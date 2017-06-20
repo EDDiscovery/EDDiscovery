@@ -23,7 +23,6 @@ using EDDiscovery.DB;
 using System.Diagnostics;
 using EDDiscovery.EDSM;
 using System.Threading.Tasks;
-using EDDiscovery.Controls;
 using System.Threading;
 using System.Collections.Concurrent;
 using EDDiscovery.EliteDangerous;
@@ -33,6 +32,7 @@ using Newtonsoft.Json.Linq;
 using EDDiscovery.Export;
 using EDDiscovery.UserControls;
 using EDDiscovery.Forms;
+using ExtendedControls;
 
 namespace EDDiscovery
 {
@@ -95,7 +95,7 @@ namespace EDDiscovery
         public HistoryEntry GetTravelHistoryCurrent {  get { return userControlTravelGrid.GetCurrentHistoryEntry; } }
         public TravelHistoryFilter GetPrimaryFilter { get { return userControlTravelGrid.GetHistoryFilter; } }  // some classes want to know out filter
 
-        public ExtendedControls.TabStrip GetTabStrip( string name )
+        public TabStrip GetTabStrip( string name )
         {
             if (name.Equals(tabStripBottom.Name, StringComparison.InvariantCultureIgnoreCase))
                 return tabStripBottom;
@@ -160,49 +160,74 @@ namespace EDDiscovery
 
         #endregion
 
+        private void UserDispose(bool disposing)
+        {
+            if (disposing)
+            {
+                if (tabbitmaps != null && tabbitmaps.Length > 0)
+                {
+                    foreach (var b in tabbitmaps)
+                        b?.Dispose();
+                }
+                lastclosestsystems?.Clear();
+            }
+            OnNearestStarListChanged = null;
+            OnTravelSelectionChanged = null;
+            notedisplayedhe = null;
+            spanelbuttonlist = null;
+            tabbitmaps = null;
+            tabtooltips = null;
+        }
+
         #region TAB control
 
-        void TabConfigure(ExtendedControls.TabStrip t, string name, int displayno)
+        private void TabConfigure(TabStrip t, string name, int displayno)
         {
+            t.Name = name;
             t.Images = tabbitmaps;
             t.ToolTips = tabtooltips;
             t.Tag = displayno;             // these are IDs for purposes of identifying different instances of a control.. 0 = main ones (main travel grid, main tab journal). 1..N are popups
-            t.OnRemoving += TabRemoved;
-            t.OnCreateTab += TabCreate;
-            t.OnPostCreateTab += TabPostCreate;
-            t.OnPopOut += TabPopOut;
-            t.Name = name;
+
+            t.ControlRemoving -= tabStrip_ControlRemoving;
+            t.ControlRemoving += tabStrip_ControlRemoving;
+            t.CreateTab -= tabStrip_CreateTab;
+            t.CreateTab += tabStrip_CreateTab;
+            t.PopOut -= tabStrip_PopOut;
+            t.PopOut += tabStrip_PopOut;
+            t.TabCreated -= tabStrip_TabCreated;
+            t.TabCreated += tabStrip_TabCreated;
         }
 
-        void TabRemoved(ExtendedControls.TabStrip t, Control c )     // called by tab strip when a control is removed
-        {
-            UserControlCommonBase uccb = c as UserControlCommonBase;
-            uccb.Closing();
-        }
+        private void tabStrip_TabCreated(object sender, TabCreatedEventArgs e)
+        {   // called by tab strip after control has been added..
+            // now we can do the configure of it, with the knowledge the tab has the right size
+            // tab strip - use tag to remember display id which helps us save context.
 
-        Control TabCreate(ExtendedControls.TabStrip t, int si)        // called by tab strip when selected index changes.. create a new one.. only create.
-        {
-            PopOutControl.PopOuts i = (PopOutControl.PopOuts)(si + PopOutControl.PopOuts.StartTabButtons);
-
-            _discoveryForm.ActionRun("onPanelChange", "UserUIEvent", null, new ConditionVariables(new string[] { "PanelTabName", PopOutControl.popoutinfo[i].WindowRefName, "PanelTabTitle" , PopOutControl.popoutinfo[i].WindowTitlePrefix , "PanelName" , t.Name }));
-
-            return PopOutControl.Create(i);
-        }
-
-        void TabPostCreate(ExtendedControls.TabStrip t, Control ctrl , int i)        // called by tab strip after control has been added..
-        {                                                           // now we can do the configure of it, with the knowledge the tab has the right size
-            int displaynumber = (int)t.Tag;                         // tab strip - use tag to remember display id which helps us save context.
-
-            UserControlCommonBase uc = ctrl as UserControlCommonBase;
-
+            UserControlCommonBase uc = e.Control as UserControlCommonBase;
+            
             if (uc != null)
             {
-                UserControlPostCreate(displaynumber, uc);
+                UserControlPostCreate(e.DisplayNum, uc);
                 uc.Display(userControlTravelGrid.GetCurrentHistoryEntry, _discoveryForm.history);
             }
 
             //System.Diagnostics.Debug.WriteLine("And theme {0}", i);
-            _discoveryForm.theme.ApplyToControls(t);
+            _discoveryForm.theme.ApplyToControls((TabStrip)sender);
+        }
+
+        private Control tabStrip_CreateTab(TabStrip container, int si)
+        {
+            PopOutControl.PopOuts i = si + PopOutControl.PopOuts.StartTabButtons;
+
+            _discoveryForm.ActionRun("onPanelChange", "UserUIEvent", null, new ConditionVariables(new string[] { "PanelTabName", PopOutControl.popoutinfo[i].WindowRefName, "PanelTabTitle", PopOutControl.popoutinfo[i].WindowTitlePrefix, "PanelName", container.Name }));
+
+            return PopOutControl.Create(i);
+        }
+
+        private void tabStrip_ControlRemoving(object sender, ControlEventArgs e)
+        {
+            UserControlCommonBase uccb = e.Control as UserControlCommonBase;
+            uccb.Closing();
         }
 
         public void UserControlPostCreate(int displaynumber, UserControlCommonBase ctrl)
@@ -248,9 +273,9 @@ namespace EDDiscovery
             }
         }
 
-        void TabPopOut(ExtendedControls.TabStrip t, int i)        // pop out clicked
+        private void tabStrip_PopOut(object sender, int e)        // pop out clicked
         {
-            _discoveryForm.PopOuts.PopOut((PopOutControl.PopOuts)(i+ PopOutControl.PopOuts.StartTabButtons));
+            _discoveryForm.PopOuts.PopOut((PopOutControl.PopOuts)(e + PopOutControl.PopOuts.StartTabButtons));
         }
 
         #endregion

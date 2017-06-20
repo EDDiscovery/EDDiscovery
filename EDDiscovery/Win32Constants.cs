@@ -117,6 +117,25 @@ namespace EDDiscovery.Win32Constants
     }
 
     /// <summary>
+    /// Tab Control Messages, as defined in CommCtrl.h (via Windows.h).
+    /// </summary>
+    /// <seealso cref="https://msdn.microsoft.com/en-us/library/windows/desktop/ff486047(v=vs.85).aspx"/>
+    public static class TCM
+    {
+        /// <summary>
+        /// TCM_FIRST: defines the start of the Tab Control Message identifiers.
+        /// </summary>
+        public const int FIRST = 0x1300;
+
+        /// <summary>
+        /// TCM_SETMINTABWIDTH: sets the minimum width of items in a tab control. You can send this message explicitly or by using
+        /// the <c>TabCtrl_SetMinTabWidth</c> macro.
+        /// </summary>
+        /// <seealso cref="https://msdn.microsoft.com/en-us/library/windows/desktop/bb760637(v=vs.85).aspx"/>
+        public const int SETMINTABWIDTH = FIRST + 49;
+    }
+
+    /// <summary>
     /// Windows message identifier constants, as defined in Winuser.h (via Windows.h) and as (mostly) implemented in Mono.
     /// </summary>
     /// <seealso href="https://msdn.microsoft.com/en-us/library/windows/desktop/ms644927(v=vs.85).aspx"/>

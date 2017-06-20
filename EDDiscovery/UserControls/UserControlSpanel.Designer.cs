@@ -102,7 +102,7 @@ namespace EDDiscovery.UserControls
             this.pictureBox.Name = "pictureBox";
             this.pictureBox.Size = new System.Drawing.Size(892, 680);
             this.pictureBox.TabIndex = 0;
-            this.pictureBox.ClickElement += new ExtendedControls.PictureBoxHotspot.OnElement(this.pictureBox_ClickElement);
+            this.pictureBox.ClickElement += new ExtendedControls.PictureBoxHotspot.OnElementEventHandler(this.pictureBox_ClickElement);
             this.pictureBox.MouseMove += new System.Windows.Forms.MouseEventHandler(this.pictureBox_MouseMove);
             // 
             // contextMenuStripConfig

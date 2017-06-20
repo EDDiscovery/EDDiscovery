@@ -22,13 +22,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using EDDiscovery.Controls;
 using EDDiscovery.DB;
 using EDDiscovery.EliteDangerous;
-using EDDiscovery.EDSM;
-
-using EDDiscovery.Export;
 using EDDiscovery.EDDN;
+using EDDiscovery.EDSM;
+using EDDiscovery.Export;
 
 namespace EDDiscovery.UserControls
 {
@@ -111,7 +109,6 @@ namespace EDDiscovery.UserControls
             discoveryform.OnHistoryChange += Display;
             discoveryform.OnNewEntry += AddNewEntry;
 
-            dataGridViewTravel.MakeDoubleBuffered();
             dataGridViewTravel.RowTemplate.Height = DefaultRowHeight;
 
             string filter = SQLiteDBClass.GetSettingString(DbFieldFilter, "");

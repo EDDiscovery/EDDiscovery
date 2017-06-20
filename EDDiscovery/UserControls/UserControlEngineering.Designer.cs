@@ -45,7 +45,7 @@ namespace EDDiscovery.UserControls
         {
             this.components = new System.ComponentModel.Container();
             this.dataViewScrollerPanel = new ExtendedControls.DataViewScrollerPanel();
-            this.dataGridViewEngineering = new System.Windows.Forms.DataGridView();
+            this.dataGridViewEngineering = new ExtendedControls.DoubleBufferedDataGridView();
             this.UpgradeCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Module = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Level = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -103,6 +103,7 @@ namespace EDDiscovery.UserControls
             this.dataGridViewEngineering.Name = "dataGridViewEngineering";
             this.dataGridViewEngineering.RowHeadersVisible = false;
             this.dataGridViewEngineering.RowHeadersWidth = 25;
+            this.dataGridViewEngineering.RowTemplate.Height = 26;
             this.dataGridViewEngineering.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.dataGridViewEngineering.Size = new System.Drawing.Size(780, 540);
             this.dataGridViewEngineering.TabIndex = 1;
@@ -316,7 +317,7 @@ namespace EDDiscovery.UserControls
         #endregion
 
         private ExtendedControls.DataViewScrollerPanel dataViewScrollerPanel;
-        private System.Windows.Forms.DataGridView dataGridViewEngineering;
+        private ExtendedControls.DoubleBufferedDataGridView dataGridViewEngineering;
         private ExtendedControls.VScrollBarCustom vScrollBarCustomMC;
         private System.Windows.Forms.Panel panelButtons;
         private System.Windows.Forms.ToolTip toolTip1;

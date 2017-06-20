@@ -46,7 +46,7 @@ namespace EDDiscovery.UserControls
             this.components = new System.ComponentModel.Container();
             this.dataViewScrollerPanel1 = new ExtendedControls.DataViewScrollerPanel();
             this.vScrollBarCustom1 = new ExtendedControls.VScrollBarCustom();
-            this.dataGridViewJournal = new System.Windows.Forms.DataGridView();
+            this.dataGridViewJournal = new ExtendedControls.DoubleBufferedDataGridView();
             this.ColumnTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Event = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColumnType = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -123,6 +123,7 @@ namespace EDDiscovery.UserControls
             this.dataGridViewJournal.AllowUserToAddRows = false;
             this.dataGridViewJournal.AllowUserToDeleteRows = false;
             this.dataGridViewJournal.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.dataGridViewJournal.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.DisplayedCells;
             this.dataGridViewJournal.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewJournal.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.ColumnTime,
@@ -133,6 +134,7 @@ namespace EDDiscovery.UserControls
             this.dataGridViewJournal.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataGridViewJournal.Location = new System.Drawing.Point(0, 0);
             this.dataGridViewJournal.Name = "dataGridViewJournal";
+            this.dataGridViewJournal.RowTemplate.Height = 26;
             this.dataGridViewJournal.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.dataGridViewJournal.Size = new System.Drawing.Size(784, 684);
             this.dataGridViewJournal.TabIndex = 0;
@@ -408,7 +410,7 @@ namespace EDDiscovery.UserControls
 
         private ExtendedControls.DataViewScrollerPanel dataViewScrollerPanel1;
         private ExtendedControls.VScrollBarCustom vScrollBarCustom1;
-        private System.Windows.Forms.DataGridView dataGridViewJournal;
+        private ExtendedControls.DoubleBufferedDataGridView dataGridViewJournal;
         private System.Windows.Forms.Panel panel1;
         private ExtendedControls.ButtonExt buttonRefresh;
         private ExtendedControls.TextBoxBorder textBoxFilter;

@@ -271,33 +271,7 @@
       <DependentUpon>ConditionVariablesForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Conditions\ConditionVariables.cs" />
-    <Compile Include="Controls\AutoCompleteDGV.cs" />
-    <Compile Include="Controls\CheckedListControlCustom.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Controls\ControlHelpers.cs" />
-    <Compile Include="Controls\CustomDateTimePicker.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Controls\DataGridViewExtensions.cs" />
-    <Compile Include="Controls\AutoCompleteTextBox.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Controls\LabelExt.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Controls\PanelVScroll.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Controls\PictureBoxHotspot.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Controls\TabStrip.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Controls\TabStrip.Designer.cs">
-      <DependentUpon>TabStrip.cs</DependentUpon>
-    </Compile>
+    <Compile Include="Controls\AutoCompleteSystemsDGVColumn.cs" />
     <Compile Include="DB\BookmarkClass.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalCrewLaunchFighter.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalCrewMemberRoleChange.cs" />
@@ -394,9 +368,6 @@
     <Compile Include="ExportImport\ImportHistory.cs" />
     <Compile Include="TraceLog.cs" />
     <Compile Include="Trilateration\DistanceParser.cs" />
-    <Compile Include="Controls\SplitContainerCustom.cs">
-      <SubType>Component</SubType>
-    </Compile>
     <Compile Include="EDDN\EDDNClass.cs" />
     <Compile Include="EDDN\EDDNSync.cs" />
     <Compile Include="EDSM\GalacticMapObject.cs" />
@@ -614,56 +585,6 @@
     <Compile Include="HTTP\GitHubRelease.cs" />
     <Compile Include="JSON\JSONHelper.cs" />
     <Compile Include="ObjectExtensions.cs" />
-    <Compile Include="Controls\ButtonExt.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Controls\CheckBoxCustom.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Controls\CustomColourTable.cs" />
-    <Compile Include="Controls\StatusStripCustom.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Controls\DataViewScrollerPanel.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Controls\GroupBoxCustom.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Controls\NumericUpDownCustom.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Controls\RadioButtonCustom.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Controls\RichTextBoxScroll.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Controls\TabControlCustom.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Controls\TabStyleCustom.cs" />
-    <Compile Include="Controls\DrawnPanel.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Controls\ComboBoxCustom.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Controls\ListControlCustom.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Controls\TextBoxBorder.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Controls\ToolStripComboBoxCustom.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Controls\UpDown.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Controls\VScrollCustom.cs">
-      <SubType>Component</SubType>
-    </Compile>
     <Compile Include="DB\SavedRouteClass.cs" />
     <Compile Include="DB\ISystem.cs" />
     <Compile Include="DB\InMemory\SystemClass.cs" />
@@ -928,15 +849,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Conditions\ConditionVariablesForm.resx">
       <DependentUpon>ConditionVariablesForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Controls\AutoCompleteTextBox.resx">
-      <DependentUpon>AutoCompleteTextBox.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Controls\RichTextBoxScroll.resx">
-      <DependentUpon>RichTextBoxScroll.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Controls\TabStrip.resx">
-      <DependentUpon>TabStrip.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\CommanderForm.resx">
       <DependentUpon>CommanderForm.cs</DependentUpon>
@@ -1431,6 +1343,12 @@
     <Folder Include="Maps\" />
     <Folder Include="SQLite\" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ExtendedControls\ExtendedControls.csproj">
+      <Project>{c8ce5d8e-fbbc-42c6-8888-f85e7533ee6d}</Project>
+      <Name>ExtendedControls</Name>
+    </ProjectReference>
+  </ItemGroup>
   <UsingTask TaskName="Zip" TaskFactory="CodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.v4.0.dll">
     <ParameterGroup>
       <OutputFilename ParameterType="System.String" Required="true" />
@@ -1479,6 +1397,8 @@
     <ItemGroup>
       <ZipFiles Include="$(OutputPath)\EDDiscovery.exe" />
       <ZipFiles Include="$(OutputPath)\EDDiscovery.pdb" />
+      <ZipFiles Include="$(OutputPath)\ExtendedControls.dll" />
+      <ZipFiles Include="$(OutputPath)\ExtendedControls.pdb" />
       <ZipFiles Include="$(ProjectDir)\App.Portable.config">
         <Name>EDDiscovery.exe.config</Name>
       </ZipFiles>
