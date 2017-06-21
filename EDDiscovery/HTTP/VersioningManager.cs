@@ -93,12 +93,21 @@ namespace EDDiscovery.HTTP
                     it.state = ItemState.LocalOnly;
                     it.localvars = ReadVarsFromFile(f.FullName , out it.localenable);
 
-                    if (it.localvars != null && it.localvars.Exists("Version"))     // gotta have some
+                    if (it.localvars != null)       // always reads some vars as long as file is there..
                     {
-                        it.localversion = it.localvars["Version"].VersionFromString();
-                        it.localmodified = !WriteOrCheckSHAFile(it, it.localvars, appfolder, false);
-                        downloaditems.Add(it);
+                        if (it.localvars.Exists("Version"))     
+                        {
+                            it.localversion = it.localvars["Version"].VersionFromString();
+                            it.localmodified = !WriteOrCheckSHAFile(it, it.localvars, appfolder, false);
+                        }
+                        else
+                        {
+                            it.localversion = new int[] { 0, 0, 0, 0 };
+                            it.localmodified = true;
+                        }
                     }
+
+                    downloaditems.Add(it);
                 }
                 catch
                 {

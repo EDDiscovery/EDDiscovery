@@ -92,6 +92,60 @@ namespace EDDiscovery.Actions
         }
     }
 
+    public class ActionInfoBox : Action
+    {
+        public override bool AllowDirectEditingOfUserData { get { return true; } }    // and allow editing?
+
+        List<string> FromString(string input)       // returns in raw esacped mode
+        {
+            StringParser sp = new StringParser(input);
+            List<string> s = sp.NextQuotedWordList(replaceescape: true);
+            return (s != null && s.Count == 2) ? s : null;
+        }
+
+        public override string VerifyActionCorrect()
+        {
+            return (FromString(userdata) != null) ? null : "InfoBox command line not in correct format";
+        }
+
+        public override bool ConfigurationMenu(Form parent, EDDiscoveryForm discoveryform, List<string> eventvars)
+        {
+            List<string> l = FromString(userdata);
+            List<string> r = Forms.PromptMultiLine.ShowDialog(parent, "Configure InfoBox Dialog",
+                            new string[] { "Message", "Caption" }, l?.ToArray(), true);
+
+            if (r != null)
+                userdata = r.ToStringCommaList(1, true);     // and escape them back
+
+            return (r != null);
+        }
+
+        public override bool ExecuteAction(ActionProgramRun ap)
+        {
+            List<string> ctrl = FromString(UserData);
+
+            if (ctrl != null)
+            {
+                List<string> exp;
+
+                if (ap.functions.ExpandStrings(ctrl, out exp) != ConditionFunctions.ExpandResult.Failed)
+                {
+                    string caption = (exp[1].Length>0) ? exp[1]: "EDDiscovery Program Message";
+
+                    Forms.InfoForm ifrm = new Forms.InfoForm();
+                    ifrm.Info(caption, exp[0], null, new int[] { 0, 100, 200, 300, 400, 500, 600 }, true);
+                    ifrm.Show(ap.actioncontroller.DiscoveryForm);
+                }
+                else
+                    ap.ReportError(exp[0]);
+            }
+            else
+                ap.ReportError("InfoBox command line not in correct format");
+
+            return true;
+        }
+    }
+
     public class ActionFileDialog : Action
     {
         public override bool AllowDirectEditingOfUserData { get { return true; } }    // and allow editing?

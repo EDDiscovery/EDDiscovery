@@ -146,6 +146,26 @@ namespace EDDiscovery
             Nand,   // any not true produces a true
         }
 
+        public ConditionEntry()
+        {
+            itemname = matchstring = "";
+        }
+
+        public ConditionEntry(string i, MatchType m, string s)
+        {
+            itemname = i;
+            matchtype = m;
+            matchstring = s;
+        }
+
+        public ConditionEntry(ConditionEntry other)
+        {
+            itemname = other.itemname;
+            matchtype = other.matchtype;
+            matchstring = other.matchstring;
+        }
+
+
         static public string GetLogicalCondition(StringParser sp, string delimchars, out LogicalCondition value)
         {
             value = LogicalCondition.Or;
@@ -178,17 +198,6 @@ namespace EDDiscovery
                 return false;
         }
 
-        public ConditionEntry()
-        {
-
-        }
-
-        public ConditionEntry(ConditionEntry other)
-        {
-            itemname = other.itemname;
-            matchtype = other.matchtype;
-            matchstring = other.matchstring;
-        }
     };
 
 }

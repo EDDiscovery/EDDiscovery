@@ -99,6 +99,7 @@ namespace EDDiscovery.Actions
             new Commands("Historytab", typeof(ActionHistoryTab) , ActionType.Cmd),
             new Commands("If", typeof(ActionIf) , ActionType.If),
             new Commands("InputBox", typeof(ActionInputBox) , ActionType.Cmd),
+            new Commands("InfoBox", typeof(ActionInfoBox) , ActionType.Cmd),
             new Commands("Ledger", typeof(ActionLedger) , ActionType.Cmd),
             new Commands("Let", typeof(ActionLet) , ActionType.Cmd),
             new Commands("Loop", typeof(ActionLoop) , ActionType.Loop),

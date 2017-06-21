@@ -1,6 +1,6 @@
 ﻿namespace EDDiscovery.Actions
 {
-    partial class ActionEditorForm
+    partial class ActionPackEditorForm
     {
         /// <summary>
         /// Required designer variable.
@@ -28,31 +28,28 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ActionPackEditorForm));
             this.panelTop = new System.Windows.Forms.Panel();
             this.panel_close = new ExtendedControls.DrawnPanel();
             this.panel_minimize = new ExtendedControls.DrawnPanel();
             this.label_index = new System.Windows.Forms.Label();
             this.panelOK = new System.Windows.Forms.Panel();
-            this.checkBoxCustomSetEnabled = new ExtendedControls.CheckBoxCustom();
+            this.buttonInstallationVars = new ExtendedControls.ButtonExt();
+            this.buttonSort2 = new ExtendedControls.ButtonExt();
+            this.buttonSort = new ExtendedControls.ButtonExt();
             this.comboBoxCustomEditProg = new ExtendedControls.ComboBoxCustom();
             this.labelEditProg = new System.Windows.Forms.Label();
             this.buttonCancel = new ExtendedControls.ButtonExt();
             this.buttonOK = new ExtendedControls.ButtonExt();
             this.panelOuter = new System.Windows.Forms.Panel();
             this.panelVScroll = new ExtendedControls.PanelVScroll();
-            this.buttonSort2 = new ExtendedControls.ButtonExt();
-            this.buttonSort = new ExtendedControls.ButtonExt();
             this.vScrollBarCustom1 = new ExtendedControls.VScrollBarCustom();
             this.buttonMore = new ExtendedControls.ButtonExt();
-            this.contextMenuStripBottom = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.configureInstallationValuesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStripCustom = new ExtendedControls.StatusStripCustom();
             this.panelTop.SuspendLayout();
             this.panelOK.SuspendLayout();
             this.panelOuter.SuspendLayout();
             this.panelVScroll.SuspendLayout();
-            this.contextMenuStripBottom.SuspendLayout();
             this.SuspendLayout();
             // 
             // panelTop
@@ -65,6 +62,7 @@
             this.panelTop.Name = "panelTop";
             this.panelTop.Size = new System.Drawing.Size(1145, 24);
             this.panelTop.TabIndex = 5;
+            this.panelTop.MouseDown += new System.Windows.Forms.MouseEventHandler(this.label_index_MouseDown);
             // 
             // panel_close
             // 
@@ -82,6 +80,7 @@
             this.panel_close.Name = "panel_close";
             this.panel_close.Size = new System.Drawing.Size(24, 24);
             this.panel_close.TabIndex = 27;
+            this.panel_close.Click += new System.EventHandler(this.panel_close_Click);
             // 
             // panel_minimize
             // 
@@ -99,6 +98,7 @@
             this.panel_minimize.Name = "panel_minimize";
             this.panel_minimize.Size = new System.Drawing.Size(24, 24);
             this.panel_minimize.TabIndex = 26;
+            this.panel_minimize.Click += new System.EventHandler(this.panel_minimize_Click);
             // 
             // label_index
             // 
@@ -111,7 +111,9 @@
             // 
             // panelOK
             // 
-            this.panelOK.Controls.Add(this.checkBoxCustomSetEnabled);
+            this.panelOK.Controls.Add(this.buttonInstallationVars);
+            this.panelOK.Controls.Add(this.buttonSort2);
+            this.panelOK.Controls.Add(this.buttonSort);
             this.panelOK.Controls.Add(this.comboBoxCustomEditProg);
             this.panelOK.Controls.Add(this.labelEditProg);
             this.panelOK.Controls.Add(this.buttonCancel);
@@ -122,22 +124,44 @@
             this.panelOK.Size = new System.Drawing.Size(1145, 30);
             this.panelOK.TabIndex = 9;
             // 
-            // checkBoxCustomSetEnabled
+            // buttonInstallationVars
             // 
-            this.checkBoxCustomSetEnabled.AutoSize = true;
-            this.checkBoxCustomSetEnabled.CheckBoxColor = System.Drawing.Color.Gray;
-            this.checkBoxCustomSetEnabled.CheckBoxInnerColor = System.Drawing.Color.White;
-            this.checkBoxCustomSetEnabled.CheckColor = System.Drawing.Color.DarkBlue;
-            this.checkBoxCustomSetEnabled.FontNerfReduction = 0.5F;
-            this.checkBoxCustomSetEnabled.Location = new System.Drawing.Point(7, 7);
-            this.checkBoxCustomSetEnabled.MouseOverColor = System.Drawing.Color.CornflowerBlue;
-            this.checkBoxCustomSetEnabled.Name = "checkBoxCustomSetEnabled";
-            this.checkBoxCustomSetEnabled.Size = new System.Drawing.Size(65, 17);
-            this.checkBoxCustomSetEnabled.TabIndex = 10;
-            this.checkBoxCustomSetEnabled.Text = "Enabled";
-            this.checkBoxCustomSetEnabled.TickBoxReductionSize = 10;
-            this.checkBoxCustomSetEnabled.UseVisualStyleBackColor = true;
-            this.checkBoxCustomSetEnabled.CheckedChanged += new System.EventHandler(this.checkBoxCustomSetEnabled_CheckedChanged);
+            this.buttonInstallationVars.BorderColorScaling = 1.25F;
+            this.buttonInstallationVars.ButtonColorScaling = 0.5F;
+            this.buttonInstallationVars.ButtonDisabledScaling = 0.5F;
+            this.buttonInstallationVars.Location = new System.Drawing.Point(417, 4);
+            this.buttonInstallationVars.Name = "buttonInstallationVars";
+            this.buttonInstallationVars.Size = new System.Drawing.Size(56, 23);
+            this.buttonInstallationVars.TabIndex = 6;
+            this.buttonInstallationVars.Text = "Install";
+            this.buttonInstallationVars.UseVisualStyleBackColor = true;
+            this.buttonInstallationVars.Click += new System.EventHandler(this.buttonInstallationVars_Click);
+            // 
+            // buttonSort2
+            // 
+            this.buttonSort2.BorderColorScaling = 1.25F;
+            this.buttonSort2.ButtonColorScaling = 0.5F;
+            this.buttonSort2.ButtonDisabledScaling = 0.5F;
+            this.buttonSort2.Location = new System.Drawing.Point(339, 4);
+            this.buttonSort2.Name = "buttonSort2";
+            this.buttonSort2.Size = new System.Drawing.Size(45, 23);
+            this.buttonSort2.TabIndex = 6;
+            this.buttonSort2.Text = "Sort2";
+            this.buttonSort2.UseVisualStyleBackColor = true;
+            this.buttonSort2.Click += new System.EventHandler(this.buttonSort2_Click);
+            // 
+            // buttonSort
+            // 
+            this.buttonSort.BorderColorScaling = 1.25F;
+            this.buttonSort.ButtonColorScaling = 0.5F;
+            this.buttonSort.ButtonDisabledScaling = 0.5F;
+            this.buttonSort.Location = new System.Drawing.Point(275, 3);
+            this.buttonSort.Name = "buttonSort";
+            this.buttonSort.Size = new System.Drawing.Size(45, 23);
+            this.buttonSort.TabIndex = 6;
+            this.buttonSort.Text = "Sort";
+            this.buttonSort.UseVisualStyleBackColor = true;
+            this.buttonSort.Click += new System.EventHandler(this.buttonSort_Click);
             // 
             // comboBoxCustomEditProg
             // 
@@ -151,7 +175,7 @@
             this.comboBoxCustomEditProg.DropDownWidth = 200;
             this.comboBoxCustomEditProg.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.comboBoxCustomEditProg.ItemHeight = 13;
-            this.comboBoxCustomEditProg.Location = new System.Drawing.Point(181, 3);
+            this.comboBoxCustomEditProg.Location = new System.Drawing.Point(78, 3);
             this.comboBoxCustomEditProg.MouseOverBackgroundColor = System.Drawing.Color.Silver;
             this.comboBoxCustomEditProg.Name = "comboBoxCustomEditProg";
             this.comboBoxCustomEditProg.ScrollBarButtonColor = System.Drawing.Color.LightGray;
@@ -160,7 +184,7 @@
             this.comboBoxCustomEditProg.SelectedIndex = -1;
             this.comboBoxCustomEditProg.SelectedItem = null;
             this.comboBoxCustomEditProg.SelectedValue = null;
-            this.comboBoxCustomEditProg.Size = new System.Drawing.Size(145, 23);
+            this.comboBoxCustomEditProg.Size = new System.Drawing.Size(144, 23);
             this.comboBoxCustomEditProg.TabIndex = 9;
             this.comboBoxCustomEditProg.ValueMember = "";
             this.comboBoxCustomEditProg.SelectedIndexChanged += new System.EventHandler(this.comboBoxCustomEditProg_SelectedIndexChanged);
@@ -168,7 +192,7 @@
             // labelEditProg
             // 
             this.labelEditProg.AutoSize = true;
-            this.labelEditProg.Location = new System.Drawing.Point(108, 7);
+            this.labelEditProg.Location = new System.Drawing.Point(5, 7);
             this.labelEditProg.Name = "labelEditProg";
             this.labelEditProg.Size = new System.Drawing.Size(46, 13);
             this.labelEditProg.TabIndex = 8;
@@ -214,8 +238,6 @@
             // 
             // panelVScroll
             // 
-            this.panelVScroll.Controls.Add(this.buttonSort2);
-            this.panelVScroll.Controls.Add(this.buttonSort);
             this.panelVScroll.Controls.Add(this.vScrollBarCustom1);
             this.panelVScroll.Controls.Add(this.buttonMore);
             this.panelVScroll.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -226,32 +248,7 @@
             this.panelVScroll.Size = new System.Drawing.Size(1143, 536);
             this.panelVScroll.TabIndex = 8;
             this.panelVScroll.VerticalScrollBarDockRight = true;
-            // 
-            // buttonSort2
-            // 
-            this.buttonSort2.BorderColorScaling = 1.25F;
-            this.buttonSort2.ButtonColorScaling = 0.5F;
-            this.buttonSort2.ButtonDisabledScaling = 0.5F;
-            this.buttonSort2.Location = new System.Drawing.Point(95, 7);
-            this.buttonSort2.Name = "buttonSort2";
-            this.buttonSort2.Size = new System.Drawing.Size(45, 23);
-            this.buttonSort2.TabIndex = 6;
-            this.buttonSort2.Text = "Sort2";
-            this.buttonSort2.UseVisualStyleBackColor = true;
-            this.buttonSort2.Click += new System.EventHandler(this.buttonSort2_Click);
-            // 
-            // buttonSort
-            // 
-            this.buttonSort.BorderColorScaling = 1.25F;
-            this.buttonSort.ButtonColorScaling = 0.5F;
-            this.buttonSort.ButtonDisabledScaling = 0.5F;
-            this.buttonSort.Location = new System.Drawing.Point(44, 6);
-            this.buttonSort.Name = "buttonSort";
-            this.buttonSort.Size = new System.Drawing.Size(45, 23);
-            this.buttonSort.TabIndex = 6;
-            this.buttonSort.Text = "Sort";
-            this.buttonSort.UseVisualStyleBackColor = true;
-            this.buttonSort.Click += new System.EventHandler(this.buttonSort_Click);
+            this.panelVScroll.Resize += new System.EventHandler(this.panelVScroll_Resize);
             // 
             // vScrollBarCustom1
             // 
@@ -295,19 +292,6 @@
             this.buttonMore.UseVisualStyleBackColor = true;
             this.buttonMore.Click += new System.EventHandler(this.buttonMore_Click);
             // 
-            // contextMenuStripBottom
-            // 
-            this.contextMenuStripBottom.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.configureInstallationValuesToolStripMenuItem});
-            this.contextMenuStripBottom.Name = "contextMenuStripBottom";
-            this.contextMenuStripBottom.Size = new System.Drawing.Size(225, 26);
-            // 
-            // configureInstallationValuesToolStripMenuItem
-            // 
-            this.configureInstallationValuesToolStripMenuItem.Name = "configureInstallationValuesToolStripMenuItem";
-            this.configureInstallationValuesToolStripMenuItem.Size = new System.Drawing.Size(224, 22);
-            this.configureInstallationValuesToolStripMenuItem.Text = "Configure Installation Values";
-            // 
             // statusStripCustom
             // 
             this.statusStripCustom.Location = new System.Drawing.Point(0, 592);
@@ -325,7 +309,9 @@
             this.Controls.Add(this.panelTop);
             this.Controls.Add(this.panelOK);
             this.Controls.Add(this.statusStripCustom);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "ActionEditorForm";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "ActionEditor";
             this.panelTop.ResumeLayout(false);
             this.panelTop.PerformLayout();
@@ -333,7 +319,6 @@
             this.panelOK.PerformLayout();
             this.panelOuter.ResumeLayout(false);
             this.panelVScroll.ResumeLayout(false);
-            this.contextMenuStripBottom.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -346,7 +331,6 @@
         private ExtendedControls.DrawnPanel panel_minimize;
         private System.Windows.Forms.Label label_index;
         private System.Windows.Forms.Panel panelOK;
-        private ExtendedControls.CheckBoxCustom checkBoxCustomSetEnabled;
         private ExtendedControls.ComboBoxCustom comboBoxCustomEditProg;
         private System.Windows.Forms.Label labelEditProg;
         private ExtendedControls.ButtonExt buttonCancel;
@@ -357,8 +341,7 @@
         private ExtendedControls.ButtonExt buttonSort;
         private ExtendedControls.VScrollBarCustom vScrollBarCustom1;
         private ExtendedControls.ButtonExt buttonMore;
-        private System.Windows.Forms.ContextMenuStrip contextMenuStripBottom;
-        private System.Windows.Forms.ToolStripMenuItem configureInstallationValuesToolStripMenuItem;
         private ExtendedControls.StatusStripCustom statusStripCustom;
+        private ExtendedControls.ButtonExt buttonInstallationVars;
     }
 }

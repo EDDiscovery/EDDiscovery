@@ -26,10 +26,8 @@ using System.Windows.Forms;
 
 namespace EDDiscovery.Actions
 {
-    public partial class ActionProgramForm : Form
+    public partial class ActionProgramEditForm : Form
     {
-        static public string LastTextEditedFile;
-
         string filesetname;
         string initialprogname;
         string[] definedprograms;                                   // list of programs already defined, to detect rename over..
@@ -65,7 +63,7 @@ namespace EDDiscovery.Actions
         int controlsize = 22;
         int panelheight = 24;
 
-        public ActionProgramForm()
+        public ActionProgramEditForm()
         {
             InitializeComponent();
             groups = new List<Group>();
@@ -585,7 +583,6 @@ namespace EDDiscovery.Actions
         private void buttonExtEdit_Click(object sender, EventArgs e)
         {
             curprog.Name = textBoxBorderName.Text;
-            LastTextEditedFile = filesetname + "::" + curprog.Name;
             if ( curprog.EditInEditor())
             {
                 LoadProgram(curprog);

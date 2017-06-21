@@ -20,6 +20,16 @@ namespace EDDiscovery
             eventname = action = actiondata = "";
         }
 
+        public Condition(string e, string a, string ad, List<ConditionEntry> f, ConditionEntry.LogicalCondition i = ConditionEntry.LogicalCondition.Or , ConditionEntry.LogicalCondition o = ConditionEntry.LogicalCondition.Or)
+        {
+            eventname = e;
+            action = a;
+            actiondata = ad;
+            innercondition = i;
+            outercondition = o;
+            fields = f;
+        }
+
         public Condition(Condition other)   // full clone
         {
             eventname = other.eventname;
@@ -51,9 +61,15 @@ namespace EDDiscovery
             return false;
         }
 
+
         public bool SetOuterCondition(string o)
         {
             return Enum.TryParse<ConditionEntry.LogicalCondition>(o.Replace(" ", ""), out outercondition);
+        }
+
+        public void Set(ConditionEntry f)
+        {
+            fields = new List<ConditionEntry>() { f };
         }
 
         public void Add(ConditionEntry f)

@@ -14,12 +14,6 @@
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 
-// WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING 
-// Blamming GITHUB gets you banned for a while during debugging. 
-// turn this on only for releasing
-//#define GITHUBDOWNLOAD
-// turn this on only for releasing
-
 using EDDiscovery.HTTP;
 using EDDiscovery.Win32Constants;
 using System;
@@ -62,6 +56,12 @@ namespace EDDiscovery.Forms
         int panelleftmargin = 3;
         Font font;
 
+        public Action<string> EditActionFile;
+        public Action EditGlobals;
+        public Action CreateActionFile;
+
+        bool managedownloadmode;
+
         string downloadactfolder;
         string downloadflightfolder;
 #if DEBUG
@@ -73,13 +73,20 @@ namespace EDDiscovery.Forms
             InitializeComponent();
         }
 
-        public void Init()
+
+        public void Init(bool ad)
         {
+            managedownloadmode = ad;
+            
             EDDiscovery.EDDTheme theme = EDDiscovery.EDDTheme.Instance;
             font = new Font(theme.FontName, 10);
             bool winborder = theme.ApplyToForm(this, font);
             statusStripCustom.Visible = panelTop.Visible = panelTop.Enabled = !winborder;
             richTextBoxScrollDescription.TextBox.ReadOnly = true;
+            label_index.Text = this.Text = (managedownloadmode) ? "Add-On Manager" : "Edit Add-Ons";
+
+            buttonExtGlobals.Visible = !managedownloadmode;
+            buttonMore.Visible = !managedownloadmode;
         }
 
         public bool DownloadFromGitHub(string downloadfolder, string gitdir)
@@ -122,14 +129,15 @@ namespace EDDiscovery.Forms
                 System.IO.Directory.CreateDirectory(downloadactdebugfolder);
 #endif
 
-#if GITHUBDOWNLOAD
-
-            DownloadFromGitHub(downloadactfolder, "ActionFiles/V1");
-            DownloadFromGitHub(downloadflightfolder, "VideoFiles/V1");
+            if (managedownloadmode)
+            {
+                System.Diagnostics.Debug.WriteLine("Checking github");
+                DownloadFromGitHub(downloadactfolder, "ActionFiles/V1");
+                DownloadFromGitHub(downloadflightfolder, "VideoFiles/V1");
 #if DEBUG
-            DownloadFromGitHub(downloadactdebugfolder, "ActionFiles/Debug");
+                DownloadFromGitHub(downloadactdebugfolder, "ActionFiles/Debug");
 #endif
-#endif
+            }
 
             BeginInvoke((MethodInvoker)ReadyToDisplay);
         }
@@ -144,7 +152,7 @@ namespace EDDiscovery.Forms
 
         void ReadyToDisplay()
         {
-            panelVScroll.RemoveAllControls();
+            panelVScroll.RemoveAllControls(new List<Control>() { buttonMore});
 
             mgr = new VersioningManager();
 
@@ -152,26 +160,34 @@ namespace EDDiscovery.Forms
             System.Diagnostics.Debug.Assert(edversion != null);
 
             mgr.ReadLocalFiles(Tools.GetAppDataDirectory(), "Actions", "*.act", "Action File");
-            mgr.ReadInstallFiles(downloadactfolder, Tools.GetAppDataDirectory(), "*.act", edversion, "Action File");
 
+            if (managedownloadmode)
+            {
+                mgr.ReadLocalFiles(Tools.GetAppDataDirectory(), "Flights", "*.vid", "Video File");
+
+                mgr.ReadInstallFiles(downloadactfolder, Tools.GetAppDataDirectory(), "*.act", edversion, "Action File");
+                mgr.ReadInstallFiles(downloadflightfolder, Tools.GetAppDataDirectory(), "*.vid", edversion, "Video File");
 #if DEBUG
-            mgr.ReadInstallFiles(downloadactdebugfolder, Tools.GetAppDataDirectory(), "*.act", edversion, "Action File");
+                mgr.ReadInstallFiles(downloadactdebugfolder, Tools.GetAppDataDirectory(), "*.act", edversion, "Action File");
 #endif
-
-            mgr.ReadLocalFiles(Tools.GetAppDataDirectory(), "Flights", "*.vid", "Video File");
-            mgr.ReadInstallFiles(downloadflightfolder, Tools.GetAppDataDirectory(), "*.vid", edversion, "Video File");
+            }
 
             mgr.Sort();
 
             panelVScroll.SuspendLayout();
 
-            int[] tabs = { 0, 100, 260, 340, 550, 730, 820, 900};
+            int[] tabs;
+            if ( managedownloadmode )
+                tabs = new int[] { 0, 100, 260, 340, 550, 730, 820, 900 };
+            else
+                tabs = new int[] { 0, 100, 260, 340, 550, 550, 700, 800 };
 
             panelVScroll.Controls.Add(new Label() { Location = new Point(tabs[0] + panelleftmargin, panelheightmargin), Size = new Size(80, 24), Text = "Type" });
             panelVScroll.Controls.Add(new Label() { Location = new Point(tabs[1] + panelleftmargin, panelheightmargin), Size = new Size(80, 24), Text = "Name" });
             panelVScroll.Controls.Add(new Label() { Location = new Point(tabs[2] + panelleftmargin, panelheightmargin), Size = new Size(80, 24), Text = "Version" });
             panelVScroll.Controls.Add(new Label() { Location = new Point(tabs[3] + panelleftmargin, panelheightmargin), Size = new Size(120, 24), Text = "Description" });
-            panelVScroll.Controls.Add(new Label() { Location = new Point(tabs[4] + panelleftmargin, panelheightmargin), Size = new Size(80, 24), Text = "Status" });
+            if ( managedownloadmode)
+                panelVScroll.Controls.Add(new Label() { Location = new Point(tabs[4] + panelleftmargin, panelheightmargin), Size = new Size(80, 24), Text = "Status" });
             panelVScroll.Controls.Add(new Label() { Location = new Point(tabs[5] + panelleftmargin, panelheightmargin), Size = new Size(80, 24), Text = "Action" });
             panelVScroll.Controls.Add(new Label() { Location = new Point(tabs[6] + panelleftmargin, panelheightmargin), Size = new Size(80, 24), Text = "Delete" });
             panelVScroll.Controls.Add(new Label() { Location = new Point(tabs[7] + panelleftmargin, panelheightmargin), Size = new Size(80, 24), Text = "Enabled" });
@@ -221,31 +237,44 @@ namespace EDDiscovery.Forms
                     g.shortdesc.Text = "N/A";
                 g.panel.Controls.Add(g.shortdesc);
 
-                string text;
-                if (di.state == VersioningManager.ItemState.EDOutOfDate)
-                    text = "Newer EDD required";
-                else if (di.state == VersioningManager.ItemState.UpToDate)
-                    text = (di.localmodified) ? "Locally modified" : "Up to Date";
-                else if (di.state == VersioningManager.ItemState.LocalOnly)
-                    text = "Local Only";
-                else if ( di.state == VersioningManager.ItemState.NotPresent)
-                    text = "Version " + di.downloadedversion.ToString(".") + ((di.localmodified) ? "*" : "");
+                if (managedownloadmode)
+                {
+                    string text;
+                    if (di.state == VersioningManager.ItemState.EDOutOfDate)
+                        text = "Newer EDD required";
+                    else if (di.state == VersioningManager.ItemState.UpToDate)
+                        text = (di.localmodified) ? "Locally modified" : "Up to Date";
+                    else if (di.state == VersioningManager.ItemState.LocalOnly)
+                        text = "Local Only";
+                    else if (di.state == VersioningManager.ItemState.NotPresent)
+                        text = "Version " + di.downloadedversion.ToString(".") + ((di.localmodified) ? "*" : "");
+                    else
+                        text = "New version " + di.downloadedversion.ToString(".") + ((di.localmodified) ? "*" : "");
+
+                    g.actionlabel = new Label();
+                    g.actionlabel.Location = new Point(tabs[4], labelheightmargin);      // 8 spacing, allow 8*4 to indent
+                    g.actionlabel.Size = new Size(tabs[5] - tabs[4], 24);
+                    g.actionlabel.Text = text;
+                    g.panel.Controls.Add(g.actionlabel);
+
+                    if (text.Contains("ersion"))        // cheap and nasty way
+                    {
+                        g.actionbutton = new ExtendedControls.ButtonExt();
+                        g.actionbutton.Location = new Point(tabs[5], labelheightmargin - 4);      // 8 spacing, allow 8*4 to indent
+                        g.actionbutton.Size = new Size(80, 24);
+                        g.actionbutton.Text = (di.state == VersioningManager.ItemState.NotPresent) ? "Install" : "Update";
+                        g.actionbutton.Click += Actionbutton_Click;
+                        g.actionbutton.Tag = g;
+                        g.panel.Controls.Add(g.actionbutton);
+                    }
+                }
                 else
-                    text = "New version " + di.downloadedversion.ToString(".") + ((di.localmodified) ? "*" : "");
-
-                g.actionlabel = new Label();
-                g.actionlabel.Location = new Point(tabs[4], labelheightmargin);      // 8 spacing, allow 8*4 to indent
-                g.actionlabel.Size = new Size(tabs[5]-tabs[4], 24);
-                g.actionlabel.Text = text;
-                g.panel.Controls.Add(g.actionlabel);
-
-                if (text.Contains("ersion"))        // cheap and nasty way
                 {
                     g.actionbutton = new ExtendedControls.ButtonExt();
                     g.actionbutton.Location = new Point(tabs[5], labelheightmargin - 4);      // 8 spacing, allow 8*4 to indent
                     g.actionbutton.Size = new Size(80, 24);
-                    g.actionbutton.Text = (di.state == VersioningManager.ItemState.NotPresent) ? "Install" : "Update";
-                    g.actionbutton.Click += Actionbutton_Click;
+                    g.actionbutton.Text = "Edit";
+                    g.actionbutton.Click += ActionbuttonEdit_Click;
                     g.actionbutton.Tag = g;
                     g.panel.Controls.Add(g.actionbutton);
                 }
@@ -282,6 +311,8 @@ namespace EDDiscovery.Forms
 
                 panelVScroll.Controls.Add(g.panel);
             }
+
+            buttonMore.Location = new Point(panelleftmargin, vpos);
 
             EDDiscovery.EDDTheme theme = EDDiscovery.EDDTheme.Instance;
             if ( theme != null )
@@ -348,6 +379,14 @@ namespace EDDiscovery.Forms
                 Forms.MessageBoxTheme.Show(this, "Add-on failed to update. Check files for read only status", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
 
+        private void ActionbuttonEdit_Click(object sender, EventArgs e)
+        {
+            ExtendedControls.ButtonExt cb = sender as ExtendedControls.ButtonExt;
+            Group g = cb.Tag as Group;
+            EditActionFile?.Invoke(g.name.Text);
+            ReadyToDisplay();
+        }
+
         private void Deletebutton_Click(object sender, EventArgs e)
         {
             ExtendedControls.ButtonExt cb = sender as ExtendedControls.ButtonExt;
@@ -360,14 +399,25 @@ namespace EDDiscovery.Forms
                 changelist[g.di.itemname] = "-";
             }
         }
-                
+
+        private void buttonMore_Click(object sender, EventArgs e)
+        {
+            CreateActionFile?.Invoke();
+            ReadyToDisplay();
+        }
+
 
         private void buttonOK_Click(object sender, EventArgs e)
         {
             Close();
         }
 
-#region Window Control
+        private void buttonExtGlobals_Click(object sender, EventArgs e)
+        {
+            EditGlobals?.Invoke();
+        }
+
+        #region Window Control
 
         // Mono compatibility
         private bool _window_dragging = false;

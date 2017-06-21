@@ -53,8 +53,10 @@ namespace EDDiscovery.Forms
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.panelVScroll = new ExtendedControls.PanelVScroll();
             this.vScrollBarCustom1 = new ExtendedControls.VScrollBarCustom();
+            this.buttonMore = new ExtendedControls.ButtonExt();
             this.richTextBoxScrollDescription = new ExtendedControls.RichTextBoxScroll();
             this.panelOK = new System.Windows.Forms.Panel();
+            this.buttonExtGlobals = new ExtendedControls.ButtonExt();
             this.buttonOK = new ExtendedControls.ButtonExt();
             this.statusStripCustom = new ExtendedControls.StatusStripCustom();
             this.panelTop.SuspendLayout();
@@ -157,6 +159,7 @@ namespace EDDiscovery.Forms
             // panelVScroll
             // 
             this.panelVScroll.Controls.Add(this.vScrollBarCustom1);
+            this.panelVScroll.Controls.Add(this.buttonMore);
             this.panelVScroll.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panelVScroll.InternalMargin = new System.Windows.Forms.Padding(0);
             this.panelVScroll.Location = new System.Drawing.Point(0, 0);
@@ -178,7 +181,7 @@ namespace EDDiscovery.Forms
             this.vScrollBarCustom1.HideScrollBar = false;
             this.vScrollBarCustom1.LargeChange = 10;
             this.vScrollBarCustom1.Location = new System.Drawing.Point(1015, 0);
-            this.vScrollBarCustom1.Maximum = -345;
+            this.vScrollBarCustom1.Maximum = -302;
             this.vScrollBarCustom1.Minimum = 0;
             this.vScrollBarCustom1.MouseOverButtonColor = System.Drawing.Color.Green;
             this.vScrollBarCustom1.MousePressedButtonColor = System.Drawing.Color.Red;
@@ -192,8 +195,21 @@ namespace EDDiscovery.Forms
             this.vScrollBarCustom1.ThumbButtonColor = System.Drawing.Color.DarkBlue;
             this.vScrollBarCustom1.ThumbColorScaling = 0.5F;
             this.vScrollBarCustom1.ThumbDrawAngle = 0F;
-            this.vScrollBarCustom1.Value = -345;
-            this.vScrollBarCustom1.ValueLimited = -345;
+            this.vScrollBarCustom1.Value = -302;
+            this.vScrollBarCustom1.ValueLimited = -302;
+            // 
+            // buttonMore
+            // 
+            this.buttonMore.BorderColorScaling = 1.25F;
+            this.buttonMore.ButtonColorScaling = 0.5F;
+            this.buttonMore.ButtonDisabledScaling = 0.5F;
+            this.buttonMore.Location = new System.Drawing.Point(8, 15);
+            this.buttonMore.Name = "buttonMore";
+            this.buttonMore.Size = new System.Drawing.Size(24, 24);
+            this.buttonMore.TabIndex = 5;
+            this.buttonMore.Text = "+";
+            this.buttonMore.UseVisualStyleBackColor = true;
+            this.buttonMore.Click += new System.EventHandler(this.buttonMore_Click);
             // 
             // richTextBoxScrollDescription
             // 
@@ -210,12 +226,27 @@ namespace EDDiscovery.Forms
             // 
             // panelOK
             // 
+            this.panelOK.Controls.Add(this.buttonExtGlobals);
             this.panelOK.Controls.Add(this.buttonOK);
             this.panelOK.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.panelOK.Location = new System.Drawing.Point(0, 607);
             this.panelOK.Name = "panelOK";
             this.panelOK.Size = new System.Drawing.Size(1043, 30);
             this.panelOK.TabIndex = 10;
+            // 
+            // buttonExtGlobals
+            // 
+            this.buttonExtGlobals.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.buttonExtGlobals.BorderColorScaling = 1.25F;
+            this.buttonExtGlobals.ButtonColorScaling = 0.5F;
+            this.buttonExtGlobals.ButtonDisabledScaling = 0.5F;
+            this.buttonExtGlobals.Location = new System.Drawing.Point(6, 3);
+            this.buttonExtGlobals.Name = "buttonExtGlobals";
+            this.buttonExtGlobals.Size = new System.Drawing.Size(75, 23);
+            this.buttonExtGlobals.TabIndex = 7;
+            this.buttonExtGlobals.Text = "Globals";
+            this.buttonExtGlobals.UseVisualStyleBackColor = true;
+            this.buttonExtGlobals.Click += new System.EventHandler(this.buttonExtGlobals_Click);
             // 
             // buttonOK
             // 
@@ -250,6 +281,7 @@ namespace EDDiscovery.Forms
             this.Controls.Add(this.statusStripCustom);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "DownloadManagerForm";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Add-On Manager";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.DownloadManagerForm_FormClosing);
             this.Shown += new System.EventHandler(this.DownloadManager_Shown);
@@ -281,5 +313,7 @@ namespace EDDiscovery.Forms
         private ExtendedControls.PanelVScroll panelVScroll;
         private ExtendedControls.VScrollBarCustom vScrollBarCustom1;
         private System.Windows.Forms.SplitContainer splitContainer1;
+        private ExtendedControls.ButtonExt buttonExtGlobals;
+        private ExtendedControls.ButtonExt buttonMore;
     }
 }
