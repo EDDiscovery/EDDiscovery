@@ -91,11 +91,11 @@ namespace ExtendedControls
 
                     e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.Default;
 
-                    GraphicsPath g1 = RectCutCorners(1, topline+1, ClientRectangle.Width-2, ClientRectangle.Height - topline - 1, 1,1 , textstart- 1, textlength);
+                    using (GraphicsPath g1 = RectCutCorners(1, topline+1, ClientRectangle.Width-2, ClientRectangle.Height - topline - 1, 1,1 , textstart- 1, textlength))
                     using (Pen pc1 = new Pen(color1, 1.0F))
                         e.Graphics.DrawPath(pc1, g1);
 
-                    GraphicsPath g2 = RectCutCorners(0, topline, ClientRectangle.Width, ClientRectangle.Height - topline - 1, 2, 2 , textstart, textlength);
+                    using (GraphicsPath g2 = RectCutCorners(0, topline, ClientRectangle.Width, ClientRectangle.Height - topline - 1, 2, 2 , textstart, textlength))
                     using (Pen pc2 = new Pen(color2, 1.0F))
                         e.Graphics.DrawPath(pc2, g2);
 
@@ -108,8 +108,8 @@ namespace ExtendedControls
                         Rectangle textarea = new Rectangle(textstart, 0, twidth, DisplayRectangle.Y);
 
                         using (Brush textb = new SolidBrush(this.ForeColor))
+                        using (StringFormat fmt = new StringFormat())
                         {
-                            StringFormat fmt = new StringFormat();
                             fmt.Alignment = StringAlignment.Center;
                             fmt.LineAlignment = StringAlignment.Center;
 

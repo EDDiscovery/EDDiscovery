@@ -96,11 +96,11 @@ namespace ExtendedControls
                 Color color2 = BorderColor.Multiply(BorderColorScaling);
 
                 int hg = tb.Height + 6;
-                GraphicsPath g1 = RectCutCorners(1, 1, ClientRectangle.Width - 2, hg - 1, 1, 1);
+                using (GraphicsPath g1 = RectCutCorners(1, 1, ClientRectangle.Width - 2, hg - 1, 1, 1))
                 using (Pen pc1 = new Pen(color1, 1.0F))
                     e.Graphics.DrawPath(pc1, g1);
 
-                GraphicsPath g2 = RectCutCorners(0, 0, ClientRectangle.Width, hg - 1, 2, 2);
+                using (GraphicsPath g2 = RectCutCorners(0, 0, ClientRectangle.Width, hg - 1, 2, 2))
                 using (Pen pc2 = new Pen(color2, 1.0F))
                     e.Graphics.DrawPath(pc2, g2);
             }
