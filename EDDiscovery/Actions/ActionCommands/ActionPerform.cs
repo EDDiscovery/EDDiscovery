@@ -82,11 +82,11 @@ namespace EDDiscovery.Actions
                 else if (cmdname.Equals("manageaddons"))
                     ap.actioncontroller.ManageAddOns();
                 else if (cmdname.Equals("editaddons"))
-                    ap.actioncontroller.EditAddOnActionFile();
+                    ap.actioncontroller.EditAddOns();
+                else if (cmdname.Equals("editlastpack"))
+                    ap.actioncontroller.EditLastPack();
                 else if (cmdname.Equals("editspeechtext"))
                     ap.actioncontroller.EditSpeechText();
-                else if (cmdname.Equals("editlasttext"))
-                    ap.actioncontroller.EditLastTextFile();
                 else if (cmdname.Equals("configurewave"))
                     ap.actioncontroller.ConfigureWave(sp.NextQuotedWord() ?? "Configure Wave Output");
                 else if (cmdname.Equals("enableeliteinput"))

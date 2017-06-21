@@ -213,11 +213,11 @@
     <Compile Include="Actions\ActionCommands\ActionProgramwindow.cs" />
     <Compile Include="Actions\ActionCommands\ActionReturn.cs" />
     <Compile Include="Actions\ActionCommands\ActionScanStar.cs" />
-    <Compile Include="Actions\ActionEditorForm.cs">
+    <Compile Include="Actions\ActionPackEditorForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Actions\ActionEditorForm.Designer.cs">
-      <DependentUpon>ActionEditorForm.cs</DependentUpon>
+    <Compile Include="Actions\ActionPackEditorForm.Designer.cs">
+      <DependentUpon>ActionPackEditorForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Actions\ActionFile.cs" />
     <Compile Include="Actions\ActionFileList.cs" />
@@ -268,11 +268,11 @@
     <Compile Include="Actions\ActionCommands\ActionSleep.cs" />
     <Compile Include="Actions\ActionCommands\ActionStructures.cs" />
     <Compile Include="Actions\ActionCommands\ActionPlay.cs" />
-    <Compile Include="Actions\ActionProgramForm.cs">
+    <Compile Include="Actions\ActionProgramEditForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Actions\ActionProgramForm.Designer.cs">
-      <DependentUpon>ActionProgramForm.cs</DependentUpon>
+    <Compile Include="Actions\ActionProgramEditForm.Designer.cs">
+      <DependentUpon>ActionProgramEditForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Actions\ActionCommands\ActionRemEnd.cs" />
     <Compile Include="Actions\ActionProgramRun.cs" />
@@ -932,11 +932,11 @@
     <Content Include="fround.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <EmbeddedResource Include="Actions\ActionEditorForm.resx">
-      <DependentUpon>ActionEditorForm.cs</DependentUpon>
+    <EmbeddedResource Include="Actions\ActionPackEditorForm.resx">
+      <DependentUpon>ActionPackEditorForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Actions\ActionProgramForm.resx">
-      <DependentUpon>ActionProgramForm.cs</DependentUpon>
+    <EmbeddedResource Include="Actions\ActionProgramEditForm.resx">
+      <DependentUpon>ActionProgramEditForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Audio\AudioDeviceConfigure.resx">
       <DependentUpon>AudioDeviceConfigure.cs</DependentUpon>

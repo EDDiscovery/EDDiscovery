@@ -1216,7 +1216,12 @@ namespace EDDiscovery
 
         private void configureAddOnActionsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            actioncontroller.EditAddOnActionFile();
+            actioncontroller.EditAddOns();
+        }
+
+        private void editLastActionPackToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            actioncontroller.EditLastPack();
         }
 
         private void stopCurrentlyRunningActionProgramToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1330,7 +1335,7 @@ namespace EDDiscovery
         public int ActionRun(string name, string triggertype, HistoryEntry he = null, ConditionVariables additionalvars = null, string flagstart = null, bool now = false)
         { return actioncontroller.ActionRun(name, triggertype,he,additionalvars,flagstart,now); }
 
-#endregion
+        #endregion
 
     }
 }

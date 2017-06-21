@@ -44,8 +44,8 @@ namespace EDDiscovery.Forms
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(InfoForm));
-            this.buttonOK = new System.Windows.Forms.Button();
-            this.textBoxInfo = new System.Windows.Forms.RichTextBox();
+            this.buttonOK = new ExtendedControls.ButtonExt();
+            this.textBoxInfo = new ExtendedControls.RichTextBoxScroll();
             this.SuspendLayout();
             // 
             // buttonOK
@@ -62,7 +62,6 @@ namespace EDDiscovery.Forms
             // 
             this.textBoxInfo.Location = new System.Drawing.Point(86, 12);
             this.textBoxInfo.Name = "textBoxInfo";
-            this.textBoxInfo.ReadOnly = true;
             this.textBoxInfo.Size = new System.Drawing.Size(650, 500);
             this.textBoxInfo.TabIndex = 2;
             this.textBoxInfo.Text = "";
@@ -84,7 +83,7 @@ namespace EDDiscovery.Forms
         }
 
         #endregion
-        private System.Windows.Forms.Button buttonOK;
-        private System.Windows.Forms.RichTextBox textBoxInfo;
+        private ExtendedControls.ButtonExt buttonOK;
+        private ExtendedControls.RichTextBoxScroll textBoxInfo;
     }
 }

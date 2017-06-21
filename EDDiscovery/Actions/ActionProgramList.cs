@@ -81,6 +81,58 @@ namespace EDDiscovery.Actions
             if (existing >= 0)
                 programs.RemoveAt(existing);
         }
-    }
 
+        EDDiscoveryForm edfrm;
+        string edoutername;
+
+        public bool EditProgram(string s, EDDiscoveryForm discoveryform , string outername)
+        {
+            int colon = s.IndexOf(':');
+            if (colon >= 0)
+                s = s.Substring(0, colon);
+            int bracket = s.IndexOf('(');
+            if (bracket >= 0)
+                s = s.Substring(0, bracket);
+
+            ActionProgram p = Get(s);
+
+            if ( p != null )
+            {
+                if (p.StoredInSubFile != null)
+                {
+                    p.EditInEditor(p.StoredInSubFile);         // Edit in the editor..
+                }
+                else
+                {
+                    ActionProgramEditForm apf = new ActionProgramEditForm();
+                    apf.EditProgram += EditProgram;
+
+                    edfrm = discoveryform;
+                    edoutername = outername;
+
+                    List<string> additionalfieldnames = new List<string>(); // TBD
+
+                    apf.Init("Action program ", discoveryform, additionalfieldnames, outername, p, GetActionProgramList(), "");
+
+                    System.Windows.Forms.DialogResult res = apf.ShowDialog();
+
+                    if (res == System.Windows.Forms.DialogResult.OK)
+                    {
+                        ActionProgram np = apf.GetProgram();
+                        AddOrChange(np);                // replaces or adds (if its a new name) same as rename
+                    }
+
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        public void EditProgram(string s)
+        {
+            if ( !EditProgram(s, edfrm, edoutername) )
+                EDDiscovery.Forms.MessageBoxTheme.Show("Unknown program or not in this file " + s);
+        }
+    }
 }

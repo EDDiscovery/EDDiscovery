@@ -26,33 +26,17 @@ namespace EDDiscovery.Actions
     public class ActionFileList
     {
         private List<ActionFile> actionfiles = new List<ActionFile>();
-        private int current = 0;
-
-        public ActionFile CurFile { get { return actionfiles[current]; } }
-        public ConditionLists CurConditions { get { return actionfiles[current].actionfieldfilter; } }
-        public ActionProgramList CurPrograms { get { return actionfiles[current].actionprogramlist; } }
-        public ConditionVariables CurInstallationVariables { get { return actionfiles[current].installationvariables; } }
-        public string CurName { get { return actionfiles[current].name; } }
-        public bool CurEnabled { get { return actionfiles[current].enabled; } }
 
         public List<string> GetList { get { return (from af in actionfiles select af.name).ToList(); } }
 
-        public void UpdateCurrentCL(ConditionLists cl) { actionfiles[current].actionfieldfilter = cl; }
-        public void UpdateCurrentInstallationVariables(ConditionVariables v) { actionfiles[current].installationvariables = v; }
-        public void UpdateCurrentEnabled(bool v) { actionfiles[current].enabled = v; }
-
-        public bool SelectCurrent(string s)
-        {
-            int indexof = actionfiles.FindIndex(x => x.name.Equals(s));
-            if (indexof >= 0)
-                current = indexof;
-            return (indexof >= 0);
-        }
+        // normally pack names are case sensitive, except when we are checking it can be written to a file.. then we would want a case insensitive version
+        public ActionFile Get(string name, StringComparison c = StringComparison.InvariantCulture) { return actionfiles.Find(x => x.name.Equals(name,c)); }
 
         public void CreateSet(string s)
         {
             string appfolder = Path.Combine(Tools.GetAppDataDirectory(), "Actions");
             ActionFile af = new ActionFile(new ConditionLists(), new ActionProgramList(), appfolder + "\\\\" + s + ".act", s, true);
+            af.WriteFile();
             actionfiles.Add(af);
         }
 
@@ -247,11 +231,6 @@ namespace EDDiscovery.Actions
                     errlist += "File " + f.FullName + " failed to load: " + Environment.NewLine + err;
             }
 
-            if (actionfiles.Count == 0)           // need a default
-                CreateSet("Default");
-
-            current = actionfiles.Count - 1;        // always the latest.
-
             return errlist;
         }
 
@@ -272,11 +251,6 @@ namespace EDDiscovery.Actions
             }
 
             return err;
-        }
-
-        public void SaveCurrentActionFile()
-        {
-            actionfiles[current].WriteFile();
         }
 
         #region special helpers
