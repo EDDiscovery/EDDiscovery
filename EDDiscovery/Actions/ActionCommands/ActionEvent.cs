@@ -48,11 +48,6 @@ namespace EDDiscovery.Actions
 
                 string cmdname = sp.NextWord(" ", true);
 
-                // [PREFIX varprefix] [FROM JID] Forward/First/Backward/Last [event or (event list,event)] [WHERE conditions list]
-                // FROM JID NEXT gives you the one after the JID
-                // FROM JID BACKWARD gives you the JID before the JID
-                // FROM JID gives you the JID
-
                 if (cmdname != null && cmdname.Equals("prefix") )
                 {
                     prefix = sp.NextWord();
@@ -211,6 +206,12 @@ namespace EDDiscovery.Actions
                         HistoryEntry he = hl.EntryOrder[jidindex];
                         ActionVars.HistoryEventFurtherInfo(ap, hl, he, prefix);
                         ActionVars.SystemVarsFurtherInfo(ap, hl, he.System, prefix);
+                        ActionVars.ShipModuleInformation(ap, he.ShipInformation, prefix);
+                    }
+                    else if (cmdname.Equals("missions"))
+                    {
+                        HistoryEntry he = hl.EntryOrder[jidindex];
+                        ActionVars.MissionInformation(ap, he.MissionList, prefix);
                     }
                     else
                         ap.ReportError("Unknown command " + cmdname + " in Event");
@@ -226,7 +227,16 @@ namespace EDDiscovery.Actions
         {
             if (hl != null && pos >= 0 && pos < hl.Count)     // if within range.. (1 based)
             {
-                ReportHistoryEntry(ap, hl[pos], prefix);
+                try
+                {
+                    ConditionVariables values = new ConditionVariables();
+                    ActionVars.HistoryEventVars(values, hl[pos], prefix);
+                    ActionVars.ShipBasicInformation(values, hl[pos].ShipInformation, prefix);
+                    ActionVars.SystemVars(values, hl[pos].System, prefix);
+                    ap.Add(values);
+                }
+                catch { }
+
                 ap[prefix + "Count"] = hl.Count.ToString(System.Globalization.CultureInfo.InvariantCulture);     // give a count of matches
             }
             else
@@ -234,19 +244,6 @@ namespace EDDiscovery.Actions
                 ap[prefix + "JID"] = "0";
                 ap[prefix + "Count"] = "0";
             }
-        }
-
-        static void ReportHistoryEntry(ActionProgramRun ap, HistoryEntry he, string prefix)
-        {
-            try
-            {
-                ConditionVariables values = new ConditionVariables();
-                ActionVars.HistoryEventVars(values, he, prefix);
-                ActionVars.ShipInformation(values, he.ShipInformation, prefix, true);
-                ActionVars.SystemVars(values, he.System, prefix);
-                ap.Add(values);
-            }
-            catch { }
         }
     }
 }

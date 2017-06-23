@@ -50,7 +50,7 @@ namespace EDDiscovery.Audio
 
         public bool SetAudioEndpoint(string dev, bool usedefault = false)
         {
-#if false
+#if true
             System.Collections.ObjectModel.ReadOnlyCollection<DirectSoundDevice> list = DirectSoundDeviceEnumerator.EnumerateDevices();
 
             DirectSoundDevice dsd = null;
@@ -94,7 +94,7 @@ namespace EDDiscovery.Audio
 
         private void Output_Stopped(object sender, PlaybackStoppedEventArgs e)
         {
-            System.Diagnostics.Debug.WriteLine((Environment.TickCount % 10000).ToString("00000") + "Driver stopped");
+            //System.Diagnostics.Debug.WriteLine((Environment.TickCount % 10000).ToString("00000") + "Driver stopped");
             if (AudioStoppedEvent != null)
                 AudioStoppedEvent();
         }
@@ -108,6 +108,7 @@ namespace EDDiscovery.Audio
         {
             IWaveSource iws = o as IWaveSource;
             iws.Dispose();
+            //System.Diagnostics.Debug.WriteLine("Audio disposed");
         }
 
         public void Start(Object o, int vol)
@@ -116,10 +117,10 @@ namespace EDDiscovery.Audio
 
             IWaveSource current = o as IWaveSource;
             aout.Initialize(current);
-            System.Diagnostics.Debug.WriteLine((Environment.TickCount-t).ToString("00000") + "Driver Init done");
+            //System.Diagnostics.Debug.WriteLine((Environment.TickCount-t).ToString("00000") + "Driver Init done");
             aout.Volume = (float)(vol) / 100;
             aout.Play();
-            System.Diagnostics.Debug.WriteLine((Environment.TickCount-t).ToString("00000") + "Driver Play done");
+            //System.Diagnostics.Debug.WriteLine((Environment.TickCount - t).ToString("00000") + "Driver Play done");
         }
 
         public void Stop()
@@ -160,14 +161,14 @@ namespace EDDiscovery.Audio
                 {
                     s = new CSCore.Codecs.WAV.WaveFileReader(audioms);
 
-                    System.Diagnostics.Debug.WriteLine("oRIGINAL length " + s.Length);
+                    //System.Diagnostics.Debug.WriteLine("oRIGINAL length " + s.Length);
                     if (ensureaudio)
                         s = s.AppendSource(x => new ExtendWaveSource(x, 100));          // SEEMS to help the click at end..
                 }
 
-                System.Diagnostics.Debug.WriteLine("Sample length " + s.Length);
+                //System.Diagnostics.Debug.WriteLine("Sample length " + s.Length);
                 ApplyEffects(ref s, effects);
-                System.Diagnostics.Debug.WriteLine(".. to length " + s.Length);
+                //System.Diagnostics.Debug.WriteLine(".. to length " + s.Length);
                 return s;
             }
             catch( Exception ex)

@@ -92,7 +92,7 @@ namespace EDDiscovery.Audio
 
         private void AudioStoppedEvent()
         {
-            System.Diagnostics.Debug.WriteLine((Environment.TickCount % 10000).ToString("00000") + " Stopped audio");
+            //System.Diagnostics.Debug.WriteLine((Environment.TickCount % 10000).ToString("00000") + " Stopped audio");
 
             if (audioqueue.Count > 0) // Normally always have an entry, except on Kill , where queue is gone
             {
@@ -114,7 +114,7 @@ namespace EDDiscovery.Audio
             {
                 if ( audioqueue.Count > 0 && p > audioqueue[0].priority )       // if something is playing, and we have priority..
                 {
-                    System.Diagnostics.Debug.WriteLine((Environment.TickCount % 10000).ToString("00000") + " Priority insert " + p + " front " + audioqueue[0].priority);
+                    //System.Diagnostics.Debug.WriteLine((Environment.TickCount % 10000).ToString("00000") + " Priority insert " + p + " front " + audioqueue[0].priority);
 
                     if (audioqueue[0].priority == Priority.Low)                 // if low at front, remove all other lows after it
                     {
@@ -143,7 +143,7 @@ namespace EDDiscovery.Audio
                 }
                 else
                 {
-                    System.Diagnostics.Debug.WriteLine(Environment.TickCount + "AUDIO queue");
+                    //System.Diagnostics.Debug.WriteLine(Environment.TickCount + "AUDIO queue");
                     
                     newdata.priority = p;
                     audioqueue.Add(newdata);
@@ -206,7 +206,7 @@ namespace EDDiscovery.Audio
             if (audioqueue.Count > 0)       // if we are playing, stop current
             {
                 ad.Stop();
-                System.Diagnostics.Debug.WriteLine((Environment.TickCount % 10000).ToString("00000") + " Stop current");
+                //System.Diagnostics.Debug.WriteLine((Environment.TickCount % 10000).ToString("00000") + " Stop current");
             }
         }
 

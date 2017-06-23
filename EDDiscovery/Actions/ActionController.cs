@@ -309,7 +309,7 @@ namespace EDDiscovery.Actions
                 ConditionVariables eventvars = new ConditionVariables();
                 Actions.ActionVars.TriggerVars(eventvars, triggername, triggertype);
                 Actions.ActionVars.HistoryEventVars(eventvars, he, "Event");     // if HE is null, ignored
-                Actions.ActionVars.ShipInformation(eventvars, he?.ShipInformation, "Event",false);     // if He null, or si null, ignore
+                Actions.ActionVars.ShipBasicInformation(eventvars, he?.ShipInformation, "Event");     // if He null, or si null, ignore
                 Actions.ActionVars.SystemVars(eventvars, he?.System, "Event");
                 eventvars.Add(additionalvars);   // adding null is allowed
 

@@ -104,24 +104,25 @@ namespace EDDiscovery
                     ret += "Condition " + ConditionEntry.OperatorNames[(int)fields[i].matchtype];
                 else
                 {
-                    ret += (fields[i].itemname).QuoteString(bracket: multi) + " " + ConditionEntry.OperatorNames[(int)fields[i].matchtype];
+                    ret += (fields[i].itemname).QuoteString(bracket: multi) +               // commas do not need quoting as conditions at written as if always at EOL.
+                            " " + ConditionEntry.OperatorNames[(int)fields[i].matchtype];
 
                     if (!ConditionEntry.IsUnaryOperation(fields[i].matchtype))
-                        ret += " " + fields[i].matchstring.QuoteString(bracket: multi);
+                        ret += " " + fields[i].matchstring.QuoteString(bracket: multi);     // commas do not need quoting..
                 }
             }
 
             return ret;
         }
 
-        public string Read( string s , bool includeevent = false, string delimchars = ", ")
+        public string Read( string s , bool includeevent = false, string delimchars = " ")
         {
             StringParser sp = new StringParser(s);
             return Read(sp, includeevent, delimchars);
         }
 
-        public string Read(StringParser sp, bool includeevent = false, string delimchars = ", ")    // if includeevent is set, it must be there..
-        {
+        public string Read(StringParser sp, bool includeevent = false, string delimchars = " ")    // if includeevent is set, it must be there..
+        {                                                                                           // demlimchars is normally space, but can be ") " if its inside a multi.
             fields = new List<ConditionEntry>();
             innercondition = outercondition = ConditionEntry.LogicalCondition.Or;
             eventname = ""; action = ""; actiondata = "";
