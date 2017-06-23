@@ -524,18 +524,7 @@ namespace EDDiscovery
                 {
                     OnRefreshCommanders?.Invoke();
 
-                    history.Clear();
-
-                    foreach (var ent in hist.EntryOrder)
-                    {
-                        history.Add(ent);
-                        Debug.Assert(ent.MaterialCommodity != null);
-                    }
-
-                    history.materialcommodititiesledger = hist.materialcommodititiesledger;
-                    history.starscan = hist.starscan;
-                    history.shipinformationlist = hist.shipinformationlist;
-                    history.CommanderId = hist.CommanderId;
+                    history.Copy(hist);
 
                     if (history.CommanderId != EdsmLogFetcher.CommanderId)
                     {
