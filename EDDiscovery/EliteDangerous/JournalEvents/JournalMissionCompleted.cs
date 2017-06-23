@@ -157,30 +157,35 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             detailed += CommoditiesList();
         }
 
-        public string PermitsList()
+        public string PermitsList(bool pretty = true)
         {
             string detailed = "";
             if (PermitsAwarded != null && PermitsAwarded.Length > 0)
             {
-                detailed += "Permits:";
+                if (pretty)
+                    detailed += "Permits:";
+
                 for (int i = 0; i < PermitsAwarded.Length; i++)
                     detailed += ((i > 0) ? "," : "") + PermitsAwarded[i];
 
-                detailed += System.Environment.NewLine;
+                if (pretty)
+                    detailed += System.Environment.NewLine;
             }
             return detailed;
         }
 
-        public string CommoditiesList()
+        public string CommoditiesList(bool pretty = true)
         {
             string detailed = "";
             if (CommodityReward != null && CommodityReward.Length > 0)
             {
-                detailed += "Rewards:";
+                if (pretty)
+                    detailed += "Rewards:";
                 for (int i = 0; i < CommodityReward.Length; i++)
                     detailed += ((i > 0) ? "," : "") + JournalFieldNaming.RMat(CommodityReward[i].Item1) + " " + CommodityReward[i].Item2.ToStringInvariant();
 
-                detailed += System.Environment.NewLine;
+                if (pretty)
+                    detailed += System.Environment.NewLine;
             }
             return detailed;
         }

@@ -64,7 +64,7 @@ namespace EDDiscovery.Actions
             execstate[execlevel] = ExecState.On;
             nextstepnumber = 0;
 
-            System.Diagnostics.Debug.WriteLine("Run " + actionfile.name + "::" + r.Name);
+            //System.Diagnostics.Debug.WriteLine("Run " + actionfile.name + "::" + r.Name);
             //ActionData.DumpVars(gvars, " Func Var:");
 
             inputvars = iparas;             // current vars is set up by ActionRun at the point of invokation to have the latests globals

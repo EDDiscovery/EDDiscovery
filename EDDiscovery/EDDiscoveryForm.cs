@@ -232,13 +232,16 @@ namespace EDDiscovery
             inputdevicesactions.Stop();
             inputdevices.Clear();
 
+#if !__MonoCS__
             if (on)
             {
                 InputDevices.InputDeviceJoystickWindows.CreateJoysticks(inputdevices,axisevents);
                 InputDevices.InputDeviceKeyboard.CreateKeyboard(inputdevices);              // Created.. not started..
+                InputDevices.InputDeviceMouse.CreateMouse(inputdevices);
                 frontierbindings.LoadBindingsFile();
                 inputdevicesactions.Start();
             }
+#endif
         }
 
         private void EDDiscoveryForm_Layout(object sender, LayoutEventArgs e)       // Manually position, could not get gripper under tab control with it sizing for the life of me

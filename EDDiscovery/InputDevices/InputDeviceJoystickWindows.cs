@@ -48,7 +48,7 @@ namespace EDDiscovery.InputDevices
 
             Capabilities c = stick.Capabilities;
             butstate = new bool[c.ButtonCount];
-                        
+
             povvalue = Enumerable.Repeat(POVNotPressed, c.PovCount).ToArray();
             slidercount = 0;
 
