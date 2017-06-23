@@ -78,7 +78,7 @@ namespace EDDiscovery.UserControls
 
             Wanted = Restore(DB.SQLiteDBClass.GetSettingString(DbWSave, ""), 0, Recipes.Count);
 
-            List<string> engineers = Recipes.SelectMany(r => r.engineers.ToList()).Distinct().ToList();
+            List<string> engineers = Recipes.SelectMany(r => r.engineers).Distinct().ToList();
             engineers.Sort();
             efs = new EngineeringFilterSelector(engineers);
             efs.Changed += FilterChanged;
@@ -96,7 +96,7 @@ namespace EDDiscovery.UserControls
             ufs = new EngineeringFilterSelector(upgrades);
             ufs.Changed += FilterChanged;
 
-            List<string> matShortNames = Recipes.SelectMany(r => r.ingredients.ToList()).Distinct().ToList();
+            List<string> matShortNames = Recipes.SelectMany(r => r.ingredients).Distinct().ToList();
             matLookUp = matShortNames.Select(sn => Tuple.Create<string,string>(sn, MaterialCommodityDB.GetCachedMaterialByShortName(sn).name)).ToList();
             List<string> matLongNames = matLookUp.Select(lu => lu.Item2).ToList();
             matLongNames.Sort();
@@ -109,17 +109,14 @@ namespace EDDiscovery.UserControls
                 MaterialCommoditiesList.EngineeringRecipe r = Recipes[rno];
 
                 int rown = dataGridViewEngineering.Rows.Add();
-
-                using (DataGridViewRow row = dataGridViewEngineering.Rows[rown])
-                {
-                    row.Cells[0].Value = r.name; // debug rno + ":" + r.name;
-                    row.Cells[1].Value = r.module;
-                    row.Cells[2].Value = r.level;
-                    row.Cells[7].Value = r.ingredientsstring;
-                    row.Cells[8].Value = r.engineersstring;
-                    row.Tag = rno;
-                    row.Visible = false;
-                }
+                DataGridViewRow row = dataGridViewEngineering.Rows[rown];
+                row.Cells[UpgradeCol.Index].Value = r.name; // debug rno + ":" + r.name;
+                row.Cells[Module.Index].Value = r.module;
+                row.Cells[Level.Index].Value = r.level;
+                row.Cells[Recipe.Index].Value = r.ingredientsstring;
+                row.Cells[Engineers.Index].Value = r.engineersstring;
+                row.Tag = rno;
+                row.Visible = false;
             }
         }
 
@@ -165,11 +162,12 @@ namespace EDDiscovery.UserControls
                 List<string> matList;
                 if (materials == "All" || materials == "None") { matList = new List<string>(); }
                 else { matList = materials.Split(';').Where(x => !string.IsNullOrEmpty(x)).Select(m => matLookUp.Where(u => u.Item2 == m).First().Item1).ToList(); }
-                
+                List<MaterialCommodities> shoppinglist = new List<MaterialCommodities>();
+
                 for (int i = 0; i < Recipes.Count; i++)
                 {
                     int rno = (int)dataGridViewEngineering.Rows[i].Tag;
-                    dataGridViewEngineering.Rows[i].Cells[3].Value = MaterialCommoditiesList.HowManyLeft(mcl, Recipes[rno]).Item1.ToStringInvariant();
+                    dataGridViewEngineering[MaxCol.Index, i].Value = MaterialCommoditiesList.HowManyLeft(mcl, Recipes[rno]).Item1.ToStringInvariant();
                     bool visible = true;
                     
                     if (engineers == "All" && modules == "All" && levels == "All" && upgrades == "All" && materials == "All")
@@ -207,36 +205,35 @@ namespace EDDiscovery.UserControls
                     }
 
                     dataGridViewEngineering.Rows[i].Visible = visible;
-                }
 
-                List<MaterialCommodities> shoppinglist = new List<MaterialCommodities>();
-
-                for (int i = 0; i < Recipes.Count; i++)
-                {
-                    if (dataGridViewEngineering.Rows[i].Visible)
+                    if (visible)
                     {
-                        int rno = (int)dataGridViewEngineering.Rows[i].Tag;
                         Tuple<int, int, string> res = MaterialCommoditiesList.HowManyLeft(mcl, Recipes[rno], shoppinglist, Wanted[rno]);
                         //System.Diagnostics.Debug.WriteLine("{0} Recipe {1} executed {2} {3} ", i, rno, Wanted[rno], res.Item2);
 
-                        using (DataGridViewRow row = dataGridViewEngineering.Rows[i])
-                        {
-                            row.Cells[4].Value = Wanted[rno].ToStringInvariant();
-                            row.Cells[5].Value = res.Item2.ToStringInvariant();
-                            row.Cells[6].Value = res.Item3;
-                        }
+                        dataGridViewEngineering[WantedCol.Index, i].Value = Wanted[rno].ToStringInvariant();
+                        dataGridViewEngineering[Available.Index, i].Value = res.Item2.ToStringInvariant();
+                        dataGridViewEngineering[Notes.Index, i].Value = res.Item3;
                     }
                 }
 
                 dataGridViewEngineering.RowCount = Recipes.Count;         // truncate previous shopping list..
-
-                shoppinglist.Sort(delegate (MaterialCommodities left, MaterialCommodities right) { return left.name.CompareTo(right.name); });
-
-                foreach( MaterialCommodities c in shoppinglist )        // and add new..
+                foreach (MaterialCommodities c in shoppinglist.OrderBy(mat => mat.name))      // and add new..
                 {
-                    Object[] values = { c.name, "", "", "", c.scratchpad.ToStringInvariant(), "", c.shortname };
-                    int rn = dataGridViewEngineering.Rows.Add(values);
-                    dataGridViewEngineering.Rows[rn].ReadOnly = true;     // disable editing wanted..
+                    int rn = dataGridViewEngineering.Rows.Add();
+
+                    foreach (var cell in dataGridViewEngineering.Rows[rn].Cells.OfType<DataGridViewCell>())
+                    {
+                        if (cell.OwningColumn == UpgradeCol)
+                            cell.Value = c.name;
+                        else if (cell.OwningColumn == WantedCol)
+                            cell.Value = c.scratchpad.ToStringInvariant();
+                        else if (cell.OwningColumn == Notes)
+                            cell.Value = c.shortname;
+                        else if (cell.ValueType == null || cell.ValueType.IsAssignableFrom(typeof(string)))
+                            cell.Value = string.Empty;
+                    }
+                    dataGridViewEngineering.Rows[rn].ReadOnly = true;   // disable editing wanted..
                 }
 
                 if ( fdrow>=0 && dataGridViewEngineering.Rows[fdrow].Visible )        // better check visible, may have changed..
@@ -292,21 +289,21 @@ namespace EDDiscovery.UserControls
 
         private void dataGridViewModules_CellEndEdit(object sender, DataGridViewCellEventArgs e)
         {
-            string v = (string)dataGridViewEngineering.Rows[e.RowIndex].Cells[e.ColumnIndex].Value;
-            int iv = 0;
-            int rno = (int)dataGridViewEngineering.Rows[e.RowIndex].Tag;
-
-            if (v.InvariantParse(out iv))
+            if (e.ColumnIndex == WantedCol.Index)
             {
-                if (e.ColumnIndex == 4)
+                string v = (string)dataGridViewEngineering[WantedCol.Index, e.RowIndex].Value;
+                int iv = 0;
+                int rno = (int)dataGridViewEngineering.Rows[e.RowIndex].Tag;
+
+                if (v.InvariantParse(out iv))
                 {
                     //System.Diagnostics.Debug.WriteLine("Set wanted {0} to {1}", rno, iv);
                     Wanted[rno] = iv;
                     Display();
                 }
+                else
+                    dataGridViewEngineering[WantedCol.Index, e.RowIndex].Value = Wanted[rno].ToStringInvariant();
             }
-            else
-                dataGridViewEngineering.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = Wanted[rno].ToStringInvariant();
         }
 
         private Rectangle moveMoveDragBox;
@@ -378,17 +375,17 @@ namespace EDDiscovery.UserControls
             new MaterialCommoditiesList.EngineeringRecipe("Heavy Duty", "1C", "Armour", 1, "Liz Ryder,Selene Jean"),
             new MaterialCommoditiesList.EngineeringRecipe("Heavy Duty", "1C,1SE", "Armour", 2, "Selene Jean"),
             new MaterialCommoditiesList.EngineeringRecipe("Heavy Duty", "1C,1HDC,1SE", "Armour", 3, "Selene Jean"),
-            new MaterialCommoditiesList.EngineeringRecipe("Heavy Duty", "1PCo,1SS,1V", "Armour", 4, "Selene Jean"),
-            new MaterialCommoditiesList.EngineeringRecipe("Heavy Duty", "1CoS,1CDC,1W", "Armour", 5, "Selene Jean"),
+            new MaterialCommoditiesList.EngineeringRecipe("Heavy Duty", "1FPC,1SS,1V", "Armour", 4, "Selene Jean"),
+            new MaterialCommoditiesList.EngineeringRecipe("Heavy Duty", "1CoS,1FCC,1W", "Armour", 5, "Selene Jean"),
             new MaterialCommoditiesList.EngineeringRecipe("Kinetic Resistant", "1Ni", "Armour", 1, "Liz Ryder,Selene Jean"),
             new MaterialCommoditiesList.EngineeringRecipe("Kinetic Resistant", "1Ni,1V", "Armour", 2, "Selene Jean"),
             new MaterialCommoditiesList.EngineeringRecipe("Kinetic Resistant", "1HDC,1SAll,1V", "Armour", 3, "Selene Jean"),
-            new MaterialCommoditiesList.EngineeringRecipe("Kinetic Resistant", "1GA,1PCo,1W", "Armour", 4, "Selene Jean"),
-            new MaterialCommoditiesList.EngineeringRecipe("Kinetic Resistant", "1CDC,1Mo,1PA", "Armour", 5, "Selene Jean"),
+            new MaterialCommoditiesList.EngineeringRecipe("Kinetic Resistant", "1GA,1FPC,1W", "Armour", 4, "Selene Jean"),
+            new MaterialCommoditiesList.EngineeringRecipe("Kinetic Resistant", "1FCC,1Mo,1PA", "Armour", 5, "Selene Jean"),
             new MaterialCommoditiesList.EngineeringRecipe("Lightweight", "1Fe", "Armour", 1, "Liz Ryder,Selene Jean"),
             new MaterialCommoditiesList.EngineeringRecipe("Lightweight", "1CCo,1Fe", "Armour", 2, "Selene Jean"),
             new MaterialCommoditiesList.EngineeringRecipe("Lightweight", "1CCo,1HDC,1Fe", "Armour", 3, "Selene Jean"),
-            new MaterialCommoditiesList.EngineeringRecipe("Lightweight", "1Ge,1CCe,1PCo", "Armour", 4, "Selene Jean"),
+            new MaterialCommoditiesList.EngineeringRecipe("Lightweight", "1Ge,1CCe,1FPC", "Armour", 4, "Selene Jean"),
             new MaterialCommoditiesList.EngineeringRecipe("Lightweight", "1CCe,1Sn,1MGA", "Armour", 5, "Selene Jean"),
             new MaterialCommoditiesList.EngineeringRecipe("Thermal Resistant", "1HCW", "Armour", 1, "Liz Ryder,Selene Jean"),
             new MaterialCommoditiesList.EngineeringRecipe("Thermal Resistant", "1HDP,1Ni", "Armour", 2, "Selene Jean"),
@@ -398,7 +395,7 @@ namespace EDDiscovery.UserControls
             new MaterialCommoditiesList.EngineeringRecipe("Shielded", "1WSE", "Auto Field-Maintenance Unit", 1, "Lori Jameson,Bill Turner"),
             new MaterialCommoditiesList.EngineeringRecipe("Shielded", "1C,1SE", "Auto Field-Maintenance Unit", 2, "Lori Jameson,Bill Turner"),
             new MaterialCommoditiesList.EngineeringRecipe("Shielded", "1C,1HDC", "Auto Field-Maintenance Unit", 3, "Lori Jameson,Bill Turner"),
-            new MaterialCommoditiesList.EngineeringRecipe("Shielded", "1PCo,1SS,1V", "Auto Field-Maintenance Unit", 4, "Lori Jameson"),
+            new MaterialCommoditiesList.EngineeringRecipe("Shielded", "1FPC,1SS,1V", "Auto Field-Maintenance Unit", 4, "Lori Jameson"),
             new MaterialCommoditiesList.EngineeringRecipe("Efficient Weapon", "1S", "Beam Laser", 1, "Broo Tarquin,The Dweller"),
             new MaterialCommoditiesList.EngineeringRecipe("Efficient Weapon", "1HDP,1S", "Beam Laser", 2, "Broo Tarquin,The Dweller"),
             new MaterialCommoditiesList.EngineeringRecipe("Efficient Weapon", "1Cr,1ESED,1HE", "Beam Laser", 3, "Broo Tarquin,The Dweller"),
@@ -418,7 +415,7 @@ namespace EDDiscovery.UserControls
             new MaterialCommoditiesList.EngineeringRecipe("Overcharged", "1CCo,1Ni", "Beam Laser", 2, "Broo Tarquin,The Dweller"),
             new MaterialCommoditiesList.EngineeringRecipe("Overcharged", "1CCo,1EA,1Ni", "Beam Laser", 3, "Broo Tarquin,The Dweller"),
             new MaterialCommoditiesList.EngineeringRecipe("Overcharged", "1CCe,1PCa,1Zn", "Beam Laser", 4, "Broo Tarquin"),
-            new MaterialCommoditiesList.EngineeringRecipe("Overcharged", "1CPo,1MEF,1Zr", "Beam Laser", 5, "Broo Tarquin"),
+            new MaterialCommoditiesList.EngineeringRecipe("Overcharged", "1CPo,1EFW,1Zr", "Beam Laser", 5, "Broo Tarquin"),
             new MaterialCommoditiesList.EngineeringRecipe("Short Range Blaster", "1Ni", "Beam Laser", 1, "Broo Tarquin,The Dweller"),
             new MaterialCommoditiesList.EngineeringRecipe("Short Range Blaster", "1MCF,1Ni", "Beam Laser", 2, "Broo Tarquin,The Dweller"),
             new MaterialCommoditiesList.EngineeringRecipe("Short Range Blaster", "1EA,1MCF,1Ni", "Beam Laser", 3, "Broo Tarquin,The Dweller"),
@@ -453,7 +450,7 @@ namespace EDDiscovery.UserControls
             new MaterialCommoditiesList.EngineeringRecipe("Overcharged", "1CCo,1Ni", "Burst Laser", 2, "Broo Tarquin,The Dweller"),
             new MaterialCommoditiesList.EngineeringRecipe("Overcharged", "1CCo,1EA,1Ni", "Burst Laser", 3, "Broo Tarquin,The Dweller"),
             new MaterialCommoditiesList.EngineeringRecipe("Overcharged", "1CCe,1PCa,1Zn", "Burst Laser", 4, "Broo Tarquin"),
-            new MaterialCommoditiesList.EngineeringRecipe("Overcharged", "1CPo,1MEF,1Zr", "Burst Laser", 5, "Broo Tarquin"),
+            new MaterialCommoditiesList.EngineeringRecipe("Overcharged", "1CPo,1EFW,1Zr", "Burst Laser", 5, "Broo Tarquin"),
             new MaterialCommoditiesList.EngineeringRecipe("Rapid Fire", "1MS", "Burst Laser", 1, "Broo Tarquin,The Dweller"),
             new MaterialCommoditiesList.EngineeringRecipe("Rapid Fire", "1HDP,1MS", "Burst Laser", 2, "Broo Tarquin,The Dweller"),
             new MaterialCommoditiesList.EngineeringRecipe("Rapid Fire", "1ME,1PAll,1SLF", "Burst Laser", 3, "Broo Tarquin,The Dweller"),
@@ -478,7 +475,7 @@ namespace EDDiscovery.UserControls
             new MaterialCommoditiesList.EngineeringRecipe("High Capacity Magazine", "1MS,1V", "Cannon", 2, "Tod \"The Blaster\" McQuinn,The Sarge"),
             new MaterialCommoditiesList.EngineeringRecipe("High Capacity Magazine", "1MS,1Nb,1V", "Cannon", 3, "The Sarge"),
             new MaterialCommoditiesList.EngineeringRecipe("High Capacity Magazine", "1HDC,1ME,1Sn", "Cannon", 4, "The Sarge"),
-            new MaterialCommoditiesList.EngineeringRecipe("High Capacity Magazine", "1MC,1MSC,1PCo", "Cannon", 5, "The Sarge"),
+            new MaterialCommoditiesList.EngineeringRecipe("High Capacity Magazine", "1MC,1MSC,1FPC", "Cannon", 5, "The Sarge"),
             new MaterialCommoditiesList.EngineeringRecipe("Light Weight", "1P", "Cannon", 1, "Tod \"The Blaster\" McQuinn,The Sarge"),
             new MaterialCommoditiesList.EngineeringRecipe("Light Weight", "1Mn,1SAll", "Cannon", 2, "Tod \"The Blaster\" McQuinn,The Sarge"),
             new MaterialCommoditiesList.EngineeringRecipe("Light Weight", "1CCe,1Mn,1SAll", "Cannon", 3, "The Sarge"),
@@ -493,7 +490,7 @@ namespace EDDiscovery.UserControls
             new MaterialCommoditiesList.EngineeringRecipe("Overcharged", "1CCo,1Ni", "Cannon", 2, "Tod \"The Blaster\" McQuinn,The Sarge"),
             new MaterialCommoditiesList.EngineeringRecipe("Overcharged", "1CCo,1EA,1Ni", "Cannon", 3, "The Sarge"),
             new MaterialCommoditiesList.EngineeringRecipe("Overcharged", "1CCe,1PCa,1Zn", "Cannon", 4, "The Sarge"),
-            new MaterialCommoditiesList.EngineeringRecipe("Overcharged", "1CPo,1MEF,1Zr", "Cannon", 5, "The Sarge"),
+            new MaterialCommoditiesList.EngineeringRecipe("Overcharged", "1CPo,1EFW,1Zr", "Cannon", 5, "The Sarge"),
             new MaterialCommoditiesList.EngineeringRecipe("Rapid Fire", "1MS", "Cannon", 1, "Tod \"The Blaster\" McQuinn,The Sarge"),
             new MaterialCommoditiesList.EngineeringRecipe("Rapid Fire", "1HDP,1MS", "Cannon", 2, "Tod \"The Blaster\" McQuinn,The Sarge"),
             new MaterialCommoditiesList.EngineeringRecipe("Rapid Fire", "1ME,1PAll,1SLF", "Cannon", 3, "The Sarge"),
@@ -523,8 +520,8 @@ namespace EDDiscovery.UserControls
             new MaterialCommoditiesList.EngineeringRecipe("Shielded", "1WSE", "Chaff Launcher", 1, "Ram Tah"),
             new MaterialCommoditiesList.EngineeringRecipe("Shielded", "1C,1SE", "Chaff Launcher", 2, "Ram Tah"),
             new MaterialCommoditiesList.EngineeringRecipe("Shielded", "1C,1HDC,1SE", "Chaff Launcher", 3, "Ram Tah"),
-            new MaterialCommoditiesList.EngineeringRecipe("Shielded", "1PCo,1SS,1V", "Chaff Launcher", 4, "Ram Tah"),
-            new MaterialCommoditiesList.EngineeringRecipe("Shielded", "1CoS,1CDC,1W", "Chaff Launcher", 5, "Ram Tah"),
+            new MaterialCommoditiesList.EngineeringRecipe("Shielded", "1FPC,1SS,1V", "Chaff Launcher", 4, "Ram Tah"),
+            new MaterialCommoditiesList.EngineeringRecipe("Shielded", "1CoS,1FCC,1W", "Chaff Launcher", 5, "Ram Tah"),
             new MaterialCommoditiesList.EngineeringRecipe("Light Weight", "1P", "Collector Limpet Controller", 1, "Tiana Fortune,The Sarge,Ram Tah"),
             new MaterialCommoditiesList.EngineeringRecipe("Light Weight", "1Mn,1SAll", "Collector Limpet Controller", 2, "Tiana Fortune,The Sarge,Ram Tah"),
             new MaterialCommoditiesList.EngineeringRecipe("Light Weight", "1CCe,1Mn,1SAll", "Collector Limpet Controller", 3, "Tiana Fortune,The Sarge,Ram Tah"),
@@ -538,8 +535,8 @@ namespace EDDiscovery.UserControls
             new MaterialCommoditiesList.EngineeringRecipe("Shielded", "1WSE", "Collector Limpet Controller", 1, "Tiana Fortune,The Sarge,Ram Tah"),
             new MaterialCommoditiesList.EngineeringRecipe("Shielded", "1C,1SE", "Collector Limpet Controller", 2, "Tiana Fortune,The Sarge,Ram Tah"),
             new MaterialCommoditiesList.EngineeringRecipe("Shielded", "1C,1HDC,1SE", "Collector Limpet Controller", 3, "Tiana Fortune,The Sarge,Ram Tah"),
-            new MaterialCommoditiesList.EngineeringRecipe("Shielded", "1PCo,1SS,1V", "Collector Limpet Controller", 4, "Tiana Fortune,The Sarge,Ram Tah"),
-            new MaterialCommoditiesList.EngineeringRecipe("Shielded", "1CoS,1CDC,1W", "Collector Limpet Controller", 5, "Tiana Fortune,The Sarge"),
+            new MaterialCommoditiesList.EngineeringRecipe("Shielded", "1FPC,1SS,1V", "Collector Limpet Controller", 4, "Tiana Fortune,The Sarge,Ram Tah"),
+            new MaterialCommoditiesList.EngineeringRecipe("Shielded", "1CoS,1FCC,1W", "Collector Limpet Controller", 5, "Tiana Fortune,The Sarge"),
             new MaterialCommoditiesList.EngineeringRecipe("Fast Scan", "1P", "Detailed Surface Scanner", 1, "Hera Tani,Juri Ishmaak,Lei Cheung,Lori Jameson,Tiana Fortune,Bill Turner,Felicity Farseer"),
             new MaterialCommoditiesList.EngineeringRecipe("Fast Scan", "1FFC,1P", "Detailed Surface Scanner", 2, "Hera Tani,Juri Ishmaak,Lei Cheung,Lori Jameson,Tiana Fortune,Bill Turner,Felicity Farseer"),
             new MaterialCommoditiesList.EngineeringRecipe("Fast Scan", "1FFC,1OSK,1P", "Detailed Surface Scanner", 3, "Hera Tani,Juri Ishmaak,Lei Cheung,Lori Jameson,Tiana Fortune,Felicity Farseer"),
@@ -549,7 +546,7 @@ namespace EDDiscovery.UserControls
             new MaterialCommoditiesList.EngineeringRecipe("Long Range", "1HC,1Fe", "Detailed Surface Scanner", 2, "Hera Tani,Juri Ishmaak,Lei Cheung,Lori Jameson,Tiana Fortune,Bill Turner,Felicity Farseer"),
             new MaterialCommoditiesList.EngineeringRecipe("Long Range", "1HC,1Fe,1UED", "Detailed Surface Scanner", 3, "Hera Tani,Juri Ishmaak,Lei Cheung,Lori Jameson,Tiana Fortune,Felicity Farseer"),
             new MaterialCommoditiesList.EngineeringRecipe("Long Range", "1DED,1EA,1Ge", "Detailed Surface Scanner", 4, "Hera Tani,Juri Ishmaak,Lei Cheung,Lori Jameson,Tiana Fortune"),
-            new MaterialCommoditiesList.EngineeringRecipe("Long Range", "1ACED,1Nb,1PCa", "Detailed Surface Scanner", 5, "Hera Tani,Juri Ishmaak,Lei Cheung,Lori Jameson,Tiana Fortune"),
+            new MaterialCommoditiesList.EngineeringRecipe("Long Range", "1CED,1Nb,1PCa", "Detailed Surface Scanner", 5, "Hera Tani,Juri Ishmaak,Lei Cheung,Lori Jameson,Tiana Fortune"),
             new MaterialCommoditiesList.EngineeringRecipe("Wide Angle", "1MS", "Detailed Surface Scanner", 1, "Hera Tani,Juri Ishmaak,Lei Cheung,Lori Jameson,Tiana Fortune,Bill Turner,Felicity Farseer"),
             new MaterialCommoditiesList.EngineeringRecipe("Wide Angle", "1Ge,1MS", "Detailed Surface Scanner", 2, "Hera Tani,Juri Ishmaak,Lei Cheung,Lori Jameson,Tiana Fortune,Bill Turner,Felicity Farseer"),
             new MaterialCommoditiesList.EngineeringRecipe("Wide Angle", "1CSD,1Ge,1MS", "Detailed Surface Scanner", 3, "Hera Tani,Juri Ishmaak,Lei Cheung,Lori Jameson,Tiana Fortune,Felicity Farseer"),
@@ -568,13 +565,13 @@ namespace EDDiscovery.UserControls
             new MaterialCommoditiesList.EngineeringRecipe("Shielded", "1WSE", "Electronic Countermeasure", 1, "Ram Tah"),
             new MaterialCommoditiesList.EngineeringRecipe("Shielded", "1C,1SE", "Electronic Countermeasure", 2, "Ram Tah"),
             new MaterialCommoditiesList.EngineeringRecipe("Shielded", "1C,1HDC", "Electronic Countermeasure", 3, "Ram Tah"),
-            new MaterialCommoditiesList.EngineeringRecipe("Shielded", "1PCo,1SS,1V", "Electronic Countermeasure", 4, "Ram Tah"),
-            new MaterialCommoditiesList.EngineeringRecipe("Shielded", "1CoS,1CDC,1W", "Electronic Countermeasure", 5, "Ram Tah"),
+            new MaterialCommoditiesList.EngineeringRecipe("Shielded", "1FPC,1SS,1V", "Electronic Countermeasure", 4, "Ram Tah"),
+            new MaterialCommoditiesList.EngineeringRecipe("Shielded", "1CoS,1FCC,1W", "Electronic Countermeasure", 5, "Ram Tah"),
             new MaterialCommoditiesList.EngineeringRecipe("Double Shot", "1C", "Fragment Cannon", 1, "Tod \"The Blaster\" McQuinn,Zacariah Nemo"),
             new MaterialCommoditiesList.EngineeringRecipe("Double Shot", "1C,1ME", "Fragment Cannon", 2, "Tod \"The Blaster\" McQuinn,Zacariah Nemo"),
             new MaterialCommoditiesList.EngineeringRecipe("Double Shot", "1C,1CIF,1ME", "Fragment Cannon", 3, "Tod \"The Blaster\" McQuinn,Zacariah Nemo"),
             new MaterialCommoditiesList.EngineeringRecipe("Double Shot", "1MC,1SFP,1V", "Fragment Cannon", 4, "Zacariah Nemo"),
-            new MaterialCommoditiesList.EngineeringRecipe("Double Shot", "1CCo,1HDC,1MEF", "Fragment Cannon", 5, "Zacariah Nemo"),
+            new MaterialCommoditiesList.EngineeringRecipe("Double Shot", "1CCo,1HDC,1EFW", "Fragment Cannon", 5, "Zacariah Nemo"),
             new MaterialCommoditiesList.EngineeringRecipe("Efficient Weapon", "1S", "Fragment Cannon", 1, "Tod \"The Blaster\" McQuinn,Zacariah Nemo"),
             new MaterialCommoditiesList.EngineeringRecipe("Efficient Weapon", "1HDP,1S", "Fragment Cannon", 2, "Tod \"The Blaster\" McQuinn,Zacariah Nemo"),
             new MaterialCommoditiesList.EngineeringRecipe("Efficient Weapon", "1Cr,1ESED,1HE", "Fragment Cannon", 3, "Tod \"The Blaster\" McQuinn,Zacariah Nemo"),
@@ -584,7 +581,7 @@ namespace EDDiscovery.UserControls
             new MaterialCommoditiesList.EngineeringRecipe("High Capacity Magazine", "1MS,1V", "Fragment Cannon", 2, "Tod \"The Blaster\" McQuinn,Zacariah Nemo"),
             new MaterialCommoditiesList.EngineeringRecipe("High Capacity Magazine", "1MS,1Nb,1V", "Fragment Cannon", 3, "Tod \"The Blaster\" McQuinn,Zacariah Nemo"),
             new MaterialCommoditiesList.EngineeringRecipe("High Capacity Magazine", "1HDC,1ME,1Sn", "Fragment Cannon", 4, "Zacariah Nemo"),
-            new MaterialCommoditiesList.EngineeringRecipe("High Capacity Magazine", "1MC,1MSC,1PCo", "Fragment Cannon", 5, "Zacariah Nemo"),
+            new MaterialCommoditiesList.EngineeringRecipe("High Capacity Magazine", "1MC,1MSC,1FPC", "Fragment Cannon", 5, "Zacariah Nemo"),
             new MaterialCommoditiesList.EngineeringRecipe("Light Weight", "1P", "Fragment Cannon", 1, "Tod \"The Blaster\" McQuinn,Zacariah Nemo"),
             new MaterialCommoditiesList.EngineeringRecipe("Light Weight", "1Mn,1SAll", "Fragment Cannon", 2, "Tod \"The Blaster\" McQuinn,Zacariah Nemo"),
             new MaterialCommoditiesList.EngineeringRecipe("Light Weight", "1CCe,1Mn,1SAll", "Fragment Cannon", 3, "Tod \"The Blaster\" McQuinn,Zacariah Nemo"),
@@ -594,7 +591,7 @@ namespace EDDiscovery.UserControls
             new MaterialCommoditiesList.EngineeringRecipe("Overcharged", "1CCo,1Ni", "Fragment Cannon", 2, "Tod \"The Blaster\" McQuinn,Zacariah Nemo"),
             new MaterialCommoditiesList.EngineeringRecipe("Overcharged", "1CCo,1EA,1Ni", "Fragment Cannon", 3, "Tod \"The Blaster\" McQuinn,Zacariah Nemo"),
             new MaterialCommoditiesList.EngineeringRecipe("Overcharged", "1CCe,1PCa,1Zn", "Fragment Cannon", 4, "Zacariah Nemo"),
-            new MaterialCommoditiesList.EngineeringRecipe("Overcharged", "1CPo,1MEF,1Zr", "Fragment Cannon", 5, "Zacariah Nemo"),
+            new MaterialCommoditiesList.EngineeringRecipe("Overcharged", "1CPo,1EFW,1Zr", "Fragment Cannon", 5, "Zacariah Nemo"),
             new MaterialCommoditiesList.EngineeringRecipe("Rapid Fire", "1MS", "Fragment Cannon", 1, "Tod \"The Blaster\" McQuinn,Zacariah Nemo"),
             new MaterialCommoditiesList.EngineeringRecipe("Rapid Fire", "1HDP,1MS", "Fragment Cannon", 2, "Tod \"The Blaster\" McQuinn,Zacariah Nemo"),
             new MaterialCommoditiesList.EngineeringRecipe("Rapid Fire", "1ME,1PAll,1SLF", "Fragment Cannon", 3, "Tod \"The Blaster\" McQuinn,Zacariah Nemo"),
@@ -619,7 +616,7 @@ namespace EDDiscovery.UserControls
             new MaterialCommoditiesList.EngineeringRecipe("Shielded", "1C,1SE", "Frame Shift Drive", 2, "Colonel Bris Dekker,Elvira Martuuk,Felicity Farseer,Professor Palin"),
             new MaterialCommoditiesList.EngineeringRecipe("Shielded", "1C,1SS,1Zn", "Frame Shift Drive", 3, "Colonel Bris Dekker,Elvira Martuuk,Felicity Farseer,Professor Palin"),
             new MaterialCommoditiesList.EngineeringRecipe("Shielded", "1CoS,1HDC,1V", "Frame Shift Drive", 4, "Elvira Martuuk,Felicity Farseer"),
-            new MaterialCommoditiesList.EngineeringRecipe("Shielded", "1IS,1PCo,1W", "Frame Shift Drive", 5, "Elvira Martuuk,Felicity Farseer"),
+            new MaterialCommoditiesList.EngineeringRecipe("Shielded", "1IS,1FPC,1W", "Frame Shift Drive", 5, "Elvira Martuuk,Felicity Farseer"),
             new MaterialCommoditiesList.EngineeringRecipe("Expanded Capture Arc", "1MS", "Frame Shift Drive Interdictor", 1, "Colonel Bris Dekker,Felicity Farseer,Tiana Fortune"),
             new MaterialCommoditiesList.EngineeringRecipe("Expanded Capture Arc", "1ME,1UEF", "Frame Shift Drive Interdictor", 2, "Colonel Bris Dekker,Tiana Fortune"),
             new MaterialCommoditiesList.EngineeringRecipe("Expanded Capture Arc", "1GR,1MC,1TEC", "Frame Shift Drive Interdictor", 3, "Colonel Bris Dekker,Tiana Fortune"),
@@ -631,7 +628,7 @@ namespace EDDiscovery.UserControls
             new MaterialCommoditiesList.EngineeringRecipe("Shielded", "1WSE", "Fuel Scoop", 1, "Lori Jameson,Bill Turner"),
             new MaterialCommoditiesList.EngineeringRecipe("Shielded", "1C,1SE", "Fuel Scoop", 2, "Lori Jameson,Bill Turner"),
             new MaterialCommoditiesList.EngineeringRecipe("Shielded", "1C,1HDC", "Fuel Scoop", 3, "Lori Jameson,Bill Turner"),
-            new MaterialCommoditiesList.EngineeringRecipe("Shielded", "1PCo,1SS,1V", "Fuel Scoop", 4, "Lori Jameson,Bill Turner"),
+            new MaterialCommoditiesList.EngineeringRecipe("Shielded", "1FPC,1SS,1V", "Fuel Scoop", 4, "Lori Jameson,Bill Turner"),
             new MaterialCommoditiesList.EngineeringRecipe("Light Weight", "1P", "Fuel Transfer Limpet Controller", 1, "Tiana Fortune,The Sarge,Ram Tah"),
             new MaterialCommoditiesList.EngineeringRecipe("Light Weight", "1Mn,1SAll", "Fuel Transfer Limpet Controller", 2, "Tiana Fortune,The Sarge,Ram Tah"),
             new MaterialCommoditiesList.EngineeringRecipe("Light Weight", "1CCe,1Mn,1SAll", "Fuel Transfer Limpet Controller", 3, "Tiana Fortune,The Sarge,Ram Tah"),
@@ -645,8 +642,8 @@ namespace EDDiscovery.UserControls
             new MaterialCommoditiesList.EngineeringRecipe("Shielded", "1WSE", "Fuel Transfer Limpet Controller", 1, "Tiana Fortune,The Sarge,Ram Tah"),
             new MaterialCommoditiesList.EngineeringRecipe("Shielded", "1C,1SE", "Fuel Transfer Limpet Controller", 2, "Tiana Fortune,The Sarge,Ram Tah"),
             new MaterialCommoditiesList.EngineeringRecipe("Shielded", "1C,1HDC,1SE", "Fuel Transfer Limpet Controller", 3, "Tiana Fortune,The Sarge,Ram Tah"),
-            new MaterialCommoditiesList.EngineeringRecipe("Shielded", "1PCo,1SS,1V", "Fuel Transfer Limpet Controller", 4, "Tiana Fortune,The Sarge,Ram Tah"),
-            new MaterialCommoditiesList.EngineeringRecipe("Shielded", "1CoS,1CDC,1W", "Fuel Transfer Limpet Controller", 5, "Tiana Fortune,The Sarge"),
+            new MaterialCommoditiesList.EngineeringRecipe("Shielded", "1FPC,1SS,1V", "Fuel Transfer Limpet Controller", 4, "Tiana Fortune,The Sarge,Ram Tah"),
+            new MaterialCommoditiesList.EngineeringRecipe("Shielded", "1CoS,1FCC,1W", "Fuel Transfer Limpet Controller", 5, "Tiana Fortune,The Sarge"),
             new MaterialCommoditiesList.EngineeringRecipe("Light Weight", "1P", "Hatch Breaker Limpet Controller", 1, "Tiana Fortune,The Sarge,Ram Tah"),
             new MaterialCommoditiesList.EngineeringRecipe("Light Weight", "1Mn,1SAll", "Hatch Breaker Limpet Controller", 2, "Tiana Fortune,The Sarge,Ram Tah"),
             new MaterialCommoditiesList.EngineeringRecipe("Light Weight", "1CCe,1Mn,1SAll", "Hatch Breaker Limpet Controller", 3, "Tiana Fortune,The Sarge,Ram Tah"),
@@ -660,8 +657,8 @@ namespace EDDiscovery.UserControls
             new MaterialCommoditiesList.EngineeringRecipe("Shielded", "1WSE", "Hatch Breaker Limpet Controller", 1, "Tiana Fortune,The Sarge,Ram Tah"),
             new MaterialCommoditiesList.EngineeringRecipe("Shielded", "1C,1SE", "Hatch Breaker Limpet Controller", 2, "Tiana Fortune,The Sarge,Ram Tah"),
             new MaterialCommoditiesList.EngineeringRecipe("Shielded", "1C,1HDC,1SE", "Hatch Breaker Limpet Controller", 3, "Tiana Fortune,The Sarge,Ram Tah"),
-            new MaterialCommoditiesList.EngineeringRecipe("Shielded", "1PCo,1SS,1V", "Hatch Breaker Limpet Controller", 4, "Tiana Fortune,The Sarge"),
-            new MaterialCommoditiesList.EngineeringRecipe("Shielded", "1CoS,1CDC,1W", "Hatch Breaker Limpet Controller", 5, "Tiana Fortune,The Sarge"),
+            new MaterialCommoditiesList.EngineeringRecipe("Shielded", "1FPC,1SS,1V", "Hatch Breaker Limpet Controller", 4, "Tiana Fortune,The Sarge"),
+            new MaterialCommoditiesList.EngineeringRecipe("Shielded", "1CoS,1FCC,1W", "Hatch Breaker Limpet Controller", 5, "Tiana Fortune,The Sarge"),
             new MaterialCommoditiesList.EngineeringRecipe("Ammo Capacity", "1MS,1Nb,1V", "Heat Sink Launcher", 3, "Ram Tah"),
             new MaterialCommoditiesList.EngineeringRecipe("Light Weight", "1P", "Heat Sink Launcher", 1, "Ram Tah"),
             new MaterialCommoditiesList.EngineeringRecipe("Light Weight", "1Mn,1SAll", "Heat Sink Launcher", 2, "Ram Tah"),
@@ -676,8 +673,8 @@ namespace EDDiscovery.UserControls
             new MaterialCommoditiesList.EngineeringRecipe("Shielded", "1WSE", "Heat Sink Launcher", 1, "Ram Tah"),
             new MaterialCommoditiesList.EngineeringRecipe("Shielded", "1C,1SE", "Heat Sink Launcher", 2, "Ram Tah"),
             new MaterialCommoditiesList.EngineeringRecipe("Shielded", "1C,1HDC,1SE", "Heat Sink Launcher", 3, "Ram Tah"),
-            new MaterialCommoditiesList.EngineeringRecipe("Shielded", "1PCo,1SS,1V", "Heat Sink Launcher", 4, "Ram Tah"),
-            new MaterialCommoditiesList.EngineeringRecipe("Shielded", "1CoS,1CDC,1W", "Heat Sink Launcher", 5, "Ram Tah"),
+            new MaterialCommoditiesList.EngineeringRecipe("Shielded", "1FPC,1SS,1V", "Heat Sink Launcher", 4, "Ram Tah"),
+            new MaterialCommoditiesList.EngineeringRecipe("Shielded", "1CoS,1FCC,1W", "Heat Sink Launcher", 5, "Ram Tah"),
             new MaterialCommoditiesList.EngineeringRecipe("Blast Resistant", "1Ni", "Hull Reinforcement Package", 1, "Liz Ryder,Selene Jean"),
             new MaterialCommoditiesList.EngineeringRecipe("Blast Resistant", "1C,1Zn", "Hull Reinforcement Package", 2, "Selene Jean"),
             new MaterialCommoditiesList.EngineeringRecipe("Blast Resistant", "1SAll,1V,1Zr", "Hull Reinforcement Package", 3, "Selene Jean"),
@@ -686,17 +683,17 @@ namespace EDDiscovery.UserControls
             new MaterialCommoditiesList.EngineeringRecipe("Heavy Duty", "1C", "Hull Reinforcement Package", 1, "Liz Ryder,Selene Jean"),
             new MaterialCommoditiesList.EngineeringRecipe("Heavy Duty", "1C,1SE", "Hull Reinforcement Package", 2, "Selene Jean"),
             new MaterialCommoditiesList.EngineeringRecipe("Heavy Duty", "1C,1HDC,1SE", "Hull Reinforcement Package", 3, "Selene Jean"),
-            new MaterialCommoditiesList.EngineeringRecipe("Heavy Duty", "1PCo,1SS,1V", "Hull Reinforcement Package", 4, "Selene Jean"),
-            new MaterialCommoditiesList.EngineeringRecipe("Heavy Duty", "1CoS,1CDC,1W", "Hull Reinforcement Package", 5, "Selene Jean"),
+            new MaterialCommoditiesList.EngineeringRecipe("Heavy Duty", "1FPC,1SS,1V", "Hull Reinforcement Package", 4, "Selene Jean"),
+            new MaterialCommoditiesList.EngineeringRecipe("Heavy Duty", "1CoS,1FCC,1W", "Hull Reinforcement Package", 5, "Selene Jean"),
             new MaterialCommoditiesList.EngineeringRecipe("Kinetic Resistant", "1Ni", "Hull Reinforcement Package", 1, "Liz Ryder,Selene Jean"),
             new MaterialCommoditiesList.EngineeringRecipe("Kinetic Resistant", "1Ni,1V", "Hull Reinforcement Package", 2, "Selene Jean"),
             new MaterialCommoditiesList.EngineeringRecipe("Kinetic Resistant", "1HDC,1SAll,1V", "Hull Reinforcement Package", 3, "Selene Jean"),
-            new MaterialCommoditiesList.EngineeringRecipe("Kinetic Resistant", "1GA,1PCo,1W", "Hull Reinforcement Package", 4, "Selene Jean"),
-            new MaterialCommoditiesList.EngineeringRecipe("Kinetic Resistant", "1CDC,1Mo,1PA", "Hull Reinforcement Package", 5, "Selene Jean"),
+            new MaterialCommoditiesList.EngineeringRecipe("Kinetic Resistant", "1GA,1FPC,1W", "Hull Reinforcement Package", 4, "Selene Jean"),
+            new MaterialCommoditiesList.EngineeringRecipe("Kinetic Resistant", "1FCC,1Mo,1PA", "Hull Reinforcement Package", 5, "Selene Jean"),
             new MaterialCommoditiesList.EngineeringRecipe("Light Weight", "1Fe", "Hull Reinforcement Package", 1, "Liz Ryder,Selene Jean"),
             new MaterialCommoditiesList.EngineeringRecipe("Light Weight", "1CCo,1Fe", "Hull Reinforcement Package", 2, "Selene Jean"),
             new MaterialCommoditiesList.EngineeringRecipe("Light Weight", "1CCo,1HDC,1Fe", "Hull Reinforcement Package", 3, "Selene Jean"),
-            new MaterialCommoditiesList.EngineeringRecipe("Light Weight", "1CCe,1Ge,1PCo", "Hull Reinforcement Package", 4, "Selene Jean"),
+            new MaterialCommoditiesList.EngineeringRecipe("Light Weight", "1CCe,1Ge,1FPC", "Hull Reinforcement Package", 4, "Selene Jean"),
             new MaterialCommoditiesList.EngineeringRecipe("Light Weight", "1CCe,1MGA,1Sn", "Hull Reinforcement Package", 5, "Selene Jean"),
             new MaterialCommoditiesList.EngineeringRecipe("Thermal Resistant", "1HCW", "Hull Reinforcement Package", 1, "Liz Ryder,Selene Jean"),
             new MaterialCommoditiesList.EngineeringRecipe("Thermal Resistant", "1HDP,1Ni", "Hull Reinforcement Package", 2, "Selene Jean"),
@@ -717,7 +714,7 @@ namespace EDDiscovery.UserControls
             new MaterialCommoditiesList.EngineeringRecipe("Long Range", "1HC,1Fe", "Kill Warrant Scanner", 2, "Juri Ishmaak,Lori Jameson,Tiana Fortune"),
             new MaterialCommoditiesList.EngineeringRecipe("Long Range", "1HC,1Fe,1UED", "Kill Warrant Scanner", 3, "Juri Ishmaak,Lori Jameson,Tiana Fortune"),
             new MaterialCommoditiesList.EngineeringRecipe("Long Range", "1DED,1EA,1Ge", "Kill Warrant Scanner", 4, "Tiana Fortune"),
-            new MaterialCommoditiesList.EngineeringRecipe("Long Range", "1ACED,1Nb,1PCa", "Kill Warrant Scanner", 5, "Tiana Fortune"),
+            new MaterialCommoditiesList.EngineeringRecipe("Long Range", "1CED,1Nb,1PCa", "Kill Warrant Scanner", 5, "Tiana Fortune"),
             new MaterialCommoditiesList.EngineeringRecipe("Reinforced", "1Ni", "Kill Warrant Scanner", 1, "Juri Ishmaak,Lori Jameson,Tiana Fortune,Bill Turner"),
             new MaterialCommoditiesList.EngineeringRecipe("Reinforced", "1Ni,1SE", "Kill Warrant Scanner", 2, "Juri Ishmaak,Lori Jameson,Tiana Fortune,Bill Turner"),
             new MaterialCommoditiesList.EngineeringRecipe("Reinforced", "1Ni,1SE,1W", "Kill Warrant Scanner", 3, "Juri Ishmaak,Lori Jameson,Tiana Fortune,Bill Turner"),
@@ -726,13 +723,13 @@ namespace EDDiscovery.UserControls
             new MaterialCommoditiesList.EngineeringRecipe("Shielded", "1WSE", "Kill Warrant Scanner", 1, "Juri Ishmaak,Lori Jameson,Tiana Fortune,Bill Turner"),
             new MaterialCommoditiesList.EngineeringRecipe("Shielded", "1C,1SE", "Kill Warrant Scanner", 2, "Juri Ishmaak,Lori Jameson,Tiana Fortune,Bill Turner"),
             new MaterialCommoditiesList.EngineeringRecipe("Shielded", "1C,1HDC,1SE", "Kill Warrant Scanner", 3, "Juri Ishmaak,Lori Jameson,Tiana Fortune,Bill Turner"),
-            new MaterialCommoditiesList.EngineeringRecipe("Shielded", "1PCo,1SS,1V", "Kill Warrant Scanner", 4, "Tiana Fortune"),
-            new MaterialCommoditiesList.EngineeringRecipe("Shielded", "1CoS,1CDC,1W", "Kill Warrant Scanner", 5, "Tiana Fortune"),
+            new MaterialCommoditiesList.EngineeringRecipe("Shielded", "1FPC,1SS,1V", "Kill Warrant Scanner", 4, "Tiana Fortune"),
+            new MaterialCommoditiesList.EngineeringRecipe("Shielded", "1CoS,1FCC,1W", "Kill Warrant Scanner", 5, "Tiana Fortune"),
             new MaterialCommoditiesList.EngineeringRecipe("Wide Angle", "1MS", "Kill Warrant Scanner", 1, "Juri Ishmaak,Lori Jameson,Tiana Fortune"),
             new MaterialCommoditiesList.EngineeringRecipe("Wide Angle", "1Ge,1MS", "Kill Warrant Scanner", 2, "Juri Ishmaak,Lori Jameson,Tiana Fortune"),
             new MaterialCommoditiesList.EngineeringRecipe("Wide Angle", "1CSD,1Ge,1MS", "Kill Warrant Scanner", 3, "Juri Ishmaak,Lori Jameson,Tiana Fortune"),
             new MaterialCommoditiesList.EngineeringRecipe("Wide Angle", "1DSD,1ME,1Nb", "Kill Warrant Scanner", 4, "Tiana Fortune"),
-            new MaterialCommoditiesList.EngineeringRecipe("Wide Angle", "1CSF,1MC,1Sn", "Kill Warrant Scanner", 5, "Tiana Fortune"),
+            new MaterialCommoditiesList.EngineeringRecipe("Wide Angle", "1CFSD,1MC,1Sn", "Kill Warrant Scanner", 5, "Tiana Fortune"),
             new MaterialCommoditiesList.EngineeringRecipe("Light Weight", "1P", "Life Support", 1, "Lori Jameson,Bill Turner"),
             new MaterialCommoditiesList.EngineeringRecipe("Light Weight", "1Mn,1SAll", "Life Support", 2, "Lori Jameson,Bill Turner"),
             new MaterialCommoditiesList.EngineeringRecipe("Light Weight", "1CCe,1Mn,1SAll", "Life Support", 3, "Lori Jameson,Bill Turner"),
@@ -744,7 +741,7 @@ namespace EDDiscovery.UserControls
             new MaterialCommoditiesList.EngineeringRecipe("Shielded", "1WSE", "Life Support", 1, "Lori Jameson,Bill Turner"),
             new MaterialCommoditiesList.EngineeringRecipe("Shielded", "1C,1SE", "Life Support", 2, "Lori Jameson,Bill Turner"),
             new MaterialCommoditiesList.EngineeringRecipe("Shielded", "1C,1HDC,1SE", "Life Support", 3, "Lori Jameson,Bill Turner"),
-            new MaterialCommoditiesList.EngineeringRecipe("Shielded", "1PCo,1SS,1V", "Life Support", 4, "Lori Jameson"),
+            new MaterialCommoditiesList.EngineeringRecipe("Shielded", "1FPC,1SS,1V", "Life Support", 4, "Lori Jameson"),
             new MaterialCommoditiesList.EngineeringRecipe("Fast Scan", "1P", "Manifest Scanner", 1, "Juri Ishmaak,Lori Jameson,Tiana Fortune"),
             new MaterialCommoditiesList.EngineeringRecipe("Fast Scan", "1FFC,1P", "Manifest Scanner", 2, "Juri Ishmaak,Lori Jameson,Tiana Fortune"),
             new MaterialCommoditiesList.EngineeringRecipe("Fast Scan", "1FFC,1OSK,1P", "Manifest Scanner", 3, "Juri Ishmaak,Lori Jameson,Tiana Fortune"),
@@ -759,7 +756,7 @@ namespace EDDiscovery.UserControls
             new MaterialCommoditiesList.EngineeringRecipe("Long Range", "1HC,1Fe", "Manifest Scanner", 2, "Juri Ishmaak,Lori Jameson,Tiana Fortune"),
             new MaterialCommoditiesList.EngineeringRecipe("Long Range", "1HC,1Fe,1UED", "Manifest Scanner", 3, "Juri Ishmaak,Lori Jameson,Tiana Fortune"),
             new MaterialCommoditiesList.EngineeringRecipe("Long Range", "1DED,1EA,1Ge", "Manifest Scanner", 4, "Tiana Fortune"),
-            new MaterialCommoditiesList.EngineeringRecipe("Long Range", "1ACED,1Nb,1PCa", "Manifest Scanner", 5, "Tiana Fortune"),
+            new MaterialCommoditiesList.EngineeringRecipe("Long Range", "1CED,1Nb,1PCa", "Manifest Scanner", 5, "Tiana Fortune"),
             new MaterialCommoditiesList.EngineeringRecipe("Reinforced", "1Ni", "Manifest Scanner", 1, "Juri Ishmaak,Lori Jameson,Tiana Fortune,Bill Turner"),
             new MaterialCommoditiesList.EngineeringRecipe("Reinforced", "1Ni,1SE", "Manifest Scanner", 2, "Juri Ishmaak,Lori Jameson,Tiana Fortune,Bill Turner"),
             new MaterialCommoditiesList.EngineeringRecipe("Reinforced", "1Ni,1SE,1W", "Manifest Scanner", 3, "Juri Ishmaak,Lori Jameson,Tiana Fortune,Bill Turner"),
@@ -768,18 +765,18 @@ namespace EDDiscovery.UserControls
             new MaterialCommoditiesList.EngineeringRecipe("Shielded", "1WSE", "Manifest Scanner", 1, "Juri Ishmaak,Lori Jameson,Tiana Fortune,Bill Turner"),
             new MaterialCommoditiesList.EngineeringRecipe("Shielded", "1C,1SE", "Manifest Scanner", 2, "Juri Ishmaak,Lori Jameson,Tiana Fortune,Bill Turner"),
             new MaterialCommoditiesList.EngineeringRecipe("Shielded", "1C,1HDC,1SE", "Manifest Scanner", 3, "Juri Ishmaak,Lori Jameson,Tiana Fortune,Bill Turner"),
-            new MaterialCommoditiesList.EngineeringRecipe("Shielded", "1PCo,1SS,1V", "Manifest Scanner", 4, "Tiana Fortune"),
-            new MaterialCommoditiesList.EngineeringRecipe("Shielded", "1CoS,1CDC,1W", "Manifest Scanner", 5, "Tiana Fortune"),
+            new MaterialCommoditiesList.EngineeringRecipe("Shielded", "1FPC,1SS,1V", "Manifest Scanner", 4, "Tiana Fortune"),
+            new MaterialCommoditiesList.EngineeringRecipe("Shielded", "1CoS,1FCC,1W", "Manifest Scanner", 5, "Tiana Fortune"),
             new MaterialCommoditiesList.EngineeringRecipe("Wide Angle", "1MS", "Manifest Scanner", 1, "Juri Ishmaak,Lori Jameson,Tiana Fortune,Bill Turner"),
             new MaterialCommoditiesList.EngineeringRecipe("Wide Angle", "1Ge,1MS", "Manifest Scanner", 2, "Juri Ishmaak,Lori Jameson,Tiana Fortune,Bill Turner"),
             new MaterialCommoditiesList.EngineeringRecipe("Wide Angle", "1CSD,1Ge,1MS", "Manifest Scanner", 3, "Juri Ishmaak,Lori Jameson,Tiana Fortune,Bill Turner"),
             new MaterialCommoditiesList.EngineeringRecipe("Wide Angle", "1DSD,1ME,1Nb", "Manifest Scanner", 4, "Tiana Fortune"),
-            new MaterialCommoditiesList.EngineeringRecipe("Wide Angle", "1CSF,1MC,1Sn", "Manifest Scanner", 5, "Tiana Fortune"),
+            new MaterialCommoditiesList.EngineeringRecipe("Wide Angle", "1CFSD,1MC,1Sn", "Manifest Scanner", 5, "Tiana Fortune"),
             new MaterialCommoditiesList.EngineeringRecipe("High Capacity Magazine", "1MS", "Mine Launcher", 1, "Juri Ishmaak,Liz Ryder"),
             new MaterialCommoditiesList.EngineeringRecipe("High Capacity Magazine", "1MS,1V", "Mine Launcher", 2, "Juri Ishmaak,Liz Ryder"),
             new MaterialCommoditiesList.EngineeringRecipe("High Capacity Magazine", "1MS,1Nb,1V", "Mine Launcher", 3, "Juri Ishmaak,Liz Ryder"),
             new MaterialCommoditiesList.EngineeringRecipe("High Capacity Magazine", "1HDC,1ME,1Sn", "Mine Launcher", 4, "Juri Ishmaak"),
-            new MaterialCommoditiesList.EngineeringRecipe("High Capacity Magazine", "1MC,1MSC,1PCo", "Mine Launcher", 5, "Juri Ishmaak"),
+            new MaterialCommoditiesList.EngineeringRecipe("High Capacity Magazine", "1MC,1MSC,1FPC", "Mine Launcher", 5, "Juri Ishmaak"),
             new MaterialCommoditiesList.EngineeringRecipe("Light Weight", "1P", "Mine Launcher", 1, "Juri Ishmaak,Liz Ryder"),
             new MaterialCommoditiesList.EngineeringRecipe("Light Weight", "1Mn,1SAll", "Mine Launcher", 2, "Juri Ishmaak,Liz Ryder"),
             new MaterialCommoditiesList.EngineeringRecipe("Light Weight", "1CCe,1Mn,1SAll", "Mine Launcher", 3, "Juri Ishmaak,Liz Ryder"),
@@ -799,7 +796,7 @@ namespace EDDiscovery.UserControls
             new MaterialCommoditiesList.EngineeringRecipe("High Capacity Magazine", "1MS,1V", "Missile Rack", 2, "Juri Ishmaak,Liz Ryder"),
             new MaterialCommoditiesList.EngineeringRecipe("High Capacity Magazine", "1MS,1Nb,1V", "Missile Rack", 3, "Juri Ishmaak,Liz Ryder"),
             new MaterialCommoditiesList.EngineeringRecipe("High Capacity Magazine", "1HDC,1ME,1Sn", "Missile Rack", 4, "Liz Ryder"),
-            new MaterialCommoditiesList.EngineeringRecipe("High Capacity Magazine", "1MC,1MSC,1PCo", "Missile Rack", 5, "Liz Ryder"),
+            new MaterialCommoditiesList.EngineeringRecipe("High Capacity Magazine", "1MC,1MSC,1FPC", "Missile Rack", 5, "Liz Ryder"),
             new MaterialCommoditiesList.EngineeringRecipe("Light Weight", "1P", "Missile Rack", 1, "Juri Ishmaak,Liz Ryder"),
             new MaterialCommoditiesList.EngineeringRecipe("Light Weight", "1Mn,1SAll", "Missile Rack", 2, "Juri Ishmaak,Liz Ryder"),
             new MaterialCommoditiesList.EngineeringRecipe("Light Weight", "1CCe,1Mn,1SAll", "Missile Rack", 3, "Juri Ishmaak,Liz Ryder"),
@@ -824,7 +821,7 @@ namespace EDDiscovery.UserControls
             new MaterialCommoditiesList.EngineeringRecipe("High Capacity Magazine", "1MS,1V", "Multi-cannon", 2, "Tod \"The Blaster\" McQuinn,Zacariah Nemo"),
             new MaterialCommoditiesList.EngineeringRecipe("High Capacity Magazine", "1MS,1Nb,1V", "Multi-cannon", 3, "Tod \"The Blaster\" McQuinn,Zacariah Nemo"),
             new MaterialCommoditiesList.EngineeringRecipe("High Capacity Magazine", "1HDC,1ME,1Sn", "Multi-cannon", 4, "Tod \"The Blaster\" McQuinn"),
-            new MaterialCommoditiesList.EngineeringRecipe("High Capacity Magazine", "1MC,1MSC,1PCo", "Multi-cannon", 5, "Tod \"The Blaster\" McQuinn"),
+            new MaterialCommoditiesList.EngineeringRecipe("High Capacity Magazine", "1MC,1MSC,1FPC", "Multi-cannon", 5, "Tod \"The Blaster\" McQuinn"),
             new MaterialCommoditiesList.EngineeringRecipe("Light Weight", "1P", "Multi-cannon", 1, "Tod \"The Blaster\" McQuinn,Zacariah Nemo"),
             new MaterialCommoditiesList.EngineeringRecipe("Light Weight", "1Mn,1SAll", "Multi-cannon", 2, "Tod \"The Blaster\" McQuinn,Zacariah Nemo"),
             new MaterialCommoditiesList.EngineeringRecipe("Light Weight", "1CCe,1Mn,1SAll", "Multi-cannon", 3, "Tod \"The Blaster\" McQuinn,Zacariah Nemo"),
@@ -839,7 +836,7 @@ namespace EDDiscovery.UserControls
             new MaterialCommoditiesList.EngineeringRecipe("Overcharged", "1CCo,1Ni", "Multi-cannon", 2, "Tod \"The Blaster\" McQuinn,Zacariah Nemo"),
             new MaterialCommoditiesList.EngineeringRecipe("Overcharged", "1CCo,1EA,1Ni", "Multi-cannon", 3, "Tod \"The Blaster\" McQuinn,Zacariah Nemo"),
             new MaterialCommoditiesList.EngineeringRecipe("Overcharged", "1CCe,1PCa,1Zn", "Multi-cannon", 4, "Tod \"The Blaster\" McQuinn"),
-            new MaterialCommoditiesList.EngineeringRecipe("Overcharged", "1CPo,1MEF,1Zr", "Multi-cannon", 5, "Tod \"The Blaster\" McQuinn"),
+            new MaterialCommoditiesList.EngineeringRecipe("Overcharged", "1CPo,1EFW,1Zr", "Multi-cannon", 5, "Tod \"The Blaster\" McQuinn"),
             new MaterialCommoditiesList.EngineeringRecipe("Rapid Fire", "1MS", "Multi-cannon", 1, "Tod \"The Blaster\" McQuinn"),
             new MaterialCommoditiesList.EngineeringRecipe("Rapid Fire", "1HDP,1MS", "Multi-cannon", 2, "Tod \"The Blaster\" McQuinn"),
             new MaterialCommoditiesList.EngineeringRecipe("Rapid Fire", "1ME,1PAll,1SLF", "Multi-cannon", 3, "Tod \"The Blaster\" McQuinn"),
@@ -879,7 +876,7 @@ namespace EDDiscovery.UserControls
             new MaterialCommoditiesList.EngineeringRecipe("Overcharged", "1CCo,1Ni", "Plasma Accelerator", 2, "Zacariah Nemo,Bill Turner"),
             new MaterialCommoditiesList.EngineeringRecipe("Overcharged", "1CCo,1EA,1Ni", "Plasma Accelerator", 3, "Bill Turner"),
             new MaterialCommoditiesList.EngineeringRecipe("Overcharged", "1CCe,1PCa,1Zn", "Plasma Accelerator", 4, "Bill Turner"),
-            new MaterialCommoditiesList.EngineeringRecipe("Overcharged", "1CPo,1MEF,1Zr", "Plasma Accelerator", 5, "Bill Turner"),
+            new MaterialCommoditiesList.EngineeringRecipe("Overcharged", "1CPo,1EFW,1Zr", "Plasma Accelerator", 5, "Bill Turner"),
             new MaterialCommoditiesList.EngineeringRecipe("Rapid Fire", "1MS", "Plasma Accelerator", 1, "Zacariah Nemo,Bill Turner"),
             new MaterialCommoditiesList.EngineeringRecipe("Rapid Fire", "1HDP,1MS", "Plasma Accelerator", 2, "Zacariah Nemo,Bill Turner"),
             new MaterialCommoditiesList.EngineeringRecipe("Rapid Fire", "1ME,1PAll,1SLF", "Plasma Accelerator", 3, "Bill Turner"),
@@ -909,8 +906,8 @@ namespace EDDiscovery.UserControls
             new MaterialCommoditiesList.EngineeringRecipe("Shielded", "1WSE", "Point Defence", 1, "Ram Tah"),
             new MaterialCommoditiesList.EngineeringRecipe("Shielded", "1C,1SE", "Point Defence", 2, "Ram Tah"),
             new MaterialCommoditiesList.EngineeringRecipe("Shielded", "1C,1HDC,1SE", "Point Defence", 3, "Ram Tah"),
-            new MaterialCommoditiesList.EngineeringRecipe("Shielded", "1PCo,1SS,1V", "Point Defence", 4, "Ram Tah"),
-            new MaterialCommoditiesList.EngineeringRecipe("Shielded", "1CoS,1CDC,1W", "Point Defence", 5, "Ram Tah"),
+            new MaterialCommoditiesList.EngineeringRecipe("Shielded", "1FPC,1SS,1V", "Point Defence", 4, "Ram Tah"),
+            new MaterialCommoditiesList.EngineeringRecipe("Shielded", "1CoS,1FCC,1W", "Point Defence", 5, "Ram Tah"),
             new MaterialCommoditiesList.EngineeringRecipe("Charge Enhanced", "1SLF", "Power Distributor", 1, "Hera Tani,Marco Qwent,The Dweller"),
             new MaterialCommoditiesList.EngineeringRecipe("Charge Enhanced", "1CP,1SLF", "Power Distributor", 2, "Hera Tani,Marco Qwent,The Dweller"),
             new MaterialCommoditiesList.EngineeringRecipe("Charge Enhanced", "1CD,1GR,1MCF", "Power Distributor", 3, "Hera Tani,Marco Qwent,The Dweller"),
@@ -922,13 +919,13 @@ namespace EDDiscovery.UserControls
             new MaterialCommoditiesList.EngineeringRecipe("High Charge Capacity", "1S", "Power Distributor", 1, "Hera Tani,Marco Qwent,The Dweller"),
             new MaterialCommoditiesList.EngineeringRecipe("High Charge Capacity", "1Cr,1SLF", "Power Distributor", 2, "Hera Tani,Marco Qwent,The Dweller"),
             new MaterialCommoditiesList.EngineeringRecipe("High Charge Capacity", "1Cr,1HDC,1SLF", "Power Distributor", 3, "Hera Tani,Marco Qwent,The Dweller"),
-            new MaterialCommoditiesList.EngineeringRecipe("High Charge Capacity", "1MCF,1PCo,1Se", "Power Distributor", 4, "The Dweller"),
-            new MaterialCommoditiesList.EngineeringRecipe("High Charge Capacity", "1CIF,1MSC,1PCo", "Power Distributor", 5, "The Dweller"),
+            new MaterialCommoditiesList.EngineeringRecipe("High Charge Capacity", "1MCF,1FPC,1Se", "Power Distributor", 4, "The Dweller"),
+            new MaterialCommoditiesList.EngineeringRecipe("High Charge Capacity", "1CIF,1MSC,1FPC", "Power Distributor", 5, "The Dweller"),
             new MaterialCommoditiesList.EngineeringRecipe("Shielded", "1WSE", "Power Distributor", 1, "Hera Tani,Marco Qwent,The Dweller"),
             new MaterialCommoditiesList.EngineeringRecipe("Shielded", "1C,1SE", "Power Distributor", 2, "Hera Tani,Marco Qwent,The Dweller"),
             new MaterialCommoditiesList.EngineeringRecipe("Shielded", "1C,1HDC,1SE", "Power Distributor", 3, "Hera Tani,Marco Qwent,The Dweller"),
-            new MaterialCommoditiesList.EngineeringRecipe("Shielded", "1PCo,1SS,1V", "Power Distributor", 4, "The Dweller"),
-            new MaterialCommoditiesList.EngineeringRecipe("Shielded", "1CoS,1CDC,1W", "Power Distributor", 5, "The Dweller"),
+            new MaterialCommoditiesList.EngineeringRecipe("Shielded", "1FPC,1SS,1V", "Power Distributor", 4, "The Dweller"),
+            new MaterialCommoditiesList.EngineeringRecipe("Shielded", "1CoS,1FCC,1W", "Power Distributor", 5, "The Dweller"),
             new MaterialCommoditiesList.EngineeringRecipe("System Focused", "1S", "Power Distributor", 1, "Hera Tani,Marco Qwent,The Dweller"),
             new MaterialCommoditiesList.EngineeringRecipe("System Focused", "1CCo,1S", "Power Distributor", 2, "Hera Tani,Marco Qwent,The Dweller"),
             new MaterialCommoditiesList.EngineeringRecipe("System Focused", "1ABSD,1Cr,1EA", "Power Distributor", 3, "Hera Tani,Marco Qwent,The Dweller"),
@@ -938,8 +935,8 @@ namespace EDDiscovery.UserControls
             new MaterialCommoditiesList.EngineeringRecipe("Armoured", "1WSE", "Power Plant", 1, "Felicity Farseer,Hera Tani,Marco Qwent"),
             new MaterialCommoditiesList.EngineeringRecipe("Armoured", "1C,1SE", "Power Plant", 2, "Hera Tani,Marco Qwent"),
             new MaterialCommoditiesList.EngineeringRecipe("Armoured", "1C,1HDC,1SE", "Power Plant", 3, "Hera Tani,Marco Qwent"),
-            new MaterialCommoditiesList.EngineeringRecipe("Armoured", "1PCo,1SS,1V", "Power Plant", 4, "Hera Tani,Marco Qwent"),
-            new MaterialCommoditiesList.EngineeringRecipe("Armoured", "1CoS,1CDC,1W", "Power Plant", 5, "Hera Tani"),
+            new MaterialCommoditiesList.EngineeringRecipe("Armoured", "1FPC,1SS,1V", "Power Plant", 4, "Hera Tani,Marco Qwent"),
+            new MaterialCommoditiesList.EngineeringRecipe("Armoured", "1CoS,1FCC,1W", "Power Plant", 5, "Hera Tani"),
             new MaterialCommoditiesList.EngineeringRecipe("Low Emissions", "1Fe", "Power Plant", 1, "Felicity Farseer,Hera Tani,Marco Qwent"),
             new MaterialCommoditiesList.EngineeringRecipe("Low Emissions", "1Fe,1IED", "Power Plant", 2, "Hera Tani,Marco Qwent"),
             new MaterialCommoditiesList.EngineeringRecipe("Low Emissions", "1HE,1Fe,1IED", "Power Plant", 3, "Hera Tani,Marco Qwent"),
@@ -961,8 +958,8 @@ namespace EDDiscovery.UserControls
             new MaterialCommoditiesList.EngineeringRecipe("Shielded", "1WSE", "Prospector Limpet Controller", 1, "Tiana Fortune,The Sarge,Ram Tah"),
             new MaterialCommoditiesList.EngineeringRecipe("Shielded", "1C,1SE", "Prospector Limpet Controller", 2, "Tiana Fortune,The Sarge,Ram Tah"),
             new MaterialCommoditiesList.EngineeringRecipe("Shielded", "1C,1HDC", "Prospector Limpet Controller", 3, "Tiana Fortune,The Sarge,Ram Tah"),
-            new MaterialCommoditiesList.EngineeringRecipe("Shielded", "1PCo,1SS,1V", "Prospector Limpet Controller", 4, "Tiana Fortune,The Sarge,Ram Tah"),
-            new MaterialCommoditiesList.EngineeringRecipe("Shielded", "1CoS,1CDC,1W", "Prospector Limpet Controller", 5, "Tiana Fortune,The Sarge"),
+            new MaterialCommoditiesList.EngineeringRecipe("Shielded", "1FPC,1SS,1V", "Prospector Limpet Controller", 4, "Tiana Fortune,The Sarge,Ram Tah"),
+            new MaterialCommoditiesList.EngineeringRecipe("Shielded", "1CoS,1FCC,1W", "Prospector Limpet Controller", 5, "Tiana Fortune,The Sarge"),
             new MaterialCommoditiesList.EngineeringRecipe("Efficient Weapon", "1S", "Pulse Laser", 1, "Broo Tarquin,The Dweller"),
             new MaterialCommoditiesList.EngineeringRecipe("Efficient Weapon", "1HDP,1S", "Pulse Laser", 2, "Broo Tarquin,The Dweller"),
             new MaterialCommoditiesList.EngineeringRecipe("Efficient Weapon", "1Cr,1ESED,1HE", "Pulse Laser", 3, "Broo Tarquin,The Dweller"),
@@ -987,7 +984,7 @@ namespace EDDiscovery.UserControls
             new MaterialCommoditiesList.EngineeringRecipe("Overcharged", "1CCo,1Ni", "Pulse Laser", 2, "Broo Tarquin,The Dweller"),
             new MaterialCommoditiesList.EngineeringRecipe("Overcharged", "1CCo,1EA,1Ni", "Pulse Laser", 3, "Broo Tarquin,The Dweller"),
             new MaterialCommoditiesList.EngineeringRecipe("Overcharged", "1CCe,1PCa,1Zn", "Pulse Laser", 4, "Broo Tarquin,The Dweller"),
-            new MaterialCommoditiesList.EngineeringRecipe("Overcharged", "1CPo,1MEF,1Zr", "Pulse Laser", 5, "Broo Tarquin"),
+            new MaterialCommoditiesList.EngineeringRecipe("Overcharged", "1CPo,1EFW,1Zr", "Pulse Laser", 5, "Broo Tarquin"),
             new MaterialCommoditiesList.EngineeringRecipe("Rapid Fire", "1MS", "Pulse Laser", 1, "Broo Tarquin,The Dweller"),
             new MaterialCommoditiesList.EngineeringRecipe("Rapid Fire", "1HDP,1MS", "Pulse Laser", 2, "Broo Tarquin,The Dweller"),
             new MaterialCommoditiesList.EngineeringRecipe("Rapid Fire", "1ME,1PAll,1SLF", "Pulse Laser", 3, "Broo Tarquin,The Dweller"),
@@ -1007,7 +1004,7 @@ namespace EDDiscovery.UserControls
             new MaterialCommoditiesList.EngineeringRecipe("High Capacity Magazine", "1MS,1V", "Rail Gun", 2, "Tod \"The Blaster\" McQuinn,The Sarge"),
             new MaterialCommoditiesList.EngineeringRecipe("High Capacity Magazine", "1MS,1Nb,1V", "Rail Gun", 3, "Tod \"The Blaster\" McQuinn,The Sarge"),
             new MaterialCommoditiesList.EngineeringRecipe("High Capacity Magazine", "1HDC,1ME,1Sn", "Rail Gun", 4, "Tod \"The Blaster\" McQuinn"),
-            new MaterialCommoditiesList.EngineeringRecipe("High Capacity Magazine", "1MC,1MSC,1PCo", "Rail Gun", 5, "Tod \"The Blaster\" McQuinn"),
+            new MaterialCommoditiesList.EngineeringRecipe("High Capacity Magazine", "1MC,1MSC,1FPC", "Rail Gun", 5, "Tod \"The Blaster\" McQuinn"),
             new MaterialCommoditiesList.EngineeringRecipe("Light Weight", "1P", "Rail Gun", 1, "Tod \"The Blaster\" McQuinn,The Sarge"),
             new MaterialCommoditiesList.EngineeringRecipe("Light Weight", "1Mn,1SAll", "Rail Gun", 2, "Tod \"The Blaster\" McQuinn,The Sarge"),
             new MaterialCommoditiesList.EngineeringRecipe("Light Weight", "1CCe,1Mn,1SAll", "Rail Gun", 3, "Tod \"The Blaster\" McQuinn,The Sarge"),
@@ -1031,7 +1028,7 @@ namespace EDDiscovery.UserControls
             new MaterialCommoditiesList.EngineeringRecipe("Shielded", "1WSE", "Refinery", 1, "Lori Jameson,Bill Turner"),
             new MaterialCommoditiesList.EngineeringRecipe("Shielded", "1C,1SE", "Refinery", 2, "Lori Jameson,Bill Turner"),
             new MaterialCommoditiesList.EngineeringRecipe("Shielded", "1C,1HDC", "Refinery", 3, "Lori Jameson,Bill Turner"),
-            new MaterialCommoditiesList.EngineeringRecipe("Shielded", "1PCo,1SS,1V", "Refinery", 4, "Lori Jameson,Bill Turner"),
+            new MaterialCommoditiesList.EngineeringRecipe("Shielded", "1FPC,1SS,1V", "Refinery", 4, "Lori Jameson,Bill Turner"),
             new MaterialCommoditiesList.EngineeringRecipe("Light Weight", "1P", "Sensors", 1, "Hera Tani,Juri Ishmaak,Lei Cheung,Lori Jameson,Tiana Fortune,Bill Turner,Felicity Farseer"),
             new MaterialCommoditiesList.EngineeringRecipe("Light Weight", "1Mn,1SAll", "Sensors", 2, "Hera Tani,Juri Ishmaak,Lei Cheung,Lori Jameson,Tiana Fortune,Bill Turner,Felicity Farseer"),
             new MaterialCommoditiesList.EngineeringRecipe("Light Weight", "1CCe,1Mn,1SAll", "Sensors", 3, "Hera Tani,Juri Ishmaak,Lei Cheung,Lori Jameson,Tiana Fortune,Bill Turner,Felicity Farseer"),
@@ -1041,12 +1038,12 @@ namespace EDDiscovery.UserControls
             new MaterialCommoditiesList.EngineeringRecipe("Long Range", "1HC,1Fe", "Sensors", 2, "Hera Tani,Juri Ishmaak,Lei Cheung,Lori Jameson,Tiana Fortune,Bill Turner,Felicity Farseer"),
             new MaterialCommoditiesList.EngineeringRecipe("Long Range", "1HC,1Fe,1UED", "Sensors", 3, "Hera Tani,Juri Ishmaak,Lei Cheung,Lori Jameson,Tiana Fortune,Bill Turner,Felicity Farseer"),
             new MaterialCommoditiesList.EngineeringRecipe("Long Range", "1DED,1EA,1Ge", "Sensors", 4, "Juri Ishmaak,Lei Cheung,Lori Jameson,Tiana Fortune,Bill Turner"),
-            new MaterialCommoditiesList.EngineeringRecipe("Long Range", "1ACED,1Nb,1PCa", "Sensors", 5, "Juri Ishmaak,Lei Cheung,Lori Jameson,Tiana Fortune,Bill Turner"),
+            new MaterialCommoditiesList.EngineeringRecipe("Long Range", "1CED,1Nb,1PCa", "Sensors", 5, "Juri Ishmaak,Lei Cheung,Lori Jameson,Tiana Fortune,Bill Turner"),
             new MaterialCommoditiesList.EngineeringRecipe("Wide Angle", "1MS", "Sensors", 1, "Hera Tani,Juri Ishmaak,Lei Cheung,Lori Jameson,Tiana Fortune,Bill Turner,Felicity Farseer"),
             new MaterialCommoditiesList.EngineeringRecipe("Wide Angle", "1Ge,1MS", "Sensors", 2, "Hera Tani,Juri Ishmaak,Lei Cheung,Lori Jameson,Tiana Fortune,Bill Turner,Felicity Farseer"),
             new MaterialCommoditiesList.EngineeringRecipe("Wide Angle", "1CSD,1Ge,1MS", "Sensors", 3, "Hera Tani,Juri Ishmaak,Lei Cheung,Lori Jameson,Tiana Fortune,Bill Turner,Felicity Farseer"),
             new MaterialCommoditiesList.EngineeringRecipe("Wide Angle", "1DSD,1ME,1Nb", "Sensors", 4, "Juri Ishmaak,Lei Cheung,Lori Jameson,Tiana Fortune,Bill Turner"),
-            new MaterialCommoditiesList.EngineeringRecipe("Wide Angle", "1CSF,1MC,1Sn", "Sensors", 5, "Juri Ishmaak,Lei Cheung,Lori Jameson,Tiana Fortune,Bill Turner"),
+            new MaterialCommoditiesList.EngineeringRecipe("Wide Angle", "1CFSD,1MC,1Sn", "Sensors", 5, "Juri Ishmaak,Lei Cheung,Lori Jameson,Tiana Fortune,Bill Turner"),
             new MaterialCommoditiesList.EngineeringRecipe("Blast Resistant", "1Fe", "Shield Booster", 1, "Didi Vatermann,Felicity Farseer,Lei Cheung"),
             new MaterialCommoditiesList.EngineeringRecipe("Blast Resistant", "1CCo,1Fe", "Shield Booster", 2, "Didi Vatermann,Lei Cheung"),
             new MaterialCommoditiesList.EngineeringRecipe("Blast Resistant", "1CCo,1FoC,1Fe", "Shield Booster", 3, "Didi Vatermann,Lei Cheung"),
@@ -1103,7 +1100,7 @@ namespace EDDiscovery.UserControls
             new MaterialCommoditiesList.EngineeringRecipe("Clean Drive Tuning", "1CCo,1SLF","Thrusters", 2, "Elvira Martuuk,Felicity Farseer,Professor Palin"),
             new MaterialCommoditiesList.EngineeringRecipe("Clean Drive Tuning", "1CCo,1SLF,1UED","Thrusters", 3, "Felicity Farseer,Professor Palin"),
             new MaterialCommoditiesList.EngineeringRecipe("Clean Drive Tuning", "1CCe,1DED,1MCF","Thrusters", 4, "Professor Palin"),
-            new MaterialCommoditiesList.EngineeringRecipe("Clean Drive Tuning", "1ACED,1CCe,1Sn","Thrusters", 5, "Professor Palin"),
+            new MaterialCommoditiesList.EngineeringRecipe("Clean Drive Tuning", "1CED,1CCe,1Sn","Thrusters", 5, "Professor Palin"),
             new MaterialCommoditiesList.EngineeringRecipe("Dirty Drive Tuning", "1SLF","Thrusters", 1, "Elvira Martuuk,Felicity Farseer,Professor Palin"),
             new MaterialCommoditiesList.EngineeringRecipe("Dirty Drive Tuning", "1ME,1SLF","Thrusters", 2, "Elvira Martuuk,Felicity Farseer,Professor Palin"),
             new MaterialCommoditiesList.EngineeringRecipe("Dirty Drive Tuning", "1Cr,1MC,1SLF","Thrusters", 3, "Felicity Farseer,Professor Palin"),
@@ -1113,7 +1110,7 @@ namespace EDDiscovery.UserControls
             new MaterialCommoditiesList.EngineeringRecipe("Drive Strengthening", "1HCW,1V","Thrusters", 2, "Elvira Martuuk,Felicity Farseer,Professor Palin"),
             new MaterialCommoditiesList.EngineeringRecipe("Drive Strengthening", "1HCW,1SS,1V","Thrusters", 3, "Felicity Farseer,Professor Palin"),
             new MaterialCommoditiesList.EngineeringRecipe("Drive Strengthening", "1CoS,1HDP,1HDC","Thrusters", 4, "Professor Palin"),
-            new MaterialCommoditiesList.EngineeringRecipe("Drive Strengthening", "1HE,1IS,1PCo","Thrusters", 5, "Professor Palin"),
+            new MaterialCommoditiesList.EngineeringRecipe("Drive Strengthening", "1HE,1IS,1FPC","Thrusters", 5, "Professor Palin"),
             new MaterialCommoditiesList.EngineeringRecipe("Light Weight", "1P", "Torpedo Pylon", 1, "Juri Ishmaak,Liz Ryder"),
             new MaterialCommoditiesList.EngineeringRecipe("Light Weight", "1Mn,1SAll", "Torpedo Pylon", 2, "Juri Ishmaak,Liz Ryder"),
             new MaterialCommoditiesList.EngineeringRecipe("Light Weight", "1CCe,1Mn,1SAll", "Torpedo Pylon", 3, "Juri Ishmaak,Liz Ryder"),
@@ -1138,7 +1135,7 @@ namespace EDDiscovery.UserControls
             new MaterialCommoditiesList.EngineeringRecipe("Long Range", "1HC,1Fe", "Wake Scanner", 2, "Juri Ishmaak,Lori Jameson,Tiana Fortune"),
             new MaterialCommoditiesList.EngineeringRecipe("Long Range", "1HC,1Fe,1UED", "Wake Scanner", 3, "Juri Ishmaak,Lori Jameson,Tiana Fortune"),
             new MaterialCommoditiesList.EngineeringRecipe("Long Range", "1DED,1EA,1Ge", "Wake Scanner", 4, "Tiana Fortune"),
-            new MaterialCommoditiesList.EngineeringRecipe("Long Range", "1ACED,1Nb,1PCa", "Wake Scanner", 5, "Tiana Fortune"),
+            new MaterialCommoditiesList.EngineeringRecipe("Long Range", "1CED,1Nb,1PCa", "Wake Scanner", 5, "Tiana Fortune"),
             new MaterialCommoditiesList.EngineeringRecipe("Reinforced", "1Ni", "Wake Scanner", 1, "Juri Ishmaak,Lori Jameson,Tiana Fortune,Bill Turner"),
             new MaterialCommoditiesList.EngineeringRecipe("Reinforced", "1Ni,1SE", "Wake Scanner", 2, "Juri Ishmaak,Lori Jameson,Tiana Fortune,Bill Turner"),
             new MaterialCommoditiesList.EngineeringRecipe("Reinforced", "1Ni,1SE,1W", "Wake Scanner", 3, "Juri Ishmaak,Lori Jameson,Tiana Fortune,Bill Turner"),
@@ -1147,13 +1144,13 @@ namespace EDDiscovery.UserControls
             new MaterialCommoditiesList.EngineeringRecipe("Shielded", "1WSE", "Wake Scanner", 1, "Juri Ishmaak,Lori Jameson,Tiana Fortune,Bill Turner"),
             new MaterialCommoditiesList.EngineeringRecipe("Shielded", "1C,1SE", "Wake Scanner", 2, "Juri Ishmaak,Lori Jameson,Tiana Fortune,Bill Turner"),
             new MaterialCommoditiesList.EngineeringRecipe("Shielded", "1C,1HDC", "Wake Scanner", 3, "Juri Ishmaak,Lori Jameson,Tiana Fortune,Bill Turner"),
-            new MaterialCommoditiesList.EngineeringRecipe("Shielded", "1PCo,1SS,1V", "Wake Scanner", 4, "Tiana Fortune"),
-            new MaterialCommoditiesList.EngineeringRecipe("Shielded", "1CoS,1CDC,1W", "Wake Scanner", 5, "Tiana Fortune"),
+            new MaterialCommoditiesList.EngineeringRecipe("Shielded", "1FPC,1SS,1V", "Wake Scanner", 4, "Tiana Fortune"),
+            new MaterialCommoditiesList.EngineeringRecipe("Shielded", "1CoS,1FCC,1W", "Wake Scanner", 5, "Tiana Fortune"),
             new MaterialCommoditiesList.EngineeringRecipe("Wide Angle", "1MS", "Wake Scanner", 1, "Juri Ishmaak,Lori Jameson,Tiana Fortune"),
             new MaterialCommoditiesList.EngineeringRecipe("Wide Angle", "1Ge,1MS", "Wake Scanner", 2, "Juri Ishmaak,Lori Jameson,Tiana Fortune"),
             new MaterialCommoditiesList.EngineeringRecipe("Wide Angle", "1CSD,1Ge,1MS", "Wake Scanner", 3, "Juri Ishmaak,Lori Jameson,Tiana Fortune"),
             new MaterialCommoditiesList.EngineeringRecipe("Wide Angle", "1DSD,1ME,1Nb", "Wake Scanner", 4, "Tiana Fortune"),
-            new MaterialCommoditiesList.EngineeringRecipe("Wide Angle", "1CSF,1MC,1Sn", "Wake Scanner", 5, "Tiana Fortune"),
+            new MaterialCommoditiesList.EngineeringRecipe("Wide Angle", "1CFSD,1MC,1Sn", "Wake Scanner", 5, "Tiana Fortune"),
         };
 
         //"Wake Scanner"

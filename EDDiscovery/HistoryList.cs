@@ -1171,7 +1171,8 @@ namespace EDDiscovery
                         if (!starscan.AddScanToBestSystem(js, Count - 1, EntryOrder, out jlhe, out jl))
                         {
                             // Ignore scans where the system name has been changed
-                            if (jl == null || jl.StarSystem.Equals(jlhe.System.name, StringComparison.InvariantCultureIgnoreCase))
+                            // Also ignore belt clusters
+                            if (jl == null || (jl.StarSystem.Equals(jlhe.System.name, StringComparison.InvariantCultureIgnoreCase) && !js.BodyDesignation.ToLowerInvariant().Contains(" belt cluster ")))
                             {
                                 logerror("Cannot add scan to system - alert the EDDiscovery developers using either discord or Github (see help)" + Environment.NewLine +
                                                  "Scan object " + js.BodyName + " in " + he.System.name);
