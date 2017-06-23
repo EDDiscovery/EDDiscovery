@@ -364,6 +364,12 @@ namespace EDDiscovery
 
         public class OptionsClass
         {
+            /// <summary>The version number of the assembly, formatted as: <c>"8.1.2.3"</c></summary>
+            /// <seealso cref="VersionDisplayString"/>
+            public string VersionNumberShort { get; } = Assembly.GetExecutingAssembly().FullName.Split(',')[1].Split('=')[1];
+            /// <summary>The version number of the assembly, with (some) processed option details:
+            /// <c>"Version 8.1.2.3 (using /some/super/long/appfolder/path) (EDSM No server) (no BETA detect)"</c></summary>
+            /// <seealso cref="VersionNumberShort"/>
             public string VersionDisplayString { get; private set; }
             public string AppFolder { get; private set; }
             public string AppDataDirectory { get; private set; }
@@ -409,8 +415,7 @@ namespace EDDiscovery
             private void SetVersionDisplayString()
             {
                 StringBuilder sb = new StringBuilder();
-                sb.Append("Version ");
-                sb.Append(Assembly.GetExecutingAssembly().FullName.Split(',')[1].Split('=')[1]);
+                sb.Append($"Version {VersionNumberShort}");
 
                 if (AppFolder != null)
                 {

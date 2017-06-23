@@ -51,8 +51,8 @@ namespace EDDiscovery.Win32Constants
     public static class HT
     {
         /// <summary>
-        /// HTERROR means the coordinates are on the screen background or on a dividing line between windows (same as HTNOWHERE,
-        /// except that the DefWindowProc function produces a system beep to indicate an error).
+        /// HTERROR means the coordinates are on the screen background or on a dividing line between windows (same as
+        /// <see cref="HTNOWHERE"/>, except the DefWindowProc function produces a system beep to indicate an error).
         /// </summary>
         public const int ERROR = -2;
 
@@ -78,6 +78,26 @@ namespace EDDiscovery.Win32Constants
         public const int CAPTION = 2;
 
         /// <summary>
+        /// HTSYSMENU means the coordinates are in a window menu or in a Close button in a child window.
+        /// </summary>
+        public const int SYSMENU = 3;
+
+        /// <summary>
+        /// HTGROWBOX means the coordinates are in a size box (same as <see cref="SIZE"/>).
+        /// </summary>
+        public const int GROWBOX = 4;
+
+        /// <summary>
+        /// HTSIZE means the coordinates are in a size box (same as <see cref="GROWBOX"/>).
+        /// </summary>
+        public const int SIZE = GROWBOX;
+
+        /// <summary>
+        /// HTMENU means the coordinates are in a menu.
+        /// </summary>
+        public const int MENU = 5;
+
+        /// <summary>
         /// HTLEFT means the coordinates are in the left border of a resizable window.
         /// </summary>
         public const int LEFT = 10;
@@ -88,14 +108,39 @@ namespace EDDiscovery.Win32Constants
         public const int RIGHT = 11;
 
         /// <summary>
+        /// HTTOP means the coordinates are in the upper-horizontal border of a window.
+        /// </summary>
+        public const int TOP = 12;
+
+        /// <summary>
+        /// HTTOPLEFT means the coordinates are in the upper-left corner of a window border.
+        /// </summary>
+        public const int TOPLEFT = 13;
+
+        /// <summary>
+        /// HTTOPRIGHT means the coordinates are in the upper-right corner of a window border.
+        /// </summary>
+        public const int TOPRIGHT = 14;
+
+        /// <summary>
         /// HTBOTTOM means the coordinates are in the lower-horizontal border of a resizable window.
         /// </summary>
         public const int BOTTOM = 15;
 
         /// <summary>
+        /// HTBOTTOMLEFT means the coordinates are in the lower-left corner of a resizable window.
+        /// </summary>
+        public const int BOTTOMLEFT = 16;
+
+        /// <summary>
         /// HTBOTTOMRIGHT means the coordinates are in the lower-right corner of a border of a resizable window.
         /// </summary>
         public const int BOTTOMRIGHT = 17;
+
+        /// <summary>
+        /// HTBORDER means the coordinates are in the border of a window that does not have a sizing border.
+        /// </summary>
+        public const int BORDER = 18;
     }
 
     /// <summary>
@@ -185,6 +230,17 @@ namespace EDDiscovery.Win32Constants
         /// </summary>
         /// <seealso href="https://msdn.microsoft.com/en-us/library/windows/desktop/ms645621(v=vs.85).aspx"/>
         public const int NCLBUTTONUP = 0x00A2;
+
+        /// <summary>
+        /// The WM_NCLBUTTONDBLCLK is posted when the user double-clicks the left mouse button while the cursor is
+        /// within the nonclient area of a window. This message is posted to the window that contains the cursor.
+        /// If a window has captured the mouse, this message is not posted.
+        /// </summary>
+        /// <seealso href="https://msdn.microsoft.com/en-us/library/windows/desktop/ms645619(v=vs.85).aspx"/>
+        public const int NCLBUTTONDBLCLK = 0x00A3;
+
+        // A4 - A6: WM_NC R BUTTON down|up|dblclk
+        // A7 - A9: WM_NC M BUTTON down|up|dblclk
 
         /// <summary>
         /// The WM_KEYDOWN message is posted to the window with the keyboard focus when a nonsystem key is pressed.

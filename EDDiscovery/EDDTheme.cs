@@ -870,7 +870,7 @@ namespace EDDiscovery
                 myControl.ForeColor = currentsettings.colors[Settings.CI.textbox_fore];
                 myControl.Font = fnt;
             }
-            else if (myControl is DrawnPanelNoTheme)        // ignore these..
+            else if (myControl is DrawnPanelNoTheme || parentcontroltype == typeof(DrawnPanelNoTheme))        // ignore these..
             {
             }
             else if (myControl is DrawnPanel)
