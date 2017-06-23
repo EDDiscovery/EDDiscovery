@@ -21,7 +21,7 @@ using System.Threading.Tasks;
 
 namespace EDDiscovery.Audio
 {
-#if !__MonoCS__
+#if !NO_SYSTEM_SPEECH
     class WindowsSpeechEngine : ISpeechEngine
     {
         private System.Speech.Synthesis.SpeechSynthesizer synth;
