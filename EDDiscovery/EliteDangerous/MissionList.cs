@@ -118,7 +118,7 @@ namespace EDDiscovery.EliteDangerous
         public static string Key(JournalMissionAbandoned m) { return m.MissionId.ToStringInvariant() + ":" + m.Name; }
     }
 
-    [System.Diagnostics.DebuggerDisplay("Total {Missions.Count}")]
+    [System.Diagnostics.DebuggerDisplay("Total {current.Missions.Count}")]
     public class MissionListAccumulator
     {
         private MissionList current;

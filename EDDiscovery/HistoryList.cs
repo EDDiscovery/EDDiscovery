@@ -521,32 +521,39 @@ namespace EDDiscovery
     public class HistoryList : IEnumerable<HistoryEntry>
     {
         private List<HistoryEntry> historylist = new List<HistoryEntry>();  // oldest first here
-
-        private JournalFuelScoop FuelScoopAccum;
-
         public Ledger materialcommodititiesledger = new Ledger();       // and the ledger..
         public ShipInformationList shipinformationlist = new ShipInformationList();     // ship info
         public MissionListAccumulator missionlistaccumulator = new MissionListAccumulator(); // and mission list..
-
         public EliteDangerous.StarScan starscan = new StarScan();                                           // and the results of scanning
-
         public int CommanderId;
 
+        private JournalFuelScoop FuelScoopAccum;        // no need to copy
         public static bool AccumulateFuelScoops { get; set; } = true;
 
         public HistoryList() { }
 
-        public HistoryList(List<HistoryEntry> hl) { historylist = hl; }
+        public HistoryList(List<HistoryEntry> hl) { historylist = hl; }         // SPECIAL USE ONLY - DOES NOT COMPUTE ALL THE OTHER STUFF
 
-        public void Clear()
+        public void Copy( HistoryList other )       // Must copy all relevant items.. been caught out by this 23/6/2017
         {
             historylist.Clear();
+
+            foreach (var ent in other.EntryOrder)
+            {
+                historylist.Add(ent);
+                Debug.Assert(ent.MaterialCommodity != null);
+            }
+
+            materialcommodititiesledger = other.materialcommodititiesledger;
+            starscan = other.starscan;
+            shipinformationlist = other.shipinformationlist;
+            CommanderId = other.CommanderId;
+            missionlistaccumulator = other.missionlistaccumulator;
         }
 
-        public void Add(HistoryEntry e)
-        {
-            historylist.Add(e);
-        }
+        public int Count { get { return historylist.Count; } }
+
+        #region Output filters and stats
 
         public List<HistoryEntry> FilterByNumber(int max)
         {
@@ -559,7 +566,6 @@ namespace EDDiscovery
             return (from systems in historylist where systems.EventTimeUTC >= oldestData orderby systems.EventTimeUTC descending select systems).ToList();
         }
 
-        public int Count { get { return historylist.Count;  } }
 
         public List<HistoryEntry> EntryOrder
         {
@@ -814,8 +820,6 @@ namespace EDDiscovery
             return (from s in historylist where s.EntryType == JournalTypeEnum.Scan && s.EventTimeLocal >= start && s.EventTimeLocal < to select s.journalEntry as JournalScan).ToList<JournalScan>();
         }
 
-
-
         public int GetFSDJumpsBeforeUTC(DateTime utc)
         {
             return (from s in historylist where s.IsFSDJump && s.EventTimeLocal < utc select s).Count();
@@ -833,6 +837,38 @@ namespace EDDiscovery
 
             return best;
         }
+
+        public static HistoryEntry FindLastFSDKnownPosition(List<HistoryEntry> syslist)
+        {
+            return syslist.FindLast(x => x.System.HasCoordinate && x.IsLocOrJump);
+        }
+
+        public static HistoryEntry FindByPos(List<HistoryEntry> syslist, float x, float y, float z, double limit)     // go thru setting the lastknowsystem
+        {
+            return syslist.FindLast(s => s.System.HasCoordinate &&
+                                            Math.Abs(s.System.x - x) < limit &&
+                                            Math.Abs(s.System.y - y) < limit &&
+                                            Math.Abs(s.System.z - z) < limit);
+        }
+
+        public static List<HistoryEntry> FilterByJournalEvent(List<HistoryEntry> he, string eventstring, out int count)
+        {
+            count = 0;
+            if (eventstring.Equals("All"))
+                return he;
+            else
+            {
+                string[] events = eventstring.Split(';');
+                List<HistoryEntry> ret = (from systems in he where systems.IsJournalEventInEventFilter(events) select systems).ToList();
+                count = he.Count - ret.Count;
+                return ret;
+            }
+        }
+
+
+        #endregion
+
+        #region EDSM
 
         public void FillInPositionsFSDJumps()       // call if you want to ensure we have the best posibile position data on FSD Jumps.  Only occurs on pre 2.1 with lazy load of just name/edsmid
         {
@@ -915,6 +951,10 @@ namespace EDDiscovery
             }
         }
 
+        #endregion
+
+        #region General Info
+
         public void CalculateSqDistances(SortedList<double, ISystem> distlist, double x, double y, double z, int maxitems, bool removezerodiststar)
         {
             double dist;
@@ -978,6 +1018,47 @@ namespace EDDiscovery
             return ds1;
         }
 
+        public static HistoryEntry FindNextSystem(List<HistoryEntry> syslist, string sysname, int dir)
+        {
+            int index = syslist.FindIndex(x => x.System.name.Equals(sysname));
+
+            if (index != -1)
+            {
+                if (dir == -1)
+                {
+                    if (index < 1)                                  //0, we go to the end and work from back..
+                        index = syslist.Count;
+
+                    int indexn = syslist.FindLastIndex(index - 1, x => x.System.HasCoordinate);
+
+                    if (indexn == -1)                             // from where we were, did not find one, try from back..
+                        indexn = syslist.FindLastIndex(x => x.System.HasCoordinate);
+
+                    return (indexn != -1) ? syslist[indexn] : null;
+                }
+                else
+                {
+                    index++;
+
+                    if (index == syslist.Count)             // if at end, go to beginning
+                        index = 0;
+
+                    int indexn = syslist.FindIndex(index, x => x.System.HasCoordinate);
+
+                    if (indexn == -1)                             // if not found, go to beginning
+                        indexn = syslist.FindIndex(x => x.System.HasCoordinate);
+
+                    return (indexn != -1) ? syslist[indexn] : null;
+                }
+            }
+            else
+            {
+                index = syslist.FindLastIndex(x => x.System.HasCoordinate);
+                return (index != -1) ? syslist[index] : null;
+            }
+        }
+
+
         public HistoryEntry PreviousFrom(HistoryEntry e, bool fsdjumps)
         {
             if (e != null)
@@ -996,6 +1077,10 @@ namespace EDDiscovery
             return null;
         }
 
+        #endregion
+        
+        #region Enumeration
+
         public IEnumerator<HistoryEntry> GetEnumerator()
         {
             foreach (var e in historylist)
@@ -1008,6 +1093,10 @@ namespace EDDiscovery
         {
             return GetEnumerator();
         }
+
+        #endregion
+
+        #region Markers
 
         public void SetStartStop( HistoryEntry hs )
         {
@@ -1046,6 +1135,10 @@ namespace EDDiscovery
                     started = false;
             }
         }
+
+        #endregion
+
+        #region Entry processing
 
         // go through the history list and recalculate the materials ledger and the materials count, plus any other stuff..
         public void ProcessUserHistoryListEntries(Func<HistoryList, List<HistoryEntry>> hlfilter)
@@ -1126,6 +1219,8 @@ namespace EDDiscovery
             yield return je;
         }
 
+        // Called on a New Entry, by EDDiscoveryController:NewEntry, to add an journal entry in
+
         public IEnumerable<HistoryEntry> AddJournalEntry(JournalEntry inje, Action<string> logerror)
         {
             if (inje.CommanderId == CommanderId)     // we are only interested at this point accepting ones for the display commander
@@ -1160,8 +1255,7 @@ namespace EDDiscovery
                         he.MissionList = missionlistaccumulator.Process(je, he.System, he.WhereAmI, conn);
                     }
 
-
-                    Add(he);
+                    historylist.Add(he);
 
                     if (je.EventTypeID == JournalTypeEnum.Scan)
                     {
@@ -1186,8 +1280,6 @@ namespace EDDiscovery
                 }
             }
         }
-
-
 
         static private DateTime LastEDSMAPiCommanderTime = DateTime.Now;
         static private ShipInformation LastShipInfo = null;
@@ -1307,7 +1399,7 @@ namespace EDDiscovery
 
                         prev = he;
 
-                        hist.Add(he);                        // add to the history list here..
+                        hist.historylist.Add(he);
 
                         if (journalupdate)
                         {
@@ -1352,72 +1444,7 @@ namespace EDDiscovery
             return hist;
         }
 
-        public static HistoryEntry FindNextSystem(List<HistoryEntry> syslist, string sysname, int dir)
-        {
-            int index = syslist.FindIndex(x => x.System.name.Equals(sysname));
-
-            if (index != -1)
-            {
-                if (dir == -1)
-                {
-                    if (index < 1)                                  //0, we go to the end and work from back..
-                        index = syslist.Count;
-
-                    int indexn = syslist.FindLastIndex(index - 1, x => x.System.HasCoordinate);
-
-                    if (indexn == -1)                             // from where we were, did not find one, try from back..
-                        indexn = syslist.FindLastIndex(x => x.System.HasCoordinate);
-
-                    return (indexn != -1) ? syslist[indexn] : null;
-                }
-                else
-                {
-                    index++;
-
-                    if (index == syslist.Count)             // if at end, go to beginning
-                        index = 0;
-
-                    int indexn = syslist.FindIndex(index, x => x.System.HasCoordinate);
-
-                    if (indexn == -1)                             // if not found, go to beginning
-                        indexn = syslist.FindIndex(x => x.System.HasCoordinate);
-
-                    return (indexn != -1) ? syslist[indexn] : null;
-                }
-            }
-            else
-            {
-                index = syslist.FindLastIndex(x => x.System.HasCoordinate);
-                return (index != -1) ? syslist[index] : null;
-            }
-        }
-
-        public static HistoryEntry FindLastFSDKnownPosition(List<HistoryEntry> syslist)
-        {
-            return syslist.FindLast(x => x.System.HasCoordinate && x.IsLocOrJump);
-        }
-
-        public static HistoryEntry FindByPos(List<HistoryEntry> syslist, float x, float y, float z, double limit)     // go thru setting the lastknowsystem
-        {
-            return syslist.FindLast(s => s.System.HasCoordinate &&
-                                            Math.Abs(s.System.x - x) < limit &&
-                                            Math.Abs(s.System.y - y) < limit &&
-                                            Math.Abs(s.System.z - z) < limit);
-        }
-
-        public static List<HistoryEntry> FilterByJournalEvent(List<HistoryEntry> he , string eventstring , out int count)
-        {
-            count = 0;
-            if (eventstring.Equals("All"))
-                return he;
-            else
-            {
-                string[] events = eventstring.Split(';');
-                List<HistoryEntry> ret = (from systems in he where systems.IsJournalEventInEventFilter(events) select systems).ToList();
-                count = he.Count - ret.Count;
-                return ret;
-            }
-        }
+        #endregion
 
     }
 }
