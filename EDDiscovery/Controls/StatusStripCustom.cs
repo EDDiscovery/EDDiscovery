@@ -31,12 +31,12 @@ namespace ExtendedControls
 
             if (m.Msg == WM.NCHITTEST)
             {
-                if ((int)m.Result == HT.BOTTOMRIGHT)
+                if (m.Result == (IntPtr)HT.BOTTOMRIGHT)
                 {
                     // Tell the system to test the parent
                     m.Result = (IntPtr)HT.TRANSPARENT;
                 }
-                else if ((int)m.Result == HT.CLIENT)
+                else if (m.Result == (IntPtr)HT.CLIENT)
                 {
                     // Work around the implementation returning HT_CLIENT instead of HT_BOTTOMRIGHT
                     int x = unchecked((short)((uint)m.LParam & 0xFFFF));
