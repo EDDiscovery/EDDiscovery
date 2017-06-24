@@ -1067,18 +1067,17 @@ namespace EDDiscovery
             // Windows honours NCHITTEST; Mono does not
             if (m.Msg == WM.NCHITTEST)
             {
-                short x = (short)m.LParam.ToInt32();
-                short y = (short)(m.LParam.ToInt32() >> 16);
-                Point p = PointToClient(new Point(x, y));
+                int res = m.Result.ToInt32();
+                Point p = PointToClient(new Point(m.LParam.ToInt32()));
                 Size sansStrip = new Size(ClientRectangle.Width - statusStrip1.Height, ClientRectangle.Height - statusStrip1.Height);
 
                 //System.Diagnostics.Debug.WriteLine( Environment.TickCount + " Res " + ((int)m.Result));
-                // Extra padding here regardless to effortlessly handle the size grip, even if border is shown.
-                if (p.Y >= sansStrip.Height && p.X >= sansStrip.Width)
+                // Extra padding here regardless to effortlessly handle the size grip, even if frame is shown.
+                if (p.Y >= sansStrip.Height && p.X >= sansStrip.Width && WindowState == FormWindowState.Normal)
                 {
                     m.Result = (IntPtr)HT.BOTTOMRIGHT;
                 }
-                else if (!theme.WindowsFrame && m.Result.ToInt32() == HT.CLIENT && WindowState == FormWindowState.Normal)
+                else if (!theme.WindowsFrame && res == HT.CLIENT && WindowState == FormWindowState.Normal)
                 {   // 5 is generous.. really only a few pixels gets thru before the subwindows grabs them
                     if (p.X <= 5)
                     {   // Left
@@ -1105,8 +1104,8 @@ namespace EDDiscovery
                             m.Result = (IntPtr)HT.BOTTOM;
                     }
                 }
-                else if (m.Result.ToInt32() == HT.MENU && p.Y < menuStrip1.Padding.Top)
-                {   // Hittest chose the menu; override if we're within the margin.
+                else if ((res == HT.MENU || res == HT.SYSMENU) && p.Y < menuStrip1.Padding.Top)
+                {   // Hittest chose the menu; override if we're within the margin. This will *maybe* get the top pixel, because menus are top-level special.
                     if (p.X < 5)
                         m.Result = (IntPtr)HT.TOPLEFT;
                     else if (p.X > ClientRectangle.Width - 5)
@@ -1150,18 +1149,19 @@ namespace EDDiscovery
             if (_window_dragging && e.Button == MouseButtons.Left)
             {
                 var ptscn = PointToScreen(e.Location);
+                var screen = Screen.FromPoint(ptscn);
                 var delta = new Point(e.X - _window_dragMousePos.X, e.Y - _window_dragMousePos.Y);
 
-                if (WindowState == FormWindowState.Normal && ptscn.Y > 32)
+                if (WindowState == FormWindowState.Normal && ptscn.Y > 32 + screen.Bounds.Top)
                 {
                     _window_dragWindowPos = new Point(_window_dragWindowPos.X + delta.X, _window_dragWindowPos.Y + delta.Y);
                     Location = _window_dragWindowPos;
                 }
-                else if (WindowState == FormWindowState.Normal && ptscn.Y <= 32)
+                else if (WindowState == FormWindowState.Normal && ptscn.Y <= 32 + screen.Bounds.Top)
                 {
                     WindowState = FormWindowState.Maximized;
                 }
-                else if (WindowState == FormWindowState.Maximized && ptscn.Y > 32)
+                else if (WindowState == FormWindowState.Maximized && ptscn.Y > 32 + screen.Bounds.Top)
                 {
                     WindowState = FormWindowState.Normal;
                 }
@@ -1209,18 +1209,19 @@ namespace EDDiscovery
             if (_window_dragging)
             {
                 var ptscn = ((Control)sender).PointToScreen(e.Location);
+                var screen = Screen.FromPoint(ptscn);
                 var delta = new Point(ptscn.X - _window_dragMousePos.X, ptscn.Y - _window_dragMousePos.Y);
 
-                if (WindowState == FormWindowState.Normal && ptscn.Y > 32)
+                if (WindowState == FormWindowState.Normal && ptscn.Y > 32 + screen.Bounds.Top)
                 {
                     _window_dragWindowPos = new Point(_window_dragWindowPos.X + delta.X, _window_dragWindowPos.Y + delta.Y);
                     Location = _window_dragWindowPos;
                 }
-                else if (WindowState == FormWindowState.Normal && ptscn.Y <= 32)
+                else if (WindowState == FormWindowState.Normal && ptscn.Y <= 32 + screen.Bounds.Top)
                 {
                     WindowState = FormWindowState.Maximized;
                 }
-                else if (WindowState == FormWindowState.Maximized && ptscn.Y > 32)
+                else if (WindowState == FormWindowState.Maximized && ptscn.Y > 32 + screen.Bounds.Top)
                 {
                     WindowState = FormWindowState.Normal;
                 }
