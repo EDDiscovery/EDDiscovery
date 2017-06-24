@@ -463,7 +463,7 @@ namespace EDDiscovery.Forms
                     base.WndProc(ref m);
             }
             // Compatibility movement for Mono
-            else if (m.Msg == WM.LBUTTONDOWN && (int)m.WParam == 1 && !curwindowsborder)
+            else if (m.Msg == WM.LBUTTONDOWN && m.WParam == (IntPtr)1 && !curwindowsborder)
             {
                 int x = unchecked((short)((uint)m.LParam & 0xFFFF));
                 int y = unchecked((short)((uint)m.LParam >> 16));
@@ -473,7 +473,7 @@ namespace EDDiscovery.Forms
                 m.Result = IntPtr.Zero;
                 this.Capture = true;
             }
-            else if (m.Msg == WM.MOUSEMOVE && (int)m.WParam == 1 && _window_dragging)
+            else if (m.Msg == WM.MOUSEMOVE && m.WParam == (IntPtr)1 && _window_dragging)
             {
                 int x = unchecked((short)((uint)m.LParam & 0xFFFF));
                 int y = unchecked((short)((uint)m.LParam >> 16));
@@ -496,7 +496,7 @@ namespace EDDiscovery.Forms
             {
                 base.WndProc(ref m);
 
-                if ((int)m.Result == HT.CLIENT)
+                if (m.Result == (IntPtr)HT.CLIENT)
                 {
                     int x = unchecked((short)((uint)m.LParam & 0xFFFF));
                     int y = unchecked((short)((uint)m.LParam >> 16));
