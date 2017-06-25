@@ -1117,11 +1117,11 @@ namespace EDDiscovery
         }
 
 
-        protected override void OnDoubleClick(EventArgs e)
+        protected override void OnMouseDoubleClick(MouseEventArgs e)
         {
             base.OnDoubleClick(e);
 
-            if (((MouseEventArgs)e).Button == MouseButtons.Left && !theme.WindowsFrame)
+            if (e.Button == MouseButtons.Left && !theme.WindowsFrame)
             {
                 if (WindowState == FormWindowState.Maximized)
                     WindowState = FormWindowState.Normal;
