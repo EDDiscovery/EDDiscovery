@@ -112,7 +112,7 @@ namespace EDDiscovery.Actions
 
     }
 
-    public class ActionLet : ActionSetLetBase
+    public class ActionLetBase : ActionSetLetBase
     {
         ConditionVariables av;
         Dictionary<string, string> operations;
@@ -122,7 +122,7 @@ namespace EDDiscovery.Actions
             return base.ConfigurationMenu(parent, discoveryform, eventvars,false, true);
         }
 
-        public override bool ExecuteAction(ActionProgramRun ap)
+        public bool ExecuteAction(ActionProgramRun ap, bool global)
         {
             if (av == null)
                 FromString(userdata, out av, out operations);
@@ -147,6 +147,8 @@ namespace EDDiscovery.Actions
                 }
 
                 ap[key] = value;
+                if ( global )
+                    ap.actioncontroller.SetNonPersistentGlobal(key, value);
             }
 
             if (av.Count == 0)
@@ -155,6 +157,22 @@ namespace EDDiscovery.Actions
             return true;
         }
 
+    }
+
+    public class ActionLet : ActionLetBase
+    {
+        public override bool ExecuteAction(ActionProgramRun ap)
+        {
+            return ExecuteAction(ap, false);
+        }
+    }
+
+    public class ActionGlobalLet : ActionLetBase
+    {
+        public override bool ExecuteAction(ActionProgramRun ap)
+        {
+            return ExecuteAction(ap, true);
+        }
     }
 
     public class ActionGlobal : ActionSetLetBase

@@ -103,6 +103,14 @@ namespace EDDiscovery.Actions
                     {
                         ap.SetContinueOnErrors(true);
                     }
+                    else if (cmd.Equals("bindings"))
+                    {
+                        ap.actioncontroller.LogLine(ap.actioncontroller.DiscoveryForm.FrontierBindings.ListBindings());
+                    }
+                    else if (cmd.Equals("bindingvalues"))
+                    {
+                        ap.actioncontroller.LogLine(ap.actioncontroller.DiscoveryForm.FrontierBindings.ListValues());
+                    }
                 }
             }
             else

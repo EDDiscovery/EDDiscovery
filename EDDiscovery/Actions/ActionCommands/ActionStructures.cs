@@ -28,7 +28,7 @@ namespace EDDiscovery.Actions
         public override bool ConfigurationMenu(Form parent, EDDiscoveryForm discoveryform, List<string> eventvars) //standard one used for most
         {
             ConditionLists jf = new ConditionLists();
-            jf.FromString(userdata);
+            jf.Read(userdata);
             bool ok = ConfigurationMenu(parent, discoveryform, eventvars, ref jf);
             if (ok)
                 userdata = jf.ToString();
@@ -53,7 +53,7 @@ namespace EDDiscovery.Actions
         public override string VerifyActionCorrect()
         {
             ConditionLists cl2 = new ConditionLists();
-            string ret = cl2.FromString(userdata);
+            string ret = cl2.Read(userdata);
             if ( ret == null )
             {
                 userdata = cl2.ToString();  // Normalize it!
@@ -74,7 +74,7 @@ namespace EDDiscovery.Actions
                 if (condition == null)
                 {
                     condition = new ConditionLists();
-                    if (condition.FromString(UserData) != null)
+                    if (condition.Read(UserData) != null)
                     {
                         ap.ReportError("IF condition is not correctly formed");
                         return true;
@@ -113,9 +113,9 @@ namespace EDDiscovery.Actions
                     if (condition == null)
                     {
                         condition = new ConditionLists();
-                        if (condition.FromString(UserData) != null)
+                        if (condition.Read(UserData) != null)
                         {
-                            ap.ReportError("IF condition is not correctly formed");
+                            ap.ReportError("ElseIf condition is not correctly formed");
                             return true;
                         }
                     }
@@ -180,7 +180,7 @@ namespace EDDiscovery.Actions
                 if (condition == null)
                 {
                     condition = new ConditionLists();
-                    if (condition.FromString(UserData) != null)
+                    if (condition.Read(UserData) != null)
                     {
                         ap.ReportError("While condition is not correctly formed");
                         return true;
@@ -211,7 +211,7 @@ namespace EDDiscovery.Actions
                 if (condition == null)
                 {
                     condition = new ConditionLists();
-                    if (condition.FromString(UserData) != null)
+                    if (condition.Read(UserData) != null)
                     {
                         ap.ReportError("While condition in Do..While is not correctly formed");
                         return true;
@@ -372,7 +372,7 @@ namespace EDDiscovery.Actions
             {
                 string condstring = p.LineLeft;
 
-                if (cond.FromString(condstring) == null)
+                if (cond.Read(condstring) == null)
                     return true;
             }
 

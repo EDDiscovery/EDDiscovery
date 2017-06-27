@@ -188,7 +188,7 @@ namespace EDDiscovery._3DMap
             var outlinedataset = new PolygonCollection("reglines", Color.White, 1f , OpenTK.Graphics.OpenGL.PrimitiveType.LineLoop);   // DrawStars picks them out in a particular order
             var datasetbks = Data3DSetClass<TexturedQuadData>.Create("regtext", Color.White, 1f);
 
-            if (galmap != null)
+            if (galmap != null && galmap.Loaded)
             {
                 long gmotarget = TargetClass.GetTargetGMO();
 
@@ -280,7 +280,7 @@ namespace EDDiscovery._3DMap
         {
             var datasetbks = Data3DSetClass<TexturedQuadData>.Create("galobj", Color.White, 1f);
 
-            if (galmap != null)
+            if (galmap != null && galmap.Loaded)
             {
                 long gmotarget = TargetClass.GetTargetGMO();
 

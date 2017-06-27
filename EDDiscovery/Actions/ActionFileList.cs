@@ -26,41 +26,25 @@ namespace EDDiscovery.Actions
     public class ActionFileList
     {
         private List<ActionFile> actionfiles = new List<ActionFile>();
-        private int current = 0;
-
-        public ActionFile CurFile { get { return actionfiles[current]; } }
-        public ConditionLists CurConditions { get { return actionfiles[current].actionfieldfilter; } }
-        public ActionProgramList CurPrograms { get { return actionfiles[current].actionprogramlist; } }
-        public ConditionVariables CurInstallationVariables { get { return actionfiles[current].installationvariables; } }
-        public string CurName { get { return actionfiles[current].name; } }
-        public bool CurEnabled { get { return actionfiles[current].enabled; } }
 
         public List<string> GetList { get { return (from af in actionfiles select af.name).ToList(); } }
 
-        public void UpdateCurrentCL(ConditionLists cl) { actionfiles[current].actionfieldfilter = cl; }
-        public void UpdateCurrentInstallationVariables(ConditionVariables v) { actionfiles[current].installationvariables = v; }
-        public void UpdateCurrentEnabled(bool v) { actionfiles[current].enabled = v; }
-
-        public bool SelectCurrent(string s)
-        {
-            int indexof = actionfiles.FindIndex(x => x.name.Equals(s));
-            if (indexof >= 0)
-                current = indexof;
-            return (indexof >= 0);
-        }
+        // normally pack names are case sensitive, except when we are checking it can be written to a file.. then we would want a case insensitive version
+        public ActionFile Get(string name, StringComparison c = StringComparison.InvariantCulture) { return actionfiles.Find(x => x.name.Equals(name,c)); }
 
         public void CreateSet(string s)
         {
             string appfolder = Path.Combine(Tools.GetAppDataDirectory(), "Actions");
             ActionFile af = new ActionFile(new ConditionLists(), new ActionProgramList(), appfolder + "\\\\" + s + ".act", s, true);
+            af.WriteFile();
             actionfiles.Add(af);
         }
 
         public class MatchingSets
         {
             public ActionFile af;                           // file it came from
-            public List<ConditionLists.Condition> cl;       // list of matching events..
-            public List<ConditionLists.Condition> passed;   // list of passed events after condition checked.
+            public List<Condition> cl;       // list of matching events..
+            public List<Condition> passed;   // list of passed events after condition checked.
         }
 
         // any with refresh flag set?
@@ -83,7 +67,7 @@ namespace EDDiscovery.Actions
             {
                 if (af.enabled)         // only enabled files are checked
                 {
-                    List<ConditionLists.Condition> events = af.actionfieldfilter.GetConditionListByEventName(eventname, flagstart);
+                    List<Condition> events = af.actionfieldfilter.GetConditionListByEventName(eventname, flagstart);
 
                     if (events != null)     // and if we have matching event..
                     {
@@ -108,7 +92,7 @@ namespace EDDiscovery.Actions
             {
                 foreach (MatchingSets ae in ale)       // for all files
                 {
-                    foreach (ConditionLists.Condition fe in ae.cl)        // find all values needed
+                    foreach (Condition fe in ae.cl)        // find all values needed
                         fe.IndicateValuesNeeded(ref valuesneeded);
                 }
 
@@ -124,7 +108,7 @@ namespace EDDiscovery.Actions
             foreach (MatchingSets ae in ale)       // for all files
             {
                 string errlist = null;
-                ae.passed = new List<ConditionLists.Condition>();
+                ae.passed = new List<Condition>();
 
                 //System.Diagnostics.Debug.WriteLine("Check `" + ae.af.name + ae.af.actionfieldfilter.ToString() + "`");
                 //ActionData.DumpVars(valuesneeded, " Test var:");
@@ -141,7 +125,7 @@ namespace EDDiscovery.Actions
         {
             foreach (Actions.ActionFileList.MatchingSets ae in ale)          // for every file which passed..
             {
-                foreach (ConditionLists.Condition fe in ae.passed)          // and every condition..
+                foreach (Condition fe in ae.passed)          // and every condition..
                 {
                     Tuple<ActionFile, ActionProgram> ap = FindProgram(fe.action, ae.af);          // find program using this name, prefer this action file first
 
@@ -235,26 +219,26 @@ namespace EDDiscovery.Actions
 
             foreach (FileInfo f in allFiles)
             {
-                ActionFile af;
-                string err = ActionFile.ReadFile(f.FullName, out af);
+                ActionFile af = new ActionFile();
+                bool readenable;
+                string err = af.ReadFile(f.FullName, out readenable);
                 if (err.Length == 0)
+                {
+                    System.Diagnostics.Debug.WriteLine("Add pack " + af.name);
                     actionfiles.Add(af);
+                }
                 else
                     errlist += "File " + f.FullName + " failed to load: " + Environment.NewLine + err;
             }
-
-            if (actionfiles.Count == 0)           // need a default
-                CreateSet("Default");
-
-            current = actionfiles.Count - 1;        // always the latest.
 
             return errlist;
         }
 
         public string LoadFile(string filename)
         {
-            ActionFile af;
-            string err = ActionFile.ReadFile(filename, out af);
+            ActionFile af = new ActionFile();
+            bool readenable;
+            string err = af.ReadFile(filename, out readenable);
 
             if (err.Length == 0)
             {
@@ -269,21 +253,16 @@ namespace EDDiscovery.Actions
             return err;
         }
 
-        public void SaveCurrentActionFile()
-        {
-            actionfiles[current].SaveFile();
-        }
-
         #region special helpers
 
-        public List<Tuple<string, ConditionLists.MatchType>> ReturnValuesOfSpecificConditions(string conditions, List<ConditionLists.MatchType> matchtypes)
+        public List<Tuple<string, ConditionEntry.MatchType>> ReturnValuesOfSpecificConditions(string conditions, List<ConditionEntry.MatchType> matchtypes)
         {
-            List<Tuple<string, ConditionLists.MatchType>> ret = new List<Tuple<string, ConditionLists.MatchType>>();
+            List<Tuple<string, ConditionEntry.MatchType>> ret = new List<Tuple<string, ConditionEntry.MatchType>>();
             foreach (ActionFile f in actionfiles)
             {
                 if (f.enabled)
                 {
-                    List<Tuple<string, ConditionLists.MatchType>> fr = f.actionfieldfilter.ReturnValuesOfSpecificConditions(conditions, matchtypes);
+                    List<Tuple<string, ConditionEntry.MatchType>> fr = f.actionfieldfilter.ReturnValuesOfSpecificConditions(conditions, matchtypes);
                     if (fr != null)
                         ret.AddRange(fr);
                 }

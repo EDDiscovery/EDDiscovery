@@ -25,14 +25,12 @@ namespace EDDiscovery.Audio
     class WindowsSpeechEngine : ISpeechEngine
     {
         private System.Speech.Synthesis.SpeechSynthesizer synth;
-        public event EventHandler SpeakingCompleted;
         public string systemdefaultvoice;
 
         public WindowsSpeechEngine()
         {
             synth = new System.Speech.Synthesis.SpeechSynthesizer();
             synth.SetOutputToDefaultAudioDevice();
-            synth.SpeakCompleted += (s, e) => SpeakingCompleted?.Invoke(s, e);
             systemdefaultvoice = synth.Voice.Name;
         }
 
@@ -64,7 +62,7 @@ namespace EDDiscovery.Audio
                 synth.Volume = volume;
                 synth.Rate = rate;
 
-                System.Diagnostics.Debug.WriteLine((Environment.TickCount % 10000).ToString("00000") + " Speak " + phrase + ", Rate " + rate + " culture " + culture);
+                //System.Diagnostics.Debug.WriteLine((Environment.TickCount % 10000).ToString("00000") + " Speak " + phrase + ", Rate " + rate + " culture " + culture);
 
                 System.IO.MemoryStream stream = new System.IO.MemoryStream();
                 synth.SetOutputToWaveStream(stream);
@@ -75,6 +73,7 @@ namespace EDDiscovery.Audio
 
                 synth.Speak(pb);
 
+                //System.Diagnostics.Debug.WriteLine("Speech " + stream.Length);
                 return stream;
             }
             catch

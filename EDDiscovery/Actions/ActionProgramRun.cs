@@ -64,7 +64,7 @@ namespace EDDiscovery.Actions
             execstate[execlevel] = ExecState.On;
             nextstepnumber = 0;
 
-            System.Diagnostics.Debug.WriteLine("Run " + actionfile.name + "::" + r.Name);
+            //System.Diagnostics.Debug.WriteLine("Run " + actionfile.name + "::" + r.Name);
             //ActionData.DumpVars(gvars, " Func Var:");
 
             inputvars = iparas;             // current vars is set up by ActionRun at the point of invokation to have the latests globals
@@ -112,7 +112,7 @@ namespace EDDiscovery.Actions
                 dialogs.Clear();
             }
 
-            System.Diagnostics.Debug.WriteLine("Program " + actionfile.name + "::" + Name + " terminated, handle close " + closehandlesatend);
+            //System.Diagnostics.Debug.WriteLine("Program " + actionfile.name + "::" + Name + " terminated, handle close " + closehandlesatend);
         }
 
         public Action GetNextStep()

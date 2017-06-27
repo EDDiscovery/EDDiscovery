@@ -51,7 +51,8 @@ namespace EDDiscovery.Actions
             return (r != null);
         }
 
-        List<Timer> timers = new List<Timer>();
+        static List<Timer> timers = new List<Timer>();          // timers are static and shared between all instances..  Programs instances of this class come and go
+
         class TimerInfo
         {
             public string name;
@@ -93,11 +94,29 @@ namespace EDDiscovery.Actions
                             }
                         }
 
+                        if (exp[0].StartsWith("+"))         // + name means replace if running
+                        {
+                            exp[0] = exp[0].Substring(1);
+
+                            Timer told = timers.Find(x => ((TimerInfo)x.Tag).name.Equals(exp[0]));
+                            //System.Diagnostics.Debug.WriteLine("Timers " + timers.Count);
+
+                            if ( told != null )
+                            {
+                                System.Diagnostics.Debug.WriteLine("Replace timer " + exp[0]);
+                                told.Stop();
+                                told.Interval = time;
+                                told.Start();
+                                return true;
+                            }
+                        }
+
                         Timer t = new Timer() { Interval = time };
                         t.Tick += Timer_Tick;
                         t.Tag = new TimerInfo() { ap = ap, name = exp[0] , he = he};
                         timers.Add(t);
                         t.Start();
+                        System.Diagnostics.Debug.WriteLine("Timer Go " + exp[0]);
                     }
                     else
                         ap.ReportError("Timer bad name or time count");
@@ -120,6 +139,7 @@ namespace EDDiscovery.Actions
 
             ti.ap.actioncontroller.ActionRun("onTimer", "ActionProgram", ti.he, new ConditionVariables("TimerName", ti.name), now: false);    // queue at end an event
 
+            //System.Diagnostics.Debug.WriteLine("REMOVED Timers " + timers.Count);
             timers.Remove(t);   // done with it
             t.Dispose();
         }

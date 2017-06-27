@@ -92,6 +92,60 @@ namespace EDDiscovery.Actions
         }
     }
 
+    public class ActionInfoBox : Action
+    {
+        public override bool AllowDirectEditingOfUserData { get { return true; } }    // and allow editing?
+
+        List<string> FromString(string input)       // returns in raw esacped mode
+        {
+            StringParser sp = new StringParser(input);
+            List<string> s = sp.NextQuotedWordList(replaceescape: true);
+            return (s != null && s.Count == 2) ? s : null;
+        }
+
+        public override string VerifyActionCorrect()
+        {
+            return (FromString(userdata) != null) ? null : "InfoBox command line not in correct format";
+        }
+
+        public override bool ConfigurationMenu(Form parent, EDDiscoveryForm discoveryform, List<string> eventvars)
+        {
+            List<string> l = FromString(userdata);
+            List<string> r = Forms.PromptMultiLine.ShowDialog(parent, "Configure InfoBox Dialog",
+                            new string[] { "Message", "Caption" }, l?.ToArray(), true);
+
+            if (r != null)
+                userdata = r.ToStringCommaList(1, true);     // and escape them back
+
+            return (r != null);
+        }
+
+        public override bool ExecuteAction(ActionProgramRun ap)
+        {
+            List<string> ctrl = FromString(UserData);
+
+            if (ctrl != null)
+            {
+                List<string> exp;
+
+                if (ap.functions.ExpandStrings(ctrl, out exp) != ConditionFunctions.ExpandResult.Failed)
+                {
+                    string caption = (exp[1].Length>0) ? exp[1]: "EDDiscovery Program Message";
+
+                    Forms.InfoForm ifrm = new Forms.InfoForm();
+                    ifrm.Info(caption, exp[0], null, new int[] { 0, 100, 200, 300, 400, 500, 600 }, true);
+                    ifrm.Show(ap.actioncontroller.DiscoveryForm);
+                }
+                else
+                    ap.ReportError(exp[0]);
+            }
+            else
+                ap.ReportError("InfoBox command line not in correct format");
+
+            return true;
+        }
+    }
+
     public class ActionFileDialog : Action
     {
         public override bool AllowDirectEditingOfUserData { get { return true; } }    // and allow editing?
@@ -222,7 +276,7 @@ namespace EDDiscovery.Actions
         {
             StringParser sp = new StringParser(input);
             List<string> s = sp.NextQuotedWordList();
-            return (s != null && s.Count >= 3 && s.Count <= 4) ? s : null;
+            return (s != null && (s.Count == 1 || (s.Count >= 3 && s.Count <= 4))) ? s : null;
         }
 
         public override string VerifyActionCorrect()
@@ -237,7 +291,10 @@ namespace EDDiscovery.Actions
                             new string[] { "MenuName", "In Menu", "Menu Text", "Icon" }, l?.ToArray());
             if ( r != null)
             {
-                userdata = r.ToStringCommaList(); 
+                if (r[1].Length == 0 && r[2].Length == 0 && r[3].Length == 0)
+                    userdata = r[0];
+                else
+                    userdata = r.ToStringCommaList(); 
             }
 
             return (r != null);
@@ -253,8 +310,15 @@ namespace EDDiscovery.Actions
 
                 if (ap.functions.ExpandStrings(ctrl, out exp) != ConditionFunctions.ExpandResult.Failed)
                 {
-                    if (!ap.actioncontroller.DiscoveryForm.AddNewMenuItemToAddOns(exp[1], exp[2], (exp.Count>=4) ? exp[3] : "None", exp[0], ap.actionfile.name))
-                        ap.ReportError("MenuItem cannot add to menu, check menu");
+                    if (exp.Count == 1 )
+                    {
+                        ap["MenuPresent"] = ap.actioncontroller.DiscoveryForm.IsMenuItemInstalled(exp[0]) ? "1" : "0";
+                    }
+                    else
+                    {
+                        if (!ap.actioncontroller.DiscoveryForm.AddNewMenuItemToAddOns(exp[1], exp[2], (exp.Count >= 4) ? exp[3] : "None", exp[0], ap.actionfile.name))
+                            ap.ReportError("MenuItem cannot add to menu, check menu");
+                    }
                 }
                 else
                     ap.ReportError(exp[0]);

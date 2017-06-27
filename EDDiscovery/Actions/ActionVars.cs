@@ -46,6 +46,17 @@ namespace EDDiscovery.Actions
                 vars[prefix + "IndexOf"] = he.Indexno.ToString(ct);
                 vars[prefix + "JID"] = he.Journalid.ToString(ct);
 
+                vars[prefix + "TravelledDistance"] = he.TravelledDistance.ToString("0.0");
+                vars[prefix + "TravelledSeconds"] = he.TravelledSeconds.ToString();
+                vars[prefix + "IsTravelling"] = he.isTravelling ? "1" : "0";
+                vars[prefix + "TravelledJumps"] = he.Travelledjumps.ToStringInvariant();
+                vars[prefix + "TravelledMissingJumps"] = he.TravelledMissingjump.ToStringInvariant();
+                vars[prefix + "MultiPlayer"] = he.MultiPlayer ? "1" : "0";
+                vars[prefix + "ContainsRares"] = he.ContainsRares() ? "1" : "0";
+                vars[prefix + "EventSummary"] = he.EventSummary;
+                vars[prefix + "EventDescription"] = he.EventDescription;
+                vars[prefix + "EventDetailedInfo"] = he.EventDetailedInfo;
+
                 vars.AddPropertiesFieldsOfClass(he.journalEntry, prefix + "Class_", new Type[] { typeof(System.Drawing.Bitmap), typeof(Newtonsoft.Json.Linq.JObject) } , 5);      //depth seems good enough
 
                 // being backwards compatible to actions packs BEFORE the V3 change to remove JS vars
@@ -59,56 +70,7 @@ namespace EDDiscovery.Actions
             }
         }
 
-        static public void ShipInformation(ConditionVariables vars, EliteDangerous.ShipInformation si, string prefix, bool modlist)
-        {
-            string ship="Unknown", id="0", name="Unknown", ident="Unknown", sv="None", fullinfo="Unknown", shortname="Unknown", fuel="0", cargo="0";
-
-            if ( si != null )
-            {
-                ship = si.ShipType;
-                id = si.ID.ToString(System.Globalization.CultureInfo.InvariantCulture);
-                name = si.ShipUserName;
-                ident = si.ShipUserIdent;
-                sv = si.SubVehicle.ToString();
-                fullinfo = si.ShipFullInfo;
-                shortname = si.ShipShortName;
-                fuel = si.FuelCapacity.ToString(System.Globalization.CultureInfo.InvariantCulture);
-                cargo = si.CargoCapacity().ToString(System.Globalization.CultureInfo.InvariantCulture);
-            }
-
-            vars[prefix + "Ship"] = ship;                   // need to be backwards compatible with older entries..
-            vars[prefix + "Ship_ID"] = id;
-            vars[prefix + "Ship_Name"] = name;
-            vars[prefix + "Ship_Ident"] = ident;
-            vars[prefix + "Ship_SubVehicle"] = sv;
-            vars[prefix + "Ship_FullInfo"] = fullinfo;
-            vars[prefix + "Ship_ShortName"] = shortname;
-            vars[prefix + "Ship_FuelCapacity"] = fuel;
-            vars[prefix + "Ship_CargoCapacity"] = cargo;
-
-            if (modlist && si!= null && si.Modules != null)
-            {
-                vars[prefix + "Ship_Module_Count"] = si.Modules.Count.ToString(System.Globalization.CultureInfo.InvariantCulture);
-
-                int ind = 0;
-                foreach (EliteDangerous.JournalEvents.JournalLoadout.ShipModule m in si.Modules.Values)
-                {
-                    string mi = prefix + "Ship_Module[" + ind.ToString() + "]_";
-                    vars[mi + "Slot"] = m.Slot;
-                    vars[mi + "Item"] = m.Item;
-                    vars[mi + "ItemLocalised"] = m.LocalisedItem.Alt(m.Item);
-                    vars[mi + "Enabled"] = m.Enabled.ToStringInvariant();
-                    vars[mi + "AmmoClip"] = m.AmmoClip.ToStringInvariant();
-                    vars[mi + "AmmoHopper"] = m.AmmoHopper.ToStringInvariant();
-                    vars[mi + "Blueprint"] = m.Blueprint.ToNullSafeString();
-                    vars[mi + "Health"] = m.Health.ToStringInvariant();
-                    vars[mi + "Value"] = m.Value.ToStringInvariant();
-                    ind++;
-                }
-            }
-        }
-
-        static public void SystemVars(ConditionVariables vars, EDDiscovery.DB.ISystem s, string prefix )
+        static public void SystemVars(ConditionVariables vars, EDDiscovery.DB.ISystem s, string prefix)
         {
             if (s != null)
             {
@@ -129,6 +91,37 @@ namespace EDDiscovery.Actions
                 vars[prefix + "EDDBPopulation"] = s.population.ToString(ct);
                 vars[prefix + "EDDBNeedsPermit"] = (s.needs_permit != 0) ? "1" : "0";
             }
+        }
+
+
+        static public void ShipBasicInformation(ConditionVariables vars, EliteDangerous.ShipInformation si, string prefix)
+        {
+            string ship = "Unknown", id = "0", name = "Unknown", ident = "Unknown", sv = "None", fullinfo = "Unknown", shortname = "Unknown", fuel = "0", cargo = "0", fuellevel = "0";
+
+            if (si != null)
+            {
+                ship = si.ShipType;
+                id = si.ID.ToString(System.Globalization.CultureInfo.InvariantCulture);
+                name = si.ShipUserName;
+                ident = si.ShipUserIdent;
+                sv = si.SubVehicle.ToString();
+                fullinfo = si.ShipFullInfo;
+                shortname = si.ShipShortName;
+                fuel = si.FuelCapacity.ToString("0.0");
+                fuellevel = si.FuelLevel.ToString("0.0");
+                cargo = si.CargoCapacity().ToStringInvariant();
+            }
+
+            vars[prefix + "Ship"] = ship;                   // need to be backwards compatible with older entries..
+            vars[prefix + "Ship_ID"] = id;
+            vars[prefix + "Ship_Name"] = name;
+            vars[prefix + "Ship_Ident"] = ident;
+            vars[prefix + "Ship_SubVehicle"] = sv;
+            vars[prefix + "Ship_FullInfo"] = fullinfo;
+            vars[prefix + "Ship_ShortName"] = shortname;
+            vars[prefix + "Ship_FuelLevel"] = fuellevel;
+            vars[prefix + "Ship_FuelCapacity"] = fuel;
+            vars[prefix + "Ship_CargoCapacity"] = cargo;
         }
 
         static public void SystemVarsFurtherInfo(ActionProgramRun vars, HistoryList hl, EDDiscovery.DB.ISystem s, string prefix)
@@ -152,6 +145,71 @@ namespace EDDiscovery.Actions
                 vars[prefix + "FSDJump"] = fsd.ToString(ct);
             }
         }
+
+        static public void ShipModuleInformation(ActionProgramRun vars, EliteDangerous.ShipInformation si, string prefix)
+        {
+            if (si != null && si.Modules != null)
+            {
+                vars[prefix + "Ship_Module_Count"] = si.Modules.Count.ToString(System.Globalization.CultureInfo.InvariantCulture);
+
+                int ind = 0;
+                foreach (EliteDangerous.JournalEvents.JournalLoadout.ShipModule m in si.Modules.Values)
+                {
+                    string mi = prefix + "Ship_Module[" + ind.ToString() + "]_";
+                    vars[mi + "Slot"] = m.Slot;
+                    vars[mi + "Item"] = m.Item;
+                    vars[mi + "ItemLocalised"] = m.LocalisedItem.Alt(m.Item);
+                    vars[mi + "Enabled"] = m.Enabled.ToStringInvariant();
+                    vars[mi + "AmmoClip"] = m.AmmoClip.ToStringInvariant();
+                    vars[mi + "AmmoHopper"] = m.AmmoHopper.ToStringInvariant();
+                    vars[mi + "Blueprint"] = m.Blueprint.ToNullSafeString();
+                    vars[mi + "Health"] = m.Health.ToStringInvariant();
+                    vars[mi + "Value"] = m.Value.ToStringInvariant();
+                    ind++;
+                }
+            }
+        }
+
+
+        static public void MissionInformation(ActionProgramRun vars, EliteDangerous.MissionList ml, string prefix)
+        {
+            vars[prefix + "_MissionCount"] = ml.Missions.Count.ToStringInvariant();
+
+            int i = 0;
+            foreach (EliteDangerous.MissionState ms in ml.Missions.Values)
+            {
+                string mp = prefix + "Mission[" + i.ToStringInvariant() +"]_";
+
+                vars[mp + "Name"] = ms.Mission.Name;
+                vars[mp + "ID"] = ms.Mission.MissionId.ToStringInvariant();
+                vars[mp + "UTC"] = ms.Mission.EventTimeUTC.ToString("yyyy-MM-dd HH-mm-ss");
+                vars[mp + "Local"] = ms.Mission.EventTimeLocal.ToString("yyyy-MM-dd HH-mm-ss");
+                vars[mp + "ExpiryUTC"] = ms.Mission.Expiry.ToString("yyyy-MM-dd HH-mm-ss");
+                vars[mp + "ExpiryLocal"] = ms.Mission.Expiry.ToLocalTime().ToString("yyyy-MM-dd HH-mm-ss");
+                vars[mp + "System"] = ms.OriginatingSystem;
+                vars[mp + "Station"] = ms.OriginatingStation;
+                vars[mp + "Faction"] = ms.Mission.Faction;
+                vars[mp + "DestSystem"] = ms.Mission.DestinationSystem;
+                vars[mp + "DestStation"] = ms.Mission.DestinationStation;
+                vars[mp + "TargetFaction"] = ms.Mission.TargetFaction;
+                vars[mp + "Influence"] = ms.Mission.Influence;
+                vars[mp + "Reputation"] = ms.Mission.Reputation;
+                vars[mp + "Commodity"] = ms.Mission.CommodityLocalised.Alt(ms.Mission.FriendlyCommodity);
+                vars[mp + "Target"] = ms.Mission.TargetLocalised.Alt(ms.Mission.TargetFriendly);
+                vars[mp + "TargetType"] = ms.Mission.TargetTypeLocalised.Alt(ms.Mission.TargetTypeFriendly);
+                vars[mp + "Passengers"] = ms.Mission.PassengerCount.ToStringInvariant();
+                vars[mp + "Completed"] = ms.Completed != null ? "1" : "0";
+                if (ms.Completed != null)
+                {
+                    vars[mp + "Reward"] = ms.Completed.Reward.ToStringInvariant();
+                    vars[mp + "Donation"] = ms.Completed.Donation.ToStringInvariant();
+                    vars[mp + "RewardCommodity"] = ms.Completed.CommoditiesList(false);
+                    vars[mp + "RewardPermit"] = ms.Completed.PermitsList(false);
+                }
+                i++;
+            }
+        }
+
 
     }
 }
