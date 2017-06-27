@@ -167,7 +167,7 @@ namespace EDDiscovery
             // Some components require the controller to be initialized
             InitializeComponent();
 
-            label_version.Text = EDDConfig.Options.VersionDisplayString;
+            this.Text = VersionNumMenuItem.Text = EDDConfig.Options.VersionDisplayString;
 
             PopOuts = new PopOutControl(this);
 
@@ -239,12 +239,6 @@ namespace EDDiscovery
                 settings.InitSettingsTab();
                 savedRouteExpeditionControl1.LoadControl();
                 travelHistoryControl1.LoadControl();
-
-                if (EDDConfig.Options.ActionButton)
-                {
-                    buttonReloadActions.Visible = true;
-                }
-
             }
             catch (Exception ex)
             {
@@ -326,6 +320,8 @@ namespace EDDiscovery
         private void PanelInfoNewRelease()
         {
             ShowInfoPanel("Download new release!", true, Color.Green);
+            labelPanelText.Click -= checkForNewReleaseToolStripMenuItem_Click;
+            labelPanelText.Click += checkForNewReleaseToolStripMenuItem_Click;
         }
 
 
@@ -387,9 +383,9 @@ namespace EDDiscovery
             ToolStripManager.Renderer = theme.toolstripRenderer;
             panel_close.Visible = !theme.WindowsFrame;
             panel_minimize.Visible = !theme.WindowsFrame;
-            label_version.Visible = !theme.WindowsFrame;
+            VersionNumMenuItem.Visible = !theme.WindowsFrame;
 
-            this.Text = "EDDiscovery " + label_version.Text;            // note in no border mode, this is not visible on the title bar but it is in the taskbar..
+            this.Text = "EDDiscovery " + VersionNumMenuItem.Text;   // note in no border mode, this is not visible on the title bar but it is in the taskbar..
 
             theme.ApplyToForm(this);
 
@@ -640,7 +636,13 @@ namespace EDDiscovery
         {
             labelPanelText.Text = message;
             panelInfo.Visible = visible;
-            if (backColour.HasValue) panelInfo.BackColor = backColour.Value;
+            if (backColour.HasValue)
+                panelInfo.BackColor = backColour.Value;
+            else
+                panelInfo.BackColor = Color.Salmon;
+
+            if (!visible || newRelease == null)
+                labelPanelText.Click -= checkForNewReleaseToolStripMenuItem_Click;
         }
 
         private void EDDiscoveryForm_FormClosing(object sender, FormClosingEventArgs e)
@@ -658,12 +660,6 @@ namespace EDDiscovery
 #endregion
 
 #region Buttons, Mouse, Menus, NotifyIcon
-
-        private void buttonReloadActions_Click(object sender, EventArgs e)
-        {
-            actioncontroller.ReLoad();
-            actioncontroller.ActionRun("onStartup", "ProgramEvent");
-        }
 
         private void addNewStarToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -791,8 +787,8 @@ namespace EDDiscovery
         private void AboutBox()
         {
             AboutForm frm = new AboutForm();
-            frm.labelVersion.Text = this.Text;
-            frm.TopMost = EDDiscoveryForm.EDDConfig.KeepOnTop;
+            frm.labelVersion.Text = $"EDDiscovery v{EDDConfig.Options.VersionNumberShort}";
+            frm.TopMost = EDDConfig.KeepOnTop;
             frm.ShowDialog(this);
         }
 
@@ -836,7 +832,13 @@ namespace EDDiscovery
 
         private void paneleddiscovery_Click(object sender, EventArgs e)
         {
-            AboutBox();
+            if (EDDConfig.Options.ActionButton)
+            {
+                actioncontroller.ReLoad();
+                actioncontroller.ActionRun("onStartup", "ProgramEvent");
+            }
+            else
+                AboutBox();
         }
 
         private void panel_close_Click(object sender, EventArgs e)
@@ -891,15 +893,12 @@ namespace EDDiscovery
 
         private void checkForNewReleaseToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (CheckForNewinstaller() )
+            if (newRelease != null || (CheckForNewinstaller() && newRelease != null))
             {
-                if (newRelease != null)
-                {
-                    NewReleaseForm frm = new NewReleaseForm();
-                    frm.release = newRelease;
+                NewReleaseForm frm = new NewReleaseForm();
+                frm.release = newRelease;
 
-                    frm.ShowDialog(this);
-                }
+                frm.ShowDialog(this);
             }
             else
             {
@@ -1057,79 +1056,194 @@ namespace EDDiscovery
                 Activate();
         }
 
-#endregion
+        #endregion
 
-#region Window Control
+        #region Window Control
 
         protected override void WndProc(ref Message m)
         {
-            // Compatibility movement for Mono
-            if (m.Msg == WM.LBUTTONDOWN && m.WParam == (IntPtr)1 && !theme.WindowsFrame)
-            {
-                int x = unchecked((short)((uint)m.LParam & 0xFFFF));
-                int y = unchecked((short)((uint)m.LParam >> 16));
-                _window_dragMousePos = new Point(x, y);
-                _window_dragWindowPos = this.Location;
-                _window_dragging = true;
-                m.Result = IntPtr.Zero;
-                this.Capture = true;
-            }
-            else if (m.Msg == WM.MOUSEMOVE && m.WParam == (IntPtr)1 && _window_dragging)
-            {
-                int x = unchecked((short)((uint)m.LParam & 0xFFFF));
-                int y = unchecked((short)((uint)m.LParam >> 16));
-                Point delta = new Point(x - _window_dragMousePos.X, y - _window_dragMousePos.Y);
-                _window_dragWindowPos = new Point(_window_dragWindowPos.X + delta.X, _window_dragWindowPos.Y + delta.Y);
-                this.Location = _window_dragWindowPos;
-                this.Update();
-                m.Result = IntPtr.Zero;
-            }
-            else if (m.Msg == WM.LBUTTONUP)
-            {
-                _window_dragging = false;
-                _window_dragMousePos = Point.Empty;
-                _window_dragWindowPos = Point.Empty;
-                m.Result = IntPtr.Zero;
-                this.Capture = false;
-            }
+            base.WndProc(ref m);
+
             // Windows honours NCHITTEST; Mono does not
-            else if (m.Msg == WM.NCHITTEST)
+            if (m.Msg == WM.NCHITTEST)
             {
-                base.WndProc(ref m);
+                int res = m.Result.ToInt32();
+                Point p = PointToClient(new Point(m.LParam.ToInt32()));
+                Size sansStrip = new Size(ClientRectangle.Width - statusStrip1.Height, ClientRectangle.Height - statusStrip1.Height);
+
                 //System.Diagnostics.Debug.WriteLine( Environment.TickCount + " Res " + ((int)m.Result));
-
-                if (m.Result == (IntPtr)HT.CLIENT)
+                // Extra padding here regardless to effortlessly handle the size grip, even if frame is shown.
+                if (p.Y >= sansStrip.Height && p.X >= sansStrip.Width && WindowState == FormWindowState.Normal)
                 {
-                    int x = unchecked((short)((uint)m.LParam & 0xFFFF));
-                    int y = unchecked((short)((uint)m.LParam >> 16));
-                    Point p = PointToClient(new Point(x, y));
-
-                    if (p.X > this.ClientSize.Width - statusStrip1.Height && p.Y > this.ClientSize.Height - statusStrip1.Height)
-                    {
-                        m.Result = (IntPtr)HT.BOTTOMRIGHT;
+                    m.Result = (IntPtr)HT.BOTTOMRIGHT;
+                }
+                else if (!theme.WindowsFrame && res == HT.CLIENT && WindowState == FormWindowState.Normal)
+                {   // 5 is generous.. really only a few pixels gets thru before the subwindows grabs them
+                    if (p.X <= 5)
+                    {   // Left
+                        if (p.Y <= 5)
+                            m.Result = (IntPtr)HT.TOPLEFT;
+                        else if (p.Y >= sansStrip.Height)
+                            m.Result = (IntPtr)HT.BOTTOMLEFT;
+                        else
+                            m.Result = (IntPtr)HT.LEFT;
                     }
-                    else if (p.Y > this.ClientSize.Height - statusStrip1.Height)
-                    {
-                        m.Result = (IntPtr)HT.BOTTOM;
+                    else if (p.X >= ClientRectangle.Width - 5)
+                    {   // Right
+                        if (p.Y <= 5)
+                            m.Result = (IntPtr)HT.TOPRIGHT;
+                        // BTMRIGHT is handled above.
+                        else
+                            m.Result = (IntPtr)HT.RIGHT;
                     }
-                    else if (p.X > this.ClientSize.Width - 5)       // 5 is generous.. really only a few pixels gets thru before the subwindows grabs them
-                    {
-                        m.Result = (IntPtr)HT.RIGHT;
-                    }
-                    else if (p.X < 5)
-                    {
-                        m.Result = (IntPtr)HT.LEFT;
-                    }
-                    else if (!theme.WindowsFrame)
-                    {
-                        m.Result = (IntPtr)HT.CAPTION;
+                    else
+                    {   // Center
+                        if (p.Y <= 5)
+                            m.Result = (IntPtr)HT.TOP;
+                        else if (p.Y >= sansStrip.Height)
+                            m.Result = (IntPtr)HT.BOTTOM;
                     }
                 }
+                else if ((res == HT.MENU || res == HT.SYSMENU) && p.Y < menuStrip1.Padding.Top)
+                {   // Hittest chose the menu; override if we're within the margin. This will *maybe* get the top pixel, because menus are top-level special.
+                    if (p.X < 5)
+                        m.Result = (IntPtr)HT.TOPLEFT;
+                    else if (p.X > ClientRectangle.Width - 5)
+                        m.Result = (IntPtr)HT.TOPRIGHT;
+                    else
+                        m.Result = (IntPtr)HT.TOP;
+                }
             }
-            else
+        }
+
+
+        protected override void OnMouseDoubleClick(MouseEventArgs e)
+        {
+            base.OnDoubleClick(e);
+
+            if (e.Button == MouseButtons.Left && !theme.WindowsFrame)
             {
-                base.WndProc(ref m);
+                if (WindowState == FormWindowState.Maximized)
+                    WindowState = FormWindowState.Normal;
+                else if (WindowState == FormWindowState.Normal)
+                    WindowState = FormWindowState.Maximized;
             }
+        }
+
+        protected override void OnMouseDown(MouseEventArgs e)
+        {
+            base.OnMouseDown(e);
+
+            if (!theme.WindowsFrame && e.Button == MouseButtons.Left && WindowState != FormWindowState.Minimized)
+            {
+                _window_dragMousePos = e.Location;
+                _window_dragWindowPos = Location;
+                _window_dragging = Capture = true;
+            }
+        }
+
+        protected override void OnMouseMove(MouseEventArgs e)
+        {
+            base.OnMouseMove(e);
+
+            if (_window_dragging && e.Button == MouseButtons.Left)
+            {
+                var ptscn = PointToScreen(e.Location);
+                var screen = Screen.FromPoint(ptscn);
+                var delta = new Point(e.X - _window_dragMousePos.X, e.Y - _window_dragMousePos.Y);
+
+                if (WindowState == FormWindowState.Normal && ptscn.Y > 32 + screen.Bounds.Top)
+                {
+                    _window_dragWindowPos = new Point(_window_dragWindowPos.X + delta.X, _window_dragWindowPos.Y + delta.Y);
+                    Location = _window_dragWindowPos;
+                }
+                else if (WindowState == FormWindowState.Normal && ptscn.Y <= 32 + screen.Bounds.Top)
+                {
+                    WindowState = FormWindowState.Maximized;
+                }
+                else if (WindowState == FormWindowState.Maximized && ptscn.Y > 32 + screen.Bounds.Top)
+                {
+                    WindowState = FormWindowState.Normal;
+                }
+            }
+        }
+
+        protected override void OnMouseUp(MouseEventArgs e)
+        {
+            base.OnMouseUp(e);
+
+            if (_window_dragging && e.Button == MouseButtons.Left)
+            {
+                _window_dragging = Capture = false;
+                _window_dragMousePos = _window_dragWindowPos = Point.Empty;
+            }
+        }
+
+
+        private void infoPanel_DoubleClick(object sender, EventArgs e)
+        {
+            if (((MouseEventArgs)e).Button == MouseButtons.Left && !theme.WindowsFrame)
+            {
+                if (WindowState == FormWindowState.Normal)
+                    WindowState = FormWindowState.Maximized;
+                else if (WindowState == FormWindowState.Maximized)
+                    WindowState = FormWindowState.Normal;
+            }
+        }
+
+        private void infoPanel_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (!theme.WindowsFrame && e.Button == MouseButtons.Left && WindowState != FormWindowState.Minimized)
+            {
+                var ctl = (Control)sender;
+                var ptscn = ctl.PointToScreen(e.Location);
+
+                _window_dragMousePos = ptscn;
+                _window_dragWindowPos = Location;
+                ctl.Capture = _window_dragging = true;
+            }
+        }
+
+        private void infoPanel_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (_window_dragging)
+            {
+                var ptscn = ((Control)sender).PointToScreen(e.Location);
+                var screen = Screen.FromPoint(ptscn);
+                var delta = new Point(ptscn.X - _window_dragMousePos.X, ptscn.Y - _window_dragMousePos.Y);
+
+                if (WindowState == FormWindowState.Normal && ptscn.Y > 32 + screen.Bounds.Top)
+                {
+                    _window_dragWindowPos = new Point(_window_dragWindowPos.X + delta.X, _window_dragWindowPos.Y + delta.Y);
+                    Location = _window_dragWindowPos;
+                }
+                else if (WindowState == FormWindowState.Normal && ptscn.Y <= 32 + screen.Bounds.Top)
+                {
+                    WindowState = FormWindowState.Maximized;
+                }
+                else if (WindowState == FormWindowState.Maximized && ptscn.Y > 32 + screen.Bounds.Top)
+                {
+                    WindowState = FormWindowState.Normal;
+                }
+
+                _window_dragMousePos = ptscn;
+            }
+        }
+
+        private void infoPanel_MouseUp(object sender, MouseEventArgs e)
+        {
+            if (_window_dragging && e.Button == MouseButtons.Left)
+            {
+                var ctl = (Control)sender;
+                ctl.Capture = _window_dragging = false;
+                _window_dragMousePos = _window_dragWindowPos = Point.Empty;
+            }
+        }
+
+        private void menuStrip1_Resize(object sender, EventArgs e)
+        {   // It's properly anchored, but there's no other way to really take peer size changes into account.
+            panelInfo.Left = menuStrip1.Width + panelInfo.Padding.Left + VersionNumMenuItem.Padding.Right;
+            panelInfo.Width = panel_eddiscovery.Left - panel_eddiscovery.Padding.Left - panelInfo.Padding.Right - panelInfo.Left;
         }
 
         private void RecordPosition()
@@ -1166,9 +1280,9 @@ namespace EDDiscovery
             RecordPosition();
         }
 
-#endregion
+        #endregion
 
-#region Targets
+        #region Targets
 
         public void NewTargetSet()
         {
@@ -1289,8 +1403,7 @@ namespace EDDiscovery
         public int ActionRun(string name, string triggertype, HistoryEntry he = null, ConditionVariables additionalvars = null, string flagstart = null, bool now = false)
         { return actioncontroller.ActionRun(name, triggertype,he,additionalvars,flagstart,now); }
 
-#endregion
-
+        #endregion
     }
 }
 

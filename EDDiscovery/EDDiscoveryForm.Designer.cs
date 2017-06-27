@@ -83,9 +83,9 @@ namespace EDDiscovery
             this.reportIssueIdeasToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpMenuSeparatorBottom = new System.Windows.Forms.ToolStripSeparator();
             this.checkForNewReleaseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.panelInfo = new System.Windows.Forms.Panel();
+            this.VersionNumMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.panelInfo = new ExtendedControls.DrawnPanelNoTheme();
             this.labelPanelText = new System.Windows.Forms.Label();
-            this.label_version = new System.Windows.Forms.Label();
             this.panel_eddiscovery = new System.Windows.Forms.Panel();
             this.edsmRefreshTimer = new System.Windows.Forms.Timer(this.components);
             this.tabControl1 = new ExtendedControls.TabControlCustom();
@@ -105,7 +105,6 @@ namespace EDDiscovery
             this.exportControl1 = new EDDiscovery.Export.ExportControl();
             this.tabPageSettings = new System.Windows.Forms.TabPage();
             this.settings = new EDDiscovery.Settings();
-            this.buttonReloadActions = new ExtendedControls.ButtonExt();
             this.panel_minimize = new ExtendedControls.DrawnPanel();
             this.panel_close = new ExtendedControls.DrawnPanel();
             this.statusStrip1 = new ExtendedControls.StatusStripCustom();
@@ -138,12 +137,14 @@ namespace EDDiscovery
             this.toolsToolStripMenuItem,
             this.adminToolStripMenuItem,
             this.addOnsToolStripMenuItem,
-            this.helpToolStripMenuItem});
+            this.helpToolStripMenuItem,
+            this.VersionNumMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(313, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(401, 24);
             this.menuStrip1.TabIndex = 16;
             this.menuStrip1.Text = "menuStrip1";
+            this.menuStrip1.Resize += new System.EventHandler(this.menuStrip1_Resize);
             // 
             // toolsToolStripMenuItem
             // 
@@ -446,36 +447,45 @@ namespace EDDiscovery
             this.checkForNewReleaseToolStripMenuItem.Text = "&Check for Updates";
             this.checkForNewReleaseToolStripMenuItem.Click += new System.EventHandler(this.checkForNewReleaseToolStripMenuItem_Click);
             // 
+            // VersionNumMenuItem
+            // 
+            this.VersionNumMenuItem.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.VersionNumMenuItem.Name = "VersionNumMenuItem";
+            this.VersionNumMenuItem.ShowShortcutKeys = false;
+            this.VersionNumMenuItem.Size = new System.Drawing.Size(88, 20);
+            this.VersionNumMenuItem.Text = "Version Label";
+            // 
             // panelInfo
             // 
-            this.panelInfo.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.panelInfo.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.panelInfo.BackColor = System.Drawing.Color.Salmon;
             this.panelInfo.Controls.Add(this.labelPanelText);
-            this.panelInfo.Location = new System.Drawing.Point(435, 1);
+            this.panelInfo.Location = new System.Drawing.Point(312, 1);
             this.panelInfo.Name = "panelInfo";
-            this.panelInfo.Size = new System.Drawing.Size(331, 23);
+            this.panelInfo.Size = new System.Drawing.Size(516, 24);
             this.panelInfo.TabIndex = 17;
             this.panelInfo.Click += new System.EventHandler(this.panelInfo_Click);
+            this.panelInfo.DoubleClick += new System.EventHandler(this.infoPanel_DoubleClick);
+            this.panelInfo.MouseDown += new System.Windows.Forms.MouseEventHandler(this.infoPanel_MouseDown);
+            this.panelInfo.MouseMove += new System.Windows.Forms.MouseEventHandler(this.infoPanel_MouseMove);
+            this.panelInfo.MouseUp += new System.Windows.Forms.MouseEventHandler(this.infoPanel_MouseUp);
             // 
             // labelPanelText
             // 
-            this.labelPanelText.AutoSize = true;
+            this.labelPanelText.Dock = System.Windows.Forms.DockStyle.Fill;
             this.labelPanelText.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelPanelText.Location = new System.Drawing.Point(3, -1);
+            this.labelPanelText.Location = new System.Drawing.Point(0, 0);
             this.labelPanelText.Name = "labelPanelText";
-            this.labelPanelText.Size = new System.Drawing.Size(158, 20);
+            this.labelPanelText.Size = new System.Drawing.Size(516, 24);
             this.labelPanelText.TabIndex = 0;
             this.labelPanelText.Text = "Loading. Please wait!";
+            this.labelPanelText.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.labelPanelText.Click += new System.EventHandler(this.labelPanelText_Click);
-            // 
-            // label_version
-            // 
-            this.label_version.AutoSize = true;
-            this.label_version.Location = new System.Drawing.Point(296, 4);
-            this.label_version.Name = "label_version";
-            this.label_version.Size = new System.Drawing.Size(71, 13);
-            this.label_version.TabIndex = 21;
-            this.label_version.Text = "Version Label";
+            this.labelPanelText.DoubleClick += new System.EventHandler(this.infoPanel_DoubleClick);
+            this.labelPanelText.MouseDown += new System.Windows.Forms.MouseEventHandler(this.infoPanel_MouseDown);
+            this.labelPanelText.MouseMove += new System.Windows.Forms.MouseEventHandler(this.infoPanel_MouseMove);
+            this.labelPanelText.MouseUp += new System.Windows.Forms.MouseEventHandler(this.infoPanel_MouseUp);
             // 
             // panel_eddiscovery
             // 
@@ -483,7 +493,7 @@ namespace EDDiscovery
             this.panel_eddiscovery.BackColor = System.Drawing.SystemColors.Control;
             this.panel_eddiscovery.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("panel_eddiscovery.BackgroundImage")));
             this.panel_eddiscovery.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.panel_eddiscovery.Location = new System.Drawing.Point(818, 1);
+            this.panel_eddiscovery.Location = new System.Drawing.Point(834, 1);
             this.panel_eddiscovery.Name = "panel_eddiscovery";
             this.panel_eddiscovery.Size = new System.Drawing.Size(101, 46);
             this.panel_eddiscovery.TabIndex = 18;
@@ -679,20 +689,6 @@ namespace EDDiscovery
             this.settings.Size = new System.Drawing.Size(979, 665);
             this.settings.TabIndex = 0;
             // 
-            // buttonReloadActions
-            // 
-            this.buttonReloadActions.BorderColorScaling = 1.25F;
-            this.buttonReloadActions.ButtonColorScaling = 0.5F;
-            this.buttonReloadActions.ButtonDisabledScaling = 0.5F;
-            this.buttonReloadActions.Location = new System.Drawing.Point(752, 0);
-            this.buttonReloadActions.Name = "buttonReloadActions";
-            this.buttonReloadActions.Size = new System.Drawing.Size(71, 23);
-            this.buttonReloadActions.TabIndex = 1;
-            this.buttonReloadActions.Text = "Reload-A";
-            this.buttonReloadActions.UseVisualStyleBackColor = true;
-            this.buttonReloadActions.Visible = false;
-            this.buttonReloadActions.Click += new System.EventHandler(this.buttonReloadActions_Click);
-            // 
             // panel_minimize
             // 
             this.panel_minimize.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
@@ -794,11 +790,9 @@ namespace EDDiscovery
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(993, 744);
-            this.Controls.Add(this.label_version);
             this.Controls.Add(this.panel_eddiscovery);
             this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.panelInfo);
-            this.Controls.Add(this.buttonReloadActions);
             this.Controls.Add(this.panel_minimize);
             this.Controls.Add(this.panel_close);
             this.Controls.Add(this.menuStrip1);
@@ -813,12 +807,10 @@ namespace EDDiscovery
             this.Load += new System.EventHandler(this.EDDiscoveryForm_Load);
             this.Shown += new System.EventHandler(this.EDDiscoveryForm_Shown);
             this.ResizeEnd += new System.EventHandler(this.EDDiscoveryForm_ResizeEnd);
-            this.Layout += new System.Windows.Forms.LayoutEventHandler(this.EDDiscoveryForm_Layout);
             this.Resize += new System.EventHandler(this.EDDiscoveryForm_Resize);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.panelInfo.ResumeLayout(false);
-            this.panelInfo.PerformLayout();
             this.tabControl1.ResumeLayout(false);
             this.tabPageTravelHistory.ResumeLayout(false);
             this.tabPageJournal.ResumeLayout(false);
@@ -838,13 +830,12 @@ namespace EDDiscovery
         }
 
         #endregion
-        private ExtendedControls.ButtonExt buttonReloadActions;
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ToolStripMenuItem toolsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem helpToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem eDDiscoveryHomepageToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem frontierForumThreadToolStripMenuItem;
-        private System.Windows.Forms.Panel panelInfo;
+        private ExtendedControls.DrawnPanelNoTheme panelInfo;
         private System.Windows.Forms.Label labelPanelText;
         private System.Windows.Forms.ToolStripMenuItem show2DMapsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem adminToolStripMenuItem;
@@ -869,7 +860,6 @@ namespace EDDiscovery
         private ExtendedControls.TabControlCustom tabControl1;
         private System.Windows.Forms.TabPage tabPageTravelHistory;
         private TravelHistoryControl travelHistoryControl1;
-        private System.Windows.Forms.Label label_version;
         private System.Windows.Forms.ToolStripMenuItem changeMapColorToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem editThemeToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
@@ -908,5 +898,6 @@ namespace EDDiscovery
         private System.Windows.Forms.ToolStripMenuItem stopCurrentlyRunningActionProgramToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator helpMenuSeparatorTop;
         private System.Windows.Forms.ToolStripSeparator helpMenuSeparatorBottom;
+        private System.Windows.Forms.ToolStripMenuItem VersionNumMenuItem;
     }
 }
