@@ -5,12 +5,12 @@
  * file except in compliance with the License. You may obtain a copy of the License at
  *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under
  * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
- * 
+ *
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 using EDDiscovery.DB;
@@ -48,7 +48,7 @@ namespace EDDiscovery
 
         public event Action OnRefreshStarting;                              // UI. Called before worker thread starts, processing history (EDDiscoveryForm uses this to disable buttons and action refreshstart)
         public event Action OnRefreshCommanders;                            // UI. Called when refresh worker completes before final history is made (EDDiscoveryForm uses this to refresh commander stuff).  History is not valid here.
-                                                                            // ALSO called if Loadgame is received.  
+                                                                            // ALSO called if Loadgame is received.
 
         public event Action<HistoryList> OnHistoryChange;                   // UI. MAJOR. UC. Mirrored. Called AFTER history is complete, or via RefreshDisplays if a forced refresh is needed.  UC's use this
         public event Action OnRefreshComplete;                              // UI. Called AFTER history is complete.. Form uses this to know the whole process is over, and buttons may be turned on, actions may be run, etc
@@ -119,8 +119,6 @@ namespace EDDiscovery
 
             journalmonitor = new EliteDangerous.EDJournalClass(InvokeAsyncOnUiThread);
             journalmonitor.OnNewJournalEntry += NewEntry;
-
-            history.CommanderId = EDCommander.CurrentCmdrID;
         }
 
         public void PostInit_Loaded()
@@ -392,7 +390,7 @@ namespace EDDiscovery
 
             if (DateTime.Now.Subtract(edsmdate).TotalDays > 7)  // Over 7 days do a sync from EDSM
             {
-                // Also update galactic mapping from EDSM 
+                // Also update galactic mapping from EDSM
                 LogLine("Get galactic mapping from EDSM.");
                 galacticMapping.DownloadFromEDSM();
 
@@ -419,7 +417,6 @@ namespace EDDiscovery
                 BookmarkClass.GetAllBookmarks();
                 galacticMapping.ParseData();                            // at this point, EDSM data is loaded..
                 SystemClass.AddToAutoComplete(galacticMapping.GetGMONames());
-
 
                 LogLine("Loaded Notes, Bookmarks and Galactic mapping.");
 
@@ -525,18 +522,7 @@ namespace EDDiscovery
                 {
                     OnRefreshCommanders?.Invoke();
 
-                    history.Clear();
-
-                    foreach (var ent in hist.EntryOrder)
-                    {
-                        history.Add(ent);
-                        Debug.Assert(ent.MaterialCommodity != null);
-                    }
-
-                    history.materialcommodititiesledger = hist.materialcommodititiesledger;
-                    history.starscan = hist.starscan;
-                    history.shipinformationlist = hist.shipinformationlist;
-                    history.CommanderId = hist.CommanderId;
+                    history.Copy(hist);
 
                     if (history.CommanderId != EdsmLogFetcher.CommanderId)
                     {
@@ -641,6 +627,8 @@ namespace EDDiscovery
         private void BackgroundInit()
         {
             StarScan.LoadBodyDesignationMap();
+            EDDiscovery.EliteDangerous.MaterialCommodityDB.SetUpInitialTable();
+
             if (!EDDConfig.Options.NoSystemsLoad)
             {
                 downloadMapsTask = FGEImage.DownloadMaps(this, () => PendingClose, LogLine, LogLineHighlight);

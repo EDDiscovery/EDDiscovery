@@ -26,10 +26,8 @@ using System.Windows.Forms;
 
 namespace EDDiscovery.Actions
 {
-    public partial class ActionProgramForm : Form
+    public partial class ActionProgramEditForm : Form
     {
-        static public string LastTextEditedFile;
-
         string filesetname;
         string initialprogname;
         string[] definedprograms;                                   // list of programs already defined, to detect rename over..
@@ -65,7 +63,7 @@ namespace EDDiscovery.Actions
         int controlsize = 22;
         int panelheight = 24;
 
-        public ActionProgramForm()
+        public ActionProgramEditForm()
         {
             InitializeComponent();
             groups = new List<Group>();
@@ -549,8 +547,8 @@ namespace EDDiscovery.Actions
 
         public ActionProgram GetProgram()      // call only when OK returned
         {
-            ActionProgram ap = new ActionProgram(curprog.Name,curprog.StoredInFile);
-
+            ActionProgram ap = new ActionProgram(curprog.Name);
+            ap.StoredInSubFile = curprog.StoredInSubFile;
             Action ac;
             int step = 0;
             while ((ac = curprog.GetStep(step++)) != null)
@@ -585,7 +583,6 @@ namespace EDDiscovery.Actions
         private void buttonExtEdit_Click(object sender, EventArgs e)
         {
             curprog.Name = textBoxBorderName.Text;
-            LastTextEditedFile = filesetname + "::" + curprog.Name;
             if ( curprog.EditInEditor())
             {
                 LoadProgram(curprog);
@@ -609,10 +606,10 @@ namespace EDDiscovery.Actions
             {
                 using (System.IO.StreamReader sr = new System.IO.StreamReader(dlg.FileName))
                 {
-                    string err;
-                    ActionProgram ap = ActionProgram.FromFile(dlg.FileName, out err);
+                    ActionProgram ap = new ActionProgram();
+                    string err = ap.ReadFile(dlg.FileName);
 
-                    if (ap == null)
+                    if (err.Length>0)
                         Forms.MessageBoxTheme.Show(this,"Failed to load text file" + Environment.NewLine + err);
                     else
                     {
@@ -624,10 +621,10 @@ namespace EDDiscovery.Actions
 
         private void buttonExtSave_Click(object sender, EventArgs e)
         {
-            SaveFileDialog(false);
+            SaveFileDialog(false);                                          // save as a file..
         }
 
-        private void buttonExtDisk_Click(object sender, EventArgs e)
+        private void buttonExtDisk_Click(object sender, EventArgs e)        // save as new disk file..
         {
             SaveFileDialog(true);
         }
@@ -655,9 +652,9 @@ namespace EDDiscovery.Actions
                 {
                     curprog.Name = textBoxBorderName.Text;
                     if ( associate )
-                        curprog.StoredInFile = dlg.FileName;        // now
+                        curprog.StoredInSubFile = dlg.FileName;        // now
 
-                    if (!curprog.SaveText(dlg.FileName))
+                    if (!curprog.WriteFile(dlg.FileName))
                         Forms.MessageBoxTheme.Show(this, "Failed to save text file - check file path");
                     else if (associate)
                     {

@@ -261,6 +261,7 @@ namespace EDDiscovery
                 functions = new Dictionary<string, FuncEntry>();
 
                 functions.Add("abs",            new FuncEntry(Abs,              2,2,    1,0));  // first is var or literal or string
+                functions.Add("alt",            new FuncEntry(Alt,              2,20,   0xfffffff, 0xfffffff));  // first is var or literal or string, etc.
                 functions.Add("closefile",      new FuncEntry(CloseFile,        1,1,    1,0));  // first is a var
 
                 functions.Add("datetimenow",    new FuncEntry(DateTimeNow,      1, 1,   0));     // literal type
@@ -333,12 +334,15 @@ namespace EDDiscovery
                 functions.Add("substring",      new FuncEntry(SubString,        3, 3,   1, 1));   // check var1, var1 can be string, var 2 and 3 can either be macro or ints not strings
 
                 functions.Add("tell",           new FuncEntry(TellFile,         1, 1,   1, 0));   //first is macro
+                functions.Add("tickcount",      new FuncEntry(TickCount,        0, 0,   0, 0));   // no paras
                 functions.Add("trim",           new FuncEntry(Trim,             1, 2,   1,1));
 
                 functions.Add("upper",          new FuncEntry(Upper,            1,20,   0xfffffff,0xfffffff));   // all can be string, check var
 
                 functions.Add("version",        new FuncEntry(Version,          1,1,    0));     // don't check first para
 
+                functions.Add("wordlistcount",  new FuncEntry(WordListCount,    1,      1,1));       // first is a var or string
+                functions.Add("wordlistentry",  new FuncEntry(WordListEntry,    2,2,    1,1));       // first is a var or string, second is a var or literal
                 functions.Add("wordof",         new FuncEntry(WordOf,           2,3,    1+4,1+4));   // first is a var or string, second is a var or literal, third is a macro or string
                 functions.Add("write",          new FuncEntry(WriteFile,        2, 2,   3, 2));      // first must be a var, second can be macro or string
                 functions.Add("writeline",      new FuncEntry(WriteLineFile,    2, 2,   3, 2));      // first must be a var, second can be macro or string
@@ -400,6 +404,24 @@ namespace EDDiscovery
             }
 
             output = "1";
+            return true;
+        }
+
+        private bool Alt(out string output)
+        {
+            output = "";
+
+            foreach (Parameter s in paras)
+            {
+                string sv= s.isstring ? s.value : vars[s.value];
+
+                if (sv.Length > 0)
+                {
+                    output = sv;
+                    break;
+                }
+            }
+
             return true;
         }
 
@@ -699,6 +721,40 @@ namespace EDDiscovery
                 return false;
             }
         }
+
+        private bool WordListCount(out string output)
+        {
+            StringParser l = new StringParser(paras[0].isstring ? paras[0].value : vars[paras[0].value]);
+            List<string> ll = l.NextQuotedWordList();
+            output = ll.Count.ToStringInvariant();
+            return true;
+        }
+
+        private bool WordListEntry(out string output)
+        {
+            StringParser l = new StringParser(paras[0].isstring ? paras[0].value : vars[paras[0].value]);
+            string c = vars.Exists(paras[1].value) ? vars[paras[1].value] : paras[1].value;
+
+            output = "";
+
+            int count;
+            if (c.InvariantParse(out count))
+            {
+                List<string> ll = l.NextQuotedWordList();
+                if (count >= 0 && count < ll.Count)
+                {
+                    output = ll[count];
+                }
+            }
+            else
+            {
+                output = "Parameter should be an integer constant or a variable name with an integer in its value";
+                return false;
+            }
+
+            return true;
+        }
+
 
         private bool Replace(out string output)
         {
@@ -1403,6 +1459,16 @@ namespace EDDiscovery
             }
             else
                 return true;
+        }
+
+        #endregion
+
+        #region Misc
+
+        private bool TickCount(out string output)
+        {
+            output = Environment.TickCount.ToStringInvariant();
+            return true;
         }
 
         #endregion

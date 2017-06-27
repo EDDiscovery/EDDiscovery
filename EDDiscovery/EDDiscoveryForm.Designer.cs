@@ -116,6 +116,7 @@ namespace EDDiscovery
             this.notifyIconMenu_Open = new System.Windows.Forms.ToolStripMenuItem();
             this.notifyIconMenu_Hide = new System.Windows.Forms.ToolStripMenuItem();
             this.notifyIconMenu_Exit = new System.Windows.Forms.ToolStripMenuItem();
+            this.editLastActionPackToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.panelInfo.SuspendLayout();
             this.tabControl1.SuspendLayout();
@@ -334,6 +335,7 @@ namespace EDDiscovery
             this.addOnsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.manageAddOnsToolStripMenuItem,
             this.configureAddOnActionsToolStripMenuItem,
+            this.editLastActionPackToolStripMenuItem,
             this.stopCurrentlyRunningActionProgramToolStripMenuItem});
             this.addOnsToolStripMenuItem.Name = "addOnsToolStripMenuItem";
             this.addOnsToolStripMenuItem.Size = new System.Drawing.Size(67, 20);
@@ -789,6 +791,14 @@ namespace EDDiscovery
             this.notifyIconMenu_Exit.Text = "E&xit";
             this.notifyIconMenu_Exit.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
+            // editLastActionPackToolStripMenuItem
+            // 
+            this.editLastActionPackToolStripMenuItem.Image = global::EDDiscovery.Properties.Resources.Log;
+            this.editLastActionPackToolStripMenuItem.Name = "editLastActionPackToolStripMenuItem";
+            this.editLastActionPackToolStripMenuItem.Size = new System.Drawing.Size(280, 22);
+            this.editLastActionPackToolStripMenuItem.Text = "Edit Last Action Pack";
+            this.editLastActionPackToolStripMenuItem.Click += new System.EventHandler(this.editLastActionPackToolStripMenuItem_Click);
+            // 
             // EDDiscoveryForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -908,5 +918,6 @@ namespace EDDiscovery
         private System.Windows.Forms.ToolStripMenuItem stopCurrentlyRunningActionProgramToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator helpMenuSeparatorTop;
         private System.Windows.Forms.ToolStripSeparator helpMenuSeparatorBottom;
+        private System.Windows.Forms.ToolStripMenuItem editLastActionPackToolStripMenuItem;
     }
 }

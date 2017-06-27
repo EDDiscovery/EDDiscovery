@@ -123,9 +123,8 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="CSCore, Version=1.1.6245.30570, Culture=neutral, PublicKeyToken=5a08f2b6f4415dea, processorArchitecture=MSIL">
-      <HintPath>..\packages\CSCore.1.2.0\lib\net35-client\CSCore.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="CSCore, Version=1.2.1.1, Culture=neutral, PublicKeyToken=5a08f2b6f4415dea, processorArchitecture=MSIL">
+      <HintPath>..\packages\CSCore.1.2.1.1\lib\net35-client\CSCore.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
@@ -138,6 +137,12 @@
     <Reference Include="OpenTK.GLControl, Version=1.1.0.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
       <HintPath>..\packages\OpenTK.GLControl.1.1.2349.61993\lib\NET40\OpenTK.GLControl.dll</HintPath>
       <Private>True</Private>
+    </Reference>
+    <Reference Include="SharpDX, Version=3.1.1.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
+      <HintPath>..\packages\SharpDX.3.1.1\lib\net45\SharpDX.dll</HintPath>
+    </Reference>
+    <Reference Include="SharpDX.DirectInput, Version=3.1.1.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
+      <HintPath>..\packages\SharpDX.DirectInput.3.1.1\lib\net45\SharpDX.DirectInput.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.configuration" />
@@ -192,6 +197,7 @@
     <Compile Include="3DMap\StarGrid.cs" />
     <Compile Include="3DMap\StarNamesList.cs" />
     <Compile Include="3DMap\Zoom.cs" />
+    <Compile Include="Actions\ActionCommands\ActionEliteBindings.cs" />
     <Compile Include="Actions\ActionCommands\ActionShip.cs" />
     <Compile Include="Actions\ActionCommands\ActionTimer.cs" />
     <Compile Include="Actions\ActionCommands\ActionUserInteraction.cs" />
@@ -206,6 +212,12 @@
     <Compile Include="Actions\ActionCommands\ActionProgramwindow.cs" />
     <Compile Include="Actions\ActionCommands\ActionReturn.cs" />
     <Compile Include="Actions\ActionCommands\ActionScanStar.cs" />
+    <Compile Include="Actions\ActionPackEditorForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Actions\ActionPackEditorForm.Designer.cs">
+      <DependentUpon>ActionPackEditorForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Actions\ActionFile.cs" />
     <Compile Include="Actions\ActionFileList.cs" />
     <Compile Include="Actions\ActionProgramList.cs" />
@@ -245,6 +257,8 @@
     <Compile Include="CompanionAPI\CModules.cs" />
     <Compile Include="CompanionAPI\CStarport.cs" />
     <Compile Include="CompanionAPI\CSystem.cs" />
+    <Compile Include="Conditions\Condition.cs" />
+    <Compile Include="Conditions\ConditionEntry.cs" />
     <Compile Include="Conditions\ConditionFileHandles.cs" />
     <Compile Include="Conditions\ConditionFunctions.cs" />
     <Compile Include="Actions\ActionCommands\ActionPragma.cs" />
@@ -253,11 +267,11 @@
     <Compile Include="Actions\ActionCommands\ActionSleep.cs" />
     <Compile Include="Actions\ActionCommands\ActionStructures.cs" />
     <Compile Include="Actions\ActionCommands\ActionPlay.cs" />
-    <Compile Include="Actions\ActionProgramForm.cs">
+    <Compile Include="Actions\ActionProgramEditForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Actions\ActionProgramForm.Designer.cs">
-      <DependentUpon>ActionProgramForm.cs</DependentUpon>
+    <Compile Include="Actions\ActionProgramEditForm.Designer.cs">
+      <DependentUpon>ActionProgramEditForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Actions\ActionCommands\ActionRemEnd.cs" />
     <Compile Include="Actions\ActionProgramRun.cs" />
@@ -299,6 +313,7 @@
       <DependentUpon>TabStrip.cs</DependentUpon>
     </Compile>
     <Compile Include="DB\BookmarkClass.cs" />
+    <Compile Include="EliteDangerous\BindingsFile.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalCrewLaunchFighter.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalCrewMemberRoleChange.cs" />
     <Compile Include="EliteDangerous\MaterialCommodities.cs" />
@@ -379,6 +394,12 @@
     </Compile>
     <Compile Include="HTTP\VersioningManager.cs" />
     <Compile Include="HTTP\GitHubFile.cs" />
+    <Compile Include="InputDevices\InputDeviceJoystickWindows.cs" />
+    <Compile Include="InputDevices\InputDeviceMouse.cs" />
+    <Compile Include="InputDevices\InputDeviceKeyboard.cs" />
+    <Compile Include="InputDevices\InputDeviceList.cs" />
+    <Compile Include="InputDevices\InputDevicesInterface.cs" />
+    <Compile Include="InputDevices\InputDeviceIntoActions.cs" />
     <Compile Include="PopOutControl.cs" />
     <Compile Include="Forms\ShipDetails.cs">
       <SubType>Form</SubType>
@@ -911,8 +932,11 @@
     <Content Include="fround.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <EmbeddedResource Include="Actions\ActionProgramForm.resx">
-      <DependentUpon>ActionProgramForm.cs</DependentUpon>
+    <EmbeddedResource Include="Actions\ActionPackEditorForm.resx">
+      <DependentUpon>ActionPackEditorForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Actions\ActionProgramEditForm.resx">
+      <DependentUpon>ActionProgramEditForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Audio\AudioDeviceConfigure.resx">
       <DependentUpon>AudioDeviceConfigure.cs</DependentUpon>
@@ -1470,7 +1494,7 @@
     <PostBuildEvent>
     </PostBuildEvent>
   </PropertyGroup>
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
   </Target>

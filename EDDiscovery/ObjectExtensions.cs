@@ -612,6 +612,61 @@ public static class ObjectExtensionsStrings
         return left.Equals(right);
     }
 
+    public static string RemoveTrailingCZeros(this string str )
+    {
+        int index = str.IndexOf('\0');
+        if (index >= 0)
+            str = str.Substring(0, index);
+        return str;
+    }
+
+    public static int ApproxMatch(this string str, string other , int min )       // how many runs match between the two strings
+    {
+        int total = 0;
+        for( int i = 0; i < str.Length; i++ )
+        {
+            for( int j = 0; i < str.Length && j < other.Length; j++ )
+            {
+                if ( str[i] == other[j] )
+                {
+                    int i2 = i+1, j2 = j+1;
+
+                    int count = 1;
+                    while (i2 < str.Length && j2 < other.Length && str[i2] == other[j2])
+                    {
+                        count++;
+                        i2++;
+                        j2++;
+                    }
+
+                    //if ( count>1)  System.Diagnostics.Debug.WriteLine("Match " + str.Substring(i) + " vs " + other.Substring(j) + " " + count);
+                    if (count >= min)   // at least this number of chars in a row.
+                    {
+                        total += count;
+                        i += count;
+                        //System.Diagnostics.Debug.WriteLine(" left " + str.Substring(i));
+                    }
+                }
+            }
+        }
+
+        //System.Diagnostics.Debug.WriteLine("** TOTAL " + str + " vs " + other + " " + total);
+
+        return total;
+    }
+
+    public static string Truncate(this string str, int start, int length )
+    {
+        int len = str.Length - start;
+        if (str == null || len < 1)
+            return "";
+        else
+        {
+            if (length > len)
+                length = len;
+            return str.Substring(start, length);
+        }
+    }
 }
 
 public static class ObjectExtensionsNumbersBool

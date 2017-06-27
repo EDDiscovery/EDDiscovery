@@ -35,10 +35,6 @@ namespace EDDiscovery.Audio
 
         public AudioDriverCSCore(string dev = null)
         {
-            //MMDevice def = MMDeviceEnumerator.DefaultAudioEndpoint(DataFlow.Render, Role.Console);
-            //aout = new WasapiOut() { Latency = 100, Device = def  }; //BAD breakup
-            //aout = new WasapiOut(true, AudioClientShareMode.Shared, 500, System.Threading.ThreadPriority.Highest); // still no better, with sync and highest.
-
             SetAudioEndpoint(dev,true);
         }
 
@@ -54,6 +50,7 @@ namespace EDDiscovery.Audio
 
         public bool SetAudioEndpoint(string dev, bool usedefault = false)
         {
+#if true
             System.Collections.ObjectModel.ReadOnlyCollection<DirectSoundDevice> list = DirectSoundDeviceEnumerator.EnumerateDevices();
 
             DirectSoundDevice dsd = null;
@@ -64,12 +61,16 @@ namespace EDDiscovery.Audio
                     return false;
             }
 
-            DirectSoundOut dso = new DirectSoundOut(200);    // seems good quality at 200 ms latency
+            DirectSoundOut dso = new DirectSoundOut(200, System.Threading.ThreadPriority.Highest);    // seems good quality at 200 ms latency
 
             if ( dsd != null )
-                dso.Device = dsd.Guid; 
+                dso.Device = dsd.Guid;
+#else
+            MMDevice def = MMDeviceEnumerator.DefaultAudioEndpoint(DataFlow.Render, Role.Console);
+            ISoundOut dso = new WasapiOut() { Latency = 100, Device = def  }; //BAD breakup
+#endif
 
-            if ( aout != null )                 // clean up last
+            if (aout != null)                 // clean up last
             {
                 aout.Stopped -= Output_Stopped;
                 aout.Stop();
@@ -93,6 +94,7 @@ namespace EDDiscovery.Audio
 
         private void Output_Stopped(object sender, PlaybackStoppedEventArgs e)
         {
+            //System.Diagnostics.Debug.WriteLine((Environment.TickCount % 10000).ToString("00000") + "Driver stopped");
             if (AudioStoppedEvent != null)
                 AudioStoppedEvent();
         }
@@ -106,15 +108,19 @@ namespace EDDiscovery.Audio
         {
             IWaveSource iws = o as IWaveSource;
             iws.Dispose();
+            //System.Diagnostics.Debug.WriteLine("Audio disposed");
         }
 
         public void Start(Object o, int vol)
         {
+            int t = Environment.TickCount;
 
             IWaveSource current = o as IWaveSource;
             aout.Initialize(current);
+            //System.Diagnostics.Debug.WriteLine((Environment.TickCount-t).ToString("00000") + "Driver Init done");
             aout.Volume = (float)(vol) / 100;
             aout.Play();
+            //System.Diagnostics.Debug.WriteLine((Environment.TickCount - t).ToString("00000") + "Driver Play done");
         }
 
         public void Stop()
@@ -141,18 +147,35 @@ namespace EDDiscovery.Audio
             try
             {
                 audioms.Position = 0;
-                IWaveSource s = new CSCore.Codecs.WAV.WaveFileReader(audioms);
 
-                if ( ensureaudio )
-                    s = s.AppendSource(x => new ExtendWaveSource(x, 100));          // SEEMS to help the click at end..
+                IWaveSource s;
 
+                if (audioms.Length == 0)
+                {
+                    if (ensureaudio)
+                        s = new NullWaveSource(50);
+                    else
+                        return null;
+                }
+                else
+                {
+                    s = new CSCore.Codecs.WAV.WaveFileReader(audioms);
+
+                    //System.Diagnostics.Debug.WriteLine("oRIGINAL length " + s.Length);
+                    if (ensureaudio)
+                        s = s.AppendSource(x => new ExtendWaveSource(x, 100));          // SEEMS to help the click at end..
+                }
+
+                //System.Diagnostics.Debug.WriteLine("Sample length " + s.Length);
                 ApplyEffects(ref s, effects);
+                //System.Diagnostics.Debug.WriteLine(".. to length " + s.Length);
                 return s;
             }
-            catch
+            catch( Exception ex)
             {
+                System.Diagnostics.Debug.WriteLine("Exception " + ex.Message);
                 if (ensureaudio)
-                    return new NullWaveSource(5);
+                    return new NullWaveSource(50);
                 else
                     return null;
             }
@@ -260,7 +283,7 @@ namespace EDDiscovery.Audio
 
         public NullWaveSource(int ms) 
         {
-            _waveFormat = new WaveFormat(44100,16, 1, AudioEncoding.Pcm);
+            _waveFormat = new WaveFormat(22050,16, 1, AudioEncoding.Pcm);
             totalbytes = _waveFormat.MillisecondsToBytes(ms);
         }
 

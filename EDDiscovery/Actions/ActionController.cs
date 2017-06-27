@@ -39,6 +39,8 @@ namespace EDDiscovery.Actions
         private EDDiscoveryForm discoveryform;
         private EDDiscoveryController discoverycontroller;
 
+        private string lasteditedpack;
+
         public ConditionVariables Globals { get { return globalvariables; } }
         public HistoryList HistoryList { get { return discoverycontroller.history; } }
         public EDDiscoveryForm DiscoveryForm { get { return discoveryform; } }
@@ -59,6 +61,7 @@ namespace EDDiscovery.Actions
             SetInternalGlobal("CurrentCultureInEnglish", System.Threading.Thread.CurrentThread.CurrentCulture.EnglishName);
             SetInternalGlobal("CurrentCultureISO", System.Threading.Thread.CurrentThread.CurrentCulture.ThreeLetterISOLanguageName);
 
+            lasteditedpack = SQLiteConnectionUser.GetSettingString("ActionPackLastFile", "");
             ReLoad();
         }
 
@@ -73,48 +76,119 @@ namespace EDDiscovery.Actions
             ActionConfigureKeys();
         }
 
-        public void EditAddOnActionFile()
+        public void EditLastPack()
         {
-            EDDiscovery.ConditionFilterForm frm = new ConditionFilterForm();
+            if (lasteditedpack.Length > 0 && EditActionFile(lasteditedpack))
+                return;
+            else
+                EDDiscovery.Forms.MessageBoxTheme.Show("Action pack does not exist anymore or never set", "WARNING!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+        }
 
-            List<string> events = EDDiscovery.EliteDangerous.JournalEntry.GetListOfEventsWithOptMethod(towords:false);
-            events.Sort();
-            events.Add("All");
-            events.Add("onRefreshStart");
-            events.Add("onRefreshEnd");
-            events.Add("onInstall");
-            events.Add("onStartup");
-            events.Add("onShutdown");
-            events.Add("onKeyPress");
-            events.Add("onTimer");
-            events.Add("onPopUp");
-            events.Add("onPopDown");
-            events.Add("onTabChange");
-            events.Add("onPanelChange");
-            events.Add("onHistorySelection");
-            events.Add("onSayStarted");
-            events.Add("onSayFinished");
-            events.Add("onPlayStarted");
-            events.Add("onPlayFinished");
-            events.Add("onMenuItem");
+        private bool EditActionFile(string name)
+        {
+            List<string> jevents = EDDiscovery.EliteDangerous.JournalEntry.GetListOfEventsWithOptMethod(towords: false);
+            jevents.Sort();
 
-            frm.InitAction("Actions: Define actions", events, globalvariables.NameList, persistentglobalvariables, actionfiles, discoveryform);
-            frm.TopMost = discoveryform.FindForm().TopMost;
+            List<Tuple<string, string>> eventnames = new List<Tuple<string, string>>();
+            foreach (string s in jevents)
+                eventnames.Add(new Tuple<string, string>(s, "Journal"));
 
-            frm.ShowDialog(discoveryform.FindForm()); // don't care about the result, the form does all the saving
+            eventnames.Add(new Tuple<string, string>("All", "Misc"));
+            eventnames.Add(new Tuple<string, string>("onRefreshStart", "Program"));
+            eventnames.Add(new Tuple<string, string>("onRefreshEnd", "Program"));
+            eventnames.Add(new Tuple<string, string>("onInstall", "Program"));
+            eventnames.Add(new Tuple<string, string>("onStartup", "Program"));
+            eventnames.Add(new Tuple<string, string>("onPostStartup", "Program"));
+            eventnames.Add(new Tuple<string, string>("onShutdown", "Program"));
+            eventnames.Add(new Tuple<string, string>("onKeyPress", "UI"));
+            eventnames.Add(new Tuple<string, string>("onTimer", "Action"));
+            eventnames.Add(new Tuple<string, string>("onPopUp", "UI"));
+            eventnames.Add(new Tuple<string, string>("onPopDown", "UI"));
+            eventnames.Add(new Tuple<string, string>("onTabChange", "UI"));
+            eventnames.Add(new Tuple<string, string>("onPanelChange", "UI"));
+            eventnames.Add(new Tuple<string, string>("onHistorySelection", "UI"));
+            eventnames.Add(new Tuple<string, string>("onSayStarted", "Audio"));
+            eventnames.Add(new Tuple<string, string>("onSayFinished", "Audio"));
+            eventnames.Add(new Tuple<string, string>("onPlayStarted", "Audio"));
+            eventnames.Add(new Tuple<string, string>("onPlayFinished", "Audio"));
+            eventnames.Add(new Tuple<string, string>("onMenuItem", "UI"));
+            eventnames.Add(new Tuple<string, string>("onEliteInputRaw", "EliteUI"));
+            eventnames.Add(new Tuple<string, string>("onEliteInput", "EliteUI"));
+            eventnames.Add(new Tuple<string, string>("onEliteInputOff", "EliteUI"));
 
-            persistentglobalvariables = frm.userglobalvariables;
-            globalvariables = new ConditionVariables(programrunglobalvariables, persistentglobalvariables);    // remake
+            ActionPackEditorForm frm = new ActionPackEditorForm();
+            ActionFile f = actionfiles.Get(name);
 
-            ActionConfigureKeys();
+            if (f != null)
+            {
+                frm.Init("Edit pack " + name, f, eventnames, discoveryform, discoveryform.Globals.NameList);
+                frm.TopMost = discoveryform.FindForm().TopMost;
+
+                frm.ShowDialog(discoveryform.FindForm()); // don't care about the result, the form does all the saving
+
+                ActionConfigureKeys();
+
+                lasteditedpack = name;
+                SQLiteConnectionUser.PutSettingString("ActionPackLastFile", lasteditedpack);
+                return true;
+            }
+            else
+                return false;
+        }
+
+        private void Dmf_OnEditActionFile(string name)
+        {
+            EditActionFile(name);
+        }
+
+        private void Dmf_OnEditGlobals()
+        {
+            ConditionVariablesForm avf = new ConditionVariablesForm();
+            avf.Init("Global User variables to pass to program on run", discoveryform.theme, persistentglobalvariables, showone: true);
+
+            if (avf.ShowDialog(discoveryform.FindForm()) == DialogResult.OK)
+            {
+                persistentglobalvariables = avf.result;
+                globalvariables = new ConditionVariables(programrunglobalvariables, persistentglobalvariables);    // remake
+            }
+        }
+
+        private void Dmf_OnCreateActionFile()
+        {
+            String r = Forms.PromptSingleLine.ShowDialog(discoveryform.FindForm(), "New name", "", "Create new action file");
+            if ( r != null )
+            {
+                if (actionfiles.Get(r, StringComparison.InvariantCultureIgnoreCase) == null)
+                {
+                    actionfiles.CreateSet(r);
+                }
+                else
+                    Forms.MessageBoxTheme.Show(discoveryform.FindForm(), "Duplicate name", "Create Action File Failed", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+            }
         }
 
         public void ManageAddOns()
         {
+            RunAddOns(true);
+        }
+
+        public void EditAddOns()
+        {
+            RunAddOns(false);
+        }
+
+        private void RunAddOns(bool manage)
+        {
             using (DownloadManagerForm dmf = new DownloadManagerForm())
             {
-                dmf.Init();
+                dmf.Init(manage);
+
+                dmf.EditActionFile += Dmf_OnEditActionFile;     // only used when manage = false
+                dmf.EditGlobals += Dmf_OnEditGlobals;
+                dmf.CreateActionFile += Dmf_OnCreateActionFile;
+
                 dmf.ShowDialog(discoveryform);
+
                 if (dmf.changelist.Count > 0)
                 {
                     actionrunasync.TerminateAll();
@@ -134,7 +208,7 @@ namespace EDDiscovery.Actions
                 }
             }
         }
-
+    
         public void ConfigureVoice(string title)
         {
             string voicename = persistentglobalvariables.GetString(Actions.ActionSay.globalvarspeechvoice, "Default");
@@ -194,26 +268,12 @@ namespace EDDiscovery.Actions
 
                 if (ap != null && ap.Item2.EditInEditor())
                 {
-                    ap.Item1.SaveFile();
+                    ap.Item1.WriteFile();
                     return;
                 }
             }
 
             Forms.MessageBoxTheme.Show(discoveryform, "Voice pack not loaded, or needs updating to support this functionality");
-        }
-
-        public void EditLastTextFile()
-        {
-            if (ActionProgramForm.LastTextEditedFile != null )
-            {
-                Tuple<ActionFile, ActionProgram> ap = actionfiles.FindProgram(ActionProgramForm.LastTextEditedFile);
-
-                if (ap != null && ap.Item2.EditInEditor())
-                {
-                    ap.Item1.SaveFile();
-                    return;
-                }
-            }
         }
 
         public void ActionRunOnRefresh()
@@ -249,7 +309,7 @@ namespace EDDiscovery.Actions
                 ConditionVariables eventvars = new ConditionVariables();
                 Actions.ActionVars.TriggerVars(eventvars, triggername, triggertype);
                 Actions.ActionVars.HistoryEventVars(eventvars, he, "Event");     // if HE is null, ignored
-                Actions.ActionVars.ShipInformation(eventvars, he?.ShipInformation, "Event",false);     // if He null, or si null, ignore
+                Actions.ActionVars.ShipBasicInformation(eventvars, he?.ShipInformation, "Event");     // if He null, or si null, ignore
                 Actions.ActionVars.SystemVars(eventvars, he?.System, "Event");
                 eventvars.Add(additionalvars);   // adding null is allowed
 
@@ -269,7 +329,7 @@ namespace EDDiscovery.Actions
             return ale.Count;
         }
 
-        public bool ActionRun(string packname, string programname , ConditionVariables runvars , bool now = false )
+        public bool ActionRunProgram(string packname, string programname , ConditionVariables runvars , bool now = false )
         {
             Tuple<ActionFile, ActionProgram> found = actionfiles.FindProgram(packname, programname);
 
@@ -282,6 +342,12 @@ namespace EDDiscovery.Actions
             }
             else
                 return false;
+        }
+
+        public void onStartup()
+        {
+            ActionRun("onStartup", "ProgramEvent");
+            ActionRun("onPostStartup", "ProgramEvent");
         }
 
         public void SetPeristentGlobal(string name, string value)     // saved on exit
@@ -324,14 +390,14 @@ namespace EDDiscovery.Actions
 
         void ActionConfigureKeys()
         {
-            List<Tuple<string, ConditionLists.MatchType>> ret = actionfiles.ReturnValuesOfSpecificConditions("KeyPress", new List<ConditionLists.MatchType>() { ConditionLists.MatchType.Equals, ConditionLists.MatchType.IsOneOf });        // need these to decide
+            List<Tuple<string, ConditionEntry.MatchType>> ret = actionfiles.ReturnValuesOfSpecificConditions("KeyPress", new List<ConditionEntry.MatchType>() { ConditionEntry.MatchType.Equals, ConditionEntry.MatchType.IsOneOf });        // need these to decide
 
             if (ret.Count > 0)
             {
                 actionfileskeyevents = "";
-                foreach (Tuple<string, ConditionLists.MatchType> t in ret)                  // go thru the list, making up a comparision string with Name, on it..
+                foreach (Tuple<string, ConditionEntry.MatchType> t in ret)                  // go thru the list, making up a comparision string with Name, on it..
                 {
-                    if (t.Item2 == ConditionLists.MatchType.Equals)
+                    if (t.Item2 == ConditionEntry.MatchType.Equals)
                         actionfileskeyevents += "<" + t.Item1 + ">";
                     else
                     {

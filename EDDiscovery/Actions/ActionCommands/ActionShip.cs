@@ -70,7 +70,10 @@ namespace EDDiscovery.Actions
                         EliteDangerous.ShipInformation si = lst.GetShipByFullInfoMatch(cmdname);
 
                         if (si != null)
-                            ActionVars.ShipInformation(values, si, prefix, true);
+                        {
+                            ActionVars.ShipBasicInformation(values, si, prefix);
+                            ActionVars.ShipModuleInformation(ap, si, prefix);
+                        }
 
                         values[prefix + "Found"] = (si != null) ? "1" : "0";
                     }
@@ -81,7 +84,7 @@ namespace EDDiscovery.Actions
                     foreach(EliteDangerous.ShipInformation si in lst.Ships.Values )
                     {
                         string p = prefix + "Ships[" + ind.ToString() + "]_";
-                        ActionVars.ShipInformation(values, si, p, false);
+                        ActionVars.ShipBasicInformation(values, si, p);
                         ind++;
                     }
 

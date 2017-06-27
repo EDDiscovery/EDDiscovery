@@ -95,7 +95,13 @@ namespace EDDiscovery.EDDN
                     {
                         hlscanevent.Reset();
 
-                        if (EDDNSync.SendToEDDN(he))
+                        TimeSpan age = he.AgeOfEntry();
+
+                        if (age.Days >= 1)
+                        {
+                            System.Diagnostics.Debug.WriteLine("EDDN: Ignoring entry due to age");
+                        }
+                        else if (EDDNSync.SendToEDDN(he))
                         {
                             mainForm.LogLine($"Sent {he.EntryType.ToString()} event to EDDN ({he.EventSummary})");
                         }

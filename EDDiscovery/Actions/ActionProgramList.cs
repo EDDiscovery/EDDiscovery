@@ -38,15 +38,23 @@ namespace EDDiscovery.Actions
             return (existing >= 0) ? programs[existing] : null;
         }
 
-        public string[] GetActionProgramList(bool markfileasext = false)
+        public int Count { get { return programs.Count; } }
+
+        public ActionProgram Get(int n)
+        {
+            return (n < programs.Count) ? programs[n] : null;
+        }
+
+        public void Add(ActionProgram p)
+        {
+            programs.Add(p);
+        }
+
+        public string[] GetActionProgramList(bool markext = false)
         {
             string[] ret = new string[programs.Count];
             for (int i = 0; i < programs.Count; i++)
-            {
-                ret[i] = programs[i].Name;
-                if (markfileasext && programs[i].StoredInFile != null)
-                    ret[i] += " (Ext)";
-            }
+                ret[i] = programs[i].Name + ((markext && programs[i].StoredInSubFile!=null) ? " (Ext)":"");
 
             return ret;
         }
@@ -54,73 +62,6 @@ namespace EDDiscovery.Actions
         public void Clear()
         {
             programs = new List<ActionProgram>();
-        }
-
-        public string ToJSON()
-        {
-            return ToJSONObject().ToString();
-        }
-
-        public JObject ToJSONObject()
-        {
-            JObject evt = new JObject();
-
-            JArray jf = new JArray();
-
-            foreach (ActionProgram ap in programs)
-            {
-                JObject j1 = ap.ToJSON();
-                jf.Add(j1);
-            }
-
-            evt["ProgramSet"] = jf;
-
-            return evt;
-        }
-
-        public string FromJSON(string s)
-        {
-            try
-            {
-                JObject jo = (JObject)JObject.Parse(s);
-                return FromJSONObject(jo);
-            }
-            catch
-            {
-                return "Exception Bad JSON";
-            }
-        }
-
-        public string FromJSONObject(JObject jo)
-        {
-            string errlist = "";
-
-            try
-            {
-                Clear();
-
-                JArray jf = (JArray)jo["ProgramSet"];
-
-                foreach (JObject j in jf)
-                {
-                    ActionProgram ap;
-                    string err = ActionProgram.FromJSON(j, out ap);
-
-                    if (err.Length == 0 && ap != null)         // if can't load, we can't trust the pack, so indicate error so we can let the user manually sort it out
-                        programs.Add(ap);
-                    else
-                        errlist += err;
-                }
-
-                return errlist;
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Debug.WriteLine("Dump:" + ex.StackTrace);
-                errlist = "Exception bad JSON";
-            }
-
-            return errlist;
         }
 
         public void AddOrChange(ActionProgram ap)
@@ -140,6 +81,58 @@ namespace EDDiscovery.Actions
             if (existing >= 0)
                 programs.RemoveAt(existing);
         }
-    }
 
+        EDDiscoveryForm edfrm;
+        string edoutername;
+
+        public bool EditProgram(string s, EDDiscoveryForm discoveryform , string outername)
+        {
+            int colon = s.IndexOf(':');
+            if (colon >= 0)
+                s = s.Substring(0, colon);
+            int bracket = s.IndexOf('(');
+            if (bracket >= 0)
+                s = s.Substring(0, bracket);
+
+            ActionProgram p = Get(s);
+
+            if ( p != null )
+            {
+                if (p.StoredInSubFile != null)
+                {
+                    p.EditInEditor(p.StoredInSubFile);         // Edit in the editor..
+                }
+                else
+                {
+                    ActionProgramEditForm apf = new ActionProgramEditForm();
+                    apf.EditProgram += EditProgram;
+
+                    edfrm = discoveryform;
+                    edoutername = outername;
+
+                    List<string> additionalfieldnames = new List<string>(); // TBD
+
+                    apf.Init("Action program ", discoveryform, additionalfieldnames, outername, p, GetActionProgramList(), "");
+
+                    System.Windows.Forms.DialogResult res = apf.ShowDialog();
+
+                    if (res == System.Windows.Forms.DialogResult.OK)
+                    {
+                        ActionProgram np = apf.GetProgram();
+                        AddOrChange(np);                // replaces or adds (if its a new name) same as rename
+                    }
+
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        public void EditProgram(string s)
+        {
+            if ( !EditProgram(s, edfrm, edoutername) )
+                EDDiscovery.Forms.MessageBoxTheme.Show("Unknown program or not in this file " + s);
+        }
+    }
 }

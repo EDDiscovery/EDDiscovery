@@ -2137,7 +2137,7 @@ namespace EDDiscovery
             Matrix4 resmat = posdir.GetResMat;
             GalacticMapObject curobj = null;
 
-            if (discoveryForm.galacticMapping != null)
+            if (discoveryForm.galacticMapping != null && discoveryForm.galacticMapping.Loaded)
             {
                 foreach (GalacticMapObject gmo in discoveryForm.galacticMapping.galacticMapObjects)
                 {

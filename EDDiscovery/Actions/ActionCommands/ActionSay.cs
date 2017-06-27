@@ -42,6 +42,8 @@ namespace EDDiscovery.Actions
         static string culturename = "Culture";
         static string literalname = "Literal";
         static string dontspeakname = "DontSpeak";
+        static string prefixsound = "PrefixSound";
+        static string postfixsound = "PostfixSound";
 
         public bool FromString(string s, out string saying, out ConditionVariables vars)
         {
@@ -159,6 +161,12 @@ namespace EDDiscovery.Actions
                     bool literal = vars.GetInt(literalname, 0) != 0;
                     bool dontspeak = vars.GetInt(dontspeakname, 0) != 0;
 
+                    string prefixsoundpath = vars.GetString(prefixsound);
+                    string postfixsoundpath = vars.GetString(postfixsound);
+
+                    //TBD .. add in ability to get file from actions folder without knowing the path..
+
+
                     Audio.SoundEffectSettings ses = new Audio.SoundEffectSettings(vars);        // use the rest of the vars to place effects
 
                     if (!ses.Any && !ses.OverrideNone && ap.VarExist(globalvarspeecheffects))  // if can't see any, and override none if off, and we have a global, use that
@@ -187,28 +195,63 @@ namespace EDDiscovery.Actions
 
                         if (ms != null)
                         {
-                            Audio.AudioQueue.AudioSample audio = ap.actioncontroller.DiscoveryForm.AudioQueueSpeech.Generate(ms, vars, true);
+                            Audio.AudioQueue.AudioSample prefixaudio = null;
 
-                            if (audio != null)
+                            if (prefixsoundpath != null)
                             {
-                                if (start != null && start.Length > 0)
+                                prefixaudio = ap.actioncontroller.DiscoveryForm.AudioQueueWave.Generate(prefixsoundpath, new ConditionVariables());
+
+                                if (prefixaudio == null)
                                 {
-                                    audio.sampleStartTag = new AudioEvent { apr = ap, eventname = start, triggername = "onSayStarted" };
-                                    audio.sampleStartEvent += Audio_sampleEvent;
-
+                                    ap.ReportError("Say could not create prefix audio, check audio file format is supported and effects settings");
+                                    return true;
                                 }
-                                if (wait || (finish != null && finish.Length > 0))       // if waiting, or finish call
-                                {
-                                    audio.sampleOverTag = new AudioEvent() { apr = ap, wait = wait, eventname = finish, triggername = "onSayFinished" };
-                                    audio.sampleOverEvent += Audio_sampleEvent;
-                                }
-
-                                ap.actioncontroller.DiscoveryForm.AudioQueueSpeech.Submit(audio, vol, priority);
-
-                                return !wait;       //False if wait, meaning terminate and wait for it to complete, true otherwise, continue
                             }
-                            else
+
+                            Audio.AudioQueue.AudioSample speechaudio = ap.actioncontroller.DiscoveryForm.AudioQueueSpeech.Generate(ms, vars, true);
+
+                            if (speechaudio == null)
+                            {
                                 ap.ReportError("Say could not create audio, check Effects settings");
+                                return true;
+                            }
+
+                            Audio.AudioQueue.AudioSample postfixaudio = null;
+
+                            if (postfixsoundpath != null)
+                            {
+                                postfixaudio = ap.actioncontroller.DiscoveryForm.AudioQueueWave.Generate(postfixsoundpath, new ConditionVariables());
+
+                                if (postfixaudio == null)
+                                {
+                                    ap.ReportError("Say could not create postfix audio, check audio file format is supported and effects settings");
+                                    return true;
+                                }
+                            }
+
+                            if (start != null && start.Length > 0)
+                            {
+                                Audio.AudioQueue.AudioSample audioatstart = (prefixaudio != null) ? prefixaudio : speechaudio;
+                                audioatstart.sampleStartTag = new AudioEvent { apr = ap, eventname = start, triggername = "onSayStarted" };
+                                audioatstart.sampleStartEvent += Audio_sampleEvent;
+                            }
+
+                            if (wait || (finish != null && finish.Length > 0))       // if waiting, or finish call
+                            {
+                                Audio.AudioQueue.AudioSample audioatend = (postfixaudio != null) ? postfixaudio : speechaudio;
+                                audioatend.sampleOverTag = new AudioEvent() { apr = ap, wait = wait, eventname = finish, triggername = "onSayFinished" };
+                                audioatend.sampleOverEvent += Audio_sampleEvent;
+                            }
+
+                            if (prefixaudio != null)
+                                ap.actioncontroller.DiscoveryForm.AudioQueueSpeech.Submit(prefixaudio, vol, priority);
+
+                            ap.actioncontroller.DiscoveryForm.AudioQueueSpeech.Submit(speechaudio, vol, priority);
+
+                            if (postfixaudio != null)
+                                ap.actioncontroller.DiscoveryForm.AudioQueueSpeech.Submit(postfixaudio, vol, priority);
+
+                            return !wait;       //False if wait, meaning terminate and wait for it to complete, true otherwise, continue
                         }
                     }
                     else

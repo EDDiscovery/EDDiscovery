@@ -58,6 +58,18 @@ namespace EDDiscovery
             return (pos < line.Length) ? line[pos] : ' ';
         }
 
+        public bool IsStringMoveOn(string s, StringComparison sc = StringComparison.InvariantCulture)
+        {
+            if (line.Substring(pos).StartsWith(s,sc))
+            {
+                pos += s.Length;
+                SkipSpace();
+                return true;
+            }
+            else
+                return false;
+        }
+
         public bool IsCharMoveOn(char t)
         {
             if (pos < line.Length && line[pos] == t)

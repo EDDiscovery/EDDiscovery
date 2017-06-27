@@ -69,11 +69,17 @@ namespace EDDiscovery
         public Audio.AudioQueue AudioQueueSpeech { get { return audioqueuespeech; } }
         public Audio.SpeechSynthesizer SpeechSynthesizer { get { return speechsynth; } }
 
+        public BindingsFile FrontierBindings { get { return frontierbindings; } }   
+
         Audio.IAudioDriver audiodriverwave;
         Audio.AudioQueue audioqueuewave;
         Audio.IAudioDriver audiodriverspeech;
         Audio.AudioQueue audioqueuespeech;
         Audio.SpeechSynthesizer speechsynth;
+
+        InputDevices.InputDeviceList inputdevices;
+        InputDevices.InputDevicesIntoActions inputdevicesactions;
+        BindingsFile frontierbindings;
 
         public CompanionAPI.CompanionAPIClass Capi { get; private set; } = new CompanionAPI.CompanionAPIClass();
 
@@ -212,9 +218,30 @@ namespace EDDiscovery
 
             actioncontroller = new Actions.ActionController(this, Controller);
 
+            frontierbindings = new BindingsFile();
+            inputdevices = new InputDevices.InputDeviceList(a => BeginInvoke(a));
+            inputdevicesactions = new InputDevices.InputDevicesIntoActions(inputdevices, frontierbindings, actioncontroller);
+
             ApplyTheme();
 
             notifyIcon1.Visible = EDDConfig.UseNotifyIcon;
+        }
+
+        public void EliteInput(bool on, bool axisevents)
+        {
+            inputdevicesactions.Stop();
+            inputdevices.Clear();
+
+#if !__MonoCS__
+            if (on)
+            {
+                InputDevices.InputDeviceJoystickWindows.CreateJoysticks(inputdevices,axisevents);
+                InputDevices.InputDeviceKeyboard.CreateKeyboard(inputdevices);              // Created.. not started..
+                InputDevices.InputDeviceMouse.CreateMouse(inputdevices);
+                frontierbindings.LoadBindingsFile();
+                inputdevicesactions.Start();
+            }
+#endif
         }
 
         private void EDDiscoveryForm_Layout(object sender, LayoutEventArgs e)       // Manually position, could not get gripper under tab control with it sizing for the life of me
@@ -273,7 +300,8 @@ namespace EDDiscovery
                 Controller.LogLineHighlight("Correct the missing colors or other information manually using the Theme Editor in Settings");
             }
 
-            actioncontroller.ActionRun("onStartup", "ProgramEvent");
+            actioncontroller.onStartup();
+
             _shownOnce = true;
         }
 
@@ -611,6 +639,9 @@ namespace EDDiscovery
             audioqueuewave.Dispose();
             audiodriverwave.Dispose();
 
+            inputdevicesactions.Stop();
+            inputdevices.Clear();
+
             Close();
             Application.Exit();
         }
@@ -662,7 +693,7 @@ namespace EDDiscovery
         private void buttonReloadActions_Click(object sender, EventArgs e)
         {
             actioncontroller.ReLoad();
-            actioncontroller.ActionRun("onStartup", "ProgramEvent");
+            actioncontroller.onStartup();
         }
 
         private void addNewStarToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1188,7 +1219,12 @@ namespace EDDiscovery
 
         private void configureAddOnActionsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            actioncontroller.EditAddOnActionFile();
+            actioncontroller.EditAddOns();
+        }
+
+        private void editLastActionPackToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            actioncontroller.EditLastPack();
         }
 
         private void stopCurrentlyRunningActionProgramToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1196,31 +1232,31 @@ namespace EDDiscovery
             actioncontroller.TerminateAll();
         }
 
-        public bool AddNewMenuItemToAddOns(string menuname, string menuitemtext, string icon , string menutrigger, string packname)
+        public bool AddNewMenuItemToAddOns(string menu, string menutext, string icon , string menuname, string packname)
         {
             ToolStripMenuItem parent;
 
-            menuname = menuname.ToLower();
-            if (menuname.Equals("add-ons"))
+            menu = menu.ToLower();
+            if (menu.Equals("add-ons"))
                 parent = addOnsToolStripMenuItem;
-            else if (menuname.Equals("help"))
+            else if (menu.Equals("help"))
                 parent = helpToolStripMenuItem;
-            else if (menuname.Equals("tools"))
+            else if (menu.Equals("tools"))
                 parent = toolsToolStripMenuItem;
-            else if (menuname.Equals("admin"))
+            else if (menu.Equals("admin"))
                 parent = adminToolStripMenuItem;
             else
                 return false;
 
             Object res = Properties.Resources.ResourceManager.GetObject(icon);
 
-            var x = (from ToolStripItem p in parent.DropDownItems where p.Text.Equals(menuitemtext) && p.Tag != null && p.Name.Equals(menutrigger) select p);
+            var x = (from ToolStripItem p in parent.DropDownItems where p.Text.Equals(menutext) && p.Tag != null && p.Name.Equals(menuname) select p);
 
-            if (x.Count() == 0)           // double entries screened out
+            if (x.Count() == 0)           // double entries screened out of same menu text from same pack
             {
                 ToolStripMenuItem it = new ToolStripMenuItem();
-                it.Text = menuitemtext;
-                it.Name = menutrigger;
+                it.Text = menutext;
+                it.Name = menuname;
                 it.Tag = packname;
                 if (res != null && res is Bitmap)
                     it.Image = (Bitmap)res;
@@ -1231,6 +1267,19 @@ namespace EDDiscovery
 
             return true;
         }
+
+        public bool IsMenuItemInstalled(string menuname)
+        {
+            foreach( ToolStripMenuItem tsi in menuStrip1.Items )
+            {
+                List<ToolStripItem> presentlist = (from ToolStripItem s in tsi.DropDownItems where s.Name.Equals(menuname) select s).ToList();
+                if (presentlist.Count() > 0)
+                    return true;
+            }
+
+            return false;
+        }
+
 
         public void RemoveMenuItemsFromAddOns(ToolStripMenuItem menu, string packname)
         {
@@ -1289,7 +1338,7 @@ namespace EDDiscovery
         public int ActionRun(string name, string triggertype, HistoryEntry he = null, ConditionVariables additionalvars = null, string flagstart = null, bool now = false)
         { return actioncontroller.ActionRun(name, triggertype,he,additionalvars,flagstart,now); }
 
-#endregion
+        #endregion
 
     }
 }

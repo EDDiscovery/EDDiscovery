@@ -31,14 +31,24 @@ namespace EDDiscovery.Forms
             InitializeComponent();
         }
 
-        public void Info(string title, string info , Font fnt, int[] array )
+        public void Info(string title, string info , Font fnt, int[] array , bool themeit = false)    
         {
             Text = title;
-            textBoxInfo.SelectionTabs = array;
+            textBoxInfo.TextBox.SelectionTabs = array;
+            textBoxInfo.TextBox.ReadOnly = true;
             textBoxInfo.Text = info;
-            textBoxInfo.Select(0, 0);
+            textBoxInfo.TextBox.Select(0, 0);
+
+            if ( themeit )
+            { 
+                EDDiscovery.EDDTheme theme = EDDiscovery.EDDTheme.Instance;
+                if ( fnt == null )
+                    fnt = new Font(theme.FontName, 12.0F);
+                theme.ApplyToForm(this, fnt);
+            }
+            
             textBoxInfo.Font = fnt;
-        }
+         }
 
         private void InfoForm_Resize(object sender, EventArgs e)
         {

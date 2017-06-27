@@ -15,7 +15,7 @@
  */
 namespace EDDiscovery.Actions
 {
-    partial class ActionProgramForm
+    partial class ActionProgramEditForm
     {
         /// <summary>
         /// Required designer variable.
@@ -44,7 +44,7 @@ namespace EDDiscovery.Actions
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ActionProgramForm));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ActionProgramEditForm));
             this.panelOuter = new System.Windows.Forms.Panel();
             this.panelVScroll = new ExtendedControls.PanelVScroll();
             this.vScrollBarCustom1 = new ExtendedControls.VScrollBarCustom();
