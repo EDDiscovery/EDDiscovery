@@ -18,6 +18,10 @@ using System.Linq;
 
 namespace EDDiscovery.EliteDangerous.JournalEvents
 {
+    /*When written: when the player is invited to a wing
+Parameters:
+•	Name: the commander name of the player inviting to the wing
+*/
     //{   "timestamp": "2017-06-27T14:35:43Z",   "event": "WingInvite",   "Name": "<cmdr name>" }
 
 [JournalEntryType(JournalTypeEnum.WingInvite)]
