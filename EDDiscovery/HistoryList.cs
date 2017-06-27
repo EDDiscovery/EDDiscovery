@@ -52,6 +52,7 @@ namespace EDDiscovery
 
         public DateTime EventTimeLocal { get { return EventTimeUTC.ToLocalTime(); } }
         public DateTime EventTimeUTC;
+        public TimeSpan AgeOfEntry() { return DateTime.Now - EventTimeUTC; }
         public string EventSummary;
         public string EventDescription;
         public string EventDetailedInfo;
@@ -521,11 +522,11 @@ namespace EDDiscovery
     public class HistoryList : IEnumerable<HistoryEntry>
     {
         private List<HistoryEntry> historylist = new List<HistoryEntry>();  // oldest first here
-        public Ledger materialcommodititiesledger = new Ledger();       // and the ledger..
-        public ShipInformationList shipinformationlist = new ShipInformationList();     // ship info
-        public MissionListAccumulator missionlistaccumulator = new MissionListAccumulator(); // and mission list..
-        public EliteDangerous.StarScan starscan = new StarScan();                                           // and the results of scanning
-        public int CommanderId;
+        public Ledger materialcommodititiesledger { get; private set; } = new Ledger();       // and the ledger..
+        public ShipInformationList shipinformationlist { get; private set; } = new ShipInformationList();     // ship info
+        private MissionListAccumulator missionlistaccumulator = new MissionListAccumulator(); // and mission list..
+        public EliteDangerous.StarScan starscan { get; private set; } = new StarScan();                                           // and the results of scanning
+        public int CommanderId { get; private set; }
 
         private JournalFuelScoop FuelScoopAccum;        // no need to copy
         public static bool AccumulateFuelScoops { get; set; } = true;
