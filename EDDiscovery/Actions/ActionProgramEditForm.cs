@@ -908,7 +908,7 @@ namespace EDDiscovery.Actions
         {
             bool windowsborder = this.FormBorderStyle == FormBorderStyle.Sizable;
             // Compatibility movement for Mono
-            if (m.Msg == WM.LBUTTONDOWN && (int)m.WParam == 1 && !windowsborder)
+            if (m.Msg == WM.LBUTTONDOWN && m.WParam == (IntPtr)1 && !windowsborder)
             {
                 int x = unchecked((short)((uint)m.LParam & 0xFFFF));
                 int y = unchecked((short)((uint)m.LParam >> 16));
@@ -918,7 +918,7 @@ namespace EDDiscovery.Actions
                 m.Result = IntPtr.Zero;
                 this.Capture = true;
             }
-            else if (m.Msg == WM.MOUSEMOVE && (int)m.WParam == 1 && _window_dragging)
+            else if (m.Msg == WM.MOUSEMOVE && m.WParam == (IntPtr)1 && _window_dragging)
             {
                 int x = unchecked((short)((uint)m.LParam & 0xFFFF));
                 int y = unchecked((short)((uint)m.LParam >> 16));
@@ -941,7 +941,7 @@ namespace EDDiscovery.Actions
             {
                 base.WndProc(ref m);
 
-                if ((int)m.Result == HT.CLIENT)
+                if (m.Result == (IntPtr)HT.CLIENT)
                 {
                     int x = unchecked((short)((uint)m.LParam & 0xFFFF));
                     int y = unchecked((short)((uint)m.LParam >> 16));

@@ -17,3 +17,6 @@ packages
 /Installer/EDDiscovery - Beta.back.aip
 /Installer/EDDiscovery.back.aip
 Thumbs.db
+#Visual Studio 2015r2+ IntelliSense SQLite db and lockfile
+/EDDiscovery.VC.db
+/EDDiscovery.VC.VC.opendb

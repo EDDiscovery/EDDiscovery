@@ -372,7 +372,7 @@ namespace EDDiscovery
 
             if(m.Msg == WM_SYSCOMMAND)
             {
-                switch((int)m.WParam)
+                switch(unchecked((long)m.WParam))
                 {
                     // Topmost entry
                     case 0x01:
