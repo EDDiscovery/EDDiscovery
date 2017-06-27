@@ -94,7 +94,9 @@ namespace EDDiscovery.Actions
                 else if (cmdname.Equals("enableeliteinputnoaxis"))
                     ap.actioncontroller.DiscoveryForm.EliteInput(true, false);
                 else if (cmdname.Equals("disableeliteinput"))
-                    ap.actioncontroller.DiscoveryForm.EliteInput(false,false);
+                    ap.actioncontroller.DiscoveryForm.EliteInput(false, false);
+                else if (cmdname.Equals("listeliteinput"))
+                    ap["EliteInput"] = ap.actioncontroller.DiscoveryForm.EliteInputList();
                 else
                     ap.ReportError("Unknown command " + cmdname + " in Performaction");
             }

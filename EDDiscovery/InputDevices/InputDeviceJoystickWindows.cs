@@ -230,6 +230,10 @@ namespace EDDiscovery.InputDevices
             return null;
         }
 
+        public override string ToString()
+        {
+            return jsi.Name + ":" + jsi.Instanceguid + ":" + jsi.Productguid + ":" + butstate.Length + "," + povvalue.Length + "," + slidercount;
+        }
 
         public static void CreateJoysticks(InputDeviceList ilist, bool axisevents)
         {
@@ -244,5 +248,6 @@ namespace EDDiscovery.InputDevices
                 }
             }
         }
+
     }
 }

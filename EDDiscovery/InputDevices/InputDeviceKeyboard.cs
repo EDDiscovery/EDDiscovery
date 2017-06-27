@@ -122,6 +122,10 @@ namespace EDDiscovery.InputDevices
             return false;
         }
 
+        public override string ToString()
+        {
+            return ksi.Name + ":" + ksi.Instanceguid + ":" + ksi.Productguid;
+        }
 
         public static void CreateKeyboard(InputDeviceList ilist)
         {
