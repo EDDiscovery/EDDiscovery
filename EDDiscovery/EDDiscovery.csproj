@@ -316,6 +316,7 @@
     <Compile Include="EliteDangerous\BindingsFile.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalCrewLaunchFighter.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalCrewMemberRoleChange.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalEngineerContribution.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalFriends.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalWingInvite.cs" />
     <Compile Include="EliteDangerous\MaterialCommodities.cs" />
