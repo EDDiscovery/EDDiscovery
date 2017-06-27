@@ -48,6 +48,9 @@ namespace EDDiscovery.Actions
 
                 BindingsFile bf = ap.actioncontroller.DiscoveryForm.FrontierBindings;
 
+                int matchno = 1;
+                string list = "";
+
                 while ( cmdname != null )
                 {
                     bool partial = false;
@@ -64,9 +67,9 @@ namespace EDDiscovery.Actions
                     {
                         foreach (BindingsFile.Assignment a in matches)
                         {
-                            ap[prefix + cmdname + "_Assignment"] = a.assignedfunc;
-                            ap[prefix + cmdname + "_Keys"] = string.Join(",", (from BindingsFile.DeviceKeyPair k in a.keys select k.Key).ToList());
-                            ap[prefix + cmdname + "_Devices"] = string.Join(",", (from BindingsFile.DeviceKeyPair k in a.keys select k.Device.Name).ToList());
+                            ap[prefix + "Binding" + matchno.ToStringInvariant()] = a.ToString();
+                            list += a.ToString() + Environment.NewLine;
+                            matchno++;
                         }
                     }
 
@@ -74,11 +77,13 @@ namespace EDDiscovery.Actions
                     foreach(string k in values.Keys)
                     {
                         ap[prefix + k] = values[k];
+                        list += k + "=" + values[k] + Environment.NewLine;
                     }
-
 
                     cmdname = sp.NextQuotedWord();
                 }
+
+                ap[prefix + "Text"] = list;
 
             }
             else

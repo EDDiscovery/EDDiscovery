@@ -9,8 +9,8 @@ namespace EDDiscovery.InputDevices
 {
     class InputDeviceMouse : InputDeviceInterface
     {
-        public InputDeviceIdentity ID() { return ksi; }
-        InputDeviceIdentity ksi;
+        public InputDeviceIdentity ID() { return msi; }
+        InputDeviceIdentity msi;
 
         SharpDX.DirectInput.Mouse mouse;
         bool[] butstate;
@@ -20,7 +20,7 @@ namespace EDDiscovery.InputDevices
 
         public InputDeviceMouse(DirectInput di,DeviceInstance d)
         {
-            ksi = new InputDeviceIdentity() { Instanceguid = d.InstanceGuid, Productguid = d.ProductGuid, Name = d.InstanceName.RemoveTrailingCZeros()};
+            msi = new InputDeviceIdentity() { Instanceguid = d.InstanceGuid, Productguid = d.ProductGuid, Name = d.InstanceName.RemoveTrailingCZeros()};
 
             mouse = new SharpDX.DirectInput.Mouse(di);
             mouse.SetNotification(eventhandle);
@@ -89,6 +89,11 @@ namespace EDDiscovery.InputDevices
             }
 
             return null;
+        }
+
+        public override string ToString()
+        {
+            return msi.Name + ":" + msi.Instanceguid + ":" + msi.Productguid;
         }
 
         public static void CreateMouse(InputDeviceList ilist)

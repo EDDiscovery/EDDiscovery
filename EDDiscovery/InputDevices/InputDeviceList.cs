@@ -32,6 +32,14 @@ namespace EDDiscovery.InputDevices
             return inputdevices.Find(p);
         }
 
+        public string ListDevices()
+        {
+            string ret = "";
+            foreach (InputDeviceInterface i in inputdevices)
+                ret += i.ToString() + Environment.NewLine;
+            return ret;
+        }
+
         public void Start()
         {
             if (waitfordatathread == null)

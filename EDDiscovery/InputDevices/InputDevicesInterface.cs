@@ -45,5 +45,7 @@ namespace EDDiscovery.InputDevices
         string EventName(InputDeviceEvent e);   // Frontier event name from input event
 
         bool? IsPressed(string eventname);       // if an input supports pressed, true/false, else null
+
+        string ToString();
     }
 }
