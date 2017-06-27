@@ -18,6 +18,11 @@ using System.Linq;
 
 namespace EDDiscovery.EliteDangerous.JournalEvents
 {
+    /*When written: when receiving information about a change in a friend's status
+Parameters:
+•	Status: one of the following: Requested, Declined, Added, Lost, Offline, Online
+•	Name: the friend's commander name
+*/ 
 //{ "timestamp":"2017-06-26T17:06:50Z", "event":"Friends", "Status":"Offline", "Name":"Finwen" }
 [JournalEntryType(JournalTypeEnum.Friends)]
     public class JournalFriends : JournalEntry
