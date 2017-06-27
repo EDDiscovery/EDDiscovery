@@ -119,8 +119,6 @@ namespace EDDiscovery
 
             journalmonitor = new EliteDangerous.EDJournalClass(InvokeAsyncOnUiThread);
             journalmonitor.OnNewJournalEntry += NewEntry;
-
-            history.CommanderId = EDCommander.CurrentCmdrID;
         }
 
         public void PostInit_Loaded()
