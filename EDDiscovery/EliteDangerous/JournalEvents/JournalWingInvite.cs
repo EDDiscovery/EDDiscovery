@@ -18,24 +18,24 @@ using System.Linq;
 
 namespace EDDiscovery.EliteDangerous.JournalEvents
 {
-//{ "timestamp":"2017-06-26T17:06:50Z", "event":"Friends", "Status":"Offline", "Name":"Finwen" }
-[JournalEntryType(JournalTypeEnum.Friends)]
-    public class JournalFriends : JournalEntry
+    //{   "timestamp": "2017-06-27T14:35:43Z",   "event": "WingInvite",   "Name": "<cmdr name>" }
+
+[JournalEntryType(JournalTypeEnum.WingInvite)]
+    public class JournalWingInvite : JournalEntry
     {
-        public JournalFriends(JObject evt) : base(evt, JournalTypeEnum.Friends)
+        public JournalWingInvite(JObject evt ) : base(evt, JournalTypeEnum.WingInvite)
         {
-            Status = evt["Status"].Str();
             Name = evt["Name"].Str();
         }
-        public string Status { get; set; }
+
         public string Name { get; set; }
 
-        public override System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.sendtext; } }
+        public override System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.wingadd; } }
 
         public override void FillInformation(out string summary, out string info, out string detailed) //V
         {
             summary = EventTypeStr.SplitCapsWord();
-            info = Tools.FieldBuilder("", Name, "", Status);
+            info = Name;
             detailed = "";
         }
     }
