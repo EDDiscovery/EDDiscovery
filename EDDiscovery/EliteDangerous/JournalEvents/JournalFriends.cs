@@ -30,7 +30,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public string Status { get; set; }
         public string Name { get; set; }
 
-        public override System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.sendtext; } }
+        public override System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.friends; } }
 
         public override void FillInformation(out string summary, out string info, out string detailed) //V
         {
