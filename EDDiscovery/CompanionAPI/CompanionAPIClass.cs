@@ -75,7 +75,6 @@ namespace EDDiscovery.CompanionAPI
 
         private void Login()
         {
-            Credentials.appId = null;
             HttpWebRequest request = GetRequest(BASE_URL + LOGIN_URL);
 
             // Send the request
@@ -354,7 +353,7 @@ namespace EDDiscovery.CompanionAPI
                     throw new CompanionAppException("Failed to contact API server");
                 }
 
-                if (response.StatusCode == HttpStatusCode.Found && response.Headers["Location"] == LOGIN_URL)
+                if (response.StatusCode == HttpStatusCode.Forbidden || response.Headers["Location"] == LOGIN_URL)
                 {
                     return null;
                 }
