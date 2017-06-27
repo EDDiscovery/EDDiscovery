@@ -166,6 +166,7 @@ namespace EDDiscovery.EliteDangerous
         USSDrop = 940,
         VehicleSwitch = 950,
         WingAdd = 960,
+        WingInvite = 965, 
         WingJoin = 970,
         WingLeave = 980,
 
