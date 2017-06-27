@@ -245,7 +245,7 @@ namespace EDDiscovery.EliteDangerous
                 string ingredient = r.ingredients[i];
 
                 int mi = list.FindIndex(x => x.shortname.Equals(ingredient));
-                int got = (mi > 0) ? list[mi].scratchpad : 0;
+                int got = (mi >= 0) ? list[mi].scratchpad : 0;
                 int sets = got / r.count[i];
 
                 max = Math.Min(max, sets);
