@@ -38,7 +38,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
     [JournalEntryType(JournalTypeEnum.Location)]
     public class JournalLocation : JournalLocOrJump
     {
-        public JournalLocation(JObject evt ) : base(evt, JournalTypeEnum.Location)      // all have evidence 16/3/2017
+        public JournalLocation(JObject evt) : base(evt, JournalTypeEnum.Location)      // all have evidence 16/3/2017
         {
             Docked = evt.Value<bool?>("Docked") ?? false;
             StationName = evt["StationName"].Str();
@@ -47,7 +47,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             BodyType = evt["BodyType"].Str();
             Faction = JSONObjectExtensions.GetMultiStringDef(evt, new string[] { "SystemFaction", "Faction" });
 
-            Allegiance = JSONObjectExtensions.GetMultiStringDef(evt, new string[] { "SystemAllegiance", "Allegiance"});
+            Allegiance = JSONObjectExtensions.GetMultiStringDef(evt, new string[] { "SystemAllegiance", "Allegiance" });
             Economy = JSONObjectExtensions.GetMultiStringDef(evt, new string[] { "SystemEconomy", "Economy" });
             Economy_Localised = JSONObjectExtensions.GetMultiStringDef(evt, new string[] { "SystemEconomy_Localised", "Economy_Localised" });
             Government = JSONObjectExtensions.GetMultiStringDef(evt, new string[] { "SystemGovernment", "Government" });
@@ -94,13 +94,29 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             {
                 summary = "At " + StationName;
                 info = Tools.FieldBuilder("Type ", StationType, "< in system ", StarSystem);
-                detailed = Tools.FieldBuilder("Allegiance:", Allegiance, "Economy:", Economy_Localised.Alt(Economy), "Government:", Government_Localised.Alt(Government) , "Security:" , Security_Localised.Alt(Security));
-                
-                if ( Factions != null )
-                    foreach( FactionInfo f in Factions)
+                detailed = Tools.FieldBuilder("Allegiance:", Allegiance, "Economy:", Economy_Localised.Alt(Economy), "Government:", Government_Localised.Alt(Government), "Security:", Security_Localised.Alt(Security));
+
+                if (Factions != null)
+                    foreach (FactionInfo f in Factions)
                     {
                         detailed += Environment.NewLine;
-                        detailed += Tools.FieldBuilder("", f.Name, "State:" , f.FactionState, "Gov:" , f.Government , "Inf:;%" , (int)(f.Influence*100), "Allegiance:" , f.Allegiance);
+                        detailed += Tools.FieldBuilder("", f.Name, "State:", f.FactionState, "Gov:", f.Government, "Inf:;%", (int)(f.Influence * 100), "Allegiance:", f.Allegiance);
+
+                        if (f.PendingStates != null)
+                        {
+                            detailed += Tools.FieldBuilder(",", "Pending State:");
+                            foreach (JournalLocation.PowerStatesInfo state in f.PendingStates)
+                                detailed += Tools.FieldBuilder(",", state.State, "", state.Trend);
+
+                        }
+
+                        if (f.RecoveringStates != null)
+                        {
+                            detailed += Tools.FieldBuilder(",", "Recovering State:");
+                            foreach (JournalLocation.PowerStatesInfo state in f.RecoveringStates)
+                                detailed += Tools.FieldBuilder(",", state.State, "", state.Trend);
+                        }
+     
                     }
             }
             else if (Latitude.HasValue && Longitude.HasValue)
@@ -117,7 +133,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             }
         }
 
-            
+
 
         public override System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.location; } }
 
@@ -128,8 +144,16 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             public string Government { get; set; }
             public double Influence { get; set; }
             public string Allegiance { get; set; }
+
+            public PowerStatesInfo[] PendingStates { get; set; }
+            public PowerStatesInfo[] RecoveringStates { get; set; }
         }
 
+        public class PowerStatesInfo
+        {
+            public string State { get; set; }
+            public int Trend { get; set; }
+        }
 
     }
 }
