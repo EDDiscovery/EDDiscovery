@@ -75,7 +75,6 @@ namespace EDDiscovery.CompanionAPI
 
         private void Login()
         {
-            Credentials.appId = null;
             HttpWebRequest request = GetRequest(BASE_URL + LOGIN_URL);
 
             // Send the request
