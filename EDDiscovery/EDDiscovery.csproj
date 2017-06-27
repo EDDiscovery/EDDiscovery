@@ -316,6 +316,7 @@
     <Compile Include="EliteDangerous\BindingsFile.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalCrewLaunchFighter.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalCrewMemberRoleChange.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalFriends.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalWingInvite.cs" />
     <Compile Include="EliteDangerous\MaterialCommodities.cs" />
     <Compile Include="DB\RegisterEntry.cs" />
@@ -1170,6 +1171,7 @@
     <None Include="Resources\engineercraft.png" />
     <None Include="Resources\High_metal_content_world_White3.png" />
     <None Include="Resources\High_metal_content_world_White3.bmp" />
+    <None Include="Resources\friends.png" />
     <Content Include="Resources\imgCheck.png" />
     <None Include="Resources\stellaremnant.PNG" />
     <None Include="Resources\nebula.PNG" />
