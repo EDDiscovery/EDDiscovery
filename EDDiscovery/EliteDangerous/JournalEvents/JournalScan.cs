@@ -91,6 +91,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public double? nOrbitalInclination;                         // direct
         public double? nPeriapsis;                                  // direct
         public double? nOrbitalPeriod { get; set; }                 // direct
+        public double? nAxialTilt { get; set; }                 // direct
 
         // Planets
         public string PlanetClass { get; set; }                     // planet class, direct
@@ -161,6 +162,8 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             nEccentricity = evt["Eccentricity"].DoubleNull();
             nOrbitalInclination = evt["OrbitalInclination"].DoubleNull();
             nPeriapsis = evt["Periapsis"].DoubleNull();
+            nAxialTilt = evt["AxialTilt"].DoubleNull();
+
 
             Rings = evt["Rings"]?.ToObject<StarPlanetRing[]>();
 
@@ -377,6 +380,9 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             if (nAbsoluteMagnitude.HasValue)
                 scanText.AppendFormat("Absolute Magnitude: {0:0.00}\n", nAbsoluteMagnitude.Value);
 
+            if (nAxialTilt.HasValue)
+                scanText.AppendFormat("Axial tilt: {0:0.00}°\n", nAxialTilt.Value);
+            
             if (nRotationPeriod.HasValue)
                 scanText.AppendFormat("Rotation Period: {0} days\n", (nRotationPeriod.Value / oneDay_s).ToString("N1"));
 
