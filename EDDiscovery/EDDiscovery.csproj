@@ -303,6 +303,7 @@
     <Compile Include="EliteDangerous\JournalEvents\JournalCrewMemberRoleChange.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalEngineerContribution.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalFriends.cs" />
+    <Compile Include="EliteDangerous\JournalEvents\JournalWingInvite.cs" />
     <Compile Include="EliteDangerous\MaterialCommodities.cs" />
     <Compile Include="DB\RegisterEntry.cs" />
     <Compile Include="DB\SQLiteCommandED.cs" />
