@@ -324,13 +324,21 @@ namespace EDDiscovery.CompanionAPI
             if (data == null || data == "Profile unavailable")
             {
                 // Happens if there is a problem with the API.  Logging in again might clear this...
+                Credentials.appId = null;
                 relogin();
                 data = DownloadProfile();
 
-                if (data == null || data == "Profile unavailable")      // uhoh
+                if (data == null || data == "Profile unavailable")
                 {
-                    Logout();
-                    throw new CompanionAppException("Failed to obtain data from Frontier server");
+                    // Try logging in again without clearing the session ID
+                    relogin();
+                    data = DownloadProfile();
+
+                    if (data == null || data == "Profile unavailable")      // uhoh
+                    {
+                        Logout();
+                        throw new CompanionAppException("Failed to obtain data from Frontier server");
+                    }
                 }
             }
 
