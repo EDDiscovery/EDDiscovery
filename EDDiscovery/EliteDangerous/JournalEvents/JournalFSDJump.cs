@@ -106,6 +106,9 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             public string Government { get; set; }
             public double Influence { get; set; }
             public string Allegiance { get; set; }
+
+            public JournalLocation.PowerStatesInfo[] PendingStates { get; set; }
+            public JournalLocation.PowerStatesInfo[] RecoveringStates { get; set; }
         }
 
         public double JumpDist { get; set; }
@@ -151,7 +154,23 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             {
                 foreach (FactionInformation i in Factions)
                 {
-                    detailed += Tools.FieldBuilder("", i.Name, "State:", i.FactionState, "Gov:", i.Government, "Inf:;%", (i.Influence * 100.0).ToString("0.0"), "Alg:", i.Allegiance) + Environment.NewLine;
+                    detailed += Tools.FieldBuilder("", i.Name, "State:", i.FactionState, "Gov:", i.Government, "Inf:;%", (i.Influence * 100.0).ToString("0.0"), "Alg:", i.Allegiance) ;
+                    if (i.PendingStates != null)
+                    {
+                        detailed += Tools.FieldBuilder(",", "Pending State:");
+                        foreach (JournalLocation.PowerStatesInfo state in i.PendingStates)
+                            detailed += Tools.FieldBuilder(",", state.State, "", state.Trend);
+
+                    }
+
+                    if (i.RecoveringStates != null)
+                    {
+                        detailed += Tools.FieldBuilder(",", "Recovering State:");
+                        foreach (JournalLocation.PowerStatesInfo state in i.RecoveringStates)
+                            detailed += Tools.FieldBuilder(",", state.State, "", state.Trend);
+                    }
+                    detailed += Environment.NewLine;
+
                 }
             }
         }
