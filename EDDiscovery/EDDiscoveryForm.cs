@@ -688,9 +688,9 @@ namespace EDDiscovery
             }
         }
 
-#endregion
+        #endregion
 
-#region Buttons, Mouse, Menus, NotifyIcon
+        #region Buttons, Mouse, Menus, NotifyIcon
 
         private void buttonReloadActions_Click(object sender, EventArgs e)
         {
@@ -821,17 +821,16 @@ namespace EDDiscovery
             Close();
         }
 
-        private void AboutBox()
+        public void AboutBox(Form parent = null)
         {
             AboutForm frm = new AboutForm();
-            frm.labelVersion.Text = this.Text;
-            frm.TopMost = EDDiscoveryForm.EDDConfig.KeepOnTop;
-            frm.ShowDialog(this);
+            frm.TopMost = parent?.TopMost ?? this.TopMost;
+            frm.ShowDialog(parent ?? this);
         }
 
         private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            AboutBox();
+            AboutBox(this);
         }
 
         private void eDDiscoveryChatDiscordToolStripMenuItem_Click(object sender, EventArgs e)
@@ -869,7 +868,7 @@ namespace EDDiscovery
 
         private void paneleddiscovery_Click(object sender, EventArgs e)
         {
-            AboutBox();
+            AboutBox(this);
         }
 
         private void panel_close_Click(object sender, EventArgs e)
