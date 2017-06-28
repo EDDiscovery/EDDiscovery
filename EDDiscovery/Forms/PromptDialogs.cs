@@ -123,9 +123,9 @@ namespace EDDiscovery.Forms
     public class ConfigurableForm : Form
     {
         private Entry[] entries;
-        private Object tag;
+        private Object callertag;
         private string logicalname;
-        public event Action<string, string, Object> Trigger;
+        public event Action<string, string, Object> Trigger;        // returns logical name, name of control, caller tag object
 
         public class Entry
         {
@@ -145,6 +145,7 @@ namespace EDDiscovery.Forms
 
             public bool checkboxchecked;
             public bool textboxmultiline;
+            public string comboboxitems;
         }
 
         static public string MakeEntry(string instr , out Entry entry )
@@ -172,6 +173,8 @@ namespace EDDiscovery.Forms
                 ctype = typeof(ExtendedControls.CheckBoxCustom);
             else if (type.Equals("label"))
                 ctype = typeof(System.Windows.Forms.Label);
+            else if (type.Equals("combobox"))
+                ctype = typeof(ExtendedControls.ComboBoxCustom);
             else
                 return "Unknown control type " + type;
 
@@ -193,19 +196,23 @@ namespace EDDiscovery.Forms
             entry = new Forms.ConfigurableForm.Entry(name, ctype,
                         text, new System.Drawing.Point(x.Value, y.Value), new System.Drawing.Size(w.Value, h.Value), tip);
 
-            if (tip != null)        // if we had a tip, we could have..
+            if (type.Contains("textbox") && tip != null )
             {
-                if (type.Contains("textbox"))
-                {
-                    int? v = sp.NextWordComma().InvariantParseIntNull();
-                    entry.textboxmultiline = v.HasValue && v.Value != 0;
-                }
+                int? v = sp.NextWordComma().InvariantParseIntNull();
+                entry.textboxmultiline = v.HasValue && v.Value != 0;
+            }
 
-                if (type.Contains("checkbox"))
-                {
-                    int? v = sp.NextWordComma().InvariantParseIntNull();
-                    entry.checkboxchecked = v.HasValue && v.Value != 0;
-                }
+            if (type.Contains("checkbox") && tip != null)
+            {
+                int? v = sp.NextWordComma().InvariantParseIntNull();
+                entry.checkboxchecked = v.HasValue && v.Value != 0;
+            }
+
+            if (type.Contains("combobox"))
+            {
+                entry.comboboxitems = sp.LineLeft.Trim();
+                if (tip == null || entry.comboboxitems.Length == 0)
+                    return "Missing paramters for combobox";
             }
 
             return null;
@@ -213,15 +220,14 @@ namespace EDDiscovery.Forms
 
         public void Show(Form p, string lname, System.Drawing.Size size, string caption, Entry[] e, Object t)
         {
-            logicalname = lname;
+            logicalname = lname;    // passed back to caller via trigger
             entries = e;
-            tag = t;
+            callertag = t;      // passed back to caller via trigger
 
             EDDiscovery.EDDTheme theme = EDDiscovery.EDDTheme.Instance;
 
             Size = size;
             FormBorderStyle = FormBorderStyle.FixedDialog;
-            Text = caption;
             StartPosition = FormStartPosition.CenterScreen;
 
             Panel outer = new Panel() { Dock = DockStyle.Fill, BorderStyle = BorderStyle.FixedSingle };
@@ -236,15 +242,17 @@ namespace EDDiscovery.Forms
             tt.ShowAlways = true;
             for (int i = 0; i < entries.Length; i++)
             {
-                Control c = (Control)Activator.CreateInstance(entries[i].controltype);
-                entries[i].control = c;
-                c.Size = entries[i].size;
-                c.Location = entries[i].pos;
-                c.Text = entries[i].text;
-                c.Tag = entries[i];
+                Entry ent = entries[i];
+                Control c = (Control)Activator.CreateInstance(ent.controltype);
+                ent.control = c;
+                c.Size = ent.size;
+                c.Location = ent.pos;
+                if (!(c is ExtendedControls.ComboBoxCustom))        // everything but get text
+                    c.Text = ent.text;
+                c.Tag = ent;     // point control tag at ent structure
                 outer.Controls.Add(c);
-                if (entries[i].tooltip != null)
-                    tt.SetToolTip(c, entries[i].tooltip);
+                if (ent.tooltip != null)
+                    tt.SetToolTip(c, ent.tooltip);
 
                 if (c is ExtendedControls.ButtonExt)
                 {
@@ -252,27 +260,43 @@ namespace EDDiscovery.Forms
                     b.Click += (sender, ev) =>
                     {
                         Entry en = (Entry)(((Control)sender).Tag);
-                        if (Trigger != null)
-                            Trigger(logicalname, en.name, tag);
+                        Trigger?.Invoke(logicalname, en.name, callertag);       // pass back the logical name of dialog, the name of the control, the caller tag
                     };
                 }
 
                 if (c is ExtendedControls.TextBoxBorder)
                 {
                     ExtendedControls.TextBoxBorder tb = c as ExtendedControls.TextBoxBorder;
-                    tb.Multiline = tb.WordWrap = entries[i].textboxmultiline;
+                    tb.Multiline = tb.WordWrap = ent.textboxmultiline;
                 }
 
                 if (c is ExtendedControls.CheckBoxCustom)
                 {
                     ExtendedControls.CheckBoxCustom cb = c as ExtendedControls.CheckBoxCustom;
-                    cb.Checked = entries[i].checkboxchecked;
+                    cb.Checked = ent.checkboxchecked;
                     cb.Click += (sender, ev) =>
                     {
                         Entry en = (Entry)(((Control)sender).Tag);
-                        if (Trigger != null)
-                            Trigger(logicalname, en.name, tag);
+                        Trigger?.Invoke(logicalname, en.name, callertag);       // pass back the logical name of dialog, the name of the control, the caller tag
                     };
+                }
+
+                if (c is ExtendedControls.ComboBoxCustom)
+                {
+                    ExtendedControls.ComboBoxCustom cb = c as ExtendedControls.ComboBoxCustom;
+                    cb.Items.AddRange(ent.comboboxitems.Split(','));
+                    if (cb.Items.Contains(ent.text))
+                        cb.SelectedItem = ent.text;
+                    cb.SelectedIndexChanged += (sender, ev) =>
+                    {
+                        Control ctr = (Control)sender;
+                        if (ctr.Enabled)
+                        {
+                            Entry en = (Entry)(ctr.Tag);
+                            Trigger?.Invoke(logicalname, en.name, callertag);       // pass back the logical name of dialog, the name of the control, the caller tag
+                        }
+                    };
+
                 }
             }
 
@@ -287,7 +311,7 @@ namespace EDDiscovery.Forms
         {
             if (keyData == Keys.Escape)
             {
-                Trigger(logicalname, "Escape", tag);
+                Trigger(logicalname, "Escape", callertag);
                 return true;
             }
 
@@ -304,6 +328,11 @@ namespace EDDiscovery.Forms
                     return (c as ExtendedControls.TextBoxBorder).Text;
                 else if (c is ExtendedControls.CheckBoxCustom)
                     return (c as ExtendedControls.CheckBoxCustom).Checked ? "1" : "0";
+                else if (c is ExtendedControls.ComboBoxCustom)
+                {
+                    ExtendedControls.ComboBoxCustom cb = c as ExtendedControls.ComboBoxCustom;
+                    return (cb.SelectedIndex != -1) ? cb.Text : "";
+                }
             }
 
             return null;
@@ -324,6 +353,17 @@ namespace EDDiscovery.Forms
                 {
                     (c as ExtendedControls.CheckBoxCustom).Checked = !value.Equals("0");
                     return true;
+                }
+                else if (c is ExtendedControls.ComboBoxCustom)
+                {
+                    ExtendedControls.ComboBoxCustom cb = c as ExtendedControls.ComboBoxCustom;
+                    if (cb.Items.Contains(value))
+                    {
+                        cb.Enabled = false;
+                        cb.SelectedItem = value;
+                        cb.Enabled = true;
+                        return true;
+                    }
                 }
             }
 

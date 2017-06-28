@@ -304,6 +304,8 @@ namespace EDDiscovery
                 functions.Add("indexof",        new FuncEntry(IndexOf,          2,2,    3,3));   // check var1 and 2 if normal, allow string in 1 and 2
                 functions.Add("indirect",       new FuncEntry(Indirect,         1,20,   0xfffffff,0xfffffff));   // check var, no strings
 
+                functions.Add("ispresent",      new FuncEntry(Ispresent,        2,3,    2,2));   // 1 may not be there, 2 either a macro or can be string. 3 is optional and a var or literal
+
                 functions.Add("join",           new FuncEntry(Join,             3,20,   0xfffffff,0xfffffff));   // all can be string, check var
 
                 functions.Add("length",         new FuncEntry(Length,           1,1,    1,1));
@@ -1095,9 +1097,33 @@ namespace EDDiscovery
 
         #endregion
 
-        #region Arrays
+        #region Is functions    
 
-        private bool ExpandArray(out string output)
+        private bool Ispresent(out string output)
+        {
+            if (vars.Exists(paras[0].value))        // if paras[0] is a macro which exists
+            {
+                string mvalue = vars[paras[0].value];
+                string cvalue = (paras[1].isstring) ? paras[1].value : vars[paras[1].value];
+
+                output = mvalue.IndexOf(cvalue, StringComparison.InvariantCultureIgnoreCase) >= 0 ? "1" : "0";
+            }
+            else
+            {   // var does not exist..
+                if (paras.Count == 3)   // if default is there, see if its a macro, if so return value, else just return it
+                    output = vars.Exists(paras[2].value) ? vars[paras[2].value] : paras[2].value;
+                else
+                    output = "0";
+            }
+
+            return true;
+        }
+
+         #endregion
+
+            #region Arrays
+
+            private bool ExpandArray(out string output)
         {
             return ExpandArrayCommon(out output, false);
         }
