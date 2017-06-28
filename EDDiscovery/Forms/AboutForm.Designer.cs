@@ -43,13 +43,12 @@ namespace EDDiscovery.Forms
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AboutForm));
-            this.panelLogo = new System.Windows.Forms.Panel();
             this.labelVersion = new System.Windows.Forms.Label();
             this.labelDevelopersEnum = new System.Windows.Forms.Label();
             this.buttonOK = new System.Windows.Forms.Button();
             this.textBoxLicense = new System.Windows.Forms.TextBox();
-            this.labelNoAffiliation = new System.Windows.Forms.Label();
             this.panelLinks = new System.Windows.Forms.Panel();
             this.linkLabelDeveloperChat = new System.Windows.Forms.LinkLabel();
             this.linkLabelHelp = new System.Windows.Forms.LinkLabel();
@@ -62,20 +61,14 @@ namespace EDDiscovery.Forms
             this.linkLabelEliteDangerous = new System.Windows.Forms.LinkLabel();
             this.labelLinks = new System.Windows.Forms.Label();
             this.labelDevelopers = new System.Windows.Forms.Label();
+            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.labelNoAffiliation = new System.Windows.Forms.Label();
+            this.panelLogo = new System.Windows.Forms.PictureBox();
+            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.panelLinks.SuspendLayout();
+            this.tableLayoutPanel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.panelLogo)).BeginInit();
             this.SuspendLayout();
-            // 
-            // panelLogo
-            // 
-            this.panelLogo.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.panelLogo.BackColor = System.Drawing.Color.Transparent;
-            this.panelLogo.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("panelLogo.BackgroundImage")));
-            this.panelLogo.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.panelLogo.Location = new System.Drawing.Point(67, 210);
-            this.panelLogo.Name = "panelLogo";
-            this.panelLogo.Size = new System.Drawing.Size(325, 212);
-            this.panelLogo.TabIndex = 4;
-            this.panelLogo.Click += new System.EventHandler(this.panelLogo_Click);
             // 
             // labelVersion
             // 
@@ -83,25 +76,25 @@ namespace EDDiscovery.Forms
             this.labelVersion.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelVersion.Location = new System.Drawing.Point(12, 19);
             this.labelVersion.Name = "labelVersion";
-            this.labelVersion.Size = new System.Drawing.Size(132, 24);
+            this.labelVersion.Size = new System.Drawing.Size(187, 24);
             this.labelVersion.TabIndex = 0;
-            this.labelVersion.Text = "EDDiscovery v";
+            this.labelVersion.Text = "EDDiscovery v4.3.2.1";
             // 
             // labelDevelopersEnum
             // 
             this.labelDevelopersEnum.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left)));
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.labelDevelopersEnum.BackColor = System.Drawing.Color.Transparent;
-            this.labelDevelopersEnum.Location = new System.Drawing.Point(453, 57);
+            this.labelDevelopersEnum.Location = new System.Drawing.Point(437, 57);
             this.labelDevelopersEnum.Name = "labelDevelopersEnum";
-            this.labelDevelopersEnum.Size = new System.Drawing.Size(203, 162);
+            this.labelDevelopersEnum.Size = new System.Drawing.Size(203, 159);
             this.labelDevelopersEnum.TabIndex = 3;
             this.labelDevelopersEnum.Text = resources.GetString("labelDevelopersEnum.Text");
             // 
             // buttonOK
             // 
             this.buttonOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonOK.Location = new System.Drawing.Point(581, 399);
+            this.buttonOK.Location = new System.Drawing.Point(565, 396);
             this.buttonOK.Name = "buttonOK";
             this.buttonOK.Size = new System.Drawing.Size(75, 23);
             this.buttonOK.TabIndex = 6;
@@ -111,27 +104,22 @@ namespace EDDiscovery.Forms
             // 
             // textBoxLicense
             // 
+            this.textBoxLicense.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.textBoxLicense.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBoxLicense.Location = new System.Drawing.Point(12, 57);
             this.textBoxLicense.Multiline = true;
             this.textBoxLicense.Name = "textBoxLicense";
             this.textBoxLicense.ReadOnly = true;
             this.textBoxLicense.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.textBoxLicense.Size = new System.Drawing.Size(435, 134);
+            this.textBoxLicense.Size = new System.Drawing.Size(419, 156);
             this.textBoxLicense.TabIndex = 1;
             this.textBoxLicense.Text = resources.GetString("textBoxLicense.Text");
             // 
-            // labelNoAffiliation
-            // 
-            this.labelNoAffiliation.AutoSize = true;
-            this.labelNoAffiliation.Location = new System.Drawing.Point(85, 194);
-            this.labelNoAffiliation.Name = "labelNoAffiliation";
-            this.labelNoAffiliation.Size = new System.Drawing.Size(288, 13);
-            this.labelNoAffiliation.TabIndex = 2;
-            this.labelNoAffiliation.Text = "EDDiscovery is not affiliated with Frontier Developments plc.";
-            // 
             // panelLinks
             // 
+            this.panelLinks.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.panelLinks.Controls.Add(this.linkLabelDeveloperChat);
             this.panelLinks.Controls.Add(this.linkLabelHelp);
             this.panelLinks.Controls.Add(this.linkLabelLicense);
@@ -142,7 +130,7 @@ namespace EDDiscovery.Forms
             this.panelLinks.Controls.Add(this.linkLabelEDDB);
             this.panelLinks.Controls.Add(this.linkLabelEliteDangerous);
             this.panelLinks.Controls.Add(this.labelLinks);
-            this.panelLinks.Location = new System.Drawing.Point(446, 222);
+            this.panelLinks.Location = new System.Drawing.Point(430, 219);
             this.panelLinks.Name = "panelLinks";
             this.panelLinks.Size = new System.Drawing.Size(210, 171);
             this.panelLinks.TabIndex = 5;
@@ -156,7 +144,7 @@ namespace EDDiscovery.Forms
             this.linkLabelDeveloperChat.TabIndex = 2;
             this.linkLabelDeveloperChat.TabStop = true;
             this.linkLabelDeveloperChat.Text = "Developer Chat";
-            this.linkLabelDeveloperChat.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabelDeveloperChat_LinkClicked);
+            this.linkLabelDeveloperChat.Click += new System.EventHandler(this.link_Click);
             // 
             // linkLabelHelp
             // 
@@ -167,7 +155,7 @@ namespace EDDiscovery.Forms
             this.linkLabelHelp.TabIndex = 7;
             this.linkLabelHelp.TabStop = true;
             this.linkLabelHelp.Text = "Help";
-            this.linkLabelHelp.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabelHelp_LinkClicked);
+            this.linkLabelHelp.Click += new System.EventHandler(this.link_Click);
             // 
             // linkLabelLicense
             // 
@@ -179,7 +167,7 @@ namespace EDDiscovery.Forms
             this.linkLabelLicense.TabIndex = 8;
             this.linkLabelLicense.TabStop = true;
             this.linkLabelLicense.Text = "License";
-            this.linkLabelLicense.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabelLicense_LinkClicked);
+            this.linkLabelLicense.Click += new System.EventHandler(this.link_Click);
             // 
             // linkLabelFDForum
             // 
@@ -191,7 +179,7 @@ namespace EDDiscovery.Forms
             this.linkLabelFDForum.TabIndex = 5;
             this.linkLabelFDForum.TabStop = true;
             this.linkLabelFDForum.Text = "Frontier Forum";
-            this.linkLabelFDForum.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabelFDForum_LinkClicked);
+            this.linkLabelFDForum.Click += new System.EventHandler(this.link_Click);
             // 
             // linkLabelGitHubIssue
             // 
@@ -203,7 +191,7 @@ namespace EDDiscovery.Forms
             this.linkLabelGitHubIssue.TabIndex = 9;
             this.linkLabelGitHubIssue.TabStop = true;
             this.linkLabelGitHubIssue.Text = "Submit Feedback";
-            this.linkLabelGitHubIssue.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabelGitHubIssue_LinkClicked);
+            this.linkLabelGitHubIssue.Click += new System.EventHandler(this.link_Click);
             // 
             // linkLabelGitHub
             // 
@@ -215,7 +203,7 @@ namespace EDDiscovery.Forms
             this.linkLabelGitHub.TabIndex = 6;
             this.linkLabelGitHub.TabStop = true;
             this.linkLabelGitHub.Text = "GitHub";
-            this.linkLabelGitHub.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabelGitHub_LinkClicked);
+            this.linkLabelGitHub.Click += new System.EventHandler(this.link_Click);
             // 
             // linkLabelEDSM
             // 
@@ -227,7 +215,7 @@ namespace EDDiscovery.Forms
             this.linkLabelEDSM.TabIndex = 4;
             this.linkLabelEDSM.TabStop = true;
             this.linkLabelEDSM.Text = "EDSM";
-            this.linkLabelEDSM.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabelEDSM_LinkClicked);
+            this.linkLabelEDSM.Click += new System.EventHandler(this.link_Click);
             // 
             // linkLabelEDDB
             // 
@@ -239,7 +227,7 @@ namespace EDDiscovery.Forms
             this.linkLabelEDDB.TabIndex = 3;
             this.linkLabelEDDB.TabStop = true;
             this.linkLabelEDDB.Text = "EDDB";
-            this.linkLabelEDDB.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabelEDDB_LinkClicked);
+            this.linkLabelEDDB.Click += new System.EventHandler(this.link_Click);
             // 
             // linkLabelEliteDangerous
             // 
@@ -251,7 +239,7 @@ namespace EDDiscovery.Forms
             this.linkLabelEliteDangerous.TabIndex = 1;
             this.linkLabelEliteDangerous.TabStop = true;
             this.linkLabelEliteDangerous.Text = "Elite Dangerous";
-            this.linkLabelEliteDangerous.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabelEliteDangerous_LinkClicked);
+            this.linkLabelEliteDangerous.Click += new System.EventHandler(this.link_Click);
             // 
             // labelLinks
             // 
@@ -266,52 +254,90 @@ namespace EDDiscovery.Forms
             // 
             // labelDevelopers
             // 
+            this.labelDevelopers.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.labelDevelopers.AutoSize = true;
             this.labelDevelopers.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelDevelopers.Location = new System.Drawing.Point(452, 19);
+            this.labelDevelopers.Location = new System.Drawing.Point(436, 19);
             this.labelDevelopers.Name = "labelDevelopers";
             this.labelDevelopers.Size = new System.Drawing.Size(106, 24);
             this.labelDevelopers.TabIndex = 7;
             this.labelDevelopers.Text = "Developers";
+            // 
+            // tableLayoutPanel1
+            // 
+            this.tableLayoutPanel1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.tableLayoutPanel1.ColumnCount = 1;
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tableLayoutPanel1.Controls.Add(this.labelNoAffiliation, 0, 1);
+            this.tableLayoutPanel1.Controls.Add(this.panelLogo, 0, 0);
+            this.tableLayoutPanel1.Location = new System.Drawing.Point(12, 220);
+            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
+            this.tableLayoutPanel1.RowCount = 2;
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 170F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(401, 200);
+            this.tableLayoutPanel1.TabIndex = 9;
+            // 
+            // labelNoAffiliation
+            // 
+            this.labelNoAffiliation.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.labelNoAffiliation.Location = new System.Drawing.Point(3, 170);
+            this.labelNoAffiliation.Name = "labelNoAffiliation";
+            this.labelNoAffiliation.Size = new System.Drawing.Size(395, 30);
+            this.labelNoAffiliation.TabIndex = 12;
+            this.labelNoAffiliation.Text = "EDDiscovery is not affiliated with Frontier Developments plc.";
+            this.labelNoAffiliation.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // panelLogo
+            // 
+            this.panelLogo.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panelLogo.Image = ((System.Drawing.Image)(resources.GetObject("panelLogo.Image")));
+            this.panelLogo.Location = new System.Drawing.Point(3, 3);
+            this.panelLogo.Name = "panelLogo";
+            this.panelLogo.Padding = new System.Windows.Forms.Padding(1);
+            this.panelLogo.Size = new System.Drawing.Size(395, 164);
+            this.panelLogo.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.panelLogo.TabIndex = 14;
+            this.panelLogo.TabStop = false;
+            this.panelLogo.Click += new System.EventHandler(this.link_Click);
             // 
             // AboutForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.ClientSize = new System.Drawing.Size(675, 434);
+            this.ClientSize = new System.Drawing.Size(659, 431);
+            this.Controls.Add(this.tableLayoutPanel1);
             this.Controls.Add(this.labelDevelopers);
             this.Controls.Add(this.panelLinks);
-            this.Controls.Add(this.labelNoAffiliation);
             this.Controls.Add(this.textBoxLicense);
             this.Controls.Add(this.labelVersion);
             this.Controls.Add(this.buttonOK);
-            this.Controls.Add(this.panelLogo);
             this.Controls.Add(this.labelDevelopersEnum);
             this.DoubleBuffered = true;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.MinimizeBox = false;
-            this.MinimumSize = new System.Drawing.Size(600, 420);
+            this.MinimumSize = new System.Drawing.Size(650, 470);
             this.Name = "AboutForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "About EDDiscovery";
             this.Load += new System.EventHandler(this.AboutForm_Load);
             this.panelLinks.ResumeLayout(false);
             this.panelLinks.PerformLayout();
+            this.tableLayoutPanel1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.panelLogo)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
         }
 
         #endregion
-
-        private System.Windows.Forms.Panel panelLogo;
         private System.Windows.Forms.Label labelDevelopersEnum;
         private System.Windows.Forms.Button buttonOK;
         internal System.Windows.Forms.Label labelVersion;
         private System.Windows.Forms.TextBox textBoxLicense;
-        private System.Windows.Forms.Label labelNoAffiliation;
         private System.Windows.Forms.Panel panelLinks;
         internal System.Windows.Forms.Label labelLinks;
         private System.Windows.Forms.LinkLabel linkLabelEliteDangerous;
@@ -324,5 +350,9 @@ namespace EDDiscovery.Forms
         private System.Windows.Forms.LinkLabel linkLabelLicense;
         private System.Windows.Forms.LinkLabel linkLabelGitHubIssue;
         internal System.Windows.Forms.Label labelDevelopers;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
+        private System.Windows.Forms.Label labelNoAffiliation;
+        private System.Windows.Forms.PictureBox panelLogo;
+        private System.Windows.Forms.ToolTip toolTip1;
     }
 }

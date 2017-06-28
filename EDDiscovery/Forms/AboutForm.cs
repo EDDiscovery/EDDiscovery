@@ -31,6 +31,19 @@ namespace EDDiscovery.Forms
         public AboutForm()
         {
             InitializeComponent();
+            labelVersion.Text = "EDDiscovery v" + System.Reflection.Assembly.GetExecutingAssembly().FullName.Split(',')[1].Split('=')[1];
+
+            SetTipAndTag(linkLabelDeveloperChat, Resources.URLProjectDiscord);
+            SetTipAndTag(linkLabelEDDB, Resources.URLeddb);
+            SetTipAndTag(linkLabelEDSM, Resources.URLedsm);
+            SetTipAndTag(linkLabelEliteDangerous, Resources.URLEDHomepage);
+            SetTipAndTag(linkLabelFDForum, Resources.URLProjectEDForumPost);
+            SetTipAndTag(linkLabelGitHub, Resources.URLProjectGithub);
+            SetTipAndTag(linkLabelGitHubIssue, Resources.URLProjectFeedback);
+            SetTipAndTag(linkLabelHelp, Resources.URLProjectWiki);
+            SetTipAndTag(linkLabelLicense, Resources.URLProjectLicense);
+
+            panelLogo.Tag = Resources.URLProjectGithub;
         }
 
         private void AboutForm_Load(object sender, EventArgs e)
@@ -43,54 +56,19 @@ namespace EDDiscovery.Forms
             Close();
         }
 
-        private void linkLabelEliteDangerous_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        private void SetTipAndTag(LinkLabel c, string text)
         {
-            Process.Start(Resources.URLEDHomepage);
+            toolTip1.SetToolTip(c, text);
+            c.Tag = text;
         }
 
-        private void linkLabelDeveloperChat_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        private void link_Click(object sender, EventArgs e)
         {
-            Process.Start(Resources.URLProjectDiscord);
-        }
-
-        private void linkLabelEDDB_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
-        {
-            Process.Start(Resources.URLeddb);
-        }
-
-        private void linkLabelEDSM_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
-        {
-            Process.Start(Resources.URLedsm);
-        }
-
-        private void linkLabelFDForum_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
-        {
-            Process.Start(Resources.URLProjectEDForumPost);
-        }
-
-        private void linkLabelGitHub_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
-        {
-            Process.Start(Resources.URLProjectGithub);
-        }
-
-        private void linkLabelHelp_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
-        {
-            Process.Start(Resources.URLProjectWiki);
-        }
-
-        private void linkLabelLicense_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
-        {
-            Process.Start(Resources.URLProjectLicense);
-        }
-
-        private void linkLabelGitHubIssue_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
-        {
-            Process.Start(Resources.URLProjectFeedback);
-        }
-
-        private void panelLogo_Click(object sender, EventArgs e)
-        {
-            Process.Start(Resources.URLProjectGithub);
+            Control ctl = (Control)sender;
+            if (ctl != null && ctl.Tag != null)
+                Process.Start((string)ctl.Tag);
+            else
+                TraceLog.WriteLine($"AboutForm: Control and/or Tag is null: control {ctl?.Name ?? "(null)"}, tag {ctl?.Tag ?? "(null)"}.");   
         }
     }
 }
