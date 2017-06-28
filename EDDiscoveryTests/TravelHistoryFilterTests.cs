@@ -53,7 +53,7 @@ namespace EDDiscoveryTests
         public void No_filter_does_not_filter_anything()
         {
             var veryOldData = HistoryEntry.MakeVSEntry(sol, DateTime.UtcNow.Subtract(TimeSpan.FromDays(500000)), 0, "", "");
-            var input = new HistoryList { veryOldData };
+            var input = new HistoryList(new List<HistoryEntry> { veryOldData });
 
             Check.That(TravelHistoryFilter.NoFilter.Filter(input)).ContainsExactly(veryOldData);
         }
@@ -64,7 +64,7 @@ namespace EDDiscoveryTests
         {
             var now = HistoryEntry.MakeVSEntry(sol, DateTime.UtcNow, 0, "", "");
             var fourDaysAgo = HistoryEntry.MakeVSEntry(sol, DateTime.UtcNow.Subtract(TimeSpan.FromDays(4)), 0, "", "");
-            var input = new HistoryList { fourDaysAgo, now };
+            var input = new HistoryList(new List<HistoryEntry> { fourDaysAgo, now });
 
             Check.That(TravelHistoryFilter.FromDays(2).Filter(input)).ContainsExactly(now);
         }
@@ -76,7 +76,7 @@ namespace EDDiscoveryTests
             var twentyDaysAgo = HistoryEntry.MakeVSEntry(sol, DateTime.UtcNow.Subtract(TimeSpan.FromDays(20)), 0, "", "");
             var tenDaysAgo = HistoryEntry.MakeVSEntry(sol, DateTime.UtcNow.Subtract(TimeSpan.FromDays(10)), 0, "", "");
             var thirtyDaysAgo = HistoryEntry.MakeVSEntry(sol, DateTime.UtcNow.Subtract(TimeSpan.FromDays(30)), 0, "", "");
-            var input = new HistoryList { twentyDaysAgo, tenDaysAgo, thirtyDaysAgo };
+            var input = new HistoryList(new List<HistoryEntry> { twentyDaysAgo, tenDaysAgo, thirtyDaysAgo });
 
             Check.That(TravelHistoryFilter.Last(2).Filter(input)).ContainsExactly(tenDaysAgo, twentyDaysAgo);
         }
