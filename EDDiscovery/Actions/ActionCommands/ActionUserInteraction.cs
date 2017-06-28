@@ -472,10 +472,10 @@ namespace EDDiscovery.Actions
             return true;
         }
 
-        private void Cd_Trigger(string lname, string res, Object tag)
+        private void Cd_Trigger(string lname, string controlname, Object tag)
         {
             ActionProgramRun apr = tag as ActionProgramRun;
-            apr[lname] = res;
+            apr[lname] = controlname;
             apr.ResumeAfterPause();
         }
     }

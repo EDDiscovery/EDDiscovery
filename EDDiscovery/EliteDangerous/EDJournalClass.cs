@@ -501,7 +501,7 @@ namespace EDDiscovery.EliteDangerous
         {
             ManualResetEvent stopRequested = StopRequested;
 
-            while (!stopRequested.WaitOne(2000))
+            while (!stopRequested.WaitOne(500))
             {
                 List<JournalEntry> jl = ScanTickWorker(() => stopRequested.WaitOne(0));
 
