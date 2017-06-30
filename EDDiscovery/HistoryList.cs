@@ -1011,7 +1011,16 @@ namespace EDDiscovery
 
                     if (gmo != null && gmo.points.Count > 0)
                     {
-                        return new SystemClass(gmo.name, gmo.points[0].X, gmo.points[0].Y, gmo.points[0].Z);        // fudge it into a system
+                        ds1 = SystemClass.GetSystem(gmo.galMapSearch);
+
+                        if (ds1 != null)
+                        {
+                            return new GalacticMapSystem(ds1, gmo);
+                        }
+                        else
+                        {
+                            return new GalacticMapSystem(gmo);
+                        }
                     }
                 }
             }
