@@ -311,7 +311,19 @@ namespace EDDiscovery
                 if (ds1 != null)
                 {
                     if (updatename)                          // can't fix it as you type.. so leave alone
-                        textBox_From.Text = ds1.name;
+                    {
+                        if (ds1 is GalacticMapSystem)
+                        {
+                            GalacticMapSystem gms = (GalacticMapSystem)ds1;
+                            textBox_From.Text = gms.GalMapObject.name;
+                            textBox_FromName.Text = gms.name;
+                        }
+                        else
+                        {
+                            textBox_From.Text = ds1.name;
+                            textBox_FromName.Text = ds1.name;
+                        }
+                    }
 
                     textBox_FromX.Text = ds1.x.ToString("0.00");
                     textBox_FromY.Text = ds1.y.ToString("0.00");
@@ -339,6 +351,7 @@ namespace EDDiscovery
                 }
 
                 textBox_From.Text = res;
+                textBox_FromName.Text = res;
             }
 
             UpdateDistance();
@@ -444,7 +457,19 @@ namespace EDDiscovery
                 if (ds1 != null)
                 {
                     if (updatename)                          // can't fix it as you type.. so leave alone
-                        textBox_To.Text = ds1.name;
+                    {
+                        if (ds1 is GalacticMapSystem)
+                        {
+                            GalacticMapSystem gms = (GalacticMapSystem)ds1;
+                            textBox_To.Text = gms.GalMapObject.name;
+                            textBox_ToName.Text = gms.name;
+                        }
+                        else
+                        {
+                            textBox_To.Text = ds1.name;
+                            textBox_ToName.Text = ds1.name;
+                        }
+                    }
 
                     textBox_ToX.Text = ds1.x.ToString("0.00");
                     textBox_ToY.Text = ds1.y.ToString("0.00");
@@ -472,6 +497,7 @@ namespace EDDiscovery
                 }
 
                 textBox_To.Text = res;
+                textBox_ToName.Text = res;
             }
 
             UpdateDistance();
