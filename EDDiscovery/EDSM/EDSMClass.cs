@@ -823,6 +823,7 @@ namespace EDDiscovery.EDSM
             { "class iii gas giant",                "Sudarsky class III gas giant"},
             { "class iv gas giant",                 "Sudarsky class IV gas giant"},
             { "class v gas giant",                  "Sudarsky class V gas giant"},
+            { "earth-like world",                   "Earthlike body" },
         };
 
         static public string EDSMPlanet2JournalName(string inname)
