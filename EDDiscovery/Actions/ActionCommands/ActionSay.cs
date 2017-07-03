@@ -144,9 +144,9 @@ namespace EDDiscovery.Actions
                 {
                     bool wait = vars.GetInt(waitname, 0) != 0;
                     Audio.AudioQueue.Priority priority = Audio.AudioQueue.GetPriority(vars.GetString(priorityname, "Normal"));
-                    string start = vars.GetString(startname);
-                    string finish = vars.GetString(finishname);
-                    string voice = vars.Exists(voicename) ? vars[voicename] : (ap.VarExist(globalvarspeechvoice) ? ap[globalvarspeechvoice] : "Default");
+                    string start = vars.GetString(startname, checklen: true);
+                    string finish = vars.GetString(finishname, checklen: true);
+                    string voice = (vars.Exists(voicename) && vars[voicename].Length>0)? vars[voicename] : (ap.VarExist(globalvarspeechvoice) ? ap[globalvarspeechvoice] : "Default");
 
                     int vol = vars.GetInt(volumename, -999);
                     if (vol == -999)
@@ -156,16 +156,13 @@ namespace EDDiscovery.Actions
                     if (rate == -999)
                         rate = ap.variables.GetInt(globalvarspeechrate, 0);
 
-                    string culture = vars.Exists(culturename) ? vars[culturename] : (ap.VarExist(globalvarspeechculture) ? ap[globalvarspeechculture] : "Default");
+                    string culture = ( vars.Exists(culturename) && vars[culturename].Length>0 ) ? vars[culturename] : (ap.VarExist(globalvarspeechculture) ? ap[globalvarspeechculture] : "Default");
 
                     bool literal = vars.GetInt(literalname, 0) != 0;
                     bool dontspeak = vars.GetInt(dontspeakname, 0) != 0;
 
-                    string prefixsoundpath = vars.GetString(prefixsound);
-                    string postfixsoundpath = vars.GetString(postfixsound);
-
-                    //TBD .. add in ability to get file from actions folder without knowing the path..
-
+                    string prefixsoundpath = vars.GetString(prefixsound, checklen: true);
+                    string postfixsoundpath = vars.GetString(postfixsound, checklen: true);
 
                     Audio.SoundEffectSettings ses = new Audio.SoundEffectSettings(vars);        // use the rest of the vars to place effects
 

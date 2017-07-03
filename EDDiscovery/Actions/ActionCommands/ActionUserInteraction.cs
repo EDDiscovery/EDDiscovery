@@ -439,10 +439,12 @@ namespace EDDiscovery.Actions
 
                     List<Forms.ConfigurableForm.Entry> entries = new List<Forms.ConfigurableForm.Entry>();
 
+                    System.Drawing.Point lastpos = new System.Drawing.Point(0, 0);
+
                     foreach( string k in cv.NameList )
                     {
                         Forms.ConfigurableForm.Entry entry;
-                        string errmsg =Forms.ConfigurableForm.MakeEntry(cv[k], out entry);
+                        string errmsg =Forms.ConfigurableForm.MakeEntry(cv[k], out entry, ref lastpos);
                         if (errmsg != null)
                             return ap.ReportError(errmsg + " in " + k + " variable for Dialog");
                         entries.Add(entry);

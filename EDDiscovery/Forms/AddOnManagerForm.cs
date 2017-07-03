@@ -29,7 +29,7 @@ using System.Windows.Forms;
 
 namespace EDDiscovery.Forms
 {
-    public partial class DownloadManagerForm : Form
+    public partial class AddOnManagerForm : Form
     {
         public Dictionary<string,string> changelist = new Dictionary<string,string>();      //+ enabled/installed, - deleted/disabled
 
@@ -68,13 +68,13 @@ namespace EDDiscovery.Forms
         string downloadactdebugfolder;
 #endif
 
-        public DownloadManagerForm()
+        public AddOnManagerForm()
         {
             InitializeComponent();
         }
 
 
-        public void Init(bool ad)
+        public void Init(bool ad)           // true = manage downloads, else just show actions and allow editing of them
         {
             managedownloadmode = ad;
             

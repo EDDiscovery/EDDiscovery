@@ -175,7 +175,9 @@ namespace EDDiscovery
             if (condi == null)
                 return "Condition operator missing";
 
-            if (Enum.TryParse<ConditionEntry.LogicalCondition>(condi.Replace(" ", ""), out value))
+            condi = condi.Replace(" ", "");
+
+            if (Enum.TryParse<ConditionEntry.LogicalCondition>(condi.Replace(" ", ""),true, out value))
                 return "";
             else
                 return "Condition operator " + condi + " is not recognised";

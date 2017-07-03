@@ -43,7 +43,7 @@ namespace EDDiscovery.Actions
             if (ap.functions.ExpandString(UserData, out res) != ConditionFunctions.ExpandResult.Failed)
             {
                 StringParser sp = new StringParser(res);
-                string cmdname = sp.NextWord(" ", true);
+                string cmdname = sp.NextWord(" ", lowercase:true);
 
                 if (cmdname == null)
                 {
@@ -96,7 +96,14 @@ namespace EDDiscovery.Actions
                 else if (cmdname.Equals("disableeliteinput"))
                     ap.actioncontroller.DiscoveryForm.EliteInput(false, false);
                 else if (cmdname.Equals("listeliteinput"))
+                {
                     ap["EliteInput"] = ap.actioncontroller.DiscoveryForm.EliteInputList();
+                    ap["EliteInputCheck"] = ap.actioncontroller.DiscoveryForm.EliteInputCheck();
+                }
+                else if (cmdname.Equals("voicenames"))
+                {
+                    ap["VoiceNames"] = ap.actioncontroller.DiscoveryForm.SpeechSynthesizer.GetVoiceNames().QuoteStrings();
+                }
                 else
                     ap.ReportError("Unknown command " + cmdname + " in Performaction");
             }

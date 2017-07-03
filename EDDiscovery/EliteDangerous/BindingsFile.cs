@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -7,9 +8,11 @@ using System.Xml.Linq;
 
 namespace EDDiscovery.EliteDangerous
 {
-    public class BindingsFile
+    public class BindingsFile : IEnumerable<BindingsFile.Device>
     {
         public bool Loaded { get { return devices.Count > 0; } }
+        private Dictionary<string, Device> devices = new Dictionary<string, Device>();
+        private Dictionary<string, string> values = new Dictionary<string, string>();
 
         public class DeviceKeyPair
         {
@@ -106,8 +109,16 @@ namespace EDDiscovery.EliteDangerous
             }
         }
 
-        Dictionary<string, Device> devices = new Dictionary<string, Device>();
-        Dictionary<string, string> values = new Dictionary<string, string>();
+        public IEnumerator<Device> GetEnumerator()
+        {
+            foreach (string e in devices.Keys)
+                yield return devices[e];
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
 
         private Device FindOrMakeDevice(string name)
         {
@@ -276,7 +287,7 @@ namespace EDDiscovery.EliteDangerous
             return devices.ContainsKey(name) ? devices[name] : null;
         }
 
-        public Device FindDevice(string name, Guid instanceguid, Guid productguid)    // best match
+        public Device FindDevice(string name, Guid instanceguid, Guid productguid)    // best match of physical device info to our binding devices
         {
             Device bestmatch = null;
             int besttotal = 0;
@@ -324,7 +335,7 @@ namespace EDDiscovery.EliteDangerous
             return s;
         }
 
-        public List<Assignment> Find(string name, bool partialmatch)
+        public List<Assignment> Find(string name, bool partialmatch)        // given a key name, find the list of assignments for it
         {
             List<Assignment> ret = new List<Assignment>();
 
@@ -338,7 +349,7 @@ namespace EDDiscovery.EliteDangerous
             return ret;
         }
 
-        public Dictionary<string,string> BindingValue(string s,bool partial)
+        public Dictionary<string,string> BindingValue(string s,bool partial)    // given a value name, with partial match flag, find the binding values
         {
             if ( partial )
                 return (from v in values where v.Key.Contains(s) select v).ToDictionary(x => x.Key, x => x.Value);
