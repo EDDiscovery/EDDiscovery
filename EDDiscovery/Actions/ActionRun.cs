@@ -92,7 +92,7 @@ namespace EDDiscovery.Actions
                 {
                     if (progcurrent.GetErrorList != null)       // any errors pending, handle
                     {
-                        actioncontroller.LogLine("Error at " + progcurrent.Location + ": Line " + progcurrent.GetLastStep().LineNumber + ":" + Environment.NewLine + progcurrent.GetLastStep().Name + progcurrent.GetErrorList);
+                        actioncontroller.LogLine("Error at " + progcurrent.Location + ": Line " + progcurrent.GetLastStep().LineNumber + ":" + Environment.NewLine + progcurrent.GetLastStep().Name + " " + progcurrent.GetErrorList);
                         TerminateCurrent();
                     }
                     else if (progcurrent.IsProgramFinished)        // if current program ran out, cancel it

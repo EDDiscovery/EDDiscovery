@@ -73,5 +73,17 @@ namespace EDDiscovery.Audio
         {
             return null;
         }
+
+        public Object Add(Object last, string file, ConditionVariables effects)
+        {
+            return null;
+        }
+
+        public Object Add(Object last, System.IO.Stream audioms, ConditionVariables effects, bool ensuresomeaudio)
+        {
+            return null;
+        }
+
+
     }
 }

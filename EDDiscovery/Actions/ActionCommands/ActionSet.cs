@@ -115,6 +115,7 @@ namespace EDDiscovery.Actions
                     }
                 }
 
+                //System.Diagnostics.Debug.WriteLine("Var " + keyname + "=" + res + "  :" + globalit + ":" + persistentit);
                 ap[keyname] = res;
 
                 if (globalit)

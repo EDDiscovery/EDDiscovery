@@ -192,61 +192,51 @@ namespace EDDiscovery.Actions
 
                         if (ms != null)
                         {
-                            Audio.AudioQueue.AudioSample prefixaudio = null;
+                            Audio.AudioQueue.AudioSample audio = null;
 
                             if (prefixsoundpath != null)
                             {
-                                prefixaudio = ap.actioncontroller.DiscoveryForm.AudioQueueWave.Generate(prefixsoundpath, new ConditionVariables());
+                                audio = ap.actioncontroller.DiscoveryForm.AudioQueueSpeech.Generate(prefixsoundpath, new ConditionVariables());
 
-                                if (prefixaudio == null)
+                                if (audio == null)
                                 {
                                     ap.ReportError("Say could not create prefix audio, check audio file format is supported and effects settings");
                                     return true;
                                 }
                             }
 
-                            Audio.AudioQueue.AudioSample speechaudio = ap.actioncontroller.DiscoveryForm.AudioQueueSpeech.Generate(ms, vars, true);
+                            audio = ap.actioncontroller.DiscoveryForm.AudioQueueSpeech.Generate(audio, ms, vars, true);
 
-                            if (speechaudio == null)
+                            if (audio == null)
                             {
                                 ap.ReportError("Say could not create audio, check Effects settings");
                                 return true;
                             }
 
-                            Audio.AudioQueue.AudioSample postfixaudio = null;
-
                             if (postfixsoundpath != null)
                             {
-                                postfixaudio = ap.actioncontroller.DiscoveryForm.AudioQueueWave.Generate(postfixsoundpath, new ConditionVariables());
+                                audio = ap.actioncontroller.DiscoveryForm.AudioQueueSpeech.Generate(audio, postfixsoundpath, new ConditionVariables());
 
-                                if (postfixaudio == null)
+                                if (audio == null)
                                 {
                                     ap.ReportError("Say could not create postfix audio, check audio file format is supported and effects settings");
                                     return true;
                                 }
                             }
 
-                            if (start != null && start.Length > 0)
+                            if (start != null )
                             {
-                                Audio.AudioQueue.AudioSample audioatstart = (prefixaudio != null) ? prefixaudio : speechaudio;
-                                audioatstart.sampleStartTag = new AudioEvent { apr = ap, eventname = start, triggername = "onSayStarted" };
-                                audioatstart.sampleStartEvent += Audio_sampleEvent;
+                                audio.sampleStartTag = new AudioEvent { apr = ap, eventname = start, triggername = "onSayStarted" };
+                                audio.sampleStartEvent += Audio_sampleEvent;
                             }
 
-                            if (wait || (finish != null && finish.Length > 0))       // if waiting, or finish call
+                            if (wait || finish != null )       // if waiting, or finish call
                             {
-                                Audio.AudioQueue.AudioSample audioatend = (postfixaudio != null) ? postfixaudio : speechaudio;
-                                audioatend.sampleOverTag = new AudioEvent() { apr = ap, wait = wait, eventname = finish, triggername = "onSayFinished" };
-                                audioatend.sampleOverEvent += Audio_sampleEvent;
+                                audio.sampleOverTag = new AudioEvent() { apr = ap, wait = wait, eventname = finish, triggername = "onSayFinished" };
+                                audio.sampleOverEvent += Audio_sampleEvent;
                             }
 
-                            if (prefixaudio != null)
-                                ap.actioncontroller.DiscoveryForm.AudioQueueSpeech.Submit(prefixaudio, vol, priority);
-
-                            ap.actioncontroller.DiscoveryForm.AudioQueueSpeech.Submit(speechaudio, vol, priority);
-
-                            if (postfixaudio != null)
-                                ap.actioncontroller.DiscoveryForm.AudioQueueSpeech.Submit(postfixaudio, vol, priority);
+                            ap.actioncontroller.DiscoveryForm.AudioQueueSpeech.Submit(audio, vol, priority);
 
                             return !wait;       //False if wait, meaning terminate and wait for it to complete, true otherwise, continue
                         }
