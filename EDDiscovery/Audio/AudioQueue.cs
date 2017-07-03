@@ -31,7 +31,7 @@ namespace EDDiscovery.Audio
 
         public class AudioSample
         {
-            public System.IO.Stream ms;
+            public List<System.IO.Stream> mslist;   // audio samples held in files to free
             public Object audiodata;            // held as an object.. driver specific format
             public int volume;                  // 0-100
             public Priority priority;           // audio priority
@@ -82,25 +82,33 @@ namespace EDDiscovery.Audio
         {
             foreach( AudioSample a in audioqueue )
             {
-                a.SampleOver(this);     // let callers know a sample is over
-                ad.Dispose(a.audiodata);        // tell the driver to clean up
-                a.ms?.Dispose();            // clean any stream
+                Clear(a,false);
             }
 
             audioqueue.Clear();
         }
 
-        private void AudioStoppedEvent()
+        public void Clear(AudioSample a , bool callback )
+        {
+            if ( callback )
+                a.SampleOver(this);     // let callers know a sample is over
+
+            ad.Dispose(a.audiodata);        // tell the driver to clean up
+            if (a.mslist != null)   // clean list
+            {
+                foreach (System.IO.Stream i in a.mslist)
+                    i.Dispose();
+            }
+            a.mslist = null;
+        }
+
+        private void AudioStoppedEvent()            //CScore calls then when audio over.
         {
             //System.Diagnostics.Debug.WriteLine((Environment.TickCount % 10000).ToString("00000") + " Stopped audio");
 
             if (audioqueue.Count > 0) // Normally always have an entry, except on Kill , where queue is gone
             {
-                audioqueue[0].SampleOver(this);     // let callers know a sample is over
-
-                ad.Dispose(audioqueue[0].audiodata);        // tell the driver to clean up
-                audioqueue[0].ms?.Dispose();        // clean stream
-
+                Clear(audioqueue[0],true);
                 audioqueue.RemoveAt(0);
             }
 
@@ -126,9 +134,7 @@ namespace EDDiscovery.Audio
                         }
                         foreach (AudioSample a in remove)
                         {
-                            audioqueue.Remove(a);
-                            ad.Dispose(a.audiodata);        // tell the driver to clean up
-                            a.ms?.Dispose();        // dispose of ms handle
+                            Clear(a,false);
                         }
                     }
 
@@ -173,8 +179,24 @@ namespace EDDiscovery.Audio
 
             if (audio != null)
             {
-                AudioSample a = new AudioSample() { ms = null, audiodata = audio };
+                AudioSample a = new AudioSample() { mslist = null, audiodata = audio };
                 return a;
+            }
+            else
+                return null;
+        }
+
+        public AudioSample Generate(AudioSample last, string file, ConditionVariables effects = null)    // last can be null, append audio
+        {
+            if (last == null)
+                return Generate(file, effects);
+
+            Object audio = ad.Add(last.audiodata, file, effects);
+
+            if (audio != null)
+            {
+                last.audiodata = audio;
+                return last;
             }
             else
                 return null;
@@ -187,8 +209,31 @@ namespace EDDiscovery.Audio
                 Object audio = ad.Generate(audioms, effects, ensuresomeaudio);
                 if (audio != null)
                 {
-                    AudioSample a = new AudioSample() { ms = audioms, audiodata = audio };
+                    AudioSample a = new AudioSample() { mslist = new List<System.IO.Stream>() { audioms }, audiodata = audio };
                     return a;
+                }
+            }
+
+            return null;
+        }
+        
+        // last can be null
+        public AudioSample Generate(AudioSample last, System.IO.Stream audioms, ConditionVariables effects = null, bool ensuresomeaudio = false)   // from a memory stream
+        {
+            if (last == null)
+                return Generate(audioms, effects , ensuresomeaudio);
+
+            if (audioms != null)
+            {
+                Object audio = ad.Add(last.audiodata, audioms, effects, ensuresomeaudio);
+
+                if (audio != null)
+                {
+                    last.audiodata = audio;
+                    if (last.mslist == null)
+                        last.mslist = new List<System.IO.Stream>();
+                    last.mslist.Add(audioms);
+                    return last;
                 }
             }
 
