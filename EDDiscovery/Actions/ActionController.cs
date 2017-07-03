@@ -179,7 +179,7 @@ namespace EDDiscovery.Actions
 
         private void RunAddOns(bool manage)
         {
-            using (DownloadManagerForm dmf = new DownloadManagerForm())
+            using (AddOnManagerForm dmf = new AddOnManagerForm())
             {
                 dmf.Init(manage);
 

@@ -232,6 +232,8 @@ namespace EDDiscovery.Audio
             }
             else
             {
+                ConditionVariables c = GetEffects();
+                toolTip1.SetToolTip(buttonExtTest, c.ToString(separ: Environment.NewLine));
                 if (TestSettingEvent != null)
                 {
                     TestSettingEvent(this, GetEffects() );

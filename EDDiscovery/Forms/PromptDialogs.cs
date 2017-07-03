@@ -148,7 +148,7 @@ namespace EDDiscovery.Forms
             public string comboboxitems;
         }
 
-        static public string MakeEntry(string instr , out Entry entry )
+        static public string MakeEntry(string instr , out Entry entry , ref System.Drawing.Point lastpos )
         {
             entry = null;
 
@@ -183,8 +183,8 @@ namespace EDDiscovery.Forms
             if (text == null)
                 return "Missing text";
 
-            int? x = sp.NextWordComma().InvariantParseIntNull();
-            int? y = sp.NextWordComma().InvariantParseIntNull();
+            int? x = sp.NextWordComma().InvariantParseIntNullOffset(lastpos.X);
+            int? y = sp.NextWordComma().InvariantParseIntNullOffset(lastpos.Y);
             int? w = sp.NextWordComma().InvariantParseIntNull();
             int? h = sp.NextWordComma().InvariantParseIntNull();
 
@@ -215,6 +215,7 @@ namespace EDDiscovery.Forms
                     return "Missing paramters for combobox";
             }
 
+            lastpos = new System.Drawing.Point(x.Value, y.Value);
             return null;
         }
 

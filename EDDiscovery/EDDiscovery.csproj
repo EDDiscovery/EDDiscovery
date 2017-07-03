@@ -370,11 +370,11 @@
     <Compile Include="Forms\CommanderForm.Designer.cs">
       <DependentUpon>CommanderForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\DownloadManagerForm.cs">
+    <Compile Include="Forms\AddOnManagerForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\DownloadManagerForm.Designer.cs">
-      <DependentUpon>DownloadManagerForm.cs</DependentUpon>
+    <Compile Include="Forms\AddOnManagerForm.Designer.cs">
+      <DependentUpon>AddOnManagerForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\ImportSphere.cs">
       <SubType>Form</SubType>
@@ -968,8 +968,8 @@
     <EmbeddedResource Include="Forms\CommanderForm.resx">
       <DependentUpon>CommanderForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\DownloadManagerForm.resx">
-      <DependentUpon>DownloadManagerForm.cs</DependentUpon>
+    <EmbeddedResource Include="Forms\AddOnManagerForm.resx">
+      <DependentUpon>AddOnManagerForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FindMaterialsForm.resx">
       <DependentUpon>FindMaterialsForm.cs</DependentUpon>

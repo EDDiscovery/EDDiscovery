@@ -215,9 +215,12 @@ namespace EDDiscovery.HTTP
                     if (key.StartsWith("OtherFile"))
                     {
                         string[] parts = item.downloadedvars[key].Split(';');
-                        string o = Path.Combine(new string[] { appfolder, parts[1], parts[0] });
-                        string s = Path.Combine(item.downloadedpath, parts[0]);
-                        File.Copy(s, o, true);
+                        string folder = Path.Combine(appfolder, parts[1]);
+                        if (!Directory.Exists(folder))      // ensure the folder exists
+                            Directory.CreateDirectory(folder);
+                        string outfile = Path.Combine(folder, parts[0] );
+                        string source = Path.Combine(item.downloadedpath, parts[0]);
+                        File.Copy(source, outfile, true);
                     }
 
                     if (key.StartsWith("DisableOther"))

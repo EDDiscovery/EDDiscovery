@@ -37,6 +37,21 @@ namespace EDDiscovery.InputDevices
             devices.Stop();
         }
 
+        public string CheckBindings()
+        {
+            string ret = "";
+            foreach (BindingsFile.Device bd in bf)     // for all devices listed in the binding file
+            {
+                InputDeviceInterface idi = GetInputDeviceFromBindingDevice(bd);
+
+                if (idi == null)
+                    ret += "ERROR: Missing physical device for " + bd.Name + Environment.NewLine;
+                else
+                    ret += "Match of FD Device " + bd.Name + " to " + idi.ID().Name + Environment.NewLine;
+            }
+            return ret;
+        }
+
         [DllImport("user32.dll")]
         static extern IntPtr GetForegroundWindow();
 

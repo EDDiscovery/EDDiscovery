@@ -84,12 +84,15 @@ namespace EDDiscovery
                 return def;
         }
 
-        public string GetString(string name, string def = null)
+        public string GetString(string name, string def = null, bool checklen = false)      // optional check length
         {
             if (values.ContainsKey(name))
-                return values[name];
-            else
-                return def;
+            {
+                if ( !checklen || values[name].Length>0 )
+                    return values[name];
+            }
+
+            return def;
         }
 
         public void SetOrRemove(bool add, string name,  string value)     // Set it, or remove it
