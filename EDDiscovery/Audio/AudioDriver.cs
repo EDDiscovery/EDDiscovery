@@ -19,8 +19,8 @@ namespace EDDiscovery.Audio
         Object Generate(string file, ConditionVariables effects = null);       // generate audio samples and return. Effects 
         Object Generate(System.IO.Stream audioms, ConditionVariables effects = null, bool ensuresomeaudio = false); // generate audio and return with effect and ensuring audio if req.
 
-        Object Add(Object last, string file, ConditionVariables effects = null);       // add to audio object
-        Object Add(Object last, System.IO.Stream audioms, ConditionVariables effects = null, bool ensuresomeaudio = false); // add to audio object
+        Object Mix(Object last, Object mix);            // either may be null, in which case null
+        Object Append(Object front, Object append);      // either may be null, in which case null
 
         string GetAudioEndpoint();
         List<string> GetAudioEndpoints();

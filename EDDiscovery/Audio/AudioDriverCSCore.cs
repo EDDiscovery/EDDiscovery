@@ -165,7 +165,7 @@ namespace EDDiscovery.Audio
 
                     //System.Diagnostics.Debug.WriteLine("oRIGINAL length " + s.Length);
                     //if (ensureaudio)
-                      //  s = s.AppendSource(x => new ExtendWaveSource(x, 100));          // SEEMS to help the click at end..
+                      //  s = s.AppendSource(x => new ExtendWaveSource(x, 100));          // SEEMS to help the click at end.. (removing for now)
                 }
 
                 //System.Diagnostics.Debug.WriteLine("Sample length " + s.Length);
@@ -183,51 +183,42 @@ namespace EDDiscovery.Audio
             }
         }
 
-        public Object Add(Object last, string file, ConditionVariables effects)     // given a last sound, add more sound to it..
+        public Object Append(Object front, Object end)      // this adds END to Front.   Format is changed to END
         {
-            IWaveSource iws = (IWaveSource)Generate(file, effects);
+            if (front == null || end == null)
+                return null;
 
-            if (iws != null)
-            {
-                IWaveSource iwslast = (IWaveSource)last;
+            IWaveSource frontws = (IWaveSource)front;
+            IWaveSource mixws = (IWaveSource)end;
 
-                if (iws.WaveFormat.Channels < iwslast.WaveFormat.Channels)      // need to adapt to previous format
-                    iws = iws.ToStereo();
-                else if (iws.WaveFormat.Channels > iwslast.WaveFormat.Channels)  
-                    iws = iws.ToMono();
+            if (frontws.WaveFormat.Channels < mixws.WaveFormat.Channels)      // need to adapt to previous format
+                frontws = frontws.ToStereo();
+            else if (frontws.WaveFormat.Channels > mixws.WaveFormat.Channels)
+                frontws = frontws.ToMono();
 
-                if (iws.WaveFormat.SampleRate != iwslast.WaveFormat.SampleRate || iws.WaveFormat.BitsPerSample != iwslast.WaveFormat.BitsPerSample)
-                    iws = ChangeSampleDepth(iws, iwslast.WaveFormat.SampleRate, iwslast.WaveFormat.BitsPerSample);
+            if (mixws.WaveFormat.SampleRate != frontws.WaveFormat.SampleRate || mixws.WaveFormat.BitsPerSample != frontws.WaveFormat.BitsPerSample)
+                frontws = ChangeSampleDepth(frontws, mixws.WaveFormat.SampleRate, mixws.WaveFormat.BitsPerSample);
 
-                iwslast = iwslast.AppendSource(x => new CopyWaveSource(iwslast, iws));
-
-                return iwslast;
-            }
-            return null;
+            return new AppendWaveSource(frontws, mixws);
         }
 
-        public Object Add(Object last, System.IO.Stream audioms, ConditionVariables effects , bool ensuresomeaudio)
+        public Object Mix(Object front, Object mix)     // This mixes mix with Front.  Format changed to MIX.
         {
-            IWaveSource iws = (IWaveSource)Generate(audioms, effects, ensuresomeaudio);
+            if (front == null || mix == null)
+                return null;
 
-            if (iws != null)
-            {
-                IWaveSource iwslast = (IWaveSource)last;
+            IWaveSource frontws = (IWaveSource)front;
+            IWaveSource mixws = (IWaveSource)mix;
 
-                if (iws.WaveFormat.Channels < iwslast.WaveFormat.Channels)
-                    iws = iws.ToStereo();
-                else if (iws.WaveFormat.Channels > iwslast.WaveFormat.Channels)      // need to 
-                    iws = iws.ToMono();
+            if (frontws.WaveFormat.Channels < mixws.WaveFormat.Channels)      // need to adapt to previous format
+                frontws = frontws.ToStereo();
+            else if (frontws.WaveFormat.Channels > mixws.WaveFormat.Channels)
+                frontws = frontws.ToMono();
 
-                if (iws.WaveFormat.SampleRate != iwslast.WaveFormat.SampleRate || iws.WaveFormat.BitsPerSample != iwslast.WaveFormat.BitsPerSample)
-                    iws = ChangeSampleDepth(iws, iwslast.WaveFormat.SampleRate, iwslast.WaveFormat.BitsPerSample);
+            if (mixws.WaveFormat.SampleRate != frontws.WaveFormat.SampleRate || mixws.WaveFormat.BitsPerSample != frontws.WaveFormat.BitsPerSample)
+                frontws = ChangeSampleDepth(frontws, mixws.WaveFormat.SampleRate, mixws.WaveFormat.BitsPerSample);
 
-                iwslast = iwslast.AppendSource(x => new CopyWaveSource(iwslast, iws));
-
-                return iwslast;
-            }
-
-            return null;
+            return new MixWaveSource(frontws, mixws);
         }
 
         static private void ApplyEffects(ref IWaveSource src, ConditionVariables effect)
@@ -284,7 +275,7 @@ namespace EDDiscovery.Audio
             }
         }
 
-        public static IWaveSource ChangeSampleDepth(IWaveSource input, int destinationSampleRate , int bitdepth)
+        public static IWaveSource ChangeSampleDepth(IWaveSource input, int destinationSampleRate , int bitdepth)    // replace INPUT with return
         {
             if (input == null)
                 throw new ArgumentNullException("input");
@@ -314,7 +305,7 @@ namespace EDDiscovery.Audio
 
         public override long Length { get { return totalbytes; } }
 
-        public override int Read(byte[] buffer, int offset, int count)
+        public override int Read(byte[] buffer, int offset, int count)      // PLAY base, until exausted, then play fill
         {
             int read = BaseSource.Read(buffer, offset, count);      // want count, stored at offset
             //System.Diagnostics.Debug.WriteLine((Environment.TickCount % 10000).ToString() + " Extend " + offset + " Read " + count);
@@ -340,29 +331,104 @@ namespace EDDiscovery.Audio
     }
 
 
-    public class CopyWaveSource : WaveAggregatorBase  // based on the TrimmedWaveSource in the CS Example
+    public class AppendWaveSource : WaveAggregatorBase  // based on the TrimmedWaveSource in the CS Example
     {
-        IWaveSource other;
+        IWaveSource append;
 
-        public CopyWaveSource(IWaveSource ws, IWaveSource o) : base(ws)
+        public AppendWaveSource(IWaveSource ws, IWaveSource o) : base(ws)
         {
-            other = o;
+            append = o;
         }
 
-        public override long Length { get { return base.Length + other.Length; } }
+        public override long Length { get { return base.Length + append.Length; } }
 
-        public override int Read(byte[] buffer, int offset, int count)
+        public override int Read(byte[] buffer, int offset, int count)      // play BASE, then play append
         {
             int read = BaseSource.Read(buffer, offset, count);      // want count, stored at offset
             //System.Diagnostics.Debug.WriteLine((Environment.TickCount % 10000).ToString() + " Copy:Read " + count);
 
             if (read < count)
             {
-                return other.Read(buffer, read, count - read);
+                return append.Read(buffer, read, count - read);
             }
             else
                 return read;
         }
+    }
+
+    public class MixWaveSource : WaveAggregatorBase  // based on the TrimmedWaveSource in the CS Example
+    {
+        IWaveSource mix;
+
+        public MixWaveSource(IWaveSource ws, IWaveSource o) : base(ws)
+        {
+            mix = o;
+        }
+
+        public override long Length { get { return base.Length; } }
+
+        public override int Read(byte[] buffer, int offset, int count)
+        {
+            int readbase = BaseSource.Read(buffer, offset, count);      // want count, stored at offset
+
+            if ( readbase > 0 )         // mix into data the mix source.. ensure the mix source never runs out.
+            {
+                byte[] buffer2 = new byte[readbase];
+
+                int storepos = 0;
+                int left = readbase;
+
+                while (left > 0)
+                {
+                    //System.Diagnostics.Debug.WriteLine("Read mix at " + mix.Position + " for " + left);
+                    int readmix = mix.Read(buffer2, storepos, left);      // and read in the readmix..
+                    //System.Diagnostics.Debug.WriteLine(".. read " + readmix);
+
+                    left -= readmix;
+
+                    if (left>0) // if we have any left, means we need to loop it
+                    {
+                        mix.Position = 0;
+                        storepos += readmix;
+                    }
+                }
+
+                if (BaseSource.WaveFormat.BytesPerSample == 2)                  // FOR NOW, presuming its PCM, cope with a few different formats.
+                {
+                    for (int i = 0; i < readbase; i += 2)
+                    {
+                        short v1 = BitConverter.ToInt16(buffer, i + offset);
+                        short v2 = BitConverter.ToInt16(buffer2, i);
+                        v1 += v2;
+                        var bytes = BitConverter.GetBytes(v1);
+                        buffer[i + offset] = bytes[0];
+                        buffer[i + offset + 1] = bytes[1];
+                    }
+                }
+                else if (BaseSource.WaveFormat.BytesPerSample == 4)
+                {
+                    for (int i = 0; i < readbase; i += 4)
+                    {
+                        long v1 = BitConverter.ToInt32(buffer, i + offset);
+                        long v2 = BitConverter.ToInt32(buffer2, i);
+                        v1 += v2;
+                        var bytes = BitConverter.GetBytes(v1);
+                        buffer[i + offset] = bytes[0];
+                        buffer[i + offset + 1] = bytes[1];
+                        buffer[i + offset + 2] = bytes[2];
+                        buffer[i + offset + 3] = bytes[3];
+                    }
+                }
+                else 
+                {
+                    for (int i = 0; i < readbase; i += 1)
+                        buffer[i + offset] += buffer2[i];
+                }
+            }
+
+            return readbase;
+        }
+
     }
 
 
@@ -374,7 +440,7 @@ namespace EDDiscovery.Audio
 
         public NullWaveSource(int ms) 
         {
-            _waveFormat = new WaveFormat(22050,16, 1, AudioEncoding.Pcm);
+            _waveFormat = new WaveFormat(22050,16, 1, AudioEncoding.Pcm);       // default format
             totalbytes = _waveFormat.MillisecondsToBytes(ms);
         }
 
@@ -388,7 +454,7 @@ namespace EDDiscovery.Audio
         {
             if ( pos < totalbytes)
             {
-                int totake = Math.Min(count, (int)(totalbytes - pos));
+                int totake = Math.Min(count, (int)(totalbytes - pos));      // and we return zeros
 
                 if ( totake > 0 )
                 {

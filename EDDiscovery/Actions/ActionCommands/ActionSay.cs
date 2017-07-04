@@ -44,6 +44,7 @@ namespace EDDiscovery.Actions
         static string dontspeakname = "DontSpeak";
         static string prefixsound = "PrefixSound";
         static string postfixsound = "PostfixSound";
+        static string mixsound = "MixSound";
 
         public bool FromString(string s, out string saying, out ConditionVariables vars)
         {
@@ -163,6 +164,7 @@ namespace EDDiscovery.Actions
 
                     string prefixsoundpath = vars.GetString(prefixsound, checklen: true);
                     string postfixsoundpath = vars.GetString(postfixsound, checklen: true);
+                    string mixsoundpath = vars.GetString(mixsound, checklen: true);
 
                     Audio.SoundEffectSettings ses = new Audio.SoundEffectSettings(vars);        // use the rest of the vars to place effects
 
@@ -192,20 +194,7 @@ namespace EDDiscovery.Actions
 
                         if (ms != null)
                         {
-                            Audio.AudioQueue.AudioSample audio = null;
-
-                            if (prefixsoundpath != null)
-                            {
-                                audio = ap.actioncontroller.DiscoveryForm.AudioQueueSpeech.Generate(prefixsoundpath, new ConditionVariables());
-
-                                if (audio == null)
-                                {
-                                    ap.ReportError("Say could not create prefix audio, check audio file format is supported and effects settings");
-                                    return true;
-                                }
-                            }
-
-                            audio = ap.actioncontroller.DiscoveryForm.AudioQueueSpeech.Generate(audio, ms, vars, true);
+                            Audio.AudioQueue.AudioSample audio = ap.actioncontroller.DiscoveryForm.AudioQueueSpeech.Generate(ms, vars, true);
 
                             if (audio == null)
                             {
@@ -213,15 +202,43 @@ namespace EDDiscovery.Actions
                                 return true;
                             }
 
-                            if (postfixsoundpath != null)
+                            if (mixsoundpath != null)
                             {
-                                audio = ap.actioncontroller.DiscoveryForm.AudioQueueSpeech.Generate(audio, postfixsoundpath, new ConditionVariables());
+                                Audio.AudioQueue.AudioSample mix = ap.actioncontroller.DiscoveryForm.AudioQueueSpeech.Generate(mixsoundpath, new ConditionVariables());
 
                                 if (audio == null)
+                                {
+                                    ap.ReportError("Say could not create mix audio, check audio file format is supported and effects settings");
+                                    return true;
+                                }
+
+                                audio = ap.actioncontroller.DiscoveryForm.AudioQueueSpeech.Mix(audio, mix);     // audio in MIX format
+                            }
+
+                            if (prefixsoundpath != null)
+                            {
+                                Audio.AudioQueue.AudioSample p = ap.actioncontroller.DiscoveryForm.AudioQueueSpeech.Generate(prefixsoundpath, new ConditionVariables());
+
+                                if ( p == null)
+                                {
+                                    ap.ReportError("Say could not create prefix audio, check audio file format is supported and effects settings");
+                                    return true;
+                                }
+
+                                audio = ap.actioncontroller.DiscoveryForm.AudioQueueSpeech.Append(p, audio);        // audio in AUDIO format.
+                            }
+
+                            if (postfixsoundpath != null)
+                            {
+                                Audio.AudioQueue.AudioSample p = ap.actioncontroller.DiscoveryForm.AudioQueueSpeech.Generate(postfixsoundpath, new ConditionVariables());
+
+                                if (p == null)
                                 {
                                     ap.ReportError("Say could not create postfix audio, check audio file format is supported and effects settings");
                                     return true;
                                 }
+
+                                audio = ap.actioncontroller.DiscoveryForm.AudioQueueSpeech.Append(audio,p);         // Audio in P format
                             }
 
                             if (start != null )

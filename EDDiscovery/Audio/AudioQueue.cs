@@ -31,7 +31,7 @@ namespace EDDiscovery.Audio
 
         public class AudioSample
         {
-            public List<System.IO.Stream> mslist;   // audio samples held in files to free
+            public List<System.IO.Stream> handlelist = new List<System.IO.Stream>();   // audio samples held in files to free
             public Object audiodata;            // held as an object.. driver specific format
             public int volume;                  // 0-100
             public Priority priority;           // audio priority
@@ -52,6 +52,13 @@ namespace EDDiscovery.Audio
             {
                 if (sampleOverEvent != null)
                     sampleOverEvent(q, sampleOverTag);
+            }
+
+            public void FreeHandles()
+            {
+                foreach (System.IO.Stream i in handlelist)
+                    i.Dispose();
+                handlelist.Clear();
             }
 
             public AudioSample linkeds;             // link to another queue. if set, we halt the queue if thissample is not t at the top of the list
@@ -93,13 +100,8 @@ namespace EDDiscovery.Audio
             if ( callback )
                 a.SampleOver(this);     // let callers know a sample is over
 
+            a.FreeHandles();
             ad.Dispose(a.audiodata);        // tell the driver to clean up
-            if (a.mslist != null)   // clean list
-            {
-                foreach (System.IO.Stream i in a.mslist)
-                    i.Dispose();
-            }
-            a.mslist = null;
         }
 
         private void AudioStoppedEvent()            //CScore calls then when audio over.
@@ -179,24 +181,8 @@ namespace EDDiscovery.Audio
 
             if (audio != null)
             {
-                AudioSample a = new AudioSample() { mslist = null, audiodata = audio };
+                AudioSample a = new AudioSample() { audiodata = audio };
                 return a;
-            }
-            else
-                return null;
-        }
-
-        public AudioSample Generate(AudioSample last, string file, ConditionVariables effects = null)    // last can be null, append audio
-        {
-            if (last == null)
-                return Generate(file, effects);
-
-            Object audio = ad.Add(last.audiodata, file, effects);
-
-            if (audio != null)
-            {
-                last.audiodata = audio;
-                return last;
             }
             else
                 return null;
@@ -209,35 +195,43 @@ namespace EDDiscovery.Audio
                 Object audio = ad.Generate(audioms, effects, ensuresomeaudio);
                 if (audio != null)
                 {
-                    AudioSample a = new AudioSample() { mslist = new List<System.IO.Stream>() { audioms }, audiodata = audio };
+                    AudioSample a = new AudioSample() { audiodata = audio };
+                    a.handlelist.Add(audioms);
                     return a;
                 }
             }
 
             return null;
         }
-        
-        // last can be null
-        public AudioSample Generate(AudioSample last, System.IO.Stream audioms, ConditionVariables effects = null, bool ensuresomeaudio = false)   // from a memory stream
+
+        public AudioSample Append(AudioSample last, AudioSample next)
         {
-            if (last == null)
-                return Generate(audioms, effects , ensuresomeaudio);
+            Object audio = ad.Append(last.audiodata, next.audiodata);
 
-            if (audioms != null)
+            if (audio != null)
             {
-                Object audio = ad.Add(last.audiodata, audioms, effects, ensuresomeaudio);
-
-                if (audio != null)
-                {
-                    last.audiodata = audio;
-                    if (last.mslist == null)
-                        last.mslist = new List<System.IO.Stream>();
-                    last.mslist.Add(audioms);
-                    return last;
-                }
+                last.audiodata = audio;
+                last.handlelist.AddRange(next.handlelist);
+                next.handlelist.Clear();
+                return last;
             }
+            else
+                return null;
+        }
 
-            return null;
+        public AudioSample Mix(AudioSample last, AudioSample mix)
+        {
+            Object audio = ad.Mix(last.audiodata, mix.audiodata);
+
+            if (audio != null)
+            {
+                last.audiodata = audio;
+                last.handlelist.AddRange(mix.handlelist);
+                mix.handlelist.Clear();
+                return last;
+            }
+            else
+                return null;
         }
 
         public void Submit(AudioSample s, int vol, Priority p)       // submit to queue
