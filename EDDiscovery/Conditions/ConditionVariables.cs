@@ -41,6 +41,13 @@ namespace EDDiscovery
             Add(other2);
         }
 
+        public ConditionVariables(ConditionVariables other, ConditionVariables other2, ConditionVariables other3)
+        {
+            values = new Dictionary<string, string>(other.values);
+            Add(other2);
+            Add(other3);
+        }
+
         public ConditionVariables(string s, FromMode fm)     //v=1,v=2 no brackets
         {
             FromString(s, fm);

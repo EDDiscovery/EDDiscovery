@@ -61,7 +61,7 @@ namespace EDDiscovery.Audio
                     return false;
             }
 
-            DirectSoundOut dso = new DirectSoundOut(200, System.Threading.ThreadPriority.Highest);    // seems good quality at 200 ms latency
+            DirectSoundOut dso = new DirectSoundOut(100, System.Threading.ThreadPriority.Highest);    // seems good quality at 200 ms latency
 
             if ( dsd != null )
                 dso.Device = dsd.Guid;
@@ -164,8 +164,8 @@ namespace EDDiscovery.Audio
                     s = new CSCore.Codecs.WAV.WaveFileReader(audioms);
 
                     //System.Diagnostics.Debug.WriteLine("oRIGINAL length " + s.Length);
-                    //if (ensureaudio)
-                      //  s = s.AppendSource(x => new ExtendWaveSource(x, 100));          // SEEMS to help the click at end.. (removing for now)
+                    if (ensureaudio)
+                      s = s.AppendSource(x => new ExtendWaveSource(x, 10));          // SEEMS to help the click at end.. (removing for now)
                 }
 
                 //System.Diagnostics.Debug.WriteLine("Sample length " + s.Length);
