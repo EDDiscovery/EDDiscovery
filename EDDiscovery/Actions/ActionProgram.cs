@@ -26,15 +26,18 @@ namespace EDDiscovery.Actions
     public class ActionProgram              // HOLDS the program, can write it JSON or Text FILES
     {
         protected List<Action> programsteps = new List<Action>();
-        public string Name { get; set; } = "";
-        public string StoredInSubFile { get; set; } = null;       // if null, then its stored in its master ActionFile, else its stored in a subfile
+        public string Name { get; private set; } = "";
+        public string StoredInSubFile { get; private set; } = null;       // if null, then its stored in its master ActionFile, else its stored in a subfile
 
         public int Count { get { return programsteps.Count; } }
 
-        public ActionProgram(string n = null)
+        public ActionProgram(string n = null, string subfile = null)
         {
             if (n != null)
                 Name = n;
+
+            if (subfile != null)
+                StoredInSubFile = subfile;
         }
 
         public void Set( ActionProgram other)
@@ -56,6 +59,21 @@ namespace EDDiscovery.Actions
         public void Clear()
         {
             programsteps.Clear();
+        }
+
+        public void CancelSubFileStorage()
+        {
+            StoredInSubFile = null;
+        }
+
+        public void SetSubFileStorage(string s)
+        {
+            StoredInSubFile = s;
+        }
+
+        public void Rename(string s)
+        {
+            Name = s;
         }
 
         public Action GetStep(int a)

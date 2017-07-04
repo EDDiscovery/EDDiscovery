@@ -60,7 +60,7 @@ namespace EDDiscovery.Actions
 
         private void LoadConditions()
         {
-            ConditionLists c = actionfile.actionfieldfilter;
+            ConditionLists c = actionfile.actioneventlist;
             groups = new List<Group>();
 
             for (int i = 0; i < c.Count; i++)
@@ -283,7 +283,7 @@ namespace EDDiscovery.Actions
                 }
             }
 
-            actionfile.actionfieldfilter = result;
+            actionfile.ChangeEventList(result);
             actionfile.WriteFile();
 
             DialogResult = DialogResult.OK;
@@ -342,7 +342,7 @@ namespace EDDiscovery.Actions
 
             if (avf.ShowDialog(this) == DialogResult.OK)
             {
-                actionfile.installationvariables = avf.result;
+                actionfile.ChangeInstallationVariables(avf.result);
             }
         }
 
@@ -683,7 +683,7 @@ namespace EDDiscovery.Actions
             {
                 if (Forms.MessageBoxTheme.Show(this, "Do you want to bring the file back into the main file", "WARNING", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK)
                 {
-                    p.StoredInSubFile = null;
+                    p.CancelSubFileStorage();
                     shift = false;
                 }
                 else
