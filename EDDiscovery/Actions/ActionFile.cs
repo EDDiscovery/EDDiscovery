@@ -374,7 +374,7 @@ namespace EDDiscovery.Actions
         }
 
         static public bool SetEnableFlag(string file, bool enable)              // change the enable flag. Read in,write out.
-        {
+        {                                                                       // true if managed to change it..
             try
             {
                 ActionFile f = new ActionFile();

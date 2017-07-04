@@ -193,10 +193,11 @@ namespace EDDiscovery.HTTP
         {
             try
             {
-                Actions.ActionFile.SetEnableFlag(item.localfilename, enable);
-
-                if (!item.localmodified)      // if was not local modified, lets set the SHA so it does not appear local modified just because of the enable
-                    WriteOrCheckSHAFile(item, item.localvars, appfolder, true);
+                if (Actions.ActionFile.SetEnableFlag(item.localfilename, enable))     // if enable flag was changed..
+                {
+                    if (!item.localmodified)      // if was not local modified, lets set the SHA so it does not appear local modified just because of the enable
+                        WriteOrCheckSHAFile(item, item.localvars, appfolder, true);
+                }
 
                 return true;
             }
@@ -227,7 +228,7 @@ namespace EDDiscovery.HTTP
                     {
                         DownloadItem other = downloaditems.Find(x => x.itemname.Equals(item.downloadedvars[key]));
 
-                        if (other != null)
+                        if (other != null && other.localfilename != null )
                             SetEnableFlag(other, false, appfolder);
                     }
                 }
