@@ -52,7 +52,7 @@ namespace EDDiscovery.Actions
         {
             foreach (ActionFile af in actionfiles)
             {
-                if (af.actionfieldfilter.IsConditionFlagSet(flagstart))
+                if (af.actioneventlist.IsConditionFlagSet(flagstart))
                     return true;
             }
             return false;
@@ -67,7 +67,7 @@ namespace EDDiscovery.Actions
             {
                 if (af.enabled)         // only enabled files are checked
                 {
-                    List<Condition> events = af.actionfieldfilter.GetConditionListByEventName(eventname, flagstart);
+                    List<Condition> events = af.actioneventlist.GetConditionListByEventName(eventname, flagstart);
 
                     if (events != null)     // and if we have matching event..
                     {
@@ -113,7 +113,7 @@ namespace EDDiscovery.Actions
                 //System.Diagnostics.Debug.WriteLine("Check `" + ae.af.name + ae.af.actionfieldfilter.ToString() + "`");
                 //ActionData.DumpVars(valuesneeded, " Test var:");
 
-                ae.af.actionfieldfilter.CheckConditions(ae.cl, valuesneeded, out errlist, ae.passed, cf);   // indicate which ones passed
+                ae.af.actioneventlist.CheckConditions(ae.cl, valuesneeded, out errlist, ae.passed, cf);   // indicate which ones passed
                 progs += ae.passed.Count;
             }
 
@@ -262,7 +262,7 @@ namespace EDDiscovery.Actions
             {
                 if (f.enabled)
                 {
-                    List<Tuple<string, ConditionEntry.MatchType>> fr = f.actionfieldfilter.ReturnValuesOfSpecificConditions(conditions, matchtypes);
+                    List<Tuple<string, ConditionEntry.MatchType>> fr = f.actioneventlist.ReturnValuesOfSpecificConditions(conditions, matchtypes);
                     if (fr != null)
                         ret.AddRange(fr);
                 }
