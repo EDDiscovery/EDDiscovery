@@ -35,7 +35,7 @@ namespace EDDiscovery.Actions
         public void CreateSet(string s)
         {
             string appfolder = Path.Combine(Tools.GetAppDataDirectory(), "Actions");
-            ActionFile af = new ActionFile(new ConditionLists(), new ActionProgramList(), appfolder + "\\\\" + s + ".act", s, true);
+            ActionFile af = new ActionFile(appfolder + "\\\\" + s + ".act", s);
             af.WriteFile();
             actionfiles.Add(af);
         }

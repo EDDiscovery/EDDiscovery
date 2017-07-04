@@ -73,7 +73,7 @@ namespace EDDiscovery.Actions
         ConditionVariables av;
         Dictionary<string, string> operations;
 
-        public bool ExecuteAction(ActionProgramRun ap, bool setit, bool globalit , bool persistentit )
+        public bool ExecuteAction(ActionProgramRun ap, bool setit, bool globalit =false, bool persistentit =false, bool staticit = false )
         {
             if (av == null)
                 FromString(userdata, out av, out operations);
@@ -121,8 +121,11 @@ namespace EDDiscovery.Actions
                 if (globalit)
                     ap.actioncontroller.SetNonPersistentGlobal(keyname, res);
 
-                if ( persistentit )
+                if (persistentit )
                     ap.actioncontroller.SetPeristentGlobal(keyname, res);
+
+                if (staticit )
+                    ap.actionfile.SetFileVariable(keyname, res);
             }
 
             if (av.Count == 0)
@@ -141,7 +144,7 @@ namespace EDDiscovery.Actions
 
         public override bool ExecuteAction(ActionProgramRun ap)
         {
-            return ExecuteAction(ap, true, false , false);
+            return ExecuteAction(ap, true);
         }
     }
 
@@ -154,7 +157,7 @@ namespace EDDiscovery.Actions
 
         public override bool ExecuteAction(ActionProgramRun ap)
         {
-            return ExecuteAction(ap, true, true , false);
+            return ExecuteAction(ap, true, globalit:true);
         }
     }
 
@@ -167,7 +170,7 @@ namespace EDDiscovery.Actions
 
         public override bool ExecuteAction(ActionProgramRun ap)
         {
-            return ExecuteAction(ap, false, false ,false);
+            return ExecuteAction(ap, false);
         }
     }
 
@@ -180,7 +183,7 @@ namespace EDDiscovery.Actions
 
         public override bool ExecuteAction(ActionProgramRun ap)
         {
-            return ExecuteAction(ap, false, true , false);
+            return ExecuteAction(ap, false, globalit:true);
         }
     }
 
@@ -193,7 +196,20 @@ namespace EDDiscovery.Actions
 
         public override bool ExecuteAction(ActionProgramRun ap)
         {
-            return ExecuteAction(ap, true, false, true);
+            return ExecuteAction(ap, true, persistentit: true);
+        }
+    }
+
+    public class ActionStatic : ActionSetLetBase
+    {
+        public override bool ConfigurationMenu(Form parent, EDDiscoveryForm discoveryform, List<string> eventvars)
+        {
+            return base.ConfigurationMenu(parent, discoveryform, eventvars, true, true);
+        }
+
+        public override bool ExecuteAction(ActionProgramRun ap)
+        {
+            return ExecuteAction(ap, true, staticit: true);
         }
     }
 
@@ -223,6 +239,7 @@ namespace EDDiscovery.Actions
                 while ((v = p.NextWord(", ")) != null)
                 {
                     ap.actioncontroller.DeleteVariable(v);
+                    ap.actionfile.DeleteFileVariable(v);
                     ap.DeleteVar(v);
                     p.IsCharMoveOn(',');
                 }

@@ -31,26 +31,32 @@ namespace EDDiscovery.Actions
     {
         public ActionFile()
         {
+            Clear();
         }
 
-        public ActionFile(ConditionLists c, ActionProgramList p, string f, string n, bool e, ConditionVariables ivar = null)
+        public ActionFile(string f, string n)
         {
-            actioneventlist = c;
-            actionprogramlist = p;
-            enabled = e;
+            Clear(f, n);
+        }
+
+        public void Clear(string f="", string n="")
+        {
+            actioneventlist = new ConditionLists();
+            actionprogramlist = new ActionProgramList();
+            enabled = true;
             installationvariables = new ConditionVariables();
+            filevariables = new ConditionVariables();
             filepath = f;
             name = n;
-            if (ivar != null)
-                installationvariables.Add(ivar);
         }
 
         public ConditionLists actioneventlist { get; private set; }                        // note we use the list, but not the evaluate between conditions..
-        public ActionProgramList actionprogramlist { get; private set;}                     // programs associated with this pack
-        public ConditionVariables installationvariables { get; private set; }                // used to pass to the installer various options, such as disable other packs
-        public string filepath { get; private set; }                                         // where it came from
-        public string name { get; private set; }                                             // its logical name
-        public bool enabled { get; private set; }                                            // if enabled.
+        public ActionProgramList actionprogramlist { get; private set;}                    // programs associated with this pack
+        public ConditionVariables installationvariables { get; private set; }              // used to pass to the installer various options, such as disable other packs
+        public ConditionVariables filevariables { get; private set; }                      // variables defined using the static.. private to this program.  Not persistent. 
+        public string filepath { get; private set; }                                       // where it came from
+        public string name { get; private set; }                                           // its logical name
+        public bool enabled { get; private set; }                                          // if enabled.
 
         public void ChangeEventList(ConditionLists s)
         {
@@ -60,6 +66,16 @@ namespace EDDiscovery.Actions
         public void ChangeInstallationVariables(ConditionVariables v)
         {
             installationvariables = v;
+        }
+
+        public void SetFileVariable(string n, string v)
+        {
+            filevariables[n] = v;
+        }
+
+        public void DeleteFileVariable(string n)
+        {
+            filevariables.Delete(n);
         }
 
         public string Read(JObject jo , out bool readenable)            // KEEP JSON reader for backwards compatibility.
@@ -117,13 +133,9 @@ namespace EDDiscovery.Actions
 
         public string ReadFile(string filename, out bool readenable)     // string, empty if no errors
         {
-            actionprogramlist = new ActionProgramList();
-            actioneventlist = new ConditionLists();
-            installationvariables = new ConditionVariables();
-            enabled = false;
             readenable = false;
-            filepath = filename;
-            name = Path.GetFileNameWithoutExtension(filename);
+
+            Clear(filename, Path.GetFileNameWithoutExtension(filename));
 
             try
             {
@@ -170,12 +182,13 @@ namespace EDDiscovery.Actions
                             }
                             else if (line.StartsWith("PROGRAM", StringComparison.InvariantCultureIgnoreCase))
                             {
-                                ActionProgram ap = new ActionProgram(line.Substring(7).Trim());
+                                ActionProgram ap = new ActionProgram();
                                 string err = ap.Read(sr, ref lineno);
 
                                 if (err.Length > 0)
                                     return name + " " + err;
 
+                                ap.Rename(line.Substring(7).Trim());        //MUST rename now, after read, as read clears the name expecting PROGRAM
                                 actionprogramlist.Add(ap);
                             }
                             else if (line.StartsWith("INCLUDE", StringComparison.InvariantCultureIgnoreCase))
@@ -184,7 +197,7 @@ namespace EDDiscovery.Actions
                                 if (!incfilename.Contains("/") && !incfilename.Contains("\\"))
                                     incfilename = Path.Combine(Path.GetDirectoryName(filename), incfilename);
 
-                                ActionProgram ap = new ActionProgram("",incfilename);
+                                ActionProgram ap = new ActionProgram("",incfilename);   // NAME will be filled in by PROGRAM statement in file
 
                                 string err = ap.ReadFile(incfilename);
 
