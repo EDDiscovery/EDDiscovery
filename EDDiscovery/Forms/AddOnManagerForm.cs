@@ -59,6 +59,8 @@ namespace EDDiscovery.Forms
         public Action<string> EditActionFile;
         public Action EditGlobals;
         public Action CreateActionFile;
+        public delegate bool IsActionLoaded(string name);
+        public event IsActionLoaded CheckActionLoaded;
 
         bool managedownloadmode;
 
@@ -270,13 +272,18 @@ namespace EDDiscovery.Forms
                 }
                 else
                 {
-                    g.actionbutton = new ExtendedControls.ButtonExt();
-                    g.actionbutton.Location = new Point(tabs[5], labelheightmargin - 4);      // 8 spacing, allow 8*4 to indent
-                    g.actionbutton.Size = new Size(80, 24);
-                    g.actionbutton.Text = "Edit";
-                    g.actionbutton.Click += ActionbuttonEdit_Click;
-                    g.actionbutton.Tag = g;
-                    g.panel.Controls.Add(g.actionbutton);
+                    bool loaded = CheckActionLoaded != null ? CheckActionLoaded(g.di.itemname) : false;
+
+                    if (loaded)     // may not be loaded IF its got an error.
+                    {
+                        g.actionbutton = new ExtendedControls.ButtonExt();
+                        g.actionbutton.Location = new Point(tabs[5], labelheightmargin - 4);      // 8 spacing, allow 8*4 to indent
+                        g.actionbutton.Size = new Size(80, 24);
+                        g.actionbutton.Text = "Edit";
+                        g.actionbutton.Click += ActionbuttonEdit_Click;
+                        g.actionbutton.Tag = g;
+                        g.panel.Controls.Add(g.actionbutton);
+                    }
                 }
 
                 if ( di.HasLocalCopy)

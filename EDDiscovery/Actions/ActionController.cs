@@ -65,9 +65,11 @@ namespace EDDiscovery.Actions
             ReLoad();
         }
 
-        public void ReLoad()
+        public void ReLoad( bool completereload = true)        // COMPLETE reload..
         {
-            actionfiles = new Actions.ActionFileList();
+            if ( completereload )
+                actionfiles = new Actions.ActionFileList();     // clear the list
+
             string errlist = actionfiles.LoadAllActionFiles();
             if (errlist.Length > 0)
                 EDDiscovery.Forms.MessageBoxTheme.Show("Failed to load files\r\n" + errlist, "WARNING!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -186,6 +188,7 @@ namespace EDDiscovery.Actions
                 dmf.EditActionFile += Dmf_OnEditActionFile;     // only used when manage = false
                 dmf.EditGlobals += Dmf_OnEditGlobals;
                 dmf.CreateActionFile += Dmf_OnCreateActionFile;
+                dmf.CheckActionLoaded += Dmf_checkActionLoaded;
 
                 dmf.ShowDialog(discoveryform);
 
@@ -193,13 +196,17 @@ namespace EDDiscovery.Actions
                 {
                     actionrunasync.TerminateAll();
                     discoveryform.AudioQueueSpeech.StopAll();
-                    ReLoad();
+                    ReLoad(false);      // reload from disk, new ones if required, refresh old ones and keep the vars
 
                     string changes = "";
                     foreach (KeyValuePair<string, string> kv in dmf.changelist)
                     {
                         if (kv.Value.Equals("+"))
+                        {
+
                             changes += kv.Key + ";";
+
+                        }
                         if (kv.Value.Equals("-"))
                             discoveryform.RemoveMenuItemsFromAddOns(kv.Key);
                     }
@@ -208,7 +215,13 @@ namespace EDDiscovery.Actions
                 }
             }
         }
-    
+
+        private bool Dmf_checkActionLoaded(string name)
+        {
+            ActionFile f = actionfiles.Get(name);
+            return f != null;
+        }
+
         public void ConfigureVoice(string title)
         {
             string voicename = persistentglobalvariables.GetString(Actions.ActionSay.globalvarspeechvoice, "Default");
