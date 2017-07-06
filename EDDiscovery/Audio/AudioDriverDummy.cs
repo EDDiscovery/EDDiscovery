@@ -52,11 +52,11 @@ namespace EDDiscovery.Audio
         {
         }
 
-        public void Dispose(Object o)
+        public void Dispose(AudioData o)
         {
         }
 
-        public void Start(Object o, int vol)
+        public void Start(AudioData o, int vol)
         {
         }
 
@@ -64,23 +64,34 @@ namespace EDDiscovery.Audio
         {
         }
 
-        public Object Generate(string file, ConditionVariables effects)
+        public AudioData Generate(string file, ConditionVariables effects)
         {
             return null;
         }
 
-        public Object Generate(System.IO.Stream audioms, ConditionVariables effects, bool ensureaudio)
+        public AudioData Generate(System.IO.Stream audioms, ConditionVariables effects, bool ensureaudio)
         {
             return null;
         }
 
-        public Object Mix(Object last, Object mix)
+        public AudioData Mix(AudioData last, AudioData mix)
         {
             return null;
         }
-        public Object Append(Object front, Object append)
+        public AudioData Append(AudioData front, AudioData append)
         {
             return null;
         }
+
+        public int Lengthms(AudioData audio)
+        {
+            return 0;                     // whats the length?
+        }
+
+        public int TimeLeftms(AudioData audio)
+        {
+            return 0;
+        }
+
     }
 }

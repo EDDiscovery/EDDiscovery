@@ -104,18 +104,18 @@ namespace EDDiscovery.Audio
             aout.Dispose();
         }
 
-        public void Dispose(Object o)
+        public void Dispose(AudioData o)
         {
-            IWaveSource iws = o as IWaveSource;
+            IWaveSource iws = o.data as IWaveSource;
             iws.Dispose();
             //System.Diagnostics.Debug.WriteLine("Audio disposed");
         }
 
-        public void Start(Object o, int vol)
+        public void Start(AudioData o, int vol)
         {
             int t = Environment.TickCount;
 
-            IWaveSource current = o as IWaveSource;
+            IWaveSource current = o.data as IWaveSource;
             aout.Initialize(current);
             //System.Diagnostics.Debug.WriteLine((Environment.TickCount-t).ToString("00000") + "Driver Init done");
             aout.Volume = (float)(vol) / 100;
@@ -129,13 +129,13 @@ namespace EDDiscovery.Audio
         }
 
         // FROM file
-        public Object Generate(string file, ConditionVariables effects)
+        public AudioData Generate(string file, ConditionVariables effects)
         {
             try
             {
                 IWaveSource s = CSCore.Codecs.CodecFactory.Instance.GetCodec(file);
                 ApplyEffects(ref s, effects);
-                return s;
+                return new AudioData(s);
             }
             catch
             {
@@ -144,7 +144,7 @@ namespace EDDiscovery.Audio
         }
 
         // FROM audio stream
-        public Object Generate(System.IO.Stream audioms, ConditionVariables effects, bool ensureaudio)
+        public AudioData Generate(System.IO.Stream audioms, ConditionVariables effects, bool ensureaudio)
         {
             try
             {
@@ -165,31 +165,31 @@ namespace EDDiscovery.Audio
 
                     //System.Diagnostics.Debug.WriteLine("oRIGINAL length " + s.Length);
                     if (ensureaudio)
-                      s = s.AppendSource(x => new ExtendWaveSource(x, 10));          // SEEMS to help the click at end.. (removing for now)
+                      s = s.AppendSource(x => new ExtendWaveSource(x, 100));          // SEEMS to help the click at end..
                 }
 
                 //System.Diagnostics.Debug.WriteLine("Sample length " + s.Length);
                 ApplyEffects(ref s, effects);
                 //System.Diagnostics.Debug.WriteLine(".. to length " + s.Length);
-                return s;
+                return new AudioData(s);
             }
             catch( Exception ex)
             {
                 System.Diagnostics.Debug.WriteLine("Exception " + ex.Message);
                 if (ensureaudio)
-                    return new NullWaveSource(50);
+                    return new AudioData(new NullWaveSource(100));
                 else
                     return null;
             }
         }
 
-        public Object Append(Object front, Object end)      // this adds END to Front.   Format is changed to END
+        public AudioData Append(AudioData front, AudioData end)      // this adds END to Front.   Format is changed to END
         {
             if (front == null || end == null)
                 return null;
 
-            IWaveSource frontws = (IWaveSource)front;
-            IWaveSource mixws = (IWaveSource)end;
+            IWaveSource frontws = (IWaveSource)front.data;
+            IWaveSource mixws = (IWaveSource)end.data;
 
             if (frontws.WaveFormat.Channels < mixws.WaveFormat.Channels)      // need to adapt to previous format
                 frontws = frontws.ToStereo();
@@ -199,16 +199,16 @@ namespace EDDiscovery.Audio
             if (mixws.WaveFormat.SampleRate != frontws.WaveFormat.SampleRate || mixws.WaveFormat.BitsPerSample != frontws.WaveFormat.BitsPerSample)
                 frontws = ChangeSampleDepth(frontws, mixws.WaveFormat.SampleRate, mixws.WaveFormat.BitsPerSample);
 
-            return new AppendWaveSource(frontws, mixws);
+            return new AudioData(new AppendWaveSource(frontws, mixws));
         }
 
-        public Object Mix(Object front, Object mix)     // This mixes mix with Front.  Format changed to MIX.
+        public AudioData Mix(AudioData front, AudioData mix)     // This mixes mix with Front.  Format changed to MIX.
         {
             if (front == null || mix == null)
                 return null;
 
-            IWaveSource frontws = (IWaveSource)front;
-            IWaveSource mixws = (IWaveSource)mix;
+            IWaveSource frontws = (IWaveSource)front.data;
+            IWaveSource mixws = (IWaveSource)mix.data;
 
             if (frontws.WaveFormat.Channels < mixws.WaveFormat.Channels)      // need to adapt to previous format
                 frontws = frontws.ToStereo();
@@ -218,7 +218,7 @@ namespace EDDiscovery.Audio
             if (mixws.WaveFormat.SampleRate != frontws.WaveFormat.SampleRate || mixws.WaveFormat.BitsPerSample != frontws.WaveFormat.BitsPerSample)
                 frontws = ChangeSampleDepth(frontws, mixws.WaveFormat.SampleRate, mixws.WaveFormat.BitsPerSample);
 
-            return new MixWaveSource(frontws, mixws);
+            return new AudioData(new MixWaveSource(frontws, mixws));
         }
 
         static private void ApplyEffects(ref IWaveSource src, ConditionVariables effect)
@@ -273,6 +273,23 @@ namespace EDDiscovery.Audio
                     src = srs.ToWaveSource();
                 }
             }
+        }
+
+        public int Lengthms(AudioData audio)
+        {
+            IWaveSource ws = audio.data as IWaveSource;
+            TimeSpan w = ws.GetLength();
+            return (int)w.TotalMilliseconds;
+        }
+
+        public int TimeLeftms(AudioData audio)
+        {
+            IWaveSource ws = audio.data as IWaveSource;
+            TimeSpan l = ws.GetLength();
+            TimeSpan p = ws.GetPosition();
+            TimeSpan togo = l - p;
+            return (int)togo.TotalMilliseconds;
+
         }
 
         public static IWaveSource ChangeSampleDepth(IWaveSource input, int destinationSampleRate , int bitdepth)    // replace INPUT with return

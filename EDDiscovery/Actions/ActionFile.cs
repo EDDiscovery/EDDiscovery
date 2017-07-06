@@ -31,21 +31,22 @@ namespace EDDiscovery.Actions
     {
         public ActionFile()
         {
+            filevariables = new ConditionVariables();       // filevariables are only cleared on creation
             Clear();
         }
 
         public ActionFile(string f, string n)
         {
+            filevariables = new ConditionVariables();
             Clear(f, n);
         }
 
-        public void Clear(string f="", string n="")
+        public void Clear(string f="", string n="")         // clear all data read from file
         {
             actioneventlist = new ConditionLists();
             actionprogramlist = new ActionProgramList();
             enabled = true;
             installationvariables = new ConditionVariables();
-            filevariables = new ConditionVariables();
             filepath = f;
             name = n;
         }

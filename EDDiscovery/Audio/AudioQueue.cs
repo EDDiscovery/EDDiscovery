@@ -27,12 +27,12 @@ namespace EDDiscovery.Audio
         public delegate void SampleOver(AudioQueue sender, Object tag);
 
         public enum Priority { Low, Normal, High };
-        static public Priority GetPriority(string s) { Priority p; if (Enum.TryParse<AudioQueue.Priority>(s, out p)) return p; else return Priority.Normal; }
+        static public Priority GetPriority(string s) { Priority p; if (Enum.TryParse<AudioQueue.Priority>(s, true, out p)) return p; else return Priority.Normal; }
 
         public class AudioSample
         {
             public List<System.IO.Stream> handlelist = new List<System.IO.Stream>();   // audio samples held in files to free
-            public Object audiodata;            // held as an object.. driver specific format
+            public AudioData audiodata;         // the audio data, in the driver format
             public int volume;                  // 0-100
             public Priority priority;           // audio priority
 
@@ -75,7 +75,7 @@ namespace EDDiscovery.Audio
             audioqueue = new List<AudioSample>();
         }
 
-        public IAudioDriver Driver { get { return ad; } }           // be careful! go thru this class to change anything
+        public IAudioDriver Driver { get { return ad; } }       // gets driver associated with this queue
 
         public bool SetAudioEndpoint( string dev )
         {
@@ -85,7 +85,7 @@ namespace EDDiscovery.Audio
             return res;
         }
 
-        public void Clear()
+        public void Clear()     // clear queue, does not call the end functions
         {
             foreach( AudioSample a in audioqueue )
             {
@@ -95,7 +95,7 @@ namespace EDDiscovery.Audio
             audioqueue.Clear();
         }
 
-        public void Clear(AudioSample a , bool callback )
+        private void Clear(AudioSample a , bool callback )
         {
             if ( callback )
                 a.SampleOver(this);     // let callers know a sample is over
@@ -122,6 +122,8 @@ namespace EDDiscovery.Audio
         {
             if (newdata != null)
             {
+                System.Diagnostics.Debug.WriteLine("Play " + ad.Lengthms(newdata.audiodata) + " in queue " + InQueuems());
+
                 if ( audioqueue.Count > 0 && p > audioqueue[0].priority )       // if something is playing, and we have priority..
                 {
                     //System.Diagnostics.Debug.WriteLine((Environment.TickCount % 10000).ToString("00000") + " Priority insert " + p + " front " + audioqueue[0].priority);
@@ -175,9 +177,20 @@ namespace EDDiscovery.Audio
             }
         }
 
+        public int InQueuems()       // Length of sound in queue.. does not take account of priority.
+        {
+            int len = 0;
+            if (audioqueue.Count > 0)
+                len = ad.TimeLeftms(audioqueue[0].audiodata);
+
+            for (int i = 1; i < audioqueue.Count; i++)
+                len += ad.Lengthms(audioqueue[i].audiodata);
+            return len;
+        }
+
         public AudioSample Generate(string file, ConditionVariables effects = null)        // from a file (you get a AS back so you have the chance to add events)
         {
-            Object audio = ad.Generate(file, effects);
+            AudioData audio = ad.Generate(file, effects);
 
             if (audio != null)
             {
@@ -192,7 +205,7 @@ namespace EDDiscovery.Audio
         {
             if (audioms != null)
             {
-                Object audio = ad.Generate(audioms, effects, ensuresomeaudio);
+                AudioData audio = ad.Generate(audioms, effects, ensuresomeaudio);
                 if (audio != null)
                 {
                     AudioSample a = new AudioSample() { audiodata = audio };
@@ -206,7 +219,7 @@ namespace EDDiscovery.Audio
 
         public AudioSample Append(AudioSample last, AudioSample next)
         {
-            Object audio = ad.Append(last.audiodata, next.audiodata);
+            AudioData audio = ad.Append(last.audiodata, next.audiodata);
 
             if (audio != null)
             {
@@ -221,7 +234,7 @@ namespace EDDiscovery.Audio
 
         public AudioSample Mix(AudioSample last, AudioSample mix)
         {
-            Object audio = ad.Mix(last.audiodata, mix.audiodata);
+            AudioData audio = ad.Mix(last.audiodata, mix.audiodata);
 
             if (audio != null)
             {

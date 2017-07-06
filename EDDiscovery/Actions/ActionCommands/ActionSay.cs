@@ -45,6 +45,7 @@ namespace EDDiscovery.Actions
         static string prefixsound = "PrefixSound";
         static string postfixsound = "PostfixSound";
         static string mixsound = "MixSound";
+        static string queuelimit = "QueueLimit";
 
         public bool FromString(string s, out string saying, out ConditionVariables vars)
         {
@@ -157,6 +158,8 @@ namespace EDDiscovery.Actions
                     if (rate == -999)
                         rate = ap.variables.GetInt(globalvarspeechrate, 0);
 
+                    int queuelimitms = vars.GetInt(queuelimit, 0);
+
                     string culture = ( vars.Exists(culturename) && vars[culturename].Length>0 ) ? vars[culturename] : (ap.VarExist(globalvarspeechculture) ? ap[globalvarspeechculture] : "Default");
 
                     bool literal = vars.GetInt(literalname, 0) != 0;
@@ -173,6 +176,18 @@ namespace EDDiscovery.Actions
                         vars = new ConditionVariables(ap[globalvarspeecheffects], ConditionVariables.FromMode.MultiEntryComma);
                     }
 
+                    if (queuelimitms > 0)
+                    {
+                        int queue = ap.actioncontroller.DiscoveryForm.AudioQueueSpeech.InQueuems();
+
+                        if (queue >= queuelimitms)
+                        {
+                            ap["SaySaid"] = "!LIMIT";
+                            System.Diagnostics.Debug.WriteLine("Abort say due to queue being at " + queue);
+                            return true;
+                        }
+                    }
+
                     string expsay;
                     if (ap.functions.ExpandString(say, out expsay) != EDDiscovery.ConditionFunctions.ExpandResult.Failed)
                     {
@@ -186,6 +201,7 @@ namespace EDDiscovery.Actions
                             ap.actioncontroller.LogLine("Say: " + expsay);
                             expsay = "";
                         }
+
 
                         if (dontspeak)
                             expsay = "";

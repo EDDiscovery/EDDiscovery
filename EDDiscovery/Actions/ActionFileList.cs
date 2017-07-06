@@ -206,7 +206,7 @@ namespace EDDiscovery.Actions
             return null;
         }
 
-        public string LoadAllActionFiles()
+        public string LoadAllActionFiles()              // loads or reloads the actions, dep on if present in list
         {
             string appfolder = Path.Combine(Tools.GetAppDataDirectory(), "Actions");
 
@@ -219,38 +219,42 @@ namespace EDDiscovery.Actions
 
             foreach (FileInfo f in allFiles)
             {
-                ActionFile af = new ActionFile();
+                int indexof = actionfiles.FindIndex(x => x.filepath.Equals(f.FullName));
+
+                ActionFile af;
+
+                if (indexof == -1)                  // if we don't have it, new it.. else overwrite it
+                    af = new ActionFile();
+                else
+                    af = actionfiles[indexof];      // overwriting keeps any dynamic data action files have
+
                 bool readenable;
-                string err = af.ReadFile(f.FullName, out readenable);
+                string err = af.ReadFile(f.FullName, out readenable);       // re-read it in.  Note it does not kill the fileaveriables
+
                 if (err.Length == 0)
                 {
-                    System.Diagnostics.Debug.WriteLine("Add pack " + af.name);
-                    actionfiles.Add(af);
+                    if (indexof == -1)
+                    {
+                        System.Diagnostics.Debug.WriteLine("Add pack " + af.name);
+                        actionfiles.Add(af);
+                    }
+                    else
+                    {
+                        System.Diagnostics.Debug.WriteLine("Update Pack " + af.name);
+                    }
                 }
                 else
+                {
                     errlist += "File " + f.FullName + " failed to load: " + Environment.NewLine + err;
+                    if (indexof != -1)
+                    {
+                        actionfiles.RemoveAt(indexof);          // remove dead packs
+                        System.Diagnostics.Debug.WriteLine("Delete Pack " + af.name);
+                    }
+                }
             }
 
             return errlist;
-        }
-
-        public string LoadFile(string filename)
-        {
-            ActionFile af = new ActionFile();
-            bool readenable;
-            string err = af.ReadFile(filename, out readenable);
-
-            if (err.Length == 0)
-            {
-                int indexof = actionfiles.FindIndex(x => x.name.Equals(af.name));
-
-                if (indexof != -1)
-                    actionfiles[indexof] = af;
-                else
-                    actionfiles.Add(af);
-            }
-
-            return err;
         }
 
         #region special helpers
