@@ -91,7 +91,7 @@ namespace EDDiscovery.Actions
             {
                 JArray ivarja = (JArray)jo["Install"];
 
-                if (!JSONHelper.IsNullOrEmptyT(ivarja))
+                if (!ivarja.Empty())
                 {
                     installationvariables.FromJSONObject(ivarja);
                 }

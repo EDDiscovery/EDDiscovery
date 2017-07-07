@@ -157,6 +157,19 @@ public static class JSONObjectExtensions
         return def;
     }
 
+    public static void Rename(this JToken token, string newName)
+    {
+        if (token == null)
+            return;
+
+        var parent = token.Parent;
+        if (parent == null)
+            throw new InvalidOperationException("The parent is missing.");
+        var newToken = new JProperty(newName, token);
+        parent.Replace(newToken);
+    }
+
+
 }
 
 public static class ObjectExtensionsStrings

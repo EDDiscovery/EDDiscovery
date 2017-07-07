@@ -53,27 +53,27 @@ namespace EDDiscovery.CompanionAPI
         {
             try
             {
-                id = JSONHelper.GetInt(jo["id"]);
-                name = JSONHelper.GetStringDef(jo["name"]);
+                id = jo["id"].Int();
+                name = jo["name"].Str();
 
-                valueHull = JSONHelper.GetInt(jo["value"]["hull"]);
-                valueModules = JSONHelper.GetInt(jo["value"]["modules"]);
-                valueCargo = JSONHelper.GetInt(jo["value"]["cargo"]);
-                valueTotal = JSONHelper.GetInt(jo["value"]["total"]);
-                valueUnloaned = JSONHelper.GetInt(jo["value"]["unloaned"]);
+                valueHull = jo["value"]["hull"].Int();
+                valueModules = jo["value"]["modules"].Int();
+                valueCargo = jo["value"]["cargo"].Int();
+                valueTotal = jo["value"]["total"].Int();
+                valueUnloaned = jo["value"]["unloaned"].Int();
 
-                free = JSONHelper.GetBool(jo["free"]);
+                free = jo["free"].Bool();
 
                 if (jo["health"] != null)
                 {
-                    healthHull = JSONHelper.GetInt(jo["health"]["hull"]);
-                    healthShield = JSONHelper.GetInt(jo["health"]["shield"]);
-                    shieldUp = JSONHelper.GetBool(jo["health"]["shieldup"]);
-                    integrity = JSONHelper.GetInt(jo["health"]["integrity"]);
-                    paintwork = JSONHelper.GetInt(jo["health"]["paintwork"]);
+                    healthHull = jo["health"]["hull"].Int();
+                    healthShield = jo["health"]["shield"].Int();
+                    shieldUp = jo["health"]["shieldup"].Bool();
+                    integrity = jo["health"]["integrity"].Int();
+                    paintwork = jo["health"]["paintwork"].Int();
                 }
-                cockpitBreached = JSONHelper.GetBool(jo["cockpitBreached"]);
-                oxygenRemaining = JSONHelper.GetInt(jo["oxygenRemaining"]);
+                cockpitBreached = jo["cockpitBreached"].Bool();
+                oxygenRemaining = jo["oxygenRemaining"].Int();
 
 
 

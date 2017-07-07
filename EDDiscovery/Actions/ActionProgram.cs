@@ -125,9 +125,9 @@ namespace EDDiscovery.Actions
                 {
                     string stepname = (string)js["StepName"];
                     string stepUC = (string)js["StepUC"];
-                    int stepLU = JSONHelper.GetInt(js["StepLevelUp"], 0);                // optional
-                    int whitespace = JSONHelper.GetInt(js["StepWhitespace"], 0);        // was not in earlier version, optional
-                    string comment = JSONHelper.GetStringDef(js["StepComment"], "");    // was not in earlier version, optional
+                    int stepLU = js["StepLevelUp"].Int(0);                // optional
+                    int whitespace = js["StepWhitespace"].Int(0);        // was not in earlier version, optional
+                    string comment = js["StepComment"].Str("");    // was not in earlier version, optional
 
                     Action cmd = Action.CreateAction(stepname, stepUC, comment, stepLU, whitespace);
 

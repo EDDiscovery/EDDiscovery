@@ -150,7 +150,7 @@ namespace EDDiscovery.DB
 
                     eddb_updated_at = jo["updated_at"].Value<int>();
 
-                    id_edsm = JSONHelper.GetLong(jo["edsm_id"]);                         // pick up its edsm ID
+                    id_edsm = jo["edsm_id"].Long();                         // pick up its edsm ID
 
                     status = SystemStatusEnum.EDDB;
                 }
