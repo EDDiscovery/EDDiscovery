@@ -25,23 +25,23 @@ namespace EDDiscovery.CompanionAPI
 
         public CCommander(JObject json)
         {
-            id = JSONHelper.GetInt(json["id"]);
-            name =  JSONHelper.GetStringDef(json["name"]);
-            credits = JSONHelper.GetLong(json["credits"]);
-            debt = JSONHelper.GetLong(json["debt"]);
-            currentShipId = JSONHelper.GetInt(json["currentShipId"]);
-            alive = JSONHelper.GetBool(json["alive"]);
-            docked = JSONHelper.GetBool(json["docked"]);
+            id = json["id"].Int();
+            name =  json["name"].Str();
+            credits = json["credits"].Long();
+            debt = json["debt"].Long();
+            currentShipId = json["currentShipId"].Int();
+            alive = json["alive"].Bool();
+            docked = json["docked"].Bool();
 
-            combatrank = (CombatRank)JSONHelper.GetInt(json["rank"]["combat"]);
-            traderank = (TradeRank)JSONHelper.GetInt(json["rank"]["trade"]);
-            explorationrank = (ExplorationRank)JSONHelper.GetInt(json["rank"]["explore"]);
-            crimeRank = JSONHelper.GetInt(json["rank"]["crime"]);
-            serviceRank = JSONHelper.GetInt(json["rank"]["service"]);
-            empirerank = (EmpireRank)JSONHelper.GetInt(json["rank"]["empire"]);
-            federationrank = (FederationRank)JSONHelper.GetInt(json["rank"]["federation"]);
-            powerRank = JSONHelper.GetInt(json["rank"]["power"]);
-            CQCRank = (CQCRank)JSONHelper.GetInt(json["rank"]["cqc"]);
+            combatrank = (CombatRank)json["rank"]["combat"].Int();
+            traderank = (TradeRank)json["rank"]["trade"].Int();
+            explorationrank = (ExplorationRank)json["rank"]["explore"].Int();
+            crimeRank = json["rank"]["crime"].Int();
+            serviceRank = json["rank"]["service"].Int();
+            empirerank = (EmpireRank)json["rank"]["empire"].Int();
+            federationrank = (FederationRank)json["rank"]["federation"].Int();
+            powerRank = json["rank"]["power"].Int();
+            CQCRank = (CQCRank)json["rank"]["cqc"].Int();
 
         }
     }

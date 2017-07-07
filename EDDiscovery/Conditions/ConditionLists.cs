@@ -432,10 +432,10 @@ namespace EDDiscovery
                 foreach (JObject j in jf)
                 {
                     string evname = (string)j["EventName"];
-                    ConditionEntry.LogicalCondition ftinner = (ConditionEntry.LogicalCondition)Enum.Parse(typeof(ConditionEntry.LogicalCondition), JSONHelper.GetStringDef(j["ICond"], "Or"));
-                    ConditionEntry.LogicalCondition ftouter = (ConditionEntry.LogicalCondition)Enum.Parse(typeof(ConditionEntry.LogicalCondition), JSONHelper.GetStringDef(j["OCond"], "Or"));
-                    string act = JSONHelper.GetStringDef(j["Actions"], "");
-                    string actd = JSONHelper.GetStringDef(j["ActionData"], "");
+                    ConditionEntry.LogicalCondition ftinner = (ConditionEntry.LogicalCondition)Enum.Parse(typeof(ConditionEntry.LogicalCondition), j["ICond"].Str("Or"));
+                    ConditionEntry.LogicalCondition ftouter = (ConditionEntry.LogicalCondition)Enum.Parse(typeof(ConditionEntry.LogicalCondition), j["OCond"].Str("Or"));
+                    string act = j["Actions"].Str();
+                    string actd = j["ActionData"].Str();
 
                     JArray filset = (JArray)j["Filters"];
 

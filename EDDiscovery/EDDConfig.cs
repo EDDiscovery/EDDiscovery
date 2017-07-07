@@ -632,9 +632,9 @@ namespace EDDiscovery
                         }
                     }
 
-                    EDDirectory = JSONHelper.GetStringDef(jo["EDDirectory"], EDDirectory);
-                    ImageHandlerOutputDir = JSONHelper.GetStringDef(jo["ImageHandlerOutputDir"], ImageHandlerOutputDir);
-                    ImageHandlerScreenshotsDir = JSONHelper.GetStringDef(jo["ImageHandlerScreenshotsDir"], ImageHandlerScreenshotsDir);
+                    EDDirectory = jo["EDDirectory"].Str(EDDirectory);
+                    ImageHandlerOutputDir = jo["ImageHandlerOutputDir"].Str(ImageHandlerOutputDir);
+                    ImageHandlerScreenshotsDir = jo["ImageHandlerScreenshotsDir"].Str(ImageHandlerScreenshotsDir);
                 }
             }
 
