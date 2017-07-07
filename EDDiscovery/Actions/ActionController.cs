@@ -47,6 +47,8 @@ namespace EDDiscovery.Actions
 
         public ActionController(EDDiscoveryForm frm, EDDiscoveryController ctrl)
         {
+            Action.cmdlist = cmdlist;       // tell actions which commands we support.
+
             discoveryform = frm;
             discoverycontroller = ctrl;
 
@@ -64,6 +66,60 @@ namespace EDDiscovery.Actions
             lasteditedpack = SQLiteConnectionUser.GetSettingString("ActionPackLastFile", "");
             ReLoad();
         }
+
+        // Controller owns this, any commands can be plugged into the action system
+
+        static private Action.Commands[] cmdlist = new Action.Commands[]
+        {
+            new Action.Commands("Break", typeof(ActionBreak) , Action.ActionType.Cmd),
+            new Action.Commands("Call", typeof(ActionCall) , Action.ActionType.Call),
+            new Action.Commands("Commodities", typeof(ActionCommodities) , Action.ActionType.Cmd),
+            new Action.Commands("Dialog", typeof(ActionDialog) , Action.ActionType.Cmd),
+            new Action.Commands("DialogControl", typeof(ActionDialogControl) , Action.ActionType.Cmd),
+            new Action.Commands("Do", typeof(ActionDo) , Action.ActionType.Do),
+            new Action.Commands("DeleteVariable", typeof(ActionDeleteVariable) , Action.ActionType.Cmd),
+            new Action.Commands("Expr", typeof(ActionExpr), Action.ActionType.Cmd),
+            new Action.Commands("Else", typeof(ActionElse), Action.ActionType.Else),
+            new Action.Commands("ElseIf", typeof(ActionElseIf) , Action.ActionType.ElseIf),
+            new Action.Commands("EliteBindings", typeof(ActionEliteBindings) , Action.ActionType.Cmd),
+            new Action.Commands("End", typeof(ActionEnd) , Action.ActionType.Cmd),
+            new Action.Commands("ErrorIf", typeof(ActionErrorIf) , Action.ActionType.Cmd),
+            new Action.Commands("Event", typeof(ActionEvent) , Action.ActionType.Cmd),
+            new Action.Commands("FileDialog", typeof(ActionFileDialog) , Action.ActionType.Cmd),
+            new Action.Commands("GlobalLet", typeof(ActionGlobalLet) , Action.ActionType.Cmd),
+            new Action.Commands("Global", typeof(ActionGlobal) , Action.ActionType.Cmd),
+            new Action.Commands("Historytab", typeof(ActionHistoryTab) , Action.ActionType.Cmd),
+            new Action.Commands("If", typeof(ActionIf) , Action.ActionType.If),
+            new Action.Commands("InputBox", typeof(ActionInputBox) , Action.ActionType.Cmd),
+            new Action.Commands("InfoBox", typeof(ActionInfoBox) , Action.ActionType.Cmd),
+            new Action.Commands("Ledger", typeof(ActionLedger) , Action.ActionType.Cmd),
+            new Action.Commands("Let", typeof(ActionLet) , Action.ActionType.Cmd),
+            new Action.Commands("Loop", typeof(ActionLoop) , Action.ActionType.Loop),
+            new Action.Commands("Materials", typeof(ActionMaterials) , Action.ActionType.Cmd),
+            new Action.Commands("MessageBox", typeof(ActionMessageBox) , Action.ActionType.Cmd),
+            new Action.Commands("MenuItem", typeof(ActionMenuItem) , Action.ActionType.Cmd),
+            new Action.Commands("NonModalDialog", typeof(ActionNonModalDialog) , Action.ActionType.Cmd),
+            new Action.Commands("Rem", typeof(ActionRem) , Action.ActionType.Cmd),
+            new Action.Commands("Return", typeof(ActionReturn) , Action.ActionType.Return),
+            new Action.Commands("Perform", typeof(ActionPerform) , Action.ActionType.Cmd),
+            new Action.Commands("PersistentGlobal", typeof(ActionPersistentGlobal) , Action.ActionType.Cmd),
+            new Action.Commands("Play", typeof(ActionPlay) , Action.ActionType.Cmd),
+            new Action.Commands("Popout", typeof(ActionPopout) , Action.ActionType.Cmd),
+            new Action.Commands("Pragma", typeof(ActionPragma) , Action.ActionType.Cmd),
+            new Action.Commands("Print", typeof(ActionPrint) , Action.ActionType.Cmd),
+            new Action.Commands("ProgramWindow", typeof(ActionProgramwindow) , Action.ActionType.Cmd),
+            new Action.Commands("Say", typeof(ActionSay), Action.ActionType.Cmd ),
+            new Action.Commands("Scan", typeof(ActionScan) , Action.ActionType.Cmd),
+            new Action.Commands("Set", typeof(ActionSet) , Action.ActionType.Cmd),
+            new Action.Commands("Ship", typeof(ActionShip) , Action.ActionType.Cmd),
+            new Action.Commands("Star", typeof(ActionStar) , Action.ActionType.Cmd),
+            new Action.Commands("Static", typeof(ActionStatic) , Action.ActionType.Cmd),
+            new Action.Commands("Sleep", typeof(ActionSleep) , Action.ActionType.Cmd),
+            new Action.Commands("Timer", typeof(ActionTimer) , Action.ActionType.Cmd),
+            new Action.Commands("While", typeof(ActionWhile) , Action.ActionType.While),
+            new Action.Commands("//", typeof(ActionFullLineComment) , Action.ActionType.Cmd),
+            new Action.Commands("Else If", typeof(ActionElseIf) , Action.ActionType.ElseIf),
+        };
 
         public void ReLoad( bool completereload = true)        // COMPLETE reload..
         {
