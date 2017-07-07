@@ -69,6 +69,8 @@ namespace EDDiscovery
             this.textBox_FromY = new ExtendedControls.TextBoxBorder();
             this.label3 = new System.Windows.Forms.Label();
             this.textBox_FromX = new ExtendedControls.TextBoxBorder();
+            this.textBox_FromName = new ExtendedControls.TextBoxBorder();
+            this.textBox_ToName = new ExtendedControls.TextBoxBorder();
             this.groupBox_Entries.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -85,7 +87,7 @@ namespace EDDiscovery
             this.comboBoxRoutingMetric.Enabled = false;
             this.comboBoxRoutingMetric.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.comboBoxRoutingMetric.ItemHeight = 13;
-            this.comboBoxRoutingMetric.Location = new System.Drawing.Point(57, 105);
+            this.comboBoxRoutingMetric.Location = new System.Drawing.Point(57, 126);
             this.comboBoxRoutingMetric.MouseOverBackgroundColor = System.Drawing.Color.Silver;
             this.comboBoxRoutingMetric.Name = "comboBoxRoutingMetric";
             this.comboBoxRoutingMetric.ScrollBarButtonColor = System.Drawing.Color.LightGray;
@@ -106,11 +108,11 @@ namespace EDDiscovery
             this.richTextBox_routeresult.Dock = System.Windows.Forms.DockStyle.Fill;
             this.richTextBox_routeresult.Font = new System.Drawing.Font("Courier New", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.richTextBox_routeresult.HideScrollBar = true;
-            this.richTextBox_routeresult.Location = new System.Drawing.Point(0, 137);
+            this.richTextBox_routeresult.Location = new System.Drawing.Point(0, 154);
             this.richTextBox_routeresult.Name = "richTextBox_routeresult";
             this.richTextBox_routeresult.ScrollBarWidth = 20;
             this.richTextBox_routeresult.ShowLineCount = false;
-            this.richTextBox_routeresult.Size = new System.Drawing.Size(897, 292);
+            this.richTextBox_routeresult.Size = new System.Drawing.Size(897, 275);
             this.richTextBox_routeresult.TabIndex = 11;
             // 
             // groupBox_Entries
@@ -119,6 +121,8 @@ namespace EDDiscovery
             this.groupBox_Entries.BackColorScaling = 0.5F;
             this.groupBox_Entries.BorderColor = System.Drawing.Color.LightGray;
             this.groupBox_Entries.BorderColorScaling = 0.5F;
+            this.groupBox_Entries.Controls.Add(this.textBox_ToName);
+            this.groupBox_Entries.Controls.Add(this.textBox_FromName);
             this.groupBox_Entries.Controls.Add(this.comboBoxRoutingMetric);
             this.groupBox_Entries.Controls.Add(this.buttonExtTravelTo);
             this.groupBox_Entries.Controls.Add(this.buttonExtTravelFrom);
@@ -147,7 +151,7 @@ namespace EDDiscovery
             this.groupBox_Entries.FillClientAreaWithAlternateColor = false;
             this.groupBox_Entries.Location = new System.Drawing.Point(0, 0);
             this.groupBox_Entries.Name = "groupBox_Entries";
-            this.groupBox_Entries.Size = new System.Drawing.Size(897, 137);
+            this.groupBox_Entries.Size = new System.Drawing.Size(897, 154);
             this.groupBox_Entries.TabIndex = 24;
             this.groupBox_Entries.TabStop = false;
             this.groupBox_Entries.TextPadding = 0;
@@ -158,7 +162,7 @@ namespace EDDiscovery
             this.buttonExtTravelTo.BorderColorScaling = 1.25F;
             this.buttonExtTravelTo.ButtonColorScaling = 0.5F;
             this.buttonExtTravelTo.ButtonDisabledScaling = 0.5F;
-            this.buttonExtTravelTo.Location = new System.Drawing.Point(326, 73);
+            this.buttonExtTravelTo.Location = new System.Drawing.Point(326, 97);
             this.buttonExtTravelTo.Name = "buttonExtTravelTo";
             this.buttonExtTravelTo.Size = new System.Drawing.Size(53, 23);
             this.buttonExtTravelTo.TabIndex = 25;
@@ -171,7 +175,7 @@ namespace EDDiscovery
             this.buttonExtTravelFrom.BorderColorScaling = 1.25F;
             this.buttonExtTravelFrom.ButtonColorScaling = 0.5F;
             this.buttonExtTravelFrom.ButtonDisabledScaling = 0.5F;
-            this.buttonExtTravelFrom.Location = new System.Drawing.Point(57, 73);
+            this.buttonExtTravelFrom.Location = new System.Drawing.Point(57, 97);
             this.buttonExtTravelFrom.Name = "buttonExtTravelFrom";
             this.buttonExtTravelFrom.Size = new System.Drawing.Size(53, 23);
             this.buttonExtTravelFrom.TabIndex = 25;
@@ -184,7 +188,7 @@ namespace EDDiscovery
             this.buttonExtTargetTo.BorderColorScaling = 1.25F;
             this.buttonExtTargetTo.ButtonColorScaling = 0.5F;
             this.buttonExtTargetTo.ButtonDisabledScaling = 0.5F;
-            this.buttonExtTargetTo.Location = new System.Drawing.Point(403, 73);
+            this.buttonExtTargetTo.Location = new System.Drawing.Point(404, 97);
             this.buttonExtTargetTo.Name = "buttonExtTargetTo";
             this.buttonExtTargetTo.Size = new System.Drawing.Size(53, 23);
             this.buttonExtTargetTo.TabIndex = 25;
@@ -197,7 +201,7 @@ namespace EDDiscovery
             this.buttonTargetFrom.BorderColorScaling = 1.25F;
             this.buttonTargetFrom.ButtonColorScaling = 0.5F;
             this.buttonTargetFrom.ButtonDisabledScaling = 0.5F;
-            this.buttonTargetFrom.Location = new System.Drawing.Point(135, 74);
+            this.buttonTargetFrom.Location = new System.Drawing.Point(135, 97);
             this.buttonTargetFrom.Name = "buttonTargetFrom";
             this.buttonTargetFrom.Size = new System.Drawing.Size(53, 23);
             this.buttonTargetFrom.TabIndex = 25;
@@ -323,7 +327,7 @@ namespace EDDiscovery
             this.textBox_ToZ.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource;
             this.textBox_ToZ.BorderColor = System.Drawing.Color.Transparent;
             this.textBox_ToZ.BorderColorScaling = 0.5F;
-            this.textBox_ToZ.Location = new System.Drawing.Point(481, 47);
+            this.textBox_ToZ.Location = new System.Drawing.Point(482, 71);
             this.textBox_ToZ.Name = "textBox_ToZ";
             this.textBox_ToZ.ReadOnly = true;
             this.textBox_ToZ.Size = new System.Drawing.Size(72, 20);
@@ -347,7 +351,7 @@ namespace EDDiscovery
             this.textBox_ToY.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource;
             this.textBox_ToY.BorderColor = System.Drawing.Color.Transparent;
             this.textBox_ToY.BorderColorScaling = 0.5F;
-            this.textBox_ToY.Location = new System.Drawing.Point(403, 47);
+            this.textBox_ToY.Location = new System.Drawing.Point(404, 71);
             this.textBox_ToY.Name = "textBox_ToY";
             this.textBox_ToY.ReadOnly = true;
             this.textBox_ToY.Size = new System.Drawing.Size(72, 20);
@@ -371,7 +375,7 @@ namespace EDDiscovery
             this.textBox_ToX.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource;
             this.textBox_ToX.BorderColor = System.Drawing.Color.Transparent;
             this.textBox_ToX.BorderColorScaling = 0.5F;
-            this.textBox_ToX.Location = new System.Drawing.Point(325, 47);
+            this.textBox_ToX.Location = new System.Drawing.Point(326, 71);
             this.textBox_ToX.Name = "textBox_ToX";
             this.textBox_ToX.ReadOnly = true;
             this.textBox_ToX.Size = new System.Drawing.Size(72, 20);
@@ -383,7 +387,7 @@ namespace EDDiscovery
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(8, 107);
+            this.label6.Location = new System.Drawing.Point(8, 128);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(36, 13);
             this.label6.TabIndex = 19;
@@ -395,7 +399,7 @@ namespace EDDiscovery
             this.textBox_FromZ.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource;
             this.textBox_FromZ.BorderColor = System.Drawing.Color.Transparent;
             this.textBox_FromZ.BorderColorScaling = 0.5F;
-            this.textBox_FromZ.Location = new System.Drawing.Point(213, 48);
+            this.textBox_FromZ.Location = new System.Drawing.Point(213, 71);
             this.textBox_FromZ.Name = "textBox_FromZ";
             this.textBox_FromZ.ReadOnly = true;
             this.textBox_FromZ.Size = new System.Drawing.Size(72, 20);
@@ -424,7 +428,7 @@ namespace EDDiscovery
             this.textBox_FromY.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource;
             this.textBox_FromY.BorderColor = System.Drawing.Color.Transparent;
             this.textBox_FromY.BorderColorScaling = 0.5F;
-            this.textBox_FromY.Location = new System.Drawing.Point(135, 48);
+            this.textBox_FromY.Location = new System.Drawing.Point(135, 71);
             this.textBox_FromY.Name = "textBox_FromY";
             this.textBox_FromY.ReadOnly = true;
             this.textBox_FromY.Size = new System.Drawing.Size(72, 20);
@@ -448,7 +452,7 @@ namespace EDDiscovery
             this.textBox_FromX.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource;
             this.textBox_FromX.BorderColor = System.Drawing.Color.Transparent;
             this.textBox_FromX.BorderColorScaling = 0.5F;
-            this.textBox_FromX.Location = new System.Drawing.Point(57, 48);
+            this.textBox_FromX.Location = new System.Drawing.Point(57, 71);
             this.textBox_FromX.Name = "textBox_FromX";
             this.textBox_FromX.ReadOnly = true;
             this.textBox_FromX.Size = new System.Drawing.Size(72, 20);
@@ -456,6 +460,30 @@ namespace EDDiscovery
             this.textBox_FromX.Click += new System.EventHandler(this.textBox_Clicked);
             this.textBox_FromX.TextChanged += new System.EventHandler(this.textBox_XYZ_From_Changed);
             this.textBox_FromX.Enter += new System.EventHandler(this.textBox_FromXYZ_Enter);
+            // 
+            // textBox_FromName
+            // 
+            this.textBox_FromName.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
+            this.textBox_FromName.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource;
+            this.textBox_FromName.BorderColor = System.Drawing.Color.Transparent;
+            this.textBox_FromName.BorderColorScaling = 0.5F;
+            this.textBox_FromName.Location = new System.Drawing.Point(57, 45);
+            this.textBox_FromName.Name = "textBox_FromName";
+            this.textBox_FromName.ReadOnly = true;
+            this.textBox_FromName.Size = new System.Drawing.Size(234, 20);
+            this.textBox_FromName.TabIndex = 26;
+            // 
+            // textBox_ToName
+            // 
+            this.textBox_ToName.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
+            this.textBox_ToName.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource;
+            this.textBox_ToName.BorderColor = System.Drawing.Color.Transparent;
+            this.textBox_ToName.BorderColorScaling = 0.5F;
+            this.textBox_ToName.Location = new System.Drawing.Point(326, 45);
+            this.textBox_ToName.Name = "textBox_ToName";
+            this.textBox_ToName.ReadOnly = true;
+            this.textBox_ToName.Size = new System.Drawing.Size(234, 20);
+            this.textBox_ToName.TabIndex = 27;
             // 
             // RouteControl
             // 
@@ -499,5 +527,7 @@ namespace EDDiscovery
         private ExtendedControls.ButtonExt buttonExtTravelFrom;
         private ExtendedControls.ButtonExt buttonExtTravelTo;
         private ExtendedControls.ButtonExt buttonExtTargetTo;
+        internal ExtendedControls.TextBoxBorder textBox_ToName;
+        internal ExtendedControls.TextBoxBorder textBox_FromName;
     }
 }
