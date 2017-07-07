@@ -32,12 +32,14 @@ namespace EDDiscovery.Actions
         public ActionFile()
         {
             filevariables = new ConditionVariables();       // filevariables are only cleared on creation
+            dialogs = new Dictionary<string, Forms.ConfigurableForm>();
             Clear();
         }
 
         public ActionFile(string f, string n)
         {
             filevariables = new ConditionVariables();
+            dialogs = new Dictionary<string, Forms.ConfigurableForm>();
             Clear(f, n);
         }
 
@@ -55,6 +57,7 @@ namespace EDDiscovery.Actions
         public ActionProgramList actionprogramlist { get; private set;}                    // programs associated with this pack
         public ConditionVariables installationvariables { get; private set; }              // used to pass to the installer various options, such as disable other packs
         public ConditionVariables filevariables { get; private set; }                      // variables defined using the static.. private to this program.  Not persistent. 
+        public Dictionary<string, Forms.ConfigurableForm> dialogs;                         // persistent dialogs owned by this file
         public string filepath { get; private set; }                                       // where it came from
         public string name { get; private set; }                                           // its logical name
         public bool enabled { get; private set; }                                          // if enabled.
@@ -243,9 +246,9 @@ namespace EDDiscovery.Actions
                     }
                 }
             }
-            catch
+            catch (Exception e)
             {
-                return filename + " Not readable" + Environment.NewLine;
+                return filename + " Not readable" + Environment.NewLine + " " + e.Message;
             }
         }
 
