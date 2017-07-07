@@ -314,6 +314,7 @@
     </Compile>
     <Compile Include="DB\BookmarkClass.cs" />
     <Compile Include="EliteDangerous\BindingsFile.cs" />
+    <Compile Include="EDSM\GalacticMapSystem.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalCrewLaunchFighter.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalCrewMemberRoleChange.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalEngineerContribution.cs" />
