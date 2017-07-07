@@ -123,9 +123,7 @@ namespace EDDiscovery
 
         public void PostInit_Loaded()
         {
-            EliteDangerousClass.CheckED();
             EDDConfig.Instance.Update();
-            CheckIfEliteDangerousIsRunning();
         }
 
         public void PostInit_Shown()
@@ -358,18 +356,6 @@ namespace EDDiscovery
 
             SQLiteConnectionUser.EarlyReadRegister();
             EDDConfig.Instance.Update(false);
-        }
-
-        private void CheckIfEliteDangerousIsRunning()
-        {
-            if (EliteDangerousClass.EDRunning)
-            {
-                LogLine("EliteDangerous is running.");
-            }
-            else
-            {
-                LogLine("EliteDangerous is not running.");
-            }
         }
 
         #endregion

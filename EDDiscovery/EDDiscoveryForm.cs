@@ -719,21 +719,6 @@ namespace EDDiscovery
             Process.Start(Properties.Resources.URLProjectWiki);
         }
 
-        private void openEliteDangerousDirectoryToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                if (EliteDangerousClass.EDDirectory != null && !EliteDangerousClass.EDDirectory.Equals(""))
-                    Process.Start(EliteDangerousClass.EDDirectory);
-
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Open EliteDangerous directory exception: " + ex.Message);
-            }
-
-        }
-
         private void showLogfilesToolStripMenuItem_Click(object sender, EventArgs e)
         {
             try
