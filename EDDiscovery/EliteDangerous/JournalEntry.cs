@@ -1017,7 +1017,7 @@ namespace EDDiscovery.EliteDangerous
 
         static public JournalEntry CreateJournalEntry(JObject jo)
         {
-            string Eventstr = JSONHelper.GetStringNull(jo["event"]);
+            string Eventstr = jo["event"].StrNull();
 
             if (Eventstr == null)  // Should normaly not happend unless corrupt string.
                 return null;

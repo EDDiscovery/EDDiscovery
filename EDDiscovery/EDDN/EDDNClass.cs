@@ -104,7 +104,7 @@ namespace EDDiscovery.EDDN
 
             JObject message = journal.GetJson();
 
-            if (JSONHelper.IsNullOrEmptyT(message["FuelUsed"]))  // Old ED 2.1 messages has no Fuel used fields
+            if (message["FuelUsed"].Empty())  // Old ED 2.1 messages has no Fuel used fields
                 return null;
 
 

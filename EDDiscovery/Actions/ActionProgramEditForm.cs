@@ -541,14 +541,13 @@ namespace EDDiscovery.Actions
             }
 
             DialogResult = DialogResult.OK;
-            curprog.Name = textBoxBorderName.Text;
+            curprog.Rename(textBoxBorderName.Text.Trim());
             Close();
         }
 
         public ActionProgram GetProgram()      // call only when OK returned
         {
-            ActionProgram ap = new ActionProgram(curprog.Name);
-            ap.StoredInSubFile = curprog.StoredInSubFile;
+            ActionProgram ap = new ActionProgram(curprog.Name, curprog.StoredInSubFile);
             Action ac;
             int step = 0;
             while ((ac = curprog.GetStep(step++)) != null)
@@ -582,7 +581,7 @@ namespace EDDiscovery.Actions
 
         private void buttonExtEdit_Click(object sender, EventArgs e)
         {
-            curprog.Name = textBoxBorderName.Text;
+            curprog.Rename(textBoxBorderName.Text.Trim());
             if ( curprog.EditInEditor())
             {
                 LoadProgram(curprog);
@@ -650,9 +649,9 @@ namespace EDDiscovery.Actions
 
                 if (dlg.ShowDialog() == DialogResult.OK)
                 {
-                    curprog.Name = textBoxBorderName.Text;
+                    curprog.Rename(textBoxBorderName.Text.Trim());
                     if ( associate )
-                        curprog.StoredInSubFile = dlg.FileName;        // now
+                        curprog.SetSubFileStorage(dlg.FileName);        // now
 
                     if (!curprog.WriteFile(dlg.FileName))
                         Forms.MessageBoxTheme.Show(this, "Failed to save text file - check file path");

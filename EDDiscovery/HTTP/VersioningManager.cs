@@ -193,10 +193,11 @@ namespace EDDiscovery.HTTP
         {
             try
             {
-                Actions.ActionFile.SetEnableFlag(item.localfilename, enable);
-
-                if (!item.localmodified)      // if was not local modified, lets set the SHA so it does not appear local modified just because of the enable
-                    WriteOrCheckSHAFile(item, item.localvars, appfolder, true);
+                if (Actions.ActionFile.SetEnableFlag(item.localfilename, enable))     // if enable flag was changed..
+                {
+                    if (!item.localmodified)      // if was not local modified, lets set the SHA so it does not appear local modified just because of the enable
+                        WriteOrCheckSHAFile(item, item.localvars, appfolder, true);
+                }
 
                 return true;
             }
@@ -215,16 +216,19 @@ namespace EDDiscovery.HTTP
                     if (key.StartsWith("OtherFile"))
                     {
                         string[] parts = item.downloadedvars[key].Split(';');
-                        string o = Path.Combine(new string[] { appfolder, parts[1], parts[0] });
-                        string s = Path.Combine(item.downloadedpath, parts[0]);
-                        File.Copy(s, o, true);
+                        string folder = Path.Combine(appfolder, parts[1]);
+                        if (!Directory.Exists(folder))      // ensure the folder exists
+                            Directory.CreateDirectory(folder);
+                        string outfile = Path.Combine(folder, parts[0] );
+                        string source = Path.Combine(item.downloadedpath, parts[0]);
+                        File.Copy(source, outfile, true);
                     }
 
                     if (key.StartsWith("DisableOther"))
                     {
                         DownloadItem other = downloaditems.Find(x => x.itemname.Equals(item.downloadedvars[key]));
 
-                        if (other != null)
+                        if (other != null && other.localfilename != null )
                             SetEnableFlag(other, false, appfolder);
                     }
                 }

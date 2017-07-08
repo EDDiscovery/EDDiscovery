@@ -395,8 +395,10 @@ namespace EDDiscovery.Actions
         }
     }
 
-    public class ActionDialog : Action
+    public class ActionDialogBase : Action
     {
+        bool IsModalDialog() { return this.GetType().Equals(typeof(ActionDialog)); }
+
         public override bool AllowDirectEditingOfUserData { get { return true; } }    // and allow editing?
 
         List<string> FromString(string input)
@@ -415,8 +417,8 @@ namespace EDDiscovery.Actions
         {
             List<string> l = FromString(userdata);
             List<string> r = Forms.PromptMultiLine.ShowDialog(parent, "Configure Dialog",
-                            new string[] { "Logical Name" , "Caption", "Size", "Var Prefix" }, l?.ToArray(),
-                            false, new string[] { "Handle name of menu" , "Enter title of menu", "Size, as w,h (200,300)", "Variable Prefix" });
+                            new string[] { "Logical Name" , "Caption", "Size [Pos]", "Var Prefix" }, l?.ToArray(),
+                            false, new string[] { "Handle name of menu" , "Enter title of menu", "Size and optional Position, as w,h [,x,y] 200,300 or 200,300,500,100", "Variable Prefix" });
             if (r != null)
             {
                 userdata = r.ToStringCommaList(2);
@@ -439,10 +441,12 @@ namespace EDDiscovery.Actions
 
                     List<Forms.ConfigurableForm.Entry> entries = new List<Forms.ConfigurableForm.Entry>();
 
+                    System.Drawing.Point lastpos = new System.Drawing.Point(0, 0);
+
                     foreach( string k in cv.NameList )
                     {
                         Forms.ConfigurableForm.Entry entry;
-                        string errmsg =Forms.ConfigurableForm.MakeEntry(cv[k], out entry);
+                        string errmsg =Forms.ConfigurableForm.MakeEntry(cv[k], out entry, ref lastpos);
                         if (errmsg != null)
                             return ap.ReportError(errmsg + " in " + k + " variable for Dialog");
                         entries.Add(entry);
@@ -450,18 +454,33 @@ namespace EDDiscovery.Actions
 
                     StringParser sp2 = new StringParser(exp[2]);
                     int? dw = sp2.NextWordComma().InvariantParseIntNull();
-                    int? dh = sp2.NextWord().InvariantParseIntNull();
+                    int? dh = sp2.NextWordComma().InvariantParseIntNull();
+                    int? x = sp2.NextWordComma().InvariantParseIntNull();
+                    int? y = sp2.NextWord().InvariantParseIntNull();
 
-                    if (dw != null && dh != null)
+                    if (dw != null && dh != null && ((x==null)==(y==null))) // need w/h, must have either no pos or both pos
                     {
                         Forms.ConfigurableForm cd = new Forms.ConfigurableForm();
-                        ap.dialogs[exp[0]] = cd;
+
+                        if (IsModalDialog())
+                            ap.dialogs[exp[0]] = cd;
+                        else
+                            ap.actionfile.dialogs[exp[0]] = cd;
+
+                        System.Drawing.Point pos = new System.Drawing.Point(-999, -999);
+                        if (x != null && y != null)
+                            pos = new System.Drawing.Point(x.Value, y.Value);
+
                         cd.Trigger += Cd_Trigger;
-                        cd.Show(ap.actioncontroller.DiscoveryForm, exp[0], new System.Drawing.Size(dw.Value, dh.Value), exp[1], entries.ToArray(), ap);
-                        return false;       // STOP, wait input
+                        cd.Show(ap.actioncontroller.DiscoveryForm, exp[0], 
+                                            new System.Drawing.Size(dw.Value, dh.Value), pos , 
+                                            exp[1], entries.ToArray(), 
+                                            new List<Object>() { ap, IsModalDialog() });
+
+                        return !IsModalDialog();       // modal, return false, STOP.  Non modal, continue
                     }
                     else
-                        ap.ReportError("Width/Height not specified in Dialog");
+                        ap.ReportError("Width/Height and/or X/Y not specified correctly in Dialog");
                 }
                 else
                     ap.ReportError(exp[0]);
@@ -472,12 +491,31 @@ namespace EDDiscovery.Actions
             return true;
         }
 
-        private void Cd_Trigger(string lname, string controlname, Object tag)
+        static private void Cd_Trigger(string lname, string controlname, Object tag)
         {
-            ActionProgramRun apr = tag as ActionProgramRun;
-            apr[lname] = controlname;
-            apr.ResumeAfterPause();
+            List<Object> tags = tag as List<Object>;        // object is a list of objects! lovely
+
+            ActionProgramRun apr = tags[0] as ActionProgramRun;
+            bool ismodal = (bool)tags[1];
+
+            if (ismodal)
+            {
+                apr[lname] = controlname;
+                apr.ResumeAfterPause();
+            }
+            else
+            {
+                apr.actioncontroller.ActionRun("onNonModalDialog", "UserUIEvent", null, new ConditionVariables(new string[] { "Dialog", lname, "Control", controlname }));
+            }
         }
+    }
+
+    public class ActionDialog : ActionDialogBase        // type of class determines Dialog action using IsModal
+    {
+    }
+
+    public class ActionNonModalDialog : ActionDialogBase
+    {
     }
 
 
@@ -504,17 +542,35 @@ namespace EDDiscovery.Actions
                 StringParser sp = new StringParser(exp);
                 string handle = sp.NextWordComma();
 
-                if (handle != null && ap.dialogs.ContainsKey(handle))
-                {
-                    Forms.ConfigurableForm f = ap.dialogs[handle];
+                if ( handle != null )
+                { 
+                    bool infile = ap.actionfile.dialogs.ContainsKey(handle);
+                    bool inlocal = ap.dialogs.ContainsKey(handle);
+
+                    Forms.ConfigurableForm f = infile ? ap.actionfile.dialogs[handle] : (inlocal ? ap.dialogs[handle] : null);
 
                     string cmd = sp.NextWord(lowercase: true);
 
                     if (cmd == null)
+                    {
                         ap.ReportError("Missing command in DialogControl");
+                    }
+                    else if (cmd.Equals("exists"))
+                    {
+                        ap["Exists"] = (f != null) ? "1" : "0";
+                    }
+                    else if (f == null)
+                    {
+                        ap.ReportError("No such dialog exists in DialogControl");
+                    }
                     else if (cmd.Equals("continue"))
                     {
-                        return false;
+                        return (inlocal) ? false : true;    // if local, pause. else just ignore
+                    }
+                    else if (cmd.Equals("position"))
+                    {
+                        ap["X"] = f.Location.X.ToStringInvariant();
+                        ap["Y"] = f.Location.Y.ToStringInvariant();
                     }
                     else if (cmd.Equals("get"))
                     {
@@ -534,7 +590,7 @@ namespace EDDiscovery.Actions
                         string value = sp.IsCharMoveOn('=') ? sp.NextQuotedWord() : null;
                         if (control != null && value != null)
                         {
-                            if ( !f.Set(control, value) )
+                            if (!f.Set(control, value))
                                 ap.ReportError("Cannot set control " + control + " in DialogControl set");
                         }
                         else
@@ -543,7 +599,10 @@ namespace EDDiscovery.Actions
                     else if (cmd.Equals("close"))
                     {
                         f.Close();
-                        ap.dialogs.Remove(handle);
+                        if (inlocal)
+                            ap.dialogs.Remove(handle);
+                        else
+                            ap.actionfile.dialogs.Remove(handle);
                     }
                     else
                         ap.ReportError("Unknown command in DialogControl");

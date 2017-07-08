@@ -28,6 +28,16 @@ namespace EDDiscovery.Actions
                                 If, Else, ElseIf, Do, While, Loop // Force execute
                                 };
 
+        public struct Commands
+        {
+            public Commands(string s, Type t, ActionType a) { name = s; type = t; at = a; }
+            public string name;
+            public Type type;
+            public ActionType at;
+        }
+
+        static public Commands[] cmdlist;           // must be set.
+
         private string actionname;
         private ActionType actiontype;
         protected string userdata;
@@ -69,66 +79,6 @@ namespace EDDiscovery.Actions
             return false;
         }
 
-       private struct Commands
-        {
-            public Commands(string s, Type t , ActionType a) { name = s;  type = t; at = a; }
-            public string name;
-            public Type type;
-            public ActionType at;
-        }
-
-        static private Commands[] cmdlist = new Commands[]
-        {
-            new Commands("Break", typeof(ActionBreak) , ActionType.Cmd),
-            new Commands("Call", typeof(ActionCall) , ActionType.Call),
-            new Commands("Commodities", typeof(ActionCommodities) , ActionType.Cmd),
-            new Commands("Dialog", typeof(ActionDialog) , ActionType.Cmd),
-            new Commands("DialogControl", typeof(ActionDialogControl) , ActionType.Cmd),
-            new Commands("Do", typeof(ActionDo) , ActionType.Do),
-            new Commands("DeleteVariable", typeof(ActionDeleteVariable) , ActionType.Cmd),
-            new Commands("Expr", typeof(ActionExpr), ActionType.Cmd),
-            new Commands("Else", typeof(ActionElse), ActionType.Else),
-            new Commands("ElseIf", typeof(ActionElseIf) , ActionType.ElseIf),
-            new Commands("EliteBindings", typeof(ActionEliteBindings) , ActionType.Cmd),
-            new Commands("End", typeof(ActionEnd) , ActionType.Cmd),
-            new Commands("ErrorIf", typeof(ActionErrorIf) , ActionType.Cmd),
-            new Commands("Event", typeof(ActionEvent) , ActionType.Cmd),
-            new Commands("FileDialog", typeof(ActionFileDialog) , ActionType.Cmd),
-            new Commands("GlobalLet", typeof(ActionGlobalLet) , ActionType.Cmd),
-            new Commands("Global", typeof(ActionGlobal) , ActionType.Cmd),
-            new Commands("Historytab", typeof(ActionHistoryTab) , ActionType.Cmd),
-            new Commands("If", typeof(ActionIf) , ActionType.If),
-            new Commands("InputBox", typeof(ActionInputBox) , ActionType.Cmd),
-            new Commands("InfoBox", typeof(ActionInfoBox) , ActionType.Cmd),
-            new Commands("Ledger", typeof(ActionLedger) , ActionType.Cmd),
-            new Commands("Let", typeof(ActionLet) , ActionType.Cmd),
-            new Commands("Loop", typeof(ActionLoop) , ActionType.Loop),
-            new Commands("Materials", typeof(ActionMaterials) , ActionType.Cmd),
-            new Commands("MessageBox", typeof(ActionMessageBox) , ActionType.Cmd),
-            new Commands("MenuItem", typeof(ActionMenuItem) , ActionType.Cmd),
-            new Commands("Rem", typeof(ActionRem) , ActionType.Cmd),
-            new Commands("Return", typeof(ActionReturn) , ActionType.Return),
-            new Commands("Perform", typeof(ActionPerform) , ActionType.Cmd),
-            new Commands("PersistentGlobal", typeof(ActionPersistentGlobal) , ActionType.Cmd),
-            new Commands("Play", typeof(ActionPlay) , ActionType.Cmd),
-            new Commands("Popout", typeof(ActionPopout) , ActionType.Cmd),
-            new Commands("Pragma", typeof(ActionPragma) , ActionType.Cmd),
-            new Commands("Print", typeof(ActionPrint) , ActionType.Cmd),
-            new Commands("ProgramWindow", typeof(ActionProgramwindow) , ActionType.Cmd),
-            new Commands("Say", typeof(ActionSay), ActionType.Cmd ),
-            new Commands("Scan", typeof(ActionScan) , ActionType.Cmd),
-            new Commands("Set", typeof(ActionSet) , ActionType.Cmd),
-            new Commands("Ship", typeof(ActionShip) , ActionType.Cmd),
-            new Commands("Star", typeof(ActionStar) , ActionType.Cmd),
-            new Commands("Timer", typeof(ActionTimer) , ActionType.Cmd),
-            new Commands("Sleep", typeof(ActionSleep) , ActionType.Cmd),
-            new Commands("While", typeof(ActionWhile) , ActionType.While),
-            new Commands("//", typeof(ActionFullLineComment) , ActionType.Cmd),
-            new Commands("Else If", typeof(ActionElseIf) , ActionType.ElseIf),
-        };
-
-        static Dictionary<string, Commands> cmdlookup = null;
-
         public static string[] GetActionNameList()
         {
             string[] list = new string[cmdlist.Length];
@@ -138,6 +88,7 @@ namespace EDDiscovery.Actions
         }
 
         // FACTORY make the correct class from name.
+        static Dictionary<string, Commands> cmdlookup = null;
 
         public static Action CreateAction( string name, string user = null , string comment = null, int lu = 0 , int ws = 0 )       
         {

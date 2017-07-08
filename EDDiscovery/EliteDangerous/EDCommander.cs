@@ -403,7 +403,7 @@ namespace EDDiscovery
                     EDCommander cmdr = GetCommander(name);
                     if (props != null && cmdr != null)
                     {
-                        cmdr.JournalDir = JSONHelper.GetStringDef(props["JournalDir"], cmdr.JournalDir);
+                        cmdr.JournalDir = props["JournalDir"].Str(cmdr.JournalDir);
                     }
                 }
             }

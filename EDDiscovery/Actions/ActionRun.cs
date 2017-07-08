@@ -56,7 +56,7 @@ namespace EDDiscovery.Actions
 
                 progcurrent = new ActionProgramRun(fileset, r, inputparas, this, actioncontroller);   // now we run this.. no need to push to stack
 
-                progcurrent.PrepareToRun(new ConditionVariables(progcurrent.inputvariables, actioncontroller.Globals),
+                progcurrent.PrepareToRun(new ConditionVariables(progcurrent.inputvariables, actioncontroller.Globals, fileset.filevariables),
                                                 fh == null ? new ConditionFileHandles() : fh, d == null ? new Dictionary<string, Forms.ConfigurableForm>() : d, closeatend);        // if no filehandles, make them and close at end
             }
             else
@@ -92,8 +92,7 @@ namespace EDDiscovery.Actions
                 {
                     if (progcurrent.GetErrorList != null)       // any errors pending, handle
                     {
-                        actioncontroller.LogLine("Error at " + progcurrent.Location + ": Line " + progcurrent.GetLastStep().LineNumber + ": "+ progcurrent.GetLastStep().Name +  Environment.NewLine + 
-                                                    progcurrent.GetErrorList);
+                        actioncontroller.LogLine("Error at " + progcurrent.Location + ": Line " + progcurrent.GetLastStep().LineNumber + ":" + Environment.NewLine + progcurrent.GetLastStep().Name + " " + progcurrent.GetErrorList);
                         TerminateCurrent();
                     }
                     else if (progcurrent.IsProgramFinished)        // if current program ran out, cancel it
@@ -112,10 +111,17 @@ namespace EDDiscovery.Actions
                     progqueue.RemoveAt(0);
 
                     if (progcurrent.variables != null)      // if not null, its because its just been restarted after a call.. reset globals
+                    {
                         progcurrent.Add(actioncontroller.Globals); // in case they have been updated...
+                        progcurrent.Add(progcurrent.actionfile.filevariables); // in case they have been updated...
+                    }
                     else
-                        progcurrent.PrepareToRun(new ConditionVariables(progcurrent.inputvariables, actioncontroller.Globals),
-                                                new ConditionFileHandles(), new Dictionary<string,Forms.ConfigurableForm>(), true); // with new file handles and close at end..
+                    {
+                        progcurrent.PrepareToRun(
+                                new ConditionVariables(progcurrent.inputvariables, actioncontroller.Globals, progcurrent.actionfile.filevariables),
+                                new ConditionFileHandles(),
+                                new Dictionary<string, Forms.ConfigurableForm>(), true); // with new file handles and close at end..
+                    }
 
                     if (progcurrent.IsProgramFinished)          // reject empty programs..
                     {

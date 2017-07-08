@@ -437,8 +437,8 @@ namespace EDDiscovery.EDSM
 
                 if (msgnum == 100 || msgnum == 401 || msgnum == 402 || msgnum == 403)
                 {
-                    firstdiscover = JSONHelper.GetBool(msg["systemCreated"], false);
-                    edsmid = JSONHelper.GetInt(msg["systemId"], 0);
+                    firstdiscover = msg["systemCreated"].Bool(false);
+                    edsmid = msg["systemId"].Int(0);
 
                     return true;
                 }
@@ -718,14 +718,14 @@ namespace EDDiscovery.EDSM
             jo["timestamp"] = DateTime.UtcNow.ToString("yyyy-MM-dd'T'HH:mm:ss'Z'", CultureInfo.InvariantCulture);
             jo["EDDFromEDSMBodie"] = true;
 
-            JSONHelper.Rename(jo["name"], "BodyName");
+            jo["name"].Rename("BodyName");
 
-            if (!JSONHelper.IsNullOrEmptyT(jo["type"]))
+            if (!jo["type"].Empty())
             {
 
                 if (jo["type"].Value<string>().Equals("Star"))
                 {
-                    JSONHelper.Rename(jo["subType"], "StarType");   // Remove extra text from EDSM   ex  "F (White) Star" -> "F"
+                    jo["subType"].Rename("StarType");   // Remove extra text from EDSM   ex  "F (White) Star" -> "F"
                     string startype = jo["StarType"].Value<string>();
                     if (startype == null)
                         startype = "unknown";
@@ -734,65 +734,65 @@ namespace EDDiscovery.EDSM
                         startype = startype.Substring(0, index).Trim();
                     jo["StarType"] = startype;
 
-                    JSONHelper.Rename(jo["age"], "Age_MY");
-                    JSONHelper.Rename(jo["solarMasses"], "StellarMass");
-                    JSONHelper.Rename(jo["solarRadius"], "Radius");
-                    JSONHelper.Rename(jo["orbitalEccentricity"], "Eccentricity");
-                    JSONHelper.Rename(jo["argOfPeriapsis"], "Periapsis");
-                    JSONHelper.Rename(jo["rotationalPeriod"], "RotationPeriod");
-                    JSONHelper.Rename(jo["rotationalPeriodTidallyLocked"], "TidalLock");
+                    jo["age"].Rename("Age_MY");
+                    jo["solarMasses"].Rename("StellarMass");
+                    jo["solarRadius"].Rename("Radius");
+                    jo["orbitalEccentricity"].Rename("Eccentricity");
+                    jo["argOfPeriapsis"].Rename("Periapsis");
+                    jo["rotationalPeriod"].Rename("RotationPeriod");
+                    jo["rotationalPeriodTidallyLocked"].Rename("TidalLock");
                 }
 
                 if (jo["type"].Value<string>().Equals("Planet"))
                 {
-                    JSONHelper.Rename(jo["isLandable"], "Landable");
-                    JSONHelper.Rename(jo["earthMasses"], "MassEM");
-                    JSONHelper.Rename(jo["volcanismType"], "Volcanism");
-                    JSONHelper.Rename(jo["atmosphereType"], "Atmosphere");
-                    JSONHelper.Rename(jo["orbitalEccentricity"], "Eccentricity");
-                    JSONHelper.Rename(jo["argOfPeriapsis"], "Periapsis");
-                    JSONHelper.Rename(jo["rotationalPeriod"], "RotationPeriod");
-                    JSONHelper.Rename(jo["rotationalPeriodTidallyLocked"], "TidalLock");
-                    JSONHelper.Rename(jo["subType"], "PlanetClass");
-                    JSONHelper.Rename(jo["radius"], "Radius");
+                    jo["isLandable"].Rename( "Landable");
+                    jo["earthMasses"].Rename( "MassEM");
+                    jo["volcanismType"].Rename("Volcanism");
+                    jo["atmosphereType"].Rename( "Atmosphere");
+                    jo["orbitalEccentricity"].Rename( "Eccentricity");
+                    jo["argOfPeriapsis"].Rename( "Periapsis");
+                    jo["rotationalPeriod"].Rename( "RotationPeriod");
+                    jo["rotationalPeriodTidallyLocked"].Rename("TidalLock");
+                    jo["subType"].Rename( "PlanetClass");
+                    jo["radius"].Rename( "Radius");
 
                     jo["PlanetClass"] = EDSMPlanet2JournalName(jo["PlanetClass"].Str());
 
 
                 }
             }
-            JSONHelper.Rename(jo["belts"], "Rings");
-            JSONHelper.Rename(jo["rings"], "Rings");
-            JSONHelper.Rename(jo["semiMajorAxis"], "SemiMajorAxis");
-            JSONHelper.Rename(jo["surfaceTemperature"], "SurfaceTemperature");
-            JSONHelper.Rename(jo["orbitalPeriod"], "OrbitalPeriod");
-            JSONHelper.Rename(jo["semiMajorAxis"], "SemiMajorAxis");
-            JSONHelper.Rename(jo["surfaceTemperature"], "SurfaceTemperature");
-            JSONHelper.Rename(jo["surfacePressure"], "SurfacePressure");
-            JSONHelper.Rename(jo["orbitalInclination"], "OrbitalInclination");
-            JSONHelper.Rename(jo["materials"], "Materials");
-            JSONHelper.Rename(jo["distanceToArrival"], "DistanceFromArrivalLS");
-            JSONHelper.Rename(jo["absoluteMagnitude"], "AbsoluteMagnitude");
-            JSONHelper.Rename(jo["terraformingState"], "TerraformState");
+            jo["belts"].Rename( "Rings");
+            jo["rings"].Rename( "Rings");
+            jo["semiMajorAxis"].Rename( "SemiMajorAxis");
+            jo["surfaceTemperature"].Rename( "SurfaceTemperature");
+            jo["orbitalPeriod"].Rename("OrbitalPeriod");
+            jo["semiMajorAxis"].Rename("SemiMajorAxis");
+            jo["surfaceTemperature"].Rename("SurfaceTemperature");
+            jo["surfacePressure"].Rename("SurfacePressure");
+            jo["orbitalInclination"].Rename("OrbitalInclination");
+            jo["materials"].Rename("Materials");
+            jo["distanceToArrival"].Rename("DistanceFromArrivalLS");
+            jo["absoluteMagnitude"].Rename("AbsoluteMagnitude");
+            jo["terraformingState"].Rename("TerraformState");
             if (jo["TerraformState"].Str().Equals("Candidate for terraforming"))
                 jo["TerraformState"] = "Terraformable";
 
 
 
 
-            if (!JSONHelper.IsNullOrEmptyT(jo["Rings"]))
+            if (!jo["Rings"].Empty())
             {
                 foreach (JObject ring in jo["Rings"])
                 {
-                    JSONHelper.Rename(ring["innerRadius"], "InnerRad");
-                    JSONHelper.Rename(ring["outerRadius"], "OuterRad");
-                    JSONHelper.Rename(ring["mass"], "MassMT");
-                    JSONHelper.Rename(ring["type"], "RingClass");
+                    ring["innerRadius"].Rename("InnerRad");
+                    ring["outerRadius"].Rename("OuterRad");
+                    ring["mass"].Rename("MassMT");
+                    ring["type"].Rename("RingClass");
                 }
             }
 
 
-            if (!JSONHelper.IsNullOrEmptyT(jo["Materials"]))  // Check if matieals has null
+            if (!jo["Materials"].Empty())  // Check if matieals has null
             {
                 Dictionary<string, double?> mats;
                 Dictionary<string, double> mats2;

@@ -107,34 +107,34 @@ namespace EDDiscovery
                 {
                     JObject jo = (JObject)JObject.Parse(line);
 
-                    string s = JSONHelper.GetStringNull(jo["BuyItem"]);
+                    string s = jo["BuyItem"].StrNull();
 
                     if (s != null)
                     {
                         items[s] = s;
                     }
 
-                    s = JSONHelper.GetStringNull(jo["SellItem"]);
+                    s = jo["SellItem"].StrNull();
 
                     if (s != null)
                     {
                         items[s] = s;
                     }
 
-                    s = JSONHelper.GetStringNull(jo["Name"]);
+                    s = jo["Name"].StrNull();
 
                     if (s != null)
                     {
                         items[s] = s;
                     }
 
-                    s = JSONHelper.GetStringNull(jo["FromItem"]);
+                    s = jo["FromItem"].StrNull();
 
                     if (s != null)
                     {
                         items[s] = s;
                     }
-                    s = JSONHelper.GetStringNull(jo["ToItem"]);
+                    s = jo["ToItem"].StrNull();
 
                     if (s != null)
                     {

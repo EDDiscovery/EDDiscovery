@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,7 +9,7 @@ namespace EDDiscovery.InputDevices
 {
     // list of devices, and main event loop.  Hook to OnNewEvent
 
-    class InputDeviceList
+    class InputDeviceList : IEnumerable<InputDeviceInterface>
     {
         public event Action<List<InputDeviceEvent>> OnNewEvent;
 
@@ -30,6 +31,17 @@ namespace EDDiscovery.InputDevices
         public InputDeviceInterface Find(Predicate<InputDeviceInterface> p)
         {
             return inputdevices.Find(p);
+        }
+
+        public IEnumerator<InputDeviceInterface> GetEnumerator()
+        {
+            foreach (var e in inputdevices)
+                yield return e;
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
         }
 
         public string ListDevices()
