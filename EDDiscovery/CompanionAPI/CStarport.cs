@@ -25,9 +25,9 @@ namespace EDDiscovery.CompanionAPI
         {
             try
             {
-                id = JSONHelper.GetLong(jo["id"]);
-                name = JSONHelper.GetStringDef(jo["name"]);
-                faction = JSONHelper.GetStringDef(jo["faction"]);
+                id = jo["id"].Long();
+                name = jo["name"].Str();
+                faction = jo["faction"].Str();
 
                 jcommodities = (JArray)jo["commodities"];
 

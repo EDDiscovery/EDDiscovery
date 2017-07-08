@@ -371,11 +371,11 @@
     <Compile Include="Forms\CommanderForm.Designer.cs">
       <DependentUpon>CommanderForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\DownloadManagerForm.cs">
+    <Compile Include="Forms\AddOnManagerForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\DownloadManagerForm.Designer.cs">
-      <DependentUpon>DownloadManagerForm.cs</DependentUpon>
+    <Compile Include="Forms\AddOnManagerForm.Designer.cs">
+      <DependentUpon>AddOnManagerForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\ImportSphere.cs">
       <SubType>Form</SubType>
@@ -567,7 +567,6 @@
     <Compile Include="Conditions\ConditionFilterForm.Designer.cs">
       <DependentUpon>ConditionFilterForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="JSON\JSONPrettyPrint.cs" />
     <Compile Include="EliteDangerous\LogReaderBase.cs" />
     <Compile Include="EliteDangerous\NetLogReader.cs" />
     <Compile Include="ExportImport\ExportBase.cs" />
@@ -637,7 +636,6 @@
     <Compile Include="HTTP\DownloadFile.cs" />
     <Compile Include="HTTP\GitHubClass.cs" />
     <Compile Include="HTTP\GitHubRelease.cs" />
-    <Compile Include="JSON\JSONHelper.cs" />
     <Compile Include="ObjectExtensions.cs" />
     <Compile Include="Controls\ButtonExt.cs">
       <SubType>Component</SubType>
@@ -696,13 +694,12 @@
     <Compile Include="DB\TravelLogUnit.cs" />
     <Compile Include="DB\WantedSystemClass.cs" />
     <Compile Include="EDDConfig.cs" />
-    <Compile Include="EDDiscoveryServer\EDDiscoveryServer.cs" />
     <Compile Include="EDDTheme.cs" />
     <Compile Include="EDDToolStripRenderer.cs" />
     <Compile Include="EDSM\EDSMClass.cs" />
     <Compile Include="EDSM\EDSMSync.cs" />
     <Compile Include="EliteDangerous\EDCommander.cs" />
-    <Compile Include="EliteDangerous\EliteDangerous.cs" />
+    <Compile Include="EliteDangerous\EDTypesFromJSON.cs" />
     <Compile Include="3DMap\FormMap.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -969,8 +966,8 @@
     <EmbeddedResource Include="Forms\CommanderForm.resx">
       <DependentUpon>CommanderForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\DownloadManagerForm.resx">
-      <DependentUpon>DownloadManagerForm.cs</DependentUpon>
+    <EmbeddedResource Include="Forms\AddOnManagerForm.resx">
+      <DependentUpon>AddOnManagerForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FindMaterialsForm.resx">
       <DependentUpon>FindMaterialsForm.cs</DependentUpon>
@@ -1456,10 +1453,7 @@
       <Install>true</Install>
     </BootstrapperPackage>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Maps\" />
-    <Folder Include="SQLite\" />
-  </ItemGroup>
+  <ItemGroup />
   <UsingTask TaskName="Zip" TaskFactory="CodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.v4.0.dll">
     <ParameterGroup>
       <OutputFilename ParameterType="System.String" Required="true" />

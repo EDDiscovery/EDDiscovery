@@ -15,7 +15,7 @@
  */
 namespace EDDiscovery.Forms
 {
-    partial class DownloadManagerForm
+    partial class AddOnManagerForm
     {
         /// <summary>
         /// Required designer variable.
@@ -44,7 +44,7 @@ namespace EDDiscovery.Forms
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(DownloadManagerForm));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AddOnManagerForm));
             this.panelTop = new System.Windows.Forms.Panel();
             this.panel_close = new ExtendedControls.DrawnPanel();
             this.panel_minimize = new ExtendedControls.DrawnPanel();

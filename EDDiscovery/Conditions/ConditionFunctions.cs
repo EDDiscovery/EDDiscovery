@@ -271,8 +271,8 @@ namespace EDDiscovery
 
                 functions.Add("escapechar",     new FuncEntry(EscapeChar,       1, 1,   1, 1));   // check var, can be string
                 functions.Add("eval",           new FuncEntry(Eval,             1, 2,   1, 1));   // can be string, can be variable, p2 is not a variable, and can't be a string
-                functions.Add("exist",          new FuncEntry(Exists,           1, 20,  0, 0));
-                functions.Add("existsdefault",  new FuncEntry(ExistsDefault,    2, 2,   2, 2));   // first is a macro but can not exist, second is a string or macro which must exist
+                functions.Add("exist",          new FuncEntry(Exists,           1, 20,  0, 0xfffffff));
+                functions.Add("existsdefault",  new FuncEntry(ExistsDefault,    2, 2,   2, 3));   // first is a macro but can not exist, second is a string or macro which must exist
                 functions.Add("expand",         new FuncEntry(Expand,           1,20,   0xfffffff,0xfffffff)); // check var, can be string (if so expanded)
                 functions.Add("expandarray",    new FuncEntry(ExpandArray,      4,5,    2,3+16));  // var 1 is text root/string, not var, not string, var 2 can be var or string, var 3/4 is integers or variables, checked in function
                 functions.Add("expandvars",     new FuncEntry(ExpandVars,       4, 5,   2,3+16));   // var 1 is text root/string, not var, not string, var 2 can be var or string, var 3/4 is integers or variables, checked in function
@@ -330,10 +330,13 @@ namespace EDDiscovery
 
                 functions.Add("seek",           new FuncEntry(SeekFile,         2, 2,   1, 0));   //first is macro, second is literal or macro
 
+                functions.Add("safevarname",    new FuncEntry(SafeVarName,      1, 1,   1, 1));   //macro/string
+
                 functions.Add("sc",             new FuncEntry(SplitCaps,        1, 1,   1, 1));   //shorter alias 
                 functions.Add("ship",           new FuncEntry(Ship,             1, 1,   1, 1));   //ship translator
                 functions.Add("splitcaps",      new FuncEntry(SplitCaps,        1, 1,   1, 1));   //check var, allow strings
                 functions.Add("substring",      new FuncEntry(SubString,        3, 3,   1, 1));   // check var1, var1 can be string, var 2 and 3 can either be macro or ints not strings
+                functions.Add("systempath",     new FuncEntry(SystemPath,       1, 1,   0, 0));   // literal
 
                 functions.Add("tell",           new FuncEntry(TellFile,         1, 1,   1, 0));   //first is macro
                 functions.Add("tickcount",      new FuncEntry(TickCount,        0, 0,   0, 0));   // no paras
@@ -398,7 +401,7 @@ namespace EDDiscovery
         {
             foreach (Parameter s in paras)
             {
-                if (!vars.Exists(s.value))
+                if (!vars.Exists(s.value))      // either s.value is an expanded string, or a literal.. does not matter.
                 {
                     output = "0";
                     return true;
@@ -429,7 +432,7 @@ namespace EDDiscovery
 
         private bool ExistsDefault(out string output)
         {
-            if (vars.Exists(paras[0].value))
+            if (vars.Exists(paras[0].value))        // either s.value is an expanded string, or a literal.. does not matter.
                 output = vars[paras[0].value];
             else
                 output = paras[1].isstring ? paras[1].value : vars[paras[1].value];
@@ -804,6 +807,13 @@ namespace EDDiscovery
         {
             string s = paras[0].isstring ? paras[0].value : vars[paras[0].value];
             output = s.PickOneOfGroups(rnd);
+            return true;
+        }
+
+        private bool SafeVarName( out string output )
+        {
+            string s = paras[0].isstring ? paras[0].value : vars[paras[0].value];
+            output = s.SafeVariableString();
             return true;
         }
 
@@ -1424,6 +1434,31 @@ namespace EDDiscovery
             catch { }
 
             output = "0";
+            return true;
+        }
+
+        private bool SystemPath(out string output)
+        {
+            string id = paras[0].value;
+
+            Environment.SpecialFolder sf;
+
+            if (Enum.TryParse<Environment.SpecialFolder>(id, true, out sf))
+                output = Environment.GetFolderPath(sf);
+            else if (id.Equals("EDDAPPFOLDER", StringComparison.InvariantCultureIgnoreCase))
+                output = EDDConfig.Options.AppDataDirectory;
+            else if (id.Equals("EDDACTIONSFOLDER", StringComparison.InvariantCultureIgnoreCase))
+                output = Path.Combine(EDDConfig.Options.AppDataDirectory, "Actions");
+            else if (id.Equals("EDDVIDEOFOLDER", StringComparison.InvariantCultureIgnoreCase))
+                output = Path.Combine(EDDConfig.Options.AppDataDirectory, "Videos");
+            else if (id.Equals("EDDSOUNDFOLDER", StringComparison.InvariantCultureIgnoreCase))
+                output = Path.Combine(EDDConfig.Options.AppDataDirectory, "Sounds");
+            else
+            {
+                output = "";
+                return false;
+            }
+
             return true;
         }
 

@@ -245,6 +245,7 @@ namespace EDDiscovery
         }
 
         public string EliteInputList() { return inputdevices.ListDevices(); }
+        public string EliteInputCheck() { return inputdevicesactions.CheckBindings(); }
 
         private void EDDiscoveryForm_Layout(object sender, LayoutEventArgs e)       // Manually position, could not get gripper under tab control with it sizing for the life of me
         {
@@ -716,21 +717,6 @@ namespace EDDiscovery
         private void eDDiscoveryHomepageToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Process.Start(Properties.Resources.URLProjectWiki);
-        }
-
-        private void openEliteDangerousDirectoryToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                if (EliteDangerousClass.EDDirectory != null && !EliteDangerousClass.EDDirectory.Equals(""))
-                    Process.Start(EliteDangerousClass.EDDirectory);
-
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Open EliteDangerous directory exception: " + ex.Message);
-            }
-
         }
 
         private void showLogfilesToolStripMenuItem_Click(object sender, EventArgs e)

@@ -43,6 +43,7 @@ namespace EDDiscovery.Audio
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SoundEffectsDialog));
             this.trackBarCDp = new System.Windows.Forms.TrackBar();
             this.trackBarDC = new System.Windows.Forms.TrackBar();
@@ -99,6 +100,7 @@ namespace EDDiscovery.Audio
             this.label23 = new System.Windows.Forms.Label();
             this.label26 = new System.Windows.Forms.Label();
             this.trackBarPitch = new System.Windows.Forms.TrackBar();
+            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.trackBarCDp)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackBarDC)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackBarRH)).BeginInit();
@@ -886,5 +888,6 @@ namespace EDDiscovery.Audio
         private System.Windows.Forms.Label label23;
         private System.Windows.Forms.Label label26;
         private System.Windows.Forms.TrackBar trackBarPitch;
+        private System.Windows.Forms.ToolTip toolTip1;
     }
 }
