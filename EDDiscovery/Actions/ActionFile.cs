@@ -31,26 +31,56 @@ namespace EDDiscovery.Actions
     {
         public ActionFile()
         {
+            filevariables = new ConditionVariables();       // filevariables are only cleared on creation
+            dialogs = new Dictionary<string, Forms.ConfigurableForm>();
+            Clear();
         }
 
-        public ActionFile(ConditionLists c, ActionProgramList p, string f, string n, bool e, ConditionVariables ivar = null)
+        public ActionFile(string f, string n)
         {
-            actionfieldfilter = c;
-            actionprogramlist = p;
-            enabled = e;
+            filevariables = new ConditionVariables();
+            dialogs = new Dictionary<string, Forms.ConfigurableForm>();
+            Clear(f, n);
+        }
+
+        public void Clear(string f="", string n="")         // clear all data read from file
+        {
+            actioneventlist = new ConditionLists();
+            actionprogramlist = new ActionProgramList();
+            enabled = true;
             installationvariables = new ConditionVariables();
             filepath = f;
             name = n;
-            if (ivar != null)
-                installationvariables.Add(ivar);
         }
 
-        public ConditionLists actionfieldfilter;                        // note we use the list, but not the evaluate between conditions..
-        public ActionProgramList actionprogramlist;                     // programs associated with this pack
-        public ConditionVariables installationvariables;                // used to pass to the installer various options, such as disable other packs
-        public string filepath;                                         // where it came from
-        public string name;                                             // its logical name
-        public bool enabled;                                            // if enabled.
+        public ConditionLists actioneventlist { get; private set; }                        // note we use the list, but not the evaluate between conditions..
+        public ActionProgramList actionprogramlist { get; private set;}                    // programs associated with this pack
+        public ConditionVariables installationvariables { get; private set; }              // used to pass to the installer various options, such as disable other packs
+        public ConditionVariables filevariables { get; private set; }                      // variables defined using the static.. private to this program.  Not persistent. 
+        public Dictionary<string, Forms.ConfigurableForm> dialogs;                         // persistent dialogs owned by this file
+        public string filepath { get; private set; }                                       // where it came from
+        public string name { get; private set; }                                           // its logical name
+        public bool enabled { get; private set; }                                          // if enabled.
+
+        public void ChangeEventList(ConditionLists s)
+        {
+            actioneventlist = s;
+        }
+
+        public void ChangeInstallationVariables(ConditionVariables v)
+        {
+            installationvariables = v;
+        }
+
+        public void SetFileVariable(string n, string v)
+        {
+            filevariables[n] = v;
+        }
+
+        public void DeleteFileVariable(string n)
+        {
+            filevariables.Delete(n);
+        }
 
         public string Read(JObject jo , out bool readenable)            // KEEP JSON reader for backwards compatibility.
         {
@@ -61,7 +91,7 @@ namespace EDDiscovery.Actions
             {
                 JArray ivarja = (JArray)jo["Install"];
 
-                if (!JSONHelper.IsNullOrEmptyT(ivarja))
+                if (!ivarja.Empty())
                 {
                     installationvariables.FromJSONObject(ivarja);
                 }
@@ -69,7 +99,7 @@ namespace EDDiscovery.Actions
                 JObject jcond = (JObject)jo["Conditions"];
 
                 if (jcond != null)
-                    actionfieldfilter.FromJSON(jcond);
+                    actioneventlist.FromJSON(jcond);
 
                 JObject jprog = (JObject)jo["Programs"];
 
@@ -107,13 +137,9 @@ namespace EDDiscovery.Actions
 
         public string ReadFile(string filename, out bool readenable)     // string, empty if no errors
         {
-            actionprogramlist = new ActionProgramList();
-            actionfieldfilter = new ConditionLists();
-            installationvariables = new ConditionVariables();
-            enabled = false;
             readenable = false;
-            filepath = filename;
-            name = Path.GetFileNameWithoutExtension(filename);
+
+            Clear(filename, Path.GetFileNameWithoutExtension(filename));
 
             try
             {
@@ -166,24 +192,22 @@ namespace EDDiscovery.Actions
                                 if (err.Length > 0)
                                     return name + " " + err;
 
-                                ap.Name = line.Substring(7).Trim();
-
+                                ap.Rename(line.Substring(7).Trim());        //MUST rename now, after read, as read clears the name expecting PROGRAM
                                 actionprogramlist.Add(ap);
                             }
                             else if (line.StartsWith("INCLUDE", StringComparison.InvariantCultureIgnoreCase))
                             {
-                                ActionProgram ap = new ActionProgram();
-
                                 string incfilename = line.Substring(7).Trim();
                                 if (!incfilename.Contains("/") && !incfilename.Contains("\\"))
                                     incfilename = Path.Combine(Path.GetDirectoryName(filename), incfilename);
+
+                                ActionProgram ap = new ActionProgram("",incfilename);   // NAME will be filled in by PROGRAM statement in file
 
                                 string err = ap.ReadFile(incfilename);
 
                                 if (err.Length > 0)
                                     return name + " " + err;
 
-                                ap.StoredInSubFile = incfilename;       // FULL path note..
                                 actionprogramlist.Add(ap);
                             }
                             else if (line.StartsWith("EVENT", StringComparison.InvariantCultureIgnoreCase))
@@ -195,7 +219,7 @@ namespace EDDiscovery.Actions
                                 else if (c.action.Length == 0 || c.eventname.Length == 0)
                                     return name + " " + lineno + " EVENT Missing event name or action" + Environment.NewLine;
 
-                                actionfieldfilter.Add(c);
+                                actioneventlist.Add(c);
                             }
                             else if (line.StartsWith("INSTALL", StringComparison.InvariantCultureIgnoreCase))
                             {
@@ -222,16 +246,16 @@ namespace EDDiscovery.Actions
                     }
                 }
             }
-            catch
+            catch (Exception e)
             {
-                return filename + " Not readable" + Environment.NewLine;
+                return filename + " Not readable" + Environment.NewLine + " " + e.Message;
             }
         }
 
         public void WriteJSON(StreamWriter sr)          // kept for reference and debugging..  files are now written in ASCII
         {
             JObject jo = new JObject();
-            jo["Conditions"] = actionfieldfilter.GetJSONObject();
+            jo["Conditions"] = actioneventlist.GetJSONObject();
 
             JObject evt = new JObject();
             JArray jf = new JArray();
@@ -271,10 +295,10 @@ namespace EDDiscovery.Actions
                         sr.WriteLine();
                     }
 
-                    if (actionfieldfilter.Count > 0)
+                    if (actioneventlist.Count > 0)
                     {
-                        for (int i = 0; i < actionfieldfilter.Count; i++)
-                            sr.WriteLine("EVENT " + actionfieldfilter.Get(i).ToString(includeaction: true));
+                        for (int i = 0; i < actioneventlist.Count; i++)
+                            sr.WriteLine("EVENT " + actioneventlist.Get(i).ToString(includeaction: true));
 
                         sr.WriteLine();
                     }
@@ -289,9 +313,9 @@ namespace EDDiscovery.Actions
                             sr.WriteLine("// " + f.Name);
                             string evl = "";
 
-                            for (int ic = 0; ic < actionfieldfilter.Count; ic++)
+                            for (int ic = 0; ic < actioneventlist.Count; ic++)
                             {
-                                Condition c = actionfieldfilter.Get(ic);
+                                Condition c = actioneventlist.Get(ic);
                                 if (c.action.Equals(f.Name))
                                 {
                                     string e = c.eventname;
@@ -354,7 +378,7 @@ namespace EDDiscovery.Actions
         }
 
         static public bool SetEnableFlag(string file, bool enable)              // change the enable flag. Read in,write out.
-        {
+        {                                                                       // true if managed to change it..
             try
             {
                 ActionFile f = new ActionFile();

@@ -20,6 +20,92 @@ using System.Text;
 
 namespace EDDiscovery.DB
 {
+    public enum EDGovernment
+    {
+        Unknown = 0,
+        Anarchy = 1,
+        Communism = 2,
+        Confederacy = 3,
+        Corporate = 4,
+        Cooperative = 5,
+        Democracy = 6,
+        Dictatorship,
+        Feudal,
+        Imperial,
+        Patronage,
+        Colony,
+        Prison_Colony,
+        Theocracy,
+        None,
+
+    }
+
+    public enum EDAllegiance
+    {
+        Unknown = 0,
+        Alliance = 1,
+        Anarchy = 2,
+        Empire = 3,
+        Federation = 4,
+        Independent = 5,
+        None = 6,
+    }
+
+    public enum EDState
+    {
+        Unknown = 0,
+        None = 1,
+        Boom,
+        Bust,
+        Civil_Unrest,
+        Civil_War,
+        Expansion,
+        Lockdown,
+        Outbreak,
+        War,
+    }
+
+    public enum EDSecurity
+    {
+        Unknown = 0,
+        Low,
+        Medium,
+        High,
+    }
+
+    public enum EDStationType
+    {
+        Unknown = 0,
+        Civilian_Outpost = 1,
+        Commercial_Outpost = 2,
+        Coriolis_Starport = 3,
+        Industrial_Outpost = 4,
+        Military_Outpost = 5,
+        Mining_Outpost = 6,
+        Ocellus_Starport = 7,
+        Orbis_Starport = 8,
+        Scientific_Outpost = 9,
+        Unsanctioned_Outpost = 10,
+        Unknown_Outpost = 11,
+        Unknown_Starport = 12,
+    }
+
+    public enum EDEconomy
+    {
+        Unknown = 0,
+        Agriculture = 1,
+        Extraction = 2,
+        High_Tech = 3,
+        Industrial = 4,
+        Military = 5,
+        Refinery = 6,
+        Service = 7,
+        Terraforming = 8,
+        Tourism = 9,
+        None = 10,
+
+    }
+
     public interface ISystemBase : IEquatable<ISystemBase>
     {
         long id { get; set; }
@@ -35,8 +121,10 @@ namespace EDDiscovery.DB
         int randomid { get; set; }
     }
 
+
     public interface ISystemEDDB
     {
+
         long id_eddb { get; set; }
         string faction { get; set; }
         long population { get; set; }

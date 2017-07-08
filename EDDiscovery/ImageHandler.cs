@@ -771,10 +771,10 @@ namespace EDDiscovery.ImageHandler
                 if (ss != null)
                 {
                     JObject jo = ss.GetJson();
-                    if (jo["EDDOutputFile"] != null && File.Exists(JSONHelper.GetStringDef(jo["EDDOutputFile"])))
+                    if (jo["EDDOutputFile"] != null && File.Exists(jo["EDDOutputFile"].Str()))
                     {
-                        store_name = JSONHelper.GetStringDef(jo["EDDOutputFile"]);
-                        finalsize = new Point(JSONHelper.GetInt(jo["EDDOutputWidth"]), JSONHelper.GetInt(jo["EDDOutputHeight"]));
+                        store_name = jo["EDDOutputFile"].Str();
+                        finalsize = new Point(jo["EDDOutputWidth"].Int(), jo["EDDOutputHeight"].Int());
                     }
                 }
             }

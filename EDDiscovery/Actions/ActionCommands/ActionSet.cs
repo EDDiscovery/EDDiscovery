@@ -69,25 +69,28 @@ namespace EDDiscovery.Actions
             return ok ? null : "Variable command not in correct format";
         }
 
-    }
 
-    public class ActionSet : ActionSetLetBase
-    {
         ConditionVariables av;
         Dictionary<string, string> operations;
 
-        public override bool ConfigurationMenu(Form parent, EDDiscoveryForm discoveryform, List<string> eventvars)
-        {
-            return base.ConfigurationMenu(parent, discoveryform, eventvars, true, true);
-        }
-
-        public override bool ExecuteAction(ActionProgramRun ap)
+        public bool ExecuteAction(ActionProgramRun ap, bool setit, bool globalit =false, bool persistentit =false, bool staticit = false )
         {
             if (av == null)
                 FromString(userdata, out av, out operations);
 
             foreach (string key in av.NameEnumuerable)
             {
+                string keyname = key;
+
+                if (keyname.Contains("%"))
+                {
+                    if (ap.functions.ExpandString(key, out keyname) == ConditionFunctions.ExpandResult.Failed)
+                    {
+                        ap.ReportError(keyname);
+                        break;
+                    }
+                }
+
                 string res;
 
                 if (operations[key].Contains("$"))
@@ -98,77 +101,47 @@ namespace EDDiscovery.Actions
                     break;
                 }
 
-                if (operations[key].Contains("+") && ap.VarExist(key))
-                    ap[key] += res;
+                if (setit)
+                {
+                    if (operations[key].Contains("+") && ap.VarExist(keyname))
+                        res = ap[keyname] + res;
+                }
                 else
-                    ap[key] = res;
+                {
+                    if (!res.Eval(out res))
+                    {
+                        ap.ReportError("Let " + res);
+                        break;
+                    }
+                }
+
+                //System.Diagnostics.Debug.WriteLine("Var " + keyname + "=" + res + "  :" + globalit + ":" + persistentit);
+                ap[keyname] = res;
+
+                if (globalit)
+                    ap.actioncontroller.SetNonPersistentGlobal(keyname, res);
+
+                if (persistentit )
+                    ap.actioncontroller.SetPeristentGlobal(keyname, res);
+
+                if (staticit )
+                    ap.actionfile.SetFileVariable(keyname, res);
             }
 
             if (av.Count == 0)
-                ap.ReportError("Set no variable name given");
+                ap.ReportError("No variable name given in variable assignment");
 
             return true;
         }
-
     }
 
-    public class ActionLetBase : ActionSetLetBase
+    public class ActionSet : ActionSetLetBase
     {
-        ConditionVariables av;
-        Dictionary<string, string> operations;
-
         public override bool ConfigurationMenu(Form parent, EDDiscoveryForm discoveryform, List<string> eventvars)
         {
-            return base.ConfigurationMenu(parent, discoveryform, eventvars,false, true);
+            return base.ConfigurationMenu(parent, discoveryform, eventvars, true, true);
         }
 
-        public bool ExecuteAction(ActionProgramRun ap, bool global)
-        {
-            if (av == null)
-                FromString(userdata, out av, out operations);
-
-            foreach (string key in av.NameEnumuerable)
-            {
-                string res;
-
-                if (operations[key].Contains("$"))
-                    res = av[key];
-                else if (ap.functions.ExpandString(av[key],out res) == ConditionFunctions.ExpandResult.Failed)
-                {
-                    ap.ReportError(res);
-                    break;
-                }
-
-                string value;
-                if (!res.Eval(out value))
-                {
-                    ap.ReportError("Let " + value);
-                    break;
-                }
-
-                ap[key] = value;
-                if ( global )
-                    ap.actioncontroller.SetNonPersistentGlobal(key, value);
-            }
-
-            if (av.Count == 0)
-                ap.ReportError("Let no variable name given");
-
-            return true;
-        }
-
-    }
-
-    public class ActionLet : ActionLetBase
-    {
-        public override bool ExecuteAction(ActionProgramRun ap)
-        {
-            return ExecuteAction(ap, false);
-        }
-    }
-
-    public class ActionGlobalLet : ActionLetBase
-    {
         public override bool ExecuteAction(ActionProgramRun ap)
         {
             return ExecuteAction(ap, true);
@@ -177,56 +150,6 @@ namespace EDDiscovery.Actions
 
     public class ActionGlobal : ActionSetLetBase
     {
-        ConditionVariables av;
-        Dictionary<string, string> operations;
-
-        public override bool ConfigurationMenu(Form parent, EDDiscoveryForm discoveryform, List<string> eventvars)
-        {
-            return base.ConfigurationMenu(parent, discoveryform, eventvars, true , true);
-        }
-
-        public override bool ExecuteAction(ActionProgramRun ap)
-        {
-            if (av == null)
-                FromString(userdata, out av, out operations);
-
-            foreach (string key in av.NameEnumuerable)
-            {
-                string res;
-
-                if (operations[key].Contains("$"))
-                    res = av[key];
-                else if (ap.functions.ExpandString(av[key],  out res) == ConditionFunctions.ExpandResult.Failed)
-                {
-                    ap.ReportError(res);
-                    break;
-                }
-
-                if (operations[key].Contains("+") && ap.VarExist(key))
-                {
-                    ap[key] += res;
-                    ap.actioncontroller.SetNonPersistentGlobal(key, ap[key]);
-                }
-                else 
-                {
-                    ap[key] = res;
-                    ap.actioncontroller.SetNonPersistentGlobal(key, res);
-                }
-            }
-
-            if (av.Count == 0)
-                ap.ReportError("Global no variable name given");
-
-            return true;
-        }
-
-    }
-
-    public class ActionPersistentGlobal : ActionSetLetBase
-    {
-        ConditionVariables av;
-        Dictionary<string, string> operations;
-
         public override bool ConfigurationMenu(Form parent, EDDiscoveryForm discoveryform, List<string> eventvars)
         {
             return base.ConfigurationMenu(parent, discoveryform, eventvars, true, true);
@@ -234,39 +157,60 @@ namespace EDDiscovery.Actions
 
         public override bool ExecuteAction(ActionProgramRun ap)
         {
-            if (av == null)
-                FromString(userdata, out av, out operations);
+            return ExecuteAction(ap, true, globalit:true);
+        }
+    }
 
-            foreach (string key in av.NameEnumuerable)
-            {
-                string res;
-
-                if (operations[key].Contains("$"))
-                    res = av[key];
-                else if (ap.functions.ExpandString(av[key],  out res) == ConditionFunctions.ExpandResult.Failed)       //Expand out.. and if no errors
-                {
-                    ap.ReportError(res);
-                    break;
-                }
-
-                if (operations[key].Contains("+") && ap.VarExist(key))
-                {
-                    ap[key] += res;
-                    ap.actioncontroller.SetPeristentGlobal(key, ap[key]);
-                }
-                else
-                {
-                    ap[key] = res;
-                    ap.actioncontroller.SetPeristentGlobal(key, res);
-                }
-            }
-
-            if (av.Count == 0)
-                ap.ReportError("PersistentGlobal no variable name given");
-
-            return true;
+    public class ActionLet : ActionSetLetBase
+    {
+        public override bool ConfigurationMenu(Form parent, EDDiscoveryForm discoveryform, List<string> eventvars)
+        {
+            return base.ConfigurationMenu(parent, discoveryform, eventvars, false, true);
         }
 
+        public override bool ExecuteAction(ActionProgramRun ap)
+        {
+            return ExecuteAction(ap, false);
+        }
+    }
+
+    public class ActionGlobalLet : ActionSetLetBase
+    {
+        public override bool ConfigurationMenu(Form parent, EDDiscoveryForm discoveryform, List<string> eventvars)
+        {
+            return base.ConfigurationMenu(parent, discoveryform, eventvars, false, true);
+        }
+
+        public override bool ExecuteAction(ActionProgramRun ap)
+        {
+            return ExecuteAction(ap, false, globalit:true);
+        }
+    }
+
+    public class ActionPersistentGlobal : ActionSetLetBase
+    {
+        public override bool ConfigurationMenu(Form parent, EDDiscoveryForm discoveryform, List<string> eventvars)
+        {
+            return base.ConfigurationMenu(parent, discoveryform, eventvars, true, true);
+        }
+
+        public override bool ExecuteAction(ActionProgramRun ap)
+        {
+            return ExecuteAction(ap, true, persistentit: true);
+        }
+    }
+
+    public class ActionStatic : ActionSetLetBase
+    {
+        public override bool ConfigurationMenu(Form parent, EDDiscoveryForm discoveryform, List<string> eventvars)
+        {
+            return base.ConfigurationMenu(parent, discoveryform, eventvars, true, true);
+        }
+
+        public override bool ExecuteAction(ActionProgramRun ap)
+        {
+            return ExecuteAction(ap, true, staticit: true);
+        }
     }
 
     public class ActionDeleteVariable: Action
@@ -295,6 +239,7 @@ namespace EDDiscovery.Actions
                 while ((v = p.NextWord(", ")) != null)
                 {
                     ap.actioncontroller.DeleteVariable(v);
+                    ap.actionfile.DeleteFileVariable(v);
                     ap.DeleteVar(v);
                     p.IsCharMoveOn(',');
                 }

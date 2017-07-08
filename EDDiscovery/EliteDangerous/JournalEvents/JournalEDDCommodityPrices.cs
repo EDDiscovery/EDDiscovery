@@ -31,7 +31,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             Commodities = new List<CCommodities>();
 
             JArray jcommodities=null;
-            if (!JSONHelper.IsNullOrEmptyT(evt["commodities"]))
+            if (!evt["commodities"].Empty())
                 jcommodities = (JArray)evt["commodities"];
 
             if (jcommodities != null)
@@ -119,16 +119,16 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         {
             try
             {
-                id = JSONHelper.GetInt(jo["id"]);
-                name = JSONHelper.GetStringDef(jo["name"]);
-                buyPrice = JSONHelper.GetInt(jo["buyPrice"]);
-                sellPrice = JSONHelper.GetInt(jo["sellPrice"]);
-                meanPrice = JSONHelper.GetInt(jo["meanPrice"]);
-                demandBracket = JSONHelper.GetInt(jo["demandBracket"]);
-                stockBracket = JSONHelper.GetInt(jo["stockBracket"]);
-                stock = JSONHelper.GetInt(jo["stock"]);
-                demand = JSONHelper.GetInt(jo["demand"]);
-                type = JSONHelper.GetStringDef(jo["categoryname"]);
+                id = jo["id"].Int();
+                name = jo["name"].Str();
+                buyPrice = jo["buyPrice"].Int();
+                sellPrice = jo["sellPrice"].Int();
+                meanPrice = jo["meanPrice"].Int();
+                demandBracket = jo["demandBracket"].Int();
+                stockBracket = jo["stockBracket"].Int();
+                stock = jo["stock"].Int();
+                demand = jo["demand"].Int();
+                type = jo["categoryname"].Str();
 
                 List<string> StatusFlags = new List<string>();
                 foreach (dynamic statusFlag in jo["statusFlags"])

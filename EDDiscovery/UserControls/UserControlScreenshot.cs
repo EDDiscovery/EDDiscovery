@@ -74,16 +74,16 @@ namespace EDDiscovery.UserControls
                     JournalScreenshot ss = (JournalScreenshot)he.journalEntry;
 
                     JObject jo = ss.GetJson();
-                    if (jo["EDDOutputFile"] != null && File.Exists(JSONHelper.GetStringDef(jo["EDDOutputFile"])))
+                    if (jo["EDDOutputFile"] != null && File.Exists(jo["EDDOutputFile"].Str()))
                     {
-                        string store_name = JSONHelper.GetStringDef(jo["EDDOutputFile"]);
-                        Point size = new Point(JSONHelper.GetInt(jo["EDDOutputWidth"]), JSONHelper.GetInt(jo["EDDOutputHeight"]));
+                        string store_name = jo["EDDOutputFile"].Str();
+                        Point size = new Point(jo["EDDOutputWidth"].Int(), jo["EDDOutputHeight"].Int());
 
                         ScreenShot(store_name, size);
                     }
-                    else if (jo["EDDInputFile"] != null && File.Exists(JSONHelper.GetStringDef(jo["EDDInputFile"])))
+                    else if (jo["EDDInputFile"] != null && File.Exists(jo["EDDInputFile"].Str()))
                     {
-                        string filename = JSONHelper.GetStringDef(jo["EDDInputFile"]);
+                        string filename = jo["EDDInputFile"].Str();
                         ScreenShot(filename, new Point(ss.Width, ss.Height));
                     }
                     else

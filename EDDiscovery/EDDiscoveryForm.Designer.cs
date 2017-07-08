@@ -61,7 +61,6 @@ namespace EDDiscovery
             this.forceEDDBUpdateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.syncEDSMSystemsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.showLogfilesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.openEliteDangerousDirectoryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.dEBUGResetAllHistoryToFirstCommandeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.read21AndFormerLogFilesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.read21AndFormerLogFiles_forceReloadLogsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -72,6 +71,7 @@ namespace EDDiscovery
             this.addOnsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.manageAddOnsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.configureAddOnActionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.editLastActionPackToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.stopCurrentlyRunningActionProgramToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -116,7 +116,6 @@ namespace EDDiscovery
             this.notifyIconMenu_Open = new System.Windows.Forms.ToolStripMenuItem();
             this.notifyIconMenu_Hide = new System.Windows.Forms.ToolStripMenuItem();
             this.notifyIconMenu_Exit = new System.Windows.Forms.ToolStripMenuItem();
-            this.editLastActionPackToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.panelInfo.SuspendLayout();
             this.tabControl1.SuspendLayout();
@@ -240,7 +239,6 @@ namespace EDDiscovery
             this.forceEDDBUpdateToolStripMenuItem,
             this.syncEDSMSystemsToolStripMenuItem,
             this.showLogfilesToolStripMenuItem,
-            this.openEliteDangerousDirectoryToolStripMenuItem,
             this.dEBUGResetAllHistoryToFirstCommandeToolStripMenuItem,
             this.read21AndFormerLogFilesToolStripMenuItem,
             this.rescanAllJournalFilesToolStripMenuItem,
@@ -271,13 +269,6 @@ namespace EDDiscovery
             this.showLogfilesToolStripMenuItem.Size = new System.Drawing.Size(396, 22);
             this.showLogfilesToolStripMenuItem.Text = "Show journal files directory of current commander";
             this.showLogfilesToolStripMenuItem.Click += new System.EventHandler(this.showLogfilesToolStripMenuItem_Click);
-            // 
-            // openEliteDangerousDirectoryToolStripMenuItem
-            // 
-            this.openEliteDangerousDirectoryToolStripMenuItem.Name = "openEliteDangerousDirectoryToolStripMenuItem";
-            this.openEliteDangerousDirectoryToolStripMenuItem.Size = new System.Drawing.Size(396, 22);
-            this.openEliteDangerousDirectoryToolStripMenuItem.Text = "Show Elite Dangerous directory";
-            this.openEliteDangerousDirectoryToolStripMenuItem.Click += new System.EventHandler(this.openEliteDangerousDirectoryToolStripMenuItem_Click);
             // 
             // dEBUGResetAllHistoryToFirstCommandeToolStripMenuItem
             // 
@@ -356,6 +347,14 @@ namespace EDDiscovery
             this.configureAddOnActionsToolStripMenuItem.Size = new System.Drawing.Size(280, 22);
             this.configureAddOnActionsToolStripMenuItem.Text = "&Edit Add-On Action Files";
             this.configureAddOnActionsToolStripMenuItem.Click += new System.EventHandler(this.configureAddOnActionsToolStripMenuItem_Click);
+            // 
+            // editLastActionPackToolStripMenuItem
+            // 
+            this.editLastActionPackToolStripMenuItem.Image = global::EDDiscovery.Properties.Resources.Log;
+            this.editLastActionPackToolStripMenuItem.Name = "editLastActionPackToolStripMenuItem";
+            this.editLastActionPackToolStripMenuItem.Size = new System.Drawing.Size(280, 22);
+            this.editLastActionPackToolStripMenuItem.Text = "Edit Last Action Pack";
+            this.editLastActionPackToolStripMenuItem.Click += new System.EventHandler(this.editLastActionPackToolStripMenuItem_Click);
             // 
             // stopCurrentlyRunningActionProgramToolStripMenuItem
             // 
@@ -791,14 +790,6 @@ namespace EDDiscovery
             this.notifyIconMenu_Exit.Text = "E&xit";
             this.notifyIconMenu_Exit.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
-            // editLastActionPackToolStripMenuItem
-            // 
-            this.editLastActionPackToolStripMenuItem.Image = global::EDDiscovery.Properties.Resources.Log;
-            this.editLastActionPackToolStripMenuItem.Name = "editLastActionPackToolStripMenuItem";
-            this.editLastActionPackToolStripMenuItem.Size = new System.Drawing.Size(280, 22);
-            this.editLastActionPackToolStripMenuItem.Text = "Edit Last Action Pack";
-            this.editLastActionPackToolStripMenuItem.Click += new System.EventHandler(this.editLastActionPackToolStripMenuItem_Click);
-            // 
             // EDDiscoveryForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -894,7 +885,6 @@ namespace EDDiscovery
         private JournalViewControl journalViewControl1;
         private System.Windows.Forms.ToolStripMenuItem read21AndFormerLogFilesToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem showLogfilesToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem openEliteDangerousDirectoryToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem read21AndFormerLogFiles_forceReloadLogsToolStripMenuItem;
         private System.Windows.Forms.TabPage tabPageExport;
         private EDDiscovery.Export.ExportControl exportControl1;

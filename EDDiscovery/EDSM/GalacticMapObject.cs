@@ -44,14 +44,14 @@ namespace EDDiscovery.EDSM
 
         public GalacticMapObject(JObject jo)
         {
-            id = JSONHelper.GetInt(jo["id"]);
-            type = JSONHelper.GetStringDef(jo["type"],"Not Set");
-            name = JSONHelper.GetStringDef(jo["name"],"No name set");
-            galMapSearch = JSONHelper.GetStringDef(jo["galMapSearch"],"");
-            galMapUrl = JSONHelper.GetStringDef(jo["galMapUrl"],"");
-            colour = JSONHelper.GetStringDef(jo["color"],"Orange");
-            description = JSONHelper.GetStringDef(jo["descriptionMardown"],"No description");
-            descriptionhtml = JSONHelper.GetStringDef(jo["descriptionHtml"],"");
+            id = jo["id"].Int();
+            type = jo["type"].Str("Not Set");
+            name = jo["name"].Str("No name set");
+            galMapSearch = jo["galMapSearch"].Str("");
+            galMapUrl = jo["galMapUrl"].Str("");
+            colour = jo["color"].Str("Orange");
+            description = jo["descriptionMardown"].Str("No description");
+            descriptionhtml = jo["descriptionHtml"].Str("");
             
             points = new List<Vector3>();
 
