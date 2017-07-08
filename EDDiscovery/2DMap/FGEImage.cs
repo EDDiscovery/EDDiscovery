@@ -314,17 +314,17 @@ namespace EDDiscovery
                         else
                             fgeimg = new FGEImage(fi.FullName.Replace(".json", ".jpg"));
 
-                        fgeimg.TopLeft = new Point(JSONHelper.GetInt(pfile["x1"], 0), JSONHelper.GetInt(pfile["y1"], 0));
-                        fgeimg.pxTopLeft = new Point(JSONHelper.GetInt(pfile["px1"], 0), JSONHelper.GetInt(pfile["py1"], 0));
+                        fgeimg.TopLeft = new Point(pfile["x1"].Int(), pfile["y1"].Int());
+                        fgeimg.pxTopLeft = new Point(pfile["px1"].Int(), pfile["py1"].Int());
 
-                        fgeimg.TopRight = new Point(JSONHelper.GetInt(pfile["x2"], 0), JSONHelper.GetInt(pfile["y1"], 0));
-                        fgeimg.pxTopRight = new Point(JSONHelper.GetInt(pfile["px2"], 0), JSONHelper.GetInt(pfile["py1"], 0));
+                        fgeimg.TopRight = new Point(pfile["x2"].Int(), pfile["y1"].Int());
+                        fgeimg.pxTopRight = new Point(pfile["px2"].Int(), pfile["py1"].Int());
 
-                        fgeimg.BottomLeft = new Point(JSONHelper.GetInt(pfile["x1"], 0), JSONHelper.GetInt(pfile["y2"], 0));
-                        fgeimg.pxBottomLeft = new Point(JSONHelper.GetInt(pfile["px1"], 0), JSONHelper.GetInt(pfile["py2"], 0));
+                        fgeimg.BottomLeft = new Point(pfile["x1"].Int(), pfile["y2"].Int());
+                        fgeimg.pxBottomLeft = new Point(pfile["px1"].Int(), pfile["py2"].Int());
 
-                        fgeimg.BottomRight = new Point(JSONHelper.GetInt(pfile["x2"], 0), JSONHelper.GetInt(pfile["y2"], 0));
-                        fgeimg.pxBottomRight = new Point(JSONHelper.GetInt(pfile["px2"], 0), JSONHelper.GetInt(pfile["py2"], 0));
+                        fgeimg.BottomRight = new Point(pfile["x2"].Int(), pfile["y2"].Int());
+                        fgeimg.pxBottomRight = new Point(pfile["px2"].Int(), pfile["py2"].Int());
 
                         fgeimg.Area = (double)(fgeimg.TopRight.X - fgeimg.TopLeft.X) * (double)(fgeimg.TopLeft.Y - fgeimg.BottomRight.Y);
                         //Console.WriteLine("img {0} {1}", fgeimg.FileName, fgeimg.Area);

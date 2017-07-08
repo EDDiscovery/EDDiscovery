@@ -27,12 +27,12 @@ namespace EDDiscovery.Audio
         public delegate void SampleOver(AudioQueue sender, Object tag);
 
         public enum Priority { Low, Normal, High };
-        static public Priority GetPriority(string s) { Priority p; if (Enum.TryParse<AudioQueue.Priority>(s, out p)) return p; else return Priority.Normal; }
+        static public Priority GetPriority(string s) { Priority p; if (Enum.TryParse<AudioQueue.Priority>(s, true, out p)) return p; else return Priority.Normal; }
 
         public class AudioSample
         {
-            public System.IO.Stream ms;
-            public Object audiodata;            // held as an object.. driver specific format
+            public List<System.IO.Stream> handlelist = new List<System.IO.Stream>();   // audio samples held in files to free
+            public AudioData audiodata;         // the audio data, in the driver format
             public int volume;                  // 0-100
             public Priority priority;           // audio priority
 
@@ -54,6 +54,13 @@ namespace EDDiscovery.Audio
                     sampleOverEvent(q, sampleOverTag);
             }
 
+            public void FreeHandles()
+            {
+                foreach (System.IO.Stream i in handlelist)
+                    i.Dispose();
+                handlelist.Clear();
+            }
+
             public AudioSample linkeds;             // link to another queue. if set, we halt the queue if thissample is not t at the top of the list
             public AudioQueue linkedq;              // of the other queue, then release them to play together.
         }
@@ -68,7 +75,7 @@ namespace EDDiscovery.Audio
             audioqueue = new List<AudioSample>();
         }
 
-        public IAudioDriver Driver { get { return ad; } }           // be careful! go thru this class to change anything
+        public IAudioDriver Driver { get { return ad; } }       // gets driver associated with this queue
 
         public bool SetAudioEndpoint( string dev )
         {
@@ -78,29 +85,32 @@ namespace EDDiscovery.Audio
             return res;
         }
 
-        public void Clear()
+        public void Clear()     // clear queue, does not call the end functions
         {
             foreach( AudioSample a in audioqueue )
             {
-                a.SampleOver(this);     // let callers know a sample is over
-                ad.Dispose(a.audiodata);        // tell the driver to clean up
-                a.ms?.Dispose();            // clean any stream
+                Clear(a,false);
             }
 
             audioqueue.Clear();
         }
 
-        private void AudioStoppedEvent()
+        private void Clear(AudioSample a , bool callback )
+        {
+            if ( callback )
+                a.SampleOver(this);     // let callers know a sample is over
+
+            a.FreeHandles();
+            ad.Dispose(a.audiodata);        // tell the driver to clean up
+        }
+
+        private void AudioStoppedEvent()            //CScore calls then when audio over.
         {
             //System.Diagnostics.Debug.WriteLine((Environment.TickCount % 10000).ToString("00000") + " Stopped audio");
 
             if (audioqueue.Count > 0) // Normally always have an entry, except on Kill , where queue is gone
             {
-                audioqueue[0].SampleOver(this);     // let callers know a sample is over
-
-                ad.Dispose(audioqueue[0].audiodata);        // tell the driver to clean up
-                audioqueue[0].ms?.Dispose();        // clean stream
-
+                Clear(audioqueue[0],true);
                 audioqueue.RemoveAt(0);
             }
 
@@ -112,6 +122,8 @@ namespace EDDiscovery.Audio
         {
             if (newdata != null)
             {
+                System.Diagnostics.Debug.WriteLine("Play " + ad.Lengthms(newdata.audiodata) + " in queue " + InQueuems());
+
                 if ( audioqueue.Count > 0 && p > audioqueue[0].priority )       // if something is playing, and we have priority..
                 {
                     //System.Diagnostics.Debug.WriteLine((Environment.TickCount % 10000).ToString("00000") + " Priority insert " + p + " front " + audioqueue[0].priority);
@@ -126,9 +138,7 @@ namespace EDDiscovery.Audio
                         }
                         foreach (AudioSample a in remove)
                         {
-                            audioqueue.Remove(a);
-                            ad.Dispose(a.audiodata);        // tell the driver to clean up
-                            a.ms?.Dispose();        // dispose of ms handle
+                            Clear(a,false);
                         }
                     }
 
@@ -167,13 +177,24 @@ namespace EDDiscovery.Audio
             }
         }
 
+        public int InQueuems()       // Length of sound in queue.. does not take account of priority.
+        {
+            int len = 0;
+            if (audioqueue.Count > 0)
+                len = ad.TimeLeftms(audioqueue[0].audiodata);
+
+            for (int i = 1; i < audioqueue.Count; i++)
+                len += ad.Lengthms(audioqueue[i].audiodata);
+            return len;
+        }
+
         public AudioSample Generate(string file, ConditionVariables effects = null)        // from a file (you get a AS back so you have the chance to add events)
         {
-            Object audio = ad.Generate(file, effects);
+            AudioData audio = ad.Generate(file, effects);
 
             if (audio != null)
             {
-                AudioSample a = new AudioSample() { ms = null, audiodata = audio };
+                AudioSample a = new AudioSample() { audiodata = audio };
                 return a;
             }
             else
@@ -184,15 +205,46 @@ namespace EDDiscovery.Audio
         {
             if (audioms != null)
             {
-                Object audio = ad.Generate(audioms, effects, ensuresomeaudio);
+                AudioData audio = ad.Generate(audioms, effects, ensuresomeaudio);
                 if (audio != null)
                 {
-                    AudioSample a = new AudioSample() { ms = audioms, audiodata = audio };
+                    AudioSample a = new AudioSample() { audiodata = audio };
+                    a.handlelist.Add(audioms);
                     return a;
                 }
             }
 
             return null;
+        }
+
+        public AudioSample Append(AudioSample last, AudioSample next)
+        {
+            AudioData audio = ad.Append(last.audiodata, next.audiodata);
+
+            if (audio != null)
+            {
+                last.audiodata = audio;
+                last.handlelist.AddRange(next.handlelist);
+                next.handlelist.Clear();
+                return last;
+            }
+            else
+                return null;
+        }
+
+        public AudioSample Mix(AudioSample last, AudioSample mix)
+        {
+            AudioData audio = ad.Mix(last.audiodata, mix.audiodata);
+
+            if (audio != null)
+            {
+                last.audiodata = audio;
+                last.handlelist.AddRange(mix.handlelist);
+                mix.handlelist.Clear();
+                return last;
+            }
+            else
+                return null;
         }
 
         public void Submit(AudioSample s, int vol, Priority p)       // submit to queue

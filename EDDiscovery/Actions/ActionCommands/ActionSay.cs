@@ -44,6 +44,8 @@ namespace EDDiscovery.Actions
         static string dontspeakname = "DontSpeak";
         static string prefixsound = "PrefixSound";
         static string postfixsound = "PostfixSound";
+        static string mixsound = "MixSound";
+        static string queuelimit = "QueueLimit";
 
         public bool FromString(string s, out string saying, out ConditionVariables vars)
         {
@@ -144,9 +146,9 @@ namespace EDDiscovery.Actions
                 {
                     bool wait = vars.GetInt(waitname, 0) != 0;
                     Audio.AudioQueue.Priority priority = Audio.AudioQueue.GetPriority(vars.GetString(priorityname, "Normal"));
-                    string start = vars.GetString(startname);
-                    string finish = vars.GetString(finishname);
-                    string voice = vars.Exists(voicename) ? vars[voicename] : (ap.VarExist(globalvarspeechvoice) ? ap[globalvarspeechvoice] : "Default");
+                    string start = vars.GetString(startname, checklen: true);
+                    string finish = vars.GetString(finishname, checklen: true);
+                    string voice = (vars.Exists(voicename) && vars[voicename].Length>0)? vars[voicename] : (ap.VarExist(globalvarspeechvoice) ? ap[globalvarspeechvoice] : "Default");
 
                     int vol = vars.GetInt(volumename, -999);
                     if (vol == -999)
@@ -156,22 +158,34 @@ namespace EDDiscovery.Actions
                     if (rate == -999)
                         rate = ap.variables.GetInt(globalvarspeechrate, 0);
 
-                    string culture = vars.Exists(culturename) ? vars[culturename] : (ap.VarExist(globalvarspeechculture) ? ap[globalvarspeechculture] : "Default");
+                    int queuelimitms = vars.GetInt(queuelimit, 0);
+
+                    string culture = ( vars.Exists(culturename) && vars[culturename].Length>0 ) ? vars[culturename] : (ap.VarExist(globalvarspeechculture) ? ap[globalvarspeechculture] : "Default");
 
                     bool literal = vars.GetInt(literalname, 0) != 0;
                     bool dontspeak = vars.GetInt(dontspeakname, 0) != 0;
 
-                    string prefixsoundpath = vars.GetString(prefixsound);
-                    string postfixsoundpath = vars.GetString(postfixsound);
-
-                    //TBD .. add in ability to get file from actions folder without knowing the path..
-
+                    string prefixsoundpath = vars.GetString(prefixsound, checklen: true);
+                    string postfixsoundpath = vars.GetString(postfixsound, checklen: true);
+                    string mixsoundpath = vars.GetString(mixsound, checklen: true);
 
                     Audio.SoundEffectSettings ses = new Audio.SoundEffectSettings(vars);        // use the rest of the vars to place effects
 
                     if (!ses.Any && !ses.OverrideNone && ap.VarExist(globalvarspeecheffects))  // if can't see any, and override none if off, and we have a global, use that
                     {
                         vars = new ConditionVariables(ap[globalvarspeecheffects], ConditionVariables.FromMode.MultiEntryComma);
+                    }
+
+                    if (queuelimitms > 0)
+                    {
+                        int queue = ap.actioncontroller.DiscoveryForm.AudioQueueSpeech.InQueuems();
+
+                        if (queue >= queuelimitms)
+                        {
+                            ap["SaySaid"] = "!LIMIT";
+                            System.Diagnostics.Debug.WriteLine("Abort say due to queue being at " + queue);
+                            return true;
+                        }
                     }
 
                     string expsay;
@@ -188,6 +202,7 @@ namespace EDDiscovery.Actions
                             expsay = "";
                         }
 
+
                         if (dontspeak)
                             expsay = "";
 
@@ -195,61 +210,66 @@ namespace EDDiscovery.Actions
 
                         if (ms != null)
                         {
-                            Audio.AudioQueue.AudioSample prefixaudio = null;
+                            Audio.AudioQueue.AudioSample audio = ap.actioncontroller.DiscoveryForm.AudioQueueSpeech.Generate(ms, vars, true);
 
-                            if (prefixsoundpath != null)
-                            {
-                                prefixaudio = ap.actioncontroller.DiscoveryForm.AudioQueueWave.Generate(prefixsoundpath, new ConditionVariables());
-
-                                if (prefixaudio == null)
-                                {
-                                    ap.ReportError("Say could not create prefix audio, check audio file format is supported and effects settings");
-                                    return true;
-                                }
-                            }
-
-                            Audio.AudioQueue.AudioSample speechaudio = ap.actioncontroller.DiscoveryForm.AudioQueueSpeech.Generate(ms, vars, true);
-
-                            if (speechaudio == null)
+                            if (audio == null)
                             {
                                 ap.ReportError("Say could not create audio, check Effects settings");
                                 return true;
                             }
 
-                            Audio.AudioQueue.AudioSample postfixaudio = null;
+                            if (mixsoundpath != null)
+                            {
+                                Audio.AudioQueue.AudioSample mix = ap.actioncontroller.DiscoveryForm.AudioQueueSpeech.Generate(mixsoundpath, new ConditionVariables());
+
+                                if (audio == null)
+                                {
+                                    ap.ReportError("Say could not create mix audio, check audio file format is supported and effects settings");
+                                    return true;
+                                }
+
+                                audio = ap.actioncontroller.DiscoveryForm.AudioQueueSpeech.Mix(audio, mix);     // audio in MIX format
+                            }
+
+                            if (prefixsoundpath != null)
+                            {
+                                Audio.AudioQueue.AudioSample p = ap.actioncontroller.DiscoveryForm.AudioQueueSpeech.Generate(prefixsoundpath, new ConditionVariables());
+
+                                if ( p == null)
+                                {
+                                    ap.ReportError("Say could not create prefix audio, check audio file format is supported and effects settings");
+                                    return true;
+                                }
+
+                                audio = ap.actioncontroller.DiscoveryForm.AudioQueueSpeech.Append(p, audio);        // audio in AUDIO format.
+                            }
 
                             if (postfixsoundpath != null)
                             {
-                                postfixaudio = ap.actioncontroller.DiscoveryForm.AudioQueueWave.Generate(postfixsoundpath, new ConditionVariables());
+                                Audio.AudioQueue.AudioSample p = ap.actioncontroller.DiscoveryForm.AudioQueueSpeech.Generate(postfixsoundpath, new ConditionVariables());
 
-                                if (postfixaudio == null)
+                                if (p == null)
                                 {
                                     ap.ReportError("Say could not create postfix audio, check audio file format is supported and effects settings");
                                     return true;
                                 }
+
+                                audio = ap.actioncontroller.DiscoveryForm.AudioQueueSpeech.Append(audio,p);         // Audio in P format
                             }
 
-                            if (start != null && start.Length > 0)
+                            if (start != null )
                             {
-                                Audio.AudioQueue.AudioSample audioatstart = (prefixaudio != null) ? prefixaudio : speechaudio;
-                                audioatstart.sampleStartTag = new AudioEvent { apr = ap, eventname = start, triggername = "onSayStarted" };
-                                audioatstart.sampleStartEvent += Audio_sampleEvent;
+                                audio.sampleStartTag = new AudioEvent { apr = ap, eventname = start, triggername = "onSayStarted" };
+                                audio.sampleStartEvent += Audio_sampleEvent;
                             }
 
-                            if (wait || (finish != null && finish.Length > 0))       // if waiting, or finish call
+                            if (wait || finish != null )       // if waiting, or finish call
                             {
-                                Audio.AudioQueue.AudioSample audioatend = (postfixaudio != null) ? postfixaudio : speechaudio;
-                                audioatend.sampleOverTag = new AudioEvent() { apr = ap, wait = wait, eventname = finish, triggername = "onSayFinished" };
-                                audioatend.sampleOverEvent += Audio_sampleEvent;
+                                audio.sampleOverTag = new AudioEvent() { apr = ap, wait = wait, eventname = finish, triggername = "onSayFinished" };
+                                audio.sampleOverEvent += Audio_sampleEvent;
                             }
 
-                            if (prefixaudio != null)
-                                ap.actioncontroller.DiscoveryForm.AudioQueueSpeech.Submit(prefixaudio, vol, priority);
-
-                            ap.actioncontroller.DiscoveryForm.AudioQueueSpeech.Submit(speechaudio, vol, priority);
-
-                            if (postfixaudio != null)
-                                ap.actioncontroller.DiscoveryForm.AudioQueueSpeech.Submit(postfixaudio, vol, priority);
+                            ap.actioncontroller.DiscoveryForm.AudioQueueSpeech.Submit(audio, vol, priority);
 
                             return !wait;       //False if wait, meaning terminate and wait for it to complete, true otherwise, continue
                         }

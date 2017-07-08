@@ -31,12 +31,12 @@ namespace EDDiscovery.HTTP
             this.jo = jo;
         }
 
-        public string Name { get { return JSONHelper.GetStringDef(jo["name"]); } }
+        public string Name { get { return jo["name"].Str(); } }
 
        
-        public string DownloadURL { get { return JSONHelper.GetStringDef(jo["download_url"]); } }
-        public int Size { get { return JSONHelper.GetInt(jo["size"]); } }
+        public string DownloadURL { get { return jo["download_url"].Str(); } }
+        public int Size { get { return jo["size"].Int(); } }
 
-        public string sha { get { return JSONHelper.GetStringDef(jo["sha"]); } }
+        public string sha { get { return jo["sha"].Str(); } }
     }
 }

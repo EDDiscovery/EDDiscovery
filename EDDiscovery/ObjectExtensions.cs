@@ -157,6 +157,19 @@ public static class JSONObjectExtensions
         return def;
     }
 
+    public static void Rename(this JToken token, string newName)
+    {
+        if (token == null)
+            return;
+
+        var parent = token.Parent;
+        if (parent == null)
+            throw new InvalidOperationException("The parent is missing.");
+        var newToken = new JProperty(newName, token);
+        parent.Replace(newToken);
+    }
+
+
 }
 
 public static class ObjectExtensionsStrings
@@ -198,6 +211,20 @@ public static class ObjectExtensionsStrings
             obj = "\"" + obj.Replace("\"", "\\\"") + "\"";
 
         return obj;
+    }
+
+    public static string QuoteStrings(this string[] obja)
+    {
+        string res = "";
+        foreach (string obj in obja)
+        {
+            if (res.Length > 0)
+                res += ",";
+
+            res += "\"" + obj.Replace("\"", "\\\"") + "\"";
+        }
+
+        return res;
     }
 
     public static string EscapeControlChars(this string obj)
@@ -582,6 +609,19 @@ public static class ObjectExtensionsStrings
         return inquote;
     }
 
+    public static string SafeVariableString(this string normal)
+    {
+        string ret = "";
+        foreach (char c in normal)
+        {
+            if (char.IsLetterOrDigit(c) || c == '_')
+                ret += c;
+            else
+                ret += "_";
+        }
+        return ret;
+    }
+
     public static string SafeFileString(this string normal)
     {
         normal = normal.Replace("*", "_star");
@@ -715,6 +755,28 @@ public static class ObjectExtensionsNumbersBool
             return i;
         else
             return null;
+    }
+
+    static public int? InvariantParseIntNullOffset(this string s, int offset)     // s can be null, can have a +/- in front indicating offset
+    {
+        int i;
+        if (s != null)
+        {
+            char first = s[0];
+            if (first == '-' || first == '+')
+                s = s.Substring(1);
+
+            if (int.TryParse(s, System.Globalization.NumberStyles.Integer, System.Globalization.CultureInfo.InvariantCulture, out i))
+            {
+                if (first == '-')
+                    i = offset - i;
+                else if (first == '+')
+                    i = offset + i;
+
+                return i;
+            }
+        }
+        return null;
     }
 
     static public bool InvariantParse(this string s, out double i)

@@ -1,5 +1,7 @@
-﻿using System;
+﻿using EDDiscovery.Win32Constants;
+using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -148,7 +150,7 @@ namespace EDDiscovery.Forms
             public string comboboxitems;
         }
 
-        static public string MakeEntry(string instr , out Entry entry )
+        static public string MakeEntry(string instr , out Entry entry , ref System.Drawing.Point lastpos )
         {
             entry = null;
 
@@ -183,8 +185,8 @@ namespace EDDiscovery.Forms
             if (text == null)
                 return "Missing text";
 
-            int? x = sp.NextWordComma().InvariantParseIntNull();
-            int? y = sp.NextWordComma().InvariantParseIntNull();
+            int? x = sp.NextWordComma().InvariantParseIntNullOffset(lastpos.X);
+            int? y = sp.NextWordComma().InvariantParseIntNullOffset(lastpos.Y);
             int? w = sp.NextWordComma().InvariantParseIntNull();
             int? h = sp.NextWordComma().InvariantParseIntNull();
 
@@ -215,10 +217,11 @@ namespace EDDiscovery.Forms
                     return "Missing paramters for combobox";
             }
 
+            lastpos = new System.Drawing.Point(x.Value, y.Value);
             return null;
         }
 
-        public void Show(Form p, string lname, System.Drawing.Size size, string caption, Entry[] e, Object t)
+        public void Show(Form p, string lname, System.Drawing.Size size, System.Drawing.Point pos, string caption, Entry[] e, Object t)
         {
             logicalname = lname;    // passed back to caller via trigger
             entries = e;
@@ -226,14 +229,25 @@ namespace EDDiscovery.Forms
 
             EDDiscovery.EDDTheme theme = EDDiscovery.EDDTheme.Instance;
 
-            Size = size;
             FormBorderStyle = FormBorderStyle.FixedDialog;
-            StartPosition = FormStartPosition.CenterScreen;
+
+            Size = size;
+
+            if ( pos.X==-999)
+                StartPosition = FormStartPosition.CenterScreen;
+            else
+            {
+                Location = pos;
+                StartPosition = FormStartPosition.Manual;
+            }
 
             Panel outer = new Panel() { Dock = DockStyle.Fill, BorderStyle = BorderStyle.FixedSingle };
+            outer.MouseDown += FormMouseDown;
+
             Controls.Add(outer);
 
             Label textLabel = new Label() { Left = 4, Top = 8, Width = Width - 50, Text = caption };
+            textLabel.MouseDown += FormMouseDown;
 
             if (!theme.WindowsFrame)
                 outer.Controls.Add(textLabel);
@@ -369,5 +383,67 @@ namespace EDDiscovery.Forms
 
             return false;
         }
+
+        #region Window control
+
+        // Mono compatibility
+        private bool _window_dragging = false;
+        private Point _window_dragMousePos = Point.Empty;
+        private Point _window_dragWindowPos = Point.Empty;
+
+        private IntPtr SendMessage(int msg, IntPtr wparam, IntPtr lparam)
+        {
+            Message message = Message.Create(this.Handle, msg, wparam, lparam);
+            this.WndProc(ref message);
+            return message.Result;
+        }
+
+        protected override void WndProc(ref Message m)
+        {
+            bool windowsborder = this.FormBorderStyle == FormBorderStyle.Sizable;
+            // Compatibility movement for Mono
+            if (m.Msg == WM.LBUTTONDOWN && m.WParam == (IntPtr)1 && !windowsborder)
+            {
+                int x = unchecked((short)((uint)m.LParam & 0xFFFF));
+                int y = unchecked((short)((uint)m.LParam >> 16));
+                _window_dragMousePos = new Point(x, y);
+                _window_dragWindowPos = this.Location;
+                _window_dragging = true;
+                m.Result = IntPtr.Zero;
+                this.Capture = true;
+            }
+            else if (m.Msg == WM.MOUSEMOVE && m.WParam == (IntPtr)1 && _window_dragging)
+            {
+                int x = unchecked((short)((uint)m.LParam & 0xFFFF));
+                int y = unchecked((short)((uint)m.LParam >> 16));
+                Point delta = new Point(x - _window_dragMousePos.X, y - _window_dragMousePos.Y);
+                _window_dragWindowPos = new Point(_window_dragWindowPos.X + delta.X, _window_dragWindowPos.Y + delta.Y);
+                this.Location = _window_dragWindowPos;
+                this.Update();
+                m.Result = IntPtr.Zero;
+            }
+            else if (m.Msg == WM.LBUTTONUP)
+            {
+                _window_dragging = false;
+                _window_dragMousePos = Point.Empty;
+                _window_dragWindowPos = Point.Empty;
+                m.Result = IntPtr.Zero;
+                this.Capture = false;
+            }
+            // Windows honours NCHITTEST; Mono does not
+            else
+            {
+                base.WndProc(ref m);
+            }
+        }
+
+        #endregion
+
+        private void FormMouseDown(object sender, MouseEventArgs e)
+        {
+            ((Control)sender).Capture = false;
+            SendMessage(WM.NCLBUTTONDOWN, (System.IntPtr)HT.CAPTION, (System.IntPtr)0);
+        }
+
     }
 }
