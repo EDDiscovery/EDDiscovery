@@ -27,6 +27,7 @@ namespace EDDiscovery.UserControls
     {
         public TimeSpan? MaximumDataAge { get; }
         public int? MaximumNumberOfItems { get; }
+        public bool? Lastdock { get; }
         public string Label { get; }
 
         public static TravelHistoryFilter NoFilter { get; } = new TravelHistoryFilter();
@@ -40,6 +41,12 @@ namespace EDDiscovery.UserControls
         private TravelHistoryFilter(int maximumNumberOfItems, string label)
         {
             MaximumNumberOfItems = maximumNumberOfItems;
+            Label = label;
+        }
+
+        private TravelHistoryFilter(bool ld, string label)
+        {
+            Lastdock = ld;
             Label = label;
         }
 
@@ -88,9 +95,18 @@ namespace EDDiscovery.UserControls
             return new TravelHistoryFilter(number, $"Last {number} entries");
         }
 
+        public static TravelHistoryFilter LastDock()
+        {
+            return new TravelHistoryFilter(true, $"Last dock");
+        }
+
         public List<HistoryEntry> Filter(HistoryList hl )
         {
-            if (MaximumNumberOfItems.HasValue)
+            if ( Lastdock.HasValue )
+            {
+                return hl.FilterToLastDock();
+            }
+            else if (MaximumNumberOfItems.HasValue)
             {
                 return hl.FilterByNumber(MaximumNumberOfItems.Value);
             }
@@ -105,7 +121,7 @@ namespace EDDiscovery.UserControls
         }
 
         public List<Ledger.Transaction> Filter(List<Ledger.Transaction> txlist )
-        {
+        {                                                               // LASTDOCK not supported
             if (MaximumNumberOfItems.HasValue)
             {
                 return txlist.OrderByDescending(s => s.utctime).Take(MaximumNumberOfItems.Value).ToList();
@@ -119,11 +135,12 @@ namespace EDDiscovery.UserControls
                 return txlist;
         }
 
-        public static void InitaliseComboBox( ExtendedControls.ComboBoxCustom cc , string dbname )
+        public static void InitaliseComboBox( ExtendedControls.ComboBoxCustom cc , string dbname , bool incldock = true )
         {
             cc.Enabled = false;
             cc.DisplayMember = nameof(TravelHistoryFilter.Label);
-            cc.DataSource = new[]
+
+            List<TravelHistoryFilter> el = new List<TravelHistoryFilter>()
             {
                 TravelHistoryFilter.NoFilter,
                 TravelHistoryFilter.FromHours(6),
@@ -142,8 +159,13 @@ namespace EDDiscovery.UserControls
                 TravelHistoryFilter.Last(500),
             };
 
+            if (incldock)
+                el.Add(TravelHistoryFilter.LastDock());
+
+            cc.DataSource = el;
+
             string last = SQLiteDBClass.GetSettingString(dbname, "");
-            int entry = Array.FindIndex((TravelHistoryFilter[])cc.DataSource, x => x.Label == last);
+            int entry = el.FindIndex(x => x.Label == last);
             //System.Diagnostics.Debug.WriteLine(dbname + "=" + last + "=" + entry);
             cc.SelectedIndex = (entry >=0) ? entry: 0;
             
