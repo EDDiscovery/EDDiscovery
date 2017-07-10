@@ -46,15 +46,23 @@ namespace EDDiscovery.ImageHandler
             InitializeComponent();
             this.comboBoxFormat.Items.AddRange(new string[] { "png", "jpg", "bmp", "tiff" });
             this.comboBoxFileNameFormat.Items.AddRange(new string[] {
-            "Sysname (YYYYMMDD-HHMMSS)",
+            "Sysname (YYYYMMDD-HHMMSS)",            //0
             "Sysname (Windows dateformat)",
             "YYYY-MM-DD HH-MM-SS Sysname",
             "DD-MM-YYYY HH-MM-SS Sysname",
-            "MM-DD-YYYY HH-MM-SS Sysname",
+            "MM-DD-YYYY HH-MM-SS Sysname",          //4
             "HH-MM-SS Sysname",
             "HH-MM-SS",
             "Sysname",
-            "Keep original"});
+            "Keep original",                        // 8
+            "Sysname BodyName (YYYYMMDD-HHMMSS)",       //9
+            "Sysname BodyName (Windows dateformat)",
+            "YYYY-MM-DD HH-MM-SS Sysname BodyName",     //11
+            "DD-MM-YYYY HH-MM-SS Sysname BodyName",
+            "MM-DD-YYYY HH-MM-SS Sysname BodyName",     //13
+            "HH-MM-SS Sysname BodyName",        //14
+            "Sysname BodyName",                 //15
+            });
             this.comboBoxSubFolder.Items.AddRange(new string[] {
             "None",
             "System Name",
@@ -76,7 +84,7 @@ namespace EDDiscovery.ImageHandler
         public void InitControl(EDDiscoveryForm discoveryForm)
         {
             _discoveryForm = discoveryForm;
-            this.Watcher = new ScreenshotDirectoryWatcher(_discoveryForm, CallWithConverter);
+            this.Watcher = new ScreenshotDirectoryWatcher(_discoveryForm, CallWithConverter);   // pass function to get the convert going
             this.Watcher.OnScreenshot += ConvertCompleted;
 
             ScreenshotsDirdefault = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyPictures), "Frontier Developments", "Elite Dangerous");
@@ -128,7 +136,7 @@ namespace EDDiscovery.ImageHandler
             numericUpDownWidth.Value = SQLiteDBClass.GetSettingInt("ImageHandlerCropWidth", 0);
             numericUpDownHeight.Value = SQLiteDBClass.GetSettingInt("ImageHandlerCropHeight", 0);
 
-            textBoxFileNameExample.Text = ImageConverter.CreateFileName("Sol", "HighResScreenshot_0000.bmp", comboBoxFileNameFormat.SelectedIndex, checkBoxHires.Checked, DateTime.Now);
+            textBoxFileNameExample.Text = ImageConverter.CreateFileName("Sol", "Earth", "HighResScreenshot_0000.bmp", comboBoxFileNameFormat.SelectedIndex, checkBoxHires.Checked, DateTime.Now);
 
             numericUpDownTop.Enabled = numericUpDownWidth.Enabled = numericUpDownLeft.Enabled = numericUpDownHeight.Enabled = checkBoxCropImage.Checked;
 
@@ -147,7 +155,7 @@ namespace EDDiscovery.ImageHandler
             return Watcher.GetScreenshotPath(ss);
         }
 
-        private void ConvertCompleted(ImageConverter cp) // Called on UI thread
+        private void ConvertCompleted(ImageConverter cp) // Called by the watcher when a convert had completed.
         {
             if (cp.Converted && cp.CopyToClipboard)
             {
@@ -197,7 +205,7 @@ namespace EDDiscovery.ImageHandler
             return p;
         }
 
-        private void CallWithConverter(Action<ImageConverter> cb)
+        private void CallWithConverter(Action<ImageConverter> cb)           // called by Watcher with a function to run in the main thread..
         {
             if (this.InvokeRequired)
             {
@@ -207,7 +215,7 @@ namespace EDDiscovery.ImageHandler
             {
                 if (checkBoxAutoConvert.Checked)
                 {
-                    cb(CreateConverter());
+                    cb(CreateConverter());                                  // call it. Function needs an image converter.  Back to processScreenshot
                 }
             }
         }
@@ -230,7 +238,7 @@ namespace EDDiscovery.ImageHandler
             {
                 SQLiteDBClass.PutSettingBool("checkBoxHires", checkBoxHires.Checked);
             }
-            textBoxFileNameExample.Text = ImageConverter.CreateFileName("Sol", "HighResScreenshot_0000.bmp", comboBoxFileNameFormat.SelectedIndex, checkBoxHires.Checked, DateTime.Now);
+            textBoxFileNameExample.Text = ImageConverter.CreateFileName("Sol", "Earth", "HighResScreenshot_0000.bmp", comboBoxFileNameFormat.SelectedIndex, checkBoxHires.Checked, DateTime.Now);
         }
 
         private void comboBoxFileNameFormat_SelectedIndexChanged(object sender, EventArgs e)
@@ -239,7 +247,7 @@ namespace EDDiscovery.ImageHandler
             {
                 SQLiteDBClass.PutSettingInt("comboBoxFileNameFormat", comboBoxFileNameFormat.SelectedIndex);
             }
-            textBoxFileNameExample.Text = ImageConverter.CreateFileName("Sol", "HighResScreenshot_0000.bmp", comboBoxFileNameFormat.SelectedIndex, checkBoxHires.Checked, DateTime.Now);
+            textBoxFileNameExample.Text = ImageConverter.CreateFileName("Sol", "Earth", "HighResScreenshot_0000.bmp", comboBoxFileNameFormat.SelectedIndex, checkBoxHires.Checked, DateTime.Now);
         }
 
         private void checkBoxCropImage_CheckedChanged(object sender, EventArgs e)
@@ -554,9 +562,11 @@ namespace EDDiscovery.ImageHandler
             }
         }
 
+        // called thru CalLWithConverter in UI main class.. that pases a ImageConverter to us
+        // sysname and or ss can be null if it was picked up by a watcher not the new journal screenshot entry
+
         private void ProcessScreenshot(string filename, string sysname, JournalScreenshot ss, int cmdrid, ImageConverter cp)
         {
-
             System.Threading.Timer timer = null;
 
             // Don't run if OnScreenshot has already run for this image
@@ -709,6 +719,8 @@ namespace EDDiscovery.ImageHandler
                     JournalScreenShot.SetConvertedFilename(InputFilename, OutputFilename, FinalSize.X, FinalSize.Y);
                 }
 
+                System.Diagnostics.Debug.WriteLine("Convert " + InputFilename + " at " + SystemName + " to " + OutputFilename);
+
                 Controller.LogLine("Converted " + Path.GetFileName(InputFilename) + " to " + Path.GetFileName(OutputFilename));
             }
 
@@ -849,9 +861,13 @@ namespace EDDiscovery.ImageHandler
         private Bitmap ConvertImage(Bitmap bmp)
         {
             int index = 0;
+
+            string bodyname = (JournalScreenShot.Body == null) ? "" : (JournalScreenShot.Body.Equals(SystemName, StringComparison.InvariantCultureIgnoreCase) ? "" : JournalScreenShot.Body);
+
             do                                          // add _N on the filename for index>0, to make them unique.
             {
-                OutputFilename = Path.Combine(OutputFolder, CreateFileName(SystemName, InputFilename, FilenameFormatIndex, HighRes, Timestamp) + (index == 0 ? "" : "_" + index) + OutputExtension);
+
+                OutputFilename = Path.Combine(OutputFolder, CreateFileName(SystemName, bodyname, InputFilename, FilenameFormatIndex, HighRes, Timestamp) + (index == 0 ? "" : "_" + index) + OutputExtension);
                 index++;
             } while (File.Exists(OutputFilename));          // if name exists, pick another
 
@@ -893,45 +909,53 @@ namespace EDDiscovery.ImageHandler
             return croppedbmp;
         }
 
-        public static string CreateFileName(string cur_sysname, string inputfile, int formatindex, bool hires, DateTime timestamp)
+        public static string CreateFileName(string cur_sysname, string cur_bodyname, string inputfile, int formatindex, bool hires, DateTime timestamp)
         {
             cur_sysname = cur_sysname.SafeFileString();
+            cur_bodyname = cur_bodyname.SafeFileString();
 
             string postfix = (hires && Path.GetFileName(inputfile).Contains("HighRes")) ? " (HighRes)" : "";
+            string bodyinsert = (formatindex >= 9 && formatindex <= 15 && cur_bodyname.Length > 0) ? ("-" + cur_bodyname) : "";
 
             switch (formatindex)
             {
                 case 0:
-                    return cur_sysname + " (" + timestamp.ToString("yyyyMMdd-HHmmss") + ")" + postfix;
+                case 9:
+                    return cur_sysname + bodyinsert + " (" + timestamp.ToString("yyyyMMdd-HHmmss") + ")" + postfix;
 
                 case 1:
+                case 10:
                     {
                         string time = timestamp.ToString();
                         time = time.Replace(":", "-");
                         time = time.Replace("/", "-");          // Rob found it was outputting 21/2/2020 on mine, so we need more replaces
                         time = time.Replace("\\", "-");
-                        return cur_sysname + " (" + time + ")" + postfix;
+                        return cur_sysname + bodyinsert + " (" + time + ")" + postfix;
                     }
                 case 2:
+                case 11:
                     {
                         string time = timestamp.ToString("yyyy-MM-dd HH-mm-ss");
-                        return time + " " + cur_sysname + postfix;
+                        return time + " " + cur_sysname + bodyinsert + postfix;
                     }
                 case 3:
+                case 12:
                     {
                         string time = timestamp.ToString("dd-MM-yyyy HH-mm-ss");
-                        return time + " " + cur_sysname + postfix;
+                        return time + " " + cur_sysname + bodyinsert + postfix;
                     }
                 case 4:
+                case 13:
                     {
                         string time = timestamp.ToString("MM-dd-yyyy HH-mm-ss");
-                        return time + " " + cur_sysname + postfix;
+                        return time + " " + cur_sysname + bodyinsert + postfix;
                     }
 
                 case 5:
+                case 14:
                     {
                         string time = timestamp.ToString("HH-mm-ss");
-                        return time + " " + cur_sysname + postfix;
+                        return time + " " + cur_sysname + bodyinsert + postfix;
                     }
 
                 case 6:
@@ -941,8 +965,9 @@ namespace EDDiscovery.ImageHandler
                     }
 
                 case 7:
+                case 15:
                     {
-                        return cur_sysname + postfix;
+                        return cur_sysname + bodyinsert + postfix;
                     }
 
                 default:
