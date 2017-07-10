@@ -594,6 +594,29 @@ namespace EDDiscovery
                 UpdateTo(false);
             }
         }
+
+        private void buttonFromEDSM_Click(object sender, EventArgs e)
+        {
+            EDSMClass edsm = new EDSMClass();
+            string url = edsm.GetUrlToEDSMSystem(textBox_From.Text, null);
+
+            if (url.Length > 0)         // may pass back empty string if not known, this solves another exception
+                Process.Start(url);
+            else
+                EDDiscovery.Forms.MessageBoxTheme.Show("System unknown to EDSM");
+        }
+
+        private void buttonToEDSM_Click(object sender, EventArgs e)
+        {
+            EDSMClass edsm = new EDSMClass();
+            string url = edsm.GetUrlToEDSMSystem(textBox_To.Text, null);
+
+            if (url.Length > 0)         // may pass back empty string if not known, this solves another exception
+                Process.Start(url);
+            else
+                EDDiscovery.Forms.MessageBoxTheme.Show("System unknown to EDSM");
+
+        }
     }
 
     public class RoutePlotter
