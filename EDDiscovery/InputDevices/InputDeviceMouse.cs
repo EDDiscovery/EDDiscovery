@@ -20,7 +20,9 @@ namespace EDDiscovery.InputDevices
 
         public InputDeviceMouse(DirectInput di,DeviceInstance d)
         {
-            msi = new InputDeviceIdentity() { Instanceguid = d.InstanceGuid, Productguid = d.ProductGuid, Name = d.InstanceName.RemoveTrailingCZeros()};
+            // those silly foreign people call mouse something other than it in english, so we need to fix it to english
+
+            msi = new InputDeviceIdentity() { Instanceguid = d.InstanceGuid, Productguid = d.ProductGuid, Name = "Mouse"};
 
             mouse = new SharpDX.DirectInput.Mouse(di);
             mouse.SetNotification(eventhandle);
