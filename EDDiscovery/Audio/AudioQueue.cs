@@ -89,13 +89,13 @@ namespace EDDiscovery.Audio
         {
             foreach( AudioSample a in audioqueue )
             {
-                Clear(a,false);
+                FinishSample(a,false);
             }
 
             audioqueue.Clear();
         }
 
-        private void Clear(AudioSample a , bool callback )
+        private void FinishSample(AudioSample a , bool callback )
         {
             if ( callback )
                 a.SampleOver(this);     // let callers know a sample is over
@@ -108,9 +108,14 @@ namespace EDDiscovery.Audio
         {
             //System.Diagnostics.Debug.WriteLine((Environment.TickCount % 10000).ToString("00000") + " Stopped audio");
 
+            System.Diagnostics.Debug.Assert(System.Windows.Forms.Application.MessageLoop);      // UI thread.
+
             if (audioqueue.Count > 0) // Normally always have an entry, except on Kill , where queue is gone
             {
-                Clear(audioqueue[0],true);
+                FinishSample(audioqueue[0],true);
+
+                //System.Diagnostics.Debug.WriteLine("Clear audio at 0 depth " + audioqueue.Count);
+
                 audioqueue.RemoveAt(0);
             }
 
@@ -120,9 +125,13 @@ namespace EDDiscovery.Audio
 
         private void Queue(AudioSample newdata, Priority p = Priority.Normal )
         {
+            System.Diagnostics.Debug.Assert(System.Windows.Forms.Application.MessageLoop);      // UI thread.
+
+            //for (int q = 0; q < audioqueue.Count; q++) System.Diagnostics.Debug.WriteLine(q.ToStringInvariant() + " " + (audioqueue[q].audiodata.data != null) + " " + audioqueue[q].priority);
+
             if (newdata != null)
             {
-                System.Diagnostics.Debug.WriteLine("Play " + ad.Lengthms(newdata.audiodata) + " in queue " + InQueuems());
+                //System.Diagnostics.Debug.WriteLine("Play " + ad.Lengthms(newdata.audiodata) + " in queue " + InQueuems() + " " + newdata.priority);
 
                 if ( audioqueue.Count > 0 && p > audioqueue[0].priority )       // if something is playing, and we have priority..
                 {
@@ -134,11 +143,15 @@ namespace EDDiscovery.Audio
                         for (int i = 1; i < audioqueue.Count; i++)
                         {
                             if (audioqueue[i].priority == Priority.Low)
+                            {
                                 remove.Add(audioqueue[i]);
+                                //System.Diagnostics.Debug.WriteLine("Queue to remove " + i);
+                            }
                         }
                         foreach (AudioSample a in remove)
                         {
-                            Clear(a,false);
+                            FinishSample(a,false);
+                            audioqueue.Remove(a);
                         }
                     }
 
@@ -179,6 +192,8 @@ namespace EDDiscovery.Audio
 
         public int InQueuems()       // Length of sound in queue.. does not take account of priority.
         {
+            System.Diagnostics.Debug.Assert(System.Windows.Forms.Application.MessageLoop);      // UI thread.
+
             int len = 0;
             if (audioqueue.Count > 0)
                 len = ad.TimeLeftms(audioqueue[0].audiodata);

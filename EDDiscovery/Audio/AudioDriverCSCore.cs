@@ -108,6 +108,7 @@ namespace EDDiscovery.Audio
         {
             IWaveSource iws = o.data as IWaveSource;
             iws.Dispose();
+            o.data = null;      // added to help catch any sequencing errors
             //System.Diagnostics.Debug.WriteLine("Audio disposed");
         }
 
@@ -134,7 +135,9 @@ namespace EDDiscovery.Audio
             try
             {
                 IWaveSource s = CSCore.Codecs.CodecFactory.Instance.GetCodec(file);
+                System.Diagnostics.Debug.Assert(s != null);
                 ApplyEffects(ref s, effects);
+                System.Diagnostics.Debug.Assert(s != null);
                 return new AudioData(s);
             }
             catch
@@ -169,15 +172,21 @@ namespace EDDiscovery.Audio
                 }
 
                 //System.Diagnostics.Debug.WriteLine("Sample length " + s.Length);
+                System.Diagnostics.Debug.Assert(s != null);
                 ApplyEffects(ref s, effects);
                 //System.Diagnostics.Debug.WriteLine(".. to length " + s.Length);
+                System.Diagnostics.Debug.Assert(s != null);
                 return new AudioData(s);
             }
             catch( Exception ex)
             {
                 System.Diagnostics.Debug.WriteLine("Exception " + ex.Message);
                 if (ensureaudio)
-                    return new AudioData(new NullWaveSource(100));
+                {
+                    IWaveSource s = new NullWaveSource(100);
+                    System.Diagnostics.Debug.Assert(s != null);
+                    return new AudioData(s);
+                }
                 else
                     return null;
             }
@@ -199,7 +208,9 @@ namespace EDDiscovery.Audio
             if (mixws.WaveFormat.SampleRate != frontws.WaveFormat.SampleRate || mixws.WaveFormat.BitsPerSample != frontws.WaveFormat.BitsPerSample)
                 frontws = ChangeSampleDepth(frontws, mixws.WaveFormat.SampleRate, mixws.WaveFormat.BitsPerSample);
 
-            return new AudioData(new AppendWaveSource(frontws, mixws));
+            IWaveSource s = new AppendWaveSource(frontws, mixws);
+            System.Diagnostics.Debug.Assert(s != null);
+            return new AudioData(s);
         }
 
         public AudioData Mix(AudioData front, AudioData mix)     // This mixes mix with Front.  Format changed to MIX.
@@ -218,7 +229,9 @@ namespace EDDiscovery.Audio
             if (mixws.WaveFormat.SampleRate != frontws.WaveFormat.SampleRate || mixws.WaveFormat.BitsPerSample != frontws.WaveFormat.BitsPerSample)
                 frontws = ChangeSampleDepth(frontws, mixws.WaveFormat.SampleRate, mixws.WaveFormat.BitsPerSample);
 
-            return new AudioData(new MixWaveSource(frontws, mixws));
+            IWaveSource s = new MixWaveSource(frontws, mixws);
+            System.Diagnostics.Debug.Assert(s != null);
+            return new AudioData(s);
         }
 
         static private void ApplyEffects(ref IWaveSource src, ConditionVariables effect)
@@ -278,6 +291,7 @@ namespace EDDiscovery.Audio
         public int Lengthms(AudioData audio)
         {
             IWaveSource ws = audio.data as IWaveSource;
+            System.Diagnostics.Debug.Assert(ws != null);
             TimeSpan w = ws.GetLength();
             return (int)w.TotalMilliseconds;
         }
@@ -285,6 +299,7 @@ namespace EDDiscovery.Audio
         public int TimeLeftms(AudioData audio)
         {
             IWaveSource ws = audio.data as IWaveSource;
+            System.Diagnostics.Debug.Assert(ws != null);
             TimeSpan l = ws.GetLength();
             TimeSpan p = ws.GetPosition();
             TimeSpan togo = l - p;
