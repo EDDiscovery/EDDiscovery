@@ -561,6 +561,15 @@ namespace EDDiscovery
             return historylist.OrderByDescending(s => s.EventTimeUTC).Take(max).ToList();
         }
 
+        public List<HistoryEntry> FilterToLastDock()
+        {
+            List<HistoryEntry> inorder = historylist.OrderByDescending(s => s.EventTimeUTC).ToList();
+            int lastdockpos = inorder.FindIndex(x => x.EntryType == JournalTypeEnum.Docked);
+            if (lastdockpos >= 0)
+                inorder = inorder.Take(lastdockpos + 1).ToList();
+            return inorder;
+        }
+
         public List<HistoryEntry> FilterByDate(TimeSpan days)
         {
             var oldestData = DateTime.UtcNow.Subtract(days);

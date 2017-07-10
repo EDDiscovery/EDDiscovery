@@ -62,7 +62,7 @@ namespace EDDiscovery.UserControls
             cfs.ConfigureThirdOption("Cash Transactions", string.Join(";", EliteDangerous.JournalEntry.GetListOfEventsWithOptMethod(true, "Ledger")));
 
             cfs.Changed += EventFilterChanged;
-            TravelHistoryFilter.InitaliseComboBox(comboBoxHistoryWindow, DbHistorySave);
+            TravelHistoryFilter.InitaliseComboBox(comboBoxHistoryWindow, DbHistorySave , incldock:false);
 
             discoveryform.OnHistoryChange += Redisplay;
             discoveryform.OnNewEntry += NewEntry;
