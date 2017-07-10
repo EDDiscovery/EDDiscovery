@@ -30,7 +30,8 @@ namespace EDDiscovery.UserControls
         Summary,
         Day,
         Week,
-        Month
+        Month,
+        Custom
     }
 
     public enum UserControlStatsDrawModeEnum
@@ -50,9 +51,13 @@ namespace EDDiscovery.UserControls
         {
             InitializeComponent();
 
+            CustomDateTimePickerFrom.Value = DateTime.Today.AddMonths(-1);
+            CustomDateTimePickerTo.Value = DateTime.Today;
+            CustomDateTimePickerFrom.CustomFormat = "yyyy-MM-dd";
+            CustomDateTimePickerTo.CustomFormat = "yyyy-MM-dd";
         }
 
-        
+
         #region "properties"
         public UserControlStatsTimeModeEnum TimeMode
         {
@@ -64,8 +69,10 @@ namespace EDDiscovery.UserControls
                     return UserControlStatsTimeModeEnum.Day;
                 else if (comboBoxTimeMode.SelectedIndex == 2)
                     return UserControlStatsTimeModeEnum.Week;
-                if (comboBoxTimeMode.SelectedIndex == 3)
+                else if (comboBoxTimeMode.SelectedIndex == 3)
                     return UserControlStatsTimeModeEnum.Month;
+                else if (comboBoxTimeMode.SelectedIndex == 4)
+                    return UserControlStatsTimeModeEnum.Custom;
                 else
                     return UserControlStatsTimeModeEnum.Summary;
             }
@@ -87,6 +94,9 @@ namespace EDDiscovery.UserControls
                             break;
                         case UserControlStatsTimeModeEnum.Month:
                             comboBoxTimeMode.SelectedIndex = 3;
+                            break;
+                        case UserControlStatsTimeModeEnum.Custom:
+                            comboBoxTimeMode.SelectedIndex = 4;
                             break;
 
                         default:
@@ -169,6 +179,7 @@ namespace EDDiscovery.UserControls
             comboBoxTimeMode.Items.Add("Day");
             comboBoxTimeMode.Items.Add("Week");
             comboBoxTimeMode.Items.Add("Month");
+            comboBoxTimeMode.Items.Add("Custom");
             comboBoxTimeMode.SelectedIndex = 0;
         }
 
@@ -176,6 +187,17 @@ namespace EDDiscovery.UserControls
 
         private void comboBoxTimeMode_SelectedIndexChanged(object sender, EventArgs e)
         {
+            if (comboBoxTimeMode.SelectedIndex == 4) // Custom'
+            {
+                CustomDateTimePickerFrom.Visible = true;
+                CustomDateTimePickerTo.Visible = true;
+            }
+            else
+            {
+                CustomDateTimePickerFrom.Visible = false;
+                CustomDateTimePickerTo.Visible = false;
+            }
+
             if (this.TimeModeChanged != null)
                 TimeModeChanged(this, e);
         }
@@ -221,6 +243,18 @@ namespace EDDiscovery.UserControls
                 if (this.TimeModeChanged != null)
                     TimeModeChanged(this, e);
             }
+        }
+
+        private void customDateTimePickerFrom_ValueChanged(object sender, EventArgs e)
+        {
+            if (this.TimeModeChanged != null)
+                TimeModeChanged(this, e);
+        }
+
+        private void customDateTimePickerTo_ValueChanged(object sender, EventArgs e)
+        {
+            if (this.TimeModeChanged != null)
+                TimeModeChanged(this, e);
         }
     }
 }
