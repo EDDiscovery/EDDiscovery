@@ -46,6 +46,8 @@ namespace EDDiscovery
             this.comboBoxRoutingMetric = new ExtendedControls.ComboBoxCustom();
             this.richTextBox_routeresult = new ExtendedControls.RichTextBoxScroll();
             this.groupBox_Entries = new ExtendedControls.GroupBoxCustom();
+            this.textBox_ToName = new ExtendedControls.TextBoxBorder();
+            this.textBox_FromName = new ExtendedControls.TextBoxBorder();
             this.buttonExtTravelTo = new ExtendedControls.ButtonExt();
             this.buttonExtTravelFrom = new ExtendedControls.ButtonExt();
             this.buttonExtTargetTo = new ExtendedControls.ButtonExt();
@@ -69,8 +71,8 @@ namespace EDDiscovery
             this.textBox_FromY = new ExtendedControls.TextBoxBorder();
             this.label3 = new System.Windows.Forms.Label();
             this.textBox_FromX = new ExtendedControls.TextBoxBorder();
-            this.textBox_FromName = new ExtendedControls.TextBoxBorder();
-            this.textBox_ToName = new ExtendedControls.TextBoxBorder();
+            this.buttonFromEDSM = new ExtendedControls.ButtonExt();
+            this.buttonToEDSM = new ExtendedControls.ButtonExt();
             this.groupBox_Entries.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -127,6 +129,8 @@ namespace EDDiscovery
             this.groupBox_Entries.Controls.Add(this.buttonExtTravelTo);
             this.groupBox_Entries.Controls.Add(this.buttonExtTravelFrom);
             this.groupBox_Entries.Controls.Add(this.buttonExtTargetTo);
+            this.groupBox_Entries.Controls.Add(this.buttonToEDSM);
+            this.groupBox_Entries.Controls.Add(this.buttonFromEDSM);
             this.groupBox_Entries.Controls.Add(this.buttonTargetFrom);
             this.groupBox_Entries.Controls.Add(this.cmd3DMap);
             this.groupBox_Entries.Controls.Add(this.textBox_From);
@@ -156,6 +160,30 @@ namespace EDDiscovery
             this.groupBox_Entries.TabStop = false;
             this.groupBox_Entries.TextPadding = 0;
             this.groupBox_Entries.TextStartPosition = -1;
+            // 
+            // textBox_ToName
+            // 
+            this.textBox_ToName.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
+            this.textBox_ToName.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource;
+            this.textBox_ToName.BorderColor = System.Drawing.Color.Transparent;
+            this.textBox_ToName.BorderColorScaling = 0.5F;
+            this.textBox_ToName.Location = new System.Drawing.Point(326, 45);
+            this.textBox_ToName.Name = "textBox_ToName";
+            this.textBox_ToName.ReadOnly = true;
+            this.textBox_ToName.Size = new System.Drawing.Size(234, 20);
+            this.textBox_ToName.TabIndex = 27;
+            // 
+            // textBox_FromName
+            // 
+            this.textBox_FromName.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
+            this.textBox_FromName.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource;
+            this.textBox_FromName.BorderColor = System.Drawing.Color.Transparent;
+            this.textBox_FromName.BorderColorScaling = 0.5F;
+            this.textBox_FromName.Location = new System.Drawing.Point(57, 45);
+            this.textBox_FromName.Name = "textBox_FromName";
+            this.textBox_FromName.ReadOnly = true;
+            this.textBox_FromName.Size = new System.Drawing.Size(234, 20);
+            this.textBox_FromName.TabIndex = 26;
             // 
             // buttonExtTravelTo
             // 
@@ -461,29 +489,31 @@ namespace EDDiscovery
             this.textBox_FromX.TextChanged += new System.EventHandler(this.textBox_XYZ_From_Changed);
             this.textBox_FromX.Enter += new System.EventHandler(this.textBox_FromXYZ_Enter);
             // 
-            // textBox_FromName
+            // buttonFromEDSM
             // 
-            this.textBox_FromName.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
-            this.textBox_FromName.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource;
-            this.textBox_FromName.BorderColor = System.Drawing.Color.Transparent;
-            this.textBox_FromName.BorderColorScaling = 0.5F;
-            this.textBox_FromName.Location = new System.Drawing.Point(57, 45);
-            this.textBox_FromName.Name = "textBox_FromName";
-            this.textBox_FromName.ReadOnly = true;
-            this.textBox_FromName.Size = new System.Drawing.Size(234, 20);
-            this.textBox_FromName.TabIndex = 26;
+            this.buttonFromEDSM.BorderColorScaling = 1.25F;
+            this.buttonFromEDSM.ButtonColorScaling = 0.5F;
+            this.buttonFromEDSM.ButtonDisabledScaling = 0.5F;
+            this.buttonFromEDSM.Location = new System.Drawing.Point(213, 97);
+            this.buttonFromEDSM.Name = "buttonFromEDSM";
+            this.buttonFromEDSM.Size = new System.Drawing.Size(53, 23);
+            this.buttonFromEDSM.TabIndex = 25;
+            this.buttonFromEDSM.Text = "EDSM";
+            this.buttonFromEDSM.UseVisualStyleBackColor = true;
+            this.buttonFromEDSM.Click += new System.EventHandler(this.buttonFromEDSM_Click);
             // 
-            // textBox_ToName
+            // buttonToEDSM
             // 
-            this.textBox_ToName.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
-            this.textBox_ToName.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource;
-            this.textBox_ToName.BorderColor = System.Drawing.Color.Transparent;
-            this.textBox_ToName.BorderColorScaling = 0.5F;
-            this.textBox_ToName.Location = new System.Drawing.Point(326, 45);
-            this.textBox_ToName.Name = "textBox_ToName";
-            this.textBox_ToName.ReadOnly = true;
-            this.textBox_ToName.Size = new System.Drawing.Size(234, 20);
-            this.textBox_ToName.TabIndex = 27;
+            this.buttonToEDSM.BorderColorScaling = 1.25F;
+            this.buttonToEDSM.ButtonColorScaling = 0.5F;
+            this.buttonToEDSM.ButtonDisabledScaling = 0.5F;
+            this.buttonToEDSM.Location = new System.Drawing.Point(482, 97);
+            this.buttonToEDSM.Name = "buttonToEDSM";
+            this.buttonToEDSM.Size = new System.Drawing.Size(53, 23);
+            this.buttonToEDSM.TabIndex = 25;
+            this.buttonToEDSM.Text = "EDSM";
+            this.buttonToEDSM.UseVisualStyleBackColor = true;
+            this.buttonToEDSM.Click += new System.EventHandler(this.buttonToEDSM_Click);
             // 
             // RouteControl
             // 
@@ -529,5 +559,7 @@ namespace EDDiscovery
         private ExtendedControls.ButtonExt buttonExtTargetTo;
         internal ExtendedControls.TextBoxBorder textBox_ToName;
         internal ExtendedControls.TextBoxBorder textBox_FromName;
+        private ExtendedControls.ButtonExt buttonFromEDSM;
+        private ExtendedControls.ButtonExt buttonToEDSM;
     }
 }

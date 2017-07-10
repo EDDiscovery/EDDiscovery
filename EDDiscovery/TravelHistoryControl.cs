@@ -322,22 +322,24 @@ namespace EDDiscovery
         {
             int width = panelTarget.Width;
 
-            if (width > 200)                            // can we fit onto one line?
+            if (width > 250)                            // can we fit onto one line?
             {
                 labelTarget.Location = new Point(2, 2);
-                textBoxTarget.Location = new Point(labelTarget.Location.X + labelTarget.Width + 6, labelTarget.Location.Y);
-                textBoxTarget.Width = width - textBoxTarget.Location.X - 16 - textBoxTargetDist.Width;
-                textBoxTargetDist.Location = new Point(textBoxTarget.Location.X + textBoxTarget.Width + 8, labelTarget.Location.Y);
+                textBoxTarget.Location = new Point(labelTarget.Right + 6, labelTarget.Location.Y);
+                textBoxTarget.Width = width - textBoxTarget.Location.X - 20 - textBoxTargetDist.Width - buttonEDSMTarget.Width;
+                textBoxTargetDist.Location = new Point(textBoxTarget.Right + 4, labelTarget.Location.Y);
+                buttonEDSMTarget.Location = new Point(textBoxTargetDist.Right + 4, labelTarget.Location.Y-2);
             }
             else
             {
                 labelNote.Location = new Point(2, 2);
                 textBoxTarget.Location = new Point(2, labelNote.Location.Y + labelNote.Height + 8);
                 textBoxTarget.Width = width - 4;
-                textBoxTargetDist.Location = new Point(2, textBoxTarget.Location.Y + textBoxTarget.Height + 8);
+                textBoxTargetDist.Location = new Point(2, textBoxTarget.Bottom + 8);
+                buttonEDSMTarget.Location = new Point(textBoxTargetDist.Right + 4, textBoxTargetDist.Top-2);
             }
 
-            panelTarget.Height = textBoxTargetDist.Location.Y + textBoxTargetDist.Height + 6;
+            panelTarget.Height = buttonEDSMTarget.Bottom + 6;
         }
 
         #endregion
@@ -777,6 +779,19 @@ namespace EDDiscovery
                 textBoxTargetDist.Text = "";
                 toolTipEddb.SetToolTip(textBoxTarget, "On 3D Map right click to make a bookmark, region mark or click on a notemark and then tick on Set Target, or type it here and hit enter");
             }
+        }
+
+        private void buttonEDSMTarget_Click(object sender, EventArgs e)
+        {
+            EDSMClass edsm = new EDSMClass();
+            string url = edsm.GetUrlToEDSMSystem(textBoxTarget.Text, null);
+
+            if (url.Length > 0)         // may pass back empty string if not known, this solves another exception
+                Process.Start(url);
+            else
+                EDDiscovery.Forms.MessageBoxTheme.Show("System unknown to EDSM");
+
+
         }
 
         #endregion

@@ -87,15 +87,16 @@ namespace EDDiscovery
             this.label5 = new System.Windows.Forms.Label();
             this.textBoxY = new ExtendedControls.TextBoxBorder();
             this.textBoxX = new ExtendedControls.TextBoxBorder();
+            this.label1 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
+            this.textBoxBody = new ExtendedControls.TextBoxBorder();
             this.textBoxSystem = new ExtendedControls.TextBoxBorder();
             this.panel_topright = new System.Windows.Forms.Panel();
             this.labelCMDR = new System.Windows.Forms.Label();
             this.splitContainerRightInner = new System.Windows.Forms.SplitContainer();
             this.tabStripMiddleRight = new ExtendedControls.TabStrip();
             this.tabStripBottomRight = new ExtendedControls.TabStrip();
-            this.textBoxBody = new ExtendedControls.TextBoxBorder();
-            this.label1 = new System.Windows.Forms.Label();
+            this.buttonEDSMTarget = new ExtendedControls.DrawnPanel();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerLeftRight)).BeginInit();
             this.splitContainerLeftRight.Panel1.SuspendLayout();
             this.splitContainerLeftRight.Panel2.SuspendLayout();
@@ -439,6 +440,7 @@ namespace EDDiscovery
             // 
             this.panelTarget.Controls.Add(this.textBoxTargetDist);
             this.panelTarget.Controls.Add(this.textBoxTarget);
+            this.panelTarget.Controls.Add(this.buttonEDSMTarget);
             this.panelTarget.Controls.Add(this.labelTarget);
             this.panelTarget.Dock = System.Windows.Forms.DockStyle.Top;
             this.panelTarget.Location = new System.Drawing.Point(0, 294);
@@ -705,6 +707,15 @@ namespace EDDiscovery
             this.textBoxX.TabIndex = 17;
             this.textBoxX.TabStop = false;
             // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(1, 30);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(31, 13);
+            this.label1.TabIndex = 16;
+            this.label1.Text = "Body";
+            // 
             // label4
             // 
             this.label4.AutoSize = true;
@@ -713,6 +724,17 @@ namespace EDDiscovery
             this.label4.Size = new System.Drawing.Size(41, 13);
             this.label4.TabIndex = 16;
             this.label4.Text = "System";
+            // 
+            // textBoxBody
+            // 
+            this.textBoxBody.BorderColor = System.Drawing.Color.Transparent;
+            this.textBoxBody.BorderColorScaling = 0.5F;
+            this.textBoxBody.Location = new System.Drawing.Point(50, 30);
+            this.textBoxBody.Name = "textBoxBody";
+            this.textBoxBody.ReadOnly = true;
+            this.textBoxBody.Size = new System.Drawing.Size(152, 20);
+            this.textBoxBody.TabIndex = 15;
+            this.textBoxBody.TabStop = false;
             // 
             // textBoxSystem
             // 
@@ -791,25 +813,21 @@ namespace EDDiscovery
             this.tabStripBottomRight.StripAtTop = true;
             this.tabStripBottomRight.TabIndex = 0;
             // 
-            // textBoxBody
+            // buttonEDSMTarget
             // 
-            this.textBoxBody.BorderColor = System.Drawing.Color.Transparent;
-            this.textBoxBody.BorderColorScaling = 0.5F;
-            this.textBoxBody.Location = new System.Drawing.Point(50, 30);
-            this.textBoxBody.Name = "textBoxBody";
-            this.textBoxBody.ReadOnly = true;
-            this.textBoxBody.Size = new System.Drawing.Size(152, 20);
-            this.textBoxBody.TabIndex = 15;
-            this.textBoxBody.TabStop = false;
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(1, 30);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(31, 13);
-            this.label1.TabIndex = 16;
-            this.label1.Text = "Body";
+            this.buttonEDSMTarget.DrawnImage = null;
+            this.buttonEDSMTarget.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.buttonEDSMTarget.ImageSelected = ExtendedControls.DrawnPanel.ImageType.InverseText;
+            this.buttonEDSMTarget.ImageText = "EDSM";
+            this.buttonEDSMTarget.Location = new System.Drawing.Point(278, 6);
+            this.buttonEDSMTarget.MarginSize = 0;
+            this.buttonEDSMTarget.MouseOverColor = System.Drawing.Color.White;
+            this.buttonEDSMTarget.MouseSelectedColor = System.Drawing.Color.Green;
+            this.buttonEDSMTarget.MouseSelectedColorEnable = true;
+            this.buttonEDSMTarget.Name = "buttonEDSMTarget";
+            this.buttonEDSMTarget.Size = new System.Drawing.Size(44, 20);
+            this.buttonEDSMTarget.TabIndex = 23;
+            this.buttonEDSMTarget.Click += new System.EventHandler(this.buttonEDSMTarget_Click);
             // 
             // TravelHistoryControl
             // 
@@ -900,5 +918,6 @@ namespace EDDiscovery
         private ExtendedControls.TextBoxBorder textBoxSolDist;
         private System.Windows.Forms.Label label1;
         private ExtendedControls.TextBoxBorder textBoxBody;
+        private ExtendedControls.DrawnPanel buttonEDSMTarget;
     }
 }
