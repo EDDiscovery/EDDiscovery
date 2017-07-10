@@ -257,6 +257,7 @@ namespace EDDiscovery.UserControls
             this.userControlStatsTimeTravel.TimeMode = EDDiscovery.UserControls.UserControlStatsTimeModeEnum.Summary;
             this.userControlStatsTimeTravel.TimeModeChanged += new System.EventHandler(this.userControlStatsTimeTravel_TimeModeChanged);
             this.userControlStatsTimeTravel.DrawModeChanged += new System.EventHandler(this.userControlStatsTimeTravel_DrawModeChanged);
+            this.userControlStatsTimeTravel.Load += new System.EventHandler(this.userControlStatsTimeTravel_Load);
             // 
             // tabPageScan
             // 
