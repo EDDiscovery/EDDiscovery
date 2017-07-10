@@ -19,7 +19,9 @@ namespace EDDiscovery.InputDevices
 
         public InputDeviceKeyboard(DirectInput di,DeviceInstance d)
         {
-            ksi = new InputDeviceIdentity() { Instanceguid = d.InstanceGuid, Productguid = d.ProductGuid, Name = d.InstanceName.RemoveTrailingCZeros()};
+            // those silly foreign people call keyboard something other than it in english, so we need to fix it to english
+
+            ksi = new InputDeviceIdentity() { Instanceguid = d.InstanceGuid, Productguid = d.ProductGuid, Name = "Keyboard"};
 
             keyboard = new Keyboard(di);
             keyboard.Properties.BufferSize = 128;
