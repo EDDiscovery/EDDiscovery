@@ -203,8 +203,12 @@ namespace EDDiscovery.UserControls
         {
             int[] intar = null;
             string[] strarr = null;
+            int intervals=0;
+            DateTime[] timearr;
+            DateTime endTime;
 
-            if (userControlStatsTimeTravel.TimeMode == UserControlStatsTimeModeEnum.Summary)
+
+            if (userControlStatsTimeTravel.TimeMode == UserControlStatsTimeModeEnum.Summary || userControlStatsTimeTravel.TimeMode == UserControlStatsTimeModeEnum.Custom)
             {
                 dataGridViewTravel.Rows.Clear();
                 dataGridViewTravel.Columns.Clear();
@@ -212,104 +216,134 @@ namespace EDDiscovery.UserControls
                 dataGridViewTravel.Visible = true;
 
 
-                var Col1 = new DataGridViewTextBoxColumn();
-                Col1.HeaderText = "Last";
+                if (userControlStatsTimeTravel.TimeMode == UserControlStatsTimeModeEnum.Summary)
+                {
+                    intervals = 5;
+                    var Col1 = new DataGridViewTextBoxColumn();
+                    Col1.HeaderText = "Last";
 
-                var Col2 = new DataGridViewTextBoxColumn();
-                ColumnValueAlignment(Col2);
-                Col2.HeaderText = "24 hours";
+                    var Col2 = new DataGridViewTextBoxColumn();
+                    ColumnValueAlignment(Col2);
+                    Col2.HeaderText = "24 hours";
 
-                var Col3 = new DataGridViewTextBoxColumn();
-                ColumnValueAlignment(Col3);
-                Col3.HeaderText = "week";
+                    var Col3 = new DataGridViewTextBoxColumn();
+                    ColumnValueAlignment(Col3);
+                    Col3.HeaderText = "week";
 
-                var Col4 = new DataGridViewTextBoxColumn();
-                ColumnValueAlignment(Col4);
-                Col4.HeaderText = "month";
+                    var Col4 = new DataGridViewTextBoxColumn();
+                    ColumnValueAlignment(Col4);
+                    Col4.HeaderText = "month";
 
-                var Col5 = new DataGridViewTextBoxColumn();
-                Col5.HeaderText = "Last dock";
-                ColumnValueAlignment(Col5);
+                    var Col5 = new DataGridViewTextBoxColumn();
+                    Col5.HeaderText = "Last dock";
+                    ColumnValueAlignment(Col5);
 
-                var Col6 = new DataGridViewTextBoxColumn();
-                Col6.HeaderText = "all";
-                ColumnValueAlignment(Col6);
+                    var Col6 = new DataGridViewTextBoxColumn();
+                    Col6.HeaderText = "all";
+                    ColumnValueAlignment(Col6);
 
-                dataGridViewTravel.Columns.AddRange(new DataGridViewColumn[] { Col1, Col2, Col3, Col4, Col5, Col6 });
-
-
-                int intervals = 5;
-                intar = new int[intervals];
-                strarr = new string[intervals];
+                    dataGridViewTravel.Columns.AddRange(new DataGridViewColumn[] { Col1, Col2, Col3, Col4, Col5, Col6 });
 
 
-                DateTime[] timearr = new DateTime[intervals];
+                    intar = new int[intervals];
+                    strarr = new string[intervals];
 
 
-                HistoryEntry lastdocked = hl.GetLastHistoryEntry(x => x.IsDocked);
-                DateTime lastdockTime = DateTime.Now;
-
-                if (lastdocked != null)
-                    lastdockTime = lastdocked.EventTimeLocal;
+                    timearr = new DateTime[intervals];
 
 
-                timearr[0] = DateTime.Now.AddDays(-1);
-                timearr[1] = DateTime.Now.AddDays(-7);
-                timearr[2] = DateTime.Now.AddMonths(-1);
-                timearr[3] = lastdockTime;
-                timearr[4] = new DateTime(2012, 1, 1);
+                    HistoryEntry lastdocked = hl.GetLastHistoryEntry(x => x.IsDocked);
+                    DateTime lastdockTime = DateTime.Now;
+
+                    if (lastdocked != null)
+                        lastdockTime = lastdocked.EventTimeLocal;
+
+
+                    timearr[0] = DateTime.Now.AddDays(-1);
+                    timearr[1] = DateTime.Now.AddDays(-7);
+                    timearr[2] = DateTime.Now.AddMonths(-1);
+                    timearr[3] = lastdockTime;
+                    timearr[4] = new DateTime(2012, 1, 1);
+
+                    endTime = DateTime.Now;
+                }
+                else  // Custom
+                {
+                    intervals = 1;
+                    var Col1 = new DataGridViewTextBoxColumn();
+                    Col1.HeaderText = "";
+
+                    var Col2 = new DataGridViewTextBoxColumn();
+                    ColumnValueAlignment(Col2);
+                    Col2.HeaderText = userControlStatsTimeTravel.CustomDateTimePickerFrom.Value.ToShortDateString() + " - " + userControlStatsTimeTravel.CustomDateTimePickerTo.Value.ToShortDateString();
+
+                    dataGridViewTravel.Columns.AddRange(new DataGridViewColumn[] { Col1, Col2});
+
+
+                    intar = new int[intervals];
+                    strarr = new string[intervals];
+
+
+                    timearr = new DateTime[intervals];
+
+
+                    timearr[0] = userControlStatsTimeTravel.CustomDateTimePickerFrom.Value;
+                    endTime = userControlStatsTimeTravel.CustomDateTimePickerTo.Value.AddDays(1);
+
+                }
+
 
 
                 for (int ii = 0; ii<intervals; ii++)
-                    intar[ii] = hl.GetFSDJumps(timearr[ii], DateTime.Now);
+                    intar[ii] = hl.GetFSDJumps(timearr[ii], endTime);
                 StatToDGV(dataGridViewTravel, "Jumps", intar);
 
                 for (int ii = 0; ii < intervals; ii++)
-                    strarr[ii] = hl.GetTraveledLy(timearr[ii], DateTime.Now).ToString("0.00");
+                    strarr[ii] = hl.GetTraveledLy(timearr[ii], endTime).ToString("0.00");
                 StatToDGV(dataGridViewTravel, "Traveled Ly", strarr);
 
                 for (int ii = 0; ii < intervals; ii++)
-                    intar[ii] = hl.GetFSDBoostUsed(timearr[ii], DateTime.Now);
+                    intar[ii] = hl.GetFSDBoostUsed(timearr[ii], endTime);
                 StatToDGV(dataGridViewTravel, "Boost used", intar);
 
                 for (int ii = 0; ii < intervals; ii++)
-                    intar[ii] = hl.GetJetConeBoost(timearr[ii], DateTime.Now);
+                    intar[ii] = hl.GetJetConeBoost(timearr[ii], endTime);
                 StatToDGV(dataGridViewTravel, "Jet Cone Boost", intar);
 
                 for (int ii = 0; ii < intervals; ii++)
-                    intar[ii] = hl.GetTouchDown(timearr[ii], DateTime.Now);
+                    intar[ii] = hl.GetTouchDown(timearr[ii], endTime);
                 StatToDGV(dataGridViewTravel, "Landed", intar);
 
 
                 for (int ii = 0; ii < intervals; ii++)
-                    intar[ii] = hl.GetHeatWarning(timearr[ii], DateTime.Now);
+                    intar[ii] = hl.GetHeatWarning(timearr[ii], endTime);
                 StatToDGV(dataGridViewTravel, "Heat Warning", intar);
 
                 for (int ii = 0; ii < intervals; ii++)
-                    intar[ii] = hl.GetHeatDamage(timearr[ii], DateTime.Now);
+                    intar[ii] = hl.GetHeatDamage(timearr[ii], endTime);
                 StatToDGV(dataGridViewTravel, "Heat damage", intar);
 
                 for (int ii = 0; ii < intervals; ii++)
-                    intar[ii] = hl.GetFuelScooped(timearr[ii], DateTime.Now);
+                    intar[ii] = hl.GetFuelScooped(timearr[ii], endTime);
                 StatToDGV(dataGridViewTravel, "Fuel Scooped", intar);
 
                 for (int ii = 0; ii < intervals; ii++)
-                    strarr[ii] = hl.GetFuelScoopedTons(timearr[ii], DateTime.Now).ToString("0.00");
+                    strarr[ii] = hl.GetFuelScoopedTons(timearr[ii], endTime).ToString("0.00");
                 StatToDGV(dataGridViewTravel, "Scooped Tons", strarr);
 
                 for (int ii = 0; ii < intervals; ii++)
-                    strarr[ii] = hl.GetNrScans(timearr[ii], DateTime.Now).ToString("0");
+                    strarr[ii] = hl.GetNrScans(timearr[ii], endTime).ToString("0");
                 StatToDGV(dataGridViewTravel, "Scans", strarr);
 
                 for (int ii = 0; ii < intervals; ii++)
-                    strarr[ii] = hl.GetScanValue(timearr[ii], DateTime.Now).ToString("0");
+                    strarr[ii] = hl.GetScanValue(timearr[ii], endTime).ToString("0");
                 StatToDGV(dataGridViewTravel, "Scan value", strarr);
 
 
             }
             else
             {
-                int intervals = 10;
+                intervals = 10;
                 DateTime[] timeintervals = new DateTime[intervals + 1];
                 DateTime currentday = DateTime.Today;
 
@@ -425,59 +459,78 @@ namespace EDDiscovery.UserControls
             int intervals;
             List<JournalScan>[] scanlists = null;
 
-            if (userControlStatsTimeScan.TimeMode == UserControlStatsTimeModeEnum.Summary)
+            if (userControlStatsTimeScan.TimeMode == UserControlStatsTimeModeEnum.Summary || userControlStatsTimeScan.TimeMode == UserControlStatsTimeModeEnum.Custom)
             {
                 dataGridViewScan.Rows.Clear();
                 dataGridViewScan.Columns.Clear();
                 dataGridViewScan.Dock = DockStyle.Fill;
                 dataGridViewScan.Visible = true;
 
+                if (userControlStatsTimeScan.TimeMode == UserControlStatsTimeModeEnum.Summary)
+                {
+                    var Col1 = new DataGridViewTextBoxColumn();
+                    Col1.HeaderText = "Body Type";
 
-                var Col1 = new DataGridViewTextBoxColumn();
-                Col1.HeaderText = "Body Type";
+                    var Col2 = new DataGridViewTextBoxColumn();
+                    Col2.HeaderText = "24 hours";
+                    ColumnValueAlignment(Col2);
 
-                var Col2 = new DataGridViewTextBoxColumn();
-                Col2.HeaderText = "24 hours";
-                ColumnValueAlignment(Col2);
+                    var Col3 = new DataGridViewTextBoxColumn();
+                    Col3.HeaderText = "week";
+                    ColumnValueAlignment(Col3);
 
-                var Col3 = new DataGridViewTextBoxColumn();
-                Col3.HeaderText = "week";
-                ColumnValueAlignment(Col3);
-
-                var Col4 = new DataGridViewTextBoxColumn();
-                Col4.HeaderText = "month";
-                ColumnValueAlignment(Col4);
+                    var Col4 = new DataGridViewTextBoxColumn();
+                    Col4.HeaderText = "month";
+                    ColumnValueAlignment(Col4);
 
 
-                var Col5 = new DataGridViewTextBoxColumn();
-                Col5.HeaderText = "Last dock";
-                ColumnValueAlignment(Col5);
+                    var Col5 = new DataGridViewTextBoxColumn();
+                    Col5.HeaderText = "Last dock";
+                    ColumnValueAlignment(Col5);
 
-                var Col6 = new DataGridViewTextBoxColumn();
-                Col6.HeaderText = "all";
-                ColumnValueAlignment(Col6);
+                    var Col6 = new DataGridViewTextBoxColumn();
+                    Col6.HeaderText = "all";
+                    ColumnValueAlignment(Col6);
 
-                dataGridViewScan.Columns.AddRange(new DataGridViewColumn[] { Col1, Col2, Col3, Col4, Col5, Col6 });
+                    dataGridViewScan.Columns.AddRange(new DataGridViewColumn[] { Col1, Col2, Col3, Col4, Col5, Col6 });
 
-                intervals = 5;
-                intar = new int[intervals];
-                strarr = new string[intervals];
+                    intervals = 5;
+                    intar = new int[intervals];
+                    strarr = new string[intervals];
 
-                
-                scanlists = new List<JournalScan>[intervals];
 
-                HistoryEntry lastdocked =   hl.GetLastHistoryEntry(x => x.IsDocked);
-                DateTime lastdockTime = DateTime.Now;
+                    scanlists = new List<JournalScan>[intervals];
 
-                if (lastdocked != null)
-                    lastdockTime = lastdocked.EventTimeLocal;
+                    HistoryEntry lastdocked = hl.GetLastHistoryEntry(x => x.IsDocked);
+                    DateTime lastdockTime = DateTime.Now;
 
-                scanlists[0] = hl.GetScanList(DateTime.Now.AddDays(-1), DateTime.Now);
-                scanlists[1] = hl.GetScanList(DateTime.Now.AddDays(-7), DateTime.Now);
-                scanlists[2] = hl.GetScanList(DateTime.Now.AddMonths(-1), DateTime.Now);
-                scanlists[3] = hl.GetScanList(lastdockTime, DateTime.Now);
-                scanlists[4] = hl.GetScanList(new DateTime(2012, 1, 1), DateTime.Now);
+                    if (lastdocked != null)
+                        lastdockTime = lastdocked.EventTimeLocal;
 
+                    scanlists[0] = hl.GetScanList(DateTime.Now.AddDays(-1), DateTime.Now);
+                    scanlists[1] = hl.GetScanList(DateTime.Now.AddDays(-7), DateTime.Now);
+                    scanlists[2] = hl.GetScanList(DateTime.Now.AddMonths(-1), DateTime.Now);
+                    scanlists[3] = hl.GetScanList(lastdockTime, DateTime.Now);
+                    scanlists[4] = hl.GetScanList(new DateTime(2012, 1, 1), DateTime.Now);
+                }
+                else
+                {
+                    var Col1 = new DataGridViewTextBoxColumn();
+                    Col1.HeaderText = "";
+
+                    var Col2 = new DataGridViewTextBoxColumn();
+                    ColumnValueAlignment(Col2);
+                    Col2.HeaderText = userControlStatsTimeScan.CustomDateTimePickerFrom.Value.ToShortDateString() + " - " + userControlStatsTimeScan.CustomDateTimePickerTo.Value.ToShortDateString();
+
+                    dataGridViewScan.Columns.AddRange(new DataGridViewColumn[] { Col1, Col2 });
+
+                    intervals = 1;
+                    intar = new int[intervals];
+                    strarr = new string[intervals];
+
+                    scanlists = new List<JournalScan>[intervals];
+                    scanlists[0] = hl.GetScanList(userControlStatsTimeScan.CustomDateTimePickerFrom.Value, userControlStatsTimeScan.CustomDateTimePickerTo.Value.AddDays(1));
+                }
 
 
             }

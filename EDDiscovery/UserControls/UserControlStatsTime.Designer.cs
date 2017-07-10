@@ -13,9 +13,11 @@
  * 
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
+using ExtendedControls;
+
 namespace EDDiscovery.UserControls
 {
-    partial class UserControlStatsTime
+    public partial class UserControlStatsTime
     {
         /// <summary> 
         /// Required designer variable.
@@ -45,17 +47,21 @@ namespace EDDiscovery.UserControls
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(UserControlStatsTime));
             this.panelControls = new System.Windows.Forms.Panel();
+            this.CustomDateTimePickerTo = new ExtendedControls.CustomDateTimePicker();
+            this.CustomDateTimePickerFrom = new ExtendedControls.CustomDateTimePicker();
+            this.checkBoxCustomStars = new ExtendedControls.CheckBoxCustom();
+            this.checkBoxCustomPlanets = new ExtendedControls.CheckBoxCustom();
             this.checkBoxCustomGraph = new ExtendedControls.CheckBoxCustom();
             this.checkBoxCustomText = new ExtendedControls.CheckBoxCustom();
             this.comboBoxTimeMode = new ExtendedControls.ComboBoxCustom();
             this.labelTime = new System.Windows.Forms.Label();
-            this.checkBoxCustomStars = new ExtendedControls.CheckBoxCustom();
-            this.checkBoxCustomPlanets = new ExtendedControls.CheckBoxCustom();
             this.panelControls.SuspendLayout();
             this.SuspendLayout();
             // 
             // panelControls
             // 
+            this.panelControls.Controls.Add(this.CustomDateTimePickerTo);
+            this.panelControls.Controls.Add(this.CustomDateTimePickerFrom);
             this.panelControls.Controls.Add(this.checkBoxCustomStars);
             this.panelControls.Controls.Add(this.checkBoxCustomPlanets);
             this.panelControls.Controls.Add(this.checkBoxCustomGraph);
@@ -68,6 +74,81 @@ namespace EDDiscovery.UserControls
             this.panelControls.Size = new System.Drawing.Size(800, 27);
             this.panelControls.TabIndex = 6;
             this.panelControls.Paint += new System.Windows.Forms.PaintEventHandler(this.panelControls_Paint);
+            // 
+            // CustomDateTimePickerTo
+            // 
+            this.CustomDateTimePickerTo.BorderColor = System.Drawing.Color.Transparent;
+            this.CustomDateTimePickerTo.BorderColorScaling = 0.5F;
+            this.CustomDateTimePickerTo.Checked = false;
+            this.CustomDateTimePickerTo.CustomFormat = "yyyy-MM-dd";
+            this.CustomDateTimePickerTo.Format = System.Windows.Forms.DateTimePickerFormat.Long;
+            this.CustomDateTimePickerTo.Location = new System.Drawing.Point(304, 1);
+            this.CustomDateTimePickerTo.Name = "CustomDateTimePickerTo";
+            this.CustomDateTimePickerTo.SelectedColor = System.Drawing.Color.Yellow;
+            this.CustomDateTimePickerTo.ShowCheckBox = false;
+            this.CustomDateTimePickerTo.ShowUpDown = false;
+            this.CustomDateTimePickerTo.Size = new System.Drawing.Size(75, 23);
+            this.CustomDateTimePickerTo.TabIndex = 8;
+            this.CustomDateTimePickerTo.Text = "customDateTimePicker2";
+            this.CustomDateTimePickerTo.TextBackColor = System.Drawing.Color.DarkBlue;
+            this.CustomDateTimePickerTo.Value = new System.DateTime(2017, 7, 10, 21, 10, 15, 925);
+            this.CustomDateTimePickerTo.ValueChanged += new System.EventHandler(this.customDateTimePickerTo_ValueChanged);
+            // 
+            // CustomDateTimePickerFrom
+            // 
+            this.CustomDateTimePickerFrom.BorderColor = System.Drawing.Color.Transparent;
+            this.CustomDateTimePickerFrom.BorderColorScaling = 0.5F;
+            this.CustomDateTimePickerFrom.Checked = false;
+            this.CustomDateTimePickerFrom.CustomFormat = "yyyy-MM-dd";
+            this.CustomDateTimePickerFrom.Format = System.Windows.Forms.DateTimePickerFormat.Long;
+            this.CustomDateTimePickerFrom.Location = new System.Drawing.Point(223, 1);
+            this.CustomDateTimePickerFrom.Name = "CustomDateTimePickerFrom";
+            this.CustomDateTimePickerFrom.SelectedColor = System.Drawing.Color.Yellow;
+            this.CustomDateTimePickerFrom.ShowCheckBox = false;
+            this.CustomDateTimePickerFrom.ShowUpDown = false;
+            this.CustomDateTimePickerFrom.Size = new System.Drawing.Size(75, 23);
+            this.CustomDateTimePickerFrom.TabIndex = 7;
+            this.CustomDateTimePickerFrom.Text = "customDateTimePicker1";
+            this.CustomDateTimePickerFrom.TextBackColor = System.Drawing.Color.DarkBlue;
+            this.CustomDateTimePickerFrom.Value = new System.DateTime(2017, 7, 10, 21, 10, 15, 925);
+            this.CustomDateTimePickerFrom.ValueChanged += new System.EventHandler(this.customDateTimePickerFrom_ValueChanged);
+            // 
+            // checkBoxCustomStars
+            // 
+            this.checkBoxCustomStars.Appearance = System.Windows.Forms.Appearance.Button;
+            this.checkBoxCustomStars.CheckBoxColor = System.Drawing.Color.Gray;
+            this.checkBoxCustomStars.CheckBoxInnerColor = System.Drawing.Color.White;
+            this.checkBoxCustomStars.CheckColor = System.Drawing.Color.DarkBlue;
+            this.checkBoxCustomStars.FontNerfReduction = 0.5F;
+            this.checkBoxCustomStars.Image = ((System.Drawing.Image)(resources.GetObject("checkBoxCustomStars.Image")));
+            this.checkBoxCustomStars.Location = new System.Drawing.Point(191, 0);
+            this.checkBoxCustomStars.MouseOverColor = System.Drawing.Color.CornflowerBlue;
+            this.checkBoxCustomStars.Name = "checkBoxCustomStars";
+            this.checkBoxCustomStars.Size = new System.Drawing.Size(26, 26);
+            this.checkBoxCustomStars.TabIndex = 6;
+            this.checkBoxCustomStars.TickBoxReductionSize = 10;
+            this.checkBoxCustomStars.UseVisualStyleBackColor = true;
+            this.checkBoxCustomStars.Visible = false;
+            this.checkBoxCustomStars.CheckedChanged += new System.EventHandler(this.checkBoxCustomStars_CheckedChanged);
+            // 
+            // checkBoxCustomPlanets
+            // 
+            this.checkBoxCustomPlanets.Appearance = System.Windows.Forms.Appearance.Button;
+            this.checkBoxCustomPlanets.CheckAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.checkBoxCustomPlanets.CheckBoxColor = System.Drawing.Color.Gray;
+            this.checkBoxCustomPlanets.CheckBoxInnerColor = System.Drawing.Color.White;
+            this.checkBoxCustomPlanets.CheckColor = System.Drawing.Color.DarkBlue;
+            this.checkBoxCustomPlanets.FontNerfReduction = 0.5F;
+            this.checkBoxCustomPlanets.Image = ((System.Drawing.Image)(resources.GetObject("checkBoxCustomPlanets.Image")));
+            this.checkBoxCustomPlanets.Location = new System.Drawing.Point(159, 0);
+            this.checkBoxCustomPlanets.MouseOverColor = System.Drawing.Color.CornflowerBlue;
+            this.checkBoxCustomPlanets.Name = "checkBoxCustomPlanets";
+            this.checkBoxCustomPlanets.Size = new System.Drawing.Size(26, 26);
+            this.checkBoxCustomPlanets.TabIndex = 5;
+            this.checkBoxCustomPlanets.TickBoxReductionSize = 10;
+            this.checkBoxCustomPlanets.UseVisualStyleBackColor = true;
+            this.checkBoxCustomPlanets.Visible = false;
+            this.checkBoxCustomPlanets.CheckedChanged += new System.EventHandler(this.checkBoxCustomPlanets_CheckedChanged);
             // 
             // checkBoxCustomGraph
             // 
@@ -142,43 +223,6 @@ namespace EDDiscovery.UserControls
             this.labelTime.TabIndex = 2;
             this.labelTime.Text = "Time";
             // 
-            // checkBoxCustomStars
-            // 
-            this.checkBoxCustomStars.Appearance = System.Windows.Forms.Appearance.Button;
-            this.checkBoxCustomStars.CheckBoxColor = System.Drawing.Color.Gray;
-            this.checkBoxCustomStars.CheckBoxInnerColor = System.Drawing.Color.White;
-            this.checkBoxCustomStars.CheckColor = System.Drawing.Color.DarkBlue;
-            this.checkBoxCustomStars.FontNerfReduction = 0.5F;
-            this.checkBoxCustomStars.Image = ((System.Drawing.Image)(resources.GetObject("checkBoxCustomStars.Image")));
-            this.checkBoxCustomStars.Location = new System.Drawing.Point(191, 0);
-            this.checkBoxCustomStars.MouseOverColor = System.Drawing.Color.CornflowerBlue;
-            this.checkBoxCustomStars.Name = "checkBoxCustomStars";
-            this.checkBoxCustomStars.Size = new System.Drawing.Size(26, 26);
-            this.checkBoxCustomStars.TabIndex = 6;
-            this.checkBoxCustomStars.TickBoxReductionSize = 10;
-            this.checkBoxCustomStars.UseVisualStyleBackColor = true;
-            this.checkBoxCustomStars.Visible = false;
-            this.checkBoxCustomStars.CheckedChanged += new System.EventHandler(this.checkBoxCustomStars_CheckedChanged);
-            // 
-            // checkBoxCustomPlanets
-            // 
-            this.checkBoxCustomPlanets.Appearance = System.Windows.Forms.Appearance.Button;
-            this.checkBoxCustomPlanets.CheckAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.checkBoxCustomPlanets.CheckBoxColor = System.Drawing.Color.Gray;
-            this.checkBoxCustomPlanets.CheckBoxInnerColor = System.Drawing.Color.White;
-            this.checkBoxCustomPlanets.CheckColor = System.Drawing.Color.DarkBlue;
-            this.checkBoxCustomPlanets.FontNerfReduction = 0.5F;
-            this.checkBoxCustomPlanets.Image = ((System.Drawing.Image)(resources.GetObject("checkBoxCustomPlanets.Image")));
-            this.checkBoxCustomPlanets.Location = new System.Drawing.Point(159, 0);
-            this.checkBoxCustomPlanets.MouseOverColor = System.Drawing.Color.CornflowerBlue;
-            this.checkBoxCustomPlanets.Name = "checkBoxCustomPlanets";
-            this.checkBoxCustomPlanets.Size = new System.Drawing.Size(26, 26);
-            this.checkBoxCustomPlanets.TabIndex = 5;
-            this.checkBoxCustomPlanets.TickBoxReductionSize = 10;
-            this.checkBoxCustomPlanets.UseVisualStyleBackColor = true;
-            this.checkBoxCustomPlanets.Visible = false;
-            this.checkBoxCustomPlanets.CheckedChanged += new System.EventHandler(this.checkBoxCustomPlanets_CheckedChanged);
-            // 
             // UserControlStatsTime
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -202,5 +246,7 @@ namespace EDDiscovery.UserControls
         private ExtendedControls.CheckBoxCustom checkBoxCustomText;
         private ExtendedControls.CheckBoxCustom checkBoxCustomStars;
         private ExtendedControls.CheckBoxCustom checkBoxCustomPlanets;
+        internal ExtendedControls.CustomDateTimePicker CustomDateTimePickerTo;
+        internal ExtendedControls.CustomDateTimePicker CustomDateTimePickerFrom;
     }
 }
