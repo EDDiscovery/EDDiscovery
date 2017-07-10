@@ -91,7 +91,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public double? nOrbitalInclination;                         // direct
         public double? nPeriapsis;                                  // direct
         public double? nOrbitalPeriod { get; set; }                 // direct
-        public double? nAxialTilt { get; set; }                 // direct
+        public double? nAxialTilt { get; set; }                 // direct, radians
 
         // Planets
         public string PlanetClass { get; set; }                     // planet class, direct
@@ -381,7 +381,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
                 scanText.AppendFormat("Absolute Magnitude: {0:0.00}\n", nAbsoluteMagnitude.Value);
 
             if (nAxialTilt.HasValue)
-                scanText.AppendFormat("Axial tilt: {0:0.00}°\n", nAxialTilt.Value);
+                scanText.AppendFormat("Axial tilt: {0:0.00}°\n", nAxialTilt.Value*180.0/Math.PI);
             
             if (nRotationPeriod.HasValue)
                 scanText.AppendFormat("Rotation Period: {0} days\n", (nRotationPeriod.Value / oneDay_s).ToString("N1"));
