@@ -21,6 +21,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -106,6 +107,8 @@ namespace EDDiscovery.EliteDangerous
                 return Color.Green;
             if (s == "Standard")
                 return Color.SandyBrown;
+            if (s == "Unknown")
+                return Color.Red;
             System.Diagnostics.Debug.Assert(false);
             return Color.Black;
         }
@@ -130,7 +133,12 @@ namespace EDDiscovery.EliteDangerous
             return Add(MaterialManufacturedCategory, CByType(typeofit), name, typeofit, shortname , fdname);
         }
 
-        private static bool AddCommodity(string aliasnamelist, string typeofit, string fdname = "" )        // fdname only if not a list.
+        private static bool AddCommodity(string aliasnamelist, string typeofit, string fdname = "")        // fdname only if not a list.
+        {
+            return AddList(CommodityCategory, Color.Green, aliasnamelist, typeofit, "", fdname);
+        }
+
+        private static bool AddCommodityO(string typeofit, string fdname, string aliasnamelist)        // for FD order
         {
             return AddList(CommodityCategory, Color.Green, aliasnamelist, typeofit, "", fdname);
         }
@@ -231,6 +239,17 @@ namespace EDDiscovery.EliteDangerous
             AddCommodity("Ai Relics;Ancient Artefact;Antimatter Containment Unit;Antiquities;Assault Plans;Black Box;Commercial Samples;Data Core;Diplomatic Bag;Encrypted Correspondence;Encrypted Data Storage;Experimental Chemicals;Fossil Remnants", sv);
             AddCommodity("Galactic Travel Guide;Geological Samples;Hostage;Military Intelligence;Military Plans;Mysterious Idol;Occupied CryoPod;Occupied Escape Pod;Personal Effects;Political Prisoner;Precious Gems;Prohibited Research Materials;Prototype Tech", sv);
             AddCommodity("Rare Artwork;Rebel Transmissions;Salvageable Wreckage;Sap 8 Core Container;Scientific Research;Scientific Samples;Space Pioneer Relics;Tactical Data;Technical Blueprints;Trade Data;Unknown Probe;Unstable Data Core", sv);
+            AddCommodity("Large Survey Data Cache", sv, "largeexplorationdatacash");
+            AddCommodity("Small Survey Data Cache", sv, "smallexplorationdatacash");
+            AddCommodity("Small Survey Data Cache", sv, "smallexplorationdatacash");
+            AddCommodity("Small Survey Data Cache", sv, "smallexplorationdatacash");
+
+            AddCommodityO(sv, "AncientRelic", "Ancient Relic");
+            AddCommodityO(sv, "AncientOrb","Ancient Orb");
+            AddCommodityO(sv, "AncientCasket","Ancient Casket");
+            AddCommodityO(sv, "AncientTablet", "Ancient Tablet");
+            AddCommodityO(sv, "AncientUrn","Ancient Urn");
+            AddCommodityO(sv, "AncientTotem","Ancient Totem");
 
             AddCommodity("Imperial Slaves;Slaves", "Slavery");
 
@@ -414,7 +433,7 @@ namespace EDDiscovery.EliteDangerous
             AddEnc( "Untypical Shield Scans", "Standard", "USS", "shielddensityreports");
             AddEnc( "Peculiar Shield Frequency Data", "Standard", "SFD", "shieldfrequencydata");
             AddEnc( "Classified Scan Fragment", "Standard", "CFSD", "classifiedscandata");
-            AddEnc( "Abnormal Compact Emission Data", "Standard", "CED", "compactemissionsdata");
+            AddEnc( "Abnormal Compact Emissions Data", "Standard", "CED", "compactemissionsdata");
             AddEnc( "Modified Embedded Firmware", "Standard", "EFW", "embeddedfirmware");
             AddEnc( "Pattern Alpha Obelisk Data", "Standard", "PAOD", "ancientbiologicaldata");
             // rare data
@@ -490,7 +509,26 @@ namespace EDDiscovery.EliteDangerous
             AddManu( "Proto Radiolic Alloys", "Very Rare", "PRA");
             AddManu( "Unknown Fragment", "Very Rare", "UES", "unknownenergysource");
 
+            //Unknowns, data from INARA and cometbourne, July 17
+            AddManu("Unknown Carapace", "Common", "UKCP", "unknowncarapace");
+            AddManu("Unknown Energy Cell", "Standard", "UKEC", "unknownenergycell");
+            AddManu("Unknown Organic Circuitry", "Standard", "UKOC", "unknownorganiccircuitry");
+            AddManu("Unknown Technology Components", "Standard", "UKTC", "unknowntechnologycomponents");
+
+            AddEnc("TG Composition Data", "Unknown", "TGCD", "tg_compositiondata");
+            AddEnc("TG Structural Data", "Unknown", "TGSD", "tg_structuraldata");
+            AddEnc("TG Residue Data", "Unknown", "TGRD", "tg_residuedata");
+
+            // INARA - no idea what the FD IDs are
+
+            //Unknown Material Composition Data   Standard
+            //Unknown Residue Data Analysis Rare
+            //Unknown Structural Data Common
+            //Unknown Technology Components
+
+
             //CheckAnthor(); // Check here..
+            //CheckEDData();
 
             // beyond Anthor but seen in logs
             AddCommodity("Drones", "Drones");
@@ -1138,7 +1176,7 @@ namespace EDDiscovery.EliteDangerous
                     System.Diagnostics.Debug.WriteLine("  **3 Alias name disagres " + db.name + " vs " + realname);
             }
 
-            foreach ( KeyValuePair<string,MaterialCommodityDB> k in cachelist)
+            foreach (KeyValuePair<string, MaterialCommodityDB> k in cachelist)
             {
                 string fdname = k.Value.fdname;
                 Alias a = EDSM_User_Alias_Data.Find(x => x.fdname.Equals(fdname));
@@ -1191,6 +1229,66 @@ namespace EDDiscovery.EliteDangerous
                 }
             }
 
+        }
+
+        #endregion
+
+        #region ED Check
+
+        static void CheckEDData()
+        {
+            ExportImport.CVSFile cvs = new ExportImport.CVSFile();
+            if (cvs.Read(@"c:\code\Docs\23Materials.csv"))
+            {
+                foreach (ExportImport.CVSFile.Line l in cvs.rows)
+                {
+                    string matname = l.cells[1];
+
+                    MaterialCommodityDB entry = GetCachedMaterial(matname.ToLower());
+                    if (entry != null)
+                    {
+                        string fdlongname = l.cells[4].Trim();  // some spurious spaces seen
+                        if (entry.name.Equals(fdlongname))
+                        {
+                            //System.Diagnostics.Debug.WriteLine("FD data " + matname + " is in DB, name matches");
+                        }
+                        else
+                            System.Diagnostics.Debug.WriteLine("FD data " + matname + " is in DB, name NOT matches " + l.cells[4] + " vs " + entry.name);
+                    }
+                    else
+                        System.Diagnostics.Debug.WriteLine("FD data " + matname + " is NOT in DB");
+                }
+
+            }
+
+            if (cvs.Read(@"c:\code\Docs\23commods.csv"))
+            {
+                foreach (ExportImport.CVSFile.Line l in cvs.rows)
+                {
+                    string category = l.cells[1];
+                    string commodname = l.cells[2].ToLower();
+                    string fdlongname = l.cells[3];
+
+                    MaterialCommodityDB entry = GetCachedMaterial(commodname);
+                    if (entry != null)
+                    {
+                        if (entry.name.Equals(fdlongname, StringComparison.InvariantCultureIgnoreCase))
+                        {
+                            //System.Diagnostics.Debug.WriteLine("FD data " + matname + " is in DB, name matches");
+                        }
+                        else
+                            System.Diagnostics.Debug.WriteLine("FD data " + commodname + " is in DB, name NOT matches " + fdlongname + " vs " + entry.name);
+                    }
+                    else if (fdnamemangling.ContainsKey(commodname))
+                    {
+                        System.Diagnostics.Debug.WriteLine("FD data " + commodname + " is NAME mangled to " + fdnamemangling[commodname]);
+
+                    }
+                    else
+                        System.Diagnostics.Debug.WriteLine("FD data " + commodname + " is NOT in DB");
+                }
+
+            }
         }
 
         #endregion
