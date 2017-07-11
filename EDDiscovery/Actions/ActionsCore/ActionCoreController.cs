@@ -11,8 +11,6 @@ namespace EDDiscovery.Actions
         protected Actions.ActionFileList actionfiles;
         protected Actions.ActionRun actionrunasync;
 
-        protected string actionfileskeyevents;
-
         protected ConditionVariables programrunglobalvariables;         // program run, lost at power off, set by GLOBAL or internal 
         protected ConditionVariables persistentglobalvariables;   // user variables, set by user only, including user setting vars like SpeechVolume
         protected ConditionVariables globalvariables;                  // combo of above.
