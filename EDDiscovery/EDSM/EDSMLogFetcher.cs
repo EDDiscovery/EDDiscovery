@@ -44,16 +44,26 @@ namespace EDDiscovery.EDSM
         {
             ExitRequested.Reset();
 
-            if ((ThreadEDSMFetchLogs == null || !ThreadEDSMFetchLogs.IsAlive) && Commander.SyncFromEdsm)
+            if (Commander != null && (ThreadEDSMFetchLogs == null || !ThreadEDSMFetchLogs.IsAlive) && Commander.SyncFromEdsm)
             {
                 ThreadEDSMFetchLogs = new Thread(FetcherThreadProc) { IsBackground = true, Name = "EDSM Log Fetcher" };
                 ThreadEDSMFetchLogs.Start();
             }
         }
 
-        public void Stop()
+        public void AsyncStop()
         {
             ExitRequested.Set();
+        }
+
+        public void StopCheck()
+        {
+            if (ThreadEDSMFetchLogs != null)
+            {
+                ExitRequested.Set();
+                ThreadEDSMFetchLogs.Join(); // wait for exit.
+                ThreadEDSMFetchLogs = null;
+            }
         }
 
         private void FetcherThreadProc()

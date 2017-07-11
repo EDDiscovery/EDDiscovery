@@ -498,7 +498,7 @@ namespace EDDiscovery
 
             if (Capi.LoggedIn)
             {
-                if (Controller.history != null && Controller.history.GetLast.ContainsRares())
+                if (Controller.history != null && Controller.history.Count > 0 && Controller.history.GetLast.ContainsRares())
                 {
                     LogLine("Not performing Companion API get due to carrying rares");
                 }
