@@ -341,7 +341,7 @@ namespace EDDiscovery
                     {
                         newRelease = rel;
                         this.BeginInvoke(new Action(() => Controller.LogLineHighlight("New EDDiscovery installer available: " + rel.ReleaseName)));
-                        this.BeginInvoke(new Action(() => PanelInfoNewRelease()));
+                        this.BeginInvoke(new Action(() => ShowInfoPanel("New Release Available!", true)));
                         return true;
                     }
                 }
@@ -354,15 +354,9 @@ namespace EDDiscovery
             return false;
         }
 
-        private void PanelInfoNewRelease()
-        {
-            ShowInfoPanel("Download new release!", true, Color.Green);
-        }
-
-
         private void InitFormControls()
         {
-            ShowInfoPanel("Loading. Please wait!", true, Color.Gold);
+            ShowInfoPanel("Loading. Please wait!", true);
 
             routeControl1.travelhistorycontrol1 = travelHistoryControl1;
         }
@@ -423,6 +417,8 @@ namespace EDDiscovery
             this.Text = "EDDiscovery " + label_version.Text;            // note in no border mode, this is not visible on the title bar but it is in the taskbar..
 
             theme.ApplyToForm(this);
+
+            labelInfoBoxTop.Location = new Point(label_version.Right + 16, labelInfoBoxTop.Top);
 
             Controller.RefreshDisplays();
         }
@@ -670,11 +666,10 @@ namespace EDDiscovery
                 PopOuts.SaveCurrentPopouts();
         }
 
-        public void ShowInfoPanel(string message, bool visible, Color? backColour = null)
+        public void ShowInfoPanel(string message, bool visible)
         {
-            labelPanelText.Text = message;
-            panelInfo.Visible = visible;
-            if (backColour.HasValue) panelInfo.BackColor = backColour.Value;
+            labelInfoBoxTop.Text = message;
+            labelInfoBoxTop.Visible = visible;
         }
 
         private void EDDiscoveryForm_FormClosing(object sender, FormClosingEventArgs e)
