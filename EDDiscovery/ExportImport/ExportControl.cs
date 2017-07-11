@@ -318,7 +318,6 @@ namespace EDDiscovery.Export
                 return;
             }
             ImportHistory ih = new ImportHistory(importFile, delim, datecol, timecol, namecol, notecol, checkBoxImpHeader.Checked, cmdrID);
-            _discoveryForm.ShowInfoPanel("Importing, please wait...", true, Color.Gold);
             string result;
             if (ih.Import(out result))
             {
@@ -329,7 +328,6 @@ namespace EDDiscovery.Export
             {
                 EDDiscovery.Forms.MessageBoxTheme.Show("Import failed: " + result, "EDD Import", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-            _discoveryForm.ShowInfoPanel("", false);
             ih = null;
         }
 

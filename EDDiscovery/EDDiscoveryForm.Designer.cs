@@ -45,7 +45,7 @@ namespace EDDiscovery
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(EDDiscoveryForm));
-            ExtendedControls.TabStyleSquare tabStyleSquare1 = new ExtendedControls.TabStyleSquare();
+            ExtendedControls.TabStyleSquare tabStyleSquare4 = new ExtendedControls.TabStyleSquare();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.toolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.show2DMapsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -83,8 +83,7 @@ namespace EDDiscovery
             this.reportIssueIdeasToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpMenuSeparatorBottom = new System.Windows.Forms.ToolStripSeparator();
             this.checkForNewReleaseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.panelInfo = new System.Windows.Forms.Panel();
-            this.labelPanelText = new System.Windows.Forms.Label();
+            this.labelInfoBoxTop = new System.Windows.Forms.Label();
             this.label_version = new System.Windows.Forms.Label();
             this.panel_eddiscovery = new System.Windows.Forms.Panel();
             this.edsmRefreshTimer = new System.Windows.Forms.Timer(this.components);
@@ -117,7 +116,6 @@ namespace EDDiscovery
             this.notifyIconMenu_Hide = new System.Windows.Forms.ToolStripMenuItem();
             this.notifyIconMenu_Exit = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
-            this.panelInfo.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPageTravelHistory.SuspendLayout();
             this.tabPageJournal.SuspendLayout();
@@ -141,7 +139,7 @@ namespace EDDiscovery
             this.helpToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(313, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(221, 24);
             this.menuStrip1.TabIndex = 16;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -447,27 +445,16 @@ namespace EDDiscovery
             this.checkForNewReleaseToolStripMenuItem.Text = "&Check for Updates";
             this.checkForNewReleaseToolStripMenuItem.Click += new System.EventHandler(this.checkForNewReleaseToolStripMenuItem_Click);
             // 
-            // panelInfo
+            // labelInfoBoxTop
             // 
-            this.panelInfo.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.panelInfo.BackColor = System.Drawing.Color.Salmon;
-            this.panelInfo.Controls.Add(this.labelPanelText);
-            this.panelInfo.Location = new System.Drawing.Point(435, 1);
-            this.panelInfo.Name = "panelInfo";
-            this.panelInfo.Size = new System.Drawing.Size(331, 23);
-            this.panelInfo.TabIndex = 17;
-            this.panelInfo.Click += new System.EventHandler(this.panelInfo_Click);
-            // 
-            // labelPanelText
-            // 
-            this.labelPanelText.AutoSize = true;
-            this.labelPanelText.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelPanelText.Location = new System.Drawing.Point(3, -1);
-            this.labelPanelText.Name = "labelPanelText";
-            this.labelPanelText.Size = new System.Drawing.Size(158, 20);
-            this.labelPanelText.TabIndex = 0;
-            this.labelPanelText.Text = "Loading. Please wait!";
-            this.labelPanelText.Click += new System.EventHandler(this.labelPanelText_Click);
+            this.labelInfoBoxTop.AutoSize = true;
+            this.labelInfoBoxTop.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelInfoBoxTop.Location = new System.Drawing.Point(382, 4);
+            this.labelInfoBoxTop.Name = "labelInfoBoxTop";
+            this.labelInfoBoxTop.Size = new System.Drawing.Size(108, 13);
+            this.labelInfoBoxTop.TabIndex = 0;
+            this.labelInfoBoxTop.Text = "Loading. Please wait!";
+            this.labelInfoBoxTop.Click += new System.EventHandler(this.labelPanelText_Click);
             // 
             // label_version
             // 
@@ -523,7 +510,7 @@ namespace EDDiscovery
             this.tabControl1.TabNotSelectedColor = System.Drawing.Color.Gray;
             this.tabControl1.TabOpaque = 100F;
             this.tabControl1.TabSelectedColor = System.Drawing.Color.LightGray;
-            this.tabControl1.TabStyle = tabStyleSquare1;
+            this.tabControl1.TabStyle = tabStyleSquare4;
             this.tabControl1.TextNotSelectedColor = System.Drawing.SystemColors.ControlText;
             this.tabControl1.TextSelectedColor = System.Drawing.SystemColors.ControlText;
             this.tabControl1.SelectedIndexChanged += new System.EventHandler(this.tabControl1_SelectedIndexChanged);
@@ -795,10 +782,10 @@ namespace EDDiscovery
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(993, 744);
+            this.Controls.Add(this.labelInfoBoxTop);
             this.Controls.Add(this.label_version);
             this.Controls.Add(this.panel_eddiscovery);
             this.Controls.Add(this.tabControl1);
-            this.Controls.Add(this.panelInfo);
             this.Controls.Add(this.buttonReloadActions);
             this.Controls.Add(this.panel_minimize);
             this.Controls.Add(this.panel_close);
@@ -818,8 +805,6 @@ namespace EDDiscovery
             this.Resize += new System.EventHandler(this.EDDiscoveryForm_Resize);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
-            this.panelInfo.ResumeLayout(false);
-            this.panelInfo.PerformLayout();
             this.tabControl1.ResumeLayout(false);
             this.tabPageTravelHistory.ResumeLayout(false);
             this.tabPageJournal.ResumeLayout(false);
@@ -845,8 +830,7 @@ namespace EDDiscovery
         private System.Windows.Forms.ToolStripMenuItem helpToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem eDDiscoveryHomepageToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem frontierForumThreadToolStripMenuItem;
-        private System.Windows.Forms.Panel panelInfo;
-        private System.Windows.Forms.Label labelPanelText;
+        private System.Windows.Forms.Label labelInfoBoxTop;
         private System.Windows.Forms.ToolStripMenuItem show2DMapsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem adminToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem forceEDDBUpdateToolStripMenuItem;
