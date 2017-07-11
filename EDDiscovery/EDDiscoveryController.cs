@@ -140,7 +140,7 @@ namespace EDDiscovery
                 PendingClose = true;
                 EDDNSync.StopSync();
                 EdsmSync.StopSync();
-                EdsmLogFetcher.Stop();
+                EdsmLogFetcher.AsyncStop();
                 journalmonitor.StopMonitor();
                 LogLineHighlight("Closing down, please wait..");
                 Console.WriteLine("Close.. safe close launched");
@@ -506,12 +506,13 @@ namespace EDDiscovery
             {
                 if (hist != null)
                 {
-                    OnRefreshCommanders?.Invoke();
-
                     history.Copy(hist);
 
-                    if (history.CommanderId != EdsmLogFetcher.CommanderId)
+                    OnRefreshCommanders?.Invoke();
+
+                    if (history.CommanderId >= 0 && history.CommanderId != EdsmLogFetcher.CommanderId)  // not hidden, and not last cmdr
                     {
+                        EdsmLogFetcher.StopCheck(); // ENSURE stopped.  it was asked to be stop on the refresh, so should be
                         EdsmLogFetcher = new EDSMLogFetcher(history.CommanderId, LogLine);
                         EdsmLogFetcher.OnDownloadedSystems += () => RefreshHistoryAsync();
                     }
@@ -525,7 +526,8 @@ namespace EDDiscovery
                 HistoryRefreshed?.Invoke(this, EventArgs.Empty);        // Internal hook call
 
                 journalmonitor.StartMonitor();
-                EdsmLogFetcher.Start();
+
+                EdsmLogFetcher.Start();         // EDSM log fetcher was stopped, restart it..  ignored if not a valid commander or disabled.
 
                 OnRefreshComplete?.Invoke();                            // History is completed
 
@@ -671,7 +673,7 @@ namespace EDDiscovery
                         break;
                     case 1:  // Refresh Requested
                         journalmonitor.StopMonitor();          // this is called by the foreground.  Ensure background is stopped.  Foreground must restart it.
-                        EdsmLogFetcher.Stop();
+                        EdsmLogFetcher.AsyncStop();     
                         InvokeAsyncOnUiThread(() =>
                         {
                             OnRefreshStarting?.Invoke();
