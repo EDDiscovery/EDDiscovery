@@ -510,14 +510,14 @@ namespace EDDiscovery.EliteDangerous
             AddManu( "Unknown Fragment", "Very Rare", "UES", "unknownenergysource");
 
             //Unknowns, data from INARA and cometbourne, July 17
-            AddManu("Unknown Carapace", "Common", "UKCP", "unknowncarapace");
+            AddManu("Unknown Carapace", "Very Rare", "UKCP", "unknowncarapace");
             AddManu("Unknown Energy Cell", "Standard", "UKEC", "unknownenergycell");
-            AddManu("Unknown Organic Circuitry", "Standard", "UKOC", "unknownorganiccircuitry");
-            AddManu("Unknown Technology Components", "Standard", "UKTC", "unknowntechnologycomponents");
+            AddManu("Unknown Organic Circuitry", "Very Rare", "UKOC", "unknownorganiccircuitry");
+            AddManu("Unknown Technology Components", "Rare", "UKTC", "unknowntechnologycomponents");
 
-            AddEnc("TG Composition Data", "Unknown", "TGCD", "tg_compositiondata");
-            AddEnc("TG Structural Data", "Unknown", "TGSD", "tg_structuraldata");
-            AddEnc("TG Residue Data", "Unknown", "TGRD", "tg_residuedata");
+            AddEnc("Unknown Material Composition Data", "Standard", "UMCD", "tg_compositiondata");
+            AddEnc("Unknown Structural Data", "Common", "UKSD", "tg_structuraldata");
+            AddEnc("Unknown Residue Data Analysis", "Rare", "URDA", "tg_residuedata");
 
             // INARA - no idea what the FD IDs are
 
