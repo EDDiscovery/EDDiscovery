@@ -25,43 +25,28 @@ using System.Windows.Forms;
 
 namespace EDDiscovery.Actions
 {
-    public class ActionController
+
+
+    public class ActionController : ActionCoreController
     {
-        private Actions.ActionFileList actionfiles;
-        private string actionfileskeyevents;
-        private ActionMessageFilter actionfilesmessagefilter;
-        private Actions.ActionRun actionrunasync;
-
-        private ConditionVariables programrunglobalvariables;         // program run, lost at power off, set by GLOBAL or internal 
-        private ConditionVariables persistentglobalvariables;   // user variables, set by user only, including user setting vars like SpeechVolume
-        private ConditionVariables globalvariables;                  // combo of above.
-
         private EDDiscoveryForm discoveryform;
         private EDDiscoveryController discoverycontroller;
 
-        private string lasteditedpack;
+        protected ActionMessageFilter actionfilesmessagefilter;
 
-        public ConditionVariables Globals { get { return globalvariables; } }
         public HistoryList HistoryList { get { return discoverycontroller.history; } }
         public EDDiscoveryForm DiscoveryForm { get { return discoveryform; } }
 
-        public ActionController(EDDiscoveryForm frm, EDDiscoveryController ctrl)
+        private string lasteditedpack;
+
+        public ActionController(EDDiscoveryForm frm, EDDiscoveryController ctrl) : base()
         {
             Action.cmdlist = cmdlist;       // tell actions which commands we support.
 
             discoveryform = frm;
             discoverycontroller = ctrl;
 
-            persistentglobalvariables = new ConditionVariables();
             persistentglobalvariables.FromString(SQLiteConnectionUser.GetSettingString("UserGlobalActionVars", ""), ConditionVariables.FromMode.MultiEntryComma);
-
-            globalvariables = new ConditionVariables(persistentglobalvariables);        // copy existing user ones into to shared buffer..
-
-            programrunglobalvariables = new ConditionVariables();
-
-            SetInternalGlobal("CurrentCulture", System.Threading.Thread.CurrentThread.CurrentCulture.Name);
-            SetInternalGlobal("CurrentCultureInEnglish", System.Threading.Thread.CurrentThread.CurrentCulture.EnglishName);
-            SetInternalGlobal("CurrentCultureISO", System.Threading.Thread.CurrentThread.CurrentCulture.ThreeLetterISOLanguageName);
 
             lasteditedpack = SQLiteConnectionUser.GetSettingString("ActionPackLastFile", "");
             ReLoad();
@@ -214,7 +199,7 @@ namespace EDDiscovery.Actions
         private void Dmf_OnCreateActionFile()
         {
             String r = Forms.PromptSingleLine.ShowDialog(discoveryform.FindForm(), "New name", "", "Create new action file");
-            if ( r != null )
+            if ( r != null && r.Length>0 )
             {
                 if (actionfiles.Get(r, StringComparison.InvariantCultureIgnoreCase) == null)
                 {
@@ -419,33 +404,6 @@ namespace EDDiscovery.Actions
             ActionRun("onPostStartup", "ProgramEvent");
         }
 
-        public void SetPeristentGlobal(string name, string value)     // saved on exit
-        {
-            persistentglobalvariables[name] = globalvariables[name] = value;
-        }
-
-        public void SetInternalGlobal(string name, string value)           // internal program vars
-        {
-            programrunglobalvariables[name] = globalvariables[name] = value;
-        }
-
-        public void SetNonPersistentGlobal(string name, string value)         // different name for identification purposes, for sets
-        {
-            programrunglobalvariables[name] = globalvariables[name] = value;
-        }
-
-        public void DeleteVariable(string name)
-        {
-            programrunglobalvariables.Delete(name);
-            persistentglobalvariables.Delete(name);
-            globalvariables.Delete(name); 
-        }
-
-        public void TerminateAll()
-        {
-            actionrunasync.TerminateAll();
-        }
-
         public void CloseDown()
         {
             actionrunasync.WaitTillFinished(10000);
@@ -455,6 +413,33 @@ namespace EDDiscovery.Actions
         public void LogLine(string s)
         {
             discoveryform.LogLine(s);
+        }
+
+        protected class ActionMessageFilter : IMessageFilter
+        {
+            EDDiscoveryForm discoveryform;
+            ActionController actcontroller;
+            public ActionMessageFilter(EDDiscoveryForm frm, ActionController ac)
+            {
+                discoveryform = frm;
+                actcontroller = ac;
+            }
+
+            public bool PreFilterMessage(ref Message m)
+            {
+                if ((m.Msg == WM.KEYDOWN || m.Msg == WM.SYSKEYDOWN) && discoveryform.CanFocus)
+                {
+                    Keys k = (Keys)m.WParam;
+                    if (k != Keys.ControlKey && k != Keys.ShiftKey && k != Keys.Menu)
+                    {
+                        //System.Diagnostics.Debug.WriteLine("Keydown " + m.LParam + " " + k.ToString(Control.ModifierKeys) + " " + m.WParam + " " + Control.ModifierKeys);
+                        if (actcontroller.CheckKeys(k.ToString(Control.ModifierKeys)))
+                            return true;    // swallow, we did it
+                    }
+                }
+
+                return false;
+            }
         }
 
         void ActionConfigureKeys()
@@ -482,7 +467,7 @@ namespace EDDiscovery.Actions
 
                 if (actionfilesmessagefilter == null)
                 {
-                    actionfilesmessagefilter = new ActionMessageFilter(discoveryform,this);
+                    actionfilesmessagefilter = new ActionMessageFilter(discoveryform, this);
                     Application.AddMessageFilter(actionfilesmessagefilter);
                 }
             }
@@ -492,6 +477,7 @@ namespace EDDiscovery.Actions
                 actionfilesmessagefilter = null;
             }
         }
+
 
         public bool CheckKeys(string keyname)
         {
@@ -503,33 +489,6 @@ namespace EDDiscovery.Actions
             }
             else
                 return false;
-        }
-
-        private class ActionMessageFilter : IMessageFilter
-        {
-            EDDiscoveryForm discoveryform;
-            ActionController actcontroller;
-            public ActionMessageFilter(EDDiscoveryForm frm, ActionController ac)
-            {
-                discoveryform = frm;
-                actcontroller = ac;
-            }
-
-            public bool PreFilterMessage(ref Message m)
-            {
-                if ((m.Msg == WM.KEYDOWN || m.Msg == WM.SYSKEYDOWN) && discoveryform.CanFocus)
-                {
-                    Keys k = (Keys)m.WParam;
-                    if (k != Keys.ControlKey && k != Keys.ShiftKey && k != Keys.Menu)
-                    {
-                        //System.Diagnostics.Debug.WriteLine("Keydown " + m.LParam + " " + k.ToString(Control.ModifierKeys) + " " + m.WParam + " " + Control.ModifierKeys);
-                        if (actcontroller.CheckKeys(k.ToString(Control.ModifierKeys)))
-                            return true;    // swallow, we did it
-                    }
-                }
-
-                return false;
-            }
         }
 
 
