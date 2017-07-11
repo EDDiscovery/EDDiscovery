@@ -33,6 +33,7 @@ namespace EDDiscovery.Actions
         private EDDiscoveryController discoverycontroller;
 
         protected ActionMessageFilter actionfilesmessagefilter;
+        protected string actionfileskeyevents;
 
         public HistoryList HistoryList { get { return discoverycontroller.history; } }
         public EDDiscoveryForm DiscoveryForm { get { return discoveryform; } }
