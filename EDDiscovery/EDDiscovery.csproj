@@ -197,30 +197,31 @@
     <Compile Include="3DMap\StarGrid.cs" />
     <Compile Include="3DMap\StarNamesList.cs" />
     <Compile Include="3DMap\Zoom.cs" />
-    <Compile Include="Actions\ActionCommands\ActionEliteBindings.cs" />
-    <Compile Include="Actions\ActionCommands\ActionShip.cs" />
-    <Compile Include="Actions\ActionCommands\ActionTimer.cs" />
-    <Compile Include="Actions\ActionCommands\ActionUserInteraction.cs" />
+    <Compile Include="Actions\ActionsCore\ActionCoreController.cs" />
+    <Compile Include="Actions\ActionsEDDCmds\ActionEliteBindings.cs" />
+    <Compile Include="Actions\ActionsEDDCmds\ActionShip.cs" />
+    <Compile Include="Actions\ActionsCoreCmds\ActionTimer.cs" />
+    <Compile Include="Actions\ActionsCoreCmds\ActionUserInteraction.cs" />
     <Compile Include="Actions\ActionController.cs" />
-    <Compile Include="Actions\Action.cs" />
-    <Compile Include="Actions\ActionCommands\ActionEvent.cs" />
-    <Compile Include="Actions\ActionCommands\ActionHistoryTab.cs" />
-    <Compile Include="Actions\ActionCommands\ActionLedger.cs" />
-    <Compile Include="Actions\ActionCommands\ActionMaterialsCommodities.cs" />
-    <Compile Include="Actions\ActionCommands\ActionPerform.cs" />
-    <Compile Include="Actions\ActionCommands\ActionPopout.cs" />
-    <Compile Include="Actions\ActionCommands\ActionProgramwindow.cs" />
-    <Compile Include="Actions\ActionCommands\ActionReturn.cs" />
-    <Compile Include="Actions\ActionCommands\ActionScanStar.cs" />
-    <Compile Include="Actions\ActionPackEditorForm.cs">
+    <Compile Include="Actions\ActionsCore\Action.cs" />
+    <Compile Include="Actions\ActionsEDDCmds\ActionEvent.cs" />
+    <Compile Include="Actions\ActionsEDDCmds\ActionHistoryTab.cs" />
+    <Compile Include="Actions\ActionsEDDCmds\ActionLedger.cs" />
+    <Compile Include="Actions\ActionsEDDCmds\ActionMaterialsCommodities.cs" />
+    <Compile Include="Actions\ActionsEDDCmds\ActionPerform.cs" />
+    <Compile Include="Actions\ActionsEDDCmds\ActionPopout.cs" />
+    <Compile Include="Actions\ActionsEDDCmds\ActionProgramwindow.cs" />
+    <Compile Include="Actions\ActionsCoreCmds\ActionReturn.cs" />
+    <Compile Include="Actions\ActionsEDDCmds\ActionScanStar.cs" />
+    <Compile Include="Actions\ActionsCore\ActionPackEditorForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Actions\ActionPackEditorForm.Designer.cs">
+    <Compile Include="Actions\ActionsCore\ActionPackEditorForm.Designer.cs">
       <DependentUpon>ActionPackEditorForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Actions\ActionFile.cs" />
-    <Compile Include="Actions\ActionFileList.cs" />
-    <Compile Include="Actions\ActionProgramList.cs" />
+    <Compile Include="Actions\ActionsCore\ActionFile.cs" />
+    <Compile Include="Actions\ActionsCore\ActionFileList.cs" />
+    <Compile Include="Actions\ActionsCore\ActionProgramList.cs" />
     <Compile Include="Actions\ActionVars.cs" />
     <Compile Include="Audio\AudioDeviceConfigure.cs">
       <SubType>Form</SubType>
@@ -257,34 +258,34 @@
     <Compile Include="CompanionAPI\CModules.cs" />
     <Compile Include="CompanionAPI\CStarport.cs" />
     <Compile Include="CompanionAPI\CSystem.cs" />
-    <Compile Include="Conditions\Condition.cs" />
-    <Compile Include="Conditions\ConditionEntry.cs" />
-    <Compile Include="Conditions\ConditionFileHandles.cs" />
-    <Compile Include="Conditions\ConditionFunctions.cs" />
-    <Compile Include="Actions\ActionCommands\ActionPragma.cs" />
-    <Compile Include="Actions\ActionCommands\ActionPrint.cs" />
-    <Compile Include="Actions\ActionCommands\ActionSet.cs" />
-    <Compile Include="Actions\ActionCommands\ActionSleep.cs" />
-    <Compile Include="Actions\ActionCommands\ActionStructures.cs" />
-    <Compile Include="Actions\ActionCommands\ActionPlay.cs" />
-    <Compile Include="Actions\ActionProgramEditForm.cs">
+    <Compile Include="Actions\Conditions\Condition.cs" />
+    <Compile Include="Actions\Conditions\ConditionEntry.cs" />
+    <Compile Include="Actions\Conditions\ConditionFileHandles.cs" />
+    <Compile Include="Actions\Conditions\ConditionFunctions.cs" />
+    <Compile Include="Actions\ActionsCoreCmds\ActionPragma.cs" />
+    <Compile Include="Actions\ActionsCoreCmds\ActionPrint.cs" />
+    <Compile Include="Actions\ActionsCoreCmds\ActionSet.cs" />
+    <Compile Include="Actions\ActionsCoreCmds\ActionSleep.cs" />
+    <Compile Include="Actions\ActionsCoreCmds\ActionStructures.cs" />
+    <Compile Include="Actions\ActionsCoreCmds\ActionPlay.cs" />
+    <Compile Include="Actions\ActionsCore\ActionProgramEditForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Actions\ActionProgramEditForm.Designer.cs">
+    <Compile Include="Actions\ActionsCore\ActionProgramEditForm.Designer.cs">
       <DependentUpon>ActionProgramEditForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Actions\ActionCommands\ActionRemEnd.cs" />
-    <Compile Include="Actions\ActionProgramRun.cs" />
-    <Compile Include="Actions\ActionRun.cs" />
-    <Compile Include="Actions\ActionCommands\ActionSay.cs" />
-    <Compile Include="Actions\ActionProgram.cs" />
-    <Compile Include="Conditions\ConditionVariablesForm.cs">
+    <Compile Include="Actions\ActionsCoreCmds\ActionRemEnd.cs" />
+    <Compile Include="Actions\ActionsCore\ActionProgramRun.cs" />
+    <Compile Include="Actions\ActionsCore\ActionRun.cs" />
+    <Compile Include="Actions\ActionsCoreCmds\ActionSay.cs" />
+    <Compile Include="Actions\ActionsCore\ActionProgram.cs" />
+    <Compile Include="Actions\Conditions\ConditionVariablesForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Conditions\ConditionVariablesForm.Designer.cs">
+    <Compile Include="Actions\Conditions\ConditionVariablesForm.Designer.cs">
       <DependentUpon>ConditionVariablesForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Conditions\ConditionVariables.cs" />
+    <Compile Include="Actions\Conditions\ConditionVariables.cs" />
     <Compile Include="Controls\AutoCompleteDGV.cs" />
     <Compile Include="Controls\CheckedListControlCustom.cs">
       <SubType>Form</SubType>
@@ -412,8 +413,8 @@
     <Compile Include="Forms\ShipDetails.Designer.cs">
       <DependentUpon>ShipDetails.cs</DependentUpon>
     </Compile>
-    <Compile Include="Conditions\ConditionLists.cs" />
-    <Compile Include="Conditions\StringParser.cs" />
+    <Compile Include="Actions\Conditions\ConditionLists.cs" />
+    <Compile Include="Actions\Conditions\StringParser.cs" />
     <Compile Include="IDiscoveryController.cs" />
     <Compile Include="RoutingUtils.cs" />
     <Compile Include="ExportImport\ExportNotes.cs" />
@@ -562,10 +563,10 @@
     <Compile Include="Forms\FindMaterialsForm.Designer.cs">
       <DependentUpon>FindMaterialsForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Conditions\ConditionFilterForm.cs">
+    <Compile Include="Actions\Conditions\ConditionFilterForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Conditions\ConditionFilterForm.Designer.cs">
+    <Compile Include="Actions\Conditions\ConditionFilterForm.Designer.cs">
       <DependentUpon>ConditionFilterForm.cs</DependentUpon>
     </Compile>
     <Compile Include="EliteDangerous\LogReaderBase.cs" />
@@ -934,10 +935,10 @@
     <Content Include="fround.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <EmbeddedResource Include="Actions\ActionPackEditorForm.resx">
+    <EmbeddedResource Include="Actions\ActionsCore\ActionPackEditorForm.resx">
       <DependentUpon>ActionPackEditorForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Actions\ActionProgramEditForm.resx">
+    <EmbeddedResource Include="Actions\ActionsCore\ActionProgramEditForm.resx">
       <DependentUpon>ActionProgramEditForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Audio\AudioDeviceConfigure.resx">
@@ -952,7 +953,7 @@
     <EmbeddedResource Include="Audio\WaveConfigureDialog.resx">
       <DependentUpon>WaveConfigureDialog.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Conditions\ConditionVariablesForm.resx">
+    <EmbeddedResource Include="Actions\Conditions\ConditionVariablesForm.resx">
       <DependentUpon>ConditionVariablesForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\AutoCompleteTextBox.resx">
@@ -985,7 +986,7 @@
     <EmbeddedResource Include="Forms\ShipDetails.resx">
       <DependentUpon>ShipDetails.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Conditions\ConditionFilterForm.resx">
+    <EmbeddedResource Include="Actions\Conditions\ConditionFilterForm.resx">
       <DependentUpon>ConditionFilterForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\TabControlForm.resx">
