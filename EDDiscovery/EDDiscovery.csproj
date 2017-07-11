@@ -363,6 +363,7 @@
     <Compile Include="EliteDangerous\JournalEvents\JournalSetUserShipName.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalStartJump.cs" />
     <Compile Include="EliteDangerous\ShipInformation.cs" />
+    <Compile Include="ExportImport\CVSRead.cs" />
     <Compile Include="ExportImport\ExportGrid.cs" />
     <Compile Include="ExportImport\ExportSphereSystems.cs" />
     <Compile Include="Forms\CommanderForm.cs">
