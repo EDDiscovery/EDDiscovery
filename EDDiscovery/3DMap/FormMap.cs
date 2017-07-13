@@ -33,6 +33,7 @@ using System.Resources;
 using System.Collections.Concurrent;
 using EDDiscovery.EDSM;
 using EDDiscovery.Forms;
+using EDDiscovery.EliteDangerous;
 
 namespace EDDiscovery
 {
@@ -104,7 +105,7 @@ namespace EDDiscovery
         System.Windows.Forms.ToolTip _mousehovertooltip = null;
 
         public List<HistoryEntry> _systemlist { get; set; }
-        private List<SystemClass> _plannedRoute { get; set; }
+        private List<SystemClassDB> _plannedRoute { get; set; }
 
         public List<FGEImage> fgeimages = new List<FGEImage>();
 
@@ -232,7 +233,7 @@ namespace EDDiscovery
             return tsmi;
         }
 
-        public void SetPlannedRoute(List<SystemClass> plannedr)
+        public void SetPlannedRoute(List<SystemClassDB> plannedr)
         {
             _plannedRoute = plannedr;
             GenerateDataSetsRouteTri();
@@ -454,7 +455,7 @@ namespace EDDiscovery
 
             SetCenterSystemTo(_centerSystem);                   // move to this..
 
-            textboxFrom.SetAutoCompletor(EDDiscovery.DB.SystemClass.ReturnSystemListForAutoComplete);
+            textboxFrom.SetAutoCompletor(EDDiscovery.DB.SystemClassDB.ReturnSystemListForAutoComplete);
 
         }
 
@@ -1232,7 +1233,7 @@ namespace EDDiscovery
                     posdir.CameraLookAt(loc,zoomfov.Zoom, 2F);
             }
             else
-                EDDiscovery.Forms.MessageBoxTheme.Show("System or Object " + textboxFrom.Text + " not found");
+                ExtendedControls.MessageBoxTheme.Show("System or Object " + textboxFrom.Text + " not found");
 
             glControl.Focus();
         }
@@ -1245,7 +1246,7 @@ namespace EDDiscovery
                 SetCenterSystemTo((he == null) ? _centerSystem.name : he.System.name);
             }
             else
-                EDDiscovery.Forms.MessageBoxTheme.Show("No travel history is available");
+                ExtendedControls.MessageBoxTheme.Show("No travel history is available");
         }
 
         private void buttonHome_Click(object sender, EventArgs e)
@@ -1256,7 +1257,7 @@ namespace EDDiscovery
         private void buttonHistory_Click(object sender, EventArgs e)
         {
             if (_historySelection == null)
-                EDDiscovery.Forms.MessageBoxTheme.Show("No travel history is available");
+                ExtendedControls.MessageBoxTheme.Show("No travel history is available");
             else
                 SetCenterSystemTo(_historySelection);
         }
@@ -1272,7 +1273,7 @@ namespace EDDiscovery
             }
             else
             {
-                EDDiscovery.Forms.MessageBoxTheme.Show("No target designated, create a bookmark or region mark, or use a Note mark, right click on it and set it as the target");
+                ExtendedControls.MessageBoxTheme.Show("No target designated, create a bookmark or region mark, or use a Note mark, right click on it and set it as the target");
             }
         }
         
@@ -1284,7 +1285,7 @@ namespace EDDiscovery
                 SetCenterSystemTo((he == null) ? _centerSystem.name : he.System.name);
             }
             else
-                EDDiscovery.Forms.MessageBoxTheme.Show("No travel history is available");
+                ExtendedControls.MessageBoxTheme.Show("No travel history is available");
         }
 
         private void toolStripButtonAutoForward_Click(object sender, EventArgs e)
@@ -1300,10 +1301,10 @@ namespace EDDiscovery
                 if (he != null )
                     SetCenterSystemTo(FindSystem(he.System.name));
                 else
-                    EDDiscovery.Forms.MessageBoxTheme.Show("No stars with defined co-ordinates available in travel history");
+                    ExtendedControls.MessageBoxTheme.Show("No stars with defined co-ordinates available in travel history");
             }
             else
-                EDDiscovery.Forms.MessageBoxTheme.Show("No travel history is available");
+                ExtendedControls.MessageBoxTheme.Show("No travel history is available");
         }
 
         private void drawLinesBetweenStarsWithPositionToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1466,7 +1467,7 @@ namespace EDDiscovery
 
         private void toolStripButtonHelp_Click(object sender, EventArgs e)
         {
-            EDDiscovery.Forms.InfoForm dl = new EDDiscovery.Forms.InfoForm();
+            ExtendedControls.InfoForm dl = new ExtendedControls.InfoForm();
             string text = EDDiscovery.Properties.Resources.maphelp3d;
             dl.Info("3D Map Help", text, new Font("Microsoft Sans Serif", 10), new int[] { 50, 200, 400 });
             dl.Show();
@@ -1523,7 +1524,7 @@ namespace EDDiscovery
 
         private void toolStripMenuItemClearRecording_Click(object sender, EventArgs e)
         {
-            if (EDDiscovery.Forms.MessageBoxTheme.Show("Confirm you wish to clear the current recording", "WARNING", MessageBoxButtons.OKCancel) == DialogResult.OK)
+            if (ExtendedControls.MessageBoxTheme.Show("Confirm you wish to clear the current recording", "WARNING", MessageBoxButtons.OKCancel) == DialogResult.OK)
                 maprecorder.Clear();
 
             SetDropDownRecordImage();
@@ -1599,7 +1600,7 @@ namespace EDDiscovery
             string file = (string)tmsi.Tag;
             if ( !maprecorder.ReadFromFile(file) )
             {
-                EDDiscovery.Forms.MessageBoxTheme.Show("Failed to load flight " + file + ". Check file path and file contents");
+                ExtendedControls.MessageBoxTheme.Show("Failed to load flight " + file + ". Check file path and file contents");
             }
         }
 
@@ -1870,7 +1871,7 @@ namespace EDDiscovery
                 info = hoversystem.name + Environment.NewLine + string.Format("x:{0} y:{1} z:{2}", hoversystem.x.ToString("0.00"), hoversystem.y.ToString("0.00"), hoversystem.z.ToString("0.00"));
                 pos = new Vector3d(hoversystem.x, hoversystem.y, hoversystem.z);
 
-                SystemClass sysclass = (hoversystem.id != 0) ? SystemClass.GetSystem(hoversystem.id) : SystemClass.GetSystem(hoversystem.name);
+                SystemClass sysclass = (hoversystem.id != 0) ? SystemClassDB.GetSystem(hoversystem.id) : SystemClassDB.GetSystem(hoversystem.name);
 
                 if (sysclass != null)
                 {
@@ -1902,7 +1903,7 @@ namespace EDDiscovery
             else if ( gmo != null )
             {
                 pos = new Vector3d(gmo.points[0].X, gmo.points[0].Y, gmo.points[0].Z);
-                info = gmo.name + Environment.NewLine + gmo.galMapType.Description + Environment.NewLine + Tools.WordWrap(gmo.description,60) + Environment.NewLine +
+                info = gmo.name + Environment.NewLine + gmo.galMapType.Description + Environment.NewLine + gmo.description.WordWrap(60) + Environment.NewLine +
                     string.Format("x:{0} y:{1} z:{2}", pos.X.ToString("0.00"), pos.Y.ToString("0.00"), pos.Z.ToString("0.00"));
                 sysname = "<<Never match string! to make the comparison fail";
             }
@@ -2070,14 +2071,14 @@ namespace EDDiscovery
             return curbk;
         }
 
-        private SystemClass GetMouseOverNotedSystem(int x, int y, out float cursysdistz )
+        private SystemClassDB GetMouseOverNotedSystem(int x, int y, out float cursysdistz )
         {
             x = Math.Min(Math.Max(x, 5), glControl.Width - 5);
             y = Math.Min(Math.Max(glControl.Height - y, 5), glControl.Height - 5);
 
             Vector3[] rotvert = TexturedQuadData.GetVertices(new Vector3(0, 0, 0), _lastcameranorm.Rotation, GetBitmapOnScreenSizeX(), GetBitmapOnScreenSizeY(), 0, GetBitmapOnScreenSizeY() / 2);
 
-            SystemClass cursys = null;
+            SystemClassDB cursys = null;
             cursysdistz = float.MaxValue;
 
             if (_systemlist == null)
@@ -2114,7 +2115,7 @@ namespace EDDiscovery
                                 if (newcursysdistz < cursysdistz)
                                 {
                                     cursysdistz = newcursysdistz;
-                                    cursys = (SystemClass)vs.System;
+                                    cursys = (SystemClassDB)vs.System;
                                 }
                             }
                         }
@@ -2194,7 +2195,7 @@ namespace EDDiscovery
         // clicked on note on a system, cursystem!=null,curbookmark=null, notedsystem=true
         // clicked on gal object, galmapobject !=null, cursystem=null,curbookmark=null,notedsystem = false
 
-        private void GetMouseOverItem(int x, int y, out ISystem cursystem,  // can return both, if a system bookmark is clicked..
+        private void GetMouseOverItem(int x, int y, out EliteDangerous.ISystem cursystem,  // can return both, if a system bookmark is clicked..
                                                     out BookmarkClass curbookmark, out bool notedsystem,
                                                     out GalacticMapObject galobj)
         {
@@ -2266,7 +2267,7 @@ namespace EDDiscovery
                     return sys.System;
             }
 
-            ISystem isys = SystemClass.GetSystem(name,cn);
+            ISystem isys = SystemClassDB.GetSystem(name,cn);
             return isys;
         }
 
@@ -2280,7 +2281,7 @@ namespace EDDiscovery
                     return vsc.System;
             }
 
-            return SystemClass.FindNearestSystem(pos.X, pos.Y, pos.Z, false, 0.1,cn);
+            return SystemClassDB.FindNearestSystem(pos.X, pos.Y, pos.Z, false, 0.1,cn);
         }
 
         private ISystem SafeSystem(ISystem s)
@@ -2290,7 +2291,7 @@ namespace EDDiscovery
                 s = FindSystem("Sol");
 
                 if (s == null)
-                    s = new SystemClass("Sol", 0, 0, 0);
+                    s = new SystemClassDB("Sol", 0, 0, 0);
             }
 
             return s;
@@ -2331,7 +2332,7 @@ namespace EDDiscovery
 
         private void LoadMapImages()
         {
-            string datapath = System.IO.Path.Combine(Tools.GetAppDataDirectory(), "Maps");
+            string datapath = System.IO.Path.Combine(EDDConfig.Options.AppDataDirectory, "Maps");
             if (System.IO.Directory.Exists(datapath))
             {
                 fgeimages = FGEImage.LoadImages(datapath);

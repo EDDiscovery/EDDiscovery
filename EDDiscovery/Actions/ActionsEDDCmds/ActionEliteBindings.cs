@@ -5,16 +5,18 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using BaseUtils;
+using ActionLanguage;
 
 namespace EDDiscovery.Actions
 {
-    public class ActionEliteBindings : Action
+    public class ActionEliteBindings : ActionBase
     {
         public override bool AllowDirectEditingOfUserData { get { return true; } }
 
-        public override bool ConfigurationMenu(Form parent, EDDiscoveryForm discoveryform, List<string> eventvars)
+        public override bool ConfigurationMenu(Form parent, ActionCoreController cp, List<string> eventvars)
         {
-            string promptValue = Forms.PromptSingleLine.ShowDialog(parent, "EliteBindings commands", UserData, "Configure EliteBindings");
+            string promptValue = ExtendedControls.PromptSingleLine.ShowDialog(parent, "EliteBindings commands", UserData, "Configure EliteBindings");
             if (promptValue != null)
             {
                 userdata = promptValue;
@@ -26,7 +28,7 @@ namespace EDDiscovery.Actions
         public override bool ExecuteAction(ActionProgramRun ap)
         {
             string res;
-            if (ap.functions.ExpandString(UserData, out res) != ConditionFunctions.ExpandResult.Failed)
+            if (ap.functions.ExpandString(UserData, out res) != Conditions.ConditionFunctions.ExpandResult.Failed)
             {
                 StringParser sp = new StringParser(res);
 
@@ -46,7 +48,7 @@ namespace EDDiscovery.Actions
                     cmdname = sp.NextQuotedWord();
                 }
 
-                BindingsFile bf = ap.actioncontroller.DiscoveryForm.FrontierBindings;
+                BindingsFile bf = (ap.actioncontroller as ActionController).DiscoveryForm.FrontierBindings;
 
                 int matchno = 1;
                 string list = "";

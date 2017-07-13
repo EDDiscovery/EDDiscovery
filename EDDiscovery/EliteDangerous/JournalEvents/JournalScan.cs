@@ -262,7 +262,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
                 if (r.HasValue)
                     r = r / solarRadius_m;
 
-                info = Tools.FieldBuilder("", GetStarTypeImage().Item2, "Mass:;SM;0.00", nStellarMass, "Age:;my;0.0", nAge, "Radius:;SR;0.00", r);
+                info = BaseUtils.FieldBuilder.Build("", GetStarTypeImage().Item2, "Mass:;SM;0.00", nStellarMass, "Age:;my;0.0", nAge, "Radius:;SR;0.00", r);
             }
             else
             {
@@ -273,7 +273,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
                 if (g.HasValue)
                     g = g / 9.8;
 
-                info = Tools.FieldBuilder("", PlanetClass, "Mass:;EM;0.00", nMassEM, "<;, Landable", IsLandable, "<;, Terraformable", TerraformState == "Terraformable", "", Atmosphere, "Gravity:;G;0.0", g, "Radius:;km;0", r);
+                info = BaseUtils.FieldBuilder.Build("", PlanetClass, "Mass:;EM;0.00", nMassEM, "<;, Landable", IsLandable, "<;, Terraformable", TerraformState == "Terraformable", "", Atmosphere, "Gravity:;G;0.0", g, "Radius:;km;0", r);
             }
 
             detailed = DisplayString(0, false);

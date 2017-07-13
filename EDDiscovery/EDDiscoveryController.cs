@@ -284,7 +284,7 @@ namespace EDDiscovery
         private EliteDangerous.EDJournalClass journalmonitor;
 
         private ConcurrentQueue<RefreshWorkerArgs> refreshWorkerQueue = new ConcurrentQueue<RefreshWorkerArgs>();
-        private SystemClass.SystemsSyncState syncstate = new SystemClass.SystemsSyncState();
+        private SystemClassDB.SystemsSyncState syncstate = new SystemClassDB.SystemsSyncState();
         private ConcurrentQueue<StardistRequest> closestsystem_queue = new ConcurrentQueue<StardistRequest>();
         private RefreshWorkerArgs refreshWorkerArgs = new RefreshWorkerArgs();
 
@@ -332,7 +332,7 @@ namespace EDDiscovery
             string logpath = "";
             try
             {
-                logpath = Path.Combine(Tools.GetAppDataDirectory(), "Log");
+                logpath = Path.Combine(EDDConfig.Options.AppDataDirectory, "Log");
                 if (!Directory.Exists(logpath))
                 {
                     Directory.CreateDirectory(logpath);
@@ -382,7 +382,7 @@ namespace EDDiscovery
 
                 // Skip EDSM full update if update has been performed in last 4 days
                 bool outoforder = SQLiteConnectionSystem.GetSettingBool("EDSMSystemsOutOfOrder", true);
-                DateTime lastmod = outoforder ? SystemClass.GetLastSystemModifiedTime() : SystemClass.GetLastSystemModifiedTimeFast();
+                DateTime lastmod = outoforder ? SystemClassDB.GetLastSystemModifiedTime() : SystemClassDB.GetLastSystemModifiedTimeFast();
 
                 if (DateTime.UtcNow.Subtract(lastmod).TotalDays > 4 ||
                     DateTime.UtcNow.Subtract(edsmdate).TotalDays > 28)
@@ -402,7 +402,7 @@ namespace EDDiscovery
                 SystemNoteClass.GetAllSystemNotes();                                // fill up memory with notes, bookmarks, galactic mapping
                 BookmarkClass.GetAllBookmarks();
                 galacticMapping.ParseData();                            // at this point, EDSM data is loaded..
-                SystemClass.AddToAutoComplete(galacticMapping.GetGMONames());
+                SystemClassDB.AddToAutoComplete(galacticMapping.GetGMONames());
 
                 LogLine("Loaded Notes, Bookmarks and Galactic mapping.");
 
@@ -421,7 +421,7 @@ namespace EDDiscovery
         {
             try
             {
-                SystemClass.PerformSync(() => PendingClose, (p, s) => ReportProgress(p, s), LogLine, LogLineHighlight, syncstate);
+                SystemClassDB.PerformSync(() => PendingClose, (p, s) => ReportProgress(p, s), LogLine, LogLineHighlight, syncstate);
             }
             catch (OperationCanceledException)
             {
@@ -442,7 +442,7 @@ namespace EDDiscovery
 
             if (!PendingClose)
             {
-                long totalsystems = SystemClass.GetTotalSystems();
+                long totalsystems = SystemClassDB.GetTotalSystems();
                 LogLineSuccess("Loading completed, total of " + totalsystems + " systems");
 
                 if (syncstate.performhistoryrefresh)
@@ -738,7 +738,7 @@ namespace EDDiscovery
                                 StardistRequest req = stardistreq;
                                 ISystem sys = req.System;
                                 SortedList<double, ISystem> closestsystemlist = new SortedList<double, ISystem>(new DuplicateKeyComparer<double>()); //lovely list allowing duplicate keys - can only iterate in it.
-                                SystemClass.GetSystemSqDistancesFrom(closestsystemlist, sys.x, sys.y, sys.z, 50, true, 1000);
+                                SystemClassDB.GetSystemSqDistancesFrom(closestsystemlist, sys.x, sys.y, sys.z, 50, true, 1000);
                                 if (!PendingClose)
                                 {
                                     InvokeAsyncOnUiThread(() =>

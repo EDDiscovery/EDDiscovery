@@ -123,26 +123,6 @@ namespace EDDiscovery.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap ArrowLeft {
-            get {
-                object obj = ResourceManager.GetObject("ArrowLeft", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap ArrowRight {
-            get {
-                object obj = ResourceManager.GetObject("ArrowRight", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
         internal static System.Drawing.Bitmap B1V_Blue_SagittariusA {
             get {
                 object obj = ResourceManager.GetObject("B1V_Blue_SagittariusA", resourceCulture);
@@ -286,16 +266,6 @@ namespace EDDiscovery.Properties {
         internal static System.Drawing.Bitmap C7III {
             get {
                 object obj = ResourceManager.GetObject("C7III", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap Calendar {
-            get {
-                object obj = ResourceManager.GetObject("Calendar", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -1726,9 +1696,9 @@ namespace EDDiscovery.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap popout {
+        internal static System.Drawing.Bitmap popout1 {
             get {
-                object obj = ResourceManager.GetObject("popout", resourceCulture);
+                object obj = ResourceManager.GetObject("popout1", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

@@ -90,11 +90,11 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public override void FillInformation(out string summary, out string info, out string detailed) //V
         {
             summary = EventTypeStr.SplitCapsWord();
-            info = Tools.FieldBuilder("", BuyItemLocalised.Alt(BuyItem), "< into ", Slot, "Cost:; credits", BuyPrice);
+            info = BaseUtils.FieldBuilder.Build("", BuyItemLocalised.Alt(BuyItem), "< into ", Slot, "Cost:; credits", BuyPrice);
             if (SellItem.Length > 0)
-                info += ", " + Tools.FieldBuilder("Sold:", SellItemLocalised.Alt(SellItem), "Price:; credits", SellPrice);
+                info += ", " + BaseUtils.FieldBuilder.Build("Sold:", SellItemLocalised.Alt(SellItem), "Price:; credits", SellPrice);
             if (StoredItem.Length > 0)
-                info += ", " + Tools.FieldBuilder("Stored:", StoredItemLocalised.Alt(StoredItem));
+                info += ", " + BaseUtils.FieldBuilder.Build("Stored:", StoredItemLocalised.Alt(StoredItem));
 
             detailed = "";
         }

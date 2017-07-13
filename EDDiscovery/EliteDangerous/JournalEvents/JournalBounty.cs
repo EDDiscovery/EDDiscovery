@@ -66,7 +66,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public override void FillInformation(out string summary, out string info, out string detailed) //V
         {
             summary = EventTypeStr.SplitCapsWord();
-            info = Tools.FieldBuilder("; credits", TotalReward, "Target:", (string)Target, "Victim faction:", VictimFactionLocalised.Alt(VictimFaction));
+            info = BaseUtils.FieldBuilder.Build("; credits", TotalReward, "Target:", (string)Target, "Victim faction:", VictimFactionLocalised.Alt(VictimFaction));
 
             detailed = "";
             if ( Rewards!=null)
@@ -76,7 +76,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
                     if (detailed.Length > 0)
                         detailed += ", ";
 
-                    detailed += Tools.FieldBuilder("Faction:", r.Faction, "; credits", r.Reward);
+                    detailed += BaseUtils.FieldBuilder.Build("Faction:", r.Faction, "; credits", r.Reward);
                 }
             }
         }

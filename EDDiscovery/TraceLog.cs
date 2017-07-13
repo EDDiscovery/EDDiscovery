@@ -70,7 +70,7 @@ namespace EDDiscovery
 
         public static void Init()
         {
-            string logname = Path.Combine(Tools.GetAppDataDirectory(), "Log", $"Trace_{DateTime.Now.ToString("yyyyMMddHHmmss")}");
+            string logname = Path.Combine(EDDConfig.Options.AppDataDirectory, "Log", $"Trace_{DateTime.Now.ToString("yyyyMMddHHmmss")}");
             LogFileBaseName = logname;
             LogFileWriterThread = new Thread(LogWriterThreadProc);
             LogFileWriterThread.IsBackground = true;
@@ -165,7 +165,7 @@ namespace EDDiscovery
             {
                 long totsize = 0;
                 // Create a reference to the Log directory.
-                DirectoryInfo dir = new DirectoryInfo(Path.Combine(Tools.GetAppDataDirectory(), "Log"));
+                DirectoryInfo dir = new DirectoryInfo(Path.Combine(EDDConfig.Options.AppDataDirectory, "Log"));
 
                 Trace.WriteLine("Running logfile age check");
                 // Create an array representing the files in the current directory.

@@ -120,11 +120,6 @@ namespace EDDiscovery.EliteDangerous
             return IsSRV(inname) || IsFighter(inname);
         }
 
-        static public string PhoneticShipName(string inname)
-        {
-            return inname.Replace("Mk. IV", "Mark 4").Replace("Mk. III", "Mark 3");
-        }
-
         static public string GetBetterMissionName(string inname)
         {
             return inname.Replace("_name", "").SplitCapsWordFull();

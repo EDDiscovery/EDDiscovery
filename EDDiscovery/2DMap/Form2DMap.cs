@@ -15,6 +15,7 @@
  */
 using EDDiscovery;
 using EDDiscovery.DB;
+using EDDiscovery.EliteDangerous;
 using EMK.LightGeometry;
 using Newtonsoft.Json.Linq;
 using System;
@@ -114,7 +115,7 @@ namespace EDDiscovery
         private void AddImages()
         {
             fgeimages = new List<FGEImage>();
-            string datapath = Path.Combine(Tools.GetAppDataDirectory(), "Maps");
+            string datapath = Path.Combine(EDDConfig.Options.AppDataDirectory, "Maps");
             if (Directory.Exists(datapath))
             {
                 fgeimages = FGEImage.LoadImages(datapath);
@@ -175,7 +176,7 @@ namespace EDDiscovery
         private void DrawStars()
         {
             if ( starpositions == null )
-                starpositions = SystemClass.GetStarPositions();
+                starpositions = SystemClassDB.GetStarPositions();
 
             using (Pen pen = new Pen(Color.White, 2))
             using (Graphics gfx = Graphics.FromImage(imageViewer1.Image))

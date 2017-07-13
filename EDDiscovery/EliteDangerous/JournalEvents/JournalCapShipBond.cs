@@ -49,7 +49,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public override void FillInformation(out string summary, out string info, out string detailed) //V
         {
             summary = EventTypeStr.SplitCapsWord();
-            info = Tools.FieldBuilder("; credits", Reward, "Awarding faction:" , AwardingFaction,  "Victim faction:", VictimFaction);
+            info = BaseUtils.FieldBuilder.Build("; credits", Reward, "Awarding faction:" , AwardingFaction,  "Victim faction:", VictimFaction);
             detailed = "";
         }
     }

@@ -22,7 +22,7 @@ using System.Windows.Forms;
 using EDDiscovery.DB;
 using EDDiscovery.EDSM;
 using ExtendedControls;
-
+using EDDiscovery.EliteDangerous;
 
 namespace EDDiscovery
 {
@@ -42,6 +42,7 @@ namespace EDDiscovery
         public TrilaterationControl()
         {
             InitializeComponent();
+            ColumnSystem.AutoCompleteGenerator = SystemClassDB.ReturnOnlySystemsListForAutoComplete;
         }
 
         public void InitControl(EDDiscoveryForm discoveryForm)
@@ -95,15 +96,15 @@ namespace EDDiscovery
             }
         }
 
-        private List<SystemClass> GetEnteredSystems()
+        private List<EliteDangerous.SystemClass> GetEnteredSystems()
         {
-            var systems = new List<SystemClass>();
+            var systems = new List<EliteDangerous.SystemClass>();
             for (int i = 0, size = dataGridViewDistances.Rows.Count - 1; i < size; i++)
             {
                 var cell = dataGridViewDistances[0, i];
                 if (cell.Value != null && cell.Tag != null)
                 {
-                    systems.Add((SystemClass) cell.Tag);
+                    systems.Add((EliteDangerous.SystemClass) cell.Tag);
                 }
             }
             return systems;
@@ -123,7 +124,7 @@ namespace EDDiscovery
                         return;
                     }
 
-                    var system = SystemClass.GetSystem(value);
+                    var system = SystemClassDB.GetSystem(value);
                     var enteredSystems = GetEnteredSystems();
                     if (cell.Value != null)
                     {
@@ -170,9 +171,9 @@ namespace EDDiscovery
 
         /* Tries to load the system data for the given name. If no system data is available, but the system is known,
          * it creates a new System entity, otherwise logs it and returns null. */
-        private SystemClass getSystemForTrilateration(string systemName)
+        private SystemClassDB getSystemForTrilateration(string systemName)
         {
-            var system = SystemClass.GetSystem(systemName);
+            var system = SystemClassDB.GetSystem(systemName);
 
             if (system == null)
             {
@@ -182,7 +183,7 @@ namespace EDDiscovery
                 }
                 else
                 {
-                    system = new SystemClass(systemName);
+                    system = new SystemClassDB(systemName);
                 }
             }
             return system;
@@ -190,7 +191,7 @@ namespace EDDiscovery
 
         /* Callback for when a new system has been added to the grid.
          * Performs some additional setup such as clearing data and setting the status. */
-        private void newSystemAdded(DataGridViewCell cell, SystemClass system)
+        private void newSystemAdded(DataGridViewCell cell, SystemClassDB system)
         {
             if (!cell.Value.Equals(system.name))            // if cell value is not the same as system name
             {
@@ -271,11 +272,11 @@ namespace EDDiscovery
         }
 
 
-        public IEnumerable<SystemClass> CurrentReferenceSystems
+        public IEnumerable<SystemClassDB> CurrentReferenceSystems
         {
             get
             {
-                return (dataGridViewDistances.Rows.OfType<DataGridViewRow>().Select(row => row.Cells[0].Tag)).OfType<SystemClass>();
+                return (dataGridViewDistances.Rows.OfType<DataGridViewRow>().Select(row => row.Cells[0].Tag)).OfType<SystemClassDB>();
             }
         }
         
@@ -291,7 +292,7 @@ namespace EDDiscovery
                     var calculatedDistanceCell = dataGridViewDistances[2, i];
                     var statusCell = dataGridViewDistances[3, i];
 
-                    var system = (SystemClass)systemCell.Tag;
+                    var system = (SystemClassDB)systemCell.Tag;
 
                     distanceCell.Value = null;
                     calculatedDistanceCell.Value = null;
@@ -314,7 +315,7 @@ namespace EDDiscovery
                 var calculatedDistanceCell = dataGridViewDistances[2, i];
                 var statusCell = dataGridViewDistances[3, i];
 
-                var system = (SystemClass)systemCell.Tag;
+                var system = (SystemClassDB)systemCell.Tag;
 
                 calculatedDistanceCell.Value = null;
                 if (system != null && system.HasCoordinate) statusCell.Value = null;
@@ -329,9 +330,9 @@ namespace EDDiscovery
             {
                 foreach (WantedSystemClass sys in wanted)
                 {
-                    SystemClass star = SystemClass.GetSystem(sys.system);
+                    SystemClass star = SystemClassDB.GetSystem(sys.system);
                     if (star == null)
-                        star = new SystemClass(sys.system);
+                        star = new SystemClassDB(sys.system);
 
                     var index = dataGridViewClosestSystems.Rows.Add("Local");
                     dataGridViewClosestSystems[1, index].Value = sys.system;
@@ -353,7 +354,7 @@ namespace EDDiscovery
 
                 foreach (String system in pushed)
                 {
-                    SystemClass star = SystemClass.GetSystem(system);
+                    SystemClass star = SystemClassDB.GetSystem(system);
                     if (star == null)
                         star = new SystemClass(system);
 
@@ -379,18 +380,18 @@ namespace EDDiscovery
         {
             if (e.RowIndex >= 0)
             {
-                var system = (SystemClass)dataGridViewClosestSystems[1, e.RowIndex].Tag;
+                var system = (SystemClassDB)dataGridViewClosestSystems[1, e.RowIndex].Tag;
                 AddSystemToDataGridViewDistances(system);
             }
         }
 
         /* Adds a system to the grid if it's not already in there */
-        public void AddSystemToDataGridViewDistances(SystemClass system)
+        public void AddSystemToDataGridViewDistances(SystemClassDB system)
         {
             for (int i = 0, count = dataGridViewDistances.Rows.Count - 1; i < count; i++)
             {
                 var cell = dataGridViewDistances[0, i];
-                SystemClass s2 = cell.Tag as SystemClass;
+                SystemClassDB s2 = cell.Tag as SystemClassDB;
                 if (s2 != null && s2.name.Equals(system.name, StringComparison.OrdinalIgnoreCase))
                 {
                     return;
@@ -465,7 +466,7 @@ namespace EDDiscovery
                     {
                         this.BeginInvoke(new MethodInvoker(() =>
                         {
-                            EDDiscovery.Forms.MessageBoxTheme.Show("Please enter commander name before submitting the system!");
+                            ExtendedControls.MessageBoxTheme.Show("Please enter commander name before submitting the system!");
                             UnfreezeTrilaterationUI();
                         }));
                         return;
@@ -723,11 +724,11 @@ namespace EDDiscovery
             for (int i = 0, count = dataGridViewDistances.Rows.Count - 1; i < count; i++)
             {
                 var systemCell = dataGridViewDistances[0, i];
-                var oldSystem = (SystemClass)systemCell.Tag;
+                var oldSystem = (SystemClassDB)systemCell.Tag;
                 if (!oldSystem.HasCoordinate)
                 {
                     var value = systemCell.Value as string;
-                    var newSystem = SystemClass.GetSystem(value);
+                    var newSystem = SystemClassDB.GetSystem(value);
                     if (newSystem != null && newSystem.HasCoordinate)
                     {
                         systemCell.Tag = newSystem;
@@ -854,9 +855,9 @@ namespace EDDiscovery
 
                 wanted.Add(toAdd);
 
-                SystemClass star = SystemClass.GetSystem(sysName);
+                SystemClassDB star = SystemClassDB.GetSystem(sysName);
                 if (star == null)
-                    star = new SystemClass(sysName);
+                    star = new SystemClassDB(sysName);
 
                 var index = dataGridViewClosestSystems.Rows.Add("Local");
                 dataGridViewClosestSystems[1, index].Value = sysName;
@@ -933,7 +934,7 @@ namespace EDDiscovery
                 sysName = r.Cells[1].Value.ToString();
                 if (r.Cells[0].Value.ToString() == "Local")
                 {
-                    SystemClass sys = getSystemForTrilateration(sysName);
+                    SystemClassDB sys = getSystemForTrilateration(sysName);
                     if (sys.HasCoordinate)
                     {
                         WantedSystemClass entry = wanted.Where(x => x.system == sysName).FirstOrDefault();

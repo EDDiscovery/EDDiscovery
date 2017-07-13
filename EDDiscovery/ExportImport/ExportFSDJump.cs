@@ -25,13 +25,14 @@ using System.Windows.Forms;
 
 namespace EDDiscovery.Export
 {
-    public class ExportFSDJump : ExportBase
+    public class ExportFSDJump : BaseUtils.CVSWrite
     {
         private List<JournalEntry> scans;
 
 
-        override public bool GetData(EDDiscoveryForm _discoveryForm)
+        override public bool GetData(Object d)
         {
+            EDDiscoveryForm _discoveryForm = (EDDiscoveryForm)d;
             var filter = _discoveryForm.TravelControl.GetPrimaryFilter;
 
             List<HistoryEntry> result = filter.Filter(_discoveryForm.history);
@@ -89,7 +90,7 @@ namespace EDDiscovery.Export
             }
             catch (IOException)
             {
-                EDDiscovery.Forms.MessageBoxTheme.Show(String.Format("Is file {0} open?", filename), "Export Scan",
+                ExtendedControls.MessageBoxTheme.Show(String.Format("Is file {0} open?", filename), "Export Scan",
                       MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return false;
             }

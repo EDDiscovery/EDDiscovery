@@ -160,7 +160,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public override void FillInformation(out string summary, out string info, out string detailed) //V
         {
             summary = EventTypeStr.SplitCapsWord();
-            info = Tools.FieldBuilder("Ship:", Ship, "Name:", ShipName, "Ident:", ShipIdent, "Modules:", ShipModules.Count);
+            info = BaseUtils.FieldBuilder.Build("Ship:", Ship, "Name:", ShipName, "Ident:", ShipIdent, "Modules:", ShipModules.Count);
             detailed = "";
 
             foreach (ShipModule m in ShipModules)
@@ -168,7 +168,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
                 if (detailed.Length > 0)
                     detailed += Environment.NewLine;
 
-                detailed += Tools.FieldBuilder("", m.Slot, "<:", m.Item , "" , m.PE() );
+                detailed += BaseUtils.FieldBuilder.Build("", m.Slot, "<:", m.Item , "" , m.PE() );
             }
         }
     }

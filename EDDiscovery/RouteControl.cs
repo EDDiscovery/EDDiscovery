@@ -32,6 +32,7 @@ using System.Threading;
 using EMK.LightGeometry;
 using EDDiscovery.EDSM;
 using System.Collections.Concurrent;
+using EDDiscovery.EliteDangerous;
 
 namespace EDDiscovery
 {
@@ -40,10 +41,10 @@ namespace EDDiscovery
         internal TravelHistoryControl travelhistorycontrol1;
         private EDDiscoveryForm _discoveryForm;
         internal bool changesilence = false;
-        private List<SystemClass> routeSystems;
+        private List<SystemClassDB> routeSystems;
         string lastsys = null;
 
-        public List<SystemClass>  RouteSystems { get {return routeSystems;} }
+        public List<SystemClassDB>  RouteSystems { get {return routeSystems;} }
 
         System.Windows.Forms.Timer fromupdatetimer;
         System.Windows.Forms.Timer toupdatetimer;
@@ -71,8 +72,8 @@ namespace EDDiscovery
             toupdatetimer.Interval = 500;
             toupdatetimer.Tick += ToUpdateTick;
 
-            textBox_From.SetAutoCompletor(EDDiscovery.DB.SystemClass.ReturnSystemListForAutoComplete);
-            textBox_To.SetAutoCompletor(EDDiscovery.DB.SystemClass.ReturnSystemListForAutoComplete);
+            textBox_From.SetAutoCompletor(EDDiscovery.DB.SystemClassDB.ReturnSystemListForAutoComplete);
+            textBox_To.SetAutoCompletor(EDDiscovery.DB.SystemClassDB.ReturnSystemListForAutoComplete);
         }
 
         private Thread ThreadRoute;
@@ -108,7 +109,7 @@ namespace EDDiscovery
 
             if (plotter.possiblejumps > 100)
             {
-                DialogResult res = EDDiscovery.Forms.MessageBoxTheme.Show(_discoveryForm, "This will result in a large number (" + plotter.possiblejumps.ToString("0") + ") of jumps" + Environment.NewLine + Environment.NewLine + "Confirm please", "Confirm you want to compute", MessageBoxButtons.YesNo);
+                DialogResult res = ExtendedControls.MessageBoxTheme.Show(_discoveryForm, "This will result in a large number (" + plotter.possiblejumps.ToString("0") + ") of jumps" + Environment.NewLine + Environment.NewLine + "Confirm please", "Confirm you want to compute", MessageBoxButtons.YesNo);
                 if (res != System.Windows.Forms.DialogResult.Yes)
                 {
                     ToggleButtons(true);
@@ -139,7 +140,7 @@ namespace EDDiscovery
 
         private void textBox_Range_KeyPress(object sender, KeyPressEventArgs e)
         {
-            Tools.TextBox_Numeric_KeyPress(sender, e);
+            BaseUtils.KeyPressHandler.TextBox_Numeric_KeyPress(sender, e);
         }
 
         public void UpdateHistorySystem(string str)
@@ -205,7 +206,7 @@ namespace EDDiscovery
             bool tostate = SQLiteDBClass.GetSettingBool("RouteToState", false);
 
             int metricvalue = SQLiteDBClass.GetSettingInt("RouteMetric", 0);
-            comboBoxRoutingMetric.SelectedIndex = (metricvalue >= 0 && metricvalue < comboBoxRoutingMetric.Items.Count) ? metricvalue : SystemClass.metric_waypointdev2;
+            comboBoxRoutingMetric.SelectedIndex = (metricvalue >= 0 && metricvalue < comboBoxRoutingMetric.Items.Count) ? metricvalue : SystemClassDB.metric_waypointdev2;
 
             SelectToMaster(tostate);
             UpdateTo(true);
@@ -338,7 +339,7 @@ namespace EDDiscovery
                 Point3D curpos;
                 if (GetCoordsFrom(out curpos))
                 {
-                    ISystem nearest = SystemClass.FindNearestSystem(curpos.X, curpos.Y, curpos.Z);
+                    ISystem nearest = SystemClassDB.FindNearestSystem(curpos.X, curpos.Y, curpos.Z);
 
                     if (nearest != null)
                     {
@@ -484,7 +485,7 @@ namespace EDDiscovery
                 Point3D curpos;
                 if (GetCoordsTo(out curpos))
                 {
-                    ISystem nearest = SystemClass.FindNearestSystem(curpos.X, curpos.Y, curpos.Z);
+                    ISystem nearest = SystemClassDB.FindNearestSystem(curpos.X, curpos.Y, curpos.Z);
 
                     if (nearest != null)
                     {
@@ -567,7 +568,7 @@ namespace EDDiscovery
             }
             else
             {
-                EDDiscovery.Forms.MessageBoxTheme.Show("No route set up, retry", "No Route", MessageBoxButtons.OK);
+                ExtendedControls.MessageBoxTheme.Show("No route set up, retry", "No Route", MessageBoxButtons.OK);
                 return;
             }
         }
@@ -603,7 +604,7 @@ namespace EDDiscovery
             if (url.Length > 0)         // may pass back empty string if not known, this solves another exception
                 Process.Start(url);
             else
-                EDDiscovery.Forms.MessageBoxTheme.Show("System unknown to EDSM");
+                ExtendedControls.MessageBoxTheme.Show("System unknown to EDSM");
         }
 
         private void buttonToEDSM_Click(object sender, EventArgs e)
@@ -614,7 +615,7 @@ namespace EDDiscovery
             if (url.Length > 0)         // may pass back empty string if not known, this solves another exception
                 Process.Start(url);
             else
-                EDDiscovery.Forms.MessageBoxTheme.Show("System unknown to EDSM");
+                ExtendedControls.MessageBoxTheme.Show("System unknown to EDSM");
 
         }
     }
@@ -641,12 +642,12 @@ namespace EDDiscovery
             "Nearest to Waypoint + Deviation / 2"
         };
 
-        public List<SystemClass> RouteIterative(Action<string> AppendText)
+        public List<SystemClassDB> RouteIterative(Action<string> AppendText)
         {
             double traveldistance = Point3D.DistanceBetween(coordsfrom, coordsto);      // its based on a percentage of the traveldistance
-            List<SystemClass> routeSystems = new List<SystemClass>();
+            List<SystemClassDB> routeSystems = new List<SystemClassDB>();
             System.Diagnostics.Debug.WriteLine("From " + fromsys + " to  " + tosys);
-            routeSystems.Add(new SystemClass(fromsys, coordsfrom.X, coordsfrom.Y, coordsfrom.Z));
+            routeSystems.Add(new SystemClassDB(fromsys, coordsfrom.X, coordsfrom.Y, coordsfrom.Z));
 
             AppendText("Searching route from " + fromsys + " to " + tosys + " using " + metric_options[routemethod] + " metric" + Environment.NewLine);
             AppendText("Total distance: " + traveldistance.ToString("0.00") + " in " + maxrange.ToString("0.00") + "ly jumps" + Environment.NewLine);
@@ -678,7 +679,7 @@ namespace EDDiscovery
                 //Console.WriteLine("Curpos " + curpos.X + "," + curpos.Y + "," + curpos.Z);
                 //Console.WriteLine(" next" + nextpos.X + "," + nextpos.Y + "," + nextpos.Z);
 #endif
-                SystemClass bestsystem = SystemClass.GetSystemNearestTo(curpos, nextpos, maxrange, maxrange - 0.5, routemethod);
+                SystemClassDB bestsystem = SystemClassDB.GetSystemNearestTo(curpos, nextpos, maxrange, maxrange - 0.5, routemethod);
 
                 string sysname = "WAYPOINT";
                 double deltafromwaypoint = 0;
@@ -703,7 +704,7 @@ namespace EDDiscovery
 
             } while (true);
 
-            routeSystems.Add(new SystemClass(tosys, coordsto.X, coordsto.Y, coordsto.Z));
+            routeSystems.Add(new SystemClassDB(tosys, coordsto.X, coordsto.Y, coordsto.Z));
             actualdistance += Point3D.DistanceBetween(curpos, coordsto);
             AppendText(string.Format("{0,-40}{1,3} Dist:{2,8:0.00}ly @ {3,9:0.00},{4,8:0.00},{5,9:0.00}" + Environment.NewLine, tosys, jump, Point3D.DistanceBetween(curpos, coordsto), coordsto.X, coordsto.Y, coordsto.Z));
             AppendText(Environment.NewLine);

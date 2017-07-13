@@ -15,18 +15,20 @@
  */
 using EDDiscovery.DB;
 using EDDiscovery.Forms;
-using EDDiscovery.Win32Constants;
+using BaseUtils.Win32Constants;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using BaseUtils;
+using ActionLanguage;
+using Conditions;
+using AudioExtensions;
 
 namespace EDDiscovery.Actions
 {
-
-
     public class ActionController : ActionCoreController
     {
         private EDDiscoveryForm discoveryform;
@@ -40,83 +42,46 @@ namespace EDDiscovery.Actions
 
         private string lasteditedpack;
 
-        public ActionController(EDDiscoveryForm frm, EDDiscoveryController ctrl) : base()
+        public ActionController(EDDiscoveryForm frm, EDDiscoveryController ctrl) : base(frm.AudioQueueSpeech, frm.AudioQueueWave, frm.SpeechSynthesizer, frm)
         {
-            Action.cmdlist = cmdlist;       // tell actions which commands we support.
-
             discoveryform = frm;
             discoverycontroller = ctrl;
 
             persistentglobalvariables.FromString(SQLiteConnectionUser.GetSettingString("UserGlobalActionVars", ""), ConditionVariables.FromMode.MultiEntryComma);
 
             lasteditedpack = SQLiteConnectionUser.GetSettingString("ActionPackLastFile", "");
+
+            ActionBase.AddCommand("Commodities", typeof(ActionCommodities), ActionBase.ActionType.Cmd);
+            ActionBase.AddCommand("EliteBindings", typeof(ActionEliteBindings), ActionBase.ActionType.Cmd);
+            ActionBase.AddCommand("Event", typeof(ActionEvent), ActionBase.ActionType.Cmd);
+            ActionBase.AddCommand("Historytab", typeof(ActionHistoryTab), ActionBase.ActionType.Cmd);
+            ActionBase.AddCommand("Ledger", typeof(ActionLedger), ActionBase.ActionType.Cmd);
+            ActionBase.AddCommand("Materials", typeof(ActionMaterials), ActionBase.ActionType.Cmd);
+            ActionBase.AddCommand("Perform", typeof(ActionPerform), ActionBase.ActionType.Cmd);
+            ActionBase.AddCommand("Play", typeof(ActionPlay), ActionBase.ActionType.Cmd);
+            ActionBase.AddCommand("Popout", typeof(ActionPopout), ActionBase.ActionType.Cmd);
+            ActionBase.AddCommand("ProgramWindow", typeof(ActionProgramwindow), ActionBase.ActionType.Cmd);
+            ActionBase.AddCommand("Scan", typeof(ActionScan), ActionBase.ActionType.Cmd);
+            ActionBase.AddCommand("Ship", typeof(ActionShip), ActionBase.ActionType.Cmd);
+            ActionBase.AddCommand("Star", typeof(ActionStar), ActionBase.ActionType.Cmd);
+            ActionBase.AddCommand("Timer", typeof(ActionTimer), ActionBase.ActionType.Cmd);
+            ActionBase.AddCommand("MenuItem", typeof(ActionMenuItem), ActionBase.ActionType.Cmd);
+
             ReLoad();
         }
 
-        // Controller owns this, any commands can be plugged into the action system
-
-        static private Action.Commands[] cmdlist = new Action.Commands[]
-        {
-            new Action.Commands("Break", typeof(ActionBreak) , Action.ActionType.Cmd),
-            new Action.Commands("Call", typeof(ActionCall) , Action.ActionType.Call),
-            new Action.Commands("Commodities", typeof(ActionCommodities) , Action.ActionType.Cmd),
-            new Action.Commands("Dialog", typeof(ActionDialog) , Action.ActionType.Cmd),
-            new Action.Commands("DialogControl", typeof(ActionDialogControl) , Action.ActionType.Cmd),
-            new Action.Commands("Do", typeof(ActionDo) , Action.ActionType.Do),
-            new Action.Commands("DeleteVariable", typeof(ActionDeleteVariable) , Action.ActionType.Cmd),
-            new Action.Commands("Expr", typeof(ActionExpr), Action.ActionType.Cmd),
-            new Action.Commands("Else", typeof(ActionElse), Action.ActionType.Else),
-            new Action.Commands("ElseIf", typeof(ActionElseIf) , Action.ActionType.ElseIf),
-            new Action.Commands("EliteBindings", typeof(ActionEliteBindings) , Action.ActionType.Cmd),
-            new Action.Commands("End", typeof(ActionEnd) , Action.ActionType.Cmd),
-            new Action.Commands("ErrorIf", typeof(ActionErrorIf) , Action.ActionType.Cmd),
-            new Action.Commands("Event", typeof(ActionEvent) , Action.ActionType.Cmd),
-            new Action.Commands("FileDialog", typeof(ActionFileDialog) , Action.ActionType.Cmd),
-            new Action.Commands("GlobalLet", typeof(ActionGlobalLet) , Action.ActionType.Cmd),
-            new Action.Commands("Global", typeof(ActionGlobal) , Action.ActionType.Cmd),
-            new Action.Commands("Historytab", typeof(ActionHistoryTab) , Action.ActionType.Cmd),
-            new Action.Commands("If", typeof(ActionIf) , Action.ActionType.If),
-            new Action.Commands("InputBox", typeof(ActionInputBox) , Action.ActionType.Cmd),
-            new Action.Commands("InfoBox", typeof(ActionInfoBox) , Action.ActionType.Cmd),
-            new Action.Commands("Ledger", typeof(ActionLedger) , Action.ActionType.Cmd),
-            new Action.Commands("Let", typeof(ActionLet) , Action.ActionType.Cmd),
-            new Action.Commands("Loop", typeof(ActionLoop) , Action.ActionType.Loop),
-            new Action.Commands("Materials", typeof(ActionMaterials) , Action.ActionType.Cmd),
-            new Action.Commands("MessageBox", typeof(ActionMessageBox) , Action.ActionType.Cmd),
-            new Action.Commands("MenuItem", typeof(ActionMenuItem) , Action.ActionType.Cmd),
-            new Action.Commands("NonModalDialog", typeof(ActionNonModalDialog) , Action.ActionType.Cmd),
-            new Action.Commands("Rem", typeof(ActionRem) , Action.ActionType.Cmd),
-            new Action.Commands("Return", typeof(ActionReturn) , Action.ActionType.Return),
-            new Action.Commands("Perform", typeof(ActionPerform) , Action.ActionType.Cmd),
-            new Action.Commands("PersistentGlobal", typeof(ActionPersistentGlobal) , Action.ActionType.Cmd),
-            new Action.Commands("Play", typeof(ActionPlay) , Action.ActionType.Cmd),
-            new Action.Commands("Popout", typeof(ActionPopout) , Action.ActionType.Cmd),
-            new Action.Commands("Pragma", typeof(ActionPragma) , Action.ActionType.Cmd),
-            new Action.Commands("Print", typeof(ActionPrint) , Action.ActionType.Cmd),
-            new Action.Commands("ProgramWindow", typeof(ActionProgramwindow) , Action.ActionType.Cmd),
-            new Action.Commands("Say", typeof(ActionSay), Action.ActionType.Cmd ),
-            new Action.Commands("Scan", typeof(ActionScan) , Action.ActionType.Cmd),
-            new Action.Commands("Set", typeof(ActionSet) , Action.ActionType.Cmd),
-            new Action.Commands("Ship", typeof(ActionShip) , Action.ActionType.Cmd),
-            new Action.Commands("Star", typeof(ActionStar) , Action.ActionType.Cmd),
-            new Action.Commands("Static", typeof(ActionStatic) , Action.ActionType.Cmd),
-            new Action.Commands("Sleep", typeof(ActionSleep) , Action.ActionType.Cmd),
-            new Action.Commands("Timer", typeof(ActionTimer) , Action.ActionType.Cmd),
-            new Action.Commands("While", typeof(ActionWhile) , Action.ActionType.While),
-            new Action.Commands("//", typeof(ActionFullLineComment) , Action.ActionType.Cmd),
-            new Action.Commands("Else If", typeof(ActionElseIf) , Action.ActionType.ElseIf),
-        };
+        static public string AppFolder { get { return System.IO.Path.Combine(EDDConfig.Options.AppDataDirectory, "Actions"); } }
 
         public void ReLoad( bool completereload = true)        // COMPLETE reload..
         {
             if ( completereload )
-                actionfiles = new Actions.ActionFileList();     // clear the list
+                actionfiles = new ActionFileList();     // clear the list
 
-            string errlist = actionfiles.LoadAllActionFiles();
+            string errlist = actionfiles.LoadAllActionFiles(AppFolder);
             if (errlist.Length > 0)
-                EDDiscovery.Forms.MessageBoxTheme.Show("Failed to load files\r\n" + errlist, "WARNING!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                ExtendedControls.MessageBoxTheme.Show("Failed to load files\r\n" + errlist, "WARNING!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
-            actionrunasync = new Actions.ActionRun(this, actionfiles);        // this is the guy who runs programs asynchronously
+            actionrunasync = new ActionRun(this, actionfiles);        // this is the guy who runs programs asynchronously
             ActionConfigureKeys();
         }
 
@@ -125,7 +90,7 @@ namespace EDDiscovery.Actions
             if (lasteditedpack.Length > 0 && EditActionFile(lasteditedpack))
                 return;
             else
-                EDDiscovery.Forms.MessageBoxTheme.Show("Action pack does not exist anymore or never set", "WARNING!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                ExtendedControls.MessageBoxTheme.Show("Action pack does not exist anymore or never set", "WARNING!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
         }
 
         private bool EditActionFile(string name)
@@ -161,11 +126,13 @@ namespace EDDiscovery.Actions
             eventnames.Add(new Tuple<string, string>("onEliteInputOff", "EliteUI"));
 
             ActionPackEditorForm frm = new ActionPackEditorForm();
+
+            frm.onAdditionalNames += Frm_onAdditionalNames;
             ActionFile f = actionfiles.Get(name);
 
             if (f != null)
             {
-                frm.Init("Edit pack " + name, f, eventnames, discoveryform, discoveryform.Globals.NameList);
+                frm.Init("Edit pack " + name, this, AppFolder, f, eventnames);
                 frm.TopMost = discoveryform.FindForm().TopMost;
 
                 frm.ShowDialog(discoveryform.FindForm()); // don't care about the result, the form does all the saving
@@ -180,6 +147,21 @@ namespace EDDiscovery.Actions
                 return false;
         }
 
+        private List<string> Frm_onAdditionalNames(string evname)       // call back to discover name list.  evname may be empty
+        {
+            List<string> fieldnames = new List<string>(discoveryform.Globals.NameList);
+            fieldnames.Sort();
+
+            if ( evname != null && evname.Length>0 )
+            { 
+                List<string> classnames = BaseUtils.FieldNames.GetPropertyFieldNames(EDDiscovery.EliteDangerous.JournalEntry.TypeOfJournalEntry(evname), "EventClass_");
+                if (classnames != null)
+                    fieldnames.InsertRange(0, classnames);
+            }
+
+            return fieldnames;
+        }
+
         private void Dmf_OnEditActionFile(string name)
         {
             EditActionFile(name);
@@ -188,7 +170,7 @@ namespace EDDiscovery.Actions
         private void Dmf_OnEditGlobals()
         {
             ConditionVariablesForm avf = new ConditionVariablesForm();
-            avf.Init("Global User variables to pass to program on run", discoveryform.theme, persistentglobalvariables, showone: true);
+            avf.Init("Global User variables to pass to program on run", persistentglobalvariables, showone: true);
 
             if (avf.ShowDialog(discoveryform.FindForm()) == DialogResult.OK)
             {
@@ -199,15 +181,15 @@ namespace EDDiscovery.Actions
 
         private void Dmf_OnCreateActionFile()
         {
-            String r = Forms.PromptSingleLine.ShowDialog(discoveryform.FindForm(), "New name", "", "Create new action file");
+            String r = ExtendedControls.PromptSingleLine.ShowDialog(discoveryform.FindForm(), "New name", "", "Create new action file");
             if ( r != null && r.Length>0 )
             {
                 if (actionfiles.Get(r, StringComparison.InvariantCultureIgnoreCase) == null)
                 {
-                    actionfiles.CreateSet(r);
+                    actionfiles.CreateSet(r,AppFolder);
                 }
                 else
-                    Forms.MessageBoxTheme.Show(discoveryform.FindForm(), "Duplicate name", "Create Action File Failed", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    ExtendedControls.MessageBoxTheme.Show(discoveryform.FindForm(), "Duplicate name", "Create Action File Failed", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             }
         }
 
@@ -266,15 +248,15 @@ namespace EDDiscovery.Actions
 
         public void ConfigureVoice(string title)
         {
-            string voicename = persistentglobalvariables.GetString(Actions.ActionSay.globalvarspeechvoice, "Default");
-            string volume = persistentglobalvariables.GetString(Actions.ActionSay.globalvarspeechvolume,"Default");
-            string rate = persistentglobalvariables.GetString(Actions.ActionSay.globalvarspeechrate,"Default");
-            ConditionVariables effects = new ConditionVariables( persistentglobalvariables.GetString(Actions.ActionSay.globalvarspeecheffects, ""),ConditionVariables.FromMode.MultiEntryComma);
+            string voicename = persistentglobalvariables.GetString(ActionSay.globalvarspeechvoice, "Default");
+            string volume = persistentglobalvariables.GetString(ActionSay.globalvarspeechvolume,"Default");
+            string rate = persistentglobalvariables.GetString(ActionSay.globalvarspeechrate,"Default");
+            ConditionVariables effects = new ConditionVariables( persistentglobalvariables.GetString(ActionSay.globalvarspeecheffects, ""),ConditionVariables.FromMode.MultiEntryComma);
 
-            Audio.SpeechConfigure cfg = new Audio.SpeechConfigure();
+            SpeechConfigure cfg = new SpeechConfigure();
             cfg.Init( discoveryform.AudioQueueSpeech, discoveryform.SpeechSynthesizer,
                         "Select voice synthesizer defaults", title, 
-                        null, false, false, Audio.AudioQueue.Priority.Normal, "", "",
+                        null, false, false, AudioExtensions.AudioQueue.Priority.Normal, "", "",
                         voicename,
                         volume,
                         rate, 
@@ -282,10 +264,10 @@ namespace EDDiscovery.Actions
 
             if (cfg.ShowDialog(discoveryform) == DialogResult.OK)
             {
-                SetPeristentGlobal(Actions.ActionSay.globalvarspeechvoice, cfg.VoiceName);
-                SetPeristentGlobal(Actions.ActionSay.globalvarspeechvolume, cfg.Volume);
-                SetPeristentGlobal(Actions.ActionSay.globalvarspeechrate, cfg.Rate);
-                SetPeristentGlobal(Actions.ActionSay.globalvarspeecheffects, cfg.Effects.ToString());
+                SetPeristentGlobal(ActionSay.globalvarspeechvoice, cfg.VoiceName);
+                SetPeristentGlobal(ActionSay.globalvarspeechvolume, cfg.Volume);
+                SetPeristentGlobal(ActionSay.globalvarspeechrate, cfg.Rate);
+                SetPeristentGlobal(ActionSay.globalvarspeecheffects, cfg.Effects.ToString());
 
                 EDDConfig.Instance.DefaultVoiceDevice = discoveryform.AudioQueueSpeech.Driver.GetAudioEndpoint();
             }
@@ -293,20 +275,20 @@ namespace EDDiscovery.Actions
 
         public void ConfigureWave(string title)
         {
-            string volume = persistentglobalvariables.GetString(Actions.ActionPlay.globalvarplayvolume, "60");
-            ConditionVariables effects = new ConditionVariables(persistentglobalvariables.GetString(Actions.ActionPlay.globalvarplayeffects, ""), ConditionVariables.FromMode.MultiEntryComma);
+            string volume = persistentglobalvariables.GetString(ActionPlay.globalvarplayvolume, "60");
+            ConditionVariables effects = new ConditionVariables(persistentglobalvariables.GetString(ActionPlay.globalvarplayeffects, ""), ConditionVariables.FromMode.MultiEntryComma);
 
-            Audio.WaveConfigureDialog dlg = new Audio.WaveConfigureDialog();
+            WaveConfigureDialog dlg = new WaveConfigureDialog();
             dlg.Init(discoveryform.AudioQueueWave, true, "Select Default device, volume and effects", title, "",
-                        false, Audio.AudioQueue.Priority.Normal, "", "",
+                        false, AudioExtensions.AudioQueue.Priority.Normal, "", "",
                         volume, effects);
 
             if (dlg.ShowDialog(discoveryform) == DialogResult.OK)
             {
                 ConditionVariables cond = new ConditionVariables(dlg.Effects);// add on any effects variables (and may add in some previous variables, since we did not purge)
 
-                SetPeristentGlobal(Actions.ActionPlay.globalvarplayvolume, dlg.Volume);
-                SetPeristentGlobal(Actions.ActionPlay.globalvarplayeffects, dlg.Effects.ToString());
+                SetPeristentGlobal(ActionPlay.globalvarplayvolume, dlg.Volume);
+                SetPeristentGlobal(ActionPlay.globalvarplayeffects, dlg.Effects.ToString());
 
                 EDDConfig.Instance.DefaultWaveDevice = discoveryform.AudioQueueWave.Driver.GetAudioEndpoint();
             }
@@ -328,7 +310,7 @@ namespace EDDiscovery.Actions
                 }
             }
 
-            Forms.MessageBoxTheme.Show(discoveryform, "Voice pack not loaded, or needs updating to support this functionality");
+            ExtendedControls.MessageBoxTheme.Show(discoveryform, "Voice pack not loaded, or needs updating to support this functionality");
         }
 
         public void ActionRunOnRefresh()
@@ -354,10 +336,14 @@ namespace EDDiscovery.Actions
             return ActionRun(he.journalEntry.EventTypeStr, triggertype, he, null, flagstart, now);
         }
 
-        public int ActionRun(string triggername, string triggertype, HistoryEntry he = null, ConditionVariables additionalvars = null ,
+        public override int ActionRun(string triggername, string triggertype, ConditionVariables additionalvars = null,
+                                string flagstart = null, bool now = false)              // override base
+        { return ActionRun(triggername, triggertype, null, additionalvars, flagstart, now); }
+
+        public int ActionRun(string triggername, string triggertype, HistoryEntry he = null, ConditionVariables additionalvars = null,
                                 string flagstart = null, bool now = false)       //set flagstart to be the first flag of the actiondata..
         {
-            List<Actions.ActionFileList.MatchingSets> ale = actionfiles.GetMatchingConditions(triggername, flagstart);      // look thru all actions, find matching ones
+            List<ActionFileList.MatchingSets> ale = actionfiles.GetMatchingConditions(triggername, flagstart);      // look thru all actions, find matching ones
 
             if (ale.Count > 0)                  
             {
@@ -411,7 +397,7 @@ namespace EDDiscovery.Actions
             SQLiteConnectionUser.PutSettingString("UserGlobalActionVars", persistentglobalvariables.ToString());
         }
 
-        public void LogLine(string s)
+        public override void LogLine(string s)
         {
             discoveryform.LogLine(s);
         }
@@ -492,6 +478,21 @@ namespace EDDiscovery.Actions
                 return false;
         }
 
+        public override bool Pragma(string cmd)     // extra pragmas.
+        {
+            if (cmd.Equals("bindings"))
+            {
+                LogLine(DiscoveryForm.FrontierBindings.ListBindings());
+            }
+            else if (cmd.Equals("bindingvalues"))
+            {
+                LogLine(DiscoveryForm.FrontierBindings.ListValues());
+            }
+            else
+                return false;
+
+            return true;
+        }
 
     }
 }

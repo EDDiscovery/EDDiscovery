@@ -19,7 +19,7 @@ using System.Windows.Forms;
 
 namespace EDDiscovery.Export
 {
-    public class ExportGrid : ExportBase
+    public class ExportGrid : BaseUtils.CVSWrite
     {
         public delegate string GetHeader(int i);            // null if end of header line (null directly if no header line)
         public delegate Object GetCell(int r, int c);       // null is end of cell line.  if called with c=-1, return bool for do you want to continue with the spreadsheet
@@ -66,7 +66,7 @@ namespace EDDiscovery.Export
             }
             catch (IOException)
             {
-                EDDiscovery.Forms.MessageBoxTheme.Show(String.Format("Is file {0} open?", filename), "Export Grid",
+                ExtendedControls.MessageBoxTheme.Show(String.Format("Is file {0} open?", filename), "Export Grid",
                       MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return false;
             }

@@ -49,7 +49,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public override void FillInformation(out string summary, out string info, out string detailed)      //V
         {
             summary = EventTypeStr.SplitCapsWord();
-            info = Tools.FieldBuilder("Type:" , Type , "Amount:; credits", Amount, "Faction:" , Faction);
+            info = BaseUtils.FieldBuilder.Build("Type:" , Type , "Amount:; credits", Amount, "Faction:" , Faction);
             if (BrokerPercentage > 0)
                 info += ", Broker took " + BrokerPercentage.ToString("0") + "%";
             detailed = "";

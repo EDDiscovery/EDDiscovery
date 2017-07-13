@@ -21,7 +21,7 @@ using EDDiscovery.EliteDangerous.JournalEvents;
 using EDDiscovery.Forms;
 using EDDiscovery.Export;
 using EDDiscovery.HTTP;
-using EDDiscovery.Win32Constants;
+using BaseUtils.Win32Constants;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -65,17 +65,17 @@ namespace EDDiscovery
         public ExportControl ExportControl { get { return exportControl1; } }
         public EDDiscovery.ImageHandler.ImageHandler ImageHandler { get { return imageHandler1; } }
 
-        public Audio.AudioQueue AudioQueueWave { get { return audioqueuewave; } }
-        public Audio.AudioQueue AudioQueueSpeech { get { return audioqueuespeech; } }
-        public Audio.SpeechSynthesizer SpeechSynthesizer { get { return speechsynth; } }
+        public AudioExtensions.AudioQueue AudioQueueWave { get { return audioqueuewave; } }
+        public AudioExtensions.AudioQueue AudioQueueSpeech { get { return audioqueuespeech; } }
+        public AudioExtensions.SpeechSynthesizer SpeechSynthesizer { get { return speechsynth; } }
 
-        public BindingsFile FrontierBindings { get { return frontierbindings; } }   
+        public BindingsFile FrontierBindings { get { return frontierbindings; } }
 
-        Audio.IAudioDriver audiodriverwave;
-        Audio.AudioQueue audioqueuewave;
-        Audio.IAudioDriver audiodriverspeech;
-        Audio.AudioQueue audioqueuespeech;
-        Audio.SpeechSynthesizer speechsynth;
+        AudioExtensions.IAudioDriver audiodriverwave;
+        AudioExtensions.AudioQueue audioqueuewave;
+        AudioExtensions.IAudioDriver audiodriverspeech;
+        AudioExtensions.AudioQueue audioqueuespeech;
+        AudioExtensions.SpeechSynthesizer speechsynth;
 
         InputDevices.InputDeviceList inputdevices;
         InputDevices.InputDevicesIntoActions inputdevicesactions;
@@ -198,23 +198,23 @@ namespace EDDiscovery
             // Windows TTS (2000 and above). Speech *recognition* will be Version.Major >= 6 (Vista and above)
             if (Environment.OSVersion.Platform == PlatformID.Win32NT && Environment.OSVersion.Version.Major >= 5)
             {
-                audiodriverwave = new Audio.AudioDriverCSCore( EDDConfig.DefaultWaveDevice );
-                audiodriverspeech = new Audio.AudioDriverCSCore( EDDConfig.DefaultVoiceDevice );
-                speechsynth = new Audio.SpeechSynthesizer(new Audio.WindowsSpeechEngine());
+                audiodriverwave = new AudioExtensions.AudioDriverCSCore( EDDConfig.DefaultWaveDevice );
+                audiodriverspeech = new AudioExtensions.AudioDriverCSCore( EDDConfig.DefaultVoiceDevice );
+                speechsynth = new AudioExtensions.SpeechSynthesizer(new AudioExtensions.WindowsSpeechEngine());
             }
             else
             {
-                audiodriverwave = new Audio.AudioDriverDummy();
-                audiodriverspeech = new Audio.AudioDriverDummy();
-                speechsynth = new Audio.SpeechSynthesizer(new Audio.DummySpeechEngine());
+                audiodriverwave = new AudioExtensions.AudioDriverDummy();
+                audiodriverspeech = new AudioExtensions.AudioDriverDummy();
+                speechsynth = new AudioExtensions.SpeechSynthesizer(new AudioExtensions.DummySpeechEngine());
             }
 #else
             audiodriverwave = new Audio.AudioDriverDummy();
             audiodriverspeech = new Audio.AudioDriverDummy();
             speechsynth = new Audio.SpeechSynthesizer(new Audio.DummySpeechEngine());
 #endif
-            audioqueuewave = new Audio.AudioQueue(audiodriverwave);
-            audioqueuespeech = new Audio.AudioQueue(audiodriverspeech);
+            audioqueuewave = new AudioExtensions.AudioQueue(audiodriverwave);
+            audioqueuespeech = new AudioExtensions.AudioQueue(audiodriverspeech);
 
             actioncontroller = new Actions.ActionController(this, Controller);
 
@@ -747,13 +747,13 @@ namespace EDDiscovery
         private void forceEDDBUpdateToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (!Controller.AsyncPerformSync(eddbsync: true))      // we want it to have run, to completion, to allow another go..
-                EDDiscovery.Forms.MessageBoxTheme.Show("Synchronisation to databases is in operation or pending, please wait");
+                ExtendedControls.MessageBoxTheme.Show("Synchronisation to databases is in operation or pending, please wait");
         }
 
         private void syncEDSMSystemsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (!Controller.AsyncPerformSync(edsmsync: true))      // we want it to have run, to completion, to allow another go..
-                EDDiscovery.Forms.MessageBoxTheme.Show("Synchronisation to databases is in operation or pending, please wait");
+                ExtendedControls.MessageBoxTheme.Show("Synchronisation to databases is in operation or pending, please wait");
         }
 
         private void gitHubToolStripMenuItem_Click(object sender, EventArgs e)
@@ -831,7 +831,7 @@ namespace EDDiscovery
 
         private void clearEDSMIDAssignedToAllRecordsForCurrentCommanderToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (EDDiscovery.Forms.MessageBoxTheme.Show("Confirm you wish to reset the assigned EDSM IDs to all the current commander history entries," +
+            if (ExtendedControls.MessageBoxTheme.Show("Confirm you wish to reset the assigned EDSM IDs to all the current commander history entries," +
                                 " and clear all the assigned EDSM IDs in all your notes for all commanders\r\n\r\n" +
                                 "This will not change your history, but when you next refresh, it will try and reassign EDSM systems to " +
                                 "your history and notes.  Use only if you think that the assignment of EDSM systems to entries is grossly wrong," +
@@ -889,7 +889,7 @@ namespace EDDiscovery
 
         private void dEBUGResetAllHistoryToFirstCommandeToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (EDDiscovery.Forms.MessageBoxTheme.Show("Confirm you wish to reset all history entries to the current commander", "WARNING", MessageBoxButtons.OKCancel) == DialogResult.OK)
+            if (ExtendedControls.MessageBoxTheme.Show("Confirm you wish to reset all history entries to the current commander", "WARNING", MessageBoxButtons.OKCancel) == DialogResult.OK)
             {
                 EliteDangerous.JournalEntry.ResetCommanderID(-1, EDCommander.CurrentCmdrID);
                 Controller.RefreshHistoryAsync();
@@ -916,13 +916,13 @@ namespace EDDiscovery
             }
             else
             {
-                EDDiscovery.Forms.MessageBoxTheme.Show(this,"No new release found", "EDDiscovery", MessageBoxButtons.OK);
+                ExtendedControls.MessageBoxTheme.Show(this,"No new release found", "EDDiscovery", MessageBoxButtons.OK);
             }
         }
 
         private void deleteDuplicateFSDJumpEntriesToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (EDDiscovery.Forms.MessageBoxTheme.Show("Confirm you remove any duplicate FSD entries from the current commander", "WARNING", MessageBoxButtons.OKCancel) == DialogResult.OK)
+            if (ExtendedControls.MessageBoxTheme.Show("Confirm you remove any duplicate FSD entries from the current commander", "WARNING", MessageBoxButtons.OKCancel) == DialogResult.OK)
             {
                 int n = EliteDangerous.JournalEntry.RemoveDuplicateFSDEntries(EDCommander.CurrentCmdrID);
                 Controller.LogLine("Removed " + n + " FSD entries");
@@ -1284,7 +1284,7 @@ namespace EDDiscovery
         private void MenuTrigger_Click(object sender, EventArgs e)
         {
             ToolStripMenuItem it = sender as ToolStripMenuItem;
-            ConditionVariables vars = new ConditionVariables(new string[]
+            Conditions.ConditionVariables vars = new Conditions.ConditionVariables(new string[]
             {   "MenuName", it.Name,
                 "MenuText", it.Text,
                 "TopLevelMenuName" , it.OwnerItem.Name,
@@ -1309,15 +1309,15 @@ namespace EDDiscovery
 
         private void tabControl1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            ActionRun("onTabChange", "UserUIEvent", null,new ConditionVariables("TabName", tabControl1.TabPages[tabControl1.SelectedIndex].Text));
+            ActionRun("onTabChange", "UserUIEvent", null, new Conditions.ConditionVariables("TabName", tabControl1.TabPages[tabControl1.SelectedIndex].Text));
         }
 
-        public ConditionVariables Globals { get { return actioncontroller.Globals; } }
+        public Conditions.ConditionVariables Globals { get { return actioncontroller.Globals; } }
 
         public int ActionRunOnEntry(HistoryEntry he, string triggertype)
         { return actioncontroller.ActionRunOnEntry(he, triggertype); }
 
-        public int ActionRun(string name, string triggertype, HistoryEntry he = null, ConditionVariables additionalvars = null, string flagstart = null, bool now = false)
+        public int ActionRun(string name, string triggertype, HistoryEntry he = null, Conditions.ConditionVariables additionalvars = null, string flagstart = null, bool now = false)
         { return actioncontroller.ActionRun(name, triggertype,he,additionalvars,flagstart,now); }
 
         #endregion

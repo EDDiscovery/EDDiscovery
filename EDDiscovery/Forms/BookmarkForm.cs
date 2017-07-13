@@ -144,7 +144,7 @@ namespace EDDiscovery.Forms
         {
             this.Text = "Galactic Mapping Object";
             textBoxName.Text = name;
-            textBoxNotes.Text = Tools.WordWrap(descr,40);
+            textBoxNotes.Text = descr.WordWrap(40);
             textBoxNotes.SelectionStart = textBoxNotes.Text.Length;
             textBoxNotes.SelectionLength = 0;
             textBoxNotes.ReadOnly = true;

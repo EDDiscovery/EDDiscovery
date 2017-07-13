@@ -19,6 +19,8 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using BaseUtils;
+using Conditions;
 
 namespace EDDiscovery.HTTP
 {
@@ -186,14 +188,14 @@ namespace EDDiscovery.HTTP
 
         private ConditionVariables ReadVarsFromFile(string file, out bool? enable)
         {
-            return Actions.ActionFile.ReadVarsAndEnableFromFile(file, out enable);      // note other files share the actionfile Enabled and INSTALL format.. not the other bits
+            return ActionLanguage.ActionFile.ReadVarsAndEnableFromFile(file, out enable);      // note other files share the actionfile Enabled and INSTALL format.. not the other bits
         }
 
         static public bool SetEnableFlag(DownloadItem item, bool enable, string appfolder)
         {
             try
             {
-                if (Actions.ActionFile.SetEnableFlag(item.localfilename, enable))     // if enable flag was changed..
+                if (ActionLanguage.ActionFile.SetEnableFlag(item.localfilename, enable))     // if enable flag was changed..
                 {
                     if (!item.localmodified)      // if was not local modified, lets set the SHA so it does not appear local modified just because of the enable
                         WriteOrCheckSHAFile(item, item.localvars, appfolder, true);

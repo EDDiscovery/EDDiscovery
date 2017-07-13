@@ -283,7 +283,7 @@ namespace EDDiscovery._3DMap
             {
                 SaveFileDialog dlg = new SaveFileDialog();
 
-                dlg.InitialDirectory = Path.Combine(Tools.GetAppDataDirectory(), "Flights");
+                dlg.InitialDirectory = Path.Combine(EDDConfig.Options.AppDataDirectory, "Flights");
 
                 if (!Directory.Exists(dlg.InitialDirectory))
                 {
@@ -297,18 +297,18 @@ namespace EDDiscovery._3DMap
                 if (dlg.ShowDialog() == DialogResult.OK)
                 {
                     if ( !SaveToFile(dlg.FileName) )
-                        EDDiscovery.Forms.MessageBoxTheme.Show("Failed to save flight - check file path");
+                        ExtendedControls.MessageBoxTheme.Show("Failed to save flight - check file path");
                 }
             }
             else
-                EDDiscovery.Forms.MessageBoxTheme.Show("No flight recorded");
+                ExtendedControls.MessageBoxTheme.Show("No flight recorded");
         }
 
         public void LoadDialog()
         {
             OpenFileDialog dlg = new OpenFileDialog();
 
-            dlg.InitialDirectory = Path.Combine(Tools.GetAppDataDirectory(), "Flights");
+            dlg.InitialDirectory = Path.Combine(EDDConfig.Options.AppDataDirectory, "Flights");
 
             if (!Directory.Exists(dlg.InitialDirectory))
             {
@@ -323,7 +323,7 @@ namespace EDDiscovery._3DMap
             if (dlg.ShowDialog() == DialogResult.OK)
             {
                 if (!ReadFromFile(dlg.FileName))
-                    EDDiscovery.Forms.MessageBoxTheme.Show("Failed to load flight " + dlg.FileName + ". Check file path and file contents");
+                    ExtendedControls.MessageBoxTheme.Show("Failed to load flight " + dlg.FileName + ". Check file path and file contents");
             }
         }
 
@@ -345,7 +345,7 @@ namespace EDDiscovery._3DMap
                 tsmi.Dispose();
             }
 
-            string flightdir =  Path.Combine(Tools.GetAppDataDirectory(), "Flights");
+            string flightdir =  Path.Combine(EDDConfig.Options.AppDataDirectory, "Flights");
             DirectoryInfo dirInfo = new DirectoryInfo(flightdir);
 
             if (dirInfo.Exists)

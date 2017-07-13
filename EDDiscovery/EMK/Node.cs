@@ -27,7 +27,7 @@ namespace EMK.Cartography
 		Point3D _Position;
 		bool _Passable;
 		ArrayList _IncomingArcs, _OutgoingArcs;
-        SystemClass _si;
+        SystemClassDB _si;
 
 		/// <summary>
 		/// Constructor.
@@ -51,7 +51,7 @@ namespace EMK.Cartography
         /// <param name="PositionY">Y coordinate.</param>
         /// <param name="PositionZ">Z coordinate.</param>
         /// <param name="si">Node name.</param>
-        public Node(double PositionX, double PositionY, double PositionZ, SystemClass si)
+        public Node(double PositionX, double PositionY, double PositionZ, SystemClassDB si)
         {
             _Position = new Point3D(PositionX, PositionY, PositionZ);
             _Passable = true;
@@ -61,7 +61,7 @@ namespace EMK.Cartography
         }
 
 
-        public SystemClass System
+        public SystemClassDB System
         {
             get
             {

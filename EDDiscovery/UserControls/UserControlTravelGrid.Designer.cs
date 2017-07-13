@@ -122,7 +122,7 @@ namespace EDDiscovery.UserControls
             // 
             // drawnPanelPopOut
             // 
-            this.drawnPanelPopOut.DrawnImage = global::EDDiscovery.Properties.Resources.popout;
+            this.drawnPanelPopOut.DrawnImage = global::EDDiscovery.Properties.Resources.popout1;
             this.drawnPanelPopOut.ImageSelected = ExtendedControls.DrawnPanel.ImageType.None;
             this.drawnPanelPopOut.ImageText = null;
             this.drawnPanelPopOut.Location = new System.Drawing.Point(32, 3);
