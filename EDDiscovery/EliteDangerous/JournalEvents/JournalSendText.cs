@@ -40,7 +40,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public override void FillInformation(out string summary, out string info, out string detailed) //V
         {
             summary = EventTypeStr.SplitCapsWord();
-            info = Tools.FieldBuilder("To:", To_Localised.Alt(To), "Msg:", Message);
+            info = BaseUtils.FieldBuilder.Build("To:", To_Localised.Alt(To), "Msg:", Message);
             detailed = "";
         }
     }

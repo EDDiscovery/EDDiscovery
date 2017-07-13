@@ -80,7 +80,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
                 {
                     if (info.Length > 0)
                         info += ", ";
-                    info += Tools.FieldBuilder("", p.Type , "> ", p.Count , "; (VIP)" , p.VIP , "; (Wanted)" , p.Wanted);
+                    info += BaseUtils.FieldBuilder.Build("", p.Type , "> ", p.Count , "; (VIP)" , p.VIP , "; (Wanted)" , p.Wanted);
                 }
             }
 

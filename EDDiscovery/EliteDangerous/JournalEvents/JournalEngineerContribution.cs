@@ -73,7 +73,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             if (unknownType==true)
                 info = "Report to EDDiscovery team an unknown EngineerContribution type: " + Type;
              else
-                info = Tools.FieldBuilder("", Engineer, "Type:", Type, "Commodity:", FriendlyCommodity, "Material:", FriendlyMaterial, "Quantity:", Quantity, "TotalQuantity:", TotalQuantity);
+                info = BaseUtils.FieldBuilder.Build("", Engineer, "Type:", Type, "Commodity:", FriendlyCommodity, "Material:", FriendlyMaterial, "Quantity:", Quantity, "TotalQuantity:", TotalQuantity);
             detailed = "";
         }
     }

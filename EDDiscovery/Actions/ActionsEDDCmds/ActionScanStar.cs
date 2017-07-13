@@ -18,16 +18,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using BaseUtils;
+using ActionLanguage;
 
 namespace EDDiscovery.Actions
 {
-    class ActionScan : Action
+    class ActionScan : ActionBase
     {
         public override bool AllowDirectEditingOfUserData { get { return true; } }
 
-        public override bool ConfigurationMenu(System.Windows.Forms.Form parent, EDDiscoveryForm discoveryform, List<string> eventvars)
+        public override bool ConfigurationMenu(System.Windows.Forms.Form parent, ActionCoreController cp, List<string> eventvars)
         {
-            string promptValue = Forms.PromptSingleLine.ShowDialog(parent, "Scan system name", UserData, "Configure Scan Command");
+            string promptValue = ExtendedControls.PromptSingleLine.ShowDialog(parent, "Scan system name", UserData, "Configure Scan Command");
             if (promptValue != null)
             {
                 userdata = promptValue;
@@ -39,7 +41,7 @@ namespace EDDiscovery.Actions
         public override bool ExecuteAction(ActionProgramRun ap)
         {
             string res;
-            if (ap.functions.ExpandString(UserData, out res) != ConditionFunctions.ExpandResult.Failed)
+            if (ap.functions.ExpandString(UserData, out res) != Conditions.ConditionFunctions.ExpandResult.Failed)
             {
                 StringParser sp = new StringParser(res);
 
@@ -68,12 +70,12 @@ namespace EDDiscovery.Actions
 
                 if (cmdname != null)
                 {
-                    EliteDangerous.StarScan scan = ap.actioncontroller.HistoryList.starscan;
-                    DB.SystemClass sc = DB.SystemClass.GetSystem(cmdname);
+                    EliteDangerous.StarScan scan = (ap.actioncontroller as ActionController).HistoryList.starscan;
+                    DB.SystemClassDB sc = DB.SystemClassDB.GetSystem(cmdname);
 
                     if (sc == null)
                     {
-                        sc = new DB.SystemClass(cmdname);
+                        sc = new DB.SystemClassDB(cmdname);
                         sc.id_edsm = 0;
                     }
 
@@ -194,13 +196,13 @@ namespace EDDiscovery.Actions
         }
     }
 
-    class ActionStar : Action
+    class ActionStar : ActionBase
     {
         public override bool AllowDirectEditingOfUserData { get { return true; } }
 
-        public override bool ConfigurationMenu(System.Windows.Forms.Form parent, EDDiscoveryForm discoveryform, List<string> eventvars)
+        public override bool ConfigurationMenu(System.Windows.Forms.Form parent, ActionCoreController cp, List<string> eventvars)
         {
-            string promptValue = Forms.PromptSingleLine.ShowDialog(parent, "Star system name", UserData, "Configure Star Command");
+            string promptValue = ExtendedControls.PromptSingleLine.ShowDialog(parent, "Star system name", UserData, "Configure Star Command");
             if (promptValue != null)
             {
                 userdata = promptValue;
@@ -212,7 +214,7 @@ namespace EDDiscovery.Actions
         public override bool ExecuteAction(ActionProgramRun ap)
         {
             string res;
-            if (ap.functions.ExpandString(UserData, out res) != ConditionFunctions.ExpandResult.Failed)
+            if (ap.functions.ExpandString(UserData, out res) != Conditions.ConditionFunctions.ExpandResult.Failed)
             {
                 StringParser sp = new StringParser(res);
 
@@ -234,15 +236,15 @@ namespace EDDiscovery.Actions
 
                 if (cmdname != null)
                 {
-                    DB.SystemClass sc = DB.SystemClass.GetSystem(cmdname);
+                    DB.SystemClassDB sc = DB.SystemClassDB.GetSystem(cmdname);
                     ap[prefix + "Found"] = sc != null ? "1" : "0";
 
                     if (sc != null)
                     {
-                        ConditionVariables vars = new ConditionVariables();
+                        Conditions.ConditionVariables vars = new Conditions.ConditionVariables();
                         ActionVars.SystemVars(vars, sc, prefix);
                         ap.Add(vars);
-                        ActionVars.SystemVarsFurtherInfo(ap, ap.actioncontroller.HistoryList, sc, prefix);
+                        ActionVars.SystemVarsFurtherInfo(ap, (ap.actioncontroller as ActionController).HistoryList, sc, prefix);
                     }
                 }
                 else

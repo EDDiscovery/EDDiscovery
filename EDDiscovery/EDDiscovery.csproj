@@ -197,13 +197,9 @@
     <Compile Include="3DMap\StarGrid.cs" />
     <Compile Include="3DMap\StarNamesList.cs" />
     <Compile Include="3DMap\Zoom.cs" />
-    <Compile Include="Actions\ActionsCore\ActionCoreController.cs" />
     <Compile Include="Actions\ActionsEDDCmds\ActionEliteBindings.cs" />
     <Compile Include="Actions\ActionsEDDCmds\ActionShip.cs" />
-    <Compile Include="Actions\ActionsCoreCmds\ActionTimer.cs" />
-    <Compile Include="Actions\ActionsCoreCmds\ActionUserInteraction.cs" />
     <Compile Include="Actions\ActionController.cs" />
-    <Compile Include="Actions\ActionsCore\Action.cs" />
     <Compile Include="Actions\ActionsEDDCmds\ActionEvent.cs" />
     <Compile Include="Actions\ActionsEDDCmds\ActionHistoryTab.cs" />
     <Compile Include="Actions\ActionsEDDCmds\ActionLedger.cs" />
@@ -211,108 +207,13 @@
     <Compile Include="Actions\ActionsEDDCmds\ActionPerform.cs" />
     <Compile Include="Actions\ActionsEDDCmds\ActionPopout.cs" />
     <Compile Include="Actions\ActionsEDDCmds\ActionProgramwindow.cs" />
-    <Compile Include="Actions\ActionsCoreCmds\ActionReturn.cs" />
     <Compile Include="Actions\ActionsEDDCmds\ActionScanStar.cs" />
-    <Compile Include="Actions\ActionsCore\ActionPackEditorForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Actions\ActionsCore\ActionPackEditorForm.Designer.cs">
-      <DependentUpon>ActionPackEditorForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Actions\ActionsCore\ActionFile.cs" />
-    <Compile Include="Actions\ActionsCore\ActionFileList.cs" />
-    <Compile Include="Actions\ActionsCore\ActionProgramList.cs" />
+    <Compile Include="Actions\ActionsEDDCmds\ActionTimer.cs" />
+    <Compile Include="Actions\ActionsEDDCmds\ActionMenuItem.cs" />
     <Compile Include="Actions\ActionVars.cs" />
-    <Compile Include="Audio\AudioDeviceConfigure.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Audio\AudioDeviceConfigure.Designer.cs">
-      <DependentUpon>AudioDeviceConfigure.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Audio\AudioDriver.cs" />
-    <Compile Include="Audio\AudioDriverCSCore.cs" />
-    <Compile Include="Audio\AudioDriverDummy.cs" />
-    <Compile Include="Audio\AudioQueue.cs" />
-    <Compile Include="Audio\SoundEffectSettings.cs" />
-    <Compile Include="Audio\SoundEffectDialog.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Audio\SoundEffectDialog.Designer.cs">
-      <DependentUpon>SoundEffectDialog.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Audio\SpeechConfigure.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Audio\SpeechConfigure.Designer.cs">
-      <DependentUpon>SpeechConfigure.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Audio\SpeechSynthesizer.cs" />
-    <Compile Include="Audio\SpeechSythesizerDummy.cs" />
-    <Compile Include="Audio\SpeechSythesizerWindows.cs" />
-    <Compile Include="Audio\WaveConfigureDialog.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Audio\WaveConfigureDialog.Designer.cs">
-      <DependentUpon>WaveConfigureDialog.cs</DependentUpon>
-    </Compile>
     <Compile Include="CompanionAPI\CModules.cs" />
     <Compile Include="CompanionAPI\CStarport.cs" />
     <Compile Include="CompanionAPI\CSystem.cs" />
-    <Compile Include="Actions\Conditions\Condition.cs" />
-    <Compile Include="Actions\Conditions\ConditionEntry.cs" />
-    <Compile Include="Actions\Conditions\ConditionFileHandles.cs" />
-    <Compile Include="Actions\Conditions\ConditionFunctions.cs" />
-    <Compile Include="Actions\ActionsCoreCmds\ActionPragma.cs" />
-    <Compile Include="Actions\ActionsCoreCmds\ActionPrint.cs" />
-    <Compile Include="Actions\ActionsCoreCmds\ActionSet.cs" />
-    <Compile Include="Actions\ActionsCoreCmds\ActionSleep.cs" />
-    <Compile Include="Actions\ActionsCoreCmds\ActionStructures.cs" />
-    <Compile Include="Actions\ActionsCoreCmds\ActionPlay.cs" />
-    <Compile Include="Actions\ActionsCore\ActionProgramEditForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Actions\ActionsCore\ActionProgramEditForm.Designer.cs">
-      <DependentUpon>ActionProgramEditForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Actions\ActionsCoreCmds\ActionRemEnd.cs" />
-    <Compile Include="Actions\ActionsCore\ActionProgramRun.cs" />
-    <Compile Include="Actions\ActionsCore\ActionRun.cs" />
-    <Compile Include="Actions\ActionsCoreCmds\ActionSay.cs" />
-    <Compile Include="Actions\ActionsCore\ActionProgram.cs" />
-    <Compile Include="Actions\Conditions\ConditionVariablesForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Actions\Conditions\ConditionVariablesForm.Designer.cs">
-      <DependentUpon>ConditionVariablesForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Actions\Conditions\ConditionVariables.cs" />
-    <Compile Include="Controls\AutoCompleteDGV.cs" />
-    <Compile Include="Controls\CheckedListControlCustom.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Controls\ControlHelpers.cs" />
-    <Compile Include="Controls\CustomDateTimePicker.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Controls\DataGridViewExtensions.cs" />
-    <Compile Include="Controls\AutoCompleteTextBox.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Controls\LabelExt.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Controls\PanelVScroll.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Controls\PictureBoxHotspot.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Controls\TabStrip.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Controls\TabStrip.Designer.cs">
-      <DependentUpon>TabStrip.cs</DependentUpon>
-    </Compile>
     <Compile Include="DB\BookmarkClass.cs" />
     <Compile Include="EliteDangerous\BindingsFile.cs" />
     <Compile Include="EDSM\GalacticMapSystem.cs" />
@@ -364,7 +265,6 @@
     <Compile Include="EliteDangerous\JournalEvents\JournalSetUserShipName.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalStartJump.cs" />
     <Compile Include="EliteDangerous\ShipInformation.cs" />
-    <Compile Include="ExportImport\CVSRead.cs" />
     <Compile Include="ExportImport\ExportGrid.cs" />
     <Compile Include="ExportImport\ExportSphereSystems.cs" />
     <Compile Include="Forms\CommanderForm.cs">
@@ -385,13 +285,6 @@
     <Compile Include="Forms\ImportSphere.Designer.cs">
       <DependentUpon>ImportSphere.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\MessageBoxTheme.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\MessageBoxTheme.Designer.cs">
-      <DependentUpon>MessageBoxTheme.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\PromptDialogs.cs" />
     <Compile Include="Forms\SetNoteForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -413,17 +306,12 @@
     <Compile Include="Forms\ShipDetails.Designer.cs">
       <DependentUpon>ShipDetails.cs</DependentUpon>
     </Compile>
-    <Compile Include="Actions\Conditions\ConditionLists.cs" />
-    <Compile Include="Actions\Conditions\StringParser.cs" />
     <Compile Include="IDiscoveryController.cs" />
     <Compile Include="RoutingUtils.cs" />
     <Compile Include="ExportImport\ExportNotes.cs" />
     <Compile Include="ExportImport\ImportHistory.cs" />
     <Compile Include="TraceLog.cs" />
     <Compile Include="Trilateration\DistanceParser.cs" />
-    <Compile Include="Controls\SplitContainerCustom.cs">
-      <SubType>Component</SubType>
-    </Compile>
     <Compile Include="EDDN\EDDNClass.cs" />
     <Compile Include="EDDN\EDDNSync.cs" />
     <Compile Include="EDSM\GalacticMapObject.cs" />
@@ -563,15 +451,8 @@
     <Compile Include="Forms\FindMaterialsForm.Designer.cs">
       <DependentUpon>FindMaterialsForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Actions\Conditions\ConditionFilterForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Actions\Conditions\ConditionFilterForm.Designer.cs">
-      <DependentUpon>ConditionFilterForm.cs</DependentUpon>
-    </Compile>
     <Compile Include="EliteDangerous\LogReaderBase.cs" />
     <Compile Include="EliteDangerous\NetLogReader.cs" />
-    <Compile Include="ExportImport\ExportBase.cs" />
     <Compile Include="ExportImport\ExportControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -616,12 +497,6 @@
     <Compile Include="Forms\TimedMessage.Designer.cs">
       <DependentUpon>TimedMessage.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\InfoForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\InfoForm.Designer.cs">
-      <DependentUpon>InfoForm.cs</DependentUpon>
-    </Compile>
     <Compile Include="Forms\RecordStep.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -638,66 +513,16 @@
     <Compile Include="HTTP\DownloadFile.cs" />
     <Compile Include="HTTP\GitHubClass.cs" />
     <Compile Include="HTTP\GitHubRelease.cs" />
-    <Compile Include="ObjectExtensions.cs" />
-    <Compile Include="Controls\ButtonExt.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Controls\CheckBoxCustom.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Controls\CustomColourTable.cs" />
-    <Compile Include="Controls\StatusStripCustom.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Controls\DataViewScrollerPanel.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Controls\GroupBoxCustom.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Controls\NumericUpDownCustom.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Controls\RadioButtonCustom.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Controls\RichTextBoxScroll.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Controls\TabControlCustom.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Controls\TabStyleCustom.cs" />
-    <Compile Include="Controls\DrawnPanel.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Controls\ComboBoxCustom.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Controls\ListControlCustom.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Controls\TextBoxBorder.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Controls\ToolStripComboBoxCustom.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Controls\UpDown.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Controls\VScrollCustom.cs">
-      <SubType>Component</SubType>
-    </Compile>
+    <Compile Include="Themeing\CustomColourTable.cs" />
     <Compile Include="DB\SavedRouteClass.cs" />
-    <Compile Include="DB\ISystem.cs" />
-    <Compile Include="DB\InMemory\SystemClass.cs" />
+    <Compile Include="EliteDangerous\ISystem.cs" />
+    <Compile Include="EliteDangerous\SystemClass.cs" />
     <Compile Include="DB\IVisitedSystems.cs" />
     <Compile Include="DB\TravelLogUnit.cs" />
     <Compile Include="DB\WantedSystemClass.cs" />
     <Compile Include="EDDConfig.cs" />
-    <Compile Include="EDDTheme.cs" />
-    <Compile Include="EDDToolStripRenderer.cs" />
+    <Compile Include="Themeing\Theme.cs" />
+    <Compile Include="Themeing\ToolStripRenderer.cs" />
     <Compile Include="EDSM\EDSMClass.cs" />
     <Compile Include="EDSM\EDSMSync.cs" />
     <Compile Include="EliteDangerous\EDCommander.cs" />
@@ -716,7 +541,7 @@
     </Compile>
     <Compile Include="UserControls\DataGridViewSorter.cs" />
     <Compile Include="DB\SQLiteDBClass.cs" />
-    <Compile Include="DB\SystemClass.cs" />
+    <Compile Include="DB\SystemClassDB.cs" />
     <Compile Include="DB\SystemNoteClass.cs" />
     <Compile Include="Forms\AboutForm.cs">
       <SubType>Form</SubType>
@@ -779,13 +604,6 @@
     <Compile Include="Settings.Designer.cs">
       <DependentUpon>Settings.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\Obsolete\SystemViewForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\Obsolete\SystemViewForm.Designer.cs">
-      <DependentUpon>SystemViewForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Tools.cs" />
     <Compile Include="TravelHistoryControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -929,42 +747,11 @@
     <Compile Include="UserControls\UserControlTrippanel.Designer.cs">
       <DependentUpon>UserControlTrippanel.cs</DependentUpon>
     </Compile>
-    <Compile Include="Vector3.cs" />
-    <Compile Include="Win32Constants.cs" />
+    <Compile Include="DB\Vector3.cs" />
     <Content Include="edlogo_3mo_icon.ico" />
     <Content Include="fround.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <EmbeddedResource Include="Actions\ActionsCore\ActionPackEditorForm.resx">
-      <DependentUpon>ActionPackEditorForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Actions\ActionsCore\ActionProgramEditForm.resx">
-      <DependentUpon>ActionProgramEditForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Audio\AudioDeviceConfigure.resx">
-      <DependentUpon>AudioDeviceConfigure.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Audio\SoundEffectDialog.resx">
-      <DependentUpon>SoundEffectDialog.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Audio\SpeechConfigure.resx">
-      <DependentUpon>SpeechConfigure.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Audio\WaveConfigureDialog.resx">
-      <DependentUpon>WaveConfigureDialog.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Actions\Conditions\ConditionVariablesForm.resx">
-      <DependentUpon>ConditionVariablesForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Controls\AutoCompleteTextBox.resx">
-      <DependentUpon>AutoCompleteTextBox.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Controls\RichTextBoxScroll.resx">
-      <DependentUpon>RichTextBoxScroll.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Controls\TabStrip.resx">
-      <DependentUpon>TabStrip.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Forms\CommanderForm.resx">
       <DependentUpon>CommanderForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -977,17 +764,11 @@
     <EmbeddedResource Include="Forms\ImportSphere.resx">
       <DependentUpon>ImportSphere.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\MessageBoxTheme.resx">
-      <DependentUpon>MessageBoxTheme.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Forms\SetNoteForm.resx">
       <DependentUpon>SetNoteForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\ShipDetails.resx">
       <DependentUpon>ShipDetails.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Actions\Conditions\ConditionFilterForm.resx">
-      <DependentUpon>ConditionFilterForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\TabControlForm.resx">
       <DependentUpon>TabControlForm.cs</DependentUpon>
@@ -1320,6 +1101,7 @@
     <None Include="Resources\receivetext.png" />
     <None Include="Resources\marketdata.png" />
     <None Include="Resources\no_entry.bmp" />
+    <None Include="Resources\popout1.png" />
     <Content Include="x86\Microsoft.VC100.CRT\msvcp100.dll" />
     <Content Include="x86\Microsoft.VC100.CRT\msvcr100.dll" />
     <Content Include="x86\SQLite.Interop.dll">
@@ -1364,9 +1146,6 @@
     <EmbeddedResource Include="Forms\TimedMessage.resx">
       <DependentUpon>TimedMessage.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\InfoForm.resx">
-      <DependentUpon>InfoForm.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Forms\RecordStep.resx">
       <DependentUpon>RecordStep.cs</DependentUpon>
     </EmbeddedResource>
@@ -1397,9 +1176,6 @@
     </Content>
     <EmbeddedResource Include="RouteControl.resx">
       <DependentUpon>RouteControl.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\Obsolete\SystemViewForm.resx">
-      <DependentUpon>SystemViewForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="SavedRouteExpeditionControl.resx">
       <DependentUpon>SavedRouteExpeditionControl.cs</DependentUpon>
@@ -1454,6 +1230,28 @@
       <ProductName>Windows Installer 4.5</ProductName>
       <Install>true</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ActionLanguage\ActionLanguage.csproj">
+      <Project>{17f82244-9fa8-4b04-85f0-9b1d0654cd26}</Project>
+      <Name>ActionLanguage</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Audio\Audio.csproj">
+      <Project>{59f99a05-ce16-4fb8-be99-f1a24f019cb8}</Project>
+      <Name>Audio</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\BaseUtils\BaseUtils.csproj">
+      <Project>{c657c881-f3e1-45ba-aca5-966348010414}</Project>
+      <Name>BaseUtils</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Conditions\Conditions.csproj">
+      <Project>{f76451e6-926d-4e03-b721-99fcd1ec4eed}</Project>
+      <Name>Conditions</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ExtendedControls\ExtendedControls.csproj">
+      <Project>{2049403f-f4c7-45e6-b777-6390c78e4d2b}</Project>
+      <Name>ExtendedControls</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup />
   <UsingTask TaskName="Zip" TaskFactory="CodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.v4.0.dll">

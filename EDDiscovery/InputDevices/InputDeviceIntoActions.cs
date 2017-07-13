@@ -80,7 +80,7 @@ namespace EDDiscovery.InputDevices
                 string match = je.EventName();              // same as bindings name..
                 System.Diagnostics.Debug.WriteLine(je.ToString(10) + " " + match);
 
-                ac.ActionRun("onEliteInputRaw", "EliteUIEvent", additionalvars: new ConditionVariables(new string[]
+                ac.ActionRun("onEliteInputRaw", "EliteUIEvent", additionalvars: new Conditions.ConditionVariables(new string[]
                         { "Device" , je.Device.ID().Name, "EventName", match , "Pressed" , je.Pressed?"1":"0", "Value" , je.Value.ToStringInvariant() }));
 
                 BindingsFile.Device dv = GetBindingDeviceFromInputDeviceIdentifier(je.Device.ID());
@@ -110,7 +110,7 @@ namespace EDDiscovery.InputDevices
                                 {
                                     System.Diagnostics.Debug.WriteLine("Action " + a.assignedfunc + "-");
                                     assignmentsinonstate.Remove(a);
-                                    ac.ActionRun("onEliteInputOff", "EliteUIEvent", additionalvars: new ConditionVariables(new string[]
+                                    ac.ActionRun("onEliteInputOff", "EliteUIEvent", additionalvars: new Conditions.ConditionVariables(new string[]
                                      { "Binding" , a.assignedfunc }));
                                 }
                             }
@@ -139,7 +139,7 @@ namespace EDDiscovery.InputDevices
 
                         foreach (string s in bindingstoexecute)
                         {
-                            ac.ActionRun("onEliteInput", "EliteUIEvent", additionalvars: new ConditionVariables(new string[]
+                            ac.ActionRun("onEliteInput", "EliteUIEvent", additionalvars: new Conditions.ConditionVariables(new string[]
                             { "Device" , je.Device.ID().Name, "Binding" , s , "BindingList" , String.Join(",",bindingstoexecute),
                               "EventName", match , "Pressed" , je.Pressed?"1":"0", "Value" , je.Value.ToStringInvariant() }));
                         }

@@ -79,12 +79,12 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public override void FillInformation(out string summary, out string info, out string detailed) //V
         {
             summary = EventTypeStr.SplitCapsWord();
-            info = Tools.FieldBuilder("", RetrievedItemLocalised.Alt(RetrievedItem), "< into ", Slot);
+            info = BaseUtils.FieldBuilder.Build("", RetrievedItemLocalised.Alt(RetrievedItem), "< into ", Slot);
             if ( Cost>0)
-                info += " " + Tools.FieldBuilder("Cost:; credits", Cost);
+                info += " " + BaseUtils.FieldBuilder.Build("Cost:; credits", Cost);
 
             if (SwapOutItem.Length > 0)
-                info += ", " + Tools.FieldBuilder("Stored:", SwapOutItemLocalised.Alt(SwapOutItem));
+                info += ", " + BaseUtils.FieldBuilder.Build("Stored:", SwapOutItemLocalised.Alt(SwapOutItem));
             detailed = "";
         }
 

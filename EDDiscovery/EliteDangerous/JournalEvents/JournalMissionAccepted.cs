@@ -116,7 +116,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public override void FillInformation(out string summary, out string info, out string detailed) //V
         {
             summary = EventTypeStr.SplitCapsWord();
-            info = Tools.FieldBuilder("", Name, 
+            info = BaseUtils.FieldBuilder.Build("", Name, 
                                       "< from ", Faction, 
                                       "System:", DestinationSystem, 
                                       "Station:", DestinationStation, 
@@ -124,7 +124,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
                                       "Influence:", Influence,
                                       "Reputation:", Reputation);
 
-            detailed = Tools.FieldBuilder("Deliver:", CommodityLocalised.Alt(FriendlyCommodity), 
+            detailed = BaseUtils.FieldBuilder.Build("Deliver:", CommodityLocalised.Alt(FriendlyCommodity), 
                                            "Target:", TargetLocalised.Alt(TargetFriendly), 
                                            "Type:", TargetTypeFriendly,
                                            "Target Faction:", TargetFaction,
@@ -134,7 +134,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
 
         public string MissionInformation()          // other stuff for the mission panel which it does not already cover
         {
-            return Tools.FieldBuilder(  "Influence:", Influence,
+            return BaseUtils.FieldBuilder.Build(  "Influence:", Influence,
                                         "Reputation:", Reputation,
                                         "Deliver:", CommodityLocalised.Alt(FriendlyCommodity),
                                         "Target:", TargetLocalised.Alt(TargetFriendly),
@@ -145,7 +145,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
 
         }
 
-        public void UpdateMissions(MissionListAccumulator mlist, EDDiscovery.DB.ISystem sys, string body, DB.SQLiteConnectionUser conn)
+        public void UpdateMissions(MissionListAccumulator mlist, EliteDangerous.ISystem sys, string body, DB.SQLiteConnectionUser conn)
         {
             mlist.Accepted(this,sys,body);
         }

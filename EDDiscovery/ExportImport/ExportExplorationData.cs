@@ -25,7 +25,7 @@ using EDDiscovery.EliteDangerous;
 
 namespace EDDiscovery.Export
 {
-    class ExportExplorationData : ExportBase
+    class ExportExplorationData : BaseUtils.CVSWrite
     {
         private const string TITLE = "Export Exploration Data";
         private bool datepopup;
@@ -40,7 +40,7 @@ namespace EDDiscovery.Export
         private List<HistoryEntry> scans;
 
 
-        public override bool GetData(EDDiscoveryForm _discoveryForm)
+        public override bool GetData(Object _discoveryForm)
         {
             bool datepicked = false;
             var picker = new DateTimePicker();
@@ -69,9 +69,9 @@ namespace EDDiscovery.Export
             }
 
             int count = 0;
-            data = HistoryList.FilterByJournalEvent(_discoveryForm.history.ToList(), "Sell Exploration Data", out count);
+            data = HistoryList.FilterByJournalEvent((_discoveryForm as EDDiscoveryForm).history.ToList(), "Sell Exploration Data", out count);
 
-            scans = HistoryList.FilterByJournalEvent(_discoveryForm.history.ToList(), "Scan", out count);
+            scans = HistoryList.FilterByJournalEvent((_discoveryForm as EDDiscoveryForm).history.ToList(), "Scan", out count);
             if (datepicked)
             {
                 data = (from he in data where he.EventTimeUTC >= picker.Value.Date.ToUniversalTime() orderby he.EventTimeUTC descending select he).ToList();
@@ -128,7 +128,7 @@ namespace EDDiscovery.Export
             }
             catch (IOException)
             {
-                EDDiscovery.Forms.MessageBoxTheme.Show(String.Format("Is file {0} open?", filename), TITLE,
+                ExtendedControls.MessageBoxTheme.Show(String.Format("Is file {0} open?", filename), TITLE,
                       MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return false;
             }

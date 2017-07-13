@@ -23,6 +23,7 @@ using System.Management;
 using System.IO;
 using EDDiscovery.DB;
 using Newtonsoft.Json.Linq;
+using EDDiscovery.EliteDangerous;
 
 namespace EDDiscovery
 {

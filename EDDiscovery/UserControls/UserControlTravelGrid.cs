@@ -48,7 +48,7 @@ namespace EDDiscovery.UserControls
 
         public TravelHistoryFilter GetHistoryFilter { get { return (TravelHistoryFilter)comboBoxHistoryWindow.SelectedItem ?? TravelHistoryFilter.NoFilter; } }
 
-        private ConditionLists fieldfilter = new ConditionLists();
+        private Conditions.ConditionLists fieldfilter = new Conditions.ConditionLists();
 
         private Dictionary<long, DataGridViewRow> rowsbyjournalid = new Dictionary<long, DataGridViewRow>();
 
@@ -169,7 +169,7 @@ namespace EDDiscovery.UserControls
             result = HistoryList.FilterByJournalEvent(result, SQLiteDBClass.GetSettingString(DbFilterSave, "All"), out ftotal);
             toolTip1.SetToolTip(buttonFilter, (ftotal > 0) ? ("Total filtered out " + ftotal) : "Filter out entries based on event type");
 
-            result = fieldfilter.FilterHistory(result, discoveryform.Globals, out ftotal);
+            result = HistoryList.FilterHistory(result, fieldfilter, discoveryform.Globals, out ftotal);
             toolTip1.SetToolTip(buttonField, (ftotal > 0) ? ("Total filtered out " + ftotal) : "Filter out entries matching the field selection");
 
             dataGridViewTravel.Rows.Clear();
@@ -253,7 +253,7 @@ namespace EDDiscovery.UserControls
 
         public bool WouldAddEntry(HistoryEntry he)                  // do we filter? if its not in the journal event filter, or it is in the field filter
         {
-            return he.IsJournalEventInEventFilter(SQLiteDBClass.GetSettingString(DbFilterSave, "All")) && fieldfilter.FilterHistory(he, discoveryform.Globals);
+            return he.IsJournalEventInEventFilter(SQLiteDBClass.GetSettingString(DbFilterSave, "All")) && HistoryList.FilterHistory(he, fieldfilter, discoveryform.Globals);
         }
 
         public void SelectTopRow()
@@ -746,7 +746,7 @@ namespace EDDiscovery.UserControls
             }
 
             if (!edsm.ShowSystemInEDSM(rightclicksystem.System.name, id_edsm))
-                EDDiscovery.Forms.MessageBoxTheme.Show("System could not be found - has not been synched or EDSM is unavailable");
+                ExtendedControls.MessageBoxTheme.Show("System could not be found - has not been synched or EDSM is unavailable");
 
             this.Cursor = Cursors.Default;
         }
@@ -801,7 +801,7 @@ namespace EDDiscovery.UserControls
 
             if (journalent == null)
             {
-                EDDiscovery.Forms.MessageBoxTheme.Show("Could not find Location or FSDJump entry associated with selected journal entry");
+                ExtendedControls.MessageBoxTheme.Show("Could not find Location or FSDJump entry associated with selected journal entry");
                 return;
             }
 
@@ -832,7 +832,7 @@ namespace EDDiscovery.UserControls
 
         private void removeJournalEntryToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (EDDiscovery.Forms.MessageBoxTheme.Show("Confirm you wish to remove this entry" + Environment.NewLine + "It may reappear if the logs are rescanned", "WARNING", MessageBoxButtons.OKCancel) == DialogResult.OK)
+            if (ExtendedControls.MessageBoxTheme.Show("Confirm you wish to remove this entry" + Environment.NewLine + "It may reappear if the logs are rescanned", "WARNING", MessageBoxButtons.OKCancel) == DialogResult.OK)
             {
                 JournalEntry.Delete(rightclicksystem.Journalid);
                 discoveryform.RefreshHistoryAsync();
@@ -869,7 +869,7 @@ namespace EDDiscovery.UserControls
 
         private void writeEventInfoToLogDebugToolStripMenuItem_Click(object sender, EventArgs e)        //DEBUG ONLY
         {
-            ConditionVariables cv = new ConditionVariables();
+            Conditions.ConditionVariables cv = new Conditions.ConditionVariables();
             cv.AddPropertiesFieldsOfClass(rightclicksystem.journalEntry, "", new Type[] { typeof(System.Drawing.Bitmap), typeof(Newtonsoft.Json.Linq.JObject) }, 5);
             discoveryform.LogLine(cv.ToString(separ: Environment.NewLine, quoteit: false));
             if (rightclicksystem.ShipInformation != null)
@@ -907,8 +907,8 @@ namespace EDDiscovery.UserControls
 
         private void buttonField_Click(object sender, EventArgs e)
         {
-            EDDiscovery.ConditionFilterForm frm = new ConditionFilterForm();
-            frm.InitFilter("History: Filter out fields", discoveryform.Globals.NameList, discoveryform, fieldfilter);
+            Conditions.ConditionFilterForm frm = new Conditions.ConditionFilterForm();
+            frm.InitFilter("History: Filter out fields", EDDiscovery.EliteDangerous.JournalEntry.GetListOfEventsWithOptMethod(false), discoveryform.Globals.NameList, fieldfilter);
             frm.TopMost = this.FindForm().TopMost;
             if (frm.ShowDialog(this.FindForm()) == DialogResult.OK)
             {
@@ -977,7 +977,7 @@ namespace EDDiscovery.UserControls
                     return (c < colh.Length) ? colh[c] : null;
                 };
 
-                grd.Csvformat = discoveryform.ExportControl.radioButtonCustomEU.Checked ? CSVFormat.EU : CSVFormat.USA_UK;
+                grd.Csvformat = discoveryform.ExportControl.radioButtonCustomEU.Checked ? BaseUtils.CVSWrite.CSVFormat.EU : BaseUtils.CVSWrite.CSVFormat.USA_UK;
                 if (grd.ToCSV(dlg.FileName))
                     System.Diagnostics.Process.Start(dlg.FileName);
             }

@@ -32,7 +32,7 @@ namespace EDDiscovery.Export
 
             if (search == null || search.Trim().Length == 0)
             {
-                EDDiscovery.Forms.MessageBoxTheme.Show("Search field should not be empty and ideally great than 2 letters",
+                ExtendedControls.MessageBoxTheme.Show("Search field should not be empty and ideally great than 2 letters",
                     TITLE);
                 return;
             }
@@ -60,11 +60,11 @@ namespace EDDiscovery.Export
 
             if (total == 0)
             {
-                EDDiscovery.Forms.MessageBoxTheme.Show("Search has found 0 records", TITLE);
+                ExtendedControls.MessageBoxTheme.Show("Search has found 0 records", TITLE);
                 return;
             }
 
-            if (EDDiscovery.Forms.MessageBoxTheme.Show(String.Format("Search has found {0} records, do you wish to contiune", total), 
+            if (ExtendedControls.MessageBoxTheme.Show(String.Format("Search has found {0} records, do you wish to contiune", total), 
                 TITLE, MessageBoxButtons.YesNo) == DialogResult.No)
             {
                 systems.Clear();
@@ -89,11 +89,11 @@ namespace EDDiscovery.Export
                         writer.WriteLine(system);
                     }
                 }
-                EDDiscovery.Forms.MessageBoxTheme.Show(String.Format("Export complete {0}", dlg.FileName), TITLE);
+                ExtendedControls.MessageBoxTheme.Show(String.Format("Export complete {0}", dlg.FileName), TITLE);
             }
             catch (IOException)
             {
-                EDDiscovery.Forms.MessageBoxTheme.Show(String.Format("Is file {0} open?", dlg.FileName), TITLE, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                ExtendedControls.MessageBoxTheme.Show(String.Format("Is file {0} open?", dlg.FileName), TITLE, MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
     }

@@ -36,7 +36,7 @@ namespace EDDiscovery.Forms
             systemName =  prompt.txtExportVisited.Text;
             bool worked = Double.TryParse(prompt.txtsphereRadius.Text, out radius);
             if (!worked)
-                Forms.MessageBoxTheme.Show("Radius in wrong format", "Spehere error");
+                ExtendedControls.MessageBoxTheme.Show("Radius in wrong format", "Spehere error");
 
             return (res == DialogResult.OK && worked);
         }
@@ -47,7 +47,7 @@ namespace EDDiscovery.Forms
             this.discoveryForm = discoveryForm;
             double ly = 10.0;
             txtsphereRadius.Text = ly.ToString("0.00");
-            txtExportVisited.SetAutoCompletor(EDDiscovery.DB.SystemClass.ReturnSystemListForAutoComplete);
+            txtExportVisited.SetAutoCompletor(EDDiscovery.DB.SystemClassDB.ReturnSystemListForAutoComplete);
         }
 
         private void buttonOK_Click(object sender, EventArgs e)

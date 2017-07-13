@@ -26,6 +26,7 @@ using System.Collections.Concurrent;
 using System.Threading;
 using EDDiscovery.DB;
 using EDDiscovery.EDSM;
+using EDDiscovery.EliteDangerous;
 
 namespace EDDiscovery.UserControls
 {
@@ -104,7 +105,7 @@ namespace EDDiscovery.UserControls
 
             if (!edsm.ShowSystemInEDSM(system.name, system.id_edsm))
             {
-                EDDiscovery.Forms.MessageBoxTheme.Show("System could not be found - has not been synched or EDSM is unavailable");
+                ExtendedControls.MessageBoxTheme.Show("System could not be found - has not been synched or EDSM is unavailable");
             }
 
             this.Cursor = Cursors.Default;

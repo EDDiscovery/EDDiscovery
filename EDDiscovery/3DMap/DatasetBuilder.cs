@@ -27,6 +27,7 @@ using System.Resources;
 using EDDiscovery.Properties;
 using EDDiscovery.EDSM;
 using System.IO;
+using EDDiscovery.EliteDangerous;
 
 namespace EDDiscovery._3DMap
 {
@@ -741,7 +742,7 @@ namespace EDDiscovery._3DMap
             return _datasets;
         }
 
-        public List<IData3DSet> BuildRouteTri(List<SystemClass> PlannedRoute)
+        public List<IData3DSet> BuildRouteTri(List<SystemClassDB> PlannedRoute)
         {
             if (PlannedRoute != null && PlannedRoute.Any())
             {

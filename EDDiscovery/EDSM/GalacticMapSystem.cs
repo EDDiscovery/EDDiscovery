@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace EDDiscovery.EDSM
 {
-    public class GalacticMapSystem : DB.SystemClass
+    public class GalacticMapSystem : DB.SystemClassDB
     {
         public GalacticMapObject GalMapObject { get; set; }
 

@@ -180,7 +180,7 @@ namespace EDDiscovery.Forms
                     _discoveryForm.ApplyTheme();
                 }
                 else
-                    EDDiscovery.Forms.MessageBoxTheme.Show("Font does not have regular style");
+                    ExtendedControls.MessageBoxTheme.Show("Font does not have regular style");
             }
 
         }

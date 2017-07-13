@@ -64,11 +64,11 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public override void FillInformation(out string summary, out string info, out string detailed) //V
         {
             summary = EventTypeStr.SplitCapsWord();
-            info = Tools.FieldBuilder("", ShipType, "Amount:; credits", ShipPrice);
+            info = BaseUtils.FieldBuilder.Build("", ShipType, "Amount:; credits", ShipPrice);
             if (StoreOldShip.Length > 0)
-                info += ", " + Tools.FieldBuilder("Stored:", StoreOldShip);
+                info += ", " + BaseUtils.FieldBuilder.Build("Stored:", StoreOldShip);
             if (SellOldShip.Length > 0)
-                info += ", " + Tools.FieldBuilder("Sold:", StoreOldShip, "Amount:; credits", SellPrice);
+                info += ", " + BaseUtils.FieldBuilder.Build("Sold:", StoreOldShip, "Amount:; credits", SellPrice);
             detailed = "";
         }
 

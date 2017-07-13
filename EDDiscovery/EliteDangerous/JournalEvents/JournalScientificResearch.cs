@@ -36,7 +36,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public override void FillInformation(out string summary, out string info, out string detailed) //V
         {
             summary = EventTypeStr.SplitCapsWord();
-            info = Tools.FieldBuilder("",Name, "Count:",  Count , "Category:", Category);
+            info = BaseUtils.FieldBuilder.Build("",Name, "Count:",  Count , "Category:", Category);
             detailed = "";
         }
     }

@@ -40,7 +40,7 @@ namespace EDDiscoveryTests
     [TestClass]
     public class TravelHistoryFilterTests
     {
-        private ISystem sol = new EDDiscovery.DB.InMemory.SystemClass
+        private ISystem sol = new EliteDangerous.SystemClass
         {
             name = "Sol",
             x = 0,

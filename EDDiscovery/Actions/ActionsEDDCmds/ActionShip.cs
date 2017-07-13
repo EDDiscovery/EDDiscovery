@@ -18,16 +18,19 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using BaseUtils;
+using ActionLanguage;
+using Conditions;
 
 namespace EDDiscovery.Actions
 {
-    class ActionShip: Action
+    class ActionShip: ActionBase
     {
         public override bool AllowDirectEditingOfUserData { get { return true; } }
 
-        public override bool ConfigurationMenu(System.Windows.Forms.Form parent, EDDiscoveryForm discoveryform, List<string> eventvars)
+        public override bool ConfigurationMenu(System.Windows.Forms.Form parent, ActionCoreController cp, List<string> eventvars)
         {
-            string promptValue = Forms.PromptSingleLine.ShowDialog(parent, "Ship name", UserData, "Configure Ship Command");
+            string promptValue = ExtendedControls.PromptSingleLine.ShowDialog(parent, "Ship name", UserData, "Configure Ship Command");
             if (promptValue != null)
             {
                 userdata = promptValue;
@@ -39,7 +42,7 @@ namespace EDDiscovery.Actions
         public override bool ExecuteAction(ActionProgramRun ap)
         {
             string res;
-            if (ap.functions.ExpandString(UserData, out res) != ConditionFunctions.ExpandResult.Failed)
+            if (ap.functions.ExpandString(UserData, out res) != Conditions.ConditionFunctions.ExpandResult.Failed)
             {
                 StringParser sp = new StringParser(res);
 
@@ -61,7 +64,7 @@ namespace EDDiscovery.Actions
 
                 if (cmdname != null)
                 {
-                    EliteDangerous.ShipInformationList lst = ap.actioncontroller.HistoryList.shipinformationlist;
+                    EliteDangerous.ShipInformationList lst = (ap.actioncontroller as ActionController).HistoryList.shipinformationlist;
 
                     ConditionVariables values = new ConditionVariables();
 

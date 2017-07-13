@@ -138,13 +138,13 @@ namespace EDDiscovery.UserControls
                 {
                     var gmo = discoveryform.galacticMapping.Find(he.System.name);
                     if (gmo != null)
-                        botline = Tools.WordWrap("GMP: " + gmo.description, 60) + Environment.NewLine;
+                        botline = ("GMP: " + gmo.description).WordWrap(60) + Environment.NewLine;
                 }
 
                 if (Config(Configuration.showSystemNotes))
                 {
                     if (he.snc != null)
-                        botline += Tools.WordWrap("NOTE: " + he.snc.Note, 60) + Environment.NewLine;
+                        botline += ("NOTE: " + he.snc.Note).WordWrap(60) + Environment.NewLine;
                 }
 
                 ExtendedControls.PictureBoxHotspot.ImageElement botlineleft = pictureBox.AddTextAutoSize(

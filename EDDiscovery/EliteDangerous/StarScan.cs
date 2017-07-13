@@ -36,7 +36,7 @@ namespace EDDiscovery.EliteDangerous
 
         public class SystemNode
         {
-            public EDDiscovery.DB.ISystem system;
+            public EliteDangerous.ISystem system;
             public SortedList<string, ScanNode> starnodes;
             public bool EDSMAdded = false;
         };
@@ -91,7 +91,7 @@ namespace EDDiscovery.EliteDangerous
         };
 
 
-        public SystemNode FindSystem(EDDiscovery.DB.ISystem sys)
+        public SystemNode FindSystem(EliteDangerous.ISystem sys)
         {
             Tuple<string, long> withedsm = new Tuple<string, long>(sys.name, sys.id_edsm);
 
@@ -218,7 +218,7 @@ namespace EDDiscovery.EliteDangerous
             return Process(je, hl[startindex].System);         // no relationship, add..
         }
 
-        public bool Process(JournalScan sc, EDDiscovery.DB.ISystem sys)           // FALSE if you can't process it
+        public bool Process(JournalScan sc, EliteDangerous.ISystem sys)           // FALSE if you can't process it
         {
             Tuple<string, long> withedsm = new Tuple<string, long>(sys.name, sys.id_edsm);
 
@@ -425,7 +425,7 @@ namespace EDDiscovery.EliteDangerous
             }
         }
 
-        public SystemNode FindSystem(EDDiscovery.DB.ISystem sys, bool useedsm)    // see if EDSM has a valid system, if so, add, return update SN
+        public SystemNode FindSystem(EliteDangerous.ISystem sys, bool useedsm)    // see if EDSM has a valid system, if so, add, return update SN
         {
             SystemNode sn = FindSystem(sys);
 

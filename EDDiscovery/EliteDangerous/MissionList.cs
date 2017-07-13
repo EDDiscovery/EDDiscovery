@@ -21,7 +21,7 @@ namespace EDDiscovery.EliteDangerous
         public string OriginatingSystem { get { return sys.name; } }
         public string OriginatingStation { get { return body; } }
 
-        public EDDiscovery.DB.ISystem sys;                                         // where it was found
+        public EliteDangerous.ISystem sys;                                         // where it was found
         public string body;                                                         // and body
 
         public string Info()            // looking at state
@@ -51,7 +51,7 @@ namespace EDDiscovery.EliteDangerous
             }
         }
 
-        public MissionState(JournalMissionAccepted m, EDDiscovery.DB.ISystem s, string b)
+        public MissionState(JournalMissionAccepted m, EliteDangerous.ISystem s, string b)
         {
             Mission = m;
             sys = s;
@@ -91,7 +91,7 @@ namespace EDDiscovery.EliteDangerous
             Missions = new Dictionary<string, MissionState>(other.Missions);
         }
 
-        public void Add(JournalMissionAccepted m, EDDiscovery.DB.ISystem sys, string body)
+        public void Add(JournalMissionAccepted m, EliteDangerous.ISystem sys, string body)
         {
             Missions[Key(m)] = new MissionState(m, sys, body); // add a new one..
         }
@@ -128,7 +128,7 @@ namespace EDDiscovery.EliteDangerous
             current = new MissionList();
         }
 
-        public void Accepted(JournalMissionAccepted m, EDDiscovery.DB.ISystem sys, string body)
+        public void Accepted(JournalMissionAccepted m, EliteDangerous.ISystem sys, string body)
         {
             if (!current.Missions.ContainsKey(MissionList.Key(m)))        // make sure not repeating, ignore if so
             {
@@ -174,7 +174,7 @@ namespace EDDiscovery.EliteDangerous
 
         #region process
 
-        public MissionList Process(JournalEntry je, EDDiscovery.DB.ISystem sys, string body , DB.SQLiteConnectionUser conn)
+        public MissionList Process(JournalEntry je, EliteDangerous.ISystem sys, string body , DB.SQLiteConnectionUser conn)
         {
             if (je is IMissions)
             {

@@ -52,7 +52,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public override void FillInformation(out string summary, out string info, out string detailed) //V
         {
             summary = EventTypeStr.SplitCapsWord();
-            info = Tools.FieldBuilder("", FriendlyType, ";Stolen", Stolen);
+            info = BaseUtils.FieldBuilder.Build("", FriendlyType, ";Stolen", Stolen);
             detailed = "";
         }
     }

@@ -152,7 +152,7 @@ namespace EDDiscovery
 
         public static HistoryEntry FromJournalEntry(EliteDangerous.JournalEntry je, HistoryEntry prev, bool checkedsm, out bool journalupdate, SQLiteConnectionSystem conn = null, EDCommander cmdr = null)
         {
-            ISystem isys = prev == null ? new SystemClass("Unknown") : prev.System;
+            ISystem isys = prev == null ? new SystemClassDB("Unknown") : prev.System;
             int indexno = prev == null ? 1 : prev.Indexno + 1;
 
             int mapcolour = 0;
@@ -170,24 +170,24 @@ namespace EDDiscovery
 
                 if (jl.HasCoordinate)       // LAZY LOAD IF it has a co-ord.. the front end will when it needs it
                 {
-                    newsys = new SystemClass(jl.StarSystem, jl.StarPos.X, jl.StarPos.Y, jl.StarPos.Z);
+                    newsys = new SystemClassDB(jl.StarSystem, jl.StarPos.X, jl.StarPos.Y, jl.StarPos.Z);
                     newsys.id_edsm = jl.EdsmID < 0 ? 0 : jl.EdsmID;       // pass across the EDSMID for the lazy load process.
 
                     if (jfsd != null && jfsd.JumpDist <= 0 && isys.HasCoordinate)     // if we don't have a jump distance (pre 2.2) but the last sys does have pos, we can compute distance and update entry
                     {
-                        jfsd.JumpDist = SystemClass.Distance(isys, newsys); // fill it out here
+                        jfsd.JumpDist = SystemClassDB.Distance(isys, newsys); // fill it out here
                         journalupdate = true;
                     }
 
                 }
                 else
                 {                           // Default one
-                    newsys = new SystemClass(jl.StarSystem);
+                    newsys = new SystemClassDB(jl.StarSystem);
                     newsys.id_edsm = jl.EdsmID;
 
                     if (checkedsm)          // see if we can find the right system
                     {
-                        SystemClass s = SystemClass.FindEDSM(newsys, conn);      // has no co-ord, did we find it?
+                        SystemClassDB s = SystemClassDB.FindEDSM(newsys, conn);      // has no co-ord, did we find it?
 
                         if (s != null)                                          // yes, use, and update the journal with the esdmid, and also the position if we have a co-ord
                         {                                                       // so next time we don't have to do this again..
@@ -202,7 +202,7 @@ namespace EDDiscovery
 
                             if (jfsd != null && jfsd.JumpDist <= 0 && newsys.HasCoordinate && isys.HasCoordinate)     // if we don't have a jump distance (pre 2.2) but the last sys does, we can compute
                             {
-                                jfsd.JumpDist = SystemClass.Distance(isys, newsys); // fill it out here.  EDSM systems always have co-ords, but we should check anyway
+                                jfsd.JumpDist = SystemClassDB.Distance(isys, newsys); // fill it out here.  EDSM systems always have co-ords, but we should check anyway
                                 journalupdate = true;
                             }
 
@@ -218,7 +218,7 @@ namespace EDDiscovery
                 {
                     if (jfsd.JumpDist <= 0 && isys.HasCoordinate && newsys.HasCoordinate) // if no JDist, its a really old entry, and if previous has a co-ord
                     {
-                        jfsd.JumpDist = SystemClass.Distance(isys, newsys); // fill it out here
+                        jfsd.JumpDist = SystemClassDB.Distance(isys, newsys); // fill it out here
                         journalupdate = true;
                     }
 
@@ -882,24 +882,24 @@ namespace EDDiscovery
 
         public void FillInPositionsFSDJumps()       // call if you want to ensure we have the best posibile position data on FSD Jumps.  Only occurs on pre 2.1 with lazy load of just name/edsmid
         {
-            List<Tuple<HistoryEntry, SystemClass>> updatesystems = new List<Tuple<HistoryEntry, SystemClass>>();
+            List<Tuple<HistoryEntry, SystemClassDB>> updatesystems = new List<Tuple<HistoryEntry, SystemClassDB>>();
 
             using (SQLiteConnectionSystem cn = new SQLiteConnectionSystem())
             {
                 foreach (HistoryEntry he in historylist)
                 {
                     if (he.IsFSDJump && !he.System.HasCoordinate)   // try and load ones without position.. if its got pos we are happy
-                        updatesystems.Add(new Tuple<HistoryEntry, SystemClass>(he, FindEDSM(he)));
+                        updatesystems.Add(new Tuple<HistoryEntry, SystemClassDB>(he, FindEDSM(he)));
                 }
             }
 
-            foreach (Tuple<HistoryEntry, SystemClass> he in updatesystems)
+            foreach (Tuple<HistoryEntry, SystemClassDB> he in updatesystems)
             {
                 FillEDSM(he.Item1, edsmsys: he.Item2);  // fill, we already have an EDSM system to use
             }
         }
 
-        private SystemClass FindEDSM(HistoryEntry syspos, SQLiteConnectionSystem conn = null, bool reload = false)
+        private SystemClassDB FindEDSM(HistoryEntry syspos, SQLiteConnectionSystem conn = null, bool reload = false)
         {
             if (syspos.System.status == SystemStatusEnum.EDSC || (!reload && syspos.System.id_edsm == -1))  // if set already, or we tried and failed..
                 return null;
@@ -914,7 +914,7 @@ namespace EDDiscovery
                     conn = new SQLiteConnectionSystem();
                 }
 
-                return SystemClass.FindEDSM(syspos.System, conn);
+                return SystemClassDB.FindEDSM(syspos.System, conn);
             }
             finally
             {
@@ -925,7 +925,7 @@ namespace EDDiscovery
             }
         }
 
-        public void FillEDSM(HistoryEntry syspos, SystemClass edsmsys = null, bool reload = false, SQLiteConnectionUser uconn = null )       // call to fill in ESDM data for entry, and also fills in all others pointing to the system object
+        public void FillEDSM(HistoryEntry syspos, SystemClassDB edsmsys = null, bool reload = false, SQLiteConnectionUser uconn = null )       // call to fill in ESDM data for entry, and also fills in all others pointing to the system object
         {
             if (syspos.System.status == SystemStatusEnum.EDSC || (!reload && syspos.System.id_edsm == -1) )  // if set already, or we tried and failed..
                 return;
@@ -1006,7 +1006,7 @@ namespace EDDiscovery
 
         public ISystem FindSystem(string name, EDSM.GalacticMapping glist = null)        // in system or name
         {
-            ISystem ds1 = SystemClass.GetSystem(name);
+            ISystem ds1 = SystemClassDB.GetSystem(name);
 
             if (ds1 == null)
             {
@@ -1020,7 +1020,7 @@ namespace EDDiscovery
 
                     if (gmo != null && gmo.points.Count > 0)
                     {
-                        ds1 = SystemClass.GetSystem(gmo.galMapSearch);
+                        ds1 = SystemClassDB.GetSystem(gmo.galMapSearch);
 
                         if (ds1 != null)
                         {
@@ -1461,6 +1461,78 @@ namespace EDDiscovery
             hist.ProcessEDSMApiCommander();
 
             return hist;
+        }
+
+        #endregion
+
+
+        #region Filtering by conditions
+
+        static public List<HistoryEntry> CheckFilterTrue(List<HistoryEntry> he, Conditions.ConditionLists cond, Conditions.ConditionVariables othervars)    // conditions match for item to stay
+        {
+            if (cond.Count == 0)       // no filters, all in
+                return he;
+            else
+            {
+                string er;
+                List<HistoryEntry> ret = (from s in he where cond.CheckFilterTrue(s.journalEntry, othervars, out er, null) select s).ToList();
+                return ret;
+            }
+        }
+
+        static public bool FilterHistory(HistoryEntry he, Conditions.ConditionLists cond, Conditions.ConditionVariables othervars)                // true if it should be included
+        {
+            string er;
+            return cond.CheckFilterFalse(he.journalEntry, he.journalEntry.EventTypeStr, othervars, out er, null);     // true it should be included
+        }
+
+        static public List<HistoryEntry> FilterHistory(List<HistoryEntry> he, Conditions.ConditionLists cond, Conditions.ConditionVariables othervars, out int count)    // filter in all entries
+        {
+            count = 0;
+            if (cond.Count == 0)       // no filters, all in
+                return he;
+            else
+            {
+                string er;
+                List<HistoryEntry> ret = (from s in he where cond.CheckFilterFalse(s.journalEntry, s.journalEntry.EventTypeStr, othervars, out er, null) select s).ToList();
+
+                count = he.Count - ret.Count;
+                return ret;
+            }
+        }
+
+        static public List<HistoryEntry> MarkHistory(List<HistoryEntry> he, Conditions.ConditionLists cond, Conditions.ConditionVariables othervars, out int count)       // Used for debugging it..
+        {
+            count = 0;
+
+            if (cond.Count == 0)       // no filters, all in
+                return he;
+            else
+            {
+                List<HistoryEntry> ret = new List<HistoryEntry>();
+
+                foreach (HistoryEntry s in he)
+                {
+                    List<Conditions.Condition> list = new List<Conditions.Condition>();    // don't want it
+
+                    int mrk = s.EventDescription.IndexOf(":::");
+                    if (mrk >= 0)
+                        s.EventDescription = s.EventDescription.Substring(mrk + 3);
+
+                    string er;
+
+                    if (!cond.CheckFilterFalse(s.journalEntry, s.journalEntry.EventTypeStr, othervars, out er, list))
+                    {
+                        //System.Diagnostics.Debug.WriteLine("Filter out " + s.Journalid + " " + s.EntryType + " " + s.EventDescription);
+                        s.EventDescription = "!" + list[0].eventname + ":::" + s.EventDescription;
+                        count++;
+                    }
+
+                    ret.Add(s);
+                }
+
+                return ret;
+            }
         }
 
         #endregion

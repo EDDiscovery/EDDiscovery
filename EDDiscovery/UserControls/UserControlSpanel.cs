@@ -29,6 +29,7 @@ using System.Windows.Forms;
 using EDDiscovery.DB;
 using EMK.LightGeometry;
 using ExtendedControls;
+using Conditions;
 
 namespace EDDiscovery.UserControls
 {
@@ -234,7 +235,7 @@ namespace EDDiscovery.UserControls
 
                 int ftotal;         // event filter
                 result = HistoryList.FilterByJournalEvent(result, SQLiteDBClass.GetSettingString(DbFilterSave, "All"), out ftotal);
-                result = fieldfilter.FilterHistory(result, discoveryform.Globals, out ftotal); // and the field filter..
+                result = HistoryList.FilterHistory(result, fieldfilter , discoveryform.Globals, out ftotal); // and the field filter..
 
                 RevertToNormalSize();                                           // ensure size is back to normal..
                 scanpostextoffset = new Point(0, 0);                            // left/ top used by scan display
@@ -261,7 +262,7 @@ namespace EDDiscovery.UserControls
 
                         if (targetpresent && Config(Configuration.showTargetLine) && hl.GetLast != null)
                         {
-                            string dist = (hl.GetLast.System.HasCoordinate) ? SystemClass.Distance(hl.GetLast.System, tpos.X, tpos.Y, tpos.Z).ToString("0.00") : "Unknown";
+                            string dist = (hl.GetLast.System.HasCoordinate) ? SystemClassDB.Distance(hl.GetLast.System, tpos.X, tpos.Y, tpos.Z).ToString("0.00") : "Unknown";
                             AddColText(0, 0, rowpos, rowheight, "Target: " + name + " @ " + dist +" ly", textcolour, backcolour, null);
                             rowpos += rowheight;
                         }
@@ -439,7 +440,7 @@ namespace EDDiscovery.UserControls
             string res = "";
             if (!double.IsNaN(tpos.X))
             {
-                double dist = SystemClass.Distance(he.System, tpos.X, tpos.Y, tpos.Z);
+                double dist = SystemClassDB.Distance(he.System, tpos.X, tpos.Y, tpos.Z);
                 if (dist >= 0)
                     res = dist.ToString("0.00");
             }
@@ -468,14 +469,14 @@ namespace EDDiscovery.UserControls
 
         public bool WouldAddEntry(HistoryEntry he)                  // do we filter? if its not in the journal event filter, or it is in the field filter
         {
-            return he.IsJournalEventInEventFilter(SQLiteDBClass.GetSettingString(DbFilterSave, "All")) && fieldfilter.FilterHistory(he, discoveryform.Globals);
+            return he.IsJournalEventInEventFilter(SQLiteDBClass.GetSettingString(DbFilterSave, "All")) && HistoryList.FilterHistory(he, fieldfilter , discoveryform.Globals);
         }
 
 #endregion
 
 #region Clicks
 
-        private void pictureBox_ClickElement(object sender, MouseEventArgs e, PictureBoxHotspot.ImageElement i, object tag)
+        private void pictureBox_ClickElement(object sender, MouseEventArgs e, ExtendedControls.PictureBoxHotspot.ImageElement i, object tag)
         {
             if (i != null)
             {
@@ -495,7 +496,7 @@ namespace EDDiscovery.UserControls
                     if (url.Length > 0)         // may pass back empty string if not known, this solves another exception
                         System.Diagnostics.Process.Start(url);
                     else
-                        EDDiscovery.Forms.MessageBoxTheme.Show("System " + he.System.name + " unknown to EDSM");
+                        ExtendedControls.MessageBoxTheme.Show("System " + he.System.name + " unknown to EDSM");
                 }
             }
         }
@@ -840,8 +841,8 @@ namespace EDDiscovery.UserControls
 
         private void configureFieldFilterToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            EDDiscovery.ConditionFilterForm frm = new EDDiscovery.ConditionFilterForm();
-            frm.InitFilter("Summary Panel: Filter out fields", discoveryform.Globals.NameList, discoveryform, fieldfilter);
+            Conditions.ConditionFilterForm frm = new Conditions.ConditionFilterForm();
+            frm.InitFilter("Summary Panel: Filter out fields", EDDiscovery.EliteDangerous.JournalEntry.GetListOfEventsWithOptMethod(false) , discoveryform.Globals.NameList, fieldfilter);
             frm.TopMost = this.FindForm().TopMost;
             if (frm.ShowDialog(this.FindForm()) == DialogResult.OK)
             {

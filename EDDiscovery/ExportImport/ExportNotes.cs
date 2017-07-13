@@ -25,11 +25,11 @@ using System.Windows.Forms;
 
 namespace EDDiscovery.Export
 {
-    class ExportNotes : ExportBase
+    class ExportNotes : BaseUtils.CVSWrite
     {
         private const string TITLE = "Export Notes";
 
-        public override bool GetData(EDDiscoveryForm _discoveryForm)
+        public override bool GetData(Object _discoveryForm)
         {
             return true;
         }
@@ -67,7 +67,7 @@ namespace EDDiscovery.Export
             }
             catch (IOException )
             {
-                EDDiscovery.Forms.MessageBoxTheme.Show(String.Format("Is file {0} open?", filename), TITLE,
+                ExtendedControls.MessageBoxTheme.Show(String.Format("Is file {0} open?", filename), TITLE,
                       MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return false;
             }

@@ -27,7 +27,7 @@ namespace EDDiscovery.EDSM
 {
     public class GalacticMapping
     {
-        readonly string GalacticMappingFile = Path.Combine(Tools.GetAppDataDirectory(), "galacticmapping.json");
+        readonly string GalacticMappingFile = Path.Combine(EDDConfig.Options.AppDataDirectory, "galacticmapping.json");
 
         public List<GalacticMapObject> galacticMapObjects = null;
         public List<GalMapType> galacticMapTypes = null;
@@ -70,7 +70,7 @@ namespace EDDiscovery.EDSM
 
             try
             {
-                string json = Tools.TryReadAllTextFromFile(GalacticMappingFile);
+                string json = BaseUtils.FileHelpers.TryReadAllTextFromFile(GalacticMappingFile);
 
                 if (json != null)
                 {

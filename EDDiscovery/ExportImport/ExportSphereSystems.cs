@@ -68,12 +68,12 @@ namespace EDDiscovery.Export
                         writer.WriteLine(system);
                     }
                 }
-               // EDDiscovery.Forms.MessageBoxTheme.Show(String.Format("Export complete {0}",
+               // ExtendedControls.MessageBoxTheme.Show(String.Format("Export complete {0}",
                //    filename), TITLE);
             }
             catch (IOException)
             {
-              //  EDDiscovery.Forms.MessageBoxTheme.Show(String.Format("Is file {0} open?", filename), TITLE, MessageBoxButtons.OK, MessageBoxIcon.Error);
+              //  ExtendedControls.MessageBoxTheme.Show(String.Format("Is file {0} open?", filename), TITLE, MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
         }

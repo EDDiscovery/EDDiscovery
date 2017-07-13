@@ -53,7 +53,7 @@ namespace EDDiscovery.Forms
 
 
             List<ISystem> distlist;
-            distlist = SystemClass.GetSystemDistancesFrom(hi.System.x, hi.System.y, hi.System.z, 1000, MaxLy);
+            distlist = SystemClassDB.GetSystemDistancesFrom(hi.System.x, hi.System.y, hi.System.z, 1000, MaxLy);
 
 
 

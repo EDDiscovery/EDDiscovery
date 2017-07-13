@@ -49,7 +49,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public override void FillInformation(out string summary, out string info, out string detailed) //V
         {
             summary = EventTypeStr.SplitCapsWord();
-            info = Tools.FieldBuilder("",ItemLocalised.Alt(Item), "Cost:; credits" , Cost );
+            info = BaseUtils.FieldBuilder.Build("",ItemLocalised.Alt(Item), "Cost:; credits" , Cost );
             detailed = "";
         }
     }

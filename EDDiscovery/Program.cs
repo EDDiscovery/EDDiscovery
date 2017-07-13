@@ -49,7 +49,7 @@ namespace EDDiscovery
                 }
                 catch (TimeoutException)
                 {
-                    if (EDDiscovery.Forms.MessageBoxTheme.Show("EDDiscovery is already running. Launch anyway?", "EDDiscovery", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                    if (ExtendedControls.MessageBoxTheme.Show("EDDiscovery is already running. Launch anyway?", "EDDiscovery", MessageBoxButtons.YesNo) == DialogResult.Yes)
                     {
                         Run();
                     }

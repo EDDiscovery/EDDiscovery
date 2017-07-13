@@ -19,16 +19,18 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using BaseUtils;
+using ActionLanguage;
 
 namespace EDDiscovery.Actions
 {
-    public class ActionPerform : Action
+    public class ActionPerform : ActionBase
     {
         public override bool AllowDirectEditingOfUserData { get { return true; } }
 
-        public override bool ConfigurationMenu(Form parent, EDDiscoveryForm discoveryform, List<string> eventvars)
+        public override bool ConfigurationMenu(Form parent, ActionCoreController cp, List<string> eventvars)
         {
-            string promptValue = Forms.PromptSingleLine.ShowDialog(parent, "Perform command", UserData, "Configure Perform Command");
+            string promptValue = ExtendedControls.PromptSingleLine.ShowDialog(parent, "Perform command", UserData, "Configure Perform Command");
             if (promptValue != null)
             {
                 userdata = promptValue;
@@ -40,7 +42,7 @@ namespace EDDiscovery.Actions
         public override bool ExecuteAction(ActionProgramRun ap)
         {
             string res;
-            if (ap.functions.ExpandString(UserData, out res) != ConditionFunctions.ExpandResult.Failed)
+            if (ap.functions.ExpandString(UserData, out res) != Conditions.ConditionFunctions.ExpandResult.Failed)
             {
                 StringParser sp = new StringParser(res);
                 string cmdname = sp.NextWord(" ", lowercase:true);
@@ -51,20 +53,20 @@ namespace EDDiscovery.Actions
                 }
                 else if (cmdname.Equals("3dmap"))
                 {
-                    ap.actioncontroller.DiscoveryForm.Open3DMap(null);
+                    (ap.actioncontroller as ActionController).DiscoveryForm.Open3DMap(null);
                 }
                 else if (cmdname.Equals("2dmap"))
                 {
-                    ap.actioncontroller.DiscoveryForm.Open2DMap();
+                    (ap.actioncontroller as ActionController).DiscoveryForm.Open2DMap();
                 }
                 else if (cmdname.Equals("edsm"))
                 {
                     EDDiscovery.EDSM.EDSMClass edsm = new EDDiscovery.EDSM.EDSMClass();
-                    ap.actioncontroller.DiscoveryForm.EdsmSync.StartSync(edsm, EDDiscovery.EDCommander.Current.SyncToEdsm, EDDiscovery.EDCommander.Current.SyncFromEdsm, EDDiscovery.EDDConfig.Instance.DefaultMapColour);
+                    (ap.actioncontroller as ActionController).DiscoveryForm.EdsmSync.StartSync(edsm, EDDiscovery.EDCommander.Current.SyncToEdsm, EDDiscovery.EDCommander.Current.SyncFromEdsm, EDDiscovery.EDDConfig.Instance.DefaultMapColour);
                 }
                 else if (cmdname.Equals("refresh"))
                 {
-                    ap.actioncontroller.DiscoveryForm.RefreshHistoryAsync(checkedsm: true);
+                    (ap.actioncontroller as ActionController).DiscoveryForm.RefreshHistoryAsync(checkedsm: true);
                 }
                 else if (cmdname.Equals("url"))
                 {
@@ -78,31 +80,31 @@ namespace EDDiscovery.Actions
                         ap.ReportError("Perform url must start with http");
                 }
                 else if (cmdname.Equals("configurevoice"))
-                    ap.actioncontroller.ConfigureVoice(sp.NextQuotedWord() ?? "Configure Voice Synthesis");
+                    (ap.actioncontroller as ActionController).ConfigureVoice(sp.NextQuotedWord() ?? "Configure Voice Synthesis");
                 else if (cmdname.Equals("manageaddons"))
-                    ap.actioncontroller.ManageAddOns();
+                    (ap.actioncontroller as ActionController).ManageAddOns();
                 else if (cmdname.Equals("editaddons"))
-                    ap.actioncontroller.EditAddOns();
+                    (ap.actioncontroller as ActionController).EditAddOns();
                 else if (cmdname.Equals("editlastpack"))
-                    ap.actioncontroller.EditLastPack();
+                    (ap.actioncontroller as ActionController).EditLastPack();
                 else if (cmdname.Equals("editspeechtext"))
-                    ap.actioncontroller.EditSpeechText();
+                    (ap.actioncontroller as ActionController).EditSpeechText();
                 else if (cmdname.Equals("configurewave"))
-                    ap.actioncontroller.ConfigureWave(sp.NextQuotedWord() ?? "Configure Wave Output");
+                    (ap.actioncontroller as ActionController).ConfigureWave(sp.NextQuotedWord() ?? "Configure Wave Output");
                 else if (cmdname.Equals("enableeliteinput"))
-                    ap.actioncontroller.DiscoveryForm.EliteInput(true, true);
+                    (ap.actioncontroller as ActionController).DiscoveryForm.EliteInput(true, true);
                 else if (cmdname.Equals("enableeliteinputnoaxis"))
-                    ap.actioncontroller.DiscoveryForm.EliteInput(true, false);
+                    (ap.actioncontroller as ActionController).DiscoveryForm.EliteInput(true, false);
                 else if (cmdname.Equals("disableeliteinput"))
-                    ap.actioncontroller.DiscoveryForm.EliteInput(false, false);
+                    (ap.actioncontroller as ActionController).DiscoveryForm.EliteInput(false, false);
                 else if (cmdname.Equals("listeliteinput"))
                 {
-                    ap["EliteInput"] = ap.actioncontroller.DiscoveryForm.EliteInputList();
-                    ap["EliteInputCheck"] = ap.actioncontroller.DiscoveryForm.EliteInputCheck();
+                    ap["EliteInput"] = (ap.actioncontroller as ActionController).DiscoveryForm.EliteInputList();
+                    ap["EliteInputCheck"] = (ap.actioncontroller as ActionController).DiscoveryForm.EliteInputCheck();
                 }
                 else if (cmdname.Equals("voicenames"))
                 {
-                    ap["VoiceNames"] = ap.actioncontroller.DiscoveryForm.SpeechSynthesizer.GetVoiceNames().QuoteStrings();
+                    ap["VoiceNames"] = (ap.actioncontroller as ActionController).DiscoveryForm.SpeechSynthesizer.GetVoiceNames().QuoteStrings();
                 }
                 else
                     ap.ReportError("Unknown command " + cmdname + " in Performaction");

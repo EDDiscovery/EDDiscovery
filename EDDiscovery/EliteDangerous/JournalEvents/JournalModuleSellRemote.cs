@@ -65,8 +65,8 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public override void FillInformation(out string summary, out string info, out string detailed) //V
         {
             summary = EventTypeStr.SplitCapsWord();
-            info = Tools.FieldBuilder("Item:", SellItemLocalised.Alt(SellItem), "Price:; credits", SellPrice);
-            detailed = Tools.FieldBuilder("Ship:", Ship);
+            info = BaseUtils.FieldBuilder.Build("Item:", SellItemLocalised.Alt(SellItem), "Price:; credits", SellPrice);
+            detailed = BaseUtils.FieldBuilder.Build("Ship:", Ship);
         }
     }
 }
