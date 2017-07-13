@@ -18,6 +18,7 @@ using System.Windows.Forms;
 using EDDiscovery.DB;
 using EDDiscovery.EDSM;
 using EDDiscovery.Forms;
+using EDDiscovery.EliteDangerous;
 
 namespace EDDiscovery
 {
