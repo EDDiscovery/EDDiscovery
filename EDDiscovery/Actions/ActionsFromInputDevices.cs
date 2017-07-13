@@ -6,11 +6,11 @@ using System.Windows.Forms;
 using EDDiscovery.EliteDangerous;
 using System.Runtime.InteropServices;
 using System.Diagnostics;
+using DirectInputDevices;
 
-namespace EDDiscovery.InputDevices
+namespace EDDiscovery.Actions
 {
-
-    class InputDevicesIntoActions
+    class ActionsFromInputDevices
     {
         InputDeviceList devices;
         Actions.ActionController ac;
@@ -18,7 +18,7 @@ namespace EDDiscovery.InputDevices
 
         List<BindingsFile.Assignment> assignmentsinonstate = new List<BindingsFile.Assignment>();
 
-        public InputDevicesIntoActions(InputDeviceList pi, BindingsFile b , Actions.ActionController pc )
+        public ActionsFromInputDevices(InputDeviceList pi, BindingsFile b , Actions.ActionController pc )
         {
             devices = pi;
             bf = b;

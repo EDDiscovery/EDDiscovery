@@ -77,8 +77,8 @@ namespace EDDiscovery
         AudioExtensions.AudioQueue audioqueuespeech;
         AudioExtensions.SpeechSynthesizer speechsynth;
 
-        InputDevices.InputDeviceList inputdevices;
-        InputDevices.InputDevicesIntoActions inputdevicesactions;
+        DirectInputDevices.InputDeviceList inputdevices;
+        Actions.ActionsFromInputDevices inputdevicesactions;
         BindingsFile frontierbindings;
 
         public CompanionAPI.CompanionAPIClass Capi { get; private set; } = new CompanionAPI.CompanionAPIClass();
@@ -219,8 +219,8 @@ namespace EDDiscovery
             actioncontroller = new Actions.ActionController(this, Controller);
 
             frontierbindings = new BindingsFile();
-            inputdevices = new InputDevices.InputDeviceList(a => BeginInvoke(a));
-            inputdevicesactions = new InputDevices.InputDevicesIntoActions(inputdevices, frontierbindings, actioncontroller);
+            inputdevices = new DirectInputDevices.InputDeviceList(a => BeginInvoke(a));
+            inputdevicesactions = new Actions.ActionsFromInputDevices(inputdevices, frontierbindings, actioncontroller);
 
             ApplyTheme();
 
@@ -235,9 +235,9 @@ namespace EDDiscovery
 #if !__MonoCS__
             if (on)
             {
-                InputDevices.InputDeviceJoystickWindows.CreateJoysticks(inputdevices,axisevents);
-                InputDevices.InputDeviceKeyboard.CreateKeyboard(inputdevices);              // Created.. not started..
-                InputDevices.InputDeviceMouse.CreateMouse(inputdevices);
+                DirectInputDevices.InputDeviceJoystickWindows.CreateJoysticks(inputdevices,axisevents);
+                DirectInputDevices.InputDeviceKeyboard.CreateKeyboard(inputdevices);              // Created.. not started..
+                DirectInputDevices.InputDeviceMouse.CreateMouse(inputdevices);
                 frontierbindings.LoadBindingsFile();
                 inputdevicesactions.Start();
             }

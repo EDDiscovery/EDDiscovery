@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EDDiscovery.InputDevices
+namespace DirectInputDevices
 {
-    class InputDeviceJoystickWindows : InputDeviceInterface
+    public class InputDeviceJoystickWindows : InputDeviceInterface
     {
         public InputDeviceIdentity ID() { return jsi;  }
         InputDeviceIdentity jsi;

@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EDDiscovery.InputDevices
+namespace DirectInputDevices
 {
-    class InputDeviceKeyboard : InputDeviceInterface
+    public class InputDeviceKeyboard : InputDeviceInterface
     {
         public InputDeviceIdentity ID() { return ksi; }
         InputDeviceIdentity ksi;
