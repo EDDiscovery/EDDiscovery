@@ -27,7 +27,7 @@ using System.Windows.Forms;
 using System.Reflection;
 using System.Net;
 
-namespace EDDiscovery
+namespace BaseUtils
 {
     public class TraceLog
     {
@@ -68,9 +68,12 @@ namespace EDDiscovery
             public override void WriteLine() { Write("\n"); }
         }
 
+        static public string logroot = "c:\\";
+        static public string urlfeedback = "Unknown";
+
         public static void Init()
         {
-            string logname = Path.Combine(EDDConfig.Options.AppDataDirectory, "Log", $"Trace_{DateTime.Now.ToString("yyyyMMddHHmmss")}");
+            string logname = Path.Combine(logroot, "Log", $"Trace_{DateTime.Now.ToString("yyyyMMddHHmmss")}");
             LogFileBaseName = logname;
             LogFileWriterThread = new Thread(LogWriterThreadProc);
             LogFileWriterThread.IsBackground = true;
@@ -165,7 +168,7 @@ namespace EDDiscovery
             {
                 long totsize = 0;
                 // Create a reference to the Log directory.
-                DirectoryInfo dir = new DirectoryInfo(Path.Combine(EDDConfig.Options.AppDataDirectory, "Log"));
+                DirectoryInfo dir = new DirectoryInfo(Path.Combine(logroot, "Log"));
 
                 Trace.WriteLine("Running logfile age check");
                 // Create an array representing the files in the current directory.
@@ -211,7 +214,7 @@ namespace EDDiscovery
                 WriteLine($"\n==== UNHANDLED EXCEPTION ====\n{e.ExceptionObject.ToString()}\n==== cut ====");
                 WriteLine(null);
                 LogLineQueueEvent.WaitOne(100);
-                MessageBox.Show($"There was an unhandled exception.\nPlease report this at {Properties.Resources.URLProjectFeedback} and attach {LogFileName}\nException: {e.ExceptionObject.ToString()}\n\nThis application must now close", "Unhandled Exception");
+                MessageBox.Show($"There was an unhandled exception.\nPlease report this at {urlfeedback} and attach {LogFileName}\nException: {e.ExceptionObject.ToString()}\n\nThis application must now close", "Unhandled Exception");
             }
             catch
             {
@@ -230,7 +233,7 @@ namespace EDDiscovery
             try
             {
                 WriteLine($"\n==== UNHANDLED UI EXCEPTION ====\n{e.Exception.ToString()}\n==== cut ====");
-                res = MessageBox.Show($"There was an unhandled UI exception.\nPlease report this at {Properties.Resources.URLProjectFeedback} and attach {LogFileName}\nException: {e.Exception.Message}\n{e.Exception.StackTrace}\n\nDo you wish to abort, or ignore the exception and try to continue?", "Unhandled Exception", MessageBoxButtons.AbortRetryIgnore);
+                res = MessageBox.Show($"There was an unhandled UI exception.\nPlease report this at {urlfeedback} and attach {LogFileName}\nException: {e.Exception.Message}\n{e.Exception.StackTrace}\n\nDo you wish to abort, or ignore the exception and try to continue?", "Unhandled Exception", MessageBoxButtons.AbortRetryIgnore);
             }
             catch
             {

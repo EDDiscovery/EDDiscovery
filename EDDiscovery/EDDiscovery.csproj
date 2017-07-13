@@ -310,7 +310,6 @@
     <Compile Include="RoutingUtils.cs" />
     <Compile Include="ExportImport\ExportNotes.cs" />
     <Compile Include="ExportImport\ImportHistory.cs" />
-    <Compile Include="TraceLog.cs" />
     <Compile Include="Trilateration\DistanceParser.cs" />
     <Compile Include="EDDN\EDDNClass.cs" />
     <Compile Include="EDDN\EDDNSync.cs" />

@@ -26,6 +26,7 @@ using System.Globalization;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
+using BaseUtils;
 
 namespace EDDiscovery
 {
@@ -337,6 +338,9 @@ namespace EDDiscovery
                 {
                     Directory.CreateDirectory(logpath);
                 }
+
+                TraceLog.logroot = EDDConfig.Options.AppDataDirectory;
+                TraceLog.urlfeedback = Properties.Resources.URLProjectFeedback;
 
                 if (!Debugger.IsAttached || EDDConfig.Options.TraceLog)
                 {

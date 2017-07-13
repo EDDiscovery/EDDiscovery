@@ -68,7 +68,7 @@ namespace EDDiscovery.Forms
             if (ctl != null && ctl.Tag != null)
                 Process.Start((string)ctl.Tag);
             else
-                TraceLog.WriteLine($"AboutForm: Control and/or Tag is null: control {ctl?.Name ?? "(null)"}, tag {ctl?.Tag ?? "(null)"}.");   
+                BaseUtils.TraceLog.WriteLine($"AboutForm: Control and/or Tag is null: control {ctl?.Name ?? "(null)"}, tag {ctl?.Tag ?? "(null)"}.");   
         }
     }
 }
