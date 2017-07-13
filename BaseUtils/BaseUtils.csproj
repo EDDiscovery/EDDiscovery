@@ -58,6 +58,7 @@
     <Compile Include="PropertyNames.cs" />
     <Compile Include="StringParser.cs" />
     <Compile Include="Theme.cs" />
+    <Compile Include="TraceLog.cs" />
     <Compile Include="Win32Constants.cs" />
   </ItemGroup>
   <ItemGroup>
