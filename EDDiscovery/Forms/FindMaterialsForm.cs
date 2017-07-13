@@ -52,7 +52,7 @@ namespace EDDiscovery.Forms
             HistoryEntry hi =   edfrm.history.First<HistoryEntry>();
 
 
-            List<ISystem> distlist;
+            List<EliteDangerous.ISystem> distlist;
             distlist = SystemClassDB.GetSystemDistancesFrom(hi.System.x, hi.System.y, hi.System.z, 1000, MaxLy);
 
 

@@ -344,20 +344,20 @@ namespace EDDiscovery.DB
         }
 
 
-        public static SystemClass GetSystem(string name, SQLiteConnectionSystem cn = null)      // with an open database, case insensitive
+        public static SystemClassDB GetSystem(string name, SQLiteConnectionSystem cn = null)      // with an open database, case insensitive
         {
             return GetSystemsByName(name, cn).FirstOrDefault();
         }
 
-        public static List<SystemClass> GetSystemsByName(string name, SQLiteConnectionSystem cn = null)
+        public static List<SystemClassDB> GetSystemsByName(string name, SQLiteConnectionSystem cn = null)
         {
-            List<SystemClass> systems = new List<SystemClass>();
+            List<SystemClassDB> systems = new List<SystemClassDB>();
 
             List<long> edsmidlist = GetEdsmIdsFromName(name, cn);
 
             foreach (long edsmid in edsmidlist )
             {
-                SystemClass sys = GetSystem(edsmid, cn, SystemIDType.EdsmId);
+                SystemClassDB sys = GetSystem(edsmid, cn, SystemIDType.EdsmId);
                 if (sys != null)
                 {
                     systems.Add(sys);
@@ -369,9 +369,9 @@ namespace EDDiscovery.DB
 
         public enum SystemIDType { id, EdsmId, EddbId };       // which ID to match?
 
-        public static SystemClass GetSystem(long id,  SQLiteConnectionSystem cn = null, SystemIDType idtype = SystemIDType.id)      // using an id
+        public static SystemClassDB GetSystem(long id,  SQLiteConnectionSystem cn = null, SystemIDType idtype = SystemIDType.id)      // using an id
         {
-            SystemClass sys = null;
+            SystemClassDB sys = null;
             bool closeit = false;
 
             try
@@ -391,7 +391,7 @@ namespace EDDiscovery.DB
                         {
                             long edsmid = (long)reader["EdsmId"];
 
-                            sys = new SystemClass
+                            sys = new SystemClassDB
                             {
                                 id = (long)reader["id"],
                                 id_edsm = (long)reader["EdsmId"],
@@ -800,7 +800,7 @@ namespace EDDiscovery.DB
         public const int metric_maximum500ly = 4;
         public const int metric_waypointdev2 = 5;
 
-        public static SystemClass GetSystemNearestTo(double x, double y, double z, SQLiteConnectionSystem conn)
+        public static SystemClassDB GetSystemNearestTo(double x, double y, double z, SQLiteConnectionSystem conn)
         {
             using (DbCommand selectByPosCmd = conn.CreateCommand(
                 "SELECT s.EdsmId FROM EdsmSystems s " +         // 16 is 0.125 of 1/128, so pick system near this one
@@ -820,7 +820,7 @@ namespace EDDiscovery.DB
                     while (reader.Read())
                     {
                         long pos_edsmid = (long)reader["EdsmId"];
-                        SystemClass sys = GetSystem(pos_edsmid, conn, SystemIDType.EdsmId);
+                        SystemClassDB sys = GetSystem(pos_edsmid, conn, SystemIDType.EdsmId);
                         return sys;
                     }
                 }
@@ -829,10 +829,10 @@ namespace EDDiscovery.DB
             return null;
         }
 
-        public static SystemClass GetSystemNearestTo(Point3D curpos, Point3D wantedpos, double maxfromcurpos, double maxfromwanted,
+        public static SystemClassDB GetSystemNearestTo(Point3D curpos, Point3D wantedpos, double maxfromcurpos, double maxfromwanted,
                                     int routemethod)
         {
-            SystemClass nearestsystem = null;
+            SystemClassDB nearestsystem = null;
 
             try
             {
@@ -1012,9 +1012,9 @@ namespace EDDiscovery.DB
                 }
 
 
-                Dictionary<long, SystemClass> altmatches = new Dictionary<long, SystemClass>();
-                Dictionary<long, SystemClass> matches = new Dictionary<long, SystemClass>();
-                SystemClass edsmidmatch = null;
+                Dictionary<long, SystemClassDB> altmatches = new Dictionary<long, SystemClassDB>();
+                Dictionary<long, SystemClassDB> matches = new Dictionary<long, SystemClassDB>();
+                SystemClassDB edsmidmatch = null;
                 long sel_edsmid = refsys.id_edsm;
                 bool hastravcoords = refsys.HasCoordinate && (refsys.name.ToLowerInvariant() == "sol" || refsys.x != 0 || refsys.y != 0 || refsys.z != 0);
                 bool multimatch = false;
@@ -1027,7 +1027,7 @@ namespace EDDiscovery.DB
                     while (aliasesById.ContainsKey(sel_edsmid))
                     {
                         sel_edsmid = aliasesById[sel_edsmid];
-                        SystemClass sys = GetSystem(sel_edsmid, cn, SystemIDType.EdsmId);
+                        SystemClassDB sys = GetSystem(sel_edsmid, cn, SystemIDType.EdsmId);
                         altmatches.Add(sys.id, sys);
                         edsmidmatch = null;
                     }
@@ -1035,9 +1035,9 @@ namespace EDDiscovery.DB
 
                 //Stopwatch sw2 = new Stopwatch(); sw2.Start(); //long t2 = sw2.ElapsedMilliseconds; Tools.LogToFile(string.Format("Query names in {0}", t2));
 
-                Dictionary<long, SystemClass> namematches = GetSystemsByName(refsys.name).Where(s => s != null).ToDictionary(s => s.id, s => s);
-                Dictionary<long, SystemClass> posmatches = new Dictionary<long, SystemClass>();
-                Dictionary<long, SystemClass> nameposmatches = new Dictionary<long, SystemClass>();
+                Dictionary<long, SystemClassDB> namematches = GetSystemsByName(refsys.name).Where(s => s != null).ToDictionary(s => s.id, s => s);
+                Dictionary<long, SystemClassDB> posmatches = new Dictionary<long, SystemClassDB>();
+                Dictionary<long, SystemClassDB> nameposmatches = new Dictionary<long, SystemClassDB>();
 
                 if (hastravcoords)
                 {
@@ -1063,7 +1063,7 @@ namespace EDDiscovery.DB
                             while (reader.Read())
                             {
                                 long pos_edsmid = (long)reader["EdsmId"];
-                                SystemClass sys = GetSystem(pos_edsmid, cn, SystemIDType.EdsmId);
+                                SystemClassDB sys = GetSystem(pos_edsmid, cn, SystemIDType.EdsmId);
                                 if (sys != null)
                                 {
                                     matches[sys.id] = sys;
@@ -1083,7 +1083,7 @@ namespace EDDiscovery.DB
                 {
                     foreach (long alt_edsmid in aliasesByName[refsys.name])
                     {
-                        SystemClass sys = GetSystem(alt_edsmid, cn, SystemIDType.EdsmId);
+                        SystemClassDB sys = GetSystem(alt_edsmid, cn, SystemIDType.EdsmId);
                         if (sys != null)
                         {
                             altmatches[sys.id] = sys;
@@ -2035,9 +2035,9 @@ namespace EDDiscovery.DB
             return ret;
         }
 
-        public static SystemClass FindEDSM(ISystem s, SQLiteConnectionSystem conn = null) // called find an EDSM system corresponding to s
+        public static SystemClassDB FindEDSM(ISystem s, SQLiteConnectionSystem conn = null) // called find an EDSM system corresponding to s
         {
-            SystemClass system = null;
+            SystemClassDB system = null;
 
             if (s.status != SystemStatusEnum.EDSC)      // if not EDSM already..
             {
@@ -2054,7 +2054,7 @@ namespace EDDiscovery.DB
 
                 if (system == null)                   // not found, so  try
                 {
-                    List<SystemClass> systemsByName = GetSystemsByName(s.name, conn);
+                    List<SystemClassDB> systemsByName = GetSystemsByName(s.name, conn);
 
                     if (systemsByName.Count == 0 && s.HasCoordinate)
                     {

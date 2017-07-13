@@ -206,7 +206,7 @@ namespace EDDiscovery.Forms
         private void btnFindSystem_Click(object sender, EventArgs e)
         {
             string name = tbManualSystemName.Text.ToLower();
-            List<SystemClass> systems = SystemClassDB.GetSystemsByName(name);
+            List<SystemClassDB> systems = SystemClassDB.GetSystemsByName(name);
 
             if (systems.Count != 0)
             {

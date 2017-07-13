@@ -354,9 +354,9 @@ namespace EDDiscovery
 
                 foreach (String system in pushed)
                 {
-                    SystemClass star = SystemClassDB.GetSystem(system);
+                    SystemClassDB star = SystemClassDB.GetSystem(system);
                     if (star == null)
-                        star = new SystemClass(system);
+                        star = new SystemClassDB(system);
 
                     this.BeginInvoke(new MethodInvoker(() =>
                     {
