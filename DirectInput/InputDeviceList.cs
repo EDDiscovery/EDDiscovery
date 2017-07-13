@@ -5,11 +5,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EDDiscovery.InputDevices
+namespace DirectInputDevices
 {
     // list of devices, and main event loop.  Hook to OnNewEvent
 
-    class InputDeviceList : IEnumerable<InputDeviceInterface>
+    public class InputDeviceList : IEnumerable<InputDeviceInterface>
     {
         public event Action<List<InputDeviceEvent>> OnNewEvent;
 

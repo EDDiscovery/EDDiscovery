@@ -71,7 +71,8 @@
     <SignManifests>false</SignManifests>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>edlogo_3mo_icon.ico</ApplicationIcon>
+    <ApplicationIcon>
+    </ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup>
     <StartupObject>
@@ -123,9 +124,6 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="CSCore, Version=1.2.1.1, Culture=neutral, PublicKeyToken=5a08f2b6f4415dea, processorArchitecture=MSIL">
-      <HintPath>..\packages\CSCore.1.2.1.1\lib\net35-client\CSCore.dll</HintPath>
-    </Reference>
     <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
@@ -137,12 +135,6 @@
     <Reference Include="OpenTK.GLControl, Version=1.1.0.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
       <HintPath>..\packages\OpenTK.GLControl.1.1.2349.61993\lib\NET40\OpenTK.GLControl.dll</HintPath>
       <Private>True</Private>
-    </Reference>
-    <Reference Include="SharpDX, Version=3.1.1.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
-      <HintPath>..\packages\SharpDX.3.1.1\lib\net45\SharpDX.dll</HintPath>
-    </Reference>
-    <Reference Include="SharpDX.DirectInput, Version=3.1.1.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
-      <HintPath>..\packages\SharpDX.DirectInput.3.1.1\lib\net45\SharpDX.DirectInput.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.configuration" />
@@ -293,12 +285,7 @@
     </Compile>
     <Compile Include="HTTP\VersioningManager.cs" />
     <Compile Include="HTTP\GitHubFile.cs" />
-    <Compile Include="InputDevices\InputDeviceJoystickWindows.cs" />
-    <Compile Include="InputDevices\InputDeviceMouse.cs" />
-    <Compile Include="InputDevices\InputDeviceKeyboard.cs" />
-    <Compile Include="InputDevices\InputDeviceList.cs" />
-    <Compile Include="InputDevices\InputDevicesInterface.cs" />
-    <Compile Include="InputDevices\InputDeviceIntoActions.cs" />
+    <Compile Include="Actions\ActionsFromInputDevices.cs" />
     <Compile Include="PopOutControl.cs" />
     <Compile Include="Forms\ShipDetails.cs">
       <SubType>Form</SubType>
@@ -747,7 +734,6 @@
       <DependentUpon>UserControlTrippanel.cs</DependentUpon>
     </Compile>
     <Compile Include="DB\Vector3.cs" />
-    <Content Include="edlogo_3mo_icon.ico" />
     <Content Include="fround.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -1170,9 +1156,6 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
-    <Content Include="fge-logo-001-dark.ico">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <EmbeddedResource Include="RouteControl.resx">
       <DependentUpon>RouteControl.cs</DependentUpon>
     </EmbeddedResource>
@@ -1246,6 +1229,10 @@
     <ProjectReference Include="..\Conditions\Conditions.csproj">
       <Project>{f76451e6-926d-4e03-b721-99fcd1ec4eed}</Project>
       <Name>Conditions</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DirectInput\DirectInput.csproj">
+      <Project>{390b1547-a455-45e3-974f-e1f9b1613ad5}</Project>
+      <Name>DirectInput</Name>
     </ProjectReference>
     <ProjectReference Include="..\ExtendedControls\ExtendedControls.csproj">
       <Project>{2049403f-f4c7-45e6-b777-6390c78e4d2b}</Project>

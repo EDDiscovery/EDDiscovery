@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EDDiscovery.InputDevices
+namespace DirectInputDevices
 {
-    class InputDeviceMouse : InputDeviceInterface
+    public class InputDeviceMouse : InputDeviceInterface
     {
         public InputDeviceIdentity ID() { return msi; }
         InputDeviceIdentity msi;
