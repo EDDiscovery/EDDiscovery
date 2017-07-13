@@ -28,26 +28,27 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public JournalRebootRepair(JObject evt) : base(evt, JournalTypeEnum.RebootRepair)
         {
             if (!evt["Modules"].Empty())
+            {
                 Modules = evt.Value<JArray>("Modules").Values<string>().ToArray();
+                if (Modules != null)
+                {
+                    FriendlyModules = new string[Modules.Length];
+                    for (int i = 0; i < Modules.Length; i++)
+                        FriendlyModules[i] = JournalFieldNaming.GetBetterItemNameEvents(Modules[i]);
+                }
+            }
         }
 
         public string[] Modules { get; set; }
+        public string[] FriendlyModules { get; set; }
         public override System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.rebootrepair; } }
 
         public override void FillInformation(out string summary, out string info, out string detailed)  //V
         {
             summary = EventTypeStr.SplitCapsWord();
             info = "";
-            if (Modules != null)
-            {
-                foreach (string s in Modules)
-                {
-                    if (info.Length > 0)
-                        info += ", ";
-
-                    info += s;
-                }
-            }
+            if (FriendlyModules != null)
+                info = string.Join(",", FriendlyModules);
             detailed = "";
         }
     }
