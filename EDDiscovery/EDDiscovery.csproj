@@ -1504,6 +1504,8 @@
     <ItemGroup>
       <ZipFiles Include="$(OutputPath)\EDDiscovery.exe" />
       <ZipFiles Include="$(OutputPath)\EDDiscovery.pdb" />
+      <ZipFiles Include="$(OutputPath)\SharpDX.DirectInput.dll" />
+      <ZipFiles Include="$(OutputPath)\SharpDX.dll" />
       <ZipFiles Include="$(ProjectDir)\App.Portable.config">
         <Name>EDDiscovery.exe.config</Name>
       </ZipFiles>
