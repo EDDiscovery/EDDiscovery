@@ -42,10 +42,17 @@ namespace EDDiscovery.Actions
 
         private string lasteditedpack;
 
+        static public ConditionFunctionHandlers DefaultGetCFH(ConditionFunctions c, ConditionVariables vars, ConditionFileHandles handles, int recdepth)
+        {
+            return new ConditionEDDFunctions(c, vars, handles, recdepth);
+        }
+
         public ActionController(EDDiscoveryForm frm, EDDiscoveryController ctrl) : base(frm.AudioQueueSpeech, frm.AudioQueueWave, frm.SpeechSynthesizer, frm)
         {
             discoveryform = frm;
             discoverycontroller = ctrl;
+
+            ConditionFunctions.GetCFH = DefaultGetCFH;
 
             persistentglobalvariables.FromString(SQLiteConnectionUser.GetSettingString("UserGlobalActionVars", ""), ConditionVariables.FromMode.MultiEntryComma);
 

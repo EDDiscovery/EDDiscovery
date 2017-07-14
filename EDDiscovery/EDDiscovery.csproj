@@ -42,7 +42,7 @@
     <OutputPath>bin\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
+    <WarningLevel>0</WarningLevel>
     <RunCodeAnalysis>false</RunCodeAnalysis>
     <UseVSHostingProcess>false</UseVSHostingProcess>
     <Prefer32Bit>false</Prefer32Bit>
@@ -203,6 +203,7 @@
     <Compile Include="Actions\ActionsEDDCmds\ActionTimer.cs" />
     <Compile Include="Actions\ActionsEDDCmds\ActionMenuItem.cs" />
     <Compile Include="Actions\ActionVars.cs" />
+    <Compile Include="Actions\ConditionFunctionsEDD.cs" />
     <Compile Include="CompanionAPI\CModules.cs" />
     <Compile Include="CompanionAPI\CStarport.cs" />
     <Compile Include="CompanionAPI\CSystem.cs" />
@@ -734,9 +735,6 @@
       <DependentUpon>UserControlTrippanel.cs</DependentUpon>
     </Compile>
     <Compile Include="DB\Vector3.cs" />
-    <Content Include="fround.js">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <EmbeddedResource Include="Forms\CommanderForm.resx">
       <DependentUpon>CommanderForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -1095,9 +1093,6 @@
     <None Include="Resources\Home-icon.png" />
     <None Include="Resources\Travelicon.png" />
     <None Include="Resources\save.png" />
-    <Content Include="trilateration.js">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <EmbeddedResource Include="2DMap\Form2DMap.resx">
       <DependentUpon>Form2DMap.cs</DependentUpon>
     </EmbeddedResource>
@@ -1292,8 +1287,6 @@
         <Name>EDDiscovery.exe.config</Name>
       </ZipFiles>
       <ZipFiles Include="$(OutputPath)\CSCore.dll" />
-      <ZipFiles Include="$(OutputPath)\fround.js" />
-      <ZipFiles Include="$(OutputPath)\trilateration.js" />
       <ZipFiles Include="$(OutputPath)\Newtonsoft.Json.dll" />
       <ZipFiles Include="$(OutputPath)\OpenTK.GLControl.dll" />
       <ZipFiles Include="$(OutputPath)\OpenTK.dll" />
