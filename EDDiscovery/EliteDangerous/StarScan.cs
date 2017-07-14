@@ -14,7 +14,6 @@
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 using EDDiscovery.EliteDangerous.JournalEvents;
-using EDDiscovery.HTTP;
 
 using System;
 using System.Collections.Generic;

@@ -45,24 +45,34 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AssociateExe.cs" />
-    <Compile Include="BrowserInfo.cs" />
-    <Compile Include="CVSRead.cs" />
-    <Compile Include="CVSWrite.cs" />
-    <Compile Include="FieldBuilder.cs" />
-    <Compile Include="FileHelpers.cs" />
-    <Compile Include="KeyPressHandler.cs" />
-    <Compile Include="LogToFile.cs" />
-    <Compile Include="ObjectExtensions.cs" />
+    <Compile Include="Files\AssociateExe.cs" />
+    <Compile Include="HTTP\BrowserInfo.cs" />
+    <Compile Include="HTTP\DownloadFile.cs" />
+    <Compile Include="HTTP\GitHubClass.cs" />
+    <Compile Include="HTTP\GitHubFile.cs" />
+    <Compile Include="HTTP\GitHubRelease.cs" />
+    <Compile Include="HTTP\HttpCom.cs" />
+    <Compile Include="HTTP\ResponseData.cs" />
+    <Compile Include="Numbers\ColorObjectExtensions.cs" />
+    <Compile Include="Numbers\NumberObjectExtensions.cs" />
+    <Compile Include="Files\CVSRead.cs" />
+    <Compile Include="Files\CVSWrite.cs" />
+    <Compile Include="Strings\FieldBuilder.cs" />
+    <Compile Include="Files\FileHelpers.cs" />
+    <Compile Include="Misc\KeyPressHandler.cs" />
+    <Compile Include="Files\LogToFile.cs" />
+    <Compile Include="Misc\JSONObjectExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="PropertyNames.cs" />
-    <Compile Include="StringParser.cs" />
-    <Compile Include="Theme.cs" />
-    <Compile Include="TraceLog.cs" />
-    <Compile Include="Win32Constants.cs" />
+    <Compile Include="Misc\PropertyNames.cs" />
+    <Compile Include="Strings\StringObjectExtensions.cs" />
+    <Compile Include="Strings\StringParser.cs" />
+    <Compile Include="Misc\Theme.cs" />
+    <Compile Include="Misc\TraceLog.cs" />
+    <Compile Include="Misc\Win32Constants.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

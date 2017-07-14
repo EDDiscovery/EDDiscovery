@@ -18,7 +18,7 @@ using System;
 using System.Collections.Specialized;
 using System.Net;
 
-namespace EDDiscovery.HTTP
+namespace BaseUtils
 {
     public struct ResponseData
     {
@@ -72,5 +72,4 @@ namespace EDDiscovery.HTTP
             return message;
         }
     }
-
 }

@@ -431,7 +431,7 @@ namespace EDDiscovery
 
                 logLine("Checking for new EDDiscovery maps");
 
-                EDDiscovery.HTTP.GitHubClass github = new EDDiscovery.HTTP.GitHubClass(discoveryform.LogLine);
+                BaseUtils.GitHubClass github = new BaseUtils.GitHubClass(discoveryform.LogLine);
 
                 var files = github.GetDataFiles("Maps/V1");
                 return Task.Factory.StartNew(() => github.DownloadFiles(files, mapsdir));
@@ -485,7 +485,7 @@ namespace EDDiscovery
             List<Task<bool>> tasks = new List<Task<bool>>();
             foreach (string file in files)
             {
-                var task = EDDiscovery.HTTP.DownloadFileHandler.BeginDownloadFile(
+                var task = BaseUtils.DownloadFileHandler.BeginDownloadFile(
                     "http://eddiscovery.astronet.se/Maps/" + file,
                     Path.Combine(EDDConfig.Options.AppDataDirectory, "Maps", file),
                     (n) =>
@@ -506,7 +506,7 @@ namespace EDDiscovery
         private static bool DownloadMapFile(string file, Action<string> logLine)
         {
             bool newfile = false;
-            if (EDDiscovery.HTTP.DownloadFileHandler.DownloadFile("http://eddiscovery.astronet.se/Maps/" + file, Path.Combine(EDDConfig.Options.AppDataDirectory, "Maps", file), out newfile))
+            if (BaseUtils.DownloadFileHandler.DownloadFile("http://eddiscovery.astronet.se/Maps/" + file, Path.Combine(EDDConfig.Options.AppDataDirectory, "Maps", file), out newfile))
             {
                 if (newfile)
                     logLine("Downloaded map: " + file);

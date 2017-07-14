@@ -14,7 +14,6 @@
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 
-using EDDiscovery.HTTP;
 using BaseUtils.Win32Constants;
 using System;
 using System.Collections.Generic;
@@ -26,6 +25,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using EDDiscovery.Versions;
 
 namespace EDDiscovery.Forms
 {
@@ -100,9 +100,9 @@ namespace EDDiscovery.Forms
                 file.Delete();
             }
 
-            GitHubClass ghc = new GitHubClass();
+            BaseUtils.GitHubClass ghc = new BaseUtils.GitHubClass();
 
-            List<GitHubFile> files = ghc.GetDataFiles(gitdir);
+            List<BaseUtils.GitHubFile> files = ghc.GetDataFiles(gitdir);
 
             return ghc.DownloadFiles(files, downloadfolder);
         }
@@ -158,7 +158,7 @@ namespace EDDiscovery.Forms
 
             mgr = new VersioningManager();
 
-            int[] edversion = ObjectExtensionsNumbersBool.GetEDVersion();
+            int[] edversion = System.Reflection.Assembly.GetExecutingAssembly().GetVersion();
             System.Diagnostics.Debug.Assert(edversion != null);
 
             mgr.ReadLocalFiles(EDDConfig.Options.AppDataDirectory, "Actions", "*.act", "Action File");

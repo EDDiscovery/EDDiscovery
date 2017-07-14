@@ -20,7 +20,6 @@ using EDDiscovery.EliteDangerous;
 using EDDiscovery.EliteDangerous.JournalEvents;
 using EDDiscovery.Forms;
 using EDDiscovery.Export;
-using EDDiscovery.HTTP;
 using BaseUtils.Win32Constants;
 using Newtonsoft.Json.Linq;
 using System;
@@ -90,7 +89,7 @@ namespace EDDiscovery
         Task checkInstallerTask = null;
         private bool themeok = true;
 
-        GitHubRelease newRelease;
+        BaseUtils.GitHubRelease newRelease;
 
         public PopOutControl PopOuts;
 
@@ -225,6 +224,13 @@ namespace EDDiscovery
             ApplyTheme();
 
             notifyIcon1.Visible = EDDConfig.UseNotifyIcon;
+
+            SetUpLogging();
+        }
+
+        public void SetUpLogging()      // controls logging of HTTP stuff
+        {
+            BaseUtils.HttpCom.LogPath = EDDConfig.Instance.EDSMLog ? EDDConfig.Options.AppDataDirectory : null;
         }
 
         public void EliteInput(bool on, bool axisevents)
@@ -323,9 +329,9 @@ namespace EDDiscovery
             try
             {
 
-                GitHubClass github = new GitHubClass(LogLine);
+                BaseUtils.GitHubClass github = new BaseUtils.GitHubClass(LogLine);
 
-                GitHubRelease rel = github.GetLatestRelease();
+                BaseUtils.GitHubRelease rel = github.GetLatestRelease();
 
                 if (rel != null)
                 {

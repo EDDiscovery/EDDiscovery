@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Conditions
 {
@@ -98,8 +95,6 @@ namespace Conditions
                 functions.Add("trim", new FuncEntry(Trim, 1, 2, 1, 1));
 
                 functions.Add("upper", new FuncEntry(Upper, 1, 20, 0xfffffff, 0xfffffff));   // all can be string, check var
-
-                functions.Add("version", new FuncEntry(Version, 1, 1, 0));     // don't check first para
 
                 functions.Add("wordlistcount", new FuncEntry(WordListCount, 1, 1, 1));       // first is a var or string
                 functions.Add("wordlistentry", new FuncEntry(WordListEntry, 2, 2, 1, 1));       // first is a var or string, second is a var or literal
@@ -541,27 +536,6 @@ namespace Conditions
             string s = paras[0].isstring ? paras[0].value : vars[paras[0].value];
             output = s.SafeVariableString();
             return true;
-        }
-
-        #endregion
-
-        #region Versions
-
-        protected bool Version(out string output)
-        {
-            int[] edversion = ObjectExtensionsNumbersBool.GetEDVersion();
-
-            int para;
-            if (paras[0].value.InvariantParse(out para) && para >= 1 && para <= edversion.Length)
-            {
-                output = edversion[para - 1].ToString(ct);
-                return true;
-            }
-            else
-            {
-                output = "Parameter number must be between 1 and 4";
-                return false;
-            }
         }
 
         #endregion

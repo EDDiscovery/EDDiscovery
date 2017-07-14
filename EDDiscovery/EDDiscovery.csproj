@@ -284,8 +284,7 @@
     <Compile Include="Forms\SetNoteForm.Designer.cs">
       <DependentUpon>SetNoteForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="HTTP\VersioningManager.cs" />
-    <Compile Include="HTTP\GitHubFile.cs" />
+    <Compile Include="Forms\VersioningManager.cs" />
     <Compile Include="Actions\ActionsFromInputDevices.cs" />
     <Compile Include="PopOutControl.cs" />
     <Compile Include="Forms\ShipDetails.cs">
@@ -497,9 +496,6 @@
       <DependentUpon>UserControlForm.cs</DependentUpon>
     </Compile>
     <Compile Include="HistoryList.cs" />
-    <Compile Include="HTTP\DownloadFile.cs" />
-    <Compile Include="HTTP\GitHubClass.cs" />
-    <Compile Include="HTTP\GitHubRelease.cs" />
     <Compile Include="Themeing\CustomColourTable.cs" />
     <Compile Include="DB\SavedRouteClass.cs" />
     <Compile Include="EliteDangerous\ISystem.cs" />
@@ -542,8 +538,6 @@
     <Compile Include="Forms\ThemeEditor.Designer.cs">
       <DependentUpon>ThemeEditor.cs</DependentUpon>
     </Compile>
-    <Compile Include="HTTP\HttpCom.cs" />
-    <Compile Include="HTTP\ResponseData.cs" />
     <Compile Include="Forms\MoveToCommander.cs">
       <SubType>Form</SubType>
     </Compile>

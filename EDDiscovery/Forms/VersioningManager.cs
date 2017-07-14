@@ -22,7 +22,7 @@ using System.Threading.Tasks;
 using BaseUtils;
 using Conditions;
 
-namespace EDDiscovery.HTTP
+namespace EDDiscovery.Versions
 {
     public class VersioningManager
     {

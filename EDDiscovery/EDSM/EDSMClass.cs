@@ -17,7 +17,6 @@ using EDDiscovery;
 using EDDiscovery.DB;
 using EDDiscovery.EliteDangerous;
 using EDDiscovery.EliteDangerous.JournalEvents;
-using EDDiscovery.HTTP;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -34,7 +33,7 @@ using System.Windows.Forms;
 
 namespace EDDiscovery.EDSM
 {
-    public class EDSMClass : HttpCom
+    public class EDSMClass : BaseUtils.HttpCom
     {
         public string commanderName;
         public string apiKey;
@@ -292,7 +291,7 @@ namespace EDDiscovery.EDSM
             {
                 string edsmhiddensystems = Path.Combine(EDDConfig.Options.AppDataDirectory, "edsmhiddensystems.json");
                 bool newfile = false;
-                DownloadFileHandler.DownloadFile(_serverAddress + "api-v1/hidden-systems?showId=1", edsmhiddensystems, out newfile);
+                BaseUtils.DownloadFileHandler.DownloadFile(_serverAddress + "api-v1/hidden-systems?showId=1", edsmhiddensystems, out newfile);
 
                 string json = BaseUtils.FileHelpers.TryReadAllTextFromFile(edsmhiddensystems);
 
@@ -691,8 +690,8 @@ namespace EDDiscovery.EDSM
                         }
                         catch (Exception ex)
                         {
-                            HttpCom.WriteLog($"Exception Loop: {ex.Message}", "");
-                            HttpCom.WriteLog($"ETrace: {ex.StackTrace}", "");
+                            BaseUtils.HttpCom.WriteLog($"Exception Loop: {ex.Message}", "");
+                            BaseUtils.HttpCom.WriteLog($"ETrace: {ex.StackTrace}", "");
                             Trace.WriteLine($"Exception Loop: {ex.Message}");
                             Trace.WriteLine($"ETrace: {ex.StackTrace}");
                         }

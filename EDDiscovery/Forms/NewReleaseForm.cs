@@ -13,7 +13,6 @@
  * 
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
-using EDDiscovery.HTTP;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -29,7 +28,7 @@ namespace EDDiscovery.Forms
 {
     public partial class NewReleaseForm : Form
     {
-        public GitHubRelease release;
+        public BaseUtils.GitHubRelease release;
         public NewReleaseForm()
         {
             InitializeComponent();

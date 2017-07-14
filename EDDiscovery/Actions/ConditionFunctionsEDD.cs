@@ -18,6 +18,7 @@ namespace EDDiscovery.Actions
             {
                 functions = new Dictionary<string, FuncEntry>();
                 functions.Add("systempath", new FuncEntry(SystemPath, 1, 1, 0, 0));   // literal
+                functions.Add("version", new FuncEntry(Version, 1, 1, 0));     // don't check first para
             }
         }
 
@@ -47,6 +48,27 @@ namespace EDDiscovery.Actions
 
             return true;
         }
+
+        protected bool Version(out string output)
+        {
+            int[] edversion = System.Reflection.Assembly.GetExecutingAssembly().GetVersion();
+
+            int para;
+            if (paras[0].value.InvariantParse(out para) && para >= 0 && para <= edversion.Length)
+            {
+                if (para == 0)
+                    output = edversion[0] + "." + edversion[1] + "." + edversion[2] + "." + edversion[3];
+                else
+                    output = edversion[para - 1].ToString(ct);
+                return true;
+            }
+            else
+            {
+                output = "Parameter number must be between 1 and 4";
+                return false;
+            }
+        }
+
 
         protected override bool VerifyFileAccess(string file, FileMode fm)
         {
