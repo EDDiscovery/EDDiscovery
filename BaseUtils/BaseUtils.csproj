@@ -55,8 +55,8 @@
     <Compile Include="HTTP\ResponseData.cs" />
     <Compile Include="Numbers\ColorObjectExtensions.cs" />
     <Compile Include="Numbers\NumberObjectExtensions.cs" />
-    <Compile Include="Files\CVSRead.cs" />
-    <Compile Include="Files\CVSWrite.cs" />
+    <Compile Include="Files\CSVRead.cs" />
+    <Compile Include="Files\CSVWrite.cs" />
     <Compile Include="Strings\FieldBuilder.cs" />
     <Compile Include="Files\FileHelpers.cs" />
     <Compile Include="Misc\KeyPressHandler.cs" />
