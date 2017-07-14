@@ -56,21 +56,21 @@
     <Compile Include="ActionsCoreCmds\ActionSleep.cs" />
     <Compile Include="ActionsCoreCmds\ActionStructures.cs" />
     <Compile Include="ActionsCoreCmds\ActionUserInteraction.cs" />
-    <Compile Include="ActionsCore\Action.cs" />
+    <Compile Include="ActionsCore\ActionBase.cs" />
     <Compile Include="ActionsCore\ActionCoreController.cs" />
     <Compile Include="ActionsCore\ActionFile.cs" />
     <Compile Include="ActionsCore\ActionFileList.cs" />
-    <Compile Include="ActionsCore\ActionPackEditorForm.cs">
+    <Compile Include="ActionEditing\ActionPackEditorForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ActionsCore\ActionPackEditorForm.Designer.cs">
+    <Compile Include="ActionEditing\ActionPackEditorForm.Designer.cs">
       <DependentUpon>ActionPackEditorForm.cs</DependentUpon>
     </Compile>
     <Compile Include="ActionsCore\ActionProgram.cs" />
-    <Compile Include="ActionsCore\ActionProgramEditForm.cs">
+    <Compile Include="ActionEditing\ActionProgramEditForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ActionsCore\ActionProgramEditForm.Designer.cs">
+    <Compile Include="ActionEditing\ActionProgramEditForm.Designer.cs">
       <DependentUpon>ActionProgramEditForm.cs</DependentUpon>
     </Compile>
     <Compile Include="ActionsCore\ActionProgramList.cs" />
@@ -79,10 +79,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="ActionsCore\ActionPackEditorForm.resx">
+    <EmbeddedResource Include="ActionEditing\ActionPackEditorForm.resx">
       <DependentUpon>ActionPackEditorForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ActionsCore\ActionProgramEditForm.resx">
+    <EmbeddedResource Include="ActionEditing\ActionProgramEditForm.resx">
       <DependentUpon>ActionProgramEditForm.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>

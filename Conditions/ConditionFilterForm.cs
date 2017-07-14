@@ -65,6 +65,9 @@ namespace Conditions
         const int panelymargin = 1;
         const int conditionhoff = 26;
 
+        public delegate List<string> AdditionalNames(string ev);
+        public event AdditionalNames onAdditionalNames;             // may be set to provide event driven names
+
         public ConditionFilterForm()
         {
             InitializeComponent();
@@ -73,23 +76,26 @@ namespace Conditions
             AcceptButton = buttonOK;
         }
 
-        // used to start when just filtering.. uses a fixed event list
+        // used to start when just filtering.. uses a fixed event list .. must provide a call back to obtain names associated with an event
 
-        public void InitFilter(string t, List<string> events, List<string> varfields,  ConditionLists j = null)
+        public void InitFilter(string t, List<string> events, AdditionalNames a, List<string> varfields,  ConditionLists j = null)
         {
+            onAdditionalNames = a;
             this.eventlist = events;
             events.Add("All");
             Init(t, events, varfields, true);
             LoadConditions(j);
         }
 
-        // used to start when inside a condition of an IF of a program action
+        // used to start when inside a condition of an IF of a program action (does not need additional names, already resolved)
 
         public void InitCondition(string t, List<string> varfields, ConditionLists j = null)
         {
             Init(t, null, varfields, true);
             LoadConditions(j);
         }
+
+        // used to start for a condition on an action form (does not need additional names, already resolved)
 
         public void InitCondition(string t, List<string> varfields, Condition j)
         {
@@ -103,9 +109,10 @@ namespace Conditions
 
         // Full start
 
-        public void Init(string t, List<string> el,                             // list of event types or null if event types not used
-                                   List<string> varfields,                      // list of additional variable/field names (must be set)
-                                   bool outerconditions)                        // outc selects if group outer action can be selected, else its OR
+        public void Init(   string t, 
+                            List<string> el,                             // list of event types or null if event types not used
+                            List<string> varfields,                      // list of additional variable/field names (must be set)
+                            bool outerconditions)                        // outc selects if group outer action can be selected, else its OR
         { 
             eventlist = el;
             additionalfieldnames = varfields;
@@ -739,10 +746,14 @@ namespace Conditions
                 {
                     cachedevents[evtype] = new List<string>();
 
-// TBD
-//                    List<string> classnames =Tools.GetPropertyFieldNames(EDDiscovery.EliteDangerous.JournalEntry.TypeOfJournalEntry(evtype));
-//                    if (classnames != null)
-//                        cachedevents[evtype].AddRange(classnames);
+                    if ( onAdditionalNames != null )
+                    {
+                        //  List<string> classnames =
+
+                        List<string> classnames = onAdditionalNames(evtype);
+                        if (classnames != null)
+                            cachedevents[evtype].AddRange(classnames);
+                    }
 
                     cachedevents[evtype].AddRange(additionalfieldnames);
                 }

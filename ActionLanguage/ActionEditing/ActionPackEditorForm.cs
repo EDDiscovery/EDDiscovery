@@ -42,7 +42,7 @@ namespace ActionLanguage
         }
 
         public delegate List<string> AdditionalNames(string ev);
-        public event AdditionalNames onAdditionalNames;
+        public event AdditionalNames onAdditionalNames;             // must set this, provide extra names
 
         public void Init(string t, ActionCoreController cp, string appfolder, ActionFile file, List<Tuple<string, string>> ev)
         {
