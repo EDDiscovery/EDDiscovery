@@ -42,17 +42,8 @@ namespace EDDiscovery
 
         public EDDiscoveryForm _discoveryForm;
 
-        List<EDCommander> commanders = null;
-
         string lastclosestname;
         SortedList<double, ISystem> lastclosestsystems;
-
-        string[] spanelbuttonlist = new string[]            // MUST match PopOuts list order
-        {
-            "S-Panel", "Trip-Panel", "Note Panel", "Route Tracker", // not in tabs
-            "Log", "Nearest Stars" , "Materials", "Commodities" , "Ledger" , "Journal", // matching PopOuts order
-            "Travel Grid" , "Screen Shot", "Statistics" , "Scan" , "Loadout" , "Exploration", "Synthesis" , "Missions", "Engineering", "Market Data"
-        };
 
         Bitmap[] tabbitmaps = new Bitmap[] { EDDiscovery.Properties.Resources.Log,      // Match pop out enum PopOuts, from start, list only ones which should be in tabs
                                         EDDiscovery.Properties.Resources.star,
@@ -129,14 +120,6 @@ namespace EDDiscovery
 
             richTextBoxNote.TextBoxChanged += richTextBoxNote_TextChanged;
 
-            LoadCommandersListBox();
-
-            comboBoxCustomPopOut.Enabled = false;
-
-            comboBoxCustomPopOut.Items.AddRange(spanelbuttonlist);
-            comboBoxCustomPopOut.SelectedIndex = 0;
-            comboBoxCustomPopOut.Enabled = true;
-
             userControlTravelGrid.Init(_discoveryForm, 0);       // primary first instance - this registers with events in discoveryform to get info
                                                         // then this display, to update its own controls..
             userControlTravelGrid.OnRedisplay += UpdatedDisplay;        // after the TG has redisplayed..
@@ -150,8 +133,6 @@ namespace EDDiscovery
             TabConfigure(tabStripMiddleRight,"Middle-Right",1002);
 
             textBoxTarget.SetAutoCompletor(EDDiscovery.DB.SystemClassDB.ReturnSystemListForAutoComplete);
-
-            buttonSync.Enabled = EDCommander.Current.SyncToEdsm | EDCommander.Current.SyncFromEdsm;
         }
 
         public void LoadControl()
@@ -262,27 +243,12 @@ namespace EDDiscovery
             // Move controls around on topright
 
             int width = panel_topright.Width;
-            int xpos = buttonMap2D.Left;
-            int ypos = buttonMap2D.Top;
-            int butoffsetx = buttonMap.Left - buttonMap2D.Left;
-            int butoffsety = buttonMap2D.Top - button_RefreshHistory.Top;
-
-            // Refresh, Cmdr label, Cmdr Dropdown
-            comboBoxCommander.Width = Math.Min(Math.Max(width - comboBoxCommander.Location.X - 4,64),192);
-
-            // always 2dmap, 3dmap
-            if (width >= xpos + butoffsetx * 3 + buttonSync.Width + 4)  // 2(r,cmd) + 4 (2dmap, 3dmap, popout, sync)
-            {
-                comboBoxCustomPopOut.Location = new Point(xpos + butoffsetx * 2, ypos);
-                buttonSync.Location = new Point(xpos + butoffsetx * 3, ypos);
-            }
-            else if (width >= xpos + butoffsetx * 2 + comboBoxCustomPopOut.Width + 4)  // 2(r,cmd) + 2 (2d,3d) + 2 (popout, sync)
-            {
-                comboBoxCustomPopOut.Location = new Point(xpos , ypos + butoffsety);
-                buttonSync.Location = new Point(xpos + butoffsetx * 1, ypos + butoffsety);
-            }
-            
-            panel_topright.Size = new Size(panel_topright.Width, buttonSync.Location.Y + buttonSync.Height + 6);
+            int xpos = 4;
+            int ypos = 4;
+            int butoffsetx = 100;
+            int butoffsety = 30;
+                
+            //panel_topright.Size = new Size(panel_topright.Width, buttonSync.Location.Y + buttonSync.Height + 6);
 
             // now do this in topright, because its moving around the lower panes. Works in here because topright won't be resized.
 
@@ -549,45 +515,6 @@ namespace EDDiscovery
 
         #region Clicks
 
-        public void LoadCommandersListBox()
-        {
-            comboBoxCommander.Enabled = false;
-            commanders = new List<EDCommander>();
-
-            commanders.Add(new EDCommander(-1, "Hidden log", "", false, false, false));
-            commanders.AddRange(EDCommander.GetList());
-
-            comboBoxCommander.DataSource = null;
-            comboBoxCommander.DataSource = commanders;
-            comboBoxCommander.ValueMember = "Nr";
-            comboBoxCommander.DisplayMember = "Name";
-
-            if (_discoveryForm.history.CommanderId == -1)
-                comboBoxCommander.SelectedIndex = 0;
-            else
-                comboBoxCommander.SelectedItem = EDCommander.Current;
-
-            comboBoxCommander.Enabled = true;
-        }
-
-        private void comboBoxCommander_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (comboBoxCommander.SelectedIndex >= 0 && comboBoxCommander.Enabled)     // DONT trigger during LoadCommandersListBox
-            {
-                var itm = (EDCommander)comboBoxCommander.SelectedItem;
-                if (itm.Nr >= 0)
-                    EDCommander.CurrentCmdrID = itm.Nr;
-
-                buttonSync.Enabled = EDCommander.Current.SyncToEdsm | EDCommander.Current.SyncFromEdsm;
-
-                _discoveryForm.RefreshHistoryAsync(currentcmdr: itm.Nr);                                   // which will cause DIsplay to be called as some point
-            }
-        }
-
-        public void buttonMap_Click(object sender, EventArgs e)
-        {
-            _discoveryForm.Open3DMap(userControlTravelGrid.GetCurrentHistoryEntry);
-        }
 
         private void Resort()       // user travel grid to say it resorted
         {
@@ -640,26 +567,6 @@ namespace EDDiscovery
             _discoveryForm.StoreSystemNote(notedisplayedhe, richTextBoxNote.Text.Trim(), send);
         }
 
-        public void buttonSync_Click(object sender, EventArgs e)
-        {
-            EDSMClass edsm = new EDSMClass();
-
-            if (!edsm.IsApiKeySet)
-            {
-                ExtendedControls.MessageBoxTheme.Show("Please ensure a commander is selected and it has a EDSM API key set");
-                return;
-            }
-
-            try
-            {
-                _discoveryForm.EdsmSync.StartSync(edsm, EDCommander.Current.SyncToEdsm, EDCommander.Current.SyncFromEdsm, EDDConfig.Instance.DefaultMapColour);
-            }
-            catch (Exception ex)
-            {
-                _discoveryForm.LogLine($"EDSM Sync failed: {ex.Message}");
-            }
-        }
-
         private void buttonEDDB_Click(object sender, EventArgs e)
         {
             HistoryEntry sys = userControlTravelGrid.GetCurrentHistoryEntry;
@@ -707,36 +614,6 @@ namespace EDDiscovery
                 }
             }
         }
-
-        public void RefreshButton(bool state)
-        {
-            button_RefreshHistory.Enabled = state;
-            _discoveryForm.PopOuts.SetRefreshState(state);
-        }
-
-        private void button_RefreshHistory_Click(object sender, EventArgs e)
-        {
-            _discoveryForm.LogLine("Refresh History.");
-            _discoveryForm.RefreshHistoryAsync(checkedsm: true);
-        }
-
-        private void button2DMap_Click(object sender, EventArgs e)
-        {
-            _discoveryForm.Open2DMap();
-        }
-        
-        private void comboBoxCustomPopOut_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (!comboBoxCustomPopOut.Enabled)
-                return;
-
-            _discoveryForm.PopOuts.PopOut((PopOutControl.PopOuts)(comboBoxCustomPopOut.SelectedIndex));
-
-            comboBoxCustomPopOut.Enabled = false;
-            comboBoxCustomPopOut.SelectedIndex = 0;
-            comboBoxCustomPopOut.Enabled = true;
-        }
-
 
         void TGPopOut()
         {
