@@ -29,6 +29,7 @@ using EDDiscovery.EliteDangerous.JournalEvents;
 using Newtonsoft.Json.Linq;
 using System.Threading.Tasks;
 using EDDiscovery.Forms;
+using EDDiscovery.EliteDangerous;
 
 namespace EDDiscovery.UserControls
 {
@@ -55,6 +56,7 @@ namespace EDDiscovery.UserControls
         public UserControlExploration()
         {
             InitializeComponent();
+            ColumnSystemName.AutoCompleteGenerator = SystemClassDB.ReturnOnlySystemsListForAutoComplete;
             _currentExplorationSet = new ExplorationSetClass();
             Name = "Exploration";
         }
@@ -134,9 +136,9 @@ namespace EDDiscovery.UserControls
 
    
 
-        private SystemClass GetSystem(string sysname)
+        private SystemClassDB GetSystem(string sysname)
         {
-            SystemClass sys = SystemClass.GetSystem(sysname);
+            SystemClassDB sys = SystemClassDB.GetSystem(sysname);
 
             if (sys == null)
             {
@@ -179,7 +181,7 @@ namespace EDDiscovery.UserControls
 
                 if (sys != null && currentSystem != null)
                 {
-                    double dist = SystemClass.Distance(sys, currentSystem);
+                    double dist = SystemClassDB.Distance(sys, currentSystem);
                     string strdist = dist >= 0 ? ((double)dist).ToString("0.00") : "";
                     dataGridViewExplore[1, rowindex].Value = strdist;
                 }
@@ -259,7 +261,7 @@ namespace EDDiscovery.UserControls
                                 note = gmo.description;
                         }
                     }
-                    dataGridViewExplore[idxNote, rowindex].Value = Tools.WordWrap(note, 60);
+                    dataGridViewExplore[idxNote, rowindex].Value = note.WordWrap(60);
                 }
 
                 if (sys == null && sysname != "")
@@ -292,7 +294,7 @@ namespace EDDiscovery.UserControls
 
         private void toolStripButtonSave_Click(object sender, EventArgs e)
         {
-            string explorepath = Path.Combine(Tools.GetAppDataDirectory(), "Exploration");
+            string explorepath = Path.Combine(EDDConfig.Options.AppDataDirectory, "Exploration");
             if (!Directory.Exists(explorepath))
                 Directory.CreateDirectory(explorepath);
 
@@ -323,7 +325,7 @@ namespace EDDiscovery.UserControls
 
         private void toolStripButtonLoad_Click(object sender, EventArgs e)
         {
-            string explorepath = Path.Combine(Tools.GetAppDataDirectory(), "Exploration");
+            string explorepath = Path.Combine(EDDConfig.Options.AppDataDirectory, "Exploration");
             if (!Directory.Exists(explorepath))
                 Directory.CreateDirectory(explorepath);
 
@@ -354,7 +356,7 @@ namespace EDDiscovery.UserControls
         private void toolStripButtonNew_Click(object sender, EventArgs e)
         {
             SaveFileDialog dlg = new SaveFileDialog();
-            string explorepath = Path.Combine(Tools.GetAppDataDirectory(), "Exploration");
+            string explorepath = Path.Combine(EDDConfig.Options.AppDataDirectory, "Exploration");
             if (!Directory.Exists(explorepath))
                 Directory.CreateDirectory(explorepath);
 
@@ -391,7 +393,7 @@ namespace EDDiscovery.UserControls
                 var row = dataGridViewExplore.Rows[e.RowIndex];
                 var cell = dataGridViewExplore[e.ColumnIndex, e.RowIndex];
 
-                SystemClass sys = SystemClass.GetSystem(sysname);
+                SystemClassDB sys = SystemClassDB.GetSystem(sysname);
 
                 if (sysname != "" && sys == null && !edsm.IsKnownSystem(sysname))
                 {
@@ -620,7 +622,7 @@ namespace EDDiscovery.UserControls
 
         private void toolStripButtonDelete_Click(object sender, EventArgs e)
         {
-            if (EDDiscovery.Forms.MessageBoxTheme.Show(_discoveryForm, "Are you sure you want to delete this route?", "Delete Route", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+            if (ExtendedControls.MessageBoxTheme.Show(_discoveryForm, "Are you sure you want to delete this route?", "Delete Route", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
             {
                 if (DeleteIsPermanent)
                 {
@@ -661,7 +663,7 @@ namespace EDDiscovery.UserControls
             }
             catch (IOException)
             {
-                EDDiscovery.Forms.MessageBoxTheme.Show(String.Format("There has been an error openning file {0}", ofd.FileName), "Import file",
+                ExtendedControls.MessageBoxTheme.Show(String.Format("There has been an error openning file {0}", ofd.FileName), "Import file",
                       MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
@@ -678,10 +680,10 @@ namespace EDDiscovery.UserControls
                 }
                 if (String.IsNullOrWhiteSpace(sysname))
                     continue;
-                SystemClass sc = GetSystem(sysname.Trim());
+                SystemClassDB sc = GetSystem(sysname.Trim());
                 if (sc == null)
                 {
-                    sc = new SystemClass(sysname.Trim());
+                    sc = new SystemClassDB(sysname.Trim());
                     countunknown++;
                 }
                 systems.Add(sc.name);
@@ -689,7 +691,7 @@ namespace EDDiscovery.UserControls
             }
             if (systems.Count == 0)
             {
-                EDDiscovery.Forms.MessageBoxTheme.Show(_discoveryForm,
+                ExtendedControls.MessageBoxTheme.Show(_discoveryForm,
                 String.Format("There are no known system names in the file import", countunknown),
                 "Unsaved", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return;
@@ -714,7 +716,7 @@ namespace EDDiscovery.UserControls
                 if (dataGridViewExplore.Rows.Count == 0
                     || (dataGridViewExplore.Rows.Count == 1 && dataGridViewExplore[0, 0].Value == null))
                 {
-                    EDDiscovery.Forms.MessageBoxTheme.Show(_discoveryForm,
+                    ExtendedControls.MessageBoxTheme.Show(_discoveryForm,
                     "There is no route to export ", "Export route", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                     return;
                 }
@@ -746,11 +748,11 @@ namespace EDDiscovery.UserControls
                             writer.WriteLine(sysname);
                     }
                 }
-                EDDiscovery.Forms.MessageBoxTheme.Show(String.Format("Export complete {0}", filename), "Export route");
+                ExtendedControls.MessageBoxTheme.Show(String.Format("Export complete {0}", filename), "Export route");
             }
             catch (IOException)
             {
-                EDDiscovery.Forms.MessageBoxTheme.Show(String.Format("Is file {0} open?", filename), "Export route",
+                ExtendedControls.MessageBoxTheme.Show(String.Format("Is file {0} open?", filename), "Export route",
                       MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
@@ -779,10 +781,10 @@ namespace EDDiscovery.UserControls
 
             if (obj == null)
                 return;
-            SystemClass sc = SystemClass.GetSystem((string)obj);
+            SystemClassDB sc = SystemClassDB.GetSystem((string)obj);
             if (sc == null)
             {
-                EDDiscovery.Forms.MessageBoxTheme.Show("Unknown system, system is without co-ordinates", "Edit bookmark", MessageBoxButtons.OK);
+                ExtendedControls.MessageBoxTheme.Show("Unknown system, system is without co-ordinates", "Edit bookmark", MessageBoxButtons.OK);
             }
             else
                 RoutingUtils.showBookmarkForm(_discoveryForm, sc, null, false);
@@ -801,12 +803,12 @@ namespace EDDiscovery.UserControls
                 return;
             if (String.IsNullOrWhiteSpace(systemName))
             {
-                EDDiscovery.Forms.MessageBoxTheme.Show("System name not set");
+                ExtendedControls.MessageBoxTheme.Show("System name not set");
                 return;
             }
 
             if (radius < 0 || radius > 1000.0) { 
-                EDDiscovery.Forms.MessageBoxTheme.Show("Radius should be a number 0.0 and 1000.0");
+                ExtendedControls.MessageBoxTheme.Show("Radius should be a number 0.0 and 1000.0");
                 return;
             }
 
@@ -829,17 +831,17 @@ namespace EDDiscovery.UserControls
             int countunknown = 0;
             foreach (String name in task.Result)
             {
-                SystemClass sc = GetSystem(name.Trim());
+                SystemClassDB sc = GetSystem(name.Trim());
                 if (sc == null)
                 {
-                    sc = new SystemClass(name.Trim());
+                    sc = new SystemClassDB(name.Trim());
                     countunknown++;
                 }
                 systems.Add(sc.name);
             }
             if (systems.Count == 0)
             {
-                EDDiscovery.Forms.MessageBoxTheme.Show(_discoveryForm,
+                ExtendedControls.MessageBoxTheme.Show(_discoveryForm,
                 String.Format("There are no known system names in the import", countunknown),
                 "Unsaved", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return;

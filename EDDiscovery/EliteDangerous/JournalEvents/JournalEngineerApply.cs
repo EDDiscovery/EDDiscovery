@@ -45,7 +45,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public override void FillInformation(out string summary, out string info, out string detailed) //V
         {
             summary = EventTypeStr.SplitCapsWord();
-            info = Tools.FieldBuilder("", Engineer, "Blueprint:", Blueprint, "Level:", Level, "Override:", Override);
+            info = BaseUtils.FieldBuilder.Build("", Engineer, "Blueprint:", Blueprint, "Level:", Level, "Override:", Override);
             detailed = "";
         }
     }

@@ -41,7 +41,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         {
             summary = EventTypeStr.SplitCapsWord();
             //info = Crew;
-            info = Tools.FieldBuilder("Crew", Crew, "Role", Role);
+            info = BaseUtils.FieldBuilder.Build("Crew", Crew, "Role", Role);
             detailed = "";
         }
     }

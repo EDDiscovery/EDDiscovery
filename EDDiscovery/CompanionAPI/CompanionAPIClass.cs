@@ -1,5 +1,4 @@
-﻿using EDDiscovery.HTTP;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -174,7 +173,7 @@ namespace EDDiscovery.CompanionAPI
         // Obtain a response, ensuring that we obtain the response's cookies
         private HttpWebResponse GetResponse(HttpWebRequest request)
         {
-            HttpCom.WriteLog("Companion Requesting ", request.RequestUri.ToNullSafeString());
+            BaseUtils.HttpCom.WriteLog("Companion Requesting ", request.RequestUri.ToNullSafeString());
             //Trace.WriteLine("Requesting " + request.RequestUri);
             HttpWebResponse response;
             try
@@ -186,7 +185,7 @@ namespace EDDiscovery.CompanionAPI
                 Trace.WriteLine("Failed to obtain response, error code " + wex.Status);
                 return null;
             }
-            HttpCom.WriteLog("Companion Response ", JsonConvert.SerializeObject(response));
+            BaseUtils.HttpCom.WriteLog("Companion Response ", JsonConvert.SerializeObject(response));
             //Trace.WriteLine("Response is " + JsonConvert.SerializeObject(response));
 
             UpdateCredentials(response);
@@ -403,10 +402,10 @@ namespace EDDiscovery.CompanionAPI
                 string data = reader.ReadToEnd();
                 if (data == null || data.Trim() == "")
                 {
-                    HttpCom.WriteLog("Companion No data returned", "");
+                    BaseUtils.HttpCom.WriteLog("Companion No data returned", "");
                     return null;
                 }
-                HttpCom.WriteLog("Companion Data is ", data);
+                BaseUtils.HttpCom.WriteLog("Companion Data is ", data);
                 return data;
             }
         }

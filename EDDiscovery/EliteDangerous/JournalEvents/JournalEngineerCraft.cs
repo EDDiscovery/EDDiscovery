@@ -81,13 +81,13 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public override void FillInformation(out string summary, out string info, out string detailed) //V
         {
             summary = EventTypeStr.SplitCapsWord();
-            info = Tools.FieldBuilder("", Engineer, "Blueprint:", Blueprint, "Level:", Level);
+            info = BaseUtils.FieldBuilder.Build("", Engineer, "Blueprint:", Blueprint, "Level:", Level);
 
             detailed = "";
             if (Ingredients != null)
             {
                 foreach (KeyValuePair<string, int> k in Ingredients)        // may be commodities or materials
-                    detailed += Tools.FieldBuilder("Name:", JournalFieldNaming.RMat(k.Key), "", k.Value) + "; ";
+                    detailed += BaseUtils.FieldBuilder.Build("Name:", JournalFieldNaming.RMat(k.Key), "", k.Value) + "; ";
             }
         }
     }

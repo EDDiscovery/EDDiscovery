@@ -140,8 +140,8 @@ namespace EDDiscovery.DB
             }
             catch (Exception ex)
             {
-                EDDiscovery.Forms.MessageBoxTheme.Show("UpgradeUserDB error: " + ex.Message);
-                EDDiscovery.Forms.MessageBoxTheme.Show(ex.StackTrace);
+                ExtendedControls.MessageBoxTheme.Show("UpgradeUserDB error: " + ex.Message);
+                ExtendedControls.MessageBoxTheme.Show(ex.StackTrace);
                 return false;
             }
         }

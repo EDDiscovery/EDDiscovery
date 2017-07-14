@@ -66,7 +66,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public override void FillInformation(out string summary, out string info, out string detailed) //V
         {
             summary = EventTypeStr.SplitCapsWord();
-            info = Tools.FieldBuilder("", CrimeType, "< on faction ", Faction, "Against ", VictimLocalised.Alt(Victim), "Cost ; credits", Fine, "Bounty ; credits", Bounty);
+            info = BaseUtils.FieldBuilder.Build("", CrimeType, "< on faction ", Faction, "Against ", VictimLocalised.Alt(Victim), "Cost ; credits", Fine, "Bounty ; credits", Bounty);
             detailed = "";
         }
     }

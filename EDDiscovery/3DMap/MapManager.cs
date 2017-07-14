@@ -20,6 +20,7 @@ using System.Text;
 using System.Windows.Forms;
 using EDDiscovery;
 using EDDiscovery.DB;
+using EDDiscovery.EliteDangerous;
 
 namespace EDDiscovery._3DMap
 {
@@ -46,7 +47,7 @@ namespace EDDiscovery._3DMap
             _formMap.Prepare(historysel, homesys, centersys, zoom, visited);
         }
 
-        public void SetPlanned(List<SystemClass> plannedr)
+        public void SetPlanned(List<SystemClassDB> plannedr)
         {
             _formMap.SetPlannedRoute(plannedr);
         }

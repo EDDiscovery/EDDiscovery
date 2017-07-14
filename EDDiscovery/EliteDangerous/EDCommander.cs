@@ -488,7 +488,7 @@ namespace EDDiscovery
         public bool SyncToEddn {  get { return syncToEddn; } set { syncToEddn = value;  } }
         public bool Deleted { get { return deleted; } set { deleted = value; } }
 
-        public string Info { get { return Tools.FieldBuilder(";To EDDN", syncToEddn, ";To EDSM", syncToEdsm, ";From EDSM", syncFromEdsm, ";CAPI" , CompanionAPI.CompanionCredentials.CredentialState(Name) == CompanionAPI.CompanionCredentials.State.CONFIRMED); } }
+        public string Info { get { return BaseUtils.FieldBuilder.Build(";To EDDN", syncToEddn, ";To EDSM", syncToEdsm, ";From EDSM", syncFromEdsm, ";CAPI" , CompanionAPI.CompanionCredentials.CredentialState(Name) == CompanionAPI.CompanionCredentials.State.CONFIRMED); } }
 
 #endregion
     }

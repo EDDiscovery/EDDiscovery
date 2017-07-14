@@ -20,18 +20,20 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using BaseUtils;
+using ActionLanguage;
 
 namespace EDDiscovery.Actions
 { 
-    public class ActionMaterialsCommoditiesBase : Action
+    public class ActionMaterialsCommoditiesBase : ActionBase
     {
         protected bool commodities = false;
 
         public override bool AllowDirectEditingOfUserData { get { return true; } }
 
-        public override bool ConfigurationMenu(Form parent, EDDiscoveryForm discoveryform, List<string> eventvars)
+        public override bool ConfigurationMenu(Form parent, ActionCoreController cp, List<string> eventvars)
         {
-            string promptValue = Forms.PromptSingleLine.ShowDialog(parent, "JID of event", UserData, (commodities) ? "Configure Commodities Command" : "Configure Material Command");
+            string promptValue = ExtendedControls.PromptSingleLine.ShowDialog(parent, "JID of event", UserData, (commodities) ? "Configure Commodities Command" : "Configure Material Command");
             if (promptValue != null)
             {
                 userdata = promptValue;
@@ -43,7 +45,7 @@ namespace EDDiscovery.Actions
         public override bool ExecuteAction(ActionProgramRun ap)
         {
             string res;
-            if (ap.functions.ExpandString(UserData, out res) != ConditionFunctions.ExpandResult.Failed)
+            if (ap.functions.ExpandString(UserData, out res) != Conditions.ConditionFunctions.ExpandResult.Failed)
             {
                 StringParser sp = new StringParser(res);
 
@@ -72,7 +74,7 @@ namespace EDDiscovery.Actions
                         return true;
                     }
 
-                    int jidindex = ap.actioncontroller.HistoryList.EntryOrder.FindIndex(x => x.Journalid == jid);
+                    int jidindex = (ap.actioncontroller as ActionController).HistoryList.EntryOrder.FindIndex(x => x.Journalid == jid);
 
                     if (jidindex == -1)
                     {
@@ -80,11 +82,11 @@ namespace EDDiscovery.Actions
                         return true;
                     }
 
-                    MaterialCommoditiesList mcl = ap.actioncontroller.HistoryList.EntryOrder[jidindex].MaterialCommodity;
+                    MaterialCommoditiesList mcl = (ap.actioncontroller as ActionController).HistoryList.EntryOrder[jidindex].MaterialCommodity;
                     List<MaterialCommodities> list = mcl.Sort(commodities);
 
                     ap[prefix + "Count"] = list.Count.ToString(System.Globalization.CultureInfo.InvariantCulture);
-                    ap[prefix + "IndexOf"] = ap.actioncontroller.HistoryList.EntryOrder[jidindex].Indexno.ToString(System.Globalization.CultureInfo.InvariantCulture);
+                    ap[prefix + "IndexOf"] = (ap.actioncontroller as ActionController).HistoryList.EntryOrder[jidindex].Indexno.ToString(System.Globalization.CultureInfo.InvariantCulture);
 
                     for ( int i = 0; i < list.Count; i++ )
                     {

@@ -147,27 +147,27 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
                 econ = "";
 
             info += " ";
-            info += Tools.FieldBuilder("Faction:", Faction, "State:", FactionState, "Allegiance:", Allegiance, "Economy:", econ);
+            info += BaseUtils.FieldBuilder.Build("Faction:", Faction, "State:", FactionState, "Allegiance:", Allegiance, "Economy:", econ);
             detailed = "";
 
             if ( Factions != null )
             {
                 foreach (FactionInformation i in Factions)
                 {
-                    detailed += Tools.FieldBuilder("", i.Name, "State:", i.FactionState, "Gov:", i.Government, "Inf:;%", (i.Influence * 100.0).ToString("0.0"), "Alg:", i.Allegiance) ;
+                    detailed += BaseUtils.FieldBuilder.Build("", i.Name, "State:", i.FactionState, "Gov:", i.Government, "Inf:;%", (i.Influence * 100.0).ToString("0.0"), "Alg:", i.Allegiance) ;
                     if (i.PendingStates != null)
                     {
-                        detailed += Tools.FieldBuilder(",", "Pending State:");
+                        detailed += BaseUtils.FieldBuilder.Build(",", "Pending State:");
                         foreach (JournalLocation.PowerStatesInfo state in i.PendingStates)
-                            detailed += Tools.FieldBuilder(",", state.State, "", state.Trend);
+                            detailed += BaseUtils.FieldBuilder.Build(",", state.State, "", state.Trend);
 
                     }
 
                     if (i.RecoveringStates != null)
                     {
-                        detailed += Tools.FieldBuilder(",", "Recovering State:");
+                        detailed += BaseUtils.FieldBuilder.Build(",", "Recovering State:");
                         foreach (JournalLocation.PowerStatesInfo state in i.RecoveringStates)
-                            detailed += Tools.FieldBuilder(",", state.State, "", state.Trend);
+                            detailed += BaseUtils.FieldBuilder.Build(",", state.State, "", state.Trend);
                     }
                     detailed += Environment.NewLine;
 

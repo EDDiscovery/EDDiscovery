@@ -35,7 +35,7 @@ namespace EDDiscovery.UserControls
         private EDDiscoveryForm discoveryform;
         private int displaynumber;                          // since this is plugged into something other than a TabControlForm, can't rely on its display number
         EventFilterSelector cfs = new EventFilterSelector();
-        private ConditionLists fieldfilter = new ConditionLists();
+        private Conditions.ConditionLists fieldfilter = new Conditions.ConditionLists();
         private Dictionary<long, DataGridViewRow> rowsbyjournalid = new Dictionary<long, DataGridViewRow>();
 
         private string DbFilterSave { get { return "JournalGridControlEventFilter" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
@@ -142,7 +142,7 @@ namespace EDDiscovery.UserControls
             result = HistoryList.FilterByJournalEvent(result, SQLiteDBClass.GetSettingString(DbFilterSave, "All"), out ftotal);
             toolTip1.SetToolTip(buttonFilter, (ftotal > 0) ? ("Total filtered out " + ftotal) : "Filter out entries based on event type");
 
-            result = fieldfilter.FilterHistory(result, discoveryform.Globals, out ftotal);
+            result = HistoryList.FilterHistory(result, fieldfilter, discoveryform.Globals, out ftotal);
             toolTip1.SetToolTip(buttonField, (ftotal > 0) ? ("Total filtered out " + ftotal) : "Filter out entries matching the field selection");
 
             dataGridViewJournal.Rows.Clear();
@@ -195,7 +195,7 @@ namespace EDDiscovery.UserControls
 
         private void AddNewEntry(HistoryEntry he, HistoryList hl)               // add if in event filter, and not in field filter..
         {
-            if (he.IsJournalEventInEventFilter(SQLiteDBClass.GetSettingString(DbFilterSave, "All")) && fieldfilter.FilterHistory(he, discoveryform.Globals))
+            if (he.IsJournalEventInEventFilter(SQLiteDBClass.GetSettingString(DbFilterSave, "All")) && HistoryList.FilterHistory(he, fieldfilter, discoveryform.Globals))
             {
                 AddNewJournalRow(true, he);
 
@@ -260,8 +260,10 @@ namespace EDDiscovery.UserControls
 
         private void buttonField_Click(object sender, EventArgs e)
         {
-            EDDiscovery.ConditionFilterForm frm = new EDDiscovery.ConditionFilterForm();
-            frm.InitFilter("Journal: Filter out fields", discoveryform.Globals.NameList, discoveryform, fieldfilter);
+            Conditions.ConditionFilterForm frm = new Conditions.ConditionFilterForm();
+            frm.InitFilter("Journal: Filter out fields", EDDiscovery.EliteDangerous.JournalEntry.GetListOfEventsWithOptMethod(false) ,
+                            (s) => { return BaseUtils.FieldNames.GetPropertyFieldNames(EDDiscovery.EliteDangerous.JournalEntry.TypeOfJournalEntry(s)); },
+                            discoveryform.Globals.NameList, fieldfilter);
             frm.TopMost = this.FindForm().TopMost;
             if (frm.ShowDialog(this.FindForm()) == DialogResult.OK)
             {
@@ -359,7 +361,7 @@ namespace EDDiscovery.UserControls
             }
 
             if (!edsm.ShowSystemInEDSM(rightclicksystem.System.name, id_edsm))
-                EDDiscovery.Forms.MessageBoxTheme.Show("System could not be found - has not been synched or EDSM is unavailable");
+                ExtendedControls.MessageBoxTheme.Show("System could not be found - has not been synched or EDSM is unavailable");
 
             this.Cursor = Cursors.Default;
         }
@@ -455,7 +457,7 @@ namespace EDDiscovery.UserControls
                     return (c < 3) ? dataGridViewJournal.Columns[c + ((c > 0) ? 1 : 0)].HeaderText : null;
                 };
 
-                grd.Csvformat = discoveryform.ExportControl.radioButtonCustomEU.Checked ? Export.CSVFormat.EU : Export.CSVFormat.USA_UK;
+                grd.Csvformat = discoveryform.ExportControl.radioButtonCustomEU.Checked ? BaseUtils.CVSWrite.CSVFormat.EU : BaseUtils.CVSWrite.CSVFormat.USA_UK;
                 if (grd.ToCSV(dlg.FileName))
                     System.Diagnostics.Process.Start(dlg.FileName);
             }

@@ -1,5 +1,5 @@
 ﻿using EDDiscovery.CompanionAPI;
-using EDDiscovery.Win32Constants;
+using BaseUtils.Win32Constants;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -106,7 +106,7 @@ namespace EDDiscovery.Forms
                         }
                         catch ( Exception ex)
                         {
-                            Forms.MessageBoxTheme.Show(this, "Login Failed:" + Environment.NewLine + ex.Message, "Companion API Login", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            ExtendedControls.MessageBoxTheme.Show(this, "Login Failed:" + Environment.NewLine + ex.Message, "Companion API Login", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         }
                     }
                 }
@@ -125,12 +125,12 @@ namespace EDDiscovery.Forms
                 }
                 catch (Exception ex)
                 {
-                    Forms.MessageBoxTheme.Show(this, "Companion API Login", "Failed to login to Frontier Companion API:" + Environment.NewLine + ex.Message, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    ExtendedControls.MessageBoxTheme.Show(this, "Companion API Login", "Failed to login to Frontier Companion API:" + Environment.NewLine + ex.Message, MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
             else if (buttonExtCAPI.Text == "Clear")
             {
-                if ( Forms.MessageBoxTheme.Show(this, "Confirm you wish to delete the credentials stored for this commander", "Companion API Clear Credentials", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
+                if ( ExtendedControls.MessageBoxTheme.Show(this, "Confirm you wish to delete the credentials stored for this commander", "Companion API Clear Credentials", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
                 {
                     capi.Logout();
                     CompanionCredentials.DeleteCredentials(textBoxBorderCmdr.Text);
@@ -144,7 +144,7 @@ namespace EDDiscovery.Forms
                 }
                 catch (Exception ex)
                 {
-                    Forms.MessageBoxTheme.Show(this, "Confirm Failed:" + Environment.NewLine + ex.Message, "Companion API Login", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    ExtendedControls.MessageBoxTheme.Show(this, "Confirm Failed:" + Environment.NewLine + ex.Message, "Companion API Login", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
 
@@ -156,7 +156,7 @@ namespace EDDiscovery.Forms
         {
             if (textBoxBorderCompanionLogin.Text.Length>0 || textBoxBorderCompanionPassword.Text.Length>0)
             {
-                if (Forms.MessageBoxTheme.Show("You have entered text in the CAPI login or password fields, do you want to abandon CAPI credential check?", "Warning CAPI Information", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.Cancel)
+                if (ExtendedControls.MessageBoxTheme.Show("You have entered text in the CAPI login or password fields, do you want to abandon CAPI credential check?", "Warning CAPI Information", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.Cancel)
                     return;
             }
 

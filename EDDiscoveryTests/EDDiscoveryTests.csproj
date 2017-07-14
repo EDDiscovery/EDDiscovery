@@ -152,6 +152,10 @@
     <Compile Include="TravelHistoryFilterTests.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\BaseUtils\BaseUtils.csproj">
+      <Project>{c657c881-f3e1-45ba-aca5-966348010414}</Project>
+      <Name>BaseUtils</Name>
+    </ProjectReference>
     <ProjectReference Include="..\EDDiscovery\EDDiscovery.csproj">
       <Project>{6EE10D92-E3E4-44D9-8E6B-851801B0B510}</Project>
       <Name>EDDiscovery</Name>

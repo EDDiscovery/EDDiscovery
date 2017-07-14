@@ -20,16 +20,18 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using BaseUtils;
+using ActionLanguage;
 
 namespace EDDiscovery.Actions
 {
-    public class ActionPopout : Action
+    public class ActionPopout : ActionBase
     {
         public override bool AllowDirectEditingOfUserData { get { return true; } }
 
-        public override bool ConfigurationMenu(Form parent, EDDiscoveryForm discoveryform, List<string> eventvars)
+        public override bool ConfigurationMenu(Form parent, ActionCoreController cp, List<string> eventvars)
         {
-            string promptValue = Forms.PromptSingleLine.ShowDialog(parent, "Popout command", UserData, "Configure Popout Command");
+            string promptValue = ExtendedControls.PromptSingleLine.ShowDialog(parent, "Popout command", UserData, "Configure Popout Command");
             if (promptValue != null)
             {
                 userdata = promptValue;
@@ -41,7 +43,7 @@ namespace EDDiscovery.Actions
         public override bool ExecuteAction(ActionProgramRun ap)
         {
             string res;
-            if (ap.functions.ExpandString(UserData, out res) != ConditionFunctions.ExpandResult.Failed)
+            if (ap.functions.ExpandString(UserData, out res) != Conditions.ConditionFunctions.ExpandResult.Failed)
             {
                 StringParser sp = new StringParser(res);
                 string prefix = "P_";
@@ -61,7 +63,7 @@ namespace EDDiscovery.Actions
                     cmdname = sp.NextWord();
                 }
 
-                Forms.PopOutControl poc = ap.actioncontroller.DiscoveryForm.PopOuts;
+                Forms.PopOutControl poc = (ap.actioncontroller as ActionController).DiscoveryForm.PopOuts;
 
                 if (cmdname == null)
                 {

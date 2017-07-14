@@ -36,7 +36,7 @@ namespace EDDiscovery
         public float Z { get; set; }
         public int Percentage { get; set; }          // foreground flags
         public float CalculatedDistance { get; set; }  // foreground.. what distance did we calc on..
-        public SystemClass.SystemAskType dBAsk { get; set; } // set for an explicit ask for unpopulated systems
+        public SystemClassDB.SystemAskType dBAsk { get; set; } // set for an explicit ask for unpopulated systems
         public int Count { get { return array1displayed ? array1vertices : array2vertices; } }
         public int CountJustMade { get { return array1displayed ? array2vertices : array1vertices; } }
         public bool Working = false;
@@ -79,9 +79,9 @@ namespace EDDiscovery
         public void FillFromDB()        // does not affect the display object
         {
             if (array1displayed)
-                array2vertices = SystemClass.GetSystemVector(Id, ref array2, ref carray2, dBAsk, Percentage, (x, y, z) => new Vector3(x, y, z));       // MAY return array/carray is null
+                array2vertices = SystemClassDB.GetSystemVector(Id, ref array2, ref carray2, dBAsk, Percentage, (x, y, z) => new Vector3(x, y, z));       // MAY return array/carray is null
             else
-                array1vertices = SystemClass.GetSystemVector(Id, ref array1, ref carray1, dBAsk, Percentage, (x, y, z) => new Vector3(x, y, z));
+                array1vertices = SystemClassDB.GetSystemVector(Id, ref array1, ref carray1, dBAsk, Percentage, (x, y, z) => new Vector3(x, y, z));
         }
 
         public void FillFromSystemList(List<HistoryEntry> cls) // does not affect the display object
@@ -399,7 +399,7 @@ namespace EDDiscovery
                     Debug.Assert(ok);
                     StarGrid grd = new StarGrid(id, xp, zp, Color.Transparent, 1.0F);           //A=0 means use default colour array
                     if (xp == 0 && zp == 0)                                     // sol grid, unpopulated stars please
-                        grd.dBAsk = SystemClass.SystemAskType.UnPopulatedStars;
+                        grd.dBAsk = SystemClassDB.SystemAskType.UnPopulatedStars;
 
                     grids.Add(grd);
                 }
@@ -410,10 +410,10 @@ namespace EDDiscovery
 
             int solid = GridId.Id(0, 0);                                    
             populatedgrid = new StarGrid(solid, 0, 0, Color.Transparent, 1.0F);      // Duplicate grid id but asking for populated stars
-            populatedgrid.dBAsk = SystemClass.SystemAskType.PopulatedStars;
+            populatedgrid.dBAsk = SystemClassDB.SystemAskType.PopulatedStars;
             grids.Add(populatedgrid);   // add last so shown last
 
-            long total = SystemClass.GetTotalSystemsFast();
+            long total = SystemClassDB.GetTotalSystemsFast();
 
             total = Math.Min(total, 10000000);                  // scaling limit at 10mil
             long offset = (total - 1000000) / 100000;           // scale down slowly.. experimental!

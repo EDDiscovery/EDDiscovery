@@ -18,6 +18,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using BaseUtils;
+using Conditions;
 
 namespace EDDiscovery.Actions
 {
@@ -70,7 +72,7 @@ namespace EDDiscovery.Actions
             }
         }
 
-        static public void SystemVars(ConditionVariables vars, EDDiscovery.DB.ISystem s, string prefix)
+        static public void SystemVars(ConditionVariables vars, EliteDangerous.ISystem s, string prefix)
         {
             if (s != null)
             {
@@ -124,7 +126,7 @@ namespace EDDiscovery.Actions
             vars[prefix + "Ship_CargoCapacity"] = cargo;
         }
 
-        static public void SystemVarsFurtherInfo(ActionProgramRun vars, HistoryList hl, EDDiscovery.DB.ISystem s, string prefix)
+        static public void SystemVarsFurtherInfo(ActionLanguage.ActionProgramRun vars, HistoryList hl, EliteDangerous.ISystem s, string prefix)
         {
             System.Globalization.CultureInfo ct = System.Globalization.CultureInfo.InvariantCulture;
 
@@ -133,7 +135,7 @@ namespace EDDiscovery.Actions
             vars[prefix + "FSDJumpsTotal"] = hl.GetFSDJumps(new TimeSpan(100000, 0, 0, 0)).ToString(ct);
         }
 
-        static public void HistoryEventFurtherInfo(ActionProgramRun vars, HistoryList hl, HistoryEntry he, string prefix)
+        static public void HistoryEventFurtherInfo(ActionLanguage.ActionProgramRun vars, HistoryList hl, HistoryEntry he, string prefix)
         {
             if (he != null)
             {
@@ -146,7 +148,7 @@ namespace EDDiscovery.Actions
             }
         }
 
-        static public void ShipModuleInformation(ActionProgramRun vars, EliteDangerous.ShipInformation si, string prefix)
+        static public void ShipModuleInformation(ActionLanguage.ActionProgramRun vars, EliteDangerous.ShipInformation si, string prefix)
         {
             if (si != null && si.Modules != null)
             {
@@ -171,7 +173,7 @@ namespace EDDiscovery.Actions
         }
 
 
-        static public void MissionInformation(ActionProgramRun vars, EliteDangerous.MissionList ml, string prefix)
+        static public void MissionInformation(ActionLanguage.ActionProgramRun vars, EliteDangerous.MissionList ml, string prefix)
         {
             vars[prefix + "_MissionCount"] = ml.Missions.Count.ToStringInvariant();
 

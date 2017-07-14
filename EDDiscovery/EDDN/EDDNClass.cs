@@ -17,7 +17,6 @@ using EDDiscovery.CompanionAPI;
 using EDDiscovery.EliteDangerous;
 using EDDiscovery.EliteDangerous.JournalEvents;
 
-using EDDiscovery.HTTP;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -31,7 +30,7 @@ using System.Text;
 
 namespace EDDiscovery.EDDN
 {
-    public class EDDNClass : HttpCom
+    public class EDDNClass : BaseUtils.HttpCom
     {
         public string commanderName;
         
@@ -215,7 +214,7 @@ namespace EDDiscovery.EDDN
         {
             try
             {
-                ResponseData resp = RequestPost(msg.ToString(), "");
+                BaseUtils.ResponseData resp = RequestPost(msg.ToString(), "");
 
                 if (resp.StatusCode == System.Net.HttpStatusCode.OK)
                     return true;

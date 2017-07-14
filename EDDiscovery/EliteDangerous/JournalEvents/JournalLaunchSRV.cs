@@ -43,7 +43,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public override void FillInformation(out string summary, out string info, out string detailed) //V
         {
             summary = EventTypeStr.SplitCapsWord();
-            info = Tools.FieldBuilder("Loadout:", Loadout);
+            info = BaseUtils.FieldBuilder.Build("Loadout:", Loadout);
             if (!PlayerControlled)
                 info += ", NPC Controlled";
             detailed = "";

@@ -19,16 +19,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using BaseUtils;
+using ActionLanguage;
 
 namespace EDDiscovery.Actions
 {
-    public class ActionLedger : Action
+    public class ActionLedger : ActionBase
     {
         public override bool AllowDirectEditingOfUserData { get { return true; } }
 
-        public override bool ConfigurationMenu(System.Windows.Forms.Form parent, EDDiscoveryForm discoveryform, List<string> eventvars)
+        public override bool ConfigurationMenu(System.Windows.Forms.Form parent, ActionCoreController cp, List<string> eventvars)
         {
-            string promptValue = Forms.PromptSingleLine.ShowDialog(parent, "JID of event", UserData, "Configure Ledger Command" );
+            string promptValue = ExtendedControls.PromptSingleLine.ShowDialog(parent, "JID of event", UserData, "Configure Ledger Command" );
             if (promptValue != null)
             {
                 userdata = promptValue;
@@ -40,7 +42,7 @@ namespace EDDiscovery.Actions
         public override bool ExecuteAction(ActionProgramRun ap)
         {
             string res;
-            if (ap.functions.ExpandString(UserData, out res) != ConditionFunctions.ExpandResult.Failed)
+            if (ap.functions.ExpandString(UserData, out res) != Conditions.ConditionFunctions.ExpandResult.Failed)
             {
                 StringParser sp = new StringParser(res);
 
@@ -77,16 +79,16 @@ namespace EDDiscovery.Actions
                         return true;
                     }
 
-                    Ledger ml = ap.actioncontroller.HistoryList.materialcommodititiesledger;
+                    Ledger ml = (ap.actioncontroller as ActionController).HistoryList.materialcommodititiesledger;
                     Ledger.Transaction tx = ml.Transactions.Find(x => x.jid == jid);// try and find it in the ledger
-                    int jidindex = ap.actioncontroller.HistoryList.EntryOrder.FindIndex(x => x.Journalid == jid);    // find it in the journal
+                    int jidindex = (ap.actioncontroller as ActionController).HistoryList.EntryOrder.FindIndex(x => x.Journalid == jid);    // find it in the journal
 
                     if ( tx == null && nextvalidentry ) // if not directly found..
                     {
                         while ( jidindex > 0 )      // go back, to 0.  if jidindex is -1 above, nothing happens
                         {
                             jidindex--;            // predec so we don't test first one
-                            jid = ap.actioncontroller.HistoryList.EntryOrder[jidindex].Journalid;
+                            jid = (ap.actioncontroller as ActionController).HistoryList.EntryOrder[jidindex].Journalid;
                             tx = ml.Transactions.Find(x => x.jid == jid);
                             if (tx != null)
                                 break;
@@ -100,7 +102,7 @@ namespace EDDiscovery.Actions
                     }
 
                     ap[prefix + "JID"] = jid.ToString(System.Globalization.CultureInfo.InvariantCulture);
-                    ap[prefix + "IndexOf"] = ap.actioncontroller.HistoryList.EntryOrder[jidindex].Indexno.ToString(System.Globalization.CultureInfo.InvariantCulture);
+                    ap[prefix + "IndexOf"] = (ap.actioncontroller as ActionController).HistoryList.EntryOrder[jidindex].Indexno.ToString(System.Globalization.CultureInfo.InvariantCulture);
                     ap[prefix + "UTCTime"] = tx.utctime.ToString("MM/dd/yyyy HH:mm:ss");
                     ap[prefix + "EntryType"] = tx.jtype.ToString();
                     ap[prefix + "Notes"] = tx.notes;

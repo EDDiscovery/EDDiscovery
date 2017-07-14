@@ -22,6 +22,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using EDDiscovery.DB;
+using EDDiscovery.EliteDangerous;
 
 namespace EDDiscovery.Forms
 {
@@ -65,14 +66,14 @@ namespace EDDiscovery.Forms
         private List<SystemLink> _systemLinkList;
 
         public AssignTravelLogSystemForm(EliteDangerous.JournalEvents.JournalLocOrJump vsc)
-            : this(new EDDiscovery.DB.InMemory.SystemClass { name = vsc.StarSystem, x = vsc.HasCoordinate ? vsc.StarPos.X : Double.NaN, y = vsc.HasCoordinate ? vsc.StarPos.Y : Double.NaN, z = vsc.HasCoordinate ? vsc.StarPos.Z : Double.NaN, id_edsm = vsc.EdsmID }, vsc.EventTimeLocal)
+            : this(new EliteDangerous.SystemClass { name = vsc.StarSystem, x = vsc.HasCoordinate ? vsc.StarPos.X : Double.NaN, y = vsc.HasCoordinate ? vsc.StarPos.Y : Double.NaN, z = vsc.HasCoordinate ? vsc.StarPos.Z : Double.NaN, id_edsm = vsc.EdsmID }, vsc.EventTimeLocal)
         {
         }
 
         public AssignTravelLogSystemForm(ISystem refsys, DateTime? visited = null)
         {
             InitializeComponent();
-            SystemClass.GetSystemAndAlternatives(refsys, out _linkSystem, out _alternatives, out _namestatus);
+            SystemClassDB.GetSystemAndAlternatives(refsys, out _linkSystem, out _alternatives, out _namestatus);
 
             this.tbLogSystemName.Text = refsys.name;
             this.tbVisitedDate.Text = visited == null ? "-" : visited.ToString();
@@ -87,7 +88,7 @@ namespace EDDiscovery.Forms
             tbManualSystemName.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
             tbManualSystemName.AutoCompleteSource = AutoCompleteSource.CustomSource;
 
-            tbManualSystemName.SetAutoCompletor(EDDiscovery.DB.SystemClass.ReturnSystemListForAutoComplete);
+            tbManualSystemName.SetAutoCompletor(EDDiscovery.DB.SystemClassDB.ReturnSystemListForAutoComplete);
 
             EDDiscovery.EDDTheme theme = EDDiscovery.EDDTheme.Instance;
             theme.ApplyToForm(this);
@@ -205,7 +206,7 @@ namespace EDDiscovery.Forms
         private void btnFindSystem_Click(object sender, EventArgs e)
         {
             string name = tbManualSystemName.Text.ToLower();
-            List<SystemClass> systems = SystemClass.GetSystemsByName(name);
+            List<SystemClassDB> systems = SystemClassDB.GetSystemsByName(name);
 
             if (systems.Count != 0)
             {

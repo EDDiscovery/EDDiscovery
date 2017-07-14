@@ -60,7 +60,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
                     if (comma)
                         info += ", ";
                     comma = true;
-                    info += Tools.FieldBuilder("Name:", JournalFieldNaming.RMat(m.Name), "", m.Count);
+                    info += BaseUtils.FieldBuilder.Build("Name:", JournalFieldNaming.RMat(m.Name), "", m.Count);
                 }
             }
 
@@ -71,7 +71,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
                     if (comma)
                         info += ", ";
                     comma = true;
-                    info += Tools.FieldBuilder("Name:", JournalFieldNaming.RMat(m.Name), "", m.Count);
+                    info += BaseUtils.FieldBuilder.Build("Name:", JournalFieldNaming.RMat(m.Name), "", m.Count);
                 }
             }
             detailed = "";

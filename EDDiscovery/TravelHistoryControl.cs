@@ -149,7 +149,7 @@ namespace EDDiscovery
             TabConfigure(tabStripBottomRight,"Bottom-Right",1001);
             TabConfigure(tabStripMiddleRight,"Middle-Right",1002);
 
-            textBoxTarget.SetAutoCompletor(EDDiscovery.DB.SystemClass.ReturnSystemListForAutoComplete);
+            textBoxTarget.SetAutoCompletor(EDDiscovery.DB.SystemClassDB.ReturnSystemListForAutoComplete);
 
             buttonSync.Enabled = EDCommander.Current.SyncToEdsm | EDCommander.Current.SyncFromEdsm;
         }
@@ -184,7 +184,7 @@ namespace EDDiscovery
         {
             PopOutControl.PopOuts i = (PopOutControl.PopOuts)(si + PopOutControl.PopOuts.StartTabButtons);
 
-            _discoveryForm.ActionRun("onPanelChange", "UserUIEvent", null, new ConditionVariables(new string[] { "PanelTabName", PopOutControl.popoutinfo[i].WindowRefName, "PanelTabTitle" , PopOutControl.popoutinfo[i].WindowTitlePrefix , "PanelName" , t.Name }));
+            _discoveryForm.ActionRun("onPanelChange", "UserUIEvent", null, new Conditions.ConditionVariables(new string[] { "PanelTabName", PopOutControl.popoutinfo[i].WindowRefName, "PanelTabTitle" , PopOutControl.popoutinfo[i].WindowTitlePrefix , "PanelName" , t.Name }));
 
             return PopOutControl.Create(i);
         }
@@ -451,8 +451,8 @@ namespace EDDiscovery
                     ISystem homesys = _discoveryForm.GetHomeSystem();
 
                     toolTipEddb.SetToolTip(textBoxHomeDist, $"Distance to home system ({homesys.name})");
-                    textBoxHomeDist.Text = SystemClass.Distance(he.System, homesys).ToString(SingleCoordinateFormat);
-                    textBoxSolDist.Text = SystemClass.Distance(he.System, 0, 0, 0).ToString(SingleCoordinateFormat);
+                    textBoxHomeDist.Text = SystemClassDB.Distance(he.System, homesys).ToString(SingleCoordinateFormat);
+                    textBoxSolDist.Text = SystemClassDB.Distance(he.System, 0, 0, 0).ToString(SingleCoordinateFormat);
                 }
                 else
                 {
@@ -646,7 +646,7 @@ namespace EDDiscovery
 
             if (!edsm.IsApiKeySet)
             {
-                EDDiscovery.Forms.MessageBoxTheme.Show("Please ensure a commander is selected and it has a EDSM API key set");
+                ExtendedControls.MessageBoxTheme.Show("Please ensure a commander is selected and it has a EDSM API key set");
                 return;
             }
 
@@ -703,7 +703,7 @@ namespace EDDiscovery
                     if (url.Length > 0)         // may pass back empty string if not known, this solves another exception
                         Process.Start(url);
                     else
-                        EDDiscovery.Forms.MessageBoxTheme.Show("System unknown to EDSM");
+                        ExtendedControls.MessageBoxTheme.Show("System unknown to EDSM");
                 }
             }
         }
@@ -769,7 +769,7 @@ namespace EDDiscovery
 
                 HistoryEntry cs = _discoveryForm.history.GetLastWithPosition;
                 if ( cs != null )
-                    textBoxTargetDist.Text = SystemClass.Distance(cs.System, x, y, z).ToString("0.00");
+                    textBoxTargetDist.Text = SystemClassDB.Distance(cs.System, x, y, z).ToString("0.00");
 
                 toolTipEddb.SetToolTip(textBoxTarget, "Position is " + x.ToString("0.00") + "," + y.ToString("0.00") + "," + z.ToString("0.00"));
             }
@@ -789,7 +789,7 @@ namespace EDDiscovery
             if (url.Length > 0)         // may pass back empty string if not known, this solves another exception
                 Process.Start(url);
             else
-                EDDiscovery.Forms.MessageBoxTheme.Show("System unknown to EDSM");
+                ExtendedControls.MessageBoxTheme.Show("System unknown to EDSM");
 
 
         }

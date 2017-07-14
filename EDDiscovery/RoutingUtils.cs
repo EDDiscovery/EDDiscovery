@@ -18,6 +18,7 @@ using System.Windows.Forms;
 using EDDiscovery.DB;
 using EDDiscovery.EDSM;
 using EDDiscovery.Forms;
+using EDDiscovery.EliteDangerous;
 
 namespace EDDiscovery
 {
@@ -57,7 +58,7 @@ namespace EDDiscovery
                     else
                     {
                         bool createbookmark = false;
-                        if ((prompt && EDDiscovery.Forms.MessageBoxTheme.Show("Make a bookmark on " + sc.name + " and set as target?", "Make Bookmark", MessageBoxButtons.OKCancel) == DialogResult.OK) || !prompt)
+                        if ((prompt && ExtendedControls.MessageBoxTheme.Show("Make a bookmark on " + sc.name + " and set as target?", "Make Bookmark", MessageBoxButtons.OKCancel) == DialogResult.OK) || !prompt)
                         {
                             createbookmark = true;
                         }
@@ -98,7 +99,7 @@ namespace EDDiscovery
             _discoveryForm.NewTargetSet();          // tells everyone who cares a new target was set
 
             if (msgboxtext != null && prompt)
-                EDDiscovery.Forms.MessageBoxTheme.Show(msgboxtext, "Create a target", MessageBoxButtons.OK);
+                ExtendedControls.MessageBoxTheme.Show(msgboxtext, "Create a target", MessageBoxButtons.OK);
 
         }
 

@@ -21,6 +21,7 @@ using EDDiscovery.DB;
 
 namespace EDDiscoveryTests
 {
+    using EDDiscovery.EliteDangerous;
     using EDDiscovery.UserControls;
 #if false
     // Visual Studio Test Framework
@@ -40,7 +41,7 @@ namespace EDDiscoveryTests
     [TestClass]
     public class TravelHistoryFilterTests
     {
-        private ISystem sol = new EDDiscovery.DB.InMemory.SystemClass
+        private ISystem sol = new EDDiscovery.EliteDangerous.SystemClass
         {
             name = "Sol",
             x = 0,
