@@ -22,9 +22,9 @@ using System.Threading.Tasks;
 using System.IO;
 using System.Net;
 
-namespace EDDiscovery.HTTP
+namespace BaseUtils
 {
-    class DownloadFileHandler
+    public class DownloadFileHandler
     {
         static public bool DownloadFile(string url, string filename)
         {
@@ -71,7 +71,7 @@ namespace EDDiscovery.HTTP
             var etagFilename = filename == null ? null : filename + ".etag";
             var tmpEtagFilename = filename == null ? null : etagFilename + ".tmp";
 
-            HttpCom.WriteLog("DownloadFile", url);
+            BaseUtils.HttpCom.WriteLog("DownloadFile", url);
             var request = (HttpWebRequest)HttpWebRequest.Create(url);
             request.UserAgent = "EDDiscovery v" + Assembly.GetExecutingAssembly().FullName.Split(',')[1].Split('=')[1];
             request.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
@@ -95,7 +95,7 @@ namespace EDDiscovery.HTTP
                 {
                     using (var response = getResponse())
                     {
-                        HttpCom.WriteLog("Response", response.StatusCode.ToString());
+                        BaseUtils.HttpCom.WriteLog("Response", response.StatusCode.ToString());
 
                         if (cancelRequested?.Invoke() == true)
                             return false;
@@ -126,7 +126,7 @@ namespace EDDiscovery.HTTP
                     if (code == HttpStatusCode.NotModified)
                     {
                         System.Diagnostics.Trace.WriteLine("DownloadFile: " + filename + " up to date (etag).");
-                        HttpCom.WriteLog(filename, "up to date (etag).");
+                        BaseUtils.HttpCom.WriteLog(filename, "up to date (etag).");
                         using (FileStream stream = File.Open(filename, FileMode.Open, FileAccess.Read, FileShare.Read))
                         {
                             processor(false, stream);
@@ -135,7 +135,7 @@ namespace EDDiscovery.HTTP
                     }
                     System.Diagnostics.Trace.WriteLine("DownloadFile Exception:" + ex.Message);
                     System.Diagnostics.Trace.WriteLine(ex.StackTrace);
-                    HttpCom.WriteLog("Exception", ex.Message);
+                    BaseUtils.HttpCom.WriteLog("Exception", ex.Message);
                     return false;
                 }
                 catch (Exception ex)
@@ -145,7 +145,7 @@ namespace EDDiscovery.HTTP
 
                     System.Diagnostics.Trace.WriteLine("DownloadFile Exception:" + ex.Message);
                     System.Diagnostics.Trace.WriteLine(ex.StackTrace);
-                    HttpCom.WriteLog("DownloadFile Exception", ex.Message);
+                    BaseUtils.HttpCom.WriteLog("DownloadFile Exception", ex.Message);
                     return false;
                 }
             });

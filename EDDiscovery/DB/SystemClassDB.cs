@@ -1647,7 +1647,7 @@ namespace EDDiscovery.DB
             logLine("Resyncing all downloaded EDSM systems with local database." + Environment.NewLine + "This will take a while.");
 
             bool newfile;
-            bool success = EDDiscovery.HTTP.DownloadFileHandler.DownloadFile(EDSMClass.ServerAddress + "dump/systemsWithCoordinates.json", edsmsystems, out newfile, (n, s) =>
+            bool success = BaseUtils.DownloadFileHandler.DownloadFile(EDSMClass.ServerAddress + "dump/systemsWithCoordinates.json", edsmsystems, out newfile, (n, s) =>
             {
                 SQLiteConnectionSystem.CreateTempSystemsTable();
 
@@ -1873,7 +1873,7 @@ namespace EDDiscovery.DB
 
             string systemFileName = Path.Combine(eddbdir, "systems_populated.jsonl");
 
-            bool success = EDDiscovery.HTTP.DownloadFileHandler.DownloadFile("http://robert.astronet.se/Elite/eddb/v5/systems_populated.jsonl", systemFileName);
+            bool success = BaseUtils.DownloadFileHandler.DownloadFile("http://robert.astronet.se/Elite/eddb/v5/systems_populated.jsonl", systemFileName);
 
             if (success)
             {

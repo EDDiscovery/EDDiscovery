@@ -20,8 +20,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EDDiscovery.HTTP
-{
+namespace BaseUtils
+{ 
     public class GitHubRelease
     {
         JObject jo;

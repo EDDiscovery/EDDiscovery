@@ -13,8 +13,6 @@
  * 
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
-using EDDiscovery.EliteDangerous.JournalEvents;
-using EDDiscovery.HTTP;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -26,7 +24,7 @@ using System.Reflection;
 using System.Security.Cryptography;
 using System.Text;
 
-namespace EDDiscovery.HTTP
+namespace BaseUtils
 {
     public class GitHubClass : HttpCom
     {

@@ -36,7 +36,6 @@ namespace EDDiscovery
 
         private EDDConfig()
         {
-            LogIndex = DateTime.Now.ToString("yyyyMMdd");
         }
 
         public static EDDConfig Instance            // Singleton pattern
@@ -50,8 +49,6 @@ namespace EDDiscovery
                 return _instance;
             }
         }
-
-        readonly public string LogIndex;            // fixed string
 
         #region Discrete Controls
 

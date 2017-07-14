@@ -13,22 +13,24 @@
  * 
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
-using EDDiscovery;
+
 using System;
 using System.Collections.Specialized;
 using System.IO;
 using System.Net;
 using System.Text;
 
-namespace EDDiscovery.HTTP
+namespace BaseUtils
 {
     public class HttpCom
     {
-        protected string _serverAddress;
+        static public string LogPath = null;           // set path to cause logging to occur
 
         public String MimeType { get; set; } = "application/json; charset=utf-8";
 
-        protected ResponseData RequestPost(string json, string action, NameValueCollection headers = null, bool handleException = false)
+        protected string _serverAddress;
+
+        protected ResponseData RequestPost(string json, string action, NameValueCollection headers = null, bool handleException = false )
         {
             if (_serverAddress == null || _serverAddress.Length == 0)           // for debugging, set _serveraddress empty
             {
@@ -68,19 +70,15 @@ namespace EDDiscovery.HTTP
                     // Get the response.
                     //request.Timeout = 740 * 1000;
 
-                    if (EDDiscoveryForm.EDDConfig.EDSMLog)
-                        WriteLog("POST " + request.RequestUri, postData);
+                    WriteLog("POST " + request.RequestUri, postData);
 
                     HttpWebResponse response = (HttpWebResponse)request.GetResponse();
 
                     var data = getResponseData(response);
                     response.Close();
 
-                    if (EDDiscoveryForm.EDDConfig.EDSMLog)
-                    {
-                        //TODO: Log Status Code too
-                        WriteLog(data.Body, "");
-                    }
+                    //TODO: Log Status Code too
+                    WriteLog(data.Body, "");
 
                     return data;
                 }
@@ -100,7 +98,8 @@ namespace EDDiscovery.HTTP
                         System.Diagnostics.Trace.WriteLine("Response code : " + httpResponse.StatusCode);
                         System.Diagnostics.Trace.WriteLine("Response body : " + data.Body);
                         System.Diagnostics.Trace.WriteLine(ex.StackTrace);
-                        if (EDDiscoveryForm.EDDConfig.EDSMLog)
+
+                        if (LogPath != null)
                         {
                             WriteLog("WebException" + ex.Message, "");
                             WriteLog($"HTTP Error code: {httpResponse.StatusCode}", "");
@@ -119,10 +118,7 @@ namespace EDDiscovery.HTTP
 
                 System.Diagnostics.Trace.WriteLine("Exception : " + ex.Message);
                 System.Diagnostics.Trace.WriteLine(ex.StackTrace);
-                if (EDDiscoveryForm.EDDConfig.EDSMLog)
-                {
-                    WriteLog("Exception" + ex.Message, "");
-                }
+                WriteLog("Exception" + ex.Message, "");
 
                 return new ResponseData(HttpStatusCode.BadRequest);
             }
@@ -164,18 +160,14 @@ namespace EDDiscovery.HTTP
                     // Get the response.
                     //request.Timeout = 740 * 1000;
 
-                    if (EDDiscoveryForm.EDDConfig.EDSMLog)
-                        WriteLog("PATCH " + request.RequestUri, postData);
+                    WriteLog("PATCH " + request.RequestUri, postData);
 
                     HttpWebResponse response = (HttpWebResponse)request.GetResponse();
 
                     var data = getResponseData(response);
                     response.Close();
 
-                    if (EDDiscoveryForm.EDDConfig.EDSMLog)
-                    {
-                        WriteLog(data.Body, "");
-                    }
+                    WriteLog(data.Body, "");
 
                     return data;
                 }
@@ -195,7 +187,8 @@ namespace EDDiscovery.HTTP
                         System.Diagnostics.Trace.WriteLine("Response code : " + httpResponse.StatusCode);
                         System.Diagnostics.Trace.WriteLine("Response body : " + data.Body);
                         System.Diagnostics.Trace.WriteLine(ex.StackTrace);
-                        if (EDDiscoveryForm.EDDConfig.EDSMLog)
+
+                        if (LogPath != null)
                         {
                             WriteLog("WebException" + ex.Message, "");
                             WriteLog($"HTTP Error code: {httpResponse.StatusCode}", "");
@@ -214,11 +207,9 @@ namespace EDDiscovery.HTTP
 
                 System.Diagnostics.Trace.WriteLine("Exception : " + ex.Message);
                 System.Diagnostics.Trace.WriteLine(ex.StackTrace);
-                if (EDDiscoveryForm.EDDConfig.EDSMLog)
-                {
-                    WriteLog("Exception" + ex.Message, "");
-                }
 
+                WriteLog("Exception" + ex.Message, "");
+ 
                 return new ResponseData(HttpStatusCode.BadRequest);
             }
         }
@@ -250,10 +241,8 @@ namespace EDDiscovery.HTTP
                     }
                     request.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
 
-                    if (EDDiscoveryForm.EDDConfig.EDSMLog)
-                        WriteLog("GET " + request.RequestUri, "");
-
-
+                    WriteLog("GET " + request.RequestUri, "");
+                    
                     // Get the response.
                     //request.Timeout = 740 * 1000;
                     HttpWebResponse response = (HttpWebResponse)request.GetResponse();
@@ -261,10 +250,7 @@ namespace EDDiscovery.HTTP
                     var data = getResponseData(response);
                     response.Close();
 
-                    if (EDDiscoveryForm.EDDConfig.EDSMLog)
-                    {
-                        WriteLog(data.Body, "");
-                    }
+                    WriteLog(data.Body, "");
 
                     return data;
                 }
@@ -289,7 +275,8 @@ namespace EDDiscovery.HTTP
                             System.Diagnostics.Trace.WriteLine("Response body : " + data.Body);
                         }
                         System.Diagnostics.Trace.WriteLine(ex.StackTrace);
-                        if (EDDiscoveryForm.EDDConfig.EDSMLog)
+
+                        if (LogPath != null)
                         {
                             WriteLog("WebException" + ex.Message, "");
                             if (httpResponse != null)
@@ -313,11 +300,7 @@ namespace EDDiscovery.HTTP
                 System.Diagnostics.Trace.WriteLine("Exception : " + ex.Message);
                 System.Diagnostics.Trace.WriteLine(ex.StackTrace);
 
-                if (EDDiscoveryForm.EDDConfig.EDSMLog)
-                {
-                    WriteLog("Exception" + ex.Message, "");
-                }
-
+                WriteLog("Exception" + ex.Message, "");
 
                 return new ResponseData(HttpStatusCode.BadRequest);
             }
@@ -349,8 +332,7 @@ namespace EDDiscovery.HTTP
                     }
                     request.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
 
-                    if (EDDiscoveryForm.EDDConfig.EDSMLog)
-                        WriteLog("DELETE " + request.RequestUri, "");
+                    WriteLog("DELETE " + request.RequestUri, "");
 
 
                     // Get the response.
@@ -360,10 +342,7 @@ namespace EDDiscovery.HTTP
                     var data = getResponseData(response);
                     response.Close();
 
-                    if (EDDiscoveryForm.EDDConfig.EDSMLog)
-                    {
-                        WriteLog(data.Body, "");
-                    }
+                    WriteLog(data.Body, "");
 
                     return data;
                 }
@@ -384,7 +363,8 @@ namespace EDDiscovery.HTTP
                         System.Diagnostics.Trace.WriteLine("Response code : " + httpResponse.StatusCode);
                         System.Diagnostics.Trace.WriteLine("Response body : " + data.Body);
                         System.Diagnostics.Trace.WriteLine(ex.StackTrace);
-                        if (EDDiscoveryForm.EDDConfig.EDSMLog)
+
+                        if (LogPath!=null)
                         {
                             WriteLog("WebException" + ex.Message, "");
                             WriteLog($"HTTP Error code: {httpResponse.StatusCode}", "");
@@ -404,11 +384,7 @@ namespace EDDiscovery.HTTP
                 System.Diagnostics.Trace.WriteLine("Exception : " + ex.Message);
                 System.Diagnostics.Trace.WriteLine(ex.StackTrace);
 
-                if (EDDiscoveryForm.EDDConfig.EDSMLog)
-                {
-                    WriteLog("Exception" + ex.Message, "");
-                }
-
+                WriteLog("Exception" + ex.Message, "");
 
                 return new ResponseData(HttpStatusCode.BadRequest, error: true);
             }
@@ -419,20 +395,20 @@ namespace EDDiscovery.HTTP
         private static Object LOCK = new Object();
         static public  void WriteLog(string str1, string str2)
         {
+            if (LogPath == null)
+                return;
+
             if (str1 != null && str1.ToUpper().Contains("PASSWORD"))
                 str1 = "** This string contains a password so not logging it.**";
 
             if (str2 != null && str2.ToUpper().Contains("PASSWORD"))
                 str2 = "** This string contains a password so not logging it.**";
 
-            if (EDDiscoveryForm.EDDConfig.EDSMLog == false)
-                return;
-
             try
             {
                 lock(LOCK)
                 {
-                    string filename = Path.Combine(EDDConfig.Options.AppDataDirectory, "Log", "EDD_" + EDDiscoveryForm.EDDConfig.LogIndex + ".log");
+                    string filename = Path.Combine(LogPath, "Log", "HTTP_" + DateTime.Now.ToString("yyyyMMdd") + ".log");
 
                     using (StreamWriter w = File.AppendText(filename))
                     {
@@ -446,6 +422,7 @@ namespace EDDiscovery.HTTP
                 System.Diagnostics.Trace.WriteLine(ex.StackTrace);
             }
         }
+
         private ResponseData getResponseData(HttpWebResponse response, bool? error = null)
         {
             if (response == null)
