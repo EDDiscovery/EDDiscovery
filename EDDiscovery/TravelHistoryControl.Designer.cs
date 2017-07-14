@@ -52,12 +52,6 @@ namespace EDDiscovery
             this.textBoxHomeDist = new ExtendedControls.TextBoxBorder();
             this.buttonRoss = new ExtendedControls.DrawnPanel();
             this.buttonEDDB = new ExtendedControls.DrawnPanel();
-            this.comboBoxCustomPopOut = new ExtendedControls.ComboBoxCustom();
-            this.button_RefreshHistory = new ExtendedControls.ButtonExt();
-            this.buttonMap2D = new ExtendedControls.ButtonExt();
-            this.comboBoxCommander = new ExtendedControls.ComboBoxCustom();
-            this.buttonMap = new ExtendedControls.ButtonExt();
-            this.buttonSync = new ExtendedControls.ButtonExt();
             this.textBoxSolDist = new ExtendedControls.TextBoxBorder();
             this.splitContainerLeftRight = new System.Windows.Forms.SplitContainer();
             this.splitContainerLeft = new System.Windows.Forms.SplitContainer();
@@ -65,6 +59,7 @@ namespace EDDiscovery
             this.tabStripBottom = new ExtendedControls.TabStrip();
             this.splitContainerRightOuter = new System.Windows.Forms.SplitContainer();
             this.panelTarget = new System.Windows.Forms.Panel();
+            this.buttonEDSMTarget = new ExtendedControls.DrawnPanel();
             this.labelTarget = new System.Windows.Forms.Label();
             this.panelNoteArea = new System.Windows.Forms.Panel();
             this.richTextBoxNote = new ExtendedControls.RichTextBoxScroll();
@@ -92,11 +87,9 @@ namespace EDDiscovery
             this.textBoxBody = new ExtendedControls.TextBoxBorder();
             this.textBoxSystem = new ExtendedControls.TextBoxBorder();
             this.panel_topright = new System.Windows.Forms.Panel();
-            this.labelCMDR = new System.Windows.Forms.Label();
             this.splitContainerRightInner = new System.Windows.Forms.SplitContainer();
             this.tabStripMiddleRight = new ExtendedControls.TabStrip();
             this.tabStripBottomRight = new ExtendedControls.TabStrip();
-            this.buttonEDSMTarget = new ExtendedControls.DrawnPanel();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerLeftRight)).BeginInit();
             this.splitContainerLeftRight.Panel1.SuspendLayout();
             this.splitContainerLeftRight.Panel2.SuspendLayout();
@@ -112,7 +105,6 @@ namespace EDDiscovery
             this.panelTarget.SuspendLayout();
             this.panelNoteArea.SuspendLayout();
             this.panel_system.SuspendLayout();
-            this.panel_topright.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerRightInner)).BeginInit();
             this.splitContainerRightInner.Panel1.SuspendLayout();
             this.splitContainerRightInner.Panel2.SuspendLayout();
@@ -236,118 +228,6 @@ namespace EDDiscovery
             this.toolTipEddb.SetToolTip(this.buttonEDDB, "Click to show system in EDDB");
             this.buttonEDDB.Click += new System.EventHandler(this.buttonEDDB_Click);
             // 
-            // comboBoxCustomPopOut
-            // 
-            this.comboBoxCustomPopOut.ArrowWidth = 1;
-            this.comboBoxCustomPopOut.BorderColor = System.Drawing.Color.White;
-            this.comboBoxCustomPopOut.ButtonColorScaling = 0.5F;
-            this.comboBoxCustomPopOut.DataSource = null;
-            this.comboBoxCustomPopOut.DisplayMember = "";
-            this.comboBoxCustomPopOut.DropDownBackgroundColor = System.Drawing.Color.Gray;
-            this.comboBoxCustomPopOut.DropDownHeight = 250;
-            this.comboBoxCustomPopOut.DropDownWidth = 150;
-            this.comboBoxCustomPopOut.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.comboBoxCustomPopOut.ItemHeight = 13;
-            this.comboBoxCustomPopOut.Location = new System.Drawing.Point(151, 37);
-            this.comboBoxCustomPopOut.MouseOverBackgroundColor = System.Drawing.Color.Silver;
-            this.comboBoxCustomPopOut.Name = "comboBoxCustomPopOut";
-            this.comboBoxCustomPopOut.ScrollBarButtonColor = System.Drawing.Color.LightGray;
-            this.comboBoxCustomPopOut.ScrollBarColor = System.Drawing.Color.LightGray;
-            this.comboBoxCustomPopOut.ScrollBarWidth = 16;
-            this.comboBoxCustomPopOut.SelectedIndex = -1;
-            this.comboBoxCustomPopOut.SelectedItem = null;
-            this.comboBoxCustomPopOut.SelectedValue = null;
-            this.comboBoxCustomPopOut.Size = new System.Drawing.Size(65, 23);
-            this.comboBoxCustomPopOut.TabIndex = 18;
-            this.comboBoxCustomPopOut.Text = "comboBoxCustom1";
-            this.toolTipEddb.SetToolTip(this.comboBoxCustomPopOut, "Open another window");
-            this.comboBoxCustomPopOut.ValueMember = "";
-            this.comboBoxCustomPopOut.SelectedIndexChanged += new System.EventHandler(this.comboBoxCustomPopOut_SelectedIndexChanged);
-            // 
-            // button_RefreshHistory
-            // 
-            this.button_RefreshHistory.BorderColorScaling = 1.25F;
-            this.button_RefreshHistory.ButtonColorScaling = 0.5F;
-            this.button_RefreshHistory.ButtonDisabledScaling = 0.5F;
-            this.button_RefreshHistory.Location = new System.Drawing.Point(6, 6);
-            this.button_RefreshHistory.Name = "button_RefreshHistory";
-            this.button_RefreshHistory.Size = new System.Drawing.Size(65, 23);
-            this.button_RefreshHistory.TabIndex = 2;
-            this.button_RefreshHistory.Text = "Refresh";
-            this.toolTipEddb.SetToolTip(this.button_RefreshHistory, "Perform an EDSM synchronisation then refresh the list");
-            this.button_RefreshHistory.UseVisualStyleBackColor = true;
-            this.button_RefreshHistory.Click += new System.EventHandler(this.button_RefreshHistory_Click);
-            // 
-            // buttonMap2D
-            // 
-            this.buttonMap2D.BorderColorScaling = 1.25F;
-            this.buttonMap2D.ButtonColorScaling = 0.5F;
-            this.buttonMap2D.ButtonDisabledScaling = 0.5F;
-            this.buttonMap2D.Location = new System.Drawing.Point(6, 36);
-            this.buttonMap2D.Name = "buttonMap2D";
-            this.buttonMap2D.Size = new System.Drawing.Size(65, 23);
-            this.buttonMap2D.TabIndex = 3;
-            this.buttonMap2D.Text = "2D map";
-            this.toolTipEddb.SetToolTip(this.buttonMap2D, "Open the 2D Map");
-            this.buttonMap2D.UseVisualStyleBackColor = true;
-            this.buttonMap2D.Click += new System.EventHandler(this.button2DMap_Click);
-            // 
-            // comboBoxCommander
-            // 
-            this.comboBoxCommander.ArrowWidth = 1;
-            this.comboBoxCommander.BorderColor = System.Drawing.Color.Red;
-            this.comboBoxCommander.ButtonColorScaling = 0.5F;
-            this.comboBoxCommander.DataSource = null;
-            this.comboBoxCommander.DisplayMember = "";
-            this.comboBoxCommander.DropDownBackgroundColor = System.Drawing.Color.Gray;
-            this.comboBoxCommander.DropDownHeight = 200;
-            this.comboBoxCommander.DropDownWidth = 173;
-            this.comboBoxCommander.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.comboBoxCommander.ItemHeight = 13;
-            this.comboBoxCommander.Location = new System.Drawing.Point(114, 6);
-            this.comboBoxCommander.MouseOverBackgroundColor = System.Drawing.Color.Silver;
-            this.comboBoxCommander.Name = "comboBoxCommander";
-            this.comboBoxCommander.ScrollBarButtonColor = System.Drawing.Color.LightGray;
-            this.comboBoxCommander.ScrollBarColor = System.Drawing.Color.LightGray;
-            this.comboBoxCommander.ScrollBarWidth = 16;
-            this.comboBoxCommander.SelectedIndex = -1;
-            this.comboBoxCommander.SelectedItem = null;
-            this.comboBoxCommander.SelectedValue = null;
-            this.comboBoxCommander.Size = new System.Drawing.Size(173, 23);
-            this.comboBoxCommander.TabIndex = 0;
-            this.toolTipEddb.SetToolTip(this.comboBoxCommander, "Select your commander. Use Settings page to configure and add additional commande" +
-        "rs");
-            this.comboBoxCommander.ValueMember = "";
-            this.comboBoxCommander.SelectedIndexChanged += new System.EventHandler(this.comboBoxCommander_SelectedIndexChanged);
-            // 
-            // buttonMap
-            // 
-            this.buttonMap.BorderColorScaling = 1.25F;
-            this.buttonMap.ButtonColorScaling = 0.5F;
-            this.buttonMap.ButtonDisabledScaling = 0.5F;
-            this.buttonMap.Location = new System.Drawing.Point(80, 36);
-            this.buttonMap.Name = "buttonMap";
-            this.buttonMap.Size = new System.Drawing.Size(65, 23);
-            this.buttonMap.TabIndex = 4;
-            this.buttonMap.Text = "3D map";
-            this.toolTipEddb.SetToolTip(this.buttonMap, "Open the 3D Map");
-            this.buttonMap.UseVisualStyleBackColor = true;
-            this.buttonMap.Click += new System.EventHandler(this.buttonMap_Click);
-            // 
-            // buttonSync
-            // 
-            this.buttonSync.BorderColorScaling = 1.25F;
-            this.buttonSync.ButtonColorScaling = 0.5F;
-            this.buttonSync.ButtonDisabledScaling = 0.5F;
-            this.buttonSync.Location = new System.Drawing.Point(6, 65);
-            this.buttonSync.Name = "buttonSync";
-            this.buttonSync.Size = new System.Drawing.Size(92, 23);
-            this.buttonSync.TabIndex = 4;
-            this.buttonSync.Text = "EDSM Sync";
-            this.toolTipEddb.SetToolTip(this.buttonSync, "Send history to your EDSM account (make sure the EDSM ID is set in settings)");
-            this.buttonSync.UseVisualStyleBackColor = true;
-            this.buttonSync.Click += new System.EventHandler(this.buttonSync_Click);
-            // 
             // textBoxSolDist
             // 
             this.textBoxSolDist.BorderColor = System.Drawing.Color.Transparent;
@@ -448,6 +328,22 @@ namespace EDDiscovery
             this.panelTarget.Size = new System.Drawing.Size(337, 32);
             this.panelTarget.TabIndex = 44;
             this.panelTarget.Resize += new System.EventHandler(this.panelTarget_Resize);
+            // 
+            // buttonEDSMTarget
+            // 
+            this.buttonEDSMTarget.DrawnImage = null;
+            this.buttonEDSMTarget.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.buttonEDSMTarget.ImageSelected = ExtendedControls.DrawnPanel.ImageType.InverseText;
+            this.buttonEDSMTarget.ImageText = "EDSM";
+            this.buttonEDSMTarget.Location = new System.Drawing.Point(278, 6);
+            this.buttonEDSMTarget.MarginSize = 0;
+            this.buttonEDSMTarget.MouseOverColor = System.Drawing.Color.White;
+            this.buttonEDSMTarget.MouseSelectedColor = System.Drawing.Color.Green;
+            this.buttonEDSMTarget.MouseSelectedColorEnable = true;
+            this.buttonEDSMTarget.Name = "buttonEDSMTarget";
+            this.buttonEDSMTarget.Size = new System.Drawing.Size(44, 20);
+            this.buttonEDSMTarget.TabIndex = 23;
+            this.buttonEDSMTarget.Click += new System.EventHandler(this.buttonEDSMTarget_Click);
             // 
             // labelTarget
             // 
@@ -749,29 +645,12 @@ namespace EDDiscovery
             // 
             // panel_topright
             // 
-            this.panel_topright.Controls.Add(this.comboBoxCustomPopOut);
-            this.panel_topright.Controls.Add(this.button_RefreshHistory);
-            this.panel_topright.Controls.Add(this.buttonMap2D);
-            this.panel_topright.Controls.Add(this.comboBoxCommander);
-            this.panel_topright.Controls.Add(this.labelCMDR);
-            this.panel_topright.Controls.Add(this.buttonMap);
-            this.panel_topright.Controls.Add(this.buttonSync);
             this.panel_topright.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel_topright.Location = new System.Drawing.Point(0, 0);
             this.panel_topright.Name = "panel_topright";
             this.panel_topright.Size = new System.Drawing.Size(337, 100);
             this.panel_topright.TabIndex = 26;
             this.panel_topright.Resize += new System.EventHandler(this.panel_topright_Resize);
-            // 
-            // labelCMDR
-            // 
-            this.labelCMDR.AutoSize = true;
-            this.labelCMDR.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelCMDR.Location = new System.Drawing.Point(77, 9);
-            this.labelCMDR.Name = "labelCMDR";
-            this.labelCMDR.Size = new System.Drawing.Size(31, 13);
-            this.labelCMDR.TabIndex = 17;
-            this.labelCMDR.Text = "Cmdr";
             // 
             // splitContainerRightInner
             // 
@@ -813,22 +692,6 @@ namespace EDDiscovery
             this.tabStripBottomRight.StripAtTop = true;
             this.tabStripBottomRight.TabIndex = 0;
             // 
-            // buttonEDSMTarget
-            // 
-            this.buttonEDSMTarget.DrawnImage = null;
-            this.buttonEDSMTarget.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonEDSMTarget.ImageSelected = ExtendedControls.DrawnPanel.ImageType.InverseText;
-            this.buttonEDSMTarget.ImageText = "EDSM";
-            this.buttonEDSMTarget.Location = new System.Drawing.Point(278, 6);
-            this.buttonEDSMTarget.MarginSize = 0;
-            this.buttonEDSMTarget.MouseOverColor = System.Drawing.Color.White;
-            this.buttonEDSMTarget.MouseSelectedColor = System.Drawing.Color.Green;
-            this.buttonEDSMTarget.MouseSelectedColorEnable = true;
-            this.buttonEDSMTarget.Name = "buttonEDSMTarget";
-            this.buttonEDSMTarget.Size = new System.Drawing.Size(44, 20);
-            this.buttonEDSMTarget.TabIndex = 23;
-            this.buttonEDSMTarget.Click += new System.EventHandler(this.buttonEDSMTarget_Click);
-            // 
             // TravelHistoryControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -854,8 +717,6 @@ namespace EDDiscovery
             this.panelNoteArea.PerformLayout();
             this.panel_system.ResumeLayout(false);
             this.panel_system.PerformLayout();
-            this.panel_topright.ResumeLayout(false);
-            this.panel_topright.PerformLayout();
             this.splitContainerRightInner.Panel1.ResumeLayout(false);
             this.splitContainerRightInner.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerRightInner)).EndInit();
@@ -865,9 +726,6 @@ namespace EDDiscovery
         }
 
         #endregion
-
-        private ExtendedControls.ButtonExt button_RefreshHistory;
-        private ExtendedControls.ButtonExt buttonMap;
         private ExtendedControls.TextBoxBorder textBoxSystem;
         private System.Windows.Forms.Panel panel_system;
         private System.Windows.Forms.Label label_Z;
@@ -877,9 +735,7 @@ namespace EDDiscovery
         private ExtendedControls.TextBoxBorder textBoxY;
         private ExtendedControls.TextBoxBorder textBoxX;
         private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.Label labelCMDR;
         private ExtendedControls.RichTextBoxScroll richTextBoxNote;
-        private ExtendedControls.ButtonExt buttonSync;
         private System.Windows.Forms.Label label9;
         private ExtendedControls.TextBoxBorder textBoxVisits;
         private System.Windows.Forms.Label labelNote;
@@ -896,9 +752,7 @@ namespace EDDiscovery
         private ExtendedControls.DrawnPanel buttonRoss;
         private System.Windows.Forms.Label labelHomeSystem;
         private ExtendedControls.TextBoxBorder textBoxHomeDist;
-        private ExtendedControls.ComboBoxCustom comboBoxCommander;
         private System.Windows.Forms.Panel panel_topright;
-        private ExtendedControls.ButtonExt buttonMap2D;
         private ExtendedControls.DrawnPanel buttonEDSM;
         private System.Windows.Forms.Label labelTarget;
         private ExtendedControls.TextBoxBorder textBoxTargetDist;
@@ -909,7 +763,6 @@ namespace EDDiscovery
         private System.Windows.Forms.Panel panelTarget;
         private System.Windows.Forms.Panel panelNoteArea;
         private UserControls.UserControlTravelGrid userControlTravelGrid;
-        private ExtendedControls.ComboBoxCustom comboBoxCustomPopOut;
         private System.Windows.Forms.SplitContainer splitContainerRightOuter;
         private ExtendedControls.TabStrip tabStripBottom;
         private ExtendedControls.TabStrip tabStripMiddleRight;

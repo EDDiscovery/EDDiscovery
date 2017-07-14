@@ -172,6 +172,11 @@ namespace EDDiscovery
             // Some components require the controller to be initialized
             InitializeComponent();
 
+            comboBoxCustomPopOut.Enabled = false;
+            comboBoxCustomPopOut.Items.AddRange(PopOutControl.spanelbuttonlist);
+            comboBoxCustomPopOut.SelectedIndex = 0;
+            comboBoxCustomPopOut.Enabled = true;
+
             label_version.Text = EDDConfig.Options.VersionDisplayString;
 
             PopOuts = new PopOutControl(this);
@@ -464,21 +469,21 @@ namespace EDDiscovery
 
         private void Controller_RefreshStarting()
         {
-            travelHistoryControl1.RefreshButton(false);
+            RefreshButton(false);
             journalViewControl1.RefreshButton(false);
             actioncontroller.ActionRun("onRefreshStart", "ProgramEvent");
         }
 
         private void Controller_RefreshCommanders()
         {
-            travelHistoryControl1.LoadCommandersListBox();             // in case a new commander has been detected
+            LoadCommandersListBox();             // in case a new commander has been detected
             exportControl1.PopulateCommanders();
             settings.UpdateCommandersListBox();
         }
 
         private void Controller_RefreshComplete()
         {
-            travelHistoryControl1.RefreshButton(true);
+            RefreshButton(true);
             journalViewControl1.RefreshButton(true);
             actioncontroller.ActionRunOnRefresh();
 
@@ -747,7 +752,7 @@ namespace EDDiscovery
 
         private void show3DMapsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            TravelControl.buttonMap_Click(sender, e);
+            Open3DMap(travelHistoryControl1.GetTravelHistoryCurrent);
         }
 
         private void forceEDDBUpdateToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1151,6 +1156,19 @@ namespace EDDiscovery
             }
         }
 
+        private IntPtr SendMessage(int msg, IntPtr wparam, IntPtr lparam)
+        {
+            Message message = Message.Create(this.Handle, msg, wparam, lparam);
+            this.WndProc(ref message);
+            return message.Result;
+        }
+
+        private void MouseDownCAPTION( object sender, MouseEventArgs e)
+        {
+            ((Control)sender).Capture = false;
+            SendMessage(WM.NCLBUTTONDOWN, (System.IntPtr)HT.CAPTION, (System.IntPtr)0);
+        }
+
         private void RecordPosition()
         {
             if (FormWindowState.Minimized != WindowState)
@@ -1301,11 +1319,11 @@ namespace EDDiscovery
 
         public bool SelectTabPage(string name)
         {
-            foreach (TabPage p in tabControl1.TabPages)
+            foreach (TabPage p in tabControlMain.TabPages)
             {
                 if (p.Text.Equals(name, StringComparison.InvariantCultureIgnoreCase))
                 {
-                    tabControl1.SelectTab(p);
+                    tabControlMain.SelectTab(p);
                     return true;
                 }
             }
@@ -1315,7 +1333,7 @@ namespace EDDiscovery
 
         private void tabControl1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            ActionRun("onTabChange", "UserUIEvent", null, new Conditions.ConditionVariables("TabName", tabControl1.TabPages[tabControl1.SelectedIndex].Text));
+            ActionRun("onTabChange", "UserUIEvent", null, new Conditions.ConditionVariables("TabName", tabControlMain.TabPages[tabControlMain.SelectedIndex].Text));
         }
 
         public Conditions.ConditionVariables Globals { get { return actioncontroller.Globals; } }
@@ -1327,6 +1345,101 @@ namespace EDDiscovery
         { return actioncontroller.ActionRun(name, triggertype,he,additionalvars,flagstart,now); }
 
         #endregion
+
+
+        public void LoadCommandersListBox()
+        {
+            comboBoxCommander.Enabled = false;
+            comboBoxCommander.Items.Clear();            // comboBox is nicer with items
+            comboBoxCommander.Items.Add("Hidden Log");
+            comboBoxCommander.Items.AddRange((from EDCommander c in EDCommander.GetList() select c.Name).ToList());
+            if (history.CommanderId == -1)
+            {
+                comboBoxCommander.SelectedIndex = 0;
+                buttonExtEDSMSync.Enabled = false;
+            }
+            else
+            {
+                comboBoxCommander.SelectedItem = EDCommander.Current.Name;
+                buttonExtEDSMSync.Enabled = EDCommander.Current.SyncToEdsm | EDCommander.Current.SyncFromEdsm;
+            }
+
+            comboBoxCommander.Enabled = true;
+        }
+
+        private void comboBoxCommander_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (comboBoxCommander.SelectedIndex >= 0 && comboBoxCommander.Enabled)     // DONT trigger during LoadCommandersListBox
+            {
+                if (comboBoxCommander.SelectedIndex == 0)
+                    RefreshHistoryAsync(currentcmdr: -1);                                   // which will cause DIsplay to be called as some point
+                else
+                {
+                    var itm = (from EDCommander c in EDCommander.GetList() where c.Name.Equals(comboBoxCommander.Text) select c).ToList();
+
+                    EDCommander.CurrentCmdrID = itm[0].Nr;
+                    RefreshHistoryAsync(currentcmdr: EDCommander.CurrentCmdrID);                                   // which will cause DIsplay to be called as some point
+                }
+            }
+
+        }
+
+        private void buttonExt3dmap_Click(object sender, EventArgs e)
+        {
+            Open3DMap(travelHistoryControl1.GetTravelHistoryCurrent);
+        }
+
+        private void buttonExt2dmap_Click(object sender, EventArgs e)
+        {
+            Open2DMap();
+        }
+
+        public void RefreshButton(bool state)
+        {
+            buttonExtRefresh.Enabled = state;
+            PopOuts.SetRefreshState(state);
+        }
+
+        private void buttonExtRefresh_Click(object sender, EventArgs e)
+        {
+            LogLine("Refresh History.");
+            RefreshHistoryAsync(checkedsm: true);
+        }
+
+        private void buttonExtEDSMSync_Click(object sender, EventArgs e)
+        {
+            EDSMClass edsm = new EDSMClass();
+
+            if (!edsm.IsApiKeySet)
+            {
+                ExtendedControls.MessageBoxTheme.Show("Please ensure a commander is selected and it has a EDSM API key set");
+                return;
+            }
+
+            try
+            {
+                EdsmSync.StartSync(edsm, EDCommander.Current.SyncToEdsm, EDCommander.Current.SyncFromEdsm, EDDConfig.Instance.DefaultMapColour);
+            }
+            catch (Exception ex)
+            {
+                LogLine($"EDSM Sync failed: {ex.Message}");
+            }
+
+        }
+
+        private void comboBoxCustomPopOut_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (!comboBoxCustomPopOut.Enabled)
+                return;
+
+            PopOuts.PopOut((PopOutControl.PopOuts)(comboBoxCustomPopOut.SelectedIndex));
+
+            comboBoxCustomPopOut.Enabled = false;
+            comboBoxCustomPopOut.SelectedIndex = 0;
+            comboBoxCustomPopOut.Enabled = true;
+        }
+
+
 
     }
 }

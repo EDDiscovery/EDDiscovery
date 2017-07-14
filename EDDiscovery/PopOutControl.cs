@@ -76,6 +76,13 @@ namespace EDDiscovery.Forms
             MaxTabButtons = MarketData - StartTabButtons,
         };
 
+        static public string[] spanelbuttonlist = new string[]            // MUST match PopOuts list order
+        {
+            "S-Panel", "Trip-Panel", "Note Panel", "Route Tracker", // not in tabs
+            "Log", "Nearest Stars" , "Materials", "Commodities" , "Ledger" , "Journal", // matching PopOuts order
+            "Travel Grid" , "Screen Shot", "Statistics" , "Scan" , "Loadout" , "Exploration", "Synthesis" , "Missions", "Engineering", "Market Data"
+        };
+
         public class PopOutInfo
         {
             public string WindowTitlePrefix;
