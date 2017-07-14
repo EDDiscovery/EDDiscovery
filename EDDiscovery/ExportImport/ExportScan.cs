@@ -30,7 +30,7 @@ using EDDiscovery.UserControls;
 
 namespace EDDiscovery.Export
 {
-    public class ExportScan : ExportBase
+    public class ExportScan : BaseUtils.CVSWrite
     {
         private List<JournalScan> scans;
         private bool ShowPlanets;
@@ -52,8 +52,9 @@ namespace EDDiscovery.Export
         }
 
 
-        override public bool GetData(EDDiscoveryForm _discoveryForm)
+        override public bool GetData(Object d)
         {
+            EDDiscoveryForm _discoveryForm = (EDDiscoveryForm)d;
             if (EDSMList == false)
             {
                 var filter = _discoveryForm.TravelControl.GetPrimaryFilter;
@@ -67,7 +68,7 @@ namespace EDDiscovery.Export
             }
             else
             {
-                string explorepath = Path.Combine(Tools.GetAppDataDirectory(), "Exploration");
+                string explorepath = Path.Combine(EDDConfig.Options.AppDataDirectory, "Exploration");
                 if (!Directory.Exists(explorepath))
                     Directory.CreateDirectory(explorepath);
 
@@ -89,7 +90,7 @@ namespace EDDiscovery.Export
 
                     foreach (string system in _currentExplorationSet.Systems)
                     {
-                        List<long> edsmidlist = SystemClass.GetEdsmIdsFromName(system);
+                        List<long> edsmidlist = SystemClassDB.GetEdsmIdsFromName(system);
 
                         if (edsmidlist.Count > 0)
                         {
@@ -301,7 +302,7 @@ namespace EDDiscovery.Export
             }
             catch (IOException)
             {
-                EDDiscovery.Forms.MessageBoxTheme.Show(String.Format("Is file {0} open?", filename), "Export Scan",
+                ExtendedControls.MessageBoxTheme.Show(String.Format("Is file {0} open?", filename), "Export Scan",
                       MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return false;
             }

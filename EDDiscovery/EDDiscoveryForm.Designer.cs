@@ -202,7 +202,7 @@ namespace EDDiscovery
             this.showAllPopoutsInTaskBarToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.showAllInTaskBarToolStripMenuItem,
             this.turnOffAllTransparencyToolStripMenuItem});
-            this.showAllPopoutsInTaskBarToolStripMenuItem.Image = global::EDDiscovery.Properties.Resources.popout;
+            this.showAllPopoutsInTaskBarToolStripMenuItem.Image = global::EDDiscovery.Properties.Resources.popout1;
             this.showAllPopoutsInTaskBarToolStripMenuItem.Name = "showAllPopoutsInTaskBarToolStripMenuItem";
             this.showAllPopoutsInTaskBarToolStripMenuItem.Size = new System.Drawing.Size(197, 22);
             this.showAllPopoutsInTaskBarToolStripMenuItem.Text = "&Pop-outs";

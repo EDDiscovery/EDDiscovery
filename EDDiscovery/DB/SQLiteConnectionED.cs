@@ -578,7 +578,7 @@ namespace EDDiscovery.DB
 
                 System.Diagnostics.Trace.WriteLine("Exception: " + ex.Message);
                 System.Diagnostics.Trace.WriteLine("Trace: " + ex.StackTrace);
-                EDDiscovery.Forms.MessageBoxTheme.Show($"UpgradeDB{newVersion} error: " + ex.Message);
+                ExtendedControls.MessageBoxTheme.Show($"UpgradeDB{newVersion} error: " + ex.Message);
             }
 
             doAfterQueries?.Invoke();

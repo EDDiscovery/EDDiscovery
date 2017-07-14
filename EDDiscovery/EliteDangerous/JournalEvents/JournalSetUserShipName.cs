@@ -57,7 +57,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public override void FillInformation(out string summary, out string info, out string detailed) //V
         {
             summary = EventTypeStr.SplitCapsWord();
-            info = Tools.FieldBuilder("",ShipName,"", ShipIdent, "On:" , Ship);
+            info = BaseUtils.FieldBuilder.Build("",ShipName,"", ShipIdent, "On:" , Ship);
             detailed = "";
         }
     }

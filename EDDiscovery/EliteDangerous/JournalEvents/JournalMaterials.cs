@@ -68,19 +68,19 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             detailed = "";
             if (Raw != null && Raw.Length>0)
             {
-                info += Tools.FieldBuilder("Raw:; ", Raw.Length);
+                info += BaseUtils.FieldBuilder.Build("Raw:; ", Raw.Length);
                 detailed += "Raw:" + List(Raw);
             }
             if (Manufactured != null && Manufactured.Length>0)
             {
-                info += Tools.FieldBuilder("Manufactured:; ", Manufactured.Length);// NOT DONE
+                info += BaseUtils.FieldBuilder.Build("Manufactured:; ", Manufactured.Length);// NOT DONE
                 if (detailed.Length > 0)
                     detailed += Environment.NewLine;
                 detailed += "Manufactured:" + List(Manufactured);
             }
             if (Encoded != null && Encoded.Length > 0)
             {
-                info += Tools.FieldBuilder("Encoded:; ", Encoded.Length);// NOT DONE
+                info += BaseUtils.FieldBuilder.Build("Encoded:; ", Encoded.Length);// NOT DONE
                 if (detailed.Length > 0)
                     detailed += Environment.NewLine;
                 detailed += "Manufactured:" + List(Encoded);
@@ -94,7 +94,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             foreach (Material m in mat)
             {
                 sb.Append(Environment.NewLine);
-                sb.Append(Tools.FieldBuilder(" ", JournalFieldNaming.RMat(m.Name), "; items", m.Count));
+                sb.Append(BaseUtils.FieldBuilder.Build(" ", JournalFieldNaming.RMat(m.Name), "; items", m.Count));
             }
             return sb.ToString();
         }

@@ -191,12 +191,12 @@ namespace EDDiscovery.UserControls
             string topline = "";
             string bottomLine="";
             string firstSystemName = _currentRoute.Systems[0];
-            SystemClass firstSystem = SystemClass.GetSystem(firstSystemName);
-            SystemClass finalSystem = SystemClass.GetSystem(_currentRoute.Systems[_currentRoute.Systems.Count - 1]);
+            SystemClassDB firstSystem = SystemClassDB.GetSystem(firstSystemName);
+            SystemClassDB finalSystem = SystemClassDB.GetSystem(_currentRoute.Systems[_currentRoute.Systems.Count - 1]);
             if (finalSystem != null)
             {
                 string mesg = "remain";
-                double distX = SystemClass.Distance(currentSystem.System, finalSystem);
+                double distX = SystemClassDB.Distance(currentSystem.System, finalSystem);
                 //Small hack to pull the jump range from TripPanel1
                 var jumpRange = SQLiteDBClass.GetSettingDouble("TripPanel1" + "JumpRange", -1.0);
                 if (jumpRange > 0)
@@ -211,16 +211,16 @@ namespace EDDiscovery.UserControls
             {
                 topline = String.Format("{0} {1} WPs remain", _currentRoute.Name, _currentRoute.Systems.Count);
             }
-            SystemClass nearestSystem = null;
+            SystemClassDB nearestSystem = null;
             double minDist = double.MaxValue;
             int nearestidx = -1;
             for (int i = 0; i < _currentRoute.Systems.Count; i++)
             {
                 String sys = _currentRoute.Systems[i];
-                SystemClass sc = SystemClass.GetSystem(sys);
+                SystemClassDB sc = SystemClassDB.GetSystem(sys);
                 if (sc == null)
                     continue;
-                double dist = SystemClass.Distance(currentSystem.System, sc);
+                double dist = SystemClassDB.Distance(currentSystem.System, sc);
                 if (dist <= minDist)
                 {
                     if (nearestSystem == null || !nearestSystem.name.Equals(sc.name))
@@ -236,8 +236,8 @@ namespace EDDiscovery.UserControls
             string name = null;
             if (nearestSystem != null && firstSystem != null)
             {
-                double first2Neasest = SystemClass.Distance(firstSystem, nearestSystem);
-                double first2Me = SystemClass.Distance(firstSystem, currentSystem.System);
+                double first2Neasest = SystemClassDB.Distance(firstSystem, nearestSystem);
+                double first2Me = SystemClassDB.Distance(firstSystem, currentSystem.System);
 
                 string nextName = null;
                 int wp = nearestidx + 1;
@@ -251,14 +251,14 @@ namespace EDDiscovery.UserControls
                 else
                     name = nearestSystem.name;
 
-                SystemClass nextSystem = SystemClass.GetSystem(name);
+                SystemClassDB nextSystem = SystemClassDB.GetSystem(name);
                 if (nextSystem == null)
                 {
                     bottomLine = String.Format("WP{0}: {1} {2}", wp, nextName, autoCopyWPToolStripMenuItem.Checked ? " (AUTO)" : "");
                 }
                 else
                 {
-                    double distance = SystemClass.Distance(currentSystem.System, nextSystem);
+                    double distance = SystemClassDB.Distance(currentSystem.System, nextSystem);
                     bottomLine = String.Format("{0:N2}ly to WP{1}: {2} {3}", distance, wp, name, autoCopyWPToolStripMenuItem.Checked ? " (AUTO)" : "");
                 }
 

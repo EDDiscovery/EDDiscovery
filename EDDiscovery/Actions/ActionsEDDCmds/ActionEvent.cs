@@ -19,16 +19,19 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using BaseUtils;
+using ActionLanguage;
+using Conditions;
 
 namespace EDDiscovery.Actions
 {
-    public class ActionEvent : Action
+    public class ActionEvent : ActionBase
     {
         public override bool AllowDirectEditingOfUserData { get { return true; } }
 
-        public override bool ConfigurationMenu(Form parent, EDDiscoveryForm discoveryform, List<string> eventvars)
+        public override bool ConfigurationMenu(Form parent, ActionCoreController cp, List<string> eventvars)
         {
-            string promptValue = Forms.PromptSingleLine.ShowDialog(parent, "Event get command", UserData, "Configure Event Command");
+            string promptValue = ExtendedControls.PromptSingleLine.ShowDialog(parent, "Event get command", UserData, "Configure Event Command");
             if (promptValue != null)
             {
                 userdata = promptValue;
@@ -42,7 +45,7 @@ namespace EDDiscovery.Actions
             string res;
             if (ap.functions.ExpandString(UserData, out res) != ConditionFunctions.ExpandResult.Failed)
             {
-                HistoryList hl = ap.actioncontroller.HistoryList;
+                HistoryList hl = (ap.actioncontroller as ActionController).HistoryList;
                 StringParser sp = new StringParser(res);
                 string prefix = "EC_";
 
@@ -69,7 +72,7 @@ namespace EDDiscovery.Actions
 
                     if (cmdname.Equals("thpos"))
                     {
-                        HistoryEntry he = ap.actioncontroller.DiscoveryForm.TravelControl.GetTravelHistoryCurrent;
+                        HistoryEntry he = (ap.actioncontroller as ActionController).DiscoveryForm.TravelControl.GetTravelHistoryCurrent;
 
                         if ( he == null )
                         {
@@ -149,7 +152,7 @@ namespace EDDiscovery.Actions
                         hltest = (from h in hltest where eventnames.Contains(h.journalEntry.EventTypeStr, StringComparer.OrdinalIgnoreCase) select h).ToList();
                     
                     if (cond.Count > 0)     // if we have filters, apply, filter out, true only stays
-                        hltest = cond.CheckFilterTrue(hltest, new ConditionVariables()); // apply filter..
+                        hltest = HistoryList.CheckFilterTrue(hltest, cond, new ConditionVariables()); // apply filter..
 
                     if (fwd)
                         ReportEntry(ap, hltest, 0, prefix);
@@ -164,13 +167,13 @@ namespace EDDiscovery.Actions
                         ap.ReportError("Valid JID must be given for command " + cmdname + " in Event");
                     else if (cmdname.Equals("action"))
                     {
-                        int count = ap.actioncontroller.ActionRunOnEntry(hl.EntryOrder[jidindex], "ActionProgram", now:true);
+                        int count = (ap.actioncontroller as ActionController).ActionRunOnEntry(hl.EntryOrder[jidindex], "ActionProgram", now:true);
                         ap[prefix + "Count"] = count.ToString(System.Globalization.CultureInfo.InvariantCulture);
                     }
                     else if (cmdname.Equals("edsm"))
                     {
                         HistoryEntry he = hl.EntryOrder[jidindex];
-                        ap.actioncontroller.HistoryList.FillEDSM(he, reload: true);
+                        (ap.actioncontroller as ActionController).HistoryList.FillEDSM(he, reload: true);
 
                         long? id_edsm = he.System.id_edsm;
                         if (id_edsm <= 0)
@@ -189,7 +192,7 @@ namespace EDDiscovery.Actions
                     else if (cmdname.Equals("ross"))
                     {
                         HistoryEntry he = hl.EntryOrder[jidindex];
-                        ap.actioncontroller.HistoryList.FillEDSM(he, reload: true);
+                        (ap.actioncontroller as ActionController).HistoryList.FillEDSM(he, reload: true);
 
                         string url = "";
 

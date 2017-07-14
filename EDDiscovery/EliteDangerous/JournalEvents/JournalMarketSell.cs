@@ -71,8 +71,8 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         {
             summary = EventTypeStr.SplitCapsWord();
             long profit = TotalSale - (AvgPricePaid * Count);
-            info = Tools.FieldBuilder("", FriendlyType, "", Count, "< at ; credits", SellPrice, "Total:", TotalSale, "Profit:", profit);
-            detailed = Tools.FieldBuilder("Legal;Illegal", IllegalGoods, "Not Stolen;Stolen", StolenGoods, "Market;BlackMarket", BlackMarket);
+            info = BaseUtils.FieldBuilder.Build("", FriendlyType, "", Count, "< at ; credits", SellPrice, "Total:", TotalSale, "Profit:", profit);
+            detailed = BaseUtils.FieldBuilder.Build("Legal;Illegal", IllegalGoods, "Not Stolen;Stolen", StolenGoods, "Market;BlackMarket", BlackMarket);
         }
     }
 }

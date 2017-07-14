@@ -63,8 +63,8 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public override void FillInformation(out string summary, out string info, out string detailed) //V
         {
             summary = EventTypeStr.SplitCapsWord();
-            info = Tools.FieldBuilder("Commander:", LoadGameCommander, "Ship:", Ship, "Name:", ShipName, "Ident:", ShipIdent, "Credits:", Credits);
-            detailed = Tools.FieldBuilder("Mode:", GameMode , "Group:" , Group , "Not Landed;Landed" , StartLanded , "Fuel Level:;;0.0", FuelLevel , "Capacity:;;0.0" , FuelCapacity);
+            info = BaseUtils.FieldBuilder.Build("Commander:", LoadGameCommander, "Ship:", Ship, "Name:", ShipName, "Ident:", ShipIdent, "Credits:", Credits);
+            detailed = BaseUtils.FieldBuilder.Build("Mode:", GameMode , "Group:" , Group , "Not Landed;Landed" , StartLanded , "Fuel Level:;;0.0", FuelLevel , "Capacity:;;0.0" , FuelCapacity);
         }
 
         public override System.Drawing.Bitmap Icon { get { return EDDiscovery.Properties.Resources.loadgame; } }

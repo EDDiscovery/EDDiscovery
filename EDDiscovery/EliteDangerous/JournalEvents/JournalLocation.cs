@@ -93,28 +93,28 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             if (Docked)
             {
                 summary = "At " + StationName;
-                info = Tools.FieldBuilder("Type ", StationType, "< in system ", StarSystem);
-                detailed = Tools.FieldBuilder("Allegiance:", Allegiance, "Economy:", Economy_Localised.Alt(Economy), "Government:", Government_Localised.Alt(Government), "Security:", Security_Localised.Alt(Security));
+                info = BaseUtils.FieldBuilder.Build("Type ", StationType, "< in system ", StarSystem);
+                detailed = BaseUtils.FieldBuilder.Build("Allegiance:", Allegiance, "Economy:", Economy_Localised.Alt(Economy), "Government:", Government_Localised.Alt(Government), "Security:", Security_Localised.Alt(Security));
 
                 if (Factions != null)
                     foreach (FactionInfo f in Factions)
                     {
                         detailed += Environment.NewLine;
-                        detailed += Tools.FieldBuilder("", f.Name, "State:", f.FactionState, "Gov:", f.Government, "Inf:;%", (int)(f.Influence * 100), "Allegiance:", f.Allegiance);
+                        detailed += BaseUtils.FieldBuilder.Build("", f.Name, "State:", f.FactionState, "Gov:", f.Government, "Inf:;%", (int)(f.Influence * 100), "Allegiance:", f.Allegiance);
 
                         if (f.PendingStates != null)
                         {
-                            detailed += Tools.FieldBuilder(",", "Pending State:");
+                            detailed += BaseUtils.FieldBuilder.Build(",", "Pending State:");
                             foreach (JournalLocation.PowerStatesInfo state in f.PendingStates)
-                                detailed += Tools.FieldBuilder(",", state.State, "", state.Trend);
+                                detailed += BaseUtils.FieldBuilder.Build(",", state.State, "", state.Trend);
 
                         }
 
                         if (f.RecoveringStates != null)
                         {
-                            detailed += Tools.FieldBuilder(",", "Recovering State:");
+                            detailed += BaseUtils.FieldBuilder.Build(",", "Recovering State:");
                             foreach (JournalLocation.PowerStatesInfo state in f.RecoveringStates)
-                                detailed += Tools.FieldBuilder(",", state.State, "", state.Trend);
+                                detailed += BaseUtils.FieldBuilder.Build(",", state.State, "", state.Trend);
                         }
      
                     }
@@ -128,7 +128,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             else
             {
                 summary = "At " + StarSystem;
-                info = Tools.FieldBuilder("In space near ", Body, "< of type ", BodyType);
+                info = BaseUtils.FieldBuilder.Build("In space near ", Body, "< of type ", BodyType);
                 detailed = "";
             }
         }

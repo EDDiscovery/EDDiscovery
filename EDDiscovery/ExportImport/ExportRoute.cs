@@ -25,22 +25,24 @@ using System.Windows.Forms;
 
 namespace EDDiscovery.Export
 {
-    class ExportRoute : ExportBase
+    class ExportRoute : BaseUtils.CVSWrite 
     {
         private const string TITLE = "Export Route plan";
         private List<KeyValuePair<String, double>> data = new List<KeyValuePair<String, double>>();
-        public override bool GetData(EDDiscoveryForm _discoveryForm)
+        public override bool GetData(Object d)
         {
-            if(_discoveryForm.RouteControl.RouteSystems==null
+            EDDiscoveryForm _discoveryForm = (EDDiscoveryForm)d;
+
+            if (_discoveryForm.RouteControl.RouteSystems==null
                 || _discoveryForm.RouteControl.RouteSystems.Count==0)
             {
 
-                EDDiscovery.Forms.MessageBoxTheme.Show(String.Format("Please create a route on the route tab"), TITLE);
+                ExtendedControls.MessageBoxTheme.Show(String.Format("Please create a route on the route tab"), TITLE);
                 return false;
             }
 
             Point3D last = null;
-            foreach (SystemClass s in _discoveryForm.RouteControl.RouteSystems)
+            foreach (SystemClassDB s in _discoveryForm.RouteControl.RouteSystems)
             {
                Point3D pos = new Point3D(s.x, s.y, s.z);
                 double dist = 0;
@@ -82,7 +84,7 @@ namespace EDDiscovery.Export
             }
             catch (IOException )
             {
-                EDDiscovery.Forms.MessageBoxTheme.Show(String.Format("Is file {0} open?", filename), TITLE,
+                ExtendedControls.MessageBoxTheme.Show(String.Format("Is file {0} open?", filename), TITLE,
                       MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return false;
             }

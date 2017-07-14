@@ -1,0 +1,116 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{59F99A05-CE16-4FB8-BE99-F1A24F019CB8}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Audio</RootNamespace>
+    <AssemblyName>Audio</AssemblyName>
+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="CSCore, Version=1.2.1.1, Culture=neutral, PublicKeyToken=5a08f2b6f4415dea, processorArchitecture=MSIL">
+      <HintPath>..\packages\CSCore.1.2.1.1\lib\net35-client\CSCore.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Speech" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AudioDeviceConfigure.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AudioDeviceConfigure.Designer.cs">
+      <DependentUpon>AudioDeviceConfigure.cs</DependentUpon>
+    </Compile>
+    <Compile Include="AudioDriver.cs" />
+    <Compile Include="AudioDriverCSCore.cs" />
+    <Compile Include="AudioDriverDummy.cs" />
+    <Compile Include="AudioQueue.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SoundEffectDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SoundEffectDialog.Designer.cs">
+      <DependentUpon>SoundEffectDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="SoundEffectSettings.cs" />
+    <Compile Include="SpeechConfigure.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SpeechConfigure.Designer.cs">
+      <DependentUpon>SpeechConfigure.cs</DependentUpon>
+    </Compile>
+    <Compile Include="SpeechSynthesizer.cs" />
+    <Compile Include="SpeechSythesizerDummy.cs" />
+    <Compile Include="SpeechSythesizerWindows.cs" />
+    <Compile Include="WaveConfigureDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="WaveConfigureDialog.Designer.cs">
+      <DependentUpon>WaveConfigureDialog.cs</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\BaseUtils\BaseUtils.csproj">
+      <Project>{c657c881-f3e1-45ba-aca5-966348010414}</Project>
+      <Name>BaseUtils</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Conditions\Conditions.csproj">
+      <Project>{f76451e6-926d-4e03-b721-99fcd1ec4eed}</Project>
+      <Name>Conditions</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ExtendedControls\ExtendedControls.csproj">
+      <Project>{2049403f-f4c7-45e6-b777-6390c78e4d2b}</Project>
+      <Name>ExtendedControls</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="AudioDeviceConfigure.resx">
+      <DependentUpon>AudioDeviceConfigure.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SoundEffectDialog.resx">
+      <DependentUpon>SoundEffectDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SpeechConfigure.resx">
+      <DependentUpon>SpeechConfigure.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="WaveConfigureDialog.resx">
+      <DependentUpon>WaveConfigureDialog.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

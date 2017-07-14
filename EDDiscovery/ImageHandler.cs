@@ -334,7 +334,7 @@ namespace EDDiscovery.ImageHandler
 
             if (!StartWatcher())
             {
-                EDDiscovery.Forms.MessageBoxTheme.Show("Folder specified does not exist, image conversion is now off");
+                ExtendedControls.MessageBoxTheme.Show("Folder specified does not exist, image conversion is now off");
             }
         }
 

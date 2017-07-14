@@ -42,7 +42,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public override void FillInformation(out string summary, out string info, out string detailed) //V
         {
             summary = EventTypeStr.SplitCapsWord();
-            info = Tools.FieldBuilder("", Engineer, "Rank:", Rank, "Progress:", Progress);
+            info = BaseUtils.FieldBuilder.Build("", Engineer, "Rank:", Rank, "Progress:", Progress);
             detailed = "";
         }
     }

@@ -15,7 +15,6 @@
  */
 using EDDiscovery.DB;
 using EDDiscovery.EDSM;
-using EDDiscovery.HTTP;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -27,7 +26,7 @@ namespace EDDiscovery.EDSM
 {
     public class GalacticMapping
     {
-        readonly string GalacticMappingFile = Path.Combine(Tools.GetAppDataDirectory(), "galacticmapping.json");
+        readonly string GalacticMappingFile = Path.Combine(EDDConfig.Options.AppDataDirectory, "galacticmapping.json");
 
         public List<GalacticMapObject> galacticMapObjects = null;
         public List<GalMapType> galacticMapTypes = null;
@@ -54,7 +53,7 @@ namespace EDDiscovery.EDSM
                 string url = EDSMClass.ServerAddress + "galactic-mapping/json-edd";
                 bool newfile;
 
-                return DownloadFileHandler.DownloadFile(url, GalacticMappingFile, out newfile);
+                return BaseUtils.DownloadFileHandler.DownloadFile(url, GalacticMappingFile, out newfile);
             }
             catch (Exception ex)
             {
@@ -70,7 +69,7 @@ namespace EDDiscovery.EDSM
 
             try
             {
-                string json = Tools.TryReadAllTextFromFile(GalacticMappingFile);
+                string json = BaseUtils.FileHelpers.TryReadAllTextFromFile(GalacticMappingFile);
 
                 if (json != null)
                 {

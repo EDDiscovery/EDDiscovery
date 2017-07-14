@@ -133,7 +133,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             mcl.AddEvent(Id, EventTimeUTC, EventTypeID, Name, (rv-dv), 0);
         }
 
-        public void UpdateMissions(MissionListAccumulator mlist, EDDiscovery.DB.ISystem sys, string body, DB.SQLiteConnectionUser conn)
+        public void UpdateMissions(MissionListAccumulator mlist, EliteDangerous.ISystem sys, string body, DB.SQLiteConnectionUser conn)
         {
             mlist.Completed(this);
         }
@@ -141,14 +141,14 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public override void FillInformation(out string summary, out string info, out string detailed)  //V
         {
             summary = EventTypeStr.SplitCapsWord();
-            info = Tools.FieldBuilder("", Name,
+            info = BaseUtils.FieldBuilder.Build("", Name,
                                         "< from ", Faction,
                                         "Reward:", Reward,
                                         "Donation:", Donation,
                                         "System:", DestinationSystem,
                                         "Station:", DestinationStation);
 
-            detailed = Tools.FieldBuilder("Commodity:", CommodityLocalised.Alt(FriendlyCommodity),
+            detailed = BaseUtils.FieldBuilder.Build("Commodity:", CommodityLocalised.Alt(FriendlyCommodity),
                                             "Target:", TargetLocalised.Alt(TargetFriendly),
                                             "Type:", TargetTypeFriendly,
                                             "Target Faction:", TargetFaction);

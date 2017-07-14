@@ -38,7 +38,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public override void FillInformation(out string summary, out string info, out string detailed) //V
         {
             summary = EventTypeStr.SplitCapsWord();
-            info = Tools.FieldBuilder("", Name, "< to role ;", Role);
+            info = BaseUtils.FieldBuilder.Build("", Name, "< to role ;", Role);
             detailed = "";
         }
     }

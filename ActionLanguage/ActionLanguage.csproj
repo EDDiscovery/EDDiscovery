@@ -1,0 +1,111 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{17F82244-9FA8-4B04-85F0-9B1D0654CD26}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>ActionLanguage</RootNamespace>
+    <AssemblyName>ActionLanguage</AssemblyName>
+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ActionsCoreCmds\ActionPlay.cs" />
+    <Compile Include="ActionsCoreCmds\ActionPragma.cs" />
+    <Compile Include="ActionsCoreCmds\ActionPrint.cs" />
+    <Compile Include="ActionsCoreCmds\ActionRemEnd.cs" />
+    <Compile Include="ActionsCoreCmds\ActionReturn.cs" />
+    <Compile Include="ActionsCoreCmds\ActionSay.cs" />
+    <Compile Include="ActionsCoreCmds\ActionSet.cs" />
+    <Compile Include="ActionsCoreCmds\ActionSleep.cs" />
+    <Compile Include="ActionsCoreCmds\ActionStructures.cs" />
+    <Compile Include="ActionsCoreCmds\ActionUserInteraction.cs" />
+    <Compile Include="ActionsCore\ActionBase.cs" />
+    <Compile Include="ActionsCore\ActionCoreController.cs" />
+    <Compile Include="ActionsCore\ActionFile.cs" />
+    <Compile Include="ActionsCore\ActionFileList.cs" />
+    <Compile Include="ActionEditing\ActionPackEditorForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ActionEditing\ActionPackEditorForm.Designer.cs">
+      <DependentUpon>ActionPackEditorForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ActionsCore\ActionProgram.cs" />
+    <Compile Include="ActionEditing\ActionProgramEditForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ActionEditing\ActionProgramEditForm.Designer.cs">
+      <DependentUpon>ActionProgramEditForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ActionsCore\ActionProgramList.cs" />
+    <Compile Include="ActionsCore\ActionProgramRun.cs" />
+    <Compile Include="ActionsCore\ActionRun.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="ActionEditing\ActionPackEditorForm.resx">
+      <DependentUpon>ActionPackEditorForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ActionEditing\ActionProgramEditForm.resx">
+      <DependentUpon>ActionProgramEditForm.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Audio\Audio.csproj">
+      <Project>{59f99a05-ce16-4fb8-be99-f1a24f019cb8}</Project>
+      <Name>Audio</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\BaseUtils\BaseUtils.csproj">
+      <Project>{c657c881-f3e1-45ba-aca5-966348010414}</Project>
+      <Name>BaseUtils</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Conditions\Conditions.csproj">
+      <Project>{f76451e6-926d-4e03-b721-99fcd1ec4eed}</Project>
+      <Name>Conditions</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ExtendedControls\ExtendedControls.csproj">
+      <Project>{2049403f-f4c7-45e6-b777-6390c78e4d2b}</Project>
+      <Name>ExtendedControls</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

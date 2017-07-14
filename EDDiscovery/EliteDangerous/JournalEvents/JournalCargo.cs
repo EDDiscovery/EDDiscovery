@@ -67,7 +67,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
                 {
                     if (detailed.Length > 0)
                         detailed += Environment.NewLine;
-                    detailed += Tools.FieldBuilder("", JournalFieldNaming.RMat(c.Name), "; items", c.Count);
+                    detailed += BaseUtils.FieldBuilder.Build("", JournalFieldNaming.RMat(c.Name), "; items", c.Count);
                 }
             }
         }

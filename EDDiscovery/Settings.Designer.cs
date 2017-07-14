@@ -313,9 +313,9 @@ namespace EDDiscovery
             this.checkBoxEDSMLog.Location = new System.Drawing.Point(17, 23);
             this.checkBoxEDSMLog.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.checkBoxEDSMLog.Name = "checkBoxEDSMLog";
-            this.checkBoxEDSMLog.Size = new System.Drawing.Size(121, 17);
+            this.checkBoxEDSMLog.Size = new System.Drawing.Size(119, 17);
             this.checkBoxEDSMLog.TabIndex = 1;
-            this.checkBoxEDSMLog.Text = "Log EDSM requests";
+            this.checkBoxEDSMLog.Text = "Log HTTP requests";
             this.checkBoxEDSMLog.TickBoxReductionSize = 10;
             this.toolTip.SetToolTip(this.checkBoxEDSMLog, "Store EDSM queries in a log file");
             this.checkBoxEDSMLog.UseVisualStyleBackColor = true;

@@ -65,7 +65,7 @@ namespace EDDiscovery.CompanionAPI
 
         public static CompanionCredentials FromFile(string cmdrname=null)
         {
-            string filename = Path.Combine(Tools.GetAppDataDirectory(), "credentials" + cmdrname.SafeFileString() + ".json");
+            string filename = Path.Combine(EDDConfig.Options.AppDataDirectory, "credentials" + cmdrname.SafeFileString() + ".json");
 
             try
             {
@@ -125,7 +125,7 @@ namespace EDDiscovery.CompanionAPI
 
         public void ToFile()
         {
-            string filename = Path.Combine(Tools.GetAppDataDirectory(), "credentials" + Commander.SafeFileString() + ".json");
+            string filename = Path.Combine(EDDConfig.Options.AppDataDirectory, "credentials" + Commander.SafeFileString() + ".json");
             string json = JsonConvert.SerializeObject(this, Formatting.Indented);
             File.WriteAllText(filename, json);
         }

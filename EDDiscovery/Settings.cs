@@ -25,13 +25,14 @@ using EDDiscovery;
 using EDDiscovery.DB;
 using System.IO;
 using EDDiscovery.Forms;
+using EDDiscovery.EliteDangerous;
 
 namespace EDDiscovery
 {
     public partial class Settings : UserControl
     {
         private EDDiscoveryForm _discoveryForm;
-        private ISystem _homeSystem = new SystemClass("Sol", 0, 0, 0);
+        private ISystem _homeSystem = new SystemClassDB("Sol", 0, 0, 0);
         private ThemeEditor themeeditor = null;
 
         public ISystem HomeSystem
@@ -65,7 +66,7 @@ namespace EDDiscovery
             ResetThemeList();
             SetEntryThemeComboBox();
 
-            textBoxHomeSystem.SetAutoCompletor(EDDiscovery.DB.SystemClass.ReturnSystemListForAutoComplete);
+            textBoxHomeSystem.SetAutoCompletor(EDDiscovery.DB.SystemClassDB.ReturnSystemListForAutoComplete);
             comboBoxTheme.ItemHeight = 20;
 
             btnDeleteCommander.Enabled = EDCommander.NumberOfCommanders > 1;
@@ -100,7 +101,7 @@ namespace EDDiscovery
 
             checkBoxMinimizeToNotifyIcon.Enabled = EDDiscoveryForm.EDDConfig.UseNotifyIcon;
 
-            HomeSystem = SystemClass.GetSystem(SQLiteDBClass.GetSettingString("DefaultMapCenter", "Sol"));
+            HomeSystem = SystemClassDB.GetSystem(SQLiteDBClass.GetSettingString("DefaultMapCenter", "Sol"));
 
             textBoxDefaultZoom.Text = SQLiteDBClass.GetSettingDouble("DefaultMapZoom", 1.0).ToString();
 
@@ -124,6 +125,8 @@ namespace EDDiscovery
             SQLiteDBClass.PutSettingBool("CentreMapOnSelection", radioButtonHistorySelection.Checked);
 
             EDDiscoveryForm.EDDConfig.EDSMLog = checkBoxEDSMLog.Checked;
+            _discoveryForm.SetUpLogging();
+
             EDDiscoveryForm.EDDConfig.UseNotifyIcon = checkBoxUseNotifyIcon.Checked;
             EDDiscoveryForm.EDDConfig.OrderRowsInverted = checkBoxOrderRowsInverted.Checked;
             EDDiscoveryForm.EDDConfig.MinimizeToNotifyIcon = checkBoxMinimizeToNotifyIcon.Checked;
@@ -170,7 +173,7 @@ namespace EDDiscovery
                     btnDeleteCommander.Enabled = EDCommander.NumberOfCommanders > 1;
                 }
                 else
-                    Forms.MessageBoxTheme.Show(this, "Command name is not valid or duplicate" , "Cannot create Commander", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
+                    ExtendedControls.MessageBoxTheme.Show(this, "Command name is not valid or duplicate" , "Cannot create Commander", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
             }
         }
 
@@ -205,7 +208,7 @@ namespace EDDiscovery
                 int row = dataGridViewCommanders.CurrentCell.RowIndex;
                 EDCommander cmdr = dataGridViewCommanders.Rows[row].DataBoundItem as EDCommander;
 
-                var result = EDDiscovery.Forms.MessageBoxTheme.Show("Do you wish to delete commander " + cmdr.Name + "?", "Delete commander", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
+                var result = ExtendedControls.MessageBoxTheme.Show("Do you wish to delete commander " + cmdr.Name + "?", "Delete commander", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
 
                 if (result == DialogResult.Yes)
                 {
@@ -241,7 +244,7 @@ namespace EDDiscovery
             string fontwanted = null;                                               // don't check custom, only a stored theme..
             if (!themename.Equals("Custom") && !_discoveryForm.theme.IsFontAvailableInTheme(themename, out fontwanted))
             {
-                DialogResult res = EDDiscovery.Forms.MessageBoxTheme.Show("The font used by this theme is not available on your system" + Environment.NewLine +
+                DialogResult res = ExtendedControls.MessageBoxTheme.Show("The font used by this theme is not available on your system" + Environment.NewLine +
                       "The font needed is \"" + fontwanted + "\"" + Environment.NewLine +
                       "Install this font and you can use this scheme." + Environment.NewLine +
                       "EuroCaps font is available www.edassets.org.",
@@ -263,7 +266,7 @@ namespace EDDiscovery
         {
             SaveFileDialog dlg = new SaveFileDialog();
 
-            dlg.InitialDirectory = Path.Combine(Tools.GetAppDataDirectory(), "Theme");
+            dlg.InitialDirectory = Path.Combine(EDDConfig.Options.AppDataDirectory, "Theme");
             dlg.DefaultExt = "eddtheme";
             dlg.AddExtension = true;
 
@@ -354,7 +357,7 @@ namespace EDDiscovery
         {
             if (!string.IsNullOrWhiteSpace(textBoxHomeSystem.Text))
             {
-                HomeSystem = SystemClass.GetSystem(textBoxHomeSystem.Text);
+                HomeSystem = SystemClassDB.GetSystem(textBoxHomeSystem.Text);
             }
         }
     }

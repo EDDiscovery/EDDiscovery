@@ -49,7 +49,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public override void FillInformation(out string summary, out string info, out string detailed) //V
         {
             summary = EventTypeStr.SplitCapsWord();
-            info = Tools.FieldBuilder("Hired ;", Name, "< of faction ", Faction, " Rank ", CombatRank.ToString().SplitCapsWord(), "Cost ; credits", Cost);
+            info = BaseUtils.FieldBuilder.Build("Hired ;", Name, "< of faction ", Faction, " Rank ", CombatRank.ToString().SplitCapsWord(), "Cost ; credits", Cost);
             detailed = "";
         }
     }

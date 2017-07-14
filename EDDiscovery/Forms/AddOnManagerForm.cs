@@ -14,8 +14,7 @@
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 
-using EDDiscovery.HTTP;
-using EDDiscovery.Win32Constants;
+using BaseUtils.Win32Constants;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -26,6 +25,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using EDDiscovery.Versions;
 
 namespace EDDiscovery.Forms
 {
@@ -100,9 +100,9 @@ namespace EDDiscovery.Forms
                 file.Delete();
             }
 
-            GitHubClass ghc = new GitHubClass();
+            BaseUtils.GitHubClass ghc = new BaseUtils.GitHubClass();
 
-            List<GitHubFile> files = ghc.GetDataFiles(gitdir);
+            List<BaseUtils.GitHubFile> files = ghc.GetDataFiles(gitdir);
 
             return ghc.DownloadFiles(files, downloadfolder);
         }
@@ -117,16 +117,16 @@ namespace EDDiscovery.Forms
 
         private void CheckState()
         {
-            downloadactfolder = System.IO.Path.Combine(Tools.GetAppDataDirectory(), "temp\\act");
+            downloadactfolder = System.IO.Path.Combine(EDDConfig.Options.AppDataDirectory, "temp\\act");
             if (!System.IO.Directory.Exists(downloadactfolder))
                 System.IO.Directory.CreateDirectory(downloadactfolder);
 
-            downloadflightfolder = System.IO.Path.Combine(Tools.GetAppDataDirectory(), "temp\\flights");
+            downloadflightfolder = System.IO.Path.Combine(EDDConfig.Options.AppDataDirectory, "temp\\flights");
             if (!System.IO.Directory.Exists(downloadflightfolder))
                 System.IO.Directory.CreateDirectory(downloadflightfolder);
 
 #if DEBUG
-            downloadactdebugfolder = System.IO.Path.Combine(Tools.GetAppDataDirectory(), "temp\\Debug");
+            downloadactdebugfolder = System.IO.Path.Combine(EDDConfig.Options.AppDataDirectory, "temp\\Debug");
             if (!System.IO.Directory.Exists(downloadactdebugfolder))
                 System.IO.Directory.CreateDirectory(downloadactdebugfolder);
 #endif
@@ -158,19 +158,19 @@ namespace EDDiscovery.Forms
 
             mgr = new VersioningManager();
 
-            int[] edversion = ObjectExtensionsNumbersBool.GetEDVersion();
+            int[] edversion = System.Reflection.Assembly.GetExecutingAssembly().GetVersion();
             System.Diagnostics.Debug.Assert(edversion != null);
 
-            mgr.ReadLocalFiles(Tools.GetAppDataDirectory(), "Actions", "*.act", "Action File");
+            mgr.ReadLocalFiles(EDDConfig.Options.AppDataDirectory, "Actions", "*.act", "Action File");
 
             if (managedownloadmode)
             {
-                mgr.ReadLocalFiles(Tools.GetAppDataDirectory(), "Flights", "*.vid", "Video File");
+                mgr.ReadLocalFiles(EDDConfig.Options.AppDataDirectory, "Flights", "*.vid", "Video File");
 
-                mgr.ReadInstallFiles(downloadactfolder, Tools.GetAppDataDirectory(), "*.act", edversion, "Action File");
-                mgr.ReadInstallFiles(downloadflightfolder, Tools.GetAppDataDirectory(), "*.vid", edversion, "Video File");
+                mgr.ReadInstallFiles(downloadactfolder, EDDConfig.Options.AppDataDirectory, "*.act", edversion, "Action File");
+                mgr.ReadInstallFiles(downloadflightfolder, EDDConfig.Options.AppDataDirectory, "*.vid", edversion, "Video File");
 #if DEBUG
-                mgr.ReadInstallFiles(downloadactdebugfolder, Tools.GetAppDataDirectory(), "*.act", edversion, "Action File");
+                mgr.ReadInstallFiles(downloadactdebugfolder, EDDConfig.Options.AppDataDirectory, "*.act", edversion, "Action File");
 #endif
             }
 
@@ -361,7 +361,7 @@ namespace EDDiscovery.Forms
         {
             ExtendedControls.CheckBoxCustom cb = sender as ExtendedControls.CheckBoxCustom;
             Group g = cb.Tag as Group;
-            VersioningManager.SetEnableFlag(g.di, cb.Checked, Tools.GetAppDataDirectory());
+            VersioningManager.SetEnableFlag(g.di, cb.Checked, EDDConfig.Options.AppDataDirectory);
             changelist[g.di.itemname] = cb.Checked ? "+" : "-";
         }
 
@@ -372,18 +372,18 @@ namespace EDDiscovery.Forms
 
             if (g.di.localmodified)
             {
-                if (Forms.MessageBoxTheme.Show(this, "Modified locally, do you wish to overwrite the changes", "Warning", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.Cancel)
+                if (ExtendedControls.MessageBoxTheme.Show(this, "Modified locally, do you wish to overwrite the changes", "Warning", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.Cancel)
                     return;
             }
 
-            if (mgr.InstallFiles(g.di, Tools.GetAppDataDirectory()))
+            if (mgr.InstallFiles(g.di, EDDConfig.Options.AppDataDirectory))
             {
                 changelist[g.di.itemname] = "+";
-                Forms.MessageBoxTheme.Show(this, "Add-on updated");
+                ExtendedControls.MessageBoxTheme.Show(this, "Add-on updated");
                 ReadyToDisplay();
             }
             else
-                Forms.MessageBoxTheme.Show(this, "Add-on failed to update. Check files for read only status", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                ExtendedControls.MessageBoxTheme.Show(this, "Add-on failed to update. Check files for read only status", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
 
         private void ActionbuttonEdit_Click(object sender, EventArgs e)
@@ -399,9 +399,9 @@ namespace EDDiscovery.Forms
             ExtendedControls.ButtonExt cb = sender as ExtendedControls.ButtonExt;
             Group g = cb.Tag as Group;
 
-            if (Forms.MessageBoxTheme.Show(this, "Do you really want to delete " + g.di.itemname, "Warning", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK)
+            if (ExtendedControls.MessageBoxTheme.Show(this, "Do you really want to delete " + g.di.itemname, "Warning", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK)
             {
-                VersioningManager.DeleteInstall(g.di, Tools.GetAppDataDirectory());
+                VersioningManager.DeleteInstall(g.di, EDDConfig.Options.AppDataDirectory);
                 ReadyToDisplay();
                 changelist[g.di.itemname] = "-";
             }

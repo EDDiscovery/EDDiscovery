@@ -66,7 +66,7 @@ namespace EDDiscovery
                     }
                     else if (je.EventTypeID == JournalTypeEnum.Scan)
                     {
-                        ss.Process(je as EliteDangerous.JournalEvents.JournalScan, new SystemClass(system));
+                        ss.Process(je as EliteDangerous.JournalEvents.JournalScan, new SystemClassDB(system));
                     }
                 }
 
@@ -180,7 +180,7 @@ namespace EDDiscovery
                 string summary, info, detailed;
                 j.FillInformation(out summary, out info, out detailed);
 
-                ConditionVariables vars = new ConditionVariables();
+                Conditions.ConditionVariables vars = new Conditions.ConditionVariables();
                 vars.AddPropertiesFieldsOfClass(j, "EventClass_", new Type[] { typeof(System.Drawing.Bitmap), typeof(Newtonsoft.Json.Linq.JObject) }, 5);      //depth seems good enough
 
                 int n = 0;

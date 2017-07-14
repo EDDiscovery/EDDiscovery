@@ -45,7 +45,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public override void FillInformation(out string summary, out string info, out string detailed) //V
         {
             summary = EventTypeStr.SplitCapsWord();
-            info = Tools.FieldBuilder("Cost:; credits", Cost, "Fuel:; tons;0.0", Amount);
+            info = BaseUtils.FieldBuilder.Build("Cost:; credits", Cost, "Fuel:; tons;0.0", Amount);
             detailed = "";
         }
 

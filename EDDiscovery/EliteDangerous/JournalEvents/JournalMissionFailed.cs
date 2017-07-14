@@ -42,7 +42,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             detailed = "";
         }
 
-        public void UpdateMissions(MissionListAccumulator mlist, EDDiscovery.DB.ISystem sys, string body, DB.SQLiteConnectionUser conn)
+        public void UpdateMissions(MissionListAccumulator mlist, EliteDangerous.ISystem sys, string body, DB.SQLiteConnectionUser conn)
         {
             mlist.Failed(this);
         }

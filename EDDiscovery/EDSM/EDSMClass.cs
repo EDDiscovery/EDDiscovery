@@ -15,8 +15,8 @@
  */
 using EDDiscovery;
 using EDDiscovery.DB;
+using EDDiscovery.EliteDangerous;
 using EDDiscovery.EliteDangerous.JournalEvents;
-using EDDiscovery.HTTP;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -33,7 +33,7 @@ using System.Windows.Forms;
 
 namespace EDDiscovery.EDSM
 {
-    public class EDSMClass : HttpCom
+    public class EDSMClass : BaseUtils.HttpCom
     {
         public string commanderName;
         public string apiKey;
@@ -52,7 +52,7 @@ namespace EDDiscovery.EDSM
 
             _serverAddress = ServerAddress;
 
-            EDSMDistancesFileName = Path.Combine(Tools.GetAppDataDirectory(), "EDSMDistances.json");
+            EDSMDistancesFileName = Path.Combine(EDDConfig.Options.AppDataDirectory, "EDSMDistances.json");
 
             apiKey = EDCommander.Current.APIKey;
             commanderName = EDCommander.Current.EdsmName;
@@ -207,14 +207,14 @@ namespace EDDiscovery.EDSM
             DateTime gammadate = new DateTime(2015, 5, 1, 0, 0, 0, DateTimeKind.Utc);
             bool outoforder = SQLiteConnectionSystem.GetSettingBool("EDSMSystemsOutOfOrder", true);
 
-            if (SystemClass.IsSystemsTableEmpty())
+            if (SystemClassDB.IsSystemsTableEmpty())
             {
                 lstsystdate = gammadate;
             }
             else
             {
                 // Get the most recent modify time returned from EDSM
-                DateTime lastmod = outoforder ? SystemClass.GetLastSystemModifiedTime() : SystemClass.GetLastSystemModifiedTimeFast();
+                DateTime lastmod = outoforder ? SystemClassDB.GetLastSystemModifiedTime() : SystemClassDB.GetLastSystemModifiedTimeFast();
                 lstsystdate = lastmod - TimeSpan.FromSeconds(1);
 
                 if (lstsystdate < gammadate)
@@ -276,7 +276,7 @@ namespace EDDiscovery.EDSM
                     break;
                 }
 
-                updates += SystemClass.ParseEDSMUpdateSystemsString(json, ref lstsyst, ref outoforder, false, cancelRequested, reportProgress, false);
+                updates += SystemClassDB.ParseEDSMUpdateSystemsString(json, ref lstsyst, ref outoforder, false, cancelRequested, reportProgress, false);
                 lstsystdate += TimeSpan.FromHours(12);
             }
             logLine($"System download complete");
@@ -289,11 +289,11 @@ namespace EDDiscovery.EDSM
         {
             try
             {
-                string edsmhiddensystems = Path.Combine(Tools.GetAppDataDirectory(), "edsmhiddensystems.json");
+                string edsmhiddensystems = Path.Combine(EDDConfig.Options.AppDataDirectory, "edsmhiddensystems.json");
                 bool newfile = false;
-                DownloadFileHandler.DownloadFile(_serverAddress + "api-v1/hidden-systems?showId=1", edsmhiddensystems, out newfile);
+                BaseUtils.DownloadFileHandler.DownloadFile(_serverAddress + "api-v1/hidden-systems?showId=1", edsmhiddensystems, out newfile);
 
-                string json = Tools.TryReadAllTextFromFile(edsmhiddensystems);
+                string json = BaseUtils.FileHelpers.TryReadAllTextFromFile(edsmhiddensystems);
 
                 return json;
             }
@@ -503,9 +503,9 @@ namespace EDDiscovery.EDSM
                         bool firstdiscover = jo["firstDiscover"].Value<bool>();
                         DateTime etutc = DateTime.ParseExact(ts, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.AdjustToUniversal|DateTimeStyles.AssumeUniversal); // UTC time
 
-                        SystemClass sc = SystemClass.GetSystem(id, cn, SystemClass.SystemIDType.EdsmId);
+                        SystemClass sc = SystemClassDB.GetSystem(id, cn, SystemClassDB.SystemIDType.EdsmId);
                         if (sc == null)
-                            sc = new SystemClass(name)
+                            sc = new SystemClassDB(name)
                             {
                                 id_edsm = id
                             };
@@ -690,8 +690,8 @@ namespace EDDiscovery.EDSM
                         }
                         catch (Exception ex)
                         {
-                            HttpCom.WriteLog($"Exception Loop: {ex.Message}", "");
-                            HttpCom.WriteLog($"ETrace: {ex.StackTrace}", "");
+                            BaseUtils.HttpCom.WriteLog($"Exception Loop: {ex.Message}", "");
+                            BaseUtils.HttpCom.WriteLog($"ETrace: {ex.StackTrace}", "");
                             Trace.WriteLine($"Exception Loop: {ex.Message}");
                             Trace.WriteLine($"ETrace: {ex.StackTrace}");
                         }

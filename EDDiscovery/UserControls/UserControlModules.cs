@@ -236,7 +236,7 @@ namespace EDDiscovery.UserControls
                 string s = si.ToJSON(out errstr);
 
                 if (errstr.Length > 0)
-                    Forms.MessageBoxTheme.Show(this, errstr + Environment.NewLine + "This is probably a new or powerplay module" + Environment.NewLine + "Report to EDD Team by Github giving the full text above", "Unknown Module Type");
+                    ExtendedControls.MessageBoxTheme.Show(this, errstr + Environment.NewLine + "This is probably a new or powerplay module" + Environment.NewLine + "Report to EDD Team by Github giving the full text above", "Unknown Module Type");
 
                 string uri = null;
 
@@ -251,11 +251,11 @@ namespace EDDiscovery.UserControls
                         uri += Properties.Resources.URLCoriolis + "data=" + Uri.EscapeDataString(Convert.ToBase64String(outdata.ToArray()));
                         uri += "&bn=" + Uri.EscapeDataString(si.Name);
 
-                        string browser = Tools.GetDefaultBrowser();
+                        string browser = BaseUtils.BrowserInfo.GetDefault();
 
                         if ( browser != null )
                         {
-                            string path = Tools.GetBrowserPath(browser);
+                            string path = BaseUtils.BrowserInfo.GetPath(browser);
 
                             if (path != null)
                             {
@@ -268,7 +268,7 @@ namespace EDDiscovery.UserControls
                                 }
                                 catch (Exception ex)
                                 {
-                                    Forms.MessageBoxTheme.Show(this, "Unable to launch browser" + ex.Message, "Browser Launch Error");
+                                    ExtendedControls.MessageBoxTheme.Show(this, "Unable to launch browser" + ex.Message, "Browser Launch Error");
                                 }
                             }
                         }
@@ -276,7 +276,7 @@ namespace EDDiscovery.UserControls
                     }
                 }
 
-                Forms.InfoForm info = new Forms.InfoForm();
+                ExtendedControls.InfoForm info = new ExtendedControls.InfoForm();
                 info.Info("Cannot launch browser, use this JSON for manual Coriolis import", s, new Font("MS Sans Serif", 10), new int[] { 0, 100 });
                 info.ShowDialog(this);
             }

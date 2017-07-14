@@ -15,7 +15,7 @@
  */
 using EDDiscovery.DB;
 using EDDiscovery.UserControls;
-using EDDiscovery.Win32Constants;
+using BaseUtils.Win32Constants;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -453,7 +453,7 @@ namespace EDDiscovery.Forms
                         panel_transparency_Click(null, null);
                     }
                     else
-                        Forms.MessageBoxTheme.Show("This panel does not support transparency");
+                        ExtendedControls.MessageBoxTheme.Show("This panel does not support transparency");
                 }
                 else if (cmd == SYSMENU_TASKBAR)
                 {
@@ -586,7 +586,7 @@ namespace EDDiscovery.Forms
         {
             UserControlForm tcf = (UserControlForm)sender;
             tabforms.Remove(tcf);
-            discoveryform.ActionRun("onPopDown", "UserUIEvent", null, new ConditionVariables(new string[] { "PopOutName", tcf.dbrefname.Substring(9), "PopOutTitle", tcf.wintitle }));
+            discoveryform.ActionRun("onPopDown", "UserUIEvent", null, new Conditions.ConditionVariables(new string[] { "PopOutName", tcf.dbrefname.Substring(9), "PopOutTitle", tcf.wintitle }));
         }
 
         public List<UserControlCommonBase> GetListOfControls(Type c)
