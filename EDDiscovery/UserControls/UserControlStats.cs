@@ -295,48 +295,48 @@ namespace EDDiscovery.UserControls
 
 
                 for (int ii = 0; ii<intervals; ii++)
-                    intar[ii] = hl.GetFSDJumps(timearr[ii], endTime);
-                StatToDGV(dataGridViewTravel, "Jumps", intar);
+                    strarr[ii] = hl.GetFSDJumps(timearr[ii], endTime).ToString("N0", System.Globalization.CultureInfo.CurrentCulture);
+                StatToDGV(dataGridViewTravel, "Jumps", strarr);
 
                 for (int ii = 0; ii < intervals; ii++)
-                    strarr[ii] = hl.GetTraveledLy(timearr[ii], endTime).ToString("0.00");
+                    strarr[ii] = hl.GetTraveledLy(timearr[ii], endTime).ToString("N2", System.Globalization.CultureInfo.CurrentCulture);
                 StatToDGV(dataGridViewTravel, "Traveled Ly", strarr);
 
                 for (int ii = 0; ii < intervals; ii++)
-                    intar[ii] = hl.GetFSDBoostUsed(timearr[ii], endTime);
-                StatToDGV(dataGridViewTravel, "Boost used", intar);
+                    strarr[ii] = hl.GetFSDBoostUsed(timearr[ii], endTime).ToString("N0", System.Globalization.CultureInfo.CurrentCulture);
+                StatToDGV(dataGridViewTravel, "Boost used", strarr);
 
                 for (int ii = 0; ii < intervals; ii++)
-                    intar[ii] = hl.GetJetConeBoost(timearr[ii], endTime);
-                StatToDGV(dataGridViewTravel, "Jet Cone Boost", intar);
+                    strarr[ii] = hl.GetJetConeBoost(timearr[ii], endTime).ToString("N0", System.Globalization.CultureInfo.CurrentCulture);
+                StatToDGV(dataGridViewTravel, "Jet Cone Boost", strarr);
 
                 for (int ii = 0; ii < intervals; ii++)
-                    intar[ii] = hl.GetTouchDown(timearr[ii], endTime);
-                StatToDGV(dataGridViewTravel, "Landed", intar);
+                    strarr[ii] = hl.GetTouchDown(timearr[ii], endTime).ToString("N0", System.Globalization.CultureInfo.CurrentCulture);
+                StatToDGV(dataGridViewTravel, "Landed", strarr);
 
 
                 for (int ii = 0; ii < intervals; ii++)
-                    intar[ii] = hl.GetHeatWarning(timearr[ii], endTime);
-                StatToDGV(dataGridViewTravel, "Heat Warning", intar);
+                    strarr[ii] = hl.GetHeatWarning(timearr[ii], endTime).ToString("N0", System.Globalization.CultureInfo.CurrentCulture);
+                StatToDGV(dataGridViewTravel, "Heat Warning", strarr);
 
                 for (int ii = 0; ii < intervals; ii++)
-                    intar[ii] = hl.GetHeatDamage(timearr[ii], endTime);
-                StatToDGV(dataGridViewTravel, "Heat damage", intar);
+                    strarr[ii] = hl.GetHeatDamage(timearr[ii], endTime).ToString("N0", System.Globalization.CultureInfo.CurrentCulture);
+                StatToDGV(dataGridViewTravel, "Heat damage", strarr);
 
                 for (int ii = 0; ii < intervals; ii++)
-                    intar[ii] = hl.GetFuelScooped(timearr[ii], endTime);
-                StatToDGV(dataGridViewTravel, "Fuel Scooped", intar);
+                    strarr[ii] = hl.GetFuelScooped(timearr[ii], endTime).ToString("N0", System.Globalization.CultureInfo.CurrentCulture);
+                StatToDGV(dataGridViewTravel, "Fuel Scooped", strarr);
 
                 for (int ii = 0; ii < intervals; ii++)
-                    strarr[ii] = hl.GetFuelScoopedTons(timearr[ii], endTime).ToString("0.00");
+                    strarr[ii] = hl.GetFuelScoopedTons(timearr[ii], endTime).ToString("N2", System.Globalization.CultureInfo.CurrentCulture);
                 StatToDGV(dataGridViewTravel, "Scooped Tons", strarr);
 
                 for (int ii = 0; ii < intervals; ii++)
-                    strarr[ii] = hl.GetNrScans(timearr[ii], endTime).ToString("0");
+                    strarr[ii] = hl.GetNrScans(timearr[ii], endTime).ToString("N0", System.Globalization.CultureInfo.CurrentCulture);
                 StatToDGV(dataGridViewTravel, "Scans", strarr);
 
                 for (int ii = 0; ii < intervals; ii++)
-                    strarr[ii] = hl.GetScanValue(timearr[ii], endTime).ToString("0");
+                    strarr[ii] = hl.GetScanValue(timearr[ii], endTime).ToString("N0", System.Globalization.CultureInfo.CurrentCulture);
                 StatToDGV(dataGridViewTravel, "Scan value", strarr);
 
 
@@ -394,56 +394,56 @@ namespace EDDiscovery.UserControls
 
 
                 for (int ii = 0; ii < intervals; ii++)
-                    strarr[ii] = hl.GetFSDJumps(timeintervals[ii + 1], timeintervals[ii]).ToString();
+                    strarr[ii] = hl.GetFSDJumps(timeintervals[ii + 1], timeintervals[ii]).ToString("N0", System.Globalization.CultureInfo.CurrentCulture);
                 StatToDGV(dataGridViewTravel, "Jumps", strarr);
 
 
                 for (int ii = 0; ii < intervals; ii++)
-                    strarr[ii] = hl.GetTraveledLy(timeintervals[ii + 1], timeintervals[ii]).ToString("0.00");
+                    strarr[ii] = hl.GetTraveledLy(timeintervals[ii + 1], timeintervals[ii]).ToString("N2", System.Globalization.CultureInfo.CurrentCulture);
                 StatToDGV(dataGridViewTravel, "Traveled Ly", strarr);
 
 
                 for (int ii = 0; ii < intervals; ii++)
-                    strarr[ii] = hl.GetFSDBoostUsed(timeintervals[ii + 1], timeintervals[ii]).ToString();
+                    strarr[ii] = hl.GetFSDBoostUsed(timeintervals[ii + 1], timeintervals[ii]).ToString("N0", System.Globalization.CultureInfo.CurrentCulture);
                 StatToDGV(dataGridViewTravel, "Boost used", strarr);
 
 
                 for (int ii = 0; ii < intervals; ii++)
-                    strarr[ii] = hl.GetJetConeBoost(timeintervals[ii + 1], timeintervals[ii]).ToString();
+                    strarr[ii] = hl.GetJetConeBoost(timeintervals[ii + 1], timeintervals[ii]).ToString("N0", System.Globalization.CultureInfo.CurrentCulture);
                 StatToDGV(dataGridViewTravel, "Jet Cone Boost", strarr);
 
                 for (int ii = 0; ii < intervals; ii++)
-                    strarr[ii] = hl.GetDocked(timeintervals[ii + 1], timeintervals[ii]).ToString();
-                    StatToDGV(dataGridViewTravel, "Docked", strarr);
+                    strarr[ii] = hl.GetDocked(timeintervals[ii + 1], timeintervals[ii]).ToString("N0", System.Globalization.CultureInfo.CurrentCulture);
+                StatToDGV(dataGridViewTravel, "Docked", strarr);
 
                 for (int ii = 0; ii < intervals; ii++)
-                    strarr[ii] = hl.GetTouchDown(timeintervals[ii + 1], timeintervals[ii]).ToString();
+                    strarr[ii] = hl.GetTouchDown(timeintervals[ii + 1], timeintervals[ii]).ToString("N0", System.Globalization.CultureInfo.CurrentCulture);
                 StatToDGV(dataGridViewTravel, "Landed", strarr);
 
 
                 for (int ii = 0; ii < intervals; ii++)
-                    strarr[ii] = hl.GetHeatWarning(timeintervals[ii + 1], timeintervals[ii]).ToString(); 
+                    strarr[ii] = hl.GetHeatWarning(timeintervals[ii + 1], timeintervals[ii]).ToString("N0", System.Globalization.CultureInfo.CurrentCulture);
                 StatToDGV(dataGridViewTravel, "Heat Warning", strarr);
 
                 for (int ii = 0; ii < intervals; ii++)
-                    strarr[ii] = hl.GetHeatDamage(timeintervals[ii + 1], timeintervals[ii]).ToString(); 
+                    strarr[ii] = hl.GetHeatDamage(timeintervals[ii + 1], timeintervals[ii]).ToString("N0", System.Globalization.CultureInfo.CurrentCulture);
                 StatToDGV(dataGridViewTravel, "Heat damage", strarr);
 
                 for (int ii = 0; ii < intervals; ii++)
-                    strarr[ii] = hl.GetFuelScooped(timeintervals[ii + 1], timeintervals[ii]).ToString();
+                    strarr[ii] = hl.GetFuelScooped(timeintervals[ii + 1], timeintervals[ii]).ToString("N0", System.Globalization.CultureInfo.CurrentCulture);
                 StatToDGV(dataGridViewTravel, "Fuel Scooped", strarr);
 
                 for (int ii = 0; ii < intervals; ii++)
-                    strarr[ii] = hl.GetFuelScoopedTons(timeintervals[ii + 1], timeintervals[ii]).ToString("0.00"); 
+                    strarr[ii] = hl.GetFuelScoopedTons(timeintervals[ii + 1], timeintervals[ii]).ToString("N2", System.Globalization.CultureInfo.CurrentCulture);
                 StatToDGV(dataGridViewTravel, "Scooped Tons", strarr);
 
                 for (int ii = 0; ii < intervals; ii++)
-                    strarr[ii] = hl.GetNrScans(timeintervals[ii + 1], timeintervals[ii]).ToString("0");
+                    strarr[ii] = hl.GetNrScans(timeintervals[ii + 1], timeintervals[ii]).ToString("N0", System.Globalization.CultureInfo.CurrentCulture);
                 StatToDGV(dataGridViewTravel, "Scans", strarr);
 
 
                 for (int ii = 0; ii < intervals; ii++)
-                    strarr[ii] = hl.GetScanValue(timeintervals[ii + 1], timeintervals[ii]).ToString("0");
+                    strarr[ii] = hl.GetScanValue(timeintervals[ii + 1], timeintervals[ii]).ToString("N0", System.Globalization.CultureInfo.CurrentCulture);
                 StatToDGV(dataGridViewTravel, "Scan value", strarr);
 
 
@@ -605,7 +605,7 @@ namespace EDDiscovery.UserControls
                                 nr++;
                         }
 
-                        strarr[ii] = nr.ToString();
+                        strarr[ii] = nr.ToString("N0", System.Globalization.CultureInfo.CurrentCulture);
 
                     }
                     StatToDGV(dataGridViewScan, obj.ToString().Replace("_", " "), strarr, false);
@@ -624,7 +624,7 @@ namespace EDDiscovery.UserControls
                                 nr++;
                         }
 
-                        strarr[ii] = nr.ToString();
+                        strarr[ii] = nr.ToString("N0", System.Globalization.CultureInfo.CurrentCulture);
 
                     }
                     StatToDGV(dataGridViewScan, obj.ToString().Replace("_", " "), strarr, false);
