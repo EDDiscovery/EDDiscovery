@@ -45,15 +45,20 @@ namespace EDDiscovery.UserControls
         {
             this.components = new System.ComponentModel.Container();
             this.contextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.toolStripSystem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripEDSM = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripEDSMDownLine = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripVisits = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripBody = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripPosition = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripDistanceFrom = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSystemState = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripNotes = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripTarget = new System.Windows.Forms.ToolStripMenuItem();
             this.textBoxBody = new ExtendedControls.TextBoxBorder();
             this.labelBodyName = new System.Windows.Forms.Label();
-            this.textBoxX = new ExtendedControls.TextBoxBorder();
-            this.textBoxY = new ExtendedControls.TextBoxBorder();
-            this.labelX = new System.Windows.Forms.Label();
-            this.labelY = new System.Windows.Forms.Label();
-            this.textBoxZ = new ExtendedControls.TextBoxBorder();
-            this.label_Z = new System.Windows.Forms.Label();
+            this.textBoxPosition = new ExtendedControls.TextBoxBorder();
+            this.labelPosition = new System.Windows.Forms.Label();
             this.textBoxVisits = new ExtendedControls.TextBoxBorder();
             this.labelVisits = new System.Windows.Forms.Label();
             this.labelAllegiance = new System.Windows.Forms.Label();
@@ -67,7 +72,7 @@ namespace EDDiscovery.UserControls
             this.buttonEDDB = new ExtendedControls.DrawnPanel();
             this.buttonRoss = new ExtendedControls.DrawnPanel();
             this.textBoxHomeDist = new ExtendedControls.TextBoxBorder();
-            this.labelHomeSystem = new System.Windows.Forms.Label();
+            this.labelHomeDist = new System.Windows.Forms.Label();
             this.buttonEDSM = new ExtendedControls.DrawnPanel();
             this.textBoxSolDist = new ExtendedControls.TextBoxBorder();
             this.labelSolDist = new System.Windows.Forms.Label();
@@ -81,11 +86,6 @@ namespace EDDiscovery.UserControls
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.textBoxSystem = new ExtendedControls.TextBoxBorder();
             this.labelSysName = new System.Windows.Forms.Label();
-            this.toolStripBody = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSystem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripTarget = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripEDSMDownLine = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripEDSM = new System.Windows.Forms.ToolStripMenuItem();
             this.labelOpen = new System.Windows.Forms.Label();
             this.contextMenuStrip.SuspendLayout();
             this.SuspendLayout();
@@ -94,13 +94,97 @@ namespace EDDiscovery.UserControls
             // 
             this.contextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripSystem,
-            this.toolStripBody,
-            this.toolStripNotes,
-            this.toolStripTarget,
             this.toolStripEDSM,
-            this.toolStripEDSMDownLine});
+            this.toolStripEDSMDownLine,
+            this.toolStripVisits,
+            this.toolStripBody,
+            this.toolStripPosition,
+            this.toolStripDistanceFrom,
+            this.toolStripSystemState,
+            this.toolStripNotes,
+            this.toolStripTarget});
             this.contextMenuStrip.Name = "contextMenuStrip1";
-            this.contextMenuStrip.Size = new System.Drawing.Size(236, 136);
+            this.contextMenuStrip.Size = new System.Drawing.Size(236, 224);
+            // 
+            // toolStripSystem
+            // 
+            this.toolStripSystem.Checked = true;
+            this.toolStripSystem.CheckOnClick = true;
+            this.toolStripSystem.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.toolStripSystem.Name = "toolStripSystem";
+            this.toolStripSystem.Size = new System.Drawing.Size(235, 22);
+            this.toolStripSystem.Text = "Display System Name";
+            this.toolStripSystem.Click += new System.EventHandler(this.toolStripSystem_Click);
+            // 
+            // toolStripEDSM
+            // 
+            this.toolStripEDSM.Checked = true;
+            this.toolStripEDSM.CheckOnClick = true;
+            this.toolStripEDSM.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.toolStripEDSM.Name = "toolStripEDSM";
+            this.toolStripEDSM.Size = new System.Drawing.Size(235, 22);
+            this.toolStripEDSM.Text = "Display EDSM Buttons";
+            this.toolStripEDSM.Click += new System.EventHandler(this.toolStripEDSM_Click);
+            // 
+            // toolStripEDSMDownLine
+            // 
+            this.toolStripEDSMDownLine.Checked = true;
+            this.toolStripEDSMDownLine.CheckOnClick = true;
+            this.toolStripEDSMDownLine.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.toolStripEDSMDownLine.Name = "toolStripEDSMDownLine";
+            this.toolStripEDSMDownLine.Size = new System.Drawing.Size(235, 22);
+            this.toolStripEDSMDownLine.Text = "EDSM buttons on separate line";
+            this.toolStripEDSMDownLine.Click += new System.EventHandler(this.toolStripEDSMButtons_Click);
+            // 
+            // toolStripVisits
+            // 
+            this.toolStripVisits.Checked = true;
+            this.toolStripVisits.CheckOnClick = true;
+            this.toolStripVisits.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.toolStripVisits.Name = "toolStripVisits";
+            this.toolStripVisits.Size = new System.Drawing.Size(235, 22);
+            this.toolStripVisits.Text = "Display Visits";
+            this.toolStripVisits.Click += new System.EventHandler(this.toolStripVisits_Click);
+            // 
+            // toolStripBody
+            // 
+            this.toolStripBody.Checked = true;
+            this.toolStripBody.CheckOnClick = true;
+            this.toolStripBody.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.toolStripBody.Name = "toolStripBody";
+            this.toolStripBody.Size = new System.Drawing.Size(235, 22);
+            this.toolStripBody.Text = "Display Body Name";
+            this.toolStripBody.Click += new System.EventHandler(this.toolStripBody_Click);
+            // 
+            // toolStripPosition
+            // 
+            this.toolStripPosition.Checked = true;
+            this.toolStripPosition.CheckOnClick = true;
+            this.toolStripPosition.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.toolStripPosition.Name = "toolStripPosition";
+            this.toolStripPosition.Size = new System.Drawing.Size(235, 22);
+            this.toolStripPosition.Text = "Display Position";
+            this.toolStripPosition.Click += new System.EventHandler(this.toolStripPosition_Click);
+            // 
+            // toolStripDistanceFrom
+            // 
+            this.toolStripDistanceFrom.Checked = true;
+            this.toolStripDistanceFrom.CheckOnClick = true;
+            this.toolStripDistanceFrom.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.toolStripDistanceFrom.Name = "toolStripDistanceFrom";
+            this.toolStripDistanceFrom.Size = new System.Drawing.Size(235, 22);
+            this.toolStripDistanceFrom.Text = "Display Distance From";
+            this.toolStripDistanceFrom.Click += new System.EventHandler(this.enableDistanceFromToolStripMenuItem_Click);
+            // 
+            // toolStripSystemState
+            // 
+            this.toolStripSystemState.Checked = true;
+            this.toolStripSystemState.CheckOnClick = true;
+            this.toolStripSystemState.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.toolStripSystemState.Name = "toolStripSystemState";
+            this.toolStripSystemState.Size = new System.Drawing.Size(235, 22);
+            this.toolStripSystemState.Text = "Display System State";
+            this.toolStripSystemState.Click += new System.EventHandler(this.toolStripSystemState_Click);
             // 
             // toolStripNotes
             // 
@@ -109,14 +193,24 @@ namespace EDDiscovery.UserControls
             this.toolStripNotes.CheckState = System.Windows.Forms.CheckState.Checked;
             this.toolStripNotes.Name = "toolStripNotes";
             this.toolStripNotes.Size = new System.Drawing.Size(235, 22);
-            this.toolStripNotes.Text = "Enable Notes";
+            this.toolStripNotes.Text = "Display Notes";
             this.toolStripNotes.Click += new System.EventHandler(this.toolStripNotes_Click);
+            // 
+            // toolStripTarget
+            // 
+            this.toolStripTarget.Checked = true;
+            this.toolStripTarget.CheckOnClick = true;
+            this.toolStripTarget.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.toolStripTarget.Name = "toolStripTarget";
+            this.toolStripTarget.Size = new System.Drawing.Size(235, 22);
+            this.toolStripTarget.Text = "Display Target";
+            this.toolStripTarget.Click += new System.EventHandler(this.toolStripTarget_Click);
             // 
             // textBoxBody
             // 
             this.textBoxBody.BorderColor = System.Drawing.Color.Transparent;
             this.textBoxBody.BorderColorScaling = 0.5F;
-            this.textBoxBody.Location = new System.Drawing.Point(52, 51);
+            this.textBoxBody.Location = new System.Drawing.Point(52, 75);
             this.textBoxBody.Name = "textBoxBody";
             this.textBoxBody.ReadOnly = true;
             this.textBoxBody.Size = new System.Drawing.Size(152, 20);
@@ -126,81 +220,38 @@ namespace EDDiscovery.UserControls
             // labelBodyName
             // 
             this.labelBodyName.AutoSize = true;
-            this.labelBodyName.Location = new System.Drawing.Point(3, 53);
+            this.labelBodyName.Location = new System.Drawing.Point(3, 77);
             this.labelBodyName.Name = "labelBodyName";
             this.labelBodyName.Size = new System.Drawing.Size(31, 13);
             this.labelBodyName.TabIndex = 3;
             this.labelBodyName.Text = "Body";
             // 
-            // textBoxX
+            // textBoxPosition
             // 
-            this.textBoxX.BorderColor = System.Drawing.Color.Transparent;
-            this.textBoxX.BorderColorScaling = 0.5F;
-            this.textBoxX.Location = new System.Drawing.Point(52, 75);
-            this.textBoxX.Name = "textBoxX";
-            this.textBoxX.ReadOnly = true;
-            this.textBoxX.Size = new System.Drawing.Size(67, 20);
-            this.textBoxX.TabIndex = 8;
-            this.textBoxX.TabStop = false;
+            this.textBoxPosition.BorderColor = System.Drawing.Color.Transparent;
+            this.textBoxPosition.BorderColorScaling = 0.5F;
+            this.textBoxPosition.Location = new System.Drawing.Point(52, 99);
+            this.textBoxPosition.Name = "textBoxPosition";
+            this.textBoxPosition.ReadOnly = true;
+            this.textBoxPosition.Size = new System.Drawing.Size(152, 20);
+            this.textBoxPosition.TabIndex = 8;
+            this.textBoxPosition.TabStop = false;
             // 
-            // textBoxY
+            // labelPosition
             // 
-            this.textBoxY.BorderColor = System.Drawing.Color.Transparent;
-            this.textBoxY.BorderColorScaling = 0.5F;
-            this.textBoxY.Location = new System.Drawing.Point(52, 93);
-            this.textBoxY.Name = "textBoxY";
-            this.textBoxY.ReadOnly = true;
-            this.textBoxY.Size = new System.Drawing.Size(67, 20);
-            this.textBoxY.TabIndex = 12;
-            this.textBoxY.TabStop = false;
-            // 
-            // labelX
-            // 
-            this.labelX.AutoSize = true;
-            this.labelX.Location = new System.Drawing.Point(32, 75);
-            this.labelX.Name = "labelX";
-            this.labelX.Size = new System.Drawing.Size(14, 13);
-            this.labelX.TabIndex = 7;
-            this.labelX.Text = "X";
-            this.labelX.TextAlign = System.Drawing.ContentAlignment.TopRight;
-            // 
-            // labelY
-            // 
-            this.labelY.AutoSize = true;
-            this.labelY.ForeColor = System.Drawing.Color.Black;
-            this.labelY.Location = new System.Drawing.Point(32, 93);
-            this.labelY.Name = "labelY";
-            this.labelY.Size = new System.Drawing.Size(14, 13);
-            this.labelY.TabIndex = 11;
-            this.labelY.Text = "Y";
-            this.labelY.TextAlign = System.Drawing.ContentAlignment.TopRight;
-            // 
-            // textBoxZ
-            // 
-            this.textBoxZ.BorderColor = System.Drawing.Color.Transparent;
-            this.textBoxZ.BorderColorScaling = 0.5F;
-            this.textBoxZ.Location = new System.Drawing.Point(52, 111);
-            this.textBoxZ.Name = "textBoxZ";
-            this.textBoxZ.ReadOnly = true;
-            this.textBoxZ.Size = new System.Drawing.Size(67, 20);
-            this.textBoxZ.TabIndex = 0;
-            this.textBoxZ.TabStop = false;
-            // 
-            // label_Z
-            // 
-            this.label_Z.AutoSize = true;
-            this.label_Z.Location = new System.Drawing.Point(32, 111);
-            this.label_Z.Name = "label_Z";
-            this.label_Z.Size = new System.Drawing.Size(14, 13);
-            this.label_Z.TabIndex = 19;
-            this.label_Z.Text = "Z";
-            this.label_Z.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            this.labelPosition.AutoSize = true;
+            this.labelPosition.Location = new System.Drawing.Point(3, 99);
+            this.labelPosition.Name = "labelPosition";
+            this.labelPosition.Size = new System.Drawing.Size(25, 13);
+            this.labelPosition.TabIndex = 7;
+            this.labelPosition.Text = "Pos";
+            this.labelPosition.TextAlign = System.Drawing.ContentAlignment.TopRight;
             // 
             // textBoxVisits
             // 
             this.textBoxVisits.BorderColor = System.Drawing.Color.Transparent;
             this.textBoxVisits.BorderColorScaling = 0.5F;
-            this.textBoxVisits.Location = new System.Drawing.Point(188, 75);
+            this.textBoxVisits.Location = new System.Drawing.Point(52, 51);
             this.textBoxVisits.Name = "textBoxVisits";
             this.textBoxVisits.ReadOnly = true;
             this.textBoxVisits.Size = new System.Drawing.Size(66, 20);
@@ -210,7 +261,7 @@ namespace EDDiscovery.UserControls
             // labelVisits
             // 
             this.labelVisits.AutoSize = true;
-            this.labelVisits.Location = new System.Drawing.Point(147, 75);
+            this.labelVisits.Location = new System.Drawing.Point(3, 52);
             this.labelVisits.Name = "labelVisits";
             this.labelVisits.Size = new System.Drawing.Size(31, 13);
             this.labelVisits.TabIndex = 9;
@@ -220,7 +271,7 @@ namespace EDDiscovery.UserControls
             // labelAllegiance
             // 
             this.labelAllegiance.AutoSize = true;
-            this.labelAllegiance.Location = new System.Drawing.Point(122, 93);
+            this.labelAllegiance.Location = new System.Drawing.Point(124, 147);
             this.labelAllegiance.Name = "labelAllegiance";
             this.labelAllegiance.Size = new System.Drawing.Size(56, 13);
             this.labelAllegiance.TabIndex = 13;
@@ -230,7 +281,7 @@ namespace EDDiscovery.UserControls
             // labelEconomy
             // 
             this.labelEconomy.AutoSize = true;
-            this.labelEconomy.Location = new System.Drawing.Point(127, 111);
+            this.labelEconomy.Location = new System.Drawing.Point(124, 165);
             this.labelEconomy.Name = "labelEconomy";
             this.labelEconomy.Size = new System.Drawing.Size(51, 13);
             this.labelEconomy.TabIndex = 34;
@@ -241,7 +292,7 @@ namespace EDDiscovery.UserControls
             // 
             this.textBoxAllegiance.BorderColor = System.Drawing.Color.Transparent;
             this.textBoxAllegiance.BorderColorScaling = 0.5F;
-            this.textBoxAllegiance.Location = new System.Drawing.Point(188, 93);
+            this.textBoxAllegiance.Location = new System.Drawing.Point(190, 147);
             this.textBoxAllegiance.Name = "textBoxAllegiance";
             this.textBoxAllegiance.ReadOnly = true;
             this.textBoxAllegiance.Size = new System.Drawing.Size(66, 20);
@@ -252,7 +303,7 @@ namespace EDDiscovery.UserControls
             // 
             this.textBoxGovernment.BorderColor = System.Drawing.Color.Transparent;
             this.textBoxGovernment.BorderColorScaling = 0.5F;
-            this.textBoxGovernment.Location = new System.Drawing.Point(188, 147);
+            this.textBoxGovernment.Location = new System.Drawing.Point(52, 165);
             this.textBoxGovernment.Name = "textBoxGovernment";
             this.textBoxGovernment.ReadOnly = true;
             this.textBoxGovernment.Size = new System.Drawing.Size(66, 20);
@@ -262,7 +313,7 @@ namespace EDDiscovery.UserControls
             // labelGov
             // 
             this.labelGov.AutoSize = true;
-            this.labelGov.Location = new System.Drawing.Point(151, 147);
+            this.labelGov.Location = new System.Drawing.Point(3, 165);
             this.labelGov.Name = "labelGov";
             this.labelGov.Size = new System.Drawing.Size(27, 13);
             this.labelGov.TabIndex = 36;
@@ -272,7 +323,7 @@ namespace EDDiscovery.UserControls
             // labelState
             // 
             this.labelState.AutoSize = true;
-            this.labelState.Location = new System.Drawing.Point(146, 129);
+            this.labelState.Location = new System.Drawing.Point(3, 147);
             this.labelState.Name = "labelState";
             this.labelState.Size = new System.Drawing.Size(32, 13);
             this.labelState.TabIndex = 38;
@@ -283,7 +334,7 @@ namespace EDDiscovery.UserControls
             // 
             this.textBoxEconomy.BorderColor = System.Drawing.Color.Transparent;
             this.textBoxEconomy.BorderColorScaling = 0.5F;
-            this.textBoxEconomy.Location = new System.Drawing.Point(188, 111);
+            this.textBoxEconomy.Location = new System.Drawing.Point(190, 165);
             this.textBoxEconomy.Name = "textBoxEconomy";
             this.textBoxEconomy.ReadOnly = true;
             this.textBoxEconomy.Size = new System.Drawing.Size(66, 20);
@@ -294,7 +345,7 @@ namespace EDDiscovery.UserControls
             // 
             this.textBoxState.BorderColor = System.Drawing.Color.Transparent;
             this.textBoxState.BorderColorScaling = 0.5F;
-            this.textBoxState.Location = new System.Drawing.Point(188, 129);
+            this.textBoxState.Location = new System.Drawing.Point(52, 147);
             this.textBoxState.Name = "textBoxState";
             this.textBoxState.ReadOnly = true;
             this.textBoxState.Size = new System.Drawing.Size(66, 20);
@@ -309,7 +360,7 @@ namespace EDDiscovery.UserControls
             this.buttonEDDB.ForeColor = System.Drawing.SystemColors.ControlText;
             this.buttonEDDB.ImageSelected = ExtendedControls.DrawnPanel.ImageType.EDDB;
             this.buttonEDDB.ImageText = null;
-            this.buttonEDDB.Location = new System.Drawing.Point(97, 27);
+            this.buttonEDDB.Location = new System.Drawing.Point(97, 25);
             this.buttonEDDB.MarginSize = 0;
             this.buttonEDDB.MouseOverColor = System.Drawing.Color.White;
             this.buttonEDDB.MouseSelectedColor = System.Drawing.Color.Green;
@@ -328,7 +379,7 @@ namespace EDDiscovery.UserControls
             this.buttonRoss.ForeColor = System.Drawing.SystemColors.Control;
             this.buttonRoss.ImageSelected = ExtendedControls.DrawnPanel.ImageType.Ross;
             this.buttonRoss.ImageText = null;
-            this.buttonRoss.Location = new System.Drawing.Point(120, 27);
+            this.buttonRoss.Location = new System.Drawing.Point(120, 25);
             this.buttonRoss.MarginSize = 0;
             this.buttonRoss.MouseOverColor = System.Drawing.Color.White;
             this.buttonRoss.MouseSelectedColor = System.Drawing.Color.Green;
@@ -343,7 +394,7 @@ namespace EDDiscovery.UserControls
             // 
             this.textBoxHomeDist.BorderColor = System.Drawing.Color.Transparent;
             this.textBoxHomeDist.BorderColorScaling = 0.5F;
-            this.textBoxHomeDist.Location = new System.Drawing.Point(52, 129);
+            this.textBoxHomeDist.Location = new System.Drawing.Point(52, 123);
             this.textBoxHomeDist.Name = "textBoxHomeDist";
             this.textBoxHomeDist.ReadOnly = true;
             this.textBoxHomeDist.Size = new System.Drawing.Size(67, 20);
@@ -351,15 +402,15 @@ namespace EDDiscovery.UserControls
             this.textBoxHomeDist.TabStop = false;
             this.toolTipEddb.SetToolTip(this.textBoxHomeDist, "Distance to home system");
             // 
-            // labelHomeSystem
+            // labelHomeDist
             // 
-            this.labelHomeSystem.AutoSize = true;
-            this.labelHomeSystem.Location = new System.Drawing.Point(3, 129);
-            this.labelHomeSystem.Name = "labelHomeSystem";
-            this.labelHomeSystem.Size = new System.Drawing.Size(35, 13);
-            this.labelHomeSystem.TabIndex = 43;
-            this.labelHomeSystem.Text = "Home";
-            this.labelHomeSystem.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            this.labelHomeDist.AutoSize = true;
+            this.labelHomeDist.Location = new System.Drawing.Point(3, 122);
+            this.labelHomeDist.Name = "labelHomeDist";
+            this.labelHomeDist.Size = new System.Drawing.Size(35, 13);
+            this.labelHomeDist.TabIndex = 43;
+            this.labelHomeDist.Text = "Home";
+            this.labelHomeDist.TextAlign = System.Drawing.ContentAlignment.TopRight;
             // 
             // buttonEDSM
             // 
@@ -367,7 +418,7 @@ namespace EDDiscovery.UserControls
             this.buttonEDSM.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.buttonEDSM.ImageSelected = ExtendedControls.DrawnPanel.ImageType.InverseText;
             this.buttonEDSM.ImageText = "EDSM";
-            this.buttonEDSM.Location = new System.Drawing.Point(53, 27);
+            this.buttonEDSM.Location = new System.Drawing.Point(53, 25);
             this.buttonEDSM.MarginSize = 0;
             this.buttonEDSM.MouseOverColor = System.Drawing.Color.White;
             this.buttonEDSM.MouseSelectedColor = System.Drawing.Color.Green;
@@ -382,7 +433,7 @@ namespace EDDiscovery.UserControls
             // 
             this.textBoxSolDist.BorderColor = System.Drawing.Color.Transparent;
             this.textBoxSolDist.BorderColorScaling = 0.5F;
-            this.textBoxSolDist.Location = new System.Drawing.Point(52, 147);
+            this.textBoxSolDist.Location = new System.Drawing.Point(190, 123);
             this.textBoxSolDist.Name = "textBoxSolDist";
             this.textBoxSolDist.ReadOnly = true;
             this.textBoxSolDist.Size = new System.Drawing.Size(67, 20);
@@ -393,7 +444,7 @@ namespace EDDiscovery.UserControls
             // labelSolDist
             // 
             this.labelSolDist.AutoSize = true;
-            this.labelSolDist.Location = new System.Drawing.Point(4, 147);
+            this.labelSolDist.Location = new System.Drawing.Point(124, 123);
             this.labelSolDist.Name = "labelSolDist";
             this.labelSolDist.Size = new System.Drawing.Size(22, 13);
             this.labelSolDist.TabIndex = 45;
@@ -407,7 +458,7 @@ namespace EDDiscovery.UserControls
             // labelNote
             // 
             this.labelNote.AutoSize = true;
-            this.labelNote.Location = new System.Drawing.Point(3, 175);
+            this.labelNote.Location = new System.Drawing.Point(3, 191);
             this.labelNote.Name = "labelNote";
             this.labelNote.Size = new System.Drawing.Size(30, 13);
             this.labelNote.TabIndex = 28;
@@ -419,7 +470,7 @@ namespace EDDiscovery.UserControls
             this.richTextBoxNote.BorderColor = System.Drawing.Color.Transparent;
             this.richTextBoxNote.BorderColorScaling = 0.5F;
             this.richTextBoxNote.HideScrollBar = true;
-            this.richTextBoxNote.Location = new System.Drawing.Point(52, 175);
+            this.richTextBoxNote.Location = new System.Drawing.Point(50, 191);
             this.richTextBoxNote.Name = "richTextBoxNote";
             this.richTextBoxNote.ScrollBarWidth = 20;
             this.richTextBoxNote.ShowLineCount = false;
@@ -431,7 +482,7 @@ namespace EDDiscovery.UserControls
             // labelTarget
             // 
             this.labelTarget.AutoSize = true;
-            this.labelTarget.Location = new System.Drawing.Point(2, 238);
+            this.labelTarget.Location = new System.Drawing.Point(2, 254);
             this.labelTarget.Name = "labelTarget";
             this.labelTarget.Size = new System.Drawing.Size(38, 13);
             this.labelTarget.TabIndex = 16;
@@ -443,7 +494,7 @@ namespace EDDiscovery.UserControls
             this.buttonEDSMTarget.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.buttonEDSMTarget.ImageSelected = ExtendedControls.DrawnPanel.ImageType.InverseText;
             this.buttonEDSMTarget.ImageText = "EDSM";
-            this.buttonEDSMTarget.Location = new System.Drawing.Point(278, 235);
+            this.buttonEDSMTarget.Location = new System.Drawing.Point(278, 251);
             this.buttonEDSMTarget.MarginSize = 0;
             this.buttonEDSMTarget.MouseOverColor = System.Drawing.Color.White;
             this.buttonEDSMTarget.MouseSelectedColor = System.Drawing.Color.Green;
@@ -468,7 +519,7 @@ namespace EDDiscovery.UserControls
             this.textBoxTarget.DropDownScrollBarColor = System.Drawing.Color.LightGray;
             this.textBoxTarget.DropDownWidth = 0;
             this.textBoxTarget.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.textBoxTarget.Location = new System.Drawing.Point(53, 235);
+            this.textBoxTarget.Location = new System.Drawing.Point(53, 251);
             this.textBoxTarget.Name = "textBoxTarget";
             this.textBoxTarget.Size = new System.Drawing.Size(151, 20);
             this.textBoxTarget.TabIndex = 15;
@@ -480,7 +531,7 @@ namespace EDDiscovery.UserControls
             // 
             this.textBoxTargetDist.BorderColor = System.Drawing.Color.Transparent;
             this.textBoxTargetDist.BorderColorScaling = 0.5F;
-            this.textBoxTargetDist.Location = new System.Drawing.Point(210, 235);
+            this.textBoxTargetDist.Location = new System.Drawing.Point(210, 251);
             this.textBoxTargetDist.Margin = new System.Windows.Forms.Padding(10, 3, 3, 3);
             this.textBoxTargetDist.Name = "textBoxTargetDist";
             this.textBoxTargetDist.ReadOnly = true;
@@ -507,66 +558,16 @@ namespace EDDiscovery.UserControls
             // labelSysName
             // 
             this.labelSysName.AutoSize = true;
-            this.labelSysName.Location = new System.Drawing.Point(4, 6);
+            this.labelSysName.Location = new System.Drawing.Point(3, 3);
             this.labelSysName.Name = "labelSysName";
             this.labelSysName.Size = new System.Drawing.Size(41, 13);
             this.labelSysName.TabIndex = 4;
             this.labelSysName.Text = "System";
             // 
-            // toolStripBody
-            // 
-            this.toolStripBody.Checked = true;
-            this.toolStripBody.CheckOnClick = true;
-            this.toolStripBody.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.toolStripBody.Name = "toolStripBody";
-            this.toolStripBody.Size = new System.Drawing.Size(235, 22);
-            this.toolStripBody.Text = "Enable Body Name";
-            this.toolStripBody.Click += new System.EventHandler(this.toolStripBody_Click);
-            // 
-            // toolStripSystem
-            // 
-            this.toolStripSystem.Checked = true;
-            this.toolStripSystem.CheckOnClick = true;
-            this.toolStripSystem.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.toolStripSystem.Name = "toolStripSystem";
-            this.toolStripSystem.Size = new System.Drawing.Size(235, 22);
-            this.toolStripSystem.Text = "Enable System Name";
-            this.toolStripSystem.Click += new System.EventHandler(this.toolStripSystem_Click);
-            // 
-            // toolStripTarget
-            // 
-            this.toolStripTarget.Checked = true;
-            this.toolStripTarget.CheckOnClick = true;
-            this.toolStripTarget.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.toolStripTarget.Name = "toolStripTarget";
-            this.toolStripTarget.Size = new System.Drawing.Size(235, 22);
-            this.toolStripTarget.Text = "Enable Target";
-            this.toolStripTarget.Click += new System.EventHandler(this.toolStripTarget_Click);
-            // 
-            // toolStripEDSMDownLine
-            // 
-            this.toolStripEDSMDownLine.Checked = true;
-            this.toolStripEDSMDownLine.CheckOnClick = true;
-            this.toolStripEDSMDownLine.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.toolStripEDSMDownLine.Name = "toolStripEDSMDownLine";
-            this.toolStripEDSMDownLine.Size = new System.Drawing.Size(235, 22);
-            this.toolStripEDSMDownLine.Text = "EDSM buttons on separate line";
-            this.toolStripEDSMDownLine.Click += new System.EventHandler(this.toolStripEDSMButtons_Click);
-            // 
-            // toolStripEDSM
-            // 
-            this.toolStripEDSM.Checked = true;
-            this.toolStripEDSM.CheckOnClick = true;
-            this.toolStripEDSM.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.toolStripEDSM.Name = "toolStripEDSM";
-            this.toolStripEDSM.Size = new System.Drawing.Size(235, 22);
-            this.toolStripEDSM.Text = "Enable EDSM Buttons";
-            this.toolStripEDSM.Click += new System.EventHandler(this.toolStripEDSM_Click);
-            // 
             // labelOpen
             // 
             this.labelOpen.AutoSize = true;
-            this.labelOpen.Location = new System.Drawing.Point(4, 27);
+            this.labelOpen.Location = new System.Drawing.Point(3, 27);
             this.labelOpen.Name = "labelOpen";
             this.labelOpen.Size = new System.Drawing.Size(33, 13);
             this.labelOpen.TabIndex = 3;
@@ -583,28 +584,24 @@ namespace EDDiscovery.UserControls
             this.Controls.Add(this.buttonEDSM);
             this.Controls.Add(this.buttonEDDB);
             this.Controls.Add(this.buttonRoss);
+            this.Controls.Add(this.labelVisits);
+            this.Controls.Add(this.textBoxVisits);
             this.Controls.Add(this.labelBodyName);
             this.Controls.Add(this.textBoxBody);
-            this.Controls.Add(this.labelX);
-            this.Controls.Add(this.textBoxX);
-            this.Controls.Add(this.labelY);
-            this.Controls.Add(this.textBoxY);
-            this.Controls.Add(this.label_Z);
-            this.Controls.Add(this.textBoxZ);
-            this.Controls.Add(this.labelHomeSystem);
+            this.Controls.Add(this.labelPosition);
+            this.Controls.Add(this.textBoxPosition);
+            this.Controls.Add(this.labelHomeDist);
             this.Controls.Add(this.textBoxHomeDist);
             this.Controls.Add(this.labelSolDist);
             this.Controls.Add(this.textBoxSolDist);
-            this.Controls.Add(this.labelVisits);
-            this.Controls.Add(this.textBoxVisits);
-            this.Controls.Add(this.labelAllegiance);
-            this.Controls.Add(this.textBoxAllegiance);
-            this.Controls.Add(this.labelEconomy);
-            this.Controls.Add(this.textBoxEconomy);
             this.Controls.Add(this.labelState);
             this.Controls.Add(this.textBoxState);
+            this.Controls.Add(this.labelAllegiance);
+            this.Controls.Add(this.textBoxAllegiance);
             this.Controls.Add(this.labelGov);
             this.Controls.Add(this.textBoxGovernment);
+            this.Controls.Add(this.labelEconomy);
+            this.Controls.Add(this.textBoxEconomy);
             this.Controls.Add(this.labelNote);
             this.Controls.Add(this.richTextBoxNote);
             this.Controls.Add(this.labelTarget);
@@ -612,7 +609,7 @@ namespace EDDiscovery.UserControls
             this.Controls.Add(this.textBoxTargetDist);
             this.Controls.Add(this.buttonEDSMTarget);
             this.Name = "UserControlSysInfo";
-            this.Size = new System.Drawing.Size(393, 294);
+            this.Size = new System.Drawing.Size(393, 353);
             this.Resize += new System.EventHandler(this.UserControlSysInfo_Resize);
             this.contextMenuStrip.ResumeLayout(false);
             this.ResumeLayout(false);
@@ -624,12 +621,8 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip;
         private ExtendedControls.TextBoxBorder textBoxBody;
         private System.Windows.Forms.Label labelBodyName;
-        private ExtendedControls.TextBoxBorder textBoxX;
-        private ExtendedControls.TextBoxBorder textBoxY;
-        private System.Windows.Forms.Label labelX;
-        private System.Windows.Forms.Label labelY;
-        private ExtendedControls.TextBoxBorder textBoxZ;
-        private System.Windows.Forms.Label label_Z;
+        private ExtendedControls.TextBoxBorder textBoxPosition;
+        private System.Windows.Forms.Label labelPosition;
         private ExtendedControls.TextBoxBorder textBoxVisits;
         private System.Windows.Forms.Label labelVisits;
         private System.Windows.Forms.Label labelAllegiance;
@@ -644,7 +637,7 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.ToolTip toolTipEddb;
         private ExtendedControls.DrawnPanel buttonRoss;
         private ExtendedControls.TextBoxBorder textBoxHomeDist;
-        private System.Windows.Forms.Label labelHomeSystem;
+        private System.Windows.Forms.Label labelHomeDist;
         private ExtendedControls.DrawnPanel buttonEDSM;
         private ExtendedControls.TextBoxBorder textBoxSolDist;
         private System.Windows.Forms.Label labelSolDist;
@@ -664,5 +657,9 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.ToolStripMenuItem toolStripEDSMDownLine;
         private System.Windows.Forms.ToolStripMenuItem toolStripEDSM;
         private System.Windows.Forms.Label labelOpen;
+        private System.Windows.Forms.ToolStripMenuItem toolStripVisits;
+        private System.Windows.Forms.ToolStripMenuItem toolStripPosition;
+        private System.Windows.Forms.ToolStripMenuItem toolStripSystemState;
+        private System.Windows.Forms.ToolStripMenuItem toolStripDistanceFrom;
     }
 }

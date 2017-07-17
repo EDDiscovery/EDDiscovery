@@ -39,7 +39,11 @@ namespace EDDiscovery.UserControls
         const int SelTarget = 8;
         const int SelEDSMButtonsNextLine = 16;
         const int SelEDSM = 32;
-        const int SelDefault = SelNotes | SelBody | SelSystem | SelTarget | SelEDSM;
+        const int SelVisits = 64;
+        const int SelSystemState = 128;
+        const int SelPosition = 256;
+        const int SelDistanceFrom = 512;
+        const int SelDefault = SelNotes | SelBody | SelSystem | SelTarget | SelEDSM | SelVisits | SelSystemState | SelPosition | SelDistanceFrom;
 
         public UserControlSysInfo()
         {
@@ -82,9 +86,7 @@ namespace EDDiscovery.UserControls
                 {
                     string SingleCoordinateFormat = "0.##";
 
-                    textBoxX.Text = he.System.x.ToString(SingleCoordinateFormat);
-                    textBoxY.Text = he.System.y.ToString(SingleCoordinateFormat);
-                    textBoxZ.Text = he.System.z.ToString(SingleCoordinateFormat);
+                    textBoxPosition.Text = he.System.x.ToString(SingleCoordinateFormat) + "," + he.System.y.ToString(SingleCoordinateFormat) + "," + he.System.z.ToString(SingleCoordinateFormat);
 
                     EliteDangerous.ISystem homesys = discoveryform.GetHomeSystem();
 
@@ -94,9 +96,7 @@ namespace EDDiscovery.UserControls
                 }
                 else
                 {
-                    textBoxX.Text = "?";
-                    textBoxY.Text = "?";
-                    textBoxZ.Text = "?";
+                    textBoxPosition.Text = "?";
                     textBoxHomeDist.Text = "";
                     textBoxSolDist.Text = "";
                 }
@@ -119,7 +119,7 @@ namespace EDDiscovery.UserControls
             else
             {
                 SetControlText("");
-                textBoxSystem.Text = textBoxBody.Text = textBoxX.Text = textBoxY.Text = textBoxZ.Text =
+                textBoxSystem.Text = textBoxBody.Text = textBoxPosition.Text = 
                                 textBoxAllegiance.Text = textBoxEconomy.Text = textBoxGovernment.Text =
                                 textBoxVisits.Text = textBoxState.Text = textBoxHomeDist.Text = richTextBoxNote.Text = textBoxSolDist.Text = "";
                 buttonRoss.Enabled = buttonEDDB.Enabled = false;
@@ -258,6 +258,25 @@ namespace EDDiscovery.UserControls
         {
             ToggleSelection(SelEDSM);
         }
+        private void toolStripVisits_Click(object sender, EventArgs e)
+        {
+            ToggleSelection(SelVisits);
+        }
+
+        private void toolStripPosition_Click(object sender, EventArgs e)
+        {
+            ToggleSelection(SelPosition);
+        }
+
+        private void enableDistanceFromToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ToggleSelection(SelDistanceFrom);
+        }
+
+        private void toolStripSystemState_Click(object sender, EventArgs e)
+        {
+            ToggleSelection(SelSystemState);
+        }
         void ToggleSelection(int mask)
         {
             int sel = DB.SQLiteConnectionUser.GetSettingInt(DbSelection, SelDefault);
@@ -290,12 +309,28 @@ namespace EDDiscovery.UserControls
             buttonEDSM.Tag = (edsmbuttons && !makespace); // remember if we shifted it artifically up
             if ( (bool)buttonEDSM.Tag)      // and if we did, we shift it up
                 buttonEDSM.Top = buttonEDDB.Top = buttonRoss.Top = buttonEDSM.Top - 24;
+            this.Controls.ShiftControls(labelVisits, 24, makespace);     // shift up/down the ones below dependent on if edsm needs space..
 
-            this.Controls.ShiftControls(labelBodyName, 24, makespace);     // shift up/down the ones below dependent on if edsm needs space..
+            bool visitson = (sel & SelVisits) != 0;
+            toolStripVisits.Checked = labelVisits.Visible = textBoxVisits.Visible = visitson;
+            this.Controls.ShiftControls(labelBodyName, 24, visitson);
 
             bool bodyon = (sel & SelBody) != 0;
             toolStripBody.Checked = labelBodyName.Visible = textBoxBody.Visible = bodyon;
-            this.Controls.ShiftControls(labelX, 24, bodyon);
+            this.Controls.ShiftControls(labelPosition, 24, bodyon);
+
+            bool poson = (sel & SelPosition) != 0;
+            toolStripPosition.Checked = labelPosition.Visible = textBoxPosition.Visible = poson;
+            this.Controls.ShiftControls(labelHomeDist, 24, poson);
+
+            bool diston = (sel & SelDistanceFrom) != 0;
+            toolStripDistanceFrom.Checked = labelSolDist.Visible = labelHomeDist.Visible = textBoxHomeDist.Visible = textBoxSolDist.Visible = diston;
+            this.Controls.ShiftControls(labelState, 24, diston);
+
+            bool stateon = (sel & SelSystemState) != 0;
+            toolStripSystemState.Checked = labelState.Visible = labelGov.Visible = labelAllegiance.Visible = labelEconomy.Visible =
+                        textBoxState.Visible = textBoxGovernment.Visible = textBoxAllegiance.Visible = textBoxEconomy.Visible = stateon;
+            this.Controls.ShiftControls(labelNote, 48, stateon);
 
             bool noteson = (sel & SelNotes) != 0;
             toolStripNotes.Checked = labelNote.Visible = richTextBoxNote.Visible = noteson;
