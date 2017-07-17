@@ -452,9 +452,9 @@ namespace EDDiscovery.UserControls
             colormap.OldColor = Color.White;    // this is the marker colour to replace
             colormap.NewColor = matcolour;
 
-            Bitmap mat = ControlHelpers.ReplaceColourInBitmap(EDDiscovery.Properties.Resources.materialmarkerorangefilled, new System.Drawing.Imaging.ColorMap[] { colormap });
+            Bitmap mat = BitMapHelpers.ReplaceColourInBitmap(EDDiscovery.Properties.Resources.materialmarkerorangefilled, new System.Drawing.Imaging.ColorMap[] { colormap });
 
-            ControlHelpers.DrawTextCentreIntoBitmap(ref mat, text, stdfont, textcolour);
+            BitMapHelpers.DrawTextCentreIntoBitmap(ref mat, text, stdfont, textcolour);
 
             PictureBoxHotspot.ImageElement ie = new PictureBoxHotspot.ImageElement(  
                             new Rectangle(matpos.X, matpos.Y, matsize.Width, matsize.Height), mat, mattag, mattip);

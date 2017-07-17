@@ -492,6 +492,8 @@ namespace EDDiscovery
 
                     if (commit)
                         snc.Update();
+
+                    Debug.WriteLine("Update note {0} {1} commit {2}", snc.Name, snc.EdsmId , commit);
                 }
                 else
                 {
@@ -502,9 +504,9 @@ namespace EDDiscovery
                     snc.Journalid = Journalid;
                     snc.EdsmId = IsFSDJump ? System.id_edsm : 0;
                     snc.Add();
-                }
 
-                Debug.WriteLine("Store note {0} {1}", snc.Name, snc.EdsmId);
+                    Debug.WriteLine("Add note {0} {1}", snc.Name, snc.EdsmId);
+                }
 
                 return true;
             }
@@ -514,7 +516,11 @@ namespace EDDiscovery
 
         public void CommitSystemNote()
         {
-            snc.Update();
+            if (snc != null)  // defensive.
+            {
+                snc.Update();
+                Debug.WriteLine("Commit note {0} {1}", snc.Name, snc.EdsmId);
+            }
         }
     }
 

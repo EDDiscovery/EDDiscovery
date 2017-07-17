@@ -59,7 +59,7 @@
     <Compile Include="ComboBoxCustom.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ControlHelpers.cs" />
+    <Compile Include="BitMapHelpers.cs" />
     <Compile Include="CustomDateTimePicker.cs">
       <SubType>Component</SubType>
     </Compile>

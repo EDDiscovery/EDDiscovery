@@ -59,7 +59,7 @@ namespace EDDiscovery
         static public EDDConfig EDDConfig { get { return EDDConfig.Instance; } }
         public EDDTheme theme { get { return EDDTheme.Instance; } }
 
-        public TravelHistoryControl TravelControl { get { return travelHistoryControl1; } }
+        public TravelHistoryControl TravelControl { get { return travelHistoryControl; } }
         public RouteControl RouteControl { get { return routeControl1; } }
         public ExportControl ExportControl { get { return exportControl1; } }
         public EDDiscovery.ImageHandler.ImageHandler ImageHandler { get { return imageHandler1; } }
@@ -186,7 +186,7 @@ namespace EDDiscovery
             themeok = theme.RestoreSettings();                                    // theme, remember your saved settings
 
             trilaterationControl.InitControl(this);
-            travelHistoryControl1.InitControl(this);
+            travelHistoryControl.InitControl(this);
             imageHandler1.InitControl(this);
             settings.InitControl(this);
             journalViewControl1.InitControl(this, 0);
@@ -279,7 +279,6 @@ namespace EDDiscovery
                 InitFormControls();
                 settings.InitSettingsTab();
                 savedRouteExpeditionControl1.LoadControl();
-                travelHistoryControl1.LoadControl();
 
                 if (EDDConfig.Options.ActionButton)
                 {
@@ -369,7 +368,7 @@ namespace EDDiscovery
         {
             ShowInfoPanel("Loading. Please wait!", true);
 
-            routeControl1.travelhistorycontrol1 = travelHistoryControl1;
+            routeControl1.travelhistorycontrol1 = travelHistoryControl;
         }
 
         private void RepositionForm()
@@ -408,7 +407,7 @@ namespace EDDiscovery
             _formHeight = Height;
             _formWidth = Width;
 
-            travelHistoryControl1.LoadLayoutSettings();
+            travelHistoryControl.LoadLayoutSettings();
             journalViewControl1.LoadLayoutSettings();
             if (EDDConfig.AutoLoadPopOuts && EDDConfig.Options.NoWindowReposition == false)
                 PopOuts.LoadSavedPopouts();
@@ -451,7 +450,7 @@ namespace EDDiscovery
             imageHandler1.StartWatcher();
             routeControl1.EnableRouteTab(); // now we have systems, we can update this..
 
-            routeControl1.travelhistorycontrol1 = travelHistoryControl1;
+            routeControl1.travelhistorycontrol1 = travelHistoryControl;
             ShowInfoPanel("", false);
 
             checkInstallerTask = CheckForNewInstallerAsync();
@@ -671,7 +670,7 @@ namespace EDDiscovery
             SQLiteDBClass.PutSettingInt("FormLeft", _formLeft);
             routeControl1.SaveSettings();
             theme.SaveSettings(null);
-            travelHistoryControl1.SaveSettings();
+            travelHistoryControl.SaveSettings();
             journalViewControl1.SaveSettings();
             if (EDDConfig.AutoSavePopOuts)
                 PopOuts.SaveCurrentPopouts();
@@ -752,7 +751,7 @@ namespace EDDiscovery
 
         private void show3DMapsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Open3DMap(travelHistoryControl1.GetTravelHistoryCurrent);
+            Open3DMap(travelHistoryControl.GetTravelHistoryCurrent);
         }
 
         private void forceEDDBUpdateToolStripMenuItem_Click(object sender, EventArgs e)
@@ -996,24 +995,12 @@ namespace EDDiscovery
         {
             if (he != null && txt != null)
             {
-                // Update the System Note; and if the text was changed, save our Note for sending and storing later
-                // Also notify various "quick" listeners
-                if (he.UpdateSystemNote(txt, send))
-                {
-                    if (_uncommittedNoteHistoryEntry == null)
-                    {
-                        _uncommittedNoteHistoryEntry = he;
-                    }
-                    travelHistoryControl1.UpdateNoteJID(he.Journalid, txt);
-                    PopOuts.UpdateNoteJID(he.Journalid, txt);
-                    // MKW TODO: Update the Note editor SPanel.
-                }
+                if (_uncommittedNoteHistoryEntry != null && _uncommittedNoteHistoryEntry != he )       // if we have an uncommited one
+                    StoreUncommittedNote();                     // and its not the same as stored one, store previous
 
-                // If we have an uncommitted system note from another entry, or the send flag is set, commit to DB and send to EDSM
-                // Also notify any "slow" listeners
-                if (_uncommittedNoteHistoryEntry != null && (send || _uncommittedNoteHistoryEntry != he))
+                if (he.UpdateSystemNote(txt, send))     // update HE SNC variable, optionally commit to DB, returns if note is set up
                 {
-                    StoreUncommittedNote();
+                    _uncommittedNoteHistoryEntry = he;  // and store for later
                     Map.UpdateNote();
                 }
             }
@@ -1024,9 +1011,11 @@ namespace EDDiscovery
             if (_uncommittedNoteHistoryEntry != null)
             {
                 _uncommittedNoteHistoryEntry.CommitSystemNote();
-                    if (EDCommander.Current.SyncToEdsm && _uncommittedNoteHistoryEntry.IsFSDJump)       // only send on FSD jumps
-                        EDSMSync.SendComments(_uncommittedNoteHistoryEntry.snc.Name, _uncommittedNoteHistoryEntry.snc.Note, _uncommittedNoteHistoryEntry.snc.EdsmId);
-                _uncommittedNoteHistoryEntry = null;
+
+                if (EDCommander.Current.SyncToEdsm && _uncommittedNoteHistoryEntry.IsFSDJump)       // only send on FSD jumps
+                    EDSMSync.SendComments(_uncommittedNoteHistoryEntry.snc.Name, _uncommittedNoteHistoryEntry.snc.Note, _uncommittedNoteHistoryEntry.snc.EdsmId);
+
+                _uncommittedNoteHistoryEntry = null;        // clear
             }
         }
 
@@ -1386,7 +1375,7 @@ namespace EDDiscovery
 
         private void buttonExt3dmap_Click(object sender, EventArgs e)
         {
-            Open3DMap(travelHistoryControl1.GetTravelHistoryCurrent);
+            Open3DMap(travelHistoryControl.GetTravelHistoryCurrent);
         }
 
         private void buttonExt2dmap_Click(object sender, EventArgs e)

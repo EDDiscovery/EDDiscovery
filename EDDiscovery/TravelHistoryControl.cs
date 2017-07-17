@@ -38,8 +38,6 @@ namespace EDDiscovery
 {
     public partial class TravelHistoryControl : UserControl
     {
-        private const string SingleCoordinateFormat = "0.##";
-
         public EDDiscoveryForm _discoveryForm;
 
         string lastclosestname;
@@ -61,6 +59,7 @@ namespace EDDiscovery
                                         EDDiscovery.Properties.Resources.missionaccepted,
                                         EDDiscovery.Properties.Resources.engineercraft,
                                         EDDiscovery.Properties.Resources.marketdata,
+                                        EDDiscovery.Properties.Resources.ammunition, //TBD
                                         };
 
         string[] tabtooltips = new string[] { "Display the program log",     // MAtch Pop out enum
@@ -79,6 +78,7 @@ namespace EDDiscovery
                                                "Display Missions",
                                                "Display Engineering planner",
                                                "Display Market Data (Requires login to Frontier using Commander Frontier log in details)",
+                                               "Display System Information panel",
                                             };
 
         HistoryEntry notedisplayedhe = null;            // remember the particulars of the note displayed, so we can save it later
@@ -94,12 +94,14 @@ namespace EDDiscovery
                 return tabStripBottomRight;
             if (name.Equals(tabStripMiddleRight.Name, StringComparison.InvariantCultureIgnoreCase))
                 return tabStripMiddleRight;
+            if (name.Equals(tabStripTopRight.Name, StringComparison.InvariantCultureIgnoreCase))
+                return tabStripTopRight;
             return null;
         }
 
         // Subscribe to these to get various events - layout controls via their Init function do this.
 
-        public delegate void TravelSelectionChanged(HistoryEntry he, HistoryList hl);       // called when current travel sel changed
+        public delegate void TravelSelectionChanged(HistoryEntry he, HistoryList hl);       // called when current travel sel changed, after the user control informs us
         public event TravelSelectionChanged OnTravelSelectionChanged;
 
         public delegate void NearestStarList(string name, SortedList<double, ISystem> csl); // called when star computation has a new list
@@ -116,13 +118,10 @@ namespace EDDiscovery
         public void InitControl(EDDiscoveryForm discoveryForm)
         {
             _discoveryForm = discoveryForm;
-            _discoveryForm.OnNewTarget += RefreshTargetDisplay;
-
-            richTextBoxNote.TextBoxChanged += richTextBoxNote_TextChanged;
 
             userControlTravelGrid.Init(_discoveryForm, 0);       // primary first instance - this registers with events in discoveryform to get info
                                                         // then this display, to update its own controls..
-            userControlTravelGrid.OnRedisplay += UpdatedDisplay;        // after the TG has redisplayed..
+            userControlTravelGrid.OnRedisplay += uctgRedisplay;        // after the TG has redisplayed..
             userControlTravelGrid.OnAddedNewEntry += UpdatedWithAddNewEntry;        // call back when you've added a new entry..
             userControlTravelGrid.OnChangedSelection += ChangedSelection;   // and if the user clicks on something
             userControlTravelGrid.OnResort += Resort;   // and if he or she resorts
@@ -130,13 +129,9 @@ namespace EDDiscovery
 
             TabConfigure(tabStripBottom,"Bottom",1000);          // codes are used to save info, 0 = primary (journal/travelgrid), 1..N are popups, these are embedded UCs
             TabConfigure(tabStripBottomRight,"Bottom-Right",1001);
-            TabConfigure(tabStripMiddleRight,"Middle-Right",1002);
+            TabConfigure(tabStripMiddleRight, "Middle-Right", 1002);
+            TabConfigure(tabStripTopRight, "Top-Right", 1003);
 
-            textBoxTarget.SetAutoCompletor(EDDiscovery.DB.SystemClassDB.ReturnSystemListForAutoComplete);
-        }
-
-        public void LoadControl()
-        {
         }
 
         #endregion
@@ -165,9 +160,11 @@ namespace EDDiscovery
         {
             PopOutControl.PopOuts i = (PopOutControl.PopOuts)(si + PopOutControl.PopOuts.StartTabButtons);
 
+            Control c = PopOutControl.Create(i);
+
             _discoveryForm.ActionRun("onPanelChange", "UserUIEvent", null, new Conditions.ConditionVariables(new string[] { "PanelTabName", PopOutControl.popoutinfo[i].WindowRefName, "PanelTabTitle" , PopOutControl.popoutinfo[i].WindowTitlePrefix , "PanelName" , t.Name }));
 
-            return PopOutControl.Create(i);
+            return c;
         }
 
         void TabPostCreate(ExtendedControls.TabStrip t, Control ctrl , int i)        // called by tab strip after control has been added..
@@ -234,109 +231,18 @@ namespace EDDiscovery
             _discoveryForm.PopOuts.PopOut((PopOutControl.PopOuts)(i+ PopOutControl.PopOuts.StartTabButtons));
         }
 
-        #endregion
-
-        #region Panel sizing
-
-        private void panel_topright_Resize(object sender, EventArgs e)
-        {
-            // Move controls around on topright
-
-            int width = panel_topright.Width;
-            int xpos = 4;
-            int ypos = 4;
-            int butoffsetx = 100;
-            int butoffsety = 30;
-                
-            //panel_topright.Size = new Size(panel_topright.Width, buttonSync.Location.Y + buttonSync.Height + 6);
-
-            // now do this in topright, because its moving around the lower panes. Works in here because topright won't be resized.
-
-            int rossright = buttonRoss.Location.X + buttonRoss.Width;       // from the system panel, far right part
-
-            if (width > rossright + 100)                                    // enough space to more to the right of topright panel?
-                panel_system.Dock = DockStyle.Left;
-            else
-                panel_system.Dock = DockStyle.Top;
-
-            panel_system.Size = new Size(rossright + 4, textBoxGovernment.Location.Y + textBoxGovernment.Height + 6);
-
-            panelTarget.Width = panelNoteArea.Width = width - panel_system.Width;   // and size the target and note panels to..
-        }
-
-        private void panelNoteArea_Resize(object sender, EventArgs e)
-        {
-            int width = panelNoteArea.Width;
-
-            if (width > 300)                              // can we fit onto one line?
-            {
-                labelNote.Location = new Point(2, 2);
-                richTextBoxNote.Location = new Point(labelNote.Location.X + labelNote.Width + 6, labelNote.Location.Y);
-                richTextBoxNote.Width = width - richTextBoxNote.Location.X - 4;
-            }
-            else
-            {
-                labelNote.Location = new Point(2, 2);
-                richTextBoxNote.Location = new Point(2, labelNote.Location.Y + labelNote.Height + 4);
-                richTextBoxNote.Width = width - 4;
-            }
-
-            panelNoteArea.Height = richTextBoxNote.Location.Y + richTextBoxNote.Height + 6;
-        }
-
-        private void panelTarget_Resize(object sender, EventArgs e)
-        {
-            int width = panelTarget.Width;
-
-            if (width > 250)                            // can we fit onto one line?
-            {
-                labelTarget.Location = new Point(2, 2);
-                textBoxTarget.Location = new Point(labelTarget.Right + 6, labelTarget.Location.Y);
-                textBoxTarget.Width = width - textBoxTarget.Location.X - 20 - textBoxTargetDist.Width - buttonEDSMTarget.Width;
-                textBoxTargetDist.Location = new Point(textBoxTarget.Right + 4, labelTarget.Location.Y);
-                buttonEDSMTarget.Location = new Point(textBoxTargetDist.Right + 4, labelTarget.Location.Y-2);
-            }
-            else
-            {
-                labelNote.Location = new Point(2, 2);
-                textBoxTarget.Location = new Point(2, labelNote.Location.Y + labelNote.Height + 8);
-                textBoxTarget.Width = width - 4;
-                textBoxTargetDist.Location = new Point(2, textBoxTarget.Bottom + 8);
-                buttonEDSMTarget.Location = new Point(textBoxTargetDist.Right + 4, textBoxTargetDist.Top-2);
-            }
-
-            panelTarget.Height = buttonEDSMTarget.Bottom + 6;
-        }
-
-        #endregion
-
         void GotoJID(long v)
         {
             userControlTravelGrid.GotoPosByJID(v);
-        }
-
-        #region New Stars
-
-        private void NewStarListComputed(string name, SortedList<double, ISystem> csl)      // thread..
-        {
-            BeginInvoke((MethodInvoker)delegate
-            {
-                lastclosestname = name;
-                lastclosestsystems = csl;
-
-                if (OnNearestStarListChanged != null)
-                    OnNearestStarListChanged(name, csl);
-            });
         }
 
         #endregion
 
         #region Display history
 
-        public void UpdatedDisplay(HistoryList hl)                      // called from main travelgrid when refreshed display
+        public void uctgRedisplay(HistoryList hl)                      // called from main travelgrid when refreshed display due to a discoveryform.OhHistoryChange
         {
-            ShowSystemInformation(userControlTravelGrid.GetCurrentRow);
-            RefreshTargetDisplay();
+            GenerateTravelChangeEvent(userControlTravelGrid.GetCurrentRow);
             UpdateDependentsWithSelection();
         }
 
@@ -365,12 +271,10 @@ namespace EDDiscovery
 
                 if ( accepted )                                                 // if accepted it on main grid..
                 {
-                    RefreshTargetDisplay();                                     // tell the target system its changed the latest system
-
                     if (EDDiscoveryForm.EDDConfig.FocusOnNewSystem)   // Move focus to new row
                     {
                         userControlTravelGrid.SelectTopRow();
-                        ShowSystemInformation(userControlTravelGrid.GetCurrentRow);
+                        GenerateTravelChangeEvent(userControlTravelGrid.GetCurrentRow);
                         UpdateDependentsWithSelection();
                     }
                 }
@@ -382,89 +286,34 @@ namespace EDDiscovery
             }
         }
 
-
-        public void ShowSystemInformation(DataGridViewRow rw)
+        public void GenerateTravelChangeEvent(DataGridViewRow rw)
         {
-            StoreSystemNote(true);      // save any previous note
-
             HistoryEntry he = null;
 
-            if (rw == null)
-            {
-                textBoxSystem.Text = textBoxBody.Text = textBoxX.Text = textBoxY.Text = textBoxZ.Text =
-                textBoxAllegiance.Text = textBoxEconomy.Text = textBoxGovernment.Text =
-                textBoxVisits.Text = textBoxState.Text = textBoxHomeDist.Text = richTextBoxNote.Text = textBoxSolDist.Text = "";
-                buttonRoss.Enabled = buttonEDDB.Enabled = false;
-            }
-            else
+            if (rw != null)
             {
                 he = userControlTravelGrid.GetHistoryEntry(rw.Index);     // reload, it may have changed
                 Debug.Assert(he != null);
-
-                _discoveryForm.history.FillEDSM(he, reload: true); // Fill in any EDSM info we have, force it to try again.. in case system db updated
-
-                notedisplayedhe = he;
-
-                textBoxSystem.Text = he.System.name;
-                textBoxBody.Text = he.WhereAmI;
-
-                if (he.System.HasCoordinate)         // cursystem has them?
-                {
-                    textBoxX.Text = he.System.x.ToString(SingleCoordinateFormat);
-                    textBoxY.Text = he.System.y.ToString(SingleCoordinateFormat);
-                    textBoxZ.Text = he.System.z.ToString(SingleCoordinateFormat);
-
-                    ISystem homesys = _discoveryForm.GetHomeSystem();
-
-                    toolTipEddb.SetToolTip(textBoxHomeDist, $"Distance to home system ({homesys.name})");
-                    textBoxHomeDist.Text = SystemClassDB.Distance(he.System, homesys).ToString(SingleCoordinateFormat);
-                    textBoxSolDist.Text = SystemClassDB.Distance(he.System, 0, 0, 0).ToString(SingleCoordinateFormat);
-                }
-                else
-                {
-                    textBoxX.Text = "?";
-                    textBoxY.Text = "?";
-                    textBoxZ.Text = "?";
-                    textBoxHomeDist.Text = "";
-                    textBoxSolDist.Text = "";
-                }
-
-                int count = _discoveryForm.history.GetVisitsCount(he.System.name);
-                textBoxVisits.Text = count.ToString();
-
-                bool enableedddross = (he.System.id_eddb > 0);  // Only enable eddb/ross for system that it knows about
-
-                buttonRoss.Enabled = buttonEDDB.Enabled = enableedddross;
-
-                textBoxAllegiance.Text = he.System.allegiance.ToNullUnknownString();
-                textBoxEconomy.Text = he.System.primary_economy.ToNullUnknownString();
-                textBoxGovernment.Text = he.System.government.ToNullUnknownString();
-                textBoxState.Text = he.System.state.ToNullUnknownString();
-                richTextBoxNote.Text = he.snc != null ? he.snc.Note : "";
-
-                _discoveryForm.CalculateClosestSystems(he.System, (s, d) => NewStarListComputed(s.name, d));
+                _discoveryForm.CalculateClosestSystems(he.System, (s, d) => NewStarListComputed(s.name, d));        // hook here, force closes system update
             }
 
             if (OnTravelSelectionChanged != null)
                 OnTravelSelectionChanged(he, _discoveryForm.history);
         }
 
-        public void UpdateNoteJID(long jid, string txt)
+        private void NewStarListComputed(string name, SortedList<double, ISystem> csl)      // thread..
         {
-            userControlTravelGrid.UpdateNoteJID(jid, txt);
-            if (notedisplayedhe != null && notedisplayedhe.Journalid == jid)
+            BeginInvoke((MethodInvoker)delegate
             {
-                string oldtext = richTextBoxNote.Text.Trim();
+                lastclosestname = name;
+                lastclosestsystems = csl;
 
-                if (oldtext != txt)
-                {
-                    richTextBoxNote.Text = txt;
-                }
-            }
+                if (OnNearestStarListChanged != null)
+                    OnNearestStarListChanged(name, csl);
+            });
         }
 
         #endregion
-
 
         #region Grid Layout
 
@@ -489,9 +338,11 @@ namespace EDDiscovery
             // NO NEED to reload the three tabstrips - code below will cause a LoadLayout on the one selected.
 
             int max = (int)PopOutControl.PopOuts.MaxTabButtons;
+
             tabStripBottom.SelectedIndex = Math.Min( SQLiteDBClass.GetSettingInt("TravelControlBottomTab", (int)(PopOutControl.PopOuts.Scan - PopOutControl.PopOuts.StartTabButtons)), max);
             tabStripBottomRight.SelectedIndex = Math.Min(SQLiteDBClass.GetSettingInt("TravelControlBottomRightTab", (int)(PopOutControl.PopOuts.Log - PopOutControl.PopOuts.StartTabButtons) ), max );
             tabStripMiddleRight.SelectedIndex = Math.Min(SQLiteDBClass.GetSettingInt("TravelControlMiddleRightTab", (int)(PopOutControl.PopOuts.StarDistance - PopOutControl.PopOuts.StartTabButtons)), max);
+            tabStripTopRight.SelectedIndex = Math.Min(SQLiteDBClass.GetSettingInt("TravelControlTopRightTab", (int)(PopOutControl.PopOuts.SystemInformation - PopOutControl.PopOuts.StartTabButtons)), max);
         }
 
         public void SaveSettings()     // called by form when closing
@@ -509,39 +360,31 @@ namespace EDDiscovery
             SQLiteDBClass.PutSettingInt("TravelControlBottomRightTab", tabStripBottomRight.SelectedIndex);
             SQLiteDBClass.PutSettingInt("TravelControlBottomTab", tabStripBottom.SelectedIndex);
             SQLiteDBClass.PutSettingInt("TravelControlMiddleRightTab", tabStripMiddleRight.SelectedIndex);
+            SQLiteDBClass.PutSettingInt("TravelControlTopRightTab", tabStripTopRight.SelectedIndex);
         }
 
         #endregion
 
         #region Clicks
 
-
         private void Resort()       // user travel grid to say it resorted
         {
-            UpdateDependentsWithSelection();
+            UpdateDependentsWithSelection();        //TBD does this do enough.. what about dependents should we call changed selection..
         }
 
         private void ChangedSelection(int rowno, int colno , bool doubleclick , bool note)      // User travel grid call back to say someone clicked somewhere
         {
             if (rowno >= 0)
             {
-                ShowSystemInformation(userControlTravelGrid.GetRow(rowno));
+                GenerateTravelChangeEvent(userControlTravelGrid.GetRow(rowno));
                 UpdateDependentsWithSelection();
-
-                if (doubleclick == false && note)
-                {
-                    richTextBoxNote.TextBox.Select(richTextBoxNote.Text.Length, 0);     // move caret to end and focus.
-                    richTextBoxNote.TextBox.ScrollToCaret();
-                    richTextBoxNote.TextBox.Focus();
-                }
 
                 if (userControlTravelGrid.GetCurrentHistoryEntry!= null)        // paranoia
                     _discoveryForm.ActionRun("onHistorySelection", "UserUIEvent", userControlTravelGrid.GetCurrentHistoryEntry);
-
             }
         }
 
-        private void UpdateDependentsWithSelection()
+        private void UpdateDependentsWithSelection()        // they really should do it themselves.. but
         {
             if (userControlTravelGrid.currentGridRow >= 0)
             {
@@ -552,126 +395,11 @@ namespace EDDiscovery
             }
         }
 
-        private void richTextBoxNote_Leave(object sender, EventArgs e)
-        {
-            StoreSystemNote(true);
-        }
-
-        private void richTextBoxNote_TextChanged(object sender, EventArgs e)
-        {
-            StoreSystemNote(false);
-        }
-
-        private void StoreSystemNote(bool send)
-        {
-            _discoveryForm.StoreSystemNote(notedisplayedhe, richTextBoxNote.Text.Trim(), send);
-        }
-
-        private void buttonEDDB_Click(object sender, EventArgs e)
-        {
-            HistoryEntry sys = userControlTravelGrid.GetCurrentHistoryEntry;
-
-            if (sys != null && sys.System.id_eddb > 0)
-                Process.Start("http://eddb.io/system/" + sys.System.id_eddb.ToString());
-        }
-
-        private void buttonRoss_Click(object sender, EventArgs e)
-        {
-            HistoryEntry sys = userControlTravelGrid.GetCurrentHistoryEntry;
-            if (sys != null)
-            {
-                _discoveryForm.history.FillEDSM(sys, reload: true);
-
-                if (sys != null && sys.System.id_eddb > 0)
-                    Process.Start("http://ross.eddb.io/system/update/" + sys.System.id_eddb.ToString());
-            }
-        }
-
-        private void buttonEDSM_Click(object sender, EventArgs e)
-        {
-            HistoryEntry sys = userControlTravelGrid.GetCurrentHistoryEntry;
-
-            if (sys != null)
-                _discoveryForm.history.FillEDSM(sys, reload: true);
-
-            if (sys != null && sys.System != null) // solve a possible exception
-            {
-                if (!String.IsNullOrEmpty(sys.System.name))
-                {
-                    long? id_edsm = sys.System.id_edsm;
-                    if (id_edsm <= 0)
-                    {
-                        id_edsm = null;
-                    }
-
-                    EDSMClass edsm = new EDSMClass();
-                    string url = edsm.GetUrlToEDSMSystem(sys.System.name, id_edsm);
-
-                    if (url.Length > 0)         // may pass back empty string if not known, this solves another exception
-                        Process.Start(url);
-                    else
-                        ExtendedControls.MessageBoxTheme.Show("System unknown to EDSM");
-                }
-            }
-        }
-
         void TGPopOut()
         {
             _discoveryForm.PopOuts.PopOut(PopOutControl.PopOuts.TravelGrid);
         }
 
         #endregion
-
-        #region Target System
-
-        private void textBoxTarget_KeyUp(object sender, KeyEventArgs e)
-        {
-            if (e.KeyCode == Keys.Enter)
-            {
-                RoutingUtils.setTargetSystem(_discoveryForm, textBoxTarget.Text);
-            }
-        }
-
-        public void RefreshTargetDisplay()              // called when a target has been changed.. via EDDiscoveryform
-        {
-            string name;
-            double x, y, z;
-
-            System.Diagnostics.Debug.WriteLine("Refresh target display");
-
-            if (TargetClass.GetTargetPosition(out name, out x, out y, out z))
-            {
-                textBoxTarget.Text = name;
-                textBoxTargetDist.Text = "No Pos";
-
-                HistoryEntry cs = _discoveryForm.history.GetLastWithPosition;
-                if ( cs != null )
-                    textBoxTargetDist.Text = SystemClassDB.Distance(cs.System, x, y, z).ToString("0.00");
-
-                toolTipEddb.SetToolTip(textBoxTarget, "Position is " + x.ToString("0.00") + "," + y.ToString("0.00") + "," + z.ToString("0.00"));
-            }
-            else
-            {
-                textBoxTarget.Text = "Set target";
-                textBoxTargetDist.Text = "";
-                toolTipEddb.SetToolTip(textBoxTarget, "On 3D Map right click to make a bookmark, region mark or click on a notemark and then tick on Set Target, or type it here and hit enter");
-            }
-        }
-
-        private void buttonEDSMTarget_Click(object sender, EventArgs e)
-        {
-            EDSMClass edsm = new EDSMClass();
-            string url = edsm.GetUrlToEDSMSystem(textBoxTarget.Text, null);
-
-            if (url.Length > 0)         // may pass back empty string if not known, this solves another exception
-                Process.Start(url);
-            else
-                ExtendedControls.MessageBoxTheme.Show("System unknown to EDSM");
-
-
-        }
-
-        #endregion
-
     }
 }
