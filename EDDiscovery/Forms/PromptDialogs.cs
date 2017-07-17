@@ -128,6 +128,7 @@ namespace EDDiscovery.Forms
         private Object callertag;
         private string logicalname;
         public event Action<string, string, Object> Trigger;        // returns logical name, name of control, caller tag object
+        private bool ProgClose = false;
 
         public class Entry
         {
@@ -231,6 +232,11 @@ namespace EDDiscovery.Forms
 
             FormBorderStyle = FormBorderStyle.FixedDialog;
 
+            if (theme.WindowsFrame)
+            {
+                size.Height += 50;
+            }
+
             Size = size;
 
             if ( pos.X==-999)
@@ -245,6 +251,8 @@ namespace EDDiscovery.Forms
             outer.MouseDown += FormMouseDown;
 
             Controls.Add(outer);
+
+            this.Text = caption;
 
             Label textLabel = new Label() { Left = 4, Top = 8, Width = Width - 50, Text = caption };
             textLabel.MouseDown += FormMouseDown;
@@ -315,10 +323,29 @@ namespace EDDiscovery.Forms
             }
 
             ShowInTaskbar = false;
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AddOnManagerForm));
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 
             theme.ApplyToForm(this, System.Drawing.SystemFonts.DefaultFont);
 
             Show(p);
+        }
+
+        public new void Close()
+        {
+            ProgClose = true;
+            base.Close();
+        }
+
+        protected override void OnFormClosing(FormClosingEventArgs e)
+        {
+            if (ProgClose == false)
+            {
+                e.Cancel = true;
+                Trigger(logicalname, "Cancel", callertag);
+            }
+            else
+                base.OnFormClosing(e);
         }
 
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
