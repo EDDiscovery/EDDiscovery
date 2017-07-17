@@ -340,7 +340,7 @@ namespace EDDiscovery.UserControls
                 ExtendedControls.PictureBoxHotspot.ImageElement edsm = pictureBox.AddTextFixedSizeC(new Point(scanpostextoffset.X + columnpos[colnum++], rowpos), new Size(45, 14), 
                                             "EDSM", displayfont, backtext, textcolour, 0.5F, true, he, "View system on EDSM");
                 edsm.Translate(0, (rowheight - edsm.img.Height) / 2);          // align to centre of rowh..
-                edsm.SetAlternateImage(ExtendedControls.ControlHelpers.DrawTextIntoFixedSizeBitmapC("EDSM", edsm.img.Size, displayfont, backtext, textcolour.Multiply(1.2F), 0.5F, true), edsm.pos, true);
+                edsm.SetAlternateImage(ExtendedControls.BitMapHelpers.DrawTextIntoFixedSizeBitmapC("EDSM", edsm.img.Size, displayfont, backtext, textcolour.Multiply(1.2F), 0.5F, true), edsm.pos, true);
             }
 
             string tooltip = he.EventSummary + Environment.NewLine + he.EventDescription + Environment.NewLine + he.EventDetailedInfo;

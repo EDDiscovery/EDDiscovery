@@ -611,6 +611,12 @@
     <Compile Include="UserControls\UserControlExploration.Designer.cs">
       <DependentUpon>UserControlExploration.cs</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\UserControlSysInfo.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\UserControlSysInfo.Designer.cs">
+      <DependentUpon>UserControlSysInfo.cs</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\UserControlMarketData.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -761,6 +767,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\UserControlJournalGrid.resx">
       <DependentUpon>UserControlJournalGrid.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\UserControlSysInfo.resx">
+      <DependentUpon>UserControlSysInfo.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\UserControlMarketData.resx">
       <DependentUpon>UserControlMarketData.cs</DependentUpon>

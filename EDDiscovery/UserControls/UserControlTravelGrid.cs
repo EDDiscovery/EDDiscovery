@@ -53,19 +53,19 @@ namespace EDDiscovery.UserControls
         private Dictionary<long, DataGridViewRow> rowsbyjournalid = new Dictionary<long, DataGridViewRow>();
 
         public delegate void ChangedSelection(int rowno, int colno, bool doubleclick, bool note);
-        public event ChangedSelection OnChangedSelection;
+        public event ChangedSelection OnChangedSelection;   // After a change of selection
 
         public delegate void Resort();
-        public event Resort OnResort;
+        public event Resort OnResort;               // After a sort
 
         public delegate void AddedNewEntry(HistoryEntry he, HistoryList hl, bool accepted);
-        public AddedNewEntry OnAddedNewEntry;
+        public AddedNewEntry OnAddedNewEntry;       // FIRED after discoveryform.onNewEntry->this.AddNewEntry completes
 
         public delegate void Redisplay(HistoryList hl);
-        public Redisplay OnRedisplay;
+        public Redisplay OnRedisplay;               // FIRED after discoveryform.onHistoryChange->this.Display
 
         public delegate void PopOut();
-        public PopOut OnPopOut;
+        public PopOut OnPopOut;                     // pop out button pressed
 
         #region Init
 
@@ -348,21 +348,20 @@ namespace EDDiscovery.UserControls
             }
         }
 
-
-        public void UpdateCurrentNote(string s)
+        public void TBDUNUSEDUpdateCurrentNote(string s)
         {
             if (currentGridRow >= 0)
                 dataGridViewTravel.Rows[currentGridRow].Cells[TravelHistoryColumns.Note].Value = s;
         }
 
-        public void UpdateNoteJID(long r, string s)
+        public void TBDREMOVEUpdateNoteJID(long r, string s)
         {
             int row = FindGridPosByJID(r,false);
             if (row >= 0)
                 dataGridViewTravel.Rows[row].Cells[TravelHistoryColumns.Note].Value = s;
         }
 
-        public void UpdateCurrentNoteTag(Object o)
+        public void TBDREMOVEUpdateCurrentNoteTag(Object o)
         {
             if (currentGridRow >= 0)
                 dataGridViewTravel.Rows[currentGridRow].Cells[TravelHistoryColumns.Note].Tag = o;

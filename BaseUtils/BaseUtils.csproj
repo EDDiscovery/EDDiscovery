@@ -69,6 +69,7 @@
     <Compile Include="Misc\Theme.cs" />
     <Compile Include="Misc\TraceLog.cs" />
     <Compile Include="Misc\Win32Constants.cs" />
+    <Compile Include="WinForms\ControlHelpers.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
