@@ -54,7 +54,7 @@ namespace EDDiscovery.Actions
 
             ConditionFunctions.GetCFH = DefaultGetCFH;
 
-            persistentglobalvariables.FromString(SQLiteConnectionUser.GetSettingString("UserGlobalActionVars", ""), ConditionVariables.FromMode.MultiEntryComma);
+            LoadPeristentVariables(new ConditionVariables(SQLiteConnectionUser.GetSettingString("UserGlobalActionVars", ""), ConditionVariables.FromMode.MultiEntryComma));
 
             lasteditedpack = SQLiteConnectionUser.GetSettingString("ActionPackLastFile", "");
 
@@ -177,12 +177,11 @@ namespace EDDiscovery.Actions
         private void Dmf_OnEditGlobals()
         {
             ConditionVariablesForm avf = new ConditionVariablesForm();
-            avf.Init("Global User variables to pass to program on run", persistentglobalvariables, showone: true);
+            avf.Init("Global User variables to pass to program on run", PersistentVariables, showone: true);
 
             if (avf.ShowDialog(discoveryform.FindForm()) == DialogResult.OK)
             {
-                persistentglobalvariables = avf.result;
-                globalvariables = new ConditionVariables(programrunglobalvariables, persistentglobalvariables);    // remake
+                LoadPeristentVariables(avf.result);
             }
         }
 
@@ -255,10 +254,10 @@ namespace EDDiscovery.Actions
 
         public void ConfigureVoice(string title)
         {
-            string voicename = persistentglobalvariables.GetString(ActionSay.globalvarspeechvoice, "Default");
-            string volume = persistentglobalvariables.GetString(ActionSay.globalvarspeechvolume,"Default");
-            string rate = persistentglobalvariables.GetString(ActionSay.globalvarspeechrate,"Default");
-            ConditionVariables effects = new ConditionVariables( persistentglobalvariables.GetString(ActionSay.globalvarspeecheffects, ""),ConditionVariables.FromMode.MultiEntryComma);
+            string voicename = Globals.GetString(ActionSay.globalvarspeechvoice, "Default");
+            string volume = Globals.GetString(ActionSay.globalvarspeechvolume,"Default");
+            string rate = Globals.GetString(ActionSay.globalvarspeechrate,"Default");
+            ConditionVariables effects = new ConditionVariables( PersistentVariables.GetString(ActionSay.globalvarspeecheffects, ""),ConditionVariables.FromMode.MultiEntryComma);
 
             SpeechConfigure cfg = new SpeechConfigure();
             cfg.Init( discoveryform.AudioQueueSpeech, discoveryform.SpeechSynthesizer,
@@ -282,8 +281,8 @@ namespace EDDiscovery.Actions
 
         public void ConfigureWave(string title)
         {
-            string volume = persistentglobalvariables.GetString(ActionPlay.globalvarplayvolume, "60");
-            ConditionVariables effects = new ConditionVariables(persistentglobalvariables.GetString(ActionPlay.globalvarplayeffects, ""), ConditionVariables.FromMode.MultiEntryComma);
+            string volume = Globals.GetString(ActionPlay.globalvarplayvolume, "60");
+            ConditionVariables effects = new ConditionVariables(PersistentVariables.GetString(ActionPlay.globalvarplayeffects, ""), ConditionVariables.FromMode.MultiEntryComma);
 
             WaveConfigureDialog dlg = new WaveConfigureDialog();
             dlg.Init(discoveryform.AudioQueueWave, true, "Select Default device, volume and effects", title, "",
@@ -304,9 +303,9 @@ namespace EDDiscovery.Actions
 
         public void EditSpeechText()
         {
-            if (programrunglobalvariables.Exists("SpeechDefinitionFile"))
+            if (Globals.Exists("SpeechDefinitionFile"))
             {
-                string prog = programrunglobalvariables["SpeechDefinitionFile"];
+                string prog = Globals["SpeechDefinitionFile"];
 
                 Tuple<ActionFile, ActionProgram> ap = actionfiles.FindProgram(prog);
 
@@ -322,10 +321,10 @@ namespace EDDiscovery.Actions
 
         public void ActionRunOnRefresh()
         {
-            string prevcommander = programrunglobalvariables.Exists("Commander") ? programrunglobalvariables["Commander"] : "None";
+            string prevcommander = Globals.Exists("Commander") ? Globals["Commander"] : "None";
             string commander = (discoverycontroller.history.CommanderId < 0) ? "Hidden" : EDCommander.Current.Name;
 
-            string refreshcount = prevcommander.Equals(commander) ? programrunglobalvariables.AddToVar("RefreshCount", 1, 1) : "1";
+            string refreshcount = prevcommander.Equals(commander) ? Globals.AddToVar("RefreshCount", 1, 1) : "1";
             SetInternalGlobal("RefreshCount", refreshcount);
             SetInternalGlobal("Commander", commander);
 
@@ -361,7 +360,7 @@ namespace EDDiscovery.Actions
                 Actions.ActionVars.SystemVars(eventvars, he?.System, "Event");
                 eventvars.Add(additionalvars);   // adding null is allowed
 
-                ConditionVariables testvars = new ConditionVariables(globalvariables);
+                ConditionVariables testvars = new ConditionVariables(Globals);
                 testvars.Add(eventvars);
 
                 ConditionFunctions functions = new ConditionFunctions(testvars,null);
@@ -401,7 +400,7 @@ namespace EDDiscovery.Actions
         public void CloseDown()
         {
             actionrunasync.WaitTillFinished(10000);
-            SQLiteConnectionUser.PutSettingString("UserGlobalActionVars", persistentglobalvariables.ToString());
+            SQLiteConnectionUser.PutSettingString("UserGlobalActionVars", PersistentVariables.ToString());
         }
 
         public override void LogLine(string s)
@@ -477,7 +476,7 @@ namespace EDDiscovery.Actions
         {
             if (actionfileskeyevents.Contains("<" + keyname + ">"))  // fast string comparision to determine if key is overridden..
             {
-                globalvariables["KeyPress"] = keyname;          // only add it to global variables, its not kept in internals.
+                SetInternalGlobal("KeyPress", keyname);
                 ActionRun("onKeyPress", "KeyPress");
                 return true;
             }

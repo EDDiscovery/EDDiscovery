@@ -28,9 +28,16 @@ namespace ActionLanguage
         protected ActionFileList actionfiles;
         protected ActionRun actionrunasync;
 
-        protected ConditionVariables programrunglobalvariables;         // program run, lost at power off, set by GLOBAL or internal 
-        protected ConditionVariables persistentglobalvariables;   // user variables, set by user only, including user setting vars like SpeechVolume
-        protected ConditionVariables globalvariables;                  // combo of above.
+        private ConditionVariables programrunglobalvariables;         // program run, lost at power off, set by GLOBAL or internal 
+        private ConditionVariables persistentglobalvariables;   // user variables, set by user only, including user setting vars like SpeechVolume
+        private ConditionVariables globalvariables;                  // combo of above.
+
+        protected ConditionVariables PersistentVariables { get { return persistentglobalvariables; } }
+        protected void LoadPeristentVariables(ConditionVariables list)
+        {
+            persistentglobalvariables = list;
+            globalvariables = new ConditionVariables(persistentglobalvariables, programrunglobalvariables);
+        }
 
         public ConditionVariables Globals { get { return globalvariables; } }
 
@@ -52,7 +59,7 @@ namespace ActionLanguage
             form = frm;
 
             persistentglobalvariables = new ConditionVariables();
-            globalvariables = new ConditionVariables(persistentglobalvariables);        // copy existing user ones into to shared buffer..
+            globalvariables = new ConditionVariables();
             programrunglobalvariables = new ConditionVariables();
 
             SetInternalGlobal("CurrentCulture", System.Threading.Thread.CurrentThread.CurrentCulture.Name);
