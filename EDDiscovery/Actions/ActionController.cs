@@ -48,6 +48,7 @@ namespace EDDiscovery.Actions
             discoverycontroller = ctrl;
 
             persistentglobalvariables.FromString(SQLiteConnectionUser.GetSettingString("UserGlobalActionVars", ""), ConditionVariables.FromMode.MultiEntryComma);
+            globalvariables = new ConditionVariables(programrunglobalvariables, persistentglobalvariables);    // remake
 
             lasteditedpack = SQLiteConnectionUser.GetSettingString("ActionPackLastFile", "");
             ReLoad();
