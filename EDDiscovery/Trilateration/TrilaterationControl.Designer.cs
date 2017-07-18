@@ -46,20 +46,16 @@ namespace EDDiscovery
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(TrilaterationControl));
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             this.trilatContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.addToWantedSystemsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.viewOnEDSMToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.pasteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.labelTargetSystem = new System.Windows.Forms.Label();
             this.labelCoordinates = new System.Windows.Forms.Label();
             this.labelCoordinateX = new System.Windows.Forms.Label();
             this.labelCoordinateY = new System.Windows.Forms.Label();
             this.labelCoordinateZ = new System.Windows.Forms.Label();
-            this.panelImplementation = new System.Windows.Forms.Panel();
-            this.labelAlgorithm = new System.Windows.Forms.Label();
-            this.radioButtonAlgorithmJs = new ExtendedControls.RadioButtonCustom();
-            this.radioButtonAlgorithmCsharp = new ExtendedControls.RadioButtonCustom();
             this.toolTipAlgorithm = new System.Windows.Forms.ToolTip(this.components);
             this.wantedContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.removeFromWantedSystemsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -96,9 +92,7 @@ namespace EDDiscovery
             this.dataGridViewClosestSystems = new System.Windows.Forms.DataGridView();
             this.Source = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewTextBoxColumnClosestSystemsSystem = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.pasteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.trilatContextMenu.SuspendLayout();
-            this.panelImplementation.SuspendLayout();
             this.wantedContextMenu.SuspendLayout();
             this.toolStrip1.SuspendLayout();
             this.panel_controls.SuspendLayout();
@@ -123,7 +117,7 @@ namespace EDDiscovery
             this.viewOnEDSMToolStripMenuItem,
             this.pasteToolStripMenuItem});
             this.trilatContextMenu.Name = "trilatContextMenu";
-            this.trilatContextMenu.Size = new System.Drawing.Size(198, 92);
+            this.trilatContextMenu.Size = new System.Drawing.Size(198, 70);
             // 
             // addToWantedSystemsToolStripMenuItem
             // 
@@ -138,6 +132,13 @@ namespace EDDiscovery
             this.viewOnEDSMToolStripMenuItem.Size = new System.Drawing.Size(197, 22);
             this.viewOnEDSMToolStripMenuItem.Text = "View on EDSM";
             this.viewOnEDSMToolStripMenuItem.Click += new System.EventHandler(this.viewOnEDSMToolStripMenuItem_Click);
+            // 
+            // pasteToolStripMenuItem
+            // 
+            this.pasteToolStripMenuItem.Name = "pasteToolStripMenuItem";
+            this.pasteToolStripMenuItem.Size = new System.Drawing.Size(197, 22);
+            this.pasteToolStripMenuItem.Text = "Paste";
+            this.pasteToolStripMenuItem.Click += new System.EventHandler(this.pasteToolStripMenuItem_Click);
             // 
             // labelTargetSystem
             // 
@@ -183,63 +184,6 @@ namespace EDDiscovery
             this.labelCoordinateZ.Size = new System.Drawing.Size(17, 13);
             this.labelCoordinateZ.TabIndex = 11;
             this.labelCoordinateZ.Text = "Z:";
-            // 
-            // panelImplementation
-            // 
-            this.panelImplementation.Controls.Add(this.labelAlgorithm);
-            this.panelImplementation.Controls.Add(this.radioButtonAlgorithmJs);
-            this.panelImplementation.Controls.Add(this.radioButtonAlgorithmCsharp);
-            this.panelImplementation.Location = new System.Drawing.Point(467, 4);
-            this.panelImplementation.Name = "panelImplementation";
-            this.panelImplementation.Size = new System.Drawing.Size(49, 63);
-            this.panelImplementation.TabIndex = 16;
-            this.panelImplementation.Visible = false;
-            // 
-            // labelAlgorithm
-            // 
-            this.labelAlgorithm.AutoSize = true;
-            this.labelAlgorithm.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.labelAlgorithm.Location = new System.Drawing.Point(0, 12);
-            this.labelAlgorithm.Name = "labelAlgorithm";
-            this.labelAlgorithm.Size = new System.Drawing.Size(48, 12);
-            this.labelAlgorithm.TabIndex = 2;
-            this.labelAlgorithm.Text = "Algorithm:";
-            // 
-            // radioButtonAlgorithmJs
-            // 
-            this.radioButtonAlgorithmJs.AutoSize = true;
-            this.radioButtonAlgorithmJs.FontNerfReduction = 0.5F;
-            this.radioButtonAlgorithmJs.Location = new System.Drawing.Point(3, 27);
-            this.radioButtonAlgorithmJs.MouseOverColor = System.Drawing.Color.CornflowerBlue;
-            this.radioButtonAlgorithmJs.Name = "radioButtonAlgorithmJs";
-            this.radioButtonAlgorithmJs.RadioButtonColor = System.Drawing.Color.Gray;
-            this.radioButtonAlgorithmJs.RadioButtonInnerColor = System.Drawing.Color.White;
-            this.radioButtonAlgorithmJs.SelectedColor = System.Drawing.Color.DarkBlue;
-            this.radioButtonAlgorithmJs.SelectedColorRing = System.Drawing.Color.Black;
-            this.radioButtonAlgorithmJs.Size = new System.Drawing.Size(37, 17);
-            this.radioButtonAlgorithmJs.TabIndex = 1;
-            this.radioButtonAlgorithmJs.Text = "JS";
-            this.toolTipAlgorithm.SetToolTip(this.radioButtonAlgorithmJs, "Original algoritthm from ed-systems, written in Javascript (slower)");
-            this.radioButtonAlgorithmJs.UseVisualStyleBackColor = true;
-            // 
-            // radioButtonAlgorithmCsharp
-            // 
-            this.radioButtonAlgorithmCsharp.AutoSize = true;
-            this.radioButtonAlgorithmCsharp.Checked = true;
-            this.radioButtonAlgorithmCsharp.FontNerfReduction = 0.5F;
-            this.radioButtonAlgorithmCsharp.Location = new System.Drawing.Point(3, 44);
-            this.radioButtonAlgorithmCsharp.MouseOverColor = System.Drawing.Color.CornflowerBlue;
-            this.radioButtonAlgorithmCsharp.Name = "radioButtonAlgorithmCsharp";
-            this.radioButtonAlgorithmCsharp.RadioButtonColor = System.Drawing.Color.Gray;
-            this.radioButtonAlgorithmCsharp.RadioButtonInnerColor = System.Drawing.Color.White;
-            this.radioButtonAlgorithmCsharp.SelectedColor = System.Drawing.Color.DarkBlue;
-            this.radioButtonAlgorithmCsharp.SelectedColorRing = System.Drawing.Color.Black;
-            this.radioButtonAlgorithmCsharp.Size = new System.Drawing.Size(39, 17);
-            this.radioButtonAlgorithmCsharp.TabIndex = 0;
-            this.radioButtonAlgorithmCsharp.TabStop = true;
-            this.radioButtonAlgorithmCsharp.Text = "C#";
-            this.toolTipAlgorithm.SetToolTip(this.radioButtonAlgorithmCsharp, "Algorithm from ed-systems rewritten to C# (fast, experimental)");
-            this.radioButtonAlgorithmCsharp.UseVisualStyleBackColor = true;
             // 
             // wantedContextMenu
             // 
@@ -305,7 +249,7 @@ namespace EDDiscovery
             // toolStripButtonSubmitDistances
             // 
             this.toolStripButtonSubmitDistances.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
-            this.toolStripButtonSubmitDistances.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonSubmitDistances.Image")));
+            this.toolStripButtonSubmitDistances.Image = global::EDDiscovery.Properties.Resources.toolStripButtonSubmitDistances_Image;
             this.toolStripButtonSubmitDistances.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonSubmitDistances.Name = "toolStripButtonSubmitDistances";
             this.toolStripButtonSubmitDistances.Size = new System.Drawing.Size(118, 22);
@@ -314,7 +258,8 @@ namespace EDDiscovery
             // 
             // toolStripButtonNew
             // 
-            this.toolStripButtonNew.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonNew.Image")));
+            this.toolStripButtonNew.BackColor = System.Drawing.Color.LightSalmon;
+            this.toolStripButtonNew.Image = global::EDDiscovery.Properties.Resources.toolStripButtonNew_Image;
             this.toolStripButtonNew.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonNew.Name = "toolStripButtonNew";
             this.toolStripButtonNew.Size = new System.Drawing.Size(76, 22);
@@ -330,8 +275,9 @@ namespace EDDiscovery
             // toolStripButtonRemoveUnused
             // 
             this.toolStripButtonRemoveUnused.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButtonRemoveUnused.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonRemoveUnused.Image")));
+            this.toolStripButtonRemoveUnused.Image = global::EDDiscovery.Properties.Resources.toolStripButtonRemoveUnused_Image;
             this.toolStripButtonRemoveUnused.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonRemoveUnused.Margin = new System.Windows.Forms.Padding(2, 1, 2, 2);
             this.toolStripButtonRemoveUnused.Name = "toolStripButtonRemoveUnused";
             this.toolStripButtonRemoveUnused.Size = new System.Drawing.Size(23, 22);
             this.toolStripButtonRemoveUnused.Text = "toolStripButtonRemoveUnused";
@@ -341,8 +287,9 @@ namespace EDDiscovery
             // toolStripButtonRemoveAll
             // 
             this.toolStripButtonRemoveAll.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButtonRemoveAll.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonRemoveAll.Image")));
+            this.toolStripButtonRemoveAll.Image = global::EDDiscovery.Properties.Resources.toolStripButtonRemoveAll_Image;
             this.toolStripButtonRemoveAll.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonRemoveAll.Margin = new System.Windows.Forms.Padding(2, 1, 2, 2);
             this.toolStripButtonRemoveAll.Name = "toolStripButtonRemoveAll";
             this.toolStripButtonRemoveAll.Size = new System.Drawing.Size(23, 22);
             this.toolStripButtonRemoveAll.Text = "toolStripButton1";
@@ -352,8 +299,9 @@ namespace EDDiscovery
             // toolStripButtonMap
             // 
             this.toolStripButtonMap.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButtonMap.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonMap.Image")));
+            this.toolStripButtonMap.Image = global::EDDiscovery.Properties.Resources.toolStripButtonMap_Image;
             this.toolStripButtonMap.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonMap.Margin = new System.Windows.Forms.Padding(2, 1, 2, 2);
             this.toolStripButtonMap.Name = "toolStripButtonMap";
             this.toolStripButtonMap.Size = new System.Drawing.Size(23, 22);
             this.toolStripButtonMap.Text = "3d map";
@@ -373,7 +321,6 @@ namespace EDDiscovery
             this.panel_controls.Controls.Add(this.labelCoordinateY);
             this.panel_controls.Controls.Add(this.textBoxCoordinateZ);
             this.panel_controls.Controls.Add(this.labelCoordinateZ);
-            this.panel_controls.Controls.Add(this.panelImplementation);
             this.panel_controls.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel_controls.Location = new System.Drawing.Point(0, 25);
             this.panel_controls.Name = "panel_controls";
@@ -678,13 +625,6 @@ namespace EDDiscovery
             this.dataGridViewTextBoxColumnClosestSystemsSystem.Name = "dataGridViewTextBoxColumnClosestSystemsSystem";
             this.dataGridViewTextBoxColumnClosestSystemsSystem.ReadOnly = true;
             // 
-            // pasteToolStripMenuItem
-            // 
-            this.pasteToolStripMenuItem.Name = "pasteToolStripMenuItem";
-            this.pasteToolStripMenuItem.Size = new System.Drawing.Size(197, 22);
-            this.pasteToolStripMenuItem.Text = "Paste";
-            this.pasteToolStripMenuItem.Click += new System.EventHandler(this.pasteToolStripMenuItem_Click);
-            // 
             // TrilaterationControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -695,8 +635,6 @@ namespace EDDiscovery
             this.Name = "TrilaterationControl";
             this.Size = new System.Drawing.Size(924, 681);
             this.trilatContextMenu.ResumeLayout(false);
-            this.panelImplementation.ResumeLayout(false);
-            this.panelImplementation.PerformLayout();
             this.wantedContextMenu.ResumeLayout(false);
             this.toolStrip1.ResumeLayout(false);
             this.toolStrip1.PerformLayout();
@@ -729,10 +667,6 @@ namespace EDDiscovery
         private ExtendedControls.TextBoxBorder textBoxCoordinateY;
         private System.Windows.Forms.Label labelCoordinateZ;
         private ExtendedControls.TextBoxBorder textBoxCoordinateZ;
-        private System.Windows.Forms.Panel panelImplementation;
-        private ExtendedControls.RadioButtonCustom radioButtonAlgorithmJs;
-        private ExtendedControls.RadioButtonCustom radioButtonAlgorithmCsharp;
-        private System.Windows.Forms.Label labelAlgorithm;
         private System.Windows.Forms.ToolTip toolTipAlgorithm;
         private System.Windows.Forms.ToolStrip toolStrip1;
         private System.Windows.Forms.ToolStripButton toolStripButtonSubmitDistances;
