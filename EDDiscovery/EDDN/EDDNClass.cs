@@ -37,7 +37,7 @@ namespace EDDiscovery.EDDN
         
         private readonly string fromSoftwareVersion;
         private readonly string fromSoftware;
-        private readonly string EDDNServer = "http://eddn-gateway.elite-markets.net:8080/upload/";
+        private readonly string EDDNServer = "https://eddn.edcd.io:4430/upload/";
 
         public EDDNClass()
         {
@@ -64,18 +64,18 @@ namespace EDDiscovery.EDDN
         private string GetEDDNJournalSchemaRef()
         {
             if (commanderName.StartsWith("[BETA]"))
-                return "http://schemas.elite-markets.net/eddn/journal/1/test";
+                return "https://eddn.edcd.io/schemas/journal/1/test";
             else
-                return "http://schemas.elite-markets.net/eddn/journal/1";
+                return "https://eddn.edcd.io/schemas/journal/1";
         }
 
         private string GetEDDNCommoditySchemaRef()
         {
             if (commanderName.StartsWith("[BETA]"))
-                return "http://schemas.elite-markets.net/eddn/commodity/3/test";
+                return "https://eddn.edcd.io/schemas/commodity/3/test";
             else
-                return "http://schemas.elite-markets.net/eddn/commodity/3";
-                //return "http://schemas.elite-markets.net/eddn/commodity/3/test"; // For testing now.
+                return "https://eddn.edcd.io/schemas/commodity/3";
+                //return "https://eddn.edcd.io/schemas/commodity/3/test"; // For testing now.
         }
 
 
