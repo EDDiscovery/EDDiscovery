@@ -942,7 +942,6 @@
     <None Include="Resources\friends.png" />
     <None Include="Resources\eddiscovery_logo.png" />
     <None Include="Resources\GNE.ico" />
-    <None Include="images\edlogo_3mo_icon.ico" />
     <Content Include="Resources\imgCheck.png" />
     <None Include="Resources\stellaremnant.PNG" />
     <None Include="Resources\nebula.PNG" />
@@ -1091,6 +1090,11 @@
     <None Include="Resources\marketdata.png" />
     <None Include="Resources\no_entry.bmp" />
     <None Include="Resources\popout1.png" />
+    <None Include="Resources\toolStripButtonRemoveUnused.Image.png" />
+    <None Include="Resources\toolStripButtonSubmitDistances.Image.png" />
+    <None Include="Resources\toolStripButtonMap.Image.png" />
+    <None Include="Resources\toolStripButtonNew.Image.png" />
+    <None Include="Resources\toolStripButtonRemoveAll.Image.png" />
     <Content Include="x86\Microsoft.VC100.CRT\msvcp100.dll" />
     <Content Include="x86\Microsoft.VC100.CRT\msvcr100.dll" />
     <Content Include="x86\SQLite.Interop.dll">

@@ -2416,6 +2416,56 @@ namespace EDDiscovery.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap toolStripButtonMap_Image {
+            get {
+                object obj = ResourceManager.GetObject("toolStripButtonMap_Image", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap toolStripButtonNew_Image {
+            get {
+                object obj = ResourceManager.GetObject("toolStripButtonNew_Image", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap toolStripButtonRemoveAll_Image {
+            get {
+                object obj = ResourceManager.GetObject("toolStripButtonRemoveAll_Image", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap toolStripButtonRemoveUnused_Image {
+            get {
+                object obj = ResourceManager.GetObject("toolStripButtonRemoveUnused_Image", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap toolStripButtonSubmitDistances_Image {
+            get {
+                object obj = ResourceManager.GetObject("toolStripButtonSubmitDistances_Image", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap touchdown {
             get {
                 object obj = ResourceManager.GetObject("touchdown", resourceCulture);
