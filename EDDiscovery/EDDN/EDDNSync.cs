@@ -97,7 +97,7 @@ namespace EDDiscovery.EDDN
 
                         TimeSpan age = he.AgeOfEntry();
 
-                        if (age.Days >= 1)
+                        if (age.Days >= 1 && he.EntryType != JournalTypeEnum.Scan)
                         {
                             System.Diagnostics.Debug.WriteLine("EDDN: Ignoring entry due to age");
                         }
