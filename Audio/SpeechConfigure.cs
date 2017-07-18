@@ -51,7 +51,7 @@ namespace AudioExtensions
         }
 
         public void Init(AudioQueue qu, SpeechSynthesizer syn,
-                            string title, string caption,
+                            string title, string caption, Icon ic,
                             String text,          // if null, no text box or wait complete
                             bool waitcomplete, bool literal, 
                             AudioQueue.Priority prio,
@@ -67,6 +67,7 @@ namespace AudioExtensions
             synth = syn;
             this.Text = caption;
             Title.Text = title;
+            this.Icon = ic;
             textBoxBorderTest.Text = "The quick brown fox jumped over the lazy dog";
 
             bool defaultmode = (text == null);
@@ -132,7 +133,7 @@ namespace AudioExtensions
 
             effects = ef;
 
-            BaseUtils.ThemeAbleFormsInstance.Instance.ApplyToForm(this, System.Drawing.SystemFonts.DefaultFont);
+            ExtendedControls.ThemeableFormsInstance.Instance.ApplyToForm(this, System.Drawing.SystemFonts.DefaultFont);
         }
 
         private void buttonExtOK_Click(object sender, EventArgs e)
@@ -144,7 +145,7 @@ namespace AudioExtensions
         private void buttonExtEffects_Click(object sender, EventArgs e)
         {
             SoundEffectsDialog sfe = new SoundEffectsDialog();
-            sfe.Init(effects, textBoxBorderText.Visible);           // give them the none option ONLY if we are allowing text
+            sfe.Init(this.Icon, effects, textBoxBorderText.Visible);           // give them the none option ONLY if we are allowing text
             sfe.TestSettingEvent += Sfe_TestSettingEvent;           // callback to say test
             sfe.StopTestSettingEvent += Sfe_StopTestSettingEvent;   // callback to say stop
             if ( sfe.ShowDialog(this) == DialogResult.OK )

@@ -31,17 +31,19 @@ namespace ExtendedControls
             InitializeComponent();
         }
 
-        public void Info(string title, string info , Font fnt, int[] array , bool themeit = false)    
+        public void Info(string title, Icon ic, string info , Font fnt, int[] array , bool themeit = false)    
         {
+            Icon = ic;
             Text = title;
             textBoxInfo.TextBox.SelectionTabs = array;
             textBoxInfo.TextBox.ReadOnly = true;
             textBoxInfo.Text = info;
             textBoxInfo.TextBox.Select(0, 0);
 
-            if ( themeit )
+            ThemeableForms theme = ThemeableFormsInstance.Instance;
+
+            if ( themeit && theme != null)
             {
-                BaseUtils.ThemeableForms theme = BaseUtils.ThemeAbleFormsInstance.Instance;
                 if ( fnt == null )
                     fnt = new Font(theme.FontName, 12.0F);
                 theme.ApplyToForm(this, fnt);

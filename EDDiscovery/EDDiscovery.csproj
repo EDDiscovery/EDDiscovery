@@ -940,6 +940,9 @@
     <None Include="Resources\High_metal_content_world_White3.png" />
     <None Include="Resources\High_metal_content_world_White3.bmp" />
     <None Include="Resources\friends.png" />
+    <None Include="Resources\eddiscovery_logo.png" />
+    <None Include="Resources\GNE.ico" />
+    <None Include="images\edlogo_3mo_icon.ico" />
     <Content Include="Resources\imgCheck.png" />
     <None Include="Resources\stellaremnant.PNG" />
     <None Include="Resources\nebula.PNG" />

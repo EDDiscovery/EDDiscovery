@@ -51,8 +51,11 @@ namespace ActionLanguage
         public SpeechSynthesizer SpeechSynthesizer { get { return synth; } }
         public System.Windows.Forms.Form Form { get { return form; } }
 
-        public ActionCoreController( AudioQueue speech , AudioQueue wave , SpeechSynthesizer synt , System.Windows.Forms.Form frm )
+        public System.Drawing.Icon Icon { get; private set;}
+
+        public ActionCoreController( AudioQueue speech , AudioQueue wave , SpeechSynthesizer synt , System.Windows.Forms.Form frm, System.Drawing.Icon ic )
         {
+            Icon = ic;
             audiospeech = speech;
             audiowave = wave;
             synth = synt;

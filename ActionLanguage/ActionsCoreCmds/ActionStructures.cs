@@ -40,7 +40,7 @@ namespace ActionLanguage
         public bool ConfigurationMenu(Form parent, ActionCoreController cp, List<string> eventvars, ref ConditionLists jf)
         {
             ConditionFilterForm frm = new ConditionFilterForm();
-            frm.InitCondition("Define condition", eventvars, jf);
+            frm.InitCondition("Define condition", cp.Icon, eventvars, jf);
 
             frm.TopMost = parent.FindForm().TopMost;
             if (frm.ShowDialog(parent.FindForm()) == DialogResult.OK)
@@ -285,7 +285,7 @@ namespace ActionLanguage
         public override bool ConfigurationMenu(Form parent, ActionCoreController cp, List<string> eventvars)
         {
             List<string> l = FromString(userdata);
-            List<string> r = ExtendedControls.PromptMultiLine.ShowDialog(parent, "Configure Loop",
+            List<string> r = ExtendedControls.PromptMultiLine.ShowDialog(parent, "Configure Loop", cp.Icon,
                             new string[] { "Loop count", "Optional var name" }, l?.ToArray(), true);
 
             if (r != null)
@@ -402,7 +402,7 @@ namespace ActionLanguage
 
             if (base.ConfigurationMenu(parent, cp, eventvars, ref cond))
             {
-                string promptValue = ExtendedControls.PromptSingleLine.ShowDialog(parent, "Error to display", errmsg, "Configure ErrorIf Command");
+                string promptValue = ExtendedControls.PromptSingleLine.ShowDialog(parent, "Error to display", errmsg, "Configure ErrorIf Command" , cp.Icon);
                 if (promptValue != null)
                 {
                     userdata = ToString(cond, promptValue);
@@ -497,11 +497,11 @@ namespace ActionLanguage
             Dictionary<string, string> altops;
             FromString(UserData, out progname, out cond, out altops);
 
-            string promptValue =ExtendedControls.PromptSingleLine.ShowDialog(parent, "Program to call (use set::prog if req)", progname, "Configure Call Command");
+            string promptValue =ExtendedControls.PromptSingleLine.ShowDialog(parent, "Program to call (use set::prog if req)", progname, "Configure Call Command" , cp.Icon);
             if (promptValue != null)
             {
                 ConditionVariablesForm avf = new ConditionVariablesForm();
-                avf.Init("Variables to pass into called program", cond, showone:true, allownoexpand:true, altops:altops);
+                avf.Init("Variables to pass into called program", cp.Icon, cond, showone:true, allownoexpand:true, altops:altops);
 
                 if (avf.ShowDialog(parent.FindForm()) == DialogResult.OK)
                 {

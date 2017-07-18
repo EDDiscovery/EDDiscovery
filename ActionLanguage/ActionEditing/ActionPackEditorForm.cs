@@ -59,8 +59,9 @@ namespace ActionLanguage
         public delegate List<string> AdditionalNames(string ev);
         public event AdditionalNames onAdditionalNames;             // must set this, provide extra names
 
-        public void Init(string t, ActionCoreController cp, string appfolder, ActionFile file, List<Tuple<string, string>> ev)
+        public void Init(string t, Icon ic, ActionCoreController cp, string appfolder, ActionFile file, List<Tuple<string, string>> ev)
         {
+            this.Icon = ic;
             actioncorecontroller = cp;
             applicationfolder = appfolder;
             actionfile = file;
@@ -71,7 +72,7 @@ namespace ActionLanguage
             foreach (string s in grouptypenames)
                 groupeventlist.Add(s, (from e in events where e.Item2 == s select e.Item1).ToList());
 
-            bool winborder = BaseUtils.ThemeAbleFormsInstance.Instance.ApplyToForm(this, SystemFonts.DefaultFont);
+            bool winborder = ExtendedControls.ThemeableFormsInstance.Instance.ApplyToForm(this, SystemFonts.DefaultFont);
             statusStripCustom.Visible = panelTop.Visible = panelTop.Enabled = !winborder;
             initialtitle = this.Text = label_index.Text = t;
 
@@ -88,7 +89,7 @@ namespace ActionLanguage
                 Condition cd = c.Get(i);
                 Group g = CreateGroup(cd);
                 groups.Add(g);
-                BaseUtils.ThemeAbleFormsInstance.Instance.ApplyToControls(g.panel, SystemFonts.DefaultFont);
+                ExtendedControls.ThemeableFormsInstance.Instance.ApplyToControls(g.panel, SystemFonts.DefaultFont);
             }
 
             foreach (Group g in groups)
@@ -140,8 +141,8 @@ namespace ActionLanguage
             }
 
             g.usercontrol = UserControlAB.Create(g.grouptype.Text);
-            g.usercontrol.Init(c, groupeventlist[g.grouptype.Text], actioncorecontroller, applicationfolder, actionfile, onAdditionalNames);
-            BaseUtils.ThemeAbleFormsInstance.Instance.ApplyToControls(g.usercontrol, SystemFonts.DefaultFont);
+            g.usercontrol.Init(c, groupeventlist[g.grouptype.Text], actioncorecontroller, applicationfolder, actionfile, onAdditionalNames , this.Icon);
+            ExtendedControls.ThemeableFormsInstance.Instance.ApplyToControls(g.usercontrol, SystemFonts.DefaultFont);
             g.usercontrol.Location = new Point(panelxmargin + 108, 0);
             g.usercontrol.Size = new Size(5000, g.panel.Height);
             g.usercontrol.RefreshEvent += Usercontrol_RefreshEvent;
@@ -259,7 +260,7 @@ namespace ActionLanguage
         private void buttonMore_Click(object sender, EventArgs e)
         {
             Group g = CreateGroup(null);
-            BaseUtils.ThemeAbleFormsInstance.Instance.ApplyToControls(g.panel, SystemFonts.DefaultFont);
+            ExtendedControls.ThemeableFormsInstance.Instance.ApplyToControls(g.panel, SystemFonts.DefaultFont);
             groups.Add(g);
             PositionGroups(true);
             panelVScroll.Controls.Add(g.panel);
@@ -329,7 +330,7 @@ namespace ActionLanguage
                     ActionProgramEditForm apf = new ActionProgramEditForm();
                     apf.EditProgram += EditProgram;
 
-                    apf.Init("Action program " , actioncorecontroller, applicationfolder,
+                    apf.Init("Action program " , this.Icon, actioncorecontroller, applicationfolder,
                                 onAdditionalNames(""), actionfile.name, p, 
                                 actionfile.actionprogramlist.GetActionProgramList(), "", ModifierKeys.HasFlag(Keys.Shift));
 
@@ -360,7 +361,7 @@ namespace ActionLanguage
         private void buttonInstallationVars_Click(object sender, EventArgs e)
         {
             ConditionVariablesForm avf = new ConditionVariablesForm();
-            avf.Init("Configuration items for installation - specialist use",  actionfile.installationvariables, showone: false);
+            avf.Init("Configuration items for installation - specialist use",  this.Icon, actionfile.installationvariables, showone: false);
 
             if (avf.ShowDialog(this) == DialogResult.OK)
             {
@@ -550,7 +551,8 @@ namespace ActionLanguage
 
         public ActionCoreController actioncorecontroller;
         public string applicationfolder;
-        
+        public System.Drawing.Icon Icon;
+
         public System.Action<UserControlAB> RemoveItem;
         public System.Action RefreshEvent;
 
@@ -566,8 +568,9 @@ namespace ActionLanguage
 
         protected ActionPackEditorForm.AdditionalNames onAdditionalNames;
 
-        public void Init(Condition cond, List<string> events, ActionCoreController cp, string appfolder, ActionFile file , ActionPackEditorForm.AdditionalNames func)
+        public void Init(Condition cond, List<string> events, ActionCoreController cp, string appfolder, ActionFile file , ActionPackEditorForm.AdditionalNames func , Icon ic)
         {
+            Icon = ic;
             onAdditionalNames = func;
             cd = new Condition(cond);        // full clone, we can now modify it.
             actionfile = file;
@@ -678,7 +681,7 @@ namespace ActionLanguage
             }
 
             ConditionVariablesForm avf = new ConditionVariablesForm();
-            avf.Init("Input parameters and flags to pass to program on run",cond, showone: true, showrefresh: true, showrefreshstate: flag.Equals(ConditionVariables.flagRunAtRefresh));
+            avf.Init("Input parameters and flags to pass to program on run", this.Icon, cond, showone: true, showrefresh: true, showrefreshstate: flag.Equals(ConditionVariables.flagRunAtRefresh));
 
             if (avf.ShowDialog(this) == DialogResult.OK)
             {
@@ -733,7 +736,7 @@ namespace ActionLanguage
                 // we init with a variable list based on the field names of the group (normally the event field names got by SetFieldNames)
                 // pass in the program if found, and its action data.
 
-                apf.Init("Action program " , actioncorecontroller, applicationfolder, onAdditionalNames(eventtype.Text), actionfile.name , p, actionfile.actionprogramlist.GetActionProgramList(), suggestedname, ModifierKeys.HasFlag(Keys.Shift));
+                apf.Init("Action program " , this.Icon, actioncorecontroller, applicationfolder, onAdditionalNames(eventtype.Text), actionfile.name , p, actionfile.actionprogramlist.GetActionProgramList(), suggestedname, ModifierKeys.HasFlag(Keys.Shift));
 
                 DialogResult res = apf.ShowDialog();
 
@@ -826,7 +829,7 @@ namespace ActionLanguage
         {
             ConditionFilterForm frm = new ConditionFilterForm();
 
-            frm.InitCondition("Action condition", onAdditionalNames(eventtype.Text), cd);
+            frm.InitCondition("Action condition", this.Icon, onAdditionalNames(eventtype.Text), cd);
             frm.TopMost = this.FindForm().TopMost;
             if (frm.ShowDialog(this.FindForm()) == DialogResult.OK)
             {

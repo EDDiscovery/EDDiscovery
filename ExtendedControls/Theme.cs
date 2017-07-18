@@ -19,7 +19,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BaseUtils
+namespace ExtendedControls
 {
     public interface ThemeableForms
     {
@@ -28,9 +28,10 @@ namespace BaseUtils
         System.Drawing.Color TextBlockColor { get; set; }
         string FontName { get; set; }
         bool WindowsFrame { get; set; }
+        System.Drawing.Icon MessageBoxWindowIcon { get; set; }
     }
 
-    public static class ThemeAbleFormsInstance
+    public static class ThemeableFormsInstance
     {
         static public ThemeableForms Instance { get; set; }
     }

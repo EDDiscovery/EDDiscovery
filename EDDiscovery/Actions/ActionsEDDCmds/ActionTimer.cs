@@ -44,7 +44,7 @@ namespace EDDiscovery.Actions
         public override bool ConfigurationMenu(Form parent, ActionCoreController cp, List<string> eventvars)
         {
             List<string> l = FromString(userdata);
-            List<string> r = ExtendedControls.PromptMultiLine.ShowDialog(parent, "Configure Timer Dialog",
+            List<string> r = ExtendedControls.PromptMultiLine.ShowDialog(parent, "Configure Timer Dialog", cp.Icon,
                             new string[] { "TimerName", "Milliseconds", "Opt JID" }, l?.ToArray());
             if (r != null)
             {

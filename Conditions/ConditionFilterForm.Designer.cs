@@ -43,7 +43,6 @@ namespace Conditions
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ConditionFilterForm));
             this.panelTop = new System.Windows.Forms.Panel();
             this.panel_close = new ExtendedControls.DrawnPanel();
             this.panel_minimize = new ExtendedControls.DrawnPanel();
@@ -241,7 +240,6 @@ namespace Conditions
             this.Controls.Add(this.panelTop);
             this.Controls.Add(this.panelOK);
             this.Controls.Add(this.statusStripCustom);
-            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "ConditionFilterForm";
             this.Padding = new System.Windows.Forms.Padding(3, 0, 3, 0);
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;

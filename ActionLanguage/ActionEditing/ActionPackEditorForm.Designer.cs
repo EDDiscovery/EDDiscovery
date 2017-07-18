@@ -28,7 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ActionPackEditorForm));
             this.panelTop = new System.Windows.Forms.Panel();
             this.panel_close = new ExtendedControls.DrawnPanel();
             this.panel_minimize = new ExtendedControls.DrawnPanel();
@@ -300,7 +299,7 @@
             this.statusStripCustom.TabIndex = 28;
             this.statusStripCustom.Text = "statusStripCustom1";
             // 
-            // ActionEditorForm
+            // ActionPackEditorForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -309,8 +308,7 @@
             this.Controls.Add(this.panelTop);
             this.Controls.Add(this.panelOK);
             this.Controls.Add(this.statusStripCustom);
-            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Name = "ActionEditorForm";
+            this.Name = "ActionPackEditorForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "ActionEditor";
             this.panelTop.ResumeLayout(false);

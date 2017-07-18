@@ -907,7 +907,9 @@ namespace EDDiscovery.UserControls
         private void buttonField_Click(object sender, EventArgs e)
         {
             Conditions.ConditionFilterForm frm = new Conditions.ConditionFilterForm();
-            frm.InitFilter("History: Filter out fields", EDDiscovery.EliteDangerous.JournalEntry.GetListOfEventsWithOptMethod(false),
+            frm.InitFilter("History: Filter out fields",
+                            System.Drawing.Icon.ExtractAssociatedIcon(System.Reflection.Assembly.GetExecutingAssembly().Location),
+                            EDDiscovery.EliteDangerous.JournalEntry.GetListOfEventsWithOptMethod(false),
                             (s) => { return BaseUtils.FieldNames.GetPropertyFieldNames(EDDiscovery.EliteDangerous.JournalEntry.TypeOfJournalEntry(s)); },
                             discoveryform.Globals.NameList, fieldfilter);
             frm.TopMost = this.FindForm().TopMost;

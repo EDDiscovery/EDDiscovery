@@ -29,7 +29,7 @@ using System.Windows.Forms.DataVisualization.Charting;
 
 namespace EDDiscovery
 {
-    public class EDDTheme : BaseUtils.ThemeableForms
+    public class EDDTheme : ExtendedControls.ThemeableForms
     {
         private static EDDTheme _instance;
 
@@ -40,7 +40,7 @@ namespace EDDiscovery
                 if (_instance == null)
                 {
                     _instance = new EDDTheme();
-                    BaseUtils.ThemeAbleFormsInstance.Instance = _instance;
+                    ExtendedControls.ThemeableFormsInstance.Instance = _instance;
                 }
 
                 return _instance;
@@ -55,6 +55,7 @@ namespace EDDiscovery
         private static string textboxborderstyle_fixed3D = TextboxBorderStyles[2];
         private static string textboxborderstyle_color = TextboxBorderStyles[3];
 
+        public System.Drawing.Icon MessageBoxWindowIcon { get; set; }
 
         public struct Settings
         {
@@ -288,6 +289,7 @@ namespace EDDiscovery
             toolstripRenderer = new EDDToolStripRenderer();
             themelist = new List<Settings>();           // theme list in
             currentsettings = new Settings("Windows Default");  // this is our default
+            MessageBoxWindowIcon = EDDiscovery.Properties.Resources.edlogo_3mo_icon;
         }
 
         /// <summary>

@@ -653,6 +653,26 @@ namespace EDDiscovery.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap eddiscovery_logo {
+            get {
+                object obj = ResourceManager.GetObject("eddiscovery_logo", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        internal static System.Drawing.Icon edlogo_3mo_icon {
+            get {
+                object obj = ResourceManager.GetObject("edlogo_3mo_icon", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap edlogo24 {
             get {
                 object obj = ResourceManager.GetObject("edlogo24", resourceCulture);
@@ -907,6 +927,16 @@ namespace EDDiscovery.Properties {
             get {
                 object obj = ResourceManager.GetObject("Globe_yellow", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        internal static System.Drawing.Icon GNE {
+            get {
+                object obj = ResourceManager.GetObject("GNE", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
             }
         }
         
@@ -2446,6 +2476,15 @@ namespace EDDiscovery.Properties {
         internal static string URLedsm {
             get {
                 return ResourceManager.GetString("URLedsm", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to https://api.github.com/repos/EDDiscovery/EDDiscovery/.
+        /// </summary>
+        internal static string URLGithubDownload {
+            get {
+                return ResourceManager.GetString("URLGithubDownload", resourceCulture);
             }
         }
         

@@ -47,7 +47,7 @@ namespace EDDiscovery.Actions
             return new ConditionEDDFunctions(c, vars, handles, recdepth);
         }
 
-        public ActionController(EDDiscoveryForm frm, EDDiscoveryController ctrl) : base(frm.AudioQueueSpeech, frm.AudioQueueWave, frm.SpeechSynthesizer, frm)
+        public ActionController(EDDiscoveryForm frm, EDDiscoveryController ctrl, System.Drawing.Icon ic) : base(frm.AudioQueueSpeech, frm.AudioQueueWave, frm.SpeechSynthesizer, frm , ic)
         {
             discoveryform = frm;
             discoverycontroller = ctrl;
@@ -139,7 +139,7 @@ namespace EDDiscovery.Actions
 
             if (f != null)
             {
-                frm.Init("Edit pack " + name, this, AppFolder, f, eventnames);
+                frm.Init("Edit pack " + name, this.Icon, this, AppFolder, f, eventnames);
                 frm.TopMost = discoveryform.FindForm().TopMost;
 
                 frm.ShowDialog(discoveryform.FindForm()); // don't care about the result, the form does all the saving
@@ -177,7 +177,7 @@ namespace EDDiscovery.Actions
         private void Dmf_OnEditGlobals()
         {
             ConditionVariablesForm avf = new ConditionVariablesForm();
-            avf.Init("Global User variables to pass to program on run", PersistentVariables, showone: true);
+            avf.Init("Global User variables to pass to program on run", this.Icon, PersistentVariables, showone: true);
 
             if (avf.ShowDialog(discoveryform.FindForm()) == DialogResult.OK)
             {
@@ -187,7 +187,7 @@ namespace EDDiscovery.Actions
 
         private void Dmf_OnCreateActionFile()
         {
-            String r = ExtendedControls.PromptSingleLine.ShowDialog(discoveryform.FindForm(), "New name", "", "Create new action file");
+            String r = ExtendedControls.PromptSingleLine.ShowDialog(discoveryform.FindForm(), "New name", "", "Create new action file" , this.Icon);
             if ( r != null && r.Length>0 )
             {
                 if (actionfiles.Get(r, StringComparison.InvariantCultureIgnoreCase) == null)
@@ -213,7 +213,7 @@ namespace EDDiscovery.Actions
         {
             using (AddOnManagerForm dmf = new AddOnManagerForm())
             {
-                dmf.Init(manage);
+                dmf.Init(manage, this.Icon);
 
                 dmf.EditActionFile += Dmf_OnEditActionFile;     // only used when manage = false
                 dmf.EditGlobals += Dmf_OnEditGlobals;
@@ -261,7 +261,7 @@ namespace EDDiscovery.Actions
 
             SpeechConfigure cfg = new SpeechConfigure();
             cfg.Init( discoveryform.AudioQueueSpeech, discoveryform.SpeechSynthesizer,
-                        "Select voice synthesizer defaults", title, 
+                        "Select voice synthesizer defaults", title, this.Icon,
                         null, false, false, AudioExtensions.AudioQueue.Priority.Normal, "", "",
                         voicename,
                         volume,
@@ -285,7 +285,9 @@ namespace EDDiscovery.Actions
             ConditionVariables effects = new ConditionVariables(PersistentVariables.GetString(ActionPlay.globalvarplayeffects, ""), ConditionVariables.FromMode.MultiEntryComma);
 
             WaveConfigureDialog dlg = new WaveConfigureDialog();
-            dlg.Init(discoveryform.AudioQueueWave, true, "Select Default device, volume and effects", title, "",
+            dlg.Init(discoveryform.AudioQueueWave, true, 
+                        "Select Default device, volume and effects", title, this.Icon,
+                        "",
                         false, AudioExtensions.AudioQueue.Priority.Normal, "", "",
                         volume, effects);
 

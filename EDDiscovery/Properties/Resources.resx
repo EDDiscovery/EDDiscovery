@@ -874,4 +874,16 @@
   <data name="popout1" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\popout1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="eddiscovery_logo" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\eddiscovery_logo.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="GNE" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\GNE.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="URLGithubDownload" xml:space="preserve">
+    <value>https://api.github.com/repos/EDDiscovery/EDDiscovery/</value>
+  </data>
+  <data name="edlogo_3mo_icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\images\edlogo_3mo_icon.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
 </root>
