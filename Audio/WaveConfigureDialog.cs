@@ -47,7 +47,7 @@ namespace AudioExtensions
 
         public void Init(AudioQueue qu, 
                           bool defaultmode,
-                          string title, string caption, 
+                          string title, string caption, Icon ic,
                           string defpath,
                           bool waitcomplete,
                           AudioQueue.Priority prio,
@@ -60,6 +60,7 @@ namespace AudioExtensions
             queue = qu;
             this.Text = caption;
             labelTitle.Text = title;
+            this.Icon = ic;
             textBoxBorderText.Text = defpath;
 
             if (defaultmode)
@@ -91,7 +92,7 @@ namespace AudioExtensions
 
             effects = ef;
 
-            BaseUtils.ThemeAbleFormsInstance.Instance.ApplyToForm(this, System.Drawing.SystemFonts.DefaultFont);
+            ExtendedControls.ThemeableFormsInstance.Instance.ApplyToForm(this, System.Drawing.SystemFonts.DefaultFont);
         }
 
 
@@ -131,7 +132,7 @@ namespace AudioExtensions
         private void buttonExtEffects_Click(object sender, EventArgs e)
         {
             SoundEffectsDialog sfe = new SoundEffectsDialog();
-            sfe.Init(effects,true);
+            sfe.Init(this.Icon, effects,true);
             sfe.TestSettingEvent += Sfe_TestSettingEvent;           // callback to say test
             sfe.StopTestSettingEvent += Sfe_StopTestSettingEvent;   // callback to say stop
             if (sfe.ShowDialog(this) == DialogResult.OK)

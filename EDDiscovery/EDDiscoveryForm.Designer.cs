@@ -44,8 +44,8 @@ namespace EDDiscovery
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(EDDiscoveryForm));
             ExtendedControls.TabStyleSquare tabStyleSquare1 = new ExtendedControls.TabStyleSquare();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(EDDiscoveryForm));
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.toolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.show2DMapsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -477,7 +477,7 @@ namespace EDDiscovery
             // 
             this.panel_eddiscovery.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.panel_eddiscovery.BackColor = System.Drawing.SystemColors.Control;
-            this.panel_eddiscovery.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("panel_eddiscovery.BackgroundImage")));
+            this.panel_eddiscovery.BackgroundImage = global::EDDiscovery.Properties.Resources.eddiscovery_logo;
             this.panel_eddiscovery.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.panel_eddiscovery.Location = new System.Drawing.Point(818, 1);
             this.panel_eddiscovery.Name = "panel_eddiscovery";

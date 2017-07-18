@@ -26,10 +26,10 @@ namespace ActionLanguage
     {
         public override bool AllowDirectEditingOfUserData { get { return true; } }
 
-        public override bool ConfigurationMenu(Form parent, ActionCoreController discoveryform, List<string> eventvars)
+        public override bool ConfigurationMenu(Form parent, ActionCoreController cp, List<string> eventvars)
         {
             string promptValue = ExtendedControls.PromptSingleLine.ShowDialog(parent, "Return", UserData.ReplaceEscapeControlChars(), 
-                                "Configure Return Command" , true);
+                                "Configure Return Command" , cp.Icon, true);
 
             if (promptValue != null)
                 userdata = promptValue.EscapeControlChars();

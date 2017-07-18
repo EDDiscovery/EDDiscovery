@@ -220,7 +220,7 @@ namespace EDDiscovery
             audioqueuewave = new AudioExtensions.AudioQueue(audiodriverwave);
             audioqueuespeech = new AudioExtensions.AudioQueue(audiodriverspeech);
 
-            actioncontroller = new Actions.ActionController(this, Controller);
+            actioncontroller = new Actions.ActionController(this, Controller, this.Icon);
 
             frontierbindings = new BindingsFile();
             inputdevices = new DirectInputDevices.InputDeviceList(a => BeginInvoke(a));
@@ -333,7 +333,7 @@ namespace EDDiscovery
             try
             {
 
-                BaseUtils.GitHubClass github = new BaseUtils.GitHubClass(LogLine);
+                BaseUtils.GitHubClass github = new BaseUtils.GitHubClass(EDDiscovery.Properties.Resources.URLGithubDownload, LogLine);
 
                 BaseUtils.GitHubRelease rel = github.GetLatestRelease();
 

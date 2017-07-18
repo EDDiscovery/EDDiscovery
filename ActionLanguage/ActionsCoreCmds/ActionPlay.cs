@@ -82,7 +82,8 @@ namespace ActionLanguage
             FromString(userdata, out path, out vars);
 
             WaveConfigureDialog cfg = new WaveConfigureDialog();
-            cfg.Init(cp.AudioQueueWave, false, "Select file, volume and effects", "Configure Play Command", path,
+            cfg.Init(cp.AudioQueueWave, false, "Select file, volume and effects", "Configure Play Command", cp.Icon,
+                        path,
                         vars.Exists(waitname),
                         AudioQueue.GetPriority(vars.GetString(priorityname, "Normal")),
                         vars.GetString(startname, ""),

@@ -30,7 +30,7 @@ namespace EDDiscovery.Actions
 
         public override bool ConfigurationMenu(System.Windows.Forms.Form parent, ActionCoreController cp, List<string> eventvars)
         {
-            string promptValue = ExtendedControls.PromptSingleLine.ShowDialog(parent, "Ship name", UserData, "Configure Ship Command");
+            string promptValue = ExtendedControls.PromptSingleLine.ShowDialog(parent, "Ship name", UserData, "Configure Ship Command" , cp.Icon);
             if (promptValue != null)
             {
                 userdata = promptValue;

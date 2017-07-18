@@ -277,7 +277,8 @@ namespace EDDiscovery.UserControls
                 }
 
                 ExtendedControls.InfoForm info = new ExtendedControls.InfoForm();
-                info.Info("Cannot launch browser, use this JSON for manual Coriolis import", s, new Font("MS Sans Serif", 10), new int[] { 0, 100 });
+                info.Info("Cannot launch browser, use this JSON for manual Coriolis import", Icon.ExtractAssociatedIcon(System.Reflection.Assembly.GetExecutingAssembly().Location), 
+                                s, new Font("MS Sans Serif", 10), new int[] { 0, 100 });
                 info.ShowDialog(this);
             }
         }

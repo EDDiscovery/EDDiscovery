@@ -38,7 +38,7 @@ namespace AudioExtensions
         {
             comboBoxCustomDevice.Items.AddRange(dr.GetAudioEndpoints().ToArray());
             comboBoxCustomDevice.SelectedItem = dr.GetAudioEndpoint();
-            bool border = BaseUtils.ThemeAbleFormsInstance.Instance.ApplyToForm(this, System.Drawing.SystemFonts.DefaultFont);
+            bool border = ExtendedControls.ThemeableFormsInstance.Instance.ApplyToForm(this, System.Drawing.SystemFonts.DefaultFont);
 
             this.Text = title;
             if (!border)

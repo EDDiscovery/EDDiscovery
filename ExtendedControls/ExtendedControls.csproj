@@ -132,6 +132,7 @@
     <Compile Include="TextBoxBorder.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Theme.cs" />
     <Compile Include="ToolStripComboBoxCustom.cs">
       <SubType>Component</SubType>
     </Compile>

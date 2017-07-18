@@ -31,7 +31,7 @@ namespace EDDiscovery.Actions
 
         public override bool ConfigurationMenu(Form parent, ActionCoreController cp, List<string> eventvars)
         {
-            string promptValue = ExtendedControls.PromptSingleLine.ShowDialog(parent, "Popout command", UserData, "Configure Popout Command");
+            string promptValue = ExtendedControls.PromptSingleLine.ShowDialog(parent, "Popout command", UserData, "Configure Popout Command" , cp.Icon);
             if (promptValue != null)
             {
                 userdata = promptValue;

@@ -46,7 +46,7 @@ namespace ActionLanguage
             FromString(userdata, out av, out operations);
 
             ConditionVariablesForm avf = new ConditionVariablesForm();
-            avf.Init("Variable list:", av, showone: true, allowadd: allowaddv, allownoexpand: allownoexpandv, altops:operations);
+            avf.Init("Variable list:", cp.Icon, av, showone: true, allowadd: allowaddv, allownoexpand: allownoexpandv, altops:operations);
 
             if (avf.ShowDialog(parent.FindForm()) == DialogResult.OK)
             {
@@ -219,9 +219,9 @@ namespace ActionLanguage
     {
         public override bool AllowDirectEditingOfUserData { get { return true; } }
 
-        public override bool ConfigurationMenu(Form parent, ActionCoreController discoveryform, List<string> eventvars)
+        public override bool ConfigurationMenu(Form parent, ActionCoreController cp, List<string> eventvars)
         {
-            string promptValue = ExtendedControls.PromptSingleLine.ShowDialog(parent, "Variable name", UserData, "Configure DeleteVariable Command");
+            string promptValue = ExtendedControls.PromptSingleLine.ShowDialog(parent, "Variable name", UserData, "Configure DeleteVariable Command" , cp.Icon);
             if (promptValue != null)
             {
                 userdata = promptValue;
@@ -257,9 +257,9 @@ namespace ActionLanguage
     {
         public override bool AllowDirectEditingOfUserData { get { return true; } }
 
-        public override bool ConfigurationMenu(Form parent, ActionCoreController discoveryform, List<string> eventvars)
+        public override bool ConfigurationMenu(Form parent, ActionCoreController cp, List<string> eventvars)
         {
-            string promptValue = ExtendedControls.PromptSingleLine.ShowDialog(parent, "Expression", UserData, "Configure Function Expression");
+            string promptValue = ExtendedControls.PromptSingleLine.ShowDialog(parent, "Expression", UserData, "Configure Function Expression", cp.Icon);
             if (promptValue != null)
             {
                 userdata = promptValue;
