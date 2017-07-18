@@ -213,9 +213,9 @@ namespace EDDiscovery
                 speechsynth = new AudioExtensions.SpeechSynthesizer(new AudioExtensions.DummySpeechEngine());
             }
 #else
-            audiodriverwave = new Audio.AudioDriverDummy();
-            audiodriverspeech = new Audio.AudioDriverDummy();
-            speechsynth = new Audio.SpeechSynthesizer(new Audio.DummySpeechEngine());
+            audiodriverwave = new AudioExtensions.AudioDriverDummy();
+            audiodriverspeech = new AudioExtensions.AudioDriverDummy();
+            speechsynth = new AudioExtensions.SpeechSynthesizer(new AudioExtensions.DummySpeechEngine());
 #endif
             audioqueuewave = new AudioExtensions.AudioQueue(audiodriverwave);
             audioqueuespeech = new AudioExtensions.AudioQueue(audiodriverspeech);
