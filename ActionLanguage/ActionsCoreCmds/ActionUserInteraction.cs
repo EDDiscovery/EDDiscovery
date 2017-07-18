@@ -43,7 +43,7 @@ namespace ActionLanguage
         public override bool ConfigurationMenu(Form parent, ActionCoreController cp, List<string> eventvars)
         {
             List<string> l = FromString(userdata);
-            List<string> r = ExtendedControls.PromptMultiLine.ShowDialog(parent, "Configure MessageBox Dialog",
+            List<string> r = ExtendedControls.PromptMultiLine.ShowDialog(parent, "Configure MessageBox Dialog", cp.Icon,
                             new string[] { "Message" , "Caption" , "Buttons", "Icon"}, l?.ToArray(), true);
 
             if (r != null)
@@ -113,7 +113,7 @@ namespace ActionLanguage
         public override bool ConfigurationMenu(Form parent, ActionCoreController cp, List<string> eventvars)
         {
             List<string> l = FromString(userdata);
-            List<string> r = ExtendedControls.PromptMultiLine.ShowDialog(parent, "Configure InfoBox Dialog",
+            List<string> r = ExtendedControls.PromptMultiLine.ShowDialog(parent, "Configure InfoBox Dialog", cp.Icon,
                             new string[] { "Message", "Caption" }, l?.ToArray(), true);
 
             if (r != null)
@@ -135,7 +135,7 @@ namespace ActionLanguage
                     string caption = (exp[1].Length>0) ? exp[1]: "EDDiscovery Program Message";
 
                     ExtendedControls.InfoForm ifrm = new ExtendedControls.InfoForm();
-                    ifrm.Info(caption, exp[0], null, new int[] { 0, 100, 200, 300, 400, 500, 600 }, true);
+                    ifrm.Info(caption, ap.actioncontroller.Icon, exp[0], null, new int[] { 0, 100, 200, 300, 400, 500, 600 }, true);
                     ifrm.Show(ap.actioncontroller.Form);
                 }
                 else
@@ -154,7 +154,7 @@ namespace ActionLanguage
 
         public override bool ConfigurationMenu(Form parent, ActionCoreController cp, List<string> eventvars)
         {
-            string promptValue = ExtendedControls.PromptSingleLine.ShowDialog(parent, "Options", UserData, "Configure File Dialog");
+            string promptValue = ExtendedControls.PromptSingleLine.ShowDialog(parent, "Options", UserData, "Configure File Dialog", cp.Icon);
             if (promptValue != null)
             {
                 userdata = promptValue;
@@ -289,7 +289,7 @@ namespace ActionLanguage
         public override bool ConfigurationMenu(Form parent, ActionCoreController cp, List<string> eventvars)
         {
             List<string> l = FromString(userdata);
-            List<string> r = ExtendedControls.PromptMultiLine.ShowDialog(parent, "Configure InputBox Dialog",
+            List<string> r = ExtendedControls.PromptMultiLine.ShowDialog(parent, "Configure InputBox Dialog", cp.Icon,
                             new string[] { "Caption", "Prompt List", "Default List", "Features", "ToolTips" }, l?.ToArray(),
                             false, new string[] { "Enter name of menu", "List of entries, semicolon separated", "Default list, semicolon separated", "Feature list: Multiline", "List of tool tips, semocolon separated" });
             if (r != null)
@@ -315,7 +315,7 @@ namespace ActionLanguage
                     bool multiline = (exp.Count >= 4) ? (exp[3].IndexOf("Multiline", StringComparison.InvariantCultureIgnoreCase) >= 0) : false;
                     string[] tooltips = (exp.Count >= 5) ? exp[4].Split(';') : null;
 
-                    List<string> r = ExtendedControls.PromptMultiLine.ShowDialog(ap.actioncontroller.Form, exp[0],
+                    List<string> r = ExtendedControls.PromptMultiLine.ShowDialog(ap.actioncontroller.Form, exp[0], ap.actioncontroller.Icon,
                                         prompts, def, multiline, tooltips);
 
                     ap["InputBoxOK"] = (r != null) ? "1" : "0";
@@ -356,7 +356,7 @@ namespace ActionLanguage
         public override bool ConfigurationMenu(Form parent, ActionCoreController cp, List<string> eventvars)
         {
             List<string> l = FromString(userdata);
-            List<string> r = ExtendedControls.PromptMultiLine.ShowDialog(parent, "Configure Dialog",
+            List<string> r = ExtendedControls.PromptMultiLine.ShowDialog(parent, "Configure Dialog", cp.Icon,
                             new string[] { "Logical Name" , "Caption", "Size [Pos]", "Var Prefix" }, l?.ToArray(),
                             false, new string[] { "Handle name of menu" , "Enter title of menu", "Size and optional Position, as w,h [,x,y] 200,300 or 200,300,500,100", "Variable Prefix" });
             if (r != null)
@@ -412,10 +412,12 @@ namespace ActionLanguage
                             pos = new System.Drawing.Point(x.Value, y.Value);
 
                         cd.Trigger += Cd_Trigger;
-                        cd.Show(ap.actioncontroller.Form, exp[0], 
+
+                        cd.Show(ap.actioncontroller.Form, exp[0], ap.actioncontroller.Icon,
                                             new System.Drawing.Size(dw.Value, dh.Value), pos , 
                                             exp[1], entries.ToArray(), 
-                                            new List<Object>() { ap, IsModalDialog() });
+                                            new List<Object>() { ap, IsModalDialog() }
+                                            );
 
                         return !IsModalDialog();       // modal, return false, STOP.  Non modal, continue
                     }
@@ -465,7 +467,7 @@ namespace ActionLanguage
 
         public override bool ConfigurationMenu(Form parent, ActionCoreController cp, List<string> eventvars)
         {
-            string promptValue = ExtendedControls.PromptSingleLine.ShowDialog(parent, "DialogControl command", UserData, "Configure DialogControl Command");
+            string promptValue = ExtendedControls.PromptSingleLine.ShowDialog(parent, "DialogControl command", UserData, "Configure DialogControl Command", cp.Icon);
             if (promptValue != null)
             {
                 userdata = promptValue;

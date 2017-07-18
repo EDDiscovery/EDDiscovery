@@ -375,7 +375,7 @@ namespace EDDiscovery
             this.enableColoursToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("enableColoursToolStripMenuItem.Image")));
             this.enableColoursToolStripMenuItem.Name = "enableColoursToolStripMenuItem";
             this.enableColoursToolStripMenuItem.Size = new System.Drawing.Size(153, 22);
-            this.enableColoursToolStripMenuItem.Text = "Enable Colours";
+            this.enableColoursToolStripMenuItem.Text = "Display Colours";
             this.enableColoursToolStripMenuItem.Click += new System.EventHandler(this.enableColoursToolStripMenuItem_Click);
             // 
             // toolStripDropDownButtonNameStars
@@ -421,7 +421,7 @@ namespace EDDiscovery
             this.toolStripDropDownButtonBookmarks.Name = "toolStripDropDownButtonBookmarks";
             this.toolStripDropDownButtonBookmarks.Size = new System.Drawing.Size(29, 37);
             this.toolStripDropDownButtonBookmarks.Text = "toolStripDropDownButton1";
-            this.toolStripDropDownButtonBookmarks.ToolTipText = "Enable or disable display of bookmarks and add a new region bookmark";
+            this.toolStripDropDownButtonBookmarks.ToolTipText = "Display or disable display of bookmarks and add a new region bookmark";
             // 
             // showBookmarksToolStripMenuItem
             // 
@@ -461,7 +461,7 @@ namespace EDDiscovery
             this.toolStripDropDownButtonGalObjects.Name = "toolStripDropDownButtonGalObjects";
             this.toolStripDropDownButtonGalObjects.Size = new System.Drawing.Size(29, 37);
             this.toolStripDropDownButtonGalObjects.Text = "toolStripDropDownButton1";
-            this.toolStripDropDownButtonGalObjects.ToolTipText = "Enable or Disable the Display of Galactic Objects and other POIs";
+            this.toolStripDropDownButtonGalObjects.ToolTipText = "Display or Disable the Display of Galactic Objects and other POIs";
             // 
             // toolStripButtonGrid
             // 

@@ -29,7 +29,7 @@ using System.Windows.Forms.DataVisualization.Charting;
 
 namespace EDDiscovery
 {
-    public class EDDTheme : BaseUtils.ThemeableForms
+    public class EDDTheme : ExtendedControls.ThemeableForms
     {
         private static EDDTheme _instance;
 
@@ -40,7 +40,7 @@ namespace EDDiscovery
                 if (_instance == null)
                 {
                     _instance = new EDDTheme();
-                    BaseUtils.ThemeAbleFormsInstance.Instance = _instance;
+                    ExtendedControls.ThemeableFormsInstance.Instance = _instance;
                 }
 
                 return _instance;
@@ -55,6 +55,7 @@ namespace EDDiscovery
         private static string textboxborderstyle_fixed3D = TextboxBorderStyles[2];
         private static string textboxborderstyle_color = TextboxBorderStyles[3];
 
+        public System.Drawing.Icon MessageBoxWindowIcon { get; set; }
 
         public struct Settings
         {
@@ -288,6 +289,7 @@ namespace EDDiscovery
             toolstripRenderer = new EDDToolStripRenderer();
             themelist = new List<Settings>();           // theme list in
             currentsettings = new Settings("Windows Default");  // this is our default
+            MessageBoxWindowIcon = EDDiscovery.Properties.Resources.edlogo_3mo_icon;
         }
 
         /// <summary>
@@ -683,12 +685,6 @@ namespace EDDiscovery
             {
                 Debug.Assert(false, myControl.Name + " of " + controltype.Name + " from " + parent.Name + " !!! Use the new controls in Controls folder - not the non visual themed ones!");
             }
-            else if (myControl is MenuStrip || myControl is ToolStrip)
-            {
-                myControl.BackColor = currentsettings.colors[Settings.CI.menu_back];
-                myControl.ForeColor = currentsettings.colors[Settings.CI.menu_fore];
-                myControl.Font = fnt;
-            }
             else if (myControl is RichTextBoxScroll)
             {
                 RichTextBoxScroll ctrl = (RichTextBoxScroll)myControl;
@@ -1070,6 +1066,20 @@ namespace EDDiscovery
                 ctrl.checkbox.MouseOverColor = currentsettings.colors[Settings.CI.checkbox].Multiply(1.4F);
                 return;     // don't do sub controls - we are in charge of them
             }
+            else if (myControl is StatusStrip)
+            {
+                myControl.BackColor = currentsettings.colors[Settings.CI.form];
+            }
+            else if ( myControl is ToolStrip )
+            {
+                foreach( ToolStripItem i in ((ToolStrip)myControl).Items)   // make sure any buttons with text only have the button back
+                {
+                    if (i is ToolStripButton )//&& i.DisplayStyle != ToolStripItemDisplayStyle.Image)
+                    {           // theme the back colour, this is the way its done.. not via the tool strip renderer
+                        i.BackColor = currentsettings.colors[Settings.CI.button_back];
+                    }
+                }
+            }
             else
             {
                 if (!parentcontroltype.Namespace.Equals("ExtendedControls"))
@@ -1087,25 +1097,36 @@ namespace EDDiscovery
 
         private void UpdateToolsTripRenderer()
         {
-            // Menu
-            toolstripRenderer.colMenuBackground = currentsettings.colors[Settings.CI.menu_back];
-            toolstripRenderer.colMenuText = currentsettings.colors[Settings.CI.menu_fore];
-            toolstripRenderer.colMenuSelectedBack = currentsettings.colors[Settings.CI.menu_dropdownback];
-            toolstripRenderer.colMenuSelectedText = currentsettings.colors[Settings.CI.menu_dropdownfore];
+            Color menuback = currentsettings.colors[Settings.CI.menu_back];
+            bool toodark = (menuback.GetBrightness() < 0.1);
 
+            toolstripRenderer.colortable.colMenuText = currentsettings.colors[Settings.CI.menu_fore];              // and the text
+            toolstripRenderer.colortable.colMenuSelectedText = currentsettings.colors[Settings.CI.menu_dropdownfore];
+            toolstripRenderer.colortable.colMenuBackground = menuback;
+            toolstripRenderer.colortable.colMenuBarBackground = currentsettings.colors[Settings.CI.form];
+            toolstripRenderer.colortable.colMenuBorder = currentsettings.colors[Settings.CI.button_border];
+            toolstripRenderer.colortable.colMenuSelectedBack = currentsettings.colors[Settings.CI.menu_dropdownback];
 
-            toolstripRenderer.Dark = Color.Pink; // currentsettings.colors[Settings.CI.menu_dropdownback];
-            //Bitmap bmp = new Bitmap(1, 1);
-            toolstripRenderer.ButtonSelectedBorder = currentsettings.colors[Settings.CI.textbox_success]; ;
-            toolstripRenderer.ButtonSelectBackLight = currentsettings.colors[Settings.CI.button_text];
+            toolstripRenderer.colortable.colMenuHighlightBorder = currentsettings.colors[Settings.CI.button_border];
+            toolstripRenderer.colortable.colMenuHighlightBack = toodark ? currentsettings.colors[Settings.CI.menu_dropdownback].Multiply(0.7F) : currentsettings.colors[Settings.CI.menu_back].Multiply(1.3F);        // whole menu back
 
-            // Need a button/Menu highlight
-            toolstripRenderer.ButtonSelectBackDark = currentsettings.colors[Settings.CI.menu_dropdownback];
+            Color menuchecked = toodark ? currentsettings.colors[Settings.CI.menu_dropdownback].Multiply(0.6F) : currentsettings.colors[Settings.CI.menu_back].Multiply(1.5F);        // whole menu back
 
-            // ToolStrip
-            toolstripRenderer.colToolStripBorder = currentsettings.colors[Settings.CI.textbox_border];  // change to tool_Strip border
-            toolstripRenderer.colToolStripBackGround = currentsettings.colors[Settings.CI.toolstrip_back];
-            toolstripRenderer.colToolStripSeparator = currentsettings.colors[Settings.CI.textbox_border];  // change to tool_Strip border
+            toolstripRenderer.colortable.colToolStripButtonCheckedBack = menuchecked;
+            toolstripRenderer.colortable.colToolStripButtonPressedBack = 
+            toolstripRenderer.colortable.colToolStripButtonSelectedBack = menuchecked.Multiply(1.1F);
+
+            toolstripRenderer.colortable.colCheckButtonChecked = menuchecked;
+            toolstripRenderer.colortable.colCheckButtonPressed = 
+            toolstripRenderer.colortable.colCheckButtonHighlighted = menuchecked.Multiply(1.1F);
+
+            toolstripRenderer.colortable.colLeftSelectionMargin = currentsettings.colors[Settings.CI.menu_back].Multiply(0.9F);
+
+            toolstripRenderer.colortable.colToolStripBackground = toodark ? currentsettings.colors[Settings.CI.menu_fore].Multiply(0.2F) : menuback;
+
+            toolstripRenderer.colortable.colGripper =
+            toolstripRenderer.colortable.colToolStripSeparator =
+            toolstripRenderer.colortable.colToolStripBorder = currentsettings.colors[Settings.CI.button_border];
         }
 
         public Color GroupBoxOverride(Control parent, Color d)      // if its a group box behind the control, use the group box back color..

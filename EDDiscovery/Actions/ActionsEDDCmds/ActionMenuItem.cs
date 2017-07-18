@@ -28,7 +28,7 @@ namespace EDDiscovery.Actions
         public override bool ConfigurationMenu(Form parent, ActionCoreController cp, List<string> eventvars)
         {
             List<string> l = FromString(userdata);
-            List<string> r = ExtendedControls.PromptMultiLine.ShowDialog(parent, "Configure MenuInput Dialog",
+            List<string> r = ExtendedControls.PromptMultiLine.ShowDialog(parent, "Configure MenuInput Dialog", cp.Icon,
                             new string[] { "MenuName", "In Menu", "Menu Text", "Icon" }, l?.ToArray());
             if (r != null)
             {

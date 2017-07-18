@@ -1469,7 +1469,8 @@ namespace EDDiscovery
         {
             ExtendedControls.InfoForm dl = new ExtendedControls.InfoForm();
             string text = EDDiscovery.Properties.Resources.maphelp3d;
-            dl.Info("3D Map Help", text, new Font("Microsoft Sans Serif", 10), new int[] { 50, 200, 400 });
+            dl.Info("3D Map Help", Icon.ExtractAssociatedIcon(System.Reflection.Assembly.GetExecutingAssembly().Location), 
+                        text, new Font("Microsoft Sans Serif", 10), new int[] { 50, 200, 400 });
             dl.Show();
         }
 

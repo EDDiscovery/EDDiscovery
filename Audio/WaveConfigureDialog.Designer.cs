@@ -43,7 +43,6 @@ namespace AudioExtensions
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(WaveConfigureDialog));
             this.textBoxBorderText = new ExtendedControls.TextBoxBorder();
             this.buttonExtBrowse = new ExtendedControls.ButtonExt();
             this.trackBarVolume = new System.Windows.Forms.TrackBar();
@@ -312,7 +311,6 @@ namespace AudioExtensions
             this.CancelButton = this.buttonExtCancel;
             this.ClientSize = new System.Drawing.Size(475, 247);
             this.Controls.Add(this.panelOuter);
-            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "WaveConfigureDialog";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "WaveConfigure";

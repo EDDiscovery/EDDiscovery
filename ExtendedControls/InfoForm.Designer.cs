@@ -43,13 +43,15 @@ namespace ExtendedControls
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(InfoForm));
             this.buttonOK = new ExtendedControls.ButtonExt();
             this.textBoxInfo = new ExtendedControls.RichTextBoxScroll();
             this.SuspendLayout();
             // 
             // buttonOK
             // 
+            this.buttonOK.BorderColorScaling = 1.25F;
+            this.buttonOK.ButtonColorScaling = 0.5F;
+            this.buttonOK.ButtonDisabledScaling = 0.5F;
             this.buttonOK.Location = new System.Drawing.Point(736, 559);
             this.buttonOK.Name = "buttonOK";
             this.buttonOK.Size = new System.Drawing.Size(75, 23);
@@ -60,11 +62,15 @@ namespace ExtendedControls
             // 
             // textBoxInfo
             // 
+            this.textBoxInfo.BorderColor = System.Drawing.Color.Transparent;
+            this.textBoxInfo.BorderColorScaling = 0.5F;
+            this.textBoxInfo.HideScrollBar = true;
             this.textBoxInfo.Location = new System.Drawing.Point(86, 12);
             this.textBoxInfo.Name = "textBoxInfo";
+            this.textBoxInfo.ScrollBarWidth = 20;
+            this.textBoxInfo.ShowLineCount = false;
             this.textBoxInfo.Size = new System.Drawing.Size(650, 500);
             this.textBoxInfo.TabIndex = 2;
-            this.textBoxInfo.Text = "";
             // 
             // InfoForm
             // 
@@ -73,7 +79,6 @@ namespace ExtendedControls
             this.ClientSize = new System.Drawing.Size(824, 594);
             this.Controls.Add(this.textBoxInfo);
             this.Controls.Add(this.buttonOK);
-            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "InfoForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "InfoForm";

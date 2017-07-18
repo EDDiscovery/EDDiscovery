@@ -106,7 +106,7 @@ namespace EDDiscovery
             // 
             // toolStripButtonNew
             // 
-            this.toolStripButtonNew.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonNew.Image")));
+            this.toolStripButtonNew.Image = global::EDDiscovery.Properties.Resources.toolStripButtonNew_Image;
             this.toolStripButtonNew.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonNew.Name = "toolStripButtonNew";
             this.toolStripButtonNew.Size = new System.Drawing.Size(85, 22);
@@ -115,7 +115,7 @@ namespace EDDiscovery
             // 
             // toolStripButtonImportFile
             // 
-            this.toolStripButtonImportFile.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonImportFile.Image")));
+            this.toolStripButtonImportFile.Image = global::EDDiscovery.Properties.Resources.toolStripButtonNew_Image;
             this.toolStripButtonImportFile.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonImportFile.Name = "toolStripButtonImportFile";
             this.toolStripButtonImportFile.Size = new System.Drawing.Size(82, 22);
@@ -124,7 +124,7 @@ namespace EDDiscovery
             // 
             // toolStripButtonImportRoute
             // 
-            this.toolStripButtonImportRoute.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonImportRoute.Image")));
+            this.toolStripButtonImportRoute.Image = global::EDDiscovery.Properties.Resources.toolStripButtonNew_Image;
             this.toolStripButtonImportRoute.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonImportRoute.Name = "toolStripButtonImportRoute";
             this.toolStripButtonImportRoute.Size = new System.Drawing.Size(94, 22);
@@ -134,7 +134,7 @@ namespace EDDiscovery
             // 
             // toolStripButtonSave
             // 
-            this.toolStripButtonSave.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonSave.Image")));
+            this.toolStripButtonSave.Image = global::EDDiscovery.Properties.Resources.toolStripButtonSubmitDistances_Image;
             this.toolStripButtonSave.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonSave.Name = "toolStripButtonSave";
             this.toolStripButtonSave.Size = new System.Drawing.Size(85, 22);
@@ -143,7 +143,7 @@ namespace EDDiscovery
             // 
             // toolStripButtonExport
             // 
-            this.toolStripButtonExport.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonExport.Image")));
+            this.toolStripButtonExport.Image = global::EDDiscovery.Properties.Resources.toolStripButtonSubmitDistances_Image;
             this.toolStripButtonExport.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonExport.Name = "toolStripButtonExport";
             this.toolStripButtonExport.Size = new System.Drawing.Size(60, 22);
@@ -153,7 +153,7 @@ namespace EDDiscovery
             // 
             // toolStripButtonDelete
             // 
-            this.toolStripButtonDelete.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonDelete.Image")));
+            this.toolStripButtonDelete.Image = global::EDDiscovery.Properties.Resources.toolStripButtonRemoveAll_Image;
             this.toolStripButtonDelete.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonDelete.Name = "toolStripButtonDelete";
             this.toolStripButtonDelete.Size = new System.Drawing.Size(94, 22);
