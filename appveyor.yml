@@ -10,3 +10,5 @@ after_build:
   - cmd: copy EDDiscovery\bin\Release\EDDiscovery.Portable.zip EDDiscovery.Portable.zip
 artifacts:
   - path: EDDiscovery.Portable.zip
+cache:
+  - packages -> **\package.config
