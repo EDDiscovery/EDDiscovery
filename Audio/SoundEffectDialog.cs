@@ -41,8 +41,10 @@ namespace AudioExtensions
             comboBoxCustomVoices.Items.AddRange(defaulteffects);
         }
 
-        public void Init(ConditionVariables cv, bool shownone)
+        public void Init(Icon ic, ConditionVariables cv, bool shownone)
         {
+            this.Icon = ic;
+
             if (!shownone)
                 checkBoxCustomNone.Visible = false;
 
@@ -105,7 +107,7 @@ namespace AudioExtensions
 
             checkBoxCustomNone.Checked = ap.OverrideNone;
 
-            BaseUtils.ThemeAbleFormsInstance.Instance.ApplyToForm(this, System.Drawing.SystemFonts.DefaultFont);
+            ExtendedControls.ThemeableFormsInstance.Instance.ApplyToForm(this, System.Drawing.SystemFonts.DefaultFont);
         }
 
         public ConditionVariables GetEffects()

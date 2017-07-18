@@ -77,19 +77,20 @@ namespace ActionLanguage
         ActionCoreController actioncorecontroller;
         string applicationfolder;
 
-        public void Init(string t, ActionCoreController cp, string appfolder,
+        public void Init(string t, Icon ic, ActionCoreController cp, string appfolder,
                             List<string> vbs,              // list any variables you want in condition statements - passed to config menu, passed back up to condition, not null
                             string pfilesetname,           // file set name
                             ActionProgram prog = null,     // give the program to display
                             string[] defprogs = null,      // list any default program names
                             string suggestedname = null, bool edittext = false)   // give a suggested name, if prog is null
         {
+            this.Icon = ic;
             actioncorecontroller = cp;
             applicationfolder = appfolder;
             startvarlist = vbs;
             currentvarlist = new List<string>(startvarlist);
 
-            bool winborder = BaseUtils.ThemeAbleFormsInstance.Instance.ApplyToForm(this, SystemFonts.DefaultFont);
+            bool winborder = ExtendedControls.ThemeableFormsInstance.Instance.ApplyToForm(this, SystemFonts.DefaultFont);
             statusStripCustom.Visible = panelTop.Visible = panelTop.Enabled = !winborder;
             this.Text = label_index.Text = t;
 
@@ -229,7 +230,7 @@ namespace ActionLanguage
 
             g.config.Tag = g.stepname.Tag = g.up.Tag = g.value.Tag = g.left.Tag = g.right.Tag = g.prog.Tag = g;
 
-            BaseUtils.ThemeAbleFormsInstance.Instance.ApplyToControls(g.panel, SystemFonts.DefaultFont);
+            ExtendedControls.ThemeableFormsInstance.Instance.ApplyToControls(g.panel, SystemFonts.DefaultFont);
 
             panelVScroll.Controls.Add(g.panel);
 
@@ -880,7 +881,7 @@ namespace ActionLanguage
         private void editCommentToolStripMenuItem_Click(object sender, EventArgs e)
         {
             ActionBase c = curprog.GetStep(rightclickstep);         // we know step and ACT is valid since it would be disabled otherwise
-            string r = ExtendedControls.PromptSingleLine.ShowDialog(this, "Comment", c.Comment, "Edit Comment for " + c.Name, false, "Enter comment for action");
+            string r = ExtendedControls.PromptSingleLine.ShowDialog(this, "Comment", c.Comment, "Edit Comment for " + c.Name, this.Icon, false, "Enter comment for action" );
             if (r != null)
             {
                 c.Comment = r;

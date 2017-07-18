@@ -611,6 +611,12 @@
     <Compile Include="UserControls\UserControlExploration.Designer.cs">
       <DependentUpon>UserControlExploration.cs</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\UserControlSysInfo.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\UserControlSysInfo.Designer.cs">
+      <DependentUpon>UserControlSysInfo.cs</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\UserControlMarketData.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -761,6 +767,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\UserControlJournalGrid.resx">
       <DependentUpon>UserControlJournalGrid.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\UserControlSysInfo.resx">
+      <DependentUpon>UserControlSysInfo.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\UserControlMarketData.resx">
       <DependentUpon>UserControlMarketData.cs</DependentUpon>
@@ -931,6 +940,8 @@
     <None Include="Resources\High_metal_content_world_White3.png" />
     <None Include="Resources\High_metal_content_world_White3.bmp" />
     <None Include="Resources\friends.png" />
+    <None Include="Resources\eddiscovery_logo.png" />
+    <None Include="Resources\GNE.ico" />
     <Content Include="Resources\imgCheck.png" />
     <None Include="Resources\stellaremnant.PNG" />
     <None Include="Resources\nebula.PNG" />
@@ -1079,6 +1090,11 @@
     <None Include="Resources\marketdata.png" />
     <None Include="Resources\no_entry.bmp" />
     <None Include="Resources\popout1.png" />
+    <None Include="Resources\toolStripButtonRemoveUnused.Image.png" />
+    <None Include="Resources\toolStripButtonSubmitDistances.Image.png" />
+    <None Include="Resources\toolStripButtonMap.Image.png" />
+    <None Include="Resources\toolStripButtonNew.Image.png" />
+    <None Include="Resources\toolStripButtonRemoveAll.Image.png" />
     <Content Include="x86\Microsoft.VC100.CRT\msvcp100.dll" />
     <Content Include="x86\Microsoft.VC100.CRT\msvcr100.dll" />
     <Content Include="x86\SQLite.Interop.dll">

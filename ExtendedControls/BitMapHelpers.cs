@@ -22,7 +22,7 @@ using System.Threading.Tasks;
 
 namespace ExtendedControls
 {
-    public class ControlHelpers
+    public class BitMapHelpers
     {
         public static Bitmap ReplaceColourInBitmap(Bitmap source, System.Drawing.Imaging.ColorMap[] remap)
         {

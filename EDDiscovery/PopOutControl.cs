@@ -55,25 +55,35 @@ namespace EDDiscovery.Forms
             NotePanel,
             RouteTracker,
 
-            Log,                    // panel and pop out
+            Log,                    // 0 (4) panel and pop out    0
             StarDistance,
             Materials,
             Commodities,
-            Ledger,
-            Journal,
+            Ledger,                 
+            Journal,                //5
             TravelGrid,
             ScreenShot,
             Statistics,
             Scan,
-            Modules,
+            Modules,                //10
             Exploration,
             Synthesis,
             Missions,
             Engineering,
-            MarketData,
+            MarketData,             //15
+            SystemInformation,      //16
 
+            EndList,                // Keep here, used to work out MaxTabButtons
             StartTabButtons = Log,
-            MaxTabButtons = MarketData - StartTabButtons,
+            MaxTabButtons = EndList - StartTabButtons - 1,
+        };
+
+        static public string[] spanelbuttonlist = new string[]            // MUST match PopOuts list order
+        {
+            "S-Panel", "Trip-Panel", "Note Panel", "Route Tracker", // not in tabs
+            "Log", "Nearest Stars" , "Materials", "Commodities" , "Ledger" , "Journal", // matching PopOuts order
+            "Travel Grid" , "Screen Shot", "Statistics" , "Scan" , "Loadout" , "Exploration", "Synthesis" ,
+            "Missions", "Engineering", "Market Data" , "System Information"
         };
 
         public class PopOutInfo
@@ -122,6 +132,7 @@ namespace EDDiscovery.Forms
             { PopOuts.RouteTracker, new PopOutInfo("Route Tracker", "RouteTracker", transparent: true) },
             { PopOuts.Engineering, new PopOutInfo("Engineering", "Engineering", EDDiscovery.Properties.Resources.engineercraft) },
             { PopOuts.MarketData, new PopOutInfo("Market Data", "MarketData", EDDiscovery.Properties.Resources.marketdata ) },
+            { PopOuts.SystemInformation, new PopOutInfo("System Information", "SystemInfo", EDDiscovery.Properties.Resources.ammunition ) },
         };
 
         public static UserControlCommonBase Create(PopOuts i)
@@ -148,6 +159,7 @@ namespace EDDiscovery.Forms
                 case PopOuts.Missions: return new UserControlMissions();
                 case PopOuts.Engineering: return new UserControlEngineering();
                 case PopOuts.MarketData: return new UserControlMarketData();
+                case PopOuts.SystemInformation: return new UserControlSysInfo();
                 default: return null;
             }
         }
@@ -236,10 +248,10 @@ namespace EDDiscovery.Forms
                 ((UserControlJournalGrid)uc).RefreshButton(state);      // and the journal views need it
         }
 
-        public void UpdateNoteJID(long jid, string text)
+        public void TBDREMOVEDUpdateNoteJID(long jid, string text)
         {
-            foreach (UserControlCommonBase uc in usercontrolsforms.GetListOfControls(typeof(UserControlTravelGrid)))
-                ((UserControlTravelGrid)uc).UpdateNoteJID(jid, text);
+//            foreach (UserControlCommonBase uc in usercontrolsforms.GetListOfControls(typeof(UserControlTravelGrid)))
+  //              ((UserControlTravelGrid)uc).UpdateNoteJID(jid, text);
         }
 
     }

@@ -13,31 +13,21 @@ namespace ExtendedControls
     public static class PromptSingleLine
     {
         public static string ShowDialog(Form p,
-                            string lab1, string defaultValue1, string caption, bool multiline = false, string tooltip = null)
+                            string lab1, string defaultValue1, string caption, Icon ic, bool multiline = false, string tooltip = null)
         {
-            List<string> r = PromptMultiLine.ShowDialog(p, caption, new string[] { lab1 }, new string[] { defaultValue1 }, multiline, tooltip != null ? new string[] { tooltip } : null);
+            List<string> r = PromptMultiLine.ShowDialog(p, caption, ic, new string[] { lab1 }, 
+                    new string[] { defaultValue1 }, multiline, tooltip != null ? new string[] { tooltip } : null);
 
             return (r != null) ? r[0] : null;
-        }
-    }
-
-    public static class PromptDoubleLine
-    {
-        public static Tuple<string, string> ShowDialog(Form p,
-                            string lab1, string lab2, string defaultValue1, string defaultValue2, string caption, bool multiline = false, string[] tooltip = null)
-        {
-            List<string> r = PromptMultiLine.ShowDialog(p, caption, new string[] { lab1, lab2 }, new string[] { defaultValue1, defaultValue2 }, multiline, tooltip);
-
-            return (r != null) ? new Tuple<string, string>(r[0], r[1]) : null;
         }
     }
 
     public static class PromptMultiLine
     {
         // lab sets the items, def can be less or null
-        public static List<string> ShowDialog(Form p, string caption, string[] lab, string[] def, bool multiline = false, string[] tooltips = null)
+        public static List<string> ShowDialog(Form p, string caption, Icon ic, string[] lab, string[] def, bool multiline = false, string[] tooltips = null)
         {
-            BaseUtils.ThemeableForms theme = BaseUtils.ThemeAbleFormsInstance.Instance;
+            ThemeableForms theme = ThemeableFormsInstance.Instance;
 
             int vstart = theme.WindowsFrame ? 20 : 40;
             int vspacing = multiline ? 60 : 40;
@@ -52,6 +42,7 @@ namespace ExtendedControls
                 FormBorderStyle = FormBorderStyle.FixedDialog,
                 Text = caption,
                 StartPosition = FormStartPosition.CenterScreen,
+                Icon = ic
             };
 
             Panel outer = new Panel() { Dock = DockStyle.Fill, BorderStyle = BorderStyle.FixedSingle };
@@ -128,6 +119,7 @@ namespace ExtendedControls
         private Object callertag;
         private string logicalname;
         public event Action<string, string, Object> Trigger;        // returns logical name, name of control, caller tag object
+        private bool ProgClose = false;
 
         public class Entry
         {
@@ -221,15 +213,20 @@ namespace ExtendedControls
             return null;
         }
 
-        public void Show(Form p, string lname, System.Drawing.Size size, System.Drawing.Point pos, string caption, Entry[] e, Object t)
+        public void Show(Form p, string lname, Icon icon, System.Drawing.Size size, System.Drawing.Point pos, string caption, Entry[] e, Object t )
         {
             logicalname = lname;    // passed back to caller via trigger
             entries = e;
             callertag = t;      // passed back to caller via trigger
 
-            BaseUtils.ThemeableForms theme = BaseUtils.ThemeAbleFormsInstance.Instance;
+            ThemeableForms theme = ThemeableFormsInstance.Instance;
 
             FormBorderStyle = FormBorderStyle.FixedDialog;
+
+            if (theme.WindowsFrame)
+            {
+                size.Height += 50;
+            }
 
             Size = size;
 
@@ -245,6 +242,8 @@ namespace ExtendedControls
             outer.MouseDown += FormMouseDown;
 
             Controls.Add(outer);
+
+            this.Text = caption;
 
             Label textLabel = new Label() { Left = 4, Top = 8, Width = Width - 50, Text = caption };
             textLabel.MouseDown += FormMouseDown;
@@ -316,9 +315,28 @@ namespace ExtendedControls
 
             ShowInTaskbar = false;
 
+            this.Icon = icon;
+
             theme.ApplyToForm(this, System.Drawing.SystemFonts.DefaultFont);
 
             Show(p);
+        }
+
+        public new void Close()     // program close.. allow it to close properly
+        {
+            ProgClose = true;
+            base.Close();
+        }
+
+        protected override void OnFormClosing(FormClosingEventArgs e)
+        {
+            if (ProgClose == false)
+            {
+                e.Cancel = true; // stop it working. program does the close
+                Trigger(logicalname, "Cancel", callertag);
+            }
+            else
+                base.OnFormClosing(e);
         }
 
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData)

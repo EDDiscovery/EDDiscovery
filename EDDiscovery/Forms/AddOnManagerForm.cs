@@ -76,8 +76,9 @@ namespace EDDiscovery.Forms
         }
 
 
-        public void Init(bool ad)           // true = manage downloads, else just show actions and allow editing of them
+        public void Init(bool ad, Icon ic)           // true = manage downloads, else just show actions and allow editing of them
         {
+            this.Icon = ic;
             managedownloadmode = ad;
             
             EDDiscovery.EDDTheme theme = EDDiscovery.EDDTheme.Instance;
@@ -100,7 +101,7 @@ namespace EDDiscovery.Forms
                 file.Delete();
             }
 
-            BaseUtils.GitHubClass ghc = new BaseUtils.GitHubClass();
+            BaseUtils.GitHubClass ghc = new BaseUtils.GitHubClass(EDDiscovery.Properties.Resources.URLGithubDownload);
 
             List<BaseUtils.GitHubFile> files = ghc.GetDataFiles(gitdir);
 

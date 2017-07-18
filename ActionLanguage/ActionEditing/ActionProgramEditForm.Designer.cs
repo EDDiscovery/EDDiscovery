@@ -44,7 +44,6 @@ namespace ActionLanguage
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ActionProgramEditForm));
             this.panelOuter = new System.Windows.Forms.Panel();
             this.panelVScroll = new ExtendedControls.PanelVScroll();
             this.vScrollBarCustom1 = new ExtendedControls.VScrollBarCustom();
@@ -72,9 +71,9 @@ namespace ActionLanguage
             this.insertEntryAboveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.whitespaceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.removeWhitespaceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.editCommentToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.statusStripCustom = new ExtendedControls.StatusStripCustom();
-            this.editCommentToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panelOuter.SuspendLayout();
             this.panelVScroll.SuspendLayout();
             this.panelName.SuspendLayout();
@@ -369,7 +368,7 @@ namespace ActionLanguage
             this.removeWhitespaceToolStripMenuItem,
             this.editCommentToolStripMenuItem});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(201, 180);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(201, 158);
             this.contextMenuStrip1.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStrip1_Opening);
             // 
             // copyToolStripMenuItem
@@ -414,6 +413,13 @@ namespace ActionLanguage
             this.removeWhitespaceToolStripMenuItem.Text = "Remove whitespace";
             this.removeWhitespaceToolStripMenuItem.Click += new System.EventHandler(this.removeWhitespaceToolStripMenuItem_Click);
             // 
+            // editCommentToolStripMenuItem
+            // 
+            this.editCommentToolStripMenuItem.Name = "editCommentToolStripMenuItem";
+            this.editCommentToolStripMenuItem.Size = new System.Drawing.Size(200, 22);
+            this.editCommentToolStripMenuItem.Text = "Edit Comment";
+            this.editCommentToolStripMenuItem.Click += new System.EventHandler(this.editCommentToolStripMenuItem_Click);
+            // 
             // toolTip1
             // 
             this.toolTip1.ShowAlways = true;
@@ -426,14 +432,7 @@ namespace ActionLanguage
             this.statusStripCustom.TabIndex = 28;
             this.statusStripCustom.Text = "statusStripCustom1";
             // 
-            // editCommentToolStripMenuItem
-            // 
-            this.editCommentToolStripMenuItem.Name = "editCommentToolStripMenuItem";
-            this.editCommentToolStripMenuItem.Size = new System.Drawing.Size(200, 22);
-            this.editCommentToolStripMenuItem.Text = "Edit Comment";
-            this.editCommentToolStripMenuItem.Click += new System.EventHandler(this.editCommentToolStripMenuItem_Click);
-            // 
-            // ActionProgramForm
+            // ActionProgramEditForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -443,8 +442,7 @@ namespace ActionLanguage
             this.Controls.Add(this.panelTop);
             this.Controls.Add(this.panelOK);
             this.Controls.Add(this.statusStripCustom);
-            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Name = "ActionProgramForm";
+            this.Name = "ActionProgramEditForm";
             this.Padding = new System.Windows.Forms.Padding(3, 0, 3, 0);
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "ActionProgramForm";

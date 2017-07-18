@@ -95,7 +95,7 @@ namespace ActionLanguage
 
             SpeechConfigure cfg = new SpeechConfigure();
             cfg.Init(cp.AudioQueueSpeech, cp.SpeechSynthesizer,
-                        "Set Text to say (use ; to separate randomly selectable phrases and {} to group)", "Configure Say Command",
+                        "Set Text to say (use ; to separate randomly selectable phrases and {} to group)", "Configure Say Command", cp.Icon,
                         saying,
                         vars.Exists(waitname), vars.Exists(literalname),
                         AudioQueue.GetPriority(vars.GetString(priorityname, "Normal")),

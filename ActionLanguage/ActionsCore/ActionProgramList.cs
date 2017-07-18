@@ -114,7 +114,7 @@ namespace ActionLanguage
 
                     List<string> additionalfieldnames = new List<string>(); // We don't have any names to contribute going thru this path
 
-                    apf.Init("Action program ", cp, appfolder, additionalfieldnames, outername, p, GetActionProgramList(), "");
+                    apf.Init("Action program ", cp.Icon, cp, appfolder, additionalfieldnames, outername, p, GetActionProgramList(), "");
 
                     System.Windows.Forms.DialogResult res = apf.ShowDialog();
 

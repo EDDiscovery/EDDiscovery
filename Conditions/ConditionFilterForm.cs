@@ -78,42 +78,43 @@ namespace Conditions
 
         // used to start when just filtering.. uses a fixed event list .. must provide a call back to obtain names associated with an event
 
-        public void InitFilter(string t, List<string> events, AdditionalNames a, List<string> varfields,  ConditionLists j = null)
+        public void InitFilter(string t, Icon ic, List<string> events, AdditionalNames a, List<string> varfields,  ConditionLists j = null)
         {
             onAdditionalNames = a;
             this.eventlist = events;
             events.Add("All");
-            Init(t, events, varfields, true);
+            Init(t, ic, events, varfields, true);
             LoadConditions(j);
         }
 
         // used to start when inside a condition of an IF of a program action (does not need additional names, already resolved)
 
-        public void InitCondition(string t, List<string> varfields, ConditionLists j = null)
+        public void InitCondition(string t, Icon ic, List<string> varfields, ConditionLists j = null)
         {
-            Init(t, null, varfields, true);
+            Init(t, ic, null, varfields, true);
             LoadConditions(j);
         }
 
         // used to start for a condition on an action form (does not need additional names, already resolved)
 
-        public void InitCondition(string t, List<string> varfields, Condition j)
+        public void InitCondition(string t, Icon ic, List<string> varfields, Condition j)
         {
             ConditionLists l = new ConditionLists();
             if ( j!= null && j.fields != null )
                 l.Add(j);
-            Init(t, null, varfields, false);
+            Init(t, ic, null, varfields, false);
             buttonMore.Visible = true;
             LoadConditions(l);
         }
 
         // Full start
 
-        public void Init(   string t, 
+        public void Init(   string t, Icon ic,
                             List<string> el,                             // list of event types or null if event types not used
                             List<string> varfields,                      // list of additional variable/field names (must be set)
                             bool outerconditions)                        // outc selects if group outer action can be selected, else its OR
-        { 
+        {
+            this.Icon = ic;
             eventlist = el;
             additionalfieldnames = varfields;
             allowoutercond = outerconditions;
@@ -122,7 +123,7 @@ namespace Conditions
             // sizes are the sizes of the controls and gaps
             condxoffset = ((eventlist != null) ? (150 + 8) : 0) +  panelxmargin + 8;
 
-            bool winborder = BaseUtils.ThemeAbleFormsInstance.Instance.ApplyToForm(this, SystemFonts.DefaultFont);
+            bool winborder = ExtendedControls.ThemeableFormsInstance.Instance.ApplyToForm(this, SystemFonts.DefaultFont);
             statusStripCustom.Visible = panelTop.Visible = panelTop.Enabled = !winborder;
             initialtitle = this.Text = label_index.Text = t;
         }
@@ -147,7 +148,7 @@ namespace Conditions
                     foreach (ConditionEntry f in fe.fields)
                         CreateConditionInt(g, f.itemname, ConditionEntry.MatchNames[(int)f.matchtype], f.matchstring);
 
-                    BaseUtils.ThemeAbleFormsInstance.Instance.ApplyToControls(g.panel, SystemFonts.DefaultFont);
+                    ExtendedControls.ThemeableFormsInstance.Instance.ApplyToControls(g.panel, SystemFonts.DefaultFont);
 
                     groups.Add(g);
                 }
@@ -190,7 +191,7 @@ namespace Conditions
             if (eventlist == null)      // if we don't have any event list, auto create a condition
                 CreateConditionInt(g, null, null, null);
 
-            BaseUtils.ThemeAbleFormsInstance.Instance.ApplyToControls(g.panel, SystemFonts.DefaultFont);
+            ExtendedControls.ThemeableFormsInstance.Instance.ApplyToControls(g.panel, SystemFonts.DefaultFont);
 
             groups.Add(g);
             panelVScroll.Controls.Add(g.panel);
@@ -297,7 +298,7 @@ namespace Conditions
         void CreateCondition(Group g, string initialfname = null, string initialcond = null, string initialvalue = null )
         {
             CreateConditionInt(g, initialfname, initialcond, initialvalue);
-            BaseUtils.ThemeAbleFormsInstance.Instance.ApplyToControls(g.panel, SystemFonts.DefaultFont);
+            ExtendedControls.ThemeableFormsInstance.Instance.ApplyToControls(g.panel, SystemFonts.DefaultFont);
             FixUpGroups();
         }
 

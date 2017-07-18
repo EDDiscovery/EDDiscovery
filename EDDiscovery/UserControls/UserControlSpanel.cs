@@ -340,7 +340,7 @@ namespace EDDiscovery.UserControls
                 ExtendedControls.PictureBoxHotspot.ImageElement edsm = pictureBox.AddTextFixedSizeC(new Point(scanpostextoffset.X + columnpos[colnum++], rowpos), new Size(45, 14), 
                                             "EDSM", displayfont, backtext, textcolour, 0.5F, true, he, "View system on EDSM");
                 edsm.Translate(0, (rowheight - edsm.img.Height) / 2);          // align to centre of rowh..
-                edsm.SetAlternateImage(ExtendedControls.ControlHelpers.DrawTextIntoFixedSizeBitmapC("EDSM", edsm.img.Size, displayfont, backtext, textcolour.Multiply(1.2F), 0.5F, true), edsm.pos, true);
+                edsm.SetAlternateImage(ExtendedControls.BitMapHelpers.DrawTextIntoFixedSizeBitmapC("EDSM", edsm.img.Size, displayfont, backtext, textcolour.Multiply(1.2F), 0.5F, true), edsm.pos, true);
             }
 
             string tooltip = he.EventSummary + Environment.NewLine + he.EventDescription + Environment.NewLine + he.EventDetailedInfo;
@@ -842,7 +842,9 @@ namespace EDDiscovery.UserControls
         private void configureFieldFilterToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Conditions.ConditionFilterForm frm = new Conditions.ConditionFilterForm();
-            frm.InitFilter("Summary Panel: Filter out fields", EDDiscovery.EliteDangerous.JournalEntry.GetListOfEventsWithOptMethod(false) ,
+            frm.InitFilter("Summary Panel: Filter out fields",
+                            Icon.ExtractAssociatedIcon(System.Reflection.Assembly.GetExecutingAssembly().Location),
+                            EDDiscovery.EliteDangerous.JournalEntry.GetListOfEventsWithOptMethod(false) ,
                             (s) => { return BaseUtils.FieldNames.GetPropertyFieldNames(EDDiscovery.EliteDangerous.JournalEntry.TypeOfJournalEntry(s)); },
                             discoveryform.Globals.NameList, fieldfilter);
             frm.TopMost = this.FindForm().TopMost;

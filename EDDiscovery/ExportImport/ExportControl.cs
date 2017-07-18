@@ -285,7 +285,8 @@ namespace EDDiscovery.Export
         {
             ExtendedControls.InfoForm dl = new ExtendedControls.InfoForm();
             string text = EDDiscovery.Properties.Resources.ImportHelp;
-            dl.Info("Import Help", text, new Font("Microsoft Sans Serif", 10), new int[] { 50, 200, 400 });
+            dl.Info("Import Help", Icon.ExtractAssociatedIcon(System.Reflection.Assembly.GetExecutingAssembly().Location),
+                        text, new Font("Microsoft Sans Serif", 10), new int[] { 50, 200, 400 });
             dl.Show();
         }
         

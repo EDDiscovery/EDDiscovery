@@ -30,7 +30,7 @@ namespace ActionLanguage
 
         public override bool ConfigurationMenu(Form parent, ActionCoreController cp, List<string> eventvars)
         {
-            string promptValue = ExtendedControls.PromptSingleLine.ShowDialog(parent, "Pragma", UserData, "Configure Pragma Command");
+            string promptValue = ExtendedControls.PromptSingleLine.ShowDialog(parent, "Pragma", UserData, "Configure Pragma Command" , cp.Icon);
             if (promptValue != null)
             {
                 userdata = promptValue;

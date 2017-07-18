@@ -43,7 +43,6 @@ namespace AudioExtensions
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SpeechConfigure));
             this.Title = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
@@ -60,6 +59,7 @@ namespace AudioExtensions
             this.buttonExtCancel = new ExtendedControls.ButtonExt();
             this.buttonExtOK = new ExtendedControls.ButtonExt();
             this.comboBoxCustomVoice = new ExtendedControls.ComboBoxCustom();
+            this.checkBoxCustomLiteral = new ExtendedControls.CheckBoxCustom();
             this.textBoxBorderTest = new ExtendedControls.TextBoxBorder();
             this.labelEndTrigger = new System.Windows.Forms.Label();
             this.labelStartTrigger = new System.Windows.Forms.Label();
@@ -67,7 +67,6 @@ namespace AudioExtensions
             this.trackBarRate = new System.Windows.Forms.TrackBar();
             this.checkBoxCustomR = new ExtendedControls.CheckBoxCustom();
             this.checkBoxCustomV = new ExtendedControls.CheckBoxCustom();
-            this.checkBoxCustomLiteral = new ExtendedControls.CheckBoxCustom();
             this.panelOuter.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trackBarVolume)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackBarRate)).BeginInit();
@@ -305,6 +304,22 @@ namespace AudioExtensions
             this.comboBoxCustomVoice.Text = "comboBoxCustom1";
             this.comboBoxCustomVoice.ValueMember = "";
             // 
+            // checkBoxCustomLiteral
+            // 
+            this.checkBoxCustomLiteral.AutoSize = true;
+            this.checkBoxCustomLiteral.CheckBoxColor = System.Drawing.Color.Gray;
+            this.checkBoxCustomLiteral.CheckBoxInnerColor = System.Drawing.Color.White;
+            this.checkBoxCustomLiteral.CheckColor = System.Drawing.Color.DarkBlue;
+            this.checkBoxCustomLiteral.FontNerfReduction = 0.5F;
+            this.checkBoxCustomLiteral.Location = new System.Drawing.Point(197, 132);
+            this.checkBoxCustomLiteral.MouseOverColor = System.Drawing.Color.CornflowerBlue;
+            this.checkBoxCustomLiteral.Name = "checkBoxCustomLiteral";
+            this.checkBoxCustomLiteral.Size = new System.Drawing.Size(54, 17);
+            this.checkBoxCustomLiteral.TabIndex = 1;
+            this.checkBoxCustomLiteral.Text = "Literal";
+            this.checkBoxCustomLiteral.TickBoxReductionSize = 10;
+            this.checkBoxCustomLiteral.UseVisualStyleBackColor = true;
+            // 
             // textBoxBorderTest
             // 
             this.textBoxBorderTest.BorderColor = System.Drawing.Color.Transparent;
@@ -386,22 +401,6 @@ namespace AudioExtensions
             this.checkBoxCustomV.UseVisualStyleBackColor = true;
             this.checkBoxCustomV.CheckedChanged += new System.EventHandler(this.checkBoxCustomV_CheckedChanged);
             // 
-            // checkBoxCustomLiteral
-            // 
-            this.checkBoxCustomLiteral.AutoSize = true;
-            this.checkBoxCustomLiteral.CheckBoxColor = System.Drawing.Color.Gray;
-            this.checkBoxCustomLiteral.CheckBoxInnerColor = System.Drawing.Color.White;
-            this.checkBoxCustomLiteral.CheckColor = System.Drawing.Color.DarkBlue;
-            this.checkBoxCustomLiteral.FontNerfReduction = 0.5F;
-            this.checkBoxCustomLiteral.Location = new System.Drawing.Point(197, 132);
-            this.checkBoxCustomLiteral.MouseOverColor = System.Drawing.Color.CornflowerBlue;
-            this.checkBoxCustomLiteral.Name = "checkBoxCustomLiteral";
-            this.checkBoxCustomLiteral.Size = new System.Drawing.Size(54, 17);
-            this.checkBoxCustomLiteral.TabIndex = 1;
-            this.checkBoxCustomLiteral.Text = "Literal";
-            this.checkBoxCustomLiteral.TickBoxReductionSize = 10;
-            this.checkBoxCustomLiteral.UseVisualStyleBackColor = true;
-            // 
             // SpeechConfigure
             // 
             this.AcceptButton = this.buttonExtOK;
@@ -410,7 +409,6 @@ namespace AudioExtensions
             this.CancelButton = this.buttonExtCancel;
             this.ClientSize = new System.Drawing.Size(433, 475);
             this.Controls.Add(this.panelOuter);
-            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "SpeechConfigure";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Configure Speech";

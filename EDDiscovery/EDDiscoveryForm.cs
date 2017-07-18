@@ -59,7 +59,7 @@ namespace EDDiscovery
         static public EDDConfig EDDConfig { get { return EDDConfig.Instance; } }
         public EDDTheme theme { get { return EDDTheme.Instance; } }
 
-        public TravelHistoryControl TravelControl { get { return travelHistoryControl1; } }
+        public TravelHistoryControl TravelControl { get { return travelHistoryControl; } }
         public RouteControl RouteControl { get { return routeControl1; } }
         public ExportControl ExportControl { get { return exportControl1; } }
         public EDDiscovery.ImageHandler.ImageHandler ImageHandler { get { return imageHandler1; } }
@@ -172,6 +172,11 @@ namespace EDDiscovery
             // Some components require the controller to be initialized
             InitializeComponent();
 
+            comboBoxCustomPopOut.Enabled = false;
+            comboBoxCustomPopOut.Items.AddRange(PopOutControl.spanelbuttonlist);
+            comboBoxCustomPopOut.SelectedIndex = 0;
+            comboBoxCustomPopOut.Enabled = true;
+
             label_version.Text = EDDConfig.Options.VersionDisplayString;
 
             PopOuts = new PopOutControl(this);
@@ -181,7 +186,7 @@ namespace EDDiscovery
             themeok = theme.RestoreSettings();                                    // theme, remember your saved settings
 
             trilaterationControl.InitControl(this);
-            travelHistoryControl1.InitControl(this);
+            travelHistoryControl.InitControl(this);
             imageHandler1.InitControl(this);
             settings.InitControl(this);
             journalViewControl1.InitControl(this, 0);
@@ -215,7 +220,7 @@ namespace EDDiscovery
             audioqueuewave = new AudioExtensions.AudioQueue(audiodriverwave);
             audioqueuespeech = new AudioExtensions.AudioQueue(audiodriverspeech);
 
-            actioncontroller = new Actions.ActionController(this, Controller);
+            actioncontroller = new Actions.ActionController(this, Controller, this.Icon);
 
             frontierbindings = new BindingsFile();
             inputdevices = new DirectInputDevices.InputDeviceList(a => BeginInvoke(a));
@@ -274,7 +279,6 @@ namespace EDDiscovery
                 InitFormControls();
                 settings.InitSettingsTab();
                 savedRouteExpeditionControl1.LoadControl();
-                travelHistoryControl1.LoadControl();
 
                 if (EDDConfig.Options.ActionButton)
                 {
@@ -329,7 +333,7 @@ namespace EDDiscovery
             try
             {
 
-                BaseUtils.GitHubClass github = new BaseUtils.GitHubClass(LogLine);
+                BaseUtils.GitHubClass github = new BaseUtils.GitHubClass(EDDiscovery.Properties.Resources.URLGithubDownload, LogLine);
 
                 BaseUtils.GitHubRelease rel = github.GetLatestRelease();
 
@@ -364,7 +368,7 @@ namespace EDDiscovery
         {
             ShowInfoPanel("Loading. Please wait!", true);
 
-            routeControl1.travelhistorycontrol1 = travelHistoryControl1;
+            routeControl1.travelhistorycontrol1 = travelHistoryControl;
         }
 
         private void RepositionForm()
@@ -403,7 +407,7 @@ namespace EDDiscovery
             _formHeight = Height;
             _formWidth = Width;
 
-            travelHistoryControl1.LoadLayoutSettings();
+            travelHistoryControl.LoadLayoutSettings();
             journalViewControl1.LoadLayoutSettings();
             if (EDDConfig.AutoLoadPopOuts && EDDConfig.Options.NoWindowReposition == false)
                 PopOuts.LoadSavedPopouts();
@@ -446,7 +450,7 @@ namespace EDDiscovery
             imageHandler1.StartWatcher();
             routeControl1.EnableRouteTab(); // now we have systems, we can update this..
 
-            routeControl1.travelhistorycontrol1 = travelHistoryControl1;
+            routeControl1.travelhistorycontrol1 = travelHistoryControl;
             ShowInfoPanel("", false);
 
             checkInstallerTask = CheckForNewInstallerAsync();
@@ -464,21 +468,21 @@ namespace EDDiscovery
 
         private void Controller_RefreshStarting()
         {
-            travelHistoryControl1.RefreshButton(false);
+            RefreshButton(false);
             journalViewControl1.RefreshButton(false);
             actioncontroller.ActionRun("onRefreshStart", "ProgramEvent");
         }
 
         private void Controller_RefreshCommanders()
         {
-            travelHistoryControl1.LoadCommandersListBox();             // in case a new commander has been detected
+            LoadCommandersListBox();             // in case a new commander has been detected
             exportControl1.PopulateCommanders();
             settings.UpdateCommandersListBox();
         }
 
         private void Controller_RefreshComplete()
         {
-            travelHistoryControl1.RefreshButton(true);
+            RefreshButton(true);
             journalViewControl1.RefreshButton(true);
             actioncontroller.ActionRunOnRefresh();
 
@@ -666,7 +670,7 @@ namespace EDDiscovery
             SQLiteDBClass.PutSettingInt("FormLeft", _formLeft);
             routeControl1.SaveSettings();
             theme.SaveSettings(null);
-            travelHistoryControl1.SaveSettings();
+            travelHistoryControl.SaveSettings();
             journalViewControl1.SaveSettings();
             if (EDDConfig.AutoSavePopOuts)
                 PopOuts.SaveCurrentPopouts();
@@ -747,7 +751,7 @@ namespace EDDiscovery
 
         private void show3DMapsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            TravelControl.buttonMap_Click(sender, e);
+            Open3DMap(travelHistoryControl.GetTravelHistoryCurrent);
         }
 
         private void forceEDDBUpdateToolStripMenuItem_Click(object sender, EventArgs e)
@@ -991,24 +995,12 @@ namespace EDDiscovery
         {
             if (he != null && txt != null)
             {
-                // Update the System Note; and if the text was changed, save our Note for sending and storing later
-                // Also notify various "quick" listeners
-                if (he.UpdateSystemNote(txt, send))
-                {
-                    if (_uncommittedNoteHistoryEntry == null)
-                    {
-                        _uncommittedNoteHistoryEntry = he;
-                    }
-                    travelHistoryControl1.UpdateNoteJID(he.Journalid, txt);
-                    PopOuts.UpdateNoteJID(he.Journalid, txt);
-                    // MKW TODO: Update the Note editor SPanel.
-                }
+                if (_uncommittedNoteHistoryEntry != null && _uncommittedNoteHistoryEntry != he )       // if we have an uncommited one
+                    StoreUncommittedNote();                     // and its not the same as stored one, store previous
 
-                // If we have an uncommitted system note from another entry, or the send flag is set, commit to DB and send to EDSM
-                // Also notify any "slow" listeners
-                if (_uncommittedNoteHistoryEntry != null && (send || _uncommittedNoteHistoryEntry != he))
+                if (he.UpdateSystemNote(txt, send))     // update HE SNC variable, optionally commit to DB, returns if note is set up
                 {
-                    StoreUncommittedNote();
+                    _uncommittedNoteHistoryEntry = he;  // and store for later
                     Map.UpdateNote();
                 }
             }
@@ -1019,9 +1011,11 @@ namespace EDDiscovery
             if (_uncommittedNoteHistoryEntry != null)
             {
                 _uncommittedNoteHistoryEntry.CommitSystemNote();
-                    if (EDCommander.Current.SyncToEdsm && _uncommittedNoteHistoryEntry.IsFSDJump)       // only send on FSD jumps
-                        EDSMSync.SendComments(_uncommittedNoteHistoryEntry.snc.Name, _uncommittedNoteHistoryEntry.snc.Note, _uncommittedNoteHistoryEntry.snc.EdsmId);
-                _uncommittedNoteHistoryEntry = null;
+
+                if (EDCommander.Current.SyncToEdsm && _uncommittedNoteHistoryEntry.IsFSDJump)       // only send on FSD jumps
+                    EDSMSync.SendComments(_uncommittedNoteHistoryEntry.snc.Name, _uncommittedNoteHistoryEntry.snc.Note, _uncommittedNoteHistoryEntry.snc.EdsmId);
+
+                _uncommittedNoteHistoryEntry = null;        // clear
             }
         }
 
@@ -1149,6 +1143,19 @@ namespace EDDiscovery
             {
                 base.WndProc(ref m);
             }
+        }
+
+        private IntPtr SendMessage(int msg, IntPtr wparam, IntPtr lparam)
+        {
+            Message message = Message.Create(this.Handle, msg, wparam, lparam);
+            this.WndProc(ref message);
+            return message.Result;
+        }
+
+        private void MouseDownCAPTION( object sender, MouseEventArgs e)
+        {
+            ((Control)sender).Capture = false;
+            SendMessage(WM.NCLBUTTONDOWN, (System.IntPtr)HT.CAPTION, (System.IntPtr)0);
         }
 
         private void RecordPosition()
@@ -1301,11 +1308,11 @@ namespace EDDiscovery
 
         public bool SelectTabPage(string name)
         {
-            foreach (TabPage p in tabControl1.TabPages)
+            foreach (TabPage p in tabControlMain.TabPages)
             {
                 if (p.Text.Equals(name, StringComparison.InvariantCultureIgnoreCase))
                 {
-                    tabControl1.SelectTab(p);
+                    tabControlMain.SelectTab(p);
                     return true;
                 }
             }
@@ -1315,7 +1322,7 @@ namespace EDDiscovery
 
         private void tabControl1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            ActionRun("onTabChange", "UserUIEvent", null, new Conditions.ConditionVariables("TabName", tabControl1.TabPages[tabControl1.SelectedIndex].Text));
+            ActionRun("onTabChange", "UserUIEvent", null, new Conditions.ConditionVariables("TabName", tabControlMain.TabPages[tabControlMain.SelectedIndex].Text));
         }
 
         public Conditions.ConditionVariables Globals { get { return actioncontroller.Globals; } }
@@ -1327,6 +1334,101 @@ namespace EDDiscovery
         { return actioncontroller.ActionRun(name, triggertype,he,additionalvars,flagstart,now); }
 
         #endregion
+
+
+        public void LoadCommandersListBox()
+        {
+            comboBoxCommander.Enabled = false;
+            comboBoxCommander.Items.Clear();            // comboBox is nicer with items
+            comboBoxCommander.Items.Add("Hidden Log");
+            comboBoxCommander.Items.AddRange((from EDCommander c in EDCommander.GetList() select c.Name).ToList());
+            if (history.CommanderId == -1)
+            {
+                comboBoxCommander.SelectedIndex = 0;
+                buttonExtEDSMSync.Enabled = false;
+            }
+            else
+            {
+                comboBoxCommander.SelectedItem = EDCommander.Current.Name;
+                buttonExtEDSMSync.Enabled = EDCommander.Current.SyncToEdsm | EDCommander.Current.SyncFromEdsm;
+            }
+
+            comboBoxCommander.Enabled = true;
+        }
+
+        private void comboBoxCommander_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (comboBoxCommander.SelectedIndex >= 0 && comboBoxCommander.Enabled)     // DONT trigger during LoadCommandersListBox
+            {
+                if (comboBoxCommander.SelectedIndex == 0)
+                    RefreshHistoryAsync(currentcmdr: -1);                                   // which will cause DIsplay to be called as some point
+                else
+                {
+                    var itm = (from EDCommander c in EDCommander.GetList() where c.Name.Equals(comboBoxCommander.Text) select c).ToList();
+
+                    EDCommander.CurrentCmdrID = itm[0].Nr;
+                    RefreshHistoryAsync(currentcmdr: EDCommander.CurrentCmdrID);                                   // which will cause DIsplay to be called as some point
+                }
+            }
+
+        }
+
+        private void buttonExt3dmap_Click(object sender, EventArgs e)
+        {
+            Open3DMap(travelHistoryControl.GetTravelHistoryCurrent);
+        }
+
+        private void buttonExt2dmap_Click(object sender, EventArgs e)
+        {
+            Open2DMap();
+        }
+
+        public void RefreshButton(bool state)
+        {
+            buttonExtRefresh.Enabled = state;
+            PopOuts.SetRefreshState(state);
+        }
+
+        private void buttonExtRefresh_Click(object sender, EventArgs e)
+        {
+            LogLine("Refresh History.");
+            RefreshHistoryAsync(checkedsm: true);
+        }
+
+        private void buttonExtEDSMSync_Click(object sender, EventArgs e)
+        {
+            EDSMClass edsm = new EDSMClass();
+
+            if (!edsm.IsApiKeySet)
+            {
+                ExtendedControls.MessageBoxTheme.Show("Please ensure a commander is selected and it has a EDSM API key set");
+                return;
+            }
+
+            try
+            {
+                EdsmSync.StartSync(edsm, EDCommander.Current.SyncToEdsm, EDCommander.Current.SyncFromEdsm, EDDConfig.Instance.DefaultMapColour);
+            }
+            catch (Exception ex)
+            {
+                LogLine($"EDSM Sync failed: {ex.Message}");
+            }
+
+        }
+
+        private void comboBoxCustomPopOut_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (!comboBoxCustomPopOut.Enabled)
+                return;
+
+            PopOuts.PopOut((PopOutControl.PopOuts)(comboBoxCustomPopOut.SelectedIndex));
+
+            comboBoxCustomPopOut.Enabled = false;
+            comboBoxCustomPopOut.SelectedIndex = 0;
+            comboBoxCustomPopOut.Enabled = true;
+        }
+
+
 
     }
 }

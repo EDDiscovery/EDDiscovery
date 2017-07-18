@@ -28,20 +28,12 @@ namespace BaseUtils
 {
     public class GitHubClass : HttpCom
     {
-        //public string commanderName;
-        //private readonly string fromSoftwareVersion;
-        // assemblyFullName = Assembly.GetExecutingAssembly().FullName;
-        //fromSoftwareVersion = assemblyFullName.Split(',')[1].Split('=')[1];
-        //commanderName = EDDConfig.Instance.CurrentCommander.EdsmName;
-
-        private readonly string githubServer = "https://api.github.com/repos/EDDiscovery/EDDiscovery/";
-
         public delegate void LogLine(string text);
         LogLine logger = null;
 
-        public GitHubClass(LogLine lg = null )
+        public GitHubClass(string server, LogLine lg = null )
         {
-            _serverAddress = githubServer;
+            _serverAddress = server;
             logger = lg;
         }
 

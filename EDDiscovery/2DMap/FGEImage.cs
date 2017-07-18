@@ -431,7 +431,7 @@ namespace EDDiscovery
 
                 logLine("Checking for new EDDiscovery maps");
 
-                BaseUtils.GitHubClass github = new BaseUtils.GitHubClass(discoveryform.LogLine);
+                BaseUtils.GitHubClass github = new BaseUtils.GitHubClass(EDDiscovery.Properties.Resources.URLGithubDownload, discoveryform.LogLine);
 
                 var files = github.GetDataFiles("Maps/V1");
                 return Task.Factory.StartNew(() => github.DownloadFiles(files, mapsdir));

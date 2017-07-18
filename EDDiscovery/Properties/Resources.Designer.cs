@@ -653,6 +653,26 @@ namespace EDDiscovery.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap eddiscovery_logo {
+            get {
+                object obj = ResourceManager.GetObject("eddiscovery_logo", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        internal static System.Drawing.Icon edlogo_3mo_icon {
+            get {
+                object obj = ResourceManager.GetObject("edlogo_3mo_icon", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap edlogo24 {
             get {
                 object obj = ResourceManager.GetObject("edlogo24", resourceCulture);
@@ -907,6 +927,16 @@ namespace EDDiscovery.Properties {
             get {
                 object obj = ResourceManager.GetObject("Globe_yellow", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        internal static System.Drawing.Icon GNE {
+            get {
+                object obj = ResourceManager.GetObject("GNE", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
             }
         }
         
@@ -2386,6 +2416,56 @@ namespace EDDiscovery.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap toolStripButtonMap_Image {
+            get {
+                object obj = ResourceManager.GetObject("toolStripButtonMap_Image", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap toolStripButtonNew_Image {
+            get {
+                object obj = ResourceManager.GetObject("toolStripButtonNew_Image", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap toolStripButtonRemoveAll_Image {
+            get {
+                object obj = ResourceManager.GetObject("toolStripButtonRemoveAll_Image", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap toolStripButtonRemoveUnused_Image {
+            get {
+                object obj = ResourceManager.GetObject("toolStripButtonRemoveUnused_Image", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap toolStripButtonSubmitDistances_Image {
+            get {
+                object obj = ResourceManager.GetObject("toolStripButtonSubmitDistances_Image", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap touchdown {
             get {
                 object obj = ResourceManager.GetObject("touchdown", resourceCulture);
@@ -2446,6 +2526,15 @@ namespace EDDiscovery.Properties {
         internal static string URLedsm {
             get {
                 return ResourceManager.GetString("URLedsm", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to https://api.github.com/repos/EDDiscovery/EDDiscovery/.
+        /// </summary>
+        internal static string URLGithubDownload {
+            get {
+                return ResourceManager.GetString("URLGithubDownload", resourceCulture);
             }
         }
         

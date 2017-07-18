@@ -30,7 +30,7 @@ namespace EDDiscovery.Actions
 
         public override bool ConfigurationMenu(Form parent, ActionCoreController cp, List<string> eventvars)
         {
-            string promptValue = ExtendedControls.PromptSingleLine.ShowDialog(parent, "ProgramWindow command", UserData, "Configure Program Window Command");
+            string promptValue = ExtendedControls.PromptSingleLine.ShowDialog(parent, "ProgramWindow command", UserData, "Configure Program Window Command" , cp.Icon);
             if (promptValue != null)
             {
                 userdata = promptValue;

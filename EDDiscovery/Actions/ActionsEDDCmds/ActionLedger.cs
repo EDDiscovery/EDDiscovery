@@ -30,7 +30,7 @@ namespace EDDiscovery.Actions
 
         public override bool ConfigurationMenu(System.Windows.Forms.Form parent, ActionCoreController cp, List<string> eventvars)
         {
-            string promptValue = ExtendedControls.PromptSingleLine.ShowDialog(parent, "JID of event", UserData, "Configure Ledger Command" );
+            string promptValue = ExtendedControls.PromptSingleLine.ShowDialog(parent, "JID of event", UserData, "Configure Ledger Command" , cp.Icon);
             if (promptValue != null)
             {
                 userdata = promptValue;

@@ -33,7 +33,7 @@ namespace EDDiscovery.Actions
 
         public override bool ConfigurationMenu(Form parent, ActionCoreController cp, List<string> eventvars)
         {
-            string promptValue = ExtendedControls.PromptSingleLine.ShowDialog(parent, "JID of event", UserData, (commodities) ? "Configure Commodities Command" : "Configure Material Command");
+            string promptValue = ExtendedControls.PromptSingleLine.ShowDialog(parent, "JID of event", UserData, (commodities) ? "Configure Commodities Command" : "Configure Material Command" , cp.Icon);
             if (promptValue != null)
             {
                 userdata = promptValue;

@@ -44,7 +44,6 @@ namespace AudioExtensions
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SoundEffectsDialog));
             this.trackBarCDp = new System.Windows.Forms.TrackBar();
             this.trackBarDC = new System.Windows.Forms.TrackBar();
             this.trackBarRH = new System.Windows.Forms.TrackBar();
@@ -805,7 +804,6 @@ namespace AudioExtensions
             this.CancelButton = this.buttonExtCancel;
             this.ClientSize = new System.Drawing.Size(566, 523);
             this.Controls.Add(this.panelOuter);
-            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "SoundEffectsDialog";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "SoundEffects";

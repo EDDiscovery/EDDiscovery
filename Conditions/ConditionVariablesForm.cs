@@ -57,12 +57,13 @@ namespace Conditions
 
         // altops, if given, describes the operator of each variable.
 
-        public void Init(string t, ConditionVariables vbs , Dictionary<string, string> altops = null,
+        public void Init(string t, Icon ic, ConditionVariables vbs , Dictionary<string, string> altops = null,
                                                                 bool showone = false ,
                                                                 bool showrefresh = false , bool showrefreshstate = false,
                                                                 bool allowadd = false, bool allownoexpand = false )
         {
-            bool winborder = BaseUtils.ThemeAbleFormsInstance.Instance.ApplyToForm(this, SystemFonts.DefaultFont);
+            this.Icon = ic;
+            bool winborder = ExtendedControls.ThemeableFormsInstance.Instance.ApplyToForm(this, SystemFonts.DefaultFont);
             statusStripCustom.Visible = panelTop.Visible = panelTop.Enabled = !winborder;
             this.Text = label_index.Text = t;
 
@@ -167,7 +168,7 @@ namespace Conditions
             groups.Add(g);
 
             panelVScroll1.Controls.Add(g.panel);
-            BaseUtils.ThemeAbleFormsInstance.Instance.ApplyToControls(g.panel, SystemFonts.DefaultFont);
+            ExtendedControls.ThemeableFormsInstance.Instance.ApplyToControls(g.panel, SystemFonts.DefaultFont);
 
             FixUpGroups();
 

@@ -17,7 +17,7 @@ namespace ExtendedControls
         {
             MessageBoxTheme msg = new MessageBoxTheme();
             msg.StartPosition = FormStartPosition.CenterParent;
-            msg.Init(text, caption, buttons, icon);
+            msg.Init(text, caption, buttons, icon , ThemeableFormsInstance.Instance?.MessageBoxWindowIcon);
             return msg.ShowDialog(window);
         }
 
@@ -25,7 +25,7 @@ namespace ExtendedControls
         {
             MessageBoxTheme msg = new MessageBoxTheme();
             msg.StartPosition = FormStartPosition.CenterScreen;
-            msg.Init(text, caption, buttons, icon);
+            msg.Init(text, caption, buttons, icon , ThemeableFormsInstance.Instance?.MessageBoxWindowIcon);
             return msg.ShowDialog();
         }
 
@@ -40,7 +40,7 @@ namespace ExtendedControls
             InitializeComponent();
         }
 
-        public void Init(string ptext, string caption , MessageBoxButtons buttons, MessageBoxIcon ic )
+        public void Init(string ptext, string caption , MessageBoxButtons buttons, MessageBoxIcon ic , System.Drawing.Icon windowicon)
         {
             if (buttons == MessageBoxButtons.AbortRetryIgnore)
             {
@@ -98,7 +98,7 @@ namespace ExtendedControls
 
             int ystart = 30;
 
-            BaseUtils.ThemeableForms theme = BaseUtils.ThemeAbleFormsInstance.Instance;
+            ThemeableForms theme = ThemeableFormsInstance.Instance;
             if (theme != null)  // paranoid
             {
                 fnt = new Font(theme.FontName, 12.0F);
@@ -115,6 +115,9 @@ namespace ExtendedControls
                 fnt = new Font("MS Sans Serif", 12.0F);
                 forecolour = Color.Red;
             }
+
+            if ( windowicon != null)
+                this.Icon = windowicon;
 
             int bordery = Bounds.Height - ClientRectangle.Height;
             int borderx = Bounds.Width - ClientRectangle.Width;
