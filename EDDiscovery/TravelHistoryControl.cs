@@ -261,7 +261,7 @@ namespace EDDiscovery
                         EDSMSync.SendTravelLog(he);
                 }
 
-                if (he.ISEDDNMessage)
+                if (he.ISEDDNMessage && he.AgeOfEntry() < TimeSpan.FromDays(1.0))
                 {
                     if (EDCommander.Current.SyncToEddn == true)
                     {
