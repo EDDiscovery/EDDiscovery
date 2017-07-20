@@ -25,6 +25,8 @@ using System.Data.Common;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
+using System.Threading;
 
 namespace EDDiscovery
 {
@@ -68,6 +70,7 @@ namespace EDDiscovery
         public bool IsFSDJump { get { return EntryType == EliteDangerous.JournalTypeEnum.FSDJump; } }
         public bool IsLocOrJump { get { return EntryType == JournalTypeEnum.FSDJump || EntryType == JournalTypeEnum.Location; } }
         public bool IsFuelScoop { get { return EntryType == JournalTypeEnum.FuelScoop; } }
+        public bool IsShipChange { get { return (EntryType == JournalTypeEnum.LoadGame || EntryType == JournalTypeEnum.Docked) && ShipInformation != null; } }
         public bool ISEDDNMessage
         {
             get
@@ -1258,8 +1261,106 @@ namespace EDDiscovery
 
         static private DateTime LastEDSMAPiCommanderTime = DateTime.Now;
         static private ShipInformation LastShipInfo = null;
+        static private long LastShipInfoTicks = -1;
+        static private long LastCreditTicks = -1;
         static private long LastEDSMCredtis = -1;
         static private long LastShipID = -1;
+
+        public void SendShipInfoAsync()
+        {
+            EDCommander commander = EDCommander.GetCommander(CommanderId);
+            string edsmname = commander.Name;
+            if (!string.IsNullOrEmpty(commander.EdsmName))
+                edsmname = commander.EdsmName;
+            EDSMClass edsm = new EDSMClass { apiKey = commander.APIKey, commanderName = edsmname };
+            JournalLoadGame loadgame = historylist.FindLast(x => x.EntryType == JournalTypeEnum.LoadGame).journalEntry as JournalLoadGame;
+            HistoryEntry shipinfohe = historylist.FindLast(he => he.ShipInformation != null && he.ShipInformation.SubVehicle == ShipInformation.SubVehicleType.None);
+
+            Task edsmtask = Task.Factory.StartNew(() =>
+            {
+                SendShipInfo(edsm, shipinfohe, loadgame);
+            });
+        }
+
+        public void SendShipInfo()
+        {
+            EDCommander commander = EDCommander.GetCommander(CommanderId);
+            string edsmname = commander.Name;
+            if (!string.IsNullOrEmpty(commander.EdsmName))
+                edsmname = commander.EdsmName;
+            EDSMClass edsm = new EDSMClass { apiKey = commander.APIKey, commanderName = edsmname };
+            JournalLoadGame loadgame = historylist.FindLast(x => x.EntryType == JournalTypeEnum.LoadGame).journalEntry as JournalLoadGame;
+            HistoryEntry shipinfohe = historylist.FindLast(he => he.ShipInformation != null && he.ShipInformation.SubVehicle == ShipInformation.SubVehicleType.None);
+
+            SendShipInfo(edsm, shipinfohe, loadgame);
+        }
+
+        public static void SendShipInfoAsync(HistoryEntry he)
+        {
+            if (he.ShipInformation != null && he.ShipInformation.SubVehicle == ShipInformation.SubVehicleType.None)
+            {
+                EDCommander commander = he.Commander;
+                string edsmname = commander.Name;
+                if (!string.IsNullOrEmpty(commander.EdsmName))
+                    edsmname = commander.EdsmName;
+                EDSMClass edsm = new EDSMClass { apiKey = commander.APIKey, commanderName = edsmname };
+
+                Task edsmtask = Task.Factory.StartNew(() =>
+                {
+                    SendShipInfo(edsm, he, null);
+                });
+            }
+        }
+
+        private static void SendShipInfo(EDSMClass edsm, HistoryEntry shipinfohe, JournalLoadGame loadgame)
+        {
+            long lastshipid = LastShipID;
+            ShipInformation lastshipinfo = LastShipInfo;
+            long lastshipinfoticks = LastShipInfoTicks;
+            long lastcreditticks = LastCreditTicks;
+
+            if (shipinfohe != null && !shipinfohe.ShipInformation.Equals(LastShipInfo))
+            {
+                ShipInformation shipinfo = shipinfohe.ShipInformation;
+                List<MaterialCommodities> commod = shipinfohe.MaterialCommodity.Sort(true);
+                int cargoqty = commod.Aggregate(0, (n, c) => n + c.count);
+
+                if (shipinfohe.EventTimeUTC.Ticks > lastshipinfoticks && Interlocked.CompareExchange(ref LastShipInfoTicks, shipinfohe.EventTimeUTC.Ticks, lastshipinfoticks) == lastshipinfoticks)
+                {
+                    edsm.CommanderUpdateShip(shipinfo.ID, shipinfo.ShipType, shipinfo, cargoqty);
+
+                    if (LastShipID != shipinfo.ID)
+                    {
+                        edsm.CommanderSetCurrentShip(loadgame.ShipId);
+                    }
+
+                    Interlocked.CompareExchange(ref LastShipID, shipinfo.ID, lastshipid);
+                    Interlocked.CompareExchange(ref LastShipInfo, shipinfo, lastshipinfo);
+                }
+            }
+
+            if (loadgame != null)
+            {
+                if (loadgame.EventTimeUTC.Ticks > lastcreditticks && Interlocked.CompareExchange(ref LastCreditTicks, loadgame.EventTimeUTC.Ticks, lastcreditticks) == lastcreditticks)
+                {
+                    if (LastEDSMCredtis != loadgame.Credits)
+                        edsm.SetCredits(loadgame.Credits, loadgame.Loan);
+
+                    LastEDSMCredtis = loadgame.Credits;
+                }
+
+                if (loadgame.EventTimeUTC.Ticks > lastshipinfoticks && Interlocked.CompareExchange(ref LastShipInfoTicks, loadgame.EventTimeUTC.Ticks, lastshipinfoticks) == lastshipinfoticks)
+                {
+                    if (shipinfohe == null && LastShipID != loadgame.ShipId)
+                    {
+                        edsm.CommanderUpdateShip(loadgame.ShipId, loadgame.Ship);
+                        edsm.CommanderSetCurrentShip(loadgame.ShipId);
+                        Interlocked.CompareExchange(ref LastShipID, loadgame.ShipId, lastshipid);
+                        Interlocked.CompareExchange(ref LastShipInfo, null, lastshipinfo);
+                    }
+                }
+            }
+        }
 
         private void ProcessEDSMApiCommander()
         {
@@ -1290,49 +1391,10 @@ namespace EDDiscovery
                 edsm.apiKey = commander.APIKey;
                 edsm.commanderName = edsmname;
 
-
                 if (progress.EventTimeUTC != LastEDSMAPiCommanderTime) // Different from last sync with EDSM
                 {
                     edsm.SetRanks((int)rank.Combat, progress.Combat, (int)rank.Trade, progress.Trade, (int)rank.Explore, progress.Explore, (int)rank.CQC, progress.CQC, (int)rank.Federation, progress.Federation, (int)rank.Empire, progress.Empire);
                     LastEDSMAPiCommanderTime = progress.EventTimeUTC;
-                }
-
-                
-                JournalLoadGame loadgame = historylist.FindLast(x => x.EntryType == JournalTypeEnum.LoadGame).journalEntry as JournalLoadGame;
-                HistoryEntry shipinfohe = historylist.FindLast(he => he.ShipInformation != null && he.ShipInformation.SubVehicle == ShipInformation.SubVehicleType.None);
-
-                if (shipinfohe != null && !shipinfohe.ShipInformation.Equals(LastShipInfo))
-                {
-                    ShipInformation shipinfo = shipinfohe.ShipInformation;
-                    List<MaterialCommodities> commod = shipinfohe.MaterialCommodity.Sort(true);
-                    int cargoqty = commod.Aggregate(0, (n, c) => n + c.count);
-
-                    edsm.CommanderUpdateShip(shipinfo.ID, shipinfo.ShipType, shipinfo, cargoqty);
-
-                    if (LastShipID != shipinfo.ID)
-                    {
-                        edsm.CommanderSetCurrentShip(loadgame.ShipId);
-                    }
-
-                    LastShipID = shipinfo.ID;
-                    LastShipInfo = shipinfo;
-                }
-
-                if (loadgame != null)
-                {
-                    if (LastEDSMCredtis != loadgame.Credits)
-                        edsm.SetCredits(loadgame.Credits, loadgame.Loan);
-
-                    LastEDSMCredtis = loadgame.Credits;
-
-
-                    if (shipinfohe == null && LastShipID != loadgame.ShipId)
-                    {
-                        edsm.CommanderUpdateShip(loadgame.ShipId, loadgame.Ship);
-                        edsm.CommanderSetCurrentShip(loadgame.ShipId);
-                        LastShipID = loadgame.ShipId;
-                        LastShipInfo = null;
-                    }
                 }
             }
             catch
@@ -1415,6 +1477,8 @@ namespace EDDiscovery
             hist.ProcessUserHistoryListEntries(h => h.ToList());      // here, we update the DBs in HistoryEntry and any global DBs in historylist
 
             hist.ProcessEDSMApiCommander();
+
+            hist.SendShipInfo();
 
             return hist;
         }
