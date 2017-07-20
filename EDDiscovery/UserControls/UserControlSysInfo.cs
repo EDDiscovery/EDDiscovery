@@ -29,6 +29,8 @@ namespace EDDiscovery.UserControls
 {
     public partial class UserControlSysInfo: UserControlCommonBase
     {
+        public bool IsNotesShowing { get { return richTextBoxNote.Visible; } }
+
         private EDDiscoveryForm discoveryform;
         private int displaynumber;
         private string DbSelection { get { return ("SystemInformation") + ((displaynumber > 0) ? displaynumber.ToString() : "") + "Sel"; } }
@@ -57,6 +59,7 @@ namespace EDDiscovery.UserControls
             this.displaynumber = displayno;
             discoveryform.TravelControl.OnTravelSelectionChanged += Display;    // get this whenever current selection or refreshed..
             discoveryform.OnNewTarget += RefreshTargetDisplay;
+            discoveryform.OnNoteChanged += OnNoteChanged;
             textBoxTarget.SetAutoCompletor(EDDiscovery.DB.SystemClassDB.ReturnSystemListForAutoComplete);
 
             UpdateViewOnSelection(0);       // first turn them all off so they all compress..
@@ -112,18 +115,26 @@ namespace EDDiscovery.UserControls
                 textBoxEconomy.Text = he.System.primary_economy.ToNullUnknownString();
                 textBoxGovernment.Text = he.System.government.ToNullUnknownString();
                 textBoxState.Text = he.System.state.ToNullUnknownString();
-                richTextBoxNote.Text = he.snc != null ? he.snc.Note : "";
+                SetNote(he.snc != null ? he.snc.Note : "");
 
-                RefreshTargetDisplay();
+                RefreshTargetDisplay(this);
             }
             else
             {
                 SetControlText("");
                 textBoxSystem.Text = textBoxBody.Text = textBoxPosition.Text = 
                                 textBoxAllegiance.Text = textBoxEconomy.Text = textBoxGovernment.Text =
-                                textBoxVisits.Text = textBoxState.Text = textBoxHomeDist.Text = richTextBoxNote.Text = textBoxSolDist.Text = "";
+                                textBoxVisits.Text = textBoxState.Text = textBoxHomeDist.Text = textBoxSolDist.Text = "";
                 buttonRoss.Enabled = buttonEDDB.Enabled = false;
+                SetNote("");
             }
+        }
+
+        private void SetNote(string text)
+        {
+            richTextBoxNote.Enabled = false;
+            richTextBoxNote.Text = text;
+            richTextBoxNote.Enabled = true;
         }
 
         private void clearLogToolStripMenuItem_Click(object sender, EventArgs e)
@@ -180,11 +191,11 @@ namespace EDDiscovery.UserControls
         {
             if (e.KeyCode == Keys.Enter)
             {
-                RoutingUtils.setTargetSystem(discoveryform, textBoxTarget.Text);
+                RoutingUtils.setTargetSystem(this,discoveryform, textBoxTarget.Text);
             }
         }
 
-        public void RefreshTargetDisplay()              // called when a target has been changed.. via EDDiscoveryform
+        private void RefreshTargetDisplay(Object sender)              // called when a target has been changed.. via EDDiscoveryform
         {
             string name;
             double x, y, z;
@@ -224,14 +235,20 @@ namespace EDDiscovery.UserControls
 
         private void richTextBoxNote_Leave(object sender, EventArgs e)
         {
-            if (last_he != null)
-                discoveryform.StoreSystemNote(last_he, richTextBoxNote.Text.Trim(), true);
+            if (last_he != null && richTextBoxNote.Enabled)
+            {
+                last_he.SetJournalSystemNoteText(richTextBoxNote.Text.Trim(), true);
+                discoveryform.NoteChanged(this, last_he, true);
+            }
         }
 
         private void richTextBoxNote_TextBoxChanged(object sender, EventArgs e)
         {
-            if (last_he != null)
-                discoveryform.StoreSystemNote(last_he, richTextBoxNote.Text.Trim(), false);
+            if (last_he != null && richTextBoxNote.Enabled)
+            {
+                last_he.SetJournalSystemNoteText(richTextBoxNote.Text.Trim(), false);
+                discoveryform.NoteChanged(this, last_he, false);
+            }
         }
 
         private void toolStripSystem_Click(object sender, EventArgs e)
@@ -344,9 +361,37 @@ namespace EDDiscovery.UserControls
 
         void Layout(Control c, int offset , bool on)
         {
-
             Refresh();
-           
+        }
+
+        private void OnNoteChanged(Object sender, HistoryEntry he, bool arg)  // BEWARE we do this as well..
+        {
+            if ( !Object.ReferenceEquals(this,sender) )     // so, make sure this sys info is not sending it
+            {
+                SetNote(he.snc != null ? he.snc.Note : "");
+            }
+        }
+
+        public void FocusOnNote( int asciikeycode )     // called if a focus is wanted
+        {
+            if (IsNotesShowing)
+            {
+                richTextBoxNote.TextBox.Select(richTextBoxNote.Text.Length, 0);     // move caret to end and focus.
+                richTextBoxNote.TextBox.ScrollToCaret();
+                richTextBoxNote.TextBox.Focus();
+
+                string s = null;
+                if (asciikeycode == 8)      // strange old sendkeys
+                    s = "{BACKSPACE}";
+                else if (asciikeycode == '+' || asciikeycode == '^' || asciikeycode == '%' || asciikeycode == '(' || asciikeycode == ')' || asciikeycode == '~')
+                    s = "{" + (new string((char)asciikeycode, 1)) + "}";
+                else if ( asciikeycode >= 32 && asciikeycode <= 126 )
+                    s = new string((char)asciikeycode, 1);
+
+                //System.Diagnostics.Debug.WriteLine("Send " + s);
+                if (s != null)
+                    SendKeys.Send(s);
+            }
         }
 
         private void UserControlSysInfo_Resize(object sender, EventArgs e)

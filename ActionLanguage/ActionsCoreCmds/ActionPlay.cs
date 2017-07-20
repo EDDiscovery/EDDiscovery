@@ -139,14 +139,10 @@ namespace ActionLanguage
                             if (vol == -999)
                                 vol = ap.variables.GetInt(globalvarplayvolume, 60);
 
-                            SoundEffectSettings ses = new SoundEffectSettings(vars);        // use the rest of the vars to place effects
-
-                            if (!ses.Any && !ses.OverrideNone && ap.VarExist(globalvarplayeffects))  // if can't see any, and override none if off, and we have a global, use that
-                            {
-                                vars = new ConditionVariables(ap[globalvarplayeffects], ConditionVariables.FromMode.MultiEntryComma);
-                            }
-
-                            AudioQueue.AudioSample audio = ap.actioncontroller.AudioQueueWave.Generate(path, vars);
+                            ConditionVariables globalsettings = ap.VarExist(globalvarplayeffects) ? new ConditionVariables(ap[globalvarplayeffects], ConditionVariables.FromMode.MultiEntryComma) : null;
+                            SoundEffectSettings ses = SoundEffectSettings.Set(globalsettings, vars);        // work out the settings
+                            
+                            AudioQueue.AudioSample audio = ap.actioncontroller.AudioQueueWave.Generate(path, ses);
 
                             if (audio != null)
                             {

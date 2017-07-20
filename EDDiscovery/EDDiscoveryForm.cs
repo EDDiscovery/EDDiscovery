@@ -84,8 +84,6 @@ namespace EDDiscovery
 
         public EDDiscovery._3DMap.MapManager Map { get; private set; }
 
-        public event Action OnNewTarget;
-
         Task checkInstallerTask = null;
         private bool themeok = true;
 
@@ -102,6 +100,13 @@ namespace EDDiscovery
         private int _formLeft;
 
         private HistoryEntry _uncommittedNoteHistoryEntry;
+
+        #endregion
+
+        #region Callbacks from us
+
+        public event Action<Object> OnNewTarget;
+        public event Action<Object, HistoryEntry, bool> OnNoteChanged;                    // UI.Note has been updated attached to this note
 
         #endregion
 
@@ -145,6 +150,7 @@ namespace EDDiscovery
             Controller.CalculateClosestSystems(sys, callback, ignoreDuplicates);
         }
         #endregion
+
         #endregion
 
         #region Initialisation
@@ -639,7 +645,7 @@ namespace EDDiscovery
 
         private void Controller_FinalClose()        // run in UI
         {
-            StoreUncommittedNote();
+            SystemNoteClass.CommitDirtyNotes();
             SaveSettings();         // do close now
             notifyIcon1.Visible = false;
 
@@ -991,34 +997,6 @@ namespace EDDiscovery
             this.Cursor = Cursors.Default;
         }
 
-        public void StoreSystemNote(HistoryEntry he, string txt, bool send = false)
-        {
-            if (he != null && txt != null)
-            {
-                if (_uncommittedNoteHistoryEntry != null && _uncommittedNoteHistoryEntry != he )       // if we have an uncommited one
-                    StoreUncommittedNote();                     // and its not the same as stored one, store previous
-
-                if (he.UpdateSystemNote(txt, send))     // update HE SNC variable, optionally commit to DB, returns if note is set up
-                {
-                    _uncommittedNoteHistoryEntry = he;  // and store for later
-                    Map.UpdateNote();
-                }
-            }
-        }
-
-        private void StoreUncommittedNote()
-        {
-            if (_uncommittedNoteHistoryEntry != null)
-            {
-                _uncommittedNoteHistoryEntry.CommitSystemNote();
-
-                if (EDCommander.Current.SyncToEdsm && _uncommittedNoteHistoryEntry.IsFSDJump)       // only send on FSD jumps
-                    EDSMSync.SendComments(_uncommittedNoteHistoryEntry.snc.Name, _uncommittedNoteHistoryEntry.snc.Note, _uncommittedNoteHistoryEntry.snc.EdsmId);
-
-                _uncommittedNoteHistoryEntry = null;        // clear
-            }
-        }
-
         private void sendUnsuncedEDDNEventsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             List<HistoryEntry> hlsyncunsyncedlist = Controller.history.FilterByScanNotEDDNSynced;        // first entry is oldest
@@ -1192,20 +1170,25 @@ namespace EDDiscovery
             RecordPosition();
         }
 
-#endregion
+        #endregion
 
-#region Targets
+        #region Updators
 
-        public void NewTargetSet()
+        public void NewTargetSet(Object sender)
         {
-            System.Diagnostics.Debug.WriteLine("New target set");
             if (OnNewTarget != null)
-                OnNewTarget();
+                OnNewTarget(sender);
         }
 
-#endregion
+        public void NoteChanged(Object sender, HistoryEntry snc, bool committed)
+        {
+            if (OnNoteChanged != null)
+                OnNoteChanged(sender, snc,committed);
+        }
 
-#region Add Ons
+        #endregion
+
+        #region Add Ons
 
         private void manageAddOnsToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -1335,6 +1318,7 @@ namespace EDDiscovery
 
         #endregion
 
+        #region Toolbar
 
         public void LoadCommandersListBox()
         {
@@ -1418,17 +1402,17 @@ namespace EDDiscovery
 
         private void comboBoxCustomPopOut_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (!comboBoxCustomPopOut.Enabled)
-                return;
+            if (comboBoxCustomPopOut.Enabled)
+            {
+                PopOuts.PopOut((PopOutControl.PopOuts)(comboBoxCustomPopOut.SelectedIndex));
 
-            PopOuts.PopOut((PopOutControl.PopOuts)(comboBoxCustomPopOut.SelectedIndex));
-
-            comboBoxCustomPopOut.Enabled = false;
-            comboBoxCustomPopOut.SelectedIndex = 0;
-            comboBoxCustomPopOut.Enabled = true;
+                comboBoxCustomPopOut.Enabled = false;
+                comboBoxCustomPopOut.SelectedIndex = 0;
+                comboBoxCustomPopOut.Enabled = true;
+            }
         }
 
-
+        #endregion
 
     }
 }

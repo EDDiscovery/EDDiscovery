@@ -279,6 +279,14 @@ public static class ObjectExtensionsStrings
     {
         return (v.HasValue) ? (v.Value ? "1" : "0") : "";
     }
+    public static string ToStringInvariant(this double v, string format)
+    {
+        return v.ToString(format, System.Globalization.CultureInfo.InvariantCulture);
+    }
+    public static string ToStringInvariant(this double v)
+    {
+        return v.ToString(System.Globalization.CultureInfo.InvariantCulture);
+    }
     public static string ToStringInvariant(this double? v, string format)
     {
         return (v.HasValue) ? v.Value.ToString(format) : "";

@@ -172,12 +172,8 @@ namespace ActionLanguage
                     string postfixsoundpath = vars.GetString(postfixsound, checklen: true);
                     string mixsoundpath = vars.GetString(mixsound, checklen: true);
 
-                    SoundEffectSettings ses = new SoundEffectSettings(vars);        // use the rest of the vars to place effects
-
-                    if (!ses.Any && !ses.OverrideNone && ap.VarExist(globalvarspeecheffects))  // if can't see any, and override none if off, and we have a global, use that
-                    {
-                        vars = new ConditionVariables(ap[globalvarspeecheffects], ConditionVariables.FromMode.MultiEntryComma);
-                    }
+                    ConditionVariables globalsettings = ap.VarExist(globalvarspeecheffects) ? new ConditionVariables(ap[globalvarspeecheffects], ConditionVariables.FromMode.MultiEntryComma) : null;
+                    SoundEffectSettings ses = SoundEffectSettings.Set(globalsettings, vars);        // work out the settings
 
                     if (queuelimitms > 0)
                     {
@@ -207,13 +203,13 @@ namespace ActionLanguage
 
 
                         if (dontspeak)
-                            expsay = "";
+                            expsay = "";    
 
                         System.IO.MemoryStream ms = ap.actioncontroller.SpeechSynthesizer.Speak(expsay, culture, voice, rate);
 
                         if (ms != null)
                         {
-                            AudioQueue.AudioSample audio = ap.actioncontroller.AudioQueueSpeech.Generate(ms, vars, true);
+                            AudioQueue.AudioSample audio = ap.actioncontroller.AudioQueueSpeech.Generate(ms, ses, true);
 
                             if (audio == null)
                             {
@@ -223,7 +219,7 @@ namespace ActionLanguage
 
                             if (mixsoundpath != null)
                             {
-                                AudioQueue.AudioSample mix = ap.actioncontroller.AudioQueueSpeech.Generate(mixsoundpath, new ConditionVariables());
+                                AudioQueue.AudioSample mix = ap.actioncontroller.AudioQueueSpeech.Generate(mixsoundpath);
 
                                 if (audio == null)
                                 {
@@ -236,7 +232,7 @@ namespace ActionLanguage
 
                             if (prefixsoundpath != null)
                             {
-                                AudioQueue.AudioSample p = ap.actioncontroller.AudioQueueSpeech.Generate(prefixsoundpath, new ConditionVariables());
+                                AudioQueue.AudioSample p = ap.actioncontroller.AudioQueueSpeech.Generate(prefixsoundpath);
 
                                 if ( p == null)
                                 {
@@ -249,7 +245,7 @@ namespace ActionLanguage
 
                             if (postfixsoundpath != null)
                             {
-                                AudioQueue.AudioSample p = ap.actioncontroller.AudioQueueSpeech.Generate(postfixsoundpath, new ConditionVariables());
+                                AudioQueue.AudioSample p = ap.actioncontroller.AudioQueueSpeech.Generate(postfixsoundpath);
 
                                 if (p == null)
                                 {

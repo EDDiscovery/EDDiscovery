@@ -102,7 +102,7 @@ namespace EDDiscovery
         public ModulesInStore StoredModules { get { return storedmodules; } set { storedmodules = value; } }
         public MissionList MissionList { get { return missionlist; } set { missionlist = value; } }
         
-        public SystemNoteClass snc;     // system note class found attached to this entry
+        public SystemNoteClass snc;     // system note class found attached to this entry. May be null
 
         private double travelled_distance;  // start/stop distance and time computation
         private TimeSpan travelled_seconds;
@@ -383,25 +383,19 @@ namespace EDDiscovery
             return he;
         }
 
-        public void ProcessWithUserDb(EliteDangerous.JournalEntry je, HistoryEntry prev, HistoryList hl , SQLiteConnectionUser conn )      // called after above with a USER connection
+        public void ProcessWithUserDb(EliteDangerous.JournalEntry je, HistoryEntry prev, HistoryList hl, SQLiteConnectionUser conn)      // called after above with a USER connection
         {
             materialscommodities = MaterialCommoditiesList.Process(je, prev?.materialscommodities, conn, EDDiscoveryForm.EDDConfig.ClearMaterials, EDDiscoveryForm.EDDConfig.ClearCommodities);
 
-            snc = SystemNoteClass.GetNoteOnJournalEntry(Journalid);
+            snc = SystemNoteClass.GetSystemNote(Journalid, IsFSDJump, System);       // may be null
+        }
 
-            if (snc == null && IsFSDJump)
-            {
-                snc = SystemNoteClass.GetNoteOnSystem(System.name, System.id_edsm);
+        public void SetJournalSystemNoteText(string text, bool commit)
+        {
+            if (snc == null || snc.Journalid == 0 )           // if no system note, or its one on a system, from now on we assign journal system notes only from this IF
+                snc = SystemNoteClass.MakeSystemNote("",DateTime.Now,System.name,Journalid, System.id_edsm);
 
-                if ( snc != null )      // if found..
-                {
-                    if ( System.id_edsm > 0 && snc.EdsmId <= 0 )    // if we have a system id, but snc not set, update it for next time.
-                    {
-                        snc.EdsmId = System.id_edsm;
-                        snc.Update(conn);
-                    }
-                }
-            }
+            snc = snc.UpdateNote(text,commit,DateTime.Now,snc.EdsmId);        // and update info, and update our ref in case it has changed or gone null
         }
 
         #endregion
@@ -478,50 +472,6 @@ namespace EDDiscovery
             return eventstr == "All" || IsJournalEventInEventFilter(eventstr.Split(';'));
         }
 
-        public bool UpdateSystemNote(string txt, bool commit = true)
-        {
-            if ((snc == null && txt.Length > 0) || (snc != null && !snc.Note.Equals(txt))) // if no system note, and text,  or system not is not text
-            {
-                if (snc != null && (snc.Journalid == Journalid || snc.Journalid == 0 || (snc.EdsmId > 0 && snc.EdsmId == System.id_edsm) || (snc.EdsmId <= 0 && snc.Name.Equals(System.name, StringComparison.InvariantCultureIgnoreCase))))           // already there, update
-                {
-                    snc.Note = txt;
-                    snc.Time = DateTime.Now;
-                    snc.Name = (IsFSDJump) ? System.name : "";
-                    snc.Journalid = Journalid;
-                    snc.EdsmId = IsFSDJump ? System.id_edsm : 0;
-
-                    if (commit)
-                        snc.Update();
-
-                    Debug.WriteLine("Update note {0} {1} commit {2}", snc.Name, snc.EdsmId , commit);
-                }
-                else
-                {
-                    snc = new SystemNoteClass();
-                    snc.Note = txt;
-                    snc.Time = DateTime.Now;
-                    snc.Name = IsFSDJump ? System.name : "";
-                    snc.Journalid = Journalid;
-                    snc.EdsmId = IsFSDJump ? System.id_edsm : 0;
-                    snc.Add();
-
-                    Debug.WriteLine("Add note {0} {1}", snc.Name, snc.EdsmId);
-                }
-
-                return true;
-            }
-
-            return false;
-        }
-
-        public void CommitSystemNote()
-        {
-            if (snc != null)  // defensive.
-            {
-                snc.Update();
-                Debug.WriteLine("Commit note {0} {1}", snc.Name, snc.EdsmId);
-            }
-        }
     }
 
 

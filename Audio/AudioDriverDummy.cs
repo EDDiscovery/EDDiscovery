@@ -15,10 +15,6 @@
  */
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Conditions;
 
 #pragma warning disable 0067
 
@@ -65,12 +61,12 @@ namespace AudioExtensions
         {
         }
 
-        public AudioData Generate(string file, ConditionVariables effects)
+        public AudioData Generate(string file, SoundEffectSettings effects)
         {
             return null;
         }
 
-        public AudioData Generate(System.IO.Stream audioms, ConditionVariables effects, bool ensureaudio)
+        public AudioData Generate(System.IO.Stream audioms, SoundEffectSettings effects, bool ensureaudio)
         {
             return null;
         }
