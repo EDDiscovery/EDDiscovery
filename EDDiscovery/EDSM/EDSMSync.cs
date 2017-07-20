@@ -15,6 +15,7 @@
  */
 using EDDiscovery;
 using EDDiscovery.DB;
+using EDDiscovery.EliteDangerous;
 using EDDiscovery.EliteDangerous.JournalEvents;
 using Newtonsoft.Json.Linq;
 using System;
