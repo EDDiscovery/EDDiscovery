@@ -386,7 +386,7 @@ namespace EDDiscovery
 
         private void UpdateDependentsWithSelection()        // they really should do it themselves.. but
         {
-            if (userControlTravelGrid.currentGridRow >= 0)
+            if (userControlTravelGrid.GetCurrentRow != null)
             {
                 HistoryEntry currentsys = userControlTravelGrid.GetCurrentHistoryEntry;
                 _discoveryForm.Map.UpdateHistorySystem(currentsys.System);

@@ -62,11 +62,6 @@ namespace EDDiscovery._3DMap
             return _formMap.SetCenterSystemTo(system);
         }
 
-        public void UpdateNote()
-        {
-            _formMap.UpdateNote();
-        }
-
         public void Show()
         {
             _formMap.TopMost = EDDiscoveryForm.EDDConfig.KeepOnTop;
