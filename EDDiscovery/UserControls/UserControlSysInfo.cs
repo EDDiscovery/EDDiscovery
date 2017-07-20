@@ -29,6 +29,8 @@ namespace EDDiscovery.UserControls
 {
     public partial class UserControlSysInfo: UserControlCommonBase
     {
+        public bool IsNotesShowing { get { return richTextBoxNote.Visible; } }
+
         private EDDiscoveryForm discoveryform;
         private int displaynumber;
         private string DbSelection { get { return ("SystemInformation") + ((displaynumber > 0) ? displaynumber.ToString() : "") + "Sel"; } }
@@ -370,20 +372,25 @@ namespace EDDiscovery.UserControls
             }
         }
 
-        public void FocusOnNote( int asciikeycode )
+        public void FocusOnNote( int asciikeycode )     // called if a focus is wanted
         {
-            if (richTextBoxNote.Visible)
+            if (IsNotesShowing)
             {
                 richTextBoxNote.TextBox.Select(richTextBoxNote.Text.Length, 0);     // move caret to end and focus.
                 richTextBoxNote.TextBox.ScrollToCaret();
                 richTextBoxNote.TextBox.Focus();
-                if (asciikeycode == 8)
-                    SendKeys.Send("{BACKSPACE}");
+
+                string s = null;
+                if (asciikeycode == 8)      // strange old sendkeys
+                    s = "{BACKSPACE}";
+                else if (asciikeycode == '+' || asciikeycode == '^' || asciikeycode == '%' || asciikeycode == '(' || asciikeycode == ')' || asciikeycode == '~')
+                    s = "{" + (new string((char)asciikeycode, 1)) + "}";
                 else if ( asciikeycode >= 32 && asciikeycode <= 126 )
-                {
-                    char c = (char)asciikeycode;
-                    SendKeys.Send(new string(c, 1));
-                }
+                    s = new string((char)asciikeycode, 1);
+
+                //System.Diagnostics.Debug.WriteLine("Send " + s);
+                if (s != null)
+                    SendKeys.Send(s);
             }
         }
 

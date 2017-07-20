@@ -413,12 +413,12 @@ namespace EDDiscovery
             if (note)
             {
                 UserControlSysInfo si = tabStripTopRight.CurrentControl as UserControlSysInfo;
-                if (si == null)
+                if (si == null || !si.IsNotesShowing)
                     si = tabStripMiddleRight.CurrentControl as UserControlSysInfo;
-                if (si == null)
+                if (si == null || !si.IsNotesShowing)
                     si = tabStripBottomRight.CurrentControl as UserControlSysInfo;
 
-                if (si != null)      // if its note, and we have a system info window
+                if (si != null && si.IsNotesShowing)      // if its note, and we have a system info window
                 {
                     si.FocusOnNote(keyvalue);
                 }

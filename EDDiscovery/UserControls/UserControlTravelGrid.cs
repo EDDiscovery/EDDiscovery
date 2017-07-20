@@ -333,8 +333,15 @@ namespace EDDiscovery.UserControls
             if (keyrepeatcount > 1)
                 CheckForSelection(e.KeyCode);
 
-            if (OnKeyDownInCell != null && dataGridViewTravel.CurrentCell != null)
-                OnKeyDownInCell(e.KeyValue, dataGridViewTravel.CurrentCell.RowIndex, dataGridViewTravel.CurrentCell.ColumnIndex, dataGridViewTravel.CurrentCell.ColumnIndex == TravelHistoryColumns.Note);
+            //System.Diagnostics.Debug.WriteLine("KC " + (int)e.KeyCode + " " + (int)e.KeyData + " " + e.KeyValue);
+        }
+
+        private void dataGridViewTravel_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            //System.Diagnostics.Debug.WriteLine("KP " + (int)e.KeyChar);
+
+            if (OnKeyDownInCell != null && dataGridViewTravel.CurrentCell != null )
+                OnKeyDownInCell(e.KeyChar, dataGridViewTravel.CurrentCell.RowIndex, dataGridViewTravel.CurrentCell.ColumnIndex, dataGridViewTravel.CurrentCell.ColumnIndex == TravelHistoryColumns.Note);
         }
 
         private void dataGridViewTravel_KeyUp(object sender, KeyEventArgs e)
@@ -976,5 +983,6 @@ namespace EDDiscovery.UserControls
             if (OnPopOut != null)
                 OnPopOut();
         }
+
     }
 }
