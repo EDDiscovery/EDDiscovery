@@ -27,11 +27,13 @@ namespace EDDiscovery.DB
     {
         public long id;
         public long Journalid;              //Journalid = 0, Name set, system marker
-        public string SystemName;           //Journalid <>0, Name clear, journal marker
+        public string SystemName;           //Journalid <>0, Name set or clear, journal marker
         public DateTime Time;
         public string Note { get; private set; }
         public long EdsmId;
         public bool Dirty;                  // changed but uncommitted
+
+        public static List<SystemNoteClass> globalSystemNotes = new List<SystemNoteClass>();        // global cache, kept updated
 
         public SystemNoteClass()
         {
@@ -170,8 +172,6 @@ namespace EDDiscovery.DB
             }
         }
 
-        public static List<SystemNoteClass> globalSystemNotes = new List<SystemNoteClass>();
-
         public static bool GetAllSystemNotes()
         {
             try
@@ -192,7 +192,7 @@ namespace EDDiscovery.DB
                         {
                             SystemNoteClass sys = new SystemNoteClass(dr);
                             globalSystemNotes.Add(sys);
-                            System.Diagnostics.Debug.WriteLine("Global note " + sys.Journalid + " " + sys.SystemName + " " + sys.Note);
+                            //System.Diagnostics.Debug.WriteLine("Global note " + sys.Journalid + " " + sys.SystemName + " " + sys.Note);
                         }
 
                         return true;
@@ -248,6 +248,11 @@ namespace EDDiscovery.DB
                         systemnote.Dirty = true;
                     }
                 }
+            }
+
+            if (systemnote != null)
+            {
+//                System.Diagnostics.Debug.WriteLine("HE " + Journalid + " Found note " + +snc.Journalid + " " + snc.SystemName + " " + snc.Note);
             }
 
             return systemnote;

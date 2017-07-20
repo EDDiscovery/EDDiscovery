@@ -36,8 +36,8 @@ namespace EDDiscovery.UserControls
     {
         #region Public IF
 
-        public DataGridViewRow GetCurrentRow { get { return currentGridRow >= 0 ? dataGridViewTravel.Rows[currentGridRow] : null; } }
-        public HistoryEntry GetCurrentHistoryEntry { get { return currentGridRow >= 0 ? dataGridViewTravel.Rows[currentGridRow].Cells[TravelHistoryColumns.HistoryTag].Tag as HistoryEntry : null; } }
+        public DataGridViewRow GetCurrentRow { get { return dataGridViewTravel.CurrentCell != null ? dataGridViewTravel.Rows[dataGridViewTravel.CurrentCell.RowIndex] : null; } }
+        public HistoryEntry GetCurrentHistoryEntry { get { return dataGridViewTravel.CurrentCell != null ? dataGridViewTravel.Rows[dataGridViewTravel.CurrentCell.RowIndex].Cells[TravelHistoryColumns.HistoryTag].Tag as HistoryEntry : null; } }
 
         public HistoryEntry GetHistoryEntry(int r) { return dataGridViewTravel.Rows[r].Cells[TravelHistoryColumns.HistoryTag].Tag as HistoryEntry; }
 
@@ -53,6 +53,9 @@ namespace EDDiscovery.UserControls
 
         public delegate void ChangedSelection(int rowno, int colno, bool doubleclick, bool note);
         public event ChangedSelection OnChangedSelection;   // After a change of selection
+
+        public delegate void KeyDownInCell(int asciikeycode, int rowno, int colno, bool note);
+        public event KeyDownInCell OnKeyDownInCell;   // After a change of selection
 
         public delegate void Resort();
         public event Resort OnResort;               // After a sort
@@ -95,7 +98,6 @@ namespace EDDiscovery.UserControls
 
         private Conditions.ConditionLists fieldfilter = new Conditions.ConditionLists();
 
-        private int currentGridRow { get; set; } = -1;
         private Dictionary<long, DataGridViewRow> rowsbyjournalid = new Dictionary<long, DataGridViewRow>();
 
         EventFilterSelector cfs = new EventFilterSelector();
@@ -203,8 +205,6 @@ namespace EDDiscovery.UserControls
             else
                 rowno = -1;
 
-            currentGridRow = rowno;
-
             dataGridViewTravel.Columns[0].HeaderText = EDDiscoveryForm.EDDConfig.DisplayUTC ? "Game Time" : "Time";
 
             if (OnRedisplay != null)
@@ -267,7 +267,6 @@ namespace EDDiscovery.UserControls
         {
             dataGridViewTravel.ClearSelection();
             dataGridViewTravel.CurrentCell = dataGridViewTravel.Rows[0].Cells[1];       // its the current cell which needs to be set, moves the row marker as well
-            currentGridRow = 0;
         }
 
         Tuple<long, int> CurrentGridPosByJID()          // Returns JID, column index.  JID = -1 if cell is not defined
@@ -320,7 +319,6 @@ namespace EDDiscovery.UserControls
 
         private void dataGridViewTravel_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            currentGridRow = e.RowIndex;
             if (OnChangedSelection != null)
                 OnChangedSelection(e.RowIndex, e.ColumnIndex, false, e.ColumnIndex == TravelHistoryColumns.Note);
         }
@@ -334,6 +332,9 @@ namespace EDDiscovery.UserControls
 
             if (keyrepeatcount > 1)
                 CheckForSelection(e.KeyCode);
+
+            if (OnKeyDownInCell != null && dataGridViewTravel.CurrentCell != null)
+                OnKeyDownInCell(e.KeyValue, dataGridViewTravel.CurrentCell.RowIndex, dataGridViewTravel.CurrentCell.ColumnIndex, dataGridViewTravel.CurrentCell.ColumnIndex == TravelHistoryColumns.Note);
         }
 
         private void dataGridViewTravel_KeyUp(object sender, KeyEventArgs e)
@@ -349,13 +350,12 @@ namespace EDDiscovery.UserControls
 
             if (cursorkeydown)
             {
-                currentGridRow = dataGridViewTravel.CurrentCell.RowIndex;
                 if (OnChangedSelection != null)
                     OnChangedSelection(dataGridViewTravel.CurrentCell.RowIndex, dataGridViewTravel.CurrentCell.ColumnIndex, false, dataGridViewTravel.CurrentCell.ColumnIndex == TravelHistoryColumns.Note);
             }
         }
 
-        private void OnNoteChanged(HistoryEntry he, bool committed)
+        private void OnNoteChanged(Object sender,HistoryEntry he, bool committed)
         {
             if (rowsbyjournalid.ContainsKey(he.Journalid) ) // if we can find the grid entry
             {
@@ -843,7 +843,7 @@ namespace EDDiscovery.UserControls
                     if (noteform.ShowDialog(this) == DialogResult.OK)
                     {
                         rightclicksystem.SetJournalSystemNoteText(noteform.NoteText, true);
-                        discoveryform.NoteChanged(rightclicksystem, true);
+                        discoveryform.NoteChanged(this,rightclicksystem, true);
                     }
                 }
             }

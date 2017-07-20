@@ -96,7 +96,7 @@ namespace EDDiscovery.UserControls
             updateScreen();
         }
 
-        private void NewTarget()
+        private void NewTarget(Object sender)
         {
            //updateScreen();
         }
@@ -277,7 +277,7 @@ namespace EDDiscovery.UserControls
                     double x, y, z;
                     TargetClass.GetTargetPosition(out targetName, out x, out y, out z);
                     if (name.CompareTo(targetName) != 0)
-                        RoutingUtils.setTargetSystem(discoveryform, name, false);
+                        RoutingUtils.setTargetSystem(this,discoveryform, name, false);
                 }
             }
             lastsystem = name;

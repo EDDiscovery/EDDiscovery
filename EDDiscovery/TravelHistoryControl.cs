@@ -126,6 +126,7 @@ namespace EDDiscovery
             userControlTravelGrid.OnChangedSelection += ChangedSelection;   // and if the user clicks on something
             userControlTravelGrid.OnResort += Resort;   // and if he or she resorts
             userControlTravelGrid.OnPopOut += TGPopOut;
+            userControlTravelGrid.OnKeyDownInCell += OnKeyDownInCell;
 
             TabConfigure(tabStripBottom,"Bottom",1000);          // codes are used to save info, 0 = primary (journal/travelgrid), 1..N are popups, these are embedded UCs
             TabConfigure(tabStripBottomRight,"Bottom-Right",1001);
@@ -150,9 +151,16 @@ namespace EDDiscovery
             t.Name = name;
         }
 
-        void TabRemoved(ExtendedControls.TabStrip t, Control c )     // called by tab strip when a control is removed
+        void TabRemoved(ExtendedControls.TabStrip t, Control ctrl )     // called by tab strip when a control is removed
         {
-            UserControlCommonBase uccb = c as UserControlCommonBase;
+            UserControlCommonBase uccb = ctrl as UserControlCommonBase;
+
+            if (ctrl is UserControlLedger)
+            {
+                UserControlLedger ucm = ctrl as UserControlLedger;
+                ucm.OnGotoJID -= GotoJID;
+            }
+
             uccb.Closing();
         }
 
@@ -365,7 +373,7 @@ namespace EDDiscovery
 
         #endregion
 
-        #region Clicks
+        #region Workers
 
         private void Resort()       // user travel grid to say it resorted
         {
@@ -398,6 +406,23 @@ namespace EDDiscovery
         void TGPopOut()
         {
             _discoveryForm.PopOuts.PopOut(PopOutControl.PopOuts.TravelGrid);
+        }
+
+        private void OnKeyDownInCell(int keyvalue, int rowno, int colno, bool note)
+        {
+            if (note)
+            {
+                UserControlSysInfo si = tabStripTopRight.CurrentControl as UserControlSysInfo;
+                if (si == null)
+                    si = tabStripMiddleRight.CurrentControl as UserControlSysInfo;
+                if (si == null)
+                    si = tabStripBottomRight.CurrentControl as UserControlSysInfo;
+
+                if (si != null)      // if its note, and we have a system info window
+                {
+                    si.FocusOnNote(keyvalue);
+                }
+            }
         }
 
         #endregion

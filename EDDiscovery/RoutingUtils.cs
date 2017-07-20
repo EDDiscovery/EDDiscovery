@@ -24,12 +24,12 @@ namespace EDDiscovery
 {
     public class RoutingUtils
     {
-        public static void setTargetSystem(EDDiscoveryForm _discoveryForm, String sn)
+        public static void setTargetSystem(Object sender,EDDiscoveryForm _discoveryForm, String sn)
         {
-            setTargetSystem(_discoveryForm, sn, true);
+            setTargetSystem(sender,_discoveryForm, sn, true);
 
         }
-        public static void setTargetSystem(EDDiscoveryForm _discoveryForm, String sn, Boolean prompt)
+        public static void setTargetSystem(Object sender, EDDiscoveryForm _discoveryForm, String sn, Boolean prompt)
         {
             if (string.IsNullOrWhiteSpace(sn))
                 return;
@@ -96,14 +96,14 @@ namespace EDDiscovery
                 }
             }
 
-            _discoveryForm.NewTargetSet();          // tells everyone who cares a new target was set
+            _discoveryForm.NewTargetSet(sender);          // tells everyone who cares a new target was set
 
             if (msgboxtext != null && prompt)
                 ExtendedControls.MessageBoxTheme.Show(msgboxtext, "Create a target", MessageBoxButtons.OK);
 
         }
 
-        public static void showBookmarkForm(
+        public static void showBookmarkForm(Object sender,
             EDDiscoveryForm discoveryForm, ISystem cursystem, BookmarkClass curbookmark, bool notedsystem)
         {
             // try and find the associated bookmark..
@@ -196,7 +196,7 @@ namespace EDDiscovery
                 }
             }
 
-            discoveryForm.NewTargetSet();
+            discoveryForm.NewTargetSet(sender);
         }
 
         //Based on http://elite-dangerous.wikia.com/wiki/Frame_Shift_Drive
