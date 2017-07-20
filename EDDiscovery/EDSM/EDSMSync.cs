@@ -187,27 +187,17 @@ namespace EDDiscovery.EDSM
 
                                 SystemNoteClass curnote = SystemNoteClass.GetNoteOnSystem(name, edsmid);
 
-                                if (curnote != null)
+                                if (curnote != null)                // curnote uses local time to store
                                 {
-                                                                                // curnote uses local time to store
                                     if (localtime.Ticks > curnote.Time.Ticks)   // if newer, add on (verified with EDSM 29/9/2016)
                                     {
-                                        curnote.Note += ". EDSM: " + note;
-                                        curnote.Time = localtime;
-                                        curnote.EdsmId = edsmid;
-                                        curnote.Update();
+                                        curnote.UpdateNote(curnote.Note + ". EDSM: " + note, true, localtime, edsmid);
                                         commentsadded++;
                                     }
                                 }
                                 else
                                 {
-                                    curnote = new SystemNoteClass();
-                                    curnote.Note = note;
-                                    curnote.Time = localtime;
-                                    curnote.Name = name;
-                                    curnote.Journalid = 0;
-                                    curnote.EdsmId = edsmid;
-                                    curnote.Add();
+                                    SystemNoteClass.MakeSystemNote(note, localtime, name, 0, edsmid);   // new one!
                                     commentsadded++;
                                 }
                             }

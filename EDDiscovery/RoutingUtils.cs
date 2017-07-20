@@ -29,7 +29,7 @@ namespace EDDiscovery
             setTargetSystem(_discoveryForm, sn, true);
 
         }
-    public static void setTargetSystem(EDDiscoveryForm _discoveryForm, String sn, Boolean prompt)
+        public static void setTargetSystem(EDDiscoveryForm _discoveryForm, String sn, Boolean prompt)
         {
             if (string.IsNullOrWhiteSpace(sn))
                 return;

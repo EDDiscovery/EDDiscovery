@@ -75,6 +75,7 @@ namespace EDDiscovery
         public event Action OnSyncStarting;                                 // BK. EDSM/EDDB sync starting
         public event Action OnSyncComplete;                                 // BK. SYNC has completed
         public event Action<int, string> OnReportProgress;                  // UI. SYNC progress reporter
+
         #endregion
 
         #region Initialisation
@@ -403,8 +404,6 @@ namespace EDDiscovery
             {
                 SQLiteConnectionUser.TranferVisitedSystemstoJournalTableIfRequired();
                 SQLiteConnectionSystem.CreateSystemsTableIndexes();
-                SystemNoteClass.GetAllSystemNotes();                                // fill up memory with notes, bookmarks, galactic mapping
-                BookmarkClass.GetAllBookmarks();
                 galacticMapping.ParseData();                            // at this point, EDSM data is loaded..
                 SystemClassDB.AddToAutoComplete(galacticMapping.GetGMONames());
 
@@ -627,6 +626,9 @@ namespace EDDiscovery
                 CheckSystems(() => PendingClose, (p, s) => ReportProgress(p, s));
             }
 
+            SystemNoteClass.GetAllSystemNotes();                                // fill up memory with notes, bookmarks, galactic mapping
+            BookmarkClass.GetAllBookmarks();
+
             ReportProgress(-1, "");
             InvokeAsyncOnUiThread(() => OnInitialSyncComplete?.Invoke());
 
@@ -765,3 +767,5 @@ namespace EDDiscovery
 
     }
 }
+
+

@@ -112,7 +112,9 @@ namespace EDDiscovery.UserControls
                 textBoxEconomy.Text = he.System.primary_economy.ToNullUnknownString();
                 textBoxGovernment.Text = he.System.government.ToNullUnknownString();
                 textBoxState.Text = he.System.state.ToNullUnknownString();
+                richTextBoxNote.Enabled = false;
                 richTextBoxNote.Text = he.snc != null ? he.snc.Note : "";
+                richTextBoxNote.Enabled = true;
 
                 RefreshTargetDisplay();
             }
@@ -224,14 +226,20 @@ namespace EDDiscovery.UserControls
 
         private void richTextBoxNote_Leave(object sender, EventArgs e)
         {
-            if (last_he != null)
-                discoveryform.StoreSystemNote(last_he, richTextBoxNote.Text.Trim(), true);
+            if (last_he != null && richTextBoxNote.Enabled)
+            {
+                last_he.SetJournalSystemNoteText(richTextBoxNote.Text.Trim(), true);
+                discoveryform.NoteChanged(last_he, true);
+            }
         }
 
         private void richTextBoxNote_TextBoxChanged(object sender, EventArgs e)
         {
-            if (last_he != null)
-                discoveryform.StoreSystemNote(last_he, richTextBoxNote.Text.Trim(), false);
+            if (last_he != null && richTextBoxNote.Enabled)
+            {
+                last_he.SetJournalSystemNoteText(richTextBoxNote.Text.Trim(), false);
+                discoveryform.NoteChanged(last_he, false);
+            }
         }
 
         private void toolStripSystem_Click(object sender, EventArgs e)

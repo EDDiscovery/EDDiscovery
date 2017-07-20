@@ -211,6 +211,8 @@ namespace EDDiscovery
 
             discoveryForm.OnNewTarget -= UpdateTarget;  // in case called multi times
             discoveryForm.OnNewTarget += UpdateTarget;
+            discoveryForm.OnNoteChanged -= UpdateNotes;
+            discoveryForm.OnNoteChanged += UpdateNotes;
             discoveryForm.OnHistoryChange -= UpdateSystemListHC;   // refresh, update the system list..
             discoveryForm.OnHistoryChange += UpdateSystemListHC;   // refresh, update the system list..
             discoveryForm.OnNewEntry -= UpdateSystemList;   // any new entries, update the system list..
@@ -248,9 +250,9 @@ namespace EDDiscovery
             }
         }
 
-        public void UpdateNote()
+        public void UpdateNotes(HistoryEntry he, bool committed)        // tested, 20 july 17, seen notes appear/disappear as edited.
         {
-            if (Is3DMapsRunning)         // if null, we are not up and running
+            if (Is3DMapsRunning && committed)         // if null, we are not up and running, and also if we are committing (don't update just because its being typed in)
             {
                 GenerateDataSetsBNG();  // will create them at correct size
                 RequestPaint();

@@ -27,10 +27,11 @@ namespace EDDiscovery.DB
     {
         public long id;
         public long Journalid;              //Journalid = 0, Name set, system marker
-        public string Name;                 //Journalid <>0, Name clear, journal marker
+        public string SystemName;           //Journalid <>0, Name clear, journal marker
         public DateTime Time;
-        public string Note;
+        public string Note { get; private set; }
         public long EdsmId;
+        public bool Dirty;                  // changed but uncommitted
 
         public SystemNoteClass()
         {
@@ -40,14 +41,14 @@ namespace EDDiscovery.DB
         {
             id = (long)dr["id"];
             Journalid = (long)dr["journalid"];
-            Name = (string)dr["Name"];
+            SystemName = (string)dr["Name"];
             Time = (DateTime)dr["Time"];
             Note = (string)dr["Note"];
             EdsmId = (long)dr["EdsmId"];
         }
 
 
-        public bool Add()
+        private bool Add()
         {
             using (SQLiteConnectionUser cn = new SQLiteConnectionUser())
             {
@@ -60,7 +61,7 @@ namespace EDDiscovery.DB
         {
             using (DbCommand cmd = cn.CreateCommand("Insert into SystemNote (Name, Time, Note, journalid, edsmid) values (@name, @time, @note, @journalid, @edsmid)"))
             {
-                cmd.AddParameterWithValue("@name", Name);
+                cmd.AddParameterWithValue("@name", SystemName);
                 cmd.AddParameterWithValue("@time", Time);
                 cmd.AddParameterWithValue("@note", Note);
                 cmd.AddParameterWithValue("@journalid", Journalid);
@@ -74,11 +75,14 @@ namespace EDDiscovery.DB
                 }
 
                 globalSystemNotes.Add(this);
+
+                Dirty = false;
+
                 return true;
             }
         }
 
-        public bool Update()
+        private bool Update()
         {
             using (SQLiteConnectionUser cn = new SQLiteConnectionUser())
             {
@@ -86,23 +90,73 @@ namespace EDDiscovery.DB
             }
         }
 
-        public bool Update(SQLiteConnectionUser cn)
+        private bool Update(SQLiteConnectionUser cn)
         {
-            using (DbCommand cmd = cn.CreateCommand("Update SystemNote set Name=@Name, Time=@Time, Note=@Note, Journalid=@journalid, EdsmId=@EdsmId  where ID=@id")) 
+            using (DbCommand cmd = cn.CreateCommand("Update SystemNote set Name=@Name, Time=@Time, Note=@Note, Journalid=@journalid, EdsmId=@EdsmId  where ID=@id"))
             {
                 cmd.AddParameterWithValue("@ID", id);
-                cmd.AddParameterWithValue("@Name", Name);
+                cmd.AddParameterWithValue("@Name", SystemName);
                 cmd.AddParameterWithValue("@Note", Note);
                 cmd.AddParameterWithValue("@Time", Time);
                 cmd.AddParameterWithValue("@journalid", Journalid);
                 cmd.AddParameterWithValue("@EdsmId", EdsmId);
 
                 SQLiteDBClass.SQLNonQueryText(cn, cmd);
+
+                Dirty = false;
             }
 
-            GetAllSystemNotes();
-
             return true;
+        }
+
+        public bool Delete()
+        {
+            using (SQLiteConnectionUser cn = new SQLiteConnectionUser())
+            {
+                return Delete(cn);
+            }
+        }
+
+        private bool Delete(SQLiteConnectionUser cn)
+        {
+            using (DbCommand cmd = cn.CreateCommand("DELETE FROM SystemNote WHERE id = @id"))
+            {
+                cmd.AddParameterWithValue("@id", id);
+                SQLiteDBClass.SQLNonQueryText(cn, cmd);
+
+                globalSystemNotes.RemoveAll(x => x.id == id);     // remove from list any containing id.
+                return true;
+            }
+        }
+
+        public SystemNoteClass UpdateNote(string s, bool commit , DateTime time , long edsmid )
+        {
+            Note = s;
+            Time = time;
+            EdsmId = edsmid;
+
+            Dirty = true;
+
+            if (commit)
+            {
+                if (s.Length == 0)        // empty ones delete the note
+                {
+                    System.Diagnostics.Debug.WriteLine("Delete note " + Journalid + " " + SystemName + " " + Note);
+                    Delete();           // delete and remove notes..
+                    return null;
+                }
+                else
+                {
+                    System.Diagnostics.Debug.WriteLine("Update note " + Journalid + " " + SystemName + " " + Note);
+                    Update();
+                }
+            }
+            else
+            {
+                System.Diagnostics.Debug.WriteLine("Editmem note " + Journalid + " " + SystemName + " " + Note);
+            }
+
+            return this;
         }
 
         public static void ClearEDSMID()
@@ -115,8 +169,6 @@ namespace EDDiscovery.DB
                 }
             }
         }
-
-
 
         public static List<SystemNoteClass> globalSystemNotes = new List<SystemNoteClass>();
 
@@ -140,6 +192,7 @@ namespace EDDiscovery.DB
                         {
                             SystemNoteClass sys = new SystemNoteClass(dr);
                             globalSystemNotes.Add(sys);
+                            System.Diagnostics.Debug.WriteLine("Global note " + sys.Journalid + " " + sys.SystemName + " " + sys.Note);
                         }
 
                         return true;
@@ -153,9 +206,22 @@ namespace EDDiscovery.DB
             }
         }
 
+
+        public static void CommitDirtyNotes()
+        {
+            foreach( SystemNoteClass sys in globalSystemNotes )
+            {
+                if (sys.Dirty)
+                {
+                    System.Diagnostics.Debug.WriteLine("Commit dirty note " + sys.Journalid + " " + sys.SystemName + " " + sys.Note);
+                    sys.Update();       // clears the dirty flag
+                }
+            }
+        }
+
         public static SystemNoteClass GetNoteOnSystem(string name, long edsmid = -1)      // case insensitive.. null if not there
         {
-            return globalSystemNotes.FindLast(x => x.Name.Equals(name, StringComparison.InvariantCultureIgnoreCase) && (edsmid <= 0 || x.EdsmId <= 0 || x.EdsmId == edsmid) );
+            return globalSystemNotes.FindLast(x => x.SystemName.Equals(name, StringComparison.InvariantCultureIgnoreCase) && (edsmid <= 0 || x.EdsmId <= 0 || x.EdsmId == edsmid));
         }
 
         public static SystemNoteClass GetNoteOnJournalEntry(long jid)
@@ -166,6 +232,38 @@ namespace EDDiscovery.DB
                 return null;
         }
 
+        public static SystemNoteClass GetSystemNote(long journalid, bool fsd, EliteDangerous.ISystem sys)
+        {
+            SystemNoteClass systemnote = SystemNoteClass.GetNoteOnJournalEntry(journalid);
 
+            if (systemnote == null && fsd)      // this is for older system name notes
+            {
+                systemnote = SystemNoteClass.GetNoteOnSystem(sys.name, sys.id_edsm);
+
+                if (systemnote != null)      // if found..
+                {
+                    if (sys.id_edsm > 0 && systemnote.EdsmId <= 0)    // if we have a system id, but snc not set, update it for next time.
+                    {
+                        systemnote.EdsmId = sys.id_edsm;
+                        systemnote.Dirty = true;
+                    }
+                }
+            }
+
+            return systemnote;
+        }
+
+        public static SystemNoteClass MakeSystemNote(string text, DateTime time, string sysname, long journalid, long edsmid )
+        {
+            SystemNoteClass sys = new SystemNoteClass();
+            sys.Note = text;
+            sys.Time = time;
+            sys.SystemName = sysname;
+            sys.Journalid = journalid;                          // any new ones gets a journal id, making the Get always lock it to a journal entry
+            sys.EdsmId = edsmid;
+            sys.Add();
+            System.Diagnostics.Debug.WriteLine("made note " + sys.Journalid + " " + sys.SystemName + " " + sys.Note);
+            return sys;
+        }
     }
 }
