@@ -78,7 +78,10 @@ namespace Conditions
                 functions.Add("length", new FuncEntry(Length, 1, 1, 1, 1));
                 functions.Add("lower", new FuncEntry(Lower, 1, 20, 0xfffffff, 0xfffffff));   // all can be string, check var
 
+
                 functions.Add("mkdir", new FuncEntry(MkDir, 1, 1, 1, 1));   // check var, can be string
+
+                functions.Add("hnum", new FuncEntry(Hnum, 2, 2, 0,3));   // para 1 literal or var or string, para 2 string, literal or var
 
                 functions.Add("openfile", new FuncEntry(OpenFile, 3, 3, 2, 2));
 
@@ -557,6 +560,69 @@ namespace Conditions
 
         #region Numbers
 
+        protected bool Hnum(out string output)
+        {
+            string s = paras[0].isstring ? paras[0].value : (vars.Exists(paras[0].value) ? vars[paras[0].value] : paras[0].value);
+            string postfix = paras[1].isstring ? paras[1].value : ( vars.Exists(paras[1].value) ? vars[paras[1].value] : paras[1].value);
+            string[] postfixes = postfix.Split(',');
+
+            double value;
+
+            if ( postfixes.Length < 6 )
+            {
+                output = "Need prefixes and postfixes";
+            }
+            else if (s.InvariantParse(out value))
+            {
+                string prefix = "";
+                if ( value < 0 )
+                {
+                    prefix = postfixes[0] + " ";
+                    value = -value;
+                }
+
+                int order = (int)Math.Log10((double)value);
+
+                if (order >= 12)        // billions, say X.Y trillion
+                {
+                    value /= 1E12;
+                    output = prefix + value.ToStringInvariant("0.#") + " " + postfixes[1];
+                }
+                else if (order >= 9)        // billions, say X.Y billion
+                {
+                    value /= 1E9;
+                    output = prefix + value.ToStringInvariant("0.#") + " " + postfixes[2];
+                }
+                else if (order >= 6)        // millions, say X.Y millions
+                {
+                    value /= 1E6;
+                    output = prefix + value.ToStringInvariant("0.#") + " " + postfixes[3];
+                }
+                else if (order >= 4)        // thousands, say X.Y millions
+                {
+                    value /= 1E3;
+                    output = prefix + value.ToStringInvariant("0") + " " + postfixes[4];
+                }
+                else if (order == 3)        // 1000-9999, say xx hundred
+                {
+                    value /= 1E2;
+                    output = prefix + value.ToStringInvariant("0") + " " + postfixes[5];
+                }
+                else
+                {
+                    output = prefix + value.ToStringInvariant();
+                }
+
+                return true;
+            }
+            else
+            {
+                output = "Parameter number be a number";
+            }
+
+            return false;
+        }
+
         protected bool Abs(out string output)
         {
             double para;
@@ -951,7 +1017,7 @@ namespace Conditions
                     string errmsg;
                     int id = handles.Open(file, fm, fm == FileMode.Open ? FileAccess.Read : FileAccess.Write, out errmsg);
                     if (id > 0)
-                        vars[handle] = id.ToString();
+                        vars[handle] = id.ToStringInvariant();
                     else
                         output = errmsg;
 

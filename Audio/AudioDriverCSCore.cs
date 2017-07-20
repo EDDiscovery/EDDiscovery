@@ -20,8 +20,6 @@ using CSCore.Streams.Effects;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using BaseUtils;
-using Conditions;
 
 namespace AudioExtensions
 { 
@@ -128,7 +126,7 @@ namespace AudioExtensions
         }
 
         // FROM file
-        public AudioData Generate(string file, ConditionVariables effects)
+        public AudioData Generate(string file, SoundEffectSettings effects)
         {
             try
             {
@@ -145,7 +143,7 @@ namespace AudioExtensions
         }
 
         // FROM audio stream
-        public AudioData Generate(System.IO.Stream audioms, ConditionVariables effects, bool ensureaudio)
+        public AudioData Generate(System.IO.Stream audioms, SoundEffectSettings effects, bool ensureaudio)
         {
             try
             {
@@ -232,12 +230,10 @@ namespace AudioExtensions
             return new AudioData(s);
         }
 
-        static private void ApplyEffects(ref IWaveSource src, ConditionVariables effect)
+        static private void ApplyEffects(ref IWaveSource src, SoundEffectSettings ap)   // ap may be null
         {
-            if (effect != null)
+            if (ap!=null && ap.Any)
             {
-                SoundEffectSettings ap = new SoundEffectSettings(effect);
-
                 int extend = 0;
                 if (ap.echoenabled)
                     extend = ap.echodelay * 2;

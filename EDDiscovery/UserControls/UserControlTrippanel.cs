@@ -121,7 +121,7 @@ namespace EDDiscovery.UserControls
             displayLastFSDOrScoop(hex);
         }
 
-        public void NewTarget()
+        public void NewTarget(Object sender)
         {
             displayLastFSDOrScoop(lastHE);
         }

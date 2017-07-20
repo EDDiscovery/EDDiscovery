@@ -54,7 +54,7 @@ namespace EDDiscovery.Export
 
                     foreach (EDDiscovery.DB.SystemNoteClass snc in EDDiscovery.DB.SystemNoteClass.globalSystemNotes)
                     {
-                        writer.Write(MakeValueCsvFriendly(snc.Name.Length > 0 ? snc.Name : "N/A"));
+                        writer.Write(MakeValueCsvFriendly(snc.SystemName.Length > 0 ? snc.SystemName : "N/A"));
                         writer.Write(MakeValueCsvFriendly(snc.Journalid > 0 ? snc.Journalid.ToString() : "N/A"));
                         writer.Write(MakeValueCsvFriendly(snc.EdsmId > 0 ? snc.EdsmId.ToString() : "N/A"));
                         writer.Write(MakeValueCsvFriendly(snc.Time));

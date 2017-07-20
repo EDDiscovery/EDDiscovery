@@ -141,8 +141,24 @@ namespace Conditions
                             }
                             else
                             {
-                                while (apos < line.Length && "), ".IndexOf(line[apos]) == -1)
-                                    apos++;
+                                if (funcname.Length > 0)        // functions can have () embedded .. in literals
+                                {
+                                    int blevel = 0;
+                                    while (apos < line.Length && (blevel > 0 || "), ".IndexOf(line[apos]) == -1))
+                                    {
+                                        if (line[apos] == '(')
+                                            blevel++;
+                                        else if (line[apos] == ')')
+                                            blevel--;
+
+                                        apos++;
+                                    }
+                                }
+                                else
+                                {
+                                    while (apos < line.Length && "), ".IndexOf(line[apos]) == -1)
+                                        apos++;
+                                }
 
                                 if (apos == start)
                                 {
@@ -150,7 +166,24 @@ namespace Conditions
                                     return ExpandResult.Failed;
                                 }
 
-                                cfh.paras.Add(new ConditionFunctionHandlers.Parameter() { value = line.Substring(start, apos - start), isstring = false });
+                                string res = line.Substring(start, apos - start);
+
+                                if (funcname.Length>0 && line.Contains("%"))        // function paramters can be expanded if they have a %
+                                {
+                                    string resexp;          // expand out any strings.. recursion
+                                    ExpandResult sexpresult = ExpandStringFull(res, out resexp, recdepth + 1);
+
+                                    if (sexpresult == ExpandResult.Failed)
+                                    {
+                                        result = resexp;
+                                        return sexpresult;
+                                    }
+
+                                    res = resexp;
+                                }
+
+                                cfh.paras.Add(new ConditionFunctionHandlers.Parameter() { value = res, isstring = false });
+                               
                             }
 
                             while (apos < line.Length && char.IsWhiteSpace(line[apos]))

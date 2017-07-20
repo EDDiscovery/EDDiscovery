@@ -34,9 +34,10 @@ namespace EDDiscovery.UserControls
 {
     public partial class UserControlTravelGrid : UserControlCommonBase
     {
-        public int currentGridRow { get; set; } = -1;
-        public DataGridViewRow GetCurrentRow { get { return currentGridRow >= 0 ? dataGridViewTravel.Rows[currentGridRow] : null; } }
-        public HistoryEntry GetCurrentHistoryEntry { get { return currentGridRow >= 0 ? dataGridViewTravel.Rows[currentGridRow].Cells[TravelHistoryColumns.HistoryTag].Tag as HistoryEntry : null; } }
+        #region Public IF
+
+        public DataGridViewRow GetCurrentRow { get { return dataGridViewTravel.CurrentCell != null ? dataGridViewTravel.Rows[dataGridViewTravel.CurrentCell.RowIndex] : null; } }
+        public HistoryEntry GetCurrentHistoryEntry { get { return dataGridViewTravel.CurrentCell != null ? dataGridViewTravel.Rows[dataGridViewTravel.CurrentCell.RowIndex].Cells[TravelHistoryColumns.HistoryTag].Tag as HistoryEntry : null; } }
 
         public HistoryEntry GetHistoryEntry(int r) { return dataGridViewTravel.Rows[r].Cells[TravelHistoryColumns.HistoryTag].Tag as HistoryEntry; }
 
@@ -44,16 +45,17 @@ namespace EDDiscovery.UserControls
 
         public DataGridViewRow GetRow(int r) { return dataGridViewTravel.Rows[r]; }
 
-        public DataGridView TravelGrid { get { return dataGridViewTravel; } }
-
         public TravelHistoryFilter GetHistoryFilter { get { return (TravelHistoryFilter)comboBoxHistoryWindow.SelectedItem ?? TravelHistoryFilter.NoFilter; } }
 
-        private Conditions.ConditionLists fieldfilter = new Conditions.ConditionLists();
+        #endregion
 
-        private Dictionary<long, DataGridViewRow> rowsbyjournalid = new Dictionary<long, DataGridViewRow>();
+        #region Events
 
         public delegate void ChangedSelection(int rowno, int colno, bool doubleclick, bool note);
         public event ChangedSelection OnChangedSelection;   // After a change of selection
+
+        public delegate void KeyDownInCell(int asciikeycode, int rowno, int colno, bool note);
+        public event KeyDownInCell OnKeyDownInCell;   // After a change of selection
 
         public delegate void Resort();
         public event Resort OnResort;               // After a sort
@@ -66,6 +68,8 @@ namespace EDDiscovery.UserControls
 
         public delegate void PopOut();
         public PopOut OnPopOut;                     // pop out button pressed
+
+        #endregion
 
         #region Init
 
@@ -92,6 +96,10 @@ namespace EDDiscovery.UserControls
 
         private HistoryList current_historylist;        // the last one set, for internal refresh purposes on sort
 
+        private Conditions.ConditionLists fieldfilter = new Conditions.ConditionLists();
+
+        private Dictionary<long, DataGridViewRow> rowsbyjournalid = new Dictionary<long, DataGridViewRow>();
+
         EventFilterSelector cfs = new EventFilterSelector();
 
         public UserControlTravelGrid()
@@ -110,6 +118,7 @@ namespace EDDiscovery.UserControls
 
             discoveryform.OnHistoryChange += Display;
             discoveryform.OnNewEntry += AddNewEntry;
+            discoveryform.OnNoteChanged += OnNoteChanged;
 
             dataGridViewTravel.MakeDoubleBuffered();
             dataGridViewTravel.RowTemplate.Height = DefaultRowHeight;
@@ -196,8 +205,6 @@ namespace EDDiscovery.UserControls
             else
                 rowno = -1;
 
-            currentGridRow = rowno;
-
             dataGridViewTravel.Columns[0].HeaderText = EDDiscoveryForm.EDDConfig.DisplayUTC ? "Game Time" : "Time";
 
             if (OnRedisplay != null)
@@ -260,7 +267,6 @@ namespace EDDiscovery.UserControls
         {
             dataGridViewTravel.ClearSelection();
             dataGridViewTravel.CurrentCell = dataGridViewTravel.Rows[0].Cells[1];       // its the current cell which needs to be set, moves the row marker as well
-            currentGridRow = 0;
         }
 
         Tuple<long, int> CurrentGridPosByJID()          // Returns JID, column index.  JID = -1 if cell is not defined
@@ -313,7 +319,6 @@ namespace EDDiscovery.UserControls
 
         private void dataGridViewTravel_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            currentGridRow = e.RowIndex;
             if (OnChangedSelection != null)
                 OnChangedSelection(e.RowIndex, e.ColumnIndex, false, e.ColumnIndex == TravelHistoryColumns.Note);
         }
@@ -327,6 +332,16 @@ namespace EDDiscovery.UserControls
 
             if (keyrepeatcount > 1)
                 CheckForSelection(e.KeyCode);
+
+            //System.Diagnostics.Debug.WriteLine("KC " + (int)e.KeyCode + " " + (int)e.KeyData + " " + e.KeyValue);
+        }
+
+        private void dataGridViewTravel_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            //System.Diagnostics.Debug.WriteLine("KP " + (int)e.KeyChar);
+
+            if (OnKeyDownInCell != null && dataGridViewTravel.CurrentCell != null )
+                OnKeyDownInCell(e.KeyChar, dataGridViewTravel.CurrentCell.RowIndex, dataGridViewTravel.CurrentCell.ColumnIndex, dataGridViewTravel.CurrentCell.ColumnIndex == TravelHistoryColumns.Note);
         }
 
         private void dataGridViewTravel_KeyUp(object sender, KeyEventArgs e)
@@ -342,29 +357,18 @@ namespace EDDiscovery.UserControls
 
             if (cursorkeydown)
             {
-                currentGridRow = dataGridViewTravel.CurrentCell.RowIndex;
                 if (OnChangedSelection != null)
                     OnChangedSelection(dataGridViewTravel.CurrentCell.RowIndex, dataGridViewTravel.CurrentCell.ColumnIndex, false, dataGridViewTravel.CurrentCell.ColumnIndex == TravelHistoryColumns.Note);
             }
         }
 
-        public void TBDUNUSEDUpdateCurrentNote(string s)
+        private void OnNoteChanged(Object sender,HistoryEntry he, bool committed)
         {
-            if (currentGridRow >= 0)
-                dataGridViewTravel.Rows[currentGridRow].Cells[TravelHistoryColumns.Note].Value = s;
-        }
-
-        public void TBDREMOVEUpdateNoteJID(long r, string s)
-        {
-            int row = FindGridPosByJID(r,false);
-            if (row >= 0)
-                dataGridViewTravel.Rows[row].Cells[TravelHistoryColumns.Note].Value = s;
-        }
-
-        public void TBDREMOVEUpdateCurrentNoteTag(Object o)
-        {
-            if (currentGridRow >= 0)
-                dataGridViewTravel.Rows[currentGridRow].Cells[TravelHistoryColumns.Note].Tag = o;
+            if (rowsbyjournalid.ContainsKey(he.Journalid) ) // if we can find the grid entry
+            {
+                string s = (he.snc != null) ? he.snc.Note : "";     // snc may have gone null, so cope with it
+                rowsbyjournalid[he.Journalid].Cells[TravelHistoryColumns.Note].Value = s;
+            }
         }
 
         private void textBoxFilter_TextChanged(object sender, EventArgs e)
@@ -495,21 +499,6 @@ namespace EDDiscovery.UserControls
                 bool toexpand = (ch <= DefaultRowHeight);
 
                 string infotext = leftclicksystem.EventDescription + ((toexpand && leftclicksystem.EventDetailedInfo.Length > 0) ? (Environment.NewLine + leftclicksystem.EventDetailedInfo) : "");
-
-#if DEBUGVOICE
-                if (toexpand)
-                {
-                    List<Actions.ActionFileList.MatchingSets> ale = discoveryform.actionfiles.GetMatchingConditions(leftclicksystem.journalEntry.EventTypeStr);
-                    infotext = ((ale.Count>0) ? "VOICE " :"NO VOICE") + infotext;
-
-                    ConditionVariables testvars = new ConditionVariables();
-                    Actions.ActionVars.TriggerVars(testvars, leftclicksystem.journalEntry.EventTypeStr, "Debug");
-                    Actions.ActionVars.HistoryEventVars(testvars, leftclicksystem, "Event");
-                    string s = testvars.ToString().Replace(",", "\r\n");
-
-                    infotext = infotext + s;
-                }
-#endif
 
                 int h = DefaultRowHeight;
 
@@ -860,7 +849,8 @@ namespace EDDiscovery.UserControls
                 {
                     if (noteform.ShowDialog(this) == DialogResult.OK)
                     {
-                        discoveryform.StoreSystemNote(rightclicksystem, noteform.NoteText, true);
+                        rightclicksystem.SetJournalSystemNoteText(noteform.NoteText, true);
+                        discoveryform.NoteChanged(this,rightclicksystem, true);
                     }
                 }
             }
@@ -993,5 +983,6 @@ namespace EDDiscovery.UserControls
             if (OnPopOut != null)
                 OnPopOut();
         }
+
     }
 }

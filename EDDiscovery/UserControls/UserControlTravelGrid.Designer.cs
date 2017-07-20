@@ -80,8 +80,8 @@ namespace EDDiscovery.UserControls
             this.runActionsOnThisEntryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.setNoteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.writeEventInfoToLogDebugToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.copyJournalEntryToClipboardToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.TopPanel.SuspendLayout();
             this.dataViewScrollerPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewTravel)).BeginInit();
@@ -296,6 +296,7 @@ namespace EDDiscovery.UserControls
             this.dataGridViewTravel.ColumnHeaderMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dataGridViewTravel_ColumnHeaderMouseClick);
             this.dataGridViewTravel.RowPostPaint += new System.Windows.Forms.DataGridViewRowPostPaintEventHandler(this.dataGridViewTravel_RowPostPaint);
             this.dataGridViewTravel.KeyDown += new System.Windows.Forms.KeyEventHandler(this.dataGridViewTravel_KeyDown);
+            this.dataGridViewTravel.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.dataGridViewTravel_KeyPress);
             this.dataGridViewTravel.KeyUp += new System.Windows.Forms.KeyEventHandler(this.dataGridViewTravel_KeyUp);
             this.dataGridViewTravel.MouseDown += new System.Windows.Forms.MouseEventHandler(this.dataGridViewTravel_MouseDown);
             // 
@@ -354,7 +355,7 @@ namespace EDDiscovery.UserControls
             this.writeEventInfoToLogDebugToolStripMenuItem,
             this.copyJournalEntryToClipboardToolStripMenuItem});
             this.historyContextMenu.Name = "historyContextMenu";
-            this.historyContextMenu.Size = new System.Drawing.Size(294, 334);
+            this.historyContextMenu.Size = new System.Drawing.Size(294, 312);
             this.historyContextMenu.Opening += new System.ComponentModel.CancelEventHandler(this.historyContextMenu_Opening);
             // 
             // mapGotoStartoolStripMenuItem
@@ -480,19 +481,19 @@ namespace EDDiscovery.UserControls
             this.writeEventInfoToLogDebugToolStripMenuItem.Text = "Write event info to Log (Debug)";
             this.writeEventInfoToLogDebugToolStripMenuItem.Click += new System.EventHandler(this.writeEventInfoToLogDebugToolStripMenuItem_Click);
             // 
-            // toolTip1
-            // 
-            this.toolTip1.AutoPopDelay = 30000;
-            this.toolTip1.InitialDelay = 250;
-            this.toolTip1.ReshowDelay = 100;
-            this.toolTip1.ShowAlways = true;
-            // 
             // copyJournalEntryToClipboardToolStripMenuItem
             // 
             this.copyJournalEntryToClipboardToolStripMenuItem.Name = "copyJournalEntryToClipboardToolStripMenuItem";
             this.copyJournalEntryToClipboardToolStripMenuItem.Size = new System.Drawing.Size(293, 22);
             this.copyJournalEntryToClipboardToolStripMenuItem.Text = "Copy journal entry to clipboard";
             this.copyJournalEntryToClipboardToolStripMenuItem.Click += new System.EventHandler(this.copyJournalEntryToClipboardToolStripMenuItem_Click);
+            // 
+            // toolTip1
+            // 
+            this.toolTip1.AutoPopDelay = 30000;
+            this.toolTip1.InitialDelay = 250;
+            this.toolTip1.ReshowDelay = 100;
+            this.toolTip1.ShowAlways = true;
             // 
             // UserControlTravelGrid
             // 

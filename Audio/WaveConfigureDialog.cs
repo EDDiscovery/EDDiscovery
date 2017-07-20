@@ -106,7 +106,7 @@ namespace AudioExtensions
             {
                 try
                 {
-                    AudioQueue.AudioSample audio = queue.Generate(textBoxBorderText.Text, effects);
+                    AudioQueue.AudioSample audio = queue.Generate(textBoxBorderText.Text, new SoundEffectSettings(effects));
                     audio.sampleOverEvent += Audio_sampleOverEvent;
                     queue.Submit(audio, trackBarVolume.Value, AudioQueue.Priority.High);
                     buttonExtTest.Text = "Stop";
@@ -145,7 +145,7 @@ namespace AudioExtensions
         {
             try
             {
-                AudioQueue.AudioSample a = queue.Generate(textBoxBorderText.Text, effects);
+                AudioQueue.AudioSample a = queue.Generate(textBoxBorderText.Text, new SoundEffectSettings(effects));
                 a.sampleOverEvent += SampleOver;
                 a.sampleOverTag = sfe;
                 queue.Submit(a, trackBarVolume.Value, AudioQueue.Priority.High);

@@ -113,7 +113,6 @@ namespace EDDiscovery
             // 
             // userControlTravelGrid
             // 
-            this.userControlTravelGrid.currentGridRow = -1;
             this.userControlTravelGrid.Dock = System.Windows.Forms.DockStyle.Fill;
             this.userControlTravelGrid.Location = new System.Drawing.Point(0, 0);
             this.userControlTravelGrid.Name = "userControlTravelGrid";

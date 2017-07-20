@@ -159,7 +159,7 @@ namespace AudioExtensions
             System.IO.MemoryStream ms = synth.Speak(textBoxBorderTest.Text, "Default", comboBoxCustomVoice.Text, trackBarRate.Value);
             if (ms != null)
             {
-                AudioQueue.AudioSample a = queue.Generate(ms, effects);
+                AudioQueue.AudioSample a = queue.Generate(ms, new SoundEffectSettings(effects));
                 a.sampleOverEvent += SampleOver;
                 a.sampleOverTag = sfe;
                 queue.Submit(a, trackBarVolume.Value, AudioQueue.Priority.High);
@@ -211,7 +211,7 @@ namespace AudioExtensions
                     System.IO.MemoryStream ms = synth.Speak(textBoxBorderTest.Text, "Default", comboBoxCustomVoice.Text, trackBarRate.Value);
                     if (ms != null)
                     {
-                        AudioExtensions.AudioQueue.AudioSample audio = queue.Generate(ms, effects);
+                        AudioExtensions.AudioQueue.AudioSample audio = queue.Generate(ms, new SoundEffectSettings(effects));
                         audio.sampleOverEvent += Audio_sampleOverEvent;
                         queue.Submit(audio, trackBarVolume.Value, AudioQueue.Priority.High);
                         buttonExtTest.Text = "Stop";

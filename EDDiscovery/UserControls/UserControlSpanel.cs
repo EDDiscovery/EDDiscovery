@@ -448,7 +448,7 @@ namespace EDDiscovery.UserControls
             return res;
         }
 
-        public void NewTarget()
+        public void NewTarget(Object sender)
         {
             System.Diagnostics.Debug.WriteLine("spanel Refresh target display");
             Display(current_historylist);
