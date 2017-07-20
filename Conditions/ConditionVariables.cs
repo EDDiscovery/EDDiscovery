@@ -35,10 +35,15 @@ namespace Conditions
             values = new Dictionary<string, string>(other.values);
         }
 
-        public ConditionVariables(ConditionVariables other, ConditionVariables other2)
+        public ConditionVariables(ConditionVariables other, ConditionVariables other2)      // other can be null, other2 must not be
         {
-            values = new Dictionary<string, string>(other.values);
-            Add(other2);
+            if ( other == null )
+                values = new Dictionary<string, string>(other2.values);
+            else
+            {
+                values = new Dictionary<string, string>(other.values);
+                Add(other2);
+            }
         }
 
         public ConditionVariables(ConditionVariables other, ConditionVariables other2, ConditionVariables other3)

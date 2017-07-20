@@ -18,7 +18,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Conditions;
 
 namespace AudioExtensions
 {
@@ -39,8 +38,8 @@ namespace AudioExtensions
         void Stop();
         void Dispose(AudioData o);             // finish with this audio
 
-        AudioData Generate(string file, ConditionVariables effects = null);       // generate audio samples and return. Effects 
-        AudioData Generate(System.IO.Stream audioms, ConditionVariables effects = null, bool ensuresomeaudio = false); // generate audio and return with effect and ensuring audio if req.
+        AudioData Generate(string file, SoundEffectSettings effects = null);       // generate audio samples and return. Effects 
+        AudioData Generate(System.IO.Stream audioms, SoundEffectSettings effects = null, bool ensuresomeaudio = false); // generate audio and return with effect and ensuring audio if req.
 
         AudioData Mix(AudioData last, AudioData mix);            // either may be null, in which case null.. Converted to mix format
         AudioData Append(AudioData front, AudioData append);      // either may be null, in which case null.. Converted to append format
