@@ -15,10 +15,6 @@
  */
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Conditions;
 
 namespace AudioExtensions
 {
@@ -204,7 +200,7 @@ namespace AudioExtensions
             return len;
         }
 
-        public AudioSample Generate(string file, ConditionVariables effects = null)        // from a file (you get a AS back so you have the chance to add events)
+        public AudioSample Generate(string file, SoundEffectSettings effects = null)        // from a file (you get a AS back so you have the chance to add events)
         {
             AudioData audio = ad.Generate(file, effects);
 
@@ -217,7 +213,7 @@ namespace AudioExtensions
                 return null;
         }
 
-        public AudioSample Generate(System.IO.Stream audioms, ConditionVariables effects = null, bool ensuresomeaudio = false)   // from a memory stream
+        public AudioSample Generate(System.IO.Stream audioms, SoundEffectSettings effects = null, bool ensuresomeaudio = false)   // from a memory stream
         {
             if (audioms != null)
             {

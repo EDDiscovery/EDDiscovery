@@ -27,7 +27,8 @@ namespace AudioExtensions
         public Conditions.ConditionVariables values;
 
         public bool Any { get { return echoenabled || chorusenabled || reverbenabled || distortionenabled || gargleenabled || pitchshiftenabled; } }
-        public bool OverrideNone { get { return values.Exists("NoEffects"); } set { values["NoEffects"] = (value)?"1":"0"; } }
+        public bool OverrideNone { get { return values.Exists("NoEffects"); } set { values["NoEffects"] = (value) ? "1" : "0"; } }
+        public bool Merge { get { return values.Exists("MergeEffects"); } set { values["MergeEffects"] = (value) ? "1" : "0"; } }
 
         public bool echoenabled { get { return values.Exists("EchoMix") || values.Exists("EchoFeedback") || values.Exists("EchoDelay"); } }
         public int echomix { get { return values.GetInt("EchoMix", 50); } set { values["EchoMix"] = value.ToString(); } }
@@ -62,6 +63,24 @@ namespace AudioExtensions
 
         public SoundEffectSettings(ConditionVariables v )
         { values = v; }
-    }
 
+        public static SoundEffectSettings Set( ConditionVariables globals, ConditionVariables local)
+        {
+            SoundEffectSettings ses = new SoundEffectSettings(local);        // use the rest of the vars to place effects
+
+            if (ses.OverrideNone)      // if none
+                ses = null;             // no speech effects
+            else if (ses.Merge)       // merged
+            {
+                ConditionVariables merged = new ConditionVariables(globals, local);   // add global settings (if not null) overridden by vars
+                ses = new SoundEffectSettings(merged);
+            }
+            else if (!ses.Any)        // if none on the command line
+            {
+                ses = (globals != null) ? new SoundEffectSettings(globals) : null;
+            }
+
+            return ses;
+        }
+    }
 }
