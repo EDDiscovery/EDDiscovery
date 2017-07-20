@@ -388,10 +388,6 @@ namespace EDDiscovery
             materialscommodities = MaterialCommoditiesList.Process(je, prev?.materialscommodities, conn, EDDiscoveryForm.EDDConfig.ClearMaterials, EDDiscoveryForm.EDDConfig.ClearCommodities);
 
             snc = SystemNoteClass.GetSystemNote(Journalid, IsFSDJump, System);       // may be null
-            if (snc != null)
-            {
-                Debug.WriteLine("HE " + Journalid + " Found note " + +snc.Journalid + " " + snc.SystemName + " " + snc.Note);
-            }
         }
 
         public void SetJournalSystemNoteText(string text, bool commit)

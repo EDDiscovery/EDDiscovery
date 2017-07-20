@@ -250,7 +250,7 @@ namespace EDDiscovery
             }
         }
 
-        public void UpdateNotes(HistoryEntry he, bool committed)        // tested, 20 july 17, seen notes appear/disappear as edited.
+        public void UpdateNotes(Object sender,HistoryEntry he, bool committed)        // tested, 20 july 17, seen notes appear/disappear as edited.
         {
             if (Is3DMapsRunning && committed)         // if null, we are not up and running, and also if we are committing (don't update just because its being typed in)
             {
@@ -259,7 +259,7 @@ namespace EDDiscovery
             }
         }
 
-        public void UpdateTarget()
+        public void UpdateTarget(Object sender)
         { 
             if (Is3DMapsRunning)         // if null, we are not up and running
             {
@@ -1436,7 +1436,7 @@ namespace EDDiscovery
                 if (frm.IsTarget)          // asked for targetchanged..
                 {
                     TargetClass.SetTargetBookmark("RM:" + newcls.Heading, newcls.id, newcls.x, newcls.y, newcls.z);
-                    discoveryForm.NewTargetSet();
+                    discoveryForm.NewTargetSet(this);
                 }
 
                 GenerateDataSetsBNG();
@@ -1725,7 +1725,7 @@ namespace EDDiscovery
                 if (cursystem != null || curbookmark != null)      // if we have a system or a bookmark...
                 {
                     //Moved the code so that it could be shared with SavedRouteExpeditionControl
-                    RoutingUtils.showBookmarkForm(discoveryForm , cursystem, curbookmark, notedsystem);
+                    RoutingUtils.showBookmarkForm(this,discoveryForm , cursystem, curbookmark, notedsystem);
                     GenerateDataSetsBNG();      // in case target changed, do all..
                     RequestPaint();
                 }
@@ -1751,7 +1751,7 @@ namespace EDDiscovery
 
                             GenerateDataSetsBNG();
                             RequestPaint();
-                            discoveryForm.NewTargetSet();
+                            discoveryForm.NewTargetSet(this);
                         }
                     }
                 }

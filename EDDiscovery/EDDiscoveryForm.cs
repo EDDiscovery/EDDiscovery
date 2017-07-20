@@ -105,8 +105,8 @@ namespace EDDiscovery
 
         #region Callbacks from us
 
-        public event Action OnNewTarget;
-        public event Action<HistoryEntry, bool> OnNoteChanged;                    // UI.Note has been updated attached to this note
+        public event Action<Object> OnNewTarget;
+        public event Action<Object, HistoryEntry, bool> OnNoteChanged;                    // UI.Note has been updated attached to this note
 
         #endregion
 
@@ -1174,18 +1174,16 @@ namespace EDDiscovery
 
         #region Updators
 
-        public void NewTargetSet()
+        public void NewTargetSet(Object sender)
         {
-            System.Diagnostics.Debug.WriteLine("New target set");
             if (OnNewTarget != null)
-                OnNewTarget();
+                OnNewTarget(sender);
         }
 
-        public void NoteChanged(HistoryEntry snc, bool committed)
+        public void NoteChanged(Object sender, HistoryEntry snc, bool committed)
         {
-            System.Diagnostics.Debug.WriteLine("note changed");
             if (OnNoteChanged != null)
-                OnNoteChanged(snc,committed);
+                OnNoteChanged(sender, snc,committed);
         }
 
         #endregion
