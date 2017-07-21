@@ -33,6 +33,8 @@ namespace ExtendedControls
         public float FontNerfReduction { get; set; } = 0.5F;
         public int TickBoxReductionSize { get; set; } = 10;          // no of pixels smaller than the height to make the tick box
 
+        public Image ImageUnchecked = null;                        // set both this and Image to draw a image instead of the check. Must set FlatSytle popup and Appearance=normal
+
         public CheckBoxCustom() : base()
         {
         }
@@ -55,11 +57,13 @@ namespace ExtendedControls
                 Rectangle textarea = ClientRectangle;
                 textarea.X = rect.Width;
                 textarea.Width -= rect.Width;
-
                 Color basecolor = (mouseover) ? MouseOverColor : CheckBoxColor;
 
-                using (Pen outer = new Pen(basecolor))
-                    e.Graphics.DrawRectangle(outer, rect);
+                if (Image == null)      // don't drawn when image defined
+                {
+                    using (Pen outer = new Pen(basecolor))
+                        e.Graphics.DrawRectangle(outer, rect);
+                }
 
                 rect.Inflate(-1, -1);
 
@@ -68,25 +72,27 @@ namespace ExtendedControls
 
                 if (Enabled)
                 {
-                    using (Pen second = new Pen(CheckBoxInnerColor, 1F))
-                        e.Graphics.DrawRectangle(second, rect);
-
-                    rect.Inflate(-1, -1);
-
-                    if (FlatStyle == FlatStyle.Flat)
+                    if (Image == null)      
                     {
-                        using (Brush inner = new SolidBrush(basecolor))
-                            e.Graphics.FillRectangle(inner, rect);      // fill slightly over size to make sure all pixels are painted
-                    }
-                    else
-                    {
-                        using (Brush inner = new LinearGradientBrush(rect, CheckBoxInnerColor, basecolor, 225))
-                            e.Graphics.FillRectangle(inner, rect);      // fill slightly over size to make sure all pixels are painted
-                    }
+                        using (Pen second = new Pen(CheckBoxInnerColor, 1F))
+                            e.Graphics.DrawRectangle(second, rect);
 
-                    using (Pen third = new Pen(basecolor, 1F))
-                        e.Graphics.DrawRectangle(third, rect);
+                        rect.Inflate(-1, -1);
 
+                        if (FlatStyle == FlatStyle.Flat)
+                        {
+                            using (Brush inner = new SolidBrush(basecolor))
+                                e.Graphics.FillRectangle(inner, rect);      // fill slightly over size to make sure all pixels are painted
+                        }
+                        else
+                        {
+                            using (Brush inner = new LinearGradientBrush(rect, CheckBoxInnerColor, basecolor, 225))
+                                e.Graphics.FillRectangle(inner, rect);      // fill slightly over size to make sure all pixels are painted
+                        }
+
+                        using (Pen third = new Pen(basecolor, 1F))
+                            e.Graphics.DrawRectangle(third, rect);
+                    }
                 }
                 else
                 {
@@ -110,18 +116,28 @@ namespace ExtendedControls
                     }
                 }
 
-                if (Checked)
+                if (Image != null && ImageUnchecked != null)
                 {
-                    Point pt1 = new Point(checkarea.X + 2, checkarea.Y + checkarea.Height / 2 - 1);
-                    Point pt2 = new Point(checkarea.X + checkarea.Width / 2 - 1, checkarea.Bottom - 2);
-                    Point pt3 = new Point(checkarea.X + checkarea.Width - 2, checkarea.Y);
+                    Image image = Checked ? Image : ImageUnchecked;
+                    //                    e.Graphics.DrawImageUnscaled(  , 0, 0);
+                    e.Graphics.DrawImage(image, new Rectangle(0, 0, image.Width, image.Height), 0, 0, image.Width, image.Height, GraphicsUnit.Pixel);
 
-                    Color c1 = Color.FromArgb(200, CheckColor);
+                }
+                else
+                { 
+                    if (Checked)
+                    { 
+                        Point pt1 = new Point(checkarea.X + 2, checkarea.Y + checkarea.Height / 2 - 1);
+                        Point pt2 = new Point(checkarea.X + checkarea.Width / 2 - 1, checkarea.Bottom - 2);
+                        Point pt3 = new Point(checkarea.X + checkarea.Width - 2, checkarea.Y);
 
-                    using (Pen pcheck = new Pen(c1, 2.0F))
-                    {
-                        e.Graphics.DrawLine(pcheck, pt1, pt2);
-                        e.Graphics.DrawLine(pcheck, pt2, pt3);
+                        Color c1 = Color.FromArgb(200, CheckColor);
+
+                        using (Pen pcheck = new Pen(c1, 2.0F))
+                        {
+                            e.Graphics.DrawLine(pcheck, pt1, pt2);
+                            e.Graphics.DrawLine(pcheck, pt2, pt3);
+                        }
                     }
                 }
 

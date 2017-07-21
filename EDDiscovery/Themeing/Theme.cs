@@ -914,20 +914,23 @@ namespace EDDiscovery
 
                 if (ctrl.Appearance != Appearance.Button)          // NOT Button
                 {
-                    if (currentsettings.buttonstyle.Equals(ButtonStyles[0])) // system
-                        ctrl.FlatStyle = FlatStyle.System;
-                    else if (currentsettings.buttonstyle.Equals(ButtonStyles[1])) // flat
-                        ctrl.FlatStyle = FlatStyle.Flat;
-                    else
-                        ctrl.FlatStyle = FlatStyle.Popup;
+                    if (ctrl.Image == null)       // only for unimage ones
+                    {
+                        if (currentsettings.buttonstyle.Equals(ButtonStyles[0])) // system
+                            ctrl.FlatStyle = FlatStyle.System;
+                        else if (currentsettings.buttonstyle.Equals(ButtonStyles[1])) // flat
+                            ctrl.FlatStyle = FlatStyle.Flat;
+                        else
+                            ctrl.FlatStyle = FlatStyle.Popup;
+                    }
 
                     ctrl.BackColor = GroupBoxOverride(parent, currentsettings.colors[Settings.CI.form]);
                     ctrl.ForeColor = currentsettings.colors[Settings.CI.checkbox];
                     ctrl.CheckBoxColor = currentsettings.colors[Settings.CI.checkbox];
                     ctrl.CheckBoxInnerColor = currentsettings.colors[Settings.CI.checkbox].Multiply(1.5F);
-                    ctrl.CheckColor = currentsettings.colors[Settings.CI.checkbox_tick];
                     ctrl.MouseOverColor = currentsettings.colors[Settings.CI.checkbox].Multiply(1.4F);
                     ctrl.TickBoxReductionSize = (fnt.SizeInPoints > 10) ? 10 : 6;
+                    ctrl.CheckColor = currentsettings.colors[Settings.CI.checkbox_tick];
                     ctrl.Font = fnt;
                 }
                 else if ( ctrl.FlatStyle == FlatStyle.Flat )           // BUTTON and FLAT

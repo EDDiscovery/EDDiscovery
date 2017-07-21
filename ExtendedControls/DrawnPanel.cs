@@ -31,7 +31,9 @@ namespace ExtendedControls
         public bool MouseSelectedColorEnable { get; set; } = true;      // set to disable selected colour in some crazy windows situations where clicks are lost
 
         public enum ImageType { Close, Minimize, OnTop, Floating, Gripper, EDDB, Ross, InverseText,
-                                Move, Text, None , Transparent, NotTransparent , WindowInTaskBar, WindowNotInTaskBar, Captioned, NotCaptioned };
+                                Move, Text, None , Transparent, NotTransparent ,
+                                WindowInTaskBar, WindowNotInTaskBar, Captioned, NotCaptioned,
+                                Bars };
 
         public ImageType ImageSelected { get; set; } = ImageType.Close;
         public Image DrawnImage { get; set; } = null;                                   // if not set, an image is drawn . Use None below for a image only
@@ -264,6 +266,11 @@ namespace ExtendedControls
                             e.Graphics.FillRectangle(bbck, new Rectangle(leftmarginpx + 2 + w + 2, top + 2, w, o));
                         }
                     }
+                }
+                else if (ImageSelected == ImageType.Bars )
+                {
+                    e.Graphics.DrawLine(p1, new Point(leftmarginpx, 0), new Point(rightmarginpx, 0));
+                    e.Graphics.DrawLine(p1, new Point(leftmarginpx, 2), new Point(rightmarginpx, 2));
                 }
 
                 e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.Default;
