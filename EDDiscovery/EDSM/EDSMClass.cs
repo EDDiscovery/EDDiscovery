@@ -480,7 +480,7 @@ namespace EDDiscovery.EDSM
                 return 0;
 
             JObject msg = JObject.Parse(json);
-            int msgnr = msg["msgnum"].Value<int>();
+            int msgnr = msg["msgnum"].Int(0);
 
             JArray logs = (JArray)msg["logs"];
 
