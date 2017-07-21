@@ -113,6 +113,9 @@
     <Compile Include="RichTextBoxScroll.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="RollUpPanel.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="SplitContainerCustom.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -181,6 +184,18 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Calendar.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\pindown.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\pinup.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\pindownred.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\pinupred.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
