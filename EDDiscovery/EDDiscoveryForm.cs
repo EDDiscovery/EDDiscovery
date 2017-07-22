@@ -529,8 +529,12 @@ namespace EDDiscovery
                                 LogLineHighlight("CAPI not docked. Server API lagging!");
                                 // Todo add a retry later...
                             }
-
-                            if (!dockevt.StationName.Equals(Capi.Profile.StarPort.name))
+                            else if (!dockevt.StarSystem.Equals(Capi.Profile.CurrentStarSystem.name))
+                            {
+                                LogLineHighlight("CAPI profileSystemRequired is " + dockevt.StarSystem + ", profile station is " + Capi.Profile.CurrentStarSystem.name);
+                                // Todo add a retry later...
+                            }
+                            else if (!dockevt.StationName.Equals(Capi.Profile.StarPort.name))
                             {
                                 LogLineHighlight("CAPI profileStationRequired is " + dockevt.StationName + ", profile station is " + Capi.Profile.StarPort.name);
                                 // Todo add a retry later...
