@@ -27,17 +27,22 @@ namespace ExtendedControls
     {
         public int RollUpDelay { get; set; } = 1000;
         public int UnrollHoverDelay { get; set; } = 1000;
-        public int UnrolledHeight { get; set; } = 40;
+        public int UnrolledHeight { get; set; } = 32;
         public int RolledUpHeight { get; set; } = 5;
+        public int RollPixelStep { get; set; } = 5;
 
+        public int HiddenMarkerWidth { get; set; } = 0;   //0 = full width
         public Color HiddenMarkerColor { get { return hiddenmarkercolor; } set { hiddenmarkercolor = value; if (hiddenmarker != null) hiddenmarker.ForeColor = value; } }
         public Color HiddenMarkerMouseOverColor { get { return hiddenmarkermouseovercolor; } set { hiddenmarkermouseovercolor = value; if (hiddenmarker != null) hiddenmarker.MouseOverColor = value; } }
+
+        public bool PinState { get { return pinbutton.Checked; } set { SetPinState(value); } }
+
+        Action<RollUpPanel, CheckBoxCustom> PinStateChanged;
 
         CheckBoxCustom pinbutton;
         DrawnPanelNoTheme hiddenmarker;
         private Color hiddenmarkercolor = Color.Red;
         private Color hiddenmarkermouseovercolor = Color.Green;
-
 
         enum Mode { None, PauseBeforeRollDown, PauseBeforeRollUp, RollUp, RollDown};
         Mode mode;
@@ -46,12 +51,17 @@ namespace ExtendedControls
         public RollUpPanel()
         {
             SuspendLayout();
+
+            this.Height = UnrolledHeight;
+
             pinbutton = new CheckBoxCustom();
             pinbutton.Appearance = Appearance.Normal;
             pinbutton.FlatStyle = FlatStyle.Popup;
             pinbutton.Size = new Size(24, 24);
             pinbutton.Image = ExtendedControls.Properties.Resources.pindownred;
             pinbutton.ImageUnchecked = ExtendedControls.Properties.Resources.pinupred;
+            pinbutton.Checked = true;
+            pinbutton.CheckedChanged += Pinbutton_CheckedChanged;
 
             hiddenmarker = new DrawnPanelNoTheme();
             hiddenmarker.Location = new Point(0, 0);
@@ -69,6 +79,8 @@ namespace ExtendedControls
             mode = Mode.None; 
             timer = new Timer();
             timer.Tick += Timer_Tick;
+
+            pinbutton.Visible = false;
         }
 
         public void SetPinState(bool state)
@@ -76,7 +88,16 @@ namespace ExtendedControls
             pinbutton.Checked = state;
             if (state)
                 RollDown();
+            else
+                RollUp();
         }
+
+        private void Pinbutton_CheckedChanged(object sender, EventArgs e)
+        {
+            if (PinStateChanged != null)
+                PinStateChanged(this, pinbutton);
+        }
+
 
         public void SetPinImages(Image up , Image down)
         {
@@ -102,7 +123,7 @@ namespace ExtendedControls
                 timer.Interval = 25;
                 timer.Start();
 
-                foreach (Control c in Controls)
+                foreach (Control c in Controls)     // everything except hidden marker visible
                 {
                     if (!Object.ReferenceEquals(c, hiddenmarker))
                         c.Visible = true;
@@ -133,10 +154,9 @@ namespace ExtendedControls
             }
         }
 
-
         public void StartRollUpTimer()
         {
-            if (!pinbutton.Checked && RollUpDelay > 0 && mode == Mode.None && Height != RolledUpHeight)
+            if (mode == Mode.None && Height != RolledUpHeight)
             {
                 timer.Stop();
                 timer.Interval = RollUpDelay;
@@ -165,12 +185,14 @@ namespace ExtendedControls
             base.OnMouseEnter(eventargs);
             inarea = true;
             StartRollDownTimer();
+            pinbutton.Visible = true;
         }
 
         private void Control_MouseEnter(object sender, EventArgs e)
         {
             inarea = true;
             StartRollDownTimer();
+            pinbutton.Visible = true;
         }
 
         protected override void OnMouseLeave(EventArgs eventargs)
@@ -193,24 +215,28 @@ namespace ExtendedControls
             {
                 pinbutton.Left = ClientRectangle.Width - pinbutton.Width - 8;
                 pinbutton.Top = 3;
-                hiddenmarker.Width = ClientRectangle.Width;
+
+                int hmwidth = Math.Abs(HiddenMarkerWidth);
+                if (hmwidth == 0)
+                    hmwidth = ClientRectangle.Width;
+
+                hiddenmarker.Left = (HiddenMarkerWidth<0) ? ((ClientRectangle.Width - hmwidth)/2) : 0;
+                hiddenmarker.Width = hmwidth;
             }
         }
 
         private void Timer_Tick(object sender, EventArgs e)
         {
-            if (mode == Mode.RollUp)
+            if (mode == Mode.RollUp)        // roll up animation, move one step on, check for end
             {
-                int h = Height - 2;
-                h = Math.Max(Math.Min(h, UnrolledHeight), RolledUpHeight);
-                Height = h;
+                Height = Math.Max(Math.Min(Height - RollPixelStep, UnrolledHeight), RolledUpHeight);
 
-                if (h == RolledUpHeight)
+                if (Height == RolledUpHeight)    // end
                 {
                     timer.Stop();
                     foreach (Control c in Controls)
                     {
-                        if (!Object.ReferenceEquals(c, hiddenmarker))
+                        if (!Object.ReferenceEquals(c, hiddenmarker))       // everything hidden but hm
                             c.Visible = false;
                     }
 
@@ -220,35 +246,39 @@ namespace ExtendedControls
                     mode = Mode.None;
                 }
             }
-            else if (mode == Mode.RollDown)
+            else if (mode == Mode.RollDown) // roll down animation, move one step on, check for end
             {
-                int h = Height + 2;
-                h = Math.Max(Math.Min(h, UnrolledHeight), RolledUpHeight);
-                Height = h;
+                Height = Math.Max(Math.Min(Height + RollPixelStep, UnrolledHeight), RolledUpHeight);
 
-                if (h == UnrolledHeight)
+                if (Height == UnrolledHeight)        // end, everything is already visible.  hide the hidden marker
                 {
                     timer.Stop();
                     mode = Mode.None;
+                    hiddenmarker.Visible = false;
                 }
 
                 if (!inarea && !pinbutton.Checked)      // but not in area now, and not held.. so start roll up procedure
                     StartRollUpTimer();
             }
-            else if (mode == Mode.PauseBeforeRollDown)
+            else if (mode == Mode.PauseBeforeRollDown) // timer up.. check if in area, if so roll down
             {
                 mode = Mode.None;
                 timer.Stop();
-                RollDown();
+
+                if ( inarea )
+                    RollDown();
+                else
+                    System.Diagnostics.Debug.WriteLine("Ignore roll down not in area " + inarea + " checked " + pinbutton.Checked);
             }
-            else if (mode == Mode.PauseBeforeRollUp)
+            else if (mode == Mode.PauseBeforeRollUp)    // timer up, check if out of area and not pinned, if so roll up
             {
                 mode = Mode.None;
                 timer.Stop();
-                if (!inarea && !pinbutton.Checked)
-                {
+
+                pinbutton.Visible = inarea;     // visible is same as inarea flag..
+
+                if (!inarea && !pinbutton.Checked)      // if not in area, and its not checked..
                     RollUp();
-                }
                 else
                     System.Diagnostics.Debug.WriteLine("Ignore roll up.. area " + inarea + " checked " + pinbutton.Checked);
             }

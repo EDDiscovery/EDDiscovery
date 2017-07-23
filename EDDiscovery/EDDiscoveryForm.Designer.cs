@@ -115,7 +115,7 @@ namespace EDDiscovery
             this.notifyIconMenu_Open = new System.Windows.Forms.ToolStripMenuItem();
             this.notifyIconMenu_Hide = new System.Windows.Forms.ToolStripMenuItem();
             this.notifyIconMenu_Exit = new System.Windows.Forms.ToolStripMenuItem();
-            this.panelToolBar = new System.Windows.Forms.Panel();
+            this.panelToolBar = new ExtendedControls.RollUpPanel();
             this.comboBoxCustomPopOut = new ExtendedControls.ComboBoxCustom();
             this.comboBoxCommander = new ExtendedControls.ComboBoxCustom();
             this.buttonExtEDSMSync = new ExtendedControls.ButtonExt();
@@ -928,12 +928,10 @@ namespace EDDiscovery
             this.Name = "EDDiscoveryForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "EDDiscovery";
-            this.Activated += new System.EventHandler(this.EDDiscoveryForm_Activated);
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.EDDiscoveryForm_FormClosing);
             this.Load += new System.EventHandler(this.EDDiscoveryForm_Load);
             this.Shown += new System.EventHandler(this.EDDiscoveryForm_Shown);
             this.ResizeEnd += new System.EventHandler(this.EDDiscoveryForm_ResizeEnd);
-            this.Layout += new System.Windows.Forms.LayoutEventHandler(this.EDDiscoveryForm_Layout);
             this.Resize += new System.EventHandler(this.EDDiscoveryForm_Resize);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
@@ -1026,7 +1024,7 @@ namespace EDDiscovery
         private System.Windows.Forms.ToolStripSeparator helpMenuSeparatorTop;
         private System.Windows.Forms.ToolStripSeparator helpMenuSeparatorBottom;
         private System.Windows.Forms.ToolStripMenuItem editLastActionPackToolStripMenuItem;
-        private System.Windows.Forms.Panel panelToolBar;
+        private ExtendedControls.RollUpPanel panelToolBar;
         private ExtendedControls.ComboBoxCustom comboBoxCommander;
         private ExtendedControls.ButtonExt buttonExt3dmap;
         private ExtendedControls.ButtonExt buttonExt2dmap;

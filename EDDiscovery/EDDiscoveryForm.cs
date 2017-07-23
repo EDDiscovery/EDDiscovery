@@ -68,6 +68,9 @@ namespace EDDiscovery
         public AudioExtensions.AudioQueue AudioQueueSpeech { get { return audioqueuespeech; } }
         public AudioExtensions.SpeechSynthesizer SpeechSynthesizer { get { return speechsynth; } }
 
+        public string EliteInputList() { return inputdevices.ListDevices(); }
+        public string EliteInputCheck() { return inputdevicesactions.CheckBindings(); }
+
         public BindingsFile FrontierBindings { get { return frontierbindings; } }
 
         AudioExtensions.IAudioDriver audiodriverwave;
@@ -155,7 +158,7 @@ namespace EDDiscovery
 
         #region Initialisation
 
-        public EDDiscoveryForm()
+        public EDDiscoveryForm()        // note we do not do the traditional Initialize component here.. we wait for splash form to call it
         {
             Controller = new EDDiscoveryController(() => theme.TextBlockColor, () => theme.TextBlockHighlightColor, () => theme.TextBlockSuccessColor, a => BeginInvoke(a));
             Controller.OnNewEntrySecond += Controller_NewEntrySecond;       // called after UI updates themselves with NewEntry
@@ -170,13 +173,16 @@ namespace EDDiscovery
             Controller.OnSyncStarting += Controller_SyncStarting;
         }
 
-        public void Init()
+        public void Init()      // called from splash form .. continues on with the construction of the form, controlled by splash form sequencing
         {
             _initialised = true;
             Controller.Init();
 
             // Some components require the controller to be initialized
             InitializeComponent();
+
+            panelToolBar.HiddenMarkerWidth = 200;
+            panelToolBar.PinState = SQLiteConnectionUser.GetSettingBool("ToolBarPanelPinState", true);
 
             comboBoxCustomPopOut.Enabled = false;
             comboBoxCustomPopOut.Items.AddRange(PopOutControl.spanelbuttonlist);
@@ -239,41 +245,12 @@ namespace EDDiscovery
             SetUpLogging();
         }
 
-        public void SetUpLogging()      // controls logging of HTTP stuff
-        {
-            BaseUtils.HttpCom.LogPath = EDDConfig.Instance.EDSMLog ? EDDConfig.Options.AppDataDirectory : null;
-        }
-
-        public void EliteInput(bool on, bool axisevents)
-        {
-            inputdevicesactions.Stop();
-            inputdevices.Clear();
-
-#if !__MonoCS__
-            if (on)
-            {
-                DirectInputDevices.InputDeviceJoystickWindows.CreateJoysticks(inputdevices,axisevents);
-                DirectInputDevices.InputDeviceKeyboard.CreateKeyboard(inputdevices);              // Created.. not started..
-                DirectInputDevices.InputDeviceMouse.CreateMouse(inputdevices);
-                frontierbindings.LoadBindingsFile();
-                inputdevicesactions.Start();
-            }
-#endif
-        }
-
-        public string EliteInputList() { return inputdevices.ListDevices(); }
-        public string EliteInputCheck() { return inputdevicesactions.CheckBindings(); }
-
-        private void EDDiscoveryForm_Layout(object sender, LayoutEventArgs e)       // Manually position, could not get gripper under tab control with it sizing for the life of me
-        {
-        }
-
         // OnLoad is called the first time the form is shown, before OnShown or OnActivated are called
         private void EDDiscoveryForm_Load(object sender, EventArgs e)
         {
             try
             {
-                if (!_initialised)
+                if (!_initialised)      // paranoid, Bravada says ;-)
                 {
                     Init();
                 }
@@ -282,7 +259,8 @@ namespace EDDiscovery
                 Controller.PostInit_Loaded();
 
                 RepositionForm();
-                InitFormControls();
+                ShowInfoPanel("Loading. Please wait!", true);
+                routeControl1.travelhistorycontrol1 = travelHistoryControl;
                 settings.InitSettingsTab();
                 savedRouteExpeditionControl1.LoadControl();
 
@@ -296,16 +274,6 @@ namespace EDDiscovery
             {
                 MessageBox.Show("EDDiscoveryForm_Load exception: " + ex.Message + "\n" + "Trace: " + ex.StackTrace);
             }
-        }
-
-        internal void SaveCurrentPopOuts()
-        {
-            PopOuts.SaveCurrentPopouts();
-        }
-
-        internal void LoadSavedPopouts()
-        {
-            PopOuts.LoadSavedPopouts();
         }
 
         // OnShown is called every time Show is called
@@ -323,6 +291,10 @@ namespace EDDiscovery
 
             _shownOnce = true;
         }
+
+        #endregion
+
+        #region New Installer
 
         private Task CheckForNewInstallerAsync()
         {
@@ -370,12 +342,9 @@ namespace EDDiscovery
             return false;
         }
 
-        private void InitFormControls()
-        {
-            ShowInfoPanel("Loading. Please wait!", true);
+        #endregion
 
-            routeControl1.travelhistorycontrol1 = travelHistoryControl;
-        }
+        #region Form positioning
 
         private void RepositionForm()
         {
@@ -419,9 +388,9 @@ namespace EDDiscovery
                 PopOuts.LoadSavedPopouts();
         }
 
-        private void EDDiscoveryForm_Activated(object sender, EventArgs e)
-        {
-        }
+        #endregion
+
+        #region Themeing
 
         public void ApplyTheme()
         {
@@ -439,18 +408,18 @@ namespace EDDiscovery
             Controller.RefreshDisplays();
         }
 
-#endregion
+        #endregion
 
-#region EDSM and EDDB syncs code
+        #region EDSM and EDDB syncs code
 
         private void edsmRefreshTimer_Tick(object sender, EventArgs e)
         {
             Controller.AsyncPerformSync();
         }
 
-#endregion
+        #endregion
 
-#region Controller event handlers
+        #region Controller event handlers
         private void Controller_InitialSyncComplete()
         {
             imageHandler1.StartWatcher();
@@ -664,7 +633,7 @@ namespace EDDiscovery
 
 #endregion
 
-#region Closing
+        #region Closing
         private void SaveSettings()
         {
             settings.SaveSettings();
@@ -674,18 +643,14 @@ namespace EDDiscovery
             SQLiteDBClass.PutSettingInt("FormHeight", _formHeight);
             SQLiteDBClass.PutSettingInt("FormTop", _formTop);
             SQLiteDBClass.PutSettingInt("FormLeft", _formLeft);
+            SQLiteDBClass.PutSettingBool("ToolBarPanelPinState", panelToolBar.PinState);
+
             routeControl1.SaveSettings();
             theme.SaveSettings(null);
             travelHistoryControl.SaveSettings();
             journalViewControl1.SaveSettings();
             if (EDDConfig.AutoSavePopOuts)
                 PopOuts.SaveCurrentPopouts();
-        }
-
-        public void ShowInfoPanel(string message, bool visible)
-        {
-            labelInfoBoxTop.Text = message;
-            labelInfoBoxTop.Visible = visible;
         }
 
         private void EDDiscoveryForm_FormClosing(object sender, FormClosingEventArgs e)
@@ -703,6 +668,12 @@ namespace EDDiscovery
         #endregion
 
         #region Buttons, Mouse, Menus, NotifyIcon
+
+        public void ShowInfoPanel(string message, bool visible)
+        {
+            labelInfoBoxTop.Text = message;
+            labelInfoBoxTop.Visible = visible;
+        }
 
         private void buttonReloadActions_Click(object sender, EventArgs e)
         {
@@ -1050,7 +1021,7 @@ namespace EDDiscovery
 
 #endregion
 
-#region Window Control
+        #region Window Control
 
         protected override void WndProc(ref Message m)
         {
@@ -1414,7 +1385,52 @@ namespace EDDiscovery
 
         #endregion
 
+        #region PopOuts
+
+        internal void SaveCurrentPopOuts()
+        {
+            PopOuts.SaveCurrentPopouts();
+        }
+
+        internal void LoadSavedPopouts()
+        {
+            PopOuts.LoadSavedPopouts();
+        }
+
+        #endregion
+
+        #region Elite Input
+
+        public void EliteInput(bool on, bool axisevents)
+        {
+            inputdevicesactions.Stop();
+            inputdevices.Clear();
+
+#if !__MonoCS__
+            if (on)
+            {
+                DirectInputDevices.InputDeviceJoystickWindows.CreateJoysticks(inputdevices, axisevents);
+                DirectInputDevices.InputDeviceKeyboard.CreateKeyboard(inputdevices);              // Created.. not started..
+                DirectInputDevices.InputDeviceMouse.CreateMouse(inputdevices);
+                frontierbindings.LoadBindingsFile();
+                inputdevicesactions.Start();
+            }
+#endif
+        }
+
+        #endregion
+
+        #region Misc
+
+        public void SetUpLogging()      // controls logging of HTTP stuff
+        {
+            BaseUtils.HttpCom.LogPath = EDDConfig.Instance.EDSMLog ? EDDConfig.Options.AppDataDirectory : null;
+        }
+
+        #endregion
+
     }
 }
+
 
 
