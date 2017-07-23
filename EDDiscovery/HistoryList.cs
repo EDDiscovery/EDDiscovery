@@ -92,6 +92,8 @@ namespace EDDiscovery
         public string ShipType { get { return shiptype; } }
         public int ShipId { get { return shipid; } }
         public bool MultiPlayer { get { return onCrewWithCaptain != null; } }
+        public string GameMode { get { return gamemode; } }
+        public string Group { get { return group; } }
 
         public bool ContainsRares() // function due to debugger and cost of working out
         {
@@ -125,6 +127,8 @@ namespace EDDiscovery
         private int shipid = -1;                    // ship id, -1 unknown
         private string shiptype = "Unknown";        // and the ship
         private string onCrewWithCaptain = null;    // if not null, your in another multiplayer ship      
+        private string gamemode = "Unknown";        // game mode, from LoadGame event
+        private string group = "";                  // group..
 
         #endregion
 
@@ -134,7 +138,7 @@ namespace EDDiscovery
         {
 
         }
-
+                                                    // for importing old events in from 2.1 - logs
         public static HistoryEntry MakeVSEntry(ISystem sys, DateTime eventt, int m, string dist, string info, int journalid = 0, bool firstdiscover = false)
         {
             Debug.Assert(sys != null);
@@ -271,6 +275,8 @@ namespace EDDiscovery
                 he.shipid = prev.shipid;
                 he.whereami = prev.whereami;
                 he.onCrewWithCaptain = prev.onCrewWithCaptain;
+                he.gamemode = prev.gamemode;
+                he.group = prev.group;
             }
 
             if (je.EventTypeID == JournalTypeEnum.Location)
@@ -299,10 +305,11 @@ namespace EDDiscovery
                 he.whereami = (je as EliteDangerous.JournalEvents.JournalFSDJump).StarSystem;
             else if (je.EventTypeID == JournalTypeEnum.LoadGame)
             {
-                he.onCrewWithCaptain = null;    // can't be in a crew at this point
-
                 EliteDangerous.JournalEvents.JournalLoadGame jl = je as EliteDangerous.JournalEvents.JournalLoadGame;
 
+                he.onCrewWithCaptain = null;    // can't be in a crew at this point
+                he.gamemode = jl.GameMode;      // set game mode
+                he.group = jl.Group;            // and group, may be empty
                 he.landed = jl.StartLanded;
 
                 if (jl.Ship.IndexOf("buggy", StringComparison.InvariantCultureIgnoreCase) == -1)        // load game with buggy, can't tell what ship we get back into, so ignore

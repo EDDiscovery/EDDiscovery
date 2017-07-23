@@ -302,6 +302,13 @@ namespace EDDiscovery.UserControls
             UpdateViewOnSelection(sel);
         }
 
+        // So, the way this works is:
+        // in the designer file, order the this.Controls.Add (line 581+) in the CORRECT order, as per the view. Order them
+        // in the order they show, first is at top, last is at the bottom of the list
+        // ShiftControls relies on this because it shifts a control up/down from a particular control to the end of the control list.
+        // the state of the position of the control (rolled up or rolled down) is saved in the Tag of the control named in shiftcontrols
+        // so we know if to add on or subtract the vertical position from it.
+
         void UpdateViewOnSelection(int sel)
         {
             if (buttonEDSM.Tag != null && (bool)buttonEDSM.Tag)     // if previously we shifted EDSM buttons up, we move them back into place for the main calc

@@ -88,7 +88,7 @@ namespace EDDiscovery
             InvokeAsyncOnUiThread = invokeAsyncOnUiThread;
         }
 
-        public static Task Initialize(bool noreposition)
+        public static Task Initialize(bool noreposition)        // called from splash form to set up initial initialization of dbs and config
         {
             InitializeConfig(noreposition);
 

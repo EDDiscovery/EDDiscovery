@@ -15,6 +15,7 @@ namespace DialogTest
         public TestRollUpPanel()
         {
             InitializeComponent();
+            rolluppanel.HiddenMarkerWidth = -100;
             rolluppanel.SetPinState(true);
         }
     }
