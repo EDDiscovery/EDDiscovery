@@ -49,12 +49,12 @@ namespace EDDiscovery.Forms
             readyForInvoke.Set();
         }
 
-        public void Init()
+        public void Init()      // called from Program once splash and eddiscoveryform have been made..
         {
             inittask = EDDiscoveryController.Initialize(Control.ModifierKeys.HasFlag(Keys.Shift)).ContinueWith(t => InitComplete(t));
         }
 
-        private void InitComplete(Task t)
+        private void InitComplete(Task t)       // tasks due to eddiscovery cotnroller Initialize complete.. now bring up eddiscoveryform
         {
             readyForInvoke.WaitOne();
             this.BeginInvoke(new Action(() =>
@@ -63,7 +63,7 @@ namespace EDDiscovery.Forms
                 {
                     try
                     {
-                        mainform.Init();
+                        mainform.Init();        // call the init function, which will initialize the eddiscovery form
                         mainform.Show();
                         Context.MainForm = mainform;
                     }

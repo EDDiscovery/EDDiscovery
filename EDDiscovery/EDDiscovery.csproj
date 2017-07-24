@@ -942,6 +942,9 @@
     <None Include="Resources\friends.png" />
     <None Include="Resources\eddiscovery_logo.png" />
     <None Include="Resources\GNE.ico" />
+    <None Include="Resources\galaxycolour.png" />
+    <None Include="Resources\galaxy_white.png" />
+    <None Include="Resources\galaxy_gray.png" />
     <Content Include="Resources\imgCheck.png" />
     <None Include="Resources\stellaremnant.PNG" />
     <None Include="Resources\nebula.PNG" />
@@ -1095,6 +1098,9 @@
     <None Include="Resources\toolStripButtonMap.Image.png" />
     <None Include="Resources\toolStripButtonNew.Image.png" />
     <None Include="Resources\toolStripButtonRemoveAll.Image.png" />
+    <None Include="Resources\refresh_blue.png" />
+    <None Include="Resources\refresh_blue22.png" />
+    <None Include="Resources\refresh_blue18.png" />
     <Content Include="x86\Microsoft.VC100.CRT\msvcp100.dll" />
     <Content Include="x86\Microsoft.VC100.CRT\msvcr100.dll" />
     <Content Include="x86\SQLite.Interop.dll">

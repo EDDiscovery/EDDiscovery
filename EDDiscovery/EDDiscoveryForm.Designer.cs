@@ -44,7 +44,7 @@ namespace EDDiscovery
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            ExtendedControls.TabStyleSquare tabStyleSquare2 = new ExtendedControls.TabStyleSquare();
+            ExtendedControls.TabStyleSquare tabStyleSquare1 = new ExtendedControls.TabStyleSquare();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(EDDiscoveryForm));
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.toolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -85,7 +85,6 @@ namespace EDDiscovery
             this.checkForNewReleaseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.labelInfoBoxTop = new System.Windows.Forms.Label();
             this.label_version = new System.Windows.Forms.Label();
-            this.panel_eddiscovery = new System.Windows.Forms.Panel();
             this.edsmRefreshTimer = new System.Windows.Forms.Timer(this.components);
             this.tabControlMain = new ExtendedControls.TabControlCustom();
             this.tabPageTravelHistory = new System.Windows.Forms.TabPage();
@@ -115,13 +114,14 @@ namespace EDDiscovery
             this.notifyIconMenu_Open = new System.Windows.Forms.ToolStripMenuItem();
             this.notifyIconMenu_Hide = new System.Windows.Forms.ToolStripMenuItem();
             this.notifyIconMenu_Exit = new System.Windows.Forms.ToolStripMenuItem();
-            this.panelToolBar = new System.Windows.Forms.Panel();
+            this.panelToolBar = new ExtendedControls.RollUpPanel();
             this.comboBoxCustomPopOut = new ExtendedControls.ComboBoxCustom();
             this.comboBoxCommander = new ExtendedControls.ComboBoxCustom();
             this.buttonExtEDSMSync = new ExtendedControls.ButtonExt();
             this.buttonExtRefresh = new ExtendedControls.ButtonExt();
             this.buttonExt2dmap = new ExtendedControls.ButtonExt();
             this.buttonExt3dmap = new ExtendedControls.ButtonExt();
+            this.panel_eddiscovery = new System.Windows.Forms.Panel();
             this.menuStrip1.SuspendLayout();
             this.tabControlMain.SuspendLayout();
             this.tabPageTravelHistory.SuspendLayout();
@@ -473,18 +473,6 @@ namespace EDDiscovery
             this.label_version.TabIndex = 21;
             this.label_version.Text = "Version Label";
             // 
-            // panel_eddiscovery
-            // 
-            this.panel_eddiscovery.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.panel_eddiscovery.BackColor = System.Drawing.SystemColors.Control;
-            this.panel_eddiscovery.BackgroundImage = global::EDDiscovery.Properties.Resources.eddiscovery_logo;
-            this.panel_eddiscovery.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.panel_eddiscovery.Location = new System.Drawing.Point(818, 1);
-            this.panel_eddiscovery.Name = "panel_eddiscovery";
-            this.panel_eddiscovery.Size = new System.Drawing.Size(101, 46);
-            this.panel_eddiscovery.TabIndex = 18;
-            this.panel_eddiscovery.Click += new System.EventHandler(this.paneleddiscovery_Click);
-            // 
             // edsmRefreshTimer
             // 
             this.edsmRefreshTimer.Interval = 3600000;
@@ -502,10 +490,10 @@ namespace EDDiscovery
             this.tabControlMain.Controls.Add(this.tabPageSettings);
             this.tabControlMain.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabControlMain.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.tabControlMain.Location = new System.Drawing.Point(0, 54);
+            this.tabControlMain.Location = new System.Drawing.Point(0, 56);
             this.tabControlMain.Name = "tabControlMain";
             this.tabControlMain.SelectedIndex = 0;
-            this.tabControlMain.Size = new System.Drawing.Size(993, 668);
+            this.tabControlMain.Size = new System.Drawing.Size(993, 666);
             this.tabControlMain.TabColorScaling = 0.5F;
             this.tabControlMain.TabControlBorderBrightColor = System.Drawing.Color.LightGray;
             this.tabControlMain.TabControlBorderColor = System.Drawing.Color.DarkGray;
@@ -516,7 +504,7 @@ namespace EDDiscovery
             this.tabControlMain.TabNotSelectedColor = System.Drawing.Color.Gray;
             this.tabControlMain.TabOpaque = 100F;
             this.tabControlMain.TabSelectedColor = System.Drawing.Color.LightGray;
-            this.tabControlMain.TabStyle = tabStyleSquare2;
+            this.tabControlMain.TabStyle = tabStyleSquare1;
             this.tabControlMain.TextNotSelectedColor = System.Drawing.SystemColors.ControlText;
             this.tabControlMain.TextSelectedColor = System.Drawing.SystemColors.ControlText;
             this.tabControlMain.SelectedIndexChanged += new System.EventHandler(this.tabControl1_SelectedIndexChanged);
@@ -527,7 +515,7 @@ namespace EDDiscovery
             this.tabPageTravelHistory.Location = new System.Drawing.Point(4, 22);
             this.tabPageTravelHistory.Name = "tabPageTravelHistory";
             this.tabPageTravelHistory.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageTravelHistory.Size = new System.Drawing.Size(985, 642);
+            this.tabPageTravelHistory.Size = new System.Drawing.Size(985, 640);
             this.tabPageTravelHistory.TabIndex = 0;
             this.tabPageTravelHistory.Text = "History";
             this.tabPageTravelHistory.UseVisualStyleBackColor = true;
@@ -537,7 +525,7 @@ namespace EDDiscovery
             this.travelHistoryControl.Dock = System.Windows.Forms.DockStyle.Fill;
             this.travelHistoryControl.Location = new System.Drawing.Point(3, 3);
             this.travelHistoryControl.Name = "travelHistoryControl";
-            this.travelHistoryControl.Size = new System.Drawing.Size(979, 636);
+            this.travelHistoryControl.Size = new System.Drawing.Size(979, 634);
             this.travelHistoryControl.TabIndex = 0;
             // 
             // tabPageJournal
@@ -546,7 +534,7 @@ namespace EDDiscovery
             this.tabPageJournal.Location = new System.Drawing.Point(4, 22);
             this.tabPageJournal.Name = "tabPageJournal";
             this.tabPageJournal.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageJournal.Size = new System.Drawing.Size(985, 642);
+            this.tabPageJournal.Size = new System.Drawing.Size(985, 640);
             this.tabPageJournal.TabIndex = 7;
             this.tabPageJournal.Text = "Journal";
             this.tabPageJournal.UseVisualStyleBackColor = true;
@@ -556,7 +544,7 @@ namespace EDDiscovery
             this.journalViewControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.journalViewControl1.Location = new System.Drawing.Point(3, 3);
             this.journalViewControl1.Name = "journalViewControl1";
-            this.journalViewControl1.Size = new System.Drawing.Size(979, 636);
+            this.journalViewControl1.Size = new System.Drawing.Size(979, 634);
             this.journalViewControl1.TabIndex = 0;
             // 
             // tabPageTriletaration
@@ -565,7 +553,7 @@ namespace EDDiscovery
             this.tabPageTriletaration.Location = new System.Drawing.Point(4, 22);
             this.tabPageTriletaration.Name = "tabPageTriletaration";
             this.tabPageTriletaration.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageTriletaration.Size = new System.Drawing.Size(985, 642);
+            this.tabPageTriletaration.Size = new System.Drawing.Size(985, 640);
             this.tabPageTriletaration.TabIndex = 3;
             this.tabPageTriletaration.Text = "Trilateration";
             this.tabPageTriletaration.UseVisualStyleBackColor = true;
@@ -575,7 +563,7 @@ namespace EDDiscovery
             this.trilaterationControl.Dock = System.Windows.Forms.DockStyle.Fill;
             this.trilaterationControl.Location = new System.Drawing.Point(3, 3);
             this.trilaterationControl.Name = "trilaterationControl";
-            this.trilaterationControl.Size = new System.Drawing.Size(979, 636);
+            this.trilaterationControl.Size = new System.Drawing.Size(979, 634);
             this.trilaterationControl.TabIndex = 21;
             // 
             // tabPageScreenshots
@@ -583,7 +571,7 @@ namespace EDDiscovery
             this.tabPageScreenshots.Controls.Add(this.imageHandler1);
             this.tabPageScreenshots.Location = new System.Drawing.Point(4, 22);
             this.tabPageScreenshots.Name = "tabPageScreenshots";
-            this.tabPageScreenshots.Size = new System.Drawing.Size(985, 642);
+            this.tabPageScreenshots.Size = new System.Drawing.Size(985, 640);
             this.tabPageScreenshots.TabIndex = 4;
             this.tabPageScreenshots.Text = "Screenshots";
             this.tabPageScreenshots.UseVisualStyleBackColor = true;
@@ -594,7 +582,7 @@ namespace EDDiscovery
             this.imageHandler1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.imageHandler1.Location = new System.Drawing.Point(0, 0);
             this.imageHandler1.Name = "imageHandler1";
-            this.imageHandler1.Size = new System.Drawing.Size(985, 642);
+            this.imageHandler1.Size = new System.Drawing.Size(985, 640);
             this.imageHandler1.TabIndex = 0;
             // 
             // tabPageRoute
@@ -603,7 +591,7 @@ namespace EDDiscovery
             this.tabPageRoute.Location = new System.Drawing.Point(4, 22);
             this.tabPageRoute.Name = "tabPageRoute";
             this.tabPageRoute.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageRoute.Size = new System.Drawing.Size(985, 642);
+            this.tabPageRoute.Size = new System.Drawing.Size(985, 640);
             this.tabPageRoute.TabIndex = 1;
             this.tabPageRoute.Text = "Route";
             this.tabPageRoute.UseVisualStyleBackColor = true;
@@ -613,7 +601,7 @@ namespace EDDiscovery
             this.routeControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.routeControl1.Location = new System.Drawing.Point(3, 3);
             this.routeControl1.Name = "routeControl1";
-            this.routeControl1.Size = new System.Drawing.Size(979, 636);
+            this.routeControl1.Size = new System.Drawing.Size(979, 634);
             this.routeControl1.TabIndex = 0;
             // 
             // tabPageRoutesExpeditions
@@ -622,7 +610,7 @@ namespace EDDiscovery
             this.tabPageRoutesExpeditions.Location = new System.Drawing.Point(4, 22);
             this.tabPageRoutesExpeditions.Name = "tabPageRoutesExpeditions";
             this.tabPageRoutesExpeditions.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageRoutesExpeditions.Size = new System.Drawing.Size(985, 642);
+            this.tabPageRoutesExpeditions.Size = new System.Drawing.Size(985, 640);
             this.tabPageRoutesExpeditions.TabIndex = 6;
             this.tabPageRoutesExpeditions.Text = "Routes/Expeditions";
             this.tabPageRoutesExpeditions.UseVisualStyleBackColor = true;
@@ -632,7 +620,7 @@ namespace EDDiscovery
             this.savedRouteExpeditionControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.savedRouteExpeditionControl1.Location = new System.Drawing.Point(3, 3);
             this.savedRouteExpeditionControl1.Name = "savedRouteExpeditionControl1";
-            this.savedRouteExpeditionControl1.Size = new System.Drawing.Size(979, 636);
+            this.savedRouteExpeditionControl1.Size = new System.Drawing.Size(979, 634);
             this.savedRouteExpeditionControl1.TabIndex = 0;
             // 
             // tabPageExport
@@ -641,7 +629,7 @@ namespace EDDiscovery
             this.tabPageExport.Location = new System.Drawing.Point(4, 22);
             this.tabPageExport.Name = "tabPageExport";
             this.tabPageExport.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageExport.Size = new System.Drawing.Size(985, 642);
+            this.tabPageExport.Size = new System.Drawing.Size(985, 640);
             this.tabPageExport.TabIndex = 8;
             this.tabPageExport.Text = "Export/Import";
             this.tabPageExport.UseVisualStyleBackColor = true;
@@ -651,7 +639,7 @@ namespace EDDiscovery
             this.exportControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.exportControl1.Location = new System.Drawing.Point(3, 3);
             this.exportControl1.Name = "exportControl1";
-            this.exportControl1.Size = new System.Drawing.Size(979, 636);
+            this.exportControl1.Size = new System.Drawing.Size(979, 634);
             this.exportControl1.TabIndex = 0;
             // 
             // tabPageSettings
@@ -660,7 +648,7 @@ namespace EDDiscovery
             this.tabPageSettings.Location = new System.Drawing.Point(4, 22);
             this.tabPageSettings.Name = "tabPageSettings";
             this.tabPageSettings.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageSettings.Size = new System.Drawing.Size(985, 642);
+            this.tabPageSettings.Size = new System.Drawing.Size(985, 640);
             this.tabPageSettings.TabIndex = 5;
             this.tabPageSettings.Text = "Settings";
             this.tabPageSettings.UseVisualStyleBackColor = true;
@@ -670,7 +658,7 @@ namespace EDDiscovery
             this.settings.Dock = System.Windows.Forms.DockStyle.Fill;
             this.settings.Location = new System.Drawing.Point(3, 3);
             this.settings.Name = "settings";
-            this.settings.Size = new System.Drawing.Size(979, 636);
+            this.settings.Size = new System.Drawing.Size(979, 634);
             this.settings.TabIndex = 0;
             // 
             // buttonReloadActions
@@ -794,10 +782,17 @@ namespace EDDiscovery
             this.panelToolBar.Controls.Add(this.buttonExt3dmap);
             this.panelToolBar.Controls.Add(this.buttonReloadActions);
             this.panelToolBar.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panelToolBar.HiddenMarkerWidth = 0;
             this.panelToolBar.Location = new System.Drawing.Point(0, 24);
             this.panelToolBar.Name = "panelToolBar";
-            this.panelToolBar.Size = new System.Drawing.Size(993, 30);
+            this.panelToolBar.PinState = true;
+            this.panelToolBar.RolledUpHeight = 5;
+            this.panelToolBar.RollPixelStep = 5;
+            this.panelToolBar.RollUpDelay = 1000;
+            this.panelToolBar.Size = new System.Drawing.Size(993, 32);
             this.panelToolBar.TabIndex = 1;
+            this.panelToolBar.UnrolledHeight = 32;
+            this.panelToolBar.UnrollHoverDelay = 1000;
             this.panelToolBar.MouseDown += new System.Windows.Forms.MouseEventHandler(this.MouseDownCAPTION);
             // 
             // comboBoxCustomPopOut
@@ -812,7 +807,7 @@ namespace EDDiscovery
             this.comboBoxCustomPopOut.DropDownWidth = 150;
             this.comboBoxCustomPopOut.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.comboBoxCustomPopOut.ItemHeight = 13;
-            this.comboBoxCustomPopOut.Location = new System.Drawing.Point(324, 3);
+            this.comboBoxCustomPopOut.Location = new System.Drawing.Point(398, 5);
             this.comboBoxCustomPopOut.MouseOverBackgroundColor = System.Drawing.Color.Silver;
             this.comboBoxCustomPopOut.Name = "comboBoxCustomPopOut";
             this.comboBoxCustomPopOut.ScrollBarButtonColor = System.Drawing.Color.LightGray;
@@ -821,7 +816,7 @@ namespace EDDiscovery
             this.comboBoxCustomPopOut.SelectedIndex = -1;
             this.comboBoxCustomPopOut.SelectedItem = null;
             this.comboBoxCustomPopOut.SelectedValue = null;
-            this.comboBoxCustomPopOut.Size = new System.Drawing.Size(65, 24);
+            this.comboBoxCustomPopOut.Size = new System.Drawing.Size(65, 21);
             this.comboBoxCustomPopOut.TabIndex = 19;
             this.comboBoxCustomPopOut.Text = "comboBoxCustom1";
             this.comboBoxCustomPopOut.ValueMember = "";
@@ -848,7 +843,7 @@ namespace EDDiscovery
             this.comboBoxCommander.SelectedIndex = -1;
             this.comboBoxCommander.SelectedItem = null;
             this.comboBoxCommander.SelectedValue = null;
-            this.comboBoxCommander.Size = new System.Drawing.Size(149, 24);
+            this.comboBoxCommander.Size = new System.Drawing.Size(149, 21);
             this.comboBoxCommander.TabIndex = 3;
             this.comboBoxCommander.Text = "Cmdr";
             this.comboBoxCommander.ValueMember = "";
@@ -859,9 +854,9 @@ namespace EDDiscovery
             this.buttonExtEDSMSync.BorderColorScaling = 1.25F;
             this.buttonExtEDSMSync.ButtonColorScaling = 0.5F;
             this.buttonExtEDSMSync.ButtonDisabledScaling = 0.5F;
-            this.buttonExtEDSMSync.Location = new System.Drawing.Point(271, 3);
+            this.buttonExtEDSMSync.Location = new System.Drawing.Point(330, 4);
             this.buttonExtEDSMSync.Name = "buttonExtEDSMSync";
-            this.buttonExtEDSMSync.Size = new System.Drawing.Size(47, 23);
+            this.buttonExtEDSMSync.Size = new System.Drawing.Size(56, 24);
             this.buttonExtEDSMSync.TabIndex = 2;
             this.buttonExtEDSMSync.Text = "EDSM";
             this.buttonExtEDSMSync.UseVisualStyleBackColor = true;
@@ -873,10 +868,10 @@ namespace EDDiscovery
             this.buttonExtRefresh.BorderColorScaling = 1.25F;
             this.buttonExtRefresh.ButtonColorScaling = 0.5F;
             this.buttonExtRefresh.ButtonDisabledScaling = 0.5F;
-            this.buttonExtRefresh.Image = global::EDDiscovery.Properties.Resources.sellexplorationdata;
-            this.buttonExtRefresh.Location = new System.Drawing.Point(239, 3);
+            this.buttonExtRefresh.Image = global::EDDiscovery.Properties.Resources.refresh_blue18;
+            this.buttonExtRefresh.Location = new System.Drawing.Point(167, 3);
             this.buttonExtRefresh.Name = "buttonExtRefresh";
-            this.buttonExtRefresh.Size = new System.Drawing.Size(26, 23);
+            this.buttonExtRefresh.Size = new System.Drawing.Size(24, 24);
             this.buttonExtRefresh.TabIndex = 2;
             this.buttonExtRefresh.UseVisualStyleBackColor = false;
             this.buttonExtRefresh.Click += new System.EventHandler(this.buttonExtRefresh_Click);
@@ -887,11 +882,14 @@ namespace EDDiscovery
             this.buttonExt2dmap.BorderColorScaling = 1.25F;
             this.buttonExt2dmap.ButtonColorScaling = 0.5F;
             this.buttonExt2dmap.ButtonDisabledScaling = 0.5F;
-            this.buttonExt2dmap.Image = global::EDDiscovery.Properties.Resources.hyperspace;
+            this.buttonExt2dmap.Image = global::EDDiscovery.Properties.Resources.galaxy_gray;
+            this.buttonExt2dmap.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.buttonExt2dmap.Location = new System.Drawing.Point(210, 3);
             this.buttonExt2dmap.Name = "buttonExt2dmap";
-            this.buttonExt2dmap.Size = new System.Drawing.Size(23, 23);
+            this.buttonExt2dmap.Size = new System.Drawing.Size(48, 24);
             this.buttonExt2dmap.TabIndex = 2;
+            this.buttonExt2dmap.Text = "2D";
+            this.buttonExt2dmap.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.buttonExt2dmap.UseVisualStyleBackColor = false;
             this.buttonExt2dmap.Click += new System.EventHandler(this.buttonExt2dmap_Click);
             // 
@@ -901,13 +899,28 @@ namespace EDDiscovery
             this.buttonExt3dmap.BorderColorScaling = 1.25F;
             this.buttonExt3dmap.ButtonColorScaling = 0.5F;
             this.buttonExt3dmap.ButtonDisabledScaling = 0.5F;
-            this.buttonExt3dmap.Location = new System.Drawing.Point(167, 3);
+            this.buttonExt3dmap.Image = global::EDDiscovery.Properties.Resources.galaxy_gray;
+            this.buttonExt3dmap.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.buttonExt3dmap.Location = new System.Drawing.Point(264, 3);
             this.buttonExt3dmap.Name = "buttonExt3dmap";
-            this.buttonExt3dmap.Size = new System.Drawing.Size(25, 23);
+            this.buttonExt3dmap.Size = new System.Drawing.Size(48, 24);
             this.buttonExt3dmap.TabIndex = 2;
-            this.buttonExt3dmap.Text = "R";
+            this.buttonExt3dmap.Text = "3D";
+            this.buttonExt3dmap.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.buttonExt3dmap.UseVisualStyleBackColor = false;
             this.buttonExt3dmap.Click += new System.EventHandler(this.buttonExt3dmap_Click);
+            // 
+            // panel_eddiscovery
+            // 
+            this.panel_eddiscovery.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.panel_eddiscovery.BackColor = System.Drawing.SystemColors.Control;
+            this.panel_eddiscovery.BackgroundImage = global::EDDiscovery.Properties.Resources.eddiscovery_logo;
+            this.panel_eddiscovery.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.panel_eddiscovery.Location = new System.Drawing.Point(818, 1);
+            this.panel_eddiscovery.Name = "panel_eddiscovery";
+            this.panel_eddiscovery.Size = new System.Drawing.Size(101, 46);
+            this.panel_eddiscovery.TabIndex = 18;
+            this.panel_eddiscovery.Click += new System.EventHandler(this.paneleddiscovery_Click);
             // 
             // EDDiscoveryForm
             // 
@@ -928,12 +941,10 @@ namespace EDDiscovery
             this.Name = "EDDiscoveryForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "EDDiscovery";
-            this.Activated += new System.EventHandler(this.EDDiscoveryForm_Activated);
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.EDDiscoveryForm_FormClosing);
             this.Load += new System.EventHandler(this.EDDiscoveryForm_Load);
             this.Shown += new System.EventHandler(this.EDDiscoveryForm_Shown);
             this.ResizeEnd += new System.EventHandler(this.EDDiscoveryForm_ResizeEnd);
-            this.Layout += new System.Windows.Forms.LayoutEventHandler(this.EDDiscoveryForm_Layout);
             this.Resize += new System.EventHandler(this.EDDiscoveryForm_Resize);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
@@ -1026,7 +1037,7 @@ namespace EDDiscovery
         private System.Windows.Forms.ToolStripSeparator helpMenuSeparatorTop;
         private System.Windows.Forms.ToolStripSeparator helpMenuSeparatorBottom;
         private System.Windows.Forms.ToolStripMenuItem editLastActionPackToolStripMenuItem;
-        private System.Windows.Forms.Panel panelToolBar;
+        private ExtendedControls.RollUpPanel panelToolBar;
         private ExtendedControls.ComboBoxCustom comboBoxCommander;
         private ExtendedControls.ButtonExt buttonExt3dmap;
         private ExtendedControls.ButtonExt buttonExt2dmap;

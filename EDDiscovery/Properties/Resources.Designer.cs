@@ -883,6 +883,26 @@ namespace EDDiscovery.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap galaxy_gray {
+            get {
+                object obj = ResourceManager.GetObject("galaxy_gray", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap galaxy_white {
+            get {
+                object obj = ResourceManager.GetObject("galaxy_white", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Gas_giant_ammonia_based_life1 {
             get {
                 object obj = ResourceManager.GetObject("Gas_giant_ammonia_based_life1", resourceCulture);
@@ -1909,6 +1929,36 @@ namespace EDDiscovery.Properties {
         internal static System.Drawing.Bitmap RecordPressed {
             get {
                 object obj = ResourceManager.GetObject("RecordPressed", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap refresh_blue {
+            get {
+                object obj = ResourceManager.GetObject("refresh_blue", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap refresh_blue18 {
+            get {
+                object obj = ResourceManager.GetObject("refresh_blue18", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap refresh_blue22 {
+            get {
+                object obj = ResourceManager.GetObject("refresh_blue22", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

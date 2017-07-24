@@ -18,6 +18,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -32,6 +33,15 @@ namespace ExtendedControls
         public float ButtonColorScaling { get; set; } = 0.5F;
         public float BorderColorScaling { get; set; } = 1.25F;
         public float ButtonDisabledScaling { get; set; } = 0.5F;
+
+        public ImageAttributes DrawnImageAttributes = null;         // Image override (colour etc) for images using Image
+
+        public void SetDrawnBitmapRemapTable(ColorMap[] remap)
+        {
+            ImageAttributes ia = new ImageAttributes();
+            ia.SetRemapTable(remap, ColorAdjustType.Bitmap);
+            DrawnImageAttributes = ia;
+        }
 
         // Internal
 
@@ -87,7 +97,7 @@ namespace ExtendedControls
                 Rectangle buttonarea = ClientRectangle;
                 buttonarea.Inflate(-1, -1);                     // inside it.
 
-                //Console.WriteLine("Paint " + this.Name + " " + ClientRectangle.ToString());
+                //System.Diagnostics.Debug.WriteLine("Paint " + this.Name + " " + ClientRectangle.ToString() + " MD " + mousedown + " MO " + mouseover);
 
                 Color back;
                 Brush b;
@@ -106,6 +116,7 @@ namespace ExtendedControls
                     p = new Pen((mousedown || mouseover) ? FlatAppearance.BorderColor.Multiply(BorderColorScaling) : FlatAppearance.BorderColor);
                 }
 
+
                 pe.Graphics.DrawRectangle(p, border);
                 pe.Graphics.FillRectangle(b, buttonarea);
 
@@ -120,18 +131,25 @@ namespace ExtendedControls
 
                 if (Image != null)
                 {
-                    pe.Graphics.DrawImage(Image, new Rectangle(ClientRectangle.Width / 2 - Image.Width / 2, ClientRectangle.Height / 2 - Image.Height / 2, Image.Width, Image.Height),
-                                    0,0, Image.Width, Image.Height, GraphicsUnit.Pixel);
+                    if (DrawnImageAttributes != null)
+                    {
+                        //System.Diagnostics.Debug.WriteLine("ButtonExt " + this.Name + " Draw image with IA");
+                        pe.Graphics.DrawImage(Image, ControlHelpersStaticFunc.ImagePositionFromContentAlignment(ImageAlign, buttonarea, Image.Size),
+                                    0, 0, Image.Width, Image.Height, GraphicsUnit.Pixel, DrawnImageAttributes);
+                    }
+                    else
+                    {
+                        pe.Graphics.DrawImage(Image, ControlHelpersStaticFunc.ImagePositionFromContentAlignment(ImageAlign, buttonarea, Image.Size),
+                                    0, 0, Image.Width, Image.Height, GraphicsUnit.Pixel);
+                    }
                 }
-                else
-                {
-                    SizeF sz = pe.Graphics.MeasureString(this.Text, this.Font);
 
+                if ( Text != null && Text.Length > 0 )
+                {
                     Brush textb = new SolidBrush((Enabled) ? this.ForeColor : this.ForeColor.Multiply(0.5F));
 
-                    pe.Graphics.DrawString(this.Text, this.Font, textb,
-                        buttonarea.Left + (buttonarea.Width - sz.Width) / 2,
-                        buttonarea.Top + (buttonarea.Height - sz.Height) / 2);
+                    pe.Graphics.DrawString(this.Text, this.Font, textb, new RectangleF(buttonarea.Left,buttonarea.Top,buttonarea.Width,buttonarea.Height), 
+                    ControlHelpersStaticFunc.StringFormatFromContentAlignment(TextAlign));
 
                     textb.Dispose();
                 }
@@ -140,5 +158,6 @@ namespace ExtendedControls
                 b.Dispose();
             }
         }
+
     }
 }

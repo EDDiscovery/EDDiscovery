@@ -16,7 +16,7 @@ namespace DialogTest
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new TestForm());
+            Application.Run(new TestRollUpPanel());
         }
     }
 }

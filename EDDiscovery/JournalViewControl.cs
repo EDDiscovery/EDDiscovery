@@ -42,7 +42,6 @@ namespace EDDiscovery
         {
             discoveryform = ed;
             userControlJournalGrid.Init(ed,displaynumber);
-            userControlJournalGrid.ShowRefresh();
             userControlJournalGrid.OnPopOut += PopOut;
         }
 
@@ -56,11 +55,6 @@ namespace EDDiscovery
         public void SaveSettings()     // called by form when closing
         {
             userControlJournalGrid.Closing();
-        }
-
-        public void RefreshButton(bool state)
-        {
-            userControlJournalGrid.RefreshButton(state);
         }
 
         public void PopOut()

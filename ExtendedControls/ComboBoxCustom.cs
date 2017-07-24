@@ -246,7 +246,7 @@ namespace ExtendedControls
         private Point arrowpt1c, arrowpt2c, arrowpt3c;
         private bool isActivated = false;
         private bool mouseover = false;
-        private ComboBoxCustomDropdown _cbdropdown;
+        private ComboBoxCustomDropdown _customdropdown;
 
         // ForeColor = text, BackColor = control background
         public Color MouseOverBackgroundColor { get; set; } = Color.Silver;
@@ -280,6 +280,7 @@ namespace ExtendedControls
         public string DisplayMember { get { return _cbsystem.DisplayMember; } set { _cbsystem.DisplayMember = value; } }
         public object SelectedItem { get { return _cbsystem.SelectedItem; } set { _cbsystem.SelectedItem = value; } }
         public object SelectedValue { get { return _cbsystem.SelectedValue; } set { _cbsystem.SelectedValue = value; } }
+        public new System.Drawing.Size Size { get { return _cbsystem.Size; } set { _cbsystem.Size = value; base.Size = value; } }
 
         public event EventHandler SelectedIndexChanged;
 
@@ -290,6 +291,8 @@ namespace ExtendedControls
             this._cbsystem.Dock = DockStyle.Fill;
             this._cbsystem.SelectedIndexChanged += _cbsystem_SelectedIndexChanged;
             this._cbsystem.DropDownStyle = ComboBoxStyle.DropDownList;
+            this._cbsystem.MouseLeave += _cbsystem_MouseLeave;
+            this._cbsystem.MouseEnter += _cbsystem_MouseEnter;
             this._items = new ObjectCollection(this._cbsystem);
             this.Controls.Add(this._cbsystem);
         }
@@ -419,26 +422,47 @@ namespace ExtendedControls
             }
         }
 
-        protected override void OnMouseEnter(EventArgs eventargs)
+        private void _cbsystem_MouseEnter(object sender, EventArgs e)       // if cbsystem is active, fired.. pass onto our ME handler
         {
-            base.OnMouseEnter(eventargs);
-            mouseover = true;
-            if (this.FlatStyle != FlatStyle.System)
+            //System.Diagnostics.Debug.WriteLine("CB sys Mouse enter " + _cbsystem.Size + " "  + this.Size);
+            base.OnMouseEnter(e);
+        }
+
+        private void _cbsystem_MouseLeave(object sender, EventArgs e)       // if cbsystem is active, fired.. pass onto our ML handler.
+        {
+            //System.Diagnostics.Debug.WriteLine("CB sys Mouse leave");
+            base.OnMouseLeave(e);
+        }
+
+        protected override void OnMouseEnter(EventArgs eventargs)           // ours is active.  Fired when entered
+        {
+            //System.Diagnostics.Debug.WriteLine("CBC Enter , visible " + _cbsystem.Visible);
+            if (!_cbsystem.Visible)
+            {
+                base.OnMouseEnter(eventargs);
+                mouseover = true;
                 Invalidate();
+            }
         }
 
         protected override void OnMouseLeave(EventArgs eventargs)
         {
-            base.OnMouseEnter(eventargs);
-            mouseover = false;
-            if (this.FlatStyle != FlatStyle.System)
+            //System.Diagnostics.Debug.WriteLine("CBC Leave, activated" + isActivated + " visible " + _cbsystem.Visible);
+
+            if (!_cbsystem.Visible)
+            {
+                if (isActivated == false)
+                    base.OnMouseLeave(eventargs);
+
+                mouseover = false;
                 Invalidate();
+            }
         }
 
         protected override void OnKeyDown(KeyEventArgs e)
         {
             base.OnKeyDown(e);
-            //Console.WriteLine("Key press " + e.KeyCode + " Focus " + Focused );
+            //System.Diagnostics.Debug.WriteLine("Key press " + e.KeyCode + " Focus " + Focused );
 
             if (this.FlatStyle != FlatStyle.System)
             {
@@ -483,7 +507,7 @@ namespace ExtendedControls
             if (Items.Count == 0 || !Enabled)
                 return;
 
-            _cbdropdown = new ComboBoxCustomDropdown(this.Name);
+            _customdropdown = new ComboBoxCustomDropdown(this.Name);
 
             int fittableitems = this.DropDownHeight / this.ItemHeight;
 
@@ -495,25 +519,25 @@ namespace ExtendedControls
             if (fittableitems > this.Items.Count())                             // no point doing more than we have..
                 fittableitems = this.Items.Count();
 
-            _cbdropdown.Size = new Size(this.DropDownWidth > 9 ? this.DropDownWidth : this.Width, fittableitems * this.ItemHeight + 4);
+            _customdropdown.Size = new Size(this.DropDownWidth > 9 ? this.DropDownWidth : this.Width, fittableitems * this.ItemHeight + 4);
 
-            _cbdropdown.SelectionBackColor = this.DropDownBackgroundColor;
-            _cbdropdown.MouseOverBackgroundColor = this.MouseOverBackgroundColor;
-            _cbdropdown.ForeColor = this.ForeColor;
-            _cbdropdown.BackColor = this.BorderColor;
-            _cbdropdown.BorderColor = this.BorderColor;
-            _cbdropdown.Items = this.Items.ToList();
-            _cbdropdown.ItemHeight = this.ItemHeight;
-            _cbdropdown.SelectedIndex = this.SelectedIndex;
-            _cbdropdown.FlatStyle = this.FlatStyle;
-            _cbdropdown.Font = this.Font;
-            _cbdropdown.ScrollBarColor = this.ScrollBarColor;
-            _cbdropdown.ScrollBarButtonColor = this.ScrollBarButtonColor;
+            _customdropdown.SelectionBackColor = this.DropDownBackgroundColor;
+            _customdropdown.MouseOverBackgroundColor = this.MouseOverBackgroundColor;
+            _customdropdown.ForeColor = this.ForeColor;
+            _customdropdown.BackColor = this.BorderColor;
+            _customdropdown.BorderColor = this.BorderColor;
+            _customdropdown.Items = this.Items.ToList();
+            _customdropdown.ItemHeight = this.ItemHeight;
+            _customdropdown.SelectedIndex = this.SelectedIndex;
+            _customdropdown.FlatStyle = this.FlatStyle;
+            _customdropdown.Font = this.Font;
+            _customdropdown.ScrollBarColor = this.ScrollBarColor;
+            _customdropdown.ScrollBarButtonColor = this.ScrollBarButtonColor;
 
-            _cbdropdown.DropDown += _cbdropdown_DropDown;
-            _cbdropdown.SelectedIndexChanged += _cbdropdown_SelectedIndexChanged;
-            _cbdropdown.OtherKeyPressed += _cbdropdown_OtherKeyPressed;
-            _cbdropdown.Deactivate += _cbdropdown_Deactivate;
+            _customdropdown.DropDown += _customdropdown_DropDown;
+            _customdropdown.SelectedIndexChanged += _customdropdown_SelectedIndexChanged;
+            _customdropdown.OtherKeyPressed += _customdropdown_OtherKeyPressed;
+            _customdropdown.Deactivate += _customdropdown_Deactivate;
 
             Control parent = this.Parent;
             while (parent != null && !(parent is Form))
@@ -521,38 +545,38 @@ namespace ExtendedControls
                 parent = parent.Parent;
             }
 
-            _cbdropdown.Show(parent);
+            _customdropdown.Show(parent);
              
             // enforce size.. some reason SHow is scaling it probably due to autosizing.. can't turn off. force back
-            _cbdropdown.Size = new Size(this.DropDownWidth > 9 ? this.DropDownWidth : this.Width, fittableitems * this.ItemHeight + 4);
+            _customdropdown.Size = new Size(this.DropDownWidth > 9 ? this.DropDownWidth : this.Width, fittableitems * this.ItemHeight + 4);
         }
 
-        private void _cbdropdown_Deactivate(object sender, EventArgs e)
+        private void _customdropdown_Deactivate(object sender, EventArgs e)
         {
             isActivated = false;
             this.Invalidate(true);
         }
 
-        private void _cbdropdown_DropDown(object sender, EventArgs e)
+        private void _customdropdown_DropDown(object sender, EventArgs e)
         {
             Point location = this.PointToScreen(new Point(0, 0));
 
             int botscr = Screen.FromControl(this).WorkingArea.Height;
-            int botcontrol = location.Y + this.Height + _cbdropdown.Height;
+            int botcontrol = location.Y + this.Height + _customdropdown.Height;
 
             if (botcontrol < botscr)
-                _cbdropdown.Location = new Point(location.X, location.Y + this.Height);
+                _customdropdown.Location = new Point(location.X, location.Y + this.Height);
             else
-                _cbdropdown.Location = new Point(location.X, location.Y -_cbdropdown.Height);
+                _customdropdown.Location = new Point(location.X, location.Y -_customdropdown.Height);
 
             isActivated = true;
             this.Invalidate(true);
         }
 
-        private void _cbdropdown_SelectedIndexChanged(object sender, EventArgs e)
+        private void _customdropdown_SelectedIndexChanged(object sender, EventArgs e)
         {
-            int selectedindex = _cbdropdown.SelectedIndex;
-            _cbdropdown.Close();
+            int selectedindex = _customdropdown.SelectedIndex;
+            _customdropdown.Close();
             isActivated = false;
             this.Invalidate(true);
             if (_cbsystem.SelectedIndex != selectedindex)
@@ -560,13 +584,15 @@ namespace ExtendedControls
             else
                 _cbsystem_SelectedIndexChanged(sender, e);      // otherwise, fire it off manually.. this is what the system box does, if the user clicks on it, fires it off
             Focus();
+
+            base.OnMouseLeave(e);    // same as mouse 
         }
 
-        private void _cbdropdown_OtherKeyPressed(object sender, KeyEventArgs e)
+        private void _customdropdown_OtherKeyPressed(object sender, KeyEventArgs e)
         {
             if ( e.KeyCode == Keys.Escape )
             {
-                _cbdropdown.Close();
+                _customdropdown.Close();
                 isActivated = false;
                 this.Invalidate(true);
             }
@@ -581,6 +607,8 @@ namespace ExtendedControls
             {
                 SelectedIndexChanged(this, e);
             }
+
+            base.OnMouseLeave(e);    // same as mouse 
         }
     }
 }
