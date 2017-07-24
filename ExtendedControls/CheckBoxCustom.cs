@@ -17,6 +17,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
+using System.Drawing.Imaging;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -33,7 +34,15 @@ namespace ExtendedControls
         public float FontNerfReduction { get; set; } = 0.5F;
         public int TickBoxReductionSize { get; set; } = 10;          // no of pixels smaller than the height to make the tick box
 
-        public Image ImageUnchecked = null;                        // set both this and Image to draw a image instead of the check. Must set FlatSytle popup and Appearance=normal
+        public Image ImageUnchecked = null;                         // set both this and Image to draw a image instead of the check. Must set FlatSytle popup and Appearance=normal
+        public ImageAttributes DrawnImageAttributes = null;         // Image override (colour etc) for images using Image/ImageUnchecked 
+
+        public void SetDrawnBitmapRemapTable(ColorMap[] remap)
+        {
+            ImageAttributes ia = new ImageAttributes();
+            ia.SetRemapTable(remap, ColorAdjustType.Bitmap);
+            DrawnImageAttributes = ia;
+        }
 
         public CheckBoxCustom() : base()
         {
@@ -119,9 +128,11 @@ namespace ExtendedControls
                 if (Image != null && ImageUnchecked != null)
                 {
                     Image image = Checked ? Image : ImageUnchecked;
-                    //                    e.Graphics.DrawImageUnscaled(  , 0, 0);
-                    e.Graphics.DrawImage(image, new Rectangle(0, 0, image.Width, image.Height), 0, 0, image.Width, image.Height, GraphicsUnit.Pixel);
 
+                    if (DrawnImageAttributes != null)
+                        e.Graphics.DrawImage(image, new Rectangle(0, 0, image.Width, image.Height), 0, 0, image.Width, image.Height, GraphicsUnit.Pixel,DrawnImageAttributes);
+                    else
+                        e.Graphics.DrawImage(image, new Rectangle(0, 0, image.Width, image.Height), 0, 0, image.Width, image.Height, GraphicsUnit.Pixel);
                 }
                 else
                 { 

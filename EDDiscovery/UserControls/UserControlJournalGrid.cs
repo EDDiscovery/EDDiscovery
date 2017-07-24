@@ -81,8 +81,6 @@ namespace EDDiscovery.UserControls
             discoveryform.OnHistoryChange += Display;
             discoveryform.OnNewEntry += AddNewEntry;
 
-            buttonRefresh.Visible = false;
-
             string filter = SQLiteDBClass.GetSettingString(DbFieldFilter, "");
             if (filter.Length > 0)
                 fieldfilter.FromJSON(filter);        // load filter
@@ -97,11 +95,6 @@ namespace EDDiscovery.UserControls
         public void NoPopOutIcon()
         {
             drawnPanelPopOut.Visible = false;
-        }
-
-        public void ShowRefresh()
-        {
-            buttonRefresh.Visible = true;
         }
 
         public override void LoadLayout()
@@ -210,11 +203,6 @@ namespace EDDiscovery.UserControls
 
         #region Buttons
 
-        public void RefreshButton(bool state)
-        {
-            buttonRefresh.Enabled = state;
-        }
-
         private void buttonFilter_Click(object sender, EventArgs e)
         {
             Button b = sender as Button;
@@ -225,12 +213,6 @@ namespace EDDiscovery.UserControls
         private void EventFilterChanged(object sender, EventArgs e)
         {
             Display(current_historylist);
-        }
-
-        private void buttonRefresh_Click(object sender, EventArgs e)
-        {
-            discoveryform.LogLine("Refresh History.");
-            discoveryform.RefreshHistoryAsync(checkedsm: true);
         }
 
         private void textBoxFilter_TextChanged(object sender, EventArgs e)

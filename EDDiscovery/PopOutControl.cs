@@ -241,18 +241,5 @@ namespace EDDiscovery.Forms
                 _discoveryForm.ActionRun("onPopUp", "UserUIEvent", null, new Conditions.ConditionVariables(new string[] { "PopOutName", refname , "PopOutTitle", windowtitle, "PopOutIndex", numopened.ToString()} ));
             }
         }
-
-        public void SetRefreshState(bool state)
-        {
-            foreach (UserControlCommonBase uc in usercontrolsforms.GetListOfControls(typeof(UserControlJournalGrid)))
-                ((UserControlJournalGrid)uc).RefreshButton(state);      // and the journal views need it
-        }
-
-        public void TBDREMOVEDUpdateNoteJID(long jid, string text)
-        {
-//            foreach (UserControlCommonBase uc in usercontrolsforms.GetListOfControls(typeof(UserControlTravelGrid)))
-  //              ((UserControlTravelGrid)uc).UpdateNoteJID(jid, text);
-        }
-
     }
 }

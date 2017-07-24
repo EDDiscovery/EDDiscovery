@@ -63,7 +63,6 @@ namespace EDDiscovery.UserControls
             this.panelJournalIcon = new System.Windows.Forms.Panel();
             this.drawnPanelPopOut = new ExtendedControls.DrawnPanel();
             this.buttonField = new ExtendedControls.ButtonExt();
-            this.buttonRefresh = new ExtendedControls.ButtonExt();
             this.textBoxFilter = new ExtendedControls.TextBoxBorder();
             this.label1 = new System.Windows.Forms.Label();
             this.buttonFilter = new ExtendedControls.ButtonExt();
@@ -232,7 +231,6 @@ namespace EDDiscovery.UserControls
             this.panel1.Controls.Add(this.panelJournalIcon);
             this.panel1.Controls.Add(this.drawnPanelPopOut);
             this.panel1.Controls.Add(this.buttonField);
-            this.panel1.Controls.Add(this.buttonRefresh);
             this.panel1.Controls.Add(this.textBoxFilter);
             this.panel1.Controls.Add(this.label1);
             this.panel1.Controls.Add(this.buttonFilter);
@@ -296,20 +294,6 @@ namespace EDDiscovery.UserControls
             this.buttonField.UseVisualStyleBackColor = true;
             this.buttonField.Click += new System.EventHandler(this.buttonField_Click);
             // 
-            // buttonRefresh
-            // 
-            this.buttonRefresh.BorderColorScaling = 1.25F;
-            this.buttonRefresh.ButtonColorScaling = 0.5F;
-            this.buttonRefresh.ButtonDisabledScaling = 0.5F;
-            this.buttonRefresh.Location = new System.Drawing.Point(636, 3);
-            this.buttonRefresh.Name = "buttonRefresh";
-            this.buttonRefresh.Size = new System.Drawing.Size(75, 23);
-            this.buttonRefresh.TabIndex = 3;
-            this.buttonRefresh.Text = "Refresh";
-            this.toolTip1.SetToolTip(this.buttonRefresh, "Rescan the journal files and refresh the display");
-            this.buttonRefresh.UseVisualStyleBackColor = true;
-            this.buttonRefresh.Click += new System.EventHandler(this.buttonRefresh_Click);
-            // 
             // textBoxFilter
             // 
             this.textBoxFilter.BorderColor = System.Drawing.Color.Transparent;
@@ -365,7 +349,7 @@ namespace EDDiscovery.UserControls
             this.comboBoxJournalWindow.SelectedIndex = -1;
             this.comboBoxJournalWindow.SelectedItem = null;
             this.comboBoxJournalWindow.SelectedValue = null;
-            this.comboBoxJournalWindow.Size = new System.Drawing.Size(100, 22);
+            this.comboBoxJournalWindow.Size = new System.Drawing.Size(100, 21);
             this.comboBoxJournalWindow.TabIndex = 0;
             this.toolTip1.SetToolTip(this.comboBoxJournalWindow, "Select the entries selected by age");
             this.comboBoxJournalWindow.ValueMember = "";
@@ -410,7 +394,6 @@ namespace EDDiscovery.UserControls
         private ExtendedControls.VScrollBarCustom vScrollBarCustom1;
         private System.Windows.Forms.DataGridView dataGridViewJournal;
         private System.Windows.Forms.Panel panel1;
-        private ExtendedControls.ButtonExt buttonRefresh;
         private ExtendedControls.TextBoxBorder textBoxFilter;
         private System.Windows.Forms.Label label1;
         private ExtendedControls.ButtonExt buttonFilter;
