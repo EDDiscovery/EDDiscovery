@@ -127,17 +127,17 @@
   <data name="Calendar" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Calendar.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="pindown" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\pindown.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="pindownwhite" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\pindownwhite.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="pindownred" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\pindownred.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="pindownwhite2" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\pindownwhite2.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="pinup" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\pinup.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="pinupwhite" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\pinupwhite.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="pinupred" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\pinupred.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="pinupwhite2" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\pinupwhite2.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="popout" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\popout.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>

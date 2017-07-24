@@ -197,5 +197,17 @@
   <ItemGroup>
     <None Include="Resources\pinupred.png" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\pinupwhite.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\pindownwhite.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\pindownwhite2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\pinupwhite2.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

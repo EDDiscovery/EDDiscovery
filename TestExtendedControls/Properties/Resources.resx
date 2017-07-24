@@ -127,4 +127,19 @@
   <data name="edsm32x32" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\edsm32x32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="galaxy" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\galaxy.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="galaxy_red" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\galaxy_red.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="galaxy_white" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\galaxy_white.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="galaxy_black" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\galaxy_black.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="galaxy_gray" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\galaxy_gray.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
 </root>

@@ -444,7 +444,6 @@ namespace EDDiscovery
         private void Controller_RefreshStarting()
         {
             RefreshButton(false);
-            journalViewControl1.RefreshButton(false);
             actioncontroller.ActionRun("onRefreshStart", "ProgramEvent");
         }
 
@@ -458,7 +457,6 @@ namespace EDDiscovery
         private void Controller_RefreshComplete()
         {
             RefreshButton(true);
-            journalViewControl1.RefreshButton(true);
             actioncontroller.ActionRunOnRefresh();
 
             if (!Capi.IsCommanderLoggedin(EDCommander.Current.Name))
@@ -1341,7 +1339,6 @@ namespace EDDiscovery
         public void RefreshButton(bool state)
         {
             buttonExtRefresh.Enabled = state;
-            PopOuts.SetRefreshState(state);
         }
 
         private void buttonExtRefresh_Click(object sender, EventArgs e)

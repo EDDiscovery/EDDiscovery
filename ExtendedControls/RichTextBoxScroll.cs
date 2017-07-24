@@ -285,7 +285,7 @@ namespace ExtendedControls
 
         private void RichTextBoxScroll_Resize(object sender, EventArgs e)
         {
-            System.Diagnostics.Debug.WriteLine("Resize" + Size);
+            //System.Diagnostics.Debug.WriteLine("Resize" + Size);
         }
     }
 }

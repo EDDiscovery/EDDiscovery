@@ -129,6 +129,24 @@
       <Name>ExtendedControls</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\galaxycolour.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\galaxy.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\galaxy_white.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\galaxy_gray.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\galaxy_red.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\galaxy_black.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
