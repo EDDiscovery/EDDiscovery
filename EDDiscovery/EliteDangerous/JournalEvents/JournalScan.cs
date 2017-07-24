@@ -856,10 +856,12 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
                         break;
                 }
 
-                int val = (int)PlanetValue(kValue, nMassEM.HasValue ? nMassEM.Value : 1.0);
+                double mass = nMassEM.HasValue ? nMassEM.Value : 1.0;       // some old entries don't have mass, so just presume 1
+
+                int val = (int)PlanetValue(kValue, mass);
                 if (Terraformable || PlanetTypeID == EDPlanet.Earthlike_body)
                 {
-                    val += (int)PlanetValue(kBonus, nMassEM.Value);
+                    val += (int)PlanetValue(kBonus, mass);
                 }
 
                 return val;
