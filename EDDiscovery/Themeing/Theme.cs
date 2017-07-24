@@ -769,8 +769,6 @@ namespace EDDiscovery
                 ButtonExt ctrl = (ButtonExt)myControl;
                 ctrl.ForeColor = currentsettings.colors[Settings.CI.button_text];
 
-                //if (ctrl.Image != null) System.Diagnostics.Debug.WriteLine("iMAGE IN " + ctrl.Name);
-
                 if (currentsettings.buttonstyle.Equals(ButtonStyles[0])) // system
                 {
                     ctrl.FlatStyle = (ctrl.Image != null) ? FlatStyle.Standard : FlatStyle.System;
@@ -778,6 +776,15 @@ namespace EDDiscovery
                 }
                 else
                 {
+                    if (ctrl.Image != null)
+                    {
+                        //System.Diagnostics.Debug.WriteLine("Theme Image in " + ctrl.Name + " Map white to " + ctrl.ForeColor);
+                        System.Drawing.Imaging.ColorMap colormap = new System.Drawing.Imaging.ColorMap();       // any drawn panel with drawn images    
+                        colormap.OldColor = Color.FromArgb(134, 134, 134);                                        // gray is defined as the forecolour to use in system mode
+                        colormap.NewColor = ctrl.ForeColor;
+                        ctrl.SetDrawnBitmapRemapTable(new System.Drawing.Imaging.ColorMap[] { colormap });
+                    }
+
                     ctrl.BackColor = (ctrl.Image != null) ? currentsettings.colors[Settings.CI.form] : currentsettings.colors[Settings.CI.button_back];
                     ctrl.FlatAppearance.BorderColor = (ctrl.Image != null) ? currentsettings.colors[Settings.CI.form] : currentsettings.colors[Settings.CI.button_border];
                     ctrl.FlatAppearance.BorderSize = 1;
@@ -914,21 +921,36 @@ namespace EDDiscovery
 
                 if (ctrl.Appearance != Appearance.Button)          // NOT Button
                 {
-                    if (currentsettings.buttonstyle.Equals(ButtonStyles[0])) // system
-                        ctrl.FlatStyle = FlatStyle.System;
-                    else if (currentsettings.buttonstyle.Equals(ButtonStyles[1])) // flat
-                        ctrl.FlatStyle = FlatStyle.Flat;
-                    else
-                        ctrl.FlatStyle = FlatStyle.Popup;
-
                     ctrl.BackColor = GroupBoxOverride(parent, currentsettings.colors[Settings.CI.form]);
                     ctrl.ForeColor = currentsettings.colors[Settings.CI.checkbox];
                     ctrl.CheckBoxColor = currentsettings.colors[Settings.CI.checkbox];
                     ctrl.CheckBoxInnerColor = currentsettings.colors[Settings.CI.checkbox].Multiply(1.5F);
-                    ctrl.CheckColor = currentsettings.colors[Settings.CI.checkbox_tick];
                     ctrl.MouseOverColor = currentsettings.colors[Settings.CI.checkbox].Multiply(1.4F);
                     ctrl.TickBoxReductionSize = (fnt.SizeInPoints > 10) ? 10 : 6;
+                    ctrl.CheckColor = currentsettings.colors[Settings.CI.checkbox_tick];
                     ctrl.Font = fnt;
+
+                    if (ctrl.Image == null)       // only for unimage ones
+                    {
+                        if (currentsettings.buttonstyle.Equals(ButtonStyles[0])) // system
+                            ctrl.FlatStyle = FlatStyle.System;
+                        else if (currentsettings.buttonstyle.Equals(ButtonStyles[1])) // flat
+                            ctrl.FlatStyle = FlatStyle.Flat;
+                        else
+                            ctrl.FlatStyle = FlatStyle.Popup;
+                    }
+                    else
+                    {
+                        System.Drawing.Imaging.ColorMap colormap = new System.Drawing.Imaging.ColorMap();       // any drawn panel with drawn images    
+                        colormap.OldColor = Color.White;                                                        // white is defined as the forecolour
+                        colormap.NewColor = ctrl.ForeColor;
+                        System.Drawing.Imaging.ColorMap colormap2 = new System.Drawing.Imaging.ColorMap();
+                        colormap2.OldColor = Color.FromArgb(222,222,222);                                                  
+                        colormap2.NewColor = ctrl.ForeColor.Multiply(0.85F);
+                        ctrl.SetDrawnBitmapRemapTable(new System.Drawing.Imaging.ColorMap[] { colormap , colormap2  });
+                        //System.Diagnostics.Debug.WriteLine("Recoloured" + ctrl.Name +" of " + ctrl.GetType().Name + " " + colormap.OldColor + ">" + colormap.NewColor);
+                    }
+
                 }
                 else if ( ctrl.FlatStyle == FlatStyle.Flat )           // BUTTON and FLAT
                 {
@@ -1072,9 +1094,9 @@ namespace EDDiscovery
             }
             else if ( myControl is ToolStrip )
             {
-                foreach( ToolStripItem i in ((ToolStrip)myControl).Items)   // make sure any buttons with text only have the button back
+                foreach( ToolStripItem i in ((ToolStrip)myControl).Items)   // make sure any buttons have the button back colour set
                 {
-                    if (i is ToolStripButton )//&& i.DisplayStyle != ToolStripItemDisplayStyle.Image)
+                    if (i is ToolStripButton )
                     {           // theme the back colour, this is the way its done.. not via the tool strip renderer
                         i.BackColor = currentsettings.colors[Settings.CI.button_back];
                     }
