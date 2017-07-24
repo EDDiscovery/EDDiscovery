@@ -855,11 +855,13 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
                         if (Terraformable) { kBonus = 223971; }
                         break;
                 }
-                int val = (int)PlanetValue(kValue, nMassEM.Value);
+
+                int val = (int)PlanetValue(kValue, nMassEM.HasValue ? nMassEM.Value : 1.0);
                 if (Terraformable || PlanetTypeID == EDPlanet.Earthlike_body)
                 {
                     val += (int)PlanetValue(kBonus, nMassEM.Value);
                 }
+
                 return val;
             }
 
