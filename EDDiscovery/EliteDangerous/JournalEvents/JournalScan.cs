@@ -98,6 +98,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
         public EDPlanet PlanetTypeID { get; }                       // planet class -> ID
         public bool? nTidalLock { get; set; }                       // direct
         public string TerraformState { get; set; }                  // direct, can be empty or a string
+        public bool Terraformable { get { return TerraformState != null && TerraformState.ToLower().Equals("terraformable"); } }
         public string Atmosphere { get; set; }                      // direct from journal, if not there or blank, tries AtmosphereType (Earthlikes)
         public EDAtmosphereType AtmosphereID { get; }               // Atmosphere -> ID (Ammonia, Carbon etc)
         public EDAtmosphereProperty AtmosphereProperty;             // Atomsphere -> Property (None, Rich, Thick , Thin, Hot)
@@ -389,7 +390,7 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             if (nTidalLock.HasValue && nTidalLock.Value)
                 scanText.Append("Tidally locked\n");
 
-            if (TerraformState != null && TerraformState == "Terraformable")
+            if (Terraformable)
                 scanText.Append("Candidate for terraforming\n");
 
             if (HasRings)
@@ -785,68 +786,13 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
             if (EventTimeUTC < new DateTime(2017, 4, 11, 12, 0, 0, 0, DateTimeKind.Utc))
                 return EstimatedValueED22();
 
-            //int low;
-            //int high;
+            double kValue;
+            double kBonus = 0;
 
             if (IsStar)
             {
                 switch (StarTypeID)      // http://elite-dangerous.wikia.com/wiki/Explorer
                 {
-                    case EDStar.O:
-                        return 6135;
-
-                    case EDStar.B:
-                        return 3012;
-
-                    case EDStar.A:
-                        return 2949;
-
-                    case EDStar.F:
-                        return 2932;
-
-                    case EDStar.G:
-                        return 2919;
-
-                    case EDStar.K:
-                        return 2916;
-                    case EDStar.M:
-                        return 2903;
-
-                    // dwarfs
-                    case EDStar.L:
-                        return 2889;
-                    case EDStar.T:
-                        return 2895;
-                    case EDStar.Y:
-                        return 2881;
-
-                    // proto stars
-                    case EDStar.AeBe:    // Herbig
-                        return 2931;
-                    case EDStar.TTS:
-                        return 2000;  //?
-
-                    // wolf rayet
-                    case EDStar.W:
-                    case EDStar.WN:
-                    case EDStar.WNC:
-                    case EDStar.WC:
-                    case EDStar.WO:
-                        return 2931;
-
-                    // Carbon
-                    case EDStar.CS:
-                    case EDStar.C:
-                    case EDStar.CN:
-                    case EDStar.CJ:
-                    case EDStar.CHd:
-                        return 2930;
-
-                    case EDStar.MS: //seen in log
-                    case EDStar.S:   // seen in log
-                        return 2000;
-
-
                     // white dwarf
                     case EDStar.D:
                     case EDStar.DA:
@@ -863,113 +809,71 @@ namespace EDDiscovery.EliteDangerous.JournalEvents
                     case EDStar.DC:
                     case EDStar.DCV:
                     case EDStar.DX:
-                        return 34294;
+                        kValue = 33737;
+                        break;
 
                     case EDStar.N:
-                        return 54782;
-
                     case EDStar.H:
-                        return 60589;
+                        kValue = 54309;
+                        break;
 
-                    case EDStar.X:
-                        return 2000; //?
-
-                    case EDStar.A_BlueWhiteSuperGiant:
-                    case EDStar.F_WhiteSuperGiant:
-                    case EDStar.M_RedSuperGiant:
-                    case EDStar.M_RedGiant:
-                    case EDStar.K_OrangeGiant:
-                        return 3122;
-
-                    case EDStar.RoguePlanet:
-                        return 2000; //?
                     default:
-                        return 2000;
+                        kValue = 2880;
+                        break;
                 }
+                return (int)StarValue(kValue, nStellarMass.Value);
             }
             else   // Planet
             {
                 switch (PlanetTypeID)      // http://elite-dangerous.wikia.com/wiki/Explorer
                 {
-                    case EDPlanet.Icy_body:
-                        return 1246; // 0.04
-
-                    case EDPlanet.Rocky_ice_body:
-                        return 928; // 0.04
-
-                    case EDPlanet.Rocky_body:
-                        if (TerraformState != null && TerraformState.ToLower().Equals("terraformable"))
-                        {
-                            return 181104;
-                        }
-                        else
-                        {
-                            return 928; // 0.04
-                        }
+                    
                     case EDPlanet.Metal_rich_body:
-                        return 65045; // 0.51 EM
+                        kValue = 52292;
+                        break;
                     case EDPlanet.High_metal_content_body:
-                        if (TerraformState != null && TerraformState.ToLower().Equals("terraformable"))
-                        {
-                            return 412249;
-                        }
-                        else
-                        {
-                            return 34310; // 0.41
-                        }
-
-                    case EDPlanet.Earthlike_body:
-                        return 627885; // 0.47 EM
-
-                    case EDPlanet.Water_world:
-                        if (TerraformState != null && TerraformState.ToLower().Equals("terraformable"))
-                            return 694971;
-                        else
-                            return 301410; // (0.82 EM)
-
-                    case EDPlanet.Ammonia_world:
-                        return 320203; // (0.41 EM)
-
-                    case EDPlanet.Sudarsky_class_I_gas_giant:
-                        return 7013;  // 62.93 EM
-
                     case EDPlanet.Sudarsky_class_II_gas_giant:
-                        return 53663;  // 260.84 EM
-
-                    case EDPlanet.Sudarsky_class_III_gas_giant:
-                        return 2693; // 990.92 EM
-
-                    case EDPlanet.Sudarsky_class_IV_gas_giant:
-                        return 2799; // 3319 em
-
-                    case EDPlanet.Sudarsky_class_V_gas_giant:
-                        return 2761;
-
-
-
-                    case EDPlanet.Water_giant:
-                        return 1824;
-
-                    case EDPlanet.Water_giant_with_life:  // ?
-                        return 2000;
-                    case EDPlanet.Gas_giant_with_water_based_life:
-                        return 2314;
-
-                    case EDPlanet.Gas_giant_with_ammonia_based_life:
-                        return 1721;
-
-                    case EDPlanet.Helium_rich_gas_giant:
-                    case EDPlanet.Helium_gas_giant:
-                        return 2095;
-
+                        kValue = 23168;
+                        if (Terraformable) { kBonus = 241607; }
+                        break;
+                    case EDPlanet.Earthlike_body:
+                        kValue = 155581;
+                        kBonus = 279088;
+                        break;
+                    case EDPlanet.Water_world:
+                        kValue = 155581;
+                        if (Terraformable) { kBonus = 279088; }
+                        break;
+                    case EDPlanet.Ammonia_world:
+                        kValue = 232619;
+                        break;
+                    case EDPlanet.Sudarsky_class_I_gas_giant:
+                        kValue = 3974;
+                        break;
                     default:
-                        return 2000;
+                        kValue = 720;
+                        if (Terraformable) { kBonus = 223971; }
+                        break;
                 }
-
+                int val = (int)PlanetValue(kValue, nMassEM.Value);
+                if (Terraformable || PlanetTypeID == EDPlanet.Earthlike_body)
+                {
+                    val += (int)PlanetValue(kBonus, nMassEM.Value);
+                }
+                return val;
             }
 
         }
 
+        private double StarValue(double k, double m)
+        {
+            return k + (m * k / 66.25);
+        }
+
+        private double PlanetValue(double k, double m)
+        {
+            return k + (3 * k * Math.Pow(m, 0.199977) / 5.3);
+        }
 
         public int EstimatedValueED22()
         {
