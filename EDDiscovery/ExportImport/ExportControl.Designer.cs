@@ -80,19 +80,19 @@ namespace EDDiscovery.Export
             this.groupBoxCustom1 = new ExtendedControls.GroupBoxCustom();
             this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
             this.txtExportVisited = new ExtendedControls.AutoCompleteTextBox();
-            this.buttonExportOpenFolder = new ExtendedControls.ButtonExt();
             this.btnExportTravel = new ExtendedControls.ButtonExt();
-            this.buttonExportToFilteredSystems = new ExtendedControls.ButtonExt();
             this.buttonExportToGalmap = new ExtendedControls.ButtonExt();
+            this.buttonExportToFilteredSystems = new ExtendedControls.ButtonExt();
+            this.buttonExportOpenFolder = new ExtendedControls.ButtonExt();
+            this.txtsphereRadius = new ExtendedControls.TextBoxBorder();
+            this.labelExt8 = new System.Windows.Forms.Label();
+            this.labelExt9 = new System.Windows.Forms.Label();
+            this.btnSphereSystems = new ExtendedControls.ButtonExt();
             this.tableLayoutPanel5 = new System.Windows.Forms.TableLayoutPanel();
             this.buttonImport = new ExtendedControls.ButtonExt();
             this.buttonImportHelp = new ExtendedControls.ButtonExt();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.selectImportFileDialog = new System.Windows.Forms.OpenFileDialog();
-            this.btnSphereSystems = new ExtendedControls.ButtonExt();
-            this.txtsphereRadius = new ExtendedControls.TextBoxBorder();
-            this.labelExt8 = new System.Windows.Forms.Label();
-            this.labelExt9 = new System.Windows.Forms.Label();
             this.tableLayoutPanel1.SuspendLayout();
             this.groupBoxCustom2.SuspendLayout();
             this.tableLayoutPanel4.SuspendLayout();
@@ -140,9 +140,9 @@ namespace EDDiscovery.Export
             this.groupBoxCustom2.BorderColorScaling = 0.5F;
             this.groupBoxCustom2.Controls.Add(this.tableLayoutPanel4);
             this.groupBoxCustom2.FillClientAreaWithAlternateColor = false;
-            this.groupBoxCustom2.Location = new System.Drawing.Point(3, 313);
+            this.groupBoxCustom2.Location = new System.Drawing.Point(3, 332);
             this.groupBoxCustom2.Name = "groupBoxCustom2";
-            this.groupBoxCustom2.Size = new System.Drawing.Size(475, 98);
+            this.groupBoxCustom2.Size = new System.Drawing.Size(475, 79);
             this.groupBoxCustom2.TabIndex = 12;
             this.groupBoxCustom2.TabStop = false;
             this.groupBoxCustom2.Text = "History Import";
@@ -217,7 +217,7 @@ namespace EDDiscovery.Export
             this.comboBoxCommander.SelectedIndex = -1;
             this.comboBoxCommander.SelectedItem = null;
             this.comboBoxCommander.SelectedValue = null;
-            this.comboBoxCommander.Size = new System.Drawing.Size(140, 23);
+            this.comboBoxCommander.Size = new System.Drawing.Size(140, 21);
             this.comboBoxCommander.TabIndex = 1;
             this.toolTip.SetToolTip(this.comboBoxCommander, "Commander to import history against");
             this.comboBoxCommander.ValueMember = "";
@@ -292,14 +292,25 @@ namespace EDDiscovery.Export
             // 
             // textBoxArrivalDate
             // 
+            this.textBoxArrivalDate.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
+            this.textBoxArrivalDate.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
             this.textBoxArrivalDate.BorderColor = System.Drawing.Color.Transparent;
             this.textBoxArrivalDate.BorderColorScaling = 0.5F;
+            this.textBoxArrivalDate.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.textBoxArrivalDate.ControlBackground = System.Drawing.SystemColors.Control;
             this.textBoxArrivalDate.Location = new System.Drawing.Point(255, 16);
+            this.textBoxArrivalDate.Multiline = false;
             this.textBoxArrivalDate.Name = "textBoxArrivalDate";
+            this.textBoxArrivalDate.ReadOnly = false;
+            this.textBoxArrivalDate.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.textBoxArrivalDate.SelectionLength = 0;
+            this.textBoxArrivalDate.SelectionStart = 0;
             this.textBoxArrivalDate.Size = new System.Drawing.Size(100, 20);
             this.textBoxArrivalDate.TabIndex = 9;
             this.textBoxArrivalDate.Text = "1";
+            this.textBoxArrivalDate.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.toolTip.SetToolTip(this.textBoxArrivalDate, "Column containing the arrival date");
+            this.textBoxArrivalDate.WordWrap = true;
             this.textBoxArrivalDate.Validating += new System.ComponentModel.CancelEventHandler(this.textBoxArrivalDate_Validating);
             // 
             // labelExt5
@@ -337,26 +348,48 @@ namespace EDDiscovery.Export
             // 
             // textBoxSysName
             // 
+            this.textBoxSysName.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
+            this.textBoxSysName.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
             this.textBoxSysName.BorderColor = System.Drawing.Color.Transparent;
             this.textBoxSysName.BorderColorScaling = 0.5F;
+            this.textBoxSysName.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.textBoxSysName.ControlBackground = System.Drawing.SystemColors.Control;
             this.textBoxSysName.Location = new System.Drawing.Point(361, 16);
+            this.textBoxSysName.Multiline = false;
             this.textBoxSysName.Name = "textBoxSysName";
+            this.textBoxSysName.ReadOnly = false;
+            this.textBoxSysName.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.textBoxSysName.SelectionLength = 0;
+            this.textBoxSysName.SelectionStart = 0;
             this.textBoxSysName.Size = new System.Drawing.Size(100, 20);
             this.textBoxSysName.TabIndex = 14;
             this.textBoxSysName.Text = "3";
+            this.textBoxSysName.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.toolTip.SetToolTip(this.textBoxSysName, "Column containing the system name");
+            this.textBoxSysName.WordWrap = true;
             this.textBoxSysName.Validating += new System.ComponentModel.CancelEventHandler(this.textBoxSysName_Validating);
             // 
             // textBoxSysNotes
             // 
+            this.textBoxSysNotes.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
+            this.textBoxSysNotes.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
             this.textBoxSysNotes.BorderColor = System.Drawing.Color.Transparent;
             this.textBoxSysNotes.BorderColorScaling = 0.5F;
+            this.textBoxSysNotes.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.textBoxSysNotes.ControlBackground = System.Drawing.SystemColors.Control;
             this.textBoxSysNotes.Location = new System.Drawing.Point(361, 68);
+            this.textBoxSysNotes.Multiline = false;
             this.textBoxSysNotes.Name = "textBoxSysNotes";
+            this.textBoxSysNotes.ReadOnly = false;
+            this.textBoxSysNotes.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.textBoxSysNotes.SelectionLength = 0;
+            this.textBoxSysNotes.SelectionStart = 0;
             this.textBoxSysNotes.Size = new System.Drawing.Size(100, 20);
             this.textBoxSysNotes.TabIndex = 15;
             this.textBoxSysNotes.Text = "6";
+            this.textBoxSysNotes.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.toolTip.SetToolTip(this.textBoxSysNotes, "Column containing any system notes");
+            this.textBoxSysNotes.WordWrap = true;
             this.textBoxSysNotes.TextChanged += new System.EventHandler(this.textBoxSysNotes_TextChanged);
             // 
             // tableLayoutPanel6
@@ -409,26 +442,48 @@ namespace EDDiscovery.Export
             // 
             // textBoxArrivalTime
             // 
+            this.textBoxArrivalTime.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
+            this.textBoxArrivalTime.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
             this.textBoxArrivalTime.BorderColor = System.Drawing.Color.Transparent;
             this.textBoxArrivalTime.BorderColorScaling = 0.5F;
+            this.textBoxArrivalTime.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.textBoxArrivalTime.ControlBackground = System.Drawing.SystemColors.Control;
             this.textBoxArrivalTime.Location = new System.Drawing.Point(255, 68);
+            this.textBoxArrivalTime.Multiline = false;
             this.textBoxArrivalTime.Name = "textBoxArrivalTime";
+            this.textBoxArrivalTime.ReadOnly = false;
+            this.textBoxArrivalTime.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.textBoxArrivalTime.SelectionLength = 0;
+            this.textBoxArrivalTime.SelectionStart = 0;
             this.textBoxArrivalTime.Size = new System.Drawing.Size(100, 20);
             this.textBoxArrivalTime.TabIndex = 10;
             this.textBoxArrivalTime.Text = "2";
+            this.textBoxArrivalTime.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.toolTip.SetToolTip(this.textBoxArrivalTime, "Column containing the arrival time");
+            this.textBoxArrivalTime.WordWrap = true;
             this.textBoxArrivalTime.TextChanged += new System.EventHandler(this.textBoxArrivalTime_TextChanged);
             // 
             // textBoxDelimiter
             // 
+            this.textBoxDelimiter.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
+            this.textBoxDelimiter.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
             this.textBoxDelimiter.BorderColor = System.Drawing.Color.Transparent;
             this.textBoxDelimiter.BorderColorScaling = 0.5F;
+            this.textBoxDelimiter.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.textBoxDelimiter.ControlBackground = System.Drawing.SystemColors.Control;
             this.textBoxDelimiter.Location = new System.Drawing.Point(149, 68);
+            this.textBoxDelimiter.Multiline = false;
             this.textBoxDelimiter.Name = "textBoxDelimiter";
+            this.textBoxDelimiter.ReadOnly = false;
+            this.textBoxDelimiter.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.textBoxDelimiter.SelectionLength = 0;
+            this.textBoxDelimiter.SelectionStart = 0;
             this.textBoxDelimiter.Size = new System.Drawing.Size(100, 20);
             this.textBoxDelimiter.TabIndex = 7;
             this.textBoxDelimiter.Text = ",";
+            this.textBoxDelimiter.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.toolTip.SetToolTip(this.textBoxDelimiter, "Delimiting character");
+            this.textBoxDelimiter.WordWrap = true;
             // 
             // flowLayoutPanel1
             // 
@@ -490,7 +545,7 @@ namespace EDDiscovery.Export
             this.groupBoxCustomFormat.FillClientAreaWithAlternateColor = false;
             this.groupBoxCustomFormat.Location = new System.Drawing.Point(3, 3);
             this.groupBoxCustomFormat.Name = "groupBoxCustomFormat";
-            this.groupBoxCustomFormat.Size = new System.Drawing.Size(475, 141);
+            this.groupBoxCustomFormat.Size = new System.Drawing.Size(475, 160);
             this.groupBoxCustomFormat.TabIndex = 0;
             this.groupBoxCustomFormat.TabStop = false;
             this.groupBoxCustomFormat.Text = "Excel/CSV format export";
@@ -503,9 +558,9 @@ namespace EDDiscovery.Export
             this.flowLayoutPanel2.Controls.Add(this.labelExtDataExport);
             this.flowLayoutPanel2.Controls.Add(this.comboBoxCustomExportType);
             this.flowLayoutPanel2.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
-            this.flowLayoutPanel2.Location = new System.Drawing.Point(6, 84);
+            this.flowLayoutPanel2.Location = new System.Drawing.Point(6, 98);
             this.flowLayoutPanel2.Name = "flowLayoutPanel2";
-            this.flowLayoutPanel2.Size = new System.Drawing.Size(222, 38);
+            this.flowLayoutPanel2.Size = new System.Drawing.Size(222, 43);
             this.flowLayoutPanel2.TabIndex = 5;
             // 
             // labelExtDataExport
@@ -538,7 +593,7 @@ namespace EDDiscovery.Export
             this.comboBoxCustomExportType.SelectedIndex = -1;
             this.comboBoxCustomExportType.SelectedItem = null;
             this.comboBoxCustomExportType.SelectedValue = null;
-            this.comboBoxCustomExportType.Size = new System.Drawing.Size(216, 19);
+            this.comboBoxCustomExportType.Size = new System.Drawing.Size(216, 21);
             this.comboBoxCustomExportType.TabIndex = 6;
             this.comboBoxCustomExportType.Text = "comboBoxCustom1";
             this.toolTip.SetToolTip(this.comboBoxCustomExportType, "Pick the data to export");
@@ -560,7 +615,7 @@ namespace EDDiscovery.Export
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel2.Size = new System.Drawing.Size(439, 59);
+            this.tableLayoutPanel2.Size = new System.Drawing.Size(439, 73);
             this.tableLayoutPanel2.TabIndex = 4;
             // 
             // checkBoxCustomIncludeHeader
@@ -639,7 +694,7 @@ namespace EDDiscovery.Export
             this.groupBoxCustom1.BorderColorScaling = 0.5F;
             this.groupBoxCustom1.Controls.Add(this.tableLayoutPanel3);
             this.groupBoxCustom1.FillClientAreaWithAlternateColor = false;
-            this.groupBoxCustom1.Location = new System.Drawing.Point(3, 150);
+            this.groupBoxCustom1.Location = new System.Drawing.Point(3, 169);
             this.groupBoxCustom1.Name = "groupBoxCustom1";
             this.groupBoxCustom1.Size = new System.Drawing.Size(475, 157);
             this.groupBoxCustom1.TabIndex = 11;
@@ -679,8 +734,12 @@ namespace EDDiscovery.Export
             // 
             this.txtExportVisited.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtExportVisited.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
+            this.txtExportVisited.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
             this.txtExportVisited.BorderColor = System.Drawing.Color.Transparent;
             this.txtExportVisited.BorderColorScaling = 0.5F;
+            this.txtExportVisited.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.txtExportVisited.ControlBackground = System.Drawing.SystemColors.Control;
             this.txtExportVisited.DropDownBackgroundColor = System.Drawing.Color.Gray;
             this.txtExportVisited.DropDownBorderColor = System.Drawing.Color.Green;
             this.txtExportVisited.DropDownHeight = 200;
@@ -691,24 +750,17 @@ namespace EDDiscovery.Export
             this.txtExportVisited.DropDownWidth = 0;
             this.txtExportVisited.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.txtExportVisited.Location = new System.Drawing.Point(49, 3);
+            this.txtExportVisited.Multiline = false;
             this.txtExportVisited.Name = "txtExportVisited";
+            this.txtExportVisited.ReadOnly = false;
+            this.txtExportVisited.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.txtExportVisited.SelectionLength = 0;
+            this.txtExportVisited.SelectionStart = 0;
             this.txtExportVisited.Size = new System.Drawing.Size(231, 20);
             this.txtExportVisited.TabIndex = 8;
+            this.txtExportVisited.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.toolTip.SetToolTip(this.txtExportVisited, "Set to filter stars with this text");
-            // 
-            // buttonExportOpenFolder
-            // 
-            this.buttonExportOpenFolder.BorderColorScaling = 1.25F;
-            this.buttonExportOpenFolder.ButtonColorScaling = 0.5F;
-            this.buttonExportOpenFolder.ButtonDisabledScaling = 0.5F;
-            this.buttonExportOpenFolder.Location = new System.Drawing.Point(286, 87);
-            this.buttonExportOpenFolder.Name = "buttonExportOpenFolder";
-            this.buttonExportOpenFolder.Size = new System.Drawing.Size(140, 23);
-            this.buttonExportOpenFolder.TabIndex = 10;
-            this.buttonExportOpenFolder.Text = "Open visited stars folder";
-            this.toolTip.SetToolTip(this.buttonExportOpenFolder, "Open the visited stars folder where ED wants the output file to be stored");
-            this.buttonExportOpenFolder.UseVisualStyleBackColor = true;
-            this.buttonExportOpenFolder.Click += new System.EventHandler(this.buttonExportOpenFolder_Click);
+            this.txtExportVisited.WordWrap = true;
             // 
             // btnExportTravel
             // 
@@ -724,20 +776,6 @@ namespace EDDiscovery.Export
             this.btnExportTravel.UseVisualStyleBackColor = true;
             this.btnExportTravel.Click += new System.EventHandler(this.btnExportTravel_Click);
             // 
-            // buttonExportToFilteredSystems
-            // 
-            this.buttonExportToFilteredSystems.BorderColorScaling = 1.25F;
-            this.buttonExportToFilteredSystems.ButtonColorScaling = 0.5F;
-            this.buttonExportToFilteredSystems.ButtonDisabledScaling = 0.5F;
-            this.buttonExportToFilteredSystems.Location = new System.Drawing.Point(49, 58);
-            this.buttonExportToFilteredSystems.Name = "buttonExportToFilteredSystems";
-            this.buttonExportToFilteredSystems.Size = new System.Drawing.Size(184, 23);
-            this.buttonExportToFilteredSystems.TabIndex = 7;
-            this.buttonExportToFilteredSystems.Text = "Export filtered systems";
-            this.toolTip.SetToolTip(this.buttonExportToFilteredSystems, "Export filtered system, filter determined by the filter text box");
-            this.buttonExportToFilteredSystems.UseVisualStyleBackColor = true;
-            this.buttonExportToFilteredSystems.Click += new System.EventHandler(this.buttonExportToFilteredSystems_Click);
-            // 
             // buttonExportToGalmap
             // 
             this.buttonExportToGalmap.BorderColorScaling = 1.25F;
@@ -752,79 +790,55 @@ namespace EDDiscovery.Export
             this.buttonExportToGalmap.UseVisualStyleBackColor = true;
             this.buttonExportToGalmap.Click += new System.EventHandler(this.buttonExportToGalmap_Click);
             // 
-            // tableLayoutPanel5
+            // buttonExportToFilteredSystems
             // 
-            this.tableLayoutPanel5.ColumnCount = 1;
-            this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel5.Controls.Add(this.buttonImport, 0, 0);
-            this.tableLayoutPanel5.Controls.Add(this.buttonImportHelp, 0, 1);
-            this.tableLayoutPanel5.Location = new System.Drawing.Point(484, 313);
-            this.tableLayoutPanel5.Name = "tableLayoutPanel5";
-            this.tableLayoutPanel5.RowCount = 2;
-            this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 31F));
-            this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 69F));
-            this.tableLayoutPanel5.Size = new System.Drawing.Size(96, 93);
-            this.tableLayoutPanel5.TabIndex = 13;
+            this.buttonExportToFilteredSystems.BorderColorScaling = 1.25F;
+            this.buttonExportToFilteredSystems.ButtonColorScaling = 0.5F;
+            this.buttonExportToFilteredSystems.ButtonDisabledScaling = 0.5F;
+            this.buttonExportToFilteredSystems.Location = new System.Drawing.Point(49, 58);
+            this.buttonExportToFilteredSystems.Name = "buttonExportToFilteredSystems";
+            this.buttonExportToFilteredSystems.Size = new System.Drawing.Size(184, 23);
+            this.buttonExportToFilteredSystems.TabIndex = 7;
+            this.buttonExportToFilteredSystems.Text = "Export filtered systems";
+            this.toolTip.SetToolTip(this.buttonExportToFilteredSystems, "Export filtered system, filter determined by the filter text box");
+            this.buttonExportToFilteredSystems.UseVisualStyleBackColor = true;
+            this.buttonExportToFilteredSystems.Click += new System.EventHandler(this.buttonExportToFilteredSystems_Click);
             // 
-            // buttonImport
+            // buttonExportOpenFolder
             // 
-            this.buttonImport.BorderColorScaling = 1.25F;
-            this.buttonImport.ButtonColorScaling = 0.5F;
-            this.buttonImport.ButtonDisabledScaling = 0.5F;
-            this.buttonImport.Location = new System.Drawing.Point(3, 3);
-            this.buttonImport.Name = "buttonImport";
-            this.buttonImport.Size = new System.Drawing.Size(75, 22);
-            this.buttonImport.TabIndex = 0;
-            this.buttonImport.Text = "Import";
-            this.toolTip.SetToolTip(this.buttonImport, "Run import using defined parameters (may take several minutes)");
-            this.buttonImport.UseVisualStyleBackColor = true;
-            this.buttonImport.Click += new System.EventHandler(this.buttonImport_Click);
-            // 
-            // buttonImportHelp
-            // 
-            this.buttonImportHelp.BorderColorScaling = 1.25F;
-            this.buttonImportHelp.ButtonColorScaling = 0.5F;
-            this.buttonImportHelp.ButtonDisabledScaling = 0.5F;
-            this.buttonImportHelp.Location = new System.Drawing.Point(3, 31);
-            this.buttonImportHelp.Name = "buttonImportHelp";
-            this.buttonImportHelp.Size = new System.Drawing.Size(75, 23);
-            this.buttonImportHelp.TabIndex = 1;
-            this.buttonImportHelp.Text = "Help";
-            this.toolTip.SetToolTip(this.buttonImportHelp, "Display Help file for History Import settings");
-            this.buttonImportHelp.UseVisualStyleBackColor = true;
-            this.buttonImportHelp.Click += new System.EventHandler(this.buttonImportHelp_Click);
-            // 
-            // toolTip
-            // 
-            this.toolTip.ShowAlways = true;
-            // 
-            // selectImportFileDialog
-            // 
-            this.selectImportFileDialog.FileName = "openFileDialog1";
-            // 
-            // btnSphereSystems
-            // 
-            this.btnSphereSystems.BorderColorScaling = 1.25F;
-            this.btnSphereSystems.ButtonColorScaling = 0.5F;
-            this.btnSphereSystems.ButtonDisabledScaling = 0.5F;
-            this.btnSphereSystems.Location = new System.Drawing.Point(286, 58);
-            this.btnSphereSystems.Name = "btnSphereSystems";
-            this.btnSphereSystems.Size = new System.Drawing.Size(140, 23);
-            this.btnSphereSystems.TabIndex = 12;
-            this.btnSphereSystems.Text = "Export sphere systems";
-            this.btnSphereSystems.UseVisualStyleBackColor = true;
-            this.btnSphereSystems.Click += new System.EventHandler(this.btnSphereSystems_Click);
+            this.buttonExportOpenFolder.BorderColorScaling = 1.25F;
+            this.buttonExportOpenFolder.ButtonColorScaling = 0.5F;
+            this.buttonExportOpenFolder.ButtonDisabledScaling = 0.5F;
+            this.buttonExportOpenFolder.Location = new System.Drawing.Point(286, 87);
+            this.buttonExportOpenFolder.Name = "buttonExportOpenFolder";
+            this.buttonExportOpenFolder.Size = new System.Drawing.Size(140, 23);
+            this.buttonExportOpenFolder.TabIndex = 10;
+            this.buttonExportOpenFolder.Text = "Open visited stars folder";
+            this.toolTip.SetToolTip(this.buttonExportOpenFolder, "Open the visited stars folder where ED wants the output file to be stored");
+            this.buttonExportOpenFolder.UseVisualStyleBackColor = true;
+            this.buttonExportOpenFolder.Click += new System.EventHandler(this.buttonExportOpenFolder_Click);
             // 
             // txtsphereRadius
             // 
             this.txtsphereRadius.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtsphereRadius.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
+            this.txtsphereRadius.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
             this.txtsphereRadius.BorderColor = System.Drawing.Color.Transparent;
             this.txtsphereRadius.BorderColorScaling = 0.5F;
+            this.txtsphereRadius.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.txtsphereRadius.ControlBackground = System.Drawing.SystemColors.Control;
             this.txtsphereRadius.Location = new System.Drawing.Point(49, 32);
+            this.txtsphereRadius.Multiline = false;
             this.txtsphereRadius.Name = "txtsphereRadius";
+            this.txtsphereRadius.ReadOnly = false;
+            this.txtsphereRadius.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.txtsphereRadius.SelectionLength = 0;
+            this.txtsphereRadius.SelectionStart = 0;
             this.txtsphereRadius.Size = new System.Drawing.Size(231, 20);
             this.txtsphereRadius.TabIndex = 13;
+            this.txtsphereRadius.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.txtsphereRadius.WordWrap = true;
             // 
             // labelExt8
             // 
@@ -843,6 +857,69 @@ namespace EDDiscovery.Export
             this.labelExt9.Size = new System.Drawing.Size(29, 13);
             this.labelExt9.TabIndex = 15;
             this.labelExt9.Text = "Filter";
+            // 
+            // btnSphereSystems
+            // 
+            this.btnSphereSystems.BorderColorScaling = 1.25F;
+            this.btnSphereSystems.ButtonColorScaling = 0.5F;
+            this.btnSphereSystems.ButtonDisabledScaling = 0.5F;
+            this.btnSphereSystems.Location = new System.Drawing.Point(286, 58);
+            this.btnSphereSystems.Name = "btnSphereSystems";
+            this.btnSphereSystems.Size = new System.Drawing.Size(140, 23);
+            this.btnSphereSystems.TabIndex = 12;
+            this.btnSphereSystems.Text = "Export sphere systems";
+            this.btnSphereSystems.UseVisualStyleBackColor = true;
+            this.btnSphereSystems.Click += new System.EventHandler(this.btnSphereSystems_Click);
+            // 
+            // tableLayoutPanel5
+            // 
+            this.tableLayoutPanel5.ColumnCount = 1;
+            this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel5.Controls.Add(this.buttonImport, 0, 0);
+            this.tableLayoutPanel5.Controls.Add(this.buttonImportHelp, 0, 1);
+            this.tableLayoutPanel5.Location = new System.Drawing.Point(484, 332);
+            this.tableLayoutPanel5.Name = "tableLayoutPanel5";
+            this.tableLayoutPanel5.RowCount = 2;
+            this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 31F));
+            this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 69F));
+            this.tableLayoutPanel5.Size = new System.Drawing.Size(96, 79);
+            this.tableLayoutPanel5.TabIndex = 13;
+            // 
+            // buttonImport
+            // 
+            this.buttonImport.BorderColorScaling = 1.25F;
+            this.buttonImport.ButtonColorScaling = 0.5F;
+            this.buttonImport.ButtonDisabledScaling = 0.5F;
+            this.buttonImport.Location = new System.Drawing.Point(3, 3);
+            this.buttonImport.Name = "buttonImport";
+            this.buttonImport.Size = new System.Drawing.Size(75, 18);
+            this.buttonImport.TabIndex = 0;
+            this.buttonImport.Text = "Import";
+            this.toolTip.SetToolTip(this.buttonImport, "Run import using defined parameters (may take several minutes)");
+            this.buttonImport.UseVisualStyleBackColor = true;
+            this.buttonImport.Click += new System.EventHandler(this.buttonImport_Click);
+            // 
+            // buttonImportHelp
+            // 
+            this.buttonImportHelp.BorderColorScaling = 1.25F;
+            this.buttonImportHelp.ButtonColorScaling = 0.5F;
+            this.buttonImportHelp.ButtonDisabledScaling = 0.5F;
+            this.buttonImportHelp.Location = new System.Drawing.Point(3, 27);
+            this.buttonImportHelp.Name = "buttonImportHelp";
+            this.buttonImportHelp.Size = new System.Drawing.Size(75, 23);
+            this.buttonImportHelp.TabIndex = 1;
+            this.buttonImportHelp.Text = "Help";
+            this.toolTip.SetToolTip(this.buttonImportHelp, "Display Help file for History Import settings");
+            this.buttonImportHelp.UseVisualStyleBackColor = true;
+            this.buttonImportHelp.Click += new System.EventHandler(this.buttonImportHelp_Click);
+            // 
+            // toolTip
+            // 
+            this.toolTip.ShowAlways = true;
+            // 
+            // selectImportFileDialog
+            // 
+            this.selectImportFileDialog.FileName = "openFileDialog1";
             // 
             // ExportControl
             // 

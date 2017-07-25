@@ -197,7 +197,7 @@ namespace ExtendedControls
         private void _cbdropdown_DropDown(object sender, EventArgs e)
         {
             Point location = this.PointToScreen(new Point(0, 0));
-            _cbdropdown.Location = new Point(location.X, location.Y + this.Height + this.BorderOffset);
+            _cbdropdown.Location = new Point(location.X, location.Y + this.Height );
             isActivated = true;
             this.Invalidate(true);
         }

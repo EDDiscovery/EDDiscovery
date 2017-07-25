@@ -61,7 +61,6 @@ namespace ExtendedControls
         public Color ScrollBarMousePressedButtonColor { get { return ScrollBar.MousePressedButtonColor; } set { ScrollBar.MousePressedButtonColor = value; } }
         public Color ScrollBarForeColor { get { return ScrollBar.ForeColor; } set { ScrollBar.ForeColor = value; } }
 
-
         public override string Text { get { return TextBox.Text; } set { TextBox.Text = value; UpdateScrollBar(); } }                // return only textbox text
         public int LineCount { get { return TextBox.GetLineFromCharIndex(TextBox.Text.Length) + 1; } }
 

@@ -232,7 +232,6 @@ namespace ExtendedControls
             {
                 // Don't draw the ExtendedControls.TextBoxBorder border
                 BorderColor = System.Drawing.Color.Transparent;
-                BorderOffset = 0;
                 // Don't draw the System.Windows.Forms.TextBox border
                 BorderStyle = BorderStyle.None;
 
