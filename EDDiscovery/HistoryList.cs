@@ -85,6 +85,7 @@ namespace EDDiscovery
         public bool isTravelling { get { return travelling; } }
         public int TravelledMissingjump { get { return travelled_missingjump; } }
         public int Travelledjumps { get { return travelled_jumps; } }
+        public string TravelledJumpsAndMisses { get { return travelled_jumps.ToStringInvariant() + ((travelled_missingjump > 0) ? (" (" + travelled_missingjump.ToStringInvariant() + ")") : ""); } }
 
         public bool IsLanded { get { return landed.HasValue && landed.Value == true; } }
         public bool IsDocked { get { return docked.HasValue && docked.Value == true; } }
@@ -94,6 +95,7 @@ namespace EDDiscovery
         public bool MultiPlayer { get { return onCrewWithCaptain != null; } }
         public string GameMode { get { return gamemode; } }
         public string Group { get { return group; } }
+        public string GameModeGroup { get { return gamemode + ((group!=null && group.Length>0) ? (":" + group) : ""); } }
 
         public bool ContainsRares() // function due to debugger and cost of working out
         {
@@ -363,8 +365,9 @@ namespace EDDiscovery
 
                 if (he.StopMarker || he.StartMarker)
                 {
+                    Debug.WriteLine("Travelling stop at " + he.Indexno);
                     he.travelling = false;
-                    he.EventDetailedInfo += ((he.EventDetailedInfo.Length > 0) ? Environment.NewLine : "") + "Travelled " + he.travelled_distance.ToString("0.0") + " LY"
+                    he.EventDetailedInfo += ((he.EventDetailedInfo.Length > 0) ? Environment.NewLine : "") + "Travelled " + he.travelled_distance.ToStringInvariant("0.0") + " LY"
                                         + ", " + he.travelled_jumps + " jumps"
                                         + ((he.travelled_missingjump > 0) ? ", " + he.travelled_missingjump + " unknown distance jumps" : "") +
                                         ", time " + he.travelled_seconds;
@@ -388,7 +391,10 @@ namespace EDDiscovery
             }
 
             if (he.StartMarker)
+            {
+                Debug.WriteLine("Travelling start at " + he.Indexno);
                 he.travelling = true;
+            }
 
             return he;
         }

@@ -91,11 +91,11 @@ namespace ExtendedControls
 
                     e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.Default;
 
-                    using (GraphicsPath g1 = RectCutCorners(1, topline+1, ClientRectangle.Width-2, ClientRectangle.Height - topline - 1, 1,1 , textstart- 1, textlength))
+                    using (GraphicsPath g1 = ControlHelpersStaticFunc.RectCutCorners(1, topline+1, ClientRectangle.Width-2, ClientRectangle.Height - topline - 1, 1,1 , textstart- 1, textlength))
                     using (Pen pc1 = new Pen(color1, 1.0F))
                         e.Graphics.DrawPath(pc1, g1);
 
-                    using (GraphicsPath g2 = RectCutCorners(0, topline, ClientRectangle.Width, ClientRectangle.Height - topline - 1, 2, 2 , textstart, textlength))
+                    using (GraphicsPath g2 = ControlHelpersStaticFunc.RectCutCorners(0, topline, ClientRectangle.Width, ClientRectangle.Height - topline - 1, 2, 2 , textstart, textlength))
                     using (Pen pc2 = new Pen(color2, 1.0F))
                         e.Graphics.DrawPath(pc2, g2);
 
@@ -122,25 +122,5 @@ namespace ExtendedControls
             }
         }
 
-        // produce a rounded rectangle with a cut out at the top..
-        private GraphicsPath RectCutCorners(int x,int y, int width , int height, int roundnessleft, int roundnessright , int topcutpos , int topcutlength )
-        {
-            GraphicsPath gr = new GraphicsPath();
-
-            if (topcutlength > 0)
-            {
-                gr.AddLine(x + roundnessleft, y, x + topcutpos, y);
-                gr.StartFigure();
-                gr.AddLine(x+topcutpos+topcutlength,y, x + width - 1 - roundnessright, y);
-            }
-            else
-                gr.AddLine(x + roundnessleft, y, x + width - 1 - roundnessright, y);
-
-            gr.AddLine(x+width-1, y + roundnessright, x+width-1, y + height - 1 - roundnessright);
-            gr.AddLine(x + width - 1 - roundnessright, y + height - 1, x + roundnessleft, y + height - 1);
-            gr.AddLine(x, y + height - 1 - roundnessleft, x, y + roundnessleft);
-            gr.AddLine(x, y + roundnessleft, x + roundnessleft, y);         // close figure manually, closing it with a break does not seem to work
-            return gr;
-        }
     }
 }

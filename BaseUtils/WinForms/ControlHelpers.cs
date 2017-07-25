@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -75,5 +76,39 @@ public static class ControlHelpersStaticFunc
             top += 0;
 
         return new Rectangle(left, top, image.Width, image.Height);
+    }
+
+    static public GraphicsPath RectCutCorners(int x, int y, int width, int height, int roundnessleft, int roundnessright)
+    {
+        GraphicsPath gr = new GraphicsPath();
+
+        gr.AddLine(x + roundnessleft, y, x + width - 1 - roundnessright, y);
+        gr.AddLine(x + width - 1, y + roundnessright, x + width - 1, y + height - 1 - roundnessright);
+        gr.AddLine(x + width - 1 - roundnessright, y + height - 1, x + roundnessleft, y + height - 1);
+        gr.AddLine(x, y + height - 1 - roundnessleft, x, y + roundnessleft);
+        gr.AddLine(x, y + roundnessleft, x + roundnessleft, y);         // close figure manually, closing it with a break does not seem to work
+        return gr;
+    }
+
+    // produce a rounded rectangle with a cut out at the top..
+
+    static public GraphicsPath RectCutCorners(int x, int y, int width, int height, int roundnessleft, int roundnessright, int topcutpos, int topcutlength)
+    {
+        GraphicsPath gr = new GraphicsPath();
+
+        if (topcutlength > 0)
+        {
+            gr.AddLine(x + roundnessleft, y, x + topcutpos, y);
+            gr.StartFigure();
+            gr.AddLine(x + topcutpos + topcutlength, y, x + width - 1 - roundnessright, y);
+        }
+        else
+            gr.AddLine(x + roundnessleft, y, x + width - 1 - roundnessright, y);
+
+        gr.AddLine(x + width - 1, y + roundnessright, x + width - 1, y + height - 1 - roundnessright);
+        gr.AddLine(x + width - 1 - roundnessright, y + height - 1, x + roundnessleft, y + height - 1);
+        gr.AddLine(x, y + height - 1 - roundnessleft, x, y + roundnessleft);
+        gr.AddLine(x, y + roundnessleft, x + roundnessleft, y);         // close figure manually, closing it with a break does not seem to work
+        return gr;
     }
 }

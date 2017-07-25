@@ -691,10 +691,10 @@ namespace EDDiscovery
                 ctrl.BorderColor = Color.Transparent;
                 ctrl.BorderStyle = BorderStyle.None;
 
-                ctrl.TextBox.ForeColor = currentsettings.colors[Settings.CI.textbox_fore];
-                ctrl.TextBox.BackColor = currentsettings.colors[Settings.CI.textbox_back];
+                ctrl.TextBoxForeColor = currentsettings.colors[Settings.CI.textbox_fore];
+                ctrl.TextBoxBackColor = currentsettings.colors[Settings.CI.textbox_back];
 
-                ctrl.ScrollBar.FlatStyle = FlatStyle.System;
+                ctrl.ScrollBarFlatStyle = FlatStyle.System;
 
                 if (currentsettings.textboxborderstyle.Equals(TextboxBorderStyles[1]))
                     ctrl.BorderStyle = BorderStyle.FixedSingle;
@@ -704,17 +704,16 @@ namespace EDDiscovery
                 {
                     Color c1 = currentsettings.colors[Settings.CI.textbox_scrollbutton];
                     ctrl.BorderColor = currentsettings.colors[Settings.CI.textbox_border];
-                    ctrl.ScrollBar.BackColor = currentsettings.colors[Settings.CI.textbox_back];
-                    ctrl.ScrollBar.SliderColor = currentsettings.colors[Settings.CI.textbox_sliderback];
-                    ctrl.ScrollBar.BorderColor = ctrl.ScrollBar.ThumbBorderColor = 
-                                ctrl.ScrollBar.ArrowBorderColor = currentsettings.colors[Settings.CI.textbox_border];
-                    ctrl.ScrollBar.ArrowButtonColor = ctrl.ScrollBar.ThumbButtonColor = c1;
-                    ctrl.ScrollBar.MouseOverButtonColor = c1.Multiply(mouseoverscaling);
-                    ctrl.ScrollBar.MousePressedButtonColor = c1.Multiply(mouseselectedscaling);
-                    ctrl.ScrollBar.ForeColor = currentsettings.colors[Settings.CI.textbox_scrollarrow];
-                    ctrl.ScrollBar.FlatStyle = FlatStyle.Popup;
+                    ctrl.ScrollBarBackColor = currentsettings.colors[Settings.CI.textbox_back];
+                    ctrl.ScrollBarSliderColor = currentsettings.colors[Settings.CI.textbox_sliderback];
+                    ctrl.ScrollBarBorderColor = ctrl.ScrollBarThumbBorderColor = 
+                                ctrl.ScrollBarArrowBorderColor = currentsettings.colors[Settings.CI.textbox_border];
+                    ctrl.ScrollBarArrowButtonColor = ctrl.ScrollBarThumbButtonColor = c1;
+                    ctrl.ScrollBarMouseOverButtonColor = c1.Multiply(mouseoverscaling);
+                    ctrl.ScrollBarMousePressedButtonColor = c1.Multiply(mouseselectedscaling);
+                    ctrl.ScrollBarForeColor = currentsettings.colors[Settings.CI.textbox_scrollarrow];
+                    ctrl.ScrollBarFlatStyle = FlatStyle.Popup;
                 }
-
                
                 if (myControl.Font.Name.Contains("Courier"))                  // okay if we ordered a fixed font, don't override
                 {

@@ -34,18 +34,32 @@ namespace EDDiscovery.UserControls
         private EDDiscoveryForm discoveryform;
         private int displaynumber;
         private string DbSelection { get { return ("SystemInformation") + ((displaynumber > 0) ? displaynumber.ToString() : "") + "Sel"; } }
+        private string DbOSave { get { return "SystemInformation" + ((displaynumber > 0) ? displaynumber.ToString() : "Order"); } }
 
-        const int SelNotes = 1;
-        const int SelBody = 2;
-        const int SelSystem = 4;
-        const int SelTarget = 8;
-        const int SelEDSMButtonsNextLine = 16;
-        const int SelEDSM = 32;
-        const int SelVisits = 64;
-        const int SelSystemState = 128;
-        const int SelPosition = 256;
-        const int SelDistanceFrom = 512;
-        const int SelDefault = SelNotes | SelBody | SelSystem | SelTarget | SelEDSM | SelVisits | SelSystemState | SelPosition | SelDistanceFrom;
+        const int BitSelSystem = 0;
+        const int BitSelEDSM = 1;
+        const int BitSelVisits = 2;
+        const int BitSelBody = 3;
+        const int BitSelPosition = 4;
+        const int BitSelDistanceFrom = 5;
+        const int BitSelSystemState = 6;
+        const int BitSelNotes = 7;
+        const int BitSelTarget = 8;
+        const int BitSelGameMode = 9;
+        const int BitSelTravel = 10;
+        const int BitSelCargo = 11;
+
+        const int BitSelTotal = 12;
+
+        const int BitSelEDSMButtonsNextLine = 24;
+        const int SelDefault = ((1<<BitSelTotal)-1)+(1<<BitSelEDSMButtonsNextLine);
+
+        const int hspacing = 8;
+
+        List<int> Order;        // orderarray is the order to display them on the screen.. same entries as BitSelTotal
+        int[] YStart;           // ypos of items in Order.
+        int[] YEnd;             // ypos of items in Order.
+        ToolStripMenuItem[] toolstriplist;          // ref to toolstrip items for each bit above. in same order as bits BitSel..
 
         public UserControlSysInfo()
         {
@@ -62,19 +76,40 @@ namespace EDDiscovery.UserControls
             discoveryform.OnNoteChanged += OnNoteChanged;
             textBoxTarget.SetAutoCompletor(EDDiscovery.DB.SystemClassDB.ReturnSystemListForAutoComplete);
 
-            UpdateViewOnSelection(0);       // first turn them all off so they all compress..
-            UpdateViewOnSelection(DB.SQLiteConnectionUser.GetSettingInt(DbSelection, SelDefault));  // then turn the right ones on
+            // same order as Sel bits are defined in, one bit per selection item.
+            toolstriplist = new ToolStripMenuItem[] { toolStripSystem , toolStripEDSM , toolStripVisits, toolStripBody,
+                                                        toolStripPosition, toolStripDistanceFrom,
+                                                        toolStripSystemState, toolStripNotes, toolStripTarget,
+                                                        toolStripGameMode,toolStripTravel,toolStripCargo};
+            
+            Order = DB.SQLiteDBClass.GetSettingString(DbOSave, "").RestoreIntListFromString(0, BitSelTotal);
+            System.Diagnostics.Debug.WriteLine("Ordered " + String.Join(",", Order));
+            if (Order.Distinct().Count() != Order.Count)       // if not distinct..
+            {
+                Order = new List<int>();
+                for (int i = 0; i < BitSelTotal; i++)          // reset
+                    Order.Add(i);
+                System.Diagnostics.Debug.WriteLine("Reset " + String.Join(",", Order));
+            }
         }
 
         public override void Closing()
         {
             discoveryform.TravelControl.OnTravelSelectionChanged -= Display;
             discoveryform.OnNewTarget -= RefreshTargetDisplay;
+            DB.SQLiteDBClass.PutSettingString(DbOSave, String.Join(",",Order));
         }
 
+        bool neverdisplayed = true;
         HistoryEntry last_he = null;
         public override void Display(HistoryEntry he, HistoryList hl)
         {
+            if (neverdisplayed)
+            {
+                UpdateViewOnSelection(DB.SQLiteConnectionUser.GetSettingInt(DbSelection, SelDefault));  // then turn the right ones on
+                neverdisplayed = false;
+            }
+
             last_he = he;
 
             if ( last_he != null )
@@ -116,15 +151,32 @@ namespace EDDiscovery.UserControls
                 textBoxGovernment.Text = he.System.government.ToNullUnknownString();
                 textBoxState.Text = he.System.state.ToNullUnknownString();
                 SetNote(he.snc != null ? he.snc.Note : "");
+                textBoxGameMode.Text = he.GameModeGroup;
+                if (he.isTravelling)
+                {
+                    textBoxTravelDist.Text = he.TravelledDistance.ToStringInvariant("0.0") + "ly";
+                    textBoxTravelTime.Text = he.TravelledSeconds.ToString();
+                    textBoxTravelJumps.Text = he.TravelledJumpsAndMisses;
+                    textBoxTravelTime.Visible = textBoxTravelJumps.Visible = true;
+                }
+                else
+                {
+                    textBoxTravelDist.Text = "-";
+                    textBoxTravelTime.Visible = textBoxTravelJumps.Visible = false;
+                }
 
                 RefreshTargetDisplay(this);
             }
             else
             {
                 SetControlText("");
-                textBoxSystem.Text = textBoxBody.Text = textBoxPosition.Text = 
+                textBoxSystem.Text = textBoxBody.Text = textBoxPosition.Text =
                                 textBoxAllegiance.Text = textBoxEconomy.Text = textBoxGovernment.Text =
-                                textBoxVisits.Text = textBoxState.Text = textBoxHomeDist.Text = textBoxSolDist.Text = "";
+                                textBoxVisits.Text = textBoxState.Text = textBoxHomeDist.Text = textBoxSolDist.Text =
+                                textBoxGameMode.Text = textBoxTravelDist.Text = 
+                                "";
+                textBoxTravelTime.Visible = textBoxTravelJumps.Visible = false;
+
                 buttonRoss.Enabled = buttonEDDB.Enabled = false;
                 SetNote("");
             }
@@ -132,14 +184,9 @@ namespace EDDiscovery.UserControls
 
         private void SetNote(string text)
         {
-            richTextBoxNote.Enabled = false;
+            noteenabled = false;
             richTextBoxNote.Text = text;
-            richTextBoxNote.Enabled = true;
-        }
-
-        private void clearLogToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-//            richTextBox_History.TextBox.Clear();
+            noteenabled = true;
         }
 
         private void buttonEDDB_Click(object sender, EventArgs e)
@@ -200,7 +247,7 @@ namespace EDDiscovery.UserControls
             string name;
             double x, y, z;
 
-            System.Diagnostics.Debug.WriteLine("Refresh target display");
+            //System.Diagnostics.Debug.WriteLine("Refresh target display");
 
             if (DB.TargetClass.GetTargetPosition(out name, out x, out y, out z))
             {
@@ -233,9 +280,10 @@ namespace EDDiscovery.UserControls
 
         }
 
+        bool noteenabled = true;
         private void richTextBoxNote_Leave(object sender, EventArgs e)
         {
-            if (last_he != null && richTextBoxNote.Enabled)
+            if (last_he != null && noteenabled)
             {
                 last_he.SetJournalSystemNoteText(richTextBoxNote.Text.Trim(), true);
                 discoveryform.NoteChanged(this, last_he, true);
@@ -244,7 +292,7 @@ namespace EDDiscovery.UserControls
 
         private void richTextBoxNote_TextBoxChanged(object sender, EventArgs e)
         {
-            if (last_he != null && richTextBoxNote.Enabled)
+            if (last_he != null && noteenabled)
             {
                 last_he.SetJournalSystemNoteText(richTextBoxNote.Text.Trim(), false);
                 discoveryform.NoteChanged(this, last_he, false);
@@ -253,122 +301,216 @@ namespace EDDiscovery.UserControls
 
         private void toolStripSystem_Click(object sender, EventArgs e)
         {
-            ToggleSelection(SelSystem);
+            ToggleSelection(sender, BitSelSystem);
         }
         private void toolStripBody_Click(object sender, EventArgs e)
         {
-            ToggleSelection(SelBody);
+            ToggleSelection(sender, BitSelBody);
         }
         private void toolStripNotes_Click(object sender, EventArgs e)
         {
-            ToggleSelection(SelNotes);
+            ToggleSelection(sender, BitSelNotes);
         }
         private void toolStripTarget_Click(object sender, EventArgs e)
         {
-            ToggleSelection(SelTarget);
+            ToggleSelection(sender, BitSelTarget);
         }
         private void toolStripEDSMButtons_Click(object sender, EventArgs e)
         {
-            ToggleSelection(SelEDSMButtonsNextLine);
+            ToggleSelection(sender, BitSelEDSMButtonsNextLine);
         }
         private void toolStripEDSM_Click(object sender, EventArgs e)
         {
-            ToggleSelection(SelEDSM);
+            ToggleSelection(sender, BitSelEDSM);
         }
         private void toolStripVisits_Click(object sender, EventArgs e)
         {
-            ToggleSelection(SelVisits);
+            ToggleSelection(sender, BitSelVisits);
         }
-
         private void toolStripPosition_Click(object sender, EventArgs e)
         {
-            ToggleSelection(SelPosition);
+            ToggleSelection(sender, BitSelPosition);
         }
-
         private void enableDistanceFromToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            ToggleSelection(SelDistanceFrom);
+            ToggleSelection(sender, BitSelDistanceFrom);
         }
-
         private void toolStripSystemState_Click(object sender, EventArgs e)
         {
-            ToggleSelection(SelSystemState);
+            ToggleSelection(sender, BitSelSystemState);
         }
-        void ToggleSelection(int mask)
+        private void toolStripGameMode_Click(object sender, EventArgs e)
         {
-            int sel = DB.SQLiteConnectionUser.GetSettingInt(DbSelection, SelDefault);
-            sel ^= mask;
-            DB.SQLiteConnectionUser.PutSettingInt(DbSelection, sel);
-            UpdateViewOnSelection(sel);
+            ToggleSelection(sender, BitSelGameMode);
+        }
+        private void toolStripTravel_Click(object sender, EventArgs e)
+        {
+            ToggleSelection(sender, BitSelTravel);
+        }
+        private void toolStripCargo_Click(object sender, EventArgs e)
+        {
+            ToggleSelection(sender, BitSelCargo);
         }
 
-        // So, the way this works is:
-        // in the designer file, order the this.Controls.Add (line 581+) in the CORRECT order, as per the view. Order them
-        // in the order they show, first is at top, last is at the bottom of the list
-        // ShiftControls relies on this because it shifts a control up/down from a particular control to the end of the control list.
-        // the state of the position of the control (rolled up or rolled down) is saved in the Tag of the control named in shiftcontrols
-        // so we know if to add on or subtract the vertical position from it.
+        void ToggleSelection(Object sender, int bit)
+        {
+            ToolStripMenuItem mi = sender as ToolStripMenuItem;
+            if (mi.Enabled)
+            {
+                int sel = DB.SQLiteConnectionUser.GetSettingInt(DbSelection, SelDefault);
+                sel ^= (1 << bit);
+                DB.SQLiteConnectionUser.PutSettingInt(DbSelection, sel);
+                UpdateViewOnSelection(sel);
+            }
+        }
 
         void UpdateViewOnSelection(int sel)
         {
-            if (buttonEDSM.Tag != null && (bool)buttonEDSM.Tag)     // if previously we shifted EDSM buttons up, we move them back into place for the main calc
-                buttonEDSM.Top = buttonEDDB.Top = buttonRoss.Top = buttonEDSM.Top + 24;
+            SuspendLayout();
+            Point pos = new Point(3, 3);
 
-            //System.Diagnostics.Debug.WriteLine("============ " + sel);
-            bool systemon = (sel & SelSystem) != 0;
-            toolStripSystem.Checked = labelSysName.Visible = textBoxSystem.Visible = systemon;
-            this.Controls.ShiftControls(labelOpen, 24, systemon);
+            foreach (Control c in this.Controls)
+                c.Visible = false;
 
-            bool edsmbuttons = (sel & SelEDSM) != 0;
-            bool edsmbuttonsdownoneline = (sel & SelEDSMButtonsNextLine) != 0;
-            bool makespace = edsmbuttons && (!systemon || edsmbuttonsdownoneline);  // if buttons are on but system isn't, or we want it down line down
-            //System.Diagnostics.Debug.WriteLine("EDSM Selection  " + edsmbuttons + " down " + edsmbuttonsdownoneline + " space "  + makespace);
+            int textboxh = EDDTheme.Instance.FontSize > 10 ? 24 : 20;
+            int vspacing = textboxh+4;
 
-            toolStripEDSM.Checked = buttonEDDB.Visible = buttonEDSM.Visible = buttonRoss.Visible = edsmbuttons;
-            toolStripEDSMDownLine.Checked = edsmbuttonsdownoneline;
-            labelOpen.Visible = makespace;
-            buttonEDSM.Left = (makespace==true) ? textBoxSystem.Left : textBoxSystem.Right + 8;
-            buttonEDDB.Left = buttonEDSM.Right + 8;
-            buttonRoss.Left = buttonEDDB.Right + 8;
-            buttonEDSM.Tag = (edsmbuttons && !makespace); // remember if we shifted it artifically up
-            if ( (bool)buttonEDSM.Tag)      // and if we did, we shift it up
-                buttonEDSM.Top = buttonEDDB.Top = buttonRoss.Top = buttonEDSM.Top - 24;
-            this.Controls.ShiftControls(labelVisits, 24, makespace);     // shift up/down the ones below dependent on if edsm needs space..
+            System.Diagnostics.Debug.WriteLine("Selection is " + sel);
 
-            bool visitson = (sel & SelVisits) != 0;
-            toolStripVisits.Checked = labelVisits.Visible = textBoxVisits.Visible = visitson;
-            this.Controls.ShiftControls(labelBodyName, 24, visitson);
+            YStart = new int[Order.Count];
+            YEnd = new int[Order.Count];
 
-            bool bodyon = (sel & SelBody) != 0;
-            toolStripBody.Checked = labelBodyName.Visible = textBoxBody.Visible = bodyon;
-            this.Controls.ShiftControls(labelPosition, 24, bodyon);
+            bool selEDSMonNextLine = (sel & (1 << BitSelEDSMButtonsNextLine)) != 0;
+            toolStripEDSMDownLine.Checked = selEDSMonNextLine;
 
-            bool poson = (sel & SelPosition) != 0;
-            toolStripPosition.Checked = labelPosition.Visible = textBoxPosition.Visible = poson;
-            this.Controls.ShiftControls(labelHomeDist, 24, poson);
+            for (int i = 0; i < Order.Count; i++)
+            {
+                int bit = Order[i];
+                bool ison = (sel & (1 << bit)) != 0;
 
-            bool diston = (sel & SelDistanceFrom) != 0;
-            toolStripDistanceFrom.Checked = labelSolDist.Visible = labelHomeDist.Visible = textBoxHomeDist.Visible = textBoxSolDist.Visible = diston;
-            this.Controls.ShiftControls(labelState, 24, diston);
+                toolstriplist[bit].Enabled = false;
+                toolstriplist[bit].Checked = ison;
+                toolstriplist[bit].Enabled = true;
 
-            bool stateon = (sel & SelSystemState) != 0;
-            toolStripSystemState.Checked = labelState.Visible = labelGov.Visible = labelAllegiance.Visible = labelEconomy.Visible =
-                        textBoxState.Visible = textBoxGovernment.Visible = textBoxAllegiance.Visible = textBoxEconomy.Visible = stateon;
-            this.Controls.ShiftControls(labelNote, 48, stateon);
+                YStart[i] = (ison) ? pos.Y : -1;
 
-            bool noteson = (sel & SelNotes) != 0;
-            toolStripNotes.Checked = labelNote.Visible = richTextBoxNote.Visible = noteson;
-            this.Controls.ShiftControls(labelTarget, 60, noteson);
+                if (ison)
+                {
+                    Point datapos = new Point(textBoxSystem.Left, pos.Y);
+                    Point labpos2 = new Point(labelSolDist.Left, pos.Y);
+                    Point datapos2 = new Point(textBoxSolDist.Left, pos.Y);
 
-            bool targeton = (sel & SelTarget) != 0;
-            toolStripTarget.Checked = labelTarget.Visible = textBoxTarget.Visible = textBoxTargetDist.Visible = buttonEDSMTarget.Visible = targeton;
+                    switch (Order[i])
+                    {
+                        case BitSelSystem:
+                            this.SetPos(ref pos, labelSysName, datapos, textBoxSystem, vspacing);
 
+                            if ( !selEDSMonNextLine && (sel & (1<<BitSelEDSM))!=0)
+                            {
+                                buttonEDSM.Location = new Point(textBoxSystem.Right + hspacing, datapos.Y);
+                                buttonEDDB.Location = new Point(buttonEDSM.Right + hspacing, buttonEDSM.Top);
+                                buttonRoss.Location = new Point(buttonEDDB.Right + hspacing, buttonEDSM.Top);
+                                buttonEDSM.Visible = buttonEDDB.Visible = buttonRoss.Visible = true;
+                            }
+
+                            break;
+
+                        case BitSelEDSM:
+                            if ( selEDSMonNextLine)
+                            {
+                                labelOpen.Location = pos;
+                                buttonEDSM.Location = new Point(datapos.X, datapos.Y);
+                                buttonEDDB.Location = new Point(buttonEDSM.Right + hspacing, buttonEDSM.Top);
+                                buttonRoss.Location = new Point(buttonEDDB.Right + hspacing, buttonEDSM.Top);
+                                labelOpen.Visible = buttonEDSM.Visible = buttonEDDB.Visible = buttonRoss.Visible = true;
+                                pos.Y += vspacing + 4;
+                            }
+                            break;
+
+                        case BitSelVisits:
+                            this.SetPos(ref pos, labelVisits, datapos, textBoxVisits, vspacing);
+                            break;
+
+                        case BitSelBody:
+                            this.SetPos(ref pos, labelBodyName, datapos, textBoxBody, vspacing);
+                            break;
+
+                        case BitSelPosition:
+                            this.SetPos(ref pos, labelPosition, datapos, textBoxPosition, vspacing);
+                            break;
+
+                        case BitSelDistanceFrom:
+                            this.SetPos(ref pos, labelHomeDist, datapos, textBoxHomeDist, vspacing);
+                            OffsetPos(labpos2, labelSolDist, datapos2, textBoxSolDist);
+                            break;
+
+                        case BitSelSystemState:
+                            this.SetPos(ref pos, labelState, datapos, textBoxState, vspacing-4);
+                            OffsetPos(labpos2, labelAllegiance, datapos2, textBoxAllegiance);
+                            datapos.Y = labpos2.Y = datapos2.Y = pos.Y;
+                            this.SetPos(ref pos, labelGov, datapos, textBoxGovernment, vspacing);
+                            OffsetPos(labpos2, labelEconomy, datapos2, textBoxEconomy);
+                            break;
+
+                        case BitSelNotes:
+                            SetPos(ref pos, labelNote, datapos, richTextBoxNote, richTextBoxNote.Height + 8);
+                            break;
+
+                        case BitSelTarget:
+                            this.SetPos(ref pos, labelTarget, datapos, textBoxTarget, vspacing);
+                            textBoxTargetDist.Location = new Point(textBoxTarget.Right + hspacing, datapos.Y);
+                            buttonEDSMTarget.Location = new Point(textBoxTargetDist.Right + hspacing, datapos.Y);
+                            textBoxTargetDist.Visible = buttonEDSMTarget.Visible = true;
+                            break;
+
+                        case BitSelGameMode:
+                            this.SetPos(ref pos, labelGamemode, datapos, textBoxGameMode, vspacing);
+                            break;
+
+                        case BitSelTravel:
+                            this.SetPos(ref pos, labelTravel, datapos, textBoxTravelDist, vspacing);
+                            textBoxTravelTime.Location = new Point(textBoxTravelDist.Right + hspacing, datapos.Y);
+                            textBoxTravelJumps.Location = new Point(textBoxTravelTime.Right + hspacing, datapos.Y);
+                            // don't set visible for the last two, may not be if not travelling. Display will deal with it
+                            break;
+
+                        case BitSelCargo:
+                            this.SetPos(ref pos, labelCargo, datapos, textBoxCargo, vspacing);
+                            OffsetPos(labpos2, labelMaterials, datapos2, textBoxMaterials);
+                            break;
+                    }
+
+                    YEnd[i] = pos.Y - 1;
+                    System.Diagnostics.Debug.WriteLine("Sel " + i + " " + Order[i] + " on " + ison + " ypos " + YStart[i] +"-" + YEnd[i]);
+                }
+            }
+
+            ResumeLayout();
             Refresh();
         }
 
-        void Layout(Control c, int offset , bool on)
+
+        void SetPos(ref Point lp, Label lab, Point tp, ExtendedControls.TextBoxBorder box, int vspacing = 0)
         {
-            Refresh();
+            lab.Location = lp;
+            box.Location = tp;
+            lab.Visible = box.Visible = true;
+            lp.Y += vspacing;
+        }
+
+        void SetPos(ref Point lp, Label lab, Point tp, ExtendedControls.RichTextBoxScroll box, int vspacing = 0)
+        {
+            lab.Location = lp;
+            box.Location = tp;
+            lab.Visible = box.Visible = true;
+            lp.Y += vspacing;
+        }
+
+        void OffsetPos(Point lp, Label lab, Point tp, ExtendedControls.TextBoxBorder box)
+        {
+            lab.Location = lp;
+            box.Location = tp;
+            lab.Visible = box.Visible = true;
         }
 
         private void OnNoteChanged(Object sender, HistoryEntry he, bool arg)  // BEWARE we do this as well..
@@ -383,9 +525,9 @@ namespace EDDiscovery.UserControls
         {
             if (IsNotesShowing)
             {
-                richTextBoxNote.TextBox.Select(richTextBoxNote.Text.Length, 0);     // move caret to end and focus.
-                richTextBoxNote.TextBox.ScrollToCaret();
-                richTextBoxNote.TextBox.Focus();
+                richTextBoxNote.Select(richTextBoxNote.Text.Length, 0);     // move caret to end and focus.
+                richTextBoxNote.ScrollToCaret();
+                richTextBoxNote.Focus();
 
                 string s = null;
                 if (asciikeycode == 8)      // strange old sendkeys
@@ -405,15 +547,109 @@ namespace EDDiscovery.UserControls
         {
             richTextBoxNote.Size = new Size(ClientRectangle.Width - richTextBoxNote.Left - 8, richTextBoxNote.Height);
 
-            int left = ClientRectangle.Width - textBoxTarget.Left - buttonEDSMTarget.Width - 8 - 4;
+            int left = ClientRectangle.Width - textBoxTarget.Left - buttonEDSMTarget.Width - hspacing*2 - 2;
             int targetw = left * 7 / 10;
             int distw = left - targetw;
 
             textBoxTarget.Size = new Size(targetw, richTextBoxNote.Height);
             textBoxTargetDist.Size = new Size(distw, richTextBoxNote.Height);
-            textBoxTargetDist.Location = new Point(textBoxTarget.Right + 4, textBoxTargetDist.Top);
-            buttonEDSMTarget.Location = new Point(textBoxTargetDist.Right + 4, buttonEDSMTarget.Top);
+            textBoxTargetDist.Location = new Point(textBoxTarget.Right + hspacing, textBoxTargetDist.Top);
+            buttonEDSMTarget.Location = new Point(textBoxTargetDist.Right + hspacing, buttonEDSMTarget.Top);
 
+        }
+
+        Control inmove = null;
+        bool inmovedrag = false;
+
+        private void controlMouseDown(object sender, MouseEventArgs e)
+        {
+            Control c = sender as Control;
+
+            inmove = c;
+            inmovedrag = false;
+            System.Diagnostics.Debug.WriteLine("Control " + inmove.Name + " grabbed");
+        }
+
+        private void controlMouseUp(object sender, MouseEventArgs e)
+        {
+            Control c = sender as Control;
+
+            if (inmove != null)
+            {
+                if (inmovedrag)
+                {
+                    int movefromy = inmove.Top;
+                    int movetoy = movefromy + e.Y;
+                    int movefromorder = FindOrder(movefromy);
+                    int movetoorder = FindOrder(movetoy);
+                    System.Diagnostics.Debug.WriteLine("Control " + inmove.Name + " Released from Y " + movefromy + " to " + movetoy + " " + movefromorder + " " + movetoorder);
+
+                    if (movefromorder >= 0 && movefromorder < Order.Count)        // valid
+                    {
+                        int selbit = Order[movefromorder];
+
+                        Order.RemoveAt(movefromorder);
+                        System.Diagnostics.Debug.WriteLine("Removed " + String.Join(",", Order));
+
+                        if (movetoorder == -1)
+                            Order.Insert(0, selbit);
+                        else if (movetoorder == 999)
+                            Order.Add(selbit);
+                        else
+                            Order.Insert(movetoorder, selbit);
+
+                        System.Diagnostics.Debug.WriteLine("Re-ordered " + String.Join(",", Order));
+                        UpdateViewOnSelection(DB.SQLiteConnectionUser.GetSettingInt(DbSelection, SelDefault));  // then turn the right ones on
+
+                    }
+
+                    Cursor.Current = Cursors.Default;
+                }
+
+                inmove = null;
+                
+            }
+        }
+
+        private int FindOrder(int y)
+        {
+            for(int i = 0 ; i < Order.Count; i++ )
+            {
+                if (YStart[i] != -1)
+                {
+                    if (i == 0 && y < YStart[i])
+                        return -1;
+
+                    if (y >= YStart[i] && y <= YEnd[i])
+                        return i;
+                }
+            }
+
+            return 999;
+        }
+
+        private void controlMouseMove(object sender, MouseEventArgs e)
+        {
+            Control c = sender as Control;
+
+            if (inmove != null)
+            {
+                if (e.Y < -4 || e.Y > c.Height + 4)
+                {
+                    if (!inmovedrag)
+                    {
+                        inmovedrag = true;
+                        Cursor.Current = Cursors.Hand;
+                    }
+                }
+                else if ( inmovedrag )
+                {
+                    inmovedrag = false;
+                    Cursor.Current = Cursors.Default;
+                }
+
+                //System.Diagnostics.Debug.WriteLine("Control " + inmove.Name + " Drag " + e.X + "," + e.Y);
+            }
         }
 
     }
