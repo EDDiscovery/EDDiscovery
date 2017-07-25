@@ -87,6 +87,19 @@ namespace EDDiscovery.UserControls
             this.textBoxSystem = new ExtendedControls.TextBoxBorder();
             this.labelSysName = new System.Windows.Forms.Label();
             this.labelOpen = new System.Windows.Forms.Label();
+            this.labelGamemode = new System.Windows.Forms.Label();
+            this.labelTravel = new System.Windows.Forms.Label();
+            this.textBoxGameMode = new ExtendedControls.TextBoxBorder();
+            this.textBoxTravelDist = new ExtendedControls.TextBoxBorder();
+            this.textBoxTravelTime = new ExtendedControls.TextBoxBorder();
+            this.textBoxTravelJumps = new ExtendedControls.TextBoxBorder();
+            this.labelCargo = new System.Windows.Forms.Label();
+            this.textBoxCargo = new ExtendedControls.TextBoxBorder();
+            this.textBoxMaterials = new ExtendedControls.TextBoxBorder();
+            this.labelMaterials = new System.Windows.Forms.Label();
+            this.toolStripGameMode = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripTravel = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripCargo = new System.Windows.Forms.ToolStripMenuItem();
             this.contextMenuStrip.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -102,9 +115,12 @@ namespace EDDiscovery.UserControls
             this.toolStripDistanceFrom,
             this.toolStripSystemState,
             this.toolStripNotes,
-            this.toolStripTarget});
+            this.toolStripTarget,
+            this.toolStripGameMode,
+            this.toolStripTravel,
+            this.toolStripCargo});
             this.contextMenuStrip.Name = "contextMenuStrip1";
-            this.contextMenuStrip.Size = new System.Drawing.Size(236, 224);
+            this.contextMenuStrip.Size = new System.Drawing.Size(253, 290);
             // 
             // toolStripSystem
             // 
@@ -112,7 +128,7 @@ namespace EDDiscovery.UserControls
             this.toolStripSystem.CheckOnClick = true;
             this.toolStripSystem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.toolStripSystem.Name = "toolStripSystem";
-            this.toolStripSystem.Size = new System.Drawing.Size(235, 22);
+            this.toolStripSystem.Size = new System.Drawing.Size(252, 22);
             this.toolStripSystem.Text = "Display System Name";
             this.toolStripSystem.Click += new System.EventHandler(this.toolStripSystem_Click);
             // 
@@ -122,7 +138,7 @@ namespace EDDiscovery.UserControls
             this.toolStripEDSM.CheckOnClick = true;
             this.toolStripEDSM.CheckState = System.Windows.Forms.CheckState.Checked;
             this.toolStripEDSM.Name = "toolStripEDSM";
-            this.toolStripEDSM.Size = new System.Drawing.Size(235, 22);
+            this.toolStripEDSM.Size = new System.Drawing.Size(252, 22);
             this.toolStripEDSM.Text = "Display EDSM Buttons";
             this.toolStripEDSM.Click += new System.EventHandler(this.toolStripEDSM_Click);
             // 
@@ -132,7 +148,7 @@ namespace EDDiscovery.UserControls
             this.toolStripEDSMDownLine.CheckOnClick = true;
             this.toolStripEDSMDownLine.CheckState = System.Windows.Forms.CheckState.Checked;
             this.toolStripEDSMDownLine.Name = "toolStripEDSMDownLine";
-            this.toolStripEDSMDownLine.Size = new System.Drawing.Size(235, 22);
+            this.toolStripEDSMDownLine.Size = new System.Drawing.Size(252, 22);
             this.toolStripEDSMDownLine.Text = "EDSM buttons on separate line";
             this.toolStripEDSMDownLine.Click += new System.EventHandler(this.toolStripEDSMButtons_Click);
             // 
@@ -142,7 +158,7 @@ namespace EDDiscovery.UserControls
             this.toolStripVisits.CheckOnClick = true;
             this.toolStripVisits.CheckState = System.Windows.Forms.CheckState.Checked;
             this.toolStripVisits.Name = "toolStripVisits";
-            this.toolStripVisits.Size = new System.Drawing.Size(235, 22);
+            this.toolStripVisits.Size = new System.Drawing.Size(252, 22);
             this.toolStripVisits.Text = "Display Visits";
             this.toolStripVisits.Click += new System.EventHandler(this.toolStripVisits_Click);
             // 
@@ -152,7 +168,7 @@ namespace EDDiscovery.UserControls
             this.toolStripBody.CheckOnClick = true;
             this.toolStripBody.CheckState = System.Windows.Forms.CheckState.Checked;
             this.toolStripBody.Name = "toolStripBody";
-            this.toolStripBody.Size = new System.Drawing.Size(235, 22);
+            this.toolStripBody.Size = new System.Drawing.Size(252, 22);
             this.toolStripBody.Text = "Display Body Name";
             this.toolStripBody.Click += new System.EventHandler(this.toolStripBody_Click);
             // 
@@ -162,7 +178,7 @@ namespace EDDiscovery.UserControls
             this.toolStripPosition.CheckOnClick = true;
             this.toolStripPosition.CheckState = System.Windows.Forms.CheckState.Checked;
             this.toolStripPosition.Name = "toolStripPosition";
-            this.toolStripPosition.Size = new System.Drawing.Size(235, 22);
+            this.toolStripPosition.Size = new System.Drawing.Size(252, 22);
             this.toolStripPosition.Text = "Display Position";
             this.toolStripPosition.Click += new System.EventHandler(this.toolStripPosition_Click);
             // 
@@ -172,7 +188,7 @@ namespace EDDiscovery.UserControls
             this.toolStripDistanceFrom.CheckOnClick = true;
             this.toolStripDistanceFrom.CheckState = System.Windows.Forms.CheckState.Checked;
             this.toolStripDistanceFrom.Name = "toolStripDistanceFrom";
-            this.toolStripDistanceFrom.Size = new System.Drawing.Size(235, 22);
+            this.toolStripDistanceFrom.Size = new System.Drawing.Size(252, 22);
             this.toolStripDistanceFrom.Text = "Display Distance From";
             this.toolStripDistanceFrom.Click += new System.EventHandler(this.enableDistanceFromToolStripMenuItem_Click);
             // 
@@ -182,7 +198,7 @@ namespace EDDiscovery.UserControls
             this.toolStripSystemState.CheckOnClick = true;
             this.toolStripSystemState.CheckState = System.Windows.Forms.CheckState.Checked;
             this.toolStripSystemState.Name = "toolStripSystemState";
-            this.toolStripSystemState.Size = new System.Drawing.Size(235, 22);
+            this.toolStripSystemState.Size = new System.Drawing.Size(252, 22);
             this.toolStripSystemState.Text = "Display System State";
             this.toolStripSystemState.Click += new System.EventHandler(this.toolStripSystemState_Click);
             // 
@@ -192,7 +208,7 @@ namespace EDDiscovery.UserControls
             this.toolStripNotes.CheckOnClick = true;
             this.toolStripNotes.CheckState = System.Windows.Forms.CheckState.Checked;
             this.toolStripNotes.Name = "toolStripNotes";
-            this.toolStripNotes.Size = new System.Drawing.Size(235, 22);
+            this.toolStripNotes.Size = new System.Drawing.Size(252, 22);
             this.toolStripNotes.Text = "Display Notes";
             this.toolStripNotes.Click += new System.EventHandler(this.toolStripNotes_Click);
             // 
@@ -202,7 +218,7 @@ namespace EDDiscovery.UserControls
             this.toolStripTarget.CheckOnClick = true;
             this.toolStripTarget.CheckState = System.Windows.Forms.CheckState.Checked;
             this.toolStripTarget.Name = "toolStripTarget";
-            this.toolStripTarget.Size = new System.Drawing.Size(235, 22);
+            this.toolStripTarget.Size = new System.Drawing.Size(252, 22);
             this.toolStripTarget.Text = "Display Target";
             this.toolStripTarget.Click += new System.EventHandler(this.toolStripTarget_Click);
             // 
@@ -216,6 +232,9 @@ namespace EDDiscovery.UserControls
             this.textBoxBody.Size = new System.Drawing.Size(152, 20);
             this.textBoxBody.TabIndex = 3;
             this.textBoxBody.TabStop = false;
+            this.textBoxBody.MouseDown += new System.Windows.Forms.MouseEventHandler(this.controlMouseDown);
+            this.textBoxBody.MouseMove += new System.Windows.Forms.MouseEventHandler(this.controlMouseMove);
+            this.textBoxBody.MouseUp += new System.Windows.Forms.MouseEventHandler(this.controlMouseUp);
             // 
             // labelBodyName
             // 
@@ -225,6 +244,9 @@ namespace EDDiscovery.UserControls
             this.labelBodyName.Size = new System.Drawing.Size(31, 13);
             this.labelBodyName.TabIndex = 3;
             this.labelBodyName.Text = "Body";
+            this.labelBodyName.MouseDown += new System.Windows.Forms.MouseEventHandler(this.controlMouseDown);
+            this.labelBodyName.MouseMove += new System.Windows.Forms.MouseEventHandler(this.controlMouseMove);
+            this.labelBodyName.MouseUp += new System.Windows.Forms.MouseEventHandler(this.controlMouseUp);
             // 
             // textBoxPosition
             // 
@@ -236,6 +258,9 @@ namespace EDDiscovery.UserControls
             this.textBoxPosition.Size = new System.Drawing.Size(152, 20);
             this.textBoxPosition.TabIndex = 8;
             this.textBoxPosition.TabStop = false;
+            this.textBoxPosition.MouseDown += new System.Windows.Forms.MouseEventHandler(this.controlMouseDown);
+            this.textBoxPosition.MouseMove += new System.Windows.Forms.MouseEventHandler(this.controlMouseMove);
+            this.textBoxPosition.MouseUp += new System.Windows.Forms.MouseEventHandler(this.controlMouseUp);
             // 
             // labelPosition
             // 
@@ -246,6 +271,9 @@ namespace EDDiscovery.UserControls
             this.labelPosition.TabIndex = 7;
             this.labelPosition.Text = "Pos";
             this.labelPosition.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            this.labelPosition.MouseDown += new System.Windows.Forms.MouseEventHandler(this.controlMouseDown);
+            this.labelPosition.MouseMove += new System.Windows.Forms.MouseEventHandler(this.controlMouseMove);
+            this.labelPosition.MouseUp += new System.Windows.Forms.MouseEventHandler(this.controlMouseUp);
             // 
             // textBoxVisits
             // 
@@ -257,6 +285,9 @@ namespace EDDiscovery.UserControls
             this.textBoxVisits.Size = new System.Drawing.Size(66, 20);
             this.textBoxVisits.TabIndex = 10;
             this.textBoxVisits.TabStop = false;
+            this.textBoxVisits.MouseDown += new System.Windows.Forms.MouseEventHandler(this.controlMouseDown);
+            this.textBoxVisits.MouseMove += new System.Windows.Forms.MouseEventHandler(this.controlMouseMove);
+            this.textBoxVisits.MouseUp += new System.Windows.Forms.MouseEventHandler(this.controlMouseUp);
             // 
             // labelVisits
             // 
@@ -267,6 +298,9 @@ namespace EDDiscovery.UserControls
             this.labelVisits.TabIndex = 9;
             this.labelVisits.Text = "Visits";
             this.labelVisits.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            this.labelVisits.MouseDown += new System.Windows.Forms.MouseEventHandler(this.controlMouseDown);
+            this.labelVisits.MouseMove += new System.Windows.Forms.MouseEventHandler(this.controlMouseMove);
+            this.labelVisits.MouseUp += new System.Windows.Forms.MouseEventHandler(this.controlMouseUp);
             // 
             // labelAllegiance
             // 
@@ -277,6 +311,9 @@ namespace EDDiscovery.UserControls
             this.labelAllegiance.TabIndex = 13;
             this.labelAllegiance.Text = "Allegiance";
             this.labelAllegiance.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            this.labelAllegiance.MouseDown += new System.Windows.Forms.MouseEventHandler(this.controlMouseDown);
+            this.labelAllegiance.MouseMove += new System.Windows.Forms.MouseEventHandler(this.controlMouseMove);
+            this.labelAllegiance.MouseUp += new System.Windows.Forms.MouseEventHandler(this.controlMouseUp);
             // 
             // labelEconomy
             // 
@@ -287,6 +324,9 @@ namespace EDDiscovery.UserControls
             this.labelEconomy.TabIndex = 34;
             this.labelEconomy.Text = "Economy";
             this.labelEconomy.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            this.labelEconomy.MouseDown += new System.Windows.Forms.MouseEventHandler(this.controlMouseDown);
+            this.labelEconomy.MouseMove += new System.Windows.Forms.MouseEventHandler(this.controlMouseMove);
+            this.labelEconomy.MouseUp += new System.Windows.Forms.MouseEventHandler(this.controlMouseUp);
             // 
             // textBoxAllegiance
             // 
@@ -298,6 +338,9 @@ namespace EDDiscovery.UserControls
             this.textBoxAllegiance.Size = new System.Drawing.Size(66, 20);
             this.textBoxAllegiance.TabIndex = 14;
             this.textBoxAllegiance.TabStop = false;
+            this.textBoxAllegiance.MouseDown += new System.Windows.Forms.MouseEventHandler(this.controlMouseDown);
+            this.textBoxAllegiance.MouseMove += new System.Windows.Forms.MouseEventHandler(this.controlMouseMove);
+            this.textBoxAllegiance.MouseUp += new System.Windows.Forms.MouseEventHandler(this.controlMouseUp);
             // 
             // textBoxGovernment
             // 
@@ -309,6 +352,9 @@ namespace EDDiscovery.UserControls
             this.textBoxGovernment.Size = new System.Drawing.Size(66, 20);
             this.textBoxGovernment.TabIndex = 35;
             this.textBoxGovernment.TabStop = false;
+            this.textBoxGovernment.MouseDown += new System.Windows.Forms.MouseEventHandler(this.controlMouseDown);
+            this.textBoxGovernment.MouseMove += new System.Windows.Forms.MouseEventHandler(this.controlMouseMove);
+            this.textBoxGovernment.MouseUp += new System.Windows.Forms.MouseEventHandler(this.controlMouseUp);
             // 
             // labelGov
             // 
@@ -319,6 +365,9 @@ namespace EDDiscovery.UserControls
             this.labelGov.TabIndex = 36;
             this.labelGov.Text = "Gov";
             this.labelGov.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            this.labelGov.MouseDown += new System.Windows.Forms.MouseEventHandler(this.controlMouseDown);
+            this.labelGov.MouseMove += new System.Windows.Forms.MouseEventHandler(this.controlMouseMove);
+            this.labelGov.MouseUp += new System.Windows.Forms.MouseEventHandler(this.controlMouseUp);
             // 
             // labelState
             // 
@@ -329,6 +378,9 @@ namespace EDDiscovery.UserControls
             this.labelState.TabIndex = 38;
             this.labelState.Text = "State";
             this.labelState.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            this.labelState.MouseDown += new System.Windows.Forms.MouseEventHandler(this.controlMouseDown);
+            this.labelState.MouseMove += new System.Windows.Forms.MouseEventHandler(this.controlMouseMove);
+            this.labelState.MouseUp += new System.Windows.Forms.MouseEventHandler(this.controlMouseUp);
             // 
             // textBoxEconomy
             // 
@@ -340,6 +392,9 @@ namespace EDDiscovery.UserControls
             this.textBoxEconomy.Size = new System.Drawing.Size(66, 20);
             this.textBoxEconomy.TabIndex = 33;
             this.textBoxEconomy.TabStop = false;
+            this.textBoxEconomy.MouseDown += new System.Windows.Forms.MouseEventHandler(this.controlMouseDown);
+            this.textBoxEconomy.MouseMove += new System.Windows.Forms.MouseEventHandler(this.controlMouseMove);
+            this.textBoxEconomy.MouseUp += new System.Windows.Forms.MouseEventHandler(this.controlMouseUp);
             // 
             // textBoxState
             // 
@@ -351,6 +406,9 @@ namespace EDDiscovery.UserControls
             this.textBoxState.Size = new System.Drawing.Size(66, 20);
             this.textBoxState.TabIndex = 37;
             this.textBoxState.TabStop = false;
+            this.textBoxState.MouseDown += new System.Windows.Forms.MouseEventHandler(this.controlMouseDown);
+            this.textBoxState.MouseMove += new System.Windows.Forms.MouseEventHandler(this.controlMouseMove);
+            this.textBoxState.MouseUp += new System.Windows.Forms.MouseEventHandler(this.controlMouseUp);
             // 
             // buttonEDDB
             // 
@@ -370,6 +428,9 @@ namespace EDDiscovery.UserControls
             this.buttonEDDB.TabIndex = 5;
             this.toolTipEddb.SetToolTip(this.buttonEDDB, "Click to show system in EDDB");
             this.buttonEDDB.Click += new System.EventHandler(this.buttonEDDB_Click);
+            this.buttonEDDB.MouseDown += new System.Windows.Forms.MouseEventHandler(this.controlMouseDown);
+            this.buttonEDDB.MouseMove += new System.Windows.Forms.MouseEventHandler(this.controlMouseMove);
+            this.buttonEDDB.MouseUp += new System.Windows.Forms.MouseEventHandler(this.controlMouseUp);
             // 
             // buttonRoss
             // 
@@ -389,6 +450,9 @@ namespace EDDiscovery.UserControls
             this.buttonRoss.TabIndex = 6;
             this.toolTipEddb.SetToolTip(this.buttonRoss, "Click to edit system in Ross");
             this.buttonRoss.Click += new System.EventHandler(this.buttonRoss_Click);
+            this.buttonRoss.MouseDown += new System.Windows.Forms.MouseEventHandler(this.controlMouseDown);
+            this.buttonRoss.MouseMove += new System.Windows.Forms.MouseEventHandler(this.controlMouseMove);
+            this.buttonRoss.MouseUp += new System.Windows.Forms.MouseEventHandler(this.controlMouseUp);
             // 
             // textBoxHomeDist
             // 
@@ -401,6 +465,9 @@ namespace EDDiscovery.UserControls
             this.textBoxHomeDist.TabIndex = 42;
             this.textBoxHomeDist.TabStop = false;
             this.toolTipEddb.SetToolTip(this.textBoxHomeDist, "Distance to home system");
+            this.textBoxHomeDist.MouseDown += new System.Windows.Forms.MouseEventHandler(this.controlMouseDown);
+            this.textBoxHomeDist.MouseMove += new System.Windows.Forms.MouseEventHandler(this.controlMouseMove);
+            this.textBoxHomeDist.MouseUp += new System.Windows.Forms.MouseEventHandler(this.controlMouseUp);
             // 
             // labelHomeDist
             // 
@@ -411,6 +478,9 @@ namespace EDDiscovery.UserControls
             this.labelHomeDist.TabIndex = 43;
             this.labelHomeDist.Text = "Home";
             this.labelHomeDist.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            this.labelHomeDist.MouseDown += new System.Windows.Forms.MouseEventHandler(this.controlMouseDown);
+            this.labelHomeDist.MouseMove += new System.Windows.Forms.MouseEventHandler(this.controlMouseMove);
+            this.labelHomeDist.MouseUp += new System.Windows.Forms.MouseEventHandler(this.controlMouseUp);
             // 
             // buttonEDSM
             // 
@@ -428,6 +498,9 @@ namespace EDDiscovery.UserControls
             this.buttonEDSM.TabIndex = 4;
             this.toolTipEddb.SetToolTip(this.buttonEDSM, "Click to show system on EDSM");
             this.buttonEDSM.Click += new System.EventHandler(this.buttonEDSM_Click);
+            this.buttonEDSM.MouseDown += new System.Windows.Forms.MouseEventHandler(this.controlMouseDown);
+            this.buttonEDSM.MouseMove += new System.Windows.Forms.MouseEventHandler(this.controlMouseMove);
+            this.buttonEDSM.MouseUp += new System.Windows.Forms.MouseEventHandler(this.controlMouseUp);
             // 
             // textBoxSolDist
             // 
@@ -440,6 +513,9 @@ namespace EDDiscovery.UserControls
             this.textBoxSolDist.TabIndex = 44;
             this.textBoxSolDist.TabStop = false;
             this.toolTipEddb.SetToolTip(this.textBoxSolDist, "Distance to Sol");
+            this.textBoxSolDist.MouseDown += new System.Windows.Forms.MouseEventHandler(this.controlMouseDown);
+            this.textBoxSolDist.MouseMove += new System.Windows.Forms.MouseEventHandler(this.controlMouseMove);
+            this.textBoxSolDist.MouseUp += new System.Windows.Forms.MouseEventHandler(this.controlMouseUp);
             // 
             // labelSolDist
             // 
@@ -450,6 +526,9 @@ namespace EDDiscovery.UserControls
             this.labelSolDist.TabIndex = 45;
             this.labelSolDist.Text = "Sol";
             this.labelSolDist.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            this.labelSolDist.MouseDown += new System.Windows.Forms.MouseEventHandler(this.controlMouseDown);
+            this.labelSolDist.MouseMove += new System.Windows.Forms.MouseEventHandler(this.controlMouseMove);
+            this.labelSolDist.MouseUp += new System.Windows.Forms.MouseEventHandler(this.controlMouseUp);
             // 
             // toolTipEddb
             // 
@@ -464,6 +543,9 @@ namespace EDDiscovery.UserControls
             this.labelNote.TabIndex = 28;
             this.labelNote.Text = "Note";
             this.toolTipEddb.SetToolTip(this.labelNote, "Enter a note against the currently selected entry");
+            this.labelNote.MouseDown += new System.Windows.Forms.MouseEventHandler(this.controlMouseDown);
+            this.labelNote.MouseMove += new System.Windows.Forms.MouseEventHandler(this.controlMouseMove);
+            this.labelNote.MouseUp += new System.Windows.Forms.MouseEventHandler(this.controlMouseUp);
             // 
             // richTextBoxNote
             // 
@@ -472,12 +554,29 @@ namespace EDDiscovery.UserControls
             this.richTextBoxNote.HideScrollBar = true;
             this.richTextBoxNote.Location = new System.Drawing.Point(50, 191);
             this.richTextBoxNote.Name = "richTextBoxNote";
+            this.richTextBoxNote.ReadOnly = false;
+            this.richTextBoxNote.ScrollBarArrowBorderColor = System.Drawing.Color.LightBlue;
+            this.richTextBoxNote.ScrollBarArrowButtonColor = System.Drawing.Color.LightGray;
+            this.richTextBoxNote.ScrollBarBackColor = System.Drawing.SystemColors.Control;
+            this.richTextBoxNote.ScrollBarBorderColor = System.Drawing.Color.White;
+            this.richTextBoxNote.ScrollBarFlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.richTextBoxNote.ScrollBarForeColor = System.Drawing.SystemColors.ControlText;
+            this.richTextBoxNote.ScrollBarMouseOverButtonColor = System.Drawing.Color.Green;
+            this.richTextBoxNote.ScrollBarMousePressedButtonColor = System.Drawing.Color.Red;
+            this.richTextBoxNote.ScrollBarSliderColor = System.Drawing.Color.DarkGray;
+            this.richTextBoxNote.ScrollBarThumbBorderColor = System.Drawing.Color.Yellow;
+            this.richTextBoxNote.ScrollBarThumbButtonColor = System.Drawing.Color.DarkBlue;
             this.richTextBoxNote.ScrollBarWidth = 20;
             this.richTextBoxNote.ShowLineCount = false;
             this.richTextBoxNote.Size = new System.Drawing.Size(277, 50);
             this.richTextBoxNote.TabIndex = 0;
+            this.richTextBoxNote.TextBoxBackColor = System.Drawing.SystemColors.Control;
+            this.richTextBoxNote.TextBoxForeColor = System.Drawing.SystemColors.ControlText;
             this.richTextBoxNote.TextBoxChanged += new ExtendedControls.RichTextBoxScroll.OnTextBoxChanged(this.richTextBoxNote_TextBoxChanged);
             this.richTextBoxNote.Leave += new System.EventHandler(this.richTextBoxNote_Leave);
+            this.richTextBoxNote.MouseDown += new System.Windows.Forms.MouseEventHandler(this.controlMouseDown);
+            this.richTextBoxNote.MouseMove += new System.Windows.Forms.MouseEventHandler(this.controlMouseMove);
+            this.richTextBoxNote.MouseUp += new System.Windows.Forms.MouseEventHandler(this.controlMouseUp);
             // 
             // labelTarget
             // 
@@ -487,6 +586,9 @@ namespace EDDiscovery.UserControls
             this.labelTarget.Size = new System.Drawing.Size(38, 13);
             this.labelTarget.TabIndex = 16;
             this.labelTarget.Text = "Target";
+            this.labelTarget.MouseDown += new System.Windows.Forms.MouseEventHandler(this.controlMouseDown);
+            this.labelTarget.MouseMove += new System.Windows.Forms.MouseEventHandler(this.controlMouseMove);
+            this.labelTarget.MouseUp += new System.Windows.Forms.MouseEventHandler(this.controlMouseUp);
             // 
             // buttonEDSMTarget
             // 
@@ -503,6 +605,9 @@ namespace EDDiscovery.UserControls
             this.buttonEDSMTarget.Size = new System.Drawing.Size(44, 20);
             this.buttonEDSMTarget.TabIndex = 23;
             this.buttonEDSMTarget.Click += new System.EventHandler(this.buttonEDSMTarget_Click);
+            this.buttonEDSMTarget.MouseDown += new System.Windows.Forms.MouseEventHandler(this.controlMouseDown);
+            this.buttonEDSMTarget.MouseMove += new System.Windows.Forms.MouseEventHandler(this.controlMouseMove);
+            this.buttonEDSMTarget.MouseUp += new System.Windows.Forms.MouseEventHandler(this.controlMouseUp);
             // 
             // textBoxTarget
             // 
@@ -526,6 +631,9 @@ namespace EDDiscovery.UserControls
             this.textBoxTarget.TabStop = false;
             this.toolTip1.SetToolTip(this.textBoxTarget, "Sets the target");
             this.textBoxTarget.KeyUp += new System.Windows.Forms.KeyEventHandler(this.textBoxTarget_KeyUp);
+            this.textBoxTarget.MouseDown += new System.Windows.Forms.MouseEventHandler(this.controlMouseDown);
+            this.textBoxTarget.MouseMove += new System.Windows.Forms.MouseEventHandler(this.controlMouseMove);
+            this.textBoxTarget.MouseUp += new System.Windows.Forms.MouseEventHandler(this.controlMouseUp);
             // 
             // textBoxTargetDist
             // 
@@ -539,6 +647,9 @@ namespace EDDiscovery.UserControls
             this.textBoxTargetDist.TabIndex = 15;
             this.textBoxTargetDist.TabStop = false;
             this.toolTip1.SetToolTip(this.textBoxTargetDist, "Distance to target");
+            this.textBoxTargetDist.MouseDown += new System.Windows.Forms.MouseEventHandler(this.controlMouseDown);
+            this.textBoxTargetDist.MouseMove += new System.Windows.Forms.MouseEventHandler(this.controlMouseMove);
+            this.textBoxTargetDist.MouseUp += new System.Windows.Forms.MouseEventHandler(this.controlMouseUp);
             // 
             // toolTip1
             // 
@@ -554,6 +665,9 @@ namespace EDDiscovery.UserControls
             this.textBoxSystem.Size = new System.Drawing.Size(152, 20);
             this.textBoxSystem.TabIndex = 1;
             this.textBoxSystem.TabStop = false;
+            this.textBoxSystem.MouseDown += new System.Windows.Forms.MouseEventHandler(this.controlMouseDown);
+            this.textBoxSystem.MouseMove += new System.Windows.Forms.MouseEventHandler(this.controlMouseMove);
+            this.textBoxSystem.MouseUp += new System.Windows.Forms.MouseEventHandler(this.controlMouseUp);
             // 
             // labelSysName
             // 
@@ -563,6 +677,9 @@ namespace EDDiscovery.UserControls
             this.labelSysName.Size = new System.Drawing.Size(41, 13);
             this.labelSysName.TabIndex = 4;
             this.labelSysName.Text = "System";
+            this.labelSysName.MouseDown += new System.Windows.Forms.MouseEventHandler(this.controlMouseDown);
+            this.labelSysName.MouseMove += new System.Windows.Forms.MouseEventHandler(this.controlMouseMove);
+            this.labelSysName.MouseUp += new System.Windows.Forms.MouseEventHandler(this.controlMouseUp);
             // 
             // labelOpen
             // 
@@ -572,6 +689,171 @@ namespace EDDiscovery.UserControls
             this.labelOpen.Size = new System.Drawing.Size(33, 13);
             this.labelOpen.TabIndex = 3;
             this.labelOpen.Text = "Open";
+            this.labelOpen.MouseDown += new System.Windows.Forms.MouseEventHandler(this.controlMouseDown);
+            this.labelOpen.MouseMove += new System.Windows.Forms.MouseEventHandler(this.controlMouseMove);
+            this.labelOpen.MouseUp += new System.Windows.Forms.MouseEventHandler(this.controlMouseUp);
+            // 
+            // labelGamemode
+            // 
+            this.labelGamemode.AutoSize = true;
+            this.labelGamemode.Location = new System.Drawing.Point(2, 283);
+            this.labelGamemode.Name = "labelGamemode";
+            this.labelGamemode.Size = new System.Drawing.Size(34, 13);
+            this.labelGamemode.TabIndex = 16;
+            this.labelGamemode.Text = "Mode";
+            this.labelGamemode.MouseDown += new System.Windows.Forms.MouseEventHandler(this.controlMouseDown);
+            this.labelGamemode.MouseMove += new System.Windows.Forms.MouseEventHandler(this.controlMouseMove);
+            this.labelGamemode.MouseUp += new System.Windows.Forms.MouseEventHandler(this.controlMouseUp);
+            // 
+            // labelTravel
+            // 
+            this.labelTravel.AutoSize = true;
+            this.labelTravel.Location = new System.Drawing.Point(3, 309);
+            this.labelTravel.Name = "labelTravel";
+            this.labelTravel.Size = new System.Drawing.Size(37, 13);
+            this.labelTravel.TabIndex = 16;
+            this.labelTravel.Text = "Travel";
+            this.labelTravel.MouseDown += new System.Windows.Forms.MouseEventHandler(this.controlMouseDown);
+            this.labelTravel.MouseMove += new System.Windows.Forms.MouseEventHandler(this.controlMouseMove);
+            this.labelTravel.MouseUp += new System.Windows.Forms.MouseEventHandler(this.controlMouseUp);
+            // 
+            // textBoxGameMode
+            // 
+            this.textBoxGameMode.BorderColor = System.Drawing.Color.Transparent;
+            this.textBoxGameMode.BorderColorScaling = 0.5F;
+            this.textBoxGameMode.Location = new System.Drawing.Point(50, 283);
+            this.textBoxGameMode.Name = "textBoxGameMode";
+            this.textBoxGameMode.ReadOnly = true;
+            this.textBoxGameMode.Size = new System.Drawing.Size(152, 20);
+            this.textBoxGameMode.TabIndex = 8;
+            this.textBoxGameMode.TabStop = false;
+            this.textBoxGameMode.MouseDown += new System.Windows.Forms.MouseEventHandler(this.controlMouseDown);
+            this.textBoxGameMode.MouseMove += new System.Windows.Forms.MouseEventHandler(this.controlMouseMove);
+            this.textBoxGameMode.MouseUp += new System.Windows.Forms.MouseEventHandler(this.controlMouseUp);
+            // 
+            // textBoxTravelDist
+            // 
+            this.textBoxTravelDist.BorderColor = System.Drawing.Color.Transparent;
+            this.textBoxTravelDist.BorderColorScaling = 0.5F;
+            this.textBoxTravelDist.Location = new System.Drawing.Point(50, 309);
+            this.textBoxTravelDist.Name = "textBoxTravelDist";
+            this.textBoxTravelDist.ReadOnly = true;
+            this.textBoxTravelDist.Size = new System.Drawing.Size(68, 20);
+            this.textBoxTravelDist.TabIndex = 8;
+            this.textBoxTravelDist.TabStop = false;
+            this.textBoxTravelDist.MouseDown += new System.Windows.Forms.MouseEventHandler(this.controlMouseDown);
+            this.textBoxTravelDist.MouseMove += new System.Windows.Forms.MouseEventHandler(this.controlMouseMove);
+            this.textBoxTravelDist.MouseUp += new System.Windows.Forms.MouseEventHandler(this.controlMouseUp);
+            // 
+            // textBoxTravelTime
+            // 
+            this.textBoxTravelTime.BorderColor = System.Drawing.Color.Transparent;
+            this.textBoxTravelTime.BorderColorScaling = 0.5F;
+            this.textBoxTravelTime.Location = new System.Drawing.Point(127, 309);
+            this.textBoxTravelTime.Name = "textBoxTravelTime";
+            this.textBoxTravelTime.ReadOnly = true;
+            this.textBoxTravelTime.Size = new System.Drawing.Size(85, 20);
+            this.textBoxTravelTime.TabIndex = 8;
+            this.textBoxTravelTime.TabStop = false;
+            this.textBoxTravelTime.MouseDown += new System.Windows.Forms.MouseEventHandler(this.controlMouseDown);
+            this.textBoxTravelTime.MouseMove += new System.Windows.Forms.MouseEventHandler(this.controlMouseMove);
+            this.textBoxTravelTime.MouseUp += new System.Windows.Forms.MouseEventHandler(this.controlMouseUp);
+            // 
+            // textBoxTravelJumps
+            // 
+            this.textBoxTravelJumps.BorderColor = System.Drawing.Color.Transparent;
+            this.textBoxTravelJumps.BorderColorScaling = 0.5F;
+            this.textBoxTravelJumps.Location = new System.Drawing.Point(218, 309);
+            this.textBoxTravelJumps.Name = "textBoxTravelJumps";
+            this.textBoxTravelJumps.ReadOnly = true;
+            this.textBoxTravelJumps.Size = new System.Drawing.Size(85, 20);
+            this.textBoxTravelJumps.TabIndex = 8;
+            this.textBoxTravelJumps.TabStop = false;
+            this.textBoxTravelJumps.MouseDown += new System.Windows.Forms.MouseEventHandler(this.controlMouseDown);
+            this.textBoxTravelJumps.MouseMove += new System.Windows.Forms.MouseEventHandler(this.controlMouseMove);
+            this.textBoxTravelJumps.MouseUp += new System.Windows.Forms.MouseEventHandler(this.controlMouseUp);
+            // 
+            // labelCargo
+            // 
+            this.labelCargo.AutoSize = true;
+            this.labelCargo.Location = new System.Drawing.Point(2, 342);
+            this.labelCargo.Name = "labelCargo";
+            this.labelCargo.Size = new System.Drawing.Size(35, 13);
+            this.labelCargo.TabIndex = 16;
+            this.labelCargo.Text = "Cargo";
+            this.labelCargo.MouseDown += new System.Windows.Forms.MouseEventHandler(this.controlMouseDown);
+            this.labelCargo.MouseMove += new System.Windows.Forms.MouseEventHandler(this.controlMouseMove);
+            this.labelCargo.MouseUp += new System.Windows.Forms.MouseEventHandler(this.controlMouseUp);
+            // 
+            // textBoxCargo
+            // 
+            this.textBoxCargo.BorderColor = System.Drawing.Color.Transparent;
+            this.textBoxCargo.BorderColorScaling = 0.5F;
+            this.textBoxCargo.Location = new System.Drawing.Point(50, 339);
+            this.textBoxCargo.Name = "textBoxCargo";
+            this.textBoxCargo.ReadOnly = true;
+            this.textBoxCargo.Size = new System.Drawing.Size(68, 20);
+            this.textBoxCargo.TabIndex = 8;
+            this.textBoxCargo.TabStop = false;
+            this.textBoxCargo.MouseDown += new System.Windows.Forms.MouseEventHandler(this.controlMouseDown);
+            this.textBoxCargo.MouseMove += new System.Windows.Forms.MouseEventHandler(this.controlMouseMove);
+            this.textBoxCargo.MouseUp += new System.Windows.Forms.MouseEventHandler(this.controlMouseUp);
+            // 
+            // textBoxMaterials
+            // 
+            this.textBoxMaterials.BorderColor = System.Drawing.Color.Transparent;
+            this.textBoxMaterials.BorderColorScaling = 0.5F;
+            this.textBoxMaterials.Location = new System.Drawing.Point(188, 339);
+            this.textBoxMaterials.Name = "textBoxMaterials";
+            this.textBoxMaterials.ReadOnly = true;
+            this.textBoxMaterials.Size = new System.Drawing.Size(68, 20);
+            this.textBoxMaterials.TabIndex = 8;
+            this.textBoxMaterials.TabStop = false;
+            this.textBoxMaterials.MouseDown += new System.Windows.Forms.MouseEventHandler(this.controlMouseDown);
+            this.textBoxMaterials.MouseMove += new System.Windows.Forms.MouseEventHandler(this.controlMouseMove);
+            this.textBoxMaterials.MouseUp += new System.Windows.Forms.MouseEventHandler(this.controlMouseUp);
+            // 
+            // labelMaterials
+            // 
+            this.labelMaterials.AutoSize = true;
+            this.labelMaterials.Location = new System.Drawing.Point(124, 342);
+            this.labelMaterials.Name = "labelMaterials";
+            this.labelMaterials.Size = new System.Drawing.Size(49, 13);
+            this.labelMaterials.TabIndex = 16;
+            this.labelMaterials.Text = "Materials";
+            this.labelMaterials.MouseDown += new System.Windows.Forms.MouseEventHandler(this.controlMouseDown);
+            this.labelMaterials.MouseMove += new System.Windows.Forms.MouseEventHandler(this.controlMouseMove);
+            this.labelMaterials.MouseUp += new System.Windows.Forms.MouseEventHandler(this.controlMouseUp);
+            // 
+            // toolStripGameMode
+            // 
+            this.toolStripGameMode.Checked = true;
+            this.toolStripGameMode.CheckOnClick = true;
+            this.toolStripGameMode.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.toolStripGameMode.Name = "toolStripGameMode";
+            this.toolStripGameMode.Size = new System.Drawing.Size(252, 22);
+            this.toolStripGameMode.Text = "Display Game Mode";
+            this.toolStripGameMode.Click += new System.EventHandler(this.toolStripGameMode_Click);
+            // 
+            // toolStripTravel
+            // 
+            this.toolStripTravel.Checked = true;
+            this.toolStripTravel.CheckOnClick = true;
+            this.toolStripTravel.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.toolStripTravel.Name = "toolStripTravel";
+            this.toolStripTravel.Size = new System.Drawing.Size(252, 22);
+            this.toolStripTravel.Text = "Display Travel Trip Statistics";
+            this.toolStripTravel.Click += new System.EventHandler(this.toolStripTravel_Click);
+            // 
+            // toolStripCargo
+            // 
+            this.toolStripCargo.Checked = true;
+            this.toolStripCargo.CheckOnClick = true;
+            this.toolStripCargo.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.toolStripCargo.Name = "toolStripCargo";
+            this.toolStripCargo.Size = new System.Drawing.Size(252, 22);
+            this.toolStripCargo.Text = "Display Cargo and Material Count";
+            this.toolStripCargo.Click += new System.EventHandler(this.toolStripCargo_Click);
             // 
             // UserControlSysInfo
             // 
@@ -589,6 +871,12 @@ namespace EDDiscovery.UserControls
             this.Controls.Add(this.labelBodyName);
             this.Controls.Add(this.textBoxBody);
             this.Controls.Add(this.labelPosition);
+            this.Controls.Add(this.textBoxTravelJumps);
+            this.Controls.Add(this.textBoxTravelTime);
+            this.Controls.Add(this.textBoxMaterials);
+            this.Controls.Add(this.textBoxCargo);
+            this.Controls.Add(this.textBoxTravelDist);
+            this.Controls.Add(this.textBoxGameMode);
             this.Controls.Add(this.textBoxPosition);
             this.Controls.Add(this.labelHomeDist);
             this.Controls.Add(this.textBoxHomeDist);
@@ -604,12 +892,16 @@ namespace EDDiscovery.UserControls
             this.Controls.Add(this.textBoxEconomy);
             this.Controls.Add(this.labelNote);
             this.Controls.Add(this.richTextBoxNote);
+            this.Controls.Add(this.labelMaterials);
+            this.Controls.Add(this.labelCargo);
+            this.Controls.Add(this.labelTravel);
+            this.Controls.Add(this.labelGamemode);
             this.Controls.Add(this.labelTarget);
             this.Controls.Add(this.textBoxTarget);
             this.Controls.Add(this.textBoxTargetDist);
             this.Controls.Add(this.buttonEDSMTarget);
             this.Name = "UserControlSysInfo";
-            this.Size = new System.Drawing.Size(393, 353);
+            this.Size = new System.Drawing.Size(393, 456);
             this.Resize += new System.EventHandler(this.UserControlSysInfo_Resize);
             this.contextMenuStrip.ResumeLayout(false);
             this.ResumeLayout(false);
@@ -661,5 +953,18 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.ToolStripMenuItem toolStripPosition;
         private System.Windows.Forms.ToolStripMenuItem toolStripSystemState;
         private System.Windows.Forms.ToolStripMenuItem toolStripDistanceFrom;
+        private System.Windows.Forms.Label labelGamemode;
+        private System.Windows.Forms.Label labelTravel;
+        private ExtendedControls.TextBoxBorder textBoxGameMode;
+        private ExtendedControls.TextBoxBorder textBoxTravelDist;
+        private ExtendedControls.TextBoxBorder textBoxTravelTime;
+        private ExtendedControls.TextBoxBorder textBoxTravelJumps;
+        private System.Windows.Forms.Label labelCargo;
+        private ExtendedControls.TextBoxBorder textBoxCargo;
+        private ExtendedControls.TextBoxBorder textBoxMaterials;
+        private System.Windows.Forms.Label labelMaterials;
+        private System.Windows.Forms.ToolStripMenuItem toolStripGameMode;
+        private System.Windows.Forms.ToolStripMenuItem toolStripTravel;
+        private System.Windows.Forms.ToolStripMenuItem toolStripCargo;
     }
 }

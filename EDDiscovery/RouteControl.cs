@@ -54,7 +54,7 @@ namespace EDDiscovery
             InitializeComponent();
             button_Route.Enabled = false;
             cmd3DMap.Enabled = false;
-			richTextBox_routeresult.TextBox.ReadOnly = true;
+			richTextBox_routeresult.ReadOnly = true;
 
             for (int i = 0; i < RoutePlotter.metric_options.Length; i++)
                 comboBoxRoutingMetric.Items.Add(RoutePlotter.metric_options[i]);
