@@ -29,16 +29,16 @@
         private void InitializeComponent()
         {
             this.rolluppanel = new ExtendedControls.RollUpPanel();
+            this.buttonExt4 = new ExtendedControls.ButtonExt();
             this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.comboBoxCustom2 = new ExtendedControls.ComboBoxCustom();
             this.comboBoxCustom1 = new ExtendedControls.ComboBoxCustom();
+            this.buttonExt3 = new ExtendedControls.ButtonExt();
             this.buttonExt2 = new ExtendedControls.ButtonExt();
             this.buttonExt1 = new ExtendedControls.ButtonExt();
             this.panel1 = new System.Windows.Forms.Panel();
             this.richTextBox1 = new System.Windows.Forms.RichTextBox();
-            this.label1 = new System.Windows.Forms.Label();
-            this.buttonExt4 = new ExtendedControls.ButtonExt();
-            this.buttonExt3 = new ExtendedControls.ButtonExt();
+            this.textBoxBorder1 = new ExtendedControls.TextBoxBorder();
             this.rolluppanel.SuspendLayout();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
@@ -64,6 +64,20 @@
             this.rolluppanel.TabIndex = 0;
             this.rolluppanel.UnrolledHeight = 32;
             this.rolluppanel.UnrollHoverDelay = 1000;
+            // 
+            // buttonExt4
+            // 
+            this.buttonExt4.BorderColorScaling = 1.25F;
+            this.buttonExt4.ButtonColorScaling = 0.5F;
+            this.buttonExt4.ButtonDisabledScaling = 0.5F;
+            this.buttonExt4.Image = global::DialogTest.Properties.Resources.galaxy_black;
+            this.buttonExt4.Location = new System.Drawing.Point(314, 6);
+            this.buttonExt4.Name = "buttonExt4";
+            this.buttonExt4.Size = new System.Drawing.Size(75, 23);
+            this.buttonExt4.TabIndex = 4;
+            this.buttonExt4.Text = "3D";
+            this.buttonExt4.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.buttonExt4.UseVisualStyleBackColor = true;
             // 
             // comboBox1
             // 
@@ -125,6 +139,27 @@
             this.comboBoxCustom1.Text = "comboBoxCustom1";
             this.comboBoxCustom1.ValueMember = "";
             // 
+            // buttonExt3
+            // 
+            this.buttonExt3.BackColor = System.Drawing.Color.DimGray;
+            this.buttonExt3.BorderColorScaling = 1.25F;
+            this.buttonExt3.ButtonColorScaling = 0.5F;
+            this.buttonExt3.ButtonDisabledScaling = 0.5F;
+            this.buttonExt3.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
+            this.buttonExt3.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Red;
+            this.buttonExt3.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Lime;
+            this.buttonExt3.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.buttonExt3.ForeColor = System.Drawing.Color.DarkOrange;
+            this.buttonExt3.Image = global::DialogTest.Properties.Resources.galaxy_white;
+            this.buttonExt3.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.buttonExt3.Location = new System.Drawing.Point(226, 5);
+            this.buttonExt3.Name = "buttonExt3";
+            this.buttonExt3.Size = new System.Drawing.Size(46, 24);
+            this.buttonExt3.TabIndex = 1;
+            this.buttonExt3.Text = "3D";
+            this.buttonExt3.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.buttonExt3.UseVisualStyleBackColor = false;
+            // 
             // buttonExt2
             // 
             this.buttonExt2.BorderColorScaling = 1.25F;
@@ -153,8 +188,8 @@
             // 
             // panel1
             // 
+            this.panel1.Controls.Add(this.textBoxBorder1);
             this.panel1.Controls.Add(this.richTextBox1);
-            this.panel1.Controls.Add(this.label1);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel1.Location = new System.Drawing.Point(0, 40);
             this.panel1.Name = "panel1";
@@ -164,55 +199,29 @@
             // richTextBox1
             // 
             this.richTextBox1.ForeColor = System.Drawing.Color.DarkOrange;
-            this.richTextBox1.Location = new System.Drawing.Point(55, 7);
+            this.richTextBox1.Location = new System.Drawing.Point(25, 24);
             this.richTextBox1.Name = "richTextBox1";
-            this.richTextBox1.Size = new System.Drawing.Size(862, 402);
+            this.richTextBox1.Size = new System.Drawing.Size(862, 122);
             this.richTextBox1.TabIndex = 1;
             this.richTextBox1.Text = "";
             // 
-            // label1
+            // textBoxBorder1
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(13, 7);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(35, 13);
-            this.label1.TabIndex = 0;
-            this.label1.Text = "label1";
-            // 
-            // buttonExt4
-            // 
-            this.buttonExt4.BorderColorScaling = 1.25F;
-            this.buttonExt4.ButtonColorScaling = 0.5F;
-            this.buttonExt4.ButtonDisabledScaling = 0.5F;
-            this.buttonExt4.Image = global::DialogTest.Properties.Resources.galaxy_black;
-            this.buttonExt4.Location = new System.Drawing.Point(314, 6);
-            this.buttonExt4.Name = "buttonExt4";
-            this.buttonExt4.Size = new System.Drawing.Size(75, 23);
-            this.buttonExt4.TabIndex = 4;
-            this.buttonExt4.Text = "3D";
-            this.buttonExt4.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.buttonExt4.UseVisualStyleBackColor = true;
-            // 
-            // buttonExt3
-            // 
-            this.buttonExt3.BackColor = System.Drawing.Color.DimGray;
-            this.buttonExt3.BorderColorScaling = 1.25F;
-            this.buttonExt3.ButtonColorScaling = 0.5F;
-            this.buttonExt3.ButtonDisabledScaling = 0.5F;
-            this.buttonExt3.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
-            this.buttonExt3.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Red;
-            this.buttonExt3.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Lime;
-            this.buttonExt3.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.buttonExt3.ForeColor = System.Drawing.Color.DarkOrange;
-            this.buttonExt3.Image = global::DialogTest.Properties.Resources.galaxy_white;
-            this.buttonExt3.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.buttonExt3.Location = new System.Drawing.Point(226, 5);
-            this.buttonExt3.Name = "buttonExt3";
-            this.buttonExt3.Size = new System.Drawing.Size(46, 24);
-            this.buttonExt3.TabIndex = 1;
-            this.buttonExt3.Text = "3D";
-            this.buttonExt3.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.buttonExt3.UseVisualStyleBackColor = false;
+            this.textBoxBorder1.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
+            this.textBoxBorder1.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
+            this.textBoxBorder1.BorderColor = System.Drawing.Color.DarkRed;
+            this.textBoxBorder1.BorderColorScaling = 0.5F;
+            this.textBoxBorder1.Location = new System.Drawing.Point(25, 181);
+            this.textBoxBorder1.Multiline = false;
+            this.textBoxBorder1.Name = "textBoxBorder1";
+            this.textBoxBorder1.ReadOnly = false;
+            this.textBoxBorder1.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.textBoxBorder1.SelectionLength = 0;
+            this.textBoxBorder1.SelectionStart = 0;
+            this.textBoxBorder1.Size = new System.Drawing.Size(223, 23);
+            this.textBoxBorder1.TabIndex = 2;
+            this.textBoxBorder1.Text = "textBoxBorder1";
+            this.textBoxBorder1.WordWrap = true;
             // 
             // TestRollUpPanel
             // 
@@ -225,7 +234,6 @@
             this.Text = "TestForm2";
             this.rolluppanel.ResumeLayout(false);
             this.panel1.ResumeLayout(false);
-            this.panel1.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -238,10 +246,10 @@
         private ExtendedControls.ButtonExt buttonExt1;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.RichTextBox richTextBox1;
-        private System.Windows.Forms.Label label1;
         private ExtendedControls.ComboBoxCustom comboBoxCustom1;
         private ExtendedControls.ComboBoxCustom comboBoxCustom2;
         private System.Windows.Forms.ComboBox comboBox1;
         private ExtendedControls.ButtonExt buttonExt4;
+        private ExtendedControls.TextBoxBorder textBoxBorder1;
     }
 }

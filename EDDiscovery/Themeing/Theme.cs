@@ -729,12 +729,14 @@ namespace EDDiscovery
             else if (myControl is TextBoxBorder)
             {
                 TextBoxBorder ctrl = (TextBoxBorder)myControl;
-                myControl.ForeColor = currentsettings.colors[Settings.CI.textbox_fore];
-                myControl.BackColor = currentsettings.colors[Settings.CI.textbox_back];
+                ctrl.ForeColor = currentsettings.colors[Settings.CI.textbox_fore];
+                ctrl.BackColor = currentsettings.colors[Settings.CI.textbox_back];
+                ctrl.ControlBackground = GroupBoxOverride(parent, currentsettings.colors[Settings.CI.form]);
                 ctrl.BorderColor = Color.Transparent;
                 ctrl.BorderStyle = BorderStyle.None;
                 ctrl.AutoSize = true;
 
+                //TBD
                 if (currentsettings.textboxborderstyle.Equals(TextboxBorderStyles[0]))
                     ctrl.AutoSize = false;                                                 // with no border, the autosize clips the bottom of chars..
                 else if (currentsettings.textboxborderstyle.Equals(TextboxBorderStyles[1]))
@@ -762,6 +764,8 @@ namespace EDDiscovery
                     else
                         actb.FlatStyle = FlatStyle.Popup;
                 }
+
+                ctrl.Invalidate();
             }
             else if (myControl is ButtonExt)
             {

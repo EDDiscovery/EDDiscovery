@@ -117,8 +117,8 @@ namespace DialogTest
             listControlCustom1.Items.Add("nine");
             listControlCustom1.FlatStyle = FlatStyle.Popup;
 
-            richTextBoxScroll1.ScrollBar.FlatStyle = FlatStyle.Popup;
-            richTextBoxScroll1.ScrollBar.HideScrollBar = true;
+            richTextBoxScroll1.ScrollBarFlatStyle = FlatStyle.Popup;
+            richTextBoxScroll1.HideScrollBar = true;
 
             dataGridView1.Rows.Clear();
 

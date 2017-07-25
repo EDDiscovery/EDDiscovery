@@ -604,7 +604,6 @@
             this.autoCompleteTextBox2.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource;
             this.autoCompleteTextBox2.BorderColor = System.Drawing.Color.Gold;
             this.autoCompleteTextBox2.BorderColorScaling = 0.5F;
-            this.autoCompleteTextBox2.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.autoCompleteTextBox2.DropDownBackgroundColor = System.Drawing.Color.Gray;
             this.autoCompleteTextBox2.DropDownBorderColor = System.Drawing.Color.Green;
             this.autoCompleteTextBox2.DropDownHeight = 80;
@@ -625,7 +624,6 @@
             this.autoCompleteTextBox1.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource;
             this.autoCompleteTextBox1.BorderColor = System.Drawing.Color.Gold;
             this.autoCompleteTextBox1.BorderColorScaling = 0.5F;
-            this.autoCompleteTextBox1.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.autoCompleteTextBox1.DropDownBackgroundColor = System.Drawing.Color.Gray;
             this.autoCompleteTextBox1.DropDownBorderColor = System.Drawing.Color.Green;
             this.autoCompleteTextBox1.DropDownHeight = 80;
@@ -1044,7 +1042,6 @@
             // 
             this.textBoxBorder1.BorderColor = System.Drawing.Color.Gold;
             this.textBoxBorder1.BorderColorScaling = 0.5F;
-            this.textBoxBorder1.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textBoxBorder1.Location = new System.Drawing.Point(18, 305);
             this.textBoxBorder1.Name = "textBoxBorder1";
             this.textBoxBorder1.Size = new System.Drawing.Size(100, 13);

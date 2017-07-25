@@ -97,6 +97,7 @@ namespace EDDiscovery.UserControls
         {
             discoveryform.TravelControl.OnTravelSelectionChanged -= Display;
             discoveryform.OnNewTarget -= RefreshTargetDisplay;
+            discoveryform.OnNoteChanged -= OnNoteChanged;
             DB.SQLiteDBClass.PutSettingString(DbOSave, String.Join(",",Order));
         }
 
@@ -165,6 +166,10 @@ namespace EDDiscovery.UserControls
                     textBoxTravelTime.Visible = textBoxTravelJumps.Visible = false;
                 }
 
+                textBoxCargo.Text = he.MaterialCommodity.CargoCount.ToStringInvariant();
+                textBoxMaterials.Text = he.MaterialCommodity.MaterialsCount.ToStringInvariant();
+
+
                 RefreshTargetDisplay(this);
             }
             else
@@ -173,7 +178,8 @@ namespace EDDiscovery.UserControls
                 textBoxSystem.Text = textBoxBody.Text = textBoxPosition.Text =
                                 textBoxAllegiance.Text = textBoxEconomy.Text = textBoxGovernment.Text =
                                 textBoxVisits.Text = textBoxState.Text = textBoxHomeDist.Text = textBoxSolDist.Text =
-                                textBoxGameMode.Text = textBoxTravelDist.Text = 
+                                textBoxGameMode.Text = textBoxTravelDist.Text =
+                                textBoxCargo.Text = textBoxMaterials.Text =
                                 "";
                 textBoxTravelTime.Visible = textBoxTravelJumps.Visible = false;
 
@@ -375,7 +381,7 @@ namespace EDDiscovery.UserControls
             int textboxh = EDDTheme.Instance.FontSize > 10 ? 24 : 20;
             int vspacing = textboxh+4;
 
-            System.Diagnostics.Debug.WriteLine("Selection is " + sel);
+            //System.Diagnostics.Debug.WriteLine("Selection is " + sel);
 
             YStart = new int[Order.Count];
             YEnd = new int[Order.Count];
@@ -481,7 +487,7 @@ namespace EDDiscovery.UserControls
                     }
 
                     YEnd[i] = pos.Y - 1;
-                    System.Diagnostics.Debug.WriteLine("Sel " + i + " " + Order[i] + " on " + ison + " ypos " + YStart[i] +"-" + YEnd[i]);
+                    //System.Diagnostics.Debug.WriteLine("Sel " + i + " " + Order[i] + " on " + ison + " ypos " + YStart[i] +"-" + YEnd[i]);
                 }
             }
 
@@ -551,8 +557,8 @@ namespace EDDiscovery.UserControls
             int targetw = left * 7 / 10;
             int distw = left - targetw;
 
-            textBoxTarget.Size = new Size(targetw, richTextBoxNote.Height);
-            textBoxTargetDist.Size = new Size(distw, richTextBoxNote.Height);
+            textBoxTarget.Width = targetw;
+            textBoxTargetDist.Width = distw;
             textBoxTargetDist.Location = new Point(textBoxTarget.Right + hspacing, textBoxTargetDist.Top);
             buttonEDSMTarget.Location = new Point(textBoxTargetDist.Right + hspacing, buttonEDSMTarget.Top);
 
