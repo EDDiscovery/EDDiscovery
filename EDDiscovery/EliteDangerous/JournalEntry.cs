@@ -269,6 +269,7 @@ namespace EDDiscovery.EliteDangerous
     {
         EDSM = 0x01,
         EDDN = 0x02,
+        EGO = 0x04,
         StartMarker = 0x0100,           // measure distance start pos marker
         StopMarker = 0x0200,            // measure distance stop pos marker
     };
@@ -294,6 +295,7 @@ namespace EDDiscovery.EliteDangerous
         
         public bool SyncedEDSM { get { return (Synced & (int)SyncFlags.EDSM) != 0; } }
         public bool SyncedEDDN { get { return (Synced & (int)SyncFlags.EDDN) != 0; } }
+        public bool SyncedEGO { get { return (Synced & (int)SyncFlags.EDDN) != 0;} }
         public bool StartMarker { get { return (Synced & (int)SyncFlags.StartMarker) != 0; } }
         public bool StopMarker { get { return (Synced & (int)SyncFlags.StopMarker) != 0; } }
         #endregion
