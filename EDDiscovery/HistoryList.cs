@@ -65,6 +65,7 @@ namespace EDDiscovery
         public bool IsEDSMFirstDiscover;// flag populated from journal entry when HE is made. Were we the first to report the system to EDSM?
         public bool EdsmSync;           // flag populated from journal entry when HE is made. Have we synced?
         public bool EDDNSync;           // flag populated from journal entry when HE is made. Have we synced?
+        public bool EGOSync;            // flag populated from journal entry when HE is made. Have we synced?
         public bool StartMarker;        // flag populated from journal entry when HE is made. Is this a system distance measurement system
         public bool StopMarker;         // flag populated from journal entry when HE is made. Is this a system distance measurement stop point
         public bool IsFSDJump { get { return EntryType == EliteDangerous.JournalTypeEnum.FSDJump; } }
@@ -251,6 +252,7 @@ namespace EDDiscovery
                 MapColour = mapcolour,
                 EdsmSync = je.SyncedEDSM,
                 EDDNSync = je.SyncedEDDN,
+                EGOSync = je.SyncedEDDN,
                 StartMarker = je.StartMarker,
                 StopMarker = je.StopMarker,
                 EventSummary = summary,
@@ -456,6 +458,15 @@ namespace EDDiscovery
             if (Journalid != 0)
             {
                 EliteDangerous.JournalEntry.UpdateSyncFlagBit(Journalid, EliteDangerous.SyncFlags.EDDN, true);
+            }
+        }
+
+        public void SetEGOSync()
+        {
+            EGOSync = true;
+            if (Journalid != 0)
+            {
+                EliteDangerous.JournalEntry.UpdateSyncFlagBit(Journalid, EliteDangerous.SyncFlags.EGO, true);
             }
         }
 

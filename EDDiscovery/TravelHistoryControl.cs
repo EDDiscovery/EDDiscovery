@@ -33,6 +33,7 @@ using Newtonsoft.Json.Linq;
 using EDDiscovery.Export;
 using EDDiscovery.UserControls;
 using EDDiscovery.Forms;
+using EDDiscovery.EGO;
 
 namespace EDDiscovery
 {
@@ -279,6 +280,14 @@ namespace EDDiscovery
                     if (EDCommander.Current.SyncToEddn == true)
                     {
                         EDDNSync.SendEDDNEvents(_discoveryForm, he);
+                    }
+                }
+
+                if (he.EntryType == JournalTypeEnum.Scan)
+                {
+                    if (EDCommander.Current.SyncToEGO)
+                    {
+                        EGOSync.SendEGOEvents(_discoveryForm, he);
                     }
                 }
 

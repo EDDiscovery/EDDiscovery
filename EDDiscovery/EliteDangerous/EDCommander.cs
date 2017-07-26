@@ -219,17 +219,18 @@ namespace EDDiscovery
 
         public static EDCommander Create(EDCommander other )
         {
-            return Create(other.name, other.EdsmName, other.APIKey, other.JournalDir, other.syncToEdsm, other.SyncFromEdsm, other.SyncToEddn);
+            return Create(other.name, other.EdsmName, other.APIKey, other.JournalDir, other.syncToEdsm, other.SyncFromEdsm, other.SyncToEddn, other.SyncToEGO, other.EGOName, other.EGOAPIKey);
         }
 
         public static EDCommander Create(string name = null, string edsmName = null, string edsmApiKey = null, string journalpath = null, 
-                                        bool toedsm = true, bool fromedsm = false, bool toeddn = true)
+                                        bool toedsm = true, bool fromedsm = false, bool toeddn = true, bool toego = false, string egoname = null, string egoapi = null)
         {
             EDCommander cmdr;
 
             using (SQLiteConnectionUser conn = new SQLiteConnectionUser())
             {
-                using (DbCommand cmd = conn.CreateCommand("INSERT INTO Commanders (Name,EdsmName,EdsmApiKey,JournalDir,Deleted, SyncToEdsm, SyncFromEdsm, SyncToEddn, NetLogDir) VALUES (@Name,@EdsmName,@EdsmApiKey,@JournalDir,@Deleted, @SyncToEdsm, @SyncFromEdsm, @SyncToEddn, @NetLogDir)"))
+                using (DbCommand cmd = conn.CreateCommand("INSERT INTO Commanders (Name,EdsmName,EdsmApiKey,JournalDir,Deleted, SyncToEdsm, SyncFromEdsm, SyncToEddn, NetLogDir, SyncToEGO, EGOName, EGOAPIKey) " +
+                                                          "VALUES (@Name,@EdsmName,@EdsmApiKey,@JournalDir,@Deleted, @SyncToEdsm, @SyncFromEdsm, @SyncToEddn, @NetLogDir, @SyncToEGO, @EGOName, @EGOApiKey)"))
                 {
                     cmd.AddParameterWithValue("@Name", name ?? "");
                     cmd.AddParameterWithValue("@EdsmName", edsmName ?? name ?? "");
@@ -240,6 +241,9 @@ namespace EDDiscovery
                     cmd.AddParameterWithValue("@SyncFromEdsm", fromedsm);
                     cmd.AddParameterWithValue("@SyncToEddn", toeddn);
                     cmd.AddParameterWithValue("@NetLogDir", "");        // Unused field, null out
+                    cmd.AddParameterWithValue("@SyncToEGO", toego);
+                    cmd.AddParameterWithValue("@EGOName", egoname ?? "");
+                    cmd.AddParameterWithValue("@EGOApiKey", egoapi ?? "");
                     cmd.ExecuteNonQuery();
                 }
 
@@ -283,7 +287,9 @@ namespace EDDiscovery
         {
             using (SQLiteConnectionUser conn = new SQLiteConnectionUser())
             {
-                using (DbCommand cmd = conn.CreateCommand("UPDATE Commanders SET Name=@Name, EdsmName=@EdsmName, EdsmApiKey=@EdsmApiKey, NetLogDir=@NetLogDir, JournalDir=@JournalDir, SyncToEdsm=@SyncToEdsm, SyncFromEdsm=@SyncFromEdsm, SyncToEddn=@SyncToEddn WHERE Id=@Id"))
+                using (DbCommand cmd = conn.CreateCommand("UPDATE Commanders SET Name=@Name, EdsmName=@EdsmName, EdsmApiKey=@EdsmApiKey, NetLogDir=@NetLogDir, JournalDir=@JournalDir, " +
+                                                          "SyncToEdsm=@SyncToEdsm, SyncFromEdsm=@SyncFromEdsm, SyncToEddn=@SyncToEddn, SyncToEGO=@SyncToEGO, EGOName=@EGOName, " +
+                                                          "EGOAPIKey=@EGOApiKey WHERE Id=@Id"))
                 {
                     cmd.AddParameter("@Id", DbType.Int32);
                     cmd.AddParameter("@Name", DbType.String);
@@ -294,6 +300,9 @@ namespace EDDiscovery
                     cmd.AddParameter("@SyncToEdsm", DbType.Boolean);
                     cmd.AddParameter("@SyncFromEdsm", DbType.Boolean);
                     cmd.AddParameter("@SyncToEddn", DbType.Boolean);
+                    cmd.AddParameter("@SyncToEGO", DbType.Boolean);
+                    cmd.AddParameter("@EGOName", DbType.String);
+                    cmd.AddParameter("@EGOApiKey", DbType.String);
 
                     foreach (EDCommander edcmdr in cmdrlist) // potential NRE
                     {
@@ -306,6 +315,9 @@ namespace EDDiscovery
                         cmd.Parameters["@SyncToEdsm"].Value = edcmdr.SyncToEdsm;
                         cmd.Parameters["@SyncFromEdsm"].Value = edcmdr.SyncFromEdsm;
                         cmd.Parameters["@SyncToEddn"].Value = edcmdr.SyncToEddn;
+                        cmd.Parameters["@SyncToEGO"].Value = edcmdr.SyncToEGO;
+                        cmd.Parameters["@EGOName"].Value = edcmdr.EGOName != null ? edcmdr.EGOName : "";
+                        cmd.Parameters["@EGOApiKey"].Value = edcmdr.EGOAPIKey != null ? edcmdr.EGOAPIKey : "";
                         cmd.ExecuteNonQuery();
 
                         _Commanders[edcmdr.Nr] = edcmdr;
@@ -375,7 +387,7 @@ namespace EDDiscovery
                     }
                     else
                     {
-                        _commandersDict[maxnr + 1] = new EDCommander(maxnr + 1, "Jameson (Default)", "", false, false, false);
+                        _commandersDict[maxnr + 1] = new EDCommander(maxnr + 1, "Jameson (Default)", "", false, false, false, false, "", "");
                     }
                 }
             }
@@ -443,10 +455,13 @@ namespace EDDiscovery
         private string name;
         private string edsmname;
         private string apikey;
+        private string egoname;
+        private string egoapikey;
         private string journalDir;
         private bool syncToEdsm;
         private bool syncFromEdsm;
         private bool syncToEddn;
+        private bool syncToEGO;
 
         public EDCommander()
         {
@@ -460,13 +475,16 @@ namespace EDDiscovery
             apikey = Convert.ToString(reader["EdsmApiKey"]);
             deleted = Convert.ToBoolean(reader["Deleted"]);
             journalDir = Convert.ToString(reader["JournalDir"]);
+            egoname = Convert.ToString(reader["EGOName"]);
+            egoapikey = Convert.ToString(reader["EGOAPIKey"]);
 
             syncToEdsm = Convert.ToBoolean(reader["SyncToEdsm"]);
             syncFromEdsm = Convert.ToBoolean(reader["SyncFromEdsm"]);
             syncToEddn = Convert.ToBoolean(reader["SyncToEddn"]);
+            syncToEGO = Convert.ToBoolean(reader["SyncToEGO"]);
         }
 
-        public EDCommander(int id, string Name, string APIKey, bool SyncToEDSM, bool SyncFromEdsm, bool SyncToEddn, string edsmName = null)
+        public EDCommander(int id, string Name, string APIKey, bool SyncToEDSM, bool SyncFromEdsm, bool SyncToEddn, bool SyncToEGO, string EGOName, string EGOAPIKey, string edsmName = null)
         {
             this.nr = id;
             this.name = Name;
@@ -475,6 +493,9 @@ namespace EDDiscovery
             this.syncToEdsm = SyncToEDSM;
             this.syncFromEdsm = SyncFromEdsm;
             this.syncToEddn = SyncToEddn;
+            this.syncToEGO = SyncToEGO;
+            this.egoname = EGOName;
+            this.egoapikey = EGOAPIKey;
         }
 
         public int Nr { get { return nr; }  private set { nr = value;  } }
@@ -482,10 +503,13 @@ namespace EDDiscovery
         public string Name { get { return name; } set { name = value; } }
         public string EdsmName { get { return edsmname; } set { edsmname = value; } }
         public string APIKey { get { return apikey; } set { apikey = value; } }
+        public string EGOName { get { return egoname; } set { egoname = value; } }
+        public string EGOAPIKey { get { return egoapikey; } set { egoapikey = value; } }
         public string JournalDir { get { return journalDir; } set { journalDir = value; } }
         public bool SyncToEdsm { get { return syncToEdsm; } set { syncToEdsm = value; } }
         public bool SyncFromEdsm { get { return syncFromEdsm; } set { syncFromEdsm = value; } }
         public bool SyncToEddn {  get { return syncToEddn; } set { syncToEddn = value;  } }
+        public bool SyncToEGO { get { return syncToEGO; } set { syncToEGO = value; } }
         public bool Deleted { get { return deleted; } set { deleted = value; } }
 
         public string Info { get { return BaseUtils.FieldBuilder.Build(";To EDDN", syncToEddn, ";To EDSM", syncToEdsm, ";From EDSM", syncFromEdsm, ";CAPI" , CompanionAPI.CompanionCredentials.CredentialState(Name) == CompanionAPI.CompanionCredentials.State.CONFIRMED); } }

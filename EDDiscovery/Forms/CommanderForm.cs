@@ -48,6 +48,9 @@ namespace EDDiscovery.Forms
             checkBoxCustomEDSMFrom.Checked = cmdr.SyncFromEdsm;
             checkBoxCustomEDSMTo.Checked = cmdr.SyncToEdsm;
             checkBoxCustomEDDNTo.Checked = cmdr.SyncToEddn;
+            checkBoxEGOSync.Checked = cmdr.SyncToEGO;
+            textBoxEGOName.Text = cmdr.EGOName;
+            textBoxEGOAPI.Text = cmdr.EGOAPIKey;
 
             UpdateCAPIState();
         }
@@ -61,6 +64,9 @@ namespace EDDiscovery.Forms
             cmdr.SyncFromEdsm = checkBoxCustomEDSMFrom.Checked;
             cmdr.SyncToEdsm = checkBoxCustomEDSMTo.Checked;
             cmdr.SyncToEddn = checkBoxCustomEDDNTo.Checked;
+            cmdr.SyncToEGO = checkBoxEGOSync.Checked;
+            cmdr.EGOName = textBoxEGOName.Text;
+            cmdr.EGOAPIKey = textBoxEGOAPI.Text;
         }
 
         public bool Valid { get { return textBoxBorderCmdr.Text != ""; } }
