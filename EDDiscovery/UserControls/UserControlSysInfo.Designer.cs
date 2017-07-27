@@ -715,7 +715,7 @@ namespace EDDiscovery.UserControls
             this.richTextBoxNote.ScrollBarThumbButtonColor = System.Drawing.Color.DarkBlue;
             this.richTextBoxNote.ScrollBarWidth = 20;
             this.richTextBoxNote.ShowLineCount = false;
-            this.richTextBoxNote.Size = new System.Drawing.Size(277, 50);
+            this.richTextBoxNote.Size = new System.Drawing.Size(209, 50);
             this.richTextBoxNote.TabIndex = 0;
             this.richTextBoxNote.TextBoxBackColor = System.Drawing.SystemColors.Control;
             this.richTextBoxNote.TextBoxForeColor = System.Drawing.SystemColors.ControlText;
@@ -932,7 +932,7 @@ namespace EDDiscovery.UserControls
             this.textBoxTravelDist.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.textBoxTravelDist.SelectionLength = 0;
             this.textBoxTravelDist.SelectionStart = 0;
-            this.textBoxTravelDist.Size = new System.Drawing.Size(68, 20);
+            this.textBoxTravelDist.Size = new System.Drawing.Size(66, 20);
             this.textBoxTravelDist.TabIndex = 8;
             this.textBoxTravelDist.TabStop = false;
             this.textBoxTravelDist.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
@@ -956,7 +956,7 @@ namespace EDDiscovery.UserControls
             this.textBoxTravelTime.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.textBoxTravelTime.SelectionLength = 0;
             this.textBoxTravelTime.SelectionStart = 0;
-            this.textBoxTravelTime.Size = new System.Drawing.Size(85, 20);
+            this.textBoxTravelTime.Size = new System.Drawing.Size(66, 20);
             this.textBoxTravelTime.TabIndex = 8;
             this.textBoxTravelTime.TabStop = false;
             this.textBoxTravelTime.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
@@ -973,14 +973,14 @@ namespace EDDiscovery.UserControls
             this.textBoxTravelJumps.BorderColorScaling = 0.5F;
             this.textBoxTravelJumps.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBoxTravelJumps.ControlBackground = System.Drawing.SystemColors.Control;
-            this.textBoxTravelJumps.Location = new System.Drawing.Point(221, 364);
+            this.textBoxTravelJumps.Location = new System.Drawing.Point(210, 364);
             this.textBoxTravelJumps.Multiline = false;
             this.textBoxTravelJumps.Name = "textBoxTravelJumps";
             this.textBoxTravelJumps.ReadOnly = true;
             this.textBoxTravelJumps.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.textBoxTravelJumps.SelectionLength = 0;
             this.textBoxTravelJumps.SelectionStart = 0;
-            this.textBoxTravelJumps.Size = new System.Drawing.Size(85, 20);
+            this.textBoxTravelJumps.Size = new System.Drawing.Size(66, 20);
             this.textBoxTravelJumps.TabIndex = 8;
             this.textBoxTravelJumps.TabStop = false;
             this.textBoxTravelJumps.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
@@ -1016,7 +1016,7 @@ namespace EDDiscovery.UserControls
             this.textBoxCargo.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.textBoxCargo.SelectionLength = 0;
             this.textBoxCargo.SelectionStart = 0;
-            this.textBoxCargo.Size = new System.Drawing.Size(68, 20);
+            this.textBoxCargo.Size = new System.Drawing.Size(66, 20);
             this.textBoxCargo.TabIndex = 8;
             this.textBoxCargo.TabStop = false;
             this.textBoxCargo.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
@@ -1033,14 +1033,14 @@ namespace EDDiscovery.UserControls
             this.textBoxMaterials.BorderColorScaling = 0.5F;
             this.textBoxMaterials.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBoxMaterials.ControlBackground = System.Drawing.SystemColors.Control;
-            this.textBoxMaterials.Location = new System.Drawing.Point(191, 306);
+            this.textBoxMaterials.Location = new System.Drawing.Point(190, 306);
             this.textBoxMaterials.Multiline = false;
             this.textBoxMaterials.Name = "textBoxMaterials";
             this.textBoxMaterials.ReadOnly = true;
             this.textBoxMaterials.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.textBoxMaterials.SelectionLength = 0;
             this.textBoxMaterials.SelectionStart = 0;
-            this.textBoxMaterials.Size = new System.Drawing.Size(68, 20);
+            this.textBoxMaterials.Size = new System.Drawing.Size(66, 20);
             this.textBoxMaterials.TabIndex = 8;
             this.textBoxMaterials.TabStop = false;
             this.textBoxMaterials.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
@@ -1088,7 +1088,7 @@ namespace EDDiscovery.UserControls
             this.textBoxData.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.textBoxData.SelectionLength = 0;
             this.textBoxData.SelectionStart = 0;
-            this.textBoxData.Size = new System.Drawing.Size(68, 20);
+            this.textBoxData.Size = new System.Drawing.Size(66, 20);
             this.textBoxData.TabIndex = 8;
             this.textBoxData.TabStop = false;
             this.textBoxData.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
@@ -1124,7 +1124,7 @@ namespace EDDiscovery.UserControls
             this.textBoxShip.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.textBoxShip.SelectionLength = 0;
             this.textBoxShip.SelectionStart = 0;
-            this.textBoxShip.Size = new System.Drawing.Size(206, 20);
+            this.textBoxShip.Size = new System.Drawing.Size(203, 20);
             this.textBoxShip.TabIndex = 8;
             this.textBoxShip.TabStop = false;
             this.textBoxShip.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
@@ -1160,7 +1160,7 @@ namespace EDDiscovery.UserControls
             this.textBoxFuel.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.textBoxFuel.SelectionLength = 0;
             this.textBoxFuel.SelectionStart = 0;
-            this.textBoxFuel.Size = new System.Drawing.Size(68, 20);
+            this.textBoxFuel.Size = new System.Drawing.Size(66, 20);
             this.textBoxFuel.TabIndex = 8;
             this.textBoxFuel.TabStop = false;
             this.textBoxFuel.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;

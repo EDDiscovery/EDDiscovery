@@ -50,15 +50,17 @@ namespace EDDiscovery.UserControls
         const int BitSelGameMode = 11;
         const int BitSelTravel = 12;
 
-        const int BitSelTotal = 13;
+        int[] LongItems = new int[] { BitSelTarget, BitSelShipInfo, BitSelCargo, BitSelTravel };
 
+        const int BitSelTotal = 13;
+        const int Positions = BitSelTotal * 2;      // two columns of positions, one at 0, one at +300 pixels ish, 
         const int BitSelEDSMButtonsNextLine = 24;
-        const int SelDefault = ((1<<BitSelTotal)-1)+(1<<BitSelEDSMButtonsNextLine);
+        const int BitSelDefault = ((1<<BitSelTotal)-1)+(1<<BitSelEDSMButtonsNextLine);
 
         const int hspacing = 8;
 
         int Selection;          // selection bits
-        List<int> Order;        // orderarray is the order to display them on the screen.. same entries as BitSelTotal
+        List<int> Order;        // orderarray is the order to display them on the screen.. can be any length
         int[] YStart;           // ypos of items in Order.
         int[] YEnd;             // ypos of items in Order.
         ToolStripMenuItem[] toolstriplist;          // ref to toolstrip items for each bit above. in same order as bits BitSel..
@@ -85,11 +87,9 @@ namespace EDDiscovery.UserControls
                                                         toolStripShip, toolStripCargo,
                                                         toolStripGameMode,toolStripTravel};
 
-            Selection = DB.SQLiteDBClass.GetSettingInt(DbSelection, SelDefault);
-            Order = DB.SQLiteDBClass.GetSettingString(DbOSave, "").RestoreIntListFromString(0, BitSelTotal);
+            Selection = DB.SQLiteDBClass.GetSettingInt(DbSelection, BitSelDefault);
+            Order = DB.SQLiteDBClass.GetSettingString(DbOSave, "").RestoreIntListFromString(-1, Positions);
             System.Diagnostics.Debug.WriteLine("Ordered " + String.Join(",", Order));
-            if (Order.Distinct().Count() != Order.Count)       // if not distinct..
-                Reset();
         }
 
         public override void Closing()
@@ -390,7 +390,7 @@ namespace EDDiscovery.UserControls
         void UpdateViewOnSelection()
         {
             SuspendLayout();
-            Point pos = new Point(3, 3);
+            int ver = 3;
 
             foreach (Control c in this.Controls)
                 c.Visible = false;
@@ -400,121 +400,148 @@ namespace EDDiscovery.UserControls
 
             //System.Diagnostics.Debug.WriteLine("Selection is " + sel);
 
-            YStart = new int[Order.Count];
+            YStart = new int[Order.Count];        //-1 not used, else Y coord
             YEnd = new int[Order.Count];
 
             bool selEDSMonNextLine = (Selection & (1 << BitSelEDSMButtonsNextLine)) != 0;
             toolStripEDSMDownLine.Checked = selEDSMonNextLine;
 
-            for (int i = 0; i < Order.Count; i++)
+            int data1pos = textBoxSystem.Left - labelSysName.Left;      // basing it on actual pos allow the auto font scale to work
+            int lab2pos = labelSolDist.Left - labelHomeDist.Left;
+            int data2pos = textBoxSolDist.Left - labelHomeDist.Left;
+            int lab3pos = labelFuel.Left - labelShip.Left;
+            int data3pos = textBoxFuel.Left - labelShip.Left;
+
+            int maxvert = 0;
+
+            for (int i = 0; i < Order.Count; i++)           // for each position possible (Order may not be as filled as Positions
             {
-                int bit = Order[i];
-                bool ison = (Selection & (1 << bit)) != 0;
+                int itemno = Order[i];     // this is the item number, which is a bit position
 
-                toolstriplist[bit].Enabled = false;
-                toolstriplist[bit].Checked = ison;
-                toolstriplist[bit].Enabled = true;
+                YStart[i] = -1; // not occupied yet
 
-                YStart[i] = (ison) ? pos.Y : -1;
-
-                if (ison)
+                if (itemno >= 0)
                 {
-                    Point datapos = new Point(textBoxSystem.Left, pos.Y);
-                    Point labpos2 = new Point(labelSolDist.Left, pos.Y);
-                    Point datapos2 = new Point(textBoxSolDist.Left, pos.Y);
-                    Point labpos3 = new Point(labelData.Left, pos.Y);
-                    Point datapos3 = new Point(textBoxData.Left, pos.Y);
+                    bool ison = (Selection & (1 << itemno)) != 0;
 
-                    switch (Order[i])
+                    toolstriplist[itemno].Enabled = false;
+                    toolstriplist[itemno].Checked = ison;
+                    toolstriplist[itemno].Enabled = true;
+
+                    if (ison)
                     {
-                        case BitSelSystem:
-                            this.SetPos(ref pos, labelSysName, datapos, textBoxSystem, vspacing);
+                        Point labpos = new Point(3 + (i % 2) * 300, ver);
+                        Point datapos = new Point(labpos.X + data1pos, labpos.Y);
+                        Point labpos2 = new Point(labpos.X + lab2pos, labpos.Y);
+                        Point datapos2 = new Point(labpos.X + data2pos, labpos.Y);
+                        Point labpos3 = new Point(labpos.X + lab3pos, labpos.Y);
+                        Point datapos3 = new Point(labpos.X + data3pos, labpos.Y);
+                        YStart[i] = ver;
 
-                            if ( !selEDSMonNextLine && (Selection & (1<<BitSelEDSM))!=0)
-                            {
-                                buttonEDSM.Location = new Point(textBoxSystem.Right + hspacing, datapos.Y);
-                                buttonEDDB.Location = new Point(buttonEDSM.Right + hspacing, buttonEDSM.Top);
-                                buttonRoss.Location = new Point(buttonEDDB.Right + hspacing, buttonEDSM.Top);
-                                buttonEDSM.Visible = buttonEDDB.Visible = buttonRoss.Visible = true;
-                            }
+                        switch (itemno)
+                        {
+                            case BitSelSystem:
+                                this.SetPos(ref labpos, labelSysName, datapos, textBoxSystem, vspacing , i);
 
-                            break;
+                                if (!selEDSMonNextLine && (Selection & (1 << BitSelEDSM)) != 0)
+                                {
+                                    buttonEDSM.Location = new Point(textBoxSystem.Right + hspacing, datapos.Y);
+                                    buttonEDDB.Location = new Point(buttonEDSM.Right + hspacing, buttonEDSM.Top);
+                                    buttonRoss.Location = new Point(buttonEDDB.Right + hspacing, buttonEDSM.Top);
+                                    buttonEDSM.Visible = buttonEDDB.Visible = buttonRoss.Visible = true;
+                                    buttonEDSM.Tag = buttonEDDB.Tag = buttonRoss.Tag = i;
+                                }
 
-                        case BitSelEDSM:
-                            if ( selEDSMonNextLine)
-                            {
-                                labelOpen.Location = pos;
-                                buttonEDSM.Location = new Point(datapos.X, datapos.Y);
-                                buttonEDDB.Location = new Point(buttonEDSM.Right + hspacing, buttonEDSM.Top);
-                                buttonRoss.Location = new Point(buttonEDDB.Right + hspacing, buttonEDSM.Top);
-                                labelOpen.Visible = buttonEDSM.Visible = buttonEDDB.Visible = buttonRoss.Visible = true;
-                                pos.Y += vspacing + 4;
-                            }
-                            break;
+                                break;
 
-                        case BitSelVisits:
-                            this.SetPos(ref pos, labelVisits, datapos, textBoxVisits, vspacing);
-                            break;
+                            case BitSelEDSM:
+                                if (selEDSMonNextLine)
+                                {
+                                    labelOpen.Location = labpos;
+                                    buttonEDSM.Location = new Point(datapos.X, datapos.Y);
+                                    buttonEDDB.Location = new Point(buttonEDSM.Right + hspacing, buttonEDSM.Top);
+                                    buttonRoss.Location = new Point(buttonEDDB.Right + hspacing, buttonEDSM.Top);
+                                    labelOpen.Tag = buttonEDSM.Tag = buttonEDDB.Tag = buttonRoss.Tag = i;
+                                    labelOpen.Visible = buttonEDSM.Visible = buttonEDDB.Visible = buttonRoss.Visible = true;
+                                    labpos.Y += vspacing + 4;
+                                }
+                                break;
 
-                        case BitSelBody:
-                            this.SetPos(ref pos, labelBodyName, datapos, textBoxBody, vspacing);
-                            break;
+                            case BitSelVisits:
+                                this.SetPos(ref labpos, labelVisits, datapos, textBoxVisits, vspacing,i);
+                                break;
 
-                        case BitSelPosition:
-                            this.SetPos(ref pos, labelPosition, datapos, textBoxPosition, vspacing);
-                            break;
+                            case BitSelBody:
+                                this.SetPos(ref labpos, labelBodyName, datapos, textBoxBody, vspacing,i);
+                                break;
 
-                        case BitSelDistanceFrom:
-                            this.SetPos(ref pos, labelHomeDist, datapos, textBoxHomeDist, vspacing);
-                            OffsetPos(labpos2, labelSolDist, datapos2, textBoxSolDist);
-                            break;
+                            case BitSelPosition:
+                                this.SetPos(ref labpos, labelPosition, datapos, textBoxPosition, vspacing,i);
+                                break;
 
-                        case BitSelSystemState:
-                            this.SetPos(ref pos, labelState, datapos, textBoxState, vspacing-4);
-                            OffsetPos(labpos2, labelAllegiance, datapos2, textBoxAllegiance);
-                            datapos.Y = labpos2.Y = datapos2.Y = pos.Y;
-                            this.SetPos(ref pos, labelGov, datapos, textBoxGovernment, vspacing);
-                            OffsetPos(labpos2, labelEconomy, datapos2, textBoxEconomy);
-                            break;
+                            case BitSelDistanceFrom:
+                                this.SetPos(ref labpos, labelHomeDist, datapos, textBoxHomeDist, vspacing,i);
+                                OffsetPos(labpos2, labelSolDist, datapos2, textBoxSolDist,i);
+                                break;
 
-                        case BitSelNotes:
-                            SetPos(ref pos, labelNote, datapos, richTextBoxNote, richTextBoxNote.Height + 8);
-                            break;
+                            case BitSelSystemState:
+                                this.SetPos(ref labpos, labelState, datapos, textBoxState, vspacing - 4, i);
+                                OffsetPos(labpos2, labelAllegiance, datapos2, textBoxAllegiance, i);
+                                datapos.Y = labpos2.Y = datapos2.Y = labpos.Y;
+                                this.SetPos(ref labpos, labelGov, datapos, textBoxGovernment, vspacing, i);
+                                OffsetPos(labpos2, labelEconomy, datapos2, textBoxEconomy, i);
+                                break;
 
-                        case BitSelTarget:
-                            this.SetPos(ref pos, labelTarget, datapos, textBoxTarget, vspacing);
-                            textBoxTargetDist.Location = new Point(textBoxTarget.Right + hspacing, datapos.Y);
-                            buttonEDSMTarget.Location = new Point(textBoxTargetDist.Right + hspacing, datapos.Y);
-                            textBoxTargetDist.Visible = buttonEDSMTarget.Visible = true;
-                            break;
+                            case BitSelNotes:
+                                SetPos(ref labpos, labelNote, datapos, richTextBoxNote, richTextBoxNote.Height + 8, i);
+                                break;
 
-                        case BitSelGameMode:
-                            this.SetPos(ref pos, labelGamemode, datapos, textBoxGameMode, vspacing);
-                            break;
+                            case BitSelTarget:
+                                this.SetPos(ref labpos, labelTarget, datapos, textBoxTarget, vspacing, i);
+                                textBoxTargetDist.Location = new Point(textBoxTarget.Right + hspacing, datapos.Y);
+                                buttonEDSMTarget.Location = new Point(textBoxTargetDist.Right + hspacing, datapos.Y);
+                                textBoxTargetDist.Tag = buttonEDSMTarget.Tag = i;
+                                textBoxTargetDist.Visible = buttonEDSMTarget.Visible = true;
+                                break;
 
-                        case BitSelTravel:
-                            this.SetPos(ref pos, labelTravel, datapos, textBoxTravelDist, vspacing);
-                            textBoxTravelTime.Location = new Point(textBoxTravelDist.Right + hspacing, datapos.Y);
-                            textBoxTravelJumps.Location = new Point(textBoxTravelTime.Right + hspacing, datapos.Y);
-                            textBoxTravelTime.Visible = textBoxTravelJumps.Visible = true;
-                            // don't set visible for the last two, may not be if not travelling. Display will deal with it
-                            break;
+                            case BitSelGameMode:
+                                this.SetPos(ref labpos, labelGamemode, datapos, textBoxGameMode, vspacing,i);
+                                break;
 
-                        case BitSelCargo:
-                            this.SetPos(ref pos, labelCargo, datapos, textBoxCargo, vspacing);
-                            OffsetPos(labpos2, labelMaterials, datapos2, textBoxMaterials);
-                            OffsetPos(labpos3, labelData, datapos3, textBoxData);
-                            break;
+                            case BitSelTravel:
+                                this.SetPos(ref labpos, labelTravel, datapos, textBoxTravelDist, vspacing, i);
+                                textBoxTravelTime.Location = new Point(textBoxTravelDist.Right + hspacing, datapos.Y);
+                                textBoxTravelJumps.Location = new Point(textBoxTravelTime.Right + hspacing, datapos.Y);
+                                textBoxTravelTime.Tag = textBoxTravelJumps.Tag = i;
+                                textBoxTravelTime.Visible = textBoxTravelJumps.Visible = true;
+                                // don't set visible for the last two, may not be if not travelling. Display will deal with it
+                                break;
 
-                        case BitSelShipInfo:
-                            this.SetPos(ref pos, labelShip, datapos, textBoxShip, vspacing);
-                            OffsetPos(labpos3, labelFuel, datapos3, textBoxFuel);
-                            break;
+                            case BitSelCargo:
+                                this.SetPos(ref labpos, labelCargo, datapos, textBoxCargo, vspacing,i);
+                                OffsetPos(labpos2, labelMaterials, datapos2, textBoxMaterials,i);
+                                OffsetPos(labpos3, labelData, datapos3, textBoxData,i);
+                                break;
+
+                            case BitSelShipInfo:
+                                this.SetPos(ref labpos, labelShip, datapos, textBoxShip, vspacing,i);
+                                OffsetPos(labpos3, labelFuel, datapos3, textBoxFuel,i);
+                                break;
+
+                            default:
+                                System.Diagnostics.Debug.WriteLine("Ignoring unknown type");
+                                break;
+                        }
+
+                        YEnd[i] = labpos.Y - 1;
+                        maxvert = Math.Max(labpos.Y, maxvert);        // update vertical
+
+                        //System.Diagnostics.Debug.WriteLine("Sel " + i + " " + Order[i] + " on " + ison + " ypos " + YStart[i] +"-" + YEnd[i]);
                     }
-
-                    YEnd[i] = pos.Y - 1;
-                    //System.Diagnostics.Debug.WriteLine("Sel " + i + " " + Order[i] + " on " + ison + " ypos " + YStart[i] +"-" + YEnd[i]);
                 }
+
+                if ((i % 2) != 0)
+                    ver = maxvert;
             }
 
             ResumeLayout();
@@ -528,33 +555,37 @@ namespace EDDiscovery.UserControls
 
         public void Reset()
         {
-            Selection = SelDefault;
+            Selection = BitSelDefault;
             Order = new List<int>();
-            for (int i = 0; i < BitSelTotal; i++)          // reset
-                Order.Add(i);
+            for (int i = 0; i < BitSelTotal*2; i++)          // reset
+                Order.Add(((i%2)==0)?(i/2) : -1);       // fill with 0,-1,1,-3,2,-5 etc aligning them all down the left.
+
             System.Diagnostics.Debug.WriteLine("Reset " + String.Join(",", Order));
         }
 
-        void SetPos(ref Point lp, Label lab, Point tp, ExtendedControls.TextBoxBorder box, int vspacing = 0)
+        void SetPos(ref Point lp, Label lab, Point tp, ExtendedControls.TextBoxBorder box, int vspacing , int i )
         {
             lab.Location = lp;
             box.Location = tp;
+            box.Tag = lab.Tag = i;
             lab.Visible = box.Visible = true;
             lp.Y += vspacing;
         }
 
-        void SetPos(ref Point lp, Label lab, Point tp, ExtendedControls.RichTextBoxScroll box, int vspacing = 0)
+        void SetPos(ref Point lp, Label lab, Point tp, ExtendedControls.RichTextBoxScroll box, int vspacing , int i)
         {
             lab.Location = lp;
             box.Location = tp;
+            box.Tag = lab.Tag = i;
             lab.Visible = box.Visible = true;
             lp.Y += vspacing;
         }
 
-        void OffsetPos(Point lp, Label lab, Point tp, ExtendedControls.TextBoxBorder box)
+        void OffsetPos(Point lp, Label lab, Point tp, ExtendedControls.TextBoxBorder box , int i)
         {
             lab.Location = lp;
             box.Location = tp;
+            box.Tag = lab.Tag = i;
             lab.Visible = box.Visible = true;
         }
 
@@ -590,96 +621,122 @@ namespace EDDiscovery.UserControls
 
         private void UserControlSysInfo_Resize(object sender, EventArgs e)
         {
-            richTextBoxNote.Size = new Size(ClientRectangle.Width - richTextBoxNote.Left - 8, richTextBoxNote.Height);
+            //richTextBoxNote.Size = new Size(ClientRectangle.Width - richTextBoxNote.Left - 8, richTextBoxNote.Height);
 
             int left = ClientRectangle.Width - textBoxTarget.Left - buttonEDSMTarget.Width - hspacing*2 - 2;
             int targetw = left * 7 / 10;
             int distw = left - targetw;
 
-            textBoxTarget.Width = targetw;
-            textBoxTargetDist.Width = distw;
-            textBoxTargetDist.Location = new Point(textBoxTarget.Right + hspacing, textBoxTargetDist.Top);
-            buttonEDSMTarget.Location = new Point(textBoxTargetDist.Right + hspacing, buttonEDSMTarget.Top);
+            //textBoxTarget.Width = targetw;
+            //textBoxTargetDist.Width = distw;
+            //textBoxTargetDist.Location = new Point(textBoxTarget.Right + hspacing, textBoxTargetDist.Top);
+            //buttonEDSMTarget.Location = new Point(textBoxTargetDist.Right + hspacing, buttonEDSMTarget.Top);
 
         }
 
-        Control inmove = null;
+        int fromorder = -1;
+        int fromy = -1;
         bool inmovedrag = false;
 
         private void controlMouseDown(object sender, MouseEventArgs e)
         {
             Control c = sender as Control;
-
-            inmove = c;
+            fromorder = (int)c.Tag;
+            fromy = c.Top;
             inmovedrag = false;
-            System.Diagnostics.Debug.WriteLine("Control " + inmove.Name + " grabbed");
+           // System.Diagnostics.Debug.WriteLine("Control " + inmove.Name + " grabbed");
         }
 
         private void controlMouseUp(object sender, MouseEventArgs e)
         {
             Control c = sender as Control;
 
-            if (inmove != null)
+            if (fromorder != -1 )
             {
                 if (inmovedrag)
                 {
-                    int movefromy = inmove.Top;
-                    int movetoy = movefromy + e.Y;
-                    int movefromorder = FindOrder(movefromy);
-                    int movetoorder = FindOrder(movetoy);
-                    System.Diagnostics.Debug.WriteLine("Control " + inmove.Name + " Released from Y " + movefromy + " to " + movetoy + " " + movefromorder + " " + movetoorder);
+                    int movetoy = fromy + e.Y;
+                    int xpos = this.PointToClient(Cursor.Position).X;
+                    int movetoorder = FindOrder(movetoy) & ~1;          // ignore the 0/1 bit, just the line we want
+                    if (xpos > 300 )
+                        movetoorder++;
+                    bool right = (movetoorder % 2) != 0;
 
-                    if (movefromorder >= 0 && movefromorder < Order.Count)        // valid
+                    if ( movetoorder>=Order.Count)  // if beyond order, insert a new pair
                     {
-                        int selbit = Order[movefromorder];
-
-                        Order.RemoveAt(movefromorder);
-                        System.Diagnostics.Debug.WriteLine("Removed " + String.Join(",", Order));
-
-                        if (movetoorder == -1)
-                            Order.Insert(0, selbit);
-                        else if (movetoorder == 999)
-                            Order.Add(selbit);
-                        else
-                            Order.Insert(movetoorder, selbit);
-
-                        System.Diagnostics.Debug.WriteLine("Re-ordered " + String.Join(",", Order));
-                        UpdateViewOnSelection();
-
+                        Order.Add(-1);
+                        Order.Add(-1);
+                        System.Diagnostics.Debug.Assert(movetoorder < Order.Count);
                     }
 
+                    System.Diagnostics.Debug.WriteLine("--");
+                    System.Diagnostics.Debug.WriteLine("Move " + fromorder + "(" + Order[fromorder] + ") to " + movetoorder + "(" + Order[movetoorder] + ") Released from Y " + fromy + " to " + xpos + "," + movetoy);
+                    
+                    if (Order[movetoorder] >= 0 ||      // occupied
+                            (!right && Array.IndexOf(LongItems, Order[fromorder]) != -1) || // item is on left and is long
+                            (right && Array.IndexOf(LongItems, Order[movetoorder&~1]) != -1 && (movetoorder&~1) != fromorder )   // item on right, but current left item is too long, and we are not moving it!
+                            )
+                    {
+                        int line = (movetoorder / 2) * 2;       // shove two in from of move
+                        Order.Insert(line, -1);
+                        Order.Insert(line, -1);
+                        if ( line<fromorder)            // adjust from down if line is in front of it
+                            fromorder += 2;
+                        System.Diagnostics.Debug.WriteLine("Insert, " + fromorder + "->" + movetoorder + " " + String.Join(",", Order));
+                    }
+
+                    Order[movetoorder] = Order[fromorder];     // now free, insert here
+                    Order[fromorder] = -1;      // clear old
+
+                    System.Diagnostics.Debug.WriteLine("Before removal of empty lines " + String.Join(",", Order));
+
+                    for (int i = 0; i < Order.Count; i += 2)        // now clean out empty rows
+                    {   
+                        if (Order[i] < 0 && Order[i + 1] < 0)  // if line empty..
+                        {
+                            Order.RemoveRange(i, 2);
+                            System.Diagnostics.Debug.WriteLine("Line " + i + " removed, now " + String.Join(",", Order));
+                        }
+                    }
+
+                    System.Diagnostics.Debug.WriteLine("Now " + String.Join(",", Order));
+                    UpdateViewOnSelection();
                     Cursor.Current = Cursors.Default;
                 }
 
-                inmove = null;
+                fromorder = -1;
                 
             }
         }
 
         private int FindOrder(int y)
         {
+            int lastfilled = -1;
+
             for(int i = 0 ; i < Order.Count; i++ )
             {
                 if (YStart[i] != -1)
                 {
-                    if (i == 0 && y < YStart[i])
-                        return -1;
+                    if (lastfilled == -1 && y < YStart[i])
+                        return 0;
 
                     if (y >= YStart[i] && y <= YEnd[i])
                         return i;
+
+                    lastfilled = i;
                 }
             }
 
-            return 999;
+            return (lastfilled / 2) * 2 + 2;
         }
 
         private void controlMouseMove(object sender, MouseEventArgs e)
         {
             Control c = sender as Control;
 
-            if (inmove != null)
+            if (fromorder != -1 )
             {
-                if (e.Y < -4 || e.Y > c.Height + 4)
+                if (e.Y < -4 || e.Y > c.Height + 4 || e.X < -100 || e.X > 100)
                 {
                     if (!inmovedrag)
                     {
