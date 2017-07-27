@@ -81,6 +81,7 @@ namespace EDDiscovery.EGO
 
         private static void SyncThread()
         {
+            bool newRecord = false;
             try
             {
                 _running = 1;
@@ -94,10 +95,12 @@ namespace EDDiscovery.EGO
                     while (hlscanunsyncedlist.TryDequeue(out he))
                     {
                         hlscanevent.Reset();
+                        newRecord = false;
 
-                        if (EGOSync.SendToEGO(he))
+                        if (EGOSync.SendToEGO(he, ref newRecord))
                         {
                             mainForm.LogLine($"Sent {he.EntryType.ToString()} event to EGO ({he.EventSummary})");
+                            if (newRecord) { mainForm.LogLine("New EGO record set"); }
                         }
 
                         if (Exit)
@@ -129,9 +132,10 @@ namespace EDDiscovery.EGO
             }
         }
 
-        static public bool SendToEGO(HistoryEntry he)
+        static public bool SendToEGO(HistoryEntry he, ref bool newRecord)
         {
             EGOClass ego = new EGOClass();
+            
 
             if (he.Commander != null)
             {
@@ -156,7 +160,7 @@ namespace EDDiscovery.EGO
 
             if (msg != null)
             {
-                if (ego.PostMessage(msg))
+                if (ego.PostMessage(msg, ref newRecord))
                 {
                     he.SetEGOSync();
                     return true;
