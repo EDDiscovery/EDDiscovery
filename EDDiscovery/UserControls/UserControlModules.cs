@@ -186,7 +186,7 @@ namespace EDDiscovery.UserControls
             }
 
             LabelVehicleText.Visible = labelVehicle.Visible = true;
-            labelVehicle.Text = si.ShipFullInfo;
+            labelVehicle.Text = si.ShipFullInfo();
             buttonExtCoriolis.Visible = si.CheckMinimumJSONModules();
         }
 

@@ -105,20 +105,21 @@ namespace EDDiscovery.EliteDangerous
             return ret;
         }
 
-        public int Count(string cat, bool match)    // for all types of cat, if item matches or does not, count
+        public int Count(string [] cats)    // for all types of cat, if item matches or does not, count
         {
             int total = 0;
             foreach (MaterialCommodities c in list)
             {
-                if (c.category.Equals(cat) == match)
+                if ( Array.IndexOf<string>(cats, c.category) != -1 )
                     total += c.count;
             }
 
             return total;
         }
 
-        public int MaterialsCount { get { return Count(MaterialCommodities.CommodityCategory, false); } }
-        public int CargoCount { get { return Count(MaterialCommodities.CommodityCategory, true); } }
+        public int DataCount { get { return Count(new string[] { MaterialCommodities.MaterialEncodedCategory, MaterialCommodities.MaterialManufacturedCategory }); } }
+        public int MaterialsCount { get { return Count(new string[] { MaterialCommodities.MaterialRawCategory }); } }
+        public int CargoCount { get { return Count(new string[] { MaterialCommodities.CommodityCategory }); } }
 
         public int DataHash() { return list.GetHashCode(); }
 

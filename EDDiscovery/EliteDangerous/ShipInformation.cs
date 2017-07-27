@@ -45,33 +45,37 @@ namespace EDDiscovery.EliteDangerous
 
         public Dictionary<string, JournalLoadout.ShipModule> Modules { get; private set; }
 
-        public string ShipFullInfo
+        public string ShipFullInfo(bool cargo = true, bool fuel = true)
         {
-            get                  // unique ID
-            {
-                StringBuilder sb = new StringBuilder(64);
-                if ( ShipUserIdent!=null)
-                    sb.Append(ShipUserIdent);
-                sb.AppendPrePad(ShipUserName);
-                sb.AppendPrePad(ShipType);
-                sb.AppendPrePad("(" + ID.ToString() + ")");
+            StringBuilder sb = new StringBuilder(64);
+            if ( ShipUserIdent!=null)
+                sb.Append(ShipUserIdent);
+            sb.AppendPrePad(ShipUserName);
+            sb.AppendPrePad(ShipType);
+            sb.AppendPrePad("(" + ID.ToString() + ")");
 
-                if (SubVehicle == SubVehicleType.SRV)
-                    sb.AppendPrePad(" in SRV");
-                else if (SubVehicle == SubVehicleType.Fighter)
-                    sb.AppendPrePad(" Control Fighter");
-                else
+            if (SubVehicle == SubVehicleType.SRV)
+                sb.AppendPrePad(" in SRV");
+            else if (SubVehicle == SubVehicleType.Fighter)
+                sb.AppendPrePad(" in Fighter");
+            else
+            {
+                if (fuel)
                 {
                     double cap = FuelCapacity;
                     if (cap > 0)
                         sb.Append(" Fuel Cap " + cap.ToString("0.#"));
-                    cap = CargoCapacity();
+                }
+
+                if (cargo)
+                {
+                    double cap = CargoCapacity();
                     if (cap > 0)
                         sb.Append(" Cargo Cap " + cap);
                 }
-
-                return sb.ToString();
             }
+
+            return sb.ToString();
         }
 
         public string Name          // Name of ship, either user named or ship type
@@ -359,7 +363,7 @@ namespace EDDiscovery.EliteDangerous
         public override string ToString()
         {
             StringBuilder sb = new StringBuilder(256);
-            sb.AppendFormat("Ship {0}", ShipFullInfo);
+            sb.AppendFormat("Ship {0}", ShipFullInfo());
             sb.Append(Environment.NewLine);
             foreach (JournalLoadout.ShipModule sm in Modules.Values)
             {
@@ -505,7 +509,7 @@ namespace EDDiscovery.EliteDangerous
         public ShipInformation GetShipByFullInfoMatch(string sn)
         {
             List<ShipInformation> lst = Ships.Values.ToList();
-            int index = lst.FindIndex(x => x.ShipFullInfo.IndexOf(sn, StringComparison.InvariantCultureIgnoreCase)!=-1);
+            int index = lst.FindIndex(x => x.ShipFullInfo().IndexOf(sn, StringComparison.InvariantCultureIgnoreCase)!=-1);
             return (index >= 0) ? lst[index] : null;
         }
 
