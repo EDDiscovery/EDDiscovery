@@ -252,7 +252,7 @@ namespace EDDiscovery
                 MapColour = mapcolour,
                 EdsmSync = je.SyncedEDSM,
                 EDDNSync = je.SyncedEDDN,
-                EGOSync = je.SyncedEDDN,
+                EGOSync = je.SyncedEGO,
                 StartMarker = je.StartMarker,
                 StopMarker = je.StopMarker,
                 EventSummary = summary,
@@ -591,6 +591,14 @@ namespace EDDiscovery
             get
             {
                 return (from s in historylist where s.EDDNSync == false && s.EntryType== JournalTypeEnum.Scan  orderby s.EventTimeUTC ascending select s).ToList();
+            }
+        }
+
+        public List<HistoryEntry> FilterByScanNotEGOSynced
+        {
+            get
+            {
+                return (from s in historylist where s.EGOSync == false && s.EntryType == JournalTypeEnum.Scan orderby s.EventTimeUTC ascending select s).ToList();
             }
         }
 

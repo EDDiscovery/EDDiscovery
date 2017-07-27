@@ -122,6 +122,7 @@ namespace EDDiscovery
             this.buttonExt2dmap = new ExtendedControls.ButtonExt();
             this.buttonExt3dmap = new ExtendedControls.ButtonExt();
             this.panel_eddiscovery = new System.Windows.Forms.Panel();
+            this.sendUnsyncedEGOScansToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.tabControlMain.SuspendLayout();
             this.tabPageTravelHistory.SuspendLayout();
@@ -250,6 +251,7 @@ namespace EDDiscovery
             this.rescanAllJournalFilesToolStripMenuItem,
             this.deleteDuplicateFSDJumpEntriesToolStripMenuItem,
             this.sendUnsuncedEDDNEventsToolStripMenuItem,
+            this.sendUnsyncedEGOScansToolStripMenuItem,
             this.clearEDSMIDAssignedToAllRecordsForCurrentCommanderToolStripMenuItem});
             this.adminToolStripMenuItem.Name = "adminToolStripMenuItem";
             this.adminToolStripMenuItem.Size = new System.Drawing.Size(55, 20);
@@ -922,6 +924,13 @@ namespace EDDiscovery
             this.panel_eddiscovery.TabIndex = 18;
             this.panel_eddiscovery.Click += new System.EventHandler(this.paneleddiscovery_Click);
             // 
+            // sendUnsyncedEGOScansToolStripMenuItem
+            // 
+            this.sendUnsyncedEGOScansToolStripMenuItem.Name = "sendUnsyncedEGOScansToolStripMenuItem";
+            this.sendUnsyncedEGOScansToolStripMenuItem.Size = new System.Drawing.Size(396, 22);
+            this.sendUnsyncedEGOScansToolStripMenuItem.Text = "Send unsynced EGO scans";
+            this.sendUnsyncedEGOScansToolStripMenuItem.Click += new System.EventHandler(this.sendUnsyncedEGOScansToolStripMenuItem_Click);
+            // 
             // EDDiscoveryForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1044,5 +1053,6 @@ namespace EDDiscovery
         private ExtendedControls.ButtonExt buttonExtRefresh;
         private ExtendedControls.ButtonExt buttonExtEDSMSync;
         private ExtendedControls.ComboBoxCustom comboBoxCustomPopOut;
+        private System.Windows.Forms.ToolStripMenuItem sendUnsyncedEGOScansToolStripMenuItem;
     }
 }

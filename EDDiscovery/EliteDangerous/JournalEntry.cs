@@ -295,7 +295,7 @@ namespace EDDiscovery.EliteDangerous
         
         public bool SyncedEDSM { get { return (Synced & (int)SyncFlags.EDSM) != 0; } }
         public bool SyncedEDDN { get { return (Synced & (int)SyncFlags.EDDN) != 0; } }
-        public bool SyncedEGO { get { return (Synced & (int)SyncFlags.EDDN) != 0;} }
+        public bool SyncedEGO { get { return (Synced & (int)SyncFlags.EGO) != 0;} }
         public bool StartMarker { get { return (Synced & (int)SyncFlags.StartMarker) != 0; } }
         public bool StopMarker { get { return (Synced & (int)SyncFlags.StopMarker) != 0; } }
         #endregion

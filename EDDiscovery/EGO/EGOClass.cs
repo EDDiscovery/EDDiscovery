@@ -65,7 +65,7 @@ namespace EDDiscovery.EGO
             return msg;
         }
 
-        public bool PostMessage(JObject msg)
+        public bool PostMessage(JObject msg, ref bool recordSet)
         {
             try
             {
@@ -75,6 +75,8 @@ namespace EDDiscovery.EGO
                 JObject res = (JObject)result["response"];
                 if ((bool)res["is_valid"])
                 {
+                    JObject conf = (JObject)res["confirmation_message"];
+                    recordSet = (bool)conf["unique_record_holder"];
                     return true;
                 }
                 else
