@@ -48,6 +48,7 @@ namespace ExtendedControls
         public int SelectionStart { get { return textbox.SelectionStart; } set { textbox.SelectionStart = value; } }
         public int SelectionLength { get { return textbox.SelectionLength; } set { textbox.SelectionLength = value; } }
         public void Select(int s, int e) { textbox.Select(s, e); }
+        public string SelectedText { get { return textbox.SelectedText; } }
 
         public HorizontalAlignment TextAlign { get { return textbox.TextAlign; } set { textbox.TextAlign = value; } }
         //        public new virtual bool Visible { get { return base.Visible; } set { base.Visible = value; if ( Parent != null) Parent.Invalidate(); } }
@@ -63,6 +64,24 @@ namespace ExtendedControls
         {
             textbox = new TextBox();
             textbox.BorderStyle = BorderStyle.FixedSingle;
+
+            textbox.Click += Textbox_Click;
+            textbox.DoubleClick += Textbox_DoubleClick;
+            textbox.Enter += Textbox_Enter;
+            textbox.KeyUp += Textbox_KeyUp;
+            textbox.KeyDown += Textbox_KeyDown;
+            textbox.KeyPress += Textbox_KeyPress;
+            textbox.Leave += Textbox_Leave;
+            textbox.MouseClick += Textbox_MouseClick;
+            textbox.MouseDoubleClick += Textbox_MouseDoubleClick;
+            textbox.MouseUp += Textbox_MouseUp;
+            textbox.MouseDown += Textbox_MouseDown;
+            textbox.MouseMove += Textbox_MouseMove;
+            textbox.MouseEnter += Textbox_MouseEnter;
+            textbox.MouseLeave += Textbox_MouseLeave;
+            textbox.TextChanged += Textbox_TextChanged;
+            textbox.Validating += Textbox_Validating;
+            textbox.Validated += Textbox_Validated;
             Controls.Add(textbox);
         }
 
@@ -113,5 +132,213 @@ namespace ExtendedControls
                     e.Graphics.DrawPath(pc2, g2);
             }
         }
+
+        public void NumericKeyPressHandler(KeyPressEventArgs e)     // given a keypress, validate it for number format..
+        {
+            const char vbBack = '\u0008';
+
+            System.Globalization.NumberFormatInfo numberFormatInfo = System.Globalization.CultureInfo.CurrentCulture.NumberFormat;
+            string decimalSeparator = numberFormatInfo.NumberDecimalSeparator;
+            string groupSeparator = numberFormatInfo.NumberGroupSeparator;
+            string negativeSign = numberFormatInfo.NegativeSign;
+
+            string keyInput = e.KeyChar.ToString();
+
+            TextBoxBorder tempBox = this;
+
+            if (Char.IsDigit(e.KeyChar))
+            {
+                if (tempBox.Text.Length != 0)
+                {
+                    if (tempBox.SelectionStart == 0 && (tempBox.Text[0].ToString()) == negativeSign && tempBox.SelectionLength == 0)
+                        e.Handled = true;
+                }
+            }
+            else if (keyInput.Equals(negativeSign))
+            {
+                if (tempBox.SelectionStart != 0 || (tempBox.Text.Contains(negativeSign) && !tempBox.SelectedText.Contains(negativeSign)))
+                    e.Handled = true;
+            }
+            else if (keyInput.Equals(decimalSeparator))
+            {
+                if (tempBox.Text.Length != 0)
+                {
+                    if (tempBox.SelectionStart == 0 && (tempBox.Text[0].ToString()) == negativeSign && !tempBox.SelectedText.Contains(negativeSign) || tempBox.Text.Contains(decimalSeparator) && !tempBox.SelectedText.Contains(decimalSeparator))
+                        e.Handled = true;
+
+                }
+                // Decimal separator is OK
+            }
+            else if (e.KeyChar == vbBack)
+            {
+                // Backspace key is OK
+            }
+            else
+            {
+                // Consume this invalid key and beep.
+                e.Handled = true;
+            }
+        }
+
+        #region Supported Events
+
+        // intercept most events and warn if used.. 
+        // done this way because you can't hide events from the underlying control class (c# does not support protected inheritance), 
+        // and we need to know if someone uses one we do not support
+        // LEAVE in the commented out ones which we do support.. this list is going to be useful for other controls which we wish
+        // to make
+
+        public new event EventHandler BackColorChanged { add { EventWarn(System.Reflection.MethodBase.GetCurrentMethod().Name); } remove { System.Diagnostics.Debug.Assert(true); } }
+        public new event EventHandler BackgroundImageChanged { add { EventWarn(System.Reflection.MethodBase.GetCurrentMethod().Name); } remove { System.Diagnostics.Debug.Assert(true); } }
+        public new event EventHandler BackgroundImageLayout { add { EventWarn(System.Reflection.MethodBase.GetCurrentMethod().Name); } remove { System.Diagnostics.Debug.Assert(true); } }
+        public new event EventHandler BindingContextChanged { add { EventWarn(System.Reflection.MethodBase.GetCurrentMethod().Name); } remove { System.Diagnostics.Debug.Assert(true); } }
+        public new event EventHandler CausesValidationChanged { add { EventWarn(System.Reflection.MethodBase.GetCurrentMethod().Name); } remove { System.Diagnostics.Debug.Assert(true); } }
+        public new event EventHandler ChangeUICues { add { EventWarn(System.Reflection.MethodBase.GetCurrentMethod().Name); } remove { System.Diagnostics.Debug.Assert(true); } }
+        //public new event EventHandler Click { add { EventWarn(System.Reflection.MethodBase.GetCurrentMethod().Name); } remove { System.Diagnostics.Debug.Assert(true); } }
+        public new event EventHandler ClientSizeChanged { add { EventWarn(System.Reflection.MethodBase.GetCurrentMethod().Name); } remove { System.Diagnostics.Debug.Assert(true); } }
+        public new event EventHandler ContextMenuStripChanged { add { EventWarn(System.Reflection.MethodBase.GetCurrentMethod().Name); } remove { System.Diagnostics.Debug.Assert(true); } }
+        public new event EventHandler ControlAdded { add { EventWarn(System.Reflection.MethodBase.GetCurrentMethod().Name); } remove { System.Diagnostics.Debug.Assert(true); } }
+        public new event EventHandler ControlRemoved { add { EventWarn(System.Reflection.MethodBase.GetCurrentMethod().Name); } remove { System.Diagnostics.Debug.Assert(true); } }
+        public new event EventHandler CursorChanged { add { EventWarn(System.Reflection.MethodBase.GetCurrentMethod().Name); } remove { System.Diagnostics.Debug.Assert(true); } }
+        public new event EventHandler DockChanged { add { EventWarn(System.Reflection.MethodBase.GetCurrentMethod().Name); } remove { System.Diagnostics.Debug.Assert(true); } }
+        //public new event EventHandler DoubleClick { add { EventWarn(System.Reflection.MethodBase.GetCurrentMethod().Name); } remove { System.Diagnostics.Debug.Assert(true); } }
+        public new event EventHandler DragDrop { add { EventWarn(System.Reflection.MethodBase.GetCurrentMethod().Name); } remove { System.Diagnostics.Debug.Assert(true); } }
+        public new event EventHandler DragEnter { add { EventWarn(System.Reflection.MethodBase.GetCurrentMethod().Name); } remove { System.Diagnostics.Debug.Assert(true); } }
+        public new event EventHandler DragLeave { add { EventWarn(System.Reflection.MethodBase.GetCurrentMethod().Name); } remove { System.Diagnostics.Debug.Assert(true); } }
+        public new event EventHandler DragOver { add { EventWarn(System.Reflection.MethodBase.GetCurrentMethod().Name); } remove { System.Diagnostics.Debug.Assert(true); } }
+        public new event EventHandler EnabledChanged { add { EventWarn(System.Reflection.MethodBase.GetCurrentMethod().Name); } remove { System.Diagnostics.Debug.Assert(true); } }
+        //public new event EventHandler Enter { add { EventWarn(System.Reflection.MethodBase.GetCurrentMethod().Name); } remove { System.Diagnostics.Debug.Assert(true); } }
+        public new event EventHandler FontChanged { add { EventWarn(System.Reflection.MethodBase.GetCurrentMethod().Name); } remove { System.Diagnostics.Debug.Assert(true); } }
+        public new event EventHandler ForeColorChanged { add { EventWarn(System.Reflection.MethodBase.GetCurrentMethod().Name); } remove { System.Diagnostics.Debug.Assert(true); } }
+        public new event EventHandler GiveFeedback { add { EventWarn(System.Reflection.MethodBase.GetCurrentMethod().Name); } remove { System.Diagnostics.Debug.Assert(true); } }
+        public new event EventHandler HelpRequested { add { EventWarn(System.Reflection.MethodBase.GetCurrentMethod().Name); } remove { System.Diagnostics.Debug.Assert(true); } }
+        public new event EventHandler ImeModeChanged { add { EventWarn(System.Reflection.MethodBase.GetCurrentMethod().Name); } remove { System.Diagnostics.Debug.Assert(true); } }
+        //public new event KeyEventHandler KeyDown { add { EventWarn(System.Reflection.MethodBase.GetCurrentMethod().Name); } remove { System.Diagnostics.Debug.Assert(true); } }
+        //public new event KeyPressEventHandler KeyPress { add { EventWarn(System.Reflection.MethodBase.GetCurrentMethod().Name); } remove { System.Diagnostics.Debug.Assert(true); } }
+        //public new event KeyEventHandler KeyUp { add { EventWarn(System.Reflection.MethodBase.GetCurrentMethod().Name); } remove { System.Diagnostics.Debug.Assert(true); } }
+        public new event EventHandler Layout { add { EventWarn(System.Reflection.MethodBase.GetCurrentMethod().Name); } remove { System.Diagnostics.Debug.Assert(true); } }
+        //public new event EventHandler Leave { add { EventWarn(System.Reflection.MethodBase.GetCurrentMethod().Name); } remove { System.Diagnostics.Debug.Assert(true); } }
+        public new event EventHandler LocationChanged { add { EventWarn(System.Reflection.MethodBase.GetCurrentMethod().Name); } remove { System.Diagnostics.Debug.Assert(true); } }
+        public new event EventHandler MarginChanged { add { EventWarn(System.Reflection.MethodBase.GetCurrentMethod().Name); } remove { System.Diagnostics.Debug.Assert(true); } }
+        public new event EventHandler MouseCaptureChanged { add { EventWarn(System.Reflection.MethodBase.GetCurrentMethod().Name); } remove { System.Diagnostics.Debug.Assert(true); } }
+        //public new event EventHandler MouseClick { add { EventWarn(System.Reflection.MethodBase.GetCurrentMethod().Name); } remove { System.Diagnostics.Debug.Assert(true); } }
+        //public new event EventHandler MouseDoubleClick { add { EventWarn(System.Reflection.MethodBase.GetCurrentMethod().Name); } remove { System.Diagnostics.Debug.Assert(true); } }
+        //public new event MouseEventHandler MouseDown { add { EventWarn(System.Reflection.MethodBase.GetCurrentMethod().Name); } remove { System.Diagnostics.Debug.Assert(true); } }
+        //public new event MouseEventHandler MouseEnter { add { EventWarn(System.Reflection.MethodBase.GetCurrentMethod().Name); } remove { System.Diagnostics.Debug.Assert(true); } }
+        //public new event MouseEventHandler MouseLeave { add { EventWarn(System.Reflection.MethodBase.GetCurrentMethod().Name); } remove { System.Diagnostics.Debug.Assert(true); } }
+        //public new event MouseEventHandler MouseMove { add { EventWarn(System.Reflection.MethodBase.GetCurrentMethod().Name); } remove { System.Diagnostics.Debug.Assert(true); } }
+        //public new event MouseEventHandler MouseUp { add { EventWarn(System.Reflection.MethodBase.GetCurrentMethod().Name); } remove { System.Diagnostics.Debug.Assert(true); } }
+        public new event EventHandler Move { add { EventWarn(System.Reflection.MethodBase.GetCurrentMethod().Name); } remove { System.Diagnostics.Debug.Assert(true); } }
+        public new event EventHandler PaddingChanged { add { EventWarn(System.Reflection.MethodBase.GetCurrentMethod().Name); } remove { System.Diagnostics.Debug.Assert(true); } }
+        public new event EventHandler ParentChanged { add { EventWarn(System.Reflection.MethodBase.GetCurrentMethod().Name); } remove { System.Diagnostics.Debug.Assert(true); } }
+        public new event EventHandler PreviewKeyDown { add { EventWarn(System.Reflection.MethodBase.GetCurrentMethod().Name); } remove { System.Diagnostics.Debug.Assert(true); } }
+        public new event EventHandler QueryAccessibilityHelp { add { EventWarn(System.Reflection.MethodBase.GetCurrentMethod().Name); } remove { System.Diagnostics.Debug.Assert(true); } }
+        public new event EventHandler QueryContinueDrag { add { EventWarn(System.Reflection.MethodBase.GetCurrentMethod().Name); } remove { System.Diagnostics.Debug.Assert(true); } }
+        public new event EventHandler RegionChanged { add { EventWarn(System.Reflection.MethodBase.GetCurrentMethod().Name); } remove { System.Diagnostics.Debug.Assert(true); } }
+        public new event EventHandler Resize { add { EventWarn(System.Reflection.MethodBase.GetCurrentMethod().Name); } remove { System.Diagnostics.Debug.Assert(true); } }
+        public new event EventHandler RightToLeftChanged { add { EventWarn(System.Reflection.MethodBase.GetCurrentMethod().Name); } remove { System.Diagnostics.Debug.Assert(true); } }
+        public new event EventHandler SizeChanged { add { EventWarn(System.Reflection.MethodBase.GetCurrentMethod().Name); } remove { System.Diagnostics.Debug.Assert(true); } }
+        public new event EventHandler StyleChanged { add { EventWarn(System.Reflection.MethodBase.GetCurrentMethod().Name); } remove { System.Diagnostics.Debug.Assert(true); } }
+        public new event EventHandler SystemColorsChanged { add { EventWarn(System.Reflection.MethodBase.GetCurrentMethod().Name); } remove { System.Diagnostics.Debug.Assert(true); } }
+        public new event EventHandler TabIndexChanged { add { EventWarn(System.Reflection.MethodBase.GetCurrentMethod().Name); } remove { System.Diagnostics.Debug.Assert(true); } }
+        public new event EventHandler TabStopChanged { add { EventWarn(System.Reflection.MethodBase.GetCurrentMethod().Name); } remove { System.Diagnostics.Debug.Assert(true); } }
+        //public new event EventHandler TextChanged { add { EventWarn(System.Reflection.MethodBase.GetCurrentMethod().Name); } remove { System.Diagnostics.Debug.Assert(true); } }
+        //public new event System.ComponentModel.CancelEventHandler Validating { add { EventWarn(System.Reflection.MethodBase.GetCurrentMethod().Name); } remove { System.Diagnostics.Debug.Assert(true); } }
+        //public new event EventHandler Validated { add { EventWarn(System.Reflection.MethodBase.GetCurrentMethod().Name); } remove { System.Diagnostics.Debug.Assert(true); } }
+        public new event EventHandler VisibleChanged { add { EventWarn(System.Reflection.MethodBase.GetCurrentMethod().Name); } remove { System.Diagnostics.Debug.Assert(true); } }
+
+        void EventWarn(string method)
+        {
+            System.Diagnostics.Debug.WriteLine("*** Event " + method + " NOT SUPPORTED ");
+            System.Diagnostics.Debug.Assert(false);
+        }
+
+        private void Textbox_Validated(object sender, EventArgs e)
+        {
+            base.OnValidated(e);
+        }
+
+        private void Textbox_Validating(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            base.OnValidating(e);
+        }
+
+        private void Textbox_DoubleClick(object sender, EventArgs e)
+        {
+            base.OnDoubleClick(e);
+        }
+
+        private void Textbox_Click(object sender, EventArgs e)
+        {
+            base.OnClick(e);
+        }
+
+        private void Textbox_Leave(object sender, EventArgs e)
+        {
+            base.OnLeave(e);
+        }
+
+        private void Textbox_Enter(object sender, EventArgs e)
+        {
+            base.OnEnter(e);
+        }
+
+        private void Textbox_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            base.OnMouseDoubleClick(e);
+        }
+
+        private void Textbox_MouseClick(object sender, MouseEventArgs e)
+        {
+            base.OnMouseClick(e);
+        }
+
+        private void Textbox_MouseEnter(object sender, EventArgs e)
+        {
+            base.OnMouseEnter(e);
+        }
+
+        private void Textbox_MouseLeave(object sender, EventArgs e)
+        {
+            base.OnMouseLeave(e);
+        }
+
+        private void Textbox_MouseMove(object sender, MouseEventArgs e)
+        {
+            base.OnMouseMove(e);
+        }
+
+        private void Textbox_MouseDown(object sender, MouseEventArgs e)
+        {
+            base.OnMouseDown(e);
+        }
+
+        private void Textbox_MouseUp(object sender, MouseEventArgs e)
+        {
+            base.OnMouseUp(e);
+        }
+
+        private void Textbox_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            base.OnKeyPress(e);
+        }
+
+        private void Textbox_KeyDown(object sender, KeyEventArgs e)
+        {
+            base.OnKeyDown(e);
+        }
+
+        private void Textbox_KeyUp(object sender, KeyEventArgs e)
+        {
+            base.OnKeyUp(e);
+        }
+
+        private void Textbox_TextChanged(object sender, EventArgs e)
+        {
+            base.OnTextChanged(e);
+        }
+
+        #endregion
+
     }
 }

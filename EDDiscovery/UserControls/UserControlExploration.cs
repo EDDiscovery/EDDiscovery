@@ -416,7 +416,7 @@ namespace EDDiscovery.UserControls
 
         private void dataGridViewRouteSystems_EditingControlShowing(object sender, DataGridViewEditingControlShowingEventArgs e)
         {
-            var textbox = (TextBox)e.Control;
+            var textbox = (ExtendedControls.TextBoxBorder)e.Control;
             if (dataGridViewExplore.CurrentCell.ColumnIndex != 0)
             {
                 textbox.AutoCompleteMode = AutoCompleteMode.None;
