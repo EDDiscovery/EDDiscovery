@@ -107,7 +107,7 @@ namespace EDDiscovery.Actions
                 name = si.ShipUserName;
                 ident = si.ShipUserIdent;
                 sv = si.SubVehicle.ToString();
-                fullinfo = si.ShipFullInfo;
+                fullinfo = si.ShipFullInfo();
                 shortname = si.ShipShortName;
                 fuel = si.FuelCapacity.ToString("0.0");
                 fuellevel = si.FuelLevel.ToString("0.0");

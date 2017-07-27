@@ -45,17 +45,19 @@ namespace EDDiscovery.UserControls
         const int BitSelSystemState = 6;
         const int BitSelNotes = 7;
         const int BitSelTarget = 8;
-        const int BitSelGameMode = 9;
-        const int BitSelTravel = 10;
-        const int BitSelCargo = 11;
+        const int BitSelShipInfo = 9;
+        const int BitSelCargo = 10;
+        const int BitSelGameMode = 11;
+        const int BitSelTravel = 12;
 
-        const int BitSelTotal = 12;
+        const int BitSelTotal = 13;
 
         const int BitSelEDSMButtonsNextLine = 24;
         const int SelDefault = ((1<<BitSelTotal)-1)+(1<<BitSelEDSMButtonsNextLine);
 
         const int hspacing = 8;
 
+        int Selection;          // selection bits
         List<int> Order;        // orderarray is the order to display them on the screen.. same entries as BitSelTotal
         int[] YStart;           // ypos of items in Order.
         int[] YEnd;             // ypos of items in Order.
@@ -80,17 +82,14 @@ namespace EDDiscovery.UserControls
             toolstriplist = new ToolStripMenuItem[] { toolStripSystem , toolStripEDSM , toolStripVisits, toolStripBody,
                                                         toolStripPosition, toolStripDistanceFrom,
                                                         toolStripSystemState, toolStripNotes, toolStripTarget,
-                                                        toolStripGameMode,toolStripTravel,toolStripCargo};
-            
+                                                        toolStripShip, toolStripCargo,
+                                                        toolStripGameMode,toolStripTravel};
+
+            Selection = DB.SQLiteDBClass.GetSettingInt(DbSelection, SelDefault);
             Order = DB.SQLiteDBClass.GetSettingString(DbOSave, "").RestoreIntListFromString(0, BitSelTotal);
             System.Diagnostics.Debug.WriteLine("Ordered " + String.Join(",", Order));
             if (Order.Distinct().Count() != Order.Count)       // if not distinct..
-            {
-                Order = new List<int>();
-                for (int i = 0; i < BitSelTotal; i++)          // reset
-                    Order.Add(i);
-                System.Diagnostics.Debug.WriteLine("Reset " + String.Join(",", Order));
-            }
+                Reset();
         }
 
         public override void Closing()
@@ -98,7 +97,8 @@ namespace EDDiscovery.UserControls
             discoveryform.TravelControl.OnTravelSelectionChanged -= Display;
             discoveryform.OnNewTarget -= RefreshTargetDisplay;
             discoveryform.OnNoteChanged -= OnNoteChanged;
-            DB.SQLiteDBClass.PutSettingString(DbOSave, String.Join(",",Order));
+            DB.SQLiteDBClass.PutSettingString(DbOSave, String.Join(",", Order));
+            DB.SQLiteDBClass.PutSettingInt(DbSelection, Selection);
         }
 
         bool neverdisplayed = true;
@@ -107,7 +107,7 @@ namespace EDDiscovery.UserControls
         {
             if (neverdisplayed)
             {
-                UpdateViewOnSelection(DB.SQLiteConnectionUser.GetSettingInt(DbSelection, SelDefault));  // then turn the right ones on
+                UpdateViewOnSelection();  // then turn the right ones on
                 neverdisplayed = false;
             }
 
@@ -158,17 +158,33 @@ namespace EDDiscovery.UserControls
                     textBoxTravelDist.Text = he.TravelledDistance.ToStringInvariant("0.0") + "ly";
                     textBoxTravelTime.Text = he.TravelledSeconds.ToString();
                     textBoxTravelJumps.Text = he.TravelledJumpsAndMisses;
-                    textBoxTravelTime.Visible = textBoxTravelJumps.Visible = true;
                 }
                 else
                 {
-                    textBoxTravelDist.Text = "-";
-                    textBoxTravelTime.Visible = textBoxTravelJumps.Visible = false;
+                    textBoxTravelDist.Text = textBoxTravelTime.Text = textBoxTravelJumps.Text = "";
                 }
 
-                textBoxCargo.Text = he.MaterialCommodity.CargoCount.ToStringInvariant();
-                textBoxMaterials.Text = he.MaterialCommodity.MaterialsCount.ToStringInvariant();
+                int cc = (he.ShipInformation) != null ? he.ShipInformation.CargoCapacity() : 0;
+                if (cc > 0)
+                    textBoxCargo.Text = he.MaterialCommodity.CargoCount.ToStringInvariant() + "/" + cc.ToStringInvariant();
+                else
+                    textBoxCargo.Text = he.MaterialCommodity.CargoCount.ToStringInvariant();
 
+                textBoxMaterials.Text = he.MaterialCommodity.MaterialsCount.ToStringInvariant();
+                textBoxData.Text = he.MaterialCommodity.DataCount.ToStringInvariant();
+
+                if (he.ShipInformation != null)
+                {
+                    textBoxShip.Text = he.ShipInformation.ShipFullInfo(cargo: false, fuel: false);
+                    if (he.ShipInformation.FuelCapacity > 0 && he.ShipInformation.FuelLevel > 0)
+                        textBoxFuel.Text = he.ShipInformation.FuelLevel.ToStringInvariant("0.#") + "/" + he.ShipInformation.FuelCapacity.ToStringInvariant("0.#");
+                    else if (he.ShipInformation.FuelCapacity > 0)
+                        textBoxFuel.Text = he.ShipInformation.FuelCapacity.ToStringInvariant("0.#");
+                    else
+                        textBoxFuel.Text = "N/A";
+                }
+                else
+                    textBoxShip.Text = textBoxFuel.Text = "";
 
                 RefreshTargetDisplay(this);
             }
@@ -178,10 +194,9 @@ namespace EDDiscovery.UserControls
                 textBoxSystem.Text = textBoxBody.Text = textBoxPosition.Text =
                                 textBoxAllegiance.Text = textBoxEconomy.Text = textBoxGovernment.Text =
                                 textBoxVisits.Text = textBoxState.Text = textBoxHomeDist.Text = textBoxSolDist.Text =
-                                textBoxGameMode.Text = textBoxTravelDist.Text =
-                                textBoxCargo.Text = textBoxMaterials.Text =
+                                textBoxGameMode.Text = textBoxTravelDist.Text = textBoxTravelTime.Text = textBoxTravelJumps.Text =
+                                textBoxCargo.Text = textBoxMaterials.Text = textBoxData.Text = textBoxShip.Text = textBoxFuel.Text =
                                 "";
-                textBoxTravelTime.Visible = textBoxTravelJumps.Visible = false;
 
                 buttonRoss.Enabled = buttonEDDB.Enabled = false;
                 SetNote("");
@@ -357,20 +372,22 @@ namespace EDDiscovery.UserControls
         {
             ToggleSelection(sender, BitSelCargo);
         }
+        private void toolStripShip_Click(object sender, EventArgs e)
+        {
+            ToggleSelection(sender, BitSelShipInfo);
+        }
 
         void ToggleSelection(Object sender, int bit)
         {
             ToolStripMenuItem mi = sender as ToolStripMenuItem;
             if (mi.Enabled)
             {
-                int sel = DB.SQLiteConnectionUser.GetSettingInt(DbSelection, SelDefault);
-                sel ^= (1 << bit);
-                DB.SQLiteConnectionUser.PutSettingInt(DbSelection, sel);
-                UpdateViewOnSelection(sel);
+                Selection ^= (1 << bit);
+                UpdateViewOnSelection();
             }
         }
 
-        void UpdateViewOnSelection(int sel)
+        void UpdateViewOnSelection()
         {
             SuspendLayout();
             Point pos = new Point(3, 3);
@@ -386,13 +403,13 @@ namespace EDDiscovery.UserControls
             YStart = new int[Order.Count];
             YEnd = new int[Order.Count];
 
-            bool selEDSMonNextLine = (sel & (1 << BitSelEDSMButtonsNextLine)) != 0;
+            bool selEDSMonNextLine = (Selection & (1 << BitSelEDSMButtonsNextLine)) != 0;
             toolStripEDSMDownLine.Checked = selEDSMonNextLine;
 
             for (int i = 0; i < Order.Count; i++)
             {
                 int bit = Order[i];
-                bool ison = (sel & (1 << bit)) != 0;
+                bool ison = (Selection & (1 << bit)) != 0;
 
                 toolstriplist[bit].Enabled = false;
                 toolstriplist[bit].Checked = ison;
@@ -405,13 +422,15 @@ namespace EDDiscovery.UserControls
                     Point datapos = new Point(textBoxSystem.Left, pos.Y);
                     Point labpos2 = new Point(labelSolDist.Left, pos.Y);
                     Point datapos2 = new Point(textBoxSolDist.Left, pos.Y);
+                    Point labpos3 = new Point(labelData.Left, pos.Y);
+                    Point datapos3 = new Point(textBoxData.Left, pos.Y);
 
                     switch (Order[i])
                     {
                         case BitSelSystem:
                             this.SetPos(ref pos, labelSysName, datapos, textBoxSystem, vspacing);
 
-                            if ( !selEDSMonNextLine && (sel & (1<<BitSelEDSM))!=0)
+                            if ( !selEDSMonNextLine && (Selection & (1<<BitSelEDSM))!=0)
                             {
                                 buttonEDSM.Location = new Point(textBoxSystem.Right + hspacing, datapos.Y);
                                 buttonEDDB.Location = new Point(buttonEDSM.Right + hspacing, buttonEDSM.Top);
@@ -477,12 +496,19 @@ namespace EDDiscovery.UserControls
                             this.SetPos(ref pos, labelTravel, datapos, textBoxTravelDist, vspacing);
                             textBoxTravelTime.Location = new Point(textBoxTravelDist.Right + hspacing, datapos.Y);
                             textBoxTravelJumps.Location = new Point(textBoxTravelTime.Right + hspacing, datapos.Y);
+                            textBoxTravelTime.Visible = textBoxTravelJumps.Visible = true;
                             // don't set visible for the last two, may not be if not travelling. Display will deal with it
                             break;
 
                         case BitSelCargo:
                             this.SetPos(ref pos, labelCargo, datapos, textBoxCargo, vspacing);
                             OffsetPos(labpos2, labelMaterials, datapos2, textBoxMaterials);
+                            OffsetPos(labpos3, labelData, datapos3, textBoxData);
+                            break;
+
+                        case BitSelShipInfo:
+                            this.SetPos(ref pos, labelShip, datapos, textBoxShip, vspacing);
+                            OffsetPos(labpos3, labelFuel, datapos3, textBoxFuel);
                             break;
                     }
 
@@ -492,9 +518,22 @@ namespace EDDiscovery.UserControls
             }
 
             ResumeLayout();
-            Refresh();
         }
 
+        private void resetToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Reset();
+            UpdateViewOnSelection();
+        }
+
+        public void Reset()
+        {
+            Selection = SelDefault;
+            Order = new List<int>();
+            for (int i = 0; i < BitSelTotal; i++)          // reset
+                Order.Add(i);
+            System.Diagnostics.Debug.WriteLine("Reset " + String.Join(",", Order));
+        }
 
         void SetPos(ref Point lp, Label lab, Point tp, ExtendedControls.TextBoxBorder box, int vspacing = 0)
         {
@@ -605,7 +644,7 @@ namespace EDDiscovery.UserControls
                             Order.Insert(movetoorder, selbit);
 
                         System.Diagnostics.Debug.WriteLine("Re-ordered " + String.Join(",", Order));
-                        UpdateViewOnSelection(DB.SQLiteConnectionUser.GetSettingInt(DbSelection, SelDefault));  // then turn the right ones on
+                        UpdateViewOnSelection();
 
                     }
 
