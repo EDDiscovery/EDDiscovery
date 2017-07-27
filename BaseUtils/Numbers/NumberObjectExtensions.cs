@@ -178,10 +178,13 @@ public static class ObjectExtensionsNumbersBool
 
     static public List<int> RestoreIntListFromString(this string plist, int def, int length)      // fill array from comma separ string, with defined length and defined default
     {
-        int i = 0;
         List<int> list = new List<int>(length);
+
         string[] parray = plist.Split(',');
-        for (; i < length; i++)
+        if (length == 0)
+            length = parray.Length;
+
+        for (int i = 0; i < length; i++)
         {
             int v;
             if (i >= parray.Length || !parray[i].InvariantParse(out v))
