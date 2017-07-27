@@ -512,7 +512,7 @@ namespace EDDiscovery
         public bool SyncToEGO { get { return syncToEGO; } set { syncToEGO = value; } }
         public bool Deleted { get { return deleted; } set { deleted = value; } }
 
-        public string Info { get { return BaseUtils.FieldBuilder.Build(";To EDDN", syncToEddn, ";To EDSM", syncToEdsm, ";From EDSM", syncFromEdsm, ";CAPI" , CompanionAPI.CompanionCredentials.CredentialState(Name) == CompanionAPI.CompanionCredentials.State.CONFIRMED); } }
+        public string Info { get { return BaseUtils.FieldBuilder.Build(";To EDDN", syncToEddn, ";To EDSM", syncToEdsm, ";From EDSM", syncFromEdsm, ";CAPI" , CompanionAPI.CompanionCredentials.CredentialState(Name) == CompanionAPI.CompanionCredentials.State.CONFIRMED, ";To EGO", syncToEGO); } }
 
 #endregion
     }
