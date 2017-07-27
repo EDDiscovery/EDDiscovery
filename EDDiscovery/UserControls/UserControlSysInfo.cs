@@ -34,7 +34,7 @@ namespace EDDiscovery.UserControls
         private EDDiscoveryForm discoveryform;
         private int displaynumber;
         private string DbSelection { get { return ("SystemInformation") + ((displaynumber > 0) ? displaynumber.ToString() : "") + "Sel"; } }
-        private string DbOSave { get { return "SystemInformation" + ((displaynumber > 0) ? displaynumber.ToString() : "Order"); } }
+        private string DbOSave { get { return "SystemInformation" + ((displaynumber > 0) ? displaynumber.ToString() :"" ) + "Order"; } }
 
         const int BitSelSystem = 0;
         const int BitSelEDSM = 1;
@@ -65,6 +65,8 @@ namespace EDDiscovery.UserControls
         int[] YEnd;             // ypos of items in Order.
         ToolStripMenuItem[] toolstriplist;          // ref to toolstrip items for each bit above. in same order as bits BitSel..
 
+        #region Init
+
         public UserControlSysInfo()
         {
             InitializeComponent();
@@ -88,7 +90,10 @@ namespace EDDiscovery.UserControls
                                                         toolStripGameMode,toolStripTravel};
 
             Selection = DB.SQLiteDBClass.GetSettingInt(DbSelection, BitSelDefault);
-            Order = DB.SQLiteDBClass.GetSettingString(DbOSave, "").RestoreIntListFromString(-1, Positions);
+            Order = DB.SQLiteDBClass.GetSettingString(DbOSave, "").RestoreIntListFromString(-1, 0);     // no min len
+            if (Order.Count < 2)
+                Reset();
+
             System.Diagnostics.Debug.WriteLine("Ordered " + String.Join(",", Order));
         }
 
@@ -100,6 +105,10 @@ namespace EDDiscovery.UserControls
             DB.SQLiteDBClass.PutSettingString(DbOSave, String.Join(",", Order));
             DB.SQLiteDBClass.PutSettingInt(DbSelection, Selection);
         }
+
+        #endregion
+
+        #region Display
 
         bool neverdisplayed = true;
         HistoryEntry last_he = null;
@@ -210,6 +219,10 @@ namespace EDDiscovery.UserControls
             noteenabled = true;
         }
 
+        #endregion
+
+        #region Clicks
+
         private void buttonEDDB_Click(object sender, EventArgs e)
         {
             if (last_he != null && last_he.System.id_eddb > 0)
@@ -299,25 +312,6 @@ namespace EDDiscovery.UserControls
             else
                 ExtendedControls.MessageBoxTheme.Show("System unknown to EDSM");
 
-        }
-
-        bool noteenabled = true;
-        private void richTextBoxNote_Leave(object sender, EventArgs e)
-        {
-            if (last_he != null && noteenabled)
-            {
-                last_he.SetJournalSystemNoteText(richTextBoxNote.Text.Trim(), true);
-                discoveryform.NoteChanged(this, last_he, true);
-            }
-        }
-
-        private void richTextBoxNote_TextBoxChanged(object sender, EventArgs e)
-        {
-            if (last_he != null && noteenabled)
-            {
-                last_he.SetJournalSystemNoteText(richTextBoxNote.Text.Trim(), false);
-                discoveryform.NoteChanged(this, last_he, false);
-            }
         }
 
         private void toolStripSystem_Click(object sender, EventArgs e)
@@ -589,6 +583,28 @@ namespace EDDiscovery.UserControls
             lab.Visible = box.Visible = true;
         }
 
+        #endregion
+
+        #region Notes
+
+        bool noteenabled = true;
+        private void richTextBoxNote_Leave(object sender, EventArgs e)
+        {
+            if (last_he != null && noteenabled)
+            {
+                last_he.SetJournalSystemNoteText(richTextBoxNote.Text.Trim(), true);
+                discoveryform.NoteChanged(this, last_he, true);
+            }
+        }
+
+        private void richTextBoxNote_TextBoxChanged(object sender, EventArgs e)
+        {
+            if (last_he != null && noteenabled)
+            {
+                last_he.SetJournalSystemNoteText(richTextBoxNote.Text.Trim(), false);
+                discoveryform.NoteChanged(this, last_he, false);
+            }
+        }
         private void OnNoteChanged(Object sender, HistoryEntry he, bool arg)  // BEWARE we do this as well..
         {
             if ( !Object.ReferenceEquals(this,sender) )     // so, make sure this sys info is not sending it
@@ -619,20 +635,9 @@ namespace EDDiscovery.UserControls
             }
         }
 
-        private void UserControlSysInfo_Resize(object sender, EventArgs e)
-        {
-            //richTextBoxNote.Size = new Size(ClientRectangle.Width - richTextBoxNote.Left - 8, richTextBoxNote.Height);
+        #endregion
 
-            int left = ClientRectangle.Width - textBoxTarget.Left - buttonEDSMTarget.Width - hspacing*2 - 2;
-            int targetw = left * 7 / 10;
-            int distw = left - targetw;
-
-            //textBoxTarget.Width = targetw;
-            //textBoxTargetDist.Width = distw;
-            //textBoxTargetDist.Location = new Point(textBoxTarget.Right + hspacing, textBoxTargetDist.Top);
-            //buttonEDSMTarget.Location = new Point(textBoxTargetDist.Right + hspacing, buttonEDSMTarget.Top);
-
-        }
+        #region Move around
 
         int fromorder = -1;
         int fromy = -1;
@@ -754,5 +759,34 @@ namespace EDDiscovery.UserControls
             }
         }
 
+        #endregion
+
+        #region Display control
+
+        private void UserControlSysInfo_Resize(object sender, EventArgs e)
+        {
+            //TBD
+
+            //richTextBoxNote.Size = new Size(ClientRectangle.Width - richTextBoxNote.Left - 8, richTextBoxNote.Height);
+
+            int left = ClientRectangle.Width - textBoxTarget.Left - buttonEDSMTarget.Width - hspacing * 2 - 2;
+            int targetw = left * 7 / 10;
+            int distw = left - targetw;
+
+            //textBoxTarget.Width = targetw;
+            //textBoxTargetDist.Width = distw;
+            //textBoxTargetDist.Location = new Point(textBoxTarget.Right + hspacing, textBoxTargetDist.Top);
+            //buttonEDSMTarget.Location = new Point(textBoxTargetDist.Right + hspacing, buttonEDSMTarget.Top);
+
+        }
+
+        public override Color ColorTransparency { get { return Color.Green; } }
+        public override void SetTransparency(bool on, Color curcol)
+        {
+            this.BackColor = curcol;
+
+        }
+
+        #endregion
     }
 }
