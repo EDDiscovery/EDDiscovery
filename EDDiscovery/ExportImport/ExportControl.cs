@@ -43,6 +43,12 @@ namespace EDDiscovery.Export
         {
             InitializeComponent();
 
+            this.textBoxArrivalDate.SetToolTip(toolTip, "Column containing the arrival date");
+            this.textBoxSysName.SetToolTip(toolTip, "Column containing the system name");
+            this.textBoxSysNotes.SetToolTip(toolTip, "Column containing any system notes");
+            this.textBoxArrivalTime.SetToolTip(toolTip, "Column containing the arrival time");
+            this.textBoxDelimiter.SetToolTip(toolTip, "Delimiting character");
+
             exportTypeList = new List<ExportTypeClass>();
 
             exportTypeList.Add(new ExportTypeClass("Exploration scans (all)", new ExportScan()));

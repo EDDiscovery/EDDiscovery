@@ -56,6 +56,8 @@ namespace ExtendedControls
         public System.Windows.Forms.AutoCompleteMode AutoCompleteMode { get { return textbox.AutoCompleteMode; } set { textbox.AutoCompleteMode = value; } }
         public System.Windows.Forms.AutoCompleteSource AutoCompleteSource { get { return textbox.AutoCompleteSource; } set { textbox.AutoCompleteSource = value; } }
 
+        public void SetToolTip(ToolTip t, string text) { t.SetToolTip(textbox, text); }
+
         private TextBox textbox;
         private Color bordercolor = Color.Transparent;
         private Color controlbackcolor = SystemColors.Control;

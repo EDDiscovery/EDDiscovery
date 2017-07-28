@@ -309,7 +309,6 @@ namespace EDDiscovery.Export
             this.textBoxArrivalDate.TabIndex = 9;
             this.textBoxArrivalDate.Text = "1";
             this.textBoxArrivalDate.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
-            this.toolTip.SetToolTip(this.textBoxArrivalDate, "Column containing the arrival date");
             this.textBoxArrivalDate.WordWrap = true;
             this.textBoxArrivalDate.Validating += new System.ComponentModel.CancelEventHandler(this.textBoxArrivalDate_Validating);
             // 
@@ -365,7 +364,6 @@ namespace EDDiscovery.Export
             this.textBoxSysName.TabIndex = 14;
             this.textBoxSysName.Text = "3";
             this.textBoxSysName.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
-            this.toolTip.SetToolTip(this.textBoxSysName, "Column containing the system name");
             this.textBoxSysName.WordWrap = true;
             this.textBoxSysName.Validating += new System.ComponentModel.CancelEventHandler(this.textBoxSysName_Validating);
             // 
@@ -388,7 +386,6 @@ namespace EDDiscovery.Export
             this.textBoxSysNotes.TabIndex = 15;
             this.textBoxSysNotes.Text = "6";
             this.textBoxSysNotes.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
-            this.toolTip.SetToolTip(this.textBoxSysNotes, "Column containing any system notes");
             this.textBoxSysNotes.WordWrap = true;
             this.textBoxSysNotes.TextChanged += new System.EventHandler(this.textBoxSysNotes_TextChanged);
             // 
@@ -459,7 +456,6 @@ namespace EDDiscovery.Export
             this.textBoxArrivalTime.TabIndex = 10;
             this.textBoxArrivalTime.Text = "2";
             this.textBoxArrivalTime.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
-            this.toolTip.SetToolTip(this.textBoxArrivalTime, "Column containing the arrival time");
             this.textBoxArrivalTime.WordWrap = true;
             this.textBoxArrivalTime.TextChanged += new System.EventHandler(this.textBoxArrivalTime_TextChanged);
             // 
@@ -482,7 +478,6 @@ namespace EDDiscovery.Export
             this.textBoxDelimiter.TabIndex = 7;
             this.textBoxDelimiter.Text = ",";
             this.textBoxDelimiter.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
-            this.toolTip.SetToolTip(this.textBoxDelimiter, "Delimiting character");
             this.textBoxDelimiter.WordWrap = true;
             // 
             // flowLayoutPanel1

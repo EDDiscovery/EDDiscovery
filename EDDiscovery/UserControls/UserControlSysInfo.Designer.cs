@@ -81,7 +81,6 @@ namespace EDDiscovery.UserControls
             this.buttonEDSM = new ExtendedControls.DrawnPanel();
             this.textBoxSolDist = new ExtendedControls.TextBoxBorder();
             this.labelSolDist = new System.Windows.Forms.Label();
-            this.toolTipEddb = new System.Windows.Forms.ToolTip(this.components);
             this.labelNote = new System.Windows.Forms.Label();
             this.richTextBoxNote = new ExtendedControls.RichTextBoxScroll();
             this.labelTarget = new System.Windows.Forms.Label();
@@ -553,7 +552,6 @@ namespace EDDiscovery.UserControls
             this.buttonEDDB.Name = "buttonEDDB";
             this.buttonEDDB.Size = new System.Drawing.Size(20, 20);
             this.buttonEDDB.TabIndex = 5;
-            this.toolTipEddb.SetToolTip(this.buttonEDDB, "Click to show system in EDDB");
             this.buttonEDDB.Click += new System.EventHandler(this.buttonEDDB_Click);
             this.buttonEDDB.MouseDown += new System.Windows.Forms.MouseEventHandler(this.controlMouseDown);
             this.buttonEDDB.MouseMove += new System.Windows.Forms.MouseEventHandler(this.controlMouseMove);
@@ -575,7 +573,6 @@ namespace EDDiscovery.UserControls
             this.buttonRoss.Name = "buttonRoss";
             this.buttonRoss.Size = new System.Drawing.Size(20, 20);
             this.buttonRoss.TabIndex = 6;
-            this.toolTipEddb.SetToolTip(this.buttonRoss, "Click to edit system in Ross");
             this.buttonRoss.Click += new System.EventHandler(this.buttonRoss_Click);
             this.buttonRoss.MouseDown += new System.Windows.Forms.MouseEventHandler(this.controlMouseDown);
             this.buttonRoss.MouseMove += new System.Windows.Forms.MouseEventHandler(this.controlMouseMove);
@@ -600,7 +597,6 @@ namespace EDDiscovery.UserControls
             this.textBoxHomeDist.TabIndex = 42;
             this.textBoxHomeDist.TabStop = false;
             this.textBoxHomeDist.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
-            this.toolTipEddb.SetToolTip(this.textBoxHomeDist, "Distance to home system");
             this.textBoxHomeDist.WordWrap = true;
             this.textBoxHomeDist.MouseDown += new System.Windows.Forms.MouseEventHandler(this.controlMouseDown);
             this.textBoxHomeDist.MouseMove += new System.Windows.Forms.MouseEventHandler(this.controlMouseMove);
@@ -633,7 +629,6 @@ namespace EDDiscovery.UserControls
             this.buttonEDSM.Name = "buttonEDSM";
             this.buttonEDSM.Size = new System.Drawing.Size(44, 20);
             this.buttonEDSM.TabIndex = 4;
-            this.toolTipEddb.SetToolTip(this.buttonEDSM, "Click to show system on EDSM");
             this.buttonEDSM.Click += new System.EventHandler(this.buttonEDSM_Click);
             this.buttonEDSM.MouseDown += new System.Windows.Forms.MouseEventHandler(this.controlMouseDown);
             this.buttonEDSM.MouseMove += new System.Windows.Forms.MouseEventHandler(this.controlMouseMove);
@@ -658,7 +653,6 @@ namespace EDDiscovery.UserControls
             this.textBoxSolDist.TabIndex = 44;
             this.textBoxSolDist.TabStop = false;
             this.textBoxSolDist.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
-            this.toolTipEddb.SetToolTip(this.textBoxSolDist, "Distance to Sol");
             this.textBoxSolDist.WordWrap = true;
             this.textBoxSolDist.MouseDown += new System.Windows.Forms.MouseEventHandler(this.controlMouseDown);
             this.textBoxSolDist.MouseMove += new System.Windows.Forms.MouseEventHandler(this.controlMouseMove);
@@ -677,10 +671,6 @@ namespace EDDiscovery.UserControls
             this.labelSolDist.MouseMove += new System.Windows.Forms.MouseEventHandler(this.controlMouseMove);
             this.labelSolDist.MouseUp += new System.Windows.Forms.MouseEventHandler(this.controlMouseUp);
             // 
-            // toolTipEddb
-            // 
-            this.toolTipEddb.ShowAlways = true;
-            // 
             // labelNote
             // 
             this.labelNote.AutoSize = true;
@@ -689,7 +679,6 @@ namespace EDDiscovery.UserControls
             this.labelNote.Size = new System.Drawing.Size(30, 13);
             this.labelNote.TabIndex = 28;
             this.labelNote.Text = "Note";
-            this.toolTipEddb.SetToolTip(this.labelNote, "Enter a note against the currently selected entry");
             this.labelNote.MouseDown += new System.Windows.Forms.MouseEventHandler(this.controlMouseDown);
             this.labelNote.MouseMove += new System.Windows.Forms.MouseEventHandler(this.controlMouseMove);
             this.labelNote.MouseUp += new System.Windows.Forms.MouseEventHandler(this.controlMouseUp);
@@ -784,7 +773,6 @@ namespace EDDiscovery.UserControls
             this.textBoxTarget.TabIndex = 15;
             this.textBoxTarget.TabStop = false;
             this.textBoxTarget.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
-            this.toolTip1.SetToolTip(this.textBoxTarget, "Sets the target");
             this.textBoxTarget.WordWrap = true;
             this.textBoxTarget.KeyUp += new System.Windows.Forms.KeyEventHandler(this.textBoxTarget_KeyUp);
             this.textBoxTarget.MouseDown += new System.Windows.Forms.MouseEventHandler(this.controlMouseDown);
@@ -811,7 +799,6 @@ namespace EDDiscovery.UserControls
             this.textBoxTargetDist.TabIndex = 15;
             this.textBoxTargetDist.TabStop = false;
             this.textBoxTargetDist.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
-            this.toolTip1.SetToolTip(this.textBoxTargetDist, "Distance to target");
             this.textBoxTargetDist.WordWrap = true;
             this.textBoxTargetDist.MouseDown += new System.Windows.Forms.MouseEventHandler(this.controlMouseDown);
             this.textBoxTargetDist.MouseMove += new System.Windows.Forms.MouseEventHandler(this.controlMouseMove);
@@ -1246,7 +1233,6 @@ namespace EDDiscovery.UserControls
         private ExtendedControls.TextBoxBorder textBoxEconomy;
         private ExtendedControls.TextBoxBorder textBoxState;
         private ExtendedControls.DrawnPanel buttonEDDB;
-        private System.Windows.Forms.ToolTip toolTipEddb;
         private ExtendedControls.DrawnPanel buttonRoss;
         private ExtendedControls.TextBoxBorder textBoxHomeDist;
         private System.Windows.Forms.Label labelHomeDist;
