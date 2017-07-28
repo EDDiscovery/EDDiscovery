@@ -33,10 +33,22 @@ namespace DialogTest
             list.Add("Efive");
 
             autoCompleteTextBox1.SetAutoCompletor(AutoList);
+            autoCompleteTextBox1.KeyUp += AutoCompleteTextBox1_KeyUp;
             autoCompleteTextBox2.SetAutoCompletor(AutoList);
             autoCompleteTextBox2.FlatStyle = FlatStyle.Popup;
+            autoCompleteTextBox2.KeyUp += AutoCompleteTextBox2_KeyUp;
 
             comboBoxCustom1.Items.AddRange(list);
+        }
+
+        private void AutoCompleteTextBox2_KeyUp(object sender, KeyEventArgs e)
+        {
+            System.Diagnostics.Debug.WriteLine("Answer " + autoCompleteTextBox2.Text);
+        }
+
+        private void AutoCompleteTextBox1_KeyUp(object sender, KeyEventArgs e)
+        {
+            System.Diagnostics.Debug.WriteLine("Answer " + autoCompleteTextBox1.Text);
         }
 
         public static List<string> AutoList(string input, AutoCompleteTextBox t)
