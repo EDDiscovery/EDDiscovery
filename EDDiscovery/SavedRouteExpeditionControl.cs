@@ -931,7 +931,7 @@ namespace EDDiscovery
 
             if (obj == null)
                 return;
-            RoutingUtils.setTargetSystem(this,_discoveryForm, (string)obj);
+            TargetHelpers.setTargetSystem(this,_discoveryForm, (string)obj);
         }
 
         private void editBookmarkToolStripMenuItem_Click(object sender, EventArgs e)
@@ -950,7 +950,7 @@ namespace EDDiscovery
                 ExtendedControls.MessageBoxTheme.Show("Unknown system, system is without co-ordinates", "Edit bookmark", MessageBoxButtons.OK);
             }
             else
-                RoutingUtils.showBookmarkForm(this,_discoveryForm, sc, null, false);
+                TargetHelpers.showBookmarkForm(this,_discoveryForm, sc, null, false);
         }
     }
 }
