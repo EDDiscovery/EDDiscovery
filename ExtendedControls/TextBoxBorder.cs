@@ -60,8 +60,10 @@ namespace ExtendedControls
         private Color bordercolor = Color.Transparent;
         private Color controlbackcolor = SystemColors.Control;
 
+        
         public TextBoxBorder() : base()
         {
+            this.GotFocus += TextBoxBorder_GotFocus;
             textbox = new TextBox();
             textbox.BorderStyle = BorderStyle.FixedSingle;
 
@@ -83,6 +85,11 @@ namespace ExtendedControls
             textbox.Validating += Textbox_Validating;
             textbox.Validated += Textbox_Validated;
             Controls.Add(textbox);
+        }
+
+        private void TextBoxBorder_GotFocus(object sender, EventArgs e)
+        {
+            textbox.Focus();
         }
 
         const int borderoffset = 3;

@@ -46,7 +46,7 @@ namespace ExtendedControls
         private System.Threading.Thread ThreadAutoComplete;
         private PerformAutoComplete func = null;
         private List<string> autocompletestrings = null;
-        ComboBoxCustomDropdown _cbdropdown;
+        DropDownCustom _cbdropdown;
         private bool isActivated = false;
         private bool disableauto = false;
 
@@ -98,18 +98,19 @@ namespace ExtendedControls
 
         private void TextChangeEventHandler(object sender, EventArgs e)
         {
+            System.Diagnostics.Debug.WriteLine("{0} text change event", Environment.TickCount % 10000);
             if (func != null && !isActivated && !disableauto)
             {
                 if (!inautocomplete)
                 {
-                    //Console.WriteLine("{0} Start timer", Environment.TickCount % 10000);
+                    System.Diagnostics.Debug.WriteLine("{0} Start timer", Environment.TickCount % 10000);
                     waitforautotimer.Stop();
                     waitforautotimer.Start();
                     autocompletestring = String.Copy(this.Text);    // a copy in case the text box changes it after complete starts
                 }
                 else
                 {
-                    //Console.WriteLine("{0} in ac, go again", Environment.TickCount % 10000);
+                    System.Diagnostics.Debug.WriteLine("{0} in ac, go again", Environment.TickCount % 10000);
                     autocompletestring = String.Copy(this.Text);
                     restartautocomplete = true;
                 }
@@ -130,10 +131,10 @@ namespace ExtendedControls
         {
             do
             {
-                //Console.WriteLine("{0} Begin AC", Environment.TickCount % 10000);
+                System.Diagnostics.Debug.WriteLine("{0} Begin AC", Environment.TickCount % 10000);
                 restartautocomplete = false;
                 autocompletestrings = func(string.Copy(autocompletestring),this);    // pass a copy, in case we change it out from under it
-                //Console.WriteLine("{0} finish func ret {1} restart {2}", Environment.TickCount % 10000, autocompletestrings.Count, restartautocomplete);
+                System.Diagnostics.Debug.WriteLine("{0} finish func ret {1} restart {2}", Environment.TickCount % 10000, autocompletestrings.Count, restartautocomplete);
             } while (restartautocomplete == true);
 
             this.BeginInvoke((MethodInvoker)delegate { AutoCompleteFinished(); });
@@ -141,17 +142,18 @@ namespace ExtendedControls
 
         private void AutoCompleteFinished()
         {
-            //Console.WriteLine("{0} Show results {1}", Environment.TickCount % 10000, autocompletestrings.Count);
+            System.Diagnostics.Debug.WriteLine("{0} Show results {1}", Environment.TickCount % 10000, autocompletestrings.Count);
             inautocomplete = false;
 
             if (autocompletestrings.Count > 0)
             {
                 if (_cbdropdown != null)
                 {
+                    System.Diagnostics.Debug.WriteLine("{0} Close prev", Environment.TickCount % 10000);
                     _cbdropdown.Close();
                 }
 
-                _cbdropdown = new ComboBoxCustomDropdown();
+                _cbdropdown = new DropDownCustom();
 
                 int fittableitems = this.DropDownHeight / this.DropDownItemHeight;
 
@@ -191,6 +193,8 @@ namespace ExtendedControls
                 }
 
                 _cbdropdown.Show(parent);
+
+              //  Focus();
             }
         }
 
@@ -218,6 +222,7 @@ namespace ExtendedControls
 
         private void _cbdropdown_KeyPressed(object sender, KeyPressEventArgs e)
         {
+            System.Diagnostics.Debug.WriteLine("{0} Keypress in dialog {1}", Environment.TickCount % 10000 , e.KeyChar);
             _cbdropdown.Close();
             isActivated = false;
             base.Text += e.KeyChar;     // to trigger an autocomplete, bypassing the Text override
@@ -227,6 +232,7 @@ namespace ExtendedControls
 
         private void _cbdropdown_OtherKeyPressed(object sender, KeyEventArgs e)
         {
+            System.Diagnostics.Debug.WriteLine("{0} Other Keypress in dialog {1}", Environment.TickCount % 10000 , e.KeyCode);
             _cbdropdown.Close();
             isActivated = false;
 

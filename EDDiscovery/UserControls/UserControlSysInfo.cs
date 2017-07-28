@@ -272,7 +272,7 @@ namespace EDDiscovery.UserControls
         {
             if (e.KeyCode == Keys.Enter)
             {
-                RoutingUtils.setTargetSystem(this,discoveryform, textBoxTarget.Text);
+                DB.TargetHelpers.setTargetSystem(this,discoveryform, textBoxTarget.Text);
             }
         }
 

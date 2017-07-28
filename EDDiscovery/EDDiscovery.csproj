@@ -208,8 +208,10 @@
     <Compile Include="CompanionAPI\CStarport.cs" />
     <Compile Include="CompanionAPI\CSystem.cs" />
     <Compile Include="DB\BookmarkClass.cs" />
+    <Compile Include="DB\TargetClassHelpers.cs" />
     <Compile Include="EliteDangerous\BindingsFile.cs" />
     <Compile Include="EDSM\GalacticMapSystem.cs" />
+    <Compile Include="EliteDangerous\EDCalculations.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalCrewLaunchFighter.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalCrewMemberRoleChange.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalEngineerContribution.cs" />
@@ -294,7 +296,6 @@
       <DependentUpon>ShipDetails.cs</DependentUpon>
     </Compile>
     <Compile Include="IDiscoveryController.cs" />
-    <Compile Include="RoutingUtils.cs" />
     <Compile Include="ExportImport\ExportNotes.cs" />
     <Compile Include="ExportImport\ImportHistory.cs" />
     <Compile Include="Trilateration\DistanceParser.cs" />

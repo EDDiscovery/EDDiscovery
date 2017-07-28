@@ -38,7 +38,6 @@
             this.buttonExt1 = new ExtendedControls.ButtonExt();
             this.panel1 = new System.Windows.Forms.Panel();
             this.richTextBox1 = new System.Windows.Forms.RichTextBox();
-            this.textBoxBorder1 = new ExtendedControls.TextBoxBorder();
             this.rolluppanel.SuspendLayout();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
@@ -188,7 +187,6 @@
             // 
             // panel1
             // 
-            this.panel1.Controls.Add(this.textBoxBorder1);
             this.panel1.Controls.Add(this.richTextBox1);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel1.Location = new System.Drawing.Point(0, 40);
@@ -204,24 +202,6 @@
             this.richTextBox1.Size = new System.Drawing.Size(862, 122);
             this.richTextBox1.TabIndex = 1;
             this.richTextBox1.Text = "";
-            // 
-            // textBoxBorder1
-            // 
-            this.textBoxBorder1.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
-            this.textBoxBorder1.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
-            this.textBoxBorder1.BorderColor = System.Drawing.Color.DarkRed;
-            this.textBoxBorder1.BorderColorScaling = 0.5F;
-            this.textBoxBorder1.Location = new System.Drawing.Point(25, 181);
-            this.textBoxBorder1.Multiline = false;
-            this.textBoxBorder1.Name = "textBoxBorder1";
-            this.textBoxBorder1.ReadOnly = false;
-            this.textBoxBorder1.ScrollBars = System.Windows.Forms.ScrollBars.None;
-            this.textBoxBorder1.SelectionLength = 0;
-            this.textBoxBorder1.SelectionStart = 0;
-            this.textBoxBorder1.Size = new System.Drawing.Size(223, 23);
-            this.textBoxBorder1.TabIndex = 2;
-            this.textBoxBorder1.Text = "textBoxBorder1";
-            this.textBoxBorder1.WordWrap = true;
             // 
             // TestRollUpPanel
             // 
@@ -250,6 +230,5 @@
         private ExtendedControls.ComboBoxCustom comboBoxCustom2;
         private System.Windows.Forms.ComboBox comboBox1;
         private ExtendedControls.ButtonExt buttonExt4;
-        private ExtendedControls.TextBoxBorder textBoxBorder1;
     }
 }

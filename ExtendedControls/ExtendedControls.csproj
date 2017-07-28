@@ -57,11 +57,14 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="ComboBoxCustom.cs">
-      <SubType>Form</SubType>
+      <SubType>Component</SubType>
     </Compile>
     <Compile Include="BitMapHelpers.cs" />
     <Compile Include="CustomDateTimePicker.cs">
       <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="DropDownCustom.cs">
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="DataGridViewExtensions.cs" />
     <Compile Include="DataViewScrollerPanel.cs">
