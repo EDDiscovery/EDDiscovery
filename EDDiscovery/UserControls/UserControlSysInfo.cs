@@ -71,6 +71,9 @@ namespace EDDiscovery.UserControls
         {
             InitializeComponent();
             Name = "System Information";
+            textBoxTarget.SetToolTip(toolTip1, "Sets the target");
+            textBoxTargetDist.SetToolTip(toolTip1, "Distance to target");
+
         }
 
         public override void Init(EDDiscoveryForm ed, int displayno)
@@ -138,7 +141,6 @@ namespace EDDiscovery.UserControls
 
                     EliteDangerous.ISystem homesys = discoveryform.GetHomeSystem();
 
-                    toolTipEddb.SetToolTip(textBoxHomeDist, $"Distance to home system ({homesys.name})");
                     textBoxHomeDist.Text = DB.SystemClassDB.Distance(he.System, homesys).ToString(SingleCoordinateFormat);
                     textBoxSolDist.Text = DB.SystemClassDB.Distance(he.System, 0, 0, 0).ToString(SingleCoordinateFormat);
                 }
@@ -293,13 +295,13 @@ namespace EDDiscovery.UserControls
                 if (cs != null)
                     textBoxTargetDist.Text = DB.SystemClassDB.Distance(cs.System, x, y, z).ToString("0.0");
 
-                toolTipEddb.SetToolTip(textBoxTarget, "Position is " + x.ToString("0.00") + "," + y.ToString("0.00") + "," + z.ToString("0.00"));
+                textBoxTarget.SetToolTip(toolTip1, "Position is " + x.ToString("0.00") + "," + y.ToString("0.00") + "," + z.ToString("0.00"));
             }
             else
             {
                 textBoxTarget.Text = "?";
                 textBoxTargetDist.Text = "";
-                toolTipEddb.SetToolTip(textBoxTarget, "On 3D Map right click to make a bookmark, region mark or click on a notemark and then tick on Set Target, or type it here and hit enter");
+                textBoxTarget.SetToolTip(toolTip1, "On 3D Map right click to make a bookmark, region mark or click on a notemark and then tick on Set Target, or type it here and hit enter");
             }
         }
 
@@ -646,10 +648,13 @@ namespace EDDiscovery.UserControls
 
         private void controlMouseDown(object sender, MouseEventArgs e)
         {
-            Control c = sender as Control;
-            fromorder = (int)c.Tag;
-            fromy = c.Top;
-            inmovedrag = false;
+            if (e.Button == MouseButtons.Left && Control.ModifierKeys.HasFlag(Keys.Control))
+            {
+                Control c = sender as Control;
+                fromorder = (int)c.Tag;
+                fromy = c.Top;
+                inmovedrag = false;
+            }
            // System.Diagnostics.Debug.WriteLine("Control " + inmove.Name + " grabbed");
         }
 
@@ -711,7 +716,6 @@ namespace EDDiscovery.UserControls
                 }
 
                 fromorder = -1;
-                
             }
         }
 

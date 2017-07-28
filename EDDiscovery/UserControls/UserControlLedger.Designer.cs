@@ -253,7 +253,6 @@ namespace EDDiscovery.UserControls
             this.textBoxFilter.Name = "textBoxFilter";
             this.textBoxFilter.Size = new System.Drawing.Size(148, 20);
             this.textBoxFilter.TabIndex = 1;
-            this.toolTip1.SetToolTip(this.textBoxFilter, "Display entries matching this string");
             this.textBoxFilter.TextChanged += new System.EventHandler(this.textBoxFilter_TextChanged);
             // 
             // label1

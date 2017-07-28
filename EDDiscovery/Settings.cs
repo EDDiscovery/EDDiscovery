@@ -57,6 +57,8 @@ namespace EDDiscovery
         public Settings()
         {
             InitializeComponent();
+            this.textBoxHomeSystem.SetToolTip(toolTip, "Select home system for 3d Map");
+            this.textBoxDefaultZoom.SetToolTip(toolTip, "Select default zoom of map. Use the map itself to determine this for you");
         }
 
         public void InitControl(EDDiscoveryForm discoveryForm)
