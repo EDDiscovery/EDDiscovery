@@ -50,6 +50,11 @@ namespace ExtendedControls
             this.Controls.Add(this._listcontrol);
         }
 
+        public void KeyDownAction(KeyEventArgs e)
+        {
+            _listcontrol.KeyDownAction(e);
+        }
+
         protected override void OnShown(EventArgs e)
         {
             base.OnShown(e);

@@ -286,6 +286,7 @@ namespace EDDiscovery.UserControls
             if (DB.TargetClass.GetTargetPosition(out name, out x, out y, out z))
             {
                 textBoxTarget.Text = name;
+                textBoxTarget.Select(textBoxTarget.Text.Length, textBoxTarget.Text.Length);
                 textBoxTargetDist.Text = "No Pos";
 
                 HistoryEntry cs = discoveryform.history.GetLastWithPosition;
@@ -296,7 +297,7 @@ namespace EDDiscovery.UserControls
             }
             else
             {
-                textBoxTarget.Text = "Set target";
+                textBoxTarget.Text = "?";
                 textBoxTargetDist.Text = "";
                 toolTipEddb.SetToolTip(textBoxTarget, "On 3D Map right click to make a bookmark, region mark or click on a notemark and then tick on Set Target, or type it here and hit enter");
             }

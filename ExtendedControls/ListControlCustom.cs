@@ -145,7 +145,7 @@ namespace ExtendedControls
             if (this.FlatStyle == FlatStyle.System)
                 return;
 
-            System.Diagnostics.Debug.WriteLine("Updated list control");
+            //System.Diagnostics.Debug.WriteLine("Updated list control");
 
             if (Items != null && itemslayoutestimatedon != Items.Count())  // item count changed, rework it out.
                 CalculateLayout();
@@ -343,12 +343,14 @@ namespace ExtendedControls
         protected override void OnKeyDown(KeyEventArgs e)
         {
             base.OnKeyDown(e);
+            KeyDownAction(e);
+        }
 
-            //Console.WriteLine("Key press " + e.KeyCode + " Focus " + Focused );
-
+        public void KeyDownAction(KeyEventArgs e)
+        { 
             if (flatstyle != FlatStyle.System)
             {
-                if (e.KeyCode == Keys.Enter || (e.Alt && (e.KeyCode == Keys.Up || e.KeyCode == Keys.Down)))
+                if ((e.KeyCode == Keys.Enter || e.KeyCode == Keys.Return) || (e.Alt && (e.KeyCode == Keys.Up || e.KeyCode == Keys.Down)))
                 {
                     SelectedIndex = focusindex;
                     if (SelectedIndexChanged != null)
