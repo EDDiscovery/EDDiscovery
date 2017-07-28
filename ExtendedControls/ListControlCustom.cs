@@ -29,6 +29,7 @@ namespace ExtendedControls
     {
         // BackColor paints the whole control - set Transparent if you don't want this. (but its a fake transparent note).
 
+        public List<string> Items { get { return items; } set           // allow items to be changed
             { items = value;
                 lbsys.Items.Clear();
                 lbsys.Items.AddRange(value.ToArray());
