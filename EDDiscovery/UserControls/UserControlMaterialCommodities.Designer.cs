@@ -57,6 +57,10 @@ namespace EDDiscovery.UserControls
             this.panelButtons = new System.Windows.Forms.Panel();
             this.checkBoxClear = new ExtendedControls.CheckBoxCustom();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.labelItems1 = new System.Windows.Forms.Label();
+            this.textBoxItems1 = new ExtendedControls.TextBoxBorder();
+            this.textBoxItems2 = new ExtendedControls.TextBoxBorder();
+            this.labelItems2 = new System.Windows.Forms.Label();
             this.dataViewScrollerPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewMC)).BeginInit();
             this.panelButtons.SuspendLayout();
@@ -179,6 +183,10 @@ namespace EDDiscovery.UserControls
             // 
             // panelButtons
             // 
+            this.panelButtons.Controls.Add(this.textBoxItems2);
+            this.panelButtons.Controls.Add(this.textBoxItems1);
+            this.panelButtons.Controls.Add(this.labelItems2);
+            this.panelButtons.Controls.Add(this.labelItems1);
             this.panelButtons.Controls.Add(this.checkBoxClear);
             this.panelButtons.Dock = System.Windows.Forms.DockStyle.Top;
             this.panelButtons.Location = new System.Drawing.Point(0, 0);
@@ -206,6 +214,66 @@ namespace EDDiscovery.UserControls
             // toolTip1
             // 
             this.toolTip1.ShowAlways = true;
+            // 
+            // labelItems1
+            // 
+            this.labelItems1.AutoSize = true;
+            this.labelItems1.Location = new System.Drawing.Point(160, 9);
+            this.labelItems1.Name = "labelItems1";
+            this.labelItems1.Size = new System.Drawing.Size(35, 13);
+            this.labelItems1.TabIndex = 3;
+            this.labelItems1.Text = "label1";
+            // 
+            // textBoxItems1
+            // 
+            this.textBoxItems1.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
+            this.textBoxItems1.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
+            this.textBoxItems1.BorderColor = System.Drawing.Color.Transparent;
+            this.textBoxItems1.BorderColorScaling = 0.5F;
+            this.textBoxItems1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.textBoxItems1.ControlBackground = System.Drawing.SystemColors.Control;
+            this.textBoxItems1.Location = new System.Drawing.Point(216, 9);
+            this.textBoxItems1.Multiline = false;
+            this.textBoxItems1.Name = "textBoxItems1";
+            this.textBoxItems1.ReadOnly = false;
+            this.textBoxItems1.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.textBoxItems1.SelectionLength = 0;
+            this.textBoxItems1.SelectionStart = 0;
+            this.textBoxItems1.Size = new System.Drawing.Size(75, 20);
+            this.textBoxItems1.TabIndex = 4;
+            this.textBoxItems1.Text = "textBoxBorder1";
+            this.textBoxItems1.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.textBoxItems1.WordWrap = true;
+            // 
+            // textBoxItems2
+            // 
+            this.textBoxItems2.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
+            this.textBoxItems2.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
+            this.textBoxItems2.BorderColor = System.Drawing.Color.Transparent;
+            this.textBoxItems2.BorderColorScaling = 0.5F;
+            this.textBoxItems2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.textBoxItems2.ControlBackground = System.Drawing.SystemColors.Control;
+            this.textBoxItems2.Location = new System.Drawing.Point(346, 9);
+            this.textBoxItems2.Multiline = false;
+            this.textBoxItems2.Name = "textBoxItems2";
+            this.textBoxItems2.ReadOnly = false;
+            this.textBoxItems2.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.textBoxItems2.SelectionLength = 0;
+            this.textBoxItems2.SelectionStart = 0;
+            this.textBoxItems2.Size = new System.Drawing.Size(75, 20);
+            this.textBoxItems2.TabIndex = 4;
+            this.textBoxItems2.Text = "textBoxBorder1";
+            this.textBoxItems2.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.textBoxItems2.WordWrap = true;
+            // 
+            // labelItems2
+            // 
+            this.labelItems2.AutoSize = true;
+            this.labelItems2.Location = new System.Drawing.Point(305, 9);
+            this.labelItems2.Name = "labelItems2";
+            this.labelItems2.Size = new System.Drawing.Size(35, 13);
+            this.labelItems2.TabIndex = 3;
+            this.labelItems2.Text = "label1";
             // 
             // UserControlMaterialCommodities
             // 
@@ -239,5 +307,9 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.Label labelNoItems;
         private System.Windows.Forms.ToolTip toolTip1;
         private ExtendedControls.CheckBoxCustom checkBoxClear;
+        private ExtendedControls.TextBoxBorder textBoxItems2;
+        private ExtendedControls.TextBoxBorder textBoxItems1;
+        private System.Windows.Forms.Label labelItems2;
+        private System.Windows.Forms.Label labelItems1;
     }
 }

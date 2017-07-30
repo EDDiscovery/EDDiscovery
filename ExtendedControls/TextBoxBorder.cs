@@ -105,6 +105,7 @@ namespace ExtendedControls
                 int offset = OurBorder ? borderoffset : 0;
                 textbox.Location = new Point(offset, offset);
                 textbox.Size = new Size(ClientRectangle.Width - offset * 2, ClientRectangle.Height - offset * 2);
+                this.Height = textbox.Height + offset * 2;
                 //System.Diagnostics.Debug.WriteLine("Repos " + Name + ":" + ClientRectangle.Size + " " + textbox.Location + " " + textbox.Size + " " + BorderColor + " " + textbox.BorderStyle);
             }
         }

@@ -168,6 +168,21 @@ public static class JSONObjectExtensions
         var newToken = new JProperty(newName, token);
         parent.Replace(newToken);
     }
+
+    
+    public static Color Color(this JToken jo, Color defc)
+    {
+        if (jo.Empty())
+            return defc;
+        try
+        {
+            string c = jo.Value<string>();
+            return System.Drawing.ColorTranslator.FromHtml(c);
+        }
+        catch { return defc; }
+    }
+
+
 }
 
 
