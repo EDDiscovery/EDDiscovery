@@ -16,6 +16,7 @@
 using EDDiscovery.DB;
 using EDDiscovery.EDDN;
 using EDDiscovery.EDSM;
+using EDDiscovery.EGO;
 using EDDiscovery.EliteDangerous;
 using EDDiscovery.EliteDangerous.JournalEvents;
 using EDDiscovery.Forms;
@@ -1426,6 +1427,11 @@ namespace EDDiscovery
 
         #endregion
 
+        private void sendUnsyncedEGOScansToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            List<HistoryEntry> hlsyncunsyncedlist = Controller.history.FilterByScanNotEGOSynced;        // first entry is oldest
+            EGOSync.SendEGOEvents(this, hlsyncunsyncedlist);
+        }
     }
 }
 
