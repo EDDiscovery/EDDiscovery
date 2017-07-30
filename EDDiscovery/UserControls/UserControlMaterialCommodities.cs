@@ -93,6 +93,7 @@ namespace EDDiscovery.UserControls
             if (mc == null)
             {
                 dataGridViewMC.Rows.Clear();
+                //TBD do the extra stuff cancel itmes
                 return;
             }
 

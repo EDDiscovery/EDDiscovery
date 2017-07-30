@@ -107,6 +107,7 @@ namespace EDDiscovery.UserControls
             this.textBoxShip = new ExtendedControls.TextBoxBorder();
             this.labelFuel = new System.Windows.Forms.Label();
             this.textBoxFuel = new ExtendedControls.TextBoxBorder();
+            this.toolStripSkinny = new System.Windows.Forms.ToolStripMenuItem();
             this.contextMenuStrip.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -127,9 +128,10 @@ namespace EDDiscovery.UserControls
             this.toolStripCargo,
             this.toolStripGameMode,
             this.toolStripTravel,
+            this.toolStripSkinny,
             this.toolStripReset});
             this.contextMenuStrip.Name = "contextMenuStrip1";
-            this.contextMenuStrip.Size = new System.Drawing.Size(253, 334);
+            this.contextMenuStrip.Size = new System.Drawing.Size(256, 356);
             // 
             // toolStripSystem
             // 
@@ -137,7 +139,7 @@ namespace EDDiscovery.UserControls
             this.toolStripSystem.CheckOnClick = true;
             this.toolStripSystem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.toolStripSystem.Name = "toolStripSystem";
-            this.toolStripSystem.Size = new System.Drawing.Size(252, 22);
+            this.toolStripSystem.Size = new System.Drawing.Size(255, 22);
             this.toolStripSystem.Text = "Display System Name";
             this.toolStripSystem.Click += new System.EventHandler(this.toolStripSystem_Click);
             // 
@@ -147,7 +149,7 @@ namespace EDDiscovery.UserControls
             this.toolStripEDSM.CheckOnClick = true;
             this.toolStripEDSM.CheckState = System.Windows.Forms.CheckState.Checked;
             this.toolStripEDSM.Name = "toolStripEDSM";
-            this.toolStripEDSM.Size = new System.Drawing.Size(252, 22);
+            this.toolStripEDSM.Size = new System.Drawing.Size(255, 22);
             this.toolStripEDSM.Text = "Display EDSM Buttons";
             this.toolStripEDSM.Click += new System.EventHandler(this.toolStripEDSM_Click);
             // 
@@ -157,7 +159,7 @@ namespace EDDiscovery.UserControls
             this.toolStripEDSMDownLine.CheckOnClick = true;
             this.toolStripEDSMDownLine.CheckState = System.Windows.Forms.CheckState.Checked;
             this.toolStripEDSMDownLine.Name = "toolStripEDSMDownLine";
-            this.toolStripEDSMDownLine.Size = new System.Drawing.Size(252, 22);
+            this.toolStripEDSMDownLine.Size = new System.Drawing.Size(255, 22);
             this.toolStripEDSMDownLine.Text = "EDSM buttons on separate line";
             this.toolStripEDSMDownLine.Click += new System.EventHandler(this.toolStripEDSMButtons_Click);
             // 
@@ -167,7 +169,7 @@ namespace EDDiscovery.UserControls
             this.toolStripVisits.CheckOnClick = true;
             this.toolStripVisits.CheckState = System.Windows.Forms.CheckState.Checked;
             this.toolStripVisits.Name = "toolStripVisits";
-            this.toolStripVisits.Size = new System.Drawing.Size(252, 22);
+            this.toolStripVisits.Size = new System.Drawing.Size(255, 22);
             this.toolStripVisits.Text = "Display Visits";
             this.toolStripVisits.Click += new System.EventHandler(this.toolStripVisits_Click);
             // 
@@ -177,7 +179,7 @@ namespace EDDiscovery.UserControls
             this.toolStripBody.CheckOnClick = true;
             this.toolStripBody.CheckState = System.Windows.Forms.CheckState.Checked;
             this.toolStripBody.Name = "toolStripBody";
-            this.toolStripBody.Size = new System.Drawing.Size(252, 22);
+            this.toolStripBody.Size = new System.Drawing.Size(255, 22);
             this.toolStripBody.Text = "Display Body Name";
             this.toolStripBody.Click += new System.EventHandler(this.toolStripBody_Click);
             // 
@@ -187,7 +189,7 @@ namespace EDDiscovery.UserControls
             this.toolStripPosition.CheckOnClick = true;
             this.toolStripPosition.CheckState = System.Windows.Forms.CheckState.Checked;
             this.toolStripPosition.Name = "toolStripPosition";
-            this.toolStripPosition.Size = new System.Drawing.Size(252, 22);
+            this.toolStripPosition.Size = new System.Drawing.Size(255, 22);
             this.toolStripPosition.Text = "Display Position";
             this.toolStripPosition.Click += new System.EventHandler(this.toolStripPosition_Click);
             // 
@@ -197,7 +199,7 @@ namespace EDDiscovery.UserControls
             this.toolStripDistanceFrom.CheckOnClick = true;
             this.toolStripDistanceFrom.CheckState = System.Windows.Forms.CheckState.Checked;
             this.toolStripDistanceFrom.Name = "toolStripDistanceFrom";
-            this.toolStripDistanceFrom.Size = new System.Drawing.Size(252, 22);
+            this.toolStripDistanceFrom.Size = new System.Drawing.Size(255, 22);
             this.toolStripDistanceFrom.Text = "Display Distance From";
             this.toolStripDistanceFrom.Click += new System.EventHandler(this.enableDistanceFromToolStripMenuItem_Click);
             // 
@@ -207,7 +209,7 @@ namespace EDDiscovery.UserControls
             this.toolStripSystemState.CheckOnClick = true;
             this.toolStripSystemState.CheckState = System.Windows.Forms.CheckState.Checked;
             this.toolStripSystemState.Name = "toolStripSystemState";
-            this.toolStripSystemState.Size = new System.Drawing.Size(252, 22);
+            this.toolStripSystemState.Size = new System.Drawing.Size(255, 22);
             this.toolStripSystemState.Text = "Display System State";
             this.toolStripSystemState.Click += new System.EventHandler(this.toolStripSystemState_Click);
             // 
@@ -217,7 +219,7 @@ namespace EDDiscovery.UserControls
             this.toolStripNotes.CheckOnClick = true;
             this.toolStripNotes.CheckState = System.Windows.Forms.CheckState.Checked;
             this.toolStripNotes.Name = "toolStripNotes";
-            this.toolStripNotes.Size = new System.Drawing.Size(252, 22);
+            this.toolStripNotes.Size = new System.Drawing.Size(255, 22);
             this.toolStripNotes.Text = "Display Notes";
             this.toolStripNotes.Click += new System.EventHandler(this.toolStripNotes_Click);
             // 
@@ -227,7 +229,7 @@ namespace EDDiscovery.UserControls
             this.toolStripTarget.CheckOnClick = true;
             this.toolStripTarget.CheckState = System.Windows.Forms.CheckState.Checked;
             this.toolStripTarget.Name = "toolStripTarget";
-            this.toolStripTarget.Size = new System.Drawing.Size(252, 22);
+            this.toolStripTarget.Size = new System.Drawing.Size(255, 22);
             this.toolStripTarget.Text = "Display Target";
             this.toolStripTarget.Click += new System.EventHandler(this.toolStripTarget_Click);
             // 
@@ -237,7 +239,7 @@ namespace EDDiscovery.UserControls
             this.toolStripShip.CheckOnClick = true;
             this.toolStripShip.CheckState = System.Windows.Forms.CheckState.Checked;
             this.toolStripShip.Name = "toolStripShip";
-            this.toolStripShip.Size = new System.Drawing.Size(252, 22);
+            this.toolStripShip.Size = new System.Drawing.Size(255, 22);
             this.toolStripShip.Text = "Display Ship Information";
             this.toolStripShip.Click += new System.EventHandler(this.toolStripShip_Click);
             // 
@@ -247,7 +249,7 @@ namespace EDDiscovery.UserControls
             this.toolStripCargo.CheckOnClick = true;
             this.toolStripCargo.CheckState = System.Windows.Forms.CheckState.Checked;
             this.toolStripCargo.Name = "toolStripCargo";
-            this.toolStripCargo.Size = new System.Drawing.Size(252, 22);
+            this.toolStripCargo.Size = new System.Drawing.Size(255, 22);
             this.toolStripCargo.Text = "Display Cargo and Material Count";
             this.toolStripCargo.Click += new System.EventHandler(this.toolStripCargo_Click);
             // 
@@ -257,7 +259,7 @@ namespace EDDiscovery.UserControls
             this.toolStripGameMode.CheckOnClick = true;
             this.toolStripGameMode.CheckState = System.Windows.Forms.CheckState.Checked;
             this.toolStripGameMode.Name = "toolStripGameMode";
-            this.toolStripGameMode.Size = new System.Drawing.Size(252, 22);
+            this.toolStripGameMode.Size = new System.Drawing.Size(255, 22);
             this.toolStripGameMode.Text = "Display Game Mode";
             this.toolStripGameMode.Click += new System.EventHandler(this.toolStripGameMode_Click);
             // 
@@ -267,14 +269,14 @@ namespace EDDiscovery.UserControls
             this.toolStripTravel.CheckOnClick = true;
             this.toolStripTravel.CheckState = System.Windows.Forms.CheckState.Checked;
             this.toolStripTravel.Name = "toolStripTravel";
-            this.toolStripTravel.Size = new System.Drawing.Size(252, 22);
+            this.toolStripTravel.Size = new System.Drawing.Size(255, 22);
             this.toolStripTravel.Text = "Display Travel Trip Statistics";
             this.toolStripTravel.Click += new System.EventHandler(this.toolStripTravel_Click);
             // 
             // toolStripReset
             // 
             this.toolStripReset.Name = "toolStripReset";
-            this.toolStripReset.Size = new System.Drawing.Size(252, 22);
+            this.toolStripReset.Size = new System.Drawing.Size(255, 22);
             this.toolStripReset.Text = "Reset";
             this.toolStripReset.Click += new System.EventHandler(this.resetToolStripMenuItem_Click);
             // 
@@ -1003,7 +1005,7 @@ namespace EDDiscovery.UserControls
             this.textBoxCargo.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.textBoxCargo.SelectionLength = 0;
             this.textBoxCargo.SelectionStart = 0;
-            this.textBoxCargo.Size = new System.Drawing.Size(66, 20);
+            this.textBoxCargo.Size = new System.Drawing.Size(48, 20);
             this.textBoxCargo.TabIndex = 8;
             this.textBoxCargo.TabStop = false;
             this.textBoxCargo.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
@@ -1020,14 +1022,14 @@ namespace EDDiscovery.UserControls
             this.textBoxMaterials.BorderColorScaling = 0.5F;
             this.textBoxMaterials.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBoxMaterials.ControlBackground = System.Drawing.SystemColors.Control;
-            this.textBoxMaterials.Location = new System.Drawing.Point(190, 306);
+            this.textBoxMaterials.Location = new System.Drawing.Point(195, 306);
             this.textBoxMaterials.Multiline = false;
             this.textBoxMaterials.Name = "textBoxMaterials";
             this.textBoxMaterials.ReadOnly = true;
             this.textBoxMaterials.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.textBoxMaterials.SelectionLength = 0;
             this.textBoxMaterials.SelectionStart = 0;
-            this.textBoxMaterials.Size = new System.Drawing.Size(66, 20);
+            this.textBoxMaterials.Size = new System.Drawing.Size(48, 20);
             this.textBoxMaterials.TabIndex = 8;
             this.textBoxMaterials.TabStop = false;
             this.textBoxMaterials.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
@@ -1039,7 +1041,7 @@ namespace EDDiscovery.UserControls
             // labelMaterials
             // 
             this.labelMaterials.AutoSize = true;
-            this.labelMaterials.Location = new System.Drawing.Point(127, 309);
+            this.labelMaterials.Location = new System.Drawing.Point(132, 309);
             this.labelMaterials.Name = "labelMaterials";
             this.labelMaterials.Size = new System.Drawing.Size(49, 13);
             this.labelMaterials.TabIndex = 16;
@@ -1075,7 +1077,7 @@ namespace EDDiscovery.UserControls
             this.textBoxData.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.textBoxData.SelectionLength = 0;
             this.textBoxData.SelectionStart = 0;
-            this.textBoxData.Size = new System.Drawing.Size(66, 20);
+            this.textBoxData.Size = new System.Drawing.Size(48, 20);
             this.textBoxData.TabIndex = 8;
             this.textBoxData.TabStop = false;
             this.textBoxData.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
@@ -1147,7 +1149,7 @@ namespace EDDiscovery.UserControls
             this.textBoxFuel.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.textBoxFuel.SelectionLength = 0;
             this.textBoxFuel.SelectionStart = 0;
-            this.textBoxFuel.Size = new System.Drawing.Size(66, 20);
+            this.textBoxFuel.Size = new System.Drawing.Size(46, 20);
             this.textBoxFuel.TabIndex = 8;
             this.textBoxFuel.TabStop = false;
             this.textBoxFuel.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
@@ -1155,6 +1157,16 @@ namespace EDDiscovery.UserControls
             this.textBoxFuel.MouseDown += new System.Windows.Forms.MouseEventHandler(this.controlMouseDown);
             this.textBoxFuel.MouseMove += new System.Windows.Forms.MouseEventHandler(this.controlMouseMove);
             this.textBoxFuel.MouseUp += new System.Windows.Forms.MouseEventHandler(this.controlMouseUp);
+            // 
+            // toolStripSkinny
+            // 
+            this.toolStripSkinny.Checked = true;
+            this.toolStripSkinny.CheckOnClick = true;
+            this.toolStripSkinny.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.toolStripSkinny.Name = "toolStripSkinny";
+            this.toolStripSkinny.Size = new System.Drawing.Size(255, 22);
+            this.toolStripSkinny.Text = "When transparent, use skinny look";
+            this.toolStripSkinny.Click += new System.EventHandler(this.whenTransparentUseSkinnyLookToolStripMenuItem_Click);
             // 
             // UserControlSysInfo
             // 
@@ -1280,5 +1292,6 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.ToolStripMenuItem toolStripReset;
         private System.Windows.Forms.Label labelFuel;
         private ExtendedControls.TextBoxBorder textBoxFuel;
+        private System.Windows.Forms.ToolStripMenuItem toolStripSkinny;
     }
 }

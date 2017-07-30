@@ -55,6 +55,7 @@ namespace EDDiscovery.UserControls
         const int BitSelTotal = 13;
         const int Positions = BitSelTotal * 2;      // two columns of positions, one at 0, one at +300 pixels ish, 
         const int BitSelEDSMButtonsNextLine = 24;
+        const int BitSelSkinny = 25;
         const int BitSelDefault = ((1<<BitSelTotal)-1)+(1<<BitSelEDSMButtonsNextLine);
 
         const int hspacing = 8;
@@ -374,6 +375,12 @@ namespace EDDiscovery.UserControls
             ToggleSelection(sender, BitSelShipInfo);
         }
 
+        private void whenTransparentUseSkinnyLookToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ToggleSelection(sender, BitSelSkinny);
+            UpdateSkinny();
+        }
+
         void ToggleSelection(Object sender, int bit)
         {
             ToolStripMenuItem mi = sender as ToolStripMenuItem;
@@ -402,6 +409,7 @@ namespace EDDiscovery.UserControls
 
             bool selEDSMonNextLine = (Selection & (1 << BitSelEDSMButtonsNextLine)) != 0;
             toolStripEDSMDownLine.Checked = selEDSMonNextLine;
+            toolStripSkinny.Checked = (Selection & (1 << BitSelSkinny)) != 0;
 
             int data1pos = textBoxSystem.Left - labelSysName.Left;      // basing it on actual pos allow the auto font scale to work
             int lab2pos = labelSolDist.Left - labelHomeDist.Left;
@@ -789,9 +797,30 @@ namespace EDDiscovery.UserControls
         public override void SetTransparency(bool on, Color curcol)
         {
             this.BackColor = curcol;
+            UpdateSkinny();
+        }
+
+        void UpdateSkinny()
+        { 
+            if (IsTransparent && (Selection & (1<<BitSelSkinny))!=0)
+            {
+                foreach (Control c in Controls)
+                {
+                    if (c is ExtendedControls.TextBoxBorder)
+                    {
+                        ExtendedControls.TextBoxBorder b = c as ExtendedControls.TextBoxBorder;
+                        b.ControlBackground = Color.Red;
+                        b.BorderStyle = BorderStyle.None;
+                        b.BorderColor = Color.Transparent;
+                    }
+                }
+            }
+            else
+                EDDTheme.Instance.ApplyToControls(this);
 
         }
 
         #endregion
+
     }
 }

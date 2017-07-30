@@ -23,6 +23,27 @@ using System.Drawing;
 
 namespace ExtendedControls
 {
+    public class ThemeToolStripRenderer : ToolStripProfessionalRenderer//ToolStripSystemRenderer
+    {
+        public ToolStripCustomColourTable colortable;
+
+        public ThemeToolStripRenderer() : base(new ToolStripCustomColourTable())
+        {
+            this.colortable = (ToolStripCustomColourTable)ColorTable;
+            this.RoundedEdges = true;
+        }
+
+        protected override void OnRenderItemText(ToolStripItemTextRenderEventArgs e)            // called to determine text colour..
+        {
+            if (e.Item.Selected || e.Item.Pressed)
+                e.TextColor = colortable.colMenuSelectedText;
+            else
+                e.TextColor = colortable.colMenuText;
+
+            base.OnRenderItemText(e);
+        }
+    }
+
     [ToolStripItemDesignerAvailability(ToolStripItemDesignerAvailability.ToolStrip | ToolStripItemDesignerAvailability.StatusStrip)]
     public class ToolStripComboBoxCustom : System.Windows.Forms.ToolStripControlHost
     {
