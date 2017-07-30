@@ -82,6 +82,9 @@ namespace EDDiscovery.UserControls
 
         public override void Display(HistoryEntry he, HistoryList hl)
         {
+            if ( he != null )
+                System.Diagnostics.Debug.WriteLine("Hash displayed" + he.MaterialCommodity.DataHash());
+
             Display(he?.MaterialCommodity.Sort(!materials));
         }
 
@@ -90,6 +93,7 @@ namespace EDDiscovery.UserControls
             if (mc == null)
             {
                 dataGridViewMC.Rows.Clear();
+                //TBD do the extra stuff cancel itmes
                 return;
             }
 

@@ -37,6 +37,13 @@ namespace EDDiscovery.EliteDangerous
             this.Details = c;
         }
 
+        public MaterialCommodities(MaterialCommodities c)
+        {
+            count = c.count;        // clone these
+            price = c.price;
+            this.Details = c.Details;       // can copy this, its fixed
+        }
+
         public string category { get { return Details.category; } }
         public string name { get { return Details.name; } }
         public string fdname { get { return Details.fdname; } }
@@ -98,39 +105,67 @@ namespace EDDiscovery.EliteDangerous
             return ret;
         }
 
+        public int Count(string [] cats)    // for all types of cat, if item matches or does not, count
+        {
+            int total = 0;
+            foreach (MaterialCommodities c in list)
+            {
+                if ( Array.IndexOf<string>(cats, c.category) != -1 )
+                    total += c.count;
+            }
+
+            return total;
+        }
+
+        public int DataCount { get { return Count(new string[] { MaterialCommodities.MaterialEncodedCategory, MaterialCommodities.MaterialManufacturedCategory }); } }
+        public int MaterialsCount { get { return Count(new string[] { MaterialCommodities.MaterialRawCategory }); } }
+        public int CargoCount { get { return Count(new string[] { MaterialCommodities.CommodityCategory }); } }
+
+        public int DataHash() { return list.GetHashCode(); }
+
+        void Dump()
+        {
+            System.Diagnostics.Debug.Write(list.GetHashCode() + " ");
+            foreach ( MaterialCommodities m in list )
+            {
+                System.Diagnostics.Debug.Write( "{" + m.GetHashCode() + " " + m.category + " " + m.fdname + " " + m.count + "}");
+            }
+            System.Diagnostics.Debug.WriteLine("");
+        }
+
         // ifnorecatonsearch is used if you don't know if its a material or commodity.. for future use.
 
-        private int EnsurePresent(string cat, string fdname, SQLiteConnectionUser conn, bool ignorecatonsearch = false)
+        private MaterialCommodities GetNewCopyOf(string cat, string fdname, SQLiteConnectionUser conn, bool ignorecatonsearch = false)
         {
             int index = list.FindIndex(x => x.fdname.Equals(fdname, StringComparison.InvariantCultureIgnoreCase) && (ignorecatonsearch || x.category.Equals(cat, StringComparison.InvariantCultureIgnoreCase)));
 
             if (index >= 0)
             {
-                return index;
+                list[index] = new MaterialCommodities(list[index]);    // fresh copy..
+                return list[index];
             }
             else
             {
                 MaterialCommodityDB mcdb = MaterialCommodityDB.EnsurePresent(cat,fdname, conn);    // get a MCDB of this
                 MaterialCommodities mc = new MaterialCommodities(mcdb);        // make a new entry
                 list.Add(mc);
-                return list.Count - 1;
+                return mc;
             }
         }
 
         // ignore cat is only used if you don't know what it is 
         public void Change(string cat, string fdname, int num, long price, SQLiteConnectionUser conn, bool ignorecatonsearch = false)
         {
-            int index = EnsurePresent(cat, fdname, conn, ignorecatonsearch);
-            MaterialCommodities mc = list[index];
+            MaterialCommodities mc = GetNewCopyOf(cat, fdname, conn, ignorecatonsearch);
 
             double costprev = mc.count * mc.price;
             double costnew = num * price;
-            mc.count = Math.Max(mc.count + num, 0); ;
+            mc.count = Math.Max(mc.count + num, 0);
 
             if (mc.count > 0 && num > 0)      // if bought (defensive with mc.count)
                 mc.price = (costprev + costnew) / mc.count;       // price is now a combination of the current cost and the new cost. in case we buy in tranches
 
-            list[index] = mc;
+            //System.Diagnostics.Debug.WriteLine("Mat:" + cat + " " + fdname + " " + num + " " + mc.count);
         }
 
         public void Craft(string fdname, int num)
@@ -139,22 +174,22 @@ namespace EDDiscovery.EliteDangerous
 
             if (index >= 0)
             {
-                MaterialCommodities mc = list[index];
+                MaterialCommodities mc = new MaterialCommodities(list[index]);      // new clone of
+                list[index] = mc;       // replace ours with new one
                 mc.count = Math.Max(mc.count - num, 0);
-                list[index] = mc;
+                //System.Diagnostics.Debug.WriteLine("craft:" + fdname + " " + num + " " + mc.count);
             }
         }
 
         public void Set(string cat, string fdname, int num, double price, SQLiteConnectionUser conn, bool ignorecatonsearch = false)
         {
-            int index = EnsurePresent(cat, fdname, conn);
-            MaterialCommodities mc = list[index];
+            MaterialCommodities mc = GetNewCopyOf(cat, fdname, conn, ignorecatonsearch);
 
             mc.count = num;
             if (price > 0)
                 mc.price = price;
 
-            list[index] = mc;
+            //System.Diagnostics.Debug.WriteLine("Set:" + cat + " " + fdname + " " + num + " " + mc.count);
         }
 
         public void Clear(bool commodity)
@@ -164,8 +199,9 @@ namespace EDDiscovery.EliteDangerous
                 MaterialCommodities mc = list[i];
                 if (commodity == (mc.category == MaterialCommodities.CommodityCategory))
                 {
-                    mc.count = 0;
-                    list[i] = mc;
+                    list[i] = new MaterialCommodities(list[i]);     // new clone of it we can change..
+                    list[i].count = 0;  // and clear it
+                    //System.Diagnostics.Debug.WriteLine("Clear:" + mc.fdname);
                 }
             }
         }
@@ -178,8 +214,9 @@ namespace EDDiscovery.EliteDangerous
             if (je is IMaterialCommodityJournalEntry)
             {
                 IMaterialCommodityJournalEntry e = je as IMaterialCommodityJournalEntry;
-                newmc = newmc.Clone(clearzeromaterials, clearzerocommodities);          // so we need a new one
+                newmc = newmc.Clone(clearzeromaterials, clearzerocommodities);          // so we need a new one, makes a new list, but copies the items..
                 e.MaterialList(newmc, conn);
+                // newmc.Dump();    // debug
             }
 
             return newmc;

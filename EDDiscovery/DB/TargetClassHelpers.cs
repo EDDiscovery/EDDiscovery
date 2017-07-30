@@ -1,38 +1,37 @@
-﻿/*
- * Copyright © 2016 - 2017 EDDiscovery development team
- *
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
- * file except in compliance with the License. You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- * 
- * Unless required by applicable law or agreed to in writing, software distributed under
- * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
- * ANY KIND, either express or implied. See the License for the specific language
- * governing permissions and limitations under the License.
- * 
- * EDDiscovery is not affiliated with Frontier Developments plc.
- */
-using System;
-using System.Windows.Forms;
-using EDDiscovery.DB;
-using EDDiscovery.EDSM;
-using EDDiscovery.Forms;
+﻿using EDDiscovery.EDSM;
 using EDDiscovery.EliteDangerous;
+using EDDiscovery.Forms;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
 
-namespace EDDiscovery
+namespace EDDiscovery.DB
 {
-    public class RoutingUtils
+    static class TargetHelpers
     {
-        public static void setTargetSystem(Object sender,EDDiscoveryForm _discoveryForm, String sn)
+        public static void setTargetSystem(Object sender, EDDiscoveryForm _discoveryForm, String sn)
         {
-            setTargetSystem(sender,_discoveryForm, sn, true);
+            setTargetSystem(sender, _discoveryForm, sn, true);
 
         }
         public static void setTargetSystem(Object sender, EDDiscoveryForm _discoveryForm, String sn, Boolean prompt)
         {
             if (string.IsNullOrWhiteSpace(sn))
+            {
+                if (prompt && TargetClass.IsTargetSet())      // if prompting, and target is set, ask for delete
+                {
+                    if (ExtendedControls.MessageBoxTheme.Show("Confirm deletion of target", "Delete a target", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK)
+                    {
+                        TargetClass.ClearTarget();
+                        _discoveryForm.NewTargetSet(sender);          // tells everyone who cares a new target was set
+                    }
+                }
+
                 return;
+            }
 
             ISystem sc = _discoveryForm.history.FindSystem(sn);
             string msgboxtext = null;
@@ -198,25 +197,5 @@ namespace EDDiscovery
 
             discoveryForm.NewTargetSet(sender);
         }
-
-        //Based on http://elite-dangerous.wikia.com/wiki/Frame_Shift_Drive
-        public static double maxJumpDistance(double f,double cargo, double lc, double mShip, double mOpt, double pc, double mfpj, out double jumps)
-        {
-            double fr = f % mfpj; 
-            jumps = Math.Floor(f/ mfpj);
-
-            mShip += fr + cargo;
-            double d = 0.0;
-            if(f > 0.0 )
-                d= Math.Pow(fr/ (lc * 0.001) , 1 / pc) * mOpt / mShip;
-
-            for (int idx = 0; idx < jumps; idx++)
-            {
-                mShip += mfpj;
-                d += Math.Pow(mfpj / (lc * 0.001), 1 / pc) * mOpt / mShip;
-            }
-            return d;
-        }
-
     }
 }

@@ -54,7 +54,7 @@ namespace EDDiscovery
             InitializeComponent();
             button_Route.Enabled = false;
             cmd3DMap.Enabled = false;
-			richTextBox_routeresult.TextBox.ReadOnly = true;
+			richTextBox_routeresult.ReadOnly = true;
 
             for (int i = 0; i < RoutePlotter.metric_options.Length; i++)
                 comboBoxRoutingMetric.Items.Add(RoutePlotter.metric_options[i]);
@@ -140,7 +140,8 @@ namespace EDDiscovery
 
         private void textBox_Range_KeyPress(object sender, KeyPressEventArgs e)
         {
-            BaseUtils.KeyPressHandler.TextBox_Numeric_KeyPress(sender, e);
+            ExtendedControls.TextBoxBorder tbb = sender as ExtendedControls.TextBoxBorder;
+            tbb.NumericKeyPressHandler(e);
         }
 
         public void UpdateHistorySystem(string str)
@@ -233,7 +234,7 @@ namespace EDDiscovery
 
         private void textBox_Clicked(object sender, EventArgs e)
         {
-            ((System.Windows.Forms.TextBox)sender).Select(0, 1000); // clicking highlights everything
+            ((ExtendedControls.TextBoxBorder)sender).Select(0, 1000); // clicking highlights everything
         }
 
         private bool GetCoordsFrom(out Point3D pos)
@@ -386,7 +387,7 @@ namespace EDDiscovery
             SelectFromMaster(true);                       // coords master
             fromupdatetimer.Stop();
             fromupdatetimer.Start();
-            ((System.Windows.Forms.TextBox)sender).Select(0, 1000); // entering selects everything
+            ((ExtendedControls.TextBoxBorder)sender).Select(0, 1000); // entering selects everything
         }
 
         private void textBox_From_TextChanged(object sender, EventArgs e)
@@ -519,7 +520,7 @@ namespace EDDiscovery
             SelectToMaster(true);                       // coords master
             toupdatetimer.Stop();
             toupdatetimer.Start();
-            ((System.Windows.Forms.TextBox)sender).Select(0, 1000); // clicking highlights everything
+            ((ExtendedControls.TextBoxBorder)sender).Select(0, 1000); // clicking highlights everything
         }
 
         private void textBox_To_TextChanged(object sender, EventArgs e)

@@ -89,6 +89,12 @@ namespace EDDiscovery.DB
             return tt != TargetType.None;
         }
 
+        public static bool IsTargetSet()
+        {
+            TargetType tt = (TargetType)SQLiteDBClass.GetSettingInt("TargetPositionType", (int)TargetType.None);
+            return tt != TargetType.None;
+        }
+
         public static bool GetTargetPosition(out string name, out Point3D t)
         {
             double x, y, z;
@@ -109,4 +115,5 @@ namespace EDDiscovery.DB
                 return "";
         }
     }
+
 }

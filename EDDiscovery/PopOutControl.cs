@@ -132,7 +132,7 @@ namespace EDDiscovery.Forms
             { PopOuts.RouteTracker, new PopOutInfo("Route Tracker", "RouteTracker", transparent: true) },
             { PopOuts.Engineering, new PopOutInfo("Engineering", "Engineering", EDDiscovery.Properties.Resources.engineercraft) },
             { PopOuts.MarketData, new PopOutInfo("Market Data", "MarketData", EDDiscovery.Properties.Resources.marketdata ) },
-            { PopOuts.SystemInformation, new PopOutInfo("System Information", "SystemInfo", EDDiscovery.Properties.Resources.ammunition ) },
+            { PopOuts.SystemInformation, new PopOutInfo("System Information", "SystemInfo", EDDiscovery.Properties.Resources.ammunition , transparent:true ) },
         };
 
         public static UserControlCommonBase Create(PopOuts i)

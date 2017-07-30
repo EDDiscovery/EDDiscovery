@@ -143,7 +143,7 @@ namespace EDDiscovery
             // labelTargetSystem
             // 
             this.labelTargetSystem.AutoSize = true;
-            this.labelTargetSystem.Location = new System.Drawing.Point(3, 25);
+            this.labelTargetSystem.Location = new System.Drawing.Point(3, 35);
             this.labelTargetSystem.Name = "labelTargetSystem";
             this.labelTargetSystem.Size = new System.Drawing.Size(44, 13);
             this.labelTargetSystem.TabIndex = 2;
@@ -152,7 +152,7 @@ namespace EDDiscovery
             // labelCoordinates
             // 
             this.labelCoordinates.AutoSize = true;
-            this.labelCoordinates.Location = new System.Drawing.Point(3, 47);
+            this.labelCoordinates.Location = new System.Drawing.Point(3, 65);
             this.labelCoordinates.Name = "labelCoordinates";
             this.labelCoordinates.Size = new System.Drawing.Size(122, 13);
             this.labelCoordinates.TabIndex = 5;
@@ -161,7 +161,7 @@ namespace EDDiscovery
             // labelCoordinateX
             // 
             this.labelCoordinateX.AutoSize = true;
-            this.labelCoordinateX.Location = new System.Drawing.Point(148, 47);
+            this.labelCoordinateX.Location = new System.Drawing.Point(148, 67);
             this.labelCoordinateX.Name = "labelCoordinateX";
             this.labelCoordinateX.Size = new System.Drawing.Size(17, 13);
             this.labelCoordinateX.TabIndex = 7;
@@ -170,7 +170,7 @@ namespace EDDiscovery
             // labelCoordinateY
             // 
             this.labelCoordinateY.AutoSize = true;
-            this.labelCoordinateY.Location = new System.Drawing.Point(228, 47);
+            this.labelCoordinateY.Location = new System.Drawing.Point(228, 67);
             this.labelCoordinateY.Name = "labelCoordinateY";
             this.labelCoordinateY.Size = new System.Drawing.Size(17, 13);
             this.labelCoordinateY.TabIndex = 9;
@@ -179,7 +179,7 @@ namespace EDDiscovery
             // labelCoordinateZ
             // 
             this.labelCoordinateZ.AutoSize = true;
-            this.labelCoordinateZ.Location = new System.Drawing.Point(309, 47);
+            this.labelCoordinateZ.Location = new System.Drawing.Point(309, 67);
             this.labelCoordinateZ.Name = "labelCoordinateZ";
             this.labelCoordinateZ.Size = new System.Drawing.Size(17, 13);
             this.labelCoordinateZ.TabIndex = 11;
@@ -324,24 +324,33 @@ namespace EDDiscovery
             this.panel_controls.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel_controls.Location = new System.Drawing.Point(0, 25);
             this.panel_controls.Name = "panel_controls";
-            this.panel_controls.Size = new System.Drawing.Size(924, 74);
+            this.panel_controls.Size = new System.Drawing.Size(924, 98);
             this.panel_controls.TabIndex = 24;
             // 
             // textBox_status
             // 
+            this.textBox_status.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
+            this.textBox_status.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
             this.textBox_status.BorderColor = System.Drawing.Color.Transparent;
             this.textBox_status.BorderColorScaling = 0.5F;
-            this.textBox_status.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.textBox_status.Location = new System.Drawing.Point(102, 4);
+            this.textBox_status.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.textBox_status.ControlBackground = System.Drawing.SystemColors.Control;
+            this.textBox_status.Location = new System.Drawing.Point(102, 3);
+            this.textBox_status.Multiline = false;
             this.textBox_status.Name = "textBox_status";
             this.textBox_status.ReadOnly = true;
-            this.textBox_status.Size = new System.Drawing.Size(167, 13);
+            this.textBox_status.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.textBox_status.SelectionLength = 0;
+            this.textBox_status.SelectionStart = 0;
+            this.textBox_status.Size = new System.Drawing.Size(167, 20);
             this.textBox_status.TabIndex = 21;
+            this.textBox_status.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.textBox_status.WordWrap = true;
             // 
             // labelstpos
             // 
             this.labelstpos.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.labelstpos.Location = new System.Drawing.Point(3, 3);
+            this.labelstpos.Location = new System.Drawing.Point(3, 5);
             this.labelstpos.Name = "labelstpos";
             this.labelstpos.Size = new System.Drawing.Size(90, 19);
             this.labelstpos.TabIndex = 20;
@@ -349,55 +358,91 @@ namespace EDDiscovery
             // 
             // textBoxSystemName
             // 
+            this.textBoxSystemName.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
+            this.textBoxSystemName.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
             this.textBoxSystemName.BorderColor = System.Drawing.Color.Transparent;
             this.textBoxSystemName.BorderColorScaling = 0.5F;
-            this.textBoxSystemName.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.textBoxSystemName.Location = new System.Drawing.Point(72, 25);
+            this.textBoxSystemName.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.textBoxSystemName.ControlBackground = System.Drawing.SystemColors.Control;
+            this.textBoxSystemName.Location = new System.Drawing.Point(102, 33);
+            this.textBoxSystemName.Multiline = false;
             this.textBoxSystemName.Name = "textBoxSystemName";
             this.textBoxSystemName.ReadOnly = true;
-            this.textBoxSystemName.Size = new System.Drawing.Size(178, 13);
+            this.textBoxSystemName.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.textBoxSystemName.SelectionLength = 0;
+            this.textBoxSystemName.SelectionStart = 0;
+            this.textBoxSystemName.Size = new System.Drawing.Size(178, 20);
             this.textBoxSystemName.TabIndex = 1;
+            this.textBoxSystemName.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.textBoxSystemName.WordWrap = true;
             // 
             // textBoxCoordinateX
             // 
+            this.textBoxCoordinateX.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
+            this.textBoxCoordinateX.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
             this.textBoxCoordinateX.BorderColor = System.Drawing.Color.Transparent;
             this.textBoxCoordinateX.BorderColorScaling = 0.5F;
-            this.textBoxCoordinateX.Location = new System.Drawing.Point(165, 46);
+            this.textBoxCoordinateX.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.textBoxCoordinateX.ControlBackground = System.Drawing.SystemColors.Control;
+            this.textBoxCoordinateX.Location = new System.Drawing.Point(165, 63);
+            this.textBoxCoordinateX.Multiline = false;
             this.textBoxCoordinateX.Name = "textBoxCoordinateX";
             this.textBoxCoordinateX.ReadOnly = true;
+            this.textBoxCoordinateX.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.textBoxCoordinateX.SelectionLength = 0;
+            this.textBoxCoordinateX.SelectionStart = 0;
             this.textBoxCoordinateX.Size = new System.Drawing.Size(60, 20);
             this.textBoxCoordinateX.TabIndex = 6;
             this.textBoxCoordinateX.Text = "?";
             this.textBoxCoordinateX.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.textBoxCoordinateX.WordWrap = true;
             // 
             // textBoxCoordinateY
             // 
+            this.textBoxCoordinateY.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
+            this.textBoxCoordinateY.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
             this.textBoxCoordinateY.BorderColor = System.Drawing.Color.Transparent;
             this.textBoxCoordinateY.BorderColorScaling = 0.5F;
-            this.textBoxCoordinateY.Location = new System.Drawing.Point(245, 46);
+            this.textBoxCoordinateY.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.textBoxCoordinateY.ControlBackground = System.Drawing.SystemColors.Control;
+            this.textBoxCoordinateY.Location = new System.Drawing.Point(245, 63);
+            this.textBoxCoordinateY.Multiline = false;
             this.textBoxCoordinateY.Name = "textBoxCoordinateY";
             this.textBoxCoordinateY.ReadOnly = true;
+            this.textBoxCoordinateY.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.textBoxCoordinateY.SelectionLength = 0;
+            this.textBoxCoordinateY.SelectionStart = 0;
             this.textBoxCoordinateY.Size = new System.Drawing.Size(60, 20);
             this.textBoxCoordinateY.TabIndex = 8;
             this.textBoxCoordinateY.Text = "?";
             this.textBoxCoordinateY.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.textBoxCoordinateY.WordWrap = true;
             // 
             // textBoxCoordinateZ
             // 
+            this.textBoxCoordinateZ.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
+            this.textBoxCoordinateZ.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
             this.textBoxCoordinateZ.BorderColor = System.Drawing.Color.Transparent;
             this.textBoxCoordinateZ.BorderColorScaling = 0.5F;
-            this.textBoxCoordinateZ.Location = new System.Drawing.Point(325, 46);
+            this.textBoxCoordinateZ.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.textBoxCoordinateZ.ControlBackground = System.Drawing.SystemColors.Control;
+            this.textBoxCoordinateZ.Location = new System.Drawing.Point(325, 63);
+            this.textBoxCoordinateZ.Multiline = false;
             this.textBoxCoordinateZ.Name = "textBoxCoordinateZ";
             this.textBoxCoordinateZ.ReadOnly = true;
+            this.textBoxCoordinateZ.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.textBoxCoordinateZ.SelectionLength = 0;
+            this.textBoxCoordinateZ.SelectionStart = 0;
             this.textBoxCoordinateZ.Size = new System.Drawing.Size(60, 20);
             this.textBoxCoordinateZ.TabIndex = 10;
             this.textBoxCoordinateZ.Text = "?";
             this.textBoxCoordinateZ.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.textBoxCoordinateZ.WordWrap = true;
             // 
             // splitContainerCustom1
             // 
             this.splitContainerCustom1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.splitContainerCustom1.Location = new System.Drawing.Point(0, 99);
+            this.splitContainerCustom1.Location = new System.Drawing.Point(0, 123);
             this.splitContainerCustom1.Name = "splitContainerCustom1";
             // 
             // splitContainerCustom1.Panel1
@@ -407,7 +452,7 @@ namespace EDDiscovery
             // splitContainerCustom1.Panel2
             // 
             this.splitContainerCustom1.Panel2.Controls.Add(this.dataViewScroller_Wanted);
-            this.splitContainerCustom1.Size = new System.Drawing.Size(924, 582);
+            this.splitContainerCustom1.Size = new System.Drawing.Size(924, 558);
             this.splitContainerCustom1.SplitterDistance = 500;
             this.splitContainerCustom1.TabIndex = 25;
             // 
@@ -425,8 +470,8 @@ namespace EDDiscovery
             // splitContainerCustom2.Panel2
             // 
             this.splitContainerCustom2.Panel2.Controls.Add(this.richTextBox_History);
-            this.splitContainerCustom2.Size = new System.Drawing.Size(500, 582);
-            this.splitContainerCustom2.SplitterDistance = 354;
+            this.splitContainerCustom2.Size = new System.Drawing.Size(500, 558);
+            this.splitContainerCustom2.SplitterDistance = 339;
             this.splitContainerCustom2.TabIndex = 0;
             // 
             // dataViewScroller_Distances
@@ -438,7 +483,7 @@ namespace EDDiscovery
             this.dataViewScroller_Distances.Location = new System.Drawing.Point(0, 0);
             this.dataViewScroller_Distances.Name = "dataViewScroller_Distances";
             this.dataViewScroller_Distances.ScrollBarWidth = 20;
-            this.dataViewScroller_Distances.Size = new System.Drawing.Size(500, 354);
+            this.dataViewScroller_Distances.Size = new System.Drawing.Size(500, 339);
             this.dataViewScroller_Distances.TabIndex = 0;
             this.dataViewScroller_Distances.VerticalScrollBarDockRight = true;
             // 
@@ -459,7 +504,7 @@ namespace EDDiscovery
             this.vScrollBarCustom1.MouseOverButtonColor = System.Drawing.Color.Green;
             this.vScrollBarCustom1.MousePressedButtonColor = System.Drawing.Color.Red;
             this.vScrollBarCustom1.Name = "vScrollBarCustom1";
-            this.vScrollBarCustom1.Size = new System.Drawing.Size(20, 333);
+            this.vScrollBarCustom1.Size = new System.Drawing.Size(20, 318);
             this.vScrollBarCustom1.SliderColor = System.Drawing.Color.DarkGray;
             this.vScrollBarCustom1.SmallChange = 1;
             this.vScrollBarCustom1.TabIndex = 1;
@@ -484,7 +529,7 @@ namespace EDDiscovery
             this.dataGridViewDistances.Location = new System.Drawing.Point(0, 0);
             this.dataGridViewDistances.Name = "dataGridViewDistances";
             this.dataGridViewDistances.ScrollBars = System.Windows.Forms.ScrollBars.None;
-            this.dataGridViewDistances.Size = new System.Drawing.Size(480, 354);
+            this.dataGridViewDistances.Size = new System.Drawing.Size(480, 339);
             this.dataGridViewDistances.TabIndex = 0;
             this.dataGridViewDistances.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewDistances_CellClick);
             this.dataGridViewDistances.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewDistances_CellEndEdit);
@@ -534,10 +579,24 @@ namespace EDDiscovery
             this.richTextBox_History.HideScrollBar = true;
             this.richTextBox_History.Location = new System.Drawing.Point(0, 0);
             this.richTextBox_History.Name = "richTextBox_History";
+            this.richTextBox_History.ReadOnly = false;
+            this.richTextBox_History.ScrollBarArrowBorderColor = System.Drawing.Color.LightBlue;
+            this.richTextBox_History.ScrollBarArrowButtonColor = System.Drawing.Color.LightGray;
+            this.richTextBox_History.ScrollBarBackColor = System.Drawing.SystemColors.Control;
+            this.richTextBox_History.ScrollBarBorderColor = System.Drawing.Color.White;
+            this.richTextBox_History.ScrollBarFlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.richTextBox_History.ScrollBarForeColor = System.Drawing.SystemColors.ControlText;
+            this.richTextBox_History.ScrollBarMouseOverButtonColor = System.Drawing.Color.Green;
+            this.richTextBox_History.ScrollBarMousePressedButtonColor = System.Drawing.Color.Red;
+            this.richTextBox_History.ScrollBarSliderColor = System.Drawing.Color.DarkGray;
+            this.richTextBox_History.ScrollBarThumbBorderColor = System.Drawing.Color.Yellow;
+            this.richTextBox_History.ScrollBarThumbButtonColor = System.Drawing.Color.DarkBlue;
             this.richTextBox_History.ScrollBarWidth = 20;
             this.richTextBox_History.ShowLineCount = false;
-            this.richTextBox_History.Size = new System.Drawing.Size(500, 224);
+            this.richTextBox_History.Size = new System.Drawing.Size(500, 215);
             this.richTextBox_History.TabIndex = 0;
+            this.richTextBox_History.TextBoxBackColor = System.Drawing.SystemColors.Control;
+            this.richTextBox_History.TextBoxForeColor = System.Drawing.SystemColors.ControlText;
             // 
             // dataViewScroller_Wanted
             // 
@@ -548,7 +607,7 @@ namespace EDDiscovery
             this.dataViewScroller_Wanted.Location = new System.Drawing.Point(0, 0);
             this.dataViewScroller_Wanted.Name = "dataViewScroller_Wanted";
             this.dataViewScroller_Wanted.ScrollBarWidth = 20;
-            this.dataViewScroller_Wanted.Size = new System.Drawing.Size(420, 582);
+            this.dataViewScroller_Wanted.Size = new System.Drawing.Size(420, 558);
             this.dataViewScroller_Wanted.TabIndex = 0;
             this.dataViewScroller_Wanted.VerticalScrollBarDockRight = true;
             // 
@@ -569,7 +628,7 @@ namespace EDDiscovery
             this.vScrollBarCustom2.MouseOverButtonColor = System.Drawing.Color.Green;
             this.vScrollBarCustom2.MousePressedButtonColor = System.Drawing.Color.Red;
             this.vScrollBarCustom2.Name = "vScrollBarCustom2";
-            this.vScrollBarCustom2.Size = new System.Drawing.Size(20, 561);
+            this.vScrollBarCustom2.Size = new System.Drawing.Size(20, 537);
             this.vScrollBarCustom2.SliderColor = System.Drawing.Color.DarkGray;
             this.vScrollBarCustom2.SmallChange = 1;
             this.vScrollBarCustom2.TabIndex = 14;
@@ -607,7 +666,7 @@ namespace EDDiscovery
             this.dataGridViewClosestSystems.ReadOnly = true;
             this.dataGridViewClosestSystems.RowHeadersVisible = false;
             this.dataGridViewClosestSystems.ScrollBars = System.Windows.Forms.ScrollBars.None;
-            this.dataGridViewClosestSystems.Size = new System.Drawing.Size(400, 582);
+            this.dataGridViewClosestSystems.Size = new System.Drawing.Size(400, 558);
             this.dataGridViewClosestSystems.TabIndex = 13;
             this.dataGridViewClosestSystems.CellMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dataGridViewClosestSystems_CellMouseClick);
             // 

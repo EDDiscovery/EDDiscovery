@@ -208,10 +208,12 @@
     <Compile Include="CompanionAPI\CStarport.cs" />
     <Compile Include="CompanionAPI\CSystem.cs" />
     <Compile Include="DB\BookmarkClass.cs" />
+    <Compile Include="DB\TargetClassHelpers.cs" />
     <Compile Include="EGO\EGOClass.cs" />
     <Compile Include="EGO\EGOSync.cs" />
     <Compile Include="EliteDangerous\BindingsFile.cs" />
     <Compile Include="EDSM\GalacticMapSystem.cs" />
+    <Compile Include="EliteDangerous\EDCalculations.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalCrewLaunchFighter.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalCrewMemberRoleChange.cs" />
     <Compile Include="EliteDangerous\JournalEvents\JournalEngineerContribution.cs" />
@@ -296,7 +298,6 @@
       <DependentUpon>ShipDetails.cs</DependentUpon>
     </Compile>
     <Compile Include="IDiscoveryController.cs" />
-    <Compile Include="RoutingUtils.cs" />
     <Compile Include="ExportImport\ExportNotes.cs" />
     <Compile Include="ExportImport\ImportHistory.cs" />
     <Compile Include="Trilateration\DistanceParser.cs" />
@@ -498,7 +499,6 @@
       <DependentUpon>UserControlForm.cs</DependentUpon>
     </Compile>
     <Compile Include="HistoryList.cs" />
-    <Compile Include="Themeing\CustomColourTable.cs" />
     <Compile Include="DB\SavedRouteClass.cs" />
     <Compile Include="EliteDangerous\ISystem.cs" />
     <Compile Include="EliteDangerous\SystemClass.cs" />
@@ -507,7 +507,6 @@
     <Compile Include="DB\WantedSystemClass.cs" />
     <Compile Include="EDDConfig.cs" />
     <Compile Include="Themeing\Theme.cs" />
-    <Compile Include="Themeing\ToolStripRenderer.cs" />
     <Compile Include="EDSM\EDSMClass.cs" />
     <Compile Include="EDSM\EDSMSync.cs" />
     <Compile Include="EliteDangerous\EDCommander.cs" />
@@ -533,12 +532,6 @@
     </Compile>
     <Compile Include="Forms\AboutForm.Designer.cs">
       <DependentUpon>AboutForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\ThemeEditor.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\ThemeEditor.Designer.cs">
-      <DependentUpon>ThemeEditor.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\MoveToCommander.cs">
       <SubType>Form</SubType>
@@ -1146,9 +1139,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\RecordStep.resx">
       <DependentUpon>RecordStep.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\ThemeEditor.resx">
-      <DependentUpon>ThemeEditor.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ImageHandler.resx">
       <DependentUpon>ImageHandler.cs</DependentUpon>

@@ -20,7 +20,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
-namespace EDDiscovery
+namespace ExtendedControls
 {
     public class ToolStripCustomColourTable : ProfessionalColorTable
     {

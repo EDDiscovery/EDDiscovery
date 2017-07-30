@@ -40,14 +40,14 @@
             this.panel5 = new System.Windows.Forms.Panel();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.buttonExtCAPI = new ExtendedControls.ButtonExt();
-            this.textBoxBorderCompanionPassword = new ExtendedControls.TextBoxBorder();
-            this.textBoxBorderCompanionLogin = new ExtendedControls.TextBoxBorder();
             this.checkBoxCustomEDDNTo = new ExtendedControls.CheckBoxCustom();
             this.checkBoxCustomEDSMFrom = new ExtendedControls.CheckBoxCustom();
             this.checkBoxCustomEDSMTo = new ExtendedControls.CheckBoxCustom();
+            this.buttonExtBrowse = new ExtendedControls.ButtonExt();
+            this.textBoxBorderCompanionPassword = new ExtendedControls.TextBoxBorder();
+            this.textBoxBorderCompanionLogin = new ExtendedControls.TextBoxBorder();
             this.textBoxBorderEDSMName = new ExtendedControls.TextBoxBorder();
             this.textBoxBorderEDSMAPI = new ExtendedControls.TextBoxBorder();
-            this.buttonExtBrowse = new ExtendedControls.ButtonExt();
             this.textBoxBorderJournal = new ExtendedControls.TextBoxBorder();
             this.textBoxBorderCmdr = new ExtendedControls.TextBoxBorder();
             this.groupBoxCustom4 = new ExtendedControls.GroupBoxCustom();
@@ -189,28 +189,6 @@
             this.buttonExtCAPI.UseVisualStyleBackColor = true;
             this.buttonExtCAPI.Click += new System.EventHandler(this.buttonExtCAPI_Click);
             // 
-            // textBoxBorderCompanionPassword
-            // 
-            this.textBoxBorderCompanionPassword.BorderColor = System.Drawing.Color.Transparent;
-            this.textBoxBorderCompanionPassword.BorderColorScaling = 0.5F;
-            this.textBoxBorderCompanionPassword.Location = new System.Drawing.Point(160, 88);
-            this.textBoxBorderCompanionPassword.Name = "textBoxBorderCompanionPassword";
-            this.textBoxBorderCompanionPassword.Size = new System.Drawing.Size(231, 20);
-            this.textBoxBorderCompanionPassword.TabIndex = 7;
-            this.toolTip1.SetToolTip(this.textBoxBorderCompanionPassword, "Enter your Frontier Password");
-            this.textBoxBorderCompanionPassword.TextChanged += new System.EventHandler(this.textBoxBorderCompanionPassword_TextChanged);
-            // 
-            // textBoxBorderCompanionLogin
-            // 
-            this.textBoxBorderCompanionLogin.BorderColor = System.Drawing.Color.Transparent;
-            this.textBoxBorderCompanionLogin.BorderColorScaling = 0.5F;
-            this.textBoxBorderCompanionLogin.Location = new System.Drawing.Point(160, 58);
-            this.textBoxBorderCompanionLogin.Name = "textBoxBorderCompanionLogin";
-            this.textBoxBorderCompanionLogin.Size = new System.Drawing.Size(231, 20);
-            this.textBoxBorderCompanionLogin.TabIndex = 5;
-            this.toolTip1.SetToolTip(this.textBoxBorderCompanionLogin, "Enter details for API");
-            this.textBoxBorderCompanionLogin.TextChanged += new System.EventHandler(this.textBoxBorderCompanionLogin_TextChanged);
-            // 
             // checkBoxCustomEDDNTo
             // 
             this.checkBoxCustomEDDNTo.AutoSize = true;
@@ -264,26 +242,6 @@
             this.toolTip1.SetToolTip(this.checkBoxCustomEDSMTo, "Send your travel and ship data to EDSM");
             this.checkBoxCustomEDSMTo.UseVisualStyleBackColor = true;
             // 
-            // textBoxBorderEDSMName
-            // 
-            this.textBoxBorderEDSMName.BorderColor = System.Drawing.Color.Transparent;
-            this.textBoxBorderEDSMName.BorderColorScaling = 0.5F;
-            this.textBoxBorderEDSMName.Location = new System.Drawing.Point(160, 30);
-            this.textBoxBorderEDSMName.Name = "textBoxBorderEDSMName";
-            this.textBoxBorderEDSMName.Size = new System.Drawing.Size(231, 20);
-            this.textBoxBorderEDSMName.TabIndex = 3;
-            this.toolTip1.SetToolTip(this.textBoxBorderEDSMName, "Give the name this commander is known as in EDSM");
-            // 
-            // textBoxBorderEDSMAPI
-            // 
-            this.textBoxBorderEDSMAPI.BorderColor = System.Drawing.Color.Transparent;
-            this.textBoxBorderEDSMAPI.BorderColorScaling = 0.5F;
-            this.textBoxBorderEDSMAPI.Location = new System.Drawing.Point(160, 60);
-            this.textBoxBorderEDSMAPI.Name = "textBoxBorderEDSMAPI";
-            this.textBoxBorderEDSMAPI.Size = new System.Drawing.Size(231, 20);
-            this.textBoxBorderEDSMAPI.TabIndex = 3;
-            this.toolTip1.SetToolTip(this.textBoxBorderEDSMAPI, "Enter the API key from the EDSM Website");
-            // 
             // buttonExtBrowse
             // 
             this.buttonExtBrowse.BorderColorScaling = 1.25F;
@@ -298,26 +256,127 @@
             this.buttonExtBrowse.UseVisualStyleBackColor = true;
             this.buttonExtBrowse.Click += new System.EventHandler(this.buttonExtBrowse_Click);
             // 
+            // textBoxBorderCompanionPassword
+            // 
+            this.textBoxBorderCompanionPassword.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
+            this.textBoxBorderCompanionPassword.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
+            this.textBoxBorderCompanionPassword.BorderColor = System.Drawing.Color.Transparent;
+            this.textBoxBorderCompanionPassword.BorderColorScaling = 0.5F;
+            this.textBoxBorderCompanionPassword.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.textBoxBorderCompanionPassword.ControlBackground = System.Drawing.SystemColors.Control;
+            this.textBoxBorderCompanionPassword.Location = new System.Drawing.Point(160, 88);
+            this.textBoxBorderCompanionPassword.Multiline = false;
+            this.textBoxBorderCompanionPassword.Name = "textBoxBorderCompanionPassword";
+            this.textBoxBorderCompanionPassword.ReadOnly = false;
+            this.textBoxBorderCompanionPassword.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.textBoxBorderCompanionPassword.SelectionLength = 0;
+            this.textBoxBorderCompanionPassword.SelectionStart = 0;
+            this.textBoxBorderCompanionPassword.Size = new System.Drawing.Size(231, 24);
+            this.textBoxBorderCompanionPassword.TabIndex = 7;
+            this.textBoxBorderCompanionPassword.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.textBoxBorderCompanionPassword.WordWrap = true;
+            this.textBoxBorderCompanionPassword.TextChanged += new System.EventHandler(this.textBoxBorderCompanionPassword_TextChanged);
+            // 
+            // textBoxBorderCompanionLogin
+            // 
+            this.textBoxBorderCompanionLogin.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
+            this.textBoxBorderCompanionLogin.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
+            this.textBoxBorderCompanionLogin.BorderColor = System.Drawing.Color.Transparent;
+            this.textBoxBorderCompanionLogin.BorderColorScaling = 0.5F;
+            this.textBoxBorderCompanionLogin.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.textBoxBorderCompanionLogin.ControlBackground = System.Drawing.SystemColors.Control;
+            this.textBoxBorderCompanionLogin.Location = new System.Drawing.Point(160, 58);
+            this.textBoxBorderCompanionLogin.Multiline = false;
+            this.textBoxBorderCompanionLogin.Name = "textBoxBorderCompanionLogin";
+            this.textBoxBorderCompanionLogin.ReadOnly = false;
+            this.textBoxBorderCompanionLogin.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.textBoxBorderCompanionLogin.SelectionLength = 0;
+            this.textBoxBorderCompanionLogin.SelectionStart = 0;
+            this.textBoxBorderCompanionLogin.Size = new System.Drawing.Size(231, 24);
+            this.textBoxBorderCompanionLogin.TabIndex = 5;
+            this.textBoxBorderCompanionLogin.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.textBoxBorderCompanionLogin.WordWrap = true;
+            this.textBoxBorderCompanionLogin.TextChanged += new System.EventHandler(this.textBoxBorderCompanionLogin_TextChanged);
+            // 
+            // textBoxBorderEDSMName
+            // 
+            this.textBoxBorderEDSMName.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
+            this.textBoxBorderEDSMName.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
+            this.textBoxBorderEDSMName.BorderColor = System.Drawing.Color.Transparent;
+            this.textBoxBorderEDSMName.BorderColorScaling = 0.5F;
+            this.textBoxBorderEDSMName.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.textBoxBorderEDSMName.ControlBackground = System.Drawing.SystemColors.Control;
+            this.textBoxBorderEDSMName.Location = new System.Drawing.Point(160, 30);
+            this.textBoxBorderEDSMName.Multiline = false;
+            this.textBoxBorderEDSMName.Name = "textBoxBorderEDSMName";
+            this.textBoxBorderEDSMName.ReadOnly = false;
+            this.textBoxBorderEDSMName.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.textBoxBorderEDSMName.SelectionLength = 0;
+            this.textBoxBorderEDSMName.SelectionStart = 0;
+            this.textBoxBorderEDSMName.Size = new System.Drawing.Size(231, 24);
+            this.textBoxBorderEDSMName.TabIndex = 3;
+            this.textBoxBorderEDSMName.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.textBoxBorderEDSMName.WordWrap = true;
+            // 
+            // textBoxBorderEDSMAPI
+            // 
+            this.textBoxBorderEDSMAPI.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
+            this.textBoxBorderEDSMAPI.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
+            this.textBoxBorderEDSMAPI.BorderColor = System.Drawing.Color.Transparent;
+            this.textBoxBorderEDSMAPI.BorderColorScaling = 0.5F;
+            this.textBoxBorderEDSMAPI.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.textBoxBorderEDSMAPI.ControlBackground = System.Drawing.SystemColors.Control;
+            this.textBoxBorderEDSMAPI.Location = new System.Drawing.Point(160, 60);
+            this.textBoxBorderEDSMAPI.Multiline = false;
+            this.textBoxBorderEDSMAPI.Name = "textBoxBorderEDSMAPI";
+            this.textBoxBorderEDSMAPI.ReadOnly = false;
+            this.textBoxBorderEDSMAPI.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.textBoxBorderEDSMAPI.SelectionLength = 0;
+            this.textBoxBorderEDSMAPI.SelectionStart = 0;
+            this.textBoxBorderEDSMAPI.Size = new System.Drawing.Size(231, 24);
+            this.textBoxBorderEDSMAPI.TabIndex = 3;
+            this.textBoxBorderEDSMAPI.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.textBoxBorderEDSMAPI.WordWrap = true;
+            // 
             // textBoxBorderJournal
             // 
+            this.textBoxBorderJournal.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
+            this.textBoxBorderJournal.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
             this.textBoxBorderJournal.BorderColor = System.Drawing.Color.Transparent;
             this.textBoxBorderJournal.BorderColorScaling = 0.5F;
+            this.textBoxBorderJournal.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.textBoxBorderJournal.ControlBackground = System.Drawing.SystemColors.Control;
             this.textBoxBorderJournal.Location = new System.Drawing.Point(160, 60);
+            this.textBoxBorderJournal.Multiline = false;
             this.textBoxBorderJournal.Name = "textBoxBorderJournal";
-            this.textBoxBorderJournal.Size = new System.Drawing.Size(310, 20);
+            this.textBoxBorderJournal.ReadOnly = false;
+            this.textBoxBorderJournal.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.textBoxBorderJournal.SelectionLength = 0;
+            this.textBoxBorderJournal.SelectionStart = 0;
+            this.textBoxBorderJournal.Size = new System.Drawing.Size(310, 24);
             this.textBoxBorderJournal.TabIndex = 3;
-            this.toolTip1.SetToolTip(this.textBoxBorderJournal, "Enter the journal location folder.  Normally leave this field blank, EDDiscovery " +
-        "knows where the standard location is");
+            this.textBoxBorderJournal.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.textBoxBorderJournal.WordWrap = true;
             // 
             // textBoxBorderCmdr
             // 
+            this.textBoxBorderCmdr.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
+            this.textBoxBorderCmdr.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
             this.textBoxBorderCmdr.BorderColor = System.Drawing.Color.Transparent;
             this.textBoxBorderCmdr.BorderColorScaling = 0.5F;
+            this.textBoxBorderCmdr.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.textBoxBorderCmdr.ControlBackground = System.Drawing.SystemColors.Control;
             this.textBoxBorderCmdr.Location = new System.Drawing.Point(160, 30);
+            this.textBoxBorderCmdr.Multiline = false;
             this.textBoxBorderCmdr.Name = "textBoxBorderCmdr";
-            this.textBoxBorderCmdr.Size = new System.Drawing.Size(231, 20);
+            this.textBoxBorderCmdr.ReadOnly = false;
+            this.textBoxBorderCmdr.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.textBoxBorderCmdr.SelectionLength = 0;
+            this.textBoxBorderCmdr.SelectionStart = 0;
+            this.textBoxBorderCmdr.Size = new System.Drawing.Size(231, 24);
             this.textBoxBorderCmdr.TabIndex = 3;
-            this.toolTip1.SetToolTip(this.textBoxBorderCmdr, "Commander Name");
+            this.textBoxBorderCmdr.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.textBoxBorderCmdr.WordWrap = true;
             // 
             // groupBoxCustom4
             // 

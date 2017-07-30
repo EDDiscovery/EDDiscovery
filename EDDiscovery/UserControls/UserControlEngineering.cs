@@ -71,12 +71,12 @@ namespace EDDiscovery.UserControls
             discoveryform.OnNewEntry += Discoveryform_OnNewEntry;
             ed.TravelControl.OnTravelSelectionChanged += Display;
 
-            Order = Restore(DB.SQLiteDBClass.GetSettingString(DbOSave, ""), 0, Recipes.Count);
+            Order = DB.SQLiteDBClass.GetSettingString(DbOSave, "").RestoreArrayFromString(0, Recipes.Count);
             if (Order.Distinct().Count() != Order.Length)       // if not distinct..
                 for (int i = 0; i < Order.Length; i++)          // reset
                     Order[i] = i;
 
-            Wanted = Restore(DB.SQLiteDBClass.GetSettingString(DbWSave, ""), 0, Recipes.Count);
+            Wanted = DB.SQLiteDBClass.GetSettingString(DbWSave, "").RestoreArrayFromString(0, Recipes.Count);
 
             List<string> engineers = Recipes.SelectMany(r => r.engineers).Distinct().ToList();
             engineers.Sort();
@@ -273,19 +273,6 @@ namespace EDDiscovery.UserControls
             Display();
         }
 
-        int[] Restore(string plist, int def , int length)
-        {
-            int i = 0;
-            string[] parray = plist.Split(',');
-            int[] newarray = new int[length];
-            for (; i < length; i++)
-            {
-                if (i >= parray.Length || !parray[i].InvariantParse(out newarray[i]))
-                    newarray[i] = def;
-            }
-
-            return newarray;
-        }
 
         private void dataGridViewModules_CellEndEdit(object sender, DataGridViewCellEventArgs e)
         {

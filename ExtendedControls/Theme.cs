@@ -21,7 +21,7 @@ using System.Threading.Tasks;
 
 namespace ExtendedControls
 {
-    public interface ThemeableForms
+    public interface ThemeableForms             // Extended controls use this if they want to be themed
     {
         bool ApplyToForm(System.Windows.Forms.Form form, System.Drawing.Font fnt);
         void ApplyToControls(System.Windows.Forms.Control parent, System.Drawing.Font fnt = null);

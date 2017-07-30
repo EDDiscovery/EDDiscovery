@@ -236,11 +236,11 @@ namespace ExtendedControls
                 Color color1 = BorderColor;
                 Color color2 = BorderColor.Multiply(BorderColorScaling);
 
-                using (GraphicsPath g1 = RectCutCorners(1, 1, ClientRectangle.Width - 2, ClientRectangle.Height - 1, 1, 1))
+                using (GraphicsPath g1 = ControlHelpersStaticFunc.RectCutCorners(1, 1, ClientRectangle.Width - 2, ClientRectangle.Height - 1, 1, 1))
                 using (Pen pc1 = new Pen(color1, 1.0F))
                     e.Graphics.DrawPath(pc1, g1);
 
-                using (GraphicsPath g2 = RectCutCorners(0, 0, ClientRectangle.Width, ClientRectangle.Height - 1, 2, 2))
+                using (GraphicsPath g2 = ControlHelpersStaticFunc.RectCutCorners(0, 0, ClientRectangle.Width, ClientRectangle.Height - 1, 2, 2))
                 using (Pen pc2 = new Pen(color2, 1.0F))
                     e.Graphics.DrawPath(pc2, g2);
 
@@ -267,18 +267,6 @@ namespace ExtendedControls
                     e.Graphics.DrawString(t, this.Font, textb, new Point(p.xpos + xstart, drawarea.Y+2));
                 }
             }
-        }
-
-        private GraphicsPath RectCutCorners(int x, int y, int width, int height, int roundnessleft, int roundnessright)
-        {
-            GraphicsPath gr = new GraphicsPath();
-
-            gr.AddLine(x + roundnessleft, y, x + width - 1 - roundnessright, y);
-            gr.AddLine(x + width - 1, y + roundnessright, x + width - 1, y + height - 1 - roundnessright);
-            gr.AddLine(x + width - 1 - roundnessright, y + height - 1, x + roundnessleft, y + height - 1);
-            gr.AddLine(x, y + height - 1 - roundnessleft, x, y + roundnessleft);
-            gr.AddLine(x, y + roundnessleft, x + roundnessleft, y);         // close figure manually, closing it with a break does not seem to work
-            return gr;
         }
 
         protected override void OnMouseDown(MouseEventArgs mevent)

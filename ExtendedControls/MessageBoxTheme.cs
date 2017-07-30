@@ -26,7 +26,8 @@ namespace ExtendedControls
             MessageBoxTheme msg = new MessageBoxTheme();
             msg.StartPosition = FormStartPosition.CenterScreen;
             msg.Init(text, caption, buttons, icon , ThemeableFormsInstance.Instance?.MessageBoxWindowIcon);
-            return msg.ShowDialog();
+            Form f = Application.OpenForms[0];
+            return msg.ShowDialog(f);
         }
 
         Font fnt;

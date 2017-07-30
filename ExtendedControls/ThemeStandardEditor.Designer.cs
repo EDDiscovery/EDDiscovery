@@ -13,9 +13,9 @@
  * 
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
-namespace EDDiscovery.Forms
+namespace ExtendedControls
 {
-    partial class ThemeEditor
+    partial class ThemeStandardEditor
     {
         /// <summary>
         /// Required designer variable.

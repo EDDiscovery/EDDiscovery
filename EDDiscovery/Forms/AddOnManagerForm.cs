@@ -85,7 +85,7 @@ namespace EDDiscovery.Forms
             font = new Font(theme.FontName, 10);
             bool winborder = theme.ApplyToForm(this, font);
             statusStripCustom.Visible = panelTop.Visible = panelTop.Enabled = !winborder;
-            richTextBoxScrollDescription.TextBox.ReadOnly = true;
+            richTextBoxScrollDescription.ReadOnly = true;
             label_index.Text = this.Text = (managedownloadmode) ? "Add-On Manager" : "Edit Add-Ons";
 
             buttonExtGlobals.Visible = !managedownloadmode;

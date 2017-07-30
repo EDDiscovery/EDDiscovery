@@ -33,7 +33,7 @@ namespace EDDiscovery
     {
         private EDDiscoveryForm _discoveryForm;
         private ISystem _homeSystem = new SystemClassDB("Sol", 0, 0, 0);
-        private ThemeEditor themeeditor = null;
+        private ExtendedControls.ThemeStandardEditor themeeditor = null;
 
         public ISystem HomeSystem
         {
@@ -57,6 +57,8 @@ namespace EDDiscovery
         public Settings()
         {
             InitializeComponent();
+            this.textBoxHomeSystem.SetToolTip(toolTip, "Select home system for 3d Map");
+            this.textBoxDefaultZoom.SetToolTip(toolTip, "Select default zoom of map. Use the map itself to determine this for you");
         }
 
         public void InitControl(EDDiscoveryForm discoveryForm)
@@ -287,12 +289,18 @@ namespace EDDiscovery
             }
         }
 
+        public void UpdateThemeChanges()
+        {
+            _discoveryForm.ApplyTheme();
+        }
+
         public void button_edittheme_Click(object sender, EventArgs e)
         {
             if (themeeditor == null)                    // no theme editor, make one..
             {
-                themeeditor = new ThemeEditor();
-                themeeditor.InitForm(_discoveryForm);
+                themeeditor = new ExtendedControls.ThemeStandardEditor();
+                themeeditor.ApplyChanges = UpdateThemeChanges;
+                themeeditor.InitForm();
                 themeeditor.FormClosing += close_edit;  // lets see when it closes
 
                 comboBoxTheme.Enabled = false;          // no doing this while theme editor is open
