@@ -65,6 +65,7 @@ namespace EDDiscovery
         public bool IsEDSMFirstDiscover;// flag populated from journal entry when HE is made. Were we the first to report the system to EDSM?
         public bool EdsmSync;           // flag populated from journal entry when HE is made. Have we synced?
         public bool EDDNSync;           // flag populated from journal entry when HE is made. Have we synced?
+        public bool EGOSync;            // flag populated from journal entry when HE is made. Have we synced?
         public bool StartMarker;        // flag populated from journal entry when HE is made. Is this a system distance measurement system
         public bool StopMarker;         // flag populated from journal entry when HE is made. Is this a system distance measurement stop point
         public bool IsFSDJump { get { return EntryType == EliteDangerous.JournalTypeEnum.FSDJump; } }
@@ -251,6 +252,7 @@ namespace EDDiscovery
                 MapColour = mapcolour,
                 EdsmSync = je.SyncedEDSM,
                 EDDNSync = je.SyncedEDDN,
+                EGOSync = je.SyncedEGO,
                 StartMarker = je.StartMarker,
                 StopMarker = je.StopMarker,
                 EventSummary = summary,
@@ -459,6 +461,15 @@ namespace EDDiscovery
             }
         }
 
+        public void SetEGOSync()
+        {
+            EGOSync = true;
+            if (Journalid != 0)
+            {
+                EliteDangerous.JournalEntry.UpdateSyncFlagBit(Journalid, EliteDangerous.SyncFlags.EGO, true);
+            }
+        }
+
         public void SetFirstDiscover(bool firstdiscover = true)
         {
             IsEDSMFirstDiscover = firstdiscover;
@@ -580,6 +591,15 @@ namespace EDDiscovery
             get
             {
                 return (from s in historylist where s.EDDNSync == false && s.EntryType== JournalTypeEnum.Scan  orderby s.EventTimeUTC ascending select s).ToList();
+            }
+        }
+
+        public List<HistoryEntry> FilterByScanNotEGOSynced
+        {
+            get
+            {
+                DateTime start2_3 = new DateTime(2017, 4, 11, 12, 0, 0, 0, DateTimeKind.Utc);
+                return (from s in historylist where s.EGOSync == false && s.EntryType == JournalTypeEnum.Scan && s.EventTimeUTC >= start2_3 orderby s.EventTimeUTC ascending select s).ToList();
             }
         }
 
