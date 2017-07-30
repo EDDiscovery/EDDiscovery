@@ -221,7 +221,7 @@ namespace EDDiscovery.UserControls
                         break;
                 }
                 fuel = Math.Floor(fuel * 100.0) / 100.0;
-                if (tankSize == -1||tankWarning==-1)
+                if (tankSize == -1 || tankWarning == -1)
                 {
                     botline = "Please set ships details";
                 }
@@ -242,13 +242,13 @@ namespace EDDiscovery.UserControls
                     && powerConstant > 0 && maxFuelPerJump > 0)
                 {
                     double maxJumps = 0;
-                    double maxJumpDistance = RoutingUtils.maxJumpDistance(fuel,
+                    double maxJumpDistance = EDCalculations.CalculateMaxJumpDistance(fuel,
                         currentCargo, linearConstant, unladenMass,
                         optimalMass, powerConstant,
                         maxFuelPerJump, out maxJumps);
                     double JumpRange = Math.Pow(maxFuelPerJump / (linearConstant * 0.001), 1 / powerConstant) * optimalMass / (currentCargo + unladenMass + fuel);
 
-                    HistoryEntry lastJet= discoveryform.history.GetLastHistoryEntry(x => x.journalEntry.EventTypeID == JournalTypeEnum.JetConeBoost);
+                    HistoryEntry lastJet = discoveryform.history.GetLastHistoryEntry(x => x.journalEntry.EventTypeID == JournalTypeEnum.JetConeBoost);
                     if (lastJet != null && lastJet.EventTimeLocal > lastHE.EventTimeLocal)
                     {
                         JumpRange *= (lastJet.journalEntry as EliteDangerous.JournalEvents.JournalJetConeBoost).BoostValue;
@@ -261,12 +261,11 @@ namespace EDDiscovery.UserControls
                          Math.Floor(maxJumpDistance * 100) / 100,
                          Math.Floor(maxJumps * 100) / 100);
                     }
-                } 
+                }
                 pictureBox.AddTextAutoSize(new Point(botlineleft.pos.Right, 35), new Size(1000, 40), botline, displayfont, textcolour, backcolour, 1.0F);
                 pictureBox.Render();
             }
         }
-
 
 
         #endregion

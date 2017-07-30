@@ -1725,7 +1725,7 @@ namespace EDDiscovery
                 if (cursystem != null || curbookmark != null)      // if we have a system or a bookmark...
                 {
                     //Moved the code so that it could be shared with SavedRouteExpeditionControl
-                    RoutingUtils.showBookmarkForm(this,discoveryForm , cursystem, curbookmark, notedsystem);
+                    TargetHelpers.showBookmarkForm(this,discoveryForm , cursystem, curbookmark, notedsystem);
                     GenerateDataSetsBNG();      // in case target changed, do all..
                     RequestPaint();
                 }

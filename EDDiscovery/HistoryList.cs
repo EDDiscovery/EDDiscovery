@@ -86,6 +86,7 @@ namespace EDDiscovery
         public bool isTravelling { get { return travelling; } }
         public int TravelledMissingjump { get { return travelled_missingjump; } }
         public int Travelledjumps { get { return travelled_jumps; } }
+        public string TravelledJumpsAndMisses { get { return travelled_jumps.ToStringInvariant() + ((travelled_missingjump > 0) ? (" (" + travelled_missingjump.ToStringInvariant() + ")") : ""); } }
 
         public bool IsLanded { get { return landed.HasValue && landed.Value == true; } }
         public bool IsDocked { get { return docked.HasValue && docked.Value == true; } }
@@ -95,6 +96,7 @@ namespace EDDiscovery
         public bool MultiPlayer { get { return onCrewWithCaptain != null; } }
         public string GameMode { get { return gamemode; } }
         public string Group { get { return group; } }
+        public string GameModeGroup { get { return gamemode + ((group!=null && group.Length>0) ? (":" + group) : ""); } }
 
         public bool ContainsRares() // function due to debugger and cost of working out
         {
@@ -365,8 +367,9 @@ namespace EDDiscovery
 
                 if (he.StopMarker || he.StartMarker)
                 {
+                    Debug.WriteLine("Travelling stop at " + he.Indexno);
                     he.travelling = false;
-                    he.EventDetailedInfo += ((he.EventDetailedInfo.Length > 0) ? Environment.NewLine : "") + "Travelled " + he.travelled_distance.ToString("0.0") + " LY"
+                    he.EventDetailedInfo += ((he.EventDetailedInfo.Length > 0) ? Environment.NewLine : "") + "Travelled " + he.travelled_distance.ToStringInvariant("0.0") + " LY"
                                         + ", " + he.travelled_jumps + " jumps"
                                         + ((he.travelled_missingjump > 0) ? ", " + he.travelled_missingjump + " unknown distance jumps" : "") +
                                         ", time " + he.travelled_seconds;
@@ -390,7 +393,10 @@ namespace EDDiscovery
             }
 
             if (he.StartMarker)
+            {
+                Debug.WriteLine("Travelling start at " + he.Indexno);
                 he.travelling = true;
+            }
 
             return he;
         }
@@ -1293,43 +1299,45 @@ namespace EDDiscovery
         static private long LastEDSMCredtis = -1;
         static private long LastShipID = -1;
 
-        public void SendShipInfoAsync()
+        public void SendShipInfo( bool async )
         {
             EDCommander commander = EDCommander.GetCommander(CommanderId);
-            string edsmname = commander.Name;
-            if (!string.IsNullOrEmpty(commander.EdsmName))
-                edsmname = commander.EdsmName;
-            EDSMClass edsm = new EDSMClass { apiKey = commander.APIKey, commanderName = edsmname };
-            JournalLoadGame loadgame = historylist.FindLast(x => x.EntryType == JournalTypeEnum.LoadGame).journalEntry as JournalLoadGame;
-            HistoryEntry shipinfohe = historylist.FindLast(he => he.ShipInformation != null && he.ShipInformation.SubVehicle == ShipInformation.SubVehicleType.None);
 
-            Task edsmtask = Task.Factory.StartNew(() =>
+            if (commander != null)  // just to be sure, in case CommanderId is not valid or set his
             {
-                SendShipInfo(edsm, shipinfohe, loadgame);
-            });
-        }
+                string edsmname = commander.Name;
+                if (!string.IsNullOrEmpty(commander.EdsmName))
+                    edsmname = commander.EdsmName;
+                EDSMClass edsm = new EDSMClass { apiKey = commander.APIKey, commanderName = edsmname };
 
-        public void SendShipInfo()
-        {
-            EDCommander commander = EDCommander.GetCommander(CommanderId);
-            string edsmname = commander.Name;
-            if (!string.IsNullOrEmpty(commander.EdsmName))
-                edsmname = commander.EdsmName;
-            EDSMClass edsm = new EDSMClass { apiKey = commander.APIKey, commanderName = edsmname };
-            JournalLoadGame loadgame = historylist.FindLast(x => x.EntryType == JournalTypeEnum.LoadGame).journalEntry as JournalLoadGame;
-            HistoryEntry shipinfohe = historylist.FindLast(he => he.ShipInformation != null && he.ShipInformation.SubVehicle == ShipInformation.SubVehicleType.None);
+                HistoryEntry he1 = historylist.FindLast(x => x.EntryType == JournalTypeEnum.LoadGame);
+                JournalLoadGame loadgame = (he1 != null) ? (he1.journalEntry as JournalLoadGame) : null;
 
-            SendShipInfo(edsm, shipinfohe, loadgame);
+                HistoryEntry shipinfohe = historylist.FindLast(he => he.ShipInformation != null && he.ShipInformation.SubVehicle == ShipInformation.SubVehicleType.None);
+
+                if (async)
+                {
+                    Task edsmtask = Task.Factory.StartNew(() =>
+                    {
+                        SendShipInfo(edsm, shipinfohe, loadgame);
+                    });
+                }
+                else
+                {
+                    SendShipInfo(edsm, shipinfohe, loadgame);   // either shipinfohe or loadgame may be missing
+                }
+            }
         }
 
         public static void SendShipInfoAsync(HistoryEntry he)
         {
-            if (he.ShipInformation != null && he.ShipInformation.SubVehicle == ShipInformation.SubVehicleType.None)
+            if (he.ShipInformation != null && he.ShipInformation.SubVehicle == ShipInformation.SubVehicleType.None && he.Commander != null )
             {
                 EDCommander commander = he.Commander;
                 string edsmname = commander.Name;
                 if (!string.IsNullOrEmpty(commander.EdsmName))
                     edsmname = commander.EdsmName;
+
                 EDSMClass edsm = new EDSMClass { apiKey = commander.APIKey, commanderName = edsmname };
 
                 Task edsmtask = Task.Factory.StartNew(() =>
@@ -1505,7 +1513,7 @@ namespace EDDiscovery
 
             hist.ProcessEDSMApiCommander();
 
-            hist.SendShipInfo();
+            hist.SendShipInfo(false);   // send synchronous
 
             return hist;
         }

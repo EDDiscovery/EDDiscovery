@@ -198,6 +198,7 @@ namespace EDDiscovery.Forms
             panel_taskbaricon.Visible = panel_close.Visible = panel_minimize.Visible = panel_ontop.Visible = panel_showtitle.Visible = !transparent;
 
             panel_transparent.Visible = IsTransparencySupported && !transparent;
+            panel_showtitle.Visible = IsTransparencySupported && !transparent;
             panel_transparent.ImageSelected = (istransparent) ? ExtendedControls.DrawnPanel.ImageType.Transparent : ExtendedControls.DrawnPanel.ImageType.NotTransparent;
 
             label_index.Visible = labelControlText.Visible = (displayTitle || !transparent);   //  titles are on, or transparent is off

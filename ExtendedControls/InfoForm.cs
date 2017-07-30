@@ -35,10 +35,10 @@ namespace ExtendedControls
         {
             Icon = ic;
             Text = title;
-            textBoxInfo.TextBox.SelectionTabs = array;
-            textBoxInfo.TextBox.ReadOnly = true;
+            textBoxInfo.SetTabs(array);
+            textBoxInfo.ReadOnly = true;
             textBoxInfo.Text = info;
-            textBoxInfo.TextBox.Select(0, 0);
+            textBoxInfo.Select(0, 0);
 
             ThemeableForms theme = ThemeableFormsInstance.Instance;
 

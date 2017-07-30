@@ -17,6 +17,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -28,7 +29,13 @@ namespace ExtendedControls
     {
         // BackColor paints the whole control - set Transparent if you don't want this. (but its a fake transparent note).
 
-        public List<string> Items { get; set; }
+        public List<string> Items { get { return items; } set           // allow items to be changed
+            { items = value;
+                lbsys.Items.Clear();
+                lbsys.Items.AddRange(value.ToArray());
+                Invalidate(true); Update();
+            } }
+
         public bool FitToItemsHeight { get; set; } = true;                    // if set, move the border to integer of item height.
         public int ScrollBarWidth { get; set; } = 16;
         public int ItemHeight { get; set; } = 20;
@@ -53,14 +60,15 @@ namespace ExtendedControls
         public delegate void OnAnyOtherKeyPressed(object sender, KeyEventArgs e);
         public event OnAnyOtherKeyPressed OtherKeyPressed;
 
-        ListBox lbsys;
+        private ListBox lbsys;
+        private List<string> items;
 
         #region Implementation
 
         public ListControlCustom() : base()
         {
+            items = new List<string>();
             SetStyle(ControlStyles.SupportsTransparentBackColor | ControlStyles.OptimizedDoubleBuffer, true);
-            Items = new List<string>();
             vScrollBar = new VScrollBarCustom();
             vScrollBar.SmallChange = 1;
             vScrollBar.LargeChange = 1;
@@ -78,7 +86,6 @@ namespace ExtendedControls
             flatstyle = v;
             lbsys.Visible = (flatstyle == FlatStyle.System);
             this.Invalidate();
-            lbsys.Items.AddRange(this.Items.ToArray());
         }
 
         protected override void OnLayout(LayoutEventArgs levent)
@@ -137,6 +144,8 @@ namespace ExtendedControls
         {
             if (this.FlatStyle == FlatStyle.System)
                 return;
+
+            //System.Diagnostics.Debug.WriteLine("Updated list control");
 
             if (Items != null && itemslayoutestimatedon != Items.Count())  // item count changed, rework it out.
                 CalculateLayout();
@@ -334,12 +343,14 @@ namespace ExtendedControls
         protected override void OnKeyDown(KeyEventArgs e)
         {
             base.OnKeyDown(e);
+            KeyDownAction(e);
+        }
 
-            //Console.WriteLine("Key press " + e.KeyCode + " Focus " + Focused );
-
+        public void KeyDownAction(KeyEventArgs e)
+        { 
             if (flatstyle != FlatStyle.System)
             {
-                if (e.KeyCode == Keys.Enter || (e.Alt && (e.KeyCode == Keys.Up || e.KeyCode == Keys.Down)))
+                if ((e.KeyCode == Keys.Enter || e.KeyCode == Keys.Return) || (e.Alt && (e.KeyCode == Keys.Up || e.KeyCode == Keys.Down)))
                 {
                     SelectedIndex = focusindex;
                     if (SelectedIndexChanged != null)

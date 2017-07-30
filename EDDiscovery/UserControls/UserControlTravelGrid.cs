@@ -106,6 +106,7 @@ namespace EDDiscovery.UserControls
         {
             InitializeComponent();
             Name = "History";
+            this.textBoxFilter.SetToolTip(toolTip1, "Display entries matching this string");
         }
 
         public override void Init(EDDiscoveryForm ed, int vn) //0=primary, 1 = first windowed version, etc

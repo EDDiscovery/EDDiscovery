@@ -177,7 +177,6 @@ namespace EDDiscovery
             this.textBoxDefaultZoom.Name = "textBoxDefaultZoom";
             this.textBoxDefaultZoom.Size = new System.Drawing.Size(51, 20);
             this.textBoxDefaultZoom.TabIndex = 6;
-            this.toolTip.SetToolTip(this.textBoxDefaultZoom, "Select default zoom of map. Use the map itself to determine this for you");
             this.textBoxDefaultZoom.Validating += new System.ComponentModel.CancelEventHandler(this.textBoxDefaultZoom_Validating);
             // 
             // textBoxHomeSystem
@@ -199,7 +198,6 @@ namespace EDDiscovery
             this.textBoxHomeSystem.Name = "textBoxHomeSystem";
             this.textBoxHomeSystem.Size = new System.Drawing.Size(221, 20);
             this.textBoxHomeSystem.TabIndex = 0;
-            this.toolTip.SetToolTip(this.textBoxHomeSystem, "Select home system for 3d Map");
             this.textBoxHomeSystem.Validated += new System.EventHandler(this.textBoxHomeSystem_Validated);
             // 
             // panel_defaultmapcolor

@@ -373,6 +373,7 @@ namespace EDDiscovery
             ((UserControlCommonBase)(tabStripBottom.CurrentControl)).Closing();
             ((UserControlCommonBase)(tabStripBottomRight.CurrentControl)).Closing();
             ((UserControlCommonBase)(tabStripMiddleRight.CurrentControl)).Closing();
+            ((UserControlCommonBase)(tabStripTopRight.CurrentControl)).Closing();
 
             SQLiteDBClass.PutSettingInt("TravelControlSpliterLR", splitContainerLeftRight.SplitterDistance);
             SQLiteDBClass.PutSettingInt("TravelControlSpliterL", splitContainerLeft.SplitterDistance);

@@ -161,5 +161,39 @@ public static class ObjectExtensionsNumbersBool
         string[] list = v.Split('.');
         return VersionFromStringArray(list);
     }
+
+    static public int[] RestoreArrayFromString(this string plist, int def, int length)      // fill array from comma separ string, with defined length and defined default
+    {
+        int i = 0;
+        string[] parray = plist.Split(',');
+        int[] newarray = new int[length];
+        for (; i < length; i++)
+        {
+            if (i >= parray.Length || !parray[i].InvariantParse(out newarray[i]))
+                newarray[i] = def;
+        }
+
+        return newarray;
+    }
+
+    static public List<int> RestoreIntListFromString(this string plist, int def, int length)      // fill array from comma separ string, with defined length and defined default
+    {
+        List<int> list = new List<int>(length);
+
+        string[] parray = plist.Split(',');
+        if (length == 0)
+            length = parray.Length;
+
+        for (int i = 0; i < length; i++)
+        {
+            int v;
+            if (i >= parray.Length || !parray[i].InvariantParse(out v))
+                list.Add(def);
+            else
+                list.Add(v);
+        }
+
+        return list;
+    }
 }
 

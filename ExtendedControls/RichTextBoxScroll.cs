@@ -41,17 +41,28 @@ namespace ExtendedControls
         // if BorderColor is set, BackColor gets shown, with BorderColor on top.
         // BorderStyle is also applied by windows around the control, set to None for BorderColor only
 
+        public Color TextBoxForeColor { get { return TextBox.ForeColor; } set { TextBox.ForeColor = value; } }
+        public Color TextBoxBackColor { get { return TextBox.BackColor; } set { TextBox.BackColor = value; } }
         public Color BorderColor { get; set; } = Color.Transparent;
         public float BorderColorScaling { get; set; } = 0.5F;           // Popup style only
         public int ScrollBarWidth { get; set; } = 20;
         public bool ShowLineCount { get; set; } = false;                // count lines
         public bool HideScrollBar { get; set; } = true;                   // hide if no scroll needed
 
+        public FlatStyle ScrollBarFlatStyle { get { return ScrollBar.FlatStyle; } set { ScrollBar.FlatStyle = value; } }
+        public Color ScrollBarBackColor { get { return ScrollBar.BackColor; } set { ScrollBar.BackColor = value; } }
+        public Color ScrollBarSliderColor { get { return ScrollBar.SliderColor; } set { ScrollBar.SliderColor = value; } }
+        public Color ScrollBarBorderColor { get { return ScrollBar.BorderColor; } set { ScrollBar.BorderColor = value; } }
+        public Color ScrollBarThumbBorderColor { get { return ScrollBar.ThumbBorderColor; } set { ScrollBar.ThumbBorderColor = value; } }
+        public Color ScrollBarArrowBorderColor { get { return ScrollBar.ArrowBorderColor; } set { ScrollBar.ArrowBorderColor = value; } }
+        public Color ScrollBarArrowButtonColor { get { return ScrollBar.ArrowButtonColor; } set { ScrollBar.ArrowButtonColor = value; } }
+        public Color ScrollBarThumbButtonColor { get { return ScrollBar.ThumbButtonColor; } set { ScrollBar.ThumbButtonColor = value; } }
+        public Color ScrollBarMouseOverButtonColor { get { return ScrollBar.MouseOverButtonColor; } set { ScrollBar.MouseOverButtonColor = value; } }
+        public Color ScrollBarMousePressedButtonColor { get { return ScrollBar.MousePressedButtonColor; } set { ScrollBar.MousePressedButtonColor = value; } }
+        public Color ScrollBarForeColor { get { return ScrollBar.ForeColor; } set { ScrollBar.ForeColor = value; } }
+
         public override string Text { get { return TextBox.Text; } set { TextBox.Text = value; UpdateScrollBar(); } }                // return only textbox text
         public int LineCount { get { return TextBox.GetLineFromCharIndex(TextBox.Text.Length) + 1; } }
-
-        public RichTextBoxBack TextBox;                 // Use these with caution.
-        public VScrollBarCustom ScrollBar;
 
         public delegate void OnTextBoxChanged(object sender, EventArgs e);
         public event OnTextBoxChanged TextBoxChanged;
@@ -95,14 +106,33 @@ namespace ExtendedControls
             UpdateScrollBar();
         }
 
-        public void CopyFrom( RichTextBoxScroll other )
+        public void CopyFrom(RichTextBoxScroll other)
         {
             TextBox.Rtf = other.TextBox.Rtf;
         }
 
+        public void SetTabs(int[] array)
+        {
+            TextBox.SelectionTabs = array;
+        }
+
+        public bool ReadOnly { get { return TextBox.ReadOnly; } set { TextBox.ReadOnly = value; } }
+
+        public void Select(int s, int e) { TextBox.Select(s, e); }
+
+
+        public void SetContextMenuStrip(System.Windows.Forms.ContextMenuStrip c) { TextBox.ContextMenuStrip = c; }
+
+        public void ScrollToCaret() { TextBox.ScrollToCaret();  }
+
+        public new void Focus() { TextBox.Focus(); }
+
         #endregion
 
         #region Implementation
+
+        private RichTextBoxBack TextBox;                 // Use these with caution.
+        private VScrollBarCustom ScrollBar;
 
         public RichTextBoxScroll() : base()
         {
@@ -114,6 +144,11 @@ namespace ExtendedControls
             TextBox.BorderStyle = BorderStyle.None;
             TextBox.BackColor = BackColor;
             TextBox.ForeColor = ForeColor;
+            TextBox.MouseUp += TextBox_MouseUp;
+            TextBox.MouseDown += TextBox_MouseDown;
+            TextBox.MouseMove += TextBox_MouseMove;
+            TextBox.MouseEnter += TextBox_MouseEnter;
+            TextBox.MouseLeave += TextBox_MouseLeave;
             TextBox.Show();
             ScrollBar.Show();
             TextBox.VScroll += OnVscrollChanged;
@@ -133,27 +168,16 @@ namespace ExtendedControls
                 Color color1 = BorderColor;
                 Color color2 = BorderColor.Multiply(BorderColorScaling);
 
-                GraphicsPath g1 = RectCutCorners(1, 1, ClientRectangle.Width - 2, ClientRectangle.Height - 1, 1, 1);
+                GraphicsPath g1 = ControlHelpersStaticFunc.RectCutCorners(1, 1, ClientRectangle.Width - 2, ClientRectangle.Height - 1, 1, 1);
                 using (Pen pc1 = new Pen(color1, 1.0F))
                     e.Graphics.DrawPath(pc1, g1);
 
-                GraphicsPath g2 = RectCutCorners(0, 0, ClientRectangle.Width, ClientRectangle.Height - 1, 2, 2);
+                GraphicsPath g2 = ControlHelpersStaticFunc.RectCutCorners(0, 0, ClientRectangle.Width, ClientRectangle.Height - 1, 2, 2);
                 using (Pen pc2 = new Pen(color2, 1.0F))
                     e.Graphics.DrawPath(pc2, g2);
             }
         }
 
-        private GraphicsPath RectCutCorners(int x, int y, int width, int height, int roundnessleft, int roundnessright )
-        {
-            GraphicsPath gr = new GraphicsPath();
-
-            gr.AddLine(x + roundnessleft, y, x + width - 1 - roundnessright, y);
-            gr.AddLine(x + width - 1, y + roundnessright, x + width - 1, y + height - 1 - roundnessright);
-            gr.AddLine(x + width - 1 - roundnessright, y + height - 1, x + roundnessleft, y + height - 1);
-            gr.AddLine(x, y + height - 1 - roundnessleft, x, y + roundnessleft);
-            gr.AddLine(x, y + roundnessleft, x + roundnessleft, y);         // close figure manually, closing it with a break does not seem to work
-            return gr;
-        }
 
         bool visibleonlayout = false;
 
@@ -287,6 +311,33 @@ namespace ExtendedControls
         {
             //System.Diagnostics.Debug.WriteLine("Resize" + Size);
         }
+
+        private void TextBox_MouseLeave(object sender, EventArgs e)             // using the text box mouse actions, pass thru to ours so registered handlers work
+        {
+            base.OnMouseLeave(e);
+        }
+
+        private void TextBox_MouseEnter(object sender, EventArgs e)
+        {
+            base.OnMouseEnter(e);
+        }
+
+        private void TextBox_MouseMove(object sender, MouseEventArgs e)
+        {
+            base.OnMouseMove(e);
+        }
+
+        private void TextBox_MouseDown(object sender, MouseEventArgs e)
+        {
+            base.OnMouseDown(e);
+        }
+
+        private void TextBox_MouseUp(object sender, MouseEventArgs e)
+        {
+            base.OnMouseUp(e);
+        }
+
+
     }
 }
 

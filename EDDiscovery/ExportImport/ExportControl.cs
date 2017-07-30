@@ -37,12 +37,17 @@ namespace EDDiscovery.Export
         private EDDiscoveryForm _discoveryForm;
 
         private List<ExportTypeClass> exportTypeList;
-        private List<EDCommander> commanders;
         private string importFile = string.Empty;
 
         public ExportControl()
         {
             InitializeComponent();
+
+            this.textBoxArrivalDate.SetToolTip(toolTip, "Column containing the arrival date");
+            this.textBoxSysName.SetToolTip(toolTip, "Column containing the system name");
+            this.textBoxSysNotes.SetToolTip(toolTip, "Column containing any system notes");
+            this.textBoxArrivalTime.SetToolTip(toolTip, "Column containing the arrival time");
+            this.textBoxDelimiter.SetToolTip(toolTip, "Delimiting character");
 
             exportTypeList = new List<ExportTypeClass>();
 
@@ -69,23 +74,10 @@ namespace EDDiscovery.Export
 
         public void PopulateCommanders()
         {
-            comboBoxCommander.Enabled = false;
-            commanders = new List<EDCommander>();
-            
-            commanders.AddRange(EDCommander.GetList());
-
-            comboBoxCommander.DataSource = null;
-            comboBoxCommander.DataSource = commanders;
-            comboBoxCommander.ValueMember = "Nr";
-            comboBoxCommander.DisplayMember = "Name";
-
-            Application.DoEvents();
-
-            if (_discoveryForm.history.CommanderId == -1)
-                comboBoxCommander.SelectedIndex = 0;
-            else
-                comboBoxCommander.SelectedItem = EDCommander.Current;
-
+            comboBoxCommander.Enabled = false;      // in case its got a on selection item hook
+            comboBoxCommander.Items.Clear();            // comboBox is nicer with items
+            comboBoxCommander.Items.AddRange((from EDCommander c in EDCommander.GetList() select c.Name).ToList());
+            comboBoxCommander.SelectedItem = EDCommander.Current.Name;
             comboBoxCommander.Enabled = true;
         }
 
@@ -292,12 +284,22 @@ namespace EDDiscovery.Export
         
         private void buttonImport_Click(object sender, EventArgs e)
         {
-            long cmdrID = long.Parse(comboBoxCommander.SelectedValue.ToString());
+            var itm = (from EDCommander c in EDCommander.GetList() where c.Name.Equals(comboBoxCommander.Text) select c).ToList();
+
+            if (itm == null || itm.Count == 0)
+            {
+                ExtendedControls.MessageBoxTheme.Show("Code failure - cannot find selected commander", "EDD Import", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            long cmdrID = itm[0].Nr;
+
             if (string.IsNullOrEmpty(importFile) || ! File.Exists(importFile))
             {
                 ExtendedControls.MessageBoxTheme.Show("An import file must be specified.", "EDD Import", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
+
             string delim = radioButtonTab.Checked ? "\t" : textBoxDelimiter.Text;
             if (string.IsNullOrEmpty(delim))
             {
