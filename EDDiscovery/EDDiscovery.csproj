@@ -71,8 +71,7 @@
     <SignManifests>false</SignManifests>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>
-    </ApplicationIcon>
+    <ApplicationIcon>Resources\edlogo_3mo_icon.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup>
     <StartupObject>
@@ -940,6 +939,7 @@
     <None Include="Resources\galaxycolour.png" />
     <None Include="Resources\galaxy_white.png" />
     <None Include="Resources\galaxy_gray.png" />
+    <Content Include="Resources\edlogo_3mo_icon.ico" />
     <Content Include="Resources\imgCheck.png" />
     <None Include="Resources\stellaremnant.PNG" />
     <None Include="Resources\nebula.PNG" />
