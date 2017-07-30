@@ -65,11 +65,20 @@
             this.label2 = new System.Windows.Forms.Label();
             this.buttonCancel = new ExtendedControls.ButtonExt();
             this.buttonOK = new ExtendedControls.ButtonExt();
+            this.panel3 = new System.Windows.Forms.Panel();
+            this.groupBoxCustom5 = new ExtendedControls.GroupBoxCustom();
+            this.checkBoxEGOSync = new ExtendedControls.CheckBoxCustom();
+            this.label7 = new System.Windows.Forms.Label();
+            this.textBoxEGOName = new ExtendedControls.TextBoxBorder();
+            this.textBoxEGOAPI = new ExtendedControls.TextBoxBorder();
+            this.label8 = new System.Windows.Forms.Label();
+            this.label9 = new System.Windows.Forms.Label();
             this.panelTop.SuspendLayout();
             this.groupBoxCustom4.SuspendLayout();
             this.groupBoxCustom3.SuspendLayout();
             this.groupBoxCustom2.SuspendLayout();
             this.groupBoxCustom1.SuspendLayout();
+            this.groupBoxCustom5.SuspendLayout();
             this.SuspendLayout();
             // 
             // panelTop
@@ -546,7 +555,7 @@
             this.buttonCancel.BorderColorScaling = 1.25F;
             this.buttonCancel.ButtonColorScaling = 0.5F;
             this.buttonCancel.ButtonDisabledScaling = 0.5F;
-            this.buttonCancel.Location = new System.Drawing.Point(418, 539);
+            this.buttonCancel.Location = new System.Drawing.Point(418, 672);
             this.buttonCancel.Name = "buttonCancel";
             this.buttonCancel.Size = new System.Drawing.Size(75, 23);
             this.buttonCancel.TabIndex = 1;
@@ -560,7 +569,7 @@
             this.buttonOK.BorderColorScaling = 1.25F;
             this.buttonOK.ButtonColorScaling = 0.5F;
             this.buttonOK.ButtonDisabledScaling = 0.5F;
-            this.buttonOK.Location = new System.Drawing.Point(519, 539);
+            this.buttonOK.Location = new System.Drawing.Point(519, 672);
             this.buttonOK.Name = "buttonOK";
             this.buttonOK.Size = new System.Drawing.Size(75, 23);
             this.buttonOK.TabIndex = 0;
@@ -568,11 +577,109 @@
             this.buttonOK.UseVisualStyleBackColor = true;
             this.buttonOK.Click += new System.EventHandler(this.buttonOK_Click);
             // 
+            // panel3
+            // 
+            this.panel3.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panel3.Location = new System.Drawing.Point(0, 522);
+            this.panel3.Name = "panel3";
+            this.panel3.Size = new System.Drawing.Size(606, 10);
+            this.panel3.TabIndex = 32;
+            // 
+            // groupBoxCustom5
+            // 
+            this.groupBoxCustom5.AlternateClientBackColor = System.Drawing.Color.Blue;
+            this.groupBoxCustom5.BackColorScaling = 0.5F;
+            this.groupBoxCustom5.BorderColor = System.Drawing.Color.LightGray;
+            this.groupBoxCustom5.BorderColorScaling = 0.5F;
+            this.groupBoxCustom5.Controls.Add(this.checkBoxEGOSync);
+            this.groupBoxCustom5.Controls.Add(this.label7);
+            this.groupBoxCustom5.Controls.Add(this.textBoxEGOName);
+            this.groupBoxCustom5.Controls.Add(this.textBoxEGOAPI);
+            this.groupBoxCustom5.Controls.Add(this.label8);
+            this.groupBoxCustom5.Controls.Add(this.label9);
+            this.groupBoxCustom5.Dock = System.Windows.Forms.DockStyle.Top;
+            this.groupBoxCustom5.FillClientAreaWithAlternateColor = false;
+            this.groupBoxCustom5.Location = new System.Drawing.Point(0, 532);
+            this.groupBoxCustom5.Margin = new System.Windows.Forms.Padding(10);
+            this.groupBoxCustom5.Name = "groupBoxCustom5";
+            this.groupBoxCustom5.Size = new System.Drawing.Size(606, 133);
+            this.groupBoxCustom5.TabIndex = 33;
+            this.groupBoxCustom5.TabStop = false;
+            this.groupBoxCustom5.Text = "Elite Galaxy Online Information (optional)";
+            this.groupBoxCustom5.TextPadding = 0;
+            this.groupBoxCustom5.TextStartPosition = -1;
+            // 
+            // checkBoxEGOSync
+            // 
+            this.checkBoxEGOSync.AutoSize = true;
+            this.checkBoxEGOSync.CheckBoxColor = System.Drawing.Color.Gray;
+            this.checkBoxEGOSync.CheckBoxInnerColor = System.Drawing.Color.White;
+            this.checkBoxEGOSync.CheckColor = System.Drawing.Color.DarkBlue;
+            this.checkBoxEGOSync.FontNerfReduction = 0.5F;
+            this.checkBoxEGOSync.Location = new System.Drawing.Point(427, 32);
+            this.checkBoxEGOSync.MouseOverColor = System.Drawing.Color.CornflowerBlue;
+            this.checkBoxEGOSync.Name = "checkBoxEGOSync";
+            this.checkBoxEGOSync.Size = new System.Drawing.Size(88, 17);
+            this.checkBoxEGOSync.TabIndex = 4;
+            this.checkBoxEGOSync.Text = "Sync to EGO";
+            this.checkBoxEGOSync.TickBoxReductionSize = 10;
+            this.toolTip1.SetToolTip(this.checkBoxEGOSync, "Send your scan data to EGO");
+            this.checkBoxEGOSync.UseVisualStyleBackColor = true;
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(6, 30);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(64, 13);
+            this.label7.TabIndex = 2;
+            this.label7.Text = "EGO Name:";
+            // 
+            // textBoxEGOName
+            // 
+            this.textBoxEGOName.BorderColor = System.Drawing.Color.Transparent;
+            this.textBoxEGOName.BorderColorScaling = 0.5F;
+            this.textBoxEGOName.Location = new System.Drawing.Point(160, 30);
+            this.textBoxEGOName.Name = "textBoxEGOName";
+            this.textBoxEGOName.Size = new System.Drawing.Size(231, 20);
+            this.textBoxEGOName.TabIndex = 3;
+            this.toolTip1.SetToolTip(this.textBoxEGOName, "Give the user name for this commander on EGO");
+            // 
+            // textBoxEGOAPI
+            // 
+            this.textBoxEGOAPI.BorderColor = System.Drawing.Color.Transparent;
+            this.textBoxEGOAPI.BorderColorScaling = 0.5F;
+            this.textBoxEGOAPI.Location = new System.Drawing.Point(160, 60);
+            this.textBoxEGOAPI.Name = "textBoxEGOAPI";
+            this.textBoxEGOAPI.Size = new System.Drawing.Size(231, 20);
+            this.textBoxEGOAPI.TabIndex = 3;
+            this.toolTip1.SetToolTip(this.textBoxEGOAPI, "Enter the API key from the EGO Website");
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(6, 60);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(74, 13);
+            this.label8.TabIndex = 2;
+            this.label8.Text = "EGO API Key:";
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(6, 96);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(394, 13);
+            this.label9.TabIndex = 1;
+            this.label9.Text = "Get an EGO API key from https://www.elitegalaxyonline.com in the account menu";
+            // 
             // CommanderForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(606, 578);
+            this.ClientSize = new System.Drawing.Size(606, 711);
+            this.Controls.Add(this.groupBoxCustom5);
+            this.Controls.Add(this.panel3);
             this.Controls.Add(this.groupBoxCustom4);
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.groupBoxCustom3);
@@ -599,6 +706,8 @@
             this.groupBoxCustom2.PerformLayout();
             this.groupBoxCustom1.ResumeLayout(false);
             this.groupBoxCustom1.PerformLayout();
+            this.groupBoxCustom5.ResumeLayout(false);
+            this.groupBoxCustom5.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -640,5 +749,13 @@
         private System.Windows.Forms.Panel panel5;
         private System.Windows.Forms.Label labelCAPIState;
         private System.Windows.Forms.ToolTip toolTip1;
+        private System.Windows.Forms.Panel panel3;
+        private ExtendedControls.GroupBoxCustom groupBoxCustom5;
+        private ExtendedControls.CheckBoxCustom checkBoxEGOSync;
+        private System.Windows.Forms.Label label7;
+        private ExtendedControls.TextBoxBorder textBoxEGOName;
+        private ExtendedControls.TextBoxBorder textBoxEGOAPI;
+        private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.Label label9;
     }
 }
