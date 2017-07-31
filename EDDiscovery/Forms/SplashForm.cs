@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2016 EDDiscovery development team
+ * Copyright © 2016 - 2017 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -30,54 +30,24 @@ namespace EDDiscovery.Forms
 {
     public partial class SplashForm : Form
     {
-        private Task inittask;
-        private EDDiscoveryForm mainform;
-        private ManualResetEvent readyForInvoke = new ManualResetEvent(false);
-        public ApplicationContext Context;
-
-        public SplashForm(EDDiscoveryForm mainform)
+        public SplashForm()
         {
             InitializeComponent();
-            this.label_version.Text = "EDDiscovery " + System.Reflection.Assembly.GetExecutingAssembly().FullName.Split(',')[1].Split('=')[1];
-            this.mainform = mainform;
-            this.Owner = mainform;
+            this.label_version.Text = $"EDDiscovery {EDDApplicationContext.AssemblyVersionNumber}";
         }
 
-        protected override void OnLoad(EventArgs e)
+        public void SetLoadingText(string value)
         {
-            base.OnLoad(e);
-            readyForInvoke.Set();
-        }
+            if (IsDisposed || label1 == null || label1.Text == value)
+                return;
 
-        public void Init()      // called from Program once splash and eddiscoveryform have been made..
-        {
-            inittask = EDDiscoveryController.Initialize(Control.ModifierKeys.HasFlag(Keys.Shift)).ContinueWith(t => InitComplete(t));
-        }
-
-        private void InitComplete(Task t)       // tasks due to eddiscovery cotnroller Initialize complete.. now bring up eddiscoveryform
-        {
-            readyForInvoke.WaitOne();
-            this.BeginInvoke(new Action(() =>
+            if (!InvokeRequired)
             {
-                if (t.IsCompleted)
-                {
-                    try
-                    {
-                        mainform.Init();        // call the init function, which will initialize the eddiscovery form
-                        mainform.Show();
-                        Context.MainForm = mainform;
-                    }
-                    finally
-                    {
-                        this.Close();
-                    }
-                }
-                else if (t.IsFaulted)
-                {
-                    MessageBox.Show($"Error initializing database:\n{t.Exception.InnerExceptions.FirstOrDefault()?.ToString()}", "Error initializing database");
-                    Application.Exit();
-                }
-            }));
+                label1.Text = value ?? string.Empty;
+                label1.Update();    // Force the immediate paint, since this thread is quite busy.
+            }
+            else
+                Invoke(new Action(() => SetLoadingText(value)));
         }
     }
 }

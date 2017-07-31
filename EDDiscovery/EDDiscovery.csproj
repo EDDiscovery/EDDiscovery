@@ -208,6 +208,7 @@
     <Compile Include="CompanionAPI\CSystem.cs" />
     <Compile Include="DB\BookmarkClass.cs" />
     <Compile Include="DB\TargetClassHelpers.cs" />
+    <Compile Include="EDDApplicationContext.cs" />
     <Compile Include="EGO\EGOClass.cs" />
     <Compile Include="EGO\EGOSync.cs" />
     <Compile Include="EliteDangerous\BindingsFile.cs" />
