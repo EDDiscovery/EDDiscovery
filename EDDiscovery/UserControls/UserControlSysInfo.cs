@@ -22,8 +22,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using EDDiscovery.EDSM;
 using System.Diagnostics;
+using EliteDangerousCore.DB;
+using EliteDangerousCore;
+using EDDiscovery.EDSM;
 
 namespace EDDiscovery.UserControls
 {
@@ -84,7 +86,7 @@ namespace EDDiscovery.UserControls
             discoveryform.TravelControl.OnTravelSelectionChanged += Display;    // get this whenever current selection or refreshed..
             discoveryform.OnNewTarget += RefreshTargetDisplay;
             discoveryform.OnNoteChanged += OnNoteChanged;
-            textBoxTarget.SetAutoCompletor(EDDiscovery.DB.SystemClassDB.ReturnSystemListForAutoComplete);
+            textBoxTarget.SetAutoCompletor(SystemClassDB.ReturnSystemListForAutoComplete);
 
             // same order as Sel bits are defined in, one bit per selection item.
             toolstriplist = new ToolStripMenuItem[] { toolStripSystem , toolStripEDSM , toolStripVisits, toolStripBody,
@@ -93,8 +95,8 @@ namespace EDDiscovery.UserControls
                                                         toolStripShip, toolStripCargo,
                                                         toolStripGameMode,toolStripTravel};
 
-            Selection = DB.SQLiteDBClass.GetSettingInt(DbSelection, BitSelDefault);
-            Order = DB.SQLiteDBClass.GetSettingString(DbOSave, "").RestoreIntListFromString(-1, 0);     // no min len
+            Selection = SQLiteDBClass.GetSettingInt(DbSelection, BitSelDefault);
+            Order = SQLiteDBClass.GetSettingString(DbOSave, "").RestoreIntListFromString(-1, 0);     // no min len
             if (Order.Count < 2)
                 Reset();
 
@@ -106,8 +108,8 @@ namespace EDDiscovery.UserControls
             discoveryform.TravelControl.OnTravelSelectionChanged -= Display;
             discoveryform.OnNewTarget -= RefreshTargetDisplay;
             discoveryform.OnNoteChanged -= OnNoteChanged;
-            DB.SQLiteDBClass.PutSettingString(DbOSave, String.Join(",", Order));
-            DB.SQLiteDBClass.PutSettingInt(DbSelection, Selection);
+            SQLiteDBClass.PutSettingString(DbOSave, String.Join(",", Order));
+            SQLiteDBClass.PutSettingInt(DbSelection, Selection);
         }
 
         #endregion
@@ -140,10 +142,10 @@ namespace EDDiscovery.UserControls
 
                     textBoxPosition.Text = he.System.x.ToString(SingleCoordinateFormat) + "," + he.System.y.ToString(SingleCoordinateFormat) + "," + he.System.z.ToString(SingleCoordinateFormat);
 
-                    EliteDangerous.ISystem homesys = discoveryform.GetHomeSystem();
+                    ISystem homesys = discoveryform.GetHomeSystem();
 
-                    textBoxHomeDist.Text = DB.SystemClassDB.Distance(he.System, homesys).ToString(SingleCoordinateFormat);
-                    textBoxSolDist.Text = DB.SystemClassDB.Distance(he.System, 0, 0, 0).ToString(SingleCoordinateFormat);
+                    textBoxHomeDist.Text = SystemClassDB.Distance(he.System, homesys).ToString(SingleCoordinateFormat);
+                    textBoxSolDist.Text = SystemClassDB.Distance(he.System, 0, 0, 0).ToString(SingleCoordinateFormat);
                 }
                 else
                 {
@@ -286,7 +288,7 @@ namespace EDDiscovery.UserControls
 
             //System.Diagnostics.Debug.WriteLine("Refresh target display");
 
-            if (DB.TargetClass.GetTargetPosition(out name, out x, out y, out z))
+            if (TargetClass.GetTargetPosition(out name, out x, out y, out z))
             {
                 textBoxTarget.Text = name;
                 textBoxTarget.Select(textBoxTarget.Text.Length, textBoxTarget.Text.Length);
@@ -294,7 +296,7 @@ namespace EDDiscovery.UserControls
 
                 HistoryEntry cs = discoveryform.history.GetLastWithPosition;
                 if (cs != null)
-                    textBoxTargetDist.Text = DB.SystemClassDB.Distance(cs.System, x, y, z).ToString("0.0");
+                    textBoxTargetDist.Text = SystemClassDB.Distance(cs.System, x, y, z).ToString("0.0");
 
                 textBoxTarget.SetToolTip(toolTip1, "Position is " + x.ToString("0.00") + "," + y.ToString("0.00") + "," + z.ToString("0.00"));
             }

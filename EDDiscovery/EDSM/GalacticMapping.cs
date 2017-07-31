@@ -13,8 +13,8 @@
  * 
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
-using EDDiscovery.DB;
 using EDDiscovery.EDSM;
+using EliteDangerousCore.DB;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;

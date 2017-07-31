@@ -26,6 +26,8 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using EDDiscovery.EliteDangerous;
+using EliteDangerousCore;
+using EliteDangerousCore.DB;
 
 namespace EDDiscovery
 {

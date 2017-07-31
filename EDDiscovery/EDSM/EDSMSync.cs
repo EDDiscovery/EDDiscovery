@@ -13,10 +13,8 @@
  * 
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
-using EDDiscovery;
-using EDDiscovery.DB;
-using EDDiscovery.EliteDangerous;
-using EDDiscovery.EliteDangerous.JournalEvents;
+using EliteDangerousCore;
+using EliteDangerousCore.DB;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -134,7 +132,7 @@ namespace EDDiscovery.EDSM
                                 if (edsmid != 0 && he.System.id_edsm <= 0)
                                 {
                                     he.System.id_edsm = edsmid;
-                                    EDDiscovery.EliteDangerous.JournalEntry.UpdateEDSMIDPosJump(he.Journalid, he.System, false, -1);
+                                    JournalEntry.UpdateEDSMIDPosJump(he.Journalid, he.System, false, -1);
                                 }
 
                                 if (firstdiscover)
@@ -234,7 +232,7 @@ namespace EDDiscovery.EDSM
                     if (edsmid != 0 && he.System.id_edsm <= 0)
                     {
                         he.System.id_edsm = edsmid;
-                        EDDiscovery.EliteDangerous.JournalEntry.UpdateEDSMIDPosJump(he.Journalid, he.System, false, -1);
+                        JournalEntry.UpdateEDSMIDPosJump(he.Journalid, he.System, false, -1);
                     }
 
                     if (firstdiscover)

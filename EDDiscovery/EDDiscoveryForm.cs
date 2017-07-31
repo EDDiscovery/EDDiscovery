@@ -18,7 +18,6 @@ using EDDiscovery.EDDN;
 using EDDiscovery.EDSM;
 using EDDiscovery.EGO;
 using EDDiscovery.EliteDangerous;
-using EDDiscovery.EliteDangerous.JournalEvents;
 using EDDiscovery.Forms;
 using EDDiscovery.Export;
 using BaseUtils.Win32Constants;
@@ -42,6 +41,9 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using EliteDangerousCore;
+using EliteDangerousCore.DB;
+using EliteDangerousCore.JournalEvents;
 
 namespace EDDiscovery
 {
@@ -84,7 +86,7 @@ namespace EDDiscovery
         Actions.ActionsFromInputDevices inputdevicesactions;
         BindingsFile frontierbindings;
 
-        public CompanionAPI.CompanionAPIClass Capi { get; private set; } = new CompanionAPI.CompanionAPIClass();
+        public EliteDangerousCore.CompanionAPI.CompanionAPIClass Capi { get; private set; } = new EliteDangerousCore.CompanionAPI.CompanionAPIClass();
 
         public EDDiscovery._3DMap.MapManager Map { get; private set; }
 
@@ -127,7 +129,7 @@ namespace EDDiscovery
         public event Action<HistoryEntry, HistoryList> OnNewEntry { add { Controller.OnNewEntry += value; } remove { Controller.OnNewEntry -= value; } }
         public event Action<JournalEntry> OnNewJournalEntry { add { Controller.OnNewJournalEntry += value; } remove { Controller.OnNewJournalEntry -= value; } }
         public event Action<string, Color> OnNewLogEntry { add { Controller.OnNewLogEntry += value; } remove { Controller.OnNewLogEntry -= value; } }
-        public event Action<CompanionAPI.CompanionAPIClass,HistoryEntry> OnNewCompanionAPIData;
+        public event Action<EliteDangerousCore.CompanionAPI.CompanionAPIClass,HistoryEntry> OnNewCompanionAPIData;
         #endregion
 
         #region Logging
@@ -252,7 +254,7 @@ namespace EDDiscovery
         {
             try
             {
-                EDDiscovery.EliteDangerous.MaterialCommodityDB.SetUpInitialTable();
+                MaterialCommodityDB.SetUpInitialTable();
                 Controller.PostInit_Loaded();
 
                 RepositionForm();
@@ -460,7 +462,7 @@ namespace EDDiscovery
             {
                 Capi.Logout();
 
-                if (CompanionAPI.CompanionCredentials.CredentialState(EDCommander.Current.Name) == CompanionAPI.CompanionCredentials.State.CONFIRMED)
+                if (EliteDangerousCore.CompanionAPI.CompanionCredentials.CredentialState(EDCommander.Current.Name) == EliteDangerousCore.CompanionAPI.CompanionCredentials.State.CONFIRMED)
                 {
                     try
                     {
@@ -470,7 +472,7 @@ namespace EDDiscovery
                     catch (Exception ex)
                     {
                         LogLineHighlight("Companion API log in failed: " + ex.Message);
-                        if (!(ex is CompanionAPI.CompanionAppException))
+                        if (!(ex is EliteDangerousCore.CompanionAPI.CompanionAppException))
                             LogLineHighlight(ex.StackTrace);
                     }
                 }
@@ -492,7 +494,7 @@ namespace EDDiscovery
                     catch (Exception ex)
                     {
                         LogLineHighlight("Companion API get failed: " + ex.Message);
-                        if (!(ex is CompanionAPI.CompanionAppException))
+                        if (!(ex is EliteDangerousCore.CompanionAPI.CompanionAppException))
                             LogLineHighlight(ex.StackTrace);
 
                         // what do we do TBD
@@ -706,7 +708,7 @@ namespace EDDiscovery
                 {
                     string cmdrfolder = cmdr.JournalDir;
                     if (cmdrfolder.Length < 1)
-                        cmdrfolder = EliteDangerous.EDJournalClass.GetDefaultJournalDir();
+                        cmdrfolder = EDJournalClass.GetDefaultJournalDir();
                     Process.Start(cmdrfolder);
                 }
             }
@@ -822,7 +824,7 @@ namespace EDDiscovery
                                 "You can manually change one EDSM assigned system by right clicking on the travel history and selecting the option"
                                 , "WARNING", MessageBoxButtons.OKCancel) == DialogResult.OK)
             {
-                EliteDangerous.JournalEntry.ClearEDSMID(EDCommander.CurrentCmdrID);
+                JournalEntry.ClearEDSMID(EDCommander.CurrentCmdrID);
                 SystemNoteClass.ClearEDSMID();
             }
 
@@ -873,7 +875,7 @@ namespace EDDiscovery
         {
             if (ExtendedControls.MessageBoxTheme.Show("Confirm you wish to reset all history entries to the current commander", "WARNING", MessageBoxButtons.OKCancel) == DialogResult.OK)
             {
-                EliteDangerous.JournalEntry.ResetCommanderID(-1, EDCommander.CurrentCmdrID);
+                JournalEntry.ResetCommanderID(-1, EDCommander.CurrentCmdrID);
                 Controller.RefreshHistoryAsync();
             }
         }
@@ -906,7 +908,7 @@ namespace EDDiscovery
         {
             if (ExtendedControls.MessageBoxTheme.Show("Confirm you remove any duplicate FSD entries from the current commander", "WARNING", MessageBoxButtons.OKCancel) == DialogResult.OK)
             {
-                int n = EliteDangerous.JournalEntry.RemoveDuplicateFSDEntries(EDCommander.CurrentCmdrID);
+                int n = JournalEntry.RemoveDuplicateFSDEntries(EDCommander.CurrentCmdrID);
                 Controller.LogLine("Removed " + n + " FSD entries");
                 Controller.RefreshHistoryAsync();
             }

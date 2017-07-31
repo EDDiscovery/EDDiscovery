@@ -20,6 +20,7 @@ using System.Text;
 using System.Threading.Tasks;
 using BaseUtils;
 using ActionLanguage;
+using EliteDangerousCore.DB;
 
 namespace EDDiscovery.Actions
 {
@@ -71,11 +72,11 @@ namespace EDDiscovery.Actions
                 if (cmdname != null)
                 {
                     EliteDangerous.StarScan scan = (ap.actioncontroller as ActionController).HistoryList.starscan;
-                    DB.SystemClassDB sc = DB.SystemClassDB.GetSystem(cmdname);
+                    SystemClassDB sc = SystemClassDB.GetSystem(cmdname);
 
                     if (sc == null)
                     {
-                        sc = new DB.SystemClassDB(cmdname);
+                        sc = new SystemClassDB(cmdname);
                         sc.id_edsm = 0;
                     }
 
@@ -144,7 +145,7 @@ namespace EDDiscovery.Actions
 
         void DumpInfo( ActionProgramRun ap, KeyValuePair<string, EliteDangerous.StarScan.ScanNode> scannode, string prefix , string subname )
         {
-            EliteDangerous.JournalEvents.JournalScan sc = scannode.Value.ScanData;
+            EliteDangerousCore.JournalEvents.JournalScan sc = scannode.Value.ScanData;
 
             ap[prefix] = scannode.Key;
             ap[prefix + "_type"] = scannode.Value.type.ToString();
@@ -236,7 +237,7 @@ namespace EDDiscovery.Actions
 
                 if (cmdname != null)
                 {
-                    DB.SystemClassDB sc = DB.SystemClassDB.GetSystem(cmdname);
+                    SystemClassDB sc = SystemClassDB.GetSystem(cmdname);
                     ap[prefix + "Found"] = sc != null ? "1" : "0";
 
                     if (sc != null)

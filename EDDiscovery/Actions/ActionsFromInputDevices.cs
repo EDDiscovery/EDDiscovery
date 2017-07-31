@@ -18,10 +18,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
-using EDDiscovery.EliteDangerous;
 using System.Runtime.InteropServices;
 using System.Diagnostics;
 using DirectInputDevices;
+using EliteDangerousCore;
 
 namespace EDDiscovery.Actions
 {

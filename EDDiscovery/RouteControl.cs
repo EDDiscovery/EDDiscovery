@@ -22,17 +22,15 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using Newtonsoft.Json.Linq;
-using EMK.Cartography;
 using System.IO;
 using Newtonsoft.Json;
 using System.Diagnostics;
-using EDDiscovery.DB;
-using EDDiscovery;
 using System.Threading;
 using EMK.LightGeometry;
 using EDDiscovery.EDSM;
 using System.Collections.Concurrent;
-using EDDiscovery.EliteDangerous;
+using EliteDangerousCore.DB;
+using EliteDangerousCore;
 
 namespace EDDiscovery
 {
@@ -72,8 +70,8 @@ namespace EDDiscovery
             toupdatetimer.Interval = 500;
             toupdatetimer.Tick += ToUpdateTick;
 
-            textBox_From.SetAutoCompletor(EDDiscovery.DB.SystemClassDB.ReturnSystemListForAutoComplete);
-            textBox_To.SetAutoCompletor(EDDiscovery.DB.SystemClassDB.ReturnSystemListForAutoComplete);
+            textBox_From.SetAutoCompletor(SystemClassDB.ReturnSystemListForAutoComplete);
+            textBox_To.SetAutoCompletor(SystemClassDB.ReturnSystemListForAutoComplete);
         }
 
         private Thread ThreadRoute;

@@ -13,6 +13,9 @@
  * 
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
+using EDDiscovery.DB;
+using EliteDangerousCore;
+using EliteDangerousCore.DB;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -21,8 +24,6 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
-using EDDiscovery.DB;
-using EDDiscovery.EliteDangerous;
 
 namespace EDDiscovery.Forms
 {
@@ -65,14 +66,15 @@ namespace EDDiscovery.Forms
         private Dictionary<long, SystemLink> _systemLinks;
         private List<SystemLink> _systemLinkList;
 
-        public AssignTravelLogSystemForm(EliteDangerous.JournalEvents.JournalLocOrJump vsc)
-            : this(new EliteDangerous.SystemClass { name = vsc.StarSystem, x = vsc.HasCoordinate ? vsc.StarPos.X : Double.NaN, y = vsc.HasCoordinate ? vsc.StarPos.Y : Double.NaN, z = vsc.HasCoordinate ? vsc.StarPos.Z : Double.NaN, id_edsm = vsc.EdsmID }, vsc.EventTimeLocal)
+        public AssignTravelLogSystemForm(EliteDangerousCore.JournalEvents.JournalLocOrJump vsc)
+            : this(new SystemClass { name = vsc.StarSystem, x = vsc.HasCoordinate ? vsc.StarPos.X : Double.NaN, y = vsc.HasCoordinate ? vsc.StarPos.Y : Double.NaN, z = vsc.HasCoordinate ? vsc.StarPos.Z : Double.NaN, id_edsm = vsc.EdsmID }, vsc.EventTimeLocal)
         {
         }
 
         public AssignTravelLogSystemForm(ISystem refsys, DateTime? visited = null)
         {
             InitializeComponent();
+            SystemClassEDSM.CheckSystemAliases();
             SystemClassDB.GetSystemAndAlternatives(refsys, out _linkSystem, out _alternatives, out _namestatus);
 
             this.tbLogSystemName.Text = refsys.name;
@@ -88,7 +90,7 @@ namespace EDDiscovery.Forms
             tbManualSystemName.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
             tbManualSystemName.AutoCompleteSource = AutoCompleteSource.CustomSource;
 
-            tbManualSystemName.SetAutoCompletor(EDDiscovery.DB.SystemClassDB.ReturnSystemListForAutoComplete);
+            tbManualSystemName.SetAutoCompletor(SystemClassDB.ReturnSystemListForAutoComplete);
 
             EDDiscovery.EDDTheme theme = EDDiscovery.EDDTheme.Instance;
             theme.ApplyToForm(this);

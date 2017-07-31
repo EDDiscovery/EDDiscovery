@@ -14,8 +14,8 @@
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 using EDDiscovery._3DMap;
+using EMK.LightGeometry;
 using Newtonsoft.Json.Linq;
-using EDDiscovery.Vectors;
 using System;
 using System.Collections.Generic;
 using System.Linq;

@@ -14,10 +14,7 @@
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 using EDDiscovery;
-using EDDiscovery.DB;
 using EDDiscovery.EDDN;
-using EDDiscovery.EliteDangerous;
-using EDDiscovery.EliteDangerous.JournalEvents;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -28,6 +25,8 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using EliteDangerousCore;
+using EliteDangerousCore.JournalEvents;
 
 namespace EDDiscovery.EDDN
 {
@@ -97,7 +96,7 @@ namespace EDDiscovery.EDDN
 
                         TimeSpan age = he.AgeOfEntry();
 
-                        if (age.Days >= 1 && he.EntryType != JournalTypeEnum.Scan)
+                        if (age.Days >= 1 && he.EntryType != EliteDangerousCore.JournalTypeEnum.Scan)
                         {
                             System.Diagnostics.Debug.WriteLine("EDDN: Ignoring entry due to age");
                         }

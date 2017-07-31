@@ -1,6 +1,8 @@
 ﻿using EDDiscovery.EDSM;
 using EDDiscovery.EliteDangerous;
 using EDDiscovery.Forms;
+using EliteDangerousCore;
+using EliteDangerousCore.DB;
 using System;
 using System.Collections.Generic;
 using System.Linq;

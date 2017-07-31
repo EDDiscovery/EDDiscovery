@@ -26,14 +26,14 @@ using System.Threading.Tasks;
 using EDDiscovery.Controls;
 using System.Threading;
 using System.Collections.Concurrent;
-using EDDiscovery.EliteDangerous;
 using EDDiscovery.EDDN;
-using EDDiscovery.EliteDangerous.JournalEvents;
 using Newtonsoft.Json.Linq;
 using EDDiscovery.Export;
 using EDDiscovery.UserControls;
 using EDDiscovery.Forms;
 using EDDiscovery.EGO;
+using EliteDangerousCore;
+using EliteDangerousCore.DB;
 
 namespace EDDiscovery
 {

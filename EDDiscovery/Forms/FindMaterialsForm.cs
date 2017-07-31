@@ -13,7 +13,8 @@
  * 
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
-using EDDiscovery.DB;
+using EliteDangerousCore;
+using EliteDangerousCore.DB;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -52,7 +53,7 @@ namespace EDDiscovery.Forms
             HistoryEntry hi =   edfrm.history.First<HistoryEntry>();
 
 
-            List<EliteDangerous.ISystem> distlist;
+            List<ISystem> distlist;
             distlist = SystemClassDB.GetSystemDistancesFrom(hi.System.x, hi.System.y, hi.System.z, 1000, MaxLy);
 
 

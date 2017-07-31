@@ -14,9 +14,9 @@
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 using EDDiscovery;
-using EDDiscovery.DB;
-using EDDiscovery.EliteDangerous;
-using EDDiscovery.EliteDangerous.JournalEvents;
+using EliteDangerousCore;
+using EliteDangerousCore.DB;
+using EliteDangerousCore.JournalEvents;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -276,7 +276,7 @@ namespace EDDiscovery.EDSM
                     break;
                 }
 
-                updates += SystemClassDB.ParseEDSMUpdateSystemsString(json, ref lstsyst, ref outoforder, false, cancelRequested, reportProgress, false);
+                updates += EDDiscovery.DB.SystemClassEDSM.ParseEDSMUpdateSystemsString(json, ref lstsyst, ref outoforder, false, cancelRequested, reportProgress, false);
                 lstsystdate += TimeSpan.FromHours(12);
             }
             logLine($"System download complete");
@@ -877,7 +877,7 @@ namespace EDDiscovery.EDSM
         }
 
 
-        public string CommanderUpdateShip(int shipId, string type, EDDiscovery.EliteDangerous.ShipInformation shipinfo = null, int cargoqty = -1)
+        public string CommanderUpdateShip(int shipId, string type, EliteDangerousCore.ShipInformation shipinfo = null, int cargoqty = -1)
         {
             if (!IsApiKeySet)
                 return null;

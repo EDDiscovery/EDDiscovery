@@ -23,10 +23,10 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using EDDiscovery.Controls;
-using EDDiscovery.DB;
 using EDDiscovery.EDSM;
-using EDDiscovery.EliteDangerous;
 using EDDiscovery.EDDN;
+using EliteDangerousCore.DB;
+using EliteDangerousCore;
 
 namespace EDDiscovery.UserControls
 {
@@ -246,8 +246,8 @@ namespace EDDiscovery.UserControls
             Conditions.ConditionFilterForm frm = new Conditions.ConditionFilterForm();
             frm.InitFilter("Journal: Filter out fields",
                             Icon.ExtractAssociatedIcon(System.Reflection.Assembly.GetExecutingAssembly().Location),
-                            EDDiscovery.EliteDangerous.JournalEntry.GetListOfEventsWithOptMethod(false) ,
-                            (s) => { return BaseUtils.FieldNames.GetPropertyFieldNames(EDDiscovery.EliteDangerous.JournalEntry.TypeOfJournalEntry(s)); },
+                            JournalEntry.GetListOfEventsWithOptMethod(false) ,
+                            (s) => { return BaseUtils.FieldNames.GetPropertyFieldNames(JournalEntry.TypeOfJournalEntry(s)); },
                             discoveryform.Globals.NameList, fieldfilter);
             frm.TopMost = this.FindForm().TopMost;
             if (frm.ShowDialog(this.FindForm()) == DialogResult.OK)
