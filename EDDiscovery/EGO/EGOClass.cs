@@ -13,10 +13,8 @@
  * 
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
-using EDDiscovery.CompanionAPI;
-using EDDiscovery.EliteDangerous;
-using EDDiscovery.EliteDangerous.JournalEvents;
-
+using EliteDangerousCore;
+using EliteDangerousCore.JournalEvents;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;

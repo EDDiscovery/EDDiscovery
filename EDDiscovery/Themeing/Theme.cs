@@ -19,13 +19,12 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
-using EDDiscovery.DB;
 using Newtonsoft.Json.Linq;
-using EDDiscovery;
 using System.IO;
 using System.Diagnostics;
 using ExtendedControls;
 using System.Windows.Forms.DataVisualization.Charting;
+using EliteDangerousCore.DB;
 
 namespace EDDiscovery
 {
@@ -117,9 +116,9 @@ namespace EDDiscovery
         }
 
 
-        public override void LoadThemes()  
+        public void LoadThemes()  
         {
-            base.LoadThemes();
+            base.LoadBaseThemes();
 
             string themepath = "";
 
@@ -140,7 +139,6 @@ namespace EDDiscovery
                 return;
             }
 
-
             // Search for theme files
             DirectoryInfo dirInfo = new DirectoryInfo(themepath);
             FileInfo[] allFiles = null;
@@ -157,7 +155,6 @@ namespace EDDiscovery
             {
                 return;
             }
-
 
             foreach (FileInfo fi in allFiles)
             {

@@ -25,11 +25,12 @@ using EDDiscovery.DB;
 using EDDiscovery.EDSM;
 using System.IO;
 using EDDiscovery.UserControls;
-using EDDiscovery.EliteDangerous.JournalEvents;
 using Newtonsoft.Json.Linq;
 using System.Threading.Tasks;
 using EDDiscovery.Forms;
-using EDDiscovery.EliteDangerous;
+using EliteDangerousCore.DB;
+using EliteDangerousCore;
+using EliteDangerousCore.JournalEvents;
 
 namespace EDDiscovery.UserControls
 {
@@ -87,7 +88,7 @@ namespace EDDiscovery.UserControls
 
         public void NewEntry(HistoryEntry he, HistoryList hl)               // called when a new entry is made.. check to see if its a scan update
         {
-            if (he.EntryType == EliteDangerous.JournalTypeEnum.Scan || he.EntryType == EliteDangerous.JournalTypeEnum.FSDJump)
+            if (he.EntryType == JournalTypeEnum.Scan || he.EntryType == JournalTypeEnum.FSDJump)
                 UpdateSystemRows();
         }
 
@@ -224,18 +225,18 @@ namespace EDDiscovery.UserControls
                     {
                         if (scan.IsStar)
                         {
-                            if (scan.StarTypeID == EliteDangerous.EDStar.AeBe)
+                            if (scan.StarTypeID == EDStar.AeBe)
                                 info = info + " " + "AeBe";
-                            if (scan.StarTypeID == EliteDangerous.EDStar.N)
+                            if (scan.StarTypeID == EDStar.N)
                                 info = info + " " + "NS";
-                            if (scan.StarTypeID == EliteDangerous.EDStar.H)
+                            if (scan.StarTypeID == EDStar.H)
                                 info = info + " " + "BH";
                         }
                         else
                         {
-                            if (scan.PlanetTypeID == EliteDangerous.EDPlanet.Earthlike_body)
+                            if (scan.PlanetTypeID == EDPlanet.Earthlike_body)
                                 info = info + " " + "ELW";
-                            if (scan.PlanetTypeID == EliteDangerous.EDPlanet.Water_world)
+                            if (scan.PlanetTypeID == EDPlanet.Water_world)
                                 info = info + " " + "WW";
                         }
                     }

@@ -1,0 +1,848 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{019917A4-7342-4F67-8AAF-9E20C016A935}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>EliteDangerous</RootNamespace>
+    <AssemblyName>EliteDangerous</AssemblyName>
+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.SQLite, Version=1.0.105.2, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Data.SQLite.Core.1.0.105.2\lib\net46\System.Data.SQLite.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Data.SQLite.Linq, Version=1.0.105.2, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Data.SQLite.Linq.1.0.105.2\lib\net46\System.Data.SQLite.Linq.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="CompanionAPI\CCommander.cs" />
+    <Compile Include="CompanionAPI\CompanionAPIClass.cs" />
+    <Compile Include="CompanionAPI\CompanionCredentials.cs" />
+    <Compile Include="CompanionAPI\CompanionException.cs" />
+    <Compile Include="CompanionAPI\CProfile.cs" />
+    <Compile Include="CompanionAPI\CShip.cs" />
+    <Compile Include="CompanionAPI\CStarport.cs" />
+    <Compile Include="CompanionAPI\CSystem.cs" />
+    <Compile Include="CompanionAPI\RijndaelCrypt.cs" />
+    <Compile Include="DB\BookmarkClass.cs" />
+    <Compile Include="DB\IVisitedSystems.cs" />
+    <Compile Include="DB\RegisterEntry.cs" />
+    <Compile Include="DB\SavedRouteClass.cs" />
+    <Compile Include="DB\SQLiteCommandED.cs" />
+    <Compile Include="DB\SQLiteConnectionED.cs" />
+    <Compile Include="DB\SQLiteConnectionSystem.cs" />
+    <Compile Include="DB\SQLiteConnectionUser.cs" />
+    <Compile Include="DB\SQLiteDBClass.cs" />
+    <Compile Include="DB\SqLiteDBSchema.cs" />
+    <Compile Include="DB\SystemClassDB.cs" />
+    <Compile Include="DB\SystemNoteClass.cs" />
+    <Compile Include="DB\TargetClass.cs" />
+    <Compile Include="DB\TravelLogUnit.cs" />
+    <Compile Include="DB\WantedSystemClass.cs" />
+    <Compile Include="Config\EliteConfig.cs" />
+    <Compile Include="EliteDangerous\BindingsFile.cs" />
+    <Compile Include="EliteDangerous\Bodies.cs" />
+    <Compile Include="EliteDangerous\BodyDesignations.cs" />
+    <Compile Include="EliteDangerous\EDCalculations.cs" />
+    <Compile Include="EliteDangerous\EDCommander.cs" />
+    <Compile Include="EliteDangerous\EDJournalClass.cs" />
+    <Compile Include="EliteDangerous\EDJournalReader.cs" />
+    <Compile Include="EliteDangerous\EDTypesFromJSON.cs" />
+    <Compile Include="EliteDangerous\ISystem.cs" />
+    <Compile Include="EliteDangerous\JournalEntry.cs" />
+    <Compile Include="EliteDangerous\JournalEntryAttributes.cs" />
+    <Compile Include="EliteDangerous\JournalEntryInterfaces.cs" />
+    <Compile Include="JournalEvents\JournalApproachSettlement.cs" />
+    <Compile Include="JournalEvents\JournalBounty.cs" />
+    <Compile Include="JournalEvents\JournalBuyAmmo.cs" />
+    <Compile Include="JournalEvents\JournalBuyDrones.cs" />
+    <Compile Include="JournalEvents\JournalBuyExplorationData.cs" />
+    <Compile Include="JournalEvents\JournalBuyTradeData.cs" />
+    <Compile Include="JournalEvents\JournalCapShipBond.cs" />
+    <Compile Include="JournalEvents\JournalCargo.cs" />
+    <Compile Include="JournalEvents\JournalChangeCrewRole.cs" />
+    <Compile Include="JournalEvents\JournalClearSavedGame.cs" />
+    <Compile Include="JournalEvents\JournalCockpitBreached.cs" />
+    <Compile Include="JournalEvents\JournalCollectCargo.cs" />
+    <Compile Include="JournalEvents\JournalCommitCrime.cs" />
+    <Compile Include="JournalEvents\JournalCommunityGoalDiscard.cs" />
+    <Compile Include="JournalEvents\JournalCommunityGoalJoin.cs" />
+    <Compile Include="JournalEvents\JournalCommunityGoalReward.cs" />
+    <Compile Include="JournalEvents\JournalContinued.cs" />
+    <Compile Include="JournalEvents\JournalCrewAssign.cs" />
+    <Compile Include="JournalEvents\JournalCrewFire.cs" />
+    <Compile Include="JournalEvents\JournalCrewHire.cs" />
+    <Compile Include="JournalEvents\JournalCrewLaunchFighter.cs" />
+    <Compile Include="JournalEvents\JournalCrewMemberJoins.cs" />
+    <Compile Include="JournalEvents\JournalCrewMemberQuits.cs" />
+    <Compile Include="JournalEvents\JournalCrewMemberRoleChange.cs" />
+    <Compile Include="JournalEvents\JournalDatalinkScan.cs" />
+    <Compile Include="JournalEvents\JournalDatalinkVoucher.cs" />
+    <Compile Include="JournalEvents\JournalDataScanned.cs" />
+    <Compile Include="JournalEvents\JournalDied.cs" />
+    <Compile Include="JournalEvents\JournalDocked.cs" />
+    <Compile Include="JournalEvents\JournalDockFighter.cs" />
+    <Compile Include="JournalEvents\JournalDockingCancelled.cs" />
+    <Compile Include="JournalEvents\JournalDockingDenied.cs" />
+    <Compile Include="JournalEvents\JournalDockingGranted.cs" />
+    <Compile Include="JournalEvents\JournalDockingRequested.cs" />
+    <Compile Include="JournalEvents\JournalDockingTimeout.cs" />
+    <Compile Include="JournalEvents\JournalDockSRV.cs" />
+    <Compile Include="JournalEvents\JournalEDDCommodityPrices.cs" />
+    <Compile Include="JournalEvents\JournalEDDItemSet.cs" />
+    <Compile Include="JournalEvents\JournalEjectCargo.cs" />
+    <Compile Include="JournalEvents\JournalEndCrewSession.cs" />
+    <Compile Include="JournalEvents\JournalEngineerApply.cs" />
+    <Compile Include="JournalEvents\JournalEngineerContribution.cs" />
+    <Compile Include="JournalEvents\JournalEngineerCraft.cs" />
+    <Compile Include="JournalEvents\JournalEngineerProgress.cs" />
+    <Compile Include="JournalEvents\JournalEscapeInterdiction.cs" />
+    <Compile Include="JournalEvents\JournalFactionKillBond.cs" />
+    <Compile Include="JournalEvents\JournalFetchRemoteModule.cs" />
+    <Compile Include="JournalEvents\JournalFileheader.cs" />
+    <Compile Include="JournalEvents\JournalFriends.cs" />
+    <Compile Include="JournalEvents\JournalFSDJump.cs" />
+    <Compile Include="JournalEvents\JournalFuelScope.cs" />
+    <Compile Include="JournalEvents\JournalHeatDamage.cs" />
+    <Compile Include="JournalEvents\JournalHeatWarning.cs" />
+    <Compile Include="JournalEvents\JournalHullDamage.cs" />
+    <Compile Include="JournalEvents\JournalInterdicted.cs" />
+    <Compile Include="JournalEvents\JournalInterdiction.cs" />
+    <Compile Include="JournalEvents\JournalJetConeBoost.cs" />
+    <Compile Include="JournalEvents\JournalJetConeDamage.cs" />
+    <Compile Include="JournalEvents\JournalJoinACrew.cs" />
+    <Compile Include="JournalEvents\JournalKickCrewMember.cs" />
+    <Compile Include="JournalEvents\JournalLaunchFighter.cs" />
+    <Compile Include="JournalEvents\JournalLaunchSRV.cs" />
+    <Compile Include="JournalEvents\JournalLiftoff.cs" />
+    <Compile Include="JournalEvents\JournalLoadGame.cs" />
+    <Compile Include="JournalEvents\JournalLoadout.cs" />
+    <Compile Include="JournalEvents\JournalLocation.cs" />
+    <Compile Include="JournalEvents\JournalLocOrJump.cs" />
+    <Compile Include="JournalEvents\JournalMarketBuy.cs" />
+    <Compile Include="JournalEvents\JournalMarketSell.cs" />
+    <Compile Include="JournalEvents\JournalMassModuleStore.cs" />
+    <Compile Include="JournalEvents\JournalMaterialCollected.cs" />
+    <Compile Include="JournalEvents\JournalMaterialDiscarded.cs" />
+    <Compile Include="JournalEvents\JournalMaterialDiscovered.cs" />
+    <Compile Include="JournalEvents\JournalMaterials.cs" />
+    <Compile Include="JournalEvents\JournalMiningRefined.cs" />
+    <Compile Include="JournalEvents\JournalMissionAbandoned.cs" />
+    <Compile Include="JournalEvents\JournalMissionAccepted.cs" />
+    <Compile Include="JournalEvents\JournalMissionCompleted.cs" />
+    <Compile Include="JournalEvents\JournalMissionFailed.cs" />
+    <Compile Include="JournalEvents\JournalModuleBuy.cs" />
+    <Compile Include="JournalEvents\JournalModuleRetrieve.cs" />
+    <Compile Include="JournalEvents\JournalModuleSell.cs" />
+    <Compile Include="JournalEvents\JournalModuleSellRemote.cs" />
+    <Compile Include="JournalEvents\JournalModuleStore.cs" />
+    <Compile Include="JournalEvents\JournalModuleSwap.cs" />
+    <Compile Include="JournalEvents\JournalNewCommander.cs" />
+    <Compile Include="JournalEvents\JournalPassengers.cs" />
+    <Compile Include="JournalEvents\JournalPayFines.cs" />
+    <Compile Include="JournalEvents\JournalPayLegacyFines.cs" />
+    <Compile Include="JournalEvents\JournalPowerplayCollect.cs" />
+    <Compile Include="JournalEvents\JournalPowerplayDefect.cs" />
+    <Compile Include="JournalEvents\JournalPowerplayDeliver.cs" />
+    <Compile Include="JournalEvents\JournalPowerplayFastTrack.cs" />
+    <Compile Include="JournalEvents\JournalPowerplayJoin.cs" />
+    <Compile Include="JournalEvents\JournalPowerplayLeave.cs" />
+    <Compile Include="JournalEvents\JournalPowerplaySalary.cs" />
+    <Compile Include="JournalEvents\JournalPowerplayVote.cs" />
+    <Compile Include="JournalEvents\JournalPowerplayVoucher.cs" />
+    <Compile Include="JournalEvents\JournalProgress.cs" />
+    <Compile Include="JournalEvents\JournalPromotion.cs" />
+    <Compile Include="JournalEvents\JournalPVPKill.cs" />
+    <Compile Include="JournalEvents\JournalQuitACrew.cs" />
+    <Compile Include="JournalEvents\JournalRank.cs" />
+    <Compile Include="JournalEvents\JournalRebootRepair.cs" />
+    <Compile Include="JournalEvents\JournalReceiveText.cs" />
+    <Compile Include="JournalEvents\JournalRedeemVoucher.cs" />
+    <Compile Include="JournalEvents\JournalRefuelAll.cs" />
+    <Compile Include="JournalEvents\JournalRefuelPartial.cs" />
+    <Compile Include="JournalEvents\JournalRepair.cs" />
+    <Compile Include="JournalEvents\JournalRepairAll.cs" />
+    <Compile Include="JournalEvents\JournalRestockVehicle.cs" />
+    <Compile Include="JournalEvents\JournalResurrect.cs" />
+    <Compile Include="JournalEvents\JournalScan.cs" />
+    <Compile Include="JournalEvents\JournalScanned.cs" />
+    <Compile Include="JournalEvents\JournalScientificResearch.cs" />
+    <Compile Include="JournalEvents\JournalScreenshot.cs" />
+    <Compile Include="JournalEvents\JournalSelfDestruct.cs" />
+    <Compile Include="JournalEvents\JournalSellDrones.cs" />
+    <Compile Include="JournalEvents\JournalSellExplorationData.cs" />
+    <Compile Include="JournalEvents\JournalSendText.cs" />
+    <Compile Include="JournalEvents\JournalSetUserShipName.cs" />
+    <Compile Include="JournalEvents\JournalShieldState.cs" />
+    <Compile Include="JournalEvents\JournalShipyardBuy.cs" />
+    <Compile Include="JournalEvents\JournalShipyardNew.cs" />
+    <Compile Include="JournalEvents\JournalShipyardSell.cs" />
+    <Compile Include="JournalEvents\JournalShipyardSwap.cs" />
+    <Compile Include="JournalEvents\JournalShipyardTransfer.cs" />
+    <Compile Include="JournalEvents\JournalStartJump.cs" />
+    <Compile Include="JournalEvents\JournalSupercruiseEntry.cs" />
+    <Compile Include="JournalEvents\JournalSupercruiseExit.cs" />
+    <Compile Include="JournalEvents\JournalSynthesis.cs" />
+    <Compile Include="JournalEvents\JournalSystemsShutdown.cs" />
+    <Compile Include="JournalEvents\JournalTouchdown.cs" />
+    <Compile Include="JournalEvents\JournalUndocked.cs" />
+    <Compile Include="JournalEvents\JournalUnknown.cs" />
+    <Compile Include="JournalEvents\JournalUSSDrop.cs" />
+    <Compile Include="JournalEvents\JournalVehicleSwitch.cs" />
+    <Compile Include="JournalEvents\JournalWingAdd.cs" />
+    <Compile Include="JournalEvents\JournalWingInvite.cs" />
+    <Compile Include="JournalEvents\JournalWingJoin.cs" />
+    <Compile Include="JournalEvents\JournalWingLeave.cs" />
+    <Compile Include="EliteDangerous\JournalFieldNaming.cs" />
+    <Compile Include="EliteDangerous\Ledger.cs" />
+    <Compile Include="EliteDangerous\LogReaderBase.cs" />
+    <Compile Include="EliteDangerous\MaterialCommodities.cs" />
+    <Compile Include="EliteDangerous\MaterialCommoditiesList.cs" />
+    <Compile Include="EliteDangerous\MissionList.cs" />
+    <Compile Include="EliteDangerous\ModuleEDID.cs" />
+    <Compile Include="EliteDangerous\NetLogClass.cs" />
+    <Compile Include="EliteDangerous\NetLogReader.cs" />
+    <Compile Include="EliteDangerous\ShipInformation.cs" />
+    <Compile Include="EliteDangerous\SystemClass.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\BaseUtils\BaseUtils.csproj">
+      <Project>{c657c881-f3e1-45ba-aca5-966348010414}</Project>
+      <Name>BaseUtils</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ExtendedControls\ExtendedControls.csproj">
+      <Project>{2049403f-f4c7-45e6-b777-6390c78e4d2b}</Project>
+      <Name>ExtendedControls</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\bounty.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\buydrones.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\buyexplorationdata.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\buytradedata.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\C7III.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Calendar.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\capshipbond.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\cargomanifest.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\changecrewrole.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\changecrewrols.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\collectcargo.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\clearsavedgame.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\cockpitbreached.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Coffinicon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\dockfighter.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\docksrv.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\dockingcancelled.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\dockingdenied.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\dockinggranted.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\dockingrequest.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\dockingtimeout.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\factionkillbond.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\fetchremotemodule.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\fighter.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\fileheader.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\friends.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\fuelscoop.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\heatdamage.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ejectcargo.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\engineerapply.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\engineercraft.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\engineerprogress.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\escapeinterdiction.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\event.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\loadout.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\location - Copy.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\marketbuy - Copy.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\marketdata - Copy.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\interdicted - Copy.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\interdiction - Copy.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\jetconeboost - Copy.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\jetconedamage - Copy.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\joinacrew - Copy.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\kickcrewmember - Copy.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\launchfighter - Copy.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\launchsrv - Copy.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\loadgame.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\loadout - Copy.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\marketdata.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\marketsell.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\material.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\materialcollected.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\materialdiscarded.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\materialdiscovered.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\supercruiseenter.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\supercruiseexit.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\textsent.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\textreceived.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\touchdown.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\wingjoin.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\wingleave.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\wingadd.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\shieldsup.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\shields.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\shieldsdown.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\shipyardtransfer.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\shipyardnew.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\shipyardsell.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\shipyardswap.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\scientificresearch.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\restockfighter.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\restocksrv.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ressurect.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\refuel.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\refuelall.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\receivetext.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\pvpkill.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\quitacrew.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\rank.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\rebootrepair.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\powerplayvoucher.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\progress.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\promotion.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\powerplaysalary.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\powerplayvote.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\powerplayjoin.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\powerplayleave.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\moduleretrieve.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\modulesell.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\modulestore.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\module.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\modulebuy.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\miningrefined.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\materials.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\marketbuy.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\location.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\liftoff.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\launchfighter.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\kickcrewmember.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\joinacrew.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\jetconedamage.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\jetconeboost.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\interdicted.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\interdiction.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\hyperspace.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\genericevent.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Globe.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\metal_rich.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Neutron_Star.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\O.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\K0V.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\K1IV.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\L3V.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\M1VA.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\M5V.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\G1IV.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\G8V_and_G9V.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Gas_giant_ammonia_based_life1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Gas_giant_water_based_life_Brown3.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Class_I_Gas_Giant_Brown2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Class_II_Gas_Giant_Sand1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Class_III_Gas_Giant_Blue3.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\DA6VII_White.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\DefaultStar.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Earth_Like_Standard.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\F5VAB.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\datalinkvoucher.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\datalinkscan.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\damage.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\crewmemberjoins.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\crewmemberquits.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\crewassign.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\crewfire.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\crewhire.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\communitygoalreward.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\communitygoaldiscard.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\communitygoaljoin.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\datascanned.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Black_Hole.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\B6V_Blueish.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\approachsettlement.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\commitcrime.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ammunition.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Ammonia_Brown.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\A9III_White.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Helium_Rich_Gas_Giant1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\High_metal_content_world_Mix3.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Globe_yellow.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Icy_Body_Greenish1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\launchsrv.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\High_metal_content_world_White3.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\High_metal_content_world_Orange8.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\moduleswap.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\passengers.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\newcommander.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\powerplaydefect.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\powerplaycollect.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\powerplaydeliver.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\powerplayfasttrack.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\payfines.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\mothership.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\missionabandoned.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\missionaccepted.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\missioncompleted.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\missionfailed.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\repair.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\repairall.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Rocky_Ice_World_Sol_Titan.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Rocky_Body_Sand2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Water_World_Poles_Cloudless4.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Y2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Water_Giant1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\uss.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\T4V.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\synthesis.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Stationenter.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Stationexit.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Star_K1IV.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\startjump.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\setusershipname.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\sendtext.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\sellexplorationdata.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\selldrones.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\selfdestruct.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\screenshot.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\scanned.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\scan.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\High_metal_content_world_Lava1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\commodities.png" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="..\packages\System.Data.SQLite.Core.1.0.105.2\build\net46\System.Data.SQLite.Core.targets" Condition="Exists('..\packages\System.Data.SQLite.Core.1.0.105.2\build\net46\System.Data.SQLite.Core.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\System.Data.SQLite.Core.1.0.105.2\build\net46\System.Data.SQLite.Core.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\System.Data.SQLite.Core.1.0.105.2\build\net46\System.Data.SQLite.Core.targets'))" />
+  </Target>
+</Project>

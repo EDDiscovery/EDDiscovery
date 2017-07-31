@@ -23,12 +23,11 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using EDDiscovery.Controls;
-using EDDiscovery.DB;
-using EDDiscovery.EliteDangerous;
+using EliteDangerousCore.DB;
+using EliteDangerousCore;
 using EDDiscovery.EDSM;
-
-using EDDiscovery.Export;
 using EDDiscovery.EDDN;
+using EDDiscovery.Export;
 
 namespace EDDiscovery.UserControls
 {
@@ -753,7 +752,7 @@ namespace EDDiscovery.UserControls
                 return;
             }
 
-            EliteDangerous.JournalEvents.JournalLocOrJump journalent = null;
+            EliteDangerousCore.JournalEvents.JournalLocOrJump journalent = null;
 
             if (jents[selindex].EventTypeID != JournalTypeEnum.FSDJump)
             {
@@ -786,7 +785,7 @@ namespace EDDiscovery.UserControls
                 jents.Add(_jents[i]);
             }
 
-            journalent = jents.OfType<EliteDangerous.JournalEvents.JournalLocOrJump>().FirstOrDefault();
+            journalent = jents.OfType<EliteDangerousCore.JournalEvents.JournalLocOrJump>().FirstOrDefault();
 
             if (journalent == null)
             {
@@ -900,8 +899,8 @@ namespace EDDiscovery.UserControls
             Conditions.ConditionFilterForm frm = new Conditions.ConditionFilterForm();
             frm.InitFilter("History: Filter out fields",
                             System.Drawing.Icon.ExtractAssociatedIcon(System.Reflection.Assembly.GetExecutingAssembly().Location),
-                            EDDiscovery.EliteDangerous.JournalEntry.GetListOfEventsWithOptMethod(false),
-                            (s) => { return BaseUtils.FieldNames.GetPropertyFieldNames(EDDiscovery.EliteDangerous.JournalEntry.TypeOfJournalEntry(s)); },
+                            JournalEntry.GetListOfEventsWithOptMethod(false),
+                            (s) => { return BaseUtils.FieldNames.GetPropertyFieldNames(JournalEntry.TypeOfJournalEntry(s)); },
                             discoveryform.Globals.NameList, fieldfilter);
             frm.TopMost = this.FindForm().TopMost;
             if (frm.ShowDialog(this.FindForm()) == DialogResult.OK)

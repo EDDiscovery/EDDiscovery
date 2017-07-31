@@ -22,11 +22,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using EDDiscovery.DB;
-using EMK.LightGeometry;
 using System.Collections.ObjectModel;
 using EDDiscovery.Forms;
-using EDDiscovery.EliteDangerous;
+using EliteDangerousCore.DB;
+using EliteDangerousCore;
+using EMK.LightGeometry;
 
 namespace EDDiscovery.UserControls
 {
@@ -190,29 +190,29 @@ namespace EDDiscovery.UserControls
 
                 switch (he.journalEntry.EventTypeID)
                 {
-                    case EliteDangerous.JournalTypeEnum.FuelScoop:
-                        fuel = (he.journalEntry as EliteDangerous.JournalEvents.JournalFuelScoop).Total;
+                    case JournalTypeEnum.FuelScoop:
+                        fuel = (he.journalEntry as EliteDangerousCore.JournalEvents.JournalFuelScoop).Total;
                         break;
-                    case EliteDangerous.JournalTypeEnum.FSDJump:
-                        fuel = (he.journalEntry as EliteDangerous.JournalEvents.JournalFSDJump).FuelLevel;
+                    case JournalTypeEnum.FSDJump:
+                        fuel = (he.journalEntry as EliteDangerousCore.JournalEvents.JournalFSDJump).FuelLevel;
                         break;
-                    case EliteDangerous.JournalTypeEnum.RefuelAll:
+                    case JournalTypeEnum.RefuelAll:
                         fuelhe = discoveryform.history.GetLastHistoryEntry(x => x.journalEntry.EventTypeID == JournalTypeEnum.FSDJump
                     || x.journalEntry.EventTypeID == JournalTypeEnum.FuelScoop);
-                        if (fuelhe.journalEntry.EventTypeID == EliteDangerous.JournalTypeEnum.FSDJump)
-                            fuel = (fuelhe.journalEntry as EliteDangerous.JournalEvents.JournalFSDJump).FuelLevel;
+                        if (fuelhe.journalEntry.EventTypeID == EliteDangerousCore.JournalTypeEnum.FSDJump)
+                            fuel = (fuelhe.journalEntry as EliteDangerousCore.JournalEvents.JournalFSDJump).FuelLevel;
                         else
-                            fuel = (fuelhe.journalEntry as EliteDangerous.JournalEvents.JournalFuelScoop).Total;
-                        fuel += (he.journalEntry as EliteDangerous.JournalEvents.JournalRefuelAll).Amount;
+                            fuel = (fuelhe.journalEntry as EliteDangerousCore.JournalEvents.JournalFuelScoop).Total;
+                        fuel += (he.journalEntry as EliteDangerousCore.JournalEvents.JournalRefuelAll).Amount;
                         break;
-                    case EliteDangerous.JournalTypeEnum.RefuelPartial:
+                    case JournalTypeEnum.RefuelPartial:
                         fuelhe = discoveryform.history.GetLastHistoryEntry(x => x.journalEntry.EventTypeID == JournalTypeEnum.FSDJump
                     || x.journalEntry.EventTypeID == JournalTypeEnum.FuelScoop);
-                        if (fuelhe.journalEntry.EventTypeID == EliteDangerous.JournalTypeEnum.FSDJump)
-                            fuel = (fuelhe.journalEntry as EliteDangerous.JournalEvents.JournalFSDJump).FuelLevel;
+                        if (fuelhe.journalEntry.EventTypeID == EliteDangerousCore.JournalTypeEnum.FSDJump)
+                            fuel = (fuelhe.journalEntry as EliteDangerousCore.JournalEvents.JournalFSDJump).FuelLevel;
                         else
-                            fuel = (fuelhe.journalEntry as EliteDangerous.JournalEvents.JournalFuelScoop).Total;
-                        fuel += (he.journalEntry as EliteDangerous.JournalEvents.JournalRefuelPartial).Amount;
+                            fuel = (fuelhe.journalEntry as EliteDangerousCore.JournalEvents.JournalFuelScoop).Total;
+                        fuel += (he.journalEntry as EliteDangerousCore.JournalEvents.JournalRefuelPartial).Amount;
                         break;
                     //fuel += (he.journalEntry as EliteDangerous.JournalEvents.JournalRefuelAll).Amount;
                     //case EliteDangerous.JournalTypeEnum.RefuelPartial:
@@ -242,7 +242,7 @@ namespace EDDiscovery.UserControls
                     && powerConstant > 0 && maxFuelPerJump > 0)
                 {
                     double maxJumps = 0;
-                    double maxJumpDistance = EDCalculations.CalculateMaxJumpDistance(fuel,
+                    double maxJumpDistance = EliteDangerousCore.EliteDangerousCalculations.CalculateMaxJumpDistance(fuel,
                         currentCargo, linearConstant, unladenMass,
                         optimalMass, powerConstant,
                         maxFuelPerJump, out maxJumps);
@@ -251,7 +251,7 @@ namespace EDDiscovery.UserControls
                     HistoryEntry lastJet = discoveryform.history.GetLastHistoryEntry(x => x.journalEntry.EventTypeID == JournalTypeEnum.JetConeBoost);
                     if (lastJet != null && lastJet.EventTimeLocal > lastHE.EventTimeLocal)
                     {
-                        JumpRange *= (lastJet.journalEntry as EliteDangerous.JournalEvents.JournalJetConeBoost).BoostValue;
+                        JumpRange *= (lastJet.journalEntry as EliteDangerousCore.JournalEvents.JournalJetConeBoost).BoostValue;
                         botline += String.Format(" [{0:N2}ly @ BOOST]", Math.Floor(JumpRange * 100) / 100);
                     }
                     else
@@ -298,12 +298,12 @@ namespace EDDiscovery.UserControls
                         return;
 
                     he.StartMarker = true;
-                    EliteDangerous.JournalEntry.UpdateSyncFlagBit(he.Journalid, EliteDangerous.SyncFlags.StartMarker, he.StartMarker);
+                    JournalEntry.UpdateSyncFlagBit(he.Journalid, SyncFlags.StartMarker, he.StartMarker);
                     if (list.Count() > 1 && he.isTravelling)
                     {
                         he = list.ToArray()[1];
                         he.StopMarker = true;
-                        EliteDangerous.JournalEntry.UpdateSyncFlagBit(he.Journalid, EliteDangerous.SyncFlags.StopMarker, he.StopMarker);
+                        JournalEntry.UpdateSyncFlagBit(he.Journalid, SyncFlags.StopMarker, he.StopMarker);
                     }
                     discoveryform.RefreshHistoryAsync();
                 }

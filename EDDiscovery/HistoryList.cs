@@ -13,9 +13,6 @@
  * 
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
-using EDDiscovery.DB;
-using EDDiscovery.EliteDangerous;
-using EDDiscovery.EliteDangerous.JournalEvents;
 using EDDiscovery.EDSM;
 using Newtonsoft.Json.Linq;
 using System;
@@ -27,6 +24,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Threading;
+using EliteDangerousCore;
+using EliteDangerousCore.DB;
+using EliteDangerousCore.JournalEvents;
 
 namespace EDDiscovery
 {
@@ -37,7 +37,7 @@ namespace EDDiscovery
 
         public int Indexno;            // for display purposes.
 
-        public EliteDangerous.JournalTypeEnum EntryType;
+        public JournalTypeEnum EntryType;
         public long Journalid;
         public JournalEntry journalEntry;
         public EDCommander Commander;
@@ -68,7 +68,7 @@ namespace EDDiscovery
         public bool EGOSync;            // flag populated from journal entry when HE is made. Have we synced?
         public bool StartMarker;        // flag populated from journal entry when HE is made. Is this a system distance measurement system
         public bool StopMarker;         // flag populated from journal entry when HE is made. Is this a system distance measurement stop point
-        public bool IsFSDJump { get { return EntryType == EliteDangerous.JournalTypeEnum.FSDJump; } }
+        public bool IsFSDJump { get { return EntryType == JournalTypeEnum.FSDJump; } }
         public bool IsLocOrJump { get { return EntryType == JournalTypeEnum.FSDJump || EntryType == JournalTypeEnum.Location; } }
         public bool IsFuelScoop { get { return EntryType == JournalTypeEnum.FuelScoop; } }
         public bool IsShipChange { get { return (EntryType == JournalTypeEnum.LoadGame || EntryType == JournalTypeEnum.Docked) && ShipInformation != null; } }
@@ -147,7 +147,7 @@ namespace EDDiscovery
             Debug.Assert(sys != null);
             return new HistoryEntry
             {
-                EntryType = EliteDangerous.JournalTypeEnum.FSDJump,
+                EntryType = JournalTypeEnum.FSDJump,
                 System = sys,
                 EventTimeUTC = eventt,
                 EventSummary = "Jump to " + sys.name,
@@ -160,7 +160,7 @@ namespace EDDiscovery
             };
         }
 
-        public static HistoryEntry FromJournalEntry(EliteDangerous.JournalEntry je, HistoryEntry prev, bool checkedsm, out bool journalupdate, SQLiteConnectionSystem conn = null, EDCommander cmdr = null)
+        public static HistoryEntry FromJournalEntry(JournalEntry je, HistoryEntry prev, bool checkedsm, out bool journalupdate, SQLiteConnectionSystem conn = null, EDCommander cmdr = null)
         {
             ISystem isys = prev == null ? new SystemClassDB("Unknown") : prev.System;
             int indexno = prev == null ? 1 : prev.Indexno + 1;
@@ -171,10 +171,10 @@ namespace EDDiscovery
             bool firstdiscover = false;
 
 
-            if (je.EventTypeID == EliteDangerous.JournalTypeEnum.Location || je.EventTypeID == EliteDangerous.JournalTypeEnum.FSDJump)
+            if (je.EventTypeID == JournalTypeEnum.Location || je.EventTypeID == JournalTypeEnum.FSDJump)
             {
-                EDDiscovery.EliteDangerous.JournalEvents.JournalLocOrJump jl = je as EDDiscovery.EliteDangerous.JournalEvents.JournalLocOrJump;
-                EDDiscovery.EliteDangerous.JournalEvents.JournalFSDJump jfsd = je as EDDiscovery.EliteDangerous.JournalEvents.JournalFSDJump;
+                JournalLocOrJump jl = je as JournalLocOrJump;
+                JournalFSDJump jfsd = je as JournalFSDJump;
 
                 ISystem newsys;
 
@@ -285,13 +285,13 @@ namespace EDDiscovery
 
             if (je.EventTypeID == JournalTypeEnum.Location)
             {
-                EliteDangerous.JournalEvents.JournalLocation jl = je as EliteDangerous.JournalEvents.JournalLocation;
+                JournalLocation jl = je as JournalLocation;
                 he.docked = jl.Docked;
                 he.whereami = jl.Docked ? jl.StationName : jl.Body;
             }
             else if (je.EventTypeID == JournalTypeEnum.Docked)
             {
-                EliteDangerous.JournalEvents.JournalDocked jl = je as EliteDangerous.JournalEvents.JournalDocked;
+                JournalDocked jl = je as JournalDocked;
                 he.docked = true;
                 he.whereami = jl.StationName;
             }
@@ -302,14 +302,14 @@ namespace EDDiscovery
             else if (je.EventTypeID == JournalTypeEnum.Liftoff)
                 he.landed = false;
             else if (je.EventTypeID == JournalTypeEnum.SupercruiseEntry)
-                he.whereami = (je as EliteDangerous.JournalEvents.JournalSupercruiseEntry).StarSystem;
+                he.whereami = (je as JournalSupercruiseEntry).StarSystem;
             else if (je.EventTypeID == JournalTypeEnum.SupercruiseExit)
-                he.whereami = (je as EliteDangerous.JournalEvents.JournalSupercruiseExit).Body;
+                he.whereami = (je as JournalSupercruiseExit).Body;
             else if (je.EventTypeID == JournalTypeEnum.FSDJump)
-                he.whereami = (je as EliteDangerous.JournalEvents.JournalFSDJump).StarSystem;
+                he.whereami = (je as JournalFSDJump).StarSystem;
             else if (je.EventTypeID == JournalTypeEnum.LoadGame)
             {
-                EliteDangerous.JournalEvents.JournalLoadGame jl = je as EliteDangerous.JournalEvents.JournalLoadGame;
+                JournalLoadGame jl = je as JournalLoadGame;
 
                 he.onCrewWithCaptain = null;    // can't be in a crew at this point
                 he.gamemode = jl.GameMode;      // set game mode
@@ -318,24 +318,24 @@ namespace EDDiscovery
 
                 if (jl.Ship.IndexOf("buggy", StringComparison.InvariantCultureIgnoreCase) == -1)        // load game with buggy, can't tell what ship we get back into, so ignore
                 {
-                    he.shiptype = (je as EliteDangerous.JournalEvents.JournalLoadGame).Ship;
-                    he.shipid = (je as EliteDangerous.JournalEvents.JournalLoadGame).ShipId;
+                    he.shiptype = (je as JournalLoadGame).Ship;
+                    he.shipid = (je as JournalLoadGame).ShipId;
                 }
             }
             else if (je.EventTypeID == JournalTypeEnum.ShipyardBuy)         // BUY does not have ship id, but the new entry will that is written later - journals 8.34
-                he.shiptype = (je as EliteDangerous.JournalEvents.JournalShipyardBuy).ShipType;
+                he.shiptype = (je as JournalShipyardBuy).ShipType;
             else if (je.EventTypeID == JournalTypeEnum.ShipyardNew)
             {
-                he.shiptype = (je as EliteDangerous.JournalEvents.JournalShipyardNew).ShipType;
-                he.shipid = (je as EliteDangerous.JournalEvents.JournalShipyardNew).ShipId;
+                he.shiptype = (je as JournalShipyardNew).ShipType;
+                he.shipid = (je as JournalShipyardNew).ShipId;
             }
             else if (je.EventTypeID == JournalTypeEnum.ShipyardSwap)
             {
-                he.shiptype = (je as EliteDangerous.JournalEvents.JournalShipyardSwap).ShipType;
-                he.shipid = (je as EliteDangerous.JournalEvents.JournalShipyardSwap).ShipId;
+                he.shiptype = (je as JournalShipyardSwap).ShipType;
+                he.shipid = (je as JournalShipyardSwap).ShipId;
             }
             else if (je.EventTypeID == JournalTypeEnum.JoinACrew)
-                he.onCrewWithCaptain = (je as EliteDangerous.JournalEvents.JournalJoinACrew).Captain;
+                he.onCrewWithCaptain = (je as JournalJoinACrew).Captain;
             else if (je.EventTypeID == JournalTypeEnum.QuitACrew )
                 he.onCrewWithCaptain = null;
 
@@ -347,7 +347,7 @@ namespace EDDiscovery
 
                 if (he.IsFSDJump && !he.MultiPlayer )   // if jump, and not multiplayer..
                 {
-                    double dist = ((EliteDangerous.JournalEvents.JournalFSDJump)je).JumpDist;
+                    double dist = ((JournalFSDJump)je).JumpDist;
                     if (dist <= 0)
                         he.travelled_missingjump++;
                     else
@@ -360,7 +360,7 @@ namespace EDDiscovery
                 he.travelled_seconds = prev.travelled_seconds;
                 TimeSpan diff = he.EventTimeUTC.Subtract(prev.EventTimeUTC);
 
-                if (he.EntryType != EliteDangerous.JournalTypeEnum.LoadGame && diff < new TimeSpan(2, 0, 0))   // time between last entry and load game is not real time
+                if (he.EntryType != JournalTypeEnum.LoadGame && diff < new TimeSpan(2, 0, 0))   // time between last entry and load game is not real time
                 {
                     he.travelled_seconds += diff;
                 }
@@ -401,7 +401,7 @@ namespace EDDiscovery
             return he;
         }
 
-        public void ProcessWithUserDb(EliteDangerous.JournalEntry je, HistoryEntry prev, HistoryList hl, SQLiteConnectionUser conn)      // called after above with a USER connection
+        public void ProcessWithUserDb(JournalEntry je, HistoryEntry prev, HistoryList hl, SQLiteConnectionUser conn)      // called after above with a USER connection
         {
             materialscommodities = MaterialCommoditiesList.Process(je, prev?.materialscommodities, conn, EDDiscoveryForm.EDDConfig.ClearMaterials, EDDiscoveryForm.EDDConfig.ClearCommodities);
 
@@ -434,11 +434,11 @@ namespace EDDiscovery
 
         public void UpdateMapColour(int v)
         {
-            if (EntryType == EliteDangerous.JournalTypeEnum.FSDJump)
+            if (EntryType == JournalTypeEnum.FSDJump)
             {
                 MapColour = v;
                 if (Journalid != 0)
-                    EliteDangerous.JournalEntry.UpdateMapColour(Journalid, v);
+                    JournalEntry.UpdateMapColour(Journalid, v);
             }
         }
 
@@ -446,7 +446,7 @@ namespace EDDiscovery
         {
             if (Journalid != 0)
             {
-                EliteDangerous.JournalEntry.UpdateCommanderID(Journalid, v);
+                JournalEntry.UpdateCommanderID(Journalid, v);
             }
         }
 
@@ -455,7 +455,7 @@ namespace EDDiscovery
             EdsmSync = true;
             if (Journalid != 0)
             {
-                EliteDangerous.JournalEntry.UpdateSyncFlagBit(Journalid, EliteDangerous.SyncFlags.EDSM, true );
+                JournalEntry.UpdateSyncFlagBit(Journalid, SyncFlags.EDSM, true );
             }
         }
         public void SetEddnSync()
@@ -463,7 +463,7 @@ namespace EDDiscovery
             EDDNSync = true;
             if (Journalid != 0)
             {
-                EliteDangerous.JournalEntry.UpdateSyncFlagBit(Journalid, EliteDangerous.SyncFlags.EDDN, true);
+                JournalEntry.UpdateSyncFlagBit(Journalid, SyncFlags.EDDN, true);
             }
         }
 
@@ -472,7 +472,7 @@ namespace EDDiscovery
             EGOSync = true;
             if (Journalid != 0)
             {
-                EliteDangerous.JournalEntry.UpdateSyncFlagBit(Journalid, EliteDangerous.SyncFlags.EGO, true);
+                JournalEntry.UpdateSyncFlagBit(Journalid, SyncFlags.EGO, true);
             }
         }
 
@@ -508,7 +508,7 @@ namespace EDDiscovery
         public Ledger materialcommodititiesledger { get; private set; } = new Ledger();       // and the ledger..
         public ShipInformationList shipinformationlist { get; private set; } = new ShipInformationList();     // ship info
         private MissionListAccumulator missionlistaccumulator = new MissionListAccumulator(); // and mission list..
-        public EliteDangerous.StarScan starscan { get; private set; } = new StarScan();                                           // and the results of scanning
+        public EliteDangerous.StarScan starscan { get; private set; } = new EliteDangerous.StarScan();                                           // and the results of scanning
         public int CommanderId { get; private set; }
 
         private JournalFuelScoop FuelScoopAccum;        // no need to copy
@@ -938,10 +938,10 @@ namespace EDDiscovery
                 foreach (HistoryEntry he in alsomatching)       // list of systems in historylist using the same system object
                 {
                     bool updateedsmid = he.System.id_edsm <= 0;
-                    bool updatepos = (he.EntryType == EliteDangerous.JournalTypeEnum.FSDJump || he.EntryType == EliteDangerous.JournalTypeEnum.Location) && !syspos.System.HasCoordinate && edsmsys.HasCoordinate;
+                    bool updatepos = (he.EntryType == JournalTypeEnum.FSDJump || he.EntryType == JournalTypeEnum.Location) && !syspos.System.HasCoordinate && edsmsys.HasCoordinate;
 
                     if (updatepos || updateedsmid)
-                        EliteDangerous.JournalEntry.UpdateEDSMIDPosJump(he.Journalid, edsmsys, updatepos, -1 , uconn);  // update pos and edsmid, jdist not updated
+                        JournalEntry.UpdateEDSMIDPosJump(he.Journalid, edsmsys, updatepos, -1 , uconn);  // update pos and edsmid, jdist not updated
 
                     he.System = edsmsys;
                 }
@@ -1119,22 +1119,22 @@ namespace EDDiscovery
                 {
                     if (he.StartMarker)
                     {
-                        EliteDangerous.JournalEntry.UpdateSyncFlagBit(hs.Journalid, EliteDangerous.SyncFlags.StartMarker, false);
+                        JournalEntry.UpdateSyncFlagBit(hs.Journalid, SyncFlags.StartMarker, false);
                         he.StartMarker = false;
                     }
                     else if (he.StopMarker)
                     {
-                        EliteDangerous.JournalEntry.UpdateSyncFlagBit(hs.Journalid, EliteDangerous.SyncFlags.StopMarker, false);
+                        JournalEntry.UpdateSyncFlagBit(hs.Journalid, SyncFlags.StopMarker, false);
                         he.StopMarker = false;
                     }
                     else if (started == false)
                     {
-                        EliteDangerous.JournalEntry.UpdateSyncFlagBit(hs.Journalid, EliteDangerous.SyncFlags.StartMarker, true);
+                        JournalEntry.UpdateSyncFlagBit(hs.Journalid, SyncFlags.StartMarker, true);
                         he.StartMarker = true;
                     }
                     else
                     {
-                        EliteDangerous.JournalEntry.UpdateSyncFlagBit(hs.Journalid, EliteDangerous.SyncFlags.StopMarker, true);
+                        JournalEntry.UpdateSyncFlagBit(hs.Journalid, SyncFlags.StopMarker, true);
                         he.StopMarker = true;
                     }
 
@@ -1245,11 +1245,11 @@ namespace EDDiscovery
 
                     if (journalupdate)
                     {
-                        EliteDangerous.JournalEvents.JournalFSDJump jfsd = je as EliteDangerous.JournalEvents.JournalFSDJump;
+                        JournalFSDJump jfsd = je as JournalFSDJump;
 
                         if (jfsd != null)
                         {
-                            EliteDangerous.JournalEntry.UpdateEDSMIDPosJump(jfsd.Id, he.System, !jfsd.HasCoordinate && he.System.HasCoordinate, jfsd.JumpDist);
+                            JournalEntry.UpdateEDSMIDPosJump(jfsd.Id, he.System, !jfsd.HasCoordinate && he.System.HasCoordinate, jfsd.JumpDist);
                         }
                     }
 
@@ -1456,13 +1456,13 @@ namespace EDDiscovery
 
             reportProgress(-1, "Resolving systems");
 
-            List<EliteDangerous.JournalEntry> jlist = EliteDangerous.JournalEntry.GetAll(CurrentCommander).OrderBy(x => x.EventTimeUTC).ThenBy(x => x.Id).ToList();
-            List<Tuple<EliteDangerous.JournalEntry, HistoryEntry>> jlistUpdated = new List<Tuple<EliteDangerous.JournalEntry, HistoryEntry>>();
+            List<JournalEntry> jlist = JournalEntry.GetAll(CurrentCommander).OrderBy(x => x.EventTimeUTC).ThenBy(x => x.Id).ToList();
+            List<Tuple<JournalEntry, HistoryEntry>> jlistUpdated = new List<Tuple<JournalEntry, HistoryEntry>>();
 
             using (SQLiteConnectionSystem conn = new SQLiteConnectionSystem())
             {
                 HistoryEntry prev = null;
-                foreach (EliteDangerous.JournalEntry inje in jlist)
+                foreach (JournalEntry inje in jlist)
                 {
                     foreach (JournalEntry je in hist.ProcessJournalEntry(inje))
                     {
@@ -1475,7 +1475,7 @@ namespace EDDiscovery
 
                         if (journalupdate)
                         {
-                            jlistUpdated.Add(new Tuple<EliteDangerous.JournalEntry, HistoryEntry>(je, he));
+                            jlistUpdated.Add(new Tuple<JournalEntry, HistoryEntry>(je, he));
                         }
                     }
                 }
@@ -1489,14 +1489,14 @@ namespace EDDiscovery
                 {
                     using (DbTransaction txn = conn.BeginTransaction())
                     {
-                        foreach (Tuple<EliteDangerous.JournalEntry, HistoryEntry> jehe in jlistUpdated)
+                        foreach (Tuple<JournalEntry, HistoryEntry> jehe in jlistUpdated)
                         {
-                            EliteDangerous.JournalEntry je = jehe.Item1;
+                            JournalEntry je = jehe.Item1;
                             HistoryEntry he = jehe.Item2;
-                            EliteDangerous.JournalEvents.JournalFSDJump jfsd = je as EliteDangerous.JournalEvents.JournalFSDJump;
+                            JournalFSDJump jfsd = je as JournalFSDJump;
                             if (jfsd != null)
                             {
-                                EliteDangerous.JournalEntry.UpdateEDSMIDPosJump(jfsd.Id, he.System, !jfsd.HasCoordinate && he.System.HasCoordinate, jfsd.JumpDist, conn, txn);
+                                JournalEntry.UpdateEDSMIDPosJump(jfsd.Id, he.System, !jfsd.HasCoordinate && he.System.HasCoordinate, jfsd.JumpDist, conn, txn);
                             }
                         }
 

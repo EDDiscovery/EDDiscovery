@@ -5,12 +5,12 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using EDDiscovery.DB;
-using EDDiscovery.EliteDangerous;
-using EDDiscovery.EliteDangerous.JournalEvents;
 using System.Globalization;
 using Newtonsoft.Json.Linq;
 using System.Diagnostics;
+using EliteDangerousCore;
+using EliteDangerousCore.JournalEvents;
+using EliteDangerousCore.DB;
 
 namespace EDDiscovery.EDSM
 {
@@ -192,12 +192,12 @@ namespace EDDiscovery.EDSM
                         {
                             foreach (HistoryEntry he in toadd)
                             {
-                                JObject jo = EDDiscovery.EliteDangerous.JournalEntry.CreateFSDJournalEntryJson(he.EventTimeUTC,
+                                JObject jo = JournalEntry.CreateFSDJournalEntryJson(he.EventTimeUTC,
                                                                                                   he.System.name, he.System.x, he.System.y, he.System.z,
                                                                                                   EDDConfig.Instance.DefaultMapColour);
-                                EDDiscovery.EliteDangerous.JournalEntry je =
-                                    EDDiscovery.EliteDangerous.JournalEntry.CreateFSDJournalEntry(tlu.id, tlu.CommanderId.Value,
-                                                                                                  (int)EDDiscovery.EliteDangerous.SyncFlags.EDSM, jo);
+                                JournalEntry je =
+                                    JournalEntry.CreateFSDJournalEntry(tlu.id, tlu.CommanderId.Value,
+                                                                                                  (int)SyncFlags.EDSM, jo);
 
                                 System.Diagnostics.Trace.WriteLine(string.Format("Add {0} {1}", je.EventTimeUTC, he.System.name));
                                 je.Add(jo, cn);

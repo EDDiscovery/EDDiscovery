@@ -14,7 +14,6 @@
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 using EDDiscovery.EDSM;
-using EDDiscovery.EliteDangerous;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -37,7 +36,7 @@ namespace EDDiscovery
         #region Events
         event Action<HistoryList> OnHistoryChange;
         event Action<HistoryEntry, HistoryList> OnNewEntry;
-        event Action<JournalEntry> OnNewJournalEntry;
+        event Action<EliteDangerousCore.JournalEntry> OnNewJournalEntry;
         event Action<string, Color> OnNewLogEntry;
         #endregion
 

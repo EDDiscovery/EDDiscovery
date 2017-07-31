@@ -22,12 +22,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using EDDiscovery.EliteDangerous.JournalEvents;
 using ExtendedControls;
 using EDDiscovery.DB;
 using System.Drawing.Drawing2D;
 using EDDiscovery.EliteDangerous;
 using EDDiscovery.EDSM;
+using EliteDangerousCore.DB;
+using EliteDangerousCore;
+using EliteDangerousCore.JournalEvents;
 
 namespace EDDiscovery.UserControls
 {
@@ -121,7 +123,7 @@ namespace EDDiscovery.UserControls
         public void NewEntry(HistoryEntry he, HistoryList hl)               // called when a new entry is made.. check to see if its a scan update
         {
             // if he valid, and last is null, or not he, or we have a new scan
-            if (he != null && (last_he == null || he != last_he || he.EntryType == EliteDangerous.JournalTypeEnum.Scan))
+            if (he != null && (last_he == null || he != last_he || he.EntryType == JournalTypeEnum.Scan))
             {
                 last_he = he;
                 DrawSystem();

@@ -1,5 +1,5 @@
-﻿using EDDiscovery.DB;
-using EDDiscovery.EliteDangerous;
+﻿using EliteDangerousCore;
+using EliteDangerousCore.DB;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace EDDiscovery.EDSM
 {
-    public class GalacticMapSystem : DB.SystemClassDB
+    public class GalacticMapSystem : SystemClassDB
     {
         public GalacticMapObject GalMapObject { get; set; }
 

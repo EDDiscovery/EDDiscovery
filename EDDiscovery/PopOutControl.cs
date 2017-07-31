@@ -13,8 +13,9 @@
  * 
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
-using EDDiscovery.DB;
-using EDDiscovery.UserControls;
+
+ using EDDiscovery.UserControls;
+using EliteDangerousCore.DB;
 using System;
 using System.Collections.Generic;
 using System.Drawing;

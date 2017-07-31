@@ -23,9 +23,9 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using EDDiscovery.Controls;
-using EDDiscovery.DB;
-using EDDiscovery.EliteDangerous;
 using System.IO;
+using EliteDangerousCore;
+using EliteDangerousCore.DB;
 
 namespace EDDiscovery.UserControls
 {
@@ -90,7 +90,7 @@ namespace EDDiscovery.UserControls
             }
 
             if (cursel == "")
-                cursel = DB.SQLiteDBClass.GetSettingString(DbShipSave, "");
+                cursel = SQLiteDBClass.GetSettingString(DbShipSave, "");
 
             if (cursel == "" || !comboBoxShips.Items.Contains(cursel))
                 cursel = "Travel History Entry";
@@ -128,7 +128,7 @@ namespace EDDiscovery.UserControls
                     ModulesInStore mi = last_he.StoredModules;
                     labelVehicle.Text = "";
                     int i = 1;
-                    foreach(EliteDangerous.JournalEvents.JournalLoadout.ShipModule sm in mi.StoredModules )
+                    foreach(EliteDangerousCore.JournalEvents.JournalLoadout.ShipModule sm in mi.StoredModules )
                     {
                         object[] rowobj = { i.ToString(), sm.Item, sm.LocalisedItem.ToNullSafeString() };
                         dataGridViewModules.Rows.Add(rowobj);
@@ -158,7 +158,7 @@ namespace EDDiscovery.UserControls
         {
             foreach (string key in si.Modules.Keys)
             {
-                EliteDangerous.JournalEvents.JournalLoadout.ShipModule sm = si.Modules[key];
+                EliteDangerousCore.JournalEvents.JournalLoadout.ShipModule sm = si.Modules[key];
 
                 string ammo = "";
                 if (sm.AmmoHopper.HasValue)
@@ -213,7 +213,7 @@ namespace EDDiscovery.UserControls
         {
             if (comboBoxShips.Enabled)
             {
-                DB.SQLiteDBClass.PutSettingString(DbShipSave, comboBoxShips.Text);
+                SQLiteDBClass.PutSettingString(DbShipSave, comboBoxShips.Text);
                 Display();
             }
         }

@@ -138,14 +138,6 @@
     <Reference Include="System" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Data.SQLite, Version=1.0.104.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Data.SQLite.Core.1.0.104.0\lib\net46\System.Data.SQLite.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.Data.SQLite.Linq, Version=1.0.104.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Data.SQLite.Linq.1.0.104.0\lib\net46\System.Data.SQLite.Linq.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="System.Management" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Speech" />
@@ -203,65 +195,16 @@
     <Compile Include="Actions\ActionsEDDCmds\ActionMenuItem.cs" />
     <Compile Include="Actions\ActionVars.cs" />
     <Compile Include="Actions\ConditionFunctionsEDD.cs" />
-    <Compile Include="CompanionAPI\CModules.cs" />
-    <Compile Include="CompanionAPI\CStarport.cs" />
-    <Compile Include="CompanionAPI\CSystem.cs" />
-    <Compile Include="DB\BookmarkClass.cs" />
+    <Compile Include="DB\StarScan.cs" />
+    <Compile Include="DB\SystemClassEDSM.cs" />
     <Compile Include="DB\TargetClassHelpers.cs" />
     <Compile Include="EDDApplicationContext.cs" />
     <Compile Include="EGO\EGOClass.cs" />
     <Compile Include="EGO\EGOSync.cs" />
-    <Compile Include="EliteDangerous\BindingsFile.cs" />
     <Compile Include="EDSM\GalacticMapSystem.cs" />
-    <Compile Include="EliteDangerous\EDCalculations.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalCrewLaunchFighter.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalCrewMemberRoleChange.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalEngineerContribution.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalFriends.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalWingInvite.cs" />
-    <Compile Include="EliteDangerous\MaterialCommodities.cs" />
-    <Compile Include="DB\RegisterEntry.cs" />
-    <Compile Include="DB\SQLiteCommandED.cs" />
-    <Compile Include="DB\SQLiteConnectionED.cs" />
-    <Compile Include="DB\SqLiteDBSchema.cs" />
-    <Compile Include="DB\SQLiteConnectionSystem.cs" />
-    <Compile Include="DB\SQLiteConnectionUser.cs" />
-    <Compile Include="DB\TargetClass.cs" />
     <Compile Include="DebugCode.cs" />
     <Compile Include="EDDiscoveryController.cs" />
     <Compile Include="EDSM\EDSMLogFetcher.cs" />
-    <Compile Include="EliteDangerous\BodyDesignations.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalEDDCommodityPrices.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalSystemsShutdown.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalEndCrewSession.cs" />
-    <Compile Include="EliteDangerous\JournalFieldNaming.cs" />
-    <Compile Include="EliteDangerous\Ledger.cs" />
-    <Compile Include="EliteDangerous\MaterialCommoditiesList.cs" />
-    <Compile Include="EliteDangerous\MissionList.cs" />
-    <Compile Include="EliteDangerous\ModuleEDID.cs" />
-    <Compile Include="EliteDangerous\JournalEntryAttributes.cs" />
-    <Compile Include="EliteDangerous\JournalEntryInterfaces.cs" />
-    <Compile Include="CompanionAPI\CompanionCredentials.cs" />
-    <Compile Include="CompanionAPI\CompanionException.cs" />
-    <Compile Include="CompanionAPI\CompanionAPIClass.cs" />
-    <Compile Include="CompanionAPI\CProfile.cs" />
-    <Compile Include="CompanionAPI\CShip.cs" />
-    <Compile Include="CompanionAPI\RijndaelCrypt.cs" />
-    <Compile Include="CompanionAPI\CCommander.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalMaterials.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalCargo.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalChangeCrewRole.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalCrewMemberJoins.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalCrewMemberQuits.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalJoinACrew.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalKickCrewMember.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalLoadout.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalPassengers.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalQuitACrew.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalScanned.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalSetUserShipName.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalStartJump.cs" />
-    <Compile Include="EliteDangerous\ShipInformation.cs" />
     <Compile Include="ExportImport\ExportGrid.cs" />
     <Compile Include="ExportImport\ExportSphereSystems.cs" />
     <Compile Include="Forms\CommanderForm.cs">
@@ -306,131 +249,6 @@
     <Compile Include="EDSM\GalacticMapObject.cs" />
     <Compile Include="EDSM\GalacticMapping.cs" />
     <Compile Include="EDSM\GalMapType.cs" />
-    <Compile Include="EliteDangerous\Bodies.cs" />
-    <Compile Include="EliteDangerous\EDJournalClass.cs" />
-    <Compile Include="EliteDangerous\EDJournalReader.cs" />
-    <Compile Include="EliteDangerous\JournalEntry.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalApproachSettlement.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalBounty.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalBuyAmmo.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalBuyDrones.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalBuyExplorationData.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalBuyTradeData.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalCapShipBond.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalClearSavedGame.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalCockpitBreached.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalCollectCargo.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalCommitCrime.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalCommunityGoalDiscard.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalCommunityGoalJoin.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalCommunityGoalReward.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalContinued.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalCrewAssign.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalCrewFire.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalCrewHire.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalDatalinkScan.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalDatalinkVoucher.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalDataScanned.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalDied.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalDocked.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalDockFighter.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalDockingCancelled.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalDockingDenied.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalDockingGranted.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalDockingRequested.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalDockingTimeout.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalDockSRV.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalEDDItemSet.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalEjectCargo.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalEngineerApply.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalEngineerCraft.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalEngineerProgress.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalEscapeInterdiction.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalFactionKillBond.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalFetchRemoteModule.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalFileheader.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalFuelScope.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalHeatDamage.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalHeatWarning.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalHullDamage.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalInterdicted.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalInterdiction.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalJetConeBoost.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalJetConeDamage.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalLaunchFighter.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalLaunchSRV.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalLiftoff.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalLocOrJump.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalLocation.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalFSDJump.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalLoadGame.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalMarketBuy.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalMarketSell.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalMassModuleStore.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalMaterialCollected.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalMaterialDiscarded.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalMaterialDiscovered.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalMiningRefined.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalMissionAbandoned.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalMissionAccepted.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalMissionCompleted.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalMissionFailed.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalModuleBuy.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalModuleRetrieve.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalModuleSell.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalModuleSellRemote.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalModuleStore.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalModuleSwap.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalNewCommander.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalPayFines.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalPayLegacyFines.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalPowerplayCollect.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalPowerplayDefect.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalPowerplayDeliver.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalPowerplayFastTrack.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalPowerplayJoin.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalPowerplayLeave.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalPowerplaySalary.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalPowerplayVote.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalPowerplayVoucher.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalProgress.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalPromotion.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalPVPKill.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalRank.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalRebootRepair.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalReceiveText.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalRedeemVoucher.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalRefuelAll.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalRefuelPartial.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalRepair.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalRepairAll.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalRestockVehicle.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalResurrect.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalScan.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalScientificResearch.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalScreenshot.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalSelfDestruct.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalSellDrones.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalSellExplorationData.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalSendText.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalShieldState.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalShipyardBuy.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalShipyardNew.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalShipyardSell.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalShipyardSwap.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalShipyardTransfer.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalSupercruiseEntry.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalSupercruiseExit.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalSynthesis.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalTouchdown.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalUndocked.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalUnknown.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalUSSDrop.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalVehicleSwitch.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalWingAdd.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalWingJoin.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalWingLeave.cs" />
-    <Compile Include="EliteDangerous\StarScan.cs" />
     <Compile Include="ExportImport\ExportExplorationData.cs" />
     <Compile Include="ExportImport\ExportFilteredSystems.cs" />
     <Compile Include="ExportImport\ExportRoute.cs" />
@@ -440,8 +258,6 @@
     <Compile Include="Forms\FindMaterialsForm.Designer.cs">
       <DependentUpon>FindMaterialsForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="EliteDangerous\LogReaderBase.cs" />
-    <Compile Include="EliteDangerous\NetLogReader.cs" />
     <Compile Include="ExportImport\ExportControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -499,18 +315,10 @@
       <DependentUpon>UserControlForm.cs</DependentUpon>
     </Compile>
     <Compile Include="HistoryList.cs" />
-    <Compile Include="DB\SavedRouteClass.cs" />
-    <Compile Include="EliteDangerous\ISystem.cs" />
-    <Compile Include="EliteDangerous\SystemClass.cs" />
-    <Compile Include="DB\IVisitedSystems.cs" />
-    <Compile Include="DB\TravelLogUnit.cs" />
-    <Compile Include="DB\WantedSystemClass.cs" />
     <Compile Include="EDDConfig.cs" />
     <Compile Include="Themeing\Theme.cs" />
     <Compile Include="EDSM\EDSMClass.cs" />
     <Compile Include="EDSM\EDSMSync.cs" />
-    <Compile Include="EliteDangerous\EDCommander.cs" />
-    <Compile Include="EliteDangerous\EDTypesFromJSON.cs" />
     <Compile Include="3DMap\FormMap.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -524,9 +332,6 @@
       <DependentUpon>SysWarning.cs</DependentUpon>
     </Compile>
     <Compile Include="UserControls\DataGridViewSorter.cs" />
-    <Compile Include="DB\SQLiteDBClass.cs" />
-    <Compile Include="DB\SystemClassDB.cs" />
-    <Compile Include="DB\SystemNoteClass.cs" />
     <Compile Include="Forms\AboutForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -539,21 +344,12 @@
     <Compile Include="Forms\MoveToCommander.Designer.cs">
       <DependentUpon>MoveToCommander.cs</DependentUpon>
     </Compile>
-    <Compile Include="EMK\Arc.cs" />
-    <Compile Include="EMK\AStar.cs" />
-    <Compile Include="EMK\Graph.cs" />
-    <Compile Include="EMK\Node.cs" />
-    <Compile Include="EMK\Point3D.cs" />
-    <Compile Include="EMK\SortableList.cs" />
-    <Compile Include="EMK\Track.cs" />
-    <Compile Include="EMK\Vector3D.cs" />
     <Compile Include="EDDiscoveryForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="EDDiscoveryForm.Designer.cs">
       <DependentUpon>EDDiscoveryForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="EliteDangerous\NetLogClass.cs" />
     <Compile Include="ImageHandler.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -729,7 +525,6 @@
     <Compile Include="UserControls\UserControlTrippanel.Designer.cs">
       <DependentUpon>UserControlTrippanel.cs</DependentUpon>
     </Compile>
-    <Compile Include="DB\Vector3.cs" />
     <EmbeddedResource Include="Forms\CommanderForm.resx">
       <DependentUpon>CommanderForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -1099,9 +894,6 @@
     <None Include="Resources\refresh_blue18.png" />
     <Content Include="x86\Microsoft.VC100.CRT\msvcp100.dll" />
     <Content Include="x86\Microsoft.VC100.CRT\msvcr100.dll" />
-    <Content Include="x86\SQLite.Interop.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <None Include="Resources\Home-icon.png" />
     <None Include="Resources\Travelicon.png" />
     <None Include="Resources\save.png" />
@@ -1238,6 +1030,10 @@
       <Project>{390b1547-a455-45e3-974f-e1f9b1613ad5}</Project>
       <Name>DirectInput</Name>
     </ProjectReference>
+    <ProjectReference Include="..\EliteDangerous\EliteDangerous.csproj">
+      <Project>{019917a4-7342-4f67-8aaf-9e20c016a935}</Project>
+      <Name>EliteDangerous</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ExtendedControls\ExtendedControls.csproj">
       <Project>{2049403f-f4c7-45e6-b777-6390c78e4d2b}</Project>
       <Name>ExtendedControls</Name>
@@ -1301,15 +1097,6 @@
       <ZipFiles Include="$(OutputPath)\Newtonsoft.Json.dll" />
       <ZipFiles Include="$(OutputPath)\OpenTK.GLControl.dll" />
       <ZipFiles Include="$(OutputPath)\OpenTK.dll" />
-      <ZipFiles Include="$(OutputPath)\System.Data.SQLite.dll" />
-      <ZipFiles Include="$(OutputPath)\System.Data.SQLite.Linq.dll" />
-      <ZipFiles Include="$(OutputPath)\System.Data.SQLite.xml" />
-      <ZipFiles Include="..\packages\System.Data.SQLite.Core.1.0.104.0\build\net46\x86\SQLite.Interop.dll">
-        <Name>x86\SQLite.Interop.dll</Name>
-      </ZipFiles>
-      <ZipFiles Include="..\packages\System.Data.SQLite.Core.1.0.104.0\build\net46\x64\SQLite.Interop.dll">
-        <Name>x64\SQLite.Interop.dll</Name>
-      </ZipFiles>
       <ZipFiles Include="$(OutputPath)\ActionLanguage.dll" />
       <ZipFiles Include="$(OutputPath)\Audio.dll" />
       <ZipFiles Include="$(OutputPath)\Conditions.dll" />
@@ -1319,11 +1106,9 @@
     </ItemGroup>
     <Zip OutputFileName="$(OutputPath)\EDDiscovery.Portable.zip" Files="@(ZipFiles)" />
   </Target>
-  <Import Project="..\packages\System.Data.SQLite.Core.1.0.104.0\build\net46\System.Data.SQLite.Core.targets" Condition="Exists('..\packages\System.Data.SQLite.Core.1.0.104.0\build\net46\System.Data.SQLite.Core.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('..\packages\System.Data.SQLite.Core.1.0.104.0\build\net46\System.Data.SQLite.Core.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\System.Data.SQLite.Core.1.0.104.0\build\net46\System.Data.SQLite.Core.targets'))" />
   </Target>
 </Project>

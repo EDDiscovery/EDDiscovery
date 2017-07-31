@@ -23,8 +23,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using EDDiscovery.Controls;
-using EDDiscovery.DB;
-using EDDiscovery.EliteDangerous;
+using EliteDangerousCore.DB;
+using EliteDangerousCore;
 
 namespace EDDiscovery.UserControls
 {
@@ -61,12 +61,12 @@ namespace EDDiscovery.UserControls
             discoveryform.OnNewEntry += Discoveryform_OnNewEntry;
             ed.TravelControl.OnTravelSelectionChanged += Display;
 
-            Order = DB.SQLiteDBClass.GetSettingString(DbOSave, "").RestoreArrayFromString(0, Recipes.Count);
+            Order = SQLiteDBClass.GetSettingString(DbOSave, "").RestoreArrayFromString(0, Recipes.Count);
             if (Order.Distinct().Count() != Order.Length)       // if not distinct..
                 for (int i = 0; i < Order.Length; i++)          // reset
                     Order[i] = i;
 
-            Wanted = DB.SQLiteDBClass.GetSettingString(DbWSave, "").RestoreArrayFromString(0, Recipes.Count);
+            Wanted = SQLiteDBClass.GetSettingString(DbWSave, "").RestoreArrayFromString(0, Recipes.Count);
 
             comboBoxSynthesis.Items.Add("All");
             comboBoxSynthesis.Items.Add("Travel");
@@ -74,7 +74,7 @@ namespace EDDiscovery.UserControls
             comboBoxSynthesis.Items.Add("SRV");
 
             comboBoxSynthesis.Enabled = false;
-            string s = DB.SQLiteDBClass.GetSettingString(DbSelSave, "All");
+            string s = SQLiteDBClass.GetSettingString(DbSelSave, "All");
             comboBoxSynthesis.SelectedItem = comboBoxSynthesis.Items.Contains(s) ? s : "All";
             comboBoxSynthesis.Enabled = true;
 
@@ -193,9 +193,9 @@ namespace EDDiscovery.UserControls
             discoveryform.TravelControl.OnTravelSelectionChanged -= Display;
             discoveryform.OnNewEntry -= Discoveryform_OnNewEntry;
 
-            DB.SQLiteDBClass.PutSettingString(DbOSave, Order.ToString(","));
-            DB.SQLiteDBClass.PutSettingString(DbWSave, Wanted.ToString(","));
-            DB.SQLiteDBClass.PutSettingString(DbSelSave, (string)comboBoxSynthesis.SelectedItem);
+            SQLiteDBClass.PutSettingString(DbOSave, Order.ToString(","));
+            SQLiteDBClass.PutSettingString(DbWSave, Wanted.ToString(","));
+            SQLiteDBClass.PutSettingString(DbSelSave, (string)comboBoxSynthesis.SelectedItem);
         }
 
         #endregion
