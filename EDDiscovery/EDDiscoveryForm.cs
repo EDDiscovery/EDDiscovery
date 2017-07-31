@@ -96,7 +96,6 @@ namespace EDDiscovery
         public PopOutControl PopOuts;
 
         private bool _shownOnce = false;
-        private bool _initialised = false;
         private bool _formMax;
         private int _formWidth;
         private int _formHeight;
@@ -174,9 +173,9 @@ namespace EDDiscovery
             Controller.OnSyncStarting += Controller_SyncStarting;
         }
 
-        public void Init()      // called from splash form .. continues on with the construction of the form, controlled by splash form sequencing
+        public void Init(Action<string> msg)    // called from EDDApplicationContext .. continues on with the construction of the form
         {
-            _initialised = true;
+            msg.Invoke("Modulating Shields");
             Controller.Init();
 
             // Some components require the controller to be initialized
@@ -195,6 +194,7 @@ namespace EDDiscovery
             PopOuts = new PopOutControl(this);
 
             ToolStripManager.Renderer = theme.toolstripRenderer;
+            msg.Invoke("Repairing Canopy");
             theme.LoadThemes();                                         // default themes and ones on disk loaded
             themeok = theme.RestoreSettings();                                    // theme, remember your saved settings
 
@@ -215,6 +215,7 @@ namespace EDDiscovery
             // Windows TTS (2000 and above). Speech *recognition* will be Version.Major >= 6 (Vista and above)
             if (Environment.OSVersion.Platform == PlatformID.Win32NT && Environment.OSVersion.Version.Major >= 5)
             {
+                msg.Invoke("Activating Sensors");
                 audiodriverwave = new AudioExtensions.AudioDriverCSCore( EDDConfig.DefaultWaveDevice );
                 audiodriverspeech = new AudioExtensions.AudioDriverCSCore( EDDConfig.DefaultVoiceDevice );
                 speechsynth = new AudioExtensions.SpeechSynthesizer(new AudioExtensions.WindowsSpeechEngine());
@@ -251,11 +252,6 @@ namespace EDDiscovery
         {
             try
             {
-                if (!_initialised)      // paranoid, Bravada says ;-)
-                {
-                    Init();
-                }
-
                 EDDiscovery.EliteDangerous.MaterialCommodityDB.SetUpInitialTable();
                 Controller.PostInit_Loaded();
 
