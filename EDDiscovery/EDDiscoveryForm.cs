@@ -102,8 +102,6 @@ namespace EDDiscovery
         private int _formTop;
         private int _formLeft;
 
-        private HistoryEntry _uncommittedNoteHistoryEntry;
-
         #endregion
 
         #region Callbacks from us
