@@ -43,7 +43,7 @@ namespace EliteDangerousCore.EDSM
         public EDSMClass()
         {
             fromSoftware = "EDDiscovery";
-            var assemblyFullName = Assembly.GetExecutingAssembly().FullName;
+            var assemblyFullName = Assembly.GetEntryAssembly().FullName;
             fromSoftwareVersion = assemblyFullName.Split(',')[1].Split('=')[1];
 
             _serverAddress = ServerAddress;
