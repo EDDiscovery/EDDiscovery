@@ -68,7 +68,7 @@ namespace EDDiscovery.Forms
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(293, 33);
             this.label1.TabIndex = 20;
-            this.label1.Text = "Loading - Please Wait";
+            this.label1.Text = "Locating Ship";
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // label_version

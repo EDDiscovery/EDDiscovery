@@ -405,9 +405,7 @@ namespace EDDiscovery
 
             private void SetVersionDisplayString()
             {
-                StringBuilder sb = new StringBuilder();
-                sb.Append("Version ");
-                sb.Append(Assembly.GetExecutingAssembly().FullName.Split(',')[1].Split('=')[1]);
+                StringBuilder sb = new StringBuilder("Version " + EDDApplicationContext.AssemblyVersionNumber);
 
                 if (AppFolder != null)
                 {
