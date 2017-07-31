@@ -39,7 +39,7 @@ namespace EliteDangerousCore.EDDN
         public EDDNClass()
         {
             fromSoftware = "EDDiscovery";
-            var assemblyFullName = Assembly.GetExecutingAssembly().FullName;
+            var assemblyFullName = Assembly.GetEntryAssembly().FullName;
             fromSoftwareVersion = assemblyFullName.Split(',')[1].Split('=')[1];
             commanderName = EDCommander.Current.Name;
 
