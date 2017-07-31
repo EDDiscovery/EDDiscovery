@@ -23,8 +23,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using EDDiscovery.Controls;
-using EDDiscovery.DB;
-using EDDiscovery.EliteDangerous;
+using EliteDangerousCore.DB;
+using EliteDangerousCore;
 
 namespace EDDiscovery.UserControls
 {
@@ -67,18 +67,18 @@ namespace EDDiscovery.UserControls
             discoveryform.OnNewEntry += Discoveryform_OnNewEntry;
             ed.TravelControl.OnTravelSelectionChanged += Display;
 
-            string start = DB.SQLiteDBClass.GetSettingString(DbStartDate, "");
+            string start = SQLiteDBClass.GetSettingString(DbStartDate, "");
             DateTime dt;
             if (start != "" && DateTime.TryParse(start, System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out dt))
                 customDateTimePickerStart.Value = dt;
 
-            customDateTimePickerStart.Checked = DB.SQLiteDBClass.GetSettingBool(DbStartDateChecked, false);
+            customDateTimePickerStart.Checked = SQLiteDBClass.GetSettingBool(DbStartDateChecked, false);
 
-            string end = DB.SQLiteDBClass.GetSettingString(DbEndDate, "");
+            string end = SQLiteDBClass.GetSettingString(DbEndDate, "");
             if (end != "" && DateTime.TryParse(end, System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out dt))
                 customDateTimePickerEnd.Value = dt;
 
-            customDateTimePickerEnd.Checked = DB.SQLiteDBClass.GetSettingBool(DbEndDateChecked, false);
+            customDateTimePickerEnd.Checked = SQLiteDBClass.GetSettingBool(DbEndDateChecked, false);
         }
 
         #endregion
@@ -186,7 +186,7 @@ namespace EDDiscovery.UserControls
             DGVLoadColumnLayout(dataGridViewCurrent, DbColumnSaveCurrent);
             DGVLoadColumnLayout(dataGridViewPrevious, DbColumnSavePrevious);
 
-            int splitter = DB.SQLiteDBClass.GetSettingInt(DbSplitter, -1);
+            int splitter = SQLiteDBClass.GetSettingInt(DbSplitter, -1);
             if (splitter >= 0)
                 splitContainer1.SplitterDistance = Math.Max(splitter, 10);
         }
@@ -199,13 +199,13 @@ namespace EDDiscovery.UserControls
             discoveryform.TravelControl.OnTravelSelectionChanged -= Display;
             discoveryform.OnNewEntry -= Discoveryform_OnNewEntry;
 
-            DB.SQLiteDBClass.PutSettingString(DbStartDate, customDateTimePickerStart.Value.ToString(System.Globalization.CultureInfo.InvariantCulture));
-            DB.SQLiteDBClass.PutSettingString(DbEndDate, customDateTimePickerEnd.Value.ToString(System.Globalization.CultureInfo.InvariantCulture));
+            SQLiteDBClass.PutSettingString(DbStartDate, customDateTimePickerStart.Value.ToString(System.Globalization.CultureInfo.InvariantCulture));
+            SQLiteDBClass.PutSettingString(DbEndDate, customDateTimePickerEnd.Value.ToString(System.Globalization.CultureInfo.InvariantCulture));
 
-            DB.SQLiteDBClass.PutSettingBool(DbStartDateChecked, customDateTimePickerStart.Checked);
-            DB.SQLiteDBClass.PutSettingBool(DbEndDateChecked, customDateTimePickerEnd.Checked);
+            SQLiteDBClass.PutSettingBool(DbStartDateChecked, customDateTimePickerStart.Checked);
+            SQLiteDBClass.PutSettingBool(DbEndDateChecked, customDateTimePickerEnd.Checked);
 
-            DB.SQLiteDBClass.PutSettingInt(DbSplitter, splitContainer1.SplitterDistance);
+            SQLiteDBClass.PutSettingInt(DbSplitter, splitContainer1.SplitterDistance);
         }
 
         #endregion

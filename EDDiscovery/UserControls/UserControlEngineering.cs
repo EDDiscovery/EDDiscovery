@@ -14,8 +14,8 @@
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 using EDDiscovery.Controls;
-using EDDiscovery.DB;
-using EDDiscovery.EliteDangerous;
+using EliteDangerousCore;
+using EliteDangerousCore.DB;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -71,12 +71,12 @@ namespace EDDiscovery.UserControls
             discoveryform.OnNewEntry += Discoveryform_OnNewEntry;
             ed.TravelControl.OnTravelSelectionChanged += Display;
 
-            Order = DB.SQLiteDBClass.GetSettingString(DbOSave, "").RestoreArrayFromString(0, Recipes.Count);
+            Order = SQLiteDBClass.GetSettingString(DbOSave, "").RestoreArrayFromString(0, Recipes.Count);
             if (Order.Distinct().Count() != Order.Length)       // if not distinct..
                 for (int i = 0; i < Order.Length; i++)          // reset
                     Order[i] = i;
 
-            Wanted = DB.SQLiteDBClass.GetSettingString(DbWSave, "").RestoreArrayFromString(0, Recipes.Count);
+            Wanted = SQLiteDBClass.GetSettingString(DbWSave, "").RestoreArrayFromString(0, Recipes.Count);
 
             List<string> engineers = Recipes.SelectMany(r => r.engineers).Distinct().ToList();
             engineers.Sort();
@@ -257,8 +257,8 @@ namespace EDDiscovery.UserControls
             discoveryform.TravelControl.OnTravelSelectionChanged -= Display;
             discoveryform.OnNewEntry -= Discoveryform_OnNewEntry;
 
-            DB.SQLiteDBClass.PutSettingString(DbOSave, Order.ToString(","));
-            DB.SQLiteDBClass.PutSettingString(DbWSave, Wanted.ToString(","));
+            SQLiteDBClass.PutSettingString(DbOSave, Order.ToString(","));
+            SQLiteDBClass.PutSettingString(DbWSave, Wanted.ToString(","));
         }
 
         #endregion

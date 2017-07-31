@@ -189,7 +189,7 @@ namespace ExtendedControls
             toolstripRenderer = new ThemeToolStripRenderer();
         }
 
-        public virtual void LoadThemes()                                    // base themes load
+        public void LoadBaseThemes()                                    // base themes load
         {
             themelist.Clear();
 
@@ -882,11 +882,5 @@ namespace ExtendedControls
 
         public bool IsCustomTheme()
         { return currentsettings.name.Equals("Custom"); }
-
-        public void UpdatePatch(Panel pn)
-        {
-            Settings.CI ci = (Settings.CI)(pn.Tag);
-            pn.BackColor = currentsettings.colors[ci];
-        }
     }
 }

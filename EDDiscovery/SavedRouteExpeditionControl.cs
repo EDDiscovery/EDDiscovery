@@ -21,13 +21,13 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
-using EDDiscovery.DB;
-using EDDiscovery.EDSM;
+using EliteDangerousCore.EDSM;
 using System.IO;
 using EMK.LightGeometry;
-
 using ExtendedControls;
-using EDDiscovery.EliteDangerous;
+using EliteDangerousCore.DB;
+using EliteDangerousCore;
+using EDDiscovery.DB;
 
 namespace EDDiscovery
 {
@@ -863,7 +863,7 @@ namespace EDDiscovery
             ClearRoute();
             toolStripComboBoxRouteSelection.SelectedItem = null;
 
-            foreach (SystemClassDB s in _discoveryForm.RouteControl.RouteSystems)
+            foreach (EliteDangerousCore.DB.SystemClassDB s in _discoveryForm.RouteControl.RouteSystems)
             {
                 dataGridViewRouteSystems.Rows.Add(s.name, "", "");
             }

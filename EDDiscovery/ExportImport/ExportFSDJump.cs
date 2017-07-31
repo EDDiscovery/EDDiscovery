@@ -13,9 +13,7 @@
  * 
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
-using EDDiscovery.EliteDangerous;
-using EDDiscovery.EliteDangerous.JournalEvents;
-
+using EliteDangerousCore;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -68,7 +66,7 @@ namespace EDDiscovery.Export
                 {
                     if (je.EventTypeID == JournalTypeEnum.FSDJump)
                     {
-                        JournalFSDJump ev = je as JournalFSDJump;
+                        EliteDangerousCore.JournalEvents.JournalFSDJump ev = je as EliteDangerousCore.JournalEvents.JournalFSDJump;
 
                         writer.Write(MakeValueCsvFriendly(ev.EventTimeLocal));
                         writer.Write(MakeValueCsvFriendly(ev.StarSystem));

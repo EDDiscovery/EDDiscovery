@@ -21,11 +21,10 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
-using EDDiscovery;
-using EDDiscovery.DB;
 using System.IO;
 using EDDiscovery.Forms;
-using EDDiscovery.EliteDangerous;
+using EliteDangerousCore;
+using EliteDangerousCore.DB;
 
 namespace EDDiscovery
 {
@@ -68,7 +67,7 @@ namespace EDDiscovery
             ResetThemeList();
             SetEntryThemeComboBox();
 
-            textBoxHomeSystem.SetAutoCompletor(EDDiscovery.DB.SystemClassDB.ReturnSystemListForAutoComplete);
+            textBoxHomeSystem.SetAutoCompletor(SystemClassDB.ReturnSystemListForAutoComplete);
             comboBoxTheme.ItemHeight = 20;
 
             btnDeleteCommander.Enabled = EDCommander.NumberOfCommanders > 1;

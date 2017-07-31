@@ -20,6 +20,7 @@ using System.Text;
 using System.Threading.Tasks;
 using BaseUtils;
 using Conditions;
+using EliteDangerousCore;
 
 namespace EDDiscovery.Actions
 {
@@ -65,14 +66,14 @@ namespace EDDiscovery.Actions
                 // these were the ones used in the pack..
 
                 vars[prefix + "JS_event"] = he.EntryType.ToString();        
-                if (he.journalEntry is EliteDangerous.JournalEvents.JournalReceiveText)
-                    vars[prefix + "JS_Channel"] = (he.journalEntry as EliteDangerous.JournalEvents.JournalReceiveText).Channel;
-                if (he.journalEntry is EliteDangerous.JournalEvents.JournalBuyAmmo)
-                    vars[prefix + "JS_Cost"] = (he.journalEntry as EliteDangerous.JournalEvents.JournalBuyAmmo).Cost.ToString(System.Globalization.CultureInfo.InvariantCulture);
+                if (he.journalEntry is EliteDangerousCore.JournalEvents.JournalReceiveText)
+                    vars[prefix + "JS_Channel"] = (he.journalEntry as EliteDangerousCore.JournalEvents.JournalReceiveText).Channel;
+                if (he.journalEntry is EliteDangerousCore.JournalEvents.JournalBuyAmmo)
+                    vars[prefix + "JS_Cost"] = (he.journalEntry as EliteDangerousCore.JournalEvents.JournalBuyAmmo).Cost.ToString(System.Globalization.CultureInfo.InvariantCulture);
             }
         }
 
-        static public void SystemVars(ConditionVariables vars, EliteDangerous.ISystem s, string prefix)
+        static public void SystemVars(ConditionVariables vars, ISystem s, string prefix)
         {
             if (s != null)
             {
@@ -96,7 +97,7 @@ namespace EDDiscovery.Actions
         }
 
 
-        static public void ShipBasicInformation(ConditionVariables vars, EliteDangerous.ShipInformation si, string prefix)
+        static public void ShipBasicInformation(ConditionVariables vars, ShipInformation si, string prefix)
         {
             string ship = "Unknown", id = "0", name = "Unknown", ident = "Unknown", sv = "None", fullinfo = "Unknown", shortname = "Unknown", fuel = "0", cargo = "0", fuellevel = "0";
 
@@ -126,7 +127,7 @@ namespace EDDiscovery.Actions
             vars[prefix + "Ship_CargoCapacity"] = cargo;
         }
 
-        static public void SystemVarsFurtherInfo(ActionLanguage.ActionProgramRun vars, HistoryList hl, EliteDangerous.ISystem s, string prefix)
+        static public void SystemVarsFurtherInfo(ActionLanguage.ActionProgramRun vars, HistoryList hl, ISystem s, string prefix)
         {
             System.Globalization.CultureInfo ct = System.Globalization.CultureInfo.InvariantCulture;
 
@@ -148,14 +149,14 @@ namespace EDDiscovery.Actions
             }
         }
 
-        static public void ShipModuleInformation(ActionLanguage.ActionProgramRun vars, EliteDangerous.ShipInformation si, string prefix)
+        static public void ShipModuleInformation(ActionLanguage.ActionProgramRun vars, ShipInformation si, string prefix)
         {
             if (si != null && si.Modules != null)
             {
                 vars[prefix + "Ship_Module_Count"] = si.Modules.Count.ToString(System.Globalization.CultureInfo.InvariantCulture);
 
                 int ind = 0;
-                foreach (EliteDangerous.JournalEvents.JournalLoadout.ShipModule m in si.Modules.Values)
+                foreach (EliteDangerousCore.JournalEvents.JournalLoadout.ShipModule m in si.Modules.Values)
                 {
                     string mi = prefix + "Ship_Module[" + ind.ToString() + "]_";
                     vars[mi + "Slot"] = m.Slot;
@@ -173,12 +174,12 @@ namespace EDDiscovery.Actions
         }
 
 
-        static public void MissionInformation(ActionLanguage.ActionProgramRun vars, EliteDangerous.MissionList ml, string prefix)
+        static public void MissionInformation(ActionLanguage.ActionProgramRun vars, MissionList ml, string prefix)
         {
             vars[prefix + "_MissionCount"] = ml.Missions.Count.ToStringInvariant();
 
             int i = 0;
-            foreach (EliteDangerous.MissionState ms in ml.Missions.Values)
+            foreach (MissionState ms in ml.Missions.Values)
             {
                 string mp = prefix + "Mission[" + i.ToStringInvariant() +"]_";
 
