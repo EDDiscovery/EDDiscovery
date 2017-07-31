@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2015 - 2016 EDDiscovery development team
+ * Copyright © 2015 - 2017 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -42,16 +42,16 @@ namespace EDDiscovery
 
                 try
                 {
-                    using (new SingleGlobalInstance(1000))
+                    using (new SingleUserInstance(1000))
                     {
-                        Run();
+                        Application.Run(new EDDApplicationContext());
                     }
                 }
                 catch (TimeoutException)
                 {
                     if (ExtendedControls.MessageBoxTheme.Show("EDDiscovery is already running. Launch anyway?", "EDDiscovery", MessageBoxButtons.YesNo) == DialogResult.Yes)
                     {
-                        Run();
+                        Application.Run(new EDDApplicationContext());
                     }
 
                     /* Could not lock the app-global mutex, which means another copy of the App is running.
@@ -60,31 +60,15 @@ namespace EDDiscovery
                 }
             }
         }
-
-        static void Run()
-        {
-            using (EDDiscoveryForm mainform = new EDDiscoveryForm())
-            {
-                using (SplashForm splash = new SplashForm(mainform))
-                {
-                    using (ApplicationContext context = new ApplicationContext(splash))
-                    {
-                        splash.Context = context;
-                        splash.Init();
-                        Application.Run(context);
-                    }
-                }
-            }
-        }
     }
 
 
-    /** This is a helper class to wrap an app-unique global mutex. It can be used to ensure that
-     * only a single instance of a piece of code runs on a machine.  If this is used to wrap main()
-     * it ensures that only a single instance of the entire application can run.
+    /** This is a helper class to wrap an app-unique per-user mutex. It can be used to ensure that
+     * only a single instance of a piece of code runs in a user session.  If this is used to wrap main()
+     * it ensures that only a single instance of the entire application can run per-user.
      * Code copied from http://stackoverflow.com/questions/229565/what-is-a-good-pattern-for-using-a-global-mutex-in-c/229567
      */
-    class SingleGlobalInstance : IDisposable
+    class SingleUserInstance : IDisposable
     {
         public bool hasHandle = false;
         Mutex mutex;
@@ -92,7 +76,8 @@ namespace EDDiscovery
         private void InitMutex()
         {
             string appGuid = ((GuidAttribute)Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(GuidAttribute), false).GetValue(0)).Value.ToString();
-            string mutexId = string.Format("Global\\{{{0}}}", appGuid);
+            string usernm = System.Convert.ToBase64String(System.Text.Encoding.Default.GetBytes(Environment.UserDomainName ?? "none" + "-" + Environment.UserName ?? "none"));
+            string mutexId = $"Global\\{usernm}-{{{appGuid}}}";
             mutex = new Mutex(false, mutexId);
 
             try
@@ -108,7 +93,7 @@ namespace EDDiscovery
             }
         }
 
-        public SingleGlobalInstance(int timeOut)
+        public SingleUserInstance(int timeOut)
         {
             InitMutex();
             try

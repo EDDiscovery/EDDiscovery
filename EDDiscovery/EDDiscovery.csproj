@@ -71,8 +71,7 @@
     <SignManifests>false</SignManifests>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>
-    </ApplicationIcon>
+    <ApplicationIcon>Resources\edlogo_3mo_icon.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup>
     <StartupObject>
@@ -209,6 +208,7 @@
     <Compile Include="CompanionAPI\CSystem.cs" />
     <Compile Include="DB\BookmarkClass.cs" />
     <Compile Include="DB\TargetClassHelpers.cs" />
+    <Compile Include="EDDApplicationContext.cs" />
     <Compile Include="EGO\EGOClass.cs" />
     <Compile Include="EGO\EGOSync.cs" />
     <Compile Include="EliteDangerous\BindingsFile.cs" />
@@ -940,6 +940,7 @@
     <None Include="Resources\galaxycolour.png" />
     <None Include="Resources\galaxy_white.png" />
     <None Include="Resources\galaxy_gray.png" />
+    <Content Include="Resources\edlogo_3mo_icon.ico" />
     <Content Include="Resources\imgCheck.png" />
     <None Include="Resources\stellaremnant.PNG" />
     <None Include="Resources\nebula.PNG" />
@@ -1309,6 +1310,12 @@
       <ZipFiles Include="..\packages\System.Data.SQLite.Core.1.0.104.0\build\net46\x64\SQLite.Interop.dll">
         <Name>x64\SQLite.Interop.dll</Name>
       </ZipFiles>
+      <ZipFiles Include="$(OutputPath)\ActionLanguage.dll" />
+      <ZipFiles Include="$(OutputPath)\Audio.dll" />
+      <ZipFiles Include="$(OutputPath)\Conditions.dll" />
+      <ZipFiles Include="$(OutputPath)\DirectInput.dll" />
+      <ZipFiles Include="$(OutputPath)\ExtendedControls.dll" />
+      <ZipFiles Include="$(OutputPath)\General.dll" />
     </ItemGroup>
     <Zip OutputFileName="$(OutputPath)\EDDiscovery.Portable.zip" Files="@(ZipFiles)" />
   </Target>
