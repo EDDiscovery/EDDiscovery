@@ -13,7 +13,8 @@
  * 
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
-using EDDiscovery.DB;
+
+using EliteDangerousCore.DB;
 using EMK.LightGeometry;
 using System;
 using System.Collections.Generic;

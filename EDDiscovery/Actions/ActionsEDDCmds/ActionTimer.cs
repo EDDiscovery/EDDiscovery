@@ -22,6 +22,7 @@ using System.Windows.Forms;
 using BaseUtils;
 using Conditions;
 using ActionLanguage;
+using EliteDangerousCore;
 
 namespace EDDiscovery.Actions
 {

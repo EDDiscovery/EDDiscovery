@@ -13,9 +13,9 @@
  * 
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
-using EDDiscovery;
-using EDDiscovery.DB;
-using EDDiscovery.EliteDangerous;
+
+using EliteDangerousCore;
+using EliteDangerousCore.DB;
 using EMK.LightGeometry;
 using Newtonsoft.Json.Linq;
 using System;

@@ -14,6 +14,7 @@
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 using EDDiscovery.DB;
+using EliteDangerousCore.DB;
 using EMK.LightGeometry;
 using System;
 using System.Collections.Generic;
@@ -50,9 +51,9 @@ namespace EDDiscovery.Export
                         writer.WriteLine();
                     }
 
-                    EDDiscovery.DB.SystemNoteClass.GetAllSystemNotes();
+                    SystemNoteClass.GetAllSystemNotes();
 
-                    foreach (EDDiscovery.DB.SystemNoteClass snc in EDDiscovery.DB.SystemNoteClass.globalSystemNotes)
+                    foreach (SystemNoteClass snc in SystemNoteClass.globalSystemNotes)
                     {
                         writer.Write(MakeValueCsvFriendly(snc.SystemName.Length > 0 ? snc.SystemName : "N/A"));
                         writer.Write(MakeValueCsvFriendly(snc.Journalid > 0 ? snc.Journalid.ToString() : "N/A"));

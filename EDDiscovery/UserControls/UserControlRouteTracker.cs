@@ -22,7 +22,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using EliteDangerousCore.DB;
 using EDDiscovery.DB;
+using EliteDangerousCore;
 
 namespace EDDiscovery.UserControls
 {
@@ -191,8 +193,10 @@ namespace EDDiscovery.UserControls
             string topline = "";
             string bottomLine="";
             string firstSystemName = _currentRoute.Systems[0];
+
             SystemClassDB firstSystem = SystemClassDB.GetSystem(firstSystemName);
             SystemClassDB finalSystem = SystemClassDB.GetSystem(_currentRoute.Systems[_currentRoute.Systems.Count - 1]);
+
             if (finalSystem != null)
             {
                 string mesg = "remain";

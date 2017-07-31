@@ -23,12 +23,11 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using EDDiscovery.Controls;
-using EDDiscovery.DB;
-using EDDiscovery.EliteDangerous;
-using EDDiscovery.EDSM;
-
+using EliteDangerousCore.DB;
+using EliteDangerousCore;
+using EliteDangerousCore.EDSM;
+using EliteDangerousCore.EDDN;
 using EDDiscovery.Export;
-using EDDiscovery.EDDN;
 
 namespace EDDiscovery.UserControls
 {
@@ -179,7 +178,7 @@ namespace EDDiscovery.UserControls
             result = HistoryList.FilterByJournalEvent(result, SQLiteDBClass.GetSettingString(DbFilterSave, "All"), out ftotal);
             toolTip1.SetToolTip(buttonFilter, (ftotal > 0) ? ("Total filtered out " + ftotal) : "Filter out entries based on event type");
 
-            result = HistoryList.FilterHistory(result, fieldfilter, discoveryform.Globals, out ftotal);
+            result = FilterHelpers.FilterHistory(result, fieldfilter, discoveryform.Globals, out ftotal);
             toolTip1.SetToolTip(buttonField, (ftotal > 0) ? ("Total filtered out " + ftotal) : "Filter out entries matching the field selection");
 
             dataGridViewTravel.Rows.Clear();
@@ -261,7 +260,7 @@ namespace EDDiscovery.UserControls
 
         public bool WouldAddEntry(HistoryEntry he)                  // do we filter? if its not in the journal event filter, or it is in the field filter
         {
-            return he.IsJournalEventInEventFilter(SQLiteDBClass.GetSettingString(DbFilterSave, "All")) && HistoryList.FilterHistory(he, fieldfilter, discoveryform.Globals);
+            return he.IsJournalEventInEventFilter(SQLiteDBClass.GetSettingString(DbFilterSave, "All")) && FilterHelpers.FilterHistory(he, fieldfilter, discoveryform.Globals);
         }
 
         public void SelectTopRow()
@@ -726,7 +725,7 @@ namespace EDDiscovery.UserControls
         private void viewOnEDSMToolStripMenuItem_Click(object sender, EventArgs e)
         {
             this.Cursor = Cursors.WaitCursor;
-            EDDiscovery.EDSM.EDSMClass edsm = new EDSMClass();
+            EliteDangerousCore.EDSM.EDSMClass edsm = new EDSMClass();
             long? id_edsm = rightclicksystem.System?.id_edsm;
 
             if (id_edsm <= 0)
@@ -753,7 +752,7 @@ namespace EDDiscovery.UserControls
                 return;
             }
 
-            EliteDangerous.JournalEvents.JournalLocOrJump journalent = null;
+            EliteDangerousCore.JournalEvents.JournalLocOrJump journalent = null;
 
             if (jents[selindex].EventTypeID != JournalTypeEnum.FSDJump)
             {
@@ -786,7 +785,7 @@ namespace EDDiscovery.UserControls
                 jents.Add(_jents[i]);
             }
 
-            journalent = jents.OfType<EliteDangerous.JournalEvents.JournalLocOrJump>().FirstOrDefault();
+            journalent = jents.OfType<EliteDangerousCore.JournalEvents.JournalLocOrJump>().FirstOrDefault();
 
             if (journalent == null)
             {
@@ -832,7 +831,7 @@ namespace EDDiscovery.UserControls
         {
             if (rightclicksystem != null && rightclicksystem.EntryType == JournalTypeEnum.Scan && !rightclicksystem.EDDNSync)
             {
-                EDDNSync.SendEDDNEvent(discoveryform, rightclicksystem);
+                EDDNSync.SendEDDNEvent(discoveryform.LogLine, rightclicksystem);
             }
         }
 
@@ -900,8 +899,8 @@ namespace EDDiscovery.UserControls
             Conditions.ConditionFilterForm frm = new Conditions.ConditionFilterForm();
             frm.InitFilter("History: Filter out fields",
                             System.Drawing.Icon.ExtractAssociatedIcon(System.Reflection.Assembly.GetExecutingAssembly().Location),
-                            EDDiscovery.EliteDangerous.JournalEntry.GetListOfEventsWithOptMethod(false),
-                            (s) => { return BaseUtils.FieldNames.GetPropertyFieldNames(EDDiscovery.EliteDangerous.JournalEntry.TypeOfJournalEntry(s)); },
+                            JournalEntry.GetListOfEventsWithOptMethod(false),
+                            (s) => { return BaseUtils.FieldNames.GetPropertyFieldNames(JournalEntry.TypeOfJournalEntry(s)); },
                             discoveryform.Globals.NameList, fieldfilter);
             frm.TopMost = this.FindForm().TopMost;
             if (frm.ShowDialog(this.FindForm()) == DialogResult.OK)

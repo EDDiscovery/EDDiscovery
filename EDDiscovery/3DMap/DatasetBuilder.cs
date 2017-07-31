@@ -13,8 +13,6 @@
  * 
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
-using EDDiscovery;
-using EDDiscovery.DB;
 
 using System;
 using System.Collections.Generic;
@@ -25,9 +23,10 @@ using System.Diagnostics;
 using OpenTK;
 using System.Resources;
 using EDDiscovery.Properties;
-using EDDiscovery.EDSM;
+using EliteDangerousCore.EDSM;
+using EliteDangerousCore.DB;
+using EliteDangerousCore;
 using System.IO;
-using EDDiscovery.EliteDangerous;
 
 namespace EDDiscovery._3DMap
 {
@@ -293,7 +292,7 @@ namespace EDDiscovery._3DMap
 
                         if (touse != null && gmo.points.Count > 0)             // if it has an image its a point object , and has co-ord
                         {
-                            Vector3 pd = gmo.points[0];
+                            Vector3 pd = gmo.points[0].Convert();
                             string tucachename = "GalMapType:" + gmo.galMapType.Typeid;
                             TexturedQuadData tubasetex = null;
 
@@ -402,7 +401,7 @@ namespace EDDiscovery._3DMap
                                         {
                                             GalacticMapObject gmo = tgmos[i];
                                             string cachename = gmo.name + textc.ToString();
-                                            Vector3 pd = gmo.points[0];
+                                            Vector3 pd = gmo.points[0].Convert();
                                             Rectangle clip = bounds[i];
                                             Point pos = clip.Location;
                                             g.SetClip(clip);
@@ -439,7 +438,7 @@ namespace EDDiscovery._3DMap
                         {
                             if (gmo.galMapType.Enabled && gmo.points.Count > 0)
                             {
-                                Vector3 pd = gmo.points[0];
+                                Vector3 pd = gmo.points[0].Convert();
                                 Bitmap map = null;
                                 string cachename = gmo.name + textc.ToString();
 
@@ -491,11 +490,11 @@ namespace EDDiscovery._3DMap
                         {
                             int id = (int)tqd.Tag2;
                             if (id == 0)
-                                tqd.UpdateVertices(gmo.points[0], rotation, widthly, heightly);
+                                tqd.UpdateVertices(gmo.points[0].Convert(), rotation, widthly, heightly);
                             else if (id == 1)
-                                tqd.UpdateVertices(gmo.points[0], rotation, (widthly / 10 * gmo.name.Length), (heightly / 3), 0, heightly * gmonameoff);
+                                tqd.UpdateVertices(gmo.points[0].Convert(), rotation, (widthly / 10 * gmo.name.Length), (heightly / 3), 0, heightly * gmonameoff);
                             else
-                                tqd.UpdateVertices(gmo.points[0], rotation, widthly, heightly, 0, heightly * gmotargetoff);
+                                tqd.UpdateVertices(gmo.points[0].Convert(), rotation, widthly, heightly, 0, heightly * gmotargetoff);
                         }
                     }
                 }
@@ -696,7 +695,7 @@ namespace EDDiscovery._3DMap
 
                     foreach (HistoryEntry sp in syslists)
                     {
-                        if (sp.EntryType == EDDiscovery.EliteDangerous.JournalTypeEnum.Resurrect || sp.EntryType == EDDiscovery.EliteDangerous.JournalTypeEnum.Died)
+                        if (sp.EntryType == JournalTypeEnum.Resurrect || sp.EntryType == JournalTypeEnum.Died)
                         {
                             lastpos = null;
                         }
@@ -790,7 +789,7 @@ namespace EDDiscovery._3DMap
                     var datasetbks = Data3DSetClass<TexturedQuadData>.Create("selgmo", Color.White, 1f);
                     long gmotarget = TargetClass.GetTargetGMO();
                     float hoff = (gmotarget == selectedgmo.id) ? (heightly * gmoseltarget) : (heightly * gmoselonly);
-                    TexturedQuadData newtexture = TexturedQuadData.FromBitmap(selmark, selectedgmo.points[0], rotation, widthly, heightly / 2, 0, hoff);
+                    TexturedQuadData newtexture = TexturedQuadData.FromBitmap(selmark, selectedgmo.points[0].Convert(), rotation, widthly, heightly / 2, 0, hoff);
                     newtexture.Tag = 1;
                     datasetbks.Add(newtexture);
                     _datasets.Add(datasetbks);
@@ -821,7 +820,7 @@ namespace EDDiscovery._3DMap
                         {
                             long gmotarget = TargetClass.GetTargetGMO();
                             float hoff = (gmotarget == selectedgmo.id) ? (heightly * gmoseltarget) : (heightly * gmoselonly);
-                            tqd.UpdateVertices(selectedgmo.points[0], rotation, widthly, heightly / 2, 0, hoff);
+                            tqd.UpdateVertices(selectedgmo.points[0].Convert(), rotation, widthly, heightly / 2, 0, hoff);
                         }
                     }
                 }
@@ -853,5 +852,13 @@ namespace EDDiscovery._3DMap
         }
 
 #endregion
+    }
+
+    static class StaticHelpers3dmap
+    {
+        public static OpenTK.Vector3 Convert(this EMK.LightGeometry.Vector3 v)
+        {
+            return new OpenTK.Vector3(v.X, v.Y, v.Z);
+        }
     }
 }

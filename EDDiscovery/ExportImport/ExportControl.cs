@@ -22,13 +22,14 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using EDDiscovery.Export;
-using EDDiscovery.EliteDangerous;
 using System.Diagnostics;
-using EDDiscovery.EliteDangerous.JournalEvents;
 using System.IO;
 using System.Globalization;
 
 using EDDiscovery.Import;
+using EliteDangerousCore.DB;
+using EliteDangerousCore;
+using EliteDangerousCore.JournalEvents;
 
 namespace EDDiscovery.Export
 {
@@ -63,7 +64,7 @@ namespace EDDiscovery.Export
             exportTypeList.Add(new ExportTypeClass("Exploration list (planet data)", new ExportScan(false, true, true)));
 
 
-            txtExportVisited.SetAutoCompletor(EDDiscovery.DB.SystemClassDB.ReturnSystemListForAutoComplete);
+            txtExportVisited.SetAutoCompletor(SystemClassDB.ReturnSystemListForAutoComplete);
 
             comboBoxCustomExportType.ItemHeight = 20;
 

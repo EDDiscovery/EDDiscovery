@@ -13,7 +13,6 @@
  * 
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
-using EDDiscovery.DB;
 using EDDiscovery.UserControls;
 using BaseUtils.Win32Constants;
 using ExtendedControls;
@@ -26,6 +25,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using EliteDangerousCore.DB;
 
 namespace EDDiscovery.Forms
 {

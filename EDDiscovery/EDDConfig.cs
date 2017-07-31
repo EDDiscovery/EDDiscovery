@@ -13,8 +13,8 @@
  * 
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
-using EDDiscovery.DB;
-using System;
+
+ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -23,14 +23,15 @@ using System.Data.Common;
 using System.Data;
 using System.IO;
 using System.Reflection;
-using EDDiscovery.EDSM;
+using EliteDangerousCore.EDSM;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
 using EDDiscovery;
+using EliteDangerousCore.DB;
 
 namespace EDDiscovery
 {
-    public class EDDConfig
+    public class EDDConfig : EliteDangerousCore.EliteConfig
     {
         private static EDDConfig _instance;
 
@@ -45,6 +46,7 @@ namespace EDDiscovery
                 if (_instance == null)
                 {
                     _instance = new EDDConfig();
+                    EliteDangerousCore.EliteConfigInstance.InstanceConfig = _instance;        // hook up so classes can see this which use this IF
                 }
                 return _instance;
             }
@@ -268,7 +270,7 @@ namespace EDDiscovery
                 _defaultvoicedevice = SQLiteConnectionUser.GetSettingString("VoiceAudioDevice", "Default", conn);
                 _defaultwavedevice = SQLiteConnectionUser.GetSettingString("WaveAudioDevice", "Default", conn);
 
-                EDCommander.Load(write, conn);
+                EliteDangerousCore.EDCommander.Load(write, conn);
                 UserPaths.Load(conn);
             }
             catch (Exception ex)
@@ -359,7 +361,7 @@ namespace EDDiscovery
             Null
         }
 
-        public class OptionsClass
+        public class OptionsClass : EliteDangerousCore.EliteOptions
         {
             public string VersionDisplayString { get; private set; }
             public string AppFolder { get; private set; }
@@ -426,7 +428,7 @@ namespace EDDiscovery
 
                 if (DisableBetaCheck)
                 {
-                    EDDiscovery.EliteDangerous.EDJournalReader.disable_beta_commander_check = true;
+                    EliteDangerousCore.EDJournalReader.disable_beta_commander_check = true;
                     sb.Append(" (no BETA detect)");
                 }
 
@@ -572,6 +574,8 @@ namespace EDDiscovery
                 if (UserDatabasePath == null) UserDatabasePath = Path.Combine(AppDataDirectory, "EDDUser.sqlite");
                 if (SystemDatabasePath == null) SystemDatabasePath = Path.Combine(AppDataDirectory, "EDDSystem.sqlite");
                 if (OldDatabasePath == null) OldDatabasePath = Path.Combine(AppDataDirectory, "EDDiscovery.sqlite");
+
+                EliteDangerousCore.EliteConfigInstance.InstanceOptions = this;
             }
         }
 
@@ -670,9 +674,10 @@ namespace EDDiscovery
                 File.Move(Path.Combine(EDDConfig.Options.AppDataDirectory, "UserPaths.json.tmp"), Path.Combine(EDDConfig.Options.AppDataDirectory, "UserPaths.json"));
             }
 
-#endregion
+        #endregion
         }
 
-#endregion
+        #endregion
+
     }
 }
