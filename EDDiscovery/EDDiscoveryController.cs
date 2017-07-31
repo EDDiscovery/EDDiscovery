@@ -88,13 +88,15 @@ namespace EDDiscovery
             InvokeAsyncOnUiThread = invokeAsyncOnUiThread;
         }
 
-        public static Task Initialize(bool noreposition)        // called from splash form to set up initial initialization of dbs and config
+        public static void Initialize(bool noreposition, Action<string> msg)    // called from EDDApplicationContext to initialize config and dbs
         {
+            msg.Invoke("Checking Config");
             InitializeConfig(noreposition);
 
             Trace.WriteLine($"*** Elite Dangerous Discovery Initializing - {EDDConfig.Options.VersionDisplayString}, Platform: {Environment.OSVersion.Platform.ToString()}");
 
-            return Task.Factory.StartNew(InitializeDatabases);
+            msg.Invoke("Scanning Memory Banks");
+            InitializeDatabases();
         }
 
         public void Init()
