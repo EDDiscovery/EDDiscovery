@@ -21,7 +21,7 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
-using EDDiscovery.EDSM;
+using EliteDangerousCore.EDSM;
 using System.IO;
 using EMK.LightGeometry;
 using ExtendedControls;

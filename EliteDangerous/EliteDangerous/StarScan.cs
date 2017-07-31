@@ -13,6 +13,7 @@
  * 
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
+
 using EliteDangerousCore;
 using EliteDangerousCore.JournalEvents;
 using System;
@@ -22,7 +23,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EDDiscovery.EliteDangerous
+namespace EliteDangerousCore
 {
 
     public class StarScan
@@ -432,7 +433,7 @@ namespace EDDiscovery.EliteDangerous
             {
                 if ((sn == null || (sn != null && sn.EDSMAdded == false)) && sys.id_edsm > 0)   // null, or not scanned, and with EDSM ID
                 {
-                    List<JournalScan> jl = EDDiscovery.EDSM.EDSMClass.GetBodiesList(sys.id_edsm);
+                    List<JournalScan> jl = EliteDangerousCore.EDSM.EDSMClass.GetBodiesList(sys.id_edsm);
 
                     if (jl != null)
                     {
@@ -456,7 +457,7 @@ namespace EDDiscovery.EliteDangerous
 
         public static void LoadBodyDesignationMap()
         {
-            string desigmappath = Path.Combine(EDDConfig.Options.AppDataDirectory, "bodydesignations.csv");
+            string desigmappath = Path.Combine(EliteConfigInstance.InstanceOptions.AppDataDirectory, "bodydesignations.csv");
 
             if (!File.Exists(desigmappath))
             {

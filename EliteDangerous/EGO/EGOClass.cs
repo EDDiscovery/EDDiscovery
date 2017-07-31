@@ -13,6 +13,7 @@
  * 
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
+
 using EliteDangerousCore;
 using EliteDangerousCore.JournalEvents;
 using Newtonsoft.Json.Linq;
@@ -26,7 +27,7 @@ using System.Management;
 using System.Reflection;
 using System.Text;
 
-namespace EDDiscovery.EGO
+namespace EDDiscoveryCore.EGO
 {
     public class EGOClass : BaseUtils.HttpCom
     {

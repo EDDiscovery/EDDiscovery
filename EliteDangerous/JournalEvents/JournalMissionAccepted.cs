@@ -111,7 +111,7 @@ namespace EliteDangerousCore.JournalEvents
         public bool? PassengerWanted { get; set; }
         public string PassengerType { get; set; }
 
-        public override System.Drawing.Bitmap Icon { get { return EliteDangerousCore.Properties.Resources.missionaccepted; } }
+        public override System.Drawing.Bitmap Icon { get { return EliteDangerous.Properties.Resources.missionaccepted; } }
 
         public override void FillInformation(out string summary, out string info, out string detailed) //V
         {

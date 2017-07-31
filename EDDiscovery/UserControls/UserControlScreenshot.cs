@@ -25,6 +25,7 @@ using System.Windows.Forms;
 using EliteDangerousCore.JournalEvents;
 using Newtonsoft.Json.Linq;
 using System.IO;
+using EliteDangerousCore;
 
 namespace EDDiscovery.UserControls
 {

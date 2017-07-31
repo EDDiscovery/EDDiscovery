@@ -37,7 +37,7 @@ namespace EliteDangerousCore.JournalEvents
         {
             get
             {
-                return Properties.Resources.scanned;
+                return EliteDangerous.Properties.Resources.scanned;
             }
         }
 

@@ -14,10 +14,8 @@
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 using EDDiscovery.DB;
-using EDDiscovery.EDDN;
-using EDDiscovery.EDSM;
-using EDDiscovery.EGO;
-using EDDiscovery.EliteDangerous;
+using EliteDangerousCore.EDDN;
+using EliteDangerousCore.EDSM;
 using EDDiscovery.Forms;
 using EDDiscovery.Export;
 using BaseUtils.Win32Constants;
@@ -562,7 +560,7 @@ namespace EDDiscovery
         {
             try
             {
-                EDDN.EDDNClass eddn = new EDDN.EDDNClass();
+                EliteDangerousCore.EDDN.EDDNClass eddn = new EliteDangerousCore.EDDN.EDDNClass();
 
                 eddn.commanderName = he.Commander.EdsmName;
                 if (string.IsNullOrEmpty(eddn.commanderName))
@@ -968,7 +966,8 @@ namespace EDDiscovery
         private void sendUnsuncedEDDNEventsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             List<HistoryEntry> hlsyncunsyncedlist = Controller.history.FilterByScanNotEDDNSynced;        // first entry is oldest
-            EDDNSync.SendEDDNEvents(this, hlsyncunsyncedlist);
+
+            EDDNSync.SendEDDNEvents(LogLine, hlsyncunsyncedlist);
         }
 
         private void materialSearchToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1358,7 +1357,7 @@ namespace EDDiscovery
 
             try
             {
-                EdsmSync.StartSync(edsm, EDCommander.Current.SyncToEdsm, EDCommander.Current.SyncFromEdsm, EDDConfig.Instance.DefaultMapColour);
+                EdsmSync.StartSync(edsm, history, EDCommander.Current.SyncToEdsm, EDCommander.Current.SyncFromEdsm, EDDConfig.Instance.DefaultMapColour);
             }
             catch (Exception ex)
             {
@@ -1428,7 +1427,7 @@ namespace EDDiscovery
         private void sendUnsyncedEGOScansToolStripMenuItem_Click(object sender, EventArgs e)
         {
             List<HistoryEntry> hlsyncunsyncedlist = Controller.history.FilterByScanNotEGOSynced;        // first entry is oldest
-            EGOSync.SendEGOEvents(this, hlsyncunsyncedlist);
+            EDDiscoveryCore.EGO.EGOSync.SendEGOEvents(LogLine, hlsyncunsyncedlist);
         }
     }
 }

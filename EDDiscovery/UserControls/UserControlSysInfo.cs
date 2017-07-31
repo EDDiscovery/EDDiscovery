@@ -25,7 +25,7 @@ using System.Windows.Forms;
 using System.Diagnostics;
 using EliteDangerousCore.DB;
 using EliteDangerousCore;
-using EDDiscovery.EDSM;
+using EliteDangerousCore.EDSM;
 
 namespace EDDiscovery.UserControls
 {

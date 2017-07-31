@@ -1,18 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.Concurrent;
 using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Globalization;
 using Newtonsoft.Json.Linq;
 using System.Diagnostics;
-using EliteDangerousCore;
 using EliteDangerousCore.JournalEvents;
 using EliteDangerousCore.DB;
 
-namespace EDDiscovery.EDSM
+namespace EliteDangerousCore.EDSM
 {
     public class EDSMLogFetcher
     {
@@ -194,7 +190,7 @@ namespace EDDiscovery.EDSM
                             {
                                 JObject jo = JournalEntry.CreateFSDJournalEntryJson(he.EventTimeUTC,
                                                                                                   he.System.name, he.System.x, he.System.y, he.System.z,
-                                                                                                  EDDConfig.Instance.DefaultMapColour);
+                                                                                                  EliteConfigInstance.InstanceConfig.DefaultMapColour);
                                 JournalEntry je =
                                     JournalEntry.CreateFSDJournalEntry(tlu.id, tlu.CommanderId.Value,
                                                                                                   (int)SyncFlags.EDSM, jo);

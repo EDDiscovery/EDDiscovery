@@ -37,7 +37,7 @@ namespace EliteDangerousCore.JournalEvents
         public double Latitude { get; set; }
         public double Longitude { get; set; }
         public bool? PlayerControlled { get; set; }
-        public override System.Drawing.Bitmap Icon { get { return EliteDangerousCore.Properties.Resources.liftoff; } }
+        public override System.Drawing.Bitmap Icon { get { return EliteDangerous.Properties.Resources.liftoff; } }
 
         public override void FillInformation(out string summary, out string info, out string detailed) //V
         {

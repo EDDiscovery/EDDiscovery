@@ -61,9 +61,9 @@ namespace EliteDangerousCore.JournalEvents
             get
             {
                 if (unknownType)
-                    return EliteDangerousCore.Properties.Resources.genericevent;
+                    return EliteDangerous.Properties.Resources.genericevent;
                 else
-                    return EliteDangerousCore.Properties.Resources.engineerapply;
+                    return EliteDangerous.Properties.Resources.engineerapply;
             }
         }
 

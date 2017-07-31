@@ -23,7 +23,7 @@ using System.Diagnostics;
 using OpenTK;
 using System.Resources;
 using EDDiscovery.Properties;
-using EDDiscovery.EDSM;
+using EliteDangerousCore.EDSM;
 using EliteDangerousCore.DB;
 using EliteDangerousCore;
 using System.IO;

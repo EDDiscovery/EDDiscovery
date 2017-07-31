@@ -37,9 +37,9 @@ namespace EliteDangerousCore.JournalEvents
             get
             {
                 if (To.Contains("Mothership"))
-                    return EliteDangerousCore.Properties.Resources.mothership;
+                    return EliteDangerous.Properties.Resources.mothership;
                 else
-                    return EliteDangerousCore.Properties.Resources.fighter;
+                    return EliteDangerous.Properties.Resources.fighter;
             }
         }
 

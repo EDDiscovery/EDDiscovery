@@ -14,7 +14,7 @@
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 using EDDiscovery;
-using EDDiscovery.EDSM;
+using EliteDangerousCore.EDSM;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -73,7 +73,7 @@ namespace EDDiscovery.Forms
             this.Height -= delta;
             checkBoxTarget.Checked = target;
 
-            var edsm = new EDSM.EDSMClass();
+            var edsm = new EDSMClass();
             edsmurl = edsm.GetUrlToEDSMSystem(name);
         }
 
@@ -124,7 +124,7 @@ namespace EDDiscovery.Forms
             }
             else
             {
-                var edsm = new EDSM.EDSMClass();
+                var edsm = new EDSMClass();
                 edsmurl = edsm.GetUrlToEDSMSystem(name);
             }
         }
@@ -136,7 +136,7 @@ namespace EDDiscovery.Forms
             textBoxTravelNote.Text = note;
             textBoxTime.Text = tme;
             buttonDelete.Hide();
-            var edsm = new EDSM.EDSMClass();
+            var edsm = new EDSMClass();
             edsmurl = edsm.GetUrlToEDSMSystem(name);
         }
 

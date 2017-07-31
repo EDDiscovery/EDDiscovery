@@ -195,16 +195,11 @@
     <Compile Include="Actions\ActionsEDDCmds\ActionMenuItem.cs" />
     <Compile Include="Actions\ActionVars.cs" />
     <Compile Include="Actions\ConditionFunctionsEDD.cs" />
-    <Compile Include="DB\StarScan.cs" />
-    <Compile Include="DB\SystemClassEDSM.cs" />
-    <Compile Include="DB\TargetClassHelpers.cs" />
+    <Compile Include="UserControls\FilterHelpers.cs" />
+    <Compile Include="UserControls\TargetClassHelpers.cs" />
     <Compile Include="EDDApplicationContext.cs" />
-    <Compile Include="EGO\EGOClass.cs" />
-    <Compile Include="EGO\EGOSync.cs" />
-    <Compile Include="EDSM\GalacticMapSystem.cs" />
     <Compile Include="DebugCode.cs" />
     <Compile Include="EDDiscoveryController.cs" />
-    <Compile Include="EDSM\EDSMLogFetcher.cs" />
     <Compile Include="ExportImport\ExportGrid.cs" />
     <Compile Include="ExportImport\ExportSphereSystems.cs" />
     <Compile Include="Forms\CommanderForm.cs">
@@ -244,11 +239,6 @@
     <Compile Include="ExportImport\ExportNotes.cs" />
     <Compile Include="ExportImport\ImportHistory.cs" />
     <Compile Include="Trilateration\DistanceParser.cs" />
-    <Compile Include="EDDN\EDDNClass.cs" />
-    <Compile Include="EDDN\EDDNSync.cs" />
-    <Compile Include="EDSM\GalacticMapObject.cs" />
-    <Compile Include="EDSM\GalacticMapping.cs" />
-    <Compile Include="EDSM\GalMapType.cs" />
     <Compile Include="ExportImport\ExportExplorationData.cs" />
     <Compile Include="ExportImport\ExportFilteredSystems.cs" />
     <Compile Include="ExportImport\ExportRoute.cs" />
@@ -314,11 +304,8 @@
     <Compile Include="Forms\UserControlForm.Designer.cs">
       <DependentUpon>UserControlForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="HistoryList.cs" />
     <Compile Include="EDDConfig.cs" />
     <Compile Include="Themeing\Theme.cs" />
-    <Compile Include="EDSM\EDSMClass.cs" />
-    <Compile Include="EDSM\EDSMSync.cs" />
     <Compile Include="3DMap\FormMap.cs">
       <SubType>Form</SubType>
     </Compile>

@@ -31,7 +31,7 @@ namespace EliteDangerousCore.JournalEvents
         public int Count { get; set; }
         public string Category { get; set; }
 
-        public override System.Drawing.Bitmap Icon { get { return EliteDangerousCore.Properties.Resources.scientificresearch; } }
+        public override System.Drawing.Bitmap Icon { get { return EliteDangerous.Properties.Resources.scientificresearch; } }
 
         public override void FillInformation(out string summary, out string info, out string detailed) //V
         {

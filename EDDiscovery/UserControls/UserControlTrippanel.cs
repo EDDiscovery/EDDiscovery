@@ -279,7 +279,7 @@ namespace EDDiscovery.UserControls
 
                 if (he != null)
                 {
-                    EDDiscovery.EDSM.EDSMClass edsm = new EDDiscovery.EDSM.EDSMClass();
+                    EliteDangerousCore.EDSM.EDSMClass edsm = new EliteDangerousCore.EDSM.EDSMClass();
 
                     string url = edsm.GetUrlToEDSMSystem(he.System.name);
 

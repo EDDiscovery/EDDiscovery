@@ -41,7 +41,7 @@ namespace EliteDangerousCore.JournalEvents
 
         public string[] Modules { get; set; }
         public string[] FriendlyModules { get; set; }
-        public override System.Drawing.Bitmap Icon { get { return EliteDangerousCore.Properties.Resources.rebootrepair; } }
+        public override System.Drawing.Bitmap Icon { get { return EliteDangerous.Properties.Resources.rebootrepair; } }
 
         public override void FillInformation(out string summary, out string info, out string detailed)  //V
         {

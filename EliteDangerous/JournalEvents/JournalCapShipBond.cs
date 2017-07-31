@@ -44,7 +44,7 @@ namespace EliteDangerousCore.JournalEvents
             mcl.AddEventNoCash(Id, EventTimeUTC, EventTypeID, AwardingFaction +" " + Reward);
         }
 
-        public override System.Drawing.Bitmap Icon { get { return EliteDangerousCore.Properties.Resources.capshipbond; } }
+        public override System.Drawing.Bitmap Icon { get { return EliteDangerous.Properties.Resources.capshipbond; } }
 
         public override void FillInformation(out string summary, out string info, out string detailed) //V
         {

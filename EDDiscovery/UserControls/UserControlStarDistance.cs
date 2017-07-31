@@ -25,7 +25,7 @@ using System.Windows.Forms;
 using System.Collections.Concurrent;
 using System.Threading;
 using EliteDangerousCore;
-using EDDiscovery.EDSM;
+using EliteDangerousCore.EDSM;
 
 namespace EDDiscovery.UserControls
 {

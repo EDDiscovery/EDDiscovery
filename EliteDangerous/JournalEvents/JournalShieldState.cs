@@ -37,7 +37,7 @@ namespace EliteDangerousCore.JournalEvents
         {
             get
             {
-                return ShieldsUp ? EliteDangerousCore.Properties.Resources.shieldsup : EliteDangerousCore.Properties.Resources.shieldsdown;
+                return ShieldsUp ? EliteDangerous.Properties.Resources.shieldsup : EliteDangerous.Properties.Resources.shieldsdown;
             }
         }
 

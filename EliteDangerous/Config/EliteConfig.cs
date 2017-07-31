@@ -35,6 +35,8 @@ namespace EliteDangerousCore
     public interface EliteConfig
     {
         int DefaultMapColour { get; }
+        bool ClearCommodities { get; }
+        bool ClearMaterials { get; }
     }
 
     public static class EliteConfigInstance

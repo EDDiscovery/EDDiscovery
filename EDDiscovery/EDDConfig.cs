@@ -23,7 +23,7 @@ using System.Data.Common;
 using System.Data;
 using System.IO;
 using System.Reflection;
-using EDDiscovery.EDSM;
+using EliteDangerousCore.EDSM;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
 using EDDiscovery;

@@ -27,6 +27,7 @@ using System.Threading;
 using System.Windows.Forms;
 using EDDiscovery;
 using EliteDangerousCore.DB;
+using EliteDangerousCore;
 
 namespace EDDiscovery
 {

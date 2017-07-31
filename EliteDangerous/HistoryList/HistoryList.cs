@@ -13,22 +13,20 @@
  * 
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
-using EDDiscovery.EDSM;
-using Newtonsoft.Json.Linq;
+
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Data.Common;
 using System.Diagnostics;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Threading;
-using EliteDangerousCore;
 using EliteDangerousCore.DB;
 using EliteDangerousCore.JournalEvents;
+using EliteDangerousCore.EDSM;
 
-namespace EDDiscovery
+namespace EliteDangerousCore
 {
     [DebuggerDisplay("Event {EntryType} {System.name} ({System.x,nq},{System.y,nq},{System.z,nq}) {EventTimeUTC} JID:{Journalid}")]
     public class HistoryEntry           // DONT store commander ID.. this history is externally filtered on it.
@@ -403,7 +401,7 @@ namespace EDDiscovery
 
         public void ProcessWithUserDb(JournalEntry je, HistoryEntry prev, HistoryList hl, SQLiteConnectionUser conn)      // called after above with a USER connection
         {
-            materialscommodities = MaterialCommoditiesList.Process(je, prev?.materialscommodities, conn, EDDiscoveryForm.EDDConfig.ClearMaterials, EDDiscoveryForm.EDDConfig.ClearCommodities);
+            materialscommodities = MaterialCommoditiesList.Process(je, prev?.materialscommodities, conn, EliteConfigInstance.InstanceConfig.ClearMaterials, EliteConfigInstance.InstanceConfig.ClearCommodities);
 
             snc = SystemNoteClass.GetSystemNote(Journalid, IsFSDJump, System);       // may be null
         }
@@ -425,9 +423,9 @@ namespace EDDiscovery
                 if (journalEntry != null)
                     return journalEntry.Icon;
                 else if (EntryType == JournalTypeEnum.FSDJump)
-                    return EDDiscovery.Properties.Resources.hyperspace;
+                    return EliteDangerous.Properties.Resources.hyperspace;
                 else
-                    return EDDiscovery.Properties.Resources.genericevent;
+                    return EliteDangerous.Properties.Resources.genericevent;
             }
         }
 
@@ -508,7 +506,7 @@ namespace EDDiscovery
         public Ledger materialcommodititiesledger { get; private set; } = new Ledger();       // and the ledger..
         public ShipInformationList shipinformationlist { get; private set; } = new ShipInformationList();     // ship info
         private MissionListAccumulator missionlistaccumulator = new MissionListAccumulator(); // and mission list..
-        public EliteDangerous.StarScan starscan { get; private set; } = new EliteDangerous.StarScan();                                           // and the results of scanning
+        public StarScan starscan { get; private set; } = new StarScan();                                           // and the results of scanning
         public int CommanderId { get; private set; }
 
         private JournalFuelScoop FuelScoopAccum;        // no need to copy
@@ -1016,11 +1014,11 @@ namespace EDDiscovery
 
                         if (ds1 != null)
                         {
-                            return new GalacticMapSystem(ds1, gmo);
+                            return new EDSM.GalacticMapSystem(ds1, gmo);
                         }
                         else
                         {
-                            return new GalacticMapSystem(gmo);
+                            return new EDSM.GalacticMapSystem(gmo);
                         }
                     }
                 }
@@ -1450,7 +1448,7 @@ namespace EDDiscovery
                 if (NetLogPath != null)
                 {
                     string errstr = null;
-                    NetLogClass.ParseFiles(NetLogPath, out errstr, EDDConfig.Instance.DefaultMapColour, () => cancelRequested(), (p, s) => reportProgress(p, s), ForceNetLogReload, currentcmdrid: CurrentCommander);
+                    NetLogClass.ParseFiles(NetLogPath, out errstr, EliteConfigInstance.InstanceConfig.DefaultMapColour, () => cancelRequested(), (p, s) => reportProgress(p, s), ForceNetLogReload, currentcmdrid: CurrentCommander);
                 }
             }
 
@@ -1519,78 +1517,5 @@ namespace EDDiscovery
         }
 
         #endregion
-
-
-        #region Filtering by conditions
-
-        static public List<HistoryEntry> CheckFilterTrue(List<HistoryEntry> he, Conditions.ConditionLists cond, Conditions.ConditionVariables othervars)    // conditions match for item to stay
-        {
-            if (cond.Count == 0)       // no filters, all in
-                return he;
-            else
-            {
-                string er;
-                List<HistoryEntry> ret = (from s in he where cond.CheckFilterTrue(s.journalEntry, othervars, out er, null) select s).ToList();
-                return ret;
-            }
-        }
-
-        static public bool FilterHistory(HistoryEntry he, Conditions.ConditionLists cond, Conditions.ConditionVariables othervars)                // true if it should be included
-        {
-            string er;
-            return cond.CheckFilterFalse(he.journalEntry, he.journalEntry.EventTypeStr, othervars, out er, null);     // true it should be included
-        }
-
-        static public List<HistoryEntry> FilterHistory(List<HistoryEntry> he, Conditions.ConditionLists cond, Conditions.ConditionVariables othervars, out int count)    // filter in all entries
-        {
-            count = 0;
-            if (cond.Count == 0)       // no filters, all in
-                return he;
-            else
-            {
-                string er;
-                List<HistoryEntry> ret = (from s in he where cond.CheckFilterFalse(s.journalEntry, s.journalEntry.EventTypeStr, othervars, out er, null) select s).ToList();
-
-                count = he.Count - ret.Count;
-                return ret;
-            }
-        }
-
-        static public List<HistoryEntry> MarkHistory(List<HistoryEntry> he, Conditions.ConditionLists cond, Conditions.ConditionVariables othervars, out int count)       // Used for debugging it..
-        {
-            count = 0;
-
-            if (cond.Count == 0)       // no filters, all in
-                return he;
-            else
-            {
-                List<HistoryEntry> ret = new List<HistoryEntry>();
-
-                foreach (HistoryEntry s in he)
-                {
-                    List<Conditions.Condition> list = new List<Conditions.Condition>();    // don't want it
-
-                    int mrk = s.EventDescription.IndexOf(":::");
-                    if (mrk >= 0)
-                        s.EventDescription = s.EventDescription.Substring(mrk + 3);
-
-                    string er;
-
-                    if (!cond.CheckFilterFalse(s.journalEntry, s.journalEntry.EventTypeStr, othervars, out er, list))
-                    {
-                        //System.Diagnostics.Debug.WriteLine("Filter out " + s.Journalid + " " + s.EntryType + " " + s.EventDescription);
-                        s.EventDescription = "!" + list[0].eventname + ":::" + s.EventDescription;
-                        count++;
-                    }
-
-                    ret.Add(s);
-                }
-
-                return ret;
-            }
-        }
-
-        #endregion
-
     }
 }

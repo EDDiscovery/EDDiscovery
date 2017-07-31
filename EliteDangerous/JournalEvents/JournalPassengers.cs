@@ -66,7 +66,7 @@ namespace EliteDangerousCore.JournalEvents
 
         public Passengers[] Manifest { get; set; }
 
-        public override System.Drawing.Bitmap Icon { get { return EliteDangerousCore.Properties.Resources.passengers; } }
+        public override System.Drawing.Bitmap Icon { get { return EliteDangerous.Properties.Resources.passengers; } }
 
         public override void FillInformation(out string summary, out string info, out string detailed) //U
         {

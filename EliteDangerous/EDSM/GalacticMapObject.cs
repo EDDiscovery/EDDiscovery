@@ -13,15 +13,13 @@
  * 
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
-using EDDiscovery._3DMap;
+
 using EMK.LightGeometry;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
-namespace EDDiscovery.EDSM
+namespace EliteDangerousCore.EDSM
 {
     public class GalacticMapObject
     {

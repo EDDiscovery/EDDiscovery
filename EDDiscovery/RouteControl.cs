@@ -27,7 +27,7 @@ using Newtonsoft.Json;
 using System.Diagnostics;
 using System.Threading;
 using EMK.LightGeometry;
-using EDDiscovery.EDSM;
+using EliteDangerousCore.EDSM;
 using System.Collections.Concurrent;
 using EliteDangerousCore.DB;
 using EliteDangerousCore;

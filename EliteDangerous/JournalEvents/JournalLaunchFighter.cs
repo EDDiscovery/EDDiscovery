@@ -33,7 +33,7 @@ namespace EliteDangerousCore.JournalEvents
         public string Loadout { get; set; }
         public bool PlayerControlled { get; set; }
 
-        public override System.Drawing.Bitmap Icon { get { return EliteDangerousCore.Properties.Resources.launchfighter; } }
+        public override System.Drawing.Bitmap Icon { get { return EliteDangerous.Properties.Resources.launchfighter; } }
 
         public void ShipInformation(ShipInformationList shp, DB.SQLiteConnectionUser conn)
         {

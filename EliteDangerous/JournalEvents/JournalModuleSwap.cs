@@ -63,7 +63,7 @@ namespace EliteDangerousCore.JournalEvents
         public string Ship { get; set; }
         public int ShipId { get; set; }
 
-        public override System.Drawing.Bitmap Icon { get { return EliteDangerousCore.Properties.Resources.moduleswap; } }
+        public override System.Drawing.Bitmap Icon { get { return EliteDangerous.Properties.Resources.moduleswap; } }
 
         public void ShipInformation(ShipInformationList shp, DB.SQLiteConnectionUser conn)
         {

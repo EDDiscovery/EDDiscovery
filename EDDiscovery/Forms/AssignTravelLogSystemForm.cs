@@ -74,7 +74,7 @@ namespace EDDiscovery.Forms
         public AssignTravelLogSystemForm(ISystem refsys, DateTime? visited = null)
         {
             InitializeComponent();
-            SystemClassEDSM.CheckSystemAliases();
+            EliteDangerousCore.EDSM.SystemClassEDSM.CheckSystemAliases();
             SystemClassDB.GetSystemAndAlternatives(refsys, out _linkSystem, out _alternatives, out _namestatus);
 
             this.tbLogSystemName.Text = refsys.name;
@@ -199,7 +199,7 @@ namespace EDDiscovery.Forms
         {
             if (_linkSystem != null)
             {
-                var edsm = new EDDiscovery.EDSM.EDSMClass();
+                var edsm = new EliteDangerousCore.EDSM.EDSMClass();
                 string url = edsm.GetUrlToEDSMSystem(_linkSystem.name, _linkSystem.id_edsm);
                 System.Diagnostics.Process.Start(url);
             }

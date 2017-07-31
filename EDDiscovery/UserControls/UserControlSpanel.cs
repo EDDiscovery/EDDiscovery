@@ -238,7 +238,7 @@ namespace EDDiscovery.UserControls
 
                 int ftotal;         // event filter
                 result = HistoryList.FilterByJournalEvent(result, SQLiteDBClass.GetSettingString(DbFilterSave, "All"), out ftotal);
-                result = HistoryList.FilterHistory(result, fieldfilter , discoveryform.Globals, out ftotal); // and the field filter..
+                result = FilterHelpers.FilterHistory(result, fieldfilter , discoveryform.Globals, out ftotal); // and the field filter..
 
                 RevertToNormalSize();                                           // ensure size is back to normal..
                 scanpostextoffset = new Point(0, 0);                            // left/ top used by scan display
@@ -472,7 +472,7 @@ namespace EDDiscovery.UserControls
 
         public bool WouldAddEntry(HistoryEntry he)                  // do we filter? if its not in the journal event filter, or it is in the field filter
         {
-            return he.IsJournalEventInEventFilter(SQLiteDBClass.GetSettingString(DbFilterSave, "All")) && HistoryList.FilterHistory(he, fieldfilter , discoveryform.Globals);
+            return he.IsJournalEventInEventFilter(SQLiteDBClass.GetSettingString(DbFilterSave, "All")) && FilterHelpers.FilterHistory(he, fieldfilter , discoveryform.Globals);
         }
 
 #endregion
@@ -492,7 +492,7 @@ namespace EDDiscovery.UserControls
                 }
                 else if (he != null)
                 {
-                    EDDiscovery.EDSM.EDSMClass edsm = new EDDiscovery.EDSM.EDSMClass();
+                    EliteDangerousCore.EDSM.EDSMClass edsm = new EliteDangerousCore.EDSM.EDSMClass();
 
                     string url = edsm.GetUrlToEDSMSystem(he.System.name);
 

@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace EliteDangerousCore.Properties {
+namespace EliteDangerous.Properties {
     using System;
     
     
@@ -126,6 +126,16 @@ namespace EliteDangerousCore.Properties {
         internal static System.Drawing.Bitmap Black_Hole {
             get {
                 object obj = ResourceManager.GetObject("Black_Hole", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Blackhole {
+            get {
+                object obj = ResourceManager.GetObject("Blackhole", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -296,6 +306,16 @@ namespace EliteDangerousCore.Properties {
         internal static System.Drawing.Bitmap collectcargo {
             get {
                 object obj = ResourceManager.GetObject("collectcargo", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap comet {
+            get {
+                object obj = ResourceManager.GetObject("comet", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -1193,6 +1213,16 @@ namespace EliteDangerousCore.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap nebula {
+            get {
+                object obj = ResourceManager.GetObject("nebula", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Neutron_Star {
             get {
                 object obj = ResourceManager.GetObject("Neutron_Star", resourceCulture);
@@ -1206,6 +1236,16 @@ namespace EliteDangerousCore.Properties {
         internal static System.Drawing.Bitmap newcommander {
             get {
                 object obj = ResourceManager.GetObject("newcommander", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap no_entry {
+            get {
+                object obj = ResourceManager.GetObject("no_entry", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -1236,6 +1276,26 @@ namespace EliteDangerousCore.Properties {
         internal static System.Drawing.Bitmap payfines {
             get {
                 object obj = ResourceManager.GetObject("payfines", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap PlanetaryNebula {
+            get {
+                object obj = ResourceManager.GetObject("PlanetaryNebula", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap pointofinterest {
+            get {
+                object obj = ResourceManager.GetObject("pointofinterest", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -1346,6 +1406,16 @@ namespace EliteDangerousCore.Properties {
         internal static System.Drawing.Bitmap promotion {
             get {
                 object obj = ResourceManager.GetObject("promotion", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap pulsar {
+            get {
+                object obj = ResourceManager.GetObject("pulsar", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -1656,6 +1726,16 @@ namespace EliteDangerousCore.Properties {
         internal static System.Drawing.Bitmap Star_K1IV {
             get {
                 object obj = ResourceManager.GetObject("Star_K1IV", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap starcluster {
+            get {
+                object obj = ResourceManager.GetObject("starcluster", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
