@@ -13,7 +13,7 @@
  * 
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
-using EDDiscovery;
+
 using EliteDangerousCore;
 using EliteDangerousCore.DB;
 using EliteDangerousCore.JournalEvents;
@@ -23,15 +23,11 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
-using System.IO.Compression;
-using System.Linq;
 using System.Net;
 using System.Reflection;
-using System.Text;
 using System.Web;
-using System.Windows.Forms;
 
-namespace EDDiscovery.EDSM
+namespace EliteDangerousCore.EDSM
 {
     public class EDSMClass : BaseUtils.HttpCom
     {
@@ -52,7 +48,7 @@ namespace EDDiscovery.EDSM
 
             _serverAddress = ServerAddress;
 
-            EDSMDistancesFileName = Path.Combine(EDDConfig.Options.AppDataDirectory, "EDSMDistances.json");
+            EDSMDistancesFileName = Path.Combine(EliteConfigInstance.InstanceOptions.AppDataDirectory, "EDSMDistances.json");
 
             apiKey = EDCommander.Current.APIKey;
             commanderName = EDCommander.Current.EdsmName;
@@ -276,7 +272,7 @@ namespace EDDiscovery.EDSM
                     break;
                 }
 
-                updates += EDDiscovery.DB.SystemClassEDSM.ParseEDSMUpdateSystemsString(json, ref lstsyst, ref outoforder, false, cancelRequested, reportProgress, false);
+                updates += SystemClassEDSM.ParseEDSMUpdateSystemsString(json, ref lstsyst, ref outoforder, false, cancelRequested, reportProgress, false);
                 lstsystdate += TimeSpan.FromHours(12);
             }
             logLine($"System download complete");
@@ -285,11 +281,11 @@ namespace EDDiscovery.EDSM
         }
 
 
-        internal string GetHiddenSystems()
+        public string GetHiddenSystems()
         {
             try
             {
-                string edsmhiddensystems = Path.Combine(EDDConfig.Options.AppDataDirectory, "edsmhiddensystems.json");
+                string edsmhiddensystems = Path.Combine(EliteConfigInstance.InstanceOptions.AppDataDirectory, "edsmhiddensystems.json");
                 bool newfile = false;
                 BaseUtils.DownloadFileHandler.DownloadFile(_serverAddress + "api-v1/hidden-systems?showId=1", edsmhiddensystems, out newfile);
 
@@ -510,7 +506,7 @@ namespace EDDiscovery.EDSM
                                 id_edsm = id
                             };
 
-                        HistoryEntry he = HistoryEntry.MakeVSEntry(sc, etutc, EDDConfig.Instance.DefaultMapColour, "", "", firstdiscover: firstdiscover);       // FSD jump entry
+                        HistoryEntry he = HistoryEntry.MakeVSEntry(sc, etutc, EliteConfigInstance.InstanceConfig.DefaultMapColour, "", "", firstdiscover: firstdiscover);       // FSD jump entry
                         log.Add(he);
                     }
                 }

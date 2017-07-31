@@ -73,7 +73,7 @@ namespace EliteDangerousCore.JournalEvents
         public string StoredItemFD { get; set; }                  // if stored previous one
         public string StoredItemLocalised { get; set; }         // if stored previous one
 
-        public override System.Drawing.Bitmap Icon { get { return EliteDangerousCore.Properties.Resources.modulebuy; } }
+        public override System.Drawing.Bitmap Icon { get { return EliteDangerous.Properties.Resources.modulebuy; } }
 
         public void Ledger(Ledger mcl, DB.SQLiteConnectionUser conn)
         {

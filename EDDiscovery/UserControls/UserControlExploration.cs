@@ -22,7 +22,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using EDDiscovery.DB;
-using EDDiscovery.EDSM;
+using EliteDangerousCore.EDSM;
 using System.IO;
 using EDDiscovery.UserControls;
 using Newtonsoft.Json.Linq;

@@ -32,7 +32,7 @@ namespace EliteDangerousCore.JournalEvents
             shp.DockFighter();
         }
 
-        public override System.Drawing.Bitmap Icon { get { return EliteDangerousCore.Properties.Resources.dockfighter; } }
+        public override System.Drawing.Bitmap Icon { get { return EliteDangerous.Properties.Resources.dockfighter; } }
 
         public override void FillInformation(out string summary, out string info, out string detailed) //V
         {

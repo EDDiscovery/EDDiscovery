@@ -13,22 +13,15 @@
  *
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
-using EDDiscovery;
-using EDDiscovery.EDDN;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Collections.Concurrent;
-using System.Drawing;
-using System.Globalization;
-using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using EliteDangerousCore;
 using EliteDangerousCore.JournalEvents;
 
-namespace EDDiscovery.EDDN
+namespace EliteDangerousCore.EDDN
 {
     public static class EDDNSync
     {
@@ -37,20 +30,22 @@ namespace EDDiscovery.EDDN
         private static bool Exit = false;
         private static ConcurrentQueue<HistoryEntry> hlscanunsyncedlist = new ConcurrentQueue<HistoryEntry>();
         private static AutoResetEvent hlscanevent = new AutoResetEvent(false);
-        private static IDiscoveryController mainForm;
+        private static Action<string> logger;
 
-        public static bool SendEDDNEvent(IDiscoveryController frm, HistoryEntry helist)
+        public static bool SendEDDNEvent(Action<string> logger, HistoryEntry helist)
         {
-            return SendEDDNEvents(frm, new[] { helist });
+            return SendEDDNEvents(logger, new[] { helist });
         }
 
-        public static bool SendEDDNEvents(IDiscoveryController frm, params HistoryEntry[] helist)
+        public static bool SendEDDNEvents(Action<string> logger, params HistoryEntry[] helist)
         {
-            return SendEDDNEvents(frm, (IEnumerable<HistoryEntry>)helist);
+            return SendEDDNEvents(logger, (IEnumerable<HistoryEntry>)helist);
         }
 
-        public static bool SendEDDNEvents(IDiscoveryController frm, IEnumerable<HistoryEntry> helist)
+        public static bool SendEDDNEvents(Action<string> log, IEnumerable<HistoryEntry> helist)
         {
+            logger = log;
+
             foreach (HistoryEntry he in helist)
             {
                 hlscanunsyncedlist.Enqueue(he);
@@ -62,7 +57,6 @@ namespace EDDiscovery.EDDN
             if (Interlocked.CompareExchange(ref _running, 1, 0) == 0)
             {
                 Exit = false;
-                mainForm = frm;
                 ThreadEDDNSync = new System.Threading.Thread(new System.Threading.ThreadStart(SyncThread));
                 ThreadEDDNSync.Name = "EDDN Sync";
                 ThreadEDDNSync.IsBackground = true;
@@ -102,7 +96,7 @@ namespace EDDiscovery.EDDN
                         }
                         else if (EDDNSync.SendToEDDN(he))
                         {
-                            mainForm.LogLine($"Sent {he.EntryType.ToString()} event to EDDN ({he.EventSummary})");
+                            logger?.Invoke($"Sent {he.EntryType.ToString()} event to EDDN ({he.EventSummary})");
                         }
 
                         if (Exit)
@@ -126,7 +120,7 @@ namespace EDDiscovery.EDDN
             catch (Exception ex)
             {
                 System.Diagnostics.Trace.WriteLine("Exception ex:" + ex.Message);
-                mainForm.LogLineHighlight("EDDN sync Exception " + ex.Message);
+                logger?.Invoke("EDDN sync Exception " + ex.Message);
             }
             finally
             {

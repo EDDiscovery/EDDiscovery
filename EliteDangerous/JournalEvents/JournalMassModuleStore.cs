@@ -51,7 +51,7 @@ namespace EliteDangerousCore.JournalEvents
 
         public ModuleItem[] ModuleItems { get; set; }
 
-        public override System.Drawing.Bitmap Icon { get { return EliteDangerousCore.Properties.Resources.modulestore; } }
+        public override System.Drawing.Bitmap Icon { get { return EliteDangerous.Properties.Resources.modulestore; } }
 
         public void ShipInformation(ShipInformationList shp, DB.SQLiteConnectionUser conn)
         {

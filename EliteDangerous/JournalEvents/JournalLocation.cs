@@ -135,7 +135,7 @@ namespace EliteDangerousCore.JournalEvents
 
 
 
-        public override System.Drawing.Bitmap Icon { get { return EliteDangerousCore.Properties.Resources.location; } }
+        public override System.Drawing.Bitmap Icon { get { return EliteDangerous.Properties.Resources.location; } }
 
         public class FactionInfo
         {

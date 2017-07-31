@@ -26,7 +26,7 @@ using System.Management;
 using System.Reflection;
 using System.Text;
 
-namespace EDDiscovery.EDDN
+namespace EliteDangerousCore.EDDN
 {
     public class EDDNClass : BaseUtils.HttpCom
     {

@@ -14,9 +14,8 @@
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 
-using EDDiscovery.EDSM;
-using EDDiscovery.EDDN;
-using EDDiscovery.EliteDangerous;
+using EliteDangerousCore.EDSM;
+using EliteDangerousCore.EDDN;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -118,13 +117,18 @@ namespace EDDiscovery
 
             galacticMapping = new GalacticMapping();
 
-            EdsmSync = new EDSMSync(this);
+            EdsmSync = new EDSMSync(Logger);
 
             EdsmLogFetcher = new EDSMLogFetcher(EDCommander.CurrentCmdrID, LogLine);
             EdsmLogFetcher.OnDownloadedSystems += () => RefreshHistoryAsync();
 
             journalmonitor = new EDJournalClass(InvokeAsyncOnUiThread);
             journalmonitor.OnNewJournalEntry += NewEntry;
+        }
+
+        public void Logger(string s)
+        {
+            LogLine(s);
         }
 
         public void PostInit_Loaded()
@@ -290,7 +294,7 @@ namespace EDDiscovery
         private EDJournalClass journalmonitor;
 
         private ConcurrentQueue<RefreshWorkerArgs> refreshWorkerQueue = new ConcurrentQueue<RefreshWorkerArgs>();
-        private EDDiscovery.DB.SystemClassEDSM.SystemsSyncState syncstate = new EDDiscovery.DB.SystemClassEDSM.SystemsSyncState();
+        private EliteDangerousCore.EDSM.SystemClassEDSM.SystemsSyncState syncstate = new EliteDangerousCore.EDSM.SystemClassEDSM.SystemsSyncState();
         private ConcurrentQueue<StardistRequest> closestsystem_queue = new ConcurrentQueue<StardistRequest>();
         private RefreshWorkerArgs refreshWorkerArgs = new RefreshWorkerArgs();
 
@@ -428,7 +432,7 @@ namespace EDDiscovery
         {
             try
             {
-                EDDiscovery.DB.SystemClassEDSM.PerformSync(() => PendingClose, (p, s) => ReportProgress(p, s), LogLine, LogLineHighlight, syncstate);
+                EliteDangerousCore.EDSM.SystemClassEDSM.PerformSync(() => PendingClose, (p, s) => ReportProgress(p, s), LogLine, LogLineHighlight, syncstate);
             }
             catch (OperationCanceledException)
             {
@@ -638,7 +642,7 @@ namespace EDDiscovery
 
             if (PendingClose) return;
 
-            if (EDDN.EDDNClass.CheckforEDMC()) // EDMC is running
+            if (EliteDangerousCore.EDDN.EDDNClass.CheckforEDMC()) // EDMC is running
             {
                 if (EDCommander.Current.SyncToEddn)  // Both EDD and EDMC should not sync to EDDN.
                 {

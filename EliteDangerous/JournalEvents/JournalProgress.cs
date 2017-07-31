@@ -47,7 +47,7 @@ namespace EliteDangerousCore.JournalEvents
         public int Federation { get; set; }
         public int CQC { get; set; }
 
-        public override System.Drawing.Bitmap Icon { get { return EliteDangerousCore.Properties.Resources.progress; } }
+        public override System.Drawing.Bitmap Icon { get { return EliteDangerous.Properties.Resources.progress; } }
 
         public override void FillInformation(out string summary, out string info, out string detailed) //V
         {

@@ -40,7 +40,7 @@ namespace EliteDangerousCore.JournalEvents
         public int Level { get; set; }
         public string Override { get; set; }
 
-        public override System.Drawing.Bitmap Icon { get { return EliteDangerousCore.Properties.Resources.engineerapply; } }
+        public override System.Drawing.Bitmap Icon { get { return EliteDangerous.Properties.Resources.engineerapply; } }
 
         public override void FillInformation(out string summary, out string info, out string detailed) //V
         {

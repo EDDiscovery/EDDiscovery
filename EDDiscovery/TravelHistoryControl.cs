@@ -21,17 +21,16 @@ using System.Linq;
 using System.Windows.Forms;
 using EDDiscovery.DB;
 using System.Diagnostics;
-using EDDiscovery.EDSM;
+using EliteDangerousCore.EDSM;
 using System.Threading.Tasks;
 using EDDiscovery.Controls;
 using System.Threading;
 using System.Collections.Concurrent;
-using EDDiscovery.EDDN;
+using EliteDangerousCore.EDDN;
 using Newtonsoft.Json.Linq;
 using EDDiscovery.Export;
 using EDDiscovery.UserControls;
 using EDDiscovery.Forms;
-using EDDiscovery.EGO;
 using EliteDangerousCore;
 using EliteDangerousCore.DB;
 
@@ -279,7 +278,7 @@ namespace EDDiscovery
                 {
                     if (EDCommander.Current.SyncToEddn == true)
                     {
-                        EDDNSync.SendEDDNEvents(_discoveryForm, he);
+                        EDDNSync.SendEDDNEvents(_discoveryForm.LogLine, he);
                     }
                 }
 
@@ -287,7 +286,7 @@ namespace EDDiscovery
                 {
                     if (EDCommander.Current.SyncToEGO)
                     {
-                        EGOSync.SendEGOEvents(_discoveryForm, he);
+                        EDDiscoveryCore.EGO.EGOSync.SendEGOEvents(_discoveryForm.LogLine, he);
                     }
                 }
 

@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EDDiscovery.EDSM
+namespace EliteDangerousCore.EDSM
 {
     public class GalacticMapSystem : SystemClassDB
     {

@@ -45,6 +45,8 @@
       <HintPath>..\packages\System.Data.SQLite.Linq.1.0.105.2\lib\net46\System.Data.SQLite.Linq.dll</HintPath>
     </Reference>
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Management" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -79,6 +81,19 @@
     <Compile Include="DB\TravelLogUnit.cs" />
     <Compile Include="DB\WantedSystemClass.cs" />
     <Compile Include="Config\EliteConfig.cs" />
+    <Compile Include="EDDN\EDDNClass.cs" />
+    <Compile Include="EDDN\EDDNSync.cs" />
+    <Compile Include="EDSM\EDSMClass.cs" />
+    <Compile Include="EDSM\EDSMLogFetcher.cs" />
+    <Compile Include="EDSM\EDSMSync.cs" />
+    <Compile Include="EDSM\GalacticMapObject.cs" />
+    <Compile Include="EDSM\GalacticMapping.cs" />
+    <Compile Include="EDSM\GalacticMapSystem.cs" />
+    <Compile Include="EDSM\GalMapType.cs" />
+    <Compile Include="EDDB\SystemClassEDDB.cs" />
+    <Compile Include="EDSM\SystemClassEDSM.cs" />
+    <Compile Include="EGO\EGOClass.cs" />
+    <Compile Include="EGO\EGOSync.cs" />
     <Compile Include="EliteDangerous\BindingsFile.cs" />
     <Compile Include="EliteDangerous\Bodies.cs" />
     <Compile Include="EliteDangerous\BodyDesignations.cs" />
@@ -91,6 +106,8 @@
     <Compile Include="EliteDangerous\JournalEntry.cs" />
     <Compile Include="EliteDangerous\JournalEntryAttributes.cs" />
     <Compile Include="EliteDangerous\JournalEntryInterfaces.cs" />
+    <Compile Include="EliteDangerous\StarScan.cs" />
+    <Compile Include="HistoryList\HistoryList.cs" />
     <Compile Include="JournalEvents\JournalApproachSettlement.cs" />
     <Compile Include="JournalEvents\JournalBounty.cs" />
     <Compile Include="JournalEvents\JournalBuyAmmo.cs" />
@@ -836,6 +853,30 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\commodities.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\PlanetaryNebula.PNG" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\pointofinterest.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Blackhole.PNG" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\comet.PNG" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\no_entry.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\pulsar.PNG" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\starcluster.PNG" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\nebula.PNG" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\System.Data.SQLite.Core.1.0.105.2\build\net46\System.Data.SQLite.Core.targets" Condition="Exists('..\packages\System.Data.SQLite.Core.1.0.105.2\build\net46\System.Data.SQLite.Core.targets')" />

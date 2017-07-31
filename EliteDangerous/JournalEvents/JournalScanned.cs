@@ -35,7 +35,7 @@ namespace EliteDangerousCore.JournalEvents
         }
         public string ScanType { get; set; }
 
-        public override System.Drawing.Bitmap Icon { get { return EliteDangerousCore.Properties.Resources.scanned; } }
+        public override System.Drawing.Bitmap Icon { get { return EliteDangerous.Properties.Resources.scanned; } }
 
         public override void FillInformation(out string summary, out string info, out string detailed) //V
         {

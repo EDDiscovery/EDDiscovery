@@ -37,7 +37,7 @@ namespace EliteDangerousCore.JournalEvents
         public string System { get; set; }
         public string Body { get; set; }
 
-        public override System.Drawing.Bitmap Icon { get { return EliteDangerousCore.Properties.Resources.screenshot; } }
+        public override System.Drawing.Bitmap Icon { get { return EliteDangerous.Properties.Resources.screenshot; } }
 
         public override void FillInformation(out string summary, out string info, out string detailed)  //V
         {

@@ -13,20 +13,18 @@
  * 
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
-using EDDiscovery.EDSM;
+
 using EliteDangerousCore.DB;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
 
-namespace EDDiscovery.EDSM
+namespace EliteDangerousCore.EDSM
 {
     public class GalacticMapping
     {
-        readonly string GalacticMappingFile = Path.Combine(EDDConfig.Options.AppDataDirectory, "galacticmapping.json");
+        readonly string GalacticMappingFile = Path.Combine(EliteConfigInstance.InstanceOptions.AppDataDirectory, "galacticmapping.json");
 
         public List<GalacticMapObject> galacticMapObjects = null;
         public List<GalMapType> galacticMapTypes = null;

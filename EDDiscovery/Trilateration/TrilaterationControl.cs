@@ -20,7 +20,7 @@ using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
 using EDDiscovery.DB;
-using EDDiscovery.EDSM;
+using EliteDangerousCore.EDSM;
 using ExtendedControls;
 using EliteDangerousCore;
 using EliteDangerousCore.DB;

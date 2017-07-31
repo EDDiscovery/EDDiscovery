@@ -49,7 +49,7 @@ namespace EliteDangerousCore.JournalEvents
         public double Distance { get; set; }
         public long TransferPrice { get; set; }
 
-        public override System.Drawing.Bitmap Icon { get { return EliteDangerousCore.Properties.Resources.shipyardtransfer; } }
+        public override System.Drawing.Bitmap Icon { get { return EliteDangerous.Properties.Resources.shipyardtransfer; } }
 
         public void Ledger(Ledger mcl, DB.SQLiteConnectionUser conn)
         {

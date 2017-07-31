@@ -28,7 +28,7 @@ namespace EliteDangerousCore.JournalEvents
 
         }
 
-        public override System.Drawing.Bitmap Icon { get { return EliteDangerousCore.Properties.Resources.cockpitbreached; } }
+        public override System.Drawing.Bitmap Icon { get { return EliteDangerous.Properties.Resources.cockpitbreached; } }
 
         public override void FillInformation(out string summary, out string info, out string detailed) //V
         {

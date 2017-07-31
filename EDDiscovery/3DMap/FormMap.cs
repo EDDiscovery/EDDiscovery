@@ -30,9 +30,8 @@ using OpenTK.Input;
 using System.Drawing.Drawing2D;
 using System.Resources;
 using System.Collections.Concurrent;
-using EDDiscovery.EDSM;
+using EliteDangerousCore.EDSM;
 using EDDiscovery.Forms;
-using EDDiscovery.EliteDangerous;
 using EliteDangerousCore;
 using EliteDangerousCore.DB;
 
@@ -1675,7 +1674,7 @@ namespace EDDiscovery
 
                     name = _clickedSystem.name;
 
-                    var edsm = new EDSM.EDSMClass();
+                    var edsm = new EDSMClass();
                     _clickedurl = edsm.GetUrlToEDSMSystem(name, _clickedSystem.id_edsm);
                     viewOnEDSMToolStripMenuItem.Enabled = true;
 

@@ -13,19 +13,16 @@
  * 
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
-using EliteDangerousCore;
 using EliteDangerousCore.DB;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Globalization;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace EDDiscovery.EDSM
+namespace EliteDangerousCore.EDSM
 {  
     public class EDSMSync
     {
@@ -35,14 +32,14 @@ namespace EDDiscovery.EDSM
         bool _syncTo = false;
         bool _syncFrom = false;
         int _defmapcolour = 0;
-        private IDiscoveryController mainForm;
+        private Action<string> logout;
 
-        public EDSMSync(IDiscoveryController frm)
+        public EDSMSync(Action<string> logger)
         {
-            mainForm = frm;
+            logout = logger;
         }
 
-        public bool StartSync(EDSMClass edsm, bool syncto, bool syncfrom, int defmapcolour)
+        public bool StartSync(EDSMClass edsm, HistoryList hl, bool syncto, bool syncfrom, int defmapcolour)
         {
             if (running) // Only start once.
                 return false;
@@ -53,7 +50,7 @@ namespace EDDiscovery.EDSM
             ThreadEDSMSync = new System.Threading.Thread(new System.Threading.ParameterizedThreadStart(SyncThread));
             ThreadEDSMSync.Name = "EDSM Sync";
             ThreadEDSMSync.IsBackground = true;
-            ThreadEDSMSync.Start(edsm);
+            ThreadEDSMSync.Start(new Tuple<EDSMClass,HistoryList>(edsm,hl));
 
             return true;
         }
@@ -65,26 +62,28 @@ namespace EDDiscovery.EDSM
 
         private void SyncThread(object _edsm)
         {
-            EDSMClass edsm = (EDSMClass)_edsm;
+            Tuple<EDSMClass, HistoryList> v = (Tuple<EDSMClass, HistoryList>)_edsm;
+            EDSMClass edsm = v.Item1;
+            HistoryList hl = v.Item2;
             running = true;
-            Sync(edsm);
+            Sync(edsm,hl);
             running = false;
         }
 
-        private void Sync(EDSMClass edsm)
+        private void Sync(EDSMClass edsm, HistoryList hl)
         {
             try
             {
-                mainForm.LogLine("EDSM sync begin");
+                logout("EDSM sync begin");
 
-                List<HistoryEntry> hlfsdunsyncedlist = mainForm.history.FilterByNotEDSMSyncedAndFSD;        // first entry is oldest
+                List<HistoryEntry> hlfsdunsyncedlist = hl.FilterByNotEDSMSyncedAndFSD;        // first entry is oldest
 
                 if ( _syncTo && hlfsdunsyncedlist.Count > 0 )                   // send systems to edsm (verified with dates, 29/9/2016, utc throughout)
                 {
                     DateTime logstarttime = DateTime.MinValue;
                     DateTime logendtime = DateTime.MinValue;
 
-                    mainForm.LogLine("EDSM: Sending " + hlfsdunsyncedlist.Count.ToString() + " flightlog entries");
+                    logout("EDSM: Sending " + hlfsdunsyncedlist.Count.ToString() + " flightlog entries");
 
                     List<HistoryEntry> edsmsystemlog = null;
 
@@ -146,13 +145,13 @@ namespace EDDiscovery.EDSM
 
                             if (errmsg.Length > 0)
                             {
-                                mainForm.LogLine(errmsg);
+                                logout(errmsg);
                                 break;
                             }
                         }
                     }
 
-                    mainForm.LogLine(string.Format("EDSM Systems sent {0}", edsmsystemssent));
+                    logout(string.Format("EDSM Systems sent {0}", edsmsystemssent));
                 }
 
                 // TBD Comments to edsm?
@@ -201,17 +200,17 @@ namespace EDDiscovery.EDSM
                                 }
                             }
 
-                            mainForm.LogLine(string.Format("EDSM Comments downloaded/updated {0}", commentsadded));
+                            logout(string.Format("EDSM Comments downloaded/updated {0}", commentsadded));
                         }
                     }
                 }
 
-                mainForm.LogLine("EDSM sync Done");
+                logout("EDSM sync Done");
             }
             catch (Exception ex)
             {
                 System.Diagnostics.Trace.WriteLine("Exception ex:" + ex.Message);
-                mainForm.LogLineHighlight("EDSM sync Exception " + ex.Message);
+                logout("EDSM sync Exception " + ex.Message);
             }
         }
 

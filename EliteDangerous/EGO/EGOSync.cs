@@ -13,7 +13,8 @@
  *
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
-using Newtonsoft.Json.Linq;
+
+ using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Collections.Concurrent;
@@ -26,7 +27,7 @@ using System.Threading.Tasks;
 using EliteDangerousCore;
 using EliteDangerousCore.JournalEvents;
 
-namespace EDDiscovery.EGO
+namespace EDDiscoveryCore.EGO
 {
     public static class EGOSync
     {
@@ -35,20 +36,22 @@ namespace EDDiscovery.EGO
         private static bool Exit = false;
         private static ConcurrentQueue<HistoryEntry> hlscanunsyncedlist = new ConcurrentQueue<HistoryEntry>();
         private static AutoResetEvent hlscanevent = new AutoResetEvent(false);
-        private static IDiscoveryController mainForm;
+        private static Action<string> logger;
 
-        public static bool SendEGOEvent(IDiscoveryController frm, HistoryEntry helist)
+        public static bool SendEGOEvent(Action<string> log, HistoryEntry helist)
         {
-            return SendEGOEvents(frm, new[] { helist });
+            return SendEGOEvents(log, new[] { helist });
         }
 
-        public static bool SendEGOEvents(IDiscoveryController frm, params HistoryEntry[] helist)
+        public static bool SendEGOEvents(Action<string> log, params HistoryEntry[] helist)
         {
-            return SendEGOEvents(frm, (IEnumerable<HistoryEntry>)helist);
+            return SendEGOEvents(log, (IEnumerable<HistoryEntry>)helist);
         }
 
-        public static bool SendEGOEvents(IDiscoveryController frm, IEnumerable<HistoryEntry> helist)
+        public static bool SendEGOEvents(Action<string> log, IEnumerable<HistoryEntry> helist)
         {
+            logger = log;
+
             foreach (HistoryEntry he in helist)
             {
                 hlscanunsyncedlist.Enqueue(he);
@@ -60,7 +63,6 @@ namespace EDDiscovery.EGO
             if (Interlocked.CompareExchange(ref _running, 1, 0) == 0)
             {
                 Exit = false;
-                mainForm = frm;
                 ThreadEGOSync = new System.Threading.Thread(new System.Threading.ThreadStart(SyncThread));
                 ThreadEGOSync.Name = "EGO Sync";
                 ThreadEGOSync.IsBackground = true;
@@ -96,8 +98,8 @@ namespace EDDiscovery.EGO
 
                         if (EGOSync.SendToEGO(he, ref newRecord))
                         {
-                            mainForm.LogLine($"Sent {he.EntryType.ToString()} event to EGO ({he.EventSummary})");
-                            if (newRecord) { mainForm.LogLine("New EGO record set"); }
+                            logger?.Invoke($"Sent {he.EntryType.ToString()} event to EGO ({he.EventSummary})");
+                            if (newRecord) { logger?.Invoke("New EGO record set"); }
                         }
 
                         if (Exit)
@@ -121,7 +123,7 @@ namespace EDDiscovery.EGO
             catch (Exception ex)
             {
                 System.Diagnostics.Trace.WriteLine("Exception ex:" + ex.Message);
-                mainForm.LogLineHighlight("EGO sync Exception " + ex.Message);
+                logger?.Invoke("EGO sync Exception " + ex.Message);
             }
             finally
             {

@@ -47,9 +47,9 @@ namespace EliteDangerousCore.JournalEvents
         public override System.Drawing.Bitmap Icon { get
             {
                 if (Type.Contains("SRV") )
-                    return EliteDangerousCore.Properties.Resources.restocksrv;
+                    return EliteDangerous.Properties.Resources.restocksrv;
                 else
-                    return EliteDangerousCore.Properties.Resources.restockfighter;
+                    return EliteDangerous.Properties.Resources.restockfighter;
             } }
 
         public override void FillInformation(out string summary, out string info, out string detailed) //V
