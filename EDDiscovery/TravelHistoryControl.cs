@@ -82,8 +82,6 @@ namespace EDDiscovery
                                                "Display System Information panel",
                                             };
 
-        HistoryEntry notedisplayedhe = null;            // remember the particulars of the note displayed, so we can save it later
-
         public HistoryEntry GetTravelHistoryCurrent {  get { return userControlTravelGrid.GetCurrentHistoryEntry; } }
         public TravelHistoryFilter GetPrimaryFilter { get { return userControlTravelGrid.GetHistoryFilter; } }  // some classes want to know out filter
 
