@@ -20,6 +20,8 @@ using System.Text;
 using System.Threading.Tasks;
 using BaseUtils;
 using ActionLanguage;
+using EliteDangerousCore.DB;
+using EliteDangerousCore;
 
 namespace EDDiscovery.Actions
 {
@@ -70,16 +72,16 @@ namespace EDDiscovery.Actions
 
                 if (cmdname != null)
                 {
-                    EliteDangerous.StarScan scan = (ap.actioncontroller as ActionController).HistoryList.starscan;
-                    DB.SystemClassDB sc = DB.SystemClassDB.GetSystem(cmdname);
+                    StarScan scan = (ap.actioncontroller as ActionController).HistoryList.starscan;
+                    SystemClassDB sc = SystemClassDB.GetSystem(cmdname);
 
                     if (sc == null)
                     {
-                        sc = new DB.SystemClassDB(cmdname);
+                        sc = new SystemClassDB(cmdname);
                         sc.id_edsm = 0;
                     }
 
-                    EliteDangerous.StarScan.SystemNode sn = scan.FindSystem(sc, edsm);
+                    StarScan.SystemNode sn = scan.FindSystem(sc, edsm);
 
                     System.Globalization.CultureInfo ct = System.Globalization.CultureInfo.InvariantCulture;
 
@@ -88,7 +90,7 @@ namespace EDDiscovery.Actions
                         int starno = 1;
                         ap[prefix + "Stars"] = sn.starnodes.Count.ToString(ct);
 
-                        foreach (KeyValuePair<string, EliteDangerous.StarScan.ScanNode> scannode in sn.starnodes)
+                        foreach (KeyValuePair<string, StarScan.ScanNode> scannode in sn.starnodes)
                         {
                             DumpInfo(ap, scannode, prefix + "Star_" + starno.ToString(ct) , "_Planets");
 
@@ -96,21 +98,21 @@ namespace EDDiscovery.Actions
 
                             if (scannode.Value.children != null)
                             {
-                                foreach (KeyValuePair<string, EliteDangerous.StarScan.ScanNode> planetnodes in scannode.Value.children)
+                                foreach (KeyValuePair<string, StarScan.ScanNode> planetnodes in scannode.Value.children)
                                 {
                                     DumpInfo(ap, planetnodes, prefix + "Planet_" + starno.ToString(ct) + "_" + pcount.ToString(ct) , "_Moons");
 
                                     if (planetnodes.Value.children != null)
                                     {
                                         int mcount = 1;
-                                        foreach (KeyValuePair<string, EliteDangerous.StarScan.ScanNode> moonnodes in planetnodes.Value.children)
+                                        foreach (KeyValuePair<string, StarScan.ScanNode> moonnodes in planetnodes.Value.children)
                                         {
                                             DumpInfo(ap, moonnodes, prefix + "Moon_" + starno.ToString(ct) + "_" + pcount.ToString(ct) + "_" + mcount.ToString(ct) , "_Submoons");
 
                                             if (moonnodes.Value.children != null)
                                             {
                                                 int smcount = 1;
-                                                foreach (KeyValuePair<string, EliteDangerous.StarScan.ScanNode> submoonnodes in moonnodes.Value.children)
+                                                foreach (KeyValuePair<string, StarScan.ScanNode> submoonnodes in moonnodes.Value.children)
                                                 {
                                                     DumpInfo(ap, submoonnodes, prefix + "SubMoon_" + starno.ToString(ct) + "_" + pcount.ToString(ct) + "_" + mcount.ToString(ct) + "_" + smcount.ToString(ct),null);
                                                     smcount++;
@@ -142,9 +144,9 @@ namespace EDDiscovery.Actions
             return true;
         }
 
-        void DumpInfo( ActionProgramRun ap, KeyValuePair<string, EliteDangerous.StarScan.ScanNode> scannode, string prefix , string subname )
+        void DumpInfo( ActionProgramRun ap, KeyValuePair<string, EliteDangerousCore.StarScan.ScanNode> scannode, string prefix , string subname )
         {
-            EliteDangerous.JournalEvents.JournalScan sc = scannode.Value.ScanData;
+            EliteDangerousCore.JournalEvents.JournalScan sc = scannode.Value.ScanData;
 
             ap[prefix] = scannode.Key;
             ap[prefix + "_type"] = scannode.Value.type.ToString();
@@ -236,7 +238,7 @@ namespace EDDiscovery.Actions
 
                 if (cmdname != null)
                 {
-                    DB.SystemClassDB sc = DB.SystemClassDB.GetSystem(cmdname);
+                    SystemClassDB sc = SystemClassDB.GetSystem(cmdname);
                     ap[prefix + "Found"] = sc != null ? "1" : "0";
 
                     if (sc != null)

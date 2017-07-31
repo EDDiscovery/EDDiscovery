@@ -14,6 +14,7 @@
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 using Conditions;
+using EliteDangerousCore.DB;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -90,7 +91,7 @@ namespace EDDiscovery.Actions
             if (fm != FileMode.Open)
             {
                 string folder = Path.GetDirectoryName(file);
-                string actionfolderperms = DB.SQLiteConnectionUser.GetSettingString("ActionFolderPerms", "");
+                string actionfolderperms = SQLiteConnectionUser.GetSettingString("ActionFolderPerms", "");
 
                 if (!actionfolderperms.Contains(folder + ";"))
                 {
@@ -104,7 +105,7 @@ namespace EDDiscovery.Actions
 
                     if (ok)
                     {
-                        DB.SQLiteConnectionUser.PutSettingString("ActionFolderPerms", actionfolderperms + folder + ";");
+                        SQLiteConnectionUser.PutSettingString("ActionFolderPerms", actionfolderperms + folder + ";");
                         return true;
                     }
                     else

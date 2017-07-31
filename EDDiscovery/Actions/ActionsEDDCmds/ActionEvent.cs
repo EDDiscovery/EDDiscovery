@@ -22,6 +22,7 @@ using System.Windows.Forms;
 using BaseUtils;
 using ActionLanguage;
 using Conditions;
+using EliteDangerousCore;
 
 namespace EDDiscovery.Actions
 {
@@ -152,7 +153,7 @@ namespace EDDiscovery.Actions
                         hltest = (from h in hltest where eventnames.Contains(h.journalEntry.EventTypeStr, StringComparer.OrdinalIgnoreCase) select h).ToList();
                     
                     if (cond.Count > 0)     // if we have filters, apply, filter out, true only stays
-                        hltest = HistoryList.CheckFilterTrue(hltest, cond, new ConditionVariables()); // apply filter..
+                        hltest = UserControls.FilterHelpers.CheckFilterTrue(hltest, cond, new ConditionVariables()); // apply filter..
 
                     if (fwd)
                         ReportEntry(ap, hltest, 0, prefix);
@@ -181,7 +182,7 @@ namespace EDDiscovery.Actions
                             id_edsm = null;
                         }
 
-                        EDDiscovery.EDSM.EDSMClass edsm = new EDDiscovery.EDSM.EDSMClass();
+                        EliteDangerousCore.EDSM.EDSMClass edsm = new EliteDangerousCore.EDSM.EDSMClass();
                         string url = edsm.GetUrlToEDSMSystem(he.System.name, id_edsm);
 
                         ap[prefix + "URL"] = url;

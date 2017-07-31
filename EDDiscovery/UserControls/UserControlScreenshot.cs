@@ -22,9 +22,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using EDDiscovery.EliteDangerous.JournalEvents;
+using EliteDangerousCore.JournalEvents;
 using Newtonsoft.Json.Linq;
 using System.IO;
+using EliteDangerousCore;
 
 namespace EDDiscovery.UserControls
 {
@@ -69,7 +70,7 @@ namespace EDDiscovery.UserControls
         {
             if (he != null)
             {
-                if (he.EntryType == EliteDangerous.JournalTypeEnum.Screenshot)
+                if (he.EntryType == EliteDangerousCore.JournalTypeEnum.Screenshot)
                 {
                     JournalScreenshot ss = (JournalScreenshot)he.journalEntry;
 

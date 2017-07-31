@@ -64,13 +64,13 @@ namespace EDDiscovery.Actions
 
                 if (cmdname != null)
                 {
-                    EliteDangerous.ShipInformationList lst = (ap.actioncontroller as ActionController).HistoryList.shipinformationlist;
+                    EliteDangerousCore.ShipInformationList lst = (ap.actioncontroller as ActionController).HistoryList.shipinformationlist;
 
                     ConditionVariables values = new ConditionVariables();
 
                     if (cmdname.Length > 0)
                     {
-                        EliteDangerous.ShipInformation si = lst.GetShipByFullInfoMatch(cmdname);
+                        EliteDangerousCore.ShipInformation si = lst.GetShipByFullInfoMatch(cmdname);
 
                         if (si != null)
                         {
@@ -84,7 +84,7 @@ namespace EDDiscovery.Actions
                     values[prefix + "Ships"] = lst.Ships.Count.ToString(System.Globalization.CultureInfo.InvariantCulture);
 
                     int ind = 0;
-                    foreach(EliteDangerous.ShipInformation si in lst.Ships.Values )
+                    foreach(EliteDangerousCore.ShipInformation si in lst.Ships.Values )
                     {
                         string p = prefix + "Ships[" + ind.ToString() + "]_";
                         ActionVars.ShipBasicInformation(values, si, p);

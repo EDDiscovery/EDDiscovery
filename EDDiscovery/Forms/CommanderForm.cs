@@ -1,5 +1,6 @@
-﻿using EDDiscovery.CompanionAPI;
-using BaseUtils.Win32Constants;
+﻿using BaseUtils.Win32Constants;
+using EliteDangerousCore;
+using EliteDangerousCore.CompanionAPI;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;

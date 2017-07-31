@@ -1,4 +1,5 @@
-﻿using EDDiscovery.EDSM;
+﻿using EliteDangerousCore;
+using EliteDangerousCore.EDSM;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;

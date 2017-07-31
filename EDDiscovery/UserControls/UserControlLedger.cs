@@ -23,8 +23,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using EDDiscovery.Controls;
-using EDDiscovery.DB;
-using EDDiscovery.EliteDangerous;
+using EliteDangerousCore;
+using EliteDangerousCore.DB;
 
 namespace EDDiscovery.UserControls
 {
@@ -60,7 +60,7 @@ namespace EDDiscovery.UserControls
             dataGridViewLedger.DefaultCellStyle.WrapMode = DataGridViewTriState.False;
             dataGridViewLedger.RowTemplate.Height = 26;
 
-            cfs.ConfigureThirdOption("Cash Transactions", string.Join(";", EliteDangerous.JournalEntry.GetListOfEventsWithOptMethod(true, "Ledger")));
+            cfs.ConfigureThirdOption("Cash Transactions", string.Join(";", EliteDangerousCore.JournalEntry.GetListOfEventsWithOptMethod(true, "Ledger")));
 
             cfs.Changed += EventFilterChanged;
             TravelHistoryFilter.InitaliseComboBox(comboBoxHistoryWindow, DbHistorySave , incldock:false);
@@ -107,7 +107,7 @@ namespace EDDiscovery.UserControls
                 var filter = (TravelHistoryFilter)comboBoxHistoryWindow.SelectedItem ?? TravelHistoryFilter.NoFilter;
                 List<Ledger.Transaction> filteredlist = filter.Filter(mc.Transactions);
 
-                filteredlist = FilterByJournalEvent(filteredlist, DB.SQLiteDBClass.GetSettingString(DbFilterSave, "All"));
+                filteredlist = FilterByJournalEvent(filteredlist, SQLiteDBClass.GetSettingString(DbFilterSave, "All"));
 
                 if (filteredlist.Count > 0)
                 {
@@ -174,13 +174,13 @@ namespace EDDiscovery.UserControls
             Button b = sender as Button;
             cfs.FilterButton(DbFilterSave, b,
                              discoveryform.theme.TextBackColor, discoveryform.theme.TextBlockColor, this.FindForm() ,
-                             EliteDangerous.JournalEntry.GetListOfEventsWithOptMethod(true, "Ledger", "LedgerNC")
+                             EliteDangerousCore.JournalEntry.GetListOfEventsWithOptMethod(true, "Ledger", "LedgerNC")
                              );
         }
 
         private void comboBoxHistoryWindow_SelectedIndexChanged(object sender, EventArgs e)
         {
-            DB.SQLiteDBClass.PutSettingString(DbHistorySave, comboBoxHistoryWindow.Text);
+            SQLiteDBClass.PutSettingString(DbHistorySave, comboBoxHistoryWindow.Text);
 
             if (current_mc != null)
             {

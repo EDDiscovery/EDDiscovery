@@ -23,7 +23,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Text.RegularExpressions;
-using EDDiscovery.DB;
+using EliteDangerousCore;
+using EliteDangerousCore.DB;
 
 namespace EDDiscovery.UserControls
 {
@@ -74,7 +75,7 @@ namespace EDDiscovery.UserControls
 
         private void DisplaySelected(HistoryEntry he, HistoryList hl)
         {
-            if (he != null && he.EntryType == EliteDangerous.JournalTypeEnum.FSDJump)
+            if (he != null && he.EntryType == JournalTypeEnum.FSDJump)
                 Display(he);
             else
                 Display(hl);
@@ -90,7 +91,7 @@ namespace EDDiscovery.UserControls
 
         public void NewEntry(HistoryEntry he, HistoryList hl)               // called when a new entry is made..
         {
-            if (he != null && he.EntryType == EliteDangerous.JournalTypeEnum.FSDJump)
+            if (he != null && he.EntryType == JournalTypeEnum.FSDJump)
                 Display(he);
             else
                 Display(hl);

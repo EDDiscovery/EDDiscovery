@@ -23,10 +23,10 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using EDDiscovery.Controls;
-using EDDiscovery.DB;
-using EDDiscovery.EDSM;
-using EDDiscovery.EliteDangerous;
-using EDDiscovery.EDDN;
+using EliteDangerousCore.EDSM;
+using EliteDangerousCore.EDDN;
+using EliteDangerousCore.DB;
+using EliteDangerousCore;
 
 namespace EDDiscovery.UserControls
 {
@@ -136,7 +136,7 @@ namespace EDDiscovery.UserControls
             result = HistoryList.FilterByJournalEvent(result, SQLiteDBClass.GetSettingString(DbFilterSave, "All"), out ftotal);
             toolTip1.SetToolTip(buttonFilter, (ftotal > 0) ? ("Total filtered out " + ftotal) : "Filter out entries based on event type");
 
-            result = HistoryList.FilterHistory(result, fieldfilter, discoveryform.Globals, out ftotal);
+            result = FilterHelpers.FilterHistory(result, fieldfilter, discoveryform.Globals, out ftotal);
             toolTip1.SetToolTip(buttonField, (ftotal > 0) ? ("Total filtered out " + ftotal) : "Filter out entries matching the field selection");
 
             dataGridViewJournal.Rows.Clear();
@@ -189,7 +189,7 @@ namespace EDDiscovery.UserControls
 
         private void AddNewEntry(HistoryEntry he, HistoryList hl)               // add if in event filter, and not in field filter..
         {
-            if (he.IsJournalEventInEventFilter(SQLiteDBClass.GetSettingString(DbFilterSave, "All")) && HistoryList.FilterHistory(he, fieldfilter, discoveryform.Globals))
+            if (he.IsJournalEventInEventFilter(SQLiteDBClass.GetSettingString(DbFilterSave, "All")) && FilterHelpers.FilterHistory(he, fieldfilter, discoveryform.Globals))
             {
                 AddNewJournalRow(true, he);
 
@@ -246,8 +246,8 @@ namespace EDDiscovery.UserControls
             Conditions.ConditionFilterForm frm = new Conditions.ConditionFilterForm();
             frm.InitFilter("Journal: Filter out fields",
                             Icon.ExtractAssociatedIcon(System.Reflection.Assembly.GetExecutingAssembly().Location),
-                            EDDiscovery.EliteDangerous.JournalEntry.GetListOfEventsWithOptMethod(false) ,
-                            (s) => { return BaseUtils.FieldNames.GetPropertyFieldNames(EDDiscovery.EliteDangerous.JournalEntry.TypeOfJournalEntry(s)); },
+                            JournalEntry.GetListOfEventsWithOptMethod(false) ,
+                            (s) => { return BaseUtils.FieldNames.GetPropertyFieldNames(JournalEntry.TypeOfJournalEntry(s)); },
                             discoveryform.Globals.NameList, fieldfilter);
             frm.TopMost = this.FindForm().TopMost;
             if (frm.ShowDialog(this.FindForm()) == DialogResult.OK)
@@ -364,7 +364,7 @@ namespace EDDiscovery.UserControls
         {
             if (rightclicksystem != null && rightclicksystem.EntryType == JournalTypeEnum.Scan && !rightclicksystem.EDDNSync)
             {
-                EDDNSync.SendEDDNEvent(discoveryform, rightclicksystem);
+                EDDNSync.SendEDDNEvent(discoveryform.LogLine, rightclicksystem);
             }
         }
 

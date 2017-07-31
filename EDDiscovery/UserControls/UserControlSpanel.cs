@@ -30,6 +30,9 @@ using EDDiscovery.DB;
 using EMK.LightGeometry;
 using ExtendedControls;
 using Conditions;
+using EliteDangerousCore.DB;
+using EliteDangerousCore;
+using EliteDangerousCore.JournalEvents;
 
 namespace EDDiscovery.UserControls
 {
@@ -235,7 +238,7 @@ namespace EDDiscovery.UserControls
 
                 int ftotal;         // event filter
                 result = HistoryList.FilterByJournalEvent(result, SQLiteDBClass.GetSettingString(DbFilterSave, "All"), out ftotal);
-                result = HistoryList.FilterHistory(result, fieldfilter , discoveryform.Globals, out ftotal); // and the field filter..
+                result = FilterHelpers.FilterHistory(result, fieldfilter , discoveryform.Globals, out ftotal); // and the field filter..
 
                 RevertToNormalSize();                                           // ensure size is back to normal..
                 scanpostextoffset = new Point(0, 0);                            // left/ top used by scan display
@@ -461,15 +464,15 @@ namespace EDDiscovery.UserControls
             if (add)
                 Display(hl);
 
-            if (he.journalEntry.EventTypeID == EliteDangerous.JournalTypeEnum.Scan)       // if scan, see if it needs to be displayed
+            if (he.journalEntry.EventTypeID == JournalTypeEnum.Scan)       // if scan, see if it needs to be displayed
             {
-                ShowScanData(he.journalEntry as EliteDangerous.JournalEvents.JournalScan);
+                ShowScanData(he.journalEntry as JournalScan);
             }
         }
 
         public bool WouldAddEntry(HistoryEntry he)                  // do we filter? if its not in the journal event filter, or it is in the field filter
         {
-            return he.IsJournalEventInEventFilter(SQLiteDBClass.GetSettingString(DbFilterSave, "All")) && HistoryList.FilterHistory(he, fieldfilter , discoveryform.Globals);
+            return he.IsJournalEventInEventFilter(SQLiteDBClass.GetSettingString(DbFilterSave, "All")) && FilterHelpers.FilterHistory(he, fieldfilter , discoveryform.Globals);
         }
 
 #endregion
@@ -489,7 +492,7 @@ namespace EDDiscovery.UserControls
                 }
                 else if (he != null)
                 {
-                    EDDiscovery.EDSM.EDSMClass edsm = new EDDiscovery.EDSM.EDSMClass();
+                    EliteDangerousCore.EDSM.EDSMClass edsm = new EliteDangerousCore.EDSM.EDSMClass();
 
                     string url = edsm.GetUrlToEDSMSystem(he.System.name);
 
@@ -671,7 +674,7 @@ namespace EDDiscovery.UserControls
 
 #region Scan Data
 
-        public void ShowScanData(EDDiscovery.EliteDangerous.JournalEvents.JournalScan scan)
+        public void ShowScanData(JournalScan scan)
         {
             if ( IsSurfaceScanOn )
             {
@@ -844,8 +847,8 @@ namespace EDDiscovery.UserControls
             Conditions.ConditionFilterForm frm = new Conditions.ConditionFilterForm();
             frm.InitFilter("Summary Panel: Filter out fields",
                             Icon.ExtractAssociatedIcon(System.Reflection.Assembly.GetExecutingAssembly().Location),
-                            EDDiscovery.EliteDangerous.JournalEntry.GetListOfEventsWithOptMethod(false) ,
-                            (s) => { return BaseUtils.FieldNames.GetPropertyFieldNames(EDDiscovery.EliteDangerous.JournalEntry.TypeOfJournalEntry(s)); },
+                            JournalEntry.GetListOfEventsWithOptMethod(false) ,
+                            (s) => { return BaseUtils.FieldNames.GetPropertyFieldNames(JournalEntry.TypeOfJournalEntry(s)); },
                             discoveryform.Globals.NameList, fieldfilter);
             frm.TopMost = this.FindForm().TopMost;
             if (frm.ShowDialog(this.FindForm()) == DialogResult.OK)

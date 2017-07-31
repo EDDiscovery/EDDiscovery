@@ -13,7 +13,8 @@
  * 
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
-using EDDiscovery.DB;
+
+ using EliteDangerousCore.DB;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -80,7 +81,7 @@ namespace EDDiscovery.Import
                         result = string.Format("System Note import failed at {0}.", sys.SysName);
                         return false;
                     }
-                    EDDiscovery.DB.SystemNoteClass.GetAllSystemNotes();
+                    SystemNoteClass.GetAllSystemNotes();
                 }
             }
             result = "File imported successfully";

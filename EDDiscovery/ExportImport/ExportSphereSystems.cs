@@ -14,7 +14,7 @@
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 using EDDiscovery.Export;
-using EDDiscovery.EDSM;
+using EliteDangerousCore.EDSM;
 using System;
 using System.Collections.Generic;
 using System.IO;
