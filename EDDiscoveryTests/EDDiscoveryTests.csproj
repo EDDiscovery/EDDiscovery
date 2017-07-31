@@ -158,6 +158,10 @@
       <Project>{6EE10D92-E3E4-44D9-8E6B-851801B0B510}</Project>
       <Name>EDDiscovery</Name>
     </ProjectReference>
+    <ProjectReference Include="..\EliteDangerous\EliteDangerous.csproj">
+      <Project>{019917a4-7342-4f67-8aaf-9e20c016a935}</Project>
+      <Name>EliteDangerous</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config">

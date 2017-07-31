@@ -21,7 +21,7 @@ using EDDiscovery.DB;
 
 namespace EDDiscoveryTests
 {
-    using EDDiscovery.EliteDangerous;
+    using EliteDangerous;
     using EDDiscovery.UserControls;
 #if false
     // Visual Studio Test Framework
@@ -32,6 +32,7 @@ namespace EDDiscoveryTests
 #else
     // NUnit Test Framework
     using NUnit.Framework;
+    using EliteDangerousCore;
 
     partial class TestClassAttribute : Attribute { }
     partial class TestMethodAttribute : Attribute { }
@@ -41,7 +42,7 @@ namespace EDDiscoveryTests
     [TestClass]
     public class TravelHistoryFilterTests
     {
-        private ISystem sol = new EDDiscovery.EliteDangerous.SystemClass
+        private ISystem sol = new EliteDangerousCore.SystemClass
         {
             name = "Sol",
             x = 0,
