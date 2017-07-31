@@ -22,7 +22,7 @@ namespace EliteDangerous.Properties {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class Resources {
+    public class Resources {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
@@ -36,7 +36,7 @@ namespace EliteDangerous.Properties {
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Resources.ResourceManager ResourceManager {
+        public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("EliteDangerous.Properties.Resources", typeof(Resources).Assembly);
@@ -51,7 +51,7 @@ namespace EliteDangerous.Properties {
         ///   resource lookups using this strongly typed resource class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Globalization.CultureInfo Culture {
+        public static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -63,7 +63,7 @@ namespace EliteDangerous.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap _event {
+        public static System.Drawing.Bitmap _event {
             get {
                 object obj = ResourceManager.GetObject("_event", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -73,7 +73,7 @@ namespace EliteDangerous.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap A9III_White {
+        public static System.Drawing.Bitmap A9III_White {
             get {
                 object obj = ResourceManager.GetObject("A9III_White", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -83,7 +83,7 @@ namespace EliteDangerous.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Ammonia_Brown {
+        public static System.Drawing.Bitmap Ammonia_Brown {
             get {
                 object obj = ResourceManager.GetObject("Ammonia_Brown", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -93,7 +93,7 @@ namespace EliteDangerous.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap ammunition {
+        public static System.Drawing.Bitmap ammunition {
             get {
                 object obj = ResourceManager.GetObject("ammunition", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -103,7 +103,7 @@ namespace EliteDangerous.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap approachsettlement {
+        public static System.Drawing.Bitmap approachsettlement {
             get {
                 object obj = ResourceManager.GetObject("approachsettlement", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -113,7 +113,7 @@ namespace EliteDangerous.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap B6V_Blueish {
+        public static System.Drawing.Bitmap B6V_Blueish {
             get {
                 object obj = ResourceManager.GetObject("B6V_Blueish", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -123,7 +123,7 @@ namespace EliteDangerous.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Black_Hole {
+        public static System.Drawing.Bitmap Black_Hole {
             get {
                 object obj = ResourceManager.GetObject("Black_Hole", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -133,7 +133,7 @@ namespace EliteDangerous.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Blackhole {
+        public static System.Drawing.Bitmap Blackhole {
             get {
                 object obj = ResourceManager.GetObject("Blackhole", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -143,7 +143,7 @@ namespace EliteDangerous.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap bounty {
+        public static System.Drawing.Bitmap bounty {
             get {
                 object obj = ResourceManager.GetObject("bounty", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -153,7 +153,7 @@ namespace EliteDangerous.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap buydrones {
+        public static System.Drawing.Bitmap buydrones {
             get {
                 object obj = ResourceManager.GetObject("buydrones", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -163,7 +163,7 @@ namespace EliteDangerous.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap buyexplorationdata {
+        public static System.Drawing.Bitmap buyexplorationdata {
             get {
                 object obj = ResourceManager.GetObject("buyexplorationdata", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -173,7 +173,7 @@ namespace EliteDangerous.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap buytradedata {
+        public static System.Drawing.Bitmap buytradedata {
             get {
                 object obj = ResourceManager.GetObject("buytradedata", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -183,7 +183,7 @@ namespace EliteDangerous.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap C7III {
+        public static System.Drawing.Bitmap C7III {
             get {
                 object obj = ResourceManager.GetObject("C7III", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -193,7 +193,7 @@ namespace EliteDangerous.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Calendar {
+        public static System.Drawing.Bitmap Calendar {
             get {
                 object obj = ResourceManager.GetObject("Calendar", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -203,7 +203,7 @@ namespace EliteDangerous.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap capshipbond {
+        public static System.Drawing.Bitmap capshipbond {
             get {
                 object obj = ResourceManager.GetObject("capshipbond", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -213,7 +213,7 @@ namespace EliteDangerous.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap cargomanifest {
+        public static System.Drawing.Bitmap cargomanifest {
             get {
                 object obj = ResourceManager.GetObject("cargomanifest", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -223,7 +223,7 @@ namespace EliteDangerous.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap changecrewrole {
+        public static System.Drawing.Bitmap changecrewrole {
             get {
                 object obj = ResourceManager.GetObject("changecrewrole", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -233,7 +233,7 @@ namespace EliteDangerous.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap changecrewrols {
+        public static System.Drawing.Bitmap changecrewrols {
             get {
                 object obj = ResourceManager.GetObject("changecrewrols", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -243,7 +243,7 @@ namespace EliteDangerous.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Class_I_Gas_Giant_Brown2 {
+        public static System.Drawing.Bitmap Class_I_Gas_Giant_Brown2 {
             get {
                 object obj = ResourceManager.GetObject("Class_I_Gas_Giant_Brown2", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -253,7 +253,7 @@ namespace EliteDangerous.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Class_II_Gas_Giant_Sand1 {
+        public static System.Drawing.Bitmap Class_II_Gas_Giant_Sand1 {
             get {
                 object obj = ResourceManager.GetObject("Class_II_Gas_Giant_Sand1", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -263,7 +263,7 @@ namespace EliteDangerous.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Class_III_Gas_Giant_Blue3 {
+        public static System.Drawing.Bitmap Class_III_Gas_Giant_Blue3 {
             get {
                 object obj = ResourceManager.GetObject("Class_III_Gas_Giant_Blue3", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -273,7 +273,7 @@ namespace EliteDangerous.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap clearsavedgame {
+        public static System.Drawing.Bitmap clearsavedgame {
             get {
                 object obj = ResourceManager.GetObject("clearsavedgame", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -283,7 +283,7 @@ namespace EliteDangerous.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap cockpitbreached {
+        public static System.Drawing.Bitmap cockpitbreached {
             get {
                 object obj = ResourceManager.GetObject("cockpitbreached", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -293,7 +293,7 @@ namespace EliteDangerous.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Coffinicon {
+        public static System.Drawing.Bitmap Coffinicon {
             get {
                 object obj = ResourceManager.GetObject("Coffinicon", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -303,7 +303,7 @@ namespace EliteDangerous.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap collectcargo {
+        public static System.Drawing.Bitmap collectcargo {
             get {
                 object obj = ResourceManager.GetObject("collectcargo", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -313,7 +313,7 @@ namespace EliteDangerous.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap comet {
+        public static System.Drawing.Bitmap comet {
             get {
                 object obj = ResourceManager.GetObject("comet", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -323,7 +323,7 @@ namespace EliteDangerous.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap commitcrime {
+        public static System.Drawing.Bitmap commitcrime {
             get {
                 object obj = ResourceManager.GetObject("commitcrime", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -333,7 +333,7 @@ namespace EliteDangerous.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap commodities {
+        public static System.Drawing.Bitmap commodities {
             get {
                 object obj = ResourceManager.GetObject("commodities", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -343,7 +343,7 @@ namespace EliteDangerous.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap communitygoaldiscard {
+        public static System.Drawing.Bitmap communitygoaldiscard {
             get {
                 object obj = ResourceManager.GetObject("communitygoaldiscard", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -353,7 +353,7 @@ namespace EliteDangerous.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap communitygoaljoin {
+        public static System.Drawing.Bitmap communitygoaljoin {
             get {
                 object obj = ResourceManager.GetObject("communitygoaljoin", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -363,7 +363,7 @@ namespace EliteDangerous.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap communitygoalreward {
+        public static System.Drawing.Bitmap communitygoalreward {
             get {
                 object obj = ResourceManager.GetObject("communitygoalreward", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -373,7 +373,7 @@ namespace EliteDangerous.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap crewassign {
+        public static System.Drawing.Bitmap crewassign {
             get {
                 object obj = ResourceManager.GetObject("crewassign", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -383,7 +383,7 @@ namespace EliteDangerous.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap crewfire {
+        public static System.Drawing.Bitmap crewfire {
             get {
                 object obj = ResourceManager.GetObject("crewfire", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -393,7 +393,7 @@ namespace EliteDangerous.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap crewhire {
+        public static System.Drawing.Bitmap crewhire {
             get {
                 object obj = ResourceManager.GetObject("crewhire", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -403,7 +403,7 @@ namespace EliteDangerous.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap crewmemberjoins {
+        public static System.Drawing.Bitmap crewmemberjoins {
             get {
                 object obj = ResourceManager.GetObject("crewmemberjoins", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -413,7 +413,7 @@ namespace EliteDangerous.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap crewmemberquits {
+        public static System.Drawing.Bitmap crewmemberquits {
             get {
                 object obj = ResourceManager.GetObject("crewmemberquits", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -423,7 +423,7 @@ namespace EliteDangerous.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap DA6VII_White {
+        public static System.Drawing.Bitmap DA6VII_White {
             get {
                 object obj = ResourceManager.GetObject("DA6VII_White", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -433,7 +433,7 @@ namespace EliteDangerous.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap damage {
+        public static System.Drawing.Bitmap damage {
             get {
                 object obj = ResourceManager.GetObject("damage", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -443,7 +443,7 @@ namespace EliteDangerous.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap datalinkscan {
+        public static System.Drawing.Bitmap datalinkscan {
             get {
                 object obj = ResourceManager.GetObject("datalinkscan", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -453,7 +453,7 @@ namespace EliteDangerous.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap datalinkvoucher {
+        public static System.Drawing.Bitmap datalinkvoucher {
             get {
                 object obj = ResourceManager.GetObject("datalinkvoucher", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -463,7 +463,7 @@ namespace EliteDangerous.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap datascanned {
+        public static System.Drawing.Bitmap datascanned {
             get {
                 object obj = ResourceManager.GetObject("datascanned", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -473,7 +473,7 @@ namespace EliteDangerous.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap DefaultStar {
+        public static System.Drawing.Bitmap DefaultStar {
             get {
                 object obj = ResourceManager.GetObject("DefaultStar", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -483,7 +483,7 @@ namespace EliteDangerous.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap dockfighter {
+        public static System.Drawing.Bitmap dockfighter {
             get {
                 object obj = ResourceManager.GetObject("dockfighter", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -493,7 +493,7 @@ namespace EliteDangerous.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap dockingcancelled {
+        public static System.Drawing.Bitmap dockingcancelled {
             get {
                 object obj = ResourceManager.GetObject("dockingcancelled", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -503,7 +503,7 @@ namespace EliteDangerous.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap dockingdenied {
+        public static System.Drawing.Bitmap dockingdenied {
             get {
                 object obj = ResourceManager.GetObject("dockingdenied", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -513,7 +513,7 @@ namespace EliteDangerous.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap dockinggranted {
+        public static System.Drawing.Bitmap dockinggranted {
             get {
                 object obj = ResourceManager.GetObject("dockinggranted", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -523,7 +523,7 @@ namespace EliteDangerous.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap dockingrequest {
+        public static System.Drawing.Bitmap dockingrequest {
             get {
                 object obj = ResourceManager.GetObject("dockingrequest", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -533,7 +533,7 @@ namespace EliteDangerous.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap dockingtimeout {
+        public static System.Drawing.Bitmap dockingtimeout {
             get {
                 object obj = ResourceManager.GetObject("dockingtimeout", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -543,7 +543,7 @@ namespace EliteDangerous.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap docksrv {
+        public static System.Drawing.Bitmap docksrv {
             get {
                 object obj = ResourceManager.GetObject("docksrv", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -553,7 +553,7 @@ namespace EliteDangerous.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Earth_Like_Standard {
+        public static System.Drawing.Bitmap Earth_Like_Standard {
             get {
                 object obj = ResourceManager.GetObject("Earth_Like_Standard", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -563,7 +563,7 @@ namespace EliteDangerous.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap ejectcargo {
+        public static System.Drawing.Bitmap ejectcargo {
             get {
                 object obj = ResourceManager.GetObject("ejectcargo", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -573,7 +573,7 @@ namespace EliteDangerous.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap engineerapply {
+        public static System.Drawing.Bitmap engineerapply {
             get {
                 object obj = ResourceManager.GetObject("engineerapply", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -583,7 +583,7 @@ namespace EliteDangerous.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap engineercraft {
+        public static System.Drawing.Bitmap engineercraft {
             get {
                 object obj = ResourceManager.GetObject("engineercraft", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -593,7 +593,7 @@ namespace EliteDangerous.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap engineerprogress {
+        public static System.Drawing.Bitmap engineerprogress {
             get {
                 object obj = ResourceManager.GetObject("engineerprogress", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -603,7 +603,7 @@ namespace EliteDangerous.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap escapeinterdiction {
+        public static System.Drawing.Bitmap escapeinterdiction {
             get {
                 object obj = ResourceManager.GetObject("escapeinterdiction", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -613,7 +613,7 @@ namespace EliteDangerous.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap F5VAB {
+        public static System.Drawing.Bitmap F5VAB {
             get {
                 object obj = ResourceManager.GetObject("F5VAB", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -623,7 +623,7 @@ namespace EliteDangerous.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap factionkillbond {
+        public static System.Drawing.Bitmap factionkillbond {
             get {
                 object obj = ResourceManager.GetObject("factionkillbond", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -633,7 +633,7 @@ namespace EliteDangerous.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap fetchremotemodule {
+        public static System.Drawing.Bitmap fetchremotemodule {
             get {
                 object obj = ResourceManager.GetObject("fetchremotemodule", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -643,7 +643,7 @@ namespace EliteDangerous.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap fighter {
+        public static System.Drawing.Bitmap fighter {
             get {
                 object obj = ResourceManager.GetObject("fighter", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -653,7 +653,7 @@ namespace EliteDangerous.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap fileheader {
+        public static System.Drawing.Bitmap fileheader {
             get {
                 object obj = ResourceManager.GetObject("fileheader", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -663,7 +663,7 @@ namespace EliteDangerous.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap friends {
+        public static System.Drawing.Bitmap friends {
             get {
                 object obj = ResourceManager.GetObject("friends", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -673,7 +673,7 @@ namespace EliteDangerous.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap fuelscoop {
+        public static System.Drawing.Bitmap fuelscoop {
             get {
                 object obj = ResourceManager.GetObject("fuelscoop", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -683,7 +683,7 @@ namespace EliteDangerous.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap G1IV {
+        public static System.Drawing.Bitmap G1IV {
             get {
                 object obj = ResourceManager.GetObject("G1IV", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -693,7 +693,7 @@ namespace EliteDangerous.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap G8V_and_G9V {
+        public static System.Drawing.Bitmap G8V_and_G9V {
             get {
                 object obj = ResourceManager.GetObject("G8V_and_G9V", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -703,7 +703,7 @@ namespace EliteDangerous.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Gas_giant_ammonia_based_life1 {
+        public static System.Drawing.Bitmap Gas_giant_ammonia_based_life1 {
             get {
                 object obj = ResourceManager.GetObject("Gas_giant_ammonia_based_life1", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -713,7 +713,7 @@ namespace EliteDangerous.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Gas_giant_water_based_life_Brown3 {
+        public static System.Drawing.Bitmap Gas_giant_water_based_life_Brown3 {
             get {
                 object obj = ResourceManager.GetObject("Gas_giant_water_based_life_Brown3", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -723,7 +723,7 @@ namespace EliteDangerous.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap genericevent {
+        public static System.Drawing.Bitmap genericevent {
             get {
                 object obj = ResourceManager.GetObject("genericevent", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -733,7 +733,7 @@ namespace EliteDangerous.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Globe {
+        public static System.Drawing.Bitmap Globe {
             get {
                 object obj = ResourceManager.GetObject("Globe", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -743,7 +743,7 @@ namespace EliteDangerous.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Globe_yellow {
+        public static System.Drawing.Bitmap Globe_yellow {
             get {
                 object obj = ResourceManager.GetObject("Globe_yellow", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -753,7 +753,7 @@ namespace EliteDangerous.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap heatdamage {
+        public static System.Drawing.Bitmap heatdamage {
             get {
                 object obj = ResourceManager.GetObject("heatdamage", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -763,7 +763,7 @@ namespace EliteDangerous.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Helium_Rich_Gas_Giant1 {
+        public static System.Drawing.Bitmap Helium_Rich_Gas_Giant1 {
             get {
                 object obj = ResourceManager.GetObject("Helium_Rich_Gas_Giant1", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -773,7 +773,7 @@ namespace EliteDangerous.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap High_metal_content_world_Lava1 {
+        public static System.Drawing.Bitmap High_metal_content_world_Lava1 {
             get {
                 object obj = ResourceManager.GetObject("High_metal_content_world_Lava1", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -783,7 +783,7 @@ namespace EliteDangerous.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap High_metal_content_world_Mix3 {
+        public static System.Drawing.Bitmap High_metal_content_world_Mix3 {
             get {
                 object obj = ResourceManager.GetObject("High_metal_content_world_Mix3", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -793,7 +793,7 @@ namespace EliteDangerous.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap High_metal_content_world_Orange8 {
+        public static System.Drawing.Bitmap High_metal_content_world_Orange8 {
             get {
                 object obj = ResourceManager.GetObject("High_metal_content_world_Orange8", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -803,7 +803,7 @@ namespace EliteDangerous.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap High_metal_content_world_White3 {
+        public static System.Drawing.Bitmap High_metal_content_world_White3 {
             get {
                 object obj = ResourceManager.GetObject("High_metal_content_world_White3", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -813,7 +813,7 @@ namespace EliteDangerous.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap hyperspace {
+        public static System.Drawing.Bitmap hyperspace {
             get {
                 object obj = ResourceManager.GetObject("hyperspace", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -823,7 +823,7 @@ namespace EliteDangerous.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Icy_Body_Greenish1 {
+        public static System.Drawing.Bitmap Icy_Body_Greenish1 {
             get {
                 object obj = ResourceManager.GetObject("Icy_Body_Greenish1", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -833,7 +833,7 @@ namespace EliteDangerous.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap interdicted {
+        public static System.Drawing.Bitmap interdicted {
             get {
                 object obj = ResourceManager.GetObject("interdicted", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -843,7 +843,7 @@ namespace EliteDangerous.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap interdiction {
+        public static System.Drawing.Bitmap interdiction {
             get {
                 object obj = ResourceManager.GetObject("interdiction", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -853,7 +853,7 @@ namespace EliteDangerous.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap jetconeboost {
+        public static System.Drawing.Bitmap jetconeboost {
             get {
                 object obj = ResourceManager.GetObject("jetconeboost", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -863,7 +863,7 @@ namespace EliteDangerous.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap jetconedamage {
+        public static System.Drawing.Bitmap jetconedamage {
             get {
                 object obj = ResourceManager.GetObject("jetconedamage", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -873,7 +873,7 @@ namespace EliteDangerous.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap joinacrew {
+        public static System.Drawing.Bitmap joinacrew {
             get {
                 object obj = ResourceManager.GetObject("joinacrew", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -883,7 +883,7 @@ namespace EliteDangerous.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap K0V {
+        public static System.Drawing.Bitmap K0V {
             get {
                 object obj = ResourceManager.GetObject("K0V", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -893,7 +893,7 @@ namespace EliteDangerous.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap K1IV {
+        public static System.Drawing.Bitmap K1IV {
             get {
                 object obj = ResourceManager.GetObject("K1IV", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -903,7 +903,7 @@ namespace EliteDangerous.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap kickcrewmember {
+        public static System.Drawing.Bitmap kickcrewmember {
             get {
                 object obj = ResourceManager.GetObject("kickcrewmember", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -913,7 +913,7 @@ namespace EliteDangerous.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap L3V {
+        public static System.Drawing.Bitmap L3V {
             get {
                 object obj = ResourceManager.GetObject("L3V", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -923,7 +923,7 @@ namespace EliteDangerous.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap launchfighter {
+        public static System.Drawing.Bitmap launchfighter {
             get {
                 object obj = ResourceManager.GetObject("launchfighter", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -933,7 +933,7 @@ namespace EliteDangerous.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap launchsrv {
+        public static System.Drawing.Bitmap launchsrv {
             get {
                 object obj = ResourceManager.GetObject("launchsrv", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -943,7 +943,7 @@ namespace EliteDangerous.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap liftoff {
+        public static System.Drawing.Bitmap liftoff {
             get {
                 object obj = ResourceManager.GetObject("liftoff", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -953,7 +953,7 @@ namespace EliteDangerous.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap loadgame {
+        public static System.Drawing.Bitmap loadgame {
             get {
                 object obj = ResourceManager.GetObject("loadgame", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -963,7 +963,7 @@ namespace EliteDangerous.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap loadout {
+        public static System.Drawing.Bitmap loadout {
             get {
                 object obj = ResourceManager.GetObject("loadout", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -973,7 +973,7 @@ namespace EliteDangerous.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap location {
+        public static System.Drawing.Bitmap location {
             get {
                 object obj = ResourceManager.GetObject("location", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -983,7 +983,7 @@ namespace EliteDangerous.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap M1VA {
+        public static System.Drawing.Bitmap M1VA {
             get {
                 object obj = ResourceManager.GetObject("M1VA", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -993,7 +993,7 @@ namespace EliteDangerous.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap M5V {
+        public static System.Drawing.Bitmap M5V {
             get {
                 object obj = ResourceManager.GetObject("M5V", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1003,7 +1003,7 @@ namespace EliteDangerous.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap marketbuy {
+        public static System.Drawing.Bitmap marketbuy {
             get {
                 object obj = ResourceManager.GetObject("marketbuy", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1013,7 +1013,7 @@ namespace EliteDangerous.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap marketdata {
+        public static System.Drawing.Bitmap marketdata {
             get {
                 object obj = ResourceManager.GetObject("marketdata", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1023,7 +1023,7 @@ namespace EliteDangerous.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap marketsell {
+        public static System.Drawing.Bitmap marketsell {
             get {
                 object obj = ResourceManager.GetObject("marketsell", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1033,7 +1033,7 @@ namespace EliteDangerous.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap material {
+        public static System.Drawing.Bitmap material {
             get {
                 object obj = ResourceManager.GetObject("material", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1043,7 +1043,7 @@ namespace EliteDangerous.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap materialcollected {
+        public static System.Drawing.Bitmap materialcollected {
             get {
                 object obj = ResourceManager.GetObject("materialcollected", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1053,7 +1053,7 @@ namespace EliteDangerous.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap materialdiscarded {
+        public static System.Drawing.Bitmap materialdiscarded {
             get {
                 object obj = ResourceManager.GetObject("materialdiscarded", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1063,7 +1063,7 @@ namespace EliteDangerous.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap materialdiscovered {
+        public static System.Drawing.Bitmap materialdiscovered {
             get {
                 object obj = ResourceManager.GetObject("materialdiscovered", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1073,7 +1073,7 @@ namespace EliteDangerous.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap materials {
+        public static System.Drawing.Bitmap materials {
             get {
                 object obj = ResourceManager.GetObject("materials", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1083,7 +1083,7 @@ namespace EliteDangerous.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap metal_rich {
+        public static System.Drawing.Bitmap metal_rich {
             get {
                 object obj = ResourceManager.GetObject("metal_rich", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1093,7 +1093,7 @@ namespace EliteDangerous.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap miningrefined {
+        public static System.Drawing.Bitmap miningrefined {
             get {
                 object obj = ResourceManager.GetObject("miningrefined", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1103,7 +1103,7 @@ namespace EliteDangerous.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap missionabandoned {
+        public static System.Drawing.Bitmap missionabandoned {
             get {
                 object obj = ResourceManager.GetObject("missionabandoned", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1113,7 +1113,7 @@ namespace EliteDangerous.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap missionaccepted {
+        public static System.Drawing.Bitmap missionaccepted {
             get {
                 object obj = ResourceManager.GetObject("missionaccepted", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1123,7 +1123,7 @@ namespace EliteDangerous.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap missioncompleted {
+        public static System.Drawing.Bitmap missioncompleted {
             get {
                 object obj = ResourceManager.GetObject("missioncompleted", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1133,7 +1133,7 @@ namespace EliteDangerous.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap missionfailed {
+        public static System.Drawing.Bitmap missionfailed {
             get {
                 object obj = ResourceManager.GetObject("missionfailed", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1143,7 +1143,7 @@ namespace EliteDangerous.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap module {
+        public static System.Drawing.Bitmap module {
             get {
                 object obj = ResourceManager.GetObject("module", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1153,7 +1153,7 @@ namespace EliteDangerous.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap modulebuy {
+        public static System.Drawing.Bitmap modulebuy {
             get {
                 object obj = ResourceManager.GetObject("modulebuy", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1163,7 +1163,7 @@ namespace EliteDangerous.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap moduleretrieve {
+        public static System.Drawing.Bitmap moduleretrieve {
             get {
                 object obj = ResourceManager.GetObject("moduleretrieve", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1173,7 +1173,7 @@ namespace EliteDangerous.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap modulesell {
+        public static System.Drawing.Bitmap modulesell {
             get {
                 object obj = ResourceManager.GetObject("modulesell", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1183,7 +1183,7 @@ namespace EliteDangerous.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap modulestore {
+        public static System.Drawing.Bitmap modulestore {
             get {
                 object obj = ResourceManager.GetObject("modulestore", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1193,7 +1193,7 @@ namespace EliteDangerous.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap moduleswap {
+        public static System.Drawing.Bitmap moduleswap {
             get {
                 object obj = ResourceManager.GetObject("moduleswap", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1203,7 +1203,7 @@ namespace EliteDangerous.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap mothership {
+        public static System.Drawing.Bitmap mothership {
             get {
                 object obj = ResourceManager.GetObject("mothership", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1213,7 +1213,7 @@ namespace EliteDangerous.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap nebula {
+        public static System.Drawing.Bitmap nebula {
             get {
                 object obj = ResourceManager.GetObject("nebula", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1223,7 +1223,7 @@ namespace EliteDangerous.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Neutron_Star {
+        public static System.Drawing.Bitmap Neutron_Star {
             get {
                 object obj = ResourceManager.GetObject("Neutron_Star", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1233,7 +1233,7 @@ namespace EliteDangerous.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap newcommander {
+        public static System.Drawing.Bitmap newcommander {
             get {
                 object obj = ResourceManager.GetObject("newcommander", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1243,7 +1243,7 @@ namespace EliteDangerous.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap no_entry {
+        public static System.Drawing.Bitmap no_entry {
             get {
                 object obj = ResourceManager.GetObject("no_entry", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1253,7 +1253,7 @@ namespace EliteDangerous.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap O {
+        public static System.Drawing.Bitmap O {
             get {
                 object obj = ResourceManager.GetObject("O", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1263,7 +1263,7 @@ namespace EliteDangerous.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap passengers {
+        public static System.Drawing.Bitmap passengers {
             get {
                 object obj = ResourceManager.GetObject("passengers", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1273,7 +1273,7 @@ namespace EliteDangerous.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap payfines {
+        public static System.Drawing.Bitmap payfines {
             get {
                 object obj = ResourceManager.GetObject("payfines", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1283,7 +1283,7 @@ namespace EliteDangerous.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap PlanetaryNebula {
+        public static System.Drawing.Bitmap PlanetaryNebula {
             get {
                 object obj = ResourceManager.GetObject("PlanetaryNebula", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1293,7 +1293,7 @@ namespace EliteDangerous.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap pointofinterest {
+        public static System.Drawing.Bitmap pointofinterest {
             get {
                 object obj = ResourceManager.GetObject("pointofinterest", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1303,7 +1303,7 @@ namespace EliteDangerous.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap powerplaycollect {
+        public static System.Drawing.Bitmap powerplaycollect {
             get {
                 object obj = ResourceManager.GetObject("powerplaycollect", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1313,7 +1313,7 @@ namespace EliteDangerous.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap powerplaydefect {
+        public static System.Drawing.Bitmap powerplaydefect {
             get {
                 object obj = ResourceManager.GetObject("powerplaydefect", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1323,7 +1323,7 @@ namespace EliteDangerous.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap powerplaydeliver {
+        public static System.Drawing.Bitmap powerplaydeliver {
             get {
                 object obj = ResourceManager.GetObject("powerplaydeliver", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1333,7 +1333,7 @@ namespace EliteDangerous.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap powerplayfasttrack {
+        public static System.Drawing.Bitmap powerplayfasttrack {
             get {
                 object obj = ResourceManager.GetObject("powerplayfasttrack", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1343,7 +1343,7 @@ namespace EliteDangerous.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap powerplayjoin {
+        public static System.Drawing.Bitmap powerplayjoin {
             get {
                 object obj = ResourceManager.GetObject("powerplayjoin", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1353,7 +1353,7 @@ namespace EliteDangerous.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap powerplayleave {
+        public static System.Drawing.Bitmap powerplayleave {
             get {
                 object obj = ResourceManager.GetObject("powerplayleave", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1363,7 +1363,7 @@ namespace EliteDangerous.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap powerplaysalary {
+        public static System.Drawing.Bitmap powerplaysalary {
             get {
                 object obj = ResourceManager.GetObject("powerplaysalary", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1373,7 +1373,7 @@ namespace EliteDangerous.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap powerplayvote {
+        public static System.Drawing.Bitmap powerplayvote {
             get {
                 object obj = ResourceManager.GetObject("powerplayvote", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1383,7 +1383,7 @@ namespace EliteDangerous.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap powerplayvoucher {
+        public static System.Drawing.Bitmap powerplayvoucher {
             get {
                 object obj = ResourceManager.GetObject("powerplayvoucher", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1393,7 +1393,7 @@ namespace EliteDangerous.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap progress {
+        public static System.Drawing.Bitmap progress {
             get {
                 object obj = ResourceManager.GetObject("progress", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1403,7 +1403,7 @@ namespace EliteDangerous.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap promotion {
+        public static System.Drawing.Bitmap promotion {
             get {
                 object obj = ResourceManager.GetObject("promotion", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1413,7 +1413,7 @@ namespace EliteDangerous.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap pulsar {
+        public static System.Drawing.Bitmap pulsar {
             get {
                 object obj = ResourceManager.GetObject("pulsar", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1423,7 +1423,7 @@ namespace EliteDangerous.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap pvpkill {
+        public static System.Drawing.Bitmap pvpkill {
             get {
                 object obj = ResourceManager.GetObject("pvpkill", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1433,7 +1433,7 @@ namespace EliteDangerous.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap quitacrew {
+        public static System.Drawing.Bitmap quitacrew {
             get {
                 object obj = ResourceManager.GetObject("quitacrew", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1443,7 +1443,7 @@ namespace EliteDangerous.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap rank {
+        public static System.Drawing.Bitmap rank {
             get {
                 object obj = ResourceManager.GetObject("rank", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1453,7 +1453,7 @@ namespace EliteDangerous.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap rebootrepair {
+        public static System.Drawing.Bitmap rebootrepair {
             get {
                 object obj = ResourceManager.GetObject("rebootrepair", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1463,7 +1463,7 @@ namespace EliteDangerous.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap receivetext {
+        public static System.Drawing.Bitmap receivetext {
             get {
                 object obj = ResourceManager.GetObject("receivetext", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1473,7 +1473,7 @@ namespace EliteDangerous.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap refuel {
+        public static System.Drawing.Bitmap refuel {
             get {
                 object obj = ResourceManager.GetObject("refuel", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1483,7 +1483,7 @@ namespace EliteDangerous.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap refuelall {
+        public static System.Drawing.Bitmap refuelall {
             get {
                 object obj = ResourceManager.GetObject("refuelall", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1493,7 +1493,7 @@ namespace EliteDangerous.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap repair {
+        public static System.Drawing.Bitmap repair {
             get {
                 object obj = ResourceManager.GetObject("repair", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1503,7 +1503,7 @@ namespace EliteDangerous.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap repairall {
+        public static System.Drawing.Bitmap repairall {
             get {
                 object obj = ResourceManager.GetObject("repairall", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1513,7 +1513,7 @@ namespace EliteDangerous.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap ressurect {
+        public static System.Drawing.Bitmap ressurect {
             get {
                 object obj = ResourceManager.GetObject("ressurect", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1523,7 +1523,7 @@ namespace EliteDangerous.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap restockfighter {
+        public static System.Drawing.Bitmap restockfighter {
             get {
                 object obj = ResourceManager.GetObject("restockfighter", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1533,7 +1533,7 @@ namespace EliteDangerous.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap restocksrv {
+        public static System.Drawing.Bitmap restocksrv {
             get {
                 object obj = ResourceManager.GetObject("restocksrv", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1543,7 +1543,7 @@ namespace EliteDangerous.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Rocky_Body_Sand2 {
+        public static System.Drawing.Bitmap Rocky_Body_Sand2 {
             get {
                 object obj = ResourceManager.GetObject("Rocky_Body_Sand2", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1553,7 +1553,7 @@ namespace EliteDangerous.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Rocky_Ice_World_Sol_Titan {
+        public static System.Drawing.Bitmap Rocky_Ice_World_Sol_Titan {
             get {
                 object obj = ResourceManager.GetObject("Rocky_Ice_World_Sol_Titan", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1563,7 +1563,7 @@ namespace EliteDangerous.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap scan {
+        public static System.Drawing.Bitmap scan {
             get {
                 object obj = ResourceManager.GetObject("scan", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1573,7 +1573,7 @@ namespace EliteDangerous.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap scanned {
+        public static System.Drawing.Bitmap scanned {
             get {
                 object obj = ResourceManager.GetObject("scanned", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1583,7 +1583,7 @@ namespace EliteDangerous.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap scientificresearch {
+        public static System.Drawing.Bitmap scientificresearch {
             get {
                 object obj = ResourceManager.GetObject("scientificresearch", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1593,7 +1593,7 @@ namespace EliteDangerous.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap screenshot {
+        public static System.Drawing.Bitmap screenshot {
             get {
                 object obj = ResourceManager.GetObject("screenshot", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1603,7 +1603,7 @@ namespace EliteDangerous.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap selfdestruct {
+        public static System.Drawing.Bitmap selfdestruct {
             get {
                 object obj = ResourceManager.GetObject("selfdestruct", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1613,7 +1613,7 @@ namespace EliteDangerous.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap selldrones {
+        public static System.Drawing.Bitmap selldrones {
             get {
                 object obj = ResourceManager.GetObject("selldrones", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1623,7 +1623,7 @@ namespace EliteDangerous.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap sellexplorationdata {
+        public static System.Drawing.Bitmap sellexplorationdata {
             get {
                 object obj = ResourceManager.GetObject("sellexplorationdata", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1633,7 +1633,7 @@ namespace EliteDangerous.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap sendtext {
+        public static System.Drawing.Bitmap sendtext {
             get {
                 object obj = ResourceManager.GetObject("sendtext", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1643,7 +1643,7 @@ namespace EliteDangerous.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap setusershipname {
+        public static System.Drawing.Bitmap setusershipname {
             get {
                 object obj = ResourceManager.GetObject("setusershipname", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1653,7 +1653,7 @@ namespace EliteDangerous.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap shields {
+        public static System.Drawing.Bitmap shields {
             get {
                 object obj = ResourceManager.GetObject("shields", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1663,7 +1663,7 @@ namespace EliteDangerous.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap shieldsdown {
+        public static System.Drawing.Bitmap shieldsdown {
             get {
                 object obj = ResourceManager.GetObject("shieldsdown", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1673,7 +1673,7 @@ namespace EliteDangerous.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap shieldsup {
+        public static System.Drawing.Bitmap shieldsup {
             get {
                 object obj = ResourceManager.GetObject("shieldsup", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1683,7 +1683,7 @@ namespace EliteDangerous.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap shipyardnew {
+        public static System.Drawing.Bitmap shipyardnew {
             get {
                 object obj = ResourceManager.GetObject("shipyardnew", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1693,7 +1693,7 @@ namespace EliteDangerous.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap shipyardsell {
+        public static System.Drawing.Bitmap shipyardsell {
             get {
                 object obj = ResourceManager.GetObject("shipyardsell", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1703,7 +1703,7 @@ namespace EliteDangerous.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap shipyardswap {
+        public static System.Drawing.Bitmap shipyardswap {
             get {
                 object obj = ResourceManager.GetObject("shipyardswap", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1713,7 +1713,7 @@ namespace EliteDangerous.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap shipyardtransfer {
+        public static System.Drawing.Bitmap shipyardtransfer {
             get {
                 object obj = ResourceManager.GetObject("shipyardtransfer", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1723,7 +1723,7 @@ namespace EliteDangerous.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Star_K1IV {
+        public static System.Drawing.Bitmap Star_K1IV {
             get {
                 object obj = ResourceManager.GetObject("Star_K1IV", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1733,7 +1733,7 @@ namespace EliteDangerous.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap starcluster {
+        public static System.Drawing.Bitmap starcluster {
             get {
                 object obj = ResourceManager.GetObject("starcluster", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1743,7 +1743,7 @@ namespace EliteDangerous.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap startjump {
+        public static System.Drawing.Bitmap startjump {
             get {
                 object obj = ResourceManager.GetObject("startjump", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1753,7 +1753,7 @@ namespace EliteDangerous.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Stationenter {
+        public static System.Drawing.Bitmap Stationenter {
             get {
                 object obj = ResourceManager.GetObject("Stationenter", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1763,7 +1763,7 @@ namespace EliteDangerous.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Stationexit {
+        public static System.Drawing.Bitmap Stationexit {
             get {
                 object obj = ResourceManager.GetObject("Stationexit", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1773,7 +1773,7 @@ namespace EliteDangerous.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap supercruiseenter {
+        public static System.Drawing.Bitmap supercruiseenter {
             get {
                 object obj = ResourceManager.GetObject("supercruiseenter", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1783,7 +1783,7 @@ namespace EliteDangerous.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap supercruiseexit {
+        public static System.Drawing.Bitmap supercruiseexit {
             get {
                 object obj = ResourceManager.GetObject("supercruiseexit", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1793,7 +1793,7 @@ namespace EliteDangerous.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap synthesis {
+        public static System.Drawing.Bitmap synthesis {
             get {
                 object obj = ResourceManager.GetObject("synthesis", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1803,7 +1803,7 @@ namespace EliteDangerous.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap T4V {
+        public static System.Drawing.Bitmap T4V {
             get {
                 object obj = ResourceManager.GetObject("T4V", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1813,7 +1813,7 @@ namespace EliteDangerous.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap textreceived {
+        public static System.Drawing.Bitmap textreceived {
             get {
                 object obj = ResourceManager.GetObject("textreceived", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1823,7 +1823,7 @@ namespace EliteDangerous.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap textsent {
+        public static System.Drawing.Bitmap textsent {
             get {
                 object obj = ResourceManager.GetObject("textsent", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1833,7 +1833,7 @@ namespace EliteDangerous.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap touchdown {
+        public static System.Drawing.Bitmap touchdown {
             get {
                 object obj = ResourceManager.GetObject("touchdown", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1843,7 +1843,7 @@ namespace EliteDangerous.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap uss {
+        public static System.Drawing.Bitmap uss {
             get {
                 object obj = ResourceManager.GetObject("uss", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1853,7 +1853,7 @@ namespace EliteDangerous.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Water_Giant1 {
+        public static System.Drawing.Bitmap Water_Giant1 {
             get {
                 object obj = ResourceManager.GetObject("Water_Giant1", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1863,7 +1863,7 @@ namespace EliteDangerous.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Water_World_Poles_Cloudless4 {
+        public static System.Drawing.Bitmap Water_World_Poles_Cloudless4 {
             get {
                 object obj = ResourceManager.GetObject("Water_World_Poles_Cloudless4", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1873,7 +1873,7 @@ namespace EliteDangerous.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap wingadd {
+        public static System.Drawing.Bitmap wingadd {
             get {
                 object obj = ResourceManager.GetObject("wingadd", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1883,7 +1883,7 @@ namespace EliteDangerous.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap wingjoin {
+        public static System.Drawing.Bitmap wingjoin {
             get {
                 object obj = ResourceManager.GetObject("wingjoin", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1893,7 +1893,7 @@ namespace EliteDangerous.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap wingleave {
+        public static System.Drawing.Bitmap wingleave {
             get {
                 object obj = ResourceManager.GetObject("wingleave", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -1903,7 +1903,7 @@ namespace EliteDangerous.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Y2 {
+        public static System.Drawing.Bitmap Y2 {
             get {
                 object obj = ResourceManager.GetObject("Y2", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));

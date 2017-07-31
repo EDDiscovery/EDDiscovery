@@ -45,21 +45,21 @@ namespace EDDiscovery
 
         Bitmap[] tabbitmaps = new Bitmap[] { EDDiscovery.Properties.Resources.Log,      // Match pop out enum PopOuts, from start, list only ones which should be in tabs
                                         EDDiscovery.Properties.Resources.star,
-                                        EDDiscovery.Properties.Resources.material ,
-                                        EDDiscovery.Properties.Resources.commodities,
+                                        EliteDangerous.Properties.Resources.material ,
+                                        EliteDangerous.Properties.Resources.commodities,
                                         EDDiscovery.Properties.Resources.ledger ,
                                         EDDiscovery.Properties.Resources.journal ,
                                         EDDiscovery.Properties.Resources.travelgrid ,
-                                        EDDiscovery.Properties.Resources.screenshot,
+                                        EliteDangerous.Properties.Resources.screenshot,
                                         EDDiscovery.Properties.Resources.stats,
-                                        EDDiscovery.Properties.Resources.scan,
-                                        EDDiscovery.Properties.Resources.module,
-                                        EDDiscovery.Properties.Resources.sellexplorationdata,
-                                        EDDiscovery.Properties.Resources.synthesis,
-                                        EDDiscovery.Properties.Resources.missionaccepted,
-                                        EDDiscovery.Properties.Resources.engineercraft,
-                                        EDDiscovery.Properties.Resources.marketdata,
-                                        EDDiscovery.Properties.Resources.ammunition, //TBD
+                                        EliteDangerous.Properties.Resources.scan,
+                                        EliteDangerous.Properties.Resources.module,
+                                        EliteDangerous.Properties.Resources.sellexplorationdata,
+                                        EliteDangerous.Properties.Resources.synthesis,
+                                        EliteDangerous.Properties.Resources.missionaccepted,
+                                        EliteDangerous.Properties.Resources.engineercraft,
+                                        EliteDangerous.Properties.Resources.marketdata,
+                                        EliteDangerous.Properties.Resources.ammunition, //TBD
                                         };
 
         string[] tabtooltips = new string[] { "Display the program log",     // MAtch Pop out enum

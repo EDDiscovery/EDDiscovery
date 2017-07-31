@@ -1194,6 +1194,8 @@ namespace EDDiscovery
                 return false;
 
             Object res = Properties.Resources.ResourceManager.GetObject(icon);
+            if ( res == null )
+                res = EliteDangerous.Properties.Resources.ResourceManager.GetObject(icon);
 
             var x = (from ToolStripItem p in parent.DropDownItems where p.Text.Equals(menutext) && p.Tag != null && p.Name.Equals(menuname) select p);
 
