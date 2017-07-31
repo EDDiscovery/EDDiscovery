@@ -13,7 +13,9 @@
  * 
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
- using System;
+using EliteDangerousCore;
+using EliteDangerousCore.DB;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -47,7 +49,7 @@ namespace EDDiscovery.Forms
             this.discoveryForm = discoveryForm;
             double ly = 10.0;
             txtsphereRadius.Text = ly.ToString("0.00");
-            txtExportVisited.SetAutoCompletor(EDDiscovery.DB.SystemClassDB.ReturnSystemListForAutoComplete);
+            txtExportVisited.SetAutoCompletor(SystemClassDB.ReturnSystemListForAutoComplete);
         }
 
         private void buttonOK_Click(object sender, EventArgs e)

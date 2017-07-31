@@ -23,10 +23,10 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using System.IO;
-using EDDiscovery.DB;
-using EDDiscovery.EliteDangerous;
-using EDDiscovery.EliteDangerous.JournalEvents;
 using Newtonsoft.Json.Linq;
+using EliteDangerousCore.DB;
+using EliteDangerousCore.JournalEvents;
+using EliteDangerousCore;
 
 namespace EDDiscovery.ImageHandler
 {

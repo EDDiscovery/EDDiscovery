@@ -19,8 +19,8 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using EDDiscovery;
-using EDDiscovery.DB;
-using EDDiscovery.EliteDangerous;
+using EliteDangerousCore;
+using EliteDangerousCore.DB;
 
 namespace EDDiscovery._3DMap
 {

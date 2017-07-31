@@ -18,10 +18,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using EDDiscovery.EliteDangerous.JournalEvents;
 using System.Windows.Forms;
 using System.IO;
-using EDDiscovery.EliteDangerous;
+using EliteDangerousCore.JournalEvents;
+using EliteDangerousCore;
 
 namespace EDDiscovery.Export
 {

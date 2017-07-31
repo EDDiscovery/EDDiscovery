@@ -14,7 +14,6 @@
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 using EDDiscovery;
-using EDDiscovery.DB;
 using EDDiscovery._3DMap;
 using OpenTK;
 using OpenTK.Graphics;
@@ -31,9 +30,10 @@ using OpenTK.Input;
 using System.Drawing.Drawing2D;
 using System.Resources;
 using System.Collections.Concurrent;
-using EDDiscovery.EDSM;
+using EliteDangerousCore.EDSM;
 using EDDiscovery.Forms;
-using EDDiscovery.EliteDangerous;
+using EliteDangerousCore;
+using EliteDangerousCore.DB;
 
 namespace EDDiscovery
 {
@@ -457,7 +457,7 @@ namespace EDDiscovery
 
             SetCenterSystemTo(_centerSystem);                   // move to this..
 
-            textboxFrom.SetAutoCompletor(EDDiscovery.DB.SystemClassDB.ReturnSystemListForAutoComplete);
+            textboxFrom.SetAutoCompletor(SystemClassDB.ReturnSystemListForAutoComplete);
 
         }
 
@@ -1674,7 +1674,7 @@ namespace EDDiscovery
 
                     name = _clickedSystem.name;
 
-                    var edsm = new EDSM.EDSMClass();
+                    var edsm = new EDSMClass();
                     _clickedurl = edsm.GetUrlToEDSMSystem(name, _clickedSystem.id_edsm);
                     viewOnEDSMToolStripMenuItem.Enabled = true;
 
@@ -1725,7 +1725,7 @@ namespace EDDiscovery
                 if (cursystem != null || curbookmark != null)      // if we have a system or a bookmark...
                 {
                     //Moved the code so that it could be shared with SavedRouteExpeditionControl
-                    TargetHelpers.showBookmarkForm(this,discoveryForm , cursystem, curbookmark, notedsystem);
+                    DB.TargetHelpers.showBookmarkForm(this,discoveryForm , cursystem, curbookmark, notedsystem);
                     GenerateDataSetsBNG();      // in case target changed, do all..
                     RequestPaint();
                 }
@@ -2147,7 +2147,7 @@ namespace EDDiscovery
                 {
                     if (gmo.galMapType.Enabled && gmo.galMapType.Group == GalMapType.GalMapGroup.Markers && gmo.points.Count > 0)             // if it is Enabled and has a co-ord, and is a marker type (routes/regions rejected)
                     {
-                        Vector3 pd = gmo.points[0];
+                        Vector3 pd = gmo.points[0].Convert();
 
                         Matrix4 area = new Matrix4(
                             new Vector4(rotvert[0].X + pd.X, rotvert[0].Y + pd.Y, rotvert[0].Z + pd.Z, 1),    // top left
@@ -2198,7 +2198,7 @@ namespace EDDiscovery
         // clicked on note on a system, cursystem!=null,curbookmark=null, notedsystem=true
         // clicked on gal object, galmapobject !=null, cursystem=null,curbookmark=null,notedsystem = false
 
-        private void GetMouseOverItem(int x, int y, out EliteDangerous.ISystem cursystem,  // can return both, if a system bookmark is clicked..
+        private void GetMouseOverItem(int x, int y, out ISystem cursystem,  // can return both, if a system bookmark is clicked..
                                                     out BookmarkClass curbookmark, out bool notedsystem,
                                                     out GalacticMapObject galobj)
         {
@@ -2318,7 +2318,7 @@ namespace EDDiscovery
             {
                 if (gmo.points.Count > 0)
                 {
-                    loc = gmo.points[0];
+                    loc = gmo.points[0].Convert();
                     return gmo.name;
                 }
                 else

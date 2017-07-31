@@ -23,9 +23,9 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using EDDiscovery.Controls;
-using EDDiscovery.DB;
-using EDDiscovery.EliteDangerous;
-using EDDiscovery.EliteDangerous.JournalEvents;
+using EliteDangerousCore.JournalEvents;
+using EliteDangerousCore;
+using EliteDangerousCore.DB;
 
 namespace EDDiscovery.UserControls
 {
@@ -58,7 +58,7 @@ namespace EDDiscovery.UserControls
             ed.TravelControl.OnTravelSelectionChanged += OnChanged;
 
             checkBoxBuyOnly.Enabled = false;
-            checkBoxBuyOnly.Checked = DB.SQLiteDBClass.GetSettingBool(DbBuyOnly, false);
+            checkBoxBuyOnly.Checked = SQLiteDBClass.GetSettingBool(DbBuyOnly, false);
             checkBoxBuyOnly.Enabled = true;
         }
 
@@ -240,7 +240,7 @@ namespace EDDiscovery.UserControls
         public override void Closing()
         {
             DGVSaveColumnLayout(dataGridViewMarketData, DbColumnSave);
-            DB.SQLiteDBClass.PutSettingBool(DbBuyOnly, checkBoxBuyOnly.Checked);
+            SQLiteDBClass.PutSettingBool(DbBuyOnly, checkBoxBuyOnly.Checked);
             discoveryform.OnNewEntry -= OnChanged;
             discoveryform.TravelControl.OnTravelSelectionChanged -= OnChanged;
         }

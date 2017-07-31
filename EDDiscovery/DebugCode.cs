@@ -14,7 +14,7 @@
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 using EDDiscovery.DB;
-using EDDiscovery.EliteDangerous;
+using EliteDangerousCore;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -50,23 +50,23 @@ namespace EDDiscovery
                     //string s = jpp.PrettyPrintStr(line, 80);
                     //System.Diagnostics.Trace.WriteLine(s);
 
-                    EliteDangerous.JournalEntry je = EliteDangerous.JournalEntry.CreateJournalEntry(line);
+                    EliteDangerousCore.JournalEntry je = EliteDangerousCore.JournalEntry.CreateJournalEntry(line);
                     //System.Diagnostics.Trace.WriteLine(je.EventTypeStr);
 
-                    if (je.EventTypeID == JournalTypeEnum.Location)
+                    if (je.EventTypeID == EliteDangerousCore.JournalTypeEnum.Location)
                     {
-                        EDDiscovery.EliteDangerous.JournalEvents.JournalLocOrJump jl = je as EDDiscovery.EliteDangerous.JournalEvents.JournalLocOrJump;
+                        EliteDangerousCore.JournalEvents.JournalLocOrJump jl = je as EliteDangerousCore.JournalEvents.JournalLocOrJump;
                         system = jl.StarSystem;
                     }
-                    else if (je.EventTypeID == JournalTypeEnum.FSDJump)
+                    else if (je.EventTypeID == EliteDangerousCore.JournalTypeEnum.FSDJump)
                     {
-                        EDDiscovery.EliteDangerous.JournalEvents.JournalFSDJump jfsd = je as EDDiscovery.EliteDangerous.JournalEvents.JournalFSDJump;
+                        EliteDangerousCore.JournalEvents.JournalFSDJump jfsd = je as EliteDangerousCore.JournalEvents.JournalFSDJump;
                         system = jfsd.StarSystem;
 
                     }
-                    else if (je.EventTypeID == JournalTypeEnum.Scan)
+                    else if (je.EventTypeID == EliteDangerousCore.JournalTypeEnum.Scan)
                     {
-                        ss.Process(je as EliteDangerous.JournalEvents.JournalScan, new SystemClassDB(system));
+                        ss.Process(je as EliteDangerousCore.JournalEvents.JournalScan, new EliteDangerousCore.DB.SystemClassDB(system));
                     }
                 }
 
@@ -85,7 +85,7 @@ namespace EDDiscovery
 
             for (long i = 0; i < 56000; i++)
             {
-                string p = JournalFieldNaming.GetBetterItemNameEvents(st);
+                string p = EliteDangerousCore.JournalFieldNaming.GetBetterItemNameEvents(st);
             }
 
             long elapsed = t.ElapsedMilliseconds;
@@ -166,14 +166,14 @@ namespace EDDiscovery
 
         public static void TestJournal()
         {
-            foreach (string s in Enum.GetNames(typeof(JournalTypeEnum)))
+            foreach (string s in Enum.GetNames(typeof(EliteDangerousCore.JournalTypeEnum)))
             //string s = "EDDItemSet";
             {
                 string json = "{ \"timestamp\":\"2017-04-05T11:16:19Z\", \"event\":\"" + s + "\" }";
 
                 System.Diagnostics.Debug.WriteLine("Event " + s + ":");
 
-                JournalEntry j = JournalEntry.CreateJournalEntry(json);
+                EliteDangerousCore.JournalEntry j = EliteDangerousCore.JournalEntry.CreateJournalEntry(json);
 
                 Debug.Assert(j.Icon != null);
 

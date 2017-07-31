@@ -13,7 +13,6 @@
  * 
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
-using EDDiscovery.DB;
 using EDDiscovery.Forms;
 using BaseUtils.Win32Constants;
 using System;
@@ -26,6 +25,8 @@ using BaseUtils;
 using ActionLanguage;
 using Conditions;
 using AudioExtensions;
+using EliteDangerousCore.DB;
+using EliteDangerousCore;
 
 namespace EDDiscovery.Actions
 {
@@ -102,7 +103,7 @@ namespace EDDiscovery.Actions
 
         private bool EditActionFile(string name)
         {
-            List<string> jevents = EDDiscovery.EliteDangerous.JournalEntry.GetListOfEventsWithOptMethod(towords: false);
+            List<string> jevents = JournalEntry.GetListOfEventsWithOptMethod(towords: false);
             jevents.Sort();
 
             List<Tuple<string, string>> eventnames = new List<Tuple<string, string>>();
@@ -161,7 +162,7 @@ namespace EDDiscovery.Actions
 
             if ( evname != null && evname.Length>0 )
             { 
-                List<string> classnames = BaseUtils.FieldNames.GetPropertyFieldNames(EDDiscovery.EliteDangerous.JournalEntry.TypeOfJournalEntry(evname), "EventClass_");
+                List<string> classnames = BaseUtils.FieldNames.GetPropertyFieldNames(JournalEntry.TypeOfJournalEntry(evname), "EventClass_");
                 if (classnames != null)
                     fieldnames.InsertRange(0, classnames);
             }

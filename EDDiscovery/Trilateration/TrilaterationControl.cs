@@ -20,9 +20,10 @@ using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
 using EDDiscovery.DB;
-using EDDiscovery.EDSM;
+using EliteDangerousCore.EDSM;
 using ExtendedControls;
-using EDDiscovery.EliteDangerous;
+using EliteDangerousCore;
+using EliteDangerousCore.DB;
 
 namespace EDDiscovery
 {
@@ -96,15 +97,15 @@ namespace EDDiscovery
             }
         }
 
-        private List<EliteDangerous.SystemClass> GetEnteredSystems()
+        private List<SystemClass> GetEnteredSystems()
         {
-            var systems = new List<EliteDangerous.SystemClass>();
+            var systems = new List<SystemClass>();
             for (int i = 0, size = dataGridViewDistances.Rows.Count - 1; i < size; i++)
             {
                 var cell = dataGridViewDistances[0, i];
                 if (cell.Value != null && cell.Tag != null)
                 {
-                    systems.Add((EliteDangerous.SystemClass) cell.Tag);
+                    systems.Add((SystemClass) cell.Tag);
                 }
             }
             return systems;

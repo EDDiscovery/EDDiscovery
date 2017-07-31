@@ -91,46 +91,53 @@ namespace ExtendedControls
 
         public void UpdatePatchesEtc()                                         // update patch colours..
         {
-            theme.UpdatePatch(panel_theme1);
-            theme.UpdatePatch(panel_theme2);
-            theme.UpdatePatch(panel_theme3);
-            theme.UpdatePatch(panel_theme4);
-            theme.UpdatePatch(panel_theme5);
-            theme.UpdatePatch(panel_theme6);
-            theme.UpdatePatch(panel_theme7);
-            theme.UpdatePatch(panel_theme8);
-            theme.UpdatePatch(panel_theme9);
-            theme.UpdatePatch(panel_theme10);
-            theme.UpdatePatch(panel_theme11);
-            theme.UpdatePatch(panel_theme12);
-            theme.UpdatePatch(panel_theme13);
-            theme.UpdatePatch(panel_theme14);
-            theme.UpdatePatch(panel_theme15);
-            theme.UpdatePatch(panel_theme16);
-            theme.UpdatePatch(panel_theme17);
-            theme.UpdatePatch(panel_theme18);
-            theme.UpdatePatch(panel_theme19);
-            theme.UpdatePatch(panel_theme30);
-            theme.UpdatePatch(panel_theme31);
-            theme.UpdatePatch(panel_theme32);
-            theme.UpdatePatch(panel_theme33);
-            theme.UpdatePatch(panel_theme35);
-            theme.UpdatePatch(panel_theme40);
-            theme.UpdatePatch(panel_theme41);
-            theme.UpdatePatch(panel_theme42);
-            theme.UpdatePatch(panel_theme43);
-            theme.UpdatePatch(panel_theme44);
-            theme.UpdatePatch(panel_theme45);
-            theme.UpdatePatch(panel_theme50);
-            theme.UpdatePatch(panel_theme51);
-            theme.UpdatePatch(panel_theme60);
-            theme.UpdatePatch(panel_theme61);
-            theme.UpdatePatch(panel_theme62);
-            theme.UpdatePatch(panel_theme70);
-            theme.UpdatePatch(panel_theme71);
+            UpdatePatch(panel_theme1);
+            UpdatePatch(panel_theme2);
+            UpdatePatch(panel_theme3);
+            UpdatePatch(panel_theme4);
+            UpdatePatch(panel_theme5);
+            UpdatePatch(panel_theme6);
+            UpdatePatch(panel_theme7);
+            UpdatePatch(panel_theme8);
+            UpdatePatch(panel_theme9);
+            UpdatePatch(panel_theme10);
+            UpdatePatch(panel_theme11);
+            UpdatePatch(panel_theme12);
+            UpdatePatch(panel_theme13);
+            UpdatePatch(panel_theme14);
+            UpdatePatch(panel_theme15);
+            UpdatePatch(panel_theme16);
+            UpdatePatch(panel_theme17);
+            UpdatePatch(panel_theme18);
+            UpdatePatch(panel_theme19);
+            UpdatePatch(panel_theme30);
+            UpdatePatch(panel_theme31);
+            UpdatePatch(panel_theme32);
+            UpdatePatch(panel_theme33);
+            UpdatePatch(panel_theme35);
+            UpdatePatch(panel_theme40);
+            UpdatePatch(panel_theme41);
+            UpdatePatch(panel_theme42);
+            UpdatePatch(panel_theme43);
+            UpdatePatch(panel_theme44);
+            UpdatePatch(panel_theme45);
+            UpdatePatch(panel_theme50);
+            UpdatePatch(panel_theme51);
+            UpdatePatch(panel_theme60);
+            UpdatePatch(panel_theme61);
+            UpdatePatch(panel_theme62);
+            UpdatePatch(panel_theme70);
+            UpdatePatch(panel_theme71);
             textBox_Font.Text = theme.FontName + " " + theme.FontSize + " points";
             checkBox_theme_windowframe.Checked = theme.WindowsFrame;
         }
+
+        private void UpdatePatch(Panel pn)
+        {
+            ThemeStandard.Settings.CI ci = (ThemeStandard.Settings.CI)(pn.Tag);
+            pn.BackColor = theme.currentsettings.colors[ci];
+        }
+
 
         private void SetPanel(Panel pn, string name, ThemeStandard.Settings.CI ex)
         {

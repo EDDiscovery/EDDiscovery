@@ -13,8 +13,9 @@
  * 
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
-using EDDiscovery.DB;
-using EDDiscovery.UserControls;
+
+ using EDDiscovery.UserControls;
+using EliteDangerousCore.DB;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -114,25 +115,25 @@ namespace EDDiscovery.Forms
         {
             { PopOuts.Log, new PopOutInfo("Log", "Log", EDDiscovery.Properties.Resources.Log ) },
             { PopOuts.StarDistance, new PopOutInfo("Nearest Stars", "StarDistance", EDDiscovery.Properties.Resources.star) },
-            { PopOuts.Materials, new PopOutInfo("Materials", "Materials", EDDiscovery.Properties.Resources.material ) },
-            { PopOuts.Commodities, new PopOutInfo("Commodities", "Commodities", EDDiscovery.Properties.Resources.commodities) },
+            { PopOuts.Materials, new PopOutInfo("Materials", "Materials", EliteDangerous.Properties.Resources.material ) },
+            { PopOuts.Commodities, new PopOutInfo("Commodities", "Commodities", EliteDangerous.Properties.Resources.commodities) },
             { PopOuts.Ledger, new PopOutInfo("Ledger", "Ledger", EDDiscovery.Properties.Resources.ledger) },
             { PopOuts.Journal, new PopOutInfo("Journal History", "JournalHistory", EDDiscovery.Properties.Resources.journal) },
             { PopOuts.TravelGrid, new PopOutInfo("Travel History", "TravelHistory", EDDiscovery.Properties.Resources.travelgrid) },
-            { PopOuts.ScreenShot, new PopOutInfo("ScreenShot", "ScreenShot", EDDiscovery.Properties.Resources.screenshot) },
+            { PopOuts.ScreenShot, new PopOutInfo("ScreenShot", "ScreenShot", EliteDangerous.Properties.Resources.screenshot) },
             { PopOuts.Statistics, new PopOutInfo("Statistics", "Stats", EDDiscovery.Properties.Resources.stats) },
-            { PopOuts.Scan, new PopOutInfo("Scan", "Scan", EDDiscovery.Properties.Resources.scan, transparent: false) },
-            { PopOuts.Modules, new PopOutInfo("Loadout", "Modules", EDDiscovery.Properties.Resources.module) },
-            { PopOuts.Synthesis, new PopOutInfo("Synthesis", "Synthesis", EDDiscovery.Properties.Resources.synthesis) },
-            { PopOuts.Missions, new PopOutInfo("Missions", "Missions", EDDiscovery.Properties.Resources.missionaccepted) },
+            { PopOuts.Scan, new PopOutInfo("Scan", "Scan", EliteDangerous.Properties.Resources.scan, transparent: false) },
+            { PopOuts.Modules, new PopOutInfo("Loadout", "Modules", EliteDangerous.Properties.Resources.module) },
+            { PopOuts.Synthesis, new PopOutInfo("Synthesis", "Synthesis", EliteDangerous.Properties.Resources.synthesis) },
+            { PopOuts.Missions, new PopOutInfo("Missions", "Missions", EliteDangerous.Properties.Resources.missionaccepted) },
             { PopOuts.Exploration, new PopOutInfo("Exploration", "Exploration", null) },
             { PopOuts.Spanel, new PopOutInfo("Summary Panel", "Spanel", transparent: true) },
             { PopOuts.Trippanel, new PopOutInfo("Trip Panel", "Trippanel", transparent: true) },
             { PopOuts.NotePanel, new PopOutInfo("Note Panel", "NotePanel", transparent: true) },
             { PopOuts.RouteTracker, new PopOutInfo("Route Tracker", "RouteTracker", transparent: true) },
-            { PopOuts.Engineering, new PopOutInfo("Engineering", "Engineering", EDDiscovery.Properties.Resources.engineercraft) },
-            { PopOuts.MarketData, new PopOutInfo("Market Data", "MarketData", EDDiscovery.Properties.Resources.marketdata ) },
-            { PopOuts.SystemInformation, new PopOutInfo("System Information", "SystemInfo", EDDiscovery.Properties.Resources.ammunition , transparent:true ) },
+            { PopOuts.Engineering, new PopOutInfo("Engineering", "Engineering", EliteDangerous.Properties.Resources.engineercraft) },
+            { PopOuts.MarketData, new PopOutInfo("Market Data", "MarketData", EliteDangerous.Properties.Resources.marketdata ) },
+            { PopOuts.SystemInformation, new PopOutInfo("System Information", "SystemInfo", EliteDangerous.Properties.Resources.ammunition , transparent:true ) },
         };
 
         public static UserControlCommonBase Create(PopOuts i)

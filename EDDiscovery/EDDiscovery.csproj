@@ -71,7 +71,8 @@
     <SignManifests>false</SignManifests>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>Resources\edlogo_3mo_icon.ico</ApplicationIcon>
+    <ApplicationIcon>
+    </ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup>
     <StartupObject>
@@ -138,14 +139,6 @@
     <Reference Include="System" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Data.SQLite, Version=1.0.104.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Data.SQLite.Core.1.0.104.0\lib\net46\System.Data.SQLite.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.Data.SQLite.Linq, Version=1.0.104.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Data.SQLite.Linq.1.0.104.0\lib\net46\System.Data.SQLite.Linq.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="System.Management" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Speech" />
@@ -203,65 +196,16 @@
     <Compile Include="Actions\ActionsEDDCmds\ActionMenuItem.cs" />
     <Compile Include="Actions\ActionVars.cs" />
     <Compile Include="Actions\ConditionFunctionsEDD.cs" />
-    <Compile Include="CompanionAPI\CModules.cs" />
-    <Compile Include="CompanionAPI\CStarport.cs" />
-    <Compile Include="CompanionAPI\CSystem.cs" />
-    <Compile Include="DB\BookmarkClass.cs" />
-    <Compile Include="DB\TargetClassHelpers.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\FilterHelpers.cs" />
+    <Compile Include="UserControls\TargetClassHelpers.cs" />
     <Compile Include="EDDApplicationContext.cs" />
-    <Compile Include="EGO\EGOClass.cs" />
-    <Compile Include="EGO\EGOSync.cs" />
-    <Compile Include="EliteDangerous\BindingsFile.cs" />
-    <Compile Include="EDSM\GalacticMapSystem.cs" />
-    <Compile Include="EliteDangerous\EDCalculations.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalCrewLaunchFighter.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalCrewMemberRoleChange.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalEngineerContribution.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalFriends.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalWingInvite.cs" />
-    <Compile Include="EliteDangerous\MaterialCommodities.cs" />
-    <Compile Include="DB\RegisterEntry.cs" />
-    <Compile Include="DB\SQLiteCommandED.cs" />
-    <Compile Include="DB\SQLiteConnectionED.cs" />
-    <Compile Include="DB\SqLiteDBSchema.cs" />
-    <Compile Include="DB\SQLiteConnectionSystem.cs" />
-    <Compile Include="DB\SQLiteConnectionUser.cs" />
-    <Compile Include="DB\TargetClass.cs" />
     <Compile Include="DebugCode.cs" />
     <Compile Include="EDDiscoveryController.cs" />
-    <Compile Include="EDSM\EDSMLogFetcher.cs" />
-    <Compile Include="EliteDangerous\BodyDesignations.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalEDDCommodityPrices.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalSystemsShutdown.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalEndCrewSession.cs" />
-    <Compile Include="EliteDangerous\JournalFieldNaming.cs" />
-    <Compile Include="EliteDangerous\Ledger.cs" />
-    <Compile Include="EliteDangerous\MaterialCommoditiesList.cs" />
-    <Compile Include="EliteDangerous\MissionList.cs" />
-    <Compile Include="EliteDangerous\ModuleEDID.cs" />
-    <Compile Include="EliteDangerous\JournalEntryAttributes.cs" />
-    <Compile Include="EliteDangerous\JournalEntryInterfaces.cs" />
-    <Compile Include="CompanionAPI\CompanionCredentials.cs" />
-    <Compile Include="CompanionAPI\CompanionException.cs" />
-    <Compile Include="CompanionAPI\CompanionAPIClass.cs" />
-    <Compile Include="CompanionAPI\CProfile.cs" />
-    <Compile Include="CompanionAPI\CShip.cs" />
-    <Compile Include="CompanionAPI\RijndaelCrypt.cs" />
-    <Compile Include="CompanionAPI\CCommander.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalMaterials.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalCargo.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalChangeCrewRole.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalCrewMemberJoins.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalCrewMemberQuits.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalJoinACrew.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalKickCrewMember.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalLoadout.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalPassengers.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalQuitACrew.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalScanned.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalSetUserShipName.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalStartJump.cs" />
-    <Compile Include="EliteDangerous\ShipInformation.cs" />
     <Compile Include="ExportImport\ExportGrid.cs" />
     <Compile Include="ExportImport\ExportSphereSystems.cs" />
     <Compile Include="Forms\CommanderForm.cs">
@@ -301,136 +245,6 @@
     <Compile Include="ExportImport\ExportNotes.cs" />
     <Compile Include="ExportImport\ImportHistory.cs" />
     <Compile Include="Trilateration\DistanceParser.cs" />
-    <Compile Include="EDDN\EDDNClass.cs" />
-    <Compile Include="EDDN\EDDNSync.cs" />
-    <Compile Include="EDSM\GalacticMapObject.cs" />
-    <Compile Include="EDSM\GalacticMapping.cs" />
-    <Compile Include="EDSM\GalMapType.cs" />
-    <Compile Include="EliteDangerous\Bodies.cs" />
-    <Compile Include="EliteDangerous\EDJournalClass.cs" />
-    <Compile Include="EliteDangerous\EDJournalReader.cs" />
-    <Compile Include="EliteDangerous\JournalEntry.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalApproachSettlement.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalBounty.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalBuyAmmo.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalBuyDrones.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalBuyExplorationData.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalBuyTradeData.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalCapShipBond.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalClearSavedGame.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalCockpitBreached.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalCollectCargo.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalCommitCrime.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalCommunityGoalDiscard.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalCommunityGoalJoin.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalCommunityGoalReward.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalContinued.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalCrewAssign.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalCrewFire.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalCrewHire.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalDatalinkScan.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalDatalinkVoucher.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalDataScanned.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalDied.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalDocked.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalDockFighter.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalDockingCancelled.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalDockingDenied.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalDockingGranted.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalDockingRequested.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalDockingTimeout.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalDockSRV.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalEDDItemSet.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalEjectCargo.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalEngineerApply.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalEngineerCraft.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalEngineerProgress.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalEscapeInterdiction.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalFactionKillBond.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalFetchRemoteModule.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalFileheader.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalFuelScope.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalHeatDamage.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalHeatWarning.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalHullDamage.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalInterdicted.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalInterdiction.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalJetConeBoost.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalJetConeDamage.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalLaunchFighter.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalLaunchSRV.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalLiftoff.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalLocOrJump.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalLocation.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalFSDJump.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalLoadGame.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalMarketBuy.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalMarketSell.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalMassModuleStore.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalMaterialCollected.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalMaterialDiscarded.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalMaterialDiscovered.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalMiningRefined.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalMissionAbandoned.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalMissionAccepted.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalMissionCompleted.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalMissionFailed.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalModuleBuy.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalModuleRetrieve.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalModuleSell.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalModuleSellRemote.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalModuleStore.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalModuleSwap.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalNewCommander.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalPayFines.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalPayLegacyFines.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalPowerplayCollect.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalPowerplayDefect.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalPowerplayDeliver.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalPowerplayFastTrack.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalPowerplayJoin.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalPowerplayLeave.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalPowerplaySalary.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalPowerplayVote.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalPowerplayVoucher.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalProgress.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalPromotion.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalPVPKill.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalRank.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalRebootRepair.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalReceiveText.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalRedeemVoucher.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalRefuelAll.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalRefuelPartial.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalRepair.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalRepairAll.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalRestockVehicle.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalResurrect.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalScan.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalScientificResearch.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalScreenshot.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalSelfDestruct.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalSellDrones.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalSellExplorationData.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalSendText.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalShieldState.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalShipyardBuy.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalShipyardNew.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalShipyardSell.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalShipyardSwap.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalShipyardTransfer.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalSupercruiseEntry.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalSupercruiseExit.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalSynthesis.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalTouchdown.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalUndocked.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalUnknown.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalUSSDrop.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalVehicleSwitch.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalWingAdd.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalWingJoin.cs" />
-    <Compile Include="EliteDangerous\JournalEvents\JournalWingLeave.cs" />
-    <Compile Include="EliteDangerous\StarScan.cs" />
     <Compile Include="ExportImport\ExportExplorationData.cs" />
     <Compile Include="ExportImport\ExportFilteredSystems.cs" />
     <Compile Include="ExportImport\ExportRoute.cs" />
@@ -440,8 +254,6 @@
     <Compile Include="Forms\FindMaterialsForm.Designer.cs">
       <DependentUpon>FindMaterialsForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="EliteDangerous\LogReaderBase.cs" />
-    <Compile Include="EliteDangerous\NetLogReader.cs" />
     <Compile Include="ExportImport\ExportControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -498,19 +310,8 @@
     <Compile Include="Forms\UserControlForm.Designer.cs">
       <DependentUpon>UserControlForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="HistoryList.cs" />
-    <Compile Include="DB\SavedRouteClass.cs" />
-    <Compile Include="EliteDangerous\ISystem.cs" />
-    <Compile Include="EliteDangerous\SystemClass.cs" />
-    <Compile Include="DB\IVisitedSystems.cs" />
-    <Compile Include="DB\TravelLogUnit.cs" />
-    <Compile Include="DB\WantedSystemClass.cs" />
     <Compile Include="EDDConfig.cs" />
     <Compile Include="Themeing\Theme.cs" />
-    <Compile Include="EDSM\EDSMClass.cs" />
-    <Compile Include="EDSM\EDSMSync.cs" />
-    <Compile Include="EliteDangerous\EDCommander.cs" />
-    <Compile Include="EliteDangerous\EDTypesFromJSON.cs" />
     <Compile Include="3DMap\FormMap.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -524,9 +325,6 @@
       <DependentUpon>SysWarning.cs</DependentUpon>
     </Compile>
     <Compile Include="UserControls\DataGridViewSorter.cs" />
-    <Compile Include="DB\SQLiteDBClass.cs" />
-    <Compile Include="DB\SystemClassDB.cs" />
-    <Compile Include="DB\SystemNoteClass.cs" />
     <Compile Include="Forms\AboutForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -539,21 +337,12 @@
     <Compile Include="Forms\MoveToCommander.Designer.cs">
       <DependentUpon>MoveToCommander.cs</DependentUpon>
     </Compile>
-    <Compile Include="EMK\Arc.cs" />
-    <Compile Include="EMK\AStar.cs" />
-    <Compile Include="EMK\Graph.cs" />
-    <Compile Include="EMK\Node.cs" />
-    <Compile Include="EMK\Point3D.cs" />
-    <Compile Include="EMK\SortableList.cs" />
-    <Compile Include="EMK\Track.cs" />
-    <Compile Include="EMK\Vector3D.cs" />
     <Compile Include="EDDiscoveryForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="EDDiscoveryForm.Designer.cs">
       <DependentUpon>EDDiscoveryForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="EliteDangerous\NetLogClass.cs" />
     <Compile Include="ImageHandler.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -729,7 +518,6 @@
     <Compile Include="UserControls\UserControlTrippanel.Designer.cs">
       <DependentUpon>UserControlTrippanel.cs</DependentUpon>
     </Compile>
-    <Compile Include="DB\Vector3.cs" />
     <EmbeddedResource Include="Forms\CommanderForm.resx">
       <DependentUpon>CommanderForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -824,287 +612,70 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="OpenTK.dll.config" />
-    <None Include="Resources\promotion.pspimage" />
-    <None Include="Resources\shipyardnew.pspimage" />
-    <None Include="Resources\YellowDot.png" />
-    <None Include="Resources\OrangeDot.png" />
     <None Include="Resources\3dmaphelp.txt" />
-    <None Include="Resources\comet.PNG" />
-    <None Include="Resources\ExplorationHazard.png" />
-    <None Include="Resources\Blackhole.PNG" />
-    <None Include="Resources\bookmarkbrightred.png" />
-    <None Include="Resources\bookmarkgreen.png" />
-    <None Include="Resources\bookmarktarget.png" />
-    <None Include="Resources\bookmarkyellow.png" />
-    <None Include="Resources\floppy.png" />
-    <None Include="Resources\eye.png" />
-    <None Include="Resources\goto.png" />
-    <None Include="Resources\ImageTravel.png" />
-    <None Include="Resources\ImageStarDisc.png" />
-    <None Include="Resources\ImageStarDiscWhite.png" />
-    <None Include="Resources\hyperspace.png" />
-    <None Include="Resources\event.png" />
-    <None Include="Resources\Coffinicon.png" />
-    <None Include="Resources\damage.png" />
-    <None Include="Resources\heatdamage.png" />
-    <None Include="Resources\bounty.png" />
-    <None Include="Resources\commitcrime.png" />
-    <None Include="Resources\approachsettlement.png" />
-    <None Include="Resources\fighter.png" />
-    <None Include="Resources\dockingdenied.png" />
-    <None Include="Resources\ammunition.png" />
-    <None Include="Resources\dockingrequest.png" />
-    <None Include="Resources\crew.png" />
-    <None Include="Resources\engineerprogress.png" />
-    <None Include="Resources\engineerapply.png" />
-    <None Include="Resources\dockinggranted.png" />
-    <None Include="Resources\fuelscoop.png" />
-    <None Include="Resources\buyexplorationdata.png" />
-    <None Include="Resources\dockingcancelled.png" />
-    <None Include="Resources\dockingtimeout.png" />
-    <None Include="Resources\escapeinterdiction.png" />
-    <None Include="Resources\buydrones.png" />
-    <None Include="Resources\buytradedata.png" />
-    <None Include="Resources\ejectcargo.png" />
-    <None Include="Resources\collectcargo.png" />
-    <None Include="Resources\cockpitbreached.png" />
-    <None Include="Resources\divider.png" />
-    <None Include="Resources\commodities.png" />
-    <None Include="Resources\ArrowLeft.png" />
-    <None Include="Resources\ArrowRight.png" />
-    <None Include="Resources\Class_II_Gas_Giant_Sand1.png" />
-    <None Include="Resources\Ammonia_Brown.png" />
-    <None Include="Resources\Icy_Body_Greenish1.png" />
-    <None Include="Resources\Belt.png" />
-    <None Include="Resources\Barycentre.jpg" />
-    <None Include="Resources\Barycentre.png" />
-    <None Include="Resources\DefaultStar.png" />
-    <None Include="Resources\B6V_Blueish.png" />
-    <None Include="Resources\A3V_Blueish.png" />
-    <None Include="Resources\A9III_White.png" />
-    <None Include="Resources\Ammonia_Orangeish.png" />
-    <None Include="Resources\B1V_Blue_SagittariusA.png" />
-    <None Include="Resources\Class_III_Gas_Giant_Blue3.png" />
-    <None Include="Resources\C7III.png" />
-    <None Include="Resources\Class_I_Gas_Giant_Brown2.png" />
-    <None Include="Resources\DA6VII_White.png" />
-    <None Include="Resources\Earth_Like_Standard.png" />
-    <None Include="Resources\F5VAB.png" />
-    <None Include="Resources\G1IV.png" />
-    <None Include="Resources\G8V_and_G9V.png" />
-    <None Include="Resources\Gas_giant_ammonia_based_life1.png" />
-    <None Include="Resources\Gas_giant_water_based_life_Brown3.png" />
-    <None Include="Resources\High_metal_content_world_Lava1.png" />
-    <None Include="Resources\High_metal_content_world_Mix3.png" />
-    <None Include="Resources\High_metal_content_world_Orange8.png" />
-    <None Include="Resources\Black_Hole.png" />
-    <None Include="Resources\Helium_Rich_Gas_Giant1.png" />
-    <None Include="Resources\Globe.png" />
-    <None Include="Resources\Globe_yellow.png" />
-    <None Include="Resources\edsm.png" />
-    <None Include="Resources\edlogo24.png" />
-    <None Include="Resources\edsm32x32.png" />
-    <None Include="Resources\edsmblue.png" />
-    <None Include="Resources\edsmred.png" />
-    <None Include="Resources\edsmown.png" />
-    <None Include="Resources\cargomanifest.png" />
-    <None Include="Resources\fetchremotemodule.png" />
-    <None Include="Resources\crewmemberjoins.png" />
-    <None Include="Resources\crewmemberquits.png" />
-    <None Include="Resources\capshipbond.png" />
-    <None Include="Resources\changecrewrols.png" />
-    <None Include="Resources\factionkillbond.png" />
-    <None Include="Resources\docksrv.png" />
-    <None Include="Resources\dockfighter.png" />
-    <None Include="Resources\datalinkscan.png" />
-    <None Include="Resources\datalinkvoucher.png" />
-    <None Include="Resources\crewhire.png" />
-    <None Include="Resources\crewfire.png" />
-    <None Include="Resources\crewassign.png" />
-    <None Include="Resources\communitygoaldiscard.png" />
-    <None Include="Resources\communitygoaljoin.png" />
-    <None Include="Resources\communitygoalreward.png" />
-    <None Include="Resources\changecrewrole.png" />
-    <None Include="Resources\datascanned.png" />
-    <None Include="Resources\fileheader.png" />
-    <None Include="Resources\clearsavedgame.png" />
-    <None Include="Resources\coriolis.png" />
-    <None Include="Resources\excel.png" />
-    <None Include="Resources\Calendar.png" />
-    <None Include="Resources\engineercraft.png" />
-    <None Include="Resources\High_metal_content_world_White3.png" />
-    <None Include="Resources\High_metal_content_world_White3.bmp" />
-    <None Include="Resources\friends.png" />
-    <None Include="Resources\eddiscovery_logo.png" />
+    <None Include="Resources\ImportHelp.txt" />
+    <None Include="Resources\edlogo_3mo_icon.ico" />
     <None Include="Resources\GNE.ico" />
-    <None Include="Resources\galaxycolour.png" />
-    <None Include="Resources\galaxy_white.png" />
-    <None Include="Resources\galaxy_gray.png" />
-    <Content Include="Resources\edlogo_3mo_icon.ico" />
-    <Content Include="Resources\imgCheck.png" />
-    <None Include="Resources\stellaremnant.PNG" />
-    <None Include="Resources\nebula.PNG" />
-    <None Include="Resources\pulsar.PNG" />
-    <None Include="Resources\PlanetaryNebula.PNG" />
-    <None Include="Resources\starcluster.PNG" />
-    <None Include="Resources\pointofinterest.png" />
     <None Include="Resources\selectedmarker.png" />
-    <None Include="Resources\PauseNormalRed.png" />
-    <None Include="Resources\RecordPressed.png" />
-    <None Include="Resources\StopNormalRed.png" />
-    <None Include="Resources\PlayNormal.png" />
-    <None Include="Resources\StopNormalBlue.png" />
-    <None Include="Resources\VideoRecorder.png" />
-    <None Include="Resources\pauseblue.png" />
-    <None Include="Resources\Stationenter.png" />
-    <None Include="Resources\module.png" />
-    <None Include="Resources\Stationexit.png" />
-    <None Include="Resources\scan.png" />
+    <None Include="Resources\SizeSelectorsSmall.png" />
+    <None Include="Resources\SizeSelectorsMedium.png" />
+    <None Include="Resources\SizeSelectorsTiny.png" />
     <None Include="Resources\stopflag.png" />
     <None Include="Resources\startflag.png" />
-    <None Include="Resources\liftoff.png" />
-    <None Include="Resources\srv.png" />
-    <None Include="Resources\location.png" />
-    <None Include="Resources\materialcollected.png" />
-    <None Include="Resources\materialdiscarded.png" />
-    <None Include="Resources\materialdiscovered.png" />
-    <None Include="Resources\shields.png" />
-    <None Include="Resources\supercruiseexit.png" />
-    <None Include="Resources\mothership.png" />
-    <None Include="Resources\supercruiseenter.png" />
-    <None Include="Resources\selfdestruct.png" />
-    <None Include="Resources\ressurect.png" />
-    <None Include="Resources\refuelall.png" />
-    <None Include="Resources\repairall.png" />
-    <None Include="Resources\repair.png" />
-    <None Include="Resources\refuel.png" />
-    <None Include="Resources\modulestore.png" />
-    <None Include="Resources\modulesell.png" />
-    <None Include="Resources\modulebuy.png" />
-    <None Include="Resources\shipyardswap.png" />
-    <None Include="Resources\shipyardtransfer.png" />
-    <None Include="Resources\shipyardsell.png" />
-    <None Include="Resources\shipyardnew.png" />
-    <None Include="Resources\loadgame.png" />
-    <None Include="Resources\rank.png" />
-    <None Include="Resources\progress.png" />
-    <None Include="Resources\interdicted.png" />
-    <None Include="Resources\screenshot.png" />
-    <None Include="Resources\payfines.png" />
-    <None Include="Resources\textreceived.png" />
-    <None Include="Resources\textsent.png" />
-    <None Include="Resources\missionfailed.png" />
-    <None Include="Resources\missioncompleted.png" />
-    <None Include="Resources\missionaccepted.png" />
-    <None Include="Resources\missionabandoned.png" />
-    <None Include="Resources\marketsell.png" />
-    <None Include="Resources\marketbuy.png" />
-    <None Include="Resources\newcommander.png" />
-    <None Include="Resources\promotion.png" />
-    <None Include="Resources\rebootrepair.png" />
-    <None Include="Resources\sellexplorationdata.png" />
-    <None Include="Resources\selldrones.png" />
-    <None Include="Resources\powerplayvote.png" />
-    <None Include="Resources\powerplayleave.png" />
-    <None Include="Resources\powerplaysalary.png" />
-    <None Include="Resources\powerplayjoin.png" />
-    <None Include="Resources\powerplaydefect.png" />
-    <None Include="Resources\powerplaydeliver.png" />
-    <None Include="Resources\powerplaycollect.png" />
-    <None Include="Resources\powerplayfasttrack.png" />
-    <None Include="Resources\powerplayvoucher.png" />
-    <None Include="Resources\shieldsup.png" />
-    <None Include="Resources\shieldsdown.png" />
-    <None Include="Resources\star.png" />
-    <None Include="Resources\Log.png" />
-    <None Include="Resources\travelgrid.png" />
-    <None Include="Resources\material.png" />
-    <None Include="Resources\ledger.png" />
-    <None Include="Resources\journal.png" />
-    <None Include="Resources\stats.png" />
-    <None Include="Resources\popout.png" />
-    <None Include="Resources\Star_K1IV.png" />
-    <None Include="Resources\Ring Only.png" />
-    <None Include="Resources\Ring Only 512.png" />
-    <None Include="Resources\materialmarker.png" />
-    <None Include="Resources\M5V.png" />
-    <None Include="Resources\K0V.png" />
-    <None Include="Resources\K1IV.png" />
-    <None Include="Resources\L3V.png" />
-    <None Include="Resources\M1VA.png" />
-    <None Include="Resources\Y2.png" />
-    <None Include="Resources\metal_rich.png" />
-    <None Include="Resources\O.png" />
-    <None Include="Resources\Rocky_Body_Sand2.png" />
-    <None Include="Resources\T4V.png" />
-    <None Include="Resources\Water_World_No_Poles_Clouds.png" />
-    <None Include="Resources\Neutron_Star.png" />
-    <None Include="Resources\Rocky_Ice_World_Sol_Titan.png" />
-    <None Include="Resources\Water_Giant1.png" />
-    <None Include="Resources\Moon24.png" />
-    <None Include="Resources\materialmarkerpurple.png" />
-    <None Include="Resources\materialmarkerorange.png" />
-    <None Include="Resources\planet landing.png" />
-    <None Include="Resources\RingGap512.png" />
-    <None Include="Resources\materiamoreindicator.png" />
-    <None Include="Resources\materialmarkerorangefilled.png" />
-    <None Include="Resources\SizeSelectorsLarge.png" />
-    <None Include="Resources\SizeSelectorsMedium.png" />
-    <None Include="Resources\SizeSelectorsSmall.png" />
-    <None Include="Resources\SizeSelectorsTiny.png" />
-    <None Include="Resources\materialrare.png" />
-    <None Include="Resources\Water_World_Poles_Cloudless4.png" />
-    <None Include="Resources\ImportHelp.txt" />
-    <None Include="Resources\speaker.png" />
-    <None Include="Resources\microphone.png" />
-    <None Include="Resources\moduleretrieve.png" />
-    <None Include="Resources\moduleswap.png" />
-    <None Include="Resources\touchdown.png" />
-    <None Include="Resources\uss.png" />
-    <None Include="Resources\wingadd.png" />
-    <None Include="Resources\wingjoin.png" />
-    <None Include="Resources\wingleave.png" />
-    <None Include="Resources\synthesis.png" />
-    <None Include="Resources\scientificresearch.png" />
-    <None Include="Resources\scanned.png" />
-    <None Include="Resources\restocksrv.png" />
-    <None Include="Resources\restockfighter.png" />
-    <None Include="Resources\pvpkill.png" />
-    <None Include="Resources\quitacrew.png" />
-    <None Include="Resources\passengers.png" />
-    <None Include="Resources\materials.png" />
-    <None Include="Resources\launchsrv.png" />
-    <None Include="Resources\launchfighter.png" />
-    <None Include="Resources\interdiction.png" />
-    <None Include="Resources\jetconeboost.png" />
-    <None Include="Resources\jetconedamage.png" />
-    <None Include="Resources\joinacrew.png" />
-    <None Include="Resources\kickcrewmember.png" />
-    <None Include="Resources\miningrefined.png" />
-    <None Include="Resources\startjump.png" />
-    <None Include="Resources\loadout.png" />
-    <None Include="Resources\setusershipname.png" />
-    <None Include="Resources\sendtext.png" />
-    <None Include="Resources\receivetext.png" />
-    <None Include="Resources\marketdata.png" />
-    <None Include="Resources\no_entry.bmp" />
+    <None Include="Resources\floppy.png" />
+    <None Include="Resources\bookmarktarget.png" />
+    <None Include="Resources\bookmarkgreen.png" />
+    <None Include="Resources\bookmarkyellow.png" />
+    <None Include="Resources\bookmarkbrightred.png" />
+    <None Include="Resources\pauseblue.png" />
+    <None Include="Resources\PlayNormal.png" />
+    <None Include="Resources\PauseNormalRed.png" />
+    <None Include="Resources\RecordPressed.png" />
+    <None Include="Resources\VideoRecorder.png" />
+    <None Include="Resources\StopNormalRed.png" />
+    <None Include="Resources\StopNormalBlue.png" />
     <None Include="Resources\popout1.png" />
-    <None Include="Resources\toolStripButtonRemoveUnused.Image.png" />
-    <None Include="Resources\toolStripButtonSubmitDistances.Image.png" />
-    <None Include="Resources\toolStripButtonMap.Image.png" />
+    <None Include="Resources\Log.png" />
+    <None Include="Resources\eddiscovery_logo.png" />
     <None Include="Resources\toolStripButtonNew.Image.png" />
+    <None Include="Resources\toolStripButtonSubmitDistances.Image.png" />
     <None Include="Resources\toolStripButtonRemoveAll.Image.png" />
-    <None Include="Resources\refresh_blue.png" />
-    <None Include="Resources\refresh_blue22.png" />
-    <None Include="Resources\refresh_blue18.png" />
-    <Content Include="x86\Microsoft.VC100.CRT\msvcp100.dll" />
-    <Content Include="x86\Microsoft.VC100.CRT\msvcr100.dll" />
-    <Content Include="x86\SQLite.Interop.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
+    <None Include="Resources\YellowDot.png" />
+    <None Include="Resources\SizeSelectorsLarge.png" />
+    <None Include="Resources\OrangeDot.png" />
+    <None Include="Resources\ImageTravel.png" />
+    <None Include="Resources\ImageStarDiscWhite.png" />
+    <None Include="Resources\ImageStarDisc.png" />
     <None Include="Resources\Home-icon.png" />
     <None Include="Resources\Travelicon.png" />
+    <None Include="Resources\excel.png" />
+    <None Include="Resources\materialmarkerorange.png" />
+    <None Include="Resources\materiamoreindicator.png" />
+    <None Include="Resources\RingGap512.png" />
+    <None Include="Resources\Ring Only 512.png" />
+    <None Include="Resources\materialmarkerorangefilled.png" />
+    <None Include="Resources\planet landing.png" />
+    <None Include="Resources\toolStripButtonRemoveUnused.Image.png" />
+    <None Include="Resources\toolStripButtonMap.Image.png" />
+    <None Include="Resources\Homeicon.png" />
+    <None Include="Resources\Barycentre.png" />
+    <None Include="Resources\Belt.png" />
+    <None Include="Resources\coriolis.png" />
+    <None Include="Resources\eye.png" />
+    <None Include="Resources\stats.png" />
+    <None Include="Resources\star.png" />
+    <None Include="Resources\refresh_blue18.png" />
+    <None Include="Resources\galaxy_gray.png" />
+    <None Include="Resources\ledger.png" />
+    <None Include="Resources\journal.png" />
+    <None Include="Resources\travelgrid.png" />
+    <None Include="Resources\edsmown.png" />
+    <None Include="Resources\materialrare.png" />
+    <None Include="Resources\Moon24.png" />
     <None Include="Resources\save.png" />
+    <None Include="Resources\speaker.png" />
+    <Content Include="x86\Microsoft.VC100.CRT\msvcp100.dll" />
+    <Content Include="x86\Microsoft.VC100.CRT\msvcr100.dll" />
     <EmbeddedResource Include="2DMap\Form2DMap.resx">
       <DependentUpon>Form2DMap.cs</DependentUpon>
     </EmbeddedResource>
@@ -1152,14 +723,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Resources.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-    </Compile>
     <EmbeddedResource Include="RouteControl.resx">
       <DependentUpon>RouteControl.cs</DependentUpon>
     </EmbeddedResource>
@@ -1238,6 +804,10 @@
       <Project>{390b1547-a455-45e3-974f-e1f9b1613ad5}</Project>
       <Name>DirectInput</Name>
     </ProjectReference>
+    <ProjectReference Include="..\EliteDangerous\EliteDangerous.csproj">
+      <Project>{019917a4-7342-4f67-8aaf-9e20c016a935}</Project>
+      <Name>EliteDangerous</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ExtendedControls\ExtendedControls.csproj">
       <Project>{2049403f-f4c7-45e6-b777-6390c78e4d2b}</Project>
       <Name>ExtendedControls</Name>
@@ -1301,15 +871,6 @@
       <ZipFiles Include="$(OutputPath)\Newtonsoft.Json.dll" />
       <ZipFiles Include="$(OutputPath)\OpenTK.GLControl.dll" />
       <ZipFiles Include="$(OutputPath)\OpenTK.dll" />
-      <ZipFiles Include="$(OutputPath)\System.Data.SQLite.dll" />
-      <ZipFiles Include="$(OutputPath)\System.Data.SQLite.Linq.dll" />
-      <ZipFiles Include="$(OutputPath)\System.Data.SQLite.xml" />
-      <ZipFiles Include="..\packages\System.Data.SQLite.Core.1.0.104.0\build\net46\x86\SQLite.Interop.dll">
-        <Name>x86\SQLite.Interop.dll</Name>
-      </ZipFiles>
-      <ZipFiles Include="..\packages\System.Data.SQLite.Core.1.0.104.0\build\net46\x64\SQLite.Interop.dll">
-        <Name>x64\SQLite.Interop.dll</Name>
-      </ZipFiles>
       <ZipFiles Include="$(OutputPath)\ActionLanguage.dll" />
       <ZipFiles Include="$(OutputPath)\Audio.dll" />
       <ZipFiles Include="$(OutputPath)\Conditions.dll" />
@@ -1319,11 +880,9 @@
     </ItemGroup>
     <Zip OutputFileName="$(OutputPath)\EDDiscovery.Portable.zip" Files="@(ZipFiles)" />
   </Target>
-  <Import Project="..\packages\System.Data.SQLite.Core.1.0.104.0\build\net46\System.Data.SQLite.Core.targets" Condition="Exists('..\packages\System.Data.SQLite.Core.1.0.104.0\build\net46\System.Data.SQLite.Core.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('..\packages\System.Data.SQLite.Core.1.0.104.0\build\net46\System.Data.SQLite.Core.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\System.Data.SQLite.Core.1.0.104.0\build\net46\System.Data.SQLite.Core.targets'))" />
   </Target>
 </Project>

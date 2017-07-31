@@ -13,11 +13,7 @@
  * 
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
-using EDDiscovery.DB;
-using EDDiscovery.EliteDangerous;
-using EDDiscovery.EliteDangerous.JournalEvents;
-
-using EDDiscovery.EDSM;
+using EliteDangerousCore.EDSM;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlTypes;
@@ -27,6 +23,9 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using EDDiscovery.UserControls;
+using EliteDangerousCore.JournalEvents;
+using EliteDangerousCore;
+using EliteDangerousCore.DB;
 
 namespace EDDiscovery.Export
 {
