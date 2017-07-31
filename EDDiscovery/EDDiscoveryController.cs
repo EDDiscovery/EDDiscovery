@@ -98,6 +98,9 @@ namespace EDDiscovery
 
             msg.Invoke("Scanning Memory Banks");
             InitializeDatabases();
+
+            msg.Invoke("Locating Crew Members");
+            EDDConfig.Instance.Update(false);
         }
 
         public void Init()
@@ -368,7 +371,6 @@ namespace EDDiscovery
             }
 
             SQLiteConnectionUser.EarlyReadRegister();
-            EDDConfig.Instance.Update(false);
         }
 
         #endregion
