@@ -875,27 +875,27 @@
   <Target Name="BeforeBuild">
   </Target>
   -->
-  <Target Name="AfterBuild" Condition=" '$(OS)' != 'Unix' ">
+  <Target Name="AfterBuild" Outputs="$(OutDir)EDDiscovery.Portable.zip" Condition=" '$(OS)' != 'Unix' ">
     <ItemGroup>
-      <ZipFiles Include="$(OutputPath)\EDDiscovery.exe" />
-      <ZipFiles Include="$(OutputPath)\EDDiscovery.pdb" />
-      <ZipFiles Include="$(OutputPath)\SharpDX.DirectInput.dll" />
-      <ZipFiles Include="$(OutputPath)\SharpDX.dll" />
-      <ZipFiles Include="$(ProjectDir)\App.Portable.config">
+      <ZipFiles Include="$(TargetPath)" />
+      <ZipFiles Include="$(OutDir)*.dll" />
+      <ZipFiles Include="$(OutDir)*.pdb" />
+      <ZipFiles Include="$(ProjectDir)App.Portable.config">
         <Name>EDDiscovery.exe.config</Name>
       </ZipFiles>
-      <ZipFiles Include="$(OutputPath)\CSCore.dll" />
-      <ZipFiles Include="$(OutputPath)\Newtonsoft.Json.dll" />
-      <ZipFiles Include="$(OutputPath)\OpenTK.GLControl.dll" />
-      <ZipFiles Include="$(OutputPath)\OpenTK.dll" />
-      <ZipFiles Include="$(OutputPath)\ActionLanguage.dll" />
-      <ZipFiles Include="$(OutputPath)\Audio.dll" />
-      <ZipFiles Include="$(OutputPath)\Conditions.dll" />
-      <ZipFiles Include="$(OutputPath)\DirectInput.dll" />
-      <ZipFiles Include="$(OutputPath)\ExtendedControls.dll" />
-      <ZipFiles Include="$(OutputPath)\General.dll" />
+      <Zipfiles Include="$(OutDir)x64\SQLite.Interop.dll">
+        <Name>x64\SQLite.Interop.dll</Name>
+      </Zipfiles>
+      <Zipfiles Include="$(OutDir)x86\SQLite.Interop.dll">
+        <Name>x86\SQLite.Interop.dll</Name>
+      </Zipfiles>
     </ItemGroup>
-    <Zip OutputFileName="$(OutputPath)\EDDiscovery.Portable.zip" Files="@(ZipFiles)" />
+    <Message Text="'@(ZipFiles)' -> '$(OutDir)EDDiscovery.Portable.zip'" />
+    <Zip OutputFileName="$(OutDir)EDDiscovery.Portable.zip" Files="@(ZipFiles)" />
+    <Error Condition="!Exists('$(OutDir)EDDiscovery.Portable.zip')" Importance="high" Text="Unknown error in BuildPortableZip." />
+  </Target>
+  <Target Name="CleanZipFile" AfterTargets="Clean">
+    <Delete Files="$(OutDir)EDDiscovery.Portable.zip" />
   </Target>
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
