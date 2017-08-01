@@ -42,6 +42,7 @@ namespace EDDiscovery.UserControls
         private string DbColumnSave { get { return "JournalGrid" + ((displaynumber > 0) ? displaynumber.ToString() : "") + "DGVCol"; } }
         private string DbHistorySave { get { return "JournalEDUIHistory" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
         private string DbFieldFilter { get { return "JournalGridControlFieldFilter" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
+        private string DbAutoTop { get { return "JournalGridControlAutoTop" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
 
         public delegate void PopOut();
         public PopOut OnPopOut;
@@ -79,6 +80,8 @@ namespace EDDiscovery.UserControls
             cfs.Changed += EventFilterChanged;
             TravelHistoryFilter.InitaliseComboBox(comboBoxJournalWindow, DbHistorySave);
 
+            checkBoxMoveToTop.Checked = SQLiteConnectionUser.GetSettingBool(DbAutoTop, true);
+
             discoveryform.OnHistoryChange += Display;
             discoveryform.OnNewEntry += AddNewEntry;
 
@@ -104,6 +107,7 @@ namespace EDDiscovery.UserControls
             DGVSaveColumnLayout(dataGridViewJournal, DbColumnSave);
             discoveryform.OnHistoryChange -= Display;
             discoveryform.OnNewEntry -= AddNewEntry;
+            SQLiteConnectionUser.PutSettingBool(DbAutoTop, checkBoxMoveToTop.Checked);
         }
 
         #endregion
@@ -189,9 +193,10 @@ namespace EDDiscovery.UserControls
             {
                 AddNewJournalRow(true, he);
 
-                if (EDDiscoveryForm.EDDConfig.FocusOnNewSystem) // Move focus to new row
+                if (checkBoxMoveToTop.Checked && dataGridViewJournal.DisplayedRowCount(false) > 0)   // Move focus to new row
                 {
-                    SelectTopRow();
+                    dataGridViewJournal.ClearSelection();
+                    dataGridViewJournal.CurrentCell = dataGridViewJournal.Rows[0].Cells[1];       // its the current cell which needs to be set, moves the row marker as well
                 }
             }
         }
@@ -406,12 +411,6 @@ namespace EDDiscovery.UserControls
             if (OnPopOut != null)
                 OnPopOut();
         }
-
-		public void SelectTopRow()
-		{
-			dataGridViewJournal.ClearSelection();
-			dataGridViewJournal.CurrentCell = dataGridViewJournal.Rows[0].Cells[1];       // its the current cell which needs to be set, moves the row marker as well
-		}
 
         #region Excel
 

@@ -69,6 +69,7 @@ namespace EDDiscovery.UserControls
             this.comboBoxJournalWindow = new ExtendedControls.ComboBoxCustom();
             this.labelTime = new System.Windows.Forms.Label();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.checkBoxMoveToTop = new ExtendedControls.CheckBoxCustom();
             this.dataViewScrollerPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewJournal)).BeginInit();
             this.historyContextMenu.SuspendLayout();
@@ -227,6 +228,7 @@ namespace EDDiscovery.UserControls
             // 
             // panel1
             // 
+            this.panel1.Controls.Add(this.checkBoxMoveToTop);
             this.panel1.Controls.Add(this.buttonExtExcel);
             this.panel1.Controls.Add(this.panelJournalIcon);
             this.panel1.Controls.Add(this.drawnPanelPopOut);
@@ -296,12 +298,23 @@ namespace EDDiscovery.UserControls
             // 
             // textBoxFilter
             // 
+            this.textBoxFilter.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
+            this.textBoxFilter.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
             this.textBoxFilter.BorderColor = System.Drawing.Color.Transparent;
             this.textBoxFilter.BorderColorScaling = 0.5F;
+            this.textBoxFilter.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.textBoxFilter.ControlBackground = System.Drawing.SystemColors.Control;
             this.textBoxFilter.Location = new System.Drawing.Point(278, 6);
+            this.textBoxFilter.Multiline = false;
             this.textBoxFilter.Name = "textBoxFilter";
+            this.textBoxFilter.ReadOnly = false;
+            this.textBoxFilter.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.textBoxFilter.SelectionLength = 0;
+            this.textBoxFilter.SelectionStart = 0;
             this.textBoxFilter.Size = new System.Drawing.Size(148, 20);
             this.textBoxFilter.TabIndex = 1;
+            this.textBoxFilter.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.textBoxFilter.WordWrap = true;
             this.textBoxFilter.TextChanged += new System.EventHandler(this.textBoxFilter_TextChanged);
             // 
             // label1
@@ -370,6 +383,22 @@ namespace EDDiscovery.UserControls
             this.toolTip1.ReshowDelay = 100;
             this.toolTip1.ShowAlways = true;
             // 
+            // checkBoxMoveToTop
+            // 
+            this.checkBoxMoveToTop.AutoSize = true;
+            this.checkBoxMoveToTop.CheckBoxColor = System.Drawing.Color.Gray;
+            this.checkBoxMoveToTop.CheckBoxInnerColor = System.Drawing.Color.White;
+            this.checkBoxMoveToTop.CheckColor = System.Drawing.Color.DarkBlue;
+            this.checkBoxMoveToTop.FontNerfReduction = 0.5F;
+            this.checkBoxMoveToTop.Location = new System.Drawing.Point(636, 7);
+            this.checkBoxMoveToTop.MouseOverColor = System.Drawing.Color.CornflowerBlue;
+            this.checkBoxMoveToTop.Name = "checkBoxMoveToTop";
+            this.checkBoxMoveToTop.Size = new System.Drawing.Size(90, 17);
+            this.checkBoxMoveToTop.TabIndex = 31;
+            this.checkBoxMoveToTop.Text = "Cursor to Top";
+            this.checkBoxMoveToTop.TickBoxReductionSize = 10;
+            this.checkBoxMoveToTop.UseVisualStyleBackColor = true;
+            // 
             // UserControlJournalGrid
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -414,5 +443,6 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.ToolStripMenuItem runActionsOnThisEntryToolStripMenuItem;
         private ExtendedControls.ButtonExt buttonExtExcel;
         private System.Windows.Forms.ToolStripMenuItem copyJournalEntryToClipboardToolStripMenuItem;
+        private ExtendedControls.CheckBoxCustom checkBoxMoveToTop;
     }
 }

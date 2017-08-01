@@ -106,6 +106,13 @@ namespace EDDiscovery.UserControls
             System.Diagnostics.Debug.WriteLine("Ordered " + String.Join(",", Order));
         }
 
+        public virtual void ChangeTravelGrid(UserControlTravelGrid thc)
+        {
+            uctg.OnTravelSelectionChanged -= Display;
+            uctg = thc;
+            uctg.OnTravelSelectionChanged += Display;
+        }
+
         public override void Closing()
         {
             uctg.OnTravelSelectionChanged -= Display;

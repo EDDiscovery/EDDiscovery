@@ -124,7 +124,7 @@ namespace EDDiscovery
             this.buttonExt2dmap = new ExtendedControls.ButtonExt();
             this.buttonExt3dmap = new ExtendedControls.ButtonExt();
             this.panel_eddiscovery = new System.Windows.Forms.Panel();
-            this.gridControl1 = new EDDiscovery.GridControl();
+            this.gridControl1 = new EDDiscovery.UserControls.UserControlContainerGrid();
             this.menuStrip1.SuspendLayout();
             this.tabControlMain.SuspendLayout();
             this.tabPageTravelHistory.SuspendLayout();
@@ -1079,6 +1079,6 @@ namespace EDDiscovery
         private ExtendedControls.ComboBoxCustom comboBoxCustomPopOut;
         private System.Windows.Forms.ToolStripMenuItem sendUnsyncedEGOScansToolStripMenuItem;
         private System.Windows.Forms.TabPage tabPageGrid;
-        private GridControl gridControl1;
+        private EDDiscovery.UserControls.UserControlContainerGrid gridControl1;
     }
 }

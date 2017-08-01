@@ -71,6 +71,13 @@ namespace EDDiscovery.UserControls
             displayfont = discoveryform.theme.GetFont;
         }
 
+        public virtual void ChangeTravelGrid(UserControlTravelGrid thc)
+        {
+            uctg.OnTravelSelectionChanged -= Display;
+            uctg = thc;
+            uctg.OnTravelSelectionChanged += Display;
+        }
+
         private void DisplaySelected(HistoryEntry he, HistoryList hl)
         {
             if (he != null && he.EntryType == JournalTypeEnum.FSDJump)

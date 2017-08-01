@@ -64,6 +64,13 @@ namespace EDDiscovery.UserControls
             checkBoxBuyOnly.Enabled = true;
         }
 
+        public virtual void ChangeTravelGrid(UserControlTravelGrid thc)
+        {
+            uctg.OnTravelSelectionChanged -= OnChanged;
+            uctg = thc;
+            uctg.OnTravelSelectionChanged += OnChanged;
+        }
+
         #endregion
 
         #region Display

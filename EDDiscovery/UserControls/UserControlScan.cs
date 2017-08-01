@@ -82,8 +82,11 @@ namespace EDDiscovery.UserControls
             imagebox.ClickElement += ClickElement;
         }
 
-        public override void LoadLayout()
+        public virtual void ChangeTravelGrid(UserControlTravelGrid thc)
         {
+            uctg.OnTravelSelectionChanged -= Display;
+            uctg = thc;
+            uctg.OnTravelSelectionChanged += Display;
         }
 
         public override void Closing()
