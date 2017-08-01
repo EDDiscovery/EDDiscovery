@@ -874,7 +874,7 @@
     </ItemGroup>
     <Message Text="'@(ZipFiles)' -> '$(OutDir)EDDiscovery.Portable.zip'" />
     <Zip OutputFileName="$(OutDir)EDDiscovery.Portable.zip" Files="@(ZipFiles)" />
-    <Error Condition="!Exists('$(OutDir)EDDiscovery.Portable.zip')" Importance="high" Text="Unknown error in BuildPortableZip." />
+    <Error Condition="!Exists('$(OutDir)EDDiscovery.Portable.zip')" Text="Unknown error in BuildPortableZip." />
   </Target>
   <Target Name="CleanZipFile" AfterTargets="Clean">
     <Delete Files="$(OutDir)EDDiscovery.Portable.zip" />
