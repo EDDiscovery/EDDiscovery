@@ -33,6 +33,7 @@ namespace EDDiscovery.UserControls
     {
         private int displaynumber = 0;
         private EDDiscoveryForm discoveryform;
+        private UserControlTravelGrid uctg;
 
         string ImagePath = null;
         Point ImageSize;
@@ -44,18 +45,19 @@ namespace EDDiscovery.UserControls
             pictureBox.Visible = false;
         }
 
-        public override void Init( EDDiscoveryForm ed, int vn) //0=primary, 1 = first windowed version, etc
+        public override void Init( EDDiscoveryForm ed, UserControlTravelGrid thc, int vn) //0=primary, 1 = first windowed version, etc
         {
             discoveryform = ed;
+            uctg = thc;
             displaynumber = vn;
             discoveryform.ImageHandler.OnScreenShot += ScreenShot;
-            discoveryform.TravelControl.OnTravelSelectionChanged += Display;
+            uctg.OnTravelSelectionChanged += Display;
         }
 
         public override void Closing()
         {
             discoveryform.ImageHandler.OnScreenShot -= ScreenShot;
-            discoveryform.TravelControl.OnTravelSelectionChanged -= Display;
+            uctg.OnTravelSelectionChanged -= Display;
         }
 
         public void ScreenShot(string path, Point size)

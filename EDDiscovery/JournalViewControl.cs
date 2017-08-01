@@ -40,8 +40,9 @@ namespace EDDiscovery
         public void InitControl(EDDiscoveryForm ed, int displaynumber)
         {
             discoveryform = ed;
-            userControlJournalGrid.Init(ed,displaynumber);
+            userControlJournalGrid.Init(ed,null,displaynumber);     // does not hook to a THC
             userControlJournalGrid.OnPopOut += PopOut;
+            userControlJournalGrid.ExtraIcons(true);
         }
 
         #region Layout

@@ -26,13 +26,15 @@ using System.Collections.Concurrent;
 using System.Threading;
 using EliteDangerousCore;
 using EliteDangerousCore.EDSM;
+using EliteDangerousCore.DB;
 
 namespace EDDiscovery.UserControls
 {
     public partial class UserControlStarDistance : UserControlCommonBase
     {
         EDDiscoveryForm _discoveryForm;
-        TravelHistoryControl _travelcontrol;
+        UserControlTravelGrid uctg;
+        StarDistanceComputer computer;
 
         public UserControlStarDistance()
         {
@@ -40,19 +42,48 @@ namespace EDDiscovery.UserControls
             Name = "Stars";
         }
 
-        public override void Init( EDDiscoveryForm ed, int vn) //0=primary, 1 = first windowed version, etc
+        public override void Init(EDDiscoveryForm ed, UserControlTravelGrid thc, int vn) //0=primary, 1 = first windowed version, etc
         {
             _discoveryForm = ed;
-            _travelcontrol = _discoveryForm.TravelControl;
-            _travelcontrol.OnNearestStarListChanged += FillGrid;
+            uctg = thc;
+            uctg.OnTravelSelectionChanged += Uctg_OnTravelSelectionChanged;
+
+            computer = new StarDistanceComputer();
+
+            HistoryEntry he = uctg.GetCurrentHistoryEntry;      // does our UCTG have a system selected?
+
+            if (he != null)
+            {
+                System.Diagnostics.Debug.WriteLine("Star grid started, uctg selected, ask");
+                computer.CalculateClosestSystems(he.System, (s, d) => BeginInvoke((MethodInvoker)delegate { NewStarListComputed(s, d); }));     // hook here, force closes system update
+            }
         }
 
         public override void Closing()
         {
-            _travelcontrol.OnNearestStarListChanged -= FillGrid;
+            uctg.OnTravelSelectionChanged -= Uctg_OnTravelSelectionChanged;
+            computer.ShutDown();
         }
 
-        public void FillGrid(string name, SortedList<double, ISystem> csl)
+        private void Uctg_OnTravelSelectionChanged(HistoryEntry he, HistoryList hl)
+        {
+            if (he != null)
+            {
+                System.Diagnostics.Debug.WriteLine("Star grid sel changed ask");
+                computer.CalculateClosestSystems(he.System, (s, d) => BeginInvoke((MethodInvoker)delegate { NewStarListComputed(s, d); }));     // hook here, force closes system update
+            }
+        }
+
+        private void NewStarListComputed(ISystem sys, SortedList<double, ISystem> list)      // In UI
+        {
+            System.Diagnostics.Debug.Assert(Application.MessageLoop);       // check!
+
+            _discoveryForm.history.CalculateSqDistances(list, sys.x, sys.y, sys.z, 50, true);   // add on any history list systems
+
+            FillGrid(sys.name, list);
+        }
+
+        private void FillGrid(string name, SortedList<double, ISystem> csl)
         {
             SetControlText("");
             dataGridViewNearest.Rows.Clear();
@@ -67,7 +98,6 @@ namespace EDDiscovery.UserControls
                     dataGridViewNearest.Rows[rowindex].Tag = tvp.Value;
                 }
             }
-
         }
 
         private void addToTrilaterationToolStripMenuItem1_Click(object sender, EventArgs e)
@@ -108,6 +138,90 @@ namespace EDDiscovery.UserControls
             }
 
             this.Cursor = Cursors.Default;
+        }
+    }
+
+
+    class StarDistanceComputer
+    {
+        private Thread backgroundStardistWorker;
+        private bool PendingClose { get;  set; }           // we want to close boys!
+
+        private class StardistRequest
+        {
+            public ISystem System;
+            public bool IgnoreOnDuplicate;
+            public Action<ISystem, SortedList<double, ISystem>> Callback;
+        }
+
+        private ConcurrentQueue<StardistRequest> closestsystem_queue = new ConcurrentQueue<StardistRequest>();
+
+        private AutoResetEvent stardistRequested = new AutoResetEvent(false);
+        private AutoResetEvent closeRequested = new AutoResetEvent(false);
+
+        public StarDistanceComputer()
+        {
+            PendingClose = false;
+            backgroundStardistWorker = new Thread(BackgroundStardistWorkerThread) { Name = "Star Distance Worker", IsBackground = true };
+            backgroundStardistWorker.Start();
+        }
+
+        public void CalculateClosestSystems(ISystem sys, Action<ISystem, SortedList<double, ISystem>> callback, bool ignoreDuplicates = true)
+        {
+            closestsystem_queue.Enqueue(new StardistRequest { System = sys, Callback = callback, IgnoreOnDuplicate = ignoreDuplicates });
+            stardistRequested.Set();
+        }
+
+        public void ShutDown()
+        {
+            PendingClose = true;
+            closeRequested.Set();
+            backgroundStardistWorker.Join();
+        }
+
+        private void BackgroundStardistWorkerThread()
+        {
+            while (!PendingClose)
+            {
+                int wh = WaitHandle.WaitAny(new WaitHandle[] { closeRequested, stardistRequested });
+
+                if (PendingClose)
+                    break;
+
+                StardistRequest stardistreq = null;
+
+                switch (wh)
+                {
+                    case 0:  // Close Requested
+                        break;
+                    case 1:  // Star Distances Requested
+                        while (!PendingClose && closestsystem_queue.TryDequeue(out stardistreq))
+                        {
+                            if (!stardistreq.IgnoreOnDuplicate || closestsystem_queue.Count == 0)
+                            {
+                                StardistRequest req = stardistreq;
+                                ISystem sys = req.System;
+                                SortedList<double, ISystem> closestsystemlist = new SortedList<double, ISystem>(new DuplicateKeyComparer<double>()); //lovely list allowing duplicate keys - can only iterate in it.
+                                SystemClassDB.GetSystemSqDistancesFrom(closestsystemlist, sys.x, sys.y, sys.z, 50, true, 1000);
+                                if (!PendingClose)
+                                {
+                                    req.Callback(sys, closestsystemlist);
+                                }
+                            }
+                        }
+
+                        break;
+                }
+            }
+        }
+
+        private class DuplicateKeyComparer<TKey> : IComparer<TKey> where TKey : IComparable      // special compare for sortedlist
+        {
+            public int Compare(TKey x, TKey y)
+            {
+                int result = x.CompareTo(y);
+                return (result == 0) ? 1 : result;      // for this, equals just means greater than, to allow duplicate distance values to be added.
+            }
         }
     }
 }

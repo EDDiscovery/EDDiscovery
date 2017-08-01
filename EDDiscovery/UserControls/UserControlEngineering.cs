@@ -28,6 +28,7 @@ namespace EDDiscovery.UserControls
     {
         private int displaynumber = 0;
         private EDDiscoveryForm discoveryform;
+        private UserControlTravelGrid uctg;
 
         EngineeringFilterSelector efs;
         EngineeringFilterSelector mfs;
@@ -59,9 +60,10 @@ namespace EDDiscovery.UserControls
             Name = "Engineering";
         }
 
-        public override void Init(EDDiscoveryForm ed, int vn) //0=primary, 1 = first windowed version, etc
+        public override void Init(EDDiscoveryForm ed, UserControlTravelGrid thc, int vn) //0=primary, 1 = first windowed version, etc
         {
             discoveryform = ed;
+            uctg = thc;
             displaynumber = vn;
 
             dataGridViewEngineering.MakeDoubleBuffered();
@@ -69,7 +71,7 @@ namespace EDDiscovery.UserControls
             dataGridViewEngineering.RowTemplate.Height = 26;
 
             discoveryform.OnNewEntry += Discoveryform_OnNewEntry;
-            ed.TravelControl.OnTravelSelectionChanged += Display;
+            uctg.OnTravelSelectionChanged += Display;
 
             Order = SQLiteDBClass.GetSettingString(DbOSave, "").RestoreArrayFromString(0, Recipes.Count);
             if (Order.Distinct().Count() != Order.Length)       // if not distinct..
@@ -254,7 +256,7 @@ namespace EDDiscovery.UserControls
         {
             DGVSaveColumnLayout(dataGridViewEngineering, DbColumnSave);
 
-            discoveryform.TravelControl.OnTravelSelectionChanged -= Display;
+            uctg.OnTravelSelectionChanged -= Display;
             discoveryform.OnNewEntry -= Discoveryform_OnNewEntry;
 
             SQLiteDBClass.PutSettingString(DbOSave, Order.ToString(","));

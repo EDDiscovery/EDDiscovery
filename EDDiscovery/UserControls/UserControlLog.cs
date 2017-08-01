@@ -37,10 +37,11 @@ namespace EDDiscovery.UserControls
             Name = "Log";
         }
 
-        public override void Init( EDDiscoveryForm ed, int displayno)
+        public override void Init( EDDiscoveryForm ed, UserControlTravelGrid thc, int displayno)
         {
             discoveryform = ed;
             discoveryform.OnNewLogEntry += AppendText;
+            AppendText(ed.LogText, ed.theme.TextBlockColor);
         }
 
         public override void Closing()
