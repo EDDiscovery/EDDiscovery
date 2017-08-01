@@ -73,7 +73,7 @@ namespace BaseUtils
 
             BaseUtils.HttpCom.WriteLog("DownloadFile", url);
             var request = (HttpWebRequest)HttpWebRequest.Create(url);
-            request.UserAgent = "EDDiscovery v" + Assembly.GetExecutingAssembly().FullName.Split(',')[1].Split('=')[1];
+            request.UserAgent = BrowserInfo.UserAgent;
             request.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
 
             if (filename != null && File.Exists(etagFilename))

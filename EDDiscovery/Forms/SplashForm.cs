@@ -33,7 +33,7 @@ namespace EDDiscovery.Forms
         public SplashForm()
         {
             InitializeComponent();
-            this.label_version.Text = $"EDDiscovery {EDDApplicationContext.AssemblyVersionNumber}";
+            this.label_version.Text = EDDApplicationContext.FriendlyName + " " + EDDApplicationContext.AppVersion;
         }
 
         public void SetLoadingText(string value)

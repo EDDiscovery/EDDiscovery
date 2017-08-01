@@ -31,7 +31,7 @@ namespace EDDiscovery.Forms
         public AboutForm()
         {
             InitializeComponent();
-            labelVersion.Text = "EDDiscovery v" + System.Reflection.Assembly.GetExecutingAssembly().FullName.Split(',')[1].Split('=')[1];
+            labelVersion.Text = EDDApplicationContext.UserAgent;
 
             SetTipAndTag(linkLabelDeveloperChat, Resources.URLProjectDiscord);
             SetTipAndTag(linkLabelEDDB, Resources.URLeddb);
