@@ -48,7 +48,18 @@ namespace EDDiscovery
         /// <summary>
         /// The concise version number of the EDDiscovery.exe assembly, in the form of "<c>3.14.15.926</c>".
         /// </summary>
-        public static string AssemblyVersionNumber { get; } = Assembly.GetExecutingAssembly().FullName.Split(',')[1].Split('=')[1];
+        public static string AppVersion { get; } = Assembly.GetExecutingAssembly().FullName.Split(',')[1].Split('=')[1];
+
+        /// <summary>
+        /// The friendly name of this assembly, i.e. "<c>EDDiscovery</c>".
+        /// </summary>
+        public static string FriendlyName { get; } = "EDDiscovery";
+
+        /// <summary>
+        /// The friendly name of this assembly combined with the version number, in the form of "<c>EDDiscovery v3.14.15.926</c>".
+        /// </summary>
+        public static string UserAgent { get; } = $"{FriendlyName} v{AppVersion}";
+
 
         /// <summary>
         /// The main <see cref="EDDiscoveryForm"/> of this application. If this is <c>null</c>, then you probably

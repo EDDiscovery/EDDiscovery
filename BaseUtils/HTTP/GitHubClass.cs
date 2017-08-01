@@ -43,7 +43,7 @@ namespace BaseUtils
             try
             {
                 HttpWebRequest request = WebRequest.Create("https://api.github.com/repos/EDDiscovery/EDDiscovery/releases") as HttpWebRequest;
-                request.UserAgent = "TestApp";
+                request.UserAgent = BrowserInfo.UserAgent;
                 using (HttpWebResponse response = request.GetResponse() as HttpWebResponse)
                 {
                     StreamReader reader = new StreamReader(response.GetResponseStream());
@@ -67,7 +67,7 @@ namespace BaseUtils
             try
             {
                 HttpWebRequest request = WebRequest.Create("https://api.github.com/repos/EDDiscovery/EDDiscovery/releases/latest") as HttpWebRequest;
-                request.UserAgent = "TestApp";
+                request.UserAgent = BrowserInfo.UserAgent;
                 using (HttpWebResponse response = request.GetResponse() as HttpWebResponse)
                 {
                     StreamReader reader = new StreamReader(response.GetResponseStream());
@@ -99,7 +99,7 @@ namespace BaseUtils
             try
             {
                 HttpWebRequest request = WebRequest.Create("https://api.github.com/repos/EDDiscovery/EDDiscoveryData/contents/" + gitdir) as HttpWebRequest;
-                request.UserAgent = "TestApp";
+                request.UserAgent = BrowserInfo.UserAgent;
                 using (HttpWebResponse response = request.GetResponse() as HttpWebResponse)
                 {
                     StreamReader reader = new StreamReader(response.GetResponseStream());
