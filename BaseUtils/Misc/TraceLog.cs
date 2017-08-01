@@ -295,7 +295,8 @@ namespace BaseUtils
             bool ourcode = false;
             foreach (var frame in trace.GetFrames())
             {
-                if (frame.GetMethod().DeclaringType.Assembly == Assembly.GetExecutingAssembly())
+                var a = frame.GetMethod().DeclaringType.Assembly;
+                if (a == Assembly.GetEntryAssembly() || a == Assembly.GetExecutingAssembly())
                 {
                     ourcode = true;
                     break;
