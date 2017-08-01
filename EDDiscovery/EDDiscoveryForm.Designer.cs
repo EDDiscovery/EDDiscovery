@@ -44,8 +44,8 @@ namespace EDDiscovery
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            ExtendedControls.TabStyleSquare tabStyleSquare1 = new ExtendedControls.TabStyleSquare();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(EDDiscoveryForm));
+            ExtendedControls.TabStyleSquare tabStyleSquare1 = new ExtendedControls.TabStyleSquare();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.toolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.show2DMapsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -67,6 +67,7 @@ namespace EDDiscovery
             this.rescanAllJournalFilesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.deleteDuplicateFSDJumpEntriesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.sendUnsuncedEDDNEventsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.sendUnsyncedEGOScansToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.clearEDSMIDAssignedToAllRecordsForCurrentCommanderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.addOnsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.manageAddOnsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -91,6 +92,7 @@ namespace EDDiscovery
             this.travelHistoryControl = new EDDiscovery.TravelHistoryControl();
             this.tabPageJournal = new System.Windows.Forms.TabPage();
             this.journalViewControl1 = new EDDiscovery.JournalViewControl();
+            this.tabPageGrid = new System.Windows.Forms.TabPage();
             this.tabPageTriletaration = new System.Windows.Forms.TabPage();
             this.trilaterationControl = new EDDiscovery.TrilaterationControl();
             this.tabPageScreenshots = new System.Windows.Forms.TabPage();
@@ -122,11 +124,12 @@ namespace EDDiscovery
             this.buttonExt2dmap = new ExtendedControls.ButtonExt();
             this.buttonExt3dmap = new ExtendedControls.ButtonExt();
             this.panel_eddiscovery = new System.Windows.Forms.Panel();
-            this.sendUnsyncedEGOScansToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.gridControl1 = new EDDiscovery.GridControl();
             this.menuStrip1.SuspendLayout();
             this.tabControlMain.SuspendLayout();
             this.tabPageTravelHistory.SuspendLayout();
             this.tabPageJournal.SuspendLayout();
+            this.tabPageGrid.SuspendLayout();
             this.tabPageTriletaration.SuspendLayout();
             this.tabPageScreenshots.SuspendLayout();
             this.tabPageRoute.SuspendLayout();
@@ -168,7 +171,7 @@ namespace EDDiscovery
             // 
             // show2DMapsToolStripMenuItem
             // 
-            this.show2DMapsToolStripMenuItem.Image = global::EliteDangerous.Properties.Resources.hyperspace;
+            this.show2DMapsToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("show2DMapsToolStripMenuItem.Image")));
             this.show2DMapsToolStripMenuItem.Name = "show2DMapsToolStripMenuItem";
             this.show2DMapsToolStripMenuItem.Size = new System.Drawing.Size(197, 22);
             this.show2DMapsToolStripMenuItem.Text = "Show &2D maps";
@@ -176,7 +179,7 @@ namespace EDDiscovery
             // 
             // show3DMapsToolStripMenuItem
             // 
-            this.show3DMapsToolStripMenuItem.Image = global::EliteDangerous.Properties.Resources.sellexplorationdata;
+            this.show3DMapsToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("show3DMapsToolStripMenuItem.Image")));
             this.show3DMapsToolStripMenuItem.Name = "show3DMapsToolStripMenuItem";
             this.show3DMapsToolStripMenuItem.Size = new System.Drawing.Size(197, 22);
             this.show3DMapsToolStripMenuItem.Text = "Show &3D maps";
@@ -184,7 +187,7 @@ namespace EDDiscovery
             // 
             // changeMapColorToolStripMenuItem
             // 
-            this.changeMapColorToolStripMenuItem.Image = global::EliteDangerous.Properties.Resources.buytradedata;
+            this.changeMapColorToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("changeMapColorToolStripMenuItem.Image")));
             this.changeMapColorToolStripMenuItem.Name = "changeMapColorToolStripMenuItem";
             this.changeMapColorToolStripMenuItem.Size = new System.Drawing.Size(197, 22);
             this.changeMapColorToolStripMenuItem.Text = "Set &Default Map Colour";
@@ -218,7 +221,7 @@ namespace EDDiscovery
             // 
             // showAllInTaskBarToolStripMenuItem
             // 
-            this.showAllInTaskBarToolStripMenuItem.Image = global::EliteDangerous.Properties.Resources.sendtext;
+            this.showAllInTaskBarToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("showAllInTaskBarToolStripMenuItem.Image")));
             this.showAllInTaskBarToolStripMenuItem.Name = "showAllInTaskBarToolStripMenuItem";
             this.showAllInTaskBarToolStripMenuItem.Size = new System.Drawing.Size(209, 22);
             this.showAllInTaskBarToolStripMenuItem.Text = "&Show All In Task Bar";
@@ -226,7 +229,7 @@ namespace EDDiscovery
             // 
             // turnOffAllTransparencyToolStripMenuItem
             // 
-            this.turnOffAllTransparencyToolStripMenuItem.Image = global::EliteDangerous.Properties.Resources.dockinggranted;
+            this.turnOffAllTransparencyToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("turnOffAllTransparencyToolStripMenuItem.Image")));
             this.turnOffAllTransparencyToolStripMenuItem.Name = "turnOffAllTransparencyToolStripMenuItem";
             this.turnOffAllTransparencyToolStripMenuItem.Size = new System.Drawing.Size(209, 22);
             this.turnOffAllTransparencyToolStripMenuItem.Text = "&Turn Off All Transparency";
@@ -234,7 +237,7 @@ namespace EDDiscovery
             // 
             // exitToolStripMenuItem
             // 
-            this.exitToolStripMenuItem.Image = global::EliteDangerous.Properties.Resources.selfdestruct;
+            this.exitToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("exitToolStripMenuItem.Image")));
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
             this.exitToolStripMenuItem.Size = new System.Drawing.Size(197, 22);
             this.exitToolStripMenuItem.Text = "E&xit";
@@ -322,6 +325,13 @@ namespace EDDiscovery
             this.sendUnsuncedEDDNEventsToolStripMenuItem.Text = "Send unsynced EDDN events";
             this.sendUnsuncedEDDNEventsToolStripMenuItem.Click += new System.EventHandler(this.sendUnsuncedEDDNEventsToolStripMenuItem_Click);
             // 
+            // sendUnsyncedEGOScansToolStripMenuItem
+            // 
+            this.sendUnsyncedEGOScansToolStripMenuItem.Name = "sendUnsyncedEGOScansToolStripMenuItem";
+            this.sendUnsyncedEGOScansToolStripMenuItem.Size = new System.Drawing.Size(396, 22);
+            this.sendUnsyncedEGOScansToolStripMenuItem.Text = "Send unsynced EGO scans";
+            this.sendUnsyncedEGOScansToolStripMenuItem.Click += new System.EventHandler(this.sendUnsyncedEGOScansToolStripMenuItem_Click);
+            // 
             // clearEDSMIDAssignedToAllRecordsForCurrentCommanderToolStripMenuItem
             // 
             this.clearEDSMIDAssignedToAllRecordsForCurrentCommanderToolStripMenuItem.Name = "clearEDSMIDAssignedToAllRecordsForCurrentCommanderToolStripMenuItem";
@@ -342,7 +352,7 @@ namespace EDDiscovery
             // 
             // manageAddOnsToolStripMenuItem
             // 
-            this.manageAddOnsToolStripMenuItem.Image = global::EliteDangerous.Properties.Resources.module;
+            this.manageAddOnsToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("manageAddOnsToolStripMenuItem.Image")));
             this.manageAddOnsToolStripMenuItem.Name = "manageAddOnsToolStripMenuItem";
             this.manageAddOnsToolStripMenuItem.Size = new System.Drawing.Size(280, 22);
             this.manageAddOnsToolStripMenuItem.Text = "&Manage Add-Ons";
@@ -412,7 +422,7 @@ namespace EDDiscovery
             // 
             // eDDiscoveryChatDiscordToolStripMenuItem
             // 
-            this.eDDiscoveryChatDiscordToolStripMenuItem.Image = global::EliteDangerous.Properties.Resources.engineercraft;
+            this.eDDiscoveryChatDiscordToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("eDDiscoveryChatDiscordToolStripMenuItem.Image")));
             this.eDDiscoveryChatDiscordToolStripMenuItem.Name = "eDDiscoveryChatDiscordToolStripMenuItem";
             this.eDDiscoveryChatDiscordToolStripMenuItem.Size = new System.Drawing.Size(242, 22);
             this.eDDiscoveryChatDiscordToolStripMenuItem.Text = "&Discord - EDD Community Chat";
@@ -420,7 +430,7 @@ namespace EDDiscovery
             // 
             // frontierForumThreadToolStripMenuItem
             // 
-            this.frontierForumThreadToolStripMenuItem.Image = global::EliteDangerous.Properties.Resources.Stationenter;
+            this.frontierForumThreadToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("frontierForumThreadToolStripMenuItem.Image")));
             this.frontierForumThreadToolStripMenuItem.Name = "frontierForumThreadToolStripMenuItem";
             this.frontierForumThreadToolStripMenuItem.Size = new System.Drawing.Size(242, 22);
             this.frontierForumThreadToolStripMenuItem.Text = "&Frontier Forum Thread";
@@ -436,7 +446,7 @@ namespace EDDiscovery
             // 
             // reportIssueIdeasToolStripMenuItem
             // 
-            this.reportIssueIdeasToolStripMenuItem.Image = global::EliteDangerous.Properties.Resources.repairall;
+            this.reportIssueIdeasToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("reportIssueIdeasToolStripMenuItem.Image")));
             this.reportIssueIdeasToolStripMenuItem.Name = "reportIssueIdeasToolStripMenuItem";
             this.reportIssueIdeasToolStripMenuItem.Size = new System.Drawing.Size(242, 22);
             this.reportIssueIdeasToolStripMenuItem.Text = "&Report Issue / Idea";
@@ -449,7 +459,7 @@ namespace EDDiscovery
             // 
             // checkForNewReleaseToolStripMenuItem
             // 
-            this.checkForNewReleaseToolStripMenuItem.Image = global::EliteDangerous.Properties.Resources.rebootrepair;
+            this.checkForNewReleaseToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("checkForNewReleaseToolStripMenuItem.Image")));
             this.checkForNewReleaseToolStripMenuItem.Name = "checkForNewReleaseToolStripMenuItem";
             this.checkForNewReleaseToolStripMenuItem.Size = new System.Drawing.Size(242, 22);
             this.checkForNewReleaseToolStripMenuItem.Text = "&Check for Updates";
@@ -484,6 +494,7 @@ namespace EDDiscovery
             // 
             this.tabControlMain.Controls.Add(this.tabPageTravelHistory);
             this.tabControlMain.Controls.Add(this.tabPageJournal);
+            this.tabControlMain.Controls.Add(this.tabPageGrid);
             this.tabControlMain.Controls.Add(this.tabPageTriletaration);
             this.tabControlMain.Controls.Add(this.tabPageScreenshots);
             this.tabControlMain.Controls.Add(this.tabPageRoute);
@@ -548,6 +559,17 @@ namespace EDDiscovery
             this.journalViewControl1.Name = "journalViewControl1";
             this.journalViewControl1.Size = new System.Drawing.Size(979, 634);
             this.journalViewControl1.TabIndex = 0;
+            // 
+            // tabPageGrid
+            // 
+            this.tabPageGrid.Controls.Add(this.gridControl1);
+            this.tabPageGrid.Location = new System.Drawing.Point(4, 22);
+            this.tabPageGrid.Name = "tabPageGrid";
+            this.tabPageGrid.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPageGrid.Size = new System.Drawing.Size(985, 640);
+            this.tabPageGrid.TabIndex = 9;
+            this.tabPageGrid.Text = "Grid";
+            this.tabPageGrid.UseVisualStyleBackColor = true;
             // 
             // tabPageTriletaration
             // 
@@ -924,12 +946,13 @@ namespace EDDiscovery
             this.panel_eddiscovery.TabIndex = 18;
             this.panel_eddiscovery.Click += new System.EventHandler(this.paneleddiscovery_Click);
             // 
-            // sendUnsyncedEGOScansToolStripMenuItem
+            // gridControl1
             // 
-            this.sendUnsyncedEGOScansToolStripMenuItem.Name = "sendUnsyncedEGOScansToolStripMenuItem";
-            this.sendUnsyncedEGOScansToolStripMenuItem.Size = new System.Drawing.Size(396, 22);
-            this.sendUnsyncedEGOScansToolStripMenuItem.Text = "Send unsynced EGO scans";
-            this.sendUnsyncedEGOScansToolStripMenuItem.Click += new System.EventHandler(this.sendUnsyncedEGOScansToolStripMenuItem_Click);
+            this.gridControl1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.gridControl1.Location = new System.Drawing.Point(3, 3);
+            this.gridControl1.Name = "gridControl1";
+            this.gridControl1.Size = new System.Drawing.Size(979, 634);
+            this.gridControl1.TabIndex = 0;
             // 
             // EDDiscoveryForm
             // 
@@ -960,6 +983,7 @@ namespace EDDiscovery
             this.tabControlMain.ResumeLayout(false);
             this.tabPageTravelHistory.ResumeLayout(false);
             this.tabPageJournal.ResumeLayout(false);
+            this.tabPageGrid.ResumeLayout(false);
             this.tabPageTriletaration.ResumeLayout(false);
             this.tabPageScreenshots.ResumeLayout(false);
             this.tabPageScreenshots.PerformLayout();
@@ -1054,5 +1078,7 @@ namespace EDDiscovery
         private ExtendedControls.ButtonExt buttonExtEDSMSync;
         private ExtendedControls.ComboBoxCustom comboBoxCustomPopOut;
         private System.Windows.Forms.ToolStripMenuItem sendUnsyncedEGOScansToolStripMenuItem;
+        private System.Windows.Forms.TabPage tabPageGrid;
+        private GridControl gridControl1;
     }
 }

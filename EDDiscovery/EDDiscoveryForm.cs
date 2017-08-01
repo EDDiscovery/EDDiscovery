@@ -197,6 +197,7 @@ namespace EDDiscovery
             themeok = theme.RestoreSettings();                                    // theme, remember your saved settings
 
             trilaterationControl.InitControl(this);
+            gridControl1.InitControl(this);
             travelHistoryControl.InitControl(this);
             imageHandler1.InitControl(this);
             settings.InitControl(this);

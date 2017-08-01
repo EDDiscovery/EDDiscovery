@@ -1,6 +1,6 @@
 ﻿namespace EDDiscovery.UserControls
 {
-    partial class UserControlCommonBaseResizable
+    partial class UserControlContainerResizable
     {
         /// <summary> 
         /// Required designer variable.
@@ -30,11 +30,14 @@
         {
             this.SuspendLayout();
             // 
-            // UserControlCommonBaseResizable
+            // UserControlContainerResizable
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Name = "UserControlCommonBaseResizable";
+            this.Name = "UserControlContainerResizable";
+            this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.UserControlContainerResizable_MouseDown);
+            this.MouseMove += new System.Windows.Forms.MouseEventHandler(this.UserControlContainerResizable_MouseMove);
+            this.MouseUp += new System.Windows.Forms.MouseEventHandler(this.UserControlContainerResizable_MouseUp);
             this.ResumeLayout(false);
 
         }
