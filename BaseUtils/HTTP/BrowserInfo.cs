@@ -16,6 +16,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -69,5 +70,7 @@ namespace BaseUtils
 
             return null;
         }
+
+        public static string UserAgent { get; } = Assembly.GetEntryAssembly().GetName().Name + " v" + Assembly.GetEntryAssembly().FullName.Split(',')[1].Split('=')[1];
     }
 }
