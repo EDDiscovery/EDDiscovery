@@ -33,7 +33,8 @@ namespace EDDiscovery.UserControls
     {
         private int displaynumber = 0;
         private EDDiscoveryForm discoveryform;
-        
+        private UserControlTravelGrid uctg;
+
         private string DbColumnSave { get { return ("MarketDataGrid") + ((displaynumber > 0) ? displaynumber.ToString() : "") + "DGVCol"; } }
         private string DbBuyOnly { get { return "MarketDataBuyOnly" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
 
@@ -45,9 +46,10 @@ namespace EDDiscovery.UserControls
             Name = "Market Data";
         }
 
-        public override void Init( EDDiscoveryForm ed, int vn) //0=primary, 1 = first windowed version, etc
+        public override void Init( EDDiscoveryForm ed, UserControlTravelGrid thc, int vn) //0=primary, 1 = first windowed version, etc
         {
             discoveryform = ed;
+            uctg = thc;
             displaynumber = vn;
 
             dataGridViewMarketData.MakeDoubleBuffered();
@@ -55,7 +57,7 @@ namespace EDDiscovery.UserControls
             dataGridViewMarketData.RowTemplate.Height = 26;
 
             discoveryform.OnNewEntry += OnChanged;
-            ed.TravelControl.OnTravelSelectionChanged += OnChanged;
+            uctg.OnTravelSelectionChanged += OnChanged;
 
             checkBoxBuyOnly.Enabled = false;
             checkBoxBuyOnly.Checked = SQLiteDBClass.GetSettingBool(DbBuyOnly, false);
@@ -242,7 +244,7 @@ namespace EDDiscovery.UserControls
             DGVSaveColumnLayout(dataGridViewMarketData, DbColumnSave);
             SQLiteDBClass.PutSettingBool(DbBuyOnly, checkBoxBuyOnly.Checked);
             discoveryform.OnNewEntry -= OnChanged;
-            discoveryform.TravelControl.OnTravelSelectionChanged -= OnChanged;
+            uctg.OnTravelSelectionChanged -= OnChanged;
         }
 
         #endregion

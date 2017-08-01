@@ -32,6 +32,7 @@ namespace EDDiscovery.UserControls
     {
         private int displaynumber = 0;
         private EDDiscoveryForm discoveryform;
+        private UserControlTravelGrid uctg;
 
         private string DbColumnSaveCurrent { get { return ("MissionsGridCurrent") + ((displaynumber > 0) ? displaynumber.ToString() : "") + "DGVCol"; } }
         private string DbColumnSavePrevious { get { return ("MissionsGridPrevious") + ((displaynumber > 0) ? displaynumber.ToString() : "") + "DGVCol"; } }
@@ -49,9 +50,10 @@ namespace EDDiscovery.UserControls
             Name = "Missions";
         }
 
-        public override void Init(EDDiscoveryForm ed, int vn) //0=primary, 1 = first windowed version, etc
+        public override void Init(EDDiscoveryForm ed, UserControlTravelGrid thc, int vn) //0=primary, 1 = first windowed version, etc
         {
             discoveryform = ed;
+            uctg = thc;
             displaynumber = vn;
 
             dataGridViewCurrent.MakeDoubleBuffered();
@@ -65,7 +67,7 @@ namespace EDDiscovery.UserControls
             dataGridViewPrevious.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.DisplayedCells;     // NEW! appears to work https://msdn.microsoft.com/en-us/library/74b2wakt(v=vs.110).aspx
 
             discoveryform.OnNewEntry += Discoveryform_OnNewEntry;
-            ed.TravelControl.OnTravelSelectionChanged += Display;
+            uctg.OnTravelSelectionChanged += Display;
 
             string start = SQLiteDBClass.GetSettingString(DbStartDate, "");
             DateTime dt;
@@ -196,7 +198,7 @@ namespace EDDiscovery.UserControls
             DGVSaveColumnLayout(dataGridViewCurrent, DbColumnSaveCurrent);
             DGVSaveColumnLayout(dataGridViewPrevious, DbColumnSavePrevious);
 
-            discoveryform.TravelControl.OnTravelSelectionChanged -= Display;
+            uctg.OnTravelSelectionChanged -= Display;
             discoveryform.OnNewEntry -= Discoveryform_OnNewEntry;
 
             SQLiteDBClass.PutSettingString(DbStartDate, customDateTimePickerStart.Value.ToString(System.Globalization.CultureInfo.InvariantCulture));

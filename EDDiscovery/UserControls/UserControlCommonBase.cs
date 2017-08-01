@@ -29,7 +29,8 @@ namespace EDDiscovery.UserControls
 {
     public class UserControlCommonBase : UserControl
     {
-        public virtual void Init( EDDiscoveryForm ed, int displayno) { }
+        public virtual void Init(EDDiscoveryForm ed, UserControlTravelGrid thc, int displayno) { }
+        public virtual void ChangeTravelGrid(UserControlTravelGrid thc) { }
         public virtual void Display(HistoryEntry current, HistoryList history) { }
 
         public virtual void LoadLayout() { }

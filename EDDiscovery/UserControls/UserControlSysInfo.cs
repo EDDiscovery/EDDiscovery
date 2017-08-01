@@ -34,6 +34,8 @@ namespace EDDiscovery.UserControls
         public bool IsNotesShowing { get { return richTextBoxNote.Visible; } }
 
         private EDDiscoveryForm discoveryform;
+        private UserControlTravelGrid uctg;
+
         private int displaynumber;
         private string DbSelection { get { return ("SystemInformation") + ((displaynumber > 0) ? displaynumber.ToString() : "") + "Sel"; } }
         private string DbOSave { get { return "SystemInformation" + ((displaynumber > 0) ? displaynumber.ToString() :"" ) + "Order"; } }
@@ -79,11 +81,12 @@ namespace EDDiscovery.UserControls
 
         }
 
-        public override void Init(EDDiscoveryForm ed, int displayno)
+        public override void Init(EDDiscoveryForm ed, UserControlTravelGrid thc, int displayno)
         {
             discoveryform = ed;
+            uctg = thc;
             this.displaynumber = displayno;
-            discoveryform.TravelControl.OnTravelSelectionChanged += Display;    // get this whenever current selection or refreshed..
+            uctg.OnTravelSelectionChanged += Display;    // get this whenever current selection or refreshed..
             discoveryform.OnNewTarget += RefreshTargetDisplay;
             discoveryform.OnNoteChanged += OnNoteChanged;
             textBoxTarget.SetAutoCompletor(SystemClassDB.ReturnSystemListForAutoComplete);
@@ -105,7 +108,7 @@ namespace EDDiscovery.UserControls
 
         public override void Closing()
         {
-            discoveryform.TravelControl.OnTravelSelectionChanged -= Display;
+            uctg.OnTravelSelectionChanged -= Display;
             discoveryform.OnNewTarget -= RefreshTargetDisplay;
             discoveryform.OnNoteChanged -= OnNoteChanged;
             SQLiteDBClass.PutSettingString(DbOSave, String.Join(",", Order));
