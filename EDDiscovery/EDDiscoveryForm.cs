@@ -375,6 +375,8 @@ namespace EDDiscovery
             journalViewControl1.LoadLayoutSettings();
             if (EDDConfig.AutoLoadPopOuts && EDDConfig.Options.NoWindowReposition == false)
                 PopOuts.LoadSavedPopouts();
+
+            gridControl1.RestoreState();
         }
 
         #endregion
@@ -633,6 +635,7 @@ namespace EDDiscovery
             SQLiteDBClass.PutSettingBool("ToolBarPanelPinState", panelToolBar.PinState);
 
             routeControl1.SaveSettings();
+            gridControl1.SaveSettings();
             theme.SaveSettings(null);
             travelHistoryControl.SaveSettings();
             journalViewControl1.SaveSettings();

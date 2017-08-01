@@ -49,12 +49,9 @@ namespace EDDiscovery
             this.comboBoxTheme = new ExtendedControls.ComboBoxCustom();
             this.button_edittheme = new ExtendedControls.ButtonExt();
             this.buttonSaveTheme = new ExtendedControls.ButtonExt();
-            this.textBoxDefaultZoom = new ExtendedControls.TextBoxBorder();
-            this.textBoxHomeSystem = new ExtendedControls.AutoCompleteTextBox();
             this.panel_defaultmapcolor = new System.Windows.Forms.Panel();
             this.checkBoxMinimizeToNotifyIcon = new ExtendedControls.CheckBoxCustom();
             this.checkBoxUseNotifyIcon = new ExtendedControls.CheckBoxCustom();
-            this.checkBoxFocusNewSystem = new ExtendedControls.CheckBoxCustom();
             this.checkBoxUTC = new ExtendedControls.CheckBoxCustom();
             this.checkBoxOrderRowsInverted = new ExtendedControls.CheckBoxCustom();
             this.checkBoxEDSMLog = new ExtendedControls.CheckBoxCustom();
@@ -65,6 +62,8 @@ namespace EDDiscovery
             this.NotesCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.btnDeleteCommander = new ExtendedControls.ButtonExt();
             this.buttonAddCommander = new ExtendedControls.ButtonExt();
+            this.textBoxDefaultZoom = new ExtendedControls.TextBoxBorder();
+            this.textBoxHomeSystem = new ExtendedControls.AutoCompleteTextBox();
             this.groupBoxPopOuts = new ExtendedControls.GroupBoxCustom();
             this.buttonReloadSaved = new ExtendedControls.ButtonExt();
             this.buttonSaveSetup = new ExtendedControls.ButtonExt();
@@ -169,37 +168,6 @@ namespace EDDiscovery
             this.buttonSaveTheme.UseVisualStyleBackColor = true;
             this.buttonSaveTheme.Click += new System.EventHandler(this.buttonSaveTheme_Click);
             // 
-            // textBoxDefaultZoom
-            // 
-            this.textBoxDefaultZoom.BorderColor = System.Drawing.Color.Transparent;
-            this.textBoxDefaultZoom.BorderColorScaling = 0.5F;
-            this.textBoxDefaultZoom.Location = new System.Drawing.Point(120, 70);
-            this.textBoxDefaultZoom.Name = "textBoxDefaultZoom";
-            this.textBoxDefaultZoom.Size = new System.Drawing.Size(51, 20);
-            this.textBoxDefaultZoom.TabIndex = 6;
-            this.textBoxDefaultZoom.Validating += new System.ComponentModel.CancelEventHandler(this.textBoxDefaultZoom_Validating);
-            // 
-            // textBoxHomeSystem
-            // 
-            this.textBoxHomeSystem.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
-            this.textBoxHomeSystem.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource;
-            this.textBoxHomeSystem.BorderColor = System.Drawing.Color.Transparent;
-            this.textBoxHomeSystem.BorderColorScaling = 0.5F;
-            this.textBoxHomeSystem.DropDownBackgroundColor = System.Drawing.Color.Gray;
-            this.textBoxHomeSystem.DropDownBorderColor = System.Drawing.Color.Green;
-            this.textBoxHomeSystem.DropDownHeight = 200;
-            this.textBoxHomeSystem.DropDownItemHeight = 20;
-            this.textBoxHomeSystem.DropDownMouseOverBackgroundColor = System.Drawing.Color.Red;
-            this.textBoxHomeSystem.DropDownScrollBarButtonColor = System.Drawing.Color.LightGray;
-            this.textBoxHomeSystem.DropDownScrollBarColor = System.Drawing.Color.LightGray;
-            this.textBoxHomeSystem.DropDownWidth = 0;
-            this.textBoxHomeSystem.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.textBoxHomeSystem.Location = new System.Drawing.Point(120, 19);
-            this.textBoxHomeSystem.Name = "textBoxHomeSystem";
-            this.textBoxHomeSystem.Size = new System.Drawing.Size(221, 20);
-            this.textBoxHomeSystem.TabIndex = 0;
-            this.textBoxHomeSystem.Validated += new System.EventHandler(this.textBoxHomeSystem_Validated);
-            // 
             // panel_defaultmapcolor
             // 
             this.panel_defaultmapcolor.AccessibleDescription = "";
@@ -219,7 +187,7 @@ namespace EDDiscovery
             this.checkBoxMinimizeToNotifyIcon.CheckBoxInnerColor = System.Drawing.Color.White;
             this.checkBoxMinimizeToNotifyIcon.CheckColor = System.Drawing.Color.DarkBlue;
             this.checkBoxMinimizeToNotifyIcon.FontNerfReduction = 0.5F;
-            this.checkBoxMinimizeToNotifyIcon.Location = new System.Drawing.Point(182, 115);
+            this.checkBoxMinimizeToNotifyIcon.Location = new System.Drawing.Point(17, 115);
             this.checkBoxMinimizeToNotifyIcon.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.checkBoxMinimizeToNotifyIcon.Name = "checkBoxMinimizeToNotifyIcon";
             this.checkBoxMinimizeToNotifyIcon.Size = new System.Drawing.Size(179, 17);
@@ -237,7 +205,7 @@ namespace EDDiscovery
             this.checkBoxUseNotifyIcon.CheckBoxInnerColor = System.Drawing.Color.White;
             this.checkBoxUseNotifyIcon.CheckColor = System.Drawing.Color.DarkBlue;
             this.checkBoxUseNotifyIcon.FontNerfReduction = 0.5F;
-            this.checkBoxUseNotifyIcon.Location = new System.Drawing.Point(17, 115);
+            this.checkBoxUseNotifyIcon.Location = new System.Drawing.Point(17, 92);
             this.checkBoxUseNotifyIcon.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.checkBoxUseNotifyIcon.Name = "checkBoxUseNotifyIcon";
             this.checkBoxUseNotifyIcon.Size = new System.Drawing.Size(154, 17);
@@ -248,24 +216,6 @@ namespace EDDiscovery
             this.checkBoxUseNotifyIcon.UseVisualStyleBackColor = true;
             this.checkBoxUseNotifyIcon.CheckedChanged += new System.EventHandler(this.checkBoxUseNotifyIcon_CheckedChanged);
             // 
-            // checkBoxFocusNewSystem
-            // 
-            this.checkBoxFocusNewSystem.AutoSize = true;
-            this.checkBoxFocusNewSystem.CheckBoxColor = System.Drawing.Color.Gray;
-            this.checkBoxFocusNewSystem.CheckBoxInnerColor = System.Drawing.Color.White;
-            this.checkBoxFocusNewSystem.CheckColor = System.Drawing.Color.DarkBlue;
-            this.checkBoxFocusNewSystem.FontNerfReduction = 0.5F;
-            this.checkBoxFocusNewSystem.Location = new System.Drawing.Point(17, 69);
-            this.checkBoxFocusNewSystem.MouseOverColor = System.Drawing.Color.CornflowerBlue;
-            this.checkBoxFocusNewSystem.Name = "checkBoxFocusNewSystem";
-            this.checkBoxFocusNewSystem.Size = new System.Drawing.Size(253, 17);
-            this.checkBoxFocusNewSystem.TabIndex = 3;
-            this.checkBoxFocusNewSystem.Text = "History cursor to new Journal Entry automatically";
-            this.checkBoxFocusNewSystem.TickBoxReductionSize = 10;
-            this.toolTip.SetToolTip(this.checkBoxFocusNewSystem, "Move the history cursor to the new journal entry automatically when its received");
-            this.checkBoxFocusNewSystem.UseVisualStyleBackColor = true;
-            this.checkBoxFocusNewSystem.CheckedChanged += new System.EventHandler(this.checkBoxFocusNewSystem_CheckedChanged);
-            // 
             // checkBoxUTC
             // 
             this.checkBoxUTC.AutoSize = true;
@@ -273,7 +223,7 @@ namespace EDDiscovery
             this.checkBoxUTC.CheckBoxInnerColor = System.Drawing.Color.White;
             this.checkBoxUTC.CheckColor = System.Drawing.Color.DarkBlue;
             this.checkBoxUTC.FontNerfReduction = 0.5F;
-            this.checkBoxUTC.Location = new System.Drawing.Point(17, 92);
+            this.checkBoxUTC.Location = new System.Drawing.Point(17, 69);
             this.checkBoxUTC.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.checkBoxUTC.Name = "checkBoxUTC";
             this.checkBoxUTC.Size = new System.Drawing.Size(209, 17);
@@ -407,6 +357,57 @@ namespace EDDiscovery
             this.toolTip.SetToolTip(this.buttonAddCommander, "Add a new commander");
             this.buttonAddCommander.UseVisualStyleBackColor = true;
             this.buttonAddCommander.Click += new System.EventHandler(this.buttonAddCommander_Click);
+            // 
+            // textBoxDefaultZoom
+            // 
+            this.textBoxDefaultZoom.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
+            this.textBoxDefaultZoom.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
+            this.textBoxDefaultZoom.BorderColor = System.Drawing.Color.Transparent;
+            this.textBoxDefaultZoom.BorderColorScaling = 0.5F;
+            this.textBoxDefaultZoom.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.textBoxDefaultZoom.ControlBackground = System.Drawing.SystemColors.Control;
+            this.textBoxDefaultZoom.Location = new System.Drawing.Point(120, 70);
+            this.textBoxDefaultZoom.Multiline = false;
+            this.textBoxDefaultZoom.Name = "textBoxDefaultZoom";
+            this.textBoxDefaultZoom.ReadOnly = false;
+            this.textBoxDefaultZoom.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.textBoxDefaultZoom.SelectionLength = 0;
+            this.textBoxDefaultZoom.SelectionStart = 0;
+            this.textBoxDefaultZoom.Size = new System.Drawing.Size(51, 20);
+            this.textBoxDefaultZoom.TabIndex = 6;
+            this.textBoxDefaultZoom.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.textBoxDefaultZoom.WordWrap = true;
+            this.textBoxDefaultZoom.Validating += new System.ComponentModel.CancelEventHandler(this.textBoxDefaultZoom_Validating);
+            // 
+            // textBoxHomeSystem
+            // 
+            this.textBoxHomeSystem.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
+            this.textBoxHomeSystem.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource;
+            this.textBoxHomeSystem.BorderColor = System.Drawing.Color.Transparent;
+            this.textBoxHomeSystem.BorderColorScaling = 0.5F;
+            this.textBoxHomeSystem.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.textBoxHomeSystem.ControlBackground = System.Drawing.SystemColors.Control;
+            this.textBoxHomeSystem.DropDownBackgroundColor = System.Drawing.Color.Gray;
+            this.textBoxHomeSystem.DropDownBorderColor = System.Drawing.Color.Green;
+            this.textBoxHomeSystem.DropDownHeight = 200;
+            this.textBoxHomeSystem.DropDownItemHeight = 20;
+            this.textBoxHomeSystem.DropDownMouseOverBackgroundColor = System.Drawing.Color.Red;
+            this.textBoxHomeSystem.DropDownScrollBarButtonColor = System.Drawing.Color.LightGray;
+            this.textBoxHomeSystem.DropDownScrollBarColor = System.Drawing.Color.LightGray;
+            this.textBoxHomeSystem.DropDownWidth = 0;
+            this.textBoxHomeSystem.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.textBoxHomeSystem.Location = new System.Drawing.Point(120, 19);
+            this.textBoxHomeSystem.Multiline = false;
+            this.textBoxHomeSystem.Name = "textBoxHomeSystem";
+            this.textBoxHomeSystem.ReadOnly = false;
+            this.textBoxHomeSystem.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.textBoxHomeSystem.SelectionLength = 0;
+            this.textBoxHomeSystem.SelectionStart = 0;
+            this.textBoxHomeSystem.Size = new System.Drawing.Size(221, 20);
+            this.textBoxHomeSystem.TabIndex = 0;
+            this.textBoxHomeSystem.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.textBoxHomeSystem.WordWrap = true;
+            this.textBoxHomeSystem.Validated += new System.EventHandler(this.textBoxHomeSystem_Validated);
             // 
             // groupBoxPopOuts
             // 
@@ -609,7 +610,6 @@ namespace EDDiscovery
             this.groupBox3.BorderColorScaling = 0.5F;
             this.groupBox3.Controls.Add(this.checkBoxMinimizeToNotifyIcon);
             this.groupBox3.Controls.Add(this.checkBoxUseNotifyIcon);
-            this.groupBox3.Controls.Add(this.checkBoxFocusNewSystem);
             this.groupBox3.Controls.Add(this.checkBoxUTC);
             this.groupBox3.Controls.Add(this.checkBoxOrderRowsInverted);
             this.groupBox3.Controls.Add(this.checkBoxEDSMLog);
@@ -745,7 +745,6 @@ namespace EDDiscovery
         private ExtendedControls.ButtonExt button_edittheme;
         private ExtendedControls.GroupBoxCustom groupBoxTheme;
         private ExtendedControls.CheckBoxCustom checkBoxOrderRowsInverted;
-        private ExtendedControls.CheckBoxCustom checkBoxFocusNewSystem;
         private ExtendedControls.CheckBoxCustom checkBoxKeepOnTop;
         private ExtendedControls.ButtonExt btnDeleteCommander;
         private ExtendedControls.CheckBoxCustom checkBoxUTC;

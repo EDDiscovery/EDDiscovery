@@ -74,6 +74,14 @@ namespace EDDiscovery.UserControls
             uctg.OnTravelSelectionChanged += Display;
         }
 
+        public virtual void ChangeTravelGrid(UserControlTravelGrid thc)
+        {
+            uctg.OnTravelSelectionChanged -= Display;
+            uctg = thc;
+            uctg.OnTravelSelectionChanged += Display;
+        }
+
+
         public override void LoadLayout()
         {
             DGVLoadColumnLayout(dataGridViewExplore, DbColumnSave);

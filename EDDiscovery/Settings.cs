@@ -93,7 +93,6 @@ namespace EDDiscovery
             checkBoxEDSMLog.Checked = EDDiscoveryForm.EDDConfig.EDSMLog;
             checkBoxOrderRowsInverted.Checked = EDDiscoveryForm.EDDConfig.OrderRowsInverted;
             checkBoxMinimizeToNotifyIcon.Checked = EDDiscoveryForm.EDDConfig.MinimizeToNotifyIcon;
-            checkBoxFocusNewSystem.Checked = EDDiscoveryForm.EDDConfig.FocusOnNewSystem;
             checkBoxKeepOnTop.Checked = EDDiscoveryForm.EDDConfig.KeepOnTop;
             checkBoxUseNotifyIcon.Checked = EDDiscoveryForm.EDDConfig.UseNotifyIcon;
             checkBoxUTC.Checked = EDDiscoveryForm.EDDConfig.DisplayUTC;
@@ -131,7 +130,6 @@ namespace EDDiscovery
             EDDiscoveryForm.EDDConfig.UseNotifyIcon = checkBoxUseNotifyIcon.Checked;
             EDDiscoveryForm.EDDConfig.OrderRowsInverted = checkBoxOrderRowsInverted.Checked;
             EDDiscoveryForm.EDDConfig.MinimizeToNotifyIcon = checkBoxMinimizeToNotifyIcon.Checked;
-            EDDiscoveryForm.EDDConfig.FocusOnNewSystem = checkBoxFocusNewSystem.Checked;
             EDDiscoveryForm.EDDConfig.KeepOnTop = checkBoxKeepOnTop.Checked;
             EDDiscoveryForm.EDDConfig.DisplayUTC = checkBoxUTC.Checked;
             EDDiscoveryForm.EDDConfig.AutoLoadPopOuts = checkBoxAutoLoad.Checked;
@@ -317,11 +315,6 @@ namespace EDDiscovery
             SetEntryThemeComboBox();
             comboBoxTheme.Enabled = true;          // no doing this while theme editor is open
             buttonSaveTheme.Enabled = true;
-        }
-
-        private void checkBoxFocusNewSystem_CheckedChanged(object sender, EventArgs e)
-        {
-            EDDConfig.Instance.FocusOnNewSystem = checkBoxFocusNewSystem.Checked;
         }
 
         private void checkBoxKeepOnTop_CheckedChanged(object sender, EventArgs e)

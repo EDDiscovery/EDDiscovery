@@ -195,11 +195,11 @@
     <Compile Include="Actions\ActionsEDDCmds\ActionMenuItem.cs" />
     <Compile Include="Actions\ActionVars.cs" />
     <Compile Include="Actions\ConditionFunctionsEDD.cs" />
-    <Compile Include="GridControl.cs">
+    <Compile Include="UserControls\UserControlContainerGrid.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="GridControl.Designer.cs">
-      <DependentUpon>GridControl.cs</DependentUpon>
+    <Compile Include="UserControls\UserControlContainerGrid.Designer.cs">
+      <DependentUpon>UserControlContainerGrid.cs</DependentUpon>
     </Compile>
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -553,8 +553,8 @@
     <EmbeddedResource Include="Forms\UserControlForm.resx">
       <DependentUpon>UserControlForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="GridControl.resx">
-      <DependentUpon>GridControl.cs</DependentUpon>
+    <EmbeddedResource Include="UserControls\UserControlContainerGrid.resx">
+      <DependentUpon>UserControlContainerGrid.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Trilateration\SysWarning.resx">
       <DependentUpon>SysWarning.cs</DependentUpon>
@@ -890,7 +890,7 @@
         <Name>x86\SQLite.Interop.dll</Name>
       </Zipfiles>
     </ItemGroup>
-    <Message Text="'@(ZipFiles)' -> '$(OutDir)EDDiscovery.Portable.zip'" />
+    <Message Text="'@(ZipFiles)' -&gt; '$(OutDir)EDDiscovery.Portable.zip'" />
     <Zip OutputFileName="$(OutDir)EDDiscovery.Portable.zip" Files="@(ZipFiles)" />
     <Error Condition="!Exists('$(OutDir)EDDiscovery.Portable.zip')" Text="Unknown error in BuildPortableZip." />
   </Target>
