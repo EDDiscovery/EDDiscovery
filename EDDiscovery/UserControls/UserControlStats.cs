@@ -32,7 +32,7 @@ namespace EDDiscovery.UserControls
     {
         private int displaynumber = 0;
         private EDDiscoveryForm discoveryform;
-        private TravelHistoryControl travelhistorycontrol;
+        private UserControlTravelGrid uctg;
 
         public UserControlStats()
         {
@@ -40,13 +40,13 @@ namespace EDDiscovery.UserControls
             Name = "Statistics";
         }
 
-        public override void Init( EDDiscoveryForm ed, int vn) //0=primary, 1 = first windowed version, etc
+        public override void Init( EDDiscoveryForm ed, UserControlTravelGrid thc,  int vn) //0=primary, 1 = first windowed version, etc
         {
             discoveryform = ed;
-            travelhistorycontrol = ed.TravelControl;
+            uctg = thc;
             displaynumber = vn;
             discoveryform.OnNewEntry += AddNewEntry;
-            travelhistorycontrol.OnTravelSelectionChanged += SelectionChanged;
+            uctg.OnTravelSelectionChanged += SelectionChanged;
 
             userControlStatsTimeScan.ScanMode = true;
 
@@ -55,7 +55,7 @@ namespace EDDiscovery.UserControls
         public override void Closing()
         {
             discoveryform.OnNewEntry -= AddNewEntry;
-            travelhistorycontrol.OnTravelSelectionChanged -= SelectionChanged;
+            uctg.OnTravelSelectionChanged -= SelectionChanged;
         }
 
         private void AddNewEntry(HistoryEntry he, HistoryList hl)

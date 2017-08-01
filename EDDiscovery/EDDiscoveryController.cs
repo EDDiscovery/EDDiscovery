@@ -277,14 +277,6 @@ namespace EDDiscovery
         }
         #endregion
 
-        #region Closest Systems
-        public void CalculateClosestSystems(ISystem sys, Action<ISystem, SortedList<double, ISystem>> callback, bool ignoreDuplicates = true)
-        {
-            closestsystem_queue.Enqueue(new StardistRequest { System = sys, Callback = callback, IgnoreOnDuplicate = ignoreDuplicates });
-            stardistRequested.Set();
-        }
-        #endregion
-
         #endregion  // MAJOR REGION
 
         #region Implementation
@@ -298,19 +290,16 @@ namespace EDDiscovery
 
         private ConcurrentQueue<RefreshWorkerArgs> refreshWorkerQueue = new ConcurrentQueue<RefreshWorkerArgs>();
         private EliteDangerousCore.EDSM.SystemClassEDSM.SystemsSyncState syncstate = new EliteDangerousCore.EDSM.SystemClassEDSM.SystemsSyncState();
-        private ConcurrentQueue<StardistRequest> closestsystem_queue = new ConcurrentQueue<StardistRequest>();
         private RefreshWorkerArgs refreshWorkerArgs = new RefreshWorkerArgs();
 
         private Thread backgroundWorker;
         private Thread backgroundRefreshWorker;
-        private Thread backgroundStardistWorker;
 
         private ManualResetEvent closeRequested = new ManualResetEvent(false);
         private ManualResetEvent readyForInitialLoad = new ManualResetEvent(false);
         private ManualResetEvent readyForNewRefresh = new ManualResetEvent(false);
         private AutoResetEvent refreshRequested = new AutoResetEvent(false);
         private AutoResetEvent resyncRequestedEvent = new AutoResetEvent(false);
-        private AutoResetEvent stardistRequested = new AutoResetEvent(false);
         private int refreshRequestedFlag = 0;
         private int resyncRequestedFlag = 0;
         #endregion
@@ -582,8 +571,6 @@ namespace EDDiscovery
             {
                 backgroundRefreshWorker = new Thread(BackgroundRefreshWorkerThread) { Name = "Background Refresh Worker", IsBackground = true };
                 backgroundRefreshWorker.Start();
-                backgroundStardistWorker = new Thread(BackgroundStardistWorkerThread) { Name = "Star Distance Worker", IsBackground = true };
-                backgroundStardistWorker.Start();
 
                 try
                 {
@@ -610,7 +597,6 @@ namespace EDDiscovery
                 {
                 }
 
-                backgroundStardistWorker.Join();
                 backgroundRefreshWorker.Join();
             }
 
@@ -707,65 +693,6 @@ namespace EDDiscovery
                             DoRefreshHistory(args);
                             WaitHandle.WaitAny(new WaitHandle[] { closeRequested, readyForNewRefresh }); // Wait to be ready for new refresh
                         }
-                        break;
-                }
-            }
-        }
-
-        #endregion
-
-        #region Star Distance
-
-        private class StardistRequest
-        {
-            public ISystem System;
-            public bool IgnoreOnDuplicate;
-            public Action<ISystem, SortedList<double, ISystem>> Callback;
-        }
-
-        private class DuplicateKeyComparer<TKey> : IComparer<TKey> where TKey : IComparable      // special compare for sortedlist
-        {
-            public int Compare(TKey x, TKey y)
-            {
-                int result = x.CompareTo(y);
-                return (result == 0) ? 1 : result;      // for this, equals just means greater than, to allow duplicate distance values to be added.
-            }
-        }
-
-        private void BackgroundStardistWorkerThread()
-        {
-            while (!PendingClose)
-            {
-                int wh = WaitHandle.WaitAny(new WaitHandle[] { closeRequested, stardistRequested });
-
-                if (PendingClose) break;
-
-                StardistRequest stardistreq = null;
-
-                switch (wh)
-                {
-                    case 0:  // Close Requested
-                        break;
-                    case 1:  // Star Distances Requested
-                        while (!PendingClose && closestsystem_queue.TryDequeue(out stardistreq))
-                        {
-                            if (!stardistreq.IgnoreOnDuplicate || closestsystem_queue.Count == 0)
-                            {
-                                StardistRequest req = stardistreq;
-                                ISystem sys = req.System;
-                                SortedList<double, ISystem> closestsystemlist = new SortedList<double, ISystem>(new DuplicateKeyComparer<double>()); //lovely list allowing duplicate keys - can only iterate in it.
-                                SystemClassDB.GetSystemSqDistancesFrom(closestsystemlist, sys.x, sys.y, sys.z, 50, true, 1000);
-                                if (!PendingClose)
-                                {
-                                    InvokeAsyncOnUiThread(() =>
-                                    {
-                                        history.CalculateSqDistances(closestsystemlist, sys.x, sys.y, sys.z, 50, true);
-                                        req.Callback(sys, closestsystemlist);
-                                    });
-                                }
-                            }
-                        }
-
                         break;
                 }
             }

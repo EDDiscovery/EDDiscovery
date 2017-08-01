@@ -35,7 +35,7 @@ namespace EDDiscovery.UserControls
     public partial class UserControlScan : UserControlCommonBase
     {
         private EDDiscoveryForm discoveryform;
-        private TravelHistoryControl travelhistorycontrol;
+        private UserControlTravelGrid uctg;
         private int displaynumber = 0;
         Size starsize,planetsize,moonsize,materialsize;
         Size itemsepar;
@@ -61,12 +61,12 @@ namespace EDDiscovery.UserControls
             toolTip.ShowAlways = true;
         }
 
-        public override void Init(EDDiscoveryForm ed, int vn) //0=primary, 1 = first windowed version, etc
+        public override void Init(EDDiscoveryForm ed, UserControlTravelGrid thc, int vn) //0=primary, 1 = first windowed version, etc
         {
             discoveryform = ed;
-            travelhistorycontrol = ed.TravelControl;
+            uctg = thc;
             displaynumber = vn;
-            travelhistorycontrol.OnTravelSelectionChanged += Display;
+            uctg.OnTravelSelectionChanged += Display;
             discoveryform.OnNewEntry += NewEntry;
 
             progchange = true;
@@ -88,7 +88,7 @@ namespace EDDiscovery.UserControls
 
         public override void Closing()
         {
-            travelhistorycontrol.OnTravelSelectionChanged -= Display;
+            uctg.OnTravelSelectionChanged -= Display;
             discoveryform.OnNewEntry -= NewEntry;
         }
 

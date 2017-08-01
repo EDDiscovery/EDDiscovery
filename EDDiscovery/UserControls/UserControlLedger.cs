@@ -32,15 +32,13 @@ namespace EDDiscovery.UserControls
     {
         private int displaynumber = 0;
         private EDDiscoveryForm discoveryform;
+        private UserControlTravelGrid uctg;
         
         EventFilterSelector cfs = new EventFilterSelector();
 
         private string DbFilterSave { get { return "LedgerGridEventFilter" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
         private string DbColumnSave { get { return ("LedgerGrid") + ((displaynumber > 0) ? displaynumber.ToString() : "") + "DGVCol"; } }
         private string DbHistorySave { get { return "LedgerGridEDUIHistory" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
-
-        public delegate void GotoJID( long jid);
-        public event GotoJID OnGotoJID;
 
         #region Init
 
@@ -51,9 +49,10 @@ namespace EDDiscovery.UserControls
             this.textBoxFilter.SetToolTip(toolTip1, "Display entries matching this string");
         }
 
-        public override void Init( EDDiscoveryForm ed, int vn) //0=primary, 1 = first windowed version, etc
+        public override void Init( EDDiscoveryForm ed, UserControlTravelGrid thc, int vn) //0=primary, 1 = first windowed version, etc
         {
             discoveryform = ed;
+            uctg = thc;
             displaynumber = vn;
 
             dataGridViewLedger.MakeDoubleBuffered();
@@ -240,8 +239,7 @@ namespace EDDiscovery.UserControls
             {
                 long v = (long)dataGridViewLedger.Rows[rightclickrow].Tag;
 
-                if (OnGotoJID != null)
-                    OnGotoJID(v);
+                uctg.GotoPosByJID(v);
             }
         }
 

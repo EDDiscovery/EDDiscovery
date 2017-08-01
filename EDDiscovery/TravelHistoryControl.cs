@@ -40,9 +40,6 @@ namespace EDDiscovery
     {
         public EDDiscoveryForm _discoveryForm;
 
-        string lastclosestname;
-        SortedList<double, ISystem> lastclosestsystems;
-
         Bitmap[] tabbitmaps = new Bitmap[] { EDDiscovery.Properties.Resources.Log,      // Match pop out enum PopOuts, from start, list only ones which should be in tabs
                                         EDDiscovery.Properties.Resources.star,
                                         EliteDangerous.Properties.Resources.material ,
@@ -84,6 +81,8 @@ namespace EDDiscovery
         public HistoryEntry GetTravelHistoryCurrent {  get { return userControlTravelGrid.GetCurrentHistoryEntry; } }
         public TravelHistoryFilter GetPrimaryFilter { get { return userControlTravelGrid.GetHistoryFilter; } }  // some classes want to know out filter
 
+        public UserControlTravelGrid GetTravelGrid { get { return userControlTravelGrid; } }
+
         public ExtendedControls.TabStrip GetTabStrip( string name )
         {
             if (name.Equals(tabStripBottom.Name, StringComparison.InvariantCultureIgnoreCase))
@@ -97,15 +96,6 @@ namespace EDDiscovery
             return null;
         }
 
-        // Subscribe to these to get various events - layout controls via their Init function do this.
-
-        public delegate void TravelSelectionChanged(HistoryEntry he, HistoryList hl);       // called when current travel sel changed, after the user control informs us
-        public event TravelSelectionChanged OnTravelSelectionChanged;
-
-        public delegate void NearestStarList(string name, SortedList<double, ISystem> csl); // called when star computation has a new list
-        public event NearestStarList OnNearestStarListChanged;
-
-
         #region Initialisation
 
         public TravelHistoryControl()
@@ -117,20 +107,18 @@ namespace EDDiscovery
         {
             _discoveryForm = discoveryForm;
 
-            userControlTravelGrid.Init(_discoveryForm, 0);       // primary first instance - this registers with events in discoveryform to get info
+            userControlTravelGrid.Init(_discoveryForm, userControlTravelGrid, 0);       // primary first instance - this registers with events in discoveryform to get info
                                                         // then this display, to update its own controls..
-            userControlTravelGrid.OnRedisplay += uctgRedisplay;        // after the TG has redisplayed..
-            userControlTravelGrid.OnAddedNewEntry += UpdatedWithAddNewEntry;        // call back when you've added a new entry..
+            userControlTravelGrid.OnNewEntry += UpdatedWithAddNewEntry;        // call back when you've added a new entry..
             userControlTravelGrid.OnChangedSelection += ChangedSelection;   // and if the user clicks on something
-            userControlTravelGrid.OnResort += Resort;   // and if he or she resorts
-            userControlTravelGrid.OnPopOut += TGPopOut;
+            userControlTravelGrid.OnPopOut += () => { _discoveryForm.PopOuts.PopOut(PopOutControl.PopOuts.TravelGrid); };
             userControlTravelGrid.OnKeyDownInCell += OnKeyDownInCell;
+            userControlTravelGrid.ExtraIcons(true);
 
             TabConfigure(tabStripBottom,"Bottom",1000);          // codes are used to save info, 0 = primary (journal/travelgrid), 1..N are popups, these are embedded UCs
             TabConfigure(tabStripBottomRight,"Bottom-Right",1001);
             TabConfigure(tabStripMiddleRight, "Middle-Right", 1002);
             TabConfigure(tabStripTopRight, "Top-Right", 1003);
-
         }
 
         #endregion
@@ -152,13 +140,6 @@ namespace EDDiscovery
         void TabRemoved(ExtendedControls.TabStrip t, Control ctrl )     // called by tab strip when a control is removed
         {
             UserControlCommonBase uccb = ctrl as UserControlCommonBase;
-
-            if (ctrl is UserControlLedger)
-            {
-                UserControlLedger ucm = ctrl as UserControlLedger;
-                ucm.OnGotoJID -= GotoJID;
-            }
-
             uccb.Closing();
         }
 
@@ -181,7 +162,8 @@ namespace EDDiscovery
 
             if (uc != null)
             {
-                UserControlPostCreate(displaynumber, uc);
+                uc.Init(_discoveryForm, userControlTravelGrid, displaynumber);
+                uc.LoadLayout();
                 uc.Display(userControlTravelGrid.GetCurrentHistoryEntry, _discoveryForm.history);
             }
 
@@ -189,70 +171,70 @@ namespace EDDiscovery
             _discoveryForm.theme.ApplyToControls(t);
         }
 
-        public void UserControlPostCreate(int displaynumber, UserControlCommonBase ctrl)
-        {
-            ctrl.Init(_discoveryForm, displaynumber);
-            ctrl.LoadLayout();
-
-            if (ctrl is UserControlLog)
-            {
-                UserControlLog sc = ctrl as UserControlLog;
-                sc.AppendText(_discoveryForm.LogText, _discoveryForm.theme.TextBlockColor);
-            }
-            else if (ctrl is UserControlStarDistance)
-            {
-                UserControlStarDistance sc = ctrl as UserControlStarDistance;
-                if (lastclosestsystems != null)           // if we have some, fill in this grid
-                    sc.FillGrid(lastclosestname, lastclosestsystems);
-            }
-            else if (ctrl is UserControlMaterials)
-            {
-                UserControlMaterials ucm = ctrl as UserControlMaterials;
-            }
-            else if (ctrl is UserControlCommodities)
-            {
-                UserControlCommodities ucm = ctrl as UserControlCommodities;
-            }
-            else if (ctrl is UserControlLedger)
-            {
-                UserControlLedger ucm = ctrl as UserControlLedger;
-                ucm.OnGotoJID += GotoJID;
-            }
-            else if (ctrl is UserControlJournalGrid)
-            {
-                UserControlJournalGrid ucm = ctrl as UserControlJournalGrid;
-                ucm.NoHistoryIcon();
-                ucm.NoPopOutIcon();
-            }
-            else if (ctrl is UserControlTravelGrid)
-            {
-                UserControlTravelGrid ucm = ctrl as UserControlTravelGrid;
-                ucm.NoHistoryIcon();
-                ucm.NoPopOutIcon();
-            }
-        }
-
         void TabPopOut(ExtendedControls.TabStrip t, int i)        // pop out clicked
         {
             _discoveryForm.PopOuts.PopOut((PopOutControl.PopOuts)(i+ PopOutControl.PopOuts.StartTabButtons));
         }
 
-        void GotoJID(long v)
+        #endregion
+
+
+        #region Grid Layout
+
+        public void LoadLayoutSettings() // called by discovery form by us after its adjusted itself
         {
-            userControlTravelGrid.GotoPosByJID(v);
+            // ORDER IMPORTANT for right outer/inner splitter, otherwise windows fixes it 
+
+            if (!EDDConfig.Options.NoWindowReposition)
+            {
+                try
+                {
+                    splitContainerLeftRight.SplitterDistance = SQLiteDBClass.GetSettingInt("TravelControlSpliterLR", splitContainerLeftRight.SplitterDistance);
+                    splitContainerLeft.SplitterDistance = SQLiteDBClass.GetSettingInt("TravelControlSpliterL", splitContainerLeft.SplitterDistance);
+                    splitContainerRightOuter.SplitterDistance = SQLiteDBClass.GetSettingInt("TravelControlSpliterRO", splitContainerRightOuter.SplitterDistance);
+                    splitContainerRightInner.SplitterDistance = SQLiteDBClass.GetSettingInt("TravelControlSpliterR", splitContainerRightInner.SplitterDistance);
+                }
+                catch { };          // so splitter can except, if values are strange, but we don't really care, so lets throw away the exception
+            }
+
+            userControlTravelGrid.LoadLayout();
+
+            // NO NEED to reload the three tabstrips - code below will cause a LoadLayout on the one selected.
+
+            int max = (int)PopOutControl.PopOuts.MaxTabButtons;
+
+            tabStripBottom.SelectedIndex = Math.Min(SQLiteDBClass.GetSettingInt("TravelControlBottomTab", (int)(PopOutControl.PopOuts.Scan - PopOutControl.PopOuts.StartTabButtons)), max);
+            tabStripBottomRight.SelectedIndex = Math.Min(SQLiteDBClass.GetSettingInt("TravelControlBottomRightTab", (int)(PopOutControl.PopOuts.Log - PopOutControl.PopOuts.StartTabButtons)), max);
+            tabStripMiddleRight.SelectedIndex = Math.Min(SQLiteDBClass.GetSettingInt("TravelControlMiddleRightTab", (int)(PopOutControl.PopOuts.StarDistance - PopOutControl.PopOuts.StartTabButtons)), max);
+            tabStripTopRight.SelectedIndex = Math.Min(SQLiteDBClass.GetSettingInt("TravelControlTopRightTab", (int)(PopOutControl.PopOuts.SystemInformation - PopOutControl.PopOuts.StartTabButtons)), max);
+        }
+
+        public void SaveSettings()     // called by form when closing
+        {
+            userControlTravelGrid.Closing();
+            ((UserControlCommonBase)(tabStripBottom.CurrentControl)).Closing();
+            ((UserControlCommonBase)(tabStripBottomRight.CurrentControl)).Closing();
+            ((UserControlCommonBase)(tabStripMiddleRight.CurrentControl)).Closing();
+            ((UserControlCommonBase)(tabStripTopRight.CurrentControl)).Closing();
+
+            SQLiteDBClass.PutSettingInt("TravelControlSpliterLR", splitContainerLeftRight.SplitterDistance);
+            SQLiteDBClass.PutSettingInt("TravelControlSpliterL", splitContainerLeft.SplitterDistance);
+            SQLiteDBClass.PutSettingInt("TravelControlSpliterRO", splitContainerRightOuter.SplitterDistance);
+            SQLiteDBClass.PutSettingInt("TravelControlSpliterR", splitContainerRightInner.SplitterDistance);
+
+            SQLiteDBClass.PutSettingInt("TravelControlBottomRightTab", tabStripBottomRight.SelectedIndex);
+            SQLiteDBClass.PutSettingInt("TravelControlBottomTab", tabStripBottom.SelectedIndex);
+            SQLiteDBClass.PutSettingInt("TravelControlMiddleRightTab", tabStripMiddleRight.SelectedIndex);
+            SQLiteDBClass.PutSettingInt("TravelControlTopRightTab", tabStripTopRight.SelectedIndex);
         }
 
         #endregion
 
-        #region Display history
 
-        public void uctgRedisplay(HistoryList hl)                      // called from main travelgrid when refreshed display due to a discoveryform.OhHistoryChange
-        {
-            GenerateTravelChangeEvent(userControlTravelGrid.GetCurrentRow);
-            UpdateDependentsWithSelection();
-        }
+        #region Reaction to UCTG changing
 
-        public void UpdatedWithAddNewEntry(HistoryEntry he, HistoryList hl, bool accepted)     // main travel grid calls after getting a new entry
+        // main travel grid has a new entry due to onNewEntry
+        public void UpdatedWithAddNewEntry(HistoryEntry he, HistoryList hl, bool accepted)     
         {
             try
             {   // try is a bit old, probably do not need it.
@@ -287,16 +269,6 @@ namespace EDDiscovery
                         EDDiscoveryCore.EGO.EGOSync.SendEGOEvents(_discoveryForm.LogLine, he);
                     }
                 }
-
-                if ( accepted )                                                 // if accepted it on main grid..
-                {
-                    if (EDDiscoveryForm.EDDConfig.FocusOnNewSystem)   // Move focus to new row
-                    {
-                        userControlTravelGrid.SelectTopRow();
-                        GenerateTravelChangeEvent(userControlTravelGrid.GetCurrentRow);
-                        UpdateDependentsWithSelection();
-                    }
-                }
             }
             catch (Exception ex)
             {
@@ -305,119 +277,21 @@ namespace EDDiscovery
             }
         }
 
-        public void GenerateTravelChangeEvent(DataGridViewRow rw)
-        {
-            HistoryEntry he = null;
+        // history list was repainted, user changed selection, or auto move
 
-            if (rw != null)
-            {
-                he = userControlTravelGrid.GetHistoryEntry(rw.Index);     // reload, it may have changed
-                Debug.Assert(he != null);
-                _discoveryForm.CalculateClosestSystems(he.System, (s, d) => NewStarListComputed(s.name, d));        // hook here, force closes system update
-            }
-
-            if (OnTravelSelectionChanged != null)
-                OnTravelSelectionChanged(he, _discoveryForm.history);
-        }
-
-        private void NewStarListComputed(string name, SortedList<double, ISystem> csl)      // thread..
-        {
-            BeginInvoke((MethodInvoker)delegate
-            {
-                lastclosestname = name;
-                lastclosestsystems = csl;
-
-                if (OnNearestStarListChanged != null)
-                    OnNearestStarListChanged(name, csl);
-            });
-        }
-
-        #endregion
-
-        #region Grid Layout
-
-        public void LoadLayoutSettings() // called by discovery form by us after its adjusted itself
-        {
-            // ORDER IMPORTANT for right outer/inner splitter, otherwise windows fixes it 
-
-            if (!EDDConfig.Options.NoWindowReposition)
-            {
-                try
-                {
-                    splitContainerLeftRight.SplitterDistance = SQLiteDBClass.GetSettingInt("TravelControlSpliterLR", splitContainerLeftRight.SplitterDistance);
-                    splitContainerLeft.SplitterDistance = SQLiteDBClass.GetSettingInt("TravelControlSpliterL", splitContainerLeft.SplitterDistance);
-                    splitContainerRightOuter.SplitterDistance = SQLiteDBClass.GetSettingInt("TravelControlSpliterRO", splitContainerRightOuter.SplitterDistance);
-                    splitContainerRightInner.SplitterDistance = SQLiteDBClass.GetSettingInt("TravelControlSpliterR", splitContainerRightInner.SplitterDistance);
-                }
-                catch { };          // so splitter can except, if values are strange, but we don't really care, so lets throw away the exception
-            }
-
-            userControlTravelGrid.LoadLayout();
-
-            // NO NEED to reload the three tabstrips - code below will cause a LoadLayout on the one selected.
-
-            int max = (int)PopOutControl.PopOuts.MaxTabButtons;
-
-            tabStripBottom.SelectedIndex = Math.Min( SQLiteDBClass.GetSettingInt("TravelControlBottomTab", (int)(PopOutControl.PopOuts.Scan - PopOutControl.PopOuts.StartTabButtons)), max);
-            tabStripBottomRight.SelectedIndex = Math.Min(SQLiteDBClass.GetSettingInt("TravelControlBottomRightTab", (int)(PopOutControl.PopOuts.Log - PopOutControl.PopOuts.StartTabButtons) ), max );
-            tabStripMiddleRight.SelectedIndex = Math.Min(SQLiteDBClass.GetSettingInt("TravelControlMiddleRightTab", (int)(PopOutControl.PopOuts.StarDistance - PopOutControl.PopOuts.StartTabButtons)), max);
-            tabStripTopRight.SelectedIndex = Math.Min(SQLiteDBClass.GetSettingInt("TravelControlTopRightTab", (int)(PopOutControl.PopOuts.SystemInformation - PopOutControl.PopOuts.StartTabButtons)), max);
-        }
-
-        public void SaveSettings()     // called by form when closing
-        {
-            userControlTravelGrid.Closing();
-            ((UserControlCommonBase)(tabStripBottom.CurrentControl)).Closing();
-            ((UserControlCommonBase)(tabStripBottomRight.CurrentControl)).Closing();
-            ((UserControlCommonBase)(tabStripMiddleRight.CurrentControl)).Closing();
-            ((UserControlCommonBase)(tabStripTopRight.CurrentControl)).Closing();
-
-            SQLiteDBClass.PutSettingInt("TravelControlSpliterLR", splitContainerLeftRight.SplitterDistance);
-            SQLiteDBClass.PutSettingInt("TravelControlSpliterL", splitContainerLeft.SplitterDistance);
-            SQLiteDBClass.PutSettingInt("TravelControlSpliterRO", splitContainerRightOuter.SplitterDistance);
-            SQLiteDBClass.PutSettingInt("TravelControlSpliterR", splitContainerRightInner.SplitterDistance);
-
-            SQLiteDBClass.PutSettingInt("TravelControlBottomRightTab", tabStripBottomRight.SelectedIndex);
-            SQLiteDBClass.PutSettingInt("TravelControlBottomTab", tabStripBottom.SelectedIndex);
-            SQLiteDBClass.PutSettingInt("TravelControlMiddleRightTab", tabStripMiddleRight.SelectedIndex);
-            SQLiteDBClass.PutSettingInt("TravelControlTopRightTab", tabStripTopRight.SelectedIndex);
-        }
-
-        #endregion
-
-        #region Workers
-
-        private void Resort()       // user travel grid to say it resorted
-        {
-            UpdateDependentsWithSelection();        //TBD does this do enough.. what about dependents should we call changed selection..
-        }
-
-        private void ChangedSelection(int rowno, int colno , bool doubleclick , bool note)      // User travel grid call back to say someone clicked somewhere
+        private void ChangedSelection(int rowno, int colno, bool doubleclick, bool note)      // User travel grid call back to say someone clicked somewhere
         {
             if (rowno >= 0)
             {
-                GenerateTravelChangeEvent(userControlTravelGrid.GetRow(rowno));
-                UpdateDependentsWithSelection();
-
-                if (userControlTravelGrid.GetCurrentHistoryEntry!= null)        // paranoia
-                    _discoveryForm.ActionRun("onHistorySelection", "UserUIEvent", userControlTravelGrid.GetCurrentHistoryEntry);
-            }
-        }
-
-        private void UpdateDependentsWithSelection()        // they really should do it themselves.. but
-        {
-            if (userControlTravelGrid.GetCurrentRow != null)
-            {
                 HistoryEntry currentsys = userControlTravelGrid.GetCurrentHistoryEntry;
-                _discoveryForm.Map.UpdateHistorySystem(currentsys.System);
+
+                _discoveryForm.Map.UpdateHistorySystem(currentsys.System);      // update some dumb friends
                 _discoveryForm.RouteControl.UpdateHistorySystem(currentsys.System.name);
                 _discoveryForm.ExportControl.UpdateHistorySystem(currentsys.System.name);
-            }
-        }
 
-        void TGPopOut()
-        {
-            _discoveryForm.PopOuts.PopOut(PopOutControl.PopOuts.TravelGrid);
+                if (userControlTravelGrid.GetCurrentHistoryEntry != null)        // paranoia
+                    _discoveryForm.ActionRun("onHistorySelection", "UserUIEvent", userControlTravelGrid.GetCurrentHistoryEntry);
+            }
         }
 
         private void OnKeyDownInCell(int keyvalue, int rowno, int colno, bool note)

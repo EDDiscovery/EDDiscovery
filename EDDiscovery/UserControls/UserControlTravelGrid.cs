@@ -50,20 +50,20 @@ namespace EDDiscovery.UserControls
 
         #region Events
 
+        public delegate void Redisplay(HistoryList hl);
+        public Redisplay OnHistoryChanged;               // FIRED after discoveryform.onHistoryChange->this.Display..
+
         public delegate void ChangedSelection(int rowno, int colno, bool doubleclick, bool note);
-        public event ChangedSelection OnChangedSelection;   // After a change of selection
+        public event ChangedSelection OnChangedSelection;   // After a change of selection by the user, or after a OnHistoryChanged, or after a sort.
+
+        public delegate void ChangedSelectionHE(HistoryEntry he, HistoryList hl);
+        public event ChangedSelectionHE OnTravelSelectionChanged;   // as above, different format, for certain older controls
 
         public delegate void KeyDownInCell(int asciikeycode, int rowno, int colno, bool note);
         public event KeyDownInCell OnKeyDownInCell;   // After a change of selection
 
-        public delegate void Resort();
-        public event Resort OnResort;               // After a sort
-
         public delegate void AddedNewEntry(HistoryEntry he, HistoryList hl, bool accepted);
-        public AddedNewEntry OnAddedNewEntry;       // FIRED after discoveryform.onNewEntry->this.AddNewEntry completes
-
-        public delegate void Redisplay(HistoryList hl);
-        public Redisplay OnRedisplay;               // FIRED after discoveryform.onHistoryChange->this.Display
+        public AddedNewEntry OnNewEntry;       // FIRED after discoveryform.onNewEntry->this.AddNewEntry completes
 
         public delegate void PopOut();
         public PopOut OnPopOut;                     // pop out button pressed
@@ -108,7 +108,7 @@ namespace EDDiscovery.UserControls
             this.textBoxFilter.SetToolTip(toolTip1, "Display entries matching this string");
         }
 
-        public override void Init(EDDiscoveryForm ed, int vn) //0=primary, 1 = first windowed version, etc
+        public override void Init(EDDiscoveryForm ed, UserControlTravelGrid tg, int vn) //0=primary, 1 = first windowed version, etc
         {
             discoveryform = ed;
             displaynumber = vn;
@@ -116,7 +116,7 @@ namespace EDDiscovery.UserControls
             cfs.Changed += EventFilterChanged;
             TravelHistoryFilter.InitaliseComboBox(comboBoxHistoryWindow, DbHistorySave);
 
-            discoveryform.OnHistoryChange += Display;
+            discoveryform.OnHistoryChange += HistoryChanged;
             discoveryform.OnNewEntry += AddNewEntry;
             discoveryform.OnNoteChanged += OnNoteChanged;
 
@@ -130,17 +130,13 @@ namespace EDDiscovery.UserControls
 #if !DEBUG
             writeEventInfoToLogDebugToolStripMenuItem.Visible = false;
 #endif
+
+            ExtraIcons(false);
         }
 
-        public void NoHistoryIcon()
+        public void ExtraIcons(bool state)
         {
-            panelHistoryIcon.Visible = false;
-            drawnPanelPopOut.Location = new Point(panelHistoryIcon.Location.X, drawnPanelPopOut.Location.Y);
-        }
-
-        public void NoPopOutIcon()
-        {
-            drawnPanelPopOut.Visible = false;
+            drawnPanelPopOut.Visible = panelHistoryIcon.Visible = state;
         }
 
         public override void LoadLayout()
@@ -151,18 +147,13 @@ namespace EDDiscovery.UserControls
         public override void Closing()
         {
             DGVSaveColumnLayout(dataGridViewTravel, DbColumnSave);
-            discoveryform.OnHistoryChange -= Display;
+            discoveryform.OnHistoryChange -= HistoryChanged;
             discoveryform.OnNewEntry -= AddNewEntry;
         }
 
         #endregion
 
-        public override void Display(HistoryEntry current, HistoryList history)
-        {
-            Display(history);
-        }
-
-        public void Display(HistoryList hl)           // rowno current.. -1 if nothing
+        public void HistoryChanged(HistoryList hl)           // on History change
         {
             if (hl == null)     // just for safety
                 return;
@@ -207,18 +198,27 @@ namespace EDDiscovery.UserControls
 
             dataGridViewTravel.Columns[0].HeaderText = EDDiscoveryForm.EDDConfig.DisplayUTC ? "Game Time" : "Time";
 
-            if (OnRedisplay != null)
-                OnRedisplay(hl);
+            System.Diagnostics.Debug.WriteLine("Fire HC");
+            if (OnHistoryChanged != null)
+                OnHistoryChanged(hl);
+
+            FireChangeSelection();      // and since we repainted, we should fire selection, as we in effect may have selected a new one
         }
 
-        private void AddNewEntry(HistoryEntry he, HistoryList hl)
+        private void AddNewEntry(HistoryEntry he, HistoryList hl)           // on new entry from discovery system
         {
             bool add = WouldAddEntry(he);
             if (add)
                 AddNewHistoryRow(true, he);
 
-            if (OnAddedNewEntry != null)
-                OnAddedNewEntry(he, hl, add);
+            if (OnNewEntry != null)
+                OnNewEntry(he, hl, add);
+
+            if (add)
+            {
+                if (CheckAutoCheckSelection())          // if we change.. fire it
+                    FireChangeSelection();
+            }
         }
 
         private void AddNewHistoryRow(bool insert, HistoryEntry item)            // second part of add history row, adds item to view.
@@ -263,10 +263,17 @@ namespace EDDiscovery.UserControls
             return he.IsJournalEventInEventFilter(SQLiteDBClass.GetSettingString(DbFilterSave, "All")) && FilterHelpers.FilterHistory(he, fieldfilter, discoveryform.Globals);
         }
 
-        public void SelectTopRow()
+        bool CheckAutoCheckSelection()      // see if auto move is on
         {
-            dataGridViewTravel.ClearSelection();
-            dataGridViewTravel.CurrentCell = dataGridViewTravel.Rows[0].Cells[1];       // its the current cell which needs to be set, moves the row marker as well
+            if (EDDiscoveryForm.EDDConfig.FocusOnNewSystem && dataGridViewTravel.DisplayedRowCount(false)>0)   // Move focus to new row
+            {
+                System.Diagnostics.Debug.WriteLine("Auto Sel");
+                dataGridViewTravel.ClearSelection();
+                dataGridViewTravel.CurrentCell = dataGridViewTravel.Rows[0].Cells[1];       // its the current cell which needs to be set, moves the row marker as well
+                return true;
+            }
+            else
+                return false;
         }
 
         Tuple<long, int> CurrentGridPosByJID()          // Returns JID, column index.  JID = -1 if cell is not defined
@@ -300,10 +307,7 @@ namespace EDDiscovery.UserControls
 
             if (current_historylist != null)
             {
-                Display(current_historylist);
-
-                if (OnResort != null)
-                    OnResort();
+                HistoryChanged(current_historylist);        // fires lots of events
             }
         }
 
@@ -312,15 +316,26 @@ namespace EDDiscovery.UserControls
             if (e.ColumnIndex != TravelHistoryColumns.Icon)
             {
                 DataGridViewSorter.DataGridSort(dataGridViewTravel, e.ColumnIndex);
-                if (OnResort != null)
-                    OnResort();
+                FireChangeSelection();
+            }
+        }
+
+        private void FireChangeSelection()
+        {
+            if (dataGridViewTravel.CurrentCell != null)
+            {
+                int row = dataGridViewTravel.CurrentCell.RowIndex;
+                System.Diagnostics.Debug.WriteLine("Fire Change Sel row" + row);
+                if (OnChangedSelection != null)
+                    OnChangedSelection(row, dataGridViewTravel.CurrentCell.ColumnIndex, false, dataGridViewTravel.CurrentCell.ColumnIndex == TravelHistoryColumns.Note);
+                if (OnTravelSelectionChanged != null)
+                    OnTravelSelectionChanged(dataGridViewTravel.Rows[row].Cells[TravelHistoryColumns.HistoryTag].Tag as HistoryEntry, current_historylist);
             }
         }
 
         private void dataGridViewTravel_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            if (OnChangedSelection != null)
-                OnChangedSelection(e.RowIndex, e.ColumnIndex, false, e.ColumnIndex == TravelHistoryColumns.Note);
+            FireChangeSelection();
         }
 
         int keyrepeatcount = 0;     // 1 is first down, 2 is second.  on 2+ we call the check selection to update the screen.  The final key up finished the job.
@@ -356,10 +371,7 @@ namespace EDDiscovery.UserControls
             bool cursorkeydown = (code == Keys.Up || code == Keys.Down || code == Keys.PageDown || code == Keys.PageUp || code == Keys.Left || code == Keys.Right);
 
             if (cursorkeydown)
-            {
-                if (OnChangedSelection != null)
-                    OnChangedSelection(dataGridViewTravel.CurrentCell.RowIndex, dataGridViewTravel.CurrentCell.ColumnIndex, false, dataGridViewTravel.CurrentCell.ColumnIndex == TravelHistoryColumns.Note);
-            }
+                FireChangeSelection();
         }
 
         private void OnNoteChanged(Object sender,HistoryEntry he, bool committed)
@@ -582,7 +594,7 @@ namespace EDDiscovery.UserControls
                 }
 
                 this.Cursor = Cursors.Default;
-                Display(current_historylist);
+                HistoryChanged(current_historylist);
             }
         }
 
@@ -891,7 +903,7 @@ namespace EDDiscovery.UserControls
 
         private void EventFilterChanged(object sender, EventArgs e)
         {
-            Display(current_historylist);
+            HistoryChanged(current_historylist);
         }
 
         private void buttonField_Click(object sender, EventArgs e)
@@ -907,7 +919,7 @@ namespace EDDiscovery.UserControls
             {
                 fieldfilter = frm.result;
                 SQLiteDBClass.PutSettingString(DbFieldFilter, fieldfilter.GetJSON());
-                Display(current_historylist);
+                HistoryChanged(current_historylist);
             }
         }
 

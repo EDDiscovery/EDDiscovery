@@ -39,7 +39,7 @@ namespace EDDiscovery.UserControls
     public partial class UserControlSpanel : UserControlCommonBase
     {
         private EDDiscoveryForm discoveryform;
-        private TravelHistoryControl travelhistorycontrol;
+        private UserControlTravelGrid uctg;
 
         private int displaynumber = 0;
         private string DbSave { get { return "SPanel" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
@@ -114,10 +114,10 @@ namespace EDDiscovery.UserControls
             InitializeComponent();
         }
 
-        public override void Init(EDDiscoveryForm ed, int vn) //0=primary, 1 = first windowed version, etc
+        public override void Init(EDDiscoveryForm ed, UserControlTravelGrid thc, int vn) //0=primary, 1 = first windowed version, etc
         {
             discoveryform = ed;
-            travelhistorycontrol = ed.TravelControl;
+            uctg = thc;
             displaynumber = vn;
             discoveryform.OnHistoryChange += Display;
             discoveryform.OnNewEntry += NewEntry;
