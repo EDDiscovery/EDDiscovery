@@ -4,7 +4,7 @@ mono:
   - latest
 install:
   - nuget restore EDDiscovery.sln
-  - nuget install NUnit.ConsoleRunner -Version 3.2.1 -OutputDirectory testrunner
+  - nuget install NUnit.ConsoleRunner -Version 3.7.0 -OutputDirectory testrunner
 script:
   - xbuild /p:Configuration=Release EDDiscovery.sln /p:DefineConstants=NO_SYSTEM_SPEECH
-  - mono ./testrunner/NUnit.ConsoleRunner.3.2.1/tools/nunit3-console.exe ./EDDiscoveryTests/bin/Release/EDDiscoveryTests.dll
+  - mono ./testrunner/NUnit.ConsoleRunner.3.7.0/tools/nunit3-console.exe ./EDDiscoveryTests/bin/Release/EDDiscoveryTests.dll
