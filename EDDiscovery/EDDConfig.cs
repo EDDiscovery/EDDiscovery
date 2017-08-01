@@ -58,7 +58,6 @@ namespace EDDiscovery
         private bool _useNotifyIcon = false;
         private bool _orderrowsinverted = false;
         private bool _minimizeToNotifyIcon = false;
-        private bool _focusOnNewSystem = false; /**< Whether to automatically focus on a new system in the TravelHistory */
         private bool _keepOnTop = false; /**< Whether to keep the windows on top or not */
         private bool _displayUTC = false;
         private bool _clearMaterials = false;
@@ -127,20 +126,6 @@ namespace EDDiscovery
             {
                 _minimizeToNotifyIcon = value;
                 SQLiteConnectionUser.PutSettingBool("MinimizeToNotifyIcon", value);
-            }
-        }
-
-
-        public bool FocusOnNewSystem
-        {
-            get
-            {
-                return _focusOnNewSystem;
-            }
-            set
-            {
-                _focusOnNewSystem = value;
-                SQLiteConnectionUser.PutSettingBool("FocusOnNewSystem", value);
             }
         }
 
@@ -260,7 +245,6 @@ namespace EDDiscovery
                 _EDSMLog = SQLiteConnectionUser.GetSettingBool("EDSMLog", false, conn);
                 _orderrowsinverted = SQLiteConnectionUser.GetSettingBool("OrderRowsInverted", false, conn);
                 _minimizeToNotifyIcon = SQLiteConnectionUser.GetSettingBool("MinimizeToNotifyIcon", false, conn);
-                _focusOnNewSystem = SQLiteConnectionUser.GetSettingBool("FocusOnNewSystem", false, conn);
                 _keepOnTop = SQLiteConnectionUser.GetSettingBool("KeepOnTop", false, conn);
                 _displayUTC = SQLiteConnectionUser.GetSettingBool("DisplayUTC", false, conn);
                 _clearCommodities = SQLiteConnectionUser.GetSettingBool("ClearCommodities", false, conn);

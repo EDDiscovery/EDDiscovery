@@ -63,6 +63,13 @@ namespace EDDiscovery.UserControls
             buttonExtCoriolis.Visible = false;
         }
 
+        public virtual void ChangeTravelGrid(UserControlTravelGrid thc)
+        {
+            uctg.OnTravelSelectionChanged -= Display;
+            uctg = thc;
+            uctg.OnTravelSelectionChanged += Display;
+        }
+
         #endregion
 
         #region Display

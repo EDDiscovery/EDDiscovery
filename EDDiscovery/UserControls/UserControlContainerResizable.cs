@@ -15,6 +15,10 @@ namespace EDDiscovery.UserControls
         public Control control;
         public Action<UserControlContainerResizable> ResizeStart;
         public Action<UserControlContainerResizable> ResizeEnd;
+        public bool Selected { get { return selected; } set { SetSelected(value); } }
+
+        private const int margin = 3;
+        private bool selected = false;
 
         public UserControlContainerResizable()
         {
@@ -28,7 +32,11 @@ namespace EDDiscovery.UserControls
             PerformLayout();
         }
 
-        const int margin = 3;
+        private void SetSelected(bool s)
+        {
+            selected = s;
+            Invalidate();
+        }
 
         protected override void OnLayout(LayoutEventArgs e)
         {
@@ -39,9 +47,9 @@ namespace EDDiscovery.UserControls
 
         protected override void OnPaint(PaintEventArgs e)
         {
-            using (Pen pb = new Pen(Color.Blue, 1.0F))
+            using (Pen pb = new Pen(Color.Black, 1.0F))
             {
-                using (Pen p1 = new Pen(Color.Green, 1.0F))
+                using (Pen p1 = new Pen(Selected ? Color.Green : Color.Red, 1.0F))
                 {
                     Rectangle r = ClientRectangle;
                     r.Inflate(-1, -1);
@@ -59,7 +67,7 @@ namespace EDDiscovery.UserControls
         Point dragstart;
         Point startpos;
         Size startsize;
-        enum DragPos { None, Left, Right, Top, Bottom};
+        enum DragPos { None, Left, Right, Top, Bottom, Size};
         DragPos dp = DragPos.None;
         bool dragmoved = false;
 
@@ -77,8 +85,16 @@ namespace EDDiscovery.UserControls
             }
             else if (e.X >= Width - margin)
             {
-                Cursor.Current = Cursors.SizeWE;
-                return DragPos.Right;
+                if (e.Y >= Height - margin)
+                {
+                    Cursor.Current = Cursors.SizeNWSE;
+                    return DragPos.Size;
+                }
+                else
+                {
+                    Cursor.Current = Cursors.SizeWE;
+                    return DragPos.Right;
+                }
             }
             else if (e.Y >= Height - margin)
             {
@@ -145,6 +161,11 @@ namespace EDDiscovery.UserControls
                     }
                     else if (dp == DragPos.Right)
                         Width = startsize.Width + xdelta;
+                    else
+                    {
+                        Width = startsize.Width + xdelta;
+                        Height = startsize.Height + ydelta;
+                    }
 
                     ResumeLayout();
                     Invalidate();

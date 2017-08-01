@@ -33,7 +33,6 @@ namespace EDDiscovery.UserControls
     public partial class UserControlTrippanel : UserControlCommonBase
     {
         private EDDiscoveryForm discoveryform;
-        private UserControlTravelGrid uctg;
 
         //static String TITLE = "Trip panel";
 
@@ -52,7 +51,6 @@ namespace EDDiscovery.UserControls
         public override void Init(EDDiscoveryForm ed, UserControlTravelGrid thc, int vn) //0=primary, 1 = first windowed version, etc
         {
             discoveryform = ed;
-            uctg = thc;
             displaynumber = vn;
 
             discoveryform.OnHistoryChange += Display;
