@@ -45,7 +45,7 @@ namespace EDDiscovery.UserControls
         private List<ExplorationSetClass> _savedExplorationSets;
         private ExplorationSetClass _currentExplorationSet;
         private EDDiscoveryForm _discoveryForm;
-        private TravelHistoryControl travelhistorycontrol;
+        private UserControlTravelGrid uctg;
         private EDSMClass edsm;
         private Rectangle _dragBox;
         private int _dragRowIndex;
@@ -62,16 +62,16 @@ namespace EDDiscovery.UserControls
             Name = "Exploration";
         }
 
-        public override void Init(EDDiscoveryForm ed, int vn) //0=primary, 1 = first windowed version, etc
+        public override void Init(EDDiscoveryForm ed,  UserControlTravelGrid thc, int vn) //0=primary, 1 = first windowed version, etc
         {
             _discoveryForm = ed;
-            travelhistorycontrol = ed.TravelControl;
+            uctg = thc;
             displaynumber = vn;
             edsm = new EDSMClass();
             _currentExplorationSet = new ExplorationSetClass();
             _savedExplorationSets = new List<ExplorationSetClass>();
             _discoveryForm.OnNewEntry += NewEntry;
-            travelhistorycontrol.OnTravelSelectionChanged += Display;
+            uctg.OnTravelSelectionChanged += Display;
         }
 
         public override void LoadLayout()
@@ -82,7 +82,7 @@ namespace EDDiscovery.UserControls
         public override void Closing()
         {
             DGVSaveColumnLayout(dataGridViewExplore, DbColumnSave);
-            travelhistorycontrol.OnTravelSelectionChanged -= Display;
+            uctg.OnTravelSelectionChanged -= Display;
             _discoveryForm.OnNewEntry -= NewEntry;
         }
 

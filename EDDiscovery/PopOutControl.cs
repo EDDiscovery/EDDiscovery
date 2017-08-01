@@ -226,7 +226,9 @@ namespace EDDiscovery.Forms
                     tcf.InitForTransparency(poi.DefaultTransparent, _discoveryForm.theme.LabelColor, _discoveryForm.theme.SPanelColor);
                 }
 
-                _discoveryForm.TravelControl.UserControlPostCreate(numopened, ctrl);        // YUK YUK YUK wire up to some internals.. at some point this needs sorting out
+                ctrl.Init(_discoveryForm, _discoveryForm.TravelControl.GetTravelGrid, numopened);
+                ctrl.LoadLayout();
+
                 tcf.Show();
 
                 if (tcf.UserControl != null)

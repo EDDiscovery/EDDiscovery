@@ -66,7 +66,7 @@ namespace EDDiscovery.UserControls
             this.textBoxFilter.SetToolTip(toolTip1, "Display entries matching this string");
         }
 
-        public override void Init(EDDiscoveryForm ed, int vn) //0=primary, 1 = first windowed version, etc
+        public override void Init(EDDiscoveryForm ed, UserControlTravelGrid thc, int vn) //0=primary, 1 = first windowed version, etc
         {
             discoveryform = ed;
             displaynumber = vn;
@@ -85,17 +85,13 @@ namespace EDDiscovery.UserControls
             string filter = SQLiteDBClass.GetSettingString(DbFieldFilter, "");
             if (filter.Length > 0)
                 fieldfilter.FromJSON(filter);        // load filter
+
+            ExtraIcons(false);
         }
 
-        public void NoHistoryIcon()
+        public void ExtraIcons(bool state)
         {
-            panelJournalIcon.Visible = false;
-            drawnPanelPopOut.Location = new Point(panelJournalIcon.Location.X, drawnPanelPopOut.Location.Y);
-        }
-
-        public void NoPopOutIcon()
-        {
-            drawnPanelPopOut.Visible = false;
+            drawnPanelPopOut.Visible = panelJournalIcon.Visible = state;
         }
 
         public override void LoadLayout()

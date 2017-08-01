@@ -39,13 +39,16 @@ namespace EDDiscovery
                 uccr.Init(uccb);
                 uccr.ResizeStart += ResizeStart;
 
+                int numopened = list.Count(x => x.GetType().Equals(uccb.GetType()));    // how many others are there?
+
                 int index = list.Count;
                 uccr.Location = new Point(index * 50, index * 50);
                 uccr.Size = new Size(300, 300);
                 list.Add(uccr);
                 panelPlayfield.Controls.Add(uccr);
 
-                discoveryForm.TravelControl.UserControlPostCreate(index + 2000, uccb);
+                uccb.Init(discoveryForm, discoveryForm.TravelControl.GetTravelGrid, index + 2000);
+                uccb.LoadLayout();
 
                 uccr.Font = discoveryForm.theme.GetFont;        // Important. Apply font autoscaling to the user control
                                                                                 // ApplyToForm does not apply the font to the actual UC, only

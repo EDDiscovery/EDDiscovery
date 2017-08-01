@@ -32,6 +32,7 @@ namespace EDDiscovery.UserControls
     {
         private int displaynumber = 0;
         private EDDiscoveryForm discoveryform;
+        private UserControlTravelGrid uctg;
         
         private string DbColumnSave { get { return ("SynthesisGrid") + ((displaynumber > 0) ? displaynumber.ToString() : "") + "DGVCol"; } }
         private string DbWSave { get { return "SynthesisWanted" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
@@ -49,9 +50,10 @@ namespace EDDiscovery.UserControls
             Name = "Synthesis";
         }
 
-        public override void Init(EDDiscoveryForm ed, int vn) //0=primary, 1 = first windowed version, etc
+        public override void Init(EDDiscoveryForm ed, UserControlTravelGrid thc, int vn) //0=primary, 1 = first windowed version, etc
         {
             discoveryform = ed;
+            uctg = thc;
             displaynumber = vn;
 
             dataGridViewSynthesis.MakeDoubleBuffered();
@@ -59,7 +61,7 @@ namespace EDDiscovery.UserControls
             dataGridViewSynthesis.RowTemplate.Height = 26;
 
             discoveryform.OnNewEntry += Discoveryform_OnNewEntry;
-            ed.TravelControl.OnTravelSelectionChanged += Display;
+            uctg.OnTravelSelectionChanged += Display;
 
             Order = SQLiteDBClass.GetSettingString(DbOSave, "").RestoreArrayFromString(0, Recipes.Count);
             if (Order.Distinct().Count() != Order.Length)       // if not distinct..
@@ -190,7 +192,7 @@ namespace EDDiscovery.UserControls
         {
             DGVSaveColumnLayout(dataGridViewSynthesis, DbColumnSave);
 
-            discoveryform.TravelControl.OnTravelSelectionChanged -= Display;
+            uctg.OnTravelSelectionChanged -= Display;
             discoveryform.OnNewEntry -= Discoveryform_OnNewEntry;
 
             SQLiteDBClass.PutSettingString(DbOSave, Order.ToString(","));

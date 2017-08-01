@@ -145,13 +145,6 @@ namespace EDDiscovery
         public void RecalculateHistoryDBs() { Controller.RecalculateHistoryDBs(); }
         #endregion
 
-        #region Star Distance Calculation
-        public void CalculateClosestSystems(ISystem sys, Action<ISystem, SortedList<double, ISystem>> callback, bool ignoreDuplicates = true)
-        {
-            Controller.CalculateClosestSystems(sys, callback, ignoreDuplicates);
-        }
-        #endregion
-
         #endregion
 
         #region Initialisation

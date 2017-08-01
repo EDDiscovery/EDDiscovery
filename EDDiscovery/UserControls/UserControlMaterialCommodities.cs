@@ -29,7 +29,7 @@ namespace EDDiscovery.UserControls
 {
     public partial class UserControlMaterialCommodities : UserControlCommonBase
     {
-        private TravelHistoryControl travelhistorycontrol;
+        private UserControlTravelGrid uctg;
         private EDDiscoveryForm discoveryform;
 
         public bool materials = false;
@@ -45,10 +45,10 @@ namespace EDDiscovery.UserControls
             InitializeComponent();
         }
 
-        public override void Init( EDDiscoveryForm ed, int vn) //0=primary, 1 = first windowed version, etc
+        public override void Init( EDDiscoveryForm ed, UserControlTravelGrid thc, int vn) //0=primary, 1 = first windowed version, etc
         {
             discoveryform = ed;
-            travelhistorycontrol = ed.TravelControl;
+            uctg = thc;
             displaynumber = vn;
 
             dataGridViewMC.MakeDoubleBuffered();
@@ -63,7 +63,7 @@ namespace EDDiscovery.UserControls
                 dataGridViewMC.Columns.Remove(dataGridViewMC.Columns[1]);       //then category to give name,type,number, avg price
             }
 
-            travelhistorycontrol.OnTravelSelectionChanged += Display;
+            uctg.OnTravelSelectionChanged += Display;
 
             SetCheckBoxes();
         }
@@ -145,7 +145,7 @@ namespace EDDiscovery.UserControls
         {
             DGVSaveColumnLayout(dataGridViewMC, DbColumnSave);
 
-            travelhistorycontrol.OnTravelSelectionChanged -= Display;
+            uctg.OnTravelSelectionChanged -= Display;
         }
 
         #endregion

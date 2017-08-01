@@ -60,7 +60,7 @@ namespace EDDiscovery.UserControls
             updateScreen();
         }
         
-        public override void Init(EDDiscoveryForm ed, int vn) //0=primary, 1 = first windowed version, etc
+        public override void Init(EDDiscoveryForm ed, UserControlTravelGrid thc, int vn) //0=primary, 1 = first windowed version, etc
         {
             discoveryform = ed;
             displaynumber = vn;
