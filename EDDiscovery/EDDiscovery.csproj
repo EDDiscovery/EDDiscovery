@@ -33,8 +33,14 @@
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
     <BootstrapperEnabled>true</BootstrapperEnabled>
+    <ManifestCertificateThumbprint>6586052CF2C6A2D8348CC25AA17842FA028AED2F</ManifestCertificateThumbprint>
+    <ManifestKeyFile>EDDiscovery_TemporaryKey.pfx</ManifestKeyFile>
+    <GenerateManifests>true</GenerateManifests>
+    <SignManifests>false</SignManifests>
+    <ApplicationIcon>Resources\edlogo_3mo_icon.ico</ApplicationIcon>
+    <NoWin32Manifest>true</NoWin32Manifest>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
     <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
@@ -47,7 +53,7 @@
     <UseVSHostingProcess>false</UseVSHostingProcess>
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
     <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
@@ -57,28 +63,6 @@
     <WarningLevel>4</WarningLevel>
     <UseVSHostingProcess>false</UseVSHostingProcess>
     <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
-  <PropertyGroup>
-    <ManifestCertificateThumbprint>6586052CF2C6A2D8348CC25AA17842FA028AED2F</ManifestCertificateThumbprint>
-  </PropertyGroup>
-  <PropertyGroup>
-    <ManifestKeyFile>EDDiscovery_TemporaryKey.pfx</ManifestKeyFile>
-  </PropertyGroup>
-  <PropertyGroup>
-    <GenerateManifests>true</GenerateManifests>
-  </PropertyGroup>
-  <PropertyGroup>
-    <SignManifests>false</SignManifests>
-  </PropertyGroup>
-  <PropertyGroup>
-    <ApplicationIcon>Resources\edlogo_3mo_icon.ico</ApplicationIcon>
-  </PropertyGroup>
-  <PropertyGroup>
-    <StartupObject>
-    </StartupObject>
-  </PropertyGroup>
-  <PropertyGroup>
-    <NoWin32Manifest>true</NoWin32Manifest>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
     <DebugSymbols>true</DebugSymbols>
@@ -625,6 +609,9 @@
     <EmbeddedResource Include="UserControls\UserControlTrippanel.resx">
       <DependentUpon>UserControlTrippanel.cs</DependentUpon>
     </EmbeddedResource>
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="App.Portable.config">
       <SubType>Designer</SubType>
     </None>
@@ -774,11 +761,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config">
-      <SubType>Designer</SubType>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.0">
       <Visible>False</Visible>
       <ProductName>Microsoft .NET Framework 4 %28x86 and x64%29</ProductName>
@@ -830,7 +812,6 @@
       <Name>ExtendedControls</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
   <UsingTask TaskName="Zip" TaskFactory="CodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.v4.0.dll">
     <ParameterGroup>
       <OutputFilename ParameterType="System.String" Required="true" />
@@ -866,36 +847,32 @@
     </Task>
   </UsingTask>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <PropertyGroup>
-    <PostBuildEvent>
-    </PostBuildEvent>
-  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
   </Target>
   -->
-  <Target Name="AfterBuild" Condition=" '$(OS)' != 'Unix' ">
+  <Target Name="AfterBuild" Outputs="$(OutDir)EDDiscovery.Portable.zip" Condition="'$(OS)' != 'Unix'">
     <ItemGroup>
-      <ZipFiles Include="$(OutputPath)\EDDiscovery.exe" />
-      <ZipFiles Include="$(OutputPath)\EDDiscovery.pdb" />
-      <ZipFiles Include="$(OutputPath)\SharpDX.DirectInput.dll" />
-      <ZipFiles Include="$(OutputPath)\SharpDX.dll" />
-      <ZipFiles Include="$(ProjectDir)\App.Portable.config">
+      <ZipFiles Include="$(TargetPath)" />
+      <ZipFiles Include="$(OutDir)*.dll" />
+      <ZipFiles Include="$(OutDir)*.pdb" />
+      <ZipFiles Include="$(ProjectDir)App.Portable.config">
         <Name>EDDiscovery.exe.config</Name>
       </ZipFiles>
-      <ZipFiles Include="$(OutputPath)\CSCore.dll" />
-      <ZipFiles Include="$(OutputPath)\Newtonsoft.Json.dll" />
-      <ZipFiles Include="$(OutputPath)\OpenTK.GLControl.dll" />
-      <ZipFiles Include="$(OutputPath)\OpenTK.dll" />
-      <ZipFiles Include="$(OutputPath)\ActionLanguage.dll" />
-      <ZipFiles Include="$(OutputPath)\Audio.dll" />
-      <ZipFiles Include="$(OutputPath)\Conditions.dll" />
-      <ZipFiles Include="$(OutputPath)\DirectInput.dll" />
-      <ZipFiles Include="$(OutputPath)\ExtendedControls.dll" />
-      <ZipFiles Include="$(OutputPath)\General.dll" />
+      <Zipfiles Include="$(OutDir)x64\SQLite.Interop.dll">
+        <Name>x64\SQLite.Interop.dll</Name>
+      </Zipfiles>
+      <Zipfiles Include="$(OutDir)x86\SQLite.Interop.dll">
+        <Name>x86\SQLite.Interop.dll</Name>
+      </Zipfiles>
     </ItemGroup>
-    <Zip OutputFileName="$(OutputPath)\EDDiscovery.Portable.zip" Files="@(ZipFiles)" />
+    <Message Text="'@(ZipFiles)' -> '$(OutDir)EDDiscovery.Portable.zip'" />
+    <Zip OutputFileName="$(OutDir)EDDiscovery.Portable.zip" Files="@(ZipFiles)" />
+    <Error Condition="!Exists('$(OutDir)EDDiscovery.Portable.zip')" Importance="high" Text="Unknown error in BuildPortableZip." />
+  </Target>
+  <Target Name="CleanZipFile" AfterTargets="Clean">
+    <Delete Files="$(OutDir)EDDiscovery.Portable.zip" />
   </Target>
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
