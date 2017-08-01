@@ -47,9 +47,14 @@ namespace EDDiscovery.UserControls
             displaynumber = vn;
             discoveryform.OnNewEntry += AddNewEntry;
             uctg.OnTravelSelectionChanged += SelectionChanged;
-
             userControlStatsTimeScan.ScanMode = true;
+        }
 
+        public virtual void ChangeTravelGrid(UserControlTravelGrid thc)
+        {
+            uctg.OnTravelSelectionChanged -= Display;
+            uctg = thc;
+            uctg.OnTravelSelectionChanged += Display;
         }
 
         public override void Closing()

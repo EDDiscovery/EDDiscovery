@@ -92,6 +92,7 @@ namespace EDDiscovery.UserControls
         private string DbColumnSave { get { return "TravelControl" + ((displaynumber > 0) ? displaynumber.ToString() : "") + "DGVCol"; } }
         private string DbHistorySave { get { return "EDUIHistory" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
         private string DbFieldFilter { get { return "TravelHistoryControlFieldFilter" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
+        private string DbAutoTop { get { return "TravelHistoryControlAutoTop" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
 
         private HistoryList current_historylist;        // the last one set, for internal refresh purposes on sort
 
@@ -115,6 +116,8 @@ namespace EDDiscovery.UserControls
             cfs.ConfigureThirdOption("Travel", "Docked;FSD Jump;Undocked;");
             cfs.Changed += EventFilterChanged;
             TravelHistoryFilter.InitaliseComboBox(comboBoxHistoryWindow, DbHistorySave);
+
+            checkBoxMoveToTop.Checked = SQLiteConnectionUser.GetSettingBool(DbAutoTop, true);
 
             discoveryform.OnHistoryChange += HistoryChanged;
             discoveryform.OnNewEntry += AddNewEntry;
@@ -149,9 +152,15 @@ namespace EDDiscovery.UserControls
             DGVSaveColumnLayout(dataGridViewTravel, DbColumnSave);
             discoveryform.OnHistoryChange -= HistoryChanged;
             discoveryform.OnNewEntry -= AddNewEntry;
+            SQLiteConnectionUser.PutSettingBool(DbAutoTop, checkBoxMoveToTop.Checked);
         }
 
         #endregion
+
+        public override void Display(HistoryEntry he, HistoryList hl)       // initial caller..
+        {
+            HistoryChanged(hl);
+        }
 
         public void HistoryChanged(HistoryList hl)           // on History change
         {
@@ -216,8 +225,14 @@ namespace EDDiscovery.UserControls
 
             if (add)
             {
-                if (CheckAutoCheckSelection())          // if we change.. fire it
+                if (checkBoxMoveToTop.Checked && dataGridViewTravel.DisplayedRowCount(false) > 0)   // Move focus to new row
+                {
+                    System.Diagnostics.Debug.WriteLine("Auto Sel");
+                    dataGridViewTravel.ClearSelection();
+                    dataGridViewTravel.CurrentCell = dataGridViewTravel.Rows[0].Cells[1];       // its the current cell which needs to be set, moves the row marker as well
+
                     FireChangeSelection();
+                }
             }
         }
 
@@ -261,19 +276,6 @@ namespace EDDiscovery.UserControls
         public bool WouldAddEntry(HistoryEntry he)                  // do we filter? if its not in the journal event filter, or it is in the field filter
         {
             return he.IsJournalEventInEventFilter(SQLiteDBClass.GetSettingString(DbFilterSave, "All")) && FilterHelpers.FilterHistory(he, fieldfilter, discoveryform.Globals);
-        }
-
-        bool CheckAutoCheckSelection()      // see if auto move is on
-        {
-            if (EDDiscoveryForm.EDDConfig.FocusOnNewSystem && dataGridViewTravel.DisplayedRowCount(false)>0)   // Move focus to new row
-            {
-                System.Diagnostics.Debug.WriteLine("Auto Sel");
-                dataGridViewTravel.ClearSelection();
-                dataGridViewTravel.CurrentCell = dataGridViewTravel.Rows[0].Cells[1];       // its the current cell which needs to be set, moves the row marker as well
-                return true;
-            }
-            else
-                return false;
         }
 
         Tuple<long, int> CurrentGridPosByJID()          // Returns JID, column index.  JID = -1 if cell is not defined

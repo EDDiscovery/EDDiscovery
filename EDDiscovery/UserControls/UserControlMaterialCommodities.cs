@@ -68,6 +68,13 @@ namespace EDDiscovery.UserControls
             SetCheckBoxes();
         }
 
+        public virtual void ChangeTravelGrid(UserControlTravelGrid thc)
+        {
+            uctg.OnTravelSelectionChanged -= Display;
+            uctg = thc;
+            uctg.OnTravelSelectionChanged += Display;
+        }
+
         void SetCheckBoxes()
         {
             checkBoxClear.Enabled = false;

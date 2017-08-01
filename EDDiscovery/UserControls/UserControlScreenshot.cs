@@ -54,6 +54,13 @@ namespace EDDiscovery.UserControls
             uctg.OnTravelSelectionChanged += Display;
         }
 
+        public virtual void ChangeTravelGrid(UserControlTravelGrid thc)
+        {
+            uctg.OnTravelSelectionChanged -= Display;
+            uctg = thc;
+            uctg.OnTravelSelectionChanged += Display;
+        }
+
         public override void Closing()
         {
             discoveryform.ImageHandler.OnScreenShot -= ScreenShot;

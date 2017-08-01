@@ -1,6 +1,6 @@
-﻿namespace EDDiscovery
+﻿namespace EDDiscovery.UserControls
 {
-    partial class GridControl
+    partial class UserControlContainerGrid
     {
         /// <summary> 
         /// Required designer variable.
@@ -28,14 +28,18 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.rollUpPanel1 = new ExtendedControls.RollUpPanel();
             this.comboBoxGridSelector = new ExtendedControls.ComboBoxCustom();
             this.panelPlayfield = new System.Windows.Forms.Panel();
+            this.buttonExtDelete = new ExtendedControls.ButtonExt();
+            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.rollUpPanel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // rollUpPanel1
             // 
+            this.rollUpPanel1.Controls.Add(this.buttonExtDelete);
             this.rollUpPanel1.Controls.Add(this.comboBoxGridSelector);
             this.rollUpPanel1.Dock = System.Windows.Forms.DockStyle.Top;
             this.rollUpPanel1.HiddenMarkerWidth = 0;
@@ -74,6 +78,7 @@
             this.comboBoxGridSelector.Size = new System.Drawing.Size(164, 21);
             this.comboBoxGridSelector.TabIndex = 2;
             this.comboBoxGridSelector.TabStop = false;
+            this.toolTip1.SetToolTip(this.comboBoxGridSelector, "Select Panel to open");
             this.comboBoxGridSelector.ValueMember = "";
             this.comboBoxGridSelector.SelectedIndexChanged += new System.EventHandler(this.comboBoxGridSelector_SelectedIndexChanged);
             // 
@@ -84,6 +89,24 @@
             this.panelPlayfield.Name = "panelPlayfield";
             this.panelPlayfield.Size = new System.Drawing.Size(912, 612);
             this.panelPlayfield.TabIndex = 2;
+            // 
+            // buttonExtDelete
+            // 
+            this.buttonExtDelete.BorderColorScaling = 1.25F;
+            this.buttonExtDelete.ButtonColorScaling = 0.5F;
+            this.buttonExtDelete.ButtonDisabledScaling = 0.5F;
+            this.buttonExtDelete.Location = new System.Drawing.Point(185, 4);
+            this.buttonExtDelete.Name = "buttonExtDelete";
+            this.buttonExtDelete.Size = new System.Drawing.Size(26, 24);
+            this.buttonExtDelete.TabIndex = 3;
+            this.buttonExtDelete.Text = "X";
+            this.toolTip1.SetToolTip(this.buttonExtDelete, "Remove selected panel");
+            this.buttonExtDelete.UseVisualStyleBackColor = true;
+            this.buttonExtDelete.Click += new System.EventHandler(this.buttonExtDelete_Click);
+            // 
+            // toolTip1
+            // 
+            this.toolTip1.ShowAlways = true;
             // 
             // GridControl
             // 
@@ -102,5 +125,7 @@
         private ExtendedControls.RollUpPanel rollUpPanel1;
         private ExtendedControls.ComboBoxCustom comboBoxGridSelector;
         private System.Windows.Forms.Panel panelPlayfield;
+        private ExtendedControls.ButtonExt buttonExtDelete;
+        private System.Windows.Forms.ToolTip toolTip1;
     }
 }
