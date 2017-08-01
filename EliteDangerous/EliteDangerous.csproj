@@ -69,32 +69,32 @@
     <Compile Include="CompanionAPI\CStarport.cs" />
     <Compile Include="CompanionAPI\CSystem.cs" />
     <Compile Include="CompanionAPI\RijndaelCrypt.cs" />
+    <Compile Include="Config\EliteConfig.cs" />
     <Compile Include="DB\BookmarkClass.cs" />
     <Compile Include="DB\IVisitedSystems.cs" />
     <Compile Include="DB\RegisterEntry.cs" />
-    <Compile Include="DB\SavedRouteClass.cs" />
     <Compile Include="DB\SQLiteCommandED.cs" />
     <Compile Include="DB\SQLiteConnectionED.cs" />
     <Compile Include="DB\SQLiteConnectionSystem.cs" />
     <Compile Include="DB\SQLiteConnectionUser.cs" />
     <Compile Include="DB\SQLiteDBClass.cs" />
+    <Compile Include="DB\SavedRouteClass.cs" />
     <Compile Include="DB\SqLiteDBSchema.cs" />
     <Compile Include="DB\SystemClassDB.cs" />
     <Compile Include="DB\SystemNoteClass.cs" />
     <Compile Include="DB\TargetClass.cs" />
     <Compile Include="DB\TravelLogUnit.cs" />
     <Compile Include="DB\WantedSystemClass.cs" />
-    <Compile Include="Config\EliteConfig.cs" />
+    <Compile Include="EDDB\SystemClassEDDB.cs" />
     <Compile Include="EDDN\EDDNClass.cs" />
     <Compile Include="EDDN\EDDNSync.cs" />
     <Compile Include="EDSM\EDSMClass.cs" />
     <Compile Include="EDSM\EDSMLogFetcher.cs" />
     <Compile Include="EDSM\EDSMSync.cs" />
-    <Compile Include="EDSM\GalacticMapObject.cs" />
-    <Compile Include="EDSM\GalacticMapping.cs" />
-    <Compile Include="EDSM\GalacticMapSystem.cs" />
     <Compile Include="EDSM\GalMapType.cs" />
-    <Compile Include="EDDB\SystemClassEDDB.cs" />
+    <Compile Include="EDSM\GalacticMapObject.cs" />
+    <Compile Include="EDSM\GalacticMapSystem.cs" />
+    <Compile Include="EDSM\GalacticMapping.cs" />
     <Compile Include="EDSM\SystemClassEDSM.cs" />
     <Compile Include="EGO\EGOClass.cs" />
     <Compile Include="EGO\EGOSync.cs" />
@@ -110,7 +110,18 @@
     <Compile Include="EliteDangerous\JournalEntry.cs" />
     <Compile Include="EliteDangerous\JournalEntryAttributes.cs" />
     <Compile Include="EliteDangerous\JournalEntryInterfaces.cs" />
+    <Compile Include="EliteDangerous\JournalFieldNaming.cs" />
+    <Compile Include="EliteDangerous\Ledger.cs" />
+    <Compile Include="EliteDangerous\LogReaderBase.cs" />
+    <Compile Include="EliteDangerous\MaterialCommodities.cs" />
+    <Compile Include="EliteDangerous\MaterialCommoditiesList.cs" />
+    <Compile Include="EliteDangerous\MissionList.cs" />
+    <Compile Include="EliteDangerous\ModuleEDID.cs" />
+    <Compile Include="EliteDangerous\NetLogClass.cs" />
+    <Compile Include="EliteDangerous\NetLogReader.cs" />
+    <Compile Include="EliteDangerous\ShipInformation.cs" />
     <Compile Include="EliteDangerous\StarScan.cs" />
+    <Compile Include="EliteDangerous\SystemClass.cs" />
     <Compile Include="HistoryList\HistoryList.cs" />
     <Compile Include="JournalEvents\JournalApproachSettlement.cs" />
     <Compile Include="JournalEvents\JournalBounty.cs" />
@@ -136,18 +147,18 @@
     <Compile Include="JournalEvents\JournalCrewMemberJoins.cs" />
     <Compile Include="JournalEvents\JournalCrewMemberQuits.cs" />
     <Compile Include="JournalEvents\JournalCrewMemberRoleChange.cs" />
+    <Compile Include="JournalEvents\JournalDataScanned.cs" />
     <Compile Include="JournalEvents\JournalDatalinkScan.cs" />
     <Compile Include="JournalEvents\JournalDatalinkVoucher.cs" />
-    <Compile Include="JournalEvents\JournalDataScanned.cs" />
     <Compile Include="JournalEvents\JournalDied.cs" />
-    <Compile Include="JournalEvents\JournalDocked.cs" />
     <Compile Include="JournalEvents\JournalDockFighter.cs" />
+    <Compile Include="JournalEvents\JournalDockSRV.cs" />
+    <Compile Include="JournalEvents\JournalDocked.cs" />
     <Compile Include="JournalEvents\JournalDockingCancelled.cs" />
     <Compile Include="JournalEvents\JournalDockingDenied.cs" />
     <Compile Include="JournalEvents\JournalDockingGranted.cs" />
     <Compile Include="JournalEvents\JournalDockingRequested.cs" />
     <Compile Include="JournalEvents\JournalDockingTimeout.cs" />
-    <Compile Include="JournalEvents\JournalDockSRV.cs" />
     <Compile Include="JournalEvents\JournalEDDCommodityPrices.cs" />
     <Compile Include="JournalEvents\JournalEDDItemSet.cs" />
     <Compile Include="JournalEvents\JournalEjectCargo.cs" />
@@ -157,11 +168,11 @@
     <Compile Include="JournalEvents\JournalEngineerCraft.cs" />
     <Compile Include="JournalEvents\JournalEngineerProgress.cs" />
     <Compile Include="JournalEvents\JournalEscapeInterdiction.cs" />
+    <Compile Include="JournalEvents\JournalFSDJump.cs" />
     <Compile Include="JournalEvents\JournalFactionKillBond.cs" />
     <Compile Include="JournalEvents\JournalFetchRemoteModule.cs" />
     <Compile Include="JournalEvents\JournalFileheader.cs" />
     <Compile Include="JournalEvents\JournalFriends.cs" />
-    <Compile Include="JournalEvents\JournalFSDJump.cs" />
     <Compile Include="JournalEvents\JournalFuelScope.cs" />
     <Compile Include="JournalEvents\JournalHeatDamage.cs" />
     <Compile Include="JournalEvents\JournalHeatWarning.cs" />
@@ -177,8 +188,8 @@
     <Compile Include="JournalEvents\JournalLiftoff.cs" />
     <Compile Include="JournalEvents\JournalLoadGame.cs" />
     <Compile Include="JournalEvents\JournalLoadout.cs" />
-    <Compile Include="JournalEvents\JournalLocation.cs" />
     <Compile Include="JournalEvents\JournalLocOrJump.cs" />
+    <Compile Include="JournalEvents\JournalLocation.cs" />
     <Compile Include="JournalEvents\JournalMarketBuy.cs" />
     <Compile Include="JournalEvents\JournalMarketSell.cs" />
     <Compile Include="JournalEvents\JournalMassModuleStore.cs" />
@@ -198,6 +209,7 @@
     <Compile Include="JournalEvents\JournalModuleStore.cs" />
     <Compile Include="JournalEvents\JournalModuleSwap.cs" />
     <Compile Include="JournalEvents\JournalNewCommander.cs" />
+    <Compile Include="JournalEvents\JournalPVPKill.cs" />
     <Compile Include="JournalEvents\JournalPassengers.cs" />
     <Compile Include="JournalEvents\JournalPayFines.cs" />
     <Compile Include="JournalEvents\JournalPayLegacyFines.cs" />
@@ -212,7 +224,6 @@
     <Compile Include="JournalEvents\JournalPowerplayVoucher.cs" />
     <Compile Include="JournalEvents\JournalProgress.cs" />
     <Compile Include="JournalEvents\JournalPromotion.cs" />
-    <Compile Include="JournalEvents\JournalPVPKill.cs" />
     <Compile Include="JournalEvents\JournalQuitACrew.cs" />
     <Compile Include="JournalEvents\JournalRank.cs" />
     <Compile Include="JournalEvents\JournalRebootRepair.cs" />
@@ -245,35 +256,215 @@
     <Compile Include="JournalEvents\JournalSynthesis.cs" />
     <Compile Include="JournalEvents\JournalSystemsShutdown.cs" />
     <Compile Include="JournalEvents\JournalTouchdown.cs" />
+    <Compile Include="JournalEvents\JournalUSSDrop.cs" />
     <Compile Include="JournalEvents\JournalUndocked.cs" />
     <Compile Include="JournalEvents\JournalUnknown.cs" />
-    <Compile Include="JournalEvents\JournalUSSDrop.cs" />
     <Compile Include="JournalEvents\JournalVehicleSwitch.cs" />
     <Compile Include="JournalEvents\JournalWingAdd.cs" />
     <Compile Include="JournalEvents\JournalWingInvite.cs" />
     <Compile Include="JournalEvents\JournalWingJoin.cs" />
     <Compile Include="JournalEvents\JournalWingLeave.cs" />
-    <Compile Include="EliteDangerous\JournalFieldNaming.cs" />
-    <Compile Include="EliteDangerous\Ledger.cs" />
-    <Compile Include="EliteDangerous\LogReaderBase.cs" />
-    <Compile Include="EliteDangerous\MaterialCommodities.cs" />
-    <Compile Include="EliteDangerous\MaterialCommoditiesList.cs" />
-    <Compile Include="EliteDangerous\MissionList.cs" />
-    <Compile Include="EliteDangerous\ModuleEDID.cs" />
-    <Compile Include="EliteDangerous\NetLogClass.cs" />
-    <Compile Include="EliteDangerous\NetLogReader.cs" />
-    <Compile Include="EliteDangerous\ShipInformation.cs" />
-    <Compile Include="EliteDangerous\SystemClass.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\A9III_White.png" />
+    <None Include="Resources\Ammonia_Brown.png" />
+    <None Include="Resources\ammunition.png" />
+    <None Include="Resources\approachsettlement.png" />
+    <None Include="Resources\B6V_Blueish.png" />
+    <None Include="Resources\Black_Hole.png" />
+    <None Include="Resources\Blackhole.PNG" />
+    <None Include="Resources\bounty.png" />
+    <None Include="Resources\buydrones.png" />
+    <None Include="Resources\buyexplorationdata.png" />
+    <None Include="Resources\buytradedata.png" />
+    <None Include="Resources\C7III.png" />
+    <None Include="Resources\Calendar.png" />
+    <None Include="Resources\capshipbond.png" />
+    <None Include="Resources\cargomanifest.png" />
+    <None Include="Resources\changecrewrole.png" />
+    <None Include="Resources\changecrewrols.png" />
+    <None Include="Resources\Class_I_Gas_Giant_Brown2.png" />
+    <None Include="Resources\Class_II_Gas_Giant_Sand1.png" />
+    <None Include="Resources\Class_III_Gas_Giant_Blue3.png" />
+    <None Include="Resources\clearsavedgame.png" />
+    <None Include="Resources\cockpitbreached.png" />
+    <None Include="Resources\Coffinicon.png" />
+    <None Include="Resources\collectcargo.png" />
+    <None Include="Resources\comet.PNG" />
+    <None Include="Resources\commitcrime.png" />
+    <None Include="Resources\commodities.png" />
+    <None Include="Resources\communitygoaldiscard.png" />
+    <None Include="Resources\communitygoaljoin.png" />
+    <None Include="Resources\communitygoalreward.png" />
+    <None Include="Resources\crewassign.png" />
+    <None Include="Resources\crewfire.png" />
+    <None Include="Resources\crewhire.png" />
+    <None Include="Resources\crewmemberjoins.png" />
+    <None Include="Resources\crewmemberquits.png" />
+    <None Include="Resources\DA6VII_White.png" />
+    <None Include="Resources\damage.png" />
+    <None Include="Resources\datalinkscan.png" />
+    <None Include="Resources\datalinkvoucher.png" />
+    <None Include="Resources\datascanned.png" />
+    <None Include="Resources\DefaultStar.png" />
+    <None Include="Resources\dockfighter.png" />
+    <None Include="Resources\dockingcancelled.png" />
+    <None Include="Resources\dockingdenied.png" />
+    <None Include="Resources\dockinggranted.png" />
+    <None Include="Resources\dockingrequest.png" />
+    <None Include="Resources\dockingtimeout.png" />
+    <None Include="Resources\docksrv.png" />
+    <None Include="Resources\Earth_Like_Standard.png" />
+    <None Include="Resources\ejectcargo.png" />
+    <None Include="Resources\engineerapply.png" />
+    <None Include="Resources\engineercraft.png" />
+    <None Include="Resources\engineerprogress.png" />
+    <None Include="Resources\escapeinterdiction.png" />
+    <None Include="Resources\event.png" />
+    <None Include="Resources\F5VAB.png" />
+    <None Include="Resources\factionkillbond.png" />
+    <None Include="Resources\fetchremotemodule.png" />
+    <None Include="Resources\fighter.png" />
+    <None Include="Resources\fileheader.png" />
+    <None Include="Resources\friends.png" />
+    <None Include="Resources\fuelscoop.png" />
+    <None Include="Resources\G1IV.png" />
+    <None Include="Resources\G8V_and_G9V.png" />
+    <None Include="Resources\Gas_giant_ammonia_based_life1.png" />
+    <None Include="Resources\Gas_giant_water_based_life_Brown3.png" />
+    <None Include="Resources\genericevent.png" />
+    <None Include="Resources\Globe.png" />
+    <None Include="Resources\Globe_yellow.png" />
+    <None Include="Resources\heatdamage.png" />
+    <None Include="Resources\Helium_Rich_Gas_Giant1.png" />
+    <None Include="Resources\High_metal_content_world_Lava1.png" />
+    <None Include="Resources\High_metal_content_world_Mix3.png" />
+    <None Include="Resources\High_metal_content_world_Orange8.png" />
+    <None Include="Resources\High_metal_content_world_White3.png" />
+    <None Include="Resources\hyperspace.png" />
+    <None Include="Resources\Icy_Body_Greenish1.png" />
+    <None Include="Resources\interdicted.png" />
+    <None Include="Resources\interdiction.png" />
+    <None Include="Resources\jetconeboost.png" />
+    <None Include="Resources\jetconedamage.png" />
+    <None Include="Resources\joinacrew.png" />
+    <None Include="Resources\K0V.png" />
+    <None Include="Resources\K1IV.png" />
+    <None Include="Resources\kickcrewmember.png" />
+    <None Include="Resources\L3V.png" />
+    <None Include="Resources\launchfighter.png" />
+    <None Include="Resources\launchsrv.png" />
+    <None Include="Resources\liftoff.png" />
+    <None Include="Resources\loadgame.png" />
+    <None Include="Resources\loadout.png" />
+    <None Include="Resources\location.png" />
+    <None Include="Resources\M1VA.png" />
+    <None Include="Resources\M5V.png" />
+    <None Include="Resources\marketbuy.png" />
+    <None Include="Resources\marketdata.png" />
+    <None Include="Resources\marketsell.png" />
+    <None Include="Resources\material.png" />
+    <None Include="Resources\materialcollected.png" />
+    <None Include="Resources\materialdiscarded.png" />
+    <None Include="Resources\materialdiscovered.png" />
+    <None Include="Resources\materials.png" />
+    <None Include="Resources\metal_rich.png" />
+    <None Include="Resources\miningrefined.png" />
+    <None Include="Resources\missionabandoned.png" />
+    <None Include="Resources\missionaccepted.png" />
+    <None Include="Resources\missioncompleted.png" />
+    <None Include="Resources\missionfailed.png" />
+    <None Include="Resources\module.png" />
+    <None Include="Resources\modulebuy.png" />
+    <None Include="Resources\moduleretrieve.png" />
+    <None Include="Resources\modulesell.png" />
+    <None Include="Resources\modulestore.png" />
+    <None Include="Resources\moduleswap.png" />
+    <None Include="Resources\mothership.png" />
+    <None Include="Resources\nebula.PNG" />
+    <None Include="Resources\Neutron_Star.png" />
+    <None Include="Resources\newcommander.png" />
+    <None Include="Resources\no_entry.png" />
+    <None Include="Resources\O.png" />
+    <None Include="Resources\passengers.png" />
+    <None Include="Resources\payfines.png" />
+    <None Include="Resources\PlanetaryNebula.PNG" />
+    <None Include="Resources\pointofinterest.png" />
+    <None Include="Resources\powerplaycollect.png" />
+    <None Include="Resources\powerplaydefect.png" />
+    <None Include="Resources\powerplaydeliver.png" />
+    <None Include="Resources\powerplayfasttrack.png" />
+    <None Include="Resources\powerplayjoin.png" />
+    <None Include="Resources\powerplayleave.png" />
+    <None Include="Resources\powerplaysalary.png" />
+    <None Include="Resources\powerplayvote.png" />
+    <None Include="Resources\powerplayvoucher.png" />
+    <None Include="Resources\progress.png" />
+    <None Include="Resources\promotion.png" />
+    <None Include="Resources\pulsar.PNG" />
+    <None Include="Resources\pvpkill.png" />
+    <None Include="Resources\quitacrew.png" />
+    <None Include="Resources\rank.png" />
+    <None Include="Resources\rebootrepair.png" />
+    <None Include="Resources\receivetext.png" />
+    <None Include="Resources\refuel.png" />
+    <None Include="Resources\refuelall.png" />
+    <None Include="Resources\repair.png" />
+    <None Include="Resources\repairall.png" />
+    <None Include="Resources\ressurect.png" />
+    <None Include="Resources\restockfighter.png" />
+    <None Include="Resources\restocksrv.png" />
+    <None Include="Resources\Rocky_Body_Sand2.png" />
+    <None Include="Resources\Rocky_Ice_World_Sol_Titan.png" />
+    <None Include="Resources\scan.png" />
+    <None Include="Resources\scanned.png" />
+    <None Include="Resources\scientificresearch.png" />
+    <None Include="Resources\screenshot.png" />
+    <None Include="Resources\selfdestruct.png" />
+    <None Include="Resources\selldrones.png" />
+    <None Include="Resources\sellexplorationdata.png" />
+    <None Include="Resources\sendtext.png" />
+    <None Include="Resources\setusershipname.png" />
+    <None Include="Resources\shields.png" />
+    <None Include="Resources\shieldsdown.png" />
+    <None Include="Resources\shieldsup.png" />
+    <None Include="Resources\shipyardnew.png" />
+    <None Include="Resources\shipyardsell.png" />
+    <None Include="Resources\shipyardswap.png" />
+    <None Include="Resources\shipyardtransfer.png" />
+    <None Include="Resources\Star_K1IV.png" />
+    <None Include="Resources\starcluster.PNG" />
+    <None Include="Resources\startjump.png" />
+    <None Include="Resources\Stationenter.png" />
+    <None Include="Resources\Stationexit.png" />
+    <None Include="Resources\supercruiseenter.png" />
+    <None Include="Resources\supercruiseexit.png" />
+    <None Include="Resources\synthesis.png" />
+    <None Include="Resources\T4V.png" />
+    <None Include="Resources\textreceived.png" />
+    <None Include="Resources\textsent.png" />
+    <None Include="Resources\touchdown.png" />
+    <None Include="Resources\uss.png" />
+    <None Include="Resources\Water_Giant1.png" />
+    <None Include="Resources\Water_World_Poles_Cloudless4.png" />
+    <None Include="Resources\wingadd.png" />
+    <None Include="Resources\wingjoin.png" />
+    <None Include="Resources\wingleave.png" />
+    <None Include="Resources\Y2.png" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\BaseUtils\BaseUtils.csproj">
@@ -284,603 +475,6 @@
       <Project>{2049403f-f4c7-45e6-b777-6390c78e4d2b}</Project>
       <Name>ExtendedControls</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\bounty.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\buydrones.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\buyexplorationdata.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\buytradedata.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\C7III.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Calendar.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\capshipbond.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\cargomanifest.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\changecrewrole.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\changecrewrols.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\collectcargo.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\clearsavedgame.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\cockpitbreached.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Coffinicon.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\dockfighter.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\docksrv.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\dockingcancelled.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\dockingdenied.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\dockinggranted.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\dockingrequest.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\dockingtimeout.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\factionkillbond.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\fetchremotemodule.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\fighter.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\fileheader.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\friends.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\fuelscoop.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\heatdamage.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\ejectcargo.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\engineerapply.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\engineercraft.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\engineerprogress.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\escapeinterdiction.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\event.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\loadout.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\location - Copy.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\marketbuy - Copy.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\marketdata - Copy.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\interdicted - Copy.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\interdiction - Copy.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\jetconeboost - Copy.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\jetconedamage - Copy.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\joinacrew - Copy.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\kickcrewmember - Copy.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\launchfighter - Copy.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\launchsrv - Copy.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\loadgame.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\loadout - Copy.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\marketdata.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\marketsell.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\material.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\materialcollected.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\materialdiscarded.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\materialdiscovered.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\supercruiseenter.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\supercruiseexit.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\textsent.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\textreceived.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\touchdown.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\wingjoin.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\wingleave.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\wingadd.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\shieldsup.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\shields.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\shieldsdown.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\shipyardtransfer.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\shipyardnew.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\shipyardsell.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\shipyardswap.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\scientificresearch.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\restockfighter.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\restocksrv.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\ressurect.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\refuel.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\refuelall.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\receivetext.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\pvpkill.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\quitacrew.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\rank.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\rebootrepair.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\powerplayvoucher.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\progress.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\promotion.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\powerplaysalary.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\powerplayvote.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\powerplayjoin.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\powerplayleave.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\moduleretrieve.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\modulesell.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\modulestore.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\module.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\modulebuy.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\miningrefined.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\materials.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\marketbuy.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\location.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\liftoff.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\launchfighter.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\kickcrewmember.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\joinacrew.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\jetconedamage.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\jetconeboost.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\interdicted.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\interdiction.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\hyperspace.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\genericevent.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Globe.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\metal_rich.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Neutron_Star.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\O.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\K0V.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\K1IV.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\L3V.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\M1VA.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\M5V.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\G1IV.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\G8V_and_G9V.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Gas_giant_ammonia_based_life1.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Gas_giant_water_based_life_Brown3.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Class_I_Gas_Giant_Brown2.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Class_II_Gas_Giant_Sand1.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Class_III_Gas_Giant_Blue3.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\DA6VII_White.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\DefaultStar.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Earth_Like_Standard.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\F5VAB.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\datalinkvoucher.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\datalinkscan.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\damage.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\crewmemberjoins.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\crewmemberquits.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\crewassign.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\crewfire.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\crewhire.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\communitygoalreward.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\communitygoaldiscard.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\communitygoaljoin.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\datascanned.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Black_Hole.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\B6V_Blueish.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\approachsettlement.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\commitcrime.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\ammunition.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Ammonia_Brown.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\A9III_White.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Helium_Rich_Gas_Giant1.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\High_metal_content_world_Mix3.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Globe_yellow.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Icy_Body_Greenish1.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\launchsrv.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\High_metal_content_world_White3.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\High_metal_content_world_Orange8.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\moduleswap.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\passengers.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\newcommander.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\powerplaydefect.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\powerplaycollect.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\powerplaydeliver.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\powerplayfasttrack.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\payfines.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\mothership.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\missionabandoned.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\missionaccepted.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\missioncompleted.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\missionfailed.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\repair.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\repairall.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Rocky_Ice_World_Sol_Titan.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Rocky_Body_Sand2.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Water_World_Poles_Cloudless4.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Y2.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Water_Giant1.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\uss.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\T4V.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\synthesis.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Stationenter.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Stationexit.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Star_K1IV.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\startjump.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\setusershipname.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\sendtext.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\sellexplorationdata.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\selldrones.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\selfdestruct.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\screenshot.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\scanned.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\scan.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\High_metal_content_world_Lava1.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\commodities.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\PlanetaryNebula.PNG" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\pointofinterest.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Blackhole.PNG" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\comet.PNG" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\no_entry.bmp" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\pulsar.PNG" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\starcluster.PNG" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\nebula.PNG" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\System.Data.SQLite.Core.1.0.105.2\build\net46\System.Data.SQLite.Core.targets" Condition="Exists('..\packages\System.Data.SQLite.Core.1.0.105.2\build\net46\System.Data.SQLite.Core.targets')" />
