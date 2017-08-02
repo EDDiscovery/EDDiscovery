@@ -79,16 +79,6 @@ namespace EDDiscovery
 
         // methods
 
-        protected override void Dispose(bool disposing)
-        {   // EDDMainForm gets cleaned up elsewhere if it has been ctor'd but not assigned to MainForm.
-            if (disposing)
-            {
-                MainForm?.Dispose();
-            }
-            MainForm = null;
-            base.Dispose(disposing);
-        }
-
         // Display a loading message on the SplashForm, if it is visible.
         private void SetLoadingMsg(string msg)
         {
@@ -101,7 +91,7 @@ namespace EDDiscovery
 
         // event handlers
 
-        // Initialize everything on the UI thread soon after the `Application` has been `.Run()`.
+        // Initialize everything on the UI thread soon after the `Application` has been `.Run()`, and transfer context (MainForm) from the SplashForm to the EDDiscoveryForm.
         private void initTimer_Tick(object sender, EventArgs e)
         {
             ((Timer)sender)?.Stop();
@@ -119,7 +109,7 @@ namespace EDDiscovery
             }
             catch (Exception ex)
             {   // There's so many ways that things could go wrong during init; let's fail for everything!
-                EDDMainForm.Dispose();
+                EDDMainForm?.Dispose();
                 string msg = ex.Message ?? "(Unknown exception)";
                 string st = ex.StackTrace ?? "(Stack trace unavailable)";
 
