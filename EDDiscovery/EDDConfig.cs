@@ -365,7 +365,7 @@ namespace EDDiscovery
             public string ReadJournal { get; private set; }
             public string OptionsFile { get; private set; }
 
-            private void SetAppDataDirectory(string appfolder, bool portable)
+            private string GetAppDataDirectory(string appfolder, bool portable)
             {
                 if (appfolder == null)
                 {
@@ -374,16 +374,21 @@ namespace EDDiscovery
 
                 if (Path.IsPathRooted(appfolder))
                 {
-                    AppDataDirectory = appfolder;
+                    return appfolder;
                 }
                 else if (portable)
                 {
-                    AppDataDirectory = Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, appfolder);
+                    return Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, appfolder);
                 }
                 else
                 {
-                    AppDataDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), appfolder);
+                    return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), appfolder);
                 }
+            }
+
+            private void SetAppDataDirectory(string appfolder, bool portable)
+            {
+                AppDataDirectory = GetAppDataDirectory(appfolder, portable);
 
                 if (!Directory.Exists(AppDataDirectory))
                     Directory.CreateDirectory(AppDataDirectory);
@@ -462,9 +467,11 @@ namespace EDDiscovery
                     }
                 }
 
-                if ((!optionsFileOverridden || !optionsFilePathRooted) && File.Exists(Path.Combine(AppDataDirectory, optionsFileName)))
+                string appdatadir = GetAppDataDirectory(AppFolder, StoreDataInProgramDirectory);
+
+                if ((!optionsFileOverridden || !optionsFilePathRooted) && File.Exists(Path.Combine(appdatadir, optionsFileName)))
                 {
-                    OptionsFile = Path.Combine(AppDataDirectory, optionsFileName);
+                    OptionsFile = Path.Combine(appdatadir, optionsFileName);
                     foreach (string line in File.ReadAllLines(OptionsFile))
                     {
                         string[] kvp = line.Split(new char[] { ' ' }, 2).Select(s => s.Trim()).ToArray();
