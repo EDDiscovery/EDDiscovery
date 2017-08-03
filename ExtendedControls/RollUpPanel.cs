@@ -30,6 +30,7 @@ namespace ExtendedControls
         public int UnrolledHeight { get; set; } = 32;
         public int RolledUpHeight { get; set; } = 5;
         public int RollPixelStep { get; set; } = 5;
+        public bool ShowHiddenMarker { get { return hiddenmarkershow; } set { hiddenmarkershow = value; SetHMViz();} }
 
         public int HiddenMarkerWidth { get; set; } = 0;   //0 = full width
 
@@ -43,6 +44,8 @@ namespace ExtendedControls
         enum Mode { None, PauseBeforeRollDown, PauseBeforeRollUp, RollUp, RollDown};
         Mode mode;
         Timer timer;
+        bool hiddenmarkershow = true;           // if to show it at all.
+        bool hiddenmarkershouldbeshown = false; // if to show it now
 
         public RollUpPanel()
         {
@@ -80,6 +83,12 @@ namespace ExtendedControls
             pinbutton.Visible = false;
         }
 
+        protected override void OnBackColorChanged(EventArgs e)
+        {
+            pinbutton.BackColor = BackColor;
+            hiddenmarker.BackColor = BackColor;
+        }
+
         private void Hiddenmarker_Click(object sender, EventArgs e)
         {
             if ( mode == Mode.PauseBeforeRollDown )
@@ -88,6 +97,11 @@ namespace ExtendedControls
                 timer.Stop();
                 Timer_Tick(sender, e);
             }
+        }
+
+        public void SetHMViz()
+        {
+            hiddenmarker.Visible = hiddenmarkershow & hiddenmarkershouldbeshown;
         }
 
         public void SetPinState(bool state)
@@ -258,7 +272,8 @@ namespace ExtendedControls
                             c.Visible = false;
                     }
 
-                    hiddenmarker.Visible = true;
+                    hiddenmarkershouldbeshown = true;
+                    SetHMViz();
                     //System.Diagnostics.Debug.WriteLine(Environment.TickCount + " At min h");
 
                     mode = Mode.None;
@@ -272,7 +287,8 @@ namespace ExtendedControls
                 {
                     timer.Stop();
                     mode = Mode.None;
-                    hiddenmarker.Visible = false;
+                    hiddenmarkershouldbeshown = false;
+                    SetHMViz();
                 }
 
                 if (!inarea && !pinbutton.Checked)      // but not in area now, and not held.. so start roll up procedure

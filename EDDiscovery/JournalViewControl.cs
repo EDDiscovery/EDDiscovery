@@ -30,7 +30,7 @@ namespace EDDiscovery
 {
     public partial class JournalViewControl : UserControl
     {
-        EDDiscoveryForm discoveryform;
+        EDDiscoveryForm discoveryForm;
 
         public JournalViewControl()
         {
@@ -39,7 +39,7 @@ namespace EDDiscovery
 
         public void InitControl(EDDiscoveryForm ed, int displaynumber)
         {
-            discoveryform = ed;
+            discoveryForm = ed;
             userControlJournalGrid.Init(ed,null,displaynumber);     // does not hook to a THC
             userControlJournalGrid.OnPopOut += PopOut;
             userControlJournalGrid.ExtraIcons(true);
@@ -50,6 +50,7 @@ namespace EDDiscovery
         public void LoadLayoutSettings() // called by discovery form by us after its adjusted itself
         {
             userControlJournalGrid.LoadLayout();
+            userControlJournalGrid.Display(null, discoveryForm.history);
         }
 
         public void SaveSettings()     // called by form when closing
@@ -59,7 +60,7 @@ namespace EDDiscovery
 
         public void PopOut()
         {
-            discoveryform.PopOuts.PopOut(Forms.PopOutControl.PopOuts.Journal);
+            discoveryForm.PopOuts.PopOut(Forms.PopOutControl.PopOuts.Journal);
         }
 
         #endregion

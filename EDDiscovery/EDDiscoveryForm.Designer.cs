@@ -93,6 +93,7 @@ namespace EDDiscovery
             this.tabPageJournal = new System.Windows.Forms.TabPage();
             this.journalViewControl1 = new EDDiscovery.JournalViewControl();
             this.tabPageGrid = new System.Windows.Forms.TabPage();
+            this.gridControl = new EDDiscovery.GridControl();
             this.tabPageTriletaration = new System.Windows.Forms.TabPage();
             this.trilaterationControl = new EDDiscovery.TrilaterationControl();
             this.tabPageScreenshots = new System.Windows.Forms.TabPage();
@@ -124,7 +125,6 @@ namespace EDDiscovery
             this.buttonExt2dmap = new ExtendedControls.ButtonExt();
             this.buttonExt3dmap = new ExtendedControls.ButtonExt();
             this.panel_eddiscovery = new System.Windows.Forms.Panel();
-            this.gridControl1 = new EDDiscovery.UserControls.UserControlContainerGrid();
             this.menuStrip1.SuspendLayout();
             this.tabControlMain.SuspendLayout();
             this.tabPageTravelHistory.SuspendLayout();
@@ -562,7 +562,7 @@ namespace EDDiscovery
             // 
             // tabPageGrid
             // 
-            this.tabPageGrid.Controls.Add(this.gridControl1);
+            this.tabPageGrid.Controls.Add(this.gridControl);
             this.tabPageGrid.Location = new System.Drawing.Point(4, 22);
             this.tabPageGrid.Name = "tabPageGrid";
             this.tabPageGrid.Padding = new System.Windows.Forms.Padding(3);
@@ -570,6 +570,14 @@ namespace EDDiscovery
             this.tabPageGrid.TabIndex = 9;
             this.tabPageGrid.Text = "Grid";
             this.tabPageGrid.UseVisualStyleBackColor = true;
+            // 
+            // gridControl
+            // 
+            this.gridControl.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.gridControl.Location = new System.Drawing.Point(3, 3);
+            this.gridControl.Name = "gridControl";
+            this.gridControl.Size = new System.Drawing.Size(979, 634);
+            this.gridControl.TabIndex = 0;
             // 
             // tabPageTriletaration
             // 
@@ -827,7 +835,7 @@ namespace EDDiscovery
             this.comboBoxCustomPopOut.DataSource = null;
             this.comboBoxCustomPopOut.DisplayMember = "";
             this.comboBoxCustomPopOut.DropDownBackgroundColor = System.Drawing.Color.Gray;
-            this.comboBoxCustomPopOut.DropDownHeight = 250;
+            this.comboBoxCustomPopOut.DropDownHeight = 400;
             this.comboBoxCustomPopOut.DropDownWidth = 150;
             this.comboBoxCustomPopOut.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.comboBoxCustomPopOut.ItemHeight = 13;
@@ -945,14 +953,6 @@ namespace EDDiscovery
             this.panel_eddiscovery.Size = new System.Drawing.Size(101, 46);
             this.panel_eddiscovery.TabIndex = 18;
             this.panel_eddiscovery.Click += new System.EventHandler(this.paneleddiscovery_Click);
-            // 
-            // gridControl1
-            // 
-            this.gridControl1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.gridControl1.Location = new System.Drawing.Point(3, 3);
-            this.gridControl1.Name = "gridControl1";
-            this.gridControl1.Size = new System.Drawing.Size(979, 634);
-            this.gridControl1.TabIndex = 0;
             // 
             // EDDiscoveryForm
             // 
@@ -1079,6 +1079,6 @@ namespace EDDiscovery
         private ExtendedControls.ComboBoxCustom comboBoxCustomPopOut;
         private System.Windows.Forms.ToolStripMenuItem sendUnsyncedEGOScansToolStripMenuItem;
         private System.Windows.Forms.TabPage tabPageGrid;
-        private EDDiscovery.UserControls.UserControlContainerGrid gridControl1;
+        private GridControl gridControl;
     }
 }

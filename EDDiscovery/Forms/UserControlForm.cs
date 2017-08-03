@@ -207,8 +207,25 @@ namespace EDDiscovery.Forms
             panel_showtitle.ImageSelected = displayTitle ? ExtendedControls.DrawnPanel.ImageType.Captioned : ExtendedControls.DrawnPanel.ImageType.NotCaptioned;
         }
 
-        public void SetFormSize()
+        private void UserControlForm_Layout(object sender, LayoutEventArgs e)
         {
+            if (UserControl != null)
+            {
+                UserControl.Location = new Point(3, curwindowsborder ? 2 : panelTop.Location.Y + panelTop.Height);
+                UserControl.Size = new Size(ClientRectangle.Width - 6, ClientRectangle.Height - UserControl.Location.Y - (curwindowsborder ? 0 : statusStripBottom.Height));
+            }
+        }
+
+        private void UserControlForm_Shown(object sender, EventArgs e)          // as launched, it may not be in front (as its launched from a control).. bring to front
+        {
+            this.BringToFront();
+
+            bool tr = SQLiteDBClass.GetSettingBool(dbrefname + "Transparent", deftransparent);
+            if (tr && IsTransparencySupported)     // the check is for paranoia
+                SetTransparency(true);      // only call if transparent.. may not be fully set up so don't merge with above
+
+            SetTopMost(SQLiteDBClass.GetSettingBool(dbrefname + "TopMost", deftopmost));
+
             var top = SQLiteDBClass.GetSettingInt(dbrefname + "Top", -1);
 
             if (top >= 0 && norepositionwindow == false)
@@ -241,28 +258,6 @@ namespace EDDiscovery.Forms
                 UserControl.LoadLayout();
 
             isloaded = true;
-        }
-
-        private void UserControlForm_Layout(object sender, LayoutEventArgs e)
-        {
-            if (UserControl != null)
-            {
-                UserControl.Location = new Point(3, curwindowsborder ? 2 : panelTop.Location.Y + panelTop.Height);
-                UserControl.Size = new Size(ClientRectangle.Width - 6, ClientRectangle.Height - UserControl.Location.Y - (curwindowsborder ? 0 : statusStripBottom.Height));
-            }
-        }
-
-        private void UserControlForm_Shown(object sender, EventArgs e)          // as launched, it may not be in front (as its launched from a control).. bring to front
-        {
-            this.BringToFront();
-
-            bool tr = SQLiteDBClass.GetSettingBool(dbrefname + "Transparent", deftransparent);
-            if (tr && IsTransparencySupported)     // the check is for paranoia
-                SetTransparency(true);      // only call if transparent.. may not be fully set up so don't merge with above
-
-            SetTopMost(SQLiteDBClass.GetSettingBool(dbrefname + "TopMost", deftopmost));
-
-            SetFormSize();
         }
 
         protected override void OnFormClosing(FormClosingEventArgs e)
