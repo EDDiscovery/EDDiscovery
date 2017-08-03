@@ -660,10 +660,8 @@
     <None Include="Resources\ImageTravel.png" />
     <None Include="Resources\ImageStarDiscWhite.png" />
     <None Include="Resources\ImageStarDisc.png" />
-    <None Include="Resources\Home-icon.png" />
     <None Include="Resources\Travelicon.png" />
     <None Include="Resources\excel.png" />
-    <None Include="Resources\materialmarkerorange.png" />
     <None Include="Resources\materiamoreindicator.png" />
     <None Include="Resources\RingGap512.png" />
     <None Include="Resources\Ring Only 512.png" />
@@ -827,7 +825,6 @@
       <Name>ExtendedControls</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
   <UsingTask TaskName="Zip" TaskFactory="CodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.v4.0.dll">
     <ParameterGroup>
       <OutputFilename ParameterType="System.String" Required="true" />
