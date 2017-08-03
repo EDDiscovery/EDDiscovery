@@ -170,7 +170,7 @@ namespace EDDiscovery.Actions
                     }
                     else
                     {
-                        Forms.PopOutControl.PopOuts? poi = poc.GetPopOutTypeByName(cmdname);
+                        Forms.PopOutControl.PopOuts? poi = Forms.PopOutControl.GetPopOutTypeByName(cmdname);
 
                         if (poi.HasValue)
                         {

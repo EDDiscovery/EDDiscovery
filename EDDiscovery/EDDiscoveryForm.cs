@@ -176,7 +176,7 @@ namespace EDDiscovery
             panelToolBar.PinState = SQLiteConnectionUser.GetSettingBool("ToolBarPanelPinState", true);
 
             comboBoxCustomPopOut.Enabled = false;
-            comboBoxCustomPopOut.Items.AddRange(PopOutControl.spanelbuttonlist);
+            comboBoxCustomPopOut.Items.AddRange(PopOutControl.GetPopOutNames());
             comboBoxCustomPopOut.SelectedIndex = 0;
             comboBoxCustomPopOut.Enabled = true;
 
@@ -190,11 +190,11 @@ namespace EDDiscovery
             themeok = theme.RestoreSettings();                                    // theme, remember your saved settings
 
             trilaterationControl.InitControl(this);
-            gridControl1.InitControl(this);
             travelHistoryControl.InitControl(this);
             imageHandler1.InitControl(this);
             settings.InitControl(this);
             journalViewControl1.InitControl(this, 0);
+            gridControl.InitControl(this, 0);
             routeControl1.InitControl(this);
             savedRouteExpeditionControl1.InitControl(this);
             exportControl1.InitControl(this);
@@ -373,10 +373,13 @@ namespace EDDiscovery
 
             travelHistoryControl.LoadLayoutSettings();
             journalViewControl1.LoadLayoutSettings();
+            gridControl.LoadLayoutSettings();
+
             if (EDDConfig.AutoLoadPopOuts && EDDConfig.Options.NoWindowReposition == false)
                 PopOuts.LoadSavedPopouts();
 
-            gridControl1.RestoreState();
+            string tab = SQLiteConnectionUser.GetSettingString("MajorTab", "");
+            SelectTabPage(tab);
         }
 
         #endregion
@@ -410,7 +413,7 @@ namespace EDDiscovery
 
         #endregion
 
-        #region Controller event handlers
+        #region Controller event handlers 
         private void Controller_InitialSyncComplete()
         {
             imageHandler1.StartWatcher();
@@ -596,15 +599,49 @@ namespace EDDiscovery
             }
         }
 
+        #endregion
+
+        #region Closing
+
+        private void EDDiscoveryForm_FormClosing(object sender, FormClosingEventArgs e)     // when user asks for a close
+        {
+            edsmRefreshTimer.Enabled = false;
+            if (!Controller.ReadyForFinalClose)
+            {
+                e.Cancel = true;
+                ShowInfoPanel("Closing, please wait!", true);
+                actioncontroller.ActionRun("onShutdown", "ProgramEvent");
+                Controller.Shutdown();
+            }
+        }
+
         private void Controller_BgSafeClose()       // run in thread..
         {
             actioncontroller.CloseDown();
         }
 
-        private void Controller_FinalClose()        // run in UI
+        private void Controller_FinalClose()        // run in UI, when controller finishes close
         {
             SystemNoteClass.CommitDirtyNotes();
-            SaveSettings();         // do close now
+
+            settings.SaveSettings();
+
+            SQLiteDBClass.PutSettingBool("FormMax", _formMax);
+            SQLiteDBClass.PutSettingInt("FormWidth", _formWidth);
+            SQLiteDBClass.PutSettingInt("FormHeight", _formHeight);
+            SQLiteDBClass.PutSettingInt("FormTop", _formTop);
+            SQLiteDBClass.PutSettingInt("FormLeft", _formLeft);
+            SQLiteDBClass.PutSettingBool("ToolBarPanelPinState", panelToolBar.PinState);
+
+            routeControl1.SaveSettings();
+            theme.SaveSettings(null);
+            travelHistoryControl.SaveSettings();
+            journalViewControl1.SaveSettings();
+            gridControl.SaveSettings();
+            if (EDDConfig.AutoSavePopOuts)
+                PopOuts.SaveCurrentPopouts();
+
+            SQLiteConnectionUser.PutSettingString("MajorTab", tabControlMain.SelectedTab.Text);
             notifyIcon1.Visible = false;
 
             audioqueuespeech.Dispose();     // in order..
@@ -618,43 +655,7 @@ namespace EDDiscovery
             Close();
             Application.Exit();
         }
-
-
-#endregion
-
-        #region Closing
-        private void SaveSettings()
-        {
-            settings.SaveSettings();
-
-            SQLiteDBClass.PutSettingBool("FormMax", _formMax);
-            SQLiteDBClass.PutSettingInt("FormWidth", _formWidth);
-            SQLiteDBClass.PutSettingInt("FormHeight", _formHeight);
-            SQLiteDBClass.PutSettingInt("FormTop", _formTop);
-            SQLiteDBClass.PutSettingInt("FormLeft", _formLeft);
-            SQLiteDBClass.PutSettingBool("ToolBarPanelPinState", panelToolBar.PinState);
-
-            routeControl1.SaveSettings();
-            gridControl1.SaveSettings();
-            theme.SaveSettings(null);
-            travelHistoryControl.SaveSettings();
-            journalViewControl1.SaveSettings();
-            if (EDDConfig.AutoSavePopOuts)
-                PopOuts.SaveCurrentPopouts();
-        }
-
-        private void EDDiscoveryForm_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            edsmRefreshTimer.Enabled = false;
-            if (!Controller.ReadyForFinalClose)
-            {
-                e.Cancel = true;
-                ShowInfoPanel("Closing, please wait!", true);
-                actioncontroller.ActionRun("onShutdown", "ProgramEvent");
-                Controller.Shutdown();
-            }
-        }
-
+     
         #endregion
 
         #region Buttons, Mouse, Menus, NotifyIcon
