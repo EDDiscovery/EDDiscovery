@@ -54,12 +54,12 @@ namespace EDDiscovery.UserControls
 
             if (he != null)
             {
-                System.Diagnostics.Debug.WriteLine("Star grid started, uctg selected, ask");
+                //System.Diagnostics.Debug.WriteLine("Star grid started, uctg selected, ask");
                 computer.CalculateClosestSystems(he.System, (s, d) => BeginInvoke((MethodInvoker)delegate { NewStarListComputed(s, d); }));     // hook here, force closes system update
             }
         }
 
-        public virtual void ChangeTravelGrid(UserControlTravelGrid thc)
+        public override void ChangeTravelGrid(UserControlTravelGrid thc)
         {
             uctg.OnTravelSelectionChanged -= Display;
             uctg = thc;
@@ -76,7 +76,7 @@ namespace EDDiscovery.UserControls
         {
             if (he != null)
             {
-                System.Diagnostics.Debug.WriteLine("Star grid sel changed ask");
+                //System.Diagnostics.Debug.WriteLine("Star grid sel changed ask");
                 computer.CalculateClosestSystems(he.System, (s, d) => BeginInvoke((MethodInvoker)delegate { NewStarListComputed(s, d); }));     // hook here, force closes system update
             }
         }

@@ -71,7 +71,7 @@ namespace EDDiscovery.Actions
                         else
                         {
                             Forms.PopOutControl poc = (ap.actioncontroller as ActionController).DiscoveryForm.PopOuts;
-                            Forms.PopOutControl.PopOuts? poi = poc.GetPopOutTypeByName(nextcmd);
+                            Forms.PopOutControl.PopOuts? poi = Forms.PopOutControl.GetPopOutTypeByName(nextcmd);
 
                             if (poi.HasValue)
                             {

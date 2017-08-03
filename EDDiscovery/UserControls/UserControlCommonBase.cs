@@ -29,11 +29,12 @@ namespace EDDiscovery.UserControls
 {
     public class UserControlCommonBase : UserControl
     {
+        // in calling order..
         public virtual void Init(EDDiscoveryForm ed, UserControlTravelGrid thc, int displayno) { }
-        public virtual void ChangeTravelGrid(UserControlTravelGrid thc) { }
+        public virtual void LoadLayout() { }
         public virtual void Display(HistoryEntry current, HistoryList history) { }
 
-        public virtual void LoadLayout() { }
+        public virtual void ChangeTravelGrid(UserControlTravelGrid thc) { }
         public virtual void Closing() { }
 
         public virtual Color ColorTransparency { get { return Color.Transparent; } }        // override to say support transparency, and what colour you want.

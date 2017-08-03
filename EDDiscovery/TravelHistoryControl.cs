@@ -40,44 +40,6 @@ namespace EDDiscovery
     {
         public EDDiscoveryForm _discoveryForm;
 
-        Bitmap[] tabbitmaps = new Bitmap[] { EDDiscovery.Properties.Resources.Log,      // Match pop out enum PopOuts, from start, list only ones which should be in tabs
-                                        EDDiscovery.Properties.Resources.star,
-                                        EliteDangerous.Properties.Resources.material ,
-                                        EliteDangerous.Properties.Resources.commodities,
-                                        EDDiscovery.Properties.Resources.ledger ,
-                                        EDDiscovery.Properties.Resources.journal ,
-                                        EDDiscovery.Properties.Resources.travelgrid ,
-                                        EliteDangerous.Properties.Resources.screenshot,
-                                        EDDiscovery.Properties.Resources.stats,
-                                        EliteDangerous.Properties.Resources.scan,
-                                        EliteDangerous.Properties.Resources.module,
-                                        EliteDangerous.Properties.Resources.sellexplorationdata,
-                                        EliteDangerous.Properties.Resources.synthesis,
-                                        EliteDangerous.Properties.Resources.missionaccepted,
-                                        EliteDangerous.Properties.Resources.engineercraft,
-                                        EliteDangerous.Properties.Resources.marketdata,
-                                        EliteDangerous.Properties.Resources.ammunition, //TBD
-                                        };
-
-        string[] tabtooltips = new string[] { "Display the program log",     // MAtch Pop out enum
-                                               "Display the nearest stars to the currently selected entry",
-                                               "Display the material count at the currently selected entry",
-                                               "Display the commodity count at the currently selected entry",
-                                               "Display a ledger of cash related entries",
-                                               "Display the journal grid view",
-                                               "Display the history grid view",
-                                               "Display the screen shot view",
-                                               "Display statistics from the history",
-                                               "Display scan data",
-                                               "Display Loadout for current ships and also stored modules",
-                                               "Display Exploration view",
-                                               "Display Synthesis planner",
-                                               "Display Missions",
-                                               "Display Engineering planner",
-                                               "Display Market Data (Requires login to Frontier using Commander Frontier log in details)",
-                                               "Display System Information panel",
-                                            };
-
         public HistoryEntry GetTravelHistoryCurrent {  get { return userControlTravelGrid.GetCurrentHistoryEntry; } }
         public TravelHistoryFilter GetPrimaryFilter { get { return userControlTravelGrid.GetHistoryFilter; } }  // some classes want to know out filter
 
@@ -127,8 +89,8 @@ namespace EDDiscovery
 
         void TabConfigure(ExtendedControls.TabStrip t, string name, int displayno)
         {
-            t.Images = tabbitmaps;
-            t.ToolTips = tabtooltips;
+            t.Images = PopOutControl.GetPopOutImages();
+            t.ToolTips = PopOutControl.GetPopOutToolTips();
             t.Tag = displayno;             // these are IDs for purposes of identifying different instances of a control.. 0 = main ones (main travel grid, main tab journal). 1..N are popups
             t.OnRemoving += TabRemoved;
             t.OnCreateTab += TabCreate;
@@ -145,7 +107,7 @@ namespace EDDiscovery
 
         Control TabCreate(ExtendedControls.TabStrip t, int si)        // called by tab strip when selected index changes.. create a new one.. only create.
         {
-            PopOutControl.PopOuts i = (PopOutControl.PopOuts)(si + PopOutControl.PopOuts.StartTabButtons);
+            PopOutControl.PopOuts i = (PopOutControl.PopOuts)si;
 
             Control c = PopOutControl.Create(i);
 
@@ -173,7 +135,7 @@ namespace EDDiscovery
 
         void TabPopOut(ExtendedControls.TabStrip t, int i)        // pop out clicked
         {
-            _discoveryForm.PopOuts.PopOut((PopOutControl.PopOuts)(i+ PopOutControl.PopOuts.StartTabButtons));
+            _discoveryForm.PopOuts.PopOut((PopOutControl.PopOuts)i);
         }
 
         #endregion
@@ -201,12 +163,12 @@ namespace EDDiscovery
 
             // NO NEED to reload the three tabstrips - code below will cause a LoadLayout on the one selected.
 
-            int max = (int)PopOutControl.PopOuts.MaxTabButtons;
+            int max = (int)PopOutControl.PopOuts.EndList;
 
-            tabStripBottom.SelectedIndex = Math.Min(SQLiteDBClass.GetSettingInt("TravelControlBottomTab", (int)(PopOutControl.PopOuts.Scan - PopOutControl.PopOuts.StartTabButtons)), max);
-            tabStripBottomRight.SelectedIndex = Math.Min(SQLiteDBClass.GetSettingInt("TravelControlBottomRightTab", (int)(PopOutControl.PopOuts.Log - PopOutControl.PopOuts.StartTabButtons)), max);
-            tabStripMiddleRight.SelectedIndex = Math.Min(SQLiteDBClass.GetSettingInt("TravelControlMiddleRightTab", (int)(PopOutControl.PopOuts.StarDistance - PopOutControl.PopOuts.StartTabButtons)), max);
-            tabStripTopRight.SelectedIndex = Math.Min(SQLiteDBClass.GetSettingInt("TravelControlTopRightTab", (int)(PopOutControl.PopOuts.SystemInformation - PopOutControl.PopOuts.StartTabButtons)), max);
+            tabStripBottom.SelectedIndex = Math.Min(SQLiteDBClass.GetSettingInt("TravelControlBottomTab", (int)(PopOutControl.PopOuts.Scan)), max);
+            tabStripBottomRight.SelectedIndex = Math.Min(SQLiteDBClass.GetSettingInt("TravelControlBottomRightTab", (int)(PopOutControl.PopOuts.Log)), max);
+            tabStripMiddleRight.SelectedIndex = Math.Min(SQLiteDBClass.GetSettingInt("TravelControlMiddleRightTab", (int)(PopOutControl.PopOuts.StarDistance)), max);
+            tabStripTopRight.SelectedIndex = Math.Min(SQLiteDBClass.GetSettingInt("TravelControlTopRightTab", (int)(PopOutControl.PopOuts.SystemInformation)), max);
         }
 
         public void SaveSettings()     // called by form when closing

@@ -74,7 +74,7 @@ namespace EDDiscovery.UserControls
             uctg.OnTravelSelectionChanged += Display;
         }
 
-        public virtual void ChangeTravelGrid(UserControlTravelGrid thc)
+        public override void ChangeTravelGrid(UserControlTravelGrid thc)
         {
             uctg.OnTravelSelectionChanged -= Display;
             uctg = thc;
