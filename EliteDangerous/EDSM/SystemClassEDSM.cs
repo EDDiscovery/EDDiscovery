@@ -191,21 +191,22 @@ namespace EliteDangerousCore.EDSM
                 }
             });
 
+            GC.Collect();
             if (!success)
             {
                 logLine("Failed to download EDSM system file from server, will check next time");
                 return false;
             }
-
-            // Stop if requested
-            if (cancelRequested())
+            else if (cancelRequested())
+            {   // Stop if requested
                 return false;
-
-            logLine("Local database updated with EDSM data, " + updates + " systems updated.");
-
-            GC.Collect();
-
-            return (updates > 0);
+            }
+            else
+            {
+                logLine("Local database updated with EDSM data, " + updates + " systems updated.");
+                File.Delete(edsmsystems);
+                return (updates > 0);
+            }
         }
 
 
