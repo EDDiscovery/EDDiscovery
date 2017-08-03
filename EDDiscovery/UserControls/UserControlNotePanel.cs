@@ -71,7 +71,7 @@ namespace EDDiscovery.UserControls
             displayfont = discoveryform.theme.GetFont;
         }
 
-        public virtual void ChangeTravelGrid(UserControlTravelGrid thc)
+        public override void ChangeTravelGrid(UserControlTravelGrid thc)
         {
             uctg.OnTravelSelectionChanged -= Display;
             uctg = thc;

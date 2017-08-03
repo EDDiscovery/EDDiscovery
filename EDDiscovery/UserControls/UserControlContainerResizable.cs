@@ -115,7 +115,7 @@ namespace EDDiscovery.UserControls
             startsize = Size;
             dp = DragType(e);
             dragmoved = false;
-            System.Diagnostics.Debug.WriteLine("Drag start here " + dp);
+            //System.Diagnostics.Debug.WriteLine("Drag start here " + dp);
 
             ResizeStart?.Invoke(this);
         }
@@ -134,7 +134,7 @@ namespace EDDiscovery.UserControls
                 int absxdelta = Math.Abs(xdelta);
                 int absydelta = Math.Abs(ydelta);
 
-                System.Diagnostics.Debug.WriteLine("Drag " + dp + " moved " + dragmoved + " delta " + absxdelta + "," + absydelta);
+                //System.Diagnostics.Debug.WriteLine("Drag " + dp + " moved " + dragmoved + " delta " + absxdelta + "," + absydelta);
 
                 if (dragmoved == false)
                 {
@@ -169,7 +169,7 @@ namespace EDDiscovery.UserControls
 
                     ResumeLayout();
                     Invalidate();
-                    System.Diagnostics.Debug.WriteLine("Drag " + Location + " " + Size);
+                    //System.Diagnostics.Debug.WriteLine("Drag " + Location + " " + Size);
                 }
             }
         }
