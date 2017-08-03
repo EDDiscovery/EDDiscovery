@@ -82,7 +82,7 @@ namespace EDDiscovery
             this.dataViewScroller_Distances = new ExtendedControls.DataViewScrollerPanel();
             this.vScrollBarCustom1 = new ExtendedControls.VScrollBarCustom();
             this.dataGridViewDistances = new System.Windows.Forms.DataGridView();
-            this.ColumnSystem = new ExtendedControls.AutoCompleteSystemsColumn();
+            this.ColumnSystem = new ExtendedControls.AutoCompleteDGVColumn();
             this.ColumnDistance = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColumnCalculated = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColumnStatus = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -737,7 +737,7 @@ namespace EDDiscovery
         private System.Windows.Forms.ToolStripButton toolStripButtonRemoveUnused;
         private System.Windows.Forms.Panel panel_controls;
         private System.Windows.Forms.Label labelstpos;
-        private ExtendedControls.AutoCompleteSystemsColumn ColumnSystem;
+        private ExtendedControls.AutoCompleteDGVColumn ColumnSystem;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnDistance;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnCalculated;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnStatus;
