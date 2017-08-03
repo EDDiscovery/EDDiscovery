@@ -365,7 +365,7 @@ namespace EDDiscovery
             public string ReadJournal { get; private set; }
             public string OptionsFile { get; private set; }
 
-            private void SetAppDataDirectory(string appfolder, bool portable)
+            private string GetAppDataDirectory(string appfolder, bool portable)
             {
                 if (appfolder == null)
                 {
@@ -374,16 +374,21 @@ namespace EDDiscovery
 
                 if (Path.IsPathRooted(appfolder))
                 {
-                    AppDataDirectory = appfolder;
+                    return appfolder;
                 }
                 else if (portable)
                 {
-                    AppDataDirectory = Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, appfolder);
+                    return Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, appfolder);
                 }
                 else
                 {
-                    AppDataDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), appfolder);
+                    return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), appfolder);
                 }
+            }
+
+            private void SetAppDataDirectory(string appfolder, bool portable)
+            {
+                AppDataDirectory = GetAppDataDirectory(appfolder, portable);
 
                 if (!Directory.Exists(AppDataDirectory))
                     Directory.CreateDirectory(AppDataDirectory);
@@ -429,26 +434,42 @@ namespace EDDiscovery
 
             private void ProcessOptionsFile()
             {
-                OptionsFile = "options.txt";
+                string optionsFileName = "options.txt";
+                bool useAppDataOptionsFile = false;
 
                 ProcessCommandLineOptions((optname, optval) =>
                 {
                     if (optname == "-optionsfile" && optval != null)
                     {
-                        OptionsFile = optval;
+                        optionsFileName = optval;
                         return true;
                     }
 
                     return false;
                 });
 
+                OptionsFile = optionsFileName;
+
                 if (!Path.IsPathRooted(OptionsFile))
                 {
                     OptionsFile = Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, OptionsFile);
+                    useAppDataOptionsFile = true;
                 }
 
                 if (File.Exists(OptionsFile))
                 {
+                    foreach (string line in File.ReadAllLines(OptionsFile))
+                    {
+                        string[] kvp = line.Split(new char[] { ' ' }, 2).Select(s => s.Trim()).ToArray();
+                        ProcessCommandLineOption("-" + kvp[0], kvp.Length == 2 ? kvp[1] : null);
+                    }
+                }
+
+                string appdatadir = GetAppDataDirectory(AppFolder, StoreDataInProgramDirectory);
+
+                if (useAppDataOptionsFile && File.Exists(Path.Combine(appdatadir, optionsFileName)))
+                {
+                    OptionsFile = Path.Combine(appdatadir, optionsFileName);
                     foreach (string line in File.ReadAllLines(OptionsFile))
                     {
                         string[] kvp = line.Split(new char[] { ' ' }, 2).Select(s => s.Trim()).ToArray();
