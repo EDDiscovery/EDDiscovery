@@ -213,16 +213,6 @@ namespace EDDiscovery.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Home_icon {
-            get {
-                object obj = ResourceManager.GetObject("Home_icon", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
         internal static System.Drawing.Bitmap Homeicon {
             get {
                 object obj = ResourceManager.GetObject("Homeicon", resourceCulture);
@@ -330,16 +320,6 @@ namespace EDDiscovery.Properties {
         internal static string maphelp3d {
             get {
                 return ResourceManager.GetString("maphelp3d", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap materialmarkerorange {
-            get {
-                object obj = ResourceManager.GetObject("materialmarkerorange", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
             }
         }
         

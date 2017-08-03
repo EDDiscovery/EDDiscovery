@@ -44,7 +44,6 @@ namespace EDDiscovery
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SavedRouteExpeditionControl));
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.toolStripButtonNew = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonImportFile = new System.Windows.Forms.ToolStripButton();
@@ -52,7 +51,6 @@ namespace EDDiscovery
             this.toolStripButtonSave = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonExport = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonDelete = new System.Windows.Forms.ToolStripButton();
-            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripButtonShowOn3DMap = new System.Windows.Forms.ToolStripButton();
             this.toolStripComboBoxRouteSelection = new ExtendedControls.ToolStripComboBoxCustom();
             this.panelRouteInfo = new System.Windows.Forms.Panel();
@@ -95,7 +93,6 @@ namespace EDDiscovery
             this.toolStripButtonSave,
             this.toolStripButtonExport,
             this.toolStripButtonDelete,
-            this.toolStripSeparator1,
             this.toolStripButtonShowOn3DMap,
             this.toolStripComboBoxRouteSelection});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
@@ -160,18 +157,11 @@ namespace EDDiscovery
             this.toolStripButtonDelete.Text = "Delete Route";
             this.toolStripButtonDelete.Click += new System.EventHandler(this.toolStripButtonDelete_Click);
             // 
-            // toolStripSeparator1
-            // 
-            this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 25);
-            // 
             // toolStripButtonShowOn3DMap
             // 
-            this.toolStripButtonShowOn3DMap.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.toolStripButtonShowOn3DMap.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonShowOn3DMap.Image")));
-            this.toolStripButtonShowOn3DMap.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonShowOn3DMap.Image = global::EDDiscovery.Properties.Resources.toolStripButtonMap_Image;
             this.toolStripButtonShowOn3DMap.Name = "toolStripButtonShowOn3DMap";
-            this.toolStripButtonShowOn3DMap.Size = new System.Drawing.Size(101, 22);
+            this.toolStripButtonShowOn3DMap.Size = new System.Drawing.Size(117, 22);
             this.toolStripButtonShowOn3DMap.Text = "Show on 3D Map";
             this.toolStripButtonShowOn3DMap.Click += new System.EventHandler(this.toolStripButtonShowOn3DMap_Click);
             // 
@@ -332,7 +322,7 @@ namespace EDDiscovery
             // 
             // textBoxRouteName
             // 
-            this.textBoxRouteName.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.textBoxRouteName.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.textBoxRouteName.BorderColor = System.Drawing.Color.Transparent;
             this.textBoxRouteName.BorderColorScaling = 0.5F;
@@ -484,7 +474,6 @@ namespace EDDiscovery
         private ExtendedControls.AutoCompleteSystemsColumn SystemName;
         private System.Windows.Forms.DataGridViewTextBoxColumn Distance;
         private System.Windows.Forms.DataGridViewTextBoxColumn Note;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripButton toolStripButtonShowOn3DMap;
         private ExtendedControls.TextBoxBorder textBoxRouteName;
         private ExtendedControls.ToolStripComboBoxCustom toolStripComboBoxRouteSelection;
