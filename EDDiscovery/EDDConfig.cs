@@ -435,15 +435,13 @@ namespace EDDiscovery
             private void ProcessOptionsFile()
             {
                 string optionsFileName = "options.txt";
-                bool optionsFileOverridden = false;
-                bool optionsFilePathRooted = true;
+                bool useAppDataOptionsFile = false;
 
                 ProcessCommandLineOptions((optname, optval) =>
                 {
                     if (optname == "-optionsfile" && optval != null)
                     {
                         optionsFileName = optval;
-                        optionsFileOverridden = true;
                         return true;
                     }
 
@@ -455,7 +453,7 @@ namespace EDDiscovery
                 if (!Path.IsPathRooted(OptionsFile))
                 {
                     OptionsFile = Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, OptionsFile);
-                    optionsFilePathRooted = false;
+                    useAppDataOptionsFile = true;
                 }
 
                 if (File.Exists(OptionsFile))
@@ -469,7 +467,7 @@ namespace EDDiscovery
 
                 string appdatadir = GetAppDataDirectory(AppFolder, StoreDataInProgramDirectory);
 
-                if ((!optionsFileOverridden || !optionsFilePathRooted) && File.Exists(Path.Combine(appdatadir, optionsFileName)))
+                if (useAppDataOptionsFile && File.Exists(Path.Combine(appdatadir, optionsFileName)))
                 {
                     OptionsFile = Path.Combine(appdatadir, optionsFileName);
                     foreach (string line in File.ReadAllLines(OptionsFile))
