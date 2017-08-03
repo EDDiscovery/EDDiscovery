@@ -195,5 +195,20 @@ public static class ObjectExtensionsNumbersBool
 
         return list;
     }
+
+    static public bool RestoreArrayFromString(this string plist, out int[] array , int? min = null, int? max = null)   // string of comma values, parse out to array, false if any fail
+    {
+        string[] parray = plist.Split(',');
+
+        array = new int[parray.Length];
+
+        for (int i = 0; i < array.Length; i++)
+        {
+            if (!parray[i].InvariantParse(out array[i]) && (!min.HasValue || array[i]>=min) && (!max.HasValue || array[i]<=max))
+                return false;
+        }
+
+        return true;
+    }
 }
 

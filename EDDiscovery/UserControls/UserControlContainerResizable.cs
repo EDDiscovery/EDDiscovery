@@ -12,9 +12,11 @@ namespace EDDiscovery.UserControls
 {
     public partial class UserControlContainerResizable : UserControl
     {
+        public Color BorderColor { get; set; } = Color.Red;
+        public Color SelectedBorderColor { get; set; } = Color.Green;
         public Control control;
         public Action<UserControlContainerResizable> ResizeStart;
-        public Action<UserControlContainerResizable> ResizeEnd;
+        public Action<UserControlContainerResizable,bool> ResizeEnd;
         public bool Selected { get { return selected; } set { SetSelected(value); } }
 
         private const int margin = 3;
@@ -47,9 +49,9 @@ namespace EDDiscovery.UserControls
 
         protected override void OnPaint(PaintEventArgs e)
         {
-            using (Pen pb = new Pen(Color.Black, 1.0F))
+            using (Pen pb = new Pen(BackColor, 1.0F))
             {
-                using (Pen p1 = new Pen(Selected ? Color.Green : Color.Red, 1.0F))
+                using (Pen p1 = new Pen(Selected ? SelectedBorderColor: BorderColor, 1.0F))
                 {
                     Rectangle r = ClientRectangle;
                     r.Inflate(-1, -1);
@@ -115,7 +117,7 @@ namespace EDDiscovery.UserControls
             startsize = Size;
             dp = DragType(e);
             dragmoved = false;
-            //System.Diagnostics.Debug.WriteLine("Drag start here " + dp);
+            System.Diagnostics.Debug.WriteLine("Drag start here " + dp);
 
             ResizeStart?.Invoke(this);
         }
@@ -125,16 +127,15 @@ namespace EDDiscovery.UserControls
             if (dp == DragPos.None)
             {
                 DragType(e);
-                
             }
-            else
+            else if ( e.Button == MouseButtons.Left )
             {
                 int xdelta = Control.MousePosition.X - dragstart.X;
                 int ydelta = Control.MousePosition.Y - dragstart.Y;
                 int absxdelta = Math.Abs(xdelta);
                 int absydelta = Math.Abs(ydelta);
 
-                //System.Diagnostics.Debug.WriteLine("Drag " + dp + " moved " + dragmoved + " delta " + absxdelta + "," + absydelta);
+                System.Diagnostics.Debug.WriteLine("Drag " + dp + " moved " + dragmoved + " delta " + absxdelta + "," + absydelta);
 
                 if (dragmoved == false)
                 {
@@ -146,11 +147,13 @@ namespace EDDiscovery.UserControls
 
                 if (dragmoved)
                 {
+                    int m = 10;
+
                     SuspendLayout();
                     if (dp == DragPos.Top)
                     {
-                        Top = startpos.Y + ydelta;
-                        Left = startpos.X + xdelta;
+                        Top = Math.Min(Math.Max(startpos.Y + ydelta, 0), Parent.Height - m);
+                        Left = Math.Min(Math.Max(startpos.X + xdelta, -startsize.Width + m), Parent.Width - m);
                     }
                     else if (dp == DragPos.Bottom)
                         Height = startsize.Height + ydelta;
@@ -172,21 +175,30 @@ namespace EDDiscovery.UserControls
                     //System.Diagnostics.Debug.WriteLine("Drag " + Location + " " + Size);
                 }
             }
+            else
+            {
+                StopDrag();
+            }
+
         }
 
         private void UserControlContainerResizable_MouseUp(object sender, MouseEventArgs e)
         {
-            if ( dp != DragPos.None )
-            {
-                if (dragmoved)
-                {
-                    ResizeEnd?.Invoke(this);
-                    Cursor.Current = Cursors.Default;
-                }
+            System.Diagnostics.Debug.WriteLine("Mouse up " + dp);
+            StopDrag();
+        }
 
-                dragmoved = false;
-                dp = DragPos.None;
-            }
+        void StopDrag()
+        {
+            System.Diagnostics.Debug.WriteLine("Stop drag " + dp + " " + dragmoved);
+            if (dragmoved)
+                Cursor.Current = Cursors.Default;
+
+            if ( dp != null )
+                ResizeEnd?.Invoke(this, dragmoved);
+
+            dragmoved = false;
+            dp = DragPos.None;
         }
     }
 }

@@ -35,6 +35,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Name = "UserControlContainerResizable";
+            this.Size = new System.Drawing.Size(811, 545);
             this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.UserControlContainerResizable_MouseDown);
             this.MouseMove += new System.Windows.Forms.MouseEventHandler(this.UserControlContainerResizable_MouseMove);
             this.MouseUp += new System.Windows.Forms.MouseEventHandler(this.UserControlContainerResizable_MouseUp);

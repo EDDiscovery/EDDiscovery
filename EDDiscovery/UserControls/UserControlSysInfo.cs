@@ -790,19 +790,7 @@ namespace EDDiscovery.UserControls
 
         private void UserControlSysInfo_Resize(object sender, EventArgs e)
         {
-            //TBD
-
-            //richTextBoxNote.Size = new Size(ClientRectangle.Width - richTextBoxNote.Left - 8, richTextBoxNote.Height);
-
-            int left = ClientRectangle.Width - textBoxTarget.Left - buttonEDSMTarget.Width - hspacing * 2 - 2;
-            int targetw = left * 7 / 10;
-            int distw = left - targetw;
-
-            //textBoxTarget.Width = targetw;
-            //textBoxTargetDist.Width = distw;
-            //textBoxTargetDist.Location = new Point(textBoxTarget.Right + hspacing, textBoxTargetDist.Top);
-            //buttonEDSMTarget.Location = new Point(textBoxTargetDist.Right + hspacing, buttonEDSMTarget.Top);
-
+            //  later we may resize to width if other column is not used, but not now
         }
 
         public override Color ColorTransparency { get { return Color.Green; } }

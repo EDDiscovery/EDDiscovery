@@ -114,6 +114,16 @@ public static class ObjectExtensionsStrings
             return false;
     }
 
+    public static string AppendPrePad(this string sb, string other, string prepad = " ")
+    {
+        if (other != null && other.Length > 0)
+        {
+            if (sb.Length > 0)
+                sb += prepad;
+            sb += other;
+        }
+        return sb;
+    }
 
     public static string Replace(this string str, string oldValue, string newValue, StringComparison comparison)
     {

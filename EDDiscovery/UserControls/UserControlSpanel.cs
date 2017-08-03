@@ -200,7 +200,7 @@ namespace EDDiscovery.UserControls
             SQLiteDBClass.PutSettingInt(DbSave+"Config", (int)config);
             SQLiteDBClass.PutSettingInt(DbSave + "Layout", layoutorder);
             string s = string.Join<int>(",", columnpos);
-            SQLiteDBClass.PutSettingString("SummaryPanelTabs", s);
+            SQLiteDBClass.PutSettingString(DbSave + "PanelTabs", s);
         }
 
         public override Color ColorTransparency { get { return Color.Green; } }
