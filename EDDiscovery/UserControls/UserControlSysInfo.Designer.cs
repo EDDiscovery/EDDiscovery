@@ -59,6 +59,7 @@ namespace EDDiscovery.UserControls
             this.toolStripCargo = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripGameMode = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripTravel = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSkinny = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripReset = new System.Windows.Forms.ToolStripMenuItem();
             this.textBoxBody = new ExtendedControls.TextBoxBorder();
             this.labelBodyName = new System.Windows.Forms.Label();
@@ -107,7 +108,6 @@ namespace EDDiscovery.UserControls
             this.textBoxShip = new ExtendedControls.TextBoxBorder();
             this.labelFuel = new System.Windows.Forms.Label();
             this.textBoxFuel = new ExtendedControls.TextBoxBorder();
-            this.toolStripSkinny = new System.Windows.Forms.ToolStripMenuItem();
             this.contextMenuStrip.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -272,6 +272,16 @@ namespace EDDiscovery.UserControls
             this.toolStripTravel.Size = new System.Drawing.Size(255, 22);
             this.toolStripTravel.Text = "Display Travel Trip Statistics";
             this.toolStripTravel.Click += new System.EventHandler(this.toolStripTravel_Click);
+            // 
+            // toolStripSkinny
+            // 
+            this.toolStripSkinny.Checked = true;
+            this.toolStripSkinny.CheckOnClick = true;
+            this.toolStripSkinny.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.toolStripSkinny.Name = "toolStripSkinny";
+            this.toolStripSkinny.Size = new System.Drawing.Size(255, 22);
+            this.toolStripSkinny.Text = "When transparent, use skinny look";
+            this.toolStripSkinny.Click += new System.EventHandler(this.whenTransparentUseSkinnyLookToolStripMenuItem_Click);
             // 
             // toolStripReset
             // 
@@ -1158,16 +1168,6 @@ namespace EDDiscovery.UserControls
             this.textBoxFuel.MouseMove += new System.Windows.Forms.MouseEventHandler(this.controlMouseMove);
             this.textBoxFuel.MouseUp += new System.Windows.Forms.MouseEventHandler(this.controlMouseUp);
             // 
-            // toolStripSkinny
-            // 
-            this.toolStripSkinny.Checked = true;
-            this.toolStripSkinny.CheckOnClick = true;
-            this.toolStripSkinny.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.toolStripSkinny.Name = "toolStripSkinny";
-            this.toolStripSkinny.Size = new System.Drawing.Size(255, 22);
-            this.toolStripSkinny.Text = "When transparent, use skinny look";
-            this.toolStripSkinny.Click += new System.EventHandler(this.whenTransparentUseSkinnyLookToolStripMenuItem_Click);
-            // 
             // UserControlSysInfo
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1221,6 +1221,7 @@ namespace EDDiscovery.UserControls
             this.Controls.Add(this.buttonEDSMTarget);
             this.Name = "UserControlSysInfo";
             this.Size = new System.Drawing.Size(393, 456);
+            this.toolTip1.SetToolTip(this, "Hold down Ctrl Key then left drag a item to reposition, 2 columns are available");
             this.Resize += new System.EventHandler(this.UserControlSysInfo_Resize);
             this.contextMenuStrip.ResumeLayout(false);
             this.ResumeLayout(false);
