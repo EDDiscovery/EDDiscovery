@@ -64,7 +64,7 @@ namespace EDDiscovery.UserControls
             checkBoxBuyOnly.Enabled = true;
         }
 
-        public virtual void ChangeTravelGrid(UserControlTravelGrid thc)
+        public override void ChangeTravelGrid(UserControlTravelGrid thc)
         {
             uctg.OnTravelSelectionChanged -= OnChanged;
             uctg = thc;
