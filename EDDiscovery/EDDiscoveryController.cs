@@ -96,6 +96,11 @@ namespace EDDiscovery
 
             Trace.WriteLine($"*** Elite Dangerous Discovery Initializing - {EDDConfig.Options.VersionDisplayString}, Platform: {Environment.OSVersion.Platform.ToString()}");
 
+            if (EDDConfig.Options.NewUserDatabasePath != null || EDDConfig.Options.NewSystemDatabasePath != null)
+            {
+                EDDConfig.Options.MoveDatabases(msg);
+            }
+
             msg.Invoke("Scanning Memory Banks");
             InitializeDatabases();
 
