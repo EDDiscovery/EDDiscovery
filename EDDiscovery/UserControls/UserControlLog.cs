@@ -34,7 +34,6 @@ namespace EDDiscovery.UserControls
             InitializeComponent();
             richTextBox_History.ReadOnly = true;
             richTextBox_History.SetContextMenuStrip(contextMenuStrip1);
-            Name = "Log";
         }
 
         public override void Init( EDDiscoveryForm ed, UserControlTravelGrid thc, int displayno)

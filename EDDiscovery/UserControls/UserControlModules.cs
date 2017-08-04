@@ -43,7 +43,7 @@ namespace EDDiscovery.UserControls
         public UserControlModules()
         {
             InitializeComponent();
-            Name = "Loadout";
+            comboBoxShips.SetToolTip(toolTip);
         }
 
         public override void Init( EDDiscoveryForm ed, UserControlTravelGrid thc, int vn) //0=primary, 1 = first windowed version, etc

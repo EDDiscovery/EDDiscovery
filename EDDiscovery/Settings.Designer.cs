@@ -340,7 +340,7 @@ namespace EDDiscovery
             this.btnDeleteCommander.Size = new System.Drawing.Size(71, 23);
             this.btnDeleteCommander.TabIndex = 3;
             this.btnDeleteCommander.Text = "Delete";
-            this.toolTip.SetToolTip(this.btnDeleteCommander, "Delete an existing commander");
+            this.toolTip.SetToolTip(this.btnDeleteCommander, "Delete selected commander");
             this.btnDeleteCommander.UseVisualStyleBackColor = true;
             this.btnDeleteCommander.Click += new System.EventHandler(this.btnDeleteCommander_Click);
             // 
@@ -376,6 +376,7 @@ namespace EDDiscovery
             this.textBoxDefaultZoom.Size = new System.Drawing.Size(51, 20);
             this.textBoxDefaultZoom.TabIndex = 6;
             this.textBoxDefaultZoom.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.toolTip.SetToolTip(this.textBoxDefaultZoom, "Set the zoom level of the map. 1 is normal");
             this.textBoxDefaultZoom.WordWrap = true;
             this.textBoxDefaultZoom.Validating += new System.ComponentModel.CancelEventHandler(this.textBoxDefaultZoom_Validating);
             // 
@@ -406,6 +407,7 @@ namespace EDDiscovery
             this.textBoxHomeSystem.Size = new System.Drawing.Size(221, 20);
             this.textBoxHomeSystem.TabIndex = 0;
             this.textBoxHomeSystem.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.toolTip.SetToolTip(this.textBoxHomeSystem, "Pick a home system");
             this.textBoxHomeSystem.WordWrap = true;
             this.textBoxHomeSystem.Validated += new System.EventHandler(this.textBoxHomeSystem_Validated);
             // 
@@ -439,6 +441,7 @@ namespace EDDiscovery
             this.buttonReloadSaved.Size = new System.Drawing.Size(127, 23);
             this.buttonReloadSaved.TabIndex = 3;
             this.buttonReloadSaved.Text = "Open Saved Setup";
+            this.toolTip.SetToolTip(this.buttonReloadSaved, "Open now the saved setup of pop outs");
             this.buttonReloadSaved.UseVisualStyleBackColor = true;
             this.buttonReloadSaved.Click += new System.EventHandler(this.buttonReloadSaved_Click);
             // 
@@ -452,6 +455,7 @@ namespace EDDiscovery
             this.buttonSaveSetup.Size = new System.Drawing.Size(127, 23);
             this.buttonSaveSetup.TabIndex = 2;
             this.buttonSaveSetup.Text = "Save Current Setup";
+            this.toolTip.SetToolTip(this.buttonSaveSetup, "Save now the current pop out state");
             this.buttonSaveSetup.UseVisualStyleBackColor = true;
             this.buttonSaveSetup.Click += new System.EventHandler(this.buttonSaveSetup_Click);
             // 
@@ -465,10 +469,11 @@ namespace EDDiscovery
             this.checkBoxAutoSave.Location = new System.Drawing.Point(7, 46);
             this.checkBoxAutoSave.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.checkBoxAutoSave.Name = "checkBoxAutoSave";
-            this.checkBoxAutoSave.Size = new System.Drawing.Size(117, 17);
+            this.checkBoxAutoSave.Size = new System.Drawing.Size(86, 17);
             this.checkBoxAutoSave.TabIndex = 1;
-            this.checkBoxAutoSave.Text = "Save Setup on Exit";
+            this.checkBoxAutoSave.Text = "Save on Exit";
             this.checkBoxAutoSave.TickBoxReductionSize = 10;
+            this.toolTip.SetToolTip(this.checkBoxAutoSave, "Save pop out state on exit");
             this.checkBoxAutoSave.UseVisualStyleBackColor = true;
             // 
             // checkBoxAutoLoad
@@ -481,10 +486,11 @@ namespace EDDiscovery
             this.checkBoxAutoLoad.Location = new System.Drawing.Point(7, 20);
             this.checkBoxAutoLoad.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.checkBoxAutoLoad.Name = "checkBoxAutoLoad";
-            this.checkBoxAutoLoad.Size = new System.Drawing.Size(121, 17);
+            this.checkBoxAutoLoad.Size = new System.Drawing.Size(87, 17);
             this.checkBoxAutoLoad.TabIndex = 0;
-            this.checkBoxAutoLoad.Text = "Load Setup on Start";
+            this.checkBoxAutoLoad.Text = "Load at Start";
             this.checkBoxAutoLoad.TickBoxReductionSize = 10;
+            this.toolTip.SetToolTip(this.checkBoxAutoLoad, "Auto show pop outs");
             this.checkBoxAutoLoad.UseVisualStyleBackColor = true;
             // 
             // groupBoxTheme
@@ -565,6 +571,7 @@ namespace EDDiscovery
             this.radioButtonHistorySelection.TabIndex = 4;
             this.radioButtonHistorySelection.TabStop = true;
             this.radioButtonHistorySelection.Text = "History Grid Selection";
+            this.toolTip.SetToolTip(this.radioButtonHistorySelection, "Select history entry as opening location");
             this.radioButtonHistorySelection.UseVisualStyleBackColor = true;
             // 
             // radioButtonCentreHome
@@ -582,6 +589,7 @@ namespace EDDiscovery
             this.radioButtonCentreHome.TabIndex = 3;
             this.radioButtonCentreHome.TabStop = true;
             this.radioButtonCentreHome.Text = "Home System";
+            this.toolTip.SetToolTip(this.radioButtonCentreHome, "Select home system as opening location");
             this.radioButtonCentreHome.UseVisualStyleBackColor = true;
             // 
             // label4
@@ -653,6 +661,7 @@ namespace EDDiscovery
             this.buttonEditCommander.Size = new System.Drawing.Size(71, 23);
             this.buttonEditCommander.TabIndex = 5;
             this.buttonEditCommander.Text = "Edit";
+            this.toolTip.SetToolTip(this.buttonEditCommander, "Edit selected commander");
             this.buttonEditCommander.UseVisualStyleBackColor = true;
             this.buttonEditCommander.Click += new System.EventHandler(this.buttonEditCommander_Click);
             // 

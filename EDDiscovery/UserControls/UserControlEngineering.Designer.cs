@@ -57,12 +57,12 @@ namespace EDDiscovery.UserControls
             this.Engineers = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.vScrollBarCustomMC = new ExtendedControls.VScrollBarCustom();
             this.panelButtons = new System.Windows.Forms.Panel();
+            this.buttonFilterMaterial = new ExtendedControls.ButtonExt();
             this.buttonFilterUpgrade = new ExtendedControls.ButtonExt();
             this.buttonFilterLevel = new ExtendedControls.ButtonExt();
             this.buttonFilterEngineer = new ExtendedControls.ButtonExt();
             this.buttonFilterModule = new ExtendedControls.ButtonExt();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.buttonFilterMaterial = new ExtendedControls.ButtonExt();
             this.dataViewScrollerPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewEngineering)).BeginInit();
             this.panelButtons.SuspendLayout();
@@ -229,6 +229,20 @@ namespace EDDiscovery.UserControls
             this.panelButtons.TabIndex = 2;
             this.toolTip1.SetToolTip(this.panelButtons, "Left click and drag on grid to reorder");
             // 
+            // buttonFilterMaterial
+            // 
+            this.buttonFilterMaterial.BorderColorScaling = 1.25F;
+            this.buttonFilterMaterial.ButtonColorScaling = 0.5F;
+            this.buttonFilterMaterial.ButtonDisabledScaling = 0.5F;
+            this.buttonFilterMaterial.Location = new System.Drawing.Point(427, 4);
+            this.buttonFilterMaterial.Name = "buttonFilterMaterial";
+            this.buttonFilterMaterial.Size = new System.Drawing.Size(100, 23);
+            this.buttonFilterMaterial.TabIndex = 4;
+            this.buttonFilterMaterial.Text = "Filter By Material";
+            this.toolTip1.SetToolTip(this.buttonFilterMaterial, "Choose items by material");
+            this.buttonFilterMaterial.UseVisualStyleBackColor = true;
+            this.buttonFilterMaterial.Click += new System.EventHandler(this.buttonFilterMaterial_Click);
+            // 
             // buttonFilterUpgrade
             // 
             this.buttonFilterUpgrade.BorderColorScaling = 1.25F;
@@ -239,6 +253,7 @@ namespace EDDiscovery.UserControls
             this.buttonFilterUpgrade.Size = new System.Drawing.Size(100, 23);
             this.buttonFilterUpgrade.TabIndex = 3;
             this.buttonFilterUpgrade.Text = "Filter By Upgrade";
+            this.toolTip1.SetToolTip(this.buttonFilterUpgrade, "Choose items by upgrade type");
             this.buttonFilterUpgrade.UseVisualStyleBackColor = true;
             this.buttonFilterUpgrade.Click += new System.EventHandler(this.buttonFilterUpgrade_Click);
             // 
@@ -252,6 +267,7 @@ namespace EDDiscovery.UserControls
             this.buttonFilterLevel.Size = new System.Drawing.Size(100, 23);
             this.buttonFilterLevel.TabIndex = 2;
             this.buttonFilterLevel.Text = "Filter By Level";
+            this.toolTip1.SetToolTip(this.buttonFilterLevel, "Choose items by level");
             this.buttonFilterLevel.UseVisualStyleBackColor = true;
             this.buttonFilterLevel.Click += new System.EventHandler(this.buttonFilterLevel_Click);
             // 
@@ -265,6 +281,7 @@ namespace EDDiscovery.UserControls
             this.buttonFilterEngineer.Size = new System.Drawing.Size(100, 23);
             this.buttonFilterEngineer.TabIndex = 1;
             this.buttonFilterEngineer.Text = "Filter By Engineer";
+            this.toolTip1.SetToolTip(this.buttonFilterEngineer, "Choose items by engineer");
             this.buttonFilterEngineer.UseVisualStyleBackColor = true;
             this.buttonFilterEngineer.Click += new System.EventHandler(this.buttonFilterEngineer_Click);
             // 
@@ -278,25 +295,13 @@ namespace EDDiscovery.UserControls
             this.buttonFilterModule.Size = new System.Drawing.Size(100, 23);
             this.buttonFilterModule.TabIndex = 0;
             this.buttonFilterModule.Text = "Filter By Module";
+            this.toolTip1.SetToolTip(this.buttonFilterModule, "Choose items by Module type");
             this.buttonFilterModule.UseVisualStyleBackColor = true;
             this.buttonFilterModule.Click += new System.EventHandler(this.buttonFilterModule_Click);
             // 
             // toolTip1
             // 
             this.toolTip1.ShowAlways = true;
-            // 
-            // buttonFilterMaterial
-            // 
-            this.buttonFilterMaterial.BorderColorScaling = 1.25F;
-            this.buttonFilterMaterial.ButtonColorScaling = 0.5F;
-            this.buttonFilterMaterial.ButtonDisabledScaling = 0.5F;
-            this.buttonFilterMaterial.Location = new System.Drawing.Point(427, 4);
-            this.buttonFilterMaterial.Name = "buttonFilterMaterial";
-            this.buttonFilterMaterial.Size = new System.Drawing.Size(100, 23);
-            this.buttonFilterMaterial.TabIndex = 4;
-            this.buttonFilterMaterial.Text = "Filter By Material";
-            this.buttonFilterMaterial.UseVisualStyleBackColor = true;
-            this.buttonFilterMaterial.Click += new System.EventHandler(this.buttonFilterMaterial_Click);
             // 
             // UserControlEngineering
             // 

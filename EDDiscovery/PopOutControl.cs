@@ -77,21 +77,21 @@ namespace EDDiscovery.Forms
             { PopOuts.Ledger, new PopOutInfo("Ledger", "Ledger", EDDiscovery.Properties.Resources.ledger, "Display a ledger of cash related entries") },
             { PopOuts.Journal, new PopOutInfo("Journal History", "JournalHistory", EDDiscovery.Properties.Resources.journal, "Display the journal grid view") },
             { PopOuts.TravelGrid, new PopOutInfo("Travel History", "TravelHistory", EDDiscovery.Properties.Resources.travelgrid, "Display the history grid view") },
-            { PopOuts.ScreenShot, new PopOutInfo("ScreenShot", "ScreenShot", EliteDangerous.Properties.Resources.screenshot, "Display the screen shot view") },
+            { PopOuts.ScreenShot, new PopOutInfo("Screen Shot", "ScreenShot", EliteDangerous.Properties.Resources.screenshot, "Display the screen shot view") },
             { PopOuts.Statistics, new PopOutInfo("Statistics", "Stats", EDDiscovery.Properties.Resources.stats, "Display statistics from the history") },
             { PopOuts.Scan, new PopOutInfo("Scan", "Scan", EliteDangerous.Properties.Resources.scan, "Display scan data", transparent: false) },
             { PopOuts.Modules, new PopOutInfo("Loadout", "Modules", EliteDangerous.Properties.Resources.module, "Display Loadout for current ships and also stored modules") },
-            { PopOuts.Exploration, new PopOutInfo("Exploration", "Exploration", EliteDangerous.Properties.Resources.sellexplorationdata, "Display Exploration view") },
+            { PopOuts.Exploration, new PopOutInfo("Exploration", "Exploration", EliteDangerous.Properties.Resources.sellexplorationdata, "Display Exploration Information") },
             { PopOuts.Synthesis, new PopOutInfo("Synthesis", "Synthesis", EliteDangerous.Properties.Resources.synthesis, "Display Synthesis planner") },
             { PopOuts.Missions, new PopOutInfo("Missions", "Missions", EliteDangerous.Properties.Resources.missionaccepted , "Display Missions") },
             { PopOuts.Engineering, new PopOutInfo("Engineering", "Engineering", EliteDangerous.Properties.Resources.engineercraft , "Display Engineering planner") },
             { PopOuts.MarketData, new PopOutInfo("Market Data", "MarketData", EliteDangerous.Properties.Resources.marketdata , "Display Market Data (Requires login to Frontier using Commander Frontier log in details)" ) },
-            { PopOuts.SystemInformation, new PopOutInfo("System Information", "SystemInfo", EliteDangerous.Properties.Resources.ammunition , "Display System Information panel" , transparent:false ) },
-            { PopOuts.Spanel, new PopOutInfo("Summary Panel", "Spanel", EliteDangerous.Properties.Resources.ammunition, "Display the travel system panel" , transparent: true ) },
-            { PopOuts.Trippanel, new PopOutInfo("Trip Panel", "Trippanel", EliteDangerous.Properties.Resources.ammunition, "Display the trip panel" , transparent: true) },
-            { PopOuts.NotePanel, new PopOutInfo("Note Panel", "NotePanel", EliteDangerous.Properties.Resources.ammunition, "Display the note panel" , transparent: true) },
-            { PopOuts.RouteTracker, new PopOutInfo("Route Tracker", "RouteTracker", EliteDangerous.Properties.Resources.ammunition, "Display the route tracker panel", transparent: true) },
-            { PopOuts.Grid, new PopOutInfo("Grid", "TheGrid", EliteDangerous.Properties.Resources.ammunition, "Display the grid which allows other panels to be placed on it" , transparent:false) },
+            { PopOuts.SystemInformation, new PopOutInfo("System Information", "SystemInfo", EDDiscovery.Properties.Resources.starsystem , "Display System Information" , transparent:false ) },
+            { PopOuts.Spanel, new PopOutInfo("Summary", "Spanel", EDDiscovery.Properties.Resources.spanel, "Display the travel system panel" , transparent: false ) },
+            { PopOuts.Trippanel, new PopOutInfo("Trip Computer", "Trippanel", EDDiscovery.Properties.Resources.trippanel, "Display the trip computer" , transparent: false) },
+            { PopOuts.NotePanel, new PopOutInfo("Notes", "NotePanel", EDDiscovery.Properties.Resources.notes, "Display current notes on a system" , transparent: false) },
+            { PopOuts.RouteTracker, new PopOutInfo("Route Tracker", "RouteTracker", EDDiscovery.Properties.Resources.routetracker, "Display the route tracker", transparent: false) },
+            { PopOuts.Grid, new PopOutInfo("The Grid", "TheGrid", EDDiscovery.Properties.Resources.grid, "Display the grid which allows other panels to be placed on it" , transparent:false) },
         };
 
         public class PopOutInfo
@@ -99,21 +99,16 @@ namespace EDDiscovery.Forms
             public string WindowTitlePrefix;
             public string WindowRefName;
             public Bitmap TabIcon;
-            public string tooltip;
+            public string Tooltip;
             public bool SupportsTransparency;
             public bool DefaultTransparent;
-
-            public PopOutInfo()
-            {
-                WindowTitlePrefix = "";
-                WindowRefName = "Unknown";
-            }
 
             public PopOutInfo(string prefix, string rf, Bitmap icon, string tooltip, bool? transparent = null)
             {
                 WindowTitlePrefix = prefix;
                 WindowRefName = rf;
                 TabIcon = icon;
+                Tooltip = tooltip;
                 SupportsTransparency = transparent != null;
                 DefaultTransparent = transparent ?? false;
             }
@@ -134,9 +129,13 @@ namespace EDDiscovery.Forms
         {
             return (from PopOutInfo x in popoutinfo.Values select x.WindowTitlePrefix).ToArray();
         }
+        static public string GetPopOutName( PopOuts p)
+        {
+            return popoutinfo[p].WindowTitlePrefix;
+        }
         static public string[] GetPopOutToolTips()
         {
-            return (from PopOutInfo x in popoutinfo.Values select x.WindowTitlePrefix).ToArray();
+            return (from PopOutInfo x in popoutinfo.Values select x.Tooltip).ToArray();
         }
         static public Bitmap[] GetPopOutImages()
         {
@@ -222,11 +221,11 @@ namespace EDDiscovery.Forms
 
             UserControlCommonBase ctrl = Create(selected);
 
-            if (ctrl != null)
+            PopOutInfo poi = popoutinfo.ContainsKey(selected) ? popoutinfo[selected] : null;
+
+            if (ctrl != null && poi != null )
             {
                 int numopened = usercontrolsforms.CountOf(ctrl.GetType()) + 1;
-
-                PopOutInfo poi = popoutinfo.ContainsKey(selected) ? popoutinfo[selected] : new PopOutInfo();
                 string windowtitle = poi.WindowTitlePrefix + " " + ((numopened > 1) ? numopened.ToString() : "");
                 string refname = poi.WindowRefName + numopened.ToString();
                 tcf.Init(ctrl, windowtitle, _discoveryForm.theme.WindowsFrame, refname, _discoveryForm.TopMost);
