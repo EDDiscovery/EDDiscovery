@@ -43,6 +43,7 @@ namespace EDDiscovery.ImageHandler
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.groupBox_Preview = new ExtendedControls.GroupBoxCustom();
             this.pictureBox = new System.Windows.Forms.PictureBox();
             this.groupBox_Prevcontrols = new ExtendedControls.GroupBoxCustom();
@@ -78,6 +79,7 @@ namespace EDDiscovery.ImageHandler
             this.label3 = new System.Windows.Forms.Label();
             this.comboBoxScanFor = new ExtendedControls.ComboBoxCustom();
             this.comboBoxFormat = new ExtendedControls.ComboBoxCustom();
+            this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.groupBox_Preview.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).BeginInit();
             this.groupBox_Prevcontrols.SuspendLayout();
@@ -289,6 +291,7 @@ namespace EDDiscovery.ImageHandler
             this.checkBoxCropImage.TabIndex = 8;
             this.checkBoxCropImage.Text = "Crop Image";
             this.checkBoxCropImage.TickBoxReductionSize = 10;
+            this.toolTip.SetToolTip(this.checkBoxCropImage, "Crop image to values below");
             this.checkBoxCropImage.UseVisualStyleBackColor = true;
             this.checkBoxCropImage.CheckedChanged += new System.EventHandler(this.checkBoxCropImage_CheckedChanged);
             // 
@@ -306,6 +309,7 @@ namespace EDDiscovery.ImageHandler
             this.checkBoxCopyClipboard.TabIndex = 10;
             this.checkBoxCopyClipboard.Text = "Copy to Clipboard";
             this.checkBoxCopyClipboard.TickBoxReductionSize = 10;
+            this.toolTip.SetToolTip(this.checkBoxCopyClipboard, "Auto Copy to the clipboard");
             this.checkBoxCopyClipboard.UseVisualStyleBackColor = true;
             this.checkBoxCopyClipboard.CheckedChanged += new System.EventHandler(this.checkBoxCopyClipboard_CheckedChanged);
             // 
@@ -323,6 +327,7 @@ namespace EDDiscovery.ImageHandler
             this.checkBoxPreview.TabIndex = 10;
             this.checkBoxPreview.Text = "Preview";
             this.checkBoxPreview.TickBoxReductionSize = 10;
+            this.toolTip.SetToolTip(this.checkBoxPreview, "Preview the file in this window");
             this.checkBoxPreview.UseVisualStyleBackColor = true;
             this.checkBoxPreview.CheckedChanged += new System.EventHandler(this.checkBoxPreview_CheckedChanged);
             // 
@@ -380,12 +385,24 @@ namespace EDDiscovery.ImageHandler
             // textBoxScreenshotsDir
             // 
             this.textBoxScreenshotsDir.AccessibleRole = System.Windows.Forms.AccessibleRole.ScrollBar;
+            this.textBoxScreenshotsDir.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
+            this.textBoxScreenshotsDir.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
             this.textBoxScreenshotsDir.BorderColor = System.Drawing.Color.Transparent;
             this.textBoxScreenshotsDir.BorderColorScaling = 0.5F;
+            this.textBoxScreenshotsDir.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.textBoxScreenshotsDir.ControlBackground = System.Drawing.SystemColors.Control;
             this.textBoxScreenshotsDir.Location = new System.Drawing.Point(214, 42);
+            this.textBoxScreenshotsDir.Multiline = false;
             this.textBoxScreenshotsDir.Name = "textBoxScreenshotsDir";
+            this.textBoxScreenshotsDir.ReadOnly = false;
+            this.textBoxScreenshotsDir.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.textBoxScreenshotsDir.SelectionLength = 0;
+            this.textBoxScreenshotsDir.SelectionStart = 0;
             this.textBoxScreenshotsDir.Size = new System.Drawing.Size(281, 20);
             this.textBoxScreenshotsDir.TabIndex = 1;
+            this.textBoxScreenshotsDir.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.toolTip.SetToolTip(this.textBoxScreenshotsDir, "Enter the folder where Elite or Steam stores its screenshot");
+            this.textBoxScreenshotsDir.WordWrap = true;
             this.textBoxScreenshotsDir.KeyUp += new System.Windows.Forms.KeyEventHandler(this.textBoxScreenshotsDir_KeyUp);
             this.textBoxScreenshotsDir.Leave += new System.EventHandler(this.textBoxScreenshotsDir_Leave);
             // 
@@ -403,6 +420,7 @@ namespace EDDiscovery.ImageHandler
             this.checkBoxHires.TabIndex = 14;
             this.checkBoxHires.Text = "Mark High Resolution Files";
             this.checkBoxHires.TickBoxReductionSize = 10;
+            this.toolTip.SetToolTip(this.checkBoxHires, "Mark high res files with a marker in the name");
             this.checkBoxHires.UseVisualStyleBackColor = true;
             this.checkBoxHires.CheckedChanged += new System.EventHandler(this.checkBox_hires_CheckedChanged);
             // 
@@ -418,14 +436,25 @@ namespace EDDiscovery.ImageHandler
             // textBoxFileNameExample
             // 
             this.textBoxFileNameExample.AccessibleRole = System.Windows.Forms.AccessibleRole.ScrollBar;
+            this.textBoxFileNameExample.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
+            this.textBoxFileNameExample.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
             this.textBoxFileNameExample.BorderColor = System.Drawing.Color.Transparent;
             this.textBoxFileNameExample.BorderColorScaling = 0.5F;
+            this.textBoxFileNameExample.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.textBoxFileNameExample.ControlBackground = System.Drawing.SystemColors.Control;
             this.textBoxFileNameExample.Location = new System.Drawing.Point(448, 128);
+            this.textBoxFileNameExample.Multiline = false;
             this.textBoxFileNameExample.Name = "textBoxFileNameExample";
             this.textBoxFileNameExample.ReadOnly = true;
+            this.textBoxFileNameExample.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.textBoxFileNameExample.SelectionLength = 0;
+            this.textBoxFileNameExample.SelectionStart = 0;
             this.textBoxFileNameExample.Size = new System.Drawing.Size(220, 20);
             this.textBoxFileNameExample.TabIndex = 13;
             this.textBoxFileNameExample.TabStop = false;
+            this.textBoxFileNameExample.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.toolTip.SetToolTip(this.textBoxFileNameExample, "Example file name");
+            this.textBoxFileNameExample.WordWrap = true;
             // 
             // buttonChnageEDScreenshot
             // 
@@ -437,6 +466,7 @@ namespace EDDiscovery.ImageHandler
             this.buttonChnageEDScreenshot.Size = new System.Drawing.Size(57, 23);
             this.buttonChnageEDScreenshot.TabIndex = 2;
             this.buttonChnageEDScreenshot.Text = "Browse";
+            this.toolTip.SetToolTip(this.buttonChnageEDScreenshot, "Browse to the folder");
             this.buttonChnageEDScreenshot.UseVisualStyleBackColor = true;
             this.buttonChnageEDScreenshot.Click += new System.EventHandler(this.buttonChnageEDScreenshot_Click);
             // 
@@ -461,12 +491,24 @@ namespace EDDiscovery.ImageHandler
             // textBoxOutputDir
             // 
             this.textBoxOutputDir.AccessibleRole = System.Windows.Forms.AccessibleRole.ScrollBar;
+            this.textBoxOutputDir.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
+            this.textBoxOutputDir.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
             this.textBoxOutputDir.BorderColor = System.Drawing.Color.Transparent;
             this.textBoxOutputDir.BorderColorScaling = 0.5F;
+            this.textBoxOutputDir.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.textBoxOutputDir.ControlBackground = System.Drawing.SystemColors.Control;
             this.textBoxOutputDir.Location = new System.Drawing.Point(214, 68);
+            this.textBoxOutputDir.Multiline = false;
             this.textBoxOutputDir.Name = "textBoxOutputDir";
+            this.textBoxOutputDir.ReadOnly = false;
+            this.textBoxOutputDir.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.textBoxOutputDir.SelectionLength = 0;
+            this.textBoxOutputDir.SelectionStart = 0;
             this.textBoxOutputDir.Size = new System.Drawing.Size(281, 20);
             this.textBoxOutputDir.TabIndex = 3;
+            this.textBoxOutputDir.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.toolTip.SetToolTip(this.textBoxOutputDir, "Enter the folder to store converted pictures in");
+            this.textBoxOutputDir.WordWrap = true;
             this.textBoxOutputDir.KeyUp += new System.Windows.Forms.KeyEventHandler(this.textBoxOutputDir_KeyUp);
             this.textBoxOutputDir.Leave += new System.EventHandler(this.textBoxOutputDir_Leave);
             // 
@@ -493,6 +535,7 @@ namespace EDDiscovery.ImageHandler
             this.comboBoxSubFolder.SelectedValue = null;
             this.comboBoxSubFolder.Size = new System.Drawing.Size(220, 21);
             this.comboBoxSubFolder.TabIndex = 7;
+            this.toolTip.SetToolTip(this.comboBoxSubFolder, "Select if a subfolder is to be used");
             this.comboBoxSubFolder.ValueMember = "";
             this.comboBoxSubFolder.SelectedIndexChanged += new System.EventHandler(this.comboBoxSubFolder_SelectedIndexChanged);
             // 
@@ -519,6 +562,7 @@ namespace EDDiscovery.ImageHandler
             this.comboBoxFileNameFormat.SelectedValue = null;
             this.comboBoxFileNameFormat.Size = new System.Drawing.Size(220, 21);
             this.comboBoxFileNameFormat.TabIndex = 7;
+            this.toolTip.SetToolTip(this.comboBoxFileNameFormat, "Select the filename format of the created file");
             this.comboBoxFileNameFormat.ValueMember = "";
             this.comboBoxFileNameFormat.SelectedIndexChanged += new System.EventHandler(this.comboBoxFileNameFormat_SelectedIndexChanged);
             // 
@@ -545,6 +589,7 @@ namespace EDDiscovery.ImageHandler
             this.checkBoxRemove.TabIndex = 6;
             this.checkBoxRemove.Text = "Remove original image after conversion";
             this.checkBoxRemove.TickBoxReductionSize = 10;
+            this.toolTip.SetToolTip(this.checkBoxRemove, "After conversion, delete the original");
             this.checkBoxRemove.UseVisualStyleBackColor = true;
             this.checkBoxRemove.CheckedChanged += new System.EventHandler(this.checkBoxRemove_CheckedChanged);
             // 
@@ -558,13 +603,14 @@ namespace EDDiscovery.ImageHandler
             this.buttonImageStore.Size = new System.Drawing.Size(57, 23);
             this.buttonImageStore.TabIndex = 4;
             this.buttonImageStore.Text = "Browse";
+            this.toolTip.SetToolTip(this.buttonImageStore, "Browse to the folder");
             this.buttonImageStore.UseVisualStyleBackColor = true;
             this.buttonImageStore.Click += new System.EventHandler(this.buttonImageStore_Click);
             // 
             // label9
             // 
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(588, 72);
+            this.label9.Location = new System.Drawing.Point(592, 45);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(47, 13);
             this.label9.TabIndex = 8;
@@ -573,7 +619,7 @@ namespace EDDiscovery.ImageHandler
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(588, 47);
+            this.label3.Location = new System.Drawing.Point(592, 71);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(46, 13);
             this.label3.TabIndex = 8;
@@ -591,7 +637,7 @@ namespace EDDiscovery.ImageHandler
             this.comboBoxScanFor.DropDownWidth = 161;
             this.comboBoxScanFor.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.comboBoxScanFor.ItemHeight = 13;
-            this.comboBoxScanFor.Location = new System.Drawing.Point(652, 69);
+            this.comboBoxScanFor.Location = new System.Drawing.Point(656, 42);
             this.comboBoxScanFor.MouseOverBackgroundColor = System.Drawing.Color.Silver;
             this.comboBoxScanFor.Name = "comboBoxScanFor";
             this.comboBoxScanFor.ScrollBarButtonColor = System.Drawing.Color.LightGray;
@@ -602,6 +648,7 @@ namespace EDDiscovery.ImageHandler
             this.comboBoxScanFor.SelectedValue = null;
             this.comboBoxScanFor.Size = new System.Drawing.Size(135, 21);
             this.comboBoxScanFor.TabIndex = 5;
+            this.toolTip.SetToolTip(this.comboBoxScanFor, "Scan folders for this format of file");
             this.comboBoxScanFor.ValueMember = "";
             this.comboBoxScanFor.SelectedIndexChanged += new System.EventHandler(this.comboBoxScanFor_SelectedIndexChanged);
             // 
@@ -617,7 +664,7 @@ namespace EDDiscovery.ImageHandler
             this.comboBoxFormat.DropDownWidth = 161;
             this.comboBoxFormat.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.comboBoxFormat.ItemHeight = 13;
-            this.comboBoxFormat.Location = new System.Drawing.Point(652, 42);
+            this.comboBoxFormat.Location = new System.Drawing.Point(656, 66);
             this.comboBoxFormat.MouseOverBackgroundColor = System.Drawing.Color.Silver;
             this.comboBoxFormat.Name = "comboBoxFormat";
             this.comboBoxFormat.ScrollBarButtonColor = System.Drawing.Color.LightGray;
@@ -628,8 +675,13 @@ namespace EDDiscovery.ImageHandler
             this.comboBoxFormat.SelectedValue = null;
             this.comboBoxFormat.Size = new System.Drawing.Size(135, 21);
             this.comboBoxFormat.TabIndex = 5;
+            this.toolTip.SetToolTip(this.comboBoxFormat, "Save the image as this type");
             this.comboBoxFormat.ValueMember = "";
             this.comboBoxFormat.SelectedIndexChanged += new System.EventHandler(this.comboBoxFormat_SelectedIndexChanged);
+            // 
+            // toolTip1
+            // 
+            this.toolTip.ShowAlways = true;
             // 
             // ImageHandler
             // 
@@ -690,5 +742,6 @@ namespace EDDiscovery.ImageHandler
         private ExtendedControls.CheckBoxCustom checkBoxCopyClipboard;
         private System.Windows.Forms.Label label11;
         private ExtendedControls.ComboBoxCustom comboBoxSubFolder;
+        private System.Windows.Forms.ToolTip toolTip;
     }
 }

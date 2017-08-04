@@ -43,6 +43,7 @@ namespace EDDiscovery.UserControls
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.dataViewScrollerPanel = new ExtendedControls.DataViewScrollerPanel();
             this.dataGridViewModules = new System.Windows.Forms.DataGridView();
             this.SlotCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -59,6 +60,7 @@ namespace EDDiscovery.UserControls
             this.LabelVehicleText = new System.Windows.Forms.Label();
             this.labelShip = new System.Windows.Forms.Label();
             this.comboBoxShips = new ExtendedControls.ComboBoxCustom();
+            this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.dataViewScrollerPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewModules)).BeginInit();
             this.panelButtons.SuspendLayout();
@@ -205,6 +207,7 @@ namespace EDDiscovery.UserControls
             this.buttonExtCoriolis.Name = "buttonExtCoriolis";
             this.buttonExtCoriolis.Size = new System.Drawing.Size(24, 24);
             this.buttonExtCoriolis.TabIndex = 29;
+            this.toolTip.SetToolTip(this.buttonExtCoriolis, "Send to Corolis");
             this.buttonExtCoriolis.UseVisualStyleBackColor = false;
             this.buttonExtCoriolis.Click += new System.EventHandler(this.buttonExtCoriolis_Click);
             // 
@@ -256,8 +259,9 @@ namespace EDDiscovery.UserControls
             this.comboBoxShips.SelectedIndex = -1;
             this.comboBoxShips.SelectedItem = null;
             this.comboBoxShips.SelectedValue = null;
-            this.comboBoxShips.Size = new System.Drawing.Size(188, 22);
+            this.comboBoxShips.Size = new System.Drawing.Size(188, 21);
             this.comboBoxShips.TabIndex = 0;
+            this.toolTip.SetToolTip(this.comboBoxShips, "Select ship to view");
             this.comboBoxShips.ValueMember = "";
             this.comboBoxShips.SelectedIndexChanged += new System.EventHandler(this.comboBoxHistoryWindow_SelectedIndexChanged);
             // 
@@ -295,5 +299,6 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.DataGridViewTextBoxColumn Value;
         private System.Windows.Forms.DataGridViewTextBoxColumn PriorityEnable;
         private ExtendedControls.ButtonExt buttonExtCoriolis;
+        private System.Windows.Forms.ToolTip toolTip;
     }
 }

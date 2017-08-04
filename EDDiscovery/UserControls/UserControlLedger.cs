@@ -45,8 +45,9 @@ namespace EDDiscovery.UserControls
         public UserControlLedger()
         {
             InitializeComponent();
-            Name = "Ledger";
-            this.textBoxFilter.SetToolTip(toolTip1, "Display entries matching this string");
+            this.textBoxFilter.SetToolTip(toolTip, "Display entries matching this string");
+            comboBoxHistoryWindow.SetToolTip(toolTip);
+            textBoxFilter.SetToolTip(toolTip);
         }
 
         public override void Init( EDDiscoveryForm ed, UserControlTravelGrid thc, int vn) //0=primary, 1 = first windowed version, etc

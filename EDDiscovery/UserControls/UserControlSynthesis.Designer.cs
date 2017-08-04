@@ -55,7 +55,7 @@ namespace EDDiscovery.UserControls
             this.vScrollBarCustomMC = new ExtendedControls.VScrollBarCustom();
             this.panelButtons = new System.Windows.Forms.Panel();
             this.comboBoxSynthesis = new ExtendedControls.ComboBoxCustom();
-            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.dataViewScrollerPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewSynthesis)).BeginInit();
             this.panelButtons.SuspendLayout();
@@ -190,7 +190,7 @@ namespace EDDiscovery.UserControls
             this.panelButtons.Name = "panelButtons";
             this.panelButtons.Size = new System.Drawing.Size(800, 32);
             this.panelButtons.TabIndex = 2;
-            this.toolTip1.SetToolTip(this.panelButtons, "Left click and drag on grid to reorder");
+            this.toolTip.SetToolTip(this.panelButtons, "Left click and drag on grid to reorder");
             // 
             // comboBoxSynthesis
             // 
@@ -213,14 +213,15 @@ namespace EDDiscovery.UserControls
             this.comboBoxSynthesis.SelectedIndex = -1;
             this.comboBoxSynthesis.SelectedItem = null;
             this.comboBoxSynthesis.SelectedValue = null;
-            this.comboBoxSynthesis.Size = new System.Drawing.Size(218, 24);
+            this.comboBoxSynthesis.Size = new System.Drawing.Size(218, 21);
             this.comboBoxSynthesis.TabIndex = 0;
+            this.toolTip.SetToolTip(this.comboBoxSynthesis, "Select Synthesis group");
             this.comboBoxSynthesis.ValueMember = "";
             this.comboBoxSynthesis.SelectedIndexChanged += new System.EventHandler(this.comboBoxHistoryWindow_SelectedIndexChanged);
             // 
-            // toolTip1
+            // toolTip
             // 
-            this.toolTip1.ShowAlways = true;
+            this.toolTip.ShowAlways = true;
             // 
             // UserControlSynthesis
             // 
@@ -244,7 +245,7 @@ namespace EDDiscovery.UserControls
         private ExtendedControls.VScrollBarCustom vScrollBarCustomMC;
         private System.Windows.Forms.Panel panelButtons;
         internal ExtendedControls.ComboBoxCustom comboBoxSynthesis;
-        private System.Windows.Forms.ToolTip toolTip1;
+        private System.Windows.Forms.ToolTip toolTip;
         private System.Windows.Forms.DataGridViewTextBoxColumn UpgradeCol;
         private System.Windows.Forms.DataGridViewTextBoxColumn MaxCol;
         private System.Windows.Forms.DataGridViewTextBoxColumn WantedCol;

@@ -227,6 +227,12 @@ namespace ExtendedControls
             this.Controls.Add(this._cbsystem);
         }
 
+        public void SetToolTip(ToolTip tt)
+        {
+            string s = tt.GetToolTip(this);
+            tt.SetToolTip(_cbsystem, s);
+        }
+
         public ComboBox GetInternalSystemControl { get { return this._cbsystem; }  }
 
         protected override void OnPaint(PaintEventArgs e)

@@ -237,6 +237,10 @@ namespace EDDiscovery
             notifyIcon1.Visible = EDDConfig.UseNotifyIcon;
 
             SetUpLogging();
+
+            comboBoxCommander.SetToolTip(toolTip);
+            comboBoxCustomPopOut.SetToolTip(toolTip);
+            panelToolBar.SetToolTip(toolTip);    // use the defaults
         }
 
         // OnLoad is called the first time the form is shown, before OnShown or OnActivated are called
@@ -1159,7 +1163,17 @@ namespace EDDiscovery
             actioncontroller.ManageAddOns();
         }
 
+        private void buttonExtManageAddOns_Click(object sender, EventArgs e)
+        {
+            actioncontroller.ManageAddOns();
+        }
+
         private void configureAddOnActionsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            actioncontroller.EditAddOns();
+        }
+
+        private void buttonExtEditAddOns_Click(object sender, EventArgs e)
         {
             actioncontroller.EditAddOns();
         }
@@ -1428,6 +1442,7 @@ namespace EDDiscovery
             List<HistoryEntry> hlsyncunsyncedlist = Controller.history.FilterByScanNotEGOSynced;        // first entry is oldest
             EDDiscoveryCore.EGO.EGOSync.SendEGOEvents(LogLine, hlsyncunsyncedlist);
         }
+
     }
 }
 

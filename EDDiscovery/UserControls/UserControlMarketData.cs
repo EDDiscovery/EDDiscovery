@@ -43,7 +43,8 @@ namespace EDDiscovery.UserControls
         public UserControlMarketData()
         {
             InitializeComponent();
-            Name = "Market Data";
+            comboBoxCustomFrom.SetToolTip(toolTip);
+            comboBoxCustomTo.SetToolTip(toolTip);
         }
 
         public override void Init( EDDiscoveryForm ed, UserControlTravelGrid thc, int vn) //0=primary, 1 = first windowed version, etc
@@ -111,7 +112,7 @@ namespace EDDiscovery.UserControls
 
             dataGridViewMarketData.Rows.Clear();
             labelLocation.Text = "No Data";
-            toolTip1.SetToolTip(labelLocation, null);
+            toolTip.SetToolTip(labelLocation, null);
 
             HistoryEntry left = (eddmd_left != null) ? eddmd_left : last_eddmd;       // if we have a selected left, use it, else use the last eddmd
             HistoryEntry cargo = (eddmd_left != null) ? eddmd_left : last_he;           // if we have a selected left, use it, else use the last he
@@ -193,7 +194,7 @@ namespace EDDiscovery.UserControls
 
                 labelLocation.Text = left.System.name + ":" + left.WhereAmI;
                 string r = "Recorded at " + ((EDDiscoveryForm.EDDConfig.DisplayUTC) ? left.EventTimeUTC.ToString() : left.EventTimeLocal.ToString());
-                toolTip1.SetToolTip(labelLocation, r);
+                toolTip.SetToolTip(labelLocation, r);
             }
 
             dataGridViewMarketData.Sort(sortcol, (sortorder == SortOrder.Descending) ? ListSortDirection.Descending : ListSortDirection.Ascending);

@@ -46,14 +46,6 @@ namespace EDDiscovery.UserControls
             this.components = new System.ComponentModel.Container();
             this.dataViewScrollerPanel = new ExtendedControls.DataViewScrollerPanel();
             this.dataGridViewMarketData = new System.Windows.Forms.DataGridView();
-            this.vScrollBarCustomMC = new ExtendedControls.VScrollBarCustom();
-            this.panelButtons = new System.Windows.Forms.Panel();
-            this.checkBoxBuyOnly = new ExtendedControls.CheckBoxCustom();
-            this.label1 = new System.Windows.Forms.Label();
-            this.comboBoxCustomTo = new ExtendedControls.ComboBoxCustom();
-            this.comboBoxCustomFrom = new ExtendedControls.ComboBoxCustom();
-            this.labelLocation = new System.Windows.Forms.Label();
-            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.CategoryCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.NameCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.SellCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -64,6 +56,14 @@ namespace EDDiscovery.UserControls
             this.GalAvgCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ProfitToCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ProfitFromCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.vScrollBarCustomMC = new ExtendedControls.VScrollBarCustom();
+            this.panelButtons = new System.Windows.Forms.Panel();
+            this.checkBoxBuyOnly = new ExtendedControls.CheckBoxCustom();
+            this.label1 = new System.Windows.Forms.Label();
+            this.comboBoxCustomTo = new ExtendedControls.ComboBoxCustom();
+            this.comboBoxCustomFrom = new ExtendedControls.ComboBoxCustom();
+            this.labelLocation = new System.Windows.Forms.Label();
+            this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.dataViewScrollerPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewMarketData)).BeginInit();
             this.panelButtons.SuspendLayout();
@@ -106,139 +106,6 @@ namespace EDDiscovery.UserControls
             this.dataGridViewMarketData.Size = new System.Drawing.Size(780, 540);
             this.dataGridViewMarketData.TabIndex = 1;
             this.dataGridViewMarketData.SortCompare += new System.Windows.Forms.DataGridViewSortCompareEventHandler(this.dataGridViewMarketData_SortCompare);
-            // 
-            // vScrollBarCustomMC
-            // 
-            this.vScrollBarCustomMC.ArrowBorderColor = System.Drawing.Color.LightBlue;
-            this.vScrollBarCustomMC.ArrowButtonColor = System.Drawing.Color.LightGray;
-            this.vScrollBarCustomMC.ArrowColorScaling = 0.5F;
-            this.vScrollBarCustomMC.ArrowDownDrawAngle = 270F;
-            this.vScrollBarCustomMC.ArrowUpDrawAngle = 90F;
-            this.vScrollBarCustomMC.BorderColor = System.Drawing.Color.White;
-            this.vScrollBarCustomMC.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.vScrollBarCustomMC.HideScrollBar = false;
-            this.vScrollBarCustomMC.LargeChange = 0;
-            this.vScrollBarCustomMC.Location = new System.Drawing.Point(780, 34);
-            this.vScrollBarCustomMC.Maximum = -1;
-            this.vScrollBarCustomMC.Minimum = 0;
-            this.vScrollBarCustomMC.MouseOverButtonColor = System.Drawing.Color.Green;
-            this.vScrollBarCustomMC.MousePressedButtonColor = System.Drawing.Color.Red;
-            this.vScrollBarCustomMC.Name = "vScrollBarCustomMC";
-            this.vScrollBarCustomMC.Size = new System.Drawing.Size(20, 506);
-            this.vScrollBarCustomMC.SliderColor = System.Drawing.Color.DarkGray;
-            this.vScrollBarCustomMC.SmallChange = 1;
-            this.vScrollBarCustomMC.TabIndex = 0;
-            this.vScrollBarCustomMC.Text = "vScrollBarCustom1";
-            this.vScrollBarCustomMC.ThumbBorderColor = System.Drawing.Color.Yellow;
-            this.vScrollBarCustomMC.ThumbButtonColor = System.Drawing.Color.DarkBlue;
-            this.vScrollBarCustomMC.ThumbColorScaling = 0.5F;
-            this.vScrollBarCustomMC.ThumbDrawAngle = 0F;
-            this.vScrollBarCustomMC.Value = -1;
-            this.vScrollBarCustomMC.ValueLimited = -1;
-            // 
-            // panelButtons
-            // 
-            this.panelButtons.Controls.Add(this.checkBoxBuyOnly);
-            this.panelButtons.Controls.Add(this.label1);
-            this.panelButtons.Controls.Add(this.comboBoxCustomTo);
-            this.panelButtons.Controls.Add(this.comboBoxCustomFrom);
-            this.panelButtons.Controls.Add(this.labelLocation);
-            this.panelButtons.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelButtons.Location = new System.Drawing.Point(0, 0);
-            this.panelButtons.Name = "panelButtons";
-            this.panelButtons.Size = new System.Drawing.Size(800, 32);
-            this.panelButtons.TabIndex = 2;
-            // 
-            // checkBoxBuyOnly
-            // 
-            this.checkBoxBuyOnly.AutoSize = true;
-            this.checkBoxBuyOnly.CheckBoxColor = System.Drawing.Color.Gray;
-            this.checkBoxBuyOnly.CheckBoxInnerColor = System.Drawing.Color.White;
-            this.checkBoxBuyOnly.CheckColor = System.Drawing.Color.DarkBlue;
-            this.checkBoxBuyOnly.FontNerfReduction = 0.5F;
-            this.checkBoxBuyOnly.Location = new System.Drawing.Point(584, 9);
-            this.checkBoxBuyOnly.MouseOverColor = System.Drawing.Color.CornflowerBlue;
-            this.checkBoxBuyOnly.Name = "checkBoxBuyOnly";
-            this.checkBoxBuyOnly.Size = new System.Drawing.Size(68, 17);
-            this.checkBoxBuyOnly.TabIndex = 29;
-            this.checkBoxBuyOnly.Text = "Buy Only";
-            this.checkBoxBuyOnly.TickBoxReductionSize = 10;
-            this.checkBoxBuyOnly.UseVisualStyleBackColor = true;
-            this.checkBoxBuyOnly.CheckedChanged += new System.EventHandler(this.checkBoxBuyOnly_CheckedChanged);
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(355, 13);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(19, 13);
-            this.label1.TabIndex = 28;
-            this.label1.Text = "Vs";
-            // 
-            // comboBoxCustomTo
-            // 
-            this.comboBoxCustomTo.ArrowWidth = 1;
-            this.comboBoxCustomTo.BorderColor = System.Drawing.Color.White;
-            this.comboBoxCustomTo.ButtonColorScaling = 0.5F;
-            this.comboBoxCustomTo.DataSource = null;
-            this.comboBoxCustomTo.DisplayMember = "";
-            this.comboBoxCustomTo.DropDownBackgroundColor = System.Drawing.Color.Gray;
-            this.comboBoxCustomTo.DropDownHeight = 150;
-            this.comboBoxCustomTo.DropDownWidth = 400;
-            this.comboBoxCustomTo.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.comboBoxCustomTo.ItemHeight = 13;
-            this.comboBoxCustomTo.Location = new System.Drawing.Point(389, 7);
-            this.comboBoxCustomTo.MouseOverBackgroundColor = System.Drawing.Color.Silver;
-            this.comboBoxCustomTo.Name = "comboBoxCustomTo";
-            this.comboBoxCustomTo.ScrollBarButtonColor = System.Drawing.Color.LightGray;
-            this.comboBoxCustomTo.ScrollBarColor = System.Drawing.Color.LightGray;
-            this.comboBoxCustomTo.ScrollBarWidth = 16;
-            this.comboBoxCustomTo.SelectedIndex = -1;
-            this.comboBoxCustomTo.SelectedItem = null;
-            this.comboBoxCustomTo.SelectedValue = null;
-            this.comboBoxCustomTo.Size = new System.Drawing.Size(176, 23);
-            this.comboBoxCustomTo.TabIndex = 27;
-            this.comboBoxCustomTo.ValueMember = "";
-            this.comboBoxCustomTo.SelectedIndexChanged += new System.EventHandler(this.comboBoxCustomTo_SelectedIndexChanged);
-            // 
-            // comboBoxCustomFrom
-            // 
-            this.comboBoxCustomFrom.ArrowWidth = 1;
-            this.comboBoxCustomFrom.BorderColor = System.Drawing.Color.White;
-            this.comboBoxCustomFrom.ButtonColorScaling = 0.5F;
-            this.comboBoxCustomFrom.DataSource = null;
-            this.comboBoxCustomFrom.DisplayMember = "";
-            this.comboBoxCustomFrom.DropDownBackgroundColor = System.Drawing.Color.Gray;
-            this.comboBoxCustomFrom.DropDownHeight = 150;
-            this.comboBoxCustomFrom.DropDownWidth = 400;
-            this.comboBoxCustomFrom.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.comboBoxCustomFrom.ItemHeight = 13;
-            this.comboBoxCustomFrom.Location = new System.Drawing.Point(167, 7);
-            this.comboBoxCustomFrom.MouseOverBackgroundColor = System.Drawing.Color.Silver;
-            this.comboBoxCustomFrom.Name = "comboBoxCustomFrom";
-            this.comboBoxCustomFrom.ScrollBarButtonColor = System.Drawing.Color.LightGray;
-            this.comboBoxCustomFrom.ScrollBarColor = System.Drawing.Color.LightGray;
-            this.comboBoxCustomFrom.ScrollBarWidth = 16;
-            this.comboBoxCustomFrom.SelectedIndex = -1;
-            this.comboBoxCustomFrom.SelectedItem = null;
-            this.comboBoxCustomFrom.SelectedValue = null;
-            this.comboBoxCustomFrom.Size = new System.Drawing.Size(176, 23);
-            this.comboBoxCustomFrom.TabIndex = 27;
-            this.comboBoxCustomFrom.ValueMember = "";
-            this.comboBoxCustomFrom.SelectedIndexChanged += new System.EventHandler(this.comboBoxCustomFrom_SelectedIndexChanged);
-            // 
-            // labelLocation
-            // 
-            this.labelLocation.AutoSize = true;
-            this.labelLocation.Location = new System.Drawing.Point(3, 7);
-            this.labelLocation.Name = "labelLocation";
-            this.labelLocation.Size = new System.Drawing.Size(47, 13);
-            this.labelLocation.TabIndex = 26;
-            this.labelLocation.Text = "No Data";
-            // 
-            // toolTip1
-            // 
-            this.toolTip1.ShowAlways = true;
             // 
             // CategoryCol
             // 
@@ -318,6 +185,140 @@ namespace EDDiscovery.UserControls
             this.ProfitFromCol.Name = "ProfitFromCol";
             this.ProfitFromCol.ReadOnly = true;
             // 
+            // vScrollBarCustomMC
+            // 
+            this.vScrollBarCustomMC.ArrowBorderColor = System.Drawing.Color.LightBlue;
+            this.vScrollBarCustomMC.ArrowButtonColor = System.Drawing.Color.LightGray;
+            this.vScrollBarCustomMC.ArrowColorScaling = 0.5F;
+            this.vScrollBarCustomMC.ArrowDownDrawAngle = 270F;
+            this.vScrollBarCustomMC.ArrowUpDrawAngle = 90F;
+            this.vScrollBarCustomMC.BorderColor = System.Drawing.Color.White;
+            this.vScrollBarCustomMC.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.vScrollBarCustomMC.HideScrollBar = false;
+            this.vScrollBarCustomMC.LargeChange = 0;
+            this.vScrollBarCustomMC.Location = new System.Drawing.Point(780, 47);
+            this.vScrollBarCustomMC.Maximum = -1;
+            this.vScrollBarCustomMC.Minimum = 0;
+            this.vScrollBarCustomMC.MouseOverButtonColor = System.Drawing.Color.Green;
+            this.vScrollBarCustomMC.MousePressedButtonColor = System.Drawing.Color.Red;
+            this.vScrollBarCustomMC.Name = "vScrollBarCustomMC";
+            this.vScrollBarCustomMC.Size = new System.Drawing.Size(20, 493);
+            this.vScrollBarCustomMC.SliderColor = System.Drawing.Color.DarkGray;
+            this.vScrollBarCustomMC.SmallChange = 1;
+            this.vScrollBarCustomMC.TabIndex = 0;
+            this.vScrollBarCustomMC.Text = "vScrollBarCustom1";
+            this.vScrollBarCustomMC.ThumbBorderColor = System.Drawing.Color.Yellow;
+            this.vScrollBarCustomMC.ThumbButtonColor = System.Drawing.Color.DarkBlue;
+            this.vScrollBarCustomMC.ThumbColorScaling = 0.5F;
+            this.vScrollBarCustomMC.ThumbDrawAngle = 0F;
+            this.vScrollBarCustomMC.Value = -1;
+            this.vScrollBarCustomMC.ValueLimited = -1;
+            // 
+            // panelButtons
+            // 
+            this.panelButtons.Controls.Add(this.checkBoxBuyOnly);
+            this.panelButtons.Controls.Add(this.label1);
+            this.panelButtons.Controls.Add(this.comboBoxCustomTo);
+            this.panelButtons.Controls.Add(this.comboBoxCustomFrom);
+            this.panelButtons.Controls.Add(this.labelLocation);
+            this.panelButtons.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panelButtons.Location = new System.Drawing.Point(0, 0);
+            this.panelButtons.Name = "panelButtons";
+            this.panelButtons.Size = new System.Drawing.Size(800, 32);
+            this.panelButtons.TabIndex = 2;
+            // 
+            // checkBoxBuyOnly
+            // 
+            this.checkBoxBuyOnly.AutoSize = true;
+            this.checkBoxBuyOnly.CheckBoxColor = System.Drawing.Color.Gray;
+            this.checkBoxBuyOnly.CheckBoxInnerColor = System.Drawing.Color.White;
+            this.checkBoxBuyOnly.CheckColor = System.Drawing.Color.DarkBlue;
+            this.checkBoxBuyOnly.FontNerfReduction = 0.5F;
+            this.checkBoxBuyOnly.Location = new System.Drawing.Point(584, 9);
+            this.checkBoxBuyOnly.MouseOverColor = System.Drawing.Color.CornflowerBlue;
+            this.checkBoxBuyOnly.Name = "checkBoxBuyOnly";
+            this.checkBoxBuyOnly.Size = new System.Drawing.Size(68, 17);
+            this.checkBoxBuyOnly.TabIndex = 29;
+            this.checkBoxBuyOnly.Text = "Buy Only";
+            this.checkBoxBuyOnly.TickBoxReductionSize = 10;
+            this.toolTip.SetToolTip(this.checkBoxBuyOnly, "Show items you can buy only");
+            this.checkBoxBuyOnly.UseVisualStyleBackColor = true;
+            this.checkBoxBuyOnly.CheckedChanged += new System.EventHandler(this.checkBoxBuyOnly_CheckedChanged);
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(355, 13);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(19, 13);
+            this.label1.TabIndex = 28;
+            this.label1.Text = "Vs";
+            // 
+            // comboBoxCustomTo
+            // 
+            this.comboBoxCustomTo.ArrowWidth = 1;
+            this.comboBoxCustomTo.BorderColor = System.Drawing.Color.White;
+            this.comboBoxCustomTo.ButtonColorScaling = 0.5F;
+            this.comboBoxCustomTo.DataSource = null;
+            this.comboBoxCustomTo.DisplayMember = "";
+            this.comboBoxCustomTo.DropDownBackgroundColor = System.Drawing.Color.Gray;
+            this.comboBoxCustomTo.DropDownHeight = 150;
+            this.comboBoxCustomTo.DropDownWidth = 400;
+            this.comboBoxCustomTo.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.comboBoxCustomTo.ItemHeight = 13;
+            this.comboBoxCustomTo.Location = new System.Drawing.Point(389, 7);
+            this.comboBoxCustomTo.MouseOverBackgroundColor = System.Drawing.Color.Silver;
+            this.comboBoxCustomTo.Name = "comboBoxCustomTo";
+            this.comboBoxCustomTo.ScrollBarButtonColor = System.Drawing.Color.LightGray;
+            this.comboBoxCustomTo.ScrollBarColor = System.Drawing.Color.LightGray;
+            this.comboBoxCustomTo.ScrollBarWidth = 16;
+            this.comboBoxCustomTo.SelectedIndex = -1;
+            this.comboBoxCustomTo.SelectedItem = null;
+            this.comboBoxCustomTo.SelectedValue = null;
+            this.comboBoxCustomTo.Size = new System.Drawing.Size(176, 21);
+            this.comboBoxCustomTo.TabIndex = 27;
+            this.comboBoxCustomTo.ValueMember = "";
+            this.comboBoxCustomTo.SelectedIndexChanged += new System.EventHandler(this.comboBoxCustomTo_SelectedIndexChanged);
+            // 
+            // comboBoxCustomFrom
+            // 
+            this.comboBoxCustomFrom.ArrowWidth = 1;
+            this.comboBoxCustomFrom.BorderColor = System.Drawing.Color.White;
+            this.comboBoxCustomFrom.ButtonColorScaling = 0.5F;
+            this.comboBoxCustomFrom.DataSource = null;
+            this.comboBoxCustomFrom.DisplayMember = "";
+            this.comboBoxCustomFrom.DropDownBackgroundColor = System.Drawing.Color.Gray;
+            this.comboBoxCustomFrom.DropDownHeight = 150;
+            this.comboBoxCustomFrom.DropDownWidth = 400;
+            this.comboBoxCustomFrom.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.comboBoxCustomFrom.ItemHeight = 13;
+            this.comboBoxCustomFrom.Location = new System.Drawing.Point(167, 7);
+            this.comboBoxCustomFrom.MouseOverBackgroundColor = System.Drawing.Color.Silver;
+            this.comboBoxCustomFrom.Name = "comboBoxCustomFrom";
+            this.comboBoxCustomFrom.ScrollBarButtonColor = System.Drawing.Color.LightGray;
+            this.comboBoxCustomFrom.ScrollBarColor = System.Drawing.Color.LightGray;
+            this.comboBoxCustomFrom.ScrollBarWidth = 16;
+            this.comboBoxCustomFrom.SelectedIndex = -1;
+            this.comboBoxCustomFrom.SelectedItem = null;
+            this.comboBoxCustomFrom.SelectedValue = null;
+            this.comboBoxCustomFrom.Size = new System.Drawing.Size(176, 21);
+            this.comboBoxCustomFrom.TabIndex = 27;
+            this.comboBoxCustomFrom.ValueMember = "";
+            this.comboBoxCustomFrom.SelectedIndexChanged += new System.EventHandler(this.comboBoxCustomFrom_SelectedIndexChanged);
+            // 
+            // labelLocation
+            // 
+            this.labelLocation.AutoSize = true;
+            this.labelLocation.Location = new System.Drawing.Point(3, 7);
+            this.labelLocation.Name = "labelLocation";
+            this.labelLocation.Size = new System.Drawing.Size(47, 13);
+            this.labelLocation.TabIndex = 26;
+            this.labelLocation.Text = "No Data";
+            // 
+            // toolTip
+            // 
+            this.toolTip.ShowAlways = true;
+            // 
             // UserControlMarketData
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -340,7 +341,7 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.DataGridView dataGridViewMarketData;
         private ExtendedControls.VScrollBarCustom vScrollBarCustomMC;
         private System.Windows.Forms.Panel panelButtons;
-        private System.Windows.Forms.ToolTip toolTip1;
+        private System.Windows.Forms.ToolTip toolTip;
         private System.Windows.Forms.Label labelLocation;
         private ExtendedControls.ComboBoxCustom comboBoxCustomTo;
         private ExtendedControls.ComboBoxCustom comboBoxCustomFrom;

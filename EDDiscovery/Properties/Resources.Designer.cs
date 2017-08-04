@@ -133,6 +133,16 @@ namespace EDDiscovery.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap dustbinshorter {
+            get {
+                object obj = ResourceManager.GetObject("dustbinshorter", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap eddiscovery_logo {
             get {
                 object obj = ResourceManager.GetObject("eddiscovery_logo", resourceCulture);
@@ -207,6 +217,16 @@ namespace EDDiscovery.Properties {
             get {
                 object obj = ResourceManager.GetObject("GNE", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap grid {
+            get {
+                object obj = ResourceManager.GetObject("grid", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
@@ -298,6 +318,16 @@ namespace EDDiscovery.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap manageaddons {
+            get {
+                object obj = ResourceManager.GetObject("manageaddons", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Help for 3D star Map.
         ///
         ///Keyboard:
@@ -359,6 +389,16 @@ namespace EDDiscovery.Properties {
         internal static System.Drawing.Bitmap Moon24 {
             get {
                 object obj = ResourceManager.GetObject("Moon24", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap notes {
+            get {
+                object obj = ResourceManager.GetObject("notes", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -466,6 +506,16 @@ namespace EDDiscovery.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap routetracker {
+            get {
+                object obj = ResourceManager.GetObject("routetracker", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap save {
             get {
                 object obj = ResourceManager.GetObject("save", resourceCulture);
@@ -526,6 +576,16 @@ namespace EDDiscovery.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap spanel {
+            get {
+                object obj = ResourceManager.GetObject("spanel", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap speaker {
             get {
                 object obj = ResourceManager.GetObject("speaker", resourceCulture);
@@ -539,6 +599,16 @@ namespace EDDiscovery.Properties {
         internal static System.Drawing.Bitmap star {
             get {
                 object obj = ResourceManager.GetObject("star", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap starsystem {
+            get {
+                object obj = ResourceManager.GetObject("starsystem", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -589,6 +659,16 @@ namespace EDDiscovery.Properties {
         internal static System.Drawing.Bitmap StopNormalRed {
             get {
                 object obj = ResourceManager.GetObject("StopNormalRed", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap tilegrid {
+            get {
+                object obj = ResourceManager.GetObject("tilegrid", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -659,6 +739,16 @@ namespace EDDiscovery.Properties {
         internal static System.Drawing.Bitmap Travelicon {
             get {
                 object obj = ResourceManager.GetObject("Travelicon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap trippanel {
+            get {
+                object obj = ResourceManager.GetObject("trippanel", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
