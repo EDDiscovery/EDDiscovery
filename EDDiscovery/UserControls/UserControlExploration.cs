@@ -808,7 +808,7 @@ namespace EDDiscovery.UserControls
         {
             string systemName;
             double radius;
-            if (!ImportSphere.showDialog(_discoveryForm, out systemName, out radius))
+            if (!ImportSphere.showDialog(_discoveryForm, out systemName, out radius, this.FindForm()))
                 return;
             if (String.IsNullOrWhiteSpace(systemName))
             {
