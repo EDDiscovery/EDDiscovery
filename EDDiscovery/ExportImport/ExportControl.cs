@@ -70,7 +70,13 @@ namespace EDDiscovery.Export
 
             double ly = 10.0;
             txtsphereRadius.Text = ly.ToString("0.00");
-            
+
+            comboBoxCommander.SetToolTip(toolTip);
+            comboBoxCustomExportType.SetToolTip(toolTip);
+            txtExportVisited.SetToolTip(toolTip);
+            txtsphereRadius.SetToolTip(toolTip);
+            textBoxArrivalDate.SetToolTip(toolTip);
+            textBoxSysName.SetToolTip(toolTip);
         }
 
         public void PopulateCommanders()

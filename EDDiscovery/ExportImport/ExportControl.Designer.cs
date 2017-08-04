@@ -226,7 +226,7 @@ namespace EDDiscovery.Export
             // 
             this.labelExt2.AutoSize = true;
             this.labelExt2.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.labelExt2.Location = new System.Drawing.Point(3, 52);
+            this.labelExt2.Location = new System.Drawing.Point(3, 50);
             this.labelExt2.Name = "labelExt2";
             this.labelExt2.Size = new System.Drawing.Size(140, 13);
             this.labelExt2.TabIndex = 2;
@@ -265,7 +265,7 @@ namespace EDDiscovery.Export
             this.radioButtonOther.AutoSize = true;
             this.radioButtonOther.Checked = true;
             this.radioButtonOther.FontNerfReduction = 0.5F;
-            this.radioButtonOther.Location = new System.Drawing.Point(149, 45);
+            this.radioButtonOther.Location = new System.Drawing.Point(149, 43);
             this.radioButtonOther.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.radioButtonOther.Name = "radioButtonOther";
             this.radioButtonOther.RadioButtonColor = System.Drawing.Color.Gray;
@@ -288,7 +288,7 @@ namespace EDDiscovery.Export
             this.labelExt4.Size = new System.Drawing.Size(100, 13);
             this.labelExt4.TabIndex = 8;
             this.labelExt4.Text = "Arrival Date";
-            this.labelExt4.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.labelExt4.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // textBoxArrivalDate
             // 
@@ -309,6 +309,7 @@ namespace EDDiscovery.Export
             this.textBoxArrivalDate.TabIndex = 9;
             this.textBoxArrivalDate.Text = "1";
             this.textBoxArrivalDate.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.toolTip.SetToolTip(this.textBoxArrivalDate, "Set Arrival Date");
             this.textBoxArrivalDate.WordWrap = true;
             this.textBoxArrivalDate.Validating += new System.ComponentModel.CancelEventHandler(this.textBoxArrivalDate_Validating);
             // 
@@ -316,12 +317,12 @@ namespace EDDiscovery.Export
             // 
             this.labelExt5.AutoSize = true;
             this.labelExt5.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.labelExt5.Location = new System.Drawing.Point(255, 52);
+            this.labelExt5.Location = new System.Drawing.Point(255, 50);
             this.labelExt5.Name = "labelExt5";
             this.labelExt5.Size = new System.Drawing.Size(100, 13);
             this.labelExt5.TabIndex = 11;
             this.labelExt5.Text = "Arrival Time";
-            this.labelExt5.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.labelExt5.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // labelExt6
             // 
@@ -332,18 +333,18 @@ namespace EDDiscovery.Export
             this.labelExt6.Size = new System.Drawing.Size(100, 13);
             this.labelExt6.TabIndex = 12;
             this.labelExt6.Text = "System Name";
-            this.labelExt6.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.labelExt6.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // labelExt7
             // 
             this.labelExt7.AutoSize = true;
             this.labelExt7.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.labelExt7.Location = new System.Drawing.Point(361, 52);
+            this.labelExt7.Location = new System.Drawing.Point(361, 50);
             this.labelExt7.Name = "labelExt7";
             this.labelExt7.Size = new System.Drawing.Size(100, 13);
             this.labelExt7.TabIndex = 13;
             this.labelExt7.Text = "System Notes";
-            this.labelExt7.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.labelExt7.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // textBoxSysName
             // 
@@ -362,8 +363,8 @@ namespace EDDiscovery.Export
             this.textBoxSysName.SelectionStart = 0;
             this.textBoxSysName.Size = new System.Drawing.Size(100, 20);
             this.textBoxSysName.TabIndex = 14;
-            this.textBoxSysName.Text = "3";
             this.textBoxSysName.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.toolTip.SetToolTip(this.textBoxSysName, "Set System Name");
             this.textBoxSysName.WordWrap = true;
             this.textBoxSysName.Validating += new System.ComponentModel.CancelEventHandler(this.textBoxSysName_Validating);
             // 
@@ -375,7 +376,7 @@ namespace EDDiscovery.Export
             this.textBoxSysNotes.BorderColorScaling = 0.5F;
             this.textBoxSysNotes.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBoxSysNotes.ControlBackground = System.Drawing.SystemColors.Control;
-            this.textBoxSysNotes.Location = new System.Drawing.Point(361, 68);
+            this.textBoxSysNotes.Location = new System.Drawing.Point(361, 66);
             this.textBoxSysNotes.Multiline = false;
             this.textBoxSysNotes.Name = "textBoxSysNotes";
             this.textBoxSysNotes.ReadOnly = false;
@@ -396,7 +397,7 @@ namespace EDDiscovery.Export
             this.tableLayoutPanel6.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel6.Controls.Add(this.buttonImportFile, 0, 0);
             this.tableLayoutPanel6.Controls.Add(this.checkBoxImpHeader, 1, 0);
-            this.tableLayoutPanel6.Location = new System.Drawing.Point(3, 68);
+            this.tableLayoutPanel6.Location = new System.Drawing.Point(3, 66);
             this.tableLayoutPanel6.Name = "tableLayoutPanel6";
             this.tableLayoutPanel6.RowCount = 1;
             this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
@@ -445,7 +446,7 @@ namespace EDDiscovery.Export
             this.textBoxArrivalTime.BorderColorScaling = 0.5F;
             this.textBoxArrivalTime.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBoxArrivalTime.ControlBackground = System.Drawing.SystemColors.Control;
-            this.textBoxArrivalTime.Location = new System.Drawing.Point(255, 68);
+            this.textBoxArrivalTime.Location = new System.Drawing.Point(255, 66);
             this.textBoxArrivalTime.Multiline = false;
             this.textBoxArrivalTime.Name = "textBoxArrivalTime";
             this.textBoxArrivalTime.ReadOnly = false;
@@ -467,7 +468,7 @@ namespace EDDiscovery.Export
             this.textBoxDelimiter.BorderColorScaling = 0.5F;
             this.textBoxDelimiter.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBoxDelimiter.ControlBackground = System.Drawing.SystemColors.Control;
-            this.textBoxDelimiter.Location = new System.Drawing.Point(149, 68);
+            this.textBoxDelimiter.Location = new System.Drawing.Point(149, 66);
             this.textBoxDelimiter.Multiline = false;
             this.textBoxDelimiter.Name = "textBoxDelimiter";
             this.textBoxDelimiter.ReadOnly = false;
@@ -833,6 +834,7 @@ namespace EDDiscovery.Export
             this.txtsphereRadius.Size = new System.Drawing.Size(231, 20);
             this.txtsphereRadius.TabIndex = 13;
             this.txtsphereRadius.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.toolTip.SetToolTip(this.txtsphereRadius, "Radius in Ly to filter around");
             this.txtsphereRadius.WordWrap = true;
             // 
             // labelExt8
@@ -863,6 +865,7 @@ namespace EDDiscovery.Export
             this.btnSphereSystems.Size = new System.Drawing.Size(140, 23);
             this.btnSphereSystems.TabIndex = 12;
             this.btnSphereSystems.Text = "Export sphere systems";
+            this.toolTip.SetToolTip(this.btnSphereSystems, "Export the systems in the sphere");
             this.btnSphereSystems.UseVisualStyleBackColor = true;
             this.btnSphereSystems.Click += new System.EventHandler(this.btnSphereSystems_Click);
             // 
