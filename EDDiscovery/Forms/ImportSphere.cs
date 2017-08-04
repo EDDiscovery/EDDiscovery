@@ -31,10 +31,10 @@ namespace EDDiscovery.Forms
     {
         private EDDiscoveryForm discoveryForm;
 
-        public static Boolean showDialog(EDDiscoveryForm discoveryForm, out string systemName, out  double radius)
+        public static Boolean showDialog(EDDiscoveryForm discoveryForm, out string systemName, out  double radius, Form owner = null)
         {
             ImportSphere prompt = new ImportSphere(discoveryForm);
-            var res = prompt.ShowDialog(discoveryForm);
+            var res = prompt.ShowDialog(owner ?? discoveryForm);
             systemName =  prompt.txtExportVisited.Text;
             bool worked = Double.TryParse(prompt.txtsphereRadius.Text, out radius);
             if (!worked)
