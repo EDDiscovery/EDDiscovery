@@ -102,6 +102,8 @@ namespace EDDiscovery
         private int _formTop;
         private int _formLeft;
 
+        private MouseEventArgs _captionLastMouseDown = null;
+
         #endregion
 
         #region Callbacks from us
@@ -1012,7 +1014,7 @@ namespace EDDiscovery
                 Activate();
         }
 
-#endregion
+        #endregion
 
         #region Window Control
 
@@ -1094,10 +1096,52 @@ namespace EDDiscovery
             return message.Result;
         }
 
-        private void MouseDownCAPTION( object sender, MouseEventArgs e)
+        private void MouseDownCAPTION(object sender, MouseEventArgs e)
         {
-            ((Control)sender).Capture = false;
-            SendMessage(WM.NCLBUTTONDOWN, (System.IntPtr)HT.CAPTION, (System.IntPtr)0);
+            if (!theme.WindowsFrame && e.Button == MouseButtons.Left)
+            {
+                _captionLastMouseDown = e;
+                Control c = (Control)sender;
+                c.Capture = false;
+                SendMessage(WM.NCLBUTTONDOWN, (System.IntPtr)HT.CAPTION, (System.IntPtr)0);
+
+                c.MouseDown -= MouseDownCAPTION;
+                c.MouseDown += MouseDoubleClickCAPTION;
+                new System.Windows.Forms.Timer { Enabled = true, Interval = SystemInformation.DoubleClickTime, Tag = c }.Tick += dblClickTimerCAPTION_tick;
+            }
+        }
+
+        private void MouseDoubleClickCAPTION(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+            {
+                ((Control)sender).Capture = false;
+                var rect = new Rectangle(_captionLastMouseDown.Location, SystemInformation.DoubleClickSize);
+                if (rect.Contains(e.Location))
+                {
+                    if (WindowState == FormWindowState.Maximized)
+                        WindowState = FormWindowState.Normal;
+                    else
+                        WindowState = FormWindowState.Maximized;
+                }
+                else
+                {
+                    SendMessage(WM.NCLBUTTONDOWN, (System.IntPtr)HT.CAPTION, (System.IntPtr)0);
+                }
+            }
+        }
+
+        private void dblClickTimerCAPTION_tick(object sender, EventArgs e)
+        {
+            System.Windows.Forms.Timer t = (System.Windows.Forms.Timer)sender;
+            t.Stop();
+
+            Control c = (Control)t.Tag;
+            c.MouseDown -= MouseDoubleClickCAPTION;
+            c.MouseDown += MouseDownCAPTION;
+
+            _captionLastMouseDown = null;
+            t.Dispose();
         }
 
         private void RecordPosition()
