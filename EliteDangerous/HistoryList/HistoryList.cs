@@ -1317,16 +1317,19 @@ namespace EliteDangerousCore
 
                 HistoryEntry shipinfohe = historylist.FindLast(he => he.ShipInformation != null && he.ShipInformation.SubVehicle == ShipInformation.SubVehicleType.None);
 
-                if (async)
+                if (loadgame != null && loadgame.Ship != "")
                 {
-                    Task edsmtask = Task.Factory.StartNew(() =>
+                    if (async)
                     {
-                        SendShipInfo(edsm, shipinfohe, loadgame);
-                    });
-                }
-                else
-                {
-                    SendShipInfo(edsm, shipinfohe, loadgame);   // either shipinfohe or loadgame may be missing
+                        Task edsmtask = Task.Factory.StartNew(() =>
+                        {
+                            SendShipInfo(edsm, shipinfohe, loadgame);
+                        });
+                    }
+                    else
+                    {
+                        SendShipInfo(edsm, shipinfohe, loadgame);   // either shipinfohe or loadgame may be missing
+                    }
                 }
             }
         }
