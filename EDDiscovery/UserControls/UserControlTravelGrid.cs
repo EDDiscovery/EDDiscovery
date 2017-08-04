@@ -863,7 +863,8 @@ namespace EDDiscovery.UserControls
                 {
                     if (noteform.ShowDialog(this) == DialogResult.OK)
                     {
-                        rightclicksystem.SetJournalSystemNoteText(noteform.NoteText, true);
+                        rightclicksystem.SetJournalSystemNoteText(noteform.NoteText, true , EDCommander.Current.SyncToEdsm);
+
                         discoveryform.NoteChanged(this,rightclicksystem, true);
                     }
                 }

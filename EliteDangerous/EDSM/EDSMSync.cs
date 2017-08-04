@@ -189,13 +189,13 @@ namespace EliteDangerousCore.EDSM
                                 {
                                     if (localtime.Ticks > curnote.Time.Ticks)   // if newer, add on (verified with EDSM 29/9/2016)
                                     {
-                                        curnote.UpdateNote(curnote.Note + ". EDSM: " + note, true, localtime, edsmid);
+                                        curnote.UpdateNote(curnote.Note + ". EDSM: " + note, true, localtime, edsmid, true);
                                         commentsadded++;
                                     }
                                 }
                                 else
                                 {
-                                    SystemNoteClass.MakeSystemNote(note, localtime, name, 0, edsmid);   // new one!
+                                    SystemNoteClass.MakeSystemNote(note, localtime, name, 0, edsmid,true);   // new one!  its an FSD one as well
                                     commentsadded++;
                                 }
                             }
@@ -246,6 +246,7 @@ namespace EliteDangerousCore.EDSM
 
         public static void SendComments(string star , string note, long edsmid = 0) // (verified with EDSM 29/9/2016)
         {
+            System.Diagnostics.Debug.WriteLine("Send note to EDSM " + star + " " + edsmid + " " + note);
             EDSMClass edsm = new EDSMClass();
 
             if (!edsm.IsApiKeySet)
