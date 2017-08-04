@@ -192,6 +192,7 @@ namespace EDDiscovery
 
                     cf.Update(cmdr);
                     List<EDCommander> edcommanders = (List<EDCommander>)dataGridViewCommanders.DataSource;
+                    _discoveryForm.LoadCommandersListBox();
                     EDCommander.Update(edcommanders, false);
 
                     if ( currentjloc != cmdr.JournalDir )

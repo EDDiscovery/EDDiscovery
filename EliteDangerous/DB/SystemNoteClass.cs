@@ -25,13 +25,15 @@ namespace EliteDangerousCore.DB
     public class SystemNoteClass
     {
         public long id;
-        public long Journalid;              //Journalid = 0, Name set, system marker
-        public string SystemName;           //Journalid <>0, Name set or clear, journal marker
+        public long Journalid;              //Journalid = 0, Name set, system marker OR Journalid <>0, Name set or clear, journal marker
+        public string SystemName;           
         public DateTime Time;
         public string Note { get; private set; }
         public long EdsmId;
-        public bool Dirty;                  // changed but uncommitted
 
+        public bool Dirty;                  // NOT DB changed but uncommitted
+        public bool FSDEntry;               // is a FSD entry.. used to mark it for EDSM send purposes
+        
         public static List<SystemNoteClass> globalSystemNotes = new List<SystemNoteClass>();        // global cache, kept updated
 
         public SystemNoteClass()
@@ -49,16 +51,16 @@ namespace EliteDangerousCore.DB
         }
 
 
-        private bool Add()
+        private bool AddToDbAndGlobal()
         {
             using (SQLiteConnectionUser cn = new SQLiteConnectionUser())
             {
-                bool ret = Add(cn);
+                bool ret = AddToDbAndGlobal(cn);
                 return ret;
             }
         }
 
-        private bool Add(SQLiteConnectionUser cn)
+        private bool AddToDbAndGlobal(SQLiteConnectionUser cn)
         {
             using (DbCommand cmd = cn.CreateCommand("Insert into SystemNote (Name, Time, Note, journalid, edsmid) values (@name, @time, @note, @journalid, @edsmid)"))
             {
@@ -130,11 +132,14 @@ namespace EliteDangerousCore.DB
             }
         }
 
-        public SystemNoteClass UpdateNote(string s, bool commit , DateTime time , long edsmid )
+        // we update our note, time, edsmid and set dirty true.  If on a commit, we write.
+        // if commit = true, we write the note to the db, which clears the dirty flag
+        public SystemNoteClass UpdateNote(string s, bool commit , DateTime time , long edsmid , bool fsdentry )
         {
             Note = s;
             Time = time;
             EdsmId = edsmid;
+            FSDEntry = fsdentry;
 
             Dirty = true;
 
@@ -205,15 +210,15 @@ namespace EliteDangerousCore.DB
             }
         }
 
-
-        public static void CommitDirtyNotes()
+        public static void CommitDirtyNotes( Action<SystemNoteClass> actionondirty )   // can be null
         {
-            foreach( SystemNoteClass sys in globalSystemNotes )
+            foreach (SystemNoteClass snc in globalSystemNotes)
             {
-                if (sys.Dirty)
+                if (snc.Dirty)
                 {
-                    System.Diagnostics.Debug.WriteLine("Commit dirty note " + sys.Journalid + " " + sys.SystemName + " " + sys.Note);
-                    sys.Update();       // clears the dirty flag
+                    System.Diagnostics.Debug.WriteLine("Commit dirty note " + snc.Journalid + " " + snc.SystemName + " " + snc.Note);
+                    snc.Update();       // clears the dirty flag
+                    actionondirty?.Invoke(snc);     // pass back in case it needs to do something with it
                 }
             }
         }
@@ -257,7 +262,7 @@ namespace EliteDangerousCore.DB
             return systemnote;
         }
 
-        public static SystemNoteClass MakeSystemNote(string text, DateTime time, string sysname, long journalid, long edsmid )
+        public static SystemNoteClass MakeSystemNote(string text, DateTime time, string sysname, long journalid, long edsmid , bool fsdentry )
         {
             SystemNoteClass sys = new SystemNoteClass();
             sys.Note = text;
@@ -265,7 +270,8 @@ namespace EliteDangerousCore.DB
             sys.SystemName = sysname;
             sys.Journalid = journalid;                          // any new ones gets a journal id, making the Get always lock it to a journal entry
             sys.EdsmId = edsmid;
-            sys.Add();
+            sys.FSDEntry = fsdentry;
+            sys.AddToDbAndGlobal();  // adds it to the global cache AND the db
             System.Diagnostics.Debug.WriteLine("made note " + sys.Journalid + " " + sys.SystemName + " " + sys.Note);
             return sys;
         }

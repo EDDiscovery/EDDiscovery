@@ -615,7 +615,7 @@ namespace EDDiscovery.UserControls
         {
             if (last_he != null && noteenabled)
             {
-                last_he.SetJournalSystemNoteText(richTextBoxNote.Text.Trim(), true);
+                last_he.SetJournalSystemNoteText(richTextBoxNote.Text.Trim(), true , EDCommander.Current.SyncToEdsm);   // commit, maybe send to edsm
                 discoveryform.NoteChanged(this, last_he, true);
             }
         }
@@ -624,7 +624,7 @@ namespace EDDiscovery.UserControls
         {
             if (last_he != null && noteenabled)
             {
-                last_he.SetJournalSystemNoteText(richTextBoxNote.Text.Trim(), false);
+                last_he.SetJournalSystemNoteText(richTextBoxNote.Text.Trim(), false, false);        // no commit, no send to edsm..
                 discoveryform.NoteChanged(this, last_he, false);
             }
         }
