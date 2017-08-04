@@ -75,10 +75,8 @@ namespace EDDiscovery.UserControls
         public UserControlSysInfo()
         {
             InitializeComponent();
-            Name = "System Information";
             textBoxTarget.SetToolTip(toolTip1, "Sets the target");
             textBoxTargetDist.SetToolTip(toolTip1, "Distance to target");
-
         }
 
         public override void Init(EDDiscoveryForm ed, UserControlTravelGrid thc, int displayno)

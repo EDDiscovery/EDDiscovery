@@ -110,6 +110,7 @@ namespace EDDiscovery
             PopOutControl.PopOuts i = (PopOutControl.PopOuts)si;
 
             Control c = PopOutControl.Create(i);
+            c.Name = PopOutControl.GetPopOutName(i);        // tabs uses Name field for display, must set it
 
             _discoveryForm.ActionRun("onPanelChange", "UserUIEvent", null, new Conditions.ConditionVariables(new string[] { "PanelTabName", PopOutControl.popoutinfo[i].WindowRefName, "PanelTabTitle" , PopOutControl.popoutinfo[i].WindowTitlePrefix , "PanelName" , t.Name }));
 

@@ -30,6 +30,8 @@ namespace EDDiscovery.UserControls
         {
             InitializeComponent();
             comboBoxGridSelector.Items.AddRange(PopOutControl.GetPopOutNames());
+            rollUpPanelMenu.SetToolTip(toolTip);    // use the defaults
+            comboBoxGridSelector.SetToolTip(toolTip); // composite, needs it.
         }
 
         public override void Init( EDDiscoveryForm f , UserControlTravelGrid thc, int dn )       //dn = 0 primary grid, or 1 first pop out, etc
@@ -88,6 +90,14 @@ namespace EDDiscovery.UserControls
             Invalidate(true);
             Update();        // need this to FORCE a full refresh in case there are lots of windows
             System.Diagnostics.Debug.WriteLine("----- Grid Restore END " + DbWindows);
+
+            UpdateButtons();
+        }
+
+        void UpdateButtons()
+        {
+            buttonExtDelete.Enabled = (from x in uccrlist where x.Selected select x).Count() > 0;
+            buttonExtTile.Enabled = uccrlist.Count > 0;
         }
 
         public override void Display(HistoryEntry current, HistoryList history)
@@ -190,9 +200,10 @@ namespace EDDiscovery.UserControls
             Invalidate();
             uc.Dispose();
             uccr.Dispose();
+            UpdateButtons();
         }
 
-        private void Select( UserControlContainerResizable uccr )
+        private void Select(UserControlContainerResizable uccr)
         {
             foreach (UserControlContainerResizable r in uccrlist)
             {
@@ -205,8 +216,12 @@ namespace EDDiscovery.UserControls
                     }
                 }
                 else if (r.Selected)
+                {
                     r.Selected = false;
+                }
             }
+
+            UpdateButtons();
         }
 
         #endregion
@@ -240,6 +255,7 @@ namespace EDDiscovery.UserControls
                 Select(null);
                 uccr.Selected = true;
                 uccr.BringToFront();
+                UpdateButtons();
             }
         }   
 
@@ -304,8 +320,8 @@ namespace EDDiscovery.UserControls
         {
             this.BackColor = curcol;
             panelPlayfield.BackColor = curcol;
-            rollUpPanel1.BackColor = curcol;
-            rollUpPanel1.ShowHiddenMarker = !on;
+            rollUpPanelMenu.BackColor = curcol;
+            rollUpPanelMenu.ShowHiddenMarker = !on;
 
             foreach (UserControlContainerResizable r in uccrlist)
             {

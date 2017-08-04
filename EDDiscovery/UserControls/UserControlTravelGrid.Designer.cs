@@ -45,6 +45,7 @@ namespace EDDiscovery.UserControls
         {
             this.components = new System.ComponentModel.Container();
             this.TopPanel = new System.Windows.Forms.Panel();
+            this.checkBoxMoveToTop = new ExtendedControls.CheckBoxCustom();
             this.buttonExtExcel = new ExtendedControls.ButtonExt();
             this.drawnPanelPopOut = new ExtendedControls.DrawnPanel();
             this.panelHistoryIcon = new System.Windows.Forms.Panel();
@@ -81,8 +82,7 @@ namespace EDDiscovery.UserControls
             this.setNoteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.writeEventInfoToLogDebugToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.copyJournalEntryToClipboardToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.checkBoxMoveToTop = new ExtendedControls.CheckBoxCustom();
+            this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.TopPanel.SuspendLayout();
             this.dataViewScrollerPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewTravel)).BeginInit();
@@ -107,6 +107,23 @@ namespace EDDiscovery.UserControls
             this.TopPanel.Size = new System.Drawing.Size(870, 32);
             this.TopPanel.TabIndex = 27;
             // 
+            // checkBoxMoveToTop
+            // 
+            this.checkBoxMoveToTop.AutoSize = true;
+            this.checkBoxMoveToTop.CheckBoxColor = System.Drawing.Color.Gray;
+            this.checkBoxMoveToTop.CheckBoxInnerColor = System.Drawing.Color.White;
+            this.checkBoxMoveToTop.CheckColor = System.Drawing.Color.DarkBlue;
+            this.checkBoxMoveToTop.FontNerfReduction = 0.5F;
+            this.checkBoxMoveToTop.Location = new System.Drawing.Point(637, 8);
+            this.checkBoxMoveToTop.MouseOverColor = System.Drawing.Color.CornflowerBlue;
+            this.checkBoxMoveToTop.Name = "checkBoxMoveToTop";
+            this.checkBoxMoveToTop.Size = new System.Drawing.Size(90, 17);
+            this.checkBoxMoveToTop.TabIndex = 29;
+            this.checkBoxMoveToTop.Text = "Cursor to Top";
+            this.checkBoxMoveToTop.TickBoxReductionSize = 10;
+            this.toolTip.SetToolTip(this.checkBoxMoveToTop, "Select if cursor moves to top entry when a new entry is received");
+            this.checkBoxMoveToTop.UseVisualStyleBackColor = true;
+            // 
             // buttonExtExcel
             // 
             this.buttonExtExcel.BorderColorScaling = 1.25F;
@@ -118,7 +135,7 @@ namespace EDDiscovery.UserControls
             this.buttonExtExcel.Name = "buttonExtExcel";
             this.buttonExtExcel.Size = new System.Drawing.Size(24, 24);
             this.buttonExtExcel.TabIndex = 28;
-            this.toolTip1.SetToolTip(this.buttonExtExcel, "Send data on grid to excel");
+            this.toolTip.SetToolTip(this.buttonExtExcel, "Send data on grid to excel");
             this.buttonExtExcel.UseVisualStyleBackColor = true;
             this.buttonExtExcel.Click += new System.EventHandler(this.buttonExtExcel_Click);
             // 
@@ -135,6 +152,7 @@ namespace EDDiscovery.UserControls
             this.drawnPanelPopOut.Name = "drawnPanelPopOut";
             this.drawnPanelPopOut.Size = new System.Drawing.Size(24, 24);
             this.drawnPanelPopOut.TabIndex = 27;
+            this.toolTip.SetToolTip(this.drawnPanelPopOut, "Click to pop out another travel grid into a window");
             this.drawnPanelPopOut.Click += new System.EventHandler(this.drawnPanelPopOut_Click);
             // 
             // panelHistoryIcon
@@ -156,7 +174,7 @@ namespace EDDiscovery.UserControls
             this.buttonField.Size = new System.Drawing.Size(75, 23);
             this.buttonField.TabIndex = 25;
             this.buttonField.Text = "Field Filter";
-            this.toolTip1.SetToolTip(this.buttonField, "Filter out entries matching the field selection");
+            this.toolTip.SetToolTip(this.buttonField, "Filter out entries matching the field selection");
             this.buttonField.UseVisualStyleBackColor = true;
             this.buttonField.Click += new System.EventHandler(this.buttonField_Click);
             // 
@@ -170,7 +188,7 @@ namespace EDDiscovery.UserControls
             this.buttonFilter.Size = new System.Drawing.Size(75, 23);
             this.buttonFilter.TabIndex = 25;
             this.buttonFilter.Text = "Event Filter";
-            this.toolTip1.SetToolTip(this.buttonFilter, "Filter out entries based on event type");
+            this.toolTip.SetToolTip(this.buttonFilter, "Filter out entries based on event type");
             this.buttonFilter.UseVisualStyleBackColor = true;
             this.buttonFilter.Click += new System.EventHandler(this.buttonFilter_Click);
             // 
@@ -192,6 +210,7 @@ namespace EDDiscovery.UserControls
             this.textBoxFilter.Size = new System.Drawing.Size(148, 20);
             this.textBoxFilter.TabIndex = 1;
             this.textBoxFilter.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.toolTip.SetToolTip(this.textBoxFilter, "Enter text to search in any fields for an item");
             this.textBoxFilter.WordWrap = true;
             this.textBoxFilter.TextChanged += new System.EventHandler(this.textBoxFilter_TextChanged);
             // 
@@ -227,7 +246,7 @@ namespace EDDiscovery.UserControls
             this.comboBoxHistoryWindow.SelectedValue = null;
             this.comboBoxHistoryWindow.Size = new System.Drawing.Size(100, 21);
             this.comboBoxHistoryWindow.TabIndex = 0;
-            this.toolTip1.SetToolTip(this.comboBoxHistoryWindow, "Select the entries by age");
+            this.toolTip.SetToolTip(this.comboBoxHistoryWindow, "Select the entries by age");
             this.comboBoxHistoryWindow.ValueMember = "";
             this.comboBoxHistoryWindow.SelectedIndexChanged += new System.EventHandler(this.comboBoxHistoryWindow_SelectedIndexChanged);
             // 
@@ -500,28 +519,12 @@ namespace EDDiscovery.UserControls
             this.copyJournalEntryToClipboardToolStripMenuItem.Text = "Copy journal entry to clipboard";
             this.copyJournalEntryToClipboardToolStripMenuItem.Click += new System.EventHandler(this.copyJournalEntryToClipboardToolStripMenuItem_Click);
             // 
-            // toolTip1
+            // toolTip
             // 
-            this.toolTip1.AutoPopDelay = 30000;
-            this.toolTip1.InitialDelay = 250;
-            this.toolTip1.ReshowDelay = 100;
-            this.toolTip1.ShowAlways = true;
-            // 
-            // checkBoxMoveToTop
-            // 
-            this.checkBoxMoveToTop.AutoSize = true;
-            this.checkBoxMoveToTop.CheckBoxColor = System.Drawing.Color.Gray;
-            this.checkBoxMoveToTop.CheckBoxInnerColor = System.Drawing.Color.White;
-            this.checkBoxMoveToTop.CheckColor = System.Drawing.Color.DarkBlue;
-            this.checkBoxMoveToTop.FontNerfReduction = 0.5F;
-            this.checkBoxMoveToTop.Location = new System.Drawing.Point(637, 8);
-            this.checkBoxMoveToTop.MouseOverColor = System.Drawing.Color.CornflowerBlue;
-            this.checkBoxMoveToTop.Name = "checkBoxMoveToTop";
-            this.checkBoxMoveToTop.Size = new System.Drawing.Size(90, 17);
-            this.checkBoxMoveToTop.TabIndex = 29;
-            this.checkBoxMoveToTop.Text = "Cursor to Top";
-            this.checkBoxMoveToTop.TickBoxReductionSize = 10;
-            this.checkBoxMoveToTop.UseVisualStyleBackColor = true;
+            this.toolTip.AutoPopDelay = 30000;
+            this.toolTip.InitialDelay = 250;
+            this.toolTip.ReshowDelay = 100;
+            this.toolTip.ShowAlways = true;
             // 
             // UserControlTravelGrid
             // 
@@ -566,7 +569,7 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemStartStop;
         private System.Windows.Forms.ToolStripMenuItem removeJournalEntryToolStripMenuItem;
         private System.Windows.Forms.Panel panelHistoryIcon;
-        private System.Windows.Forms.ToolTip toolTip1;
+        private System.Windows.Forms.ToolTip toolTip;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnTime;
         private System.Windows.Forms.DataGridViewTextBoxColumn Icon;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnSystem;

@@ -36,8 +36,8 @@ namespace ExtendedControls
 
         public bool PinState { get { return pinbutton.Checked; } set { SetPinState(value); } }
 
-        public CheckBoxCustom pinbutton;        // public so you can theme them with colour/IAs
-        public DrawnPanel hiddenmarker;
+        private CheckBoxCustom pinbutton;        // public so you can theme them with colour/IAs
+        private DrawnPanel hiddenmarker;
 
         Action<RollUpPanel, CheckBoxCustom> PinStateChanged = null;
 
@@ -99,9 +99,19 @@ namespace ExtendedControls
             }
         }
 
-        public void SetHMViz()
+        private void SetHMViz()
         {
             hiddenmarker.Visible = hiddenmarkershow & hiddenmarkershouldbeshown;
+        }
+
+        public void SetToolTip(ToolTip t, string ttpin = null, string ttmarker = null)
+        {
+            if (ttpin == null)
+                ttpin = "Pin to stop this menu bar disappearing automatically";
+            if ( ttmarker == null )
+                ttmarker = "Click or hover over this to unroll the menu bar";
+            t.SetToolTip(pinbutton, ttpin);
+            t.SetToolTip(hiddenmarker, ttmarker);
         }
 
         public void SetPinState(bool state)
@@ -176,7 +186,7 @@ namespace ExtendedControls
             }
         }
 
-        public void StartRollUpTimer()
+        private void StartRollUpTimer()
         {
             if (mode == Mode.None && Height != RolledUpHeight)
             {

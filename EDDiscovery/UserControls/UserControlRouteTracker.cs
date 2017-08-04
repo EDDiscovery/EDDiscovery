@@ -30,7 +30,6 @@ namespace EDDiscovery.UserControls
 {
     public partial class UserControlRouteTracker :   UserControlCommonBase
     {
-
         private EDDiscoveryForm discoveryform;
         private int displaynumber = 0;
         private Font displayfont;
@@ -44,22 +43,6 @@ namespace EDDiscovery.UserControls
             InitializeComponent();
         }
 
-        public override void Closing()
-        {
-            SQLiteDBClass.PutSettingBool(DbSave + "autoCopyWP", autoCopyWPToolStripMenuItem.Checked);
-            SQLiteDBClass.PutSettingBool(DbSave + "autoSetTarget", autoSetTargetToolStripMenuItem.Checked);
-            discoveryform.OnHistoryChange -= Display;
-            discoveryform.OnNewEntry -= NewEntry;
-            discoveryform.OnNewTarget -= NewTarget;
-        }
-
-        public override Color ColorTransparency { get { return Color.Green; } }
-        public override void SetTransparency(bool on, Color curcol)
-        {
-            pictureBox.BackColor = this.BackColor = curcol;
-            updateScreen();
-        }
-        
         public override void Init(EDDiscoveryForm ed, UserControlTravelGrid thc, int vn) //0=primary, 1 = first windowed version, etc
         {
             discoveryform = ed;
@@ -77,6 +60,22 @@ namespace EDDiscovery.UserControls
             String selRoute = SQLiteDBClass.GetSettingString(DbSave + "SelectedRoute", "-1");
             long id = long.Parse(selRoute);
             _currentRoute = SavedRouteClass.GetAllSavedRoutes().Find(r => r.Id.Equals(id));
+            updateScreen();
+        }
+
+        public override void Closing()
+        {
+            SQLiteDBClass.PutSettingBool(DbSave + "autoCopyWP", autoCopyWPToolStripMenuItem.Checked);
+            SQLiteDBClass.PutSettingBool(DbSave + "autoSetTarget", autoSetTargetToolStripMenuItem.Checked);
+            discoveryform.OnHistoryChange -= Display;
+            discoveryform.OnNewEntry -= NewEntry;
+            discoveryform.OnNewTarget -= NewTarget;
+        }
+
+        public override Color ColorTransparency { get { return Color.Green; } }
+        public override void SetTransparency(bool on, Color curcol)
+        {
+            pictureBox.BackColor = this.BackColor = curcol;
             updateScreen();
         }
 
@@ -202,7 +201,7 @@ namespace EDDiscovery.UserControls
                 string mesg = "remain";
                 double distX = SystemClassDB.Distance(currentSystem.System, finalSystem);
                 //Small hack to pull the jump range from TripPanel1
-                var jumpRange = SQLiteDBClass.GetSettingDouble("TripPanel1" + "JumpRange", -1.0);
+                var jumpRange = SQLiteDBClass.GetSettingDouble("TripPanel1" + "JumpRange", -1.0);       //TBD Not a good idea.
                 if (jumpRange > 0)
                 {
                     int jumps = (int)Math.Ceiling(distX / jumpRange);
