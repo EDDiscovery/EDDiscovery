@@ -13,7 +13,6 @@
  * 
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
-using EDDiscovery;
 using System;
 using System.ComponentModel;
 using System.Windows.Forms;
@@ -23,9 +22,7 @@ namespace ExtendedControls
     /// <summary>
     /// A string-backed <see cref="DataGridViewColumn"/> capable of autocompletion inside of a <see cref="DataGridView"/> control.
     /// </summary>
-    /// <remarks>Use one of the specialized variants of this class, such as <see cref="AutoCompleteSystemsColumn"/>,
-    /// or create a new subclass for best results.</remarks>
-    public abstract class AutoCompleteDGVColumn : DataGridViewColumn
+    public class AutoCompleteDGVColumn : DataGridViewColumn
     {
         #region AutoCompleteDGVColumn
 
@@ -40,7 +37,7 @@ namespace ExtendedControls
         /// <summary>
         /// Initializes a new instance of the <see cref="AutoCompleteDGVColumn"/> class to the default state.
         /// </summary>
-        protected AutoCompleteDGVColumn() : base(new CellDisplayControl()) { }
+        public AutoCompleteDGVColumn() : base(new CellDisplayControl()) { }
 
         /// <summary>
         /// Gets or sets the template used to create new cells.
@@ -54,9 +51,16 @@ namespace ExtendedControls
             set
             {
                 if (value != null && !value.GetType().IsAssignableFrom(typeof(CellDisplayControl)))
-                    throw new InvalidCastException("value is not an AutoCompleteDGVCell");
+                    throw new InvalidCastException($"value is not a {nameof(CellDisplayControl)}");
                 base.CellTemplate = value;
             }
+        }
+
+        public override object Clone()
+        {
+            var c = base.Clone() as AutoCompleteDGVColumn;
+            c.AutoCompleteGenerator = AutoCompleteGenerator;
+            return c;
         }
 
         protected override void Dispose(bool disposing)
@@ -106,17 +110,12 @@ namespace ExtendedControls
             public override void InitializeEditingControl(int rowIndex, object initialFormattedValue, DataGridViewCellStyle dataGridViewCellStyle)
             {
                 base.InitializeEditingControl(rowIndex, initialFormattedValue, dataGridViewCellStyle);
-                var ctl = DataGridView.EditingControl as CellEditControl;
-                if (ctl != null)    // This should not be needed, but just in case...
+                if (DataGridView.EditingControl != null)    // This should not be needed, but just in case...
                 {
-                    _ctl = ctl;
-                    if (Value == null)
-                        ctl.Text = (string)DefaultNewRowValue;
-                    else
-                        ctl.Text = (string)Value;
-                    var col = OwningColumn as AutoCompleteDGVColumn;
-                    if (col != null && col.AutoCompleteGenerator != null)
-                        ctl.SetAutoCompletor(col.AutoCompleteGenerator);
+                    _ctl = DataGridView.EditingControl as CellEditControl;
+                    _ctl.Text = (string)(Value ?? DefaultNewRowValue);
+                    if (OwningColumn != null && ((AutoCompleteDGVColumn)OwningColumn).AutoCompleteGenerator != null)
+                        _ctl.SetAutoCompletor((OwningColumn as AutoCompleteDGVColumn).AutoCompleteGenerator);
                 }
             }
 
@@ -257,64 +256,4 @@ namespace ExtendedControls
 
         #endregion // CellEditControl
     }
-
-    #region Specialized AutoCompleteDGVColumn classes
-
-    /// <summary>
-    /// An <see cref="AutoCompleteDGVColumn"/> specialized for interracting solely with system names.
-    /// </summary>
-    public class AutoCompleteSystemsColumn : AutoCompleteDGVColumn
-    {
-        /// <summary>
-        /// Constructs a new <see cref="AutoCompleteSystemsColumn"/> instance.
-        /// </summary>
-        public AutoCompleteSystemsColumn() : base()     // must set this.AutoCompleteGenerator outside of this in the constructor
-        {
-        }
-
-        /// <summary>
-        /// Creates an exact copy of this <see cref="AutoCompleteSystemsColumn"/>.
-        /// </summary>
-        /// <returns>An <see cref="object"/> that represents the cloned <see cref="AutoCompleteSystemsColumn"/>.</returns>
-        public override object Clone()
-        {
-            return base.Clone() as AutoCompleteSystemsColumn;
-        }
-    }
-
-#if false // Nobody needs these now, but they may come in handy someday.
-    /// <summary>
-    /// An <see cref="AutoCompleteDGVColumn"/> specialized for interracting solely with GalMap objects.
-    /// </summary>
-    public class AutoCompleteGalMapColumn : AutoCompleteDGVColumn
-    {
-        public AutoCompleteGalMapColumn() : base()
-        {
-            AutoCompleteGenerator += SystemClass.ReturnOnlyGalMapListForAutoComplete;
-        }
-
-        public override object Clone()
-        {
-            return base.Clone() as AutoCompleteGalMapColumn;
-        }
-    }
-
-    /// <summary>
-    /// An <see cref="AutoCompleteDGVColumn"/> specialized for interracting with both system names AND GalMap objects.
-    /// </summary>
-    public class AutoCompleteGalMapSysColumn : AutoCompleteDGVColumn
-    {
-        public AutoCompleteGalMapSysColumn() : base()
-        {
-            AutoCompleteGenerator += SystemClass.ReturnSystemListForAutoComplete;
-        }
-
-        public override object Clone()
-        {
-            return base.Clone() as AutoCompleteGalMapSysColumn;
-        }
-    }
-#endif
-
-    #endregion // Specialized AutoCompleteDGVColumn classes
 }
