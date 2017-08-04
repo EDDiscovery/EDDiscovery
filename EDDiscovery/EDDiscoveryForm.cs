@@ -622,7 +622,8 @@ namespace EDDiscovery
 
         private void Controller_FinalClose()        // run in UI, when controller finishes close
         {
-            SystemNoteClass.CommitDirtyNotes();
+            // send any dirty notes.  if they are, the call back gets called. If we have EDSM sync on, and its an FSD entry, send it
+            SystemNoteClass.CommitDirtyNotes( (snc) => { if (EDCommander.Current.SyncToEdsm && snc.FSDEntry) EDSMSync.SendComments(snc.SystemName, snc.Note, snc.EdsmId); });
 
             settings.SaveSettings();
 

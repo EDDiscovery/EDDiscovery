@@ -406,12 +406,16 @@ namespace EliteDangerousCore
             snc = SystemNoteClass.GetSystemNote(Journalid, IsFSDJump, System);       // may be null
         }
 
-        public void SetJournalSystemNoteText(string text, bool commit)
+        public void SetJournalSystemNoteText(string text, bool commit , bool sendtoedsm)
         {
             if (snc == null || snc.Journalid == 0 )           // if no system note, or its one on a system, from now on we assign journal system notes only from this IF
-                snc = SystemNoteClass.MakeSystemNote("",DateTime.Now,System.name,Journalid, System.id_edsm);
+                snc = SystemNoteClass.MakeSystemNote("",DateTime.Now,System.name,Journalid, System.id_edsm , IsFSDJump);
 
-            snc = snc.UpdateNote(text,commit,DateTime.Now,snc.EdsmId);        // and update info, and update our ref in case it has changed or gone null
+            snc = snc.UpdateNote(text,commit,DateTime.Now,snc.EdsmId , IsFSDJump);        // and update info, and update our ref in case it has changed or gone null
+                                                                                           // remember for EDSM send purposes if its an FSD entry
+
+            if (snc != null && commit && sendtoedsm && snc.FSDEntry)                    // if still have a note, and commiting, and send to esdm, and FSD jump
+                EDSMSync.SendComments(snc.SystemName, snc.Note, snc.EdsmId);
         }
 
         #endregion
