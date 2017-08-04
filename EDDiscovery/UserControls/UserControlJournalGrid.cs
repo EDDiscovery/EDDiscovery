@@ -63,8 +63,9 @@ namespace EDDiscovery.UserControls
         public UserControlJournalGrid()
         {
             InitializeComponent();
-            Name = "Journal";
-            this.textBoxFilter.SetToolTip(toolTip1, "Display entries matching this string");
+            this.textBoxFilter.SetToolTip(toolTip, "Display entries matching this string");
+            comboBoxJournalWindow.SetToolTip(toolTip);
+            textBoxFilter.SetToolTip(toolTip);
         }
 
         public override void Init(EDDiscoveryForm ed, UserControlTravelGrid thc, int vn) //0=primary, 1 = first windowed version, etc
@@ -134,10 +135,10 @@ namespace EDDiscovery.UserControls
 
             int ftotal;
             result = HistoryList.FilterByJournalEvent(result, SQLiteDBClass.GetSettingString(DbFilterSave, "All"), out ftotal);
-            toolTip1.SetToolTip(buttonFilter, (ftotal > 0) ? ("Total filtered out " + ftotal) : "Filter out entries based on event type");
+            toolTip.SetToolTip(buttonFilter, (ftotal > 0) ? ("Total filtered out " + ftotal) : "Filter out entries based on event type");
 
             result = FilterHelpers.FilterHistory(result, fieldfilter, discoveryform.Globals, out ftotal);
-            toolTip1.SetToolTip(buttonField, (ftotal > 0) ? ("Total filtered out " + ftotal) : "Filter out entries matching the field selection");
+            toolTip.SetToolTip(buttonField, (ftotal > 0) ? ("Total filtered out " + ftotal) : "Filter out entries matching the field selection");
 
             dataGridViewJournal.Rows.Clear();
             rowsbyjournalid.Clear();

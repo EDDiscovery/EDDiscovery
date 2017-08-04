@@ -150,11 +150,11 @@ namespace EDDiscovery.UserControls
                 if (Config(Configuration.showSystemNotes))
                 {
                     if (he.snc != null)
-                        botline += ("NOTE: " + he.snc.Note).WordWrap(60) + Environment.NewLine;
+                        botline += (he.snc.Note).WordWrap(60) + Environment.NewLine;
                 }
 
-                ExtendedControls.PictureBoxHotspot.ImageElement botlineleft = pictureBox.AddTextAutoSize(
-                    new Point(5, 5),
+                pictureBox.AddTextAutoSize(
+                    new Point(0, 5),
                     new Size(1000, 1000),
                     botline,
                     displayfont,

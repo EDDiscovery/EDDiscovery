@@ -47,7 +47,6 @@ namespace EDDiscovery.UserControls
         public UserControlMissions()
         {
             InitializeComponent();
-            Name = "Missions";
         }
 
         public override void Init(EDDiscoveryForm ed, UserControlTravelGrid thc, int vn) //0=primary, 1 = first windowed version, etc

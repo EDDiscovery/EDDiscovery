@@ -57,7 +57,6 @@ namespace EDDiscovery.UserControls
         public UserControlEngineering()
         {
             InitializeComponent();
-            Name = "Engineering";
         }
 
         public override void Init(EDDiscoveryForm ed, UserControlTravelGrid thc, int vn) //0=primary, 1 = first windowed version, etc

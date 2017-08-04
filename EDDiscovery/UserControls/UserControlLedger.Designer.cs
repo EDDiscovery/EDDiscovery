@@ -63,7 +63,7 @@ namespace EDDiscovery.UserControls
             this.textBoxFilter = new ExtendedControls.TextBoxBorder();
             this.label1 = new System.Windows.Forms.Label();
             this.comboBoxHistoryWindow = new ExtendedControls.ComboBoxCustom();
-            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.dataViewScrollerPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewLedger)).BeginInit();
             this.contextMenuStripLedger.SuspendLayout();
@@ -241,18 +241,30 @@ namespace EDDiscovery.UserControls
             this.buttonFilter.Size = new System.Drawing.Size(75, 23);
             this.buttonFilter.TabIndex = 25;
             this.buttonFilter.Text = "Event Filter";
-            this.toolTip1.SetToolTip(this.buttonFilter, "Display entries matching this event type filter");
+            this.toolTip.SetToolTip(this.buttonFilter, "Display entries matching this event type filter");
             this.buttonFilter.UseVisualStyleBackColor = true;
             this.buttonFilter.Click += new System.EventHandler(this.buttonFilter_Click);
             // 
             // textBoxFilter
             // 
+            this.textBoxFilter.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
+            this.textBoxFilter.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
             this.textBoxFilter.BorderColor = System.Drawing.Color.Transparent;
             this.textBoxFilter.BorderColorScaling = 0.5F;
+            this.textBoxFilter.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.textBoxFilter.ControlBackground = System.Drawing.SystemColors.Control;
             this.textBoxFilter.Location = new System.Drawing.Point(278, 6);
+            this.textBoxFilter.Multiline = false;
             this.textBoxFilter.Name = "textBoxFilter";
+            this.textBoxFilter.ReadOnly = false;
+            this.textBoxFilter.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.textBoxFilter.SelectionLength = 0;
+            this.textBoxFilter.SelectionStart = 0;
             this.textBoxFilter.Size = new System.Drawing.Size(148, 20);
             this.textBoxFilter.TabIndex = 1;
+            this.textBoxFilter.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.toolTip.SetToolTip(this.textBoxFilter, "Search to particular items");
+            this.textBoxFilter.WordWrap = true;
             this.textBoxFilter.TextChanged += new System.EventHandler(this.textBoxFilter_TextChanged);
             // 
             // label1
@@ -285,15 +297,15 @@ namespace EDDiscovery.UserControls
             this.comboBoxHistoryWindow.SelectedIndex = -1;
             this.comboBoxHistoryWindow.SelectedItem = null;
             this.comboBoxHistoryWindow.SelectedValue = null;
-            this.comboBoxHistoryWindow.Size = new System.Drawing.Size(100, 20);
+            this.comboBoxHistoryWindow.Size = new System.Drawing.Size(100, 21);
             this.comboBoxHistoryWindow.TabIndex = 0;
-            this.toolTip1.SetToolTip(this.comboBoxHistoryWindow, "Select the entries by age");
+            this.toolTip.SetToolTip(this.comboBoxHistoryWindow, "Select the entries by age");
             this.comboBoxHistoryWindow.ValueMember = "";
             this.comboBoxHistoryWindow.SelectedIndexChanged += new System.EventHandler(this.comboBoxHistoryWindow_SelectedIndexChanged);
             // 
-            // toolTip1
+            // toolTip
             // 
-            this.toolTip1.ShowAlways = true;
+            this.toolTip.ShowAlways = true;
             // 
             // UserControlLedger
             // 
@@ -326,7 +338,7 @@ namespace EDDiscovery.UserControls
         private ExtendedControls.TextBoxBorder textBoxFilter;
         private System.Windows.Forms.ContextMenuStrip contextMenuStripLedger;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemGotoItem;
-        private System.Windows.Forms.ToolTip toolTip1;
+        private System.Windows.Forms.ToolTip toolTip;
         private System.Windows.Forms.DataGridViewTextBoxColumn TimeCol;
         private System.Windows.Forms.DataGridViewTextBoxColumn Type;
         private System.Windows.Forms.DataGridViewTextBoxColumn Notes;

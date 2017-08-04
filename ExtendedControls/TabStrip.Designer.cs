@@ -46,6 +46,7 @@ namespace ExtendedControls
             this.components = new System.ComponentModel.Container();
             this.panelBottom = new System.Windows.Forms.Panel();
             this.labelControlText = new System.Windows.Forms.Label();
+            this.drawnPanelPopOut = new ExtendedControls.DrawnPanel();
             this.panelArrowRight = new System.Windows.Forms.Panel();
             this.panelArrowLeft = new System.Windows.Forms.Panel();
             this.panelSelected = new System.Windows.Forms.Panel();
@@ -53,7 +54,6 @@ namespace ExtendedControls
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.toolStripMenuItemPopOut = new System.Windows.Forms.ToolStripMenuItem();
-            this.drawnPanelPopOut = new ExtendedControls.DrawnPanel();
             this.panelBottom.SuspendLayout();
             this.contextMenuStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -85,6 +85,24 @@ namespace ExtendedControls
             this.labelControlText.MouseEnter += new System.EventHandler(this.panelBottom_MouseEnter);
             this.labelControlText.MouseLeave += new System.EventHandler(this.panelBottom_MouseLeave);
             // 
+            // drawnPanelPopOut
+            // 
+            this.drawnPanelPopOut.DrawnImage = global::ExtendedControls.Properties.Resources.popout;
+            this.drawnPanelPopOut.ImageSelected = ExtendedControls.DrawnPanel.ImageType.None;
+            this.drawnPanelPopOut.ImageText = null;
+            this.drawnPanelPopOut.Location = new System.Drawing.Point(161, 3);
+            this.drawnPanelPopOut.MarginSize = 4;
+            this.drawnPanelPopOut.MouseOverColor = System.Drawing.Color.White;
+            this.drawnPanelPopOut.MouseSelectedColor = System.Drawing.Color.Green;
+            this.drawnPanelPopOut.MouseSelectedColorEnable = true;
+            this.drawnPanelPopOut.Name = "drawnPanelPopOut";
+            this.drawnPanelPopOut.Size = new System.Drawing.Size(24, 24);
+            this.drawnPanelPopOut.TabIndex = 3;
+            this.toolTip1.SetToolTip(this.drawnPanelPopOut, "Click to pop out the current panel into another window");
+            this.drawnPanelPopOut.Click += new System.EventHandler(this.panelPopOut_Click);
+            this.drawnPanelPopOut.MouseEnter += new System.EventHandler(this.panelBottom_MouseEnter);
+            this.drawnPanelPopOut.MouseLeave += new System.EventHandler(this.panelBottom_MouseLeave);
+            // 
             // panelArrowRight
             // 
             this.panelArrowRight.BackgroundImage = global::ExtendedControls.Properties.Resources.ArrowRight;
@@ -93,6 +111,7 @@ namespace ExtendedControls
             this.panelArrowRight.Name = "panelArrowRight";
             this.panelArrowRight.Size = new System.Drawing.Size(12, 20);
             this.panelArrowRight.TabIndex = 2;
+            this.toolTip1.SetToolTip(this.panelArrowRight, "Click to scroll the list right");
             this.panelArrowRight.Visible = false;
             this.panelArrowRight.Click += new System.EventHandler(this.panelArrowRight_Click);
             this.panelArrowRight.MouseEnter += new System.EventHandler(this.panelBottom_MouseEnter);
@@ -106,6 +125,7 @@ namespace ExtendedControls
             this.panelArrowLeft.Name = "panelArrowLeft";
             this.panelArrowLeft.Size = new System.Drawing.Size(12, 20);
             this.panelArrowLeft.TabIndex = 2;
+            this.toolTip1.SetToolTip(this.panelArrowLeft, "Click to scroll the list left");
             this.panelArrowLeft.Visible = false;
             this.panelArrowLeft.Click += new System.EventHandler(this.panelArrowLeft_Click);
             this.panelArrowLeft.MouseEnter += new System.EventHandler(this.panelBottom_MouseEnter);
@@ -132,6 +152,10 @@ namespace ExtendedControls
             this.labelCurrent.MouseEnter += new System.EventHandler(this.panelBottom_MouseEnter);
             this.labelCurrent.MouseLeave += new System.EventHandler(this.panelBottom_MouseLeave);
             // 
+            // toolTip1
+            // 
+            this.toolTip1.ShowAlways = true;
+            // 
             // contextMenuStrip1
             // 
             this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -147,22 +171,6 @@ namespace ExtendedControls
             this.toolStripMenuItemPopOut.Size = new System.Drawing.Size(118, 22);
             this.toolStripMenuItemPopOut.Text = "Pop Out";
             this.toolStripMenuItemPopOut.Click += new System.EventHandler(this.toolStripMenuItemPopOut_Click);
-            // 
-            // drawnPanelPopOut
-            // 
-            this.drawnPanelPopOut.DrawnImage = global::ExtendedControls.Properties.Resources.popout;
-            this.drawnPanelPopOut.ImageSelected = ExtendedControls.DrawnPanel.ImageType.None;
-            this.drawnPanelPopOut.ImageText = null;
-            this.drawnPanelPopOut.Location = new System.Drawing.Point(161, 3);
-            this.drawnPanelPopOut.MarginSize = 4;
-            this.drawnPanelPopOut.MouseOverColor = System.Drawing.Color.White;
-            this.drawnPanelPopOut.MouseSelectedColor = System.Drawing.Color.Green;
-            this.drawnPanelPopOut.Name = "drawnPanelPopOut";
-            this.drawnPanelPopOut.Size = new System.Drawing.Size(24, 24);
-            this.drawnPanelPopOut.TabIndex = 3;
-            this.drawnPanelPopOut.Click += new System.EventHandler(this.panelPopOut_Click);
-            this.drawnPanelPopOut.MouseEnter += new System.EventHandler(this.panelBottom_MouseEnter);
-            this.drawnPanelPopOut.MouseLeave += new System.EventHandler(this.panelBottom_MouseLeave);
             // 
             // TabStrip
             // 

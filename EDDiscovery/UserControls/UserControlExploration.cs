@@ -59,7 +59,6 @@ namespace EDDiscovery.UserControls
             InitializeComponent();
             ColumnSystemName.AutoCompleteGenerator = SystemClassDB.ReturnOnlySystemsListForAutoComplete;
             _currentExplorationSet = new ExplorationSetClass();
-            Name = "Exploration";
         }
 
         public override void Init(EDDiscoveryForm ed,  UserControlTravelGrid thc, int vn) //0=primary, 1 = first windowed version, etc

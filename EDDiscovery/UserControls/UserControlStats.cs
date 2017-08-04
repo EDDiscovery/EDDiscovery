@@ -37,7 +37,6 @@ namespace EDDiscovery.UserControls
         public UserControlStats()
         {
             InitializeComponent();
-            Name = "Statistics";
         }
 
         public override void Init( EDDiscoveryForm ed, UserControlTravelGrid thc,  int vn) //0=primary, 1 = first windowed version, etc

@@ -55,12 +55,12 @@ namespace EDDiscovery.UserControls
             this.Price = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.vScrollBarCustomMC = new ExtendedControls.VScrollBarCustom();
             this.panelButtons = new System.Windows.Forms.Panel();
+            this.textBoxItems2 = new ExtendedControls.TextBoxBorder();
+            this.textBoxItems1 = new ExtendedControls.TextBoxBorder();
+            this.labelItems2 = new System.Windows.Forms.Label();
+            this.labelItems1 = new System.Windows.Forms.Label();
             this.checkBoxClear = new ExtendedControls.CheckBoxCustom();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.labelItems1 = new System.Windows.Forms.Label();
-            this.textBoxItems1 = new ExtendedControls.TextBoxBorder();
-            this.textBoxItems2 = new ExtendedControls.TextBoxBorder();
-            this.labelItems2 = new System.Windows.Forms.Label();
             this.dataViewScrollerPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewMC)).BeginInit();
             this.panelButtons.SuspendLayout();
@@ -194,35 +194,26 @@ namespace EDDiscovery.UserControls
             this.panelButtons.Size = new System.Drawing.Size(704, 32);
             this.panelButtons.TabIndex = 2;
             // 
-            // checkBoxClear
+            // textBoxItems2
             // 
-            this.checkBoxClear.AutoSize = true;
-            this.checkBoxClear.CheckBoxColor = System.Drawing.Color.Gray;
-            this.checkBoxClear.CheckBoxInnerColor = System.Drawing.Color.White;
-            this.checkBoxClear.CheckColor = System.Drawing.Color.DarkBlue;
-            this.checkBoxClear.FontNerfReduction = 0.5F;
-            this.checkBoxClear.Location = new System.Drawing.Point(6, 9);
-            this.checkBoxClear.MouseOverColor = System.Drawing.Color.CornflowerBlue;
-            this.checkBoxClear.Name = "checkBoxClear";
-            this.checkBoxClear.Size = new System.Drawing.Size(116, 17);
-            this.checkBoxClear.TabIndex = 2;
-            this.checkBoxClear.Text = "Remove zero items";
-            this.checkBoxClear.TickBoxReductionSize = 10;
-            this.checkBoxClear.UseVisualStyleBackColor = true;
-            this.checkBoxClear.CheckStateChanged += new System.EventHandler(this.checkBoxClear_CheckStateChanged);
-            // 
-            // toolTip1
-            // 
-            this.toolTip1.ShowAlways = true;
-            // 
-            // labelItems1
-            // 
-            this.labelItems1.AutoSize = true;
-            this.labelItems1.Location = new System.Drawing.Point(160, 9);
-            this.labelItems1.Name = "labelItems1";
-            this.labelItems1.Size = new System.Drawing.Size(35, 13);
-            this.labelItems1.TabIndex = 3;
-            this.labelItems1.Text = "label1";
+            this.textBoxItems2.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
+            this.textBoxItems2.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
+            this.textBoxItems2.BorderColor = System.Drawing.Color.Transparent;
+            this.textBoxItems2.BorderColorScaling = 0.5F;
+            this.textBoxItems2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.textBoxItems2.ControlBackground = System.Drawing.SystemColors.Control;
+            this.textBoxItems2.Location = new System.Drawing.Point(346, 9);
+            this.textBoxItems2.Multiline = false;
+            this.textBoxItems2.Name = "textBoxItems2";
+            this.textBoxItems2.ReadOnly = false;
+            this.textBoxItems2.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.textBoxItems2.SelectionLength = 0;
+            this.textBoxItems2.SelectionStart = 0;
+            this.textBoxItems2.Size = new System.Drawing.Size(75, 20);
+            this.textBoxItems2.TabIndex = 4;
+            this.textBoxItems2.Text = "textBoxBorder1";
+            this.textBoxItems2.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.textBoxItems2.WordWrap = true;
             // 
             // textBoxItems1
             // 
@@ -245,27 +236,6 @@ namespace EDDiscovery.UserControls
             this.textBoxItems1.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.textBoxItems1.WordWrap = true;
             // 
-            // textBoxItems2
-            // 
-            this.textBoxItems2.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
-            this.textBoxItems2.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
-            this.textBoxItems2.BorderColor = System.Drawing.Color.Transparent;
-            this.textBoxItems2.BorderColorScaling = 0.5F;
-            this.textBoxItems2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.textBoxItems2.ControlBackground = System.Drawing.SystemColors.Control;
-            this.textBoxItems2.Location = new System.Drawing.Point(346, 9);
-            this.textBoxItems2.Multiline = false;
-            this.textBoxItems2.Name = "textBoxItems2";
-            this.textBoxItems2.ReadOnly = false;
-            this.textBoxItems2.ScrollBars = System.Windows.Forms.ScrollBars.None;
-            this.textBoxItems2.SelectionLength = 0;
-            this.textBoxItems2.SelectionStart = 0;
-            this.textBoxItems2.Size = new System.Drawing.Size(75, 20);
-            this.textBoxItems2.TabIndex = 4;
-            this.textBoxItems2.Text = "textBoxBorder1";
-            this.textBoxItems2.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
-            this.textBoxItems2.WordWrap = true;
-            // 
             // labelItems2
             // 
             this.labelItems2.AutoSize = true;
@@ -274,6 +244,37 @@ namespace EDDiscovery.UserControls
             this.labelItems2.Size = new System.Drawing.Size(35, 13);
             this.labelItems2.TabIndex = 3;
             this.labelItems2.Text = "label1";
+            // 
+            // labelItems1
+            // 
+            this.labelItems1.AutoSize = true;
+            this.labelItems1.Location = new System.Drawing.Point(160, 9);
+            this.labelItems1.Name = "labelItems1";
+            this.labelItems1.Size = new System.Drawing.Size(35, 13);
+            this.labelItems1.TabIndex = 3;
+            this.labelItems1.Text = "label1";
+            // 
+            // checkBoxClear
+            // 
+            this.checkBoxClear.AutoSize = true;
+            this.checkBoxClear.CheckBoxColor = System.Drawing.Color.Gray;
+            this.checkBoxClear.CheckBoxInnerColor = System.Drawing.Color.White;
+            this.checkBoxClear.CheckColor = System.Drawing.Color.DarkBlue;
+            this.checkBoxClear.FontNerfReduction = 0.5F;
+            this.checkBoxClear.Location = new System.Drawing.Point(6, 9);
+            this.checkBoxClear.MouseOverColor = System.Drawing.Color.CornflowerBlue;
+            this.checkBoxClear.Name = "checkBoxClear";
+            this.checkBoxClear.Size = new System.Drawing.Size(116, 17);
+            this.checkBoxClear.TabIndex = 2;
+            this.checkBoxClear.Text = "Remove zero items";
+            this.checkBoxClear.TickBoxReductionSize = 10;
+            this.toolTip1.SetToolTip(this.checkBoxClear, "Remove zero items the time after they go to zero");
+            this.checkBoxClear.UseVisualStyleBackColor = true;
+            this.checkBoxClear.CheckStateChanged += new System.EventHandler(this.checkBoxClear_CheckStateChanged);
+            // 
+            // toolTip1
+            // 
+            this.toolTip1.ShowAlways = true;
             // 
             // UserControlMaterialCommodities
             // 

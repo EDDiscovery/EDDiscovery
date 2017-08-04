@@ -39,7 +39,6 @@ namespace EDDiscovery.UserControls
         public UserControlStarDistance()
         {
             InitializeComponent();
-            Name = "Stars";
         }
 
         public override void Init(EDDiscoveryForm ed, UserControlTravelGrid thc, int vn) //0=primary, 1 = first windowed version, etc

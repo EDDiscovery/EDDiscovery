@@ -57,6 +57,19 @@ namespace EDDiscovery
             for (int i = 0; i < RoutePlotter.metric_options.Length; i++)
                 comboBoxRoutingMetric.Items.Add(RoutePlotter.metric_options[i]);
 
+            textBox_Range.SetToolTip(toolTip);
+            textBox_Distance.SetToolTip(toolTip);
+            textBox_From.SetToolTip(toolTip);
+            textBox_FromName.SetToolTip(toolTip);
+            textBox_FromX.SetToolTip(toolTip);
+            textBox_FromY.SetToolTip(toolTip);
+            textBox_FromZ.SetToolTip(toolTip);
+            textBox_To.SetToolTip(toolTip);
+            textBox_ToName.SetToolTip(toolTip);
+            textBox_ToX.SetToolTip(toolTip);
+            textBox_ToY.SetToolTip(toolTip);
+            textBox_ToZ.SetToolTip(toolTip);
+            comboBoxRoutingMetric.SetToolTip(toolTip);
         }
 
         public void InitControl(EDDiscoveryForm discoveryForm)
