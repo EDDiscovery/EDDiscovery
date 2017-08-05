@@ -17,7 +17,8 @@ namespace EDDiscovery.UserControls
     public partial class UserControlContainerGrid: UserControlCommonBase        // circular, huh! neat!
     {
         private EDDiscoveryForm discoveryForm;
-        private UserControlTravelGrid uctg;     // one passed to us, refers to thc.uctg
+        private UserControlTravelGrid uctg_history;     // one passed to us, refers to thc.uctg
+        private UserControlTravelGrid uctg_inuse;  // one in use
         private int displaynumber;
 
         private List<UserControlContainerResizable> uccrlist = new List<UserControlContainerResizable>();
@@ -37,7 +38,7 @@ namespace EDDiscovery.UserControls
         public override void Init( EDDiscoveryForm f , UserControlTravelGrid thc, int dn )       //dn = 0 primary grid, or 1 first pop out, etc
         {
             discoveryForm = f;
-            uctg = thc;
+            uctg_history = uctg_inuse = thc;
             displaynumber = dn;
         }
 
@@ -65,6 +66,10 @@ namespace EDDiscovery.UserControls
                 // need work.  We want to preserve the order for tiling.  So list is in tiling order.  But we need to add in a specific order
                 // as Z order is controlled by order Controls are added.
 
+
+                var uccrfirst = uccrlist.Find(x => x.GetType() == typeof(UserControlTravelGrid));
+                UserControlTravelGrid uctgfirst = (uccrfirst != null) ? (uccrfirst.control as UserControlTravelGrid) : null;
+
                 int ppos = 0;
                 foreach (string n in names)
                 {
@@ -72,8 +77,7 @@ namespace EDDiscovery.UserControls
                     if (t != null )
                     {
                         UserControlCommonBase uccb = (UserControlCommonBase)Activator.CreateInstance(t);
-                        UserControlContainerResizable uccr = CreatePanel(uccb);
-                        AddToControls(uccr, new Point(positions[ppos++], positions[ppos++]), new Size(positions[ppos++], positions[ppos++]));
+                        CreatePanel(uccb , new Point(positions[ppos++], positions[ppos++]), new Size(positions[ppos++], positions[ppos++]));
                     }
                 }
 
@@ -92,6 +96,8 @@ namespace EDDiscovery.UserControls
             System.Diagnostics.Debug.WriteLine("----- Grid Restore END " + DbWindows);
 
             UpdateButtons();
+
+            AssignTHC();
         }
 
         void UpdateButtons()
@@ -144,29 +150,17 @@ namespace EDDiscovery.UserControls
 
         #region Open/Close
 
-        private UserControlContainerResizable CreatePanel(UserControlCommonBase uccb)
+        private UserControlContainerResizable CreatePanel(UserControlCommonBase uccb , Point pos, Size size)
         {
-            if (uccb != null)
-            {
-                UserControlContainerResizable uccr = new UserControlContainerResizable();
-                uccr.Init(uccb);
-                uccr.ResizeStart += ResizeStart;
-                uccr.ResizeEnd += ResizeEnd;
-                uccr.BorderColor = discoveryForm.theme.GridBorderLines;
-                uccr.SelectedBorderColor = discoveryForm.theme.TextBlockHighlightColor;
+            UserControlContainerResizable uccr = new UserControlContainerResizable();
+            uccr.Init(uccb);
+            uccr.ResizeStart += ResizeStart;
+            uccr.ResizeEnd += ResizeEnd;
+            uccr.BorderColor = discoveryForm.theme.GridBorderLines;
+            uccr.SelectedBorderColor = discoveryForm.theme.TextBlockHighlightColor;
 
-                uccrlist.Add(uccr);
-                System.Diagnostics.Debug.WriteLine("  Create " + uccb.GetType().Name);
-
-                return uccr;
-            }
-            else
-                return null;
-        }
-
-        private void AddToControls(UserControlContainerResizable uccr, Point pos, Size size)
-        {
-            UserControlCommonBase uccb = uccr.control as UserControlCommonBase;
+            uccrlist.Add(uccr);
+            System.Diagnostics.Debug.WriteLine("  Create " + uccb.GetType().Name);
 
             int numopenedinside = uccrlist.Count(x => x.GetType().Equals(uccb.GetType()));    // how many others are there?
 
@@ -175,7 +169,7 @@ namespace EDDiscovery.UserControls
 
             panelPlayfield.Controls.Add(uccr);
 
-            uccb.Init(discoveryForm, uctg, dnum);
+            uccb.Init(discoveryForm, uctg_inuse, dnum);
             uccb.LoadLayout();
 
             uccr.Font = discoveryForm.theme.GetFont;        // Important. Apply font autoscaling to the user control
@@ -189,6 +183,8 @@ namespace EDDiscovery.UserControls
             uccr.Size = size;
 
             uccb.Display(discoveryForm.TravelControl.GetTravelHistoryCurrent, discoveryForm.history);
+
+            return uccr;
         }
 
         public void ClosePanel( UserControlContainerResizable uccr )
@@ -201,6 +197,7 @@ namespace EDDiscovery.UserControls
             uc.Dispose();
             uccr.Dispose();
             UpdateButtons();
+            AssignTHC();
         }
 
         private void Select(UserControlContainerResizable uccr)
@@ -222,6 +219,22 @@ namespace EDDiscovery.UserControls
             }
 
             UpdateButtons();
+        }
+
+        private void AssignTHC()
+        {
+            var v = uccrlist.Find(x => x.control.GetType() == typeof(UserControlTravelGrid));   // find one with TG
+            UserControlTravelGrid uctgfound = (v != null) ? (v.control as UserControlTravelGrid) : null;    // if found, set to it
+
+            if ( (uctgfound != null && !Object.ReferenceEquals(uctgfound,uctg_inuse) ) ||    // if got one but its not the one currently in use
+                 (uctgfound == null && !Object.ReferenceEquals(uctg_history,uctg_inuse))    // or not found, but we are not on the history one
+                )
+            { 
+                uctg_inuse = (uctgfound != null) ? uctgfound : uctg_history;    // select
+
+                foreach (UserControlContainerResizable u in uccrlist)
+                    ((UserControlCommonBase)u.control).ChangeTravelGrid(uctg_inuse);
+            }
         }
 
         #endregion
@@ -246,17 +259,14 @@ namespace EDDiscovery.UserControls
         #region Clicks
         private void comboBoxGridSelector_SelectedIndexChanged(object sender, EventArgs e)
         {
-            UserControlContainerResizable uccr = CreatePanel(PopOutControl.Create((PopOutControl.PopOuts)comboBoxGridSelector.SelectedIndex));
-
-            if (uccr != null)
-            {
-                AddToControls(uccr, new Point((uccrlist.Count % 5) * 50, (uccrlist.Count % 5) * 50),
-                                    new Size(Math.Min(300, panelPlayfield.Width - 10), Math.Min(300, panelPlayfield.Height - 10)));
-                Select(null);
-                uccr.Selected = true;
-                uccr.BringToFront();
-                UpdateButtons();
-            }
+            UserControlContainerResizable uccr = CreatePanel(PopOutControl.Create((PopOutControl.PopOuts)comboBoxGridSelector.SelectedIndex) ,
+                                        new Point((uccrlist.Count % 5) * 50, (uccrlist.Count % 5) * 50),
+                                        new Size(Math.Min(300, panelPlayfield.Width - 10), Math.Min(300, panelPlayfield.Height - 10)));
+            Select(null);
+            uccr.Selected = true;
+            uccr.BringToFront();
+            UpdateButtons();
+            AssignTHC();
         }   
 
         private void buttonExtDelete_Click(object sender, EventArgs e)
