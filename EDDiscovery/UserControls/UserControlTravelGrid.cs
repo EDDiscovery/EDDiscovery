@@ -208,7 +208,7 @@ namespace EDDiscovery.UserControls
 
             dataGridViewTravel.Columns[0].HeaderText = EDDiscoveryForm.EDDConfig.DisplayUTC ? "Game Time" : "Time";
 
-            System.Diagnostics.Debug.WriteLine("Fire HC");
+            //System.Diagnostics.Debug.WriteLine("Fire HC");
             if (OnHistoryChanged != null)
                 OnHistoryChanged(hl);
 
@@ -228,7 +228,7 @@ namespace EDDiscovery.UserControls
             {
                 if (checkBoxMoveToTop.Checked && dataGridViewTravel.DisplayedRowCount(false) > 0)   // Move focus to new row
                 {
-                    System.Diagnostics.Debug.WriteLine("Auto Sel");
+                    //System.Diagnostics.Debug.WriteLine("Auto Sel");
                     dataGridViewTravel.ClearSelection();
                     dataGridViewTravel.CurrentCell = dataGridViewTravel.Rows[0].Cells[1];       // its the current cell which needs to be set, moves the row marker as well
 
@@ -323,12 +323,12 @@ namespace EDDiscovery.UserControls
             }
         }
 
-        private void FireChangeSelection()
+        public void FireChangeSelection()
         {
             if (dataGridViewTravel.CurrentCell != null)
             {
                 int row = dataGridViewTravel.CurrentCell.RowIndex;
-                System.Diagnostics.Debug.WriteLine("Fire Change Sel row" + row);
+                //System.Diagnostics.Debug.WriteLine("Fire Change Sel row" + row);
                 if (OnChangedSelection != null)
                     OnChangedSelection(row, dataGridViewTravel.CurrentCell.ColumnIndex, false, dataGridViewTravel.CurrentCell.ColumnIndex == TravelHistoryColumns.Note);
                 if (OnTravelSelectionChanged != null)
