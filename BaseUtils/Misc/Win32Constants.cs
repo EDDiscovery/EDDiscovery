@@ -187,6 +187,14 @@ namespace BaseUtils.Win32Constants
         public const int NCLBUTTONUP = 0x00A2;
 
         /// <summary>
+        /// The WM_NCLBUTTONDBLCLK message is posted when the user double-clicks the left mouse button while the cursor
+        /// is within the nonclient area of a window. This message is posted to the window that contains the cursor. If
+        /// a window has captured the mouse, this message is not posted.
+        /// </summary>
+        /// <seealso href="https://msdn.microsoft.com/en-us/library/windows/desktop/ms645619(v=vs.85).aspx"/>
+        public const int NCLBUTTONDBLCLK = 0x00A3;
+
+        /// <summary>
         /// The WM_KEYDOWN message is posted to the window with the keyboard focus when a nonsystem key is pressed.
         /// A nonsystem key is a key that is pressed when the ALT key is not pressed.
         /// </summary>
