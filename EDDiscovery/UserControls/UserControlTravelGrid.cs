@@ -31,7 +31,7 @@ using EDDiscovery.Export;
 
 namespace EDDiscovery.UserControls
 {
-    public partial class UserControlTravelGrid : UserControlCommonBase
+    public partial class UserControlTravelGrid : UserControlCommonBase, UserControlCursorType
     {
         #region Public IF
 
@@ -53,10 +53,9 @@ namespace EDDiscovery.UserControls
         public delegate void Redisplay(HistoryList hl);
         public Redisplay OnHistoryChanged;               // FIRED after discoveryform.onHistoryChange->this.Display..
 
-        public delegate void ChangedSelection(int rowno, int colno, bool doubleclick, bool note);
-        public event ChangedSelection OnChangedSelection;   // After a change of selection by the user, or after a OnHistoryChanged, or after a sort.
+        // implement UserControlCursorType fields
 
-        public delegate void ChangedSelectionHE(HistoryEntry he, HistoryList hl);
+        public event ChangedSelection OnChangedSelection;   // After a change of selection by the user, or after a OnHistoryChanged, or after a sort.
         public event ChangedSelectionHE OnTravelSelectionChanged;   // as above, different format, for certain older controls
 
         public delegate void KeyDownInCell(int asciikeycode, int rowno, int colno, bool note);
@@ -107,8 +106,8 @@ namespace EDDiscovery.UserControls
             InitializeComponent();
         }
 
-        public override void Init(EDDiscoveryForm ed, UserControlTravelGrid tg, int vn) //0=primary, 1 = first windowed version, etc
-        {
+        public override void Init(EDDiscoveryForm ed, UserControlCursorType tg, int vn) // TG is not used.
+        {                       
             discoveryform = ed;
             displaynumber = vn;
             cfs.ConfigureThirdOption("Travel", "Docked;FSD Jump;Undocked;");

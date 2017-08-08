@@ -30,11 +30,11 @@ namespace EDDiscovery.UserControls
     public class UserControlCommonBase : UserControl
     {
         // in calling order..
-        public virtual void Init(EDDiscoveryForm ed, UserControlTravelGrid thc, int displayno) { }
+        public virtual void Init(EDDiscoveryForm ed, UserControlCursorType thc, int displayno) { }
         public virtual void LoadLayout() { }
         public virtual void Display(HistoryEntry current, HistoryList history) { }
 
-        public virtual void ChangeTravelGrid(UserControlTravelGrid thc) { }
+        public virtual void ChangeCursorType(UserControlCursorType thc) { }
         public virtual void Closing() { }
 
         public virtual Color ColorTransparency { get { return Color.Transparent; } }        // override to say support transparency, and what colour you want.
@@ -142,5 +142,19 @@ namespace EDDiscovery.UserControls
         }
 
         #endregion
+    }
+
+    // Any UCs wanting to be a cursor, must implement this interface
+
+    public delegate void ChangedSelection(int rowno, int colno, bool doubleclick, bool note);
+    public delegate void ChangedSelectionHE(HistoryEntry he, HistoryList hl);
+
+    public interface UserControlCursorType
+    {
+        event ChangedSelection OnChangedSelection;   // After a change of selection by the user, or after a OnHistoryChanged, or after a sort.
+        event ChangedSelectionHE OnTravelSelectionChanged;   // as above, different format, for certain older controls
+        void FireChangeSelection(); // fire a change sel event to everyone
+        void GotoPosByJID(long jid);    // goto a pos by JID
+        HistoryEntry GetCurrentHistoryEntry { get; }    // whats your current entry, null if not
     }
 }

@@ -32,7 +32,7 @@ namespace EDDiscovery.UserControls
     {
         private int displaynumber = 0;
         private EDDiscoveryForm discoveryform;
-        private UserControlTravelGrid uctg;
+        private UserControlCursorType uctg;
         
         private string DbColumnSave { get { return ("SynthesisGrid") + ((displaynumber > 0) ? displaynumber.ToString() : "") + "DGVCol"; } }
         private string DbWSave { get { return "SynthesisWanted" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
@@ -49,7 +49,7 @@ namespace EDDiscovery.UserControls
             InitializeComponent();
         }
 
-        public override void Init(EDDiscoveryForm ed, UserControlTravelGrid thc, int vn) //0=primary, 1 = first windowed version, etc
+        public override void Init(EDDiscoveryForm ed, UserControlCursorType thc, int vn) //0=primary, 1 = first windowed version, etc
         {
             discoveryform = ed;
             uctg = thc;
@@ -96,7 +96,7 @@ namespace EDDiscovery.UserControls
             }
         }
 
-        public override void ChangeTravelGrid(UserControlTravelGrid thc)
+        public override void ChangeCursorType(UserControlCursorType thc)
         {
             uctg.OnTravelSelectionChanged -= Display;
             uctg = thc;

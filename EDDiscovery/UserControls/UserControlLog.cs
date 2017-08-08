@@ -36,7 +36,7 @@ namespace EDDiscovery.UserControls
             richTextBox_History.SetContextMenuStrip(contextMenuStrip1);
         }
 
-        public override void Init( EDDiscoveryForm ed, UserControlTravelGrid thc, int displayno)
+        public override void Init( EDDiscoveryForm ed, UserControlCursorType thc, int displayno)
         {
             discoveryform = ed;
             discoveryform.OnNewLogEntry += AppendText;

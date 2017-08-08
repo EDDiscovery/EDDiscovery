@@ -17,8 +17,8 @@ namespace EDDiscovery.UserControls
     public partial class UserControlContainerGrid: UserControlCommonBase        // circular, huh! neat!
     {
         private EDDiscoveryForm discoveryForm;
-        private UserControlTravelGrid uctg_history;     // one passed to us, refers to thc.uctg
-        private UserControlTravelGrid uctg_inuse;  // one in use
+        private UserControlCursorType ucursor_history;     // one passed to us, refers to thc.uctg
+        private UserControlCursorType ucursor_inuse;  // one in use
         private int displaynumber;
 
         private List<UserControlContainerResizable> uccrlist = new List<UserControlContainerResizable>();
@@ -36,12 +36,12 @@ namespace EDDiscovery.UserControls
             rollUpPanelMenu.SetToolTip(toolTip);    // use the defaults
         }
 
-        public override void Init( EDDiscoveryForm f , UserControlTravelGrid thc, int dn )       //dn = 0 primary grid, or 1 first pop out, etc
+        public override void Init( EDDiscoveryForm f , UserControlCursorType thc, int dn )       //dn = 0 primary grid, or 1 first pop out, etc
         {
             discoveryForm = f;
-            uctg_history = uctg_inuse = thc;
+            ucursor_history = ucursor_inuse = thc;
             displaynumber = dn;
-            System.Diagnostics.Debug.WriteLine("Init Grid Use THC " + uctg_inuse.GetHashCode());
+            //System.Diagnostics.Debug.WriteLine("Init Grid Use THC " + ucursor_inuse.GetHashCode());
         }
 
         bool checkmulticall = false;    // debug for now
@@ -65,9 +65,6 @@ namespace EDDiscovery.UserControls
             if ( pos.RestoreArrayFromString(out positions) && zo.RestoreArrayFromString(out zorder,0,names.Length-1) && 
                         names.Length == zorder.Length && positions.Length == 4*names.Length )
             {
-                var uccrfirst = uccrlist.Find(x => x.GetType() == typeof(UserControlTravelGrid));
-                UserControlTravelGrid uctgfirst = (uccrfirst != null) ? (uccrfirst.control as UserControlTravelGrid) : null;
-
                 int ppos = 0;
                 foreach (string n in names)
                 {
@@ -146,19 +143,19 @@ namespace EDDiscovery.UserControls
             System.Diagnostics.Debug.WriteLine("---- END Grid Saving to " + DbWindows);
         }
 
-        public override void ChangeTravelGrid(UserControlTravelGrid thc)     // a grid below changed its travel grid, update our history one
+        public override void ChangeCursorType(UserControlCursorType thc)     // a grid below changed its travel grid, update our history one
         {
-            bool changedinuse = Object.ReferenceEquals(uctg_inuse, uctg_history);   // if we are using the history as the current tg
-            System.Diagnostics.Debug.WriteLine("Grid CTG " + uctg_history.GetHashCode() + " IU " + uctg_inuse.GetHashCode() + " New " + thc.GetHashCode());
-            uctg_history = thc;         // underlying one has changed. 
+            bool changedinuse = Object.ReferenceEquals(ucursor_inuse, ucursor_history);   // if we are using the history as the current tg
+            System.Diagnostics.Debug.WriteLine("Grid CTG " + ucursor_history.GetHashCode() + " IU " + ucursor_inuse.GetHashCode() + " New " + thc.GetHashCode());
+            ucursor_history = thc;         // underlying one has changed. 
 
             if (changedinuse)   // inform the boys
             {
-                uctg_inuse = uctg_history;
+                ucursor_inuse = ucursor_history;
                 //System.Diagnostics.Debug.WriteLine(".. changed in use, inform children");
 
                 foreach (UserControlContainerResizable u in uccrlist)
-                    ((UserControlCommonBase)u.control).ChangeTravelGrid(uctg_inuse);
+                    ((UserControlCommonBase)u.control).ChangeCursorType(ucursor_inuse);
             }
         }
 
@@ -178,11 +175,11 @@ namespace EDDiscovery.UserControls
             int numopenedinside = uccrlist.Count(x => x.GetType().Equals(uccb.GetType()));    // how many others are there?
 
             int dnum = 1050 + displaynumber * 100 + numopenedinside;
-            System.Diagnostics.Debug.WriteLine("  Create " + uccb.GetType().Name + " " + dnum + " Assign THC " + uctg_inuse.GetHashCode() );
+            System.Diagnostics.Debug.WriteLine("  Create " + uccb.GetType().Name + " " + dnum + " Assign THC " + ucursor_inuse.GetHashCode() );
 
             panelPlayfield.Controls.Add(uccr);
 
-            uccb.Init(discoveryForm, uctg_inuse, dnum);
+            uccb.Init(discoveryForm, ucursor_inuse, dnum);
             uccb.LoadLayout();
 
             uccr.Font = discoveryForm.theme.GetFont;        // Important. Apply font autoscaling to the user control
@@ -242,19 +239,23 @@ namespace EDDiscovery.UserControls
         private void AssignTHC()
         {
             var v = uccrlist.Find(x => x.control.GetType() == typeof(UserControlTravelGrid));   // find one with TG
-            UserControlTravelGrid uctgfound = (v != null) ? (v.control as UserControlTravelGrid) : null;    // if found, set to it
 
-            if ( (uctgfound != null && !Object.ReferenceEquals(uctgfound,uctg_inuse) ) ||    // if got one but its not the one currently in use
-                 (uctgfound == null && !Object.ReferenceEquals(uctg_history,uctg_inuse))    // or not found, but we are not on the history one
+            if ( v == null )
+                v = uccrlist.Find(x => x.control.GetType() == typeof(UserControlJournalGrid));   // find one with Journal grid if no TG
+
+            UserControlCursorType uctgfound = (v != null) ? (v.control as UserControlCursorType) : null;    // if found, set to it
+
+            if ( (uctgfound != null && !Object.ReferenceEquals(uctgfound,ucursor_inuse) ) ||    // if got one but its not the one currently in use
+                 (uctgfound == null && !Object.ReferenceEquals(ucursor_history,ucursor_inuse))    // or not found, but we are not on the history one
                 )
             { 
-                uctg_inuse = (uctgfound != null) ? uctgfound : uctg_history;    // select
+                ucursor_inuse = (uctgfound != null) ? uctgfound : ucursor_history;    // select
                 //System.Diagnostics.Debug.WriteLine("Children of " + this.GetHashCode() + " Use THC " + uctg_inuse.GetHashCode());
 
                 foreach (UserControlContainerResizable u in uccrlist)
-                    ((UserControlCommonBase)u.control).ChangeTravelGrid(uctg_inuse);
+                    ((UserControlCommonBase)u.control).ChangeCursorType(ucursor_inuse);
 
-                uctg_inuse.FireChangeSelection();       // let the uctg tell the children a change event, so they can refresh
+                ucursor_inuse.FireChangeSelection();       // let the uctg tell the children a change event, so they can refresh
             }
         }
 

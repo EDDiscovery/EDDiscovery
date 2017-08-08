@@ -34,7 +34,7 @@ namespace EDDiscovery.UserControls
         public bool IsNotesShowing { get { return richTextBoxNote.Visible; } }
 
         private EDDiscoveryForm discoveryform;
-        private UserControlTravelGrid uctg;
+        private UserControlCursorType uctg;
 
         private int displaynumber;
         private string DbSelection { get { return ("SystemInformation") + ((displaynumber > 0) ? displaynumber.ToString() : "") + "Sel"; } }
@@ -50,13 +50,13 @@ namespace EDDiscovery.UserControls
         const int BitSelNotes = 7;
         const int BitSelTarget = 8;
         const int BitSelShipInfo = 9;
-        const int BitSelCargo = 10;
-        const int BitSelGameMode = 11;
-        const int BitSelTravel = 12;
+        const int BitSelFuel = 10;
+        const int BitSelCargo = 11;
+        const int BitSelMats = 12;
+        const int BitSelGameMode = 13;
+        const int BitSelTravel = 14;
 
-        int[] LongItems = new int[] { BitSelTarget, BitSelShipInfo, BitSelCargo, BitSelTravel };
-
-        const int BitSelTotal = 13;
+        const int BitSelTotal = 15;
         const int Positions = BitSelTotal * 2;      // two columns of positions, one at 0, one at +300 pixels ish, 
         const int BitSelEDSMButtonsNextLine = 24;
         const int BitSelSkinny = 25;
@@ -77,7 +77,7 @@ namespace EDDiscovery.UserControls
             InitializeComponent();
         }
 
-        public override void Init(EDDiscoveryForm ed, UserControlTravelGrid thc, int displayno)
+        public override void Init(EDDiscoveryForm ed, UserControlCursorType thc, int displayno)
         {
             discoveryform = ed;
             uctg = thc;
@@ -91,8 +91,8 @@ namespace EDDiscovery.UserControls
             toolstriplist = new ToolStripMenuItem[] { toolStripSystem , toolStripEDSM , toolStripVisits, toolStripBody,
                                                         toolStripPosition, toolStripDistanceFrom,
                                                         toolStripSystemState, toolStripNotes, toolStripTarget,
-                                                        toolStripShip, toolStripCargo,
-                                                        toolStripGameMode,toolStripTravel};
+                                                        toolStripShip, toolStripFuel , toolStripCargo,  toolStripMaterialAndDataCount,
+                                                        toolStripGameMode,toolStripTravel,  };
 
             Selection = SQLiteDBClass.GetSettingInt(DbSelection, BitSelDefault);
             Order = SQLiteDBClass.GetSettingString(DbOSave, "").RestoreIntListFromString(-1, 0);     // no min len
@@ -102,7 +102,7 @@ namespace EDDiscovery.UserControls
             System.Diagnostics.Debug.WriteLine("Ordered " + String.Join(",", Order));
         }
 
-        public override void ChangeTravelGrid(UserControlTravelGrid thc)
+        public override void ChangeCursorType(UserControlCursorType thc)
         {
             uctg.OnTravelSelectionChanged -= Display;
             uctg = thc;
@@ -378,9 +378,17 @@ namespace EDDiscovery.UserControls
         {
             ToggleSelection(sender, BitSelCargo);
         }
+        private void toolStripMaterialAndDataCount_Click(object sender, EventArgs e)
+        {
+            ToggleSelection(sender, BitSelMats);
+        }
         private void toolStripShip_Click(object sender, EventArgs e)
         {
             ToggleSelection(sender, BitSelShipInfo);
+        }
+        private void toolStripFuel_Click(object sender, EventArgs e)
+        {
+            ToggleSelection(sender, BitSelFuel);
         }
 
         private void whenTransparentUseSkinnyLookToolStripMenuItem_Click(object sender, EventArgs e)
@@ -422,8 +430,7 @@ namespace EDDiscovery.UserControls
             int data1pos = textBoxSystem.Left - labelSysName.Left;      // basing it on actual pos allow the auto font scale to work
             int lab2pos = labelSolDist.Left - labelHomeDist.Left;
             int data2pos = textBoxSolDist.Left - labelHomeDist.Left;
-            int lab3pos = labelFuel.Left - labelShip.Left;
-            int data3pos = textBoxFuel.Left - labelShip.Left;
+            int col2pos = (textBoxSolDist.Right + hspacing);
 
             int maxvert = 0;
 
@@ -443,12 +450,11 @@ namespace EDDiscovery.UserControls
 
                     if (ison)
                     {
-                        Point labpos = new Point(3 + (i % 2) * 300, ver);
+                        Point labpos = new Point(3 + (i % 2) * col2pos , ver);
                         Point datapos = new Point(labpos.X + data1pos, labpos.Y);
                         Point labpos2 = new Point(labpos.X + lab2pos, labpos.Y);
                         Point datapos2 = new Point(labpos.X + data2pos, labpos.Y);
-                        Point labpos3 = new Point(labpos.X + lab3pos, labpos.Y);
-                        Point datapos3 = new Point(labpos.X + data3pos, labpos.Y);
+
                         YStart[i] = ver;
 
                         switch (itemno)
@@ -532,13 +538,19 @@ namespace EDDiscovery.UserControls
 
                             case BitSelCargo:
                                 this.SetPos(ref labpos, labelCargo, datapos, textBoxCargo, vspacing,i);
-                                OffsetPos(labpos2, labelMaterials, datapos2, textBoxMaterials,i);
-                                OffsetPos(labpos3, labelData, datapos3, textBoxData,i);
+                                break;
+
+                            case BitSelMats:
+                                this.SetPos(ref labpos, labelData, datapos, textBoxData, vspacing, i);
+                                OffsetPos(labpos2, labelMaterials, datapos2, textBoxMaterials, i);
                                 break;
 
                             case BitSelShipInfo:
                                 this.SetPos(ref labpos, labelShip, datapos, textBoxShip, vspacing,i);
-                                OffsetPos(labpos3, labelFuel, datapos3, textBoxFuel,i);
+                                break;
+
+                            case BitSelFuel:
+                                this.SetPos( ref labpos, labelFuel, datapos, textBoxFuel, vspacing,i);
                                 break;
 
                             default:
@@ -572,6 +584,9 @@ namespace EDDiscovery.UserControls
             Order = new List<int>();
             for (int i = 0; i < BitSelTotal*2; i++)          // reset
                 Order.Add(((i%2)==0)?(i/2) : -1);       // fill with 0,-1,1,-3,2,-5 etc aligning them all down the left.
+
+            Order[BitSelFuel * 2 + 1] = BitSelCargo;
+            Order[BitSelFuel * 2 + 2] = -1;
 
             System.Diagnostics.Debug.WriteLine("Reset " + String.Join(",", Order));
         }
@@ -699,10 +714,7 @@ namespace EDDiscovery.UserControls
                     System.Diagnostics.Debug.WriteLine("--");
                     System.Diagnostics.Debug.WriteLine("Move " + fromorder + "(" + Order[fromorder] + ") to " + movetoorder + "(" + Order[movetoorder] + ") Released from Y " + fromy + " to " + xpos + "," + movetoy);
                     
-                    if (Order[movetoorder] >= 0 ||      // occupied
-                            (!right && Array.IndexOf(LongItems, Order[fromorder]) != -1) || // item is on left and is long
-                            (right && Array.IndexOf(LongItems, Order[movetoorder&~1]) != -1 && (movetoorder&~1) != fromorder )   // item on right, but current left item is too long, and we are not moving it!
-                            )
+                    if (Order[movetoorder] >= 0 )      // occupied
                     {
                         int line = (movetoorder / 2) * 2;       // shove two in from of move
                         Order.Insert(line, -1);
