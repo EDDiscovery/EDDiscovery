@@ -31,7 +31,7 @@ namespace EDDiscovery.UserControls
     public partial class UserControlNotePanel : UserControlCommonBase
     {
         private EDDiscoveryForm discoveryform;
-        private UserControlTravelGrid uctg;
+        private UserControlCursorType uctg;
 
         private int displaynumber = 0;
         private string DbSave { get { return "NotePanel" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
@@ -56,7 +56,7 @@ namespace EDDiscovery.UserControls
             InitializeComponent();
         }
 
-        public override void Init(EDDiscoveryForm ed, UserControlTravelGrid thc, int vn) //0=primary, 1 = first windowed version, etc
+        public override void Init(EDDiscoveryForm ed, UserControlCursorType thc, int vn) //0=primary, 1 = first windowed version, etc
         {
             config = (Configuration)SQLiteDBClass.GetSettingInt(DbSave + "Config", (int)config);
 
@@ -71,7 +71,7 @@ namespace EDDiscovery.UserControls
             displayfont = discoveryform.theme.GetFont;
         }
 
-        public override void ChangeTravelGrid(UserControlTravelGrid thc)
+        public override void ChangeCursorType(UserControlCursorType thc)
         {
             uctg.OnTravelSelectionChanged -= Display;
             uctg = thc;
