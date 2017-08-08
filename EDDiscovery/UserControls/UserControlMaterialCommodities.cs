@@ -58,7 +58,7 @@ namespace EDDiscovery.UserControls
             {
                 dataGridViewMC.Columns.Remove(dataGridViewMC.Columns[5]);       // to give name,shortname abv,category,type,number
                 labelItems1.Text = "Data";
-                labelItems2.Text = "Raw";
+                labelItems2.Text = "Mats";
             }
             else
             {

@@ -58,7 +58,8 @@ namespace EDDiscovery.UserControls
             this.toolStripShip = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripFuel = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripCargo = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripMaterialAndDataCount = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripDataCount = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMaterialCounts = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripGameMode = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripTravel = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSkinny = new System.Windows.Forms.ToolStripMenuItem();
@@ -129,13 +130,14 @@ namespace EDDiscovery.UserControls
             this.toolStripShip,
             this.toolStripFuel,
             this.toolStripCargo,
-            this.toolStripMaterialAndDataCount,
+            this.toolStripDataCount,
+            this.toolStripMaterialCounts,
             this.toolStripGameMode,
             this.toolStripTravel,
             this.toolStripSkinny,
             this.toolStripReset});
             this.contextMenuStrip.Name = "contextMenuStrip1";
-            this.contextMenuStrip.Size = new System.Drawing.Size(256, 400);
+            this.contextMenuStrip.Size = new System.Drawing.Size(256, 422);
             // 
             // toolStripSystem
             // 
@@ -266,14 +268,23 @@ namespace EDDiscovery.UserControls
             this.toolStripCargo.Text = "Display Cargo Count";
             this.toolStripCargo.Click += new System.EventHandler(this.toolStripCargo_Click);
             // 
-            // toolStripMaterialAndDataCount
+            // toolStripDataCount
             // 
-            this.toolStripMaterialAndDataCount.Checked = true;
-            this.toolStripMaterialAndDataCount.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.toolStripMaterialAndDataCount.Name = "toolStripMaterialAndDataCount";
-            this.toolStripMaterialAndDataCount.Size = new System.Drawing.Size(255, 22);
-            this.toolStripMaterialAndDataCount.Text = "Display Material and Data Count";
-            this.toolStripMaterialAndDataCount.Click += new System.EventHandler(this.toolStripMaterialAndDataCount_Click);
+            this.toolStripDataCount.Checked = true;
+            this.toolStripDataCount.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.toolStripDataCount.Name = "toolStripDataCount";
+            this.toolStripDataCount.Size = new System.Drawing.Size(255, 22);
+            this.toolStripDataCount.Text = "Display Data Count";
+            this.toolStripDataCount.Click += new System.EventHandler(this.toolStripDataCount_Click);
+            // 
+            // toolStripMaterialCounts
+            // 
+            this.toolStripMaterialCounts.Checked = true;
+            this.toolStripMaterialCounts.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.toolStripMaterialCounts.Name = "toolStripMaterialCounts";
+            this.toolStripMaterialCounts.Size = new System.Drawing.Size(255, 22);
+            this.toolStripMaterialCounts.Text = "Display Material Count";
+            this.toolStripMaterialCounts.Click += new System.EventHandler(this.toolStripMaterialCount_Click);
             // 
             // toolStripGameMode
             // 
@@ -400,7 +411,7 @@ namespace EDDiscovery.UserControls
             this.textBoxVisits.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.textBoxVisits.SelectionLength = 0;
             this.textBoxVisits.SelectionStart = 0;
-            this.textBoxVisits.Size = new System.Drawing.Size(66, 20);
+            this.textBoxVisits.Size = new System.Drawing.Size(70, 20);
             this.textBoxVisits.TabIndex = 10;
             this.textBoxVisits.TabStop = false;
             this.textBoxVisits.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
@@ -425,7 +436,7 @@ namespace EDDiscovery.UserControls
             // labelAllegiance
             // 
             this.labelAllegiance.AutoSize = true;
-            this.labelAllegiance.Location = new System.Drawing.Point(124, 147);
+            this.labelAllegiance.Location = new System.Drawing.Point(125, 231);
             this.labelAllegiance.Name = "labelAllegiance";
             this.labelAllegiance.Size = new System.Drawing.Size(56, 13);
             this.labelAllegiance.TabIndex = 13;
@@ -438,7 +449,7 @@ namespace EDDiscovery.UserControls
             // labelEconomy
             // 
             this.labelEconomy.AutoSize = true;
-            this.labelEconomy.Location = new System.Drawing.Point(124, 165);
+            this.labelEconomy.Location = new System.Drawing.Point(125, 249);
             this.labelEconomy.Name = "labelEconomy";
             this.labelEconomy.Size = new System.Drawing.Size(51, 13);
             this.labelEconomy.TabIndex = 34;
@@ -456,18 +467,19 @@ namespace EDDiscovery.UserControls
             this.textBoxAllegiance.BorderColorScaling = 0.5F;
             this.textBoxAllegiance.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBoxAllegiance.ControlBackground = System.Drawing.SystemColors.Control;
-            this.textBoxAllegiance.Location = new System.Drawing.Point(190, 147);
+            this.textBoxAllegiance.Location = new System.Drawing.Point(191, 231);
             this.textBoxAllegiance.Multiline = false;
             this.textBoxAllegiance.Name = "textBoxAllegiance";
             this.textBoxAllegiance.ReadOnly = true;
             this.textBoxAllegiance.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.textBoxAllegiance.SelectionLength = 0;
             this.textBoxAllegiance.SelectionStart = 0;
-            this.textBoxAllegiance.Size = new System.Drawing.Size(68, 20);
+            this.textBoxAllegiance.Size = new System.Drawing.Size(70, 20);
             this.textBoxAllegiance.TabIndex = 14;
             this.textBoxAllegiance.TabStop = false;
             this.textBoxAllegiance.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.textBoxAllegiance.WordWrap = true;
+            this.textBoxAllegiance.Click += new System.EventHandler(this.textBoxAllegiance_Click);
             this.textBoxAllegiance.MouseDown += new System.Windows.Forms.MouseEventHandler(this.controlMouseDown);
             this.textBoxAllegiance.MouseMove += new System.Windows.Forms.MouseEventHandler(this.controlMouseMove);
             this.textBoxAllegiance.MouseUp += new System.Windows.Forms.MouseEventHandler(this.controlMouseUp);
@@ -480,14 +492,14 @@ namespace EDDiscovery.UserControls
             this.textBoxGovernment.BorderColorScaling = 0.5F;
             this.textBoxGovernment.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBoxGovernment.ControlBackground = System.Drawing.SystemColors.Control;
-            this.textBoxGovernment.Location = new System.Drawing.Point(52, 165);
+            this.textBoxGovernment.Location = new System.Drawing.Point(53, 249);
             this.textBoxGovernment.Multiline = false;
             this.textBoxGovernment.Name = "textBoxGovernment";
             this.textBoxGovernment.ReadOnly = true;
             this.textBoxGovernment.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.textBoxGovernment.SelectionLength = 0;
             this.textBoxGovernment.SelectionStart = 0;
-            this.textBoxGovernment.Size = new System.Drawing.Size(66, 20);
+            this.textBoxGovernment.Size = new System.Drawing.Size(70, 20);
             this.textBoxGovernment.TabIndex = 35;
             this.textBoxGovernment.TabStop = false;
             this.textBoxGovernment.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
@@ -499,7 +511,7 @@ namespace EDDiscovery.UserControls
             // labelGov
             // 
             this.labelGov.AutoSize = true;
-            this.labelGov.Location = new System.Drawing.Point(3, 165);
+            this.labelGov.Location = new System.Drawing.Point(4, 249);
             this.labelGov.Name = "labelGov";
             this.labelGov.Size = new System.Drawing.Size(27, 13);
             this.labelGov.TabIndex = 36;
@@ -512,7 +524,7 @@ namespace EDDiscovery.UserControls
             // labelState
             // 
             this.labelState.AutoSize = true;
-            this.labelState.Location = new System.Drawing.Point(3, 147);
+            this.labelState.Location = new System.Drawing.Point(4, 231);
             this.labelState.Name = "labelState";
             this.labelState.Size = new System.Drawing.Size(32, 13);
             this.labelState.TabIndex = 38;
@@ -530,14 +542,14 @@ namespace EDDiscovery.UserControls
             this.textBoxEconomy.BorderColorScaling = 0.5F;
             this.textBoxEconomy.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBoxEconomy.ControlBackground = System.Drawing.SystemColors.Control;
-            this.textBoxEconomy.Location = new System.Drawing.Point(190, 165);
+            this.textBoxEconomy.Location = new System.Drawing.Point(191, 249);
             this.textBoxEconomy.Multiline = false;
             this.textBoxEconomy.Name = "textBoxEconomy";
             this.textBoxEconomy.ReadOnly = true;
             this.textBoxEconomy.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.textBoxEconomy.SelectionLength = 0;
             this.textBoxEconomy.SelectionStart = 0;
-            this.textBoxEconomy.Size = new System.Drawing.Size(68, 20);
+            this.textBoxEconomy.Size = new System.Drawing.Size(70, 20);
             this.textBoxEconomy.TabIndex = 33;
             this.textBoxEconomy.TabStop = false;
             this.textBoxEconomy.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
@@ -554,14 +566,14 @@ namespace EDDiscovery.UserControls
             this.textBoxState.BorderColorScaling = 0.5F;
             this.textBoxState.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBoxState.ControlBackground = System.Drawing.SystemColors.Control;
-            this.textBoxState.Location = new System.Drawing.Point(52, 147);
+            this.textBoxState.Location = new System.Drawing.Point(53, 231);
             this.textBoxState.Multiline = false;
             this.textBoxState.Name = "textBoxState";
             this.textBoxState.ReadOnly = true;
             this.textBoxState.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.textBoxState.SelectionLength = 0;
             this.textBoxState.SelectionStart = 0;
-            this.textBoxState.Size = new System.Drawing.Size(66, 20);
+            this.textBoxState.Size = new System.Drawing.Size(70, 20);
             this.textBoxState.TabIndex = 37;
             this.textBoxState.TabStop = false;
             this.textBoxState.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
@@ -622,14 +634,14 @@ namespace EDDiscovery.UserControls
             this.textBoxHomeDist.BorderColorScaling = 0.5F;
             this.textBoxHomeDist.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBoxHomeDist.ControlBackground = System.Drawing.SystemColors.Control;
-            this.textBoxHomeDist.Location = new System.Drawing.Point(52, 123);
+            this.textBoxHomeDist.Location = new System.Drawing.Point(60, 161);
             this.textBoxHomeDist.Multiline = false;
             this.textBoxHomeDist.Name = "textBoxHomeDist";
             this.textBoxHomeDist.ReadOnly = true;
             this.textBoxHomeDist.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.textBoxHomeDist.SelectionLength = 0;
             this.textBoxHomeDist.SelectionStart = 0;
-            this.textBoxHomeDist.Size = new System.Drawing.Size(67, 20);
+            this.textBoxHomeDist.Size = new System.Drawing.Size(70, 20);
             this.textBoxHomeDist.TabIndex = 42;
             this.textBoxHomeDist.TabStop = false;
             this.textBoxHomeDist.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
@@ -641,7 +653,7 @@ namespace EDDiscovery.UserControls
             // labelHomeDist
             // 
             this.labelHomeDist.AutoSize = true;
-            this.labelHomeDist.Location = new System.Drawing.Point(3, 122);
+            this.labelHomeDist.Location = new System.Drawing.Point(4, 160);
             this.labelHomeDist.Name = "labelHomeDist";
             this.labelHomeDist.Size = new System.Drawing.Size(35, 13);
             this.labelHomeDist.TabIndex = 43;
@@ -679,14 +691,14 @@ namespace EDDiscovery.UserControls
             this.textBoxSolDist.BorderColorScaling = 0.5F;
             this.textBoxSolDist.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBoxSolDist.ControlBackground = System.Drawing.SystemColors.Control;
-            this.textBoxSolDist.Location = new System.Drawing.Point(190, 123);
+            this.textBoxSolDist.Location = new System.Drawing.Point(194, 161);
             this.textBoxSolDist.Multiline = false;
             this.textBoxSolDist.Name = "textBoxSolDist";
             this.textBoxSolDist.ReadOnly = true;
             this.textBoxSolDist.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.textBoxSolDist.SelectionLength = 0;
             this.textBoxSolDist.SelectionStart = 0;
-            this.textBoxSolDist.Size = new System.Drawing.Size(68, 20);
+            this.textBoxSolDist.Size = new System.Drawing.Size(70, 20);
             this.textBoxSolDist.TabIndex = 44;
             this.textBoxSolDist.TabStop = false;
             this.textBoxSolDist.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
@@ -698,7 +710,7 @@ namespace EDDiscovery.UserControls
             // labelSolDist
             // 
             this.labelSolDist.AutoSize = true;
-            this.labelSolDist.Location = new System.Drawing.Point(124, 123);
+            this.labelSolDist.Location = new System.Drawing.Point(130, 161);
             this.labelSolDist.Name = "labelSolDist";
             this.labelSolDist.Size = new System.Drawing.Size(22, 13);
             this.labelSolDist.TabIndex = 45;
@@ -711,7 +723,7 @@ namespace EDDiscovery.UserControls
             // labelNote
             // 
             this.labelNote.AutoSize = true;
-            this.labelNote.Location = new System.Drawing.Point(3, 191);
+            this.labelNote.Location = new System.Drawing.Point(4, 275);
             this.labelNote.Name = "labelNote";
             this.labelNote.Size = new System.Drawing.Size(30, 13);
             this.labelNote.TabIndex = 28;
@@ -725,7 +737,7 @@ namespace EDDiscovery.UserControls
             this.richTextBoxNote.BorderColor = System.Drawing.Color.Transparent;
             this.richTextBoxNote.BorderColorScaling = 0.5F;
             this.richTextBoxNote.HideScrollBar = true;
-            this.richTextBoxNote.Location = new System.Drawing.Point(50, 191);
+            this.richTextBoxNote.Location = new System.Drawing.Point(51, 275);
             this.richTextBoxNote.Name = "richTextBoxNote";
             this.richTextBoxNote.ReadOnly = false;
             this.richTextBoxNote.ScrollBarArrowBorderColor = System.Drawing.Color.LightBlue;
@@ -741,7 +753,7 @@ namespace EDDiscovery.UserControls
             this.richTextBoxNote.ScrollBarThumbButtonColor = System.Drawing.Color.DarkBlue;
             this.richTextBoxNote.ScrollBarWidth = 20;
             this.richTextBoxNote.ShowLineCount = false;
-            this.richTextBoxNote.Size = new System.Drawing.Size(208, 50);
+            this.richTextBoxNote.Size = new System.Drawing.Size(200, 50);
             this.richTextBoxNote.TabIndex = 0;
             this.richTextBoxNote.TextBoxBackColor = System.Drawing.SystemColors.Control;
             this.richTextBoxNote.TextBoxForeColor = System.Drawing.SystemColors.ControlText;
@@ -754,7 +766,7 @@ namespace EDDiscovery.UserControls
             // labelTarget
             // 
             this.labelTarget.AutoSize = true;
-            this.labelTarget.Location = new System.Drawing.Point(2, 254);
+            this.labelTarget.Location = new System.Drawing.Point(3, 338);
             this.labelTarget.Name = "labelTarget";
             this.labelTarget.Size = new System.Drawing.Size(38, 13);
             this.labelTarget.TabIndex = 16;
@@ -769,7 +781,7 @@ namespace EDDiscovery.UserControls
             this.buttonEDSMTarget.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.buttonEDSMTarget.ImageSelected = ExtendedControls.DrawnPanel.ImageType.InverseText;
             this.buttonEDSMTarget.ImageText = "EDSM";
-            this.buttonEDSMTarget.Location = new System.Drawing.Point(215, 251);
+            this.buttonEDSMTarget.Location = new System.Drawing.Point(216, 335);
             this.buttonEDSMTarget.MarginSize = 0;
             this.buttonEDSMTarget.MouseOverColor = System.Drawing.Color.White;
             this.buttonEDSMTarget.MouseSelectedColor = System.Drawing.Color.Green;
@@ -800,7 +812,7 @@ namespace EDDiscovery.UserControls
             this.textBoxTarget.DropDownScrollBarColor = System.Drawing.Color.LightGray;
             this.textBoxTarget.DropDownWidth = 0;
             this.textBoxTarget.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.textBoxTarget.Location = new System.Drawing.Point(53, 251);
+            this.textBoxTarget.Location = new System.Drawing.Point(54, 335);
             this.textBoxTarget.Multiline = false;
             this.textBoxTarget.Name = "textBoxTarget";
             this.textBoxTarget.ReadOnly = false;
@@ -826,7 +838,7 @@ namespace EDDiscovery.UserControls
             this.textBoxTargetDist.BorderColorScaling = 0.5F;
             this.textBoxTargetDist.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBoxTargetDist.ControlBackground = System.Drawing.SystemColors.Control;
-            this.textBoxTargetDist.Location = new System.Drawing.Point(163, 251);
+            this.textBoxTargetDist.Location = new System.Drawing.Point(164, 335);
             this.textBoxTargetDist.Margin = new System.Windows.Forms.Padding(10, 3, 3, 3);
             this.textBoxTargetDist.Multiline = false;
             this.textBoxTargetDist.Name = "textBoxTargetDist";
@@ -899,7 +911,7 @@ namespace EDDiscovery.UserControls
             // labelGamemode
             // 
             this.labelGamemode.AutoSize = true;
-            this.labelGamemode.Location = new System.Drawing.Point(5, 439);
+            this.labelGamemode.Location = new System.Drawing.Point(6, 523);
             this.labelGamemode.Name = "labelGamemode";
             this.labelGamemode.Size = new System.Drawing.Size(34, 13);
             this.labelGamemode.TabIndex = 16;
@@ -911,7 +923,7 @@ namespace EDDiscovery.UserControls
             // labelTravel
             // 
             this.labelTravel.AutoSize = true;
-            this.labelTravel.Location = new System.Drawing.Point(6, 465);
+            this.labelTravel.Location = new System.Drawing.Point(7, 549);
             this.labelTravel.Name = "labelTravel";
             this.labelTravel.Size = new System.Drawing.Size(37, 13);
             this.labelTravel.TabIndex = 16;
@@ -928,7 +940,7 @@ namespace EDDiscovery.UserControls
             this.textBoxGameMode.BorderColorScaling = 0.5F;
             this.textBoxGameMode.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBoxGameMode.ControlBackground = System.Drawing.SystemColors.Control;
-            this.textBoxGameMode.Location = new System.Drawing.Point(53, 439);
+            this.textBoxGameMode.Location = new System.Drawing.Point(54, 523);
             this.textBoxGameMode.Multiline = false;
             this.textBoxGameMode.Name = "textBoxGameMode";
             this.textBoxGameMode.ReadOnly = true;
@@ -952,7 +964,7 @@ namespace EDDiscovery.UserControls
             this.textBoxTravelDist.BorderColorScaling = 0.5F;
             this.textBoxTravelDist.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBoxTravelDist.ControlBackground = System.Drawing.SystemColors.Control;
-            this.textBoxTravelDist.Location = new System.Drawing.Point(53, 465);
+            this.textBoxTravelDist.Location = new System.Drawing.Point(54, 549);
             this.textBoxTravelDist.Multiline = false;
             this.textBoxTravelDist.Name = "textBoxTravelDist";
             this.textBoxTravelDist.ReadOnly = true;
@@ -976,7 +988,7 @@ namespace EDDiscovery.UserControls
             this.textBoxTravelTime.BorderColorScaling = 0.5F;
             this.textBoxTravelTime.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBoxTravelTime.ControlBackground = System.Drawing.SystemColors.Control;
-            this.textBoxTravelTime.Location = new System.Drawing.Point(130, 465);
+            this.textBoxTravelTime.Location = new System.Drawing.Point(131, 549);
             this.textBoxTravelTime.Multiline = false;
             this.textBoxTravelTime.Name = "textBoxTravelTime";
             this.textBoxTravelTime.ReadOnly = true;
@@ -1000,7 +1012,7 @@ namespace EDDiscovery.UserControls
             this.textBoxTravelJumps.BorderColorScaling = 0.5F;
             this.textBoxTravelJumps.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBoxTravelJumps.ControlBackground = System.Drawing.SystemColors.Control;
-            this.textBoxTravelJumps.Location = new System.Drawing.Point(210, 465);
+            this.textBoxTravelJumps.Location = new System.Drawing.Point(211, 549);
             this.textBoxTravelJumps.Multiline = false;
             this.textBoxTravelJumps.Name = "textBoxTravelJumps";
             this.textBoxTravelJumps.ReadOnly = true;
@@ -1019,7 +1031,7 @@ namespace EDDiscovery.UserControls
             // labelCargo
             // 
             this.labelCargo.AutoSize = true;
-            this.labelCargo.Location = new System.Drawing.Point(5, 352);
+            this.labelCargo.Location = new System.Drawing.Point(6, 436);
             this.labelCargo.Name = "labelCargo";
             this.labelCargo.Size = new System.Drawing.Size(35, 13);
             this.labelCargo.TabIndex = 16;
@@ -1036,14 +1048,14 @@ namespace EDDiscovery.UserControls
             this.textBoxCargo.BorderColorScaling = 0.5F;
             this.textBoxCargo.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBoxCargo.ControlBackground = System.Drawing.SystemColors.Control;
-            this.textBoxCargo.Location = new System.Drawing.Point(53, 349);
+            this.textBoxCargo.Location = new System.Drawing.Point(54, 433);
             this.textBoxCargo.Multiline = false;
             this.textBoxCargo.Name = "textBoxCargo";
             this.textBoxCargo.ReadOnly = true;
             this.textBoxCargo.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.textBoxCargo.SelectionLength = 0;
             this.textBoxCargo.SelectionStart = 0;
-            this.textBoxCargo.Size = new System.Drawing.Size(48, 20);
+            this.textBoxCargo.Size = new System.Drawing.Size(70, 20);
             this.textBoxCargo.TabIndex = 8;
             this.textBoxCargo.TabStop = false;
             this.textBoxCargo.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
@@ -1060,14 +1072,14 @@ namespace EDDiscovery.UserControls
             this.textBoxMaterials.BorderColorScaling = 0.5F;
             this.textBoxMaterials.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBoxMaterials.ControlBackground = System.Drawing.SystemColors.Control;
-            this.textBoxMaterials.Location = new System.Drawing.Point(180, 379);
+            this.textBoxMaterials.Location = new System.Drawing.Point(60, 492);
             this.textBoxMaterials.Multiline = false;
             this.textBoxMaterials.Name = "textBoxMaterials";
             this.textBoxMaterials.ReadOnly = true;
             this.textBoxMaterials.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.textBoxMaterials.SelectionLength = 0;
             this.textBoxMaterials.SelectionStart = 0;
-            this.textBoxMaterials.Size = new System.Drawing.Size(48, 20);
+            this.textBoxMaterials.Size = new System.Drawing.Size(70, 20);
             this.textBoxMaterials.TabIndex = 8;
             this.textBoxMaterials.TabStop = false;
             this.textBoxMaterials.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
@@ -1079,7 +1091,7 @@ namespace EDDiscovery.UserControls
             // labelMaterials
             // 
             this.labelMaterials.AutoSize = true;
-            this.labelMaterials.Location = new System.Drawing.Point(117, 382);
+            this.labelMaterials.Location = new System.Drawing.Point(-3, 495);
             this.labelMaterials.Name = "labelMaterials";
             this.labelMaterials.Size = new System.Drawing.Size(49, 13);
             this.labelMaterials.TabIndex = 16;
@@ -1091,7 +1103,7 @@ namespace EDDiscovery.UserControls
             // labelData
             // 
             this.labelData.AutoSize = true;
-            this.labelData.Location = new System.Drawing.Point(14, 385);
+            this.labelData.Location = new System.Drawing.Point(15, 469);
             this.labelData.Name = "labelData";
             this.labelData.Size = new System.Drawing.Size(30, 13);
             this.labelData.TabIndex = 16;
@@ -1108,14 +1120,14 @@ namespace EDDiscovery.UserControls
             this.textBoxData.BorderColorScaling = 0.5F;
             this.textBoxData.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBoxData.ControlBackground = System.Drawing.SystemColors.Control;
-            this.textBoxData.Location = new System.Drawing.Point(50, 382);
+            this.textBoxData.Location = new System.Drawing.Point(51, 466);
             this.textBoxData.Multiline = false;
             this.textBoxData.Name = "textBoxData";
             this.textBoxData.ReadOnly = true;
             this.textBoxData.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.textBoxData.SelectionLength = 0;
             this.textBoxData.SelectionStart = 0;
-            this.textBoxData.Size = new System.Drawing.Size(48, 20);
+            this.textBoxData.Size = new System.Drawing.Size(70, 20);
             this.textBoxData.TabIndex = 8;
             this.textBoxData.TabStop = false;
             this.textBoxData.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
@@ -1127,7 +1139,7 @@ namespace EDDiscovery.UserControls
             // labelShip
             // 
             this.labelShip.AutoSize = true;
-            this.labelShip.Location = new System.Drawing.Point(5, 277);
+            this.labelShip.Location = new System.Drawing.Point(6, 361);
             this.labelShip.Name = "labelShip";
             this.labelShip.Size = new System.Drawing.Size(28, 13);
             this.labelShip.TabIndex = 16;
@@ -1144,7 +1156,7 @@ namespace EDDiscovery.UserControls
             this.textBoxShip.BorderColorScaling = 0.5F;
             this.textBoxShip.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBoxShip.ControlBackground = System.Drawing.SystemColors.Control;
-            this.textBoxShip.Location = new System.Drawing.Point(53, 277);
+            this.textBoxShip.Location = new System.Drawing.Point(54, 361);
             this.textBoxShip.Multiline = false;
             this.textBoxShip.Name = "textBoxShip";
             this.textBoxShip.ReadOnly = true;
@@ -1163,7 +1175,7 @@ namespace EDDiscovery.UserControls
             // labelFuel
             // 
             this.labelFuel.AutoSize = true;
-            this.labelFuel.Location = new System.Drawing.Point(5, 303);
+            this.labelFuel.Location = new System.Drawing.Point(6, 387);
             this.labelFuel.Name = "labelFuel";
             this.labelFuel.Size = new System.Drawing.Size(27, 13);
             this.labelFuel.TabIndex = 16;
@@ -1180,14 +1192,14 @@ namespace EDDiscovery.UserControls
             this.textBoxFuel.BorderColorScaling = 0.5F;
             this.textBoxFuel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBoxFuel.ControlBackground = System.Drawing.SystemColors.Control;
-            this.textBoxFuel.Location = new System.Drawing.Point(52, 303);
+            this.textBoxFuel.Location = new System.Drawing.Point(53, 387);
             this.textBoxFuel.Multiline = false;
             this.textBoxFuel.Name = "textBoxFuel";
             this.textBoxFuel.ReadOnly = true;
             this.textBoxFuel.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.textBoxFuel.SelectionLength = 0;
             this.textBoxFuel.SelectionStart = 0;
-            this.textBoxFuel.Size = new System.Drawing.Size(46, 20);
+            this.textBoxFuel.Size = new System.Drawing.Size(70, 20);
             this.textBoxFuel.TabIndex = 8;
             this.textBoxFuel.TabStop = false;
             this.textBoxFuel.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
@@ -1323,6 +1335,7 @@ namespace EDDiscovery.UserControls
         private ExtendedControls.TextBoxBorder textBoxFuel;
         private System.Windows.Forms.ToolStripMenuItem toolStripSkinny;
         private System.Windows.Forms.ToolStripMenuItem toolStripFuel;
-        private System.Windows.Forms.ToolStripMenuItem toolStripMaterialAndDataCount;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMaterialCounts;
+        private System.Windows.Forms.ToolStripMenuItem toolStripDataCount;
     }
 }
