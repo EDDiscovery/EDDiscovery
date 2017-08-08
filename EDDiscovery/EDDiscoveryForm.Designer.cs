@@ -45,7 +45,7 @@ namespace EDDiscovery
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(EDDiscoveryForm));
-            ExtendedControls.TabStyleSquare tabStyleSquare2 = new ExtendedControls.TabStyleSquare();
+            ExtendedControls.TabStyleSquare tabStyleSquare1 = new ExtendedControls.TabStyleSquare();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.toolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.show2DMapsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -520,7 +520,7 @@ namespace EDDiscovery
             this.tabControlMain.TabNotSelectedColor = System.Drawing.Color.Gray;
             this.tabControlMain.TabOpaque = 100F;
             this.tabControlMain.TabSelectedColor = System.Drawing.Color.LightGray;
-            this.tabControlMain.TabStyle = tabStyleSquare2;
+            this.tabControlMain.TabStyle = tabStyleSquare1;
             this.tabControlMain.TextNotSelectedColor = System.Drawing.SystemColors.ControlText;
             this.tabControlMain.TextSelectedColor = System.Drawing.SystemColors.ControlText;
             this.tabControlMain.SelectedIndexChanged += new System.EventHandler(this.tabControl1_SelectedIndexChanged);
@@ -725,6 +725,7 @@ namespace EDDiscovery
             this.panel_minimize.MouseSelectedColor = System.Drawing.Color.Green;
             this.panel_minimize.MouseSelectedColorEnable = true;
             this.panel_minimize.Name = "panel_minimize";
+            this.panel_minimize.PanelDisabledScaling = 0.25F;
             this.panel_minimize.Size = new System.Drawing.Size(24, 24);
             this.panel_minimize.TabIndex = 20;
             this.panel_minimize.Click += new System.EventHandler(this.panel_minimize_Click);
@@ -743,6 +744,7 @@ namespace EDDiscovery
             this.panel_close.MouseSelectedColor = System.Drawing.Color.Green;
             this.panel_close.MouseSelectedColorEnable = true;
             this.panel_close.Name = "panel_close";
+            this.panel_close.PanelDisabledScaling = 0.25F;
             this.panel_close.Size = new System.Drawing.Size(24, 24);
             this.panel_close.TabIndex = 19;
             this.panel_close.Click += new System.EventHandler(this.panel_close_Click);
@@ -895,7 +897,7 @@ namespace EDDiscovery
             this.buttonExtEDSMSync.BorderColorScaling = 1.25F;
             this.buttonExtEDSMSync.ButtonColorScaling = 0.5F;
             this.buttonExtEDSMSync.ButtonDisabledScaling = 0.5F;
-            this.buttonExtEDSMSync.Location = new System.Drawing.Point(330, 3);
+            this.buttonExtEDSMSync.Location = new System.Drawing.Point(333, 3);
             this.buttonExtEDSMSync.Name = "buttonExtEDSMSync";
             this.buttonExtEDSMSync.Size = new System.Drawing.Size(56, 24);
             this.buttonExtEDSMSync.TabIndex = 2;
@@ -959,7 +961,7 @@ namespace EDDiscovery
             this.buttonExt2dmap.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.buttonExt2dmap.Location = new System.Drawing.Point(210, 3);
             this.buttonExt2dmap.Name = "buttonExt2dmap";
-            this.buttonExt2dmap.Size = new System.Drawing.Size(48, 24);
+            this.buttonExt2dmap.Size = new System.Drawing.Size(56, 24);
             this.buttonExt2dmap.TabIndex = 2;
             this.buttonExt2dmap.Text = "2D";
             this.buttonExt2dmap.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -975,9 +977,9 @@ namespace EDDiscovery
             this.buttonExt3dmap.ButtonDisabledScaling = 0.5F;
             this.buttonExt3dmap.Image = global::EDDiscovery.Properties.Resources.galaxy_gray;
             this.buttonExt3dmap.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.buttonExt3dmap.Location = new System.Drawing.Point(264, 3);
+            this.buttonExt3dmap.Location = new System.Drawing.Point(270, 3);
             this.buttonExt3dmap.Name = "buttonExt3dmap";
-            this.buttonExt3dmap.Size = new System.Drawing.Size(48, 24);
+            this.buttonExt3dmap.Size = new System.Drawing.Size(56, 24);
             this.buttonExt3dmap.TabIndex = 2;
             this.buttonExt3dmap.Text = "3D";
             this.buttonExt3dmap.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;

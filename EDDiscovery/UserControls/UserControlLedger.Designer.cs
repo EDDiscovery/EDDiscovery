@@ -171,13 +171,13 @@ namespace EDDiscovery.UserControls
             this.contextMenuStripLedger.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripMenuItemGotoItem});
             this.contextMenuStripLedger.Name = "contextMenuStripLedger";
-            this.contextMenuStripLedger.Size = new System.Drawing.Size(207, 26);
+            this.contextMenuStripLedger.Size = new System.Drawing.Size(175, 48);
             // 
             // toolStripMenuItemGotoItem
             // 
             this.toolStripMenuItemGotoItem.Name = "toolStripMenuItemGotoItem";
-            this.toolStripMenuItemGotoItem.Size = new System.Drawing.Size(206, 22);
-            this.toolStripMenuItemGotoItem.Text = "Go to entry on travel grid";
+            this.toolStripMenuItemGotoItem.Size = new System.Drawing.Size(174, 22);
+            this.toolStripMenuItemGotoItem.Text = "Go to entry on grid";
             this.toolStripMenuItemGotoItem.Click += new System.EventHandler(this.toolStripMenuItemGotoItem_Click);
             // 
             // vScrollBarCustomMC

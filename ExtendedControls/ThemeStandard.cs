@@ -558,14 +558,11 @@ namespace ExtendedControls
                 ctrl.MouseOverColor = currentsettings.colors[Settings.CI.label].Multiply(mouseoverscaling);
                 ctrl.MouseSelectedColor = currentsettings.colors[Settings.CI.label].Multiply(mouseselectedscaling);
 
-                if (ctrl.DrawnImage != null)
-                {
-                    System.Drawing.Imaging.ColorMap colormap = new System.Drawing.Imaging.ColorMap();       // any drawn panel with drawn images    
-                    colormap.OldColor = Color.White;                                                        // white is defined as the forecolour
-                    colormap.NewColor = ctrl.ForeColor;
-                    ctrl.SetDrawnBitmapRemapTable(new System.Drawing.Imaging.ColorMap[] { colormap });
-                    System.Diagnostics.Debug.WriteLine("Drawn Panel Image button " + ctrl.Name);
-                }
+                System.Drawing.Imaging.ColorMap colormap = new System.Drawing.Imaging.ColorMap();       // any drawn panel with drawn images    
+                colormap.OldColor = Color.White;                                                        // white is defined as the forecolour
+                colormap.NewColor = ctrl.ForeColor;
+                ctrl.SetDrawnBitmapRemapTable(new System.Drawing.Imaging.ColorMap[] { colormap });
+                //System.Diagnostics.Debug.WriteLine("Drawn Panel Image button " + ctrl.Name);
             }
             else if (myControl is Panel)
             {

@@ -136,6 +136,7 @@ namespace EDDiscovery.UserControls
             this.dataGridViewJournal.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.dataGridViewJournal.Size = new System.Drawing.Size(784, 684);
             this.dataGridViewJournal.TabIndex = 0;
+            this.dataGridViewJournal.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewJournal_CellClick);
             this.dataGridViewJournal.ColumnHeaderMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dataGridViewJournal_ColumnHeaderMouseClick);
             this.dataGridViewJournal.RowPostPaint += new System.Windows.Forms.DataGridViewRowPostPaintEventHandler(this.dataGridViewJournal_RowPostPaint);
             this.dataGridViewJournal.MouseDown += new System.Windows.Forms.MouseEventHandler(this.dataGridViewJournal_MouseDown);
@@ -251,6 +252,7 @@ namespace EDDiscovery.UserControls
             this.checkBoxMoveToTop.CheckBoxInnerColor = System.Drawing.Color.White;
             this.checkBoxMoveToTop.CheckColor = System.Drawing.Color.DarkBlue;
             this.checkBoxMoveToTop.FontNerfReduction = 0.5F;
+            this.checkBoxMoveToTop.ImageButtonDisabledScaling = 0.5F;
             this.checkBoxMoveToTop.Location = new System.Drawing.Point(636, 7);
             this.checkBoxMoveToTop.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.checkBoxMoveToTop.Name = "checkBoxMoveToTop";
@@ -296,6 +298,7 @@ namespace EDDiscovery.UserControls
             this.drawnPanelPopOut.MouseSelectedColor = System.Drawing.Color.Green;
             this.drawnPanelPopOut.MouseSelectedColorEnable = true;
             this.drawnPanelPopOut.Name = "drawnPanelPopOut";
+            this.drawnPanelPopOut.PanelDisabledScaling = 0.25F;
             this.drawnPanelPopOut.Size = new System.Drawing.Size(24, 24);
             this.drawnPanelPopOut.TabIndex = 28;
             this.toolTip.SetToolTip(this.drawnPanelPopOut, "Click to pop out another journal grid into a window");

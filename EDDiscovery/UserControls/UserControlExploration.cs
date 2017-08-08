@@ -45,7 +45,7 @@ namespace EDDiscovery.UserControls
         private List<ExplorationSetClass> _savedExplorationSets;
         private ExplorationSetClass _currentExplorationSet;
         private EDDiscoveryForm _discoveryForm;
-        private UserControlTravelGrid uctg;
+        private UserControlCursorType uctg;
         private EDSMClass edsm;
         private Rectangle _dragBox;
         private int _dragRowIndex;
@@ -61,7 +61,7 @@ namespace EDDiscovery.UserControls
             _currentExplorationSet = new ExplorationSetClass();
         }
 
-        public override void Init(EDDiscoveryForm ed,  UserControlTravelGrid thc, int vn) //0=primary, 1 = first windowed version, etc
+        public override void Init(EDDiscoveryForm ed,  UserControlCursorType thc, int vn) //0=primary, 1 = first windowed version, etc
         {
             _discoveryForm = ed;
             uctg = thc;
@@ -73,7 +73,7 @@ namespace EDDiscovery.UserControls
             uctg.OnTravelSelectionChanged += Display;
         }
 
-        public override void ChangeTravelGrid(UserControlTravelGrid thc)
+        public override void ChangeCursorType(UserControlCursorType thc)
         {
             uctg.OnTravelSelectionChanged -= Display;
             uctg = thc;

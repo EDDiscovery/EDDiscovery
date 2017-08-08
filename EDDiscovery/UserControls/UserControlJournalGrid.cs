@@ -30,7 +30,7 @@ using EliteDangerousCore;
 
 namespace EDDiscovery.UserControls
 {
-    public partial class UserControlJournalGrid : UserControlCommonBase
+    public partial class UserControlJournalGrid : UserControlCommonBase, UserControlCursorType
     {
         private EDDiscoveryForm discoveryform;
         private int displaynumber;                          // since this is plugged into something other than a TabControlForm, can't rely on its display number
@@ -49,6 +49,11 @@ namespace EDDiscovery.UserControls
 
         private HistoryList current_historylist;        // the last one set, for internal refresh purposes on sort
 
+        public event ChangedSelection OnChangedSelection;   // After a change of selection by the user, or after a OnHistoryChanged, or after a sort.
+        public event ChangedSelectionHE OnTravelSelectionChanged;   // as above, different format, for certain older controls
+        public HistoryEntry GetCurrentHistoryEntry { get { return dataGridViewJournal.CurrentCell != null ? dataGridViewJournal.Rows[dataGridViewJournal.CurrentCell.RowIndex].Cells[JournalHistoryColumns.HistoryTag].Tag as HistoryEntry : null; } }
+
+
         #region Init
 
         private class JournalHistoryColumns
@@ -65,7 +70,7 @@ namespace EDDiscovery.UserControls
             InitializeComponent();
         }
 
-        public override void Init(EDDiscoveryForm ed, UserControlTravelGrid thc, int vn) //0=primary, 1 = first windowed version, etc
+        public override void Init(EDDiscoveryForm ed, UserControlCursorType thc, int vn) //0=primary, 1 = first windowed version, etc
         {
             discoveryform = ed;
             displaynumber = vn;
@@ -157,6 +162,8 @@ namespace EDDiscovery.UserControls
             }
 
             dataGridViewJournal.Columns[0].HeaderText = EDDiscoveryForm.EDDConfig.DisplayUTC ? "Game Time" : "Time";
+
+            FireChangeSelection();
         }
 
         private void AddNewJournalRow(bool insert, HistoryEntry item)            // second part of add history row, adds item to view.
@@ -197,6 +204,8 @@ namespace EDDiscovery.UserControls
                 {
                     dataGridViewJournal.ClearSelection();
                     dataGridViewJournal.CurrentCell = dataGridViewJournal.Rows[0].Cells[1];       // its the current cell which needs to be set, moves the row marker as well
+
+                    FireChangeSelection();
                 }
             }
         }
@@ -239,6 +248,7 @@ namespace EDDiscovery.UserControls
             if (e.ColumnIndex != JournalHistoryColumns.Event)
             {
                 DataGridViewSorter.DataGridSort(dataGridViewJournal, e.ColumnIndex);
+                FireChangeSelection();
             }
         }
 
@@ -406,6 +416,16 @@ namespace EDDiscovery.UserControls
                 return -1;
         }
 
+        public void GotoPosByJID(long jid)
+        {
+            int rowno = FindGridPosByJID(jid, true);
+            if (rowno >= 0)
+            {
+                dataGridViewJournal.CurrentCell = dataGridViewJournal.Rows[rowno].Cells[JournalHistoryColumns.Event];
+                dataGridViewJournal.Rows[rowno].Selected = true;
+            }
+        }
+
         private void drawnPanelPopOut_Click(object sender, EventArgs e)
         {
             if (OnPopOut != null)
@@ -444,5 +464,24 @@ namespace EDDiscovery.UserControls
         }
 
         #endregion
+
+        private void dataGridViewJournal_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            FireChangeSelection();
+        }
+
+        public void FireChangeSelection()
+        {
+            if (dataGridViewJournal.CurrentCell != null)
+            {
+                int row = dataGridViewJournal.CurrentCell.RowIndex;
+                //System.Diagnostics.Debug.WriteLine("Fire Change Sel row" + row);
+                if (OnChangedSelection != null)
+                    OnChangedSelection(row, dataGridViewJournal.CurrentCell.ColumnIndex, false, false);
+                if (OnTravelSelectionChanged != null)
+                    OnTravelSelectionChanged(dataGridViewJournal.Rows[row].Cells[JournalHistoryColumns.HistoryTag].Tag as HistoryEntry, current_historylist);
+            }
+        }
+
     }
 }
