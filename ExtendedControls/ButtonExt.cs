@@ -34,13 +34,12 @@ namespace ExtendedControls
         public float BorderColorScaling { get; set; } = 1.25F;
         public float ButtonDisabledScaling { get; set; } = 0.5F;
 
-        public ImageAttributes DrawnImageAttributes = null;         // Image override (colour etc) for images using Image
+        private ImageAttributes DrawnImageAttributesEnabled = null;         // Image override (colour etc) for images using Image
+        private ImageAttributes DrawnImageAttributesDisabled = null;         // Image override (colour etc) for images using Image
 
-        public void SetDrawnBitmapRemapTable(ColorMap[] remap)
+        public void SetDrawnBitmapRemapTable(ColorMap[] remap, float[][] colormatrix = null)
         {
-            ImageAttributes ia = new ImageAttributes();
-            ia.SetRemapTable(remap, ColorAdjustType.Bitmap);
-            DrawnImageAttributes = ia;
+            ControlHelpersStaticFunc.ComputeDrawnPanel(out DrawnImageAttributesEnabled, out DrawnImageAttributesDisabled, ButtonDisabledScaling, remap, colormatrix);
         }
 
         // Internal
@@ -131,11 +130,11 @@ namespace ExtendedControls
 
                 if (Image != null)
                 {
-                    if (DrawnImageAttributes != null)
+                    if (DrawnImageAttributesEnabled != null)
                     {
                         //System.Diagnostics.Debug.WriteLine("ButtonExt " + this.Name + " Draw image with IA");
                         pe.Graphics.DrawImage(Image, ControlHelpersStaticFunc.ImagePositionFromContentAlignment(ImageAlign, buttonarea, Image.Size),
-                                    0, 0, Image.Width, Image.Height, GraphicsUnit.Pixel, DrawnImageAttributes);
+                                    0, 0, Image.Width, Image.Height, GraphicsUnit.Pixel, (Enabled) ? DrawnImageAttributesEnabled : DrawnImageAttributesDisabled);
                     }
                     else
                     {

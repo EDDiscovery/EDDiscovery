@@ -31,8 +31,9 @@ namespace EDDiscovery.UserControls
         {
             InitializeComponent();
             comboBoxGridSelector.Items.AddRange(PopOutControl.GetPopOutNames());
+            comboBoxGridSelector.SelectedIndex = 0;
+            comboBoxGridSelector.SelectedIndexChanged += ComboBoxGridSelector_SelectedIndexChanged;
             rollUpPanelMenu.SetToolTip(toolTip);    // use the defaults
-            comboBoxGridSelector.SetToolTip(toolTip); // composite, needs it.
         }
 
         public override void Init( EDDiscoveryForm f , UserControlTravelGrid thc, int dn )       //dn = 0 primary grid, or 1 first pop out, etc
@@ -196,6 +197,11 @@ namespace EDDiscovery.UserControls
 
             uccb.Display(discoveryForm.TravelControl.GetTravelHistoryCurrent, discoveryForm.history);
 
+            if (uccb is UserControlTravelGrid)
+                (uccb as UserControlTravelGrid).ExtraIcons(true, false);
+            if (uccb is UserControlJournalGrid)
+                (uccb as UserControlJournalGrid).ExtraIcons(true, false);
+
             return uccr;
         }
 
@@ -272,7 +278,7 @@ namespace EDDiscovery.UserControls
         #endregion
 
         #region Clicks
-        private void comboBoxGridSelector_SelectedIndexChanged(object sender, EventArgs e)
+        private void ComboBoxGridSelector_SelectedIndexChanged(object sender, EventArgs e)
         {
             UserControlContainerResizable uccr = CreatePanel(PopOutControl.Create((PopOutControl.PopOuts)comboBoxGridSelector.SelectedIndex) ,
                                         new Point((uccrlist.Count % 5) * 50, (uccrlist.Count % 5) * 50),

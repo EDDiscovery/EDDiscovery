@@ -34,7 +34,6 @@ namespace EDDiscovery.UserControls
 
         public bool materials = false;
         private int displaynumber = 0;
-        List<MaterialCommodities> last_mc = null;
 
         private string DbColumnSave { get { return ((materials) ? "MaterialsGrid" : "CommoditiesGrid") + ((displaynumber > 0) ? displaynumber.ToString() : "") + "DGVCol"; } }
 
@@ -56,11 +55,18 @@ namespace EDDiscovery.UserControls
             dataGridViewMC.RowTemplate.Height = 26;
 
             if (materials)
+            {
                 dataGridViewMC.Columns.Remove(dataGridViewMC.Columns[5]);       // to give name,shortname abv,category,type,number
+                labelItems1.Text = "Data";
+                labelItems2.Text = "Raw";
+            }
             else
             {
                 dataGridViewMC.Columns.Remove(dataGridViewMC.Columns[1]);       //shortname
                 dataGridViewMC.Columns.Remove(dataGridViewMC.Columns[1]);       //then category to give name,type,number, avg price
+                labelItems1.Text = "Total";
+                textBoxItems2.Visible = labelItems2.Visible = false;
+
             }
 
             uctg.OnTravelSelectionChanged += Display;
@@ -91,21 +97,18 @@ namespace EDDiscovery.UserControls
             if ( he != null )
                 System.Diagnostics.Debug.WriteLine("Hash displayed" + he.MaterialCommodity.DataHash());
 
-            Display(he?.MaterialCommodity.Sort(!materials));
+            Display(he?.MaterialCommodity);
         }
 
-        public void Display(List<MaterialCommodities> mc)
+        public void Display(MaterialCommoditiesList mcl)
         {
-            if (mc == null)
-            {
-                dataGridViewMC.Rows.Clear();
-                //TBD do the extra stuff cancel itmes
-                return;
-            }
-
-            last_mc = mc;
-
             dataGridViewMC.Rows.Clear();
+            textBoxItems1.Text = textBoxItems2.Text = "";
+
+            if (mcl == null)
+                return;
+
+            List<MaterialCommodities> mc = mcl.Sort(!materials);
 
             if (mc.Count > 0)
             {
@@ -132,6 +135,14 @@ namespace EDDiscovery.UserControls
                 {
                     dataGridViewMC.Sort(dataGridViewMC.SortedColumn, dataGridViewMC.SortOrder == SortOrder.Descending ? ListSortDirection.Descending : ListSortDirection.Ascending);
                 }
+
+                if (materials)
+                {
+                    textBoxItems1.Text = mcl.DataCount.ToStringInvariant();
+                    textBoxItems2.Text = mcl.MaterialsCount.ToStringInvariant();
+                }
+                else
+                    textBoxItems1.Text = mcl.CargoCount.ToStringInvariant();
             }
             else
             {

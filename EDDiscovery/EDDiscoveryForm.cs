@@ -237,10 +237,6 @@ namespace EDDiscovery
             notifyIcon1.Visible = EDDConfig.UseNotifyIcon;
 
             SetUpLogging();
-
-            comboBoxCommander.SetToolTip(toolTip);
-            comboBoxCustomPopOut.SetToolTip(toolTip);
-            panelToolBar.SetToolTip(toolTip);    // use the defaults
         }
 
         // OnLoad is called the first time the form is shown, before OnShown or OnActivated are called

@@ -111,7 +111,6 @@
             this.comboBoxGridSelector.TabStop = false;
             this.toolTip.SetToolTip(this.comboBoxGridSelector, "Select Panel to open");
             this.comboBoxGridSelector.ValueMember = "";
-            this.comboBoxGridSelector.SelectedIndexChanged += new System.EventHandler(this.comboBoxGridSelector_SelectedIndexChanged);
             // 
             // panelPlayfield
             // 

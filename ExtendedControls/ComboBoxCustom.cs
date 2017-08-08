@@ -227,16 +227,28 @@ namespace ExtendedControls
             this.Controls.Add(this._cbsystem);
         }
 
-        public void SetToolTip(ToolTip tt)
+        public void SetTipDynamically(ToolTip t, string text)// only needed for dynamic changes..
         {
-            string s = tt.GetToolTip(this);
-            tt.SetToolTip(_cbsystem, s);
-        }
+            t.SetToolTip(this, text);
+            t.SetToolTip(_cbsystem, text);
+        }                                       
 
         public ComboBox GetInternalSystemControl { get { return this._cbsystem; }  }
 
+        bool firstpaint = true;
+
         protected override void OnPaint(PaintEventArgs e)
         {
+            if (firstpaint)
+            {
+                System.ComponentModel.IContainer ic = this.GetParentContainerComponents();
+
+                if (ic != null)    // yes we have a container object
+                    ic.CopyToolTips(this, new Control[] { this, _cbsystem });
+
+                firstpaint = true;
+            }
+
             base.OnPaint(e);
 
             if (this.FlatStyle != FlatStyle.System)

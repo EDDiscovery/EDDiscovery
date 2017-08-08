@@ -260,6 +260,7 @@ namespace EDDiscovery
             this.textBox_status.Size = new System.Drawing.Size(167, 20);
             this.textBox_status.TabIndex = 21;
             this.textBox_status.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.toolTip.SetToolTip(this.textBox_status, "Current Status of the trilateration.");
             this.textBox_status.WordWrap = true;
             // 
             // labelstpos
@@ -289,6 +290,7 @@ namespace EDDiscovery
             this.textBoxSystemName.Size = new System.Drawing.Size(178, 20);
             this.textBoxSystemName.TabIndex = 1;
             this.textBoxSystemName.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.toolTip.SetToolTip(this.textBoxSystemName, "System to tri-lat to");
             this.textBoxSystemName.WordWrap = true;
             // 
             // textBoxCoordinateX
@@ -310,6 +312,7 @@ namespace EDDiscovery
             this.textBoxCoordinateX.TabIndex = 6;
             this.textBoxCoordinateX.Text = "?";
             this.textBoxCoordinateX.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.toolTip.SetToolTip(this.textBoxCoordinateX, "X Co-ord of system");
             this.textBoxCoordinateX.WordWrap = true;
             // 
             // textBoxCoordinateY
@@ -331,6 +334,7 @@ namespace EDDiscovery
             this.textBoxCoordinateY.TabIndex = 8;
             this.textBoxCoordinateY.Text = "?";
             this.textBoxCoordinateY.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.toolTip.SetToolTip(this.textBoxCoordinateY, "Y Co-ord of system");
             this.textBoxCoordinateY.WordWrap = true;
             // 
             // textBoxCoordinateZ
@@ -352,6 +356,7 @@ namespace EDDiscovery
             this.textBoxCoordinateZ.TabIndex = 10;
             this.textBoxCoordinateZ.Text = "?";
             this.textBoxCoordinateZ.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.toolTip.SetToolTip(this.textBoxCoordinateZ, "Z Co-ord of system");
             this.textBoxCoordinateZ.WordWrap = true;
             // 
             // splitContainerCustom1

@@ -63,9 +63,6 @@ namespace EDDiscovery.UserControls
         public UserControlJournalGrid()
         {
             InitializeComponent();
-            this.textBoxFilter.SetToolTip(toolTip, "Display entries matching this string");
-            comboBoxJournalWindow.SetToolTip(toolTip);
-            textBoxFilter.SetToolTip(toolTip);
         }
 
         public override void Init(EDDiscoveryForm ed, UserControlTravelGrid thc, int vn) //0=primary, 1 = first windowed version, etc
@@ -90,12 +87,14 @@ namespace EDDiscovery.UserControls
             if (filter.Length > 0)
                 fieldfilter.FromJSON(filter);        // load filter
 
-            ExtraIcons(false);
+            ExtraIcons(false,false);
         }
 
-        public void ExtraIcons(bool state)
+        public void ExtraIcons(bool icon, bool popout)
         {
-            drawnPanelPopOut.Visible = panelJournalIcon.Visible = state;
+            panelJournalIcon.Visible = icon;
+            drawnPanelPopOut.Visible = popout;
+            drawnPanelPopOut.Left = icon ? 32 : 3;
         }
 
         public override void LoadLayout()

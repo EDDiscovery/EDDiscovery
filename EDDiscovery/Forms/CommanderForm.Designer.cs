@@ -44,6 +44,9 @@
             this.checkBoxCustomEDSMFrom = new ExtendedControls.CheckBoxCustom();
             this.checkBoxCustomEDSMTo = new ExtendedControls.CheckBoxCustom();
             this.buttonExtBrowse = new ExtendedControls.ButtonExt();
+            this.checkBoxEGOSync = new ExtendedControls.CheckBoxCustom();
+            this.textBoxEGOName = new ExtendedControls.TextBoxBorder();
+            this.textBoxEGOAPI = new ExtendedControls.TextBoxBorder();
             this.textBoxBorderCompanionPassword = new ExtendedControls.TextBoxBorder();
             this.textBoxBorderCompanionLogin = new ExtendedControls.TextBoxBorder();
             this.textBoxBorderEDSMName = new ExtendedControls.TextBoxBorder();
@@ -67,10 +70,7 @@
             this.buttonOK = new ExtendedControls.ButtonExt();
             this.panel3 = new System.Windows.Forms.Panel();
             this.groupBoxCustom5 = new ExtendedControls.GroupBoxCustom();
-            this.checkBoxEGOSync = new ExtendedControls.CheckBoxCustom();
             this.label7 = new System.Windows.Forms.Label();
-            this.textBoxEGOName = new ExtendedControls.TextBoxBorder();
-            this.textBoxEGOAPI = new ExtendedControls.TextBoxBorder();
             this.label8 = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
             this.panelTop.SuspendLayout();
@@ -256,6 +256,65 @@
             this.buttonExtBrowse.UseVisualStyleBackColor = true;
             this.buttonExtBrowse.Click += new System.EventHandler(this.buttonExtBrowse_Click);
             // 
+            // checkBoxEGOSync
+            // 
+            this.checkBoxEGOSync.AutoSize = true;
+            this.checkBoxEGOSync.CheckBoxColor = System.Drawing.Color.Gray;
+            this.checkBoxEGOSync.CheckBoxInnerColor = System.Drawing.Color.White;
+            this.checkBoxEGOSync.CheckColor = System.Drawing.Color.DarkBlue;
+            this.checkBoxEGOSync.FontNerfReduction = 0.5F;
+            this.checkBoxEGOSync.Location = new System.Drawing.Point(427, 32);
+            this.checkBoxEGOSync.MouseOverColor = System.Drawing.Color.CornflowerBlue;
+            this.checkBoxEGOSync.Name = "checkBoxEGOSync";
+            this.checkBoxEGOSync.Size = new System.Drawing.Size(88, 17);
+            this.checkBoxEGOSync.TabIndex = 4;
+            this.checkBoxEGOSync.Text = "Sync to EGO";
+            this.checkBoxEGOSync.TickBoxReductionSize = 10;
+            this.toolTip1.SetToolTip(this.checkBoxEGOSync, "Send your scan data to EGO");
+            this.checkBoxEGOSync.UseVisualStyleBackColor = true;
+            // 
+            // textBoxEGOName
+            // 
+            this.textBoxEGOName.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
+            this.textBoxEGOName.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
+            this.textBoxEGOName.BorderColor = System.Drawing.Color.Transparent;
+            this.textBoxEGOName.BorderColorScaling = 0.5F;
+            this.textBoxEGOName.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.textBoxEGOName.ControlBackground = System.Drawing.SystemColors.Control;
+            this.textBoxEGOName.Location = new System.Drawing.Point(160, 30);
+            this.textBoxEGOName.Multiline = false;
+            this.textBoxEGOName.Name = "textBoxEGOName";
+            this.textBoxEGOName.ReadOnly = false;
+            this.textBoxEGOName.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.textBoxEGOName.SelectionLength = 0;
+            this.textBoxEGOName.SelectionStart = 0;
+            this.textBoxEGOName.Size = new System.Drawing.Size(231, 20);
+            this.textBoxEGOName.TabIndex = 3;
+            this.textBoxEGOName.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.toolTip1.SetToolTip(this.textBoxEGOName, "Give the user name for this commander on EGO");
+            this.textBoxEGOName.WordWrap = true;
+            // 
+            // textBoxEGOAPI
+            // 
+            this.textBoxEGOAPI.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
+            this.textBoxEGOAPI.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
+            this.textBoxEGOAPI.BorderColor = System.Drawing.Color.Transparent;
+            this.textBoxEGOAPI.BorderColorScaling = 0.5F;
+            this.textBoxEGOAPI.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.textBoxEGOAPI.ControlBackground = System.Drawing.SystemColors.Control;
+            this.textBoxEGOAPI.Location = new System.Drawing.Point(160, 60);
+            this.textBoxEGOAPI.Multiline = false;
+            this.textBoxEGOAPI.Name = "textBoxEGOAPI";
+            this.textBoxEGOAPI.ReadOnly = false;
+            this.textBoxEGOAPI.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.textBoxEGOAPI.SelectionLength = 0;
+            this.textBoxEGOAPI.SelectionStart = 0;
+            this.textBoxEGOAPI.Size = new System.Drawing.Size(231, 20);
+            this.textBoxEGOAPI.TabIndex = 3;
+            this.textBoxEGOAPI.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.toolTip1.SetToolTip(this.textBoxEGOAPI, "Enter the API key from the EGO Website");
+            this.textBoxEGOAPI.WordWrap = true;
+            // 
             // textBoxBorderCompanionPassword
             // 
             this.textBoxBorderCompanionPassword.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
@@ -271,9 +330,10 @@
             this.textBoxBorderCompanionPassword.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.textBoxBorderCompanionPassword.SelectionLength = 0;
             this.textBoxBorderCompanionPassword.SelectionStart = 0;
-            this.textBoxBorderCompanionPassword.Size = new System.Drawing.Size(231, 24);
+            this.textBoxBorderCompanionPassword.Size = new System.Drawing.Size(231, 20);
             this.textBoxBorderCompanionPassword.TabIndex = 7;
             this.textBoxBorderCompanionPassword.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.toolTip1.SetToolTip(this.textBoxBorderCompanionPassword, "Enter your Frontier Password");
             this.textBoxBorderCompanionPassword.WordWrap = true;
             this.textBoxBorderCompanionPassword.TextChanged += new System.EventHandler(this.textBoxBorderCompanionPassword_TextChanged);
             // 
@@ -292,9 +352,10 @@
             this.textBoxBorderCompanionLogin.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.textBoxBorderCompanionLogin.SelectionLength = 0;
             this.textBoxBorderCompanionLogin.SelectionStart = 0;
-            this.textBoxBorderCompanionLogin.Size = new System.Drawing.Size(231, 24);
+            this.textBoxBorderCompanionLogin.Size = new System.Drawing.Size(231, 20);
             this.textBoxBorderCompanionLogin.TabIndex = 5;
             this.textBoxBorderCompanionLogin.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.toolTip1.SetToolTip(this.textBoxBorderCompanionLogin, "Enter your Frontier Login ID");
             this.textBoxBorderCompanionLogin.WordWrap = true;
             this.textBoxBorderCompanionLogin.TextChanged += new System.EventHandler(this.textBoxBorderCompanionLogin_TextChanged);
             // 
@@ -313,9 +374,10 @@
             this.textBoxBorderEDSMName.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.textBoxBorderEDSMName.SelectionLength = 0;
             this.textBoxBorderEDSMName.SelectionStart = 0;
-            this.textBoxBorderEDSMName.Size = new System.Drawing.Size(231, 24);
+            this.textBoxBorderEDSMName.Size = new System.Drawing.Size(231, 20);
             this.textBoxBorderEDSMName.TabIndex = 3;
             this.textBoxBorderEDSMName.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.toolTip1.SetToolTip(this.textBoxBorderEDSMName, "Give the name this commander is known as in EDSM");
             this.textBoxBorderEDSMName.WordWrap = true;
             // 
             // textBoxBorderEDSMAPI
@@ -333,9 +395,10 @@
             this.textBoxBorderEDSMAPI.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.textBoxBorderEDSMAPI.SelectionLength = 0;
             this.textBoxBorderEDSMAPI.SelectionStart = 0;
-            this.textBoxBorderEDSMAPI.Size = new System.Drawing.Size(231, 24);
+            this.textBoxBorderEDSMAPI.Size = new System.Drawing.Size(231, 20);
             this.textBoxBorderEDSMAPI.TabIndex = 3;
             this.textBoxBorderEDSMAPI.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.toolTip1.SetToolTip(this.textBoxBorderEDSMAPI, "Enter the API key from the EDSM Website");
             this.textBoxBorderEDSMAPI.WordWrap = true;
             // 
             // textBoxBorderJournal
@@ -353,9 +416,11 @@
             this.textBoxBorderJournal.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.textBoxBorderJournal.SelectionLength = 0;
             this.textBoxBorderJournal.SelectionStart = 0;
-            this.textBoxBorderJournal.Size = new System.Drawing.Size(310, 24);
+            this.textBoxBorderJournal.Size = new System.Drawing.Size(310, 20);
             this.textBoxBorderJournal.TabIndex = 3;
             this.textBoxBorderJournal.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.toolTip1.SetToolTip(this.textBoxBorderJournal, "Enter the journal location folder.  Normally leave this field blank only if you a" +
+        "re using EDD on another computer than your play computer");
             this.textBoxBorderJournal.WordWrap = true;
             // 
             // textBoxBorderCmdr
@@ -373,9 +438,10 @@
             this.textBoxBorderCmdr.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.textBoxBorderCmdr.SelectionLength = 0;
             this.textBoxBorderCmdr.SelectionStart = 0;
-            this.textBoxBorderCmdr.Size = new System.Drawing.Size(231, 24);
+            this.textBoxBorderCmdr.Size = new System.Drawing.Size(231, 20);
             this.textBoxBorderCmdr.TabIndex = 3;
             this.textBoxBorderCmdr.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.toolTip1.SetToolTip(this.textBoxBorderCmdr, "Enter commander name as used in Elite Dangerous");
             this.textBoxBorderCmdr.WordWrap = true;
             // 
             // groupBoxCustom4
@@ -609,23 +675,6 @@
             this.groupBoxCustom5.TextPadding = 0;
             this.groupBoxCustom5.TextStartPosition = -1;
             // 
-            // checkBoxEGOSync
-            // 
-            this.checkBoxEGOSync.AutoSize = true;
-            this.checkBoxEGOSync.CheckBoxColor = System.Drawing.Color.Gray;
-            this.checkBoxEGOSync.CheckBoxInnerColor = System.Drawing.Color.White;
-            this.checkBoxEGOSync.CheckColor = System.Drawing.Color.DarkBlue;
-            this.checkBoxEGOSync.FontNerfReduction = 0.5F;
-            this.checkBoxEGOSync.Location = new System.Drawing.Point(427, 32);
-            this.checkBoxEGOSync.MouseOverColor = System.Drawing.Color.CornflowerBlue;
-            this.checkBoxEGOSync.Name = "checkBoxEGOSync";
-            this.checkBoxEGOSync.Size = new System.Drawing.Size(88, 17);
-            this.checkBoxEGOSync.TabIndex = 4;
-            this.checkBoxEGOSync.Text = "Sync to EGO";
-            this.checkBoxEGOSync.TickBoxReductionSize = 10;
-            this.toolTip1.SetToolTip(this.checkBoxEGOSync, "Send your scan data to EGO");
-            this.checkBoxEGOSync.UseVisualStyleBackColor = true;
-            // 
             // label7
             // 
             this.label7.AutoSize = true;
@@ -634,26 +683,6 @@
             this.label7.Size = new System.Drawing.Size(64, 13);
             this.label7.TabIndex = 2;
             this.label7.Text = "EGO Name:";
-            // 
-            // textBoxEGOName
-            // 
-            this.textBoxEGOName.BorderColor = System.Drawing.Color.Transparent;
-            this.textBoxEGOName.BorderColorScaling = 0.5F;
-            this.textBoxEGOName.Location = new System.Drawing.Point(160, 30);
-            this.textBoxEGOName.Name = "textBoxEGOName";
-            this.textBoxEGOName.Size = new System.Drawing.Size(231, 20);
-            this.textBoxEGOName.TabIndex = 3;
-            this.toolTip1.SetToolTip(this.textBoxEGOName, "Give the user name for this commander on EGO");
-            // 
-            // textBoxEGOAPI
-            // 
-            this.textBoxEGOAPI.BorderColor = System.Drawing.Color.Transparent;
-            this.textBoxEGOAPI.BorderColorScaling = 0.5F;
-            this.textBoxEGOAPI.Location = new System.Drawing.Point(160, 60);
-            this.textBoxEGOAPI.Name = "textBoxEGOAPI";
-            this.textBoxEGOAPI.Size = new System.Drawing.Size(231, 20);
-            this.textBoxEGOAPI.TabIndex = 3;
-            this.toolTip1.SetToolTip(this.textBoxEGOAPI, "Enter the API key from the EGO Website");
             // 
             // label8
             // 

@@ -785,6 +785,7 @@ namespace EDDiscovery.UserControls
             this.textBoxTarget.TabIndex = 15;
             this.textBoxTarget.TabStop = false;
             this.textBoxTarget.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.toolTip1.SetToolTip(this.textBoxTarget, "Sets the target");
             this.textBoxTarget.WordWrap = true;
             this.textBoxTarget.KeyUp += new System.Windows.Forms.KeyEventHandler(this.textBoxTarget_KeyUp);
             this.textBoxTarget.MouseDown += new System.Windows.Forms.MouseEventHandler(this.controlMouseDown);
@@ -811,6 +812,7 @@ namespace EDDiscovery.UserControls
             this.textBoxTargetDist.TabIndex = 15;
             this.textBoxTargetDist.TabStop = false;
             this.textBoxTargetDist.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.toolTip1.SetToolTip(this.textBoxTargetDist, "Distance to target");
             this.textBoxTargetDist.WordWrap = true;
             this.textBoxTargetDist.MouseDown += new System.Windows.Forms.MouseEventHandler(this.controlMouseDown);
             this.textBoxTargetDist.MouseMove += new System.Windows.Forms.MouseEventHandler(this.controlMouseMove);
