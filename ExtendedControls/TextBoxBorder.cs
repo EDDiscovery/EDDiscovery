@@ -21,6 +21,7 @@ using System.Text;
 using System.Drawing;
 using System.Windows.Forms;
 using System.Drawing.Drawing2D;
+using System.Reflection;
 
 namespace ExtendedControls
 {
@@ -51,18 +52,11 @@ namespace ExtendedControls
         public string SelectedText { get { return textbox.SelectedText; } }
 
         public HorizontalAlignment TextAlign { get { return textbox.TextAlign; } set { textbox.TextAlign = value; } }
-        //        public new virtual bool Visible { get { return base.Visible; } set { base.Visible = value; if ( Parent != null) Parent.Invalidate(); } }
 
         public System.Windows.Forms.AutoCompleteMode AutoCompleteMode { get { return textbox.AutoCompleteMode; } set { textbox.AutoCompleteMode = value; } }
         public System.Windows.Forms.AutoCompleteSource AutoCompleteSource { get { return textbox.AutoCompleteSource; } set { textbox.AutoCompleteSource = value; } }
 
-        public void SetToolTip(ToolTip tt)
-        {
-            string s = tt.GetToolTip(this);
-            tt.SetToolTip(textbox, s);
-        }
-
-        public void SetToolTip(ToolTip t, string text) { t.SetToolTip(textbox, text); }
+        public void SetTipDynamically(ToolTip t, string text) { t.SetToolTip(textbox, text); } // only needed for dynamic changes..
 
         private TextBox textbox;
         private Color bordercolor = Color.Transparent;
@@ -119,10 +113,23 @@ namespace ExtendedControls
         protected override void OnLayout(LayoutEventArgs levent)
         {
             Reposition();
+
         }
+
+        bool firstpaint = true;
 
         protected override void OnPaint(PaintEventArgs e)
         {
+            if (firstpaint)
+            {
+                System.ComponentModel.IContainer ic = this.GetParentContainerComponents();
+
+                if (ic != null)    // yes we have a container object
+                    ic.CopyToolTips(this, new Control[] { textbox });
+
+                firstpaint = true;
+            }
+
             using (Brush highlight = new SolidBrush(controlbackcolor))
             {
                 e.Graphics.FillRectangle(highlight, ClientRectangle);

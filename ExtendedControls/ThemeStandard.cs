@@ -450,7 +450,9 @@ namespace ExtendedControls
                         System.Drawing.Imaging.ColorMap colormap = new System.Drawing.Imaging.ColorMap();       // any drawn panel with drawn images    
                         colormap.OldColor = Color.FromArgb(134, 134, 134);                                        // gray is defined as the forecolour to use in system mode
                         colormap.NewColor = ctrl.ForeColor;
-                        ctrl.SetDrawnBitmapRemapTable(new System.Drawing.Imaging.ColorMap[] { colormap });
+
+                        ctrl.SetDrawnBitmapRemapTable(new System.Drawing.Imaging.ColorMap[] { colormap } );     // used ButtonDisabledScaling note!
+                        //System.Diagnostics.Debug.WriteLine("Image button " + ctrl.Name);
                     }
 
                     ctrl.BackColor = (ctrl.Image != null) ? currentsettings.colors[Settings.CI.form] : currentsettings.colors[Settings.CI.button_back];
@@ -556,10 +558,14 @@ namespace ExtendedControls
                 ctrl.MouseOverColor = currentsettings.colors[Settings.CI.label].Multiply(mouseoverscaling);
                 ctrl.MouseSelectedColor = currentsettings.colors[Settings.CI.label].Multiply(mouseselectedscaling);
 
-                System.Drawing.Imaging.ColorMap colormap = new System.Drawing.Imaging.ColorMap();       // any drawn panel with drawn images    
-                colormap.OldColor = Color.White;                                                        // white is defined as the forecolour
-                colormap.NewColor = ctrl.ForeColor;
-                ctrl.SetDrawnBitmapRemapTable(new System.Drawing.Imaging.ColorMap[] { colormap });
+                if (ctrl.DrawnImage != null)
+                {
+                    System.Drawing.Imaging.ColorMap colormap = new System.Drawing.Imaging.ColorMap();       // any drawn panel with drawn images    
+                    colormap.OldColor = Color.White;                                                        // white is defined as the forecolour
+                    colormap.NewColor = ctrl.ForeColor;
+                    ctrl.SetDrawnBitmapRemapTable(new System.Drawing.Imaging.ColorMap[] { colormap });
+                    System.Diagnostics.Debug.WriteLine("Drawn Panel Image button " + ctrl.Name);
+                }
             }
             else if (myControl is Panel)
             {
@@ -616,7 +622,6 @@ namespace ExtendedControls
                         colormap2.OldColor = Color.FromArgb(222, 222, 222);
                         colormap2.NewColor = ctrl.ForeColor.Multiply(0.85F);
                         ctrl.SetDrawnBitmapRemapTable(new System.Drawing.Imaging.ColorMap[] { colormap, colormap2 });
-                        //System.Diagnostics.Debug.WriteLine("Recoloured" + ctrl.Name +" of " + ctrl.GetType().Name + " " + colormap.OldColor + ">" + colormap.NewColor);
                     }
 
                 }

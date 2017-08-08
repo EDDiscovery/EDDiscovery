@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
+using System.Drawing.Imaging;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -110,5 +111,80 @@ public static class ControlHelpersStaticFunc
         gr.AddLine(x, y + height - 1 - roundnessleft, x, y + roundnessleft);
         gr.AddLine(x, y + roundnessleft, x + roundnessleft, y);         // close figure manually, closing it with a break does not seem to work
         return gr;
+    }
+
+    static public System.ComponentModel.IContainer GetParentContainerComponents(this Control p)
+    {
+        IContainerControl c = p.GetContainerControl();  // get container control (UserControl or Form)
+
+        if (c != null)  // paranoia in case control is not connected
+        {
+            // find all fields, incl private of them
+            var memcc = c.GetType().GetFields(System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic);
+
+            var icontainers = (from f in memcc      // pick out a list of IContainers (should be only 1)
+                               where f.FieldType.FullName == "System.ComponentModel.IContainer"
+                               select f);
+
+            if (icontainers.Count() > 0)    // paranoia, should always be there
+            {
+                var item = (icontainers.ToArray())[0].GetValue(c);
+
+                return item as System.ComponentModel.IContainer;  // But IT may be null if no containers are on the form
+            }
+        }
+
+        return null;
+    }
+
+    static public void CopyToolTips( this System.ComponentModel.IContainer c, Control outerctrl, Control[] ctrlitems)
+    {
+        if ( c != null )
+        {
+            var clisttt = c.Components.OfType<ToolTip>().ToList(); // find all tooltips
+
+            foreach (ToolTip t in clisttt)
+            {
+                string s = t.GetToolTip(outerctrl);
+                if (s != null && s.Length>0)
+                {
+                    foreach (Control inner in ctrlitems)
+                        t.SetToolTip(inner, s);
+                }
+            }
+        }
+    }
+
+    // used to compute ImageAttributes, given a disabled scaling, a remap table, and a optional color matrix
+    static public void ComputeDrawnPanel( out ImageAttributes Enabled, 
+                    out ImageAttributes Disabled, 
+                    float disabledscaling, System.Drawing.Imaging.ColorMap[] remap, float[][] colormatrix = null)
+    {
+        Enabled = new ImageAttributes();
+        Enabled.SetRemapTable(remap, ColorAdjustType.Bitmap);
+        if (colormatrix != null)
+            Enabled.SetColorMatrix(new ColorMatrix(colormatrix), ColorMatrixFlag.Default, ColorAdjustType.Bitmap);
+
+        Disabled = new ImageAttributes();
+        Disabled.SetRemapTable(remap, ColorAdjustType.Bitmap);
+
+        if (colormatrix != null)
+        {
+            colormatrix[0][0] *= disabledscaling;     // the identity positions are scaled by BDS 
+            colormatrix[1][1] *= disabledscaling;
+            colormatrix[2][2] *= disabledscaling;
+            Disabled.SetColorMatrix(new ColorMatrix(colormatrix), ColorMatrixFlag.Default, ColorAdjustType.Bitmap);
+        }
+        else
+        {
+            float[][] disabledMatrix = {
+                        new float[] {disabledscaling,  0,  0,  0, 0},        // red scaling factor of BDS
+                        new float[] {0,  disabledscaling,  0,  0, 0},        // green scaling factor of BDS
+                        new float[] {0,  0,  disabledscaling,  0, 0},        // blue scaling factor of BDS
+                        new float[] {0,  0,  0,  1, 0},        // alpha scaling factor of 1
+                        new float[] {0,0,0, 0, 1}};    // three translations of 0
+
+            Disabled.SetColorMatrix(new ColorMatrix(disabledMatrix), ColorMatrixFlag.Default, ColorAdjustType.Bitmap);
+        }
     }
 }

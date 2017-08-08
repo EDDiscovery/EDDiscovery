@@ -79,13 +79,6 @@ namespace EDDiscovery.ImageHandler
             });
 
             this.comboBoxScanFor.Items.AddRange(new string[] { "bmp -ED Launcher", "jpg -Steam" , "png -Steam" });
-            comboBoxFileNameFormat.SetToolTip(toolTip);
-            comboBoxFormat.SetToolTip(toolTip);
-            comboBoxScanFor.SetToolTip(toolTip);
-            comboBoxSubFolder.SetToolTip(toolTip);
-            textBoxFileNameExample.SetToolTip(toolTip);
-            textBoxOutputDir.SetToolTip(toolTip);
-            textBoxScreenshotsDir.SetToolTip(toolTip);
         }
 
         public void InitControl(EDDiscoveryForm discoveryForm)

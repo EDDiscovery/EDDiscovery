@@ -42,7 +42,7 @@ namespace EDDiscovery
             discoveryForm = ed;
             userControlJournalGrid.Init(ed,null,displaynumber);     // does not hook to a THC
             userControlJournalGrid.OnPopOut += PopOut;
-            userControlJournalGrid.ExtraIcons(true);
+            userControlJournalGrid.ExtraIcons(true,true);
         }
 
         #region Layout

@@ -20,14 +20,6 @@ namespace EDDiscovery.Forms
         public CommanderForm()
         {
             InitializeComponent();
-            this.textBoxBorderCompanionPassword.SetToolTip(toolTip1, "Enter your Frontier Password");
-            this.textBoxBorderCompanionLogin.SetToolTip(toolTip1, "Enter details for API");
-            this.textBoxBorderEDSMName.SetToolTip(toolTip1, "Give the name this commander is known as in EDSM");
-            this.textBoxBorderEDSMAPI.SetToolTip(toolTip1, "Enter the API key from the EDSM Website");
-            this.textBoxBorderJournal.SetToolTip(toolTip1, "Enter the journal location folder.  Normally leave this field blank, EDDiscovery " + "knows where the standard location is");
-            this.textBoxBorderCmdr.SetToolTip(toolTip1, "Commander Name");
-
-
             EDDiscovery.EDDTheme theme = EDDiscovery.EDDTheme.Instance;
             font = new Font(theme.FontName, 10);
             bool winborder = theme.ApplyToForm(this, font);

@@ -28,9 +28,12 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.autoCompleteTextBox1 = new ExtendedControls.AutoCompleteTextBox();
             this.comboBoxCustom1 = new ExtendedControls.ComboBoxCustom();
             this.autoCompleteTextBox2 = new ExtendedControls.AutoCompleteTextBox();
+            this.textBoxBorder1 = new ExtendedControls.TextBoxBorder();
+            this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.SuspendLayout();
             // 
             // autoCompleteTextBox1
@@ -57,7 +60,7 @@
             this.autoCompleteTextBox1.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.autoCompleteTextBox1.SelectionLength = 0;
             this.autoCompleteTextBox1.SelectionStart = 0;
-            this.autoCompleteTextBox1.Size = new System.Drawing.Size(316, 23);
+            this.autoCompleteTextBox1.Size = new System.Drawing.Size(316, 20);
             this.autoCompleteTextBox1.TabIndex = 0;
             this.autoCompleteTextBox1.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.autoCompleteTextBox1.WordWrap = true;
@@ -112,16 +115,38 @@
             this.autoCompleteTextBox2.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.autoCompleteTextBox2.SelectionLength = 0;
             this.autoCompleteTextBox2.SelectionStart = 0;
-            this.autoCompleteTextBox2.Size = new System.Drawing.Size(316, 23);
+            this.autoCompleteTextBox2.Size = new System.Drawing.Size(316, 20);
             this.autoCompleteTextBox2.TabIndex = 0;
             this.autoCompleteTextBox2.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.autoCompleteTextBox2.WordWrap = true;
+            // 
+            // textBoxBorder1
+            // 
+            this.textBoxBorder1.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
+            this.textBoxBorder1.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
+            this.textBoxBorder1.BorderColor = System.Drawing.Color.Transparent;
+            this.textBoxBorder1.BorderColorScaling = 0.5F;
+            this.textBoxBorder1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.textBoxBorder1.ControlBackground = System.Drawing.SystemColors.Control;
+            this.textBoxBorder1.Location = new System.Drawing.Point(40, 222);
+            this.textBoxBorder1.Multiline = false;
+            this.textBoxBorder1.Name = "textBoxBorder1";
+            this.textBoxBorder1.ReadOnly = false;
+            this.textBoxBorder1.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.textBoxBorder1.SelectionLength = 0;
+            this.textBoxBorder1.SelectionStart = 0;
+            this.textBoxBorder1.Size = new System.Drawing.Size(75, 20);
+            this.textBoxBorder1.TabIndex = 2;
+            this.textBoxBorder1.Text = "textBoxBorder1";
+            this.textBoxBorder1.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.textBoxBorder1.WordWrap = true;
             // 
             // TestAutoComplete
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(521, 334);
+            this.Controls.Add(this.textBoxBorder1);
             this.Controls.Add(this.comboBoxCustom1);
             this.Controls.Add(this.autoCompleteTextBox2);
             this.Controls.Add(this.autoCompleteTextBox1);
@@ -136,5 +161,7 @@
         private ExtendedControls.AutoCompleteTextBox autoCompleteTextBox1;
         private ExtendedControls.ComboBoxCustom comboBoxCustom1;
         private ExtendedControls.AutoCompleteTextBox autoCompleteTextBox2;
+        private ExtendedControls.TextBoxBorder textBoxBorder1;
+        private System.Windows.Forms.Timer timer1;
     }
 }

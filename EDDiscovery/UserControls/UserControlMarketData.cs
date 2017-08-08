@@ -43,8 +43,6 @@ namespace EDDiscovery.UserControls
         public UserControlMarketData()
         {
             InitializeComponent();
-            comboBoxCustomFrom.SetToolTip(toolTip);
-            comboBoxCustomTo.SetToolTip(toolTip);
         }
 
         public override void Init( EDDiscoveryForm ed, UserControlTravelGrid thc, int vn) //0=primary, 1 = first windowed version, etc

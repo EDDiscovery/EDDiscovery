@@ -105,9 +105,6 @@ namespace EDDiscovery.UserControls
         public UserControlTravelGrid()
         {
             InitializeComponent();
-            this.textBoxFilter.SetToolTip(toolTip, "Display entries matching this string");
-            comboBoxHistoryWindow.SetToolTip(toolTip);
-            textBoxFilter.SetToolTip(toolTip);
         }
 
         public override void Init(EDDiscoveryForm ed, UserControlTravelGrid tg, int vn) //0=primary, 1 = first windowed version, etc
@@ -135,12 +132,14 @@ namespace EDDiscovery.UserControls
             writeEventInfoToLogDebugToolStripMenuItem.Visible = false;
 #endif
 
-            ExtraIcons(false);
+            ExtraIcons(false,false);
         }
 
-        public void ExtraIcons(bool state)
+        public void ExtraIcons(bool icon, bool popout )
         {
-            drawnPanelPopOut.Visible = panelHistoryIcon.Visible = state;
+            panelHistoryIcon.Visible = icon;
+            drawnPanelPopOut.Visible = popout;
+            drawnPanelPopOut.Left = icon ? 32 : 3;
         }
 
         public override void LoadLayout()

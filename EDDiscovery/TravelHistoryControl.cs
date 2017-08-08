@@ -75,7 +75,7 @@ namespace EDDiscovery
             userControlTravelGrid.OnChangedSelection += ChangedSelection;   // and if the user clicks on something
             userControlTravelGrid.OnPopOut += () => { _discoveryForm.PopOuts.PopOut(PopOutControl.PopOuts.TravelGrid); };
             userControlTravelGrid.OnKeyDownInCell += OnKeyDownInCell;
-            userControlTravelGrid.ExtraIcons(true);
+            userControlTravelGrid.ExtraIcons(true, true);
 
             TabConfigure(tabStripBottom,"Bottom",1000);          // codes are used to save info, 0 = primary (journal/travelgrid), 1..N are popups, these are embedded UCs
             TabConfigure(tabStripBottomRight,"Bottom-Right",1001);

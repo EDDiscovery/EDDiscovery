@@ -309,7 +309,7 @@ namespace EDDiscovery.Export
             this.textBoxArrivalDate.TabIndex = 9;
             this.textBoxArrivalDate.Text = "1";
             this.textBoxArrivalDate.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
-            this.toolTip.SetToolTip(this.textBoxArrivalDate, "Set Arrival Date");
+            this.toolTip.SetToolTip(this.textBoxArrivalDate, "Set Arrival Date Column");
             this.textBoxArrivalDate.WordWrap = true;
             this.textBoxArrivalDate.Validating += new System.ComponentModel.CancelEventHandler(this.textBoxArrivalDate_Validating);
             // 
@@ -364,7 +364,7 @@ namespace EDDiscovery.Export
             this.textBoxSysName.Size = new System.Drawing.Size(100, 20);
             this.textBoxSysName.TabIndex = 14;
             this.textBoxSysName.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
-            this.toolTip.SetToolTip(this.textBoxSysName, "Set System Name");
+            this.toolTip.SetToolTip(this.textBoxSysName, "Set System Name Column");
             this.textBoxSysName.WordWrap = true;
             this.textBoxSysName.Validating += new System.ComponentModel.CancelEventHandler(this.textBoxSysName_Validating);
             // 

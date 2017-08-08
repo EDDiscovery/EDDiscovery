@@ -44,12 +44,6 @@ namespace EDDiscovery.Export
         {
             InitializeComponent();
 
-            this.textBoxArrivalDate.SetToolTip(toolTip, "Column containing the arrival date");
-            this.textBoxSysName.SetToolTip(toolTip, "Column containing the system name");
-            this.textBoxSysNotes.SetToolTip(toolTip, "Column containing any system notes");
-            this.textBoxArrivalTime.SetToolTip(toolTip, "Column containing the arrival time");
-            this.textBoxDelimiter.SetToolTip(toolTip, "Delimiting character");
-
             exportTypeList = new List<ExportTypeClass>();
 
             exportTypeList.Add(new ExportTypeClass("Exploration scans (all)", new ExportScan()));
@@ -70,13 +64,6 @@ namespace EDDiscovery.Export
 
             double ly = 10.0;
             txtsphereRadius.Text = ly.ToString("0.00");
-
-            comboBoxCommander.SetToolTip(toolTip);
-            comboBoxCustomExportType.SetToolTip(toolTip);
-            txtExportVisited.SetToolTip(toolTip);
-            txtsphereRadius.SetToolTip(toolTip);
-            textBoxArrivalDate.SetToolTip(toolTip);
-            textBoxSysName.SetToolTip(toolTip);
         }
 
         public void PopulateCommanders()

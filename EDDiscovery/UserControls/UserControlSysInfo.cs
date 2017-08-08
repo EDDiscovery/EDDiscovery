@@ -75,8 +75,6 @@ namespace EDDiscovery.UserControls
         public UserControlSysInfo()
         {
             InitializeComponent();
-            textBoxTarget.SetToolTip(toolTip1, "Sets the target");
-            textBoxTargetDist.SetToolTip(toolTip1, "Distance to target");
         }
 
         public override void Init(EDDiscoveryForm ed, UserControlTravelGrid thc, int displayno)
@@ -306,13 +304,13 @@ namespace EDDiscovery.UserControls
                 if (cs != null)
                     textBoxTargetDist.Text = SystemClassDB.Distance(cs.System, x, y, z).ToString("0.0");
 
-                textBoxTarget.SetToolTip(toolTip1, "Position is " + x.ToString("0.00") + "," + y.ToString("0.00") + "," + z.ToString("0.00"));
+                textBoxTarget.SetTipDynamically(toolTip1, "Position is " + x.ToString("0.00") + "," + y.ToString("0.00") + "," + z.ToString("0.00"));
             }
             else
             {
                 textBoxTarget.Text = "?";
                 textBoxTargetDist.Text = "";
-                textBoxTarget.SetToolTip(toolTip1, "On 3D Map right click to make a bookmark, region mark or click on a notemark and then tick on Set Target, or type it here and hit enter");
+                textBoxTarget.SetTipDynamically(toolTip1, "On 3D Map right click to make a bookmark, region mark or click on a notemark and then tick on Set Target, or type it here and hit enter");
             }
         }
 

@@ -60,7 +60,7 @@ namespace EDDiscovery.UserControls
             this.labelItems2 = new System.Windows.Forms.Label();
             this.labelItems1 = new System.Windows.Forms.Label();
             this.checkBoxClear = new ExtendedControls.CheckBoxCustom();
-            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.dataViewScrollerPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewMC)).BeginInit();
             this.panelButtons.SuspendLayout();
@@ -73,10 +73,10 @@ namespace EDDiscovery.UserControls
             this.dataViewScrollerPanel.Controls.Add(this.vScrollBarCustomMC);
             this.dataViewScrollerPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataViewScrollerPanel.InternalMargin = new System.Windows.Forms.Padding(0);
-            this.dataViewScrollerPanel.Location = new System.Drawing.Point(0, 32);
+            this.dataViewScrollerPanel.Location = new System.Drawing.Point(0, 28);
             this.dataViewScrollerPanel.Name = "dataViewScrollerPanel";
             this.dataViewScrollerPanel.ScrollBarWidth = 20;
-            this.dataViewScrollerPanel.Size = new System.Drawing.Size(704, 532);
+            this.dataViewScrollerPanel.Size = new System.Drawing.Size(704, 536);
             this.dataViewScrollerPanel.TabIndex = 0;
             this.dataViewScrollerPanel.VerticalScrollBarDockRight = true;
             // 
@@ -106,7 +106,7 @@ namespace EDDiscovery.UserControls
             this.dataGridViewMC.Name = "dataGridViewMC";
             this.dataGridViewMC.RowHeadersVisible = false;
             this.dataGridViewMC.ScrollBars = System.Windows.Forms.ScrollBars.None;
-            this.dataGridViewMC.Size = new System.Drawing.Size(684, 532);
+            this.dataGridViewMC.Size = new System.Drawing.Size(684, 536);
             this.dataGridViewMC.TabIndex = 1;
             this.dataGridViewMC.SortCompare += new System.Windows.Forms.DataGridViewSortCompareEventHandler(this.dataGridViewMC_SortCompare);
             // 
@@ -169,7 +169,7 @@ namespace EDDiscovery.UserControls
             this.vScrollBarCustomMC.MouseOverButtonColor = System.Drawing.Color.Green;
             this.vScrollBarCustomMC.MousePressedButtonColor = System.Drawing.Color.Red;
             this.vScrollBarCustomMC.Name = "vScrollBarCustomMC";
-            this.vScrollBarCustomMC.Size = new System.Drawing.Size(20, 511);
+            this.vScrollBarCustomMC.Size = new System.Drawing.Size(20, 515);
             this.vScrollBarCustomMC.SliderColor = System.Drawing.Color.DarkGray;
             this.vScrollBarCustomMC.SmallChange = 1;
             this.vScrollBarCustomMC.TabIndex = 0;
@@ -191,7 +191,7 @@ namespace EDDiscovery.UserControls
             this.panelButtons.Dock = System.Windows.Forms.DockStyle.Top;
             this.panelButtons.Location = new System.Drawing.Point(0, 0);
             this.panelButtons.Name = "panelButtons";
-            this.panelButtons.Size = new System.Drawing.Size(704, 32);
+            this.panelButtons.Size = new System.Drawing.Size(704, 28);
             this.panelButtons.TabIndex = 2;
             // 
             // textBoxItems2
@@ -202,7 +202,7 @@ namespace EDDiscovery.UserControls
             this.textBoxItems2.BorderColorScaling = 0.5F;
             this.textBoxItems2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBoxItems2.ControlBackground = System.Drawing.SystemColors.Control;
-            this.textBoxItems2.Location = new System.Drawing.Point(346, 9);
+            this.textBoxItems2.Location = new System.Drawing.Point(360, 3);
             this.textBoxItems2.Multiline = false;
             this.textBoxItems2.Name = "textBoxItems2";
             this.textBoxItems2.ReadOnly = false;
@@ -211,8 +211,8 @@ namespace EDDiscovery.UserControls
             this.textBoxItems2.SelectionStart = 0;
             this.textBoxItems2.Size = new System.Drawing.Size(75, 20);
             this.textBoxItems2.TabIndex = 4;
-            this.textBoxItems2.Text = "textBoxBorder1";
             this.textBoxItems2.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.toolTip.SetToolTip(this.textBoxItems2, "Count of Items");
             this.textBoxItems2.WordWrap = true;
             // 
             // textBoxItems1
@@ -223,7 +223,7 @@ namespace EDDiscovery.UserControls
             this.textBoxItems1.BorderColorScaling = 0.5F;
             this.textBoxItems1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBoxItems1.ControlBackground = System.Drawing.SystemColors.Control;
-            this.textBoxItems1.Location = new System.Drawing.Point(216, 9);
+            this.textBoxItems1.Location = new System.Drawing.Point(210, 3);
             this.textBoxItems1.Multiline = false;
             this.textBoxItems1.Name = "textBoxItems1";
             this.textBoxItems1.ReadOnly = false;
@@ -232,14 +232,14 @@ namespace EDDiscovery.UserControls
             this.textBoxItems1.SelectionStart = 0;
             this.textBoxItems1.Size = new System.Drawing.Size(75, 20);
             this.textBoxItems1.TabIndex = 4;
-            this.textBoxItems1.Text = "textBoxBorder1";
             this.textBoxItems1.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.toolTip.SetToolTip(this.textBoxItems1, "Count of Items");
             this.textBoxItems1.WordWrap = true;
             // 
             // labelItems2
             // 
             this.labelItems2.AutoSize = true;
-            this.labelItems2.Location = new System.Drawing.Point(305, 9);
+            this.labelItems2.Location = new System.Drawing.Point(310, 4);
             this.labelItems2.Name = "labelItems2";
             this.labelItems2.Size = new System.Drawing.Size(35, 13);
             this.labelItems2.TabIndex = 3;
@@ -248,7 +248,7 @@ namespace EDDiscovery.UserControls
             // labelItems1
             // 
             this.labelItems1.AutoSize = true;
-            this.labelItems1.Location = new System.Drawing.Point(160, 9);
+            this.labelItems1.Location = new System.Drawing.Point(160, 4);
             this.labelItems1.Name = "labelItems1";
             this.labelItems1.Size = new System.Drawing.Size(35, 13);
             this.labelItems1.TabIndex = 3;
@@ -261,20 +261,21 @@ namespace EDDiscovery.UserControls
             this.checkBoxClear.CheckBoxInnerColor = System.Drawing.Color.White;
             this.checkBoxClear.CheckColor = System.Drawing.Color.DarkBlue;
             this.checkBoxClear.FontNerfReduction = 0.5F;
-            this.checkBoxClear.Location = new System.Drawing.Point(6, 9);
+            this.checkBoxClear.ImageButtonDisabledScaling = 0.5F;
+            this.checkBoxClear.Location = new System.Drawing.Point(6, 3);
             this.checkBoxClear.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.checkBoxClear.Name = "checkBoxClear";
             this.checkBoxClear.Size = new System.Drawing.Size(116, 17);
             this.checkBoxClear.TabIndex = 2;
             this.checkBoxClear.Text = "Remove zero items";
             this.checkBoxClear.TickBoxReductionSize = 10;
-            this.toolTip1.SetToolTip(this.checkBoxClear, "Remove zero items the time after they go to zero");
+            this.toolTip.SetToolTip(this.checkBoxClear, "Remove zero items the time after they go to zero");
             this.checkBoxClear.UseVisualStyleBackColor = true;
             this.checkBoxClear.CheckStateChanged += new System.EventHandler(this.checkBoxClear_CheckStateChanged);
             // 
-            // toolTip1
+            // toolTip
             // 
-            this.toolTip1.ShowAlways = true;
+            this.toolTip.ShowAlways = true;
             // 
             // UserControlMaterialCommodities
             // 
@@ -306,7 +307,7 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.DataGridViewTextBoxColumn Number;
         private System.Windows.Forms.DataGridViewTextBoxColumn Price;
         private System.Windows.Forms.Label labelNoItems;
-        private System.Windows.Forms.ToolTip toolTip1;
+        private System.Windows.Forms.ToolTip toolTip;
         private ExtendedControls.CheckBoxCustom checkBoxClear;
         private ExtendedControls.TextBoxBorder textBoxItems2;
         private ExtendedControls.TextBoxBorder textBoxItems1;

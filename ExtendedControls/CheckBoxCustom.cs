@@ -35,13 +35,14 @@ namespace ExtendedControls
         public int TickBoxReductionSize { get; set; } = 10;          // no of pixels smaller than the height to make the tick box
 
         public Image ImageUnchecked = null;                         // set both this and Image to draw a image instead of the check. Must set FlatSytle popup and Appearance=normal
-        public ImageAttributes DrawnImageAttributes = null;         // Image override (colour etc) for images using Image/ImageUnchecked 
+        public float ImageButtonDisabledScaling { get; set; } = 0.5F;   // scaling when disabled
 
-        public void SetDrawnBitmapRemapTable(ColorMap[] remap)
+        public ImageAttributes DrawnImageAttributesEnabled = null;         // Image override (colour etc) for images using Image
+        public ImageAttributes DrawnImageAttributesDisabled = null;         // Image override (colour etc) for images using Image
+
+        public void SetDrawnBitmapRemapTable(ColorMap[] remap, float[][] colormatrix = null)
         {
-            ImageAttributes ia = new ImageAttributes();
-            ia.SetRemapTable(remap, ColorAdjustType.Bitmap);
-            DrawnImageAttributes = ia;
+            ControlHelpersStaticFunc.ComputeDrawnPanel(out DrawnImageAttributesEnabled, out DrawnImageAttributesDisabled, ImageButtonDisabledScaling, remap, colormatrix);
         }
 
         public CheckBoxCustom() : base()
@@ -129,8 +130,8 @@ namespace ExtendedControls
                 {
                     Image image = Checked ? Image : ImageUnchecked;
 
-                    if (DrawnImageAttributes != null)
-                        e.Graphics.DrawImage(image, new Rectangle(0, 0, image.Width, image.Height), 0, 0, image.Width, image.Height, GraphicsUnit.Pixel,DrawnImageAttributes);
+                    if (DrawnImageAttributesEnabled != null)
+                        e.Graphics.DrawImage(image, new Rectangle(0, 0, image.Width, image.Height), 0, 0, image.Width, image.Height, GraphicsUnit.Pixel, (Enabled) ? DrawnImageAttributesEnabled : DrawnImageAttributesDisabled);
                     else
                         e.Graphics.DrawImage(image, new Rectangle(0, 0, image.Width, image.Height), 0, 0, image.Width, image.Height, GraphicsUnit.Pixel);
                 }

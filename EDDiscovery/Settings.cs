@@ -56,9 +56,6 @@ namespace EDDiscovery
         public Settings()
         {
             InitializeComponent();
-            textBoxHomeSystem.SetToolTip(toolTip);
-            textBoxDefaultZoom.SetToolTip(toolTip);
-            comboBoxTheme.SetToolTip(toolTip);
         }
 
         public void InitControl(EDDiscoveryForm discoveryForm)

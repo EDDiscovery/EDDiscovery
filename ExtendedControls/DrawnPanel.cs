@@ -29,6 +29,7 @@ namespace ExtendedControls
         public Color MouseOverColor { get; set; } = Color.White;
         public Color MouseSelectedColor { get; set; } = Color.Green;
         public bool MouseSelectedColorEnable { get; set; } = true;      // set to disable selected colour in some crazy windows situations where clicks are lost
+        public float PanelDisabledScaling { get; set; } = 0.25F;
 
         public enum ImageType { Close, Minimize, OnTop, Floating, Gripper, EDDB, Ross, InverseText,
                                 Move, Text, None , Transparent, NotTransparent ,
@@ -37,7 +38,7 @@ namespace ExtendedControls
 
         public ImageType ImageSelected { get; set; } = ImageType.Close;
         public Image DrawnImage { get; set; } = null;                                   // if not set, an image is drawn . Use None below for a image only
-        public ImageAttributes DrawnImageAttributes = null;                             // Image override (colour etc) 
+
         public string ImageText { get; set; } = null;       // for Text Type
         public int MarginSize { get; set; } = 4;                    // margin around icon, 0 =auto, -1 = zero
 
@@ -50,11 +51,12 @@ namespace ExtendedControls
 
         public bool IsCaptured { get { return mousecapture; } }
 
-        public void SetDrawnBitmapRemapTable( ColorMap[] remap )
+        private ImageAttributes DrawnImageAttributesEnabled = null;         // Image override (colour etc) for images using Image
+        private ImageAttributes DrawnImageAttributesDisabled = null;         // Image override (colour etc) for images using Image
+
+        public void SetDrawnBitmapRemapTable(ColorMap[] remap, float[][] colormatrix = null)
         {
-            ImageAttributes ia = new ImageAttributes();
-            ia.SetRemapTable(remap, ColorAdjustType.Bitmap);
-            DrawnImageAttributes = ia;
+            ControlHelpersStaticFunc.ComputeDrawnPanel(out DrawnImageAttributesEnabled, out DrawnImageAttributesDisabled, PanelDisabledScaling, remap, colormatrix);
         }
 
         #endregion
@@ -68,8 +70,8 @@ namespace ExtendedControls
             //System.Diagnostics.Debug.WriteLine("DP Paint " + this.Name + " MD " + mousedown + " MO "  + mouseover);
             if ( DrawnImage != null )
             {
-                if (DrawnImageAttributes != null)
-                    e.Graphics.DrawImage(DrawnImage, new Rectangle(0, 0, DrawnImage.Width, DrawnImage.Height), 0, 0, DrawnImage.Width, DrawnImage.Height, GraphicsUnit.Pixel, DrawnImageAttributes);
+                if (DrawnImageAttributesEnabled != null)
+                    e.Graphics.DrawImage(DrawnImage, new Rectangle(0, 0, DrawnImage.Width, DrawnImage.Height), 0, 0, DrawnImage.Width, DrawnImage.Height, GraphicsUnit.Pixel, DrawnImageAttributesEnabled );
                 else
                     e.Graphics.DrawImage(DrawnImage, new Rectangle(0, 0, DrawnImage.Width, DrawnImage.Height), 0, 0, DrawnImage.Width, DrawnImage.Height, GraphicsUnit.Pixel);
             }
@@ -77,7 +79,7 @@ namespace ExtendedControls
             if (ImageSelected != ImageType.None)
             {
                 int msize = (MarginSize == -1) ? 0 : ((MarginSize > 0) ? MarginSize : ClientRectangle.Height / 6);
-                Color pc = (Enabled) ? ((mousedown || mousecapture) ? MouseSelectedColor : ((mouseover) ? MouseOverColor : this.ForeColor)) : this.ForeColor.Average(this.BackColor, 0.25F);
+                Color pc = (Enabled) ? ((mousedown || mousecapture) ? MouseSelectedColor : ((mouseover) ? MouseOverColor : this.ForeColor)) : this.ForeColor.Average(this.BackColor, PanelDisabledScaling);
                 //Console.WriteLine("Enabled" + Enabled + " Mouse over " + mouseover + " mouse down " + mousedown);
 
                 e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
