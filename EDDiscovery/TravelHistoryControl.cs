@@ -214,7 +214,7 @@ namespace EDDiscovery
 
                 if (he.IsShipChange)
                 {
-                    HistoryList.SendShipInfoAsync(he);
+                    hl.SendShipInfo(true);
                 }
 
                 if (he.ISEDDNMessage && he.AgeOfEntry() < TimeSpan.FromDays(1.0))

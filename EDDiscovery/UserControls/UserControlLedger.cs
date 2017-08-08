@@ -74,17 +74,17 @@ namespace EDDiscovery.UserControls
 
         public void Redisplay(HistoryList hl)
         {
-            Display(hl.materialcommodititiesledger);
+            Display(hl.cashledger);
         }
 
         private void NewEntry(HistoryEntry l, HistoryList hl)
         {
-            Display(hl.materialcommodititiesledger);
+            Display(hl.cashledger);
         }
 
         public override void Display(HistoryEntry current, HistoryList history)
         {
-            Display(history.materialcommodititiesledger);
+            Display(history.cashledger);
         }
 
         public void Display(Ledger mc)

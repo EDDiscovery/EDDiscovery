@@ -83,7 +83,8 @@ namespace EDDiscovery.UserControls
 
         private void OnChanged(HistoryEntry he, HistoryList hl)
         {
-            if (!Object.ReferenceEquals(he, last_he))       // if last was null, or he has changed, we have a possible change..
+            System.Diagnostics.Debug.WriteLine("OnChanged");
+            if (!Object.ReferenceEquals(he, last_he) )       // if last was null, or he has changed, we have a possible change..
             {
                 FillComboBoxes(hl);
                 HistoryEntry new_last_eddmd = hl.GetLastHistoryEntry(x => x.EntryType == JournalTypeEnum.EDDCommodityPrices, he);       // find, from he, the last market data commodity price
@@ -94,9 +95,11 @@ namespace EDDiscovery.UserControls
                 last_he = he;
                 last_eddmd = new_last_eddmd;
 
+                System.Diagnostics.Debug.WriteLine("left {0} right {1} eddmchanged {2} cargo {3}", last_eddmd?.Indexno, last_he?.Indexno, eddmdchanged, cargochanged);
+
                 if (eddmd_left == null)    // if showing travel.. if not, no update due to this.  Need to keep the last_he/last_eddmd going for swapping back
                 {
-                    System.Diagnostics.Debug.WriteLine("left {0} right {1} eddmchanged {2} cargo {3}", last_eddmd?.Indexno, last_he?.Indexno, eddmdchanged , cargochanged);
+                    System.Diagnostics.Debug.WriteLine("Go");
                     if (eddmdchanged || cargochanged)        // if last_eddmd changed.. or cargo
                         Display();
                 }
@@ -108,6 +111,10 @@ namespace EDDiscovery.UserControls
             DataGridViewColumn sortcol = dataGridViewMarketData.SortedColumn != null ? dataGridViewMarketData.SortedColumn : dataGridViewMarketData.Columns[0];
             SortOrder sortorder = dataGridViewMarketData.SortOrder;
 
+            int firstdisplayed = dataGridViewMarketData.FirstDisplayedScrollingRowIndex;
+            string commodity = (dataGridViewMarketData.CurrentRow != null) ? (string)dataGridViewMarketData.CurrentRow.Cells[1].Value : null;
+            int currentoffset = (dataGridViewMarketData.CurrentRow != null) ? dataGridViewMarketData.CurrentRow.Index - firstdisplayed : 0;
+            
             dataGridViewMarketData.Rows.Clear();
             labelLocation.Text = "No Data";
             toolTip.SetToolTip(labelLocation, null);
@@ -197,6 +204,21 @@ namespace EDDiscovery.UserControls
 
             dataGridViewMarketData.Sort(sortcol, (sortorder == SortOrder.Descending) ? ListSortDirection.Descending : ListSortDirection.Ascending);
             dataGridViewMarketData.Columns[sortcol.Index].HeaderCell.SortGlyphDirection = sortorder;
+
+            if ( commodity != null )
+            {
+                foreach( DataGridViewRow rw in dataGridViewMarketData.Rows)
+                {
+                    string v = (string)rw.Cells[1].Value;
+                    if ( v.Equals(commodity))           // Find the commodity, and set it to the same relative position as before.
+                    {
+                        dataGridViewMarketData.CurrentCell = dataGridViewMarketData.Rows[rw.Index].Cells[1];
+                        dataGridViewMarketData.FirstDisplayedScrollingRowIndex = Math.Max(rw.Index - currentoffset,0);
+                        break;
+                    }
+                }
+
+            }
         }
 
         private void FillComboBoxes(HistoryList hl)
