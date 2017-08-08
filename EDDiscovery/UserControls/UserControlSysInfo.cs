@@ -29,7 +29,7 @@ using EliteDangerousCore.EDSM;
 
 namespace EDDiscovery.UserControls
 {
-    public partial class UserControlSysInfo: UserControlCommonBase
+    public partial class UserControlSysInfo : UserControlCommonBase
     {
         public bool IsNotesShowing { get { return richTextBoxNote.Visible; } }
 
@@ -38,7 +38,7 @@ namespace EDDiscovery.UserControls
 
         private int displaynumber;
         private string DbSelection { get { return ("SystemInformation") + ((displaynumber > 0) ? displaynumber.ToString() : "") + "Sel"; } }
-        private string DbOSave { get { return "SystemInformation" + ((displaynumber > 0) ? displaynumber.ToString() :"" ) + "Order"; } }
+        private string DbOSave { get { return "SystemInformation" + ((displaynumber > 0) ? displaynumber.ToString() : "") + "Order"; } }
 
         const int BitSelSystem = 0;
         const int BitSelEDSM = 1;
@@ -53,14 +53,19 @@ namespace EDDiscovery.UserControls
         const int BitSelFuel = 10;
         const int BitSelCargo = 11;
         const int BitSelMats = 12;
-        const int BitSelGameMode = 13;
-        const int BitSelTravel = 14;
+        const int BitSelData = 13;
+        const int BitSelGameMode = 14;
+        const int BitSelTravel = 15;
 
-        const int BitSelTotal = 15;
+        int[] SmallItems = new int[] {BitSelFuel,BitSelCargo,BitSelVisits, BitSelMats, BitSelData };
+
+        const int BitSelTotal = 16;
         const int Positions = BitSelTotal * 2;      // two columns of positions, one at 0, one at +300 pixels ish, 
         const int BitSelEDSMButtonsNextLine = 24;
         const int BitSelSkinny = 25;
         const int BitSelDefault = ((1<<BitSelTotal)-1)+(1<<BitSelEDSMButtonsNextLine);
+
+        const int HorzPositions = 4;
 
         const int hspacing = 8;
 
@@ -91,7 +96,7 @@ namespace EDDiscovery.UserControls
             toolstriplist = new ToolStripMenuItem[] { toolStripSystem , toolStripEDSM , toolStripVisits, toolStripBody,
                                                         toolStripPosition, toolStripDistanceFrom,
                                                         toolStripSystemState, toolStripNotes, toolStripTarget,
-                                                        toolStripShip, toolStripFuel , toolStripCargo,  toolStripMaterialAndDataCount,
+                                                        toolStripShip, toolStripFuel , toolStripCargo, toolStripMaterialCounts,  toolStripDataCount,
                                                         toolStripGameMode,toolStripTravel,  };
 
             Selection = SQLiteDBClass.GetSettingInt(DbSelection, BitSelDefault);
@@ -378,9 +383,13 @@ namespace EDDiscovery.UserControls
         {
             ToggleSelection(sender, BitSelCargo);
         }
-        private void toolStripMaterialAndDataCount_Click(object sender, EventArgs e)
+        private void toolStripMaterialCount_Click(object sender, EventArgs e)
         {
             ToggleSelection(sender, BitSelMats);
+        }
+        private void toolStripDataCount_Click(object sender, EventArgs e)
+        {
+            ToggleSelection(sender, BitSelData);
         }
         private void toolStripShip_Click(object sender, EventArgs e)
         {
@@ -427,10 +436,10 @@ namespace EDDiscovery.UserControls
             toolStripEDSMDownLine.Checked = selEDSMonNextLine;
             toolStripSkinny.Checked = (Selection & (1 << BitSelSkinny)) != 0;
 
-            int data1pos = textBoxSystem.Left - labelSysName.Left;      // basing it on actual pos allow the auto font scale to work
-            int lab2pos = labelSolDist.Left - labelHomeDist.Left;
-            int data2pos = textBoxSolDist.Left - labelHomeDist.Left;
-            int col2pos = (textBoxSolDist.Right + hspacing);
+            int data1pos = textBoxHomeDist.Left - labelHomeDist.Left;      // basing it on actual pos allow the auto font scale to work
+            int lab2pos = textBoxHomeDist.Right + 4 - labelHomeDist.Left;
+            int data2pos = lab2pos + data1pos;
+            int col2pos = lab2pos;
 
             int maxvert = 0;
 
@@ -450,7 +459,7 @@ namespace EDDiscovery.UserControls
 
                     if (ison)
                     {
-                        Point labpos = new Point(3 + (i % 2) * col2pos , ver);
+                        Point labpos = new Point(3 + (i % HorzPositions) * (col2pos) , ver);
                         Point datapos = new Point(labpos.X + data1pos, labpos.Y);
                         Point labpos2 = new Point(labpos.X + lab2pos, labpos.Y);
                         Point datapos2 = new Point(labpos.X + data2pos, labpos.Y);
@@ -541,8 +550,11 @@ namespace EDDiscovery.UserControls
                                 break;
 
                             case BitSelMats:
+                                this.SetPos(ref labpos, labelMaterials, datapos, textBoxMaterials, vspacing, i);
+                                break;
+
+                            case BitSelData:
                                 this.SetPos(ref labpos, labelData, datapos, textBoxData, vspacing, i);
-                                OffsetPos(labpos2, labelMaterials, datapos2, textBoxMaterials, i);
                                 break;
 
                             case BitSelShipInfo:
@@ -565,7 +577,7 @@ namespace EDDiscovery.UserControls
                     }
                 }
 
-                if ((i % 2) != 0)
+                if ((i % HorzPositions) == HorzPositions-1)
                     ver = maxvert;
             }
 
@@ -582,13 +594,15 @@ namespace EDDiscovery.UserControls
         {
             Selection = BitSelDefault;
             Order = new List<int>();
-            for (int i = 0; i < BitSelTotal*2; i++)          // reset
-                Order.Add(((i%2)==0)?(i/2) : -1);       // fill with 0,-1,1,-3,2,-5 etc aligning them all down the left.
+            for (int i = 0; i < BitSelTotal* HorzPositions; i++)          // reset
+                Order.Add(((i% HorzPositions) ==0)?(i/ HorzPositions) : -1);       // fill with 0,-1,1,-3,2,-5 etc aligning them all down the left.
 
-            Order[BitSelFuel * 2 + 1] = BitSelCargo;
-            Order[BitSelFuel * 2 + 2] = -1;
+            Order[BitSelFuel * HorzPositions + 1] = BitSelCargo;
+            Order[BitSelCargo * HorzPositions] = -1;
+            Order[BitSelMats * HorzPositions + 1] = BitSelData;
+            Order[BitSelData * HorzPositions] = -1;
 
-            System.Diagnostics.Debug.WriteLine("Reset " + String.Join(",", Order));
+            CompressOrder();
         }
 
         void SetPos(ref Point lp, Label lab, Point tp, ExtendedControls.TextBoxBorder box, int vspacing , int i )
@@ -697,53 +711,76 @@ namespace EDDiscovery.UserControls
             {
                 if (inmovedrag)
                 {
+                    int col2pos = (textBoxSolDist.Right + hspacing);
+
                     int movetoy = fromy + e.Y;
                     int xpos = this.PointToClient(Cursor.Position).X;
-                    int movetoorder = FindOrder(movetoy) & ~1;          // ignore the 0/1 bit, just the line we want
-                    if (xpos > 300 )
-                        movetoorder++;
-                    bool right = (movetoorder % 2) != 0;
+                    int linestartorder = FindOrder(movetoy) & ~1;          // ignore the 0/1 bit, just the line we want
+                    int column = Math.Min(xpos / (col2pos / 2), HorzPositions-1);
+                    int movetoorder = linestartorder + column;
 
                     if ( movetoorder>=Order.Count)  // if beyond order, insert a new pair
                     {
-                        Order.Add(-1);
-                        Order.Add(-1);
+                        for (int i = 0; i < HorzPositions; i++)
+                            Order.Add(-1);
                         System.Diagnostics.Debug.Assert(movetoorder < Order.Count);
                     }
 
                     System.Diagnostics.Debug.WriteLine("--");
                     System.Diagnostics.Debug.WriteLine("Move " + fromorder + "(" + Order[fromorder] + ") to " + movetoorder + "(" + Order[movetoorder] + ") Released from Y " + fromy + " to " + xpos + "," + movetoy);
-                    
-                    if (Order[movetoorder] >= 0 )      // occupied
+
+                    bool oneleftisnotshort = column > 0 && Order[movetoorder - 1] >= 0 && Array.IndexOf(SmallItems, Order[movetoorder - 1]) == -1;
+                    if (Order[movetoorder] >= 0 || oneleftisnotshort )      // occupied
                     {
-                        int line = (movetoorder / 2) * 2;       // shove two in from of move
-                        Order.Insert(line, -1);
-                        Order.Insert(line, -1);
+                        int line = (movetoorder / HorzPositions) * HorzPositions;       // shove two in from of move
+                        for (int i = 0; i < HorzPositions; i++)
+                            Order.Insert(line, -1);
                         if ( line<fromorder)            // adjust from down if line is in front of it
-                            fromorder += 2;
-                        System.Diagnostics.Debug.WriteLine("Insert, " + fromorder + "->" + movetoorder + " " + String.Join(",", Order));
+                            fromorder += HorzPositions;
+                        System.Diagnostics.Debug.WriteLine("Insert, " + fromorder + "->" + movetoorder );
                     }
 
                     Order[movetoorder] = Order[fromorder];     // now free, insert here
                     Order[fromorder] = -1;      // clear old
 
-                    System.Diagnostics.Debug.WriteLine("Before removal of empty lines " + String.Join(",", Order));
+                    CompressOrder();
 
-                    for (int i = 0; i < Order.Count; i += 2)        // now clean out empty rows
-                    {   
-                        if (Order[i] < 0 && Order[i + 1] < 0)  // if line empty..
-                        {
-                            Order.RemoveRange(i, 2);
-                            System.Diagnostics.Debug.WriteLine("Line " + i + " removed, now " + String.Join(",", Order));
-                        }
-                    }
-
-                    System.Diagnostics.Debug.WriteLine("Now " + String.Join(",", Order));
                     UpdateViewOnSelection();
                     Cursor.Current = Cursors.Default;
                 }
 
                 fromorder = -1;
+            }
+        }
+
+        private void CompressOrder()
+        {
+            //DumpOrder("Before removal");
+
+            for (int i = 0; i < Order.Count; i += HorzPositions)        // now clean out empty rows
+            {
+                int empty = 0;
+                for (; empty < HorzPositions && Order[i + empty] < 0; empty++)
+                    ;
+
+                if (empty == HorzPositions)
+                {
+                    Order.RemoveRange(i, HorzPositions);
+                    System.Diagnostics.Debug.WriteLine("Line " + i + " removed, now " + String.Join(",", Order));
+                }
+            }
+
+            //DumpOrder("After removal");
+        }
+
+        private void DumpOrder(string s)
+        {
+            System.Diagnostics.Debug.WriteLine("--- " + s);
+            for (int i = 0; i < Order.Count; i++)
+            {
+                System.Diagnostics.Debug.Write(string.Format("{0,5} ", Order[i]));
+                if ((i % HorzPositions) == HorzPositions - 1)
+                    System.Diagnostics.Debug.WriteLine("");
             }
         }
 
@@ -830,5 +867,9 @@ namespace EDDiscovery.UserControls
 
         #endregion
 
+        private void textBoxAllegiance_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }
