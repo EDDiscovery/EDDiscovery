@@ -934,9 +934,48 @@ namespace EliteDangerousCore.EDSM
             return response.Body;
         }
 
+        static private ShipInformation LastShipInfo = null;     // send with some caching
+        static private long LastEDSMCredits = -1;
+        static private long LastShipID = -1;
+        static JournalProgress LastProgress = null;
+        static JournalRank LastRank = null;
+        static Object LockShipInfo = new object();
 
+        public void SendShipInfo(ShipInformation si, int cargo, ShipInformation sicurrent, long cash, long loan, 
+                                    JournalProgress progress, JournalRank rank  // both may be null
+                                )
+        {
+            lock (LockShipInfo) // lets not double send in different threads.
+            {
+                if (!si.Equals(LastShipInfo))   // if we are sending new ship info..
+                {
+                    System.Diagnostics.Debug.WriteLine("Update EDSM with ship info" + si.ID + " " + si.ShipType + " " + cargo);
+                    CommanderUpdateShip(si.ID, si.ShipType, si, cargo);
+                    LastShipInfo = si;
+                }
+
+                if (LastShipID != sicurrent.ID) // if we have a new current ship
+                {
+                    System.Diagnostics.Debug.WriteLine("Update EDSM with current ship" + sicurrent.ID);
+                    CommanderSetCurrentShip(sicurrent.ID);
+                    LastShipID = sicurrent.ID;
+                }
+
+                if (LastEDSMCredits != cash)    // if our cash has changed..
+                {
+                    System.Diagnostics.Debug.WriteLine("Update EDSM with credits" + cash);
+                    SetCredits(cash, loan);
+                    LastEDSMCredits = cash;
+                }
+
+                if ( progress != null && rank != null && (!Object.ReferenceEquals(progress,LastProgress) || !Object.ReferenceEquals(rank,LastRank)) )
+                {
+                    System.Diagnostics.Debug.WriteLine("Update EDSM with ranks");
+                    SetRanks((int)rank.Combat, progress.Combat, (int)rank.Trade, progress.Trade, (int)rank.Explore, progress.Explore, (int)rank.CQC, progress.CQC, (int)rank.Federation, progress.Federation, (int)rank.Empire, progress.Empire);
+                    LastProgress = progress;
+                    LastRank = rank;
+                }
+            }
+        }
     }
-
-
-
 }

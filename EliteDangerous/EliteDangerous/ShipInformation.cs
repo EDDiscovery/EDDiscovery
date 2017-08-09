@@ -23,7 +23,7 @@ using Newtonsoft.Json.Linq;
 
 namespace EliteDangerousCore
 {
-    [System.Diagnostics.DebuggerDisplay("{Ship} {Modules.Count}")]
+    [System.Diagnostics.DebuggerDisplay("{ID} {ShipType} {Modules.Count}")]
     public class ShipInformation
     {
         public int ID { get; private set; }                 // its ID.     ID's are moved to high range when sold
@@ -236,6 +236,7 @@ namespace EliteDangerousCore
                 if (fueltotal != 0)
                     sm.FuelCapacity = fueltotal;
 
+                System.Diagnostics.Debug.WriteLine(ship + " " + sm.FuelCapacity + " " + sm.FuelLevel);
                 return sm;
             }
 

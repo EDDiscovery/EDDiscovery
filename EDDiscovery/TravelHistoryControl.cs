@@ -212,10 +212,7 @@ namespace EDDiscovery
                         EDSMSync.SendTravelLog(he);
                 }
 
-                if (he.IsShipChange)
-                {
-                    hl.SendShipInfo(true);
-                }
+                hl.SendEDSMStatusInfo(he, true);
 
                 if (he.ISEDDNMessage && he.AgeOfEntry() < TimeSpan.FromDays(1.0))
                 {
@@ -254,6 +251,8 @@ namespace EDDiscovery
 
                 if (userControlTravelGrid.GetCurrentHistoryEntry != null)        // paranoia
                     _discoveryForm.ActionRun("onHistorySelection", "UserUIEvent", userControlTravelGrid.GetCurrentHistoryEntry);
+
+                // DEBUG ONLY.. useful for debugging this _discoveryForm.history.SendEDSMStatusInfo(currentsys, true);        // update if required..
             }
         }
 
