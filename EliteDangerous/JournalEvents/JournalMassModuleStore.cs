@@ -32,6 +32,7 @@ namespace EliteDangerousCore.JournalEvents
     {
         public JournalMassModuleStore(JObject evt) : base(evt, JournalTypeEnum.MassModuleStore)
         {
+            ShipFD = evt["Ship"].Str();
             Ship = JournalFieldNaming.GetBetterShipName(evt["Ship"].Str());
             ShipId = evt["ShipID"].Int();
             ModuleItems = evt["Items"]?.ToObject<ModuleItem[]>();
@@ -47,6 +48,7 @@ namespace EliteDangerousCore.JournalEvents
         }
 
         public string Ship { get; set; }
+        public string ShipFD { get; set; }
         public int ShipId { get; set; }
 
         public ModuleItem[] ModuleItems { get; set; }

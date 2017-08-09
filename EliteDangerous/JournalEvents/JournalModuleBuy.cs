@@ -40,6 +40,7 @@ namespace EliteDangerousCore.JournalEvents
             BuyItemLocalised = evt["BuyItem_Localised"].Str();
             BuyPrice = evt["BuyPrice"].Long();
 
+            ShipFD = evt["Ship"].Str();
             Ship = JournalFieldNaming.GetBetterShipName(evt["Ship"].Str());
             ShipId = evt["ShipID"].Int();
 
@@ -57,6 +58,7 @@ namespace EliteDangerousCore.JournalEvents
         public string SlotFD { get; set; }
 
         public string Ship { get; set; }
+        public string ShipFD { get; set; }
         public int ShipId { get; set; }
 
         public string BuyItem { get; set; }
