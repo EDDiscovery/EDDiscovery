@@ -70,7 +70,7 @@ namespace Conditions
                 values[s[i]] = s[i+1];
         }
 
-        public string this[string s] { get { return values[s]; } set { values[s] = value; } }
+        public string this[string s] { get { return values[s]; } set { values[s] = value; } }       // can be set NULL
 
         public int Count { get { return values.Count; } }
 
