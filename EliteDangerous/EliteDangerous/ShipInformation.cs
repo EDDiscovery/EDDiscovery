@@ -28,7 +28,7 @@ namespace EliteDangerousCore
     {
         public int ID { get; private set; }                 // its ID.     ID's are moved to high range when sold
         public bool Sold { get; set; }                      // if sold.
-        public string ShipType { get; private set; }        // ship type name, nice, fer-de-lance, etc.           can be null
+        public string ShipType { get; private set; }        // ship type name, nice, fer-de-lance, etc. can be null
         public string ShipFD { get; private set; }          // ship type name, fdname
         public string ShipUserName { get; private set; }    // ship name, may be empty or null
         public string ShipUserIdent { get; private set; }   // ship ident, may be empty or null

@@ -950,7 +950,7 @@ namespace EliteDangerousCore.EDSM
                 if (!si.Equals(LastShipInfo))   // if we are sending new ship info..
                 {
                     System.Diagnostics.Debug.WriteLine("Update EDSM with ship info" + si.ID + " " + si.ShipType + " " + cargo);
-                    CommanderUpdateShip(si.ID, si.ShipType, si, cargo);
+                    CommanderUpdateShip(si.ID, si.ShipType.Alt("Unknown"), si, cargo);
                     LastShipInfo = si;
                 }
 

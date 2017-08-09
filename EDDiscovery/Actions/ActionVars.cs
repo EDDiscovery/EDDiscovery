@@ -103,13 +103,13 @@ namespace EDDiscovery.Actions
 
             if (si != null)
             {
-                ship = si.ShipType;
+                ship = si.ShipType.Alt("Unknown");
                 id = si.ID.ToString(System.Globalization.CultureInfo.InvariantCulture);
-                name = si.ShipUserName;
-                ident = si.ShipUserIdent;
+                name = si.ShipUserName.Alt("");
+                ident = si.ShipUserIdent.Alt("");
                 sv = si.SubVehicle.ToString();
                 fullinfo = si.ShipFullInfo();
-                shortname = si.ShipShortName;
+                shortname = si.ShipShortName.Alt("Unknown");
                 fuel = si.FuelCapacity.ToString("0.0");
                 fuellevel = si.FuelLevel.ToString("0.0");
                 cargo = si.CargoCapacity().ToStringInvariant();
