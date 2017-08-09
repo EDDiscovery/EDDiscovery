@@ -423,6 +423,7 @@ namespace EDDiscovery.UserControls
             {
                 dataGridViewJournal.CurrentCell = dataGridViewJournal.Rows[rowno].Cells[JournalHistoryColumns.Event];
                 dataGridViewJournal.Rows[rowno].Selected = true;
+                FireChangeSelection();
             }
         }
 
