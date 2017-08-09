@@ -195,6 +195,7 @@ namespace EDDiscovery.UserControls
 
                 textBoxMaterials.Text = he.MaterialCommodity.MaterialsCount.ToStringInvariant();
                 textBoxData.Text = he.MaterialCommodity.DataCount.ToStringInvariant();
+                textBoxCredits.Text = he.Credits.ToString("N0");
 
                 if (he.ShipInformation != null)
                 {
