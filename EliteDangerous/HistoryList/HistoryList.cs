@@ -1294,134 +1294,50 @@ namespace EliteDangerousCore
             }
         }
 
-        static private DateTime LastEDSMAPiCommanderTime = DateTime.Now;
-        static private ShipInformation LastShipInfo = null;
-        static private long LastShipInfoTicks = -1;
-        static private long LastCreditTicks = -1;
-        static private long LastEDSMCredits = -1;
-        static private long LastShipID = -1;
-
-        public void SendShipInfo(bool async)
+        public void SendEDSMStatusInfo(HistoryEntry he, bool async)     // he points to ship info to send from..
         {
-            HistoryEntry shipinfohe = historylist.FindLast(he => he.ShipInformation != null && he.ShipInformation.SubVehicle == ShipInformation.SubVehicleType.None);
-            HistoryEntry loadload = historylist.FindLast(he => he.EntryType == JournalTypeEnum.LoadGame);
-
-            SendShipInfo(shipinfohe, cashledger.CashTotal, (loadload!=null) ? ((JournalLoadGame)loadload.journalEntry).Loan : 0 , async);
-        }
-
-        static private void SendShipInfo( HistoryEntry he, long cash , long loan ,bool async )
-        {
-            if ( he != null && he.Commander != null )
-            { 
-                string edsmname = he.Commander.Name;
-                if (!string.IsNullOrEmpty(he.Commander.EdsmName))
-                    edsmname = he.Commander.EdsmName;
-
-                EDSMClass edsm = new EDSMClass { apiKey = he.Commander.APIKey, commanderName = edsmname };
-
-                if (async)
-                {
-                    Task edsmtask = Task.Factory.StartNew(() =>
-                    {
-                        SendShipInfoToEDSM(edsm, he , cash , loan);
-                    });
-                }
-                else
-                {
-                    SendShipInfoToEDSM(edsm, he , cash , loan);   // either shipinfohe or loadgame may be missing
-                }
-            }
-        }
-
-
-        private static void SendShipInfoToEDSM(EDSMClass edsm, HistoryEntry shipinfohe , long cash , long loan)
-        {
-            long lastshipid = LastShipID;
-            ShipInformation lastshipinfo = LastShipInfo;
-            long lastshipinfoticks = LastShipInfoTicks;
-            long lastcreditticks = LastCreditTicks;
-
-            if (shipinfohe != null )
+            if (CommanderId >= 0)
             {
-                if (!shipinfohe.ShipInformation.Equals(LastShipInfo))
-                {
-                    ShipInformation shipinfo = shipinfohe.ShipInformation;
-                    List<MaterialCommodities> commod = shipinfohe.MaterialCommodity.Sort(true);
-                    int cargoqty = commod.Aggregate(0, (n, c) => n + c.count);
-
-                    if (shipinfohe.EventTimeUTC.Ticks > lastshipinfoticks && Interlocked.CompareExchange(ref LastShipInfoTicks, shipinfohe.EventTimeUTC.Ticks, lastshipinfoticks) == lastshipinfoticks)
-                    {
-                        edsm.CommanderUpdateShip(shipinfo.ID, shipinfo.ShipType, shipinfo, cargoqty);
-
-                        if (LastShipID != shipinfo.ID)
-                        {
-                            edsm.CommanderSetCurrentShip(shipinfohe.ShipId);
-                        }
-
-                        Interlocked.CompareExchange(ref LastShipID, shipinfo.ID, lastshipid);
-                        Interlocked.CompareExchange(ref LastShipInfo, shipinfo, lastshipinfo);
-                    }
-                }
-
-                if (LastEDSMCredits != cash)
-                {
-                    if (shipinfohe.EventTimeUTC.Ticks > lastcreditticks && Interlocked.CompareExchange(ref LastCreditTicks, shipinfohe.EventTimeUTC.Ticks, lastcreditticks) == lastcreditticks)
-                    {
-                        edsm.SetCredits(cash, loan);
-                        LastEDSMCredits = cash;
-                    }
-                }
-
-                if (shipinfohe.EventTimeUTC.Ticks > lastshipinfoticks && Interlocked.CompareExchange(ref LastShipInfoTicks, shipinfohe.EventTimeUTC.Ticks, lastshipinfoticks) == lastshipinfoticks)
-                {
-                    if (shipinfohe == null && LastShipID != shipinfohe.ShipId)
-                    {
-                        edsm.CommanderUpdateShip(shipinfohe.ShipId, shipinfohe.ShipInformation.ShipFD,shipinfohe.ShipInformation);
-                        edsm.CommanderSetCurrentShip(shipinfohe.ShipId);
-                        Interlocked.CompareExchange(ref LastShipID, shipinfohe.ShipId, lastshipid);
-                        Interlocked.CompareExchange(ref LastShipInfo, null, lastshipinfo);
-                    }
-                }
-            }
-        }
-
-        private void ProcessEDSMApiCommander()
-        {
-            try
-            {
-                if (this.CommanderId < 0)  // Only sync for real commander.
-                    return;
-
                 var commander = EDCommander.GetCommander(CommanderId);
 
                 string edsmname = commander.Name;
                 if (!string.IsNullOrEmpty(commander.EdsmName))
                     edsmname = commander.EdsmName;
 
-                // check if we shall sync commander info to EDSM
                 if (!commander.SyncToEdsm || string.IsNullOrEmpty(commander.APIKey) || string.IsNullOrEmpty(edsmname))
                     return;
 
+                EDSMClass edsm = new EDSMClass { apiKey = commander.APIKey, commanderName = edsmname };
+
+                // find last ship info currently
+                HistoryEntry lastshipinfocurrenthe = GetLastHistoryEntry(x => x.ShipInformation != null && x.ShipInformation.SubVehicle == ShipInformation.SubVehicleType.None);
+
+                // based on he position, find one before it with ship info that is a normal si not a srv
+                HistoryEntry lastshipinfohe = GetLastHistoryEntry(x => x.ShipInformation != null && x.ShipInformation.SubVehicle == ShipInformation.SubVehicleType.None, he);
+
+                long loan = 0;
+
+                if ( lastshipinfohe != null)       // we have a ship info
+                {
+                    // and based on that position, find a last load game.  May be null
+                    HistoryEntry lastloadgamehe = GetLastHistoryEntry(x => x.EntryType == JournalTypeEnum.LoadGame, lastshipinfohe);
+                    loan = (lastloadgamehe != null) ? ((JournalLoadGame)lastloadgamehe.journalEntry).Loan : 0;
+                }
+
                 JournalProgress progress = historylist.FindLast(x => x.EntryType == JournalTypeEnum.Progress).journalEntry as JournalProgress;
                 JournalRank rank = historylist.FindLast(x => x.EntryType == JournalTypeEnum.Rank).journalEntry as JournalRank;
-                //= evt.journalEntry as JournalProgress;
 
-                if (progress == null || rank == null)
-                    return;
-
-                EDSMClass edsm = new EDSMClass();
-
-                edsm.apiKey = commander.APIKey;
-                edsm.commanderName = edsmname;
-
-                if (progress.EventTimeUTC != LastEDSMAPiCommanderTime) // Different from last sync with EDSM
+                if (async)
                 {
-                    edsm.SetRanks((int)rank.Combat, progress.Combat, (int)rank.Trade, progress.Trade, (int)rank.Explore, progress.Explore, (int)rank.CQC, progress.CQC, (int)rank.Federation, progress.Federation, (int)rank.Empire, progress.Empire);
-                    LastEDSMAPiCommanderTime = progress.EventTimeUTC;
+                    Task edsmtask = Task.Factory.StartNew(() =>
+                    {
+                        edsm.SendShipInfo(lastshipinfohe.ShipInformation, lastshipinfohe.MaterialCommodity.CargoCount, lastshipinfocurrenthe.ShipInformation, cashledger.CashTotal, loan, progress, rank);
+                    });
                 }
-            }
-            catch
-            {
+                else
+                {
+                    edsm.SendShipInfo(lastshipinfohe.ShipInformation, lastshipinfohe.MaterialCommodity.CargoCount, lastshipinfocurrenthe.ShipInformation, cashledger.CashTotal, loan, progress, rank);
+                }
             }
         }
 
@@ -1499,9 +1415,7 @@ namespace EliteDangerousCore
 
             hist.ProcessUserHistoryListEntries(h => h.ToList());      // here, we update the DBs in HistoryEntry and any global DBs in historylist
 
-            hist.ProcessEDSMApiCommander();
-
-            hist.SendShipInfo(false);   // send synchronous
+            hist.SendEDSMStatusInfo(hist.GetLast, true);
 
             return hist;
         }
