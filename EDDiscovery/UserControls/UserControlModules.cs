@@ -91,7 +91,7 @@ namespace EDDiscovery.UserControls
             comboBoxShips.Items.Clear();
             comboBoxShips.Items.Add("Travel History Entry");
             comboBoxShips.Items.Add("Stored Modules");
-            foreach ( int id in shm.Ships.Keys)
+            foreach ( string id in shm.Ships.Keys)
             {
                 ShipInformation sm = shm.Ships[id];
                 comboBoxShips.Items.Add(sm.ShipShortName);

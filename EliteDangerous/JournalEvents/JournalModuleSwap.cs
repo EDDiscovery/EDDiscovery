@@ -46,6 +46,7 @@ namespace EliteDangerousCore.JournalEvents
                 ToItem = ToItemFD = "";
             ToItemLocalised = evt["ToItem_Localised"].Str();        // if ToItem is null or not there, this won't be
 
+            ShipFD = evt["Ship"].Str();
             Ship = JournalFieldNaming.GetBetterShipName(evt["Ship"].Str());
             ShipId = evt["ShipID"].Int();
 
@@ -61,6 +62,7 @@ namespace EliteDangerousCore.JournalEvents
         public string ToItemFD { get; set; }
         public string ToItemLocalised { get; set; }
         public string Ship { get; set; }
+        public string ShipFD { get; set; }
         public int ShipId { get; set; }
 
         public override System.Drawing.Bitmap Icon { get { return EliteDangerous.Properties.Resources.moduleswap; } }
