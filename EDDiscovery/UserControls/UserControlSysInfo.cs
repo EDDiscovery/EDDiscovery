@@ -195,7 +195,6 @@ namespace EDDiscovery.UserControls
 
                 textBoxMaterials.Text = he.MaterialCommodity.MaterialsCount.ToStringInvariant();
                 textBoxData.Text = he.MaterialCommodity.DataCount.ToStringInvariant();
-                textBoxCredits.Text = he.Credits.ToStringInvariant();
 
                 if (he.ShipInformation != null)
                 {
@@ -442,8 +441,8 @@ namespace EDDiscovery.UserControls
             toolStripEDSMDownLine.Checked = selEDSMonNextLine;
             toolStripSkinny.Checked = (Selection & (1 << BitSelSkinny)) != 0;
 
-            int data1pos = textBoxHomeDist.Left - labelHomeDist.Left;      // basing it on actual pos allow the auto font scale to work
-            int lab2pos = textBoxHomeDist.Right + 4 - labelHomeDist.Left;
+            int data1pos = textBoxCredits.Left - labelCredits.Left;      // basing it on actual pos allow the auto font scale to work
+            int lab2pos = textBoxCredits.Right + 4 - labelCredits.Left;
             int data2pos = lab2pos + data1pos;
             int col2pos = lab2pos;
 
@@ -732,8 +731,7 @@ namespace EDDiscovery.UserControls
                     int fromrow = fromorder / HorzPositions;
                     int fromcol = fromorder % HorzPositions;
 
-
-                    int col2pos = textBoxHomeDist.Right + 4 - labelHomeDist.Left;
+                    int col2pos = textBoxCredits.Right + 4 - labelCredits.Left;
 
                     int movetoy = fromy + e.Y;
                     int torow = BaseUtils.LineStore.FindRow(Lines,movetoy);       // may be -1 if can't find
