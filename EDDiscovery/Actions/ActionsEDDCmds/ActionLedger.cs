@@ -80,7 +80,7 @@ namespace EDDiscovery.Actions
                         return true;
                     }
 
-                    Ledger ml = (ap.actioncontroller as ActionController).HistoryList.materialcommodititiesledger;
+                    Ledger ml = (ap.actioncontroller as ActionController).HistoryList.cashledger;
                     Ledger.Transaction tx = ml.Transactions.Find(x => x.jid == jid);// try and find it in the ledger
                     int jidindex = (ap.actioncontroller as ActionController).HistoryList.EntryOrder.FindIndex(x => x.Journalid == jid);    // find it in the journal
 

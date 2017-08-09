@@ -35,6 +35,7 @@ namespace EliteDangerousCore.JournalEvents
             Slot = JournalFieldNaming.GetBetterSlotName(evt["Slot"].Str());
             SlotFD = JournalFieldNaming.NormaliseFDSlotName(evt["Slot"].Str());
 
+            ShipFD = evt["Ship"].Str();
             Ship = JournalFieldNaming.GetBetterShipName(evt["Ship"].Str());
             ShipId = evt["ShipID"].Int();
 
@@ -52,6 +53,7 @@ namespace EliteDangerousCore.JournalEvents
         public string Slot { get; set; }
         public string SlotFD { get; set; }
         public string Ship { get; set; }
+        public string ShipFD { get; set; }
         public int ShipId { get; set; }
         public string RetrievedItem { get; set; }
         public string RetrievedItemFD { get; set; }

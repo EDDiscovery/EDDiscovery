@@ -299,6 +299,7 @@ namespace EDDiscovery.UserControls
             {
                 dataGridViewTravel.CurrentCell = dataGridViewTravel.Rows[rowno].Cells[TravelHistoryColumns.Information];
                 dataGridViewTravel.Rows[rowno].Selected = true;
+                FireChangeSelection();
             }
         }
 

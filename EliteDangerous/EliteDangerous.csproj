@@ -122,6 +122,7 @@
     <Compile Include="EliteDangerous\ShipInformation.cs" />
     <Compile Include="EliteDangerous\StarScan.cs" />
     <Compile Include="EliteDangerous\SystemClass.cs" />
+    <Compile Include="HistoryList\HistoryEntry.cs" />
     <Compile Include="HistoryList\HistoryList.cs" />
     <Compile Include="JournalEvents\JournalApproachSettlement.cs" />
     <Compile Include="JournalEvents\JournalBounty.cs" />

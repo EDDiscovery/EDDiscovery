@@ -23,12 +23,12 @@ using Newtonsoft.Json.Linq;
 
 namespace EliteDangerousCore
 {
-    [System.Diagnostics.DebuggerDisplay("{Ship} {Modules.Count}")]
+    [System.Diagnostics.DebuggerDisplay("{ID} {ShipType} {Modules.Count}")]
     public class ShipInformation
     {
         public int ID { get; private set; }                 // its ID.     ID's are moved to high range when sold
         public bool Sold { get; set; }                      // if sold.
-        public string ShipType { get; private set; }        // ship type name, nice, fer-de-lance, etc.           can be null
+        public string ShipType { get; private set; }        // ship type name, nice, fer-de-lance, etc. can be null
         public string ShipFD { get; private set; }          // ship type name, fdname
         public string ShipUserName { get; private set; }    // ship name, may be empty or null
         public string ShipUserIdent { get; private set; }   // ship ident, may be empty or null
@@ -236,6 +236,7 @@ namespace EliteDangerousCore
                 if (fueltotal != 0)
                     sm.FuelCapacity = fueltotal;
 
+                //System.Diagnostics.Debug.WriteLine(ship + " " + sm.FuelCapacity + " " + sm.FuelLevel);
                 return sm;
             }
 
@@ -488,15 +489,18 @@ namespace EliteDangerousCore
     [System.Diagnostics.DebuggerDisplay("{currentid} ships {Ships.Count}")]
     public class ShipInformationList
     {
-        public Dictionary<int, ShipInformation> Ships { get; private set; }         // by shipid
+        public Dictionary<string, ShipInformation> Ships { get; private set; }         // by shipid
 
         public ModulesInStore StoredModules { get; private set; }                   // stored modules
 
         private Dictionary<string, string> itemlocalisation;
 
-        private int currentid;
-        public bool HaveCurrentShip { get { return currentid >= 0; } }
+        private string currentid;
+        public bool HaveCurrentShip { get { return currentid!=null; } }
         public ShipInformation CurrentShip { get { return (HaveCurrentShip) ? Ships[currentid] : null; } }
+
+        // IDs have been repeated, need more than just that
+        private string Key(string fdname, int i) { return fdname.ToLower() + ":" + i.ToStringInvariant(); }
 
         public ShipInformation GetShipByShortName(string sn)
         {
@@ -516,15 +520,17 @@ namespace EliteDangerousCore
 
         public ShipInformationList()
         {
-            Ships = new Dictionary<int, ShipInformation>();
+            Ships = new Dictionary<string, ShipInformation>();
             StoredModules = new ModulesInStore();
             itemlocalisation = new Dictionary<string, string>();
-            currentid = -1;
+            currentid = null;
         }
 
         public void Loadout(int id, string ship, string shipfd, string name, string ident, List<JournalLoadout.ShipModule> modulelist)
         {
-            ShipInformation sm = EnsureShip(id);            // this either gets current ship or makes a new one.
+            string sid = Key(shipfd, id);
+
+            ShipInformation sm = EnsureShip(sid);            // this either gets current ship or makes a new one.
             sm.Set(ship, shipfd, name, ident);
             //System.Diagnostics.Debug.WriteLine("Loadout " + sm.ID + " " + sm.Ship);
 
@@ -540,7 +546,7 @@ namespace EliteDangerousCore
                     if (newsm == null)              // if not cloned
                     {
                         newsm = sm.ShallowClone();  // we need a clone, pointing to the same modules, but with a new dictionary
-                        Ships[id] = newsm;              // update our record of last module list for this ship
+                        Ships[sid] = newsm;              // update our record of last module list for this ship
                     }
 
                     newsm.Set(m);                   // update entry only.. rest will still point to same entries
@@ -550,14 +556,16 @@ namespace EliteDangerousCore
 
         public void LoadGame(int id, string ship, string shipfd, string name, string ident, double fuellevel, double fueltotal)        // LoadGame..
         {
-            ShipInformation sm = EnsureShip(id);            // this either gets current ship or makes a new one.
+            string sid = Key(shipfd, id);
 
-            Ships[id] = sm = sm.Set(ship, shipfd, name, ident, fuellevel, fueltotal);   // this makes a shallow copy if any data has changed..
+            ShipInformation sm = EnsureShip(sid);            // this either gets current ship or makes a new one.
+
+            Ships[sid] = sm = sm.Set(ship, shipfd, name, ident, fuellevel, fueltotal);   // this makes a shallow copy if any data has changed..
 
             //System.Diagnostics.Debug.WriteLine("Load Game " + sm.ID + " " + sm.Ship);
 
             if (!JournalFieldNaming.IsSRVOrFighter(ship))
-                currentid = sm.ID;
+                currentid = sid;
         }
 
         public void LaunchSRV()
@@ -609,34 +617,42 @@ namespace EliteDangerousCore
 
         public void ShipyardSwap(JournalShipyardSwap e)
         {
-            ShipInformation sm = EnsureShip(e.ShipId);            // this either gets current ship or makes a new one.
-            Ships[e.ShipId] = sm.Set(e.ShipType, e.ShipFD); // shallow copy if changed
-            currentid = e.ShipId;
+            string sid = Key(e.ShipFD, e.ShipId);
+
+            ShipInformation sm = EnsureShip(sid);            // this either gets current ship or makes a new one.
+            Ships[sid] = sm.Set(e.ShipType, e.ShipFD); // shallow copy if changed
+            currentid = sid;
         }
 
         public void ShipyardNew(JournalShipyardNew e)
         {
-            ShipInformation sm = EnsureShip(e.ShipId);            // this either gets current ship or makes a new one.
-            Ships[e.ShipId] = sm.Set(e.ShipType,e.ShipFD); // shallow copy if changed
-            currentid = e.ShipId;
+            string sid = Key(e.ShipFD, e.ShipId);
+
+            ShipInformation sm = EnsureShip(sid);            // this either gets current ship or makes a new one.
+            Ships[sid] = sm.Set(e.ShipType,e.ShipFD); // shallow copy if changed
+            currentid = sid;
         }
 
         public void SetUserShipName(JournalSetUserShipName e)
         {
-            ShipInformation sm = EnsureShip(e.ShipID);            // this either gets current ship or makes a new one.
-            Ships[e.ShipID] = sm.Set(e.Ship, e.ShipFD, e.ShipName, e.ShipIdent);
-            currentid = e.ShipID;           // must be in it to do this
+            string sid = Key(e.ShipFD, e.ShipID);
+
+            ShipInformation sm = EnsureShip(sid);            // this either gets current ship or makes a new one.
+            Ships[sid] = sm.Set(e.Ship, e.ShipFD, e.ShipName, e.ShipIdent);
+            currentid = sid;           // must be in it to do this
         }
 
         public void ModuleBuy(JournalModuleBuy e)
         {
-            ShipInformation sm = EnsureShip(e.ShipId);              // this either gets current ship or makes a new one.
+            string sid = Key(e.ShipFD, e.ShipId);
+
+            ShipInformation sm = EnsureShip(sid);              // this either gets current ship or makes a new one.
 
             if ( e.StoredItem.Length>0)                             // if we stored something
                 StoredModules = StoredModules.StoreModule(e.StoredItem, e.StoredItemLocalised);
 
                                                                     // if we sold it, who cares?
-            Ships[e.ShipId] = sm.AddModule(e.Slot,e.SlotFD, e.BuyItem,e.BuyItemFD, e.BuyItemLocalised);      // replace the slot with this
+            Ships[sid] = sm.AddModule(e.Slot,e.SlotFD, e.BuyItem,e.BuyItemFD, e.BuyItemLocalised);      // replace the slot with this
 
             itemlocalisation[e.BuyItem] = e.BuyItemLocalised;       // record any localisations
             if (e.SellItem.Length>0)
@@ -644,49 +660,57 @@ namespace EliteDangerousCore
             if (e.StoredItem.Length>0)
                 itemlocalisation[e.StoredItem] = e.StoredItemLocalised;
 
-            currentid = e.ShipId;           // must be in it to do this
+            currentid = sid;           // must be in it to do this
         }
 
         public void ModuleSell(JournalModuleSell e)
         {
-            ShipInformation sm = EnsureShip(e.ShipId);            // this either gets current ship or makes a new one.
-            Ships[e.ShipId] = sm.RemoveModule(e.Slot, e.SellItem);
+            string sid = Key(e.ShipFD, e.ShipId);
+
+            ShipInformation sm = EnsureShip(sid);            // this either gets current ship or makes a new one.
+            Ships[sid] = sm.RemoveModule(e.Slot, e.SellItem);
 
             if (e.SellItem.Length>0)
                 itemlocalisation[e.SellItem] = e.SellItemLocalised;
 
-            currentid = e.ShipId;           // must be in it to do this
+            currentid = sid;           // must be in it to do this
         }
 
         public void ModuleSwap(JournalModuleSwap e)
         {
-            ShipInformation sm = EnsureShip(e.ShipId);            // this either gets current ship or makes a new one.
-            Ships[e.ShipId] = sm.SwapModule(e.FromSlot, e.FromSlotFD, e.FromItem, e.FromItemFD, e.FromItemLocalised, 
+            string sid = Key(e.ShipFD, e.ShipId);
+
+            ShipInformation sm = EnsureShip(sid);            // this either gets current ship or makes a new one.
+            Ships[sid] = sm.SwapModule(e.FromSlot, e.FromSlotFD, e.FromItem, e.FromItemFD, e.FromItemLocalised, 
                                             e.ToSlot , e.ToSlotFD, e.ToItem , e.ToItemFD, e.ToItemLocalised);
-            currentid = e.ShipId;           // must be in it to do this
+            currentid = sid;           // must be in it to do this
         }
 
         public void ModuleStore(JournalModuleStore e)
         {
-            ShipInformation sm = EnsureShip(e.ShipId);            // this either gets current ship or makes a new one.
+            string sid = Key(e.ShipFD, e.ShipId);
+
+            ShipInformation sm = EnsureShip(sid);            // this either gets current ship or makes a new one.
 
             if (e.ReplacementItem.Length > 0)
-                Ships[e.ShipId] = sm.AddModule(e.Slot, e.SlotFD, e.ReplacementItem, e.ReplacementItemFD, e.ReplacementItemLocalised);
+                Ships[sid] = sm.AddModule(e.Slot, e.SlotFD, e.ReplacementItem, e.ReplacementItemFD, e.ReplacementItemLocalised);
             else
-                Ships[e.ShipId] = sm.RemoveModule(e.Slot, e.StoredItem);
+                Ships[sid] = sm.RemoveModule(e.Slot, e.StoredItem);
 
             StoredModules = StoredModules.StoreModule(e.StoredItem, e.StoredItemLocalised);
-            currentid = e.ShipId;           // must be in it to do this
+            currentid = sid;           // must be in it to do this
         }
 
         public void ModuleRetrieve(JournalModuleRetrieve e)
         {
-            ShipInformation sm = EnsureShip(e.ShipId);            // this either gets current ship or makes a new one.
+            string sid = Key(e.ShipFD, e.ShipId);
+
+            ShipInformation sm = EnsureShip(sid);            // this either gets current ship or makes a new one.
 
             if ( e.SwapOutItem.Length>0 )
                 StoredModules = StoredModules.StoreModule(e.SwapOutItem, e.SwapOutItemLocalised);
 
-            Ships[e.ShipId] = sm.AddModule(e.Slot, e.SlotFD, e.RetrievedItem, e.RetrievedItemFD, e.RetrievedItemLocalised);
+            Ships[sid] = sm.AddModule(e.Slot, e.SlotFD, e.RetrievedItem, e.RetrievedItemFD, e.RetrievedItemLocalised);
 
             StoredModules = StoredModules.RemoveModule(e.RetrievedItem);
         }
@@ -698,8 +722,10 @@ namespace EliteDangerousCore
 
         public void MassModuleStore(JournalMassModuleStore e)
         {
-            ShipInformation sm = EnsureShip(e.ShipId);            // this either gets current ship or makes a new one.
-            Ships[e.ShipId] = sm.RemoveModules(e.ModuleItems);
+            string sid = Key(e.ShipFD, e.ShipId);
+
+            ShipInformation sm = EnsureShip(sid);            // this either gets current ship or makes a new one.
+            Ships[sid] = sm.RemoveModules(e.ModuleItems);
             StoredModules = StoredModules.StoreModule(e.ModuleItems, itemlocalisation);
         }
 
@@ -744,7 +770,7 @@ namespace EliteDangerousCore
 
         #region Helpers
 
-        private ShipInformation EnsureShip(int id)      // ensure we have an ID of this type..
+        private ShipInformation EnsureShip(string id)      // ensure we have an ID of this type..
         {
             if (Ships.ContainsKey(id))
             {
@@ -753,11 +779,13 @@ namespace EliteDangerousCore
                     return sm;             
                 else
                 {
-                    Ships[newsoldid++] = sm;                      // okay, we place this information on 30000+  all Ids of this will now refer to new entry
+                    Ships[Key(sm.ShipFD,newsoldid++)] = sm;                      // okay, we place this information on 30000+  all Ids of this will now refer to new entry
                 }
             }
 
-            ShipInformation smn = new ShipInformation(id);
+            int i;
+            id.Substring(id.IndexOf(":") + 1).InvariantParse(out i);
+            ShipInformation smn = new ShipInformation(i);
             Ships[id] = smn;
             return smn;
         }
