@@ -70,6 +70,11 @@ namespace EDDiscovery.UserControls
             uctg.OnTravelSelectionChanged += OnChanged;
         }
 
+        public override void Display(HistoryEntry current, HistoryList history)  // initial call
+        {
+            OnChanged(current, history);
+        }
+
         #endregion
 
         #region Display
