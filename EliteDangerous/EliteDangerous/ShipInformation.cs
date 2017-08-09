@@ -236,7 +236,7 @@ namespace EliteDangerousCore
                 if (fueltotal != 0)
                     sm.FuelCapacity = fueltotal;
 
-                System.Diagnostics.Debug.WriteLine(ship + " " + sm.FuelCapacity + " " + sm.FuelLevel);
+                //System.Diagnostics.Debug.WriteLine(ship + " " + sm.FuelCapacity + " " + sm.FuelLevel);
                 return sm;
             }
 

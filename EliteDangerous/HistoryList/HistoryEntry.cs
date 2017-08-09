@@ -362,7 +362,7 @@ namespace EliteDangerousCore
 
                 if (he.StopMarker || he.StartMarker)
                 {
-                    Debug.WriteLine("Travelling stop at " + he.Indexno);
+                    //Debug.WriteLine("Travelling stop at " + he.Indexno);
                     he.travelling = false;
                     he.EventDetailedInfo += ((he.EventDetailedInfo.Length > 0) ? Environment.NewLine : "") + "Travelled " + he.travelled_distance.ToStringInvariant("0.0") + " LY"
                                         + ", " + he.travelled_jumps + " jumps"
@@ -389,7 +389,7 @@ namespace EliteDangerousCore
 
             if (he.StartMarker)
             {
-                Debug.WriteLine("Travelling start at " + he.Indexno);
+                //Debug.WriteLine("Travelling start at " + he.Indexno);
                 he.travelling = true;
             }
 
