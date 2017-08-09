@@ -88,7 +88,6 @@ namespace EDDiscovery.UserControls
 
         private void OnChanged(HistoryEntry he, HistoryList hl)
         {
-            System.Diagnostics.Debug.WriteLine("OnChanged");
             if (!Object.ReferenceEquals(he, last_he) )       // if last was null, or he has changed, we have a possible change..
             {
                 FillComboBoxes(hl);
@@ -100,11 +99,10 @@ namespace EDDiscovery.UserControls
                 last_he = he;
                 last_eddmd = new_last_eddmd;
 
-                System.Diagnostics.Debug.WriteLine("left {0} right {1} eddmchanged {2} cargo {3}", last_eddmd?.Indexno, last_he?.Indexno, eddmdchanged, cargochanged);
+                //System.Diagnostics.Debug.WriteLine("left {0} right {1} eddmchanged {2} cargo {3}", last_eddmd?.Indexno, last_he?.Indexno, eddmdchanged, cargochanged);
 
                 if (eddmd_left == null)    // if showing travel.. if not, no update due to this.  Need to keep the last_he/last_eddmd going for swapping back
                 {
-                    System.Diagnostics.Debug.WriteLine("Go");
                     if (eddmdchanged || cargochanged)        // if last_eddmd changed.. or cargo
                         Display();
                 }

@@ -146,7 +146,7 @@ namespace EDDiscovery.UserControls
         public override void ChangeCursorType(UserControlCursorType thc)     // a grid below changed its travel grid, update our history one
         {
             bool changedinuse = Object.ReferenceEquals(ucursor_inuse, ucursor_history);   // if we are using the history as the current tg
-            System.Diagnostics.Debug.WriteLine("Grid CTG " + ucursor_history.GetHashCode() + " IU " + ucursor_inuse.GetHashCode() + " New " + thc.GetHashCode());
+            //System.Diagnostics.Debug.WriteLine("Grid CTG " + ucursor_history.GetHashCode() + " IU " + ucursor_inuse.GetHashCode() + " New " + thc.GetHashCode());
             ucursor_history = thc;         // underlying one has changed. 
 
             if (changedinuse)   // inform the boys
@@ -175,7 +175,7 @@ namespace EDDiscovery.UserControls
             int numopenedinside = uccrlist.Count(x => x.GetType().Equals(uccb.GetType()));    // how many others are there?
 
             int dnum = 1050 + displaynumber * 100 + numopenedinside;
-            System.Diagnostics.Debug.WriteLine("  Create " + uccb.GetType().Name + " " + dnum + " Assign THC " + ucursor_inuse.GetHashCode() );
+            //System.Diagnostics.Debug.WriteLine("  Create " + uccb.GetType().Name + " " + dnum + " Assign THC " + ucursor_inuse.GetHashCode() );
 
             panelPlayfield.Controls.Add(uccr);
 
