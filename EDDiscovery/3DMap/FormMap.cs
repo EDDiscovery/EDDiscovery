@@ -2335,7 +2335,7 @@ namespace EDDiscovery
 
         private void LoadMapImages()
         {
-            string datapath = System.IO.Path.Combine(EDDConfig.Options.AppDataDirectory, "Maps");
+            string datapath = System.IO.Path.Combine(EDDOptions.Instance.AppDataDirectory, "Maps");
             if (System.IO.Directory.Exists(datapath))
             {
                 fgeimages = FGEImage.LoadImages(datapath);

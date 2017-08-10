@@ -302,7 +302,7 @@ namespace EDDiscovery.UserControls
 
         private void toolStripButtonSave_Click(object sender, EventArgs e)
         {
-            string explorepath = Path.Combine(EDDConfig.Options.AppDataDirectory, "Exploration");
+            string explorepath = Path.Combine(EDDOptions.Instance.AppDataDirectory, "Exploration");
             if (!Directory.Exists(explorepath))
                 Directory.CreateDirectory(explorepath);
 
@@ -333,7 +333,7 @@ namespace EDDiscovery.UserControls
 
         private void toolStripButtonLoad_Click(object sender, EventArgs e)
         {
-            string explorepath = Path.Combine(EDDConfig.Options.AppDataDirectory, "Exploration");
+            string explorepath = Path.Combine(EDDOptions.Instance.AppDataDirectory, "Exploration");
             if (!Directory.Exists(explorepath))
                 Directory.CreateDirectory(explorepath);
 
@@ -364,7 +364,7 @@ namespace EDDiscovery.UserControls
         private void toolStripButtonNew_Click(object sender, EventArgs e)
         {
             SaveFileDialog dlg = new SaveFileDialog();
-            string explorepath = Path.Combine(EDDConfig.Options.AppDataDirectory, "Exploration");
+            string explorepath = Path.Combine(EDDOptions.Instance.AppDataDirectory, "Exploration");
             if (!Directory.Exists(explorepath))
                 Directory.CreateDirectory(explorepath);
 

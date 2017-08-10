@@ -118,16 +118,16 @@ namespace EDDiscovery.Forms
 
         private void CheckState()
         {
-            downloadactfolder = System.IO.Path.Combine(EDDConfig.Options.AppDataDirectory, "temp\\act");
+            downloadactfolder = System.IO.Path.Combine(EDDOptions.Instance.AppDataDirectory, "temp\\act");
             if (!System.IO.Directory.Exists(downloadactfolder))
                 System.IO.Directory.CreateDirectory(downloadactfolder);
 
-            downloadflightfolder = System.IO.Path.Combine(EDDConfig.Options.AppDataDirectory, "temp\\flights");
+            downloadflightfolder = System.IO.Path.Combine(EDDOptions.Instance.AppDataDirectory, "temp\\flights");
             if (!System.IO.Directory.Exists(downloadflightfolder))
                 System.IO.Directory.CreateDirectory(downloadflightfolder);
 
 #if DEBUG
-            downloadactdebugfolder = System.IO.Path.Combine(EDDConfig.Options.AppDataDirectory, "temp\\Debug");
+            downloadactdebugfolder = System.IO.Path.Combine(EDDOptions.Instance.AppDataDirectory, "temp\\Debug");
             if (!System.IO.Directory.Exists(downloadactdebugfolder))
                 System.IO.Directory.CreateDirectory(downloadactdebugfolder);
 #endif
@@ -162,16 +162,16 @@ namespace EDDiscovery.Forms
             int[] edversion = System.Reflection.Assembly.GetExecutingAssembly().GetVersion();
             System.Diagnostics.Debug.Assert(edversion != null);
 
-            mgr.ReadLocalFiles(EDDConfig.Options.AppDataDirectory, "Actions", "*.act", "Action File");
+            mgr.ReadLocalFiles(EDDOptions.Instance.AppDataDirectory, "Actions", "*.act", "Action File");
 
             if (managedownloadmode)
             {
-                mgr.ReadLocalFiles(EDDConfig.Options.AppDataDirectory, "Flights", "*.vid", "Video File");
+                mgr.ReadLocalFiles(EDDOptions.Instance.AppDataDirectory, "Flights", "*.vid", "Video File");
 
-                mgr.ReadInstallFiles(downloadactfolder, EDDConfig.Options.AppDataDirectory, "*.act", edversion, "Action File");
-                mgr.ReadInstallFiles(downloadflightfolder, EDDConfig.Options.AppDataDirectory, "*.vid", edversion, "Video File");
+                mgr.ReadInstallFiles(downloadactfolder, EDDOptions.Instance.AppDataDirectory, "*.act", edversion, "Action File");
+                mgr.ReadInstallFiles(downloadflightfolder, EDDOptions.Instance.AppDataDirectory, "*.vid", edversion, "Video File");
 #if DEBUG
-                mgr.ReadInstallFiles(downloadactdebugfolder, EDDConfig.Options.AppDataDirectory, "*.act", edversion, "Action File");
+                mgr.ReadInstallFiles(downloadactdebugfolder, EDDOptions.Instance.AppDataDirectory, "*.act", edversion, "Action File");
 #endif
             }
 
@@ -362,7 +362,7 @@ namespace EDDiscovery.Forms
         {
             ExtendedControls.CheckBoxCustom cb = sender as ExtendedControls.CheckBoxCustom;
             Group g = cb.Tag as Group;
-            VersioningManager.SetEnableFlag(g.di, cb.Checked, EDDConfig.Options.AppDataDirectory);
+            VersioningManager.SetEnableFlag(g.di, cb.Checked, EDDOptions.Instance.AppDataDirectory);
             changelist[g.di.itemname] = cb.Checked ? "+" : "-";
         }
 
@@ -377,7 +377,7 @@ namespace EDDiscovery.Forms
                     return;
             }
 
-            if (mgr.InstallFiles(g.di, EDDConfig.Options.AppDataDirectory))
+            if (mgr.InstallFiles(g.di, EDDOptions.Instance.AppDataDirectory))
             {
                 changelist[g.di.itemname] = "+";
                 ExtendedControls.MessageBoxTheme.Show(this, "Add-on updated");
@@ -402,7 +402,7 @@ namespace EDDiscovery.Forms
 
             if (ExtendedControls.MessageBoxTheme.Show(this, "Do you really want to delete " + g.di.itemname, "Warning", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK)
             {
-                VersioningManager.DeleteInstall(g.di, EDDConfig.Options.AppDataDirectory);
+                VersioningManager.DeleteInstall(g.di, EDDOptions.Instance.AppDataDirectory);
                 ReadyToDisplay();
                 changelist[g.di.itemname] = "-";
             }

@@ -52,13 +52,13 @@ namespace EDDiscovery.Actions
             string id = paras[0].value;
 
             if (id.Equals("EDDAPPFOLDER", StringComparison.InvariantCultureIgnoreCase))
-                output = EDDConfig.Options.AppDataDirectory;
+                output = EDDOptions.Instance.AppDataDirectory;
             else if (id.Equals("EDDACTIONSFOLDER", StringComparison.InvariantCultureIgnoreCase))
-                output = Path.Combine(EDDConfig.Options.AppDataDirectory, "Actions");
+                output = Path.Combine(EDDOptions.Instance.AppDataDirectory, "Actions");
             else if (id.Equals("EDDVIDEOFOLDER", StringComparison.InvariantCultureIgnoreCase))
-                output = Path.Combine(EDDConfig.Options.AppDataDirectory, "Videos");
+                output = Path.Combine(EDDOptions.Instance.AppDataDirectory, "Videos");
             else if (id.Equals("EDDSOUNDFOLDER", StringComparison.InvariantCultureIgnoreCase))
-                output = Path.Combine(EDDConfig.Options.AppDataDirectory, "Sounds");
+                output = Path.Combine(EDDOptions.Instance.AppDataDirectory, "Sounds");
             else
                 return base.SystemPath(out output);
 
