@@ -148,7 +148,7 @@ namespace EDDiscovery
         {
             // ORDER IMPORTANT for right outer/inner splitter, otherwise windows fixes it 
 
-            if (!EDDConfig.Options.NoWindowReposition)
+            if (!EDDOptions.Instance.NoWindowReposition)
             {
                 try
                 {

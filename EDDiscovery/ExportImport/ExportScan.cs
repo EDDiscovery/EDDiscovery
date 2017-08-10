@@ -67,7 +67,7 @@ namespace EDDiscovery.Export
             }
             else
             {
-                string explorepath = Path.Combine(EDDConfig.Options.AppDataDirectory, "Exploration");
+                string explorepath = Path.Combine(EDDOptions.Instance.AppDataDirectory, "Exploration");
                 if (!Directory.Exists(explorepath))
                     Directory.CreateDirectory(explorepath);
 
