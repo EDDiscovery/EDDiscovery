@@ -283,7 +283,7 @@ namespace EDDiscovery._3DMap
             {
                 SaveFileDialog dlg = new SaveFileDialog();
 
-                dlg.InitialDirectory = Path.Combine(EDDConfig.Options.AppDataDirectory, "Flights");
+                dlg.InitialDirectory = Path.Combine(EDDOptions.Instance.AppDataDirectory, "Flights");
 
                 if (!Directory.Exists(dlg.InitialDirectory))
                 {
@@ -308,7 +308,7 @@ namespace EDDiscovery._3DMap
         {
             OpenFileDialog dlg = new OpenFileDialog();
 
-            dlg.InitialDirectory = Path.Combine(EDDConfig.Options.AppDataDirectory, "Flights");
+            dlg.InitialDirectory = Path.Combine(EDDOptions.Instance.AppDataDirectory, "Flights");
 
             if (!Directory.Exists(dlg.InitialDirectory))
             {
@@ -345,7 +345,7 @@ namespace EDDiscovery._3DMap
                 tsmi.Dispose();
             }
 
-            string flightdir =  Path.Combine(EDDConfig.Options.AppDataDirectory, "Flights");
+            string flightdir =  Path.Combine(EDDOptions.Instance.AppDataDirectory, "Flights");
             DirectoryInfo dirInfo = new DirectoryInfo(flightdir);
 
             if (dirInfo.Exists)
