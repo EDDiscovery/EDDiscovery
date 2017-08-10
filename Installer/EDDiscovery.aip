@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<DOCUMENT Type="Advanced Installer" CreateVersion="12.3.1" version="14.0.2" Modules="professional" RootPath="." Language="sv" Id="{E17E2BD0-5288-4C73-8857-5EBE36CF59E8}">
+<DOCUMENT Type="Advanced Installer" CreateVersion="12.3.1" version="14.2" Modules="professional" RootPath="." Language="sv" Id="{E17E2BD0-5288-4C73-8857-5EBE36CF59E8}">
   <COMPONENT cid="caphyon.advinst.msicomp.ProjectOptionsComponent">
     <ROW Name="HiddenItems" Value="MsiJavaComponent;MsiDriverPackagesComponent;UserAccountsComponent;ScheduledTasksComponent;SqlConnectionComponent;AutorunComponent;FirewallExceptionComponent;GameUxComponent;MsiDirectEditorComponent;SharePointSlnComponent;SilverlightSlnComponent;MultipleInstancesComponent;SccmComponent;ActSyncAppComponent;AppXAppDetailsComponent;AppXCapabilitiesComponent;AppXDependenciesComponent;AppXProductDetailsComponent;AppXVisualAssetsComponent;AppXAppDeclarationsComponent;AppXUriRulesComponent"/>
   </COMPONENT>
@@ -17,10 +17,10 @@
     <ROW Property="ARPURLUPDATEINFO" Value="http://eddiscovery.astronet.se/release/"/>
     <ROW Property="CTRLS" Value="2"/>
     <ROW Property="Manufacturer" Value="EDDiscovery"/>
-    <ROW Property="ProductCode" Value="1033:{280DA25C-0A0D-4E54-91F5-D73BCEABA46A} 1053:{274FCBDE-319F-49C8-9C02-344D69D39AF4} " Type="16"/>
+    <ROW Property="ProductCode" Value="1033:{9DA3D73A-CA84-4809-8AB5-5F081E2942E1} 1053:{DD94E1E0-C91D-4D90-B8F8-FDDC6C2E71D8} " Type="16"/>
     <ROW Property="ProductLanguage" Value="1033"/>
     <ROW Property="ProductName" Value="EDDiscovery"/>
-    <ROW Property="ProductVersion" Value="8.1.2" Type="32"/>
+    <ROW Property="ProductVersion" Value="8.2.0" Type="32"/>
     <ROW Property="SecureCustomProperties" Value="OLDPRODUCTS;AI_NEWERPRODUCTFOUND;UPGRADE_1;AI_SETUPEXEPATH;SETUPEXEDIR"/>
     <ROW Property="UpgradeCode" Value="{27EA2F84-C7C5-41E2-9C59-CC42CCDC9FEF}"/>
     <ROW Property="WindowsType9X" MultiBuildValue="AnyCPU_Debug:Windows 9x/ME" ValueLocId="-"/>
@@ -49,12 +49,19 @@
   <COMPONENT cid="caphyon.advinst.msicomp.MsiCompsComponent">
     <ROW Component="AI_ExePath" ComponentId="{109A35C7-F83F-4943-A79E-CFE792394CE4}" Directory_="APPDIR" Attributes="4" KeyPath="AI_ExePath"/>
     <ROW Component="AI_InstallLanguage" ComponentId="{F07C9C71-86CA-4FBD-870D-B68CB290510D}" Directory_="APPDIR" Attributes="260" KeyPath="AI_InstallLanguage" Options="1"/>
+    <ROW Component="ActionLanguage.dll" ComponentId="{282C679E-267C-4D95-A914-C124C8DBC60A}" Directory_="APPDIR" Attributes="0" KeyPath="ActionLanguage.dll"/>
     <ROW Component="Actions" ComponentId="{D8B1D85C-5FC3-4DAD-8112-62A5C2DE7CF6}" Directory_="Actions_Dir" Attributes="0"/>
+    <ROW Component="Audio.dll" ComponentId="{6AF8596E-C99A-4CC9-8193-686150A0176E}" Directory_="APPDIR" Attributes="0" KeyPath="Audio.dll"/>
     <ROW Component="CSCore.dll" ComponentId="{D8B173BA-81A1-436A-9B1A-72FE76408586}" Directory_="APPDIR" Attributes="0" KeyPath="CSCore.dll"/>
+    <ROW Component="Conditions.dll" ComponentId="{36F2DBB5-3F71-4973-A999-D255A66D8182}" Directory_="APPDIR" Attributes="0" KeyPath="Conditions.dll"/>
+    <ROW Component="DirectInput.dll" ComponentId="{1A449C90-023A-4B8D-BD54-E02337152501}" Directory_="APPDIR" Attributes="0" KeyPath="DirectInput.dll"/>
     <ROW Component="EDDiscovery" ComponentId="{461F3BC6-118F-4961-81C1-AE07702EC6C4}" Directory_="EDDiscovery_Dir" Attributes="0"/>
     <ROW Component="EDDiscovery.exe" ComponentId="{497BEB88-C9A8-4385-AE78-7EF3CD72795C}" Directory_="APPDIR" Attributes="0" KeyPath="EDDiscovery.exe"/>
     <ROW Component="EDDiscovery.exe.config" ComponentId="{674E78B1-0FF5-4922-8568-CDB41C0CC83C}" Directory_="APPDIR" Attributes="0" KeyPath="EDDiscovery.exe.config" Type="0"/>
     <ROW Component="EUROCAPS.TTF" ComponentId="{6BDDE9AC-722A-44A4-8A95-9D3D98C24D62}" Directory_="FontsFolder" Attributes="0" Type="0"/>
+    <ROW Component="EliteDangerous.dll" ComponentId="{29FDF6F6-BE47-47D1-8946-444524A36532}" Directory_="APPDIR" Attributes="0" KeyPath="EliteDangerous.dll"/>
+    <ROW Component="ExtendedControls.dll" ComponentId="{726FCAAF-0CAC-4414-8652-A647AF38EB5D}" Directory_="APPDIR" Attributes="0" KeyPath="ExtendedControls.dll"/>
+    <ROW Component="General.dll" ComponentId="{56D488F3-CCAE-41F5-831A-14B82FD7767F}" Directory_="APPDIR" Attributes="0" KeyPath="General.dll"/>
     <ROW Component="InstallLanguage" ComponentId="{E9F59FD4-B1B3-479F-858E-68E75683B873}" Directory_="APPDIR" Attributes="4" KeyPath="InstallLanguage" Options="1"/>
     <ROW Component="M67.json" ComponentId="{C770A861-605F-4B7A-B952-1155AFA91CFF}" Directory_="Exploration_Dir" Attributes="0" KeyPath="M67.json" Type="0"/>
     <ROW Component="Newtonsoft.Json.dll" ComponentId="{11EF4895-473E-435D-A749-C1CCC6462BF8}" Directory_="APPDIR" Attributes="0" KeyPath="Newtonsoft.Json.dll"/>
@@ -65,24 +72,30 @@
     <ROW Component="SQLite.Interop.dll_1" ComponentId="{672AE966-62A2-4C1B-8B99-A6154BEC2651}" Directory_="x64_Dir" Attributes="256" Condition="VersionNT64" KeyPath="SQLite.Interop.dll_1"/>
     <ROW Component="SharpDX.DirectInput.dll" ComponentId="{651ADDC1-B79F-42A6-9CC1-40EA66739058}" Directory_="APPDIR" Attributes="0" KeyPath="SharpDX.DirectInput.dll"/>
     <ROW Component="SharpDX.dll" ComponentId="{AEE0F320-3566-4B7E-AFE0-FF04F7639192}" Directory_="APPDIR" Attributes="0" KeyPath="SharpDX.dll"/>
-    <ROW Component="System.Data.SQLite.Linq.dll" ComponentId="{C4D477EF-2A57-4F1B-A734-51B99F52282B}" Directory_="APPDIR" Attributes="0" KeyPath="System.Data.SQLite.Linq.dll"/>
     <ROW Component="System.Data.SQLite.dll" ComponentId="{E6F4A3E8-055F-4C9B-93C0-017F0DDC75C5}" Directory_="APPDIR" Attributes="0" KeyPath="System.Data.SQLite.dll"/>
     <ROW Component="fround.js" ComponentId="{B5869344-88FF-40C8-9124-682DF7CBD7F5}" Directory_="APPDIR" Attributes="0" KeyPath="System.Data.SQLite.xml" Type="0"/>
     <ROW Component="msvcp100.dll" ComponentId="{D8CFBA57-F84C-4822-8DA0-96420E2DD65B}" Directory_="Microsoft.VC100.CRT_Dir" Attributes="0" KeyPath="msvcp100.dll"/>
     <ROW Component="msvcr100.dll" ComponentId="{AC70668F-10E4-4828-B09C-A16494936DAC}" Directory_="Microsoft.VC100.CRT_Dir" Attributes="0" KeyPath="msvcr100.dll"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiFeatsComponent">
-    <ROW Feature="AI32BitFiles" Title="32-bit" Description="32-bit Executables and Libraries" Display="5" Level="1" Directory_="APPDIR" Attributes="0" Components="AI_ExePath AI_InstallLanguage InstallLanguage Newtonsoft.Json.dll OpenTK.GLControl.dll OpenTK.dll SQLite.Interop.dll System.Data.SQLite.Linq.dll System.Data.SQLite.dll msvcp100.dll msvcr100.dll"/>
+    <ROW Feature="AI32BitFiles" Title="32-bit" Description="32-bit Executables and Libraries" Display="5" Level="1" Directory_="APPDIR" Attributes="0" Components="AI_ExePath AI_InstallLanguage InstallLanguage Newtonsoft.Json.dll OpenTK.GLControl.dll OpenTK.dll SQLite.Interop.dll System.Data.SQLite.dll msvcp100.dll msvcr100.dll"/>
     <ROW Feature="AI64BitFiles" Title="64-bit" Description="64-bit Executables and Libraries" Display="3" Level="1" Directory_="APPDIR" Attributes="0" Components="AI_ExePath AI_InstallLanguage InstallLanguage SQLite.Interop.dll_1"/>
     <ROW Feature="AIOtherFiles" Title="Common" Description="Shared Resource and Regular Files" Display="7" Level="1" Directory_="APPDIR" Attributes="0" Components="AI_ExePath AI_InstallLanguage InstallLanguage fround.js"/>
-    <ROW Feature="MainFeature" Title="MainFeature" Description="Description" Display="1" Level="1" Directory_="APPDIR" Attributes="0" Components="AI_ExePath AI_InstallLanguage Actions CSCore.dll EDDiscovery EDDiscovery.exe EDDiscovery.exe.config EUROCAPS.TTF InstallLanguage M67.json ProductInformation SharpDX.DirectInput.dll SharpDX.dll"/>
+    <ROW Feature="MainFeature" Title="MainFeature" Description="Description" Display="1" Level="1" Directory_="APPDIR" Attributes="0" Components="AI_ExePath AI_InstallLanguage ActionLanguage.dll Actions Audio.dll CSCore.dll Conditions.dll DirectInput.dll EDDiscovery EDDiscovery.exe EDDiscovery.exe.config EUROCAPS.TTF EliteDangerous.dll ExtendedControls.dll General.dll InstallLanguage M67.json ProductInformation SharpDX.DirectInput.dll SharpDX.dll"/>
     <ATTRIBUTE name="CurrentFeature" value="MainFeature"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiFilesComponent">
+    <ROW File="ActionLanguage.dll" Component_="ActionLanguage.dll" FileName="ACTION~1.DLL|ActionLanguage.dll" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\EDDiscovery\bin\Release\ActionLanguage.dll" SelfReg="false" NextFile="General.dll"/>
+    <ROW File="Audio.dll" Component_="Audio.dll" FileName="Audio.dll" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\EDDiscovery\bin\Release\Audio.dll" SelfReg="false"/>
     <ROW File="CSCore.dll" Component_="CSCore.dll" FileName="CSCore.dll" Attributes="0" SourcePath="..\EDDiscovery\bin\Release\CSCore.dll" SelfReg="false" NextFile="SharpDX.DirectInput.dll"/>
+    <ROW File="Conditions.dll" Component_="Conditions.dll" FileName="CONDIT~1.DLL|Conditions.dll" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\EDDiscovery\bin\Release\Conditions.dll" SelfReg="false" NextFile="Audio.dll"/>
+    <ROW File="DirectInput.dll" Component_="DirectInput.dll" FileName="DIRECT~1.DLL|DirectInput.dll" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\EDDiscovery\bin\Release\DirectInput.dll" SelfReg="false" NextFile="Conditions.dll"/>
     <ROW File="EDDiscovery.exe" Component_="EDDiscovery.exe" FileName="EDDISC~1.EXE|EDDiscovery.exe" Attributes="0" SourcePath="..\EDDiscovery\bin\Release\EDDiscovery.exe" SelfReg="false" NextFile="EUROCAPS.TTF" DigSign="true"/>
     <ROW File="EDDiscovery.exe.config" Component_="EDDiscovery.exe.config" FileName="EDDISC~1.CON|EDDiscovery.exe.config" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\EDDiscovery\bin\Release\EDDiscovery.exe.config" SelfReg="false" NextFile="M67.json"/>
     <ROW File="EUROCAPS.TTF" Component_="EUROCAPS.TTF" FileName="EUROCAPS.TTF" Attributes="0" SourcePath="ExtraFiles\EUROCAPS.TTF" SelfReg="false" NextFile="EDDiscovery.exe.config"/>
+    <ROW File="EliteDangerous.dll" Component_="EliteDangerous.dll" FileName="ELITED~1.DLL|EliteDangerous.dll" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\EDDiscovery\bin\Release\EliteDangerous.dll" SelfReg="false" NextFile="DirectInput.dll"/>
+    <ROW File="ExtendedControls.dll" Component_="ExtendedControls.dll" FileName="EXTEND~1.DLL|ExtendedControls.dll" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\EDDiscovery\bin\Release\ExtendedControls.dll" SelfReg="false" NextFile="EliteDangerous.dll"/>
+    <ROW File="General.dll" Component_="General.dll" FileName="General.dll" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\EDDiscovery\bin\Release\General.dll" SelfReg="false" NextFile="ExtendedControls.dll"/>
     <ROW File="Installer.txt" Component_="fround.js" FileName="INSTAL~1.TXT|Installer.txt" Attributes="0" SourcePath="Installer.txt" SelfReg="false" NextFile="System.Data.SQLite.dll"/>
     <ROW File="M67.json" Component_="M67.json" FileName="M67~1.JSO|M67.json" Attributes="0" SourcePath="ExtraFiles\M67.json" SelfReg="false" NextFile="Pleiades.json"/>
     <ROW File="Newtonsoft.Json.dll" Component_="Newtonsoft.Json.dll" FileName="NEWTON~1.DLL|Newtonsoft.Json.dll" Attributes="0" SourcePath="..\EDDiscovery\bin\Release\Newtonsoft.Json.dll" SelfReg="false" NextFile="OpenTK.GLControl.dll"/>
@@ -92,15 +105,14 @@
     <ROW File="SQLite.Interop.dll" Component_="SQLite.Interop.dll" FileName="SQLITE~1.DLL|SQLite.Interop.dll" Attributes="0" SourcePath="..\EDDiscovery\bin\Release\x86\SQLite.Interop.dll" SelfReg="false" NextFile="SQLite.Interop.dll_1"/>
     <ROW File="SQLite.Interop.dll_1" Component_="SQLite.Interop.dll_1" FileName="SQLITE~1.DLL|SQLite.Interop.dll" Attributes="0" SourcePath="..\EDDiscovery\bin\Release\x64\SQLite.Interop.dll" SelfReg="false" NextFile="EDDiscovery.exe"/>
     <ROW File="SharpDX.DirectInput.dll" Component_="SharpDX.DirectInput.dll" FileName="SHARPD~1.DLL|SharpDX.DirectInput.dll" Attributes="0" SourcePath="..\EDDiscovery\bin\Release\SharpDX.DirectInput.dll" SelfReg="false" NextFile="SharpDX.dll"/>
-    <ROW File="SharpDX.dll" Component_="SharpDX.dll" FileName="SharpDX.dll" Attributes="0" SourcePath="..\EDDiscovery\bin\Release\SharpDX.dll" SelfReg="false"/>
-    <ROW File="System.Data.SQLite.Linq.dll" Component_="System.Data.SQLite.Linq.dll" FileName="SYSTEM~2.DLL|System.Data.SQLite.Linq.dll" Attributes="0" SourcePath="..\EDDiscovery\bin\Release\System.Data.SQLite.Linq.dll" SelfReg="false" NextFile="System.Data.SQLite.xml"/>
-    <ROW File="System.Data.SQLite.dll" Component_="System.Data.SQLite.dll" FileName="SYSTEM~1.DLL|System.Data.SQLite.dll" Attributes="0" SourcePath="..\EDDiscovery\bin\Release\System.Data.SQLite.dll" SelfReg="false" NextFile="System.Data.SQLite.Linq.dll"/>
+    <ROW File="SharpDX.dll" Component_="SharpDX.dll" FileName="SharpDX.dll" Attributes="0" SourcePath="..\EDDiscovery\bin\Release\SharpDX.dll" SelfReg="false" NextFile="ActionLanguage.dll"/>
+    <ROW File="System.Data.SQLite.dll" Component_="System.Data.SQLite.dll" FileName="SYSTEM~1.DLL|System.Data.SQLite.dll" Attributes="0" SourcePath="..\EDDiscovery\bin\Release\System.Data.SQLite.dll" SelfReg="false" NextFile="System.Data.SQLite.xml"/>
     <ROW File="System.Data.SQLite.xml" Component_="fround.js" FileName="SYSTEM~1.XML|System.Data.SQLite.xml" Attributes="0" SourcePath="..\EDDiscovery\bin\Release\System.Data.SQLite.xml" SelfReg="false" NextFile="msvcp100.dll"/>
     <ROW File="msvcp100.dll" Component_="msvcp100.dll" FileName="msvcp100.dll" Attributes="0" SourcePath="..\EDDiscovery\bin\Release\x86\Microsoft.VC100.CRT\msvcp100.dll" SelfReg="false" NextFile="msvcr100.dll"/>
     <ROW File="msvcr100.dll" Component_="msvcr100.dll" FileName="msvcr100.dll" Attributes="0" SourcePath="..\EDDiscovery\bin\Release\x86\Microsoft.VC100.CRT\msvcr100.dll" SelfReg="false" NextFile="SQLite.Interop.dll"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.BuildComponent">
-    <ROW BuildKey="AnyCPU_Debug" BuildName="AnyCPU_Debug" BuildOrder="1" BuildType="0" PackageFolder="AnyCPU_DebugSetupFiles" PackageFileName="EDDiscovery" Languages="sv;en" InstallationType="4" CabsLocation="1" PackageType="1" FilesInsideExe="true" ExtractionFolder="[AppDataFolder][|Manufacturer]\[|ProductName] [|ProductVersion]\install" LangsDialog="true" UseLargeSchema="true" Unicode="true" ExeName="EDDiscovery" MsiPackageType="AI_ALL"/>
+    <ROW BuildKey="AnyCPU_Debug" BuildName="AnyCPU_Debug" BuildOrder="1" BuildType="0" PackageFolder="AnyCPU_DebugSetupFiles" PackageFileName="EDDiscovery" Languages="sv;en" InstallationType="4" CabsLocation="1" PackageType="1" FilesInsideExe="true" ExtractionFolder="[AppDataFolder][|Manufacturer]\[|ProductName] [|ProductVersion]\install" ExtUI="true" LangsDialog="true" UseLargeSchema="true" Unicode="true" ExeName="EDDiscovery" MsiPackageType="AI_ALL"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.DictionaryComponent">
     <ROW Path="&lt;AI_DICTS&gt;ui.ail"/>
@@ -278,7 +290,7 @@
     <ROW UpgradeCode="{E965D927-1F52-476C-BE3A-36E3F181657E}" VersionMax="2.4.8" Language="1033" Attributes="517" ActionProperty="UPGRADE_1"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.PreReqComponent">
-    <ROW PrereqKey="DC417C6DDE44CDB0139EE138C17B2C" DisplayName=".NET Framework 4.6" SetupFileUrl="http://download.microsoft.com/download/C/3/A/C3A5200B-D33C-47E9-9D70-2F7C65DAAD94/NDP46-KB3045557-x86-x64-AllOS-ENU.exe" Location="1" ExactSize="65444688" WinNTVersions="Windows XP x86 Service Pack 3, Windows Server 2003 x86 Service Pack 2, Windows Vista x86, Windows Vista x86 Service Pack 1, Windows 7 x86, Windows 10 x86" WinNT64Versions="Windows XP x64 Service Pack 2, Windows Server 2003 x64 Service Pack 2, Windows Vista x64, Windows Vista x64 Service Pack 1, Windows 7 x64, Windows Server 2008 R2 x64, Windows 10 x64" Operator="1" NoUiComLine="/q /norestart" Options="xy" MD5="88bc05e20114a4506f40c36911de92fa" TargetName=".NET Framework 4.6"/>
+    <ROW PrereqKey="DC417C6DDE44CDB0139EE138C17B2C" DisplayName=".NET Framework 4.6" SetupFileUrl="http://download.microsoft.com/download/C/3/A/C3A5200B-D33C-47E9-9D70-2F7C65DAAD94/NDP46-KB3045557-x86-x64-AllOS-ENU.exe" Location="1" ExactSize="65444688" WinNTVersions="Windows XP SP3 x86, Windows Server 2003 SP2 x86, Windows Vista RTM x86, Windows Vista SP1 x86, Windows 7 RTM x86, Windows 10 x86" WinNT64Versions="Windows XP SP2 x64, Windows Server 2003 SP2 x64, Windows Vista RTM x64, Windows Vista SP1 x64, Windows 7 RTM x64, Windows Server 2008 R2 RTM x64, Windows 10 x64" Operator="1" NoUiComLine="/q /norestart" Options="xy" MD5="88bc05e20114a4506f40c36911de92fa" TargetName=".NET Framework 4.6"/>
     <ATTRIBUTE name="PrereqsOrder" value="DC417C6DDE44CDB0139EE138C17B2C"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.PreReqSearchComponent">
