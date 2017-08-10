@@ -180,7 +180,7 @@ namespace EDDiscovery
             comboBoxCustomPopOut.SelectedIndex = 0;
             comboBoxCustomPopOut.Enabled = true;
 
-            label_version.Text = EDDConfig.Options.VersionDisplayString;
+            label_version.Text = EDDOptions.Instance.VersionDisplayString;
 
             PopOuts = new PopOutControl(this);
 
@@ -199,7 +199,7 @@ namespace EDDiscovery
             savedRouteExpeditionControl1.InitControl(this);
             exportControl1.InitControl(this);
 
-            Map = new EDDiscovery._3DMap.MapManager(EDDConfig.Options.NoWindowReposition, this);
+            Map = new EDDiscovery._3DMap.MapManager(EDDOptions.Instance.NoWindowReposition, this);
 
             this.TopMost = EDDConfig.KeepOnTop;
 
@@ -253,7 +253,7 @@ namespace EDDiscovery
                 settings.InitSettingsTab();
                 savedRouteExpeditionControl1.LoadControl();
 
-                if (EDDConfig.Options.ActionButton)
+                if (EDDOptions.Instance.ActionButton)
                 {
                     buttonReloadActions.Visible = true;
                 }
@@ -338,7 +338,7 @@ namespace EDDiscovery
         private void RepositionForm()
         {
             var top = SQLiteDBClass.GetSettingInt("FormTop", -1);
-            if (top != -1 && EDDConfig.Options.NoWindowReposition == false)
+            if (top != -1 && EDDOptions.Instance.NoWindowReposition == false)
             {
                 var left = SQLiteDBClass.GetSettingInt("FormLeft", 0);
                 var height = SQLiteDBClass.GetSettingInt("FormHeight", 800);
@@ -375,7 +375,7 @@ namespace EDDiscovery
             journalViewControl1.LoadLayoutSettings();
             gridControl.LoadLayoutSettings();
 
-            if (EDDConfig.AutoLoadPopOuts && EDDConfig.Options.NoWindowReposition == false)
+            if (EDDConfig.AutoLoadPopOuts && EDDOptions.Instance.NoWindowReposition == false)
                 PopOuts.LoadSavedPopouts();
 
             string tab = SQLiteConnectionUser.GetSettingString("MajorTab", "");
@@ -958,7 +958,7 @@ namespace EDDiscovery
         {
             this.Cursor = Cursors.WaitCursor;
             Form2DMap frm = new Form2DMap(Controller.history.FilterByFSDAndPosition);
-            frm.Nowindowreposition = EDDConfig.Options.NoWindowReposition;
+            frm.Nowindowreposition = EDDOptions.Instance.NoWindowReposition;
             frm.Show();
             this.Cursor = Cursors.Default;
         }
@@ -1431,7 +1431,7 @@ namespace EDDiscovery
 
         public void SetUpLogging()      // controls logging of HTTP stuff
         {
-            BaseUtils.HttpCom.LogPath = EDDConfig.Instance.EDSMLog ? EDDConfig.Options.AppDataDirectory : null;
+            BaseUtils.HttpCom.LogPath = EDDConfig.Instance.EDSMLog ? EDDOptions.Instance.AppDataDirectory : null;
         }
 
         #endregion

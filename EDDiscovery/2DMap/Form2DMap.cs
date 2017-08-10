@@ -115,7 +115,7 @@ namespace EDDiscovery
         private void AddImages()
         {
             fgeimages = new List<FGEImage>();
-            string datapath = Path.Combine(EDDConfig.Options.AppDataDirectory, "Maps");
+            string datapath = Path.Combine(EDDOptions.Instance.AppDataDirectory, "Maps");
             if (Directory.Exists(datapath))
             {
                 fgeimages = FGEImage.LoadImages(datapath);

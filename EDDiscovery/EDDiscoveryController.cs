@@ -94,11 +94,11 @@ namespace EDDiscovery
             msg.Invoke("Checking Config");
             InitializeConfig(noreposition);
 
-            Trace.WriteLine($"*** Elite Dangerous Discovery Initializing - {EDDConfig.Options.VersionDisplayString}, Platform: {Environment.OSVersion.Platform.ToString()}");
+            Trace.WriteLine($"*** Elite Dangerous Discovery Initializing - {EDDOptions.Instance.VersionDisplayString}, Platform: {Environment.OSVersion.Platform.ToString()}");
 
-            if (EDDConfig.Options.NewUserDatabasePath != null || EDDConfig.Options.NewSystemDatabasePath != null)
+            if (EDDOptions.Instance.NewUserDatabasePath != null || EDDOptions.Instance.NewSystemDatabasePath != null)
             {
-                EDDConfig.Options.MoveDatabases(msg);
+                EDDOptions.Instance.MoveDatabases(msg);
             }
 
             msg.Invoke("Scanning Memory Banks");
@@ -110,7 +110,7 @@ namespace EDDiscovery
 
         public void Init()
         {
-            if (!Debugger.IsAttached || EDDConfig.Options.TraceLog)
+            if (!Debugger.IsAttached || EDDOptions.Instance.TraceLog)
             {
                 TraceLog.LogFileWriterException += ex =>
                 {
@@ -329,31 +329,31 @@ namespace EDDiscovery
 
         private static void InitializeConfig(bool noreposition)
         {
-            EDDConfig.Options.Init(noreposition);
+            EDDOptions.Instance.Init(noreposition);
 
-            if (EDDConfig.Options.ReadJournal != null && File.Exists(EDDConfig.Options.ReadJournal))
+            if (EDDOptions.Instance.ReadJournal != null && File.Exists(EDDOptions.Instance.ReadJournal))
             {
-                DebugCode.ReadCmdLineJournal(EDDConfig.Options.ReadJournal);
+                DebugCode.ReadCmdLineJournal(EDDOptions.Instance.ReadJournal);
             }
 
             string logpath = "";
             try
             {
-                logpath = Path.Combine(EDDConfig.Options.AppDataDirectory, "Log");
+                logpath = Path.Combine(EDDOptions.Instance.AppDataDirectory, "Log");
                 if (!Directory.Exists(logpath))
                 {
                     Directory.CreateDirectory(logpath);
                 }
 
-                TraceLog.logroot = EDDConfig.Options.AppDataDirectory;
+                TraceLog.logroot = EDDOptions.Instance.AppDataDirectory;
                 TraceLog.urlfeedback = Properties.Resources.URLProjectFeedback;
 
-                if (!Debugger.IsAttached || EDDConfig.Options.TraceLog)
+                if (!Debugger.IsAttached || EDDOptions.Instance.TraceLog)
                 {
                     TraceLog.Init();
                 }
 
-                if (EDDConfig.Options.LogExceptions)
+                if (EDDOptions.Instance.LogExceptions)
                 {
                     TraceLog.RegisterFirstChanceExceptionHandler();
                 }
@@ -579,7 +579,7 @@ namespace EDDiscovery
 
                 try
                 {
-                    if (!EDDConfig.Options.NoSystemsLoad)
+                    if (!EDDOptions.Instance.NoSystemsLoad)
                         DoPerformSync();
 
                     while (!PendingClose)
@@ -621,7 +621,7 @@ namespace EDDiscovery
             StarScan.LoadBodyDesignationMap();
             MaterialCommodityDB.SetUpInitialTable();
 
-            if (!EDDConfig.Options.NoSystemsLoad)
+            if (!EDDOptions.Instance.NoSystemsLoad)
             {
                 downloadMapsTask = FGEImage.DownloadMaps(this, () => PendingClose, LogLine, LogLineHighlight);
                 CheckSystems(() => PendingClose, (p, s) => ReportProgress(p, s));
@@ -646,7 +646,7 @@ namespace EDDiscovery
             if (PendingClose) return;
             LogLine("Reading travel history");
 
-            if (!EDDConfig.Options.NoLoad)
+            if (!EDDOptions.Instance.NoLoad)
             {
                 DoRefreshHistory(new RefreshWorkerArgs { CurrentCommander = EDCommander.CurrentCmdrID });
             }

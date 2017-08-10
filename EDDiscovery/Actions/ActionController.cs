@@ -78,7 +78,7 @@ namespace EDDiscovery.Actions
             ReLoad();
         }
 
-        static public string AppFolder { get { return System.IO.Path.Combine(EDDConfig.Options.AppDataDirectory, "Actions"); } }
+        static public string AppFolder { get { return System.IO.Path.Combine(EDDOptions.Instance.AppDataDirectory, "Actions"); } }
 
         public void ReLoad( bool completereload = true)        // COMPLETE reload..
         {

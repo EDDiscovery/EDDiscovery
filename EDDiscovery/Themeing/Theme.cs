@@ -124,7 +124,7 @@ namespace EDDiscovery
 
             try
             {
-                themepath = Path.Combine(EDDConfig.Options.AppDataDirectory, "Theme");
+                themepath = Path.Combine(EDDOptions.Instance.AppDataDirectory, "Theme");
                 if (!Directory.Exists(themepath))
                 {
                     Directory.CreateDirectory(themepath);
@@ -214,7 +214,7 @@ namespace EDDiscovery
 
             try
             {
-                themepath = Path.Combine(EDDConfig.Options.AppDataDirectory, "Theme") ;
+                themepath = Path.Combine(EDDOptions.Instance.AppDataDirectory, "Theme") ;
                 if (!Directory.Exists(themepath))
                 {
                     Directory.CreateDirectory(themepath);

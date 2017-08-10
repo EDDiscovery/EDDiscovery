@@ -425,7 +425,7 @@ namespace EDDiscovery
         {
             try
             {
-                string mapsdir = Path.Combine(EDDConfig.Options.AppDataDirectory, "Maps");
+                string mapsdir = Path.Combine(EDDOptions.Instance.AppDataDirectory, "Maps");
                 if (!Directory.Exists(mapsdir))
                     Directory.CreateDirectory(mapsdir);
 
@@ -487,7 +487,7 @@ namespace EDDiscovery
             {
                 var task = BaseUtils.DownloadFileHandler.BeginDownloadFile(
                     "http://eddiscovery.astronet.se/Maps/" + file,
-                    Path.Combine(EDDConfig.Options.AppDataDirectory, "Maps", file),
+                    Path.Combine(EDDOptions.Instance.AppDataDirectory, "Maps", file),
                     (n) =>
                     {
                         if (n) logLine("Downloaded map: " + file);
@@ -506,7 +506,7 @@ namespace EDDiscovery
         private static bool DownloadMapFile(string file, Action<string> logLine)
         {
             bool newfile = false;
-            if (BaseUtils.DownloadFileHandler.DownloadFile("http://eddiscovery.astronet.se/Maps/" + file, Path.Combine(EDDConfig.Options.AppDataDirectory, "Maps", file), out newfile))
+            if (BaseUtils.DownloadFileHandler.DownloadFile("http://eddiscovery.astronet.se/Maps/" + file, Path.Combine(EDDOptions.Instance.AppDataDirectory, "Maps", file), out newfile))
             {
                 if (newfile)
                     logLine("Downloaded map: " + file);
@@ -518,7 +518,7 @@ namespace EDDiscovery
 
         private static void DeleteMapFile(string file, Action<string> logLine)
         {
-            string filename = Path.Combine(EDDConfig.Options.AppDataDirectory, "Maps", file);
+            string filename = Path.Combine(EDDOptions.Instance.AppDataDirectory, "Maps", file);
 
             try
             {
