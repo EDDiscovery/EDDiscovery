@@ -458,18 +458,20 @@ public static class ObjectExtensionsStrings
         return String.Join(" ", words);
     }
 
-    public static bool InQuotes(this string s, int max = 0)            // left true if quote left over on line, taking care of any escapes..
+    public static bool InQuotes(this string s, int max )            // left true if quote left over on line, taking care of any escapes..
     {
-        if (max <= 0)
-            max = s.Length;
-
         bool inquote = false;
+        char quotechar = ' ';
+
         for (int i = 0; i < max; i++)
         {
-            if (s[i] == '\\' && i < max - 1 && s[i + 1] == '"')
-                i += 1;     // ignore this, ingore "
-            else if (s[i] == '"')
+            if (s[i] == '\\' && i < max - 1 && s[i + 1] == quotechar)
+                i += 1;     // ignore this, ignore "
+            else if (s[i] == '"' || s[i] == '\'')
+            {
+                quotechar = s[i];
                 inquote = !inquote;
+            }
         }
 
         return inquote;
@@ -646,11 +648,11 @@ public static class ObjectExtensionsStrings
         return ret;
     }
 
-    static public int IndexOf(this string s , string[] array , out int fi)   // in array, find one with first occurance, return which one in i
+    static public int IndexOf(this string s, string[] array, out int fi)   // in array, find one with first occurance, return which one in i
     {
         int found = -1;
         fi = -1;
-        for( int av = 0; av < array.Length; av++)
+        for (int av = 0; av < array.Length; av++)
         {
             int pos = s.IndexOf(array[av]);
             if (pos != -1 && (found == -1 || pos < found))
