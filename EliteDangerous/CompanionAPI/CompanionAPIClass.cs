@@ -27,6 +27,7 @@ namespace EliteDangerousCore.CompanionAPI
 {
     public class CompanionAPIClass
     {
+        private static string BASE_URL_BETA = "https://pts-companion.orerve.net";
         private static string BASE_URL = "https://companion.orerve.net";
         private static string ROOT_URL = "/";
         private static string LOGIN_URL = "/user/login";
