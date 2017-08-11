@@ -44,14 +44,13 @@ namespace EDDiscovery
                 {
                     using (new SingleUserInstance(1000))
                     {
-                        Application.Run(new EDDApplicationContext());
                     }
                 }
                 catch (TimeoutException)
                 {
                     if (ExtendedControls.MessageBoxTheme.Show("EDDiscovery is already running. Launch anyway?", "EDDiscovery", MessageBoxButtons.YesNo) == DialogResult.Yes)
                     {
-                        Application.Run(new EDDApplicationContext());
+                        Application.Run(new EDDApplicationContext(Control.ModifierKeys.HasFlag(Keys.Shift)));
                     }
 
                     /* Could not lock the app-global mutex, which means another copy of the App is running.

@@ -89,10 +89,10 @@ namespace EDDiscovery
             InvokeAsyncOnUiThread = invokeAsyncOnUiThread;
         }
 
-        public static void Initialize(bool shiftkey, bool ctrlkey, Action<string> msg)    // called from EDDApplicationContext to initialize config and dbs
+        public static void Initialize(bool positionreset, bool themereset, Action<string> msg)    // called from EDDApplicationContext to initialize config and dbs
         {
             msg.Invoke("Checking Config");
-            InitializeConfig(shiftkey, ctrlkey);
+            InitializeConfig(positionreset, themereset);
 
             Trace.WriteLine($"*** Elite Dangerous Discovery Initializing - {EDDOptions.Instance.VersionDisplayString}, Platform: {Environment.OSVersion.Platform.ToString()}");
 
@@ -327,9 +327,9 @@ namespace EDDiscovery
             Trace.WriteLine("Database initialization complete");
         }
 
-        private static void InitializeConfig(bool shiftkey , bool ctrlkey)
+        private static void InitializeConfig(bool positionreset , bool themereset)
         {
-            EDDOptions.Instance.Init(shiftkey, ctrlkey);
+            EDDOptions.Instance.Init(positionreset, themereset);
 
             if (EDDOptions.Instance.ReadJournal != null && File.Exists(EDDOptions.Instance.ReadJournal))
             {

@@ -317,12 +317,12 @@ namespace EDDiscovery
             ProcessCommandLineOptions(ProcessCommandLineOption);
         }
 
-        public void Init(bool shift , bool ctrl)
+        public void Init(bool positionreset, bool themereset)
         {
-            if (shift)
+            if (positionreset)
                 NoWindowReposition = true;
 
-            if ( ctrl)
+            if ( themereset)
                 NoTheme = true;
             
             ProcessConfigVariables();

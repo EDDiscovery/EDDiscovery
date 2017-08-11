@@ -33,14 +33,34 @@ namespace EDDiscovery
     // Class for managing application initialization, and proud owner of SplashScreen and EDDiscoveryForm. Singleton.
     internal class EDDApplicationContext : ApplicationContext
     {
-        public EDDApplicationContext() : base(new SplashForm())
+        public EDDApplicationContext(bool safemode) : base(safemode ? ((Form)new SafeModeForm()) : new SplashForm())
         {
-            if (Instance == null)
+            if (safemode)
             {
-                Instance = this;
+                ((SafeModeForm)MainForm).Run += RunAfterSafeMode;
+            }
+            else
+            {
                 Timer timer = new Timer { Interval = 250, Enabled = true };
                 timer.Tick += initTimer_Tick;
             }
+        }
+
+        bool themereset = false;
+        bool positionreset = false;
+
+        void RunAfterSafeMode(bool p, bool t)
+        {
+            var curform = MainForm;
+            MainForm = new SplashForm();
+            curform.Close();
+            MainForm.Show();
+
+            themereset = t;
+            positionreset = p;
+
+            Timer timer = new Timer { Interval = 250, Enabled = true };
+            timer.Tick += initTimer_Tick;
         }
 
         #region Public static properties
@@ -71,7 +91,7 @@ namespace EDDiscovery
         /// <summary>
         /// The <see cref="EDDApplicationContext"/> of this application process.
         /// </summary>
-        public static EDDApplicationContext Instance { get; private set; } = null;
+        //public static EDDApplicationContext Instance { get; private set; } = null;
 
         #endregion
 
@@ -101,7 +121,7 @@ namespace EDDiscovery
             {
                 EDDMainForm = new EDDiscoveryForm();
                 SetLoadingMsg("Checking Ship Systems");
-                EDDiscoveryController.Initialize(Control.ModifierKeys.HasFlag(Keys.Shift), Control.ModifierKeys.HasFlag(Keys.Control), SetLoadingMsg);
+                EDDiscoveryController.Initialize( positionreset, themereset, SetLoadingMsg);
                 EDDMainForm.Init(SetLoadingMsg);     // call the init function, which will initialize the eddiscovery form
 
                 SetLoadingMsg("Establishing Telepresence");
