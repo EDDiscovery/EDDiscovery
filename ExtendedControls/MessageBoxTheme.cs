@@ -141,19 +141,18 @@ namespace ExtendedControls
         {
             e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
 
-      //      using (Brush b = new SolidBrush(Color.Gray)) e.Graphics.FillRectangle(b, textarea);  // DEBUG
+            //      using (Brush b = new SolidBrush(Color.Gray)) e.Graphics.FillRectangle(b, textarea);  // DEBUG
 
             using (Brush b = new SolidBrush(forecolour))
+            using (StringFormat f = new StringFormat() { Alignment = StringAlignment.Near, LineAlignment = StringAlignment.Near })
             {
-                StringFormat f = new StringFormat();
-                f.Alignment = StringAlignment.Near;
-                f.LineAlignment = StringAlignment.Near;
-
                 e.Graphics.DrawString(text, fnt, b, textarea, f);
             }
 
             if (icon != null)
                 e.Graphics.DrawIcon(icon, new Rectangle(10, textarea.Top, 48, 48));
+
+            e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.Default;
         }
 
         private void MessageBoxTheme_FormClosed(object sender, FormClosedEventArgs e)

@@ -108,12 +108,9 @@ namespace ExtendedControls
                         Rectangle textarea = new Rectangle(textstart, 0, twidth, DisplayRectangle.Y);
 
                         using (Brush textb = new SolidBrush(this.ForeColor))
-                        using (StringFormat fmt = new StringFormat())
+                        using (StringFormat fmt = new StringFormat() { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Center })
                         {
-                            fmt.Alignment = StringAlignment.Center;
-                            fmt.LineAlignment = StringAlignment.Center;
-
-                            e.Graphics.DrawString(this.Text, this.Font, textb, textarea,fmt);
+                            e.Graphics.DrawString(this.Text, this.Font, textb, textarea, fmt);
                         }
 
                         e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.Default;
