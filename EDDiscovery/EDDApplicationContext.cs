@@ -101,7 +101,7 @@ namespace EDDiscovery
             {
                 EDDMainForm = new EDDiscoveryForm();
                 SetLoadingMsg("Checking Ship Systems");
-                EDDiscoveryController.Initialize(Control.ModifierKeys.HasFlag(Keys.Shift), SetLoadingMsg);
+                EDDiscoveryController.Initialize(Control.ModifierKeys.HasFlag(Keys.Shift), Control.ModifierKeys.HasFlag(Keys.Control), SetLoadingMsg);
                 EDDMainForm.Init(SetLoadingMsg);     // call the init function, which will initialize the eddiscovery form
 
                 SetLoadingMsg("Establishing Telepresence");

@@ -317,9 +317,14 @@ namespace EDDiscovery
             ProcessCommandLineOptions(ProcessCommandLineOption);
         }
 
-        public void Init(bool shift)
+        public void Init(bool shift , bool ctrl)
         {
-            if (shift) NoWindowReposition = true;
+            if (shift)
+                NoWindowReposition = true;
+
+            if ( ctrl)
+                NoTheme = true;
+            
             ProcessConfigVariables();
             ProcessOptionsFile();
             ProcessCommandLineOptions();
