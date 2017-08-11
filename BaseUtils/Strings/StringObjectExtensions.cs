@@ -645,5 +645,21 @@ public static class ObjectExtensionsStrings
 
         return ret;
     }
+
+    static public int IndexOf(this string s , string[] array , out int fi)   // in array, find one with first occurance, return which one in i
+    {
+        int found = -1;
+        fi = -1;
+        for( int av = 0; av < array.Length; av++)
+        {
+            int pos = s.IndexOf(array[av]);
+            if (pos != -1 && (found == -1 || pos < found))
+            {
+                found = pos;
+                fi = av;
+            }
+        }
+        return found;
+    }
 }
 
