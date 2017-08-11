@@ -41,6 +41,7 @@ namespace EDDiscovery
         public bool NoWindowReposition { get; private set; }
         public bool ActionButton { get; private set; }
         public bool NoLoad { get; private set; }
+        public bool NoTheme { get; private set; }
         public bool NoSystemsLoad { get; private set; }
         public bool TraceLog { get; private set; }
         public bool LogExceptions { get; private set; }
@@ -298,6 +299,7 @@ namespace EDDiscovery
                     case "edsmbeta": EDSMServerType = EDSMServerType.Beta; break;
                     case "edsmnull": EDSMServerType = EDSMServerType.Null; break;
                     case "disablebetacheck": DisableBetaCheck = true; break;
+                    case "notheme": NoTheme = true; break;
                     default:
                         Console.WriteLine($"Unrecognized option -{opt}");
                         break;

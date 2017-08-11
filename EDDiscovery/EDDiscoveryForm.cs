@@ -187,7 +187,9 @@ namespace EDDiscovery
             ToolStripManager.Renderer = theme.toolstripRenderer;
             msg.Invoke("Repairing Canopy");
             theme.LoadThemes();                                         // default themes and ones on disk loaded
-            themeok = theme.RestoreSettings();                                    // theme, remember your saved settings
+
+            if (!EDDOptions.Instance.NoTheme)
+                themeok = theme.RestoreSettings();                                    // theme, remember your saved settings
 
             trilaterationControl.InitControl(this);
             travelHistoryControl.InitControl(this);
