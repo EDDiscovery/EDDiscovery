@@ -49,7 +49,7 @@ namespace EDDiscovery
                 }
                 catch (TimeoutException)
                 {
-                    if (ExtendedControls.MessageBoxTheme.Show("EDDiscovery is already running. Launch anyway?", "EDDiscovery", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                    if (System.Windows.Forms.MessageBox.Show("EDDiscovery is already running. Launch anyway?", "EDDiscovery", MessageBoxButtons.YesNo) == DialogResult.Yes)
                     {
                         Application.Run(new EDDApplicationContext());
                     }
