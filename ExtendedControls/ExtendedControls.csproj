@@ -61,6 +61,12 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="BitMapHelpers.cs" />
+    <Compile Include="FatalExceptionForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FatalExceptionForm.Designer.cs">
+      <DependentUpon>FatalExceptionForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="ThemeStandardEditor.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -165,6 +171,9 @@
   <ItemGroup>
     <EmbeddedResource Include="AutoCompleteTextBox.resx">
       <DependentUpon>AutoCompleteTextBox.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FatalExceptionForm.resx">
+      <DependentUpon>FatalExceptionForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="InfoForm.resx">
       <DependentUpon>InfoForm.cs</DependentUpon>
