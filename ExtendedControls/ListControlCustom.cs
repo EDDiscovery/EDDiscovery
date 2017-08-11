@@ -170,18 +170,18 @@ namespace ExtendedControls
 
             focusindex = (focusindex >= 0) ? focusindex : ((SelectedIndex > 0) ? SelectedIndex : 0);
 
-            Pen p = new Pen(this.BorderColor);
-            for (int i = 0; i < bordersize; i++)
+            using (Pen p = new Pen(this.BorderColor))
             {
-                var brect = new Rectangle(borderrect.Left + i, borderrect.Top + i, borderrect.Width - i * 2, borderrect.Height - i * 2);
-                e.Graphics.DrawRectangle(p, borderrect);
+                for (int i = 0; i < bordersize; i++)
+                {
+                    var brect = new Rectangle(borderrect.Left + i, borderrect.Top + i, borderrect.Width - i * 2, borderrect.Height - i * 2);
+                    e.Graphics.DrawRectangle(p, borderrect);
+                }
             }
-            p.Dispose();
-
-            Brush backb;
 
             if (!this.SelectionBackColor.IsFullyTransparent())
             {
+                Brush backb;
                 Color c1 = SelectionBackColor;
                 if (FlatStyle == FlatStyle.Popup)
                     backb = new System.Drawing.Drawing2D.LinearGradientBrush(mainarea, c1, c1.Multiply(GradientColorScaling), 90);
@@ -198,37 +198,32 @@ namespace ExtendedControls
                 pos.Height = ItemHeight;
                 int offset = 0;
 
-                Brush textb = new SolidBrush(this.ForeColor);
                 e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
 
-                StringFormat f = new StringFormat();
-                f.Alignment = StringAlignment.Near;
-                f.LineAlignment = StringAlignment.Center;
-                f.FormatFlags = StringFormatFlags.NoWrap;
-
                 // Console.WriteLine("Paint {0} {1}", focusindex, firstindex);
-                foreach (string s in Items)
-                {   // if not fitting to items height, 
-                    if (offset >= firstindex && offset < firstindex + displayableitems + (FitToItemsHeight ? 0:1))
-                    {
-                        if (offset == focusindex)
+                using (StringFormat f = new StringFormat() { Alignment = StringAlignment.Near, LineAlignment = StringAlignment.Center, FormatFlags = StringFormatFlags.NoWrap })
+                using (Brush textb = new SolidBrush(this.ForeColor))
+                using (Brush highlight = new SolidBrush(MouseOverBackgroundColor))
+                {
+                    foreach (string s in Items)
+                    {   // if not fitting to items height, 
+                        if (offset >= firstindex && offset < firstindex + displayableitems + (FitToItemsHeight ? 0 : 1))
                         {
-                            using (Brush highlight = new SolidBrush(MouseOverBackgroundColor))
+                            if (offset == focusindex)
                             {
                                 e.Graphics.FillRectangle(highlight, pos);
                             }
+
+                            e.Graphics.DrawString(s, this.Font, textb, pos, f);
+
+                            pos.Y += ItemHeight;
                         }
 
-                        e.Graphics.DrawString(s, this.Font, textb, pos,f);
-
-                        pos.Y += ItemHeight;
+                        offset++;
                     }
-
-                    offset++;
                 }
 
                 e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.Default;
-                textb.Dispose();
             }
         }
 
