@@ -107,7 +107,11 @@ namespace EDDiscoveryCore.EGO
                             return;
                         }
 
-                        Thread.Sleep(1000);   // Throttling to 1 per second to not kill EGO network
+                        if (DateTime.UtcNow < new DateTime(2017,8,18))  // Temporary slow down EGO sync more...
+                            Thread.Sleep(5000);   // Throttling to 1 per second to not kill EGO network
+                        else
+                            Thread.Sleep(1000);   // Throttling to 1 per second to not kill EGO network
+
                     }
 
                     // Wait up to 60 seconds for another EGO event to come in
