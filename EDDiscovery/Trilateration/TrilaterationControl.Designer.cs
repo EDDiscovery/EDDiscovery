@@ -46,6 +46,7 @@ namespace EDDiscovery
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(TrilaterationControl));
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             this.trilatContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.addToWantedSystemsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -63,6 +64,13 @@ namespace EDDiscovery
             this.addAllLocalSystemsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.addAllEDSMSystemsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panel_controls = new System.Windows.Forms.Panel();
+            this.toolStrip1 = new System.Windows.Forms.ToolStrip();
+            this.toolStripButtonSubmitDistances = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButtonNew = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripButtonRemoveUnused = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButtonRemoveAll = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButtonMap = new System.Windows.Forms.ToolStripButton();
             this.textBox_status = new ExtendedControls.TextBoxBorder();
             this.labelstpos = new System.Windows.Forms.Label();
             this.textBoxSystemName = new ExtendedControls.TextBoxBorder();
@@ -88,6 +96,7 @@ namespace EDDiscovery
             this.trilatContextMenu.SuspendLayout();
             this.wantedContextMenu.SuspendLayout();
             this.panel_controls.SuspendLayout();
+            this.toolStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerCustom1)).BeginInit();
             this.splitContainerCustom1.Panel1.SuspendLayout();
             this.splitContainerCustom1.Panel2.SuspendLayout();
@@ -225,6 +234,7 @@ namespace EDDiscovery
             // 
             // panel_controls
             // 
+            this.panel_controls.Controls.Add(this.toolStrip1);
             this.panel_controls.Controls.Add(this.textBox_status);
             this.panel_controls.Controls.Add(this.labelstpos);
             this.panel_controls.Controls.Add(this.textBoxSystemName);
@@ -242,6 +252,79 @@ namespace EDDiscovery
             this.panel_controls.Size = new System.Drawing.Size(924, 98);
             this.panel_controls.TabIndex = 24;
             // 
+            // toolStrip1
+            // 
+            this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripButtonSubmitDistances,
+            this.toolStripButtonNew,
+            this.toolStripSeparator1,
+            this.toolStripButtonRemoveUnused,
+            this.toolStripButtonRemoveAll,
+            this.toolStripButtonMap});
+            this.toolStrip1.Location = new System.Drawing.Point(0, 0);
+            this.toolStrip1.Name = "toolStrip1";
+            this.toolStrip1.Size = new System.Drawing.Size(924, 25);
+            this.toolStrip1.TabIndex = 24;
+            this.toolStrip1.Text = "toolStrip1";
+            // 
+            // toolStripButtonSubmitDistances
+            // 
+            this.toolStripButtonSubmitDistances.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+            this.toolStripButtonSubmitDistances.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonSubmitDistances.Image")));
+            this.toolStripButtonSubmitDistances.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonSubmitDistances.Name = "toolStripButtonSubmitDistances";
+            this.toolStripButtonSubmitDistances.Size = new System.Drawing.Size(118, 22);
+            this.toolStripButtonSubmitDistances.Text = "&Submit Distances";
+            this.toolStripButtonSubmitDistances.Click += new System.EventHandler(this.toolStripButtonSubmitDistances_Click);
+            // 
+            // toolStripButtonNew
+            // 
+            this.toolStripButtonNew.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonNew.Image")));
+            this.toolStripButtonNew.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonNew.Name = "toolStripButtonNew";
+            this.toolStripButtonNew.Size = new System.Drawing.Size(76, 22);
+            this.toolStripButtonNew.Text = "Start &new";
+            this.toolStripButtonNew.ToolTipText = "Calculate coordinates for current system";
+            this.toolStripButtonNew.Click += new System.EventHandler(this.buttonStartNew_Click);
+            // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 25);
+            // 
+            // toolStripButtonRemoveUnused
+            // 
+            this.toolStripButtonRemoveUnused.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButtonRemoveUnused.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonRemoveUnused.Image")));
+            this.toolStripButtonRemoveUnused.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonRemoveUnused.Name = "toolStripButtonRemoveUnused";
+            this.toolStripButtonRemoveUnused.Size = new System.Drawing.Size(23, 22);
+            this.toolStripButtonRemoveUnused.Text = "toolStripButtonRemoveUnused";
+            this.toolStripButtonRemoveUnused.ToolTipText = "Remove unused";
+            this.toolStripButtonRemoveUnused.Click += new System.EventHandler(this.toolStripButtonRemoveUnused_Click);
+            // 
+            // toolStripButtonRemoveAll
+            // 
+            this.toolStripButtonRemoveAll.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButtonRemoveAll.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonRemoveAll.Image")));
+            this.toolStripButtonRemoveAll.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonRemoveAll.Name = "toolStripButtonRemoveAll";
+            this.toolStripButtonRemoveAll.Size = new System.Drawing.Size(23, 22);
+            this.toolStripButtonRemoveAll.Text = "toolStripButton1";
+            this.toolStripButtonRemoveAll.ToolTipText = "Remove all";
+            this.toolStripButtonRemoveAll.Click += new System.EventHandler(this.toolStripButtonRemoveAll_Click);
+            // 
+            // toolStripButtonMap
+            // 
+            this.toolStripButtonMap.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButtonMap.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonMap.Image")));
+            this.toolStripButtonMap.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonMap.Name = "toolStripButtonMap";
+            this.toolStripButtonMap.Size = new System.Drawing.Size(23, 22);
+            this.toolStripButtonMap.Text = "3d map";
+            this.toolStripButtonMap.ToolTipText = "Show 3d map";
+            this.toolStripButtonMap.Click += new System.EventHandler(this.toolStripButtonMap_Click);
+            // 
             // textBox_status
             // 
             this.textBox_status.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
@@ -250,7 +333,7 @@ namespace EDDiscovery
             this.textBox_status.BorderColorScaling = 0.5F;
             this.textBox_status.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBox_status.ControlBackground = System.Drawing.SystemColors.Control;
-            this.textBox_status.Location = new System.Drawing.Point(102, 3);
+            this.textBox_status.Location = new System.Drawing.Point(406, 33);
             this.textBox_status.Multiline = false;
             this.textBox_status.Name = "textBox_status";
             this.textBox_status.ReadOnly = true;
@@ -266,7 +349,7 @@ namespace EDDiscovery
             // labelstpos
             // 
             this.labelstpos.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.labelstpos.Location = new System.Drawing.Point(3, 5);
+            this.labelstpos.Location = new System.Drawing.Point(307, 35);
             this.labelstpos.Name = "labelstpos";
             this.labelstpos.Size = new System.Drawing.Size(90, 19);
             this.labelstpos.TabIndex = 20;
@@ -616,6 +699,8 @@ namespace EDDiscovery
             this.wantedContextMenu.ResumeLayout(false);
             this.panel_controls.ResumeLayout(false);
             this.panel_controls.PerformLayout();
+            this.toolStrip1.ResumeLayout(false);
+            this.toolStrip1.PerformLayout();
             this.splitContainerCustom1.Panel1.ResumeLayout(false);
             this.splitContainerCustom1.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerCustom1)).EndInit();
@@ -671,5 +756,12 @@ namespace EDDiscovery
         private System.Windows.Forms.ToolStripMenuItem addAllEDSMSystemsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem pasteToolStripMenuItem;
         private System.Windows.Forms.ToolTip toolTip;
+        private System.Windows.Forms.ToolStrip toolStrip1;
+        private System.Windows.Forms.ToolStripButton toolStripButtonSubmitDistances;
+        private System.Windows.Forms.ToolStripButton toolStripButtonNew;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
+        private System.Windows.Forms.ToolStripButton toolStripButtonRemoveUnused;
+        private System.Windows.Forms.ToolStripButton toolStripButtonRemoveAll;
+        private System.Windows.Forms.ToolStripButton toolStripButtonMap;
     }
 }
