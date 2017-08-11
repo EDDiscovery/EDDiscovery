@@ -136,6 +136,8 @@ namespace EDDiscovery.Actions
             ActionPackEditorForm frm = new ActionPackEditorForm();
 
             frm.onAdditionalNames += Frm_onAdditionalNames;
+            frm.CreateActionPackEdit += (group, cond) => { return new ActionPackEditEventProgramCondition(); };
+
             ActionFile f = actionfiles.Get(name);
 
             if (f != null)

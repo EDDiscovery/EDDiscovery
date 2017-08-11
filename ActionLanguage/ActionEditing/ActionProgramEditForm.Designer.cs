@@ -180,12 +180,23 @@ namespace ActionLanguage
             // 
             // textBoxBorderName
             // 
+            this.textBoxBorderName.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
+            this.textBoxBorderName.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
             this.textBoxBorderName.BorderColor = System.Drawing.Color.Transparent;
             this.textBoxBorderName.BorderColorScaling = 0.5F;
+            this.textBoxBorderName.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.textBoxBorderName.ControlBackground = System.Drawing.SystemColors.Control;
             this.textBoxBorderName.Location = new System.Drawing.Point(152, 4);
+            this.textBoxBorderName.Multiline = false;
             this.textBoxBorderName.Name = "textBoxBorderName";
+            this.textBoxBorderName.ReadOnly = false;
+            this.textBoxBorderName.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.textBoxBorderName.SelectionLength = 0;
+            this.textBoxBorderName.SelectionStart = 0;
             this.textBoxBorderName.Size = new System.Drawing.Size(154, 20);
             this.textBoxBorderName.TabIndex = 0;
+            this.textBoxBorderName.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.textBoxBorderName.WordWrap = true;
             // 
             // labelSet
             // 
@@ -231,6 +242,7 @@ namespace ActionLanguage
             this.panel_close.MouseSelectedColor = System.Drawing.Color.Green;
             this.panel_close.MouseSelectedColorEnable = true;
             this.panel_close.Name = "panel_close";
+            this.panel_close.PanelDisabledScaling = 0.25F;
             this.panel_close.Size = new System.Drawing.Size(24, 24);
             this.panel_close.TabIndex = 27;
             this.panel_close.Click += new System.EventHandler(this.panel_close_Click);
@@ -249,6 +261,7 @@ namespace ActionLanguage
             this.panel_minimize.MouseSelectedColor = System.Drawing.Color.Green;
             this.panel_minimize.MouseSelectedColorEnable = true;
             this.panel_minimize.Name = "panel_minimize";
+            this.panel_minimize.PanelDisabledScaling = 0.25F;
             this.panel_minimize.Size = new System.Drawing.Size(24, 24);
             this.panel_minimize.TabIndex = 26;
             this.panel_minimize.Click += new System.EventHandler(this.panel_minimize_Click);
