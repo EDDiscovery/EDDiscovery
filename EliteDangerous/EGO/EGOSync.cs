@@ -101,6 +101,16 @@ namespace EDDiscoveryCore.EGO
                             logger?.Invoke($"Sent {he.EntryType.ToString()} event to EGO ({he.EventSummary})");
                             if (newRecord) { logger?.Invoke("New EGO record set"); }
                         }
+                        else
+                        {
+                            logger?.Invoke($"Fail to send {he.EntryType.ToString()} event to EGO ({he.EventSummary})");
+
+                        }
+
+                        if (hlscanunsyncedlist.Count>1 && hlscanunsyncedlist.Count%10==0)
+                        {
+                            logger?.Invoke($"{hlscanunsyncedlist.Count.ToString()} events in EGO queue");
+                        }
 
                         if (Exit)
                         {
@@ -168,7 +178,6 @@ namespace EDDiscoveryCore.EGO
                     he.SetEGOSync();
                     return true;
                 }
-                return true;
             }
 
             return false;
