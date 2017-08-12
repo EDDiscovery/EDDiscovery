@@ -48,10 +48,9 @@ namespace ExtendedControls
 
             if (textpresent)
             {
-                StringFormat f = new StringFormat();
-                f.Alignment = StringAlignment.Center;
-                f.LineAlignment = StringAlignment.Center;
                 gr.SmoothingMode = SmoothingMode.AntiAlias;
+
+                using (StringFormat f = new StringFormat() { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Center })
                 using (Brush textb = new SolidBrush(color))
                     gr.DrawString(text, ft, textb, borderrect, f);
             }

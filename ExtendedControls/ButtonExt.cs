@@ -145,12 +145,9 @@ namespace ExtendedControls
 
                 if ( Text != null && Text.Length > 0 )
                 {
-                    Brush textb = new SolidBrush((Enabled) ? this.ForeColor : this.ForeColor.Multiply(0.5F));
-
-                    pe.Graphics.DrawString(this.Text, this.Font, textb, new RectangleF(buttonarea.Left,buttonarea.Top,buttonarea.Width,buttonarea.Height), 
-                    ControlHelpersStaticFunc.StringFormatFromContentAlignment(TextAlign));
-
-                    textb.Dispose();
+                    using (var fmt = ControlHelpersStaticFunc.StringFormatFromContentAlignment(TextAlign))
+                    using (Brush textb = new SolidBrush((Enabled) ? this.ForeColor : this.ForeColor.Multiply(0.5F)))
+                        pe.Graphics.DrawString(this.Text, this.Font, textb, new RectangleF(buttonarea.Left, buttonarea.Top, buttonarea.Width, buttonarea.Height), fmt);
                 }
 
                 p.Dispose();
