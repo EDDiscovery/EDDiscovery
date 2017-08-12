@@ -152,7 +152,26 @@ namespace EDDiscovery.ImageHandler
 
         public string GetScreenshotPath(JournalScreenshot ss)
         {
-            return Watcher.GetScreenshotPath(ss);
+            string filename = ss.Filename;
+            string defaultInputDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyPictures), "Frontier Developments", "Elite Dangerous");
+
+            if (filename.StartsWith("\\ED_Pictures\\"))
+            {
+                filename = filename.Substring(13);
+                string filepath = Path.Combine(textBoxScreenshotsDir.Text ?? defaultInputDir, filename);
+
+                if (!File.Exists(filepath))
+                {
+                    filepath = Path.Combine(defaultInputDir, filename);
+                }
+
+                if (File.Exists(filepath))
+                {
+                    filename = filepath;
+                }
+            }
+
+            return filename;
         }
 
         private void ConvertCompleted(ImageConverter cp) // Called by the watcher when a convert had completed.
@@ -503,35 +522,8 @@ namespace EDDiscovery.ImageHandler
             if (je.EventTypeID == JournalTypeEnum.Screenshot)
             {
                 JournalScreenshot ss = je as JournalScreenshot;
-                string filename = GetScreenshotPath(ss);
-
-                if (File.Exists(filename))
-                {
-                    this.paramscallback?.Invoke(cp => ProcessScreenshot(filename, ss.System, ss, ss.CommanderId, cp));
-                }
+                this.paramscallback?.Invoke(cp => ProcessScreenshot(ss.Filename, ss.System, ss, ss.CommanderId, cp));
             }
-        }
-
-        public string GetScreenshotPath(JournalScreenshot ss)
-        {
-            string filename = ss.Filename;
-            if (filename.StartsWith("\\ED_Pictures\\"))
-            {
-                filename = filename.Substring(13);
-                string filepath = Path.Combine(watchedfolder ?? EDPicturesDir, filename);
-
-                if (!File.Exists(filepath))
-                {
-                    filepath = Path.Combine(EDPicturesDir, filename);
-                }
-
-                if (File.Exists(filepath))
-                {
-                    filename = filepath;
-                }
-            }
-
-            return filename;
         }
 
         private void watcher(object sender, System.IO.FileSystemEventArgs e)
@@ -569,13 +561,6 @@ namespace EDDiscovery.ImageHandler
         {
             System.Threading.Timer timer = null;
 
-            // Don't run if OnScreenshot has already run for this image
-            if ((ScreenshotTimers.TryGetValue(filename, out timer) && timer == null) || (!ScreenshotTimers.TryAdd(filename, null) && !ScreenshotTimers.TryUpdate(filename, null, timer)))
-                return;
-
-            if (timer != null)
-                timer.Dispose();
-
             if (sysname == null)
             {
                 if (LastJournalLoc != null)
@@ -605,7 +590,19 @@ namespace EDDiscovery.ImageHandler
                 cp.JournalScreenShot = ss;
                 cp.CommanderID = cmdrid;
 
-                bool converted = cp.Convert();
+                bool converted = false;
+
+                using (Bitmap bmp = cp.GetScreenshot(ref filename))
+                {
+                    // Don't run if OnScreenshot has already run for this image
+                    if ((ScreenshotTimers.TryGetValue(filename, out timer) && timer == null) || (!ScreenshotTimers.TryAdd(filename, null) && !ScreenshotTimers.TryUpdate(filename, null, timer)))
+                        return;
+
+                    if (timer != null)
+                        timer.Dispose();
+
+                    converted = cp.Convert(bmp);
+                }
 
                 if (converted && cp.RemoveInputFile)         // if remove, delete original picture
                 {
@@ -658,61 +655,47 @@ namespace EDDiscovery.ImageHandler
         public bool Converted;
         public IDiscoveryController Controller;
 
-        public bool Convert() // can call independent of watcher
+        public bool Convert(Bitmap bmp) // can call independent of watcher
         {
             OutputFilename = null;
             FinalSize = Point.Empty;
             Converted = false;
 
-            FileInfo fi = null;
-
-            if (JournalScreenShot != null)
+            if (!GetOutputSubFolder())
             {
-                CommanderID = JournalScreenShot.CommanderId;
+                Controller.LogLineHighlight("Cannot convert " + InputExtension + " into the same folder as they are stored into" + Environment.NewLine + Environment.NewLine + "Pick a different conversion folder or a different output format");
+                return false;
             }
 
-            using (Bitmap bmp = GetScreenshot(InputFilename, SystemName, CommanderID, ref JournalScreenShot, ref OutputFilename, ref FinalSize, ref fi))
+            if (OutputFilename == null || ReConvert)
             {
-                CommanderID = JournalScreenShot.CommanderId;            // reload in case GetScreenshot changed it..
-
-                Timestamp = fi.CreationTimeUtc;
-
-                if (!GetOutputSubFolder())
+                using (Bitmap croppedbmp = ConvertImage(bmp))
                 {
-                    Controller.LogLineHighlight("Cannot convert " + InputExtension + " into the same folder as they are stored into" + Environment.NewLine + Environment.NewLine + "Pick a different conversion folder or a different output format");
-                    return false;
-                }
-
-                if (OutputFilename == null || ReConvert)
-                {
-                    using (Bitmap croppedbmp = ConvertImage(bmp))
+                    if (OutputExtension.Equals(".jpg"))
                     {
-                        if (OutputExtension.Equals(".jpg"))
-                        {
-                            croppedbmp.Save(OutputFilename, System.Drawing.Imaging.ImageFormat.Jpeg);
-                        }
-                        else if (OutputExtension.Equals(".tiff"))
-                        {
-                            croppedbmp.Save(OutputFilename, System.Drawing.Imaging.ImageFormat.Tiff);
-                        }
-                        else if (OutputExtension.Equals(".bmp"))
-                        {
-                            croppedbmp.Save(OutputFilename, System.Drawing.Imaging.ImageFormat.Bmp);
-                        }
-                        else
-                        {
-                            croppedbmp.Save(OutputFilename, System.Drawing.Imaging.ImageFormat.Png);
-                        }
-
-                        FinalSize = new Point(croppedbmp.Size);
-                        Converted = true;
+                        croppedbmp.Save(OutputFilename, System.Drawing.Imaging.ImageFormat.Jpeg);
                     }
+                    else if (OutputExtension.Equals(".tiff"))
+                    {
+                        croppedbmp.Save(OutputFilename, System.Drawing.Imaging.ImageFormat.Tiff);
+                    }
+                    else if (OutputExtension.Equals(".bmp"))
+                    {
+                        croppedbmp.Save(OutputFilename, System.Drawing.Imaging.ImageFormat.Bmp);
+                    }
+                    else
+                    {
+                        croppedbmp.Save(OutputFilename, System.Drawing.Imaging.ImageFormat.Png);
+                    }
+
+                    FinalSize = new Point(croppedbmp.Size);
+                    Converted = true;
                 }
             }
 
             if (Converted)
             {
-                File.SetCreationTime(OutputFilename, fi.CreationTime);
+                File.SetCreationTime(OutputFilename, Timestamp);
 
                 if (JournalScreenShot != null)
                 {
@@ -727,78 +710,108 @@ namespace EDDiscovery.ImageHandler
             return Converted;
         }
 
-        private Bitmap GetScreenshot(string inputfile, string cur_sysname, int cmdrid, ref JournalScreenshot ss, ref string store_name, ref Point finalsize, ref FileInfo fi)
+        private bool TryGetScreenshot(string filename, string cur_sysname, ref int cmdrid, ref JournalScreenshot ss, ref string store_name, ref Point finalsize, ref DateTime timestamp, out Bitmap bmp, out string readfilename, bool throwOnError = false)
         {
-            FileStream testfile = null;
-            MemoryStream memstrm = new MemoryStream();
+            string defaultInputDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyPictures), "Frontier Developments", "Elite Dangerous");
+
+            if (filename.StartsWith("\\ED_Pictures\\"))
+            {
+                filename = filename.Substring(13);
+                string filepath = Path.Combine(InputFolder ?? defaultInputDir, filename);
+
+                if (!File.Exists(filepath))
+                {
+                    filepath = Path.Combine(defaultInputDir, filename);
+                }
+
+                if (File.Exists(filepath))
+                {
+                    filename = filepath;
+                }
+            }
+
+            bmp = null;
+
+            try
+            {
+                using (FileStream testfile = File.Open(filename, FileMode.Open, FileAccess.Read, FileShare.Read))        // throws if can't open
+                {
+                    timestamp = new FileInfo(filename).CreationTimeUtc;
+                    MemoryStream memstrm = new MemoryStream(); // will be owned by bitmap
+                    testfile.CopyTo(memstrm);
+                    memstrm.Seek(0, SeekOrigin.Begin);
+                    bmp = new Bitmap(memstrm);
+
+                    if (ss == null)
+                    {
+                        ss = JournalScreenshot.GetScreenshot(filename, bmp.Size.Width, bmp.Size.Height, timestamp, cur_sysname == "Unknown System" ? null : cur_sysname, cmdrid);
+                    }
+
+                    if (ss != null)
+                    {
+                        string ss_infile = null;
+                        string ss_outfile = null;
+                        int ss_width = 0;
+                        int ss_height = 0;
+                        ss.GetConvertedFilename(out ss_infile, out ss_outfile, out ss_width, out ss_height);
+                        JObject jo = ss.GetJson();
+                        if (ss_outfile != null && File.Exists(ss_outfile))
+                        {
+                            store_name = ss_outfile;
+                            finalsize = new Point(ss_width, ss_height);
+                        }
+                    }
+
+                    readfilename = filename;
+                    cmdrid = ss.CommanderId;
+                }
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                if (bmp != null)
+                {
+                    bmp.Dispose();
+                }
+
+                if (throwOnError)
+                {
+                    Controller.LogLineHighlight($"Unable to open screenshot '{filename}': {ex.Message}");
+                    throw;
+                }
+
+                readfilename = null;
+                return false;
+            }
+        }
+
+        private Bitmap GetScreenshot(string inputfile, string cur_sysname, ref int cmdrid, ref JournalScreenshot ss, ref string store_name, ref Point finalsize, ref DateTime timestamp, ref string readfilename)
+        {
             Bitmap bmp = null;
 
-            for (int tries = 60; tries-- > 0;)          // wait 30 seconds and then try it anyway.. 32K hires shots take a while to write.
+            for (int tries = 60; tries > 0; tries--)          // wait 30 seconds and then try it anyway.. 32K hires shots take a while to write.
             {
-                System.Threading.Thread.Sleep(500);     // every 500ms see if we can read the file, if we can, go, else wait..
-                try
+                if (TryGetScreenshot(inputfile, cur_sysname, ref cmdrid, ref ss, ref store_name, ref finalsize, ref timestamp, out bmp, out readfilename, false))
                 {
-                    //Console.WriteLine("Trying " + inputfile);
-                    using (testfile = File.Open(inputfile, FileMode.Open, FileAccess.Read, FileShare.Read))        // throws if can't open
-                    {
-                        memstrm.SetLength(0);
-                        testfile.CopyTo(memstrm);
-                        memstrm.Seek(0, SeekOrigin.Begin);
-                        bmp = new Bitmap(memstrm);
-                    }
-                    //Console.WriteLine("Worked " + inputfile);
                     break;
                 }
-                catch
-                {
-                }
+
+                System.Threading.Thread.Sleep(500);     // every 500ms see if we can read the file, if we can, go, else wait..
             }
 
             if (bmp == null)
             {
-                try
-                {
-                    //Console.WriteLine("Trying " + inputfile);
-                    using (testfile = File.Open(inputfile, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))        // throws if can't open
-                    {
-                        memstrm.SetLength(0);
-                        testfile.CopyTo(memstrm);
-                        memstrm.Seek(0, SeekOrigin.Begin);
-                        bmp = new Bitmap(memstrm);
-                    }
-                    //Console.WriteLine("Worked " + inputfile);
-                }
-                catch (Exception ex)
-                {
-                    Controller.LogLineHighlight($"Unable to open screenshot '{inputfile}': {ex.Message}");
-                    throw;
-                }
+                TryGetScreenshot(inputfile, cur_sysname, ref cmdrid, ref ss, ref store_name, ref finalsize, ref timestamp, out bmp, out readfilename, true);
             }
 
-            try
-            {
-                fi = new FileInfo(inputfile);
-                if (ss == null)
-                {
-                    ss = JournalScreenshot.GetScreenshot(inputfile, bmp.Size.Width, bmp.Size.Height, fi.CreationTimeUtc, cur_sysname == "Unknown System" ? null : cur_sysname, cmdrid);
-                }
+            return bmp;
+        }
 
-                if (ss != null)
-                {
-                    JObject jo = ss.GetJson();
-                    if (jo["EDDOutputFile"] != null && File.Exists(jo["EDDOutputFile"].Str()))
-                    {
-                        store_name = jo["EDDOutputFile"].Str();
-                        finalsize = new Point(jo["EDDOutputWidth"].Int(), jo["EDDOutputHeight"].Int());
-                    }
-                }
-            }
-            catch
-            {
-                bmp.Dispose();
-                throw;
-            }
-
+        public Bitmap GetScreenshot(ref string filename)
+        {
+            Bitmap bmp = GetScreenshot(filename, SystemName, ref CommanderID, ref JournalScreenShot, ref OutputFilename, ref FinalSize, ref Timestamp, ref filename);
+            InputFilename = filename;
             return bmp;
         }
 
