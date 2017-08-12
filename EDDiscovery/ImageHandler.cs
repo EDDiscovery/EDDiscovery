@@ -754,22 +754,25 @@ namespace EDDiscovery.ImageHandler
                 }
             }
 
-            try
+            if (bmp == null)
             {
-                //Console.WriteLine("Trying " + inputfile);
-                using (testfile = File.Open(inputfile, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))        // throws if can't open
+                try
                 {
-                    memstrm.SetLength(0);
-                    testfile.CopyTo(memstrm);
-                    memstrm.Seek(0, SeekOrigin.Begin);
-                    bmp = new Bitmap(memstrm);
+                    //Console.WriteLine("Trying " + inputfile);
+                    using (testfile = File.Open(inputfile, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))        // throws if can't open
+                    {
+                        memstrm.SetLength(0);
+                        testfile.CopyTo(memstrm);
+                        memstrm.Seek(0, SeekOrigin.Begin);
+                        bmp = new Bitmap(memstrm);
+                    }
+                    //Console.WriteLine("Worked " + inputfile);
                 }
-                //Console.WriteLine("Worked " + inputfile);
-            }
-            catch (Exception ex)
-            {
-                Controller.LogLineHighlight($"Unable to open screenshot '{inputfile}': {ex.Message}");
-                throw;
+                catch (Exception ex)
+                {
+                    Controller.LogLineHighlight($"Unable to open screenshot '{inputfile}': {ex.Message}");
+                    throw;
+                }
             }
 
             try
