@@ -14,6 +14,7 @@
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 using EDDiscovery.Forms;
+using ExtendedControls;
 using System;
 using System.Diagnostics;
 using System.IO;
@@ -110,12 +111,7 @@ namespace EDDiscovery
             catch (Exception ex)
             {   // There's so many ways that things could go wrong during init; let's fail for everything!
                 EDDMainForm?.Dispose();
-                string msg = ex.Message ?? "(Unknown exception)";
-                string st = ex.StackTrace ?? "(Stack trace unavailable)";
-
-                MessageBox.Show(MainForm, $"Error initializing EDDiscovery. Please report this at {Properties.Resources.URLProjectFeedback}:\n\n{msg}\n{st}", "Error Initializing EDDiscovery");
-                ExitThread();
-                return;
+                FatalExceptionForm.ShowAndDie(MainForm, "Initializing", Properties.Resources.URLProjectFeedback, ex);
             }
 
             var splashForm = MainForm;
