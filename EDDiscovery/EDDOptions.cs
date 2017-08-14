@@ -236,11 +236,15 @@ namespace EDDiscovery
 
             ProcessCommandLineOptions(ProcessOption);       // do all of the command line
 
-            string optval = Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "options.txt");
-            if (!File.Exists(optval))   // try options.txt in the base folder..
+            string optval = Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "options.txt");      // options in the base folder.
+            if (File.Exists(optval))   // try options.txt in the base folder..
                 ProcessOptionFile(optval);
 
             SetAppDataDirectory();      // set the app directory
+
+            optval = Path.Combine(AppDataDirectory, "options.txt");      // options in the base folder.
+            if (File.Exists(optval))   // try options.txt in the base folder..
+                ProcessOptionFile(optval);
 
             // must be last, to override any previous options.. will contain user and system db overrides
             optval = Path.Combine(AppDataDirectory, "dboptions.txt");   // look for this file in the app folder
