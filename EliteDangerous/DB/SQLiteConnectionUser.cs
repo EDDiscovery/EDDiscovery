@@ -42,14 +42,6 @@ namespace EliteDangerousCore.DB
         {
             InitializeIfNeeded(() =>
             {
-                string dbv4file = SQLiteConnectionED.GetSQLiteDBFile(EDDSqlDbSelection.EDDiscovery);
-                string dbuserfile = SQLiteConnectionED.GetSQLiteDBFile(EDDSqlDbSelection.EDDUser);
-
-                if (File.Exists(dbv4file) && !File.Exists(dbuserfile))
-                {
-                    File.Copy(dbv4file, dbuserfile);
-                }
-
                 using (SQLiteConnectionUser conn = new SQLiteConnectionUser(true, true, EDDbAccessMode.Writer))
                 {
                     UpgradeUserDB(conn);
@@ -495,177 +487,6 @@ namespace EliteDangerousCore.DB
             }
         }
 
-        public static void TranferVisitedSystemstoJournalTableIfRequired()
-        {
-            if (System.IO.File.Exists(SQLiteConnectionED.GetSQLiteDBFile(EDDSqlDbSelection.EDDiscovery)))
-            {
-                if (SQLiteDBClass.GetSettingBool("ImportVisitedSystems", false) == false)
-                {
-                    TranferVisitedSystemstoJournalTable();
-                    SQLiteDBClass.PutSettingBool("ImportVisitedSystems", true);
-                }
-            }
-        }
-
-        public static void TranferVisitedSystemstoJournalTable()        // DONE purposely without using any VisitedSystem code.. so we can blow it away later.
-        {
-            List<Object[]> ehl = new List<Object[]>();
-            Dictionary<string, Dictionary<string, double>> dists = new Dictionary<string, Dictionary<string, double>>(StringComparer.CurrentCultureIgnoreCase);
-
-            List<DB.TravelLogUnit> tlus = DB.TravelLogUnit.GetAll().Where(t => t.type == 1).ToList();
-
-            using (SQLiteConnectionOld conn = new SQLiteConnectionOld())
-            {
-                //                                                0      1      2
-                using (DbCommand cmd = conn.CreateCommand("SELECT NameA, NameB, Dist FROM Distances WHERE Status >= 1"))    // any distance pairs okay
-                {
-                    using (DbDataReader reader = cmd.ExecuteReader())
-                    {
-                        while (reader.Read())
-                        {
-                            object[] vals = new object[3];
-                            reader.GetValues(vals);
-
-                            string namea = (string)vals[0];
-                            string nameb = (string)vals[1];
-                            double dist = (double)vals[2];
-
-                            if (!dists.ContainsKey(namea))
-                            {
-                                dists[namea] = new Dictionary<string, double>(StringComparer.CurrentCultureIgnoreCase);
-                            }
-
-                            dists[namea][nameb] = dist;
-
-                            if (!dists.ContainsKey(nameb))
-                            {
-                                dists[nameb] = new Dictionary<string, double>(StringComparer.CurrentCultureIgnoreCase);
-                            }
-
-                            dists[nameb][namea] = dist;
-                        }
-                    }
-                }
-
-                int olddbver = SQLiteConnectionOld.GetSettingInt("DBVer", 1);
-
-                if (olddbver < 7) // 2.5.2
-                {
-                    System.Diagnostics.Trace.WriteLine("Database too old - unable to migrate travel log");
-                    return;
-                }
-
-                string query;
-
-                if (olddbver < 8) // 2.5.6
-                {
-                    query = "Select Name,Time,Unit,Commander,edsm_sync, -65536 AS Map_colour, NULL AS X, NULL AS Y, NULL AS Z, NULL as id_edsm_assigned From VisitedSystems Order By Time";
-                }
-                else if (olddbver < 14) // 3.2.1
-                {
-                    query = "Select Name,Time,Unit,Commander,edsm_sync,Map_colour, NULL AS X, NULL AS Y, NULL AS Z, NULL as id_edsm_assigned From VisitedSystems Order By Time";
-                }
-                else if (olddbver < 18) // 4.0.2
-                {
-                    query = "Select Name,Time,Unit,Commander,edsm_sync,Map_colour,X,Y,Z, NULL AS id_edsm_assigned From VisitedSystems Order By Time";
-                }
-                else
-                {
-                    //              0    1    2    3         4         5          6 7 8 9
-                    query = "Select Name,Time,Unit,Commander,edsm_sync,Map_colour,X,Y,Z,id_edsm_assigned From VisitedSystems Order By Time";
-                }
-
-                using (DbCommand cmd = conn.CreateCommand(query))
-                {
-                    using (DbDataReader reader = cmd.ExecuteReader())
-                    {
-                        string prev = "";
-
-                        while (reader.Read())
-                        {
-                            Object[] array = new Object[17];
-                            reader.GetValues(array);                    // love this call.
-
-                            string tluname = (string)array[2];          // 2 is in terms of its name.. look it up
-
-                            if (tluname.StartsWith("EDSM-")) // Don't migrate the entries that were synced from EDSM
-                            {                                // We can sync them from EDSM later.
-                                continue;
-                            }
-
-                            DB.TravelLogUnit tlu = tlus.Find(x => x.Name.Equals(tluname, StringComparison.InvariantCultureIgnoreCase));
-
-                            array[15] = (tlu != null) ? (long)tlu.id : 0;      // even if we don't find it, tlu may be screwed up, still want to import
-
-                            array[16] = null;
-                            if (prev.Length>0 && dists.ContainsKey((string)array[0]))
-                            {
-                                Dictionary<string, double> _dists = dists[(string)array[0]];
-                                if (_dists.ContainsKey(prev))
-                                {
-                                    array[16] = _dists[prev];
-                                }
-                            }
-
-                            ehl.Add(array);
-                            prev = (string)array[0];
-                        }
-                    }
-                }
-            }
-
-            using (SQLiteConnectionUser conn = new SQLiteConnectionUser(utc: true))
-            {
-                using (DbTransaction txn = conn.BeginTransaction())
-                {
-                    foreach (Object[] array in ehl)
-                    {
-                        using (DbCommand cmd = conn.CreateCommand(
-                            "Insert into JournalEntries (TravelLogId,CommanderId,EventTypeId,EventType,EventTime,EventData,EdsmId,Synced) " +
-                            "values (@tli,@cid,@eti,@et,@etime,@edata,@edsmid,@synced)", txn))
-                        {
-                            cmd.AddParameterWithValue("@tli", (long)array[15]);
-                            cmd.AddParameterWithValue("@cid", (long)array[3]);
-                            cmd.AddParameterWithValue("@eti", JournalTypeEnum.FSDJump);
-                            cmd.AddParameterWithValue("@et", "FSDJump");
-
-                            JObject je = new JObject();
-                            DateTime eventtime = DateTime.SpecifyKind((DateTime)array[1], DateTimeKind.Local).ToUniversalTime();
-
-                            je["timestamp"] = eventtime.ToString("yyyy'-'MM'-'dd'T'HH':'mm':'ss'Z'");
-                            je["event"] = "FSDJump";
-                            je["StarSystem"] = ((string)array[0]);
-
-                            if (System.DBNull.Value != array[6] && System.DBNull.Value != array[7] && System.DBNull.Value != array[8])
-                            {
-                                je["StarPos"] = new JArray() {array[6], array[7], array[8] };
-                            }
-
-                            if (array[16] != null)
-                            {
-                                je["JumpDist"] = (double)array[16];
-                            }
-
-                            je["EDDMapColor"] = ((long)array[5]);
-                            cmd.AddParameterWithValue("@etime", eventtime);
-                            cmd.AddParameterWithValue("@edata", je.ToString());    // order number - look at the dbcommand above
-
-                            long edsmid = 0;
-                            if (System.DBNull.Value != array[9])
-                                edsmid = (long)array[9];
-
-                            cmd.AddParameterWithValue("@edsmid", edsmid);    // order number - look at the dbcommand above
-                            cmd.AddParameterWithValue("@synced", ((bool)array[4] == true) ? 1 : 0);
-
-                            SQLiteDBClass.SQLNonQueryText(conn, cmd);
-                        }
-                    }
-
-                    txn.Commit();
-                }
-            }
-
-        }
 
         public static Dictionary<string, RegisterEntry> EarlyGetRegister()
         {
@@ -684,10 +505,6 @@ namespace EliteDangerousCore.DB
                 {
                     System.Diagnostics.Trace.WriteLine($"Unable to read register table from EDDUser.sqlite\n{ex.ToString()}");
                 }
-            }
-            else
-            {
-                reg = SQLiteConnectionOld.EarlyGetRegister();
             }
 
             return reg;

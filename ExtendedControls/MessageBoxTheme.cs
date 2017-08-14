@@ -13,37 +13,56 @@ namespace ExtendedControls
 {
     public partial class MessageBoxTheme : Form
     {
-        static public DialogResult Show(IWin32Window window, string text, string caption = "EDDiscovery Message", MessageBoxButtons buttons = MessageBoxButtons.OK, MessageBoxIcon icon = MessageBoxIcon.None)
+        static public DialogResult Show(IWin32Window window, string text, string caption = "Warning", MessageBoxButtons buttons = MessageBoxButtons.OK, MessageBoxIcon icon = MessageBoxIcon.None, Icon windowicon = null)
         {
             MessageBoxTheme msg = new MessageBoxTheme();
             msg.StartPosition = FormStartPosition.CenterParent;
-            msg.Init(text, caption, buttons, icon , ThemeableFormsInstance.Instance?.MessageBoxWindowIcon);
+            msg.Init(text, caption, buttons, icon, windowicon);
             return msg.ShowDialog(window);
         }
 
-        static public DialogResult Show(string text, string caption = "EDDiscovery Message", MessageBoxButtons buttons = MessageBoxButtons.OK, MessageBoxIcon icon = MessageBoxIcon.None)
+        static public MessageBoxTheme ShowModeless(IWin32Window window, string text, string caption = "Warning", MessageBoxIcon icon = MessageBoxIcon.None, Icon windowicon = null)
+        {
+            MessageBoxTheme msg = new MessageBoxTheme();
+            msg.Init(text, caption, null, icon, windowicon );
+            msg.Show(window);
+            msg.CenterToParent();
+            msg.Update();
+            return msg;
+        }
+
+        static public DialogResult Show(string text, string caption = "Warning", MessageBoxButtons buttons = MessageBoxButtons.OK, MessageBoxIcon icon = MessageBoxIcon.None, Icon windowicon = null)
         {
             MessageBoxTheme msg = new MessageBoxTheme();
             msg.StartPosition = FormStartPosition.CenterScreen;
-            msg.Init(text, caption, buttons, icon , ThemeableFormsInstance.Instance?.MessageBoxWindowIcon);
+            msg.Init(text, caption, buttons, icon, windowicon);
             Form f = Application.OpenForms[0];
             return msg.ShowDialog(f);
         }
 
-        Font fnt;
+        public string MsgText { get { return text; } set { SetText(value); Invalidate(true); Update(); } }     // modeless update
+
         string text;
+        Font fnt;
         Rectangle textarea;
         Icon icon;
         Color forecolour;
+        int ystart;
 
         public MessageBoxTheme()
         {
             InitializeComponent();
         }
 
-        public void Init(string ptext, string caption , MessageBoxButtons buttons, MessageBoxIcon ic , System.Drawing.Icon windowicon)
+        public void Init(string ptext, string caption, MessageBoxButtons? buttons, MessageBoxIcon ic, System.Drawing.Icon windowicon)
         {
-            if (buttons == MessageBoxButtons.AbortRetryIgnore)
+            if (buttons == null)
+            {
+                buttonExt1.Visible = false;
+                buttonExt2.Visible = false;
+                buttonExt3.Visible = false;
+            }
+            else if (buttons == MessageBoxButtons.AbortRetryIgnore)
             {
                 buttonExt1.Tag = DialogResult.Ignore; buttonExt1.Text = "Ignore";
                 buttonExt2.Tag = DialogResult.Retry; buttonExt2.Text = "Retry";
@@ -82,22 +101,19 @@ namespace ExtendedControls
             }
 
             labelCaption.Text = this.Text = caption;
-            text = ptext;
 
             if (ic == MessageBoxIcon.Asterisk)
                 icon = SystemIcons.Asterisk;
-            if (ic == MessageBoxIcon.Error)
+            else if (ic == MessageBoxIcon.Error)
                 icon = SystemIcons.Error;
-            if (ic == MessageBoxIcon.Exclamation)
+            else if (ic == MessageBoxIcon.Exclamation)
                 icon = SystemIcons.Exclamation;
-            if (ic == MessageBoxIcon.Information)
+            else if (ic == MessageBoxIcon.Information)
                 icon = SystemIcons.Information;
-            if (ic == MessageBoxIcon.Question)
+            else if (ic == MessageBoxIcon.Question)
                 icon = SystemIcons.Question;
-            if (ic == MessageBoxIcon.Warning)
+            else if (ic == MessageBoxIcon.Warning)
                 icon = SystemIcons.Warning;
-
-            int ystart = 30;
 
             ThemeableForms theme = ThemeableFormsInstance.Instance;
             if (theme != null)  // paranoid
@@ -106,29 +122,39 @@ namespace ExtendedControls
                 forecolour = theme.TextBlockColor;
                 bool border = theme.ApplyToForm(this, fnt);
                 if (!border)
-                {
                     labelCaption.Visible = true;
-                    ystart += 20;
-                }
+                ystart = 30 + (!border ? 20 : 0);
+                if (windowicon != null)
+                    this.Icon = windowicon;
+                else if (theme.MessageBoxWindowIcon != null)
+                    this.Icon = theme.MessageBoxWindowIcon;
             }
             else
             {
                 fnt = new Font("MS Sans Serif", 12.0F);
-                forecolour = Color.Red;
+                forecolour = Color.Black;
+                if ( windowicon != null )
+                    this.Icon = windowicon;
+                ystart = 30;
             }
 
-            if ( windowicon != null)
-                this.Icon = windowicon;
+            SetText(ptext);
+        }
+
+        private void SetText(string p)
+        {
+            text = p;
+            //System.Diagnostics.Debug.WriteLine("Set text " + text);
 
             int bordery = Bounds.Height - ClientRectangle.Height;
             int borderx = Bounds.Width - ClientRectangle.Width;
 
-            int left = (ic != MessageBoxIcon.None) ? 80 : 20;
+            int left = (icon != null) ? 80 : 20;
 
             using (Graphics g = CreateGraphics())
             {
                 SizeF sizeftext = g.MeasureString(text, fnt);
-                SizeF sizefcaption = g.MeasureString(caption, fnt);
+                SizeF sizefcaption = g.MeasureString(labelCaption.Text, fnt);
 
                 Height = (int)sizeftext.Height + ystart + 50 + bordery;
                 Width = Math.Min(Math.Max(300, left + (int)Math.Max(sizeftext.Width, sizefcaption.Width) + 20), 1800) + borderx;
@@ -140,13 +166,16 @@ namespace ExtendedControls
         private void panel1_Paint(object sender, PaintEventArgs e)
         {
             e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+            //System.Diagnostics.Debug.WriteLine("Message box paint " + text);
 
             //      using (Brush b = new SolidBrush(Color.Gray)) e.Graphics.FillRectangle(b, textarea);  // DEBUG
 
             using (Brush b = new SolidBrush(forecolour))
-            using (StringFormat f = new StringFormat() { Alignment = StringAlignment.Near, LineAlignment = StringAlignment.Near })
             {
-                e.Graphics.DrawString(text, fnt, b, textarea, f);
+                using (StringFormat f = new StringFormat() { Alignment = StringAlignment.Near, LineAlignment = StringAlignment.Near })
+                {
+                    e.Graphics.DrawString(text, fnt, b, textarea, f);
+                }
             }
 
             if (icon != null)
