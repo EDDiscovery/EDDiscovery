@@ -30,17 +30,13 @@ namespace EDDiscovery
         static EDDOptions options = null;
 
         public string VersionDisplayString { get; private set; }
-        public string AppFolder { get; private set; }
         public string AppDataDirectory { get; private set; }
         public string UserDatabasePath { get; private set; }
         public string SystemDatabasePath { get; private set; }
-        public string OldDatabasePath { get; private set; }
-        public string NewUserDatabasePath { get; private set; }
-        public string NewSystemDatabasePath { get; private set; }
-        public bool StoreDataInProgramDirectory { get; private set; }
-        public bool NoWindowReposition { get; private set; }
+        public bool NoWindowReposition { get;  set; }
         public bool ActionButton { get; private set; }
         public bool NoLoad { get; private set; }
+        public bool NoTheme { get; set; }
         public bool NoSystemsLoad { get; private set; }
         public bool TraceLog { get; private set; }
         public bool LogExceptions { get; private set; }
@@ -49,32 +45,30 @@ namespace EDDiscovery
         public string ReadJournal { get; private set; }
         public string OptionsFile { get; private set; }
 
-        private string GetAppDataDirectory(string appfolder, bool portable)
+        private string AppFolder { get; set; }      // internal to use.. for -appfolder option
+        private bool StoreDataInProgramDirectory { get; set; }  // internal to us, to indicate portable
+
+        private void SetAppDataDirectory()
         {
-            if (appfolder == null)
+            if (AppFolder == null)  // if userdid not set it..
             {
-                appfolder = (portable ? "Data" : "EDDiscovery");
+                AppFolder = (StoreDataInProgramDirectory ? "Data" : "EDDiscovery");
             }
 
-            if (Path.IsPathRooted(appfolder))
+            if (Path.IsPathRooted(AppFolder))
             {
-                return appfolder;
+                AppDataDirectory = AppFolder;
             }
-            else if (portable)
+            else if (StoreDataInProgramDirectory)
             {
-                return Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, appfolder);
+                AppDataDirectory = Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, AppFolder);
             }
             else
             {
-                return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), appfolder);
+                AppDataDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), AppFolder);
             }
-        }
 
-        private void SetAppDataDirectory(string appfolder, bool portable)
-        {
-            AppDataDirectory = GetAppDataDirectory(appfolder, portable);
-
-            if (!Directory.Exists(AppDataDirectory))
+            if (!Directory.Exists(AppDataDirectory))        // make sure its there..
                 Directory.CreateDirectory(AppDataDirectory);
         }
 
@@ -112,110 +106,43 @@ namespace EDDiscovery
         {
             var appsettings = System.Configuration.ConfigurationManager.AppSettings;
 
-            if (appsettings["StoreDataInProgramDirectory"] == "true") StoreDataInProgramDirectory = true;
+            if (appsettings["StoreDataInProgramDirectory"] == "true")
+                StoreDataInProgramDirectory = true;
+
             UserDatabasePath = appsettings["UserDatabasePath"];
         }
 
-        private void ProcessOptionsFile()
+        private void ProcessOptionsFileOption(string basefolder)     // command line -optionsfile
         {
-            string optionsFileName = "options.txt";
-            bool useAppDataOptionsFile = false;
-
-            ProcessCommandLineOptions((optname, optval) =>
-            {
+            //System.Diagnostics.Debug.WriteLine("OptionFile -optionsfile ");
+            ProcessCommandLineOptions((optname, optval) =>              //FIRST pass thru command line options looking
+            {                                                           //JUST for -optionsfile
                 if (optname == "-optionsfile" && optval != null)
                 {
-                    optionsFileName = optval;
-                    return true;
+                    if (!File.Exists(optval) && !Path.IsPathRooted(optval))  // if it does not exist on its own, may be relative to base folder ..
+                        optval = Path.Combine(basefolder, optval);
+
+                    if (File.Exists(optval))
+                        ProcessOptionFile(optval);
+
+                    return true;    // used one
                 }
 
                 return false;
             });
-
-            OptionsFile = optionsFileName;
-
-            if (!Path.IsPathRooted(OptionsFile))
-            {
-                OptionsFile = Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, OptionsFile);
-                useAppDataOptionsFile = true;
-            }
-
-            if (File.Exists(OptionsFile))
-            {
-                foreach (string line in File.ReadAllLines(OptionsFile))
-                {
-                    string[] kvp = line.Split(new char[] { ' ' }, 2).Select(s => s.Trim()).ToArray();
-                    ProcessCommandLineOption("-" + kvp[0], kvp.Length == 2 ? kvp[1] : null);
-                }
-            }
-
-            string appdatadir = GetAppDataDirectory(AppFolder, StoreDataInProgramDirectory);
-
-            if (useAppDataOptionsFile && File.Exists(Path.Combine(appdatadir, optionsFileName)))
-            {
-                OptionsFile = Path.Combine(appdatadir, optionsFileName);
-                foreach (string line in File.ReadAllLines(OptionsFile))
-                {
-                    string[] kvp = line.Split(new char[] { ' ' }, 2).Select(s => s.Trim()).ToArray();
-                    ProcessCommandLineOption("-" + kvp[0], kvp.Length == 2 ? kvp[1] : null);
-                }
-            }
         }
 
-        private bool TryReadLine(string filename, out string line)
+        private void ProcessOptionFile(string optval)       // read file and process options
         {
-            line = null;
-
-            if (File.Exists(filename))
+            //System.Diagnostics.Debug.WriteLine("OptionFile " + optval);
+            foreach (string line in File.ReadAllLines(optval))
             {
-                try
-                {
-                    line = File.ReadLines(filename).FirstOrDefault();
-                    return true;
-                }
-                catch
-                {
-                }
-            }
-
-            return false;
-        }
-
-        private void ProcessDbRedirectFiles()
-        {
-            string userdbpath = null;
-            string userdbmove = null;
-            string sysdbpath = null;
-            string sysdbmove = null;
-
-            if (UserDatabasePath == null)
-            {
-                if (TryReadLine(Path.Combine(AppDataDirectory, "EDDUser.sqlite.redirect.new"), out userdbmove))
-                {
-                    NewUserDatabasePath = userdbmove;
-                }
-
-                if (TryReadLine(Path.Combine(AppDataDirectory, "EDDUser.sqlite.redirect"), out userdbpath) && File.Exists(userdbpath))
-                {
-                    UserDatabasePath = userdbpath;
-                }
-            }
-
-            if (SystemDatabasePath == null)
-            {
-                if (TryReadLine(Path.Combine(AppDataDirectory, "EDDSystem.sqlite.redirect.new"), out sysdbmove))
-                {
-                    NewSystemDatabasePath = sysdbmove;
-                }
-
-                if (TryReadLine(Path.Combine(AppDataDirectory, "EDDSystem.sqlite.redirect"), out sysdbpath) && File.Exists(sysdbpath))
-                {
-                    SystemDatabasePath = sysdbpath;
-                }
+                string[] kvp = line.Split(new char[] { ' ' }, 2).Select(s => s.Trim()).ToArray();
+                ProcessOption("-" + kvp[0], kvp.Length == 2 ? kvp[1] : null);
             }
         }
 
-        private void ProcessCommandLineOptions(Func<string, string, bool> getopt)
+        private void ProcessCommandLineOptions(Func<string, string, bool> getopt)       // go thru command line..
         {
             string[] cmdlineopts = Environment.GetCommandLineArgs().ToArray();
 
@@ -238,9 +165,10 @@ namespace EDDiscovery
             }
         }
 
-        private bool ProcessCommandLineOption(string optname, string optval)
+        private bool ProcessOption(string optname, string optval)
         {
             optname = optname.ToLowerInvariant();
+            //System.Diagnostics.Debug.WriteLine("     Option " + optname);
 
             if (optname == "-optionsfile")
             {
@@ -267,24 +195,10 @@ namespace EDDiscovery
                 SystemDatabasePath = optval;
                 return true;
             }
-            else if (optname == "-olddbpath")
-            {
-                OldDatabasePath = optval;
-                return true;
-            }
-            else if (optname == "-movesystemsdb")
-            {
-                NewSystemDatabasePath = optval;
-                return true;
-            }
-            else if (optname == "-moveuserdb")
-            {
-                NewUserDatabasePath = optval;
-                return true;
-            }
             else if (optname.StartsWith("-"))
             {
-                string opt = optname.Substring(1).ToLowerInvariant();
+                string opt = optname.Substring(1);
+
                 switch (opt)
                 {
                     case "norepositionwindow": NoWindowReposition = true; break;
@@ -298,6 +212,7 @@ namespace EDDiscovery
                     case "edsmbeta": EDSMServerType = EDSMServerType.Beta; break;
                     case "edsmnull": EDSMServerType = EDSMServerType.Null; break;
                     case "disablebetacheck": DisableBetaCheck = true; break;
+                    case "notheme": NoTheme = true; break;
                     default:
                         Console.WriteLine($"Unrecognized option -{opt}");
                         break;
@@ -310,109 +225,40 @@ namespace EDDiscovery
             return false;
         }
 
-        private void ProcessCommandLineOptions()
+        public void Init()
         {
-            ProcessCommandLineOptions(ProcessCommandLineOption);
-        }
-
-        public void Init(bool shift)
-        {
-            if (shift) NoWindowReposition = true;
             ProcessConfigVariables();
-            ProcessOptionsFile();
-            ProcessCommandLineOptions();
-            SetAppDataDirectory(AppFolder, StoreDataInProgramDirectory);
-            SetVersionDisplayString();
-            ProcessDbRedirectFiles();
+
+            ProcessOptionsFileOption(System.AppDomain.CurrentDomain.BaseDirectory);     // go thru the command line looking for -optionfile, use relative base dir
+
+            ProcessCommandLineOptions(ProcessOption);       // do all of the command line..  this sets up the appfolder if its overridden on the command line
+
+            string optval = Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "options.txt");      // options in the base folder.
+            if (File.Exists(optval))   // try options.txt in the base folder..
+                ProcessOptionFile(optval);
+
+            SetAppDataDirectory();      // set the app directory, now we have given base dir options to override appfolder, and we have given any -optionfiles on the command line
+
+            ProcessOptionsFileOption(AppDataDirectory);     // go thru the command line looking for -optionfile relative to app folder, then read them
+
+            optval = Path.Combine(AppDataDirectory, "options.txt");      // options in the base folder.
+            if (File.Exists(optval))   // try options.txt in the base folder..
+                ProcessOptionFile(optval);
+
+            // db move system option file will contain user and system db overrides
+            optval = Path.Combine(AppDataDirectory, "dboptions.txt");   // look for this file in the app folder
+            if (File.Exists(optval))
+                ProcessOptionFile(optval);
+
+            ProcessCommandLineOptions(ProcessOption);       // And then let the command line have a last go at overriding them Again. Optionfiles is ignore, appfolder was already done
+
+            SetVersionDisplayString();  // then set the version display string up dependent on options selected
+
             if (UserDatabasePath == null) UserDatabasePath = Path.Combine(AppDataDirectory, "EDDUser.sqlite");
             if (SystemDatabasePath == null) SystemDatabasePath = Path.Combine(AppDataDirectory, "EDDSystem.sqlite");
-            if (OldDatabasePath == null) OldDatabasePath = Path.Combine(AppDataDirectory, "EDDiscovery.sqlite");
 
             EliteDangerousCore.EliteConfigInstance.InstanceOptions = this;
         }
 
-        public bool MoveDatabases(Action<string> msg)
-        {
-            FileStream userdbstream = null;
-            FileStream newuserdbstream = null;
-            FileStream sysdbstream = null;
-            FileStream newsysdbstream = null;
-
-            try
-            {
-                if (NewUserDatabasePath != null)
-                {
-                    if (File.Exists(UserDatabasePath) && NewUserDatabasePath != UserDatabasePath)
-                    {
-                        FileStream instream = userdbstream = File.Open(UserDatabasePath, FileMode.Open, FileAccess.Read, FileShare.Delete);
-                        FileStream outstream = newuserdbstream = File.Open(NewUserDatabasePath, FileMode.CreateNew, FileAccess.Write, FileShare.None);
-                        long size = instream.Length;
-                        int blk = 0;
-                        int len = 0;
-                        byte[] data = new byte[65536];
-
-                        while ((len = instream.Read(data, 0, data.Length)) != 0)
-                        {
-                            outstream.Write(data, 0, len);
-                            blk++;
-                            if ((blk % 16) == 0)
-                            {
-                                msg.Invoke($"Moving User DB ({outstream.Position / 1048576} / {size / 1048576}MiB)");
-                            }
-                        }
-                    }
-                }
-
-                if (NewSystemDatabasePath != null)
-                {
-                    if (File.Exists(UserDatabasePath) && NewUserDatabasePath != UserDatabasePath)
-                    {
-                        FileStream instream = sysdbstream = File.Open(SystemDatabasePath, FileMode.Open, FileAccess.Read, FileShare.Delete);
-                        FileStream outstream = newsysdbstream = File.Open(NewSystemDatabasePath, FileMode.CreateNew, FileAccess.Write, FileShare.None);
-                        long size = instream.Length;
-                        int blk = 0;
-                        int len = 0;
-                        byte[] data = new byte[65536];
-
-                        while ((len = instream.Read(data, 0, data.Length)) != 0)
-                        {
-                            outstream.Write(data, 0, len);
-                            blk++;
-                            if ((blk % 16) == 0)
-                            {
-                                msg.Invoke($"Moving System DB ({outstream.Position / 1048576} / {size / 1048576}MiB)");
-                            }
-                        }
-                    }
-                }
-
-                if (userdbstream != null && newuserdbstream != null && userdbstream.Length == newuserdbstream.Length)
-                {
-                    File.WriteAllText(Path.Combine(AppDataDirectory, "EDDUser.sqlite.redirect"), NewUserDatabasePath);
-                    File.Delete(Path.Combine(AppDataDirectory, "EDDUser.sqlite.redirect.new"));
-                    File.Delete(UserDatabasePath);
-                    UserDatabasePath = NewUserDatabasePath;
-                    NewUserDatabasePath = null;
-                }
-
-                if (sysdbstream != null && newsysdbstream != null && sysdbstream.Length == newsysdbstream.Length)
-                {
-                    File.WriteAllText(Path.Combine(AppDataDirectory, "EDDSystem.sqlite.redirect"), NewSystemDatabasePath);
-                    File.Delete(Path.Combine(AppDataDirectory, "EDDSystem.sqlite.redirect.new"));
-                    File.Delete(SystemDatabasePath);
-                    SystemDatabasePath = NewSystemDatabasePath;
-                    NewSystemDatabasePath = null;
-                }
-
-                return true;
-            }
-            finally
-            {
-                if (newuserdbstream != null) newuserdbstream.Close();
-                if (newsysdbstream != null) newsysdbstream.Close();
-                if (userdbstream != null) userdbstream.Close();
-                if (sysdbstream != null) sysdbstream.Close();
-            }
-        }
     }
 }

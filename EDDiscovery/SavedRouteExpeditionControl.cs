@@ -728,15 +728,10 @@ namespace EDDiscovery
 
             if (!e.IsLastVisibleRow)
             {
-                var centerFormat = new StringFormat()
-                {
-                    // right alignment might actually make more sense for numbers
-                    Alignment = StringAlignment.Center,
-                    LineAlignment = StringAlignment.Center
-                };
-
                 var headerBounds = new Rectangle(e.RowBounds.Left, e.RowBounds.Top, grid.RowHeadersWidth, e.RowBounds.Height);
 
+                // right alignment might actually make more sense for numbers
+                using (var centerFormat = new StringFormat() { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Center })
                 using (Brush br = new SolidBrush(grid.RowHeadersDefaultCellStyle.ForeColor))
                     e.Graphics.DrawString(rowIdx, grid.RowHeadersDefaultCellStyle.Font, br, headerBounds, centerFormat);
             }

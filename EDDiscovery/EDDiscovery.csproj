@@ -193,6 +193,12 @@
     <Compile Include="Actions\ActionVars.cs" />
     <Compile Include="Actions\ConditionFunctionsEDD.cs" />
     <Compile Include="EDDOptions.cs" />
+    <Compile Include="Forms\SafeModeForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\SafeModeForm.Designer.cs">
+      <DependentUpon>SafeModeForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="GridControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -544,6 +550,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\ImportSphere.resx">
       <DependentUpon>ImportSphere.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\SafeModeForm.resx">
+      <DependentUpon>SafeModeForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\SetNoteForm.resx">
       <DependentUpon>SetNoteForm.cs</DependentUpon>

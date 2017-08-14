@@ -89,17 +89,12 @@ namespace EDDiscovery
             InvokeAsyncOnUiThread = invokeAsyncOnUiThread;
         }
 
-        public static void Initialize(bool noreposition, Action<string> msg)    // called from EDDApplicationContext to initialize config and dbs
+        public static void Initialize(Action<string> msg)    // called from EDDApplicationContext to initialize config and dbs
         {
             msg.Invoke("Checking Config");
-            InitializeConfig(noreposition);
+            InitializeConfig();
 
             Trace.WriteLine($"*** Elite Dangerous Discovery Initializing - {EDDOptions.Instance.VersionDisplayString}, Platform: {Environment.OSVersion.Platform.ToString()}");
-
-            if (EDDOptions.Instance.NewUserDatabasePath != null || EDDOptions.Instance.NewSystemDatabasePath != null)
-            {
-                EDDOptions.Instance.MoveDatabases(msg);
-            }
 
             msg.Invoke("Scanning Memory Banks");
             InitializeDatabases();
@@ -321,15 +316,14 @@ namespace EDDiscovery
         private static void InitializeDatabases()
         {
             Trace.WriteLine("Initializing database");
-            SQLiteConnectionOld.Initialize();
             SQLiteConnectionUser.Initialize();
             SQLiteConnectionSystem.Initialize();
             Trace.WriteLine("Database initialization complete");
         }
 
-        private static void InitializeConfig(bool noreposition)
+        private static void InitializeConfig()
         {
-            EDDOptions.Instance.Init(noreposition);
+            EDDOptions.Instance.Init();
 
             if (EDDOptions.Instance.ReadJournal != null && File.Exists(EDDOptions.Instance.ReadJournal))
             {
@@ -406,7 +400,6 @@ namespace EDDiscovery
 
             if (!cancelRequested())
             {
-                SQLiteConnectionUser.TranferVisitedSystemstoJournalTableIfRequired();
                 SQLiteConnectionSystem.CreateSystemsTableIndexes();
                 galacticMapping.ParseData();                            // at this point, EDSM data is loaded..
                 SystemClassDB.AddToAutoComplete(galacticMapping.GetGMONames());

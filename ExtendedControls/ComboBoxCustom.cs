@@ -337,12 +337,8 @@ namespace ExtendedControls
                     }
                 }
 
-                StringFormat f = new StringFormat();
-                f.Alignment = StringAlignment.Near;
-                f.LineAlignment = StringAlignment.Near;
-                f.FormatFlags = StringFormatFlags.NoWrap;
-
-                e.Graphics.DrawString(this.Text, this.Font, textb, topBoxTextArea, f);
+                using (StringFormat f = new StringFormat() { Alignment = StringAlignment.Near, LineAlignment = StringAlignment.Near, FormatFlags = StringFormatFlags.NoWrap })
+                    e.Graphics.DrawString(this.Text, this.Font, textb, topBoxTextArea, f);
 
                 e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.Default;
 
