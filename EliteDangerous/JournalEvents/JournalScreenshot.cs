@@ -56,6 +56,15 @@ namespace EliteDangerousCore.JournalEvents
             UpdateJson(jo);
         }
 
+        public void GetConvertedFilename(out string input_filename, out string output_filename, out int width, out int height)
+        {
+            JObject jo = GetJson();
+            input_filename = jo["EDDInputFile"]?.ToString();
+            output_filename = jo["EDDOutputFile"]?.ToString();
+            width = jo["EDDOutputWidth"].Int();
+            height = jo["EDDOutputHeight"].Int();
+        }
+
         public static JournalScreenshot GetScreenshot(string filename, int width, int height, DateTime timestamp, string sysname, int cmdrid)
         {
             JournalScreenshot ss = null;

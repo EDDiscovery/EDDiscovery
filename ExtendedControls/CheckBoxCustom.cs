@@ -82,7 +82,7 @@ namespace ExtendedControls
 
                 if (Enabled)
                 {
-                    if (Image == null)      
+                    if (Image == null)
                     {
                         using (Pen second = new Pen(CheckBoxInnerColor, 1F))
                             e.Graphics.DrawRectangle(second, rect);
@@ -114,16 +114,11 @@ namespace ExtendedControls
 
                 e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
 
+                using (StringFormat fmt = new StringFormat() { Alignment = StringAlignment.Near, LineAlignment = StringAlignment.Center })
                 using (Brush textb = new SolidBrush((Enabled) ? this.ForeColor : this.ForeColor.Multiply(0.5F)))
+                using (Font ft = new Font(this.Font.Name, this.Font.Size - FontNerfReduction)) // font 0.5 points smaller, seems to work, otherwise it just won't fit
                 {
-                    StringFormat fmt = new StringFormat();
-                    fmt.Alignment = StringAlignment.Near;
-                    fmt.LineAlignment = StringAlignment.Center;
-
-                    using (Font ft = new Font(this.Font.Name, this.Font.Size - FontNerfReduction)) // font 0.5 points smaller, seems to work, otherwise it just won't fit
-                    {
-                        e.Graphics.DrawString(this.Text, ft, textb, textarea, fmt);
-                    }
+                    e.Graphics.DrawString(this.Text, ft, textb, textarea, fmt);
                 }
 
                 if (Image != null && ImageUnchecked != null)

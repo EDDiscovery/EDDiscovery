@@ -101,13 +101,27 @@ namespace EDDiscoveryCore.EGO
                             logger?.Invoke($"Sent {he.EntryType.ToString()} event to EGO ({he.EventSummary})");
                             if (newRecord) { logger?.Invoke("New EGO record set"); }
                         }
+                        else
+                        {
+                            logger?.Invoke($"Fail to send {he.EntryType.ToString()} event to EGO ({he.EventSummary})");
+
+                        }
+
+                        if (hlscanunsyncedlist.Count>1 && hlscanunsyncedlist.Count%10==0)
+                        {
+                            logger?.Invoke($"{hlscanunsyncedlist.Count.ToString()} events in EGO queue");
+                        }
 
                         if (Exit)
                         {
                             return;
                         }
 
-                        Thread.Sleep(1000);   // Throttling to 1 per second to not kill EGO network
+                        if (DateTime.UtcNow < new DateTime(2017,8,18))  // Temporary slow down EGO sync more...
+                            Thread.Sleep(5000);   // Throttling to 1 per second to not kill EGO network
+                        else
+                            Thread.Sleep(1000);   // Throttling to 1 per second to not kill EGO network
+
                     }
 
                     // Wait up to 60 seconds for another EGO event to come in
@@ -164,7 +178,6 @@ namespace EDDiscoveryCore.EGO
                     he.SetEGOSync();
                     return true;
                 }
-                return true;
             }
 
             return false;
