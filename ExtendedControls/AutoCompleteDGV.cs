@@ -147,7 +147,10 @@ namespace ExtendedControls
             /// <summary>
             /// Initializes a new instance of the <see cref="CellEditControl"/> class.
             /// </summary>
-            public CellEditControl() : base() { }
+            public CellEditControl() : base()
+            {
+                this.TextChanged += Control_TextChanged;
+            }
 
             #region IDataGridViewEditingControl implementation
 
@@ -246,9 +249,8 @@ namespace ExtendedControls
             /// Raises the <see cref="Control.TextChanged"/> event.
             /// </summary>
             /// <param name="e">An <see cref="EventArgs"/> that contains the event data.</param>
-            protected override void OnTextChanged(EventArgs e)
+            private void Control_TextChanged(object sender, EventArgs e)
             {
-                base.OnTextChanged(e);
                 EditingControlValueChanged = true;
                 EditingControlDataGridView?.NotifyCurrentCellDirty(true);
             }
