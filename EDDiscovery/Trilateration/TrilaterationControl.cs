@@ -609,12 +609,6 @@ namespace EDDiscovery
             richTextBox_History.AppendText(text,color);
         }
         
-        private void toolStripButtonNew_Click(object sender, EventArgs e)
-        {
-            HistoryEntry he = _discoveryForm.history.GetLastFSD;
-            if ( he != null )
-                Set(he.System);
-        }
 
         private void toolStripButtonMap_Click(object sender, EventArgs e)
         {
@@ -1019,6 +1013,13 @@ namespace EDDiscovery
                     e.Handled = true;
                 }
             }
+        }
+
+        private void buttonStartNew_Click(object sender, EventArgs e)
+        {
+            HistoryEntry he = _discoveryForm.history.GetLastFSD;
+            if (he != null)
+                Set(he.System);
         }
     }
 }
