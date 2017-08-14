@@ -15,6 +15,7 @@
  */
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Linq;
@@ -23,23 +24,40 @@ using System.Windows.Forms;
 
 namespace ExtendedControls
 {
+    [DefaultEvent(nameof(MouseClick))]
     public class DrawnPanel : Panel
     {
         // Back, Fore color used
+        [DefaultValue(typeof(Color), "Transparent")]
+        public override Color BackColor { get { return _BackColor; } set { _BackColor = value; Invalidate(); } }
+        private Color _BackColor = Color.Transparent;
+
+        [DefaultValue(typeof(Color), nameof(Color.White))]
         public Color MouseOverColor { get; set; } = Color.White;
+
+        [DefaultValue(typeof(Color), nameof(Color.Green))]
         public Color MouseSelectedColor { get; set; } = Color.Green;
+
+        [DefaultValue(true)]
         public bool MouseSelectedColorEnable { get; set; } = true;      // set to disable selected colour in some crazy windows situations where clicks are lost
         public float PanelDisabledScaling { get; set; } = 0.25F;
 
         public enum ImageType { Close, Minimize, OnTop, Floating, Gripper, EDDB, Ross, InverseText,
                                 Move, Text, None , Transparent, NotTransparent ,
                                 WindowInTaskBar, WindowNotInTaskBar, Captioned, NotCaptioned,
-                                Bars };
+                                Bars, Maximize, Restore };
 
-        public ImageType ImageSelected { get; set; } = ImageType.Close;
+        [DefaultValue(ImageType.Close)]
+        public ImageType ImageSelected { get { return _ImageSelected; } set { if (_ImageSelected != value) { _ImageSelected = value; Invalidate(); } } }
+        private ImageType _ImageSelected = ImageType.Close;
+
+        [DefaultValue(null)]
         public Image DrawnImage { get; set; } = null;                                   // if not set, an image is drawn . Use None below for a image only
 
+        [DefaultValue(null)]
         public string ImageText { get; set; } = null;       // for Text Type
+
+        [DefaultValue(4)]
         public int MarginSize { get; set; } = 4;                    // margin around icon, 0 =auto, -1 = zero
 
         #region Public Functions
@@ -48,7 +66,7 @@ namespace ExtendedControls
             mousecapture = true;
             Invalidate();
         }
-
+        [Browsable(false)]
         public bool IsCaptured { get { return mousecapture; } }
 
         private ImageAttributes DrawnImageAttributesEnabled = null;         // Image override (colour etc) for images using Image
@@ -274,6 +292,25 @@ namespace ExtendedControls
                     e.Graphics.DrawLine(p1, new Point(leftmarginpx, 0), new Point(rightmarginpx, 0));
                     e.Graphics.DrawLine(p1, new Point(leftmarginpx, 2), new Point(rightmarginpx, 2));
                 }
+                else if (ImageSelected == ImageType.Maximize)
+                {
+                    e.Graphics.DrawRectangle(p1, new Rectangle(leftmarginpx, topmarginpx, marginwidth - 1, marginheight));
+                    e.Graphics.DrawLine(p2, new Point(leftmarginpx, topmarginpx + 1), new Point(rightmarginpx, topmarginpx + 1));
+                }
+                else if (ImageSelected == ImageType.Restore)
+                {
+                    // lower-left foreground "window" clockwise from top-left
+                    e.Graphics.DrawLine(p2, new Point(leftmarginpx, topmarginpx + 8), new Point(rightmarginpx - 6, topmarginpx + 8));
+                    e.Graphics.DrawLine(p1, new Point(rightmarginpx - 6, topmarginpx + 8), new Point(rightmarginpx - 6, bottommarginpx));
+                    e.Graphics.DrawLine(p1, new Point(rightmarginpx - 6, bottommarginpx), new Point(leftmarginpx, bottommarginpx));
+                    e.Graphics.DrawLine(p1, new Point(leftmarginpx, bottommarginpx), new Point(leftmarginpx, topmarginpx + 8));
+
+                    // upper-right background "window" clockwise from (obscured!) bottom-left
+                    e.Graphics.DrawLine(p1, new Point(leftmarginpx + 6, topmarginpx + 8), new Point(leftmarginpx + 6, topmarginpx + 2));
+                    e.Graphics.DrawLine(p2, new Point(leftmarginpx + 6, topmarginpx + 2), new Point(rightmarginpx, topmarginpx + 2));
+                    e.Graphics.DrawLine(p1, new Point(rightmarginpx, topmarginpx + 2), new Point(rightmarginpx, bottommarginpx - 6));
+                    e.Graphics.DrawLine(p1, new Point(rightmarginpx, bottommarginpx - 6), new Point(rightmarginpx - 6, bottommarginpx - 6));
+                }
 
                 e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.Default;
 
@@ -321,7 +358,7 @@ namespace ExtendedControls
         private bool mouseover = false;
         private bool mousedown = false;
         private bool mousecapture = false;
-#endregion
+        #endregion
     }
 
     public class DrawnPanelNoTheme : DrawnPanel     // use if you want the panel to be themed.. sometimes you do, sometimes you don't

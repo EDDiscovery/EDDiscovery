@@ -48,6 +48,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ChooseTestsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ChooseTestsForm.Designer.cs">
+      <DependentUpon>ChooseTestsForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="EDCommander.cs" />
     <Compile Include="TestAutoComplete.cs">
       <SubType>Form</SubType>
@@ -81,6 +87,9 @@
     <Compile Include="UserControl2.Designer.cs">
       <DependentUpon>UserControl2.cs</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="ChooseTestsForm.resx">
+      <DependentUpon>ChooseTestsForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="TestAutoComplete.resx">
       <DependentUpon>TestAutoComplete.cs</DependentUpon>
     </EmbeddedResource>
