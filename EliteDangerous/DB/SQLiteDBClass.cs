@@ -23,7 +23,7 @@ namespace EliteDangerousCore.DB
     public enum EDDSqlDbSelection
     {
         None = 0,
-        EDDiscovery = 1,
+        //EDDiscovery = 1,
         EDDUser = 2,
         EDDSystem = 4
     }

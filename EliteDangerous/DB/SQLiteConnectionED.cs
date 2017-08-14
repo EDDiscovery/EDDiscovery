@@ -24,55 +24,6 @@ using System.IO;
 
 namespace EliteDangerousCore.DB
 {
-    public class SQLiteConnectionOld : SQLiteConnectionED<SQLiteConnectionOld>
-    {
-        public SQLiteConnectionOld() : base(EDDSqlDbSelection.EDDiscovery)
-        {
-            
-        }
-
-        protected SQLiteConnectionOld(bool initializing) : base(EDDSqlDbSelection.EDDiscovery, initializing: initializing)
-        {
-        }
-
-        public static void Initialize()
-        {
-            InitializeIfNeeded(() => { });
-        }
-
-        public static Dictionary<string, RegisterEntry> EarlyGetRegister()
-        {
-            Dictionary<string, RegisterEntry> reg = new Dictionary<string, RegisterEntry>();
-
-            if (File.Exists(GetSQLiteDBFile(EDDSqlDbSelection.EDDiscovery)))
-            {
-                try
-                {
-                    using (SQLiteConnectionOld conn = new SQLiteConnectionOld(true))
-                    {
-                        conn.GetRegister(reg);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    System.Diagnostics.Trace.WriteLine($"Unable to read register table from old database\n{ex.ToString()}");
-                }
-            }
-
-            return reg;
-        }
-
-    }
-
-    /*
-    public class SQLiteConnectionCombined : SQLiteConnectionED<SQLiteConnectionCombined>
-    {
-        public SQLiteConnectionCombined() : base(EDDSqlDbSelection.None, EDDSqlDbSelection.EDDUser | EDDSqlDbSelection.EDDSystem)
-        {
-        }
-    }
-     */
-
     public enum EDDbAccessMode
     {
         Reader,
@@ -512,8 +463,9 @@ namespace EliteDangerousCore.DB
             }
             else
             {
-                // Get the old EDDiscovery database path
-                return EliteDangerousCore.EliteConfigInstance.InstanceOptions.OldDatabasePath;
+                // Get the old EDDiscovery database path - no longer supported
+                System.Diagnostics.Debug.Assert(false);
+                return EliteDangerousCore.EliteConfigInstance.InstanceOptions.UserDatabasePath; // just to make the code compile
             }
         }
 
