@@ -38,28 +38,28 @@
             // 
             // buttonDbs
             // 
-            this.buttonDbs.Enabled = false;
-            this.buttonDbs.Location = new System.Drawing.Point(89, 121);
+            this.buttonDbs.Location = new System.Drawing.Point(89, 120);
             this.buttonDbs.Name = "buttonDbs";
             this.buttonDbs.Size = new System.Drawing.Size(193, 23);
             this.buttonDbs.TabIndex = 0;
             this.buttonDbs.Text = "Move Databases";
             this.buttonDbs.UseVisualStyleBackColor = true;
+            this.buttonDbs.Click += new System.EventHandler(this.buttonDbs_Click);
             // 
             // buttonNormal
             // 
-            this.buttonNormal.Location = new System.Drawing.Point(89, 164);
+            this.buttonNormal.Location = new System.Drawing.Point(89, 160);
             this.buttonNormal.Name = "buttonNormal";
             this.buttonNormal.Size = new System.Drawing.Size(193, 23);
             this.buttonNormal.TabIndex = 0;
             this.buttonNormal.Text = "Run";
             this.buttonNormal.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.buttonNormal.UseVisualStyleBackColor = true;
-            this.buttonNormal.Click += new System.EventHandler(this.button2_Click);
+            this.buttonNormal.Click += new System.EventHandler(this.Run_Click);
             // 
             // buttonPositions
             // 
-            this.buttonPositions.Location = new System.Drawing.Point(89, 81);
+            this.buttonPositions.Location = new System.Drawing.Point(89, 80);
             this.buttonPositions.Name = "buttonPositions";
             this.buttonPositions.Size = new System.Drawing.Size(193, 23);
             this.buttonPositions.TabIndex = 0;
@@ -79,7 +79,7 @@
             // 
             // buttonCancel
             // 
-            this.buttonCancel.Location = new System.Drawing.Point(89, 207);
+            this.buttonCancel.Location = new System.Drawing.Point(89, 200);
             this.buttonCancel.Name = "buttonCancel";
             this.buttonCancel.Size = new System.Drawing.Size(193, 23);
             this.buttonCancel.TabIndex = 0;
@@ -92,7 +92,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(370, 288);
+            this.ClientSize = new System.Drawing.Size(370, 252);
             this.Controls.Add(this.buttonCancel);
             this.Controls.Add(this.buttonNormal);
             this.Controls.Add(this.buttonDbs);

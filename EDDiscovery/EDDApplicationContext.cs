@@ -121,7 +121,15 @@ namespace EDDiscovery
             {
                 EDDMainForm = new EDDiscoveryForm();
                 SetLoadingMsg("Checking Ship Systems");
-                EDDiscoveryController.Initialize( positionreset, themereset, SetLoadingMsg);
+
+                EDDiscoveryController.Initialize( SetLoadingMsg );   // this loads up the options
+
+                if (positionreset)
+                    EDDOptions.Instance.NoWindowReposition = true;
+
+                if (themereset)
+                    EDDOptions.Instance.NoTheme = true;
+
                 EDDMainForm.Init(SetLoadingMsg);     // call the init function, which will initialize the eddiscovery form
 
                 SetLoadingMsg("Establishing Telepresence");
