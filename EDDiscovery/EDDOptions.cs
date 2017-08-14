@@ -115,8 +115,6 @@ namespace EDDiscovery
 
         private void ProcessOptionsFileOption()     // command line -optionsfile
         {
-            string optionsFileName = "options.txt";
-
             ProcessCommandLineOptions((optname, optval) =>              //FIRST pass thru command line options looking
             {                                                           //JUST for -optionsfile
                 if (optname == "-optionsfile" && optval != null)
@@ -238,11 +236,15 @@ namespace EDDiscovery
 
             ProcessCommandLineOptions(ProcessOption);       // do all of the command line
 
+            string optval = Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "options.txt");
+            if (!File.Exists(optval))   // try options.txt in the base folder..
+                ProcessOptionFile(optval);
+
             SetAppDataDirectory();      // set the app directory
 
             // must be last, to override any previous options.. will contain user and system db overrides
-            string optval = Path.Combine(AppDataDirectory, "dboptions.txt");   // look for this file in the app folder
-            if (File.Exists(optval))                    
+            optval = Path.Combine(AppDataDirectory, "dboptions.txt");   // look for this file in the app folder
+            if (File.Exists(optval))
                 ProcessOptionFile(optval);
 
             SetVersionDisplayString();  // then set the version display string up dependent on options selected
