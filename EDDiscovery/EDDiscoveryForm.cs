@@ -803,6 +803,15 @@ namespace EDDiscovery
             Process.Start(Properties.Resources.URLProjectDiscord);
         }
 
+        private void howToRunInSafeModeToResetVariousParametersToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ExtendedControls.MessageBoxTheme.Show(this, "To start in safe mode, exit the program, hold down the shift key" + Environment.NewLine +
+                            "and double click on the EDD program icon.  You will then be in the safe mode dialog." + Environment.NewLine +
+                            "You can reset various parameters and move the data bases to other locations.",
+                            "How to run safe mode", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+        }
+
         private void showAllInTaskBarToolStripMenuItem_Click(object sender, EventArgs e)
         {
             PopOuts.ShowAllPopOutsInTaskBar();
