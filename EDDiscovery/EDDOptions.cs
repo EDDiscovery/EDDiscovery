@@ -113,14 +113,15 @@ namespace EDDiscovery
             UserDatabasePath = appsettings["UserDatabasePath"];
         }
 
-        private void ProcessOptionsFileOption()     // command line -optionsfile
+        private void ProcessOptionsFileOption(string basefolder)     // command line -optionsfile
         {
+            //System.Diagnostics.Debug.WriteLine("OptionFile -optionsfile ");
             ProcessCommandLineOptions((optname, optval) =>              //FIRST pass thru command line options looking
             {                                                           //JUST for -optionsfile
                 if (optname == "-optionsfile" && optval != null)
                 {
-                    if (!File.Exists(optval))   // if it does not exist on its own, may be relative to base folder ..
-                        optval = Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, optval);
+                    if (!File.Exists(optval) && !Path.IsPathRooted(optval))  // if it does not exist on its own, may be relative to base folder ..
+                        optval = Path.Combine(basefolder, optval);
 
                     if (File.Exists(optval))
                         ProcessOptionFile(optval);
@@ -134,6 +135,7 @@ namespace EDDiscovery
 
         private void ProcessOptionFile(string optval)       // read file and process options
         {
+            //System.Diagnostics.Debug.WriteLine("OptionFile " + optval);
             foreach (string line in File.ReadAllLines(optval))
             {
                 string[] kvp = line.Split(new char[] { ' ' }, 2).Select(s => s.Trim()).ToArray();
@@ -167,6 +169,7 @@ namespace EDDiscovery
         private bool ProcessOption(string optname, string optval)
         {
             optname = optname.ToLowerInvariant();
+            //System.Diagnostics.Debug.WriteLine("     Option " + optname);
 
             if (optname == "-optionsfile")
             {
@@ -232,24 +235,28 @@ namespace EDDiscovery
         {
             ProcessConfigVariables();
 
-            ProcessOptionsFileOption();     // go thru the command line looking for -optionfile, then read them
+            ProcessOptionsFileOption(System.AppDomain.CurrentDomain.BaseDirectory);     // go thru the command line looking for -optionfile, use relative base dir
 
-            ProcessCommandLineOptions(ProcessOption);       // do all of the command line
+            ProcessCommandLineOptions(ProcessOption);       // do all of the command line..  this sets up the appfolder if its overridden on the command line
 
             string optval = Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "options.txt");      // options in the base folder.
             if (File.Exists(optval))   // try options.txt in the base folder..
                 ProcessOptionFile(optval);
 
-            SetAppDataDirectory();      // set the app directory
+            SetAppDataDirectory();      // set the app directory, now we have given base dir options to override appfolder, and we have given any -optionfiles on the command line
+
+            ProcessOptionsFileOption(AppDataDirectory);     // go thru the command line looking for -optionfile relative to app folder, then read them
 
             optval = Path.Combine(AppDataDirectory, "options.txt");      // options in the base folder.
             if (File.Exists(optval))   // try options.txt in the base folder..
                 ProcessOptionFile(optval);
 
-            // must be last, to override any previous options.. will contain user and system db overrides
+            // db move system option file will contain user and system db overrides
             optval = Path.Combine(AppDataDirectory, "dboptions.txt");   // look for this file in the app folder
             if (File.Exists(optval))
                 ProcessOptionFile(optval);
+
+            ProcessCommandLineOptions(ProcessOption);       // And then let the command line have a last go at overriding them Again. Optionfiles is ignore, appfolder was already done
 
             SetVersionDisplayString();  // then set the version display string up dependent on options selected
 
