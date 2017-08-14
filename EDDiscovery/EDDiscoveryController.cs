@@ -316,7 +316,6 @@ namespace EDDiscovery
         private static void InitializeDatabases()
         {
             Trace.WriteLine("Initializing database");
-            SQLiteConnectionOld.Initialize();
             SQLiteConnectionUser.Initialize();
             SQLiteConnectionSystem.Initialize();
             Trace.WriteLine("Database initialization complete");
@@ -401,7 +400,6 @@ namespace EDDiscovery
 
             if (!cancelRequested())
             {
-                SQLiteConnectionUser.TranferVisitedSystemstoJournalTableIfRequired();
                 SQLiteConnectionSystem.CreateSystemsTableIndexes();
                 galacticMapping.ParseData();                            // at this point, EDSM data is loaded..
                 SystemClassDB.AddToAutoComplete(galacticMapping.GetGMONames());

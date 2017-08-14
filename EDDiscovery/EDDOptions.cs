@@ -33,7 +33,6 @@ namespace EDDiscovery
         public string AppDataDirectory { get; private set; }
         public string UserDatabasePath { get; private set; }
         public string SystemDatabasePath { get; private set; }
-        public string OldDatabasePath { get; private set; }
         public bool NoWindowReposition { get;  set; }
         public bool ActionButton { get; private set; }
         public bool NoLoad { get; private set; }
@@ -196,11 +195,6 @@ namespace EDDiscovery
                 SystemDatabasePath = optval;
                 return true;
             }
-            else if (optname == "-olddbpath")
-            {
-                OldDatabasePath = optval;
-                return true;
-            }
             else if (optname.StartsWith("-"))
             {
                 string opt = optname.Substring(1);
@@ -262,7 +256,6 @@ namespace EDDiscovery
 
             if (UserDatabasePath == null) UserDatabasePath = Path.Combine(AppDataDirectory, "EDDUser.sqlite");
             if (SystemDatabasePath == null) SystemDatabasePath = Path.Combine(AppDataDirectory, "EDDSystem.sqlite");
-            if (OldDatabasePath == null) OldDatabasePath = Path.Combine(AppDataDirectory, "EDDiscovery.sqlite");
 
             EliteDangerousCore.EliteConfigInstance.InstanceOptions = this;
         }

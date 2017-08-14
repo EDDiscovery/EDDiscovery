@@ -29,7 +29,6 @@ namespace EliteDangerousCore
         string AppDataDirectory { get; }
         string SystemDatabasePath { get; }
         string UserDatabasePath { get; }
-        string OldDatabasePath { get; }
     }
 
     public interface EliteConfig
