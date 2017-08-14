@@ -52,11 +52,6 @@ namespace EDDiscovery
             this.addToWantedSystemsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.viewOnEDSMToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.pasteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.labelTargetSystem = new System.Windows.Forms.Label();
-            this.labelCoordinates = new System.Windows.Forms.Label();
-            this.labelCoordinateX = new System.Windows.Forms.Label();
-            this.labelCoordinateY = new System.Windows.Forms.Label();
-            this.labelCoordinateZ = new System.Windows.Forms.Label();
             this.wantedContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.removeFromWantedSystemsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.viewOnEDSMToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
@@ -71,12 +66,9 @@ namespace EDDiscovery
             this.toolStripButtonRemoveUnused = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonRemoveAll = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonMap = new System.Windows.Forms.ToolStripButton();
-            this.textBox_status = new ExtendedControls.TextBoxBorder();
-            this.labelstpos = new System.Windows.Forms.Label();
-            this.textBoxSystemName = new ExtendedControls.TextBoxBorder();
-            this.textBoxCoordinateX = new ExtendedControls.TextBoxBorder();
-            this.textBoxCoordinateY = new ExtendedControls.TextBoxBorder();
-            this.textBoxCoordinateZ = new ExtendedControls.TextBoxBorder();
+            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripLabelSystem = new System.Windows.Forms.ToolStripLabel();
+            this.toolStripTextBoxSystem = new System.Windows.Forms.ToolStripTextBox();
             this.splitContainerCustom1 = new ExtendedControls.SplitContainerCustom();
             this.splitContainerCustom2 = new ExtendedControls.SplitContainerCustom();
             this.dataViewScroller_Distances = new ExtendedControls.DataViewScrollerPanel();
@@ -141,51 +133,6 @@ namespace EDDiscovery
             this.pasteToolStripMenuItem.Text = "Paste";
             this.pasteToolStripMenuItem.Click += new System.EventHandler(this.pasteToolStripMenuItem_Click);
             // 
-            // labelTargetSystem
-            // 
-            this.labelTargetSystem.AutoSize = true;
-            this.labelTargetSystem.Location = new System.Drawing.Point(3, 35);
-            this.labelTargetSystem.Name = "labelTargetSystem";
-            this.labelTargetSystem.Size = new System.Drawing.Size(44, 13);
-            this.labelTargetSystem.TabIndex = 2;
-            this.labelTargetSystem.Text = "System:";
-            // 
-            // labelCoordinates
-            // 
-            this.labelCoordinates.AutoSize = true;
-            this.labelCoordinates.Location = new System.Drawing.Point(3, 65);
-            this.labelCoordinates.Name = "labelCoordinates";
-            this.labelCoordinates.Size = new System.Drawing.Size(122, 13);
-            this.labelCoordinates.TabIndex = 5;
-            this.labelCoordinates.Text = "Trilaterated Coordinates:";
-            // 
-            // labelCoordinateX
-            // 
-            this.labelCoordinateX.AutoSize = true;
-            this.labelCoordinateX.Location = new System.Drawing.Point(148, 67);
-            this.labelCoordinateX.Name = "labelCoordinateX";
-            this.labelCoordinateX.Size = new System.Drawing.Size(17, 13);
-            this.labelCoordinateX.TabIndex = 7;
-            this.labelCoordinateX.Text = "X:";
-            // 
-            // labelCoordinateY
-            // 
-            this.labelCoordinateY.AutoSize = true;
-            this.labelCoordinateY.Location = new System.Drawing.Point(228, 67);
-            this.labelCoordinateY.Name = "labelCoordinateY";
-            this.labelCoordinateY.Size = new System.Drawing.Size(17, 13);
-            this.labelCoordinateY.TabIndex = 9;
-            this.labelCoordinateY.Text = "Y:";
-            // 
-            // labelCoordinateZ
-            // 
-            this.labelCoordinateZ.AutoSize = true;
-            this.labelCoordinateZ.Location = new System.Drawing.Point(309, 67);
-            this.labelCoordinateZ.Name = "labelCoordinateZ";
-            this.labelCoordinateZ.Size = new System.Drawing.Size(17, 13);
-            this.labelCoordinateZ.TabIndex = 11;
-            this.labelCoordinateZ.Text = "Z:";
-            // 
             // wantedContextMenu
             // 
             this.wantedContextMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -235,21 +182,10 @@ namespace EDDiscovery
             // panel_controls
             // 
             this.panel_controls.Controls.Add(this.toolStrip1);
-            this.panel_controls.Controls.Add(this.textBox_status);
-            this.panel_controls.Controls.Add(this.labelstpos);
-            this.panel_controls.Controls.Add(this.textBoxSystemName);
-            this.panel_controls.Controls.Add(this.labelTargetSystem);
-            this.panel_controls.Controls.Add(this.labelCoordinates);
-            this.panel_controls.Controls.Add(this.textBoxCoordinateX);
-            this.panel_controls.Controls.Add(this.labelCoordinateX);
-            this.panel_controls.Controls.Add(this.textBoxCoordinateY);
-            this.panel_controls.Controls.Add(this.labelCoordinateY);
-            this.panel_controls.Controls.Add(this.textBoxCoordinateZ);
-            this.panel_controls.Controls.Add(this.labelCoordinateZ);
             this.panel_controls.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel_controls.Location = new System.Drawing.Point(0, 0);
             this.panel_controls.Name = "panel_controls";
-            this.panel_controls.Size = new System.Drawing.Size(924, 98);
+            this.panel_controls.Size = new System.Drawing.Size(924, 28);
             this.panel_controls.TabIndex = 24;
             // 
             // toolStrip1
@@ -260,7 +196,10 @@ namespace EDDiscovery
             this.toolStripSeparator1,
             this.toolStripButtonRemoveUnused,
             this.toolStripButtonRemoveAll,
-            this.toolStripButtonMap});
+            this.toolStripButtonMap,
+            this.toolStripSeparator2,
+            this.toolStripLabelSystem,
+            this.toolStripTextBoxSystem});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.Size = new System.Drawing.Size(924, 25);
@@ -325,127 +264,27 @@ namespace EDDiscovery
             this.toolStripButtonMap.ToolTipText = "Show 3d map";
             this.toolStripButtonMap.Click += new System.EventHandler(this.toolStripButtonMap_Click);
             // 
-            // textBox_status
+            // toolStripSeparator2
             // 
-            this.textBox_status.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
-            this.textBox_status.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
-            this.textBox_status.BorderColor = System.Drawing.Color.Transparent;
-            this.textBox_status.BorderColorScaling = 0.5F;
-            this.textBox_status.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.textBox_status.ControlBackground = System.Drawing.SystemColors.Control;
-            this.textBox_status.Location = new System.Drawing.Point(406, 33);
-            this.textBox_status.Multiline = false;
-            this.textBox_status.Name = "textBox_status";
-            this.textBox_status.ReadOnly = true;
-            this.textBox_status.ScrollBars = System.Windows.Forms.ScrollBars.None;
-            this.textBox_status.SelectionLength = 0;
-            this.textBox_status.SelectionStart = 0;
-            this.textBox_status.Size = new System.Drawing.Size(167, 20);
-            this.textBox_status.TabIndex = 21;
-            this.textBox_status.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
-            this.toolTip.SetToolTip(this.textBox_status, "Current Status of the trilateration.");
-            this.textBox_status.WordWrap = true;
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(6, 25);
             // 
-            // labelstpos
+            // toolStripLabelSystem
             // 
-            this.labelstpos.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.labelstpos.Location = new System.Drawing.Point(307, 35);
-            this.labelstpos.Name = "labelstpos";
-            this.labelstpos.Size = new System.Drawing.Size(90, 19);
-            this.labelstpos.TabIndex = 20;
-            this.labelstpos.Text = "Current Status:";
+            this.toolStripLabelSystem.Name = "toolStripLabelSystem";
+            this.toolStripLabelSystem.Size = new System.Drawing.Size(79, 22);
+            this.toolStripLabelSystem.Text = "From System:";
             // 
-            // textBoxSystemName
+            // toolStripTextBoxSystem
             // 
-            this.textBoxSystemName.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
-            this.textBoxSystemName.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
-            this.textBoxSystemName.BorderColor = System.Drawing.Color.Transparent;
-            this.textBoxSystemName.BorderColorScaling = 0.5F;
-            this.textBoxSystemName.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.textBoxSystemName.ControlBackground = System.Drawing.SystemColors.Control;
-            this.textBoxSystemName.Location = new System.Drawing.Point(102, 33);
-            this.textBoxSystemName.Multiline = false;
-            this.textBoxSystemName.Name = "textBoxSystemName";
-            this.textBoxSystemName.ReadOnly = true;
-            this.textBoxSystemName.ScrollBars = System.Windows.Forms.ScrollBars.None;
-            this.textBoxSystemName.SelectionLength = 0;
-            this.textBoxSystemName.SelectionStart = 0;
-            this.textBoxSystemName.Size = new System.Drawing.Size(178, 20);
-            this.textBoxSystemName.TabIndex = 1;
-            this.textBoxSystemName.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
-            this.toolTip.SetToolTip(this.textBoxSystemName, "System to tri-lat to");
-            this.textBoxSystemName.WordWrap = true;
-            // 
-            // textBoxCoordinateX
-            // 
-            this.textBoxCoordinateX.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
-            this.textBoxCoordinateX.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
-            this.textBoxCoordinateX.BorderColor = System.Drawing.Color.Transparent;
-            this.textBoxCoordinateX.BorderColorScaling = 0.5F;
-            this.textBoxCoordinateX.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.textBoxCoordinateX.ControlBackground = System.Drawing.SystemColors.Control;
-            this.textBoxCoordinateX.Location = new System.Drawing.Point(165, 63);
-            this.textBoxCoordinateX.Multiline = false;
-            this.textBoxCoordinateX.Name = "textBoxCoordinateX";
-            this.textBoxCoordinateX.ReadOnly = true;
-            this.textBoxCoordinateX.ScrollBars = System.Windows.Forms.ScrollBars.None;
-            this.textBoxCoordinateX.SelectionLength = 0;
-            this.textBoxCoordinateX.SelectionStart = 0;
-            this.textBoxCoordinateX.Size = new System.Drawing.Size(60, 20);
-            this.textBoxCoordinateX.TabIndex = 6;
-            this.textBoxCoordinateX.Text = "?";
-            this.textBoxCoordinateX.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.toolTip.SetToolTip(this.textBoxCoordinateX, "X Co-ord of system");
-            this.textBoxCoordinateX.WordWrap = true;
-            // 
-            // textBoxCoordinateY
-            // 
-            this.textBoxCoordinateY.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
-            this.textBoxCoordinateY.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
-            this.textBoxCoordinateY.BorderColor = System.Drawing.Color.Transparent;
-            this.textBoxCoordinateY.BorderColorScaling = 0.5F;
-            this.textBoxCoordinateY.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.textBoxCoordinateY.ControlBackground = System.Drawing.SystemColors.Control;
-            this.textBoxCoordinateY.Location = new System.Drawing.Point(245, 63);
-            this.textBoxCoordinateY.Multiline = false;
-            this.textBoxCoordinateY.Name = "textBoxCoordinateY";
-            this.textBoxCoordinateY.ReadOnly = true;
-            this.textBoxCoordinateY.ScrollBars = System.Windows.Forms.ScrollBars.None;
-            this.textBoxCoordinateY.SelectionLength = 0;
-            this.textBoxCoordinateY.SelectionStart = 0;
-            this.textBoxCoordinateY.Size = new System.Drawing.Size(60, 20);
-            this.textBoxCoordinateY.TabIndex = 8;
-            this.textBoxCoordinateY.Text = "?";
-            this.textBoxCoordinateY.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.toolTip.SetToolTip(this.textBoxCoordinateY, "Y Co-ord of system");
-            this.textBoxCoordinateY.WordWrap = true;
-            // 
-            // textBoxCoordinateZ
-            // 
-            this.textBoxCoordinateZ.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
-            this.textBoxCoordinateZ.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
-            this.textBoxCoordinateZ.BorderColor = System.Drawing.Color.Transparent;
-            this.textBoxCoordinateZ.BorderColorScaling = 0.5F;
-            this.textBoxCoordinateZ.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.textBoxCoordinateZ.ControlBackground = System.Drawing.SystemColors.Control;
-            this.textBoxCoordinateZ.Location = new System.Drawing.Point(325, 63);
-            this.textBoxCoordinateZ.Multiline = false;
-            this.textBoxCoordinateZ.Name = "textBoxCoordinateZ";
-            this.textBoxCoordinateZ.ReadOnly = true;
-            this.textBoxCoordinateZ.ScrollBars = System.Windows.Forms.ScrollBars.None;
-            this.textBoxCoordinateZ.SelectionLength = 0;
-            this.textBoxCoordinateZ.SelectionStart = 0;
-            this.textBoxCoordinateZ.Size = new System.Drawing.Size(60, 20);
-            this.textBoxCoordinateZ.TabIndex = 10;
-            this.textBoxCoordinateZ.Text = "?";
-            this.textBoxCoordinateZ.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.toolTip.SetToolTip(this.textBoxCoordinateZ, "Z Co-ord of system");
-            this.textBoxCoordinateZ.WordWrap = true;
+            this.toolStripTextBoxSystem.Name = "toolStripTextBoxSystem";
+            this.toolStripTextBoxSystem.ReadOnly = true;
+            this.toolStripTextBoxSystem.Size = new System.Drawing.Size(200, 25);
             // 
             // splitContainerCustom1
             // 
             this.splitContainerCustom1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.splitContainerCustom1.Location = new System.Drawing.Point(0, 98);
+            this.splitContainerCustom1.Location = new System.Drawing.Point(0, 28);
             this.splitContainerCustom1.Name = "splitContainerCustom1";
             // 
             // splitContainerCustom1.Panel1
@@ -455,7 +294,7 @@ namespace EDDiscovery
             // splitContainerCustom1.Panel2
             // 
             this.splitContainerCustom1.Panel2.Controls.Add(this.dataViewScroller_Wanted);
-            this.splitContainerCustom1.Size = new System.Drawing.Size(924, 583);
+            this.splitContainerCustom1.Size = new System.Drawing.Size(924, 653);
             this.splitContainerCustom1.SplitterDistance = 500;
             this.splitContainerCustom1.TabIndex = 25;
             // 
@@ -473,8 +312,8 @@ namespace EDDiscovery
             // splitContainerCustom2.Panel2
             // 
             this.splitContainerCustom2.Panel2.Controls.Add(this.richTextBox_History);
-            this.splitContainerCustom2.Size = new System.Drawing.Size(500, 583);
-            this.splitContainerCustom2.SplitterDistance = 354;
+            this.splitContainerCustom2.Size = new System.Drawing.Size(500, 653);
+            this.splitContainerCustom2.SplitterDistance = 539;
             this.splitContainerCustom2.TabIndex = 0;
             // 
             // dataViewScroller_Distances
@@ -486,7 +325,7 @@ namespace EDDiscovery
             this.dataViewScroller_Distances.Location = new System.Drawing.Point(0, 0);
             this.dataViewScroller_Distances.Name = "dataViewScroller_Distances";
             this.dataViewScroller_Distances.ScrollBarWidth = 20;
-            this.dataViewScroller_Distances.Size = new System.Drawing.Size(500, 354);
+            this.dataViewScroller_Distances.Size = new System.Drawing.Size(500, 539);
             this.dataViewScroller_Distances.TabIndex = 0;
             this.dataViewScroller_Distances.VerticalScrollBarDockRight = true;
             // 
@@ -507,7 +346,7 @@ namespace EDDiscovery
             this.vScrollBarCustom1.MouseOverButtonColor = System.Drawing.Color.Green;
             this.vScrollBarCustom1.MousePressedButtonColor = System.Drawing.Color.Red;
             this.vScrollBarCustom1.Name = "vScrollBarCustom1";
-            this.vScrollBarCustom1.Size = new System.Drawing.Size(20, 333);
+            this.vScrollBarCustom1.Size = new System.Drawing.Size(20, 518);
             this.vScrollBarCustom1.SliderColor = System.Drawing.Color.DarkGray;
             this.vScrollBarCustom1.SmallChange = 1;
             this.vScrollBarCustom1.TabIndex = 1;
@@ -532,7 +371,7 @@ namespace EDDiscovery
             this.dataGridViewDistances.Location = new System.Drawing.Point(0, 0);
             this.dataGridViewDistances.Name = "dataGridViewDistances";
             this.dataGridViewDistances.ScrollBars = System.Windows.Forms.ScrollBars.None;
-            this.dataGridViewDistances.Size = new System.Drawing.Size(480, 354);
+            this.dataGridViewDistances.Size = new System.Drawing.Size(480, 539);
             this.dataGridViewDistances.TabIndex = 0;
             this.dataGridViewDistances.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewDistances_CellClick);
             this.dataGridViewDistances.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewDistances_CellEndEdit);
@@ -596,7 +435,7 @@ namespace EDDiscovery
             this.richTextBox_History.ScrollBarThumbButtonColor = System.Drawing.Color.DarkBlue;
             this.richTextBox_History.ScrollBarWidth = 20;
             this.richTextBox_History.ShowLineCount = false;
-            this.richTextBox_History.Size = new System.Drawing.Size(500, 225);
+            this.richTextBox_History.Size = new System.Drawing.Size(500, 110);
             this.richTextBox_History.TabIndex = 0;
             this.richTextBox_History.TextBoxBackColor = System.Drawing.SystemColors.Control;
             this.richTextBox_History.TextBoxForeColor = System.Drawing.SystemColors.ControlText;
@@ -610,7 +449,7 @@ namespace EDDiscovery
             this.dataViewScroller_Wanted.Location = new System.Drawing.Point(0, 0);
             this.dataViewScroller_Wanted.Name = "dataViewScroller_Wanted";
             this.dataViewScroller_Wanted.ScrollBarWidth = 20;
-            this.dataViewScroller_Wanted.Size = new System.Drawing.Size(420, 583);
+            this.dataViewScroller_Wanted.Size = new System.Drawing.Size(420, 653);
             this.dataViewScroller_Wanted.TabIndex = 0;
             this.dataViewScroller_Wanted.VerticalScrollBarDockRight = true;
             // 
@@ -631,7 +470,7 @@ namespace EDDiscovery
             this.vScrollBarCustom2.MouseOverButtonColor = System.Drawing.Color.Green;
             this.vScrollBarCustom2.MousePressedButtonColor = System.Drawing.Color.Red;
             this.vScrollBarCustom2.Name = "vScrollBarCustom2";
-            this.vScrollBarCustom2.Size = new System.Drawing.Size(20, 562);
+            this.vScrollBarCustom2.Size = new System.Drawing.Size(20, 632);
             this.vScrollBarCustom2.SliderColor = System.Drawing.Color.DarkGray;
             this.vScrollBarCustom2.SmallChange = 1;
             this.vScrollBarCustom2.TabIndex = 14;
@@ -669,7 +508,7 @@ namespace EDDiscovery
             this.dataGridViewClosestSystems.ReadOnly = true;
             this.dataGridViewClosestSystems.RowHeadersVisible = false;
             this.dataGridViewClosestSystems.ScrollBars = System.Windows.Forms.ScrollBars.None;
-            this.dataGridViewClosestSystems.Size = new System.Drawing.Size(400, 583);
+            this.dataGridViewClosestSystems.Size = new System.Drawing.Size(400, 653);
             this.dataGridViewClosestSystems.TabIndex = 13;
             this.dataGridViewClosestSystems.CellMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dataGridViewClosestSystems_CellMouseClick);
             // 
@@ -718,23 +557,12 @@ namespace EDDiscovery
         }
 
         #endregion
-        private ExtendedControls.TextBoxBorder textBoxSystemName;
-        private System.Windows.Forms.Label labelTargetSystem;
-        private System.Windows.Forms.Label labelCoordinates;
-        private ExtendedControls.TextBoxBorder textBoxCoordinateX;
-        private System.Windows.Forms.Label labelCoordinateX;
-        private System.Windows.Forms.Label labelCoordinateY;
-        private ExtendedControls.TextBoxBorder textBoxCoordinateY;
-        private System.Windows.Forms.Label labelCoordinateZ;
-        private ExtendedControls.TextBoxBorder textBoxCoordinateZ;
         protected System.Windows.Forms.DataGridView dataGridViewDistances;
         private System.Windows.Forms.Panel panel_controls;
-        private System.Windows.Forms.Label labelstpos;
         private ExtendedControls.AutoCompleteDGVColumn ColumnSystem;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnDistance;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnCalculated;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnStatus;
-        private ExtendedControls.TextBoxBorder textBox_status;
         private System.Windows.Forms.ContextMenuStrip trilatContextMenu;
         private System.Windows.Forms.ToolStripMenuItem addToWantedSystemsToolStripMenuItem;
         private System.Windows.Forms.ContextMenuStrip wantedContextMenu;
@@ -763,5 +591,8 @@ namespace EDDiscovery
         private System.Windows.Forms.ToolStripButton toolStripButtonRemoveUnused;
         private System.Windows.Forms.ToolStripButton toolStripButtonRemoveAll;
         private System.Windows.Forms.ToolStripButton toolStripButtonMap;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
+        private System.Windows.Forms.ToolStripLabel toolStripLabelSystem;
+        private System.Windows.Forms.ToolStripTextBox toolStripTextBoxSystem;
     }
 }

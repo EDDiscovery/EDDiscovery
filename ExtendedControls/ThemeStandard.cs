@@ -770,6 +770,11 @@ namespace ExtendedControls
                     {           // theme the back colour, this is the way its done.. not via the tool strip renderer
                         i.BackColor = currentsettings.colors[Settings.CI.button_back];
                     }
+                    else if (i is ToolStripTextBox)
+                    {
+                        i.ForeColor = currentsettings.colors[Settings.CI.textbox_fore];
+                        i.BackColor = currentsettings.colors[Settings.CI.textbox_back];
+                    }
                 }
             }
             else
@@ -818,6 +823,8 @@ namespace ExtendedControls
             toolstripRenderer.colortable.colGripper =
             toolstripRenderer.colortable.colToolStripSeparator =
             toolstripRenderer.colortable.colToolStripBorder = currentsettings.colors[Settings.CI.button_border];
+
+            
         }
 
         public Color GroupBoxOverride(Control parent, Color d)      // if its a group box behind the control, use the group box back color..
