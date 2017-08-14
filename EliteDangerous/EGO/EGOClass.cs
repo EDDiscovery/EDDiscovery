@@ -80,14 +80,14 @@ namespace EDDiscoveryCore.EGO
                 }
                 else
                 {
-                    System.Diagnostics.Trace.WriteLine($"EGO message post failed - status: {res["validation_messages"].ToNullSafeString()}\nEGO Message: {msg.ToString()}");
+                    System.Diagnostics.Trace.WriteLine($"EGO message post failed - status: {res["validation_messages"].ToNullSafeString()}\nEGO Message: {msg.ToString().Replace(ego_apikey, "**********").Replace(auth_code, "*********")}");
                     return false;
                 }
             }
             catch (System.Net.WebException ex)
             {
                 System.Net.HttpWebResponse response = ex.Response as System.Net.HttpWebResponse;
-                System.Diagnostics.Trace.WriteLine($"EGO message post failed - status: {response?.StatusCode.ToString() ?? ex.Status.ToString()}\nEGO Message: {msg.ToString()}");
+                System.Diagnostics.Trace.WriteLine($"EGO message post failed - status: {response?.StatusCode.ToString() ?? ex.Status.ToString()}\nEGO Message: {msg.ToString().Replace(ego_apikey, "**********").Replace(auth_code, "*********")}");
                 return false;
             }
         }
