@@ -25,34 +25,21 @@ namespace ActionLanguage
     {
         public Condition cd;
 
-        public ActionFile actionfile;
-
-        public ActionCoreController actioncorecontroller;
-        public string applicationfolder;
-        public System.Drawing.Icon Icon;
-
-        public System.Action<ActionPackEditBase> RemoveItem;
         public System.Action RefreshEvent;
-
-        public const int panelxmargin = 3;
-        public const int panelymargin = 1;
-
         protected ActionPackEditorForm.AdditionalNames onAdditionalNames;
 
-        public void Init(Condition cond, List<string> events, ActionCoreController cp, string appfolder, ActionFile file, ActionPackEditorForm.AdditionalNames func, Icon ic)
+        public virtual void Init(Condition cond, List<string> events, ActionCoreController cp, string appfolder, ActionFile file,
+                        ActionPackEditorForm.AdditionalNames func, Icon ic)
         {
-            Icon = ic;
-            onAdditionalNames = func;
             cd = new Condition(cond);        // full clone, we can now modify it.
-            actionfile = file;
-            actioncorecontroller = cp;
-            applicationfolder = appfolder;
-            InitSub(events);
+            InitSub(cd, events, cp, appfolder, file, func, ic);
         }
 
         public virtual string ID() { return ""; }
-        public virtual void InitSub(List<string> events) { }
-        public virtual void EventChanged() { }
+        public virtual void InitSub(Condition cond, List<string> events, ActionCoreController cp, string appfolder, ActionFile file,
+                        ActionPackEditorForm.AdditionalNames func, Icon ic)
+        { }
+
         public virtual void UpdateProgramList(string[] proglist) { }
 
         public virtual new void Dispose()
@@ -64,10 +51,6 @@ namespace ActionLanguage
         {
             RefreshEvent?.Invoke();
         }
-
-        public void RemoveIt()
-        {
-            RemoveItem?.Invoke(this);
-        }
     }
+
 }

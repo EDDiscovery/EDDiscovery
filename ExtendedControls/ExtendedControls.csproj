@@ -70,6 +70,12 @@
     <Compile Include="FatalExceptionForm.Designer.cs">
       <DependentUpon>FatalExceptionForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="PanelSelectionList.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="PanelSelectionList.Designer.cs">
+      <DependentUpon>PanelSelectionList.cs</DependentUpon>
+    </Compile>
     <Compile Include="ThemeStandardEditor.cs">
       <SubType>Form</SubType>
     </Compile>
