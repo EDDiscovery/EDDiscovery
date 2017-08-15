@@ -49,6 +49,12 @@
     <Compile Include="ActionEditing\ActionPackEditBase.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="ActionEditing\ActionPackEditCondition.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ActionEditing\ActionPackEditProgram.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="ActionEditing\ActionPackEditEventProgramCondition.cs">
       <SubType>UserControl</SubType>
     </Compile>

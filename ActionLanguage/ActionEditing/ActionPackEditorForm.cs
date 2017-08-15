@@ -43,6 +43,7 @@ namespace ActionLanguage
         {
             public Panel panel;
             public ExtendedControls.ComboBoxCustom grouptype;
+            public ExtendedControls.ButtonExt delete;
             public ActionPackEditBase usercontrol;
         }
 
@@ -128,8 +129,16 @@ namespace ActionLanguage
             g.grouptype.SelectedIndexChanged += Grouptype_SelectedIndexChanged;
             g.grouptype.Tag = g;
             g.panel.Controls.Add(g.grouptype);
-            g.panel.ResumeLayout();
 
+            g.delete = new ExtendedControls.ButtonExt();
+            g.delete.Text = "X";
+            g.delete.Size = new Size(24, 24);
+            g.delete.Tag = g;
+            g.delete.Click += Delete_Click;
+
+            g.panel.Controls.Add(g.delete);
+
+            g.panel.ResumeLayout();
             return g;
         }
 
@@ -141,17 +150,19 @@ namespace ActionLanguage
                 g.usercontrol.Dispose();
             }
 
-            g.usercontrol = CreateActionPackEdit(g.grouptype.Text, c);
+            g.usercontrol = CreateActionPackEdit(g.grouptype.Text, c);      // sets the user control Height
             g.usercontrol.Init(c, groupeventlist[g.grouptype.Text], actioncorecontroller, applicationfolder, actionfile, onAdditionalNames , this.Icon);
-            ExtendedControls.ThemeableFormsInstance.Instance.ApplyToControls(g.usercontrol, SystemFonts.DefaultFont);
-            g.usercontrol.Location = new Point(panelxmargin + 108, 0);
-            g.usercontrol.Size = new Size(5000, g.panel.Height);
-            g.usercontrol.RefreshEvent += Usercontrol_RefreshEvent;
-            g.usercontrol.RemoveItem += Usercontrol_RemoveEvent;
 
+            ExtendedControls.ThemeableFormsInstance.Instance.ApplyToControls(g.usercontrol, SystemFonts.DefaultFont);
+
+            g.usercontrol.Location = new Point(panelxmargin + 108, 0);
+            g.usercontrol.Size = new Size(5000, g.usercontrol.Height);
+
+            g.usercontrol.RefreshEvent += Usercontrol_RefreshEvent;
+
+            g.panel.Height = g.usercontrol.Height;
             g.panel.Controls.Add(g.usercontrol);
         }
-
 
         private void PositionGroups(bool calcminsize)
         {
@@ -165,10 +176,11 @@ namespace ActionLanguage
                 int farx = 100;
 
                 g.panel.Location = new Point(panelxmargin, y + panelVScroll.ScrollOffset);
-                g.panel.Size = new Size(Math.Max(panelwidth - panelxmargin * 2, farx), panelymargin + conditionhoff);
+                g.panel.Width = Math.Max(panelwidth - panelxmargin * 2, farx); //, panelymargin + conditionhoff);
+                g.delete.Location = new Point(g.panel.Width - 30, panelymargin);
 
                 if (g.usercontrol != null)
-                    g.usercontrol.Size = new Size(g.panel.Size.Width - 4 - g.usercontrol.Left, g.panel.Height);
+                    g.usercontrol.Width = g.panel.Size.Width - 4 - 30 - g.usercontrol.Left;
 
                 y += g.panel.Height + 2;
             }
@@ -209,15 +221,17 @@ namespace ActionLanguage
             }
         }
 
-        private void Usercontrol_RemoveEvent(ActionPackEditBase item)
+        
+        private void Delete_Click(object sender, EventArgs e)
         {
             foreach (Group g in groups)
             {
-                if ( Object.ReferenceEquals(g.usercontrol,item ))
+                if ( Object.ReferenceEquals(g, ((Control)sender).Tag))
                 {
                     g.usercontrol.Dispose();
                     g.panel.Controls.Clear();
                     g.grouptype.Dispose();
+                    g.delete.Dispose();
                     g.panel.Dispose();
                     groups.Remove(g);
                     PositionGroups(false);

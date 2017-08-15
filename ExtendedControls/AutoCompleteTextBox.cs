@@ -187,7 +187,7 @@ namespace ExtendedControls
                     _cbdropdown.ScrollBarColor = this.DropDownScrollBarColor;
                     _cbdropdown.ScrollBarButtonColor = this.DropDownScrollBarButtonColor;
                     _cbdropdown.MouseOverBackgroundColor = this.DropDownMouseOverBackgroundColor;
-                    _cbdropdown.DropDown += _cbdropdown_DropDown;
+                    _cbdropdown.Activated += _cbdropdown_DropDown;
                     _cbdropdown.SelectedIndexChanged += _cbdropdown_SelectedIndexChanged;
 
                     Control parent = this.Parent;

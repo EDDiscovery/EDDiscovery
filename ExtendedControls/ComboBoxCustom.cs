@@ -478,7 +478,7 @@ namespace ExtendedControls
             _customdropdown.ScrollBarColor = this.ScrollBarColor;
             _customdropdown.ScrollBarButtonColor = this.ScrollBarButtonColor;
 
-            _customdropdown.DropDown += _customdropdown_DropDown;
+            _customdropdown.Activated += _customdropdown_DropDown;
             _customdropdown.SelectedIndexChanged += _customdropdown_SelectedIndexChanged;
             _customdropdown.OtherKeyPressed += _customdropdown_OtherKeyPressed;
             _customdropdown.Deactivate += _customdropdown_Deactivate;
@@ -520,8 +520,7 @@ namespace ExtendedControls
         private void _customdropdown_SelectedIndexChanged(object sender, EventArgs e)
         {
             int selectedindex = _customdropdown.SelectedIndex;
-            _customdropdown.Close();
-            isActivated = false;
+            isActivated = false;            // call has already closed the custom drop down..
             this.Invalidate(true);
             if (_cbsystem.SelectedIndex != selectedindex)
                 _cbsystem.SelectedIndex = selectedindex; // triggers _cbsystem_SelectedIndexChanged, but only if we change the index..
