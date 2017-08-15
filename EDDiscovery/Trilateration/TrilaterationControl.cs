@@ -53,7 +53,7 @@ namespace EDDiscovery
             edsm = new EDSMClass();
             edsm.apiKey = EDCommander.Current.APIKey;
             edsm.commanderName = EDCommander.Current.EdsmName;
-            SetTriStatus("Press Start New");
+            toolStripTextBoxSystem.Text = "Press Start New";
         }
         
         public void Set(ISystem system)
@@ -81,20 +81,7 @@ namespace EDDiscovery
             if (TargetSystem == null)
                 return;
 
-            textBoxSystemName.Text = TargetSystem.name;
-
-            if (TargetSystem.HasCoordinate)
-            {
-                textBoxCoordinateX.Text = TargetSystem.x.ToString();
-                textBoxCoordinateY.Text = TargetSystem.y.ToString();
-                textBoxCoordinateZ.Text = TargetSystem.z.ToString();
-
-                SetTriStatusSuccess("Has Coordinates!");
-            }
-            else
-            {
-                SetTriStatusError("Enter Distances");
-            }
+            toolStripTextBoxSystem.Text = TargetSystem.name;
         }
 
         private List<SystemClass> GetEnteredSystems()
@@ -570,27 +557,6 @@ namespace EDDiscovery
             Dock = DockStyle.Fill;
         }
         
-        private void SetTriStatus(string st)
-        {
-            textBox_status.ForeColor = _discoveryForm.theme.TextBlockColor;
-            textBox_status.BackColor = _discoveryForm.theme.TextBackColor;
-            textBox_status.Text = st;
-        }
-
-        private void SetTriStatusSuccess(string st)
-        {
-            textBox_status.ForeColor = _discoveryForm.theme.TextBackColor;
-            textBox_status.BackColor = _discoveryForm.theme.TextBlockSuccessColor;
-            textBox_status.Text = st;
-        }
-
-        private void SetTriStatusError(string st)
-        {
-            textBox_status.ForeColor = _discoveryForm.theme.TextBackColor;
-            textBox_status.BackColor = _discoveryForm.theme.TextBlockHighlightColor;
-            textBox_status.Text = st;
-        }
-
         public void LogText(string text)
         {
             LogTextColor(text, _discoveryForm.theme.TextBlockColor);
@@ -640,7 +606,7 @@ namespace EDDiscovery
 
                     System.Diagnostics.Trace.WriteLine("Click:" + e.RowIndex.ToString() + ":" + e.ColumnIndex.ToString());
 
-                    if (text != null)
+                    if (!string.IsNullOrEmpty(text))
                     {
                         try
                         {
@@ -674,7 +640,7 @@ namespace EDDiscovery
 
                     System.Diagnostics.Trace.WriteLine("Click:" + e.RowIndex.ToString() + ":" + e.ColumnIndex.ToString());
 
-                    if (text != null)
+                    if (!string.IsNullOrEmpty(text))
                     {
                         try
                         {
@@ -769,7 +735,7 @@ namespace EDDiscovery
             string text=null;
             if (ob != null)
                 text = (string)ob.Value;
-            if (text != null)
+            if (!string.IsNullOrEmpty(text))
                 try
                 {
                     System.Windows.Forms.Clipboard.SetText(text);
