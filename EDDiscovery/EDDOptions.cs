@@ -50,22 +50,36 @@ namespace EDDiscovery
 
         private void SetAppDataDirectory()
         {
-            if (AppFolder == null)  // if userdid not set it..
+            ProcessCommandLineOptions((optname, optval) =>              //FIRST pass thru command line options looking
+            {                                                           //JUST for -appfolder
+                if (optname == "-appfolder" && optval != null)
+                {
+                    AppFolder = optval;
+
+                    return true;    // used one
+                }
+
+                return false;
+            });
+
+            string appfolder = AppFolder;
+
+            if (appfolder == null)  // if userdid not set it..
             {
-                AppFolder = (StoreDataInProgramDirectory ? "Data" : "EDDiscovery");
+                appfolder = (StoreDataInProgramDirectory ? "Data" : "EDDiscovery");
             }
 
-            if (Path.IsPathRooted(AppFolder))
+            if (Path.IsPathRooted(appfolder))
             {
-                AppDataDirectory = AppFolder;
+                AppDataDirectory = appfolder;
             }
             else if (StoreDataInProgramDirectory)
             {
-                AppDataDirectory = Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, AppFolder);
+                AppDataDirectory = Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, appfolder);
             }
             else
             {
-                AppDataDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), AppFolder);
+                AppDataDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), appfolder);
             }
 
             if (!Directory.Exists(AppDataDirectory))        // make sure its there..
@@ -177,7 +191,10 @@ namespace EDDiscovery
             }
             else if (optname == "-appfolder")
             {
-                AppFolder = optval;
+                if (AppDataDirectory == null) // Only override AppFolder if AppDataDirectory has not been set
+                {
+                    AppFolder = optval;
+                }
                 return true;
             }
             else if (optname == "-readjournal")
@@ -231,8 +248,6 @@ namespace EDDiscovery
 
             ProcessOptionsFileOption(System.AppDomain.CurrentDomain.BaseDirectory);     // go thru the command line looking for -optionfile, use relative base dir
 
-            ProcessCommandLineOptions(ProcessOption);       // do all of the command line..  this sets up the appfolder if its overridden on the command line
-
             string optval = Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "options.txt");      // options in the base folder.
             if (File.Exists(optval))   // try options.txt in the base folder..
                 ProcessOptionFile(optval);
@@ -250,7 +265,7 @@ namespace EDDiscovery
             if (File.Exists(optval))
                 ProcessOptionFile(optval);
 
-            ProcessCommandLineOptions(ProcessOption);       // And then let the command line have a last go at overriding them Again. Optionfiles is ignore, appfolder was already done
+            ProcessCommandLineOptions(ProcessOption);       // do all of the command line except optionsfile and appfolder..
 
             SetVersionDisplayString();  // then set the version display string up dependent on options selected
 
