@@ -508,7 +508,7 @@ namespace ActionLanguage
                 while (true)
                 {
                     System.Diagnostics.Process p = new System.Diagnostics.Process();
-                    p.StartInfo.FileName = BaseUtils.AssociateExe.AssocQueryString(BaseUtils.AssociateExe.AssocStr.Executable, ".txt");
+                    p.StartInfo.FileName = BaseUtils.AssociateExe.AssocQueryString(BaseUtils.Win32.UnsafeNativeMethods.AssocStr.Executable, ".txt");
                     p.StartInfo.Arguments = file.QuoteString();
                     p.Start();
                     p.WaitForExit();

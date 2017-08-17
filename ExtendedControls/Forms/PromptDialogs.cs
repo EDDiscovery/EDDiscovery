@@ -113,7 +113,7 @@ namespace ExtendedControls
         }
     }
 
-    public class ConfigurableForm : Form
+    public class ConfigurableForm : DraggableForm
     {
         private Entry[] entries;
         private Object callertag;
@@ -402,65 +402,9 @@ namespace ExtendedControls
             return false;
         }
 
-        #region Window control
-
-        // Mono compatibility
-        private bool _window_dragging = false;
-        private Point _window_dragMousePos = Point.Empty;
-        private Point _window_dragWindowPos = Point.Empty;
-
-        private IntPtr SendMessage(int msg, IntPtr wparam, IntPtr lparam)
-        {
-            Message message = Message.Create(this.Handle, msg, wparam, lparam);
-            this.WndProc(ref message);
-            return message.Result;
-        }
-
-        protected override void WndProc(ref Message m)
-        {
-            bool windowsborder = this.FormBorderStyle == FormBorderStyle.Sizable;
-            // Compatibility movement for Mono
-            if (m.Msg == WM.LBUTTONDOWN && m.WParam == (IntPtr)1 && !windowsborder)
-            {
-                int x = unchecked((short)((uint)m.LParam & 0xFFFF));
-                int y = unchecked((short)((uint)m.LParam >> 16));
-                _window_dragMousePos = new Point(x, y);
-                _window_dragWindowPos = this.Location;
-                _window_dragging = true;
-                m.Result = IntPtr.Zero;
-                this.Capture = true;
-            }
-            else if (m.Msg == WM.MOUSEMOVE && m.WParam == (IntPtr)1 && _window_dragging)
-            {
-                int x = unchecked((short)((uint)m.LParam & 0xFFFF));
-                int y = unchecked((short)((uint)m.LParam >> 16));
-                Point delta = new Point(x - _window_dragMousePos.X, y - _window_dragMousePos.Y);
-                _window_dragWindowPos = new Point(_window_dragWindowPos.X + delta.X, _window_dragWindowPos.Y + delta.Y);
-                this.Location = _window_dragWindowPos;
-                this.Update();
-                m.Result = IntPtr.Zero;
-            }
-            else if (m.Msg == WM.LBUTTONUP)
-            {
-                _window_dragging = false;
-                _window_dragMousePos = Point.Empty;
-                _window_dragWindowPos = Point.Empty;
-                m.Result = IntPtr.Zero;
-                this.Capture = false;
-            }
-            // Windows honours NCHITTEST; Mono does not
-            else
-            {
-                base.WndProc(ref m);
-            }
-        }
-
-        #endregion
-
         private void FormMouseDown(object sender, MouseEventArgs e)
         {
-            ((Control)sender).Capture = false;
-            SendMessage(WM.NCLBUTTONDOWN, (System.IntPtr)HT.CAPTION, (System.IntPtr)0);
+            DragMoveMode((Control)sender);
         }
 
     }

@@ -381,7 +381,7 @@ namespace EliteDangerousCore
             if (Environment.OSVersion.Platform == PlatformID.Win32NT && Environment.OSVersion.Version.Major >= 6)
             {
                 IntPtr pszPath;
-                if (SHGetKnownFolderPath(Win32FolderId_SavedGames, 0, IntPtr.Zero, out pszPath) == 0)
+                if (BaseUtils.Win32.UnsafeNativeMethods.SHGetKnownFolderPath(Win32FolderId_SavedGames, 0, IntPtr.Zero, out pszPath) == 0)
                 {
                     path = Marshal.PtrToStringUni(pszPath);
                     Marshal.FreeCoTaskMem(pszPath);
@@ -540,13 +540,5 @@ namespace EliteDangerousCore
         }
 
         private static Guid Win32FolderId_SavedGames = new Guid("4C5C32FF-BB9D-43b0-B5B4-2D72E54EAAA4");
-        [DllImport("Shell32.dll")]
-        private static extern uint SHGetKnownFolderPath(
-            [MarshalAs(UnmanagedType.LPStruct)] Guid rfid,
-            uint dwFlags,
-            IntPtr hToken,
-            out IntPtr pszPath  // API uses CoTaskMemAlloc
-        );
-
     }
 }

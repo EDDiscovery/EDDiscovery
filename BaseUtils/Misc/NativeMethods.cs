@@ -139,7 +139,65 @@ namespace BaseUtils.Win32
         public static extern IntPtr GetForegroundWindow();
         [DllImport("User32.dll")]
         public static extern uint MapVirtualKey(uint uCode, uint uMapType);
-    }
+
+        // https://msdn.microsoft.com/en-us/library/windows/desktop/ms647985(v=vs.85).aspx
+        [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
+        public static extern IntPtr GetSystemMenu(IntPtr hWnd, bool bRevert);
+
+        // https://msdn.microsoft.com/en-us/library/windows/desktop/ms647616(v=vs.85).aspx
+        [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
+        public static extern bool AppendMenu(IntPtr hMenu, int uFlags, int uIDNewItem, string lpNewItem);
+
+        [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
+        public static extern bool InsertMenu(IntPtr hMenu, int uPosition, int uFlags, int uIDNewItem, string lpNewItem);
+
+        [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
+        public static extern IntPtr CreateMenu();
+
+        [DllImport("Shell32.dll")]
+        public static extern uint SHGetKnownFolderPath(
+            [MarshalAs(UnmanagedType.LPStruct)] Guid rfid,
+            uint dwFlags,
+            IntPtr hToken,
+            out IntPtr pszPath  // API uses CoTaskMemAlloc
+        );
+
+        [Flags]
+        public enum AssocF
+        {
+            None = 0,
+            Init_NoRemapCLSID = 0x1,
+            Init_ByExeName = 0x2,
+            Open_ByExeName = 0x2,
+            Init_DefaultToStar = 0x4,
+            Init_DefaultToFolder = 0x8,
+            NoUserSettings = 0x10,
+            NoTruncate = 0x20,
+            Verify = 0x40,
+            RemapRunDll = 0x80,
+            NoFixUps = 0x100,
+            IgnoreBaseClass = 0x200
+        }
+
+        public enum AssocStr
+        {
+            Command = 1,
+            Executable,
+            FriendlyDocName,
+            FriendlyAppName,
+            NoOpen,
+            ShellNewValue,
+            DDECommand,
+            DDEIfExec,
+            DDEApplication,
+            DDETopic
+        }
+
+        [DllImport("Shlwapi.dll", CharSet = CharSet.Unicode)]
+        public static extern uint AssocQueryString(AssocF flags, AssocStr str,
+           string pszAssoc, string pszExtra, [Out] StringBuilder pszOut, ref uint
+           pcchOut);
+   }
 
     public class SafeNativeMethods
     {
