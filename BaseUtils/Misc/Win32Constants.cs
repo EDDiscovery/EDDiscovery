@@ -192,6 +192,8 @@ namespace BaseUtils.Win32Constants
         /// </summary>
         /// <seealso href="https://msdn.microsoft.com/en-us/library/windows/desktop/ms646280(v=vs.85).aspx"/>
         public const int KEYDOWN = 0x0100;
+        public const int KEYUP = 0x0101;
+
 
         /// <summary>
         /// The WM_CHAR message is posted to the window with the keyboard focus when a WM_KEYDOWN message is translated
@@ -209,6 +211,7 @@ namespace BaseUtils.Win32Constants
         /// </summary>
         /// <seealso href="https://msdn.microsoft.com/en-us/library/windows/desktop/ms646286(v=vs.85).aspx"/>
         public const int SYSKEYDOWN = 0x0104;
+        public const int SYSKEYUP = 0x0105;
 
         /// <summary>
         /// The WM_SYSCOMMAND message is posted to the window when the user chooses a command from the Window menu
@@ -241,5 +244,23 @@ namespace BaseUtils.Win32Constants
         /// </summary>
         /// <seealso href="https://msdn.microsoft.com/en-us/library/windows/desktop/ms645608(v=vs.85).aspx"/>
         public const int LBUTTONUP = 0x0202;
+
+        public const int CANCELJOURNAL = 0x004B;
+
     }
+
+    public static class WH
+    {
+        public const int JOURNALPLAYBACK = 1;
+
+    }
+
+    public static class HC
+    {
+        public const int
+        ACTION = 0,
+        GETNEXT = 1,
+        SKIP = 2;
+    }
+
 }

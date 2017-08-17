@@ -58,6 +58,7 @@
     <Compile Include="ActionEditing\ActionPackEditEventProgramCondition.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="ActionsCoreCmds\ActionKey.cs" />
     <Compile Include="ActionsCoreCmds\ActionPlay.cs" />
     <Compile Include="ActionsCoreCmds\ActionPragma.cs" />
     <Compile Include="ActionsCoreCmds\ActionPrint.cs" />
