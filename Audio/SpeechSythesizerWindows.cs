@@ -39,6 +39,7 @@ namespace AudioExtensions
             return synth.GetInstalledVoices().Select(v => v.VoiceInfo.Name).ToArray();
         }
 
+
         public System.IO.MemoryStream Speak(string phrase, string culture, string voice, int volume, int rate)
         {
             try
@@ -67,17 +68,70 @@ namespace AudioExtensions
                 System.IO.MemoryStream stream = new System.IO.MemoryStream();
                 synth.SetOutputToWaveStream(stream);
 
-                pb.AppendText(phrase);
+                string[] ssmlstart = new string[] { "<say-as ", "<emphasis" , "<phoneme" , "<sub" , "<prosody"};
+                string[] ssmlend = new string[] { "</say-as>", "</emphasis>" , "</phoneme>" , "</sub>" , "</prosody>" };
+
+                phrase.Trim();
+
+                while (phrase.Length > 0)
+                {
+                    int ssmlindex;
+                    int foundpos = phrase.IndexOf(ssmlstart, out ssmlindex);        // find one of the ssml phrases
+                    if (foundpos == -1)     // no more, task on rest as normal text
+                    {
+                        pb.AppendText(phrase);
+                        break;
+                    }
+                    else
+                    {
+                        if (foundpos > 0)
+                        {
+                            pb.AppendText(phrase.Substring(0, foundpos));       // tack on front
+                            phrase = phrase.Substring(foundpos);
+                        }
+
+                        int indexofend = phrase.IndexOf(ssmlend[ssmlindex]);
+
+                        if (indexofend == -1) // allowed as a shortcut to drop the last one
+                        {
+                            indexofend = phrase.Length;
+                            phrase += ssmlend[ssmlindex];
+                        }
+
+                        indexofend += ssmlend[ssmlindex].Length; // move to end of it
+
+                        string ssmlcmd = phrase.Substring(0, indexofend).Replace('\'', '"');
+
+                        try
+                        {
+                            pb.AppendSsmlMarkup(ssmlcmd);
+                        }
+                        catch       // bad markup
+                        {
+                            pb.AppendText("Bad SSML Markup when added, contact developers");
+                        }
+
+                        phrase = phrase.Substring(indexofend).Trim();
+                    }
+                }
 
                 pb.EndVoice();
 
-                synth.Speak(pb);
+                try
+                {
+                    synth.Speak(pb);
+                }
+                catch
+                {
+                    synth.Speak("Bad SSML Markup in phrase, contact developers");
+                }
 
                 //System.Diagnostics.Debug.WriteLine("Speech " + stream.Length);
                 return stream;
             }
-            catch
+            catch (Exception ex)
             {
+                System.Diagnostics.Debug.WriteLine("Exception " + ex.ToString());
                 return null;
             }
         }

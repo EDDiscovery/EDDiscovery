@@ -136,6 +136,8 @@ namespace EDDiscovery.Actions
             ActionPackEditorForm frm = new ActionPackEditorForm();
 
             frm.onAdditionalNames += Frm_onAdditionalNames;
+            frm.CreateActionPackEdit += (group, cond) => { ActionPackEditBase eb = new ActionPackEditEventProgramCondition(); eb.Height = 30;  return eb; };
+
             ActionFile f = actionfiles.Get(name);
 
             if (f != null)
@@ -426,10 +428,12 @@ namespace EDDiscovery.Actions
                 if ((m.Msg == WM.KEYDOWN || m.Msg == WM.SYSKEYDOWN) && discoveryform.CanFocus)
                 {
                     Keys k = (Keys)m.WParam;
+
                     if (k != Keys.ControlKey && k != Keys.ShiftKey && k != Keys.Menu)
                     {
-                        //System.Diagnostics.Debug.WriteLine("Keydown " + m.LParam + " " + k.ToString(Control.ModifierKeys) + " " + m.WParam + " " + Control.ModifierKeys);
-                        if (actcontroller.CheckKeys(k.ToString(Control.ModifierKeys)))
+                        string name = k.VKeyToString(Control.ModifierKeys);
+                        System.Diagnostics.Debug.WriteLine("Keydown " + m.LParam + " " + name + " " + m.WParam + " " + Control.ModifierKeys);
+                        if (actcontroller.CheckKeys(name))
                             return true;    // swallow, we did it
                     }
                 }

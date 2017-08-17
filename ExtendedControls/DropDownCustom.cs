@@ -12,28 +12,29 @@ namespace ExtendedControls
     {
         private ListControlCustom _listcontrol;
 
-        public event EventHandler DropDown;
         public event EventHandler SelectedIndexChanged;
         public event KeyPressEventHandler KeyPressed;
         public event KeyEventHandler OtherKeyPressed;
 
+        public List<string> Items { get { return _listcontrol.Items; } set { _listcontrol.Items = value; } }
         public Color MouseOverBackgroundColor { get { return _listcontrol.MouseOverBackgroundColor; } set { _listcontrol.MouseOverBackgroundColor = value; } }
         public int SelectedIndex { get { return _listcontrol.SelectedIndex; } set { _listcontrol.SelectedIndex = value; } }
         public Color SelectionBackColor { get { return _listcontrol.SelectionBackColor; } set { _listcontrol.SelectionBackColor = value; this.BackColor = value; } }
-        public List<string> Items { get { return _listcontrol.Items; } set { _listcontrol.Items = value; } }
         public Color BorderColor { get { return _listcontrol.BorderColor; } set { _listcontrol.BorderColor = value; } }
         public Color ScrollBarColor { get { return _listcontrol.ScrollBarColor; } set { _listcontrol.ScrollBarColor = value; } }
         public Color ScrollBarButtonColor { get { return _listcontrol.ScrollBarButtonColor; } set { _listcontrol.ScrollBarButtonColor = value; } }
         public FlatStyle FlatStyle { get { return _listcontrol.FlatStyle; } set { _listcontrol.FlatStyle = value; } }
         public new Font Font { get { return base.Font; } set { base.Font = value; _listcontrol.Font = value; } }
-
+        public bool FitToItemsHeight { get { return _listcontrol.FitToItemsHeight; } set { _listcontrol.FitToItemsHeight = value; } }
+        public int ScrollBarWidth { get { return _listcontrol.ScrollBarWidth; } set { _listcontrol.ScrollBarWidth = value; } }
+        public float GradientColorScaling { get { return _listcontrol.GradientColorScaling; } set { _listcontrol.GradientColorScaling = value; } }
         public int ItemHeight { get { return _listcontrol.ItemHeight; } set { _listcontrol.ItemHeight = value; } }
 
-        private bool closeondeactivate;
+        private bool closeondeactivateselected;
 
         public DropDownCustom(string name = "", bool closeondeact = true)
         {
-            closeondeactivate = closeondeact;
+            closeondeactivateselected = closeondeact;
 
             this.FormBorderStyle = FormBorderStyle.None;
             this.ShowInTaskbar = false;
@@ -55,17 +56,13 @@ namespace ExtendedControls
             _listcontrol.KeyDownAction(e);
         }
 
-        protected override void OnShown(EventArgs e)
-        {
-            base.OnShown(e);
-            DropDown(this, e);
-        }
-
         private void _listcontrol_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (SelectedIndexChanged != null)
                 SelectedIndexChanged(this, e);
-            this.Close();
+
+            if ( closeondeactivateselected )
+                this.Close();
         }
 
         private void _listcontrol_KeyPressed(object sender, KeyPressEventArgs e)
@@ -84,7 +81,7 @@ namespace ExtendedControls
         {
             base.OnDeactivate(e);
 
-            if ( closeondeactivate)
+            if ( closeondeactivateselected)
                 this.Close();
         }
     }

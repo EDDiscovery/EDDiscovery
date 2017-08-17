@@ -44,7 +44,7 @@ namespace ActionLanguage
             Clear(f, n);
         }
 
-        public void Clear(string f="", string n="")         // clear all data read from file
+        public void Clear(string f = "", string n = "")         // clear all data read from file
         {
             actioneventlist = new ConditionLists();
             actionprogramlist = new ActionProgramList();
@@ -52,16 +52,18 @@ namespace ActionLanguage
             installationvariables = new ConditionVariables();
             filepath = f;
             name = n;
+            fileencoding = Encoding.UTF8;
         }
 
         public ConditionLists actioneventlist { get; private set; }                        // note we use the list, but not the evaluate between conditions..
-        public ActionProgramList actionprogramlist { get; private set;}                    // programs associated with this pack
+        public ActionProgramList actionprogramlist { get; private set; }                    // programs associated with this pack
         public ConditionVariables installationvariables { get; private set; }              // used to pass to the installer various options, such as disable other packs
         public ConditionVariables filevariables { get; private set; }                      // variables defined using the static.. private to this program.  Not persistent. 
         public Dictionary<string, ExtendedControls.ConfigurableForm> dialogs;                         // persistent dialogs owned by this file
         public string filepath { get; private set; }                                       // where it came from
         public string name { get; private set; }                                           // its logical name
         public bool enabled { get; private set; }                                          // if enabled.
+        public Encoding fileencoding {get; private set;}                                    // file encoding
 
         public void ChangeEventList(ConditionLists s)
         {
@@ -144,9 +146,15 @@ namespace ActionLanguage
 
             try
             {
-                using (StreamReader sr = new StreamReader(filename))         // read directly from file..
+                var utc8nobom = new UTF8Encoding(false);        // give it the default UTF8 no BOM encoding, it will detect BOM or UCS-2 automatically
+
+                using (StreamReader sr = new StreamReader(filename, utc8nobom))         // read directly from file.. presume UTF8 no bom
                 {
                     string firstline = sr.ReadLine();
+
+                    fileencoding = sr.CurrentEncoding;
+
+                    System.Diagnostics.Debug.WriteLine("File " + filename + " is in " + fileencoding.BodyName + "   is utc8nobom? " + Equals(utc8nobom, fileencoding));
 
                     if (firstline == "{")
                     {
@@ -156,7 +164,7 @@ namespace ActionLanguage
                         try
                         {
                             JObject jo = JObject.Parse(json);
-                            return Read(jo,out readenable);
+                            return Read(jo, out readenable);
                         }
                         catch
                         {
@@ -202,7 +210,7 @@ namespace ActionLanguage
                                 if (!incfilename.Contains("/") && !incfilename.Contains("\\"))
                                     incfilename = Path.Combine(Path.GetDirectoryName(filename), incfilename);
 
-                                ActionProgram ap = new ActionProgram("",incfilename);   // NAME will be filled in by PROGRAM statement in file
+                                ActionProgram ap = new ActionProgram("", incfilename);   // NAME will be filled in by PROGRAM statement in file
 
                                 string err = ap.ReadFile(incfilename);
 
@@ -281,7 +289,9 @@ namespace ActionLanguage
         {
             try
             {
-                using (StreamWriter sr = new StreamWriter(filepath))
+                var utc8nobom = new UTF8Encoding(false); System.Diagnostics.Debug.WriteLine("File " + filepath + " written in " + fileencoding.BodyName + " is utf8 no bom " + Equals(utc8nobom,fileencoding));
+
+                using (StreamWriter sr = new StreamWriter(filepath, false, fileencoding))
                 {
                     string rootpath = Path.GetDirectoryName(filepath) + "\\";
 

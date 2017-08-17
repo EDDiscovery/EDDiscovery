@@ -117,23 +117,24 @@ namespace BaseUtils
         {
             if (pos < line.Length)
             {
-                if (line[pos] == '"')
+                if (line[pos] == '"' || line[pos] == '\'')
                 {
-                    string ret = "";
-                    pos++;
+                    char quote = line[pos++];
 
+                    string ret = "";
+                    
                     while (true)
                     {
                         int nextslash = line.IndexOf("\\", pos);
-                        int nextquote = line.IndexOf('"', pos);
+                        int nextquote = line.IndexOf(quote, pos);
 
                         if (nextslash >= 0 && nextslash < nextquote)        // slash first..
                         {
                             if (nextslash + 1 >= line.Length)               // slash at end of line, uhoh
                                 return null;
 
-                            if (line[nextslash + 1] == '"')                 // if \", its just a "
-                                ret += line.Substring(pos, nextslash - pos) + "\""; // copy up to slash, but not the slash, then add the quote
+                            if (line[nextslash + 1] == quote)                 // if \", its just a "
+                                ret += line.Substring(pos, nextslash - pos) + quote; // copy up to slash, but not the slash, then add the quote
                             else
                                 ret += line.Substring(pos, nextslash + 2 - pos);    // copy all, include the next char
 
