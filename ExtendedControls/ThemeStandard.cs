@@ -516,6 +516,28 @@ namespace ExtendedControls
                 myControl.Font = fnt;
                 ctrl.Repaint();            // force a repaint as the individual settings do not by design.
             }
+            else if (myControl is PanelSelectionList)
+            {
+                PanelSelectionList ctrl = (PanelSelectionList)myControl;
+                ctrl.ForeColor = currentsettings.colors[Settings.CI.button_text];
+                ctrl.SelectionMarkColor = ctrl.ForeColor;
+
+                if (currentsettings.buttonstyle.Equals(ButtonStyles[0])) // system
+                {
+                    ctrl.FlatStyle = FlatStyle.System;
+                }
+                else
+                {
+                    ctrl.BackColor = ctrl.SelectionBackColor = currentsettings.colors[Settings.CI.button_back];
+                    ctrl.BorderColor = currentsettings.colors[Settings.CI.button_border];
+                    ctrl.MouseOverBackgroundColor = currentsettings.colors[Settings.CI.button_back].Multiply(mouseoverscaling);
+                    ctrl.ScrollBarButtonColor = currentsettings.colors[Settings.CI.textbox_scrollbutton];
+                    ctrl.ScrollBarColor = currentsettings.colors[Settings.CI.textbox_sliderback];
+                    ctrl.FlatStyle = FlatStyle.Popup;
+                }
+
+                myControl.Font = fnt;
+            }
             else if (myControl is ComboBoxCustom)
             {
                 ComboBoxCustom ctrl = (ComboBoxCustom)myControl;
