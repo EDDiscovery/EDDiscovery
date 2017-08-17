@@ -67,12 +67,9 @@ namespace EDDiscovery.Actions
             return ret;
         }
 
-        [DllImport("user32.dll")]
-        static extern IntPtr GetForegroundWindow();
-
         private void Devices_OnNewEvent(List<InputDeviceEvent> list)
         {
-            IntPtr handle = GetForegroundWindow();
+            IntPtr handle = BaseUtils.Win32.UnsafeNativeMethods.GetForegroundWindow();
             Process[] processes = Process.GetProcessesByName("elitedangerous64");//Process.GetProcessesByName("EliteDangerous64");
             bool ed = false;
             foreach (Process p in processes)

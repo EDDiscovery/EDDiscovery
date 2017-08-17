@@ -27,7 +27,7 @@ using BaseUtils;
 
 namespace Conditions
 { 
-    public partial class ConditionVariablesForm : Form
+    public partial class ConditionVariablesForm : ExtendedControls.DraggableForm
     {
         public ConditionVariables result;      // only on OK
         public Dictionary<string, string> result_altops;
@@ -252,95 +252,9 @@ namespace Conditions
             CreateEntry("", "","=");
         }
 
-        #region Window Control
-
-        // Mono compatibility
-        private bool _window_dragging = false;
-        private Point _window_dragMousePos = Point.Empty;
-        private Point _window_dragWindowPos = Point.Empty;
-
-        private IntPtr SendMessage(int msg, IntPtr wparam, IntPtr lparam)
-        {
-            Message message = Message.Create(this.Handle, msg, wparam, lparam);
-            this.WndProc(ref message);
-            return message.Result;
-        }
-
-        protected override void WndProc(ref Message m)
-        {
-            bool windowsborder = this.FormBorderStyle == FormBorderStyle.Sizable;
-            // Compatibility movement for Mono
-            if (m.Msg == WM.LBUTTONDOWN && m.WParam == (IntPtr)1 && !windowsborder)
-            {
-                int x = unchecked((short)((uint)m.LParam & 0xFFFF));
-                int y = unchecked((short)((uint)m.LParam >> 16));
-                _window_dragMousePos = new Point(x, y);
-                _window_dragWindowPos = this.Location;
-                _window_dragging = true;
-                m.Result = IntPtr.Zero;
-                this.Capture = true;
-            }
-            else if (m.Msg == WM.MOUSEMOVE && m.WParam == (IntPtr)1 && _window_dragging)
-            {
-                int x = unchecked((short)((uint)m.LParam & 0xFFFF));
-                int y = unchecked((short)((uint)m.LParam >> 16));
-                Point delta = new Point(x - _window_dragMousePos.X, y - _window_dragMousePos.Y);
-                _window_dragWindowPos = new Point(_window_dragWindowPos.X + delta.X, _window_dragWindowPos.Y + delta.Y);
-                this.Location = _window_dragWindowPos;
-                this.Update();
-                m.Result = IntPtr.Zero;
-            }
-            else if (m.Msg == WM.LBUTTONUP)
-            {
-                _window_dragging = false;
-                _window_dragMousePos = Point.Empty;
-                _window_dragWindowPos = Point.Empty;
-                m.Result = IntPtr.Zero;
-                this.Capture = false;
-            }
-            // Windows honours NCHITTEST; Mono does not
-            else if (m.Msg == WM.NCHITTEST)
-            {
-                base.WndProc(ref m);
-
-                if (m.Result == (IntPtr)HT.CLIENT)
-                {
-                    int x = unchecked((short)((uint)m.LParam & 0xFFFF));
-                    int y = unchecked((short)((uint)m.LParam >> 16));
-                    Point p = PointToClient(new Point(x, y));
-
-                    if (p.X > this.ClientSize.Width - statusStripCustom.Height && p.Y > this.ClientSize.Height - statusStripCustom.Height)
-                    {
-                        m.Result = (IntPtr)HT.BOTTOMRIGHT;
-                    }
-                    else if (p.Y > this.ClientSize.Height - statusStripCustom.Height)
-                    {
-                        m.Result = (IntPtr)HT.BOTTOM;
-                    }
-                    else if (p.X > this.ClientSize.Width - 5)       // 5 is generous.. really only a few pixels gets thru before the subwindows grabs them
-                    {
-                        m.Result = (IntPtr)HT.RIGHT;
-                    }
-                    else if (p.X < 5)
-                    {
-                        m.Result = (IntPtr)HT.LEFT;
-                    }
-                    else if (!windowsborder)
-                    {
-                        m.Result = (IntPtr)HT.CAPTION;
-                    }
-                }
-            }
-            else
-            {
-                base.WndProc(ref m);
-            }
-        }
-
         private void label_index_MouseDown(object sender, MouseEventArgs e)
         {
-            ((Control)sender).Capture = false;
-            SendMessage(WM.NCLBUTTONDOWN, (IntPtr)HT.CAPTION, IntPtr.Zero);
+            DragMoveMode((Control)sender);
         }
 
         private void panel_minimize_Click(object sender, EventArgs e)
@@ -352,8 +266,6 @@ namespace Conditions
         {
             Close();
         }
-
-        #endregion
 
 
     }

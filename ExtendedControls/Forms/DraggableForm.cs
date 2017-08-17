@@ -72,13 +72,14 @@ namespace ExtendedControls
                     int y = unchecked((short)((uint)m.LParam >> 16));
                     Point p = PointToClient(new Point(x, y));
 
-                    StatusStripCustom statstrip = Controls.OfType<StatusStripCustom>().First();
+                    StatusStripCustom statstripinstalled = Controls.OfType<StatusStripCustom>().FirstOrDefault();
+                    int bottomh = (statstripinstalled != null) ? statstripinstalled.Height : 5;
 
-                    if (p.X > this.ClientSize.Width - statstrip.Height && p.Y > this.ClientSize.Height - statstrip.Height)
+                    if (p.X > this.ClientSize.Width - bottomh && p.Y > this.ClientSize.Height - bottomh)
                     {
                         m.Result = (IntPtr)HT.BOTTOMRIGHT;
                     }
-                    else if (p.Y > this.ClientSize.Height - statstrip.Height)
+                    else if (p.Y > this.ClientSize.Height - bottomh)
                     {
                         m.Result = (IntPtr)HT.BOTTOM;
                     }
