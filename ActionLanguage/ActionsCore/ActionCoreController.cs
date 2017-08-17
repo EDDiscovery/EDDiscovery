@@ -86,6 +86,7 @@ namespace ActionLanguage
             ActionBase.AddCommand("If", typeof(ActionIf), ActionBase.ActionType.If);
             ActionBase.AddCommand("InputBox", typeof(ActionInputBox), ActionBase.ActionType.Cmd);
             ActionBase.AddCommand("InfoBox", typeof(ActionInfoBox), ActionBase.ActionType.Cmd);
+            ActionBase.AddCommand("Key", typeof(ActionKey), ActionBase.ActionType.Cmd);
             ActionBase.AddCommand("MessageBox", typeof(ActionMessageBox), ActionBase.ActionType.Cmd);
             ActionBase.AddCommand("NonModalDialog", typeof(ActionNonModalDialog), ActionBase.ActionType.Cmd);
             ActionBase.AddCommand("Return", typeof(ActionReturn), ActionBase.ActionType.Return);

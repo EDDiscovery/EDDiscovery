@@ -70,6 +70,12 @@
     <Compile Include="FatalExceptionForm.Designer.cs">
       <DependentUpon>FatalExceptionForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\KeyForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\KeyForm.Designer.cs">
+      <DependentUpon>KeyForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="PanelSelectionList.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -186,6 +192,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="InfoForm.resx">
       <DependentUpon>InfoForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\KeyForm.resx">
+      <DependentUpon>KeyForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MessageBoxTheme.resx">
       <DependentUpon>MessageBoxTheme.cs</DependentUpon>
