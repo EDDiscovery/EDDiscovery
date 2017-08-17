@@ -45,7 +45,7 @@ using EliteDangerousCore.JournalEvents;
 
 namespace EDDiscovery
 {
-    public partial class EDDiscoveryForm : Form, IDiscoveryController
+    public partial class EDDiscoveryForm : ExtendedControls.DraggableForm, IDiscoveryController
     {
         #region Variables
 
@@ -1028,90 +1028,9 @@ namespace EDDiscovery
 
 #endregion
 
-        #region Window Control
-
-        protected override void WndProc(ref Message m)
-        {
-            // Compatibility movement for Mono
-            if (m.Msg == WM.LBUTTONDOWN && m.WParam == (IntPtr)1 && !theme.WindowsFrame)
-            {
-                int x = unchecked((short)((uint)m.LParam & 0xFFFF));
-                int y = unchecked((short)((uint)m.LParam >> 16));
-                _window_dragMousePos = new Point(x, y);
-                _window_dragWindowPos = this.Location;
-                _window_dragging = true;
-                m.Result = IntPtr.Zero;
-                this.Capture = true;
-            }
-            else if (m.Msg == WM.MOUSEMOVE && m.WParam == (IntPtr)1 && _window_dragging)
-            {
-                int x = unchecked((short)((uint)m.LParam & 0xFFFF));
-                int y = unchecked((short)((uint)m.LParam >> 16));
-                Point delta = new Point(x - _window_dragMousePos.X, y - _window_dragMousePos.Y);
-                _window_dragWindowPos = new Point(_window_dragWindowPos.X + delta.X, _window_dragWindowPos.Y + delta.Y);
-                this.Location = _window_dragWindowPos;
-                this.Update();
-                m.Result = IntPtr.Zero;
-            }
-            else if (m.Msg == WM.LBUTTONUP)
-            {
-                _window_dragging = false;
-                _window_dragMousePos = Point.Empty;
-                _window_dragWindowPos = Point.Empty;
-                m.Result = IntPtr.Zero;
-                this.Capture = false;
-            }
-            // Windows honours NCHITTEST; Mono does not
-            else if (m.Msg == WM.NCHITTEST)
-            {
-                base.WndProc(ref m);
-                //System.Diagnostics.Debug.WriteLine( Environment.TickCount + " Res " + ((int)m.Result));
-
-                if (m.Result == (IntPtr)HT.CLIENT)
-                {
-                    int x = unchecked((short)((uint)m.LParam & 0xFFFF));
-                    int y = unchecked((short)((uint)m.LParam >> 16));
-                    Point p = PointToClient(new Point(x, y));
-
-                    if (p.X > this.ClientSize.Width - statusStrip1.Height && p.Y > this.ClientSize.Height - statusStrip1.Height)
-                    {
-                        m.Result = (IntPtr)HT.BOTTOMRIGHT;
-                    }
-                    else if (p.Y > this.ClientSize.Height - statusStrip1.Height)
-                    {
-                        m.Result = (IntPtr)HT.BOTTOM;
-                    }
-                    else if (p.X > this.ClientSize.Width - 5)       // 5 is generous.. really only a few pixels gets thru before the subwindows grabs them
-                    {
-                        m.Result = (IntPtr)HT.RIGHT;
-                    }
-                    else if (p.X < 5)
-                    {
-                        m.Result = (IntPtr)HT.LEFT;
-                    }
-                    else if (!theme.WindowsFrame)
-                    {
-                        m.Result = (IntPtr)HT.CAPTION;
-                    }
-                }
-            }
-            else
-            {
-                base.WndProc(ref m);
-            }
-        }
-
-        private IntPtr SendMessage(int msg, IntPtr wparam, IntPtr lparam)
-        {
-            Message message = Message.Create(this.Handle, msg, wparam, lparam);
-            this.WndProc(ref message);
-            return message.Result;
-        }
-
         private void MouseDownCAPTION( object sender, MouseEventArgs e)
         {
-            ((Control)sender).Capture = false;
-            SendMessage(WM.NCLBUTTONDOWN, (System.IntPtr)HT.CAPTION, (System.IntPtr)0);
+            DragMoveMode((Control)sender);
         }
 
         private void RecordPosition()
@@ -1147,8 +1066,6 @@ namespace EDDiscovery
         {
             RecordPosition();
         }
-
-        #endregion
 
         #region Updators
 
