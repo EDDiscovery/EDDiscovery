@@ -31,7 +31,10 @@ namespace EliteDangerousCore.JournalEvents
     {
         public JournalRepairDrone(JObject evt ) : base(evt, JournalTypeEnum.RepairDrone)
         {
-            
+            HullRepaired = evt["HullRepaired"].Str();
+            CockpitRepaired = evt["CockpitRepaired"].Str();
+            CorrosionRepaired = evt["CorrosionRepaired"].Str();
+
         }
 
         public string HullRepaired { get; set; }
