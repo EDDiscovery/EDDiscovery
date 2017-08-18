@@ -109,6 +109,13 @@ namespace EliteDangerousCore
             Missions[Key(m)] = new MissionState(m, sys, body); // add a new one..
         }
 
+        public void Redirected(JournalMissionRedirected m, ISystem sys, string body)
+        {
+            // Update State with new info...     TODO
+            //Missions[Key(m)] = new MissionState(m, sys, body); // add a new one..
+        }
+
+
         public void Completed(JournalMissionCompleted m)
         {
             Missions[Key(m)] = new MissionState(Missions[Key(m)], m); // copy previous mission state, add completed
@@ -123,11 +130,18 @@ namespace EliteDangerousCore
         {
             Missions[Key(m)] = new MissionState(Missions[Key(m)], MissionState.StateTypes.Failed); // copy previous mission state, add failed
         }
+        public void Redirected(JournalMissionRedirected m)
+        {
+            // Todo  update destination....
+            //Missions[Key(m)] = new MissionState(Missions[Key(m)], MissionState.StateTypes.Failed); // copy previous mission state, add failed
+        }
+
 
         // can't think of a better way, don't want to put it in the actual entries since it should all be here.. can't be bothered to refactor so they have a common ancestor.
         public static string Key(JournalMissionFailed m) { return m.MissionId.ToStringInvariant() + ":" + m.Name; }
         public static string Key(JournalMissionCompleted m) { return m.MissionId.ToStringInvariant() + ":" + m.Name; }
         public static string Key(JournalMissionAccepted m) { return m.MissionId.ToStringInvariant() + ":" + m.Name; }
+        public static string Key(JournalMissionRedirected m) { return m.MissionId.ToStringInvariant() + ":" + ""; }  // TODO  fix name later  with new ED 2.4 beta?
         public static string Key(JournalMissionAbandoned m) { return m.MissionId.ToStringInvariant() + ":" + m.Name; }
     }
 
@@ -180,6 +194,17 @@ namespace EliteDangerousCore
             {
                 current = new MissionList(current);     // shallow copy
                 current.Failed(m);
+            }
+            else
+                System.Diagnostics.Debug.WriteLine("Missions: Unknown " + MissionList.Key(m));
+        }
+
+        public void Redirected(JournalMissionRedirected m)
+        {
+            if (current.Missions.ContainsKey(MissionList.Key(m)))        // make sure not repeating, ignore if so
+            {
+                current = new MissionList(current);     // shallow copy
+                current.Redirected(m);
             }
             else
                 System.Diagnostics.Debug.WriteLine("Missions: Unknown " + MissionList.Key(m));
