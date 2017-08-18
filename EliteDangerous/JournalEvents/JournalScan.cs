@@ -80,6 +80,7 @@ namespace EliteDangerousCore.JournalEvents
         public string StarTypeText { get { return IsStar ? GetStarTypeImage().Item2 : ""; } }   // Long form star name, from StarTypeID
         public double? nStellarMass { get; set; }                   // direct
         public double? nAbsoluteMagnitude { get; set; }             // direct
+        public string Luminosity { get; set; }
         public double? nAge { get; set; }                           // direct
         public double? HabitableZoneInner { get; set; }             // calculated
         public double? HabitableZoneOuter { get; set; }             // calculated
@@ -155,6 +156,8 @@ namespace EliteDangerousCore.JournalEvents
             nStellarMass = evt["StellarMass"].DoubleNull();
             nRadius = evt["Radius"].DoubleNull();
             nAbsoluteMagnitude = evt["AbsoluteMagnitude"].DoubleNull();
+            Luminosity = evt["Luminosity"].StrNull();
+
             nRotationPeriod = evt["RotationPeriod"].DoubleNull();
 
             nOrbitalPeriod = evt["OrbitalPeriod"].DoubleNull();
@@ -342,6 +345,9 @@ namespace EliteDangerousCore.JournalEvents
 
             if (nSurfaceTemperature.HasValue)
                 scanText.AppendFormat("Surface Temp: {0}K\n", nSurfaceTemperature.Value.ToString("N0"));
+
+            if (Luminosity != null)
+                scanText.AppendFormat("Luminosity: {0}\n", Luminosity);
 
             if (nSurfaceGravity.HasValue)
                 scanText.AppendFormat("Gravity: {0:0.0}g\n", nSurfaceGravity.Value / 9.8);
