@@ -141,7 +141,7 @@ namespace EDDiscovery
                 EDDMainForm?.Dispose();
                 FatalExceptionForm.ShowAndDie(MainForm, "Initializing", Properties.Resources.URLProjectFeedback, ex);
             }
-
+            
             var splashForm = MainForm;
             MainForm = EDDMainForm; // Switch context
             splashForm.Close();     // and cleanup

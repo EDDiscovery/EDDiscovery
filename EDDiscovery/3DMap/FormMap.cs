@@ -335,19 +335,7 @@ namespace EDDiscovery
         private const int MF_UNCHECKED = 0x00000000;
         private const int MF_SEPARATOR = 0x00000800;
 
-        // P/Invoke declarations
-        [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
-        private static extern IntPtr GetSystemMenu(IntPtr hWnd, bool bRevert);
-
-        [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
-        private static extern bool AppendMenu(IntPtr hMenu, int uFlags, int uIDNewItem, string lpNewItem);
-
-        [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
-        private static extern bool InsertMenu(IntPtr hMenu, int uPosition, int uFlags, int uIDNewItem, string lpNewItem);
-
-        [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
-        private static extern IntPtr CreateMenu();
-
+      
         /// <summary>
         /// Add to Windows System menu
         /// </summary>
@@ -356,18 +344,18 @@ namespace EDDiscovery
         {
             base.OnHandleCreated(e);
 
-            IntPtr hSysMenu = GetSystemMenu(this.Handle, false);
-            IntPtr hOpacityMenu = CreateMenu();
+            IntPtr hSysMenu = BaseUtils.Win32.UnsafeNativeMethods.GetSystemMenu(this.Handle, false);
+            IntPtr hOpacityMenu = BaseUtils.Win32.UnsafeNativeMethods.CreateMenu();
             for(int i = 10; i > 0; i -= 1)
             {
                 string s = (i * 10).ToString();
-                AppendMenu(hOpacityMenu, MF_STRING, 0x0100 | i, s);
+                BaseUtils.Win32.UnsafeNativeMethods.AppendMenu(hOpacityMenu, MF_STRING, 0x0100 | i, s);
             }
-            AppendMenu(hSysMenu, MF_SEPARATOR, 0, string.Empty);
-            AppendMenu(hSysMenu, this.TopMost?MF_CHECKED:MF_UNCHECKED, 0x01, "On &Top");
+            BaseUtils.Win32.UnsafeNativeMethods.AppendMenu(hSysMenu, MF_SEPARATOR, 0, string.Empty);
+            BaseUtils.Win32.UnsafeNativeMethods.AppendMenu(hSysMenu, this.TopMost?MF_CHECKED:MF_UNCHECKED, 0x01, "On &Top");
             //AppendMenu(hSysMenu, MF_STRING, 0x02, "T&ransparency");
             // TODO: Make transparency a sub-menu with different values
-            AppendMenu(hSysMenu, 0x10, (int)hOpacityMenu, "&Opacity");
+            BaseUtils.Win32.UnsafeNativeMethods.AppendMenu(hSysMenu, 0x10, (int)hOpacityMenu, "&Opacity");
         }
         protected override void WndProc(ref Message m)
         {

@@ -14,7 +14,7 @@ namespace EDDiscovery.UserControls
     {
         public Color BorderColor { get; set; } = Color.Red;
         public Color SelectedBorderColor { get; set; } = Color.Green;
-        public Control control;
+        public Control control { get; private set; }
         public Action<UserControlContainerResizable> ResizeStart;
         public Action<UserControlContainerResizable,bool> ResizeEnd;
         public bool Selected { get { return selected; } set { SetSelected(value); } }
@@ -50,17 +50,15 @@ namespace EDDiscovery.UserControls
         protected override void OnPaint(PaintEventArgs e)
         {
             using (Pen pb = new Pen(BackColor, 1.0F))
+            using (Pen p1 = new Pen(Selected ? SelectedBorderColor : BorderColor, 1.0F))
             {
-                using (Pen p1 = new Pen(Selected ? SelectedBorderColor: BorderColor, 1.0F))
-                {
-                    Rectangle r = ClientRectangle;
-                    r.Inflate(-1, -1);
-                    e.Graphics.DrawRectangle(p1, r);
-                    r.Inflate(-1, -1);
-                    e.Graphics.DrawRectangle(pb, r);
-                    r.Inflate(-1, -1);
-                    e.Graphics.DrawRectangle(pb, r);
-                }
+                Rectangle r = ClientRectangle;
+                r.Inflate(-1, -1);
+                e.Graphics.DrawRectangle(p1, r);
+                r.Inflate(-1, -1);
+                e.Graphics.DrawRectangle(pb, r);
+                r.Inflate(-1, -1);
+                e.Graphics.DrawRectangle(pb, r);
             }
 
             base.OnPaint(e);
@@ -194,7 +192,7 @@ namespace EDDiscovery.UserControls
             if (dragmoved)
                 Cursor.Current = Cursors.Default;
 
-            if ( dp != null )
+            if ( dp != DragPos.None )
                 ResizeEnd?.Invoke(this, dragmoved);
 
             dragmoved = false;

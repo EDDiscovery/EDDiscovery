@@ -301,12 +301,6 @@
     <Compile Include="Forms\SplashForm.Designer.cs">
       <DependentUpon>SplashForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\TabControlForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\TabControlForm.Designer.cs">
-      <DependentUpon>TabControlForm.cs</DependentUpon>
-    </Compile>
     <Compile Include="Forms\TimedMessage.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -559,9 +553,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\ShipDetails.resx">
       <DependentUpon>ShipDetails.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\TabControlForm.resx">
-      <DependentUpon>TabControlForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\UserControlForm.resx">
       <DependentUpon>UserControlForm.cs</DependentUpon>

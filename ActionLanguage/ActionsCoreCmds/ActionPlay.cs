@@ -42,7 +42,7 @@ namespace ActionLanguage
         {
             vars = new ConditionVariables();
 
-            if (s.IndexOf(',') == -1 && s.IndexOf('"') == -1) // no quotes, no commas, just the string, probably typed in..
+            if (s.IndexOfAny(",\"'".ToCharArray()) == -1)
             {
                 path = s;
                 return true;

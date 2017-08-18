@@ -13,12 +13,10 @@
  * 
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
-using Newtonsoft.Json.Linq;
+
 using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
-using System.Text.RegularExpressions;
 
 public static class ObjectExtensionsStrings
 {
@@ -59,6 +57,20 @@ public static class ObjectExtensionsStrings
             obj = "\"" + obj.Replace("\"", "\\\"") + "\"";
 
         return obj;
+    }
+
+    public static string Skip(this string s, string t, StringComparison c = StringComparison.InvariantCulture)
+    {
+        if (s.StartsWith(t, c))
+            s = s.Substring(t.Length);
+        return s;
+    }
+
+    public static string SkipIf(this string s, string t, bool cond, StringComparison c = StringComparison.InvariantCulture)
+    {
+        if (cond && s.StartsWith(t, c))
+            s = s.Substring(t.Length);
+        return s;
     }
 
     public static string QuoteStrings(this string[] obja)
@@ -251,32 +263,6 @@ public static class ObjectExtensionsStrings
         return outstr;
     }
 
-    public static string ToString(this System.Windows.Forms.Keys key, System.Windows.Forms.Keys modifier)
-    {
-        string k = "";
-
-        if ((modifier & System.Windows.Forms.Keys.Shift) != 0)
-        {
-            k += "Shift+";
-        }
-        if ((modifier & System.Windows.Forms.Keys.Alt) != 0)
-        {
-            k += "Alt+";
-        }
-        if ((modifier & System.Windows.Forms.Keys.Control) != 0)
-        {
-            k += "Ctrl+";
-        }
-
-        string keyname = key.ToString();
-        if (keyname.Length == 2 && keyname[0] == 'D')
-            keyname = keyname.Substring(1);
-        else if (keyname.StartsWith("Oem") && keyname.Length > 4)       // leave oem1-9, they are not standard.
-            keyname = keyname.Substring(3);
-
-        return k + keyname;
-    }
-
     public static string ToStringInvariant(this int v)
     {
         return v.ToString(System.Globalization.CultureInfo.InvariantCulture);
@@ -458,18 +444,20 @@ public static class ObjectExtensionsStrings
         return String.Join(" ", words);
     }
 
-    public static bool InQuotes(this string s, int max = 0)            // left true if quote left over on line, taking care of any escapes..
+    public static bool InQuotes(this string s, int max )            // left true if quote left over on line, taking care of any escapes..
     {
-        if (max <= 0)
-            max = s.Length;
-
         bool inquote = false;
+        char quotechar = ' ';
+
         for (int i = 0; i < max; i++)
         {
-            if (s[i] == '\\' && i < max - 1 && s[i + 1] == '"')
-                i += 1;     // ignore this, ingore "
-            else if (s[i] == '"')
+            if (s[i] == '\\' && i < max - 1 && s[i + 1] == quotechar)
+                i += 1;     // ignore this, ignore "
+            else if (s[i] == '"' || s[i] == '\'')
+            {
+                quotechar = s[i];
                 inquote = !inquote;
+            }
         }
 
         return inquote;
@@ -645,5 +633,67 @@ public static class ObjectExtensionsStrings
 
         return ret;
     }
+
+    static public int IndexOf(this string s, string[] array, out int fi)   // in array, find one with first occurance, return which one in i
+    {
+        int found = -1;
+        fi = -1;
+        for (int av = 0; av < array.Length; av++)
+        {
+            int pos = s.IndexOf(array[av]);
+            if (pos != -1 && (found == -1 || pos < found))
+            {
+                found = pos;
+                fi = av;
+            }
+        }
+        return found;
+    }
+
+    public enum StartWithResult
+    {
+        None,
+        Keyword,
+        KeywordCont
+    };
+
+    public static StartWithResult StringStartsWith(ref string s, string part, string cstr, StringComparison c = StringComparison.InvariantCultureIgnoreCase)
+    {
+        if (part != null && s.StartsWith(part, c))
+        {
+            s = s.Substring(part.Length);
+            if (s.StartsWith(cstr, c))
+            {
+                s = s.Substring(cstr.Length);
+                return StartWithResult.KeywordCont;
+            }
+            else
+                return StartWithResult.Keyword;
+        }
+        else
+            return StartWithResult.None;
+    }
+
+    public static string FirstWord( ref string s, char[] stopchars)
+    {
+        int i = 0;
+        while (i < s.Length && Array.IndexOf(stopchars,s[i]) == -1 )
+            i++;
+
+        string ret = s.Substring(0, i);
+        s = s.Substring(i).TrimStart();
+        return ret;
+    }
+
+    public static bool IsPrefix(ref string s, string t, StringComparison c = StringComparison.InvariantCulture)
+    {
+        if (s.StartsWith(t, c))
+        {
+            s = s.Substring(t.Length);
+            return true;
+        }
+        return false;
+    }
+
 }
 
