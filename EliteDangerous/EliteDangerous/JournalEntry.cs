@@ -139,6 +139,7 @@ namespace EliteDangerousCore
         RefuelPartial = 730,
         Repair = 740,
         RepairAll = 745,
+        RepairDrone = 747,
         RestockVehicle = 750,
         Resurrect = 760,
         Scan = 770,
