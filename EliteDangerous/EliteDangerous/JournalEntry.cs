@@ -148,6 +148,7 @@ namespace EliteDangerousCore
         SelfDestruct = 790,
         SellDrones = 800,
         SellExplorationData = 810,
+        SearchAndRescue = 815,
         SendText = 820,
         SetUserShipName = 825,
         ShieldState = 830,
