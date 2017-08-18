@@ -252,6 +252,7 @@
     <Compile Include="JournalEvents\JournalShipyardSell.cs" />
     <Compile Include="JournalEvents\JournalShipyardSwap.cs" />
     <Compile Include="JournalEvents\JournalShipyardTransfer.cs" />
+    <Compile Include="JournalEvents\JournalSearchAndRescue.cs" />
     <Compile Include="JournalEvents\JournalStartJump.cs" />
     <Compile Include="JournalEvents\JournalSupercruiseEntry.cs" />
     <Compile Include="JournalEvents\JournalSupercruiseExit.cs" />

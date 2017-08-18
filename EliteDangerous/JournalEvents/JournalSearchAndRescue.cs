@@ -18,31 +18,32 @@ using System.Linq;
 
 namespace EliteDangerousCore.JournalEvents
 {
-//    When written: at the start of a Hyperspace or Supercruise jump(start of countdown)
+//When written: when delivering items to a Search and Rescue contact
 //Parameters:
-//•	JumpType: "Hyperspace" or "Supercruise"
-//•	StarClass: star type(only for a hyperspace jump)
+// Name
+// Count
+// Reward
 
-    [JournalEntryType(JournalTypeEnum.StartJump)]
-    public class JournalStartJump : JournalEntry
+    [JournalEntryType(JournalTypeEnum.SearchAndRescue)]
+    public class JournalSearchAndRescue : JournalEntry
     {
-        public JournalStartJump(JObject evt) : base(evt, JournalTypeEnum.StartJump)
+        public JournalSearchAndRescue(JObject evt) : base(evt, JournalTypeEnum.SearchAndRescue)
         {
-            JumpType = evt["JumpType"].Str();
-            StarSystem = evt["StarSystem"].Str();
-            StarClass = evt["StarClass"].Str();
+            Name = evt["Name"].Str();
+            Count = evt["Count"].Int();
+            Reward = evt["Reward"].Str();
         }
 
-        public string JumpType { get; set; }            // Hyperspace, Supercruise
-        public string StarSystem { get; set; }
-        public string StarClass { get; set; }
+        public string Name { get; set; }            // Hyperspace, Supercruise
+        public int Count { get; set; }
+        public string Reward { get; set; }
 
-        public override System.Drawing.Bitmap Icon { get { return EliteDangerous.Properties.Resources.startjump; } }
+        public override System.Drawing.Bitmap Icon { get { return EliteDangerous.Properties.Resources.no_entry; } }  // TODO
 
         public override void FillInformation(out string summary, out string info, out string detailed) //V
         {
             summary = EventTypeStr.SplitCapsWord();
-            info = BaseUtils.FieldBuilder.Build("",JumpType , "< to " , StarSystem, "Class:" , StarClass);
+            info = BaseUtils.FieldBuilder.Build("",Name , "Nr:" , Count, "Reward:" , Reward);
             detailed = "";
         }
     }
