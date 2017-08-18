@@ -339,7 +339,7 @@ namespace EliteDangerousCore
             if (!s.HasValue)
                 return null;
 
-            TimeSpan ts = new TimeSpan(s.Value);
+            TimeSpan ts = new TimeSpan(0,0,s.Value);
 
             return ts.ToString();
         }
