@@ -895,7 +895,7 @@ namespace ActionLanguage
 
         private void label_index_MouseDown(object sender, MouseEventArgs e)
         {
-            DragMoveMode((Control)sender);
+            OnCaptionMouseDown((Control)sender, e);
         }
 
         private void panel_minimize_Click(object sender, EventArgs e)
