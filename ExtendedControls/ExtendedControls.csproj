@@ -44,121 +44,136 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AutoCompleteDGV.cs" />
-    <Compile Include="AutoCompleteTextBox.cs">
+    <Compile Include="Controls\AutoCompleteDGV.cs" />
+    <Compile Include="Controls\AutoCompleteTextBox.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="ButtonExt.cs">
+    <Compile Include="Controls\ButtonExt.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="CheckBoxCustom.cs">
+    <Compile Include="Controls\CheckBoxCustom.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="CheckedListControlCustom.cs">
+    <Compile Include="Controls\CheckedListControlCustom.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ComboBoxCustom.cs">
+    <Compile Include="Controls\ComboBoxCustom.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="BitMapHelpers.cs" />
-    <Compile Include="FatalExceptionForm.cs">
+    <Compile Include="Helpers\BitMapHelpers.cs" />
+    <Compile Include="Forms\DraggableForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FatalExceptionForm.Designer.cs">
+    <Compile Include="Forms\FatalExceptionForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FatalExceptionForm.Designer.cs">
       <DependentUpon>FatalExceptionForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="ThemeStandardEditor.cs">
+    <Compile Include="Forms\KeyForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ThemeStandardEditor.Designer.cs">
+    <Compile Include="Forms\KeyForm.Designer.cs">
+      <DependentUpon>KeyForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\PanelSelectionList.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controls\PanelSelectionList.Designer.cs">
+      <DependentUpon>PanelSelectionList.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Themes\ThemeStandardEditor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Themes\ThemeStandardEditor.Designer.cs">
       <DependentUpon>ThemeStandardEditor.cs</DependentUpon>
     </Compile>
-    <Compile Include="ThemeToolStrip.cs" />
-    <Compile Include="CustomDateTimePicker.cs">
+    <Compile Include="ToolStrips\ThemeToolStrip.cs" />
+    <Compile Include="Controls\CustomDateTimePicker.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="DropDownCustom.cs">
+    <Compile Include="Controls\DropDownCustom.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="DataGridViewExtensions.cs" />
-    <Compile Include="DataViewScrollerPanel.cs">
+    <Compile Include="Controls\DataGridViewExtensions.cs" />
+    <Compile Include="Controls\DataViewScrollerPanel.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="DrawnPanel.cs">
+    <Compile Include="Controls\DrawnPanel.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="GroupBoxCustom.cs">
+    <Compile Include="Controls\GroupBoxCustom.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="InfoForm.cs">
+    <Compile Include="Forms\InfoForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="InfoForm.Designer.cs">
+    <Compile Include="Forms\InfoForm.Designer.cs">
       <DependentUpon>InfoForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="LabelExt.cs">
+    <Compile Include="Controls\LabelExt.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="ListControlCustom.cs">
+    <Compile Include="Controls\ListControlCustom.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="MessageBoxTheme.cs">
+    <Compile Include="Forms\MessageBoxTheme.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="MessageBoxTheme.Designer.cs">
+    <Compile Include="Forms\MessageBoxTheme.Designer.cs">
       <DependentUpon>MessageBoxTheme.cs</DependentUpon>
     </Compile>
-    <Compile Include="NumericUpDownCustom.cs">
+    <Compile Include="Controls\NumericUpDownCustom.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="PanelVScroll.cs">
+    <Compile Include="Controls\PanelVScroll.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="PictureBoxHotspot.cs">
+    <Compile Include="Controls\PictureBoxHotspot.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="PromptDialogs.cs" />
+    <Compile Include="Forms\PromptDialogs.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="RadioButtonCustom.cs">
+    <Compile Include="Controls\RadioButtonCustom.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="RichTextBoxScroll.cs">
+    <Compile Include="Controls\RichTextBoxScroll.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="RollUpPanel.cs">
+    <Compile Include="Controls\RollUpPanel.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="SplitContainerCustom.cs">
+    <Compile Include="Controls\SplitContainerCustom.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="StatusStripCustom.cs">
+    <Compile Include="Controls\StatusStripCustom.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="TabControlCustom.cs">
+    <Compile Include="Controls\TabControlCustom.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="TabStrip.cs">
+    <Compile Include="Controls\TabStrip.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="TabStrip.Designer.cs">
+    <Compile Include="Controls\TabStrip.Designer.cs">
       <DependentUpon>TabStrip.cs</DependentUpon>
     </Compile>
-    <Compile Include="TabStyleCustom.cs" />
-    <Compile Include="TextBoxBorder.cs">
+    <Compile Include="Controls\TabStyleCustom.cs" />
+    <Compile Include="Controls\TextBoxBorder.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Theme.cs" />
-    <Compile Include="ThemeStandard.cs" />
-    <Compile Include="ToolStripComboBoxCustom.cs" />
-    <Compile Include="UpDown.cs">
+    <Compile Include="Themes\Theme.cs" />
+    <Compile Include="Themes\ThemeStandard.cs" />
+    <Compile Include="ToolStrips\ToolStripComboBoxCustom.cs" />
+    <Compile Include="Controls\UpDown.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="VScrollCustom.cs">
+    <Compile Include="Controls\VScrollCustom.cs">
       <SubType>Component</SubType>
     </Compile>
   </ItemGroup>
@@ -169,29 +184,32 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="AutoCompleteTextBox.resx">
+    <EmbeddedResource Include="Controls\AutoCompleteTextBox.resx">
       <DependentUpon>AutoCompleteTextBox.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="FatalExceptionForm.resx">
+    <EmbeddedResource Include="Forms\FatalExceptionForm.resx">
       <DependentUpon>FatalExceptionForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="InfoForm.resx">
+    <EmbeddedResource Include="Forms\InfoForm.resx">
       <DependentUpon>InfoForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="MessageBoxTheme.resx">
+    <EmbeddedResource Include="Forms\KeyForm.resx">
+      <DependentUpon>KeyForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\MessageBoxTheme.resx">
       <DependentUpon>MessageBoxTheme.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="RichTextBoxScroll.resx">
+    <EmbeddedResource Include="Controls\RichTextBoxScroll.resx">
       <DependentUpon>RichTextBoxScroll.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="TabStrip.resx">
+    <EmbeddedResource Include="Controls\TabStrip.resx">
       <DependentUpon>TabStrip.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ThemeStandardEditor.resx">
+    <EmbeddedResource Include="Themes\ThemeStandardEditor.resx">
       <DependentUpon>ThemeStandardEditor.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>

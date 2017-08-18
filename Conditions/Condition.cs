@@ -108,7 +108,7 @@ namespace Conditions
             string ret = "";
 
             if (includeaction)
-                ret += eventname.QuoteString() + ", " + action.QuoteString() + ", " + actiondata.QuoteString() + ", ";
+                ret += eventname.QuoteString(comma: true) + ", " + action.QuoteString(comma: true) + ", " + actiondata.QuoteString(comma:true) + ", ";
 
             for (int i = 0; fields != null && i < fields.Count; i++)
             {

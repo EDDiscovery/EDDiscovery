@@ -29,7 +29,7 @@ using EliteDangerousCore.DB;
 
 namespace EDDiscovery.Forms
 {
-    public partial class UserControlForm : Form
+    public partial class UserControlForm : ExtendedControls.DraggableForm
     {
         public UserControlCommonBase UserControl;
         public bool isloaded = false;
@@ -386,18 +386,6 @@ namespace EDDiscovery.Forms
         private const int SYSMENU_TRANSPARENT = 0x2;
         private const int SYSMENU_TASKBAR = 0x3;
 
-        // https://msdn.microsoft.com/en-us/library/windows/desktop/ms647985(v=vs.85).aspx
-        [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
-        private static extern IntPtr GetSystemMenu(IntPtr hWnd, bool bRevert);
-
-        // https://msdn.microsoft.com/en-us/library/windows/desktop/ms647616(v=vs.85).aspx
-        [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
-        private static extern bool AppendMenu(IntPtr hMenu, int uFlags, int uIDNewItem, string lpNewItem);
-
-        // Unused. Any reason to keep this?
-        // [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
-        // private static extern bool InsertMenu(IntPtr hMenu, int uPosition, int uFlags, int uIDNewItem, string lpNewItem);
-
         protected override void OnHandleCreated(EventArgs e)
         {
             base.OnHandleCreated(e);
@@ -406,32 +394,19 @@ namespace EDDiscovery.Forms
             if (Environment.OSVersion.Platform == PlatformID.Win32NT && Environment.OSVersion.Version.Major >= 5)
             {
                 // Get a handle to a copy of this form's system (window) menu
-                IntPtr hSysMenu = GetSystemMenu(this.Handle, false);
+                IntPtr hSysMenu = BaseUtils.Win32.UnsafeNativeMethods.GetSystemMenu(this.Handle, false);
                 if (hSysMenu != IntPtr.Zero)
                 {
                     // Add a separator
-                    AppendMenu(hSysMenu, MF.SEPARATOR, 0, string.Empty);
+                    BaseUtils.Win32.UnsafeNativeMethods.AppendMenu(hSysMenu, MF.SEPARATOR, 0, string.Empty);
 
                     // Add the About menu item
-                    AppendMenu(hSysMenu, MF.STRING, SYSMENU_ONTOP, "&On Top");
-                    AppendMenu(hSysMenu, MF.STRING, SYSMENU_TRANSPARENT, "&Transparent");
-                    AppendMenu(hSysMenu, MF.STRING, SYSMENU_TASKBAR, "Show icon in Task&Bar for window");
+                    BaseUtils.Win32.UnsafeNativeMethods.AppendMenu(hSysMenu, MF.STRING, SYSMENU_ONTOP, "&On Top");
+                    BaseUtils.Win32.UnsafeNativeMethods.AppendMenu(hSysMenu, MF.STRING, SYSMENU_TRANSPARENT, "&Transparent");
+                    BaseUtils.Win32.UnsafeNativeMethods.AppendMenu(hSysMenu, MF.STRING, SYSMENU_TASKBAR, "Show icon in Task&Bar for window");
                 }
             }
         }
-
-        private IntPtr SendMessage(int msg, IntPtr wparam, IntPtr lparam)
-        {
-            Message message = Message.Create(this.Handle, msg, wparam, lparam);
-            this.WndProc(ref message);
-            return message.Result;
-        }
-
-
-        // Mono compatibility
-        private bool _window_dragging = false;
-        private Point _window_dragMousePos = Point.Empty;
-        private Point _window_dragWindowPos = Point.Empty;
 
         protected override void WndProc(ref Message m)
         {
@@ -458,69 +433,6 @@ namespace EDDiscovery.Forms
                 else
                     base.WndProc(ref m);
             }
-            // Compatibility movement for Mono
-            else if (m.Msg == WM.LBUTTONDOWN && m.WParam == (IntPtr)1 && !curwindowsborder)
-            {
-                int x = unchecked((short)((uint)m.LParam & 0xFFFF));
-                int y = unchecked((short)((uint)m.LParam >> 16));
-                _window_dragMousePos = new Point(x, y);
-                _window_dragWindowPos = this.Location;
-                _window_dragging = true;
-                m.Result = IntPtr.Zero;
-                this.Capture = true;
-            }
-            else if (m.Msg == WM.MOUSEMOVE && m.WParam == (IntPtr)1 && _window_dragging)
-            {
-                int x = unchecked((short)((uint)m.LParam & 0xFFFF));
-                int y = unchecked((short)((uint)m.LParam >> 16));
-                Point delta = new Point(x - _window_dragMousePos.X, y - _window_dragMousePos.Y);
-                _window_dragWindowPos = new Point(_window_dragWindowPos.X + delta.X, _window_dragWindowPos.Y + delta.Y);
-                this.Location = _window_dragWindowPos;
-                this.Update();
-                m.Result = IntPtr.Zero;
-            }
-            else if (m.Msg == WM.LBUTTONUP)
-            {
-                _window_dragging = false;
-                _window_dragMousePos = Point.Empty;
-                _window_dragWindowPos = Point.Empty;
-                m.Result = IntPtr.Zero;
-                this.Capture = false;
-            }
-            // Windows honours NCHITTEST; Mono does not
-            else if (m.Msg == WM.NCHITTEST)
-            {
-                base.WndProc(ref m);
-
-                if (m.Result == (IntPtr)HT.CLIENT)
-                {
-                    int x = unchecked((short)((uint)m.LParam & 0xFFFF));
-                    int y = unchecked((short)((uint)m.LParam >> 16));
-                    Point p = PointToClient(new Point(x, y));
-
-                    if (p.X > this.ClientSize.Width - statusStripBottom.Height && p.Y > this.ClientSize.Height - statusStripBottom.Height)
-                    {
-                        m.Result = (IntPtr)HT.BOTTOMRIGHT;
-                    }
-                    else if (p.Y > this.ClientSize.Height - statusStripBottom.Height)
-                    {
-                        m.Result = (IntPtr)HT.BOTTOM;
-                    }
-                    else if (p.X > this.ClientSize.Width - 5)       // 5 is generous.. really only a few pixels gets thru before the subwindows grabs them
-                    {
-                        m.Result = (IntPtr)HT.RIGHT;
-                    }
-                    else if (p.X < 5)
-                    {
-                        m.Result = (IntPtr)HT.LEFT;
-                    }
-                    else if (!curwindowsborder)
-                    {
-                        m.Result = (IntPtr)HT.CAPTION;
-                    }
-
-                }
-            }
             else
             {
                 base.WndProc(ref m);
@@ -529,8 +441,7 @@ namespace EDDiscovery.Forms
 
         private void panelTop_MouseDown(object sender, MouseEventArgs e)
         {
-            ((Control)sender).Capture = false;
-            SendMessage(WM.NCLBUTTONDOWN, (IntPtr)HT.CAPTION, IntPtr.Zero);
+            OnCaptionMouseDown((Control)sender, e);
         }
 
         #endregion

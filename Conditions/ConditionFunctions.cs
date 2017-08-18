@@ -106,13 +106,15 @@ namespace Conditions
 
                             int start = apos;
 
-                            if (apos < line.Length && line[apos] == '"')
+                            if (apos < line.Length && (line[apos] == '"' || line[apos] == '\''))
                             {
+                                char quote = line[apos++];
+
                                 string res = "";
-                                apos++;
-                                while (apos < line.Length && line[apos] != '"')
+
+                                while (apos < line.Length && line[apos] != quote)
                                 {
-                                    if (line[apos] == '\\' && (apos + 1) < line.Length && line[apos + 1] == '"')  // if \"
+                                    if (line[apos] == '\\' && (apos + 1) < line.Length && line[apos + 1] == quote)  // if \"
                                     {
                                         apos++;
                                     }
