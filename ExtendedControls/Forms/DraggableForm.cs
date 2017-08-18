@@ -14,7 +14,7 @@ namespace ExtendedControls
         public DraggableForm()
         {
             DoubleBuffered = true;
-            _dblClickTimer = new Timer { Enabled = false, Interval = SystemInformation.DoubleClickTime, Tag = Rectangle.Empty };
+            _dblClickTimer = new Timer { Enabled = false, Tag = Rectangle.Empty };
             _dblClickTimer.Tick += DblClickTimer_Tick;
         }
 
@@ -103,6 +103,7 @@ namespace ExtendedControls
                 else
                 {
                     _dblClickTimer.Enabled = false;
+                    _dblClickTimer.Interval = SystemInformation.DoubleClickTime;
                     var dblclksz = SystemInformation.DoubleClickSize;
                     var dblclkrc = new Rectangle(mousePos, dblclksz);
                     dblclkrc.Offset(dblclksz.Width / -2, dblclksz.Height / -2);
