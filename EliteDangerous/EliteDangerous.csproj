@@ -202,6 +202,7 @@
     <Compile Include="JournalEvents\JournalMissionAbandoned.cs" />
     <Compile Include="JournalEvents\JournalMissionAccepted.cs" />
     <Compile Include="JournalEvents\JournalMissionCompleted.cs" />
+    <Compile Include="JournalEvents\JournalMissionRedirected.cs" />
     <Compile Include="JournalEvents\JournalMissionFailed.cs" />
     <Compile Include="JournalEvents\JournalModuleBuy.cs" />
     <Compile Include="JournalEvents\JournalModuleRetrieve.cs" />

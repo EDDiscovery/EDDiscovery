@@ -107,6 +107,7 @@ namespace EliteDangerousCore
         MissionAccepted = 480,
         MissionCompleted = 490,
         MissionFailed = 500,
+        MissionRedirected = 505,
         ModuleBuy = 510,
         ModuleRetrieve = 515,
         ModuleSell = 520,
