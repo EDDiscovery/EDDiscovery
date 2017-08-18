@@ -118,7 +118,7 @@ namespace ExtendedControls
         {
             dropdown = false;
             ddc.Hide();
-            SelectedIndexChanged?.Invoke(sender, e);
+            SelectedIndexChanged?.Invoke(this, e);
         }
     }
 }

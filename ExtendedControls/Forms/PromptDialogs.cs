@@ -18,7 +18,7 @@ namespace ExtendedControls
             List<string> r = PromptMultiLine.ShowDialog(p, caption, ic, new string[] { lab1 }, 
                     new string[] { defaultValue1 }, multiline, tooltip != null ? new string[] { tooltip } : null);
 
-            return (r != null) ? r[0] : null;
+            return r?[0];
         }
     }
 
@@ -404,7 +404,7 @@ namespace ExtendedControls
 
         private void FormMouseDown(object sender, MouseEventArgs e)
         {
-            DragMoveMode((Control)sender);
+            OnCaptionMouseDown((Control)sender, e);
         }
 
     }

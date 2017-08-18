@@ -207,7 +207,7 @@ namespace ExtendedControls
         
         private void pictureBox1_MouseDown(object sender, MouseEventArgs e)
         {
-            DragMoveMode((Control)sender);
+            OnCaptionMouseDown((Control)sender, e);
         }
 
     }

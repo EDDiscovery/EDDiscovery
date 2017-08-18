@@ -441,7 +441,7 @@ namespace EDDiscovery.Forms
 
         private void panelTop_MouseDown(object sender, MouseEventArgs e)
         {
-            DragMoveMode((Control)sender);
+            OnCaptionMouseDown((Control)sender, e);
         }
 
         #endregion
