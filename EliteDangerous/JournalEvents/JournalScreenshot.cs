@@ -30,19 +30,23 @@ namespace EliteDangerousCore.JournalEvents
             Height = evt["Height"].Int();
             System = evt["System"].Str();
             Body = evt["Body"].Str();
+            nLatitude = evt["Latitude"].DoubleNull();
+            nLongitude = evt["Longitude"].DoubleNull();
         }
         public string Filename { get; set; }
         public int Width { get; set; }
         public int Height { get; set; }
         public string System { get; set; }
         public string Body { get; set; }
+        public double? nLatitude { get; set; }
+        public double? nLongitude { get; set; }
 
         public override System.Drawing.Bitmap Icon { get { return EliteDangerous.Properties.Resources.screenshot; } }
 
         public override void FillInformation(out string summary, out string info, out string detailed)  //V
         {
             summary = EventTypeStr.SplitCapsWord();
-            info = BaseUtils.FieldBuilder.Build("At " , Body , "< in " , System , "File:", Filename, "Width:", Width , "Height:", Height);
+            info = BaseUtils.FieldBuilder.Build("At " , Body , "< in " , System , "File:", Filename, "Width:", Width , "Height:", Height, "Latitude:", JournalFieldNaming.RLat(nLatitude), "Longitude:", JournalFieldNaming.RLong(nLongitude));
             detailed = "";
         }
 
