@@ -31,15 +31,15 @@ namespace EliteDangerousCore.JournalEvents
     {
         public JournalRepairDrone(JObject evt ) : base(evt, JournalTypeEnum.RepairDrone)
         {
-            HullRepaired = evt["HullRepaired"].Str();
-            CockpitRepaired = evt["CockpitRepaired"].Str();
-            CorrosionRepaired = evt["CorrosionRepaired"].Str();
+            HullRepaired = evt["HullRepaired"].Double();
+            CockpitRepaired = evt["CockpitRepaired"].Double();
+            CorrosionRepaired = evt["CorrosionRepaired"].Double();
 
         }
 
-        public string HullRepaired { get; set; }
-        public string CockpitRepaired { get; set; }
-        public string CorrosionRepaired { get; set; }
+        public double HullRepaired { get; set; }
+        public double CockpitRepaired { get; set; }
+        public double CorrosionRepaired { get; set; }
 
         public override System.Drawing.Bitmap Icon { get { return EliteDangerous.Properties.Resources.repair; } }  // TODO?
 
@@ -48,7 +48,7 @@ namespace EliteDangerousCore.JournalEvents
         public override void FillInformation(out string summary, out string info, out string detailed) //V
         {
             summary = EventTypeStr.SplitCapsWord();
-            info = BaseUtils.FieldBuilder.Build("Hull:", HullRepaired, "Cockpit:", CockpitRepaired, "Corrosion:", CorrosionRepaired);
+            info = BaseUtils.FieldBuilder.Build("Hull:", HullRepaired.ToString("0.0"), "Cockpit:", CockpitRepaired.ToString("0.0"), "Corrosion:", CorrosionRepaired.ToString("0.0"));
             detailed = "";
         }
     }
