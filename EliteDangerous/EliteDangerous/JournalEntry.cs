@@ -114,6 +114,7 @@ namespace EliteDangerousCore
         ModuleSellRemote = 990,
         ModuleStore = 525,
         ModuleSwap = 530,
+        Music = 535,
         NewCommander = 540,
         Passengers = 545,
         PayFines = 550,

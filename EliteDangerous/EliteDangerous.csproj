@@ -233,6 +233,8 @@
     <Compile Include="JournalEvents\JournalRedeemVoucher.cs" />
     <Compile Include="JournalEvents\JournalRefuelAll.cs" />
     <Compile Include="JournalEvents\JournalRefuelPartial.cs" />
+    <Compile Include="JournalEvents\JournalMusic.cs" />
+    <Compile Include="JournalEvents\JournalRepairDrone.cs" />
     <Compile Include="JournalEvents\JournalRepair.cs" />
     <Compile Include="JournalEvents\JournalRepairAll.cs" />
     <Compile Include="JournalEvents\JournalRestockVehicle.cs" />
