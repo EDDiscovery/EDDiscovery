@@ -19,7 +19,22 @@ using System.Linq;
 
 namespace EliteDangerousCore.JournalEvents
 {
-    //When written: screenshot
+    /*
+     When Written: when a screen snapshot is saved
+    Parameters:
+     Filename: filename of screenshot
+     Width: size in pixels
+     Height: size in pixels
+     System: current star system
+     Body: name of nearest body
+     Latitude
+     Longitude
+    The latitude and longitude will be included if on a planet or in low-altitude flight
+    Example:
+    { "timestamp":"2016-06-10T14:32:03Z","event":"Screenshot",
+    "Filename":"_Screenshots/Screenshot_0151.bmp", "Width":1600, "Height":900, "System":"Shinrarta
+    Dezhra", "Body":"Founders World" } 
+     */
     [JournalEntryType(JournalTypeEnum.Screenshot)]
     public class JournalScreenshot : JournalEntry
     {
