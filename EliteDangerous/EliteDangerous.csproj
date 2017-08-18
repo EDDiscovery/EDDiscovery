@@ -243,6 +243,7 @@
     <Compile Include="JournalEvents\JournalScreenshot.cs" />
     <Compile Include="JournalEvents\JournalSelfDestruct.cs" />
     <Compile Include="JournalEvents\JournalSellDrones.cs" />
+    <Compile Include="JournalEvents\JournalSellShipOnRebuy.cs" />
     <Compile Include="JournalEvents\JournalSellExplorationData.cs" />
     <Compile Include="JournalEvents\JournalSendText.cs" />
     <Compile Include="JournalEvents\JournalSetUserShipName.cs" />
