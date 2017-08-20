@@ -439,7 +439,7 @@ namespace EliteDangerousCore.JournalEvents
 
             int estvalue = EstimatedValue();
             if (estvalue > 0)
-                scanText.AppendFormat("\nEstimated value: {0}", estvalue);
+                scanText.AppendFormat("\nEstimated value: {0:N0}", estvalue);
 
             return scanText.ToNullSafeString().Replace("\n", "\n" + inds);
         }
