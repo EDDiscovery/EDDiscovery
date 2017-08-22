@@ -41,7 +41,7 @@ namespace EliteDangerousCore
             public bool EDSMAdded = false;
         };
 
-        public enum ScanNodeType { star, barycentre, body };
+        public enum ScanNodeType { star, barycentre, body, belt, beltcluster };
 
         public class ScanNode
         {
@@ -52,6 +52,7 @@ namespace EliteDangerousCore
             public SortedList<string, ScanNode> children;         // kids
 
             private JournalScan scandata;            // can be null if no scan, its a place holder.
+            private JournalScan.StarPlanetRing beltdata;
 
             public JournalScan ScanData
             {
@@ -72,6 +73,22 @@ namespace EliteDangerousCore
                 }
             }
 
+            public JournalScan.StarPlanetRing BeltData
+            {
+                get
+                {
+                    return beltdata;
+                }
+
+                set
+                {
+                    if (value == null)
+                        return;
+
+                    beltdata = value;
+                }
+            }
+
             public bool DoesNodeHaveNonEDSMScansBelow()
             {
                 if (ScanData != null && ScanData.IsEDSMBody == false)
@@ -89,7 +106,6 @@ namespace EliteDangerousCore
                 return false;
             }
         };
-
 
         public SystemNode FindSystem(ISystem sys)
         {
@@ -267,6 +283,7 @@ namespace EliteDangerousCore
             List<string> elements;
 
             ScanNodeType starscannodetype = ScanNodeType.star;          // presuming.. 
+            bool isbeltcluster = false;
 
             string rest = sc.IsStarNameRelatedReturnRest(sys.name);
             if (rest != null)                                   // if we have a relationship..
@@ -274,6 +291,22 @@ namespace EliteDangerousCore
                 if (rest.Length > 0)
                 {
                     elements = rest.Split(' ').ToList();
+
+                    if (elements.Count == 4 && elements[0].Length == 1 && char.IsLetter(elements[0][0]) && 
+                            elements[1].Equals("belt", StringComparison.InvariantCultureIgnoreCase) &&
+                            elements[2].Equals("cluster", StringComparison.InvariantCultureIgnoreCase))
+                    {
+                        elements = new List<string> { "Main Star", elements[0] + " " + elements[1], elements[2] + " " + elements[3] };
+                        isbeltcluster = true;
+                    }
+                    else if (elements.Count == 5 && elements[0].Length == 1 && 
+                            elements[1].Length == 1 && char.IsLetter(elements[1][0]) &&
+                            elements[2].Equals("belt", StringComparison.InvariantCultureIgnoreCase) &&
+                            elements[3].Equals("cluster", StringComparison.InvariantCultureIgnoreCase))
+                    {
+                        elements = new List<string> { elements[0], elements[1] + " " + elements[2], elements[3] + " " + elements[4] };
+                        isbeltcluster = true;
+                    }
 
                     if (char.IsDigit(elements[0][0]))       // if digits, planet number, no star designator
                         elements.Insert(0, "Main Star");         // no star designator, main star, add MAIN
@@ -340,7 +373,9 @@ namespace EliteDangerousCore
                         if (sublv0.children == null)
                             sublv0.children = new SortedList<string, ScanNode>(new DuplicateKeyComparer<string>());
 
-                        sublv1 = new ScanNode() { ownname = elements[1], fullname = sublv0.fullname + " " + elements[1], ScanData = null, children = null, type = ScanNodeType.body};
+                        ScanNodeType lv1scannodetype = isbeltcluster ? ScanNodeType.belt : ScanNodeType.body;
+
+                        sublv1 = new ScanNode() { ownname = elements[1], fullname = sublv0.fullname + " " + elements[1], ScanData = null, children = null, type = lv1scannodetype};
                         sublv0.children.Add(elements[1], sublv1);
                     }
 
@@ -353,7 +388,9 @@ namespace EliteDangerousCore
                             if (sublv1.children == null)
                                 sublv1.children = new SortedList<string, ScanNode>(new DuplicateKeyComparer<string>());
 
-                            sublv2 = new ScanNode() { ownname = elements[2], fullname = sublv0.fullname + " " + elements[1] + " " + elements[2], ScanData = null, children = null, type = ScanNodeType.body };
+                            ScanNodeType lv2scannodetype = isbeltcluster ? ScanNodeType.beltcluster : ScanNodeType.body;
+
+                            sublv2 = new ScanNode() { ownname = elements[2], fullname = sublv0.fullname + " " + elements[1] + " " + elements[2], ScanData = null, children = null, type = lv2scannodetype };
                             sublv1.children.Add(elements[2], sublv2);
                         }
 
@@ -370,15 +407,34 @@ namespace EliteDangerousCore
                                 sublv2.children.Add(elements[3], sublv3);
                             }
 
-                            if (elements.Count == 4)            // okay, need only 4 elements now.. if not, we have not coped..
+                            if (elements.Count >= 5)
                             {
-                                sublv3.customname = customname;
-                                sublv3.ScanData = sc;
+                                ScanNode sublv4;
+
+                                if (sublv3.children == null || !sublv3.children.TryGetValue(elements[4], out sublv4))
+                                {
+                                    if (sublv3.children == null)
+                                        sublv3.children = new SortedList<string, ScanNode>(new DuplicateKeyComparer<string>());
+
+                                    sublv4 = new ScanNode() { ownname = elements[4], fullname = sublv0.fullname + " " + elements[1] + " " + elements[2] + " " + elements[3] + " " + elements[4], ScanData = null, children = null, type = ScanNodeType.body };
+                                    sublv3.children.Add(elements[4], sublv4);
+                                }
+
+                                if (elements.Count == 5)            // okay, need only 5 elements now.. if not, we have not coped..
+                                {
+                                    sublv4.customname = customname;
+                                    sublv4.ScanData = sc;
+                                }
+                                else
+                                {
+                                    System.Diagnostics.Debug.WriteLine("Failed to add system " + sc.BodyName + " too long");
+                                    return false;
+                                }
                             }
                             else
                             {
-                                System.Diagnostics.Debug.WriteLine("Failed to add system " + sc.BodyName + " too long");
-                                return false;
+                                sublv3.customname = customname;
+                                sublv3.ScanData = sc;
                             }
                         }
                         else
@@ -397,6 +453,29 @@ namespace EliteDangerousCore
                 {
                     sublv0.customname = customname;
                     sublv0.ScanData = sc;
+
+                    if (sc.HasRings)
+                    {
+                        foreach (JournalScan.StarPlanetRing ring in sc.Rings)
+                        {
+                            ScanNode sublv1;
+                            string beltname = ring.Name;
+                            string stardesig = sc.BodyDesignation ?? sc.BodyName;
+                            if (beltname.StartsWith(stardesig, StringComparison.InvariantCultureIgnoreCase))
+                            {
+                                beltname = beltname.Substring(stardesig.Length).Trim();
+                            }
+
+                            if (sublv0.children == null || !sublv0.children.TryGetValue(beltname, out sublv1))
+                            {
+                                if (sublv0.children == null)
+                                    sublv0.children = new SortedList<string, ScanNode>(new DuplicateKeyComparer<string>());
+
+                                sublv1 = new ScanNode() { ownname = beltname, fullname = sublv0.fullname + " " + beltname, ScanData = null, BeltData = ring, children = null, type = ScanNodeType.belt };
+                                sublv0.children.Add(beltname, sublv1);
+                            }
+                        }
+                    }
                 }
 
                 return true;
