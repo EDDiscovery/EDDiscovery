@@ -828,6 +828,8 @@ namespace EliteDangerousCore.JournalEvents
                 }
                 return (int)StarValue(kValue, nStellarMass.Value);
             }
+            else if (PlanetClass == null)  //Asteroid belt
+                return 0;
             else   // Planet
             {
                 switch (PlanetTypeID)      // http://elite-dangerous.wikia.com/wiki/Explorer
