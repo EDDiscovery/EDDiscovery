@@ -721,14 +721,8 @@ namespace EliteDangerousCore.EDSM
 
                 if (jo["type"].Value<string>().Equals("Star"))
                 {
-                    jo["subType"].Rename("StarType");   // Remove extra text from EDSM   ex  "F (White) Star" -> "F"
-                    string startype = jo["StarType"].Value<string>();
-                    if (startype == null)
-                        startype = "unknown";
-                    int index = startype.IndexOf("(");
-                    if (index > 0)
-                        startype = startype.Substring(0, index).Trim();
-                    jo["StarType"] = startype;
+                    jo["subType"].Rename("StarType");
+                    jo["StarType"] = EDSMStar2JournalName(jo["StarType"].Str());
 
                     jo["age"].Rename("Age_MY");
                     jo["solarMasses"].Rename("StellarMass");
@@ -822,11 +816,49 @@ namespace EliteDangerousCore.EDSM
             { "earth-like world",                   "Earthlike body" },
         };
 
+        private static Dictionary<string, string> EDSM2StarNames = new Dictionary<string, string>(StringComparer.InvariantCultureIgnoreCase)
+        {
+            // EDSM name (lower case)               Journal name
+            { "a (blue-white super giant) star", "A_BlueWhiteSuperGiant" },
+            { "f (white super giant) star", "F_WhiteSuperGiant" },
+            { "k (yellow-orange giant) star", "K_OrangeGiant" },
+            { "m (red giant) star", "M_RedGiant" },
+            { "m (red super giant) star", "M_RedSuperGiant" },
+            { "black hole", "H" },
+            { "c star", "C" },
+            { "cj star", "CJ" },
+            { "cn star", "CN" },
+            { "herbig ae/be star", "AeBe" },
+            { "ms-type star", "MS" },
+            { "neutron star", "N" },
+            { "s-type star", "S" },
+            { "t tauri star", "TTS" },
+            { "wolf-rayet c star", "WC" },
+            { "wolf-rayet n star", "WN" },
+            { "wolf-rayet nc star", "WNC" },
+            { "wolf-rayet o star", "WO" },
+            { "wolf-rayet star", "W" },
+        };
+
         static public string EDSMPlanet2JournalName(string inname)
         {
             return EDSM2PlanetNames.ContainsKey(inname.ToLower()) ? EDSM2PlanetNames[inname.ToLower()] : inname;
         }
 
+        public static string EDSMStar2JournalName(string startype)
+        {
+            if (startype == null)
+                startype = "unknown";
+            else if (EDSM2StarNames.ContainsKey(startype))
+                startype = EDSM2StarNames[startype];
+            else   // Remove extra text from EDSM   ex  "F (White) Star" -> "F"
+            {
+                int index = startype.IndexOf("(");
+                if (index > 0)
+                    startype = startype.Substring(0, index).Trim();
+            }
+            return startype;
+        }
 
         public string SetRanks(int combat_rank, int combat_progress, int trade_rank, int trade_progress,
             int explore_rank, int explore_progress, int cqc_rank, int cqc_progress,
