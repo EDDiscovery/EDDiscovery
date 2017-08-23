@@ -188,7 +188,7 @@ namespace EDDiscovery.UserControls
 
                             //System.Diagnostics.Debug.WriteLine("Planet Node " + planetnode.ownname + " has scans " + nonedsmscans);
 
-                            if (nonedsmscans || checkBoxEDSM.Checked)
+                            if ((nonedsmscans || checkBoxEDSM.Checked) && planetnode.type != StarScan.ScanNodeType.belt)
                             {
                                 List<PictureBoxHotspot.ImageElement> pc = new List<PictureBoxHotspot.ImageElement>();
 
