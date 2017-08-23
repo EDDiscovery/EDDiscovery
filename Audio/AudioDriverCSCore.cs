@@ -91,8 +91,7 @@ namespace AudioExtensions
         private void Output_Stopped(object sender, PlaybackStoppedEventArgs e)
         {
             //System.Diagnostics.Debug.WriteLine((Environment.TickCount % 10000).ToString("00000") + "Driver stopped");
-            if (AudioStoppedEvent != null)
-                AudioStoppedEvent();
+            AudioStoppedEvent?.Invoke();
         }
 
         public void Dispose()
@@ -110,6 +109,9 @@ namespace AudioExtensions
 
         public void Start(AudioData o, int vol)
         {
+            if (((DirectSoundOut)aout).Device == Guid.Empty)
+                return;
+
             int t = Environment.TickCount;
 
             IWaveSource current = o.data as IWaveSource;
