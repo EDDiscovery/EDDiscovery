@@ -140,10 +140,10 @@ namespace EliteDangerousCore.JournalEvents
             public double OuterRad;
         }
         
-        private const double solarRadius_m = 695700000;
-        private const double oneAU_m = 149597870000;
-        private const double oneDay_s = 86400;
-        private const double oneMoon_MT = 73420000000000;
+        public const double solarRadius_m = 695700000;
+        public const double oneAU_m = 149597870000;
+        public const double oneDay_s = 86400;
+        public const double oneMoon_MT = 73420000000000;
 
         public JournalScan(JObject evt) : base(evt, JournalTypeEnum.Scan)
         {
