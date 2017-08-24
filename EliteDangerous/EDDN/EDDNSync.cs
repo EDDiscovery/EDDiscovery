@@ -137,6 +137,9 @@ namespace EliteDangerousCore.EDDN
                 eddn.commanderName = he.Commander.EdsmName;
                 if (string.IsNullOrEmpty(eddn.commanderName))
                     eddn.commanderName = he.Commander.Name;
+
+                if (he.Commander.Name.StartsWith("[BETA]", StringComparison.InvariantCultureIgnoreCase))
+                    eddn.isBeta = true;
             }
 
             JournalEntry je = he.journalEntry;

@@ -31,6 +31,7 @@ namespace EliteDangerousCore.EDDN
     public class EDDNClass : BaseUtils.HttpCom
     {
         public string commanderName;
+        public bool isBeta;
         
         private readonly string fromSoftwareVersion;
         private readonly string fromSoftware;
@@ -60,7 +61,7 @@ namespace EliteDangerousCore.EDDN
 
         private string GetEDDNJournalSchemaRef()
         {
-            if (commanderName.StartsWith("[BETA]"))
+            if (isBeta || commanderName.StartsWith("[BETA]"))
                 return "https://eddn.edcd.io/schemas/journal/1/test";
             else
                 return "https://eddn.edcd.io/schemas/journal/1";
@@ -68,7 +69,7 @@ namespace EliteDangerousCore.EDDN
 
         private string GetEDDNCommoditySchemaRef()
         {
-            if (commanderName.StartsWith("[BETA]"))
+            if (isBeta || commanderName.StartsWith("[BETA]"))
                 return "https://eddn.edcd.io/schemas/commodity/3/test";
             else
                 return "https://eddn.edcd.io/schemas/commodity/3";
