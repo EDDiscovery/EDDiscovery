@@ -298,10 +298,10 @@ namespace EliteDangerousCore
         private int Synced;                     // sync flags
 
         public DateTime EventTimeLocal { get { return EventTimeUTC.ToLocalTime(); } }
-        
+
         public bool SyncedEDSM { get { return (Synced & (int)SyncFlags.EDSM) != 0; } }
         public bool SyncedEDDN { get { return (Synced & (int)SyncFlags.EDDN) != 0; } }
-        public bool SyncedEGO { get { return (Synced & (int)SyncFlags.EGO) != 0;} }
+        public bool SyncedEGO { get { return (Synced & (int)SyncFlags.EGO) != 0; } }
         public bool StartMarker { get { return (Synced & (int)SyncFlags.StartMarker) != 0; } }
         public bool StopMarker { get { return (Synced & (int)SyncFlags.StopMarker) != 0; } }
         private bool? beta;                        // True if journal entry is from beta
@@ -632,7 +632,7 @@ namespace EliteDangerousCore
             }
         }
 
-        public static JournalEDDCommodityPrices AddEDDCommodityPrices(int cmdrid, DateTime dt, string station , string faction , JArray jcommodities)     // add item, return journal ID
+        public static JournalEDDCommodityPrices AddEDDCommodityPrices(int cmdrid, DateTime dt, string station, string faction, JArray jcommodities)     // add item, return journal ID
         {
             JObject jo;
             using (SQLiteConnectionUser cn = new SQLiteConnectionUser(utc: true))
@@ -1072,7 +1072,7 @@ namespace EliteDangerousCore
         }
 
         #endregion
-        
+
         #region Misc
 
         static public JournalTypeEnum JournalString2Type(string str)
@@ -1105,7 +1105,7 @@ namespace EliteDangerousCore
             return true;
         }
 
-        static public List<string> GetListOfEventsWithOptMethod(bool towords, string method = null, string method2 = null )
+        static public List<string> GetListOfEventsWithOptMethod(bool towords, string method = null, string method2 = null)
         {
             List<string> ret = new List<string>();
 
@@ -1136,6 +1136,10 @@ namespace EliteDangerousCore
 
             return ret;
         }
+
+        public bool IsUIEvent { get { return IsUIEventType(this); } }
+
+        static public bool IsUIEventType(JournalEntry j) { return j is JournalMusic; } 
 
         #endregion
 

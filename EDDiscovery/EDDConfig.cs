@@ -64,6 +64,7 @@ namespace EDDiscovery
         private bool _clearCommodities = false;
         private bool _autoLoadPopouts = false;
         private bool _autoSavePopouts = false;
+        private bool _showuievents = false;
         private string _defaultwavedevice = "Default";
         private string _defaultvoicedevice = "Default";
 
@@ -233,9 +234,22 @@ namespace EDDiscovery
             }
         }
 
-#endregion
+        public bool ShowUIEvents 
+        {
+            get
+            {
+                return _showuievents;
+            }
+            set
+            {
+                _showuievents = value;
+                SQLiteConnectionUser.PutSettingBool("ShowUIEvents", value);
+            }
+        }
 
-#region Update at start
+        #endregion
+
+        #region Update at start
 
         public void Update(bool write = true, SQLiteConnectionUser conn = null)     // call at start to populate above
         {
@@ -253,6 +267,7 @@ namespace EDDiscovery
                 _autoSavePopouts = SQLiteConnectionUser.GetSettingBool("AutoSavePopouts", false, conn);
                 _defaultvoicedevice = SQLiteConnectionUser.GetSettingString("VoiceAudioDevice", "Default", conn);
                 _defaultwavedevice = SQLiteConnectionUser.GetSettingString("WaveAudioDevice", "Default", conn);
+                _showuievents = SQLiteConnectionUser.GetSettingBool("ShowUIEvents", false, conn);
 
                 EliteDangerousCore.EDCommander.Load(write, conn);
                 UserPaths.Load(conn);

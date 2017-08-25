@@ -51,7 +51,6 @@ namespace EDDiscovery
         }
         public float MapZoom { get { return float.Parse(textBoxDefaultZoom.Text); } }
         public bool MapCentreOnSelection { get { return radioButtonHistorySelection.Checked; } }
-        public bool OrderRowsInverted { get { return checkBoxOrderRowsInverted.Checked; } }
 
         public Settings()
         {
@@ -96,6 +95,7 @@ namespace EDDiscovery
             checkBoxUTC.Checked = EDDiscoveryForm.EDDConfig.DisplayUTC;
             checkBoxAutoLoad.Checked = EDDiscoveryForm.EDDConfig.AutoLoadPopOuts;
             checkBoxAutoSave.Checked = EDDiscoveryForm.EDDConfig.AutoSavePopOuts;
+            checkBoxShowUIEvents.Checked = EDDiscoveryForm.EDDConfig.ShowUIEvents;
 
             checkBoxMinimizeToNotifyIcon.Enabled = EDDiscoveryForm.EDDConfig.UseNotifyIcon;
 
@@ -132,6 +132,7 @@ namespace EDDiscovery
             EDDiscoveryForm.EDDConfig.DisplayUTC = checkBoxUTC.Checked;
             EDDiscoveryForm.EDDConfig.AutoLoadPopOuts = checkBoxAutoLoad.Checked;
             EDDiscoveryForm.EDDConfig.AutoSavePopOuts = checkBoxAutoSave.Checked;
+            EDDiscoveryForm.EDDConfig.ShowUIEvents = checkBoxShowUIEvents.Checked;
         }
 
         private void textBoxDefaultZoom_Validating(object sender, System.ComponentModel.CancelEventArgs e)
@@ -323,6 +324,16 @@ namespace EDDiscovery
             _discoveryForm.keepOnTopChanged(checkBoxKeepOnTop.Checked);
         }
 
+        private void checkBoxShowUIEvents_CheckedChanged(object sender, EventArgs e)
+        {
+            EDDConfig.Instance.ShowUIEvents = checkBoxShowUIEvents.Checked;
+        }
+
+        private void checkBoxOrderRowsInverted_CheckedChanged(object sender, EventArgs e)
+        {
+            EDDConfig.Instance.OrderRowsInverted = checkBoxOrderRowsInverted.Checked;
+        }
+
         private void checkBoxMinimizeToNotifyIcon_CheckedChanged(object sender, EventArgs e)
         {
             EDDiscoveryForm.EDDConfig.MinimizeToNotifyIcon = checkBoxMinimizeToNotifyIcon.Checked;
@@ -359,6 +370,7 @@ namespace EDDiscovery
                 HomeSystem = SystemClassDB.GetSystem(textBoxHomeSystem.Text);
             }
         }
+
     }
 }
 
