@@ -1902,6 +1902,9 @@ namespace EliteDangerousCore
             { "MOA-2007-BLG-400L", new Dictionary<string, string> {
                 { "MOA-2007-BLG-400L b", "MOA-2007-BLG-400L 1" }
             } },
+            { "Eol Procul Centauri", new Dictionary<string, string> {
+                { "Hutton Moon", "Eol Procul Centauri 1" }
+            } },
         };
     }
 }
