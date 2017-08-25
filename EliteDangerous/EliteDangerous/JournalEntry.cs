@@ -305,7 +305,7 @@ namespace EliteDangerousCore
         public bool StartMarker { get { return (Synced & (int)SyncFlags.StartMarker) != 0; } }
         public bool StopMarker { get { return (Synced & (int)SyncFlags.StopMarker) != 0; } }
         private bool? beta;                        // True if journal entry is from beta
-        public bool Beta
+        public virtual bool Beta
         {
             get
             {
