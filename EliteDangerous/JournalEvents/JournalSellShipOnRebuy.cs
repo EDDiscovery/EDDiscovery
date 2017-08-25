@@ -34,7 +34,7 @@ Example:
     {
         public JournalSellShipOnRebuy(JObject evt) : base(evt, JournalTypeEnum.SellShipOnRebuy)
         {
-            ShipType = evt["ShipType"].Str();
+            ShipType = JournalFieldNaming.GetBetterShipName(evt["ShipType"].Str());
             System = evt["System"].Str();
             SellShipId = evt["SellShipId"].Int();
             ShipPrice = evt["ShipPrice"].Long();
