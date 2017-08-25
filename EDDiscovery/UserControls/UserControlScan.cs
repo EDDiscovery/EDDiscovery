@@ -168,7 +168,6 @@ namespace EDDiscovery.UserControls
 
                 foreach (StarScan.ScanNode starnode in last_sn.starnodes.Values)        // always has scan nodes
                 {
-                    int belty = curpos.Y;
                     int offset = 0;
                     Point maxstarpos = DrawNode(starcontrols, starnode,
                                 (starnode.type == StarScan.ScanNodeType.barycentre) ? EDDiscovery.Properties.Resources.Barycentre : JournalScan.GetStarImageNotScanned(),
@@ -183,19 +182,34 @@ namespace EDDiscovery.UserControls
 
                     if (starnode.children != null)
                     {
+                        Queue<StarScan.ScanNode> belts = null;
                         if (starnode.ScanData != null && (!starnode.ScanData.IsEDSMBody || checkBoxEDSM.Checked))
                         {
-                            foreach (StarScan.ScanNode beltnode in starnode.children.Values.Where(s => s.type == StarScan.ScanNodeType.belt))
-                            {
-                                Point beltpos = DrawNode(starcontrols, beltnode, EDDiscovery.Properties.Resources.Belt, 
-                                                         new Point(curpos.X, belty), beltsize, ref offset, false,
-                                                         (planetsize.Height * 6 / 4 - starsize.Height) / 2);
-                                curpos.X = beltpos.X;
-                            }
+                            belts = new Queue<StarScan.ScanNode>(starnode.children.Values.Where(s => s.type == StarScan.ScanNodeType.belt));
                         }
+                        else
+                        {
+                            belts = new Queue<StarScan.ScanNode>();
+                        }
+
+                        StarScan.ScanNode lastbelt = belts.Count != 0 ? belts.Dequeue() : null;
 
                         foreach (StarScan.ScanNode planetnode in starnode.children.Values.Where(s => s.type != StarScan.ScanNodeType.belt))
                         {
+                            while (lastbelt != null && planetnode.ScanData != null && (lastbelt.BeltData == null || lastbelt.BeltData.OuterRad < planetnode.ScanData.nSemiMajorAxis))
+                            {
+                                if (curpos.X + planetsize.Width > panelStars.Width - panelStars.ScrollBarWidth)
+                                {
+                                    curpos = new Point(firstcolumn.X, maxitemspos.Y + planetsize.Height);
+                                }
+
+                                DrawNode(starcontrols, lastbelt, EDDiscovery.Properties.Resources.Belt,
+                                         new Point(curpos.X + (planetsize.Width - beltsize.Width) / 2, curpos.Y), beltsize, ref offset, false);
+
+                                curpos = new Point(curpos.X + planetsize.Width, curpos.Y);
+                                lastbelt = belts.Count != 0 ? belts.Dequeue() : null;
+                            }
+
                             bool nonedsmscans = planetnode.DoesNodeHaveNonEDSMScansBelow();     // is there any scans here, either at this node or below?
 
                             //System.Diagnostics.Debug.WriteLine("Planet Node " + planetnode.ownname + " has scans " + nonedsmscans);
@@ -225,6 +239,20 @@ namespace EDDiscovery.UserControls
 
                                 starcontrols.AddRange(pc.ToArray());
                             }
+                        }
+
+                        while (lastbelt != null)
+                        {
+                            if (curpos.X + planetsize.Width > panelStars.Width - panelStars.ScrollBarWidth)
+                            {
+                                curpos = new Point(firstcolumn.X, maxitemspos.Y + planetsize.Height);
+                            }
+
+                            DrawNode(starcontrols, lastbelt, EDDiscovery.Properties.Resources.Belt,
+                                     new Point(curpos.X + (planetsize.Width - beltsize.Width) / 2, curpos.Y), beltsize, ref offset, false);
+
+                            curpos = new Point(curpos.X + planetsize.Width, curpos.Y);
+                            lastbelt = belts.Count != 0 ? belts.Dequeue() : null;
                         }
                     }
 
@@ -554,7 +582,7 @@ namespace EDDiscovery.UserControls
         void SetSize(int stars)
         {
             starsize = new Size(stars, stars);
-            beltsize = new Size(stars / 2, stars);
+            beltsize = new Size(starsize.Width * 1 / 2, starsize.Height);
             planetsize = new Size(starsize.Width * 3 / 4, starsize.Height * 3 / 4);
             moonsize = new Size(starsize.Width * 2 / 4, starsize.Height * 2 / 4);
             materialsize = new Size(24, 24);
