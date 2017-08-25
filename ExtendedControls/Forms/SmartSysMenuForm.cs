@@ -100,20 +100,21 @@ namespace ExtendedControls
 
                 case WM.INITMENU:       // Win32: refresh the system menu before displaying it.
                     {
-                        base.WndProc(ref m);
+                        base.WndProc(ref m);    // Base should always get first crack at this.
 
                         if (m.WParam != IntPtr.Zero && Environment.OSVersion.Platform == PlatformID.Win32NT && IsHandleCreated)
                         {
                             bool maximized = WindowState == FormWindowState.Maximized;
-                            UnsafeNativeMethods.EnableMenuItem(m.WParam, SC.MINIMIZE, AllowResize ? MF.ENABLED : MF.GRAYED);
-                            UnsafeNativeMethods.EnableMenuItem(m.WParam, SC.RESTORE, maximized && AllowResize ? MF.ENABLED : MF.GRAYED);
-                            UnsafeNativeMethods.EnableMenuItem(m.WParam, SC.MAXIMIZE, !maximized && AllowResize ? MF.ENABLED : MF.GRAYED);
-                            UnsafeNativeMethods.EnableMenuItem(m.WParam, SC.SIZE, !maximized && AllowResize ? MF.ENABLED : MF.GRAYED);
+                            // these don't matter too much, but it helps the user to know if something isn't allowed. WM_SYSCOMMAND is where we verify.
+                            UnsafeNativeMethods.EnableMenuItem(m.WParam, SC.RESTORE,  AllowResize &&  maximized ? MF.ENABLED : MF.GRAYED);
+                            UnsafeNativeMethods.EnableMenuItem(m.WParam, SC.SIZE,     AllowResize && !maximized ? MF.ENABLED : MF.GRAYED);
+                            UnsafeNativeMethods.EnableMenuItem(m.WParam, SC.MINIMIZE, AllowResize               ? MF.ENABLED : MF.GRAYED);
+                            UnsafeNativeMethods.EnableMenuItem(m.WParam, SC.MAXIMIZE, AllowResize && !maximized ? MF.ENABLED : MF.GRAYED);
 
                             if (FormBorderStyle == FormBorderStyle.None) // base.WndProc() is useless...
                             {
-                                UnsafeNativeMethods.EnableMenuItem(m.WParam, SC.CLOSE, MF.ENABLED);
                                 UnsafeNativeMethods.EnableMenuItem(m.WParam, SC.MOVE, maximized ? MF.GRAYED : MF.ENABLED);
+                                UnsafeNativeMethods.EnableMenuItem(m.WParam, SC.CLOSE, MF.ENABLED);
                             }
 
                             UnsafeNativeMethods.ModifyMenu(m.WParam, SC_ONTOP, MF.BYCOMMAND | (TopMost ? MF.CHECKED : MF.UNCHECKED), SC_ONTOP, "On &Top");
@@ -125,6 +126,7 @@ namespace ExtendedControls
 
                             // This only works reliably on the application's MainForm.
                             UnsafeNativeMethods.SetMenuDefaultItem(m.WParam, maximized && AllowResize ? SC.RESTORE : (!maximized && AllowResize ? SC.MAXIMIZE : SC.CLOSE), 0);
+                            m.Result = IntPtr.Zero;
                         }
                         return;
                     }
@@ -165,9 +167,9 @@ namespace ExtendedControls
             base.WndProc(ref m);
         }
 
-        // If WS.SYSMENU is not active at WM.CREATE, the menu will not be created. Since FormBorderStyle may clear WS.SYSMENu, we have to
-        // fake it during startup. WS.SYSMENU is meaningless to us outside of WM.CREATE. Seealso https://stackoverflow.com/a/16695606
-        // By the way, if WS.SYSMENU is enabled but WS.CAPTION is not, hittests will be ignored! So there's always that to smash things with...
+        // If WS.SYSMENU is not active at first WM.CREATE, the menu will not be created. Since FormBorderStyle may clear WS.SYSMENu, we have
+        // to fake it during startup. WS.SYSMENU is meaningless to us outside of WM.CREATE. Seealso https://stackoverflow.com/a/16695606
+        // CAUTION: if WS.SYSMENU is enabled but WS.CAPTION is not, all hittests, including our sysmenu, min/max/close, etc., will get ignored!
         private bool _SysMenuCreationHackEnabled = Environment.OSVersion.Platform == PlatformID.Win32NT;
     }
 }
