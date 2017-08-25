@@ -31,7 +31,7 @@ namespace ExtendedControls
         public DraggableForm()
         {
             _dblClickTimer = new Timer();
-            _dblClickTimer.Tick += DblClickTimer_Tick;
+            _dblClickTimer.Tick += (o, e) => { ((Timer)o).Enabled = false; };
         }
 
 
@@ -139,7 +139,7 @@ namespace ExtendedControls
 
                 case WM.NCLBUTTONDOWN:  // Monitor and intercept double-clicks, ignoring the fact that it may occur over multiple controls with/without capture.
                     {
-                        if (!windowsborder && m.WParam == (IntPtr)HT.CAPTION && AllowResize)
+                        if (!windowsborder && m.WParam == (IntPtr)HT.CAPTION)
                         {
                             var p = new Point((int)m.LParam);
                             if (_dblClickTimer.Enabled && ((Rectangle)_dblClickTimer.Tag).Contains(p))
@@ -170,11 +170,6 @@ namespace ExtendedControls
         #region Private implementation
 
         private System.Windows.Forms.Timer _dblClickTimer = null;
-
-        private void DblClickTimer_Tick(object sender, EventArgs e)
-        {
-            _dblClickTimer.Enabled = false;
-        }
 
         #endregion
     }
