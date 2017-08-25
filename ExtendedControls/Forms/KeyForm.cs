@@ -332,7 +332,7 @@ namespace ExtendedControls
 
         private void KeyForm_MouseDown(object sender, MouseEventArgs e)
         {
-            DragMoveMode((Control)sender);
+            OnCaptionMouseDown((Control)sender,e);
         }
 
         private void buttonOK_Click(object sender, EventArgs e)

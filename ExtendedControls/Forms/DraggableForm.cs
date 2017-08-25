@@ -29,7 +29,7 @@ namespace ExtendedControls
     {
         public bool DraggableDisableResize { get; set; } = false;       // SET true to stop your form from resizing in non windows border mode
 
-        public void DragMoveMode(Control sender)  
+        public void OnCaptionMouseDown(Control sender, MouseEventArgs e)
         {
             sender.Capture = false;
             SendMessage(WM.NCLBUTTONDOWN, (IntPtr)HT.CAPTION, IntPtr.Zero);
