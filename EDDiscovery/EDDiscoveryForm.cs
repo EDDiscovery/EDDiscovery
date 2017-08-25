@@ -118,6 +118,7 @@ namespace EDDiscovery
         #region Events - see the EDDiscoveryControl for meaning and context
         public event Action<HistoryList> OnHistoryChange { add { Controller.OnHistoryChange += value; } remove { Controller.OnHistoryChange -= value; } }
         public event Action<HistoryEntry, HistoryList> OnNewEntry { add { Controller.OnNewEntry += value; } remove { Controller.OnNewEntry -= value; } }
+        public event Action<string> OnNewUIEvent { add { Controller.OnNewUIEvent += value; } remove { Controller.OnNewUIEvent -= value; } }
         public event Action<JournalEntry> OnNewJournalEntry { add { Controller.OnNewJournalEntry += value; } remove { Controller.OnNewJournalEntry -= value; } }
         public event Action<string, Color> OnNewLogEntry { add { Controller.OnNewLogEntry += value; } remove { Controller.OnNewLogEntry -= value; } }
         public event Action<EliteDangerousCore.CompanionAPI.CompanionAPIClass,HistoryEntry> OnNewCompanionAPIData;
@@ -148,6 +149,7 @@ namespace EDDiscovery
         {
             Controller = new EDDiscoveryController(() => theme.TextBlockColor, () => theme.TextBlockHighlightColor, () => theme.TextBlockSuccessColor, a => BeginInvoke(a));
             Controller.OnNewEntrySecond += Controller_NewEntrySecond;       // called after UI updates themselves with NewEntry
+            Controller.OnNewUIEvent += Controller_NewUIEvent;       // called if its an UI event
             Controller.OnBgSafeClose += Controller_BgSafeClose;
             Controller.OnFinalClose += Controller_FinalClose;
             Controller.OnInitialSyncComplete += Controller_InitialSyncComplete;
@@ -549,6 +551,11 @@ namespace EDDiscovery
                     }
                 }
             }
+        }
+
+        private void Controller_NewUIEvent(string name)      
+        {
+            actioncontroller.ActionRun(Actions.ActionEventEDList.onUIEvent , new Conditions.ConditionVariables("UIEvent",name));
         }
 
         private void SendPricestoEDDN(HistoryEntry he)

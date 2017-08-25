@@ -64,24 +64,25 @@ namespace EDDiscovery
             this.buttonAddCommander = new ExtendedControls.ButtonExt();
             this.textBoxDefaultZoom = new ExtendedControls.TextBoxBorder();
             this.textBoxHomeSystem = new ExtendedControls.AutoCompleteTextBox();
-            this.groupBoxPopOuts = new ExtendedControls.GroupBoxCustom();
             this.buttonReloadSaved = new ExtendedControls.ButtonExt();
             this.buttonSaveSetup = new ExtendedControls.ButtonExt();
             this.checkBoxAutoSave = new ExtendedControls.CheckBoxCustom();
             this.checkBoxAutoLoad = new ExtendedControls.CheckBoxCustom();
+            this.radioButtonHistorySelection = new ExtendedControls.RadioButtonCustom();
+            this.radioButtonCentreHome = new ExtendedControls.RadioButtonCustom();
+            this.buttonEditCommander = new ExtendedControls.ButtonExt();
+            this.groupBoxPopOuts = new ExtendedControls.GroupBoxCustom();
             this.groupBoxTheme = new ExtendedControls.GroupBoxCustom();
             this.groupBox2 = new ExtendedControls.GroupBoxCustom();
             this.label17 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
-            this.radioButtonHistorySelection = new ExtendedControls.RadioButtonCustom();
-            this.radioButtonCentreHome = new ExtendedControls.RadioButtonCustom();
             this.label4 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.groupBox3 = new ExtendedControls.GroupBoxCustom();
             this.groupBox4 = new ExtendedControls.GroupBoxCustom();
-            this.buttonEditCommander = new ExtendedControls.ButtonExt();
             this.dataViewScrollerPanel1 = new ExtendedControls.DataViewScrollerPanel();
             this.vScrollBarCustom1 = new ExtendedControls.VScrollBarCustom();
+            this.checkBoxShowUIEvents = new ExtendedControls.CheckBoxCustom();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewCommanders)).BeginInit();
             this.groupBoxPopOuts.SuspendLayout();
             this.groupBoxTheme.SuspendLayout();
@@ -102,6 +103,7 @@ namespace EDDiscovery
             this.checkBoxKeepOnTop.CheckBoxInnerColor = System.Drawing.Color.White;
             this.checkBoxKeepOnTop.CheckColor = System.Drawing.Color.DarkBlue;
             this.checkBoxKeepOnTop.FontNerfReduction = 0.5F;
+            this.checkBoxKeepOnTop.ImageButtonDisabledScaling = 0.5F;
             this.checkBoxKeepOnTop.Location = new System.Drawing.Point(7, 63);
             this.checkBoxKeepOnTop.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.checkBoxKeepOnTop.Name = "checkBoxKeepOnTop";
@@ -187,6 +189,7 @@ namespace EDDiscovery
             this.checkBoxMinimizeToNotifyIcon.CheckBoxInnerColor = System.Drawing.Color.White;
             this.checkBoxMinimizeToNotifyIcon.CheckColor = System.Drawing.Color.DarkBlue;
             this.checkBoxMinimizeToNotifyIcon.FontNerfReduction = 0.5F;
+            this.checkBoxMinimizeToNotifyIcon.ImageButtonDisabledScaling = 0.5F;
             this.checkBoxMinimizeToNotifyIcon.Location = new System.Drawing.Point(17, 115);
             this.checkBoxMinimizeToNotifyIcon.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.checkBoxMinimizeToNotifyIcon.Name = "checkBoxMinimizeToNotifyIcon";
@@ -205,6 +208,7 @@ namespace EDDiscovery
             this.checkBoxUseNotifyIcon.CheckBoxInnerColor = System.Drawing.Color.White;
             this.checkBoxUseNotifyIcon.CheckColor = System.Drawing.Color.DarkBlue;
             this.checkBoxUseNotifyIcon.FontNerfReduction = 0.5F;
+            this.checkBoxUseNotifyIcon.ImageButtonDisabledScaling = 0.5F;
             this.checkBoxUseNotifyIcon.Location = new System.Drawing.Point(17, 92);
             this.checkBoxUseNotifyIcon.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.checkBoxUseNotifyIcon.Name = "checkBoxUseNotifyIcon";
@@ -223,6 +227,7 @@ namespace EDDiscovery
             this.checkBoxUTC.CheckBoxInnerColor = System.Drawing.Color.White;
             this.checkBoxUTC.CheckColor = System.Drawing.Color.DarkBlue;
             this.checkBoxUTC.FontNerfReduction = 0.5F;
+            this.checkBoxUTC.ImageButtonDisabledScaling = 0.5F;
             this.checkBoxUTC.Location = new System.Drawing.Point(17, 69);
             this.checkBoxUTC.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.checkBoxUTC.Name = "checkBoxUTC";
@@ -241,6 +246,7 @@ namespace EDDiscovery
             this.checkBoxOrderRowsInverted.CheckBoxInnerColor = System.Drawing.Color.White;
             this.checkBoxOrderRowsInverted.CheckColor = System.Drawing.Color.DarkBlue;
             this.checkBoxOrderRowsInverted.FontNerfReduction = 0.5F;
+            this.checkBoxOrderRowsInverted.ImageButtonDisabledScaling = 0.5F;
             this.checkBoxOrderRowsInverted.Location = new System.Drawing.Point(17, 46);
             this.checkBoxOrderRowsInverted.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.checkBoxOrderRowsInverted.Name = "checkBoxOrderRowsInverted";
@@ -250,6 +256,7 @@ namespace EDDiscovery
             this.checkBoxOrderRowsInverted.TickBoxReductionSize = 10;
             this.toolTip.SetToolTip(this.checkBoxOrderRowsInverted, "Number oldest entry 1, latest entry highest");
             this.checkBoxOrderRowsInverted.UseVisualStyleBackColor = true;
+            this.checkBoxOrderRowsInverted.CheckedChanged += new System.EventHandler(this.checkBoxOrderRowsInverted_CheckedChanged);
             // 
             // checkBoxEDSMLog
             // 
@@ -258,6 +265,7 @@ namespace EDDiscovery
             this.checkBoxEDSMLog.CheckBoxInnerColor = System.Drawing.Color.White;
             this.checkBoxEDSMLog.CheckColor = System.Drawing.Color.DarkBlue;
             this.checkBoxEDSMLog.FontNerfReduction = 0.5F;
+            this.checkBoxEDSMLog.ImageButtonDisabledScaling = 0.5F;
             this.checkBoxEDSMLog.Location = new System.Drawing.Point(17, 23);
             this.checkBoxEDSMLog.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.checkBoxEDSMLog.Name = "checkBoxEDSMLog";
@@ -411,26 +419,6 @@ namespace EDDiscovery
             this.textBoxHomeSystem.WordWrap = true;
             this.textBoxHomeSystem.Validated += new System.EventHandler(this.textBoxHomeSystem_Validated);
             // 
-            // groupBoxPopOuts
-            // 
-            this.groupBoxPopOuts.AlternateClientBackColor = System.Drawing.Color.Blue;
-            this.groupBoxPopOuts.BackColorScaling = 0.5F;
-            this.groupBoxPopOuts.BorderColor = System.Drawing.Color.LightGray;
-            this.groupBoxPopOuts.BorderColorScaling = 0.5F;
-            this.groupBoxPopOuts.Controls.Add(this.buttonReloadSaved);
-            this.groupBoxPopOuts.Controls.Add(this.buttonSaveSetup);
-            this.groupBoxPopOuts.Controls.Add(this.checkBoxAutoSave);
-            this.groupBoxPopOuts.Controls.Add(this.checkBoxAutoLoad);
-            this.groupBoxPopOuts.FillClientAreaWithAlternateColor = false;
-            this.groupBoxPopOuts.Location = new System.Drawing.Point(440, 361);
-            this.groupBoxPopOuts.Name = "groupBoxPopOuts";
-            this.groupBoxPopOuts.Size = new System.Drawing.Size(277, 79);
-            this.groupBoxPopOuts.TabIndex = 19;
-            this.groupBoxPopOuts.TabStop = false;
-            this.groupBoxPopOuts.Text = "Pop Out Window Options";
-            this.groupBoxPopOuts.TextPadding = 0;
-            this.groupBoxPopOuts.TextStartPosition = -1;
-            // 
             // buttonReloadSaved
             // 
             this.buttonReloadSaved.BorderColorScaling = 1.25F;
@@ -466,6 +454,7 @@ namespace EDDiscovery
             this.checkBoxAutoSave.CheckBoxInnerColor = System.Drawing.Color.White;
             this.checkBoxAutoSave.CheckColor = System.Drawing.Color.DarkBlue;
             this.checkBoxAutoSave.FontNerfReduction = 0.5F;
+            this.checkBoxAutoSave.ImageButtonDisabledScaling = 0.5F;
             this.checkBoxAutoSave.Location = new System.Drawing.Point(7, 46);
             this.checkBoxAutoSave.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.checkBoxAutoSave.Name = "checkBoxAutoSave";
@@ -483,6 +472,7 @@ namespace EDDiscovery
             this.checkBoxAutoLoad.CheckBoxInnerColor = System.Drawing.Color.White;
             this.checkBoxAutoLoad.CheckColor = System.Drawing.Color.DarkBlue;
             this.checkBoxAutoLoad.FontNerfReduction = 0.5F;
+            this.checkBoxAutoLoad.ImageButtonDisabledScaling = 0.5F;
             this.checkBoxAutoLoad.Location = new System.Drawing.Point(7, 20);
             this.checkBoxAutoLoad.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.checkBoxAutoLoad.Name = "checkBoxAutoLoad";
@@ -492,6 +482,76 @@ namespace EDDiscovery
             this.checkBoxAutoLoad.TickBoxReductionSize = 10;
             this.toolTip.SetToolTip(this.checkBoxAutoLoad, "Auto show pop outs");
             this.checkBoxAutoLoad.UseVisualStyleBackColor = true;
+            // 
+            // radioButtonHistorySelection
+            // 
+            this.radioButtonHistorySelection.AutoSize = true;
+            this.radioButtonHistorySelection.FontNerfReduction = 0.5F;
+            this.radioButtonHistorySelection.Location = new System.Drawing.Point(224, 46);
+            this.radioButtonHistorySelection.MouseOverColor = System.Drawing.Color.CornflowerBlue;
+            this.radioButtonHistorySelection.Name = "radioButtonHistorySelection";
+            this.radioButtonHistorySelection.RadioButtonColor = System.Drawing.Color.Gray;
+            this.radioButtonHistorySelection.RadioButtonInnerColor = System.Drawing.Color.White;
+            this.radioButtonHistorySelection.SelectedColor = System.Drawing.Color.DarkBlue;
+            this.radioButtonHistorySelection.SelectedColorRing = System.Drawing.Color.Black;
+            this.radioButtonHistorySelection.Size = new System.Drawing.Size(126, 17);
+            this.radioButtonHistorySelection.TabIndex = 4;
+            this.radioButtonHistorySelection.TabStop = true;
+            this.radioButtonHistorySelection.Text = "History Grid Selection";
+            this.toolTip.SetToolTip(this.radioButtonHistorySelection, "Select history entry as opening location");
+            this.radioButtonHistorySelection.UseVisualStyleBackColor = true;
+            // 
+            // radioButtonCentreHome
+            // 
+            this.radioButtonCentreHome.AutoSize = true;
+            this.radioButtonCentreHome.FontNerfReduction = 0.5F;
+            this.radioButtonCentreHome.Location = new System.Drawing.Point(120, 46);
+            this.radioButtonCentreHome.MouseOverColor = System.Drawing.Color.CornflowerBlue;
+            this.radioButtonCentreHome.Name = "radioButtonCentreHome";
+            this.radioButtonCentreHome.RadioButtonColor = System.Drawing.Color.Gray;
+            this.radioButtonCentreHome.RadioButtonInnerColor = System.Drawing.Color.White;
+            this.radioButtonCentreHome.SelectedColor = System.Drawing.Color.DarkBlue;
+            this.radioButtonCentreHome.SelectedColorRing = System.Drawing.Color.Black;
+            this.radioButtonCentreHome.Size = new System.Drawing.Size(90, 17);
+            this.radioButtonCentreHome.TabIndex = 3;
+            this.radioButtonCentreHome.TabStop = true;
+            this.radioButtonCentreHome.Text = "Home System";
+            this.toolTip.SetToolTip(this.radioButtonCentreHome, "Select home system as opening location");
+            this.radioButtonCentreHome.UseVisualStyleBackColor = true;
+            // 
+            // buttonEditCommander
+            // 
+            this.buttonEditCommander.BorderColorScaling = 1.25F;
+            this.buttonEditCommander.ButtonColorScaling = 0.5F;
+            this.buttonEditCommander.ButtonDisabledScaling = 0.5F;
+            this.buttonEditCommander.Location = new System.Drawing.Point(713, 60);
+            this.buttonEditCommander.Name = "buttonEditCommander";
+            this.buttonEditCommander.Size = new System.Drawing.Size(71, 23);
+            this.buttonEditCommander.TabIndex = 5;
+            this.buttonEditCommander.Text = "Edit";
+            this.toolTip.SetToolTip(this.buttonEditCommander, "Edit selected commander");
+            this.buttonEditCommander.UseVisualStyleBackColor = true;
+            this.buttonEditCommander.Click += new System.EventHandler(this.buttonEditCommander_Click);
+            // 
+            // groupBoxPopOuts
+            // 
+            this.groupBoxPopOuts.AlternateClientBackColor = System.Drawing.Color.Blue;
+            this.groupBoxPopOuts.BackColorScaling = 0.5F;
+            this.groupBoxPopOuts.BorderColor = System.Drawing.Color.LightGray;
+            this.groupBoxPopOuts.BorderColorScaling = 0.5F;
+            this.groupBoxPopOuts.Controls.Add(this.buttonReloadSaved);
+            this.groupBoxPopOuts.Controls.Add(this.buttonSaveSetup);
+            this.groupBoxPopOuts.Controls.Add(this.checkBoxAutoSave);
+            this.groupBoxPopOuts.Controls.Add(this.checkBoxAutoLoad);
+            this.groupBoxPopOuts.FillClientAreaWithAlternateColor = false;
+            this.groupBoxPopOuts.Location = new System.Drawing.Point(440, 361);
+            this.groupBoxPopOuts.Name = "groupBoxPopOuts";
+            this.groupBoxPopOuts.Size = new System.Drawing.Size(277, 79);
+            this.groupBoxPopOuts.TabIndex = 19;
+            this.groupBoxPopOuts.TabStop = false;
+            this.groupBoxPopOuts.Text = "Pop Out Window Options";
+            this.groupBoxPopOuts.TextPadding = 0;
+            this.groupBoxPopOuts.TextStartPosition = -1;
             // 
             // groupBoxTheme
             // 
@@ -504,7 +564,7 @@ namespace EDDiscovery
             this.groupBoxTheme.Controls.Add(this.button_edittheme);
             this.groupBoxTheme.Controls.Add(this.buttonSaveTheme);
             this.groupBoxTheme.FillClientAreaWithAlternateColor = false;
-            this.groupBoxTheme.Location = new System.Drawing.Point(3, 405);
+            this.groupBoxTheme.Location = new System.Drawing.Point(3, 450);
             this.groupBoxTheme.Name = "groupBoxTheme";
             this.groupBoxTheme.Size = new System.Drawing.Size(426, 108);
             this.groupBoxTheme.TabIndex = 18;
@@ -556,42 +616,6 @@ namespace EDDiscovery
             this.label5.TabIndex = 5;
             this.label5.Text = "Default Zoom";
             // 
-            // radioButtonHistorySelection
-            // 
-            this.radioButtonHistorySelection.AutoSize = true;
-            this.radioButtonHistorySelection.FontNerfReduction = 0.5F;
-            this.radioButtonHistorySelection.Location = new System.Drawing.Point(224, 46);
-            this.radioButtonHistorySelection.MouseOverColor = System.Drawing.Color.CornflowerBlue;
-            this.radioButtonHistorySelection.Name = "radioButtonHistorySelection";
-            this.radioButtonHistorySelection.RadioButtonColor = System.Drawing.Color.Gray;
-            this.radioButtonHistorySelection.RadioButtonInnerColor = System.Drawing.Color.White;
-            this.radioButtonHistorySelection.SelectedColor = System.Drawing.Color.DarkBlue;
-            this.radioButtonHistorySelection.SelectedColorRing = System.Drawing.Color.Black;
-            this.radioButtonHistorySelection.Size = new System.Drawing.Size(126, 17);
-            this.radioButtonHistorySelection.TabIndex = 4;
-            this.radioButtonHistorySelection.TabStop = true;
-            this.radioButtonHistorySelection.Text = "History Grid Selection";
-            this.toolTip.SetToolTip(this.radioButtonHistorySelection, "Select history entry as opening location");
-            this.radioButtonHistorySelection.UseVisualStyleBackColor = true;
-            // 
-            // radioButtonCentreHome
-            // 
-            this.radioButtonCentreHome.AutoSize = true;
-            this.radioButtonCentreHome.FontNerfReduction = 0.5F;
-            this.radioButtonCentreHome.Location = new System.Drawing.Point(120, 46);
-            this.radioButtonCentreHome.MouseOverColor = System.Drawing.Color.CornflowerBlue;
-            this.radioButtonCentreHome.Name = "radioButtonCentreHome";
-            this.radioButtonCentreHome.RadioButtonColor = System.Drawing.Color.Gray;
-            this.radioButtonCentreHome.RadioButtonInnerColor = System.Drawing.Color.White;
-            this.radioButtonCentreHome.SelectedColor = System.Drawing.Color.DarkBlue;
-            this.radioButtonCentreHome.SelectedColorRing = System.Drawing.Color.Black;
-            this.radioButtonCentreHome.Size = new System.Drawing.Size(90, 17);
-            this.radioButtonCentreHome.TabIndex = 3;
-            this.radioButtonCentreHome.TabStop = true;
-            this.radioButtonCentreHome.Text = "Home System";
-            this.toolTip.SetToolTip(this.radioButtonCentreHome, "Select home system as opening location");
-            this.radioButtonCentreHome.UseVisualStyleBackColor = true;
-            // 
             // label4
             // 
             this.label4.AutoSize = true;
@@ -616,6 +640,7 @@ namespace EDDiscovery
             this.groupBox3.BackColorScaling = 0.5F;
             this.groupBox3.BorderColor = System.Drawing.Color.LightGray;
             this.groupBox3.BorderColorScaling = 0.5F;
+            this.groupBox3.Controls.Add(this.checkBoxShowUIEvents);
             this.groupBox3.Controls.Add(this.checkBoxMinimizeToNotifyIcon);
             this.groupBox3.Controls.Add(this.checkBoxUseNotifyIcon);
             this.groupBox3.Controls.Add(this.checkBoxUTC);
@@ -624,7 +649,7 @@ namespace EDDiscovery
             this.groupBox3.FillClientAreaWithAlternateColor = false;
             this.groupBox3.Location = new System.Drawing.Point(3, 254);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(426, 145);
+            this.groupBox3.Size = new System.Drawing.Size(426, 186);
             this.groupBox3.TabIndex = 16;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Options";
@@ -650,20 +675,6 @@ namespace EDDiscovery
             this.groupBox4.Text = "Commanders";
             this.groupBox4.TextPadding = 0;
             this.groupBox4.TextStartPosition = -1;
-            // 
-            // buttonEditCommander
-            // 
-            this.buttonEditCommander.BorderColorScaling = 1.25F;
-            this.buttonEditCommander.ButtonColorScaling = 0.5F;
-            this.buttonEditCommander.ButtonDisabledScaling = 0.5F;
-            this.buttonEditCommander.Location = new System.Drawing.Point(713, 60);
-            this.buttonEditCommander.Name = "buttonEditCommander";
-            this.buttonEditCommander.Size = new System.Drawing.Size(71, 23);
-            this.buttonEditCommander.TabIndex = 5;
-            this.buttonEditCommander.Text = "Edit";
-            this.toolTip.SetToolTip(this.buttonEditCommander, "Edit selected commander");
-            this.buttonEditCommander.UseVisualStyleBackColor = true;
-            this.buttonEditCommander.Click += new System.EventHandler(this.buttonEditCommander_Click);
             // 
             // dataViewScrollerPanel1
             // 
@@ -705,6 +716,26 @@ namespace EDDiscovery
             this.vScrollBarCustom1.ThumbDrawAngle = 0F;
             this.vScrollBarCustom1.Value = -1;
             this.vScrollBarCustom1.ValueLimited = -1;
+            // 
+            // checkBoxShowUIEvents
+            // 
+            this.checkBoxShowUIEvents.AutoSize = true;
+            this.checkBoxShowUIEvents.CheckBoxColor = System.Drawing.Color.Gray;
+            this.checkBoxShowUIEvents.CheckBoxInnerColor = System.Drawing.Color.White;
+            this.checkBoxShowUIEvents.CheckColor = System.Drawing.Color.DarkBlue;
+            this.checkBoxShowUIEvents.FontNerfReduction = 0.5F;
+            this.checkBoxShowUIEvents.ImageButtonDisabledScaling = 0.5F;
+            this.checkBoxShowUIEvents.Location = new System.Drawing.Point(17, 138);
+            this.checkBoxShowUIEvents.MouseOverColor = System.Drawing.Color.CornflowerBlue;
+            this.checkBoxShowUIEvents.Name = "checkBoxShowUIEvents";
+            this.checkBoxShowUIEvents.Size = new System.Drawing.Size(170, 17);
+            this.checkBoxShowUIEvents.TabIndex = 6;
+            this.checkBoxShowUIEvents.Text = "Show Elite UI Events in history";
+            this.checkBoxShowUIEvents.TickBoxReductionSize = 10;
+            this.toolTip.SetToolTip(this.checkBoxShowUIEvents, "Show the UI events (such as Music) in the history. The quantity of them can be ve" +
+        "ry large");
+            this.checkBoxShowUIEvents.UseVisualStyleBackColor = true;
+            this.checkBoxShowUIEvents.CheckedChanged += new System.EventHandler(this.checkBoxShowUIEvents_CheckedChanged);
             // 
             // Settings
             // 
@@ -771,5 +802,6 @@ namespace EDDiscovery
         private System.Windows.Forms.DataGridViewTextBoxColumn EdsmName;
         private System.Windows.Forms.DataGridViewTextBoxColumn JournalDirCol;
         private System.Windows.Forms.DataGridViewTextBoxColumn NotesCol;
+        private ExtendedControls.CheckBoxCustom checkBoxShowUIEvents;
     }
 }

@@ -57,8 +57,12 @@ namespace EDDiscovery
 
         // DURING A new Journal entry by the monitor, in order..
 
+                                                                            // Next two ONLY called if its for the current commander, and its not a screened out event (uievent)
         public event Action<HistoryEntry, HistoryList> OnNewEntry;          // UI. MAJOR. UC. Mirrored. Called before OnNewJournalEntry, when NewEntry is called with a new item for the CURRENT commander
         public event Action<HistoryEntry, HistoryList> OnNewEntrySecond;    // UI. Called after OnNewEntry, when NewEntry is called with a new item for the CURRENT commander.  Use if you want to do something after the main UI has been updated
+
+        public event Action<string> OnNewUIEvent;                           // UI. MAJOR. UC. Mirrored. Called if the event is a UI event, with the UI event name.  Called even if show UI events is turned off
+
         public event Action<JournalEntry> OnNewJournalEntry;                // UI. MAJOR. UC. Mirrored. Called after OnNewEntry, and when ANY new journal entry is created by the journal monitor
 
         // IF a log print occurs
@@ -490,7 +494,8 @@ namespace EDDiscovery
             try
             {
                 refreshWorkerArgs = args;
-                hist = HistoryList.LoadHistory(journalmonitor, () => PendingClose, (p, s) => ReportProgress(p, $"Processing log file {s}"), args.NetLogPath, args.ForceJournalReload, args.ForceJournalReload, args.CheckEdsm, args.CurrentCommander);
+                hist = HistoryList.LoadHistory(journalmonitor, () => PendingClose, (p, s) => ReportProgress(p, $"Processing log file {s}"), args.NetLogPath, 
+                    args.ForceJournalReload, args.ForceJournalReload, args.CheckEdsm, args.CurrentCommander , EDDConfig.Instance.ShowUIEvents );
             }
             catch (Exception ex)
             {
@@ -540,12 +545,25 @@ namespace EDDiscovery
         {
             if (je.CommanderId == history.CommanderId)     // we are only interested at this point accepting ones for the display commander
             {
-                foreach (HistoryEntry he in history.AddJournalEntry(je, h => LogLineHighlight(h)))
+                bool uievent = je.IsUIEvent;
+
+                if (!je.IsUIEvent || EDDConfig.Instance.ShowUIEvents)              // filter out any UI events
                 {
-                {
-                    OnNewEntry?.Invoke(he, history);            // major hook
-                    OnNewEntrySecond?.Invoke(he, history);      // secondary hook..
+                    foreach (HistoryEntry he in history.AddJournalEntry(je, h => LogLineHighlight(h)))
+                    {
+                        OnNewEntry?.Invoke(he, history);            // major hook
+                        OnNewEntrySecond?.Invoke(he, history);      // secondary hook..
+                    }
                 }
+                else
+                {
+                    System.Diagnostics.Debug.WriteLine("**** Filter out " + je.EventTypeStr);
+                }
+
+                if (uievent)
+                {
+                    if (je is EliteDangerousCore.JournalEvents.JournalMusic)
+                        OnNewUIEvent?.Invoke((je as EliteDangerousCore.JournalEvents.JournalMusic).MusicTrack);
                 }
             }
 

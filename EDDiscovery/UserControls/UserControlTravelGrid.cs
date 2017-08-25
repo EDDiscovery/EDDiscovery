@@ -412,7 +412,7 @@ namespace EDDiscovery.UserControls
 
             string rowIdx;
 
-            if (discoveryform.settings.OrderRowsInverted)
+            if (EDDConfig.Instance.OrderRowsInverted)
                 rowIdx = he.Indexno.ToString();            // oldest has the highest index
             else
                 rowIdx = (totalentries - he.Indexno + 1).ToString();

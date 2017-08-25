@@ -30,6 +30,7 @@ namespace EDDiscovery.Actions
             new ActionEventEDList("onPopDown", "UserUIEvent", "UI"), //12
             new ActionEventEDList("onPanelChange", "UserUIEvent", "UI"),
             new ActionEventEDList("onHistorySelection", "UserUIEvent", "UI"),  //14
+            new ActionEventEDList("onEliteUIEvent", "EliteUIEvent", "EliteUI"),  //15
             //TBD for 9.0 new ActionEventEDList("onVoiceInput", "Voice", "Voice"), 
 
             new ActionEventEDList("All","","Misc"),                      // All, special match only
@@ -50,7 +51,8 @@ namespace EDDiscovery.Actions
         public static ActionEvent onPopDown { get { return events[12]; } }
         public static ActionEvent onPanelChange { get { return events[13]; } }
         public static ActionEvent onHistorySelection { get { return events[14]; } }
-        public static ActionEvent onVoiceInput { get { return events[15]; } }
+        public static ActionEvent onUIEvent { get { return events[15]; } }
+        public static ActionEvent onVoiceInput { get { return events[0]; } }   // TBD for voice, fix index
 
         public static ActionEvent RefreshJournal(EliteDangerousCore.HistoryEntry he) { return new ActionEventEDList(he.journalEntry.EventTypeStr, "onRefresh", ""); }
         public static ActionEvent NewEntry(EliteDangerousCore.HistoryEntry he) { return new ActionEventEDList(he.journalEntry.EventTypeStr, "NewEntry", ""); }
