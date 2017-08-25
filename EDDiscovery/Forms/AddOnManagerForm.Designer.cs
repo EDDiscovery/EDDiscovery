@@ -79,6 +79,7 @@ namespace EDDiscovery.Forms
             this.panelTop.Size = new System.Drawing.Size(1043, 32);
             this.panelTop.TabIndex = 30;
             this.panelTop.MouseDown += new System.Windows.Forms.MouseEventHandler(this.label_index_MouseDown);
+            this.panelTop.MouseUp += new System.Windows.Forms.MouseEventHandler(this.label_index_MouseUp);
             // 
             // panel_close
             // 
@@ -125,6 +126,7 @@ namespace EDDiscovery.Forms
             this.label_index.TabIndex = 23;
             this.label_index.Text = "Add-On Manager";
             this.label_index.MouseDown += new System.Windows.Forms.MouseEventHandler(this.label_index_MouseDown);
+            this.label_index.MouseUp += new System.Windows.Forms.MouseEventHandler(this.label_index_MouseUp);
             // 
             // panelOuter
             // 
