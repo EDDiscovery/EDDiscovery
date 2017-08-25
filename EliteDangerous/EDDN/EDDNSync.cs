@@ -142,6 +142,9 @@ namespace EliteDangerousCore.EDDN
                     eddn.isBeta = true;
             }
 
+            if (he.IsBetaMessage)
+                eddn.isBeta = true;
+
             JournalEntry je = he.journalEntry;
 
             if (je == null)
