@@ -234,6 +234,7 @@
     <Compile Include="JournalEvents\JournalRefuelAll.cs" />
     <Compile Include="JournalEvents\JournalRefuelPartial.cs" />
     <Compile Include="JournalEvents\JournalMusic.cs" />
+    <Compile Include="JournalEvents\JournalAfmuRepair.cs" />
     <Compile Include="JournalEvents\JournalRepairDrone.cs" />
     <Compile Include="JournalEvents\JournalRepair.cs" />
     <Compile Include="JournalEvents\JournalRepairAll.cs" />

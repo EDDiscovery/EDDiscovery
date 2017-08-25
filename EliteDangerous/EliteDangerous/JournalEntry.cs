@@ -31,6 +31,7 @@ namespace EliteDangerousCore
     {
         Unknown = 0,
 
+        AfmuRepairs = 3,
         ApproachSettlement = 5,
         Bounty = 10,
         BuyAmmo = 20,
