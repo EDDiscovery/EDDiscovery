@@ -21,13 +21,19 @@ using System.Text;
 
 namespace EliteDangerousCore.JournalEvents
 {
-    //When Written: when requesting a ship at another station be transported to this station
-    //Parameters:
-    //•	ShipType: type of ship
-    //•	ShipID
-    //•	System: where it is
-    //•	Distance: how far away
-    //•	TransferPrice: cost of transfer
+    /*
+    When Written: when requesting a ship at another station be transported to this station
+    Parameters:
+     ShipType: type of ship
+     ShipID
+     System: where it is
+     Distance: how far away
+     TransferPrice: cost of transfer
+     TransferTime: time taken in seconds
+    Example:
+    { "timestamp":"2016-07-21T15:19:49Z", "event":"ShipyardTransfer", "ShipType":"SideWinder",
+    "ShipID":7, "System":"Eranin", "Distance":85.639145, "TransferPrice":580 }
+     * */
     [JournalEntryType(JournalTypeEnum.ShipyardTransfer)]
     public class JournalShipyardTransfer : JournalEntry, ILedgerJournalEntry
     {
@@ -41,6 +47,10 @@ namespace EliteDangerousCore.JournalEvents
 
             if (Distance > 100000.0)       // previously, it was in m, now they have changed it to LY per 2.3. So if its large (over 100k ly, impossible) convert
                 Distance = Distance / 299792458.0 / 365 / 24 / 60 / 60;
+
+
+            nTransferTime = evt["TransferTime"].IntNull();
+
         }
 
         public string ShipType { get; set; }
@@ -48,6 +58,7 @@ namespace EliteDangerousCore.JournalEvents
         public string System { get; set; }
         public double Distance { get; set; }
         public long TransferPrice { get; set; }
+        public int? nTransferTime { get; set; }
 
         public override System.Drawing.Bitmap Icon { get { return EliteDangerous.Properties.Resources.shipyardtransfer; } }
 
@@ -59,7 +70,7 @@ namespace EliteDangerousCore.JournalEvents
         public override void FillInformation(out string summary, out string info, out string detailed) //V
         {
             summary = EventTypeStr.SplitCapsWord();
-            info = BaseUtils.FieldBuilder.Build("Of ", ShipType, "< from " , System , "Distance:; ly;0.0" , Distance , "Price:; credits", TransferPrice);
+            info = BaseUtils.FieldBuilder.Build("Of ", ShipType, "< from " , System , "Distance:; ly;0.0" , Distance , "Price:; credits", TransferPrice, "TransferTime:", JournalFieldNaming.GetBetterTimeinSeconds(nTransferTime));
             detailed = "";
         }
     }
