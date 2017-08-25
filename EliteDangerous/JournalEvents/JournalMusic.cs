@@ -32,7 +32,7 @@ Note: Other music track names may be used in future
 
     public enum EDMusicTrackEnum
     {
-        None = 0, 
+        None = 0, Unknown = 1,
         NoTrack, MainMenu, CQCMenu, SystemMap, GalaxyMap, GalacticPowers,
         CQC, DestinationFromHyperspace, DestinationFromSupercruise, Supercruise, Combat_Unknown,
         UnknownEncounter, CapitalShip, CombatLargeDogFight, CombatDogfight, CombatSRV,
@@ -76,7 +76,7 @@ Note: Other music track names may be used in future
                     return atm;
             }
 
-            return EDMusicTrackEnum.None;
+            return EDMusicTrackEnum.Unknown;
         }
 
     }
