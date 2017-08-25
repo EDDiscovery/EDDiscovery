@@ -44,6 +44,7 @@ namespace EliteDangerousCore
         CockpitBreached = 80,
         CollectCargo = 90,
         CommitCrime = 100,
+        CommunityGoal = 105,
         CommunityGoalJoin = 110,
         CommunityGoalReward = 120,
         CommunityGoalDiscard = 1040,

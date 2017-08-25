@@ -138,6 +138,7 @@
     <Compile Include="JournalEvents\JournalCollectCargo.cs" />
     <Compile Include="JournalEvents\JournalCommitCrime.cs" />
     <Compile Include="JournalEvents\JournalCommunityGoalDiscard.cs" />
+    <Compile Include="JournalEvents\JournalCommunityGoal.cs" />
     <Compile Include="JournalEvents\JournalCommunityGoalJoin.cs" />
     <Compile Include="JournalEvents\JournalCommunityGoalReward.cs" />
     <Compile Include="JournalEvents\JournalContinued.cs" />
