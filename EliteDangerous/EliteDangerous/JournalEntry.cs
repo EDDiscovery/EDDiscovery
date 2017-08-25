@@ -116,6 +116,7 @@ namespace EliteDangerousCore
         ModuleStore = 525,
         ModuleSwap = 530,
         Music = 535,
+        NavBeaconScan = 538,
         NewCommander = 540,
         Passengers = 545,
         PayFines = 550,
