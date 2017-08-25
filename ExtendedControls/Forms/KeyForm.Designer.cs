@@ -41,6 +41,21 @@
             this.labelSendTo = new System.Windows.Forms.Label();
             this.buttonOK = new ExtendedControls.ButtonExt();
             this.buttonCancel = new ExtendedControls.ButtonExt();
+            this.labelCaption = new System.Windows.Forms.Label();
+            this.panelOuter = new System.Windows.Forms.Panel();
+            this.comboBoxKeySelector = new ExtendedControls.ComboBoxCustom();
+            this.panelRadio = new System.Windows.Forms.Panel();
+            this.radioButtonUp = new ExtendedControls.RadioButtonCustom();
+            this.radioButtonDown = new ExtendedControls.RadioButtonCustom();
+            this.radioButtonPress = new ExtendedControls.RadioButtonCustom();
+            this.textBoxNextDelay = new ExtendedControls.TextBoxBorder();
+            this.textBoxDelay = new ExtendedControls.TextBoxBorder();
+            this.labelNextDelay = new System.Windows.Forms.Label();
+            this.labelDelay = new System.Windows.Forms.Label();
+            this.buttonDelete = new ExtendedControls.ButtonExt();
+            this.labelSelKeys = new System.Windows.Forms.Label();
+            this.panelOuter.SuspendLayout();
+            this.panelRadio.SuspendLayout();
             this.SuspendLayout();
             // 
             // checkBoxShift
@@ -50,9 +65,10 @@
             this.checkBoxShift.CheckBoxColor = System.Drawing.Color.Gray;
             this.checkBoxShift.CheckBoxInnerColor = System.Drawing.Color.White;
             this.checkBoxShift.CheckColor = System.Drawing.Color.DarkBlue;
+            this.checkBoxShift.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.checkBoxShift.FontNerfReduction = 0.5F;
             this.checkBoxShift.ImageButtonDisabledScaling = 0.5F;
-            this.checkBoxShift.Location = new System.Drawing.Point(29, 32);
+            this.checkBoxShift.Location = new System.Drawing.Point(12, 15);
             this.checkBoxShift.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.checkBoxShift.Name = "checkBoxShift";
             this.checkBoxShift.Size = new System.Drawing.Size(56, 56);
@@ -70,9 +86,10 @@
             this.checkBoxCtrl.CheckBoxColor = System.Drawing.Color.Gray;
             this.checkBoxCtrl.CheckBoxInnerColor = System.Drawing.Color.White;
             this.checkBoxCtrl.CheckColor = System.Drawing.Color.DarkBlue;
+            this.checkBoxCtrl.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.checkBoxCtrl.FontNerfReduction = 0.5F;
             this.checkBoxCtrl.ImageButtonDisabledScaling = 0.5F;
-            this.checkBoxCtrl.Location = new System.Drawing.Point(104, 32);
+            this.checkBoxCtrl.Location = new System.Drawing.Point(87, 15);
             this.checkBoxCtrl.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.checkBoxCtrl.Name = "checkBoxCtrl";
             this.checkBoxCtrl.Size = new System.Drawing.Size(56, 56);
@@ -90,9 +107,10 @@
             this.checkBoxAlt.CheckBoxColor = System.Drawing.Color.Gray;
             this.checkBoxAlt.CheckBoxInnerColor = System.Drawing.Color.White;
             this.checkBoxAlt.CheckColor = System.Drawing.Color.DarkBlue;
+            this.checkBoxAlt.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.checkBoxAlt.FontNerfReduction = 0.5F;
             this.checkBoxAlt.ImageButtonDisabledScaling = 0.5F;
-            this.checkBoxAlt.Location = new System.Drawing.Point(180, 32);
+            this.checkBoxAlt.Location = new System.Drawing.Point(163, 15);
             this.checkBoxAlt.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.checkBoxAlt.Name = "checkBoxAlt";
             this.checkBoxAlt.Size = new System.Drawing.Size(56, 56);
@@ -110,9 +128,10 @@
             this.checkBoxKey.CheckBoxColor = System.Drawing.Color.Gray;
             this.checkBoxKey.CheckBoxInnerColor = System.Drawing.Color.White;
             this.checkBoxKey.CheckColor = System.Drawing.Color.DarkBlue;
+            this.checkBoxKey.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.checkBoxKey.FontNerfReduction = 0.5F;
             this.checkBoxKey.ImageButtonDisabledScaling = 0.5F;
-            this.checkBoxKey.Location = new System.Drawing.Point(259, 32);
+            this.checkBoxKey.Location = new System.Drawing.Point(242, 15);
             this.checkBoxKey.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.checkBoxKey.Name = "checkBoxKey";
             this.checkBoxKey.Size = new System.Drawing.Size(100, 56);
@@ -127,7 +146,7 @@
             this.buttonReset.BorderColorScaling = 1.25F;
             this.buttonReset.ButtonColorScaling = 0.5F;
             this.buttonReset.ButtonDisabledScaling = 0.5F;
-            this.buttonReset.Location = new System.Drawing.Point(29, 113);
+            this.buttonReset.Location = new System.Drawing.Point(12, 233);
             this.buttonReset.Name = "buttonReset";
             this.buttonReset.Size = new System.Drawing.Size(75, 23);
             this.buttonReset.TabIndex = 1;
@@ -140,7 +159,7 @@
             this.buttonNext.BorderColorScaling = 1.25F;
             this.buttonNext.ButtonColorScaling = 0.5F;
             this.buttonNext.ButtonDisabledScaling = 0.5F;
-            this.buttonNext.Location = new System.Drawing.Point(121, 113);
+            this.buttonNext.Location = new System.Drawing.Point(191, 233);
             this.buttonNext.Name = "buttonNext";
             this.buttonNext.Size = new System.Drawing.Size(75, 23);
             this.buttonNext.TabIndex = 1;
@@ -156,7 +175,7 @@
             this.textBoxKeys.BorderColorScaling = 0.5F;
             this.textBoxKeys.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBoxKeys.ControlBackground = System.Drawing.SystemColors.Control;
-            this.textBoxKeys.Location = new System.Drawing.Point(104, 165);
+            this.textBoxKeys.Location = new System.Drawing.Point(87, 203);
             this.textBoxKeys.Multiline = false;
             this.textBoxKeys.Name = "textBoxKeys";
             this.textBoxKeys.ReadOnly = true;
@@ -167,11 +186,13 @@
             this.textBoxKeys.TabIndex = 2;
             this.textBoxKeys.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.textBoxKeys.WordWrap = true;
+            this.textBoxKeys.Enter += new System.EventHandler(this.textBoxKeys_Enter);
+            this.textBoxKeys.Leave += new System.EventHandler(this.textBoxKeys_Leave);
             // 
             // labelKeys
             // 
             this.labelKeys.AutoSize = true;
-            this.labelKeys.Location = new System.Drawing.Point(29, 165);
+            this.labelKeys.Location = new System.Drawing.Point(12, 203);
             this.labelKeys.Name = "labelKeys";
             this.labelKeys.Size = new System.Drawing.Size(30, 13);
             this.labelKeys.TabIndex = 3;
@@ -182,7 +203,7 @@
             this.buttonTest.BorderColorScaling = 1.25F;
             this.buttonTest.ButtonColorScaling = 0.5F;
             this.buttonTest.ButtonDisabledScaling = 0.5F;
-            this.buttonTest.Location = new System.Drawing.Point(29, 258);
+            this.buttonTest.Location = new System.Drawing.Point(272, 275);
             this.buttonTest.Name = "buttonTest";
             this.buttonTest.Size = new System.Drawing.Size(75, 23);
             this.buttonTest.TabIndex = 1;
@@ -207,24 +228,24 @@
             this.textBoxSendTo.DropDownScrollBarColor = System.Drawing.Color.LightGray;
             this.textBoxSendTo.DropDownWidth = 0;
             this.textBoxSendTo.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.textBoxSendTo.Location = new System.Drawing.Point(104, 208);
+            this.textBoxSendTo.Location = new System.Drawing.Point(87, 277);
             this.textBoxSendTo.Multiline = false;
             this.textBoxSendTo.Name = "textBoxSendTo";
             this.textBoxSendTo.ReadOnly = false;
             this.textBoxSendTo.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.textBoxSendTo.SelectionLength = 0;
             this.textBoxSendTo.SelectionStart = 0;
-            this.textBoxSendTo.Size = new System.Drawing.Size(255, 20);
+            this.textBoxSendTo.Size = new System.Drawing.Size(179, 20);
             this.textBoxSendTo.TabIndex = 2;
             this.textBoxSendTo.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.textBoxSendTo.WordWrap = true;
-            this.textBoxSendTo.Enter += new System.EventHandler(this.textBoxSendTo_Enter);
-            this.textBoxSendTo.Leave += new System.EventHandler(this.textBoxSendTo_Leave);
+            this.textBoxSendTo.Enter += new System.EventHandler(this.textBox_Enter);
+            this.textBoxSendTo.Leave += new System.EventHandler(this.textBox_Leave);
             // 
             // labelSendTo
             // 
             this.labelSendTo.AutoSize = true;
-            this.labelSendTo.Location = new System.Drawing.Point(29, 208);
+            this.labelSendTo.Location = new System.Drawing.Point(12, 277);
             this.labelSendTo.Name = "labelSendTo";
             this.labelSendTo.Size = new System.Drawing.Size(48, 13);
             this.labelSendTo.TabIndex = 3;
@@ -235,7 +256,7 @@
             this.buttonOK.BorderColorScaling = 1.25F;
             this.buttonOK.ButtonColorScaling = 0.5F;
             this.buttonOK.ButtonDisabledScaling = 0.5F;
-            this.buttonOK.Location = new System.Drawing.Point(289, 296);
+            this.buttonOK.Location = new System.Drawing.Point(275, 355);
             this.buttonOK.Name = "buttonOK";
             this.buttonOK.Size = new System.Drawing.Size(75, 23);
             this.buttonOK.TabIndex = 4;
@@ -248,7 +269,7 @@
             this.buttonCancel.BorderColorScaling = 1.25F;
             this.buttonCancel.ButtonColorScaling = 0.5F;
             this.buttonCancel.ButtonDisabledScaling = 0.5F;
-            this.buttonCancel.Location = new System.Drawing.Point(193, 296);
+            this.buttonCancel.Location = new System.Drawing.Point(179, 355);
             this.buttonCancel.Name = "buttonCancel";
             this.buttonCancel.Size = new System.Drawing.Size(75, 23);
             this.buttonCancel.TabIndex = 4;
@@ -256,26 +277,238 @@
             this.buttonCancel.UseVisualStyleBackColor = true;
             this.buttonCancel.Click += new System.EventHandler(this.buttonCancel_Click);
             // 
+            // labelCaption
+            // 
+            this.labelCaption.AutoSize = true;
+            this.labelCaption.Location = new System.Drawing.Point(3, 0);
+            this.labelCaption.Name = "labelCaption";
+            this.labelCaption.Size = new System.Drawing.Size(111, 13);
+            this.labelCaption.TabIndex = 5;
+            this.labelCaption.Text = "Define Key Sequence";
+            this.labelCaption.MouseDown += new System.Windows.Forms.MouseEventHandler(this.panelOuter_MouseDown);
+            // 
+            // panelOuter
+            // 
+            this.panelOuter.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panelOuter.Controls.Add(this.comboBoxKeySelector);
+            this.panelOuter.Controls.Add(this.panelRadio);
+            this.panelOuter.Controls.Add(this.textBoxNextDelay);
+            this.panelOuter.Controls.Add(this.textBoxDelay);
+            this.panelOuter.Controls.Add(this.checkBoxShift);
+            this.panelOuter.Controls.Add(this.checkBoxCtrl);
+            this.panelOuter.Controls.Add(this.checkBoxAlt);
+            this.panelOuter.Controls.Add(this.checkBoxKey);
+            this.panelOuter.Controls.Add(this.labelNextDelay);
+            this.panelOuter.Controls.Add(this.labelSelKeys);
+            this.panelOuter.Controls.Add(this.labelDelay);
+            this.panelOuter.Controls.Add(this.labelSendTo);
+            this.panelOuter.Controls.Add(this.buttonReset);
+            this.panelOuter.Controls.Add(this.labelKeys);
+            this.panelOuter.Controls.Add(this.buttonDelete);
+            this.panelOuter.Controls.Add(this.buttonNext);
+            this.panelOuter.Controls.Add(this.textBoxSendTo);
+            this.panelOuter.Controls.Add(this.buttonTest);
+            this.panelOuter.Controls.Add(this.textBoxKeys);
+            this.panelOuter.Location = new System.Drawing.Point(3, 16);
+            this.panelOuter.Name = "panelOuter";
+            this.panelOuter.Size = new System.Drawing.Size(367, 322);
+            this.panelOuter.TabIndex = 6;
+            this.panelOuter.MouseDown += new System.Windows.Forms.MouseEventHandler(this.panelOuter_MouseDown);
+            // 
+            // comboBoxKeySelector
+            // 
+            this.comboBoxKeySelector.ArrowWidth = 1;
+            this.comboBoxKeySelector.BorderColor = System.Drawing.Color.White;
+            this.comboBoxKeySelector.ButtonColorScaling = 0.5F;
+            this.comboBoxKeySelector.DataSource = null;
+            this.comboBoxKeySelector.DisplayMember = "";
+            this.comboBoxKeySelector.DropDownBackgroundColor = System.Drawing.Color.Gray;
+            this.comboBoxKeySelector.DropDownHeight = 400;
+            this.comboBoxKeySelector.DropDownWidth = 162;
+            this.comboBoxKeySelector.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.comboBoxKeySelector.ItemHeight = 13;
+            this.comboBoxKeySelector.Location = new System.Drawing.Point(104, 86);
+            this.comboBoxKeySelector.MouseOverBackgroundColor = System.Drawing.Color.Silver;
+            this.comboBoxKeySelector.Name = "comboBoxKeySelector";
+            this.comboBoxKeySelector.ScrollBarButtonColor = System.Drawing.Color.LightGray;
+            this.comboBoxKeySelector.ScrollBarColor = System.Drawing.Color.LightGray;
+            this.comboBoxKeySelector.ScrollBarWidth = 16;
+            this.comboBoxKeySelector.SelectedIndex = -1;
+            this.comboBoxKeySelector.SelectedItem = null;
+            this.comboBoxKeySelector.SelectedValue = null;
+            this.comboBoxKeySelector.Size = new System.Drawing.Size(162, 21);
+            this.comboBoxKeySelector.TabIndex = 6;
+            this.comboBoxKeySelector.Text = "comboBoxCustom1";
+            this.comboBoxKeySelector.ValueMember = "";
+            // 
+            // panelRadio
+            // 
+            this.panelRadio.Controls.Add(this.radioButtonUp);
+            this.panelRadio.Controls.Add(this.radioButtonDown);
+            this.panelRadio.Controls.Add(this.radioButtonPress);
+            this.panelRadio.Location = new System.Drawing.Point(191, 122);
+            this.panelRadio.Name = "panelRadio";
+            this.panelRadio.Size = new System.Drawing.Size(75, 72);
+            this.panelRadio.TabIndex = 5;
+            // 
+            // radioButtonUp
+            // 
+            this.radioButtonUp.AutoSize = true;
+            this.radioButtonUp.FontNerfReduction = 0.5F;
+            this.radioButtonUp.Location = new System.Drawing.Point(4, 46);
+            this.radioButtonUp.MouseOverColor = System.Drawing.Color.CornflowerBlue;
+            this.radioButtonUp.Name = "radioButtonUp";
+            this.radioButtonUp.RadioButtonColor = System.Drawing.Color.Gray;
+            this.radioButtonUp.RadioButtonInnerColor = System.Drawing.Color.White;
+            this.radioButtonUp.SelectedColor = System.Drawing.Color.DarkBlue;
+            this.radioButtonUp.SelectedColorRing = System.Drawing.Color.Black;
+            this.radioButtonUp.Size = new System.Drawing.Size(39, 17);
+            this.radioButtonUp.TabIndex = 0;
+            this.radioButtonUp.TabStop = true;
+            this.radioButtonUp.Text = "Up";
+            this.radioButtonUp.UseVisualStyleBackColor = true;
+            this.radioButtonUp.CheckedChanged += new System.EventHandler(this.radioButtonPress_CheckedChanged);
+            // 
+            // radioButtonDown
+            // 
+            this.radioButtonDown.AutoSize = true;
+            this.radioButtonDown.FontNerfReduction = 0.5F;
+            this.radioButtonDown.Location = new System.Drawing.Point(4, 24);
+            this.radioButtonDown.MouseOverColor = System.Drawing.Color.CornflowerBlue;
+            this.radioButtonDown.Name = "radioButtonDown";
+            this.radioButtonDown.RadioButtonColor = System.Drawing.Color.Gray;
+            this.radioButtonDown.RadioButtonInnerColor = System.Drawing.Color.White;
+            this.radioButtonDown.SelectedColor = System.Drawing.Color.DarkBlue;
+            this.radioButtonDown.SelectedColorRing = System.Drawing.Color.Black;
+            this.radioButtonDown.Size = new System.Drawing.Size(53, 17);
+            this.radioButtonDown.TabIndex = 0;
+            this.radioButtonDown.TabStop = true;
+            this.radioButtonDown.Text = "Down";
+            this.radioButtonDown.UseVisualStyleBackColor = true;
+            this.radioButtonDown.CheckedChanged += new System.EventHandler(this.radioButtonPress_CheckedChanged);
+            // 
+            // radioButtonPress
+            // 
+            this.radioButtonPress.AutoSize = true;
+            this.radioButtonPress.FontNerfReduction = 0.5F;
+            this.radioButtonPress.Location = new System.Drawing.Point(4, 3);
+            this.radioButtonPress.MouseOverColor = System.Drawing.Color.CornflowerBlue;
+            this.radioButtonPress.Name = "radioButtonPress";
+            this.radioButtonPress.RadioButtonColor = System.Drawing.Color.Gray;
+            this.radioButtonPress.RadioButtonInnerColor = System.Drawing.Color.White;
+            this.radioButtonPress.SelectedColor = System.Drawing.Color.DarkBlue;
+            this.radioButtonPress.SelectedColorRing = System.Drawing.Color.Black;
+            this.radioButtonPress.Size = new System.Drawing.Size(51, 17);
+            this.radioButtonPress.TabIndex = 0;
+            this.radioButtonPress.TabStop = true;
+            this.radioButtonPress.Text = "Press";
+            this.radioButtonPress.UseVisualStyleBackColor = true;
+            this.radioButtonPress.CheckedChanged += new System.EventHandler(this.radioButtonPress_CheckedChanged);
+            // 
+            // textBoxNextDelay
+            // 
+            this.textBoxNextDelay.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
+            this.textBoxNextDelay.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
+            this.textBoxNextDelay.BorderColor = System.Drawing.Color.Transparent;
+            this.textBoxNextDelay.BorderColorScaling = 0.5F;
+            this.textBoxNextDelay.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.textBoxNextDelay.ControlBackground = System.Drawing.SystemColors.Control;
+            this.textBoxNextDelay.Location = new System.Drawing.Point(104, 148);
+            this.textBoxNextDelay.Multiline = false;
+            this.textBoxNextDelay.Name = "textBoxNextDelay";
+            this.textBoxNextDelay.ReadOnly = false;
+            this.textBoxNextDelay.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.textBoxNextDelay.SelectionLength = 0;
+            this.textBoxNextDelay.SelectionStart = 0;
+            this.textBoxNextDelay.Size = new System.Drawing.Size(50, 20);
+            this.textBoxNextDelay.TabIndex = 4;
+            this.textBoxNextDelay.Text = "50";
+            this.textBoxNextDelay.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.textBoxNextDelay.WordWrap = true;
+            this.textBoxNextDelay.TextChanged += new System.EventHandler(this.textBoxNextDelay_TextChanged);
+            this.textBoxNextDelay.Enter += new System.EventHandler(this.textBox_Enter);
+            this.textBoxNextDelay.Leave += new System.EventHandler(this.textBox_Leave);
+            // 
+            // textBoxDelay
+            // 
+            this.textBoxDelay.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
+            this.textBoxDelay.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
+            this.textBoxDelay.BorderColor = System.Drawing.Color.Transparent;
+            this.textBoxDelay.BorderColorScaling = 0.5F;
+            this.textBoxDelay.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.textBoxDelay.ControlBackground = System.Drawing.SystemColors.Control;
+            this.textBoxDelay.Location = new System.Drawing.Point(104, 122);
+            this.textBoxDelay.Multiline = false;
+            this.textBoxDelay.Name = "textBoxDelay";
+            this.textBoxDelay.ReadOnly = false;
+            this.textBoxDelay.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.textBoxDelay.SelectionLength = 0;
+            this.textBoxDelay.SelectionStart = 0;
+            this.textBoxDelay.Size = new System.Drawing.Size(50, 20);
+            this.textBoxDelay.TabIndex = 4;
+            this.textBoxDelay.Text = "50";
+            this.textBoxDelay.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.textBoxDelay.WordWrap = true;
+            this.textBoxDelay.Enter += new System.EventHandler(this.textBox_Enter);
+            this.textBoxDelay.Leave += new System.EventHandler(this.textBox_Leave);
+            // 
+            // labelNextDelay
+            // 
+            this.labelNextDelay.AutoSize = true;
+            this.labelNextDelay.Location = new System.Drawing.Point(12, 148);
+            this.labelNextDelay.Name = "labelNextDelay";
+            this.labelNextDelay.Size = new System.Drawing.Size(71, 13);
+            this.labelNextDelay.TabIndex = 3;
+            this.labelNextDelay.Text = "Current Delay";
+            // 
+            // labelDelay
+            // 
+            this.labelDelay.AutoSize = true;
+            this.labelDelay.Location = new System.Drawing.Point(12, 122);
+            this.labelDelay.Name = "labelDelay";
+            this.labelDelay.Size = new System.Drawing.Size(78, 13);
+            this.labelDelay.TabIndex = 3;
+            this.labelDelay.Text = "Start Delay(ms)";
+            // 
+            // buttonDelete
+            // 
+            this.buttonDelete.BorderColorScaling = 1.25F;
+            this.buttonDelete.ButtonColorScaling = 0.5F;
+            this.buttonDelete.ButtonDisabledScaling = 0.5F;
+            this.buttonDelete.Location = new System.Drawing.Point(104, 233);
+            this.buttonDelete.Name = "buttonDelete";
+            this.buttonDelete.Size = new System.Drawing.Size(75, 23);
+            this.buttonDelete.TabIndex = 1;
+            this.buttonDelete.Text = "Delete";
+            this.buttonDelete.UseVisualStyleBackColor = true;
+            this.buttonDelete.Click += new System.EventHandler(this.buttonDelete_Click);
+            // 
+            // labelSelKeys
+            // 
+            this.labelSelKeys.AutoSize = true;
+            this.labelSelKeys.Location = new System.Drawing.Point(12, 86);
+            this.labelSelKeys.Name = "labelSelKeys";
+            this.labelSelKeys.Size = new System.Drawing.Size(58, 13);
+            this.labelSelKeys.TabIndex = 3;
+            this.labelSelKeys.Text = "Select Key";
+            // 
             // KeyForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(371, 336);
+            this.ClientSize = new System.Drawing.Size(373, 390);
+            this.Controls.Add(this.panelOuter);
+            this.Controls.Add(this.labelCaption);
             this.Controls.Add(this.buttonCancel);
             this.Controls.Add(this.buttonOK);
-            this.Controls.Add(this.labelSendTo);
-            this.Controls.Add(this.labelKeys);
-            this.Controls.Add(this.textBoxSendTo);
-            this.Controls.Add(this.textBoxKeys);
-            this.Controls.Add(this.buttonTest);
-            this.Controls.Add(this.buttonNext);
-            this.Controls.Add(this.buttonReset);
-            this.Controls.Add(this.checkBoxKey);
-            this.Controls.Add(this.checkBoxAlt);
-            this.Controls.Add(this.checkBoxCtrl);
-            this.Controls.Add(this.checkBoxShift);
             this.Name = "KeyForm";
-            this.Text = "Define Keys";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
+            this.Text = "Define Key Sequence";
+            this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.KeyForm_MouseDown);
+            this.panelOuter.ResumeLayout(false);
+            this.panelOuter.PerformLayout();
+            this.panelRadio.ResumeLayout(false);
+            this.panelRadio.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -296,5 +529,18 @@
         private System.Windows.Forms.Label labelSendTo;
         private ButtonExt buttonOK;
         private ButtonExt buttonCancel;
+        private System.Windows.Forms.Label labelCaption;
+        private System.Windows.Forms.Panel panelOuter;
+        private ButtonExt buttonDelete;
+        private TextBoxBorder textBoxDelay;
+        private System.Windows.Forms.Label labelDelay;
+        private TextBoxBorder textBoxNextDelay;
+        private System.Windows.Forms.Label labelNextDelay;
+        private System.Windows.Forms.Panel panelRadio;
+        private RadioButtonCustom radioButtonUp;
+        private RadioButtonCustom radioButtonDown;
+        private RadioButtonCustom radioButtonPress;
+        private ComboBoxCustom comboBoxKeySelector;
+        private System.Windows.Forms.Label labelSelKeys;
     }
 }

@@ -228,5 +228,16 @@ namespace BaseUtils
 
             return sl;
         }
+
+        public static string FirstQuotedWord(string s, string limits, string def = "", string prefix = "", string postfix = "")
+        {
+            if (s != null)
+            {
+                StringParser k1 = new StringParser(s);
+                return prefix + k1.NextQuotedWord(limits) + postfix;
+            }
+            else
+                return def;
+        }
     }
 }

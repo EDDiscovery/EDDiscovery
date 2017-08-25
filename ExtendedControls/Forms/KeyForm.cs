@@ -1,4 +1,20 @@
-﻿using BaseUtils.Win32Constants;
+﻿/*
+ * Copyright © 2016 EDDiscovery development team
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
+ * file except in compliance with the License. You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software distributed under
+ * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
+ * ANY KIND, either express or implied. See the License for the specific language
+ * governing permissions and limitations under the License.
+ * 
+ * EDDiscovery is not affiliated with Frontier Developments plc.
+ */
+
+using BaseUtils.Win32Constants;
 using ExtendedControls;
 using System;
 using System.Collections.Generic;
@@ -14,29 +30,107 @@ using System.Windows.Forms;
 
 namespace ExtendedControls
 {
-    public partial class KeyForm : Form
+    public partial class KeyForm : DraggableForm
     {
         public string KeyList { get { return textBoxKeys.Text; } }
         public string ProcessSelected { get { return textBoxSendTo.Text; } }
+        public int DefaultDelay { get { int t; return textBoxDelay.Text.InvariantParse(out t) ? t : 50; } }
 
-        ActionMessageFilter actionfilesmessagefilter;
-        Keys basekey = Keys.None;
+        KeyFormMessageFilter keyformmessagefilter;
+        string basekeystroke = "";
         
         int curinsertpoint = 0;
+        string seperator;
 
         public KeyForm()
         {
             InitializeComponent();
-            actionfilesmessagefilter = new ActionMessageFilter(this);
-            Application.AddMessageFilter(actionfilesmessagefilter);
-            //  textBoxSendTo.Text = "Current window";
-            //textBoxSendTo.Text = "KeyLogger";
             textBoxSendTo.SetAutoCompletor(AutoList);
+            DraggableDisableResize = true; // tell dragger no resizing
+            //System.Diagnostics.Debug.WriteLine("HASH " + GetHashCode());
         }
 
-        public void Init(Icon i)
+        public void Init(Icon i , bool showprocess, string separ ,string keystring = "", string process = "" , 
+                        List<string> additionalkeys = null , int defdelay = 50 , bool allowkeysedit = false)
         {
-            Icon = i;
+            if ( i != null )
+                Icon = i;
+
+            seperator = separ;
+
+            textBoxKeys.Text = keystring;
+            curinsertpoint = keystring.Length;
+
+            textBoxSendTo.Text = process.Alt(BaseUtils.EnhancedSendKeys.CurrentWindow);
+            textBoxDelay.Text = textBoxNextDelay.Text = defdelay.ToStringInvariant();
+            radioButtonPress.Checked = true;
+
+            if ( additionalkeys!=null )
+                comboBoxKeySelector.Items.AddRange(additionalkeys);
+            comboBoxKeySelector.Items.AddRange(KeyObjectExtensions.VKeyList());
+            comboBoxKeySelector.SelectedIndexChanged += new System.EventHandler(this.comboBoxKeySelector_SelectedIndexChanged);
+
+            if ( !showprocess)
+            {
+                textBoxNextDelay.Visible = panelRadio.Visible = labelNextDelay.Visible = labelDelay.Visible = textBoxDelay.Visible = labelSendTo.Visible = textBoxSendTo.Visible = buttonTest.Visible = false;
+
+                int d = textBoxKeys.Top - textBoxDelay.Top;
+                foreach (Control c in new Control[] { buttonReset, buttonDelete, buttonNext, textBoxKeys, labelKeys })
+                    c.Top -= d;     // shift down
+
+                d += 40;        // cause of the Send
+                foreach (Control c in new Control[] { buttonOK, buttonCancel})
+                    c.Top -= d;
+                panelOuter.Height -= d;
+                this.Height -= d;
+            }
+
+            //System.Diagnostics.Debug.WriteLine("T" + textBoxKeys.Text + " at " + curinsertpoint + " >" + textBoxSendTo.Text);
+
+            bool border = true;
+            ThemeableForms theme = ThemeableFormsInstance.Instance;
+            if (theme != null)  // paranoid
+            {
+                border = theme.ApplyToForm(this);
+            }
+
+            labelCaption.Visible = !border;
+
+            AddMF();
+
+            if (allowkeysedit)
+                textBoxKeys.ReadOnly = false;
+
+            DisplayKeyString();
+        }
+
+        void AddMF()
+        {
+            if (keyformmessagefilter == null)       // leave ends up double making it
+            {
+                keyformmessagefilter = new KeyFormMessageFilter(this);
+                Application.AddMessageFilter(keyformmessagefilter);
+                //System.Diagnostics.Debug.WriteLine("Make " + keyformmessagefilter.GetHashCode() + " for " + GetHashCode());
+            }
+            else
+            {
+                //System.Diagnostics.Debug.WriteLine("DOUBLE Make " + keyformmessagefilter.GetHashCode() + " for " + GetHashCode());
+            }
+        }
+
+        void RemoveMF()
+        {
+            if (keyformmessagefilter != null)
+            {
+                //System.Diagnostics.Debug.WriteLine("Remove " + keyformmessagefilter.GetHashCode() + " for " + GetHashCode());
+                Application.RemoveMessageFilter(keyformmessagefilter);
+                keyformmessagefilter = null;
+            }
+        }
+
+        protected override void OnFormClosing(FormClosingEventArgs e)
+        {
+            RemoveMF();
         }
 
         public static List<string> AutoList(string input, AutoCompleteTextBox t)
@@ -48,13 +142,6 @@ namespace ExtendedControls
             return res;
         }
 
-
-        private void checkBoxsac_MouseDown(object sender, MouseEventArgs e)
-        {
-            CheckBoxCustom c = sender as CheckBoxCustom;
-            SetToggle(c, !c.Checked, e.Button == MouseButtons.Right);
-            SetKeyString();
-        }
 
         private void SetToggle(CheckBoxCustom c, bool ch , bool right)
         { 
@@ -72,7 +159,6 @@ namespace ExtendedControls
             int sc = (extsc >> 16) & 0xff;
 
             Keys k1 = k.VKeyAdjust(extendedkey, sc);
-            System.Diagnostics.Debug.WriteLine("Key press " + k + " => " + k1.ToString());
 
             if (k1 == Keys.ShiftKey || k1 == Keys.RShiftKey)
             {
@@ -88,24 +174,56 @@ namespace ExtendedControls
             }
             else
             {
-                basekey = k1;
-
+                basekeystroke = k1.VKeyToString();
+                comboBoxKeySelector.Enabled = false;
+                comboBoxKeySelector.SelectedItem = k.VKeyToString();
+                comboBoxKeySelector.Enabled = true;
                 //string name = k1.VKeyToString(); Keys kback = name.ToVkey(); System.Diagnostics.Debug.WriteLine("Key press " + k + " Full SC " + extsc.ToString("X8") + " SC " + sc.ToString("X2") + " Ext " + extendedkey + " MOD " + modifiers + " ==> " + name + " ==> " + kback.ToString());
             }
 
-            SetKeyString();
+            DisplayKeyString();
         }
 
-        void SetKeyString()
+        void DisplayKeyString()
         { 
             Keys shiftKey = KeyObjectExtensions.ShiftKey(checkBoxShift.Checked, checkBoxShift.Text.Contains("Right"));
             Keys ctrlKey = KeyObjectExtensions.ControlKey(checkBoxCtrl.Checked, checkBoxCtrl.Text.Contains("Right"));
             Keys altKey = KeyObjectExtensions.MenuKey(checkBoxAlt.Checked, checkBoxAlt.Text.Contains("Right"));
 
-            checkBoxKey.Text = (basekey != Keys.None) ? basekey.VKeyToString() : "Press Key";
-            string fullname = basekey.VKeyToString(shiftKey, altKey, ctrlKey);
+            checkBoxKey.Text = basekeystroke.HasChars() ? basekeystroke : "Press Key";
 
-            textBoxKeys.Text = textBoxKeys.Text.Substring(0, curinsertpoint) + fullname;
+            //System.Diagnostics.Debug.WriteLine("T" + textBoxKeys.Text + " at " + curinsertpoint + " " + fullname);
+
+            textBoxNextDelay.ReadOnly = (curinsertpoint == 0);
+            int nextdelay = DefaultDelay;
+            textBoxNextDelay.Text.InvariantParse(out nextdelay);
+
+            string res = textBoxKeys.Text.Substring(0, curinsertpoint);
+
+            string partstring = "";
+
+            if (DefaultDelay != nextdelay)
+                partstring += "[" + nextdelay.ToStringInvariant() + "]";
+
+            if (radioButtonDown.Checked)
+                partstring += "!";
+            else if (radioButtonUp.Checked)
+                partstring += "^";
+
+            string shifters = KeyObjectExtensions.ShiftersToString(shiftKey, altKey, ctrlKey);
+            string keyname = shifters;
+            keyname = keyname.AppendPrePad(basekeystroke, "+");
+            partstring += keyname;
+            System.Diagnostics.Debug.WriteLine("Stroke " + partstring);
+
+            if (partstring.Length > 0)
+                res = res.AppendPrePad(partstring, seperator);
+
+            buttonNext.Enabled = keyname.Length > 0;
+            buttonDelete.Enabled = keyname.Length> 0 || curinsertpoint > 0;
+
+            textBoxKeys.Text = res;
+            textBoxKeys.Select(res.Length, res.Length);
         }
 
         void ResetCurrent()
@@ -113,61 +231,108 @@ namespace ExtendedControls
             SetToggle(checkBoxShift, false, false);
             SetToggle(checkBoxCtrl, false, false);
             SetToggle(checkBoxAlt, false, false);
-            basekey = Keys.None;
-            SetKeyString();
+            basekeystroke = "";
+            comboBoxKeySelector.Enabled = false;
+            comboBoxKeySelector.SelectedIndex = -1;
+            comboBoxKeySelector.Enabled = true;
+            DisplayKeyString();
         }
 
-        // maybe a full hook? https://github.com/shanselman/babysmash/blob/master/App.xaml.cs
-
-        protected class ActionMessageFilter : IMessageFilter
+        private void checkBoxsac_MouseDown(object sender, MouseEventArgs e)
         {
-            KeyForm keyform;
-            public ActionMessageFilter(KeyForm k)
-            {
-                keyform = k;
-            }
+            CheckBoxCustom c = sender as CheckBoxCustom;
+            SetToggle(c, !c.Checked, e.Button == MouseButtons.Right);
+            DisplayKeyString();
+        }
 
-            public bool PreFilterMessage(ref Message m)
-            {
-                if (m.Msg == WM.KEYDOWN || m.Msg == WM.SYSKEYDOWN) 
-                {
-                    Keys k = (Keys)m.WParam;
-                    int sc = (int)m.LParam;
-                    keyform.PressedKey(k, sc, Control.ModifierKeys);
-                    return true;
-                }
 
-                return false;
+        private void comboBoxKeySelector_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (comboBoxKeySelector.Enabled)
+            {
+                basekeystroke = comboBoxKeySelector.Text;
+                DisplayKeyString();
             }
         }
 
         private void buttonNext_Click(object sender, EventArgs e)
         {
-            textBoxKeys.Text += " ";
             curinsertpoint = textBoxKeys.Text.Length;
+            textBoxNextDelay.Text = textBoxDelay.Text;
             ResetCurrent();
         }
 
         private void buttonReset_Click(object sender, EventArgs e)
         {
             curinsertpoint = 0;
+            textBoxNextDelay.Text = textBoxDelay.Text;
             ResetCurrent();
+        }
+
+        private void buttonDelete_Click(object sender, EventArgs e)
+        {
+            if (basekeystroke.HasChars())
+                ResetCurrent();
+            else
+            {
+                int lastcomma = textBoxKeys.Text.Substring(0, curinsertpoint).LastIndexOf(seperator);
+                curinsertpoint = Math.Max(lastcomma, 0);
+                DisplayKeyString();
+            }
+
         }
 
         private void buttonTest_Click(object sender, EventArgs e)
         {
             string target = textBoxSendTo.Text;
-            BaseUtils.SendExtendedKeys.Send(textBoxKeys.Text, target);
+
+            if (target.HasChars())
+            {
+                if (target == BaseUtils.EnhancedSendKeys.CurrentWindow)
+                    MessageBoxTheme.Show("Name a process to test sending keys");
+                else
+                {
+                    string err = BaseUtils.EnhancedSendKeys.Send(textBoxKeys.Text, DefaultDelay, 2 , 2, textBoxSendTo.Text);
+                    if (err.Length > 0)
+                        MessageBoxTheme.Show("Error " + err + " - check entry");
+                }
+            }
+            else
+                MessageBoxTheme.Show("No process names to send keys to");
         }
 
-        private void textBoxSendTo_Enter(object sender, EventArgs e)
+        private void textBox_Enter(object sender, EventArgs e)
         {
-            Application.RemoveMessageFilter(actionfilesmessagefilter);
+            checkBoxKey.Visible = false;
+            RemoveMF();
         }
 
-        private void textBoxSendTo_Leave(object sender, EventArgs e)
+        private void textBox_Leave(object sender, EventArgs e)
         {
-            Application.AddMessageFilter(actionfilesmessagefilter);
+            checkBoxKey.Visible = true;
+            AddMF();
+        }
+
+        private void textBoxNextDelay_TextChanged(object sender, EventArgs e)
+        {
+            DisplayKeyString();
+        }
+
+        private void panelOuter_MouseDown(object sender, MouseEventArgs e)
+        {
+            checkBoxKey.Select();   // better than Focus
+            checkBoxKey.Visible = true;
+            AddMF();
+        }
+
+        private void radioButtonPress_CheckedChanged(object sender, EventArgs e)
+        {
+            DisplayKeyString();
+        }
+
+        private void KeyForm_MouseDown(object sender, MouseEventArgs e)
+        {
+            OnCaptionMouseDown((Control)sender,e);
         }
 
         private void buttonOK_Click(object sender, EventArgs e)
@@ -181,5 +346,53 @@ namespace ExtendedControls
             DialogResult = DialogResult.Cancel;
             Close();
         }
+
+        protected class KeyFormMessageFilter : IMessageFilter
+        {
+            KeyForm keyform;
+            public KeyFormMessageFilter(KeyForm k)
+            {
+                keyform = k;
+            }
+
+            public bool PreFilterMessage(ref Message m)
+            {
+                if (m.Msg == WM.KEYDOWN || m.Msg == WM.SYSKEYDOWN)
+                {
+                    Keys k = (Keys)m.WParam;
+                    int sc = (int)m.LParam;
+                    keyform.PressedKey(k, sc, Control.ModifierKeys);
+                    return true;
+                }
+
+                return false;
+            }
+        }
+
+        private void textBoxKeys_Enter(object sender, EventArgs e)
+        {
+            if ((Control.ModifierKeys & Keys.Control) != 0 && (Control.ModifierKeys & Keys.Shift) != 0)     // manual mode override.. use with care.g
+            {
+                textBoxKeys.ReadOnly = false;
+                ResetCurrent();
+            }
+
+            if ( !textBoxKeys.ReadOnly )
+            {
+                checkBoxKey.Visible = false;
+                RemoveMF();
+            }
+        }
+
+        private void textBoxKeys_Leave(object sender, EventArgs e)
+        {
+            if (!textBoxKeys.ReadOnly)
+            {
+                curinsertpoint = textBoxKeys.Text.Length;
+                checkBoxKey.Visible = true;
+                AddMF();
+            }
+        }
+
     }
 }

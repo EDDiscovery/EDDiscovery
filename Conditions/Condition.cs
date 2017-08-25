@@ -77,6 +77,35 @@ namespace Conditions
         }
 
 
+        public bool IsAlwaysTrue()
+        {
+            foreach (ConditionEntry c in fields)
+            {
+                if (c.matchtype == ConditionEntry.MatchType.AlwaysTrue)
+                    return true;
+            }
+
+            return false;
+        }
+
+        public bool Is(string itemname, ConditionEntry.MatchType mt)        // one condition, of this type
+        {
+            return fields.Count == 1 && fields[0].itemname == itemname && fields[0].matchtype == mt;
+        }
+
+        public void SetAlwaysTrue()
+        {
+            fields = new List<ConditionEntry>();
+            fields.Add(new ConditionEntry("Condition", ConditionEntry.MatchType.AlwaysTrue, ""));
+        }
+
+        static public Condition AlwaysTrue()
+        {
+            Condition cd = new Condition();
+            cd.SetAlwaysTrue();
+            return cd;
+        }
+
         public bool SetOuterCondition(string o)
         {
             return Enum.TryParse<ConditionEntry.LogicalCondition>(o.Replace(" ", ""), out outercondition);
@@ -206,15 +235,5 @@ namespace Conditions
             }
         }
 
-        public bool AlwaysTrue()
-        {
-            foreach( ConditionEntry c in fields)
-            {
-                if (c.matchtype == ConditionEntry.MatchType.AlwaysTrue)
-                    return true;
-            }
-
-            return false;
-        }
     }
 }

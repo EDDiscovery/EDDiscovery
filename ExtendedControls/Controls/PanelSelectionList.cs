@@ -34,6 +34,7 @@ namespace ExtendedControls
         public Color MouseOverBackgroundColor { get { return ddc.MouseOverBackgroundColor; } set { ddc.MouseOverBackgroundColor = value; } }
 
         public int SelectedIndex { get { return ddc.SelectedIndex; } set { ddc.SelectedIndex = value; } }
+        public string SelectedItem { get { return (ddc.SelectedIndex>=0) ? ddc.Items[ddc.SelectedIndex] : null; }  }
 
         private DropDownCustom ddc;
         int dropdownwidth = 200;

@@ -1,4 +1,20 @@
-﻿using BaseUtils.Win32;
+﻿/*
+ * Copyright © 2016 EDDiscovery development team
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
+ * file except in compliance with the License. You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software distributed under
+ * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
+ * ANY KIND, either express or implied. See the License for the specific language
+ * governing permissions and limitations under the License.
+ * 
+ * EDDiscovery is not affiliated with Frontier Developments plc.
+ */
+ 
+using BaseUtils.Win32;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -13,16 +29,33 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using static ObjectExtensionsStrings;
 
+// syntax: [<delay>][<prefix>] [<shifters>] [<add>] [ seq | '('seq [' ' seq].. ')']
+// delay = '[' d1 [',' d2 [ ',' d3 ] ] ']' in decimal ms.
+//          d1 applies to main vkey sequence, or to shifters if no vkey sequence is given
+//          d2 applies to shifters when vkey sequence is given, or to updelay when no vkey sequence is given
+//          updelay applies to presses, or to shifters when combined with vkey sequence
+// prefix = one of '^' '<' : up    
+// prefix = one of '!' '>' : down  . No prefix indicates press (down then up)
+// shifters = '' | 'Shift' | 'Shift+Alt' | 'Shift+Alt+Ctrl' | 'Alt' | 'Alt+Ctrl' | 'Ctrl'
+// add = '' or '+' when both shifters and vkey is present
+// seq = vkey | shortlist. Multiple sequences can be given, space seperated, inside the ()
+// vkey = Vkey name, See KeyObjectExtensions.ToVkey.  NumEnter is principle addition, D0-9 are just 0-9.
+// shortlist = '0'-'9' | 'A'-'Z' | 'a'-'z'.  List of Vkeys in this range.
+//
+// Examples : Shift+Ctrl, Shift, Alt, Alt+A, Shift+Alt+A, Shift+(ABC), Shift+(F1 BC), ^Shift+(F1 BC)
+// [100,20]Shift+A
+
 namespace BaseUtils
 {
-    public class SendExtendedKeys
+    public class EnhancedSendKeys
     {
-       
-        static SendExtendedKeys()
+        public static string CurrentWindow = "Current window";
+
+        static EnhancedSendKeys()
         {
         }
 
-        private SendExtendedKeys()
+        private EnhancedSendKeys()
         {
         }
 
@@ -34,8 +67,9 @@ namespace BaseUtils
             internal short vkey;      
             internal short sc;
             internal bool extkey;
+            internal int delay;     // key delay
 
-            public SKEvent(int wma, Keys vk)
+            public SKEvent(int wma, Keys vk , int del)
             {
                 wm = wma;
                 vkey = (short)((vk == KeyObjectExtensions.NumEnter) ? Keys.Return : vk);
@@ -44,6 +78,8 @@ namespace BaseUtils
                 else
                     sc = (short)BaseUtils.Win32.UnsafeNativeMethods.MapVirtualKey((uint)vkey, 0);
                 extkey = ((Keys)vk).IsExtendedKey();
+                delay = del;
+                System.Diagnostics.Debug.WriteLine("Queue " + wma + " : " + vk.VKeyToString() + " " + sc + " " + extkey + " " + delay + "ms");
             }
         }
 
@@ -56,17 +92,18 @@ namespace BaseUtils
             events.Enqueue(skevent);
         }
 
-        private static void AddMsgsForVK(Keys vk, int repeat, bool altnoctrldown)
+        private static void AddMsgsForVK(Keys vk, bool altnoctrldown , int downdel , int updel , KMode kmd)
         {
-            for (int i = 0; i < repeat; i++)
-            {
-                AddEvent(new SKEvent(altnoctrldown ? BaseUtils.Win32Constants.WM.SYSKEYDOWN : BaseUtils.Win32Constants.WM.KEYDOWN, vk));
-                //AddEvent(new SKEvent(altnoctrldown ? BaseUtils.Win32Constants.WM.SYSKEYUP : BaseUtils.Win32Constants.WM.KEYUP, vk));
-                AddEvent(new SKEvent( BaseUtils.Win32Constants.WM.KEYUP, vk));
-            }
+            if (kmd == KMode.press || kmd == KMode.down)
+                AddEvent(new SKEvent(altnoctrldown ? BaseUtils.Win32Constants.WM.SYSKEYDOWN : BaseUtils.Win32Constants.WM.KEYDOWN, vk , downdel));
+
+            if (kmd == KMode.press || kmd == KMode.up)
+                AddEvent(new SKEvent( BaseUtils.Win32Constants.WM.KEYUP, vk , updel));  // key up has a short nominal delay
         }
 
-        public static string ParseKeys(string s)
+        enum KMode { press, up, down };
+
+        public static string ParseKeys(string s, int defdelay , int defshiftdelay , int defupdelay)
         {
             //debugevents = null;
             s = s.Trim();
@@ -74,6 +111,50 @@ namespace BaseUtils
 
             while (s.Length > 0)
             {
+                KMode kmd = KMode.press;
+
+                int d1 = -1, d2 = -1, d3 = -1;
+
+                if (s[0] == '[')
+                {
+                    s = s.Substring(1);
+                    string word = ObjectExtensionsStrings.FirstWord(ref s, new char[] { ']' , ',' });
+                    if (!word.InvariantParse(out d1))
+                        return "Delay not properly given";
+
+                    if (s[0] == ',')
+                    {
+                        s = s.Substring(1);
+                        word = ObjectExtensionsStrings.FirstWord(ref s, new char[] { ']' , ',' });
+                        if (!word.InvariantParse(out d2))
+                            return "Second Delay not properly given";
+                    }
+
+                    if (s[0] == ',')
+                    {
+                        s = s.Substring(1);
+                        word = ObjectExtensionsStrings.FirstWord(ref s, new char[] { ']' });
+                        if (!word.InvariantParse(out d3))
+                            return "Third Delay not properly given";
+                    }
+
+                    if (s[0] == ']')
+                        s = s.Substring(1);
+                    else
+                        return "Missing closing ] in delay";
+                }
+
+                if (s[0] == '^' || s[0] == '<')
+                {
+                    kmd = KMode.up;
+                    s = s.Substring(1);
+                }
+                else if (s[0] == '!' || s[0] == '>')
+                {
+                    kmd = KMode.down;
+                    s = s.Substring(1);
+                }
+
                 Keys shift = KeyObjectExtensions.IsShiftPrefix(ref s);
                 Keys ctrl = Keys.None;
                 Keys alt = Keys.None;
@@ -94,18 +175,27 @@ namespace BaseUtils
                     }
                 }
 
-                if (shift != Keys.None)
-                    AddEvent(new SKEvent(BaseUtils.Win32Constants.WM.KEYDOWN, shift));
+                bool mainpart = s.Length > 0 && s[0] != ' ';
+
+                // keydown is d1 or def
+                int keydowndelay = (d1 != -1) ? d1 : defdelay;                          
+                // if mainpart present, its d2 or defshift.  If no main part, its d1 or def shift
+                int shiftdelay = (mainpart) ? (d2 != -1 ? d2 : defshiftdelay) : (d1!=-1 ? d1 : defshiftdelay);
+                // if in up/down mode, its d1 or def up.   If its got a main part, its d3/defup.  else its d2/defup
+                int keyupdelay = (kmd == KMode.up || kmd == KMode.down) ? (d1!=-1 ? d1 : defupdelay) : (mainpart ? (d3 != -1 ? d3: defupdelay) : (d2 != -1 ? d2 : defupdelay));
+
+                System.Diagnostics.Debug.WriteLine(string.Format("{0} {1} {2} {3} {4} {5} ", d1, d2, d3, keydowndelay, shiftdelay, keyupdelay));
+
+                if (shift != Keys.None)         // we already run shift keys here. If we are doing UP, we send a up, else we are doing down/press
+                    AddEvent(new SKEvent(kmd == KMode.up ? BaseUtils.Win32Constants.WM.KEYUP : BaseUtils.Win32Constants.WM.KEYDOWN, shift, shiftdelay));
 
                 if (ctrl != Keys.None)
-                    AddEvent(new SKEvent(BaseUtils.Win32Constants.WM.KEYDOWN, ctrl));
+                    AddEvent(new SKEvent(kmd == KMode.up ? BaseUtils.Win32Constants.WM.KEYUP : BaseUtils.Win32Constants.WM.KEYDOWN, ctrl, shiftdelay));
 
                 if (alt != Keys.None)
-                    AddEvent(new SKEvent(BaseUtils.Win32Constants.WM.SYSKEYDOWN, alt));
+                    AddEvent(new SKEvent(kmd == KMode.up ? BaseUtils.Win32Constants.WM.SYSKEYUP: BaseUtils.Win32Constants.WM.SYSKEYDOWN, alt, shiftdelay));
 
-                bool shifts = shift != Keys.None || ctrl != Keys.None || alt != Keys.None;
-                
-                if (s.Length>0 && s[0] != ' ') // we have a main part..
+                if (mainpart)
                 {
                     if (s.Length == 0)
                         return "Invalid no characters after shifters";
@@ -113,15 +203,15 @@ namespace BaseUtils
                     bool brackets = ObjectExtensionsStrings.IsPrefix(ref s, "(");
 
                     while( s.Length>0 )
-                    { 
+                    {
                         string word = ObjectExtensionsStrings.FirstWord(ref s, new char[] { ' ', ')' });
 
                         Keys key = word.ToVkey();
 
                         if (key != Keys.None)
                         {
-                            AddMsgsForVK(key, 1, alt != Keys.None && ctrl == Keys.None);
-                            System.Diagnostics.Debug.WriteLine(shift + " " + alt + " " + ctrl + "  press " + key.VKeyToString());
+                            AddMsgsForVK(key, alt != Keys.None && ctrl == Keys.None, keydowndelay, keyupdelay , kmd);
+                            //System.Diagnostics.Debug.WriteLine(shift + " " + alt + " " + ctrl + "  press " + key.VKeyToString());
                         }
                         else
                         {
@@ -132,8 +222,8 @@ namespace BaseUtils
 
                                 if (key.IsSingleCharName())
                                 {
-                                    AddMsgsForVK(key, 1, alt != Keys.None && ctrl == Keys.None);
-                                    System.Diagnostics.Debug.WriteLine(shift + " " + alt + " " + ctrl + "  press " + key.VKeyToString());
+                                    AddMsgsForVK(key, alt != Keys.None && ctrl == Keys.None, keydowndelay , keyupdelay, kmd);
+                                    //System.Diagnostics.Debug.WriteLine(shift + " " + alt + " " + ctrl + "  press " + key.VKeyToString());
                                     word = word.Substring(1);
                                 }
                                 else
@@ -151,21 +241,21 @@ namespace BaseUtils
                     }
                 }
 
-                if (alt != Keys.None)
-                    AddEvent(new SKEvent(BaseUtils.Win32Constants.WM.SYSKEYUP, alt));
+                if (kmd == KMode.press)     // only on a press do we release here
+                {
+                    if (alt != Keys.None)
+                        AddEvent(new SKEvent(BaseUtils.Win32Constants.WM.SYSKEYUP, alt, keyupdelay));
 
-                if (ctrl != Keys.None)
-                    AddEvent(new SKEvent(BaseUtils.Win32Constants.WM.KEYUP, ctrl));
+                    if (ctrl != Keys.None)
+                        AddEvent(new SKEvent(BaseUtils.Win32Constants.WM.KEYUP, ctrl, keyupdelay));
 
-                if (shift != Keys.None)
-                    AddEvent(new SKEvent(BaseUtils.Win32Constants.WM.KEYUP, shift));
+                    if (shift != Keys.None)
+                        AddEvent(new SKEvent(BaseUtils.Win32Constants.WM.KEYUP, shift, keyupdelay));
+                }
 
                 s = s.Trim();
-            }
-
-            foreach (SKEvent ev in events)
-            {
-                System.Diagnostics.Debug.WriteLine("Event " + ev.wm + " " + ev.vkey.ToString("X4") );
+                if (s.Length > 0 && s[0] == ',')        // comma can be used between key groups
+                    s = s.Substring(1).TrimStart();
             }
 
             return "";
@@ -174,12 +264,6 @@ namespace BaseUtils
         // Uses User32 SendInput to send keystrokes
         private static void SendInput(byte[] oldKeyboardState ) //, Queue previousEvents)
         {
-            // Should be a No-Opt most of the time
-            //AddCancelModifiersForPreviousEvents(previousEvents);
-
-            // SKEvents are sent as sent as 1 or 2 inputs
-            // currentInput[0] represents the SKEvent
-            // currentInput[1] is a KeyUp to prevent all identical WM_CHARs to be sent as one message
             NativeMethods.INPUT[] currentInput = new NativeMethods.INPUT[1];
 
             // all events are Keyboard events
@@ -197,11 +281,6 @@ namespace BaseUtils
             int eventsTotal;
 
             // A lock here will allow multiple threads to SendInput at the same time.
-            // This mimics the JournalHook method of using the message loop to mitigate
-            // threading issues.  There is still a theoretical thread issue with adding 
-            // to the events Queue (both JournalHook and SendInput), but we do not want 
-            // to alter the timings of the existing shipped behavior.  I did not run into
-            // problems with 2 threads on a multiproc machine
             lock (events.SyncRoot)
             {
                 // block keyboard and mouse input events from reaching applications.
@@ -235,15 +314,11 @@ namespace BaseUtils
 
                         currentInput[0].inputUnion.ki.wVk = skEvent.vkey;
 
-                        System.Diagnostics.Debug.WriteLine("Send " + currentInput[0].inputUnion.ki.wVk + " " + currentInput[0].inputUnion.ki.wScan.ToString("2X") + " " + currentInput[0].inputUnion.ki.dwFlags);
+                        //System.Diagnostics.Debug.WriteLine("Send " + currentInput[0].inputUnion.ki.wVk + " " + currentInput[0].inputUnion.ki.wScan.ToString("2X") + " " + currentInput[0].inputUnion.ki.dwFlags);
                         // send only currentInput[0]
                         eventsSent += UnsafeNativeMethods.SendInput(1, currentInput, INPUTSize);
 
-                        // We need this slight delay here for Alt-Tab to work on Vista when the Aero theme
-                        // is running.  See DevDiv bugs 23355.  Although this does not look good, a delay
-                        // here actually more closely resembles the old JournalHook that processes each
-                        // event individually in the hook callback.
-                        System.Threading.Thread.Sleep(1);
+                        System.Threading.Thread.Sleep( skEvent.delay>0 ? skEvent.delay : 1);
                     }
                 }
                 finally
@@ -278,13 +353,17 @@ namespace BaseUtils
             UnsafeNativeMethods.SetKeyboardState(keystate);
         }
 
-        public static bool Send(string keys, string pname = null)
+        public static string Send(string keys, int keydelay, int shiftdelay , int updelay, string pname = null)
         {
-            if (keys == null || keys.Length == 0) return true;
+            if (!keys.HasChars())
+                return "";
 
-            ParseKeys(keys);
+            string err = ParseKeys(keys,keydelay, shiftdelay , updelay);
+            if (err != "")
+                return err;
 
-            if (events == null) return true;
+            if (events == null)
+                return "";
 
             byte[] oldstate = GetKeyboardState();
 
@@ -292,19 +371,19 @@ namespace BaseUtils
 
             IntPtr currentfore = (IntPtr)0;
 
-            if (pname != null && !pname.Equals("Current window") && pname.Length > 0)
+            if (pname.HasChars() && !pname.Equals(CurrentWindow) && pname.Length > 0)
             {
                 p = Process.GetProcessesByName(pname).FirstOrDefault();
 
                 if (p != null)
                 {
                     currentfore = BaseUtils.Win32.UnsafeNativeMethods.GetForegroundWindow();
-                    System.Diagnostics.Debug.WriteLine("Current fore" + currentfore + " " + p.MainWindowHandle);
+                    //System.Diagnostics.Debug.WriteLine("Current fore" + currentfore + " " + p.MainWindowHandle);
 
                     BaseUtils.Win32.UnsafeNativeMethods.SetForegroundWindow(p.MainWindowHandle);
                 }
                 else
-                    return false;
+                    return "No such process";
             }
 
             SendInput(oldstate);
@@ -314,7 +393,7 @@ namespace BaseUtils
                 BaseUtils.Win32.UnsafeNativeMethods.SetForegroundWindow(currentfore);
             }
 
-            return true;
+            return "";
         }
 
     }
