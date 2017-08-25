@@ -23,7 +23,7 @@ namespace ExtendedControls
 {
     public interface ThemeableForms             // Extended controls use this if they want to be themed
     {
-        bool ApplyToForm(System.Windows.Forms.Form form, System.Drawing.Font fnt);
+        bool ApplyToForm(System.Windows.Forms.Form form, System.Drawing.Font fnt = null);   // null means use standard one
         void ApplyToControls(System.Windows.Forms.Control parent, System.Drawing.Font fnt = null);
         System.Drawing.Color TextBlockColor { get; set; }
         string FontName { get; set; }

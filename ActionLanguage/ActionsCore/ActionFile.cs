@@ -331,7 +331,7 @@ namespace ActionLanguage
                                 {
                                     string e = c.eventname;
 
-                                    if (!c.AlwaysTrue())
+                                    if (!c.IsAlwaysTrue())
                                     {
                                         e += "?(" + c.ToString() + ")";
                                     }

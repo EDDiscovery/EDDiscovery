@@ -177,7 +177,9 @@
     <Compile Include="3DMap\StarGrid.cs" />
     <Compile Include="3DMap\StarNamesList.cs" />
     <Compile Include="3DMap\Zoom.cs" />
+    <Compile Include="Actions\ActionEventList.cs" />
     <Compile Include="Actions\ActionsEDDCmds\ActionEliteBindings.cs" />
+    <Compile Include="Actions\ActionsEDDCmds\ActionKeyED.cs" />
     <Compile Include="Actions\ActionsEDDCmds\ActionShip.cs" />
     <Compile Include="Actions\ActionController.cs" />
     <Compile Include="Actions\ActionsEDDCmds\ActionEvent.cs" />

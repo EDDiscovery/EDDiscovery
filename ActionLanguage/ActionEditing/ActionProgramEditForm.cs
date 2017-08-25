@@ -35,7 +35,6 @@ namespace ActionLanguage
         public delegate void EditProgramFunc(string name);
         public event EditProgramFunc EditProgram; 
 
-        List<string> startvarlist;                                  // starting vars
         List<string> currentvarlist;                                // variables available to use.. combination of above
 
         bool editastextimmediately = false;
@@ -87,8 +86,7 @@ namespace ActionLanguage
             this.Icon = ic;
             actioncorecontroller = cp;
             applicationfolder = appfolder;
-            startvarlist = vbs;
-            currentvarlist = new List<string>(startvarlist);
+            currentvarlist = new List<string>(vbs);
 
             bool winborder = ExtendedControls.ThemeableFormsInstance.Instance.ApplyToForm(this, SystemFonts.DefaultFont);
             statusStripCustom.Visible = panelTop.Visible = panelTop.Enabled = !winborder;

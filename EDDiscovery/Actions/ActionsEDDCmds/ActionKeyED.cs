@@ -22,47 +22,13 @@ using System.Windows.Forms;
 using BaseUtils;
 using AudioExtensions;
 using Conditions;
+using ActionLanguage;
 
-namespace ActionLanguage
+namespace EDDiscovery.Actions
 {
-    public class ActionKey: ActionBase
+    public class ActionKeyED : ActionKey        // extends Key
     {
-        protected static string ProcessID = "To";
-        protected static string DelayID = "Delay";
-        protected const int DefaultDelay = 10;
-        protected const int DefaultShiftDelay = 2;
-        protected const int DefaultUpDelay = 2;
-
-        static public bool FromString(string s, out string keys, out ConditionVariables vars)
-        {
-            vars = new ConditionVariables();
-
-            StringParser p = new StringParser(s);
-            keys = p.NextQuotedWord(", ");        // stop at space or comma..
-
-            if (keys != null && (p.IsEOL || (p.IsCharMoveOn(',') && vars.FromString(p, ConditionVariables.FromMode.MultiEntryComma))))   // normalise variable names (true)
-                return true;
-
-            keys = "";
-            return false;
-        }
-
-        static public string ToString(string keys, ConditionVariables cond )
-        {
-            if (cond.Count > 0)
-                return keys.QuoteString(comma: true) + ", " + cond.ToString();
-            else
-                return keys.QuoteString(comma: true);
-        }
-
-        public override string VerifyActionCorrect()
-        {
-            string saying;
-            ConditionVariables vars;
-            return FromString(userdata, out saying, out vars) ? null : "Key command line not in correct format";
-        }
-
-        static public string Menu(Control parent , System.Drawing.Icon ic, string userdata)
+        static public string Menu(Control parent, System.Drawing.Icon ic, string userdata , EliteDangerousCore.BindingsFile bf)
         {
             ConditionVariables vars;
             string keys;
@@ -71,11 +37,11 @@ namespace ActionLanguage
             ExtendedControls.KeyForm kf = new ExtendedControls.KeyForm();
             int defdelay = vars.Exists(DelayID) ? vars[DelayID].InvariantParseInt(DefaultDelay) : DefaultDelay;
             string process = vars.Exists(ProcessID) ? vars[ProcessID] : "";
-            kf.Init(ic, true, " ", keys, process , defdelay:defdelay );
+            kf.Init(ic, true, " ", keys, process, defdelay: defdelay);
 
             if (kf.ShowDialog(parent) == DialogResult.OK)
             {
-                return ToString(kf.KeyList, new ConditionVariables( new string[] { ProcessID, kf.ProcessSelected, DelayID, kf.DefaultDelay.ToStringInvariant() } ));
+                return ToString(kf.KeyList, new ConditionVariables(new string[] { ProcessID, kf.ProcessSelected, DelayID, kf.DefaultDelay.ToStringInvariant() }));
             }
             else
                 return null;
@@ -83,7 +49,9 @@ namespace ActionLanguage
 
         public override bool ConfigurationMenu(Form parent, ActionCoreController cp, List<string> eventvars)    // override again to expand any functionality
         {
-            string ud = Menu(parent, cp.Icon, userdata);      // base has no additional keys
+            ActionController ac = cp as ActionController;
+
+            string ud = Menu(parent, cp.Icon, userdata , ac.DiscoveryForm.FrontierBindings );      // base has no additional keys
             if (ud != null)
             {
                 userdata = ud;
@@ -104,8 +72,11 @@ namespace ActionLanguage
 
                 if (errlist == null)
                 {
-                    int defdelay = vars.Exists(DelayID) ? vars[DelayID].InvariantParseInt(50) : 50;
+                    int defdelay = vars.Exists(DelayID) ? vars[DelayID].InvariantParseInt(DefaultDelay) : DefaultDelay;
                     string process = vars.Exists(ProcessID) ? vars[ProcessID] : "";
+
+                    ActionController ac = ap.actioncontroller as ActionController;
+                    EliteDangerousCore.BindingsFile bf = ac.DiscoveryForm.FrontierBindings;
 
                     string res = BaseUtils.EnhancedSendKeys.Send(keys, defdelay, DefaultShiftDelay, DefaultUpDelay, process);
 

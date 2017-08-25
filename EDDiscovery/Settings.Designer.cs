@@ -49,7 +49,7 @@ namespace EDDiscovery
             this.comboBoxTheme = new ExtendedControls.ComboBoxCustom();
             this.button_edittheme = new ExtendedControls.ButtonExt();
             this.buttonSaveTheme = new ExtendedControls.ButtonExt();
-            this.panel_defaultmapcolor = new System.Windows.Forms.Panel();
+            this.panel_defaultmapcolor = new ExtendedControls.PanelNoTheme();
             this.checkBoxMinimizeToNotifyIcon = new ExtendedControls.CheckBoxCustom();
             this.checkBoxUseNotifyIcon = new ExtendedControls.CheckBoxCustom();
             this.checkBoxUTC = new ExtendedControls.CheckBoxCustom();
@@ -748,7 +748,7 @@ namespace EDDiscovery
         private ExtendedControls.AutoCompleteTextBox textBoxHomeSystem;
         private ExtendedControls.ComboBoxCustom comboBoxTheme;
         private System.Windows.Forms.ToolTip toolTip;
-        private System.Windows.Forms.Panel panel_defaultmapcolor;
+        private ExtendedControls.PanelNoTheme panel_defaultmapcolor;
         private ExtendedControls.ButtonExt buttonSaveTheme;
         private System.Windows.Forms.Label label17;
         private ExtendedControls.ButtonExt button_edittheme;
