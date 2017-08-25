@@ -138,8 +138,50 @@ namespace EliteDangerousCore.JournalEvents
             public double MassMT;
             public double InnerRad;
             public double OuterRad;
+
+            public string RingInformation(double scale = 1, string scaletype = " MT", bool parentIsStar = false)
+            {
+                StringBuilder scanText = new StringBuilder();
+                scanText.AppendFormat("  {0} ({1})\n", Name, DisplayStringFromRingClass(RingClass));
+                scanText.AppendFormat("  Mass: {0}{1}\n", (MassMT * scale).ToString("N4"), scaletype);
+                if (parentIsStar && InnerRad > 3000000)
+                {
+                    scanText.AppendFormat("  Inner Radius: {0:0.00}ls\n", (InnerRad / 300000000));
+                    scanText.AppendFormat("  Outer Radius: {0:0.00}ls\n", (OuterRad / 300000000));
+                }
+                else
+                {
+                    scanText.AppendFormat("  Inner Radius: {0}km\n", (InnerRad / 1000).ToString("N0"));
+                    scanText.AppendFormat("  Outer Radius: {0}km\n", (OuterRad / 1000).ToString("N0"));
+                }
+                return scanText.ToNullSafeString();
+            }
+
+            public string RingInformationMoons(bool parentIsStar = false)
+            {
+                return RingInformation(1 / oneMoon_MT, " Moons", parentIsStar);
+            }
+
+            public static string DisplayStringFromRingClass(string ringClass)
+            {
+                switch (ringClass)
+                {
+                    case "eRingClass_Icy":
+                        return "Icy";
+                    case "eRingClass_Rocky":
+                        return "Rocky";
+                    case "eRingClass_MetalRich":
+                        return "Metal Rich";
+                    case "eRingClass_Metalic":
+                        return "Metallic";
+                    case "eRingClass_RockyIce":
+                        return "Rocky Ice";
+                    default:
+                        return ringClass.Replace("eRingClass_", "");
+                }
+            }
         }
-        
+
         public const double solarRadius_m = 695700000;
         public const double oneAU_m = 149597870000;
         public const double oneDay_s = 86400;
@@ -491,40 +533,9 @@ namespace EliteDangerousCore.JournalEvents
         public string RingInformation(int ringno, double scale = 1, string scaletype = " MT")
         {
             StarPlanetRing ring = Rings[ringno];
-            StringBuilder scanText = new StringBuilder();
-            scanText.AppendFormat("  {0} ({1})\n", ring.Name, DisplayStringFromRingClass(ring.RingClass));
-            scanText.AppendFormat("  Mass: {0}{1}\n", (ring.MassMT * scale).ToString("N4"), scaletype);
-            if (IsStar && ring.InnerRad > 3000000)
-            {
-                scanText.AppendFormat("  Inner Radius: {0:0.00}ls\n", (ring.InnerRad / 300000000));
-                scanText.AppendFormat("  Outer Radius: {0:0.00}ls\n", (ring.OuterRad / 300000000));
-            }
-            else
-            {
-                scanText.AppendFormat("  Inner Radius: {0}km\n", (ring.InnerRad / 1000).ToString("N0"));
-                scanText.AppendFormat("  Outer Radius: {0}km\n", (ring.OuterRad / 1000).ToString("N0"));
-            }
-            return scanText.ToNullSafeString();
+            return ring.RingInformation(scale, scaletype, IsStar);
         }
 
-        public string DisplayStringFromRingClass(string ringClass)
-        {
-            switch (ringClass)
-            {
-                case "eRingClass_Icy":
-                    return "Icy";
-                case "eRingClass_Rocky":
-                    return "Rocky";
-                case "eRingClass_MetalRich":
-                    return "Metal Rich";
-                case "eRingClass_Metalic":
-                    return "Metallic";
-                case "eRingClass_RockyIce":
-                    return "Rocky Ice";
-                default:
-                    return ringClass.Replace("eRingClass_", "");
-            }
-        }
 
 
         public Tuple<System.Drawing.Image, string> GetStarTypeImage()           // give image and description to star class
