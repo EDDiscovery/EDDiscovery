@@ -208,6 +208,7 @@ namespace EDDiscovery.Forms
             this.panelTop.Size = new System.Drawing.Size(634, 22);
             this.panelTop.TabIndex = 27;
             this.panelTop.MouseDown += new System.Windows.Forms.MouseEventHandler(this.panelTop_MouseDown);
+            this.panelTop.MouseUp += new System.Windows.Forms.MouseEventHandler(this.panelTop_MouseUp);
             // 
             // statusStripBottom
             // 

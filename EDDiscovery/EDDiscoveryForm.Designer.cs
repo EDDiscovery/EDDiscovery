@@ -159,6 +159,7 @@ namespace EDDiscovery
             this.menuStrip1.TabIndex = 16;
             this.menuStrip1.Text = "menuStrip1";
             this.menuStrip1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.MouseDownCAPTION);
+            this.menuStrip1.MouseUp += new System.Windows.Forms.MouseEventHandler(this.MouseUpCAPTION);
             // 
             // toolsToolStripMenuItem
             // 
@@ -488,6 +489,7 @@ namespace EDDiscovery
             this.labelInfoBoxTop.TabIndex = 0;
             this.labelInfoBoxTop.Text = "Loading. Please wait!";
             this.labelInfoBoxTop.MouseDown += new System.Windows.Forms.MouseEventHandler(this.labelInfoBoxTop_MouseDown);
+            this.labelInfoBoxTop.MouseUp += new System.Windows.Forms.MouseEventHandler(this.MouseUpCAPTION);
             // 
             // label_version
             // 
@@ -498,6 +500,7 @@ namespace EDDiscovery
             this.label_version.TabIndex = 21;
             this.label_version.Text = "Version Label";
             this.label_version.MouseDown += new System.Windows.Forms.MouseEventHandler(this.MouseDownCAPTION);
+            this.label_version.MouseUp += new System.Windows.Forms.MouseEventHandler(this.MouseUpCAPTION);
             // 
             // edsmRefreshTimer
             // 
@@ -741,7 +744,7 @@ namespace EDDiscovery
             this.panel_minimize.PanelDisabledScaling = 0.25F;
             this.panel_minimize.Size = new System.Drawing.Size(24, 24);
             this.panel_minimize.TabIndex = 20;
-            this.panel_minimize.Click += new System.EventHandler(this.panel_minimize_Click);
+            this.panel_minimize.MouseClick += new System.Windows.Forms.MouseEventHandler(this.panel_minimize_MouseClick);
             // 
             // panel_close
             // 
@@ -760,7 +763,7 @@ namespace EDDiscovery
             this.panel_close.PanelDisabledScaling = 0.25F;
             this.panel_close.Size = new System.Drawing.Size(24, 24);
             this.panel_close.TabIndex = 19;
-            this.panel_close.Click += new System.EventHandler(this.panel_close_Click);
+            this.panel_close.MouseClick += new System.Windows.Forms.MouseEventHandler(this.panel_close_MouseClick);
             // 
             // statusStrip1
             // 
@@ -852,6 +855,7 @@ namespace EDDiscovery
             this.panelToolBar.DeployStarting += new System.EventHandler(this.panelToolBar_DeployStarting);
             this.panelToolBar.RetractCompleted += new System.EventHandler(this.panelToolBar_RetractCompleted);
             this.panelToolBar.MouseDown += new System.Windows.Forms.MouseEventHandler(this.MouseDownCAPTION);
+            this.panelToolBar.MouseUp += new System.Windows.Forms.MouseEventHandler(this.MouseUpCAPTION);
             this.panelToolBar.Resize += new System.EventHandler(this.panelToolBar_Resize);
             // 
             // comboBoxCustomPopOut

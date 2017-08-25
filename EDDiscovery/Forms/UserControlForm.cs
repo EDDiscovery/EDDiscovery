@@ -382,9 +382,8 @@ namespace EDDiscovery.Forms
 
         #region Low level Wndproc
 
-        private const int SYSMENU_ONTOP = 0x1;
-        private const int SYSMENU_TRANSPARENT = 0x2;
-        private const int SYSMENU_TASKBAR = 0x3;
+        protected const int SC_TRANSPARENT = 0x0020;    // Different from SmartSysMenuForm's SC_OPACITYSUBMENU.
+        protected const int SC_TASKBAR = 0x0021;
 
         protected override void OnHandleCreated(EventArgs e)
         {
@@ -394,54 +393,62 @@ namespace EDDiscovery.Forms
             if (Environment.OSVersion.Platform == PlatformID.Win32NT && Environment.OSVersion.Version.Major >= 5)
             {
                 // Get a handle to a copy of this form's system (window) menu
-                IntPtr hSysMenu = BaseUtils.Win32.UnsafeNativeMethods.GetSystemMenu(this.Handle, false);
+                IntPtr hSysMenu = BaseUtils.Win32.UnsafeNativeMethods.GetSystemMenu(Handle, false);
                 if (hSysMenu != IntPtr.Zero)
                 {
-                    // Add a separator
-                    BaseUtils.Win32.UnsafeNativeMethods.AppendMenu(hSysMenu, MF.SEPARATOR, 0, string.Empty);
-
                     // Add the About menu item
-                    BaseUtils.Win32.UnsafeNativeMethods.AppendMenu(hSysMenu, MF.STRING, SYSMENU_ONTOP, "&On Top");
-                    BaseUtils.Win32.UnsafeNativeMethods.AppendMenu(hSysMenu, MF.STRING, SYSMENU_TRANSPARENT, "&Transparent");
-                    BaseUtils.Win32.UnsafeNativeMethods.AppendMenu(hSysMenu, MF.STRING, SYSMENU_TASKBAR, "Show icon in Task&Bar for window");
+                    BaseUtils.Win32.UnsafeNativeMethods.AppendMenu(hSysMenu, MF.STRING, SC_TRANSPARENT, "&Transparent");
+                    BaseUtils.Win32.UnsafeNativeMethods.AppendMenu(hSysMenu, MF.STRING, SC_TASKBAR, "Show icon in Task&Bar for window");
                 }
             }
         }
 
         protected override void WndProc(ref Message m)
         {
-            if (m.Msg == WM.SYSCOMMAND)
+            switch (m.Msg)
             {
-                int cmd = (int)m.WParam;
-                if (cmd == SYSMENU_ONTOP)
-                {
-                    panel_ontop_Click(null, null);
-                }
-                else if (cmd == SYSMENU_TRANSPARENT)
-                {
-                    if (IsTransparencySupported)
+                case WM.INITMENU:
                     {
-                        panel_transparency_Click(null, null);
+                        base.WndProc(ref m);
+                        if (m.WParam != IntPtr.Zero && Environment.OSVersion.Platform == PlatformID.Win32NT && IsHandleCreated)
+                        {
+                            BaseUtils.Win32.UnsafeNativeMethods.EnableMenuItem(m.WParam, SC_TRANSPARENT, MF.BYCOMMAND | (IsTransparencySupported ? MF.ENABLED : MF.GRAYED));
+                            BaseUtils.Win32.UnsafeNativeMethods.ModifyMenu(m.WParam, SC_TASKBAR, MF.BYCOMMAND | (ShowInTaskbar ? MF.CHECKED : MF.UNCHECKED), SC_TASKBAR, "Show icon in Task&Bar for window");
+                            m.Result = IntPtr.Zero;
+                        }
+                        return;
                     }
-                    else
-                        ExtendedControls.MessageBoxTheme.Show("This panel does not support transparency");
-                }
-                else if (cmd == SYSMENU_TASKBAR)
-                {
-                    panel_taskbaricon_Click(null, null);
-                }
-                else
-                    base.WndProc(ref m);
+                case WM.SYSCOMMAND:
+                    {
+                        if (m.WParam == (IntPtr)SC_TASKBAR)
+                        {
+                            panel_taskbaricon_Click(panel_taskbaricon, EventArgs.Empty);
+                        }
+                        else if (m.WParam == (IntPtr)SC_TRANSPARENT)
+                        {
+                            if (IsTransparencySupported)
+                                panel_transparency_Click(panel_transparent, EventArgs.Empty);
+                            else
+                                ExtendedControls.MessageBoxTheme.Show("This panel does not support transparency");
+                        }
+                        else
+                            break;
+
+                        m.Result = IntPtr.Zero;
+                        return;
+                    }
             }
-            else
-            {
-                base.WndProc(ref m);
-            }
+            base.WndProc(ref m);
         }
 
         private void panelTop_MouseDown(object sender, MouseEventArgs e)
         {
             OnCaptionMouseDown((Control)sender, e);
+        }
+
+        private void panelTop_MouseUp(object sender, MouseEventArgs e)
+        {
+            OnCaptionMouseUp((Control)sender, e);
         }
 
         #endregion

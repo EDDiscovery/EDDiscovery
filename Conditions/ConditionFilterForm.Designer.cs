@@ -72,6 +72,7 @@ namespace Conditions
             this.panelTop.Size = new System.Drawing.Size(1098, 24);
             this.panelTop.TabIndex = 4;
             this.panelTop.MouseDown += new System.Windows.Forms.MouseEventHandler(this.label_index_MouseDown);
+            this.panelTop.MouseUp += new System.Windows.Forms.MouseEventHandler(this.label_index_MouseUp);
             // 
             // panel_close
             // 
@@ -118,6 +119,7 @@ namespace Conditions
             this.label_index.TabIndex = 23;
             this.label_index.Text = "N/A";
             this.label_index.MouseDown += new System.Windows.Forms.MouseEventHandler(this.label_index_MouseDown);
+            this.label_index.MouseUp += new System.Windows.Forms.MouseEventHandler(this.label_index_MouseUp);
             // 
             // panelOuter
             // 

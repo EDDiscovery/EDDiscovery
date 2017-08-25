@@ -240,6 +240,7 @@ namespace ExtendedControls
 
             Panel outer = new Panel() { Dock = DockStyle.Fill, BorderStyle = BorderStyle.FixedSingle };
             outer.MouseDown += FormMouseDown;
+            outer.MouseUp += FormMouseUp;
 
             Controls.Add(outer);
 
@@ -247,6 +248,7 @@ namespace ExtendedControls
 
             Label textLabel = new Label() { Left = 4, Top = 8, Width = Width - 50, Text = caption };
             textLabel.MouseDown += FormMouseDown;
+            textLabel.MouseUp += FormMouseUp;
 
             if (!theme.WindowsFrame)
                 outer.Controls.Add(textLabel);
@@ -407,5 +409,9 @@ namespace ExtendedControls
             OnCaptionMouseDown((Control)sender, e);
         }
 
+        private void FormMouseUp(object sender, MouseEventArgs e)
+        {
+            OnCaptionMouseUp((Control)sender, e);
+        }
     }
 }

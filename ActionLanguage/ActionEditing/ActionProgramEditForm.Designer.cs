@@ -227,6 +227,7 @@ namespace ActionLanguage
             this.panelTop.Size = new System.Drawing.Size(862, 24);
             this.panelTop.TabIndex = 29;
             this.panelTop.MouseDown += new System.Windows.Forms.MouseEventHandler(this.label_index_MouseDown);
+            this.panelTop.MouseUp += new System.Windows.Forms.MouseEventHandler(this.label_index_MouseUp);
             // 
             // panel_close
             // 
@@ -275,6 +276,7 @@ namespace ActionLanguage
             this.label_index.TabIndex = 23;
             this.label_index.Text = "N/A";
             this.label_index.MouseDown += new System.Windows.Forms.MouseEventHandler(this.label_index_MouseDown);
+            this.label_index.MouseUp += new System.Windows.Forms.MouseEventHandler(this.label_index_MouseUp);
             // 
             // panelOK
             // 
