@@ -23,23 +23,14 @@ namespace ActionLanguage
 {
     public class ActionPackEditBase : UserControl
     {
-        public Condition cd;
-
         public System.Action RefreshEvent;
-        protected ActionPackEditorForm.AdditionalNames onAdditionalNames;
+        public Condition cd;    // which is a copy of the Program condition, so it can edited
 
         public virtual void Init(Condition cond, List<string> events, ActionCoreController cp, string appfolder, ActionFile file,
-                        ActionPackEditorForm.AdditionalNames func, Icon ic)
-        {
-            cd = new Condition(cond);        // full clone, we can now modify it.
-            InitSub(cd, events, cp, appfolder, file, func, ic);
-        }
-
-        public virtual string ID() { return ""; }
-        public virtual void InitSub(Condition cond, List<string> events, ActionCoreController cp, string appfolder, ActionFile file,
-                        ActionPackEditorForm.AdditionalNames func, Icon ic)
+                        System.Func<string, List<string>> func, Icon ic , ToolTip toolTip)
         { }
 
+        public virtual string ID() { return ""; }
         public virtual void UpdateProgramList(string[] proglist) { }
 
         public virtual new void Dispose()
@@ -52,5 +43,4 @@ namespace ActionLanguage
             RefreshEvent?.Invoke();
         }
     }
-
 }

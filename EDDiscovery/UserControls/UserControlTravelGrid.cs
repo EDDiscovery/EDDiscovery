@@ -412,7 +412,7 @@ namespace EDDiscovery.UserControls
 
             string rowIdx;
 
-            if (discoveryform.settings.OrderRowsInverted)
+            if (EDDConfig.Instance.OrderRowsInverted)
                 rowIdx = he.Indexno.ToString();            // oldest has the highest index
             else
                 rowIdx = (totalentries - he.Indexno + 1).ToString();
@@ -847,7 +847,7 @@ namespace EDDiscovery.UserControls
         private void runActionsOnThisEntryToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (rightclicksystem != null)
-                discoveryform.ActionRunOnEntry(rightclicksystem, "UserRightClick");
+                discoveryform.ActionRunOnEntry(rightclicksystem, Actions.ActionEventEDList.UserRightClick(rightclicksystem));
         }
 
         private void setNoteToolStripMenuItem_Click(object sender, EventArgs e)

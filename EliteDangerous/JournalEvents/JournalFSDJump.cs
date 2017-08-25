@@ -22,38 +22,87 @@ using System.Text;
 
 namespace EliteDangerousCore.JournalEvents
 {
-//    When written: when jumping from one star system to another
+    /*
+     When written: when jumping from one star system to another
+Parameters:
+ StarSystem: name of destination starsystem
+ StarPos: star position, as a Json array [x, y, z], in light years
+ Body: star’s body name
+ JumpDist: distance jumped
+ FuelUsed
+ FuelLevel
+ BoostUsed: whether FSD boost was used
+ SystemFaction: system controlling faction
+ FactionState
+ SystemAllegiance
+ SystemEconomy
+ SystemGovernment
+ SystemSecurity
+ Population 
+10
+ Factions: an array of info for the local minor factions
+o Name
+o FactionState
+o Government
+o Influence
+o PendingStates: array (if any) with State name and Trend value
+o RecovingStates: array (if any)with State name and Trend value
+If the player is pledged to a Power in Powerplay, and the star system is involved in powerplay,
+ Powers: a json array with the names of any powers contesting the system, or the name of
+the controlling power
+ PowerplayState: the system state – one of ("InPrepareRadius", "Prepared", "Exploited",
+"Contested", "Controlled", "Turmoil", "HomeSystem")
+Example:
+{ "timestamp":"2017-02-27T15:37:47Z", "event":"FSDJump", "StarSystem":"HR 3316", "StarPos":[100.719,19.813,-51.125],
+"SystemAllegiance":"Independent", "SystemEconomy":"$economy_Colony;", "SystemEconomy_Localised":"Colony",
+"SystemGovernment":"$government_Democracy;", "SystemGovernment_Localised":"Democracy",
+"SystemSecurity":"$SYSTEM_SECURITY_medium;", "SystemSecurity_Localised":"Medium Security", "JumpDist":20.326,
+"FuelUsed":1.260775, "FuelLevel":12.872868, "Factions":[ { "Name":"Independent HR 3316 Liberals",
+"FactionState":"Outbreak", "Government":"Democracy", "Influence":0.550000 }, { "Name":"Jet Natural Partners",
+"FactionState":"None", "Government":"Corporate", "Influence":0.150000 }, { "Name":"Camorra of HR 3316",
+"FactionState":"None", "Government":"Anarchy", "Influence":0.090000 }, { "Name":"HR 3316 Nobles",
+"FactionState":"None", "Government":"Feudal", "Influence":0.210000 } ], "SystemFaction":"Independent HR 3316
+Liberals", "FactionState":"Outbreak" }
+Examples of trending states:
+... "Factions":[ { "Name":"Inupiates Patrons of Law", "FactionState":"Lockdown", "Government":"Patronage",
+"Influence":0.550000, "Allegiance":"Empire", "PendingStates":[ { "State":"Boom", "Trend":0 }, { "State":"CivilUnrest",
+"Trend":0 } ] }, ...
+... "Factions":[ { "Name":"IV Comae Berenices Purple Creative", "FactionState":"CivilWar", "Government":"Corporat
+     * */
 
-//{ "timestamp":"2017-05-01T08:24:52Z", "event":"FSDJump",
-//"StarSystem":"Lauma", "StarPos":[16.813,-43.813,38.594],          -- BASE CLASS
 
-//"SystemAllegiance":"Federation",      -- Allegiance
-//"SystemEconomy":"$economy_Refinery;", "SystemEconomy_Localised":"Refinery",       --ECONOMY/LOC
-//"SystemGovernment":"$government_Corporate;", "SystemGovernment_Localised":"Corporate",         -- GOVERNMENT/LOC  
-//"SystemSecurity":"$SYSTEM_SECURITY_medium;", "SystemSecurity_Localised":"Medium Security", // SECURITY
-// "JumpDist":6.237, //JUMPDIST
-//"FuelUsed":0.129626, "FuelLevel":31.685003,   // FUELx
+    //    When written: when jumping from one star system to another
 
-//"Factions":[ { "Name":"Workers
-//of Lauma Labour", "FactionState":"Boom", "Government":"Democracy",
-//"Influence":0.181000, "Allegiance":"Federation" }, { "Name":"Nerthus
-//Citizens of Tradition", "FactionState":"Boom", "Government":"Patronage",
-//"Influence":0.118000, "Allegiance":"Empire" }, { "Name":"HDS 3215 Defence
-//Party", "FactionState":"Boom", "Government":"Dictatorship",
-//"Influence":0.109000, "Allegiance":"Empire" }, { "Name":"Lauma
-//Nationalists", "FactionState":"Boom", "Government":"Dictatorship",
-//"Influence":0.056000, "Allegiance":"Independent" }, { "Name":"Gebel Empire
-//League", "FactionState":"Boom", "Government":"Patronage",
-//"Influence":0.109000, "Allegiance":"Empire" }, { "Name":"Silver Legal Ltd",
-//"FactionState":"None", "Government":"Corporate", "Influence":0.380000,
-//"Allegiance":"Federation" }, { "Name":"Lauma Jet Cartel",
-//"FactionState":"None", "Government":"Anarchy", "Influence":0.047000,
-//"Allegiance":"Independent" } ],
+    //{ "timestamp":"2017-05-01T08:24:52Z", "event":"FSDJump",
+    //"StarSystem":"Lauma", "StarPos":[16.813,-43.813,38.594],          -- BASE CLASS
 
-//"SystemFaction":"Silver Legal Ltd" }
-//If the player is pledged to a Power in Powerplay, and the star system is involved in powerplay,
-//•	Powers: a json array with the names of any powers contesting the system, or the name of the controlling power
-//•	PowerplayState: the system state – one of("InPrepareRadius", "Prepared", "Exploited", "Contested", "Controlled", "Turmoil", "HomeSystem")
+    //"SystemAllegiance":"Federation",      -- Allegiance
+    //"SystemEconomy":"$economy_Refinery;", "SystemEconomy_Localised":"Refinery",       --ECONOMY/LOC
+    //"SystemGovernment":"$government_Corporate;", "SystemGovernment_Localised":"Corporate",         -- GOVERNMENT/LOC  
+    //"SystemSecurity":"$SYSTEM_SECURITY_medium;", "SystemSecurity_Localised":"Medium Security", // SECURITY
+    // "JumpDist":6.237, //JUMPDIST
+    //"FuelUsed":0.129626, "FuelLevel":31.685003,   // FUELx
+
+    //"Factions":[ { "Name":"Workers
+    //of Lauma Labour", "FactionState":"Boom", "Government":"Democracy",
+    //"Influence":0.181000, "Allegiance":"Federation" }, { "Name":"Nerthus
+    //Citizens of Tradition", "FactionState":"Boom", "Government":"Patronage",
+    //"Influence":0.118000, "Allegiance":"Empire" }, { "Name":"HDS 3215 Defence
+    //Party", "FactionState":"Boom", "Government":"Dictatorship",
+    //"Influence":0.109000, "Allegiance":"Empire" }, { "Name":"Lauma
+    //Nationalists", "FactionState":"Boom", "Government":"Dictatorship",
+    //"Influence":0.056000, "Allegiance":"Independent" }, { "Name":"Gebel Empire
+    //League", "FactionState":"Boom", "Government":"Patronage",
+    //"Influence":0.109000, "Allegiance":"Empire" }, { "Name":"Silver Legal Ltd",
+    //"FactionState":"None", "Government":"Corporate", "Influence":0.380000,
+    //"Allegiance":"Federation" }, { "Name":"Lauma Jet Cartel",
+    //"FactionState":"None", "Government":"Anarchy", "Influence":0.047000,
+    //"Allegiance":"Independent" } ],
+
+    //"SystemFaction":"Silver Legal Ltd" }
+    //If the player is pledged to a Power in Powerplay, and the star system is involved in powerplay,
+    //•	Powers: a json array with the names of any powers contesting the system, or the name of the controlling power
+    //•	PowerplayState: the system state – one of("InPrepareRadius", "Prepared", "Exploited", "Contested", "Controlled", "Turmoil", "HomeSystem")
 
 
     [JournalEntryType(JournalTypeEnum.FSDJump)]
@@ -72,6 +121,7 @@ namespace EliteDangerousCore.JournalEvents
             Government_Localised = JSONObjectExtensions.GetMultiStringDef(evt, new string[] { "", "SystemGovernment_Localised" });
             Security = JSONObjectExtensions.GetMultiStringDef(evt, new string[] { "", "SystemSecurity" });
             Security_Localised = JSONObjectExtensions.GetMultiStringDef(evt, new string[] { "", "SystemSecurity_Localised" });
+            Population = evt["Population"].LongNull();
             JumpDist = evt["JumpDist"].Double();
             FuelUsed = evt["FuelUsed"].Double();
             FuelLevel = evt["FuelLevel"].Double();
@@ -125,6 +175,7 @@ namespace EliteDangerousCore.JournalEvents
         public string Government_Localised { get; set; }
         public string Security { get; set; }
         public string Security_Localised { get; set; }
+        public long? Population { get; set; }
         public string PowerplayState { get; set; }
         public string[] Powers { get; set; }
         public FactionInformation[] Factions;
@@ -147,7 +198,7 @@ namespace EliteDangerousCore.JournalEvents
                 econ = "";
 
             info += " ";
-            info += BaseUtils.FieldBuilder.Build("Faction:", Faction, "State:", FactionState, "Allegiance:", Allegiance, "Economy:", econ);
+            info += BaseUtils.FieldBuilder.Build("Faction:", Faction, "State:", FactionState, "Allegiance:", Allegiance, "Economy:", econ, "Population:", Population);
             detailed = "";
 
             if ( Factions != null )

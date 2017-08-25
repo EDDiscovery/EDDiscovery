@@ -69,13 +69,12 @@ namespace ExtendedControls
             textbox = new TextBox();
             textbox.BorderStyle = BorderStyle.FixedSingle;
 
+            // Enter and Leave is handled by this wrapper control itself, since when we leave the textbox, we leave this
             textbox.Click += Textbox_Click;
             textbox.DoubleClick += Textbox_DoubleClick;
-            textbox.Enter += Textbox_Enter;
             textbox.KeyUp += Textbox_KeyUp;
             textbox.KeyDown += Textbox_KeyDown;
             textbox.KeyPress += Textbox_KeyPress;
-            textbox.Leave += Textbox_Leave;
             textbox.MouseClick += Textbox_MouseClick;
             textbox.MouseDoubleClick += Textbox_MouseDoubleClick;
             textbox.MouseUp += Textbox_MouseUp;
@@ -294,16 +293,6 @@ namespace ExtendedControls
         private void Textbox_Click(object sender, EventArgs e)
         {
             base.OnClick(e);
-        }
-
-        private void Textbox_Leave(object sender, EventArgs e)
-        {
-            base.OnLeave(e);
-        }
-
-        private void Textbox_Enter(object sender, EventArgs e)
-        {
-            base.OnEnter(e);
         }
 
         private void Textbox_MouseDoubleClick(object sender, MouseEventArgs e)

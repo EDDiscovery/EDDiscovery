@@ -28,19 +28,19 @@ namespace ActionLanguage
                                 If, Else, ElseIf, Do, While, Loop // Force execute
                                 };
 
-        public struct Commands
+        public struct CommandEntry
         {
-            public Commands(string s, Type t, ActionType a) { name = s; type = t; at = a; }
+            public CommandEntry(string s, Type t, ActionType a) { name = s; type = t; at = a; }
             public string name;
             public Type type;
             public ActionType at;
         }
 
-        public static Dictionary<string, Commands> CommandList = new Dictionary<string, Commands>();
+        private static Dictionary<string, CommandEntry> CommandList = new Dictionary<string, CommandEntry>();
 
         public static void AddCommand(string s, Type t, ActionType a)
         {
-            CommandList.Add(s.ToLower(), new Commands(s, t, a));
+            CommandList[s.ToLower()] = new CommandEntry(s, t, a);       // = so you can override them
         }
 
         private string actionname;
@@ -88,7 +88,7 @@ namespace ActionLanguage
         {
             string[] list = new string[CommandList.Count];
             int i = 0;
-            foreach( Commands v in CommandList.Values.ToList())
+            foreach( CommandEntry v in CommandList.Values.ToList())
                 list[i++] = v.name;
             return list;
         }
@@ -101,7 +101,7 @@ namespace ActionLanguage
 
             if ( CommandList.ContainsKey(nname))
             {
-                Commands c = CommandList[nname];
+                CommandEntry c = CommandList[nname];
 
                 ActionBase a = (ActionBase)Activator.CreateInstance(c.type, new Object[] { });
                 a.actionname = c.name;

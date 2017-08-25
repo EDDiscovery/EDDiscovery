@@ -31,6 +31,7 @@ namespace EliteDangerousCore
     {
         Unknown = 0,
 
+        AfmuRepairs = 3,
         ApproachSettlement = 5,
         Bounty = 10,
         BuyAmmo = 20,
@@ -116,6 +117,7 @@ namespace EliteDangerousCore
         ModuleStore = 525,
         ModuleSwap = 530,
         Music = 535,
+        NavBeaconScan = 538,
         NewCommander = 540,
         Passengers = 545,
         PayFines = 550,
@@ -297,12 +299,26 @@ namespace EliteDangerousCore
         private int Synced;                     // sync flags
 
         public DateTime EventTimeLocal { get { return EventTimeUTC.ToLocalTime(); } }
-        
+
         public bool SyncedEDSM { get { return (Synced & (int)SyncFlags.EDSM) != 0; } }
         public bool SyncedEDDN { get { return (Synced & (int)SyncFlags.EDDN) != 0; } }
-        public bool SyncedEGO { get { return (Synced & (int)SyncFlags.EGO) != 0;} }
+        public bool SyncedEGO { get { return (Synced & (int)SyncFlags.EGO) != 0; } }
         public bool StartMarker { get { return (Synced & (int)SyncFlags.StartMarker) != 0; } }
         public bool StopMarker { get { return (Synced & (int)SyncFlags.StopMarker) != 0; } }
+        private bool? beta;                        // True if journal entry is from beta
+        public virtual bool Beta
+        {
+            get
+            {
+                if (beta == null)
+                {
+                    TravelLogUnit tlu = TravelLogUnit.Get(TLUId);
+                    beta = tlu?.Beta ?? false;
+                }
+
+                return beta ?? false;
+            }
+        }
         #endregion
 
         #region Static properties and fields
@@ -617,7 +633,7 @@ namespace EliteDangerousCore
             }
         }
 
-        public static JournalEDDCommodityPrices AddEDDCommodityPrices(int cmdrid, DateTime dt, string station , string faction , JArray jcommodities)     // add item, return journal ID
+        public static JournalEDDCommodityPrices AddEDDCommodityPrices(int cmdrid, DateTime dt, string station, string faction, JArray jcommodities)     // add item, return journal ID
         {
             JObject jo;
             using (SQLiteConnectionUser cn = new SQLiteConnectionUser(utc: true))
@@ -707,6 +723,8 @@ namespace EliteDangerousCore
 
         static public List<JournalEntry> Get(string eventtype, SQLiteConnectionUser cn, DbTransaction tn = null)
         {
+            Dictionary<long, TravelLogUnit> tlus = TravelLogUnit.GetAll().ToDictionary(t => t.id);
+
             using (DbCommand cmd = cn.CreateCommand("select * from JournalEntries where EventType=@ev", tn))
             {
                 cmd.AddParameterWithValue("@ev", eventtype);
@@ -717,7 +735,9 @@ namespace EliteDangerousCore
 
                     while (reader.Read())
                     {
-                        entries.Add(CreateJournalEntry(reader));
+                        JournalEntry je = CreateJournalEntry(reader);
+                        je.beta = tlus.ContainsKey(je.TLUId) ? tlus[je.TLUId].Beta : false;
+                        entries.Add(je);
                     }
 
                     return entries;
@@ -727,6 +747,8 @@ namespace EliteDangerousCore
 
         static public List<JournalEntry> GetAll(int commander = -999)
         {
+            Dictionary<long, TravelLogUnit> tlus = TravelLogUnit.GetAll().ToDictionary(t => t.id);
+
             List<JournalEntry> list = new List<JournalEntry>();
 
             using (SQLiteConnectionUser cn = new SQLiteConnectionUser(utc: true))
@@ -746,6 +768,7 @@ namespace EliteDangerousCore
                     foreach (DataRow dr in ds.Tables[0].Rows)
                     {
                         JournalEntry sys = JournalEntry.CreateJournalEntry(dr);
+                        sys.beta = tlus.ContainsKey(sys.TLUId) ? tlus[sys.TLUId].Beta : false;
                         list.Add(sys);
                     }
 
@@ -757,6 +780,8 @@ namespace EliteDangerousCore
 
         public static List<JournalEntry> GetByEventType(JournalTypeEnum eventtype, int commanderid, DateTime start, DateTime stop)
         {
+            Dictionary<long, TravelLogUnit> tlus = TravelLogUnit.GetAll().ToDictionary(t => t.id);
+
             List<JournalEntry> vsc = new List<JournalEntry>();
 
             using (SQLiteConnectionUser cn = new SQLiteConnectionUser(utc: true))
@@ -771,7 +796,9 @@ namespace EliteDangerousCore
                     {
                         while (reader.Read())
                         {
-                            vsc.Add(JournalEntry.CreateJournalEntry(reader));
+                            JournalEntry je = CreateJournalEntry(reader);
+                            je.beta = tlus.ContainsKey(je.TLUId) ? tlus[je.TLUId].Beta : false;
+                            vsc.Add(je);
                         }
                     }
                 }
@@ -783,6 +810,7 @@ namespace EliteDangerousCore
 
         public static List<JournalEntry> GetAllByTLU(long tluid)
         {
+            TravelLogUnit tlu = TravelLogUnit.Get(tluid);
             List<JournalEntry> vsc = new List<JournalEntry>();
 
             using (SQLiteConnectionUser cn = new SQLiteConnectionUser(utc: true))
@@ -794,7 +822,9 @@ namespace EliteDangerousCore
                     {
                         while (reader.Read())
                         {
-                            vsc.Add(JournalEntry.CreateJournalEntry(reader));
+                            JournalEntry je = CreateJournalEntry(reader);
+                            je.beta = tlu?.Beta ?? false;
+                            vsc.Add(je);
                         }
                     }
                 }
@@ -1043,7 +1073,7 @@ namespace EliteDangerousCore
         }
 
         #endregion
-        
+
         #region Misc
 
         static public JournalTypeEnum JournalString2Type(string str)
@@ -1076,7 +1106,7 @@ namespace EliteDangerousCore
             return true;
         }
 
-        static public List<string> GetListOfEventsWithOptMethod(bool towords, string method = null, string method2 = null )
+        static public List<string> GetListOfEventsWithOptMethod(bool towords, string method = null, string method2 = null)
         {
             List<string> ret = new List<string>();
 
@@ -1107,6 +1137,10 @@ namespace EliteDangerousCore
 
             return ret;
         }
+
+        public bool IsUIEvent { get { return IsUIEventType(this); } }
+
+        static public bool IsUIEventType(JournalEntry j) { return j is JournalMusic; } 
 
         #endregion
 

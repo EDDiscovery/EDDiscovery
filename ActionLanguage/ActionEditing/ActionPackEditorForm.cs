@@ -29,93 +29,93 @@ namespace ActionLanguage
 {
     public partial class ActionPackEditorForm : ExtendedControls.DraggableForm
     {
-        ActionFile actionfile;
-        List<Tuple<string, string>> events;
-        List<string> grouptypenames;
-        Dictionary<string, List<string>> groupeventlist;
+        ActionFile actionfile;      // file we are editing
+        string applicationfolder;   // folder where the file is
+        ActionCoreController actioncorecontroller;  // need this for some access to data
+        List<ActionEvent> events;   // list of events, UIs
+        List<string> grouptypenames;    // groupnames extracted from events
+        Dictionary<string, List<string>> groupeventlist;    // events per group name, extracted from events
         string initialtitle;
 
         const int panelxmargin = 3;
         const int panelymargin = 1;
-        const int conditionhoff = 28;
 
-        class Group
+        class Group     // this top level form has a list of groups, each containing a grouptype CBC, a delete button, and a UC containing its controls
         {
             public Panel panel;
             public ExtendedControls.ComboBoxCustom grouptype;
             public ExtendedControls.ButtonExt delete;
-            public ActionPackEditBase usercontrol;
+            public ActionPackEditBase usercontrol;              
         }
 
-        List<Group> groups;
+        List<Group> groups; // the groups
 
-        ActionCoreController actioncorecontroller;
-        string applicationfolder;
+        public Func<string, List<string>> AdditionalNames;                          // Call back when we need more variable names, by event string
+        public Func<string, Condition, ActionPackEditBase> CreateActionPackEdit;    // must set, given a group and condition, what editor do you want? change the condition if you need to
+
+        #region Init
 
         public ActionPackEditorForm() 
         {
             InitializeComponent();
         }
 
-        public delegate List<string> AdditionalNames(string ev);
-        public event AdditionalNames onAdditionalNames;             // must set this, provide extra names
-        public Func<string, Condition, ActionPackEditBase> CreateActionPackEdit;    // must set, given a group and condition, what editor do you want?
-
-        public void Init(string t, Icon ic, ActionCoreController cp, string appfolder, ActionFile file, List<Tuple<string, string>> ev)
+        public void Init(string t, Icon ic, ActionCoreController cp, string appfolder, ActionFile file, List<ActionEvent> evlist)       // here, change to using events
         {
             this.Icon = ic;
             actioncorecontroller = cp;
             applicationfolder = appfolder;
             actionfile = file;
-            events = ev;
+            events = evlist;
 
-            grouptypenames = (from e in events select e.Item2).ToList().Distinct().ToList();
+            grouptypenames = (from e in events select e.uiclass).ToList().Distinct().ToList();      // here we extract from events relevant data
             groupeventlist = new Dictionary<string, List<string>>();
             foreach (string s in grouptypenames)
-                groupeventlist.Add(s, (from e in events where e.Item2 == s select e.Item1).ToList());
+                groupeventlist.Add(s, (from e in events where e.uiclass == s select e.triggername).ToList());
 
             bool winborder = ExtendedControls.ThemeableFormsInstance.Instance.ApplyToForm(this, SystemFonts.DefaultFont);
             statusStripCustom.Visible = panelTop.Visible = panelTop.Enabled = !winborder;
             initialtitle = this.Text = label_index.Text = t;
 
-            LoadConditions();
-        }
-
-        private void LoadConditions()
-        {
-            ConditionLists c = actionfile.actioneventlist;
+            ConditionLists clist = actionfile.actioneventlist;          // now load the initial conditions from the action file
             groups = new List<Group>();
 
-            for (int i = 0; i < c.Count; i++)
+            for (int i = 0; i < clist.Count; i++)       // for ever event, find the condition, create the group, theme
             {
-                Condition cd = c.Get(i);
+                Condition cd = clist.Get(i);
                 Group g = CreateGroup(cd);
                 groups.Add(g);
                 ExtendedControls.ThemeableFormsInstance.Instance.ApplyToControls(g.panel, SystemFonts.DefaultFont);
             }
 
-            foreach (Group g in groups)
+            foreach (Group g in groups)     // add the groups to the vscroller
                 panelVScroll.Controls.Add(g.panel);
 
-            PositionGroups(true);
+            PositionGroups(true);       //repositions all items
+
             this.Text = label_index.Text = initialtitle + " (" + groups.Count.ToString() + " conditions)";
 
             Usercontrol_RefreshEvent();
         }
 
-        private Group CreateGroup(Condition cd)
+        #endregion
+
+        #region Group Making and positions
+
+        private Group CreateGroup(Condition cd)     // create a group, create the UC under it if required
         {
             Group g = new Group();
 
             g.panel = new Panel();
-            //g.panel.BackColor = Color.Red;
+            //g.panel.BackColor = Color.Red; // useful for debug
             g.panel.SuspendLayout();
 
             g.grouptype = new ExtendedControls.ComboBoxCustom();
             g.grouptype.Items.AddRange(grouptypenames);
             g.grouptype.Location = new Point(panelxmargin, panelymargin);
-            g.grouptype.Size = new Size(100, 24);
+            g.grouptype.Size = new Size(80, 24);
             g.grouptype.DropDownHeight = 400;
+            g.grouptype.SetTipDynamically(toolTip, "Select event class");
 
             if (cd != null)
             {
@@ -125,6 +125,8 @@ namespace ActionLanguage
 
                 CreateUserControl(g, cd);
             }
+            else
+                g.panel.Height = 28;    // no UG yet to set size, size it appropriately
 
             g.grouptype.SelectedIndexChanged += Grouptype_SelectedIndexChanged;
             g.grouptype.Tag = g;
@@ -135,6 +137,7 @@ namespace ActionLanguage
             g.delete.Size = new Size(24, 24);
             g.delete.Tag = g;
             g.delete.Click += Delete_Click;
+            toolTip.SetToolTip(g.delete, "Delete this event");
 
             g.panel.Controls.Add(g.delete);
 
@@ -142,7 +145,7 @@ namespace ActionLanguage
             return g;
         }
 
-        private void CreateUserControl(Group g, Condition c)
+        private void CreateUserControl(Group g, Condition inputcond)        // create the UC under the group.  Condition will be either AlwaysTrue if new, or stored condition from actionprogram
         {
             if (g.usercontrol != null)
             {
@@ -150,18 +153,24 @@ namespace ActionLanguage
                 g.usercontrol.Dispose();
             }
 
-            g.usercontrol = CreateActionPackEdit(g.grouptype.Text, c);      // sets the user control Height
-            g.usercontrol.Init(c, groupeventlist[g.grouptype.Text], actioncorecontroller, applicationfolder, actionfile, onAdditionalNames , this.Icon);
+            Condition cd = new Condition(inputcond);                       // make a copy for editing purposes.
+
+            g.usercontrol = CreateActionPackEdit(g.grouptype.Text, cd); // make the user control, based on text/cond.  Allow cd to be altered
+            
+            // init, with the copy of inputcond so they can edit it without commiting change
+            g.usercontrol.Init(cd, groupeventlist[g.grouptype.Text], actioncorecontroller, applicationfolder, actionfile, AdditionalNames , 
+                                    this.Icon, toolTip);
 
             ExtendedControls.ThemeableFormsInstance.Instance.ApplyToControls(g.usercontrol, SystemFonts.DefaultFont);
 
-            g.usercontrol.Location = new Point(panelxmargin + 108, 0);
+            g.usercontrol.Location = new Point(g.grouptype.Right+16, 0);
             g.usercontrol.Size = new Size(5000, g.usercontrol.Height);
 
             g.usercontrol.RefreshEvent += Usercontrol_RefreshEvent;
 
             g.panel.Height = g.usercontrol.Height;
             g.panel.Controls.Add(g.usercontrol);
+            //System.Diagnostics.Debug.WriteLine(g.GetHashCode() + " " + g.panel.Height);
         }
 
         private void PositionGroups(bool calcminsize)
@@ -182,6 +191,7 @@ namespace ActionLanguage
                 if (g.usercontrol != null)
                     g.usercontrol.Width = g.panel.Size.Width - 4 - 30 - g.usercontrol.Left;
 
+                //System.Diagnostics.Debug.WriteLine(g.GetHashCode() + " " + i + " " + g.panel.Height);
                 y += g.panel.Height + 2;
             }
 
@@ -203,9 +213,11 @@ namespace ActionLanguage
 
         private string GetGroupName(string a)
         {
-            Tuple<string, string> p = events.Find(x => x.Item1 == a);
-            return (p == null) ? "Misc" : p.Item2;
+            ActionEvent p = events.Find(x => x.triggername == a);
+            return (p == null) ? "Misc" : p.uiclass;
         }
+
+        #endregion
 
         private void Usercontrol_RefreshEvent()
         {
@@ -220,56 +232,7 @@ namespace ActionLanguage
                     g.usercontrol.UpdateProgramList(actionfile.actionprogramlist.GetActionProgramList());
             }
         }
-
         
-        private void Delete_Click(object sender, EventArgs e)
-        {
-            foreach (Group g in groups)
-            {
-                if ( Object.ReferenceEquals(g, ((Control)sender).Tag))
-                {
-                    g.usercontrol.Dispose();
-                    g.panel.Controls.Clear();
-                    g.grouptype.Dispose();
-                    g.delete.Dispose();
-                    g.panel.Dispose();
-                    groups.Remove(g);
-                    PositionGroups(false);
-                    return;
-                }
-            }
-        }
-
-        ConditionLists result;
-        private string Check()
-        {
-            string errorlist = "";
-            result = new ConditionLists();
-
-            foreach (Group g in groups)
-            {
-                if (g.usercontrol == null)
-                {
-                    errorlist += "Ignored group with empty name" + Environment.NewLine;
-                }
-                else
-                {
-                    Condition c = g.usercontrol.cd;
-
-                    if (c.eventname.Length == 0)
-                        errorlist += "Event does not have an event name defined" + Environment.NewLine;
-                    else if (c.action.Equals("New") || c.action.Length == 0)        // actions, but not selected one..
-                        errorlist += "Event " + g.usercontrol.ID() + " does not have an action program defined" + Environment.NewLine;
-                    else if (c.fields == null || c.fields.Count == 0)
-                        errorlist += "Event " + g.usercontrol.ID() + " does not have a condition" + Environment.NewLine;
-                    else
-                        result.Add(g.usercontrol.cd);
-                }
-            }
-
-            return errorlist;
-        }
-
         #region UI
 
         private void buttonMore_Click(object sender, EventArgs e)
@@ -283,12 +246,29 @@ namespace ActionLanguage
             panelVScroll.ToEnd();       // tell it to scroll to end
         }
 
+        private void Delete_Click(object sender, EventArgs e)
+        {
+            foreach (Group g in groups)
+            {
+                if (Object.ReferenceEquals(g, ((Control)sender).Tag))
+                {
+                    g.usercontrol.Dispose();
+                    g.panel.Controls.Clear();
+                    g.grouptype.Dispose();
+                    g.delete.Dispose();
+                    g.panel.Dispose();
+                    groups.Remove(g);
+                    PositionGroups(false);
+                    return;
+                }
+            }
+        }
+
         private void Grouptype_SelectedIndexChanged(object sender, EventArgs e)
         {
             ExtendedControls.ComboBoxCustom b = sender as ExtendedControls.ComboBoxCustom;
             Group g = (Group)b.Tag;
-            Condition c = new Condition("", "", "", new List<ConditionEntry>() { new ConditionEntry("Condition", ConditionEntry.MatchType.AlwaysTrue, "") });
-            CreateUserControl(g, c);
+            CreateUserControl(g, Condition.AlwaysTrue());
         }
 
         private void buttonCancel_Click(object sender, EventArgs e)
@@ -326,6 +306,41 @@ namespace ActionLanguage
             Close();
         }
 
+        ConditionLists result;
+        private string Check()
+        {
+            string errorlist = "";
+            result = new ConditionLists();
+
+            int index = 1;
+            foreach (Group g in groups)
+            {
+                string prefix = "Event " + index.ToStringInvariant() + ": ";
+
+                if (g.usercontrol == null)
+                {
+                    errorlist += prefix + "Ignored group with empty name" + Environment.NewLine;
+                }
+                else
+                {
+                    Condition c = g.usercontrol.cd;
+
+                    if (c.eventname.Length == 0)
+                        errorlist += prefix + "Event " + g.usercontrol.ID() + " does not have an event name defined" + Environment.NewLine;
+                    else if (c.action.Equals("New") || c.action.Length == 0)        // actions, but not selected one..
+                        errorlist += prefix + "Event " + g.usercontrol.ID() + " does not have an action program defined" + Environment.NewLine;
+                    else if (c.fields == null || c.fields.Count == 0)
+                        errorlist += prefix + "Event " + g.usercontrol.ID() + " does not have a condition" + Environment.NewLine;
+                    else
+                        result.Add(g.usercontrol.cd);
+                }
+
+                index++;
+            }
+
+            return errorlist;
+        }
+
         private void comboBoxCustomEditProg_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (comboBoxCustomEditProg.Enabled)
@@ -346,7 +361,8 @@ namespace ActionLanguage
                     apf.EditProgram += EditProgram;
 
                     apf.Init("Action program " , this.Icon, actioncorecontroller, applicationfolder,
-                                onAdditionalNames(""), actionfile.name, p, 
+                                AdditionalNames(""),        // no event associated, so just return the globals in effect
+                                actionfile.name, p, 
                                 actionfile.actionprogramlist.GetActionProgramList(), "", ModifierKeys.HasFlag(Keys.Shift));
 
                     DialogResult res = apf.ShowDialog();

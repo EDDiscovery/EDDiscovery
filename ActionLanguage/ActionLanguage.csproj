@@ -52,6 +52,9 @@
     <Compile Include="ActionEditing\ActionPackEditCondition.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="ActionEditing\ActionPackEditEventVoice.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="ActionEditing\ActionPackEditProgram.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -71,6 +74,7 @@
     <Compile Include="ActionsCoreCmds\ActionUserInteraction.cs" />
     <Compile Include="ActionsCore\ActionBase.cs" />
     <Compile Include="ActionsCore\ActionCoreController.cs" />
+    <Compile Include="ActionsCore\ActionEvent.cs" />
     <Compile Include="ActionsCore\ActionFile.cs" />
     <Compile Include="ActionsCore\ActionFileList.cs" />
     <Compile Include="ActionEditing\ActionPackEditorForm.cs">

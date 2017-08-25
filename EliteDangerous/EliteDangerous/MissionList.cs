@@ -25,11 +25,11 @@ namespace EliteDangerousCore
     {
         public JournalMissionAccepted Mission { get; private set; }                  // never null
         public JournalMissionCompleted Completed { get; private set; }               // null until complete
-        public enum StateTypes { InProgress, Completed, Abandoned, Failed };
+        public enum StateTypes { InProgress, Completed, Abandoned, Failed, Redirected };
         public StateTypes State { get; private set; }     
 
-        public bool InProgress { get { return State == StateTypes.InProgress; } }
-        public bool InProgressDateTime(DateTime compare) { return State == StateTypes.InProgress && DateTime.Compare(compare, Mission.Expiry)<0; }
+        public bool InProgress { get { return (State == StateTypes.InProgress || State == StateTypes.Redirected); } }
+        public bool InProgressDateTime(DateTime compare) { return InProgress && DateTime.Compare(compare, Mission.Expiry)<0; }
 
         public string OriginatingSystem { get { return sys.name; } }
         public string OriginatingStation { get { return body; } }
@@ -132,6 +132,7 @@ namespace EliteDangerousCore
         }
         public void Redirected(JournalMissionRedirected m)
         {
+            Missions[Key(m)] = new MissionState(Missions[Key(m)], MissionState.StateTypes.Redirected); // copy previous mission state, add failed
             // Todo  update destination....
             //Missions[Key(m)] = new MissionState(Missions[Key(m)], MissionState.StateTypes.Failed); // copy previous mission state, add failed
         }
@@ -141,7 +142,7 @@ namespace EliteDangerousCore
         public static string Key(JournalMissionFailed m) { return m.MissionId.ToStringInvariant() + ":" + m.Name; }
         public static string Key(JournalMissionCompleted m) { return m.MissionId.ToStringInvariant() + ":" + m.Name; }
         public static string Key(JournalMissionAccepted m) { return m.MissionId.ToStringInvariant() + ":" + m.Name; }
-        public static string Key(JournalMissionRedirected m) { return m.MissionId.ToStringInvariant() + ":" + ""; }  // TODO  fix name later  with new ED 2.4 beta?
+        public static string Key(JournalMissionRedirected m) { return m.MissionId.ToStringInvariant() + ":" + m.Name; }  
         public static string Key(JournalMissionAbandoned m) { return m.MissionId.ToStringInvariant() + ":" + m.Name; }
     }
 

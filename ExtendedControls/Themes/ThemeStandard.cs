@@ -99,7 +99,7 @@ namespace ExtendedControls
                 name = n;
                 colors = new Dictionary<CI, Color>();
                 colors.Add(CI.form, SystemColors.Menu);
-                colors.Add(CI.button_back, SystemColors.Control); colors.Add(CI.button_text, SystemColors.ControlText); colors.Add(CI.button_border, SystemColors.Menu);
+                colors.Add(CI.button_back, SystemColors.Control); colors.Add(CI.button_text, SystemColors.ControlText); colors.Add(CI.button_border, SystemColors.ActiveBorder);
                 colors.Add(CI.grid_borderback, SystemColors.Menu); colors.Add(CI.grid_bordertext, SystemColors.MenuText);
                 colors.Add(CI.grid_cellbackground, SystemColors.ControlLightLight); colors.Add(CI.grid_celltext, SystemColors.MenuText); colors.Add(CI.grid_borderlines, SystemColors.ControlDark);
                 colors.Add(CI.grid_sliderback, SystemColors.ControlLight); colors.Add(CI.grid_scrollarrow, SystemColors.MenuText); colors.Add(CI.grid_scrollbutton, SystemColors.Control);
@@ -401,7 +401,6 @@ namespace ExtendedControls
                 ctrl.BorderStyle = BorderStyle.None;
                 ctrl.AutoSize = true;
 
-                //TBD
                 if (currentsettings.textboxborderstyle.Equals(TextboxBorderStyles[0]))
                     ctrl.AutoSize = false;                                                 // with no border, the autosize clips the bottom of chars..
                 else if (currentsettings.textboxborderstyle.Equals(TextboxBorderStyles[1]))
@@ -451,7 +450,7 @@ namespace ExtendedControls
                         colormap.OldColor = Color.FromArgb(134, 134, 134);                                        // gray is defined as the forecolour to use in system mode
                         colormap.NewColor = ctrl.ForeColor;
 
-                        ctrl.SetDrawnBitmapRemapTable(new System.Drawing.Imaging.ColorMap[] { colormap } );     // used ButtonDisabledScaling note!
+                        ctrl.SetDrawnBitmapRemapTable(new System.Drawing.Imaging.ColorMap[] { colormap });     // used ButtonDisabledScaling note!
                         //System.Diagnostics.Debug.WriteLine("Image button " + ctrl.Name);
                     }
 
@@ -522,19 +521,12 @@ namespace ExtendedControls
                 ctrl.ForeColor = currentsettings.colors[Settings.CI.button_text];
                 ctrl.SelectionMarkColor = ctrl.ForeColor;
 
-                if (currentsettings.buttonstyle.Equals(ButtonStyles[0])) // system
-                {
-                    ctrl.FlatStyle = FlatStyle.System;
-                }
-                else
-                {
-                    ctrl.BackColor = ctrl.SelectionBackColor = currentsettings.colors[Settings.CI.button_back];
-                    ctrl.BorderColor = currentsettings.colors[Settings.CI.button_border];
-                    ctrl.MouseOverBackgroundColor = currentsettings.colors[Settings.CI.button_back].Multiply(mouseoverscaling);
-                    ctrl.ScrollBarButtonColor = currentsettings.colors[Settings.CI.textbox_scrollbutton];
-                    ctrl.ScrollBarColor = currentsettings.colors[Settings.CI.textbox_sliderback];
-                    ctrl.FlatStyle = FlatStyle.Popup;
-                }
+                ctrl.BackColor = ctrl.SelectionBackColor = currentsettings.colors[Settings.CI.button_back];
+                ctrl.BorderColor = currentsettings.colors[Settings.CI.button_border];
+                ctrl.MouseOverBackgroundColor = currentsettings.colors[Settings.CI.button_back].Multiply(mouseoverscaling);
+                ctrl.ScrollBarButtonColor = currentsettings.colors[Settings.CI.textbox_scrollbutton];
+                ctrl.ScrollBarColor = currentsettings.colors[Settings.CI.textbox_sliderback];
+                ctrl.FlatStyle = FlatStyle.Popup;
 
                 myControl.Font = fnt;
             }
@@ -586,13 +578,13 @@ namespace ExtendedControls
                 ctrl.SetDrawnBitmapRemapTable(new System.Drawing.Imaging.ColorMap[] { colormap });
                 //System.Diagnostics.Debug.WriteLine("Drawn Panel Image button " + ctrl.Name);
             }
+            else if (myControl is PanelNoTheme)
+            {
+            }
             else if (myControl is Panel)
             {
-                if (!(myControl.Name.Contains("defaultmapcolor")))                 // theme panels show settings color - don't overwrite
-                {
-                    myControl.BackColor = currentsettings.colors[Settings.CI.form];
-                    myControl.ForeColor = currentsettings.colors[Settings.CI.label];
-                }
+                myControl.BackColor = currentsettings.colors[Settings.CI.form];
+                myControl.ForeColor = currentsettings.colors[Settings.CI.label];
             }
             else if (myControl is Label)
             {
@@ -646,9 +638,11 @@ namespace ExtendedControls
                 }
                 else if (ctrl.FlatStyle == FlatStyle.Flat)           // BUTTON and FLAT
                 {
-                    ctrl.BackColor = GroupBoxOverride(parent, currentsettings.colors[Settings.CI.form]);
-                    ctrl.FlatAppearance.CheckedBackColor = currentsettings.colors[Settings.CI.checkbox];
-                    ctrl.FlatAppearance.MouseOverBackColor = currentsettings.colors[Settings.CI.checkbox].Multiply(1.4F);
+                    ctrl.ForeColor = currentsettings.colors[Settings.CI.checkbox];
+                    ctrl.BackColor = GroupBoxOverride(parent, currentsettings.colors[Settings.CI.button_back]);
+                    ctrl.FlatAppearance.CheckedBackColor = currentsettings.colors[Settings.CI.checkbox].MultiplyBrightness(0.5F);
+                    ctrl.FlatAppearance.MouseOverBackColor = currentsettings.colors[Settings.CI.button_back].InvertBrightness(mouseoverscaling);
+                    ctrl.FlatAppearance.MouseDownBackColor = currentsettings.colors[Settings.CI.button_back].InvertBrightness(mouseselectedscaling);
                     ctrl.FlatAppearance.BorderColor = currentsettings.colors[Settings.CI.button_border];
                 }
             }

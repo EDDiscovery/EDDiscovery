@@ -90,7 +90,7 @@ public static class KeyObjectExtensions
         return k + keyname;
     }
 
-    public static string VKeyToString(this Keys key , Keys shift, Keys alt, Keys ctrl)  // shift/alt/ctrl holds either None, or Shift, or RShift etc
+    public static string ShiftersToString(Keys shift, Keys alt, Keys ctrl)  // shift/alt/ctrl holds either None, or Shift, or RShift etc
     {
         string k = "";
         if (shift != Keys.None)
@@ -99,10 +99,6 @@ public static class KeyObjectExtensions
             k = k.AppendPrePad( (alt != Keys.RMenu) ? "Alt" : "RAlt", "+");
         if (ctrl != Keys.None)
             k = k.AppendPrePad( (ctrl != Keys.RControlKey) ? "Ctrl" : "RCtrl", "+");
-
-        if (key != Keys.None)
-            k = k.AppendPrePad(key.VKeyToString(), "+");
-
         return k;
     }
 
@@ -207,6 +203,30 @@ public static class KeyObjectExtensions
         else
             return Keys.None;
     }
-    
+
+    public static List<string> VKeyList()   // names of keys
+    {
+        Keys[] remove = new Keys[] { Keys.None, Keys.LButton, Keys.RButton, Keys.MButton, Keys.XButton1, Keys.XButton2,
+                                    Keys.ShiftKey, Keys.ControlKey, Keys.Menu, Keys.LShiftKey, Keys.RShiftKey,
+                                    Keys.LControlKey , Keys.RControlKey, Keys.LMenu, Keys.RMenu ,
+                                    Keys.Shift, Keys.Control, Keys.Alt , Keys.Modifiers , Keys.KeyCode };
+
+        List<string> names = new List<string>();
+
+        foreach (Keys k in Enum.GetValues(typeof(Keys)))        
+        {
+            if ( Array.IndexOf(remove,k) == -1 )        // remove these, as they are either specials or handled in a different way
+            {
+                string v = VKeyToString(k); // translate to our names
+                if (!names.Contains(v))     // and because values are repeated (see oems) make sure we don't repeat
+                    names.Add(v);
+            }
+        }
+
+        names.Insert(names.IndexOf("Multiply"), "NumEnter");    // insert the numenter here
+
+        return names;
+    }
+   
 }
 

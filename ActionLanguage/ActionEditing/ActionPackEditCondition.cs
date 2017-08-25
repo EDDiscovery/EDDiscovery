@@ -32,31 +32,105 @@ namespace ActionLanguage
         private const int panelxmargin = 3;
         private const int panelymargin = 1;
         private Icon Icon;
-        private ExtendedControls.TextBoxBorder condition;
+        private ExtendedControls.PanelSelectionList panelConditionType;
+        private ExtendedControls.TextBoxBorder textBoxCondition;
+        private ExtendedControls.ButtonExt buttonKeys;
+        private Label labelAlwaysTrue;
         private Condition cd;
+        bool overrideshowfull = false;
 
-        public void Init(Condition c, Icon ic)
+        public void Init(Condition c, Icon ic, ToolTip toolTip)
         {
-            cd = c;
+            cd = c;     // point to common condition.  We only change the fields, not the cd.action/actiondata, and we don't replace it.
             Icon = ic;
 
-            condition = new ExtendedControls.TextBoxBorder();
-            condition.Text = cd.ToString();
-            condition.Location = new Point(panelxmargin, panelymargin + 2);
-            condition.Size = new Size(200, 24);
-            condition.ReadOnly = true;
-            condition.Click += Condition_Click;
-            condition.Tag = this;
+            panelConditionType = new ExtendedControls.PanelSelectionList();
+            panelConditionType.Location = new Point(0, 0);
+            panelConditionType.Size = new Size(this.Width, this.Height); // outer panel aligns with this UC 
+            panelConditionType.SelectedIndexChanged += PanelConditionType_SelectedIndexChanged;
+            toolTip.SetToolTip(panelConditionType, "Use the selector (click on bottom right arrow) to select condition class type");
+
+            textBoxCondition = new ExtendedControls.TextBoxBorder();
+            textBoxCondition.Location = new Point(panelxmargin, panelymargin + 2);
+            textBoxCondition.Size = new Size(this.Width-8-panelxmargin*2, 24);    // 8 for selector
+            textBoxCondition.ReadOnly = true;
+            textBoxCondition.Click += Condition_Click;
+            textBoxCondition.SetTipDynamically(toolTip, "Click to edit the condition that controls when the event is generated");
+
+            buttonKeys = new ExtendedControls.ButtonExt();
+            buttonKeys.Location = textBoxCondition.Location;
+            buttonKeys.Size = textBoxCondition.Size;
+            buttonKeys.Click += Keypress_Click;
+            toolTip.SetToolTip(buttonKeys,"Click to set the key list that associated this event with key presses");
+
+            labelAlwaysTrue = new Label();
+            labelAlwaysTrue.Location = new Point(panelxmargin, panelymargin + 4);
+            labelAlwaysTrue.Size = textBoxCondition.Size;
+            labelAlwaysTrue.Text = "Always Action/True";
 
             SuspendLayout();
-            Controls.Add(condition);
+            panelConditionType.Controls.Add(textBoxCondition);
+            panelConditionType.Controls.Add(labelAlwaysTrue);
+            panelConditionType.Controls.Add(buttonKeys);
+            Controls.Add(panelConditionType);
+            SelectRepresentation();
             ResumeLayout();
         }
 
-        public void SetCondition(Condition c)
+        public void ChangedCondition()  // someone altered condition externally. 
         {
-            cd = c;
-            condition.Text = cd.ToString();
+            SelectRepresentation();
+        }
+
+        private void SelectRepresentation()
+        {
+            ConditionClass c = Classify(cd);
+
+            panelConditionType.Items.Clear();       // dependent on program classification, select what we can pick
+            if ( c == ConditionClass.Key )
+                panelConditionType.Items.AddRange(new string[] { "Full Condition" , "Key" });
+            else
+                panelConditionType.Items.AddRange(new string[] { "Always Action/True", "Full Condition" });
+
+            if (overrideshowfull)
+                c = ConditionClass.Full;
+
+            labelAlwaysTrue.Visible = (c == ConditionClass.AlwaysTrue);
+            textBoxCondition.Visible = (c == ConditionClass.Full);
+            buttonKeys.Visible = (c == ConditionClass.Key);
+            textBoxCondition.Text = cd.ToString();
+            buttonKeys.Text = (cd.fields.Count > 0) ? cd.fields[0].matchstring.Left(20) : "?";
+        }
+
+        private void PanelConditionType_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            overrideshowfull = false;
+            string sel = panelConditionType.SelectedItem;
+            if (sel.Contains("Always"))    // always true
+            {
+                cd.SetAlwaysTrue();
+            }
+            else if (sel.Contains("Full"))    // always true
+                overrideshowfull = true;    // full
+            else
+            {
+                if (Classify(cd) != ConditionClass.Key)
+                    cd.Set(new ConditionEntry("KeyPress", ConditionEntry.MatchType.Equals, "?"));       // changes fields only
+            }
+
+            SelectRepresentation();
+        }
+
+        private void Keypress_Click(object sender, EventArgs e)
+        {
+            ExtendedControls.KeyForm kf = new ExtendedControls.KeyForm();
+            kf.Init(this.Icon, false, ",", buttonKeys.Text.Equals("?") ? "" : buttonKeys.Text);
+            if ( kf.ShowDialog(this) == DialogResult.OK)
+            {
+                buttonKeys.Text = kf.KeyList;
+                cd.fields[0].matchstring = kf.KeyList;
+                cd.fields[0].matchtype = (kf.KeyList.Contains(",")) ? ConditionEntry.MatchType.IsOneOf : ConditionEntry.MatchType.Equals;
+            }
         }
 
         private void Condition_Click(object sender, EventArgs e)
@@ -76,15 +150,33 @@ namespace ActionLanguage
                 else
                     cd.fields = null;
 
-                condition.Text = cd.ToString();
+                textBoxCondition.Text = cd.ToString();
             }
         }
 
         public new void Dispose()
         {
+            panelConditionType.Controls.Clear();
             Controls.Clear();
-            condition.Dispose();
+            textBoxCondition.Dispose();
+            panelConditionType.Dispose();    
             base.Dispose();
         }
+
+        enum ConditionClass { Full, Key, AlwaysTrue };
+
+        private ConditionClass Classify(Condition c)
+        {
+            if (c.IsAlwaysTrue())
+                return ConditionClass.AlwaysTrue;
+            else if (c.fields.Count == 1)
+            {
+                if (c.fields[0].itemname == "KeyPress" && (c.fields[0].matchtype == ConditionEntry.MatchType.Equals || c.fields[0].matchtype == ConditionEntry.MatchType.IsOneOf))
+                    return ConditionClass.Key;
+            }
+
+            return ConditionClass.Full;
+        }
+
     }
 }

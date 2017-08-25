@@ -677,7 +677,7 @@ namespace EliteDangerousCore
         #region Entry processing
 
         // go through the history list and recalculate the materials ledger and the materials count, plus any other stuff..
-        public void ProcessUserHistoryListEntries(Func<HistoryList, List<HistoryEntry>> hlfilter)
+        public void ProcessUserHistoryListEntries(Func<HistoryList, List<HistoryEntry>> hlfilter )
         {
             List<HistoryEntry> hl = hlfilter(this);
 
@@ -687,6 +687,7 @@ namespace EliteDangerousCore
                 {
                     HistoryEntry he = hl[i];
                     JournalEntry je = he.journalEntry;
+
                     he.ProcessWithUserDb(je, (i > 0) ? hl[i - 1] : null, this, conn);        // let the HE do what it wants to with the user db
 
                     Debug.Assert(he.MaterialCommodity != null);
@@ -713,7 +714,7 @@ namespace EliteDangerousCore
             }
         }
 
-        private IEnumerable<JournalEntry> ProcessJournalEntry(JournalEntry je)
+        private IEnumerable<JournalEntry> ProcessJournalEntry(JournalEntry je)          // Used to detect multiple repeats and filter them out
         {
             if (je.EventTypeID == JournalTypeEnum.FuelScoop)
             {
@@ -866,7 +867,13 @@ namespace EliteDangerousCore
             }
         }
 
-        public static HistoryList LoadHistory(EDJournalClass journalmonitor, Func<bool> cancelRequested, Action<int, string> reportProgress, string NetLogPath = null, bool ForceNetLogReload = false, bool ForceJournalReload = false, bool CheckEdsm = false, int CurrentCommander = Int32.MinValue)
+        public static HistoryList LoadHistory(EDJournalClass journalmonitor, Func<bool> cancelRequested, Action<int, string> reportProgress, 
+                                    string NetLogPath = null, 
+                                    bool ForceNetLogReload = false, 
+                                    bool ForceJournalReload = false, 
+                                    bool CheckEdsm = false, 
+                                    int CurrentCommander = Int32.MinValue,
+                                    bool Keepuievents = true)
         {
             HistoryList hist = new HistoryList();
             EDCommander cmdr = null;
@@ -893,8 +900,14 @@ namespace EliteDangerousCore
                 HistoryEntry prev = null;
                 foreach (JournalEntry inje in jlist)
                 {
-                    foreach (JournalEntry je in hist.ProcessJournalEntry(inje))
+                    foreach (JournalEntry je in hist.ProcessJournalEntry(inje)) // pass thru the repeat remover..
                     {
+                        if ( je.IsUIEvent && !Keepuievents)              // filter out any UI events
+                        {
+                            System.Diagnostics.Debug.WriteLine("**** Filter out " + je.EventTypeStr + " on " + je.EventTimeLocal.ToString());
+                            continue;
+                        }
+
                         bool journalupdate = false;
                         HistoryEntry he = HistoryEntry.FromJournalEntry(je, prev, CheckEdsm, out journalupdate, conn, cmdr);
 

@@ -110,7 +110,7 @@ namespace ActionLanguage
         {
             public ActionProgramRun apr;
             public bool wait;
-            public string triggername;
+            public ActionEvent ev;
             public string eventname;
         }
 
@@ -148,13 +148,13 @@ namespace ActionLanguage
                             {
                                 if (start != null && start.Length > 0)
                                 {
-                                    audio.sampleStartTag = new AudioEvent { apr = ap, eventname = start, triggername = "onPlayStarted" };
+                                    audio.sampleStartTag = new AudioEvent { apr = ap, eventname = start, ev = ActionEvent.onPlayStarted };
                                     audio.sampleStartEvent += Audio_sampleEvent;
 
                                 }
                                 if (wait || (finish != null && finish.Length > 0))       // if waiting, or finish call
                                 {
-                                    audio.sampleOverTag = new AudioEvent() { apr = ap, wait = wait, eventname = finish, triggername = "onPlayFinished" };
+                                    audio.sampleOverTag = new AudioEvent() { apr = ap, wait = wait, eventname = finish, ev = ActionEvent.onPlayFinished };
                                     audio.sampleOverEvent += Audio_sampleEvent;
                                 }
 
@@ -184,7 +184,7 @@ namespace ActionLanguage
             AudioEvent af = tag as AudioEvent;
 
             if (af.eventname != null && af.eventname.Length>0)
-                af.apr.actioncontroller.ActionRun(af.triggername, "ActionProgram", new ConditionVariables("EventName", af.eventname), now: false);    // queue at end an event
+                af.apr.actioncontroller.ActionRun(af.ev, new ConditionVariables("EventName", af.eventname), now: false);    // queue at end an event
 
             if (af.wait)
                 af.apr.ResumeAfterPause();

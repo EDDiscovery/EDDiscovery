@@ -382,7 +382,7 @@ namespace EDDiscovery.UserControls
         private void runActionsOnThisEntryToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (rightclicksystem != null)
-                discoveryform.ActionRunOnEntry(rightclicksystem, "UserRightClick");
+                discoveryform.ActionRunOnEntry(rightclicksystem, Actions.ActionEventEDList.UserRightClick(rightclicksystem));
         }
 
         private void copyJournalEntryToClipboardToolStripMenuItem_Click(object sender, EventArgs e)

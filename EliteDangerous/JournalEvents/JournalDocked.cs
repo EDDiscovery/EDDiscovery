@@ -14,22 +14,41 @@
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 using Newtonsoft.Json.Linq;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace EliteDangerousCore.JournalEvents
 {
-    //When written: when landing at landing pad in a space station, outpost, or surface settlement
-    //Parameters:
-    //•	StationName: name of station
-    //•	StationType: type of station
-    //•	StarSystem: name of system
-    //•	CockpitBreach:true (only if landing with breached cockpit)
-    //•	Faction: station’s controlling faction
-    //•	FactionState
-    //•	Allegiance
-    //•	Economy
-    //•	Government
-    //•	Security
+
+    /*
+    When written: when landing at landing pad in a space station, outpost, or surface settlement
+    Parameters:
+     StationName: name of station
+     StationType: type of station
+     StarSystem: name of system
+     CockpitBreach:true (only if landing with breached cockpit)
+     StationFaction: station’s controlling faction
+     FactionState
+     StationAllegiance
+     StationEconomy
+     StationGovernment
+     DistFromStarLS
+     StationServices: (Array of strings)
+    Example:
+    { "timestamp":"2017-08-18T10:52:26Z", "event":"Docked", "StationName":"Goddard Hub",
+    "StationType":"Coriolis", "StarSystem":"HR 3499", "StationFaction":"Labour of HR 3499",
+    "StationGovernment":"$government_Democracy;", "StationGovernment_Localised":"Democracy",
+    "StationAllegiance":"Federation", "StationServices":[ "Dock", "Autodock", "BlackMarket",
+    "Commodities", "Contacts", "Exploration", "Missions", "Outfitting", "CrewLounge", "Rearm",
+    "Refuel", "Repair", "Shipyard", "Tuning", "MissionsGenerated", "FlightController",
+    "StationOperations", "Powerplay", "SearchAndRescue" ], "StationEconomy":"$economy_Industrial;",
+    "StationEconomy_Localised":"Industrial", "DistFromStarLS":129.454132 }
+    StationServices can include:
+    Dock, Autodock, BlackMarket, Commodities, Contacts, Exploration, Initiatives, Missions,
+    Outfitting,CrewLounge, Rearm, Refuel, Repair, Shipyard, Tuning, Workshop, MissionsGenerated,
+    Facilitator, Research, FlightController, StationOperations, OnDockMission, Powerplay,
+    SearchAndRescue, 
+     */
     [JournalEntryType(JournalTypeEnum.Docked)]
     public class JournalDocked : JournalEntry
     {
@@ -48,6 +67,10 @@ namespace EliteDangerousCore.JournalEvents
             Economy_Localised = JSONObjectExtensions.GetMultiStringDef(evt, new string[] { "StationEconomy_Localised", "Economy_Localised" });
             Government = JSONObjectExtensions.GetMultiStringDef(evt, new string[] { "StationGovernment", "Government" });
             Government_Localised = JSONObjectExtensions.GetMultiStringDef(evt, new string[] { "StationGovernment_Localised", "Government_Localised" });
+
+            if (!evt["StationServices"].Empty())
+                StationServices = evt.Value<JArray>("StationServices").Values<string>().ToList();
+
         }
 
         public string StationName { get; set; }
@@ -61,6 +84,7 @@ namespace EliteDangerousCore.JournalEvents
         public string Economy_Localised { get; set; }
         public string Government { get; set; }
         public string Government_Localised { get; set; }
+        public List<string> StationServices { get; set; }
 
         public override System.Drawing.Bitmap Icon { get { return EliteDangerous.Properties.Resources.Stationenter; } }
 
@@ -70,6 +94,13 @@ namespace EliteDangerousCore.JournalEvents
             summary = $"At {StationName}";
             info = BaseUtils.FieldBuilder.Build("Type ", StationType, "< in system ", StarSystem, "Faction:", Faction, "< in state ", FactionState);
             detailed = BaseUtils.FieldBuilder.Build("Allegiance:", Allegiance, "Economy:", Economy_Localised.Alt(Economy), "Government:", Government_Localised.Alt(Government));
+
+            if (StationServices != null)
+            {
+                detailed += System.Environment.NewLine + "Station services:";
+                foreach (string s in StationServices)
+                    detailed = detailed.AppendPrePad(s, " ");
+            }
         }
 
     }

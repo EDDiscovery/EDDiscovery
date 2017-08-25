@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.panelTop = new System.Windows.Forms.Panel();
             this.panel_close = new ExtendedControls.DrawnPanel();
             this.panel_minimize = new ExtendedControls.DrawnPanel();
@@ -45,6 +46,7 @@
             this.vScrollBarCustom1 = new ExtendedControls.VScrollBarCustom();
             this.buttonMore = new ExtendedControls.ButtonExt();
             this.statusStripCustom = new ExtendedControls.StatusStripCustom();
+            this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.panelTop.SuspendLayout();
             this.panelOK.SuspendLayout();
             this.panelOuter.SuspendLayout();
@@ -135,6 +137,7 @@
             this.buttonInstallationVars.Size = new System.Drawing.Size(56, 23);
             this.buttonInstallationVars.TabIndex = 6;
             this.buttonInstallationVars.Text = "Install";
+            this.toolTip.SetToolTip(this.buttonInstallationVars, "Set Installation variables for pack (Advanced)");
             this.buttonInstallationVars.UseVisualStyleBackColor = true;
             this.buttonInstallationVars.Click += new System.EventHandler(this.buttonInstallationVars_Click);
             // 
@@ -148,6 +151,7 @@
             this.buttonSort2.Size = new System.Drawing.Size(45, 23);
             this.buttonSort2.TabIndex = 6;
             this.buttonSort2.Text = "Sort2";
+            this.toolTip.SetToolTip(this.buttonSort2, "Sort by event name, then by matchstring, then by parameters");
             this.buttonSort2.UseVisualStyleBackColor = true;
             this.buttonSort2.Click += new System.EventHandler(this.buttonSort2_Click);
             // 
@@ -161,6 +165,7 @@
             this.buttonSort.Size = new System.Drawing.Size(45, 23);
             this.buttonSort.TabIndex = 6;
             this.buttonSort.Text = "Sort";
+            this.toolTip.SetToolTip(this.buttonSort, "Sort by event name, then by parameters, then by match string");
             this.buttonSort.UseVisualStyleBackColor = true;
             this.buttonSort.Click += new System.EventHandler(this.buttonSort_Click);
             // 
@@ -187,6 +192,7 @@
             this.comboBoxCustomEditProg.SelectedValue = null;
             this.comboBoxCustomEditProg.Size = new System.Drawing.Size(144, 21);
             this.comboBoxCustomEditProg.TabIndex = 9;
+            this.toolTip.SetToolTip(this.comboBoxCustomEditProg, "Select a program to edit directly");
             this.comboBoxCustomEditProg.ValueMember = "";
             this.comboBoxCustomEditProg.SelectedIndexChanged += new System.EventHandler(this.comboBoxCustomEditProg_SelectedIndexChanged);
             // 
@@ -291,6 +297,7 @@
             this.buttonMore.Size = new System.Drawing.Size(24, 24);
             this.buttonMore.TabIndex = 5;
             this.buttonMore.Text = "+";
+            this.toolTip.SetToolTip(this.buttonMore, "Add more events");
             this.buttonMore.UseVisualStyleBackColor = true;
             this.buttonMore.Click += new System.EventHandler(this.buttonMore_Click);
             // 
@@ -301,6 +308,10 @@
             this.statusStripCustom.Size = new System.Drawing.Size(1068, 22);
             this.statusStripCustom.TabIndex = 28;
             this.statusStripCustom.Text = "statusStripCustom1";
+            // 
+            // toolTip
+            // 
+            this.toolTip.ShowAlways = true;
             // 
             // ActionPackEditorForm
             // 
@@ -344,5 +355,6 @@
         private ExtendedControls.ButtonExt buttonMore;
         private ExtendedControls.StatusStripCustom statusStripCustom;
         private ExtendedControls.ButtonExt buttonInstallationVars;
+        private System.Windows.Forms.ToolTip toolTip;
     }
 }

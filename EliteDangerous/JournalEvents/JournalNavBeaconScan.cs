@@ -18,32 +18,30 @@ using System.Linq;
 
 namespace EliteDangerousCore.JournalEvents
 {
-//When written: when delivering items to a Search and Rescue contact
-//Parameters:
-// Name
-// Count
-// Reward
+    /*
+    When written: when scanning a navigation beacon, before the scan data for all the bodies in the
+    system is written into the journal
+    Parameters:
+     NumBodies
+    */
 
-    [JournalEntryType(JournalTypeEnum.SearchAndRescue)]
-    public class JournalSearchAndRescue : JournalEntry
+    [JournalEntryType(JournalTypeEnum.NavBeaconScan)]
+    public class JournalNavBeaconScan : JournalEntry
     {
-        public JournalSearchAndRescue(JObject evt) : base(evt, JournalTypeEnum.SearchAndRescue)
+        public JournalNavBeaconScan(JObject evt) : base(evt, JournalTypeEnum.NavBeaconScan)
         {
-            Name = evt["Name"].Str();
-            Count = evt["Count"].Int();
-            Reward = evt["Reward"].Str();
+            NumBodies = evt["JumpType"].Int();
         }
 
-        public string Name { get; set; }            // Hyperspace, Supercruise
-        public int Count { get; set; }
-        public string Reward { get; set; }
+        public int NumBodies { get; set; }            // Hyperspace, Supercruise
 
-        public override System.Drawing.Bitmap Icon { get { return EliteDangerous.Properties.Resources.no_entry; } }  // TODO
+
+        public override System.Drawing.Bitmap Icon { get { return EliteDangerous.Properties.Resources.scan; } }
 
         public override void FillInformation(out string summary, out string info, out string detailed) //V
         {
             summary = EventTypeStr.SplitCapsWord();
-            info = BaseUtils.FieldBuilder.Build("",Name , "No:" , Count, "Reward:" , Reward);
+            info = BaseUtils.FieldBuilder.Build("Bodies:", NumBodies);
             detailed = "";
         }
     }

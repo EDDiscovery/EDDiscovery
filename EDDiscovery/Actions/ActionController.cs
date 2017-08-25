@@ -61,10 +61,12 @@ namespace EDDiscovery.Actions
 
             ActionBase.AddCommand("Commodities", typeof(ActionCommodities), ActionBase.ActionType.Cmd);
             ActionBase.AddCommand("EliteBindings", typeof(ActionEliteBindings), ActionBase.ActionType.Cmd);
-            ActionBase.AddCommand("Event", typeof(ActionEvent), ActionBase.ActionType.Cmd);
+            ActionBase.AddCommand("Event", typeof(ActionEventCmd), ActionBase.ActionType.Cmd);
             ActionBase.AddCommand("Historytab", typeof(ActionHistoryTab), ActionBase.ActionType.Cmd);
+            ActionBase.AddCommand("Key", typeof(ActionKeyED), ActionBase.ActionType.Cmd);       // override key
             ActionBase.AddCommand("Ledger", typeof(ActionLedger), ActionBase.ActionType.Cmd);
             ActionBase.AddCommand("Materials", typeof(ActionMaterials), ActionBase.ActionType.Cmd);
+            ActionBase.AddCommand("MenuItem", typeof(ActionMenuItem), ActionBase.ActionType.Cmd);
             ActionBase.AddCommand("Perform", typeof(ActionPerform), ActionBase.ActionType.Cmd);
             ActionBase.AddCommand("Play", typeof(ActionPlay), ActionBase.ActionType.Cmd);
             ActionBase.AddCommand("Popout", typeof(ActionPopout), ActionBase.ActionType.Cmd);
@@ -73,7 +75,6 @@ namespace EDDiscovery.Actions
             ActionBase.AddCommand("Ship", typeof(ActionShip), ActionBase.ActionType.Cmd);
             ActionBase.AddCommand("Star", typeof(ActionStar), ActionBase.ActionType.Cmd);
             ActionBase.AddCommand("Timer", typeof(ActionTimer), ActionBase.ActionType.Cmd);
-            ActionBase.AddCommand("MenuItem", typeof(ActionMenuItem), ActionBase.ActionType.Cmd);
 
             ReLoad();
         }
@@ -93,6 +94,8 @@ namespace EDDiscovery.Actions
             ActionConfigureKeys();
         }
 
+        #region Edit Action Packs
+
         public void EditLastPack()
         {
             if (lasteditedpack.Length > 0 && EditActionFile(lasteditedpack))
@@ -101,48 +104,23 @@ namespace EDDiscovery.Actions
                 ExtendedControls.MessageBoxTheme.Show("Action pack does not exist anymore or never set", "WARNING!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
         }
 
-        private bool EditActionFile(string name)
+        private bool EditActionFile(string name)            // edit pack name
         {
             List<string> jevents = JournalEntry.GetListOfEventsWithOptMethod(towords: false);
             jevents.Sort();
-
-            List<Tuple<string, string>> eventnames = new List<Tuple<string, string>>();
-            foreach (string s in jevents)
-                eventnames.Add(new Tuple<string, string>(s, "Journal"));
-
-            eventnames.Add(new Tuple<string, string>("All", "Misc"));
-            eventnames.Add(new Tuple<string, string>("onRefreshStart", "Program"));
-            eventnames.Add(new Tuple<string, string>("onRefreshEnd", "Program"));
-            eventnames.Add(new Tuple<string, string>("onInstall", "Program"));
-            eventnames.Add(new Tuple<string, string>("onStartup", "Program"));
-            eventnames.Add(new Tuple<string, string>("onPostStartup", "Program"));
-            eventnames.Add(new Tuple<string, string>("onShutdown", "Program"));
-            eventnames.Add(new Tuple<string, string>("onKeyPress", "UI"));
-            eventnames.Add(new Tuple<string, string>("onTimer", "Action"));
-            eventnames.Add(new Tuple<string, string>("onPopUp", "UI"));
-            eventnames.Add(new Tuple<string, string>("onPopDown", "UI"));
-            eventnames.Add(new Tuple<string, string>("onTabChange", "UI"));
-            eventnames.Add(new Tuple<string, string>("onPanelChange", "UI"));
-            eventnames.Add(new Tuple<string, string>("onHistorySelection", "UI"));
-            eventnames.Add(new Tuple<string, string>("onSayStarted", "Audio"));
-            eventnames.Add(new Tuple<string, string>("onSayFinished", "Audio"));
-            eventnames.Add(new Tuple<string, string>("onPlayStarted", "Audio"));
-            eventnames.Add(new Tuple<string, string>("onPlayFinished", "Audio"));
-            eventnames.Add(new Tuple<string, string>("onMenuItem", "UI"));
-            eventnames.Add(new Tuple<string, string>("onEliteInputRaw", "EliteUI"));
-            eventnames.Add(new Tuple<string, string>("onEliteInput", "EliteUI"));
-            eventnames.Add(new Tuple<string, string>("onEliteInputOff", "EliteUI"));
+            List<ActionEvent> eventlist = ActionEventEDList.EventsFromNames(jevents, "Journal");
+            eventlist.AddRange(ActionEventEDList.events); // our ED events
+            eventlist.AddRange(ActionEvent.events);     // core events
 
             ActionPackEditorForm frm = new ActionPackEditorForm();
 
-            frm.onAdditionalNames += Frm_onAdditionalNames;
-            frm.CreateActionPackEdit += (group, cond) => { ActionPackEditBase eb = new ActionPackEditEventProgramCondition(); eb.Height = 30;  return eb; };
-
+            frm.AdditionalNames += Frm_onAdditionalNames;
+            frm.CreateActionPackEdit += SetPackEditorAndCondition;
             ActionFile f = actionfiles.Get(name);
 
             if (f != null)
             {
-                frm.Init("Edit pack " + name, this.Icon, this, AppFolder, f, eventnames);
+                frm.Init("Edit pack " + name, this.Icon, this, AppFolder, f, eventlist);
                 frm.TopMost = discoveryform.FindForm().TopMost;
 
                 frm.ShowDialog(discoveryform.FindForm()); // don't care about the result, the form does all the saving
@@ -157,12 +135,87 @@ namespace EDDiscovery.Actions
                 return false;
         }
 
+        // called when a new group is set up, what editor do you want?  and you can alter the condition
+        // for new entries, cd = AlwaysTrue. For older entries, the condition
+        private ActionPackEditBase SetPackEditorAndCondition(string group, Condition cd)        
+        {
+            List<string> addnames = new List<string>() { "{one}", "{two}" };
+
+            if (group == "Voice")
+            {
+                ActionPackEditVoice ev = new ActionPackEditVoice();
+                ev.Height = 28;
+                ev.onEditKeys = onEditKeys;
+                ev.onEditSay = onEditSay;
+
+                // make sure the voice condition is right.. if not, reset.
+
+                if (cd.eventname != Actions.ActionEventEDList.onVoiceInput.triggername || !cd.Is("VoiceInput", ConditionEntry.MatchType.Equals))
+                {
+                    cd.eventname = Actions.ActionEventEDList.onVoiceInput.triggername;
+                    cd.Set(new ConditionEntry("VoiceInput", ConditionEntry.MatchType.Equals, "?"));     // Voiceinput being the variable set to the expression
+                }
+
+                return ev;
+            }
+            else
+            {
+                ActionPackEditEventProgramCondition eb = new ActionPackEditEventProgramCondition();
+                eb.autosetcondition += SetEventCondition;
+                eb.Height = 28;
+                eb.onEditKeys = onEditKeys;
+                eb.onEditSay = onEditSay;
+                return eb;
+            }
+        }
+
+        private string onEditKeys(Control p, System.Drawing.Icon i, string keys)      // called when program wants to edit Key
+        {
+            return ActionKeyED.Menu(p, i, keys, discoveryform.FrontierBindings);
+        }
+
+        private string onEditSay(Control p, string say, ActionCoreController cp)      // called when program wants to edit Key
+        {
+            return ActionSay.Menu(p, say, cp);
+        }
+
+
+        // called when a event name is selected, what is the initial condition set up?
+        private ActionProgram.ProgramConditionClass SetEventCondition( Condition cd)          
+        {                                                       // and what is the class selection for the program?
+            ActionProgram.ProgramConditionClass cls = ActionProgram.ProgramConditionClass.Full;
+
+            if (cd.IsAlwaysTrue())
+            {
+                if (cd.eventname == "onKeyPress")
+                    cd.Set(new ConditionEntry("KeyPress", ConditionEntry.MatchType.Equals, "?"));
+                else if (cd.eventname == "onTimer")
+                    cd.Set(new ConditionEntry("TimerName", ConditionEntry.MatchType.Equals, "?"));
+                else if (cd.eventname == "onPopUp" || cd.eventname == "onPopDown")
+                    cd.Set(new ConditionEntry("PopOutName", ConditionEntry.MatchType.Equals, "?"));
+                else if (cd.eventname == "onTabChange")
+                    cd.Set(new ConditionEntry("TabName", ConditionEntry.MatchType.Equals, "?"));
+                else if (cd.eventname == "onPanelChange")
+                    cd.Set(new ConditionEntry("PopOutName", ConditionEntry.MatchType.Equals, "?"));
+                else if (cd.eventname == "onEliteInput" || cd.eventname == "onEliteInputOff")
+                    cd.Set(new ConditionEntry("Binding", ConditionEntry.MatchType.Equals, "?"));
+                else if (cd.eventname == "onMenuItem")
+                    cd.Set(new ConditionEntry("MenuName", ConditionEntry.MatchType.Equals, "?"));
+                else if (cd.eventname == "onSayStarted" || cd.eventname == "onSayFinished" || cd.eventname == "onPlayStarted" || cd.eventname == "onPlayFinished")
+                    cd.Set(new ConditionEntry("EventName", ConditionEntry.MatchType.Equals, "?"));
+                else if (cd.eventname == "onVoiceInput")
+                    cls = ActionProgram.ProgramConditionClass.KeySay;
+            }
+
+            return cls;
+        }
+
         private List<string> Frm_onAdditionalNames(string evname)       // call back to discover name list.  evname may be empty
         {
             List<string> fieldnames = new List<string>(discoveryform.Globals.NameList);
             fieldnames.Sort();
 
-            if ( evname != null && evname.Length>0 )
+            if ( evname.HasChars())
             { 
                 List<string> classnames = BaseUtils.FieldNames.GetPropertyFieldNames(JournalEntry.TypeOfJournalEntry(evname), "EventClass_");
                 if (classnames != null)
@@ -172,12 +225,12 @@ namespace EDDiscovery.Actions
             return fieldnames;
         }
 
-        private void Dmf_OnEditActionFile(string name)
+        private void Dmf_OnEditActionFile(string name)      // wanna edit
         {
             EditActionFile(name);
         }
 
-        private void Dmf_OnEditGlobals()
+        private void Dmf_OnEditGlobals()                    // edit the globals
         {
             ConditionVariablesForm avf = new ConditionVariablesForm();
             avf.Init("Global User variables to pass to program on run", this.Icon, PersistentVariables, showone: true);
@@ -201,6 +254,10 @@ namespace EDDiscovery.Actions
                     ExtendedControls.MessageBoxTheme.Show(discoveryform.FindForm(), "Duplicate name", "Create Action File Failed", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             }
         }
+
+        #endregion
+
+        #region Manage them
 
         public void ManageAddOns()
         {
@@ -244,7 +301,7 @@ namespace EDDiscovery.Actions
                             discoveryform.RemoveMenuItemsFromAddOns(kv.Key);
                     }
 
-                    ActionRun("onInstall", "ProgramEvent", null, new ConditionVariables("InstallList", changes));
+                    ActionRun(ActionEventEDList.onInstall, null, new ConditionVariables("InstallList", changes));
                 }
             }
         }
@@ -254,6 +311,8 @@ namespace EDDiscovery.Actions
             ActionFile f = actionfiles.Get(name);
             return f != null;
         }
+
+        #endregion
 
         public void ConfigureVoice(string title)
         {
@@ -324,6 +383,8 @@ namespace EDDiscovery.Actions
             ExtendedControls.MessageBoxTheme.Show(discoveryform, "Voice pack not loaded, or needs updating to support this functionality");
         }
 
+        #region RUN!
+
         public void ActionRunOnRefresh()
         {
             string prevcommander = Globals.Exists("Commander") ? Globals["Commander"] : "None";
@@ -336,30 +397,30 @@ namespace EDDiscovery.Actions
             if (actionfiles.IsConditionFlagSet(ConditionVariables.flagRunAtRefresh))      // any events have this flag? .. don't usually do this, so worth checking first
             {
                 foreach (HistoryEntry he in discoverycontroller.history.EntryOrder)
-                    ActionRunOnEntry(he, "onRefresh", ConditionVariables.flagRunAtRefresh);
+                    ActionRunOnEntry(he, ActionEventEDList.RefreshJournal(he), ConditionVariables.flagRunAtRefresh);
             }
 
-            ActionRun("onRefreshEnd", "ProgramEvent");
+            ActionRun(ActionEventEDList.onRefreshEnd);
         }
 
-        public int ActionRunOnEntry(HistoryEntry he, string triggertype, string flagstart = null, bool now = false)       //set flagstart to be the first flag of the actiondata..
+        public int ActionRunOnEntry(HistoryEntry he, ActionEvent ev, string flagstart = null, bool now = false)       //set flagstart to be the first flag of the actiondata..
         {
-            return ActionRun(he.journalEntry.EventTypeStr, triggertype, he, null, flagstart, now);
+            return ActionRun(ev, he, null, flagstart, now);
         }
 
-        public override int ActionRun(string triggername, string triggertype, ConditionVariables additionalvars = null,
+        public override int ActionRun(ActionEvent ev, ConditionVariables additionalvars = null,
                                 string flagstart = null, bool now = false)              // override base
-        { return ActionRun(triggername, triggertype, null, additionalvars, flagstart, now); }
+        { return ActionRun(ev, null, additionalvars, flagstart, now); }
 
-        public int ActionRun(string triggername, string triggertype, HistoryEntry he = null, ConditionVariables additionalvars = null,
+        public int ActionRun(ActionEvent ev, HistoryEntry he = null, ConditionVariables additionalvars = null,
                                 string flagstart = null, bool now = false)       //set flagstart to be the first flag of the actiondata..
         {
-            List<ActionFileList.MatchingSets> ale = actionfiles.GetMatchingConditions(triggername, flagstart);      // look thru all actions, find matching ones
+            List<ActionFileList.MatchingSets> ale = actionfiles.GetMatchingConditions(ev.triggername, flagstart);      // look thru all actions, find matching ones
 
             if (ale.Count > 0)                  
             {
                 ConditionVariables eventvars = new ConditionVariables();
-                Actions.ActionVars.TriggerVars(eventvars, triggername, triggertype);
+                Actions.ActionVars.TriggerVars(eventvars, ev.triggername, ev.triggertype);
                 Actions.ActionVars.HistoryEventVars(eventvars, he, "Event");     // if HE is null, ignored
                 Actions.ActionVars.ShipBasicInformation(eventvars, he?.ShipInformation, "Event");     // if He null, or si null, ignore
                 Actions.ActionVars.SystemVars(eventvars, he?.System, "Event");
@@ -396,10 +457,12 @@ namespace EDDiscovery.Actions
                 return false;
         }
 
+        #endregion
+
         public void onStartup()
         {
-            ActionRun("onStartup", "ProgramEvent");
-            ActionRun("onPostStartup", "ProgramEvent");
+            ActionRun(ActionEvent.onStartup);
+            ActionRun(ActionEvent.onPostStartup);
         }
 
         public void CloseDown()
@@ -484,7 +547,7 @@ namespace EDDiscovery.Actions
             if (actionfileskeyevents.Contains("<" + keyname + ">"))  // fast string comparision to determine if key is overridden..
             {
                 SetInternalGlobal("KeyPress", keyname);
-                ActionRun("onKeyPress", "KeyPress");
+                ActionRun(ActionEventEDList.onKeyPress);
                 return true;
             }
             else
