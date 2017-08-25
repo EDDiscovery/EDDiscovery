@@ -37,7 +37,7 @@ namespace EliteDangerousCore.JournalEvents
         public string Language { get; set; }
         public int Part { get; set; }
 
-        public bool Beta
+        public override bool Beta
         {
             get
             {

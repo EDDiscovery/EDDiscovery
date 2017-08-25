@@ -97,9 +97,9 @@ namespace EliteDangerousCore.JournalEvents
 
             if (StationServices != null)
             {
-                detailed += "Station services:";
+                detailed += System.Environment.NewLine + "Station services:";
                 foreach (string s in StationServices)
-                    detailed += s + " ";
+                    detailed = detailed.AppendPrePad(s, " ");
             }
         }
 
