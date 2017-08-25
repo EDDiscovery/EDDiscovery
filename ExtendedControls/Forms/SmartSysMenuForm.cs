@@ -154,6 +154,8 @@ namespace ExtendedControls
                         else if ((int)m.WParam > SC_OPACITYSUBMENU && (int)m.WParam <= SC_OPACITYSUBMENU + 10)
                             Opacity = ((int)m.WParam - SC_OPACITYSUBMENU) / 10f;
                         else if (!AllowResize && (m.WParam == (IntPtr)SC.MAXIMIZE || m.WParam == (IntPtr)SC.SIZE || m.WParam == (IntPtr)SC.RESTORE))
+                            return;     // Access Denied.
+                        else
                             break;
 
                         m.Result = IntPtr.Zero;
