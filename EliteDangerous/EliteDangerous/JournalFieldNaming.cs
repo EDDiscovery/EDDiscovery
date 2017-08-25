@@ -45,12 +45,29 @@ namespace EliteDangerousCore
                 return fdname.SplitCapsWordFull();
         }
 
+        public static string RLat(double? lv)
+        {
+            if (lv.HasValue)
+                return RLat(lv.Value);
+            else
+                return null;
+        }
+
+
         public static string RLat(double lv)      
         {
             long arcsec = (long)(lv * 60 * 60);          // convert to arc seconds
             string marker = (arcsec < 0) ? "S" : "N";       // presume lat
             arcsec = Math.Abs(arcsec);
             return string.Format("{0}°{1} {2}'{3}\"", arcsec / 3600, marker, (arcsec / 60) % 60, arcsec % 60);
+        }
+
+        public static string RLong(double? lv)
+        {
+            if (lv.HasValue)
+                return RLong(lv.Value);
+            else
+                return null;
         }
 
         public static string RLong(double lv)      
@@ -316,6 +333,17 @@ namespace EliteDangerousCore
                 s = s.Substring(1);
             return s.SplitCapsWordFull();
         }
-        
+
+        static public string GetBetterTimeinSeconds(int? s)
+        {
+            if (!s.HasValue)
+                return null;
+
+            TimeSpan ts = new TimeSpan(0,0,s.Value);
+
+            return ts.ToString();
+        }
+
+
     }
 }

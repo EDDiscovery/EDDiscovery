@@ -19,7 +19,7 @@ namespace ExtendedControls
 
         public List<string> Items { get { return ddc.Items; } set { ddc.Items = value; } }
 
-        public override Color ForeColor { get => base.ForeColor; set => ddc.ForeColor = base.ForeColor = value; }
+        public override Color ForeColor { get { return base.ForeColor; } set { ddc.ForeColor = base.ForeColor = value; } }
         public bool FitToItemsHeight { get { return ddc.FitToItemsHeight; } set { ddc.FitToItemsHeight = value; } }
         public int ScrollBarWidth { get { return ddc.ScrollBarWidth; } set { ddc.ScrollBarWidth = value; } }
         public int DropDownWidth { get { return dropdownwidth; } set { dropdownwidth = value; } }
@@ -119,8 +119,7 @@ namespace ExtendedControls
         {
             dropdown = false;
             ddc.Hide();
-            if (SelectedIndexChanged != null)
-                SelectedIndexChanged(sender, e);
+            SelectedIndexChanged?.Invoke(this, e);
         }
     }
 }

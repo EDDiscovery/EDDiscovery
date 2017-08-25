@@ -476,7 +476,7 @@ namespace ActionLanguage
 
         private void label_index_MouseDown(object sender, MouseEventArgs e)
         {
-            DragMoveMode((Control)sender);
+            OnCaptionMouseDown((Control)sender, e);
         }
 
     }

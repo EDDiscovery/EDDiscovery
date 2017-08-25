@@ -19,7 +19,22 @@ using System.Linq;
 
 namespace EliteDangerousCore.JournalEvents
 {
-    //When written: screenshot
+    /*
+     When Written: when a screen snapshot is saved
+    Parameters:
+     Filename: filename of screenshot
+     Width: size in pixels
+     Height: size in pixels
+     System: current star system
+     Body: name of nearest body
+     Latitude
+     Longitude
+    The latitude and longitude will be included if on a planet or in low-altitude flight
+    Example:
+    { "timestamp":"2016-06-10T14:32:03Z","event":"Screenshot",
+    "Filename":"_Screenshots/Screenshot_0151.bmp", "Width":1600, "Height":900, "System":"Shinrarta
+    Dezhra", "Body":"Founders World" } 
+     */
     [JournalEntryType(JournalTypeEnum.Screenshot)]
     public class JournalScreenshot : JournalEntry
     {
@@ -30,19 +45,23 @@ namespace EliteDangerousCore.JournalEvents
             Height = evt["Height"].Int();
             System = evt["System"].Str();
             Body = evt["Body"].Str();
+            nLatitude = evt["Latitude"].DoubleNull();
+            nLongitude = evt["Longitude"].DoubleNull();
         }
         public string Filename { get; set; }
         public int Width { get; set; }
         public int Height { get; set; }
         public string System { get; set; }
         public string Body { get; set; }
+        public double? nLatitude { get; set; }
+        public double? nLongitude { get; set; }
 
         public override System.Drawing.Bitmap Icon { get { return EliteDangerous.Properties.Resources.screenshot; } }
 
         public override void FillInformation(out string summary, out string info, out string detailed)  //V
         {
             summary = EventTypeStr.SplitCapsWord();
-            info = BaseUtils.FieldBuilder.Build("At " , Body , "< in " , System , "File:", Filename, "Width:", Width , "Height:", Height);
+            info = BaseUtils.FieldBuilder.Build("At " , Body , "< in " , System , "File:", Filename, "Width:", Width , "Height:", Height, "Latitude:", JournalFieldNaming.RLat(nLatitude), "Longitude:", JournalFieldNaming.RLong(nLongitude));
             detailed = "";
         }
 

@@ -80,6 +80,7 @@ namespace EliteDangerousCore.JournalEvents
         public string StarTypeText { get { return IsStar ? GetStarTypeImage().Item2 : ""; } }   // Long form star name, from StarTypeID
         public double? nStellarMass { get; set; }                   // direct
         public double? nAbsoluteMagnitude { get; set; }             // direct
+        public string Luminosity { get; set; }
         public double? nAge { get; set; }                           // direct
         public double? HabitableZoneInner { get; set; }             // calculated
         public double? HabitableZoneOuter { get; set; }             // calculated
@@ -139,10 +140,10 @@ namespace EliteDangerousCore.JournalEvents
             public double OuterRad;
         }
         
-        private const double solarRadius_m = 695700000;
-        private const double oneAU_m = 149597870000;
-        private const double oneDay_s = 86400;
-        private const double oneMoon_MT = 73420000000000;
+        public const double solarRadius_m = 695700000;
+        public const double oneAU_m = 149597870000;
+        public const double oneDay_s = 86400;
+        public const double oneMoon_MT = 73420000000000;
 
         public JournalScan(JObject evt) : base(evt, JournalTypeEnum.Scan)
         {
@@ -155,6 +156,8 @@ namespace EliteDangerousCore.JournalEvents
             nStellarMass = evt["StellarMass"].DoubleNull();
             nRadius = evt["Radius"].DoubleNull();
             nAbsoluteMagnitude = evt["AbsoluteMagnitude"].DoubleNull();
+            Luminosity = evt["Luminosity"].StrNull();
+
             nRotationPeriod = evt["RotationPeriod"].DoubleNull();
 
             nOrbitalPeriod = evt["OrbitalPeriod"].DoubleNull();
@@ -343,6 +346,9 @@ namespace EliteDangerousCore.JournalEvents
             if (nSurfaceTemperature.HasValue)
                 scanText.AppendFormat("Surface Temp: {0}K\n", nSurfaceTemperature.Value.ToString("N0"));
 
+            if (Luminosity != null)
+                scanText.AppendFormat("Luminosity: {0}\n", Luminosity);
+
             if (nSurfaceGravity.HasValue)
                 scanText.AppendFormat("Gravity: {0:0.0}g\n", nSurfaceGravity.Value / 9.8);
 
@@ -433,7 +439,7 @@ namespace EliteDangerousCore.JournalEvents
 
             int estvalue = EstimatedValue();
             if (estvalue > 0)
-                scanText.AppendFormat("\nEstimated value: {0}", estvalue);
+                scanText.AppendFormat("\nEstimated value: {0:N0}", estvalue);
 
             return scanText.ToNullSafeString().Replace("\n", "\n" + inds);
         }
@@ -822,6 +828,8 @@ namespace EliteDangerousCore.JournalEvents
                 }
                 return (int)StarValue(kValue, nStellarMass.Value);
             }
+            else if (PlanetClass == null)  //Asteroid belt
+                return 0;
             else   // Planet
             {
                 switch (PlanetTypeID)      // http://elite-dangerous.wikia.com/wiki/Explorer
