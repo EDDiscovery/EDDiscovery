@@ -21,6 +21,7 @@ namespace EliteDangerousCore.JournalEvents
     //When written: when a mission is updated with a new destination
     //Parameters
     // MissionID
+    // MissionName
     // NewDestinationStation
     // OldDestinationStation
     // NewDestinationSystem
@@ -35,6 +36,12 @@ namespace EliteDangerousCore.JournalEvents
         {
            
             MissionId = evt["MissionID"].Int();
+            Name = evt["MissionName"].Str("");
+
+            NewDestinationStation = evt["NewDestinationStation"].Str();
+            OldDestinationStation = evt["OldDestinationStation"].Str();
+            NewDestinationSystem = evt["NewDestinationSystem"].Str();
+            OldDestinationSystem = evt["OldDestinationSystem"].Str();
         }
 
         public string NewDestinationStation { get; set; }
@@ -43,13 +50,14 @@ namespace EliteDangerousCore.JournalEvents
         public string OldDestinationSystem { get; set; }
 
         public int MissionId { get; set; }
+        public string Name { get; set; }
 
         public override System.Drawing.Bitmap Icon { get { return EliteDangerous.Properties.Resources.missionaccepted; } }  // TODO new icon
 
         public override void FillInformation(out string summary, out string info, out string detailed) //V
         {
             summary = EventTypeStr.SplitCapsWord();
-            info = info = BaseUtils.FieldBuilder.Build(
+            info = info = BaseUtils.FieldBuilder.Build("Mission name:", Name,
                                       "Old System:", OldDestinationSystem,
                                       "Old Station:", OldDestinationStation,
                                       "New System:", NewDestinationSystem,
