@@ -65,6 +65,7 @@ namespace EliteDangerousCore
         public bool IsLocOrJump { get { return EntryType == JournalTypeEnum.FSDJump || EntryType == JournalTypeEnum.Location; } }
         public bool IsFuelScoop { get { return EntryType == JournalTypeEnum.FuelScoop; } }
         public bool IsShipChange { get { return (EntryType == JournalTypeEnum.LoadGame || EntryType == JournalTypeEnum.Docked) && ShipInformation != null; } }
+        public bool IsBetaMessage { get { return journalEntry?.Beta ?? false; } }
         public bool ISEDDNMessage
         {
             get
