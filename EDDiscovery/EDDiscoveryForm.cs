@@ -49,11 +49,6 @@ namespace EDDiscovery
     {
         #region Variables
 
-        // Mono compatibility
-        private bool _window_dragging = false;
-        private Point _window_dragMousePos = Point.Empty;
-        private Point _window_dragWindowPos = Point.Empty;
-
         private EDDiscoveryController Controller;
         private Actions.ActionController actioncontroller;
 
@@ -566,6 +561,8 @@ namespace EDDiscovery
                 if (string.IsNullOrEmpty(eddn.commanderName))
                      eddn.commanderName = Capi.Credentials.Commander;
 
+                if (he.Commander.Name.StartsWith("[BETA]", StringComparison.InvariantCultureIgnoreCase) || he.IsBetaMessage)
+                    eddn.isBeta = true;
 
                 JObject msg = eddn.CreateEDDNCommodityMessage(Capi.Profile.StarPort.commodities, Capi.Profile.CurrentStarSystem.name, Capi.Profile.StarPort.name, DateTime.UtcNow);
 
@@ -921,25 +918,18 @@ namespace EDDiscovery
             }
         }
 
-        private void panelInfo_Click(object sender, EventArgs e)
+        private void labelInfoBoxTop_MouseDown(object sender, MouseEventArgs e)
         {
-            if (newRelease != null)
+            if (e.Button == MouseButtons.Left && newRelease != null)
             {
                 NewReleaseForm frm = new NewReleaseForm();
                 frm.release = newRelease;
 
                 frm.ShowDialog(this);
             }
-        }
-
-        private void labelPanelText_Click(object sender, EventArgs e)
-        {
-            if (newRelease != null)
+            else
             {
-                NewReleaseForm frm = new NewReleaseForm();
-                frm.release = newRelease;
-
-                frm.ShowDialog(this);
+                MouseDownCAPTION(sender, e);
             }
         }
 
@@ -1024,11 +1014,11 @@ namespace EDDiscovery
                 Activate();
         }
 
-#endregion
+        #endregion
 
-        private void MouseDownCAPTION( object sender, MouseEventArgs e)
+        private void MouseDownCAPTION(object sender, MouseEventArgs e)
         {
-            DragMoveMode((Control)sender);
+            OnCaptionMouseDown((Control)sender, e);
         }
 
         private void RecordPosition()
@@ -1063,6 +1053,21 @@ namespace EDDiscovery
         private void EDDiscoveryForm_ResizeEnd(object sender, EventArgs e)
         {
             RecordPosition();
+        }
+
+        private void panelToolBar_Resize(object sender, EventArgs e)
+        {
+            tabControlMain.Top = panelToolBar.Bottom;
+        }
+
+        private void panelToolBar_RetractCompleted(object sender, EventArgs e)
+        {
+            tabControlMain.Height += panelToolBar.UnrolledHeight - panelToolBar.RolledUpHeight;
+        }
+
+        private void panelToolBar_DeployStarting(object sender, EventArgs e)
+        {
+            tabControlMain.Height -= panelToolBar.UnrolledHeight - panelToolBar.RolledUpHeight;
         }
 
         #region Updators
@@ -1367,7 +1372,6 @@ namespace EDDiscovery
             List<HistoryEntry> hlsyncunsyncedlist = Controller.history.FilterByScanNotEGOSynced;        // first entry is oldest
             EDDiscoveryCore.EGO.EGOSync.SendEGOEvents(LogLine, hlsyncunsyncedlist);
         }
-
     }
 }
 

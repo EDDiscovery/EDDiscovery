@@ -192,7 +192,7 @@ namespace EliteDangerousCore
         Pristine,
     }
 
-
+   
 
     public class Bodies
     {

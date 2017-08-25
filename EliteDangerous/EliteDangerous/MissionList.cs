@@ -25,11 +25,11 @@ namespace EliteDangerousCore
     {
         public JournalMissionAccepted Mission { get; private set; }                  // never null
         public JournalMissionCompleted Completed { get; private set; }               // null until complete
-        public enum StateTypes { InProgress, Completed, Abandoned, Failed };
+        public enum StateTypes { InProgress, Completed, Abandoned, Failed, Redirected };
         public StateTypes State { get; private set; }     
 
-        public bool InProgress { get { return State == StateTypes.InProgress; } }
-        public bool InProgressDateTime(DateTime compare) { return State == StateTypes.InProgress && DateTime.Compare(compare, Mission.Expiry)<0; }
+        public bool InProgress { get { return (State == StateTypes.InProgress || State == StateTypes.Redirected); } }
+        public bool InProgressDateTime(DateTime compare) { return InProgress && DateTime.Compare(compare, Mission.Expiry)<0; }
 
         public string OriginatingSystem { get { return sys.name; } }
         public string OriginatingStation { get { return body; } }
@@ -109,6 +109,13 @@ namespace EliteDangerousCore
             Missions[Key(m)] = new MissionState(m, sys, body); // add a new one..
         }
 
+        public void Redirected(JournalMissionRedirected m, ISystem sys, string body)
+        {
+            // Update State with new info...     TODO
+            //Missions[Key(m)] = new MissionState(m, sys, body); // add a new one..
+        }
+
+
         public void Completed(JournalMissionCompleted m)
         {
             Missions[Key(m)] = new MissionState(Missions[Key(m)], m); // copy previous mission state, add completed
@@ -123,11 +130,19 @@ namespace EliteDangerousCore
         {
             Missions[Key(m)] = new MissionState(Missions[Key(m)], MissionState.StateTypes.Failed); // copy previous mission state, add failed
         }
+        public void Redirected(JournalMissionRedirected m)
+        {
+            Missions[Key(m)] = new MissionState(Missions[Key(m)], MissionState.StateTypes.Redirected); // copy previous mission state, add failed
+            // Todo  update destination....
+            //Missions[Key(m)] = new MissionState(Missions[Key(m)], MissionState.StateTypes.Failed); // copy previous mission state, add failed
+        }
+
 
         // can't think of a better way, don't want to put it in the actual entries since it should all be here.. can't be bothered to refactor so they have a common ancestor.
         public static string Key(JournalMissionFailed m) { return m.MissionId.ToStringInvariant() + ":" + m.Name; }
         public static string Key(JournalMissionCompleted m) { return m.MissionId.ToStringInvariant() + ":" + m.Name; }
         public static string Key(JournalMissionAccepted m) { return m.MissionId.ToStringInvariant() + ":" + m.Name; }
+        public static string Key(JournalMissionRedirected m) { return m.MissionId.ToStringInvariant() + ":" + m.Name; }  
         public static string Key(JournalMissionAbandoned m) { return m.MissionId.ToStringInvariant() + ":" + m.Name; }
     }
 
@@ -180,6 +195,17 @@ namespace EliteDangerousCore
             {
                 current = new MissionList(current);     // shallow copy
                 current.Failed(m);
+            }
+            else
+                System.Diagnostics.Debug.WriteLine("Missions: Unknown " + MissionList.Key(m));
+        }
+
+        public void Redirected(JournalMissionRedirected m)
+        {
+            if (current.Missions.ContainsKey(MissionList.Key(m)))        // make sure not repeating, ignore if so
+            {
+                current = new MissionList(current);     // shallow copy
+                current.Redirected(m);
             }
             else
                 System.Diagnostics.Debug.WriteLine("Missions: Unknown " + MissionList.Key(m));

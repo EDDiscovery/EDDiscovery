@@ -36,6 +36,11 @@ namespace ExtendedControls
 
         public bool PinState { get { return pinbutton.Checked; } set { SetPinState(value); } }
 
+        public event EventHandler DeployStarting;
+        public event EventHandler DeployCompleted;
+        public event EventHandler RetractStarting;
+        public event EventHandler RetractCompleted;
+
         private CheckBoxCustom pinbutton;        // public so you can theme them with colour/IAs
         private DrawnPanel hiddenmarker;
 
@@ -85,6 +90,7 @@ namespace ExtendedControls
 
         protected override void OnBackColorChanged(EventArgs e)
         {
+            base.OnBackColorChanged(e);
             pinbutton.BackColor = BackColor;
             hiddenmarker.BackColor = BackColor;
         }
@@ -101,7 +107,7 @@ namespace ExtendedControls
 
         private void SetHMViz()
         {
-            hiddenmarker.Visible = hiddenmarkershow & hiddenmarkershouldbeshown;
+            hiddenmarker.Visible = hiddenmarkershow && hiddenmarkershouldbeshown;
         }
 
         public void SetToolTip(ToolTip t, string ttpin = null, string ttmarker = null)
@@ -125,8 +131,7 @@ namespace ExtendedControls
 
         private void Pinbutton_CheckedChanged(object sender, EventArgs e)
         {
-            if (PinStateChanged != null)
-                PinStateChanged(this, pinbutton);
+            PinStateChanged?.Invoke(this, pinbutton);
         }
 
 
@@ -153,6 +158,7 @@ namespace ExtendedControls
                 //System.Diagnostics.Debug.WriteLine(Environment.TickCount + " roll down, start animating");
                 mode = Mode.RollDown;
                 timer.Interval = 25;
+                DeployStarting?.Invoke(this, EventArgs.Empty);
                 timer.Start();
 
                 foreach (Control c in Controls)     // everything except hidden marker visible
@@ -177,6 +183,7 @@ namespace ExtendedControls
                 //System.Diagnostics.Debug.WriteLine(Environment.TickCount + " roll up, start animating");
                 mode = Mode.RollUp;
                 timer.Interval = 25;
+                RetractStarting?.Invoke(this, EventArgs.Empty);
                 timer.Start();
             }
             else
@@ -287,6 +294,7 @@ namespace ExtendedControls
                     //System.Diagnostics.Debug.WriteLine(Environment.TickCount + " At min h");
 
                     mode = Mode.None;
+                    RetractCompleted?.Invoke(this, EventArgs.Empty);
                 }
             }
             else if (mode == Mode.RollDown) // roll down animation, move one step on, check for end
@@ -299,6 +307,7 @@ namespace ExtendedControls
                     mode = Mode.None;
                     hiddenmarkershouldbeshown = false;
                     SetHMViz();
+                    DeployCompleted?.Invoke(this, EventArgs.Empty);
                 }
 
                 if (!inarea && !pinbutton.Checked)      // but not in area now, and not held.. so start roll up procedure

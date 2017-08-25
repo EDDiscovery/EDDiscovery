@@ -25,6 +25,7 @@ namespace EliteDangerousCore.JournalEvents
 //•	TransferCost
 //•	Ship
 //•	ShipId
+//* TransferTime: (in seconds) 
     [JournalEntryType(JournalTypeEnum.FetchRemoteModule)]
     public class JournalFetchRemoteModule : JournalEntry, ILedgerJournalEntry
     {
@@ -41,6 +42,7 @@ namespace EliteDangerousCore.JournalEvents
             Ship = JournalFieldNaming.GetBetterShipName( evt["Ship"].Str() );
             ShipId = evt["ShipID"].Int();
             ServerId = evt["ServerId"].Int();
+            nTransferTime = evt["TransferTime"].IntNull();
         }
         public string StorageSlot { get; set; }
         public string StoredItem { get; set; }
@@ -50,6 +52,7 @@ namespace EliteDangerousCore.JournalEvents
         public string Ship { get; set; }
         public int ShipId { get; set; }
         public int ServerId { get; set; }
+        public int? nTransferTime { get; set; }
 
         public void Ledger(Ledger mcl, DB.SQLiteConnectionUser conn)
         {
@@ -61,7 +64,7 @@ namespace EliteDangerousCore.JournalEvents
         public override void FillInformation(out string summary, out string info, out string detailed) //V
         {
             summary = EventTypeStr.SplitCapsWord();
-            info = BaseUtils.FieldBuilder.Build("", StoredItemLocalised.Alt(StoredItem), "Cost:", TransferCost, "into ship:", Ship);
+            info = BaseUtils.FieldBuilder.Build("", StoredItemLocalised.Alt(StoredItem), "Cost:", TransferCost, "into ship:", Ship, "TransferTime:", JournalFieldNaming.GetBetterTimeinSeconds(nTransferTime));
             detailed = "";
         }
     }

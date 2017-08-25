@@ -31,6 +31,7 @@ namespace EliteDangerousCore
     {
         Unknown = 0,
 
+        AfmuRepairs = 3,
         ApproachSettlement = 5,
         Bounty = 10,
         BuyAmmo = 20,
@@ -107,12 +108,15 @@ namespace EliteDangerousCore
         MissionAccepted = 480,
         MissionCompleted = 490,
         MissionFailed = 500,
+        MissionRedirected = 505,
         ModuleBuy = 510,
         ModuleRetrieve = 515,
         ModuleSell = 520,
         ModuleSellRemote = 990,
         ModuleStore = 525,
         ModuleSwap = 530,
+        Music = 535,
+        NavBeaconScan = 538,
         NewCommander = 540,
         Passengers = 545,
         PayFines = 550,
@@ -138,15 +142,18 @@ namespace EliteDangerousCore
         RefuelPartial = 730,
         Repair = 740,
         RepairAll = 745,
+        RepairDrone = 747,
         RestockVehicle = 750,
         Resurrect = 760,
         Scan = 770,
         Scanned = 772,
         ScientificResearch = 775,
         Screenshot = 780,
+        SearchAndRescue = 785,
         SelfDestruct = 790,
         SellDrones = 800,
         SellExplorationData = 810,
+        SellShipOnRebuy = 815,
         SendText = 820,
         SetUserShipName = 825,
         ShieldState = 830,
@@ -297,6 +304,20 @@ namespace EliteDangerousCore
         public bool SyncedEGO { get { return (Synced & (int)SyncFlags.EGO) != 0;} }
         public bool StartMarker { get { return (Synced & (int)SyncFlags.StartMarker) != 0; } }
         public bool StopMarker { get { return (Synced & (int)SyncFlags.StopMarker) != 0; } }
+        private bool? beta;                        // True if journal entry is from beta
+        public bool Beta
+        {
+            get
+            {
+                if (beta == null)
+                {
+                    TravelLogUnit tlu = TravelLogUnit.Get(TLUId);
+                    beta = tlu?.Beta ?? false;
+                }
+
+                return beta ?? false;
+            }
+        }
         #endregion
 
         #region Static properties and fields
@@ -701,6 +722,8 @@ namespace EliteDangerousCore
 
         static public List<JournalEntry> Get(string eventtype, SQLiteConnectionUser cn, DbTransaction tn = null)
         {
+            Dictionary<long, TravelLogUnit> tlus = TravelLogUnit.GetAll().ToDictionary(t => t.id);
+
             using (DbCommand cmd = cn.CreateCommand("select * from JournalEntries where EventType=@ev", tn))
             {
                 cmd.AddParameterWithValue("@ev", eventtype);
@@ -711,7 +734,9 @@ namespace EliteDangerousCore
 
                     while (reader.Read())
                     {
-                        entries.Add(CreateJournalEntry(reader));
+                        JournalEntry je = CreateJournalEntry(reader);
+                        je.beta = tlus.ContainsKey(je.TLUId) ? tlus[je.TLUId].Beta : false;
+                        entries.Add(je);
                     }
 
                     return entries;
@@ -721,6 +746,8 @@ namespace EliteDangerousCore
 
         static public List<JournalEntry> GetAll(int commander = -999)
         {
+            Dictionary<long, TravelLogUnit> tlus = TravelLogUnit.GetAll().ToDictionary(t => t.id);
+
             List<JournalEntry> list = new List<JournalEntry>();
 
             using (SQLiteConnectionUser cn = new SQLiteConnectionUser(utc: true))
@@ -740,6 +767,7 @@ namespace EliteDangerousCore
                     foreach (DataRow dr in ds.Tables[0].Rows)
                     {
                         JournalEntry sys = JournalEntry.CreateJournalEntry(dr);
+                        sys.beta = tlus.ContainsKey(sys.TLUId) ? tlus[sys.TLUId].Beta : false;
                         list.Add(sys);
                     }
 
@@ -751,6 +779,8 @@ namespace EliteDangerousCore
 
         public static List<JournalEntry> GetByEventType(JournalTypeEnum eventtype, int commanderid, DateTime start, DateTime stop)
         {
+            Dictionary<long, TravelLogUnit> tlus = TravelLogUnit.GetAll().ToDictionary(t => t.id);
+
             List<JournalEntry> vsc = new List<JournalEntry>();
 
             using (SQLiteConnectionUser cn = new SQLiteConnectionUser(utc: true))
@@ -765,7 +795,9 @@ namespace EliteDangerousCore
                     {
                         while (reader.Read())
                         {
-                            vsc.Add(JournalEntry.CreateJournalEntry(reader));
+                            JournalEntry je = CreateJournalEntry(reader);
+                            je.beta = tlus.ContainsKey(je.TLUId) ? tlus[je.TLUId].Beta : false;
+                            vsc.Add(je);
                         }
                     }
                 }
@@ -777,6 +809,7 @@ namespace EliteDangerousCore
 
         public static List<JournalEntry> GetAllByTLU(long tluid)
         {
+            TravelLogUnit tlu = TravelLogUnit.Get(tluid);
             List<JournalEntry> vsc = new List<JournalEntry>();
 
             using (SQLiteConnectionUser cn = new SQLiteConnectionUser(utc: true))
@@ -788,7 +821,9 @@ namespace EliteDangerousCore
                     {
                         while (reader.Read())
                         {
-                            vsc.Add(JournalEntry.CreateJournalEntry(reader));
+                            JournalEntry je = CreateJournalEntry(reader);
+                            je.beta = tlu?.Beta ?? false;
+                            vsc.Add(je);
                         }
                     }
                 }

@@ -202,6 +202,7 @@
     <Compile Include="JournalEvents\JournalMissionAbandoned.cs" />
     <Compile Include="JournalEvents\JournalMissionAccepted.cs" />
     <Compile Include="JournalEvents\JournalMissionCompleted.cs" />
+    <Compile Include="JournalEvents\JournalMissionRedirected.cs" />
     <Compile Include="JournalEvents\JournalMissionFailed.cs" />
     <Compile Include="JournalEvents\JournalModuleBuy.cs" />
     <Compile Include="JournalEvents\JournalModuleRetrieve.cs" />
@@ -232,6 +233,9 @@
     <Compile Include="JournalEvents\JournalRedeemVoucher.cs" />
     <Compile Include="JournalEvents\JournalRefuelAll.cs" />
     <Compile Include="JournalEvents\JournalRefuelPartial.cs" />
+    <Compile Include="JournalEvents\JournalMusic.cs" />
+    <Compile Include="JournalEvents\JournalAfmuRepair.cs" />
+    <Compile Include="JournalEvents\JournalRepairDrone.cs" />
     <Compile Include="JournalEvents\JournalRepair.cs" />
     <Compile Include="JournalEvents\JournalRepairAll.cs" />
     <Compile Include="JournalEvents\JournalRestockVehicle.cs" />
@@ -242,6 +246,7 @@
     <Compile Include="JournalEvents\JournalScreenshot.cs" />
     <Compile Include="JournalEvents\JournalSelfDestruct.cs" />
     <Compile Include="JournalEvents\JournalSellDrones.cs" />
+    <Compile Include="JournalEvents\JournalSellShipOnRebuy.cs" />
     <Compile Include="JournalEvents\JournalSellExplorationData.cs" />
     <Compile Include="JournalEvents\JournalSendText.cs" />
     <Compile Include="JournalEvents\JournalSetUserShipName.cs" />
@@ -251,6 +256,8 @@
     <Compile Include="JournalEvents\JournalShipyardSell.cs" />
     <Compile Include="JournalEvents\JournalShipyardSwap.cs" />
     <Compile Include="JournalEvents\JournalShipyardTransfer.cs" />
+    <Compile Include="JournalEvents\JournalSearchAndRescue.cs" />
+    <Compile Include="JournalEvents\JournalNavBeaconScan.cs" />
     <Compile Include="JournalEvents\JournalStartJump.cs" />
     <Compile Include="JournalEvents\JournalSupercruiseEntry.cs" />
     <Compile Include="JournalEvents\JournalSupercruiseExit.cs" />
