@@ -50,29 +50,21 @@ namespace ActionLanguage
         static string mixsound = "MixSound";
         static string queuelimit = "QueueLimit";
 
-        public bool FromString(string s, out string saying, out ConditionVariables vars)
+        static public bool FromString(string s, out string saying, out ConditionVariables vars)
         {
             vars = new ConditionVariables();
 
-            if (s.IndexOfAny(",\"'".ToCharArray()) == -1)       // these not found
-            {
-                saying = s;
+            StringParser p = new StringParser(s);
+            saying = p.NextQuotedWord(", ");        // stop at space or comma..
+
+            if (saying != null && (p.IsEOL || (p.IsCharMoveOn(',') && vars.FromString(p, ConditionVariables.FromMode.MultiEntryComma))))   // normalise variable names (true)
                 return true;
-            }
-            else
-            {
-                StringParser p = new StringParser(s);
-                saying = p.NextQuotedWord(", ");        // stop at space or comma..
 
-                if (saying != null && (p.IsEOL || (p.IsCharMoveOn(',') && vars.FromString(p, ConditionVariables.FromMode.MultiEntryComma))))   // normalise variable names (true)
-                    return true;
-
-                saying = "";
-                return false;
-            }
+            saying = "";
+            return false;
         }
 
-        public string ToString(string saying, ConditionVariables cond)
+        static public string ToString(string saying, ConditionVariables cond)
         {
             if (cond.Count > 0)
                 return saying.QuoteString(comma: true) + ", " + cond.ToString();
@@ -87,7 +79,7 @@ namespace ActionLanguage
             return FromString(userdata, out saying, out vars) ? null : "Say command line not in correct format";
         }
 
-        public override bool ConfigurationMenu(Form parent, ActionCoreController cp, List<string> eventvars)
+        static public string Menu(Control parent, string userdata, ActionCoreController cp)
         {
             string saying;
             ConditionVariables vars;
@@ -119,18 +111,32 @@ namespace ActionLanguage
                 cond.SetOrRemove(!cfg.Volume.Equals("Default", StringComparison.InvariantCultureIgnoreCase), volumename, cfg.Volume);
                 cond.SetOrRemove(!cfg.Rate.Equals("Default", StringComparison.InvariantCultureIgnoreCase), ratename, cfg.Rate);
 
-                userdata = ToString(cfg.SayText, cond);
-                return true;
+                return ToString(cfg.SayText, cond);
             }
 
-            return false;
+            return null;
         }
+
+
+        public override bool ConfigurationMenu(Form parent, ActionCoreController cp, List<string> eventvars)
+        {
+            string ud = Menu(parent, userdata, cp);
+
+            if (ud != null)
+            {
+                userdata = ud;
+                return true;
+            }
+            else
+                return false;
+        }
+
 
         class AudioEvent
         {
             public ActionProgramRun apr;
             public bool wait;
-            public string triggername;
+            public ActionEvent ev;
             public string eventname;
         }
 
@@ -258,13 +264,13 @@ namespace ActionLanguage
 
                             if (start != null )
                             {
-                                audio.sampleStartTag = new AudioEvent { apr = ap, eventname = start, triggername = "onSayStarted" };
+                                audio.sampleStartTag = new AudioEvent { apr = ap, eventname = start, ev = ActionEvent.onSayStarted };
                                 audio.sampleStartEvent += Audio_sampleEvent;
                             }
 
                             if (wait || finish != null )       // if waiting, or finish call
                             {
-                                audio.sampleOverTag = new AudioEvent() { apr = ap, wait = wait, eventname = finish, triggername = "onSayFinished" };
+                                audio.sampleOverTag = new AudioEvent() { apr = ap, wait = wait, eventname = finish, ev = ActionEvent.onSayFinished };
                                 audio.sampleOverEvent += Audio_sampleEvent;
                             }
 
@@ -291,7 +297,7 @@ namespace ActionLanguage
             AudioEvent af = tag as AudioEvent;
 
             if (af.eventname != null && af.eventname.Length>0)
-                af.apr.actioncontroller.ActionRun(af.triggername, "ActionProgram", new ConditionVariables("EventName", af.eventname), now: false);    // queue at end an event
+                af.apr.actioncontroller.ActionRun(af.ev, new ConditionVariables("EventName", af.eventname), now: false);    // queue at end an event
 
             if (af.wait)
                 af.apr.ResumeAfterPause();

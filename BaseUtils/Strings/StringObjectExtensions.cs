@@ -20,6 +20,15 @@ using System.Linq;
 
 public static class ObjectExtensionsStrings
 {
+    static public bool HasChars(this string obj)
+    {
+        return obj != null && obj.Length > 0;
+    }
+    static public bool IsEmpty(this string obj)
+    {
+        return obj == null || obj.Length == 0;
+    }
+
     public static string ToNullSafeString(this object obj)
     {
         return (obj ?? string.Empty).ToString();
@@ -33,6 +42,33 @@ public static class ObjectExtensionsStrings
     public static string ToNANNullSafeString(this double? obj, string format)
     {
         return (obj.HasValue && obj != double.NaN) ? obj.Value.ToString(format) : string.Empty;
+    }
+
+    public static string Left(this string obj, int length)      // obj = null, return "".  Length can be > string
+    {
+        if (obj != null)
+        {
+            if (length < obj.Length)
+                return obj.Substring(0, length);
+            else
+                return obj;
+        }
+        else
+            return string.Empty;
+    }
+
+    public static string Mid(this string obj, int start, int length)      // obj = null, return "".  Mid, start/length can be out of limits
+    {
+        if (obj != null)
+        {
+            if (start < obj.Length)        // if in range
+            {
+                int left = obj.Length - start;      // what is left..
+                return obj.Substring(start, Math.Min(left, length));    // min of left, length
+            }
+        }
+
+        return string.Empty;
     }
 
     public static string Alt(this string obj, string alt)

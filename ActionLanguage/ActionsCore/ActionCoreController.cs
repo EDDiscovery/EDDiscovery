@@ -135,7 +135,7 @@ namespace ActionLanguage
         public virtual void LogLine(string s)
         { }
 
-        public virtual int ActionRun(string triggername, string triggertype, ConditionVariables additionalvars = null,
+        public virtual int ActionRun(ActionEvent ev, ConditionVariables additionalvars = null,
                                 string flagstart = null, bool now = false)
         { return 0; }
 

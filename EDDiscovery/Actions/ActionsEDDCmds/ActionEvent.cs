@@ -26,7 +26,7 @@ using EliteDangerousCore;
 
 namespace EDDiscovery.Actions
 {
-    public class ActionEvent : ActionBase
+    public class ActionEventCmd : ActionBase
     {
         public override bool AllowDirectEditingOfUserData { get { return true; } }
 
@@ -168,7 +168,7 @@ namespace EDDiscovery.Actions
                         ap.ReportError("Valid JID must be given for command " + cmdname + " in Event");
                     else if (cmdname.Equals("action"))
                     {
-                        int count = (ap.actioncontroller as ActionController).ActionRunOnEntry(hl.EntryOrder[jidindex], "ActionProgram", now:true);
+                        int count = (ap.actioncontroller as ActionController).ActionRunOnEntry(hl.EntryOrder[jidindex], Actions.ActionEventEDList.EventCmd(hl.EntryOrder[jidindex]), now:true);
                         ap[prefix + "Count"] = count.ToString(System.Globalization.CultureInfo.InvariantCulture);
                     }
                     else if (cmdname.Equals("edsm"))

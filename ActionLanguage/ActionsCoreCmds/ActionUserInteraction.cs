@@ -447,7 +447,7 @@ namespace ActionLanguage
             }
             else
             {
-                apr.actioncontroller.ActionRun("onNonModalDialog", "UserUIEvent", new Conditions.ConditionVariables(new string[] { "Dialog", lname, "Control", controlname }));
+                apr.actioncontroller.ActionRun(ActionEvent.onNonModalDialog, new Conditions.ConditionVariables(new string[] { "Dialog", lname, "Control", controlname }));
             }
         }
     }

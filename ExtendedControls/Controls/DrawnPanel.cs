@@ -332,5 +332,13 @@ namespace ExtendedControls
         }
     }
 
+    public class PanelNoTheme: Panel        // slightly random placement..
+    {
+        public PanelNoTheme()
+        {
+
+        }
+    }
+
 
 }

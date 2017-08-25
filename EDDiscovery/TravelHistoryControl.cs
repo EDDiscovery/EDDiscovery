@@ -112,7 +112,7 @@ namespace EDDiscovery
             Control c = PopOutControl.Create(i);
             c.Name = PopOutControl.GetPopOutName(i);        // tabs uses Name field for display, must set it
 
-            _discoveryForm.ActionRun("onPanelChange", "UserUIEvent", null, new Conditions.ConditionVariables(new string[] { "PanelTabName", PopOutControl.popoutinfo[i].WindowRefName, "PanelTabTitle" , PopOutControl.popoutinfo[i].WindowTitlePrefix , "PanelName" , t.Name }));
+            _discoveryForm.ActionRun(Actions.ActionEventEDList.onPanelChange, null, new Conditions.ConditionVariables(new string[] { "PanelTabName", PopOutControl.popoutinfo[i].WindowRefName, "PanelTabTitle" , PopOutControl.popoutinfo[i].WindowTitlePrefix , "PanelName" , t.Name }));
 
             return c;
         }
@@ -250,7 +250,7 @@ namespace EDDiscovery
                 _discoveryForm.ExportControl.UpdateHistorySystem(currentsys.System.name);
 
                 if (userControlTravelGrid.GetCurrentHistoryEntry != null)        // paranoia
-                    _discoveryForm.ActionRun("onHistorySelection", "UserUIEvent", userControlTravelGrid.GetCurrentHistoryEntry);
+                    _discoveryForm.ActionRun(Actions.ActionEventEDList.onHistorySelection, userControlTravelGrid.GetCurrentHistoryEntry);
 
                 // DEBUG ONLY.. useful for debugging this _discoveryForm.history.SendEDSMStatusInfo(currentsys, true);        // update if required..
             }

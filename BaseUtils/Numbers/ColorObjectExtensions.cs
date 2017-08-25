@@ -109,6 +109,23 @@ public static class ObjectExtensionsColours
             (byte)Math.Max(Math.Min(Math.Round((float)c.G * val), 255), 0),
             (byte)Math.Max(Math.Min(Math.Round((float)c.B * val), 255), 0));
     }
+
+    public static Color InvertBrightness(this Color c, float amount = 0.5f)        // multiply up/down by this amount, dep. on brightness
+    {
+        if (float.IsNaN(amount))
+            return c;
+
+        float val = Math.Abs(amount);
+
+        float brightness = c.GetBrightness();
+        if (brightness > 0.5)
+            val = 1.0F / val;
+
+        return Color.FromArgb(c.A,
+            (byte)Math.Max(Math.Min(Math.Round((float)c.R * val), 255), 0),
+            (byte)Math.Max(Math.Min(Math.Round((float)c.G * val), 255), 0),
+            (byte)Math.Max(Math.Min(Math.Round((float)c.B * val), 255), 0));
+    }
 }
 
 

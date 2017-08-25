@@ -141,7 +141,7 @@ namespace EDDiscovery.Actions
 
             TimerInfo ti = t.Tag as TimerInfo;
 
-            (ti.ap.actioncontroller as ActionController).ActionRun("onTimer", "ActionProgram", ti.he, new ConditionVariables("TimerName", ti.name), now: false);    // queue at end an event
+            (ti.ap.actioncontroller as ActionController).ActionRun(Actions.ActionEventEDList.onTimer, ti.he, new ConditionVariables("TimerName", ti.name), now: false);    // queue at end an event
 
             //System.Diagnostics.Debug.WriteLine("REMOVED Timers " + timers.Count);
             timers.Remove(t);   // done with it

@@ -59,6 +59,12 @@ public static class ObjectExtensionsNumbersBool
         return int.TryParse(s, System.Globalization.NumberStyles.Integer, System.Globalization.CultureInfo.InvariantCulture, out i);
     }
 
+    static public int InvariantParseInt(this string s, int def)
+    {
+        int i;
+        return int.TryParse(s, System.Globalization.NumberStyles.Integer, System.Globalization.CultureInfo.InvariantCulture, out i) ? i : def;
+    }
+
     static public int? InvariantParseIntNull(this string s)     // s can be null
     {
         int i;
@@ -95,6 +101,12 @@ public static class ObjectExtensionsNumbersBool
         return double.TryParse(s, System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture, out i);
     }
 
+    static public double InvariantParseDouble(this string s, double def)
+    {
+        double i;
+        return double.TryParse(s, System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture, out i) ? i : def;
+    }
+
     static public double? InvariantParseDoubleNull(this string s)
     {
         double i;
@@ -107,6 +119,12 @@ public static class ObjectExtensionsNumbersBool
     static public bool InvariantParse(this string s, out long i)
     {
         return long.TryParse(s, System.Globalization.NumberStyles.Integer, System.Globalization.CultureInfo.InvariantCulture, out i);
+    }
+
+    static public long InvariantParseLong(this string s, long def)
+    {
+        long i;
+        return long.TryParse(s, System.Globalization.NumberStyles.Integer, System.Globalization.CultureInfo.InvariantCulture, out i) ? i: def;
     }
 
     static public long? InvariantParseLongNull(this string s)

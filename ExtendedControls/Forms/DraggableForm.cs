@@ -1,4 +1,20 @@
-﻿using BaseUtils.Win32Constants;
+﻿/*
+ * Copyright © 2016 EDDiscovery development team
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
+ * file except in compliance with the License. You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software distributed under
+ * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
+ * ANY KIND, either express or implied. See the License for the specific language
+ * governing permissions and limitations under the License.
+ * 
+ * EDDiscovery is not affiliated with Frontier Developments plc.
+ */
+ 
+ using BaseUtils.Win32Constants;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -11,6 +27,8 @@ namespace ExtendedControls
 {
     public class DraggableForm : Form
     {
+        public bool DraggableDisableResize { get; set; } = false;       // SET true to stop your form from resizing in non windows border mode
+
         public void DragMoveMode(Control sender)  
         {
             sender.Capture = false;
@@ -75,7 +93,9 @@ namespace ExtendedControls
                     StatusStripCustom statstripinstalled = Controls.OfType<StatusStripCustom>().FirstOrDefault();
                     int bottomh = (statstripinstalled != null) ? statstripinstalled.Height : 5;
 
-                    if (p.X > this.ClientSize.Width - bottomh && p.Y > this.ClientSize.Height - bottomh)
+                    if (DraggableDisableResize && !windowsborder)   // not draggable, and no windows border, all is move
+                        m.Result = (IntPtr)HT.CAPTION;
+                    else if (p.X > this.ClientSize.Width - bottomh && p.Y > this.ClientSize.Height - bottomh)
                     {
                         m.Result = (IntPtr)HT.BOTTOMRIGHT;
                     }

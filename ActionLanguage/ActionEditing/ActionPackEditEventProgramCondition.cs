@@ -23,19 +23,24 @@ namespace ActionLanguage
 {
     public class ActionPackEditEventProgramCondition : ActionPackEditBase
     {
+        public System.Func<Control, System.Drawing.Icon, string, string> onEditKeys;   // edit the key string.. must provide
+        public System.Func<Control, string, ActionCoreController, string> onEditSay;   // edit the say string..
+
         private ExtendedControls.ComboBoxCustom eventtype;
 
         private ActionPackEditProgram ucprog;
         private ActionPackEditCondition uccond;
 
-        private ActionPackEditorForm.AdditionalNames anfunc;
+        private System.Func<string, List<string>> anfunc;
+        public System.Func<Condition, ActionProgram.ProgramConditionClass> autosetcondition;      // set the condition from the event type..
 
         private const int panelxmargin = 3;
         private const int panelymargin = 1;
 
-        public override void InitSub(Condition cond, List<string> events, ActionCoreController cp, string appfolder, ActionFile file,
-                        ActionPackEditorForm.AdditionalNames func, Icon ic)
+        public override void Init(Condition cond, List<string> events, ActionCoreController cp, string appfolder, ActionFile actionfile,
+                        System.Func<string, List<string>> func, Icon ic, ToolTip toolTip)
         {
+            cd = cond;
             anfunc = func;
 
             eventtype = new ExtendedControls.ComboBoxCustom();
@@ -50,48 +55,38 @@ namespace ActionLanguage
 
             Controls.Add(eventtype);
 
-            ucprog = new ActionPackEditProgram();
-            ucprog.Location = new Point(160, 0);
-            ucprog.Size = new Size(400, this.Height);       // init all the panels to 0/this height, select widths
-            ucprog.Init(file, cond, cp, appfolder, ic);
-            ucprog.onAdditionalNames += additionalnamelist;
-            ucprog.SuggestedName += suggestedname;
-            ucprog.RefreshEvent += refresh;
-            Controls.Add(ucprog);
-
             uccond = new ActionPackEditCondition();
-            uccond.Location = new Point(ucprog.Right + 8, 0);
+            uccond.Location = new Point(eventtype.Right+16, 0);
             uccond.Size = new Size(200, this.Height);       // init all the panels to 0/this height, select widths
-            uccond.Init(cond, ic);
-            uccond.onAdditionalNames += additionalnamelist;
+            uccond.Init(cond, ic ,toolTip);
+            uccond.onAdditionalNames += () => { return anfunc(eventtype.Text); };
 
             Controls.Add(uccond);
+
+            ActionProgram p = cond.action.HasChars() ? actionfile.actionprogramlist.Get(cond.action) : null;
+            ActionProgram.ProgramConditionClass classifier = p != null ? p.progclass : ActionProgram.ProgramConditionClass.Full;
+            ucprog = new ActionPackEditProgram();
+            ucprog.Location = new Point(uccond.Right+16, 0);
+            ucprog.Size = new Size(400, this.Height);       // init all the panels to 0/this height, select widths
+            ucprog.Init(actionfile, cond, cp, appfolder, ic, toolTip, classifier);
+            ucprog.onEditKeys = onEditKeys;
+            ucprog.onEditSay = onEditSay;
+            ucprog.onAdditionalNames += () => { return anfunc(eventtype.Text); };
+            ucprog.SuggestedName += () => { return eventtype.Text; };
+            ucprog.RefreshEvent += () => { RefreshIt(); };
+            Controls.Add(ucprog);
+
         }
 
         private void Eventtype_SelectedIndexChanged(object sender, System.EventArgs e)
         {
             cd.eventname = eventtype.Text;
 
-            if (cd.AlwaysTrue())
+            if (autosetcondition != null)
             {
-                if (cd.eventname == "onKeyPress")
-                    cd.Set(new ConditionEntry("KeyPress", ConditionEntry.MatchType.Equals, "?"));
-                else if (cd.eventname == "onTimer")
-                    cd.Set(new ConditionEntry("TimerName", ConditionEntry.MatchType.Equals, "?"));
-                else if (cd.eventname == "onPopUp" || cd.eventname == "onPopDown")
-                    cd.Set(new ConditionEntry("PopOutName", ConditionEntry.MatchType.Equals, "?"));
-                else if (cd.eventname == "onTabChange")
-                    cd.Set(new ConditionEntry("TabName", ConditionEntry.MatchType.Equals, "?"));
-                else if (cd.eventname == "onPanelChange")
-                    cd.Set(new ConditionEntry("PopOutName", ConditionEntry.MatchType.Equals, "?"));
-                else if (cd.eventname == "onEliteInput" || cd.eventname == "onEliteInputOff")
-                    cd.Set(new ConditionEntry("Binding", ConditionEntry.MatchType.Equals, "?"));
-                else if (cd.eventname == "onMenuItem")
-                    cd.Set(new ConditionEntry("MenuName", ConditionEntry.MatchType.Equals, "?"));
-                else if (cd.eventname == "onSayStarted" || cd.eventname == "onSayFinished" || cd.eventname == "onPlayStarted" || cd.eventname == "onPlayFinished")
-                    cd.Set(new ConditionEntry("EventName", ConditionEntry.MatchType.Equals, "?"));
-
-                uccond.SetCondition(cd);
+                ActionProgram.ProgramConditionClass cls = autosetcondition(cd);     // ask how to set up the event..
+                uccond.ChangedCondition();      // cd is updated
+                ucprog.ChangedCondition(cls);   // program class is updated
             }
         }
 
@@ -109,23 +104,5 @@ namespace ActionLanguage
         }
 
         public override string ID() { return eventtype.Text.Length > 0 ? eventtype.Text : "Action not set"; }
-
-        // tell the sub controls stuff
-
-        public List<string> additionalnamelist()
-        {
-            return anfunc(eventtype.Text);
-        }
-
-        public string suggestedname()
-        {
-            return eventtype.Text;
-        }
-
-        public void refresh()
-        {
-            RefreshIt();
-        }
-
     }
 }

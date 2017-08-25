@@ -440,7 +440,7 @@ namespace EDDiscovery
         private void Controller_RefreshStarting()
         {
             RefreshButton(false);
-            actioncontroller.ActionRun("onRefreshStart", "ProgramEvent");
+            actioncontroller.ActionRun(Actions.ActionEventEDList.onRefreshStart);
         }
 
         private void Controller_RefreshCommanders()
@@ -493,8 +493,6 @@ namespace EDDiscovery
                         LogLineHighlight("Companion API get failed: " + ex.Message);
                         if (!(ex is EliteDangerousCore.CompanionAPI.CompanionAppException))
                             LogLineHighlight(ex.StackTrace);
-
-                        // what do we do TBD
                     }
                 }
             }
@@ -502,7 +500,7 @@ namespace EDDiscovery
 
         private void Controller_NewEntrySecond(HistoryEntry he, HistoryList hl)         // called after all UI's have had their chance
         {
-            actioncontroller.ActionRunOnEntry(he, "NewEntry");
+            actioncontroller.ActionRunOnEntry(he, Actions.ActionEventEDList.NewEntry(he));
 
             // all notes committed
             SystemNoteClass.CommitDirtyNotes((snc) => { if (EDCommander.Current.SyncToEdsm && snc.FSDEntry) EDSMSync.SendComments(snc.SystemName, snc.Note, snc.EdsmId); });
@@ -615,7 +613,7 @@ namespace EDDiscovery
             {
                 e.Cancel = true;
                 ShowInfoPanel("Closing, please wait!", true);
-                actioncontroller.ActionRun("onShutdown", "ProgramEvent");
+                actioncontroller.ActionRun(Actions.ActionEventEDList.onShutdown);
                 Controller.Shutdown();
             }
         }
@@ -1193,7 +1191,7 @@ namespace EDDiscovery
                 "TopLevelMenuName" , it.OwnerItem.Name,
             });
 
-            actioncontroller.ActionRun("onMenuItem", "UserUIEvent", null, vars);
+            actioncontroller.ActionRun(Actions.ActionEventEDList.onMenuItem, null, vars);
         }
 
         public bool SelectTabPage(string name)
@@ -1212,16 +1210,16 @@ namespace EDDiscovery
 
         private void tabControl1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            ActionRun("onTabChange", "UserUIEvent", null, new Conditions.ConditionVariables("TabName", tabControlMain.TabPages[tabControlMain.SelectedIndex].Text));
+            ActionRun(Actions.ActionEventEDList.onTabChange, null, new Conditions.ConditionVariables("TabName", tabControlMain.TabPages[tabControlMain.SelectedIndex].Text));
         }
 
         public Conditions.ConditionVariables Globals { get { return actioncontroller.Globals; } }
 
-        public int ActionRunOnEntry(HistoryEntry he, string triggertype)
-        { return actioncontroller.ActionRunOnEntry(he, triggertype); }
+        public int ActionRunOnEntry(HistoryEntry he, ActionLanguage.ActionEvent av)
+        { return actioncontroller.ActionRunOnEntry(he, av); }
 
-        public int ActionRun(string name, string triggertype, HistoryEntry he = null, Conditions.ConditionVariables additionalvars = null, string flagstart = null, bool now = false)
-        { return actioncontroller.ActionRun(name, triggertype,he,additionalvars,flagstart,now); }
+        public int ActionRun(ActionLanguage.ActionEvent ev, HistoryEntry he = null, Conditions.ConditionVariables additionalvars = null, string flagstart = null, bool now = false)
+        { return actioncontroller.ActionRun(ev,he,additionalvars,flagstart,now); }
 
         #endregion
 
