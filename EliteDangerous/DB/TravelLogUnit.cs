@@ -72,10 +72,7 @@ namespace EliteDangerousCore.DB
         {
             get
             {
-                if (Path == null)
-                    return false;
-
-                if (Path.Contains("PUBLIC_TEST_SERVER"))
+                if ((Path != null && Path.Contains("PUBLIC_TEST_SERVER")) || (type & 0x8000) == 0x8000)
                     return true;
                 else
                     return false;
@@ -204,6 +201,32 @@ namespace EliteDangerousCore.DB
         public static bool TryGet(string name, out TravelLogUnit tlu)
         {
             tlu = Get(name);
+            return tlu != null;
+        }
+
+        public static TravelLogUnit Get(long id)
+        {
+            using (SQLiteConnectionUser cn = new SQLiteConnectionUser(mode: EDDbAccessMode.Reader))
+            {
+                using (DbCommand cmd = cn.CreateCommand("SELECT * FROM TravelLogUnit WHERE Id = @id ORDER BY Id DESC"))
+                {
+                    cmd.AddParameterWithValue("@id", id);
+                    using (DbDataReader reader = cmd.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            return new TravelLogUnit(reader);
+                        }
+                    }
+                }
+            }
+
+            return null;
+        }
+
+        public static bool TryGet(long id, out TravelLogUnit tlu)
+        {
+            tlu = Get(id);
             return tlu != null;
         }
     }
