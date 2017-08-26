@@ -28,7 +28,7 @@ namespace EDDiscovery.Actions
 
     public class ConditionEDDFunctions : ConditionFunctionsBase
     {
-        public ConditionEDDFunctions(ConditionFunctions c, ConditionVariables v, ConditionFileHandles h, int recd) : base(c, v, h, recd)
+        public ConditionEDDFunctions(ConditionFunctions c, ConditionVariables v, ConditionPersistentData h, int recd) : base(c, v, h, recd)
         {
             if (functions == null)        // one time init, done like this cause can't do it in {}
             {

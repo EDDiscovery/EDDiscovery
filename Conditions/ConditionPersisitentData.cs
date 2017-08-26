@@ -155,12 +155,12 @@ namespace Conditions
         }
     }
 
-    public class ConditionFileHandles
+    public class ConditionPersistentData
     {
         private Dictionary<int, ConditionFileHandle> handles;
         private int nextid;
 
-        public ConditionFileHandles()
+        public ConditionPersistentData()
         {
             handles = new Dictionary<int, ConditionFileHandle>();
             nextid = 1;

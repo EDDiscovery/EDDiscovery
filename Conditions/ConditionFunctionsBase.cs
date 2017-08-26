@@ -21,7 +21,7 @@ namespace Conditions
 {
     public class ConditionFunctionsBase : ConditionFunctionHandlers
     {
-        public ConditionFunctionsBase(ConditionFunctions c, ConditionVariables v, ConditionFileHandles h, int recd) : base(c, v, h, recd)
+        public ConditionFunctionsBase(ConditionFunctions c, ConditionVariables v, ConditionPersistentData h, int recd) : base(c, v, h, recd)
         {
             if (functions == null)        // one time init, done like this cause can't do it in {}
             {
@@ -999,7 +999,7 @@ namespace Conditions
 
         protected bool OpenFile(out string output)
         {
-            if (handles == null)
+            if (persistentdata == null)
             {
                 output = "File access not supported";
                 return false;
@@ -1015,7 +1015,7 @@ namespace Conditions
                 if (VerifyFileAccess(file, fm))
                 {
                     string errmsg;
-                    int id = handles.Open(file, fm, fm == FileMode.Open ? FileAccess.Read : FileAccess.Write, out errmsg);
+                    int id = persistentdata.Open(file, fm, fm == FileMode.Open ? FileAccess.Read : FileAccess.Write, out errmsg);
                     if (id > 0)
                         vars[handle] = id.ToStringInvariant();
                     else
@@ -1037,9 +1037,9 @@ namespace Conditions
         {
             int? hv = vars[paras[0].value].InvariantParseIntNull();
 
-            if (hv != null && handles != null)
+            if (hv != null && persistentdata != null)
             {
-                handles.Close(hv.Value);
+                persistentdata.Close(hv.Value);
                 output = "1";
                 return true;
             }
@@ -1054,9 +1054,9 @@ namespace Conditions
         {
             int? hv = vars[paras[0].value].InvariantParseIntNull();
 
-            if (hv != null && handles != null)
+            if (hv != null && persistentdata != null)
             {
-                if (handles.ReadLine(hv.Value, out output))
+                if (persistentdata.ReadLine(hv.Value, out output))
                 {
                     if (output == null)
                         output = "0";
@@ -1090,9 +1090,9 @@ namespace Conditions
             int? hv = vars[paras[0].value].InvariantParseIntNull();
             string line = paras[1].isstring ? paras[1].value : vars[paras[1].value];
 
-            if (hv != null && handles != null)
+            if (hv != null && persistentdata != null)
             {
-                if (handles.WriteLine(hv.Value, line, lf, out output))
+                if (persistentdata.WriteLine(hv.Value, line, lf, out output))
                 {
                     output = "1";
                     return true;
@@ -1114,9 +1114,9 @@ namespace Conditions
             if (pos == null && vars.Exists(paras[1].value))
                 pos = vars[paras[1].value].InvariantParseLongNull();
 
-            if (hv != null && pos != null && handles != null)
+            if (hv != null && pos != null && persistentdata != null)
             {
-                if (handles.Seek(hv.Value, pos.Value, out output))
+                if (persistentdata.Seek(hv.Value, pos.Value, out output))
                 {
                     output = "1";
                     return true;
@@ -1133,9 +1133,9 @@ namespace Conditions
         protected bool TellFile(out string output)
         {
             int? hv = vars[paras[0].value].InvariantParseIntNull();
-            if (hv != null && handles != null)
+            if (hv != null && persistentdata != null)
             {
-                if (handles.Tell(hv.Value, out output))
+                if (persistentdata.Tell(hv.Value, out output))
                 {
                     return true;
                 }
