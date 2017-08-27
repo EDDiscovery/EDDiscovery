@@ -27,98 +27,98 @@ namespace Conditions
             {
                 functions = new Dictionary<string, FuncEntry>();
 
-                functions.Add("abs", new FuncEntry(Abs, 2, 2, 1, 0));  // first is var or literal or string
-                functions.Add("alt", new FuncEntry(Alt, 2, 20, 0xfffffff, 0xfffffff));  // first is var or literal or string, etc.
-                functions.Add("closefile", new FuncEntry(CloseFile, 1, 1, 1, 0));  // first is a var
+                functions.Add("abs", new FuncEntry(Abs, 2, 2, FirstMacro, NoStrings));  // first is macro. second is macro or literal
+                functions.Add("alt", new FuncEntry(Alt, 2, 20, AllMacros, AllStrings));  // string/var.. repeated
+                functions.Add("closefile", new FuncEntry(CloseFile, 1, 1, AllMacros, NoStrings));  // first is a var
 
-                functions.Add("datetimenow", new FuncEntry(DateTimeNow, 1, 1, 0));     // literal type
-                functions.Add("datehour", new FuncEntry(DateHour, 1, 1, 1, 1));   // first is a var or string
-                functions.Add("date", new FuncEntry(Date, 2, 2, 1, 1));   // first is a var or string, second is literal
-                functions.Add("direxists", new FuncEntry(DirExists, 1, 20, 0xfffffff, 0xfffffff));   // check var, can be string
+                functions.Add("datetimenow", new FuncEntry(DateTimeNow, 1, 1, NoMacros, NoStrings));     // literal type
+                functions.Add("datehour", new FuncEntry(DateHour, 1, 1, AllMacros, FirstString));   // first is a var or string
+                functions.Add("date", new FuncEntry(Date, 2, 2, FirstMacro, FirstString));   // first is a var or string, second is literal
+                functions.Add("direxists", new FuncEntry(DirExists, 1, 20, AllMacros, AllStrings));   // check var, can be string
 
-                functions.Add("escapechar", new FuncEntry(EscapeChar, 1, 1, 1, 1));   // check var, can be string
-                functions.Add("eval", new FuncEntry(Eval, 1, 2, 1, 1));   // can be string, can be variable, p2 is not a variable, and can't be a string
-                functions.Add("exist", new FuncEntry(Exists, 1, 20, 0, 0xfffffff));
-                functions.Add("existsdefault", new FuncEntry(ExistsDefault, 2, 2, 2, 3));   // first is a macro but can not exist, second is a string or macro which must exist
-                functions.Add("expand", new FuncEntry(Expand, 1, 20, 0xfffffff, 0xfffffff)); // check var, can be string (if so expanded)
-                functions.Add("expandarray", new FuncEntry(ExpandArray, 4, 5, 2, 3 + 16));  // var 1 is text root/string, not var, not string, var 2 can be var or string, var 3/4 is integers or variables, checked in function
-                functions.Add("expandvars", new FuncEntry(ExpandVars, 4, 5, 2, 3 + 16));   // var 1 is text root/string, not var, not string, var 2 can be var or string, var 3/4 is integers or variables, checked in function
+                functions.Add("escapechar", new FuncEntry(EscapeChar, 1, 1, AllMacros, AllStrings));   // check var, can be string
+                functions.Add("eval", new FuncEntry(Eval, 1, 2, FirstMacro, FirstString));   // can be string, can be variable, p2 is not a variable, and can't be a string
+                functions.Add("exist", new FuncEntry(Exists, 1, 20, NoMacros, AllStrings)); // no macros, all literal, can be strings
+                functions.Add("existsdefault", new FuncEntry(ExistsDefault, 2, 2, SecondMacro, AllStrings));   // first is a macro but can not exist, second is a string or macro which must exist
+                functions.Add("expand", new FuncEntry(Expand, 1, 20, AllMacros, AllStrings)); // check var, can be string (if so expanded)
+                functions.Add("expandarray", new FuncEntry(ExpandArray, 4, 5, SecondMacro, 3 + 16));  // var 1 is text root/string, not var, not string, var 2 can be var or string, var 3/4 is integers or variables, checked in function
+                functions.Add("expandvars", new FuncEntry(ExpandVars, 4, 5, SecondMacro, 3 + 16));   // var 1 is text root/string, not var, not string, var 2 can be var or string, var 3/4 is integers or variables, checked in function
 
-                functions.Add("filelength", new FuncEntry(FileLength, 1, 1, 1, 1));   // check var, can be string
-                functions.Add("fileexists", new FuncEntry(FileExists, 1, 20, 0xfffffff, 0xfffffff));   // check var, can be string
-                functions.Add("findline", new FuncEntry(FindLine, 2, 2, 3, 2));   //check var1 and var2, second can be a string
-                functions.Add("floor", new FuncEntry(Floor, 2, 2, 1));     // check var1, not var 2 no strings
+                functions.Add("filelength", new FuncEntry(FileLength, 1, 1, AllMacros, FirstString));   // check var, can be string
+                functions.Add("fileexists", new FuncEntry(FileExists, 1, 20, AllMacros, AllStrings));   // check var, can be string
+                functions.Add("findline", new FuncEntry(FindLine, 2, 2, AllMacros, SecondString));   //check var1 and var2, second can be a string
+                functions.Add("floor", new FuncEntry(Floor, 2, 2, FirstMacro , NoStrings));     // check var1, not var 2 no strings
 
-                functions.Add("ifnotempty", new FuncEntry(Ifnotempty, 2, 3, 7, 7));   // check var1-3, allow strings var1-3
-                functions.Add("ifempty", new FuncEntry(Ifempty, 2, 3, 7, 7));
-                functions.Add("iftrue", new FuncEntry(Iftrue, 2, 3, 7, 7));   // check var1-3, allow strings var1-3
-                functions.Add("iffalse", new FuncEntry(Iffalse, 2, 3, 7, 7));
-                functions.Add("ifzero", new FuncEntry(Ifzero, 2, 3, 7, 7));   // check var1-3, allow strings var1-3
-                functions.Add("ifnonzero", new FuncEntry(Ifnonzero, 2, 3, 7, 7));   // check var1-3, allow strings var1-3
+                functions.Add("ifnotempty", new FuncEntry(Ifnotempty, 2, 3, AllMacros, AllStrings));   // check var1-3, allow strings var1-3
+                functions.Add("ifempty", new FuncEntry(Ifempty, 2, 3, AllMacros, AllStrings));
+                functions.Add("iftrue", new FuncEntry(Iftrue, 2, 3, AllMacros, AllStrings));   // check var1-3, allow strings var1-3
+                functions.Add("iffalse", new FuncEntry(Iffalse, 2, 3, AllMacros, AllStrings));
+                functions.Add("ifzero", new FuncEntry(Ifzero, 2, 3, AllMacros, AllStrings));   // check var1-3, allow strings var1-3
+                functions.Add("ifnonzero", new FuncEntry(Ifnonzero, 2, 3, AllMacros, AllStrings));   // check var1-3, allow strings var1-3
 
-                functions.Add("ifcontains", new FuncEntry(Ifcontains, 3, 5, 31, 31)); // check var1-5, allow strings var1-5
-                functions.Add("ifnotcontains", new FuncEntry(Ifnotcontains, 3, 5, 31, 31));
-                functions.Add("ifequal", new FuncEntry(Ifequal, 3, 5, 31, 31));
-                functions.Add("ifnotequal", new FuncEntry(Ifnotequal, 3, 5, 31, 31));
+                functions.Add("ifcontains", new FuncEntry(Ifcontains, 3, 5, AllMacros, AllStrings)); // check var1-5, allow strings var1-5
+                functions.Add("ifnotcontains", new FuncEntry(Ifnotcontains, 3, 5, AllMacros, AllStrings));
+                functions.Add("ifequal", new FuncEntry(Ifequal, 3, 5, AllMacros, AllStrings));
+                functions.Add("ifnotequal", new FuncEntry(Ifnotequal, 3, 5, AllMacros, AllStrings));
 
-                functions.Add("ifgt", new FuncEntry(Ifnumgreater, 3, 5, 31, 31)); // check var1-5, allow strings var1-5
-                functions.Add("iflt", new FuncEntry(Ifnumless, 3, 5, 31, 31));
-                functions.Add("ifge", new FuncEntry(Ifnumgreaterequal, 3, 5, 31, 31));
-                functions.Add("ifle", new FuncEntry(Ifnumlessequal, 3, 5, 31, 31));
-                functions.Add("ifeq", new FuncEntry(Ifnumequal, 3, 5, 31, 31));
-                functions.Add("ifne", new FuncEntry(Ifnumnotequal, 3, 5, 31, 31));
+                functions.Add("ifgt", new FuncEntry(Ifnumgreater, 3, 5, AllMacros, AllStrings)); // check var1-5, allow strings var1-5
+                functions.Add("iflt", new FuncEntry(Ifnumless, 3, 5, AllMacros, AllStrings));
+                functions.Add("ifge", new FuncEntry(Ifnumgreaterequal, 3, 5, AllMacros, AllStrings));
+                functions.Add("ifle", new FuncEntry(Ifnumlessequal, 3, 5, AllMacros, AllStrings));
+                functions.Add("ifeq", new FuncEntry(Ifnumequal, 3, 5, AllMacros, AllStrings));
+                functions.Add("ifne", new FuncEntry(Ifnumnotequal, 3, 5, AllMacros, AllStrings));
 
-                functions.Add("indexof", new FuncEntry(IndexOf, 2, 2, 3, 3));   // check var1 and 2 if normal, allow string in 1 and 2
-                functions.Add("indirect", new FuncEntry(Indirect, 1, 20, 0xfffffff, 0xfffffff));   // check var, no strings
+                functions.Add("indexof", new FuncEntry(IndexOf, 2, 2, AllMacros, AllStrings));   // check var1 and 2 if normal, allow string in 1 and 2
+                functions.Add("indirect", new FuncEntry(Indirect, 1, 20, AllMacros, AllStrings));   // check var, no strings
 
-                functions.Add("ispresent", new FuncEntry(Ispresent, 2, 3, 2, 2));   // 1 may not be there, 2 either a macro or can be string. 3 is optional and a var or literal
+                functions.Add("ispresent", new FuncEntry(Ispresent, 2, 3, SecondMacro, SecondString));   // 1 may not be there, 2 either a macro or can be string. 3 is optional and a var or literal
 
-                functions.Add("join", new FuncEntry(Join, 3, 20, 0xfffffff, 0xfffffff));   // all can be string, check var
+                functions.Add("join", new FuncEntry(Join, 3, 20, AllMacros, AllStrings));   // all can be string, check var
 
-                functions.Add("length", new FuncEntry(Length, 1, 1, 1, 1));
-                functions.Add("lower", new FuncEntry(Lower, 1, 20, 0xfffffff, 0xfffffff));   // all can be string, check var
+                functions.Add("length", new FuncEntry(Length, 1, 1, AllMacros, AllStrings));   // length, first may be string/macro
+                functions.Add("lower", new FuncEntry(Lower, 1, 20, AllMacros, AllStrings));   // all can be string, check var
 
+                functions.Add("mkdir", new FuncEntry(MkDir, 1, 1, AllMacros, AllStrings));   // check var, can be string
 
-                functions.Add("mkdir", new FuncEntry(MkDir, 1, 1, 1, 1));   // check var, can be string
+                functions.Add("hnum", new FuncEntry(Hnum, 2, 2, NoMacros, AllStrings));   // para 1 literal or var or string, para 2 string, literal or var
 
-                functions.Add("hnum", new FuncEntry(Hnum, 2, 2, 0,3));   // para 1 literal or var or string, para 2 string, literal or var
+                functions.Add("openfile", new FuncEntry(OpenFile, 3, 3, SecondMacro, SecondString));
 
-                functions.Add("openfile", new FuncEntry(OpenFile, 3, 3, 2, 2));
+                functions.Add("phrase", new FuncEntry(Phrase, 1, 1, AllMacros, AllMacros));
 
-                functions.Add("phrase", new FuncEntry(Phrase, 1, 1, 1, 1));
+                functions.Add("random", new FuncEntry(Random, 1, 1, NoMacros, NoStrings));   // no change var, not string
+                functions.Add("readline", new FuncEntry(ReadLineFile, 2, 2, FirstMacro, NoStrings));   // first must be a macro, second is a literal varname only
+                functions.Add("regex", new FuncEntry(Regex, 3, 3, AllMacros, AllStrings)); // var/string for all
+                functions.Add("replace", new FuncEntry(Replace, 3, 3, AllMacros, AllStrings)); // var/string for all
+                functions.Add("replaceescapechar", new FuncEntry(ReplaceEscapeChar, 1, 1, AllMacros, AllStrings));   // check var, can be string
+                functions.Add("replacevar", new FuncEntry(ReplaceVar, 2, 2, FirstMacro, AllStrings)); // var/string, literal/var/string
+                functions.Add("round", new FuncEntry(RoundCommon, 3, 3, FirstMacro, NoStrings));
+                functions.Add("roundnz", new FuncEntry(RoundCommon, 4, 4, FirstMacro, NoStrings));
+                functions.Add("roundscale", new FuncEntry(RoundCommon, 5, 5, FirstMacro, NoStrings));
+                functions.Add("rs", new FuncEntry(ReplaceVarSC, 2, 2, FirstMacro, AllStrings)); // var/string, literal/var/string
+                functions.Add("rv", new FuncEntry(ReplaceVar, 2, 2, FirstMacro, AllStrings)); // var/string, literal/var/string
 
-                functions.Add("random", new FuncEntry(Random, 1, 1, 0, 0));   // no change var, not string
-                functions.Add("readline", new FuncEntry(ReadLineFile, 2, 2, 1, 0));   // first must be a macro, second is a literal varname only
-                functions.Add("replace", new FuncEntry(Replace, 3, 3, 7, 7)); // var/string for all
-                functions.Add("replaceescapechar", new FuncEntry(ReplaceEscapeChar, 1, 1, 1, 1));   // check var, can be string
-                functions.Add("replacevar", new FuncEntry(ReplaceVar, 2, 2, 1, 3)); // var/string, literal/var/string
-                functions.Add("round", new FuncEntry(RoundCommon, 3, 3, 1));
-                functions.Add("roundnz", new FuncEntry(RoundCommon, 4, 4, 1));
-                functions.Add("roundscale", new FuncEntry(RoundCommon, 5, 5, 1));
-                functions.Add("rs", new FuncEntry(ReplaceVarSC, 2, 2, 1, 3)); // var/string, literal/var/string
-                functions.Add("rv", new FuncEntry(ReplaceVar, 2, 2, 1, 3)); // var/string, literal/var/string
+                functions.Add("seek", new FuncEntry(SeekFile, 2, 2, FirstMacro, NoStrings));   //first is macro, second is literal or macro
 
-                functions.Add("seek", new FuncEntry(SeekFile, 2, 2, 1, 0));   //first is macro, second is literal or macro
+                functions.Add("safevarname", new FuncEntry(SafeVarName, 1, 1, AllMacros, AllStrings));   //macro/string
 
-                functions.Add("safevarname", new FuncEntry(SafeVarName, 1, 1, 1, 1));   //macro/string
+                functions.Add("sc", new FuncEntry(SplitCaps, 1, 1, AllMacros, AllStrings));   //shorter alias 
+                functions.Add("ship", new FuncEntry(Ship, 1, 1, AllMacros, AllStrings));   //ship translator
+                functions.Add("splitcaps", new FuncEntry(SplitCaps, 1, 1, AllMacros, AllStrings));   //check var, allow strings
+                functions.Add("substring", new FuncEntry(SubString, 3, 3, FirstMacro, FirstString));   // check var1, var1 can be string, var 2 and 3 can either be macro or ints not strings
+                functions.Add("systempath", new FuncEntry(SystemPath, 1, 1, NoMacros, NoStrings));   // literal
 
-                functions.Add("sc", new FuncEntry(SplitCaps, 1, 1, 1, 1));   //shorter alias 
-                functions.Add("ship", new FuncEntry(Ship, 1, 1, 1, 1));   //ship translator
-                functions.Add("splitcaps", new FuncEntry(SplitCaps, 1, 1, 1, 1));   //check var, allow strings
-                functions.Add("substring", new FuncEntry(SubString, 3, 3, 1, 1));   // check var1, var1 can be string, var 2 and 3 can either be macro or ints not strings
-                functions.Add("systempath", new FuncEntry(SystemPath, 1, 1, 0, 0));   // literal
+                functions.Add("tell", new FuncEntry(TellFile, 1, 1, AllMacros, NoStrings));   //first is macro
+                functions.Add("tickcount", new FuncEntry(TickCount, 0, 0, NoMacros, NoStrings));   // no paras
+                functions.Add("trim", new FuncEntry(Trim, 1, 1, AllMacros, AllStrings));  // var/string
 
-                functions.Add("tell", new FuncEntry(TellFile, 1, 1, 1, 0));   //first is macro
-                functions.Add("tickcount", new FuncEntry(TickCount, 0, 0, 0, 0));   // no paras
-                functions.Add("trim", new FuncEntry(Trim, 1, 2, 1, 1));
+                functions.Add("upper", new FuncEntry(Upper, 1, 20, AllMacros, AllStrings));   // all can be string, check var
 
-                functions.Add("upper", new FuncEntry(Upper, 1, 20, 0xfffffff, 0xfffffff));   // all can be string, check var
-
-                functions.Add("wordlistcount", new FuncEntry(WordListCount, 1, 1, 1));       // first is a var or string
-                functions.Add("wordlistentry", new FuncEntry(WordListEntry, 2, 2, 1, 1));       // first is a var or string, second is a var or literal
+                functions.Add("wordlistcount", new FuncEntry(WordListCount, 1, 1, AllMacros , AllStrings));       // first is a var or string
+                functions.Add("wordlistentry", new FuncEntry(WordListEntry, 2, 2, FirstMacro, FirstString));       // first is a var or string, second is a var or literal
                 functions.Add("wordof", new FuncEntry(WordOf, 2, 3, 1 + 4, 1 + 4));   // first is a var or string, second is a var or literal, third is a macro or string
-                functions.Add("write", new FuncEntry(WriteFile, 2, 2, 3, 2));      // first must be a var, second can be macro or string
-                functions.Add("writeline", new FuncEntry(WriteLineFile, 2, 2, 3, 2));      // first must be a var, second can be macro or string
+                functions.Add("write", new FuncEntry(WriteFile, 2, 2, AllMacros, SecondString));      // first must be a var, second can be macro or string
+                functions.Add("writeline", new FuncEntry(WriteLineFile, 2, 2, AllMacros, SecondString));      // first must be a var, second can be macro or string
             }
         }
 
@@ -499,6 +499,22 @@ namespace Conditions
             return true;
         }
 
+        protected bool Regex(out string output)
+        {
+            string s = paras[0].isstring ? paras[0].value : vars[paras[0].value];
+            string f1 = paras[1].isstring ? paras[1].value : vars[paras[1].value];
+            string f2 = paras[2].isstring ? paras[2].value : vars[paras[2].value];
+            try
+            {
+                output = System.Text.RegularExpressions.Regex.Replace(s, f1, f2);
+                return true;
+            }
+            catch
+            {
+                output = "Regular expression failed";
+                return false;
+            }
+        }
 
         protected bool Replace(out string output)
         {
@@ -508,6 +524,7 @@ namespace Conditions
             output = s.Replace(f1, f2, StringComparison.InvariantCultureIgnoreCase);
             return true;
         }
+
 
         protected bool ReplaceVar(out string output)
         {

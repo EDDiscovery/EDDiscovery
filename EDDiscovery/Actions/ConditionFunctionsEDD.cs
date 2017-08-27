@@ -33,8 +33,9 @@ namespace EDDiscovery.Actions
             if (functions == null)        // one time init, done like this cause can't do it in {}
             {
                 functions = new Dictionary<string, FuncEntry>();
-                functions.Add("systempath", new FuncEntry(SystemPath, 1, 1, 0, 0));   // literal
-                functions.Add("version", new FuncEntry(Version, 1, 1, 0));     // don't check first para
+                functions.Add("systempath", new FuncEntry(SystemPath, 1, 1, NoMacros, NoStrings));   // literal
+                functions.Add("version", new FuncEntry(Version, 1, 1, NoMacros, NoStrings));     // don't check first para
+                functions.Add("star", new FuncEntry(Star, 2, 2, FirstMacro, AllStrings));     // var/string, literal/var/string
             }
         }
 
@@ -85,6 +86,22 @@ namespace EDDiscovery.Actions
             }
         }
 
+        protected bool Star(out string output )
+        {
+            string s = paras[0].isstring ? paras[0].value : vars[paras[0].value];
+
+            // Find IX-T123b and replace with I X - T 123 b
+            paras[0].value = System.Text.RegularExpressions.Regex.Replace(s, @"([A-Za-z0-9]+)\-([A-Za-z0-9]+)", delegate (System.Text.RegularExpressions.Match match)
+            {
+                string r = System.Text.RegularExpressions.Regex.Replace(match.Value, @"([A-Za-z\-])", " $1 ");  // space out alphas and dash
+                return r.Replace("  ", " ");   // remove double spaces.. quickest way for now
+            });
+
+            paras[0].isstring = true;       // now a string, pass to root function to do the say_ss bit
+
+            return ReplaceVarCommon(out output, true);
+        }
+
 
         protected override bool VerifyFileAccess(string file, FileMode fm)
         {
@@ -95,7 +112,7 @@ namespace EDDiscovery.Actions
 
                 if (!actionfolderperms.Contains(folder + ";"))
                 {
-                    bool ok = ExtendedControls.MessageBoxTheme.Show("Warning - This programy is attempting to write to folder" + Environment.NewLine + Environment.NewLine +
+                    bool ok = ExtendedControls.MessageBoxTheme.Show("Warning - This program is attempting to write to folder" + Environment.NewLine + Environment.NewLine +
                                                          folder + Environment.NewLine + Environment.NewLine +
                                                          "with file " + Path.GetFileName(file) + Environment.NewLine + Environment.NewLine +
                                                            "!!! Verify you are happy for the program to write to ANY files in that folder!!!",
