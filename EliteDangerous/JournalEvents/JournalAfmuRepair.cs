@@ -51,7 +51,7 @@ namespace EliteDangerousCore.JournalEvents
         public override void FillInformation(out string summary, out string info, out string detailed) //V
         {
             summary = EventTypeStr.SplitCapsWord();
-            info = BaseUtils.FieldBuilder.Build("", ModuleLocalised.Alt(Module), "Health:", Health, "Fully Repaired:", FullyRepaired.ToString());
+            info = BaseUtils.FieldBuilder.Build("", ModuleLocalised.Alt(Module), "Health:;%", (int)(Health * 100), "Fully Repaired:", FullyRepaired.ToString());
             detailed = "";
         }
     }
