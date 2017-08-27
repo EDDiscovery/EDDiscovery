@@ -282,16 +282,26 @@ namespace Conditions
             public string fname;
             public int numberparasmin;
             public int numberparasmax;
-            public int checkvarmap;           // if not a string, check macro
-            public int allowstringmap;          // allow a string
+            public int checkvarmap;             // if not a string, check macro and fail if does not exist. b0 = para1, etc.
+            public int allowstringmap;          // allow a string map. b0 = para1, etc.
 
-            public FuncEntry(func f, int min, int max, int checkmacromapx, int allowstringmapx = 0)
+            public FuncEntry(func f, int min, int max, int checkmacromapx, int allowstringmapx )
             {
                 fname = f.Method.Name;
                 numberparasmin = min; numberparasmax = max;
                 checkvarmap = checkmacromapx; allowstringmap = allowstringmapx;
             }
         }
+
+        protected const int NoMacros = 0;           // ID for checkvarmap above
+        protected const int FirstMacro = 1;
+        protected const int SecondMacro = 2;
+        protected const int AllMacros = 0xfffffff;
+
+        protected const int NoStrings = 0;          // ID for allowstringmap above
+        protected const int FirstString = 1;
+        protected const int SecondString = 2;
+        protected const int AllStrings = 0xfffffff;
 
         protected static System.Globalization.CultureInfo ct = System.Globalization.CultureInfo.InvariantCulture;
         protected static Random rnd = new Random();
