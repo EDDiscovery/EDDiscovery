@@ -47,7 +47,7 @@ namespace EDDiscovery
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(TrilaterationControl));
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             this.trilatContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.addToWantedSystemsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.viewOnEDSMToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -85,6 +85,9 @@ namespace EDDiscovery
             this.Source = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewTextBoxColumnClosestSystemsSystem = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
+            this.toolStripLabel1 = new System.Windows.Forms.ToolStripLabel();
+            this.toolStripLabelNoCoords = new System.Windows.Forms.ToolStripLabel();
+            this.toolStripAddFromHistory = new System.Windows.Forms.ToolStripButton();
             this.trilatContextMenu.SuspendLayout();
             this.wantedContextMenu.SuspendLayout();
             this.panel_controls.SuspendLayout();
@@ -199,7 +202,10 @@ namespace EDDiscovery
             this.toolStripButtonMap,
             this.toolStripSeparator2,
             this.toolStripLabelSystem,
-            this.toolStripTextBoxSystem});
+            this.toolStripTextBoxSystem,
+            this.toolStripLabel1,
+            this.toolStripLabelNoCoords,
+            this.toolStripAddFromHistory});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.Size = new System.Drawing.Size(924, 25);
@@ -488,14 +494,14 @@ namespace EDDiscovery
             this.dataGridViewClosestSystems.AllowUserToDeleteRows = false;
             this.dataGridViewClosestSystems.AllowUserToResizeRows = false;
             this.dataGridViewClosestSystems.ClipboardCopyMode = System.Windows.Forms.DataGridViewClipboardCopyMode.EnableWithoutHeaderText;
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dataGridViewClosestSystems.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dataGridViewClosestSystems.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
             this.dataGridViewClosestSystems.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewClosestSystems.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.Source,
@@ -525,6 +531,28 @@ namespace EDDiscovery
             this.dataGridViewTextBoxColumnClosestSystemsSystem.MinimumWidth = 100;
             this.dataGridViewTextBoxColumnClosestSystemsSystem.Name = "dataGridViewTextBoxColumnClosestSystemsSystem";
             this.dataGridViewTextBoxColumnClosestSystemsSystem.ReadOnly = true;
+            // 
+            // toolStripLabel1
+            // 
+            this.toolStripLabel1.Name = "toolStripLabel1";
+            this.toolStripLabel1.Size = new System.Drawing.Size(154, 22);
+            this.toolStripLabel1.Text = "Visited without coordinates:";
+            this.toolStripLabel1.ToolTipText = "Start New to update count";
+            // 
+            // toolStripLabelNoCoords
+            // 
+            this.toolStripLabelNoCoords.Name = "toolStripLabelNoCoords";
+            this.toolStripLabelNoCoords.Size = new System.Drawing.Size(0, 22);
+            // 
+            // toolStripAddFromHistory
+            // 
+            this.toolStripAddFromHistory.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.toolStripAddFromHistory.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripAddFromHistory.Name = "toolStripAddFromHistory";
+            this.toolStripAddFromHistory.Size = new System.Drawing.Size(48, 22);
+            this.toolStripAddFromHistory.Text = "Add 20";
+            this.toolStripAddFromHistory.ToolTipText = "Add the oldest 20 unknown systems from history to wanted list";
+            this.toolStripAddFromHistory.Click += new System.EventHandler(this.toolStripAddFromHistory_Click);
             // 
             // TrilaterationControl
             // 
@@ -594,5 +622,8 @@ namespace EDDiscovery
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private System.Windows.Forms.ToolStripLabel toolStripLabelSystem;
         private System.Windows.Forms.ToolStripTextBox toolStripTextBoxSystem;
+        private System.Windows.Forms.ToolStripLabel toolStripLabel1;
+        private System.Windows.Forms.ToolStripLabel toolStripLabelNoCoords;
+        private System.Windows.Forms.ToolStripButton toolStripAddFromHistory;
     }
 }
