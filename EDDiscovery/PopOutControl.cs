@@ -51,6 +51,7 @@ namespace EDDiscovery.Forms
             ScreenShot,
             Statistics,
             Scan,
+            EstimatedValues,
             Modules,                
             Exploration,
             Synthesis,
@@ -80,6 +81,7 @@ namespace EDDiscovery.Forms
             { PopOuts.ScreenShot, new PopOutInfo("Screen Shot", "ScreenShot", EliteDangerous.Properties.Resources.screenshot, "Display the screen shot view") },
             { PopOuts.Statistics, new PopOutInfo("Statistics", "Stats", EDDiscovery.Properties.Resources.stats, "Display statistics from the history") },
             { PopOuts.Scan, new PopOutInfo("Scan", "Scan", EliteDangerous.Properties.Resources.scan, "Display scan data", transparent: false) },
+            { PopOuts.EstimatedValues, new PopOutInfo("Estimated Values", "EstimatedValues", EliteDangerous.Properties.Resources.estval, "Display estimated scan values for all bodies in current system", transparent: false) },
             { PopOuts.Modules, new PopOutInfo("Loadout", "Modules", EliteDangerous.Properties.Resources.module, "Display Loadout for current ships and also stored modules") },
             { PopOuts.Exploration, new PopOutInfo("Exploration", "Exploration", EliteDangerous.Properties.Resources.sellexplorationdata, "Display Exploration Information") },
             { PopOuts.Synthesis, new PopOutInfo("Synthesis", "Synthesis", EliteDangerous.Properties.Resources.synthesis, "Display Synthesis planner") },
@@ -160,6 +162,7 @@ namespace EDDiscovery.Forms
                 case PopOuts.ScreenShot: return new UserControlScreenshot();
                 case PopOuts.Statistics: return new UserControlStats();
                 case PopOuts.Scan: return new UserControlScan();
+                case PopOuts.EstimatedValues: return new UserControlEstimatedValues();
                 case PopOuts.Modules: return new UserControlModules();
                 case PopOuts.Exploration: return new UserControlExploration();
                 case PopOuts.Synthesis: return new UserControlSynthesis();
