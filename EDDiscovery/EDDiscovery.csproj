@@ -406,6 +406,12 @@
     <Compile Include="UserControls\UserControlContainerResizable.Designer.cs">
       <DependentUpon>UserControlContainerResizable.cs</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\UserControlEstimatedValues.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\UserControlEstimatedValues.Designer.cs">
+      <DependentUpon>UserControlEstimatedValues.cs</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\UserControlExploration.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -570,6 +576,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\UserControlContainerResizable.resx">
       <DependentUpon>UserControlContainerResizable.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\UserControlEstimatedValues.resx">
+      <DependentUpon>UserControlEstimatedValues.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\UserControlExploration.resx">
       <DependentUpon>UserControlExploration.cs</DependentUpon>
