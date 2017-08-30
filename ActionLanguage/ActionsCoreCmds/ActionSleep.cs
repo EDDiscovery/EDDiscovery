@@ -60,14 +60,10 @@ namespace ActionLanguage
             int i;
             if (delay.InvariantParse(out i) && i >= 0)
             {
-                if (t == null)
-                {
-                    t = new Timer();
-                    t.Tick += T_Tick;
-                }
-
                 System.Diagnostics.Debug.WriteLine((Environment.TickCount % 10000).ToString("00000") + " Doze for " + i);
                 apr = ap;
+                t = new Timer();
+                t.Tick += T_Tick;
                 t.Interval = i;
                 t.Start();
                 return false;
@@ -81,9 +77,10 @@ namespace ActionLanguage
         private void T_Tick(object sender, EventArgs e)
         {
             t.Stop();
+            t.Dispose();
+            t = null;
             System.Diagnostics.Debug.WriteLine((Environment.TickCount % 10000).ToString("00000") + " Resume after sleep");
             apr.ResumeAfterPause();
-            t.Dispose();
         }
     }
 }

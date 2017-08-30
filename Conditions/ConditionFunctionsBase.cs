@@ -30,6 +30,7 @@ namespace Conditions
                 functions.Add("abs", new FuncEntry(Abs, 2, 2, FirstMacro, NoStrings));  // first is macro. second is macro or literal
                 functions.Add("alt", new FuncEntry(Alt, 2, 20, AllMacros, AllStrings));  // string/var.. repeated
                 functions.Add("closefile", new FuncEntry(CloseFile, 1, 1, AllMacros, NoStrings));  // first is a var
+                functions.Add("closeprocess", new FuncEntry(CloseProcess, 1, 1, AllMacros, NoStrings));   //first is macro
 
                 functions.Add("datetimenow", new FuncEntry(DateTimeNow, 1, 1, NoMacros, NoStrings));     // literal type
                 functions.Add("datehour", new FuncEntry(DateHour, 1, 1, AllMacros, FirstString));   // first is a var or string
@@ -46,8 +47,12 @@ namespace Conditions
 
                 functions.Add("filelength", new FuncEntry(FileLength, 1, 1, AllMacros, FirstString));   // check var, can be string
                 functions.Add("fileexists", new FuncEntry(FileExists, 1, 20, AllMacros, AllStrings));   // check var, can be string
+                functions.Add("findarray", new FuncEntry(FindArray, 2, 2, SecondMacro, AllStrings));   //1 = literal or string, 2 = macro or string
+                functions.Add("findprocess", new FuncEntry(FindProcess, 1, 1, AllMacros, AllStrings));   //macro/string
                 functions.Add("findline", new FuncEntry(FindLine, 2, 2, AllMacros, SecondString));   //check var1 and var2, second can be a string
                 functions.Add("floor", new FuncEntry(Floor, 2, 2, FirstMacro , NoStrings));     // check var1, not var 2 no strings
+
+                functions.Add("hasprocessexited", new FuncEntry(HasProcessExited, 1, 1, AllMacros, NoStrings));   //first is macro
 
                 functions.Add("ifnotempty", new FuncEntry(Ifnotempty, 2, 3, AllMacros, AllStrings));   // check var1-3, allow strings var1-3
                 functions.Add("ifempty", new FuncEntry(Ifempty, 2, 3, AllMacros, AllStrings));
@@ -75,7 +80,10 @@ namespace Conditions
 
                 functions.Add("join", new FuncEntry(Join, 3, 20, AllMacros, AllStrings));   // all can be string, check var
 
+                functions.Add("killprocess", new FuncEntry(KillProcess, 1, 1, AllMacros, NoStrings));   //first is macro
+
                 functions.Add("length", new FuncEntry(Length, 1, 1, AllMacros, AllStrings));   // length, first may be string/macro
+                functions.Add("listprocesses", new FuncEntry(ListProcesses, 1, 1, NoMacros, AllStrings));   // first is a literal or a string
                 functions.Add("lower", new FuncEntry(Lower, 1, 20, AllMacros, AllStrings));   // all can be string, check var
 
                 functions.Add("mkdir", new FuncEntry(MkDir, 1, 1, AllMacros, AllStrings));   // check var, can be string
@@ -103,8 +111,10 @@ namespace Conditions
                 functions.Add("safevarname", new FuncEntry(SafeVarName, 1, 1, AllMacros, AllStrings));   //macro/string
 
                 functions.Add("sc", new FuncEntry(SplitCaps, 1, 1, AllMacros, AllStrings));   //shorter alias 
-                functions.Add("ship", new FuncEntry(Ship, 1, 1, AllMacros, AllStrings));   //ship translator
                 functions.Add("splitcaps", new FuncEntry(SplitCaps, 1, 1, AllMacros, AllStrings));   //check var, allow strings
+
+                functions.Add("startprocess", new FuncEntry(StartProcess, 2, 2, AllMacros, AllStrings));   //macros/strings
+
                 functions.Add("substring", new FuncEntry(SubString, 3, 3, FirstMacro, FirstString));   // check var1, var1 can be string, var 2 and 3 can either be macro or ints not strings
                 functions.Add("systempath", new FuncEntry(SystemPath, 1, 1, NoMacros, NoStrings));   // literal
 
@@ -113,6 +123,8 @@ namespace Conditions
                 functions.Add("trim", new FuncEntry(Trim, 1, 1, AllMacros, AllStrings));  // var/string
 
                 functions.Add("upper", new FuncEntry(Upper, 1, 20, AllMacros, AllStrings));   // all can be string, check var
+
+                functions.Add("waitforprocess", new FuncEntry(WaitForProcess, 2, 2, FirstMacro, NoStrings));   //first is macro, second is literal or macro
 
                 functions.Add("wordlistcount", new FuncEntry(WordListCount, 1, 1, AllMacros , AllStrings));       // first is a var or string
                 functions.Add("wordlistentry", new FuncEntry(WordListEntry, 2, 2, FirstMacro, FirstString));       // first is a var or string, second is a var or literal
@@ -232,19 +244,6 @@ namespace Conditions
         {
             string value = (paras[0].isstring) ? paras[0].value : vars[paras[0].value];
             output = value.SplitCapsWordFull();
-            return true;
-        }
-
-        static public string PhoneticShipName(string inname)
-        {
-            return inname.Replace("Mk. IV", "Mark 4").Replace("Mk. III", "Mark 3");
-        }
-
-        protected bool Ship(out string output)
-        {
-            string value = (paras[0].isstring) ? paras[0].value : vars[paras[0].value];
-            output = PhoneticShipName(value);
-            output = output.SplitCapsWordFull();
             return true;
         }
 
@@ -1010,6 +1009,36 @@ namespace Conditions
             return false;
         }
 
+        protected bool FindArray(out string output)
+        {
+            string arrayroot = paras[0].value;
+            string search = (paras[1].isstring) ? paras[1].value : vars[paras[1].value];
+            string searchafter = (paras.Count >= 3 ) ? (paras[2].isstring ? paras[2].value : vars[paras[2].value] ) : "";
+            bool searchon = searchafter.Length == 0;    // empty searchafter means go immediately
+
+            foreach (string key in vars.NameEnumuerable)
+            {
+                if (key.StartsWith(arrayroot))
+                {
+                    if (searchon)
+                    {
+                        string value = vars[key];
+
+                        if (value.IndexOf(search, StringComparison.InvariantCultureIgnoreCase) >= 0)
+                        {
+                            output = key;
+                            return true;
+                        }
+                    }
+                    else if (key.Equals(searchafter))
+                        searchon = true;
+                }
+            }
+
+            output = "";
+            return true;
+        }
+
         #endregion
 
         #region File Functions
@@ -1032,7 +1061,7 @@ namespace Conditions
                 if (VerifyFileAccess(file, fm))
                 {
                     string errmsg;
-                    int id = persistentdata.Open(file, fm, fm == FileMode.Open ? FileAccess.Read : FileAccess.Write, out errmsg);
+                    int id = persistentdata.fh.Open(file, fm, fm == FileMode.Open ? FileAccess.Read : FileAccess.Write, out errmsg);
                     if (id > 0)
                         vars[handle] = id.ToStringInvariant();
                     else
@@ -1056,7 +1085,7 @@ namespace Conditions
 
             if (hv != null && persistentdata != null)
             {
-                persistentdata.Close(hv.Value);
+                persistentdata.fh.Close(hv.Value);
                 output = "1";
                 return true;
             }
@@ -1073,7 +1102,7 @@ namespace Conditions
 
             if (hv != null && persistentdata != null)
             {
-                if (persistentdata.ReadLine(hv.Value, out output))
+                if (persistentdata.fh.ReadLine(hv.Value, out output))
                 {
                     if (output == null)
                         output = "0";
@@ -1109,7 +1138,7 @@ namespace Conditions
 
             if (hv != null && persistentdata != null)
             {
-                if (persistentdata.WriteLine(hv.Value, line, lf, out output))
+                if (persistentdata.fh.WriteLine(hv.Value, line, lf, out output))
                 {
                     output = "1";
                     return true;
@@ -1133,7 +1162,7 @@ namespace Conditions
 
             if (hv != null && pos != null && persistentdata != null)
             {
-                if (persistentdata.Seek(hv.Value, pos.Value, out output))
+                if (persistentdata.fh.Seek(hv.Value, pos.Value, out output))
                 {
                     output = "1";
                     return true;
@@ -1152,7 +1181,7 @@ namespace Conditions
             int? hv = vars[paras[0].value].InvariantParseIntNull();
             if (hv != null && persistentdata != null)
             {
-                if (persistentdata.Tell(hv.Value, out output))
+                if (persistentdata.fh.Tell(hv.Value, out output))
                 {
                     return true;
                 }
@@ -1283,6 +1312,142 @@ namespace Conditions
 
         protected virtual bool VerifyFileAccess(string file, FileMode fm)      // override to provide protection
         {
+            return true;
+        }
+
+        #endregion
+
+        #region Processes
+
+        protected bool StartProcess(out string output)
+        {
+            string procname = (paras[0].isstring) ? paras[0].value : vars[paras[0].value];
+            string cmdline = (paras[1].isstring) ? paras[1].value : vars[paras[1].value];
+
+            if (persistentdata != null)
+            {
+                int pid = persistentdata.procs.StartProcess(procname, cmdline);
+
+                if (pid != 0)
+                {
+                    output = pid.ToStringInvariant();
+                    return true;
+                }
+
+                output = "Process " + procname + " did not start";
+            }
+            else
+                output = "No persistency - Error";
+
+            return false;
+        }
+
+        protected bool KillProcess(out string output) { return CloseKillProcess(out output, true); }
+        protected bool CloseProcess(out string output) { return CloseKillProcess(out output, false); }
+
+        protected bool CloseKillProcess(out string output, bool kill)
+        {
+            int? hv = vars[paras[0].value].InvariantParseIntNull();
+
+            if (hv != null && persistentdata != null)
+            {
+                BaseUtils.Processes.ProcessResult r = (kill) ? persistentdata.procs.KillProcess(hv.Value) : persistentdata.procs.CloseProcess(hv.Value);
+                if (r == BaseUtils.Processes.ProcessResult.OK)
+                {
+                    output = "1";
+                    return true;
+                }
+                else
+                    output = "No such process found";
+            }
+            else
+                output = "Missing PID";
+
+            return false;
+        }
+
+        protected bool HasProcessExited(out string output)
+        {
+            int? hv = vars[paras[0].value].InvariantParseIntNull();
+
+            if (hv != null && persistentdata != null)
+            {
+                int exitcode;
+                BaseUtils.Processes.ProcessResult r = persistentdata.procs.HasProcessExited(hv.Value , out exitcode);
+                if (r == BaseUtils.Processes.ProcessResult.OK)
+                {
+                    output = exitcode.ToStringInvariant();
+                    return true;
+                }
+                else if ( r == BaseUtils.Processes.ProcessResult.NotExited )
+                {
+                    output = "NOTEXITED";
+                    return true;
+                }
+                else
+                    output = "No such process found";
+            }
+            else
+                output = "Missing PID";
+
+            return false;
+        }
+
+
+        protected bool WaitForProcess(out string output)
+        {
+            int? hv = vars[paras[0].value].InvariantParseIntNull();
+            string stimeout = (paras[1].isstring) ? paras[1].value : (vars.Exists(paras[1].value) ? vars[paras[1].value] : paras[1].value);
+            int? timeout = stimeout.InvariantParseIntNull();
+
+            if (hv != null && persistentdata != null && timeout != null)
+            {
+                BaseUtils.Processes.ProcessResult r = persistentdata.procs.WaitForProcess(hv.Value, timeout.Value);
+                if (r == BaseUtils.Processes.ProcessResult.OK)
+                {
+                    output = "1";
+                    return true;
+                }
+                else if ( r == BaseUtils.Processes.ProcessResult.Timeout )
+                {
+                    output = "0";
+                    return true;
+                }
+                else
+                    output = "No such process found";
+            }
+            else
+                output = "Missing PID or timeout value";
+
+            return false;
+        }
+
+        protected bool FindProcess(out string output)
+        {
+            string pname = (paras[0].isstring) ? paras[0].value : vars[paras[0].value];
+
+            if (persistentdata != null)
+            {
+                output = persistentdata.procs.FindProcess(pname).ToStringInvariant();
+                return true;
+            }
+            else
+                output = "No persistency - Error";
+
+            return false;
+        }
+
+        protected bool ListProcesses(out string output)
+        {
+            string basename = paras[0].value;
+
+            string[] proc = BaseUtils.Processes.ListProcesses();
+            for( int i = 0; i < proc.Length; i++ )
+            {
+                vars[basename + "[" + (i + 1) + "]"] = proc[i];
+            }
+
+            output = "1";
             return true;
         }
 
