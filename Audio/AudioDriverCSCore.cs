@@ -71,6 +71,21 @@ namespace AudioExtensions
                 dso.Device = def.Guid;  // use default GUID
             }
 
+            NullWaveSource nullw = new NullWaveSource(10);
+
+            try
+            {
+                dso.Initialize(nullw);  // check it takes it.. may not if no sound devices there..
+                dso.Stop();
+                nullw.Dispose();
+            }
+            catch
+            {
+                nullw.Dispose();
+                dso.Dispose();
+                return false;
+            }
+
             if (aout != null)                 // clean up last
             {
                 aout.Stopped -= Output_Stopped;
@@ -107,7 +122,8 @@ namespace AudioExtensions
 
         public void Dispose()
         {
-            aout.Dispose();
+            if ( aout != null )
+                aout.Dispose();
         }
 
         public void Dispose(AudioData o)
