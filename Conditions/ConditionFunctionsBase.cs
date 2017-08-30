@@ -1315,6 +1315,11 @@ namespace Conditions
             return true;
         }
 
+        protected virtual bool VerifyProcessAllowed(string proc, string cmdline)      // override to provide protection
+        {
+            return true;
+        }
+
         #endregion
 
         #region Processes
@@ -1326,15 +1331,20 @@ namespace Conditions
 
             if (persistentdata != null)
             {
-                int pid = persistentdata.procs.StartProcess(procname, cmdline);
-
-                if (pid != 0)
+                if (VerifyProcessAllowed(procname, cmdline))
                 {
-                    output = pid.ToStringInvariant();
-                    return true;
-                }
+                    int pid = persistentdata.procs.StartProcess(procname, cmdline);
 
-                output = "Process " + procname + " did not start";
+                    if (pid != 0)
+                    {
+                        output = pid.ToStringInvariant();
+                        return true;
+                    }
+
+                    output = "Process " + procname + " did not start";
+                }
+                else
+                    output = "Process not allowed";
             }
             else
                 output = "No persistency - Error";
