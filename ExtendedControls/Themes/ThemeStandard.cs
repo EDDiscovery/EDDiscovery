@@ -772,6 +772,12 @@ namespace ExtendedControls
                 ctrl.checkbox.CheckBoxInnerColor = inner;
                 ctrl.checkbox.CheckColor = currentsettings.colors[Settings.CI.checkbox_tick];
                 ctrl.checkbox.MouseOverColor = currentsettings.colors[Settings.CI.checkbox].Multiply(1.4F);
+
+                ctrl.updown.BackColor = currentsettings.colors[Settings.CI.button_back];
+                ctrl.updown.BorderColor = currentsettings.colors[Settings.CI.grid_borderlines];
+                ctrl.updown.ForeColor = currentsettings.colors[Settings.CI.textbox_fore];
+                ctrl.updown.MouseOverColor = currentsettings.colors[Settings.CI.checkbox].Multiply(1.4F);
+                ctrl.updown.MouseSelectedColor = currentsettings.colors[Settings.CI.checkbox].Multiply(1.5F);
                 return;     // don't do sub controls - we are in charge of them
             }
             else if (myControl is StatusStrip)
