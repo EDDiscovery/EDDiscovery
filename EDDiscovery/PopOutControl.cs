@@ -51,7 +51,6 @@ namespace EDDiscovery.Forms
             ScreenShot,
             Statistics,
             Scan,
-            EstimatedValues,
             Modules,                
             Exploration,
             Synthesis,
@@ -64,6 +63,7 @@ namespace EDDiscovery.Forms
             NotePanel,
             RouteTracker,
             Grid,
+            EstimatedValues,
 
             EndList,                // Keep here, used to work out MaxTabButtons
         };
