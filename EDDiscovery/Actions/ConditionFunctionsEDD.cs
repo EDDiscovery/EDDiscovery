@@ -149,7 +149,31 @@ namespace EDDiscovery.Actions
                 return true;
         }
 
+        protected override bool VerifyProcessAllowed(string proc, string cmdline)
+        {
+            string actionprocessperms = SQLiteConnectionUser.GetSettingString("ActionProcessPerms", "");
 
-    #endregion
-}
+            if (!actionprocessperms.Contains("!" + proc + ";"))
+            {
+                bool ok = ExtendedControls.MessageBoxTheme.Show("Warning - This program is attempting to run the following process" + Environment.NewLine + Environment.NewLine +
+                                                        proc + Environment.NewLine + Environment.NewLine +
+                                                        "!!! Verify you are happy for the process to run now, and in the future!!!",
+                                                        "WARNING - PROCESS WANTS TO RUN",
+                                                    System.Windows.Forms.MessageBoxButtons.YesNo,
+                                                    System.Windows.Forms.MessageBoxIcon.Warning) == System.Windows.Forms.DialogResult.Yes;
+
+                if (ok)
+                {
+                    SQLiteConnectionUser.PutSettingString("ActionProcessPerms", actionprocessperms + "!" + proc + ";");
+                    return true;
+                }
+                else
+                    return false;
+            }
+            else
+                return true;
+        }
+
+        #endregion
+    }
 }
