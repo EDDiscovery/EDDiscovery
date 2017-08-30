@@ -57,7 +57,7 @@
     <Compile Include="ConditionFunctions.cs" />
     <Compile Include="ConditionFunctionsBase.cs" />
     <Compile Include="ConditionLists.cs" />
-    <Compile Include="ConditionPersisitentData.cs" />
+    <Compile Include="ConditionPersistentData.cs" />
     <Compile Include="ConditionVariables.cs" />
     <Compile Include="ConditionVariablesForm.cs">
       <SubType>Form</SubType>

@@ -36,6 +36,7 @@ namespace EDDiscovery.Actions
                 functions.Add("systempath", new FuncEntry(SystemPath, 1, 1, NoMacros, NoStrings));   // literal
                 functions.Add("version", new FuncEntry(Version, 1, 1, NoMacros, NoStrings));     // don't check first para
                 functions.Add("star", new FuncEntry(Star, 2, 2, FirstMacro, AllStrings));     // var/string, literal/var/string
+                functions.Add("ship", new FuncEntry(Ship, 1, 1, AllMacros, AllStrings));   //ship translator
             }
         }
 
@@ -84,6 +85,19 @@ namespace EDDiscovery.Actions
                 output = "Parameter number must be between 1 and 4";
                 return false;
             }
+        }
+
+        static public string PhoneticShipName(string inname)
+        {
+            return inname.Replace("Mk. IV", "Mark 4").Replace("Mk. III", "Mark 3");
+        }
+
+        protected bool Ship(out string output)
+        {
+            string value = (paras[0].isstring) ? paras[0].value : vars[paras[0].value];
+            output = PhoneticShipName(value);
+            output = output.SplitCapsWordFull();
+            return true;
         }
 
         protected bool Star(out string output )
