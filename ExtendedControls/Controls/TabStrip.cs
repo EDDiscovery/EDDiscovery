@@ -32,7 +32,7 @@ namespace ExtendedControls
         public Bitmap[] Images;     // images
         public string[] ToolTips;
         public bool ShowPopOut { get; set; }= true;
-        
+
         public int SelectedIndex { get { return si; } set { ChangePanel(value); } }
         public Control CurrentControl;
 
@@ -52,6 +52,9 @@ namespace ExtendedControls
         private Timer autofade = new Timer();
         private int si = -1;
 
+        private Timer autorepeat = new Timer();
+        private int autorepeatdir = 0;
+
         public TabStrip()
         {
             InitializeComponent();
@@ -61,6 +64,8 @@ namespace ExtendedControls
             labelControlText.Text = "";
             labelCurrent.Text = "None";
             drawnPanelPopOut.Location = panelSelected.Location;
+            autorepeat.Interval = 200;
+            autorepeat.Tick += Autorepeat_Tick;
         }
 
         public void Toggle()
@@ -124,7 +129,7 @@ namespace ExtendedControls
                 }
             }
 
-            drawnPanelPopOut.Visible = tabstripvisible && ShowPopOut;
+            drawnPanelPopOut.Visible = tabstripvisible && ShowPopOut && CurrentControl != null;
             panelSelected.Visible = !tabstripvisible && CurrentControl != null;
             labelCurrent.Visible = !tabstripvisible && CurrentControl != null;
             labelControlText.Visible = false; 
@@ -181,7 +186,10 @@ namespace ExtendedControls
 
                 int tabtotalwidth = 0;
                 for (int ip = 0; ip < imagepanels.Length; ip++)
+                {
                     tabtotalwidth += imagepanels[ip].Width + Spacing * 2;       // do it now due to the internal scaling due to fonts
+                   // System.Diagnostics.Debug.WriteLine("Image panel size " + ip + " w " + imagepanels[ip].Width + " width " + Images[ip].Width);
+                }
 
                 tabtotalwidth -= Spacing * 2;           // don't count last spacing.
 
@@ -193,15 +201,17 @@ namespace ExtendedControls
                     arrowson = true;
                 }
 
-                tabdisplayed = 0;           
+                
+                tabdisplayed = 0;
                 for (; i < imagepanels.Length && xpos < stoppoint - Images[i].Width; i++)
                 {                                           // if its soo tight, may display nothing, thats okay
                     imagepanels[i].Location = new Point(xpos, 3);
-                    xpos += imagepanels[i].Width + Spacing*2;
+                    xpos += imagepanels[i].Width + Spacing * 2;
                     imagepanels[i].Visible = true;
                     tabdisplayed++;
                 }
 
+                
                 if ( arrowson )
                     panelArrowRight.Location = new Point(xpos, 4);
             }
@@ -292,23 +302,45 @@ namespace ExtendedControls
                 DisplayTabs(tobevisible);
         }
 
-        private void panelArrowRight_Click(object sender, EventArgs e)
+
+        private void panelArrowLeft_MouseDown(object sender, MouseEventArgs e)
         {
-            if (tabdisplaystart < imagepanels.Length - tabdisplayed)
+            autorepeatdir = -1;
+            ClickArrow();
+        }
+
+        private void panelArrowLeft_MouseUp(object sender, MouseEventArgs e)
+        {
+            autorepeat.Stop();
+        }
+
+        private void panelArrowRight_MouseDown(object sender, MouseEventArgs e)
+        {
+            autorepeatdir = 1;
+            ClickArrow();
+        }
+
+        private void panelArrowRight_MouseUp(object sender, MouseEventArgs e)
+        {
+            autorepeat.Stop();
+        }
+
+        private void ClickArrow()
+        {
+            autorepeat.Stop();
+
+            int newpos = tabdisplaystart + autorepeatdir;
+            if ( newpos >= 0 && newpos <= imagepanels.Length - tabdisplayed)
             {
-                tabdisplaystart++;
+                tabdisplaystart = newpos;
                 DisplayTabs(true);
+                autorepeat.Start();
             }
         }
 
-        private void panelArrowLeft_Click(object sender, EventArgs e)
+        private void Autorepeat_Tick(object sender, EventArgs e)
         {
-            if (tabdisplaystart > 0)
-            {
-                tabdisplaystart--;
-                DisplayTabs(true);
-            }
-
+            ClickArrow();
         }
 
         private void TabStrip_Resize(object sender, EventArgs e)
@@ -346,5 +378,6 @@ namespace ExtendedControls
         }
 
         #endregion
+
     }
 }

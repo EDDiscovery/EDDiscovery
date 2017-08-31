@@ -108,9 +108,10 @@ namespace ExtendedControls
             this.panelArrowRight.TabIndex = 2;
             this.toolTip1.SetToolTip(this.panelArrowRight, "Click to scroll the list right");
             this.panelArrowRight.Visible = false;
-            this.panelArrowRight.Click += new System.EventHandler(this.panelArrowRight_Click);
+            this.panelArrowRight.MouseDown += new System.Windows.Forms.MouseEventHandler(this.panelArrowRight_MouseDown);
             this.panelArrowRight.MouseEnter += new System.EventHandler(this.panelBottom_MouseEnter);
             this.panelArrowRight.MouseLeave += new System.EventHandler(this.panelBottom_MouseLeave);
+            this.panelArrowRight.MouseUp += new System.Windows.Forms.MouseEventHandler(this.panelArrowRight_MouseUp);
             // 
             // panelArrowLeft
             // 
@@ -122,9 +123,10 @@ namespace ExtendedControls
             this.panelArrowLeft.TabIndex = 2;
             this.toolTip1.SetToolTip(this.panelArrowLeft, "Click to scroll the list left");
             this.panelArrowLeft.Visible = false;
-            this.panelArrowLeft.Click += new System.EventHandler(this.panelArrowLeft_Click);
+            this.panelArrowLeft.MouseDown += new System.Windows.Forms.MouseEventHandler(this.panelArrowLeft_MouseDown);
             this.panelArrowLeft.MouseEnter += new System.EventHandler(this.panelBottom_MouseEnter);
             this.panelArrowLeft.MouseLeave += new System.EventHandler(this.panelBottom_MouseLeave);
+            this.panelArrowLeft.MouseUp += new System.Windows.Forms.MouseEventHandler(this.panelArrowLeft_MouseUp);
             // 
             // panelSelected
             // 

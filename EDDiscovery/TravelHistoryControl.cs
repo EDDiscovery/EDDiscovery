@@ -107,12 +107,10 @@ namespace EDDiscovery
 
         Control TabCreate(ExtendedControls.TabStrip t, int si)        // called by tab strip when selected index changes.. create a new one.. only create.
         {
-            PopOutControl.PopOuts i = (PopOutControl.PopOuts)si;
+            Control c = PopOutControl.Create(si);
+            c.Name = PopOutControl.PopOutList[si].WindowTitlePrefix;        // tabs uses Name field for display, must set it
 
-            Control c = PopOutControl.Create(i);
-            c.Name = PopOutControl.GetPopOutName(i);        // tabs uses Name field for display, must set it
-
-            _discoveryForm.ActionRun(Actions.ActionEventEDList.onPanelChange, null, new Conditions.ConditionVariables(new string[] { "PanelTabName", PopOutControl.popoutinfo[i].WindowRefName, "PanelTabTitle" , PopOutControl.popoutinfo[i].WindowTitlePrefix , "PanelName" , t.Name }));
+            _discoveryForm.ActionRun(Actions.ActionEventEDList.onPanelChange, null, new Conditions.ConditionVariables(new string[] { "PanelTabName", PopOutControl.PopOutList[si].WindowRefName, "PanelTabTitle" , PopOutControl.PopOutList[si].WindowTitlePrefix , "PanelName" , t.Name }));
 
             return c;
         }
@@ -136,7 +134,7 @@ namespace EDDiscovery
 
         void TabPopOut(ExtendedControls.TabStrip t, int i)        // pop out clicked
         {
-            _discoveryForm.PopOuts.PopOut((PopOutControl.PopOuts)i);
+            _discoveryForm.PopOuts.PopOut(i);
         }
 
         #endregion
@@ -166,10 +164,16 @@ namespace EDDiscovery
 
             int max = (int)PopOutControl.PopOuts.EndList;
 
-            tabStripBottom.SelectedIndex = Math.Min(SQLiteDBClass.GetSettingInt("TravelControlBottomTab", (int)(PopOutControl.PopOuts.Scan)), max);
-            tabStripBottomRight.SelectedIndex = Math.Min(SQLiteDBClass.GetSettingInt("TravelControlBottomRightTab", (int)(PopOutControl.PopOuts.Log)), max);
-            tabStripMiddleRight.SelectedIndex = Math.Min(SQLiteDBClass.GetSettingInt("TravelControlMiddleRightTab", (int)(PopOutControl.PopOuts.StarDistance)), max);
-            tabStripTopRight.SelectedIndex = Math.Min(SQLiteDBClass.GetSettingInt("TravelControlTopRightTab", (int)(PopOutControl.PopOuts.SystemInformation)), max);
+            // saved as the pop out enum value, for historical reasons
+            int piindex_bottom = Math.Min(SQLiteDBClass.GetSettingInt("TravelControlBottomTab", (int)(PopOutControl.PopOuts.Scan)), max);
+            int piindex_bottomright = Math.Min(SQLiteDBClass.GetSettingInt("TravelControlBottomRightTab", (int)(PopOutControl.PopOuts.Log)), max);
+            int piindex_middleright = Math.Min(SQLiteDBClass.GetSettingInt("TravelControlMiddleRightTab", (int)(PopOutControl.PopOuts.StarDistance)), max);
+            int piindex_topright = Math.Min(SQLiteDBClass.GetSettingInt("TravelControlTopRightTab", (int)(PopOutControl.PopOuts.SystemInformation)), max);
+
+            tabStripBottom.SelectedIndex = PopOutControl.GetPopOutIndexByEnum((PopOutControl.PopOuts)piindex_bottom);       // translate to image index
+            tabStripBottomRight.SelectedIndex = PopOutControl.GetPopOutIndexByEnum((PopOutControl.PopOuts)piindex_bottomright);
+            tabStripMiddleRight.SelectedIndex = PopOutControl.GetPopOutIndexByEnum((PopOutControl.PopOuts)piindex_middleright);
+            tabStripTopRight.SelectedIndex = PopOutControl.GetPopOutIndexByEnum((PopOutControl.PopOuts)piindex_topright);
         }
 
         public void SaveSettings()     // called by form when closing
@@ -185,10 +189,10 @@ namespace EDDiscovery
             SQLiteDBClass.PutSettingInt("TravelControlSpliterRO", splitContainerRightOuter.SplitterDistance);
             SQLiteDBClass.PutSettingInt("TravelControlSpliterR", splitContainerRightInner.SplitterDistance);
 
-            SQLiteDBClass.PutSettingInt("TravelControlBottomRightTab", tabStripBottomRight.SelectedIndex);
-            SQLiteDBClass.PutSettingInt("TravelControlBottomTab", tabStripBottom.SelectedIndex);
-            SQLiteDBClass.PutSettingInt("TravelControlMiddleRightTab", tabStripMiddleRight.SelectedIndex);
-            SQLiteDBClass.PutSettingInt("TravelControlTopRightTab", tabStripTopRight.SelectedIndex);
+            SQLiteDBClass.PutSettingInt("TravelControlBottomRightTab", (int)PopOutControl.PopOutList[tabStripBottomRight.SelectedIndex].popoutid);
+            SQLiteDBClass.PutSettingInt("TravelControlBottomTab", (int)PopOutControl.PopOutList[tabStripBottom.SelectedIndex].popoutid);
+            SQLiteDBClass.PutSettingInt("TravelControlMiddleRightTab", (int)PopOutControl.PopOutList[tabStripMiddleRight.SelectedIndex].popoutid);
+            SQLiteDBClass.PutSettingInt("TravelControlTopRightTab", (int)PopOutControl.PopOutList[tabStripTopRight.SelectedIndex].popoutid);
         }
 
         #endregion

@@ -48,6 +48,10 @@ namespace DialogTest
                     f.Init(null, true, " ", "", "KeyLogger", new List<string>() { "{1}", "{2}" }, 100, false);
                     sel = f;
                     break;
+
+                case "testtabstrip":
+                    sel = new TestTabStrip();
+                    break;
             }
 
             Application.Run(sel);

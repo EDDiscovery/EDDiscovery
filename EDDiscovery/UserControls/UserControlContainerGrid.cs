@@ -284,7 +284,7 @@ namespace EDDiscovery.UserControls
         #region Clicks
         private void ComboBoxGridSelector_SelectedIndexChanged(object sender, EventArgs e)
         {
-            UserControlContainerResizable uccr = CreatePanel(PopOutControl.Create((PopOutControl.PopOuts)comboBoxGridSelector.SelectedIndex) ,
+            UserControlContainerResizable uccr = CreatePanel(PopOutControl.Create(comboBoxGridSelector.SelectedIndex) ,
                                         new Point((uccrlist.Count % 5) * 50, (uccrlist.Count % 5) * 50),
                                         new Size(Math.Min(300, panelPlayfield.Width - 10), Math.Min(300, panelPlayfield.Height - 10)));
             Select(null);
