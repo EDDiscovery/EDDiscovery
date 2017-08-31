@@ -406,6 +406,12 @@
     <Compile Include="UserControls\UserControlContainerResizable.Designer.cs">
       <DependentUpon>UserControlContainerResizable.cs</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\UserControlEstimatedValues.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\UserControlEstimatedValues.Designer.cs">
+      <DependentUpon>UserControlEstimatedValues.cs</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\UserControlExploration.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -523,6 +529,12 @@
     <Compile Include="UserControls\UserControlStatsTime.Designer.cs">
       <DependentUpon>UserControlStatsTime.cs</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\UserControlStarVisited.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\UserControlStarVisited.Designer.cs">
+      <DependentUpon>UserControlStarVisited.cs</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\UserControlTravelGrid.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -570,6 +582,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\UserControlContainerResizable.resx">
       <DependentUpon>UserControlContainerResizable.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\UserControlEstimatedValues.resx">
+      <DependentUpon>UserControlEstimatedValues.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\UserControlExploration.resx">
       <DependentUpon>UserControlExploration.cs</DependentUpon>
@@ -627,6 +642,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\UserControlStatsTime.resx">
       <DependentUpon>UserControlStatsTime.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\UserControlStarVisited.resx">
+      <DependentUpon>UserControlStarVisited.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\UserControlTravelGrid.resx">
       <DependentUpon>UserControlTravelGrid.cs</DependentUpon>

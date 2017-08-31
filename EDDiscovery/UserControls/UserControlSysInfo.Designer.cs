@@ -605,17 +605,11 @@ namespace EDDiscovery.UserControls
             // 
             this.buttonEDDB.BackColor = System.Drawing.SystemColors.Control;
             this.buttonEDDB.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.buttonEDDB.DrawnImage = null;
             this.buttonEDDB.ForeColor = System.Drawing.SystemColors.ControlText;
             this.buttonEDDB.ImageSelected = ExtendedControls.DrawnPanel.ImageType.EDDB;
-            this.buttonEDDB.ImageText = null;
             this.buttonEDDB.Location = new System.Drawing.Point(97, 30);
             this.buttonEDDB.MarginSize = 0;
-            this.buttonEDDB.MouseOverColor = System.Drawing.Color.White;
-            this.buttonEDDB.MouseSelectedColor = System.Drawing.Color.Green;
-            this.buttonEDDB.MouseSelectedColorEnable = true;
             this.buttonEDDB.Name = "buttonEDDB";
-            this.buttonEDDB.PanelDisabledScaling = 0.25F;
             this.buttonEDDB.Size = new System.Drawing.Size(20, 20);
             this.buttonEDDB.TabIndex = 5;
             this.buttonEDDB.Click += new System.EventHandler(this.buttonEDDB_Click);
@@ -627,17 +621,11 @@ namespace EDDiscovery.UserControls
             // 
             this.buttonRoss.BackColor = System.Drawing.SystemColors.ControlText;
             this.buttonRoss.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.buttonRoss.DrawnImage = null;
             this.buttonRoss.ForeColor = System.Drawing.SystemColors.Control;
             this.buttonRoss.ImageSelected = ExtendedControls.DrawnPanel.ImageType.Ross;
-            this.buttonRoss.ImageText = null;
             this.buttonRoss.Location = new System.Drawing.Point(120, 30);
             this.buttonRoss.MarginSize = 0;
-            this.buttonRoss.MouseOverColor = System.Drawing.Color.White;
-            this.buttonRoss.MouseSelectedColor = System.Drawing.Color.Green;
-            this.buttonRoss.MouseSelectedColorEnable = true;
             this.buttonRoss.Name = "buttonRoss";
-            this.buttonRoss.PanelDisabledScaling = 0.25F;
             this.buttonRoss.Size = new System.Drawing.Size(20, 20);
             this.buttonRoss.TabIndex = 6;
             this.buttonRoss.Click += new System.EventHandler(this.buttonRoss_Click);
@@ -690,11 +678,7 @@ namespace EDDiscovery.UserControls
             this.buttonEDSM.ImageText = "EDSM";
             this.buttonEDSM.Location = new System.Drawing.Point(53, 30);
             this.buttonEDSM.MarginSize = 0;
-            this.buttonEDSM.MouseOverColor = System.Drawing.Color.White;
-            this.buttonEDSM.MouseSelectedColor = System.Drawing.Color.Green;
-            this.buttonEDSM.MouseSelectedColorEnable = true;
             this.buttonEDSM.Name = "buttonEDSM";
-            this.buttonEDSM.PanelDisabledScaling = 0.25F;
             this.buttonEDSM.Size = new System.Drawing.Size(44, 20);
             this.buttonEDSM.TabIndex = 4;
             this.buttonEDSM.Click += new System.EventHandler(this.buttonEDSM_Click);
@@ -802,11 +786,7 @@ namespace EDDiscovery.UserControls
             this.buttonEDSMTarget.ImageText = "EDSM";
             this.buttonEDSMTarget.Location = new System.Drawing.Point(216, 335);
             this.buttonEDSMTarget.MarginSize = 0;
-            this.buttonEDSMTarget.MouseOverColor = System.Drawing.Color.White;
-            this.buttonEDSMTarget.MouseSelectedColor = System.Drawing.Color.Green;
-            this.buttonEDSMTarget.MouseSelectedColorEnable = true;
             this.buttonEDSMTarget.Name = "buttonEDSMTarget";
-            this.buttonEDSMTarget.PanelDisabledScaling = 0.25F;
             this.buttonEDSMTarget.Size = new System.Drawing.Size(44, 20);
             this.buttonEDSMTarget.TabIndex = 23;
             this.buttonEDSMTarget.Click += new System.EventHandler(this.buttonEDSMTarget_Click);

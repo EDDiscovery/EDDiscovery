@@ -286,7 +286,8 @@ namespace EDDiscovery.Forms
             this.labelNoAffiliation.Name = "labelNoAffiliation";
             this.labelNoAffiliation.Size = new System.Drawing.Size(395, 30);
             this.labelNoAffiliation.TabIndex = 12;
-            this.labelNoAffiliation.Text = "EDDiscovery is not affiliated with Frontier Developments plc.";
+            this.labelNoAffiliation.Text = "EDDiscovery is not affiliated with Frontier Developments plc.\r\nFree Advanced Inst" +
+    "aller License for Open-Source";
             this.labelNoAffiliation.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // panelLogo

@@ -291,14 +291,8 @@ namespace EDDiscovery.UserControls
             // 
             this.drawnPanelPopOut.DrawnImage = global::EDDiscovery.Properties.Resources.popout1;
             this.drawnPanelPopOut.ImageSelected = ExtendedControls.DrawnPanel.ImageType.None;
-            this.drawnPanelPopOut.ImageText = null;
             this.drawnPanelPopOut.Location = new System.Drawing.Point(32, 3);
-            this.drawnPanelPopOut.MarginSize = 4;
-            this.drawnPanelPopOut.MouseOverColor = System.Drawing.Color.White;
-            this.drawnPanelPopOut.MouseSelectedColor = System.Drawing.Color.Green;
-            this.drawnPanelPopOut.MouseSelectedColorEnable = true;
             this.drawnPanelPopOut.Name = "drawnPanelPopOut";
-            this.drawnPanelPopOut.PanelDisabledScaling = 0.25F;
             this.drawnPanelPopOut.Size = new System.Drawing.Size(24, 24);
             this.drawnPanelPopOut.TabIndex = 28;
             this.toolTip.SetToolTip(this.drawnPanelPopOut, "Click to pop out another journal grid into a window");
