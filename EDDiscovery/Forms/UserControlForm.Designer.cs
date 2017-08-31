@@ -85,9 +85,14 @@ namespace EDDiscovery.Forms
             this.panel_minimize.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.panel_minimize.BackColor = System.Drawing.SystemColors.Control;
             this.panel_minimize.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.panel_minimize.DrawnImage = null;
             this.panel_minimize.ImageSelected = ExtendedControls.DrawnPanel.ImageType.Minimize;
+            this.panel_minimize.ImageText = null;
             this.panel_minimize.Location = new System.Drawing.Point(586, -2);
             this.panel_minimize.MarginSize = 6;
+            this.panel_minimize.MouseOverColor = System.Drawing.Color.White;
+            this.panel_minimize.MouseSelectedColor = System.Drawing.Color.Green;
+            this.panel_minimize.MouseSelectedColorEnable = true;
             this.panel_minimize.Name = "panel_minimize";
             this.panel_minimize.Size = new System.Drawing.Size(24, 24);
             this.panel_minimize.TabIndex = 24;
@@ -99,9 +104,14 @@ namespace EDDiscovery.Forms
             this.panel_ontop.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.panel_ontop.BackColor = System.Drawing.SystemColors.Control;
             this.panel_ontop.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.panel_ontop.DrawnImage = null;
             this.panel_ontop.ImageSelected = ExtendedControls.DrawnPanel.ImageType.Floating;
+            this.panel_ontop.ImageText = null;
             this.panel_ontop.Location = new System.Drawing.Point(562, -2);
             this.panel_ontop.MarginSize = 6;
+            this.panel_ontop.MouseOverColor = System.Drawing.Color.White;
+            this.panel_ontop.MouseSelectedColor = System.Drawing.Color.Green;
+            this.panel_ontop.MouseSelectedColorEnable = true;
             this.panel_ontop.Name = "panel_ontop";
             this.panel_ontop.Size = new System.Drawing.Size(24, 24);
             this.panel_ontop.TabIndex = 24;
@@ -113,9 +123,14 @@ namespace EDDiscovery.Forms
             this.panel_transparent.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.panel_transparent.BackColor = System.Drawing.SystemColors.Control;
             this.panel_transparent.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.panel_transparent.DrawnImage = null;
             this.panel_transparent.ImageSelected = ExtendedControls.DrawnPanel.ImageType.Transparent;
+            this.panel_transparent.ImageText = null;
             this.panel_transparent.Location = new System.Drawing.Point(490, -2);
             this.panel_transparent.MarginSize = 6;
+            this.panel_transparent.MouseOverColor = System.Drawing.Color.White;
+            this.panel_transparent.MouseSelectedColor = System.Drawing.Color.Green;
+            this.panel_transparent.MouseSelectedColorEnable = true;
             this.panel_transparent.Name = "panel_transparent";
             this.panel_transparent.Size = new System.Drawing.Size(24, 24);
             this.panel_transparent.TabIndex = 24;
@@ -127,8 +142,14 @@ namespace EDDiscovery.Forms
             this.panel_close.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.panel_close.BackColor = System.Drawing.SystemColors.Control;
             this.panel_close.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.panel_close.DrawnImage = null;
+            this.panel_close.ImageSelected = ExtendedControls.DrawnPanel.ImageType.Close;
+            this.panel_close.ImageText = null;
             this.panel_close.Location = new System.Drawing.Point(610, -2);
             this.panel_close.MarginSize = 6;
+            this.panel_close.MouseOverColor = System.Drawing.Color.White;
+            this.panel_close.MouseSelectedColor = System.Drawing.Color.Green;
+            this.panel_close.MouseSelectedColorEnable = true;
             this.panel_close.Name = "panel_close";
             this.panel_close.Size = new System.Drawing.Size(24, 24);
             this.panel_close.TabIndex = 25;
@@ -140,9 +161,14 @@ namespace EDDiscovery.Forms
             this.panel_taskbaricon.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.panel_taskbaricon.BackColor = System.Drawing.SystemColors.Control;
             this.panel_taskbaricon.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.panel_taskbaricon.DrawnImage = null;
             this.panel_taskbaricon.ImageSelected = ExtendedControls.DrawnPanel.ImageType.WindowInTaskBar;
+            this.panel_taskbaricon.ImageText = null;
             this.panel_taskbaricon.Location = new System.Drawing.Point(538, -2);
             this.panel_taskbaricon.MarginSize = 6;
+            this.panel_taskbaricon.MouseOverColor = System.Drawing.Color.White;
+            this.panel_taskbaricon.MouseSelectedColor = System.Drawing.Color.Green;
+            this.panel_taskbaricon.MouseSelectedColorEnable = true;
             this.panel_taskbaricon.Name = "panel_taskbaricon";
             this.panel_taskbaricon.Size = new System.Drawing.Size(24, 24);
             this.panel_taskbaricon.TabIndex = 24;
@@ -152,9 +178,14 @@ namespace EDDiscovery.Forms
             // panel_showtitle
             // 
             this.panel_showtitle.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.panel_showtitle.DrawnImage = null;
             this.panel_showtitle.ImageSelected = ExtendedControls.DrawnPanel.ImageType.Captioned;
+            this.panel_showtitle.ImageText = "";
             this.panel_showtitle.Location = new System.Drawing.Point(514, -2);
             this.panel_showtitle.MarginSize = 6;
+            this.panel_showtitle.MouseOverColor = System.Drawing.Color.White;
+            this.panel_showtitle.MouseSelectedColor = System.Drawing.Color.Green;
+            this.panel_showtitle.MouseSelectedColorEnable = true;
             this.panel_showtitle.Name = "panel_showtitle";
             this.panel_showtitle.Size = new System.Drawing.Size(24, 24);
             this.panel_showtitle.TabIndex = 26;
@@ -177,7 +208,6 @@ namespace EDDiscovery.Forms
             this.panelTop.Size = new System.Drawing.Size(634, 22);
             this.panelTop.TabIndex = 27;
             this.panelTop.MouseDown += new System.Windows.Forms.MouseEventHandler(this.panelTop_MouseDown);
-            this.panelTop.MouseUp += new System.Windows.Forms.MouseEventHandler(this.panelTop_MouseUp);
             // 
             // statusStripBottom
             // 

@@ -89,7 +89,12 @@ namespace ExtendedControls
             // 
             this.drawnPanelPopOut.DrawnImage = global::ExtendedControls.Properties.Resources.popout;
             this.drawnPanelPopOut.ImageSelected = ExtendedControls.DrawnPanel.ImageType.None;
+            this.drawnPanelPopOut.ImageText = null;
             this.drawnPanelPopOut.Location = new System.Drawing.Point(161, 3);
+            this.drawnPanelPopOut.MarginSize = 4;
+            this.drawnPanelPopOut.MouseOverColor = System.Drawing.Color.White;
+            this.drawnPanelPopOut.MouseSelectedColor = System.Drawing.Color.Green;
+            this.drawnPanelPopOut.MouseSelectedColorEnable = true;
             this.drawnPanelPopOut.Name = "drawnPanelPopOut";
             this.drawnPanelPopOut.Size = new System.Drawing.Size(24, 24);
             this.drawnPanelPopOut.TabIndex = 3;

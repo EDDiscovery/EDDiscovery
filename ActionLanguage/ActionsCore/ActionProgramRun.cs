@@ -30,7 +30,7 @@ namespace ActionLanguage
 
         private ConditionVariables currentvars;      // set up by ActionRun at invokation so they have the latest globals, see Run line 87 ish
 
-        private ConditionPersistentData conditionpersistentdata;
+        private ConditionFileHandles currentfiles;
         public Dictionary<string, ExtendedControls.ConfigurableForm> dialogs;
         private bool closehandlesatend;
 
@@ -90,12 +90,12 @@ namespace ActionLanguage
 
         #region Exec control
 
-        public void PrepareToRun( ConditionVariables v , ConditionPersistentData fh , Dictionary<string, ExtendedControls.ConfigurableForm> d, bool chae = true)
+        public void PrepareToRun( ConditionVariables v , ConditionFileHandles fh , Dictionary<string, ExtendedControls.ConfigurableForm> d, bool chae = true)
         {
             currentvars = v;
-            conditionpersistentdata = fh;
+            currentfiles = fh;
             closehandlesatend = chae;
-            functions = new ConditionFunctions(currentvars, conditionpersistentdata);           // point the functions at our variables and our files..
+            functions = new ConditionFunctions(currentvars, currentfiles);           // point the functions at our variables and our files..
             dialogs = d; 
         }
 
@@ -103,7 +103,7 @@ namespace ActionLanguage
         {
             if (closehandlesatend)
             {
-                conditionpersistentdata.CloseAll();
+                currentfiles.CloseAll();
                 foreach (string s in dialogs.Keys)
                     dialogs[s].Close();
 

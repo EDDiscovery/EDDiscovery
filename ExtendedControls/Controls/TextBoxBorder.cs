@@ -123,9 +123,10 @@ namespace ExtendedControls
             {
                 System.ComponentModel.IContainer ic = this.GetParentContainerComponents();
 
-                ic?.CopyToolTips(this, new Control[] { textbox });
+                if (ic != null)    // yes we have a container object
+                    ic.CopyToolTips(this, new Control[] { textbox });
 
-                firstpaint = false;
+                firstpaint = true;
             }
 
             using (Brush highlight = new SolidBrush(controlbackcolor))

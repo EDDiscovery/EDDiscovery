@@ -48,6 +48,7 @@
   <ItemGroup>
     <Compile Include="Condition.cs" />
     <Compile Include="ConditionEntry.cs" />
+    <Compile Include="ConditionFileHandles.cs" />
     <Compile Include="ConditionFilterForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -57,7 +58,6 @@
     <Compile Include="ConditionFunctions.cs" />
     <Compile Include="ConditionFunctionsBase.cs" />
     <Compile Include="ConditionLists.cs" />
-    <Compile Include="ConditionPersistentData.cs" />
     <Compile Include="ConditionVariables.cs" />
     <Compile Include="ConditionVariablesForm.cs">
       <SubType>Form</SubType>

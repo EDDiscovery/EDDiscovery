@@ -37,7 +37,7 @@ namespace EDDiscovery.UserControls
         private EDDiscoveryForm discoveryform;
         private UserControlCursorType uctg;
         private int displaynumber = 0;
-        Size starsize,beltsize,planetsize,moonsize,materialsize;
+        Size starsize,planetsize,moonsize,materialsize;
         Size itemsepar;
         int leftmargin;
         int topmargin;
@@ -171,7 +171,7 @@ namespace EDDiscovery.UserControls
                     int offset = 0;
                     Point maxstarpos = DrawNode(starcontrols, starnode,
                                 (starnode.type == StarScan.ScanNodeType.barycentre) ? EDDiscovery.Properties.Resources.Barycentre : JournalScan.GetStarImageNotScanned(),
-                                curpos, starsize, ref offset , false, (planetsize.Height*6/4-starsize.Height)/2, true);       // the last part nerfs the label down to the right position
+                                curpos, starsize, ref offset , false, (planetsize.Height*6/4-starsize.Height)/2);       // the last part nerfs the label down to the right position
 
                     Point maxitemspos = maxstarpos;
 
@@ -182,39 +182,13 @@ namespace EDDiscovery.UserControls
 
                     if (starnode.children != null)
                     {
-                        Queue<StarScan.ScanNode> belts = null;
-                        if (starnode.ScanData != null && (!starnode.ScanData.IsEDSMBody || checkBoxEDSM.Checked))
+                        foreach (StarScan.ScanNode planetnode in starnode.children.Values)
                         {
-                            belts = new Queue<StarScan.ScanNode>(starnode.children.Values.Where(s => s.type == StarScan.ScanNodeType.belt));
-                        }
-                        else
-                        {
-                            belts = new Queue<StarScan.ScanNode>();
-                        }
-
-                        StarScan.ScanNode lastbelt = belts.Count != 0 ? belts.Dequeue() : null;
-
-                        foreach (StarScan.ScanNode planetnode in starnode.children.Values.Where(s => s.type != StarScan.ScanNodeType.belt))
-                        {
-                            while (lastbelt != null && planetnode.ScanData != null && (lastbelt.BeltData == null || lastbelt.BeltData.OuterRad < planetnode.ScanData.nSemiMajorAxis))
-                            {
-                                if (curpos.X + planetsize.Width > panelStars.Width - panelStars.ScrollBarWidth)
-                                {
-                                    curpos = new Point(firstcolumn.X, maxitemspos.Y + planetsize.Height);
-                                }
-
-                                DrawNode(starcontrols, lastbelt, EDDiscovery.Properties.Resources.Belt,
-                                         new Point(curpos.X + (planetsize.Width - beltsize.Width) / 2, curpos.Y), beltsize, ref offset, false);
-
-                                curpos = new Point(curpos.X + planetsize.Width, curpos.Y);
-                                lastbelt = belts.Count != 0 ? belts.Dequeue() : null;
-                            }
-
                             bool nonedsmscans = planetnode.DoesNodeHaveNonEDSMScansBelow();     // is there any scans here, either at this node or below?
 
                             //System.Diagnostics.Debug.WriteLine("Planet Node " + planetnode.ownname + " has scans " + nonedsmscans);
 
-                            if (nonedsmscans || checkBoxEDSM.Checked)
+                            if ((nonedsmscans || checkBoxEDSM.Checked) && planetnode.type != StarScan.ScanNodeType.belt)
                             {
                                 List<PictureBoxHotspot.ImageElement> pc = new List<PictureBoxHotspot.ImageElement>();
 
@@ -239,20 +213,6 @@ namespace EDDiscovery.UserControls
 
                                 starcontrols.AddRange(pc.ToArray());
                             }
-                        }
-
-                        while (lastbelt != null)
-                        {
-                            if (curpos.X + planetsize.Width > panelStars.Width - panelStars.ScrollBarWidth)
-                            {
-                                curpos = new Point(firstcolumn.X, maxitemspos.Y + planetsize.Height);
-                            }
-
-                            DrawNode(starcontrols, lastbelt, EDDiscovery.Properties.Resources.Belt,
-                                     new Point(curpos.X + (planetsize.Width - beltsize.Width) / 2, curpos.Y), beltsize, ref offset, false);
-
-                            curpos = new Point(curpos.X + planetsize.Width, curpos.Y);
-                            lastbelt = belts.Count != 0 ? belts.Dequeue() : null;
                         }
                     }
 
@@ -338,8 +298,7 @@ namespace EDDiscovery.UserControls
 
         // return right bottom of area used from curpos
         Point DrawNode(List<PictureBoxHotspot.ImageElement> pc, StarScan.ScanNode sn, Image notscanned, Point curpos, 
-                                    Size size, ref int offset , bool aligndown = false , int labelvoff = 0,
-                                    bool toplevel = false)
+                                    Size size, ref int offset , bool aligndown = false , int labelvoff = 0 )
         {
             string tip;
             Point endpoint = curpos;
@@ -354,14 +313,13 @@ namespace EDDiscovery.UserControls
             {
                 tip = sc.DisplayString();
 
-                if (sc.IsStar && toplevel)
+                if (sc.IsStar)
                 {
-                    endpoint = CreateImageLabel(pc, sc.GetStarTypeImage().Item1,
-                                                new Point(curpos.X + offset, curpos.Y + alignv),      // WE are basing it on a 1/4 + 1 + 1/4 grid, this is not being made bigger, move off
+                    endpoint = CreateImageLabel(pc, sc.GetStarTypeImage().Item1, 
+                                                new Point(curpos.X+offset, curpos.Y + alignv) ,      // WE are basing it on a 1/4 + 1 + 1/4 grid, this is not being made bigger, move off
                                                 size, sn.customname ?? sn.ownname, tip, alignv + labelvoff, sc.IsEDSMBody, false);          // and the label needs to be a quarter height below it..
 
-                    /*
-                    if (sc.HasRings)
+                    if ( sc.HasRings )
                     {
                         curpos = new Point(endpoint.X + itemsepar.Width, curpos.Y);
 
@@ -375,8 +333,8 @@ namespace EDDiscovery.UserControls
 
                             curpos.X += 4;      // a little spacing, image is tight
 
-                            endbelt = CreateImageLabel(pc, EDDiscovery.Properties.Resources.Belt,
-                                new Point(curpos.X, curpos.Y + alignv), new Size(size.Width / 2, size.Height), name,
+                            endbelt = CreateImageLabel(pc, EDDiscovery.Properties.Resources.Belt, 
+                                new Point( curpos.X, curpos.Y + alignv ), new Size(size.Width/2,size.Height), name,
                                                                 sc.RingInformationMoons(i), alignv + labelvoff, sc.IsEDSMBody, false);
 
                             curpos = new Point(endbelt.X + itemsepar.Width, curpos.Y);
@@ -384,7 +342,6 @@ namespace EDDiscovery.UserControls
 
                         endpoint = new Point(curpos.X, endpoint.Y);
                     }
-                     */
 
                     offset += size.Width / 2;       // return the middle used was this..
                 }
@@ -392,7 +349,7 @@ namespace EDDiscovery.UserControls
                 {
                     bool indicatematerials = sc.HasMaterials && !checkBoxMaterials.Checked;
 
-                    Image nodeimage = sc.IsStar ? sc.GetStarTypeImage().Item1 : sc.GetPlanetClassImage();
+                    Image nodeimage = sc.GetPlanetClassImage();
 
                     if ((sc.IsLandable || sc.HasRings || indicatematerials))
                     {
@@ -433,29 +390,6 @@ namespace EDDiscovery.UserControls
                         endpoint = new Point(Math.Max(endpoint.X, endmat.X), Math.Max(endpoint.Y, endmat.Y)); // record new right point..
                     }
                 }
-            }
-            else if (sn.type == StarScan.ScanNodeType.belt)
-            {
-                if (sn.BeltData != null)
-                    tip = sn.BeltData.RingInformationMoons(true);
-                else
-                    tip = sn.ownname + "\n\nNo scan data available";
-
-                if (sn.children != null && sn.children.Count != 0)
-                {
-                    foreach (StarScan.ScanNode snc in sn.children.Values)
-                    {
-                        if (snc.ScanData != null)
-                        {
-                            tip += "\n\n" + snc.ScanData.DisplayString();
-                        }
-                    }
-                }
-
-                endpoint = CreateImageLabel(pc, EDDiscovery.Properties.Resources.Belt,
-                    new Point(curpos.X, curpos.Y + alignv), new Size(size.Width, size.Height), sn.ownname,
-                                                    tip, alignv + labelvoff, false, false);
-                offset += size.Width;
             }
             else
             {
@@ -582,7 +516,6 @@ namespace EDDiscovery.UserControls
         void SetSize(int stars)
         {
             starsize = new Size(stars, stars);
-            beltsize = new Size(starsize.Width * 1 / 2, starsize.Height);
             planetsize = new Size(starsize.Width * 3 / 4, starsize.Height * 3 / 4);
             moonsize = new Size(starsize.Width * 2 / 4, starsize.Height * 2 / 4);
             materialsize = new Size(24, 24);

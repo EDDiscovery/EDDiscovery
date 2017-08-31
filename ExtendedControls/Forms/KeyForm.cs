@@ -46,11 +46,9 @@ namespace ExtendedControls
         {
             InitializeComponent();
             textBoxSendTo.SetAutoCompletor(AutoList);
+            DraggableDisableResize = true; // tell dragger no resizing
             //System.Diagnostics.Debug.WriteLine("HASH " + GetHashCode());
         }
-
-
-        protected override bool AllowResize { get { return false; } }   // Tell dragger no resizing.
 
         public void Init(Icon i , bool showprocess, string separ ,string keystring = "", string process = "" , 
                         List<string> additionalkeys = null , int defdelay = 50 , bool allowkeysedit = false)
@@ -335,11 +333,6 @@ namespace ExtendedControls
         private void KeyForm_MouseDown(object sender, MouseEventArgs e)
         {
             OnCaptionMouseDown((Control)sender,e);
-        }
-
-        private void KeyForm_MouseUp(object sender, MouseEventArgs e)
-        {
-            OnCaptionMouseUp((Control)sender, e);
         }
 
         private void buttonOK_Click(object sender, EventArgs e)

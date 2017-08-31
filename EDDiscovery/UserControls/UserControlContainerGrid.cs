@@ -240,11 +240,8 @@ namespace EDDiscovery.UserControls
         {
             var v = uccrlist.Find(x => x.control.GetType() == typeof(UserControlTravelGrid));   // find one with TG
 
-            if (v == null)
+            if ( v == null )
                 v = uccrlist.Find(x => x.control.GetType() == typeof(UserControlJournalGrid));   // find one with Journal grid if no TG
-
-            if (v == null)
-                v = uccrlist.Find(x => x.control.GetType() == typeof(UserControlStarList));   // find one with Journal grid if no TG
 
             UserControlCursorType uctgfound = (v != null) ? (v.control as UserControlCursorType) : null;    // if found, set to it
 

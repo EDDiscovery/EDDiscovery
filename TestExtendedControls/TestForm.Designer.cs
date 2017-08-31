@@ -675,8 +675,13 @@
             // 
             this.drawnPanel1.DrawnImage = null;
             this.drawnPanel1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
+            this.drawnPanel1.ImageSelected = ExtendedControls.DrawnPanel.ImageType.Close;
+            this.drawnPanel1.ImageText = null;
             this.drawnPanel1.Location = new System.Drawing.Point(18, 230);
             this.drawnPanel1.MarginSize = 8;
+            this.drawnPanel1.MouseOverColor = System.Drawing.Color.White;
+            this.drawnPanel1.MouseSelectedColor = System.Drawing.Color.Green;
+            this.drawnPanel1.MouseSelectedColorEnable = true;
             this.drawnPanel1.Name = "drawnPanel1";
             this.drawnPanel1.Size = new System.Drawing.Size(28, 34);
             this.drawnPanel1.TabIndex = 44;

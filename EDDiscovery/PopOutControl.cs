@@ -62,9 +62,7 @@ namespace EDDiscovery.Forms
             Trippanel,
             NotePanel,
             RouteTracker,
-            StarList,
             Grid,
-            EstimatedValues,
 
             EndList,                // Keep here, used to work out MaxTabButtons
         };
@@ -82,7 +80,6 @@ namespace EDDiscovery.Forms
             { PopOuts.ScreenShot, new PopOutInfo("Screen Shot", "ScreenShot", EliteDangerous.Properties.Resources.screenshot, "Display the screen shot view") },
             { PopOuts.Statistics, new PopOutInfo("Statistics", "Stats", EDDiscovery.Properties.Resources.stats, "Display statistics from the history") },
             { PopOuts.Scan, new PopOutInfo("Scan", "Scan", EliteDangerous.Properties.Resources.scan, "Display scan data", transparent: false) },
-            { PopOuts.EstimatedValues, new PopOutInfo("Estimated Values", "EstimatedValues", EliteDangerous.Properties.Resources.estval, "Display estimated scan values for all bodies in current system", transparent: false) },
             { PopOuts.Modules, new PopOutInfo("Loadout", "Modules", EliteDangerous.Properties.Resources.module, "Display Loadout for current ships and also stored modules") },
             { PopOuts.Exploration, new PopOutInfo("Exploration", "Exploration", EliteDangerous.Properties.Resources.sellexplorationdata, "Display Exploration Information") },
             { PopOuts.Synthesis, new PopOutInfo("Synthesis", "Synthesis", EliteDangerous.Properties.Resources.synthesis, "Display Synthesis planner") },
@@ -94,7 +91,6 @@ namespace EDDiscovery.Forms
             { PopOuts.Trippanel, new PopOutInfo("Trip Computer", "Trippanel", EDDiscovery.Properties.Resources.trippanel, "Display the trip computer" , transparent: false) },
             { PopOuts.NotePanel, new PopOutInfo("Notes", "NotePanel", EDDiscovery.Properties.Resources.notes, "Display current notes on a system" , transparent: false) },
             { PopOuts.RouteTracker, new PopOutInfo("Route Tracker", "RouteTracker", EDDiscovery.Properties.Resources.routetracker, "Display the route tracker", transparent: false) },
-            { PopOuts.StarList, new PopOutInfo("Star List", "StarList", EDDiscovery.Properties.Resources.dustbinshorter, "Display the visited star list", transparent: false) },
             { PopOuts.Grid, new PopOutInfo("The Grid", "TheGrid", EDDiscovery.Properties.Resources.grid, "Display the grid which allows other panels to be placed on it" , transparent:false) },
         };
 
@@ -164,7 +160,6 @@ namespace EDDiscovery.Forms
                 case PopOuts.ScreenShot: return new UserControlScreenshot();
                 case PopOuts.Statistics: return new UserControlStats();
                 case PopOuts.Scan: return new UserControlScan();
-                case PopOuts.EstimatedValues: return new UserControlEstimatedValues();
                 case PopOuts.Modules: return new UserControlModules();
                 case PopOuts.Exploration: return new UserControlExploration();
                 case PopOuts.Synthesis: return new UserControlSynthesis();
@@ -172,7 +167,6 @@ namespace EDDiscovery.Forms
                 case PopOuts.Engineering: return new UserControlEngineering();
                 case PopOuts.MarketData: return new UserControlMarketData();
                 case PopOuts.SystemInformation: return new UserControlSysInfo();
-                case PopOuts.StarList: return new UserControlStarList();
                 case PopOuts.Grid: return new UserControlContainerGrid();
                 default: return null;
             }

@@ -140,49 +140,19 @@ namespace BaseUtils.Win32
         [DllImport("User32.dll")]
         public static extern uint MapVirtualKey(uint uCode, uint uMapType);
 
-        #region Menu API (user32.dll, win2k+) (MF_*) (TPM_*)
-
-        // https://msdn.microsoft.com/en-us/library/windows/desktop/ms647616(v=vs.85).aspx
-        [DllImport("user32", CharSet = CharSet.Auto, SetLastError = true)]
-        public static extern bool AppendMenu(IntPtr hMenu, int uFlags, int uIDNewItem, string lpNewItem);
-  
-        // https://msdn.microsoft.com/en-us/library/windows/desktop/ms647624(v=vs.85).aspx
-        [DllImport("user32", CharSet = CharSet.Auto, SetLastError = true)]
-        public static extern IntPtr CreateMenu();
-
-        // https://msdn.microsoft.com/en-us/library/windows/desktop/ms647636(v=vs.85).aspx
-        [DllImport("user32", CharSet = CharSet.Auto, SetLastError = false)]
-        public static extern bool EnableMenuItem(IntPtr hMenu, int uIDEnableItem, int uEnable);
-
         // https://msdn.microsoft.com/en-us/library/windows/desktop/ms647985(v=vs.85).aspx
-        [DllImport("user32", CharSet = CharSet.Auto, SetLastError = true)]
+        [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
         public static extern IntPtr GetSystemMenu(IntPtr hWnd, bool bRevert);
 
-        // https://msdn.microsoft.com/en-us/library/windows/desktop/ms647987(v=vs.85).aspx
-        [DllImport("user32", CharSet = CharSet.Auto, SetLastError = true)]
+        // https://msdn.microsoft.com/en-us/library/windows/desktop/ms647616(v=vs.85).aspx
+        [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
+        public static extern bool AppendMenu(IntPtr hMenu, int uFlags, int uIDNewItem, string lpNewItem);
+
+        [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
         public static extern bool InsertMenu(IntPtr hMenu, int uPosition, int uFlags, int uIDNewItem, string lpNewItem);
 
-        // https://msdn.microsoft.com/en-us/library/windows/desktop/ms647993(v=vs.85).aspx
-        [DllImport("user32", CharSet = CharSet.Auto, SetLastError = true)]
-        public static extern void ModifyMenu(IntPtr hMenu, int uPosition, int uFlags, int uIDNewItem, string lpNewItem);
-
-        // https://msdn.microsoft.com/en-us/library/windows/desktop/ms647996(v=vs.85).aspx
-        [DllImport("user32", CharSet = CharSet.Auto, SetLastError = true)]
-        public static extern int SetMenuDefaultItem(IntPtr hMenu, int uItem, uint fByPos);
-
-        // https://msdn.microsoft.com/en-us/library/windows/desktop/ms648003(v=vs.85).aspx
-        [DllImport("user32", CharSet = CharSet.Auto, SetLastError = true)]
-        public static extern int TrackPopupMenuEx(IntPtr hmenu, int fuFlags, int x, int y, IntPtr hwnd, IntPtr lptpm);
-
-        #endregion
-
-        // https://msdn.microsoft.com/en-us/library/windows/desktop/ms724385(v=vs.85).aspx
-        [DllImport("user32", CharSet = CharSet.Auto, SetLastError = false)]
-        public static extern int GetSystemMetrics(Win32Constants.SystemMetrics nIndex);
-
-        // https://msdn.microsoft.com/en-us/library/windows/desktop/ms644944(v=vs.85).aspx
-        [DllImport("user32", CharSet = CharSet.Auto, SetLastError = true)]
-        public static extern IntPtr PostMessage(IntPtr hWnd, uint Msg, IntPtr wParam, IntPtr lParam);
+        [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
+        public static extern IntPtr CreateMenu();
 
         [DllImport("Shell32.dll")]
         public static extern uint SHGetKnownFolderPath(

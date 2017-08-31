@@ -59,11 +59,11 @@ namespace EDDiscovery
             this.txtP2PDIstance = new ExtendedControls.TextBoxBorder();
             this.txtCmlDistance = new ExtendedControls.TextBoxBorder();
             this.buttonReverseRoute = new ExtendedControls.ButtonExt();
-            this.dateTimePickerEndTime = new ExtendedControls.CustomDateTimePicker();
-            this.dateTimePickerEndDate = new ExtendedControls.CustomDateTimePicker();
+            this.dateTimePickerEndTime = new System.Windows.Forms.DateTimePicker();
+            this.dateTimePickerEndDate = new System.Windows.Forms.DateTimePicker();
             this.labelEndDate = new System.Windows.Forms.Label();
-            this.dateTimePickerStartTime = new ExtendedControls.CustomDateTimePicker();
-            this.dateTimePickerStartDate = new ExtendedControls.CustomDateTimePicker();
+            this.dateTimePickerStartTime = new System.Windows.Forms.DateTimePicker();
+            this.dateTimePickerStartDate = new System.Windows.Forms.DateTimePicker();
             this.labelDateStart = new System.Windows.Forms.Label();
             this.textBoxRouteName = new ExtendedControls.TextBoxBorder();
             this.labelRouteName = new System.Windows.Forms.Label();
@@ -228,43 +228,23 @@ namespace EDDiscovery
             // 
             // txtP2PDIstance
             // 
-            this.txtP2PDIstance.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
-            this.txtP2PDIstance.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
             this.txtP2PDIstance.BorderColor = System.Drawing.Color.Transparent;
             this.txtP2PDIstance.BorderColorScaling = 0.5F;
-            this.txtP2PDIstance.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.txtP2PDIstance.ControlBackground = System.Drawing.SystemColors.Control;
             this.txtP2PDIstance.Location = new System.Drawing.Point(517, 32);
-            this.txtP2PDIstance.Multiline = false;
             this.txtP2PDIstance.Name = "txtP2PDIstance";
             this.txtP2PDIstance.ReadOnly = true;
-            this.txtP2PDIstance.ScrollBars = System.Windows.Forms.ScrollBars.None;
-            this.txtP2PDIstance.SelectionLength = 0;
-            this.txtP2PDIstance.SelectionStart = 0;
             this.txtP2PDIstance.Size = new System.Drawing.Size(100, 20);
             this.txtP2PDIstance.TabIndex = 10;
-            this.txtP2PDIstance.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
-            this.txtP2PDIstance.WordWrap = true;
             // 
             // txtCmlDistance
             // 
-            this.txtCmlDistance.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
-            this.txtCmlDistance.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
             this.txtCmlDistance.BorderColor = System.Drawing.Color.Transparent;
             this.txtCmlDistance.BorderColorScaling = 0.5F;
-            this.txtCmlDistance.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.txtCmlDistance.ControlBackground = System.Drawing.SystemColors.Control;
             this.txtCmlDistance.Location = new System.Drawing.Point(517, 58);
-            this.txtCmlDistance.Multiline = false;
             this.txtCmlDistance.Name = "txtCmlDistance";
             this.txtCmlDistance.ReadOnly = true;
-            this.txtCmlDistance.ScrollBars = System.Windows.Forms.ScrollBars.None;
-            this.txtCmlDistance.SelectionLength = 0;
-            this.txtCmlDistance.SelectionStart = 0;
             this.txtCmlDistance.Size = new System.Drawing.Size(100, 20);
             this.txtCmlDistance.TabIndex = 9;
-            this.txtCmlDistance.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
-            this.txtCmlDistance.WordWrap = true;
             // 
             // buttonReverseRoute
             // 
@@ -282,37 +262,23 @@ namespace EDDiscovery
             // 
             // dateTimePickerEndTime
             // 
-            this.dateTimePickerEndTime.BorderColor = System.Drawing.Color.Transparent;
-            this.dateTimePickerEndTime.BorderColorScaling = 0.5F;
             this.dateTimePickerEndTime.Checked = false;
-            this.dateTimePickerEndTime.CustomFormat = "HH:mm:ss";
             this.dateTimePickerEndTime.Format = System.Windows.Forms.DateTimePickerFormat.Time;
             this.dateTimePickerEndTime.Location = new System.Drawing.Point(298, 58);
             this.dateTimePickerEndTime.Name = "dateTimePickerEndTime";
-            this.dateTimePickerEndTime.SelectedColor = System.Drawing.Color.Yellow;
             this.dateTimePickerEndTime.ShowCheckBox = true;
             this.dateTimePickerEndTime.ShowUpDown = true;
             this.dateTimePickerEndTime.Size = new System.Drawing.Size(135, 20);
             this.dateTimePickerEndTime.TabIndex = 7;
-            this.dateTimePickerEndTime.TextBackColor = System.Drawing.Color.AliceBlue;
-            this.dateTimePickerEndTime.Value = new System.DateTime(2017, 8, 30, 10, 50, 42, 845);
             // 
             // dateTimePickerEndDate
             // 
-            this.dateTimePickerEndDate.BorderColor = System.Drawing.Color.Transparent;
-            this.dateTimePickerEndDate.BorderColorScaling = 0.5F;
             this.dateTimePickerEndDate.Checked = false;
-            this.dateTimePickerEndDate.CustomFormat = "dd MMMM yyyy";
-            this.dateTimePickerEndDate.Format = System.Windows.Forms.DateTimePickerFormat.Long;
             this.dateTimePickerEndDate.Location = new System.Drawing.Point(81, 58);
             this.dateTimePickerEndDate.Name = "dateTimePickerEndDate";
-            this.dateTimePickerEndDate.SelectedColor = System.Drawing.Color.Yellow;
             this.dateTimePickerEndDate.ShowCheckBox = true;
-            this.dateTimePickerEndDate.ShowUpDown = false;
             this.dateTimePickerEndDate.Size = new System.Drawing.Size(211, 20);
             this.dateTimePickerEndDate.TabIndex = 6;
-            this.dateTimePickerEndDate.TextBackColor = System.Drawing.Color.AliceBlue;
-            this.dateTimePickerEndDate.Value = new System.DateTime(2017, 8, 30, 10, 50, 42, 853);
             // 
             // labelEndDate
             // 
@@ -325,36 +291,24 @@ namespace EDDiscovery
             // 
             // dateTimePickerStartTime
             // 
-            this.dateTimePickerStartTime.BorderColor = System.Drawing.Color.Transparent;
-            this.dateTimePickerStartTime.BorderColorScaling = 0.5F;
             this.dateTimePickerStartTime.Checked = false;
-            this.dateTimePickerStartTime.CustomFormat = "HH:mm:ss";
             this.dateTimePickerStartTime.Format = System.Windows.Forms.DateTimePickerFormat.Time;
             this.dateTimePickerStartTime.Location = new System.Drawing.Point(298, 31);
             this.dateTimePickerStartTime.Name = "dateTimePickerStartTime";
-            this.dateTimePickerStartTime.SelectedColor = System.Drawing.Color.Yellow;
             this.dateTimePickerStartTime.ShowCheckBox = true;
             this.dateTimePickerStartTime.ShowUpDown = true;
             this.dateTimePickerStartTime.Size = new System.Drawing.Size(135, 20);
             this.dateTimePickerStartTime.TabIndex = 4;
-            this.dateTimePickerStartTime.TextBackColor = System.Drawing.Color.AliceBlue;
             this.dateTimePickerStartTime.Value = new System.DateTime(2010, 1, 1, 0, 0, 0, 0);
             // 
             // dateTimePickerStartDate
             // 
-            this.dateTimePickerStartDate.BorderColor = System.Drawing.Color.Transparent;
-            this.dateTimePickerStartDate.BorderColorScaling = 0.5F;
             this.dateTimePickerStartDate.Checked = false;
-            this.dateTimePickerStartDate.CustomFormat = "dd MMMM yyyy";
-            this.dateTimePickerStartDate.Format = System.Windows.Forms.DateTimePickerFormat.Long;
             this.dateTimePickerStartDate.Location = new System.Drawing.Point(81, 31);
             this.dateTimePickerStartDate.Name = "dateTimePickerStartDate";
-            this.dateTimePickerStartDate.SelectedColor = System.Drawing.Color.Yellow;
             this.dateTimePickerStartDate.ShowCheckBox = true;
-            this.dateTimePickerStartDate.ShowUpDown = false;
             this.dateTimePickerStartDate.Size = new System.Drawing.Size(211, 20);
             this.dateTimePickerStartDate.TabIndex = 3;
-            this.dateTimePickerStartDate.TextBackColor = System.Drawing.Color.AliceBlue;
             this.dateTimePickerStartDate.Value = new System.DateTime(2010, 1, 1, 0, 0, 0, 0);
             // 
             // labelDateStart
@@ -368,25 +322,14 @@ namespace EDDiscovery
             // 
             // textBoxRouteName
             // 
-            this.textBoxRouteName.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.textBoxRouteName.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBoxRouteName.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
-            this.textBoxRouteName.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
             this.textBoxRouteName.BorderColor = System.Drawing.Color.Transparent;
             this.textBoxRouteName.BorderColorScaling = 0.5F;
-            this.textBoxRouteName.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.textBoxRouteName.ControlBackground = System.Drawing.SystemColors.Control;
             this.textBoxRouteName.Location = new System.Drawing.Point(81, 4);
-            this.textBoxRouteName.Multiline = false;
             this.textBoxRouteName.Name = "textBoxRouteName";
-            this.textBoxRouteName.ReadOnly = false;
-            this.textBoxRouteName.ScrollBars = System.Windows.Forms.ScrollBars.None;
-            this.textBoxRouteName.SelectionLength = 0;
-            this.textBoxRouteName.SelectionStart = 0;
             this.textBoxRouteName.Size = new System.Drawing.Size(703, 20);
             this.textBoxRouteName.TabIndex = 1;
-            this.textBoxRouteName.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
-            this.textBoxRouteName.WordWrap = true;
             // 
             // labelRouteName
             // 
@@ -520,11 +463,11 @@ namespace EDDiscovery
         private System.Windows.Forms.ToolStripButton toolStripButtonNew;
         private System.Windows.Forms.ToolStripButton toolStripButtonSave;
         private System.Windows.Forms.Panel panelRouteInfo;
-        private ExtendedControls.CustomDateTimePicker dateTimePickerEndTime;
-        private ExtendedControls.CustomDateTimePicker dateTimePickerEndDate;
+        private System.Windows.Forms.DateTimePicker dateTimePickerEndTime;
+        private System.Windows.Forms.DateTimePicker dateTimePickerEndDate;
         private System.Windows.Forms.Label labelEndDate;
-        private ExtendedControls.CustomDateTimePicker dateTimePickerStartTime;
-        private ExtendedControls.CustomDateTimePicker dateTimePickerStartDate;
+        private System.Windows.Forms.DateTimePicker dateTimePickerStartTime;
+        private System.Windows.Forms.DateTimePicker dateTimePickerStartDate;
         private System.Windows.Forms.Label labelDateStart;
         private System.Windows.Forms.Label labelRouteName;
         private System.Windows.Forms.DataGridView dataGridViewRouteSystems;

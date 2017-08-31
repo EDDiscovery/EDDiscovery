@@ -39,25 +39,6 @@ namespace EliteDangerousCore
             public ISystem system;
             public SortedList<string, ScanNode> starnodes;
             public bool EDSMAdded = false;
-
-            public IEnumerable<ScanNode> Bodies
-            {
-                get
-                {
-                    if (starnodes != null)
-                    {
-                        foreach (ScanNode sn in starnodes.Values)
-                        {
-                            yield return sn;
-
-                            foreach (ScanNode c in sn.Descendants)
-                            {
-                                yield return c;
-                            }
-                        }
-                    }
-                }
-            }
         };
 
         public enum ScanNodeType { star, barycentre, body, belt, beltcluster };
@@ -124,25 +105,6 @@ namespace EliteDangerousCore
 
                 return false;
             }
-
-            public IEnumerable<ScanNode> Descendants
-            {
-                get
-                {
-                    if (children != null)
-                    {
-                        foreach (ScanNode sn in children.Values)
-                        {
-                            yield return sn;
-
-                            foreach (ScanNode c in sn.Descendants)
-                            {
-                                yield return c;
-                            }
-                        }
-                    }
-                }
-            }
         };
 
         public SystemNode FindSystem(ISystem sys)
@@ -164,19 +126,6 @@ namespace EliteDangerousCore
             }
 
             return null;
-        }
-
-        private static bool CompareEpsilon(double? a, double? b, bool acceptNull = false, double epsilon = 0.001, Func<double?, double> fb = null)
-        {
-            if (a == null || b == null)
-            {
-                return !acceptNull;
-            }
-
-            double _a = (double)a;
-            double _b = fb == null ? (double)b : fb(b);
-
-            return _a == _b || (_a + _b > 0 && Math.Abs((_a - _b) / (_a + _b)) < epsilon);
         }
 
         public string GetBodyDesignation(JournalScan je, string system)
@@ -208,15 +157,15 @@ namespace EliteDangerousCore
                     primaryStarScans[system] = new List<JournalScan>();
                 }
 
-                if (!primaryStarScans[system].Any(s => CompareEpsilon(s.nAge, je.nAge) &&
-                                                       CompareEpsilon(s.nEccentricity, je.nEccentricity) &&
-                                                       CompareEpsilon(s.nOrbitalInclination, je.nOrbitalInclination) &&
-                                                       CompareEpsilon(s.nOrbitalPeriod, je.nOrbitalPeriod) &&
-                                                       CompareEpsilon(s.nPeriapsis, je.nPeriapsis) &&
-                                                       CompareEpsilon(s.nRadius, je.nRadius) &&
-                                                       CompareEpsilon(s.nRotationPeriod, je.nRotationPeriod) &&
-                                                       CompareEpsilon(s.nSemiMajorAxis, je.nSemiMajorAxis) &&
-                                                       CompareEpsilon(s.nStellarMass, je.nStellarMass)))
+                if (!primaryStarScans[system].Any(s => s.nAge == je.nAge &&
+                                                       s.nEccentricity == je.nEccentricity &&
+                                                       s.nOrbitalInclination == je.nOrbitalInclination &&
+                                                       s.nOrbitalPeriod == je.nOrbitalPeriod &&
+                                                       s.nPeriapsis == je.nPeriapsis &&
+                                                       s.nRadius == je.nRadius &&
+                                                       s.nRotationPeriod == je.nRotationPeriod &&
+                                                       s.nSemiMajorAxis == je.nSemiMajorAxis &&
+                                                       s.nStellarMass == je.nStellarMass))
                 {
                     primaryStarScans[system].Add(je);
                 }
@@ -233,10 +182,10 @@ namespace EliteDangerousCore
             {
                 foreach (JournalScan primary in primaryStarScans[system])
                 {
-                    if (CompareEpsilon(je.nOrbitalPeriod, primary.nOrbitalPeriod) && 
-                        CompareEpsilon(je.nPeriapsis, primary.nPeriapsis, acceptNull: true, fb: b => ((double)b + 180) % 360.0) &&
-                        CompareEpsilon(je.nOrbitalInclination, primary.nOrbitalInclination) &&
-                        CompareEpsilon(je.nEccentricity, primary.nEccentricity) &&
+                    if (je.nOrbitalPeriod == primary.nOrbitalPeriod &&
+                        (je.nPeriapsis == null || primary.nPeriapsis == null || Math.Abs((double)je.nPeriapsis - (((double)primary.nPeriapsis + 180) % 360.0)) < 0.1) &&
+                        je.nOrbitalInclination == primary.nOrbitalInclination &&
+                        je.nEccentricity == primary.nEccentricity &&
                         !je.BodyName.Equals(primary.BodyName, StringComparison.InvariantCultureIgnoreCase))
                     {
                         return system + " B";
@@ -268,7 +217,7 @@ namespace EliteDangerousCore
                     if (je.IsStarNameRelated(he.System.name, designation))       // if its part of the name, use it
                     {
                         je.BodyDesignation = designation;
-                        return Process(je, he.System, true);
+                        return Process(je, he.System);
                     }
                     else if (jl != null && je.IsStarNameRelated(jl.StarSystem, designation))
                     {
@@ -282,10 +231,10 @@ namespace EliteDangerousCore
             he = null;
 
             je.BodyDesignation = GetBodyDesignation(je, hl[startindex].System.name);
-            return Process(je, hl[startindex].System, true);         // no relationship, add..
+            return Process(je, hl[startindex].System);         // no relationship, add..
         }
 
-        public bool Process(JournalScan sc, ISystem sys, bool reprocessPrimary = false)           // FALSE if you can't process it
+        public bool Process(JournalScan sc, ISystem sys)           // FALSE if you can't process it
         {
             Tuple<string, long> withedsm = new Tuple<string, long>(sys.name, sys.id_edsm);
 
@@ -529,28 +478,12 @@ namespace EliteDangerousCore
                     }
                 }
 
-                // Reprocess if we've encountered the primary (A) star an we already have a "Main Star"
-                if (reprocessPrimary && elements.Count == 1 && elements[0].Equals("A", StringComparison.InvariantCultureIgnoreCase) && sn.starnodes.ContainsKey("Main Star"))
-                    ReProcess(sn);
-
                 return true;
             }
             else
             {
                 System.Diagnostics.Debug.WriteLine("Failed to add system " + sc.BodyName + " not enough elements");
                 return false;
-            }
-        }
-
-        private void ReProcess(SystemNode sysnode)
-        {
-            List<JournalScan> bodies = sysnode.Bodies.Where(b => b.ScanData != null).Select(b => b.ScanData).ToList();
-            sysnode.starnodes = new SortedList<string, ScanNode>(new DuplicateKeyComparer<string>());
-
-            foreach (JournalScan sn in bodies)
-            {
-                sn.BodyDesignation = GetBodyDesignation(sn, sysnode.system.name);
-                Process(sn, sysnode.system);
             }
         }
 
@@ -586,7 +519,7 @@ namespace EliteDangerousCore
                         foreach (JournalScan js in jl)
                         {
                             js.BodyDesignation = GetBodyDesignation(js, sys.name);
-                            Process(js, sys, true);
+                            Process(js, sys);
                         }
                     }
 

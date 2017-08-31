@@ -122,14 +122,14 @@
   Cmdr Finwen  (Robert Wahlström )
 
 Main developers:
-  Robby,  Bravada Cadelanne,
-  Cruento Mucrone,  phroggie
+  Robby
+  Bravada Cadelanne
 
 Additional developers:
-  Corbin Moran
+  Cruento Mucrone, Corbin Moran
   Myshka, Zed
   Marlon Blake, Majkl
-  Smacker, Jason Thorpe</value>
+  Smacker, phroggie, Jason Thorpe</value>
   </data>
   <data name="textBoxLicense.Text" xml:space="preserve">
     <value>Apache License

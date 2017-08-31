@@ -25,15 +25,15 @@ namespace Conditions
     public class ConditionFunctions
     {
         public ConditionVariables vars;
-        public ConditionPersistentData persistentdata;
+        public ConditionFileHandles handles;
 
-        public delegate ConditionFunctionHandlers delegateGetCFH(ConditionFunctions c, ConditionVariables vars, ConditionPersistentData handles, int recdepth);
+        public delegate ConditionFunctionHandlers delegateGetCFH(ConditionFunctions c, ConditionVariables vars, ConditionFileHandles handles, int recdepth);
         public static delegateGetCFH GetCFH;            // SET this to override and add on more functions
 
-        public ConditionFunctions(ConditionVariables v, ConditionPersistentData f)
+        public ConditionFunctions(ConditionVariables v, ConditionFileHandles f)
         {
             vars = v;
-            persistentdata = f;
+            handles = f;
 
             if (GetCFH == null)                     // Make sure we at least have some functions.. the base ones
                 GetCFH = DefaultGetCFH;
@@ -91,7 +91,7 @@ namespace Conditions
                         string funcname = line.Substring(pos, apos - pos);
                         apos++;     // past the (
 
-                        ConditionFunctionHandlers cfh = GetCFH(this, vars, persistentdata, recdepth);
+                        ConditionFunctionHandlers cfh = GetCFH(this, vars, handles, recdepth);
 
                         while (true)
                         {
@@ -249,7 +249,7 @@ namespace Conditions
         }
 
         // backstop standard functions
-        static public ConditionFunctionHandlers DefaultGetCFH(ConditionFunctions c, ConditionVariables vars, ConditionPersistentData handles, int recdepth)
+        static public ConditionFunctionHandlers DefaultGetCFH(ConditionFunctions c, ConditionVariables vars, ConditionFileHandles handles, int recdepth)
         {
             return new ConditionFunctionsBase(c, vars, handles, recdepth);
         }
@@ -272,7 +272,7 @@ namespace Conditions
 
         protected ConditionFunctions caller;
         protected ConditionVariables vars;
-        protected ConditionPersistentData persistentdata;
+        protected ConditionFileHandles handles;
         protected int recdepth;
 
         protected delegate bool func(out string output);
@@ -282,10 +282,10 @@ namespace Conditions
             public string fname;
             public int numberparasmin;
             public int numberparasmax;
-            public int checkvarmap;             // if not a string, check macro and fail if does not exist. b0 = para1, etc.
-            public int allowstringmap;          // allow a string map. b0 = para1, etc.
+            public int checkvarmap;           // if not a string, check macro
+            public int allowstringmap;          // allow a string
 
-            public FuncEntry(func f, int min, int max, int checkmacromapx, int allowstringmapx )
+            public FuncEntry(func f, int min, int max, int checkmacromapx, int allowstringmapx = 0)
             {
                 fname = f.Method.Name;
                 numberparasmin = min; numberparasmax = max;
@@ -293,26 +293,16 @@ namespace Conditions
             }
         }
 
-        protected const int NoMacros = 0;           // ID for checkvarmap above
-        protected const int FirstMacro = 1;
-        protected const int SecondMacro = 2;
-        protected const int AllMacros = 0xfffffff;
-
-        protected const int NoStrings = 0;          // ID for allowstringmap above
-        protected const int FirstString = 1;
-        protected const int SecondString = 2;
-        protected const int AllStrings = 0xfffffff;
-
         protected static System.Globalization.CultureInfo ct = System.Globalization.CultureInfo.InvariantCulture;
         protected static Random rnd = new Random();
 
         protected virtual FuncEntry FindFunction(string name) { return null; }
 
-        public ConditionFunctionHandlers(ConditionFunctions c, ConditionVariables v, ConditionPersistentData h, int recd)
+        public ConditionFunctionHandlers(ConditionFunctions c, ConditionVariables v, ConditionFileHandles h, int recd)
         {
             caller = c;
             vars = v;
-            persistentdata = h;
+            handles = h;
             recdepth = recd;
             paras = new List<Parameter>();
         }

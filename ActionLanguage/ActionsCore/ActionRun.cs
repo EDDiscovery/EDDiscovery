@@ -48,7 +48,7 @@ namespace ActionLanguage
         // now = true, run it immediately, else run at end of queue.  Optionally pass in handles and dialogs in case its a sub prog
 
         public void Run(bool now, ActionFile fileset, ActionProgram r, ConditionVariables inputparas,
-                                ConditionPersistentData fh = null, Dictionary<string, ExtendedControls.ConfigurableForm> d = null, bool closeatend = true)
+                                ConditionFileHandles fh = null, Dictionary<string, ExtendedControls.ConfigurableForm> d = null, bool closeatend = true)
         {
             if (now)
             {
@@ -58,7 +58,7 @@ namespace ActionLanguage
                 progcurrent = new ActionProgramRun(fileset, r, inputparas, this, actioncontroller);   // now we run this.. no need to push to stack
 
                 progcurrent.PrepareToRun(new ConditionVariables(progcurrent.inputvariables, actioncontroller.Globals, fileset.filevariables),
-                                                fh == null ? new ConditionPersistentData() : fh, d == null ? new Dictionary<string, ExtendedControls.ConfigurableForm>() : d, closeatend);        // if no filehandles, make them and close at end
+                                                fh == null ? new ConditionFileHandles() : fh, d == null ? new Dictionary<string, ExtendedControls.ConfigurableForm>() : d, closeatend);        // if no filehandles, make them and close at end
             }
             else
                 progqueue.Add(new ActionProgramRun(fileset, r, inputparas, this, actioncontroller));
@@ -120,7 +120,7 @@ namespace ActionLanguage
                     {
                         progcurrent.PrepareToRun(
                                 new ConditionVariables(progcurrent.inputvariables, actioncontroller.Globals, progcurrent.actionfile.filevariables),
-                                new ConditionPersistentData(),
+                                new ConditionFileHandles(),
                                 new Dictionary<string, ExtendedControls.ConfigurableForm>(), true); // with new file handles and close at end..
                     }
 
@@ -159,7 +159,7 @@ namespace ActionLanguage
 
                             if (ap != null)
                             {
-                                Run(true,ap.Item1, ap.Item2, paravars , progcurrent.functions.persistentdata,progcurrent.dialogs, false);   // run now with these para vars
+                                Run(true,ap.Item1, ap.Item2, paravars , progcurrent.functions.handles,progcurrent.dialogs, false);   // run now with these para vars
                             }
                             else
                                 progcurrent.ReportError("Call cannot find " + prog);

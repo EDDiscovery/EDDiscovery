@@ -31,9 +31,6 @@ namespace EDDiscovery.Actions
             new ActionEventEDList("onPanelChange", "UserUIEvent", "UI"),
             new ActionEventEDList("onHistorySelection", "UserUIEvent", "UI"),  //14
             new ActionEventEDList("onEliteUIEvent", "EliteUIEvent", "EliteUI"),  //15
-            new ActionEventEDList("onEDDNSync", "ProgramEvent", "Program"),  //16
-            new ActionEventEDList("onEGOSync", "ProgramEvent", "Program"),  //17
-            new ActionEventEDList("onEDSMSync", "ProgramEvent", "Program"),  //18
             //TBD for 9.0 new ActionEventEDList("onVoiceInput", "Voice", "Voice"), 
 
             new ActionEventEDList("All","","Misc"),                      // All, special match only
@@ -55,10 +52,6 @@ namespace EDDiscovery.Actions
         public static ActionEvent onPanelChange { get { return events[13]; } }
         public static ActionEvent onHistorySelection { get { return events[14]; } }
         public static ActionEvent onUIEvent { get { return events[15]; } }
-        public static ActionEvent onEDDNSync { get { return events[16]; } }
-        public static ActionEvent onEGOSync { get { return events[17]; } }
-        public static ActionEvent onEDSMSync { get { return events[18]; } }
-
         public static ActionEvent onVoiceInput { get { return events[0]; } }   // TBD for voice, fix index
 
         public static ActionEvent RefreshJournal(EliteDangerousCore.HistoryEntry he) { return new ActionEventEDList(he.journalEntry.EventTypeStr, "onRefresh", ""); }

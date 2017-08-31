@@ -194,6 +194,8 @@ namespace EDDiscovery
         #endregion
 
 
+        #region Reaction to UCTG changing
+
         // main travel grid has a new entry due to onNewEntry
         public void UpdatedWithAddNewEntry(HistoryEntry he, HistoryList hl, bool accepted)     
         {
@@ -207,10 +209,7 @@ namespace EDDiscovery
                     System.Diagnostics.Trace.WriteLine("Arrived at system: " + he.System.name + " " + count + ":th visit.");
 
                     if (EDCommander.Current.SyncToEdsm == true)
-                    {
                         EDSMSync.SendTravelLog(he);
-                        _discoveryForm.ActionRunOnEntry(he, Actions.ActionEventEDList.onEDSMSync);
-                    }
                 }
 
                 hl.SendEDSMStatusInfo(he, true);
@@ -220,7 +219,6 @@ namespace EDDiscovery
                     if (EDCommander.Current.SyncToEddn == true)
                     {
                         EDDNSync.SendEDDNEvents(_discoveryForm.LogLine, he);
-                        _discoveryForm.ActionRunOnEntry(he, Actions.ActionEventEDList.onEDDNSync);
                     }
                 }
 
@@ -229,7 +227,6 @@ namespace EDDiscovery
                     if (EDCommander.Current.SyncToEGO)
                     {
                         EDDiscoveryCore.EGO.EGOSync.SendEGOEvents(_discoveryForm.LogLine, he);
-                        _discoveryForm.ActionRunOnEntry(he, Actions.ActionEventEDList.onEGOSync);
                     }
                 }
             }
@@ -239,8 +236,6 @@ namespace EDDiscovery
                 System.Diagnostics.Trace.WriteLine("Trace: " + ex.StackTrace);
             }
         }
-
-        #region Reaction to UCTG changing
 
         // history list was repainted, user changed selection, or auto move
 
