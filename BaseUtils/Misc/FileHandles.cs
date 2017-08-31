@@ -1,28 +1,13 @@
-﻿/*
- * Copyright © 2017 EDDiscovery development team
- *
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
- * file except in compliance with the License. You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- * 
- * Unless required by applicable law or agreed to in writing, software distributed under
- * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
- * ANY KIND, either express or implied. See the License for the specific language
- * governing permissions and limitations under the License.
- * 
- * EDDiscovery is not affiliated with Frontier Developments plc.
- */
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Conditions
+namespace BaseUtils
 {
-    public class ConditionFileHandle
+    public class FileHandle
     {
         StreamReader reader;
         StreamWriter writer;
@@ -121,7 +106,7 @@ namespace Conditions
             {
                 if (writer != null)
                     writer.BaseStream.Seek(value, SeekOrigin.Begin);
-                else 
+                else
                 {
                     reader.DiscardBufferedData();
                     reader.BaseStream.Seek(value, SeekOrigin.Begin);
@@ -142,7 +127,7 @@ namespace Conditions
             {
                 if (writer != null)
                     output = writer.BaseStream.Position.ToString(System.Globalization.CultureInfo.InvariantCulture);
-                else 
+                else
                     output = reader.BaseStream.Position.ToString(System.Globalization.CultureInfo.InvariantCulture);
 
                 return true;
@@ -155,24 +140,34 @@ namespace Conditions
         }
     }
 
-    public class ConditionFileHandles
+    public class FileHandles
     {
-        private Dictionary<int, ConditionFileHandle> handles;
-        private int nextid;
+        private Dictionary<int, FileHandle> handles;
+        private int nexthid;
 
-        public ConditionFileHandles()
+        public FileHandles()
         {
-            handles = new Dictionary<int, ConditionFileHandle>();
-            nextid = 1;
+            nexthid = 1;
+            handles = new Dictionary<int, FileHandle>();
+        }
+
+        public void CloseAll()
+        {
+            foreach (int i in handles.Keys)
+            {
+                handles[i].Close();
+            }
+
+            handles.Clear();
         }
 
         public int Open(string f, FileMode fm, FileAccess ac, out string errmsg)        // 0 is bad!
         {
-            ConditionFileHandle cfh = new ConditionFileHandle();
+            FileHandle cfh = new FileHandle();
             if (cfh.Open(f, fm, ac, out errmsg))
             {
-                handles[nextid] = cfh;
-                return nextid++;
+                handles[nexthid] = cfh;
+                return nexthid++;
             }
             else
                 return 0;
@@ -230,16 +225,5 @@ namespace Conditions
                 return false;
             }
         }
-
-        public void CloseAll()
-        {
-            foreach (int i in handles.Keys)
-            {
-                handles[i].Close();
-            }
-
-            handles.Clear();
-        }
-
     }
 }

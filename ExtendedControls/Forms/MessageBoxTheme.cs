@@ -210,5 +210,9 @@ namespace ExtendedControls
             OnCaptionMouseDown((Control)sender, e);
         }
 
+        private void pictureBox1_MouseUp(object sender, MouseEventArgs e)
+        {
+            OnCaptionMouseUp((Control)sender, e);
+        }
     }
 }

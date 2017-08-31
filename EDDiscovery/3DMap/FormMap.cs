@@ -15,29 +15,29 @@
  */
 using EDDiscovery;
 using EDDiscovery._3DMap;
+using EDDiscovery.Forms;
+using EliteDangerousCore;
+using EliteDangerousCore.DB;
+using EliteDangerousCore.EDSM;
 using OpenTK;
 using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL;
+using OpenTK.Input;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Linq;
+using System.Resources;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
-using OpenTK.Input;
-using System.Drawing.Drawing2D;
-using System.Resources;
-using System.Collections.Concurrent;
-using EliteDangerousCore.EDSM;
-using EDDiscovery.Forms;
-using EliteDangerousCore;
-using EliteDangerousCore.DB;
 
 namespace EDDiscovery
 {
-    public partial class FormMap : Form
+    public partial class FormMap : ExtendedControls.SmartSysMenuForm
     {
 
 //TBD subscribe to new target
@@ -326,82 +326,6 @@ namespace EDDiscovery
             this.glControl.MouseWheel += new System.Windows.Forms.MouseEventHandler(this.glControl_OnMouseWheel);
             this.glControlContainer.Controls.Add(this.glControl);
             this.glControlContainer.ResumeLayout();
-        }
-
-        // P/Invoke constants
-        private const int WM_SYSCOMMAND = 0x112;
-        private const int MF_STRING = 0x0;
-        private const int MF_CHECKED = 0x00000008;
-        private const int MF_UNCHECKED = 0x00000000;
-        private const int MF_SEPARATOR = 0x00000800;
-
-      
-        /// <summary>
-        /// Add to Windows System menu
-        /// </summary>
-        /// <param name="e"></param>
-        protected override void OnHandleCreated(EventArgs e)
-        {
-            base.OnHandleCreated(e);
-
-            IntPtr hSysMenu = BaseUtils.Win32.UnsafeNativeMethods.GetSystemMenu(this.Handle, false);
-            IntPtr hOpacityMenu = BaseUtils.Win32.UnsafeNativeMethods.CreateMenu();
-            for(int i = 10; i > 0; i -= 1)
-            {
-                string s = (i * 10).ToString();
-                BaseUtils.Win32.UnsafeNativeMethods.AppendMenu(hOpacityMenu, MF_STRING, 0x0100 | i, s);
-            }
-            BaseUtils.Win32.UnsafeNativeMethods.AppendMenu(hSysMenu, MF_SEPARATOR, 0, string.Empty);
-            BaseUtils.Win32.UnsafeNativeMethods.AppendMenu(hSysMenu, this.TopMost?MF_CHECKED:MF_UNCHECKED, 0x01, "On &Top");
-            //AppendMenu(hSysMenu, MF_STRING, 0x02, "T&ransparency");
-            // TODO: Make transparency a sub-menu with different values
-            BaseUtils.Win32.UnsafeNativeMethods.AppendMenu(hSysMenu, 0x10, (int)hOpacityMenu, "&Opacity");
-        }
-        protected override void WndProc(ref Message m)
-        {
-            base.WndProc(ref m);
-
-            if(m.Msg == WM_SYSCOMMAND)
-            {
-                switch(unchecked((long)m.WParam))
-                {
-                    // Topmost entry
-                    case 0x01:
-                        this.TopMost = !this.TopMost;
-                        // TODO: toggle checkmark
-                        break;
-
-                    // Opacity toggle (obsolete)
-                    case 0x02:
-                        if (this.Opacity > 0.99)
-                        {
-                            this.Opacity = 0.75;
-                        }
-                        else
-                        {
-                            this.Opacity = 1.0;
-                        }
-                        break;
-
-                    // Opacity sub=menu
-                    case 0x0101:
-                    case 0x0102:
-                    case 0x0103:
-                    case 0x0104:
-                    case 0x0105:
-                    case 0x0106:
-                    case 0x0107:
-                    case 0x0108:
-                    case 0x0109:
-                    case 0x010a:
-                        this.Opacity = (0x00ff & (int)m.WParam) / 10.0f;
-                        // TODO: toggle checkmark
-                        break;
-
-                    default:
-                        break;
-                }
-            }
         }
 
         private void FormMap_Load(object sender, EventArgs e)

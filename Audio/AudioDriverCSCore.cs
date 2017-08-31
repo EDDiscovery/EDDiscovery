@@ -46,25 +46,45 @@ namespace AudioExtensions
 
         public bool SetAudioEndpoint(string dev, bool usedefault = false)
         {
-#if true
             System.Collections.ObjectModel.ReadOnlyCollection<DirectSoundDevice> list = DirectSoundDeviceEnumerator.EnumerateDevices();
 
             DirectSoundDevice dsd = null;
+
             if (dev != null)       // active selection
             {
                 dsd = list.FirstOrDefault(x => x.Description.Equals(dev));        // find
+
                 if (dsd == null && !usedefault) // if not found, and don't use the default (used by constructor)
                     return false;
             }
 
             DirectSoundOut dso = new DirectSoundOut(100, System.Threading.ThreadPriority.Highest);    // seems good quality at 200 ms latency
 
-            if ( dsd != null )
+            if (dso == null)    // if no DSO, fail..
+                return false;
+
+            if (dsd != null)
                 dso.Device = dsd.Guid;
-#else
-            MMDevice def = MMDeviceEnumerator.DefaultAudioEndpoint(DataFlow.Render, Role.Console);
-            ISoundOut dso = new WasapiOut() { Latency = 100, Device = def  }; //BAD breakup
-#endif
+            else
+            {
+                DirectSoundDevice def = DirectSoundDevice.DefaultDevice;
+                dso.Device = def.Guid;  // use default GUID
+            }
+
+            NullWaveSource nullw = new NullWaveSource(10);
+
+            try
+            {
+                dso.Initialize(nullw);  // check it takes it.. may not if no sound devices there..
+                dso.Stop();
+                nullw.Dispose();
+            }
+            catch
+            {
+                nullw.Dispose();
+                dso.Dispose();
+                return false;
+            }
 
             if (aout != null)                 // clean up last
             {
@@ -81,10 +101,15 @@ namespace AudioExtensions
 
         public string GetAudioEndpoint()
         {
-            Guid guid = ((DirectSoundOut)aout).Device;
-            System.Collections.ObjectModel.ReadOnlyCollection<DirectSoundDevice> list = DirectSoundDeviceEnumerator.EnumerateDevices();
-            DirectSoundDevice dsd = list.First(x => x.Guid == guid);
-            return dsd.Description;
+            if (aout != null)
+            {
+                Guid guid = ((DirectSoundOut)aout).Device;
+                System.Collections.ObjectModel.ReadOnlyCollection<DirectSoundDevice> list = DirectSoundDeviceEnumerator.EnumerateDevices();
+                DirectSoundDevice dsd = list.First(x => x.Guid == guid);
+                return dsd.Description;
+            }
+            else
+                return "";
         }
 
 
@@ -97,7 +122,8 @@ namespace AudioExtensions
 
         public void Dispose()
         {
-            aout.Dispose();
+            if ( aout != null )
+                aout.Dispose();
         }
 
         public void Dispose(AudioData o)
@@ -110,19 +136,23 @@ namespace AudioExtensions
 
         public void Start(AudioData o, int vol)
         {
-            int t = Environment.TickCount;
+            if (aout != null)
+            {
+                int t = Environment.TickCount;
 
-            IWaveSource current = o.data as IWaveSource;
-            aout.Initialize(current);
-            //System.Diagnostics.Debug.WriteLine((Environment.TickCount-t).ToString("00000") + "Driver Init done");
-            aout.Volume = (float)(vol) / 100;
-            aout.Play();
-            //System.Diagnostics.Debug.WriteLine((Environment.TickCount - t).ToString("00000") + "Driver Play done");
+                IWaveSource current = o.data as IWaveSource;
+                aout.Initialize(current);
+                //System.Diagnostics.Debug.WriteLine((Environment.TickCount-t).ToString("00000") + "Driver Init done");
+                aout.Volume = (float)(vol) / 100;
+                aout.Play();
+                //System.Diagnostics.Debug.WriteLine((Environment.TickCount - t).ToString("00000") + "Driver Play done");
+            }
         }
 
         public void Stop()
         {
-            aout.Stop();
+            if ( aout != null )
+                aout.Stop();
         }
 
         // FROM file

@@ -57,8 +57,10 @@
     <Compile Include="HTTP\HttpCom.cs" />
     <Compile Include="HTTP\ResponseData.cs" />
     <Compile Include="Misc\EnhancedSendKeys.cs" />
+    <Compile Include="Misc\FileHandles.cs" />
     <Compile Include="Misc\KeyObjectExtensions.cs" />
     <Compile Include="Misc\NativeMethods.cs" />
+    <Compile Include="Misc\Processes.cs" />
     <Compile Include="Numbers\ColorObjectExtensions.cs" />
     <Compile Include="Numbers\LineStore.cs" />
     <Compile Include="Numbers\NumberObjectExtensions.cs" />

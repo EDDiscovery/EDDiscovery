@@ -69,6 +69,9 @@ namespace EDDiscovery
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripLabelSystem = new System.Windows.Forms.ToolStripLabel();
             this.toolStripTextBoxSystem = new System.Windows.Forms.ToolStripTextBox();
+            this.toolStripLabel1 = new System.Windows.Forms.ToolStripLabel();
+            this.toolStripLabelNoCoords = new System.Windows.Forms.ToolStripLabel();
+            this.toolStripAddFromHistory = new System.Windows.Forms.ToolStripButton();
             this.splitContainerCustom1 = new ExtendedControls.SplitContainerCustom();
             this.splitContainerCustom2 = new ExtendedControls.SplitContainerCustom();
             this.dataViewScroller_Distances = new ExtendedControls.DataViewScrollerPanel();
@@ -199,7 +202,10 @@ namespace EDDiscovery
             this.toolStripButtonMap,
             this.toolStripSeparator2,
             this.toolStripLabelSystem,
-            this.toolStripTextBoxSystem});
+            this.toolStripTextBoxSystem,
+            this.toolStripLabel1,
+            this.toolStripLabelNoCoords,
+            this.toolStripAddFromHistory});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.Size = new System.Drawing.Size(924, 25);
@@ -218,7 +224,7 @@ namespace EDDiscovery
             // 
             // toolStripButtonNew
             // 
-            this.toolStripButtonNew.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonNew.Image")));
+            this.toolStripButtonNew.Image = global::EDDiscovery.Properties.Resources.toolStripButtonNew_Image;
             this.toolStripButtonNew.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonNew.Name = "toolStripButtonNew";
             this.toolStripButtonNew.Size = new System.Drawing.Size(76, 22);
@@ -234,7 +240,7 @@ namespace EDDiscovery
             // toolStripButtonRemoveUnused
             // 
             this.toolStripButtonRemoveUnused.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButtonRemoveUnused.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonRemoveUnused.Image")));
+            this.toolStripButtonRemoveUnused.Image = global::EDDiscovery.Properties.Resources.toolStripButtonRemoveUnused_Image;
             this.toolStripButtonRemoveUnused.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonRemoveUnused.Name = "toolStripButtonRemoveUnused";
             this.toolStripButtonRemoveUnused.Size = new System.Drawing.Size(23, 22);
@@ -245,7 +251,7 @@ namespace EDDiscovery
             // toolStripButtonRemoveAll
             // 
             this.toolStripButtonRemoveAll.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButtonRemoveAll.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonRemoveAll.Image")));
+            this.toolStripButtonRemoveAll.Image = global::EDDiscovery.Properties.Resources.toolStripButtonRemoveAll_Image;
             this.toolStripButtonRemoveAll.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonRemoveAll.Name = "toolStripButtonRemoveAll";
             this.toolStripButtonRemoveAll.Size = new System.Drawing.Size(23, 22);
@@ -256,7 +262,7 @@ namespace EDDiscovery
             // toolStripButtonMap
             // 
             this.toolStripButtonMap.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButtonMap.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonMap.Image")));
+            this.toolStripButtonMap.Image = global::EDDiscovery.Properties.Resources.toolStripButtonMap_Image;
             this.toolStripButtonMap.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonMap.Name = "toolStripButtonMap";
             this.toolStripButtonMap.Size = new System.Drawing.Size(23, 22);
@@ -280,6 +286,28 @@ namespace EDDiscovery
             this.toolStripTextBoxSystem.Name = "toolStripTextBoxSystem";
             this.toolStripTextBoxSystem.ReadOnly = true;
             this.toolStripTextBoxSystem.Size = new System.Drawing.Size(200, 25);
+            // 
+            // toolStripLabel1
+            // 
+            this.toolStripLabel1.Name = "toolStripLabel1";
+            this.toolStripLabel1.Size = new System.Drawing.Size(154, 22);
+            this.toolStripLabel1.Text = "Visited without coordinates:";
+            this.toolStripLabel1.ToolTipText = "Start New to update count";
+            // 
+            // toolStripLabelNoCoords
+            // 
+            this.toolStripLabelNoCoords.Name = "toolStripLabelNoCoords";
+            this.toolStripLabelNoCoords.Size = new System.Drawing.Size(0, 22);
+            // 
+            // toolStripAddFromHistory
+            // 
+            this.toolStripAddFromHistory.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.toolStripAddFromHistory.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripAddFromHistory.Name = "toolStripAddFromHistory";
+            this.toolStripAddFromHistory.Size = new System.Drawing.Size(48, 22);
+            this.toolStripAddFromHistory.Text = "Add 20";
+            this.toolStripAddFromHistory.ToolTipText = "Add the oldest 20 unknown systems from history to wanted list";
+            this.toolStripAddFromHistory.Click += new System.EventHandler(this.toolStripAddFromHistory_Click);
             // 
             // splitContainerCustom1
             // 
@@ -594,5 +622,8 @@ namespace EDDiscovery
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private System.Windows.Forms.ToolStripLabel toolStripLabelSystem;
         private System.Windows.Forms.ToolStripTextBox toolStripTextBoxSystem;
+        private System.Windows.Forms.ToolStripLabel toolStripLabel1;
+        private System.Windows.Forms.ToolStripLabel toolStripLabelNoCoords;
+        private System.Windows.Forms.ToolStripButton toolStripAddFromHistory;
     }
 }

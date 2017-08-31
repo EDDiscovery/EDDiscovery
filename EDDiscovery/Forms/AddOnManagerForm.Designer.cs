@@ -79,20 +79,15 @@ namespace EDDiscovery.Forms
             this.panelTop.Size = new System.Drawing.Size(1043, 32);
             this.panelTop.TabIndex = 30;
             this.panelTop.MouseDown += new System.Windows.Forms.MouseEventHandler(this.label_index_MouseDown);
+            this.panelTop.MouseUp += new System.Windows.Forms.MouseEventHandler(this.label_index_MouseUp);
             // 
             // panel_close
             // 
             this.panel_close.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.panel_close.BackColor = System.Drawing.SystemColors.Control;
             this.panel_close.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.panel_close.DrawnImage = null;
-            this.panel_close.ImageSelected = ExtendedControls.DrawnPanel.ImageType.Close;
-            this.panel_close.ImageText = null;
             this.panel_close.Location = new System.Drawing.Point(1020, 0);
             this.panel_close.MarginSize = 6;
-            this.panel_close.MouseOverColor = System.Drawing.Color.White;
-            this.panel_close.MouseSelectedColor = System.Drawing.Color.Green;
-            this.panel_close.MouseSelectedColorEnable = true;
             this.panel_close.Name = "panel_close";
             this.panel_close.Size = new System.Drawing.Size(24, 24);
             this.panel_close.TabIndex = 27;
@@ -103,14 +98,9 @@ namespace EDDiscovery.Forms
             this.panel_minimize.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.panel_minimize.BackColor = System.Drawing.SystemColors.Control;
             this.panel_minimize.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.panel_minimize.DrawnImage = null;
             this.panel_minimize.ImageSelected = ExtendedControls.DrawnPanel.ImageType.Minimize;
-            this.panel_minimize.ImageText = null;
             this.panel_minimize.Location = new System.Drawing.Point(990, 0);
             this.panel_minimize.MarginSize = 6;
-            this.panel_minimize.MouseOverColor = System.Drawing.Color.White;
-            this.panel_minimize.MouseSelectedColor = System.Drawing.Color.Green;
-            this.panel_minimize.MouseSelectedColorEnable = true;
             this.panel_minimize.Name = "panel_minimize";
             this.panel_minimize.Size = new System.Drawing.Size(24, 24);
             this.panel_minimize.TabIndex = 26;
@@ -125,6 +115,7 @@ namespace EDDiscovery.Forms
             this.label_index.TabIndex = 23;
             this.label_index.Text = "Add-On Manager";
             this.label_index.MouseDown += new System.Windows.Forms.MouseEventHandler(this.label_index_MouseDown);
+            this.label_index.MouseUp += new System.Windows.Forms.MouseEventHandler(this.label_index_MouseUp);
             // 
             // panelOuter
             // 
