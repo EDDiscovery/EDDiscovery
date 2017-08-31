@@ -76,19 +76,19 @@ namespace EliteDangerousCore.JournalEvents
                 SystemName = jo["SystemName"].Str();
                 MarketName = jo["MarketName"].Str();
 
-Expiry: time and date
-IsComplete: Boolean
-CurrentTotal
-PlayerContribution
-NumContributors
-PlayerPercentileBand
+//Expiry: time and date
+//IsComplete: Boolean
+//CurrentTotal
+//PlayerContribution
+//NumContributors
+//PlayerPercentileBand
 
-                    //If the community goal is constructed with a fixed-size top rank(ie max reward for top 10 players)
-                    TopRankSize: (integer)
-                    PlayerInTopRank: (Boolean)
-                    //If the community goal has reached the first success tier:
-                 TierReached
-        Bonus
+//                    //If the community goal is constructed with a fixed-size top rank(ie max reward for top 10 players)
+//                    TopRankSize: (integer)
+//                    PlayerInTopRank: (Boolean)
+//                    //If the community goal has reached the first success tier:
+//                 TierReached
+//        Bonus
 
             }
         }
@@ -97,44 +97,44 @@ PlayerPercentileBand
 
         public JournalCommunityGoal(JObject evt ) : base(evt, JournalTypeEnum.CommunityGoal)
         {
-            Name = evt["Name"].Str();
-            System = evt["System"].Str();
+            //Name = evt["Name"].Str();
+            //System = evt["System"].Str();
 
 
-            CommunityGoal = new List<CommunityGoal>();
+            //CommunityGoal = new List<CommunityGoal>();
 
-            JArray jmodules = (JArray)evt["Modules"];
-            if (jmodules != null)       // paranoia
-            {
-                foreach (JObject jo in jmodules)
-                {
-                    CommunityGoal module = new CommunityGoal(JournalFieldNaming.GetBetterSlotName(jo["Slot"].Str()),
-                                                        JournalFieldNaming.NormaliseFDSlotName(jo["Slot"].Str()),
-                                                        JournalFieldNaming.GetBetterItemNameLoadout(jo["Item"].Str()),
-                                                        JournalFieldNaming.NormaliseFDItemName(jo["Item"].Str()),
-                                                        jo["On"].BoolNull(),
-                                                        jo["Priority"].IntNull(),
-                                                        jo["AmmoInClip"].IntNull(),
-                                                        jo["AmmoInHopper"].IntNull(),
-                                                        jo["EngineerBlueprint"].Str().SplitCapsWordFull(),
-                                                        jo["EngineerLevel"].IntNull(),
-                                                        jo["Health"].DoubleNull(),
-                                                        jo["Value"].IntNull());
-                    CommunityGoals.Add(module);
-                }
+            //JArray jmodules = (JArray)evt["Modules"];
+            //if (jmodules != null)       // paranoia
+            //{
+            //    foreach (JObject jo in jmodules)
+            //    {
+            //        CommunityGoal module = new CommunityGoal(JournalFieldNaming.GetBetterSlotName(jo["Slot"].Str()),
+            //                                            JournalFieldNaming.NormaliseFDSlotName(jo["Slot"].Str()),
+            //                                            JournalFieldNaming.GetBetterItemNameLoadout(jo["Item"].Str()),
+            //                                            JournalFieldNaming.NormaliseFDItemName(jo["Item"].Str()),
+            //                                            jo["On"].BoolNull(),
+            //                                            jo["Priority"].IntNull(),
+            //                                            jo["AmmoInClip"].IntNull(),
+            //                                            jo["AmmoInHopper"].IntNull(),
+            //                                            jo["EngineerBlueprint"].Str().SplitCapsWordFull(),
+            //                                            jo["EngineerLevel"].IntNull(),
+            //                                            jo["Health"].DoubleNull(),
+            //                                            jo["Value"].IntNull());
+            //        CommunityGoals.Add(module);
+            //    }
 
             
             }
 
-        }
-        public List<CommunityGoal> CommunityGoals;
+        
+        //public List<CommunityGoal> CommunityGoals;
 
         public override System.Drawing.Bitmap Icon { get { return EliteDangerous.Properties.Resources.communitygoaljoin; } }
 
         public override void FillInformation(out string summary, out string info, out string detailed) //V
         {
             summary = EventTypeStr.SplitCapsWord();
-            info = BaseUtils.FieldBuilder.Build("", Name, "< at ; Star System", System);
+            info = "";// BaseUtils.FieldBuilder.Build("", Name, "< at ; Star System", System);
             detailed = "";
         }
     }

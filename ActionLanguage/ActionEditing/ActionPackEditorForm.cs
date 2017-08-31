@@ -479,9 +479,5 @@ namespace ActionLanguage
             OnCaptionMouseDown((Control)sender, e);
         }
 
-        private void label_index_MouseUp(object sender, MouseEventArgs e)
-        {
-            OnCaptionMouseUp((Control)sender, e);
-        }
     }
 }

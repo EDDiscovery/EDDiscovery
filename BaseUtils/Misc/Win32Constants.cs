@@ -47,24 +47,6 @@ namespace BaseUtils.Win32Constants
 
     #endregion
 
-    #region window Hook Codes (HC_*)
-
-    /// <summary>
-    /// window Hook Codes as defined in Winuser.h (via windows.h), for use in a WH_CALLWNDPROC hook procedure while
-    /// conducting unsactioned witchcraft alongside a supervisory greybeard.
-    /// </summary>
-    /// <seealso href="https://msdn.microsoft.com/en-us/library/windows/desktop/ms644959(v=vs.85).aspx"/>
-    /// <seealso href="https://msdn.microsoft.com/en-us/library/windows/desktop/ms644990(v=vs.85).aspx"/>
-    public static class HC
-    {
-        public const int
-            ACTION = 0,
-            GETNEXT = 1,
-            SKIP = 2;
-    }
-
-    #endregion
-
     #region HitTest results (HT*)
 
     /// <summary>
@@ -219,278 +201,15 @@ namespace BaseUtils.Win32Constants
     public static class MF
     {
         /// <summary>
-        /// Indicates that uIDEnableItem gives the identifier of the menu item. If neither the MF_BYCOMMAND nor MF_BYPOSITION flag is specified, the MF_BYCOMMAND flag is the default flag.
-        /// </summary>
-        public const int BYCOMMAND = 0x00000000;
-
-        /// <summary>
-        /// Indicates that the menu item is enabled and restored from a grayed state so that it can be selected.
-        /// </summary>
-        public const int ENABLED = 0x00000000;
-
-        /// <summary>
         /// MF_STRING: the menu item contains a string (conflicts with MF_BITMAP and/or MF_OWNERDRAW).
         /// </summary>
         public const int STRING = 0x00000000;
-
-        /// <summary>
-        /// MF_UNCHECKED: Does not place a check mark next to the item.
-        /// </summary>
-        public const int UNCHECKED = 0x00000000;
-
-        /// <summary>
-        /// Indicates that the menu item is disabled and grayed so that it cannot be selected.
-        /// </summary>
-        public const int GRAYED = 0x00000001;
-
-        /// <summary>
-        /// Indicates that the menu item is disabled, but not grayed, so it cannot be selected.
-        /// </summary>
-        public const int DISABLED = 0x00000002;
-
-        /// <summary>
-        /// MF_CHECKED: Places a check mark next to the item.
-        /// </summary>
-        public const int CHECKED = 0x00000008;
-
-        /// <summary>
-        /// MF_POPUP: The menu item opens a drop-down menu or submenu. uIDNewItem should be a handle to the submenu.
-        /// </summary>
-        public const int POPUP = 0x00000010;
-
-        /// <summary>
-        /// Indicates that uIDEnableItem gives the zero-based relative position of the menu item.
-        /// </summary>
-        public const int BYPOSITION = 0x00000400;
 
         /// <summary>
         /// MF_SEPARATOR: draws a horizontal dividing line. This flag is used only in a drop-down menu, submenu, or shortcut menu. The line cannot
         /// be grayed, disabled, or highlighted.
         /// </summary>
         public const int SEPARATOR = 0x00000800;
-    }
-
-    #endregion
-
-    #region System Commands (SC_*)
-
-    /// <summary>
-    /// System Command constants, for use with <see cref="WM.SYSCOMMAND"/>, as defined in Winuser.h (via Windows.h).
-    /// </summary>
-    /// <seealso href="https://msdn.microsoft.com/en-us/library/windows/desktop/ms646360(v=vs.85).aspx"/>
-    public static class SC
-    {
-        /// <summary>
-        /// Sizes the window.
-        /// </summary>
-        public const int SIZE = 0xF000;
-
-        /// <summary>
-        /// Moves the window.
-        /// </summary>
-        public const int MOVE = 0xF010;
-
-        /// <summary>
-        /// Minimizes the window.
-        /// </summary>
-        public const int MINIMIZE = 0xF020;
-
-        /// <summary>
-        /// Maximizes the window.
-        /// </summary>
-        public const int MAXIMIZE = 0xF030;
-
-        /// <summary>
-        /// Moves to the next window.
-        /// </summary>
-        public const int NEXTWINDOW = 0xF040;
-
-        /// <summary>
-        /// Moves to the previous window.
-        /// </summary>
-        public const int PREVWINDOW = 0xF050;
-
-        /// <summary>
-        /// Closes the window.
-        /// </summary>
-        public const int CLOSE = 0xF060;
-
-        /// <summary>
-        /// Scrolls vertically.
-        /// </summary>
-        public const int VSCROLL = 0xF070;
-
-        /// <summary>
-        /// Scrolls horizontally.
-        /// </summary>
-        public const int HSCROLL = 0xF080;
-
-        /// <summary>
-        /// Retrieves the window menu as a result of a mouse click.
-        /// </summary>
-        public const int MOUSEMENU = 0xF090;
-
-        /// <summary>
-        /// Retrieves the window menu as a result of a keystroke. For more information, see the Remarks section.
-        /// </summary>
-        public const int KEYMENU = 0xF100;
-
-        public const int ARRANGE = 0xF110;  // TODO: SC_ARRANGE is undocumented
-
-        /// <summary>
-        /// Restores the window to its normal position and size.
-        /// </summary>
-        public const int RESTORE = 0xF120;
-
-        /// <summary>
-        /// Activates the Start menu.
-        /// </summary>
-        public const int TASKLIST = 0xF130;
-
-        /// <summary>
-        /// Executes the screen saver application specified in the [boot] section of the System.ini file.
-        /// </summary>
-        public const int SCREENSAVE = 0xF140;
-
-        /// <summary>
-        /// Activates the window associated with the application-specified hot key. The lParam parameter identifies the window to activate.
-        /// </summary>
-        public const int HOTKEY = 0xF150;
-
-        /// <summary>
-        /// Selects the default item; the user double-clicked the window menu.
-        /// </summary>
-        public const int DEFAULT = 0xF160;
-
-        /// <summary>
-        /// Sets the state of the display. This command supports devices that have power-saving features, such as a battery-powered personal computer.
-        /// The lParam parameter can have the following values:
-        /// -1: the display is powering on; 1: the display is going to low power; 2: the display is being shut off.
-        /// </summary>
-        public const int MONITORPOWER = 0xF170;
-
-        /// <summary>
-        /// Changes the cursor to a question mark with a pointer. If the user then clicks a control in the dialog box, the control receives a <see cref="WM.HELP"/> message.
-        /// </summary>
-        public const int CONTEXTHELP = 0xF180;
-    }
-
-    #endregion
-
-    #region System Metrics (SM_*)
-
-    /// <summary>
-    /// Constants for use with <see cref="Win32.UnsafeNativeMethods.GetSystemMetrics(SystemMetrics)"/>.
-    /// </summary>
-    /// <seealso href="https://msdn.microsoft.com/en-us/library/windows/desktop/ms724385(v=vs.85).aspx"/>
-    public enum SystemMetrics : int
-    {
-        CXSCREEN = 0,
-        CYSCREEN, CXVSCROLL, CYHSCROLL, CYCAPTION, CXBORDER = 5,
-        CYBORDER, CXDLGFRAME = 7, CXFIXEDFRAME = 7, CYDLGFRAME = 8, CYFIXEDFRAME = 8, CYVTHUMB, CXHTHUMB = 10,
-        CXICON, CYICON, CXCURSOR, CYCURSOR, CYMENU = 15,
-        CXFULLSCREEN, CYFULLSCREEN, CYKANJIWINDOW, MOUSEPRESENT, CYVSCROLL = 20,
-        CXHSCROLL, DEBUG, SWAPBUTTON, UNSUPPORTED_24, UNSUPPORTED_25 = 25,
-        UNSUPPORTED_26, UNSUPPORTED_27, CXMIN, CYMIN, CXSIZE = 30,
-        CYSIZE, CXFRAME = 32, CXSIZEFRAME = 32, CYFRAME = 33, CYSIZEFRAME = 33, CXMINTRACK, CYMINTRACK = 35,
-        CXDOUBLECLK, CYDOUBLECLK, CXICONSPACING, CYICONSPACING, MENUDROPALIGNMENT = 40,
-        PENWINDOWS, DBCSENABLED, CMOUSEBUTTONS, SECURE, CXEDGE = 45,
-        CYEDGE, CXMINSPACING, CYMINSPACING, CXSMICON, CYSMICON = 50,
-        CYSMCAPTION, CXSMSIZE, CYSMSIZE, CXMENUSIZE, CYMENUSIZE = 55,
-        ARRANGE, CXMINIMIZED, CYMINIMIZED, CXMAXTRACK, CYMAXTRACK = 60,
-        CXMAXIMIZED, CYMAXIMIZED, NETWORK, UNSUPPORTED_64, UNSUPPORTED_65 = 65,
-        UNSUPPORTED_66, CLEANBOOT, CXDRAG, CYDRAG, SHOWSOUNDS = 70,
-        CXMENUCHECK, CYMENUCHECK, SLOWMACHINE, MIDEASTENABLED, MOUSEWHEELPRESENT = 75,
-        XVIRTUALSCREEN, YVIRTUALSCREEN, CXVIRTUALSCREEN, CYVIRTUALSCREEN, CMONITORS = 80,
-        SAMEDISPLAYFORMAT, IMMENABLED, CXFOCUSBORDER, CYFOCUSBORDER, UNSUPPORTED_85 = 85,
-        TABLETPC, MEDIACENTER, STARTER, SERVERR2, UNSUPPORTED_90 = 90,
-        MOUSEHORIZONTALWHEELPRESENT, CXPADDEDBORDER, UNSUPPORTED_93, DIGITIZER, MAXIMUMTOUCHES = 95,
-        REMOTESESSION = 0x1000, SHUTTINGDOWN = 0x2000, REMOTECONTROL = 0x2001, CONVERTIBLESLATEMODE = 0x2003, SYSTEMDOCKED = 0x2004,
-    }
-
-    #endregion
-
-    #region Track Popup Menu (TPM_*)
-
-    /// <summary>
-    /// Track Popup Menu constants, for use with TrackPopupMenu, as defined in Winuser.h (via Windows.h).
-    /// </summary>
-    /// <seealso href="https://msdn.microsoft.com/en-us/library/windows/desktop/ms648002(v=vs.85).aspx"/>
-    public static class TPM
-    {
-        /// <summary>
-        /// Positions the shortcut menu so that its left side is aligned with the coordinate specified by the x parameter.
-        /// </summary>
-        public const int LEFTALIGN = 0x0000;
-
-        /// <summary>
-        /// The user can select menu items with only the left mouse button.
-        /// </summary>
-        public const int LEFTBUTTON = 0x0000;
-
-        /// <summary>
-        /// The user can select menu items with both the left and right mouse buttons.
-        /// </summary>
-        public const int RIGHTBUTTON = 0x0002;
-
-        /// <summary>
-        /// Centers the shortcut menu horizontally relative to the coordinate specified by the x parameter.
-        /// </summary>
-        public const int CENTERALIGN = 0x0004;
-
-        /// <summary>
-        /// Positions the shortcut menu so that its right side is aligned with the coordinate specified by the x parameter.
-        /// </summary>
-        public const int RIGHTALIGN = 0x0008;
-
-        /// <summary>
-        /// Positions the shortcut menu so that its top side is aligned with the coordinate specified by the y parameter.
-        /// </summary>
-        public const int TOPALIGN = 0x0000;
-
-        /// <summary>
-        /// Centers the shortcut menu vertically relative to the coordinate specified by the y parameter.
-        /// </summary>
-        public const int VCENTERALIGN = 0x0010;
-
-        /// <summary>
-        /// Positions the shortcut menu so that its bottom side is aligned with the coordinate specified by the y parameter.
-        /// </summary>
-        public const int BOTTOMALIGN = 0x0020;
-
-        public const int HORIZONTAL = 0x0000;   /* Horz alignment matters more */
-        public const int VERTICAL = 0x0040;     /* Vert alignment matters more */
-
-        /// <summary>
-        /// The function does not send notification messages when the user clicks a menu item.
-        /// </summary>
-        public const int NONOTIFY = 0x0080;
-
-        /// <summary>
-        /// The function returns the menu item identifier of the user's selection in the return value.
-        /// </summary>
-        public const int RETURNCMD = 0x0100;
-    }
-
-    #endregion
-
-    #region Window Hooks (WH_*)
-
-    /// <summary>
-    /// Windows Hook type identifiers as defined in Winuser.h (via windows.h), for use with `SetWindowsHook()`.
-    /// </summary>
-    /// <seealso href="https://msdn.microsoft.com/en-us/library/windows/desktop/ms644959(v=vs.85).aspx"/>
-    /// <seealso href="https://msdn.microsoft.com/en-us/library/windows/desktop/ms644990(v=vs.85).aspx"/>
-    public static class WH
-    {
-        /// <summary>
-        /// The WH_JOURNALPLAYBACK hook enables an application to insert messages into the system message queue. You
-        /// can use this hook to play back a series of mouse and keyboard events recorded earlier. Regular mouse and
-        /// keyboard input is disabled as long as a WH_JOURNALPLAYBACK hook is installed. A WH_JOURNALPLAYBACK hook is
-        /// a global hook; it cannot be used as a thread-specific hook.
-        /// </summary>
-        /// <seealso href="https://msdn.microsoft.com/en-us/library/windows/desktop/ms644959(v=vs.85).aspx#wh_journalplaybackhook"/>
-        public const int JOURNALPLAYBACK = 1;
     }
 
     #endregion
@@ -504,25 +223,6 @@ namespace BaseUtils.Win32Constants
     /// <seealso href="http://www.pinvoke.net/default.aspx/Constants.WM"/>
     public static class WM
     {
-        /// <summary>
-        /// The WM_NULL message performs no operation.
-        /// </summary>
-        /// <seealso href="https://msdn.microsoft.com/en-us/library/windows/desktop/ms632637(v=vs.85).aspx"/>
-        public const int NULL = 0x0000;
-
-        /// <summary>
-        /// The WM_CREATE message is sent when an application requests that a window be created. The window procedure
-        /// of the new window receives this message after the window is created, but before the window becomes visible.
-        /// </summary>
-        /// <seealso href="https://msdn.microsoft.com/en-us/library/windows/desktop/ms632619(v=vs.85).aspx"/>
-        public const int CREATE = 0x0001;
-
-        /// <summary>
-        /// The WM_DESTROY message is sent when a window is being destroyed.
-        /// </summary>
-        /// <seealso href="https://msdn.microsoft.com/en-us/library/windows/desktop/ms632620(v=vs.85).aspx"/>
-        public const int DESTROY = 0x0002;
-
         /// <summary>
         /// The WM_MOVE message is sent after a window has been moved.
         /// </summary>
@@ -752,14 +452,6 @@ namespace BaseUtils.Win32Constants
         public const int SYSCOMMAND = 0x0112;
 
         /// <summary>
-        /// The WM_INITMENU message is sent when a menu is about to become active. It occurs when the user clicks an
-        /// item on the menu bar or presses a menu key. This allows the application to modify the menu before it is
-        /// displayed.
-        /// </summary>
-        /// <seealso href="https://msdn.microsoft.com/en-us/library/windows/desktop/ms646344(v=vs.85).aspx"/>
-        public const int INITMENU = 0x0116;
-
-        /// <summary>
         /// The WM_MOUSEMOVE message is posted to a window when the cursor moves. If the mouse is not captured, the
         /// message is posted to the window that contains the cursor. Otherwise, the message is posted to the window
         /// that has captured the mouse.
@@ -955,168 +647,42 @@ namespace BaseUtils.Win32Constants
 
     #endregion
 
-    #region Window Styles (WS_*)
+    #region Window Hooks (WH_*)
 
     /// <summary>
-    /// Window Style constants, as defined in Winuser.h (via Windows.h). Useful for manipulating
-    /// <see cref="System.Windows.Forms.CreateParams.Style"/>.
+    /// Windows Hook type identifiers as defined in Winuser.h (via windows.h), for use with `SetWindowsHook()`.
     /// </summary>
-    /// <seealso href="https://msdn.microsoft.com/en-us/library/windows/desktop/ms632600(v=vs.85).aspx"/>
-    /// <seealso href="https://msdn.microsoft.com/en-us/library/system.windows.forms.control.createparams(v=vs.110).aspx"/>
-    public static class WS
+    /// <seealso href="https://msdn.microsoft.com/en-us/library/windows/desktop/ms644959(v=vs.85).aspx"/>
+    /// <seealso href="https://msdn.microsoft.com/en-us/library/windows/desktop/ms644990(v=vs.85).aspx"/>
+    public static class WH
     {
         /// <summary>
-        /// The window is an overlapped window. An overlapped window has a title bar and a border. Same as the
-        /// <see cref="TILED"/> style.
+        /// The WH_JOURNALPLAYBACK hook enables an application to insert messages into the system message queue. You
+        /// can use this hook to play back a series of mouse and keyboard events recorded earlier. Regular mouse and
+        /// keyboard input is disabled as long as a WH_JOURNALPLAYBACK hook is installed. A WH_JOURNALPLAYBACK hook is
+        /// a global hook; it cannot be used as a thread-specific hook.
         /// </summary>
-        public const int OVERLAPPED = 0x00000000;
-
-        /// <summary>
-        /// The windows is a pop-up window. This style cannot be used with the <see cref="CHILD"/> style.
-        /// </summary>
-        public const int POPUP = unchecked((int)0x80000000);
-
-        /// <summary>
-        /// The window is a child window. A window with this style cannot have a menu bar. This style cannot be used
-        /// with the <see cref="POPUP"/> style.
-        /// </summary>
-        public const int CHILD = 0x40000000;
-
-        /// <summary>
-        /// The window is initially minimized. Same as the <see cref="ICONIC"/> style.
-        /// </summary>
-        public const int MINIMIZE = 0x20000000;
-
-        /// <summary>
-        /// The window is initially visible.
-        /// </summary>
-        public const int VISIBLE = 0x10000000;
-
-        /// <summary>
-        /// The window is initially disabled. A disabled window cannot receive input from the user. To change this
-        /// after a window has been created, use the <c>EnableWindow</c> function.
-        /// </summary>
-        public const int DISABLED = 0x08000000;
-
-        /// <summary>
-        /// Clips child windows relative to each other; that is, when a particular child window receives a <see cref="WM.PAINT"/>
-        /// message, the CLIPSIBLINGS style clips all other overlapping child windows out of the region of the child
-        /// window to be updated. If CLIPSIBLINGS is not specified and child windows overlap, it is possible, when
-        /// drawing within the client area of a child window, to draw within the client area of a neighboring child window.
-        /// </summary>
-        public const int CLIPSIBLINGS = 0x04000000;
-
-        /// <summary>
-        /// Excludes the area occupied by child windows when drawing occurs within the parent window. This style is
-        /// used when creating the parent window.
-        /// </summary>
-        public const int CLIPCHILDREN = 0x02000000;
-
-        /// <summary>
-        /// The window is initially maximized.
-        /// </summary>
-        public const int MAXIMIZE = 0x01000000;
-
-        /// <summary>
-        /// The window has a title bar (includes the <see cref="BORDER"/> and <see cref="DLGFRAME"/> styles).
-        /// </summary>
-        public const int CAPTION = (BORDER | DLGFRAME); // 00C0 0000
-
-        /// <summary>
-        /// The window has a thin-line border.
-        /// </summary>
-        public const int BORDER = 0x00800000;
-
-        /// <summary>
-        /// The window has a border of a style typically used with dialog boxes. A window with this style cannot have a
-        /// title bar.
-        /// </summary>
-        public const int DLGFRAME = 0x00400000;
-
-        /// <summary>
-        /// The window has a vertical scroll bar.
-        /// </summary>
-        public const int VSCROLL = 0x00200000;
-
-        /// <summary>
-        /// The window has a horizontal scroll bar.
-        /// </summary>
-        public const int HSCROLL = 0x00100000;
-
-        /// <summary>
-        /// The window has a window menu on its title bar. The <see cref="CAPTION"/> style must also be specified.
-        /// </summary>
-        public const int SYSMENU = 0x00080000;
-
-        /// <summary>
-        /// The window has a sizing border. Same as the <see cref="SIZEBOX"/> style.
-        /// </summary>
-        public const int THICKFRAME = 0x00040000;
-
-        /// <summary>
-        /// The window is the first control of a group of controls. The group consists of this first control and all
-        /// controls defined after it, up to the next control with the GROUP style. The first control in each group
-        /// usually has the <see cref="TABSTOP"/> style so that the user can move from group to group. The user can
-        /// subsequently change the keyboard focus from one control in the group to the next control in the group by
-        /// using the direction keys.
-        /// </summary>
-        public const int GROUP = 0x00020000;
-
-        /// <summary>
-        /// The window is a control that can receive the keyboard focus when the user presses the TAB key. Pressing the
-        /// TAB key changes the keyboard focus to the next control with the <c>TABSTOP</c> style.
-        /// </summary>
-        public const int TABSTOP = 0x00010000;
-
-        /// <summary>
-        /// The window has a minimize button. Cannot be combined with the <see cref="WS_EX.CONTEXTHELP"/> style. The
-        /// <see cref="SYSMENU"/> style must also be specified.
-        /// </summary>
-        public const int MINIMIZEBOX = 0x00020000;
-
-        /// <summary>
-        /// The window has a maximize button. Cannot be combined with the <see cref="WS_EX.CONTEXTHELP"/> style. The
-        /// <see cref="SYSMENU"/> style must also be specified.
-        /// </summary>
-        public const int MAXIMIZEBOX = 0x00010000;
-
-        /// <summary>
-        /// The window is an overlapped window. An overlapped window has a title bar and a border. Same as the
-        /// <see cref="OVERLAPPED"/> style.
-        /// </summary>
-        public const int TILED = (OVERLAPPED);
-
-        /// <summary>
-        /// The window is initially minimized. Same as the <see cref="MINIMIZE"/> style.
-        /// </summary>
-        public const int ICONIC = (MINIMIZE);
-
-        /// <summary>
-        /// The window has a sizing border. Same as the <see cref="THICKFRAME"/> style.
-        /// </summary>
-        public const int SIZEBOX = (THICKFRAME);
-
-        /// <summary>
-        /// The window is an overlapped window. Same as the <see cref="OVERLAPPEDWINDOW"/> style.
-        /// </summary>
-        public const int TILEDWINDOW = (OVERLAPPEDWINDOW);
-
-        /// <summary>
-        /// The window is an overlapped window. Same as the <see cref="TILEDWINDOW"/> style.
-        /// </summary>
-        public const int OVERLAPPEDWINDOW = (OVERLAPPED | CAPTION | SYSMENU | THICKFRAME | MINIMIZEBOX | MAXIMIZEBOX);
-
-        /// <summary>
-        /// The window is a pop-up window. The <see cref="CAPTION"/> and <see cref="POPUPWINDOW"/> styles must be
-        /// combined to make the window menu visible.
-        /// </summary>
-        public const int POPUPWINDOW = (POPUP | BORDER | SYSMENU);
-
-        /// <summary>
-        /// Same as the <see cref="CHILD"/> style.
-        /// </summary>
-        public const int CHILDWINDOW = (CHILD);
+        /// <seealso href="https://msdn.microsoft.com/en-us/library/windows/desktop/ms644959(v=vs.85).aspx#wh_journalplaybackhook"/>
+        public const int JOURNALPLAYBACK = 1;
     }
 
-    #endregion   
+    #endregion
+
+    #region window Hook Codes (HC_*)
+
+    /// <summary>
+    /// window Hook Codes as defined in Winuser.h (via windows.h), for use in a WH_CALLWNDPROC hook procedure while
+    /// conducting unsactioned witchcraft alongside a supervisory greybeard.
+    /// </summary>
+    /// <seealso href="https://msdn.microsoft.com/en-us/library/windows/desktop/ms644959(v=vs.85).aspx"/>
+    /// <seealso href="https://msdn.microsoft.com/en-us/library/windows/desktop/ms644990(v=vs.85).aspx"/>
+    public static class HC
+    {
+        public const int
+            ACTION = 0,
+            GETNEXT = 1,
+            SKIP = 2;
+    }
+
+    #endregion
 }

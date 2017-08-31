@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2016 - 2017 EDDiscovery development team
+ * Copyright © 2016 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -15,8 +15,6 @@
  */
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Linq;
@@ -25,35 +23,23 @@ using System.Windows.Forms;
 
 namespace ExtendedControls
 {
-    [DefaultEvent(nameof(MouseClick))]
     public class DrawnPanel : Panel
     {
         // Back, Fore color used
-        [DefaultValue(typeof(Color), nameof(Color.White))]
         public Color MouseOverColor { get; set; } = Color.White;
-        [DefaultValue(typeof(Color), nameof(Color.Green))]
         public Color MouseSelectedColor { get; set; } = Color.Green;
-        [DefaultValue(true)]
         public bool MouseSelectedColorEnable { get; set; } = true;      // set to disable selected colour in some crazy windows situations where clicks are lost
-        [DefaultValue(0.25f)]
         public float PanelDisabledScaling { get; set; } = 0.25F;
 
         public enum ImageType { Close, Minimize, OnTop, Floating, Gripper, EDDB, Ross, InverseText,
                                 Move, Text, None , Transparent, NotTransparent ,
                                 WindowInTaskBar, WindowNotInTaskBar, Captioned, NotCaptioned,
-                                Bars, Maximize, Restore };
+                                Bars };
 
-        [DefaultValue(ImageType.Close)]
-        public ImageType ImageSelected { get { return _ImageSelected; } set { _ImageSelected = value; Invalidate(); } }
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        private ImageType _ImageSelected = ImageType.Close;
-
-        [DefaultValue(null)]
+        public ImageType ImageSelected { get; set; } = ImageType.Close;
         public Image DrawnImage { get; set; } = null;                                   // if not set, an image is drawn . Use None below for a image only
 
-        [DefaultValue(null)]
         public string ImageText { get; set; } = null;       // for Text Type
-        [DefaultValue(4)]
         public int MarginSize { get; set; } = 4;                    // margin around icon, 0 =auto, -1 = zero
 
         #region Public Functions
@@ -63,7 +49,6 @@ namespace ExtendedControls
             Invalidate();
         }
 
-        [Browsable(false)]
         public bool IsCaptured { get { return mousecapture; } }
 
         private ImageAttributes DrawnImageAttributesEnabled = null;         // Image override (colour etc) for images using Image
@@ -167,7 +152,7 @@ namespace ExtendedControls
                 else if (ImageSelected == ImageType.NotCaptioned)
                 {
                     e.Graphics.DrawLine(p2, new Point(leftmarginpx + 2, topmarginpx + 2), new Point(rightmarginpx - 2, topmarginpx + 2));
-                    e.Graphics.DrawLine(p2, new Point(leftmarginpx + 2, bottommarginpx - 2), new Point(rightmarginpx - 2, bottommarginpx - 2));
+                    e.Graphics.DrawLine(p2, new Point(leftmarginpx + 2, bottommarginpx - 2), new Point(rightmarginpx - 2, bottommarginpx -2));
                     e.Graphics.DrawLine(p2, new Point(leftmarginpx + 2, topmarginpx + 2), new Point(leftmarginpx + 2, bottommarginpx - 2));
                 }
                 else if (ImageSelected == ImageType.Gripper)
@@ -267,7 +252,7 @@ namespace ExtendedControls
                     e.Graphics.DrawLine(p1, new Point(rightmarginpx - o, centrevertpx - o), new Point(rightmarginpx, centrevertpx));
                     e.Graphics.DrawLine(p1, new Point(rightmarginpx - o, centrevertpx + o), new Point(rightmarginpx, centrevertpx));
                 }
-                else if (ImageSelected == ImageType.WindowInTaskBar || ImageSelected == ImageType.WindowNotInTaskBar)
+                else if (ImageSelected == ImageType.WindowInTaskBar || ImageSelected == ImageType.WindowNotInTaskBar )
                 {
                     int o = 4;
                     int w = 3;
@@ -284,29 +269,10 @@ namespace ExtendedControls
                         }
                     }
                 }
-                else if (ImageSelected == ImageType.Bars)
+                else if (ImageSelected == ImageType.Bars )
                 {
                     e.Graphics.DrawLine(p1, new Point(leftmarginpx, 0), new Point(rightmarginpx, 0));
                     e.Graphics.DrawLine(p1, new Point(leftmarginpx, 2), new Point(rightmarginpx, 2));
-                }
-                else if (ImageSelected == ImageType.Maximize)
-                {
-                    e.Graphics.DrawRectangle(p1, new Rectangle(leftmarginpx, topmarginpx, marginwidth - 1, marginheight));
-                    e.Graphics.DrawLine(p2, new Point(leftmarginpx, topmarginpx + 1), new Point(rightmarginpx, topmarginpx + 1));
-                }
-                else if (ImageSelected == ImageType.Restore)
-                {
-                    // lower-left foreground "window" clockwise from top-left
-                    e.Graphics.DrawLine(p2, new Point(leftmarginpx, topmarginpx + 8), new Point(rightmarginpx - 6, topmarginpx + 8));
-                    e.Graphics.DrawLine(p1, new Point(rightmarginpx - 6, topmarginpx + 8), new Point(rightmarginpx - 6, bottommarginpx));
-                    e.Graphics.DrawLine(p1, new Point(rightmarginpx - 6, bottommarginpx), new Point(leftmarginpx, bottommarginpx));
-                    e.Graphics.DrawLine(p1, new Point(leftmarginpx, bottommarginpx), new Point(leftmarginpx, topmarginpx + 8));
-
-                    // upper-right background "window" clockwise from (obscured!) bottom-left
-                    e.Graphics.DrawLine(p1, new Point(leftmarginpx + 6, topmarginpx + 8), new Point(leftmarginpx + 6, topmarginpx + 2));
-                    e.Graphics.DrawLine(p2, new Point(leftmarginpx + 6, topmarginpx + 2), new Point(rightmarginpx, topmarginpx + 2));
-                    e.Graphics.DrawLine(p1, new Point(rightmarginpx, topmarginpx + 2), new Point(rightmarginpx, bottommarginpx - 6));
-                    e.Graphics.DrawLine(p1, new Point(rightmarginpx, bottommarginpx - 6), new Point(rightmarginpx - 6, bottommarginpx - 6));
                 }
 
                 e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.Default;

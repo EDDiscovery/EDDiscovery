@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2017 EDDiscovery development team
+ * Copyright © 2016 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -13,11 +13,10 @@
  * 
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
-using BaseUtils.Win32;
-using BaseUtils.Win32Constants;
+ 
+ using BaseUtils.Win32Constants;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -26,151 +25,103 @@ using System.Windows.Forms;
 
 namespace ExtendedControls
 {
-    public class DraggableForm : SmartSysMenuForm
+    public class DraggableForm : Form
     {
-        public DraggableForm()
-        {
-            _dblClickTimer = new Timer();
-            _dblClickTimer.Tick += (o, e) => { ((Timer)o).Enabled = false; };
-        }
+        public bool DraggableDisableResize { get; set; } = false;       // SET true to stop your form from resizing in non windows border mode
 
-
-        protected virtual bool DraggableDisableResize { get; } = false;       // SET true to stop your form from resizing
-
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing && _dblClickTimer != null)
-            {
-                _dblClickTimer.Enabled = false;
-                _dblClickTimer.Tag = null;
-                _dblClickTimer.Dispose();
-            }
-            _dblClickTimer = null;
-            base.Dispose(disposing);
-        }
-
-        protected void OnCaptionMouseDown(Control sender, MouseEventArgs e)
+        public void OnCaptionMouseDown(Control sender, MouseEventArgs e)
         {
             sender.Capture = false;
-            if (FormBorderStyle == FormBorderStyle.None)
-            {
-                var p = sender.PointToScreen(e.Location);
-                var lParam = (IntPtr)((ushort)p.X | (p.Y << 16));
-
-                switch (e.Button)
-                {
-                    case MouseButtons.Left:     SendMessage(WM.NCLBUTTONDOWN, (IntPtr)HT.CAPTION, lParam); break;
-                    case MouseButtons.Middle:   SendMessage(WM.NCMBUTTONDOWN, (IntPtr)HT.CAPTION, lParam); break;
-                    case MouseButtons.Right:    SendMessage(WM.NCRBUTTONDOWN, (IntPtr)HT.CAPTION, lParam); break;
-                }
-            }
+            SendMessage(WM.NCLBUTTONDOWN, (IntPtr)HT.CAPTION, IntPtr.Zero);
         }
 
-        protected void OnCaptionMouseUp(Control sender, MouseEventArgs e)
-        {
-            if (FormBorderStyle == FormBorderStyle.None)
-            {
-                var p = sender.PointToScreen(e.Location);
-                var lParam = (IntPtr)((ushort)p.X | (p.Y << 16));
+        // Mono compatibility
+        private bool _window_dragging = false;
+        private Point _window_dragMousePos = Point.Empty;
+        private Point _window_dragWindowPos = Point.Empty;
 
-                switch (e.Button)
-                {
-                    case MouseButtons.Left:     SendMessage(WM.NCLBUTTONUP, (IntPtr)HT.CAPTION, lParam); break;
-                    case MouseButtons.Middle:   SendMessage(WM.NCMBUTTONUP, (IntPtr)HT.CAPTION, lParam); break;
-                    case MouseButtons.Right:    SendMessage(WM.NCRBUTTONUP, (IntPtr)HT.CAPTION, lParam); break;
-                }
-            }
+        private IntPtr SendMessage(int msg, IntPtr wparam, IntPtr lparam)
+        {
+            Message message = Message.Create(this.Handle, msg, wparam, lparam);
+            this.WndProc(ref message);
+            return message.Result;
         }
 
         protected override void WndProc(ref Message m)
         {
             bool windowsborder = this.FormBorderStyle == FormBorderStyle.Sizable;
-
-            switch (m.Msg)
+            // Compatibility movement for Mono
+            if (m.Msg == WM.LBUTTONDOWN && (int)m.WParam == 1 && !windowsborder)
             {
-                case WM.NCHITTEST:      // Windows honours NCHITTEST; Mono does not 
-                    {
-                        if (!AllowResize)
-                        {
-                            m.Result = (IntPtr)HT.CAPTION;
-                        }   
-                        else
-                        {
-                            base.WndProc(ref m);
-
-                            var p = PointToClient(new Point((int)m.LParam));
-                            const int CaptionHeight = 32;
-                            const int edgesz = 5;   // 5 is generous.. really only a few pixels gets thru before the subwindows grabs them
-
-                            if (SizeGripStyle != SizeGripStyle.Hide && WindowState != FormWindowState.Maximized && (p.X + p.Y >= ClientSize.Width + ClientSize.Height -
-                                (Controls.OfType<StatusStripCustom>().FirstOrDefault()?.Height ?? Controls.OfType<StatusStrip>().FirstOrDefault()?.Height ?? CaptionHeight)))
-                            {
-                                m.Result = (IntPtr)HT.BOTTOMRIGHT;
-                            }
-                            else if (m.Result == (IntPtr)HT.CLIENT && !windowsborder)
-                            {
-                                int rw = 1, col = 1;
-
-                                if (WindowState != FormWindowState.Maximized)
-                                {
-                                    if (p.Y <= edgesz)
-                                        rw = 0;
-                                    else if (p.Y >= ClientSize.Height - edgesz)
-                                        rw = 2;
-
-                                    if (p.X <= edgesz)
-                                        col = 0;
-                                    else if (p.X >= ClientSize.Width - edgesz)
-                                        col = 2;
-                                }
-                                var htarr = new int[][]
-                                {
-                                    new int[] { HT.TOPLEFT, HT.TOP, HT.TOPRIGHT },
-                                    new int[] { HT.LEFT, p.Y < CaptionHeight ? HT.CAPTION : HT.CLIENT, HT.RIGHT },
-                                    new int[] { HT.BOTTOMLEFT, HT.BOTTOM, HT.BOTTOMRIGHT }
-                                };
-                                m.Result = (IntPtr)htarr[rw][col];
-                            }
-                        }
-
-                        return;
-                    }
-
-                case WM.NCLBUTTONDOWN:  // Monitor and intercept double-clicks, ignoring the fact that it may occur over multiple controls with/without capture.
-                    {
-                        if (!windowsborder && m.WParam == (IntPtr)HT.CAPTION)
-                        {
-                            var p = new Point((int)m.LParam);
-                            if (_dblClickTimer.Enabled && ((Rectangle)_dblClickTimer.Tag).Contains(p))
-                            {
-                                _dblClickTimer.Enabled = false;
-                                _dblClickTimer.Tag = Rectangle.Empty;
-                                SendMessage(WM.NCLBUTTONDBLCLK, (IntPtr)HT.CAPTION, m.LParam);
-                                m.Result = IntPtr.Zero;
-                                return;
-                            }
-                            else
-                            {
-                                _dblClickTimer.Enabled = false;
-                                _dblClickTimer.Interval = SystemInformation.DoubleClickTime;
-                                var dblclksz = SystemInformation.DoubleClickSize;
-                                var dblclkrc = new Rectangle(p, dblclksz);
-                                dblclkrc.Offset(dblclksz.Width / -2, dblclksz.Height / -2);
-                                _dblClickTimer.Tag = dblclkrc;
-                                _dblClickTimer.Enabled = true;
-                            }
-                        }
-                        break;
-                    }
+                int x = unchecked((short)((uint)m.LParam & 0xFFFF));
+                int y = unchecked((short)((uint)m.LParam >> 16));
+                _window_dragMousePos = new Point(x, y);
+                _window_dragWindowPos = this.Location;
+                _window_dragging = true;
+                m.Result = IntPtr.Zero;
+                this.Capture = true;
             }
-            base.WndProc(ref m);
+            else if (m.Msg == WM.MOUSEMOVE && (int)m.WParam == 1 && _window_dragging)
+            {
+                int x = unchecked((short)((uint)m.LParam & 0xFFFF));
+                int y = unchecked((short)((uint)m.LParam >> 16));
+                Point delta = new Point(x - _window_dragMousePos.X, y - _window_dragMousePos.Y);
+                _window_dragWindowPos = new Point(_window_dragWindowPos.X + delta.X, _window_dragWindowPos.Y + delta.Y);
+                this.Location = _window_dragWindowPos;
+                this.Update();
+                m.Result = IntPtr.Zero;
+            }
+            else if (m.Msg == WM.LBUTTONUP)
+            {
+                _window_dragging = false;
+                _window_dragMousePos = Point.Empty;
+                _window_dragWindowPos = Point.Empty;
+                m.Result = IntPtr.Zero;
+                this.Capture = false;
+            }
+            // Windows honours NCHITTEST; Mono does not
+            else if (m.Msg == WM.NCHITTEST)
+            {
+                base.WndProc(ref m);
+
+                if ((int)m.Result == HT.CLIENT)
+                {
+                    int x = unchecked((short)((uint)m.LParam & 0xFFFF));
+                    int y = unchecked((short)((uint)m.LParam >> 16));
+                    Point p = PointToClient(new Point(x, y));
+
+                    StatusStripCustom statstripinstalled = Controls.OfType<StatusStripCustom>().FirstOrDefault();
+                    int bottomh = (statstripinstalled != null) ? statstripinstalled.Height : 5;
+
+                    if (DraggableDisableResize && !windowsborder)   // not draggable, and no windows border, all is move
+                        m.Result = (IntPtr)HT.CAPTION;
+                    else if (p.X > this.ClientSize.Width - bottomh && p.Y > this.ClientSize.Height - bottomh)
+                    {
+                        m.Result = (IntPtr)HT.BOTTOMRIGHT;
+                    }
+                    else if (p.Y > this.ClientSize.Height - bottomh)
+                    {
+                        m.Result = (IntPtr)HT.BOTTOM;
+                    }
+                    else if (p.X > this.ClientSize.Width - 5)       // 5 is generous.. really only a few pixels gets thru before the subwindows grabs them
+                    {
+                        m.Result = (IntPtr)HT.RIGHT;
+                    }
+                    else if (p.X < 5)
+                    {
+                        m.Result = (IntPtr)HT.LEFT;
+                    }
+                    else if (!windowsborder)
+                    {
+                        m.Result = (IntPtr)HT.CAPTION;
+                    }
+                }
+            }
+            else
+            {
+                base.WndProc(ref m);
+            }
         }
 
-        #region Private implementation
-
-        private System.Windows.Forms.Timer _dblClickTimer = null;
-
-        #endregion
     }
 }

@@ -34,16 +34,34 @@ namespace EDDiscovery
     // Class for managing application initialization, and proud owner of SplashScreen and EDDiscoveryForm. Singleton.
     internal class EDDApplicationContext : ApplicationContext
     {
-        public EDDApplicationContext() : base(StartupForm)
+        public EDDApplicationContext(bool safemode) : base(safemode ? ((Form)new SafeModeForm()) : new SplashForm())
         {
-            if (typeof(SafeModeForm).IsAssignableFrom(MainForm?.GetType()))
+            if (safemode)
             {
-                ((SafeModeForm)MainForm).Run += ((p, t) => { GoForAutoSequenceStart(new EDDFormLaunchArgs(p, t)); });
+                ((SafeModeForm)MainForm).Run += RunAfterSafeMode;
             }
             else
             {
-                GoForAutoSequenceStart();
+                Timer timer = new Timer { Interval = 250, Enabled = true };
+                timer.Tick += initTimer_Tick;
             }
+        }
+
+        bool themereset = false;
+        bool positionreset = false;
+
+        void RunAfterSafeMode(bool p, bool t)
+        {
+            var curform = MainForm;
+            MainForm = new SplashForm();
+            curform.Close();
+            MainForm.Show();
+
+            themereset = t;
+            positionreset = p;
+
+            Timer timer = new Timer { Interval = 250, Enabled = true };
+            timer.Tick += initTimer_Tick;
         }
 
         #region Public static properties
@@ -66,112 +84,67 @@ namespace EDDiscovery
 
         /// <summary>
         /// The main <see cref="EDDiscoveryForm"/> of this application. If this is <c>null</c>, then you probably
-        /// need to `<c>Application.Run(new EDDApplicationContext());</c>` and check back later, because it is
+        /// need to `<c>Application.Run(EDDApplicationContext.Instance);</c>` and check back later, because it is
         /// still being initialized and is not yet in a valid state.
         /// </summary>
         public static EDDiscoveryForm EDDMainForm { get; private set; } = null;
+
+        /// <summary>
+        /// The <see cref="EDDApplicationContext"/> of this application process.
+        /// </summary>
+        //public static EDDApplicationContext Instance { get; private set; } = null;
 
         #endregion
 
         #region Implementation
 
-        // Return whichever form should initially be displayed; normally SplashForm, but maybe SafeModeForm or even something else.
-        private static Form StartupForm
-        {   // Really just a workaround for the clumsy terniary operator if constructing new but different things.
-            get
-            {
-                if (Control.ModifierKeys.HasFlag(Keys.Shift))
-                    return new SafeModeForm();
-                else
-                    return new SplashForm();
-            }
-        }
+        // methods
 
-        // Show SplashForm, if it's not already, then start a 250ms timer to ensure that we don't block the main loop during spool-up and ignition.
-        private void GoForAutoSequenceStart(EDDFormLaunchArgs args = null)
-        {
-            if (MainForm == null || !(MainForm is SplashForm || MainForm.GetType().IsSubclassOf(typeof(SplashForm))))
-            {
-                SwitchContext(new SplashForm());
-            }
-
-            var tim = new Timer { Interval = 250 };
-            tim.Tag = args;
-            tim.Tick += MainEngineStart;
-            tim.Start();
-        }
-
-        // Display a loading message on the SplashForm.
+        // Display a loading message on the SplashForm, if it is visible.
         private void SetLoadingMsg(string msg)
         {
-            if (typeof(SplashForm).IsAssignableFrom(MainForm?.GetType()))
+            if (MainForm != null && MainForm is SplashForm)
             {
                 ((SplashForm)MainForm).SetLoadingText(msg ?? string.Empty);
             }
         }
 
-        // Switch context from an existing Form to a different Form, Close() the previous Form, and Show() the new one.
-        private void SwitchContext(Form newContext)
+
+        // event handlers
+
+        // Initialize everything on the UI thread soon after the `Application` has been `.Run()`, and transfer context (MainForm) from the SplashForm to the EDDiscoveryForm.
+        private void initTimer_Tick(object sender, EventArgs e)
         {
-            Form f = MainForm;
-            MainForm = newContext;
-            f?.Close();
-            MainForm?.Show();
-        }
-
-
-        // Initialize everything on the UI thread, and report+die for any problems or SwitchContext from SplashForm to EDDiscoveryForm.
-        private void MainEngineStart(object sender, EventArgs e)
-        {
-            var tim = (Timer)sender;
-            tim?.Stop();
-
-            var launchArg = ((EDDFormLaunchArgs)tim?.Tag)?.Clone() ?? new EDDFormLaunchArgs();
-            tim?.Dispose();
+            ((Timer)sender)?.Stop();
+            ((Timer)sender)?.Dispose();
 
             try
             {
                 EDDMainForm = new EDDiscoveryForm();
                 SetLoadingMsg("Checking Ship Systems");
 
-                EDDiscoveryController.Initialize(SetLoadingMsg);   // this loads up the options
+                EDDiscoveryController.Initialize( SetLoadingMsg );   // this loads up the options
 
-                EDDOptions.Instance.NoWindowReposition |= launchArg.PositionReset;
-                EDDOptions.Instance.NoTheme |= launchArg.ThemeReset;
+                if (positionreset)
+                    EDDOptions.Instance.NoWindowReposition = true;
 
-                EDDMainForm.Init(SetLoadingMsg);    // call the init function, which will initialize the eddiscovery form
+                if (themereset)
+                    EDDOptions.Instance.NoTheme = true;
+
+                EDDMainForm.Init(SetLoadingMsg);     // call the init function, which will initialize the eddiscovery form
 
                 SetLoadingMsg("Establishing Telepresence");
-                SwitchContext(EDDMainForm);         // Ignition, and liftoff!
+                EDDMainForm.Show();
             }
             catch (Exception ex)
             {   // There's so many ways that things could go wrong during init; let's fail for everything!
                 EDDMainForm?.Dispose();
                 FatalExceptionForm.ShowAndDie(MainForm, "Initializing", Properties.Resources.URLProjectFeedback, ex);
             }
-        }
-
-
-        // Pass startup opts from GoForAutoSequenceStart to MainEngineStart without permanent heap impact.
-        private class EDDFormLaunchArgs : EventArgs
-        {   // Should probably be public and passed directly on to EDDiscoveryForm ctor() or Init() or something.
-            public bool PositionReset { get; private set; }
-
-            public bool ThemeReset { get; private set; }
             
-
-            public EDDFormLaunchArgs() : this(false, false) { }
-
-            public EDDFormLaunchArgs(bool positionReset, bool themeReset)
-            {
-                PositionReset = positionReset;
-                ThemeReset = themeReset;
-            }
-
-            public EDDFormLaunchArgs Clone()
-            {
-                return new EDDFormLaunchArgs(PositionReset, ThemeReset);
-            }
+            var splashForm = MainForm;
+            MainForm = EDDMainForm; // Switch context
+            splashForm.Close();     // and cleanup
         }
 
         #endregion // Implementation

@@ -768,6 +768,11 @@ namespace EDDiscovery
                 Show();
         }
 
+        private void panel_minimize_Click(object sender, EventArgs e)
+        {
+            this.WindowState = FormWindowState.Minimized;
+        }
+
         private void changeMapColorToolStripMenuItem_Click(object sender, EventArgs e)
         {
             settings.panel_defaultmapcolor_Click(sender, e);
@@ -842,6 +847,11 @@ namespace EDDiscovery
             AboutBox(this);
         }
 
+        private void panel_close_Click(object sender, EventArgs e)
+        {
+            Close();
+        }
+
         private void read21AndFormerLogFilesToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Read21Folders(false);
@@ -912,6 +922,21 @@ namespace EDDiscovery
                 int n = JournalEntry.RemoveDuplicateFSDEntries(EDCommander.CurrentCmdrID);
                 Controller.LogLine("Removed " + n + " FSD entries");
                 Controller.RefreshHistoryAsync();
+            }
+        }
+
+        private void labelInfoBoxTop_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left && newRelease != null)
+            {
+                NewReleaseForm frm = new NewReleaseForm();
+                frm.release = newRelease;
+
+                frm.ShowDialog(this);
+            }
+            else
+            {
+                MouseDownCAPTION(sender, e);
             }
         }
 
@@ -998,51 +1023,10 @@ namespace EDDiscovery
 
         #endregion
 
-        #region "Caption" controls
-
         private void MouseDownCAPTION(object sender, MouseEventArgs e)
         {
             OnCaptionMouseDown((Control)sender, e);
         }
-
-        private void MouseUpCAPTION(object sender, MouseEventArgs e)
-        {
-            OnCaptionMouseUp((Control)sender, e);
-        }
-
-
-        private void labelInfoBoxTop_MouseDown(object sender, MouseEventArgs e)
-        {
-            if (e.Button == MouseButtons.Left && newRelease != null)
-            {
-                NewReleaseForm frm = new NewReleaseForm();
-                frm.release = newRelease;
-
-                frm.ShowDialog(this);
-            }
-            else
-            {
-                MouseDownCAPTION(sender, e);
-            }
-        }
-
-        private void panel_close_MouseClick(object sender, MouseEventArgs e)
-        {
-            if (e.Button == MouseButtons.Left)
-                Close();
-            else
-                MouseUpCAPTION(sender, e);
-        }
-
-        private void panel_minimize_MouseClick(object sender, MouseEventArgs e)
-        {
-            if (e.Button == MouseButtons.Left)
-                this.WindowState = FormWindowState.Minimized;
-            else
-                MouseUpCAPTION(sender, e);
-        }
-
-        #endregion
 
         private void RecordPosition()
         {
@@ -1078,8 +1062,6 @@ namespace EDDiscovery
             RecordPosition();
         }
 
-        #region panelToolBar animation
-
         private void panelToolBar_Resize(object sender, EventArgs e)
         {
             tabControlMain.Top = panelToolBar.Bottom;
@@ -1094,8 +1076,6 @@ namespace EDDiscovery
         {
             tabControlMain.Height -= panelToolBar.UnrolledHeight - panelToolBar.RolledUpHeight;
         }
-
-        #endregion
 
         #region Updators
 

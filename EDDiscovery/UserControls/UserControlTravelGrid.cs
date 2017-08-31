@@ -35,29 +35,35 @@ namespace EDDiscovery.UserControls
     {
         #region Public IF
 
-        //ucct interface
+        public DataGridViewRow GetCurrentRow { get { return dataGridViewTravel.CurrentCell != null ? dataGridViewTravel.Rows[dataGridViewTravel.CurrentCell.RowIndex] : null; } }
         public HistoryEntry GetCurrentHistoryEntry { get { return dataGridViewTravel.CurrentCell != null ? dataGridViewTravel.Rows[dataGridViewTravel.CurrentCell.RowIndex].Cells[TravelHistoryColumns.HistoryTag].Tag as HistoryEntry : null; } }
 
-        //horrible.. needs removing, used by export.
+        public HistoryEntry GetHistoryEntry(int r) { return dataGridViewTravel.Rows[r].Cells[TravelHistoryColumns.HistoryTag].Tag as HistoryEntry; }
+
+        public static HistoryEntry GetHistoryEntry(DataGridViewRow rw) { return rw.Cells[TravelHistoryColumns.HistoryTag].Tag as HistoryEntry; }
+
+        public DataGridViewRow GetRow(int r) { return dataGridViewTravel.Rows[r]; }
+
         public TravelHistoryFilter GetHistoryFilter { get { return (TravelHistoryFilter)comboBoxHistoryWindow.SelectedItem ?? TravelHistoryFilter.NoFilter; } }
 
         #endregion
 
         #region Events
 
+        public delegate void Redisplay(HistoryList hl);
+        public Redisplay OnHistoryChanged;               // FIRED after discoveryform.onHistoryChange->this.Display..
+
         // implement UserControlCursorType fields
+
         public event ChangedSelection OnChangedSelection;   // After a change of selection by the user, or after a OnHistoryChanged, or after a sort.
         public event ChangedSelectionHE OnTravelSelectionChanged;   // as above, different format, for certain older controls
 
-        // for primary travel grid for auto note jump
         public delegate void KeyDownInCell(int asciikeycode, int rowno, int colno, bool note);
         public event KeyDownInCell OnKeyDownInCell;   // After a change of selection
 
-        // for primary travel grid to chain stuff after display has been updated
         public delegate void AddedNewEntry(HistoryEntry he, HistoryList hl, bool accepted);
         public AddedNewEntry OnNewEntry;       // FIRED after discoveryform.onNewEntry->this.AddNewEntry completes
 
-        // to allow pop out for primary travel grid
         public delegate void PopOut();
         public PopOut OnPopOut;                     // pop out button pressed
 
@@ -199,6 +205,10 @@ namespace EDDiscovery.UserControls
                 rowno = -1;
 
             dataGridViewTravel.Columns[0].HeaderText = EDDiscoveryForm.EDDConfig.DisplayUTC ? "Game Time" : "Time";
+
+            //System.Diagnostics.Debug.WriteLine("Fire HC");
+            if (OnHistoryChanged != null)
+                OnHistoryChanged(hl);
 
             FireChangeSelection();      // and since we repainted, we should fire selection, as we in effect may have selected a new one
         }

@@ -243,9 +243,10 @@ namespace ExtendedControls
             {
                 System.ComponentModel.IContainer ic = this.GetParentContainerComponents();
 
-                ic?.CopyToolTips(this, new Control[] { this, _cbsystem });
+                if (ic != null)    // yes we have a container object
+                    ic.CopyToolTips(this, new Control[] { this, _cbsystem });
 
-                firstpaint = false;
+                firstpaint = true;
             }
 
             base.OnPaint(e);
