@@ -24,6 +24,7 @@ using EliteDangerousCore.EDSM;
 using ExtendedControls;
 using EliteDangerousCore;
 using EliteDangerousCore.DB;
+using EliteDangerousCore.JournalEvents;
 
 namespace EDDiscovery
 {
@@ -65,6 +66,7 @@ namespace EDDiscovery
             }
 
             SetTargetSystemUI();
+            toolStripLabelNoCoords.Text = _discoveryForm.history.FilterByFSD.Where(j => !(j.journalEntry as JournalFSDJump).HasCoordinate).Count().ToString();
 
             UnfreezeTrilaterationUI();
             dataGridViewDistances.Focus();
@@ -75,6 +77,7 @@ namespace EDDiscovery
             ViewPushedSystemsThread.Start();
 
         }
+
 
         private void SetTargetSystemUI()
         {
@@ -986,6 +989,23 @@ namespace EDDiscovery
             HistoryEntry he = _discoveryForm.history.GetLastFSD;
             if (he != null)
                 Set(he.System);
+        }
+
+        private void toolStripAddFromHistory_Click(object sender, EventArgs e)
+        {
+            int i = 0;
+            var unknown = _discoveryForm.history
+                            .FilterByFSD.ConvertAll<JournalFSDJump>(he => (he.journalEntry as JournalFSDJump))
+                            .Where(fsd => !fsd.HasCoordinate).OrderBy(fsd => fsd.EventTimeUTC);
+            foreach(JournalFSDJump jmp in unknown)
+            {
+                if (wanted.Where(w => w.system == jmp.StarSystem).Count() == 0)
+                {
+                    AddWantedSystem(jmp.StarSystem);
+                    i++;
+                }
+                if (i >= 20) break;
+            }
         }
     }
 }
