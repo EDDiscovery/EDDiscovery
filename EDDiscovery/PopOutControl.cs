@@ -41,65 +41,69 @@ namespace EDDiscovery.Forms
         public UserControlForm this[int i] { get { return usercontrolsforms[i]; } }
         public enum PopOuts        // id's.. used in tab controls, and in button pop outs button
         {
-            Log,                    
-            StarDistance,
-            Materials,
-            Commodities,
-            Ledger,                 
+            Log,                    // BEWARE
+            StarDistance,           // BEWARE
+            Materials,              // BEWARE
+            Commodities,            // Current user selection is saved as an index, so re-ordering these is not allowed
+            Ledger,                 // 4
             Journal,                
             TravelGrid,
             ScreenShot,
-            Statistics,
+            Statistics,             // 8
             Scan,
             Modules,                
             Exploration,
-            Synthesis,
+            Synthesis,              // 12
             Missions,
             Engineering,
             MarketData,             
-            SystemInformation,
+            SystemInformation,      // 16
             Spanel,
             Trippanel,
             NotePanel,
-            RouteTracker,
-            StarList,
+            RouteTracker,           // 20
             Grid,
+            StarList,
             EstimatedValues,
-
+            // ****** ADD More here DO NOT REORDER *****
             EndList,                // Keep here, used to work out MaxTabButtons
         };
 
-        // MUST match above order
-        static public Dictionary<PopOuts, PopOutInfo> popoutinfo = new Dictionary<PopOuts, PopOutInfo>
+        // This is the order they are presented to the user..   you can shuffle them to your hearts content
+        // via PopOutNames() for the drop down list
+        // and via PopOutImages() for the tab strip
+
+        static public List<PopOutInfo> PopOutList = new List<PopOutInfo>()
         {
-            { PopOuts.Log, new PopOutInfo("Log", "Log", EDDiscovery.Properties.Resources.Log , "Display the program log" ) },
-            { PopOuts.StarDistance, new PopOutInfo("Nearest Stars", "StarDistance", EDDiscovery.Properties.Resources.star,"Display the nearest stars to the currently selected entry") },
-            { PopOuts.Materials, new PopOutInfo("Materials", "Materials", EliteDangerous.Properties.Resources.material, "Display the material count at the currently selected entry" ) },
-            { PopOuts.Commodities, new PopOutInfo("Commodities", "Commodities", EliteDangerous.Properties.Resources.commodities, "Display the commodity count at the currently selected entry") },
-            { PopOuts.Ledger, new PopOutInfo("Ledger", "Ledger", EDDiscovery.Properties.Resources.ledger, "Display a ledger of cash related entries") },
-            { PopOuts.Journal, new PopOutInfo("Journal History", "JournalHistory", EDDiscovery.Properties.Resources.journal, "Display the journal grid view") },
-            { PopOuts.TravelGrid, new PopOutInfo("Travel History", "TravelHistory", EDDiscovery.Properties.Resources.travelgrid, "Display the history grid view") },
-            { PopOuts.ScreenShot, new PopOutInfo("Screen Shot", "ScreenShot", EliteDangerous.Properties.Resources.screenshot, "Display the screen shot view") },
-            { PopOuts.Statistics, new PopOutInfo("Statistics", "Stats", EDDiscovery.Properties.Resources.stats, "Display statistics from the history") },
-            { PopOuts.Scan, new PopOutInfo("Scan", "Scan", EliteDangerous.Properties.Resources.scan, "Display scan data", transparent: false) },
-            { PopOuts.EstimatedValues, new PopOutInfo("Estimated Values", "EstimatedValues", EliteDangerous.Properties.Resources.estval, "Display estimated scan values for all bodies in current system", transparent: false) },
-            { PopOuts.Modules, new PopOutInfo("Loadout", "Modules", EliteDangerous.Properties.Resources.module, "Display Loadout for current ships and also stored modules") },
-            { PopOuts.Exploration, new PopOutInfo("Exploration", "Exploration", EliteDangerous.Properties.Resources.sellexplorationdata, "Display Exploration Information") },
-            { PopOuts.Synthesis, new PopOutInfo("Synthesis", "Synthesis", EliteDangerous.Properties.Resources.synthesis, "Display Synthesis planner") },
-            { PopOuts.Missions, new PopOutInfo("Missions", "Missions", EliteDangerous.Properties.Resources.missionaccepted , "Display Missions") },
-            { PopOuts.Engineering, new PopOutInfo("Engineering", "Engineering", EliteDangerous.Properties.Resources.engineercraft , "Display Engineering planner") },
-            { PopOuts.MarketData, new PopOutInfo("Market Data", "MarketData", EliteDangerous.Properties.Resources.marketdata , "Display Market Data (Requires login to Frontier using Commander Frontier log in details)" ) },
-            { PopOuts.SystemInformation, new PopOutInfo("System Information", "SystemInfo", EDDiscovery.Properties.Resources.starsystem , "Display System Information" , transparent:false ) },
-            { PopOuts.Spanel, new PopOutInfo("Summary", "Spanel", EDDiscovery.Properties.Resources.spanel, "Display the travel system panel" , transparent: false ) },
-            { PopOuts.Trippanel, new PopOutInfo("Trip Computer", "Trippanel", EDDiscovery.Properties.Resources.trippanel, "Display the trip computer" , transparent: false) },
-            { PopOuts.NotePanel, new PopOutInfo("Notes", "NotePanel", EDDiscovery.Properties.Resources.notes, "Display current notes on a system" , transparent: false) },
-            { PopOuts.RouteTracker, new PopOutInfo("Route Tracker", "RouteTracker", EDDiscovery.Properties.Resources.routetracker, "Display the route tracker", transparent: false) },
-            { PopOuts.StarList, new PopOutInfo("Star List", "StarList", EDDiscovery.Properties.Resources.dustbinshorter, "Display the visited star list", transparent: false) },
-            { PopOuts.Grid, new PopOutInfo("The Grid", "TheGrid", EDDiscovery.Properties.Resources.grid, "Display the grid which allows other panels to be placed on it" , transparent:false) },
+            { new PopOutInfo( PopOuts.Log ,"Log", "Log", EDDiscovery.Properties.Resources.Log , "Display the program log" ) },
+            { new PopOutInfo( PopOuts.StarDistance,"Nearest Stars", "StarDistance", EDDiscovery.Properties.Resources.star,"Display the nearest stars to the currently selected entry") },
+            { new PopOutInfo( PopOuts.Materials, "Materials", "Materials", EliteDangerous.Properties.Resources.material, "Display the material count at the currently selected entry" ) },
+            { new PopOutInfo( PopOuts.Commodities, "Commodities", "Commodities", EliteDangerous.Properties.Resources.commodities, "Display the commodity count at the currently selected entry") },
+            { new PopOutInfo( PopOuts.Ledger, "Ledger", "Ledger", EDDiscovery.Properties.Resources.ledger, "Display a ledger of cash related entries") },
+            { new PopOutInfo( PopOuts.Journal, "Journal History", "JournalHistory", EDDiscovery.Properties.Resources.journal, "Display the journal grid view") },
+            { new PopOutInfo( PopOuts.TravelGrid, "Travel History", "TravelHistory", EDDiscovery.Properties.Resources.travelgrid, "Display the history grid view") },
+            { new PopOutInfo( PopOuts.StarList, "Star List", "StarList", EDDiscovery.Properties.Resources.dustbinshorter, "Display the visited star list", transparent: false) },
+            { new PopOutInfo( PopOuts.ScreenShot, "Screen Shot", "ScreenShot", EliteDangerous.Properties.Resources.screenshot, "Display the screen shot view") },
+            { new PopOutInfo( PopOuts.Statistics, "Statistics", "Stats", EDDiscovery.Properties.Resources.stats, "Display statistics from the history") },
+            { new PopOutInfo( PopOuts.Scan, "Scan", "Scan", EliteDangerous.Properties.Resources.scan, "Display scan data", transparent: false) },
+            { new PopOutInfo( PopOuts.EstimatedValues, "Estimated Values", "EstimatedValues", EliteDangerous.Properties.Resources.estval, "Display estimated scan values for all bodies in current system", transparent: false) },
+            { new PopOutInfo( PopOuts.Modules, "Loadout", "Modules", EliteDangerous.Properties.Resources.module, "Display Loadout for current ships and also stored modules") },
+            { new PopOutInfo( PopOuts.Exploration, "Exploration", "Exploration", EliteDangerous.Properties.Resources.sellexplorationdata, "Display Exploration Information") },
+            { new PopOutInfo( PopOuts.Synthesis, "Synthesis", "Synthesis", EliteDangerous.Properties.Resources.synthesis, "Display Synthesis planner") },
+            { new PopOutInfo( PopOuts.Missions, "Missions", "Missions", EliteDangerous.Properties.Resources.missionaccepted , "Display Missions") },
+            { new PopOutInfo( PopOuts.Engineering, "Engineering", "Engineering", EliteDangerous.Properties.Resources.engineercraft , "Display Engineering planner") },
+            { new PopOutInfo( PopOuts.MarketData, "Market Data", "MarketData", EliteDangerous.Properties.Resources.marketdata , "Display Market Data (Requires login to Frontier using Commander Frontier log in details)" ) },
+            { new PopOutInfo( PopOuts.SystemInformation, "System Information", "SystemInfo", EDDiscovery.Properties.Resources.starsystem , "Display System Information" , transparent:false ) },
+            { new PopOutInfo( PopOuts.Spanel, "Summary", "Spanel", EDDiscovery.Properties.Resources.spanel, "Display the travel system panel" , transparent: false ) },
+            { new PopOutInfo( PopOuts.Trippanel, "Trip Computer", "Trippanel", EDDiscovery.Properties.Resources.trippanel, "Display the trip computer" , transparent: false) },
+            { new PopOutInfo( PopOuts.NotePanel, "Notes", "NotePanel", EDDiscovery.Properties.Resources.notes, "Display current notes on a system" , transparent: false) },
+            { new PopOutInfo( PopOuts.RouteTracker, "Route Tracker", "RouteTracker", EDDiscovery.Properties.Resources.routetracker, "Display the route tracker", transparent: false) },
+            { new PopOutInfo( PopOuts.Grid, "The Grid", "TheGrid", EDDiscovery.Properties.Resources.grid, "Display the grid which allows other panels to be placed on it" , transparent:false) },
         };
 
         public class PopOutInfo
         {
+            public PopOuts popoutid;
             public string WindowTitlePrefix;
             public string WindowRefName;
             public Bitmap TabIcon;
@@ -107,8 +111,9 @@ namespace EDDiscovery.Forms
             public bool SupportsTransparency;
             public bool DefaultTransparent;
 
-            public PopOutInfo(string prefix, string rf, Bitmap icon, string tooltip, bool? transparent = null)
+            public PopOutInfo(PopOuts p, string prefix, string rf, Bitmap icon, string tooltip, bool? transparent = null)
             {
+                popoutid = p;
                 WindowTitlePrefix = prefix;
                 WindowRefName = rf;
                 TabIcon = icon;
@@ -118,37 +123,39 @@ namespace EDDiscovery.Forms
             }
         }
 
-
-        static public PopOuts? GetPopOutTypeByName(string name)
-        {
-            foreach (KeyValuePair<PopOuts, PopOutInfo> k in popoutinfo)
-            {
-                if (k.Value.WindowRefName.Equals(name, StringComparison.InvariantCultureIgnoreCase))
-                    return k.Key;
-            }
-            return null;
-        }
-
         static public string[] GetPopOutNames()
         {
-            return (from PopOutInfo x in popoutinfo.Values select x.WindowTitlePrefix).ToArray();
-        }
-        static public string GetPopOutName( PopOuts p)
-        {
-            return popoutinfo[p].WindowTitlePrefix;
-        }
-        static public string[] GetPopOutToolTips()
-        {
-            return (from PopOutInfo x in popoutinfo.Values select x.Tooltip).ToArray();
-        }
-        static public Bitmap[] GetPopOutImages()
-        {
-            return (from PopOutInfo x in popoutinfo.Values select x.TabIcon).ToArray();
+            return (from PopOutInfo x in PopOutList select x.WindowTitlePrefix).ToArray();
         }
 
-        public static UserControlCommonBase Create(PopOuts i)
+        static public string[] GetPopOutToolTips()
         {
-            switch (i)
+            return (from PopOutInfo x in PopOutList select x.Tooltip).ToArray();
+        }
+
+        static public Bitmap[] GetPopOutImages()
+        {
+            return (from PopOutInfo x in PopOutList select x.TabIcon).ToArray();
+        }
+
+        static public int GetPopOutIndexByName(string name)
+        {
+            return PopOutList.FindIndex(x => x.WindowRefName.Equals(name, StringComparison.InvariantCultureIgnoreCase));
+        }
+
+        static public int GetPopOutIndexByEnum( PopOuts p )
+        {
+            return PopOutList.FindIndex(x => x.popoutid == p);
+        }
+
+        public static UserControlCommonBase Create(int i)       // index into popoutlist
+        {
+            return Create(PopOutList[i].popoutid);
+        }
+
+        public static UserControlCommonBase Create(PopOuts p)
+        { 
+            switch (p)
             {
                 case PopOuts.Spanel: return new UserControlSpanel();
                 case PopOuts.Trippanel: return new UserControlTrippanel();
@@ -190,9 +197,11 @@ namespace EDDiscovery.Forms
 
         internal void SaveCurrentPopouts()
         {
-            foreach (int i in Enum.GetValues(typeof(PopOutControl.PopOuts)))
+            foreach (int i in Enum.GetValues(typeof(PopOuts)))        // in terms of PopOuts Enum
             {
-                UserControlCommonBase ctrl = Create((PopOuts)i);
+                PopOuts p = (PopOuts)i;
+
+                UserControlCommonBase ctrl = Create(p);
                 int numopened = ctrl == null ? 0 : usercontrolsforms.CountOf(ctrl.GetType());
                 SQLiteConnectionUser.PutSettingInt("SavedPopouts:" + ((PopOuts)i).ToString(), numopened);
             }
@@ -200,34 +209,41 @@ namespace EDDiscovery.Forms
 
         internal void LoadSavedPopouts()
         {
-            foreach (int popout in Enum.GetValues(typeof(PopOuts)))
+            foreach (int ip in Enum.GetValues(typeof(PopOuts)))     // in terms of PopOut ENUM
             {
-                int numToOpen = SQLiteConnectionUser.GetSettingInt("SavedPopouts:" + ((PopOuts)popout).ToString(), 0);
+                PopOuts p = (PopOuts)ip;
+
+                int numToOpen = SQLiteConnectionUser.GetSettingInt("SavedPopouts:" + p.ToString(), 0);
                 if (numToOpen > 0)
                 {
-                    UserControlCommonBase ctrl = Create((PopOuts)popout);
+                    UserControlCommonBase ctrl = Create(p);
                     int numOpened = ctrl == null ? 0 : usercontrolsforms.CountOf(ctrl.GetType());
                     if (numOpened < numToOpen)
                     {
                         for (int i = numOpened + 1; i <= numToOpen; i++)
                         {
-                            PopOut((PopOuts)popout);
+                            PopOut(p);
                         }
                     }
                 }
             }
         }
 
-
         public void PopOut(PopOutControl.PopOuts selected)
+        {
+            int index = PopOutList.FindIndex(x => x.popoutid == selected);
+            PopOut(index);
+        }
+
+        public void PopOut(int ix)
         {
             UserControlForm tcf = usercontrolsforms.NewForm(EDDiscovery.EDDOptions.Instance.NoWindowReposition);
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(EDDiscovery.EDDiscoveryForm));
             tcf.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 
-            UserControlCommonBase ctrl = Create(selected);
+            UserControlCommonBase ctrl = Create(ix);
 
-            PopOutInfo poi = popoutinfo.ContainsKey(selected) ? popoutinfo[selected] : null;
+            PopOutInfo poi = PopOutList[ix];
 
             if (ctrl != null && poi != null )
             {

@@ -1340,7 +1340,7 @@ namespace EDDiscovery
         {
             if (comboBoxCustomPopOut.Enabled)
             {
-                PopOuts.PopOut((PopOutControl.PopOuts)(comboBoxCustomPopOut.SelectedIndex));
+                PopOuts.PopOut(comboBoxCustomPopOut.SelectedIndex);
 
                 comboBoxCustomPopOut.Enabled = false;
                 comboBoxCustomPopOut.SelectedIndex = 0;

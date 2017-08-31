@@ -170,13 +170,13 @@ namespace EDDiscovery.Actions
                     }
                     else
                     {
-                        Forms.PopOutControl.PopOuts? poi = Forms.PopOutControl.GetPopOutTypeByName(cmdname);
+                        int poi = Forms.PopOutControl.GetPopOutIndexByName(cmdname);
 
-                        if (poi.HasValue)
+                        if (poi>=0)
                         {
                             if (nextcmd.Equals("toggle") || nextcmd.Equals("on"))
                             {
-                                poc.PopOut(poi.Value);
+                                poc.PopOut(poi);
                             }
                             else
                                 ap.ReportError("Cannot use command " + nextcmd + " after generic popout name in Popout");
