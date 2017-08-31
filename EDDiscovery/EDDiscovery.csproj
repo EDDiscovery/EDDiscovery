@@ -529,6 +529,12 @@
     <Compile Include="UserControls\UserControlStatsTime.Designer.cs">
       <DependentUpon>UserControlStatsTime.cs</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\UserControlStarVisited.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\UserControlStarVisited.Designer.cs">
+      <DependentUpon>UserControlStarVisited.cs</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\UserControlTravelGrid.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -636,6 +642,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\UserControlStatsTime.resx">
       <DependentUpon>UserControlStatsTime.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\UserControlStarVisited.resx">
+      <DependentUpon>UserControlStarVisited.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\UserControlTravelGrid.resx">
       <DependentUpon>UserControlTravelGrid.cs</DependentUpon>

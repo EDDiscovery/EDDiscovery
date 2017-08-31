@@ -62,6 +62,7 @@ namespace EDDiscovery.Forms
             Trippanel,
             NotePanel,
             RouteTracker,
+            StarList,
             Grid,
             EstimatedValues,
 
@@ -93,6 +94,7 @@ namespace EDDiscovery.Forms
             { PopOuts.Trippanel, new PopOutInfo("Trip Computer", "Trippanel", EDDiscovery.Properties.Resources.trippanel, "Display the trip computer" , transparent: false) },
             { PopOuts.NotePanel, new PopOutInfo("Notes", "NotePanel", EDDiscovery.Properties.Resources.notes, "Display current notes on a system" , transparent: false) },
             { PopOuts.RouteTracker, new PopOutInfo("Route Tracker", "RouteTracker", EDDiscovery.Properties.Resources.routetracker, "Display the route tracker", transparent: false) },
+            { PopOuts.StarList, new PopOutInfo("Star List", "StarList", EDDiscovery.Properties.Resources.dustbinshorter, "Display the visited star list", transparent: false) },
             { PopOuts.Grid, new PopOutInfo("The Grid", "TheGrid", EDDiscovery.Properties.Resources.grid, "Display the grid which allows other panels to be placed on it" , transparent:false) },
         };
 
@@ -170,6 +172,7 @@ namespace EDDiscovery.Forms
                 case PopOuts.Engineering: return new UserControlEngineering();
                 case PopOuts.MarketData: return new UserControlMarketData();
                 case PopOuts.SystemInformation: return new UserControlSysInfo();
+                case PopOuts.StarList: return new UserControlStarList();
                 case PopOuts.Grid: return new UserControlContainerGrid();
                 default: return null;
             }
