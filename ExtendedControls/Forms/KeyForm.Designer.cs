@@ -505,6 +505,7 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Define Key Sequence";
             this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.KeyForm_MouseDown);
+            this.MouseUp += new System.Windows.Forms.MouseEventHandler(this.KeyForm_MouseUp);
             this.panelOuter.ResumeLayout(false);
             this.panelOuter.PerformLayout();
             this.panelRadio.ResumeLayout(false);

@@ -43,7 +43,7 @@ namespace EliteDangerousCore
 
         public HistoryList(List<HistoryEntry> hl) { historylist = hl; }         // SPECIAL USE ONLY - DOES NOT COMPUTE ALL THE OTHER STUFF
 
-        public void Copy( HistoryList other )       // Must copy all relevant items.. been caught out by this 23/6/2017
+        public void Copy(HistoryList other)       // Must copy all relevant items.. been caught out by this 23/6/2017
         {
             historylist.Clear();
 
@@ -121,7 +121,7 @@ namespace EliteDangerousCore
         {
             get
             {
-                return (from s in historylist where s.EDDNSync == false && s.EntryType== JournalTypeEnum.Scan  orderby s.EventTimeUTC ascending select s).ToList();
+                return (from s in historylist where s.EDDNSync == false && s.EntryType == JournalTypeEnum.Scan orderby s.EventTimeUTC ascending select s).ToList();
             }
         }
 
@@ -148,32 +148,31 @@ namespace EliteDangerousCore
         {
             get
             {
-                return (from s in historylist where s.EntryType == JournalTypeEnum.EDDCommodityPrices orderby s.EventTimeUTC descending select s ).ToList();
+                return (from s in historylist where s.EntryType == JournalTypeEnum.EDDCommodityPrices orderby s.EventTimeUTC descending select s).ToList();
             }
         }
 
-        public List<HistoryEntry> FilterByTravel
-        {
-            get
-            {
-                List<HistoryEntry> ents = new List<HistoryEntry>();
-                bool resurrect = true;
-                foreach (HistoryEntry he in historylist)
-                {
-                    if (he.EntryType == JournalTypeEnum.Resurrect || he.EntryType == JournalTypeEnum.Died)
-                    {
-                        resurrect = true;
-                        ents.Add(he);
-                    }
-                    else if ((resurrect && he.EntryType == JournalTypeEnum.Location) || he.EntryType == JournalTypeEnum.FSDJump)
-                    {
-                        resurrect = false;
-                        ents.Add(he);
-                    }
-                }
+        public List<HistoryEntry> FilterByTravel { get { return FilterHLByTravel(historylist); } }
 
-                return ents;
+        static public List<HistoryEntry> FilterHLByTravel( List<HistoryEntry> hlist)        // filter, in its own order. return FSD and location events after death
+        { 
+            List<HistoryEntry> ents = new List<HistoryEntry>();
+            bool resurrect = true;
+            foreach (HistoryEntry he in hlist)
+            {
+                if (he.EntryType == JournalTypeEnum.Resurrect || he.EntryType == JournalTypeEnum.Died)
+                {
+                    resurrect = true;
+                    ents.Add(he);
+                }
+                else if ((resurrect && he.EntryType == JournalTypeEnum.Location) || he.EntryType == JournalTypeEnum.FSDJump)
+                {
+                    resurrect = false;
+                    ents.Add(he);
+                }
             }
+
+            return ents;
         }
 
         public List<HistoryEntry> FilterByFSD
