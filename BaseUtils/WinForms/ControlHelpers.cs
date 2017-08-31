@@ -125,13 +125,7 @@ public static class ControlHelpersStaticFunc
             var icontainers = (from f in memcc      // pick out a list of IContainers (should be only 1)
                                where f.FieldType.FullName == "System.ComponentModel.IContainer"
                                select f);
-
-            if (icontainers.Count() > 0)    // paranoia, should always be there
-            {
-                var item = (icontainers.ToArray())[0].GetValue(c);
-
-                return item as System.ComponentModel.IContainer;  // But IT may be null if no containers are on the form
-            }
+            return icontainers?.FirstOrDefault()?.GetValue(c) as System.ComponentModel.IContainer;  // But IT may be null if no containers are on the form
         }
 
         return null;

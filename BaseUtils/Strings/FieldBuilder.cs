@@ -27,7 +27,7 @@ namespace BaseUtils
         // second object = data value
         // if data value null or empty, not printed
         // if data value is bool, format = false text;true text
-        // else format is prefix;postfix;[doubleformat] value 
+        // else format is prefix;postfix;[floatdoubleformat] value .  floatDoubleformat must be present for floats/doubles
         // if prefix starts with a <, no ,<spc> pad
 
         static public string Build(params System.Object[] values)
@@ -76,6 +76,11 @@ namespace BaseUtils
                             System.Diagnostics.Debug.Assert(fieldnames.Length >= 3);
                             output = ((double)value).ToString(fieldnames[2]);
                         }
+                        else if (value is float)
+                        {
+                            System.Diagnostics.Debug.Assert(fieldnames.Length >= 3);
+                            output = ((float)value).ToString(fieldnames[2]);
+                        }
                         else if (value is int)
                             output = ((int)value).ToString(System.Globalization.CultureInfo.InvariantCulture);
                         else if (value is long)
@@ -84,6 +89,11 @@ namespace BaseUtils
                         {
                             System.Diagnostics.Debug.Assert(fieldnames.Length >= 3);
                             output = ((double?)value).Value.ToString(fieldnames[2]);
+                        }
+                        else if (value is float?)
+                        {
+                            System.Diagnostics.Debug.Assert(fieldnames.Length >= 3);
+                            output = ((float?)value).Value.ToString(fieldnames[2]);
                         }
                         else if (value is int?)
                             output = ((int?)value).Value.ToString(System.Globalization.CultureInfo.InvariantCulture);
