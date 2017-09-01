@@ -78,10 +78,13 @@ namespace EDDiscovery
             this.deleteRowsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.setTargetToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.editBookmarkToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.ctxMenuCombo = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.ctxMenuItemUndelete = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStrip1.SuspendLayout();
             this.panelRouteInfo.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewRouteSystems)).BeginInit();
             this.contextMenuCopyPaste.SuspendLayout();
+            this.ctxMenuCombo.SuspendLayout();
             this.SuspendLayout();
             // 
             // toolStrip1
@@ -178,14 +181,16 @@ namespace EDDiscovery
             this.toolStripComboBoxRouteSelection.ItemHeight = 13;
             this.toolStripComboBoxRouteSelection.MouseOverBackgroundColor = System.Drawing.Color.Silver;
             this.toolStripComboBoxRouteSelection.Name = "toolStripComboBoxRouteSelection";
+            this.toolStripComboBoxRouteSelection.Overflow = System.Windows.Forms.ToolStripItemOverflow.Never;
             this.toolStripComboBoxRouteSelection.ScrollBarButtonColor = System.Drawing.Color.LightGray;
             this.toolStripComboBoxRouteSelection.ScrollBarColor = System.Drawing.Color.LightGray;
             this.toolStripComboBoxRouteSelection.ScrollBarWidth = 16;
             this.toolStripComboBoxRouteSelection.SelectedIndex = -1;
             this.toolStripComboBoxRouteSelection.SelectedItem = null;
-            this.toolStripComboBoxRouteSelection.Size = new System.Drawing.Size(150, 22);
+            this.toolStripComboBoxRouteSelection.Size = new System.Drawing.Size(200, 22);
             this.toolStripComboBoxRouteSelection.ValueMember = "";
             this.toolStripComboBoxRouteSelection.SelectedIndexChanged += new System.EventHandler(this.toolStripComboBoxRouteSelection_SelectedIndexChanged);
+            this.toolStripComboBoxRouteSelection.MouseUp += new System.Windows.Forms.MouseEventHandler(this.toolStripComboBoxRouteSelection_MouseUp);
             // 
             // panelRouteInfo
             // 
@@ -494,6 +499,19 @@ namespace EDDiscovery
             this.editBookmarkToolStripMenuItem.Text = "Edit bookmark";
             this.editBookmarkToolStripMenuItem.Click += new System.EventHandler(this.editBookmarkToolStripMenuItem_Click);
             // 
+            // ctxMenuCombo
+            // 
+            this.ctxMenuCombo.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.ctxMenuItemUndelete});
+            this.ctxMenuCombo.Name = "ctxMenuCombo";
+            this.ctxMenuCombo.Size = new System.Drawing.Size(153, 48);
+            // 
+            // ctxMenuItemUndelete
+            // 
+            this.ctxMenuItemUndelete.Name = "ctxMenuItemUndelete";
+            this.ctxMenuItemUndelete.Size = new System.Drawing.Size(152, 22);
+            this.ctxMenuItemUndelete.Text = "&Undelete";
+            // 
             // SavedRouteExpeditionControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -509,6 +527,7 @@ namespace EDDiscovery
             this.panelRouteInfo.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewRouteSystems)).EndInit();
             this.contextMenuCopyPaste.ResumeLayout(false);
+            this.ctxMenuCombo.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -550,5 +569,7 @@ namespace EDDiscovery
         private ExtendedControls.TextBoxBorder txtCmlDistance;
         private System.Windows.Forms.ToolStripMenuItem setTargetToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem editBookmarkToolStripMenuItem;
+        private System.Windows.Forms.ContextMenuStrip ctxMenuCombo;
+        private System.Windows.Forms.ToolStripMenuItem ctxMenuItemUndelete;
     }
 }

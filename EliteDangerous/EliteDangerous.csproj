@@ -91,6 +91,7 @@
     <Compile Include="EDSM\EDSMClass.cs" />
     <Compile Include="EDSM\EDSMLogFetcher.cs" />
     <Compile Include="EDSM\EDSMSync.cs" />
+    <Compile Include="EDSM\Expeditions.cs" />
     <Compile Include="EDSM\GalMapType.cs" />
     <Compile Include="EDSM\GalacticMapObject.cs" />
     <Compile Include="EDSM\GalacticMapSystem.cs" />
