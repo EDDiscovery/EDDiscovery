@@ -676,4 +676,28 @@
   <data name="estval" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\estval.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="amfurepair" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\amfurepair.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="communitygoal" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\communitygoal.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="missionredirected" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\missionredirected.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="navbeacon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\navbeacon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="repairdrones" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\repairdrones.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="searchrescue" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\searchrescue.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="sellshiponrebuy" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\sellshiponrebuy.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="music" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\music.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
 </root>

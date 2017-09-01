@@ -122,7 +122,7 @@ namespace EDDiscovery.UserControls
             // 
             // panelHistoryIcon
             // 
-            this.panelHistoryIcon.BackgroundImage = global::EDDiscovery.Properties.Resources.dustbinshorter;
+            this.panelHistoryIcon.BackgroundImage = global::EDDiscovery.Properties.Resources.starlist;
             this.panelHistoryIcon.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.panelHistoryIcon.Location = new System.Drawing.Point(3, 4);
             this.panelHistoryIcon.Name = "panelHistoryIcon";

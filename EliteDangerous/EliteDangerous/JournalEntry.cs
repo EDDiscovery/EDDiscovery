@@ -1059,7 +1059,7 @@ namespace EliteDangerousCore
             string Eventstr = jo["event"].StrNull();
 
             if (Eventstr == null)  // Should normaly not happend unless corrupt string.
-                return null;
+                return new JournalUnknown(jo);      // MUST return something
 
             Type jtype = TypeOfJournalEntry(Eventstr);
 
