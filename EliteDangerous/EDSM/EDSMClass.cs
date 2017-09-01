@@ -13,7 +13,6 @@
  * 
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
-
 using EliteDangerousCore;
 using EliteDangerousCore.DB;
 using EliteDangerousCore.JournalEvents;
@@ -29,7 +28,7 @@ using System.Web;
 
 namespace EliteDangerousCore.EDSM
 {
-    public class EDSMClass : BaseUtils.HttpCom
+    public partial class EDSMClass : BaseUtils.HttpCom
     {
         public string commanderName;
         public string apiKey;
