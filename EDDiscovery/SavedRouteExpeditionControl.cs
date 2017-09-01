@@ -88,6 +88,40 @@ namespace EDDiscovery
             _suppressCombo = false;
         }
 
+        private void UpdateUndeleteMenu()
+        {
+            var delrts = SavedRouteClass.GetAllSavedRoutes().Where(r => r.Name.StartsWith("\x7F")).OrderBy(r => r.Name);
+
+            if (ctxMenuItemUndelete.HasDropDownItems)
+            {
+                for (int i = ctxMenuItemUndelete.DropDownItems.Count - 1; i >= 0; i--)
+                    ctxMenuItemUndelete.DropDownItems[i].Dispose();
+                ctxMenuItemUndelete.DropDownItems.Clear();
+            }
+
+            foreach (var drt in delrts)
+            {
+                var menuitem = new ToolStripMenuItem(drt.Name.TrimStart("\x7F".ToCharArray()));
+                menuitem.Tag = drt;
+                menuitem.Click += UndeleteRouteSubMenuItem_Click;
+                ctxMenuItemUndelete.DropDownItems.Add(menuitem);
+            }
+        }
+
+        private void UndeleteRouteSubMenuItem_Click(object sender, EventArgs e)
+        {
+            var tmi = sender as ToolStripMenuItem;
+            var rte = tmi.Tag as SavedRouteClass;
+
+            rte.Name = tmi.Text;    // .Text already had the DEL prefix removed, so let's use that.
+            rte.Update();
+
+            _savedRoutes = SavedRouteClass.GetAllSavedRoutes().Where(r => !r.Name.StartsWith("\x7F")).OrderBy(r => r.Name).ToList();
+            UpdateComboBox();
+
+            tmi.Dispose();  // Gets removed automatically.
+        }
+
         public void InsertRows(int insertIndex, params string[] sysnames)
         {
             foreach (var row in sysnames)
@@ -441,6 +475,16 @@ namespace EDDiscovery
             }
 
             UpdateSystemRows();
+        }
+
+        private void toolStripComboBoxRouteSelection_MouseUp(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right)
+            {
+                UpdateUndeleteMenu();
+                if (ctxMenuItemUndelete.DropDownItems.Count > 0)
+                    ctxMenuCombo.Show(toolStripComboBoxRouteSelection.Control.PointToScreen(e.Location));
+            }
         }
 
         private void toolStripButtonSave_Click(object sender, EventArgs e)
