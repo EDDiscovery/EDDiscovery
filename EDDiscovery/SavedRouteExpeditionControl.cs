@@ -13,139 +13,54 @@
  * 
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
+using EDDiscovery.DB;
+using EliteDangerousCore;
+using EliteDangerousCore.DB;
+using EliteDangerousCore.EDSM;
+using ExtendedControls;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Drawing;
 using System.Data;
+using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
-using EliteDangerousCore.EDSM;
-using System.IO;
-using EMK.LightGeometry;
-using ExtendedControls;
-using EliteDangerousCore.DB;
-using EliteDangerousCore;
-using EDDiscovery.DB;
 
 namespace EDDiscovery
 {
     public partial class SavedRouteExpeditionControl : UserControl
     {
-        public static SavedRouteClass[] InitialRoutes =
-        {
-            new SavedRouteClass(
-                "Distant Worlds (3302)",
-                "Pallaeni",
-                "Fine Ring Sector JH-V c2-4",
-                "NGC 6530 WFI 16706",
-                "Omega Sector EL-Y d60",
-                "Eagle Sector EL-Y d203",
-                "NGC 6357 Sector DL-Y e22",
-                "Blaa Hypai UC-G c12-6",
-                "Greae Phio LS-L c23-221",
-                "Speamoea WU-E d12-543",
-                "Athaip CR-C b55-4",
-                "Myriesly EC-B c27-381",
-                "Stuemeae KM-W c1-342",
-                "Nyuena JS-B d342",
-                "Phipoea DD-F c26-1311",
-                "Dryao Chrea VU-P e5-7481",
-                "Eorld Byoe YA-W e2-4084",
-                "Eok Gree TO-Q e5-3167",
-                "Pheia Briae DK-A e303",
-                "Greeroi MD-Q d6-5",
-                "Rendezvous Point",
-                "Oupailks BB-M c8-5",
-                "Qautheia BA-A e0",
-                "Cheae Eurl AA-A e0",
-                "Beagle Point"
-            )
-            {
-                StartDate = new DateTime(2016, 1, 14, 20, 0, 0, DateTimeKind.Utc).ToLocalTime(),
-                EndDate = new DateTime(2016, 6, 1, 23, 59, 59, DateTimeKind.Utc).ToLocalTime(),
-            },
-            new SavedRouteClass(
-                "Sagittarius-Carina Mission",
-                "Sol",
-                "NGC 6530 WFI 16706",
-                "Syralia JT-V b7-0",
-                "CSI-61-15434",
-                "CPD-65 2513",
-                "Thaile HW-V e2-7",
-                "GCRV 6807",
-                "Prue Hypa CL-Y g2",
-                "Pueliae IT-H d10-1",
-                "Grie Hypai DL-Y g2",
-                "Eock Prau WD-T d3-6",
-                "Mycapp TX-U d2-4",
-                "Eembaitl DL-Y d13",
-                "Hypaa Byio ZE-A g1",
-                "Gooroa PT-Q e5-5",
-                "Braitu EG-Y g1",
-                "Suvaa NL-P d5-29",
-                "Truechea SD-T d3-14",
-                "Hyphielie GR-N d6-9",
-                "Cho Eur QY-S e3-2",
-                "Fleckia FI-Z d1-6",
-                "Beagle Point",
-                "Myeia Thaa ZE-R d4-0",
-                "Syriae Thaa PJ-I d9-1",
-                "Pyrie Eurk QX-U e2-0",
-                "Cho Thua SF-W b29-0",
-                "Pyriveae FK-C d14-72",
-                "Tyroerts RX-U d2-0",
-                "Eactaify GD-A d14-18",
-                "Preia Flyuae XY-A e1865",
-                "13 MU SAGITTARII",
-                "Chraisa AY-F d12-133",
-                "Dryio Bloo PZ-W d2-1161",
-                "Stuemiae BB-O e6-61",
-                "Hypua Flyoae WU-X e1-4448",
-                "Oephaif RJ-G d11-408",
-                "Froaln II-W b7-1",
-                "Eodgorph IN-Z c14-32",
-                "CSI-06-19031",
-                "Omega Sector EL-Y d60",
-                "HIP 72043"
-            )
-            {
-                StartDate = new DateTime(2015, 8, 1, 19, 0, 0, DateTimeKind.Utc).ToLocalTime(),
-                EndDate = new DateTime(2018, 4, 9, 23, 59, 59, DateTimeKind.Utc).ToLocalTime()
-            }
-        };
-
         public static bool DeleteIsPermanent = true;
 
         private List<SavedRouteClass> _savedRoutes;
         private SavedRouteClass _currentRoute;
         private EDDiscoveryForm _discoveryForm;
         private EDSMClass edsm;
-        private int _currentRouteIndex;
         private Rectangle _dragBox;
         private int _dragRowIndex;
+        private bool _suppressCombo = false;
 
         public SavedRouteExpeditionControl()
         {
             InitializeComponent();
             SystemName.AutoCompleteGenerator = SystemClassDB.ReturnOnlySystemsListForAutoComplete;
             _currentRoute = new SavedRouteClass("");
+            _savedRoutes = new List<SavedRouteClass>();
         }
 
         public void InitControl(EDDiscoveryForm discoveryForm)
         {
             _discoveryForm = discoveryForm;
             edsm = new EDSMClass();
-            _currentRoute = new SavedRouteClass("");
-            _savedRoutes = new List<SavedRouteClass>();
         }
 
         public void LoadControl()
         {
             _savedRoutes = SavedRouteClass.GetAllSavedRoutes();
 
-            foreach (var initroute in InitialRoutes)
+            foreach (var initroute in EDSMClass.Expeditions)
             {
                 if (!_savedRoutes.Any(r => r.Name == initroute.Name || r.Name == "\x7F" + initroute.Name))
                 {
@@ -154,19 +69,57 @@ namespace EDDiscovery
                 }
             }
 
-            _savedRoutes = _savedRoutes.Where(r => !r.Name.StartsWith("\x7F")).ToList();
+            _savedRoutes = _savedRoutes.Where(r => !r.Name.StartsWith("\x7F")).OrderBy(r => r.Name).ToList();
 
             UpdateComboBox();
         }
 
         private void UpdateComboBox()
         {
+            _suppressCombo = true;
             toolStripComboBoxRouteSelection.Items.Clear();
 
             foreach (var route in _savedRoutes)
             {
                 toolStripComboBoxRouteSelection.Items.Add(route.Name);
             }
+
+            toolStripComboBoxRouteSelection.Text = _currentRoute.Name;
+            _suppressCombo = false;
+        }
+
+        private void UpdateUndeleteMenu()
+        {
+            var delrts = SavedRouteClass.GetAllSavedRoutes().Where(r => r.Name.StartsWith("\x7F")).OrderBy(r => r.Name);
+
+            if (ctxMenuItemUndelete.HasDropDownItems)
+            {
+                for (int i = ctxMenuItemUndelete.DropDownItems.Count - 1; i >= 0; i--)
+                    ctxMenuItemUndelete.DropDownItems[i].Dispose();
+                ctxMenuItemUndelete.DropDownItems.Clear();
+            }
+
+            foreach (var drt in delrts)
+            {
+                var menuitem = new ToolStripMenuItem(drt.Name.TrimStart("\x7F".ToCharArray()));
+                menuitem.Tag = drt;
+                menuitem.Click += UndeleteRouteSubMenuItem_Click;
+                ctxMenuItemUndelete.DropDownItems.Add(menuitem);
+            }
+        }
+
+        private void UndeleteRouteSubMenuItem_Click(object sender, EventArgs e)
+        {
+            var tmi = sender as ToolStripMenuItem;
+            var rte = tmi.Tag as SavedRouteClass;
+
+            rte.Name = tmi.Text;    // .Text already had the DEL prefix removed, so let's use that.
+            rte.Update();
+
+            _savedRoutes = SavedRouteClass.GetAllSavedRoutes().Where(r => !r.Name.StartsWith("\x7F")).OrderBy(r => r.Name).ToList();
+            UpdateComboBox();
+
+            tmi.Dispose();  // Gets removed automatically.
         }
 
         public void InsertRows(int insertIndex, params string[] sysnames)
@@ -194,13 +147,15 @@ namespace EDDiscovery
                 return 100;
 
             double maxdist = 25;
-            var rows = dataGridViewRouteSystems.Rows.OfType<DataGridViewRow>().Where(r => r.Cells[0].Value != null).ToList();
-            List<SystemClassDB> systems = rows.Select(r => r.Cells[0].Tag as SystemClassDB).ToList();
-            SystemClassDB sys0 = systems.FirstOrDefault(s => s != null && s.HasCoordinate);
+            var systems = dataGridViewRouteSystems.Rows.OfType<DataGridViewRow>()
+                .Where(r => r.Index < dataGridViewRouteSystems.NewRowIndex && r.Cells[0].Tag != null)
+                .Select(r => r.Cells[0].Tag as ISystemBase)
+                .Where(s => s.HasCoordinate);
+            var sys0 = systems.FirstOrDefault();
 
             if (sys0 != null)
             {
-                foreach (var sys in systems.Where(s => s != null))
+                foreach (var sys in systems)
                 {
                     double dist = SystemClassDB.Distance(sys0, sys);
 
@@ -221,6 +176,86 @@ namespace EDDiscovery
                 sys = new SystemClassDB(sysname);
 
             return sys;
+        }
+
+        // If the route has any unsaved changes, prompt the user to save them.
+        // Returns true if the caller is allowed to continue; false if caller should abort.
+        private bool PromptAndSaveIfNeeded()
+        {
+            var rt = new SavedRouteClass();
+            UpdateRouteInfo(rt);
+
+            if (rt.Equals(_currentRoute))   // No changes have been made.
+                return true;
+            else
+            {
+                var result = ExtendedControls.MessageBoxTheme.Show(ParentForm, "There are unsaved changes to the current route." + Environment.NewLine
+                    + "Would you like to save the current route before proceeding?", "Unsaved route", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Exclamation);
+                switch (result)
+                {
+                    case DialogResult.Yes:
+                        return SaveCurrentRoute();
+
+                    case DialogResult.No:
+                        return true;
+
+                    case DialogResult.Cancel:
+                    default:
+                        return false;
+                }
+            }
+        }
+
+        private bool SaveCurrentRoute()
+        {
+            bool ret = false;
+            string newrtname = textBoxRouteName.Text?.Trim();
+            string oldrtname = _currentRoute.Name;
+            var newrt = new SavedRouteClass();
+            var oldrt = _currentRoute;
+
+            UpdateRouteInfo(newrt);
+
+            if (string.IsNullOrEmpty(newrtname))
+            {
+                ExtendedControls.MessageBoxTheme.Show(ParentForm, "Please specify a name for the route.", "Unsaved Route", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                textBoxRouteName.Select();
+            }
+            else if (EDSMClass.Expeditions.Any(r => r.Name.Equals(newrtname)))
+            {
+                ExtendedControls.MessageBoxTheme.Show(ParentForm, "The current route name conflicts with a well-known expedition." + Environment.NewLine
+                    + "Please specify a new name to save your changes.", "Unsaved Route", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                textBoxRouteName.Select();
+                textBoxRouteName.SelectAll();
+            }
+            else
+            {
+                var overwriteroute = _savedRoutes.Where(r => r.Name.Equals(newrtname) && r.Id != _currentRoute.Id).FirstOrDefault();
+                if (overwriteroute != null)
+                {
+                    if (MessageBoxTheme.Show(ParentForm, "Warning: route already exists. Would you like to overwrite it?", "Route Exists", MessageBoxButtons.YesNo) != DialogResult.Yes)
+                        return false;
+
+                    overwriteroute.Delete();
+                    _savedRoutes.Remove(overwriteroute);
+                }
+                if (_currentRoute.Id < 0)
+                {
+                    ret = newrt.Add();
+                }
+                else
+                {
+                    newrt.Id = _currentRoute.Id;
+                    ret = newrt.Update();
+                    _savedRoutes.Remove(oldrt);
+                }
+                _currentRoute = newrt;
+                _savedRoutes.Add(newrt);
+                _savedRoutes = _savedRoutes.Where(r => !r.Name.StartsWith("\x7F")).OrderBy(r => r.Name).ToList();
+                UpdateComboBox();
+            }
+
+            return ret;
         }
 
         private void UpdateSystemRow(int rowindex)
@@ -316,10 +351,9 @@ namespace EDDiscovery
                 }
                 txtCmlDistance.Text = distance.ToString("0.00") + "LY";
                 distance = 0;
-                if (firstSC != null && lastSC != null) { 
-                    Point3D first = new Point3D(firstSC.x, firstSC.y, firstSC.z);
-                    Point3D last = new Point3D(lastSC.x, lastSC.y, lastSC.z);
-                    distance = Point3D.DistanceBetween(first, last);
+                if (firstSC != null && lastSC != null)
+                {
+                    distance = SystemClassDB.Distance(firstSC, lastSC);
                     txtP2PDIstance.Text = distance.ToString("0.00") + "LY";
                 }
             }
@@ -329,7 +363,9 @@ namespace EDDiscovery
         {
             route.Name = textBoxRouteName.Text.Trim();
             route.Systems.Clear();
-            route.Systems.AddRange(dataGridViewRouteSystems.Rows.OfType<DataGridViewRow>().Where(r => r.Cells[0].Value != null).Select(r => r.Cells[0].Value.ToString()));
+            route.Systems.AddRange(dataGridViewRouteSystems.Rows.OfType<DataGridViewRow>()
+                .Where(r => r.Index < dataGridViewRouteSystems.NewRowIndex && r.Cells[0].Value != null)
+                .Select(r => r.Cells[0].Value.ToString()));
 
             if (dateTimePickerStartDate.Checked)
             {
@@ -366,21 +402,18 @@ namespace EDDiscovery
 
         private void toolStripComboBoxRouteSelection_SelectedIndexChanged(object sender, EventArgs e)
         {
-            SavedRouteClass newroute = new SavedRouteClass();
-            UpdateRouteInfo(newroute);
+            if (_suppressCombo)
+                return;
 
-            if (!newroute.Equals(_currentRoute))
+            if (!PromptAndSaveIfNeeded())
             {
-                var result = ExtendedControls.MessageBoxTheme.Show(_discoveryForm, "There are unsaved changes to the current route.\r\nAre you sure you want to select another route without saving?", "Unsaved route", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation);
-                if (result == DialogResult.No)
-                {
-                    toolStripComboBoxRouteSelection.SelectedIndex = _currentRouteIndex;
-                    return;
-                }
+                _suppressCombo = true;
+                toolStripComboBoxRouteSelection.Text = _currentRoute.Name;
+                _suppressCombo = false;
+                return;
             }
 
-            _currentRouteIndex = toolStripComboBoxRouteSelection.SelectedIndex;
-            if (_currentRouteIndex == -1)
+            if (toolStripComboBoxRouteSelection.SelectedIndex == -1)
                 return;
 
 
@@ -444,43 +477,25 @@ namespace EDDiscovery
             UpdateSystemRows();
         }
 
+        private void toolStripComboBoxRouteSelection_MouseUp(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right)
+            {
+                UpdateUndeleteMenu();
+                if (ctxMenuItemUndelete.DropDownItems.Count > 0)
+                    ctxMenuCombo.Show(toolStripComboBoxRouteSelection.Control.PointToScreen(e.Location));
+            }
+        }
+
         private void toolStripButtonSave_Click(object sender, EventArgs e)
         {
-            UpdateRouteInfo(_currentRoute);
-
-            if (String.IsNullOrEmpty(_currentRoute.Name))
-            {
-                var result = ExtendedControls.MessageBoxTheme.Show(_discoveryForm, "Please specify a name for the route.", "Unsaved route", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                textBoxRouteName.Select();
-                return;
-            }
-            if (_currentRoute.Id == -1)
-            {
-                _currentRoute.Add();
-                _savedRoutes.Add(_currentRoute);
-            }
-            else
-            {
-                _currentRoute.Update();
-            }
-            UpdateComboBox();
-            toolStripComboBoxRouteSelection.Text = _currentRoute.Name;
+            SaveCurrentRoute();
         }
 
         private void toolStripButtonNew_Click(object sender, EventArgs e)
         {
-            SavedRouteClass newroute = new SavedRouteClass();
-            UpdateRouteInfo(newroute);
-
-            if (!newroute.Equals(_currentRoute))
-            {
-                var result = ExtendedControls.MessageBoxTheme.Show(_discoveryForm, "There are unsaved changes to the current route.\r\nAre you sure you want to select another route without saving?", "Unsaved route", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation);
-                if (result == DialogResult.No)
-                {
-                    toolStripComboBoxRouteSelection.SelectedIndex = _currentRouteIndex;
-                    return;
-                }
-            }
+            if (!PromptAndSaveIfNeeded())
+                return;
 
             ClearRoute();
             toolStripComboBoxRouteSelection.SelectedItem = null;
@@ -507,8 +522,10 @@ namespace EDDiscovery
         private void toolStripButtonShowOn3DMap_Click(object sender, EventArgs e)
         {
             var map = _discoveryForm.Map;
-
-            var route = dataGridViewRouteSystems.Rows.OfType<DataGridViewRow>().Select(s => s.Cells[0].Tag as SystemClassDB).Where(s => s != null && s.HasCoordinate).ToList();
+            var route = dataGridViewRouteSystems.Rows.OfType<DataGridViewRow>()
+                .Where(r => r.Index < dataGridViewRouteSystems.NewRowIndex && r.Cells[0].Tag != null)
+                .Select(s => s.Cells[0].Tag as SystemClassDB)
+                .Where(s => s.HasCoordinate).ToList();
 
             if (route.Count >= 2)
             {
@@ -519,7 +536,7 @@ namespace EDDiscovery
             }
             else
             {
-                ExtendedControls.MessageBoxTheme.Show("No route set up, retry", "No Route", MessageBoxButtons.OK);
+                ExtendedControls.MessageBoxTheme.Show(ParentForm, "No route set up. Please add at least two systems.", "No Route", MessageBoxButtons.OK);
                 return;
             }
         }
@@ -757,38 +774,32 @@ namespace EDDiscovery
 
         private void toolStripButtonDelete_Click(object sender, EventArgs e)
         {
-            if (ExtendedControls.MessageBoxTheme.Show(_discoveryForm, "Are you sure you want to delete this route?", "Delete Route", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+            if (ExtendedControls.MessageBoxTheme.Show(ParentForm, "Are you sure you want to delete this route?", "Delete Route", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
             {
-                if (DeleteIsPermanent)
+                if (_currentRoute.Id >= 0)
                 {
-                    _currentRoute.Delete();
-                }
-                else
-                {
-                    _currentRoute.Name = "\x7F" + _currentRoute.Name;
-                    _currentRoute.Update();
+                    if (DeleteIsPermanent && !EDSMClass.Expeditions.Any(r => r.Name.Equals(_currentRoute.Name)))
+                    {
+                        _currentRoute.Delete();
+                    }
+                    else
+                    {   // Expeditions shouldn't use .Delete(), as LoadControl will ignorantly re-create them at next startup.
+                        _currentRoute.Name = "\x7F" + _currentRoute.Name;
+                        _currentRoute.Update();
+                    }
+
+                    _savedRoutes.Remove(_currentRoute);
+                    UpdateComboBox();
                 }
 
-                _savedRoutes.Remove(_currentRoute);
-                UpdateComboBox();
                 ClearRoute();
             }
         }
         
         private void toolStripButtonImportFile_Click(object sender, EventArgs e)
         {
-            SavedRouteClass newroute = new SavedRouteClass();
-            UpdateRouteInfo(newroute);
-            if (!newroute.Equals(_currentRoute))
-            {
-                var result = ExtendedControls.MessageBoxTheme.Show(_discoveryForm, "There are unsaved changes to the current route.\r\n"
-                    + "Are you sure you want to import a route without saving?", "Unsaved route", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation);
-                if (result == DialogResult.No)
-                    return;
-            }
-
-            ClearRoute();
-            toolStripComboBoxRouteSelection.SelectedItem = null;
+            if (!PromptAndSaveIfNeeded())
+                return;
 
             OpenFileDialog ofd = new OpenFileDialog();
             ofd.Filter = "Text Files|*.txt";
@@ -804,8 +815,8 @@ namespace EDDiscovery
             }
             catch (IOException)
             {
-                ExtendedControls.MessageBoxTheme.Show(String.Format("There was an error reading {0}", ofd.FileName), "Import route",
-                      MessageBoxButtons.OK, MessageBoxIcon.Error);
+                ExtendedControls.MessageBoxTheme.Show(ParentForm, $"There was an error reading {ofd.FileName}",
+                    "Import route", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
@@ -823,12 +834,13 @@ namespace EDDiscovery
             }
             if (systems.Count == 0)
             {
-                ExtendedControls.MessageBoxTheme.Show(_discoveryForm,
-                    String.Format("The imported file contains no known system names"),
+                ExtendedControls.MessageBoxTheme.Show(ParentForm, "The imported file contains no known system names",
                     "Import route", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return;
             }
 
+            ClearRoute();
+            toolStripComboBoxRouteSelection.SelectedItem = null;
             foreach (var sysname in systems)
             {
                 dataGridViewRouteSystems.Rows.Add(sysname, "", "");
@@ -841,19 +853,11 @@ namespace EDDiscovery
             if (_discoveryForm.RouteControl.RouteSystems == null
                 || _discoveryForm.RouteControl.RouteSystems.Count == 0)
             {
-                ExtendedControls.MessageBoxTheme.Show(String.Format("Please create a route on the route tab"), "Import from route tab");
+                ExtendedControls.MessageBoxTheme.Show(ParentForm, "Please create a route on the route tab", "Import from route tab");
                 return;
             }
-
-            SavedRouteClass newroute = new SavedRouteClass();
-            UpdateRouteInfo(newroute);
-            if (!newroute.Equals(_currentRoute))
-            {
-                var result = ExtendedControls.MessageBoxTheme.Show(_discoveryForm, "There are unsaved changes to the current route.\r\n"
-                    + "Are you sure you want to import a route without saving?", "Unsaved route", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation);
-                if (result == DialogResult.No)
-                    return;
-            }
+            else if (!PromptAndSaveIfNeeded())
+                return;
 
             ClearRoute();
             toolStripComboBoxRouteSelection.SelectedItem = null;
@@ -868,14 +872,15 @@ namespace EDDiscovery
         private void toolStripButtonExport_Click(object sender, EventArgs e)
         {
             string filename = "";
+            var rt = new SavedRouteClass();
+            UpdateRouteInfo(rt);
+
             try
             {
-
-                if (dataGridViewRouteSystems.Rows.Count == 0
-                    || (dataGridViewRouteSystems.Rows.Count == 1 && dataGridViewRouteSystems[0, 0].Value == null))
+                if (rt.Systems.Count < 1)
                 {
-                    ExtendedControls.MessageBoxTheme.Show(_discoveryForm,
-                    "There is no route to export ", "Export route", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    ExtendedControls.MessageBoxTheme.Show(ParentForm, "There is no route to export ",
+                        "Export route", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                     return;
                 }
 
@@ -899,19 +904,18 @@ namespace EDDiscovery
                 filename = dlg.FileName;
                 using (StreamWriter writer = new StreamWriter(filename, false))
                 {
-                    for (int i = 0; i < dataGridViewRouteSystems.Rows.Count; i++)
+                    foreach (var sysname in rt.Systems)
                     {
-                        String sysname = (String)dataGridViewRouteSystems[0, i].Value;
-                        if (!String.IsNullOrWhiteSpace(sysname))
+                        if (!string.IsNullOrWhiteSpace(sysname))
                             writer.WriteLine(sysname);
                     }
                 }
-                ExtendedControls.MessageBoxTheme.Show(String.Format("Export complete {0}", filename), "Export route");
+                ExtendedControls.MessageBoxTheme.Show(ParentForm, $"Export completed to {filename}", "Export route");
             }
             catch (IOException)
             {
-                ExtendedControls.MessageBoxTheme.Show(String.Format("Is file {0} open?", filename), "Export route",
-                      MessageBoxButtons.OK, MessageBoxIcon.Error);
+                ExtendedControls.MessageBoxTheme.Show(ParentForm, $"Problem exporting route. Is file {filename} already open?",
+                    "Export route", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
         }
@@ -931,7 +935,9 @@ namespace EDDiscovery
 
         private void editBookmarkToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            int[] selectedRows = dataGridViewRouteSystems.SelectedCells.OfType<DataGridViewCell>().Where(c => c.RowIndex != dataGridViewRouteSystems.NewRowIndex).Select(c => c.RowIndex).OrderBy(v => v).Distinct().ToArray();
+            int[] selectedRows = dataGridViewRouteSystems.SelectedCells.OfType<DataGridViewCell>()
+                .Where(c => c.RowIndex != dataGridViewRouteSystems.NewRowIndex)
+                .Select(c => c.RowIndex).OrderBy(v => v).Distinct().ToArray();
 
             if (selectedRows.Length == 0)
                 return;
@@ -942,7 +948,7 @@ namespace EDDiscovery
             SystemClass sc = SystemClassDB.GetSystem((string)obj);
             if (sc == null)
             {
-                ExtendedControls.MessageBoxTheme.Show("Unknown system, system is without co-ordinates", "Edit bookmark", MessageBoxButtons.OK);
+                ExtendedControls.MessageBoxTheme.Show(ParentForm, "Unknown system, system is without co-ordinates", "Edit bookmark", MessageBoxButtons.OK);
             }
             else
                 TargetHelpers.showBookmarkForm(this,_discoveryForm, sc, null, false);
