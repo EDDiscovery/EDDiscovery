@@ -166,15 +166,16 @@ namespace EliteDangerousCore
             bool starposfromedsm = false;
             bool firstdiscover = false;
 
-
-            if (je.EventTypeID == JournalTypeEnum.Location || je.EventTypeID == JournalTypeEnum.FSDJump)
+            if (je.EventTypeID == JournalTypeEnum.Location || je.EventTypeID == JournalTypeEnum.FSDJump ||
+                (je.EventTypeID == JournalTypeEnum.StartJump && (je as JournalStartJump)?.JumpType == "Hyperspace"))
             {
                 JournalLocOrJump jl = je as JournalLocOrJump;
                 JournalFSDJump jfsd = je as JournalFSDJump;
+                JournalStartJump js = je as JournalStartJump;
 
                 ISystem newsys;
 
-                if (jl.HasCoordinate)       // LAZY LOAD IF it has a co-ord.. the front end will when it needs it
+                if (jl != null && jl.HasCoordinate)       // LAZY LOAD IF it has a co-ord.. the front end will when it needs it
                 {
                     newsys = new SystemClassDB(jl.StarSystem, jl.StarPos.X, jl.StarPos.Y, jl.StarPos.Z);
                     newsys.id_edsm = jl.EdsmID < 0 ? 0 : jl.EdsmID;       // pass across the EDSMID for the lazy load process.
@@ -188,8 +189,10 @@ namespace EliteDangerousCore
                 }
                 else
                 {                           // Default one
-                    newsys = new SystemClassDB(jl.StarSystem);
-                    newsys.id_edsm = jl.EdsmID;
+                    string sysname = jl?.StarSystem ?? js?.StarSystem;
+
+                    newsys = new SystemClassDB(sysname);
+                    newsys.id_edsm = je.EdsmID;
 
                     if (checkedsm)          // see if we can find the right system
                     {
@@ -197,7 +200,7 @@ namespace EliteDangerousCore
 
                         if (s != null)                                          // yes, use, and update the journal with the esdmid, and also the position if we have a co-ord
                         {                                                       // so next time we don't have to do this again..
-                            if (jl.HasCoordinate)
+                            if (jl != null && jl.HasCoordinate)
                             {
                                 s.x = Math.Round(jl.StarPos.X * 32.0) / 32.0;
                                 s.y = Math.Round(jl.StarPos.Y * 32.0) / 32.0;
@@ -212,7 +215,7 @@ namespace EliteDangerousCore
                                 journalupdate = true;
                             }
 
-                            if (jl.EdsmID <= 0 && newsys.id_edsm > 0)
+                            if (je.EdsmID <= 0 && newsys.id_edsm > 0)
                             {
                                 journalupdate = true;
                             }
@@ -232,8 +235,8 @@ namespace EliteDangerousCore
                 }
 
                 isys = newsys;
-                starposfromedsm = jl.HasCoordinate ? jl.StarPosFromEDSM : newsys.HasCoordinate;
-                firstdiscover = jl.EDSMFirstDiscover;
+                starposfromedsm = (jl != null && jl.HasCoordinate) ? jl.StarPosFromEDSM : newsys.HasCoordinate;
+                firstdiscover = jl == null ? false : jl.EDSMFirstDiscover;
             }
 
             string summary, info, detailed;
