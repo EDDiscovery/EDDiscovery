@@ -223,6 +223,7 @@ namespace ExtendedControls
             this._cbsystem.DropDownStyle = ComboBoxStyle.DropDownList;
             this._cbsystem.MouseLeave += _cbsystem_MouseLeave;
             this._cbsystem.MouseEnter += _cbsystem_MouseEnter;
+            this._cbsystem.MouseUp += _cbsystem_MouseUp;
             this._items = new ObjectCollection(this._cbsystem);
             this.Controls.Add(this._cbsystem);
         }
@@ -375,6 +376,11 @@ namespace ExtendedControls
         {
             //System.Diagnostics.Debug.WriteLine("CB sys Mouse leave");
             base.OnMouseLeave(e);
+        }
+
+        private void _cbsystem_MouseUp(object sender, MouseEventArgs e)
+        {
+            base.OnMouseUp(e);
         }
 
         protected override void OnMouseEnter(EventArgs eventargs)           // ours is active.  Fired when entered
