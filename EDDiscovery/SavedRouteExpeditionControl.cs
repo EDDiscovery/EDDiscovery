@@ -32,89 +32,6 @@ namespace EDDiscovery
 {
     public partial class SavedRouteExpeditionControl : UserControl
     {
-        public static SavedRouteClass[] InitialRoutes =
-        {
-            new SavedRouteClass(
-                "Distant Worlds (3302)",
-                "Pallaeni",
-                "Fine Ring Sector JH-V c2-4",
-                "NGC 6530 WFI 16706",
-                "Omega Sector EL-Y d60",
-                "Eagle Sector EL-Y d203",
-                "NGC 6357 Sector DL-Y e22",
-                "Blaa Hypai UC-G c12-6",
-                "Greae Phio LS-L c23-221",
-                "Speamoea WU-E d12-543",
-                "Athaip CR-C b55-4",
-                "Myriesly EC-B c27-381",
-                "Stuemeae KM-W c1-342",
-                "Nyuena JS-B d342",
-                "Phipoea DD-F c26-1311",
-                "Dryao Chrea VU-P e5-7481",
-                "Eorld Byoe YA-W e2-4084",
-                "Eok Gree TO-Q e5-3167",
-                "Pheia Briae DK-A e303",
-                "Greeroi MD-Q d6-5",
-                "Rendezvous Point",
-                "Oupailks BB-M c8-5",
-                "Qautheia BA-A e0",
-                "Cheae Eurl AA-A e0",
-                "Beagle Point"
-            )
-            {
-                StartDate = new DateTime(2016, 1, 14, 20, 0, 0, DateTimeKind.Utc).ToLocalTime(),
-                EndDate = new DateTime(2016, 6, 1, 23, 59, 59, DateTimeKind.Utc).ToLocalTime(),
-            },
-            new SavedRouteClass(
-                "Sagittarius-Carina Mission",
-                "Sol",
-                "NGC 6530 WFI 16706",
-                "Syralia JT-V b7-0",
-                "CSI-61-15434",
-                "CPD-65 2513",
-                "Thaile HW-V e2-7",
-                "GCRV 6807",
-                "Prue Hypa CL-Y g2",
-                "Pueliae IT-H d10-1",
-                "Grie Hypai DL-Y g2",
-                "Eock Prau WD-T d3-6",
-                "Mycapp TX-U d2-4",
-                "Eembaitl DL-Y d13",
-                "Hypaa Byio ZE-A g1",
-                "Gooroa PT-Q e5-5",
-                "Braitu EG-Y g1",
-                "Suvaa NL-P d5-29",
-                "Truechea SD-T d3-14",
-                "Hyphielie GR-N d6-9",
-                "Cho Eur QY-S e3-2",
-                "Fleckia FI-Z d1-6",
-                "Beagle Point",
-                "Myeia Thaa ZE-R d4-0",
-                "Syriae Thaa PJ-I d9-1",
-                "Pyrie Eurk QX-U e2-0",
-                "Cho Thua SF-W b29-0",
-                "Pyriveae FK-C d14-72",
-                "Tyroerts RX-U d2-0",
-                "Eactaify GD-A d14-18",
-                "Preia Flyuae XY-A e1865",
-                "13 MU SAGITTARII",
-                "Chraisa AY-F d12-133",
-                "Dryio Bloo PZ-W d2-1161",
-                "Stuemiae BB-O e6-61",
-                "Hypua Flyoae WU-X e1-4448",
-                "Oephaif RJ-G d11-408",
-                "Froaln II-W b7-1",
-                "Eodgorph IN-Z c14-32",
-                "CSI-06-19031",
-                "Omega Sector EL-Y d60",
-                "HIP 72043"
-            )
-            {
-                StartDate = new DateTime(2015, 8, 1, 19, 0, 0, DateTimeKind.Utc).ToLocalTime(),
-                EndDate = new DateTime(2018, 4, 9, 23, 59, 59, DateTimeKind.Utc).ToLocalTime()
-            }
-        };
-
         public static bool DeleteIsPermanent = true;
 
         private List<SavedRouteClass> _savedRoutes;
@@ -143,7 +60,7 @@ namespace EDDiscovery
         {
             _savedRoutes = SavedRouteClass.GetAllSavedRoutes();
 
-            foreach (var initroute in InitialRoutes)
+            foreach (var initroute in EDSMClass.Expeditions)
             {
                 if (!_savedRoutes.Any(r => r.Name == initroute.Name || r.Name == "\x7F" + initroute.Name))
                 {
@@ -270,7 +187,7 @@ namespace EDDiscovery
                 ExtendedControls.MessageBoxTheme.Show(ParentForm, "Please specify a name for the route.", "Unsaved Route", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 textBoxRouteName.Select();
             }
-            else if (InitialRoutes.Any(r => r.Name.Equals(newrtname)))
+            else if (EDSMClass.Expeditions.Any(r => r.Name.Equals(newrtname)))
             {
                 ExtendedControls.MessageBoxTheme.Show(ParentForm, "The current route name conflicts with a well-known expedition." + Environment.NewLine
                     + "Please specify a new name to save your changes.", "Unsaved Route", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
@@ -817,12 +734,12 @@ namespace EDDiscovery
             {
                 if (_currentRoute.Id >= 0)
                 {
-                    if (DeleteIsPermanent && !InitialRoutes.Any(r => r.Name.Equals(_currentRoute.Name)))
+                    if (DeleteIsPermanent && !EDSMClass.Expeditions.Any(r => r.Name.Equals(_currentRoute.Name)))
                     {
                         _currentRoute.Delete();
                     }
                     else
-                    {   // InitialRoutes shouldn't use .Delete(), as LoadControl will ignorantly re-create them at next startup.
+                    {   // Expeditions shouldn't use .Delete(), as LoadControl will ignorantly re-create them at next startup.
                         _currentRoute.Name = "\x7F" + _currentRoute.Name;
                         _currentRoute.Update();
                     }
