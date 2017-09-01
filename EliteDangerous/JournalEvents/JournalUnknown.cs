@@ -21,11 +21,14 @@ using System.Text;
 
 namespace EliteDangerousCore.JournalEvents
 {
-    // For "new" unknown event EDD  not knows.
+    [JournalEntryType(JournalTypeEnum.Unknown)] 
     public class JournalUnknown : JournalEntry
     {
+        public string json;
+
         public JournalUnknown(JObject evt) : base(evt, JournalTypeEnum.Unknown)
         {
+            json = evt.ToString();
         }
 
         public override System.Drawing.Bitmap Icon { get { return EliteDangerous.Properties.Resources.genericevent; } }
@@ -34,7 +37,7 @@ namespace EliteDangerousCore.JournalEvents
         {
             summary = EventTypeStr.SplitCapsWord();
             info = "Report to EDDiscovery team an unknown event";
-            detailed = "";
+            detailed = json;
         }
     }
 

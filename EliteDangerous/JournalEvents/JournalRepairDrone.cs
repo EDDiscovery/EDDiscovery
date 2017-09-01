@@ -41,9 +41,7 @@ namespace EliteDangerousCore.JournalEvents
         public double CockpitRepaired { get; set; }
         public double CorrosionRepaired { get; set; }
 
-        public override System.Drawing.Bitmap Icon { get { return EliteDangerous.Properties.Resources.repair; } }  // TODO?
-
-
+        public override System.Drawing.Bitmap Icon { get { return EliteDangerous.Properties.Resources.repairdrones; } }  
 
         public override void FillInformation(out string summary, out string info, out string detailed) //V
         {

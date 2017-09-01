@@ -129,7 +129,7 @@ namespace EliteDangerousCore.JournalEvents
         
         //public List<CommunityGoal> CommunityGoals;
 
-        public override System.Drawing.Bitmap Icon { get { return EliteDangerous.Properties.Resources.communitygoaljoin; } }
+        public override System.Drawing.Bitmap Icon { get { return EliteDangerous.Properties.Resources.communitygoal; } }
 
         public override void FillInformation(out string summary, out string info, out string detailed) //V
         {

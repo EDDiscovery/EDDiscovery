@@ -529,11 +529,11 @@
     <Compile Include="UserControls\UserControlStatsTime.Designer.cs">
       <DependentUpon>UserControlStatsTime.cs</DependentUpon>
     </Compile>
-    <Compile Include="UserControls\UserControlStarVisited.cs">
+    <Compile Include="UserControls\UserControlStarList.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="UserControls\UserControlStarVisited.Designer.cs">
-      <DependentUpon>UserControlStarVisited.cs</DependentUpon>
+    <Compile Include="UserControls\UserControlStarList.Designer.cs">
+      <DependentUpon>UserControlStarList.cs</DependentUpon>
     </Compile>
     <Compile Include="UserControls\UserControlTravelGrid.cs">
       <SubType>UserControl</SubType>
@@ -643,8 +643,8 @@
     <EmbeddedResource Include="UserControls\UserControlStatsTime.resx">
       <DependentUpon>UserControlStatsTime.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="UserControls\UserControlStarVisited.resx">
-      <DependentUpon>UserControlStarVisited.cs</DependentUpon>
+    <EmbeddedResource Include="UserControls\UserControlStarList.resx">
+      <DependentUpon>UserControlStarList.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\UserControlTravelGrid.resx">
       <DependentUpon>UserControlTravelGrid.cs</DependentUpon>
@@ -725,6 +725,7 @@
     <None Include="Resources\notes.png" />
     <None Include="Resources\dustbinshorter.png" />
     <None Include="Resources\tilegrid.png" />
+    <None Include="Resources\starlist.png" />
     <Content Include="x86\Microsoft.VC100.CRT\msvcp100.dll" />
     <Content Include="x86\Microsoft.VC100.CRT\msvcr100.dll" />
     <EmbeddedResource Include="2DMap\Form2DMap.resx">

@@ -39,7 +39,7 @@ Note: Other music track names may be used in future
         UnknownSettlement, DockingComputer, Starport, UnknownExploration, Exploration
     }
 
-[JournalEntryType(JournalTypeEnum.Music)]
+    [JournalEntryType(JournalTypeEnum.Music)]
     public class JournalMusic : JournalEntry
     {
         public JournalMusic(JObject evt ) : base(evt, JournalTypeEnum.Music)
@@ -51,7 +51,7 @@ Note: Other music track names may be used in future
         public string MusicTrack { get; set; }
         public EDMusicTrackEnum MusicTrackID { get; set; }
 
-        public override System.Drawing.Bitmap Icon { get { return EliteDangerous.Properties.Resources.no_entry; } }  // TODO?
+        public override System.Drawing.Bitmap Icon { get { return EliteDangerous.Properties.Resources.music; } }  // TODO?
 
         public override void FillInformation(out string summary, out string info, out string detailed) //V
         {
