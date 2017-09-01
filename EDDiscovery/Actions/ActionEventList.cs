@@ -13,7 +13,7 @@ namespace EDDiscovery.Actions
         {
         }
 
-        public static List<ActionEvent> events = new List<ActionEvent>()
+        public new static List<ActionEvent> events = new List<ActionEvent>()
         {
             new ActionEventEDList("onInstall", "ProgramEvent", "Program"),
             new ActionEventEDList("onRefreshStart", "ProgramEvent", "Program"),
