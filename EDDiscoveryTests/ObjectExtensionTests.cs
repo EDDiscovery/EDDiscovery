@@ -13,32 +13,17 @@
  * 
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
+using NFluent;
+using NUnit.Framework;
 using System;
 using System.Drawing;
-using NFluent;
 
 namespace EDDiscoveryTests
 {
-#if false
-    // Visual Studio Test Framework
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
-
-    partial class TestFixtureAttribute : Attribute { }
-    partial class TestAttribute : Attribute { }
-#else
-    // NUnit Test Framework
-    using NUnit.Framework;
-
-    partial class TestClassAttribute : Attribute { }
-    partial class TestMethodAttribute : Attribute { }
-#endif
-
-    [TestFixture]
-    [TestClass]
+    [TestFixture(TestOf = typeof(ObjectExtensionsColours))]
     public class ObjectExtensionsTests
     {
         [Test]
-        [TestMethod]
         public void ObjectExtensions_Color_IsEqual()
         {
             //some obvious checks
@@ -66,7 +51,6 @@ namespace EDDiscoveryTests
         }
 
         [Test]
-        [TestMethod]
         public void ObjectExtensions_Color_IsTransparent()
         {
             Check.That(Color.Transparent.IsFullyTransparent()).IsTrue();
@@ -86,7 +70,6 @@ namespace EDDiscoveryTests
         }
 
         [Test]
-        [TestMethod]
         public void ObjectExtensions_Color_Average()
         {
             // Note that these tests explicitly do not check using the IsEqual comparer.
@@ -112,7 +95,6 @@ namespace EDDiscoveryTests
         }
 
         [Test]
-        [TestMethod]
         public void ObjectExtensions_Color_Multiply()
         {
             // Note that these tests explicitly do not check using the IsEqual comparer.
