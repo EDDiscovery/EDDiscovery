@@ -339,7 +339,12 @@ namespace EliteDangerousCore
             string rest = sc.IsStarNameRelatedReturnRest(sys.name);
             if (rest != null)                                   // if we have a relationship..
             {
-                if (rest.Length > 0)
+                if (sc.IsStar && !sc.IsEDSMBody && sc.DistanceFromArrivalLS == 0 && rest.Length >= 2)
+                {
+                    elements = new List<string> { rest };
+                    starscannodetype = ScanNodeType.star;
+                }
+                else if (rest.Length > 0)
                 {
                     elements = rest.Split(' ').ToList();
 
