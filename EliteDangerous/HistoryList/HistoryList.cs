@@ -840,9 +840,9 @@ namespace EliteDangerousCore
             }
         }
 
-        public void SendEDSMStatusInfo(HistoryEntry he, bool async)     // he points to ship info to send from..
+        public void SendEDSMStatusInfo(HistoryEntry he, bool async)     // he points to ship info to send from..  may be null from one feed function
         {
-            if (CommanderId >= 0)
+            if (CommanderId >= 0 && he != null )
             {
                 var commander = EDCommander.GetCommander(CommanderId);
 
