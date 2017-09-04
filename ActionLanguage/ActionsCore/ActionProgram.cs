@@ -238,7 +238,7 @@ namespace ActionLanguage
                                 }
 
                                 if (tolevel >= 0)       // if found, we have a statement to hook to..
-                                {
+                                {                               // while in DO loop, or Else/Elseif in IF 
                                     if ((a.Type == ActionBase.ActionType.While && programsteps[tolevel].Type == ActionBase.ActionType.Do) ||
                                         ((a.Type == ActionBase.ActionType.Else || a.Type == ActionBase.ActionType.ElseIf) && programsteps[tolevel].Type == ActionBase.ActionType.If))
                                     {
@@ -463,7 +463,7 @@ namespace ActionLanguage
                         lastwaswhileafterdo = true;     // be careful backing up
                     }
                     else if (act.Type == ActionBase.ActionType.If || (act.Type == ActionBase.ActionType.While && !indo) ||
-                                act.Type == ActionBase.ActionType.Do || act.Type == ActionBase.ActionType.Loop)
+                                act.Type == ActionBase.ActionType.Do || act.Type == ActionBase.ActionType.Loop || act.Type == ActionBase.ActionType.ForEach )
                     {
                         structlevel++;
                         structcount[structlevel] = 0;

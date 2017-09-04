@@ -744,5 +744,12 @@ public static class ObjectExtensionsStrings
         return false;
     }
 
+    public static string RegExWildCardToRegular(this string value)
+    {
+        if (value.Contains("*") || value.Contains("?"))
+            return "^" + System.Text.RegularExpressions.Regex.Escape(value).Replace("\\?", ".").Replace("\\*", ".*") + "$";
+        else
+            return "^" + value + ".*$";
+    }
 }
 

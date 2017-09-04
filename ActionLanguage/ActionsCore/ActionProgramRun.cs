@@ -187,9 +187,9 @@ namespace ActionLanguage
         {
             for (int i = execlevel; i > 0; i--)
             {
-                if (exectype[i] == ActionBase.ActionType.While || exectype[i] == ActionBase.ActionType.Loop )             
+                if (exectype[i] == ActionBase.ActionType.While || exectype[i] == ActionBase.ActionType.Loop || exectype[i] == ActionBase.ActionType.ForEach )             
                 {
-                    execlooppos[i] = -1;            // while/Loop.. expecting to loop back to WHILE or LOOP on next down push, instead don't
+                    execlooppos[i] = -1;            // while/Loop/Foreach.. expecting to loop back to WHILE or LOOP or FOR on next down push, instead don't
                     execstate[i] = ExecState.OffForGood;        // and we are off for good at the While/Loop level
                     execstate[execlevel] = ExecState.OffForGood;        // and we are off for good at this level.. levels in between must be IFs which won't execute because we executed
                     break;  // ironic break
@@ -234,10 +234,20 @@ namespace ActionLanguage
                         return true;
                     }
                 }
-                else if (IsExecutingType(ActionBase.ActionType.Loop) ) // active loop, need to consider if we need to go back
-                {   
-                                                                   // break may have cancelled this
+                else if (IsExecutingType(ActionBase.ActionType.Loop)) // active loop, need to consider if we need to go back
+                {
+                    // break may have cancelled this
                     if (PushPos >= 0 && ((ActionLoop)GetStep(PushPos)).ExecuteEndLoop(this))      // if true, it wants to move back, so go back and get next value.
+                    {
+                        return true;
+                    }
+                    else
+                        RemoveLevel();      // else, just remove level.. 
+                }
+                else if (IsExecutingType(ActionBase.ActionType.ForEach)) // active For, need to consider if we need to go back
+                {
+                    // break may have cancelled this
+                    if (PushPos >= 0 && ((ActionForEach)GetStep(PushPos)).ExecuteEndFor(this))      // if true, it wants to move back, so go back and get next value.
                     {
                         return true;
                     }
