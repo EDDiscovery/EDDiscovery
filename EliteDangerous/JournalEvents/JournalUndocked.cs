@@ -29,7 +29,7 @@ namespace EliteDangerousCore.JournalEvents
         public JournalUndocked(JObject evt ) : base(evt, JournalTypeEnum.Undocked)
         {
             StationName = evt["StationName"].Str();
-            StationType = evt["StationType"].Str();
+            StationType = evt["StationType"].Str().SplitCapsWord();
 
         }
         public string StationName { get; set; }

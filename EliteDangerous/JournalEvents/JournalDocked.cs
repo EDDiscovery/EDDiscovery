@@ -55,7 +55,7 @@ namespace EliteDangerousCore.JournalEvents
         public JournalDocked(JObject evt ) : base(evt, JournalTypeEnum.Docked)
         {
             StationName = evt["StationName"].Str();
-            StationType = evt["StationType"].Str();
+            StationType = evt["StationType"].Str().SplitCapsWord();
             StarSystem = evt["StarSystem"].Str();
             CockpitBreach = evt["CockpitBreach"].Bool();
 
