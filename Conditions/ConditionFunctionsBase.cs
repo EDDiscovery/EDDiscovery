@@ -606,7 +606,7 @@ namespace Conditions
         {
             string s = vars.Exists(paras[0].value) ? vars[paras[0].value] : paras[0].value;
             string postfix = paras[1].isstring ? paras[1].value : ( vars.Exists(paras[1].value) ? vars[paras[1].value] : paras[1].value);
-            string[] postfixes = postfix.Split(',');
+            string[] postfixes = postfix.Split(';');
 
             double value;
 
@@ -628,19 +628,19 @@ namespace Conditions
                 if (order >= 12)        // billions, say X.Y trillion
                 {
                     value /= 1E12;
-                    output = prefix + value.ToStringInvariant("0.#") + " " + postfixes[1];
+                    output = prefix + value.ToStringInvariant("0.##") + " " + postfixes[1];
                 }
                 else if (order >= 9)        // billions, say X.Y billion
                 {
                     value /= 1E9;
-                    output = prefix + value.ToStringInvariant("0.#") + " " + postfixes[2];
+                    output = prefix + value.ToStringInvariant("0.##") + " " + postfixes[2];
                 }
                 else if (order >= 6)        // millions, say X.Y millions
                 {
                     value /= 1E6;
-                    output = prefix + value.ToStringInvariant("0.#") + " " + postfixes[3];
+                    output = prefix + value.ToStringInvariant("0.##") + " " + postfixes[3];
                 }
-                else if (order >= 4)        // thousands, say X.Y thousands
+                else if (order >= 4)        // thousands, say X thousands
                 {
                     value /= 1E3;
                     output = prefix + value.ToStringInvariant("0") + " " + postfixes[4];

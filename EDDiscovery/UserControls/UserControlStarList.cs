@@ -28,6 +28,7 @@ using EliteDangerousCore;
 using EliteDangerousCore.EDSM;
 using EliteDangerousCore.EDDN;
 using EDDiscovery.Export;
+using EliteDangerousCore.JournalEvents;
 
 namespace EDDiscovery.UserControls
 {
@@ -238,14 +239,41 @@ namespace EDDiscovery.UserControls
                 if (node.starnodes != null)
                 {
                     infostr = infostr.AppendPrePad(node.starnodes.Count.ToStringInvariant() + " Star" + ((node.starnodes.Count > 1) ? "s" : ""), Environment.NewLine);
-
+                    string extrainfo = "";
+                    string prefix = Environment.NewLine;
                     int total = 0;
                     foreach (StarScan.ScanNode sn in node.Bodies)
+                    {
                         total++;
+                        if (sn.ScanData!=null)
+                        {
+                            JournalScan sc = sn.ScanData;
+
+                            if (sc.IsStar)
+                            {
+                                if (sc.StarTypeID == EDStar.N)
+                                    extrainfo = extrainfo.AppendPrePad(sc.BodyName + " is a neutron star", prefix);
+                                if (sc.StarTypeID == EDStar.H)
+                                    extrainfo = extrainfo.AppendPrePad(sc.BodyName + " is a black hole", prefix);
+                            }
+                            else
+                            {
+                                if (sc.PlanetTypeID == EDPlanet.Earthlike_body)
+                                    extrainfo = extrainfo.AppendPrePad(sc.BodyName + " is a earth like body", prefix);
+                                if (sc.PlanetTypeID == EDPlanet.Water_world)
+                                    extrainfo = extrainfo.AppendPrePad(sc.BodyName + " is a water world", prefix);
+                                if (sc.PlanetTypeID == EDPlanet.Ammonia_world)
+                                    extrainfo = extrainfo.AppendPrePad(sc.BodyName + " is a ammonia world", prefix);
+                            }
+                        }
+                    }
 
                     total -= node.starnodes.Count;
                     if (total > 0)
+                    {
                         infostr = infostr.AppendPrePad(total.ToStringInvariant() + " Other bod" + ((total > 1) ? "ies" : "y"), ", ");
+                        infostr = infostr.AppendPrePad(extrainfo, prefix);
+                    }
                 }
             }
 

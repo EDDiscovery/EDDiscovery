@@ -33,13 +33,13 @@ namespace EliteDangerousCore.JournalEvents
             Name = JournalFieldNaming.FDNameTranslation(Name); // some premangling
             FriendlyName = JournalFieldNaming.RMat(Name);
             Count = evt["Count"].Int();
-            Reward = evt["Reward"].Str();
+            Reward = evt["Reward"].Long();
         }
 
         public string Name { get; set; }            // Hyperspace, Supercruise
         public string FriendlyName { get; set; }            // Hyperspace, Supercruise
         public int Count { get; set; }
-        public string Reward { get; set; }
+        public long Reward { get; set; }
 
         public override System.Drawing.Bitmap Icon { get { return EliteDangerous.Properties.Resources.searchrescue; } }  
 
