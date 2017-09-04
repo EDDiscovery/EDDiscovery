@@ -104,7 +104,7 @@ namespace ActionLanguage
 
                 if (errlist == null)
                 {
-                    int defdelay = vars.Exists(DelayID) ? vars[DelayID].InvariantParseInt(50) : 50;
+                    int defdelay = vars.Exists(DelayID) ? vars[DelayID].InvariantParseInt(DefaultDelay) : DefaultDelay;
                     string process = vars.Exists(ProcessID) ? vars[ProcessID] : "";
 
                     string res = BaseUtils.EnhancedSendKeys.Send(keys, defdelay, DefaultShiftDelay, DefaultUpDelay, process);

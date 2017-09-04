@@ -98,6 +98,7 @@ namespace ActionLanguage
             ActionBase.AddCommand("Print", typeof(ActionPrint), ActionBase.ActionType.Cmd);
             ActionBase.AddCommand("Say", typeof(ActionSay), ActionBase.ActionType.Cmd);
             ActionBase.AddCommand("Set", typeof(ActionSet), ActionBase.ActionType.Cmd);
+            ActionBase.AddCommand("StaticLet", typeof(ActionStaticLet), ActionBase.ActionType.Cmd);
             ActionBase.AddCommand("Static", typeof(ActionStatic), ActionBase.ActionType.Cmd);
             ActionBase.AddCommand("Sleep", typeof(ActionSleep), ActionBase.ActionType.Cmd);
             ActionBase.AddCommand("While", typeof(ActionWhile), ActionBase.ActionType.While);

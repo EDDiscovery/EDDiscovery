@@ -51,9 +51,9 @@
             this.textBoxNextDelay = new ExtendedControls.TextBoxBorder();
             this.textBoxDelay = new ExtendedControls.TextBoxBorder();
             this.labelNextDelay = new System.Windows.Forms.Label();
+            this.labelSelKeys = new System.Windows.Forms.Label();
             this.labelDelay = new System.Windows.Forms.Label();
             this.buttonDelete = new ExtendedControls.ButtonExt();
-            this.labelSelKeys = new System.Windows.Forms.Label();
             this.panelOuter.SuspendLayout();
             this.panelRadio.SuspendLayout();
             this.SuspendLayout();
@@ -146,7 +146,7 @@
             this.buttonReset.BorderColorScaling = 1.25F;
             this.buttonReset.ButtonColorScaling = 0.5F;
             this.buttonReset.ButtonDisabledScaling = 0.5F;
-            this.buttonReset.Location = new System.Drawing.Point(12, 233);
+            this.buttonReset.Location = new System.Drawing.Point(3, 233);
             this.buttonReset.Name = "buttonReset";
             this.buttonReset.Size = new System.Drawing.Size(75, 23);
             this.buttonReset.TabIndex = 1;
@@ -159,7 +159,7 @@
             this.buttonNext.BorderColorScaling = 1.25F;
             this.buttonNext.ButtonColorScaling = 0.5F;
             this.buttonNext.ButtonDisabledScaling = 0.5F;
-            this.buttonNext.Location = new System.Drawing.Point(191, 233);
+            this.buttonNext.Location = new System.Drawing.Point(182, 233);
             this.buttonNext.Name = "buttonNext";
             this.buttonNext.Size = new System.Drawing.Size(75, 23);
             this.buttonNext.TabIndex = 1;
@@ -192,7 +192,7 @@
             // labelKeys
             // 
             this.labelKeys.AutoSize = true;
-            this.labelKeys.Location = new System.Drawing.Point(12, 203);
+            this.labelKeys.Location = new System.Drawing.Point(3, 203);
             this.labelKeys.Name = "labelKeys";
             this.labelKeys.Size = new System.Drawing.Size(30, 13);
             this.labelKeys.TabIndex = 3;
@@ -245,7 +245,7 @@
             // labelSendTo
             // 
             this.labelSendTo.AutoSize = true;
-            this.labelSendTo.Location = new System.Drawing.Point(12, 277);
+            this.labelSendTo.Location = new System.Drawing.Point(3, 277);
             this.labelSendTo.Name = "labelSendTo";
             this.labelSendTo.Size = new System.Drawing.Size(48, 13);
             this.labelSendTo.TabIndex = 3;
@@ -336,7 +336,7 @@
             this.comboBoxKeySelector.SelectedIndex = -1;
             this.comboBoxKeySelector.SelectedItem = null;
             this.comboBoxKeySelector.SelectedValue = null;
-            this.comboBoxKeySelector.Size = new System.Drawing.Size(162, 21);
+            this.comboBoxKeySelector.Size = new System.Drawing.Size(153, 21);
             this.comboBoxKeySelector.TabIndex = 6;
             this.comboBoxKeySelector.Text = "comboBoxCustom1";
             this.comboBoxKeySelector.ValueMember = "";
@@ -455,16 +455,25 @@
             // labelNextDelay
             // 
             this.labelNextDelay.AutoSize = true;
-            this.labelNextDelay.Location = new System.Drawing.Point(12, 148);
+            this.labelNextDelay.Location = new System.Drawing.Point(3, 148);
             this.labelNextDelay.Name = "labelNextDelay";
             this.labelNextDelay.Size = new System.Drawing.Size(71, 13);
             this.labelNextDelay.TabIndex = 3;
             this.labelNextDelay.Text = "Current Delay";
             // 
+            // labelSelKeys
+            // 
+            this.labelSelKeys.AutoSize = true;
+            this.labelSelKeys.Location = new System.Drawing.Point(3, 86);
+            this.labelSelKeys.Name = "labelSelKeys";
+            this.labelSelKeys.Size = new System.Drawing.Size(58, 13);
+            this.labelSelKeys.TabIndex = 3;
+            this.labelSelKeys.Text = "Select Key";
+            // 
             // labelDelay
             // 
             this.labelDelay.AutoSize = true;
-            this.labelDelay.Location = new System.Drawing.Point(12, 122);
+            this.labelDelay.Location = new System.Drawing.Point(3, 122);
             this.labelDelay.Name = "labelDelay";
             this.labelDelay.Size = new System.Drawing.Size(78, 13);
             this.labelDelay.TabIndex = 3;
@@ -475,22 +484,13 @@
             this.buttonDelete.BorderColorScaling = 1.25F;
             this.buttonDelete.ButtonColorScaling = 0.5F;
             this.buttonDelete.ButtonDisabledScaling = 0.5F;
-            this.buttonDelete.Location = new System.Drawing.Point(104, 233);
+            this.buttonDelete.Location = new System.Drawing.Point(95, 233);
             this.buttonDelete.Name = "buttonDelete";
             this.buttonDelete.Size = new System.Drawing.Size(75, 23);
             this.buttonDelete.TabIndex = 1;
             this.buttonDelete.Text = "Delete";
             this.buttonDelete.UseVisualStyleBackColor = true;
             this.buttonDelete.Click += new System.EventHandler(this.buttonDelete_Click);
-            // 
-            // labelSelKeys
-            // 
-            this.labelSelKeys.AutoSize = true;
-            this.labelSelKeys.Location = new System.Drawing.Point(12, 86);
-            this.labelSelKeys.Name = "labelSelKeys";
-            this.labelSelKeys.Size = new System.Drawing.Size(58, 13);
-            this.labelSelKeys.TabIndex = 3;
-            this.labelSelKeys.Text = "Select Key";
             // 
             // KeyForm
             // 

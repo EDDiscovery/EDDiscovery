@@ -228,5 +228,64 @@ public static class ObjectExtensionsNumbersBool
 
         return true;
     }
+
+    static public bool SafeToString(this double v, string fmt, out string output)     //  safe as fmt can be crap string.. format it.  Additional M type.
+    {
+        output = "";
+
+        if (fmt.StartsWith("M"))
+        {
+            fmt = fmt.Substring(1);
+
+            if (v < 0)
+            {
+                output = "Minus ";
+                v = -v;
+            }
+        }
+
+        try
+        {
+            output += v.ToString(fmt, System.Globalization.CultureInfo.InvariantCulture);
+            return true;
+        }
+        catch
+        {
+            output = "Format must be a c# ToString format";
+            return false;
+        }
+    }
+
+    static public bool SafeToString(this long v, string fmt, out string output)
+    {
+        output = "";
+
+        if (fmt.StartsWith("M"))
+        {
+            fmt = fmt.Substring(1);
+
+            if (v < 0)
+            {
+                output = "Minus ";
+                v = -v;
+            }
+        }
+
+        try
+        {
+            if (fmt == "O")
+                output += Convert.ToString(v, 8);
+            else if ( fmt == "B")
+                output += Convert.ToString(v, 2);
+            else
+                output += v.ToString(fmt, System.Globalization.CultureInfo.InvariantCulture);
+            return true;
+        }
+        catch
+        {
+            output = "Format must be a c# ToString format";
+            return false;
+        }
+    }
 }
 

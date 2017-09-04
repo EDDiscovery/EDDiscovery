@@ -371,7 +371,7 @@ namespace BaseUtils
 
             IntPtr currentfore = (IntPtr)0;
 
-            if (pname.HasChars() && !pname.Equals(CurrentWindow) && pname.Length > 0)
+            if (pname.HasChars() && !pname.Equals(CurrentWindow, StringComparison.InvariantCultureIgnoreCase) && pname.Length > 0)
             {
                 p = Process.GetProcessesByName(pname).FirstOrDefault();
 

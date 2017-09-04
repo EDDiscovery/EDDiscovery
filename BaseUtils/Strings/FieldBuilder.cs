@@ -23,98 +23,117 @@ namespace BaseUtils
 {
     static public class FieldBuilder
     {
-        // first object = format
+        // first object = format string
         // second object = data value
-        // if data value null or empty, not printed
-        // if data value is bool, format = false text;true text
-        // else format is prefix;postfix;[floatdoubleformat] value .  floatDoubleformat must be present for floats/doubles
-        // if prefix starts with a <, no ,<spc> pad
+        //      if data value null or empty, not printed
+        //      if data value is bool, format = false text;true text
+        //      else format is prefix;postfix;[floatdoubleformat] value .  floatDoubleformat must be present for floats/doubles
+        //      if prefix starts with a <, no ,<spc> pad
+        // or first object = NewPrefix only, define next pad to use, then go back to standard pad
+
+        public class NewPrefix   // indicator class, use this as first item to indicate the next prefix to use.  After one use, its discarded.
+        {
+            public string prefix;
+            public NewPrefix(string s) { prefix = s; }
+        }
 
         static public string Build(params System.Object[] values)
         {
             System.Text.StringBuilder sb = new System.Text.StringBuilder(64);
 
+            string overrideprefix = string.Empty;
+
             for (int i = 0; i < values.Length;)
             {
+                Object first = values[i];
 
-                System.Diagnostics.Debug.Assert(i + 2 <= values.Length);
-
-                string[] fieldnames = ((string)values[i]).Split(';');
-                object value = values[i + 1];
-                i += 2;
-
-                string pad = ", ";
-                if (fieldnames[0].Length > 0 && fieldnames[0][0] == '<')
+                if ( first is NewPrefix )       // first item is special, a new prefix, override
                 {
-                    fieldnames[0] = fieldnames[0].Substring(1);
-                    pad = "";
+                    overrideprefix = (first as NewPrefix).prefix;
+                    i++;
                 }
-
-                if (value != null)
+                else if ( first is string )     // normal, string
                 {
-                    if (value is bool)
-                    {
-                        string s = ((bool)value) ? fieldnames[1] : fieldnames[0];
-                        sb.AppendPrePad(s, pad);
-                    }
-                    else if (value is string)
-                    {
-                        string text = (string)value;
+                    System.Diagnostics.Debug.Assert(i + 2 <= values.Length);
 
-                        if (sb.AppendPrePad(text, fieldnames[0], pad))      // if printed something, text must be non null and of length
-                        {
-                            if (fieldnames.Length >= 2 && fieldnames[1].Length > 0)
-                                sb.Append(fieldnames[1]);
-                        }
-                    }
-                    else
-                    {
-                        string output;
+                    string[] fieldnames = ((string)first).Split(';');
+                    object value = values[i + 1];
+                    i += 2;
 
-                        if (value is double)
+                    string pad = ", ";
+                    if (fieldnames[0].Length > 0 && fieldnames[0][0] == '<')
+                    {
+                        fieldnames[0] = fieldnames[0].Substring(1);
+                        pad = "";
+                    }
+
+                    if (value != null)
+                    {
+                        if (value is bool)
                         {
-                            System.Diagnostics.Debug.Assert(fieldnames.Length >= 3);
-                            output = ((double)value).ToString(fieldnames[2]);
-                        }
-                        else if (value is float)
-                        {
-                            System.Diagnostics.Debug.Assert(fieldnames.Length >= 3);
-                            output = ((float)value).ToString(fieldnames[2]);
-                        }
-                        else if (value is int)
-                            output = ((int)value).ToString(System.Globalization.CultureInfo.InvariantCulture);
-                        else if (value is long)
-                            output = ((long)value).ToString(System.Globalization.CultureInfo.InvariantCulture);
-                        else if (value is double?)
-                        {
-                            System.Diagnostics.Debug.Assert(fieldnames.Length >= 3);
-                            output = ((double?)value).Value.ToString(fieldnames[2]);
-                        }
-                        else if (value is float?)
-                        {
-                            System.Diagnostics.Debug.Assert(fieldnames.Length >= 3);
-                            output = ((float?)value).Value.ToString(fieldnames[2]);
-                        }
-                        else if (value is int?)
-                            output = ((int?)value).Value.ToString(System.Globalization.CultureInfo.InvariantCulture);
-                        else if (value is long?)
-                            output = ((long?)value).Value.ToString(System.Globalization.CultureInfo.InvariantCulture);
-                        else if (value is DateTime)
-                        {
-                            output = ((DateTime)value).ToString();
+                            string s = ((bool)value) ? fieldnames[1] : fieldnames[0];
+                            sb.AppendPrePad(s, (overrideprefix.Length > 0) ? overrideprefix : pad);
+                            overrideprefix = string.Empty;
                         }
                         else
                         {
-                            output = "";
-                            System.Diagnostics.Debug.Assert(false);
-                        }
+                            string output;
+                            if (value is string)
+                            {
+                                output = (string)value;
+                            }
+                            else if (value is double)
+                            {
+                                System.Diagnostics.Debug.Assert(fieldnames.Length >= 3);
+                                output = ((double)value).ToString(fieldnames[2]);
+                            }
+                            else if (value is float)
+                            {
+                                System.Diagnostics.Debug.Assert(fieldnames.Length >= 3);
+                                output = ((float)value).ToString(fieldnames[2]);
+                            }
+                            else if (value is int)
+                                output = ((int)value).ToString(System.Globalization.CultureInfo.InvariantCulture);
+                            else if (value is long)
+                                output = ((long)value).ToString(System.Globalization.CultureInfo.InvariantCulture);
+                            else if (value is double?)
+                            {
+                                System.Diagnostics.Debug.Assert(fieldnames.Length >= 3);
+                                output = ((double?)value).Value.ToString(fieldnames[2]);
+                            }
+                            else if (value is float?)
+                            {
+                                System.Diagnostics.Debug.Assert(fieldnames.Length >= 3);
+                                output = ((float?)value).Value.ToString(fieldnames[2]);
+                            }
+                            else if (value is int?)
+                                output = ((int?)value).Value.ToString(System.Globalization.CultureInfo.InvariantCulture);
+                            else if (value is long?)
+                                output = ((long?)value).Value.ToString(System.Globalization.CultureInfo.InvariantCulture);
+                            else if (value is DateTime)
+                            {
+                                output = ((DateTime)value).ToString();
+                            }
+                            else
+                            {
+                                output = "";
+                                System.Diagnostics.Debug.Assert(false);
+                            }
 
-                        if (sb.AppendPrePad(output, fieldnames[0], pad))      // if printed something, text must be non null and of length
-                        {
-                            if (fieldnames.Length >= 2 && fieldnames[1].Length > 0)
-                                sb.Append(fieldnames[1]);
+                            // if printed something, text must be non null and of length, and it returns true.  Only adds on prefix and prepad if required
+                            if (sb.AppendPrePad(output, fieldnames[0], (overrideprefix.Length > 0) ? overrideprefix : pad))
+                            {                                                                   // prefix with fieldnames[0], and prefix with newline if defined, or pad
+                                if (fieldnames.Length >= 2 && fieldnames[1].Length > 0)
+                                    sb.Append(fieldnames[1]);
+
+                                overrideprefix = string.Empty;
+                            }
                         }
                     }
+                }
+                else
+                {
+                    System.Diagnostics.Debug.Assert(false);
                 }
             }
 

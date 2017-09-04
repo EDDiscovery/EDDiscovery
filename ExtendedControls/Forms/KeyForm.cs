@@ -70,6 +70,8 @@ namespace ExtendedControls
             if ( additionalkeys!=null )
                 comboBoxKeySelector.Items.AddRange(additionalkeys);
             comboBoxKeySelector.Items.AddRange(KeyObjectExtensions.VKeyList());
+            //System.Diagnostics.Debug.WriteLine(String.Join(",",KeyObjectExtensions.VKeyList()));
+            comboBoxKeySelector.Text = "";
             comboBoxKeySelector.SelectedIndexChanged += new System.EventHandler(this.comboBoxKeySelector_SelectedIndexChanged);
 
             if ( !showprocess)
