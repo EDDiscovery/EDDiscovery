@@ -56,7 +56,7 @@ namespace ActionLanguage
         {
             ConditionLists cl2 = new ConditionLists();
             string ret = cl2.Read(userdata);
-            if ( ret == null )
+            if (ret == null)
             {
                 userdata = cl2.ToString();  // Normalize it!
             }
@@ -323,7 +323,7 @@ namespace ActionLanguage
             }
             else
             {
-                ap.PushState(Type, ActionProgramRun.ExecState.OffForGood , true);  // push off for good and save position so we know which loop we are executing
+                ap.PushState(Type, ActionProgramRun.ExecState.OffForGood, true);  // push off for good and save position so we know which loop we are executing
                 inloop = true;    // we are in the loop properly.
                 loopcount = 0;      // and with no count
             }
@@ -331,9 +331,9 @@ namespace ActionLanguage
             return true;
         }
 
-        public bool ExecuteEndLoop(ActionProgramRun ap)     // only called if executing
+        public bool ExecuteEndLoop(ActionProgramRun ap)     // only called if Push pos is set.  break clears the push pos
         {
-            if ( inloop )                   // if in a count, we were executing at the loop, either on or off
+            if (inloop)                   // if in a count, we were executing at the loop, either on or off
             {
                 if (--loopcount > 0)        // any count left?
                 {
@@ -363,14 +363,14 @@ namespace ActionLanguage
         string errmsg;
 
 
-        public bool FromString(string s, out ConditionLists cond , out string errmsg )
+        public bool FromString(string s, out ConditionLists cond, out string errmsg)
         {
             cond = new ConditionLists();
 
             StringParser p = new StringParser(s);
             errmsg = p.NextQuotedWord(" ,");
-            
-            if ( errmsg != null && p.IsCharMoveOn(','))
+
+            if (errmsg != null && p.IsCharMoveOn(','))
             {
                 string condstring = p.LineLeft;
 
@@ -384,7 +384,7 @@ namespace ActionLanguage
 
         public string ToString(ConditionLists cond, string errmsg)
         {
-            return errmsg.QuoteString(comma:true) + ", " + cond.ToString();
+            return errmsg.QuoteString(comma: true) + ", " + cond.ToString();
         }
 
         public override string VerifyActionCorrect()
@@ -402,7 +402,7 @@ namespace ActionLanguage
 
             if (base.ConfigurationMenu(parent, cp, eventvars, ref cond))
             {
-                string promptValue = ExtendedControls.PromptSingleLine.ShowDialog(parent, "Error to display", errmsg, "Configure ErrorIf Command" , cp.Icon);
+                string promptValue = ExtendedControls.PromptSingleLine.ShowDialog(parent, "Error to display", errmsg, "Configure ErrorIf Command", cp.Icon);
                 if (promptValue != null)
                 {
                     userdata = ToString(cond, promptValue);
@@ -417,7 +417,7 @@ namespace ActionLanguage
         {
             if (condition == null)
             {
-                if ( !FromString(userdata, out condition, out errmsg) )
+                if (!FromString(userdata, out condition, out errmsg))
                 {
                     ap.ReportError("ErrorIF condition is not correctly formed");
                     return true;
@@ -443,8 +443,7 @@ namespace ActionLanguage
 
     public class ActionCall : ActionBase
     {
-
-        public bool FromString(string s, out string progname, out ConditionVariables vars, out Dictionary<string,string> altops )
+        public bool FromString(string s, out string progname, out ConditionVariables vars, out Dictionary<string, string> altops)
         {
             StringParser p = new StringParser(s);
             vars = new ConditionVariables();
@@ -456,7 +455,7 @@ namespace ActionLanguage
             {
                 if (p.IsCharMoveOn('('))       // if (, then
                 {
-                    if (vars.FromString(p,ConditionVariables.FromMode.MultiEntryCommaBracketEnds,altops) && p.IsCharMoveOn(')') && p.IsEOL)      // if para list decodes and we finish on a ) and its EOL
+                    if (vars.FromString(p, ConditionVariables.FromMode.MultiEntryCommaBracketEnds, altops) && p.IsCharMoveOn(')') && p.IsEOL)      // if para list decodes and we finish on a ) and its EOL
                         return true;
                 }
                 else if (p.IsEOL)   // if EOL, its okay, prog name only
@@ -466,10 +465,10 @@ namespace ActionLanguage
             return false;
         }
 
-        public string ToString(string progname, ConditionVariables cond, Dictionary<string,string> altops)
+        public string ToString(string progname, ConditionVariables cond, Dictionary<string, string> altops)
         {
             if (cond.Count > 0)
-                return progname + "(" + cond.ToString(altops,bracket:true) + ")";
+                return progname + "(" + cond.ToString(altops, bracket: true) + ")";
             else
                 return progname;
         }
@@ -497,24 +496,24 @@ namespace ActionLanguage
             Dictionary<string, string> altops;
             FromString(UserData, out progname, out cond, out altops);
 
-            string promptValue =ExtendedControls.PromptSingleLine.ShowDialog(parent, "Program to call (use set::prog if req)", progname, "Configure Call Command" , cp.Icon);
+            string promptValue = ExtendedControls.PromptSingleLine.ShowDialog(parent, "Program to call (use set::prog if req)", progname, "Configure Call Command", cp.Icon);
             if (promptValue != null)
             {
                 ConditionVariablesForm avf = new ConditionVariablesForm();
-                avf.Init("Variables to pass into called program", cp.Icon, cond, showone:true, allownoexpand:true, altops:altops);
+                avf.Init("Variables to pass into called program", cp.Icon, cond, showone: true, allownoexpand: true, altops: altops);
 
                 if (avf.ShowDialog(parent.FindForm()) == DialogResult.OK)
                 {
-                    userdata = ToString(promptValue, avf.result , avf.result_altops);
+                    userdata = ToString(promptValue, avf.result, avf.result_altops);
                     return true;
                 }
             }
 
             return false;
         }
-        
+
         //special call for execute, needs to pass back more data
-        public bool ExecuteCallAction(ActionProgramRun ap, out string progname, out ConditionVariables vars )
+        public bool ExecuteCallAction(ActionProgramRun ap, out string progname, out ConditionVariables vars)
         {
             Dictionary<string, string> altops;
             if (FromString(UserData, out progname, out vars, out altops) && progname.Length > 0)
@@ -530,9 +529,9 @@ namespace ActionLanguage
                         bool noexpand = altops[key].Contains("$");            // wildcard operator determines expansion state
 
                         wildcards.Add(key);
-                        string prefix = key.Substring(0,asterisk);
+                        string prefix = key.Substring(0, asterisk);
 
-                        foreach( string jkey in ap.variables.NameEnumuerable )
+                        foreach (string jkey in ap.variables.NameEnumuerable)
                         {
                             if (jkey.StartsWith(prefix))
                             {
@@ -541,7 +540,7 @@ namespace ActionLanguage
                                 else
                                 {
                                     string res;
-                                    if (ap.functions.ExpandString(ap[jkey],out res) == ConditionFunctions.ExpandResult.Failed)
+                                    if (ap.functions.ExpandString(ap[jkey], out res) == ConditionFunctions.ExpandResult.Failed)
                                     {
                                         ap.ReportError(res);
                                         return false;
@@ -565,7 +564,7 @@ namespace ActionLanguage
                     if (!noexpand)
                     {
                         string res;
-                        if (ap.functions.ExpandString(vars[k],out res) == ConditionFunctions.ExpandResult.Failed)
+                        if (ap.functions.ExpandString(vars[k], out res) == ConditionFunctions.ExpandResult.Failed)
                         {
                             ap.ReportError(res);
                             return false;
@@ -580,7 +579,7 @@ namespace ActionLanguage
                 return true;
             }
             else
-            { 
+            {
                 ap.ReportError("Call not configured");
                 return false;
             }
@@ -596,6 +595,119 @@ namespace ActionLanguage
         {
             ap.Break();
             return true;
+        }
+    }
+
+    public class ActionForEach : ActionBase
+    {
+        static public bool FromString(string s, out string macroname, out string searchterm)
+        {
+            StringParser sp = new StringParser(s);
+            macroname = sp.NextQuotedWord();
+            searchterm = null;
+
+            return (macroname != null && sp.IsStringMoveOn("in") && (searchterm = sp.NextQuotedWord()) != null);
+        }
+
+        static public string ToString(string macro, string searchterm)
+        {
+            return macro.QuoteString() + " in " + searchterm.QuoteString();
+        }
+
+        public override string VerifyActionCorrect()
+        {
+            string mn, st;
+            return FromString(UserData, out mn, out st) ? null : "ForEach command line not in correct format";
+        }
+
+        public override bool ConfigurationMenu(Form parent, ActionCoreController cp, List<string> eventvars)
+        {
+            string mn = "", st = "";
+            FromString(UserData, out mn, out st);
+
+            List<string> promptValue = ExtendedControls.PromptMultiLine.ShowDialog(parent, "ForEach:", cp.Icon,
+                             new string[] { "Var Name", "Search" },
+                             new string[] { mn, st },
+                             false,
+                             new string[] { "Enter the variable to be assigned with the variable name", "Enter the front search pattern" });
+
+            if (promptValue != null)
+                userdata = ToString(promptValue[0], promptValue[1]);
+
+            return (promptValue != null);
+        }
+
+        int count;
+        string expmacroname;
+        List<string> values;
+
+        public override bool ExecuteAction(ActionProgramRun ap)
+        {
+            if (ap.IsExecuteOn)
+            {
+                string macroname, searchterm;
+
+                if (FromString(UserData, out macroname, out searchterm))
+                {
+                    if (ap.functions.ExpandString(macroname, out expmacroname) == Conditions.ConditionFunctions.ExpandResult.Failed)       //Expand out.. and if no errors
+                    {
+                        ap.ReportError(expmacroname);
+                        return true;
+                    }
+
+                    string expsearchterm;
+
+                    if (ap.functions.ExpandString(searchterm, out expsearchterm) == Conditions.ConditionFunctions.ExpandResult.Failed)       //Expand out.. and if no errors
+                    {
+                        ap.ReportError(expmacroname);
+                        return true;
+                    }
+
+                    values = new List<String>();
+
+                    expsearchterm = expsearchterm.RegExWildCardToRegular();
+
+                    foreach (string key in ap.variables.NameEnumuerable)
+                    {
+                        if ( System.Text.RegularExpressions.Regex.IsMatch(key,expsearchterm))
+                            values.Add(key);
+                    }
+
+                    ap.PushState(Type, values.Count>0, true);   // set execute to On and push the position of the ForEach
+                    count = 0;
+                    if (values.Count > 0)
+                    {
+                        ap[expmacroname] = values[count++];
+                        System.Diagnostics.Debug.WriteLine("First value " + ap[expmacroname]);
+                    }
+                }
+            }
+            else
+            {
+                ap.PushState(Type, ActionProgramRun.ExecState.OffForGood, true);
+                values = null;
+            }
+
+            return true;
+        }
+
+        public bool ExecuteEndFor(ActionProgramRun ap)   // only called if Push pos is set.  break clears the push pos
+        {
+            if ( values != null )
+            {
+                if (count < values.Count)
+                {
+                    ap.Goto(ap.PushPos + 1);
+                    ap[expmacroname] = values[count++];
+                    System.Diagnostics.Debug.WriteLine("New value " + ap[expmacroname]);
+
+                    return true;
+                }
+                else
+                    values = null;
+            }
+
+            return false;
         }
     }
 }

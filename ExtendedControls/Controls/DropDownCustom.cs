@@ -58,11 +58,12 @@ namespace ExtendedControls
 
         private void _listcontrol_SelectedIndexChanged(object sender, EventArgs e)
         {
+            if (closeondeactivateselected)
+                this.Close();
+
             if (SelectedIndexChanged != null)
                 SelectedIndexChanged(this, e);
 
-            if ( closeondeactivateselected )
-                this.Close();
         }
 
         private void _listcontrol_KeyPressed(object sender, KeyPressEventArgs e)

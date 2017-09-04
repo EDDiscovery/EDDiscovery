@@ -25,8 +25,10 @@ namespace ActionLanguage
     public class ActionBase
     {
         public enum ActionType { Cmd, Call, Return,         // NOT auto
-                                If, Else, ElseIf, Do, While, Loop // Force execute
+                                If, Else, ElseIf, Do, While, Loop, ForEach, // Force execute
                                 };
+
+        public bool IsStructStart { get { return Type == ActionType.If || Type == ActionType.Do || Type == ActionType.While || Type == ActionType.Loop || Type == ActionType.ForEach; } }
 
         public struct CommandEntry
         {
@@ -63,8 +65,6 @@ namespace ActionLanguage
         public int calcStructLevel { get; set; }        // NOT stored, for editing purposes, what is the structure level?
         public bool calcAllowRight { get; set; }        // NOT stored
         public bool calcAllowLeft { get; set; }         // NOT stored
-
-        public bool IsStructStart { get { return Type == ActionType.If || Type == ActionType.Do || Type != ActionType.While || Type != ActionType.Loop; } }
 
         public virtual bool AllowDirectEditingOfUserData { get { return false; } }    // and allow editing?
 
