@@ -149,7 +149,9 @@ namespace EDDiscovery.UserControls
                 {
                     string SingleCoordinateFormat = "0.##";
 
-                    textBoxPosition.Text = he.System.x.ToString(SingleCoordinateFormat) + "," + he.System.y.ToString(SingleCoordinateFormat) + "," + he.System.z.ToString(SingleCoordinateFormat);
+                    string separ = System.Globalization.CultureInfo.CurrentCulture.NumberFormat.NumberGroupSeparator + " ";
+
+                    textBoxPosition.Text = he.System.x.ToString(SingleCoordinateFormat) + separ + he.System.y.ToString(SingleCoordinateFormat) + separ + he.System.z.ToString(SingleCoordinateFormat);
 
                     ISystem homesys = discoveryform.GetHomeSystem();
 
