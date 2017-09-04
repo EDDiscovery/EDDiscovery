@@ -78,6 +78,27 @@ namespace EliteDangerousCore
             return inorder;
         }
 
+        public List<HistoryEntry> FilterStartEnd()
+        {
+            List<HistoryEntry> entries = new List<HistoryEntry>();
+            bool started = false;
+            foreach( HistoryEntry he in historylist.OrderBy(s => s.EventTimeUTC).ToList())      // ascending order
+            {
+                if ( he.StartMarker)
+                {
+                    started = true;
+                    entries.Add(he);
+                }
+                else if ( started )
+                {
+                    entries.Add(he);
+                    if (he.StopMarker && !he.StartMarker)
+                        started = false;
+                }
+            }
+            return entries.OrderByDescending(s => s.EventTimeUTC).ToList();
+        }
+
         public List<HistoryEntry> FilterByDate(TimeSpan days)
         {
             var oldestData = DateTime.UtcNow.Subtract(days);

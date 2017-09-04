@@ -27,7 +27,8 @@ namespace EDDiscovery.UserControls
     {
         public TimeSpan? MaximumDataAge { get; }
         public int? MaximumNumberOfItems { get; }
-        public bool? Lastdock { get; }
+        public bool Lastdockflag { get; }
+        public bool Startendflag { get; }
         public string Label { get; }
 
         public static TravelHistoryFilter NoFilter { get; } = new TravelHistoryFilter();
@@ -44,9 +45,10 @@ namespace EDDiscovery.UserControls
             Label = label;
         }
 
-        private TravelHistoryFilter(bool ld, string label)
+        private TravelHistoryFilter(bool ld, bool startend, string label)
         {
-            Lastdock = ld;
+            Lastdockflag = ld;
+            Startendflag = startend;
             Label = label;
         }
 
@@ -97,14 +99,23 @@ namespace EDDiscovery.UserControls
 
         public static TravelHistoryFilter LastDock()
         {
-            return new TravelHistoryFilter(true, $"Last dock");
+            return new TravelHistoryFilter(true, false, $"Last dock");
+        }
+
+        public static TravelHistoryFilter StartEnd()
+        {
+            return new TravelHistoryFilter(false, true, $"Start/End Flag");
         }
 
         public List<HistoryEntry> Filter(HistoryList hl )
         {
-            if ( Lastdock.HasValue )
+            if (Lastdockflag)
             {
                 return hl.FilterToLastDock();
+            }
+            else if (Startendflag)
+            {
+                return hl.FilterStartEnd();
             }
             else if (MaximumNumberOfItems.HasValue)
             {
@@ -135,7 +146,7 @@ namespace EDDiscovery.UserControls
                 return txlist;
         }
 
-        public static void InitaliseComboBox( ExtendedControls.ComboBoxCustom cc , string dbname , bool incldock = true )
+        public static void InitaliseComboBox( ExtendedControls.ComboBoxCustom cc , string dbname , bool incldockstartend = true )
         {
             cc.Enabled = false;
             cc.DisplayMember = nameof(TravelHistoryFilter.Label);
@@ -159,8 +170,11 @@ namespace EDDiscovery.UserControls
                 TravelHistoryFilter.Last(500),
             };
 
-            if (incldock)
+            if (incldockstartend)
+            {
                 el.Add(TravelHistoryFilter.LastDock());
+                el.Add(TravelHistoryFilter.StartEnd());
+            }
 
             cc.DataSource = el;
 
