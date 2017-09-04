@@ -42,7 +42,7 @@ namespace EliteDangerousCore.JournalEvents
         {
             Docked = evt.Value<bool?>("Docked") ?? false;
             StationName = evt["StationName"].Str();
-            StationType = evt["StationType"].Str();
+            StationType = evt["StationType"].Str().SplitCapsWord();
             Body = evt["Body"].Str();
             BodyType = evt["BodyType"].Str();
             Faction = JSONObjectExtensions.GetMultiStringDef(evt, new string[] { "SystemFaction", "Faction" });

@@ -18,18 +18,6 @@ using System.Linq;
 
 namespace EliteDangerousCore.JournalEvents
 {
-    //When written: when landing at landing pad in a space station, outpost, or surface settlement
-    //Parameters:
-    //•	StationName: name of station
-    //•	StationType: type of station
-    //•	StarSystem: name of system
-    //•	CockpitBreach:true (only if landing with breached cockpit)
-    //•	Faction: station’s controlling faction
-    //•	FactionState
-    //•	Allegiance
-    //•	Economy
-    //•	Government
-    //•	Security
     [JournalEntryType(JournalTypeEnum.DockingGranted)]
     public class JournalDockingGranted : JournalEntry
     {
