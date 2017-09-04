@@ -343,7 +343,7 @@ public static class ObjectExtensionsStrings
     //  s = Regex.Replace(s, @"(0)([0-9]+)", "$2");   // any 0Ns left, remove 0
 
     enum State { space, alpha, nonalpha, digits0, digits };
-    static public string SplitCapsWordFull(this string capslower, Dictionary<string, string> namerep = null)     // one_two goes to One_Two
+    static public string SplitCapsWordFull(this string capslower, Dictionary<string, string> namerep = null)     // fixes numbers, does replacement of alpha sequences
     {
         if (capslower == null || capslower.Length == 0)
             return "";
@@ -357,84 +357,97 @@ public static class ObjectExtensionsStrings
         for (int i = 0; i < s.Length; i++)
         {
             char c = s[i];
-            if ((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z'))
+
+            if (c == '0') // 00..
             {
-                if (state != State.alpha)
-                {
-                    if (state != State.space)
-                        sb.Append(' ');
-
-                    state = State.alpha;
-
-                    if (namerep != null)           // at alpha start, see if we have any global subs of alpha numerics
-                    {
-                        int j = i + 1;
-                        for (; j < s.Length && ((s[j] >= 'A' && s[j] <= 'Z') || (s[j] >= 'a' && s[j] <= 'z') || (s[j] >= '0' && s[j] <= '9')); j++)
-                            ;
-
-                        string keyname = s.Substring(i, j - i);
-
-                        //                        string keyname = namekeys.Find(x => s.Substring(i).StartsWith(x));
-
-                        if (namerep.ContainsKey(keyname))
-                        {
-                            sb.Append(namerep[keyname]);
-                            i += keyname.Length - 1;                  // skip this, we are in alpha, -1 because of i++ at top
-                        }
-                        else
-                            sb.Append(char.ToUpper(c));
-                    }
-                    else
-                        sb.Append(char.ToUpper(c));
-                }
-                else
+                if (state == State.digits)      // if in digits, print
                     sb.Append(c);
+                else if ( state != State.digits0 )  // digits0, we just ignore, otherwise we jump into it
+                {
+                    if (state != State.space)  // if not in space, space it out, but don't print it
+                        sb.Append(' ');
+                    state = State.digits0;     // digits 0.
+                }
+            }
+            else if (c >= '1' && c <= '9')  // numbers
+            {
+                if (state == State.digits)
+                    sb.Append(c);                   // in digits, so print it, as we have removed 0 front stuff.
+                else
+                {
+                    if (state != State.space && state != State.digits0)
+                        sb.Append(' ');     // so, we space out if came from not these two states
+
+                    state = State.digits;           // else jump into digits, and append
+                    sb.Append(c);
+                }
             }
             else
             {
-                if (c == '_')
-                    c = ' ';
+                if (state == State.digits0)        // left in digit 0, therefore a run of 0's, so don't lose it (since they are not inserted)
+                    sb.Append('0');
 
-                if (c == ' ')
+                if ((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z'))   // if now alpha
                 {
-                    state = State.space;
-                    sb.Append(c);
-                }
-                else if (c >= '0' && c <= '9')
-                {
-                    if (state != State.digits)
-                    {
-                        if (state != State.space && state != State.digits0)
-                            sb.Append(' ');
-
-                        if (c == '0')
-                        {
-                            state = State.digits0;          // 0, don't append
-                        }
-                        else
-                        {
-                            state = State.digits;
-                            sb.Append(c);
-                        }
-                    }
-                    else
+                    if (state == State.alpha)
                         sb.Append(c);
-                }
-                else
-                {
-                    if (state != State.nonalpha)
+                    else
                     {
                         if (state != State.space)
                             sb.Append(' ');
 
-                        state = State.nonalpha;
+                        state = State.alpha;
+
+                        if (namerep != null)           // at alpha start, see if we have any global subs of alpha numerics
+                        {
+                            int j = i + 1;
+                            for (; j < s.Length && ((s[j] >= 'A' && s[j] <= 'Z') || (s[j] >= 'a' && s[j] <= 'z') || (s[j] >= '0' && s[j] <= '9')); j++)
+                                ;
+
+                            string keyname = s.Substring(i, j - i);
+
+                            //                        string keyname = namekeys.Find(x => s.Substring(i).StartsWith(x));
+
+                            if (namerep.ContainsKey(keyname))
+                            {
+                                sb.Append(namerep[keyname]);
+                                i += keyname.Length - 1;                  // skip this, we are in alpha, -1 because of i++ at top
+                            }
+                            else
+                                sb.Append(char.ToUpper(c));
+                        }
+                        else
+                            sb.Append(char.ToUpper(c));
                     }
-
-                    sb.Append(c);
                 }
+                else
+                {
+                    if (c == '_')       // _ is space
+                        c = ' ';
 
+                    if (c == ' ')       // now space, go into space mode..
+                    {
+                        state = State.space;
+                        sb.Append(c);
+                    }
+                    else
+                    {                                       // any other than 0-9 and a-z
+                        if (state != State.nonalpha)
+                        {
+                            if (state != State.space)       // space it
+                                sb.Append(' ');
+
+                            state = State.nonalpha;
+                        }
+
+                        sb.Append(c);
+                    }
+                }
             }
         }
+
+        if (state == State.digits0)     // if trailing 0, append.
+            sb.Append("0");
 
         return sb.ToString();
     }

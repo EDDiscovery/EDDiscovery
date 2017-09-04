@@ -34,10 +34,8 @@ namespace EliteDangerousCore.JournalEvents
     {
         public JournalMissionRedirected(JObject evt ) : base(evt, JournalTypeEnum.MissionRedirected)
         {
-           
+            Name = JournalFieldNaming.GetBetterMissionName(evt["MissionName"].Str());
             MissionId = evt["MissionID"].Int();
-            Name = evt["MissionName"].Str("");
-
             NewDestinationStation = evt["NewDestinationStation"].Str();
             OldDestinationStation = evt["OldDestinationStation"].Str();
             NewDestinationSystem = evt["NewDestinationSystem"].Str();
@@ -58,10 +56,10 @@ namespace EliteDangerousCore.JournalEvents
         {
             summary = EventTypeStr.SplitCapsWord();
             info = info = BaseUtils.FieldBuilder.Build("Mission name:", Name,
-                                      "Old System:", OldDestinationSystem,
-                                      "Old Station:", OldDestinationStation,
-                                      "New System:", NewDestinationSystem,
-                                      "New Station:", NewDestinationStation);
+                                      "From:", OldDestinationSystem,
+                                      "", OldDestinationStation,
+                                      "To:", NewDestinationSystem,
+                                      "", NewDestinationStation);
 
             detailed = "";
         }

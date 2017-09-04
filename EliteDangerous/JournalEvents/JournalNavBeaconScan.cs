@@ -30,7 +30,7 @@ namespace EliteDangerousCore.JournalEvents
     {
         public JournalNavBeaconScan(JObject evt) : base(evt, JournalTypeEnum.NavBeaconScan)
         {
-            NumBodies = evt["JumpType"].Int();
+            NumBodies = evt["NumBodies"].Int();
         }
 
         public int NumBodies { get; set; }            // Hyperspace, Supercruise

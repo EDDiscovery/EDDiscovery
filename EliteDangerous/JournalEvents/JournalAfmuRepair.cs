@@ -38,7 +38,7 @@ namespace EliteDangerousCore.JournalEvents
             Module = JournalFieldNaming.GetBetterItemNameEvents(evt["Module"].Str());
             ModuleLocalised = evt["Module_Localised"].Str();
             FullyRepaired = evt["FullyRepaired"].Bool();
-            Health = evt["Health"].Float();
+            Health = evt["Health"].Float()*100.0F;
         }
 
         public string Module { get; set; }
@@ -51,7 +51,7 @@ namespace EliteDangerousCore.JournalEvents
         public override void FillInformation(out string summary, out string info, out string detailed) //V
         {
             summary = EventTypeStr.SplitCapsWord();
-            info = BaseUtils.FieldBuilder.Build("", ModuleLocalised.Alt(Module), "Health:;%", (int)(Health * 100), "Fully Repaired:", FullyRepaired.ToString());
+            info = BaseUtils.FieldBuilder.Build("", ModuleLocalised.Alt(Module), "Health:;%", (int)Health, ";Fully Repaired", FullyRepaired);
             detailed = "";
         }
     }

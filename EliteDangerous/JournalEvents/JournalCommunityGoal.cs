@@ -16,6 +16,7 @@
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 
 namespace EliteDangerousCore.JournalEvents
@@ -61,13 +62,13 @@ namespace EliteDangerousCore.JournalEvents
             public DateTime Expiry { get; set; }
             public bool IsComplete { get; set; }
             public long CurrentTotal { get; set; }
-            public int PlayerContribution { get; set; }
+            public long PlayerContribution { get; set; }
             public int NumContributors { get; set; }
             public int PlayerPercentileBand { get; set; }
             public int TopRankSize { get; set; }
-            public int PlayerInTopRank { get; set; }
-            public int TierReached { get; set; }
-            public int Bonus { get; set; }
+            public bool PlayerInTopRank { get; set; }
+            public string TierReached { get; set; }
+            public long Bonus { get; set; }
 
             public CommunityGoal(JObject jo)
             {
@@ -75,67 +76,69 @@ namespace EliteDangerousCore.JournalEvents
                 Title = jo["Title"].Str();
                 SystemName = jo["SystemName"].Str();
                 MarketName = jo["MarketName"].Str();
+                if (!jo["Expiry"].Empty())
+                    Expiry = DateTime.Parse(jo.Value<string>("Expiry"), CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal | DateTimeStyles.AdjustToUniversal);
+                IsComplete = jo["IsComplete"].Bool();
+                CurrentTotal = jo["CurrentTotal"].Long();
+                PlayerContribution = jo["PlayerContribution"].Long();
+                NumContributors = jo["NumContributors"].Int();
+                PlayerPercentileBand = jo["PlayerPercentileBand"].Int();
+                TopRankSize = jo["TopRankSize"].Int();
+                PlayerInTopRank = jo["PlayerInTopRank"].Bool();
+                TierReached = jo["TierReached"].Str();
+                Bonus = jo["Bonus"].Long();
+            }
 
-//Expiry: time and date
-//IsComplete: Boolean
-//CurrentTotal
-//PlayerContribution
-//NumContributors
-//PlayerPercentileBand
+            public override string ToString()
+            {
+                BaseUtils.FieldBuilder.NewPrefix nl = new BaseUtils.FieldBuilder.NewPrefix(Environment.NewLine+"  ");
 
-//                    //If the community goal is constructed with a fixed-size top rank(ie max reward for top 10 players)
-//                    TopRankSize: (integer)
-//                    PlayerInTopRank: (Boolean)
-//                    //If the community goal has reached the first success tier:
-//                 TierReached
-//        Bonus
-
+                return BaseUtils.FieldBuilder.Build(
+                     "Title:", Title, "System:", SystemName,
+                     nl,"At:", MarketName, "Expires:", Expiry,
+                     nl,"Not Complete;Complete", IsComplete,  "Current Total:" , CurrentTotal, "Contribution:", PlayerContribution, "Num Contributors:", NumContributors,
+                     nl,"Player % Band:", PlayerPercentileBand, "Top Rank:", TopRankSize, "Not In Top Rank;In Top Rank", PlayerInTopRank,
+                     nl,"Tier Reached:", TierReached,  "Bonus:" , Bonus
+                      );
             }
         }
 
-
-
         public JournalCommunityGoal(JObject evt ) : base(evt, JournalTypeEnum.CommunityGoal)
         {
-            //Name = evt["Name"].Str();
-            //System = evt["System"].Str();
+            JArray jmodules = (JArray)evt["CurrentGoals"];
 
+            CommunityGoalList = string.Empty;
 
-            //CommunityGoal = new List<CommunityGoal>();
-
-            //JArray jmodules = (JArray)evt["Modules"];
-            //if (jmodules != null)       // paranoia
-            //{
-            //    foreach (JObject jo in jmodules)
-            //    {
-            //        CommunityGoal module = new CommunityGoal(JournalFieldNaming.GetBetterSlotName(jo["Slot"].Str()),
-            //                                            JournalFieldNaming.NormaliseFDSlotName(jo["Slot"].Str()),
-            //                                            JournalFieldNaming.GetBetterItemNameLoadout(jo["Item"].Str()),
-            //                                            JournalFieldNaming.NormaliseFDItemName(jo["Item"].Str()),
-            //                                            jo["On"].BoolNull(),
-            //                                            jo["Priority"].IntNull(),
-            //                                            jo["AmmoInClip"].IntNull(),
-            //                                            jo["AmmoInHopper"].IntNull(),
-            //                                            jo["EngineerBlueprint"].Str().SplitCapsWordFull(),
-            //                                            jo["EngineerLevel"].IntNull(),
-            //                                            jo["Health"].DoubleNull(),
-            //                                            jo["Value"].IntNull());
-            //        CommunityGoals.Add(module);
-            //    }
-
-            
+            if ( jmodules != null )
+            {
+                CommunityGoals = new List<CommunityGoal>();
+                foreach (JObject jo in jmodules)
+                {
+                    CommunityGoal g = new CommunityGoal(jo);
+                    CommunityGoals.Add(g);
+                    CommunityGoalList = CommunityGoalList.AppendPrePad(g.Title, ", ");
+                }
             }
+        }
 
         
-        //public List<CommunityGoal> CommunityGoals;
+        public List<CommunityGoal> CommunityGoals;
+        public string CommunityGoalList;
 
         public override System.Drawing.Bitmap Icon { get { return EliteDangerous.Properties.Resources.communitygoal; } }
 
         public override void FillInformation(out string summary, out string info, out string detailed) //V
         {
             summary = EventTypeStr.SplitCapsWord();
-            info = "";// BaseUtils.FieldBuilder.Build("", Name, "< at ; Star System", System);
+            info = CommunityGoalList;
             detailed = "";
+            if ( CommunityGoals!=null )
+            {
+                foreach( CommunityGoal g in CommunityGoals)
+                {
+                    detailed = detailed.AppendPrePad(g.ToString(), Environment.NewLine + Environment.NewLine);
+                }
+            }
         }
     }
 }

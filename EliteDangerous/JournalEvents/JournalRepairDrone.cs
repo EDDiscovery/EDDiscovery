@@ -34,7 +34,6 @@ namespace EliteDangerousCore.JournalEvents
             HullRepaired = evt["HullRepaired"].Double();
             CockpitRepaired = evt["CockpitRepaired"].Double();
             CorrosionRepaired = evt["CorrosionRepaired"].Double();
-
         }
 
         public double HullRepaired { get; set; }

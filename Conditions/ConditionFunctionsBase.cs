@@ -27,18 +27,19 @@ namespace Conditions
             {
                 functions = new Dictionary<string, FuncEntry>();
 
-                functions.Add("abs", new FuncEntry(Abs, 2, 2, FirstMacro, NoStrings));  // first is macro. second is macro or literal
+                functions.Add("abs", new FuncEntry(Abs, 2, 2, NoMacros, NoStrings));  // first is macro or lit. second is macro or literal
                 functions.Add("alt", new FuncEntry(Alt, 2, 20, AllMacros, AllStrings));  // string/var.. repeated
                 functions.Add("closefile", new FuncEntry(CloseFile, 1, 1, AllMacros, NoStrings));  // first is a var
                 functions.Add("closeprocess", new FuncEntry(CloseProcess, 1, 1, AllMacros, NoStrings));   //first is macro
 
                 functions.Add("datetimenow", new FuncEntry(DateTimeNow, 1, 1, NoMacros, NoStrings));     // literal type
                 functions.Add("datehour", new FuncEntry(DateHour, 1, 1, AllMacros, FirstString));   // first is a var or string
+                functions.Add("datedelta", new FuncEntry(DateDelta, 2, 2, AllMacros, AllStrings));   // two dates
                 functions.Add("date", new FuncEntry(Date, 2, 2, FirstMacro, FirstString));   // first is a var or string, second is literal
                 functions.Add("direxists", new FuncEntry(DirExists, 1, 20, AllMacros, AllStrings));   // check var, can be string
 
                 functions.Add("escapechar", new FuncEntry(EscapeChar, 1, 1, AllMacros, AllStrings));   // check var, can be string
-                functions.Add("eval", new FuncEntry(Eval, 1, 2, FirstMacro, FirstString));   // can be string, can be variable, p2 is not a variable, and can't be a string
+                functions.Add("eval", new FuncEntry(Eval, 1, 2, NoMacros, FirstString));   // can be string, can be variable, p2 is not a variable, and can't be a string
                 functions.Add("exist", new FuncEntry(Exists, 1, 20, NoMacros, AllStrings)); // no macros, all literal, can be strings
                 functions.Add("existsdefault", new FuncEntry(ExistsDefault, 2, 2, SecondMacro, AllStrings));   // first is a macro but can not exist, second is a string or macro which must exist
                 functions.Add("expand", new FuncEntry(Expand, 1, 20, AllMacros, AllStrings)); // check var, can be string (if so expanded)
@@ -50,7 +51,7 @@ namespace Conditions
                 functions.Add("findarray", new FuncEntry(FindArray, 2, 2, SecondMacro, AllStrings));   //1 = literal or string, 2 = macro or string
                 functions.Add("findprocess", new FuncEntry(FindProcess, 1, 1, AllMacros, AllStrings));   //macro/string
                 functions.Add("findline", new FuncEntry(FindLine, 2, 2, AllMacros, SecondString));   //check var1 and var2, second can be a string
-                functions.Add("floor", new FuncEntry(Floor, 2, 2, FirstMacro , NoStrings));     // check var1, not var 2 no strings
+                functions.Add("floor", new FuncEntry(Floor, 2, 2, NoMacros, NoStrings));     // first is macros or lit, second is macro or literal
 
                 functions.Add("hasprocessexited", new FuncEntry(HasProcessExited, 1, 1, AllMacros, NoStrings));   //first is macro
 
@@ -76,6 +77,8 @@ namespace Conditions
                 functions.Add("indexof", new FuncEntry(IndexOf, 2, 2, AllMacros, AllStrings));   // check var1 and 2 if normal, allow string in 1 and 2
                 functions.Add("indirect", new FuncEntry(Indirect, 1, 20, AllMacros, AllStrings));   // check var, no strings
 
+                functions.Add("int", new FuncEntry(Int, 2, 2, NoMacros, NoStrings));  // first is macro or lit, second is macro or lit
+
                 functions.Add("ispresent", new FuncEntry(Ispresent, 2, 3, SecondMacro, SecondString));   // 1 may not be there, 2 either a macro or can be string. 3 is optional and a var or literal
 
                 functions.Add("join", new FuncEntry(Join, 3, 20, AllMacros, AllStrings));   // all can be string, check var
@@ -88,7 +91,7 @@ namespace Conditions
 
                 functions.Add("mkdir", new FuncEntry(MkDir, 1, 1, AllMacros, AllStrings));   // check var, can be string
 
-                functions.Add("hnum", new FuncEntry(Hnum, 2, 2, NoMacros, AllStrings));   // para 1 literal or var or string, para 2 string, literal or var
+                functions.Add("hnum", new FuncEntry(Hnum, 2, 2, NoMacros, SecondString));   // para 1 literal or var, para 2 string, literal or var
 
                 functions.Add("openfile", new FuncEntry(OpenFile, 3, 3, SecondMacro, SecondString));
 
@@ -100,9 +103,9 @@ namespace Conditions
                 functions.Add("replace", new FuncEntry(Replace, 3, 3, AllMacros, AllStrings)); // var/string for all
                 functions.Add("replaceescapechar", new FuncEntry(ReplaceEscapeChar, 1, 1, AllMacros, AllStrings));   // check var, can be string
                 functions.Add("replacevar", new FuncEntry(ReplaceVar, 2, 2, FirstMacro, AllStrings)); // var/string, literal/var/string
-                functions.Add("round", new FuncEntry(RoundCommon, 3, 3, FirstMacro, NoStrings));
-                functions.Add("roundnz", new FuncEntry(RoundCommon, 4, 4, FirstMacro, NoStrings));
-                functions.Add("roundscale", new FuncEntry(RoundCommon, 5, 5, FirstMacro, NoStrings));
+                functions.Add("round", new FuncEntry(RoundCommon, 3, 3, NoMacros, NoStrings));
+                functions.Add("roundnz", new FuncEntry(RoundCommon, 4, 4, NoMacros, NoStrings));
+                functions.Add("roundscale", new FuncEntry(RoundCommon, 5, 5, NoMacros, NoStrings));
                 functions.Add("rs", new FuncEntry(ReplaceVarSC, 2, 2, FirstMacro, AllStrings)); // var/string, literal/var/string
                 functions.Add("rv", new FuncEntry(ReplaceVar, 2, 2, FirstMacro, AllStrings)); // var/string, literal/var/string
 
@@ -316,6 +319,29 @@ namespace Conditions
             }
             else
                 output = "Date is not in correct en-US format";
+
+            return false;
+        }
+
+        protected bool DateDelta(out string output)
+        {
+            string value1 = (paras[0].isstring) ? paras[0].value : vars[paras[0].value];
+            string value2 = (paras[1].isstring) ? paras[1].value : vars[paras[1].value];
+
+            DateTime res1,res2;
+
+            if (DateTime.TryParse(value1, System.Globalization.CultureInfo.CreateSpecificCulture("en-US"),
+                                    System.Globalization.DateTimeStyles.None, out res1) &&
+                DateTime.TryParse(value2, System.Globalization.CultureInfo.CreateSpecificCulture("en-US"),
+                                    System.Globalization.DateTimeStyles.None, out res2))
+
+            {
+                TimeSpan ts = res2.Subtract(res1);
+                output = ts.TotalSeconds.ToStringInvariant();
+                return true;
+            }
+            else
+                output = "A Date is not in correct en-US format";
 
             return false;
         }
@@ -578,7 +604,7 @@ namespace Conditions
 
         protected bool Hnum(out string output)
         {
-            string s = paras[0].isstring ? paras[0].value : (vars.Exists(paras[0].value) ? vars[paras[0].value] : paras[0].value);
+            string s = vars.Exists(paras[0].value) ? vars[paras[0].value] : paras[0].value;
             string postfix = paras[1].isstring ? paras[1].value : ( vars.Exists(paras[1].value) ? vars[paras[1].value] : paras[1].value);
             string[] postfixes = postfix.Split(',');
 
@@ -614,7 +640,7 @@ namespace Conditions
                     value /= 1E6;
                     output = prefix + value.ToStringInvariant("0.#") + " " + postfixes[3];
                 }
-                else if (order >= 4)        // thousands, say X.Y millions
+                else if (order >= 4)        // thousands, say X.Y thousands
                 {
                     value /= 1E3;
                     output = prefix + value.ToStringInvariant("0") + " " + postfixes[4];
@@ -642,11 +668,12 @@ namespace Conditions
         protected bool Abs(out string output)
         {
             double para;
-            if (vars[paras[0].value].InvariantParse(out para))
+            string s = vars.Exists(paras[0].value) ? vars[paras[0].value] : paras[0].value;
+            if (s.InvariantParse(out para))
             {
                 string fmt = vars.Exists(paras[1].value) ? vars[paras[1].value] : paras[1].value;
-                if (FormatIt(Math.Abs(para), fmt, out output))
-                    return true;
+                para = Math.Abs(para);
+                return para.SafeToString(fmt, out output);
             }
             else
                 output = "Parameter number be a number";
@@ -654,14 +681,31 @@ namespace Conditions
             return false;
         }
 
+        protected bool Int(out string output)
+        {
+            long para;
+            string s = vars.Exists(paras[0].value) ? vars[paras[0].value] : paras[0].value;
+            if (s.InvariantParse(out para)) // 64 bit
+            {
+                string fmt = vars.Exists(paras[1].value) ? vars[paras[1].value] : paras[1].value;
+                return para.SafeToString(fmt, out output);
+            }
+            else
+            {
+                output = "Parameter number be a integer number";
+                return false;
+            }
+        }
+
         protected bool Floor(out string output)
         {
             double para;
-            if (vars[paras[0].value].InvariantParse(out para))
+            string s = vars.Exists(paras[0].value) ? vars[paras[0].value] : paras[0].value;
+            if (s.InvariantParse(out para))
             {
                 string fmt = vars.Exists(paras[1].value) ? vars[paras[1].value] : paras[1].value;
-                if (FormatIt(Math.Floor(para), fmt, out output))
-                    return true;
+                para = Math.Floor(para);
+                return para.SafeToString(fmt, out output);
             }
             else
                 output = "Parameter number be a number";
@@ -694,7 +738,9 @@ namespace Conditions
 
             double value;
 
-            if (vars[paras[0].value].InvariantParse(out value))
+            string s = vars.Exists(paras[0].value) ? vars[paras[0].value] : paras[0].value;
+
+            if (s.InvariantParse(out value))
             {
                 value *= scale;
 
@@ -712,8 +758,7 @@ namespace Conditions
                         res = Math.Round(value, digits);
                     }
 
-                    if (FormatIt(res, fmt, out output))
-                        return true;
+                    return res.SafeToString(fmt, out output);
                 }
                 else
                     output = "Digits must be a variable or an integer number of digits";
@@ -722,33 +767,6 @@ namespace Conditions
                 output = "Variable must be a integer or fractional";
 
             return false;
-        }
-
-        protected bool FormatIt(double v, string fmt, out string output)
-        {
-            output = "";
-
-            if (fmt.StartsWith("M"))
-            {
-                fmt = fmt.Substring(1);
-
-                if (v < 0)
-                {
-                    output = "Minus ";
-                    v = -v;
-                }
-            }
-
-            try
-            {
-                output += v.ToString(fmt, ct);
-                return true;
-            }
-            catch
-            {
-                output = "Format must be a c# ToString format for doubles";
-                return false;
-            }
         }
 
         protected bool Random(out string output)
@@ -768,7 +786,8 @@ namespace Conditions
 
         protected bool Eval(out string output)
         {
-            string s = paras[0].isstring ? paras[0].value : vars[paras[0].value];
+            // string, or if macro name use macro value, else literal
+            string s = paras[0].isstring ? paras[0].value : (vars.Exists(paras[0].value) ? vars[paras[0].value] : paras[0].value);
 
             bool tryit = paras.Count > 1 && paras[1].value.Equals("Try", StringComparison.InvariantCultureIgnoreCase);
 
@@ -815,7 +834,7 @@ namespace Conditions
             // p0 = value, p1 = comparitor, p2 = true expansion, p3 = false expansion, p4 = empty expansion
 
             string value = (paras[0].isstring) ? paras[0].value : vars[paras[0].value];
-            string comparitor = (paras[1].isstring) ? paras[1].value : vars[paras[1].value];
+            string comparitor = (paras[1].isstring) ? paras[1].value : (vars.Exists(paras[1].value) ? vars[paras[1].value] : paras[1].value);   // may be literal
 
             int pexp = 0;       // 0 = blank, else parameter to expand
 

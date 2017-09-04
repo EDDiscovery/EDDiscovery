@@ -189,6 +189,19 @@ namespace ActionLanguage
         }
     }
 
+    public class ActionStaticLet : ActionSetLetBase
+    {
+        public override bool ConfigurationMenu(Form parent, ActionCoreController discoveryform, List<string> eventvars)
+        {
+            return base.ConfigurationMenu(parent, discoveryform, eventvars, false, true);
+        }
+
+        public override bool ExecuteAction(ActionProgramRun ap)
+        {
+            return ExecuteAction(ap, false, staticit: true);
+        }
+    }
+
     public class ActionPersistentGlobal : ActionSetLetBase
     {
         public override bool ConfigurationMenu(Form parent, ActionCoreController discoveryform, List<string> eventvars)
@@ -214,6 +227,7 @@ namespace ActionLanguage
             return ExecuteAction(ap, true, staticit: true);
         }
     }
+
 
     public class ActionDeleteVariable: ActionBase
     {

@@ -30,11 +30,14 @@ namespace EliteDangerousCore.JournalEvents
         public JournalSearchAndRescue(JObject evt) : base(evt, JournalTypeEnum.SearchAndRescue)
         {
             Name = evt["Name"].Str();
+            Name = JournalFieldNaming.FDNameTranslation(Name); // some premangling
+            FriendlyName = JournalFieldNaming.RMat(Name);
             Count = evt["Count"].Int();
             Reward = evt["Reward"].Str();
         }
 
         public string Name { get; set; }            // Hyperspace, Supercruise
+        public string FriendlyName { get; set; }            // Hyperspace, Supercruise
         public int Count { get; set; }
         public string Reward { get; set; }
 
@@ -43,7 +46,7 @@ namespace EliteDangerousCore.JournalEvents
         public override void FillInformation(out string summary, out string info, out string detailed) //V
         {
             summary = EventTypeStr.SplitCapsWord();
-            info = BaseUtils.FieldBuilder.Build("",Name , "No:" , Count, "Reward:" , Reward);
+            info = BaseUtils.FieldBuilder.Build("",FriendlyName , "Num:" , Count, "Reward:" , Reward);
             detailed = "";
         }
     }
