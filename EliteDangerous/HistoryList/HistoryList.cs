@@ -841,12 +841,14 @@ namespace EliteDangerousCore
                 HistoryEntry lastshipinfohe = GetLastHistoryEntry(x => x.ShipInformation != null && x.ShipInformation.SubVehicle == ShipInformation.SubVehicleType.None, he);
 
                 long loan = 0;
+                long cash = 0;
 
                 if ( lastshipinfohe != null)       // we have a ship info
                 {
                     // and based on that position, find a last load game.  May be null
                     HistoryEntry lastloadgamehe = GetLastHistoryEntry(x => x.EntryType == JournalTypeEnum.LoadGame, lastshipinfohe);
                     loan = (lastloadgamehe != null) ? ((JournalLoadGame)lastloadgamehe.journalEntry).Loan : 0;
+                    cash = (lastloadgamehe != null) ? ((JournalLoadGame)lastloadgamehe.journalEntry).Credits : 0;
                 }
 
                 JournalProgress progress = historylist.FindLast(x => x.EntryType == JournalTypeEnum.Progress).journalEntry as JournalProgress;
@@ -856,12 +858,12 @@ namespace EliteDangerousCore
                 {
                     Task edsmtask = Task.Factory.StartNew(() =>
                     {
-                        edsm.SendShipInfo(lastshipinfohe.ShipInformation, lastshipinfohe.MaterialCommodity.CargoCount, lastshipinfocurrenthe.ShipInformation, cashledger.CashTotal, loan, progress, rank);
+                        edsm.SendShipInfo(lastshipinfohe?.ShipInformation, lastshipinfohe?.MaterialCommodity?.CargoCount ?? 0, lastshipinfocurrenthe?.ShipInformation, cashledger?.CashTotal ?? cash, loan, progress, rank);
                     });
                 }
                 else
                 {
-                    edsm.SendShipInfo(lastshipinfohe.ShipInformation, lastshipinfohe.MaterialCommodity.CargoCount, lastshipinfocurrenthe.ShipInformation, cashledger.CashTotal, loan, progress, rank);
+                    edsm.SendShipInfo(lastshipinfohe?.ShipInformation, lastshipinfohe?.MaterialCommodity?.CargoCount ?? 0, lastshipinfocurrenthe?.ShipInformation, cashledger?.CashTotal ?? cash, loan, progress, rank);
                 }
             }
         }
