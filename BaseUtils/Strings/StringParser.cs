@@ -229,6 +229,14 @@ namespace BaseUtils
             return sl;
         }
 
+        public bool Find(string s)      // move position to string, this will be the next read..
+        {
+            int indexof = line.IndexOf(s, pos);
+            if (indexof != -1)
+                pos = indexof;
+            return (indexof != -1);
+        }
+
         public static string FirstQuotedWord(string s, string limits, string def = "", string prefix = "", string postfix = "")
         {
             if (s != null)

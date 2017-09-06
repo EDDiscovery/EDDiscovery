@@ -571,8 +571,21 @@ namespace Conditions
                 if (key.StartsWith(varroot))
                 {
                     string[] subs = vars[key].Split(';');
-                    if (subs.Length == 2 && subs[0].Length > 0 && s.IndexOf(subs[0], StringComparison.InvariantCultureIgnoreCase) >= 0)
-                        s = s.Replace(subs[0], subs[1], StringComparison.InvariantCultureIgnoreCase);
+                    if (subs.Length == 2 && subs[0].Length > 0) // standard anywhere pattern
+                    {
+                        if (s.IndexOf(subs[0], StringComparison.InvariantCultureIgnoreCase) >= 0)
+                            s = s.Replace(subs[0], subs[1], StringComparison.InvariantCultureIgnoreCase);
+                    }
+                    else if (subs.Length == 3 && subs[1].Length > 0 && subs[0].Equals("R",StringComparison.InvariantCultureIgnoreCase))     // regex pattern
+                    {
+                        System.Text.RegularExpressions.RegexOptions opt = (subs[0] == "r" ) ? System.Text.RegularExpressions.RegexOptions.IgnoreCase : System.Text.RegularExpressions.RegexOptions.None;
+                        s = System.Text.RegularExpressions.Regex.Replace(s, subs[1], subs[2],opt);
+                    }
+                    else
+                    {
+                        output = "Missformed replacement pattern : " + vars[key];
+                        return false;
+                    }
                 }
             }
 
