@@ -143,7 +143,7 @@ namespace EDDiscovery.UserControls
                 textBoxSystem.Text = he.System.name;
                 discoveryform.history.FillEDSM(he, reload: true); // Fill in any EDSM info we have, force it to try again.. in case system db updated
 
-                textBoxBody.Text = he.WhereAmI;
+                textBoxBody.Text = he.WhereAmI + ((he.IsInHyperSpace) ? " (HS)": "");
 
                 if (he.System.HasCoordinate)         // cursystem has them?
                 {

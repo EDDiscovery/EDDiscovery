@@ -43,6 +43,7 @@ namespace EDDiscovery.Actions
                 vars[prefix + "LocalTime"] = he.EventTimeLocal.ToString("MM/dd/yyyy HH:mm:ss");
                 vars[prefix + "DockedState"] = he.IsDocked ? "1" : "0";
                 vars[prefix + "LandedState"] = he.IsLanded ? "1" : "0";
+                vars[prefix + "Hyperspace"] = he.IsInHyperSpace ? "1" : "0";
                 vars[prefix + "WhereAmI"] = he.WhereAmI;
                 vars[prefix + "ShipType"] = he.ShipType;
                 vars[prefix + "ShipId"] = he.ShipId.ToString(ct);
