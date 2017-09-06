@@ -133,8 +133,8 @@ namespace EliteDangerousCore.JournalEvents
 
         public class StarPlanetRing
         {
-            public string Name;
-            public string RingClass;
+            public string Name;     // may be null
+            public string RingClass;    // may be null
             public double MassMT;
             public double InnerRad;
             public double OuterRad;
@@ -142,7 +142,7 @@ namespace EliteDangerousCore.JournalEvents
             public string RingInformation(double scale = 1, string scaletype = " MT", bool parentIsStar = false)
             {
                 StringBuilder scanText = new StringBuilder();
-                scanText.AppendFormat("  {0} ({1})\n", Name, DisplayStringFromRingClass(RingClass));
+                scanText.AppendFormat("  {0} ({1})\n", Name.Alt("Unknown"), DisplayStringFromRingClass(RingClass));
                 scanText.AppendFormat("  Mass: {0}{1}\n", (MassMT * scale).ToString("N4"), scaletype);
                 if (parentIsStar && InnerRad > 3000000)
                 {
@@ -166,6 +166,8 @@ namespace EliteDangerousCore.JournalEvents
             {
                 switch (ringClass)
                 {
+                    case null:
+                        return "Unknown";
                     case "eRingClass_Icy":
                         return "Icy";
                     case "eRingClass_Rocky":
@@ -209,8 +211,7 @@ namespace EliteDangerousCore.JournalEvents
             nPeriapsis = evt["Periapsis"].DoubleNull();
             nAxialTilt = evt["AxialTilt"].DoubleNull();
 
-
-            Rings = evt["Rings"]?.ToObject<StarPlanetRing[]>();
+            Rings = evt["Rings"]?.ToObject<StarPlanetRing[]>(); // may be Null
 
             nTidalLock = evt["TidalLock"].Bool();
             TerraformState = evt["TerraformState"].StrNull();
@@ -448,13 +449,20 @@ namespace EliteDangerousCore.JournalEvents
                     scanText.AppendFormat("Belt{0}", Rings.Count() == 1 ? ":" : "s:");
                     for (int i = 0; i < Rings.Length; i++)
                     {
-                        if (Rings[i].MassMT > 7342000000) { scanText.Append("\n" + RingInformation(i, 1.0 / oneMoon_MT, " Moons")); }
-                        else { scanText.Append("\n" + RingInformation(i)); }
+                        if (Rings[i].MassMT > 7342000000)
+                        {
+                            scanText.Append("\n" + RingInformation(i, 1.0 / oneMoon_MT, " Moons"));
+                        }
+                        else
+                        {
+                            scanText.Append("\n" + RingInformation(i));
+                        }
                     }
                 }
                 else
                 {
                     scanText.AppendFormat("Ring{0}", Rings.Count() == 1 ? ":" : "s:");
+
                     for (int i = 0; i < Rings.Length; i++)
                         scanText.Append("\n" + RingInformation(i));
                 }
