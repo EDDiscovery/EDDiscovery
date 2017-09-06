@@ -708,7 +708,7 @@ namespace EliteDangerousCore.EDSM
         }
 
 
-        public static JObject ConvertFromEDSMBodies(JObject jo)
+        private static JObject ConvertFromEDSMBodies(JObject jo)
         {
             JObject jout = new JObject
             {
@@ -732,7 +732,7 @@ namespace EliteDangerousCore.EDSM
             {
                 if (jo["type"].Value<string>().Equals("Star"))
                 {
-                    jout["StarType"] = EDSMStar2JournalName(jo["subType"].Str());
+                    jout["StarType"] = EDSMStar2JournalName(jo["subType"].StrNull());           // pass thru null to code, it will cope with it
                     jout["Age_MY"] = jo["age"];
                     jout["StellarMass"] = jo["solarMasses"];
                     jout["Radius"] = jo["solarRadius"].Double() * JournalScan.solarRadius_m; // solar-rad -> metres
@@ -830,15 +830,15 @@ namespace EliteDangerousCore.EDSM
             { "wolf-rayet star", "W" },
         };
 
-        static public string EDSMPlanet2JournalName(string inname)
+        private static string EDSMPlanet2JournalName(string inname)
         {
             return EDSM2PlanetNames.ContainsKey(inname.ToLower()) ? EDSM2PlanetNames[inname.ToLower()] : inname;
         }
 
-        public static string EDSMStar2JournalName(string startype)
+        private static string EDSMStar2JournalName(string startype)
         {
             if (startype == null)
-                startype = "unknown";
+                startype = "Unknown";
             else if (EDSM2StarNames.ContainsKey(startype))
                 startype = EDSM2StarNames[startype];
             else   // Remove extra text from EDSM   ex  "F (White) Star" -> "F"
