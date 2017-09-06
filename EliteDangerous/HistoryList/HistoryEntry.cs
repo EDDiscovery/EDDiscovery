@@ -84,6 +84,7 @@ namespace EliteDangerousCore
 
         public bool IsLanded { get { return landed.HasValue && landed.Value == true; } }
         public bool IsDocked { get { return docked.HasValue && docked.Value == true; } }
+        public bool IsInHyperSpace { get { return hyperspace.HasValue && hyperspace.Value == true; } }
         public string WhereAmI { get { return whereami; } }
         public string ShipType { get { return shiptype; } }
         public int ShipId { get { return shipid; } }
@@ -122,6 +123,7 @@ namespace EliteDangerousCore
 
         private bool? docked;                       // are we docked.  Null if don't know, else true/false
         private bool? landed;                       // are we landed on the planet surface.  Null if don't know, else true/false
+        private bool? hyperspace;                   // are we in hyperspace..
         private string whereami = "";               // where we think we are
         private int shipid = -1;                    // ship id, -1 unknown
         private string shiptype = "Unknown";        // and the ship
@@ -273,6 +275,8 @@ namespace EliteDangerousCore
                     he.docked = prev.docked;
                 if (prev.landed.HasValue)
                     he.landed = prev.landed;
+                if (prev.hyperspace.HasValue)
+                    he.hyperspace = prev.hyperspace;
 
                 he.shiptype = prev.shiptype;
                 he.shipid = prev.shipid;
@@ -287,6 +291,7 @@ namespace EliteDangerousCore
                 JournalLocation jl = je as JournalLocation;
                 he.docked = jl.Docked;
                 he.whereami = jl.Docked ? jl.StationName : jl.Body;
+                he.hyperspace = false;
             }
             else if (je.EventTypeID == JournalTypeEnum.Docked)
             {
@@ -301,11 +306,24 @@ namespace EliteDangerousCore
             else if (je.EventTypeID == JournalTypeEnum.Liftoff)
                 he.landed = false;
             else if (je.EventTypeID == JournalTypeEnum.SupercruiseEntry)
+            {
                 he.whereami = (je as JournalSupercruiseEntry).StarSystem;
+                he.hyperspace = true;
+            }
             else if (je.EventTypeID == JournalTypeEnum.SupercruiseExit)
+            {
                 he.whereami = (je as JournalSupercruiseExit).Body;
+                he.hyperspace = false;
+            }
             else if (je.EventTypeID == JournalTypeEnum.FSDJump)
+            {
                 he.whereami = (je as JournalFSDJump).StarSystem;
+                he.hyperspace = true;
+            }
+            else if (je.EventTypeID == JournalTypeEnum.StartJump)
+            {
+                he.hyperspace = true;   // some of these are just to make sure, as FSDJump will also set it
+            }
             else if (je.EventTypeID == JournalTypeEnum.LoadGame)
             {
                 JournalLoadGame jl = je as JournalLoadGame;
@@ -314,6 +332,7 @@ namespace EliteDangerousCore
                 he.gamemode = jl.GameMode;      // set game mode
                 he.group = jl.Group;            // and group, may be empty
                 he.landed = jl.StartLanded;
+                he.hyperspace = false;
 
                 if (jl.Ship.IndexOf("buggy", StringComparison.InvariantCultureIgnoreCase) == -1)        // load game with buggy, can't tell what ship we get back into, so ignore
                 {
