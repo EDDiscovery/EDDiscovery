@@ -225,6 +225,10 @@ namespace EliteDangerousCore
             }
         }
 
+        public bool IsCurrentlyLanded { get { HistoryEntry he = GetLast; return (he != null) ? he.IsLanded : false; } }     //safe methods
+        public bool IsCurrentlyDocked { get { HistoryEntry he = GetLast; return (he != null) ? he.IsDocked : false; } }
+        public ISystem CurrentSystem { get { HistoryEntry he = GetLast; return (he != null) ? he.System : null; } }  // current system
+
         public HistoryEntry GetLastFSD
         {
             get
@@ -981,5 +985,24 @@ namespace EliteDangerousCore
         }
 
         #endregion
+
+        #region Common info extractors
+
+        #endregion
+
+        public void ReturnSystemInfo(HistoryEntry he, out string allegiance, out string economy, out string gov, 
+                                out string faction, out string factionstate , out string security)
+        {
+            EliteDangerousCore.JournalEvents.JournalFSDJump lastfsd =
+                GetLastHistoryEntry(x => x.journalEntry is EliteDangerousCore.JournalEvents.JournalFSDJump, he)?.journalEntry as EliteDangerousCore.JournalEvents.JournalFSDJump;
+            // same code in spanel.. not sure where to put it
+            allegiance = lastfsd != null && lastfsd.Allegiance.Length > 0 ? lastfsd.Allegiance : he.System.allegiance.ToNullUnknownString();
+            economy = lastfsd != null && lastfsd.Economy_Localised.Length > 0 ? lastfsd.Economy_Localised : he.System.primary_economy.ToNullUnknownString();
+            gov = lastfsd != null && lastfsd.Government_Localised.Length > 0 ? lastfsd.Government_Localised : he.System.government.ToNullUnknownString();
+            faction = lastfsd != null && lastfsd.FactionState.Length > 0 ? lastfsd.Faction : "Unknown Faction";
+            factionstate = lastfsd != null && lastfsd.FactionState.Length > 0 ? lastfsd.FactionState : he.System.state.ToNullUnknownString();
+            factionstate = factionstate.SplitCapsWord();
+            security = lastfsd != null && lastfsd.Security_Localised.Length > 0 ? lastfsd.Security_Localised : "Unknown Security";
+        }
     }
 }

@@ -170,11 +170,12 @@ namespace EDDiscovery.UserControls
             if (hl == null)
                 hl = _discoveryForm.history;
 
-            if (hl.GetLast == null)
-                return;
-            ISystem currentSystem = hl.GetLast.System;
+            HistoryEntry last = hl.GetLast;
 
-            
+            if ( last == null )
+                return;
+
+            ISystem currentSystem = last.System;
 
             if (rowindex < dataGridViewExplore.Rows.Count && dataGridViewExplore[0, rowindex].Value != null)
             {

@@ -74,6 +74,7 @@ namespace EDDiscovery.UserControls
             showXYZ = 32,
             showDistancePerStar = 64,
             showIcon = 128,
+            showSystemInformation = 256,
 
             showDoesNotAffectTabs = 1024,        // above this, tab positions are not changed by changes in these values
 
@@ -100,7 +101,7 @@ namespace EDDiscovery.UserControls
                                                 Configuration.showTime | Configuration.showDescription |
                                                Configuration.showInformation | Configuration.showNotes | 
                                                 Configuration.showXYZ | Configuration.showDistancePerStar |
-                                               Configuration.showScan15s |
+                                               Configuration.showScan15s | Configuration.showSystemInformation |
                                                Configuration.showScanRight );
 
         bool Config(Configuration c) { return (config & c) != 0; }
@@ -135,6 +136,7 @@ namespace EDDiscovery.UserControls
             showDistancesOnFSDJumpsOnlyToolStripMenuItem.Checked = Config(Configuration.showDistancesOnFSDJumpsOnly);
             expandTextOverEmptyColumnsToolStripMenuItem.Checked = Config(Configuration.showExpandOverColumns);
             showNothingWhenDockedtoolStripMenuItem.Checked = Config(Configuration.showNothingWhenDocked);
+            showSystemInformationToolStripMenuItem.Checked = Config(Configuration.showSystemInformation);
 
             SetSurfaceScanBehaviour(null);
             SetScanPosition(null);
@@ -251,9 +253,9 @@ namespace EDDiscovery.UserControls
                     int rowpos = scanpostextoffset.Y;
                     int rowheight = Config(Configuration.showIcon) ? 26 : 20;
 
-                    if (Config(Configuration.showNothingWhenDocked) && (hl.GetLast.IsDocked || hl.GetLast.IsLanded))
+                    if (Config(Configuration.showNothingWhenDocked) && (hl.IsCurrentlyDocked || hl.IsCurrentlyLanded))
                     {
-                        AddColText(0, 0, rowpos, rowheight , (hl.GetLast.IsDocked) ? "Docked" : "Landed", textcolour, backcolour, null);
+                        AddColText(0, 0, rowpos, rowheight , (hl.IsCurrentlyDocked) ? "Docked" : "Landed", textcolour, backcolour, null);
                     }
                     else
                     {
@@ -261,9 +263,31 @@ namespace EDDiscovery.UserControls
                         Point3D tpos;
                         bool targetpresent = TargetClass.GetTargetPosition(out name, out tpos);
 
-                        if (targetpresent && Config(Configuration.showTargetLine) && hl.GetLast != null)
+                        ISystem currentsystem = hl.CurrentSystem; // may be null
+
+                        HistoryEntry last = hl.GetLast;
+
+                        if (Config(Configuration.showSystemInformation) && last != null)
                         {
-                            string dist = (hl.GetLast.System.HasCoordinate) ? SystemClassDB.Distance(hl.GetLast.System, tpos.X, tpos.Y, tpos.Z).ToString("0.00") : "Unknown";
+                            string allegiance, economy, gov, faction, factionstate, security;
+                            hl.ReturnSystemInfo(last, out allegiance, out economy, out gov, out faction, out factionstate, out security);
+
+                            string str = last.System.name + " : " + BaseUtils.FieldBuilder.Build(
+                                "", faction,
+                                "", factionstate,
+                                "", security,
+                                "", allegiance,
+                                "", economy,
+                                "", gov
+                                );
+                            AddColText(0, 0, rowpos, rowheight, str, textcolour, backcolour, null);
+
+                            rowpos += rowheight;
+                        }
+
+                        if (targetpresent && Config(Configuration.showTargetLine) && currentsystem != null)
+                        {
+                            string dist = (currentsystem.HasCoordinate) ? SystemClassDB.Distance(currentsystem, tpos.X, tpos.Y, tpos.Z).ToString("0.00") : "Unknown";
                             AddColText(0, 0, rowpos, rowheight, "Target: " + name + " @ " + dist +" ly", textcolour, backcolour, null);
                             rowpos += rowheight;
                         }
@@ -692,15 +716,20 @@ namespace EDDiscovery.UserControls
             }
         }
 
-#endregion
+        #endregion
 
-#region Config
+        #region Config
+
+        private void showSystemInformationToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FlipConfig(Configuration.showSystemInformation, ((ToolStripMenuItem)sender).Checked, true);
+        }
 
         private void toolStripMenuItemTargetLine_Click(object sender, EventArgs e)
         {
             FlipConfig(Configuration.showTargetLine, ((ToolStripMenuItem)sender).Checked, true);
         }
-    
+
         private void EDSMButtonToolStripMenuItem_Click(object sender, EventArgs e)
         {
             FlipConfig(Configuration.showEDSMButton, ((ToolStripMenuItem)sender).Checked, true);
