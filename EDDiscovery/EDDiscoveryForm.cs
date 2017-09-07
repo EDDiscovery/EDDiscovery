@@ -336,8 +336,8 @@ namespace EDDiscovery
 
         private void RepositionForm()
         {
-            var top = SQLiteDBClass.GetSettingInt("FormTop", -1);
-            if (top != -1 && EDDOptions.Instance.NoWindowReposition == false)
+            var top = SQLiteDBClass.GetSettingInt("FormTop", -999);
+            if (top != -999 && EDDOptions.Instance.NoWindowReposition == false)
             {
                 var left = SQLiteDBClass.GetSettingInt("FormLeft", 0);
                 var height = SQLiteDBClass.GetSettingInt("FormHeight", 800);

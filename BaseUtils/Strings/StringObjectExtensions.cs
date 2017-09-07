@@ -87,6 +87,17 @@ public static class ObjectExtensionsStrings
         }
     }
 
+    public static string ReplaceUnderscoresNull(this object obj)
+    {
+        if (obj == null)
+            return null;
+        else
+        {
+            string str = obj.ToString();
+            return str.Equals("Unknown") ? "" : str.Replace("_", " ");
+        }
+    }
+
     public static string QuoteString(this string obj, bool comma = false, bool bracket = false)
     {
         if (obj.Length == 0 || obj.Contains("\"") || obj.Contains(" ") || (bracket && obj.Contains(")")) || (comma && obj.Contains(",")))

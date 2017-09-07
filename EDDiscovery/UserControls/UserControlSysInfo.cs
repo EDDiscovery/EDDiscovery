@@ -172,10 +172,14 @@ namespace EDDiscovery.UserControls
 
                 buttonRoss.Enabled = buttonEDDB.Enabled = enableedddross;
 
-                textBoxAllegiance.Text = he.System.allegiance.ToNullUnknownString();
-                textBoxEconomy.Text = he.System.primary_economy.ToNullUnknownString();
-                textBoxGovernment.Text = he.System.government.ToNullUnknownString();
-                textBoxState.Text = he.System.state.ToNullUnknownString();
+                string allegiance, economy, gov, faction, factionstate, security;
+                hl.ReturnSystemInfo(he, out allegiance, out economy, out gov, out faction, out factionstate, out security);
+
+                textBoxAllegiance.Text = allegiance;
+                textBoxEconomy.Text = economy;
+                textBoxGovernment.Text = gov;
+                textBoxState.Text = factionstate;
+
                 SetNote(he.snc != null ? he.snc.Note : "");
                 textBoxGameMode.Text = he.GameModeGroup;
                 if (he.isTravelling)

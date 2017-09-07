@@ -114,10 +114,20 @@ namespace BaseUtils
                             {
                                 output = ((DateTime)value).ToString();
                             }
-                            else
+                            else 
                             {
-                                output = "";
-                                System.Diagnostics.Debug.Assert(false);
+                                Type t = value.GetType();
+                                if (t.BaseType.Name.Equals("Enum"))
+                                {
+                                    var ev = Activator.CreateInstance(t);
+                                    ev = value;
+                                    output = ev.ToString();
+                                }
+                                else
+                                {
+                                    output = "";
+                                    System.Diagnostics.Debug.Assert(false);
+                                }
                             }
 
                             // if printed something, text must be non null and of length, and it returns true.  Only adds on prefix and prepad if required

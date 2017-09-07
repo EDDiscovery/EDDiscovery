@@ -226,14 +226,16 @@ namespace EDDiscovery.Forms
 
             SetTopMost(SQLiteDBClass.GetSettingBool(dbrefname + "TopMost", deftopmost));
 
-            var top = SQLiteDBClass.GetSettingInt(dbrefname + "Top", -1);
+            var top = SQLiteDBClass.GetSettingInt(dbrefname + "Top", -999);
+            System.Diagnostics.Debug.WriteLine("Position Top is {0} {1}", dbrefname, top);
 
-            if (top >= 0 && norepositionwindow == false)
+            if (top != -999 && norepositionwindow == false)
             {
                 var left = SQLiteDBClass.GetSettingInt(dbrefname + "Left", 0);
                 var height = SQLiteDBClass.GetSettingInt(dbrefname + "Height", 800);
                 var width = SQLiteDBClass.GetSettingInt(dbrefname + "Width", 800);
 
+                System.Diagnostics.Debug.WriteLine("Position {0} {1} {2} {3} {4}", dbrefname, top, left, width, height);
                 // Adjust so window fits on screen; just in case user unplugged a monitor or something
 
                 var screen = SystemInformation.VirtualScreen;
@@ -277,6 +279,7 @@ namespace EDDiscovery.Forms
             SQLiteDBClass.PutSettingInt(dbrefname + "Height", winsize.Height);
             SQLiteDBClass.PutSettingInt(dbrefname + "Top", this.Top);
             SQLiteDBClass.PutSettingInt(dbrefname + "Left", this.Left);
+            System.Diagnostics.Debug.WriteLine("Save Position {0} {1} {2} {3} {4}", dbrefname , Top, Left, winsize.Width, winsize.Height);
         }
 
         #endregion
