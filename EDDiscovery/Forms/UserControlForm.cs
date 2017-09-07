@@ -233,8 +233,6 @@ namespace EDDiscovery.Forms
 
             panel_taskbaricon.ImageSelected = this.ShowInTaskbar ? ExtendedControls.DrawnPanel.ImageType.WindowInTaskBar : ExtendedControls.DrawnPanel.ImageType.WindowNotInTaskBar;
             panel_showtitle.ImageSelected = displayTitle ? ExtendedControls.DrawnPanel.ImageType.Captioned : ExtendedControls.DrawnPanel.ImageType.NotCaptioned;
-
-            fucking buttons don't work.. fix
         }
 
         private void UserControlForm_Layout(object sender, LayoutEventArgs e)
@@ -254,7 +252,6 @@ namespace EDDiscovery.Forms
             if (tr && IsTransparencySupported)     // the check is for paranoia
             {
                 SetTransparency(true);      // only call if transparent.. may not be fully set up so don't merge with above
-                why the green flash
                 // clickthruwhentransparent = SQLiteDBClass.GetSettingBool(dbrefname + "TransparentClickThru", false);
             }
 
@@ -375,14 +372,14 @@ namespace EDDiscovery.Forms
                 {
                     System.Diagnostics.Debug.WriteLine(Environment.TickCount + "In area");
 
-                    if (Control.ModifierKeys.HasFlag(clickthrukey) || clickthrukey == Keys.None)
-                    {
+                   // if (Control.ModifierKeys.HasFlag(clickthrukey) || clickthrukey == Keys.None)
+                  //  {
                         if (!inpanelshow)
                         {
                             inpanelshow = true;
                             UpdateTransparency();
                         }
-                    }
+                 //   }
                 }
                 else
                 {
