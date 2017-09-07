@@ -37,6 +37,10 @@ namespace EDDiscovery.Forms
         public bool istemporaryresized = false;
 
         public bool istransparent = false;          // we are in transparent mode (but may be showing due to inpanelshow)
+        public bool clickthruwhentransparent = true;   // click thru when transparent..
+
+        Keys clickthrukey = Keys.Shift;
+
         public bool displayTitle = true;            // we are displaying the title
         public string dbrefname;
         public string wintitle;
@@ -118,6 +122,17 @@ namespace EDDiscovery.Forms
             }
         }
 
+        public void SetClickThruWhenTransparent(bool t)
+        {
+            if (IsTransparencySupported)
+            {
+                clickthruwhentransparent = t;
+                UpdateTransparency();
+                SQLiteDBClass.PutSettingBool(dbrefname + "TransparentClickThru", clickthruwhentransparent);
+            }
+
+        }
+
         public void SetShowTitleInTransparency(bool t)
         {
             displayTitle = t;
@@ -154,11 +169,9 @@ namespace EDDiscovery.Forms
         private void UpdateTransparency()
         {
             curwindowsborder = (!istransparent && defwindowsborder);    // we have a border if not transparent and we have a def border
-            bool transparent = istransparent && !inpanelshow;           // are we transparent..
+            bool showtransparent = istransparent && !inpanelshow;           // are we transparent..  must not be in panel show
 
-            Color togo;
-
-            if (beforetransparency.IsFullyTransparent())
+            if (beforetransparency.IsFullyTransparent())        // record colour before transparency, dynamically
             {
                 beforetransparency = this.BackColor;
                 tkey = this.TransparencyKey;
@@ -166,8 +179,8 @@ namespace EDDiscovery.Forms
 
             UpdateControls();
 
-            this.TransparencyKey = (transparent) ? transparencycolor : tkey;
-            togo = (transparent) ? transparencycolor : beforetransparency;
+            this.TransparencyKey = (showtransparent) ? transparencycolor : tkey;        
+            Color togo = (showtransparent) ? transparencycolor : beforetransparency;
 
             this.BackColor = togo;
             statusStripBottom.BackColor = togo;
@@ -177,13 +190,28 @@ namespace EDDiscovery.Forms
             System.Diagnostics.Debug.Assert(!labeltransparentcolour.IsFullyTransparent());
             label_index.ForeColor = labelControlText.ForeColor = (istransparent) ? labeltransparentcolour : labelnormalcolour;
 
-            UserControl.SetTransparency(transparent, togo);
+            UserControl.SetTransparency(showtransparent, togo);
             PerformLayout();
 
-            if (transparent || inpanelshow)
+            if (showtransparent || inpanelshow)     // timer needed if transparent, or if in panel show
                 timer.Start();
             else
                 timer.Stop();
+
+
+            UpdateClickThru();
+        }
+
+        void UpdateClickThru()
+        {
+            int cur = BaseUtils.Win32.UnsafeNativeMethods.GetWindowLong(this.Handle, BaseUtils.Win32.UnsafeNativeMethods.GWL.ExStyle);
+
+            if (istransparent && !inpanelshow && clickthruwhentransparent)      // if transparent, and we want click thru when transparent
+                cur = cur | WS_EX.TRANSPARENT | WS_EX.LAYERED;
+            else
+                cur = cur & ~(WS_EX.TRANSPARENT | WS_EX.LAYERED);
+
+            BaseUtils.Win32.UnsafeNativeMethods.SetWindowLong(this.Handle, BaseUtils.Win32.UnsafeNativeMethods.GWL.ExStyle , cur);
         }
 
         private void UpdateControls()
@@ -199,12 +227,14 @@ namespace EDDiscovery.Forms
 
             panel_transparent.Visible = IsTransparencySupported && !transparent;
             panel_showtitle.Visible = IsTransparencySupported && !transparent;
-            panel_transparent.ImageSelected = (istransparent) ? ExtendedControls.DrawnPanel.ImageType.Transparent : ExtendedControls.DrawnPanel.ImageType.NotTransparent;
+            panel_transparent.ImageSelected = (istransparent && clickthruwhentransparent) ? ExtendedControls.DrawnPanel.ImageType.TransparentClickThru : ((istransparent) ? ExtendedControls.DrawnPanel.ImageType.Transparent : ExtendedControls.DrawnPanel.ImageType.NotTransparent);
 
             label_index.Visible = labelControlText.Visible = (displayTitle || !transparent);   //  titles are on, or transparent is off
 
             panel_taskbaricon.ImageSelected = this.ShowInTaskbar ? ExtendedControls.DrawnPanel.ImageType.WindowInTaskBar : ExtendedControls.DrawnPanel.ImageType.WindowNotInTaskBar;
             panel_showtitle.ImageSelected = displayTitle ? ExtendedControls.DrawnPanel.ImageType.Captioned : ExtendedControls.DrawnPanel.ImageType.NotCaptioned;
+
+            fucking buttons don't work.. fix
         }
 
         private void UserControlForm_Layout(object sender, LayoutEventArgs e)
@@ -222,7 +252,11 @@ namespace EDDiscovery.Forms
 
             bool tr = SQLiteDBClass.GetSettingBool(dbrefname + "Transparent", deftransparent);
             if (tr && IsTransparencySupported)     // the check is for paranoia
+            {
                 SetTransparency(true);      // only call if transparent.. may not be fully set up so don't merge with above
+                why the green flash
+                // clickthruwhentransparent = SQLiteDBClass.GetSettingBool(dbrefname + "TransparentClickThru", false);
+            }
 
             SetTopMost(SQLiteDBClass.GetSettingBool(dbrefname + "TopMost", deftopmost));
 
@@ -260,6 +294,8 @@ namespace EDDiscovery.Forms
                 UserControl.LoadLayout();
 
             isloaded = true;
+
+            UpdateClickThru();
         }
 
         protected override void OnFormClosing(FormClosingEventArgs e)
@@ -305,6 +341,19 @@ namespace EDDiscovery.Forms
         {
             inpanelshow = true;
             SetTransparency(!istransparent);
+            //if (clickthruwhentransparent)     // if set, go to off/off
+            //{
+            //    clickthruwhentransparent = false;
+            //    SetTransparency(false);
+            //}
+            //else if (istransparent)           // if this is set, go to on/on
+            //{
+            //    SetClickThruWhenTransparent(true);
+            //}
+            //else
+            //{
+            //    SetTransparency(true);     // else its transparency off, goto on/off
+            //}
         }
 
         private void panel_taskbaricon_Click(object sender, EventArgs e)
@@ -322,16 +371,23 @@ namespace EDDiscovery.Forms
             if (isloaded)
             {
                 //System.Diagnostics.Debug.WriteLine(Environment.TickCount + " Tick" + istransparent + " " + inpanelshow);
-                if (ClientRectangle.Contains(this.PointToClient(MousePosition)))
+                if (ClientRectangle.Contains(this.PointToClient(MousePosition)) )
                 {
-                    if (!inpanelshow)
+                    System.Diagnostics.Debug.WriteLine(Environment.TickCount + "In area");
+
+                    if (Control.ModifierKeys.HasFlag(clickthrukey) || clickthrukey == Keys.None)
                     {
-                        inpanelshow = true;
-                        UpdateTransparency();
+                        if (!inpanelshow)
+                        {
+                            inpanelshow = true;
+                            UpdateTransparency();
+                        }
                     }
                 }
                 else
                 {
+                    System.Diagnostics.Debug.WriteLine(Environment.TickCount + "Out of area");
+
                     if (inpanelshow)
                     {
                         inpanelshow = false;
