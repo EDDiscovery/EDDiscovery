@@ -375,6 +375,11 @@ namespace EliteDangerousCore
                     elements.Add("Main Star");              // Sol / SN:Sol should come thru here
                 }
             }
+            else if (sc.IsStar && !sc.IsEDSMBody && sc.DistanceFromArrivalLS == 0)
+            {
+                elements = new List<string> { sc.BodyName };
+                starscannodetype = ScanNodeType.star;
+            }
             else
             {                                               // so not part of starname        
                 elements = sc.BodyName.Split(' ').ToList();     // not related in any way (earth) so assume all bodyparts, and 
