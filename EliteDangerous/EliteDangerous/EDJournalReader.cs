@@ -121,12 +121,12 @@ namespace EliteDangerousCore
 
                 if (_commander == null )
                 {
-                    EDCommander onlyc = EDCommander.GetAll().FirstOrDefault();
-                    if (EDCommander.NumberOfCommanders == 1 && onlyc != null && onlyc.Name == "Jameson (Default)")
+                    _commander = EDCommander.GetAll().FirstOrDefault();
+                    if (EDCommander.NumberOfCommanders == 1 && _commander != null && _commander.Name == "Jameson (Default)")
                     {
-                        onlyc.Name = newname;
-                        onlyc.EdsmName = newname;
-                        EDCommander.Update(new List<EDCommander> { onlyc }, false);
+                        _commander.Name = newname;
+                        _commander.EdsmName = newname;
+                        EDCommander.Update(new List<EDCommander> { _commander }, false);
                     }
                     else
                         _commander = EDCommander.Create(newname, null, EDJournalClass.GetDefaultJournalDir().Equals(TravelLogUnit.Path) ? "" : TravelLogUnit.Path);
