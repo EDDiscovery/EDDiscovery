@@ -113,6 +113,15 @@ namespace BaseUtils.Win32
         public static extern int GetWindowLong(IntPtr hWnd, GWL nIndex);
         [DllImport("user32.dll", EntryPoint = "SetWindowLong")]
         public static extern int SetWindowLong(IntPtr hWnd, GWL nIndex, int dwNewLong);
+
+        public static int ChangeWindowLong(IntPtr hWnd, GWL nIndex, int mask , int set)     // HELPER!
+        {
+            int cur = (GetWindowLong(hWnd, nIndex) & ~mask) | set;
+            SetWindowLong(hWnd, nIndex, cur);
+            System.Diagnostics.Debug.WriteLine("set exstyle " + cur.ToString("X"));
+            return cur;
+        }
+
         [DllImport("user32.dll", CharSet = CharSet.Auto)]
         public static extern bool UnhookWindowsHookEx(HandleRef hhook);
         [DllImport("user32.dll", CharSet = CharSet.Auto)]
