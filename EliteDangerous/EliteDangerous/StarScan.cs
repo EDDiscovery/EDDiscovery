@@ -540,7 +540,7 @@ namespace EliteDangerousCore
                 }
 
                 // Reprocess if we've encountered the primary (A) star an we already have a "Main Star"
-                if (reprocessPrimary && elements.Count == 1 && elements[0].Equals("A", StringComparison.InvariantCultureIgnoreCase) && sn.starnodes.ContainsKey("Main Star"))
+                if (reprocessPrimary && elements.Count == 1 && elements[0].Equals("A", StringComparison.InvariantCultureIgnoreCase) && sn.starnodes.Any(n => n.Key.Length > 1 && n.Value.type == ScanNodeType.star))
                     ReProcess(sn);
 
                 return true;
