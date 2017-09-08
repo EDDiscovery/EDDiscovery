@@ -39,8 +39,6 @@ namespace EDDiscovery.Forms
         public bool istransparent = false;          // we are in transparent mode (but may be showing due to inpanelshow)
         public bool clickthruwhentransparent = true;   // click thru when transparent..
 
-        Keys clickthrukey = Keys.Shift;
-
         public bool displayTitle = true;            // we are displaying the title
         public string dbrefname;
         public string wintitle;
@@ -142,9 +140,10 @@ namespace EDDiscovery.Forms
 
         public void SetTopMost(bool t)
         {
-            TopMost = t;
-            UpdateControls();
+            TopMost = t;        // this calls Win32.SetWindowPos, which then plays with the actual topmost bit in windows extended style
+                                // and loses the transparency bit!  So therefore
             SQLiteDBClass.PutSettingBool(dbrefname + "TopMost", TopMost);
+            UpdateTransparency();   // need to reestablish correct transparency again
         }
 
         public void SetShowInTaskBar(bool t)
@@ -175,9 +174,12 @@ namespace EDDiscovery.Forms
             {
                 beforetransparency = this.BackColor;
                 tkey = this.TransparencyKey;
+                //System.Diagnostics.Debug.WriteLine("Record colour " + beforetransparency.ToString() + " tkey " + this.TransparencyKey);
             }
 
             UpdateControls();
+
+            System.Diagnostics.Debug.WriteLine(Text + " tr " + istransparent + " " + clickthruwhentransparent);
 
             this.TransparencyKey = (showtransparent) ? transparencycolor : tkey;        
             Color togo = (showtransparent) ? transparencycolor : beforetransparency;
@@ -193,25 +195,15 @@ namespace EDDiscovery.Forms
             UserControl.SetTransparency(showtransparent, togo);
             PerformLayout();
 
+            // if in transparent click thru, we set transparent style.. else clear it.
+            BaseUtils.Win32.UnsafeNativeMethods.ChangeWindowLong(this.Handle, BaseUtils.Win32.UnsafeNativeMethods.GWL.ExStyle , 
+                                WS_EX.TRANSPARENT, showtransparent && clickthruwhentransparent ? WS_EX.TRANSPARENT : 0);
+
             if (showtransparent || inpanelshow)     // timer needed if transparent, or if in panel show
                 timer.Start();
             else
                 timer.Stop();
 
-
-            UpdateClickThru();
-        }
-
-        void UpdateClickThru()
-        {
-            int cur = BaseUtils.Win32.UnsafeNativeMethods.GetWindowLong(this.Handle, BaseUtils.Win32.UnsafeNativeMethods.GWL.ExStyle);
-
-            if (istransparent && !inpanelshow && clickthruwhentransparent)      // if transparent, and we want click thru when transparent
-                cur = cur | WS_EX.TRANSPARENT | WS_EX.LAYERED;
-            else
-                cur = cur & ~(WS_EX.TRANSPARENT | WS_EX.LAYERED);
-
-            BaseUtils.Win32.UnsafeNativeMethods.SetWindowLong(this.Handle, BaseUtils.Win32.UnsafeNativeMethods.GWL.ExStyle , cur);
         }
 
         private void UpdateControls()
@@ -233,6 +225,7 @@ namespace EDDiscovery.Forms
 
             panel_taskbaricon.ImageSelected = this.ShowInTaskbar ? ExtendedControls.DrawnPanel.ImageType.WindowInTaskBar : ExtendedControls.DrawnPanel.ImageType.WindowNotInTaskBar;
             panel_showtitle.ImageSelected = displayTitle ? ExtendedControls.DrawnPanel.ImageType.Captioned : ExtendedControls.DrawnPanel.ImageType.NotCaptioned;
+            panel_ontop.ImageSelected = TopMost ? ExtendedControls.DrawnPanel.ImageType.OnTop : ExtendedControls.DrawnPanel.ImageType.Floating;
         }
 
         private void UserControlForm_Layout(object sender, LayoutEventArgs e)
@@ -248,15 +241,11 @@ namespace EDDiscovery.Forms
         {
             this.BringToFront();
 
-            bool tr = SQLiteDBClass.GetSettingBool(dbrefname + "Transparent", deftransparent);
-            if (tr && IsTransparencySupported)     // the check is for paranoia
-            {
-                SetTransparency(true);      // only call if transparent.. may not be fully set up so don't merge with above
-                // clickthruwhentransparent = SQLiteDBClass.GetSettingBool(dbrefname + "TransparentClickThru", false);
-            }
+            istransparent = SQLiteDBClass.GetSettingBool(dbrefname + "Transparent", deftransparent) && IsTransparencySupported;
+            clickthruwhentransparent = SQLiteDBClass.GetSettingBool(dbrefname + "TransparentClickThru", false);
 
-            SetTopMost(SQLiteDBClass.GetSettingBool(dbrefname + "TopMost", deftopmost));
-
+            SetTopMost(SQLiteDBClass.GetSettingBool(dbrefname + "TopMost", deftopmost)); // this also establishes transparency
+            
             var top = SQLiteDBClass.GetSettingInt(dbrefname + "Top", -999);
             System.Diagnostics.Debug.WriteLine("Position Top is {0} {1}", dbrefname, top);
 
@@ -291,8 +280,8 @@ namespace EDDiscovery.Forms
                 UserControl.LoadLayout();
 
             isloaded = true;
-
-            UpdateClickThru();
+            int cur = BaseUtils.Win32.UnsafeNativeMethods.GetWindowLong(this.Handle, BaseUtils.Win32.UnsafeNativeMethods.GWL.ExStyle);
+            System.Diagnostics.Debug.WriteLine("Style at exit " + cur.ToString("X"));
         }
 
         protected override void OnFormClosing(FormClosingEventArgs e)
@@ -336,21 +325,20 @@ namespace EDDiscovery.Forms
 
         private void panel_transparency_Click(object sender, EventArgs e)       // only works if transparency is supported
         {
-            inpanelshow = true;
-            SetTransparency(!istransparent);
-            //if (clickthruwhentransparent)     // if set, go to off/off
-            //{
-            //    clickthruwhentransparent = false;
-            //    SetTransparency(false);
-            //}
-            //else if (istransparent)           // if this is set, go to on/on
-            //{
-            //    SetClickThruWhenTransparent(true);
-            //}
-            //else
-            //{
-            //    SetTransparency(true);     // else its transparency off, goto on/off
-            //}
+            inpanelshow = true; // in case we go transparent, we need to make sure its on.. since it won't be on if the timer is not running
+            if (clickthruwhentransparent)     // if set, go to off/off
+            {
+                clickthruwhentransparent = false;
+                SetTransparency(false);
+            }
+            else if (istransparent)           // if this is set, go to on/on
+            {
+                SetClickThruWhenTransparent(true);
+            }
+            else
+            {
+                SetTransparency(true);     // else its transparency off, goto on/off
+            }
         }
 
         private void panel_taskbaricon_Click(object sender, EventArgs e)
@@ -370,20 +358,22 @@ namespace EDDiscovery.Forms
                 //System.Diagnostics.Debug.WriteLine(Environment.TickCount + " Tick" + istransparent + " " + inpanelshow);
                 if (ClientRectangle.Contains(this.PointToClient(MousePosition)) )
                 {
-                    System.Diagnostics.Debug.WriteLine(Environment.TickCount + "In area");
+                    //System.Diagnostics.Debug.WriteLine(Environment.TickCount + "In area");
 
-                   // if (Control.ModifierKeys.HasFlag(clickthrukey) || clickthrukey == Keys.None)
-                  //  {
+                    Keys clickthrukey = EDDConfig.Instance.ClickThruKey;
+
+                    if ( !clickthruwhentransparent || Control.ModifierKeys.HasFlag(clickthrukey) )
+                    {
                         if (!inpanelshow)
                         {
                             inpanelshow = true;
                             UpdateTransparency();
                         }
-                 //   }
+                    }
                 }
                 else
                 {
-                    System.Diagnostics.Debug.WriteLine(Environment.TickCount + "Out of area");
+                    //System.Diagnostics.Debug.WriteLine(Environment.TickCount + "Out of area");
 
                     if (inpanelshow)
                     {

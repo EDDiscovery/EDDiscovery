@@ -1120,6 +1120,7 @@ namespace BaseUtils.Win32Constants
 
     public static class WS_EX
     {
+        public const int TOPMOST = 0x8;
         public const int TRANSPARENT = 0x20;
         public const int LAYERED = 0x80000;
     }
