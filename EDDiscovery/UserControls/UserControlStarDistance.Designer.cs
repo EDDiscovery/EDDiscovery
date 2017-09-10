@@ -140,6 +140,7 @@ namespace EDDiscovery.UserControls
             this.dataGridViewNearest.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.dataGridViewNearest.Size = new System.Drawing.Size(552, 572);
             this.dataGridViewNearest.TabIndex = 23;
+            this.dataGridViewNearest.SortCompare += new System.Windows.Forms.DataGridViewSortCompareEventHandler(this.dataGridViewNearest_SortCompare);
             // 
             // Col1
             // 
