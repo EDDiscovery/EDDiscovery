@@ -91,7 +91,7 @@ namespace EDDiscovery.Actions
 
                         if ( ucf!= null)
                         {
-                            ap[prefix + "Transparent"] = ucf.istransparent ? "1" : "0";
+                            ap[prefix + "Transparent"] = ucf.IsTransparent ? "1" : "0";
                             ap[prefix + "TopMost"] = ucf.TopMost ? "1" : "0";
                             ap[prefix + "DisplayTitle"] = ucf.displayTitle ? "1" : "0";
                             ap[prefix + "ShowInTaskbar"] = ucf.ShowInTaskbar ? "1" : "0";
@@ -109,9 +109,9 @@ namespace EDDiscovery.Actions
                         else if (nextcmd.Equals("on"))   // does nothing
                         { }
                         else if (nextcmd.Equals("transparent"))
-                            ucf.SetTransparency(true);
+                            ucf.SetTransparency(Forms.UserControlForm.TransparencyMode.On);
                         else if (nextcmd.Equals("opaque"))
-                            ucf.SetTransparency(false);
+                            ucf.SetTransparency(Forms.UserControlForm.TransparencyMode.Off);
                         else if (nextcmd.Equals("title"))
                             ucf.SetShowInTaskBar(true);
                         else if (nextcmd.Equals("notitle"))

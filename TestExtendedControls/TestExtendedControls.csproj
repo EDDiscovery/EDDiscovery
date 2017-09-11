@@ -49,6 +49,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="EDCommander.cs" />
+    <Compile Include="TestDirectInput.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="TestDirectInput.Designer.cs">
+      <DependentUpon>TestDirectInput.cs</DependentUpon>
+    </Compile>
     <Compile Include="TestSelectionPanel.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -93,6 +99,9 @@
     <Compile Include="UserControl2.Designer.cs">
       <DependentUpon>UserControl2.cs</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="TestDirectInput.resx">
+      <DependentUpon>TestDirectInput.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="TestSelectionPanel.resx">
       <DependentUpon>TestSelectionPanel.cs</DependentUpon>
     </EmbeddedResource>
@@ -152,6 +161,10 @@
     <ProjectReference Include="..\BaseUtils\BaseUtils.csproj">
       <Project>{c657c881-f3e1-45ba-aca5-966348010414}</Project>
       <Name>BaseUtils</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DirectInput\DirectInput.csproj">
+      <Project>{390b1547-a455-45e3-974f-e1f9b1613ad5}</Project>
+      <Name>DirectInput</Name>
     </ProjectReference>
     <ProjectReference Include="..\ExtendedControls\ExtendedControls.csproj">
       <Project>{2049403f-f4c7-45e6-b777-6390c78e4d2b}</Project>

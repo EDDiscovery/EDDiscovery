@@ -52,6 +52,10 @@ namespace DialogTest
                 case "testtabstrip":
                     sel = new TestTabStrip();
                     break;
+
+                case "testdirectinput":
+                    sel = new TestDirectInput();
+                    break;
             }
 
             Application.Run(sel);

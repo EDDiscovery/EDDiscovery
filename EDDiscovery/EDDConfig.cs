@@ -65,6 +65,7 @@ namespace EDDiscovery
         private bool _autoLoadPopouts = false;
         private bool _autoSavePopouts = false;
         private bool _showuievents = false;
+        private System.Windows.Forms.Keys _clickthrukey = System.Windows.Forms.Keys.ShiftKey;
         private string _defaultwavedevice = "Default";
         private string _defaultvoicedevice = "Default";
 
@@ -234,7 +235,7 @@ namespace EDDiscovery
             }
         }
 
-        public bool ShowUIEvents 
+        public bool ShowUIEvents
         {
             get
             {
@@ -244,6 +245,19 @@ namespace EDDiscovery
             {
                 _showuievents = value;
                 SQLiteConnectionUser.PutSettingBool("ShowUIEvents", value);
+            }
+        }
+
+        public System.Windows.Forms.Keys ClickThruKey
+        {
+            get
+            {
+                return _clickthrukey;
+            }
+            set
+            {
+                _clickthrukey = value;
+                SQLiteConnectionUser.PutSettingInt("ClickThruKey", (int)value);
             }
         }
 
@@ -268,6 +282,7 @@ namespace EDDiscovery
                 _defaultvoicedevice = SQLiteConnectionUser.GetSettingString("VoiceAudioDevice", "Default", conn);
                 _defaultwavedevice = SQLiteConnectionUser.GetSettingString("WaveAudioDevice", "Default", conn);
                 _showuievents = SQLiteConnectionUser.GetSettingBool("ShowUIEvents", false, conn);
+                _clickthrukey = (System.Windows.Forms.Keys)SQLiteConnectionUser.GetSettingInt("ClickThruKey", (int)System.Windows.Forms.Keys.ShiftKey, conn);
 
                 EliteDangerousCore.EDCommander.Load(write, conn);
                 UserPaths.Load(conn);

@@ -39,7 +39,8 @@ namespace ExtendedControls
         public float PanelDisabledScaling { get; set; } = 0.25F;
 
         public enum ImageType { Close, Minimize, OnTop, Floating, Gripper, EDDB, Ross, InverseText,
-                                Move, Text, None , Transparent, NotTransparent ,
+                                Move, Text, None ,
+                                NotTransparent, Transparent, TransparentClickThru, FullyTransparent,
                                 WindowInTaskBar, WindowNotInTaskBar, Captioned, NotCaptioned,
                                 Bars, Maximize, Restore };
 
@@ -111,6 +112,8 @@ namespace ExtendedControls
                 int topmarginpx = msize;
                 int bottommarginpx = bottompx - msize;
 
+                Rectangle workingarea = new Rectangle(leftmarginpx, topmarginpx, rightmarginpx - leftmarginpx + 1, bottommarginpx - topmarginpx + 1);
+
                 int marginwidth = rightmarginpx - leftmarginpx + 1;
                 int marginheight = bottommarginpx - topmarginpx + 1;
 
@@ -133,20 +136,37 @@ namespace ExtendedControls
                 }
                 else if (ImageSelected == ImageType.Floating)
                 {
-                    e.Graphics.DrawLine(p2, new Point(leftmarginpx, topmarginpx), new Point(rightmarginpx, topmarginpx));
-                    e.Graphics.DrawLine(p2, new Point(leftmarginpx, bottommarginpx), new Point(rightmarginpx, bottommarginpx));
-                    e.Graphics.DrawLine(p2, new Point(leftmarginpx, bottommarginpx), new Point(leftmarginpx, topmarginpx));
-                    e.Graphics.DrawLine(p2, new Point(rightmarginpx, bottommarginpx), new Point(rightmarginpx, topmarginpx));
+                    e.Graphics.DrawRectangle(p2, workingarea);
                 }
-                else if (ImageSelected == ImageType.Transparent)
+                else if (ImageSelected == ImageType.TransparentClickThru)
                 {
-                    e.Graphics.DrawLine(p2, new Point(leftmarginpx, topmarginpx), new Point(rightmarginpx, topmarginpx));
-                    e.Graphics.DrawLine(p2, new Point(leftmarginpx, bottommarginpx), new Point(rightmarginpx, bottommarginpx));
-                    e.Graphics.DrawLine(p2, new Point(leftmarginpx, bottommarginpx), new Point(leftmarginpx, topmarginpx));
-                    e.Graphics.DrawLine(p2, new Point(rightmarginpx, bottommarginpx), new Point(rightmarginpx, topmarginpx));
+                    e.Graphics.DrawRectangle(p2, workingarea);
 
                     e.Graphics.DrawLine(p2, new Point(leftmarginpx + 2, topmarginpx + 2), new Point(rightmarginpx - 2, topmarginpx + 2));
                     e.Graphics.DrawLine(p2, new Point(centrehorzpx, topmarginpx + 2), new Point(centrehorzpx, bottommarginpx - 2));
+
+                    e.Graphics.DrawLine(p2, new Point(centrehorzpx + 2, topmarginpx + 6), new Point(centrehorzpx + 6, topmarginpx + 6));
+                    e.Graphics.DrawLine(p2, new Point(centrehorzpx + 2, topmarginpx + 6), new Point(centrehorzpx + 2, topmarginpx + 10));
+                    e.Graphics.DrawLine(p2, new Point(centrehorzpx + 2, topmarginpx + 10), new Point(centrehorzpx + 6, topmarginpx + 10));
+                }
+                else if (ImageSelected == ImageType.FullyTransparent)
+                {
+                    e.Graphics.DrawRectangle(p2, workingarea);
+
+                    e.Graphics.DrawLine(p2, new Point(leftmarginpx + 2, topmarginpx + 2), new Point(rightmarginpx - 2, topmarginpx + 2));
+                    e.Graphics.DrawLine(p2, new Point(centrehorzpx, topmarginpx + 2), new Point(centrehorzpx, bottommarginpx - 2));
+
+                    e.Graphics.DrawLine(p2, new Point(centrehorzpx + 2, topmarginpx + 6), new Point(centrehorzpx + 6, topmarginpx + 6));
+                    e.Graphics.DrawLine(p2, new Point(centrehorzpx + 2, topmarginpx + 6), new Point(centrehorzpx + 2, topmarginpx + 11));
+                    e.Graphics.DrawLine(p2, new Point(centrehorzpx + 2, topmarginpx + 8), new Point(centrehorzpx + 6, topmarginpx + 8));
+                }
+                else if (ImageSelected == ImageType.Transparent)
+                {
+                    e.Graphics.DrawRectangle(p2, workingarea);
+
+                    e.Graphics.DrawLine(p2, new Point(leftmarginpx + 2, topmarginpx + 3), new Point(rightmarginpx - 2, topmarginpx + 3));
+                    e.Graphics.DrawLine(p2, new Point(centrehorzpx, topmarginpx + 3), new Point(centrehorzpx, bottommarginpx - 3));
+
                 }
                 else if (ImageSelected == ImageType.NotTransparent)
                 {
@@ -155,10 +175,7 @@ namespace ExtendedControls
                 }
                 else if (ImageSelected == ImageType.Captioned)
                 {
-                    e.Graphics.DrawLine(p2, new Point(leftmarginpx, topmarginpx), new Point(rightmarginpx, topmarginpx));
-                    e.Graphics.DrawLine(p2, new Point(leftmarginpx, bottommarginpx), new Point(rightmarginpx, bottommarginpx));
-                    e.Graphics.DrawLine(p2, new Point(leftmarginpx, bottommarginpx), new Point(leftmarginpx, topmarginpx));
-                    e.Graphics.DrawLine(p2, new Point(rightmarginpx, bottommarginpx), new Point(rightmarginpx, topmarginpx));
+                    e.Graphics.DrawRectangle(p2, workingarea);
 
                     e.Graphics.DrawLine(p2, new Point(leftmarginpx + 2, topmarginpx + 2), new Point(rightmarginpx - 2, topmarginpx + 2));
                     e.Graphics.DrawLine(p2, new Point(leftmarginpx + 2, bottommarginpx - 2), new Point(rightmarginpx - 2, bottommarginpx - 2));
