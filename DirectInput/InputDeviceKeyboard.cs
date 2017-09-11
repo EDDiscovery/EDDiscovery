@@ -19,6 +19,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace DirectInputDevices
 {
@@ -71,7 +72,86 @@ namespace DirectInputDevices
             return (events.Count > 0) ? events : null;
         }
 
-        Tuple<string, string>[] strtx = new Tuple<string, string>[] 
+        public string EventName(InputDeviceEvent e) // need to return frontier naming convention!
+        {
+            Key k = (Key)(e.EventNumber);
+            return DIKeyToFrontier(k);
+        }
+
+        public bool? IsPressed(string frontierkeyname )      // frontier naming convention..  GetEvents must have filled in ks
+        {
+            frontierkeyname = frontierkeyname.Substring(4);
+            if (frontierkeyname.Length == 1 && (frontierkeyname[0] >= '0' && frontierkeyname[0] <= '9'))
+                frontierkeyname = "D" + frontierkeyname;
+            else if (frontierkeyname.StartsWith("Numpad_") && char.IsDigit(frontierkeyname[7]))
+                frontierkeyname = "NumberPad" + frontierkeyname[7];
+            else
+            {
+                int i = Array.FindIndex(strtx, x => x.Item2.Equals(frontierkeyname));
+                if (i >= 0)
+                    frontierkeyname = strtx[i].Item1;
+            }
+
+            Key k;
+            if (Enum.TryParse<Key>(frontierkeyname, out k))
+            {
+                return (ks!=null) ? ks.IsPressed(k) : false;
+            }
+            else
+            {
+                System.Diagnostics.Debug.WriteLine("FAILED IsPressed " + frontierkeyname);
+            }
+
+            return false;
+        }
+
+        public bool IsDIPressed(Key k, bool recheck = false) // check. Optional rescan or use GetEvents
+        {
+            if (recheck || ks == null)
+                ks = keyboard.GetCurrentState();
+
+            return ks.IsPressed(k);
+        }
+
+        public bool IsKeyPressed(Keys k, bool recheck = false) // check. Optional rescan or use GetEvents. Needs a diff name from above for some reason
+        {
+            if (recheck || ks == null)
+                ks = keyboard.GetCurrentState();
+
+            Key ky = KeysToKey(k);
+            return ks.IsPressed(ky);
+        }
+
+        public override string ToString()
+        {
+            return ksi.Name + ":" + ksi.Instanceguid + ":" + ksi.Productguid;
+        }
+
+        public static void CreateKeyboard(InputDeviceList ilist)
+        {
+            DirectInput dinput = new DirectInput();
+
+            foreach (DeviceInstance di in dinput.GetDevices(DeviceClass.Keyboard, DeviceEnumerationFlags.AttachedOnly))
+            {
+                InputDeviceKeyboard k = new InputDeviceKeyboard(dinput, di);
+                ilist.Add(k);
+            }
+        }
+
+        public static InputDeviceKeyboard CreateKeyboard()      // direct keyboard make, not part of elite UI
+        {
+            DirectInput dinput = new DirectInput();
+
+            foreach (DeviceInstance di in dinput.GetDevices(DeviceClass.Keyboard, DeviceEnumerationFlags.AttachedOnly))
+            {
+                InputDeviceKeyboard k = new InputDeviceKeyboard(dinput, di);
+                return k;
+            }
+
+            return null;
+        }
+
+        static Tuple<string, string>[] strtx = new Tuple<string, string>[] // frontier naming convention, not quite c# naming conventions
         {
             new Tuple<string,string>("Up","UpArrow"),
             new Tuple<string,string>("Down","DownArrow"),
@@ -87,12 +167,10 @@ namespace DirectInputDevices
             new Tuple<string,string>("Add","Numpad_Add"),
             new Tuple<string,string>("NumberPadEnter","Numpad_Enter"),
             new Tuple<string,string>("Decimal","Numpad_Decimal"),
-       };
+        };
 
-        public string EventName(InputDeviceEvent e) // need to return frontier naming convention!
+        static public string DIKeyToFrontier(SharpDX.DirectInput.Key k)     // Sharp DX to frontier name
         {
-            Key k = (Key)(e.EventNumber);
-
             string keyname = k.ToString();
             string newname = keyname;
 
@@ -112,48 +190,172 @@ namespace DirectInputDevices
             return newname;
         }
 
-        public bool? IsPressed(string keyname)
+        static public System.Windows.Forms.Keys KeyToKeys(SharpDX.DirectInput.Key k)
         {
-            keyname = keyname.Substring(4);
-            if (keyname.Length == 1 && (keyname[0] >= '0' && keyname[0] <= '9'))
-                keyname = "D" + keyname;
-            else if (keyname.StartsWith("Numpad_") && char.IsDigit(keyname[7]))
-                keyname = "NumberPad" + keyname[7];
-            else
-            {
-                int i = Array.FindIndex(strtx, x => x.Item2.Equals(keyname));
-                if (i >= 0)
-                    keyname = strtx[i].Item1;
-            }
-
-            Key k;
-            if (Enum.TryParse<Key>(keyname, out k))
-            {
-                return ks.IsPressed(k);
-            }
-            else
-            {
-                System.Diagnostics.Debug.WriteLine("FAILED IsPressed " + keyname);
-            }
-
-            return false;
+            if (tx.ContainsKey(k))
+                return tx[k];
+            return Keys.None;
         }
 
-        public override string ToString()
+        static public SharpDX.DirectInput.Key KeysToKey(System.Windows.Forms.Keys ky)
         {
-            return ksi.Name + ":" + ksi.Instanceguid + ":" + ksi.Productguid;
+            Key k = tx.FirstOrDefault(x => x.Value == ky).Key; // if not found, returns enum 0, or Key.Unknown!
+            return k;
         }
 
-        public static void CreateKeyboard(InputDeviceList ilist)
+        static public System.Windows.Forms.Keys ToKeys(InputDeviceEvent ev) // safe to call without including SharpDirectInput
         {
-            DirectInput dinput = new DirectInput();
-
-            foreach (DeviceInstance di in dinput.GetDevices(DeviceClass.Keyboard, DeviceEnumerationFlags.AttachedOnly))
-            {
-                InputDeviceKeyboard k = new InputDeviceKeyboard(dinput,di);
-                ilist.Add(k);
-            }
-
+            return KeyToKeys((Key)ev.EventNumber);
         }
-    }
+
+        // manual table to go from DI Key to VKEY.. check on 11/sept/2017
+        static Dictionary<SharpDX.DirectInput.Key, System.Windows.Forms.Keys> tx = new Dictionary<Key, Keys>()
+        {
+            {        SharpDX.DirectInput.Key.Unknown , Keys.None},
+            {        SharpDX.DirectInput.Key.Escape , Keys.Escape},
+            {        SharpDX.DirectInput.Key.D1 , Keys.D1},
+            {        SharpDX.DirectInput.Key.D2 , Keys.D2},
+            {        SharpDX.DirectInput.Key.D3 , Keys.D3},
+            {        SharpDX.DirectInput.Key.D4 , Keys.D4},
+            {        SharpDX.DirectInput.Key.D5 , Keys.D5},
+            {        SharpDX.DirectInput.Key.D6 , Keys.D6},
+            {        SharpDX.DirectInput.Key.D7 , Keys.D7},
+            {        SharpDX.DirectInput.Key.D8 , Keys.D8},
+            {        SharpDX.DirectInput.Key.D9 , Keys.D9},
+            {        SharpDX.DirectInput.Key.D0 , Keys.D0},
+            {        SharpDX.DirectInput.Key.Minus , Keys.OemMinus},
+            {        SharpDX.DirectInput.Key.Equals , Keys.Oemplus},
+            {        SharpDX.DirectInput.Key.Back , Keys.Back},
+            {        SharpDX.DirectInput.Key.Tab , Keys.Tab},
+            {        SharpDX.DirectInput.Key.Q , Keys.Q},
+            {        SharpDX.DirectInput.Key.W , Keys.W},
+            {        SharpDX.DirectInput.Key.E , Keys.E},
+            {        SharpDX.DirectInput.Key.R , Keys.R},
+            {        SharpDX.DirectInput.Key.T , Keys.T},
+            {        SharpDX.DirectInput.Key.Y , Keys.Y},
+            {        SharpDX.DirectInput.Key.U , Keys.U},
+            {        SharpDX.DirectInput.Key.I , Keys.I},
+            {        SharpDX.DirectInput.Key.O , Keys.O},
+            {        SharpDX.DirectInput.Key.P , Keys.P},
+            {        SharpDX.DirectInput.Key.LeftBracket , Keys.OemOpenBrackets},
+            {        SharpDX.DirectInput.Key.RightBracket , Keys.OemCloseBrackets},
+            {        SharpDX.DirectInput.Key.Return , Keys.Return},
+            {        SharpDX.DirectInput.Key.LeftControl , Keys.ControlKey},
+            {        SharpDX.DirectInput.Key.A , Keys.A},
+            {        SharpDX.DirectInput.Key.S , Keys.S},
+            {        SharpDX.DirectInput.Key.D , Keys.D},
+            {        SharpDX.DirectInput.Key.F , Keys.F},
+            {        SharpDX.DirectInput.Key.G , Keys.G},
+            {        SharpDX.DirectInput.Key.H , Keys.H},
+            {        SharpDX.DirectInput.Key.J , Keys.J},
+            {        SharpDX.DirectInput.Key.K , Keys.K},
+            {        SharpDX.DirectInput.Key.L , Keys.L},
+            {        SharpDX.DirectInput.Key.Semicolon , Keys.OemSemicolon},
+            {        SharpDX.DirectInput.Key.Apostrophe , Keys.Oemtilde},
+            {        SharpDX.DirectInput.Key.Grave , Keys.Oem8 },
+            {        SharpDX.DirectInput.Key.LeftShift , Keys.ShiftKey},
+            {        SharpDX.DirectInput.Key.Backslash , Keys.OemQuotes},
+            {        SharpDX.DirectInput.Key.Z , Keys.Z},
+            {        SharpDX.DirectInput.Key.X , Keys.X},
+            {        SharpDX.DirectInput.Key.C , Keys.C},
+            {        SharpDX.DirectInput.Key.V , Keys.V},
+            {        SharpDX.DirectInput.Key.B , Keys.B},
+            {        SharpDX.DirectInput.Key.N , Keys.N},
+            {        SharpDX.DirectInput.Key.M , Keys.M},
+            {        SharpDX.DirectInput.Key.Comma , Keys.Oemcomma},
+            {        SharpDX.DirectInput.Key.Period , Keys.OemPeriod},
+            {        SharpDX.DirectInput.Key.Slash , Keys.OemQuestion},
+            {        SharpDX.DirectInput.Key.RightShift , Keys.RShiftKey},
+            {        SharpDX.DirectInput.Key.Multiply , Keys.Multiply},
+            {        SharpDX.DirectInput.Key.LeftAlt , Keys.Menu},
+            {        SharpDX.DirectInput.Key.Space , Keys.Space},
+            {        SharpDX.DirectInput.Key.Capital , Keys.Capital},
+            {        SharpDX.DirectInput.Key.F1 , Keys.F1},
+            {        SharpDX.DirectInput.Key.F2 , Keys.F2},
+            {        SharpDX.DirectInput.Key.F3 , Keys.F3},
+            {        SharpDX.DirectInput.Key.F4 , Keys.F4},
+            {        SharpDX.DirectInput.Key.F5 , Keys.F5},
+            {        SharpDX.DirectInput.Key.F6 , Keys.F6},
+            {        SharpDX.DirectInput.Key.F7 , Keys.F7},
+            {        SharpDX.DirectInput.Key.F8 , Keys.F8},
+            {        SharpDX.DirectInput.Key.F9 , Keys.F9},
+            {        SharpDX.DirectInput.Key.F10 , Keys.F10},
+            {        SharpDX.DirectInput.Key.NumberLock , Keys.NumLock},
+            {        SharpDX.DirectInput.Key.ScrollLock , Keys.Scroll},
+            {        SharpDX.DirectInput.Key.NumberPad7 , Keys.NumPad7  },
+            {        SharpDX.DirectInput.Key.NumberPad8 , Keys.NumPad8  },
+            {        SharpDX.DirectInput.Key.NumberPad9 , Keys.NumPad9},
+            {        SharpDX.DirectInput.Key.Subtract , Keys.Subtract},
+            {        SharpDX.DirectInput.Key.NumberPad4 , Keys.NumPad4},
+            {        SharpDX.DirectInput.Key.NumberPad5 , Keys.NumPad5},
+            {        SharpDX.DirectInput.Key.NumberPad6 , Keys.NumPad6},
+            {        SharpDX.DirectInput.Key.Add , Keys.Add },
+            {        SharpDX.DirectInput.Key.NumberPad1 , Keys.NumPad1},
+            {        SharpDX.DirectInput.Key.NumberPad2 , Keys.NumPad2},
+            {        SharpDX.DirectInput.Key.NumberPad3 , Keys.NumPad3},
+            {        SharpDX.DirectInput.Key.NumberPad0 , Keys.NumPad0},
+            {        SharpDX.DirectInput.Key.Decimal , Keys.Decimal },
+            {        SharpDX.DirectInput.Key.Oem102 , Keys.OemPipe },
+            {        SharpDX.DirectInput.Key.F11 , Keys.F11},
+            {        SharpDX.DirectInput.Key.F12 , Keys.F12},
+            {        SharpDX.DirectInput.Key.F13 , Keys.F13},
+            {        SharpDX.DirectInput.Key.F14 , Keys.F14},
+            {        SharpDX.DirectInput.Key.F15 , Keys.F15},
+            {        SharpDX.DirectInput.Key.Kana , Keys.KanaMode },
+            {        SharpDX.DirectInput.Key.AbntC1 , Keys.None },
+            {        SharpDX.DirectInput.Key.Convert , Keys.None },
+            {        SharpDX.DirectInput.Key.NoConvert , Keys.None },
+            {        SharpDX.DirectInput.Key.Yen , Keys.None },
+            {        SharpDX.DirectInput.Key.AbntC2 , Keys.None },
+            {        SharpDX.DirectInput.Key.NumberPadEquals , Keys.None },
+            {        SharpDX.DirectInput.Key.PreviousTrack ,  Keys.MediaPreviousTrack },
+            {        SharpDX.DirectInput.Key.AT , Keys.None },
+            {        SharpDX.DirectInput.Key.Colon , Keys.None },
+            {        SharpDX.DirectInput.Key.Underline , Keys.None },
+            {        SharpDX.DirectInput.Key.Kanji , Keys.KanjiMode },
+            {        SharpDX.DirectInput.Key.Stop , Keys.MediaStop },
+            {        SharpDX.DirectInput.Key.AX , Keys.None },
+            {        SharpDX.DirectInput.Key.Unlabeled , Keys.None },
+            {        SharpDX.DirectInput.Key.NextTrack , Keys.MediaNextTrack },
+            {        SharpDX.DirectInput.Key.NumberPadEnter , KeyObjectExtensions.NumEnter },
+            {        SharpDX.DirectInput.Key.RightControl , Keys.RControlKey },
+            {        SharpDX.DirectInput.Key.Mute , Keys.VolumeMute },
+            {        SharpDX.DirectInput.Key.Calculator , Keys.None },
+            {        SharpDX.DirectInput.Key.PlayPause , Keys.Pause },
+            {        SharpDX.DirectInput.Key.MediaStop , Keys.MediaStop },
+            {        SharpDX.DirectInput.Key.VolumeDown , Keys.VolumeDown },
+            {        SharpDX.DirectInput.Key.VolumeUp , Keys.VolumeUp },
+            {        SharpDX.DirectInput.Key.WebHome , Keys.None },
+            {        SharpDX.DirectInput.Key.NumberPadComma , Keys.None },
+            {        SharpDX.DirectInput.Key.Divide , Keys.Divide },
+            {        SharpDX.DirectInput.Key.PrintScreen , Keys.PrintScreen },
+            {        SharpDX.DirectInput.Key.RightAlt , Keys.RMenu },
+            {        SharpDX.DirectInput.Key.Pause , Keys.Pause },
+            {        SharpDX.DirectInput.Key.Home , Keys.Home },
+            {        SharpDX.DirectInput.Key.Up , Keys.Up },
+            {        SharpDX.DirectInput.Key.PageUp , Keys.PageUp },
+            {        SharpDX.DirectInput.Key.Left , Keys.Left },
+            {        SharpDX.DirectInput.Key.Right , Keys.Right },
+            {        SharpDX.DirectInput.Key.End , Keys.End },
+            {        SharpDX.DirectInput.Key.Down , Keys.Down },
+            {        SharpDX.DirectInput.Key.PageDown , Keys.PageDown },
+            {        SharpDX.DirectInput.Key.Insert , Keys.Insert },
+            {        SharpDX.DirectInput.Key.Delete , Keys.Delete },
+            {        SharpDX.DirectInput.Key.LeftWindowsKey , Keys.LWin },
+            {        SharpDX.DirectInput.Key.RightWindowsKey , Keys.RWin },
+            {        SharpDX.DirectInput.Key.Applications , Keys.Apps },
+            {        SharpDX.DirectInput.Key.Power , Keys.None },
+            {        SharpDX.DirectInput.Key.Sleep , Keys.Sleep },
+            {        SharpDX.DirectInput.Key.Wake , Keys.None },
+            {        SharpDX.DirectInput.Key.WebSearch , Keys.BrowserSearch},
+            {        SharpDX.DirectInput.Key.WebFavorites , Keys.BrowserFavorites },
+            {        SharpDX.DirectInput.Key.WebRefresh , Keys.BrowserRefresh },
+            {        SharpDX.DirectInput.Key.WebStop , Keys.BrowserStop },
+            {        SharpDX.DirectInput.Key.WebForward , Keys.BrowserForward },
+            {        SharpDX.DirectInput.Key.WebBack , Keys.BrowserBack},
+            {        SharpDX.DirectInput.Key.MyComputer , Keys.None },
+            {        SharpDX.DirectInput.Key.Mail , Keys.None },
+            {        SharpDX.DirectInput.Key.MediaSelect , Keys.None },
+        };
+   }
 }

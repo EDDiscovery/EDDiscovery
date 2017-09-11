@@ -59,6 +59,7 @@
             this.rolluppanel.RolledUpHeight = 5;
             this.rolluppanel.RollPixelStep = 2;
             this.rolluppanel.RollUpDelay = 1000;
+            this.rolluppanel.ShowHiddenMarker = true;
             this.rolluppanel.Size = new System.Drawing.Size(941, 40);
             this.rolluppanel.TabIndex = 0;
             this.rolluppanel.UnrolledHeight = 32;
@@ -94,7 +95,7 @@
             this.comboBoxCustom2.DataSource = null;
             this.comboBoxCustom2.DisplayMember = "";
             this.comboBoxCustom2.DropDownBackgroundColor = System.Drawing.Color.Gray;
-            this.comboBoxCustom2.DropDownHeight = 106;
+            this.comboBoxCustom2.DropDownHeight = 400;
             this.comboBoxCustom2.DropDownWidth = 75;
             this.comboBoxCustom2.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.comboBoxCustom2.ItemHeight = 13;
@@ -107,9 +108,8 @@
             this.comboBoxCustom2.SelectedIndex = -1;
             this.comboBoxCustom2.SelectedItem = null;
             this.comboBoxCustom2.SelectedValue = null;
-            this.comboBoxCustom2.Size = new System.Drawing.Size(75, 21);
+            this.comboBoxCustom2.Size = new System.Drawing.Size(103, 21);
             this.comboBoxCustom2.TabIndex = 2;
-            this.comboBoxCustom2.Text = "comboBoxCustom1";
             this.comboBoxCustom2.ValueMember = "";
             // 
             // comboBoxCustom1
@@ -120,11 +120,11 @@
             this.comboBoxCustom1.DataSource = null;
             this.comboBoxCustom1.DisplayMember = "";
             this.comboBoxCustom1.DropDownBackgroundColor = System.Drawing.Color.Gray;
-            this.comboBoxCustom1.DropDownHeight = 106;
+            this.comboBoxCustom1.DropDownHeight = 400;
             this.comboBoxCustom1.DropDownWidth = 75;
             this.comboBoxCustom1.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.comboBoxCustom1.ItemHeight = 13;
-            this.comboBoxCustom1.Location = new System.Drawing.Point(554, 5);
+            this.comboBoxCustom1.Location = new System.Drawing.Point(520, 5);
             this.comboBoxCustom1.MouseOverBackgroundColor = System.Drawing.Color.Silver;
             this.comboBoxCustom1.Name = "comboBoxCustom1";
             this.comboBoxCustom1.ScrollBarButtonColor = System.Drawing.Color.LightGray;
@@ -133,9 +133,8 @@
             this.comboBoxCustom1.SelectedIndex = -1;
             this.comboBoxCustom1.SelectedItem = null;
             this.comboBoxCustom1.SelectedValue = null;
-            this.comboBoxCustom1.Size = new System.Drawing.Size(75, 21);
+            this.comboBoxCustom1.Size = new System.Drawing.Size(109, 21);
             this.comboBoxCustom1.TabIndex = 2;
-            this.comboBoxCustom1.Text = "comboBoxCustom1";
             this.comboBoxCustom1.ValueMember = "";
             // 
             // buttonExt3

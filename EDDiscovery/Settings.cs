@@ -68,6 +68,11 @@ namespace EDDiscovery
             comboBoxTheme.ItemHeight = 20;
 
             btnDeleteCommander.Enabled = EDCommander.NumberOfCommanders > 1;
+
+            comboBoxClickThruKey.Items = KeyObjectExtensions.KeyListString(inclshifts:true);
+            comboBoxClickThruKey.SelectedItem = EDDConfig.Instance.ClickThruKey.VKeyToString();
+            comboBoxClickThruKey.SelectedIndexChanged += comboBoxClickThruKey_SelectedIndexChanged;
+         //   toolTip.SetToolTip(comboBoxClickThruKey, "");
         }
 
         void SetEntryThemeComboBox()
@@ -371,6 +376,12 @@ namespace EDDiscovery
             }
         }
 
+        private void comboBoxClickThruKey_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            ExtendedControls.ComboBoxCustom c = sender as ExtendedControls.ComboBoxCustom;
+            Keys k = c.Text.ToVkey();
+            EDDConfig.Instance.ClickThruKey = k;
+        }
     }
 }
 
