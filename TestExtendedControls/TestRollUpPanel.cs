@@ -21,7 +21,8 @@ namespace DialogTest
             comboBoxCustom1.DropDownBackgroundColor = Color.Red;
             comboBoxCustom1.FlatStyle = FlatStyle.Popup;
             comboBoxCustom1.Repaint();
-            comboBoxCustom2.Items.AddRange(new string[] { "2Fred", "Jim", "Sheila", "George" });
+            comboBoxCustom2.Items.AddRange(KeyObjectExtensions.KeyListString(true));
+            comboBoxCustom2.SelectedItem = Keys.ShiftKey.VKeyToString();
             //comboBoxCustom1.FlatStyle = FlatStyle.Popup;
 
             System.Drawing.Imaging.ColorMap colormap = new System.Drawing.Imaging.ColorMap();       // any drawn panel with drawn images    
@@ -37,6 +38,17 @@ namespace DialogTest
                 else if (c is ExtendedControls.ButtonExt)
                     (c as ExtendedControls.ButtonExt).SetDrawnBitmapRemapTable(new System.Drawing.Imaging.ColorMap[] { colormap, colormap2 });
             }
+
+            KeyObjectExtensions.VerifyKeyOE();
+        }
+
+        private void TestRollUpPanel_KeyDown(object sender, KeyEventArgs e)
+        {
+        }
+
+        private void textBox1_KeyDown(object sender, KeyEventArgs e)
+        {
+            System.Diagnostics.Debug.WriteLine("Key down " + e.KeyCode + " " + e.KeyData);
 
         }
     }

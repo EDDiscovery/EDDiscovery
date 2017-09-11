@@ -36,7 +36,12 @@ namespace EDDiscovery.Forms
         public bool norepositionwindow = false;
         public bool istemporaryresized = false;
 
-        public bool istransparent = false;          // we are in transparent mode (but may be showing due to inpanelshow)
+        public enum TransparencyMode { Off, On, OnClickThru, OnFullyTransparent };
+
+        public TransparencyMode transparentmode = TransparencyMode.Off;
+        public bool IsTransparent { get { return transparentmode != TransparencyMode.Off; } }
+        public bool IsClickThruOn { get { return transparentmode == TransparencyMode.OnClickThru || transparentmode == TransparencyMode.OnFullyTransparent; } }
+
         public bool displayTitle = true;            // we are displaying the title
         public string dbrefname;
         public string wintitle;
@@ -52,6 +57,8 @@ namespace EDDiscovery.Forms
         private Timer timer = new Timer();      // timer to monitor for entry into form when transparent.. only sane way in forms
         private bool deftopmost, deftransparent;
         private Size normalsize;
+
+        private DirectInputDevices.InputDeviceKeyboard idk;     // used to sniff in transparency mode
 
         public bool IsTransparencySupported { get { return !transparencycolor.IsFullyTransparent(); } }
 
@@ -89,6 +96,8 @@ namespace EDDiscovery.Forms
 
             displayTitle = SQLiteDBClass.GetSettingBool(dbrefname + "ShowTitle", true);
 
+            idk = DirectInputDevices.InputDeviceKeyboard.CreateKeyboard();
+
             UpdateControls();
 
             Invalidate();
@@ -108,13 +117,13 @@ namespace EDDiscovery.Forms
             this.Text = wintitle + " " + text;
         }
 
-        public void SetTransparency(bool t)
+        public void SetTransparency(TransparencyMode t)
         {
             if (IsTransparencySupported)
             {
-                istransparent = t;
+                transparentmode = t;
                 UpdateTransparency();
-                SQLiteDBClass.PutSettingBool(dbrefname + "Transparent", istransparent);
+                SQLiteDBClass.PutSettingInt(dbrefname + "Transparent", (int)transparentmode);
             }
         }
 
@@ -127,9 +136,10 @@ namespace EDDiscovery.Forms
 
         public void SetTopMost(bool t)
         {
-            TopMost = t;
-            UpdateControls();
+            TopMost = t;        // this calls Win32.SetWindowPos, which then plays with the actual topmost bit in windows extended style
+                                // and loses the transparency bit!  So therefore
             SQLiteDBClass.PutSettingBool(dbrefname + "TopMost", TopMost);
+            UpdateTransparency();   // need to reestablish correct transparency again
         }
 
         public void SetShowInTaskBar(bool t)
@@ -153,21 +163,22 @@ namespace EDDiscovery.Forms
 
         private void UpdateTransparency()
         {
-            curwindowsborder = (!istransparent && defwindowsborder);    // we have a border if not transparent and we have a def border
-            bool transparent = istransparent && !inpanelshow;           // are we transparent..
+            curwindowsborder = (!IsTransparent && defwindowsborder);    // we have a border if not transparent and we have a def border
+            bool showtransparent = IsTransparent && !inpanelshow;           // are we transparent..  must not be in panel show
 
-            Color togo;
-
-            if (beforetransparency.IsFullyTransparent())
+            if (beforetransparency.IsFullyTransparent())        // record colour before transparency, dynamically
             {
                 beforetransparency = this.BackColor;
                 tkey = this.TransparencyKey;
+                //System.Diagnostics.Debug.WriteLine("Record colour " + beforetransparency.ToString() + " tkey " + this.TransparencyKey);
             }
 
             UpdateControls();
 
-            this.TransparencyKey = (transparent) ? transparencycolor : tkey;
-            togo = (transparent) ? transparencycolor : beforetransparency;
+            //System.Diagnostics.Debug.WriteLine(Text + " tr " + transparentmode);
+
+            this.TransparencyKey = (showtransparent) ? transparencycolor : tkey;        
+            Color togo = (showtransparent) ? transparencycolor : beforetransparency;
 
             this.BackColor = togo;
             statusStripBottom.BackColor = togo;
@@ -175,20 +186,25 @@ namespace EDDiscovery.Forms
                     panel_minimize.BackColor = panel_ontop.BackColor = panel_showtitle.BackColor = panelTop.BackColor = togo;
 
             System.Diagnostics.Debug.Assert(!labeltransparentcolour.IsFullyTransparent());
-            label_index.ForeColor = labelControlText.ForeColor = (istransparent) ? labeltransparentcolour : labelnormalcolour;
+            label_index.ForeColor = labelControlText.ForeColor = IsTransparent ? labeltransparentcolour : labelnormalcolour;
 
-            UserControl.SetTransparency(transparent, togo);
+            UserControl.SetTransparency(showtransparent, togo);
             PerformLayout();
 
-            if (transparent || inpanelshow)
+            // if in transparent click thru, we set transparent style.. else clear it.
+            BaseUtils.Win32.UnsafeNativeMethods.ChangeWindowLong(this.Handle, BaseUtils.Win32.UnsafeNativeMethods.GWL.ExStyle , 
+                                WS_EX.TRANSPARENT, showtransparent && transparentmode == TransparencyMode.OnFullyTransparent ? WS_EX.TRANSPARENT : 0);
+
+            if (showtransparent || inpanelshow)     // timer needed if transparent, or if in panel show
                 timer.Start();
             else
                 timer.Stop();
+
         }
 
         private void UpdateControls()
         {
-            bool transparent = istransparent && !inpanelshow;           // are we transparent..
+            bool transparent = IsTransparent && !inpanelshow;           // are we transparent..
 
             FormBorderStyle = curwindowsborder ? FormBorderStyle.Sizable : FormBorderStyle.None;
             panelTop.Visible = !curwindowsborder;       // this also has the effect of removing the label_ and panel_ buttons
@@ -199,12 +215,21 @@ namespace EDDiscovery.Forms
 
             panel_transparent.Visible = IsTransparencySupported && !transparent;
             panel_showtitle.Visible = IsTransparencySupported && !transparent;
-            panel_transparent.ImageSelected = (istransparent) ? ExtendedControls.DrawnPanel.ImageType.Transparent : ExtendedControls.DrawnPanel.ImageType.NotTransparent;
+
+            if (transparentmode == TransparencyMode.On)
+                panel_transparent.ImageSelected = ExtendedControls.DrawnPanel.ImageType.Transparent;
+            else if (transparentmode == TransparencyMode.OnClickThru)
+                panel_transparent.ImageSelected = ExtendedControls.DrawnPanel.ImageType.TransparentClickThru;
+            else if (transparentmode == TransparencyMode.OnFullyTransparent)
+                panel_transparent.ImageSelected = ExtendedControls.DrawnPanel.ImageType.FullyTransparent;
+            else
+                panel_transparent.ImageSelected = ExtendedControls.DrawnPanel.ImageType.NotTransparent;
 
             label_index.Visible = labelControlText.Visible = (displayTitle || !transparent);   //  titles are on, or transparent is off
 
             panel_taskbaricon.ImageSelected = this.ShowInTaskbar ? ExtendedControls.DrawnPanel.ImageType.WindowInTaskBar : ExtendedControls.DrawnPanel.ImageType.WindowNotInTaskBar;
             panel_showtitle.ImageSelected = displayTitle ? ExtendedControls.DrawnPanel.ImageType.Captioned : ExtendedControls.DrawnPanel.ImageType.NotCaptioned;
+            panel_ontop.ImageSelected = TopMost ? ExtendedControls.DrawnPanel.ImageType.OnTop : ExtendedControls.DrawnPanel.ImageType.Floating;
         }
 
         private void UserControlForm_Layout(object sender, LayoutEventArgs e)
@@ -220,14 +245,13 @@ namespace EDDiscovery.Forms
         {
             this.BringToFront();
 
-            bool tr = SQLiteDBClass.GetSettingBool(dbrefname + "Transparent", deftransparent);
-            if (tr && IsTransparencySupported)     // the check is for paranoia
-                SetTransparency(true);      // only call if transparent.. may not be fully set up so don't merge with above
+            if (IsTransparencySupported)
+                transparentmode = (TransparencyMode)SQLiteDBClass.GetSettingInt(dbrefname + "Transparent", deftransparent ? (int)TransparencyMode.On : (int)TransparencyMode.Off);
 
-            SetTopMost(SQLiteDBClass.GetSettingBool(dbrefname + "TopMost", deftopmost));
-
+            SetTopMost(SQLiteDBClass.GetSettingBool(dbrefname + "TopMost", deftopmost)); // this also establishes transparency
+            
             var top = SQLiteDBClass.GetSettingInt(dbrefname + "Top", -999);
-            System.Diagnostics.Debug.WriteLine("Position Top is {0} {1}", dbrefname, top);
+            //System.Diagnostics.Debug.WriteLine("Position Top is {0} {1}", dbrefname, top);
 
             if (top != -999 && norepositionwindow == false)
             {
@@ -303,8 +327,12 @@ namespace EDDiscovery.Forms
 
         private void panel_transparency_Click(object sender, EventArgs e)       // only works if transparency is supported
         {
-            inpanelshow = true;
-            SetTransparency(!istransparent);
+            inpanelshow = true; // in case we go transparent, we need to make sure its on.. since it won't be on if the timer is not running
+
+            //nasty.. but nice
+            transparentmode = (TransparencyMode)( ((int)transparentmode + 1) % Enum.GetValues(typeof(TransparencyMode)).Length);
+
+            SetTransparency(transparentmode);
         }
 
         private void panel_taskbaricon_Click(object sender, EventArgs e)
@@ -321,17 +349,29 @@ namespace EDDiscovery.Forms
         {
             if (isloaded)
             {
-                //System.Diagnostics.Debug.WriteLine(Environment.TickCount + " Tick" + istransparent + " " + inpanelshow);
+                //System.Diagnostics.Debug.WriteLine(Environment.TickCount + " Tick " + Name + " " + Text + " " + transparentmode + " " + inpanelshow);
                 if (ClientRectangle.Contains(this.PointToClient(MousePosition)))
                 {
+                    //System.Diagnostics.Debug.WriteLine(Environment.TickCount + "In area");
                     if (!inpanelshow)
                     {
-                        inpanelshow = true;
-                        UpdateTransparency();
+                        if (IsClickThruOn)
+                        {
+                            if ( idk.IsKeyPressed(EDDConfig.Instance.ClickThruKey, recheck: true) )
+                                inpanelshow = true;
+                        }
+                        else
+                            inpanelshow = true;
+
+                        if (inpanelshow)
+                            UpdateTransparency();
                     }
+
                 }
                 else
                 {
+                    //System.Diagnostics.Debug.WriteLine(Environment.TickCount + "Out of area");
+
                     if (inpanelshow)
                     {
                         inpanelshow = false;
@@ -341,9 +381,12 @@ namespace EDDiscovery.Forms
             }
         }
 
-        #endregion
+        
 
-        #region Resizing
+
+#endregion
+
+#region Resizing
 
         public void RequestTemporaryMinimiumSize(Size w)            // Size w is the client area used by the UserControl..
         {
@@ -381,9 +424,9 @@ namespace EDDiscovery.Forms
             }
         }
 
-        #endregion
+#endregion
 
-        #region Low level Wndproc
+#region Low level Wndproc
 
         protected const int SC_TRANSPARENT = 0x0020;    // Different from SmartSysMenuForm's SC_OPACITYSUBMENU.
         protected const int SC_TASKBAR = 0x0021;
@@ -454,7 +497,7 @@ namespace EDDiscovery.Forms
             OnCaptionMouseUp((Control)sender, e);
         }
 
-        #endregion
+#endregion
     }
 
     public class UserControlFormList
@@ -550,7 +593,7 @@ namespace EDDiscovery.Forms
             {
                 if (ucf.isloaded)
                 {
-                    ucf.SetTransparency(false);
+                    ucf.SetTransparency(UserControlForm.TransparencyMode.Off);
                     ucf.SetShowTitleInTransparency(true);
                 }
             }

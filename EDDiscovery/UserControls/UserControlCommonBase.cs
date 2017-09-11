@@ -53,7 +53,7 @@ namespace EDDiscovery.UserControls
             get
             {
                 if (this.Parent is Forms.UserControlForm)
-                    return ((Forms.UserControlForm)(this.Parent)).istransparent;
+                    return ((Forms.UserControlForm)(this.Parent)).IsTransparent;
                 else
                     return false;
             }

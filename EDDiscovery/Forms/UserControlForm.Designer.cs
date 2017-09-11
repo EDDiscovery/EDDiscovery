@@ -44,6 +44,7 @@ namespace EDDiscovery.Forms
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(UserControlForm));
             this.label_index = new ExtendedControls.LabelExt();
             this.labelControlText = new ExtendedControls.LabelExt();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
@@ -119,7 +120,7 @@ namespace EDDiscovery.Forms
             this.panel_transparent.Name = "panel_transparent";
             this.panel_transparent.Size = new System.Drawing.Size(24, 24);
             this.panel_transparent.TabIndex = 24;
-            this.toolTip1.SetToolTip(this.panel_transparent, "Toggle window transparency");
+            this.toolTip1.SetToolTip(this.panel_transparent, resources.GetString("panel_transparent.ToolTip"));
             this.panel_transparent.Click += new System.EventHandler(this.panel_transparency_Click);
             // 
             // panel_close

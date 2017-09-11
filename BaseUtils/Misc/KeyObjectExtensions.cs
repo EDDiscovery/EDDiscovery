@@ -30,13 +30,20 @@ public static class KeyObjectExtensions
         new Tuple<string,Keys>("Semicolon", Keys.Oem1),
         new Tuple<string,Keys>("Question", Keys.Oem2),
         new Tuple<string,Keys>("Tilde", Keys.Oem3),
-        new Tuple<string,Keys>("CloseBrackets", Keys.Oem4),
+        new Tuple<string,Keys>("OpenBrackets", Keys.Oem4),
         new Tuple<string,Keys>("Pipe", Keys.Oem5),
-        new Tuple<string,Keys>("OpenBrackets", Keys.Oem6),
+        new Tuple<string,Keys>("CloseBrackets", Keys.Oem6),
         new Tuple<string,Keys>("Quotes", Keys.Oem7),
         new Tuple<string,Keys>("Backquote", Keys.Oem8),
         new Tuple<string,Keys>("OemClear", Keys.OemClear),  // clashes with clear..
+        new Tuple<string,Keys>("PageDown", Keys.Next),  
+
+        //new Tuple<string,Keys>("CapsLock", Keys.Capital),     // On consideration, not renaming them is the best. Stick to c# names
+        //new Tuple<string,Keys>("AltKey", Keys.Menu),
+        //new Tuple<string,Keys>("RAltKey", Keys.RMenu),
+        //new Tuple<string,Keys>("LAltKey", Keys.LMenu),
     };
+
 
     public static void VerifyKeyOE()//keep for testing
     {
@@ -68,24 +75,25 @@ public static class KeyObjectExtensions
     {
         string k = "";
 
-        string keyname = key.ToString();
+        string keyname = key.ToString();        // built in translation..
 
         if (key == NumEnter)        // special treatement
             return "NumEnter";
-        else if (keyname.Length == 2 && keyname[0] == 'D')          // remove the D
+        else if (keyname.Length == 2 && keyname[0] == 'D')          // remove the Dx
             keyname = keyname.Substring(1);
-        else if (keyname.StartsWith("Oem") )                        // oem tender care, first thru the list, then use the default
+        else 
         {
             Tuple<string, Keys> vk = (from t in oemtx where t.Item2 == key select t).FirstOrDefault();  // see if we have a table translate..
 
             if (vk != null)
                 keyname = vk.Item1;
-            else
+            else if (keyname.StartsWith("Oem"))                        // oem tender care..
             {           // just caps case it for niceness
                 System.Globalization.TextInfo textInfo = new System.Globalization.CultureInfo("en-US", false).TextInfo;
                 keyname = textInfo.ToTitleCase(keyname.Substring( keyname.Length>4 ? 3 : 0));    // if its OemPeriod, use Period. if its Oem1, use Oem1
             }
         }
+
 
         return k + keyname;
     }
@@ -204,29 +212,30 @@ public static class KeyObjectExtensions
             return Keys.None;
     }
 
-    public static List<string> VKeyList()   // names of keys
+    public static List<Keys> KeyList(bool inclshifts = false)  // base keys, repeates removed, mouse removed, modifiers removed, with optional inclusion if shift keys
     {
-        Keys[] remove = new Keys[] { Keys.None, Keys.LButton, Keys.RButton, Keys.MButton, Keys.XButton1, Keys.XButton2,
+        Keys[] alwaysremove = new Keys[] { Keys.None, Keys.LButton, Keys.RButton, Keys.MButton, Keys.XButton1, Keys.XButton2,
+                                    Keys.Shift, Keys.Control, Keys.Alt , Keys.Modifiers , Keys.KeyCode,
+                                    };
+
+        Keys[] shiftremove = new Keys[] {
                                     Keys.ShiftKey, Keys.ControlKey, Keys.Menu, Keys.LShiftKey, Keys.RShiftKey,
                                     Keys.LControlKey , Keys.RControlKey, Keys.LMenu, Keys.RMenu ,
-                                    Keys.Shift, Keys.Control, Keys.Alt , Keys.Modifiers , Keys.KeyCode };
+                                    };
 
-        List<string> names = new List<string>();
+        List<Keys> kl = (from Keys k in Enum.GetValues(typeof(Keys)) where (Array.IndexOf(alwaysremove, k) == -1 && (inclshifts == true || Array.IndexOf(shiftremove, k) == -1)) select k).Distinct().ToList();
 
-        foreach (Keys k in Enum.GetValues(typeof(Keys)))        
-        {
-            if ( Array.IndexOf(remove,k) == -1 )        // remove these, as they are either specials or handled in a different way
-            {
-                string v = VKeyToString(k); // translate to our names
-                if (!names.Contains(v))     // and because values are repeated (see oems) make sure we don't repeat
-                    names.Add(v);
-            }
-        }
+        kl.Insert(kl.IndexOf(Keys.Multiply), NumEnter);    // insert the numenter here
 
-        names.Insert(names.IndexOf("Multiply"), "NumEnter");    // insert the numenter here
-
-        return names;
+        return kl;
     }
-   
+
+    public static List<string> KeyListString(bool inclshifts = false)  // names of base keys as strings
+    {
+        List<Keys> kl = KeyList(inclshifts);
+        List<string> ks = (from Keys k in kl select VKeyToString(k)).ToList();
+        return ks;
+    }
+
 }
 
