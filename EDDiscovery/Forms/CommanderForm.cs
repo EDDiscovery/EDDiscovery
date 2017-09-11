@@ -13,7 +13,7 @@ using System.Windows.Forms;
 
 namespace EDDiscovery.Forms
 {
-    public partial class CommanderForm : Form
+    public partial class CommanderForm : ExtendedControls.DraggableForm
     {
         Font font;
 
@@ -179,17 +179,9 @@ namespace EDDiscovery.Forms
 
         #region Window Control
 
-        private IntPtr SendMessage(int msg, IntPtr wparam, IntPtr lparam)
-        {
-            Message message = Message.Create(this.Handle, msg, wparam, lparam);
-            this.WndProc(ref message);
-            return message.Result;
-        }
-
         private void label_index_MouseDown(object sender, MouseEventArgs e)
         {
-            ((Control)sender).Capture = false;
-            SendMessage(WM.NCLBUTTONDOWN, (IntPtr)HT.CAPTION, IntPtr.Zero);
+            OnCaptionMouseDown((Control)sender, e);
         }
 
         private void panel_minimize_Click(object sender, EventArgs e)
