@@ -375,6 +375,11 @@ namespace EliteDangerousCore
                     elements.Add("Main Star");              // Sol / SN:Sol should come thru here
                 }
             }
+            else if (sc.IsStar && !sc.IsEDSMBody && sc.DistanceFromArrivalLS == 0)
+            {
+                elements = new List<string> { sc.BodyName };
+                starscannodetype = ScanNodeType.star;
+            }
             else
             {                                               // so not part of starname        
                 elements = sc.BodyName.Split(' ').ToList();     // not related in any way (earth) so assume all bodyparts, and 
@@ -535,7 +540,7 @@ namespace EliteDangerousCore
                 }
 
                 // Reprocess if we've encountered the primary (A) star an we already have a "Main Star"
-                if (reprocessPrimary && elements.Count == 1 && elements[0].Equals("A", StringComparison.InvariantCultureIgnoreCase) && sn.starnodes.ContainsKey("Main Star"))
+                if (reprocessPrimary && elements.Count == 1 && elements[0].Equals("A", StringComparison.InvariantCultureIgnoreCase) && sn.starnodes.Any(n => n.Key.Length > 1 && n.Value.type == ScanNodeType.star))
                     ReProcess(sn);
 
                 return true;
