@@ -35,7 +35,11 @@ namespace ExtendedControls
         // TODO: managed wrapper to keep track of these all up and down the inhertance stack.
         protected const int SC_ONTOP = 0x0001;
         protected const int SC_OPACITYSUBMENU = 0x0002;    // 100% = 0x3; 90% = 0x4; ...; 10% = 0xC; 0% = NOT USED!
-        // 0x000D-0x000F are reserved by us for future expansion, while 0x0000 and 0xF000+ are system reserved.
+        protected const int SC_ADDITIONALMENU = 0x0020;    
+        // 0x000D-0x001F are reserved by us for future expansion, while 0x0000 and 0xF000+ are system reserved.
+
+        public List<string> AdditionalSysMenus;     // null means none!  SET by derived class to add more menus!
+        public Action<int> AdditionalSysMenuSelected;  // called when additional menu X (0-N-1) selected
 
         protected virtual bool AllowResize { get; } = true;
 
@@ -59,6 +63,13 @@ namespace ExtendedControls
                 IntPtr hSysMenu = UnsafeNativeMethods.GetSystemMenu(Handle, false);
                 if (hSysMenu != IntPtr.Zero)
                 {
+                    if (AdditionalSysMenus != null)
+                    {
+                        int entryno = SC_ADDITIONALMENU;
+                        foreach (string t in AdditionalSysMenus )
+                            UnsafeNativeMethods.AppendMenu(hSysMenu, MF.STRING, entryno++, t);
+                    }
+
                     UnsafeNativeMethods.AppendMenu(hSysMenu, MF.SEPARATOR, 0, string.Empty);
                     UnsafeNativeMethods.AppendMenu(hSysMenu, MF.STRING, SC_ONTOP, "On &Top");
 
@@ -68,6 +79,7 @@ namespace ExtendedControls
                         for (int i = 10; i > 0; i--)
                             UnsafeNativeMethods.AppendMenu(hOpacSubmenu, MF.STRING, SC_OPACITYSUBMENU + i, $"{i / 10f:P0}");
                         UnsafeNativeMethods.AppendMenu(hSysMenu, MF.STRING | MF.POPUP, (int)hOpacSubmenu, "&Opacity");
+
                     }
                 }
             }
@@ -151,10 +163,14 @@ namespace ExtendedControls
 
                 case WM.SYSCOMMAND:     // Process any system commands intended for this window (SC_ONTOP / SC_OPACITYSUBMENU).
                     {
+                        int wp = (int)m.WParam;
+
                         if (m.WParam == (IntPtr)SC_ONTOP)
                             TopMost = !TopMost;
-                        else if ((int)m.WParam > SC_OPACITYSUBMENU && (int)m.WParam <= SC_OPACITYSUBMENU + 10)
-                            Opacity = ((int)m.WParam - SC_OPACITYSUBMENU) / 10f;
+                        else if (wp > SC_OPACITYSUBMENU && wp <= SC_OPACITYSUBMENU + 10)
+                            Opacity = (wp - SC_OPACITYSUBMENU) / 10f;
+                        else if (wp >= SC_ADDITIONALMENU && AdditionalSysMenus != null && wp < SC_ADDITIONALMENU + AdditionalSysMenus.Count)
+                            AdditionalSysMenuSelected?.Invoke(wp - SC_ADDITIONALMENU);
                         else if (!AllowResize && (m.WParam == (IntPtr)SC.MAXIMIZE || m.WParam == (IntPtr)SC.SIZE || m.WParam == (IntPtr)SC.RESTORE))
                             return;     // Access Denied.
                         else
