@@ -14,9 +14,6 @@
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 
-// DEFINE this, allows you to click on an entry to make the scan change
-// #define TH 
-
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -63,48 +60,56 @@ namespace EDDiscovery.UserControls
         private int dividercapture = -2;        //-2 not shown, -1 shown, >=0 captured
         private int divideroriginalxpos = -1;
 
-        [Flags]
-        enum Configuration
+        enum UIState { Normal, SystemMap, GalMap };
+        UIState uistate = UIState.Normal;
+
+
+
+        class Configuration         // SO many now we need to prepare for a Long
         {
-            showInformation = 1,
-            showEDSMButton = 2,
-            showTime = 4,
-            showDescription = 8,
-            showNotes = 16,
-            showXYZ = 32,
-            showDistancePerStar = 64,
-            showIcon = 128,
-            showSystemInformation = 256,
+            public const long showInformation = 1;
+            public const long showEDSMButton = 2;
+            public const long showTime = 4;
+            public const long showDescription = 8;
+            public const long showNotes = 16;
+            public const long showXYZ = 32;
+            public const long showDistancePerStar = 64;
+            public const long showIcon = 128;
 
-            showDoesNotAffectTabs = 1024,        // above this, tab positions are not changed by changes in these values
+            public const long showaffectsTabs = showInformation | showEDSMButton | showTime | showDescription | showNotes | showXYZ | showDistancePerStar | showIcon;
 
-            showDistancesOnFSDJumpsOnly = 1024,
-            showTargetLine = 2048,
-            showBlackBoxAroundText = 4096,
-            showExpandOverColumns = 8192,
-            showNothingWhenDocked = 16384,
+            public const long showDistancesOnFSDJumpsOnly = 1024;
+            public const long showTargetLine = 2048;
+            public const long showBlackBoxAroundText = 4096;
+            public const long showExpandOverColumns = 8192;
+            public const long showNothingWhenDocked = 16384;
 
-            showScan15s = 32768,
-            showScan30s = 65536,
-            showScan60s = 131072,
-            showScanIndefinite = 262144,
-            showScanOff = 0,                    // this is not saved, but is a flag for the function to turn it off
+            public const long showScan15s = 32768;
+            public const long showScan30s = 65536;
+            public const long showScan60s = 131072;
+            public const long showScanIndefinite = 262144;
+            public const long showScanOff = 0;                    // this is not saved; but is a flag for the function to turn it off
 
-            showScanRight = 524288,
-            showScanLeft = 1048576,
-            showScanOnTop = 2097152,
-            showScanBelow = 4194304,
-            showScanAbove = 8388608
-        };
+            public const long showScanRight = 524288;
+            public const long showScanLeft = 1048576;
+            public const long showScanOnTop = 2097152;
+            public const long showScanBelow = 4194304;
+            public const long showScanAbove = 8388608;
 
-        Configuration config = (Configuration)(Configuration.showTargetLine | Configuration.showEDSMButton | Configuration.showIcon | 
+            public const long showSystemInformation = 1L << 32;
+            public const long showHabInformation = 1L << 33;
+            public const long showNothingWhenSysmap = 1L << 34;
+            public const long showNothingWhenGalmap = 1L << 35;
+        }
+
+        long config = Configuration.showTargetLine | Configuration.showEDSMButton | Configuration.showIcon | 
                                                 Configuration.showTime | Configuration.showDescription |
                                                Configuration.showInformation | Configuration.showNotes | 
                                                 Configuration.showXYZ | Configuration.showDistancePerStar |
                                                Configuration.showScan15s | Configuration.showSystemInformation |
-                                               Configuration.showScanRight );
+                                               Configuration.showScanRight;
 
-        bool Config(Configuration c) { return (config & c) != 0; }
+        bool Config(long c) { return (config & c) != 0; }
         bool IsSurfaceScanOn { get { return Config(Configuration.showScan15s) || Config(Configuration.showScan30s) || Config(Configuration.showScan60s) || Config(Configuration.showScanIndefinite); } }
 
         int layoutorder = 0;
@@ -121,8 +126,9 @@ namespace EDDiscovery.UserControls
             discoveryform.OnHistoryChange += Display;
             discoveryform.OnNewEntry += NewEntry;
             discoveryform.OnNewTarget += NewTarget;
+            discoveryform.OnNewUIEvent += OnNewUIEvent;
 
-            config = (Configuration)SQLiteDBClass.GetSettingInt(DbSave + "Config", (int)config);
+            config = SQLiteDBClass.GetSettingInt(DbSave + "Config", (int)config) | ((long)SQLiteDBClass.GetSettingInt(DbSave + "ConfigH", (int)(config>>32)) << 32);
             toolStripMenuItemTargetLine.Checked = Config(Configuration.showTargetLine);
             toolStripMenuItemTime.Checked = Config(Configuration.showTime);
             EDSMButtonToolStripMenuItem.Checked = Config(Configuration.showEDSMButton);
@@ -137,6 +143,11 @@ namespace EDDiscovery.UserControls
             expandTextOverEmptyColumnsToolStripMenuItem.Checked = Config(Configuration.showExpandOverColumns);
             showNothingWhenDockedtoolStripMenuItem.Checked = Config(Configuration.showNothingWhenDocked);
             showSystemInformationToolStripMenuItem.Checked = Config(Configuration.showSystemInformation);
+            showHabitationMinimumAndMaximumDistanceToolStripMenuItem.Checked = Config(Configuration.showHabInformation);
+            dontshowwhenInGalaxyPanelToolStripMenuItem.Checked = Config(Configuration.showNothingWhenGalmap);
+            dontshowwhenInSystemMapPanelToolStripMenuItem.Checked = Config(Configuration.showNothingWhenSysmap);
+
+
 
             SetSurfaceScanBehaviour(null);
             SetScanPosition(null);
@@ -170,22 +181,7 @@ namespace EDDiscovery.UserControls
 
             dividers = new ButtonExt[] { buttonExt0, buttonExt1, buttonExt2, buttonExt3, buttonExt4, buttonExt5, buttonExt6, buttonExt7, buttonExt8, buttonExt9, buttonExt10, buttonExt11, buttonExt12 };
 
-#if TH
-            travelhistorycontrol.OnTravelSelectionChanged += Travelhistorycontrol_OnTravelSelectionChanged;
-#endif
         }
-
-#if TH
-        private void Travelhistorycontrol_OnTravelSelectionChanged(HistoryEntry he, HistoryList hl)     // DEBUGGING ONLY.. click on a scan and it will trigger it
-        {
-            if (he.journalEntry.EventTypeID == EliteDangerous.JournalTypeEnum.Scan)       // if scan, see if it needs to be displayed
-            {
-                ShowScanData(he.journalEntry as EliteDangerous.JournalEvents.JournalScan);
-            }
-            else
-                HideScanData(null,null);
-        }
-#endif
 
         public override void Closing()
         {
@@ -194,12 +190,10 @@ namespace EDDiscovery.UserControls
             discoveryform.OnHistoryChange -= Display;
             discoveryform.OnNewEntry -= NewEntry;
             discoveryform.OnNewTarget -= NewTarget;
+            discoveryform.OnNewUIEvent -= OnNewUIEvent;
 
-#if TH
-            travelhistorycontrol.OnTravelSelectionChanged -= Travelhistorycontrol_OnTravelSelectionChanged;
-#endif
-
-            SQLiteDBClass.PutSettingInt(DbSave+"Config", (int)config);
+            SQLiteDBClass.PutSettingInt(DbSave + "Config", (int)config);
+            SQLiteDBClass.PutSettingInt(DbSave + "ConfigH", (int)(config>>32));
             SQLiteDBClass.PutSettingInt(DbSave + "Layout", layoutorder);
             string s = string.Join<int>(",", columnpos);
             SQLiteDBClass.PutSettingString(DbSave + "PanelTabs", s);
@@ -226,11 +220,12 @@ namespace EDDiscovery.UserControls
             Display(history);
         }
 
-        public void Display(HistoryList hl)            // when user clicks around..  HE may be null here
+        public void Display(HistoryList hl)            
         {
             pictureBox.ClearImageList();
 
             current_historylist = hl;
+            System.Diagnostics.Debug.WriteLine("Display event " );
 
             if (hl != null && hl.Count > 0)     // just for safety
             {
@@ -255,7 +250,11 @@ namespace EDDiscovery.UserControls
 
                     if (Config(Configuration.showNothingWhenDocked) && (hl.IsCurrentlyDocked || hl.IsCurrentlyLanded))
                     {
-                        AddColText(0, 0, rowpos, rowheight , (hl.IsCurrentlyDocked) ? "Docked" : "Landed", textcolour, backcolour, null);
+                        AddColText(0, 0, rowpos, rowheight, (hl.IsCurrentlyDocked) ? "Docked" : "Landed", textcolour, backcolour, null);
+                    }
+                    else if ( ( uistate == UIState.GalMap && Config(Configuration.showNothingWhenGalmap)) || ( uistate == UIState.SystemMap && Config(Configuration.showNothingWhenSysmap)))
+                    {
+                        AddColText(0, 0, rowpos, rowheight, (uistate == UIState.GalMap) ? "Galaxy Map" : "System Map", textcolour, backcolour, null);
                     }
                     else
                     {
@@ -283,6 +282,27 @@ namespace EDDiscovery.UserControls
                             AddColText(0, 0, rowpos, rowheight, str, textcolour, backcolour, null);
 
                             rowpos += rowheight;
+                        }
+
+                        if (Config(Configuration.showHabInformation) && last != null)
+                        {
+                            StarScan scan = hl.starscan;
+
+                            StarScan.SystemNode sn = scan.FindSystem(last.System, true);    // EDSM look up here..
+
+                            string res = null;
+
+                            if ( sn != null && sn.starnodes.Count>0 && sn.starnodes.Values[0].ScanData != null )
+                            {
+                                JournalScan js = sn.starnodes.Values[0].ScanData;
+                                res = js.HabZoneString();
+                            }
+
+                            if (res != null)
+                            {
+                                AddColText(0, 0, rowpos, rowheight, res, textcolour, backcolour, null);
+                                rowpos += rowheight;
+                            }
                         }
 
                         if (targetpresent && Config(Configuration.showTargetLine) && currentsystem != null)
@@ -458,6 +478,30 @@ namespace EDDiscovery.UserControls
 
                 e.Translate(0, (rowh - e.img.Height) / 2);          // align to centre of rowh..
             }
+        }
+
+        private void OnNewUIEvent(string obj, bool uieventshown)       // UI event in, see if we want to hide.  UI events come before any onNew
+        {
+            bool refresh = false;
+            if (obj.Contains("GalaxyMap") )
+            {
+                refresh = (uistate != UIState.GalMap);
+                uistate = UIState.GalMap;
+            }
+            else if (obj.Contains("SystemMap") )
+            {
+                refresh = (uistate != UIState.SystemMap);
+                uistate = UIState.SystemMap;
+            }
+            else
+            {
+                refresh = (uistate != UIState.Normal);
+                uistate = UIState.Normal;
+            }
+
+            //System.Diagnostics.Debug.WriteLine("UI event " + obj + " " + uistate + " shown " + shown);
+            if (refresh && !uieventshown)      // if we materially changed, and we are not showing ui events, need to update here
+               Display(current_historylist);
         }
 
         private string DistToStar(HistoryEntry he, Point3D tpos)
@@ -725,6 +769,11 @@ namespace EDDiscovery.UserControls
             FlipConfig(Configuration.showSystemInformation, ((ToolStripMenuItem)sender).Checked, true);
         }
 
+        private void showHabitationMinimumAndMaximumDistanceToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FlipConfig(Configuration.showHabInformation, ((ToolStripMenuItem)sender).Checked, true);
+        }
+
         private void toolStripMenuItemTargetLine_Click(object sender, EventArgs e)
         {
             FlipConfig(Configuration.showTargetLine, ((ToolStripMenuItem)sender).Checked, true);
@@ -783,6 +832,15 @@ namespace EDDiscovery.UserControls
         private void showNothingWhenDockedtoolStripMenuItem_Click(object sender, EventArgs e)
         {
             FlipConfig(Configuration.showNothingWhenDocked, ((ToolStripMenuItem)sender).Checked, true);
+        }
+        private void dontshowwhenInGalaxyPanelToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FlipConfig(Configuration.showNothingWhenGalmap, ((ToolStripMenuItem)sender).Checked, true);
+        }
+
+        private void dontshowwhenInSystemPanelToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FlipConfig(Configuration.showNothingWhenSysmap, ((ToolStripMenuItem)sender).Checked, true);
         }
 
         private void expandTextOverEmptyColumnsToolStripMenuItem_Click(object sender, EventArgs e)
@@ -886,14 +944,14 @@ namespace EDDiscovery.UserControls
             }
         }
 
-        void FlipConfig(Configuration item, bool ch , bool redisplay = false)
+        void FlipConfig(long item, bool ch , bool redisplay = false)
         {
             if (ch)
-                config = (Configuration)((int)config | (int)item);
+                config |= item;
             else
-                config = (Configuration)((int)config & ~(int)item);
+                config &= ~item;
 
-            if (item < Configuration.showDoesNotAffectTabs)
+            if ((item & Configuration.showaffectsTabs)!=0)
             {
                 ResetTabList();
                 ShowDividers(false);
@@ -919,7 +977,7 @@ namespace EDDiscovery.UserControls
             }
         }
 
-        private void SetSurfaceScanBehaviour(Configuration? itemClicked)    // pass in a 
+        private void SetSurfaceScanBehaviour(long? itemClicked)    // pass in a 
         {
             if (itemClicked.HasValue)
             {
@@ -948,7 +1006,7 @@ namespace EDDiscovery.UserControls
                 scanhide.Start();
         }
 
-        private void SetScanPosition(Configuration? position)
+        private void SetScanPosition(long? position)
         {
             if (position.HasValue)
             {

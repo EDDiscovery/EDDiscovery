@@ -118,7 +118,7 @@ namespace BaseUtils.Win32
         {
             int cur = (GetWindowLong(hWnd, nIndex) & ~mask) | set;
             SetWindowLong(hWnd, nIndex, cur);
-            System.Diagnostics.Debug.WriteLine("set exstyle " + cur.ToString("X"));
+            //System.Diagnostics.Debug.WriteLine("set exstyle " + cur.ToString("X"));
             return cur;
         }
 

@@ -473,25 +473,34 @@ namespace EliteDangerousCore.JournalEvents
                 scanText.Append("\n" + DisplayMaterials(2) + "\n");
             }
 
-            if (IsStar && HabitableZoneInner.HasValue && HabitableZoneOuter.HasValue)
-            {
-                StringBuilder habZone = new StringBuilder();
-                habZone.AppendFormat("Habitable Zone Approx. {0}-{1}ls ({2}-{3} AU)\n", HabitableZoneInner.Value.ToString("N0"), HabitableZoneOuter.Value.ToString("N0"),
-                                                                                             (HabitableZoneInner.Value / 499).ToString("N2"), (HabitableZoneOuter.Value / 499).ToString("N2"));
-                if (nSemiMajorAxis.HasValue && nSemiMajorAxis.Value > 0)
-                    habZone.AppendFormat(" (This star only, others not considered)\n");
-                scanText.Append("\n" + habZone);
-            }
+            string habzonestring = HabZoneString();
+            if (habzonestring != null)
+                scanText.Append("\n" + habzonestring);
 
             if (scanText.Length > 0 && scanText[scanText.Length - 1] == '\n')
                 scanText.Remove(scanText.Length - 1, 1);
-
 
             int estvalue = EstimatedValue();
             if (estvalue > 0)
                 scanText.AppendFormat("\nEstimated value: {0:N0}", estvalue);
 
             return scanText.ToNullSafeString().Replace("\n", "\n" + inds);
+        }
+
+        public string HabZoneString()
+        {
+            if (IsStar && HabitableZoneInner.HasValue && HabitableZoneOuter.HasValue)
+            {
+                StringBuilder habZone = new StringBuilder();
+                habZone.AppendFormat("Habitable Zone Approx. {0}-{1}ls ({2}-{3} AU)\n", HabitableZoneInner.Value.ToString("N0"), HabitableZoneOuter.Value.ToString("N0"),
+                                                                                             (HabitableZoneInner.Value / 499).ToString("N2"), (HabitableZoneOuter.Value / 499).ToString("N2"));
+                if (nSemiMajorAxis.HasValue && nSemiMajorAxis.Value > 0)
+                    habZone.AppendFormat(" (Star only, others not considered)\n");
+
+                return habZone.ToNullSafeString();
+            }
+            else
+                return null;
         }
 
         public string DisplayMaterials(int indent = 0)
