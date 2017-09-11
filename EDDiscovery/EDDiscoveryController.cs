@@ -57,11 +57,11 @@ namespace EDDiscovery
 
         // DURING A new Journal entry by the monitor, in order..
 
-                                                                            // Next two ONLY called if its for the current commander, and its not a screened out event (uievent)
-        public event Action<HistoryEntry, HistoryList> OnNewEntry;          // UI. MAJOR. UC. Mirrored. Called before OnNewJournalEntry, when NewEntry is called with a new item for the CURRENT commander
-        public event Action<HistoryEntry, HistoryList> OnNewEntrySecond;    // UI. Called after OnNewEntry, when NewEntry is called with a new item for the CURRENT commander.  Use if you want to do something after the main UI has been updated
+        public event Action<string, bool> OnNewUIEvent;                     // UI. MAJOR. UC. Mirrored. Always called irrespective of commander
 
-        public event Action<string> OnNewUIEvent;                           // UI. MAJOR. UC. Mirrored. Called if the event is a UI event, with the UI event name.  Called even if show UI events is turned off
+                                                                            // Next two ONLY called if its for the current commander, and its not a screened out event (uievent)
+        public event Action<HistoryEntry, HistoryList> OnNewEntry;          // UI. MAJOR. UC. Mirrored. Current commander. Called before OnNewJournalEntry, when NewEntry is called with a new item for the CURRENT commander
+        public event Action<HistoryEntry, HistoryList> OnNewEntrySecond;    // UI. Current commander. After onNewEntry, Use if you want to do something after the main UI has been updated
 
         public event Action<JournalEntry> OnNewJournalEntry;                // UI. MAJOR. UC. Mirrored. Called after OnNewEntry, and when ANY new journal entry is created by the journal monitor
 
@@ -543,31 +543,28 @@ namespace EDDiscovery
 
         public void NewEntry(JournalEntry je)        // hooked into journal monitor and receives new entries.. Also call if you programatically add an entry
         {
-            if (je.CommanderId == history.CommanderId)     // we are only interested at this point accepting ones for the display commander
-            {
-                bool uievent = je.IsUIEvent;
+            bool uievent = je.IsUIEvent;
+            bool showuievents = EDDConfig.Instance.ShowUIEvents;
 
-                if (!je.IsUIEvent || EDDConfig.Instance.ShowUIEvents)              // filter out any UI events
+            if (uievent)            // give windows time to set up for OnNewEvent, and tell them if its coming via showuievents
+            {
+                if (je is EliteDangerousCore.JournalEvents.JournalMusic)
+                    OnNewUIEvent?.Invoke((je as EliteDangerousCore.JournalEvents.JournalMusic).MusicTrack, showuievents);
+            }
+
+            if (je.CommanderId == history.CommanderId)     // Next two are only if current commander is selected
+            {
+                if (!je.IsUIEvent || showuievents )              // filter out any UI events
                 {
-                    foreach (HistoryEntry he in history.AddJournalEntry(je, h => LogLineHighlight(h)))
+                    foreach (HistoryEntry he in history.AddJournalEntry(je, h => LogLineHighlight(h)))      // pass it thru the history list filtering/reorder system
                     {
                         OnNewEntry?.Invoke(he, history);            // major hook
                         OnNewEntrySecond?.Invoke(he, history);      // secondary hook..
                     }
                 }
-                else
-                {
-                    System.Diagnostics.Debug.WriteLine("**** Filter out " + je.EventTypeStr);
-                }
-
-                if (uievent)
-                {
-                    if (je is EliteDangerousCore.JournalEvents.JournalMusic)
-                        OnNewUIEvent?.Invoke((je as EliteDangerousCore.JournalEvents.JournalMusic).MusicTrack);
-                }
             }
 
-            OnNewJournalEntry?.Invoke(je);
+            OnNewJournalEntry?.Invoke(je);          // Finally, always call this on all entries
 
             if (je.EventTypeID == JournalTypeEnum.LoadGame)
             {

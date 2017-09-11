@@ -64,6 +64,9 @@ namespace EDDiscovery.Forms
 
         public UserControlForm()
         {
+            AdditionalSysMenus = new List<string>() { "&Transparent", "Show icon in Task&Bar for window" };
+            AdditionalSysMenuSelected += SystemMenu;        // DO this first, enable extra system menu options for SmartSysMenuForm
+
             InitializeComponent();
 
             timer.Interval = 500;
@@ -86,7 +89,7 @@ namespace EDDiscovery.Forms
 
             curwindowsborder = defwindowsborder = winborder;
             dbrefname = "PopUpForm" + rf;
-            this.Name = rf; 
+            this.Name = rf;
             deftopmost = deftopmostp;
             deftransparent = false;
 
@@ -177,7 +180,7 @@ namespace EDDiscovery.Forms
 
             //System.Diagnostics.Debug.WriteLine(Text + " tr " + transparentmode);
 
-            this.TransparencyKey = (showtransparent) ? transparencycolor : tkey;        
+            this.TransparencyKey = (showtransparent) ? transparencycolor : tkey;
             Color togo = (showtransparent) ? transparencycolor : beforetransparency;
 
             this.BackColor = togo;
@@ -192,7 +195,7 @@ namespace EDDiscovery.Forms
             PerformLayout();
 
             // if in transparent click thru, we set transparent style.. else clear it.
-            BaseUtils.Win32.UnsafeNativeMethods.ChangeWindowLong(this.Handle, BaseUtils.Win32.UnsafeNativeMethods.GWL.ExStyle , 
+            BaseUtils.Win32.UnsafeNativeMethods.ChangeWindowLong(this.Handle, BaseUtils.Win32.UnsafeNativeMethods.GWL.ExStyle,
                                 WS_EX.TRANSPARENT, showtransparent && transparentmode == TransparencyMode.OnFullyTransparent ? WS_EX.TRANSPARENT : 0);
 
             if (showtransparent || inpanelshow)     // timer needed if transparent, or if in panel show
@@ -249,7 +252,7 @@ namespace EDDiscovery.Forms
                 transparentmode = (TransparencyMode)SQLiteDBClass.GetSettingInt(dbrefname + "Transparent", deftransparent ? (int)TransparencyMode.On : (int)TransparencyMode.Off);
 
             SetTopMost(SQLiteDBClass.GetSettingBool(dbrefname + "TopMost", deftopmost)); // this also establishes transparency
-            
+
             var top = SQLiteDBClass.GetSettingInt(dbrefname + "Top", -999);
             //System.Diagnostics.Debug.WriteLine("Position Top is {0} {1}", dbrefname, top);
 
@@ -303,7 +306,7 @@ namespace EDDiscovery.Forms
             SQLiteDBClass.PutSettingInt(dbrefname + "Height", winsize.Height);
             SQLiteDBClass.PutSettingInt(dbrefname + "Top", this.Top);
             SQLiteDBClass.PutSettingInt(dbrefname + "Left", this.Left);
-            System.Diagnostics.Debug.WriteLine("Save Position {0} {1} {2} {3} {4}", dbrefname , Top, Left, winsize.Width, winsize.Height);
+            System.Diagnostics.Debug.WriteLine("Save Position {0} {1} {2} {3} {4}", dbrefname, Top, Left, winsize.Width, winsize.Height);
         }
 
         #endregion
@@ -330,7 +333,7 @@ namespace EDDiscovery.Forms
             inpanelshow = true; // in case we go transparent, we need to make sure its on.. since it won't be on if the timer is not running
 
             //nasty.. but nice
-            transparentmode = (TransparencyMode)( ((int)transparentmode + 1) % Enum.GetValues(typeof(TransparencyMode)).Length);
+            transparentmode = (TransparencyMode)(((int)transparentmode + 1) % Enum.GetValues(typeof(TransparencyMode)).Length);
 
             SetTransparency(transparentmode);
         }
@@ -357,7 +360,7 @@ namespace EDDiscovery.Forms
                     {
                         if (IsClickThruOn)
                         {
-                            if ( idk.IsKeyPressed(EDDConfig.Instance.ClickThruKey, recheck: true) )
+                            if (idk.IsKeyPressed(EDDConfig.Instance.ClickThruKey, recheck: true))
                                 inpanelshow = true;
                         }
                         else
@@ -381,12 +384,12 @@ namespace EDDiscovery.Forms
             }
         }
 
-        
 
 
-#endregion
 
-#region Resizing
+        #endregion
+
+        #region Resizing
 
         public void RequestTemporaryMinimiumSize(Size w)            // Size w is the client area used by the UserControl..
         {
@@ -424,68 +427,27 @@ namespace EDDiscovery.Forms
             }
         }
 
-#endregion
+        #endregion
 
-#region Low level Wndproc
+        #region System menu for border windows - added in in Init for smartsysmenu
 
-        protected const int SC_TRANSPARENT = 0x0020;    // Different from SmartSysMenuForm's SC_OPACITYSUBMENU.
-        protected const int SC_TASKBAR = 0x0021;
-
-        protected override void OnHandleCreated(EventArgs e)
+        void SystemMenu(int v)      // index into array
         {
-            base.OnHandleCreated(e);
-
-            // Windows title-bar context menu manipulation (2000 and above)
-            if (Environment.OSVersion.Platform == PlatformID.Win32NT && Environment.OSVersion.Version.Major >= 5)
+            if (v == 0)
             {
-                // Get a handle to a copy of this form's system (window) menu
-                IntPtr hSysMenu = BaseUtils.Win32.UnsafeNativeMethods.GetSystemMenu(Handle, false);
-                if (hSysMenu != IntPtr.Zero)
-                {
-                    // Add the About menu item
-                    BaseUtils.Win32.UnsafeNativeMethods.AppendMenu(hSysMenu, MF.STRING, SC_TRANSPARENT, "&Transparent");
-                    BaseUtils.Win32.UnsafeNativeMethods.AppendMenu(hSysMenu, MF.STRING, SC_TASKBAR, "Show icon in Task&Bar for window");
-                }
+                if (IsTransparencySupported)
+                    panel_transparency_Click(panel_transparent, EventArgs.Empty);
+                else
+                    ExtendedControls.MessageBoxTheme.Show("This panel does not support transparency");
+            }
+            else
+            {
+                panel_taskbaricon_Click(panel_taskbaricon, EventArgs.Empty);
             }
         }
 
-        protected override void WndProc(ref Message m)
-        {
-            switch (m.Msg)
-            {
-                case WM.INITMENU:
-                    {
-                        base.WndProc(ref m);
-                        if (m.WParam != IntPtr.Zero && Environment.OSVersion.Platform == PlatformID.Win32NT && IsHandleCreated)
-                        {
-                            BaseUtils.Win32.UnsafeNativeMethods.EnableMenuItem(m.WParam, SC_TRANSPARENT, MF.BYCOMMAND | (IsTransparencySupported ? MF.ENABLED : MF.GRAYED));
-                            BaseUtils.Win32.UnsafeNativeMethods.ModifyMenu(m.WParam, SC_TASKBAR, MF.BYCOMMAND | (ShowInTaskbar ? MF.CHECKED : MF.UNCHECKED), SC_TASKBAR, "Show icon in Task&Bar for window");
-                            m.Result = IntPtr.Zero;
-                        }
-                        return;
-                    }
-                case WM.SYSCOMMAND:
-                    {
-                        if (m.WParam == (IntPtr)SC_TASKBAR)
-                        {
-                            panel_taskbaricon_Click(panel_taskbaricon, EventArgs.Empty);
-                        }
-                        else if (m.WParam == (IntPtr)SC_TRANSPARENT)
-                        {
-                            if (IsTransparencySupported)
-                                panel_transparency_Click(panel_transparent, EventArgs.Empty);
-                            else
-                                ExtendedControls.MessageBoxTheme.Show("This panel does not support transparency");
-                        }
-                        else
-                            break;
+        #endregion
 
-                        m.Result = IntPtr.Zero;
-                        return;
-                    }
-            }
-            base.WndProc(ref m);
-        }
 
         private void panelTop_MouseDown(object sender, MouseEventArgs e)
         {
@@ -496,9 +458,8 @@ namespace EDDiscovery.Forms
         {
             OnCaptionMouseUp((Control)sender, e);
         }
-
-#endregion
     }
+
 
     public class UserControlFormList
     {
