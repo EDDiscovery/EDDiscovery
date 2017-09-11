@@ -21,6 +21,7 @@ namespace NetLogEntry
                                   "Options: Docked, Undocked, Touchdown, Liftoff, CommitCrime MissionCompleted MissionCompleted2 MiningRefined\n" +
                                   "Options: ScanPlanet ScanStar NavBeaconScan ScanEarth SellShipOnRebuy SearchANdRescue MissionRedirected\n" +
                                   "Options: RepairDrone CommunityGoal\n" +
+                                  "Options: MusicNormal MusicGalMap MusicSysMap\n" +
                                   "Or EDDBSTARS <filename> or EDDBPLANETS or EDDBSTARNAMES for the eddb dump\n" +
                                   "Or Phoneme <filename> <fileout> for EDDI phoneme tx\n" +
                                   "Path = <pathto>Journal.<name>.log (example c:\\test\\Journal.test1.log)\n" +
@@ -151,6 +152,13 @@ namespace NetLogEntry
 
             else if (writetype.Equals("CommunityGoal", StringComparison.InvariantCultureIgnoreCase))
                 lineout = "{ " + TimeStamp() + F("event", "CommunityGoal") + "\"CurrentGoals\":[ { \"CGID\":726, \"Title\":\"Alliance Research Initiative - Trade\", \"SystemName\":\"Kaushpoos\", \"MarketName\":\"Neville Horizons\", \"Expiry\":\"2017-08-17T14:58:14Z\", \"IsComplete\":false, \"CurrentTotal\":10062, \"PlayerContribution\":562, \"NumContributors\":101, \"TopRankSize\":10, \"PlayerInTopRank\":false, \"TierReached\":\"Tier 1\", \"PlayerPercentileBand\":50, \"Bonus\":200000 } ] }";
+
+            else if (writetype.Equals("MusicNormal", StringComparison.InvariantCultureIgnoreCase))
+                lineout = "{ " + TimeStamp() + F("event", "Music") + FF("MusicTrack", "NoTrack") + " }";
+            else if (writetype.Equals("MusicSysMap", StringComparison.InvariantCultureIgnoreCase))
+                lineout = "{ " + TimeStamp() + F("event", "Music") + FF("MusicTrack", "SystemMap") + " }";
+            else if (writetype.Equals("MusicGalMap", StringComparison.InvariantCultureIgnoreCase))
+                lineout = "{ " + TimeStamp() + F("event", "Music") + FF("MusicTrack", "GalaxyMap") + " }";
 
             if (lineout != null)
                 Write(filename, lineout);
