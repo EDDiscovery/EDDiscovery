@@ -80,10 +80,12 @@ namespace EDDiscovery.Forms
             textBoxBorderCompanionLogin.Visible = textBoxBorderCompanionPassword.Visible = labelCAPILogin.Visible = labelCAPIPassword.Visible = true;
             toolTip1.SetToolTip(textBoxBorderCompanionLogin, "Enter you Frontier ID, which is the email you registered with Frontier. Does not work for Steam installs");
             buttonExtCAPI.Enabled = false;
+            checkBoxCAPIEnable.Visible = false;
 
             if (textBoxBorderCmdr.Text.Length > 0)
             {
-                CompanionCredentials.State s = CompanionCredentials.CredentialState(textBoxBorderCmdr.Text);
+                bool isdisabled;
+                CompanionCredentials.State s = CompanionCredentials.CredentialState(textBoxBorderCmdr.Text, out isdisabled);
 
                 if (s == CompanionCredentials.State.CONFIRMED)
                 {
@@ -93,6 +95,9 @@ namespace EDDiscovery.Forms
                     textBoxBorderCompanionLogin.Text = textBoxBorderCompanionPassword.Text = "";
                     buttonExtCAPI.Text = "Clear";
                     buttonExtCAPI.Enabled = true;
+                    checkBoxCAPIEnable.Location = labelCAPILogin.Location;
+                    checkBoxCAPIEnable.Visible = true;
+                    checkBoxCAPIEnable.Checked = !isdisabled;
                 }
                 else if (s == CompanionCredentials.State.NEEDS_CONFIRMATION)
                 {
@@ -176,6 +181,10 @@ namespace EDDiscovery.Forms
             Close();
         }
 
+        private void checkBoxCAPIEnable_CheckedChanged(object sender, EventArgs e)
+        {
+            CompanionCredentials.SetDisabled(textBoxBorderCmdr.Text, !checkBoxCAPIEnable.Checked);      // rewrites the file with the disabled state
+        }
 
         #region Window Control
 
@@ -222,5 +231,6 @@ namespace EDDiscovery.Forms
                 textBoxBorderJournal.Text = fbd.SelectedPath;
 
         }
+
     }
 }

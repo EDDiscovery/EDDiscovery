@@ -58,7 +58,9 @@ namespace EDDiscovery.Forms
         private bool deftopmost, deftransparent;
         private Size normalsize;
 
+#if !__MonoCS__
         private DirectInputDevices.InputDeviceKeyboard idk;     // used to sniff in transparency mode
+#endif
 
         public bool IsTransparencySupported { get { return !transparencycolor.IsFullyTransparent(); } }
 
@@ -99,8 +101,9 @@ namespace EDDiscovery.Forms
 
             displayTitle = SQLiteDBClass.GetSettingBool(dbrefname + "ShowTitle", true);
 
+#if !__MonoCS__
             idk = DirectInputDevices.InputDeviceKeyboard.CreateKeyboard();
-
+#endif
             UpdateControls();
 
             Invalidate();
@@ -160,9 +163,9 @@ namespace EDDiscovery.Forms
                 return null;
         }
 
-        #endregion
+#endregion
 
-        #region View Implementation
+#region View Implementation
 
         private void UpdateTransparency()
         {
@@ -309,9 +312,9 @@ namespace EDDiscovery.Forms
             System.Diagnostics.Debug.WriteLine("Save Position {0} {1} {2} {3} {4}", dbrefname, Top, Left, winsize.Width, winsize.Height);
         }
 
-        #endregion
+#endregion
 
-        #region Clicks
+#region Clicks
 
         private void panel_close_Click(object sender, EventArgs e)
         {
@@ -333,7 +336,11 @@ namespace EDDiscovery.Forms
             inpanelshow = true; // in case we go transparent, we need to make sure its on.. since it won't be on if the timer is not running
 
             //nasty.. but nice
+#if !__MonoCS__
             transparentmode = (TransparencyMode)(((int)transparentmode + 1) % Enum.GetValues(typeof(TransparencyMode)).Length);
+#else
+            transparentmode = (transparentmode == TransparencyMode.Off) ? TransparencyMode.On : TransparencyMode.Off;   // no idea what happens in Mono
+#endif
 
             SetTransparency(transparentmode);
         }
@@ -360,8 +367,10 @@ namespace EDDiscovery.Forms
                     {
                         if (IsClickThruOn)
                         {
+#if !__MonoCS__
                             if (idk.IsKeyPressed(EDDConfig.Instance.ClickThruKey, recheck: true))
                                 inpanelshow = true;
+#endif
                         }
                         else
                             inpanelshow = true;
@@ -387,9 +396,9 @@ namespace EDDiscovery.Forms
 
 
 
-        #endregion
+#endregion
 
-        #region Resizing
+#region Resizing
 
         public void RequestTemporaryMinimiumSize(Size w)            // Size w is the client area used by the UserControl..
         {
@@ -427,9 +436,9 @@ namespace EDDiscovery.Forms
             }
         }
 
-        #endregion
+#endregion
 
-        #region System menu for border windows - added in in Init for smartsysmenu
+#region System menu for border windows - added in in Init for smartsysmenu
 
         void SystemMenu(int v)      // index into array
         {
@@ -446,7 +455,7 @@ namespace EDDiscovery.Forms
             }
         }
 
-        #endregion
+#endregion
 
 
         private void panelTop_MouseDown(object sender, MouseEventArgs e)

@@ -67,6 +67,9 @@ namespace EliteDangerousCore.CompanionAPI
         [JsonProperty("machinetoken")]
         public string machineToken { get; set; }
 
+        [JsonProperty("disablelogin")]
+        public bool disablelogin { get; set; }
+
         private RijndaelCrypt rijndaelCrypt = new RijndaelCrypt();
 
         private CompanionCredentials()
@@ -108,13 +111,30 @@ namespace EliteDangerousCore.CompanionAPI
             CONFIRMED,
         };
 
-        static public State CredentialState(string cmdrname)
+        static public State CredentialState(string cmdrname , out bool disabled)
         {
+            disabled = false;
             CompanionCredentials c = CompanionCredentials.FromFile(cmdrname);
             if (c != null && c.IsComplete)
+            {
+                disabled = c.disablelogin;
                 return c.Confirmed ? State.CONFIRMED : State.NEEDS_CONFIRMATION;
+            }
             else
                 return State.NO_CREDENTIALS;
+        }
+
+        static public bool SetDisabled(string cmdrname, bool disabled)
+        {
+            CompanionCredentials c = CompanionCredentials.FromFile(cmdrname);
+            if (c != null && c.IsComplete)      // only worth it if complete
+            {
+                c.disablelogin = disabled;
+                c.ToFile();                     // and write back
+                return true;
+            }
+            else
+                return false;
         }
 
         static public void DeleteCredentials(string cmdrname)

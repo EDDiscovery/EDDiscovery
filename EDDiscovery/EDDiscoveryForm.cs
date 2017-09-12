@@ -456,18 +456,28 @@ namespace EDDiscovery
             {
                 Capi.Logout();
 
-                if (EliteDangerousCore.CompanionAPI.CompanionCredentials.CredentialState(EDCommander.Current.Name) == EliteDangerousCore.CompanionAPI.CompanionCredentials.State.CONFIRMED)
+                bool isdisabled;
+                bool isconfirmed = EliteDangerousCore.CompanionAPI.CompanionCredentials.CredentialState(EDCommander.Current.Name , out isdisabled) == EliteDangerousCore.CompanionAPI.CompanionCredentials.State.CONFIRMED;
+
+                if (isconfirmed )
                 {
-                    try
+                    if ( isdisabled)
                     {
-                        Capi.LoginAs(EDCommander.Current.Name);
-                        LogLine("Logged into Companion API");
+                        LogLine("Companion API is disabled in commander settings");
                     }
-                    catch (Exception ex)
+                    else
                     {
-                        LogLineHighlight("Companion API log in failed: " + ex.Message);
-                        if (!(ex is EliteDangerousCore.CompanionAPI.CompanionAppException))
-                            LogLineHighlight(ex.StackTrace);
+                        try
+                        {
+                            Capi.LoginAs(EDCommander.Current.Name);
+                            LogLine("Logged into Companion API");
+                        }
+                        catch (Exception ex)
+                        {
+                            LogLineHighlight("Companion API log in failed: " + ex.Message);
+                            if (!(ex is EliteDangerousCore.CompanionAPI.CompanionAppException))
+                                LogLineHighlight(ex.StackTrace);
+                        }
                     }
                 }
             }

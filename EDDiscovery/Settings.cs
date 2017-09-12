@@ -192,16 +192,14 @@ namespace EDDiscovery
 
                 if (cf.ShowDialog(this) == DialogResult.OK)
                 {
-                    string currentjloc = cmdr.JournalDir;
-
                     cf.Update(cmdr);
                     List<EDCommander> edcommanders = (List<EDCommander>)dataGridViewCommanders.DataSource;
                     _discoveryForm.LoadCommandersListBox();
                     EDCommander.Update(edcommanders, false);
-
-                    if ( currentjloc != cmdr.JournalDir )
-                        _discoveryForm.RefreshHistoryAsync();           // will do a new parse on commander list adding/removing scanners
                 }
+
+                _discoveryForm.Capi.Logout();       // logout.. CAPI may have changed
+                _discoveryForm.RefreshHistoryAsync();           // do a resync, CAPI may have changed, anything else, make it work again
             }
         }
 
