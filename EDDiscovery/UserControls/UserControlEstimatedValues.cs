@@ -45,14 +45,20 @@ namespace EDDiscovery.UserControls
         {
             _discoveryForm = ed;
             uctg = thc;
-            uctg.OnTravelSelectionChanged += Uctg_OnTravelSelectionChanged;
+            uctg.OnTravelSelectionChanged += Display;      
             ed.OnNewEntry += NewEntry;
+        }
 
+        public override void ChangeCursorType(UserControlCursorType thc)
+        {
+            uctg.OnTravelSelectionChanged -= Display;
+            uctg = thc;
+            uctg.OnTravelSelectionChanged += Display;
         }
 
         public override void Closing()
         {
-            uctg.OnTravelSelectionChanged -= Uctg_OnTravelSelectionChanged;
+            uctg.OnTravelSelectionChanged -= Display;
             _discoveryForm.OnNewEntry -= NewEntry;
         }
 
@@ -66,7 +72,7 @@ namespace EDDiscovery.UserControls
             }
         }
 
-        public override void Display(HistoryEntry he, HistoryList hl)            // when user clicks around..
+        public override void Display(HistoryEntry he, HistoryList hl)            // Called at first start or hooked to change cursor
         {
             if (he != null && (last_he == null || he.System != last_he.System))
             {
@@ -128,12 +134,5 @@ namespace EDDiscovery.UserControls
             return flattened;
         }
 
-        private void Uctg_OnTravelSelectionChanged(HistoryEntry he, HistoryList hl)
-        {
-            if (he != null)
-            {
-                dataGridViewNearest.Rows.Clear();
-            }
-        }
     }
 }

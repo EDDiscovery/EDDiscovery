@@ -60,9 +60,9 @@ namespace EDDiscovery.UserControls
 
         public override void ChangeCursorType(UserControlCursorType thc)
         {
-            uctg.OnTravelSelectionChanged -= Display;
+            uctg.OnTravelSelectionChanged -= Uctg_OnTravelSelectionChanged;
             uctg = thc;
-            uctg.OnTravelSelectionChanged += Display;
+            uctg.OnTravelSelectionChanged += Uctg_OnTravelSelectionChanged;
         }
 
         public override void Closing()
@@ -99,7 +99,8 @@ namespace EDDiscovery.UserControls
                 SetControlText("Closest systems from " + name);
                 foreach (KeyValuePair<double, ISystem> tvp in csl)
                 {
-                    object[] rowobj = { tvp.Value.name, Math.Sqrt(tvp.Key).ToString("0.00") };       // distances are stored squared for speed, back to normal.
+                    int visits = _discoveryForm.history.GetVisitsCount(tvp.Value.name, tvp.Value.id_edsm);
+                    object[] rowobj = { tvp.Value.name, Math.Sqrt(tvp.Key).ToString("0.00"), visits.ToStringInvariant()};       // distances are stored squared for speed, back to normal.
                     int rowindex = dataGridViewNearest.Rows.Add(rowobj);
                     dataGridViewNearest.Rows[rowindex].Tag = tvp.Value;
                 }
@@ -148,7 +149,7 @@ namespace EDDiscovery.UserControls
 
         private void dataGridViewNearest_SortCompare(object sender, DataGridViewSortCompareEventArgs e)
         {
-            if (e.Column.Index == 1)
+            if (e.Column.Index >= 1)
             {
                 double v1, v2;
                 string vs1 = e.CellValue1?.ToString();
