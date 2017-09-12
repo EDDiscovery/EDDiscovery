@@ -54,6 +54,7 @@
             this.textBoxBorderJournal = new ExtendedControls.TextBoxBorder();
             this.textBoxBorderCmdr = new ExtendedControls.TextBoxBorder();
             this.groupBoxCustom4 = new ExtendedControls.GroupBoxCustom();
+            this.checkBoxCAPIEnable = new ExtendedControls.CheckBoxCustom();
             this.labelCAPIState = new System.Windows.Forms.Label();
             this.labelCAPIPassword = new System.Windows.Forms.Label();
             this.labelCAPILogin = new System.Windows.Forms.Label();
@@ -185,6 +186,7 @@
             this.checkBoxCustomEDDNTo.CheckBoxInnerColor = System.Drawing.Color.White;
             this.checkBoxCustomEDDNTo.CheckColor = System.Drawing.Color.DarkBlue;
             this.checkBoxCustomEDDNTo.FontNerfReduction = 0.5F;
+            this.checkBoxCustomEDDNTo.ImageButtonDisabledScaling = 0.5F;
             this.checkBoxCustomEDDNTo.Location = new System.Drawing.Point(9, 29);
             this.checkBoxCustomEDDNTo.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.checkBoxCustomEDDNTo.Name = "checkBoxCustomEDDNTo";
@@ -203,6 +205,7 @@
             this.checkBoxCustomEDSMFrom.CheckBoxInnerColor = System.Drawing.Color.White;
             this.checkBoxCustomEDSMFrom.CheckColor = System.Drawing.Color.DarkBlue;
             this.checkBoxCustomEDSMFrom.FontNerfReduction = 0.5F;
+            this.checkBoxCustomEDSMFrom.ImageButtonDisabledScaling = 0.5F;
             this.checkBoxCustomEDSMFrom.Location = new System.Drawing.Point(427, 60);
             this.checkBoxCustomEDSMFrom.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.checkBoxCustomEDSMFrom.Name = "checkBoxCustomEDSMFrom";
@@ -221,6 +224,7 @@
             this.checkBoxCustomEDSMTo.CheckBoxInnerColor = System.Drawing.Color.White;
             this.checkBoxCustomEDSMTo.CheckColor = System.Drawing.Color.DarkBlue;
             this.checkBoxCustomEDSMTo.FontNerfReduction = 0.5F;
+            this.checkBoxCustomEDSMTo.ImageButtonDisabledScaling = 0.5F;
             this.checkBoxCustomEDSMTo.Location = new System.Drawing.Point(427, 32);
             this.checkBoxCustomEDSMTo.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.checkBoxCustomEDSMTo.Name = "checkBoxCustomEDSMTo";
@@ -252,6 +256,7 @@
             this.checkBoxEGOSync.CheckBoxInnerColor = System.Drawing.Color.White;
             this.checkBoxEGOSync.CheckColor = System.Drawing.Color.DarkBlue;
             this.checkBoxEGOSync.FontNerfReduction = 0.5F;
+            this.checkBoxEGOSync.ImageButtonDisabledScaling = 0.5F;
             this.checkBoxEGOSync.Location = new System.Drawing.Point(427, 32);
             this.checkBoxEGOSync.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.checkBoxEGOSync.Name = "checkBoxEGOSync";
@@ -439,6 +444,7 @@
             this.groupBoxCustom4.BackColorScaling = 0.5F;
             this.groupBoxCustom4.BorderColor = System.Drawing.Color.LightGray;
             this.groupBoxCustom4.BorderColorScaling = 0.5F;
+            this.groupBoxCustom4.Controls.Add(this.checkBoxCAPIEnable);
             this.groupBoxCustom4.Controls.Add(this.labelCAPIState);
             this.groupBoxCustom4.Controls.Add(this.buttonExtCAPI);
             this.groupBoxCustom4.Controls.Add(this.textBoxBorderCompanionPassword);
@@ -455,6 +461,24 @@
             this.groupBoxCustom4.Text = "Frontier Companion API (optional)";
             this.groupBoxCustom4.TextPadding = 0;
             this.groupBoxCustom4.TextStartPosition = -1;
+            // 
+            // checkBoxCAPIEnable
+            // 
+            this.checkBoxCAPIEnable.AutoSize = true;
+            this.checkBoxCAPIEnable.CheckBoxColor = System.Drawing.Color.Gray;
+            this.checkBoxCAPIEnable.CheckBoxInnerColor = System.Drawing.Color.White;
+            this.checkBoxCAPIEnable.CheckColor = System.Drawing.Color.DarkBlue;
+            this.checkBoxCAPIEnable.FontNerfReduction = 0.5F;
+            this.checkBoxCAPIEnable.ImageButtonDisabledScaling = 0.5F;
+            this.checkBoxCAPIEnable.Location = new System.Drawing.Point(418, 70);
+            this.checkBoxCAPIEnable.MouseOverColor = System.Drawing.Color.CornflowerBlue;
+            this.checkBoxCAPIEnable.Name = "checkBoxCAPIEnable";
+            this.checkBoxCAPIEnable.Size = new System.Drawing.Size(88, 17);
+            this.checkBoxCAPIEnable.TabIndex = 4;
+            this.checkBoxCAPIEnable.Text = "Enable Login";
+            this.checkBoxCAPIEnable.TickBoxReductionSize = 10;
+            this.checkBoxCAPIEnable.UseVisualStyleBackColor = true;
+            this.checkBoxCAPIEnable.CheckedChanged += new System.EventHandler(this.checkBoxCAPIEnable_CheckedChanged);
             // 
             // labelCAPIState
             // 
@@ -775,5 +799,6 @@
         private ExtendedControls.TextBoxBorder textBoxEGOAPI;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.Label label9;
+        private ExtendedControls.CheckBoxCustom checkBoxCAPIEnable;
     }
 }

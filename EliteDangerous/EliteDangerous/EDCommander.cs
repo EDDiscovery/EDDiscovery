@@ -510,7 +510,12 @@ namespace EliteDangerousCore
         public bool SyncToEGO { get { return syncToEGO; } set { syncToEGO = value; } }
         public bool Deleted { get { return deleted; } set { deleted = value; } }
 
-        public string Info { get { return BaseUtils.FieldBuilder.Build(";To EDDN", syncToEddn, ";To EDSM", syncToEdsm, ";From EDSM", syncFromEdsm, ";CAPI" , EliteDangerousCore.CompanionAPI.CompanionCredentials.CredentialState(Name) == EliteDangerousCore.CompanionAPI.CompanionCredentials.State.CONFIRMED, ";To EGO", syncToEGO); } }
+        public string Info { get
+            {
+                bool isdisabled;
+                bool confirmed = EliteDangerousCore.CompanionAPI.CompanionCredentials.CredentialState(Name, out isdisabled) == EliteDangerousCore.CompanionAPI.CompanionCredentials.State.CONFIRMED;
+                return BaseUtils.FieldBuilder.Build(";To EDDN", syncToEddn, ";To EDSM", syncToEdsm, ";From EDSM", syncFromEdsm, ";CAPI" , confirmed, "<;(Disabled)" , isdisabled, ";To EGO", syncToEGO);
+            } }
 
 #endregion
     }
