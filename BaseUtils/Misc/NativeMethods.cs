@@ -245,7 +245,18 @@ namespace BaseUtils.Win32
         public static extern uint AssocQueryString(AssocF flags, AssocStr str,
            string pszAssoc, string pszExtra, [Out] StringBuilder pszOut, ref uint
            pcchOut);
-   }
+
+        // https://msdn.microsoft.com/en-us/library/windows/desktop/ms632605.aspx
+        [StructLayout(LayoutKind.Sequential)]
+        public struct MINMAXINFO
+        {
+            public System.Drawing.Point ptReserved;
+            public System.Drawing.Point ptMaxSize;
+            public System.Drawing.Point ptMaxPosition;
+            public System.Drawing.Point ptMinTrackSize;
+            public System.Drawing.Point ptMaxTrackSize;
+        }
+    }
 
     public class SafeNativeMethods
     {

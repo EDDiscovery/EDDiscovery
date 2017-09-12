@@ -20,6 +20,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -89,6 +90,28 @@ namespace ExtendedControls
 
             switch (m.Msg)
             {
+                case WM.GETMINMAXINFO:  // Don't overlap the taskbar when maximizing without a windows border.
+                    {
+                        if (m.LParam != IntPtr.Zero && !windowsborder && AllowResize)
+                        {
+                            var sc = Screen.FromControl(this);
+                            var scb = sc.Bounds;
+                            var wa = sc.WorkingArea;
+                            var mmi = Marshal.PtrToStructure<UnsafeNativeMethods.MINMAXINFO>(m.LParam);
+
+                            mmi.ptMaxPosition.X = wa.Left - scb.Left;
+                            mmi.ptMaxPosition.Y = wa.Top - scb.Top;
+
+                            mmi.ptMaxSize.X = wa.Width;
+                            mmi.ptMaxSize.Y = wa.Height;
+
+                            Marshal.StructureToPtr(mmi, m.LParam, false);
+                            m.Result = IntPtr.Zero;
+                            return;
+                        }
+                        break;
+                    }
+
                 case WM.NCHITTEST:      // Windows honours NCHITTEST; Mono does not 
                     {
                         if (!AllowResize)
