@@ -572,6 +572,8 @@ namespace EDDiscovery
                 if (string.IsNullOrEmpty(eddn.commanderName))
                      eddn.commanderName = Capi.Credentials.Commander;
 
+                if (he.Commander.Name.StartsWith("[BETA]", StringComparison.InvariantCultureIgnoreCase) || he.IsBetaMessage)
+                    eddn.isBeta = true;
 
                 JObject msg = eddn.CreateEDDNCommodityMessage(Capi.Profile.StarPort.commodities, Capi.Profile.CurrentStarSystem.name, Capi.Profile.StarPort.name, DateTime.UtcNow);
 

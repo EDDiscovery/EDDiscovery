@@ -511,6 +511,8 @@ namespace EliteDangerousCore.JournalEvents
         {
             switch (ringClass)
             {
+                case null:
+                    return "Unknown";
                 case "eRingClass_Icy":
                     return "Icy";
                 case "eRingClass_Rocky":
