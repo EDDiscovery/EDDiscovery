@@ -374,7 +374,7 @@ namespace EliteDangerousCore.EDSM
                                 {
                                     if (!jo_enum.MoveNext())
                                     {
-                                        reportProgress(-1, $"Syncing EDSM systems: {count} processed, {insertcount} new systems, {updatecount} updated systems");
+                                        reportProgress(-1, $"Syncing EDSM systems: {count:N0} processed, {insertcount:N0} new systems, {updatecount:N0} updated systems");
                                         txn.Commit();
 
                                         if (jr_eof)
