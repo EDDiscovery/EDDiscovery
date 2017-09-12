@@ -104,25 +104,6 @@ namespace EDDiscovery.UserControls
             UpdateSystemRows();
         }
 
-        public void LoadControl()
-        {
-            //_savedRoutes = ExplorationSetClass.GetAllSavedRoutes();
-
-            //foreach (var initroute in InitialRoutes)
-            //{
-            //    if (!_savedRoutes.Any(r => r.Name == initroute.Name || r.Name == "\x7F" + initroute.Name))
-            //    {
-            //        initroute.Add();
-            //        _savedRoutes.Add(initroute);
-            //    }
-            //}
-
-            //_savedRoutes = _savedRoutes.Where(r => !r.Name.StartsWith("\x7F")).ToList();
-
-
-        }
-
-
         public void InsertRows(int insertIndex, params string[] sysnames)
         {
             foreach (var row in sysnames)

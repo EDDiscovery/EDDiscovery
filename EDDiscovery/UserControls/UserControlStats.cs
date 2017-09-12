@@ -51,9 +51,9 @@ namespace EDDiscovery.UserControls
 
         public override void ChangeCursorType(UserControlCursorType thc)
         {
-            uctg.OnTravelSelectionChanged -= Display;
+            uctg.OnTravelSelectionChanged -= SelectionChanged;
             uctg = thc;
-            uctg.OnTravelSelectionChanged += Display;
+            uctg.OnTravelSelectionChanged += SelectionChanged;
         }
 
         public override void Closing()

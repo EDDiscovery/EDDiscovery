@@ -100,7 +100,7 @@ namespace EDDiscovery.UserControls
 
         public override void LoadLayout()
         {
-          //  DGVLoadColumnLayout(dataGridViewStarList, DbColumnSave);
+            DGVLoadColumnLayout(dataGridViewStarList, DbColumnSave);
         }
 
         public override void Closing()

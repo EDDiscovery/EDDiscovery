@@ -52,6 +52,7 @@ namespace EDDiscovery.UserControls
             this.dataGridViewNearest = new System.Windows.Forms.DataGridView();
             this.Col1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Distance = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Visited = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.closestContextMenu.SuspendLayout();
             this.dataViewScrollerPanel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewNearest)).BeginInit();
@@ -131,7 +132,8 @@ namespace EDDiscovery.UserControls
             this.dataGridViewNearest.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewNearest.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.Col1,
-            this.Distance});
+            this.Distance,
+            this.Visited});
             this.dataGridViewNearest.ContextMenuStrip = this.closestContextMenu;
             this.dataGridViewNearest.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.dataGridViewNearest.Location = new System.Drawing.Point(0, 0);
@@ -154,6 +156,12 @@ namespace EDDiscovery.UserControls
             this.Distance.HeaderText = "Distance";
             this.Distance.MinimumWidth = 50;
             this.Distance.Name = "Distance";
+            // 
+            // Visited
+            // 
+            this.Visited.FillWeight = 25F;
+            this.Visited.HeaderText = "Visited";
+            this.Visited.Name = "Visited";
             // 
             // UserControlStarDistance
             // 
@@ -178,5 +186,6 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.DataGridView dataGridViewNearest;
         private System.Windows.Forms.DataGridViewTextBoxColumn Col1;
         private System.Windows.Forms.DataGridViewTextBoxColumn Distance;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Visited;
     }
 }
