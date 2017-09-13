@@ -93,6 +93,11 @@ namespace EDDiscovery.Export
             this.buttonImportHelp = new ExtendedControls.ButtonExt();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.selectImportFileDialog = new System.Windows.Forms.OpenFileDialog();
+            this.customDateTimePickerFrom = new ExtendedControls.CustomDateTimePicker();
+            this.customDateTimePickerTo = new ExtendedControls.CustomDateTimePicker();
+            this.label1 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
+            this.checkBoxDateFilter = new ExtendedControls.CheckBoxCustom();
             this.tableLayoutPanel1.SuspendLayout();
             this.groupBoxCustom2.SuspendLayout();
             this.tableLayoutPanel4.SuspendLayout();
@@ -125,7 +130,7 @@ namespace EDDiscovery.Export
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(583, 414);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(583, 465);
             this.tableLayoutPanel1.TabIndex = 7;
             // 
             // groupBoxCustom2
@@ -142,7 +147,7 @@ namespace EDDiscovery.Export
             this.groupBoxCustom2.FillClientAreaWithAlternateColor = false;
             this.groupBoxCustom2.Location = new System.Drawing.Point(3, 332);
             this.groupBoxCustom2.Name = "groupBoxCustom2";
-            this.groupBoxCustom2.Size = new System.Drawing.Size(475, 79);
+            this.groupBoxCustom2.Size = new System.Drawing.Size(475, 130);
             this.groupBoxCustom2.TabIndex = 12;
             this.groupBoxCustom2.TabStop = false;
             this.groupBoxCustom2.Text = "History Import";
@@ -428,6 +433,7 @@ namespace EDDiscovery.Export
             this.checkBoxImpHeader.CheckState = System.Windows.Forms.CheckState.Checked;
             this.checkBoxImpHeader.Dock = System.Windows.Forms.DockStyle.Fill;
             this.checkBoxImpHeader.FontNerfReduction = 0.5F;
+            this.checkBoxImpHeader.ImageButtonDisabledScaling = 0.5F;
             this.checkBoxImpHeader.Location = new System.Drawing.Point(73, 3);
             this.checkBoxImpHeader.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.checkBoxImpHeader.Name = "checkBoxImpHeader";
@@ -517,6 +523,7 @@ namespace EDDiscovery.Export
             this.checkBoxCustomAutoOpen.Checked = true;
             this.checkBoxCustomAutoOpen.CheckState = System.Windows.Forms.CheckState.Checked;
             this.checkBoxCustomAutoOpen.FontNerfReduction = 0.5F;
+            this.checkBoxCustomAutoOpen.ImageButtonDisabledScaling = 0.5F;
             this.checkBoxCustomAutoOpen.Location = new System.Drawing.Point(18, 33);
             this.checkBoxCustomAutoOpen.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.checkBoxCustomAutoOpen.Name = "checkBoxCustomAutoOpen";
@@ -536,6 +543,10 @@ namespace EDDiscovery.Export
             this.groupBoxCustomFormat.BackColorScaling = 0.5F;
             this.groupBoxCustomFormat.BorderColor = System.Drawing.Color.LightGray;
             this.groupBoxCustomFormat.BorderColorScaling = 0.5F;
+            this.groupBoxCustomFormat.Controls.Add(this.label2);
+            this.groupBoxCustomFormat.Controls.Add(this.label1);
+            this.groupBoxCustomFormat.Controls.Add(this.customDateTimePickerTo);
+            this.groupBoxCustomFormat.Controls.Add(this.customDateTimePickerFrom);
             this.groupBoxCustomFormat.Controls.Add(this.flowLayoutPanel2);
             this.groupBoxCustomFormat.Controls.Add(this.tableLayoutPanel2);
             this.groupBoxCustomFormat.FillClientAreaWithAlternateColor = false;
@@ -605,6 +616,7 @@ namespace EDDiscovery.Export
             this.tableLayoutPanel2.Controls.Add(this.labelExtSeparator, 0, 0);
             this.tableLayoutPanel2.Controls.Add(this.radioButtonCustomUSAUK, 0, 1);
             this.tableLayoutPanel2.Controls.Add(this.radioButtonCustomEU, 0, 2);
+            this.tableLayoutPanel2.Controls.Add(this.checkBoxDateFilter, 1, 2);
             this.tableLayoutPanel2.Location = new System.Drawing.Point(6, 19);
             this.tableLayoutPanel2.Name = "tableLayoutPanel2";
             this.tableLayoutPanel2.RowCount = 3;
@@ -623,6 +635,7 @@ namespace EDDiscovery.Export
             this.checkBoxCustomIncludeHeader.Checked = true;
             this.checkBoxCustomIncludeHeader.CheckState = System.Windows.Forms.CheckState.Checked;
             this.checkBoxCustomIncludeHeader.FontNerfReduction = 0.5F;
+            this.checkBoxCustomIncludeHeader.ImageButtonDisabledScaling = 0.5F;
             this.checkBoxCustomIncludeHeader.Location = new System.Drawing.Point(111, 16);
             this.checkBoxCustomIncludeHeader.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.checkBoxCustomIncludeHeader.Name = "checkBoxCustomIncludeHeader";
@@ -878,8 +891,8 @@ namespace EDDiscovery.Export
             this.tableLayoutPanel5.Location = new System.Drawing.Point(484, 332);
             this.tableLayoutPanel5.Name = "tableLayoutPanel5";
             this.tableLayoutPanel5.RowCount = 2;
-            this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 31F));
-            this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 69F));
+            this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 37.97468F));
+            this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 62.02532F));
             this.tableLayoutPanel5.Size = new System.Drawing.Size(96, 79);
             this.tableLayoutPanel5.TabIndex = 13;
             // 
@@ -890,7 +903,7 @@ namespace EDDiscovery.Export
             this.buttonImport.ButtonDisabledScaling = 0.5F;
             this.buttonImport.Location = new System.Drawing.Point(3, 3);
             this.buttonImport.Name = "buttonImport";
-            this.buttonImport.Size = new System.Drawing.Size(75, 18);
+            this.buttonImport.Size = new System.Drawing.Size(75, 23);
             this.buttonImport.TabIndex = 0;
             this.buttonImport.Text = "Import";
             this.toolTip.SetToolTip(this.buttonImport, "Run import using defined parameters (may take several minutes)");
@@ -902,7 +915,7 @@ namespace EDDiscovery.Export
             this.buttonImportHelp.BorderColorScaling = 1.25F;
             this.buttonImportHelp.ButtonColorScaling = 0.5F;
             this.buttonImportHelp.ButtonDisabledScaling = 0.5F;
-            this.buttonImportHelp.Location = new System.Drawing.Point(3, 27);
+            this.buttonImportHelp.Location = new System.Drawing.Point(3, 32);
             this.buttonImportHelp.Name = "buttonImportHelp";
             this.buttonImportHelp.Size = new System.Drawing.Size(75, 23);
             this.buttonImportHelp.TabIndex = 1;
@@ -919,13 +932,89 @@ namespace EDDiscovery.Export
             // 
             this.selectImportFileDialog.FileName = "openFileDialog1";
             // 
+            // customDateTimePickerFrom
+            // 
+            this.customDateTimePickerFrom.BorderColor = System.Drawing.Color.Transparent;
+            this.customDateTimePickerFrom.BorderColorScaling = 0.5F;
+            this.customDateTimePickerFrom.Checked = false;
+            this.customDateTimePickerFrom.CustomFormat = "dd MMMM yyyy";
+            this.customDateTimePickerFrom.Format = System.Windows.Forms.DateTimePickerFormat.Long;
+            this.customDateTimePickerFrom.Location = new System.Drawing.Point(231, 114);
+            this.customDateTimePickerFrom.Name = "customDateTimePickerFrom";
+            this.customDateTimePickerFrom.SelectedColor = System.Drawing.Color.Yellow;
+            this.customDateTimePickerFrom.ShowCheckBox = false;
+            this.customDateTimePickerFrom.ShowUpDown = false;
+            this.customDateTimePickerFrom.Size = new System.Drawing.Size(104, 23);
+            this.customDateTimePickerFrom.TabIndex = 6;
+            this.customDateTimePickerFrom.Text = "customDateTimePickerFrom";
+            this.customDateTimePickerFrom.TextBackColor = System.Drawing.Color.DarkBlue;
+            this.customDateTimePickerFrom.Value = new System.DateTime(2017, 9, 13, 19, 51, 40, 515);
+            // 
+            // customDateTimePickerTo
+            // 
+            this.customDateTimePickerTo.BorderColor = System.Drawing.Color.Transparent;
+            this.customDateTimePickerTo.BorderColorScaling = 0.5F;
+            this.customDateTimePickerTo.Checked = false;
+            this.customDateTimePickerTo.CustomFormat = "dd MMMM yyyy";
+            this.customDateTimePickerTo.Format = System.Windows.Forms.DateTimePickerFormat.Long;
+            this.customDateTimePickerTo.Location = new System.Drawing.Point(341, 114);
+            this.customDateTimePickerTo.Name = "customDateTimePickerTo";
+            this.customDateTimePickerTo.SelectedColor = System.Drawing.Color.Yellow;
+            this.customDateTimePickerTo.ShowCheckBox = false;
+            this.customDateTimePickerTo.ShowUpDown = false;
+            this.customDateTimePickerTo.Size = new System.Drawing.Size(104, 23);
+            this.customDateTimePickerTo.TabIndex = 7;
+            this.customDateTimePickerTo.Text = "customDateTimePickerTo";
+            this.customDateTimePickerTo.TextBackColor = System.Drawing.Color.DarkBlue;
+            this.customDateTimePickerTo.Value = new System.DateTime(2017, 9, 13, 19, 52, 10, 976);
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(231, 98);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(63, 13);
+            this.label1.TabIndex = 8;
+            this.label1.Text = "Export From";
+            this.toolTip.SetToolTip(this.label1, "Start date for export");
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(341, 98);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(53, 13);
+            this.label2.TabIndex = 9;
+            this.label2.Text = "Export To";
+            this.toolTip.SetToolTip(this.label2, "End date for export");
+            // 
+            // checkBoxDateFilter
+            // 
+            this.checkBoxDateFilter.AutoSize = true;
+            this.checkBoxDateFilter.CheckBoxColor = System.Drawing.Color.Gray;
+            this.checkBoxDateFilter.CheckBoxInnerColor = System.Drawing.Color.White;
+            this.checkBoxDateFilter.CheckColor = System.Drawing.Color.DarkBlue;
+            this.checkBoxDateFilter.Checked = true;
+            this.checkBoxDateFilter.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBoxDateFilter.FontNerfReduction = 0.5F;
+            this.checkBoxDateFilter.ImageButtonDisabledScaling = 0.5F;
+            this.checkBoxDateFilter.Location = new System.Drawing.Point(111, 39);
+            this.checkBoxDateFilter.MouseOverColor = System.Drawing.Color.CornflowerBlue;
+            this.checkBoxDateFilter.Name = "checkBoxDateFilter";
+            this.checkBoxDateFilter.Size = new System.Drawing.Size(103, 17);
+            this.checkBoxDateFilter.TabIndex = 5;
+            this.checkBoxDateFilter.Text = "Apply Date Filter";
+            this.checkBoxDateFilter.TickBoxReductionSize = 10;
+            this.toolTip.SetToolTip(this.checkBoxDateFilter, "Filter the export by selected dates");
+            this.checkBoxDateFilter.UseVisualStyleBackColor = true;
+            // 
             // ExportControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.tableLayoutPanel1);
             this.Name = "ExportControl";
-            this.Size = new System.Drawing.Size(583, 414);
+            this.Size = new System.Drawing.Size(583, 465);
             this.Load += new System.EventHandler(this.ExportControl_Load);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();
@@ -1002,5 +1091,10 @@ namespace EDDiscovery.Export
         private ExtendedControls.TextBoxBorder txtsphereRadius;
         private System.Windows.Forms.Label labelExt8;
         private System.Windows.Forms.Label labelExt9;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label label1;
+        private ExtendedControls.CustomDateTimePicker customDateTimePickerTo;
+        private ExtendedControls.CustomDateTimePicker customDateTimePickerFrom;
+        private ExtendedControls.CheckBoxCustom checkBoxDateFilter;
     }
 }

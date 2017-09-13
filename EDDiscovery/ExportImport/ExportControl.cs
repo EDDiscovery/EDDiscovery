@@ -50,13 +50,14 @@ namespace EDDiscovery.Export
             exportTypeList.Add(new ExportTypeClass("Exploration scans (Stars)", new ExportScan(true, false)));
             exportTypeList.Add(new ExportTypeClass("Exploration scans (Planets)", new ExportScan(false, true)));
             exportTypeList.Add(new ExportTypeClass("Travel history", new ExportFSDJump()));
-            exportTypeList.Add(new ExportTypeClass("Sold exploration data (all)", new ExportExplorationData(false)));
-            exportTypeList.Add(new ExportTypeClass("Sold exploration data (By date)", new ExportExplorationData(true)));
+            exportTypeList.Add(new ExportTypeClass("Sold exploration data", new ExportExplorationData()));
             exportTypeList.Add(new ExportTypeClass("Route plan", new ExportRoute()));
             exportTypeList.Add(new ExportTypeClass("All Notes from All Commanders", new ExportNotes()));
             exportTypeList.Add(new ExportTypeClass("Exploration list (star data)", new ExportScan(true, false, true)));
             exportTypeList.Add(new ExportTypeClass("Exploration list (planet data)", new ExportScan(false, true, true)));
 
+            customDateTimePickerFrom.Value = new DateTime(2014, 11, 22, 4, 0, 0, DateTimeKind.Utc); //Gamma start
+            customDateTimePickerTo.Value = DateTime.Now;
 
             txtExportVisited.SetAutoCompletor(SystemClassDB.ReturnSystemListForAutoComplete);
 
@@ -117,6 +118,9 @@ namespace EDDiscovery.Export
                     exptype.export.Csvformat = BaseUtils.CVSWrite.CSVFormat.USA_UK;
 
                 exptype.export.IncludeHeader = checkBoxCustomIncludeHeader.Checked;
+
+                exptype.export.fromDate = checkBoxDateFilter.Checked ? customDateTimePickerFrom.Value : DateTime.MinValue;
+                exptype.export.toDate = checkBoxDateFilter.Checked ? customDateTimePickerTo.Value : DateTime.MaxValue;
 
                 //Check for failed getdata or failed CSV
                 if (!exptype.export.GetData(_discoveryForm))
