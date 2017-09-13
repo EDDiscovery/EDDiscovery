@@ -53,7 +53,7 @@ namespace EDDiscovery.Export
 
                     SystemNoteClass.GetAllSystemNotes();
 
-                    foreach (SystemNoteClass snc in SystemNoteClass.globalSystemNotes)
+                    foreach (SystemNoteClass snc in SystemNoteClass.globalSystemNotes.Where(n => n.Time >= fromDate && n.Time <= toDate))
                     {
                         writer.Write(MakeValueCsvFriendly(snc.SystemName.Length > 0 ? snc.SystemName : "N/A"));
                         writer.Write(MakeValueCsvFriendly(snc.Journalid > 0 ? snc.Journalid.ToString() : "N/A"));
