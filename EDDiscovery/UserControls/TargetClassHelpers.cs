@@ -69,7 +69,7 @@ namespace EDDiscovery.DB
                     if (bk != null)
                     {
                         TargetClass.SetTargetBookmark(sc.name, bk.id, bk.x, bk.y, bk.z);
-                        msgboxtext = "Target set on booked marked system " + sc.name;
+                        msgboxtext = "Target set on bookmarked system " + sc.name;
                     }
                     else
                     {

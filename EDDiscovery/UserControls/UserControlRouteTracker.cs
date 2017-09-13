@@ -151,8 +151,9 @@ namespace EDDiscovery.UserControls
         private void setRouteToolStripMenuItem_Click(object sender, EventArgs e)
         {
             SavedRouteClass selectedRoute;
-            if (Prompt.ShowDialog(discoveryform, SavedRouteClass.GetAllSavedRoutes(),
-                _currentRoute!=null? _currentRoute.Name:"", "Select route", out selectedRoute))
+
+            if (Prompt.ShowDialog(discoveryform, SavedRouteClass.GetAllSavedRoutes().Where(r => !r.Name.StartsWith("\x7F")).OrderBy(r => r.Name).ToList(),
+                _currentRoute?.Name ?? string.Empty, "Select route", out selectedRoute))
             {
                 if (selectedRoute == null)
                     return;
