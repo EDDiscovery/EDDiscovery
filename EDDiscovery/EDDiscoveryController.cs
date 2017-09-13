@@ -449,7 +449,7 @@ namespace EDDiscovery
             if (!PendingClose)
             {
                 long totalsystems = SystemClassDB.GetTotalSystems();
-                LogLineSuccess("Loading completed, total of " + totalsystems + " systems");
+                LogLineSuccess($"Loading completed, total of {totalsystems:N0} systems");
 
                 if (syncstate.performhistoryrefresh)
                 {
