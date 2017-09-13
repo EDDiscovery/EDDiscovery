@@ -93,9 +93,13 @@ namespace EliteDangerousCore.JournalEvents
             {
                 BaseUtils.FieldBuilder.NewPrefix nl = new BaseUtils.FieldBuilder.NewPrefix(Environment.NewLine+"  ");
 
+                DateTime exp = Expiry;
+                if (exp != null)
+                    exp = exp.ToLocalTime();
+
                 return BaseUtils.FieldBuilder.Build(
                      "Title:", Title, "System:", SystemName,
-                     nl,"At:", MarketName, "Expires:", Expiry,
+                     nl,"At:", MarketName, "Expires:", exp,
                      nl,"Not Complete;Complete", IsComplete,  "Current Total:" , CurrentTotal, "Contribution:", PlayerContribution, "Num Contributors:", NumContributors,
                      nl,"Player % Band:", PlayerPercentileBand, "Top Rank:", TopRankSize, "Not In Top Rank;In Top Rank", PlayerInTopRank,
                      nl,"Tier Reached:", TierReached,  "Bonus:" , Bonus

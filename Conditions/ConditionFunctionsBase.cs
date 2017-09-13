@@ -32,10 +32,13 @@ namespace Conditions
                 functions.Add("closefile", new FuncEntry(CloseFile, 1, 1, AllMacros, NoStrings));  // first is a var
                 functions.Add("closeprocess", new FuncEntry(CloseProcess, 1, 1, AllMacros, NoStrings));   //first is macro
 
-                functions.Add("datetimenow", new FuncEntry(DateTimeNow, 1, 1, NoMacros, NoStrings));     // literal type
-                functions.Add("datehour", new FuncEntry(DateHour, 1, 1, AllMacros, FirstString));   // first is a var or string
-                functions.Add("datedelta", new FuncEntry(DateDelta, 2, 2, AllMacros, AllStrings));   // two dates
-                functions.Add("date", new FuncEntry(Date, 2, 2, FirstMacro, FirstString));   // first is a var or string, second is literal
+                functions.Add("datetimenow", new FuncEntry(DateTimeNow, 1, 1, NoMacros, AllStrings));     // literal type
+                functions.Add("datedeltadiffformat", new FuncEntry(DateDeltaDiffFormat, 4, 5, 15, AllStrings));   // macro,macro,macro,macro,literal
+                functions.Add("datedeltaformatnow", new FuncEntry(DateDeltaFormatNow, 3, 4, FirstSecondThirdMacro, AllStrings));   // macro,macro,macro,literal
+                functions.Add("datedeltaformat", new FuncEntry(DateDeltaFormat, 3, 3, SecondOnMacro, SecondOnStrings));   // delta seconds, string, string
+                functions.Add("datedelta", new FuncEntry(DateDelta, 2, 3, FirstSecondMacro, AllStrings));   // date, date, literal
+                functions.Add("date", new FuncEntry(Date, 2, 2, FirstMacro, AllStrings));   // first is a var or string, second is literal
+
                 functions.Add("direxists", new FuncEntry(DirExists, 1, 20, AllMacros, AllStrings));   // check var, can be string
 
                 functions.Add("escapechar", new FuncEntry(EscapeChar, 1, 1, AllMacros, AllStrings));   // check var, can be string
@@ -253,68 +256,36 @@ namespace Conditions
         #endregion
 
         #region Dates
-
-        protected bool DateTimeNow(out string output)
+        
+        private DateTime? ConvertDate(string value, string formatoptions) // t may be null
         {
-            paras.Add(new Parameter() { isstring = false, value = paras[0].value });            // move P1 to P2
-            paras[0].value = DateTime.Now.ToString("MM/dd/yyyy HH:mm:ss");
-            paras[0].isstring = true;
-            return Date(out output);
+            DateTime res;
+
+            System.Globalization.DateTimeStyles dts = System.Globalization.DateTimeStyles.AssumeUniversal | System.Globalization.DateTimeStyles.AdjustToUniversal;
+
+            string[] t = formatoptions.ToLower().Split(';');
+            if (t != null && Array.IndexOf(t, "local") != -1)
+            {
+                dts = System.Globalization.DateTimeStyles.AssumeLocal;
+            }
+
+            // presuming its univeral means no translation in the values to local.
+            if (DateTime.TryParse(value, System.Globalization.CultureInfo.CreateSpecificCulture("en-US"), dts, out res))
+                return res;
+            else
+                return null;
         }
+
 
         protected bool Date(out string output)
         {
             string value = (paras[0].isstring) ? paras[0].value : vars[paras[0].value];
 
-            DateTime res;
+            DateTime? cnv = ConvertDate(value, paras[1].value);
 
-            if (DateTime.TryParse(value, System.Globalization.CultureInfo.CreateSpecificCulture("en-US"),
-                                    System.Globalization.DateTimeStyles.None, out res))
+            if ( cnv != null )
             {
-                string t = paras[1].value.ToLower();
-
-                if (t.Equals("longtime"))
-                {
-                    output = res.ToLongTimeString();
-                }
-                else if (t.Equals("shorttime"))
-                {
-                    output = res.ToShortTimeString();
-                }
-                else if (t.Equals("longdate"))
-                {
-                    output = res.ToLongDateString();
-                }
-                else if (t.Equals("longdatetime"))
-                {
-                    output = res.ToLongDateString() + " " + res.ToLongTimeString();
-                }
-                else if (t.Equals("datetime"))
-                {
-                    output = res.ToShortDateString() + " " + res.ToLongTimeString();
-                }
-                else if (t.Equals("shortdate"))
-                {
-                    output = res.ToShortDateString();
-                }
-                else if (t.Equals("utc"))
-                {
-                    output = res.ToUniversalTime().ToString("yyyy/MM/dd HH:mm:ss");
-                }
-                else if (t.Equals("local"))
-                {
-                    output = res.ToString("yyyy/MM/dd HH:mm:ss");
-                }
-                else if (t.Equals(""))
-                {
-                    output = res.ToUniversalTime().ToString("yyyy/mm/dd HH:mm:ss");
-                }
-                else
-                {
-                    output = "Format selector not supported";
-                    return false;
-                }
-
+                output = ObjectExtensionsDates.PrintDate(cnv.Value,paras[1].value);
                 return true;
             }
             else
@@ -323,20 +294,29 @@ namespace Conditions
             return false;
         }
 
+        protected bool DateTimeNow(out string output)
+        {
+            output = ObjectExtensionsDates.PrintDate(DateTime.UtcNow, paras[0].value);
+            return true;
+        }
+
         protected bool DateDelta(out string output)
         {
             string value1 = (paras[0].isstring) ? paras[0].value : vars[paras[0].value];
             string value2 = (paras[1].isstring) ? paras[1].value : vars[paras[1].value];
+            string formatoptions = (paras.Count >= 3) ? paras[2].value : "";
 
-            DateTime res1,res2;
+            DateTime? v1 = ConvertDate(value1, formatoptions);
+            DateTime? v2 = ConvertDate(value2, formatoptions);
 
-            if (DateTime.TryParse(value1, System.Globalization.CultureInfo.CreateSpecificCulture("en-US"),
-                                    System.Globalization.DateTimeStyles.None, out res1) &&
-                DateTime.TryParse(value2, System.Globalization.CultureInfo.CreateSpecificCulture("en-US"),
-                                    System.Globalization.DateTimeStyles.None, out res2))
-
+            if (v1 != null && v2 != null)
             {
-                TimeSpan ts = res2.Subtract(res1);
+                if (v1.Value.Kind == DateTimeKind.Local)       // all must be in UTC for the calc..
+                    v1 = v1.Value.ToUniversalTime();
+                if (v2.Value.Kind == DateTimeKind.Local)       // all must be in UTC for the calc..
+                    v2 = v2.Value.ToUniversalTime();
+
+                TimeSpan ts = v2.Value.Subtract(v1.Value);      // does not respect time zones
                 output = ts.TotalSeconds.ToStringInvariant();
                 return true;
             }
@@ -346,23 +326,77 @@ namespace Conditions
             return false;
         }
 
-        protected bool DateHour(out string output)
+
+        protected bool DateDeltaFormat(out string output)
         {
-            string value = (paras[0].isstring) ? paras[0].value : vars[paras[0].value];
+            string datum = vars.Exists(paras[0].value) ? vars[paras[0].value] : paras[0].value;
+            string before = (paras[1].isstring) ? paras[1].value : vars[paras[1].value];
+            string after = (paras[2].isstring) ? paras[2].value : vars[paras[2].value];
 
-            DateTime res;
-
-            if (DateTime.TryParse(value, System.Globalization.CultureInfo.CreateSpecificCulture("en-US"),
-                                    System.Globalization.DateTimeStyles.None, out res))
+            double? diff = datum.InvariantParseDoubleNull();
+            if (diff != null)
             {
-                output = res.Hour.ToString(ct);
+                output = ObjectExtensionsDates.DateDeltaFormatter(diff.Value, before, after);
                 return true;
             }
             else
-                output = "Date is not in correct en-US format";
+                output = "time Difference is not a number";
 
             return false;
         }
+
+        protected bool DateDeltaFormatNow(out string output)
+        {
+            string value = (paras[0].isstring) ? paras[0].value : vars[paras[0].value];
+            string before = (paras[1].isstring) ? paras[1].value : vars[paras[1].value];
+            string after = (paras[2].isstring) ? paras[2].value : vars[paras[2].value];
+            string formatoptions = (paras.Count >= 4) ? paras[3].value : "";
+
+            DateTime? cnv = ConvertDate(value, formatoptions);
+            if (cnv != null)
+            {
+                if (cnv.Value.Kind == DateTimeKind.Local)       // all must be in UTC for the calc..
+                    cnv = cnv.Value.ToUniversalTime();
+
+                DateTime cur = DateTime.UtcNow;
+                TimeSpan ts = cnv.Value.Subtract(cur);      // does not respect Kind when doing calc.
+                output = ObjectExtensionsDates.DateDeltaFormatter(ts.TotalSeconds, before, after, cnv.Value, formatoptions);
+                return true;
+            }
+            else
+                output = "Not a valid date";
+
+            return false;
+        }
+
+        protected bool DateDeltaDiffFormat(out string output)
+        {
+            string value1 = (paras[0].isstring) ? paras[0].value : vars[paras[0].value];
+            string value2 = (paras[1].isstring) ? paras[1].value : vars[paras[1].value];
+            string before = (paras[2].isstring) ? paras[2].value : vars[paras[2].value];
+            string after = (paras[3].isstring) ? paras[3].value : vars[paras[3].value];
+            string formatoptions = (paras.Count >= 5) ? paras[4].value : "";
+
+            DateTime? v1 = ConvertDate(value1, formatoptions);
+            DateTime? v2 = ConvertDate(value2, formatoptions);
+
+            if (v1 != null && v2 != null)
+            {
+                if (v1.Value.Kind == DateTimeKind.Local)       // all must be in UTC for the calc..
+                    v1 = v1.Value.ToUniversalTime();
+                if (v2.Value.Kind == DateTimeKind.Local)       // all must be in UTC for the calc..
+                    v2 = v2.Value.ToUniversalTime();
+
+                TimeSpan ts = v2.Value.Subtract(v1.Value);      // does not respect Kind when doing calc.
+                output = ObjectExtensionsDates.DateDeltaFormatter(ts.TotalSeconds, before, after, v2.Value, formatoptions);
+                return true;
+            }
+            else
+                output = "Not a valid date";
+
+            return false;
+        }
+
 
         #endregion
 
@@ -653,15 +687,18 @@ namespace Conditions
                     value /= 1E6;
                     output = prefix + value.ToStringInvariant("0.##") + " " + postfixes[3];
                 }
-                else if (order >= 4)        // thousands, say X thousands
+                else if (order >= 4)        // 10000+ thousands, say X thousands
                 {
                     value /= 1E3;
                     output = prefix + value.ToStringInvariant("0") + " " + postfixes[4];
                 }
                 else if (order == 3)        // 1000-9999, say xx hundred
                 {
-                    value /= 1E2;
-                    output = prefix + value.ToStringInvariant("0") + " " + postfixes[5];
+                    value /= 1E2;           // hundreds.
+                    int hundreds = (int)value;  // thousand parts
+                    output = prefix + (hundreds / 10).ToStringInvariant() + " " + postfixes[4];
+                    if ( hundreds%10 != 0 ) // hundred parts
+                        output += " " + (hundreds%10).ToStringInvariant() + " "  + postfixes[5];
                 }
                 else
                 {

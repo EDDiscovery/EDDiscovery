@@ -31,12 +31,12 @@ namespace ActionLanguage
             vars = new ConditionVariables();
             operations = new Dictionary<string, string>();
             StringParser p = new StringParser(ud);
-            return vars.FromString(p, ConditionVariables.FromMode.MultiEntryComma, altops:operations);
+            return vars.FromString(p, ConditionVariables.FromMode.OnePerLine, altops:operations);
         }
 
         protected string ToString(ConditionVariables vars, Dictionary<string, string> operations)
         {
-            return vars.ToString(operations, " ");
+            return vars.ToString(operations, pad: " ", comma:false, bracket:false, space:false);
         }
 
         public bool ConfigurationMenu(Form parent, ActionCoreController cp, List<string> eventvars, bool allowaddv , bool allownoexpandv)
@@ -46,7 +46,7 @@ namespace ActionLanguage
             FromString(userdata, out av, out operations);
 
             ConditionVariablesForm avf = new ConditionVariablesForm();
-            avf.Init("Variable list:", cp.Icon, av, showone: true, allowadd: allowaddv, allownoexpand: allownoexpandv, altops:operations);
+            avf.Init("Define Variable:", cp.Icon, av, showone: true, allowadd: allowaddv, allownoexpand: allownoexpandv, altops:operations, allowmultiple:false);
 
             if (avf.ShowDialog(parent.FindForm()) == DialogResult.OK)
             {
@@ -112,7 +112,7 @@ namespace ActionLanguage
                 {
                     if (!res.Eval(out res))
                     {
-                        ap.ReportError("Let " + res);
+                        ap.ReportError(res);
                         break;
                     }
                 }

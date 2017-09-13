@@ -75,7 +75,11 @@ namespace EliteDangerousCore.JournalEvents
             Count = evt["Count"].IntNull();
 
             if (!evt["Expiry"].Empty())
-                Expiry = DateTime.Parse(evt.Value<string>("Expiry"), CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal | DateTimeStyles.AdjustToUniversal);
+            {
+                string s = evt.Value<string>("Expiry");
+                System.Diagnostics.Debug.WriteLine("Time " + s);
+                Expiry = DateTime.Parse(s, CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal | DateTimeStyles.AdjustToUniversal);
+            }
 
             PassengerCount = evt["PassengerCount"].IntNull();
             PassengerVIPs = evt["PassengerVIPs"].BoolNull();
@@ -116,11 +120,16 @@ namespace EliteDangerousCore.JournalEvents
         public override void FillInformation(out string summary, out string info, out string detailed) //V
         {
             summary = EventTypeStr.SplitCapsWord();
+
+            DateTime exp = Expiry;
+            if (exp != null)
+                exp = exp.ToLocalTime();
+
             info = BaseUtils.FieldBuilder.Build("", Name, 
                                       "< from ", Faction, 
                                       "System:", DestinationSystem, 
                                       "Station:", DestinationStation, 
-                                      "Expiry:", Expiry,
+                                      "Expiry:", exp,
                                       "Influence:", Influence,
                                       "Reputation:", Reputation);
 

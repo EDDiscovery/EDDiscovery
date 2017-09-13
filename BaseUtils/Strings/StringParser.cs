@@ -82,6 +82,8 @@ namespace BaseUtils
                 return false;
         }
 
+        // WORD defined by terminators. options to lowercase it and de-escape it
+
         public string NextWord(string terminators = " " , bool lowercase = false, bool replacescape = false)
         {
             if (pos >= line.Length)     // null if there is nothing..
@@ -104,6 +106,8 @@ namespace BaseUtils
             }
         }
 
+        // NextWord with a fixed space comma terminator.  Fails if not a comma separ list
+
         public string NextWordComma(bool lowercase = false, bool replaceescape = false)           // comma separ
         {
             string res = NextWord(" ,", lowercase, replaceescape);
@@ -112,6 +116,8 @@ namespace BaseUtils
             else
                 return null;
         }
+
+        // Take a " or ' quoted string, or a WORD defined by terminators. options to lowercase it and de-escape it
 
         public string NextQuotedWord(string nonquoteterminators = " ", bool lowercase = false, bool replaceescape = false)
         {
@@ -162,6 +168,8 @@ namespace BaseUtils
                 return null;
         }
 
+        // NextQuotedWord with a fixed space comma terminator.  Fails if not a comma separ list
+
         public string NextQuotedWordComma(bool lowercase = false , bool replaceescape = false)           // comma separ
         {
             string res = NextQuotedWord(" ,", lowercase, replaceescape);
@@ -170,6 +178,31 @@ namespace BaseUtils
             else
                 return null;
         }
+
+        // if quoted, take the quote string, else take the rest, space stripped.
+
+        public string NextQuotedWordOrLine(bool lowercase = false, bool replaceescape = false)
+        {
+            if (pos < line.Length)
+            {
+                if (line[pos] == '"' || line[pos] == '\'')
+                    return NextQuotedWord("", lowercase, replaceescape);
+                else
+                {
+                    string ret = line.Substring(pos).Trim();
+                    pos = line.Length;
+
+                    if (lowercase)
+                        ret = ret.ToLower();
+
+                    return (replaceescape) ? ret.ReplaceEscapeControlChars() : ret;
+                }
+            }
+            else
+                return null;
+        }
+
+        // Read a quoted word list off.
 
         public List<string> NextQuotedWordList(bool lowercase = false , bool replaceescape = false )        // empty list on error
         {
@@ -190,6 +223,8 @@ namespace BaseUtils
 
             return ret;
         }
+
+        // Read a quoted word list off, with a ) termination
 
         public List<string> NextOptionallyBracketedList()       // empty list on error
         {
@@ -228,6 +263,8 @@ namespace BaseUtils
 
             return sl;
         }
+        
+        // Move pointer to string if found
 
         public bool Find(string s)      // move position to string, this will be the next read..
         {
@@ -236,6 +273,8 @@ namespace BaseUtils
                 pos = indexof;
             return (indexof != -1);
         }
+
+        // Static. Read first quoted word
 
         public static string FirstQuotedWord(string s, string limits, string def = "", string prefix = "", string postfix = "")
         {

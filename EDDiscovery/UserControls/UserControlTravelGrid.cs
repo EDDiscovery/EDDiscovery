@@ -860,7 +860,7 @@ namespace EDDiscovery.UserControls
         {
             Conditions.ConditionVariables cv = new Conditions.ConditionVariables();
             cv.AddPropertiesFieldsOfClass(rightclicksystem.journalEntry, "", new Type[] { typeof(System.Drawing.Bitmap), typeof(Newtonsoft.Json.Linq.JObject) }, 5);
-            discoveryform.LogLine(cv.ToString(separ: Environment.NewLine, quoteit: false));
+            discoveryform.LogLine(cv.ToString(separ: Environment.NewLine));
             if (rightclicksystem.ShipInformation != null)
                 discoveryform.LogLine(rightclicksystem.ShipInformation.ToString());
         }
