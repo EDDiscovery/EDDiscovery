@@ -559,6 +559,14 @@ namespace BaseUtils.Win32Constants
         public const int FONTCHANGE = 0x001D;
 
         /// <summary>
+        /// WM_GETMINMAXINFO message is sent to a window when the size or position of the window is about to change. An
+        /// application can use this message to override the window's default maximized size and position, or its
+        /// default minimum or maximum tracking size. wParam is not used, while lParam is a pointer to a
+        /// <see cref="Win32.UnsafeNativeMethods.MINMAXINFO"/> struct.
+        /// </summary>
+        public const int GETMINMAXINFO = 0x0024;
+
+        /// <summary>
         /// An application sends a WM_SETFONT message to specify the font that a control is to use when drawing text.
         /// </summary>
         /// <seealso href="https://msdn.microsoft.com/en-us/library/windows/desktop/ms632642(v=vs.85).aspx"/>
