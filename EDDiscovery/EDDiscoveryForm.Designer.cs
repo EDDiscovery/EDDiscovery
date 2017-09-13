@@ -82,9 +82,9 @@ namespace EDDiscovery
             this.frontierForumThreadToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.gitHubToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.reportIssueIdeasToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.howToRunInSafeModeToResetVariousParametersToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpMenuSeparatorBottom = new System.Windows.Forms.ToolStripSeparator();
             this.checkForNewReleaseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.howToRunInSafeModeToResetVariousParametersToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.labelInfoBoxTop = new System.Windows.Forms.Label();
             this.label_version = new System.Windows.Forms.Label();
             this.edsmRefreshTimer = new System.Windows.Forms.Timer(this.components);
@@ -459,6 +459,13 @@ namespace EDDiscovery
             this.reportIssueIdeasToolStripMenuItem.Text = "&Report Issue / Idea";
             this.reportIssueIdeasToolStripMenuItem.Click += new System.EventHandler(this.reportIssueIdeasToolStripMenuItem_Click);
             // 
+            // howToRunInSafeModeToResetVariousParametersToolStripMenuItem
+            // 
+            this.howToRunInSafeModeToResetVariousParametersToolStripMenuItem.Name = "howToRunInSafeModeToResetVariousParametersToolStripMenuItem";
+            this.howToRunInSafeModeToResetVariousParametersToolStripMenuItem.Size = new System.Drawing.Size(354, 22);
+            this.howToRunInSafeModeToResetVariousParametersToolStripMenuItem.Text = "How to Run in Safe Mode to reset various parameters";
+            this.howToRunInSafeModeToResetVariousParametersToolStripMenuItem.Click += new System.EventHandler(this.howToRunInSafeModeToResetVariousParametersToolStripMenuItem_Click);
+            // 
             // helpMenuSeparatorBottom
             // 
             this.helpMenuSeparatorBottom.Name = "helpMenuSeparatorBottom";
@@ -471,13 +478,6 @@ namespace EDDiscovery
             this.checkForNewReleaseToolStripMenuItem.Size = new System.Drawing.Size(354, 22);
             this.checkForNewReleaseToolStripMenuItem.Text = "&Check for Updates";
             this.checkForNewReleaseToolStripMenuItem.Click += new System.EventHandler(this.checkForNewReleaseToolStripMenuItem_Click);
-            // 
-            // howToRunInSafeModeToResetVariousParametersToolStripMenuItem
-            // 
-            this.howToRunInSafeModeToResetVariousParametersToolStripMenuItem.Name = "howToRunInSafeModeToResetVariousParametersToolStripMenuItem";
-            this.howToRunInSafeModeToResetVariousParametersToolStripMenuItem.Size = new System.Drawing.Size(354, 22);
-            this.howToRunInSafeModeToResetVariousParametersToolStripMenuItem.Text = "How to Run in Safe Mode to reset various parameters";
-            this.howToRunInSafeModeToResetVariousParametersToolStripMenuItem.Click += new System.EventHandler(this.howToRunInSafeModeToResetVariousParametersToolStripMenuItem_Click);
             // 
             // labelInfoBoxTop
             // 
@@ -881,8 +881,8 @@ namespace EDDiscovery
             this.comboBoxCommander.DataSource = null;
             this.comboBoxCommander.DisplayMember = "";
             this.comboBoxCommander.DropDownBackgroundColor = System.Drawing.Color.Gray;
-            this.comboBoxCommander.DropDownHeight = 106;
-            this.comboBoxCommander.DropDownWidth = 149;
+            this.comboBoxCommander.DropDownHeight = 400;
+            this.comboBoxCommander.DropDownWidth = 200;
             this.comboBoxCommander.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.comboBoxCommander.ItemHeight = 13;
             this.comboBoxCommander.Location = new System.Drawing.Point(12, 4);

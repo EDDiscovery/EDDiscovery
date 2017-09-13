@@ -98,9 +98,9 @@ public static class ObjectExtensionsStrings
         }
     }
 
-    public static string QuoteString(this string obj, bool comma = false, bool bracket = false)
+    public static string QuoteString(this string obj, bool comma = false, bool bracket = false, bool space = true)
     {
-        if (obj.Length == 0 || obj.Contains("\"") || obj.Contains(" ") || (bracket && obj.Contains(")")) || (comma && obj.Contains(",")))
+        if (obj.Length == 0 || obj.Contains("\"") || obj[obj.Length-1]==' ' || (space && obj.Contains(" ")) || (bracket && obj.Contains(")")) || (comma && obj.Contains(",")))
             obj = "\"" + obj.Replace("\"", "\\\"") + "\"";
 
         return obj;
@@ -762,5 +762,43 @@ public static class ObjectExtensionsStrings
         else
             return "^" + value + ".*$";
     }
+
+    // find start, find terminate, if found replace with replace plus any intermidate text if keepafter>0 (keeping after this no of char)
+    // replace can have {plural|notplural} inside it, and if plural is defined, replaced with the approriate selection
+
+    public static string ReplaceArea(this string text , string start, string terminate , string replace , int keepafter = 0 , bool? plural = null)    
+    {
+        int index = text.IndexOf(start);
+        if ( index >= 0 )
+        {
+            int endindex = text.IndexOf(terminate, index + 1);
+
+            if ( endindex > 0 )
+            {
+                string insert = replace + (keepafter > 0 ? text.Mid(index + keepafter, endindex - index - keepafter) : "");
+
+                if (plural != null)
+                {
+                    int pi = insert.IndexOf("{");
+                    if ( pi >= 0 )
+                    {
+                        int pie = insert.IndexOf("}", pi+1);
+                        if ( pie > 0 )
+                        {
+                            string[] options = insert.Mid(pi + 1, pie - pi - 1).Split('|');
+                            insert = insert.Left(pi) + ((plural.Value || options.Length == 1) ? options[0] : options[1]) + insert.Substring(pie + 1);
+                        }
+                    }
+                }
+
+                text = text.Left(index) + insert + text.Substring(endindex + terminate.Length);
+            }
+        }
+
+        return text;
+    }
+
+
+
 }
 

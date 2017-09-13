@@ -233,7 +233,7 @@ namespace ActionLanguage
                             else if (line.StartsWith("INSTALL", StringComparison.InvariantCultureIgnoreCase))
                             {
                                 ConditionVariables c = new ConditionVariables();
-                                if (c.FromString(line.Substring(7).Trim(), ConditionVariables.FromMode.SingleEntry) && c.Count == 1)
+                                if (c.FromString(line.Substring(7).Trim(), ConditionVariables.FromMode.OnePerLine) && c.Count == 1)
                                 {
                                     installationvariables.Add(c);
                                 }

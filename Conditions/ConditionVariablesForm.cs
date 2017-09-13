@@ -48,6 +48,7 @@ namespace Conditions
         const int vscrollmargin = 10;
 
         bool showadd, shownoexpand;
+        bool allowmultiple;
 
         public ConditionVariablesForm()
         {
@@ -60,7 +61,8 @@ namespace Conditions
         public void Init(string t, Icon ic, ConditionVariables vbs , Dictionary<string, string> altops = null,
                                                                 bool showone = false ,
                                                                 bool showrefresh = false , bool showrefreshstate = false,
-                                                                bool allowadd = false, bool allownoexpand = false )
+                                                                bool allowadd = false, bool allownoexpand = false, 
+                                                                bool allowmultiple = true)
         {
             this.Icon = ic;
             bool winborder = ExtendedControls.ThemeableFormsInstance.Instance.ApplyToForm(this, SystemFonts.DefaultFont);
@@ -69,6 +71,7 @@ namespace Conditions
 
             showadd = allowadd;
             shownoexpand = allownoexpand;
+            this.allowmultiple = allowmultiple;
 
             int pos = panelmargin;
             checkBoxCustomRefresh.Enabled = checkBoxCustomRefresh.Visible = showrefresh;
@@ -194,6 +197,7 @@ namespace Conditions
             }
 
             buttonMore.Location = new Point(panelmargin, y);
+            buttonMore.Visible = groups.Count == 0 || allowmultiple;
 
             Rectangle screenRectangle = RectangleToScreen(this.ClientRectangle);
             int titleHeight = screenRectangle.Top - this.Top;

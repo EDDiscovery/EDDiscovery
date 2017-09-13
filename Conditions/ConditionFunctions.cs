@@ -296,11 +296,15 @@ namespace Conditions
         protected const int NoMacros = 0;           // ID for checkvarmap above
         protected const int FirstMacro = 1;
         protected const int SecondMacro = 2;
+        protected const int FirstSecondMacro = 3;
+        protected const int FirstSecondThirdMacro = 7;
+        protected const int SecondOnMacro = 0xffffffe;
         protected const int AllMacros = 0xfffffff;
 
         protected const int NoStrings = 0;          // ID for allowstringmap above
         protected const int FirstString = 1;
         protected const int SecondString = 2;
+        protected const int SecondOnStrings = 0xffffffe;
         protected const int AllStrings = 0xfffffff;
 
         protected static System.Globalization.CultureInfo ct = System.Globalization.CultureInfo.InvariantCulture;

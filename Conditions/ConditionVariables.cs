@@ -117,7 +117,7 @@ namespace Conditions
 
         // Print vars, if altops is passed in, you can output using alternate operators
 
-        public string ToString(Dictionary<string, string> altops = null, string pad = "", bool bracket = false , string separ = "," , bool quoteit = true, string prefix = "")
+        public string ToString(Dictionary<string, string> altops = null, string pad = "", string separ = ",", string prefix = "" , bool bracket = false, bool comma = true , bool space = true )
         {
             string s = "";
             foreach (KeyValuePair<string, string> v in values)
@@ -125,7 +125,7 @@ namespace Conditions
                 if (s.Length > 0)
                     s += separ;
 
-                string vs = (quoteit) ? v.Value.QuoteString(comma: true, bracket: bracket) : v.Value;
+                string vs = v.Value.QuoteString(comma: comma, bracket: bracket, space: space);
 
                 if ( altops == null )
                     s += prefix + v.Key + pad + "=" + pad + vs;
@@ -139,7 +139,7 @@ namespace Conditions
             return s;
         }
 
-        public enum FromMode { SingleEntry, MultiEntryComma, MultiEntryCommaBracketEnds };
+        public enum FromMode { OnePerLine, MultiEntryComma, MultiEntryCommaBracketEnds };
 
         public bool FromString(string s, FromMode fm)    // string, not bracketed.
         {
@@ -199,7 +199,7 @@ namespace Conditions
                 if (!p.IsCharMoveOn('='))
                     return false;
 
-                string value = p.NextQuotedWord((fm == FromMode.SingleEntry) ? " " : (fm == FromMode.MultiEntryComma) ? ", " : ",) ");
+                string value = (fm == FromMode.OnePerLine) ? p.NextQuotedWordOrLine() : p.NextQuotedWord((fm == FromMode.MultiEntryComma) ? ", " : ",) "); 
 
                 if (value == null)
                     return false;
@@ -211,7 +211,7 @@ namespace Conditions
                     values = newvars;
                     return true;
                 }
-                else if (fm == FromMode.SingleEntry && !p.IsEOL)        // single entry, must be eol now
+                else if (fm == FromMode.OnePerLine && !p.IsEOL)        // single entry, must be eol now
                     return false;
                 else if (!p.IsEOL && !p.IsCharMoveOn(','))   // if not EOL, but not comma, incorrectly formed list
                     return false;

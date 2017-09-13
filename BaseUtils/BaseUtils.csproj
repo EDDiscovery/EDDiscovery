@@ -46,6 +46,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Dates\DateObjectExtensions.cs" />
     <Compile Include="EMK\Point3D.cs" />
     <Compile Include="EMK\Vector3D.cs" />
     <Compile Include="Files\AssociateExe.cs" />

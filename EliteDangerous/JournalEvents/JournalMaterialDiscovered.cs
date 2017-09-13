@@ -44,7 +44,9 @@ namespace EliteDangerousCore.JournalEvents
         public override void FillInformation(out string summary, out string info, out string detailed) //V
         {
             summary = EventTypeStr.SplitCapsWord();
-            info = BaseUtils.FieldBuilder.Build("", FriendlyName );
+            info = BaseUtils.FieldBuilder.Build("", FriendlyName);
+            if (DiscoveryNumber > 0)
+                info += ", Discovery " + DiscoveryNumber.ToStringInvariant();
             detailed = "";
         }
     }
