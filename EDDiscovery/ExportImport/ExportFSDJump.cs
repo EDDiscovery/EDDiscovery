@@ -37,7 +37,9 @@ namespace EDDiscovery.Export
 
             scans = new List<JournalEntry>();
 
-            scans = JournalEntry.GetByEventType(JournalTypeEnum.FSDJump, EDCommander.CurrentCmdrID, _discoveryForm.history.GetMinDate, _discoveryForm.history.GetMaxDate);
+            scans = JournalEntry.GetByEventType(JournalTypeEnum.FSDJump, EDCommander.CurrentCmdrID, 
+                fromDate == DateTime.MinValue ? _discoveryForm.history.GetMinDate : fromDate, 
+                toDate == DateTime.MaxValue ? _discoveryForm.history.GetMaxDate : toDate);
 
             return true;
         }
