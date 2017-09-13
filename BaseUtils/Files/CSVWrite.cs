@@ -34,7 +34,7 @@ namespace BaseUtils
         protected System.Globalization.CultureInfo formatculture;
         private CSVFormat csvformat;
         public bool IncludeHeader;
-
+        
         public CSVFormat Csvformat
         {
             get
@@ -57,6 +57,9 @@ namespace BaseUtils
                 }
             }
         }
+
+        public DateTime fromDate { get; set; } = DateTime.MinValue;
+        public DateTime toDate { get; set; } = DateTime.MaxValue;
 
         abstract public bool ToCSV(string filename);
         virtual public bool GetData(Object datasource) { return false; }

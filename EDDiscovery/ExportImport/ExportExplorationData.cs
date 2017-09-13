@@ -28,13 +28,9 @@ namespace EDDiscovery.Export
     class ExportExplorationData : BaseUtils.CVSWrite
     {
         private const string TITLE = "Export Exploration Data";
-        private bool datepopup;
-
-        public ExportExplorationData(bool datepopup)
-        {
-            this.datepopup = datepopup;
-
-        }
+        
+        public ExportExplorationData()
+        { }
 
         private List<HistoryEntry> data;
         private List<HistoryEntry> scans;
@@ -42,39 +38,13 @@ namespace EDDiscovery.Export
 
         public override bool GetData(Object _discoveryForm)
         {
-            bool datepicked = false;
-            var picker = new DateTimePicker();
-            if (this.datepopup)
-            {
-                Button button1 = new Button();
-                button1.Text = "OK";
-                button1.DialogResult = DialogResult.OK;
-                Form f = new Form();
-                TableLayoutPanel tlp = new TableLayoutPanel();
-                tlp.ColumnCount = 2;
-                tlp.RowCount = 2;
-                tlp.Dock = DockStyle.Fill;
-                tlp.AutoSizeMode = AutoSizeMode.GrowAndShrink;
-                tlp.AutoSize = true;
-                f.Name = TITLE;
-                tlp.Controls.Add(picker, 0, 0);
-                tlp.Controls.Add(button1, 1, 1);
-                f.Controls.Add(tlp);
-                f.AutoSize = true;
-                var result = f.ShowDialog();
-                if (result == DialogResult.OK)
-                {
-                    datepicked = true;
-                }
-            }
-
             int count = 0;
             data = HistoryList.FilterByJournalEvent((_discoveryForm as EDDiscoveryForm).history.ToList(), "Sell Exploration Data", out count);
 
             scans = HistoryList.FilterByJournalEvent((_discoveryForm as EDDiscoveryForm).history.ToList(), "Scan", out count);
-            if (datepicked)
+            if (fromDate != DateTime.MinValue || toDate != DateTime.MaxValue)
             {
-                data = (from he in data where he.EventTimeUTC >= picker.Value.Date.ToUniversalTime() orderby he.EventTimeUTC descending select he).ToList();
+                data = (from he in data where he.EventTimeUTC >= fromDate && he.EventTimeUTC <= toDate orderby he.EventTimeUTC descending select he).ToList();
             }
             return true;
         }
