@@ -619,7 +619,7 @@ namespace EliteDangerousCore.EDSM
                     logLine("Checking for new EDSM systems (may take a few moments).");
                     EDSMClass edsm = new EDSMClass();
                     long updates = edsm.GetNewSystems(cancelRequested, reportProgress, logLine);
-                    logLine("EDSM updated " + updates + " systems.");
+                    logLine($"EDSM updated {updates:N0} systems.");
                     state.performhistoryrefresh |= (updates > 0);
                 }
             }
