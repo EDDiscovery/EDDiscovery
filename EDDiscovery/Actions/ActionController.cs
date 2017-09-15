@@ -495,7 +495,7 @@ namespace EDDiscovery.Actions
                     if (k != Keys.ControlKey && k != Keys.ShiftKey && k != Keys.Menu)
                     {
                         string name = k.VKeyToString(Control.ModifierKeys);
-                        System.Diagnostics.Debug.WriteLine("Keydown " + m.LParam + " " + name + " " + m.WParam + " " + Control.ModifierKeys);
+                        //System.Diagnostics.Debug.WriteLine("Keydown " + m.LParam + " " + name + " " + m.WParam + " " + Control.ModifierKeys);
                         if (actcontroller.CheckKeys(name))
                             return true;    // swallow, we did it
                     }

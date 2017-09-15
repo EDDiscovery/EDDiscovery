@@ -26,6 +26,7 @@ using EDDiscovery.Controls;
 using EliteDangerousCore.JournalEvents;
 using EliteDangerousCore;
 using EliteDangerousCore.DB;
+using System.Diagnostics;
 
 namespace EDDiscovery.UserControls
 {
@@ -37,6 +38,7 @@ namespace EDDiscovery.UserControls
 
         private string DbColumnSave { get { return ("MarketDataGrid") + ((displaynumber > 0) ? displaynumber.ToString() : "") + "DGVCol"; } }
         private string DbBuyOnly { get { return "MarketDataBuyOnly" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
+        private string DbAutoSwap { get { return "MarketDataAutoSwap" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
 
         #region Init
 
@@ -58,9 +60,9 @@ namespace EDDiscovery.UserControls
             discoveryform.OnNewEntry += OnChanged;
             uctg.OnTravelSelectionChanged += OnChanged;
 
-            checkBoxBuyOnly.Enabled = false;
             checkBoxBuyOnly.Checked = SQLiteDBClass.GetSettingBool(DbBuyOnly, false);
-            checkBoxBuyOnly.Enabled = true;
+            this.checkBoxBuyOnly.CheckedChanged += new System.EventHandler(this.checkBoxBuyOnly_CheckedChanged);
+            checkBoxAutoSwap.Checked = SQLiteDBClass.GetSettingBool(DbAutoSwap, false);
         }
 
         public override void ChangeCursorType(UserControlCursorType thc)
@@ -83,6 +85,7 @@ namespace EDDiscovery.UserControls
         HistoryEntry last_eddmd;        // last edd market data from last_he
         HistoryEntry eddmd_left;        // eddmd left comparision, null means use last_he
         HistoryEntry eddmd_right;       // what we are comparing with, null means none
+        HistoryEntry current_displayed; // what we are displaying
 
         List<HistoryEntry> comboboxentries = new List<HistoryEntry>(); // filled by combobox
 
@@ -111,6 +114,9 @@ namespace EDDiscovery.UserControls
 
         public void Display()
         {
+            Stopwatch swp = new Stopwatch();
+            swp.Start();
+
             DataGridViewColumn sortcol = dataGridViewMarketData.SortedColumn != null ? dataGridViewMarketData.SortedColumn : dataGridViewMarketData.Columns[0];
             SortOrder sortorder = dataGridViewMarketData.SortOrder;
 
@@ -127,11 +133,33 @@ namespace EDDiscovery.UserControls
 
             if (left != null )       // we know it has a journal entry of EDD commodity..
             {
+                System.Diagnostics.Debug.WriteLine(Environment.NewLine + "From " + current_displayed?.WhereAmI + " to " + left.WhereAmI);
+
                 JournalEDDCommodityPrices ecp = left.journalEntry as JournalEDDCommodityPrices;
                 List<CCommodities> list = ecp.Commodities;
 
-                if (eddmd_right != null && !Object.ReferenceEquals(eddmd_right, left))   // if got a comparision, and not the same
+                System.Diagnostics.Debug.WriteLine("Test Right " + eddmd_right?.WhereAmI + " vs " + left.WhereAmI);
+                if (eddmd_right != null && !Object.ReferenceEquals(eddmd_right, left))   // if got a comparision, and not the same data..
                 {
+                    if ( checkBoxAutoSwap.Checked &&
+                        left.System.name.Equals(eddmd_right.System.name) &&     // if left system being displayed is same as right system
+                        left.WhereAmI.Equals(eddmd_right.WhereAmI) )            // that means we can autoswap comparisions around
+                    {
+                        System.Diagnostics.Debug.WriteLine("Arrived at last left station, repick " + current_displayed.WhereAmI + " as comparision");
+
+                        int index = comboboxentries.FindIndex(x => x.System.name.Equals(current_displayed.System.name) && x.WhereAmI.Equals(current_displayed.WhereAmI));
+                        if ( index >= 0 )       // if found it, swap to last instance of system
+                        {
+                            comboBoxCustomTo.Enabled = false;
+                            comboBoxCustomTo.SelectedIndex = index+1;
+                            comboBoxCustomTo.Enabled = true;
+                            eddmd_right = comboboxentries[index];
+                            System.Diagnostics.Debug.WriteLine("Right is now " + eddmd_right.WhereAmI);
+                        }
+
+                    }
+
+                    System.Diagnostics.Debug.WriteLine("Right " + eddmd_right.System.name + " " + eddmd_right.WhereAmI);
                     list = CCommodities.Merge(list, ((JournalEDDCommodityPrices)eddmd_right.journalEntry).Commodities , eddmd_right.WhereAmI);
                 }
 
@@ -200,6 +228,7 @@ namespace EDDiscovery.UserControls
                     }
                 }
 
+                current_displayed = left;
                 labelLocation.Text = left.System.name + ":" + left.WhereAmI;
                 string r = "Recorded at " + ((EDDiscoveryForm.EDDConfig.DisplayUTC) ? left.EventTimeUTC.ToString() : left.EventTimeLocal.ToString());
                 toolTip.SetToolTip(labelLocation, r);
@@ -222,6 +251,8 @@ namespace EDDiscovery.UserControls
                 }
 
             }
+
+            System.Diagnostics.Debug.WriteLine("Stop watch" + swp.ElapsedMilliseconds);
         }
 
         private void FillComboBoxes(HistoryList hl)
@@ -238,6 +269,7 @@ namespace EDDiscovery.UserControls
             comboboxentries.Clear();
 
             List<HistoryEntry> hlcpb = hl.FilterByEDDCommodityPricesBackwards;
+
             foreach (HistoryEntry h in hlcpb)
             {
                 comboboxentries.Add(h);
@@ -274,6 +306,7 @@ namespace EDDiscovery.UserControls
         {
             DGVSaveColumnLayout(dataGridViewMarketData, DbColumnSave);
             SQLiteDBClass.PutSettingBool(DbBuyOnly, checkBoxBuyOnly.Checked);
+            SQLiteDBClass.PutSettingBool(DbAutoSwap, checkBoxAutoSwap.Checked);
             discoveryform.OnNewEntry -= OnChanged;
             uctg.OnTravelSelectionChanged -= OnChanged;
         }
@@ -340,10 +373,8 @@ namespace EDDiscovery.UserControls
 
         private void checkBoxBuyOnly_CheckedChanged(object sender, EventArgs e)
         {
-            if ( checkBoxBuyOnly.Enabled )
-            {
-                Display();
-            }
+            Display();
         }
+
     }
 }

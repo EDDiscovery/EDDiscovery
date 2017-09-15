@@ -295,7 +295,7 @@ namespace EDDiscovery.UserControls
                             if ( sn != null && sn.starnodes.Count>0 && sn.starnodes.Values[0].ScanData != null )
                             {
                                 JournalScan js = sn.starnodes.Values[0].ScanData;
-                                res = js.HabZoneString();
+                                res = js.HabZoneString().Replace("\r\n", " ");
                             }
 
                             if (res != null)

@@ -58,24 +58,41 @@ namespace EliteDangerousCore.JournalEvents
             summary = EventTypeStr.SplitCapsWord();
             info = "Prices on " + Commodities.Count + " items";
 
+            int col = 0;
+            int maxcol = Commodities.Count>60 ? 2 : 1;
             detailed = "Items to buy:" + System.Environment.NewLine;
             foreach (CCommodities c in Commodities)
             {
                 if (c.buyPrice > 0)
                 {
                     if (c.sellPrice > 0)
-                        detailed += string.Format("{0}: {1} sell {2} Diff {3} {4}%" + System.Environment.NewLine, c.name, c.buyPrice, c.sellPrice , c.buyPrice - c.sellPrice , ((double)(c.buyPrice-c.sellPrice)/(double)c.sellPrice * 100.0).ToString("0.#"));
+                        detailed += string.Format("{0}: {1} sell {2} Diff {3} {4}%  " , c.name, c.buyPrice, c.sellPrice , c.buyPrice - c.sellPrice , ((double)(c.buyPrice-c.sellPrice)/(double)c.sellPrice * 100.0).ToString("0.#"));
                     else
-                        detailed += string.Format("{0}: {1}" + System.Environment.NewLine, c.name, c.buyPrice);
+                        detailed += string.Format("{0}: {1}  " , c.name, c.buyPrice);
+
+                    if (++col == maxcol)
+                    {
+                        detailed += System.Environment.NewLine;
+                        col = 0;
+                    }
                 }
             }
 
+            if ( col == maxcol-1 )
+                detailed += System.Environment.NewLine;
+
+            col = 0;
             detailed += "Sell only Items:" + System.Environment.NewLine;
             foreach (CCommodities c in Commodities)
             {
                 if (c.buyPrice <= 0)
                 {
-                    detailed += string.Format("{0}: {1}" + System.Environment.NewLine, c.name, c.sellPrice);
+                    detailed += string.Format("{0}: {1}  " , c.name, c.sellPrice);
+                    if (++col == maxcol)
+                    {
+                        detailed += System.Environment.NewLine;
+                        col = 0;
+                    }
                 }
             }
         }
