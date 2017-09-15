@@ -27,6 +27,8 @@ namespace ActionLanguage
 {
     public class ActionKey: ActionBase
     {
+        public static string globalvarProcessID = "KeyProcessTo";
+        public static string globalvarDelay = "KeyDelay";
         protected static string ProcessID = "To";
         protected static string DelayID = "Delay";
         protected const int DefaultDelay = 10;
@@ -104,8 +106,8 @@ namespace ActionLanguage
 
                 if (errlist == null)
                 {
-                    int defdelay = vars.Exists(DelayID) ? vars[DelayID].InvariantParseInt(DefaultDelay) : DefaultDelay;
-                    string process = vars.Exists(ProcessID) ? vars[ProcessID] : "";
+                    int defdelay = vars.Exists(DelayID) ? vars[DelayID].InvariantParseInt(DefaultDelay) : (ap.VarExist(globalvarDelay) ? ap[globalvarDelay].InvariantParseInt(DefaultDelay) : DefaultDelay);
+                    string process = vars.Exists(ProcessID) ? vars[ProcessID] : (ap.VarExist(globalvarProcessID) ? ap[globalvarProcessID] : "");
 
                     string res = BaseUtils.EnhancedSendKeys.Send(keys, defdelay, DefaultShiftDelay, DefaultUpDelay, process);
 

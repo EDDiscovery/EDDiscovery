@@ -589,7 +589,7 @@ namespace EDDiscovery
 
                 if (msg != null)
                 {
-                    LogLine("EDDN: Send commodities prices");
+                    LogLine($"Sent {he.EntryType.ToString()} event to EDDN ({he.EventSummary})");
                     if (eddn.PostMessage(msg))
                     {
                     }

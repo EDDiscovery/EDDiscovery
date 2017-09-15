@@ -77,7 +77,7 @@ namespace EliteDangerousCore.JournalEvents
             if (!evt["Expiry"].Empty())
             {
                 string s = evt.Value<string>("Expiry");
-                System.Diagnostics.Debug.WriteLine("Time " + s);
+                //System.Diagnostics.Debug.WriteLine("Time " + s);
                 Expiry = DateTime.Parse(s, CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal | DateTimeStyles.AdjustToUniversal);
             }
 

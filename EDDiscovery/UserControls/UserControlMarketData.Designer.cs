@@ -64,6 +64,7 @@ namespace EDDiscovery.UserControls
             this.comboBoxCustomFrom = new ExtendedControls.ComboBoxCustom();
             this.labelLocation = new System.Windows.Forms.Label();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
+            this.checkBoxAutoSwap = new ExtendedControls.CheckBoxCustom();
             this.dataViewScrollerPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewMarketData)).BeginInit();
             this.panelButtons.SuspendLayout();
@@ -216,6 +217,7 @@ namespace EDDiscovery.UserControls
             // 
             // panelButtons
             // 
+            this.panelButtons.Controls.Add(this.checkBoxAutoSwap);
             this.panelButtons.Controls.Add(this.checkBoxBuyOnly);
             this.panelButtons.Controls.Add(this.label1);
             this.panelButtons.Controls.Add(this.comboBoxCustomTo);
@@ -226,6 +228,8 @@ namespace EDDiscovery.UserControls
             this.panelButtons.Name = "panelButtons";
             this.panelButtons.Size = new System.Drawing.Size(800, 32);
             this.panelButtons.TabIndex = 2;
+            this.toolTip.SetToolTip(this.panelButtons, "When arriving at a station where you are comparing against (on the right)\r\nswap t" +
+        "he comparision to the previous market data.\r\nUseful when doing A->B->A trading");
             // 
             // checkBoxBuyOnly
             // 
@@ -234,6 +238,7 @@ namespace EDDiscovery.UserControls
             this.checkBoxBuyOnly.CheckBoxInnerColor = System.Drawing.Color.White;
             this.checkBoxBuyOnly.CheckColor = System.Drawing.Color.DarkBlue;
             this.checkBoxBuyOnly.FontNerfReduction = 0.5F;
+            this.checkBoxBuyOnly.ImageButtonDisabledScaling = 0.5F;
             this.checkBoxBuyOnly.Location = new System.Drawing.Point(584, 9);
             this.checkBoxBuyOnly.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.checkBoxBuyOnly.Name = "checkBoxBuyOnly";
@@ -243,7 +248,6 @@ namespace EDDiscovery.UserControls
             this.checkBoxBuyOnly.TickBoxReductionSize = 10;
             this.toolTip.SetToolTip(this.checkBoxBuyOnly, "Show items you can buy only");
             this.checkBoxBuyOnly.UseVisualStyleBackColor = true;
-            this.checkBoxBuyOnly.CheckedChanged += new System.EventHandler(this.checkBoxBuyOnly_CheckedChanged);
             // 
             // label1
             // 
@@ -277,6 +281,7 @@ namespace EDDiscovery.UserControls
             this.comboBoxCustomTo.SelectedValue = null;
             this.comboBoxCustomTo.Size = new System.Drawing.Size(176, 21);
             this.comboBoxCustomTo.TabIndex = 27;
+            this.toolTip.SetToolTip(this.comboBoxCustomTo, "Click to select a comparision market data set");
             this.comboBoxCustomTo.ValueMember = "";
             this.comboBoxCustomTo.SelectedIndexChanged += new System.EventHandler(this.comboBoxCustomTo_SelectedIndexChanged);
             // 
@@ -303,6 +308,7 @@ namespace EDDiscovery.UserControls
             this.comboBoxCustomFrom.SelectedValue = null;
             this.comboBoxCustomFrom.Size = new System.Drawing.Size(176, 21);
             this.comboBoxCustomFrom.TabIndex = 27;
+            this.toolTip.SetToolTip(this.comboBoxCustomFrom, "Click to select between tracking the cursor or a particular market data set");
             this.comboBoxCustomFrom.ValueMember = "";
             this.comboBoxCustomFrom.SelectedIndexChanged += new System.EventHandler(this.comboBoxCustomFrom_SelectedIndexChanged);
             // 
@@ -318,6 +324,23 @@ namespace EDDiscovery.UserControls
             // toolTip
             // 
             this.toolTip.ShowAlways = true;
+            // 
+            // checkBoxAutoSwap
+            // 
+            this.checkBoxAutoSwap.AutoSize = true;
+            this.checkBoxAutoSwap.CheckBoxColor = System.Drawing.Color.Gray;
+            this.checkBoxAutoSwap.CheckBoxInnerColor = System.Drawing.Color.White;
+            this.checkBoxAutoSwap.CheckColor = System.Drawing.Color.DarkBlue;
+            this.checkBoxAutoSwap.FontNerfReduction = 0.5F;
+            this.checkBoxAutoSwap.ImageButtonDisabledScaling = 0.5F;
+            this.checkBoxAutoSwap.Location = new System.Drawing.Point(658, 9);
+            this.checkBoxAutoSwap.MouseOverColor = System.Drawing.Color.CornflowerBlue;
+            this.checkBoxAutoSwap.Name = "checkBoxAutoSwap";
+            this.checkBoxAutoSwap.Size = new System.Drawing.Size(75, 17);
+            this.checkBoxAutoSwap.TabIndex = 29;
+            this.checkBoxAutoSwap.Text = "AutoSwap";
+            this.checkBoxAutoSwap.TickBoxReductionSize = 10;
+            this.checkBoxAutoSwap.UseVisualStyleBackColor = true;
             // 
             // UserControlMarketData
             // 
@@ -357,5 +380,6 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.DataGridViewTextBoxColumn GalAvgCol;
         private System.Windows.Forms.DataGridViewTextBoxColumn ProfitToCol;
         private System.Windows.Forms.DataGridViewTextBoxColumn ProfitFromCol;
+        private ExtendedControls.CheckBoxCustom checkBoxAutoSwap;
     }
 }
