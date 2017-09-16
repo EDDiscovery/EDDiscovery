@@ -203,24 +203,6 @@ namespace EliteDangerousCore
 
             if (je.IsStar && je.BodyName == system && je.nOrbitalPeriod != null)
             {
-                if (!primaryStarScans.ContainsKey(system))
-                {
-                    primaryStarScans[system] = new List<JournalScan>();
-                }
-
-                if (!primaryStarScans[system].Any(s => CompareEpsilon(s.nAge, je.nAge) &&
-                                                       CompareEpsilon(s.nEccentricity, je.nEccentricity) &&
-                                                       CompareEpsilon(s.nOrbitalInclination, je.nOrbitalInclination) &&
-                                                       CompareEpsilon(s.nOrbitalPeriod, je.nOrbitalPeriod) &&
-                                                       CompareEpsilon(s.nPeriapsis, je.nPeriapsis) &&
-                                                       CompareEpsilon(s.nRadius, je.nRadius) &&
-                                                       CompareEpsilon(s.nRotationPeriod, je.nRotationPeriod) &&
-                                                       CompareEpsilon(s.nSemiMajorAxis, je.nSemiMajorAxis) &&
-                                                       CompareEpsilon(s.nStellarMass, je.nStellarMass)))
-                {
-                    primaryStarScans[system].Add(je);
-                }
-
                 return system + " A";
             }
 
@@ -499,6 +481,29 @@ namespace EliteDangerousCore
                 }
             }
         }
+
+        private void CachePrimaryStar(JournalScan je, ISystem sys)
+        {
+            string system = sys.name;
+
+            if (!primaryStarScans.ContainsKey(system))
+            {
+                primaryStarScans[system] = new List<JournalScan>();
+            }
+
+            if (!primaryStarScans[system].Any(s => CompareEpsilon(s.nAge, je.nAge) &&
+                                                   CompareEpsilon(s.nEccentricity, je.nEccentricity) &&
+                                                   CompareEpsilon(s.nOrbitalInclination, je.nOrbitalInclination) &&
+                                                   CompareEpsilon(s.nOrbitalPeriod, je.nOrbitalPeriod) &&
+                                                   CompareEpsilon(s.nPeriapsis, je.nPeriapsis) &&
+                                                   CompareEpsilon(s.nRadius, je.nRadius) &&
+                                                   CompareEpsilon(s.nRotationPeriod, je.nRotationPeriod) &&
+                                                   CompareEpsilon(s.nSemiMajorAxis, je.nSemiMajorAxis) &&
+                                                   CompareEpsilon(s.nStellarMass, je.nStellarMass)))
+            {
+                primaryStarScans[system].Add(je);
+            }
+        }
         #endregion
 
         public bool Process(JournalScan sc, ISystem sys, bool reprocessPrimary = false)           // FALSE if you can't process it
@@ -536,14 +541,23 @@ namespace EliteDangerousCore
             // Process elements
             ScanNode node = ProcessElements(sc, sys, sn, customname, elements, starscannodetype, isbeltcluster);
 
+            // Process top-level star
             if (elements.Count == 1)
             {
                 // Process any belts if present
                 ProcessBelts(sc, node);
 
-                // Reprocess if we've encountered the primary (A) star and we already have a "Main Star"
-                if (reprocessPrimary && elements[0].Equals("A", StringComparison.InvariantCultureIgnoreCase) && sn.starnodes.Any(n => n.Key.Length > 1 && n.Value.type == ScanNodeType.star))
-                    ReProcess(sn);
+                // Process primary star in multi-star system
+                if (elements[0].Equals("A", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    CachePrimaryStar(sc, sys);
+
+                    // Reprocess if we've encountered the primary (A) star and we already have a "Main Star"
+                    if (reprocessPrimary && sn.starnodes.Any(n => n.Key.Length > 1 && n.Value.type == ScanNodeType.star))
+                    {
+                        ReProcess(sn);
+                    }
+                }
             }
 
             return true;
