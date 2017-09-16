@@ -285,7 +285,8 @@ namespace EliteDangerousCore
             return Process(je, hl[startindex].System, true);         // no relationship, add..
         }
 
-        public bool Process(JournalScan sc, ISystem sys, bool reprocessPrimary = false)           // FALSE if you can't process it
+        #region Scan Processing
+        private SystemNode GetOrCreateSystemNode(ISystem sys)
         {
             Tuple<string, long> withedsm = new Tuple<string, long>(sys.name, sys.id_edsm);
 
@@ -325,18 +326,16 @@ namespace EliteDangerousCore
                 }
             }
 
-            // handle Earth, starname = Sol
-            // handle Eol Prou LW-L c8-306 A 4 a and Eol Prou LW-L c8-306
-            // handle Colonia 4 , starname = Colonia, planet 4
-            // handle Aurioum B A BELT
-            // Kyloasly OY-Q d5-906 13 1
+            return sn;
+        }
 
+        private List<string> ExtractElements(JournalScan sc, ISystem sys, out bool isbeltcluster, out ScanNodeType starscannodetype)
+        {
+            starscannodetype = ScanNodeType.star;
+            isbeltcluster = false;
             List<string> elements;
-
-            ScanNodeType starscannodetype = ScanNodeType.star;          // presuming.. 
-            bool isbeltcluster = false;
-
             string rest = sc.IsStarNameRelatedReturnRest(sys.name);
+
             if (rest != null)                                   // if we have a relationship..
             {
                 if (sc.IsStar && !sc.IsEDSMBody && sc.DistanceFromArrivalLS == 0 && rest.Length >= 2)
@@ -348,14 +347,14 @@ namespace EliteDangerousCore
                 {
                     elements = rest.Split(' ').ToList();
 
-                    if (elements.Count == 4 && elements[0].Length == 1 && char.IsLetter(elements[0][0]) && 
+                    if (elements.Count == 4 && elements[0].Length == 1 && char.IsLetter(elements[0][0]) &&
                             elements[1].Equals("belt", StringComparison.InvariantCultureIgnoreCase) &&
                             elements[2].Equals("cluster", StringComparison.InvariantCultureIgnoreCase))
                     {
                         elements = new List<string> { "Main Star", elements[0] + " " + elements[1], elements[2] + " " + elements[3] };
                         isbeltcluster = true;
                     }
-                    else if (elements.Count == 5 && elements[0].Length == 1 && 
+                    else if (elements.Count == 5 && elements[0].Length == 1 &&
                             elements[1].Length == 1 && char.IsLetter(elements[1][0]) &&
                             elements[2].Equals("belt", StringComparison.InvariantCultureIgnoreCase) &&
                             elements[3].Equals("cluster", StringComparison.InvariantCultureIgnoreCase))
@@ -386,6 +385,12 @@ namespace EliteDangerousCore
                 elements.Insert(0, "Main Star");                     // insert the MAIN designator as the star designator
             }
 
+            return elements;
+        }
+
+        private string GetCustomName(JournalScan sc, ISystem sys)
+        {
+            string rest = sc.IsStarNameRelatedReturnRest(sys.name);
             string customname = null;
 
             if (sc.BodyName.StartsWith(sys.name, StringComparison.InvariantCultureIgnoreCase))
@@ -406,150 +411,142 @@ namespace EliteDangerousCore
                 customname = sc.BodyName;
             }
 
-            if (elements.Count >= 1)                          // okay, we have an element.. first is the star..
-            {
-                ScanNode sublv0;
+            return customname;
+        }
 
-                if (!sn.starnodes.TryGetValue(elements[0], out sublv0))     // not found this node, add..
+        private ScanNode ProcessElements(JournalScan sc, ISystem sys, SystemNode sn, string customname, List<string> elements, ScanNodeType starscannodetype, bool isbeltcluster)
+        {
+            SortedList<string, ScanNode> cnodes = sn.starnodes;
+            ScanNode node = null;
+
+            for (int lvl = 0; lvl < elements.Count; lvl++)
+            {
+                ScanNode sublv;
+                ScanNodeType sublvtype;
+                string ownname = elements[lvl];
+
+                if (cnodes == null || !cnodes.TryGetValue(elements[lvl], out sublv))
                 {
-                    sublv0 = new ScanNode()
+                    if (node != null && node.children == null)
                     {
-                        ownname = elements[0],
-                        fullname = sys.name + (elements[0].Contains("Main") ? "" : (" " + elements[0])),
+                        node.children = new SortedList<string, ScanNode>();
+                        cnodes = node.children;
+                    }
+
+                    if (lvl == 0)
+                        sublvtype = starscannodetype;
+                    else if (isbeltcluster)
+                        sublvtype = lvl == 1 ? ScanNodeType.belt : ScanNodeType.beltcluster;
+                    else
+                        sublvtype = ScanNodeType.body;
+
+                    sublv = new ScanNode
+                    {
+                        ownname = ownname,
+                        fullname = lvl == 0 ? (sys.name + (ownname.Contains("Main") ? "" : (" " + ownname))) : node.fullname + " " + ownname,
                         ScanData = null,
                         children = null,
-                        type = starscannodetype
+                        type = sublvtype
                     };
 
-                    sn.starnodes.Add(elements[0], sublv0);
-                    //System.Diagnostics.Debug.WriteLine("Added star " + star.fullname + " '" + star.ownname + "'" + " under '" + designator + "' type " + ty);
+                    cnodes.Add(ownname, sublv);
                 }
 
-                if (elements.Count >= 2)                        // we have a sub designator..
+                node = sublv;
+                cnodes = node.children;
+
+                if (lvl == elements.Count - 1)
                 {
-                    ScanNode sublv1;
-
-                    if (sublv0.children == null || !sublv0.children.TryGetValue(elements[1], out sublv1))
-                    {
-                        if (sublv0.children == null)
-                            sublv0.children = new SortedList<string, ScanNode>(new DuplicateKeyComparer<string>());
-
-                        ScanNodeType lv1scannodetype = isbeltcluster ? ScanNodeType.belt : ScanNodeType.body;
-
-                        sublv1 = new ScanNode() { ownname = elements[1], fullname = sublv0.fullname + " " + elements[1], ScanData = null, children = null, type = lv1scannodetype};
-                        sublv0.children.Add(elements[1], sublv1);
-                    }
-
-                    if (elements.Count >= 3)
-                    {
-                        ScanNode sublv2;
-
-                        if (sublv1.children == null || !sublv1.children.TryGetValue(elements[2], out sublv2))
-                        {
-                            if (sublv1.children == null)
-                                sublv1.children = new SortedList<string, ScanNode>(new DuplicateKeyComparer<string>());
-
-                            ScanNodeType lv2scannodetype = isbeltcluster ? ScanNodeType.beltcluster : ScanNodeType.body;
-
-                            sublv2 = new ScanNode() { ownname = elements[2], fullname = sublv0.fullname + " " + elements[1] + " " + elements[2], ScanData = null, children = null, type = lv2scannodetype };
-                            sublv1.children.Add(elements[2], sublv2);
-                        }
-
-                        if (elements.Count >= 4)
-                        {
-                            ScanNode sublv3;
-
-                            if (sublv2.children == null || !sublv2.children.TryGetValue(elements[3], out sublv3))
-                            {
-                                if (sublv2.children == null)
-                                    sublv2.children = new SortedList<string, ScanNode>(new DuplicateKeyComparer<string>());
-
-                                sublv3 = new ScanNode() { ownname = elements[3], fullname = sublv0.fullname + " " + elements[1] + " " + elements[2] + " " + elements[3], ScanData = null, children = null, type = ScanNodeType.body };
-                                sublv2.children.Add(elements[3], sublv3);
-                            }
-
-                            if (elements.Count >= 5)
-                            {
-                                ScanNode sublv4;
-
-                                if (sublv3.children == null || !sublv3.children.TryGetValue(elements[4], out sublv4))
-                                {
-                                    if (sublv3.children == null)
-                                        sublv3.children = new SortedList<string, ScanNode>(new DuplicateKeyComparer<string>());
-
-                                    sublv4 = new ScanNode() { ownname = elements[4], fullname = sublv0.fullname + " " + elements[1] + " " + elements[2] + " " + elements[3] + " " + elements[4], ScanData = null, children = null, type = ScanNodeType.body };
-                                    sublv3.children.Add(elements[4], sublv4);
-                                }
-
-                                if (elements.Count == 5)            // okay, need only 5 elements now.. if not, we have not coped..
-                                {
-                                    sublv4.customname = customname;
-                                    sublv4.ScanData = sc;
-                                }
-                                else
-                                {
-                                    System.Diagnostics.Debug.WriteLine("Failed to add system " + sc.BodyName + " too long");
-                                    return false;
-                                }
-                            }
-                            else
-                            {
-                                sublv3.customname = customname;
-                                sublv3.ScanData = sc;
-                            }
-                        }
-                        else
-                        {
-                            sublv2.customname = customname;
-                            sublv2.ScanData = sc;
-                        }
-                    }
-                    else
-                    {
-                        sublv1.customname = customname;
-                        sublv1.ScanData = sc;
-                    }
+                    node.ScanData = sc;
+                    node.customname = customname;
                 }
-                else
-                {
-                    sublv0.customname = customname;
-                    sublv0.ScanData = sc;
-
-                    if (sc.HasRings)
-                    {
-                        foreach (JournalScan.StarPlanetRing ring in sc.Rings)
-                        {
-                            ScanNode sublv1;
-                            string beltname = ring.Name;
-                            string stardesig = sc.BodyDesignation ?? sc.BodyName;
-                            if (beltname.StartsWith(stardesig, StringComparison.InvariantCultureIgnoreCase))
-                            {
-                                beltname = beltname.Substring(stardesig.Length).Trim();
-                            }
-
-                            if (sublv0.children == null || !sublv0.children.TryGetValue(beltname, out sublv1))
-                            {
-                                if (sublv0.children == null)
-                                    sublv0.children = new SortedList<string, ScanNode>(new DuplicateKeyComparer<string>());
-
-                                sublv1 = new ScanNode() { ownname = beltname, fullname = sublv0.fullname + " " + beltname, ScanData = null, BeltData = ring, children = null, type = ScanNodeType.belt };
-                                sublv0.children.Add(beltname, sublv1);
-                            }
-                        }
-                    }
-                }
-
-                // Reprocess if we've encountered the primary (A) star an we already have a "Main Star"
-                if (reprocessPrimary && elements.Count == 1 && elements[0].Equals("A", StringComparison.InvariantCultureIgnoreCase) && sn.starnodes.Any(n => n.Key.Length > 1 && n.Value.type == ScanNodeType.star))
-                    ReProcess(sn);
-
-                return true;
             }
-            else
+
+            return node;
+        }
+
+        private void ProcessBelts(JournalScan sc, ScanNode node)
+        {
+            if (sc.HasRings)
             {
-                System.Diagnostics.Debug.WriteLine("Failed to add system " + sc.BodyName + " not enough elements");
+                foreach (JournalScan.StarPlanetRing ring in sc.Rings)
+                {
+                    ScanNode belt;
+                    string beltname = ring.Name;
+                    string stardesig = sc.BodyDesignation ?? sc.BodyName;
+                    if (beltname.StartsWith(stardesig, StringComparison.InvariantCultureIgnoreCase))
+                    {
+                        beltname = beltname.Substring(stardesig.Length).Trim();
+                    }
+
+                    if (node.children == null || !node.children.TryGetValue(beltname, out belt))
+                    {
+                        if (node.children == null)
+                            node.children = new SortedList<string, ScanNode>(new DuplicateKeyComparer<string>());
+
+                        belt = new ScanNode
+                        {
+                            ownname = beltname,
+                            fullname = node.fullname + " " + beltname,
+                            ScanData = null,
+                            BeltData = ring,
+                            children = null,
+                            type = ScanNodeType.belt
+                        };
+
+                        node.children.Add(beltname, belt);
+                    }
+                }
+            }
+        }
+        #endregion
+
+        public bool Process(JournalScan sc, ISystem sys, bool reprocessPrimary = false)           // FALSE if you can't process it
+        {
+            SystemNode sn = GetOrCreateSystemNode(sys);
+
+            // handle Earth, starname = Sol
+            // handle Eol Prou LW-L c8-306 A 4 a and Eol Prou LW-L c8-306
+            // handle Colonia 4 , starname = Colonia, planet 4
+            // handle Aurioum B A BELT
+            // Kyloasly OY-Q d5-906 13 1
+
+            ScanNodeType starscannodetype = ScanNodeType.star;          // presuming.. 
+            bool isbeltcluster = false;
+
+            // Extract elements from name
+            List<string> elements = ExtractElements(sc, sys, out isbeltcluster, out starscannodetype);
+
+            // Bail out if no elements extracted
+            if (elements.Count == 0)
+            {
+                System.Diagnostics.Trace.WriteLine($"Failed to add body {sc.BodyName} to system {sys.name} - not enough elements");
                 return false;
             }
+            // Bail out if more than 5 elements extracted
+            else if (elements.Count > 5)
+            {
+                System.Diagnostics.Trace.WriteLine($"Failed to add body {sc.BodyName} to system {sys.name} - too deep");
+                return false;
+            }
+
+            // Get custom name if different to designation
+            string customname = GetCustomName(sc, sys);
+
+            // Process elements
+            ScanNode node = ProcessElements(sc, sys, sn, customname, elements, starscannodetype, isbeltcluster);
+
+            if (elements.Count == 1)
+            {
+                // Process any belts if present
+                ProcessBelts(sc, node);
+
+                // Reprocess if we've encountered the primary (A) star and we already have a "Main Star"
+                if (reprocessPrimary && elements[0].Equals("A", StringComparison.InvariantCultureIgnoreCase) && sn.starnodes.Any(n => n.Key.Length > 1 && n.Value.type == ScanNodeType.star))
+                    ReProcess(sn);
+            }
+
+            return true;
         }
 
         private void ReProcess(SystemNode sysnode)
