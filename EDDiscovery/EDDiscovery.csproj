@@ -213,6 +213,9 @@
     <Compile Include="GridControl.Designer.cs">
       <DependentUpon>GridControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="ScreenShots\ScreenShotConverter.cs" />
+    <Compile Include="ScreenShots\ScreenShotDirectoryWatcher.cs" />
+    <Compile Include="ScreenShots\ScreenShotImageConverter.cs" />
     <Compile Include="UserControls\UserControlContainerGrid.cs">
       <SubType>UserControl</SubType>
     </Compile>
