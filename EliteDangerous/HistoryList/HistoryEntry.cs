@@ -189,7 +189,7 @@ namespace EliteDangerousCore
                     }
 
                     // If it was a new system, pass the coords back to the StartJump
-                    if (prev.System.name == newsys.name && !prev.System.HasCoordinate)
+                    if (prev != null && prev.System.name == newsys.name && !prev.System.HasCoordinate)
                     {
                         prev.System.x = newsys.x;
                         prev.System.y = newsys.y;
