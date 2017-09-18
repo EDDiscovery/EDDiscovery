@@ -162,7 +162,7 @@ namespace EDDiscovery
 
             // NO NEED to reload the three tabstrips - code below will cause a LoadLayout on the one selected.
 
-            int max = (int)PopOutControl.PopOuts.EndList;
+            int max = (int)PopOutControl.PopOuts.EndList-1;
 
             // saved as the pop out enum value, for historical reasons
             int piindex_bottom = Math.Min(SQLiteDBClass.GetSettingInt("TravelControlBottomTab", (int)(PopOutControl.PopOuts.Scan)), max);
