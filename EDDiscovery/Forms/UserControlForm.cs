@@ -52,7 +52,7 @@ namespace EDDiscovery.Forms
         private Color transparencycolor = Color.Transparent;
         private Color beforetransparency = Color.Transparent;
         private Color tkey = Color.Transparent;
-        private Color labelnormalcolour = Color.Transparent, labeltransparentcolour = Color.Transparent;
+        private Color labelnormalcolour, labeltransparentcolour;
 
         private Timer timer = new Timer();      // timer to monitor for entry into form when transparent.. only sane way in forms
         private bool deftopmost, deftransparent;
@@ -77,13 +77,17 @@ namespace EDDiscovery.Forms
 
         #region Public Interface
 
-        public void Init(EDDiscovery.UserControls.UserControlCommonBase c, string title, bool winborder, string rf, bool deftopmostp = false, bool defwindowintaskbar = true)
+        public void Init(EDDiscovery.UserControls.UserControlCommonBase c, string title, bool winborder, string rf, bool deftopmostp ,
+                         bool deftransparentp , Color labelnormal , Color labeltransparent )
         {
             UserControl = c;
             c.Dock = DockStyle.None;
             c.Location = new Point(0, 10);
             c.Size = new Size(200, 200);
             this.Controls.Add(c);
+            deftransparent = deftransparentp;   // only applied if allowed to be transparent.
+            labelnormalcolour = labelnormal;
+            labeltransparentcolour = labeltransparent;
 
             transparencycolor = c.ColorTransparency;
 
@@ -97,7 +101,7 @@ namespace EDDiscovery.Forms
 
             labelControlText.Text = "";                                 // always starts blank..
 
-            this.ShowInTaskbar = SQLiteDBClass.GetSettingBool(dbrefname + "Taskbar", defwindowintaskbar);
+            this.ShowInTaskbar = SQLiteDBClass.GetSettingBool(dbrefname + "Taskbar", true);
 
             displayTitle = SQLiteDBClass.GetSettingBool(dbrefname + "ShowTitle", true);
 
@@ -107,13 +111,6 @@ namespace EDDiscovery.Forms
             UpdateControls();
 
             Invalidate();
-        }
-
-        public void InitForTransparency(bool deftransparentp, Color labeln, Color labelt)
-        {
-            deftransparent = deftransparentp;
-            labelnormalcolour = labeln;
-            labeltransparentcolour = labelt;
         }
 
         public void SetControlText(string text)
@@ -191,7 +188,6 @@ namespace EDDiscovery.Forms
             panel_taskbaricon.BackColor = panel_transparent.BackColor = panel_close.BackColor =
                     panel_minimize.BackColor = panel_ontop.BackColor = panel_showtitle.BackColor = panelTop.BackColor = togo;
 
-            System.Diagnostics.Debug.Assert(!labeltransparentcolour.IsFullyTransparent());
             label_index.ForeColor = labelControlText.ForeColor = IsTransparent ? labeltransparentcolour : labelnormalcolour;
 
             UserControl.SetTransparency(showtransparent, togo);
@@ -455,8 +451,18 @@ namespace EDDiscovery.Forms
             }
         }
 
-#endregion
 
+        #endregion
+
+        private void label_index_MouseDown(object sender, MouseEventArgs e)
+        {
+            OnCaptionMouseDown((Control)sender, e);
+        }
+
+        private void labelControlText_MouseDown(object sender, MouseEventArgs e)
+        {
+            OnCaptionMouseDown((Control)sender, e);
+        }
 
         private void panelTop_MouseDown(object sender, MouseEventArgs e)
         {
