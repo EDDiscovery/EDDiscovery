@@ -28,7 +28,6 @@ using System.Threading;
 using System.Collections.Concurrent;
 using EliteDangerousCore.EDDN;
 using Newtonsoft.Json.Linq;
-using EDDiscovery.Export;
 using EDDiscovery.UserControls;
 using EDDiscovery.Forms;
 using EliteDangerousCore;
@@ -162,7 +161,7 @@ namespace EDDiscovery
 
             // NO NEED to reload the three tabstrips - code below will cause a LoadLayout on the one selected.
 
-            int max = (int)PopOutControl.PopOuts.EndList-1;
+            int max = (int)PopOutControl.PopOuts.EndList-1; // fix, its up to but not including endlist
 
             // saved as the pop out enum value, for historical reasons
             int piindex_bottom = Math.Min(SQLiteDBClass.GetSettingInt("TravelControlBottomTab", (int)(PopOutControl.PopOuts.Scan)), max);
@@ -256,7 +255,6 @@ namespace EDDiscovery
 
                 _discoveryForm.Map.UpdateHistorySystem(currentsys.System);      // update some dumb friends
                 _discoveryForm.RouteControl.UpdateHistorySystem(currentsys.System.name);
-                _discoveryForm.ExportControl.UpdateHistorySystem(currentsys.System.name);
 
                 if (userControlTravelGrid.GetCurrentHistoryEntry != null)        // paranoia
                     _discoveryForm.ActionRun(Actions.ActionEventEDList.onHistorySelection, userControlTravelGrid.GetCurrentHistoryEntry);

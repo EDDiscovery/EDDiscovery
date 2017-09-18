@@ -616,6 +616,72 @@ namespace EDDiscovery
                 ExtendedControls.MessageBoxTheme.Show("System unknown to EDSM");
 
         }
+
+        private void buttonExtExcel_Click(object sender, EventArgs e)
+        {
+            if (RouteSystems == null || RouteSystems.Count == 0)
+            {
+                ExtendedControls.MessageBoxTheme.Show("No Route Plotted", "Route", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                return;
+            }
+
+            Forms.ExportForm frm = new Forms.ExportForm();
+            frm.Init(new string[] { "All" }, disablestartendtime:true);
+
+            if (frm.ShowDialog(this) == DialogResult.OK)
+            {
+                BaseUtils.CSVWrite csv = new BaseUtils.CSVWrite();
+                csv.SetCSVDelimiter(frm.Comma);
+
+                try
+                {
+                    using (System.IO.StreamWriter writer = new System.IO.StreamWriter(frm.Path))
+                    {
+                        List<KeyValuePair<String, double>> data = new List<KeyValuePair<String, double>>();
+
+                        Point3D last = null;
+                        foreach (SystemClassDB s in RouteSystems)
+                        {
+                            Point3D pos = new Point3D(s.x, s.y, s.z);
+                            double dist = 0;
+                            if (last != null)
+                            {
+                                dist = Point3D.DistanceBetween(pos, last);
+                            }
+                            last = pos;
+                            data.Add(new KeyValuePair<String, double>(s.name, dist));
+                        }
+
+                        if (frm.IncludeHeader)
+                        {
+                            writer.Write(csv.Format("System"));
+                            writer.Write(csv.Format("Distance"));
+                            writer.Write(csv.Format("Total distance",false));
+                            writer.WriteLine();
+                        }
+
+                        double totalDist = 0;
+                        foreach (KeyValuePair<String, double> item in data)
+                        {
+                            writer.Write(csv.Format(item.Key));
+                            writer.Write(csv.Format(item.Value.ToString("0.00")));
+                            totalDist += item.Value;
+                            writer.Write(csv.Format(totalDist.ToString("0.00"), false));
+                            writer.WriteLine();
+                        }
+
+                        writer.Close();
+
+                        if (frm.AutoOpen)
+                            System.Diagnostics.Process.Start(frm.Path);
+                    }
+                }
+                catch
+                {
+                    ExtendedControls.MessageBoxTheme.Show("Failed to write to " + frm.Path, "Export Failed", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                }
+            }
+        }
     }
 
     public class RoutePlotter

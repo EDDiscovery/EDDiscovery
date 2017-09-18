@@ -555,26 +555,37 @@ namespace EliteDangerousCore.EDSM
             return systems;
         }
 
-        public List<String> GetSphereSystems(String systemName, double radius)
+        public List<Tuple<ISystem,double>> GetSphereSystems(String systemName, double radius)
         {
-            List<String> systems = new List<string>();
-            string query = String.Format("api-v1/sphere-systems?systemName={0}&radius={1}", systemName, radius);
+            string query = String.Format("api-v1/sphere-systems?systemName={0}&radius={1}&showCoordinates=1&showId=1", systemName, radius);
 
             var response = RequestGet(query, handleException: true);
             if (response.Error)
-                return systems;
+                return null;
 
             var json = response.Body;
             if (json == null)
-                return systems;
+                return null;
 
             JArray msg = JArray.Parse(json);
+
+            List<Tuple<ISystem,double>> systems = new List<Tuple<ISystem,double>>();
 
             if (msg != null)
             {
                 foreach (JObject sysname in msg)
                 {
-                    systems.Add(sysname["name"].ToString());
+                    SystemClass sys = new SystemClass();
+                    sys.name = sysname["name"].Str("Unknown");
+                    sys.id_edsm = sysname["id"].Long(0);
+                    JObject co = (JObject)sysname["coords"];
+                    if ( co != null )
+                    {
+                        sys.x = co["x"].Double();
+                        sys.y = co["y"].Double();
+                        sys.z = co["z"].Double();
+                    }
+                    systems.Add(new Tuple<ISystem, double>(sys, sysname["distance"].Double()));
                 }
             }
             return systems;

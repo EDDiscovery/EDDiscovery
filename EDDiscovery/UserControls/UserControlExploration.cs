@@ -800,7 +800,7 @@ namespace EDDiscovery.UserControls
             ClearExplorationSet();
             EDSMClass edsm = new EDSMClass();
             Cursor.Current = Cursors.WaitCursor;
-            Task<List<String>> taskEDSM = Task<List<String>>.Factory.StartNew(() =>
+            Task<List<Tuple<ISystem, double>>> taskEDSM = Task<List<Tuple<ISystem, double>>>.Factory.StartNew(() =>
             {
                 return edsm.GetSphereSystems(systemName, radius);
             });
@@ -810,12 +810,14 @@ namespace EDDiscovery.UserControls
 
         }
 
-        private void LoadSphereData(Task<List<String>> task)
+        private void LoadSphereData(Task<List<Tuple<ISystem, double>>> task)
         {
             List<String> systems = new List<String>();
             int countunknown = 0;
-            foreach (String name in task.Result)
+            foreach (Tuple<ISystem,double> ret in task.Result)
             {
+                string name = ret.Item1.name;
+
                 SystemClassDB sc = GetSystem(name.Trim());
                 if (sc == null)
                 {

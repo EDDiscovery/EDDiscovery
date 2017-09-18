@@ -47,6 +47,7 @@ namespace EDDiscovery
             this.comboBoxRoutingMetric = new ExtendedControls.ComboBoxCustom();
             this.richTextBox_routeresult = new ExtendedControls.RichTextBoxScroll();
             this.groupBox_Entries = new ExtendedControls.GroupBoxCustom();
+            this.buttonExtExcel = new ExtendedControls.ButtonExt();
             this.textBox_ToName = new ExtendedControls.TextBoxBorder();
             this.textBox_FromName = new ExtendedControls.TextBoxBorder();
             this.buttonExtTravelTo = new ExtendedControls.ButtonExt();
@@ -75,6 +76,7 @@ namespace EDDiscovery
             this.label3 = new System.Windows.Forms.Label();
             this.textBox_FromX = new ExtendedControls.TextBoxBorder();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
+            this.label5 = new System.Windows.Forms.Label();
             this.groupBox_Entries.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -140,6 +142,8 @@ namespace EDDiscovery
             this.groupBox_Entries.BackColorScaling = 0.5F;
             this.groupBox_Entries.BorderColor = System.Drawing.Color.LightGray;
             this.groupBox_Entries.BorderColorScaling = 0.5F;
+            this.groupBox_Entries.Controls.Add(this.label5);
+            this.groupBox_Entries.Controls.Add(this.buttonExtExcel);
             this.groupBox_Entries.Controls.Add(this.textBox_ToName);
             this.groupBox_Entries.Controls.Add(this.textBox_FromName);
             this.groupBox_Entries.Controls.Add(this.comboBoxRoutingMetric);
@@ -177,6 +181,21 @@ namespace EDDiscovery
             this.groupBox_Entries.TabStop = false;
             this.groupBox_Entries.TextPadding = 0;
             this.groupBox_Entries.TextStartPosition = -1;
+            // 
+            // buttonExtExcel
+            // 
+            this.buttonExtExcel.BorderColorScaling = 1.25F;
+            this.buttonExtExcel.ButtonColorScaling = 0.5F;
+            this.buttonExtExcel.ButtonDisabledScaling = 0.5F;
+            this.buttonExtExcel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonExtExcel.Image = global::EDDiscovery.Properties.Resources.excel;
+            this.buttonExtExcel.Location = new System.Drawing.Point(832, 108);
+            this.buttonExtExcel.Name = "buttonExtExcel";
+            this.buttonExtExcel.Size = new System.Drawing.Size(24, 24);
+            this.buttonExtExcel.TabIndex = 29;
+            this.toolTip.SetToolTip(this.buttonExtExcel, "Send data on grid to excel");
+            this.buttonExtExcel.UseVisualStyleBackColor = true;
+            this.buttonExtExcel.Click += new System.EventHandler(this.buttonExtExcel_Click);
             // 
             // textBox_ToName
             // 
@@ -654,6 +673,15 @@ namespace EDDiscovery
             // 
             this.toolTip.ShowAlways = true;
             // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(742, 114);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(53, 13);
+            this.label5.TabIndex = 30;
+            this.label5.Text = "Export To";
+            // 
             // RouteControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -701,5 +729,7 @@ namespace EDDiscovery
         private ExtendedControls.ButtonExt buttonFromEDSM;
         private ExtendedControls.ButtonExt buttonToEDSM;
         private System.Windows.Forms.ToolTip toolTip;
+        private ExtendedControls.ButtonExt buttonExtExcel;
+        private System.Windows.Forms.Label label5;
     }
 }

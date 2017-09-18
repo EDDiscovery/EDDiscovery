@@ -195,6 +195,12 @@
     <Compile Include="Actions\ActionVars.cs" />
     <Compile Include="Actions\ConditionFunctionsEDD.cs" />
     <Compile Include="EDDOptions.cs" />
+    <Compile Include="Forms\ExportForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\ExportForm.Designer.cs">
+      <DependentUpon>ExportForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\SafeModeForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -223,8 +229,6 @@
     <Compile Include="EDDApplicationContext.cs" />
     <Compile Include="DebugCode.cs" />
     <Compile Include="EDDiscoveryController.cs" />
-    <Compile Include="ExportImport\ExportGrid.cs" />
-    <Compile Include="ExportImport\ExportSphereSystems.cs" />
     <Compile Include="Forms\CommanderForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -259,26 +263,13 @@
       <DependentUpon>ShipDetails.cs</DependentUpon>
     </Compile>
     <Compile Include="IDiscoveryController.cs" />
-    <Compile Include="ExportImport\ExportNotes.cs" />
-    <Compile Include="ExportImport\ImportHistory.cs" />
     <Compile Include="Trilateration\DistanceParser.cs" />
-    <Compile Include="ExportImport\ExportExplorationData.cs" />
-    <Compile Include="ExportImport\ExportFilteredSystems.cs" />
-    <Compile Include="ExportImport\ExportRoute.cs" />
     <Compile Include="Forms\FindMaterialsForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\FindMaterialsForm.Designer.cs">
       <DependentUpon>FindMaterialsForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="ExportImport\ExportControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="ExportImport\ExportControl.Designer.cs">
-      <DependentUpon>ExportControl.cs</DependentUpon>
-    </Compile>
-    <Compile Include="ExportImport\ExportFSDJump.cs" />
-    <Compile Include="ExportImport\ExportScan.cs" />
     <Compile Include="Forms\AssignTravelLogSystemForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -418,6 +409,12 @@
     <Compile Include="UserControls\UserControlExploration.Designer.cs">
       <DependentUpon>UserControlExploration.cs</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\UserControlEDSM.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\UserControlEDSM.Designer.cs">
+      <DependentUpon>UserControlEDSM.cs</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\UserControlSysInfo.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -553,6 +550,9 @@
     <EmbeddedResource Include="Forms\AddOnManagerForm.resx">
       <DependentUpon>AddOnManagerForm.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\ExportForm.resx">
+      <DependentUpon>ExportForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\FindMaterialsForm.resx">
       <DependentUpon>FindMaterialsForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -588,6 +588,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\UserControlExploration.resx">
       <DependentUpon>UserControlExploration.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\UserControlEDSM.resx">
+      <DependentUpon>UserControlEDSM.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\UserControlJournalGrid.resx">
       <DependentUpon>UserControlJournalGrid.cs</DependentUpon>
@@ -739,9 +742,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="3DMap\FormMap.resx">
       <DependentUpon>FormMap.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="ExportImport\ExportControl.resx">
-      <DependentUpon>ExportControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\AboutForm.resx">
       <DependentUpon>AboutForm.cs</DependentUpon>
