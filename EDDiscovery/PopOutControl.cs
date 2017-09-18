@@ -253,11 +253,8 @@ namespace EDDiscovery.Forms
                 int numopened = usercontrolsforms.CountOf(ctrl.GetType()) + 1;
                 string windowtitle = poi.WindowTitlePrefix + " " + ((numopened > 1) ? numopened.ToString() : "");
                 string refname = poi.WindowRefName + numopened.ToString();
-                tcf.Init(ctrl, windowtitle, _discoveryForm.theme.WindowsFrame, refname, _discoveryForm.TopMost);
-                if (poi.SupportsTransparency)
-                {
-                    tcf.InitForTransparency(poi.DefaultTransparent, _discoveryForm.theme.LabelColor, _discoveryForm.theme.SPanelColor);
-                }
+                tcf.Init(ctrl, windowtitle, _discoveryForm.theme.WindowsFrame, refname, _discoveryForm.TopMost,
+                            poi.DefaultTransparent, _discoveryForm.theme.LabelColor, _discoveryForm.theme.SPanelColor);
 
                 ctrl.Init(_discoveryForm, _discoveryForm.TravelControl.GetTravelGrid, numopened);
 

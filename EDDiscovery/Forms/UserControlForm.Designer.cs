@@ -67,6 +67,7 @@ namespace EDDiscovery.Forms
             this.label_index.Size = new System.Drawing.Size(27, 13);
             this.label_index.TabIndex = 23;
             this.label_index.Text = "N/A";
+            this.label_index.MouseDown += new System.Windows.Forms.MouseEventHandler(this.label_index_MouseDown);
             // 
             // labelControlText
             // 
@@ -76,6 +77,7 @@ namespace EDDiscovery.Forms
             this.labelControlText.Size = new System.Drawing.Size(27, 13);
             this.labelControlText.TabIndex = 23;
             this.labelControlText.Text = "N/A";
+            this.labelControlText.MouseDown += new System.Windows.Forms.MouseEventHandler(this.labelControlText_MouseDown);
             // 
             // toolTip1
             // 
