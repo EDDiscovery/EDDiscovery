@@ -65,6 +65,7 @@ namespace EDDiscovery.Forms
             Grid,
             StarList,
             EstimatedValues,
+            EDSM,
             // ****** ADD More here DO NOT REORDER *****
             EndList,                // Keep here, used to work out MaxTabButtons
         };
@@ -98,6 +99,7 @@ namespace EDDiscovery.Forms
             { new PopOutInfo( PopOuts.Trippanel, "Trip Computer", "Trippanel", EDDiscovery.Properties.Resources.trippanel, "Display the trip computer" , transparent: false) },
             { new PopOutInfo( PopOuts.NotePanel, "Notes", "NotePanel", EDDiscovery.Properties.Resources.notes, "Display current notes on a system" , transparent: false) },
             { new PopOutInfo( PopOuts.RouteTracker, "Route Tracker", "RouteTracker", EDDiscovery.Properties.Resources.routetracker, "Display the route tracker", transparent: false) },
+            { new PopOutInfo( PopOuts.EDSM, "EDSM Star Finder", "EDSMStarFinder", EDDiscovery.Properties.Resources.edsmown, "Display the EDSM Star finder") },
             { new PopOutInfo( PopOuts.Grid, "The Grid", "TheGrid", EDDiscovery.Properties.Resources.grid, "Display the grid which allows other panels to be placed on it" , transparent:false) },
         };
 
@@ -180,6 +182,7 @@ namespace EDDiscovery.Forms
                 case PopOuts.MarketData: return new UserControlMarketData();
                 case PopOuts.SystemInformation: return new UserControlSysInfo();
                 case PopOuts.StarList: return new UserControlStarList();
+                case PopOuts.EDSM: return new UserControlEDSM();
                 case PopOuts.Grid: return new UserControlContainerGrid();
                 default: return null;
             }

@@ -28,7 +28,6 @@ using System.Threading;
 using System.Collections.Concurrent;
 using EliteDangerousCore.EDDN;
 using Newtonsoft.Json.Linq;
-using EDDiscovery.Export;
 using EDDiscovery.UserControls;
 using EDDiscovery.Forms;
 using EliteDangerousCore;
@@ -256,7 +255,6 @@ namespace EDDiscovery
 
                 _discoveryForm.Map.UpdateHistorySystem(currentsys.System);      // update some dumb friends
                 _discoveryForm.RouteControl.UpdateHistorySystem(currentsys.System.name);
-                _discoveryForm.ExportControl.UpdateHistorySystem(currentsys.System.name);
 
                 if (userControlTravelGrid.GetCurrentHistoryEntry != null)        // paranoia
                     _discoveryForm.ActionRun(Actions.ActionEventEDList.onHistorySelection, userControlTravelGrid.GetCurrentHistoryEntry);

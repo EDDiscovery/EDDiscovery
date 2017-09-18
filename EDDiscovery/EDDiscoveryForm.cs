@@ -17,7 +17,6 @@ using EDDiscovery.DB;
 using EliteDangerousCore.EDDN;
 using EliteDangerousCore.EDSM;
 using EDDiscovery.Forms;
-using EDDiscovery.Export;
 using BaseUtils.Win32Constants;
 using Newtonsoft.Json.Linq;
 using System;
@@ -57,7 +56,6 @@ namespace EDDiscovery
 
         public TravelHistoryControl TravelControl { get { return travelHistoryControl; } }
         public RouteControl RouteControl { get { return routeControl1; } }
-        public ExportControl ExportControl { get { return exportControl1; } }
         public EDDiscovery.ImageHandler.ImageHandler ImageHandler { get { return imageHandler1; } }
 
         public AudioExtensions.AudioQueue AudioQueueWave { get { return audioqueuewave; } }
@@ -196,7 +194,6 @@ namespace EDDiscovery
             gridControl.InitControl(this, 0);
             routeControl1.InitControl(this);
             savedRouteExpeditionControl1.InitControl(this);
-            exportControl1.InitControl(this);
 
             Map = new EDDiscovery._3DMap.MapManager(EDDOptions.Instance.NoWindowReposition, this);
 
@@ -443,7 +440,6 @@ namespace EDDiscovery
         private void Controller_RefreshCommanders()
         {
             LoadCommandersListBox();             // in case a new commander has been detected
-            exportControl1.PopulateCommanders();
             settings.UpdateCommandersListBox();
         }
 
@@ -926,6 +922,53 @@ namespace EDDiscovery
                 int n = JournalEntry.RemoveDuplicateFSDEntries(EDCommander.CurrentCmdrID);
                 Controller.LogLine("Removed " + n + " FSD entries");
                 Controller.RefreshHistoryAsync();
+            }
+        }
+
+        private void exportVistedStarsListToEliteDangerousToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            string exportfilename = null;
+            bool found = false;
+            string folder = EliteDangerousCore.VisitingStarsCacheFolder.GetVisitedStarsCacheDirectory();
+
+            if (folder != null)
+            {
+                exportfilename = Path.Combine(folder, "ImportStars.txt");
+                found = true;
+            }
+            else
+            {
+                SaveFileDialog dlg = new SaveFileDialog();
+
+                dlg.Filter = "ImportedStars export| *.txt";
+                dlg.Title = "Could not find VisitedStarsCache.dat file, choose file";
+                dlg.FileName = "ImportStars.txt";
+
+                if (dlg.ShowDialog() != DialogResult.OK)
+                    return;
+                exportfilename = dlg.FileName;
+            }
+
+            List<JournalEntry> scans = JournalEntry.GetByEventType(JournalTypeEnum.FSDJump, EDCommander.CurrentCmdrID, new DateTime(2014, 1, 1), DateTime.UtcNow);
+
+            var tscans = scans.ConvertAll<JournalFSDJump>(x => (JournalFSDJump)x);
+
+            try
+            {
+                using (StreamWriter writer = new StreamWriter(exportfilename, false))
+                {
+                    foreach (var system in tscans.Select(o => o.StarSystem).Distinct())
+                    {
+                        writer.WriteLine(system);
+                    }
+                }
+
+                ExtendedControls.MessageBoxTheme.Show(this, "File " + exportfilename + " created." + Environment.NewLine
+                    + (found ? "Restart Elite Dangerous to have this file read into the galaxy map" : ""), "Export visited stars");
+            }
+            catch (IOException)
+            {
+                ExtendedControls.MessageBoxTheme.Show("Error writing " + exportfilename, "Export visited stars", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -1413,6 +1456,7 @@ namespace EDDiscovery
             List<HistoryEntry> hlsyncunsyncedlist = Controller.history.FilterByScanNotEGOSynced;        // first entry is oldest
             EDDiscoveryCore.EGO.EGOSync.SendEGOEvents(LogLine, hlsyncunsyncedlist);
         }
+
     }
 }
 
