@@ -314,6 +314,14 @@ namespace EliteDangerousCore.DB
 
         public static void CreateSystemsTableIndexes()
         {
+            using (var schemalock = new SchemaLock())
+            {
+                CreateSystemsTableIndexesNoLock();
+            }
+        }
+
+        private static void CreateSystemsTableIndexesNoLock()
+        {
             string[] queries = new[]
             {
                 "CREATE INDEX IF NOT EXISTS EdsmSystems_EdsmId ON EdsmSystems (EdsmId ASC, EddbId, X, Y, Z)",
@@ -366,7 +374,7 @@ namespace EliteDangerousCore.DB
 
         public static void ReplaceSystemsTable()
         {
-            using (var slock = new SQLiteConnectionSystem.SchemaLock())
+            using (var slock = new SchemaLock())
             {
                 using (var conn = new SQLiteConnectionSystem())
                 {
@@ -381,7 +389,7 @@ namespace EliteDangerousCore.DB
                         txn.Commit();
                     }
                     ExecuteQuery(conn, "VACUUM");
-                    CreateSystemsTableIndexes();
+                    CreateSystemsTableIndexesNoLock();
                 }
             }
         }
