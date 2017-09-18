@@ -89,7 +89,7 @@ namespace ExtendedControls
             lblHeader.Text =
                 $"A fatal exception was encountered while {_Description}.{Environment.NewLine}{Environment.NewLine}" +
                 $"Click the \"Report An Issue\" button to copy diagnostic information to your clipboard, and provide this info to help us make {Assembly.GetEntryAssembly().GetName().Name} better, or click \"Exit\" to end the program.";
-            tbDetails.Text =
+            textboxDetails.Text =
                 $"Fatal exception while {_Description}.{Environment.NewLine}{Environment.NewLine}" +
                 "==== BEGIN ====" + Environment.NewLine +
                 _Exception.ToString() + Environment.NewLine +
@@ -123,7 +123,7 @@ namespace ExtendedControls
         {
             if (!string.IsNullOrWhiteSpace(_ReportURL))
             {
-                string mdText = tbDetails.Text
+                string mdText = textboxDetails.Text
                     .Replace("==== BEGIN", "```" + Environment.NewLine + "==== BEGIN")
                     .Replace("END =====", "END =====" + Environment.NewLine + "```" + Environment.NewLine);
 

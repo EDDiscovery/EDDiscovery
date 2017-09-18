@@ -40,8 +40,6 @@ namespace EDDiscovery
     public partial class FormMap : ExtendedControls.SmartSysMenuForm
     {
 
-//TBD subscribe to new target
-
 
         #region Variables
 

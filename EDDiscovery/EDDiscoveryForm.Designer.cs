@@ -69,6 +69,7 @@ namespace EDDiscovery
             this.sendUnsuncedEDDNEventsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.sendUnsyncedEGOScansToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.clearEDSMIDAssignedToAllRecordsForCurrentCommanderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.exportVistedStarsListToEliteDangerousToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.addOnsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.manageAddOnsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.configureAddOnActionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -103,8 +104,6 @@ namespace EDDiscovery
             this.routeControl1 = new EDDiscovery.RouteControl();
             this.tabPageRoutesExpeditions = new System.Windows.Forms.TabPage();
             this.savedRouteExpeditionControl1 = new EDDiscovery.SavedRouteExpeditionControl();
-            this.tabPageExport = new System.Windows.Forms.TabPage();
-            this.exportControl1 = new EDDiscovery.Export.ExportControl();
             this.tabPageSettings = new System.Windows.Forms.TabPage();
             this.settings = new EDDiscovery.Settings();
             this.buttonReloadActions = new ExtendedControls.ButtonExt();
@@ -138,7 +137,6 @@ namespace EDDiscovery
             this.tabPageScreenshots.SuspendLayout();
             this.tabPageRoute.SuspendLayout();
             this.tabPageRoutesExpeditions.SuspendLayout();
-            this.tabPageExport.SuspendLayout();
             this.tabPageSettings.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.notifyIconContextMenuStrip1.SuspendLayout();
@@ -261,7 +259,8 @@ namespace EDDiscovery
             this.deleteDuplicateFSDJumpEntriesToolStripMenuItem,
             this.sendUnsuncedEDDNEventsToolStripMenuItem,
             this.sendUnsyncedEGOScansToolStripMenuItem,
-            this.clearEDSMIDAssignedToAllRecordsForCurrentCommanderToolStripMenuItem});
+            this.clearEDSMIDAssignedToAllRecordsForCurrentCommanderToolStripMenuItem,
+            this.exportVistedStarsListToEliteDangerousToolStripMenuItem});
             this.adminToolStripMenuItem.Name = "adminToolStripMenuItem";
             this.adminToolStripMenuItem.Size = new System.Drawing.Size(55, 20);
             this.adminToolStripMenuItem.Text = "A&dmin";
@@ -344,6 +343,13 @@ namespace EDDiscovery
             this.clearEDSMIDAssignedToAllRecordsForCurrentCommanderToolStripMenuItem.Size = new System.Drawing.Size(396, 22);
             this.clearEDSMIDAssignedToAllRecordsForCurrentCommanderToolStripMenuItem.Text = "Clear EDSM ID assigned to all records for current commander";
             this.clearEDSMIDAssignedToAllRecordsForCurrentCommanderToolStripMenuItem.Click += new System.EventHandler(this.clearEDSMIDAssignedToAllRecordsForCurrentCommanderToolStripMenuItem_Click);
+            // 
+            // exportVistedStarsListToEliteDangerousToolStripMenuItem
+            // 
+            this.exportVistedStarsListToEliteDangerousToolStripMenuItem.Name = "exportVistedStarsListToEliteDangerousToolStripMenuItem";
+            this.exportVistedStarsListToEliteDangerousToolStripMenuItem.Size = new System.Drawing.Size(396, 22);
+            this.exportVistedStarsListToEliteDangerousToolStripMenuItem.Text = "Export Visted Stars List to Elite Dangerous";
+            this.exportVistedStarsListToEliteDangerousToolStripMenuItem.Click += new System.EventHandler(this.exportVistedStarsListToEliteDangerousToolStripMenuItem_Click);
             // 
             // addOnsToolStripMenuItem
             // 
@@ -519,7 +525,6 @@ namespace EDDiscovery
             this.tabControlMain.Controls.Add(this.tabPageScreenshots);
             this.tabControlMain.Controls.Add(this.tabPageRoute);
             this.tabControlMain.Controls.Add(this.tabPageRoutesExpeditions);
-            this.tabControlMain.Controls.Add(this.tabPageExport);
             this.tabControlMain.Controls.Add(this.tabPageSettings);
             this.tabControlMain.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.tabControlMain.Location = new System.Drawing.Point(2, 56);
@@ -673,25 +678,6 @@ namespace EDDiscovery
             this.savedRouteExpeditionControl1.Name = "savedRouteExpeditionControl1";
             this.savedRouteExpeditionControl1.Size = new System.Drawing.Size(975, 634);
             this.savedRouteExpeditionControl1.TabIndex = 0;
-            // 
-            // tabPageExport
-            // 
-            this.tabPageExport.Controls.Add(this.exportControl1);
-            this.tabPageExport.Location = new System.Drawing.Point(4, 22);
-            this.tabPageExport.Name = "tabPageExport";
-            this.tabPageExport.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageExport.Size = new System.Drawing.Size(981, 640);
-            this.tabPageExport.TabIndex = 8;
-            this.tabPageExport.Text = "Export/Import";
-            this.tabPageExport.UseVisualStyleBackColor = true;
-            // 
-            // exportControl1
-            // 
-            this.exportControl1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.exportControl1.Location = new System.Drawing.Point(3, 3);
-            this.exportControl1.Name = "exportControl1";
-            this.exportControl1.Size = new System.Drawing.Size(975, 634);
-            this.exportControl1.TabIndex = 0;
             // 
             // tabPageSettings
             // 
@@ -1043,7 +1029,6 @@ namespace EDDiscovery
             this.tabPageScreenshots.PerformLayout();
             this.tabPageRoute.ResumeLayout(false);
             this.tabPageRoutesExpeditions.ResumeLayout(false);
-            this.tabPageExport.ResumeLayout(false);
             this.tabPageSettings.ResumeLayout(false);
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
@@ -1101,8 +1086,6 @@ namespace EDDiscovery
         private System.Windows.Forms.ToolStripMenuItem read21AndFormerLogFilesToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem showLogfilesToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem read21AndFormerLogFiles_forceReloadLogsToolStripMenuItem;
-        private System.Windows.Forms.TabPage tabPageExport;
-        private EDDiscovery.Export.ExportControl exportControl1;
         private System.Windows.Forms.ToolStripMenuItem rescanAllJournalFilesToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem checkForNewReleaseToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem deleteDuplicateFSDJumpEntriesToolStripMenuItem;
@@ -1138,5 +1121,6 @@ namespace EDDiscovery
         private ExtendedControls.ButtonExt buttonExtEditAddOns;
         private ExtendedControls.ButtonExt buttonExtManageAddOns;
         private System.Windows.Forms.ToolStripMenuItem howToRunInSafeModeToResetVariousParametersToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem exportVistedStarsListToEliteDangerousToolStripMenuItem;
     }
 }
