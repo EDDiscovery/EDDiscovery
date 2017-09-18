@@ -92,10 +92,19 @@ namespace DirectInputDevices
                         axispresent[(int)Axis.RY] = true;
                     else if (guid == ObjectGuid.RzAxis)
                         axispresent[(int)Axis.RZ] = true;
+                    else if (guid == ObjectGuid.Slider)
+                    {
+                        int axisentry = (int)Axis.U + slidercount;
+                        if (axisentry < AxisCount)
+                        {
+                            axispresent[axisentry] = true;
+                            slidercount++;      // must be sliders, only ones left with axis
+                            //System.Diagnostics.Debug.WriteLine("Slider " + slidercount);
+                        }
+                    }
                     else
                     {
-                        axispresent[(int)Axis.U + slidercount] = true;
-                        slidercount++;      // must be sliders, only ones left with axis
+                        System.Diagnostics.Debug.WriteLine("Unknown Axis " + guid.ToString());
                     }
 
                     ObjectProperties o = stick.GetObjectPropertiesById(deviceObject.ObjectId);
