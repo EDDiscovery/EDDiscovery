@@ -171,7 +171,6 @@ namespace EDDiscovery
                     EDCommander.Create(cmdr);
                     UpdateCommandersListBox();
                     _discoveryForm.LoadCommandersListBox();
-                    _discoveryForm.ExportControl.PopulateCommanders();
                     _discoveryForm.RefreshHistoryAsync();           // will do a new parse on commander list adding/removing scanners
                     btnDeleteCommander.Enabled = EDCommander.NumberOfCommanders > 1;
                 }
@@ -216,7 +215,6 @@ namespace EDDiscovery
                 {
                     EDCommander.Delete(cmdr);
                     _discoveryForm.LoadCommandersListBox();
-                    _discoveryForm.ExportControl.PopulateCommanders();
                     UpdateCommandersListBox();
                     _discoveryForm.RefreshHistoryAsync();           // will do a new parse on commander list adding/removing scanners
 

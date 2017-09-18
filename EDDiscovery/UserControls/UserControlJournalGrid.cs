@@ -290,8 +290,6 @@ namespace EDDiscovery.UserControls
 
         HistoryEntry rightclicksystem = null;
         int rightclickrow = -1;
-        HistoryEntry leftclicksystem = null;
-        int leftclickrow = -1;
 
         private void dataGridViewJournal_MouseDown(object sender, MouseEventArgs e)
         {
@@ -299,11 +297,6 @@ namespace EDDiscovery.UserControls
             {
                 rightclicksystem = null;
                 rightclickrow = -1;
-            }
-            if (e.Button == MouseButtons.Left)         // right click on travel map, get in before the context menu
-            {
-                leftclicksystem = null;
-                leftclickrow = -1;
             }
 
             if (dataGridViewJournal.SelectedCells.Count < 2 || dataGridViewJournal.SelectedRows.Count == 1)      // if single row completely selected, or 1 cell or less..
@@ -318,11 +311,6 @@ namespace EDDiscovery.UserControls
                     {
                         rightclickrow = hti.RowIndex;
                         rightclicksystem = (HistoryEntry)dataGridViewJournal.Rows[hti.RowIndex].Cells[JournalHistoryColumns.HistoryTag].Tag;
-                    }
-                    if (e.Button == MouseButtons.Left)         // right click on travel map, get in before the context menu
-                    {
-                        leftclickrow = hti.RowIndex;
-                        leftclicksystem = (HistoryEntry)dataGridViewJournal.Rows[hti.RowIndex].Cells[JournalHistoryColumns.HistoryTag].Tag;
                     }
                 }
             }
@@ -437,30 +425,48 @@ namespace EDDiscovery.UserControls
 
         private void buttonExtExcel_Click(object sender, EventArgs e)
         {
-            SaveFileDialog dlg = new SaveFileDialog();
+            Forms.ExportForm frm = new Forms.ExportForm();
+            frm.Init(new string[] { "Export Current View" });
 
-            dlg.Filter = "CSV export| *.csv";
-            dlg.Title = "Export current Journal view to Excel (csv)";
-
-            if (dlg.ShowDialog() == DialogResult.OK)
+            if (frm.ShowDialog(this) == DialogResult.OK)
             {
-                Export.ExportGrid grd = new Export.ExportGrid();
-                grd.onGetCell += delegate (int r, int c)
+                if (frm.SelectedIndex == 0)
                 {
-                    if (c == -1)
-                        return (r < dataGridViewJournal.Rows.Count) ? true : false;
+                    BaseUtils.CSVWriteGrid grd = new BaseUtils.CSVWriteGrid();
+                    grd.SetCSVDelimiter(frm.Comma);
+                    grd.GetLineStatus += delegate (int r)
+                    {
+                        if (r < dataGridViewJournal.Rows.Count)
+                        {
+                            HistoryEntry he = dataGridViewJournal.Rows[r].Cells[JournalHistoryColumns.HistoryTag].Tag as HistoryEntry;
+                            return (dataGridViewJournal.Rows[r].Visible &&
+                                he.EventTimeLocal.CompareTo(frm.StartTime) >= 0 &&
+                                he.EventTimeLocal.CompareTo(frm.EndTime) <= 0) ? BaseUtils.CSVWriteGrid.LineStatus.OK : BaseUtils.CSVWriteGrid.LineStatus.Skip;
+                        }
+                        else
+                            return BaseUtils.CSVWriteGrid.LineStatus.EOF;
+                    };
+
+                    grd.GetLine += delegate (int r)
+                    {
+                        HistoryEntry he = dataGridViewJournal.Rows[r].Cells[JournalHistoryColumns.HistoryTag].Tag as HistoryEntry;
+                        DataGridViewRow rw = dataGridViewJournal.Rows[r];
+                        return new Object[] { rw.Cells[0].Value, rw.Cells[2].Value, rw.Cells[3].Value };
+                    };
+
+                    grd.GetHeader += delegate (int c)
+                    {
+                        return (c < 3 && frm.IncludeHeader) ? dataGridViewJournal.Columns[c + ((c > 0) ? 1 : 0)].HeaderText : null;
+                    };
+
+                    if (grd.WriteCSV(frm.Path))
+                    {
+                        if (frm.AutoOpen)
+                            System.Diagnostics.Process.Start(frm.Path);
+                    }
                     else
-                        return (c < 3 && dataGridViewJournal.Rows[r].Visible) ? dataGridViewJournal.Rows[r].Cells[c + ((c > 0) ? 1 : 0)].Value : null;
-                };
-
-                grd.onGetHeader += delegate (int c)
-                {
-                    return (c < 3) ? dataGridViewJournal.Columns[c + ((c > 0) ? 1 : 0)].HeaderText : null;
-                };
-
-                grd.Csvformat = discoveryform.ExportControl.radioButtonCustomEU.Checked ? BaseUtils.CVSWrite.CSVFormat.EU : BaseUtils.CVSWrite.CSVFormat.USA_UK;
-                if (grd.ToCSV(dlg.FileName))
-                    System.Diagnostics.Process.Start(dlg.FileName);
+                        ExtendedControls.MessageBoxTheme.Show("Failed to write to " + frm.Path, "Export Failed", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                }
             }
         }
 

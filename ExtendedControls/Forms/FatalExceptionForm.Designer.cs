@@ -36,7 +36,7 @@
             this.btnDetails = new System.Windows.Forms.Button();
             this.lblHeader = new System.Windows.Forms.Label();
             this.pnlDetails = new System.Windows.Forms.Panel();
-            this.tbDetails = new System.Windows.Forms.TextBox();
+            this.textboxDetails = new System.Windows.Forms.TextBox();
             this.pnlHeader.SuspendLayout();
             this.pnlDetails.SuspendLayout();
             this.SuspendLayout();
@@ -111,24 +111,24 @@
             // pnlDetails
             // 
             this.pnlDetails.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.pnlDetails.Controls.Add(this.tbDetails);
+            this.pnlDetails.Controls.Add(this.textboxDetails);
             this.pnlDetails.Location = new System.Drawing.Point(12, 149);
             this.pnlDetails.Name = "pnlDetails";
             this.pnlDetails.Size = new System.Drawing.Size(363, 192);
             this.pnlDetails.TabIndex = 2;
             // 
-            // tbDetails
+            // textboxDetails
             // 
-            this.tbDetails.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.tbDetails.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tbDetails.Location = new System.Drawing.Point(0, 0);
-            this.tbDetails.Multiline = true;
-            this.tbDetails.Name = "tbDetails";
-            this.tbDetails.ReadOnly = true;
-            this.tbDetails.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.tbDetails.Size = new System.Drawing.Size(359, 188);
-            this.tbDetails.TabIndex = 0;
-            this.tbDetails.WordWrap = false;
+            this.textboxDetails.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.textboxDetails.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.textboxDetails.Location = new System.Drawing.Point(0, 0);
+            this.textboxDetails.Multiline = true;
+            this.textboxDetails.Name = "textboxDetails";
+            this.textboxDetails.ReadOnly = true;
+            this.textboxDetails.ScrollBars = System.Windows.Forms.ScrollBars.Both;
+            this.textboxDetails.Size = new System.Drawing.Size(359, 188);
+            this.textboxDetails.TabIndex = 0;
+            this.textboxDetails.WordWrap = false;
             // 
             // FatalExceptionForm
             // 
@@ -159,6 +159,6 @@
         private System.Windows.Forms.Button btnDetails;
         private System.Windows.Forms.Label lblHeader;
         private System.Windows.Forms.Panel pnlDetails;
-        private System.Windows.Forms.TextBox tbDetails;
+        private System.Windows.Forms.TextBox textboxDetails;
     }
 }

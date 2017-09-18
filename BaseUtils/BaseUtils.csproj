@@ -50,6 +50,7 @@
     <Compile Include="EMK\Point3D.cs" />
     <Compile Include="EMK\Vector3D.cs" />
     <Compile Include="Files\AssociateExe.cs" />
+    <Compile Include="Files\CSVWriteGrid.cs" />
     <Compile Include="HTTP\BrowserInfo.cs" />
     <Compile Include="HTTP\DownloadFile.cs" />
     <Compile Include="HTTP\GitHubClass.cs" />

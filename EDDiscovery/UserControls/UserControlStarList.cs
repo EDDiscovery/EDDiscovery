@@ -27,7 +27,6 @@ using EliteDangerousCore.DB;
 using EliteDangerousCore;
 using EliteDangerousCore.EDSM;
 using EliteDangerousCore.EDDN;
-using EDDiscovery.Export;
 using EliteDangerousCore.JournalEvents;
 
 namespace EDDiscovery.UserControls
@@ -515,72 +514,76 @@ namespace EDDiscovery.UserControls
 
         private void buttonExtExcel_Click(object sender, EventArgs e)
         {
-            SaveFileDialog dlg = new SaveFileDialog();
+            Forms.ExportForm frm = new Forms.ExportForm();
+            frm.Init(new string[] { "Export Current View" });
 
-            dlg.Filter = "CSV export| *.csv";
-            dlg.Title = "Export current History view to Excel (csv)";
-                            // 0        1       2           3            4               5           6           7             8              9              10              11              12          
-            string[] colh = { "Time", "System", "Visits", "Other Info" , "Visit List" , "Body", "Ship" ,  "Description", "Detailed Info", "Travel Dist", "Travel Time" , "Travel Jumps" , "Travelled MisJumps" };
-
-            if (dlg.ShowDialog() == DialogResult.OK)
+            if (frm.ShowDialog(this) == DialogResult.OK)
             {
-                Export.ExportGrid grd = new ExportGrid();
-                grd.onGetCell += delegate (int r, int c)
+                if (frm.SelectedIndex == 0)
                 {
-                    if (c == -1)    // next line?
-                        return r < dataGridViewStarList.Rows.Count;
-                    else if (c < colh.Length && dataGridViewStarList.Rows[r].Visible)
+                    // 0        1       2           3            4               5           6           7             8              9              10              11              12          
+                    string[] colh = { "Time", "System", "Visits", "Other Info", "Visit List", "Body", "Ship", "Description", "Detailed Info", "Travel Dist", "Travel Time", "Travel Jumps", "Travelled MisJumps" };
+
+                    BaseUtils.CSVWriteGrid grd = new BaseUtils.CSVWriteGrid();
+                    grd.SetCSVDelimiter(frm.Comma);
+                    grd.GetLineStatus += delegate (int r)
+                    {
+                        if (r < dataGridViewStarList.Rows.Count)
+                        {
+                            List<HistoryEntry> syslist = dataGridViewStarList.Rows[r].Tag as List<HistoryEntry>;
+                            HistoryEntry he = syslist[0];
+
+                            return (dataGridViewStarList.Rows[r].Visible &&
+                                    he.EventTimeLocal.CompareTo(frm.StartTime) >= 0 &&
+                                    he.EventTimeLocal.CompareTo(frm.EndTime) <= 0) ? BaseUtils.CSVWriteGrid.LineStatus.OK : BaseUtils.CSVWriteGrid.LineStatus.Skip;
+                        }
+                        else
+                            return BaseUtils.CSVWriteGrid.LineStatus.EOF;
+                    };
+                    grd.GetLine += delegate (int r)
                     {
                         List<HistoryEntry> syslist = dataGridViewStarList.Rows[r].Tag as List<HistoryEntry>;
                         HistoryEntry he = syslist[0];
+                        DataGridViewRow rw = dataGridViewStarList.Rows[r];
 
-                        if (c == 0)
-                            return dataGridViewStarList.Rows[r].Cells[0].Value;
-                        else if (c == 1)
-                            return dataGridViewStarList.Rows[r].Cells[1].Value;
-                        else if (c == 2)
-                            return dataGridViewStarList.Rows[r].Cells[2].Value;
-                        else if (c == 3)
-                            return dataGridViewStarList.Rows[r].Cells[3].Value;
-                        else if (c == 4)
+                        string tlist = "";
+                        if (syslist.Count > 1)
                         {
-                            string tlist = "";
-                            if (syslist.Count > 1)
-                            {
-                                for(int i = 1; i < syslist.Count; i++)
-                                    tlist = tlist.AppendPrePad(syslist[i].EventTimeLocal.ToShortDateString() + " " + syslist[i].EventTimeLocal.ToShortTimeString(), ", ");
-                            }
-                            return tlist;
+                            for (int i = 1; i < syslist.Count; i++)
+                                tlist = tlist.AppendPrePad(syslist[i].EventTimeLocal.ToShortDateString() + " " + syslist[i].EventTimeLocal.ToShortTimeString(), ", ");
                         }
-                        else if (c == 5)
-                            return he.WhereAmI;
-                        else if (c == 6)
-                            return he.ShipInformation != null ? he.ShipInformation.Name : "Unknown";
-                        else if (c == 7)
-                            return he.EventDescription;
-                        else if (c == 8)
-                            return he.EventDetailedInfo;
-                        else if (c == 9)
-                            return he.isTravelling ? he.TravelledDistance.ToString("0.0") : "";
-                        else if (c == 10)
-                            return he.isTravelling ? he.TravelledSeconds.ToString() : "";
-                        else if (c == 11)
-                            return he.isTravelling ? he.Travelledjumps.ToStringInvariant() : "";
-                        else    // 12
-                            return he.isTravelling ? he.TravelledMissingjump.ToStringInvariant() : "";
+
+                        return new Object[] {
+                            rw.Cells[0].Value,
+                            rw.Cells[1].Value,
+                            rw.Cells[2].Value ,
+                            rw.Cells[3].Value ,
+                            tlist,
+                            he.WhereAmI ,
+                            he.ShipInformation != null ? he.ShipInformation.Name : "Unknown",
+                            he.EventDescription,
+                            he.EventDetailedInfo,
+                            he.isTravelling ? he.TravelledDistance.ToString("0.0") : "",
+                            he.isTravelling ? he.TravelledSeconds.ToString() : "",
+                            he.isTravelling ? he.Travelledjumps.ToStringInvariant() : "",
+                            he.isTravelling ? he.TravelledMissingjump.ToStringInvariant() : "",
+                            };
+                    };
+
+                    grd.GetHeader += delegate (int c)
+                    {
+                        return (c < colh.Length && frm.IncludeHeader) ? colh[c] : null;
+                    };
+
+                    if (grd.WriteCSV(frm.Path))
+                    {
+                        if (frm.AutoOpen)
+                            System.Diagnostics.Process.Start(frm.Path);
                     }
                     else
-                        return null;
-                };
+                        ExtendedControls.MessageBoxTheme.Show("Failed to write to " + frm.Path, "Export Failed", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
 
-                grd.onGetHeader += delegate (int c)
-                {
-                    return (c < colh.Length) ? colh[c] : null;
-                };
-
-                grd.Csvformat = discoveryform.ExportControl.radioButtonCustomEU.Checked ? BaseUtils.CVSWrite.CSVFormat.EU : BaseUtils.CVSWrite.CSVFormat.USA_UK;
-                if (grd.ToCSV(dlg.FileName))
-                    System.Diagnostics.Process.Start(dlg.FileName);
+                }
             }
         }
 

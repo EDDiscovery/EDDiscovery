@@ -294,7 +294,7 @@ namespace EliteDangerousCore.DB
         }
 
 
-        public static List<long> GetEdsmIdsFromName(string name, SQLiteConnectionSystem cn = null)
+        public static List<long> GetEdsmIdsFromName(string name, SQLiteConnectionSystem cn = null , bool uselike = false)
         {
             List<long> ret = new List<long>();
 
@@ -309,10 +309,9 @@ namespace EliteDangerousCore.DB
                         cn = new SQLiteConnectionSystem();
                     }
 
-                    using (DbCommand cmd = cn.CreateCommand("SELECT Name,EdsmId FROM SystemNames WHERE Name==@first"))
+                    using (DbCommand cmd = cn.CreateCommand("SELECT Name,EdsmId FROM SystemNames WHERE " + (uselike? "Name like @first" : "Name==@first") ))
                     {
-                        cmd.AddParameterWithValue("first", name);
-                        //Console.WriteLine("Look up {0}", name);
+                        cmd.AddParameterWithValue("first", name + (uselike ? "%" : ""));
 
                         using (DbDataReader rdr = cmd.ExecuteReader())
                         {
@@ -341,11 +340,11 @@ namespace EliteDangerousCore.DB
             return GetSystemsByName(name, cn).FirstOrDefault();
         }
 
-        public static List<SystemClassDB> GetSystemsByName(string name, SQLiteConnectionSystem cn = null)
+        public static List<SystemClassDB> GetSystemsByName(string name, SQLiteConnectionSystem cn = null , bool uselike = false)
         {
             List<SystemClassDB> systems = new List<SystemClassDB>();
 
-            List<long> edsmidlist = GetEdsmIdsFromName(name, cn);
+            List<long> edsmidlist = GetEdsmIdsFromName(name, cn , uselike);
 
             foreach (long edsmid in edsmidlist )
             {

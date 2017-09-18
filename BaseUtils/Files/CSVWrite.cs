@@ -22,49 +22,27 @@ using System.Data.SqlTypes;
 
 namespace BaseUtils
 {
-    public abstract class CVSWrite
+    public class CSVWrite
     {
-        public enum CSVFormat
-        {
-            USA_UK = 0,
-            EU = 1,
-        }
-
         protected string delimiter = ",";
-        protected System.Globalization.CultureInfo formatculture;
-        private CSVFormat csvformat;
-        public bool IncludeHeader;
-        
-        public CSVFormat Csvformat
-        {
-            get
-            {
-                return csvformat;
-            }
+        protected System.Globalization.CultureInfo formatculture = new System.Globalization.CultureInfo("en-US");
 
-            set
+        public void SetCSVDelimiter( bool comma )
+        {
+            if (comma)
             {
-                csvformat = value;
-                if (csvformat == CSVFormat.EU)
-                {
-                    delimiter = ";";
-                    formatculture = new System.Globalization.CultureInfo("sv");
-                }
-                else
-                {
-                    delimiter = ",";
-                    formatculture = new System.Globalization.CultureInfo("en-US");
-                }
+                delimiter = ",";
+                formatculture = new System.Globalization.CultureInfo("en-US");
+            }
+            else
+            {
+                delimiter = ";";
+                formatculture = new System.Globalization.CultureInfo("sv");
             }
         }
 
-        public DateTime fromDate { get; set; } = DateTime.MinValue;
-        public DateTime toDate { get; set; } = DateTime.MaxValue;
 
-        abstract public bool ToCSV(string filename);
-        virtual public bool GetData(Object datasource) { return false; }
-
-        protected string MakeValueCsvFriendly(object value, bool delimit = true)
+        public string Format(object value, bool delimit = true)
         {
             string output = "";
 

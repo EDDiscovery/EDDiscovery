@@ -27,7 +27,6 @@ using EliteDangerousCore.DB;
 using EliteDangerousCore;
 using EliteDangerousCore.EDSM;
 using EliteDangerousCore.EDDN;
-using EDDiscovery.Export;
 
 namespace EDDiscovery.UserControls
 {
@@ -917,66 +916,133 @@ namespace EDDiscovery.UserControls
 
         private void buttonExtExcel_Click(object sender, EventArgs e)
         {
-            SaveFileDialog dlg = new SaveFileDialog();
+            Forms.ExportForm frm = new Forms.ExportForm();
+            frm.Init(new string[] { "View", "FSD Jumps only", "With Notes only" , "With Notes, no repeat"  });
 
-            dlg.Filter = "CSV export| *.csv";
-            dlg.Title = "Export current History view to Excel (csv)";
-                            // 0        1       2           3       4       5           6           7                   8       9               10              11              12
-            string[] colh = { "Time", "Event", "System", "Body", "Ship" , "Summary", "Description", "Detailed Info", "Note" , "Travel Dist", "Travel Time" , "Travel Jumps" , "Travelled MisJumps" };
-
-            if (dlg.ShowDialog() == DialogResult.OK)
+            if (frm.ShowDialog(this) == DialogResult.OK)
             {
-                Export.ExportGrid grd = new ExportGrid();
-                grd.onGetCell += delegate (int r, int c)
+                BaseUtils.CSVWriteGrid grd = new BaseUtils.CSVWriteGrid();
+                grd.SetCSVDelimiter(frm.Comma);
+
+                List<SystemNoteClass> sysnotecache = new List<SystemNoteClass>();
+                string[] colh = null;
+
+                grd.GetLineStatus += delegate (int r)
                 {
-                    if (c == -1)    // next line?
-                        return r < dataGridViewTravel.Rows.Count;
-                    else if (c < colh.Length && dataGridViewTravel.Rows[r].Visible)
+                    if (r < dataGridViewTravel.Rows.Count)
                     {
                         HistoryEntry he = (HistoryEntry)dataGridViewTravel.Rows[r].Cells[TravelHistoryColumns.HistoryTag].Tag;
-                        if (c == 0)
-                            return dataGridViewTravel.Rows[r].Cells[0].Value;
-                        else if (c == 1)
-                            return he.journalEntry.EventTypeStr;
-                        else if (c == 2)
-                            return (he.System != null) ? he.System.name : "Unknown";    // paranoia
-                        else if (c == 3)
-                            return he.WhereAmI;
-                        else if (c == 4)
-                            return he.ShipInformation != null ? he.ShipInformation.Name : "Unknown";
-                        else if (c == 5)
-                            return he.EventSummary;
-                        else if (c == 6)
-                            return he.EventDescription;
-                        else if (c == 7)
-                            return he.EventDetailedInfo;
-                        else if (c == 8)
-                            return dataGridViewTravel.Rows[r].Cells[4].Value;
-                        else if (c == 9)
-                            return he.isTravelling ? he.TravelledDistance.ToString("0.0") : "";
-                        else if (c == 10)
-                            return he.isTravelling ? he.TravelledSeconds.ToString() : "";
-                        else if (c == 11)
-                            return he.isTravelling ? he.Travelledjumps.ToStringInvariant() : "";
-                        else 
-                            return he.isTravelling ? he.TravelledMissingjump.ToStringInvariant() : "";
+                        return (dataGridViewTravel.Rows[r].Visible &&
+                                he.EventTimeLocal.CompareTo(frm.StartTime) >= 0 &&
+                                he.EventTimeLocal.CompareTo(frm.EndTime) <= 0) ? BaseUtils.CSVWriteGrid.LineStatus.OK : BaseUtils.CSVWriteGrid.LineStatus.Skip;
                     }
                     else
-                        return null;
+                        return BaseUtils.CSVWriteGrid.LineStatus.EOF;
                 };
 
-                grd.onGetHeader += delegate (int c)
+                if (frm.SelectedIndex == 1)     // export fsd jumps
                 {
-                    return (c < colh.Length) ? colh[c] : null;
+                    colh = new string[] { "Time", "Name", "X", "Y", "Z", "Distance", "Fuel Used", "Fuel Left", "Boost", "Note" };
+
+                    grd.VerifyLine += delegate (int r)      // addition qualifier for FSD jump
+                    {
+                        HistoryEntry he = (HistoryEntry)dataGridViewTravel.Rows[r].Cells[TravelHistoryColumns.HistoryTag].Tag;
+                        return he.EntryType == JournalTypeEnum.FSDJump;
+                    };
+
+                    grd.GetLine += delegate (int r)
+                    {
+                        HistoryEntry he = (HistoryEntry)dataGridViewTravel.Rows[r].Cells[TravelHistoryColumns.HistoryTag].Tag;
+                        EliteDangerousCore.JournalEvents.JournalFSDJump fsd = he.journalEntry as EliteDangerousCore.JournalEvents.JournalFSDJump;
+
+                        return new Object[] {
+                            fsd.EventTimeLocal,
+                            fsd.StarSystem,
+                            fsd.StarPos.X,
+                            fsd.StarPos.Y,
+                            fsd.StarPos.Z,
+                            fsd.JumpDist,
+                            fsd.FuelUsed,
+                            fsd.FuelLevel,
+                            fsd.BoostUsed,
+                            he.snc != null ? he.snc.Note : "",
+                        };
+                        
+                    };
+                }
+                else
+                {
+                    colh = new string[] { "Time", "Event", "System", "Body",            //0
+                                          "Ship", "Summary", "Description", "Detailed Info",        //4
+                                          "Note", "Travel Dist", "Travel Time", "Travel Jumps",     //8
+                                          "Travelled MisJumps" , "X", "Y","Z" ,     //12
+                                          "JID", "EDSMID" , "EDDBID" };             //16
+
+                    grd.GetLine += delegate (int r)
+                    {
+                        HistoryEntry he = (HistoryEntry)dataGridViewTravel.Rows[r].Cells[TravelHistoryColumns.HistoryTag].Tag;
+                        return new Object[] {
+                            dataGridViewTravel.Rows[r].Cells[0].Value,
+                            he.journalEntry.EventTypeStr,
+                            (he.System != null) ? he.System.name : "Unknown",    // paranoia
+                            he.WhereAmI,
+                            he.ShipInformation != null ? he.ShipInformation.Name : "Unknown",
+                            he.EventSummary,
+                            he.EventDescription,
+                            he.EventDetailedInfo,
+                            dataGridViewTravel.Rows[r].Cells[4].Value,
+                            he.isTravelling ? he.TravelledDistance.ToString("0.0") : "",
+                            he.isTravelling ? he.TravelledSeconds.ToString() : "",
+                            he.isTravelling ? he.Travelledjumps.ToStringInvariant() : "",
+                            he.isTravelling ? he.TravelledMissingjump.ToStringInvariant() : "",
+                            he.System.x,
+                            he.System.y,
+                            he.System.z,
+                            he.Journalid,
+                            he.System.id_edsm,
+                            he.System.id_eddb,
+                        };
+                    };
+
+                    if (frm.SelectedIndex == 2 || frm.SelectedIndex == 3)     // export notes
+                    {
+                        grd.VerifyLine += delegate (int r)      // second hook to reject line
+                        {
+                            HistoryEntry he = (HistoryEntry)dataGridViewTravel.Rows[r].Cells[TravelHistoryColumns.HistoryTag].Tag;
+                            if (he.snc != null)
+                            {
+                                if (sysnotecache.Contains(he.snc))
+                                    return false;
+                                else
+                                {
+                                    if (frm.SelectedIndex == 3)
+                                        sysnotecache.Add(he.snc);
+                                    return true;
+                                }
+                            }
+                            else
+                                return false;
+                        };
+                    }
+                }
+
+                grd.GetHeader += delegate (int c)
+                {
+                    return (c < colh.Length && frm.IncludeHeader) ? colh[c] : null;
                 };
 
-                grd.Csvformat = discoveryform.ExportControl.radioButtonCustomEU.Checked ? BaseUtils.CVSWrite.CSVFormat.EU : BaseUtils.CVSWrite.CSVFormat.USA_UK;
-                if (grd.ToCSV(dlg.FileName))
-                    System.Diagnostics.Process.Start(dlg.FileName);
+                if (grd.WriteCSV(frm.Path))
+                {
+                    if (frm.AutoOpen)
+                        System.Diagnostics.Process.Start(frm.Path);
+                }
+                else
+                    ExtendedControls.MessageBoxTheme.Show("Failed to write to " + frm.Path, "Export Failed", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             }
+
         }
 
-        #endregion
+#endregion
 
         private void drawnPanelPopOut_Click(object sender, EventArgs e)
         {
