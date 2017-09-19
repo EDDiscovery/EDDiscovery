@@ -95,6 +95,13 @@ namespace EDDiscovery.UserControls
             dataGridViewStarList.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.DisplayedCells;     // NEW! appears to work https://msdn.microsoft.com/en-us/library/74b2wakt(v=vs.110).aspx
 
             checkBoxEDSM.Checked = SQLiteDBClass.GetSettingBool(DbEDSM, false);
+
+            ExtraIcons(false);
+        }
+
+        public void ExtraIcons(bool icon)
+        {
+            panelHistoryIcon.Visible = icon;
         }
 
         public override void LoadLayout()

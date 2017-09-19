@@ -70,7 +70,6 @@ namespace EDDiscovery
 
             userControlTravelGrid.Init(_discoveryForm, userControlTravelGrid, 0);       // primary first instance - this registers with events in discoveryform to get info
                                                         // then this display, to update its own controls..
-            userControlTravelGrid.OnNewEntry += UpdatedWithAddNewEntry;        // call back when you've added a new entry..
             userControlTravelGrid.OnChangedSelection += ChangedSelection;   // and if the user clicks on something
             userControlTravelGrid.OnPopOut += () => { _discoveryForm.PopOuts.PopOut(PopOutControl.PopOuts.TravelGrid); };
             userControlTravelGrid.OnKeyDownInCell += OnKeyDownInCell;
@@ -196,52 +195,6 @@ namespace EDDiscovery
 
         #endregion
 
-
-        // main travel grid has a new entry due to onNewEntry
-        public void UpdatedWithAddNewEntry(HistoryEntry he, HistoryList hl, bool accepted)     
-        {
-            try
-            {   // try is a bit old, probably do not need it.
-                if (he.IsFSDJump)
-                {
-                    int count = _discoveryForm.history.GetVisitsCount(he.System.name);
-                    _discoveryForm.LogLine(string.Format("Arrived at system {0} Visit No. {1}", he.System.name, count));
-
-                    System.Diagnostics.Trace.WriteLine("Arrived at system: " + he.System.name + " " + count + ":th visit.");
-
-                    if (EDCommander.Current.SyncToEdsm == true)
-                    {
-                        EDSMSync.SendTravelLog(he);
-                        _discoveryForm.ActionRunOnEntry(he, Actions.ActionEventEDList.onEDSMSync);
-                    }
-                }
-
-                hl.SendEDSMStatusInfo(he, true);
-
-                if (he.ISEDDNMessage && he.AgeOfEntry() < TimeSpan.FromDays(1.0))
-                {
-                    if (EDCommander.Current.SyncToEddn == true)
-                    {
-                        EDDNSync.SendEDDNEvents(_discoveryForm.LogLine, he);
-                        _discoveryForm.ActionRunOnEntry(he, Actions.ActionEventEDList.onEDDNSync);
-                    }
-                }
-
-                if (he.EntryType == JournalTypeEnum.Scan)
-                {
-                    if (EDCommander.Current.SyncToEGO)
-                    {
-                        EDDiscoveryCore.EGO.EGOSync.SendEGOEvents(_discoveryForm.LogLine, he);
-                        _discoveryForm.ActionRunOnEntry(he, Actions.ActionEventEDList.onEGOSync);
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Trace.WriteLine("Exception NewPosition: " + ex.Message);
-                System.Diagnostics.Trace.WriteLine("Trace: " + ex.StackTrace);
-            }
-        }
 
         #region Reaction to UCTG changing
 

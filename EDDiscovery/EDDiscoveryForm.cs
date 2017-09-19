@@ -561,6 +561,50 @@ namespace EDDiscovery
                     }
                 }
             }
+
+            // Moved from travel history control
+
+            try
+            {   // try is a bit old, probably do not need it.
+                if (he.IsFSDJump)
+                {
+                    int count = history.GetVisitsCount(he.System.name);
+                    LogLine(string.Format("Arrived at system {0} Visit No. {1}", he.System.name, count));
+
+                    System.Diagnostics.Trace.WriteLine("Arrived at system: " + he.System.name + " " + count + ":th visit.");
+
+                    if (EDCommander.Current.SyncToEdsm == true)
+                    {
+                        EDSMSync.SendTravelLog(he);
+                        ActionRunOnEntry(he, Actions.ActionEventEDList.onEDSMSync);
+                    }
+                }
+
+                hl.SendEDSMStatusInfo(he, true);
+
+                if (he.ISEDDNMessage && he.AgeOfEntry() < TimeSpan.FromDays(1.0))
+                {
+                    if (EDCommander.Current.SyncToEddn == true)
+                    {
+                        EDDNSync.SendEDDNEvents(LogLine, he);
+                        ActionRunOnEntry(he, Actions.ActionEventEDList.onEDDNSync);
+                    }
+                }
+
+                if (he.EntryType == JournalTypeEnum.Scan)
+                {
+                    if (EDCommander.Current.SyncToEGO)
+                    {
+                        EDDiscoveryCore.EGO.EGOSync.SendEGOEvents(LogLine, he);
+                        ActionRunOnEntry(he, Actions.ActionEventEDList.onEGOSync);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Trace.WriteLine("Exception NewPosition: " + ex.Message);
+                System.Diagnostics.Trace.WriteLine("Trace: " + ex.StackTrace);
+            }
         }
 
         private void Controller_NewUIEvent(string name,bool shown)      
