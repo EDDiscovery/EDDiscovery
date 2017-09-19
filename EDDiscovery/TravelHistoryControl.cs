@@ -40,7 +40,6 @@ namespace EDDiscovery
         public EDDiscoveryForm _discoveryForm;
 
         public HistoryEntry GetTravelHistoryCurrent {  get { return userControlTravelGrid.GetCurrentHistoryEntry; } }
-        public TravelHistoryFilter GetPrimaryFilter { get { return userControlTravelGrid.GetHistoryFilter; } }  // some classes want to know out filter
 
         public UserControlTravelGrid GetTravelGrid { get { return userControlTravelGrid; } }
 
