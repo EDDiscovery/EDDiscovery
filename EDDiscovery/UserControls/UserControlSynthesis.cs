@@ -107,6 +107,12 @@ namespace EDDiscovery.UserControls
 
         #region Display
 
+        public override void InitialDisplay()
+        {
+            last_he = uctg.GetCurrentHistoryEntry;
+            Display();
+        }
+
         private void Discoveryform_OnNewEntry(HistoryEntry he, HistoryList hl)
         {
             last_he = he;
@@ -114,13 +120,13 @@ namespace EDDiscovery.UserControls
         }
 
         HistoryEntry last_he = null;
-        public override void Display(HistoryEntry he, HistoryList hl)
+        private void Display(HistoryEntry he, HistoryList hl)
         {
             last_he = he;
             Display();
         }
 
-        public void Display()
+        private void Display()
         {
             //DONT turn on sorting in the future, thats not how it works.  You click and drag to sort manually since it gives you
             // the order of recipies.

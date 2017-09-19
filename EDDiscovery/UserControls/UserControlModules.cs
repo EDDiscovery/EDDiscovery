@@ -108,8 +108,13 @@ namespace EDDiscovery.UserControls
             comboBoxShips.Enabled = true;
         }
 
+        public override void InitialDisplay()
+        {
+            Display(uctg.GetCurrentHistoryEntry, discoveryform.history);
+        }
+
         HistoryEntry last_he = null;
-        public override void Display(HistoryEntry he, HistoryList hl)
+        private void Display(HistoryEntry he, HistoryList hl)
         {
             if ( comboBoxShips.Items.Count == 0 )
                 UpdateComboBox(hl);
@@ -118,7 +123,7 @@ namespace EDDiscovery.UserControls
             Display();
         }
 
-        public void Display()
+        private void Display()
         {
             DataGridViewColumn sortcol = dataGridViewModules.SortedColumn != null ? dataGridViewModules.SortedColumn : dataGridViewModules.Columns[0];
             SortOrder sortorder = dataGridViewModules.SortOrder;
@@ -162,7 +167,7 @@ namespace EDDiscovery.UserControls
             dataGridViewModules.Columns[sortcol.Index].HeaderCell.SortGlyphDirection = sortorder;
         }
 
-        public void Display(ShipInformation si)
+        private void Display(ShipInformation si)
         {
             foreach (string key in si.Modules.Keys)
             {

@@ -125,9 +125,14 @@ namespace EDDiscovery.UserControls
 
         #region Display
 
+        public override void InitialDisplay()
+        {
+            Display(uctg.GetCurrentHistoryEntry, discoveryform.history);
+        }
+
         bool neverdisplayed = true;
         HistoryEntry last_he = null;
-        public override void Display(HistoryEntry he, HistoryList hl)
+        private void Display(HistoryEntry he, HistoryList hl)
         {
             if (neverdisplayed)
             {

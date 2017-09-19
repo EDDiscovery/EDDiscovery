@@ -71,6 +71,10 @@ namespace EDDiscovery.UserControls
             computer.ShutDown();
         }
 
+        public override void InitialDisplay()
+        {
+        }
+
         private void Uctg_OnTravelSelectionChanged(HistoryEntry he, HistoryList hl)
         {
             if (he != null)

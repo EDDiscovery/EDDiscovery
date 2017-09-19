@@ -67,9 +67,9 @@ namespace EDDiscovery.UserControls
             Stats(he,hl);
         }
 
-        public override void Display(HistoryEntry current, HistoryList history)
+        public override void InitialDisplay()
         {
-            SelectionChanged(current, history);
+            SelectionChanged(uctg.GetCurrentHistoryEntry,discoveryform.history);
         }
 
         public void SelectionChanged(HistoryEntry he, HistoryList hl)

@@ -43,6 +43,10 @@ namespace EDDiscovery.UserControls
             AppendText(ed.LogText, ed.theme.TextBlockColor);
         }
 
+        public override void InitialDisplay()
+        {
+        }
+
         public override void Closing()
         {
             discoveryform.OnNewLogEntry -= AppendText;

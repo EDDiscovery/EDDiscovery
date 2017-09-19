@@ -27,15 +27,15 @@ using EliteDangerousCore;
 
 namespace EDDiscovery.UserControls
 {
-    public class UserControlCommonBase : UserControl
+    public abstract class UserControlCommonBase : UserControl
     {
         // in calling order..
-        public virtual void Init(EDDiscoveryForm ed, UserControlCursorType thc, int displayno) { }
-        public virtual void LoadLayout() { }
-        public virtual void Display(HistoryEntry current, HistoryList history) { }
+        public abstract void Init(EDDiscoveryForm ed, UserControlCursorType thc, int displayno);    // start up, give discovery form and cursor, and its display id
+        public virtual void LoadLayout() { }        // then a chance to load a layout
+        public abstract void InitialDisplay();      // then after the themeing, do the initial display
+        public abstract void Closing();             // close it
 
-        public virtual void ChangeCursorType(UserControlCursorType thc) { }
-        public virtual void Closing() { }
+        public virtual void ChangeCursorType(UserControlCursorType thc) { }     // optional, cursor has changed
 
         public virtual Color ColorTransparency { get { return Color.Transparent; } }        // override to say support transparency, and what colour you want.
         public virtual void SetTransparency(bool on, Color curcol) { }                      // set on/off transparency of components.

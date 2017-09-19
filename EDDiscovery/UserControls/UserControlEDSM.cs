@@ -71,6 +71,10 @@ namespace EDDiscovery.UserControls
             DGVLoadColumnLayout(dataGridViewEDSM, DbColumnSave);
         }
 
+        public override void InitialDisplay()
+        {
+        }
+
         public override void Closing()
         {
             DGVSaveColumnLayout(dataGridViewEDSM, DbColumnSave);

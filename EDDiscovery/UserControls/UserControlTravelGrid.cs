@@ -149,9 +149,9 @@ namespace EDDiscovery.UserControls
 
         #endregion
 
-        public override void Display(HistoryEntry he, HistoryList hl)       // initial caller..
+        public override void InitialDisplay()
         {
-            HistoryChanged(hl);
+            HistoryChanged(discoveryform.history);
         }
 
         public void HistoryChanged(HistoryList hl)           // on History change
