@@ -101,12 +101,12 @@ namespace EDDiscovery.UserControls
 
         #region Display
 
-        public override void Display(HistoryEntry current, HistoryList history)
+        public override void InitialDisplay()
         {
-            Display(history);
+            Display(discoveryform.history);
         }
 
-        public void Display(HistoryList hl)            // when user clicks around..  HE may be null here
+        private void Display(HistoryList hl)            // when user clicks around..  HE may be null here
         {
             HistoryEntry lfs = hl.GetLastHistoryEntry(x => x.IsFuelScoop);
             HistoryEntry hex = hl.GetLastHistoryEntry(x => x.IsFSDJump);

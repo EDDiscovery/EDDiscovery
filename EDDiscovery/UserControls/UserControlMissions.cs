@@ -93,6 +93,11 @@ namespace EDDiscovery.UserControls
 
         #region Display
 
+        public override void InitialDisplay()
+        {
+            Display(uctg.GetCurrentHistoryEntry, discoveryform.history);
+        }
+
         private void Discoveryform_OnNewEntry(HistoryEntry he, HistoryList hl)
         {
             last_he = he;
@@ -100,13 +105,13 @@ namespace EDDiscovery.UserControls
         }
 
         HistoryEntry last_he = null;
-        public override void Display(HistoryEntry he, HistoryList hl)
+        private void Display(HistoryEntry he, HistoryList hl)
         {
             last_he = he;
             Display();
         }
 
-        public void Display()
+        private void Display()
         {
             MissionList ml = last_he?.MissionList;
 

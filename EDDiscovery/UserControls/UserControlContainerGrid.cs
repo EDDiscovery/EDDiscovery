@@ -101,12 +101,12 @@ namespace EDDiscovery.UserControls
             buttonExtTile.Enabled = uccrlist.Count > 0;
         }
 
-        public override void Display(HistoryEntry current, HistoryList history)
+        public override void InitialDisplay()
         {
             foreach (UserControlContainerResizable r in uccrlist)
             {
                 UserControlCommonBase uc = (UserControlCommonBase)r.control;
-                uc.Display(current, history);
+                uc.InitialDisplay();
             }
         }
 
@@ -192,7 +192,7 @@ namespace EDDiscovery.UserControls
             uccr.Location = pos;
             uccr.Size = size;
 
-            uccb.Display(discoveryForm.TravelControl.GetTravelHistoryCurrent, discoveryForm.history);
+            uccb.InitialDisplay();
 
             if (uccb is UserControlTravelGrid)
                 (uccb as UserControlTravelGrid).ExtraIcons(true, false);

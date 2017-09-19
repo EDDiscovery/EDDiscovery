@@ -62,6 +62,11 @@ namespace EDDiscovery.UserControls
             _discoveryForm.OnNewEntry -= NewEntry;
         }
 
+        public override void InitialDisplay()
+        {
+            Display(uctg.GetCurrentHistoryEntry, _discoveryForm.history);
+        }
+
         public void NewEntry(HistoryEntry he, HistoryList hl)               // called when a new entry is made.. check to see if its a scan update
         {
             // if he valid, and last is null, or not he, or we have a new scan
@@ -72,7 +77,8 @@ namespace EDDiscovery.UserControls
             }
         }
 
-        public override void Display(HistoryEntry he, HistoryList hl)            // Called at first start or hooked to change cursor
+
+        private void Display(HistoryEntry he, HistoryList hl)            // Called at first start or hooked to change cursor
         {
             if (he != null && (last_he == null || he.System != last_he.System))
             {

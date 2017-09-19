@@ -92,14 +92,19 @@ namespace EDDiscovery.UserControls
 
         #region Display
 
-        public override void Display(HistoryEntry he, HistoryList hl)
+        public override void InitialDisplay()
+        {
+            Display(uctg.GetCurrentHistoryEntry, discoveryform.history);
+        }
+
+        private void Display(HistoryEntry he, HistoryList hl)
         {
             //if ( he != null ) System.Diagnostics.Debug.WriteLine("Hash displayed" + he.MaterialCommodity.DataHash());
 
             Display(he?.MaterialCommodity);
         }
 
-        public void Display(MaterialCommoditiesList mcl)
+        private void Display(MaterialCommoditiesList mcl)
         {
             dataGridViewMC.Rows.Clear();
             textBoxItems1.Text = textBoxItems2.Text = "";

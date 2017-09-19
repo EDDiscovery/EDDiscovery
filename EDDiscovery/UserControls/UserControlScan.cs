@@ -131,7 +131,12 @@ namespace EDDiscovery.UserControls
             }
         }
 
-        public override void Display(HistoryEntry he, HistoryList hl)            // when user clicks around..
+        public override void InitialDisplay()
+        {
+            Display(uctg.GetCurrentHistoryEntry,discoveryform.history);
+        }
+
+        private void Display(HistoryEntry he, HistoryList hl)            // when user clicks around..
         {
             if (he != null && (last_he == null || he.System != last_he.System ))
             {

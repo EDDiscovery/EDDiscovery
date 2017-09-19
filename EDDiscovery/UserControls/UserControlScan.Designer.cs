@@ -390,7 +390,7 @@ namespace EDDiscovery.UserControls
             this.checkBoxEDSM.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Silver;
             this.checkBoxEDSM.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.checkBoxEDSM.FontNerfReduction = 0.5F;
-            this.checkBoxEDSM.Image = global::EDDiscovery.Properties.Resources.edsmown;
+            this.checkBoxEDSM.Image = global::EDDiscovery.Properties.Resources.edsm24;
             this.checkBoxEDSM.ImageButtonDisabledScaling = 0.5F;
             this.checkBoxEDSM.Location = new System.Drawing.Point(263, 0);
             this.checkBoxEDSM.MouseOverColor = System.Drawing.Color.CornflowerBlue;
