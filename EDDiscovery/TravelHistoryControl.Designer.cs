@@ -50,10 +50,10 @@ namespace EDDiscovery
             this.userControlTravelGrid = new EDDiscovery.UserControls.UserControlTravelGrid();
             this.tabStripBottom = new ExtendedControls.TabStrip();
             this.splitContainerRightOuter = new System.Windows.Forms.SplitContainer();
+            this.tabStripTopRight = new ExtendedControls.TabStrip();
             this.splitContainerRightInner = new System.Windows.Forms.SplitContainer();
             this.tabStripMiddleRight = new ExtendedControls.TabStrip();
             this.tabStripBottomRight = new ExtendedControls.TabStrip();
-            this.tabStripTopRight = new ExtendedControls.TabStrip();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerLeftRight)).BeginInit();
             this.splitContainerLeftRight.Panel1.SuspendLayout();
             this.splitContainerLeftRight.Panel2.SuspendLayout();
@@ -148,6 +148,17 @@ namespace EDDiscovery
             this.splitContainerRightOuter.SplitterDistance = 325;
             this.splitContainerRightOuter.TabIndex = 17;
             // 
+            // tabStripTopRight
+            // 
+            this.tabStripTopRight.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tabStripTopRight.Location = new System.Drawing.Point(0, 0);
+            this.tabStripTopRight.Name = "tabStripTopRight";
+            this.tabStripTopRight.SelectedIndex = -1;
+            this.tabStripTopRight.ShowPopOut = true;
+            this.tabStripTopRight.Size = new System.Drawing.Size(337, 325);
+            this.tabStripTopRight.StripAtTop = true;
+            this.tabStripTopRight.TabIndex = 2;
+            // 
             // splitContainerRightInner
             // 
             this.splitContainerRightInner.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -187,17 +198,6 @@ namespace EDDiscovery
             this.tabStripBottomRight.Size = new System.Drawing.Size(337, 157);
             this.tabStripBottomRight.StripAtTop = true;
             this.tabStripBottomRight.TabIndex = 0;
-            // 
-            // tabStripTopRight
-            // 
-            this.tabStripTopRight.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tabStripTopRight.Location = new System.Drawing.Point(0, 0);
-            this.tabStripTopRight.Name = "tabStripTopRight";
-            this.tabStripTopRight.SelectedIndex = -1;
-            this.tabStripTopRight.ShowPopOut = true;
-            this.tabStripTopRight.Size = new System.Drawing.Size(337, 325);
-            this.tabStripTopRight.StripAtTop = true;
-            this.tabStripTopRight.TabIndex = 2;
             // 
             // TravelHistoryControl
             // 
