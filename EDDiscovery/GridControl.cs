@@ -28,7 +28,7 @@ namespace EDDiscovery
         public void LoadLayoutSettings() // called by discovery form by us after its adjusted itself
         {
             userControlContainerGrid.LoadLayout();
-            userControlContainerGrid.Display(discoveryForm.TravelControl.GetTravelHistoryCurrent, discoveryForm.history);
+            userControlContainerGrid.InitialDisplay();
         }
 
         public void SaveSettings()     // called by form when closing

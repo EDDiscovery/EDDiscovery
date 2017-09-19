@@ -268,7 +268,7 @@ namespace EDDiscovery.Forms
 
                 _discoveryForm.theme.ApplyToForm(tcf);
 
-                ctrl.Display(_discoveryForm.TravelControl.GetTravelHistoryCurrent, _discoveryForm.history);
+                ctrl.InitialDisplay();
 
                 _discoveryForm.ActionRun(Actions.ActionEventEDList.onPopUp, null, new Conditions.ConditionVariables(new string[] { "PopOutName", refname , "PopOutTitle", windowtitle, "PopOutIndex", numopened.ToString()} ));
             }

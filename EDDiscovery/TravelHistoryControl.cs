@@ -122,7 +122,7 @@ namespace EDDiscovery
             {
                 uc.Init(_discoveryForm, userControlTravelGrid, displaynumber);
                 uc.LoadLayout();
-                uc.Display(userControlTravelGrid.GetCurrentHistoryEntry, _discoveryForm.history);
+                uc.InitialDisplay();
             }
 
             //System.Diagnostics.Debug.WriteLine("And theme {0}", i);

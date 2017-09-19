@@ -119,12 +119,12 @@ namespace EDDiscovery.UserControls
 
         #region Display
 
-        public override void Display(HistoryEntry current, HistoryList history)
+        public override void InitialDisplay()
         {
-            Display(history);
+            Display(discoveryform.history);
         }
 
-        public void Display(HistoryList hl)
+        private void Display(HistoryList hl)
         {
             if (hl == null)     // just for safety
                 return;

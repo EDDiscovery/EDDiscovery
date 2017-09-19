@@ -72,9 +72,9 @@ namespace EDDiscovery.UserControls
             uctg.OnTravelSelectionChanged += OnChanged;
         }
 
-        public override void Display(HistoryEntry current, HistoryList history)  // initial call
+        public override void InitialDisplay()
         {
-            OnChanged(current, history);
+            OnChanged(uctg.GetCurrentHistoryEntry,discoveryform.history);
         }
 
         #endregion
@@ -112,7 +112,7 @@ namespace EDDiscovery.UserControls
             }
         }
 
-        public void Display()
+        private void Display()
         {
             Stopwatch swp = new Stopwatch();
             swp.Start();

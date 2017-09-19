@@ -72,7 +72,7 @@ namespace EDDiscovery.UserControls
 
         Ledger current_mc;
 
-        public void Redisplay(HistoryList hl)
+        private void Redisplay(HistoryList hl)
         {
             Display(hl.cashledger);
         }
@@ -82,12 +82,12 @@ namespace EDDiscovery.UserControls
             Display(hl.cashledger);
         }
 
-        public override void Display(HistoryEntry current, HistoryList history)
+        public override void InitialDisplay()
         {
-            Display(history.cashledger);
+            Display(discoveryform.history.cashledger);
         }
 
-        public void Display(Ledger mc)
+        private void Display(Ledger mc)
         {
             DataGridViewColumn sortcol = dataGridViewLedger.SortedColumn != null ? dataGridViewLedger.SortedColumn : dataGridViewLedger.Columns[0];
             SortOrder sortorder = dataGridViewLedger.SortOrder;

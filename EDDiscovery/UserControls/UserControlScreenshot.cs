@@ -74,7 +74,12 @@ namespace EDDiscovery.UserControls
             FitToWindow();
         }
 
-        public override void Display(HistoryEntry he, HistoryList hl)
+        public override void InitialDisplay()
+        {
+            Display(uctg.GetCurrentHistoryEntry, discoveryform.history);
+        }
+
+        private void Display(HistoryEntry he, HistoryList hl)
         {
             if (he != null)
             {

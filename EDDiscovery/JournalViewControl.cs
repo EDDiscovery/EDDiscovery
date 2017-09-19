@@ -50,7 +50,7 @@ namespace EDDiscovery
         public void LoadLayoutSettings() // called by discovery form by us after its adjusted itself
         {
             userControlJournalGrid.LoadLayout();
-            userControlJournalGrid.Display(null, discoveryForm.history);
+            userControlJournalGrid.InitialDisplay();
         }
 
         public void SaveSettings()     // called by form when closing
