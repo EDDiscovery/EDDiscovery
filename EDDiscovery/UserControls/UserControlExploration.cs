@@ -99,7 +99,12 @@ namespace EDDiscovery.UserControls
                 UpdateSystemRows();
         }
 
-        public override void Display(HistoryEntry he, HistoryList hl)            // when user clicks around..
+        public override void InitialDisplay()
+        {
+            UpdateSystemRows();
+        }
+
+        private void Display(HistoryEntry he, HistoryList hl)            // when user clicks around..
         {
             UpdateSystemRows();
         }

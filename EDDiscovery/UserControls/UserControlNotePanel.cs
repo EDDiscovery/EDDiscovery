@@ -71,6 +71,11 @@ namespace EDDiscovery.UserControls
             displayfont = discoveryform.theme.GetFont;
         }
 
+        public override void InitialDisplay()
+        {
+            DisplaySelected(uctg.GetCurrentHistoryEntry, discoveryform.history);
+        }
+
         public override void ChangeCursorType(UserControlCursorType thc)
         {
             uctg.OnTravelSelectionChanged -= DisplaySelected;
@@ -109,12 +114,7 @@ namespace EDDiscovery.UserControls
             Display(lastHE);
         }
 
-        public override void Display(HistoryEntry current, HistoryList history)
-        {
-            Display(history);
-        }
-
-        public void Display( HistoryList hl)            // when user clicks around..  HE may be null here
+        private void Display( HistoryList hl)            // when user clicks around..  HE may be null here
         {
             Display(hl.GetLastFSD);
         }
