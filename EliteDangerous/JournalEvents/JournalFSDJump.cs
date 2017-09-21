@@ -106,7 +106,7 @@ Examples of trending states:
 
 
     [JournalEntryType(JournalTypeEnum.FSDJump)]
-    public class JournalFSDJump : JournalLocOrJump, IShipInformation
+    public class JournalFSDJump : JournalLocOrJump, IShipInformation, ISystemStationEntry
     {
         public JournalFSDJump(JObject evt) : base(evt, JournalTypeEnum.FSDJump)
         {
@@ -147,6 +147,12 @@ Examples of trending states:
             MapColor = jm.Int(EliteDangerousCore.EliteConfigInstance.InstanceConfig.DefaultMapColour);
             if (jm.Empty())
                 evt["EDDMapColor"] = EliteDangerousCore.EliteConfigInstance.InstanceConfig.DefaultMapColour;      // new entries get this default map colour if its not already there
+
+            // Allegiance without Faction only occurs in Training
+            if (!String.IsNullOrEmpty(Allegiance) && Faction == null)
+            {
+                IsTrainingEvent = true;
+            }
         }
 
         public class FactionInformation
@@ -181,6 +187,7 @@ Examples of trending states:
         public FactionInformation[] Factions;
         public int MapColor { get; set; }
         public bool RealJournalEvent { get; private set; } // True if real ED 2.2+ journal event and not pre 2.2 imported.
+        public bool IsTrainingEvent { get; private set; } // True if detected to be in training
 
         public override void FillInformation(out string summary, out string info, out string detailed)  //V
         {

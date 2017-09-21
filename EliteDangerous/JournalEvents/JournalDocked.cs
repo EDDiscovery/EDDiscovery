@@ -50,7 +50,7 @@ namespace EliteDangerousCore.JournalEvents
     SearchAndRescue, 
      */
     [JournalEntryType(JournalTypeEnum.Docked)]
-    public class JournalDocked : JournalEntry
+    public class JournalDocked : JournalEntry, ISystemStationEntry
     {
         public JournalDocked(JObject evt ) : base(evt, JournalTypeEnum.Docked)
         {
@@ -71,6 +71,11 @@ namespace EliteDangerousCore.JournalEvents
             if (!evt["StationServices"].Empty())
                 StationServices = evt.Value<JArray>("StationServices").Values<string>().ToList();
 
+            // Government = None only happens in Training
+            if (Government == "$government_None;")
+            {
+                IsTrainingEvent = true;
+            }
         }
 
         public string StationName { get; set; }
@@ -85,6 +90,8 @@ namespace EliteDangerousCore.JournalEvents
         public string Government { get; set; }
         public string Government_Localised { get; set; }
         public List<string> StationServices { get; set; }
+
+        public bool IsTrainingEvent { get; private set; }
 
         public override System.Drawing.Bitmap Icon { get { return EliteDangerous.Properties.Resources.Stationenter; } }
 
