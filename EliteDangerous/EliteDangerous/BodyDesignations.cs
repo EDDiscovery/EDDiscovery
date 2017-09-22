@@ -1897,6 +1897,7 @@ namespace EliteDangerousCore
             } },
             { "Kepler-20", new Dictionary<string, string> {
                 { "PER - G8XBE", "Kepler-20 1" },
+                { "Rob's Place", "Kepler-20 2" },
                 { "Maxine's World", "Kepler-20 3" },
             } },
             { "MOA-2007-BLG-400L", new Dictionary<string, string> {
