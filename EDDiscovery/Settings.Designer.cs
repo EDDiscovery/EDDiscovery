@@ -77,22 +77,29 @@ namespace EDDiscovery
             this.groupBoxPopOuts = new ExtendedControls.GroupBoxCustom();
             this.labelTKey = new System.Windows.Forms.Label();
             this.groupBoxTheme = new ExtendedControls.GroupBoxCustom();
-            this.groupBox2 = new ExtendedControls.GroupBoxCustom();
+            this.groupBox3dmap = new ExtendedControls.GroupBoxCustom();
             this.label17 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
-            this.groupBox3 = new ExtendedControls.GroupBoxCustom();
-            this.groupBox4 = new ExtendedControls.GroupBoxCustom();
+            this.groupBoxOptions = new ExtendedControls.GroupBoxCustom();
+            this.groupBoxCommanders = new ExtendedControls.GroupBoxCustom();
             this.dataViewScrollerPanel1 = new ExtendedControls.DataViewScrollerPanel();
             this.vScrollBarCustom1 = new ExtendedControls.VScrollBarCustom();
+            this.groupBoxCustomScreenShots = new ExtendedControls.GroupBoxCustom();
+            this.checkBoxCustomCopyToClipboard = new ExtendedControls.CheckBoxCustom();
+            this.checkBoxCustomMarkHiRes = new ExtendedControls.CheckBoxCustom();
+            this.checkBoxCustomRemoveOriginals = new ExtendedControls.CheckBoxCustom();
+            this.buttonExtScreenshot = new ExtendedControls.ButtonExt();
+            this.checkBoxCustomEnableScreenshots = new ExtendedControls.CheckBoxCustom();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewCommanders)).BeginInit();
             this.groupBoxPopOuts.SuspendLayout();
             this.groupBoxTheme.SuspendLayout();
-            this.groupBox2.SuspendLayout();
-            this.groupBox3.SuspendLayout();
-            this.groupBox4.SuspendLayout();
+            this.groupBox3dmap.SuspendLayout();
+            this.groupBoxOptions.SuspendLayout();
+            this.groupBoxCommanders.SuspendLayout();
             this.dataViewScrollerPanel1.SuspendLayout();
+            this.groupBoxCustomScreenShots.SuspendLayout();
             this.SuspendLayout();
             // 
             // toolTip
@@ -140,7 +147,7 @@ namespace EDDiscovery
             this.comboBoxTheme.SelectedIndex = -1;
             this.comboBoxTheme.SelectedItem = null;
             this.comboBoxTheme.SelectedValue = null;
-            this.comboBoxTheme.Size = new System.Drawing.Size(267, 21);
+            this.comboBoxTheme.Size = new System.Drawing.Size(209, 21);
             this.comboBoxTheme.TabIndex = 0;
             this.toolTip.SetToolTip(this.comboBoxTheme, "Select the theme to use");
             this.comboBoxTheme.ValueMember = "";
@@ -150,7 +157,7 @@ namespace EDDiscovery
             this.button_edittheme.BorderColorScaling = 1.25F;
             this.button_edittheme.ButtonColorScaling = 0.5F;
             this.button_edittheme.ButtonDisabledScaling = 0.5F;
-            this.button_edittheme.Location = new System.Drawing.Point(291, 63);
+            this.button_edittheme.Location = new System.Drawing.Point(232, 63);
             this.button_edittheme.Name = "button_edittheme";
             this.button_edittheme.Size = new System.Drawing.Size(95, 23);
             this.button_edittheme.TabIndex = 10;
@@ -164,7 +171,7 @@ namespace EDDiscovery
             this.buttonSaveTheme.BorderColorScaling = 1.25F;
             this.buttonSaveTheme.ButtonColorScaling = 0.5F;
             this.buttonSaveTheme.ButtonDisabledScaling = 0.5F;
-            this.buttonSaveTheme.Location = new System.Drawing.Point(291, 19);
+            this.buttonSaveTheme.Location = new System.Drawing.Point(232, 19);
             this.buttonSaveTheme.Name = "buttonSaveTheme";
             this.buttonSaveTheme.Size = new System.Drawing.Size(95, 23);
             this.buttonSaveTheme.TabIndex = 7;
@@ -193,7 +200,7 @@ namespace EDDiscovery
             this.checkBoxMinimizeToNotifyIcon.CheckColor = System.Drawing.Color.DarkBlue;
             this.checkBoxMinimizeToNotifyIcon.FontNerfReduction = 0.5F;
             this.checkBoxMinimizeToNotifyIcon.ImageButtonDisabledScaling = 0.5F;
-            this.checkBoxMinimizeToNotifyIcon.Location = new System.Drawing.Point(10, 115);
+            this.checkBoxMinimizeToNotifyIcon.Location = new System.Drawing.Point(232, 46);
             this.checkBoxMinimizeToNotifyIcon.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.checkBoxMinimizeToNotifyIcon.Name = "checkBoxMinimizeToNotifyIcon";
             this.checkBoxMinimizeToNotifyIcon.Size = new System.Drawing.Size(179, 17);
@@ -212,7 +219,7 @@ namespace EDDiscovery
             this.checkBoxUseNotifyIcon.CheckColor = System.Drawing.Color.DarkBlue;
             this.checkBoxUseNotifyIcon.FontNerfReduction = 0.5F;
             this.checkBoxUseNotifyIcon.ImageButtonDisabledScaling = 0.5F;
-            this.checkBoxUseNotifyIcon.Location = new System.Drawing.Point(10, 92);
+            this.checkBoxUseNotifyIcon.Location = new System.Drawing.Point(232, 23);
             this.checkBoxUseNotifyIcon.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.checkBoxUseNotifyIcon.Name = "checkBoxUseNotifyIcon";
             this.checkBoxUseNotifyIcon.Size = new System.Drawing.Size(154, 17);
@@ -300,7 +307,7 @@ namespace EDDiscovery
             this.dataGridViewCommanders.RowHeadersWidth = 20;
             this.dataGridViewCommanders.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.dataGridViewCommanders.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGridViewCommanders.Size = new System.Drawing.Size(671, 219);
+            this.dataGridViewCommanders.Size = new System.Drawing.Size(671, 150);
             this.dataGridViewCommanders.TabIndex = 2;
             this.toolTip.SetToolTip(this.dataGridViewCommanders, "Configure commanders");
             // 
@@ -544,7 +551,7 @@ namespace EDDiscovery
             this.checkBoxShowUIEvents.CheckColor = System.Drawing.Color.DarkBlue;
             this.checkBoxShowUIEvents.FontNerfReduction = 0.5F;
             this.checkBoxShowUIEvents.ImageButtonDisabledScaling = 0.5F;
-            this.checkBoxShowUIEvents.Location = new System.Drawing.Point(10, 138);
+            this.checkBoxShowUIEvents.Location = new System.Drawing.Point(232, 69);
             this.checkBoxShowUIEvents.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.checkBoxShowUIEvents.Name = "checkBoxShowUIEvents";
             this.checkBoxShowUIEvents.Size = new System.Drawing.Size(170, 17);
@@ -595,7 +602,7 @@ namespace EDDiscovery
             this.groupBoxPopOuts.Controls.Add(this.checkBoxAutoSave);
             this.groupBoxPopOuts.Controls.Add(this.checkBoxAutoLoad);
             this.groupBoxPopOuts.FillClientAreaWithAlternateColor = false;
-            this.groupBoxPopOuts.Location = new System.Drawing.Point(440, 361);
+            this.groupBoxPopOuts.Location = new System.Drawing.Point(440, 289);
             this.groupBoxPopOuts.Name = "groupBoxPopOuts";
             this.groupBoxPopOuts.Size = new System.Drawing.Size(379, 109);
             this.groupBoxPopOuts.TabIndex = 19;
@@ -624,7 +631,7 @@ namespace EDDiscovery
             this.groupBoxTheme.Controls.Add(this.button_edittheme);
             this.groupBoxTheme.Controls.Add(this.buttonSaveTheme);
             this.groupBoxTheme.FillClientAreaWithAlternateColor = false;
-            this.groupBoxTheme.Location = new System.Drawing.Point(3, 433);
+            this.groupBoxTheme.Location = new System.Drawing.Point(3, 289);
             this.groupBoxTheme.Name = "groupBoxTheme";
             this.groupBoxTheme.Size = new System.Drawing.Size(426, 108);
             this.groupBoxTheme.TabIndex = 18;
@@ -633,30 +640,30 @@ namespace EDDiscovery
             this.groupBoxTheme.TextPadding = 0;
             this.groupBoxTheme.TextStartPosition = -1;
             // 
-            // groupBox2
+            // groupBox3dmap
             // 
-            this.groupBox2.AlternateClientBackColor = System.Drawing.Color.Blue;
-            this.groupBox2.BackColorScaling = 0.5F;
-            this.groupBox2.BorderColor = System.Drawing.Color.LightGray;
-            this.groupBox2.BorderColorScaling = 0.5F;
-            this.groupBox2.Controls.Add(this.label17);
-            this.groupBox2.Controls.Add(this.textBoxDefaultZoom);
-            this.groupBox2.Controls.Add(this.label5);
-            this.groupBox2.Controls.Add(this.radioButtonHistorySelection);
-            this.groupBox2.Controls.Add(this.radioButtonCentreHome);
-            this.groupBox2.Controls.Add(this.label4);
-            this.groupBox2.Controls.Add(this.label3);
-            this.groupBox2.Controls.Add(this.textBoxHomeSystem);
-            this.groupBox2.Controls.Add(this.panel_defaultmapcolor);
-            this.groupBox2.FillClientAreaWithAlternateColor = false;
-            this.groupBox2.Location = new System.Drawing.Point(440, 254);
-            this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(379, 100);
-            this.groupBox2.TabIndex = 17;
-            this.groupBox2.TabStop = false;
-            this.groupBox2.Text = "3D Map Settings";
-            this.groupBox2.TextPadding = 0;
-            this.groupBox2.TextStartPosition = -1;
+            this.groupBox3dmap.AlternateClientBackColor = System.Drawing.Color.Blue;
+            this.groupBox3dmap.BackColorScaling = 0.5F;
+            this.groupBox3dmap.BorderColor = System.Drawing.Color.LightGray;
+            this.groupBox3dmap.BorderColorScaling = 0.5F;
+            this.groupBox3dmap.Controls.Add(this.label17);
+            this.groupBox3dmap.Controls.Add(this.textBoxDefaultZoom);
+            this.groupBox3dmap.Controls.Add(this.label5);
+            this.groupBox3dmap.Controls.Add(this.radioButtonHistorySelection);
+            this.groupBox3dmap.Controls.Add(this.radioButtonCentreHome);
+            this.groupBox3dmap.Controls.Add(this.label4);
+            this.groupBox3dmap.Controls.Add(this.label3);
+            this.groupBox3dmap.Controls.Add(this.textBoxHomeSystem);
+            this.groupBox3dmap.Controls.Add(this.panel_defaultmapcolor);
+            this.groupBox3dmap.FillClientAreaWithAlternateColor = false;
+            this.groupBox3dmap.Location = new System.Drawing.Point(440, 182);
+            this.groupBox3dmap.Name = "groupBox3dmap";
+            this.groupBox3dmap.Size = new System.Drawing.Size(379, 100);
+            this.groupBox3dmap.TabIndex = 17;
+            this.groupBox3dmap.TabStop = false;
+            this.groupBox3dmap.Text = "3D Map Settings";
+            this.groupBox3dmap.TextPadding = 0;
+            this.groupBox3dmap.TextStartPosition = -1;
             // 
             // label17
             // 
@@ -694,47 +701,47 @@ namespace EDDiscovery
             this.label3.TabIndex = 1;
             this.label3.Text = "Home System";
             // 
-            // groupBox3
+            // groupBoxOptions
             // 
-            this.groupBox3.AlternateClientBackColor = System.Drawing.Color.Blue;
-            this.groupBox3.BackColorScaling = 0.5F;
-            this.groupBox3.BorderColor = System.Drawing.Color.LightGray;
-            this.groupBox3.BorderColorScaling = 0.5F;
-            this.groupBox3.Controls.Add(this.checkBoxShowUIEvents);
-            this.groupBox3.Controls.Add(this.checkBoxMinimizeToNotifyIcon);
-            this.groupBox3.Controls.Add(this.checkBoxUseNotifyIcon);
-            this.groupBox3.Controls.Add(this.checkBoxUTC);
-            this.groupBox3.Controls.Add(this.checkBoxOrderRowsInverted);
-            this.groupBox3.Controls.Add(this.checkBoxEDSMLog);
-            this.groupBox3.FillClientAreaWithAlternateColor = false;
-            this.groupBox3.Location = new System.Drawing.Point(3, 254);
-            this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(426, 174);
-            this.groupBox3.TabIndex = 16;
-            this.groupBox3.TabStop = false;
-            this.groupBox3.Text = "Options";
-            this.groupBox3.TextPadding = 0;
-            this.groupBox3.TextStartPosition = -1;
+            this.groupBoxOptions.AlternateClientBackColor = System.Drawing.Color.Blue;
+            this.groupBoxOptions.BackColorScaling = 0.5F;
+            this.groupBoxOptions.BorderColor = System.Drawing.Color.LightGray;
+            this.groupBoxOptions.BorderColorScaling = 0.5F;
+            this.groupBoxOptions.Controls.Add(this.checkBoxShowUIEvents);
+            this.groupBoxOptions.Controls.Add(this.checkBoxMinimizeToNotifyIcon);
+            this.groupBoxOptions.Controls.Add(this.checkBoxUseNotifyIcon);
+            this.groupBoxOptions.Controls.Add(this.checkBoxUTC);
+            this.groupBoxOptions.Controls.Add(this.checkBoxOrderRowsInverted);
+            this.groupBoxOptions.Controls.Add(this.checkBoxEDSMLog);
+            this.groupBoxOptions.FillClientAreaWithAlternateColor = false;
+            this.groupBoxOptions.Location = new System.Drawing.Point(3, 182);
+            this.groupBoxOptions.Name = "groupBoxOptions";
+            this.groupBoxOptions.Size = new System.Drawing.Size(426, 100);
+            this.groupBoxOptions.TabIndex = 16;
+            this.groupBoxOptions.TabStop = false;
+            this.groupBoxOptions.Text = "Options";
+            this.groupBoxOptions.TextPadding = 0;
+            this.groupBoxOptions.TextStartPosition = -1;
             // 
-            // groupBox4
+            // groupBoxCommanders
             // 
-            this.groupBox4.AlternateClientBackColor = System.Drawing.Color.Blue;
-            this.groupBox4.BackColorScaling = 0.5F;
-            this.groupBox4.BorderColor = System.Drawing.Color.LightGray;
-            this.groupBox4.BorderColorScaling = 0.5F;
-            this.groupBox4.Controls.Add(this.buttonEditCommander);
-            this.groupBox4.Controls.Add(this.dataViewScrollerPanel1);
-            this.groupBox4.Controls.Add(this.btnDeleteCommander);
-            this.groupBox4.Controls.Add(this.buttonAddCommander);
-            this.groupBox4.FillClientAreaWithAlternateColor = false;
-            this.groupBox4.Location = new System.Drawing.Point(0, 4);
-            this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(819, 244);
-            this.groupBox4.TabIndex = 15;
-            this.groupBox4.TabStop = false;
-            this.groupBox4.Text = "Commanders";
-            this.groupBox4.TextPadding = 0;
-            this.groupBox4.TextStartPosition = -1;
+            this.groupBoxCommanders.AlternateClientBackColor = System.Drawing.Color.Blue;
+            this.groupBoxCommanders.BackColorScaling = 0.5F;
+            this.groupBoxCommanders.BorderColor = System.Drawing.Color.LightGray;
+            this.groupBoxCommanders.BorderColorScaling = 0.5F;
+            this.groupBoxCommanders.Controls.Add(this.buttonEditCommander);
+            this.groupBoxCommanders.Controls.Add(this.dataViewScrollerPanel1);
+            this.groupBoxCommanders.Controls.Add(this.btnDeleteCommander);
+            this.groupBoxCommanders.Controls.Add(this.buttonAddCommander);
+            this.groupBoxCommanders.FillClientAreaWithAlternateColor = false;
+            this.groupBoxCommanders.Location = new System.Drawing.Point(0, 4);
+            this.groupBoxCommanders.Name = "groupBoxCommanders";
+            this.groupBoxCommanders.Size = new System.Drawing.Size(819, 176);
+            this.groupBoxCommanders.TabIndex = 15;
+            this.groupBoxCommanders.TabStop = false;
+            this.groupBoxCommanders.Text = "Commanders";
+            this.groupBoxCommanders.TextPadding = 0;
+            this.groupBoxCommanders.TextStartPosition = -1;
             // 
             // dataViewScrollerPanel1
             // 
@@ -744,7 +751,7 @@ namespace EDDiscovery
             this.dataViewScrollerPanel1.Location = new System.Drawing.Point(10, 19);
             this.dataViewScrollerPanel1.Name = "dataViewScrollerPanel1";
             this.dataViewScrollerPanel1.ScrollBarWidth = 20;
-            this.dataViewScrollerPanel1.Size = new System.Drawing.Size(691, 219);
+            this.dataViewScrollerPanel1.Size = new System.Drawing.Size(691, 150);
             this.dataViewScrollerPanel1.TabIndex = 4;
             this.dataViewScrollerPanel1.VerticalScrollBarDockRight = true;
             // 
@@ -765,7 +772,7 @@ namespace EDDiscovery
             this.vScrollBarCustom1.MouseOverButtonColor = System.Drawing.Color.Green;
             this.vScrollBarCustom1.MousePressedButtonColor = System.Drawing.Color.Red;
             this.vScrollBarCustom1.Name = "vScrollBarCustom1";
-            this.vScrollBarCustom1.Size = new System.Drawing.Size(20, 198);
+            this.vScrollBarCustom1.Size = new System.Drawing.Size(20, 129);
             this.vScrollBarCustom1.SliderColor = System.Drawing.Color.DarkGray;
             this.vScrollBarCustom1.SmallChange = 1;
             this.vScrollBarCustom1.TabIndex = 3;
@@ -777,15 +784,118 @@ namespace EDDiscovery
             this.vScrollBarCustom1.Value = -1;
             this.vScrollBarCustom1.ValueLimited = -1;
             // 
+            // groupBoxCustomScreenShots
+            // 
+            this.groupBoxCustomScreenShots.AlternateClientBackColor = System.Drawing.Color.Blue;
+            this.groupBoxCustomScreenShots.BackColorScaling = 0.5F;
+            this.groupBoxCustomScreenShots.BorderColor = System.Drawing.Color.LightGray;
+            this.groupBoxCustomScreenShots.BorderColorScaling = 0.5F;
+            this.groupBoxCustomScreenShots.Controls.Add(this.checkBoxCustomCopyToClipboard);
+            this.groupBoxCustomScreenShots.Controls.Add(this.checkBoxCustomMarkHiRes);
+            this.groupBoxCustomScreenShots.Controls.Add(this.checkBoxCustomRemoveOriginals);
+            this.groupBoxCustomScreenShots.Controls.Add(this.buttonExtScreenshot);
+            this.groupBoxCustomScreenShots.Controls.Add(this.checkBoxCustomEnableScreenshots);
+            this.groupBoxCustomScreenShots.FillClientAreaWithAlternateColor = false;
+            this.groupBoxCustomScreenShots.Location = new System.Drawing.Point(4, 404);
+            this.groupBoxCustomScreenShots.Name = "groupBoxCustomScreenShots";
+            this.groupBoxCustomScreenShots.Size = new System.Drawing.Size(425, 100);
+            this.groupBoxCustomScreenShots.TabIndex = 20;
+            this.groupBoxCustomScreenShots.TabStop = false;
+            this.groupBoxCustomScreenShots.Text = "Screenshots";
+            this.groupBoxCustomScreenShots.TextPadding = 0;
+            this.groupBoxCustomScreenShots.TextStartPosition = -1;
+            // 
+            // checkBoxCustomCopyToClipboard
+            // 
+            this.checkBoxCustomCopyToClipboard.AutoSize = true;
+            this.checkBoxCustomCopyToClipboard.CheckBoxColor = System.Drawing.Color.Gray;
+            this.checkBoxCustomCopyToClipboard.CheckBoxInnerColor = System.Drawing.Color.White;
+            this.checkBoxCustomCopyToClipboard.CheckColor = System.Drawing.Color.DarkBlue;
+            this.checkBoxCustomCopyToClipboard.FontNerfReduction = 0.5F;
+            this.checkBoxCustomCopyToClipboard.ImageButtonDisabledScaling = 0.5F;
+            this.checkBoxCustomCopyToClipboard.Location = new System.Drawing.Point(231, 65);
+            this.checkBoxCustomCopyToClipboard.MouseOverColor = System.Drawing.Color.CornflowerBlue;
+            this.checkBoxCustomCopyToClipboard.Name = "checkBoxCustomCopyToClipboard";
+            this.checkBoxCustomCopyToClipboard.Size = new System.Drawing.Size(108, 17);
+            this.checkBoxCustomCopyToClipboard.TabIndex = 5;
+            this.checkBoxCustomCopyToClipboard.Text = "Copy to clipboard";
+            this.checkBoxCustomCopyToClipboard.TickBoxReductionSize = 10;
+            this.checkBoxCustomCopyToClipboard.UseVisualStyleBackColor = true;
+            // 
+            // checkBoxCustomMarkHiRes
+            // 
+            this.checkBoxCustomMarkHiRes.AutoSize = true;
+            this.checkBoxCustomMarkHiRes.CheckBoxColor = System.Drawing.Color.Gray;
+            this.checkBoxCustomMarkHiRes.CheckBoxInnerColor = System.Drawing.Color.White;
+            this.checkBoxCustomMarkHiRes.CheckColor = System.Drawing.Color.DarkBlue;
+            this.checkBoxCustomMarkHiRes.FontNerfReduction = 0.5F;
+            this.checkBoxCustomMarkHiRes.ImageButtonDisabledScaling = 0.5F;
+            this.checkBoxCustomMarkHiRes.Location = new System.Drawing.Point(9, 65);
+            this.checkBoxCustomMarkHiRes.MouseOverColor = System.Drawing.Color.CornflowerBlue;
+            this.checkBoxCustomMarkHiRes.Name = "checkBoxCustomMarkHiRes";
+            this.checkBoxCustomMarkHiRes.Size = new System.Drawing.Size(103, 17);
+            this.checkBoxCustomMarkHiRes.TabIndex = 5;
+            this.checkBoxCustomMarkHiRes.Text = "Mark HiRes files";
+            this.checkBoxCustomMarkHiRes.TickBoxReductionSize = 10;
+            this.checkBoxCustomMarkHiRes.UseVisualStyleBackColor = true;
+            // 
+            // checkBoxCustomRemoveOriginals
+            // 
+            this.checkBoxCustomRemoveOriginals.AutoSize = true;
+            this.checkBoxCustomRemoveOriginals.CheckBoxColor = System.Drawing.Color.Gray;
+            this.checkBoxCustomRemoveOriginals.CheckBoxInnerColor = System.Drawing.Color.White;
+            this.checkBoxCustomRemoveOriginals.CheckColor = System.Drawing.Color.DarkBlue;
+            this.checkBoxCustomRemoveOriginals.FontNerfReduction = 0.5F;
+            this.checkBoxCustomRemoveOriginals.ImageButtonDisabledScaling = 0.5F;
+            this.checkBoxCustomRemoveOriginals.Location = new System.Drawing.Point(9, 42);
+            this.checkBoxCustomRemoveOriginals.MouseOverColor = System.Drawing.Color.CornflowerBlue;
+            this.checkBoxCustomRemoveOriginals.Name = "checkBoxCustomRemoveOriginals";
+            this.checkBoxCustomRemoveOriginals.Size = new System.Drawing.Size(109, 17);
+            this.checkBoxCustomRemoveOriginals.TabIndex = 5;
+            this.checkBoxCustomRemoveOriginals.Text = "Remove Originals";
+            this.checkBoxCustomRemoveOriginals.TickBoxReductionSize = 10;
+            this.checkBoxCustomRemoveOriginals.UseVisualStyleBackColor = true;
+            // 
+            // buttonExtScreenshot
+            // 
+            this.buttonExtScreenshot.BorderColorScaling = 1.25F;
+            this.buttonExtScreenshot.ButtonColorScaling = 0.5F;
+            this.buttonExtScreenshot.ButtonDisabledScaling = 0.5F;
+            this.buttonExtScreenshot.Location = new System.Drawing.Point(231, 19);
+            this.buttonExtScreenshot.Name = "buttonExtScreenshot";
+            this.buttonExtScreenshot.Size = new System.Drawing.Size(95, 23);
+            this.buttonExtScreenshot.TabIndex = 10;
+            this.buttonExtScreenshot.Text = "Configure";
+            this.buttonExtScreenshot.UseVisualStyleBackColor = true;
+            this.buttonExtScreenshot.Click += new System.EventHandler(this.buttonExtScreenshot_Click);
+            // 
+            // checkBoxCustomEnableScreenshots
+            // 
+            this.checkBoxCustomEnableScreenshots.AutoSize = true;
+            this.checkBoxCustomEnableScreenshots.CheckBoxColor = System.Drawing.Color.Gray;
+            this.checkBoxCustomEnableScreenshots.CheckBoxInnerColor = System.Drawing.Color.White;
+            this.checkBoxCustomEnableScreenshots.CheckColor = System.Drawing.Color.DarkBlue;
+            this.checkBoxCustomEnableScreenshots.FontNerfReduction = 0.5F;
+            this.checkBoxCustomEnableScreenshots.ImageButtonDisabledScaling = 0.5F;
+            this.checkBoxCustomEnableScreenshots.Location = new System.Drawing.Point(9, 19);
+            this.checkBoxCustomEnableScreenshots.MouseOverColor = System.Drawing.Color.CornflowerBlue;
+            this.checkBoxCustomEnableScreenshots.Name = "checkBoxCustomEnableScreenshots";
+            this.checkBoxCustomEnableScreenshots.Size = new System.Drawing.Size(169, 17);
+            this.checkBoxCustomEnableScreenshots.TabIndex = 5;
+            this.checkBoxCustomEnableScreenshots.Text = "Enable screenshot conversion";
+            this.checkBoxCustomEnableScreenshots.TickBoxReductionSize = 10;
+            this.checkBoxCustomEnableScreenshots.UseVisualStyleBackColor = true;
+            // 
             // Settings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.groupBoxCustomScreenShots);
             this.Controls.Add(this.groupBoxPopOuts);
             this.Controls.Add(this.groupBoxTheme);
-            this.Controls.Add(this.groupBox2);
-            this.Controls.Add(this.groupBox3);
-            this.Controls.Add(this.groupBox4);
+            this.Controls.Add(this.groupBox3dmap);
+            this.Controls.Add(this.groupBoxOptions);
+            this.Controls.Add(this.groupBoxCommanders);
             this.Name = "Settings";
             this.Size = new System.Drawing.Size(937, 725);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewCommanders)).EndInit();
@@ -793,23 +903,25 @@ namespace EDDiscovery
             this.groupBoxPopOuts.PerformLayout();
             this.groupBoxTheme.ResumeLayout(false);
             this.groupBoxTheme.PerformLayout();
-            this.groupBox2.ResumeLayout(false);
-            this.groupBox2.PerformLayout();
-            this.groupBox3.ResumeLayout(false);
-            this.groupBox3.PerformLayout();
-            this.groupBox4.ResumeLayout(false);
+            this.groupBox3dmap.ResumeLayout(false);
+            this.groupBox3dmap.PerformLayout();
+            this.groupBoxOptions.ResumeLayout(false);
+            this.groupBoxOptions.PerformLayout();
+            this.groupBoxCommanders.ResumeLayout(false);
             this.dataViewScrollerPanel1.ResumeLayout(false);
+            this.groupBoxCustomScreenShots.ResumeLayout(false);
+            this.groupBoxCustomScreenShots.PerformLayout();
             this.ResumeLayout(false);
 
         }
 
         #endregion
-        private ExtendedControls.GroupBoxCustom groupBox4;
+        private ExtendedControls.GroupBoxCustom groupBoxCommanders;
         private ExtendedControls.ButtonExt buttonAddCommander;
         private System.Windows.Forms.DataGridView dataGridViewCommanders;
-        private ExtendedControls.GroupBoxCustom groupBox3;
+        private ExtendedControls.GroupBoxCustom groupBoxOptions;
         private ExtendedControls.CheckBoxCustom checkBoxEDSMLog;
-        private ExtendedControls.GroupBoxCustom groupBox2;
+        private ExtendedControls.GroupBoxCustom groupBox3dmap;
         private ExtendedControls.TextBoxBorder textBoxDefaultZoom;
         private System.Windows.Forms.Label label5;
         private ExtendedControls.RadioButtonCustom radioButtonHistorySelection;
@@ -845,5 +957,11 @@ namespace EDDiscovery
         private ExtendedControls.CheckBoxCustom checkBoxShowUIEvents;
         private ExtendedControls.ComboBoxCustom comboBoxClickThruKey;
         private System.Windows.Forms.Label labelTKey;
+        private ExtendedControls.GroupBoxCustom groupBoxCustomScreenShots;
+        internal ExtendedControls.CheckBoxCustom checkBoxCustomMarkHiRes;
+        internal ExtendedControls.CheckBoxCustom checkBoxCustomRemoveOriginals;
+        private ExtendedControls.ButtonExt buttonExtScreenshot;
+        internal ExtendedControls.CheckBoxCustom checkBoxCustomEnableScreenshots;
+        internal ExtendedControls.CheckBoxCustom checkBoxCustomCopyToClipboard;
     }
 }
