@@ -30,25 +30,58 @@ namespace EDDiscovery.ScreenShots
 {
     public class ScreenshotDirectoryWatcher : IDisposable
     {
-        private IDiscoveryController _discoveryForm;
+        private EDDiscoveryForm discoveryform;
         private Action<Action<ScreenShotImageConverter>> paramscallback;
-        private FileSystemWatcher watchfolder = null;
-        private string watchedfolder = null;
+        private FileSystemWatcher filesystemwatcher = null;
+
         private ConcurrentDictionary<string, System.Threading.Timer> ScreenshotTimers = new ConcurrentDictionary<string, System.Threading.Timer>();
-        private string EDPicturesDir;
+        
         private int LastJournalCmdr = Int32.MinValue;
         private JournalLocOrJump LastJournalLoc;
 
         public event Action<ScreenShotImageConverter> OnScreenshot;
 
-        public ScreenshotDirectoryWatcher(IDiscoveryController controller, Action<Action<ScreenShotImageConverter>> paramscallback)
+        public ScreenshotDirectoryWatcher(EDDiscoveryForm frm, Action<Action<ScreenShotImageConverter>> paramscallback)
         {
             this.paramscallback = paramscallback;
-            this._discoveryForm = controller;
+            this.discoveryform = frm;
             string ScreenshotsDirdefault = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyPictures), "Frontier Developments", "Elite Dangerous");
             string OutputDirdefault = Path.Combine(ScreenshotsDirdefault, "Converted");
-            this.EDPicturesDir = ScreenshotsDirdefault;
-            _discoveryForm.OnNewJournalEntry += NewJournalEntry;
+
+            discoveryform.OnNewJournalEntry += NewJournalEntry;
+        }
+
+        public bool Start(string watchedfolder, string ext)
+        {
+            this.Stop();
+
+            if (Directory.Exists(watchedfolder))
+            {
+                filesystemwatcher = new System.IO.FileSystemWatcher();
+                filesystemwatcher.Path = watchedfolder;
+
+                filesystemwatcher.Filter = "*." + ext;
+                filesystemwatcher.NotifyFilter = NotifyFilters.FileName;
+                filesystemwatcher.Created += WatcherTripped;
+                filesystemwatcher.EnableRaisingEvents = true;
+
+                discoveryform.LogLine("Scanning for " + ext + " screenshots in " + watchedfolder);
+                return true;
+            }
+            else
+            {
+                discoveryform.LogLineHighlight("Folder specified for image conversion does not exist, check settings in the Screenshots tab");
+                return false;
+            }
+        }
+
+        public void Stop()
+        {
+            if (filesystemwatcher != null)
+            {
+                filesystemwatcher.Dispose();
+                filesystemwatcher = null;
+            }
         }
 
         public void Dispose()
@@ -61,59 +94,11 @@ namespace EDDiscovery.ScreenShots
             if (disposing)
             {
                 Stop();
-                _discoveryForm.OnNewJournalEntry -= NewJournalEntry;
+                discoveryform.OnNewJournalEntry -= NewJournalEntry;
             }
         }
 
-        public bool Start(string folder, string ext)
-        {
-            this.Stop();
-
-            this.watchedfolder = folder;
-            return StartWatcher(folder, ext);
-        }
-
-        public void Stop()
-        {
-            if (watchfolder != null)
-            {
-                watchfolder.Dispose();
-                watchfolder = null;
-            }
-
-            this.watchedfolder = null;
-        }
-
-        private bool StartWatcher(string watchedfolder, string ext)
-        {
-            if (watchfolder != null)                           // if there, delete
-            {
-                watchfolder.EnableRaisingEvents = false;
-                watchfolder = null;
-            }
-
-            if (Directory.Exists(watchedfolder))
-            {
-                watchfolder = new System.IO.FileSystemWatcher();
-                watchfolder.Path = watchedfolder;
-
-                watchfolder.Filter = "*." + ext;
-                watchfolder.NotifyFilter = NotifyFilters.FileName;
-                watchfolder.Created += watcher;
-                watchfolder.EnableRaisingEvents = true;
-
-                _discoveryForm.LogLine("Scanning for " + ext + " screenshots in " + watchedfolder);
-                return true;
-            }
-            else
-            {
-                _discoveryForm.LogLineHighlight("Folder specified for image conversion does not exist, check settings in the Screenshots tab");
-            }
-
-            return false;
-        }
-
-        private void NewJournalEntry(JournalEntry je)
+        private void NewJournalEntry(JournalEntry je)       // will be in UI thread
         {
             if (je is JournalLocOrJump)
             {
@@ -132,24 +117,28 @@ namespace EDDiscovery.ScreenShots
             if (je.EventTypeID == JournalTypeEnum.Screenshot)
             {
                 JournalScreenshot ss = je as JournalScreenshot;
+                System.Diagnostics.Debug.WriteLine("Screenshot tripped " + ss.Filename);
                 this.paramscallback?.Invoke(cp => ProcessScreenshot(ss.Filename, ss.System, ss, ss.CommanderId, cp));
             }
         }
 
-        private void watcher(object sender, System.IO.FileSystemEventArgs e)
+        private void WatcherTripped(object sender, System.IO.FileSystemEventArgs e)
         {
+            System.Diagnostics.Debug.WriteLine("Watcher file tripped " + e.FullPath);
             this.paramscallback?.Invoke(cp => ProcessFilesystemEvent(sender, e, cp));
         }
 
-        private void ProcessFilesystemEvent(object sender, System.IO.FileSystemEventArgs e, ScreenShotImageConverter cp)
+        private void ProcessFilesystemEvent(object sender, System.IO.FileSystemEventArgs e, ScreenShotImageConverter cp) // on UI thread
         {
+            System.Diagnostics.Debug.Assert(System.Windows.Forms.Application.MessageLoop);
+
             int cmdrid = LastJournalCmdr;
 
             if (e.FullPath.ToLowerInvariant().EndsWith(".bmp"))
             {
                 if (!ScreenshotTimers.ContainsKey(e.FullPath))
                 {
-                    System.Threading.Timer timer = new System.Threading.Timer(s => ProcessScreenshot(e.FullPath, null, null, cmdrid, cp), null, 5000, System.Threading.Timeout.Infinite);
+                    System.Threading.Timer timer = new System.Threading.Timer(s=>TimerTickedOut(e.FullPath, cmdrid), null, 5000, System.Threading.Timeout.Infinite);
 
                     // Destroy the timer if OnScreenshot was run between the above check and adding the timer to the dictionary
                     if (!ScreenshotTimers.TryAdd(e.FullPath, timer))
@@ -164,11 +153,18 @@ namespace EDDiscovery.ScreenShots
             }
         }
 
+        private void TimerTickedOut(string filename, int cmdrid)   // timer is executed on a background thread, go back to UI
+        {
+            this.paramscallback?.Invoke(cp=>ProcessScreenshot(filename, null, null, cmdrid, cp)); //process on UI thread
+        }
+
         // called thru CalLWithConverter in UI main class.. that pases a ImageConverter to us
         // sysname and or ss can be null if it was picked up by a watcher not the new journal screenshot entry
 
         private void ProcessScreenshot(string filename, string sysname, JournalScreenshot ss, int cmdrid, ScreenShotImageConverter cp)
         {
+            System.Diagnostics.Debug.Assert(System.Windows.Forms.Application.MessageLoop);  // UI thread
+
             System.Threading.Timer timer = null;
 
             if (sysname == null)
@@ -189,7 +185,7 @@ namespace EDDiscovery.ScreenShots
 
             if (sysname == null)
             {
-                HistoryEntry he = _discoveryForm.history.GetLastFSD;
+                HistoryEntry he = discoveryform.history.GetLast;
                 sysname = (he != null) ? he.System.name : "Unknown System";
             }
 
@@ -202,7 +198,7 @@ namespace EDDiscovery.ScreenShots
 
                 bool converted = false;
 
-                using (Bitmap bmp = cp.GetScreenshot(ref filename, _discoveryForm.LogLine))
+                using (Bitmap bmp = cp.GetScreenshot(ref filename, discoveryform.LogLine))
                 {
                     // Don't run if OnScreenshot has already run for this image
                     if ((ScreenshotTimers.TryGetValue(filename, out timer) && timer == null) || (!ScreenshotTimers.TryAdd(filename, null) && !ScreenshotTimers.TryUpdate(filename, null, timer)))
@@ -211,7 +207,7 @@ namespace EDDiscovery.ScreenShots
                     if (timer != null)
                         timer.Dispose();
 
-                    converted = cp.Convert(bmp, _discoveryForm.LogLine);
+                    converted = cp.Convert(bmp, discoveryform.LogLine);
                 }
 
                 if (converted && cp.RemoveInputFile)         // if remove, delete original picture
@@ -235,7 +231,7 @@ namespace EDDiscovery.ScreenShots
                 System.Diagnostics.Trace.WriteLine("Exception watcher: " + ex.Message);
                 System.Diagnostics.Trace.WriteLine("Trace: " + ex.StackTrace);
 
-                _discoveryForm.LogLineHighlight("Error in executing image conversion, try another screenshot, check output path settings. (Exception " + ex.Message + ")");
+                discoveryform.LogLineHighlight("Error in executing image conversion, try another screenshot, check output path settings. (Exception " + ex.Message + ")");
             }
         }
     }
