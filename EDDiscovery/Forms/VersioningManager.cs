@@ -191,22 +191,20 @@ namespace EDDiscovery.Versions
             return ActionLanguage.ActionFile.ReadVarsAndEnableFromFile(file, out enable);      // note other files share the actionfile Enabled and INSTALL format.. not the other bits
         }
 
-        static public bool SetEnableFlag(DownloadItem item, bool enable, string appfolder)
+        static public bool SetEnableFlag(DownloadItem item, bool enable, string appfolder)      // false if could not change the flag
         {
-            try
-            {
+            if (File.Exists(item.localfilename))    // if its there..
+            { 
                 if (ActionLanguage.ActionFile.SetEnableFlag(item.localfilename, enable))     // if enable flag was changed..
                 {
                     if (!item.localmodified)      // if was not local modified, lets set the SHA so it does not appear local modified just because of the enable
                         WriteOrCheckSHAFile(item, item.localvars, appfolder, true);
-                }
 
-                return true;
+                    return true;
+                }
             }
-            catch
-            {
-                return false;
-            }
+
+            return false;
         }
 
         public bool InstallFiles(DownloadItem item, string appfolder)
@@ -231,7 +229,7 @@ namespace EDDiscovery.Versions
                         DownloadItem other = downloaditems.Find(x => x.itemname.Equals(item.downloadedvars[key]));
 
                         if (other != null && other.localfilename != null )
-                            SetEnableFlag(other, false, appfolder);
+                            SetEnableFlag(other, false, appfolder); // don't worry if it fails..
                     }
                 }
 
