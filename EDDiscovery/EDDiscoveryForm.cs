@@ -452,6 +452,12 @@ namespace EDDiscovery
             RefreshButton(true);
             actioncontroller.ActionRunOnRefresh();
 
+            if ( true )
+            {
+                LogLineHighlight("Companion API is temporarily disabled due to changed in the API by Frontier for 2.4." + Environment.NewLine + "As Arnie says, I'll be back!");
+            }
+            else
+
             if (!Capi.IsCommanderLoggedin(EDCommander.Current.Name))
             {
                 Capi.Logout();
