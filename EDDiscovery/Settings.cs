@@ -72,7 +72,6 @@ namespace EDDiscovery
             comboBoxClickThruKey.Items = KeyObjectExtensions.KeyListString(inclshifts:true);
             comboBoxClickThruKey.SelectedItem = EDDConfig.Instance.ClickThruKey.VKeyToString();
             comboBoxClickThruKey.SelectedIndexChanged += comboBoxClickThruKey_SelectedIndexChanged;
-         //   toolTip.SetToolTip(comboBoxClickThruKey, "");
         }
 
         void SetEntryThemeComboBox()
@@ -118,6 +117,16 @@ namespace EDDiscovery
             panel_defaultmapcolor.BackColor = Color.FromArgb(EDDConfig.Instance.DefaultMapColour);
 
             this.comboBoxTheme.SelectedIndexChanged += this.comboBoxTheme_SelectedIndexChanged;    // now turn on the handler..
+
+            checkBoxCustomRemoveOriginals.Checked = _discoveryForm.screenshotconverter.RemoveOriginal;
+            checkBoxCustomMarkHiRes.Checked = _discoveryForm.screenshotconverter.MarkHiRes;
+            checkBoxCustomEnableScreenshots.Checked = _discoveryForm.screenshotconverter.AutoConvert;
+            checkBoxCustomCopyToClipboard.Checked = _discoveryForm.screenshotconverter.CopyToClipboard;
+
+            this.checkBoxCustomRemoveOriginals.CheckedChanged += new System.EventHandler(this.checkBoxCustomRemoveOriginals_CheckedChanged);
+            this.checkBoxCustomMarkHiRes.CheckedChanged += new System.EventHandler(this.checkBoxCustomMarkHiRes_CheckedChanged);
+            this.checkBoxCustomEnableScreenshots.CheckedChanged += new System.EventHandler(this.checkBoxCustomEnableScreenshots_CheckedChanged);
+            this.checkBoxCustomCopyToClipboard.CheckedChanged += new System.EventHandler(this.checkBoxCustomCopyToClipboard_CheckedChanged);
         }
 
         public void SaveSettings()
@@ -377,6 +386,46 @@ namespace EDDiscovery
             ExtendedControls.ComboBoxCustom c = sender as ExtendedControls.ComboBoxCustom;
             Keys k = c.Text.ToVkey();
             EDDConfig.Instance.ClickThruKey = k;
+        }
+
+        private void buttonExtScreenshot_Click(object sender, EventArgs e)
+        {
+            ScreenShots.ScreenShotConfigureForm frm = new ScreenShots.ScreenShotConfigureForm();
+            frm.Init(_discoveryForm.screenshotconverter, _discoveryForm.screenshotconverter.MarkHiRes);
+
+            if ( frm.ShowDialog() == DialogResult.OK )
+            {
+                _discoveryForm.screenshotconverter.Stop();
+                _discoveryForm.screenshotconverter.ScreenshotsDir = frm.ScreenshotsDir;
+                _discoveryForm.screenshotconverter.OutputDir = frm.OutputDir;
+                _discoveryForm.screenshotconverter.InputFileExtension = frm.InputFileExtension;
+                _discoveryForm.screenshotconverter.OutputFileExtension = frm.OutputFileExtension;
+                _discoveryForm.screenshotconverter.FolderNameFormat = frm.FolderNameFormat;
+                _discoveryForm.screenshotconverter.FileNameFormat = frm.FileNameFormat;
+                _discoveryForm.screenshotconverter.CropImage = frm.CropImage;
+                _discoveryForm.screenshotconverter.CropArea = frm.CropArea;
+                _discoveryForm.screenshotconverter.Start();
+            }
+        }
+
+        private void checkBoxCustomEnableScreenshots_CheckedChanged(object sender, EventArgs e)
+        {
+            _discoveryForm.screenshotconverter.AutoConvert = checkBoxCustomEnableScreenshots.Checked; 
+        }
+
+        private void checkBoxCustomRemoveOriginals_CheckedChanged(object sender, EventArgs e)
+        {
+            _discoveryForm.screenshotconverter.RemoveOriginal = checkBoxCustomRemoveOriginals.Checked; 
+        }
+
+        private void checkBoxCustomMarkHiRes_CheckedChanged(object sender, EventArgs e)
+        {
+            _discoveryForm.screenshotconverter.MarkHiRes = checkBoxCustomMarkHiRes.Checked;
+        }
+
+        private void checkBoxCustomCopyToClipboard_CheckedChanged(object sender, EventArgs e)
+        {
+            _discoveryForm.screenshotconverter.CopyToClipboard = checkBoxCustomCopyToClipboard.Checked;
         }
     }
 }

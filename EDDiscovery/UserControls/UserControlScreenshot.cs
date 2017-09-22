@@ -49,7 +49,7 @@ namespace EDDiscovery.UserControls
             discoveryform = ed;
             uctg = thc;
             displaynumber = vn;
-            discoveryform.ImageHandler.OnScreenShot += ScreenShot;
+            //discoveryform.screenshotconverter.OnScreenShot += ScreenShot;
             uctg.OnTravelSelectionChanged += Display;
         }
 
@@ -62,7 +62,7 @@ namespace EDDiscovery.UserControls
 
         public override void Closing()
         {
-            discoveryform.ImageHandler.OnScreenShot -= ScreenShot;
+            //discoveryform.screenshotconverter.OnScreenShot -= ScreenShot;
             uctg.OnTravelSelectionChanged -= Display;
         }
 
@@ -102,7 +102,7 @@ namespace EDDiscovery.UserControls
                     }
                     else
                     {
-                        string filename = discoveryform.ImageHandler.GetScreenshotPath(ss);
+                        string filename = discoveryform.screenshotconverter.GetScreenshotPath(ss);
 
                         if (File.Exists(filename))
                         {

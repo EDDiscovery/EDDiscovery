@@ -98,8 +98,6 @@ namespace EDDiscovery
             this.gridControl = new EDDiscovery.GridControl();
             this.tabPageTriletaration = new System.Windows.Forms.TabPage();
             this.trilaterationControl = new EDDiscovery.TrilaterationControl();
-            this.tabPageScreenshots = new System.Windows.Forms.TabPage();
-            this.imageHandler1 = new EDDiscovery.ImageHandler.ImageHandler();
             this.tabPageRoute = new System.Windows.Forms.TabPage();
             this.routeControl1 = new EDDiscovery.RouteControl();
             this.tabPageRoutesExpeditions = new System.Windows.Forms.TabPage();
@@ -134,7 +132,6 @@ namespace EDDiscovery
             this.tabPageJournal.SuspendLayout();
             this.tabPageGrid.SuspendLayout();
             this.tabPageTriletaration.SuspendLayout();
-            this.tabPageScreenshots.SuspendLayout();
             this.tabPageRoute.SuspendLayout();
             this.tabPageRoutesExpeditions.SuspendLayout();
             this.tabPageSettings.SuspendLayout();
@@ -522,7 +519,6 @@ namespace EDDiscovery
             this.tabControlMain.Controls.Add(this.tabPageJournal);
             this.tabControlMain.Controls.Add(this.tabPageGrid);
             this.tabControlMain.Controls.Add(this.tabPageTriletaration);
-            this.tabControlMain.Controls.Add(this.tabPageScreenshots);
             this.tabControlMain.Controls.Add(this.tabPageRoute);
             this.tabControlMain.Controls.Add(this.tabPageRoutesExpeditions);
             this.tabControlMain.Controls.Add(this.tabPageSettings);
@@ -621,25 +617,6 @@ namespace EDDiscovery
             this.trilaterationControl.Name = "trilaterationControl";
             this.trilaterationControl.Size = new System.Drawing.Size(975, 634);
             this.trilaterationControl.TabIndex = 21;
-            // 
-            // tabPageScreenshots
-            // 
-            this.tabPageScreenshots.Controls.Add(this.imageHandler1);
-            this.tabPageScreenshots.Location = new System.Drawing.Point(4, 22);
-            this.tabPageScreenshots.Name = "tabPageScreenshots";
-            this.tabPageScreenshots.Size = new System.Drawing.Size(981, 640);
-            this.tabPageScreenshots.TabIndex = 4;
-            this.tabPageScreenshots.Text = "Screenshots";
-            this.tabPageScreenshots.UseVisualStyleBackColor = true;
-            // 
-            // imageHandler1
-            // 
-            this.imageHandler1.AutoSize = true;
-            this.imageHandler1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.imageHandler1.Location = new System.Drawing.Point(0, 0);
-            this.imageHandler1.Name = "imageHandler1";
-            this.imageHandler1.Size = new System.Drawing.Size(981, 640);
-            this.imageHandler1.TabIndex = 0;
             // 
             // tabPageRoute
             // 
@@ -1025,8 +1002,6 @@ namespace EDDiscovery
             this.tabPageJournal.ResumeLayout(false);
             this.tabPageGrid.ResumeLayout(false);
             this.tabPageTriletaration.ResumeLayout(false);
-            this.tabPageScreenshots.ResumeLayout(false);
-            this.tabPageScreenshots.PerformLayout();
             this.tabPageRoute.ResumeLayout(false);
             this.tabPageRoutesExpeditions.ResumeLayout(false);
             this.tabPageSettings.ResumeLayout(false);
@@ -1063,8 +1038,6 @@ namespace EDDiscovery
         public EDDiscovery.Settings settings;
         private System.Windows.Forms.TabPage tabPageRoute;
         private RouteControl routeControl1;
-        private System.Windows.Forms.TabPage tabPageScreenshots;
-        private EDDiscovery.ImageHandler.ImageHandler imageHandler1;
         private System.Windows.Forms.TabPage tabPageTriletaration;
         public TrilaterationControl trilaterationControl;
         private ExtendedControls.TabControlCustom tabControlMain;
