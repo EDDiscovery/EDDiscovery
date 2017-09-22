@@ -42,4 +42,9 @@ namespace EliteDangerousCore
     {
         void UpdateMissions(MissionListAccumulator mlist, ISystem sys, string body, SQLiteConnectionUser conn);
     }
+
+    public interface ISystemStationEntry
+    {
+        bool IsTrainingEvent { get; }
+    }
 }

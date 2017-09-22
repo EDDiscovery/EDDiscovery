@@ -36,7 +36,7 @@ namespace EliteDangerousCore.JournalEvents
     //•	Government
     //•	Security
     [JournalEntryType(JournalTypeEnum.Location)]
-    public class JournalLocation : JournalLocOrJump
+    public class JournalLocation : JournalLocOrJump, ISystemStationEntry
     {
         public JournalLocation(JObject evt) : base(evt, JournalTypeEnum.Location)      // all have evidence 16/3/2017
         {
@@ -63,6 +63,12 @@ namespace EliteDangerousCore.JournalEvents
             PowerplayState = evt["PowerplayState"].Str();            // NO evidence
             if (!evt["Powers"].Empty())
                 Powers = evt.Value<JArray>("Powers").Values<string>().ToArray();
+
+            // Allegiance without Faction only occurs in Training
+            if (!String.IsNullOrEmpty(Allegiance) && Faction == null)
+            {
+                IsTrainingEvent = true;
+            }
         }
 
         public bool Docked { get; set; }
@@ -87,6 +93,8 @@ namespace EliteDangerousCore.JournalEvents
         public string[] Powers { get; set; }
 
         public FactionInfo[] Factions { get; set; }
+
+        public bool IsTrainingEvent { get; private set; } // True if detected to be in training
 
         public override void FillInformation(out string summary, out string info, out string detailed) //V
         {

@@ -142,6 +142,11 @@ namespace EliteDangerousCore
                     System.Diagnostics.Trace.WriteLine(string.Format("TLU {0} updated with commander {1}", TravelLogUnit.Path, cmdrid));
                 }
             }
+            else if (je is ISystemStationEntry && ((ISystemStationEntry)je).IsTrainingEvent)
+            {
+                System.Diagnostics.Trace.WriteLine($"Training detected:\n{line}");
+                return null;
+            }
 
             je.TLUId = (int)TravelLogUnit.id;
             je.CommanderId = cmdrid;
