@@ -103,8 +103,12 @@ namespace EDDiscovery.ScreenShots
 
         public void Stop()
         {
-            if ( Watcher != null )
+            if (Watcher != null)
+            {
                 Watcher.Stop();
+                Watcher.Dispose();
+                Watcher = null;
+            }
         }
 
         private void CallWithConverter(Action<ScreenShotImageConverter> cb)           // called by Watcher with a function to run in the UI main thread..

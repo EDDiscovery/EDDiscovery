@@ -86,16 +86,8 @@ namespace EDDiscovery.ScreenShots
 
         public void Dispose()
         {
-            Dispose(true);
-        }
-
-        private void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                Stop();
-                discoveryform.OnNewJournalEntry -= NewJournalEntry;
-            }
+            Stop();
+            discoveryform.OnNewJournalEntry -= NewJournalEntry;
         }
 
         private void NewJournalEntry(JournalEntry je)       // will be in UI thread
