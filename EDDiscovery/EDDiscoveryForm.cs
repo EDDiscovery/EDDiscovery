@@ -56,8 +56,7 @@ namespace EDDiscovery
 
         public TravelHistoryControl TravelControl { get { return travelHistoryControl; } }
         public RouteControl RouteControl { get { return routeControl1; } }
-        public EDDiscovery.ImageHandler.ImageHandler ImageHandler { get { return imageHandler1; } }
-
+        
         public AudioExtensions.AudioQueue AudioQueueWave { get { return audioqueuewave; } }
         public AudioExtensions.AudioQueue AudioQueueSpeech { get { return audioqueuespeech; } }
         public AudioExtensions.SpeechSynthesizer SpeechSynthesizer { get { return speechsynth; } }
@@ -76,6 +75,8 @@ namespace EDDiscovery
         DirectInputDevices.InputDeviceList inputdevices;
         Actions.ActionsFromInputDevices inputdevicesactions;
         BindingsFile frontierbindings;
+
+        public ScreenShots.ScreenShotConverter screenshotconverter;
 
         public EliteDangerousCore.CompanionAPI.CompanionAPIClass Capi { get; private set; } = new EliteDangerousCore.CompanionAPI.CompanionAPIClass();
 
@@ -188,7 +189,7 @@ namespace EDDiscovery
 
             trilaterationControl.InitControl(this);
             travelHistoryControl.InitControl(this);
-            imageHandler1.InitControl(this);
+
             settings.InitControl(this);
             journalViewControl1.InitControl(this, 0);
             gridControl.InitControl(this, 0);
@@ -227,6 +228,8 @@ namespace EDDiscovery
             frontierbindings = new BindingsFile();
             inputdevices = new DirectInputDevices.InputDeviceList(a => BeginInvoke(a));
             inputdevicesactions = new Actions.ActionsFromInputDevices(inputdevices, frontierbindings, actioncontroller);
+
+            screenshotconverter = new ScreenShots.ScreenShotConverter(this);
 
             ApplyTheme();
 
@@ -412,7 +415,8 @@ namespace EDDiscovery
         #region Controller event handlers 
         private void Controller_InitialSyncComplete()
         {
-            imageHandler1.StartWatcher();
+            screenshotconverter.Start();
+
             routeControl1.EnableRouteTab(); // now we have systems, we can update this..
 
             routeControl1.travelhistorycontrol1 = travelHistoryControl;
@@ -687,6 +691,8 @@ namespace EDDiscovery
             SystemNoteClass.CommitDirtyNotes((snc) => { if (EDCommander.Current.SyncToEdsm && snc.FSDEntry) EDSMSync.SendComments(snc.SystemName, snc.Note, snc.EdsmId); });
 
             settings.SaveSettings();
+
+            screenshotconverter.SaveSettings();
 
             SQLiteDBClass.PutSettingBool("FormMax", _formMax);
             SQLiteDBClass.PutSettingInt("FormWidth", _formWidth);

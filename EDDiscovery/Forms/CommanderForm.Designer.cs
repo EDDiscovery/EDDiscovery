@@ -90,7 +90,7 @@
             this.panelTop.Dock = System.Windows.Forms.DockStyle.Top;
             this.panelTop.Location = new System.Drawing.Point(0, 0);
             this.panelTop.Name = "panelTop";
-            this.panelTop.Size = new System.Drawing.Size(606, 32);
+            this.panelTop.Size = new System.Drawing.Size(606, 26);
             this.panelTop.TabIndex = 31;
             this.panelTop.MouseDown += new System.Windows.Forms.MouseEventHandler(this.label_index_MouseDown);
             // 
@@ -132,7 +132,7 @@
             // panel1
             // 
             this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel1.Location = new System.Drawing.Point(0, 311);
+            this.panel1.Location = new System.Drawing.Point(0, 305);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(606, 10);
             this.panel1.TabIndex = 10;
@@ -140,7 +140,7 @@
             // panel2
             // 
             this.panel2.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel2.Location = new System.Drawing.Point(0, 387);
+            this.panel2.Location = new System.Drawing.Point(0, 381);
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(606, 10);
             this.panel2.TabIndex = 11;
@@ -148,7 +148,7 @@
             // panel4
             // 
             this.panel4.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel4.Location = new System.Drawing.Point(0, 168);
+            this.panel4.Location = new System.Drawing.Point(0, 162);
             this.panel4.Name = "panel4";
             this.panel4.Size = new System.Drawing.Size(606, 10);
             this.panel4.TabIndex = 11;
@@ -156,7 +156,7 @@
             // panel5
             // 
             this.panel5.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel5.Location = new System.Drawing.Point(0, 32);
+            this.panel5.Location = new System.Drawing.Point(0, 26);
             this.panel5.Name = "panel5";
             this.panel5.Size = new System.Drawing.Size(606, 10);
             this.panel5.TabIndex = 12;
@@ -453,7 +453,7 @@
             this.groupBoxCustom4.Controls.Add(this.labelCAPILogin);
             this.groupBoxCustom4.Dock = System.Windows.Forms.DockStyle.Top;
             this.groupBoxCustom4.FillClientAreaWithAlternateColor = false;
-            this.groupBoxCustom4.Location = new System.Drawing.Point(0, 397);
+            this.groupBoxCustom4.Location = new System.Drawing.Point(0, 391);
             this.groupBoxCustom4.Name = "groupBoxCustom4";
             this.groupBoxCustom4.Size = new System.Drawing.Size(606, 125);
             this.groupBoxCustom4.TabIndex = 6;
@@ -516,7 +516,7 @@
             this.groupBoxCustom3.Controls.Add(this.checkBoxCustomEDDNTo);
             this.groupBoxCustom3.Dock = System.Windows.Forms.DockStyle.Top;
             this.groupBoxCustom3.FillClientAreaWithAlternateColor = false;
-            this.groupBoxCustom3.Location = new System.Drawing.Point(0, 321);
+            this.groupBoxCustom3.Location = new System.Drawing.Point(0, 315);
             this.groupBoxCustom3.Name = "groupBoxCustom3";
             this.groupBoxCustom3.Size = new System.Drawing.Size(606, 66);
             this.groupBoxCustom3.TabIndex = 5;
@@ -540,7 +540,7 @@
             this.groupBoxCustom2.Controls.Add(this.label1);
             this.groupBoxCustom2.Dock = System.Windows.Forms.DockStyle.Top;
             this.groupBoxCustom2.FillClientAreaWithAlternateColor = false;
-            this.groupBoxCustom2.Location = new System.Drawing.Point(0, 178);
+            this.groupBoxCustom2.Location = new System.Drawing.Point(0, 172);
             this.groupBoxCustom2.Margin = new System.Windows.Forms.Padding(10);
             this.groupBoxCustom2.Name = "groupBoxCustom2";
             this.groupBoxCustom2.Size = new System.Drawing.Size(606, 133);
@@ -591,7 +591,7 @@
             this.groupBoxCustom1.Controls.Add(this.label2);
             this.groupBoxCustom1.Dock = System.Windows.Forms.DockStyle.Top;
             this.groupBoxCustom1.FillClientAreaWithAlternateColor = false;
-            this.groupBoxCustom1.Location = new System.Drawing.Point(0, 42);
+            this.groupBoxCustom1.Location = new System.Drawing.Point(0, 36);
             this.groupBoxCustom1.Name = "groupBoxCustom1";
             this.groupBoxCustom1.Size = new System.Drawing.Size(606, 126);
             this.groupBoxCustom1.TabIndex = 3;
@@ -659,7 +659,7 @@
             // panel3
             // 
             this.panel3.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel3.Location = new System.Drawing.Point(0, 522);
+            this.panel3.Location = new System.Drawing.Point(0, 516);
             this.panel3.Name = "panel3";
             this.panel3.Size = new System.Drawing.Size(606, 10);
             this.panel3.TabIndex = 32;
@@ -678,7 +678,7 @@
             this.groupBoxCustom5.Controls.Add(this.label9);
             this.groupBoxCustom5.Dock = System.Windows.Forms.DockStyle.Top;
             this.groupBoxCustom5.FillClientAreaWithAlternateColor = false;
-            this.groupBoxCustom5.Location = new System.Drawing.Point(0, 532);
+            this.groupBoxCustom5.Location = new System.Drawing.Point(0, 526);
             this.groupBoxCustom5.Margin = new System.Windows.Forms.Padding(10);
             this.groupBoxCustom5.Name = "groupBoxCustom5";
             this.groupBoxCustom5.Size = new System.Drawing.Size(606, 133);
