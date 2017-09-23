@@ -883,12 +883,12 @@ namespace EliteDangerousCore
                 {
                     Task edsmtask = Task.Factory.StartNew(() =>
                     {
-                        edsm.SendShipInfo(lastshipinfohe?.ShipInformation, lastshipinfohe?.MaterialCommodity?.CargoCount ?? 0, lastshipinfocurrenthe?.ShipInformation, cashledger?.CashTotal ?? cash, loan, progress, rank);
+                        edsm.SendShipInfo(lastshipinfohe?.ShipInformation, lastshipinfohe?.MaterialCommodity, lastshipinfohe?.MaterialCommodity?.CargoCount ?? 0, lastshipinfocurrenthe?.ShipInformation, cashledger?.CashTotal ?? cash, loan, progress, rank);
                     });
                 }
                 else
                 {
-                    edsm.SendShipInfo(lastshipinfohe?.ShipInformation, lastshipinfohe?.MaterialCommodity?.CargoCount ?? 0, lastshipinfocurrenthe?.ShipInformation, cashledger?.CashTotal ?? cash, loan, progress, rank);
+                    edsm.SendShipInfo(lastshipinfohe?.ShipInformation, lastshipinfohe?.MaterialCommodity, lastshipinfohe?.MaterialCommodity?.CargoCount ?? 0, lastshipinfocurrenthe?.ShipInformation, cashledger?.CashTotal ?? cash, loan, progress, rank);
                 }
             }
         }
