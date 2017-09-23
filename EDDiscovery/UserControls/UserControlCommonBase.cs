@@ -27,6 +27,7 @@ using EliteDangerousCore;
 
 namespace EDDiscovery.UserControls
 {
+    [TypeDescriptionProvider(typeof(AbstractControlDescriptionProvider<UserControlCommonBase, UserControl>))]
     public abstract class UserControlCommonBase : UserControl
     {
         // in calling order..
