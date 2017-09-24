@@ -102,7 +102,7 @@ namespace EDDiscovery.Forms
             { new PopOutInfo( PopOuts.RouteTracker, "Route Tracker", "RouteTracker", EDDiscovery.Properties.Resources.routetracker, "Display the route tracker", transparent: false) },
             { new PopOutInfo( PopOuts.EDSM, "EDSM Star Finder", "EDSMStarFinder", EDDiscovery.Properties.Resources.edsm24, "Display the EDSM Star finder") },
             { new PopOutInfo( PopOuts.Grid, "The Grid", "TheGrid", EDDiscovery.Properties.Resources.grid, "Display the grid which allows other panels to be placed on it" , transparent:false) },
-            { new PopOutInfo( PopOuts.ShoppingList, "Shopping List", "ShoppingList", null, "Create a list of required materials combining synthesis and engineering") }
+            { new PopOutInfo( PopOuts.ShoppingList, "Shopping List", "ShoppingList", EDDiscovery.Properties.Resources.shoppinglist, "Create a list of required materials combining synthesis and engineering") }
         };
 
         public class PopOutInfo
