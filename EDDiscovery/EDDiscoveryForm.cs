@@ -452,7 +452,7 @@ namespace EDDiscovery
             RefreshButton(true);
             actioncontroller.ActionRunOnRefresh();
 
-            if ( true )
+            if ( DateTime.UtcNow > new DateTime (2017, 9, 26, 12 ,0 ,0 ))
             {
                 LogLineHighlight("Companion API is temporarily disabled due to changed in the API by Frontier for 2.4." + Environment.NewLine + "As Arnie says, I'll be back!");
             }
