@@ -83,13 +83,9 @@ namespace EDDiscovery.UserControls
             this.splitContainer1.Size = new System.Drawing.Size(971, 572);
             this.splitContainer1.SplitterDistance = 323;
             this.splitContainer1.TabIndex = 0;
-            this.splitContainer1.SplitterMoved += new System.Windows.Forms.SplitterEventHandler(this.splitContainer1_SplitterMoved);
             // 
             // pictureBoxList
             // 
-            this.pictureBoxList.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.pictureBoxList.Location = new System.Drawing.Point(0, 0);
             this.pictureBoxList.Name = "pictureBoxList";
             this.pictureBoxList.Size = new System.Drawing.Size(320, 569);
