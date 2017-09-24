@@ -49,6 +49,7 @@ namespace EDDiscovery.UserControls
         public override void Init(EDDiscoveryForm ed, UserControlCursorType thc, int vn) //0=primary, 1 = first windowed version, etc
         {
             discoveryform = ed;
+            discoveryform.OnNewEntry += Discoveryform_OnNewEntry;
             uctg = thc;
             displaynumber = vn;
             displayfont = discoveryform.theme.GetFont;
@@ -85,6 +86,8 @@ namespace EDDiscovery.UserControls
         public override void SetTransparency(bool on, Color curcol)
         {
             pictureBoxList.BackColor = this.BackColor = splitContainer1.BackColor = splitContainer2.BackColor = curcol;
+            splitContainer1.Panel1.BackColor = splitContainer1.Panel2.BackColor = curcol;
+            splitContainer2.Panel1.BackColor = splitContainer2.Panel2.BackColor = curcol;
             Display();
         }
 
@@ -159,22 +162,16 @@ namespace EDDiscovery.UserControls
                 pictureBoxList.ClearImageList();
                 PictureBoxHotspot.ImageElement displayList = pictureBoxList.AddTextAutoSize(new Point(0, 0), new Size(1000,1000), wantedList.ToNullSafeString(), displayfont, textcolour, backcolour, 1.0F);
                 pictureBoxList.Render();
-                splitContainer1.Panel1.BackColor = backcolour;
-                splitContainer1.BackColor = backcolour;
-                if (splitContainer1.SplitterDistance < displayList.img.Width)
-                {
-                    movingSplitter = true;
-                    splitContainer1.SplitterDistance = displayList.img.Width;
-                    movingSplitter = false;
-                }
+                movingSplitter = true;
+                splitContainer1.SplitterDistance = displayList.img.Width;
+                movingSplitter = false;
                 splitContainer1.Panel1MinSize = displayList.img.Width;
-                userControlEngineering.Visible = !IsTransparent;
-                userControlSynthesis.Visible = !IsTransparent;
-                userControlSynthesis.Enabled = !IsTransparent;
-                userControlSynthesis.Enabled = !IsTransparent;
+                userControlEngineering.Visible = userControlSynthesis.Visible = !IsTransparent;
+                userControlEngineering.Enabled = userControlSynthesis.Enabled = !IsTransparent;
                 if (IsTransparent)
                 {
-                    RequestTemporaryResize(new Size(pictureBoxList.Width + splitContainer1.SplitterWidth, pictureBoxList.Height));
+                    RevertToNormalSize();
+                    RequestTemporaryResize(new Size(displayList.img.Width + 8, displayList.img.Height + 4));
                 }
                 else
                 {
@@ -187,10 +184,6 @@ namespace EDDiscovery.UserControls
 
         #region Layout
 
-        public override void LoadLayout()
-        {
-        }
-
         public override void Closing()
         {
             userControlEngineering.Closing();
@@ -198,11 +191,6 @@ namespace EDDiscovery.UserControls
         }
 
         #endregion
-
-        private void comboBoxHistoryWindow_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            Display();
-        }
 
         private void splitContainer1_SplitterMoved(object sender, SplitterEventArgs e)
         {
