@@ -998,6 +998,9 @@ namespace EliteDangerousCore.EDSM
                 string paintjob = shipinfo.Modules.ContainsKey("Paint Job") ? shipinfo.Modules["Paint Job"].ItemFD : null;
                 if (!string.IsNullOrWhiteSpace(paintjob))
                     query += "&paintJob=" + Uri.EscapeDataString(paintjob);
+                string errstr;
+                string coriolisurl = shipinfo.GetCoriolisUrl(out errstr);
+                query += "&linkToCoriolis=" + Uri.EscapeDataString(coriolisurl);
             }
 
             var response = RequestGet("api-commander-v1/" + query, handleException: true);
