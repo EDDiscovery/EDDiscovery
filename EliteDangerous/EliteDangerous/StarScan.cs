@@ -411,7 +411,7 @@ namespace EliteDangerousCore
                 {
                     if (node != null && node.children == null)
                     {
-                        node.children = new SortedList<string, ScanNode>();
+                        node.children = new SortedList<string, ScanNode>(new DuplicateKeyComparer<string>());
                         cnodes = node.children;
                     }
 
