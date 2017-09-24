@@ -16,10 +16,12 @@
 using EDDiscovery.Controls;
 using EliteDangerousCore;
 using EliteDangerousCore.DB;
+using ExtendedControls;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Text;
 using System.Windows.Forms;
 
 namespace EDDiscovery.UserControls
@@ -29,6 +31,13 @@ namespace EDDiscovery.UserControls
         private int displaynumber = 0;
         private EDDiscoveryForm discoveryform;
         private UserControlCursorType uctg;
+        private List<Tuple<MaterialCommoditiesList.Recipe, int>> EngineeringWanted = new List<Tuple<MaterialCommoditiesList.Recipe, int>>();
+        private List<Tuple<MaterialCommoditiesList.Recipe, int>> SynthesisWanted = new List<Tuple<MaterialCommoditiesList.Recipe, int>>();
+        private Font displayfont;
+        HistoryEntry last_he = null;
+        const int PhysicalInventoryCapacity = 1000;
+        const int DataInventoryCapacity = 500;
+        bool movingSplitter = false;
 
         #region Init
 
@@ -42,10 +51,15 @@ namespace EDDiscovery.UserControls
             discoveryform = ed;
             uctg = thc;
             displaynumber = vn;
-            //need to do something for vn in child controls so it won't conflict with standalone ones.  +20 will work for now, but could be cleaner
-            userControlEngineering.Init(ed, thc, vn+20);
-            userControlSynthesis.Init(ed, thc, vn+20);
-            
+            displayfont = discoveryform.theme.GetFont;
+
+            userControlEngineering.isEmbedded = true;
+            userControlEngineering.OnChangedEngineeringWanted += Engineering_OnWantedChange;
+            //Use vn+1000 for embedded controls to avoid conflict with DB settings from standalone ones
+            userControlEngineering.Init(ed, thc, vn + 1000);
+            userControlSynthesis.isEmbedded = true;
+            userControlSynthesis.OnChangedSynthesisWanted += Synthesis_OnWantedChange;
+            userControlSynthesis.Init(ed, thc, vn + 1000);
         }
 
         public override void ChangeCursorType(UserControlCursorType thc)
@@ -62,6 +76,27 @@ namespace EDDiscovery.UserControls
         public override void InitialDisplay()
         {
             last_he = uctg.GetCurrentHistoryEntry;
+            userControlEngineering.InitialDisplay();
+            userControlSynthesis.InitialDisplay();
+            Display();
+        }
+
+        public override Color ColorTransparency { get { return Color.Green; } }
+        public override void SetTransparency(bool on, Color curcol)
+        {
+            pictureBoxList.BackColor = this.BackColor = splitContainer1.BackColor = splitContainer2.BackColor = curcol;
+            Display();
+        }
+
+        private void Engineering_OnWantedChange(List<Tuple<MaterialCommoditiesList.Recipe, int>> wanted)
+        {
+            EngineeringWanted = wanted;
+            Display();
+        }
+
+        private void Synthesis_OnWantedChange(List<Tuple<MaterialCommoditiesList.Recipe, int>> wanted)
+        {
+            SynthesisWanted = wanted;
             Display();
         }
 
@@ -71,18 +106,80 @@ namespace EDDiscovery.UserControls
             Display();
         }
 
-        HistoryEntry last_he = null;
         private void Display(HistoryEntry he, HistoryList hl)
         {
             last_he = he;
             Display();
         }
-
+        
         private void Display()
         {
-
             if (last_he != null)
             {
+                List<MaterialCommodities> mcl = last_he.MaterialCommodity.Sort(false);
+                MaterialCommoditiesList.ResetUsed(mcl);
+                Color textcolour = IsTransparent ? discoveryform.theme.SPanelColor : discoveryform.theme.LabelColor;
+                Color backcolour = this.BackColor;
+                List<Tuple<MaterialCommoditiesList.Recipe, int>> totalWanted = EngineeringWanted.Concat(SynthesisWanted).ToList();
+
+                List<MaterialCommodities> shoppinglist = MaterialCommoditiesList.GetShoppingList(totalWanted, mcl);
+
+                StringBuilder wantedList = new StringBuilder();
+
+                if (shoppinglist.Any())
+                {
+                    foreach (MaterialCommodities c in shoppinglist.OrderBy(mat => mat.name))      // and add new..
+                    {
+                        wantedList.AppendFormat("{0} {1} required\n", c.scratchpad, c.name);
+                    }
+
+                    int currentMats = mcl.Where(m => m.category == MaterialCommodityDB.MaterialManufacturedCategory || m.category == MaterialCommodityDB.MaterialRawCategory)
+                                         .Sum(i => i.count);
+                    int currentData = mcl.Where(m => m.category == MaterialCommodityDB.MaterialEncodedCategory).Sum(i => i.count);
+                    int neededMats = shoppinglist.Where(m => m.category == MaterialCommodityDB.MaterialManufacturedCategory || m.category == MaterialCommodityDB.MaterialRawCategory)
+                                                 .Sum(i => i.scratchpad);
+                    int neededData = shoppinglist.Where(m => m.category == MaterialCommodityDB.MaterialEncodedCategory).Sum(i => i.scratchpad);
+
+                    if (currentMats + neededMats > PhysicalInventoryCapacity || currentData + neededData > DataInventoryCapacity)
+                    {
+                        wantedList.Append("\nWarning");
+                        if (currentMats + neededMats > PhysicalInventoryCapacity)
+                        {
+                            wantedList.AppendFormat("\n   Needed space for materials is {0}\n   Current available is {1}", neededMats, PhysicalInventoryCapacity - currentMats);
+                        }
+                        if (currentData + neededData > DataInventoryCapacity)
+                        {
+                            wantedList.AppendFormat("\n   Needed space for data is {0}\n   Current available is {1}", neededData, DataInventoryCapacity - currentData);
+                        }
+                    }
+                }
+                else
+                { wantedList.Append("No materials currently required."); }
+
+                pictureBoxList.ClearImageList();
+                PictureBoxHotspot.ImageElement displayList = pictureBoxList.AddTextAutoSize(new Point(0, 0), new Size(1000,1000), wantedList.ToNullSafeString(), displayfont, textcolour, backcolour, 1.0F);
+                pictureBoxList.Render();
+                splitContainer1.Panel1.BackColor = backcolour;
+                splitContainer1.BackColor = backcolour;
+                if (splitContainer1.SplitterDistance < displayList.img.Width)
+                {
+                    movingSplitter = true;
+                    splitContainer1.SplitterDistance = displayList.img.Width;
+                    movingSplitter = false;
+                }
+                splitContainer1.Panel1MinSize = displayList.img.Width;
+                userControlEngineering.Visible = !IsTransparent;
+                userControlSynthesis.Visible = !IsTransparent;
+                userControlSynthesis.Enabled = !IsTransparent;
+                userControlSynthesis.Enabled = !IsTransparent;
+                if (IsTransparent)
+                {
+                    RequestTemporaryResize(new Size(pictureBoxList.Width + splitContainer1.SplitterWidth, pictureBoxList.Height));
+                }
+                else
+                {
+                    RevertToNormalSize();
+                }
             }
         }
 
@@ -96,6 +193,8 @@ namespace EDDiscovery.UserControls
 
         public override void Closing()
         {
+            userControlEngineering.Closing();
+            userControlSynthesis.Closing();
         }
 
         #endregion
@@ -105,7 +204,9 @@ namespace EDDiscovery.UserControls
             Display();
         }
 
-        private Rectangle moveMoveDragBox;
-
+        private void splitContainer1_SplitterMoved(object sender, SplitterEventArgs e)
+        {
+            if (!movingSplitter) Display();
+        }
     }
 }

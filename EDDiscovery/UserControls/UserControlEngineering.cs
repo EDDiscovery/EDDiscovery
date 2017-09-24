@@ -51,6 +51,11 @@ namespace EDDiscovery.UserControls
 
         int[] Order;        // order
         int[] Wanted;       // wanted, in order terms
+        internal bool isEmbedded = false;
+        private List<Tuple<MaterialCommoditiesList.Recipe, int>> wantedList;
+
+        public delegate void ChangedEngineeringWanted(List<Tuple<MaterialCommoditiesList.Recipe, int>> newWanted);
+        public event ChangedEngineeringWanted OnChangedEngineeringWanted;
 
         #region Init
 
@@ -163,6 +168,7 @@ namespace EDDiscovery.UserControls
                 int fdrow = dataGridViewEngineering.FirstDisplayedScrollingRowIndex;      // remember where we were displaying
 
                 MaterialCommoditiesList.ResetUsed(mcl);
+                wantedList = new List<Tuple<MaterialCommoditiesList.Recipe, int>>();
 
                 string engineers = SQLiteDBClass.GetSettingString(DbEngFilterSave, "All");
                 List<string> engList = engineers.Split(';').ToList<string>();
@@ -176,8 +182,7 @@ namespace EDDiscovery.UserControls
                 List<string> matList;
                 if (materials == "All" || materials == "None") { matList = new List<string>(); }
                 else { matList = materials.Split(';').Where(x => !string.IsNullOrEmpty(x)).Select(m => matLookUp.Where(u => u.Item2 == m).First().Item1).ToList(); }
-                List<MaterialCommodities> shoppinglist = new List<MaterialCommodities>();
-
+                
                 for (int i = 0; i < Recipes.Count; i++)
                 {
                     int rno = (int)dataGridViewEngineering.Rows[i].Tag;
@@ -222,36 +227,52 @@ namespace EDDiscovery.UserControls
 
                     if (visible)
                     {
-                        Tuple<int, int, string> res = MaterialCommoditiesList.HowManyLeft(mcl, Recipes[rno], shoppinglist, Wanted[rno]);
+                        Tuple<int, int, string> res = MaterialCommoditiesList.HowManyLeft(mcl, Recipes[rno], Wanted[rno]);
                         //System.Diagnostics.Debug.WriteLine("{0} Recipe {1} executed {2} {3} ", i, rno, Wanted[rno], res.Item2);
 
                         dataGridViewEngineering[WantedCol.Index, i].Value = Wanted[rno].ToStringInvariant();
                         dataGridViewEngineering[Available.Index, i].Value = res.Item2.ToStringInvariant();
                         dataGridViewEngineering[Notes.Index, i].Value = res.Item3;
+
+                    }
+                    if (isEmbedded && Wanted[rno] > 0)
+                    {
+                        wantedList.Add(new Tuple<MaterialCommoditiesList.Recipe, int>(Recipes[rno], Wanted[rno]));
                     }
                 }
 
-                dataGridViewEngineering.RowCount = Recipes.Count;         // truncate previous shopping list..
-                foreach (MaterialCommodities c in shoppinglist.OrderBy(mat => mat.name))      // and add new..
+                if (!isEmbedded)
                 {
-                    int rn = dataGridViewEngineering.Rows.Add();
-
-                    foreach (var cell in dataGridViewEngineering.Rows[rn].Cells.OfType<DataGridViewCell>())
+                    MaterialCommoditiesList.ResetUsed(mcl);
+                    List<MaterialCommodities> shoppinglist = MaterialCommoditiesList.GetShoppingList(wantedList, mcl);
+                    dataGridViewEngineering.RowCount = Recipes.Count;         // truncate previous shopping list..
+                    foreach (MaterialCommodities c in shoppinglist.OrderBy(mat => mat.name))      // and add new..
                     {
-                        if (cell.OwningColumn == UpgradeCol)
-                            cell.Value = c.name;
-                        else if (cell.OwningColumn == WantedCol)
-                            cell.Value = c.scratchpad.ToStringInvariant();
-                        else if (cell.OwningColumn == Notes)
-                            cell.Value = c.shortname;
-                        else if (cell.ValueType == null || cell.ValueType.IsAssignableFrom(typeof(string)))
-                            cell.Value = string.Empty;
+
+                        int rn = dataGridViewEngineering.Rows.Add();
+
+                        foreach (var cell in dataGridViewEngineering.Rows[rn].Cells.OfType<DataGridViewCell>())
+                        {
+                            if (cell.OwningColumn == UpgradeCol)
+                                cell.Value = c.name;
+                            else if (cell.OwningColumn == WantedCol)
+                                cell.Value = c.scratchpad.ToStringInvariant();
+                            else if (cell.OwningColumn == Notes)
+                                cell.Value = c.shortname;
+                            else if (cell.ValueType == null || cell.ValueType.IsAssignableFrom(typeof(string)))
+                                cell.Value = string.Empty;
+                        }
+                        dataGridViewEngineering.Rows[rn].ReadOnly = true;   // disable editing wanted..
                     }
-                    dataGridViewEngineering.Rows[rn].ReadOnly = true;   // disable editing wanted..
                 }
 
                 if ( fdrow>=0 && dataGridViewEngineering.Rows[fdrow].Visible )        // better check visible, may have changed..
                     dataGridViewEngineering.FirstDisplayedScrollingRowIndex = fdrow;
+
+                if (OnChangedEngineeringWanted != null)
+                {
+                    OnChangedEngineeringWanted(wantedList);
+                }
             }
         }
 
@@ -363,7 +384,7 @@ namespace EDDiscovery.UserControls
                 Display();
             }
         }
-
+        
         #region Recipes
 
         List<MaterialCommoditiesList.EngineeringRecipe> Recipes = new List<MaterialCommoditiesList.EngineeringRecipe>()
@@ -1190,6 +1211,16 @@ namespace EDDiscovery.UserControls
             Button b = sender as Button;
             matfs.FilterButton(DbMaterialFilterSave, b,
                              discoveryform.theme.TextBackColor, discoveryform.theme.TextBlockColor, this.FindForm());
+        }
+
+        private void buttonClear_Click(object sender, EventArgs e)
+        {
+            for (int i = 0; i < Recipes.Count; i++)
+            {
+                int rno = (int)dataGridViewEngineering.Rows[i].Tag;
+                Wanted[rno] = 0;
+            }
+            Display();
         }
     }
 }

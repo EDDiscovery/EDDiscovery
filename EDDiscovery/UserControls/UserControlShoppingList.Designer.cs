@@ -46,19 +46,19 @@ namespace EDDiscovery.UserControls
             this.components = new System.ComponentModel.Container();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.splitContainer1 = new ExtendedControls.SplitContainerCustom();
-            this.splitContainer2 = new ExtendedControls.SplitContainerCustom();
             this.pictureBoxList = new ExtendedControls.PictureBoxHotspot();
+            this.splitContainer2 = new ExtendedControls.SplitContainerCustom();
             this.userControlSynthesis = new EDDiscovery.UserControls.UserControlSynthesis();
             this.userControlEngineering = new EDDiscovery.UserControls.UserControlEngineering();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxList)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).BeginInit();
             this.splitContainer2.Panel1.SuspendLayout();
             this.splitContainer2.Panel2.SuspendLayout();
             this.splitContainer2.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxList)).BeginInit();
             this.SuspendLayout();
             // 
             // toolTip1
@@ -83,6 +83,17 @@ namespace EDDiscovery.UserControls
             this.splitContainer1.Size = new System.Drawing.Size(971, 572);
             this.splitContainer1.SplitterDistance = 323;
             this.splitContainer1.TabIndex = 0;
+            this.splitContainer1.SplitterMoved += new System.Windows.Forms.SplitterEventHandler(this.splitContainer1_SplitterMoved);
+            // 
+            // pictureBoxList
+            // 
+            this.pictureBoxList.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.pictureBoxList.Location = new System.Drawing.Point(0, 0);
+            this.pictureBoxList.Name = "pictureBoxList";
+            this.pictureBoxList.Size = new System.Drawing.Size(320, 569);
+            this.pictureBoxList.TabIndex = 0;
             // 
             // splitContainer2
             // 
@@ -101,16 +112,6 @@ namespace EDDiscovery.UserControls
             this.splitContainer2.Size = new System.Drawing.Size(644, 572);
             this.splitContainer2.SplitterDistance = 214;
             this.splitContainer2.TabIndex = 0;
-            // 
-            // pictureBoxList
-            // 
-            this.pictureBoxList.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.pictureBoxList.Location = new System.Drawing.Point(0, 0);
-            this.pictureBoxList.Name = "pictureBoxList";
-            this.pictureBoxList.Size = new System.Drawing.Size(320, 569);
-            this.pictureBoxList.TabIndex = 0;
             // 
             // userControlSynthesis
             // 
@@ -143,11 +144,11 @@ namespace EDDiscovery.UserControls
             this.splitContainer1.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
             this.splitContainer1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxList)).EndInit();
             this.splitContainer2.Panel1.ResumeLayout(false);
             this.splitContainer2.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).EndInit();
             this.splitContainer2.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxList)).EndInit();
             this.ResumeLayout(false);
 
         }
