@@ -25,6 +25,7 @@ using System.IO;
 using System.Net;
 using System.Reflection;
 using System.Web;
+using System.Linq;
 
 namespace EliteDangerousCore.EDSM
 {
@@ -905,6 +906,65 @@ namespace EliteDangerousCore.EDSM
             return response.Body;
         }
 
+        public string SetInventoryMaterials(Dictionary<string, int> matcounts)
+        {
+            JObject jo = new JObject();
+            foreach (KeyValuePair<string, int> kvp in matcounts)
+            {
+                jo[kvp.Key] = kvp.Value;
+            }
+
+            string query = "set-materials?commanderName=" + HttpUtility.UrlEncode(commanderName) + "&apiKey=" + apiKey;
+            query += "&type=materials";
+            query += "&values=" + HttpUtility.UrlEncode(jo.ToString());
+
+            var response = RequestGet("api-commander-v1/" + query, handleException: true);
+
+            if (response.Error)
+                return null;
+
+            return response.Body;
+        }
+
+        public string SetInventoryData(Dictionary<string, int> matcounts)
+        {
+            JObject jo = new JObject();
+            foreach (KeyValuePair<string, int> kvp in matcounts)
+            {
+                jo[kvp.Key] = kvp.Value;
+            }
+
+            string query = "set-materials?commanderName=" + HttpUtility.UrlEncode(commanderName) + "&apiKey=" + apiKey;
+            query += "&type=data";
+            query += "&values=" + HttpUtility.UrlEncode(jo.ToString());
+
+            var response = RequestGet("api-commander-v1/" + query, handleException: true);
+
+            if (response.Error)
+                return null;
+
+            return response.Body;
+        }
+
+        public string SetInventoryCargo(Dictionary<string, int> matcounts)
+        {
+            JObject jo = new JObject();
+            foreach (KeyValuePair<string, int> kvp in matcounts)
+            {
+                jo[kvp.Key] = kvp.Value;
+            }
+
+            string query = "set-materials?commanderName=" + HttpUtility.UrlEncode(commanderName) + "&apiKey=" + apiKey;
+            query += "&type=cargo";
+            query += "&values=" + HttpUtility.UrlEncode(jo.ToString());
+
+            var response = RequestGet("api-commander-v1/" + query, handleException: true);
+
+            if (response.Error)
+                return null;
+
+            return response.Body;
+        }
 
         public string CommanderUpdateShip(int shipId, string type, EliteDangerousCore.ShipInformation shipinfo = null, int cargoqty = -1)
         {
@@ -972,9 +1032,10 @@ namespace EliteDangerousCore.EDSM
         static private long LastShipID = -1;
         static JournalProgress LastProgress = null;
         static JournalRank LastRank = null;
+        static MaterialCommoditiesList LastMats = null;
         static Object LockShipInfo = new object();
 
-        public void SendShipInfo(ShipInformation si, int cargo, ShipInformation sicurrent, long cash, long loan, 
+        public void SendShipInfo(ShipInformation si, MaterialCommoditiesList matcommod, int cargo, ShipInformation sicurrent, long cash, long loan, 
                                     JournalProgress progress, JournalRank rank  // both may be null
                                 )
         {
@@ -1007,6 +1068,19 @@ namespace EliteDangerousCore.EDSM
                     SetRanks((int)rank.Combat, progress.Combat, (int)rank.Trade, progress.Trade, (int)rank.Explore, progress.Explore, (int)rank.CQC, progress.CQC, (int)rank.Federation, progress.Federation, (int)rank.Empire, progress.Empire);
                     LastProgress = progress;
                     LastRank = rank;
+                }
+
+                if (matcommod != null && matcommod != LastMats)
+                {
+                    System.Diagnostics.Debug.WriteLine("Update EDSM with materials and cargo");
+                    List<MaterialCommodities> lmats = matcommod.Sort(false);
+                    List<MaterialCommodities> lcargo = matcommod.Sort(true);
+                    List<MaterialCommodities> ldata = lmats.Where(m => m.category == MaterialCommodities.MaterialEncodedCategory).ToList();
+                    lmats = lmats.Where(m => m.category != MaterialCommodities.MaterialEncodedCategory).ToList();
+                    SetInventoryMaterials(lmats.Where(m => m.count > 0).ToDictionary(m => m.fdname, m => m.count));
+                    SetInventoryData(ldata.Where(m => m.count > 0).ToDictionary(m => m.fdname, m => m.count));
+                    SetInventoryCargo(lcargo.Where(m => m.count > 0).ToDictionary(m => m.fdname, m => m.count));
+                    LastMats = matcommod;
                 }
             }
         }
