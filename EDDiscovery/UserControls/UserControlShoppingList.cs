@@ -14,6 +14,7 @@
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 using EDDiscovery.Controls;
+using EDDiscovery.Forms;
 using EliteDangerousCore;
 using EliteDangerousCore.DB;
 using ExtendedControls;
@@ -37,7 +38,6 @@ namespace EDDiscovery.UserControls
         HistoryEntry last_he = null;
         const int PhysicalInventoryCapacity = 1000;
         const int DataInventoryCapacity = 500;
-        bool movingSplitter = false;
 
         #region Init
 
@@ -162,16 +162,15 @@ namespace EDDiscovery.UserControls
                 pictureBoxList.ClearImageList();
                 PictureBoxHotspot.ImageElement displayList = pictureBoxList.AddTextAutoSize(new Point(0, 0), new Size(1000,1000), wantedList.ToNullSafeString(), displayfont, textcolour, backcolour, 1.0F);
                 pictureBoxList.Render();
-                movingSplitter = true;
                 splitContainer1.SplitterDistance = displayList.img.Width;
-                movingSplitter = false;
                 splitContainer1.Panel1MinSize = displayList.img.Width;
                 userControlEngineering.Visible = userControlSynthesis.Visible = !IsTransparent;
                 userControlEngineering.Enabled = userControlSynthesis.Enabled = !IsTransparent;
                 if (IsTransparent)
                 {
                     RevertToNormalSize();
-                    RequestTemporaryResize(new Size(displayList.img.Width + 8, displayList.img.Height + 4));
+                    int minWidth = ((UserControlForm)this.ParentForm).TitleBarMinWidth();
+                    RequestTemporaryResize(new Size(Math.Max(minWidth, displayList.img.Width) + 8, displayList.img.Height + 4));
                 }
                 else
                 {
@@ -186,15 +185,11 @@ namespace EDDiscovery.UserControls
 
         public override void Closing()
         {
+            RevertToNormalSize();
             userControlEngineering.Closing();
             userControlSynthesis.Closing();
         }
 
         #endregion
-
-        private void splitContainer1_SplitterMoved(object sender, SplitterEventArgs e)
-        {
-            if (!movingSplitter) Display();
-        }
     }
 }
