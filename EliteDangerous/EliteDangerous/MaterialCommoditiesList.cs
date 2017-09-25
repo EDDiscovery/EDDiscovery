@@ -268,10 +268,9 @@ namespace EliteDangerousCore
             for (int i = 0; i < mcl.Count; i++)
                 mcl[i].scratchpad = mcl[i].count;
         }
-
+        
         //return maximum can make, how many made, needed string.
-
-        static public Tuple<int, int, string> HowManyLeft(List<MaterialCommodities> list, Recipe r, List<MaterialCommodities> shoppinglist = null, int tomake = 0 )
+        static public Tuple<int, int, string> HowManyLeft(List<MaterialCommodities> list, Recipe r, int tomake = 0 )
         {
             int max = int.MaxValue;
             StringBuilder needed = new StringBuilder(64);
@@ -290,23 +289,6 @@ namespace EliteDangerousCore
 
                 if (got < need )
                 {
-                    if (shoppinglist != null)
-                    {
-                        int shopentry = shoppinglist.FindIndex(x => x.shortname.Equals(ingredient));
-                        if (shopentry >= 0)
-                            shoppinglist[shopentry].scratchpad += (need - got);
-                        else
-                        {
-                            MaterialCommodityDB db = MaterialCommodityDB.GetCachedMaterialByShortName(ingredient);
-                            if (db != null)       // MUST be there, its well know, but will check..
-                            {
-                                MaterialCommodities mc = new MaterialCommodities(db);        // make a new entry
-                                mc.scratchpad = (need - got);
-                                shoppinglist.Add(mc);
-                            }
-                        }
-                    }
-
                     string dispName;
                     if (mi > 0)
                     { dispName = (list[mi].category == MaterialCommodityDB.MaterialEncodedCategory || list[mi].category == MaterialCommodityDB.MaterialManufacturedCategory) ? " " + list[mi].name : list[mi].shortname; }
@@ -344,6 +326,47 @@ namespace EliteDangerousCore
             }
 
             return new Tuple<int,int,string>(max, made, needed.ToNullSafeString());
+        }
+
+        static public List<MaterialCommodities> GetShoppingList(List<Tuple<Recipe,int>> target, List<MaterialCommodities> list)
+        {
+            List<MaterialCommodities> shoppingList = new List<MaterialCommodities>();
+
+            foreach (Tuple<Recipe, int> want in target)
+            {
+                Recipe r = want.Item1;
+                int wanted = want.Item2;
+                for (int i = 0; i < r.ingredients.Length; i++)
+                {
+                    string ingredient = r.ingredients[i];
+                    int mi = list.FindIndex(x => x.shortname.Equals(ingredient));
+                    int got = (mi >= 0) ? list[mi].scratchpad : 0;
+                    int need = r.count[i] * wanted;
+
+                    if (got < need)
+                    {
+                        int shopentry = shoppingList.FindIndex(x => x.shortname.Equals(ingredient));
+                        if (shopentry >= 0)
+                            shoppingList[shopentry].scratchpad += (need - got);
+                        else
+                        {
+                            MaterialCommodityDB db = MaterialCommodityDB.GetCachedMaterialByShortName(ingredient);
+                            if (db != null)       // MUST be there, its well know, but will check..
+                            {
+                                MaterialCommodities mc = new MaterialCommodities(db);        // make a new entry
+                                mc.scratchpad = (need - got);
+                                shoppingList.Add(mc);
+                            }
+                        }
+                        if (mi >= 0) list[mi].scratchpad = 0;
+                    }
+                    else
+                    {
+                        if (mi >= 0) list[mi].scratchpad -= need;
+                    }
+                }
+            }
+            return shoppingList;
         }
 
         #endregion
