@@ -993,6 +993,7 @@ namespace EDDiscovery
 
         private void toolStripAddFromHistory_Click(object sender, EventArgs e)
         {
+            if (wanted == null) PopulateLocalWantedSystems();
             int i = 0;
             var unknown = _discoveryForm.history
                             .FilterByFSD.ConvertAll<JournalFSDJump>(he => (he.journalEntry as JournalFSDJump))
