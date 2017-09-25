@@ -54,6 +54,7 @@ namespace EDDiscovery
 
         public event Action<HistoryList> OnHistoryChange;                   // UI. MAJOR. UC. Mirrored. Called AFTER history is complete, or via RefreshDisplays if a forced refresh is needed.  UC's use this
         public event Action OnRefreshComplete;                              // UI. Called AFTER history is complete.. Form uses this to know the whole process is over, and buttons may be turned on, actions may be run, etc
+        public event Action OnInitialisationComplete;                       // UI.  Called AFTER first initial history load only
 
         // DURING A new Journal entry by the monitor, in order..
 
@@ -671,6 +672,7 @@ namespace EDDiscovery
                                 "This will take a while, up to 15 minutes, please be patient." + Environment.NewLine +
                                 "Please continue running ED Discovery until refresh is complete.");
             }
+            InvokeAsyncOnUiThread(() => OnInitialisationComplete?.Invoke());
         }
 
         private void BackgroundRefreshWorkerThread()
