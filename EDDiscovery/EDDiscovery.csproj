@@ -422,7 +422,7 @@
     <Compile Include="UserControls\UserControlShoppingList.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="UserControls\UserControlShoppingList.designer.cs">
+    <Compile Include="UserControls\UserControlShoppingList.Designer.cs">
       <DependentUpon>UserControlShoppingList.cs</DependentUpon>
     </Compile>
     <Compile Include="UserControls\UserControlSysInfo.cs">
