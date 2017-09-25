@@ -225,7 +225,7 @@ namespace EDDiscovery.UserControls
             this.dataGridViewTravel.Location = new System.Drawing.Point(19, 46);
             this.dataGridViewTravel.Name = "dataGridViewTravel";
             this.dataGridViewTravel.RowHeadersVisible = false;
-            this.dataGridViewTravel.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.dataGridViewTravel.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.dataGridViewTravel.Size = new System.Drawing.Size(156, 336);
             this.dataGridViewTravel.TabIndex = 3;
             this.dataGridViewTravel.ColumnHeaderMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dataGridViewTravel_ColumnHeaderMouseClick);
