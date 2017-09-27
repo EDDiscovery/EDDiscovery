@@ -81,9 +81,9 @@ namespace EliteDangerousCore
                 return 0;
             }
 
-            if ( ifd.Contains("cockpit") || ifd.Contains("decal") || ifd.Contains("paintjob") || ifd.Contains("cargobaydoor") || 
-                        ifd.Contains("weaponcustomisation") || ifd.Contains("nameplate") || ifd.Contains("shipkit") || ifd.Contains("bobble") )     
-                return -1;       // no IDs
+            foreach (var s in new[] { "bobble", "cargobaydoor", "cockpit", "decal", "enginecustomisation", "nameplate", "paintjob", "shipkit", "weaponcustomisation" })
+                if (ifd.Contains(s))
+                    return -1;       // no IDs
 
             int firstunderscore = ifd.IndexOf('_');
 
