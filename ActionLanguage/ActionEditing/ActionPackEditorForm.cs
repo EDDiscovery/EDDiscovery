@@ -57,6 +57,7 @@ namespace ActionLanguage
 
         public ActionPackEditorForm() 
         {
+            groups = new List<Group>();
             InitializeComponent();
         }
 
@@ -78,7 +79,6 @@ namespace ActionLanguage
             initialtitle = this.Text = label_index.Text = t;
 
             ConditionLists clist = actionfile.actioneventlist;          // now load the initial conditions from the action file
-            groups = new List<Group>();
 
             for (int i = 0; i < clist.Count; i++)       // for ever event, find the condition, create the group, theme
             {
