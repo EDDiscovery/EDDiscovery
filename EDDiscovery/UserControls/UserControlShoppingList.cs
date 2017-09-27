@@ -162,8 +162,6 @@ namespace EDDiscovery.UserControls
                 pictureBoxList.ClearImageList();
                 PictureBoxHotspot.ImageElement displayList = pictureBoxList.AddTextAutoSize(new Point(0, 0), new Size(1000,1000), wantedList.ToNullSafeString(), displayfont, textcolour, backcolour, 1.0F);
                 pictureBoxList.Render();
-                splitContainer1.SplitterDistance = displayList.img.Width;
-                splitContainer1.Panel1MinSize = displayList.img.Width;
                 userControlEngineering.Visible = userControlSynthesis.Visible = !IsTransparent;
                 userControlEngineering.Enabled = userControlSynthesis.Enabled = !IsTransparent;
                 if (IsTransparent)
@@ -176,6 +174,14 @@ namespace EDDiscovery.UserControls
                 {
                     RevertToNormalSize();
                 }
+                splitContainer1.Panel1MinSize = 0;
+                if (displayList.img.Width < splitContainer1.Width - splitContainer1.Panel2MinSize)
+                {
+                    splitContainer1.SplitterDistance = displayList.img.Width;
+                    splitContainer1.Panel1MinSize = displayList.img.Width;
+                }
+                else
+                    splitContainer1.SplitterDistance = splitContainer1.Width - splitContainer1.Panel2MinSize;
             }
         }
 
