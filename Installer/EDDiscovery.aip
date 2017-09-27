@@ -17,10 +17,10 @@
     <ROW Property="ARPURLUPDATEINFO" Value="http://eddiscovery.astronet.se/release/"/>
     <ROW Property="CTRLS" Value="2"/>
     <ROW Property="Manufacturer" Value="EDDiscovery"/>
-    <ROW Property="ProductCode" Value="1033:{0EBDCA47-B95F-439E-9B2B-CC44B1768468} 1053:{1EC606AD-BB9D-428B-B11A-7F1334728834} " Type="16"/>
+    <ROW Property="ProductCode" Value="1033:{8C54B511-9B88-4359-A53C-A42EC1447351} 1053:{E08922FC-A1A1-47A2-B283-E7CB2B87673C} " Type="16"/>
     <ROW Property="ProductLanguage" Value="1033"/>
     <ROW Property="ProductName" Value="EDDiscovery"/>
-    <ROW Property="ProductVersion" Value="8.3.1" Type="32"/>
+    <ROW Property="ProductVersion" Value="8.3.2" Type="32"/>
     <ROW Property="SecureCustomProperties" Value="OLDPRODUCTS;AI_NEWERPRODUCTFOUND;UPGRADE_1;AI_SETUPEXEPATH;SETUPEXEDIR"/>
     <ROW Property="UpgradeCode" Value="{27EA2F84-C7C5-41E2-9C59-CC42CCDC9FEF}"/>
     <ROW Property="WindowsType9X" MultiBuildValue="AnyCPU_Debug:Windows 9x/ME" ValueLocId="-"/>
@@ -86,16 +86,24 @@
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiFilesComponent">
     <ROW File="ActionLanguage.dll" Component_="ActionLanguage.dll" FileName="ACTION~1.DLL|ActionLanguage.dll" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\EDDiscovery\bin\Release\ActionLanguage.dll" SelfReg="false" NextFile="General.dll"/>
-    <ROW File="Audio.dll" Component_="Audio.dll" FileName="Audio.dll" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\EDDiscovery\bin\Release\Audio.dll" SelfReg="false"/>
+    <ROW File="ActionLanguage.pdb" Component_="ActionLanguage.dll" FileName="ACTION~1.PDB|ActionLanguage.pdb" Attributes="0" SourcePath="..\EDDiscovery\bin\Release\ActionLanguage.pdb" SelfReg="false" NextFile="Audio.pdb"/>
+    <ROW File="Audio.dll" Component_="Audio.dll" FileName="Audio.dll" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\EDDiscovery\bin\Release\Audio.dll" SelfReg="false" NextFile="ExtendedControls.pdb"/>
+    <ROW File="Audio.pdb" Component_="Audio.dll" FileName="Audio.pdb" Attributes="0" SourcePath="..\EDDiscovery\bin\Release\Audio.pdb" SelfReg="false" NextFile="Conditions.pdb"/>
     <ROW File="CSCore.dll" Component_="CSCore.dll" FileName="CSCore.dll" Attributes="0" SourcePath="..\EDDiscovery\bin\Release\CSCore.dll" SelfReg="false" NextFile="SharpDX.DirectInput.dll"/>
     <ROW File="Conditions.dll" Component_="Conditions.dll" FileName="CONDIT~1.DLL|Conditions.dll" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\EDDiscovery\bin\Release\Conditions.dll" SelfReg="false" NextFile="Audio.dll"/>
+    <ROW File="Conditions.pdb" Component_="Conditions.dll" FileName="CONDIT~1.PDB|Conditions.pdb" Attributes="0" SourcePath="..\EDDiscovery\bin\Release\Conditions.pdb" SelfReg="false" NextFile="DirectInput.pdb"/>
     <ROW File="DirectInput.dll" Component_="DirectInput.dll" FileName="DIRECT~1.DLL|DirectInput.dll" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\EDDiscovery\bin\Release\DirectInput.dll" SelfReg="false" NextFile="Conditions.dll"/>
+    <ROW File="DirectInput.pdb" Component_="DirectInput.dll" FileName="DIRECT~1.PDB|DirectInput.pdb" Attributes="0" SourcePath="..\EDDiscovery\bin\Release\DirectInput.pdb" SelfReg="false" NextFile="EDDiscovery.pdb"/>
     <ROW File="EDDiscovery.exe" Component_="EDDiscovery.exe" FileName="EDDISC~1.EXE|EDDiscovery.exe" Attributes="0" SourcePath="..\EDDiscovery\bin\Release\EDDiscovery.exe" SelfReg="false" NextFile="EUROCAPS.TTF" DigSign="true"/>
     <ROW File="EDDiscovery.exe.config" Component_="EDDiscovery.exe.config" FileName="EDDISC~1.CON|EDDiscovery.exe.config" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\EDDiscovery\bin\Release\EDDiscovery.exe.config" SelfReg="false" NextFile="M67.json"/>
+    <ROW File="EDDiscovery.pdb" Component_="EDDiscovery.exe" FileName="EDDISC~1.PDB|EDDiscovery.pdb" Attributes="0" SourcePath="..\EDDiscovery\bin\Release\EDDiscovery.pdb" SelfReg="false" NextFile="EliteDangerous.pdb"/>
     <ROW File="EUROCAPS.TTF" Component_="EUROCAPS.TTF" FileName="EUROCAPS.TTF" Attributes="0" SourcePath="ExtraFiles\EUROCAPS.TTF" SelfReg="false" NextFile="EDDiscovery.exe.config"/>
     <ROW File="EliteDangerous.dll" Component_="EliteDangerous.dll" FileName="ELITED~1.DLL|EliteDangerous.dll" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\EDDiscovery\bin\Release\EliteDangerous.dll" SelfReg="false" NextFile="DirectInput.dll"/>
+    <ROW File="EliteDangerous.pdb" Component_="EliteDangerous.dll" FileName="ELITED~1.PDB|EliteDangerous.pdb" Attributes="0" SourcePath="..\EDDiscovery\bin\Release\EliteDangerous.pdb" SelfReg="false"/>
     <ROW File="ExtendedControls.dll" Component_="ExtendedControls.dll" FileName="EXTEND~1.DLL|ExtendedControls.dll" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\EDDiscovery\bin\Release\ExtendedControls.dll" SelfReg="false" NextFile="EliteDangerous.dll"/>
+    <ROW File="ExtendedControls.pdb" Component_="ExtendedControls.dll" FileName="EXTEND~1.PDB|ExtendedControls.pdb" Attributes="0" SourcePath="..\EDDiscovery\bin\Release\ExtendedControls.pdb" SelfReg="false" NextFile="General.pdb"/>
     <ROW File="General.dll" Component_="General.dll" FileName="General.dll" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\EDDiscovery\bin\Release\General.dll" SelfReg="false" NextFile="ExtendedControls.dll"/>
+    <ROW File="General.pdb" Component_="General.dll" FileName="General.pdb" Attributes="0" SourcePath="..\EDDiscovery\bin\Release\General.pdb" SelfReg="false" NextFile="ActionLanguage.pdb"/>
     <ROW File="Installer.txt" Component_="fround.js" FileName="INSTAL~1.TXT|Installer.txt" Attributes="0" SourcePath="Installer.txt" SelfReg="false" NextFile="System.Data.SQLite.dll"/>
     <ROW File="M67.json" Component_="M67.json" FileName="M67~1.JSO|M67.json" Attributes="0" SourcePath="ExtraFiles\M67.json" SelfReg="false" NextFile="Pleiades.json"/>
     <ROW File="Newtonsoft.Json.dll" Component_="Newtonsoft.Json.dll" FileName="NEWTON~1.DLL|Newtonsoft.Json.dll" Attributes="0" SourcePath="..\EDDiscovery\bin\Release\Newtonsoft.Json.dll" SelfReg="false" NextFile="OpenTK.GLControl.dll"/>
@@ -112,7 +120,7 @@
     <ROW File="msvcr100.dll" Component_="msvcr100.dll" FileName="msvcr100.dll" Attributes="0" SourcePath="..\EDDiscovery\bin\Release\x86\Microsoft.VC100.CRT\msvcr100.dll" SelfReg="false" NextFile="SQLite.Interop.dll"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.BuildComponent">
-    <ROW BuildKey="AnyCPU_Debug" BuildName="AnyCPU_Debug" BuildOrder="1" BuildType="0" PackageFolder="AnyCPU_DebugSetupFiles" PackageFileName="EDDiscovery" Languages="sv;en" InstallationType="4" CabsLocation="1" PackageType="1" FilesInsideExe="true" ExtractionFolder="[AppDataFolder][|Manufacturer]\[|ProductName] [|ProductVersion]\install" ExtUI="true" LangsDialog="true" UseLargeSchema="true" Unicode="true" ExeName="EDDiscovery" MsiPackageType="AI_ALL"/>
+    <ROW BuildKey="AnyCPU_Debug" BuildName="AnyCPU_Debug" BuildOrder="1" BuildType="0" PackageFolder="AnyCPU_DebugSetupFiles" PackageFileName="EDDiscovery" Languages="sv;en" InstallationType="4" CabsLocation="1" PackageType="1" FilesInsideExe="true" ExtractionFolder="[AppDataFolder][|Manufacturer]\[|ProductName] [|ProductVersion]\install" ExtUI="true" LangsDialog="true" UseLargeSchema="true" Unicode="true" ExeName="EDDiscovery_[|ProductVersion]" MsiPackageType="AI_ALL"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.DictionaryComponent">
     <ROW Path="&lt;AI_DICTS&gt;ui.ail"/>
