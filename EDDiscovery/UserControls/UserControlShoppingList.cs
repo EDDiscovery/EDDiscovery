@@ -56,11 +56,11 @@ namespace EDDiscovery.UserControls
 
             userControlEngineering.isEmbedded = true;
             userControlEngineering.OnChangedEngineeringWanted += Engineering_OnWantedChange;
-            //Use vn+1000 for embedded controls to avoid conflict with DB settings from standalone ones
-            userControlEngineering.Init(ed, thc, vn + 1000);
+            //Can use display number for it, because their names for db save are unique between engineering and synthesis.
+            userControlEngineering.Init(ed, thc, displaynumber);
             userControlSynthesis.isEmbedded = true;
             userControlSynthesis.OnChangedSynthesisWanted += Synthesis_OnWantedChange;
-            userControlSynthesis.Init(ed, thc, vn + 1000);
+            userControlSynthesis.Init(ed, thc, displaynumber);
         }
 
         public override void ChangeCursorType(UserControlCursorType thc)
