@@ -57,7 +57,7 @@ namespace EliteDangerousCore.JournalEvents
 
             if (StatusList != null)
             {
-                info = BaseUtils.FieldBuilder.Build("Friends Online:", NameList.Count);
+                info = BaseUtils.FieldBuilder.Build("Total Friends:", NameList.Count);
                 for( int i = 0; i < StatusList.Count; i++ )
                     detailed = detailed.AppendPrePad(BaseUtils.FieldBuilder.Build("", NameList[i], "", StatusList[i]) , System.Environment.NewLine);
             }
