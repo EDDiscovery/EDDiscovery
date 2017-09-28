@@ -34,8 +34,8 @@ namespace EDDiscovery.ScreenShots
         private Action<Action<ScreenShotImageConverter>> paramscallback;
         private FileSystemWatcher filesystemwatcher = null;
 
-        private ConcurrentDictionary<string, System.Threading.Timer> ScreenshotTimers = new ConcurrentDictionary<string, System.Threading.Timer>();
-        private ConcurrentDictionary<string, JournalScreenshot> JournalScreenshotsByName = new ConcurrentDictionary<string, JournalScreenshot>();
+        private ConcurrentDictionary<string, System.Threading.Timer> ScreenshotTimers = new ConcurrentDictionary<string, System.Threading.Timer>(StringComparer.InvariantCultureIgnoreCase);
+        private ConcurrentDictionary<string, JournalScreenshot> JournalScreenshotsByName = new ConcurrentDictionary<string, JournalScreenshot>(StringComparer.InvariantCultureIgnoreCase);
         
         private int LastJournalCmdr = Int32.MinValue;
         private JournalLocOrJump LastJournalLoc;
