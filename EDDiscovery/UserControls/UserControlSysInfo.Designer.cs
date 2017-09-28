@@ -672,7 +672,6 @@ namespace EDDiscovery.UserControls
             // 
             // buttonEDSM
             // 
-            this.buttonEDSM.DrawnImage = null;
             this.buttonEDSM.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.buttonEDSM.ImageSelected = ExtendedControls.DrawnPanel.ImageType.InverseText;
             this.buttonEDSM.ImageText = "EDSM";
@@ -780,7 +779,6 @@ namespace EDDiscovery.UserControls
             // 
             // buttonEDSMTarget
             // 
-            this.buttonEDSMTarget.DrawnImage = null;
             this.buttonEDSMTarget.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.buttonEDSMTarget.ImageSelected = ExtendedControls.DrawnPanel.ImageType.InverseText;
             this.buttonEDSMTarget.ImageText = "EDSM";
@@ -1298,7 +1296,7 @@ namespace EDDiscovery.UserControls
             this.Controls.Add(this.buttonEDSMTarget);
             this.Name = "UserControlSysInfo";
             this.Size = new System.Drawing.Size(393, 731);
-            this.toolTip1.SetToolTip(this, "Hold down Ctrl Key then left drag a item to reposition, 2 columns are available");
+            this.toolTip1.SetToolTip(this, "Hold down Ctrl Key then left drag a item to reposition, 8 columns are available");
             this.Resize += new System.EventHandler(this.UserControlSysInfo_Resize);
             this.contextMenuStrip.ResumeLayout(false);
             this.ResumeLayout(false);
