@@ -14,12 +14,13 @@
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 using Newtonsoft.Json.Linq;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace EliteDangerousCore.JournalEvents
 {
-//{ "timestamp":"2017-06-26T17:06:50Z", "event":"Friends", "Status":"Offline", "Name":"Finwen" }
-[JournalEntryType(JournalTypeEnum.Friends)]
+    //{ "timestamp":"2017-06-26T17:06:50Z", "event":"Friends", "Status":"Offline", "Name":"Finwen" }
+    [JournalEntryType(JournalTypeEnum.Friends)]
     public class JournalFriends : JournalEntry
     {
         public JournalFriends(JObject evt) : base(evt, JournalTypeEnum.Friends)
@@ -27,16 +28,43 @@ namespace EliteDangerousCore.JournalEvents
             Status = evt["Status"].Str();
             Name = evt["Name"].Str();
         }
-        public string Status { get; set; }
+
+        public void AddFriend(JObject evt)
+        {
+            if (StatusList == null)     // if first time we added, move to status list format
+            {
+                StatusList = new List<string>() { Status };
+                NameList = new List<string>() { Name };
+                Status = Name = string.Empty;
+            }
+
+            StatusList.Add(evt["Status"].Str());
+            NameList.Add(evt["Name"].Str());
+        }
+
+        public string Status { get; set; }      // used for single entries.. empty if list.  Used for VP backwards compat
         public string Name { get; set; }
+
+        public List<string> StatusList { get; set; }        // EDD addition.. used when agregating, null if single entry
+        public List<string> NameList { get; set; }
 
         public override System.Drawing.Bitmap Icon { get { return EliteDangerous.Properties.Resources.friends; } }
 
         public override void FillInformation(out string summary, out string info, out string detailed) //V
         {
             summary = EventTypeStr.SplitCapsWord();
-            info = BaseUtils.FieldBuilder.Build("", Name, "", Status);
             detailed = "";
+
+            if (StatusList != null)
+            {
+                info = BaseUtils.FieldBuilder.Build("Friends Online:", NameList.Count);
+                for( int i = 0; i < StatusList.Count; i++ )
+                    detailed = detailed.AppendPrePad(BaseUtils.FieldBuilder.Build("", NameList[i], "", StatusList[i]) , System.Environment.NewLine);
+            }
+            else
+            {
+                info = BaseUtils.FieldBuilder.Build("", Name, "", Status);
+            }
         }
     }
 }
