@@ -27,14 +27,13 @@ using EliteDangerousCore;
 
 namespace EDDiscovery.UserControls
 {
-    [TypeDescriptionProvider(typeof(AbstractControlDescriptionProvider<UserControlCommonBase, UserControl>))]
-    public abstract class UserControlCommonBase : UserControl
+    public class UserControlCommonBase : UserControl
     {
         // in calling order..
-        public abstract void Init(EDDiscoveryForm ed, UserControlCursorType thc, int displayno);    // start up, give discovery form and cursor, and its display id
+        public virtual void Init(EDDiscoveryForm ed, UserControlCursorType thc, int displayno) { }    // start up, give discovery form and cursor, and its display id
         public virtual void LoadLayout() { }        // then a chance to load a layout
-        public abstract void InitialDisplay();      // then after the themeing, do the initial display
-        public abstract void Closing();             // close it
+        public virtual void InitialDisplay() { }    // then after the themeing, do the initial display
+        public virtual void Closing() { }           // close it
 
         public virtual void ChangeCursorType(UserControlCursorType thc) { }     // optional, cursor has changed
 
