@@ -35,6 +35,7 @@ namespace EDDiscovery.ScreenShots
         private FileSystemWatcher filesystemwatcher = null;
 
         private ConcurrentDictionary<string, System.Threading.Timer> ScreenshotTimers = new ConcurrentDictionary<string, System.Threading.Timer>();
+        private ConcurrentDictionary<string, JournalScreenshot> JournalScreenshotsByName = new ConcurrentDictionary<string, JournalScreenshot>();
         
         private int LastJournalCmdr = Int32.MinValue;
         private JournalLocOrJump LastJournalLoc;
@@ -109,8 +110,12 @@ namespace EDDiscovery.ScreenShots
             if (je.EventTypeID == JournalTypeEnum.Screenshot)
             {
                 JournalScreenshot ss = je as JournalScreenshot;
+                string ssname = ss.Filename;
+                if (ssname.StartsWith("\\ED_Pictures\\")) ssname = ssname.Substring(13);
+                JournalScreenshotsByName[ssname] = ss;
                 System.Diagnostics.Debug.WriteLine("Screenshot tripped " + ss.Filename);
                 this.paramscallback?.Invoke(cp => ProcessScreenshot(ss.Filename, ss.System, ss, ss.CommanderId, cp));
+                JournalScreenshotsByName[ssname] = null;
             }
         }
 
@@ -147,7 +152,11 @@ namespace EDDiscovery.ScreenShots
 
         private void TimerTickedOut(string filename, int cmdrid)   // timer is executed on a background thread, go back to UI
         {
-            this.paramscallback?.Invoke(cp=>ProcessScreenshot(filename, null, null, cmdrid, cp)); //process on UI thread
+            string basename = Path.GetFileName(filename);
+            JournalScreenshot ss = null;
+            JournalScreenshotsByName.TryGetValue(basename, out ss);
+
+            this.paramscallback?.Invoke(cp=>ProcessScreenshot(filename, ss?.System, ss, cmdrid, cp)); //process on UI thread
         }
 
         // called thru CalLWithConverter in UI main class.. that pases a ImageConverter to us
