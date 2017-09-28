@@ -113,7 +113,7 @@ namespace EDDiscovery.ScreenShots
                 string ssname = ss.Filename;
                 if (ssname.StartsWith("\\ED_Pictures\\")) ssname = ssname.Substring(13);
                 JournalScreenshotsByName[ssname] = ss;
-                System.Diagnostics.Debug.WriteLine("Screenshot tripped " + ss.Filename);
+                System.Diagnostics.Trace.WriteLine("Journal Screenshot logged " + ss.Filename);
                 this.paramscallback?.Invoke(cp => ProcessScreenshot(ss.Filename, ss.System, ss, ss.CommanderId, cp));
                 JournalScreenshotsByName[ssname] = null;
             }
@@ -121,7 +121,7 @@ namespace EDDiscovery.ScreenShots
 
         private void WatcherTripped(object sender, System.IO.FileSystemEventArgs e)
         {
-            System.Diagnostics.Debug.WriteLine("Watcher file tripped " + e.FullPath);
+            System.Diagnostics.Trace.WriteLine("Directory watcher picked up screenshot " + e.FullPath);
             this.paramscallback?.Invoke(cp => ProcessFilesystemEvent(sender, e, cp));
         }
 
