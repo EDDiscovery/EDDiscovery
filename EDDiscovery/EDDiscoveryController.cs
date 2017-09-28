@@ -86,6 +86,12 @@ namespace EDDiscovery
 
         #endregion
 
+        #region Private vars
+        private List<JournalEntry> journalqueue = new List<JournalEntry>();
+        private System.Threading.Timer journalqueuedelaytimer;
+
+        #endregion
+
         #region Initialisation
 
         public EDDiscoveryController(Func<Color> getNormalTextColor, Func<Color> getHighlightTextColor, Func<Color> getSuccessTextColor, Action<Action> invokeAsyncOnUiThread)
@@ -94,6 +100,7 @@ namespace EDDiscovery
             GetHighlightTextColour = getHighlightTextColor;
             GetSuccessTextColour = getSuccessTextColor;
             InvokeAsyncOnUiThread = invokeAsyncOnUiThread;
+            journalqueuedelaytimer = new Timer(DelayPlay, null, Timeout.Infinite, Timeout.Infinite);
         }
 
         public static void Initialize(Action<string> msg)    // called from EDDApplicationContext to initialize config and dbs
@@ -544,36 +551,90 @@ namespace EDDiscovery
             }
         }
 
-        public void NewEntry(JournalEntry je)        // hooked into journal monitor and receives new entries.. Also call if you programatically add an entry
+        #endregion
+
+        #region New Entry with merge
+
+        public void NewEntry(JournalEntry je)        // on UI thread. hooked into journal monitor and receives new entries.. Also call if you programatically add an entry
         {
-            bool uievent = je.IsUIEvent;
-            bool showuievents = EDDConfig.Instance.ShowUIEvents;
+            Debug.Assert(System.Windows.Forms.Application.MessageLoop);
 
-            if (uievent)            // give windows time to set up for OnNewEvent, and tell them if its coming via showuievents
+            int playdelay = HistoryList.MergeTypeDelay(je); // see if there is a delay needed..
+
+            if (playdelay > 0)  // if delaying to see if a companion event occurs. add it to list. Set timer so we pick it up
             {
-                if (je is EliteDangerousCore.JournalEvents.JournalMusic)
-                    OnNewUIEvent?.Invoke((je as EliteDangerousCore.JournalEvents.JournalMusic).MusicTrack, showuievents);
+                System.Diagnostics.Debug.WriteLine(Environment.TickCount + " Delay Play queue " + je.EventTypeID + " Delay for " + playdelay);
+                journalqueue.Add(je);
+                journalqueuedelaytimer.Change(playdelay, Timeout.Infinite);
             }
-
-            if (je.CommanderId == history.CommanderId)     // Next two are only if current commander is selected
+            else
             {
-                if (!je.IsUIEvent || showuievents )              // filter out any UI events
+                journalqueuedelaytimer.Change(Timeout.Infinite, Timeout.Infinite);  // stop the timer, but if it occurs before this, not the end of the world
+                journalqueue.Add(je);  // add it to the play list.
+                System.Diagnostics.Debug.WriteLine(Environment.TickCount + " No delay, issue " + je.EventTypeID );
+                PlayJournalList();    // and play
+            }
+        }
+
+        public void PlayJournalList()                 // play delay list out..
+        {
+            Debug.Assert(System.Windows.Forms.Application.MessageLoop);
+            System.Diagnostics.Debug.WriteLine(Environment.TickCount + " Play out list");
+
+            JournalEntry prev = null;  // we start afresh from the point of merging so we don't merge with previous ones already shown
+
+            foreach (JournalEntry je in journalqueue)
+            {
+                if (!HistoryList.MergeEntries(prev, je))                // if not merged
                 {
-                    foreach (HistoryEntry he in history.AddJournalEntry(je, h => LogLineHighlight(h)))      // pass it thru the history list filtering/reorder system
-                    {
-                        OnNewEntry?.Invoke(he, history);            // major hook
-                        OnNewEntrySecond?.Invoke(he, history);      // secondary hook..
-                    }
+                    if (prev != null)                       // no merge, so if we have a merge candidate on top, run actions on it.
+                        ActionEntry(prev);
+
+                    prev = je;                              // record
                 }
             }
 
-            OnNewJournalEntry?.Invoke(je);          // Finally, always call this on all entries
+            if (prev != null)                               // any left.. action it
+                ActionEntry(prev);
+
+            journalqueue.Clear();
+        }
+
+        void ActionEntry(JournalEntry je)               // issue the JE to the system
+        {
+            if (je.IsUIEvent)            // give windows time to set up for OnNewEvent, and tell them if its coming via showuievents
+            {
+                if (je is EliteDangerousCore.JournalEvents.JournalMusic)
+                    OnNewUIEvent?.Invoke((je as EliteDangerousCore.JournalEvents.JournalMusic).MusicTrack, EDDConfig.Instance.ShowUIEvents);
+            }
+
+            // filter out commanders, and filter out any UI events
+            if (je.CommanderId == history.CommanderId && (!je.IsUIEvent || EDDConfig.Instance.ShowUIEvents))  
+            {
+                HistoryEntry he = history.AddJournalEntry(je, h => LogLineHighlight(h));        // add a new one on top
+                System.Diagnostics.Debug.WriteLine("Delay Play add HE " + he.EventSummary);
+                OnNewEntry?.Invoke(he, history);            // major hook
+                OnNewEntrySecond?.Invoke(he, history);      // secondary hook..
+            }
+
+            OnNewJournalEntry?.Invoke(je);          // Finally, always call this on all entries... note not subject to delay play
 
             if (je.EventTypeID == JournalTypeEnum.LoadGame)
             {
                 OnRefreshCommanders?.Invoke();
             }
         }
+
+        public void DelayPlay(Object s)
+        {
+            System.Diagnostics.Debug.WriteLine(Environment.TickCount + " Delay Play timer executed");
+            journalqueuedelaytimer.Change(Timeout.Infinite, Timeout.Infinite);
+            InvokeAsyncOnUiThread(() =>
+            {
+                PlayJournalList();
+            });
+        }
+
         #endregion
 
         #region Background Worker Threads
