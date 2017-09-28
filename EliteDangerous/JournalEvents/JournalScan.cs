@@ -854,7 +854,7 @@ namespace EliteDangerousCore.JournalEvents
                         kValue = 2880;
                         break;
                 }
-                return (int)StarValue(kValue, nStellarMass.Value);
+                return (int)StarValue(kValue, nStellarMass.HasValue ? nStellarMass.Value : 1.0);
             }
             else if (PlanetClass == null)  //Asteroid belt
                 return 0;
