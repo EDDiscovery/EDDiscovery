@@ -778,15 +778,21 @@ namespace EliteDangerousCore
             reportProgress(-1, "Resolving systems");
 
             List<JournalEntry> jlist = JournalEntry.GetAll(CurrentCommander).OrderBy(x => x.EventTimeUTC).ThenBy(x => x.Id).ToList();
+
             List<Tuple<JournalEntry, HistoryEntry>> jlistUpdated = new List<Tuple<JournalEntry, HistoryEntry>>();
 
             using (SQLiteConnectionSystem conn = new SQLiteConnectionSystem())
             {
                 HistoryEntry prev = null;
+                JournalEntry jprev = null;
+
                 foreach (JournalEntry je in jlist)
                 {
-                    if (MergeEntries(prev, je))     // if we merge back.. don't add.
+                    if (MergeEntries(jprev, je))        // if we merge.. we may have updated info, so reprint.
+                    {
+                        jprev.FillInformation(out prev.EventSummary, out prev.EventDescription, out prev.EventDetailedInfo);    // need to keep this up to date..
                         continue;
+                    }
 
                     if (je.IsUIEvent && !Keepuievents)              // filter out any UI events
                     {
@@ -798,6 +804,7 @@ namespace EliteDangerousCore
                     HistoryEntry he = HistoryEntry.FromJournalEntry(je, prev, CheckEdsm, out journalupdate, conn, cmdr);
 
                     prev = he;
+                    jprev = je;
 
                     hist.historylist.Add(he);
 
@@ -843,46 +850,6 @@ namespace EliteDangerousCore
             return hist;
         }
 
-
-        public static int MergeTypeDelay(JournalEntry je)   //0 = none
-        {
-            if (je.EventTypeID == JournalTypeEnum.Friends)
-                return 2000;
-            else if (je.EventTypeID == JournalTypeEnum.Scan)
-                return 10000;
-            else
-                return 0;
-        }
-
-        // true if merged back to previous..
-        public static bool MergeEntries(HistoryEntry prev, JournalEntry je)
-        {
-            if (prev != null)
-            {
-                if (je.EventTypeID == JournalTypeEnum.FuelScoop && prev.EntryType == JournalTypeEnum.FuelScoop)  // merge scoops
-                {
-                    JournalFuelScoop jfs = je as JournalFuelScoop;
-                    JournalFuelScoop jfsprev = prev.journalEntry as JournalFuelScoop;
-                    jfsprev.Scooped += jfs.Scooped;
-                    jfsprev.Total = jfs.Total;
-                    jfsprev.FillInformation(out prev.EventSummary, out prev.EventDescription, out prev.EventDetailedInfo);
-                    System.Diagnostics.Debug.WriteLine("Merge FS " + jfsprev.EventTimeUTC);
-                    return true;
-                }
-                else if (je.EventTypeID == JournalTypeEnum.Friends && prev.EntryType == JournalTypeEnum.Friends) // merge friends
-                {
-                    JournalFriends jf = je as JournalFriends;
-                    JournalFriends jfprev = prev.journalEntry as JournalFriends;
-                    jfprev.AddFriend(je.GetJson());
-                    jfprev.FillInformation(out prev.EventSummary, out prev.EventDescription, out prev.EventDetailedInfo);
-                    System.Diagnostics.Debug.WriteLine("Merge Friends " + jfprev.EventTimeUTC + " "  + jfprev.NameList.Count);
-                    return true;
-                }
-            }
-
-            return false;
-        }
-
         // go through the history list and recalculate the materials ledger and the materials count, plus any other stuff..
         public void ProcessUserHistoryListEntries(Func<HistoryList, List<HistoryEntry>> hlfilter)
         {
@@ -920,6 +887,44 @@ namespace EliteDangerousCore
                 }
             }
         }
+
+        public static int MergeTypeDelay(JournalEntry je)   //0 = none
+        {
+            if (je.EventTypeID == JournalTypeEnum.Friends)
+                return 2000;
+            else if (je.EventTypeID == JournalTypeEnum.Scan)
+                return 10000;
+            else
+                return 0;
+        }
+
+        // true if merged back to previous..
+        public static bool MergeEntries(JournalEntry prev, JournalEntry je)
+        {
+            if (prev != null)
+            {
+                if (je.EventTypeID == JournalTypeEnum.FuelScoop && prev.EventTypeID == JournalTypeEnum.FuelScoop)  // merge scoops
+                {
+                    EliteDangerousCore.JournalEvents.JournalFuelScoop jfs = je as EliteDangerousCore.JournalEvents.JournalFuelScoop;
+                    EliteDangerousCore.JournalEvents.JournalFuelScoop jfsprev = prev as EliteDangerousCore.JournalEvents.JournalFuelScoop;
+                    jfsprev.Scooped += jfs.Scooped;
+                    jfsprev.Total = jfs.Total;
+                    System.Diagnostics.Debug.WriteLine("Merge FS " + jfsprev.EventTimeUTC);
+                    return true;
+                }
+                else if (je.EventTypeID == JournalTypeEnum.Friends && prev.EventTypeID == JournalTypeEnum.Friends) // merge friends
+                {
+                    EliteDangerousCore.JournalEvents.JournalFriends jfprev = prev as EliteDangerousCore.JournalEvents.JournalFriends;
+                    jfprev.AddFriend(je.GetJson());
+                    System.Diagnostics.Debug.WriteLine("Merge Friends " + jfprev.EventTimeUTC + " " + jfprev.NameList.Count);
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+
 
         public void SendEDSMStatusInfo(HistoryEntry he, bool async)     // he points to ship info to send from..  may be null from one feed function
         {
