@@ -116,8 +116,8 @@ namespace EliteDangerousCore
             return total;
         }
 
-        public int DataCount { get { return Count(new string[] { MaterialCommodities.MaterialEncodedCategory, MaterialCommodities.MaterialManufacturedCategory }); } }
-        public int MaterialsCount { get { return Count(new string[] { MaterialCommodities.MaterialRawCategory }); } }
+        public int DataCount { get { return Count(new string[] { MaterialCommodities.MaterialEncodedCategory }); } }
+        public int MaterialsCount { get { return Count(new string[] { MaterialCommodities.MaterialRawCategory, MaterialCommodities.MaterialManufacturedCategory }); } }
         public int CargoCount { get { return Count(new string[] { MaterialCommodities.CommodityCategory }); } }
 
         public int DataHash() { return list.GetHashCode(); }
