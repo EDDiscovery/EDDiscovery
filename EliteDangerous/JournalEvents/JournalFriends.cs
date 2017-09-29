@@ -27,6 +27,8 @@ namespace EliteDangerousCore.JournalEvents
         {
             Status = evt["Status"].Str();
             Name = evt["Name"].Str();
+            OfflineCount = Status.Equals("offline", System.StringComparison.InvariantCultureIgnoreCase) ? 1 : 0;
+            OnlineCount = Status.Equals("online", System.StringComparison.InvariantCultureIgnoreCase) ? 1 : 0;
         }
 
         public void AddFriend(JObject evt)
@@ -38,8 +40,13 @@ namespace EliteDangerousCore.JournalEvents
                 Status = Name = string.Empty;
             }
 
-            StatusList.Add(evt["Status"].Str());
+            string stat = evt["Status"].Str();
+
+            StatusList.Add(stat);
             NameList.Add(evt["Name"].Str());
+
+            OfflineCount += stat.Equals("offline", System.StringComparison.InvariantCultureIgnoreCase) ? 1 : 0;
+            OnlineCount += stat.Equals("online", System.StringComparison.InvariantCultureIgnoreCase) ? 1 : 0;
         }
 
         public string Status { get; set; }      // used for single entries.. empty if list.  Used for VP backwards compat
@@ -47,6 +54,9 @@ namespace EliteDangerousCore.JournalEvents
 
         public List<string> StatusList { get; set; }        // EDD addition.. used when agregating, null if single entry
         public List<string> NameList { get; set; }
+
+        public int OnlineCount { get; set; }        // always counts
+        public int OfflineCount { get; set; }
 
         public override System.Drawing.Bitmap Icon { get { return EliteDangerous.Properties.Resources.friends; } }
 
@@ -57,8 +67,17 @@ namespace EliteDangerousCore.JournalEvents
 
             if (StatusList != null)
             {
-                info = BaseUtils.FieldBuilder.Build("Total Friends:", NameList.Count);
-                for( int i = 0; i < StatusList.Count; i++ )
+                info = "";
+                if (OfflineCount + OnlineCount < NameList.Count)
+                    info = BaseUtils.FieldBuilder.Build("Number of Statuses:", NameList.Count);
+
+                if (OnlineCount > 0)
+                    info = info.AppendPrePad("Online:" + OnlineCount.ToStringInvariant(), ", ");
+
+                if (OfflineCount > 0)
+                    info = info.AppendPrePad("Offline:" + OfflineCount.ToStringInvariant(), ", ");
+
+                for ( int i = 0; i < StatusList.Count; i++ )
                     detailed = detailed.AppendPrePad(BaseUtils.FieldBuilder.Build("", NameList[i], "", StatusList[i]) , System.Environment.NewLine);
             }
             else
