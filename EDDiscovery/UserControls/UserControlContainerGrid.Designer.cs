@@ -49,7 +49,6 @@
             this.rollUpPanelMenu.Name = "rollUpPanelMenu";
             this.rollUpPanelMenu.PinState = true;
             this.rollUpPanelMenu.RolledUpHeight = 5;
-            this.rollUpPanelMenu.RollPixelStep = 5;
             this.rollUpPanelMenu.RollUpDelay = 1000;
             this.rollUpPanelMenu.ShowHiddenMarker = true;
             this.rollUpPanelMenu.Size = new System.Drawing.Size(912, 32);
