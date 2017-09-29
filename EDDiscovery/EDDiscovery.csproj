@@ -737,8 +737,8 @@
     <None Include="Resources\tilegrid.png" />
     <None Include="Resources\starlist.png" />
     <None Include="Resources\edsm24.png" />
-    <None Include="Resources\transformer.bmp" />
     <None Include="Resources\Volcano.bmp" />
+    <None Include="Resources\Terraformable.png" />
     <Content Include="x86\Microsoft.VC100.CRT\msvcp100.dll" />
     <Content Include="x86\Microsoft.VC100.CRT\msvcr100.dll" />
     <EmbeddedResource Include="2DMap\Form2DMap.resx">
