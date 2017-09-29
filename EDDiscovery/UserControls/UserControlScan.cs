@@ -417,13 +417,13 @@ namespace EDDiscovery.UserControls
 
                     offset += size.Width / 2;       // return the middle used was this..
                 }
-                else
+                else //else not a top-level star
                 {
                     bool indicatematerials = sc.HasMaterials && !checkBoxMaterials.Checked;
 
                     Image nodeimage = sc.IsStar ? sc.GetStarTypeImage().Item1 : sc.GetPlanetClassImage();
 
-                    if ((sc.IsLandable || sc.HasRings || indicatematerials))
+                    if ((sc.IsLandable || sc.HasRings || indicatematerials || sc.Terraformable))
                     {
                         Bitmap bmp = new Bitmap(size.Width * 2, quarterheight * 6);          
 
@@ -437,6 +437,9 @@ namespace EDDiscovery.UserControls
                             if (sc.HasRings)
                                 g.DrawImage(sc.Rings.Count() > 1 ? EDDiscovery.Properties.Resources.RingGap512 : EDDiscovery.Properties.Resources.Ring_Only_512,
                                                 new Rectangle(-2, quarterheight, size.Width * 2, size.Height));
+
+                            if (sc.Terraformable)
+                                g.DrawImage(EDDiscovery.Properties.Resources.Transformer, new Rectangle(quarterheight/2, quarterheight / 2, quarterheight, quarterheight));
 
                             if (indicatematerials)
                             {
