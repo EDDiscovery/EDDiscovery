@@ -498,7 +498,7 @@ namespace EliteDangerousCore
         {
             ManualResetEvent stopRequested = StopRequested;
 
-            while (!stopRequested.WaitOne(500))
+            while (!stopRequested.WaitOne(250))
             {
                 List<JournalEntry> jl = ScanTickWorker(() => stopRequested.WaitOne(0));
 

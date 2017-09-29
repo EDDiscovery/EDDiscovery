@@ -17,7 +17,6 @@ namespace EliteDangerousCore.EDSM
 
         private Thread ThreadEDSMFetchLogs;
         private ManualResetEvent ExitRequested = new ManualResetEvent(false);
-        private EDCommander Commander;
         private Action<string> LogLine;
         private DateTime EDSMRequestBackoffTime = DateTime.UtcNow;
         private TimeSpan BackoffInterval = TimeSpan.FromSeconds(60);
@@ -25,22 +24,33 @@ namespace EliteDangerousCore.EDSM
         public DateTime FirstEventTime { get; private set; }
         public DateTime LastEventTime { get; private set; }
 
-        public int CommanderId { get { return Commander.Nr; } }
-
         public delegate void EDSMDownloadedSystems();
         public event EDSMDownloadedSystems OnDownloadedSystems;
 
-        public EDSMLogFetcher(int cmdrid, Action<string> logline)
+        private EDCommander Commander = null;
+        private int CommanderId { get { return Commander.Nr; } }
+
+        public EDSMLogFetcher(Action<string> logline)
         {
-            Commander = EDCommander.GetCommander(cmdrid);
             LogLine = logline;
         }
 
-        public void Start()
+        public void Start( EDCommander cmdr )
         {
             ExitRequested.Reset();
 
-            if (Commander != null && (ThreadEDSMFetchLogs == null || !ThreadEDSMFetchLogs.IsAlive) && Commander.SyncFromEdsm)
+            Trace.WriteLine($"EDSM Fetch logs start with cmdr {cmdr.Nr}");
+
+            if ( !object.ReferenceEquals(Commander,cmdr) )
+            {
+                Trace.WriteLine($"EDSM Fetch logs restart time");
+                LastEventTime = DateTime.UtcNow;
+                FirstEventTime = LastEventTime;
+            }
+
+            Commander = cmdr;
+
+            if (( ThreadEDSMFetchLogs == null || !ThreadEDSMFetchLogs.IsAlive) && Commander.SyncFromEdsm)
             {
                 ThreadEDSMFetchLogs = new Thread(FetcherThreadProc) { IsBackground = true, Name = "EDSM Log Fetcher" };
                 ThreadEDSMFetchLogs.Start();
@@ -65,14 +75,15 @@ namespace EliteDangerousCore.EDSM
         private void FetcherThreadProc()
         {
             bool jupdate = false;
-            LastEventTime = DateTime.UtcNow;
-            FirstEventTime = LastEventTime;
 
             int waittime = 2000; // Max 1 request every 2 seconds, with a backoff if the rate limit is hit
             if (EDSMRequestBackoffTime > DateTime.UtcNow)
             {
                 waittime = (int)Math.Min(EDSMMaxLogAgeMinutes * 60000, Math.Min(BackoffInterval.TotalSeconds * 1000, EDSMRequestBackoffTime.Subtract(DateTime.UtcNow).TotalSeconds * 1000));
             }
+
+            // get them as of now.. since we are searching back in time it should be okay. On a refresh we would start again!
+            List<HistoryEntry> hlfsdlist = JournalEntry.GetAll(Commander.Nr).OfType<JournalLocOrJump>().OrderBy(je => je.EventTimeUTC).Select(je => HistoryEntry.FromJournalEntry(je, null, false, out jupdate)).ToList();
 
             while (!ExitRequested.WaitOne(waittime))
             {
@@ -86,12 +97,12 @@ namespace EliteDangerousCore.EDSM
                 {
                     if (DateTime.UtcNow.Subtract(LastEventTime).TotalMinutes >= EDSMMaxLogAgeMinutes)
                     {
-                        Trace.WriteLine($"Retrieving logs starting {LastEventTime}");
+                        Trace.WriteLine($"Retrieving EDSM logs starting {LastEventTime}");
                         res = edsm.GetLogs(LastEventTime, null, out edsmlogs, out logstarttime, out logendtime);
                     }
                     else if (FirstEventTime > GammaStart)
                     {
-                        Trace.WriteLine($"Retrieving logs ending {FirstEventTime}");
+                        Trace.WriteLine($"Retrieving EDSM logs ending {FirstEventTime}");
                         res = edsm.GetLogs(null, FirstEventTime, out edsmlogs, out logstarttime, out logendtime);
                     }
                 }
@@ -113,99 +124,105 @@ namespace EliteDangerousCore.EDSM
                     EDSMRequestBackoffTime = DateTime.UtcNow + BackoffInterval;
                     BackoffInterval = BackoffInterval + TimeSpan.FromSeconds(60);
                 }
-                else if (res == 100 && edsmlogs != null)
+                else if (res == 100 && edsmlogs != null )
                 {
-                    BackoffInterval = TimeSpan.FromSeconds(60);
+                    Trace.WriteLine($"Retrieving EDSM logs count {edsmlogs.Count}");
 
-                    if (logendtime > DateTime.UtcNow)
-                        logendtime = DateTime.UtcNow;
-
-                    List<HistoryEntry> hlfsdlist = JournalEntry.GetAll(Commander.Nr).OfType<JournalLocOrJump>().OrderBy(je => je.EventTimeUTC).Select(je => HistoryEntry.FromJournalEntry(je, null, false, out jupdate)).ToList();
-                    HistoryList hl = new HistoryList(hlfsdlist);
-                    List<DateTime> hlfsdtimes = hlfsdlist.Select(he => he.EventTimeUTC).ToList();
-
-                    List<HistoryEntry> toadd = new List<HistoryEntry>();
-
-                    int previdx = -1;
-                    foreach (HistoryEntry he in edsmlogs)      // find out list of ones not present
+                    if (edsmlogs.Count > 0)     // if anything to process..
                     {
-                        int index = hlfsdlist.FindIndex(x => x.System.name.Equals(he.System.name, StringComparison.InvariantCultureIgnoreCase) && x.EventTimeUTC.Ticks == he.EventTimeUTC.Ticks);
+                        BackoffInterval = TimeSpan.FromSeconds(60);
 
-                        if (index < 0)
+                        if (logendtime > DateTime.UtcNow)
+                            logendtime = DateTime.UtcNow;
+
+                        HistoryList hl = new HistoryList(hlfsdlist);
+                        List<DateTime> hlfsdtimes = hlfsdlist.Select(he => he.EventTimeUTC).ToList();
+
+                        List<HistoryEntry> toadd = new List<HistoryEntry>();
+
+                        int previdx = -1;
+                        foreach (HistoryEntry he in edsmlogs)      // find out list of ones not present
                         {
-                            // Look for any entries where DST may have thrown off the time
-                            foreach (var vi in hlfsdlist.Select((v, i) => new { v = v, i = i }).Where(vi => vi.v.System.name.Equals(he.System.name, StringComparison.InvariantCultureIgnoreCase)))
-                            {
-                                if (vi.i > previdx)
-                                {
-                                    double hdiff = vi.v.EventTimeUTC.Subtract(he.EventTimeUTC).TotalHours;
-                                    if (hdiff >= -2 && hdiff <= 2 && hdiff == Math.Floor(hdiff))
-                                    {
-                                        if (vi.v.System.id_edsm <= 0)
-                                        {
-                                            vi.v.System.id_edsm = 0;
-                                            hl.FillEDSM(vi.v);
-                                        }
+                            int index = hlfsdlist.FindIndex(x => x.System.name.Equals(he.System.name, StringComparison.InvariantCultureIgnoreCase) && x.EventTimeUTC.Ticks == he.EventTimeUTC.Ticks);
 
-                                        if (vi.v.System.id_edsm <= 0 || vi.v.System.id_edsm == he.System.id_edsm)
+                            if (index < 0)
+                            {
+                                // Look for any entries where DST may have thrown off the time
+                                foreach (var vi in hlfsdlist.Select((v, i) => new { v = v, i = i }).Where(vi => vi.v.System.name.Equals(he.System.name, StringComparison.InvariantCultureIgnoreCase)))
+                                {
+                                    if (vi.i > previdx)
+                                    {
+                                        double hdiff = vi.v.EventTimeUTC.Subtract(he.EventTimeUTC).TotalHours;
+                                        if (hdiff >= -2 && hdiff <= 2 && hdiff == Math.Floor(hdiff))
                                         {
-                                            index = vi.i;
-                                            break;
+                                            if (vi.v.System.id_edsm <= 0)
+                                            {
+                                                vi.v.System.id_edsm = 0;
+                                                hl.FillEDSM(vi.v);
+                                            }
+
+                                            if (vi.v.System.id_edsm <= 0 || vi.v.System.id_edsm == he.System.id_edsm)
+                                            {
+                                                index = vi.i;
+                                                break;
+                                            }
                                         }
                                     }
                                 }
                             }
-                        }
 
-                        if (index < 0)
-                        {
-                            toadd.Add(he);
-                        }
-                        else
-                        {
-                            HistoryEntry lhe = hlfsdlist[index];
-
-                            if (he.IsEDSMFirstDiscover && !lhe.IsEDSMFirstDiscover)
+                            if (index < 0)
                             {
-                                lhe.SetFirstDiscover();
+                                toadd.Add(he);
                             }
-
-                            previdx = index;
-                        }
-                    }
-
-                    if (toadd.Count > 0)  // if we have any, we can add 
-                    {
-                        TravelLogUnit tlu = new TravelLogUnit();    // need a tlu for it
-                        tlu.type = 2;  // EDSM
-                        tlu.Name = "EDSM-" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
-                        tlu.Size = 0;
-                        tlu.Path = "EDSM";
-                        tlu.CommanderId = EDCommander.CurrentCmdrID;
-                        tlu.Add();  // Add to Database
-
-                        using (SQLiteConnectionUser cn = new SQLiteConnectionUser(utc: true))
-                        {
-                            foreach (HistoryEntry he in toadd)
+                            else
                             {
-                                JObject jo = JournalEntry.CreateFSDJournalEntryJson(he.EventTimeUTC,
-                                                                                                  he.System.name, he.System.x, he.System.y, he.System.z,
-                                                                                                  EliteConfigInstance.InstanceConfig.DefaultMapColour);
-                                JournalEntry je =
-                                    JournalEntry.CreateFSDJournalEntry(tlu.id, tlu.CommanderId.Value,
-                                                                                                  (int)SyncFlags.EDSM, jo);
+                                HistoryEntry lhe = hlfsdlist[index];
 
-                                System.Diagnostics.Trace.WriteLine(string.Format("Add {0} {1}", je.EventTimeUTC, he.System.name));
-                                je.Add(jo, cn);
+                                if (he.IsEDSMFirstDiscover && !lhe.IsEDSMFirstDiscover)
+                                {
+                                    lhe.SetFirstDiscover();
+                                }
+
+                                previdx = index;
                             }
                         }
 
-                        LogLine($"Retrieved {toadd.Count} log entries from EDSM, from {logstarttime.ToLocalTime().ToString()} to {logendtime.ToLocalTime().ToString()}");
-
-                        if (logendtime > LastEventTime || logstarttime <= GammaStart)
+                        if (toadd.Count > 0)  // if we have any, we can add 
                         {
-                            if (OnDownloadedSystems != null)
-                                OnDownloadedSystems();
+                            Trace.WriteLine($"Adding EDSM logs count {toadd.Count}");
+
+                            TravelLogUnit tlu = new TravelLogUnit();    // need a tlu for it
+                            tlu.type = 2;  // EDSM
+                            tlu.Name = "EDSM-" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
+                            tlu.Size = 0;
+                            tlu.Path = "EDSM";
+                            tlu.CommanderId = EDCommander.CurrentCmdrID;
+                            tlu.Add();  // Add to Database
+
+                            using (SQLiteConnectionUser cn = new SQLiteConnectionUser(utc: true))
+                            {
+                                foreach (HistoryEntry he in toadd)
+                                {
+                                    JObject jo = JournalEntry.CreateFSDJournalEntryJson(he.EventTimeUTC,
+                                                                                                      he.System.name, he.System.x, he.System.y, he.System.z,
+                                                                                                      EliteConfigInstance.InstanceConfig.DefaultMapColour);
+                                    JournalEntry je =
+                                        JournalEntry.CreateFSDJournalEntry(tlu.id, tlu.CommanderId.Value,
+                                                                                                      (int)SyncFlags.EDSM, jo);
+
+                                    System.Diagnostics.Trace.WriteLine(string.Format("Add {0} {1}", je.EventTimeUTC, he.System.name));
+                                    je.Add(jo, cn);
+                                }
+                            }
+
+                            LogLine($"Retrieved {toadd.Count} log entries from EDSM, from {logstarttime.ToLocalTime().ToString()} to {logendtime.ToLocalTime().ToString()}");
+
+                            if (logendtime > LastEventTime || logstarttime <= GammaStart)
+                            {
+                                if (OnDownloadedSystems != null)
+                                    OnDownloadedSystems();
+                            }
                         }
                     }
 
