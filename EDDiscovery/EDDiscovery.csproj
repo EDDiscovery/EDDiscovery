@@ -222,7 +222,6 @@
     <Compile Include="ScreenShots\ScreenShotConverter.cs" />
     <Compile Include="ScreenShots\ScreenShotDirectoryWatcher.cs" />
     <Compile Include="ScreenShots\ScreenShotImageConverter.cs" />
-    <Compile Include="UserControls\AbstractControlDescriptionProvider.cs" />
     <Compile Include="UserControls\UserControlContainerGrid.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -419,6 +418,12 @@
     <Compile Include="UserControls\UserControlEDSM.Designer.cs">
       <DependentUpon>UserControlEDSM.cs</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\UserControlShoppingList.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\UserControlShoppingList.Designer.cs">
+      <DependentUpon>UserControlShoppingList.cs</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\UserControlSysInfo.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -602,6 +607,9 @@
     <EmbeddedResource Include="UserControls\UserControlJournalGrid.resx">
       <DependentUpon>UserControlJournalGrid.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\UserControlShoppingList.resx">
+      <DependentUpon>UserControlShoppingList.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="UserControls\UserControlSysInfo.resx">
       <DependentUpon>UserControlSysInfo.cs</DependentUpon>
     </EmbeddedResource>
@@ -737,6 +745,7 @@
     <None Include="Resources\tilegrid.png" />
     <None Include="Resources\starlist.png" />
     <None Include="Resources\edsm24.png" />
+    <None Include="Resources\shoppinglist.bmp" />
     <Content Include="x86\Microsoft.VC100.CRT\msvcp100.dll" />
     <Content Include="x86\Microsoft.VC100.CRT\msvcr100.dll" />
     <EmbeddedResource Include="2DMap\Form2DMap.resx">

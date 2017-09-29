@@ -41,6 +41,11 @@ namespace EDDiscovery.UserControls
 
         int[] Order;        // order
         int[] Wanted;       // wanted, in order terms
+        internal bool isEmbedded = false;
+        private List<Tuple<MaterialCommoditiesList.Recipe, int>> wantedList;
+
+        public delegate void ChangedSynthesisWanted(List<Tuple<MaterialCommoditiesList.Recipe, int>> newWanted);
+        public event ChangedSynthesisWanted OnChangedSynthesisWanted;
 
         #region Init
 
@@ -134,6 +139,7 @@ namespace EDDiscovery.UserControls
             if (last_he != null)
             {
                 List<MaterialCommodities> mcl = last_he.MaterialCommodity.Sort(false);
+                wantedList = new List<Tuple<MaterialCommoditiesList.Recipe, int>>();
 
                 int fdrow = dataGridViewSynthesis.FirstDisplayedScrollingRowIndex;      // remember where we were displaying
 
@@ -156,14 +162,12 @@ namespace EDDiscovery.UserControls
                     dataGridViewSynthesis.Rows[i].Visible = visible;
                 }
 
-                List<MaterialCommodities> shoppinglist = new List<MaterialCommodities>();
-
                 for (int i = 0; i < Recipes.Count; i++)
                 {
+                    int rno = (int)dataGridViewSynthesis.Rows[i].Tag;
                     if (dataGridViewSynthesis.Rows[i].Visible)
                     {
-                        int rno = (int)dataGridViewSynthesis.Rows[i].Tag;
-                        Tuple<int, int, string> res = MaterialCommoditiesList.HowManyLeft(mcl, Recipes[rno], shoppinglist, Wanted[rno]);
+                        Tuple<int, int, string> res = MaterialCommoditiesList.HowManyLeft(mcl, Recipes[rno], Wanted[rno]);
                         //System.Diagnostics.Debug.WriteLine("{0} Recipe {1} executed {2} {3} ", i, rno, Wanted[rno], res.Item2);
 
                         using (DataGridViewRow row = dataGridViewSynthesis.Rows[i])
@@ -173,21 +177,32 @@ namespace EDDiscovery.UserControls
                             row.Cells[4].Value = res.Item3;
                         }
                     }
+                    if (Wanted[rno] > 0 && (dataGridViewSynthesis.Rows[i].Visible || isEmbedded))
+                    {
+                        wantedList.Add(new Tuple<MaterialCommoditiesList.Recipe, int>(Recipes[rno], Wanted[rno]));
+                    }
                 }
 
                 dataGridViewSynthesis.RowCount = Recipes.Count;         // truncate previous shopping list..
 
-                shoppinglist.Sort(delegate (MaterialCommodities left, MaterialCommodities right) { return left.name.CompareTo(right.name); });
-
-                foreach( MaterialCommodities c in shoppinglist )        // and add new..
+                if (!isEmbedded)
                 {
-                    Object[] values = { c.name, "", c.scratchpad.ToStringInvariant(), "", c.shortname };
-                    int rn = dataGridViewSynthesis.Rows.Add(values);
-                    dataGridViewSynthesis.Rows[rn].ReadOnly = true;     // disable editing wanted..
+                    MaterialCommoditiesList.ResetUsed(mcl);
+                    List<MaterialCommodities> shoppinglist = MaterialCommoditiesList.GetShoppingList(wantedList, mcl);
+                    shoppinglist.Sort(delegate (MaterialCommodities left, MaterialCommodities right) { return left.name.CompareTo(right.name); });
+
+                    foreach (MaterialCommodities c in shoppinglist)        // and add new..
+                    {
+                        Object[] values = { c.name, "", c.scratchpad.ToStringInvariant(), "", c.shortname };
+                        int rn = dataGridViewSynthesis.Rows.Add(values);
+                        dataGridViewSynthesis.Rows[rn].ReadOnly = true;     // disable editing wanted..
+                    }
                 }
 
                 if ( fdrow>=0 && dataGridViewSynthesis.Rows[fdrow].Visible )        // better check visible, may have changed..
                     dataGridViewSynthesis.FirstDisplayedScrollingRowIndex = fdrow;
+
+                if (OnChangedSynthesisWanted != null) OnChangedSynthesisWanted(wantedList);
             }
         }
 
@@ -345,5 +360,14 @@ namespace EDDiscovery.UserControls
 
         };
 
+        private void buttonClear_Click(object sender, EventArgs e)
+        {
+            for (int i = 0; i < Recipes.Count; i++)
+            {
+                int rno = (int)dataGridViewSynthesis.Rows[i].Tag;
+                Wanted[rno] = 0;
+            }
+            Display();
+        }
     }
 }

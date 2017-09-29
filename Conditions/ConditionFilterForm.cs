@@ -53,10 +53,10 @@ namespace Conditions
                 public ExtendedControls.ButtonExt del;
                 public ExtendedControls.ButtonExt more;
                 public Group group;
-            };
+            }
 
             public List<Conditions> condlist = new List<Conditions>();
-        };
+        }
 
         List<Group> groups;
         public int condxoffset;     // where conditions start in x, estimate in Init
@@ -70,8 +70,8 @@ namespace Conditions
 
         public ConditionFilterForm()
         {
-            InitializeComponent();
             groups = new List<Group>();
+            InitializeComponent();
             CancelButton = buttonCancel;
             AcceptButton = buttonOK;
         }
