@@ -150,6 +150,7 @@ namespace EDDiscovery.UserControls
             HideInfo();
 
             imagebox.ClearImageList();  // does not clear the image, render will do that
+            rtbSystemInfo.Text = "";
 
             if ( last_he == null )
             {
