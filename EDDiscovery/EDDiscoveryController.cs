@@ -605,6 +605,8 @@ namespace EDDiscovery
                     OnNewUIEvent?.Invoke((je as EliteDangerousCore.JournalEvents.JournalMusic).MusicTrack, EDDConfig.Instance.ShowUIEvents);
             }
 
+            OnNewJournalEntry?.Invoke(je);          // Always call this on all entries...
+
             // filter out commanders, and filter out any UI events
             if (je.CommanderId == history.CommanderId && (!je.IsUIEvent || EDDConfig.Instance.ShowUIEvents))  
             {
@@ -613,8 +615,6 @@ namespace EDDiscovery
                 OnNewEntry?.Invoke(he, history);            // major hook
                 OnNewEntrySecond?.Invoke(he, history);      // secondary hook..
             }
-
-            OnNewJournalEntry?.Invoke(je);          // Finally, always call this on all entries...
 
             if (je.EventTypeID == JournalTypeEnum.LoadGame) // and issue this on Load game
             {
