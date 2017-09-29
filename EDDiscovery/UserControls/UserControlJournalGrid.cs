@@ -174,24 +174,22 @@ namespace EDDiscovery.UserControls
             if (item.EventDetailedInfo.Length > 0)
                 detail += ((detail.Length > 0) ? Environment.NewLine : "") + item.EventDetailedInfo;
 
-            object[] rowobj = { EDDiscoveryForm.EDDConfig.DisplayUTC ? item.EventTimeUTC : item.EventTimeLocal, "", item.EventSummary, detail };
+            var rw = dataGridViewJournal.RowTemplate.Clone() as DataGridViewRow;
+            rw.CreateCells(dataGridViewJournal, EDDiscoveryForm.EDDConfig.DisplayUTC ? item.EventTimeUTC : item.EventTimeLocal, "", item.EventSummary, detail);
+            rw.Cells[JournalHistoryColumns.HistoryTag].Tag = item;
 
-            int rownr;
+            int rownr = 0;
 
             if (insert)
             {
-                dataGridViewJournal.Rows.Insert(0, rowobj);
-                rownr = 0;
+                dataGridViewJournal.Rows.Insert(rownr, rw);
             }
             else
             {
-                dataGridViewJournal.Rows.Add(rowobj);
-                rownr = dataGridViewJournal.Rows.Count - 1;
-            }
+                rownr = dataGridViewJournal.Rows.Add(rw);
+            }   
 
             rowsbyjournalid[item.Journalid] = dataGridViewJournal.Rows[rownr];
-
-            dataGridViewJournal.Rows[rownr].Cells[JournalHistoryColumns.HistoryTag].Tag = item;
         }
 
         private void AddNewEntry(HistoryEntry he, HistoryList hl)               // add if in event filter, and not in field filter..
