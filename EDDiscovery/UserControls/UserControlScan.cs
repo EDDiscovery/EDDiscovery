@@ -56,7 +56,7 @@ namespace EDDiscovery.UserControls
         {
             InitializeComponent();
             this.AutoScaleMode = AutoScaleMode.None;            // we are dealing with graphics.. lets turn off dialog scaling.
-            richTextBoxInfo.Visible = false;
+            rtbNodeInfo.Visible = false;
             toolTip.ShowAlways = true;
         }
 
@@ -164,9 +164,10 @@ namespace EDDiscovery.UserControls
 
             if (last_sn != null)     // 
             {
+                BuildSystemInfo(last_sn);
+
                 Point curpos = new Point(leftmargin, topmargin);
                 last_maxdisplayarea = curpos;
-
                 List<PictureBoxHotspot.ImageElement> starcontrols = new List<PictureBoxHotspot.ImageElement>();
 
                 //for( int i = 0; i < 1000; i +=100)  CreateStarPlanet(starcontrols, EDDiscovery.Properties.Resources.ImageStarDiscWhite, new Point(i, 0), new Size(24, 24), i.ToString(), "");
@@ -175,7 +176,7 @@ namespace EDDiscovery.UserControls
                 {
                     int offset = 0;
                     Point maxstarpos = DrawNode(starcontrols, starnode,
-                                (starnode.type == StarScan.ScanNodeType.barycentre) ? EDDiscovery.Properties.Resources.Barycentre : JournalScan.GetStarImageNotScanned(),
+                                (starnode.type == StarScan.ScanNodeType.barycentre) ? Properties.Resources.Barycentre : JournalScan.GetStarImageNotScanned(),
                                 curpos, starsize, ref offset , false, (planetsize.Height*6/4-starsize.Height)/2, true);       // the last part nerfs the label down to the right position
 
                     Point maxitemspos = maxstarpos;
@@ -271,8 +272,30 @@ namespace EDDiscovery.UserControls
             imagebox.Render();      // replaces image..
         }
 
+        private void BuildSystemInfo(StarScan.SystemNode system)
+        {
+            //systems are small... if they get too big and iterating repeatedly is a problem we'll have to move to a node-by-node
+            rtbSystemInfo.Text = BuildScanValue(system);
+            
+        }
+
+        private string BuildScanValue(StarScan.SystemNode system)
+        {
+            var value = 0;
+
+            foreach (var body in system.Bodies)
+            {
+                if (body?.ScanData?.EstimatedValue() != null)
+                {
+                    value += body.ScanData.EstimatedValue();
+                }
+            }
+
+            return $"Approx system scan value: {value:N0}";
+        }
+
         // return right bottom of area used from curpos
-        Point CreatePlanetTree(List<PictureBoxHotspot.ImageElement> pc, StarScan.ScanNode planetnode, Point curpos )
+        Point CreatePlanetTree(List<PictureBoxHotspot.ImageElement> pc, StarScan.ScanNode planetnode, Point curpos)
         {
             // PLANETWIDTH|PLANETWIDTH  (if drawing a full planet with rings/landing)
             // or
@@ -702,32 +725,36 @@ namespace EDDiscovery.UserControls
 
         void ShowInfo(string text , bool onright )
         {
-            richTextBoxInfo.Text = text;
-            richTextBoxInfo.Tag = onright;
-            richTextBoxInfo.Visible = true;
-            richTextBoxInfo.Show();
+            rtbNodeInfo.Text = text;
+            rtbNodeInfo.Tag = onright;
+            rtbNodeInfo.Visible = true;
+            rtbNodeInfo.Show();
             PositionInfo();
         }
-
+        
         void HideInfo()
         {
-            richTextBoxInfo.Visible = false;
+            rtbNodeInfo.Visible = false;
         }
 
         void PositionInfo()
         {
-            if (richTextBoxInfo.Visible)
+            if (rtbNodeInfo.Visible)
             {
-                if (richTextBoxInfo.Tag != null && ((bool)richTextBoxInfo.Tag) == true)
-                    richTextBoxInfo.Location = new Point(panelStars.Width / 2 + panelStars.Width / 16, 10);
+                if (rtbNodeInfo.Tag != null && ((bool)rtbNodeInfo.Tag) == true)
+                    rtbNodeInfo.Location = new Point(panelStars.Width / 2 + panelStars.Width / 16, 50);
                 else
-                    richTextBoxInfo.Location = new Point(panelStars.Width / 16, 10);
+                    rtbNodeInfo.Location = new Point(panelStars.Width / 16, 10);
 
-                int h = Math.Min(richTextBoxInfo.EstimateVerticalSizeFromText(), panelStars.Height - 20);
+                int h = Math.Min(rtbNodeInfo.EstimateVerticalSizeFromText(), panelStars.Height - 20);
 
-                richTextBoxInfo.Size = new Size(panelStars.Width * 6 / 16, h);
-                richTextBoxInfo.PerformLayout();    // not sure why i need this..
+                rtbNodeInfo.Size = new Size(panelStars.Width * 6 / 16, h);
+                rtbNodeInfo.PerformLayout();    // not sure why i need this..
             }
+
+            rtbSystemInfo.Location = new Point(panelStars.Width / 2 + panelStars.Width / 16, 10);
+            rtbSystemInfo.Size = new Size(panelStars.Width * 6 / 16, 40);
+            rtbSystemInfo.PerformLayout();    // not sure why i need this..
         }
 
         private void panelStars_Click(object sender, EventArgs e)
