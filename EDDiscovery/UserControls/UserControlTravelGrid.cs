@@ -397,7 +397,9 @@ namespace EDDiscovery.UserControls
                                              int totalentries, HistoryEntry he,
                                              int hpos, int colwidth, bool showfsdmapcolour)
         {
-            System.Diagnostics.Debug.Assert(he != null);
+            System.Diagnostics.Debug.Assert(he != null);    // Trip for debug builds if something is wrong,
+            if (he == null)                                 // otherwise, ignore it and return.
+                return;
 
             string rowIdx;
 
