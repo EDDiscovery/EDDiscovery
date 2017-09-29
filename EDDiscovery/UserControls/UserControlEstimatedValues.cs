@@ -112,15 +112,8 @@ namespace EDDiscovery.UserControls
                 // flatten tree of scan nodes to prepare for listing
                 foreach(StarScan.ScanNode sn in all_nodes)
                 {
-                    // no ScanData for barycentres or belts
-                    try
-                    {
+                    if ( sn.ScanData != null && sn.ScanData.BodyName != null )
                         dataGridViewNearest.Rows.Add(new object[] { sn.ScanData.BodyName, sn.ScanData.EstimatedValue() });
-                    }
-                    catch
-                    {
-                        // System.Diagnostics.Debug.WriteLine("failed to add row with fullname " + sn.fullname);
-                    }
                 }
 
                 dataGridViewNearest.Sort(this.EstValue, ListSortDirection.Descending);

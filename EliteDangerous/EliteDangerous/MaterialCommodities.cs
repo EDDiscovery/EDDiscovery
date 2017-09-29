@@ -394,11 +394,6 @@ namespace EliteDangerousCore
             AddRare("yasokondileaf", "Yaso Kondi Leaf");
             AddRare("zeesszeantgrubglue", "Zeessze Ant Grub Glue");
             AddRare("trinketsofhiddenfortune", "Trinkets Of Hidden Fortune");
-            AddRare("unknownartifact", "Unknown Artefact");
-            AddRare("unknownlink", "Unknown Link");
-            AddRare("unknownbiologicalmatter", "Unknown Biological Matter");
-            AddRare("unknownresin", "Unknown Resin");
-            AddRare("unknowntechnologysamples", "Unknown Technology Samples");
 
             // very common data
             AddEnc( "Anomalous Bulk Scan Data", "Very Common", "ABSD", "bulkscandata");
@@ -435,8 +430,6 @@ namespace EliteDangerousCore
             AddEnc( "Divergent Scan Data", "Rare", "DSD", "encodedscandata");
             AddEnc( "Eccentric Hyperspace Trajectories", "Rare", "EHT", "hyperspacetrajectories");
             AddEnc( "Security Firmware Patch", "Rare", "SFP", "securityfirmware");
-            AddEnc("Unknown Ship Signature", "Rare", "USSig");
-            AddEnc("Unknown Wake Data", "Rare", "UWD");
             AddEnc( "Pattern Delta Obelisk Data", "Rare", "PDOD", "ancientlanguagedata");
             // very rare data
             AddEnc( "Adaptive Encryptors Capture", "Very Rare", "AEC", "adaptiveencryptors");
@@ -499,17 +492,27 @@ namespace EliteDangerousCore
             AddManu( "Pharmaceutical Isolators", "Very Rare", "PI");
             AddManu( "Proto Heat Radiators", "Very Rare", "PHR");
             AddManu( "Proto Radiolic Alloys", "Very Rare", "PRA");
-            AddManu( "Unknown Fragment", "Very Rare", "UES", "unknownenergysource");
 
             //Unknowns, data from INARA and cometbourne, July 17
-            AddManu("Unknown Carapace", "Very Rare", "UKCP", "unknowncarapace");
-            AddManu("Unknown Energy Cell", "Standard", "UKEC", "unknownenergycell");
-            AddManu("Unknown Organic Circuitry", "Very Rare", "UKOC", "unknownorganiccircuitry");
-            AddManu("Unknown Technology Components", "Rare", "UKTC", "unknowntechnologycomponents");
+            // Renamed in 2.4
+            AddRare("unknownartifact", "Thargoid Sensor");
+            AddRare("unknownprobe", "Thargoid Probe");
+            AddRare("unknownlink", "Thargoid Link");
+            AddRare("unknownbiologicalmatter", "Thargoid Biological Matter");
+            AddRare("unknownresin", "Thargoid Resin");
+            AddRare("unknowntechnologysamples", "Thargoid Technology Samples");
 
-            AddEnc("Unknown Material Composition Data", "Standard", "UMCD", "tg_compositiondata");
-            AddEnc("Unknown Structural Data", "Common", "UKSD", "tg_structuraldata");
-            AddEnc("Unknown Residue Data Analysis", "Rare", "URDA", "tg_residuedata");
+            AddManu("Thargoid Carapace", "Common", "UKCP", "unknowncarapace");
+            AddManu("Thargoid Energy Cell", "Standard", "UKEC", "unknownenergycell");
+            AddManu("Thargoid Organic Circuitry", "Very Rare", "UKOC", "unknownorganiccircuitry");
+            AddManu("Thargoid Technology Components", "Rare", "UKTC", "unknowntechnologycomponents");
+            AddManu("Sensor Fragment", "Very Rare", "UES", "unknownenergysource");
+
+            AddEnc("Thargoid Material Composition Data", "Standard", "UMCD", "tg_compositiondata");
+            AddEnc("Thargoid Structural Data", "Common", "UKSD", "tg_structuraldata");
+            AddEnc("Thargoid Residue Data", "Rare", "URDA", "tg_residuedata");
+            AddEnc("Thargoid Ship Signature", "Standard", "USSig", "unknownshipsignature");
+            AddEnc("Thargoid Wake Data", "Rare", "UWD", "unknownwakedata");
 
             // INARA - no idea what the FD IDs are
 
