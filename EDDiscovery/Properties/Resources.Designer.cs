@@ -686,6 +686,16 @@ namespace EDDiscovery.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap Terraformable {
+            get {
+                object obj = ResourceManager.GetObject("Terraformable", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap tilegrid {
             get {
                 object obj = ResourceManager.GetObject("tilegrid", resourceCulture);
@@ -739,16 +749,6 @@ namespace EDDiscovery.Properties {
         internal static System.Drawing.Bitmap toolStripButtonSubmitDistances_Image {
             get {
                 object obj = ResourceManager.GetObject("toolStripButtonSubmitDistances_Image", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap Transformer {
-            get {
-                object obj = ResourceManager.GetObject("Transformer", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

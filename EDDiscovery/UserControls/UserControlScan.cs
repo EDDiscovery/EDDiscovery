@@ -438,12 +438,17 @@ namespace EDDiscovery.UserControls
                                 g.DrawImage(sc.Rings.Count() > 1 ? EDDiscovery.Properties.Resources.RingGap512 : EDDiscovery.Properties.Resources.Ring_Only_512,
                                                 new Rectangle(-2, quarterheight, size.Width * 2, size.Height));
 
-                            if (!string.IsNullOrEmpty(sc.Volcanism))
-                                g.DrawImage(EDDiscovery.Properties.Resources.Volcano, new Rectangle(quarterheight / 2, quarterheight / 2 + quarterheight, quarterheight, quarterheight));
-
 
                             if (sc.Terraformable)
-                                g.DrawImage(EDDiscovery.Properties.Resources.Transformer, new Rectangle(quarterheight / 2, quarterheight / 2, quarterheight, quarterheight));
+                                g.DrawImage(EDDiscovery.Properties.Resources.Terraformable, new Rectangle(quarterheight / 2, quarterheight / 2, quarterheight, quarterheight));
+
+                            if (HasMeaningfulVolcanism(sc)) //this renders below the terraformable icon if present
+                                g.DrawImage(EDDiscovery.Properties.Resources.Volcano, new Rectangle(quarterheight / 2, (int)(quarterheight *1.5), quarterheight, quarterheight));
+
+                            //experiment - does this take all the fun out of it?
+                            if (sc.EstimatedValue() > 50000)
+                                g.DrawImage(EDDiscovery.Properties.Resources.startflag, new Rectangle(quarterheight / 2, (int)(quarterheight * 2.5), quarterheight, quarterheight));
+
 
                             if (indicatematerials)
                             {
@@ -513,7 +518,13 @@ namespace EDDiscovery.UserControls
                 sc.HasRings || 
                 indicatematerials || 
                 sc.Terraformable ||
-                !string.IsNullOrEmpty(sc.Volcanism);
+                HasMeaningfulVolcanism(sc) ||
+                sc.EstimatedValue() > 50000;
+        }
+
+        private static bool HasMeaningfulVolcanism(JournalScan sc)
+        {
+            return sc.VolcanismID != EDVolcanism.None && sc.VolcanismID != EDVolcanism.Unknown;
         }
 
         Point CreateMaterialNodes(List<PictureBoxHotspot.ImageElement> pc, JournalScan sn, Point matpos, Size matsize)
