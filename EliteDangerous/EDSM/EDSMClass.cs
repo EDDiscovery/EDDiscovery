@@ -499,9 +499,9 @@ namespace EliteDangerousCore.EDSM
                         bool firstdiscover = jo["firstDiscover"].Value<bool>();
                         DateTime etutc = DateTime.ParseExact(ts, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.AdjustToUniversal|DateTimeStyles.AssumeUniversal); // UTC time
 
-                        SystemClass sc = SystemClassDB.GetSystem(id, cn, SystemClassDB.SystemIDType.EdsmId);
+                        ISystem sc = SystemClassDB.GetSystem(id, cn, SystemClassDB.SystemIDType.EdsmId);
                         if (sc == null)
-                            sc = new SystemClassDB(name)
+                            sc = new SystemClass(name)
                             {
                                 id_edsm = id
                             };
@@ -576,7 +576,7 @@ namespace EliteDangerousCore.EDSM
             {
                 foreach (JObject sysname in msg)
                 {
-                    SystemClass sys = new SystemClass();
+                    ISystem sys = new SystemClass();
                     sys.name = sysname["name"].Str("Unknown");
                     sys.id_edsm = sysname["id"].Long(0);
                     JObject co = (JObject)sysname["coords"];

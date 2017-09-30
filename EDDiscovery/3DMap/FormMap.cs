@@ -101,7 +101,7 @@ namespace EDDiscovery
         System.Windows.Forms.ToolTip _mousehovertooltip = null;
 
         public List<HistoryEntry> _systemlist { get; set; }
-        private List<SystemClassDB> _plannedRoute { get; set; }
+        private List<ISystem> _plannedRoute { get; set; }
 
         public List<FGEImage> fgeimages = new List<FGEImage>();
 
@@ -231,7 +231,7 @@ namespace EDDiscovery
             return tsmi;
         }
 
-        public void SetPlannedRoute(List<SystemClassDB> plannedr)
+        public void SetPlannedRoute(List<ISystem> plannedr)
         {
             _plannedRoute = plannedr;
             GenerateDataSetsRouteTri();
@@ -1782,7 +1782,7 @@ namespace EDDiscovery
                 info = hoversystem.name + Environment.NewLine + string.Format("x:{0} y:{1} z:{2}", hoversystem.x.ToString("0.00"), hoversystem.y.ToString("0.00"), hoversystem.z.ToString("0.00"));
                 pos = new Vector3d(hoversystem.x, hoversystem.y, hoversystem.z);
 
-                SystemClassDB sysclass = (hoversystem.id != 0) ? SystemClassDB.GetSystem(hoversystem.id) : SystemClassDB.GetSystem(hoversystem.name);
+                ISystem sysclass = (hoversystem.id != 0) ? SystemClassDB.GetSystem(hoversystem.id) : SystemClassDB.GetSystem(hoversystem.name);
 
                 if (sysclass != null)
                 {
@@ -1982,14 +1982,14 @@ namespace EDDiscovery
             return curbk;
         }
 
-        private SystemClassDB GetMouseOverNotedSystem(int x, int y, out float cursysdistz )
+        private ISystem GetMouseOverNotedSystem(int x, int y, out float cursysdistz )
         {
             x = Math.Min(Math.Max(x, 5), glControl.Width - 5);
             y = Math.Min(Math.Max(glControl.Height - y, 5), glControl.Height - 5);
 
             Vector3[] rotvert = TexturedQuadData.GetVertices(new Vector3(0, 0, 0), _lastcameranorm.Rotation, GetBitmapOnScreenSizeX(), GetBitmapOnScreenSizeY(), 0, GetBitmapOnScreenSizeY() / 2);
 
-            SystemClassDB cursys = null;
+            ISystem cursys = null;
             cursysdistz = float.MaxValue;
 
             if (_systemlist == null)
@@ -2026,7 +2026,7 @@ namespace EDDiscovery
                                 if (newcursysdistz < cursysdistz)
                                 {
                                     cursysdistz = newcursysdistz;
-                                    cursys = (SystemClassDB)vs.System;
+                                    cursys = vs.System;
                                 }
                             }
                         }
@@ -2202,7 +2202,7 @@ namespace EDDiscovery
                 s = FindSystem("Sol");
 
                 if (s == null)
-                    s = new SystemClassDB("Sol", 0, 0, 0);
+                    s = new SystemClass("Sol", 0, 0, 0);
             }
 
             return s;
