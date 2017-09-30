@@ -48,6 +48,8 @@ namespace EliteDangerousCore.DB
 
     public static class SystemClassDB
     {
+        private static Dictionary<string, List<ISystem>> SystemNameCache = new Dictionary<string, List<ISystem>>(StringComparer.InvariantCultureIgnoreCase);
+
         public const float XYZScalar = 128.0F;     // scaling between DB stored values and floats
 
         public static ISystem FromJson(JObject jo, SystemInfoSource source)
@@ -324,7 +326,7 @@ namespace EliteDangerousCore.DB
             return GetSystemsByName(name, cn).FirstOrDefault();
         }
 
-        public static List<ISystem> GetSystemsByName(string name, SQLiteConnectionSystem cn = null, bool uselike = false, bool useedsm = true)
+        public static List<ISystem> GetSystemsByName(string name, SQLiteConnectionSystem cn = null, bool uselike = false, bool useedsm = true, bool cache = true)
         {
             List<ISystem> systems = new List<ISystem>();
 
@@ -343,9 +345,21 @@ namespace EliteDangerousCore.DB
             }
             else if (useedsm && name != "" && name.Length >= 2)
             {
-                System.Diagnostics.Debug.WriteLine($"System {name} not in local DB; fetching from EDSM");
-                EDSMClass edsm = new EDSMClass();
-                systems = edsm.GetSystemsByName(name, uselike);
+                if (!uselike && cache && SystemNameCache.ContainsKey(name))
+                {
+                    systems = SystemNameCache[name];
+                }
+                else
+                {
+                    System.Diagnostics.Trace.WriteLine($"System {name} not in local DB; fetching from EDSM");
+                    EDSMClass edsm = new EDSMClass();
+                    systems = edsm.GetSystemsByName(name, uselike);
+
+                    if (!uselike)
+                    {
+                        SystemNameCache[name] = systems;
+                    }
+                }
             }
 
             return systems;
