@@ -192,6 +192,7 @@ namespace EDDiscovery.UserControls
 
         public override void Closing()
         {
+            discoveryform.OnNewEntry -= Discoveryform_OnNewEntry;
             RevertToNormalSize();
             userControlEngineering.Closing();
             userControlSynthesis.Closing();
