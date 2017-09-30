@@ -168,6 +168,7 @@ namespace EDDiscovery.UserControls
                 {
                     RevertToNormalSize();
                     int minWidth = ((UserControlForm)this.ParentForm).TitleBarMinWidth();
+                    splitContainer1.Panel2MinSize = 0;
                     RequestTemporaryResize(new Size(Math.Max(minWidth, displayList.img.Width) + 8, displayList.img.Height + 4));
                 }
                 else
