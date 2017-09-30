@@ -213,6 +213,32 @@ namespace EDDiscovery.UserControls
 
             if (add)
             {
+                var filter = (TravelHistoryFilter)comboBoxHistoryWindow.SelectedItem ?? TravelHistoryFilter.NoFilter;
+
+                if (filter.MaximumNumberOfItems != null)
+                {
+                    for (int r = dataGridViewTravel.Rows.Count - 1; r >= dataGridViewTravel.Rows.Count; r--)
+                    {
+                        dataGridViewTravel.Rows.RemoveAt(r);
+                    }
+                }
+
+                if (filter.MaximumDataAge != null)
+                {
+                    for (int r = dataGridViewTravel.Rows.Count - 1; r > 0; r--)
+                    {
+                        var rhe = dataGridViewTravel.Rows[r].Tag as HistoryEntry;
+                        if (rhe != null && rhe.AgeOfEntry() > filter.MaximumDataAge)
+                        {
+                            dataGridViewTravel.Rows.RemoveAt(r);
+                        }
+                        else
+                        {
+                            break;
+                        }
+                    }
+                }
+
                 if (checkBoxMoveToTop.Checked && dataGridViewTravel.DisplayedRowCount(false) > 0)   // Move focus to new row
                 {
                     //System.Diagnostics.Debug.WriteLine("Auto Sel");
