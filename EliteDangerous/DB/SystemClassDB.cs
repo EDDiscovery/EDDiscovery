@@ -14,6 +14,7 @@
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 
+using EliteDangerousCore.EDSM;
 using EMK.LightGeometry;
 using Newtonsoft.Json.Linq;
 using System;
@@ -323,19 +324,28 @@ namespace EliteDangerousCore.DB
             return GetSystemsByName(name, cn).FirstOrDefault();
         }
 
-        public static List<ISystem> GetSystemsByName(string name, SQLiteConnectionSystem cn = null , bool uselike = false)
+        public static List<ISystem> GetSystemsByName(string name, SQLiteConnectionSystem cn = null, bool uselike = false, bool useedsm = true)
         {
             List<ISystem> systems = new List<ISystem>();
 
             List<long> edsmidlist = GetEdsmIdsFromName(name, cn , uselike);
 
-            foreach (long edsmid in edsmidlist )
+            if (edsmidlist.Count != 0)
             {
-                ISystem sys = GetSystem(edsmid, cn, SystemIDType.EdsmId);
-                if (sys != null)
+                foreach (long edsmid in edsmidlist)
                 {
-                    systems.Add(sys);
+                    ISystem sys = GetSystem(edsmid, cn, SystemIDType.EdsmId);
+                    if (sys != null)
+                    {
+                        systems.Add(sys);
+                    }
                 }
+            }
+            else if (useedsm && name != "" && name.Length >= 2)
+            {
+                System.Diagnostics.Debug.WriteLine($"System {name} not in local DB; fetching from EDSM");
+                EDSMClass edsm = new EDSMClass();
+                systems = edsm.GetSystemsByName(name, uselike);
             }
 
             return systems;
