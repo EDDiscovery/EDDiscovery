@@ -89,7 +89,7 @@ namespace EliteDangerousCore.EDDB
                                 {
                                     JObject jo = JObject.Parse(line);
 
-                                    SystemClassDB system = new SystemClassDB(jo, SystemInfoSource.EDDB);
+                                    ISystem system = SystemClassDB.FromJson(jo, SystemInfoSource.EDDB);
 
                                     if (system.HasEDDBInformation)                                  // screen out for speed any EDDB data with empty interesting fields
                                     {
