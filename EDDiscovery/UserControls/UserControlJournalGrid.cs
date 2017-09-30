@@ -198,6 +198,32 @@ namespace EDDiscovery.UserControls
             {
                 AddNewJournalRow(true, he);
 
+                var filter = (TravelHistoryFilter)comboBoxJournalWindow.SelectedItem ?? TravelHistoryFilter.NoFilter;
+
+                if (filter.MaximumNumberOfItems != null)
+                {
+                    for (int r = dataGridViewJournal.Rows.Count - 1; r >= dataGridViewJournal.Rows.Count; r--)
+                    {
+                        dataGridViewJournal.Rows.RemoveAt(r);
+                    }
+                }
+
+                if (filter.MaximumDataAge != null)
+                {
+                    for (int r = dataGridViewJournal.Rows.Count - 1; r > 0; r--)
+                    {
+                        var rhe = dataGridViewJournal.Rows[r].Tag as HistoryEntry;
+                        if (rhe != null && rhe.AgeOfEntry() > filter.MaximumDataAge)
+                        {
+                            dataGridViewJournal.Rows.RemoveAt(r);
+                        }
+                        else
+                        {
+                            break;
+                        }
+                    }
+                }
+
                 if (checkBoxMoveToTop.Checked && dataGridViewJournal.DisplayedRowCount(false) > 0)   // Move focus to new row
                 {
                     dataGridViewJournal.ClearSelection();
