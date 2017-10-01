@@ -420,24 +420,24 @@ namespace EliteDangerousCore
 
         public void FillInPositionsFSDJumps()       // call if you want to ensure we have the best posibile position data on FSD Jumps.  Only occurs on pre 2.1 with lazy load of just name/edsmid
         {
-            List<Tuple<HistoryEntry, SystemClassDB>> updatesystems = new List<Tuple<HistoryEntry, SystemClassDB>>();
+            List<Tuple<HistoryEntry, ISystem>> updatesystems = new List<Tuple<HistoryEntry, ISystem>>();
 
             using (SQLiteConnectionSystem cn = new SQLiteConnectionSystem())
             {
                 foreach (HistoryEntry he in historylist)
                 {
                     if (he.IsFSDJump && !he.System.HasCoordinate)   // try and load ones without position.. if its got pos we are happy
-                        updatesystems.Add(new Tuple<HistoryEntry, SystemClassDB>(he, FindEDSM(he)));
+                        updatesystems.Add(new Tuple<HistoryEntry, ISystem>(he, FindEDSM(he)));
                 }
             }
 
-            foreach (Tuple<HistoryEntry, SystemClassDB> he in updatesystems)
+            foreach (Tuple<HistoryEntry, ISystem> he in updatesystems)
             {
                 FillEDSM(he.Item1, edsmsys: he.Item2);  // fill, we already have an EDSM system to use
             }
         }
 
-        private SystemClassDB FindEDSM(HistoryEntry syspos, SQLiteConnectionSystem conn = null, bool reload = false)
+        private ISystem FindEDSM(HistoryEntry syspos, SQLiteConnectionSystem conn = null, bool reload = false)
         {
             if (syspos.System.status == SystemStatusEnum.EDSC || (!reload && syspos.System.id_edsm == -1))  // if set already, or we tried and failed..
                 return null;
@@ -463,7 +463,7 @@ namespace EliteDangerousCore
             }
         }
 
-        public void FillEDSM(HistoryEntry syspos, SystemClassDB edsmsys = null, bool reload = false, SQLiteConnectionUser uconn = null)       // call to fill in ESDM data for entry, and also fills in all others pointing to the system object
+        public void FillEDSM(HistoryEntry syspos, ISystem edsmsys = null, bool reload = false, SQLiteConnectionUser uconn = null)       // call to fill in ESDM data for entry, and also fills in all others pointing to the system object
         {
             if (syspos.System.status == SystemStatusEnum.EDSC || (!reload && syspos.System.id_edsm == -1))  // if set already, or we tried and failed..
                 return;

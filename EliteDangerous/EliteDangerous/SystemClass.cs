@@ -14,7 +14,8 @@
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 
- using System;
+using System;
+using System.Diagnostics;
 
 namespace EliteDangerousCore
 {
@@ -51,8 +52,29 @@ namespace EliteDangerousCore
         }
     }
 
+    [DebuggerDisplay("System {name} ({x,nq},{y,nq},{z,nq})")]
     public class SystemClass : SystemClassBase, ISystem
     {
+        public SystemClass()
+        {
+        }
+
+        public SystemClass(string Name)
+        {
+            name = Name;
+            status = DB.SystemStatusEnum.Unknown;
+            x = double.NaN;
+            y = double.NaN;
+            z = double.NaN;
+        }
+
+        public SystemClass(string Name, double vx, double vy, double vz)
+        {
+            name = Name;
+            status = DB.SystemStatusEnum.Unknown;
+            x = vx; y = vy; z = vz;
+        }
+
         public int cr { get; set; }
         public string CommanderCreate { get; set; }
         public DateTime CreateDate { get; set; }
