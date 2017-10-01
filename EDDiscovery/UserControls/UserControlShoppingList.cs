@@ -106,7 +106,8 @@ namespace EDDiscovery.UserControls
         private void Discoveryform_OnNewEntry(HistoryEntry he, HistoryList hl)
         {
             last_he = he;
-            Display();
+            if (he is IMaterialCommodityJournalEntry)
+                Display();
         }
 
         private void Display(HistoryEntry he, HistoryList hl)
@@ -182,7 +183,7 @@ namespace EDDiscovery.UserControls
                     splitContainer1.Panel1MinSize = displayList.img.Width;
                 }
                 else
-                    splitContainer1.SplitterDistance = splitContainer1.Width - splitContainer1.Panel2MinSize;
+                    splitContainer1.SplitterDistance = Math.Max(0, splitContainer1.Width - splitContainer1.Panel2MinSize);
             }
         }
 
