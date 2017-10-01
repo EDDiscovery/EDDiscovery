@@ -745,7 +745,7 @@ namespace EDDiscovery._3DMap
             return _datasets;
         }
 
-        public List<IData3DSet> BuildRouteTri(List<SystemClassDB> PlannedRoute)
+        public List<IData3DSet> BuildRouteTri(List<ISystem> PlannedRoute)
         {
             if (PlannedRoute != null && PlannedRoute.Any())
             {
