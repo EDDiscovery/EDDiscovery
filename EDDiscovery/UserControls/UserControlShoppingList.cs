@@ -182,7 +182,7 @@ namespace EDDiscovery.UserControls
                     splitContainer1.Panel1MinSize = displayList.img.Width;
                 }
                 else
-                    splitContainer1.SplitterDistance = splitContainer1.Width - splitContainer1.Panel2MinSize;
+                    splitContainer1.SplitterDistance = Math.Max(0, splitContainer1.Width - splitContainer1.Panel2MinSize);
             }
         }
 
