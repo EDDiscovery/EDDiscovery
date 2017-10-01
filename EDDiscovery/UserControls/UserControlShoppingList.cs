@@ -106,7 +106,8 @@ namespace EDDiscovery.UserControls
         private void Discoveryform_OnNewEntry(HistoryEntry he, HistoryList hl)
         {
             last_he = he;
-            Display();
+            if (he is IMaterialCommodityJournalEntry)
+                Display();
         }
 
         private void Display(HistoryEntry he, HistoryList hl)
