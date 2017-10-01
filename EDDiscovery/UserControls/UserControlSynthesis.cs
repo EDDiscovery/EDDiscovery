@@ -116,6 +116,7 @@ namespace EDDiscovery.UserControls
         {
             last_he = uctg.GetCurrentHistoryEntry;
             Display();
+            if (OnChangedSynthesisWanted != null) OnChangedSynthesisWanted(wantedList);
         }
 
         private void Discoveryform_OnNewEntry(HistoryEntry he, HistoryList hl)
