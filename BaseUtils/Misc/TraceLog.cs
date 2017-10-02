@@ -124,7 +124,7 @@ namespace BaseUtils
                                 }
                                 else
                                 {
-                                    writer.WriteLine($"[{DateTime.Now.ToString("u")}] {msg}");
+                                    writer.WriteLine($"[{DateTime.UtcNow.ToString("u")}] {msg}");
                                     writer.Flush();
                                     msgrepeats[msg] = 0;
                                     linenum++;
@@ -141,10 +141,10 @@ namespace BaseUtils
                                 {
                                     if (rptkvp.Value >= 1)
                                     {
-                                        writer.WriteLine($"[{DateTime.Now.ToString("u")}] {rptkvp.Key}");
+                                        writer.WriteLine($"[{DateTime.UtcNow.ToString("u")}] {rptkvp.Key}");
                                         if (rptkvp.Value > 1)
                                         {
-                                            writer.WriteLine($"[{DateTime.Now.ToString("u")}] Last message repeated {(rptkvp.Value)} times");
+                                            writer.WriteLine($"[{DateTime.UtcNow.ToString("u")}] Last message repeated {(rptkvp.Value)} times");
                                         }
                                     }
                                 }

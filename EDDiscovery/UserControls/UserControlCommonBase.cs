@@ -27,14 +27,22 @@ using EliteDangerousCore;
 
 namespace EDDiscovery.UserControls
 {
-    [TypeDescriptionProvider(typeof(AbstractControlDescriptionProvider<UserControlCommonBase, UserControl>))]
-    public abstract class UserControlCommonBase : UserControl
+    public class UserControlCommonBase : UserControl
     {
+        // Displaynumbers.. 
+        // 0 = main travel control (travelhistorycontrol), 0 = main journal control (journalviewcontrol, via EDform)
+        // 1000 = Bottom history, 1001 = bottom right history, 1002 = middle right history, 1003 = top right history (travelhistorycontrol.cs)
+        // 1 = first pop out window of type, 2 = second, etc (popoutcontrol, PopOut func)
+        // When a grid open, displaynumber for its children is set by CreatePanel in UserControlContainerGrid
+        // 1050+ grid displaynumber * 1000 + index of type in grid
+        // so, if a pop out grid of second instance, = 2, would get 1050+2000+index of type in grid
+        // this works for recursive grids to a enough for real world purposes.
+
         // in calling order..
-        public abstract void Init(EDDiscoveryForm ed, UserControlCursorType thc, int displayno);    // start up, give discovery form and cursor, and its display id
+        public virtual void Init(EDDiscoveryForm ed, UserControlCursorType thc, int displayno) { }    // start up, give discovery form and cursor, and its display id
         public virtual void LoadLayout() { }        // then a chance to load a layout
-        public abstract void InitialDisplay();      // then after the themeing, do the initial display
-        public abstract void Closing();             // close it
+        public virtual void InitialDisplay() { }    // then after the themeing, do the initial display
+        public virtual void Closing() { }           // close it
 
         public virtual void ChangeCursorType(UserControlCursorType thc) { }     // optional, cursor has changed
 

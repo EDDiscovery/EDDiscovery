@@ -63,6 +63,7 @@ namespace EDDiscovery.UserControls
             this.buttonFilterEngineer = new ExtendedControls.ButtonExt();
             this.buttonFilterModule = new ExtendedControls.ButtonExt();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.buttonClear = new ExtendedControls.ButtonExt();
             this.dataViewScrollerPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewEngineering)).BeginInit();
             this.panelButtons.SuspendLayout();
@@ -217,6 +218,7 @@ namespace EDDiscovery.UserControls
             // 
             // panelButtons
             // 
+            this.panelButtons.Controls.Add(this.buttonClear);
             this.panelButtons.Controls.Add(this.buttonFilterMaterial);
             this.panelButtons.Controls.Add(this.buttonFilterUpgrade);
             this.panelButtons.Controls.Add(this.buttonFilterLevel);
@@ -303,6 +305,21 @@ namespace EDDiscovery.UserControls
             // 
             this.toolTip1.ShowAlways = true;
             // 
+            // buttonClear
+            // 
+            this.buttonClear.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.buttonClear.BorderColorScaling = 1.25F;
+            this.buttonClear.ButtonColorScaling = 0.5F;
+            this.buttonClear.ButtonDisabledScaling = 0.5F;
+            this.buttonClear.Location = new System.Drawing.Point(692, 4);
+            this.buttonClear.Name = "buttonClear";
+            this.buttonClear.Size = new System.Drawing.Size(88, 23);
+            this.buttonClear.TabIndex = 5;
+            this.buttonClear.Text = "Clear Wanted";
+            this.toolTip1.SetToolTip(this.buttonClear, "Set all wanted values to zero");
+            this.buttonClear.UseVisualStyleBackColor = true;
+            this.buttonClear.Click += new System.EventHandler(this.buttonClear_Click);
+            // 
             // UserControlEngineering
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -339,5 +356,6 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.DataGridViewTextBoxColumn Recipe;
         private System.Windows.Forms.DataGridViewTextBoxColumn Engineers;
         private ExtendedControls.ButtonExt buttonFilterMaterial;
+        private ExtendedControls.ButtonExt buttonClear;
     }
 }
