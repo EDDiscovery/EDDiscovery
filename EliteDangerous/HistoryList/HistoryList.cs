@@ -892,7 +892,7 @@ namespace EliteDangerousCore
         {
             if (je.EventTypeID == JournalTypeEnum.Friends)
                 return 2000;
-            else if (je.EventTypeID == JournalTypeEnum.Scan)
+            else if (je.EventTypeID == JournalTypeEnum.FuelScoop)
                 return 10000;
             else
                 return 0;
