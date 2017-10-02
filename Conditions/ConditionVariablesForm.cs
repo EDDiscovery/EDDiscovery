@@ -40,7 +40,7 @@ namespace Conditions
             public ExtendedControls.ComboBoxCustom op;
             public ExtendedControls.TextBoxBorder value;
             public ExtendedControls.ButtonExt del;
-        };
+        }
 
         List<Group> groups;
 
@@ -52,8 +52,9 @@ namespace Conditions
 
         public ConditionVariablesForm()
         {
-            InitializeComponent();
             groups = new List<Group>();
+            InitializeComponent();
+
         }
 
         // altops, if given, describes the operator of each variable.

@@ -20,6 +20,7 @@ using System.Linq;
 using System.Text;
 using EliteDangerousCore.JournalEvents;
 using Newtonsoft.Json.Linq;
+using System.IO;
 
 namespace EliteDangerousCore
 {
@@ -429,6 +430,33 @@ namespace EliteDangerousCore
             jo["modules"] = mlist;
 
             return jo.ToString(Newtonsoft.Json.Formatting.Indented);
+        }
+
+        public string ToCompressedJSON(out string errstring)
+        {
+            string s = ToJSON(out errstring);
+
+            var bytes = Encoding.UTF8.GetBytes(s);
+
+            using (MemoryStream indata = new MemoryStream(bytes))
+            {
+                using (MemoryStream outdata = new MemoryStream())
+                {
+                    using (System.IO.Compression.GZipStream gzipStream = new System.IO.Compression.GZipStream(outdata, System.IO.Compression.CompressionLevel.Optimal, true))
+                    {
+                        indata.CopyTo(gzipStream);      // important to clean up gzip otherwise all the data is not written.. using
+                    }
+
+                    return Convert.ToBase64String(outdata.ToArray());
+                }
+            }
+        }
+
+        public string GetCoriolisUrl(out string errstring)
+        {
+            string data = ToCompressedJSON(out errstring);
+
+            return EliteDangerous.Properties.Resources.URLCoriolis + "data=" + Uri.EscapeDataString(data) + "&bn=" + Uri.EscapeDataString(Name);
         }
     }
 

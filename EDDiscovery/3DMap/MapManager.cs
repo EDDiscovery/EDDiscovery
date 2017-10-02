@@ -47,7 +47,7 @@ namespace EDDiscovery._3DMap
             _formMap.Prepare(historysel, homesys, centersys, zoom, visited);
         }
 
-        public void SetPlanned(List<SystemClassDB> plannedr)
+        public void SetPlanned(List<ISystem> plannedr)
         {
             _formMap.SetPlannedRoute(plannedr);
         }

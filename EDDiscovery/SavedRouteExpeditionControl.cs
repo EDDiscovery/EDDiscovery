@@ -173,7 +173,7 @@ namespace EDDiscovery
         {
             ISystemBase sys;
             if (!SystemClassDB.TryGetSystem(sysname, out sys, true) && edsm.IsKnownSystem(sysname))
-                sys = new SystemClassDB(sysname);
+                sys = new SystemClass(sysname);
 
             return sys;
         }
@@ -337,14 +337,14 @@ namespace EDDiscovery
             txtP2PDIstance.Text = distance.ToString("0.00") + "LY";
             if (dataGridViewRouteSystems.Rows.Count > 1)
             {
-                SystemClassDB firstSC = null;
-                SystemClassDB lastSC = null;
+                ISystem firstSC = null;
+                ISystem lastSC = null;
                 for (int i = 0; i < dataGridViewRouteSystems.Rows.Count; i++)
                 {
                     if (firstSC == null && dataGridViewRouteSystems[0, i].Tag != null)
-                        firstSC = (SystemClassDB)dataGridViewRouteSystems[0, i].Tag;
+                        firstSC = (ISystem)dataGridViewRouteSystems[0, i].Tag;
                     if (dataGridViewRouteSystems[0, i].Tag != null)
-                        lastSC = (SystemClassDB)dataGridViewRouteSystems[0, i].Tag;
+                        lastSC = (ISystem)dataGridViewRouteSystems[0, i].Tag;
                     String value = dataGridViewRouteSystems[1, i].Value as string;
                     if (!String.IsNullOrWhiteSpace(value))
                         distance += Double.Parse(value);
@@ -524,7 +524,7 @@ namespace EDDiscovery
             var map = _discoveryForm.Map;
             var route = dataGridViewRouteSystems.Rows.OfType<DataGridViewRow>()
                 .Where(r => r.Index < dataGridViewRouteSystems.NewRowIndex && r.Cells[0].Tag != null)
-                .Select(s => s.Cells[0].Tag as SystemClassDB)
+                .Select(s => s.Cells[0].Tag as ISystem)
                 .Where(s => s.HasCoordinate).ToList();
 
             if (route.Count >= 2)
@@ -549,7 +549,7 @@ namespace EDDiscovery
                 var row = dataGridViewRouteSystems.Rows[e.RowIndex];
                 var cell = dataGridViewRouteSystems[e.ColumnIndex, e.RowIndex];
 
-                SystemClass sys = SystemClassDB.GetSystem(sysname);
+                ISystem sys = SystemClassDB.GetSystem(sysname);
 
                 if (sysname != "" && sys == null && !edsm.IsKnownSystem(sysname))
                 {
@@ -862,7 +862,7 @@ namespace EDDiscovery
             ClearRoute();
             toolStripComboBoxRouteSelection.SelectedItem = null;
 
-            foreach (EliteDangerousCore.DB.SystemClassDB s in _discoveryForm.RouteControl.RouteSystems)
+            foreach (ISystem s in _discoveryForm.RouteControl.RouteSystems)
             {
                 dataGridViewRouteSystems.Rows.Add(s.name, "", "");
             }
@@ -945,7 +945,7 @@ namespace EDDiscovery
 
             if (obj == null)
                 return;
-            SystemClass sc = SystemClassDB.GetSystem((string)obj);
+            ISystem sc = SystemClassDB.GetSystem((string)obj);
             if (sc == null)
             {
                 ExtendedControls.MessageBoxTheme.Show(ParentForm, "Unknown system, system is without co-ordinates", "Edit bookmark", MessageBoxButtons.OK);

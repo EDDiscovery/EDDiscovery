@@ -1931,6 +1931,15 @@ namespace EliteDangerous.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to https://coriolis.edcd.io/import?.
+        /// </summary>
+        public static string URLCoriolis {
+            get {
+                return ResourceManager.GetString("URLCoriolis", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         public static System.Drawing.Bitmap uss {

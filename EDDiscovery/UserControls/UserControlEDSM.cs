@@ -201,25 +201,25 @@ namespace EDDiscovery.UserControls
         {
             Cursor = Cursors.WaitCursor;
 
-            Task taskEDSM = Task<List<SystemClassDB>>.Factory.StartNew(() =>
+            Task taskEDSM = Task<List<ISystem>>.Factory.StartNew(() =>
             {
                 return SystemClassDB.GetSystemsByName(textBoxSystemName.Text, uselike: true);
 
             }).ContinueWith(task => this.Invoke(new Action(() => { DBLookup(task); })));
         }
 
-        private void DBLookup(Task<List<SystemClassDB>> task)
+        private void DBLookup(Task<List<ISystem>> task)
         {
             System.Diagnostics.Debug.Assert(Application.MessageLoop);
 
             dataGridViewEDSM.Rows.Clear();
 
-            List<SystemClassDB> systems = task.Result;
+            List<ISystem> systems = task.Result;
 
             HistoryEntry helast = discoveryform.history.GetLast;
-            ISystem home = helast != null ? helast.System : new SystemClassDB("Sol", 0, 0, 0);
+            ISystem home = helast != null ? helast.System : new SystemClass("Sol", 0, 0, 0);
 
-            foreach (SystemClassDB sys in systems)
+            foreach (ISystem sys in systems)
             {
                 string sep = System.Globalization.CultureInfo.CurrentCulture.NumberFormat.NumberGroupSeparator + " ";
 

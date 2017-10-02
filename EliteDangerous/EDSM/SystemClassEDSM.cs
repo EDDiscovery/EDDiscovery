@@ -290,11 +290,12 @@ namespace EliteDangerousCore.EDSM
             string sysnamesTableName = useTempSystems ? "SystemNames_temp" : "SystemNames";
             string edsmsysTableName = useTempSystems ? "EdsmSystems_temp" : "EdsmSystems";
             Stopwatch sw = Stopwatch.StartNew();
+            const int BlockSize = 10000;
 
             while (!cancelRequested())
             {
                 bool jr_eof = false;
-                List<JObject> objs = new List<JObject>();
+                List<JObject> objs = new List<JObject>(BlockSize);
 
                 while (!cancelRequested())
                 {
@@ -304,7 +305,7 @@ namespace EliteDangerousCore.EDSM
                         {
                             objs.Add(JObject.Load(jr));
 
-                            if (objs.Count >= 10000)
+                            if (objs.Count >= BlockSize)
                             {
                                 break;
                             }
