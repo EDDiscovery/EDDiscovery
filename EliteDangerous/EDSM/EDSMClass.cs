@@ -37,7 +37,6 @@ namespace EliteDangerousCore.EDSM
 
         private readonly string fromSoftwareVersion;
         private readonly string fromSoftware;
-        private string EDSMDistancesFileName;
         static private Dictionary<long, List<JournalScan>> DictEDSMBodies = new Dictionary<long, List<JournalScan>>();
 
         public EDSMClass()
@@ -47,8 +46,6 @@ namespace EliteDangerousCore.EDSM
             fromSoftwareVersion = assemblyFullName.Split(',')[1].Split('=')[1];
 
             _serverAddress = ServerAddress;
-
-            EDSMDistancesFileName = Path.Combine(EliteConfigInstance.InstanceOptions.AppDataDirectory, "EDSMDistances.json");
 
             apiKey = EDCommander.Current.APIKey;
             commanderName = EDCommander.Current.EdsmName;

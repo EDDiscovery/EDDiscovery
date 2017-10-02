@@ -8,13 +8,6 @@ using System.Threading.Tasks;
 
 namespace EDDiscovery
 {
-    public enum EDSMServerType
-    {
-        Normal,
-        Beta,
-        Null
-    }
-
     public class EDDOptions : EliteDangerousCore.EliteOptions
     {
         public static EDDOptions Instance
@@ -40,8 +33,6 @@ namespace EDDiscovery
         public bool NoSystemsLoad { get; private set; }
         public bool TraceLog { get; private set; }
         public bool LogExceptions { get; private set; }
-        public EDSMServerType EDSMServerType { get; private set; } = EDSMServerType.Normal;
-        public bool DisableBetaCheck { get; private set; }
         public bool DisableShowDebugInfoInTitle { get; private set; }
         public string ReadJournal { get; private set; }
         public string OptionsFile { get; private set; }
@@ -98,21 +89,13 @@ namespace EDDiscovery
                     sb.Append($" (Using {AppFolder})");
                 }
 
-                switch (EDSMServerType)
-                {
-                    case EDSMServerType.Beta:
-                        EDSMClass.ServerAddress = "http://beta.edsm.net:8080/";
-                        sb.Append(" (EDSMBeta)");
-                        break;
-                    case EDSMServerType.Null:
-                        EDSMClass.ServerAddress = "";
-                        sb.Append(" (EDSM No server)");
-                        break;
-                }
+                if (EDSMClass.ServerAddress.Length ==0)
+                    sb.Append(" (EDSM No server)");
+                else if (EDSMClass.ServerAddress.IndexOf("Beta",StringComparison.InvariantCultureIgnoreCase)!=-1)
+                    sb.Append(" (EDSM Beta server)");
 
-                if (DisableBetaCheck)
+                if (EliteDangerousCore.EDJournalReader.disable_beta_commander_check)
                 {
-                    EliteDangerousCore.EDJournalReader.disable_beta_commander_check = true;
                     sb.Append(" (no BETA detect)");
                 }
             }
@@ -230,9 +213,15 @@ namespace EDDiscovery
                     case "nosystems": NoSystemsLoad = true; break;
                     case "tracelog": TraceLog = true; break;
                     case "logexceptions": LogExceptions = true; break;
-                    case "edsmbeta": EDSMServerType = EDSMServerType.Beta; break;
-                    case "edsmnull": EDSMServerType = EDSMServerType.Null; break;
-                    case "disablebetacheck": DisableBetaCheck = true; break;
+                    case "edsmbeta":
+                        EDSMClass.ServerAddress = "http://beta.edsm.net:8080/";
+                        break;
+                    case "edsmnull":
+                        EDSMClass.ServerAddress = "";
+                        break;
+                    case "disablebetacheck":
+                        EliteDangerousCore.EDJournalReader.disable_beta_commander_check = true;
+                        break;
                     case "notheme": NoTheme = true; break;
                     case "notitleinfo": DisableShowDebugInfoInTitle = true; break;
                     default:

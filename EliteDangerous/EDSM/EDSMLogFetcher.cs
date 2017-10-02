@@ -50,7 +50,7 @@ namespace EliteDangerousCore.EDSM
 
             Commander = cmdr;
 
-            if (( ThreadEDSMFetchLogs == null || !ThreadEDSMFetchLogs.IsAlive) && Commander.SyncFromEdsm)
+            if (( ThreadEDSMFetchLogs == null || !ThreadEDSMFetchLogs.IsAlive) && Commander.SyncFromEdsm && EDSMClass.IsServerAddressValid )
             {
                 ThreadEDSMFetchLogs = new Thread(FetcherThreadProc) { IsBackground = true, Name = "EDSM Log Fetcher" };
                 ThreadEDSMFetchLogs.Start();
@@ -74,6 +74,7 @@ namespace EliteDangerousCore.EDSM
 
         private void FetcherThreadProc()
         {
+            Trace.WriteLine($"EDSM Thread logs start");
             bool jupdate = false;
 
             int waittime = 2000; // Max 1 request every 2 seconds, with a backoff if the rate limit is hit
