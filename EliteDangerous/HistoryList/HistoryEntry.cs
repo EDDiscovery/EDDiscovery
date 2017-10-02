@@ -189,6 +189,7 @@ namespace EliteDangerousCore
                         population = jl.Population ?? 0,
                         state = jl.EDState,
                         allegiance = jl.EDAllegiance,
+                        UpdateDate = jl.EventTimeUTC,
                         status = SystemStatusEnum.EDDiscovery,
                     };
 
@@ -215,7 +216,7 @@ namespace EliteDangerousCore
 
                     if (checkedsm)          // see if we can find the right system
                     {
-                        ISystem s = SystemClassDB.FindEDSM(newsys, conn);      // has no co-ord, did we find it?
+                        ISystem s = SystemCache.FindEDSM(newsys, conn: conn, usedb: true, useedsm: true);      // has no co-ord, did we find it?
 
                         if (s != null)                                          // yes, use, and update the journal with the esdmid, and also the position if we have a co-ord
                         {                                                       // so next time we don't have to do this again..
