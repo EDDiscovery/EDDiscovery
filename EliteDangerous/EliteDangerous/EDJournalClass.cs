@@ -300,7 +300,7 @@ namespace EliteDangerousCore
                 {
                     if (lastnfi == null)
                     {
-                        Trace.Write($"No last file - scanning for journals");
+                        Trace.WriteLine($"No last file - scanning for journals");
                     }
                     else if (!File.Exists(lastnfi.FileName))
                     {
