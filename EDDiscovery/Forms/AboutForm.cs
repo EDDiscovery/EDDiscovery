@@ -65,10 +65,10 @@ namespace EDDiscovery.Forms
         private void link_Click(object sender, EventArgs e)
         {
             Control ctl = (Control)sender;
-            if (ctl != null && ctl.Tag != null)
+            if (ctl?.Tag != null)
                 Process.Start((string)ctl.Tag);
             else
-                BaseUtils.TraceLog.WriteLine($"AboutForm: Control and/or Tag is null: control {ctl?.Name ?? "(null)"}, tag {ctl?.Tag ?? "(null)"}.");   
+                Trace.WriteLine($"{nameof(AboutForm)}.{nameof(link_Click)}: control and/or Tag is null: control {ctl?.Name ?? "(null)"}, tag {ctl?.Tag ?? "(null)"}.");   
         }
     }
 }

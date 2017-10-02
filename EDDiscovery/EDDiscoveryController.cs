@@ -13,9 +13,11 @@
  *
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
-
-using EliteDangerousCore.EDSM;
+using BaseUtils;
+using EliteDangerousCore;
+using EliteDangerousCore.DB;
 using EliteDangerousCore.EDDN;
+using EliteDangerousCore.EDSM;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -23,11 +25,9 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
 using System.IO;
+using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
-using BaseUtils;
-using EliteDangerousCore;
-using EliteDangerousCore.DB;
 
 namespace EDDiscovery
 {
@@ -110,6 +110,9 @@ namespace EDDiscovery
 
             Trace.WriteLine($"*** Elite Dangerous Discovery Initializing - {EDDOptions.Instance.VersionDisplayString}, Platform: {Environment.OSVersion.Platform.ToString()}");
 
+            msg.Invoke("Preparing Rescue Buoy");
+            InitializeTraceLog();
+
             msg.Invoke("Scanning Memory Banks");
             InitializeDatabases();
 
@@ -119,13 +122,10 @@ namespace EDDiscovery
 
         public void Init()
         {
-            if (!Debugger.IsAttached || EDDOptions.Instance.TraceLog)
+            if (TraceLog.IsTraceListenerLoggingEnabled)
             {
-                TraceLog.LogFileWriterException += ex =>
-                {
-                    LogLineHighlight($"Log Writer Exception: {ex}");
-                };
-            }
+                TraceLog.LogFileWriterException += ex => LogLineHighlight($"Log Writer Exception: {ex}");
+            }   
 
             backgroundWorker = new Thread(BackgroundWorkerThread);
             backgroundWorker.IsBackground = true;
@@ -184,7 +184,7 @@ namespace EDDiscovery
 
         public void LogLineHighlight(string text)
         {
-            TraceLog.WriteLine(text);
+            Trace.WriteLine(text);
             LogLineColor(text, GetHighlightTextColour());
         }
 
@@ -344,35 +344,35 @@ namespace EDDiscovery
                 DebugCode.ReadCmdLineJournal(EDDOptions.Instance.ReadJournal);
             }
 
-            string logpath = "";
-            try
-            {
-                logpath = Path.Combine(EDDOptions.Instance.AppDataDirectory, "Log");
-                if (!Directory.Exists(logpath))
-                {
-                    Directory.CreateDirectory(logpath);
-                }
-
-                TraceLog.logroot = EDDOptions.Instance.AppDataDirectory;
-                TraceLog.urlfeedback = Properties.Resources.URLProjectFeedback;
-
-                if (!Debugger.IsAttached || EDDOptions.Instance.TraceLog)
-                {
-                    TraceLog.Init();
-                }
-
-                if (EDDOptions.Instance.LogExceptions)
-                {
-                    TraceLog.RegisterFirstChanceExceptionHandler();
-                }
-            }
-            catch (Exception ex)
-            {
-                Trace.WriteLine($"Unable to create the folder '{logpath}'");
-                Trace.WriteLine($"Exception: {ex.Message}");
-            }
-
             SQLiteConnectionUser.EarlyReadRegister();
+        }
+
+        private static void InitializeTraceLog()
+        {
+            string logpath = string.Empty;
+            logpath = Path.Combine(EDDOptions.Instance.AppDataDirectory, "Log");
+            if (!Directory.Exists(logpath))
+            {
+                Directory.CreateDirectory(logpath);
+            }
+
+            TraceLog.Init(logpath, Properties.Resources.URLProjectFeedback, !Debugger.IsAttached || EDDOptions.Instance.TraceLog);
+
+            if (EDDOptions.Instance.LogExceptions)
+            {
+                // The chosen types aren't very important; the key is simply to get one from each assembly that we're concerned with.
+                TraceLog.EnableFirstChanceExceptionLogging(new[]
+                {
+                    Assembly.GetAssembly(typeof(ActionLanguage.ActionBase)),
+                    Assembly.GetAssembly(typeof(AudioExtensions.IAudioDriver)),
+                    Assembly.GetAssembly(typeof(BaseUtils.Win32Constants.WM)),
+                    Assembly.GetAssembly(typeof(Conditions.Condition)),
+                    Assembly.GetAssembly(typeof(DirectInputDevices.InputDeviceInterface)),
+                    Assembly.GetAssembly(typeof(EDDiscoveryController)),
+                    Assembly.GetAssembly(typeof(EliteDangerousCore.ISystem)),
+                    Assembly.GetAssembly(typeof(ExtendedControls.ThemeableForms))
+                });
+            }   
         }
 
         #endregion
