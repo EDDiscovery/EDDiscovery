@@ -353,11 +353,15 @@ namespace EliteDangerousCore.DB
                 {
                     System.Diagnostics.Trace.WriteLine($"System {name} not in local DB; fetching from EDSM");
                     EDSMClass edsm = new EDSMClass();
-                    systems = edsm.GetSystemsByName(name, uselike);
+                    List<ISystem> _systems = edsm.GetSystemsByName(name, uselike);
 
-                    if (!uselike)
+                    if (_systems != null)
                     {
-                        SystemNameCache[name] = systems;
+                        systems = _systems;
+                        if (!uselike)
+                        {
+                            SystemNameCache[name] = systems;
+                        }
                     }
                 }
             }
