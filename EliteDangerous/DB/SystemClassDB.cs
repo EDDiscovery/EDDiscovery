@@ -49,6 +49,7 @@ namespace EliteDangerousCore.DB
     public static class SystemClassDB
     {
         private static Dictionary<string, List<ISystem>> SystemNameCache = new Dictionary<string, List<ISystem>>(StringComparer.InvariantCultureIgnoreCase);
+        private static Dictionary<long, ISystem> SystemEdsmIDCache = new Dictionary<long, ISystem>();
 
         public const float XYZScalar = 128.0F;     // scaling between DB stored values and floats
 

@@ -179,8 +179,18 @@ namespace EliteDangerousCore
 
                 if (jl != null && jl.HasCoordinate)       // LAZY LOAD IF it has a co-ord.. the front end will when it needs it
                 {
-                    newsys = new SystemClass(jl.StarSystem, jl.StarPos.X, jl.StarPos.Y, jl.StarPos.Z);
-                    newsys.id_edsm = jl.EdsmID < 0 ? 0 : jl.EdsmID;       // pass across the EDSMID for the lazy load process.
+                    newsys = new SystemClass(jl.StarSystem, jl.StarPos.X, jl.StarPos.Y, jl.StarPos.Z)
+                    {
+                        id_edsm = jl.EdsmID < 0 ? 0 : jl.EdsmID,       // pass across the EDSMID for the lazy load process.
+                        faction = jl.Faction,
+                        government = jl.EDGovernment,
+                        primary_economy = jl.EDEconomy,
+                        security = jl.EDSecurity,
+                        population = jl.Population ?? 0,
+                        state = jl.EDState,
+                        allegiance = jl.EDAllegiance,
+                        status = SystemStatusEnum.EDDiscovery,
+                    };
 
                     if (jfsd != null && jfsd.JumpDist <= 0 && isys.HasCoordinate)     // if we don't have a jump distance (pre 2.2) but the last sys does have pos, we can compute distance and update entry
                     {
