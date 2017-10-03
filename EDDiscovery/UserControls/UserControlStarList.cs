@@ -270,6 +270,10 @@ namespace EDDiscovery.UserControls
                                     extrainfo = extrainfo.AppendPrePad(sc.BodyName + " is a water world", prefix);
                                 if (sc.PlanetTypeID == EDPlanet.Ammonia_world)
                                     extrainfo = extrainfo.AppendPrePad(sc.BodyName + " is a ammonia world", prefix);
+
+                                // Add information for terraformable planets
+                                if (sc.Terraformable == true)
+                                    extrainfo = extrainfo.AppendPrePad(sc.BodyName + " is terraformable", prefix);
                             }
                         }
                     }
