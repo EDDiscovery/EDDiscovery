@@ -801,6 +801,15 @@ namespace ExtendedControls
                     }
                 }
             }
+            else if (myControl is TabStrip )
+            {
+                TabStrip ts = myControl as TabStrip;
+                ts.DropDownBackgroundColor = currentsettings.colors[Settings.CI.button_back];
+                ts.DropDownBorderColor = currentsettings.colors[Settings.CI.textbox_border];
+                ts.DropDownScrollBarButtonColor = currentsettings.colors[Settings.CI.textbox_scrollbutton];
+                ts.DropDownScrollBarColor = currentsettings.colors[Settings.CI.textbox_sliderback];
+                ts.DropDownMouseOverBackgroundColor = currentsettings.colors[Settings.CI.button_back].Multiply(mouseoverscaling);
+            }
             else
             {
                 if (!parentcontroltype.Namespace.Equals("ExtendedControls"))
