@@ -61,6 +61,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CompanionAPI\CCommander.cs" />
+    <Compile Include="CompanionAPI\CMarket.cs" />
     <Compile Include="CompanionAPI\CompanionAPIClass.cs" />
     <Compile Include="CompanionAPI\CompanionCredentials.cs" />
     <Compile Include="CompanionAPI\CompanionException.cs" />
