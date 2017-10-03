@@ -48,7 +48,7 @@ namespace EDDiscovery.UserControls
             this.panelStars = new ExtendedControls.PanelVScroll();
             this.contextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.toolStripMenuItemToolbar = new System.Windows.Forms.ToolStripMenuItem();
-            this.richTextBoxInfo = new ExtendedControls.RichTextBoxScroll();
+            this.rtbNodeInfo = new ExtendedControls.RichTextBoxScroll();
             this.imagebox = new ExtendedControls.PictureBoxHotspot();
             this.vScrollBarCustom = new ExtendedControls.VScrollBarCustom();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
@@ -60,8 +60,9 @@ namespace EDDiscovery.UserControls
             this.checkBoxMaterialsRare = new ExtendedControls.CheckBoxCustom();
             this.checkBoxTiny = new ExtendedControls.CheckBoxCustom();
             this.panelControls = new System.Windows.Forms.Panel();
-            this.checkBoxEDSM = new ExtendedControls.CheckBoxCustom();
             this.buttonExtExcel = new ExtendedControls.ButtonExt();
+            this.checkBoxEDSM = new ExtendedControls.CheckBoxCustom();
+            this.rtbSystemInfo = new ExtendedControls.RichTextBoxScroll();
             this.panelStars.SuspendLayout();
             this.contextMenuStrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.imagebox)).BeginInit();
@@ -71,7 +72,8 @@ namespace EDDiscovery.UserControls
             // panelStars
             // 
             this.panelStars.ContextMenuStrip = this.contextMenuStrip;
-            this.panelStars.Controls.Add(this.richTextBoxInfo);
+            this.panelStars.Controls.Add(this.rtbSystemInfo);
+            this.panelStars.Controls.Add(this.rtbNodeInfo);
             this.panelStars.Controls.Add(this.imagebox);
             this.panelStars.Controls.Add(this.vScrollBarCustom);
             this.panelStars.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -98,31 +100,31 @@ namespace EDDiscovery.UserControls
             this.toolStripMenuItemToolbar.Text = "Show/Hide Toolbar";
             this.toolStripMenuItemToolbar.Click += new System.EventHandler(this.toolStripMenuItemToolbar_Click);
             // 
-            // richTextBoxInfo
+            // rtbNodeInfo
             // 
-            this.richTextBoxInfo.BorderColor = System.Drawing.Color.Transparent;
-            this.richTextBoxInfo.BorderColorScaling = 0.5F;
-            this.richTextBoxInfo.HideScrollBar = true;
-            this.richTextBoxInfo.Location = new System.Drawing.Point(468, 99);
-            this.richTextBoxInfo.Name = "richTextBoxInfo";
-            this.richTextBoxInfo.ReadOnly = false;
-            this.richTextBoxInfo.ScrollBarArrowBorderColor = System.Drawing.Color.LightBlue;
-            this.richTextBoxInfo.ScrollBarArrowButtonColor = System.Drawing.Color.LightGray;
-            this.richTextBoxInfo.ScrollBarBackColor = System.Drawing.SystemColors.Control;
-            this.richTextBoxInfo.ScrollBarBorderColor = System.Drawing.Color.White;
-            this.richTextBoxInfo.ScrollBarFlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.richTextBoxInfo.ScrollBarForeColor = System.Drawing.SystemColors.ControlText;
-            this.richTextBoxInfo.ScrollBarMouseOverButtonColor = System.Drawing.Color.Green;
-            this.richTextBoxInfo.ScrollBarMousePressedButtonColor = System.Drawing.Color.Red;
-            this.richTextBoxInfo.ScrollBarSliderColor = System.Drawing.Color.DarkGray;
-            this.richTextBoxInfo.ScrollBarThumbBorderColor = System.Drawing.Color.Yellow;
-            this.richTextBoxInfo.ScrollBarThumbButtonColor = System.Drawing.Color.DarkBlue;
-            this.richTextBoxInfo.ScrollBarWidth = 20;
-            this.richTextBoxInfo.ShowLineCount = false;
-            this.richTextBoxInfo.Size = new System.Drawing.Size(200, 100);
-            this.richTextBoxInfo.TabIndex = 3;
-            this.richTextBoxInfo.TextBoxBackColor = System.Drawing.SystemColors.Control;
-            this.richTextBoxInfo.TextBoxForeColor = System.Drawing.SystemColors.ControlText;
+            this.rtbNodeInfo.BorderColor = System.Drawing.Color.Transparent;
+            this.rtbNodeInfo.BorderColorScaling = 0.5F;
+            this.rtbNodeInfo.HideScrollBar = true;
+            this.rtbNodeInfo.Location = new System.Drawing.Point(468, 99);
+            this.rtbNodeInfo.Name = "rtbNodeInfo";
+            this.rtbNodeInfo.ReadOnly = false;
+            this.rtbNodeInfo.ScrollBarArrowBorderColor = System.Drawing.Color.LightBlue;
+            this.rtbNodeInfo.ScrollBarArrowButtonColor = System.Drawing.Color.LightGray;
+            this.rtbNodeInfo.ScrollBarBackColor = System.Drawing.SystemColors.Control;
+            this.rtbNodeInfo.ScrollBarBorderColor = System.Drawing.Color.White;
+            this.rtbNodeInfo.ScrollBarFlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.rtbNodeInfo.ScrollBarForeColor = System.Drawing.SystemColors.ControlText;
+            this.rtbNodeInfo.ScrollBarMouseOverButtonColor = System.Drawing.Color.Green;
+            this.rtbNodeInfo.ScrollBarMousePressedButtonColor = System.Drawing.Color.Red;
+            this.rtbNodeInfo.ScrollBarSliderColor = System.Drawing.Color.DarkGray;
+            this.rtbNodeInfo.ScrollBarThumbBorderColor = System.Drawing.Color.Yellow;
+            this.rtbNodeInfo.ScrollBarThumbButtonColor = System.Drawing.Color.DarkBlue;
+            this.rtbNodeInfo.ScrollBarWidth = 20;
+            this.rtbNodeInfo.ShowLineCount = false;
+            this.rtbNodeInfo.Size = new System.Drawing.Size(200, 100);
+            this.rtbNodeInfo.TabIndex = 3;
+            this.rtbNodeInfo.TextBoxBackColor = System.Drawing.SystemColors.Control;
+            this.rtbNodeInfo.TextBoxForeColor = System.Drawing.SystemColors.ControlText;
             // 
             // imagebox
             // 
@@ -375,6 +377,21 @@ namespace EDDiscovery.UserControls
             this.panelControls.TabIndex = 4;
             this.toolTip.SetToolTip(this.panelControls, "Right click on panel to show/hide the toolbar");
             // 
+            // buttonExtExcel
+            // 
+            this.buttonExtExcel.BorderColorScaling = 1.25F;
+            this.buttonExtExcel.ButtonColorScaling = 0.5F;
+            this.buttonExtExcel.ButtonDisabledScaling = 0.5F;
+            this.buttonExtExcel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonExtExcel.Image = global::EDDiscovery.Properties.Resources.excel;
+            this.buttonExtExcel.Location = new System.Drawing.Point(310, 5);
+            this.buttonExtExcel.Name = "buttonExtExcel";
+            this.buttonExtExcel.Size = new System.Drawing.Size(24, 24);
+            this.buttonExtExcel.TabIndex = 29;
+            this.toolTip.SetToolTip(this.buttonExtExcel, "Send data on grid to excel");
+            this.buttonExtExcel.UseVisualStyleBackColor = true;
+            this.buttonExtExcel.Click += new System.EventHandler(this.buttonExtExcel_Click);
+            // 
             // checkBoxEDSM
             // 
             this.checkBoxEDSM.Appearance = System.Windows.Forms.Appearance.Button;
@@ -402,20 +419,31 @@ namespace EDDiscovery.UserControls
             this.checkBoxEDSM.UseVisualStyleBackColor = false;
             this.checkBoxEDSM.CheckedChanged += new System.EventHandler(this.checkBoxEDSM_CheckedChanged);
             // 
-            // buttonExtExcel
+            // rtbSystemInfo
             // 
-            this.buttonExtExcel.BorderColorScaling = 1.25F;
-            this.buttonExtExcel.ButtonColorScaling = 0.5F;
-            this.buttonExtExcel.ButtonDisabledScaling = 0.5F;
-            this.buttonExtExcel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.buttonExtExcel.Image = global::EDDiscovery.Properties.Resources.excel;
-            this.buttonExtExcel.Location = new System.Drawing.Point(310, 5);
-            this.buttonExtExcel.Name = "buttonExtExcel";
-            this.buttonExtExcel.Size = new System.Drawing.Size(24, 24);
-            this.buttonExtExcel.TabIndex = 29;
-            this.toolTip.SetToolTip(this.buttonExtExcel, "Send data on grid to excel");
-            this.buttonExtExcel.UseVisualStyleBackColor = true;
-            this.buttonExtExcel.Click += new System.EventHandler(this.buttonExtExcel_Click);
+            this.rtbSystemInfo.BorderColor = System.Drawing.Color.Transparent;
+            this.rtbSystemInfo.BorderColorScaling = 0.5F;
+            this.rtbSystemInfo.HideScrollBar = true;
+            this.rtbSystemInfo.Location = new System.Drawing.Point(468, 3);
+            this.rtbSystemInfo.Name = "rtbSystemInfo";
+            this.rtbSystemInfo.ReadOnly = false;
+            this.rtbSystemInfo.ScrollBarArrowBorderColor = System.Drawing.Color.LightBlue;
+            this.rtbSystemInfo.ScrollBarArrowButtonColor = System.Drawing.Color.LightGray;
+            this.rtbSystemInfo.ScrollBarBackColor = System.Drawing.SystemColors.Control;
+            this.rtbSystemInfo.ScrollBarBorderColor = System.Drawing.Color.White;
+            this.rtbSystemInfo.ScrollBarFlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.rtbSystemInfo.ScrollBarForeColor = System.Drawing.SystemColors.ControlText;
+            this.rtbSystemInfo.ScrollBarMouseOverButtonColor = System.Drawing.Color.Green;
+            this.rtbSystemInfo.ScrollBarMousePressedButtonColor = System.Drawing.Color.Red;
+            this.rtbSystemInfo.ScrollBarSliderColor = System.Drawing.Color.DarkGray;
+            this.rtbSystemInfo.ScrollBarThumbBorderColor = System.Drawing.Color.Yellow;
+            this.rtbSystemInfo.ScrollBarThumbButtonColor = System.Drawing.Color.DarkBlue;
+            this.rtbSystemInfo.ScrollBarWidth = 20;
+            this.rtbSystemInfo.ShowLineCount = false;
+            this.rtbSystemInfo.Size = new System.Drawing.Size(200, 90);
+            this.rtbSystemInfo.TabIndex = 4;
+            this.rtbSystemInfo.TextBoxBackColor = System.Drawing.SystemColors.Control;
+            this.rtbSystemInfo.TextBoxForeColor = System.Drawing.SystemColors.ControlText;
             // 
             // UserControlScan
             // 
@@ -438,7 +466,7 @@ namespace EDDiscovery.UserControls
         private ExtendedControls.PanelVScroll panelStars;
         private System.Windows.Forms.ToolTip toolTip;
         private ExtendedControls.VScrollBarCustom vScrollBarCustom;
-        private ExtendedControls.RichTextBoxScroll richTextBoxInfo;
+        private ExtendedControls.RichTextBoxScroll rtbNodeInfo;
         private System.Windows.Forms.Panel panelControls;
         private ExtendedControls.CheckBoxCustom checkBoxMaterials;
         private ExtendedControls.CheckBoxCustom checkBoxMoons;
@@ -452,5 +480,6 @@ namespace EDDiscovery.UserControls
         private ExtendedControls.PictureBoxHotspot imagebox;
         private ExtendedControls.CheckBoxCustom checkBoxEDSM;
         private ExtendedControls.ButtonExt buttonExtExcel;
+        private ExtendedControls.RichTextBoxScroll rtbSystemInfo;
     }
 }
