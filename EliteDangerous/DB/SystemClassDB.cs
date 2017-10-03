@@ -48,8 +48,6 @@ namespace EliteDangerousCore.DB
 
     public static class SystemClassDB
     {
-        private static Dictionary<string, List<ISystem>> SystemNameCache = new Dictionary<string, List<ISystem>>(StringComparer.InvariantCultureIgnoreCase);
-
         public const float XYZScalar = 128.0F;     // scaling between DB stored values and floats
 
         public static ISystem FromJson(JObject jo, SystemInfoSource source)
@@ -326,7 +324,7 @@ namespace EliteDangerousCore.DB
             return GetSystemsByName(name, cn).FirstOrDefault();
         }
 
-        public static List<ISystem> GetSystemsByName(string name, SQLiteConnectionSystem cn = null, bool uselike = false, bool useedsm = true, bool cache = true)
+        public static List<ISystem> GetSystemsByName(string name, SQLiteConnectionSystem cn = null, bool uselike = false, bool useedsm = false)
         {
             List<ISystem> systems = new List<ISystem>();
 
@@ -345,24 +343,13 @@ namespace EliteDangerousCore.DB
             }
             else if (useedsm && name != "" && name.Length >= 2)
             {
-                if (!uselike && cache && SystemNameCache.ContainsKey(name))
-                {
-                    systems = SystemNameCache[name];
-                }
-                else
-                {
-                    System.Diagnostics.Trace.WriteLine($"System {name} not in local DB; fetching from EDSM");
-                    EDSMClass edsm = new EDSMClass();
-                    List<ISystem> _systems = edsm.GetSystemsByName(name, uselike);
+                System.Diagnostics.Trace.WriteLine($"System {name} not in local DB; fetching from EDSM");
+                EDSMClass edsm = new EDSMClass();
+                List<ISystem> _systems = edsm.GetSystemsByName(name, uselike);
 
-                    if (_systems != null)
-                    {
-                        systems = _systems;
-                        if (!uselike)
-                        {
-                            SystemNameCache[name] = systems;
-                        }
-                    }
+                if (_systems != null)
+                {
+                    systems = _systems;
                 }
             }
 
@@ -1246,7 +1233,7 @@ namespace EliteDangerousCore.DB
             return ret;
         }
 
-        public static ISystem FindEDSM(ISystem s, SQLiteConnectionSystem conn = null) // called find an EDSM system corresponding to s
+        public static ISystem FindEDSM(ISystem s, SQLiteConnectionSystem conn = null, bool useedsm = true) // called find an EDSM system corresponding to s
         {
             ISystem system = null;
 
@@ -1265,7 +1252,7 @@ namespace EliteDangerousCore.DB
 
                 if (system == null)                   // not found, so  try
                 {
-                    List<ISystem> systemsByName = GetSystemsByName(s.name, conn);
+                    List<ISystem> systemsByName = GetSystemsByName(s.name, conn, useedsm: useedsm);
 
                     if (systemsByName.Count == 0 && s.HasCoordinate)
                     {
