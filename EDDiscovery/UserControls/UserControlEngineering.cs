@@ -141,12 +141,14 @@ namespace EDDiscovery.UserControls
         {
             last_he = uctg.GetCurrentHistoryEntry;
             Display();
+            if (OnChangedEngineeringWanted != null) OnChangedEngineeringWanted(wantedList);
         }
 
         private void Discoveryform_OnNewEntry(HistoryEntry he, HistoryList hl)
         {
             last_he = he;
-            Display();
+            if (he.journalEntry is IMaterialCommodityJournalEntry)
+                Display();
         }
 
         HistoryEntry last_he = null;
@@ -268,8 +270,6 @@ namespace EDDiscovery.UserControls
 
                 if ( fdrow>=0 && dataGridViewEngineering.Rows[fdrow].Visible )        // better check visible, may have changed..
                     dataGridViewEngineering.FirstDisplayedScrollingRowIndex = fdrow;
-
-                if (OnChangedEngineeringWanted != null) OnChangedEngineeringWanted(wantedList);
             }
         }
 
@@ -319,6 +319,7 @@ namespace EDDiscovery.UserControls
                     //System.Diagnostics.Debug.WriteLine("Set wanted {0} to {1}", rno, iv);
                     Wanted[rno] = iv;
                     Display();
+                    if (OnChangedEngineeringWanted != null) OnChangedEngineeringWanted(wantedList);
                 }
                 else
                     dataGridViewEngineering[WantedCol.Index, e.RowIndex].Value = Wanted[rno].ToStringInvariant();
