@@ -891,14 +891,14 @@ namespace EliteDangerousCore
                     EliteDangerousCore.JournalEvents.JournalFuelScoop jfsprev = prev as EliteDangerousCore.JournalEvents.JournalFuelScoop;
                     jfsprev.Scooped += jfs.Scooped;
                     jfsprev.Total = jfs.Total;
-                    System.Diagnostics.Debug.WriteLine("Merge FS " + jfsprev.EventTimeUTC);
+                    //System.Diagnostics.Debug.WriteLine("Merge FS " + jfsprev.EventTimeUTC);
                     return true;
                 }
                 else if (je.EventTypeID == JournalTypeEnum.Friends && prev.EventTypeID == JournalTypeEnum.Friends) // merge friends
                 {
                     EliteDangerousCore.JournalEvents.JournalFriends jfprev = prev as EliteDangerousCore.JournalEvents.JournalFriends;
                     jfprev.AddFriend(je.GetJson());
-                    System.Diagnostics.Debug.WriteLine("Merge Friends " + jfprev.EventTimeUTC + " " + jfprev.NameList.Count);
+                    //System.Diagnostics.Debug.WriteLine("Merge Friends " + jfprev.EventTimeUTC + " " + jfprev.NameList.Count);
                     return true;
                 }
             }
@@ -943,18 +943,22 @@ namespace EliteDangerousCore
                 JournalProgress progress = historylist.FindLast(x => x.EntryType == JournalTypeEnum.Progress).journalEntry as JournalProgress;
                 JournalRank rank = historylist.FindLast(x => x.EntryType == JournalTypeEnum.Rank).journalEntry as JournalRank;
 
-                if (async)
+                if (progress != null && rank != null)
                 {
-                    Task edsmtask = Task.Factory.StartNew(() =>
+                    if (async)
+                    {
+                        Task edsmtask = Task.Factory.StartNew(() =>
+                        {
+                            edsm.SendShipInfo(lastshipinfohe?.ShipInformation, lastshipinfohe?.MaterialCommodity, lastshipinfohe?.MaterialCommodity?.CargoCount ?? 0, lastshipinfocurrenthe?.ShipInformation, cashledger?.CashTotal ?? cash, loan, progress, rank);
+                        });
+                    }
+                    else
                     {
                         edsm.SendShipInfo(lastshipinfohe?.ShipInformation, lastshipinfohe?.MaterialCommodity, lastshipinfohe?.MaterialCommodity?.CargoCount ?? 0, lastshipinfocurrenthe?.ShipInformation, cashledger?.CashTotal ?? cash, loan, progress, rank);
-                    });
-                }
-                else
-                {
-                    edsm.SendShipInfo(lastshipinfohe?.ShipInformation, lastshipinfohe?.MaterialCommodity, lastshipinfohe?.MaterialCommodity?.CargoCount ?? 0, lastshipinfocurrenthe?.ShipInformation, cashledger?.CashTotal ?? cash, loan, progress, rank);
+                    }
                 }
             }
+
         }
 
         #endregion
