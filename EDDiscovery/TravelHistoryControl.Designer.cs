@@ -128,7 +128,7 @@ namespace EDDiscovery
             this.tabStripBottom.DropDownMouseOverBackgroundColor = System.Drawing.Color.Red;
             this.tabStripBottom.DropDownScrollBarButtonColor = System.Drawing.Color.LightGray;
             this.tabStripBottom.DropDownScrollBarColor = System.Drawing.Color.LightGray;
-            this.tabStripBottom.DropDownWidth = 400;
+            this.tabStripBottom.DropDownWidth = 500;
             this.tabStripBottom.Location = new System.Drawing.Point(0, 0);
             this.tabStripBottom.Name = "tabStripBottom";
             this.tabStripBottom.SelectedIndex = -1;
@@ -164,7 +164,7 @@ namespace EDDiscovery
             this.tabStripTopRight.DropDownMouseOverBackgroundColor = System.Drawing.Color.Red;
             this.tabStripTopRight.DropDownScrollBarButtonColor = System.Drawing.Color.LightGray;
             this.tabStripTopRight.DropDownScrollBarColor = System.Drawing.Color.LightGray;
-            this.tabStripTopRight.DropDownWidth = 400;
+            this.tabStripTopRight.DropDownWidth = 500;
             this.tabStripTopRight.Location = new System.Drawing.Point(0, 0);
             this.tabStripTopRight.Name = "tabStripTopRight";
             this.tabStripTopRight.SelectedIndex = -1;
@@ -200,7 +200,7 @@ namespace EDDiscovery
             this.tabStripMiddleRight.DropDownMouseOverBackgroundColor = System.Drawing.Color.Red;
             this.tabStripMiddleRight.DropDownScrollBarButtonColor = System.Drawing.Color.LightGray;
             this.tabStripMiddleRight.DropDownScrollBarColor = System.Drawing.Color.LightGray;
-            this.tabStripMiddleRight.DropDownWidth = 400;
+            this.tabStripMiddleRight.DropDownWidth = 500;
             this.tabStripMiddleRight.Location = new System.Drawing.Point(0, 0);
             this.tabStripMiddleRight.Name = "tabStripMiddleRight";
             this.tabStripMiddleRight.SelectedIndex = -1;
@@ -218,7 +218,7 @@ namespace EDDiscovery
             this.tabStripBottomRight.DropDownMouseOverBackgroundColor = System.Drawing.Color.Red;
             this.tabStripBottomRight.DropDownScrollBarButtonColor = System.Drawing.Color.LightGray;
             this.tabStripBottomRight.DropDownScrollBarColor = System.Drawing.Color.LightGray;
-            this.tabStripBottomRight.DropDownWidth = 400;
+            this.tabStripBottomRight.DropDownWidth = 500;
             this.tabStripBottomRight.Location = new System.Drawing.Point(0, 0);
             this.tabStripBottomRight.Name = "tabStripBottomRight";
             this.tabStripBottomRight.SelectedIndex = -1;
