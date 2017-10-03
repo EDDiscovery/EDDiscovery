@@ -112,6 +112,10 @@ namespace EliteDangerousCore.JournalEvents
         public string type { get; private set; }            // in this context, it means, its type (Metals).. as per MaterialCommoditiesDB
         public List<string> StatusFlags { get; private set; }
 
+        public string categoryname { get; private set; }
+        public string locName { get; private set; }
+
+
         public string ComparisionLR { get; private set; }       // NOT in Frontier data, used for market data UC during merge
         public string ComparisionRL { get; private set; }       // NOT in Frontier data, used for market data UC during merge
         public bool ComparisionRightOnly { get; private set; }  // NOT in Frontier data, Exists in right data only
@@ -138,6 +142,8 @@ namespace EliteDangerousCore.JournalEvents
             {
                 id = jo["id"].Int();
                 name = jo["name"].Str();
+                locName = jo["locName"].Str();
+
                 buyPrice = jo["buyPrice"].Int();
                 sellPrice = jo["sellPrice"].Int();
                 meanPrice = jo["meanPrice"].Int();

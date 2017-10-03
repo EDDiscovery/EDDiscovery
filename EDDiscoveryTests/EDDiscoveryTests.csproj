@@ -80,6 +80,9 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="NFluent, Version=2.0.0.71, Culture=neutral, PublicKeyToken=18828b37b84b1437, processorArchitecture=MSIL">
       <HintPath>..\packages\NFluent.2.0.0\lib\net45\NFluent.dll</HintPath>
     </Reference>
@@ -94,6 +97,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="3DMap\DatasetBuilderTests.cs" />
+    <Compile Include="CAPITests.cs" />
     <Compile Include="DistanceParserTests.cs" />
     <Compile Include="ObjectExtensionTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
