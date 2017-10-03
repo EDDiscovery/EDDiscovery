@@ -86,8 +86,8 @@ namespace EDDiscovery
 
         void TabConfigure(ExtendedControls.TabStrip t, string name, int displayno)
         {
-            t.Images = PopOutControl.GetPopOutImages();
-            t.ToolTips = PopOutControl.GetPopOutToolTips();
+            t.ImageList = PopOutControl.GetPopOutImages();
+            t.TextList = PopOutControl.GetPopOutToolTips();
             t.Tag = displayno;             // these are IDs for purposes of identifying different instances of a control.. 0 = main ones (main travel grid, main tab journal). 1..N are popups
             t.OnRemoving += TabRemoved;
             t.OnCreateTab += TabCreate;

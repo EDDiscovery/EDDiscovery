@@ -122,12 +122,19 @@ namespace EDDiscovery
             // tabStripBottom
             // 
             this.tabStripBottom.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tabStripBottom.DropDownBackgroundColor = System.Drawing.Color.Gray;
+            this.tabStripBottom.DropDownBorderColor = System.Drawing.Color.Green;
+            this.tabStripBottom.DropDownHeight = 400;
+            this.tabStripBottom.DropDownMouseOverBackgroundColor = System.Drawing.Color.Red;
+            this.tabStripBottom.DropDownScrollBarButtonColor = System.Drawing.Color.LightGray;
+            this.tabStripBottom.DropDownScrollBarColor = System.Drawing.Color.LightGray;
+            this.tabStripBottom.DropDownWidth = 500;
             this.tabStripBottom.Location = new System.Drawing.Point(0, 0);
             this.tabStripBottom.Name = "tabStripBottom";
             this.tabStripBottom.SelectedIndex = -1;
             this.tabStripBottom.ShowPopOut = true;
             this.tabStripBottom.Size = new System.Drawing.Size(550, 296);
-            this.tabStripBottom.StripAtTop = true;
+            this.tabStripBottom.StripMode = ExtendedControls.TabStrip.StripModeType.ListSelection;
             this.tabStripBottom.TabIndex = 0;
             // 
             // splitContainerRightOuter
@@ -151,12 +158,19 @@ namespace EDDiscovery
             // tabStripTopRight
             // 
             this.tabStripTopRight.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tabStripTopRight.DropDownBackgroundColor = System.Drawing.Color.Gray;
+            this.tabStripTopRight.DropDownBorderColor = System.Drawing.Color.Green;
+            this.tabStripTopRight.DropDownHeight = 400;
+            this.tabStripTopRight.DropDownMouseOverBackgroundColor = System.Drawing.Color.Red;
+            this.tabStripTopRight.DropDownScrollBarButtonColor = System.Drawing.Color.LightGray;
+            this.tabStripTopRight.DropDownScrollBarColor = System.Drawing.Color.LightGray;
+            this.tabStripTopRight.DropDownWidth = 500;
             this.tabStripTopRight.Location = new System.Drawing.Point(0, 0);
             this.tabStripTopRight.Name = "tabStripTopRight";
             this.tabStripTopRight.SelectedIndex = -1;
             this.tabStripTopRight.ShowPopOut = true;
             this.tabStripTopRight.Size = new System.Drawing.Size(337, 325);
-            this.tabStripTopRight.StripAtTop = true;
+            this.tabStripTopRight.StripMode = ExtendedControls.TabStrip.StripModeType.ListSelection;
             this.tabStripTopRight.TabIndex = 2;
             // 
             // splitContainerRightInner
@@ -180,23 +194,37 @@ namespace EDDiscovery
             // tabStripMiddleRight
             // 
             this.tabStripMiddleRight.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tabStripMiddleRight.DropDownBackgroundColor = System.Drawing.Color.Gray;
+            this.tabStripMiddleRight.DropDownBorderColor = System.Drawing.Color.Green;
+            this.tabStripMiddleRight.DropDownHeight = 400;
+            this.tabStripMiddleRight.DropDownMouseOverBackgroundColor = System.Drawing.Color.Red;
+            this.tabStripMiddleRight.DropDownScrollBarButtonColor = System.Drawing.Color.LightGray;
+            this.tabStripMiddleRight.DropDownScrollBarColor = System.Drawing.Color.LightGray;
+            this.tabStripMiddleRight.DropDownWidth = 500;
             this.tabStripMiddleRight.Location = new System.Drawing.Point(0, 0);
             this.tabStripMiddleRight.Name = "tabStripMiddleRight";
             this.tabStripMiddleRight.SelectedIndex = -1;
             this.tabStripMiddleRight.ShowPopOut = true;
             this.tabStripMiddleRight.Size = new System.Drawing.Size(337, 160);
-            this.tabStripMiddleRight.StripAtTop = true;
+            this.tabStripMiddleRight.StripMode = ExtendedControls.TabStrip.StripModeType.ListSelection;
             this.tabStripMiddleRight.TabIndex = 1;
             // 
             // tabStripBottomRight
             // 
             this.tabStripBottomRight.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tabStripBottomRight.DropDownBackgroundColor = System.Drawing.Color.Gray;
+            this.tabStripBottomRight.DropDownBorderColor = System.Drawing.Color.Green;
+            this.tabStripBottomRight.DropDownHeight = 400;
+            this.tabStripBottomRight.DropDownMouseOverBackgroundColor = System.Drawing.Color.Red;
+            this.tabStripBottomRight.DropDownScrollBarButtonColor = System.Drawing.Color.LightGray;
+            this.tabStripBottomRight.DropDownScrollBarColor = System.Drawing.Color.LightGray;
+            this.tabStripBottomRight.DropDownWidth = 500;
             this.tabStripBottomRight.Location = new System.Drawing.Point(0, 0);
             this.tabStripBottomRight.Name = "tabStripBottomRight";
             this.tabStripBottomRight.SelectedIndex = -1;
             this.tabStripBottomRight.ShowPopOut = true;
             this.tabStripBottomRight.Size = new System.Drawing.Size(337, 157);
-            this.tabStripBottomRight.StripAtTop = true;
+            this.tabStripBottomRight.StripMode = ExtendedControls.TabStrip.StripModeType.ListSelection;
             this.tabStripBottomRight.TabIndex = 0;
             // 
             // TravelHistoryControl

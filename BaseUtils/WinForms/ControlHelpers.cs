@@ -181,4 +181,15 @@ public static class ControlHelpersStaticFunc
             Disabled.SetColorMatrix(new ColorMatrix(disabledMatrix), ColorMatrixFlag.Default, ColorAdjustType.Bitmap);
         }
     }
+
+    static public Point PositionWithinScreen(this Control p, int x, int y)
+    {
+        Screen scr = Screen.FromControl(p);
+        Rectangle scrb = scr.Bounds;
+        //System.Diagnostics.Debug.WriteLine("Screen is " + scrb);
+        x = Math.Min(Math.Max(x, scrb.Left), scrb.Right - p.Width);
+        y = Math.Min(Math.Max(y, scrb.Top), scrb.Bottom - p.Height);
+        return new Point(x, y);
+    }
+
 }

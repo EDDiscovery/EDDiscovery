@@ -85,12 +85,12 @@ namespace EDDiscovery.Forms
             { new PopOutInfo( PopOuts.Journal, "Journal History", "JournalHistory", EDDiscovery.Properties.Resources.journal, "Display the journal grid view") },
             { new PopOutInfo( PopOuts.TravelGrid, "Travel History", "TravelHistory", EDDiscovery.Properties.Resources.travelgrid, "Display the history grid view") },
             { new PopOutInfo( PopOuts.StarList, "Star List", "StarList", EDDiscovery.Properties.Resources.starlist, "Display the visited star list", transparent: false) },
-            { new PopOutInfo( PopOuts.MarketData, "Market Data", "MarketData", EliteDangerous.Properties.Resources.marketdata , "Display Market Data (Requires login to Frontier using Commander Frontier log in details)" ) },
+            { new PopOutInfo( PopOuts.MarketData, "Market Data", "MarketData", EliteDangerous.Properties.Resources.marketdata , "Display Market Data (Requires Frontier Commander login)" ) },
             { new PopOutInfo( PopOuts.Missions, "Missions", "Missions", EliteDangerous.Properties.Resources.missionaccepted , "Display Missions") },
             { new PopOutInfo( PopOuts.Synthesis, "Synthesis", "Synthesis", EliteDangerous.Properties.Resources.synthesis, "Display Synthesis planner") },
             { new PopOutInfo( PopOuts.Engineering, "Engineering", "Engineering", EliteDangerous.Properties.Resources.engineercraft , "Display Engineering planner") },
             { new PopOutInfo( PopOuts.Scan, "Scan", "Scan", EliteDangerous.Properties.Resources.scan, "Display scan data", transparent: false) },
-            { new PopOutInfo( PopOuts.EstimatedValues, "Estimated Values", "EstimatedValues", EliteDangerous.Properties.Resources.estval, "Display estimated scan values for all bodies in current system", transparent: false) },
+            { new PopOutInfo( PopOuts.EstimatedValues, "Estimated Values", "EstimatedValues", EliteDangerous.Properties.Resources.estval, "Display estimated scan values bodies in system", transparent: false) },
             { new PopOutInfo( PopOuts.Modules, "Loadout", "Modules", EliteDangerous.Properties.Resources.module, "Display Loadout for current ships and also stored modules") },
             { new PopOutInfo( PopOuts.Exploration, "Exploration", "Exploration", EliteDangerous.Properties.Resources.sellexplorationdata, "Display Exploration Information") },
             { new PopOutInfo( PopOuts.ScreenShot, "Screen Shot", "ScreenShot", EliteDangerous.Properties.Resources.screenshot, "Display the screen shot view") },
@@ -102,7 +102,7 @@ namespace EDDiscovery.Forms
             { new PopOutInfo( PopOuts.RouteTracker, "Route Tracker", "RouteTracker", EDDiscovery.Properties.Resources.routetracker, "Display the route tracker", transparent: false) },
             { new PopOutInfo( PopOuts.EDSM, "EDSM Star Finder", "EDSMStarFinder", EDDiscovery.Properties.Resources.edsm24, "Display the EDSM Star finder") },
             { new PopOutInfo( PopOuts.Grid, "The Grid", "TheGrid", EDDiscovery.Properties.Resources.grid, "Display the grid which allows other panels to be placed on it" , transparent:false) },
-            { new PopOutInfo( PopOuts.ShoppingList, "Shopping List", "ShoppingList", EDDiscovery.Properties.Resources.shoppinglist, "Create a list of required materials combining synthesis and engineering") }
+            { new PopOutInfo( PopOuts.ShoppingList, "Shopping List", "ShoppingList", EDDiscovery.Properties.Resources.shoppinglist, "Shopping list of materials combining synthesis and engineering") }
         };
 
         public class PopOutInfo
@@ -137,7 +137,7 @@ namespace EDDiscovery.Forms
             return (from PopOutInfo x in PopOutList select x.Tooltip).ToArray();
         }
 
-        static public Bitmap[] GetPopOutImages()
+        static public Image[] GetPopOutImages()
         {
             return (from PopOutInfo x in PopOutList select x.TabIcon).ToArray();
         }
