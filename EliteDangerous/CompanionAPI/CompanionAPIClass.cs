@@ -14,6 +14,7 @@
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 
+using EliteDangerous.CompanionAPI;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
@@ -365,7 +366,7 @@ namespace EliteDangerousCore.CompanionAPI
         }
 
 
-        public void GetMarket()
+        public CMarket GetMarket()
         {
             if (NeedLogin == true)
                 throw new CompanionAppIllegalStateException("Service is not logged in to profile");
@@ -400,8 +401,12 @@ namespace EliteDangerousCore.CompanionAPI
             JObject jo = JObject.Parse(ProfileString);
             ProfileString = jo.ToString(Formatting.Indented);       // nicer
             //System.Diagnostics.Debug.WriteLine(ProfileString);
-            CProfile market = new CProfile(jo);
+            CMarket market = new CMarket();
 
+            if (market.FromJson(jo))
+                return market;
+            else
+                return null;
         }
 
 
