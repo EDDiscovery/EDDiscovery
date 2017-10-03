@@ -442,25 +442,7 @@ namespace EliteDangerousCore
             if (syspos.System.status == SystemStatusEnum.EDSC || (!reload && syspos.System.id_edsm == -1))  // if set already, or we tried and failed..
                 return null;
 
-            bool ownconn = false;
-
-            try
-            {
-                if (conn == null)
-                {
-                    ownconn = true;
-                    conn = new SQLiteConnectionSystem();
-                }
-
-                return SystemClassDB.FindEDSM(syspos.System, conn);
-            }
-            finally
-            {
-                if (ownconn && conn != null)
-                {
-                    conn.Dispose();
-                }
-            }
+            return SystemCache.FindEDSM(syspos.System, usedb: true, useedsm: true, conn: conn);
         }
 
         public void FillEDSM(HistoryEntry syspos, ISystem edsmsys = null, bool reload = false, SQLiteConnectionUser uconn = null)       // call to fill in ESDM data for entry, and also fills in all others pointing to the system object
