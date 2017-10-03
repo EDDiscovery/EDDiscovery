@@ -194,8 +194,8 @@ namespace EDDiscovery.UserControls
             string bottomLine="";
             string firstSystemName = _currentRoute.Systems[0];
 
-            SystemClassDB firstSystem = SystemClassDB.GetSystem(firstSystemName);
-            SystemClassDB finalSystem = SystemClassDB.GetSystem(_currentRoute.Systems[_currentRoute.Systems.Count - 1]);
+            ISystem firstSystem = SystemClassDB.GetSystem(firstSystemName);
+            ISystem finalSystem = SystemClassDB.GetSystem(_currentRoute.Systems[_currentRoute.Systems.Count - 1]);
 
             if (finalSystem != null)
             {
@@ -215,13 +215,13 @@ namespace EDDiscovery.UserControls
             {
                 topline = String.Format("{0} {1} WPs remain", _currentRoute.Name, _currentRoute.Systems.Count);
             }
-            SystemClassDB nearestSystem = null;
+            ISystem nearestSystem = null;
             double minDist = double.MaxValue;
             int nearestidx = -1;
             for (int i = 0; i < _currentRoute.Systems.Count; i++)
             {
                 String sys = _currentRoute.Systems[i];
-                SystemClassDB sc = SystemClassDB.GetSystem(sys);
+                ISystem sc = SystemClassDB.GetSystem(sys);
                 if (sc == null)
                     continue;
                 double dist = SystemClassDB.Distance(currentSystem.System, sc);
@@ -255,7 +255,7 @@ namespace EDDiscovery.UserControls
                 else
                     name = nearestSystem.name;
 
-                SystemClassDB nextSystem = SystemClassDB.GetSystem(name);
+                ISystem nextSystem = SystemClassDB.GetSystem(name);
                 if (nextSystem == null)
                 {
                     bottomLine = String.Format("WP{0}: {1} {2}", wp, nextName, autoCopyWPToolStripMenuItem.Checked ? " (AUTO)" : "");

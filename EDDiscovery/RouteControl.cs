@@ -39,10 +39,10 @@ namespace EDDiscovery
         internal TravelHistoryControl travelhistorycontrol1;
         private EDDiscoveryForm _discoveryForm;
         internal bool changesilence = false;
-        private List<SystemClassDB> routeSystems;
+        private List<ISystem> routeSystems;
         string lastsys = null;
 
-        public List<SystemClassDB>  RouteSystems { get {return routeSystems;} }
+        public List<ISystem>  RouteSystems { get {return routeSystems;} }
 
         System.Windows.Forms.Timer fromupdatetimer;
         System.Windows.Forms.Timer toupdatetimer;
@@ -640,7 +640,7 @@ namespace EDDiscovery
                         List<KeyValuePair<String, double>> data = new List<KeyValuePair<String, double>>();
 
                         Point3D last = null;
-                        foreach (SystemClassDB s in RouteSystems)
+                        foreach (ISystem s in RouteSystems)
                         {
                             Point3D pos = new Point3D(s.x, s.y, s.z);
                             double dist = 0;
@@ -706,12 +706,12 @@ namespace EDDiscovery
             "Nearest to Waypoint + Deviation / 2"
         };
 
-        public List<SystemClassDB> RouteIterative(Action<string> AppendText)
+        public List<ISystem> RouteIterative(Action<string> AppendText)
         {
             double traveldistance = Point3D.DistanceBetween(coordsfrom, coordsto);      // its based on a percentage of the traveldistance
-            List<SystemClassDB> routeSystems = new List<SystemClassDB>();
+            List<ISystem> routeSystems = new List<ISystem>();
             System.Diagnostics.Debug.WriteLine("From " + fromsys + " to  " + tosys);
-            routeSystems.Add(new SystemClassDB(fromsys, coordsfrom.X, coordsfrom.Y, coordsfrom.Z));
+            routeSystems.Add(new SystemClass(fromsys, coordsfrom.X, coordsfrom.Y, coordsfrom.Z));
 
             AppendText("Searching route from " + fromsys + " to " + tosys + " using " + metric_options[routemethod] + " metric" + Environment.NewLine);
             AppendText("Total distance: " + traveldistance.ToString("0.00") + " in " + maxrange.ToString("0.00") + "ly jumps" + Environment.NewLine);
@@ -743,7 +743,7 @@ namespace EDDiscovery
                 //Console.WriteLine("Curpos " + curpos.X + "," + curpos.Y + "," + curpos.Z);
                 //Console.WriteLine(" next" + nextpos.X + "," + nextpos.Y + "," + nextpos.Z);
 #endif
-                SystemClassDB bestsystem = SystemClassDB.GetSystemNearestTo(curpos, nextpos, maxrange, maxrange - 0.5, routemethod);
+                ISystem bestsystem = SystemClassDB.GetSystemNearestTo(curpos, nextpos, maxrange, maxrange - 0.5, routemethod);
 
                 string sysname = "WAYPOINT";
                 double deltafromwaypoint = 0;
@@ -768,7 +768,7 @@ namespace EDDiscovery
 
             } while (true);
 
-            routeSystems.Add(new SystemClassDB(tosys, coordsto.X, coordsto.Y, coordsto.Z));
+            routeSystems.Add(new SystemClass(tosys, coordsto.X, coordsto.Y, coordsto.Z));
             actualdistance += Point3D.DistanceBetween(curpos, coordsto);
             AppendText(string.Format("{0,-40}{1,3} Dist:{2,8:0.00}ly @ {3,9:0.00},{4,8:0.00},{5,9:0.00}" + Environment.NewLine, tosys, jump, Point3D.DistanceBetween(curpos, coordsto), coordsto.X, coordsto.Y, coordsto.Z));
             AppendText(Environment.NewLine);

@@ -106,7 +106,8 @@ namespace EDDiscovery.UserControls
         private void Discoveryform_OnNewEntry(HistoryEntry he, HistoryList hl)
         {
             last_he = he;
-            Display();
+            if (he is IMaterialCommodityJournalEntry)
+                Display();
         }
 
         private void Display(HistoryEntry he, HistoryList hl)
@@ -168,6 +169,7 @@ namespace EDDiscovery.UserControls
                 {
                     RevertToNormalSize();
                     int minWidth = ((UserControlForm)this.ParentForm).TitleBarMinWidth();
+                    splitContainer1.Panel2MinSize = 0;
                     RequestTemporaryResize(new Size(Math.Max(minWidth, displayList.img.Width) + 8, displayList.img.Height + 4));
                 }
                 else
@@ -181,7 +183,7 @@ namespace EDDiscovery.UserControls
                     splitContainer1.Panel1MinSize = displayList.img.Width;
                 }
                 else
-                    splitContainer1.SplitterDistance = splitContainer1.Width - splitContainer1.Panel2MinSize;
+                    splitContainer1.SplitterDistance = Math.Max(0, splitContainer1.Width - splitContainer1.Panel2MinSize);
             }
         }
 
@@ -191,6 +193,7 @@ namespace EDDiscovery.UserControls
 
         public override void Closing()
         {
+            discoveryform.OnNewEntry -= Discoveryform_OnNewEntry;
             RevertToNormalSize();
             userControlEngineering.Closing();
             userControlSynthesis.Closing();

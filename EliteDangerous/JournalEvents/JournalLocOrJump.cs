@@ -21,26 +21,61 @@ using System.Text;
 
 namespace EliteDangerousCore.JournalEvents
 {
-    public abstract class JournalLocOrJump : JournalEntry
+    public abstract class JournalLocOrJump : JournalEntry, ISystemStationEntry
     {
         public string StarSystem { get; set; }
         public EMK.LightGeometry.Vector3 StarPos { get; set; }
         public bool StarPosFromEDSM { get; set; }
         public bool EDSMFirstDiscover { get; set; }
 
+        public string Faction { get; set; }
+        public string FactionState { get; set; }
+        public string Allegiance { get; set; }
+        public string Economy { get; set; }
+        public string Economy_Localised { get; set; }
+        public string Government { get; set; }
+        public string Government_Localised { get; set; }
+        public string Security { get; set; }
+        public string Security_Localised { get; set; }
+        public long? Population { get; set; }
+        public string PowerplayState { get; set; }
+        public string[] Powers { get; set; }
+
+        public FactionInformation[] Factions { get; set; }
+
         public bool HasCoordinate { get { return !float.IsNaN(StarPos.X); } }
 
-        protected JournalLocOrJump(JObject jo, JournalTypeEnum jtype ) : base(jo, jtype)
+        public bool IsTrainingEvent { get; private set; } // True if detected to be in training
+
+        public class FactionInformation
         {
-            StarSystem = jo["StarSystem"].Str();
-            StarPosFromEDSM = jo["StarPosFromEDSM"].Bool(false);
-            EDSMFirstDiscover = jo["EDD_EDSMFirstDiscover"].Bool(false);
+            public string Name { get; set; }
+            public string FactionState { get; set; }
+            public string Government { get; set; }
+            public double Influence { get; set; }
+            public string Allegiance { get; set; }
+
+            public PowerStatesInfo[] PendingStates { get; set; }
+            public PowerStatesInfo[] RecoveringStates { get; set; }
+        }
+
+        public class PowerStatesInfo
+        {
+            public string State { get; set; }
+            public int Trend { get; set; }
+        }
+
+        protected JournalLocOrJump(JObject evt, JournalTypeEnum jtype ) : base(evt, jtype)
+        {
+            StarSystem = evt["StarSystem"].Str();
+            StarPosFromEDSM = evt["StarPosFromEDSM"].Bool(false);
+            EDSMFirstDiscover = evt["EDD_EDSMFirstDiscover"].Bool(false);
 
             EMK.LightGeometry.Vector3 pos = new EMK.LightGeometry.Vector3();
 
-            if (!jo["StarPos"].Empty())            // if its an old VS entry, may not have co-ords
+            if (!evt["StarPos"].Empty())            // if its an old VS entry, may not have co-ords
             {
-                JArray coords = jo["StarPos"] as JArray;
+                JArray coords = evt["StarPos"] as JArray;
                 pos.X = coords[0].Value<float>();
                 pos.Y = coords[1].Value<float>();
                 pos.Z = coords[2].Value<float>();
@@ -51,6 +86,35 @@ namespace EliteDangerousCore.JournalEvents
             }
 
             StarPos = pos;
+
+            Faction = JSONObjectExtensions.GetMultiStringDef(evt, new string[] { "SystemFaction", "Faction" });
+            FactionState = evt["FactionState"].Str();           // PRE 2.3 .. not present in newer files, fixed up in next bit of code
+            Factions = evt["Factions"]?.ToObject<FactionInformation[]>()?.OrderByDescending(x => x.Influence)?.ToArray();  // POST 2.3
+
+            if (Factions != null)
+            {
+                int i = Array.FindIndex(Factions, x => x.Name == Faction);
+                if (i != -1)
+                    FactionState = Factions[i].FactionState;        // set to State of controlling faction
+            }
+
+            Allegiance = JSONObjectExtensions.GetMultiStringDef(evt, new string[] { "SystemAllegiance", "Allegiance" });
+            Economy = JSONObjectExtensions.GetMultiStringDef(evt, new string[] { "SystemEconomy", "Economy" });
+            Economy_Localised = JSONObjectExtensions.GetMultiStringDef(evt, new string[] { "SystemEconomy_Localised", "Economy_Localised" });
+            Government = JSONObjectExtensions.GetMultiStringDef(evt, new string[] { "SystemGovernment", "Government" });
+            Government_Localised = JSONObjectExtensions.GetMultiStringDef(evt, new string[] { "SystemGovernment_Localised", "Government_Localised" });
+            Security = JSONObjectExtensions.GetMultiStringDef(evt, new string[] { "SystemSecurity", "Security" });
+            Security_Localised = JSONObjectExtensions.GetMultiStringDef(evt, new string[] { "SystemSecurity_Localised", "Security_Localised" });
+
+            PowerplayState = evt["PowerplayState"].Str();            // NO evidence
+            if (!evt["Powers"].Empty())
+                Powers = evt.Value<JArray>("Powers").Values<string>().ToArray();
+
+            // Allegiance without Faction only occurs in Training
+            if (!String.IsNullOrEmpty(Allegiance) && Faction == null)
+            {
+                IsTrainingEvent = true;
+            }
         }
 
         public void UpdateEDSMFirstDiscover(bool firstdiscover)
@@ -59,6 +123,78 @@ namespace EliteDangerousCore.JournalEvents
             jo["EDD_EDSMFirstDiscover"] = firstdiscover;
             UpdateJson(jo);
             EDSMFirstDiscover = firstdiscover;
+        }
+
+        public EDGovernment EDGovernment
+        {
+            get
+            {
+                EDGovernment government;
+                if (Government != null && Government.StartsWith("$government_") && Enum.TryParse(Government.Substring(12), out government))
+                {
+                    return government;
+                }
+                if (Government == "$government_PrisonColony;") return EDGovernment.Prison_Colony;
+                return EDGovernment.Unknown;
+            }
+        }
+
+        public EDEconomy EDEconomy
+        {
+            get
+            {
+                EDEconomy economy;
+                if (Economy != null && Economy.StartsWith("$economy_") && Enum.TryParse(Economy.Substring(9), out economy))
+                {
+                    return economy;
+                }
+                if (Economy == "$economy_Agri;") return EDEconomy.Agriculture;
+                return EDEconomy.Unknown;
+            }
+        }
+
+        public EDSecurity EDSecurity
+        {
+            get
+            {
+                switch (Security)
+                {
+                    case "$GAlAXY_MAP_INFO_state_anarchy;": return EDSecurity.Anarchy;
+                    case "$GALAXY_MAP_INFO_state_lawless;": return EDSecurity.Lawless;
+                    case "$SYSTEM_SECURITY_low;": return EDSecurity.Low;
+                    case "$SYSTEM_SECURITY_medium;": return EDSecurity.Medium;
+                    case "$SYSTEM_SECURITY_high;": return EDSecurity.High;
+                    default: return EDSecurity.Unknown;
+                }
+            }
+        }
+
+        public EDState EDState
+        {
+            get
+            {
+                EDState state;
+                if (FactionState != null && Enum.TryParse(FactionState, out state))
+                {
+                    return state;
+                }
+                if (FactionState == "CivilUnrest") return EDState.Civil_Unrest;
+                if (FactionState == "CivilWar") return EDState.Civil_War;
+                return EDState.Unknown;
+            }
+        }
+
+        public EDAllegiance EDAllegiance
+        {
+            get
+            {
+                EDAllegiance allegiance;
+                if (Allegiance != null && Enum.TryParse(Allegiance, out allegiance))
+                {
+                    return allegiance;
+                }
+                return EDAllegiance.Unknown;
+            }
         }
     }
 }

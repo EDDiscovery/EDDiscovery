@@ -174,24 +174,22 @@ namespace EDDiscovery.UserControls
             if (item.EventDetailedInfo.Length > 0)
                 detail += ((detail.Length > 0) ? Environment.NewLine : "") + item.EventDetailedInfo;
 
-            object[] rowobj = { EDDiscoveryForm.EDDConfig.DisplayUTC ? item.EventTimeUTC : item.EventTimeLocal, "", item.EventSummary, detail };
+            var rw = dataGridViewJournal.RowTemplate.Clone() as DataGridViewRow;
+            rw.CreateCells(dataGridViewJournal, EDDiscoveryForm.EDDConfig.DisplayUTC ? item.EventTimeUTC : item.EventTimeLocal, "", item.EventSummary, detail);
+            rw.Cells[JournalHistoryColumns.HistoryTag].Tag = item;
 
-            int rownr;
+            int rownr = 0;
 
             if (insert)
             {
-                dataGridViewJournal.Rows.Insert(0, rowobj);
-                rownr = 0;
+                dataGridViewJournal.Rows.Insert(rownr, rw);
             }
             else
             {
-                dataGridViewJournal.Rows.Add(rowobj);
-                rownr = dataGridViewJournal.Rows.Count - 1;
-            }
+                rownr = dataGridViewJournal.Rows.Add(rw);
+            }   
 
             rowsbyjournalid[item.Journalid] = dataGridViewJournal.Rows[rownr];
-
-            dataGridViewJournal.Rows[rownr].Cells[JournalHistoryColumns.HistoryTag].Tag = item;
         }
 
         private void AddNewEntry(HistoryEntry he, HistoryList hl)               // add if in event filter, and not in field filter..
@@ -199,6 +197,32 @@ namespace EDDiscovery.UserControls
             if (he.IsJournalEventInEventFilter(SQLiteDBClass.GetSettingString(DbFilterSave, "All")) && FilterHelpers.FilterHistory(he, fieldfilter, discoveryform.Globals))
             {
                 AddNewJournalRow(true, he);
+
+                var filter = (TravelHistoryFilter)comboBoxJournalWindow.SelectedItem ?? TravelHistoryFilter.NoFilter;
+
+                if (filter.MaximumNumberOfItems != null)
+                {
+                    for (int r = dataGridViewJournal.Rows.Count - 1; r >= dataGridViewJournal.Rows.Count; r--)
+                    {
+                        dataGridViewJournal.Rows.RemoveAt(r);
+                    }
+                }
+
+                if (filter.MaximumDataAge != null)
+                {
+                    for (int r = dataGridViewJournal.Rows.Count - 1; r > 0; r--)
+                    {
+                        var rhe = dataGridViewJournal.Rows[r].Tag as HistoryEntry;
+                        if (rhe != null && rhe.AgeOfEntry() > filter.MaximumDataAge)
+                        {
+                            dataGridViewJournal.Rows.RemoveAt(r);
+                        }
+                        else
+                        {
+                            break;
+                        }
+                    }
+                }
 
                 if (checkBoxMoveToTop.Checked && dataGridViewJournal.DisplayedRowCount(false) > 0)   // Move focus to new row
                 {

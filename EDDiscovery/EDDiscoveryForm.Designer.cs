@@ -795,7 +795,6 @@ namespace EDDiscovery
             this.panelToolBar.Name = "panelToolBar";
             this.panelToolBar.PinState = true;
             this.panelToolBar.RolledUpHeight = 5;
-            this.panelToolBar.RollPixelStep = 5;
             this.panelToolBar.RollUpDelay = 1000;
             this.panelToolBar.ShowHiddenMarker = true;
             this.panelToolBar.Size = new System.Drawing.Size(989, 32);

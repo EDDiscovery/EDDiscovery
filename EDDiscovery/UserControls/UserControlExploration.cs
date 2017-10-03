@@ -130,9 +130,9 @@ namespace EDDiscovery.UserControls
 
    
 
-        private SystemClassDB GetSystem(string sysname)
+        private ISystem GetSystem(string sysname)
         {
-            SystemClassDB sys = SystemClassDB.GetSystem(sysname);
+            ISystem sys = SystemClassDB.GetSystem(sysname);
 
             if (sys == null)
             {
@@ -388,7 +388,7 @@ namespace EDDiscovery.UserControls
                 var row = dataGridViewExplore.Rows[e.RowIndex];
                 var cell = dataGridViewExplore[e.ColumnIndex, e.RowIndex];
 
-                SystemClassDB sys = SystemClassDB.GetSystem(sysname);
+                ISystem sys = SystemClassDB.GetSystem(sysname);
 
                 if (sysname != "" && sys == null && !edsm.IsKnownSystem(sysname))
                 {
@@ -670,10 +670,10 @@ namespace EDDiscovery.UserControls
                 }
                 if (String.IsNullOrWhiteSpace(sysname))
                     continue;
-                SystemClassDB sc = GetSystem(sysname.Trim());
+                ISystem sc = GetSystem(sysname.Trim());
                 if (sc == null)
                 {
-                    sc = new SystemClassDB(sysname.Trim());
+                    sc = new SystemClass(sysname.Trim());
                     countunknown++;
                 }
                 systems.Add(sc.name);
@@ -771,7 +771,7 @@ namespace EDDiscovery.UserControls
 
             if (obj == null)
                 return;
-            SystemClassDB sc = SystemClassDB.GetSystem((string)obj);
+            ISystem sc = SystemClassDB.GetSystem((string)obj);
             if (sc == null)
             {
                 ExtendedControls.MessageBoxTheme.Show("Unknown system, system is without co-ordinates", "Edit bookmark", MessageBoxButtons.OK);
@@ -823,10 +823,10 @@ namespace EDDiscovery.UserControls
             {
                 string name = ret.Item1.name;
 
-                SystemClassDB sc = GetSystem(name.Trim());
+                ISystem sc = GetSystem(name.Trim());
                 if (sc == null)
                 {
-                    sc = new SystemClassDB(name.Trim());
+                    sc = new SystemClass(name.Trim());
                     countunknown++;
                 }
                 systems.Add(sc.name);
