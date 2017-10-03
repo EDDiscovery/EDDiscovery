@@ -172,11 +172,6 @@ namespace EDDiscovery
             panelToolBar.HiddenMarkerWidth = 200;
             panelToolBar.PinState = SQLiteConnectionUser.GetSettingBool("ToolBarPanelPinState", true);
 
-            comboBoxCustomPopOut.Enabled = false;
-            comboBoxCustomPopOut.Items.AddRange(PopOutControl.GetPopOutNames());
-            comboBoxCustomPopOut.SelectedIndex = 0;
-            comboBoxCustomPopOut.Enabled = true;
-
             label_version.Text = EDDOptions.Instance.VersionDisplayString;
 
             PopOuts = new PopOutControl(this);
@@ -1454,21 +1449,36 @@ namespace EDDiscovery
 
         }
 
-        private void comboBoxCustomPopOut_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (comboBoxCustomPopOut.Enabled)
-            {
-                PopOuts.PopOut(comboBoxCustomPopOut.SelectedIndex);
-
-                comboBoxCustomPopOut.Enabled = false;
-                comboBoxCustomPopOut.SelectedIndex = 0;
-                comboBoxCustomPopOut.Enabled = true;
-            }
-        }
-
         #endregion
 
         #region PopOuts
+
+        ExtendedControls.DropDownCustom popoutdropdown;
+
+        private void buttonExtPopOut_Click(object sender, EventArgs e)
+        {
+            popoutdropdown = new ExtendedControls.DropDownCustom("", true);
+
+            popoutdropdown.ItemHeight = 26;
+            popoutdropdown.Items = PopOutControl.GetPopOutToolTips().ToList();
+            popoutdropdown.ImageItems = PopOutControl.GetPopOutImages().ToList();
+            popoutdropdown.FlatStyle = FlatStyle.Popup;
+            popoutdropdown.Activated += (s, ea) =>
+            {
+                Point location = buttonExtPopOut.PointToScreen(new Point(0, 0));
+                popoutdropdown.Location = popoutdropdown.PositionWithinScreen(location.X + buttonExtPopOut.Width, location.Y);
+                this.Invalidate(true);
+            };
+            popoutdropdown.SelectedIndexChanged += (s, ea) =>
+            {
+                PopOuts.PopOut(popoutdropdown.SelectedIndex);
+            };
+
+            popoutdropdown.Size = new Size(500,400);
+            theme.ApplyToControls(popoutdropdown);
+            popoutdropdown.SelectionBackColor = theme.ButtonBackColor;
+            popoutdropdown.Show(this);
+        }
 
         internal void SaveCurrentPopOuts()
         {
