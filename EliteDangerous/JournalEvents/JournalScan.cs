@@ -418,7 +418,7 @@ namespace EliteDangerousCore.JournalEvents
             }
 
             if (nEccentricity.HasValue)
-                scanText.AppendFormat("Orbital Eccentricity: {0:0.000}°\n", nEccentricity.Value);
+                scanText.AppendFormat("Orbital Eccentricity: {0:0.000}\n", nEccentricity.Value);
 
             if (nOrbitalInclination.HasValue)
                 scanText.AppendFormat("Orbital Inclination: {0:0.000}°\n", nOrbitalInclination.Value);

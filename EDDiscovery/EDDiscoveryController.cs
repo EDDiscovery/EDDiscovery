@@ -136,7 +136,7 @@ namespace EDDiscovery
 
             EdsmSync = new EDSMSync(Logger);
 
-            EdsmLogFetcher = new EDSMLogFetcher(EDCommander.CurrentCmdrID, LogLine);
+            EdsmLogFetcher = new EDSMLogFetcher(LogLine);
             EdsmLogFetcher.OnDownloadedSystems += () => RefreshHistoryAsync();
 
             journalmonitor = new EDJournalClass(InvokeAsyncOnUiThread);
@@ -525,12 +525,8 @@ namespace EDDiscovery
 
                     OnRefreshCommanders?.Invoke();
 
-                    if (history.CommanderId >= 0 && history.CommanderId != EdsmLogFetcher.CommanderId)  // not hidden, and not last cmdr
-                    {
-                        EdsmLogFetcher.StopCheck(); // ENSURE stopped.  it was asked to be stop on the refresh, so should be
-                        EdsmLogFetcher = new EDSMLogFetcher(history.CommanderId, LogLine);
-                        EdsmLogFetcher.OnDownloadedSystems += () => RefreshHistoryAsync();
-                    }
+                    EdsmLogFetcher.StopCheck();
+
 
                     ReportProgress(-1, "");
                     LogLine("Refresh Complete.");
@@ -542,9 +538,10 @@ namespace EDDiscovery
 
                 journalmonitor.StartMonitor();
 
-                EdsmLogFetcher.Start();         // EDSM log fetcher was stopped, restart it..  ignored if not a valid commander or disabled.
-
                 OnRefreshComplete?.Invoke();                            // History is completed
+
+                if (history.CommanderId >= 0)
+                    EdsmLogFetcher.Start(EDCommander.Current);
 
                 refreshRequestedFlag = 0;
                 readyForNewRefresh.Set();
@@ -571,7 +568,7 @@ namespace EDDiscovery
             {
                 journalqueuedelaytimer.Change(Timeout.Infinite, Timeout.Infinite);  // stop the timer, but if it occurs before this, not the end of the world
                 journalqueue.Add(je);  // add it to the play list.
-                System.Diagnostics.Debug.WriteLine(Environment.TickCount + " No delay, issue " + je.EventTypeID );
+                //System.Diagnostics.Debug.WriteLine(Environment.TickCount + " No delay, issue " + je.EventTypeID );
                 PlayJournalList();    // and play
             }
         }
@@ -579,7 +576,7 @@ namespace EDDiscovery
         public void PlayJournalList()                 // play delay list out..
         {
             Debug.Assert(System.Windows.Forms.Application.MessageLoop);
-            System.Diagnostics.Debug.WriteLine(Environment.TickCount + " Play out list");
+            //System.Diagnostics.Debug.WriteLine(Environment.TickCount + " Play out list");
 
             JournalEntry prev = null;  // we start afresh from the point of merging so we don't merge with previous ones already shown
 
@@ -608,24 +605,24 @@ namespace EDDiscovery
                     OnNewUIEvent?.Invoke((je as EliteDangerousCore.JournalEvents.JournalMusic).MusicTrack, EDDConfig.Instance.ShowUIEvents);
             }
 
+            OnNewJournalEntry?.Invoke(je);          // Always call this on all entries...
+
             // filter out commanders, and filter out any UI events
             if (je.CommanderId == history.CommanderId && (!je.IsUIEvent || EDDConfig.Instance.ShowUIEvents))  
             {
                 HistoryEntry he = history.AddJournalEntry(je, h => LogLineHighlight(h));        // add a new one on top
-                System.Diagnostics.Debug.WriteLine("Delay Play add HE " + he.EventSummary);
+                //System.Diagnostics.Debug.WriteLine("Add HE " + he.EventSummary);
                 OnNewEntry?.Invoke(he, history);            // major hook
                 OnNewEntrySecond?.Invoke(he, history);      // secondary hook..
             }
 
-            OnNewJournalEntry?.Invoke(je);          // Finally, always call this on all entries... note not subject to delay play
-
-            if (je.EventTypeID == JournalTypeEnum.LoadGame)
+            if (je.EventTypeID == JournalTypeEnum.LoadGame) // and issue this on Load game
             {
                 OnRefreshCommanders?.Invoke();
             }
         }
 
-        public void DelayPlay(Object s)
+        public void DelayPlay(Object s)             // timeout after play delay.. 
         {
             System.Diagnostics.Debug.WriteLine(Environment.TickCount + " Delay Play timer executed");
             journalqueuedelaytimer.Change(Timeout.Infinite, Timeout.Infinite);

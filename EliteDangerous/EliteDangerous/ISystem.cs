@@ -60,6 +60,10 @@ namespace EliteDangerousCore
         Lockdown,
         Outbreak,
         War,
+        Famine,
+        Election,
+        Retreat,
+        Investment,
     }
 
     public enum EDSecurity
@@ -68,6 +72,8 @@ namespace EliteDangerousCore
         Low,
         Medium,
         High,
+        Anarchy,
+        Lawless,
     }
 
     public enum EDStationType

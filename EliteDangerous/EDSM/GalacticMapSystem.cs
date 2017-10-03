@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace EliteDangerousCore.EDSM
 {
-    public class GalacticMapSystem : SystemClassDB
+    public class GalacticMapSystem : SystemClass
     {
         public GalacticMapObject GalMapObject { get; set; }
 
