@@ -932,6 +932,9 @@ namespace EliteDangerousCore
             {
                 var commander = EDCommander.GetCommander(CommanderId);
 
+                if (commander == null)      // more paranoia
+                    return;
+
                 string edsmname = commander.Name;
                 if (!string.IsNullOrEmpty(commander.EdsmName))
                     edsmname = commander.EdsmName;
