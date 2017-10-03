@@ -961,8 +961,8 @@ namespace EliteDangerousCore
                     cash = (lastloadgamehe != null) ? ((JournalLoadGame)lastloadgamehe.journalEntry).Credits : 0;
                 }
 
-                JournalProgress progress = historylist.FindLast(x => x.EntryType == JournalTypeEnum.Progress).journalEntry as JournalProgress;
-                JournalRank rank = historylist.FindLast(x => x.EntryType == JournalTypeEnum.Rank).journalEntry as JournalRank;
+                JournalProgress progress = historylist.FindLast(x => x.EntryType == JournalTypeEnum.Progress)?.journalEntry as JournalProgress;
+                JournalRank rank = historylist.FindLast(x => x.EntryType == JournalTypeEnum.Rank)?.journalEntry as JournalRank;
 
                 if (async)
                 {
