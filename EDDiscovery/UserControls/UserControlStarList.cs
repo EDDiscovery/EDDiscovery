@@ -265,11 +265,15 @@ namespace EDDiscovery.UserControls
                             else
                             {
                                 if (sc.PlanetTypeID == EDPlanet.Earthlike_body)
-                                    extrainfo = extrainfo.AppendPrePad(sc.BodyName + " is a earth like body", prefix);
+                                    extrainfo = extrainfo.AppendPrePad(sc.BodyName + " is an earth like body", prefix);
                                 if (sc.PlanetTypeID == EDPlanet.Water_world)
                                     extrainfo = extrainfo.AppendPrePad(sc.BodyName + " is a water world", prefix);
                                 if (sc.PlanetTypeID == EDPlanet.Ammonia_world)
-                                    extrainfo = extrainfo.AppendPrePad(sc.BodyName + " is a ammonia world", prefix);
+                                    extrainfo = extrainfo.AppendPrePad(sc.BodyName + " is an ammonia world", prefix);
+
+                                // Add information for terraformable planets
+                                if (sc.Terraformable == true)
+                                    extrainfo = extrainfo.AppendPrePad(sc.BodyName + " is terraformable", prefix);
                             }
                         }
                     }
