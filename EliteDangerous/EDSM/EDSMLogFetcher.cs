@@ -98,12 +98,12 @@ namespace EliteDangerousCore.EDSM
                 {
                     if (DateTime.UtcNow.Subtract(LastEventTime).TotalMinutes >= EDSMMaxLogAgeMinutes)
                     {
-                        Trace.WriteLine($"Retrieving EDSM logs starting {LastEventTime}");
+                        //Trace.WriteLine($"Retrieving EDSM logs starting {LastEventTime}");
                         res = edsm.GetLogs(LastEventTime, null, out edsmlogs, out logstarttime, out logendtime);
                     }
                     else if (FirstEventTime > GammaStart)
                     {
-                        Trace.WriteLine($"Retrieving EDSM logs ending {FirstEventTime}");
+                        //Trace.WriteLine($"Retrieving EDSM logs ending {FirstEventTime}");
                         res = edsm.GetLogs(null, FirstEventTime, out edsmlogs, out logstarttime, out logendtime);
                     }
                 }
@@ -127,10 +127,10 @@ namespace EliteDangerousCore.EDSM
                 }
                 else if (res == 100 && edsmlogs != null )
                 {
-                    Trace.WriteLine($"Retrieving EDSM logs count {edsmlogs.Count}");
-
                     if (edsmlogs.Count > 0)     // if anything to process..
                     {
+                        //Trace.WriteLine($"Retrieving EDSM logs count {edsmlogs.Count}");
+
                         BackoffInterval = TimeSpan.FromSeconds(60);
 
                         if (logendtime > DateTime.UtcNow)

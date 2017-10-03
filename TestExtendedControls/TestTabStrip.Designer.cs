@@ -45,18 +45,17 @@
             this.panel1.Controls.Add(this.tabStrip1);
             this.panel1.Location = new System.Drawing.Point(45, 47);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(574, 100);
+            this.panel1.Size = new System.Drawing.Size(574, 126);
             this.panel1.TabIndex = 0;
             // 
             // tabStrip1
             // 
             this.tabStrip1.BackColor = System.Drawing.SystemColors.ActiveCaption;
-            this.tabStrip1.Location = new System.Drawing.Point(43, 18);
+            this.tabStrip1.Location = new System.Drawing.Point(3, 3);
             this.tabStrip1.Name = "tabStrip1";
             this.tabStrip1.SelectedIndex = -1;
             this.tabStrip1.ShowPopOut = true;
-            this.tabStrip1.Size = new System.Drawing.Size(484, 46);
-            this.tabStrip1.StripAtTop = false;
+            this.tabStrip1.Size = new System.Drawing.Size(484, 96);
             this.tabStrip1.TabIndex = 0;
             // 
             // listView1

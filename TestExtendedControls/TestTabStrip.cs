@@ -15,7 +15,7 @@ namespace DialogTest
         public TestTabStrip()
         {
             InitializeComponent();
-            tabStrip1.Images = new Bitmap[] {
+            tabStrip1.ImageList = new Bitmap[] {
                 DialogTest.Properties.Resources.galaxy_red, DialogTest.Properties.Resources.galaxy_gray,
                 DialogTest.Properties.Resources.galaxy_black, DialogTest.Properties.Resources.galaxy_gray,
                 DialogTest.Properties.Resources.galaxy_black, DialogTest.Properties.Resources.galaxy_gray,
@@ -24,8 +24,12 @@ namespace DialogTest
                 DialogTest.Properties.Resources.galaxy_black, DialogTest.Properties.Resources.galaxy_gray,
                 DialogTest.Properties.Resources.galaxy_white, DialogTest.Properties.Resources.galaxy_gray,
                 DialogTest.Properties.Resources.galaxy_gray,DialogTest.Properties.Resources.galaxy,
+                DialogTest.Properties.Resources.galaxy_gray,
+                DialogTest.Properties.Resources.galaxy_white,
+                DialogTest.Properties.Resources.galaxy_gray,
+                DialogTest.Properties.Resources.galaxy_white,
                                             };
-            tabStrip1.ToolTips = new string[] { "icon 1", "icon 2",
+            tabStrip1.TextList = new string[] { "icon 0", "icon 1",
                 "icon 2", "icon 3",
                 "icon 4", "icon 5",
                 "icon 6", "icon 7",
@@ -36,8 +40,11 @@ namespace DialogTest
                 "icon 16", "icon 17",
                 "icon 18", "icon 19",
             };
-            tabStrip1.SetControlText("Test tab");
 
+            tabStrip1.StripMode = ExtendedControls.TabStrip.StripModeType.StripTop; //.ListSelection;
+            //tabStrip1.StripMode = ExtendedControls.TabStrip.StripModeType.ListSelection;
+
+            tabStrip1.OnCreateTab += TabStrip1_OnCreateTab;
 
             ListViewItem item1 = new ListViewItem("item1", 0);
             // Place a check mark next to the item.
@@ -99,6 +106,20 @@ namespace DialogTest
 
 
             listBox1.Items.AddRange(lv.ToArray());
+        }
+
+        private Control TabStrip1_OnCreateTab(ExtendedControls.TabStrip t, int no)
+        {
+            UserControl uc = new UserControl();
+            uc.BackColor = Color.Cyan;
+            Label lb = new Label();
+            lb.Location = new Point(10, 10);
+            lb.Text = "User Control " + (no+0);
+            uc.Name = "UC " + no;
+            uc.Dock = DockStyle.Fill;
+            uc.Controls.Add(lb);
+            tabStrip1.SetControlText("<" + uc.Name + ">");
+            return uc;
         }
 
         private void listBox1_DrawItem(object sender, DrawItemEventArgs e)
