@@ -528,6 +528,7 @@ namespace EDDiscovery
                         try
                         {
                             Capi.GetProfile();
+                            Capi.GetMarket();
 
                             JournalDocked dockevt = he.journalEntry as JournalDocked;
 
