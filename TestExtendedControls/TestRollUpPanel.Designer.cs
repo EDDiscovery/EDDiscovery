@@ -57,7 +57,6 @@
             this.rolluppanel.Name = "rolluppanel";
             this.rolluppanel.PinState = true;
             this.rolluppanel.RolledUpHeight = 5;
-            this.rolluppanel.RollPixelStep = 2;
             this.rolluppanel.RollUpDelay = 1000;
             this.rolluppanel.ShowHiddenMarker = true;
             this.rolluppanel.Size = new System.Drawing.Size(941, 40);

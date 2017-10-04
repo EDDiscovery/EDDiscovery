@@ -40,35 +40,16 @@ namespace EliteDangerousCore.JournalEvents
     {
         public JournalLocation(JObject evt) : base(evt, JournalTypeEnum.Location)      // all have evidence 16/3/2017
         {
+            // base class does StarSystem/StarPos/Faction/Powerplay
+
             Docked = evt.Value<bool?>("Docked") ?? false;
             StationName = evt["StationName"].Str();
             StationType = evt["StationType"].Str().SplitCapsWord();
             Body = evt["Body"].Str();
             BodyType = evt["BodyType"].Str();
-            Faction = JSONObjectExtensions.GetMultiStringDef(evt, new string[] { "SystemFaction", "Faction" });
-
-            Allegiance = JSONObjectExtensions.GetMultiStringDef(evt, new string[] { "SystemAllegiance", "Allegiance" });
-            Economy = JSONObjectExtensions.GetMultiStringDef(evt, new string[] { "SystemEconomy", "Economy" });
-            Economy_Localised = JSONObjectExtensions.GetMultiStringDef(evt, new string[] { "SystemEconomy_Localised", "Economy_Localised" });
-            Government = JSONObjectExtensions.GetMultiStringDef(evt, new string[] { "SystemGovernment", "Government" });
-            Government_Localised = JSONObjectExtensions.GetMultiStringDef(evt, new string[] { "SystemGovernment_Localised", "Government_Localised" });
-            Security = JSONObjectExtensions.GetMultiStringDef(evt, new string[] { "SystemSecurity", "Security" });
-            Security_Localised = JSONObjectExtensions.GetMultiStringDef(evt, new string[] { "SystemSecurity_Localised", "Security_Localised" });
 
             Latitude = evt["Latitude"].DoubleNull();
             Longitude = evt["Longitude"].DoubleNull();
-
-            Factions = evt["Factions"]?.ToObject<FactionInfo[]>();
-
-            PowerplayState = evt["PowerplayState"].Str();            // NO evidence
-            if (!evt["Powers"].Empty())
-                Powers = evt.Value<JArray>("Powers").Values<string>().ToArray();
-
-            // Allegiance without Faction only occurs in Training
-            if (!String.IsNullOrEmpty(Allegiance) && Faction == null)
-            {
-                IsTrainingEvent = true;
-            }
         }
 
         public bool Docked { get; set; }
@@ -76,25 +57,9 @@ namespace EliteDangerousCore.JournalEvents
         public string StationType { get; set; }
         public string Body { get; set; }
         public string BodyType { get; set; }
-        public string Faction { get; set; }
-
-        public string Allegiance { get; set; }
-        public string Economy { get; set; }
-        public string Economy_Localised { get; set; }
-        public string Government { get; set; }
-        public string Government_Localised { get; set; }
-        public string Security { get; set; }
-        public string Security_Localised { get; set; }
 
         public double? Latitude { get; set; }
         public double? Longitude { get; set; }
-
-        public string PowerplayState { get; set; }
-        public string[] Powers { get; set; }
-
-        public FactionInfo[] Factions { get; set; }
-
-        public bool IsTrainingEvent { get; private set; } // True if detected to be in training
 
         public override void FillInformation(out string summary, out string info, out string detailed) //V
         {
@@ -105,7 +70,7 @@ namespace EliteDangerousCore.JournalEvents
                 detailed = BaseUtils.FieldBuilder.Build("Allegiance:", Allegiance, "Economy:", Economy_Localised.Alt(Economy), "Government:", Government_Localised.Alt(Government), "Security:", Security_Localised.Alt(Security));
 
                 if (Factions != null)
-                    foreach (FactionInfo f in Factions)
+                    foreach (FactionInformation f in Factions)
                     {
                         detailed += Environment.NewLine;
                         detailed += BaseUtils.FieldBuilder.Build("", f.Name, "State:", f.FactionState, "Gov:", f.Government, "Inf:;%", (int)(f.Influence * 100), "Allegiance:", f.Allegiance);
@@ -144,24 +109,6 @@ namespace EliteDangerousCore.JournalEvents
 
 
         public override System.Drawing.Bitmap Icon { get { return EliteDangerous.Properties.Resources.location; } }
-
-        public class FactionInfo
-        {
-            public string Name { get; set; }
-            public string FactionState { get; set; }
-            public string Government { get; set; }
-            public double Influence { get; set; }
-            public string Allegiance { get; set; }
-
-            public PowerStatesInfo[] PendingStates { get; set; }
-            public PowerStatesInfo[] RecoveringStates { get; set; }
-        }
-
-        public class PowerStatesInfo
-        {
-            public string State { get; set; }
-            public int Trend { get; set; }
-        }
 
     }
 }

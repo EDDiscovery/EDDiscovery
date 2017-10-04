@@ -176,7 +176,7 @@ namespace EliteDangerousCore
             double _a = (double)a;
             double _b = fb == null ? (double)b : fb(b);
 
-            return _a == _b || (_a + _b > 0 && Math.Abs((_a - _b) / (_a + _b)) < epsilon);
+            return _a == _b || (_a + _b != 0 && Math.Sign(_a + _b) == Math.Sign(_a) && Math.Abs((_a - _b) / (_a + _b)) < epsilon);
         }
 
         public string GetBodyDesignation(JournalScan je, string system)

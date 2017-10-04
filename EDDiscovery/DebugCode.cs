@@ -66,7 +66,7 @@ namespace EDDiscovery
                     }
                     else if (je.EventTypeID == EliteDangerousCore.JournalTypeEnum.Scan)
                     {
-                        ss.Process(je as EliteDangerousCore.JournalEvents.JournalScan, new EliteDangerousCore.DB.SystemClassDB(system));
+                        ss.Process(je as EliteDangerousCore.JournalEvents.JournalScan, new EliteDangerousCore.SystemClass(system));
                     }
                 }
 

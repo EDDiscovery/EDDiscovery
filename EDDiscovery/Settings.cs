@@ -31,7 +31,7 @@ namespace EDDiscovery
     public partial class Settings : UserControl
     {
         private EDDiscoveryForm _discoveryForm;
-        private ISystem _homeSystem = new SystemClassDB("Sol", 0, 0, 0);
+        private ISystem _homeSystem = new SystemClass("Sol", 0, 0, 0);
         private ExtendedControls.ThemeStandardEditor themeeditor = null;
 
         public ISystem HomeSystem

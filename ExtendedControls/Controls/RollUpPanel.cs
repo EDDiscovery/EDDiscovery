@@ -25,11 +25,11 @@ namespace ExtendedControls
 {
     public class RollUpPanel : Panel
     {
-        public int RollUpDelay { get; set; } = 1000;
+        public int RollUpDelay { get; set; } = 1000;            // before rolling
         public int UnrollHoverDelay { get; set; } = 1000;       // set to large value and forces click to open functionality
         public int UnrolledHeight { get; set; } = 32;
         public int RolledUpHeight { get; set; } = 5;
-        public int RollPixelStep { get; set; } = 5;
+        public int RollUpAnimationTime { get; set; } = 500;            // animation time
         public bool ShowHiddenMarker { get { return hiddenmarkershow; } set { hiddenmarkershow = value; SetHMViz();} }
 
         public int HiddenMarkerWidth { get; set; } = 0;   //0 = full width
@@ -43,6 +43,9 @@ namespace ExtendedControls
 
         private CheckBoxCustom pinbutton;        // public so you can theme them with colour/IAs
         private DrawnPanel hiddenmarker;
+
+        long targetrolltickstart;     // when the roll is supposed to be in time
+        const int rolltimerinterval = 25;
 
         Action<RollUpPanel, CheckBoxCustom> PinStateChanged = null;
 
@@ -157,7 +160,8 @@ namespace ExtendedControls
             {
                 //System.Diagnostics.Debug.WriteLine(Environment.TickCount + " roll down, start animating");
                 mode = Mode.RollDown;
-                timer.Interval = 25;
+                targetrolltickstart = Environment.TickCount;
+                timer.Interval = rolltimerinterval;
                 DeployStarting?.Invoke(this, EventArgs.Empty);
                 timer.Start();
 
@@ -182,7 +186,8 @@ namespace ExtendedControls
             {
                 //System.Diagnostics.Debug.WriteLine(Environment.TickCount + " roll up, start animating");
                 mode = Mode.RollUp;
-                timer.Interval = 25;
+                targetrolltickstart = Environment.TickCount;
+                timer.Interval = rolltimerinterval;
                 RetractStarting?.Invoke(this, EventArgs.Empty);
                 timer.Start();
             }
@@ -276,9 +281,14 @@ namespace ExtendedControls
 
         private void Timer_Tick(object sender, EventArgs e)
         {
+            double rollpercent = (double)(Environment.TickCount - targetrolltickstart) / RollUpAnimationTime;
+            int rolldiff = UnrolledHeight - RolledUpHeight;
+            //System.Diagnostics.Debug.WriteLine(Environment.TickCount + " " + rollpercent);
+
             if (mode == Mode.RollUp)        // roll up animation, move one step on, check for end
             {
-                Height = Math.Max(Math.Min(Height - RollPixelStep, UnrolledHeight), RolledUpHeight);
+                Height = Math.Max((int)(UnrolledHeight - rolldiff * rollpercent), RolledUpHeight);
+                //System.Diagnostics.Debug.WriteLine(Environment.TickCount + " At " + Height);
 
                 if (Height == RolledUpHeight)    // end
                 {
@@ -299,7 +309,8 @@ namespace ExtendedControls
             }
             else if (mode == Mode.RollDown) // roll down animation, move one step on, check for end
             {
-                Height = Math.Max(Math.Min(Height + RollPixelStep, UnrolledHeight), RolledUpHeight);
+                Height = Math.Min((int)(RolledUpHeight + rolldiff * rollpercent), UnrolledHeight);
+                //System.Diagnostics.Debug.WriteLine(Environment.TickCount + " At " + Height);
 
                 if (Height == UnrolledHeight)        // end, everything is already visible.  hide the hidden marker
                 {

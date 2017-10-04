@@ -11,16 +11,16 @@
     <ROW Property="AI_FrameBtnsColor" Value="powderblue" MultiBuildValue="AnyCPU_Debug:orange" MsiKey="AI_FrameBtnsColor"/>
     <ROW Property="AI_FrameColor" Value="powderblue" MultiBuildValue="AnyCPU_Debug:orange" MsiKey="AI_FrameColor"/>
     <ROW Property="AI_ImagesColor" Value="powderblue" MultiBuildValue="AnyCPU_Debug:orange" MsiKey="AI_ImagesColor"/>
-    <ROW Property="ALLUSERS" Value="1"/>
+    <ROW Property="ALLUSERS" Value="1" MultiBuildValue="AnyCPU_Debug:2"/>
     <ROW Property="ARPHELPLINK" Value="https://forums.frontier.co.uk/showthread.php?t=138155&amp;p=2113535"/>
-    <ROW Property="ARPURLINFOABOUT" Value="http://eddiscovery.astronet.se/"/>
+    <ROW Property="ARPURLINFOABOUT" Value="https://github.com/EDDiscovery/EDDiscovery"/>
     <ROW Property="ARPURLUPDATEINFO" Value="http://eddiscovery.astronet.se/release/"/>
     <ROW Property="CTRLS" Value="2"/>
     <ROW Property="Manufacturer" Value="EDDiscovery"/>
-    <ROW Property="ProductCode" Value="1033:{0EB51619-BC98-4448-B3B0-C0363E0DF249} 1053:{F528B608-A15D-4AAA-9C81-033C4A43D933} " Type="16"/>
+    <ROW Property="ProductCode" Value="1033:{D8BDCE24-B9C5-42FA-B984-C2E7FD215E00} 1053:{E5B124D5-6DC7-4561-9169-E45549807638} " Type="16"/>
     <ROW Property="ProductLanguage" Value="1033"/>
     <ROW Property="ProductName" Value="EDDiscovery"/>
-    <ROW Property="ProductVersion" Value="8.3.0" Type="32"/>
+    <ROW Property="ProductVersion" Value="8.3.2" Type="32"/>
     <ROW Property="SecureCustomProperties" Value="OLDPRODUCTS;AI_NEWERPRODUCTFOUND;UPGRADE_1;AI_SETUPEXEPATH;SETUPEXEDIR"/>
     <ROW Property="UpgradeCode" Value="{27EA2F84-C7C5-41E2-9C59-CC42CCDC9FEF}"/>
     <ROW Property="WindowsType9X" MultiBuildValue="AnyCPU_Debug:Windows 9x/ME" ValueLocId="-"/>
@@ -112,7 +112,7 @@
     <ROW File="msvcr100.dll" Component_="msvcr100.dll" FileName="msvcr100.dll" Attributes="0" SourcePath="..\EDDiscovery\bin\Release\x86\Microsoft.VC100.CRT\msvcr100.dll" SelfReg="false" NextFile="SQLite.Interop.dll"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.BuildComponent">
-    <ROW BuildKey="AnyCPU_Debug" BuildName="AnyCPU_Debug" BuildOrder="1" BuildType="0" PackageFolder="AnyCPU_DebugSetupFiles" PackageFileName="EDDiscovery" Languages="sv;en" InstallationType="4" CabsLocation="1" PackageType="1" FilesInsideExe="true" ExtractionFolder="[AppDataFolder][|Manufacturer]\[|ProductName] [|ProductVersion]\install" ExtUI="true" LangsDialog="true" UseLargeSchema="true" Unicode="true" ExeName="EDDiscovery" MsiPackageType="AI_ALL"/>
+    <ROW BuildKey="AnyCPU_Debug" BuildName="AnyCPU_Debug" BuildOrder="1" BuildType="0" PackageFolder="AnyCPU_DebugSetupFiles" PackageFileName="EDDiscovery" Languages="sv;en" InstallationType="4" CabsLocation="1" PackageType="1" FilesInsideExe="true" ExtractionFolder="[AppDataFolder][|Manufacturer]\[|ProductName] [|ProductVersion]\install" ExtUI="true" LangsDialog="true" UseLargeSchema="true" Unicode="true" ExeName="EDDiscovery_[|ProductVersion]" MsiPackageType="AI_ALL"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.DictionaryComponent">
     <ROW Path="&lt;AI_DICTS&gt;ui.ail"/>
@@ -212,6 +212,7 @@
     <ROW Action="AI_RESTORE_LOCATION" Type="65" Source="aicustact.dll" Target="RestoreLocation"/>
     <ROW Action="AI_ResolveKnownFolders" Type="1" Source="aicustact.dll" Target="AI_ResolveKnownFolders"/>
     <ROW Action="AI_RunFinishActions" Type="1" Source="aicustact.dll" Target="RunFinishActions" WithoutSeq="true"/>
+    <ROW Action="AI_SETMIXINSTLOCATION" Type="1" Source="aicustact.dll" Target="MixedAllUsersInstallLocation"/>
     <ROW Action="AI_SETPROGRAMFILES" Type="51" Source="AI_ProgramFiles" Target="[ProgramFilesFolder]"/>
     <ROW Action="AI_SETPROGRAMFILES64" Type="51" Source="AI_ProgramFiles" Target="[ProgramFiles64Folder]"/>
     <ROW Action="AI_SHOW_LOG" Type="65" Source="aicustact.dll" Target="LaunchLogFile" WithoutSeq="true"/>
@@ -248,6 +249,7 @@
     <ROW Action="AI_SETPROGRAMFILES" Condition="NOT VersionNT64" Sequence="749"/>
     <ROW Action="AI_EnableDebugLog" Sequence="51"/>
     <ROW Action="AI_AppSearchEx" Sequence="101"/>
+    <ROW Action="AI_SETMIXINSTLOCATION" Sequence="746"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiInstallUISequenceComponent">
     <ROW Action="AI_RESTORE_LOCATION" Condition="APPDIR=&quot;&quot;" Sequence="747"/>
@@ -259,6 +261,7 @@
     <ROW Action="AI_SETPROGRAMFILES" Condition="NOT VersionNT64" Sequence="749"/>
     <ROW Action="AI_EnableDebugLog" Sequence="51"/>
     <ROW Action="AI_AppSearchEx" Sequence="101"/>
+    <ROW Action="AI_SETMIXINSTLOCATION" Sequence="746"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiLaunchConditionsComponent">
     <ROW Condition="(VersionNT &lt;&gt; 400)" Description="[ProductName] cannot be installed on the following Windows versions: [WindowsTypeNT40Display]" DescriptionLocId="AI.LaunchCondition.NoNT40" IsPredefined="true" Builds="AnyCPU_Debug"/>

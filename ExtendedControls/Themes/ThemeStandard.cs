@@ -783,6 +783,8 @@ namespace ExtendedControls
             else if (myControl is StatusStrip)
             {
                 myControl.BackColor = currentsettings.colors[Settings.CI.form];
+                myControl.ForeColor = currentsettings.colors[Settings.CI.label];
+                myControl.Font = fnt;
             }
             else if (myControl is ToolStrip)
             {

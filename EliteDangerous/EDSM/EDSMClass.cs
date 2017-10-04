@@ -37,7 +37,6 @@ namespace EliteDangerousCore.EDSM
 
         private readonly string fromSoftwareVersion;
         private readonly string fromSoftware;
-        private string EDSMDistancesFileName;
         static private Dictionary<long, List<JournalScan>> DictEDSMBodies = new Dictionary<long, List<JournalScan>>();
 
         public EDSMClass()
@@ -47,8 +46,6 @@ namespace EliteDangerousCore.EDSM
             fromSoftwareVersion = assemblyFullName.Split(',')[1].Split('=')[1];
 
             _serverAddress = ServerAddress;
-
-            EDSMDistancesFileName = Path.Combine(EliteConfigInstance.InstanceOptions.AppDataDirectory, "EDSMDistances.json");
 
             apiKey = EDCommander.Current.APIKey;
             commanderName = EDCommander.Current.EdsmName;
@@ -499,12 +496,19 @@ namespace EliteDangerousCore.EDSM
                         bool firstdiscover = jo["firstDiscover"].Value<bool>();
                         DateTime etutc = DateTime.ParseExact(ts, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.AdjustToUniversal|DateTimeStyles.AssumeUniversal); // UTC time
 
-                        SystemClass sc = SystemClassDB.GetSystem(id, cn, SystemClassDB.SystemIDType.EdsmId);
+                        ISystem sc = SystemClassDB.GetSystem(id, cn, SystemClassDB.SystemIDType.EdsmId);
                         if (sc == null)
-                            sc = new SystemClassDB(name)
+                        {
+                            sc = GetSystemsByName(name).FirstOrDefault(s => s.id_edsm == id);
+
+                            if (sc == null)
                             {
-                                id_edsm = id
-                            };
+                                sc = new SystemClass(name)
+                                {
+                                    id_edsm = id
+                                };
+                            }
+                        }
 
                         HistoryEntry he = HistoryEntry.MakeVSEntry(sc, etutc, EliteConfigInstance.InstanceConfig.DefaultMapColour, "", "", firstdiscover: firstdiscover);       // FSD jump entry
                         log.Add(he);
@@ -558,7 +562,7 @@ namespace EliteDangerousCore.EDSM
 
         public List<Tuple<ISystem,double>> GetSphereSystems(String systemName, double radius)
         {
-            string query = String.Format("api-v1/sphere-systems?systemName={0}&radius={1}&showCoordinates=1&showId=1", systemName, radius);
+            string query = String.Format("api-v1/sphere-systems?systemName={0}&radius={1}&showCoordinates=1&showId=1", Uri.EscapeDataString(systemName), radius);
 
             var response = RequestGet(query, handleException: true);
             if (response.Error)
@@ -576,7 +580,7 @@ namespace EliteDangerousCore.EDSM
             {
                 foreach (JObject sysname in msg)
                 {
-                    SystemClass sys = new SystemClass();
+                    ISystem sys = new SystemClass();
                     sys.name = sysname["name"].Str("Unknown");
                     sys.id_edsm = sysname["id"].Long(0);
                     JObject co = (JObject)sysname["coords"];
@@ -589,6 +593,69 @@ namespace EliteDangerousCore.EDSM
                     systems.Add(new Tuple<ISystem, double>(sys, sysname["distance"].Double()));
                 }
             }
+            return systems;
+        }
+
+
+        public List<ISystem> GetSystemsByName(string systemName, bool uselike = false)
+        {
+            string query = String.Format("api-v1/systems?systemName={0}&showCoordinates=1&showId=1&showInformation=1&showPermit=1", Uri.EscapeDataString(systemName));
+
+            var response = RequestGet(query, handleException: true);
+            if (response.Error)
+                return null;
+
+            var json = response.Body;
+            if (json == null)
+                return null;
+
+            JArray msg = JArray.Parse(json);
+
+            List<ISystem> systems = new List<ISystem>();
+
+            if (msg != null)
+            {
+                foreach (JObject sysname in msg)
+                {
+                    ISystem sys = new SystemClass();
+                    sys.name = sysname["name"].Str("Unknown");
+                    sys.id_edsm = sysname["id"].Long(0);
+                    JObject co = (JObject)sysname["coords"];
+
+                    if (co != null)
+                    {
+                        sys.x = co["x"].Double();
+                        sys.y = co["y"].Double();
+                        sys.z = co["z"].Double();
+                    }
+
+                    sys.needs_permit = sysname["requirePermit"].Bool(false) ? 1 : 0;
+
+                    JObject info = sysname["information"] as JObject;
+
+                    if (info != null)
+                    {
+                        sys.population = info["population"].Long(0);
+                        sys.faction = info["faction"].StrNull();
+                        EDAllegiance allegiance = EDAllegiance.None;
+                        EDGovernment government = EDGovernment.None;
+                        EDState state = EDState.None;
+                        EDEconomy economy = EDEconomy.None;
+                        EDSecurity security = EDSecurity.Unknown;
+                        sys.allegiance = Enum.TryParse(info["allegiance"].Str(), out allegiance) ? allegiance : EDAllegiance.None;
+                        sys.government = Enum.TryParse(info["government"].Str(), out government) ? government : EDGovernment.None;
+                        sys.state = Enum.TryParse(info["factionState"].Str(), out state) ? state : EDState.None;
+                        sys.primary_economy = Enum.TryParse(info["economy"].Str(), out economy) ? economy : EDEconomy.None;
+                        sys.security = Enum.TryParse(info["security"].Str(), out security) ? security : EDSecurity.Unknown;
+                    }
+
+                    if (uselike ? sys.name.StartsWith(systemName, StringComparison.InvariantCultureIgnoreCase) : sys.name.Equals(systemName, StringComparison.InvariantCultureIgnoreCase))
+                    {
+                        systems.Add(sys);
+                    }
+                }
+            }
+
             return systems;
         }
 
