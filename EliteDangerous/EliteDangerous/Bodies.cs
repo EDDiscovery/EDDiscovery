@@ -196,45 +196,55 @@ namespace EliteDangerousCore
 
     public class Bodies
     {
+        private static Dictionary<string, EDStar> StarStr2EnumLookup;
 
         public static EDStar StarStr2Enum(string star)
         {
             if (star == null)
                 return EDStar.Unknown;
 
+            if (StarStr2EnumLookup == null)
+            {
+                StarStr2EnumLookup = new Dictionary<string, EDStar>(StringComparer.InvariantCultureIgnoreCase);
+                foreach (EDStar atm in Enum.GetValues(typeof(EDStar)))
+                {
+                    StarStr2EnumLookup[atm.ToString().Replace("_", "")] = atm;
+                }
+            }
+
             var searchstr = star.Replace("_", "").Replace(" ", "").Replace("-", "").ToLower();
 
-
-            foreach (EDStar atm in Enum.GetValues(typeof(EDStar)))
-            {
-                string str = atm.ToString().Replace("_", "").ToLower();
-
-                if (searchstr.Equals(str))
-                    return atm;
-            }
+            if (StarStr2EnumLookup.ContainsKey(searchstr))
+                return StarStr2EnumLookup[searchstr];
 
             return EDStar.Unknown;
         }
+
+        private static Dictionary<string, EDPlanet> PlanetStr2EnumLookup;
 
         public static EDPlanet PlanetStr2Enum(string star)
         {
             if (star == null)
                 return EDPlanet.Unknown;
 
+            if (PlanetStr2EnumLookup == null)
+            {
+                PlanetStr2EnumLookup = new Dictionary<string, EDPlanet>(StringComparer.InvariantCultureIgnoreCase);
+                foreach (EDPlanet atm in Enum.GetValues(typeof(EDPlanet)))
+                {
+                    PlanetStr2EnumLookup[atm.ToString().Replace("_", "")] = atm;
+                }
+            }
+
             var searchstr = star.Replace("_", "").Replace(" ", "").Replace("-", "").ToLower();
 
-            foreach (EDPlanet atm in Enum.GetValues(typeof(EDPlanet)))
-            {
-                string str = atm.ToString().Replace("_", "").ToLower();
-
-                if (searchstr.Equals(str))
-                    return atm;
-            }
+            if (PlanetStr2EnumLookup.ContainsKey(searchstr))
+                return PlanetStr2EnumLookup[searchstr];
 
             return EDPlanet.Unknown;
         }
 
-
+        private static Dictionary<string, EDAtmosphereType> AtmosphereStr2EnumLookup;
 
         public static EDAtmosphereType AtmosphereStr2Enum(string v, out EDAtmosphereProperty atmprop)
         {
@@ -242,6 +252,15 @@ namespace EliteDangerousCore
 
             if (v == null)
                 return EDAtmosphereType.Unknown;
+
+            if (AtmosphereStr2EnumLookup == null)
+            {
+                AtmosphereStr2EnumLookup = new Dictionary<string, EDAtmosphereType>(StringComparer.InvariantCultureIgnoreCase);
+                foreach (EDAtmosphereType atm in Enum.GetValues(typeof(EDAtmosphereType)))
+                {
+                    AtmosphereStr2EnumLookup[atm.ToString().Replace("_", "")] = atm;
+                }
+            }
 
             var searchstr = v.ToLower().Replace("_", "").Replace(" ", "").Replace("-", "").Replace("atmosphere", "");
 
@@ -266,19 +285,15 @@ namespace EliteDangerousCore
                 searchstr = searchstr.Replace("hot", "");
             }
 
-
-            foreach (EDAtmosphereType atm in Enum.GetValues(typeof(EDAtmosphereType)))
-            {
-                string str = atm.ToString().Replace("_", "").ToLower();
-
-                if (searchstr.Equals(str))
-                    return atm;
-            }
+            if (AtmosphereStr2EnumLookup.ContainsKey(searchstr))
+                return AtmosphereStr2EnumLookup[searchstr];
 
            // System.Diagnostics.Trace.WriteLine("atm: " + v);
 
             return EDAtmosphereType.Unknown;
         }
+
+        private static Dictionary<string, EDVolcanism> VolcanismStr2EnumLookup;
 
         public static EDVolcanism VolcanismStr2Enum(string v, out EDVolcanismProperty vprop )
         {
@@ -288,7 +303,14 @@ namespace EliteDangerousCore
 
             string searchstr = v.ToLower().Replace("_", "").Replace(" ", "").Replace("-", "").Replace("volcanism", "");
 
-
+            if (VolcanismStr2EnumLookup == null)
+            {
+                VolcanismStr2EnumLookup = new Dictionary<string, EDVolcanism>(StringComparer.InvariantCultureIgnoreCase);
+                foreach (EDVolcanism atm in Enum.GetValues(typeof(EDVolcanism)))
+                {
+                    VolcanismStr2EnumLookup[atm.ToString().Replace("_", "")] = atm;
+                }
+            }
 
             if (searchstr.Contains("minor"))
             {
@@ -301,33 +323,32 @@ namespace EliteDangerousCore
                 searchstr = searchstr.Replace("major", "");
             }
 
-            foreach (EDVolcanism atm in Enum.GetValues(typeof(EDVolcanism)))
-            {
-                string str = atm.ToString().Replace("_", "").ToLower();
-
-                if (searchstr.Equals(str))
-                    return atm;
-            }
+            if (VolcanismStr2EnumLookup.ContainsKey(searchstr))
+                return VolcanismStr2EnumLookup[searchstr];
 
             return EDVolcanism.Unknown;
         }
 
+        private static Dictionary<string, EDReserve> ReserveStr2EnumLookup;
 
         public static EDReserve ReserveStr2Enum(string star)
         {
             if (star == null)
                 return EDReserve.None;
 
+            if (ReserveStr2EnumLookup == null)
+            {
+                ReserveStr2EnumLookup = new Dictionary<string, EDReserve>(StringComparer.InvariantCultureIgnoreCase);
+                foreach (EDReserve atm in Enum.GetValues(typeof(EDReserve)))
+                {
+                    ReserveStr2EnumLookup[atm.ToString().Replace("_", "")] = atm;
+                }
+            }
+
             var searchstr = star.Replace("_", "").Replace(" ", "").Replace("-", "").ToLower();
 
-
-            foreach (EDReserve atm in Enum.GetValues(typeof(EDReserve)))
-            {
-                string str = atm.ToString().Replace("_", "").ToLower();
-
-                if (searchstr.Equals(str))
-                    return atm;
-            }
+            if (ReserveStr2EnumLookup.ContainsKey(searchstr))
+                return ReserveStr2EnumLookup[searchstr];
 
             return EDReserve.None;
         }
