@@ -266,17 +266,22 @@ namespace EDDiscovery.UserControls
                             {
                                 if (sc.PlanetTypeID == EDPlanet.Earthlike_body)
                                     extrainfo = extrainfo.AppendPrePad(sc.BodyName + " is an earth like body", prefix);
+
+                                // Water Planets, not terraformable
                                 if (sc.PlanetTypeID == EDPlanet.Water_world && sc.Terraformable == false)
                                     extrainfo = extrainfo.AppendPrePad(sc.BodyName + " is a water world", prefix);
-                                // Check and inform if a water planet is terraformable or not
+                                // Check and inform if a water planet is terraformable
                                 if (sc.PlanetTypeID == EDPlanet.Water_world && sc.Terraformable == true)
-                                    extrainfo = extrainfo.AppendPrePad(sc.BodyName + " is a terraformable water world", prefix); 
+                                    extrainfo = extrainfo.AppendPrePad(sc.BodyName + " is a terraformable water world", prefix);
+                                
+                                // Add information for other terraformable planets
+                                if (sc.Terraformable == true && sc.PlanetTypeID != EDPlanet.Water_world)
+                                    extrainfo = extrainfo.AppendPrePad(sc.BodyName + " is terraformable", prefix);
+                                
                                 if (sc.PlanetTypeID == EDPlanet.Ammonia_world)
                                     extrainfo = extrainfo.AppendPrePad(sc.BodyName + " is an ammonia world", prefix);
 
-                                // Add information for terraformable planets
-                                if (sc.Terraformable == true && sc.PlanetTypeID != EDPlanet.Water_world)
-                                    extrainfo = extrainfo.AppendPrePad(sc.BodyName + " is terraformable", prefix);
+                                
                             }
                         }
                     }
