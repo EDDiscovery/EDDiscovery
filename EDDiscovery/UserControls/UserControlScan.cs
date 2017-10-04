@@ -942,6 +942,7 @@ namespace EDDiscovery.UserControls
                                     writer.Write(csv.Format("StellarMass"));
                                     writer.Write(csv.Format("AbsoluteMagnitude"));
                                     writer.Write(csv.Format("Age MY"));
+                                    writer.Write(csv.Format("Luminosity"));
                                 }
                                 writer.Write(csv.Format("Radius"));
                                 writer.Write(csv.Format("RotationPeriod"));
@@ -977,6 +978,7 @@ namespace EDDiscovery.UserControls
                                 writer.Write(csv.Format("OrbitalInclination"));
                                 writer.Write(csv.Format("Periapsis"));
                                 writer.Write(csv.Format("OrbitalPeriod"));
+                                writer.Write(csv.Format("AxialTilt"));
 
 
                                 if (ShowPlanets)
@@ -1034,6 +1036,7 @@ namespace EDDiscovery.UserControls
                                     writer.Write(csv.Format((scan.nStellarMass.HasValue) ? scan.nStellarMass.Value : 0));
                                     writer.Write(csv.Format((scan.nAbsoluteMagnitude.HasValue) ? scan.nAbsoluteMagnitude.Value : 0));
                                     writer.Write(csv.Format((scan.nAge.HasValue) ? scan.nAge.Value : 0));
+                                    writer.Write(csv.Format(scan.Luminosity));
                                 }
 
 
@@ -1071,6 +1074,7 @@ namespace EDDiscovery.UserControls
                                 writer.Write(csv.Format(scan.nOrbitalInclination.HasValue ? scan.nOrbitalInclination.Value : 0));
                                 writer.Write(csv.Format(scan.nPeriapsis.HasValue ? scan.nPeriapsis.Value : 0));
                                 writer.Write(csv.Format(scan.nOrbitalPeriod.HasValue ? scan.nOrbitalPeriod.Value : 0));
+                                writer.Write(csv.Format(scan.nAxialTilt.HasValue ? scan.nAxialTilt : null));
 
                                 if (ShowPlanets)
                                 {
