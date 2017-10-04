@@ -294,8 +294,23 @@ namespace EDDiscovery
 
         }
 
-#endregion
+        #endregion
 
-        public int DefaultMapColour { get { return SQLiteConnectionUser.GetSettingInt("DefaultMap", System.Drawing.Color.Red.ToArgb()); } set { SQLiteConnectionUser.PutSettingInt("DefaultMap", value); } }
+        int? defmapcolour;
+
+        public int DefaultMapColour
+        {
+            get
+            {
+                if (defmapcolour == null)
+                    defmapcolour = SQLiteConnectionUser.GetSettingInt("DefaultMap", System.Drawing.Color.Red.ToArgb());
+                return defmapcolour.Value;
+            }
+            set
+            {
+                SQLiteConnectionUser.PutSettingInt("DefaultMap", value);
+                defmapcolour = value;
+            }
+        }
     }
 }
