@@ -491,8 +491,8 @@ namespace EliteDangerousCore.JournalEvents
         {
             if (IsStar && HabitableZoneInner.HasValue && HabitableZoneOuter.HasValue)
             {
-                return $"{HabitableZoneInner.Value.ToString("N0")}-{HabitableZoneOuter.Value.ToString("N0")}ls";
-                    }
+                return $"{HabitableZoneInner:N0}-{HabitableZoneOuter:N0}ls";
+            }
             else
             {
                 return string.Empty;
