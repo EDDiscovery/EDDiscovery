@@ -386,9 +386,18 @@ namespace EDDiscovery.UserControls
 
                 if (sc.IsStar && toplevel)
                 {
+                    var starLabel = sn.customname ?? sn.ownname;
+
+                    var habZone = sc.HabZoneString();
+                    if (!string.IsNullOrEmpty(habZone))
+                    {
+                        starLabel += Environment.NewLine + $"({habZone})";
+                        labelvoff -= 15;
+                    }
+
                     endpoint = CreateImageLabel(pc, sc.GetStarTypeImage().Item1,
                                                 new Point(curpos.X + offset, curpos.Y + alignv),      // WE are basing it on a 1/4 + 1 + 1/4 grid, this is not being made bigger, move off
-                                                size, sn.customname ?? sn.ownname, tip, alignv + labelvoff, sc.IsEDSMBody, false);          // and the label needs to be a quarter height below it..
+                                                size, starLabel, tip, alignv + labelvoff, sc.IsEDSMBody, false);          // and the label needs to be a quarter height below it..
 
                     /*
                     if (sc.HasRings)
@@ -608,7 +617,7 @@ namespace EDDiscovery.UserControls
                 Point labposcenthorz = new Point(postopright.X + size.Width / 2, postopright.Y + size.Height + labelhoff);
 
                 PictureBoxHotspot.ImageElement lab = new PictureBoxHotspot.ImageElement();
-                Size maxsize = new Size(300, 20);
+                Size maxsize = new Size(300, 30);
 
                 lab.TextCentreAutosize(labposcenthorz, maxsize, label, font, discoveryform.theme.LabelColor, this.BackColor);
 
