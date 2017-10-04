@@ -1061,7 +1061,8 @@ namespace EliteDangerousCore
             if (Eventstr == null)  // Should normaly not happend unless corrupt string.
                 return new JournalUnknown(jo);      // MUST return something
 
-            Type jtype = TypeOfJournalEntry(Eventstr);
+            JournalTypeEnum jte = JournalTypeEnum.Unknown;
+            Type jtype = Enum.TryParse(Eventstr, out jte) ? TypeOfJournalEntry(jte) : TypeOfJournalEntry(Eventstr);
 
             if (jtype == null)
             {
