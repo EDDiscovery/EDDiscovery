@@ -437,15 +437,15 @@ namespace EliteDangerousCore
             }
         }
 
-        private ISystem FindEDSM(HistoryEntry syspos, SQLiteConnectionSystem conn = null, bool reload = false)
+        private ISystem FindEDSM(HistoryEntry syspos, SQLiteConnectionSystem conn = null, bool reload = false, bool useedsm = false)
         {
             if (syspos.System.status == SystemStatusEnum.EDSC || (!reload && syspos.System.id_edsm == -1))  // if set already, or we tried and failed..
                 return null;
 
-            return SystemCache.FindEDSM(syspos.System, usedb: true, useedsm: true, conn: conn);
+            return SystemCache.FindEDSM(syspos.System, usedb: true, useedsm: useedsm, conn: conn);
         }
 
-        public void FillEDSM(HistoryEntry syspos, ISystem edsmsys = null, bool reload = false, SQLiteConnectionUser uconn = null)       // call to fill in ESDM data for entry, and also fills in all others pointing to the system object
+        public void FillEDSM(HistoryEntry syspos, ISystem edsmsys = null, bool reload = false, SQLiteConnectionUser uconn = null, bool useedsm = false)       // call to fill in ESDM data for entry, and also fills in all others pointing to the system object
         {
             if (syspos.System.status == SystemStatusEnum.EDSC || (!reload && syspos.System.id_edsm == -1))  // if set already, or we tried and failed..
                 return;
@@ -459,7 +459,7 @@ namespace EliteDangerousCore
             }
 
             if (edsmsys == null)                              // if we found it externally, do not find again
-                edsmsys = FindEDSM(syspos, reload: reload);
+                edsmsys = FindEDSM(syspos, reload: reload, useedsm: useedsm);
 
             if (edsmsys != null)
             {
