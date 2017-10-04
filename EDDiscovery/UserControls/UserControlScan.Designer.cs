@@ -62,7 +62,7 @@ namespace EDDiscovery.UserControls
             this.panelControls = new System.Windows.Forms.Panel();
             this.buttonExtExcel = new ExtendedControls.ButtonExt();
             this.checkBoxEDSM = new ExtendedControls.CheckBoxCustom();
-            this.rtbSystemInfo = new ExtendedControls.RichTextBoxScroll();
+            this.lblSystemInfo = new System.Windows.Forms.Label();
             this.panelStars.SuspendLayout();
             this.contextMenuStrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.imagebox)).BeginInit();
@@ -72,7 +72,6 @@ namespace EDDiscovery.UserControls
             // panelStars
             // 
             this.panelStars.ContextMenuStrip = this.contextMenuStrip;
-            this.panelStars.Controls.Add(this.rtbSystemInfo);
             this.panelStars.Controls.Add(this.rtbNodeInfo);
             this.panelStars.Controls.Add(this.imagebox);
             this.panelStars.Controls.Add(this.vScrollBarCustom);
@@ -105,7 +104,7 @@ namespace EDDiscovery.UserControls
             this.rtbNodeInfo.BorderColor = System.Drawing.Color.Transparent;
             this.rtbNodeInfo.BorderColorScaling = 0.5F;
             this.rtbNodeInfo.HideScrollBar = true;
-            this.rtbNodeInfo.Location = new System.Drawing.Point(468, 99);
+            this.rtbNodeInfo.Location = new System.Drawing.Point(472, 6);
             this.rtbNodeInfo.Name = "rtbNodeInfo";
             this.rtbNodeInfo.ReadOnly = false;
             this.rtbNodeInfo.ScrollBarArrowBorderColor = System.Drawing.Color.LightBlue;
@@ -361,6 +360,7 @@ namespace EDDiscovery.UserControls
             // panelControls
             // 
             this.panelControls.ContextMenuStrip = this.contextMenuStrip;
+            this.panelControls.Controls.Add(this.lblSystemInfo);
             this.panelControls.Controls.Add(this.buttonExtExcel);
             this.panelControls.Controls.Add(this.checkBoxEDSM);
             this.panelControls.Controls.Add(this.checkBoxTiny);
@@ -419,31 +419,14 @@ namespace EDDiscovery.UserControls
             this.checkBoxEDSM.UseVisualStyleBackColor = false;
             this.checkBoxEDSM.CheckedChanged += new System.EventHandler(this.checkBoxEDSM_CheckedChanged);
             // 
-            // rtbSystemInfo
+            // lblSystemInfo
             // 
-            this.rtbSystemInfo.BorderColor = System.Drawing.Color.Transparent;
-            this.rtbSystemInfo.BorderColorScaling = 0.5F;
-            this.rtbSystemInfo.HideScrollBar = true;
-            this.rtbSystemInfo.Location = new System.Drawing.Point(468, 3);
-            this.rtbSystemInfo.Name = "rtbSystemInfo";
-            this.rtbSystemInfo.ReadOnly = false;
-            this.rtbSystemInfo.ScrollBarArrowBorderColor = System.Drawing.Color.LightBlue;
-            this.rtbSystemInfo.ScrollBarArrowButtonColor = System.Drawing.Color.LightGray;
-            this.rtbSystemInfo.ScrollBarBackColor = System.Drawing.SystemColors.Control;
-            this.rtbSystemInfo.ScrollBarBorderColor = System.Drawing.Color.White;
-            this.rtbSystemInfo.ScrollBarFlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.rtbSystemInfo.ScrollBarForeColor = System.Drawing.SystemColors.ControlText;
-            this.rtbSystemInfo.ScrollBarMouseOverButtonColor = System.Drawing.Color.Green;
-            this.rtbSystemInfo.ScrollBarMousePressedButtonColor = System.Drawing.Color.Red;
-            this.rtbSystemInfo.ScrollBarSliderColor = System.Drawing.Color.DarkGray;
-            this.rtbSystemInfo.ScrollBarThumbBorderColor = System.Drawing.Color.Yellow;
-            this.rtbSystemInfo.ScrollBarThumbButtonColor = System.Drawing.Color.DarkBlue;
-            this.rtbSystemInfo.ScrollBarWidth = 20;
-            this.rtbSystemInfo.ShowLineCount = false;
-            this.rtbSystemInfo.Size = new System.Drawing.Size(200, 90);
-            this.rtbSystemInfo.TabIndex = 4;
-            this.rtbSystemInfo.TextBoxBackColor = System.Drawing.SystemColors.Control;
-            this.rtbSystemInfo.TextBoxForeColor = System.Drawing.SystemColors.ControlText;
+            this.lblSystemInfo.AutoSize = true;
+            this.lblSystemInfo.Location = new System.Drawing.Point(340, 5);
+            this.lblSystemInfo.Name = "lblSystemInfo";
+            this.lblSystemInfo.Size = new System.Drawing.Size(35, 13);
+            this.lblSystemInfo.TabIndex = 30;
+            this.lblSystemInfo.Text = "label1";
             // 
             // UserControlScan
             // 
@@ -458,6 +441,7 @@ namespace EDDiscovery.UserControls
             this.contextMenuStrip.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.imagebox)).EndInit();
             this.panelControls.ResumeLayout(false);
+            this.panelControls.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -480,6 +464,6 @@ namespace EDDiscovery.UserControls
         private ExtendedControls.PictureBoxHotspot imagebox;
         private ExtendedControls.CheckBoxCustom checkBoxEDSM;
         private ExtendedControls.ButtonExt buttonExtExcel;
-        private ExtendedControls.RichTextBoxScroll rtbSystemInfo;
+        private System.Windows.Forms.Label lblSystemInfo;
     }
 }
