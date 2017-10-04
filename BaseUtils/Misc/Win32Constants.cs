@@ -16,6 +16,25 @@
 
 namespace BaseUtils.Win32Constants
 {
+    #region window Class Styles (CS_*)
+
+    /// <summary>
+    /// Window Class Style constants, as defined in Winuser.h (via Windows.h). Useful for manipulating
+    /// <see cref="System.Windows.Forms.CreateParams.ClassStyle"/>.
+    /// </summary>
+    /// <seealso href="https://msdn.microsoft.com/en-us/library/windows/desktop/ff729176(v=vs.85).aspx"/>
+    public static class CS
+    {
+        /// <summary>
+        /// CS_DBLCLKS: Sends a double-click message to the window procedure when the user double-clicks the mouse
+        /// while the cursor is within a window belonging to the class. Also allows for minimize/restore operations
+        /// when clicking a <see cref="System.Windows.Forms.Form"/>'s TaskBar icon.
+        /// </summary>
+        public const int DBLCLKS = 0x0008;
+    }
+
+    #endregion
+
     #region Edit control Messages (EM_*)
 
     /// <summary>
