@@ -41,6 +41,7 @@ using System.Windows.Forms;
 using EliteDangerousCore;
 using EliteDangerousCore.DB;
 using EliteDangerousCore.JournalEvents;
+using EliteDangerous.CompanionAPI;
 
 namespace EDDiscovery
 {
@@ -171,11 +172,6 @@ namespace EDDiscovery
 
             panelToolBar.HiddenMarkerWidth = 200;
             panelToolBar.PinState = SQLiteConnectionUser.GetSettingBool("ToolBarPanelPinState", true);
-
-            comboBoxCustomPopOut.Enabled = false;
-            comboBoxCustomPopOut.Items.AddRange(PopOutControl.GetPopOutNames());
-            comboBoxCustomPopOut.SelectedIndex = 0;
-            comboBoxCustomPopOut.Enabled = true;
 
             label_version.Text = EDDOptions.Instance.VersionDisplayString;
 
@@ -457,11 +453,7 @@ namespace EDDiscovery
             RefreshButton(true);
             actioncontroller.ActionRunOnRefresh();
 
-            if ( DateTime.UtcNow > new DateTime (2017, 9, 26, 12 ,0 ,0 ))
-            {
-                LogLineHighlight("Companion API is temporarily disabled due to changed in the API by Frontier for 2.4." + Environment.NewLine + "As Arnie says, I'll be back!");
-            }
-            else
+
 
             if (!Capi.IsCommanderLoggedin(EDCommander.Current.Name))
             {
@@ -537,6 +529,7 @@ namespace EDDiscovery
                         try
                         {
                             Capi.GetProfile();
+                            CMarket market = Capi.GetMarket();
 
                             JournalDocked dockevt = he.journalEntry as JournalDocked;
 
@@ -555,16 +548,21 @@ namespace EDDiscovery
                                 LogLineHighlight("CAPI profileStationRequired is " + dockevt.StationName + ", profile station is " + Capi.Profile.StarPort.name);
                                 // Todo add a retry later...
                             }
+                            else if (!dockevt.StationName.Equals(market.name))
+                            {
+                                LogLineHighlight("CAPI stationname  " + dockevt.StationName + ",´market station is " + market.name);
+                                // Todo add a retry later...
+                            }
                             else
                             {
-                                JournalEDDCommodityPrices entry = JournalEntry.AddEDDCommodityPrices(EDCommander.Current.Nr, he.journalEntry.EventTimeUTC.AddSeconds(1), Capi.Profile.StarPort.name, Capi.Profile.StarPort.faction, Capi.Profile.StarPort.jcommodities);
+                                JournalEDDCommodityPrices entry = JournalEntry.AddEDDCommodityPrices(EDCommander.Current.Nr, he.journalEntry.EventTimeUTC.AddSeconds(1), Capi.Profile.StarPort.name, Capi.Profile.StarPort.faction, market.jcommodities);
                                 if (entry != null)
                                 {
                                     Controller.NewEntry(entry);
                                     OnNewCompanionAPIData?.Invoke(Capi, he);
 
                                     if (EDCommander.Current.SyncToEddn)
-                                        SendPricestoEDDN(he);
+                                        SendPricestoEDDN(he, market);
 
                                 }
                             }
@@ -627,7 +625,7 @@ namespace EDDiscovery
             actioncontroller.ActionRun(Actions.ActionEventEDList.onUIEvent , new Conditions.ConditionVariables(new string[] { "UIEvent", name, "UIDisplayed", shown ? "1" : "0" }));
         }
 
-        private void SendPricestoEDDN(HistoryEntry he)
+        private void SendPricestoEDDN(HistoryEntry he, CMarket market)
         {
             try
             {
@@ -640,7 +638,7 @@ namespace EDDiscovery
                 if (he.Commander.Name.StartsWith("[BETA]", StringComparison.InvariantCultureIgnoreCase) || he.IsBetaMessage)
                     eddn.isBeta = true;
 
-                JObject msg = eddn.CreateEDDNCommodityMessage(Capi.Profile.StarPort.commodities, Capi.Profile.CurrentStarSystem.name, Capi.Profile.StarPort.name, DateTime.UtcNow);
+                JObject msg = eddn.CreateEDDNCommodityMessage(market.commodities, Capi.Profile.CurrentStarSystem.name, Capi.Profile.StarPort.name, DateTime.UtcNow);
 
                 if (msg != null)
                 {
@@ -1454,21 +1452,36 @@ namespace EDDiscovery
 
         }
 
-        private void comboBoxCustomPopOut_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (comboBoxCustomPopOut.Enabled)
-            {
-                PopOuts.PopOut(comboBoxCustomPopOut.SelectedIndex);
-
-                comboBoxCustomPopOut.Enabled = false;
-                comboBoxCustomPopOut.SelectedIndex = 0;
-                comboBoxCustomPopOut.Enabled = true;
-            }
-        }
-
         #endregion
 
         #region PopOuts
+
+        ExtendedControls.DropDownCustom popoutdropdown;
+
+        private void buttonExtPopOut_Click(object sender, EventArgs e)
+        {
+            popoutdropdown = new ExtendedControls.DropDownCustom("", true);
+
+            popoutdropdown.ItemHeight = 26;
+            popoutdropdown.Items = PopOutControl.GetPopOutToolTips().ToList();
+            popoutdropdown.ImageItems = PopOutControl.GetPopOutImages().ToList();
+            popoutdropdown.FlatStyle = FlatStyle.Popup;
+            popoutdropdown.Activated += (s, ea) =>
+            {
+                Point location = buttonExtPopOut.PointToScreen(new Point(0, 0));
+                popoutdropdown.Location = popoutdropdown.PositionWithinScreen(location.X + buttonExtPopOut.Width, location.Y);
+                this.Invalidate(true);
+            };
+            popoutdropdown.SelectedIndexChanged += (s, ea) =>
+            {
+                PopOuts.PopOut(popoutdropdown.SelectedIndex);
+            };
+
+            popoutdropdown.Size = new Size(500,400);
+            theme.ApplyToControls(popoutdropdown);
+            popoutdropdown.SelectionBackColor = theme.ButtonBackColor;
+            popoutdropdown.Show(this);
+        }
 
         internal void SaveCurrentPopOuts()
         {

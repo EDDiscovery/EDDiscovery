@@ -437,15 +437,15 @@ namespace EliteDangerousCore
             }
         }
 
-        private ISystem FindEDSM(HistoryEntry syspos, SQLiteConnectionSystem conn = null, bool reload = false)
+        private ISystem FindEDSM(HistoryEntry syspos, SQLiteConnectionSystem conn = null, bool reload = false, bool useedsm = false)
         {
             if (syspos.System.status == SystemStatusEnum.EDSC || (!reload && syspos.System.id_edsm == -1))  // if set already, or we tried and failed..
                 return null;
 
-            return SystemCache.FindEDSM(syspos.System, usedb: true, useedsm: true, conn: conn);
+            return SystemCache.FindEDSM(syspos.System, usedb: true, useedsm: useedsm, conn: conn);
         }
 
-        public void FillEDSM(HistoryEntry syspos, ISystem edsmsys = null, bool reload = false, SQLiteConnectionUser uconn = null)       // call to fill in ESDM data for entry, and also fills in all others pointing to the system object
+        public void FillEDSM(HistoryEntry syspos, ISystem edsmsys = null, bool reload = false, SQLiteConnectionUser uconn = null, bool useedsm = false)       // call to fill in ESDM data for entry, and also fills in all others pointing to the system object
         {
             if (syspos.System.status == SystemStatusEnum.EDSC || (!reload && syspos.System.id_edsm == -1))  // if set already, or we tried and failed..
                 return;
@@ -459,7 +459,7 @@ namespace EliteDangerousCore
             }
 
             if (edsmsys == null)                              // if we found it externally, do not find again
-                edsmsys = FindEDSM(syspos, reload: reload);
+                edsmsys = FindEDSM(syspos, reload: reload, useedsm: useedsm);
 
             if (edsmsys != null)
             {
@@ -891,14 +891,14 @@ namespace EliteDangerousCore
                     EliteDangerousCore.JournalEvents.JournalFuelScoop jfsprev = prev as EliteDangerousCore.JournalEvents.JournalFuelScoop;
                     jfsprev.Scooped += jfs.Scooped;
                     jfsprev.Total = jfs.Total;
-                    System.Diagnostics.Debug.WriteLine("Merge FS " + jfsprev.EventTimeUTC);
+                    //System.Diagnostics.Debug.WriteLine("Merge FS " + jfsprev.EventTimeUTC);
                     return true;
                 }
                 else if (je.EventTypeID == JournalTypeEnum.Friends && prev.EventTypeID == JournalTypeEnum.Friends) // merge friends
                 {
                     EliteDangerousCore.JournalEvents.JournalFriends jfprev = prev as EliteDangerousCore.JournalEvents.JournalFriends;
                     jfprev.AddFriend(je.GetJson());
-                    System.Diagnostics.Debug.WriteLine("Merge Friends " + jfprev.EventTimeUTC + " " + jfprev.NameList.Count);
+                    //System.Diagnostics.Debug.WriteLine("Merge Friends " + jfprev.EventTimeUTC + " " + jfprev.NameList.Count);
                     return true;
                 }
             }
@@ -940,21 +940,25 @@ namespace EliteDangerousCore
                     cash = (lastloadgamehe != null) ? ((JournalLoadGame)lastloadgamehe.journalEntry).Credits : 0;
                 }
 
-                JournalProgress progress = historylist.FindLast(x => x.EntryType == JournalTypeEnum.Progress).journalEntry as JournalProgress;
-                JournalRank rank = historylist.FindLast(x => x.EntryType == JournalTypeEnum.Rank).journalEntry as JournalRank;
+                JournalProgress progress = historylist.FindLast(x => x.EntryType == JournalTypeEnum.Progress)?.journalEntry as JournalProgress;
+                JournalRank rank = historylist.FindLast(x => x.EntryType == JournalTypeEnum.Rank)?.journalEntry as JournalRank;
 
-                if (async)
+                if (progress != null && rank != null)
                 {
-                    Task edsmtask = Task.Factory.StartNew(() =>
+                    if (async)
+                    {
+                        Task edsmtask = Task.Factory.StartNew(() =>
+                        {
+                            edsm.SendShipInfo(lastshipinfohe?.ShipInformation, lastshipinfohe?.MaterialCommodity, lastshipinfohe?.MaterialCommodity?.CargoCount ?? 0, lastshipinfocurrenthe?.ShipInformation, cashledger?.CashTotal ?? cash, loan, progress, rank);
+                        });
+                    }
+                    else
                     {
                         edsm.SendShipInfo(lastshipinfohe?.ShipInformation, lastshipinfohe?.MaterialCommodity, lastshipinfohe?.MaterialCommodity?.CargoCount ?? 0, lastshipinfocurrenthe?.ShipInformation, cashledger?.CashTotal ?? cash, loan, progress, rank);
-                    });
-                }
-                else
-                {
-                    edsm.SendShipInfo(lastshipinfohe?.ShipInformation, lastshipinfohe?.MaterialCommodity, lastshipinfohe?.MaterialCommodity?.CargoCount ?? 0, lastshipinfocurrenthe?.ShipInformation, cashledger?.CashTotal ?? cash, loan, progress, rank);
+                    }
                 }
             }
+
         }
 
         #endregion

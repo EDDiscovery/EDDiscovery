@@ -17,6 +17,7 @@ namespace ExtendedControls
         public event KeyEventHandler OtherKeyPressed;
 
         public List<string> Items { get { return _listcontrol.Items; } set { _listcontrol.Items = value; } }
+        public List<Image> ImageItems { get { return _listcontrol.ImageItems; } set { _listcontrol.ImageItems = value; } }
         public Color MouseOverBackgroundColor { get { return _listcontrol.MouseOverBackgroundColor; } set { _listcontrol.MouseOverBackgroundColor = value; } }
         public int SelectedIndex { get { return _listcontrol.SelectedIndex; } set { _listcontrol.SelectedIndex = value; } }
         public Color SelectionBackColor { get { return _listcontrol.SelectionBackColor; } set { _listcontrol.SelectionBackColor = value; this.BackColor = value; } }
