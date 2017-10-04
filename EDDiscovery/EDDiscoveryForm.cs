@@ -472,7 +472,9 @@ namespace EDDiscovery
 
         private void Controller_RefreshComplete()
         {
-            
+
+            Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " Refresh complete");
+
             RefreshButton(true);
             actioncontroller.ActionRunOnRefresh();
 
@@ -529,6 +531,8 @@ namespace EDDiscovery
                     }
                 }
             }
+
+            Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " Refresh complete finished");
         }
 
         private void Controller_NewEntrySecond(HistoryEntry he, HistoryList hl)         // called after all UI's have had their chance
