@@ -106,7 +106,7 @@ namespace EliteDangerousCore
                 else
                     itemfdname = ifd.Substring(firstunderscore + 1);    // whole string
 
-                System.Diagnostics.Debug.WriteLine("item " + itemfdname + " ext " + extension);
+                //System.Diagnostics.Debug.WriteLine("item " + itemfdname + " ext " + extension);
 
                 if (modules.ContainsKey(itemfdname))
                 {
