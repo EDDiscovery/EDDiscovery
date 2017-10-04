@@ -163,6 +163,16 @@ namespace EDDiscovery.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap edsm16 {
+            get {
+                object obj = ResourceManager.GetObject("edsm16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap edsm24 {
             get {
                 object obj = ResourceManager.GetObject("edsm24", resourceCulture);
@@ -419,6 +429,16 @@ namespace EDDiscovery.Properties {
         internal static System.Drawing.Bitmap OrangeDot {
             get {
                 object obj = ResourceManager.GetObject("OrangeDot", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap panels {
+            get {
+                object obj = ResourceManager.GetObject("panels", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
