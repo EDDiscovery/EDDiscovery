@@ -370,6 +370,7 @@ namespace EDDiscovery.UserControls
                 Wanted[rno] = 0;
             }
             Display();
+            if (OnChangedSynthesisWanted != null) OnChangedSynthesisWanted(wantedList);
         }
     }
 }
