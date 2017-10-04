@@ -487,13 +487,25 @@ namespace EliteDangerousCore.JournalEvents
             return scanText.ToNullSafeString().Replace("\n", "\n" + inds);
         }
 
+        public string GetHabZoneStringLs()
+        {
+            if (IsStar && HabitableZoneInner.HasValue && HabitableZoneOuter.HasValue)
+            {
+                return $"{HabitableZoneInner.Value.ToString("N0")}-{HabitableZoneOuter.Value.ToString("N0")}ls";
+                    }
+            else
+            {
+                return string.Empty;
+            }
+        }
+
         public string HabZoneString()
         {
             if (IsStar && HabitableZoneInner.HasValue && HabitableZoneOuter.HasValue)
             {
                 StringBuilder habZone = new StringBuilder();
-                habZone.AppendFormat("Habitable Zone Approx. {0}-{1}ls ({2}-{3} AU)\n", HabitableZoneInner.Value.ToString("N0"), HabitableZoneOuter.Value.ToString("N0"),
-                                                                                             (HabitableZoneInner.Value / 499).ToString("N2"), (HabitableZoneOuter.Value / 499).ToString("N2"));
+                habZone.AppendFormat("Habitable Zone Approx. {0} ({1}-{2} AU)\n", GetHabZoneStringLs(),
+                                                                                  (HabitableZoneInner.Value / 499).ToString("N2"), (HabitableZoneOuter.Value / 499).ToString("N2"));
                 if (nSemiMajorAxis.HasValue && nSemiMajorAxis.Value > 0)
                     habZone.AppendFormat(" (Star only, others not considered)\n");
 
