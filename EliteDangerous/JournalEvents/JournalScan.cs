@@ -77,7 +77,7 @@ namespace EliteDangerousCore.JournalEvents
         // STAR
         public string StarType { get; set; }                        // null if no StarType, direct from journal, K, A, B etc
         public EDStar StarTypeID { get; }                           // star type -> identifier
-        public string StarTypeText { get { return IsStar ? GetStarTypeImage().Item2 : ""; } }   // Long form star name, from StarTypeID
+        public string StarTypeText { get { return IsStar ? GetStarTypeName() : ""; } }   // Long form star name, from StarTypeID
         public double? nStellarMass { get; set; }                   // direct
         public double? nAbsoluteMagnitude { get; set; }             // direct
         public string Luminosity { get; set; }
@@ -308,7 +308,7 @@ namespace EliteDangerousCore.JournalEvents
                 if (r.HasValue)
                     r = r / solarRadius_m;
 
-                info = BaseUtils.FieldBuilder.Build("", GetStarTypeImage().Item2, "Mass:;SM;0.00", nStellarMass, "Age:;my;0.0", nAge, "Radius:;SR;0.00", r);
+                info = BaseUtils.FieldBuilder.Build("", GetStarTypeName(), "Mass:;SM;0.00", nStellarMass, "Age:;my;0.0", nAge, "Radius:;SR;0.00", r);
             }
             else
             {
@@ -346,7 +346,7 @@ namespace EliteDangerousCore.JournalEvents
 
                 if (IsStar)
                 {
-                    scanText.AppendFormat(GetStarTypeImage().Item2);
+                    scanText.AppendFormat(GetStarTypeName());
                 }
                 else if (PlanetClass != null)
                 {
@@ -553,52 +553,48 @@ namespace EliteDangerousCore.JournalEvents
             return ring.RingInformation(scale, scaletype, IsStar);
         }
 
-
-
-        public Tuple<System.Drawing.Image, string> GetStarTypeImage()           // give image and description to star class
+        public string GetStarTypeName()           // give description to star class
         {
-            System.Drawing.Image ret = EliteDangerous.Properties.Resources.Star_K1IV;
-
             switch (StarTypeID)       // see journal, section 11.2
             {
                 case EDStar.O:
-                    return new Tuple<System.Drawing.Image, string>(EliteDangerous.Properties.Resources.O, string.Format("Luminous Hot Main Sequence star", StarType));
+                    return string.Format("Luminous Hot Main Sequence star", StarType);
 
                 case EDStar.B:
                     // also have an B1V
-                    return new Tuple<System.Drawing.Image, string>(EliteDangerous.Properties.Resources.B6V_Blueish, string.Format("Luminous Blue Main Sequence star", StarType));
+                    return string.Format("Luminous Blue Main Sequence star", StarType);
 
                 case EDStar.A:
                     // also have an A3V..
-                    return new Tuple<System.Drawing.Image, string>(EliteDangerous.Properties.Resources.A9III_White, string.Format("Bluish-White Main Sequence star", StarType));
+                    return string.Format("Bluish-White Main Sequence star", StarType);
 
                 case EDStar.F:
-                    return new Tuple<System.Drawing.Image, string>(EliteDangerous.Properties.Resources.F5VAB, string.Format("White Main Sequence star", StarType));
+                    return string.Format("White Main Sequence star", StarType);
 
                 case EDStar.G:
                     // also have a G8V
-                    return new Tuple<System.Drawing.Image, string>(EliteDangerous.Properties.Resources.G1IV, string.Format("Yellow Main Sequence star", StarType));
+                    return string.Format("Yellow Main Sequence star", StarType);
 
                 case EDStar.K:
                     // also have a K0V
-                    return new Tuple<System.Drawing.Image, string>(EliteDangerous.Properties.Resources.Star_K1IV, string.Format("Orange Main Sequence {0} star", StarType));
+                    return string.Format("Orange Main Sequence {0} star", StarType);
                 case EDStar.M:
                     // also have a M1VA
-                    return new Tuple<System.Drawing.Image, string>(EliteDangerous.Properties.Resources.M5V, string.Format("Red Main Sequence {0} star", StarType));
+                    return string.Format("Red Main Sequence {0} star", StarType);
 
                 // dwarfs
                 case EDStar.L:
-                    return new Tuple<System.Drawing.Image, string>(EliteDangerous.Properties.Resources.L3V, string.Format("Dark Red Non Main Sequence {0} star", StarType));
+                    return string.Format("Dark Red Non Main Sequence {0} star", StarType);
                 case EDStar.T:
-                    return new Tuple<System.Drawing.Image, string>(EliteDangerous.Properties.Resources.T4V, string.Format("Methane Dwarf star", StarType));
+                    return string.Format("Methane Dwarf star", StarType);
                 case EDStar.Y:
-                    return new Tuple<System.Drawing.Image, string>(EliteDangerous.Properties.Resources.Y2, string.Format("Brown Dwarf star", StarType));
+                    return string.Format("Brown Dwarf star", StarType);
 
                 // proto stars
                 case EDStar.AeBe:    // Herbig
-                    return new Tuple<System.Drawing.Image, string>(EliteDangerous.Properties.Resources.DefaultStar, "Herbig Ae/Be");
+                    return "Herbig Ae/Be";
                 case EDStar.TTS:     // seen in logs
-                    return new Tuple<System.Drawing.Image, string>(EliteDangerous.Properties.Resources.DefaultStar, "T Tauri");
+                    return "T Tauri";
 
                 // wolf rayet
                 case EDStar.W:
@@ -606,7 +602,7 @@ namespace EliteDangerousCore.JournalEvents
                 case EDStar.WNC:
                 case EDStar.WC:
                 case EDStar.WO:
-                    return new Tuple<System.Drawing.Image, string>(EliteDangerous.Properties.Resources.DefaultStar, string.Format("Wolf-Rayet {0} star", StarType));
+                    return string.Format("Wolf-Rayet {0} star", StarType);
 
                 // Carbon
                 case EDStar.CS:
@@ -614,13 +610,13 @@ namespace EliteDangerousCore.JournalEvents
                 case EDStar.CN:
                 case EDStar.CJ:
                 case EDStar.CHd:
-                    return new Tuple<System.Drawing.Image, string>(EliteDangerous.Properties.Resources.C7III, string.Format("Carbon {0} star", StarType));
+                    return string.Format("Carbon {0} star", StarType);
 
                 case EDStar.MS: //seen in log https://en.wikipedia.org/wiki/S-type_star
-                    return new Tuple<System.Drawing.Image, string>(EliteDangerous.Properties.Resources.M5V, string.Format("Intermediate low Zirconium Monoxide Type {0} star", StarType));
+                    return string.Format("Intermediate low Zirconium Monoxide Type {0} star", StarType);
 
                 case EDStar.S:   // seen in log, data from http://elite-dangerous.wikia.com/wiki/Stars
-                    return new Tuple<System.Drawing.Image, string>(EliteDangerous.Properties.Resources.DefaultStar, string.Format("Cool Giant Zirconium Monoxide rich Type {0} star", StarType));
+                    return string.Format("Cool Giant Zirconium Monoxide rich Type {0} star", StarType);
 
                 // white dwarf
                 case EDStar.D:
@@ -638,38 +634,156 @@ namespace EliteDangerousCore.JournalEvents
                 case EDStar.DC:
                 case EDStar.DCV:
                 case EDStar.DX:
-                    return new Tuple<System.Drawing.Image, string>(EliteDangerous.Properties.Resources.DA6VII_White, string.Format("White Dwarf {0} star", StarType));
+                    return string.Format("White Dwarf {0} star", StarType);
 
                 case EDStar.N:
-                    return new Tuple<System.Drawing.Image, string>(EliteDangerous.Properties.Resources.Neutron_Star, "Neutron Star");
+                    return "Neutron Star";
 
                 case EDStar.H:
 
-                    return new Tuple<System.Drawing.Image, string>(EliteDangerous.Properties.Resources.Black_Hole, "Black Hole");
+                    return "Black Hole";
 
                 case EDStar.X:
                     // currently speculative, not confirmed with actual data... in journal
-                    return new Tuple<System.Drawing.Image, string>(EliteDangerous.Properties.Resources.DefaultStar, "Exotic");
+                    return "Exotic";
 
                 // Journal.. really?  need evidence these actually are formatted like this.
 
                 case EDStar.SuperMassiveBlackHole:
-                    return new Tuple<System.Drawing.Image, string>(EliteDangerous.Properties.Resources.Black_Hole, "Super Massive Black Hole");
+                    return "Super Massive Black Hole";
                 case EDStar.A_BlueWhiteSuperGiant:
-                    return new Tuple<System.Drawing.Image, string>(EliteDangerous.Properties.Resources.A9III_White, "Blue White Super Giant");
+                    return "Blue White Super Giant";
                 case EDStar.F_WhiteSuperGiant:
-                    return new Tuple<System.Drawing.Image, string>(EliteDangerous.Properties.Resources.DefaultStar, "F White Super Giant");
+                    return "F White Super Giant";
                 case EDStar.M_RedSuperGiant:
-                    return new Tuple<System.Drawing.Image, string>(EliteDangerous.Properties.Resources.DefaultStar, "M Red Super Giant");
+                    return "M Red Super Giant";
                 case EDStar.M_RedGiant:
-                    return new Tuple<System.Drawing.Image, string>(EliteDangerous.Properties.Resources.DefaultStar, "M Red Giant");
+                    return "M Red Giant";
                 case EDStar.K_OrangeGiant:
-                    return new Tuple<System.Drawing.Image, string>(EliteDangerous.Properties.Resources.DefaultStar, "K Orange Giant");
+                    return "K Orange Giant";
                 case EDStar.RoguePlanet:
-                    return new Tuple<System.Drawing.Image, string>(EliteDangerous.Properties.Resources.DefaultStar, "Rouge Planet");
+                    return "Rouge Planet";
 
                 default:
-                    return new Tuple<System.Drawing.Image, string>(EliteDangerous.Properties.Resources.DefaultStar, string.Format("Class {0} star\n", StarType.Replace("_", " ")));
+                    return string.Format("Class {0} star\n", StarType.Replace("_", " "));
+            }
+        }
+
+        public System.Drawing.Image GetStarTypeImage()           // give image and description to star class
+        {
+            System.Drawing.Image ret = EliteDangerous.Properties.Resources.Star_K1IV;
+
+            switch (StarTypeID)       // see journal, section 11.2
+            {
+                case EDStar.O:
+                    return EliteDangerous.Properties.Resources.O;
+
+                case EDStar.B:
+                    // also have an B1V
+                    return EliteDangerous.Properties.Resources.B6V_Blueish;
+
+                case EDStar.A:
+                    // also have an A3V..
+                    return EliteDangerous.Properties.Resources.A9III_White;
+
+                case EDStar.F:
+                    return EliteDangerous.Properties.Resources.F5VAB;
+
+                case EDStar.G:
+                    // also have a G8V
+                    return EliteDangerous.Properties.Resources.G1IV;
+
+                case EDStar.K:
+                    // also have a K0V
+                    return EliteDangerous.Properties.Resources.Star_K1IV;
+                case EDStar.M:
+                    // also have a M1VA
+                    return EliteDangerous.Properties.Resources.M5V;
+
+                // dwarfs
+                case EDStar.L:
+                    return EliteDangerous.Properties.Resources.L3V;
+                case EDStar.T:
+                    return EliteDangerous.Properties.Resources.T4V;
+                case EDStar.Y:
+                    return EliteDangerous.Properties.Resources.Y2;
+
+                // proto stars
+                case EDStar.AeBe:    // Herbig
+                    return EliteDangerous.Properties.Resources.DefaultStar;
+                case EDStar.TTS:     // seen in logs
+                    return EliteDangerous.Properties.Resources.DefaultStar;
+
+                // wolf rayet
+                case EDStar.W:
+                case EDStar.WN:
+                case EDStar.WNC:
+                case EDStar.WC:
+                case EDStar.WO:
+                    return EliteDangerous.Properties.Resources.DefaultStar;
+
+                // Carbon
+                case EDStar.CS:
+                case EDStar.C:
+                case EDStar.CN:
+                case EDStar.CJ:
+                case EDStar.CHd:
+                    return EliteDangerous.Properties.Resources.C7III;
+
+                case EDStar.MS: //seen in log https://en.wikipedia.org/wiki/S-type_star
+                    return EliteDangerous.Properties.Resources.M5V;
+
+                case EDStar.S:   // seen in log, data from http://elite-dangerous.wikia.com/wiki/Stars
+                    return EliteDangerous.Properties.Resources.DefaultStar;
+
+                // white dwarf
+                case EDStar.D:
+                case EDStar.DA:
+                case EDStar.DAB:
+                case EDStar.DAO:
+                case EDStar.DAZ:
+                case EDStar.DAV:
+                case EDStar.DB:
+                case EDStar.DBZ:
+                case EDStar.DBV:
+                case EDStar.DO:
+                case EDStar.DOV:
+                case EDStar.DQ:
+                case EDStar.DC:
+                case EDStar.DCV:
+                case EDStar.DX:
+                    return EliteDangerous.Properties.Resources.DA6VII_White;
+
+                case EDStar.N:
+                    return EliteDangerous.Properties.Resources.Neutron_Star;
+
+                case EDStar.H:
+
+                    return EliteDangerous.Properties.Resources.Black_Hole;
+
+                case EDStar.X:
+                    // currently speculative, not confirmed with actual data... in journal
+                    return EliteDangerous.Properties.Resources.DefaultStar;
+
+                // Journal.. really?  need evidence these actually are formatted like this.
+
+                case EDStar.SuperMassiveBlackHole:
+                    return EliteDangerous.Properties.Resources.Black_Hole;
+                case EDStar.A_BlueWhiteSuperGiant:
+                    return EliteDangerous.Properties.Resources.A9III_White;
+                case EDStar.F_WhiteSuperGiant:
+                    return EliteDangerous.Properties.Resources.DefaultStar;
+                case EDStar.M_RedSuperGiant:
+                    return EliteDangerous.Properties.Resources.DefaultStar;
+                case EDStar.M_RedGiant:
+                    return EliteDangerous.Properties.Resources.DefaultStar;
+                case EDStar.K_OrangeGiant:
+                    return EliteDangerous.Properties.Resources.DefaultStar;
+                case EDStar.RoguePlanet:
+                    return EliteDangerous.Properties.Resources.DefaultStar;
+
+                default:
+                    return EliteDangerous.Properties.Resources.DefaultStar;
             }
         }
 
