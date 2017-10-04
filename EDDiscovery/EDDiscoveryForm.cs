@@ -164,6 +164,7 @@ namespace EDDiscovery
 
         public void Init(Action<string> msg)    // called from EDDApplicationContext .. continues on with the construction of the form
         {
+            Debug.WriteLine((Environment.TickCount % 100000) + " ED init");
             msg.Invoke("Modulating Shields");
             Controller.Init();
 
@@ -175,6 +176,7 @@ namespace EDDiscovery
 
             label_version.Text = EDDOptions.Instance.VersionDisplayString;
 
+            Debug.WriteLine((Environment.TickCount % 100000) + " Load popouts, themes, init controls");
             PopOuts = new PopOutControl(this);
 
             ToolStripManager.Renderer = theme.toolstripRenderer;
@@ -193,11 +195,14 @@ namespace EDDiscovery
             routeControl1.InitControl(this);
             savedRouteExpeditionControl1.InitControl(this);
 
+            Debug.WriteLine((Environment.TickCount % 100000) + " Map manager");
             Map = new EDDiscovery._3DMap.MapManager(EDDOptions.Instance.NoWindowReposition, this);
 
             this.TopMost = EDDConfig.KeepOnTop;
 
 #if !NO_SYSTEM_SPEECH
+            Debug.WriteLine((Environment.TickCount % 100000) + " Audio");
+
             // Windows TTS (2000 and above). Speech *recognition* will be Version.Major >= 6 (Vista and above)
             if (Environment.OSVersion.Platform == PlatformID.Win32NT && Environment.OSVersion.Version.Major >= 5)
             {
@@ -220,6 +225,8 @@ namespace EDDiscovery
             audioqueuewave = new AudioExtensions.AudioQueue(audiodriverwave);
             audioqueuespeech = new AudioExtensions.AudioQueue(audiodriverspeech);
 
+            Debug.WriteLine((Environment.TickCount % 100000) + " Action controller");
+
             actioncontroller = new Actions.ActionController(this, Controller, this.Icon);
 
             frontierbindings = new BindingsFile();
@@ -228,16 +235,20 @@ namespace EDDiscovery
 
             screenshotconverter = new ScreenShots.ScreenShotConverter(this);
 
+            Debug.WriteLine((Environment.TickCount % 100000) + " Theming");
             ApplyTheme();
 
             notifyIcon1.Visible = EDDConfig.UseNotifyIcon;
 
             SetUpLogging();
+
+            Debug.WriteLine((Environment.TickCount % 100000) + " Finish ED Init");
         }
 
         // OnLoad is called the first time the form is shown, before OnShown or OnActivated are called
         private void EDDiscoveryForm_Load(object sender, EventArgs e)
         {
+            Debug.WriteLine((Environment.TickCount % 100000) + " EDF Load");
             try
             {
                 MaterialCommodityDB.SetUpInitialTable();
@@ -254,6 +265,7 @@ namespace EDDiscovery
                     buttonReloadActions.Visible = true;
                 }
 
+                Debug.WriteLine((Environment.TickCount % 100000) + " EDF load complete");
             }
             catch (Exception ex)
             {
@@ -264,6 +276,7 @@ namespace EDDiscovery
         // OnShown is called every time Show is called
         private void EDDiscoveryForm_Shown(object sender, EventArgs e)
         {
+            Debug.WriteLine((Environment.TickCount % 100000) + " EDF shown");
             Controller.PostInit_Shown();
 
             if (!themeok)
@@ -275,6 +288,7 @@ namespace EDDiscovery
             actioncontroller.onStartup();
 
             _shownOnce = true;
+            Debug.WriteLine((Environment.TickCount % 100000) + " EDF shown complete");
         }
 
         #endregion

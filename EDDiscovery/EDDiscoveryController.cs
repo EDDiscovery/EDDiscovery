@@ -117,7 +117,7 @@ namespace EDDiscovery
             EDDConfig.Instance.Update(false);
         }
 
-        public void Init()
+        public void Init()      // ED Discovery calls this during its init
         {
             if (!Debugger.IsAttached || EDDOptions.Instance.TraceLog)
             {
