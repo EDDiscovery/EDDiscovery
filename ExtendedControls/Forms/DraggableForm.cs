@@ -122,6 +122,9 @@ namespace ExtendedControls
                         {
                             base.WndProc(ref m);
 
+                            if (WindowState == FormWindowState.Minimized)
+                                return;
+
                             var p = PointToClient(new Point((int)m.LParam));
                             const int CaptionHeight = 32;
                             const int edgesz = 5;   // 5 is generous.. really only a few pixels gets thru before the subwindows grabs them
