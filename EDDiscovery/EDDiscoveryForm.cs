@@ -164,7 +164,7 @@ namespace EDDiscovery
 
         public void Init(Action<string> msg)    // called from EDDApplicationContext .. continues on with the construction of the form
         {
-            Debug.WriteLine((Environment.TickCount % 100000) + " ED init");
+            Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " ED init");
             msg.Invoke("Modulating Shields");
             Controller.Init();
 
@@ -176,7 +176,7 @@ namespace EDDiscovery
 
             label_version.Text = EDDOptions.Instance.VersionDisplayString;
 
-            Debug.WriteLine((Environment.TickCount % 100000) + " Load popouts, themes, init controls");
+            Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " Load popouts, themes, init controls");
             PopOuts = new PopOutControl(this);
 
             ToolStripManager.Renderer = theme.toolstripRenderer;
@@ -195,13 +195,13 @@ namespace EDDiscovery
             routeControl1.InitControl(this);
             savedRouteExpeditionControl1.InitControl(this);
 
-            Debug.WriteLine((Environment.TickCount % 100000) + " Map manager");
+            Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " Map manager");
             Map = new EDDiscovery._3DMap.MapManager(EDDOptions.Instance.NoWindowReposition, this);
 
             this.TopMost = EDDConfig.KeepOnTop;
 
 #if !NO_SYSTEM_SPEECH
-            Debug.WriteLine((Environment.TickCount % 100000) + " Audio");
+            Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " Audio");
 
             // Windows TTS (2000 and above). Speech *recognition* will be Version.Major >= 6 (Vista and above)
             if (Environment.OSVersion.Platform == PlatformID.Win32NT && Environment.OSVersion.Version.Major >= 5)
@@ -225,7 +225,7 @@ namespace EDDiscovery
             audioqueuewave = new AudioExtensions.AudioQueue(audiodriverwave);
             audioqueuespeech = new AudioExtensions.AudioQueue(audiodriverspeech);
 
-            Debug.WriteLine((Environment.TickCount % 100000) + " Action controller");
+            Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " Action controller");
 
             actioncontroller = new Actions.ActionController(this, Controller, this.Icon);
 
@@ -235,26 +235,41 @@ namespace EDDiscovery
 
             screenshotconverter = new ScreenShots.ScreenShotConverter(this);
 
-            Debug.WriteLine((Environment.TickCount % 100000) + " Theming");
+            Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " Theming");
             ApplyTheme();
 
             notifyIcon1.Visible = EDDConfig.UseNotifyIcon;
 
             SetUpLogging();
 
-            Debug.WriteLine((Environment.TickCount % 100000) + " Finish ED Init");
+            Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " Finish ED Init");
         }
 
         // OnLoad is called the first time the form is shown, before OnShown or OnActivated are called
         private void EDDiscoveryForm_Load(object sender, EventArgs e)
         {
-            Debug.WriteLine((Environment.TickCount % 100000) + " EDF Load");
             try
             {
+                Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " EDF Load");
+
                 MaterialCommodityDB.SetUpInitialTable();
                 Controller.PostInit_Loaded();
 
                 RepositionForm();
+
+                long t = Environment.TickCount;
+                Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " EDF Load layout of THC");
+                travelHistoryControl.LoadLayoutSettings();
+                Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " EDF Load layout of JVC");
+                journalViewControl1.LoadLayoutSettings();
+                Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " EDF Load layout GC");
+                gridControl.LoadLayoutSettings();
+                Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " EDF Load layout Major Tab");
+
+                string tab = SQLiteConnectionUser.GetSettingString("MajorTab", "");
+                SelectTabPage(tab);
+
+                Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " EDF Load show info panel");
                 ShowInfoPanel("Loading. Please wait!", true);
                 routeControl1.travelhistorycontrol1 = travelHistoryControl;
                 settings.InitSettingsTab();
@@ -265,7 +280,7 @@ namespace EDDiscovery
                     buttonReloadActions.Visible = true;
                 }
 
-                Debug.WriteLine((Environment.TickCount % 100000) + " EDF load complete");
+                Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " EDF load complete");
             }
             catch (Exception ex)
             {
@@ -276,7 +291,7 @@ namespace EDDiscovery
         // OnShown is called every time Show is called
         private void EDDiscoveryForm_Shown(object sender, EventArgs e)
         {
-            Debug.WriteLine((Environment.TickCount % 100000) + " EDF shown");
+            Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " EDF shown");
             Controller.PostInit_Shown();
 
             if (!themeok)
@@ -288,7 +303,7 @@ namespace EDDiscovery
             actioncontroller.onStartup();
 
             _shownOnce = true;
-            Debug.WriteLine((Environment.TickCount % 100000) + " EDF shown complete");
+            Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " EDF shown complete");
         }
 
         #endregion
@@ -376,17 +391,11 @@ namespace EDDiscovery
                 _formMax = SQLiteDBClass.GetSettingBool("FormMax", false);
                 if (_formMax) this.WindowState = FormWindowState.Maximized;
             }
+
             _formLeft = Left;
             _formTop = Top;
             _formHeight = Height;
             _formWidth = Width;
-
-            travelHistoryControl.LoadLayoutSettings();
-            journalViewControl1.LoadLayoutSettings();
-            gridControl.LoadLayoutSettings();
-
-            string tab = SQLiteConnectionUser.GetSettingString("MajorTab", "");
-            SelectTabPage(tab);
         }
 
         #endregion
