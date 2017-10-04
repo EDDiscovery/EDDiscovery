@@ -385,7 +385,7 @@ namespace EDDiscovery.UserControls
 
                 if (sc.IsStar && toplevel)
                 {
-                    endpoint = CreateImageLabel(pc, sc.GetStarTypeImage().Item1,
+                    endpoint = CreateImageLabel(pc, sc.GetStarTypeImage(),
                                                 new Point(curpos.X + offset, curpos.Y + alignv),      // WE are basing it on a 1/4 + 1 + 1/4 grid, this is not being made bigger, move off
                                                 size, sn.customname ?? sn.ownname, tip, alignv + labelvoff, sc.IsEDSMBody, false);          // and the label needs to be a quarter height below it..
 
@@ -421,7 +421,7 @@ namespace EDDiscovery.UserControls
                 {
                     bool indicatematerials = sc.HasMaterials && !checkBoxMaterials.Checked;
 
-                    Image nodeimage = sc.IsStar ? sc.GetStarTypeImage().Item1 : sc.GetPlanetClassImage();
+                    Image nodeimage = sc.IsStar ? sc.GetStarTypeImage() : sc.GetPlanetClassImage();
 
                     if ((sc.IsLandable || sc.HasRings || indicatematerials))
                     {
