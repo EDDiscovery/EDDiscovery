@@ -293,7 +293,7 @@ namespace EDDiscovery.UserControls
                 }
             }
 
-            return $"Approx value (known bodies): {value:N0}";
+            return $"Approx value: {value:N0}";
         }
 
         // return right bottom of area used from curpos
