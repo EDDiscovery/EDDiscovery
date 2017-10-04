@@ -73,6 +73,7 @@ namespace EDDiscovery.UserControls
             checkBoxMaterialsRare.Checked = SQLiteDBClass.GetSettingBool(DbSave + "MaterialsRare", false);
             checkBoxMoons.Checked = SQLiteDBClass.GetSettingBool(DbSave + "Moons", true);
             checkBoxEDSM.Checked = SQLiteDBClass.GetSettingBool(DbSave + "EDSM", false);
+            chkShowOverlays.Checked = SQLiteDBClass.GetSettingBool(DbSave + "BodyOverlays", false);
             progchange = false;
 
             int size = SQLiteDBClass.GetSettingInt(DbSave + "Size", 64);
@@ -438,17 +439,18 @@ namespace EDDiscovery.UserControls
                                 g.DrawImage(sc.Rings.Count() > 1 ? EDDiscovery.Properties.Resources.RingGap512 : EDDiscovery.Properties.Resources.Ring_Only_512,
                                                 new Rectangle(-2, quarterheight, size.Width * 2, size.Height));
 
+                            if (chkShowOverlays.Checked)
+                            {
+                                if (sc.Terraformable)
+                                    g.DrawImage(EDDiscovery.Properties.Resources.Terraformable, new Rectangle(quarterheight / 2, quarterheight / 2, quarterheight, quarterheight));
 
-                            if (sc.Terraformable)
-                                g.DrawImage(EDDiscovery.Properties.Resources.Terraformable, new Rectangle(quarterheight / 2, quarterheight / 2, quarterheight, quarterheight));
+                                if (HasMeaningfulVolcanism(sc)) //this renders below the terraformable icon if present
+                                    g.DrawImage(EDDiscovery.Properties.Resources.Volcano, new Rectangle(quarterheight / 2, (int)(quarterheight * 1.5), quarterheight, quarterheight));
 
-                            if (HasMeaningfulVolcanism(sc)) //this renders below the terraformable icon if present
-                                g.DrawImage(EDDiscovery.Properties.Resources.Volcano, new Rectangle(quarterheight / 2, (int)(quarterheight *1.5), quarterheight, quarterheight));
-
-                            //experiment - does this take all the fun out of it?
-                            if (sc.EstimatedValue() > 50000)
-                                g.DrawImage(EDDiscovery.Properties.Resources.startflag, new Rectangle(quarterheight / 2, (int)(quarterheight * 2.5), quarterheight, quarterheight));
-
+                                //experiment - does this take all the fun out of it?
+                                if (sc.EstimatedValue() > 50000)
+                                    g.DrawImage(EDDiscovery.Properties.Resources.startflag, new Rectangle(quarterheight / 2, (int)(quarterheight * 2.5), quarterheight, quarterheight));
+                            }
 
                             if (indicatematerials)
                             {
@@ -745,6 +747,15 @@ namespace EDDiscovery.UserControls
             }
         }
 
+        private void chkShowOverlays_CheckedChanged(object sender, EventArgs e)
+        {
+            if (!progchange)
+            {
+                SQLiteDBClass.PutSettingBool(DbSave + "BodyOverlays", chkShowOverlays.Checked);
+                DrawSystem();
+            }
+        }
+
         private void toolStripMenuItemToolbar_Click(object sender, EventArgs e)
         {
             panelControls.Visible = !panelControls.Visible;
@@ -758,6 +769,8 @@ namespace EDDiscovery.UserControls
             rtbNodeInfo.Show();
             PositionInfo();
         }
+
+
 
         void HideInfo()
         {
