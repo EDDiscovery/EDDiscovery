@@ -89,7 +89,7 @@ namespace EDDiscovery.Forms
             this.panel_minimize.BackColor = System.Drawing.SystemColors.Control;
             this.panel_minimize.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.panel_minimize.ImageSelected = ExtendedControls.DrawnPanel.ImageType.Minimize;
-            this.panel_minimize.Location = new System.Drawing.Point(586, -2);
+            this.panel_minimize.Location = new System.Drawing.Point(582, -2);
             this.panel_minimize.MarginSize = 6;
             this.panel_minimize.Name = "panel_minimize";
             this.panel_minimize.Size = new System.Drawing.Size(24, 24);
@@ -103,7 +103,7 @@ namespace EDDiscovery.Forms
             this.panel_ontop.BackColor = System.Drawing.SystemColors.Control;
             this.panel_ontop.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.panel_ontop.ImageSelected = ExtendedControls.DrawnPanel.ImageType.Floating;
-            this.panel_ontop.Location = new System.Drawing.Point(562, -2);
+            this.panel_ontop.Location = new System.Drawing.Point(558, -2);
             this.panel_ontop.MarginSize = 6;
             this.panel_ontop.Name = "panel_ontop";
             this.panel_ontop.Size = new System.Drawing.Size(24, 24);
@@ -117,7 +117,7 @@ namespace EDDiscovery.Forms
             this.panel_transparent.BackColor = System.Drawing.SystemColors.Control;
             this.panel_transparent.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.panel_transparent.ImageSelected = ExtendedControls.DrawnPanel.ImageType.Transparent;
-            this.panel_transparent.Location = new System.Drawing.Point(490, -2);
+            this.panel_transparent.Location = new System.Drawing.Point(486, -2);
             this.panel_transparent.MarginSize = 6;
             this.panel_transparent.Name = "panel_transparent";
             this.panel_transparent.Size = new System.Drawing.Size(24, 24);
@@ -130,7 +130,7 @@ namespace EDDiscovery.Forms
             this.panel_close.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.panel_close.BackColor = System.Drawing.SystemColors.Control;
             this.panel_close.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.panel_close.Location = new System.Drawing.Point(610, -2);
+            this.panel_close.Location = new System.Drawing.Point(606, -2);
             this.panel_close.MarginSize = 6;
             this.panel_close.Name = "panel_close";
             this.panel_close.Size = new System.Drawing.Size(24, 24);
@@ -144,7 +144,7 @@ namespace EDDiscovery.Forms
             this.panel_taskbaricon.BackColor = System.Drawing.SystemColors.Control;
             this.panel_taskbaricon.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.panel_taskbaricon.ImageSelected = ExtendedControls.DrawnPanel.ImageType.WindowInTaskBar;
-            this.panel_taskbaricon.Location = new System.Drawing.Point(538, -2);
+            this.panel_taskbaricon.Location = new System.Drawing.Point(534, -2);
             this.panel_taskbaricon.MarginSize = 6;
             this.panel_taskbaricon.Name = "panel_taskbaricon";
             this.panel_taskbaricon.Size = new System.Drawing.Size(24, 24);
@@ -156,7 +156,7 @@ namespace EDDiscovery.Forms
             // 
             this.panel_showtitle.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.panel_showtitle.ImageSelected = ExtendedControls.DrawnPanel.ImageType.Captioned;
-            this.panel_showtitle.Location = new System.Drawing.Point(514, -2);
+            this.panel_showtitle.Location = new System.Drawing.Point(510, -2);
             this.panel_showtitle.MarginSize = 6;
             this.panel_showtitle.Name = "panel_showtitle";
             this.panel_showtitle.Size = new System.Drawing.Size(24, 24);
@@ -166,6 +166,8 @@ namespace EDDiscovery.Forms
             // 
             // panelTop
             // 
+            this.panelTop.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.panelTop.Controls.Add(this.panel_showtitle);
             this.panelTop.Controls.Add(this.label_index);
             this.panelTop.Controls.Add(this.labelControlText);
@@ -174,10 +176,9 @@ namespace EDDiscovery.Forms
             this.panelTop.Controls.Add(this.panel_taskbaricon);
             this.panelTop.Controls.Add(this.panel_transparent);
             this.panelTop.Controls.Add(this.panel_close);
-            this.panelTop.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelTop.Location = new System.Drawing.Point(0, 0);
+            this.panelTop.Location = new System.Drawing.Point(2, 2);
             this.panelTop.Name = "panelTop";
-            this.panelTop.Size = new System.Drawing.Size(634, 22);
+            this.panelTop.Size = new System.Drawing.Size(630, 22);
             this.panelTop.TabIndex = 27;
             this.panelTop.MouseDown += new System.Windows.Forms.MouseEventHandler(this.panelTop_MouseDown);
             this.panelTop.MouseUp += new System.Windows.Forms.MouseEventHandler(this.panelTop_MouseUp);

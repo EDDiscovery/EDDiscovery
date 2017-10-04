@@ -54,7 +54,7 @@ namespace ActionLanguage
             public bool marked;     // is marked for editing
 
             public ActionBase checkit; // used just to check we keep in sync with curprog, not strictly ness. but useful
-        };
+        }
 
         List<Group> groups;
         int panelheightmargin = 1;
@@ -64,8 +64,8 @@ namespace ActionLanguage
 
         public ActionProgramEditForm()
         {
-            InitializeComponent();
             groups = new List<Group>();
+            InitializeComponent();
             CancelButton = buttonCancel;
             AcceptButton = buttonOK;
         }

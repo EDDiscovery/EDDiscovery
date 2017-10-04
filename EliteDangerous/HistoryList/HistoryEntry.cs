@@ -160,7 +160,7 @@ namespace EliteDangerousCore
 
         public static HistoryEntry FromJournalEntry(JournalEntry je, HistoryEntry prev, bool checkedsm, out bool journalupdate, SQLiteConnectionSystem conn = null, EDCommander cmdr = null)
         {
-            ISystem isys = prev == null ? new SystemClassDB("Unknown") : prev.System;
+            ISystem isys = prev == null ? new SystemClass("Unknown") : prev.System;
             int indexno = prev == null ? 1 : prev.Indexno + 1;
 
             int mapcolour = 0;
@@ -179,8 +179,19 @@ namespace EliteDangerousCore
 
                 if (jl != null && jl.HasCoordinate)       // LAZY LOAD IF it has a co-ord.. the front end will when it needs it
                 {
-                    newsys = new SystemClassDB(jl.StarSystem, jl.StarPos.X, jl.StarPos.Y, jl.StarPos.Z);
-                    newsys.id_edsm = jl.EdsmID < 0 ? 0 : jl.EdsmID;       // pass across the EDSMID for the lazy load process.
+                    newsys = new SystemClass(jl.StarSystem, jl.StarPos.X, jl.StarPos.Y, jl.StarPos.Z)
+                    {
+                        id_edsm = jl.EdsmID < 0 ? 0 : jl.EdsmID,       // pass across the EDSMID for the lazy load process.
+                        faction = jl.Faction,
+                        government = jl.EDGovernment,
+                        primary_economy = jl.EDEconomy,
+                        security = jl.EDSecurity,
+                        population = jl.Population ?? 0,
+                        state = jl.EDState,
+                        allegiance = jl.EDAllegiance,
+                        UpdateDate = jl.EventTimeUTC,
+                        status = SystemStatusEnum.EDDiscovery,
+                    };
 
                     if (jfsd != null && jfsd.JumpDist <= 0 && isys.HasCoordinate)     // if we don't have a jump distance (pre 2.2) but the last sys does have pos, we can compute distance and update entry
                     {
@@ -200,12 +211,12 @@ namespace EliteDangerousCore
                 {                           // Default one
                     string sysname = jl?.StarSystem ?? js?.StarSystem;
 
-                    newsys = new SystemClassDB(sysname);
+                    newsys = new SystemClass(sysname);
                     newsys.id_edsm = je.EdsmID;
 
                     if (checkedsm)          // see if we can find the right system
                     {
-                        SystemClassDB s = SystemClassDB.FindEDSM(newsys, conn);      // has no co-ord, did we find it?
+                        ISystem s = SystemCache.FindEDSM(newsys, conn: conn, usedb: true, useedsm: true);      // has no co-ord, did we find it?
 
                         if (s != null)                                          // yes, use, and update the journal with the esdmid, and also the position if we have a co-ord
                         {                                                       // so next time we don't have to do this again..

@@ -213,6 +213,32 @@ namespace EDDiscovery.UserControls
 
             if (add)
             {
+                var filter = (TravelHistoryFilter)comboBoxHistoryWindow.SelectedItem ?? TravelHistoryFilter.NoFilter;
+
+                if (filter.MaximumNumberOfItems != null)
+                {
+                    for (int r = dataGridViewTravel.Rows.Count - 1; r >= dataGridViewTravel.Rows.Count; r--)
+                    {
+                        dataGridViewTravel.Rows.RemoveAt(r);
+                    }
+                }
+
+                if (filter.MaximumDataAge != null)
+                {
+                    for (int r = dataGridViewTravel.Rows.Count - 1; r > 0; r--)
+                    {
+                        var rhe = dataGridViewTravel.Rows[r].Tag as HistoryEntry;
+                        if (rhe != null && rhe.AgeOfEntry() > filter.MaximumDataAge)
+                        {
+                            dataGridViewTravel.Rows.RemoveAt(r);
+                        }
+                        else
+                        {
+                            break;
+                        }
+                    }
+                }
+
                 if (checkBoxMoveToTop.Checked && dataGridViewTravel.DisplayedRowCount(false) > 0)   // Move focus to new row
                 {
                     //System.Diagnostics.Debug.WriteLine("Auto Sel");
@@ -228,22 +254,21 @@ namespace EDDiscovery.UserControls
         {
             //string debugt = item.Journalid + "  " + item.System.id_edsm + " " + item.System.GetHashCode() + " "; // add on for debug purposes to a field below
 
-            object[] rowobj = { EDDiscoveryForm.EDDConfig.DisplayUTC ? item.EventTimeUTC : item.EventTimeLocal, "", item.EventSummary, item.EventDescription, (item.snc != null) ? item.snc.Note : "" };
+            var rw = dataGridViewTravel.RowTemplate.Clone() as DataGridViewRow;
+            rw.CreateCells(dataGridViewTravel, EDDiscoveryForm.EDDConfig.DisplayUTC ? item.EventTimeUTC : item.EventTimeLocal, "", item.EventSummary, item.EventDescription, (item.snc != null) ? item.snc.Note : "");
+            rw.Cells[TravelHistoryColumns.HistoryTag].Tag = item;
 
-            int rownr;
+            int rownr = 0;
             if (insert)
             {
-                dataGridViewTravel.Rows.Insert(0, rowobj);
-                rownr = 0;
+                dataGridViewTravel.Rows.Insert(rownr, rw);
             }
             else
             {
-                dataGridViewTravel.Rows.Add(rowobj);
-                rownr = dataGridViewTravel.Rows.Count - 1;
+                rownr = dataGridViewTravel.Rows.Add(rw);
             }
 
             rowsbyjournalid[item.Journalid] = dataGridViewTravel.Rows[rownr];
-            dataGridViewTravel.Rows[rownr].Cells[TravelHistoryColumns.HistoryTag].Tag = item;
 
             dataGridViewTravel.Rows[rownr].DefaultCellStyle.ForeColor = (item.System.HasCoordinate || item.EntryType != JournalTypeEnum.FSDJump) ? discoveryform.theme.VisitedSystemColor : discoveryform.theme.NonVisitedSystemColor;
 
@@ -397,7 +422,9 @@ namespace EDDiscovery.UserControls
                                              int totalentries, HistoryEntry he,
                                              int hpos, int colwidth, bool showfsdmapcolour)
         {
-            System.Diagnostics.Debug.Assert(he != null);
+            System.Diagnostics.Debug.Assert(he != null);    // Trip for debug builds if something is wrong,
+            if (he == null)                                 // otherwise, ignore it and return.
+                return;
 
             string rowIdx;
 

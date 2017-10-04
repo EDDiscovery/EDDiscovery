@@ -36,9 +36,6 @@ namespace EliteDangerousCore
         public StarScan starscan { get; private set; } = new StarScan();                                           // and the results of scanning
         public int CommanderId { get; private set; }
 
-        private JournalFuelScoop FuelScoopAccum;        // no need to copy
-        public static bool AccumulateFuelScoops { get; set; } = true;
-
         public HistoryList() { }
 
         public HistoryList(List<HistoryEntry> hl) { historylist = hl; }         // SPECIAL USE ONLY - DOES NOT COMPUTE ALL THE OTHER STUFF
@@ -82,14 +79,14 @@ namespace EliteDangerousCore
         {
             List<HistoryEntry> entries = new List<HistoryEntry>();
             bool started = false;
-            foreach( HistoryEntry he in historylist.OrderBy(s => s.EventTimeUTC).ToList())      // ascending order
+            foreach (HistoryEntry he in historylist.OrderBy(s => s.EventTimeUTC).ToList())      // ascending order
             {
-                if ( he.StartMarker)
+                if (he.StartMarker)
                 {
                     started = true;
                     entries.Add(he);
                 }
-                else if ( started )
+                else if (started)
                 {
                     entries.Add(he);
                     if (he.StopMarker && !he.StartMarker)
@@ -175,8 +172,8 @@ namespace EliteDangerousCore
 
         public List<HistoryEntry> FilterByTravel { get { return FilterHLByTravel(historylist); } }
 
-        static public List<HistoryEntry> FilterHLByTravel( List<HistoryEntry> hlist)        // filter, in its own order. return FSD and location events after death
-        { 
+        static public List<HistoryEntry> FilterHLByTravel(List<HistoryEntry> hlist)        // filter, in its own order. return FSD and location events after death
+        {
             List<HistoryEntry> ents = new List<HistoryEntry>();
             bool resurrect = true;
             foreach (HistoryEntry he in hlist)
@@ -242,7 +239,7 @@ namespace EliteDangerousCore
             return historylist.FindLast(where);
         }
 
-        public HistoryEntry GetLastHistoryEntry(Predicate<HistoryEntry> where, HistoryEntry frominclusive )
+        public HistoryEntry GetLastHistoryEntry(Predicate<HistoryEntry> where, HistoryEntry frominclusive)
         {
             int hepos = historylist.FindIndex(x => x.Journalid == frominclusive.Journalid);
             if (hepos != -1)
@@ -278,8 +275,8 @@ namespace EliteDangerousCore
         public int GetVisitsCount(string name, long edsmid = 0)
         {
             return (from he in historylist.AsParallel()
-                   where (he.IsFSDJump && (edsmid <= 0 || he.System.id_edsm == edsmid) && he.System.name.Equals(name, StringComparison.InvariantCultureIgnoreCase))
-                   select he).Count();
+                    where (he.IsFSDJump && (edsmid <= 0 || he.System.id_edsm == edsmid) && he.System.name.Equals(name, StringComparison.InvariantCultureIgnoreCase))
+                    select he).Count();
         }
         public List<JournalScan> GetScans(string name, long edsmid = 0)
         {
@@ -288,15 +285,15 @@ namespace EliteDangerousCore
                     select s.journalEntry as JournalScan).ToList<JournalScan>();
         }
 
-        public int GetFSDJumps( TimeSpan t )
+        public int GetFSDJumps(TimeSpan t)
         {
             DateTime tme = DateTime.UtcNow.Subtract(t);
-            return (from s in historylist where s.IsFSDJump && s.EventTimeUTC>=tme select s).Count();
+            return (from s in historylist where s.IsFSDJump && s.EventTimeUTC >= tme select s).Count();
         }
 
         public int GetFSDJumps(DateTime start, DateTime to)
         {
-            return (from s in historylist where s.IsFSDJump && s.EventTimeLocal >= start && s.EventTimeLocal<to  select s).Count();
+            return (from s in historylist where s.IsFSDJump && s.EventTimeLocal >= start && s.EventTimeLocal < to select s).Count();
         }
 
         public int GetNrScans(DateTime start, DateTime to)
@@ -353,7 +350,7 @@ namespace EliteDangerousCore
 
         public double GetFuelScoopedTons(DateTime start, DateTime to)
         {
-             var list = (from s in historylist where s.EntryType == JournalTypeEnum.FuelScoop && s.EventTimeLocal >= start && s.EventTimeLocal < to select s.journalEntry as JournalFuelScoop).ToList<JournalFuelScoop>();
+            var list = (from s in historylist where s.EntryType == JournalTypeEnum.FuelScoop && s.EventTimeLocal >= start && s.EventTimeLocal < to select s.journalEntry as JournalFuelScoop).ToList<JournalFuelScoop>();
 
             return (from s in list select s.Scooped).Sum();
         }
@@ -377,10 +374,10 @@ namespace EliteDangerousCore
         }
 
         public delegate bool FurthestFund(HistoryEntry he, ref double lastv);
-        public HistoryEntry GetConditionally( double lastv, FurthestFund f )              // give a comparision function, find entry
+        public HistoryEntry GetConditionally(double lastv, FurthestFund f)              // give a comparision function, find entry
         {
             HistoryEntry best = null;
-            foreach( HistoryEntry s in historylist )
+            foreach (HistoryEntry s in historylist)
             {
                 if (f(s, ref lastv))
                     best = s;
@@ -423,52 +420,34 @@ namespace EliteDangerousCore
 
         public void FillInPositionsFSDJumps()       // call if you want to ensure we have the best posibile position data on FSD Jumps.  Only occurs on pre 2.1 with lazy load of just name/edsmid
         {
-            List<Tuple<HistoryEntry, SystemClassDB>> updatesystems = new List<Tuple<HistoryEntry, SystemClassDB>>();
+            List<Tuple<HistoryEntry, ISystem>> updatesystems = new List<Tuple<HistoryEntry, ISystem>>();
 
             using (SQLiteConnectionSystem cn = new SQLiteConnectionSystem())
             {
                 foreach (HistoryEntry he in historylist)
                 {
                     if (he.IsFSDJump && !he.System.HasCoordinate)   // try and load ones without position.. if its got pos we are happy
-                        updatesystems.Add(new Tuple<HistoryEntry, SystemClassDB>(he, FindEDSM(he)));
+                        updatesystems.Add(new Tuple<HistoryEntry, ISystem>(he, FindEDSM(he)));
                 }
             }
 
-            foreach (Tuple<HistoryEntry, SystemClassDB> he in updatesystems)
+            foreach (Tuple<HistoryEntry, ISystem> he in updatesystems)
             {
                 FillEDSM(he.Item1, edsmsys: he.Item2);  // fill, we already have an EDSM system to use
             }
         }
 
-        private SystemClassDB FindEDSM(HistoryEntry syspos, SQLiteConnectionSystem conn = null, bool reload = false)
+        private ISystem FindEDSM(HistoryEntry syspos, SQLiteConnectionSystem conn = null, bool reload = false)
         {
             if (syspos.System.status == SystemStatusEnum.EDSC || (!reload && syspos.System.id_edsm == -1))  // if set already, or we tried and failed..
                 return null;
 
-            bool ownconn = false;
-
-            try
-            {
-                if (conn == null)
-                {
-                    ownconn = true;
-                    conn = new SQLiteConnectionSystem();
-                }
-
-                return SystemClassDB.FindEDSM(syspos.System, conn);
-            }
-            finally
-            {
-                if (ownconn && conn != null)
-                {
-                    conn.Dispose();
-                }
-            }
+            return SystemCache.FindEDSM(syspos.System, usedb: true, useedsm: true, conn: conn);
         }
 
-        public void FillEDSM(HistoryEntry syspos, SystemClassDB edsmsys = null, bool reload = false, SQLiteConnectionUser uconn = null )       // call to fill in ESDM data for entry, and also fills in all others pointing to the system object
+        public void FillEDSM(HistoryEntry syspos, ISystem edsmsys = null, bool reload = false, SQLiteConnectionUser uconn = null)       // call to fill in ESDM data for entry, and also fills in all others pointing to the system object
         {
-            if (syspos.System.status == SystemStatusEnum.EDSC || (!reload && syspos.System.id_edsm == -1) )  // if set already, or we tried and failed..
+            if (syspos.System.status == SystemStatusEnum.EDSC || (!reload && syspos.System.id_edsm == -1))  // if set already, or we tried and failed..
                 return;
 
             List<HistoryEntry> alsomatching = new List<HistoryEntry>();
@@ -479,7 +458,7 @@ namespace EliteDangerousCore
                     alsomatching.Add(he);
             }
 
-            if (edsmsys==null)                              // if we found it externally, do not find again
+            if (edsmsys == null)                              // if we found it externally, do not find again
                 edsmsys = FindEDSM(syspos, reload: reload);
 
             if (edsmsys != null)
@@ -490,7 +469,7 @@ namespace EliteDangerousCore
                     bool updatepos = (he.EntryType == JournalTypeEnum.FSDJump || he.EntryType == JournalTypeEnum.Location) && !syspos.System.HasCoordinate && edsmsys.HasCoordinate;
 
                     if (updatepos || updateedsmid)
-                        JournalEntry.UpdateEDSMIDPosJump(he.Journalid, edsmsys, updatepos, -1 , uconn);  // update pos and edsmid, jdist not updated
+                        JournalEntry.UpdateEDSMIDPosJump(he.Journalid, edsmsys, updatepos, -1, uconn);  // update pos and edsmid, jdist not updated
 
                     he.System = edsmsys;
                 }
@@ -638,7 +617,7 @@ namespace EliteDangerousCore
         }
 
         #endregion
-        
+
         #region Enumeration
 
         public IEnumerator<HistoryEntry> GetEnumerator()
@@ -658,11 +637,11 @@ namespace EliteDangerousCore
 
         #region Markers
 
-        public void SetStartStop( HistoryEntry hs )
+        public void SetStartStop(HistoryEntry hs)
         {
             bool started = false;
 
-            foreach ( HistoryEntry he in historylist )
+            foreach (HistoryEntry he in historylist)
             {
                 if (hs == he)
                 {
@@ -700,204 +679,66 @@ namespace EliteDangerousCore
 
         #region Entry processing
 
-        // go through the history list and recalculate the materials ledger and the materials count, plus any other stuff..
-        public void ProcessUserHistoryListEntries(Func<HistoryList, List<HistoryEntry>> hlfilter )
-        {
-            List<HistoryEntry> hl = hlfilter(this);
-
-            using (SQLiteConnectionUser conn = new SQLiteConnectionUser())      // splitting the update into two, one using system, one using user helped
-            {
-                for (int i = 0; i < hl.Count; i++)
-                {
-                    HistoryEntry he = hl[i];
-                    JournalEntry je = he.journalEntry;
-
-                    he.ProcessWithUserDb(je, (i > 0) ? hl[i - 1] : null, this, conn);        // let the HE do what it wants to with the user db
-
-                    Debug.Assert(he.MaterialCommodity != null);
-
-                    // **** REMEMBER NEW Journal entry needs this too *****************
-
-                    cashledger.Process(je, conn);            // update the ledger     
-                    he.Credits = cashledger.CashTotal;
-
-                    Tuple<ShipInformation,ModulesInStore> ret = shipinformationlist.Process(je, conn);  // the ships
-                    he.ShipInformation = ret.Item1;
-                    he.StoredModules = ret.Item2;
-
-                    he.MissionList = missionlistaccumulator.Process(je, he.System, he.WhereAmI, conn);                           // the missions
-
-                    if (je.EventTypeID == JournalTypeEnum.Scan)
-                    {
-                        if (!this.starscan.AddScanToBestSystem(je as JournalScan, i, hl))
-                        {
-                            System.Diagnostics.Debug.WriteLine("******** Cannot add scan to system " + (je as JournalScan).BodyName + " in " + he.System.name);
-                        }
-                    }
-                }
-            }
-        }
-
-        private IEnumerable<JournalEntry> ProcessJournalEntry(JournalEntry je)          // Used to detect multiple repeats and filter them out
-        {
-            if (je.EventTypeID == JournalTypeEnum.FuelScoop)
-            {
-                JournalFuelScoop scoop = je as JournalFuelScoop;
-                if (scoop != null)
-                {
-                    if (scoop.Scooped >= 5.0)
-                    {
-                        if (FuelScoopAccum == null)
-                        {
-                            FuelScoopAccum = new JournalFuelScoop(je.GetJson());
-                            yield break;
-                        }
-                        else
-                        {
-                            FuelScoopAccum.Id = scoop.Id;
-                            FuelScoopAccum.TLUId = scoop.TLUId;
-                            FuelScoopAccum.CommanderId = scoop.CommanderId;
-                            FuelScoopAccum.EdsmID = scoop.EdsmID;
-                            FuelScoopAccum.EventTimeUTC = scoop.EventTimeUTC;
-                            FuelScoopAccum.Scooped += scoop.Scooped;
-                            FuelScoopAccum.Total = scoop.Total;
-                            yield break;
-                        }
-                    }
-                    else if (FuelScoopAccum != null)
-                    {
-                        scoop.Scooped += FuelScoopAccum.Scooped;
-                        FuelScoopAccum = null;
-                    }
-                }
-            }
-
-            if (FuelScoopAccum != null)
-            {
-                yield return FuelScoopAccum;
-                FuelScoopAccum = null;
-            }
-
-            yield return je;
-        }
-
         // Called on a New Entry, by EDDiscoveryController:NewEntry, to add an journal entry in
 
-        public IEnumerable<HistoryEntry> AddJournalEntry(JournalEntry inje, Action<string> logerror)
+        public HistoryEntry AddJournalEntry(JournalEntry je, Action<string> logerror)   // always return he
         {
-            if (inje.CommanderId == CommanderId)     // we are only interested at this point accepting ones for the display commander
+            HistoryEntry prev = GetLast;
+
+            bool journalupdate = false;
+            HistoryEntry he = HistoryEntry.FromJournalEntry(je, prev, true, out journalupdate);
+
+            if (journalupdate)
             {
-                HistoryEntry last = GetLast;
+                JournalFSDJump jfsd = je as JournalFSDJump;
 
-                foreach (JournalEntry je in ProcessJournalEntry(inje))
+                if (jfsd != null)
                 {
-                    bool journalupdate = false;
-                    HistoryEntry he = HistoryEntry.FromJournalEntry(je, last, true, out journalupdate);
-
-                    if (journalupdate)
-                    {
-                        JournalFSDJump jfsd = je as JournalFSDJump;
-
-                        if (jfsd != null)
-                        {
-                            JournalEntry.UpdateEDSMIDPosJump(jfsd.Id, he.System, !jfsd.HasCoordinate && he.System.HasCoordinate, jfsd.JumpDist);
-                        }
-                    }
-
-                    using (SQLiteConnectionUser conn = new SQLiteConnectionUser())
-                    {
-                        he.ProcessWithUserDb(je, last, this, conn);           // let some processes which need the user db to work
-
-                        cashledger.Process(je, conn);
-                        he.Credits = cashledger.CashTotal;
-
-                        Tuple<ShipInformation, ModulesInStore> ret = shipinformationlist.Process(je, conn);
-                        he.ShipInformation = ret.Item1;
-                        he.StoredModules = ret.Item2;
-
-                        he.MissionList = missionlistaccumulator.Process(je, he.System, he.WhereAmI, conn);
-                    }
-
-                    historylist.Add(he);
-
-                    if (je.EventTypeID == JournalTypeEnum.Scan)
-                    {
-                        JournalScan js = je as JournalScan;
-                        JournalLocOrJump jl;
-                        HistoryEntry jlhe;
-                        if (!starscan.AddScanToBestSystem(js, Count - 1, EntryOrder, out jlhe, out jl))
-                        {
-                            // Ignore scans where the system name has been changed
-                            // Also ignore belt clusters
-                            if (jl == null || (jl.StarSystem.Equals(jlhe.System.name, StringComparison.InvariantCultureIgnoreCase) && !js.BodyDesignation.ToLowerInvariant().Contains(" belt cluster ")))
-                            {
-                                logerror("Cannot add scan to system - alert the EDDiscovery developers using either discord or Github (see help)" + Environment.NewLine +
-                                                 "Scan object " + js.BodyName + " in " + he.System.name);
-                            }
-                        }
-                    }
-
-                    yield return he;
-
-                    last = he;
+                    JournalEntry.UpdateEDSMIDPosJump(jfsd.Id, he.System, !jfsd.HasCoordinate && he.System.HasCoordinate, jfsd.JumpDist);
                 }
             }
-        }
 
-        public void SendEDSMStatusInfo(HistoryEntry he, bool async)     // he points to ship info to send from..  may be null from one feed function
-        {
-            if (CommanderId >= 0 && he != null )
+            using (SQLiteConnectionUser conn = new SQLiteConnectionUser())
             {
-                var commander = EDCommander.GetCommander(CommanderId);
+                he.ProcessWithUserDb(je, prev, this, conn);           // let some processes which need the user db to work
 
-                string edsmname = commander.Name;
-                if (!string.IsNullOrEmpty(commander.EdsmName))
-                    edsmname = commander.EdsmName;
+                cashledger.Process(je, conn);
+                he.Credits = cashledger.CashTotal;
 
-                if (!commander.SyncToEdsm || string.IsNullOrEmpty(commander.APIKey) || string.IsNullOrEmpty(edsmname))
-                    return;
+                Tuple<ShipInformation, ModulesInStore> ret = shipinformationlist.Process(je, conn);
+                he.ShipInformation = ret.Item1;
+                he.StoredModules = ret.Item2;
 
-                EDSMClass edsm = new EDSMClass { apiKey = commander.APIKey, commanderName = edsmname };
+                he.MissionList = missionlistaccumulator.Process(je, he.System, he.WhereAmI, conn);
+            }
 
-                // find last ship info currently
-                HistoryEntry lastshipinfocurrenthe = GetLastHistoryEntry(x => x.ShipInformation != null && x.ShipInformation.SubVehicle == ShipInformation.SubVehicleType.None);
+            historylist.Add(he);
 
-                // based on he position, find one before it with ship info that is a normal si not a srv
-                HistoryEntry lastshipinfohe = GetLastHistoryEntry(x => x.ShipInformation != null && x.ShipInformation.SubVehicle == ShipInformation.SubVehicleType.None, he);
-
-                long loan = 0;
-                long cash = 0;
-
-                if ( lastshipinfohe != null)       // we have a ship info
+            if (je.EventTypeID == JournalTypeEnum.Scan)
+            {
+                JournalScan js = je as JournalScan;
+                JournalLocOrJump jl;
+                HistoryEntry jlhe;
+                if (!starscan.AddScanToBestSystem(js, Count - 1, EntryOrder, out jlhe, out jl))
                 {
-                    // and based on that position, find a last load game.  May be null
-                    HistoryEntry lastloadgamehe = GetLastHistoryEntry(x => x.EntryType == JournalTypeEnum.LoadGame, lastshipinfohe);
-                    loan = (lastloadgamehe != null) ? ((JournalLoadGame)lastloadgamehe.journalEntry).Loan : 0;
-                    cash = (lastloadgamehe != null) ? ((JournalLoadGame)lastloadgamehe.journalEntry).Credits : 0;
-                }
-
-                JournalProgress progress = historylist.FindLast(x => x.EntryType == JournalTypeEnum.Progress).journalEntry as JournalProgress;
-                JournalRank rank = historylist.FindLast(x => x.EntryType == JournalTypeEnum.Rank).journalEntry as JournalRank;
-
-                if (async)
-                {
-                    Task edsmtask = Task.Factory.StartNew(() =>
+                    // Ignore scans where the system name has been changed
+                    // Also ignore belt clusters
+                    if (jl == null || (jl.StarSystem.Equals(jlhe.System.name, StringComparison.InvariantCultureIgnoreCase) && !js.BodyDesignation.ToLowerInvariant().Contains(" belt cluster ")))
                     {
-                        edsm.SendShipInfo(lastshipinfohe?.ShipInformation, lastshipinfohe?.MaterialCommodity, lastshipinfohe?.MaterialCommodity?.CargoCount ?? 0, lastshipinfocurrenthe?.ShipInformation, cashledger?.CashTotal ?? cash, loan, progress, rank);
-                    });
-                }
-                else
-                {
-                    edsm.SendShipInfo(lastshipinfohe?.ShipInformation, lastshipinfohe?.MaterialCommodity, lastshipinfohe?.MaterialCommodity?.CargoCount ?? 0, lastshipinfocurrenthe?.ShipInformation, cashledger?.CashTotal ?? cash, loan, progress, rank);
+                        logerror("Cannot add scan to system - alert the EDDiscovery developers using either discord or Github (see help)" + Environment.NewLine +
+                                            "Scan object " + js.BodyName + " in " + he.System.name);
+                    }
                 }
             }
+
+            return he;
         }
 
-        public static HistoryList LoadHistory(EDJournalClass journalmonitor, Func<bool> cancelRequested, Action<int, string> reportProgress, 
-                                    string NetLogPath = null, 
-                                    bool ForceNetLogReload = false, 
-                                    bool ForceJournalReload = false, 
-                                    bool CheckEdsm = false, 
+        public static HistoryList LoadHistory(EDJournalClass journalmonitor, Func<bool> cancelRequested, Action<int, string> reportProgress,
+                                    string NetLogPath = null,
+                                    bool ForceNetLogReload = false,
+                                    bool ForceJournalReload = false,
+                                    bool CheckEdsm = false,
                                     int CurrentCommander = Int32.MinValue,
                                     bool Keepuievents = true)
         {
@@ -919,32 +760,39 @@ namespace EliteDangerousCore
             reportProgress(-1, "Resolving systems");
 
             List<JournalEntry> jlist = JournalEntry.GetAll(CurrentCommander).OrderBy(x => x.EventTimeUTC).ThenBy(x => x.Id).ToList();
+
             List<Tuple<JournalEntry, HistoryEntry>> jlistUpdated = new List<Tuple<JournalEntry, HistoryEntry>>();
 
             using (SQLiteConnectionSystem conn = new SQLiteConnectionSystem())
             {
                 HistoryEntry prev = null;
-                foreach (JournalEntry inje in jlist)
+                JournalEntry jprev = null;
+
+                foreach (JournalEntry je in jlist)
                 {
-                    foreach (JournalEntry je in hist.ProcessJournalEntry(inje)) // pass thru the repeat remover..
+                    if (MergeEntries(jprev, je))        // if we merge.. we may have updated info, so reprint.
                     {
-                        if ( je.IsUIEvent && !Keepuievents)              // filter out any UI events
-                        {
-                            System.Diagnostics.Debug.WriteLine("**** Filter out " + je.EventTypeStr + " on " + je.EventTimeLocal.ToString());
-                            continue;
-                        }
+                        jprev.FillInformation(out prev.EventSummary, out prev.EventDescription, out prev.EventDetailedInfo);    // need to keep this up to date..
+                        continue;
+                    }
 
-                        bool journalupdate = false;
-                        HistoryEntry he = HistoryEntry.FromJournalEntry(je, prev, CheckEdsm, out journalupdate, conn, cmdr);
+                    if (je.IsUIEvent && !Keepuievents)              // filter out any UI events
+                    {
+                        System.Diagnostics.Debug.WriteLine("**** Filter out " + je.EventTypeStr + " on " + je.EventTimeLocal.ToString());
+                        continue;
+                    }
 
-                        prev = he;
+                    bool journalupdate = false;
+                    HistoryEntry he = HistoryEntry.FromJournalEntry(je, prev, CheckEdsm, out journalupdate, conn, cmdr);
 
-                        hist.historylist.Add(he);
+                    prev = he;
+                    jprev = je;
 
-                        if (journalupdate)
-                        {
-                            jlistUpdated.Add(new Tuple<JournalEntry, HistoryEntry>(je, he));
-                        }
+                    hist.historylist.Add(he);
+
+                    if (journalupdate)
+                    {
+                        jlistUpdated.Add(new Tuple<JournalEntry, HistoryEntry>(je, he));
                     }
                 }
             }
@@ -982,6 +830,131 @@ namespace EliteDangerousCore
             hist.SendEDSMStatusInfo(hist.GetLast, true);
 
             return hist;
+        }
+
+        // go through the history list and recalculate the materials ledger and the materials count, plus any other stuff..
+        public void ProcessUserHistoryListEntries(Func<HistoryList, List<HistoryEntry>> hlfilter)
+        {
+            List<HistoryEntry> hl = hlfilter(this);
+
+            using (SQLiteConnectionUser conn = new SQLiteConnectionUser())      // splitting the update into two, one using system, one using user helped
+            {
+                for (int i = 0; i < hl.Count; i++)
+                {
+                    HistoryEntry he = hl[i];
+                    JournalEntry je = he.journalEntry;
+
+                    he.ProcessWithUserDb(je, (i > 0) ? hl[i - 1] : null, this, conn);        // let the HE do what it wants to with the user db
+
+                    Debug.Assert(he.MaterialCommodity != null);
+
+                    // **** REMEMBER NEW Journal entry needs this too *****************
+
+                    cashledger.Process(je, conn);            // update the ledger     
+                    he.Credits = cashledger.CashTotal;
+
+                    Tuple<ShipInformation, ModulesInStore> ret = shipinformationlist.Process(je, conn);  // the ships
+                    he.ShipInformation = ret.Item1;
+                    he.StoredModules = ret.Item2;
+
+                    he.MissionList = missionlistaccumulator.Process(je, he.System, he.WhereAmI, conn);                           // the missions
+
+                    if (je.EventTypeID == JournalTypeEnum.Scan)
+                    {
+                        if (!this.starscan.AddScanToBestSystem(je as JournalScan, i, hl))
+                        {
+                            System.Diagnostics.Debug.WriteLine("******** Cannot add scan to system " + (je as JournalScan).BodyName + " in " + he.System.name);
+                        }
+                    }
+                }
+            }
+        }
+
+        public static int MergeTypeDelay(JournalEntry je)   //0 = none
+        {
+            if (je.EventTypeID == JournalTypeEnum.Friends)
+                return 2000;
+            else if (je.EventTypeID == JournalTypeEnum.FuelScoop)
+                return 10000;
+            else
+                return 0;
+        }
+
+        // true if merged back to previous..
+        public static bool MergeEntries(JournalEntry prev, JournalEntry je)
+        {
+            if (prev != null)
+            {
+                if (je.EventTypeID == JournalTypeEnum.FuelScoop && prev.EventTypeID == JournalTypeEnum.FuelScoop)  // merge scoops
+                {
+                    EliteDangerousCore.JournalEvents.JournalFuelScoop jfs = je as EliteDangerousCore.JournalEvents.JournalFuelScoop;
+                    EliteDangerousCore.JournalEvents.JournalFuelScoop jfsprev = prev as EliteDangerousCore.JournalEvents.JournalFuelScoop;
+                    jfsprev.Scooped += jfs.Scooped;
+                    jfsprev.Total = jfs.Total;
+                    System.Diagnostics.Debug.WriteLine("Merge FS " + jfsprev.EventTimeUTC);
+                    return true;
+                }
+                else if (je.EventTypeID == JournalTypeEnum.Friends && prev.EventTypeID == JournalTypeEnum.Friends) // merge friends
+                {
+                    EliteDangerousCore.JournalEvents.JournalFriends jfprev = prev as EliteDangerousCore.JournalEvents.JournalFriends;
+                    jfprev.AddFriend(je.GetJson());
+                    System.Diagnostics.Debug.WriteLine("Merge Friends " + jfprev.EventTimeUTC + " " + jfprev.NameList.Count);
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+
+
+        public void SendEDSMStatusInfo(HistoryEntry he, bool async)     // he points to ship info to send from..  may be null from one feed function
+        {
+            if (CommanderId >= 0 && he != null)
+            {
+                var commander = EDCommander.GetCommander(CommanderId);
+
+                string edsmname = commander.Name;
+                if (!string.IsNullOrEmpty(commander.EdsmName))
+                    edsmname = commander.EdsmName;
+
+                if (!commander.SyncToEdsm || string.IsNullOrEmpty(commander.APIKey) || string.IsNullOrEmpty(edsmname))
+                    return;
+
+                EDSMClass edsm = new EDSMClass { apiKey = commander.APIKey, commanderName = edsmname };
+
+                // find last ship info currently
+                HistoryEntry lastshipinfocurrenthe = GetLastHistoryEntry(x => x.ShipInformation != null && x.ShipInformation.SubVehicle == ShipInformation.SubVehicleType.None);
+
+                // based on he position, find one before it with ship info that is a normal si not a srv
+                HistoryEntry lastshipinfohe = GetLastHistoryEntry(x => x.ShipInformation != null && x.ShipInformation.SubVehicle == ShipInformation.SubVehicleType.None, he);
+
+                long loan = 0;
+                long cash = 0;
+
+                if (lastshipinfohe != null)       // we have a ship info
+                {
+                    // and based on that position, find a last load game.  May be null
+                    HistoryEntry lastloadgamehe = GetLastHistoryEntry(x => x.EntryType == JournalTypeEnum.LoadGame, lastshipinfohe);
+                    loan = (lastloadgamehe != null) ? ((JournalLoadGame)lastloadgamehe.journalEntry).Loan : 0;
+                    cash = (lastloadgamehe != null) ? ((JournalLoadGame)lastloadgamehe.journalEntry).Credits : 0;
+                }
+
+                JournalProgress progress = historylist.FindLast(x => x.EntryType == JournalTypeEnum.Progress).journalEntry as JournalProgress;
+                JournalRank rank = historylist.FindLast(x => x.EntryType == JournalTypeEnum.Rank).journalEntry as JournalRank;
+
+                if (async)
+                {
+                    Task edsmtask = Task.Factory.StartNew(() =>
+                    {
+                        edsm.SendShipInfo(lastshipinfohe?.ShipInformation, lastshipinfohe?.MaterialCommodity, lastshipinfohe?.MaterialCommodity?.CargoCount ?? 0, lastshipinfocurrenthe?.ShipInformation, cashledger?.CashTotal ?? cash, loan, progress, rank);
+                    });
+                }
+                else
+                {
+                    edsm.SendShipInfo(lastshipinfohe?.ShipInformation, lastshipinfohe?.MaterialCommodity, lastshipinfohe?.MaterialCommodity?.CargoCount ?? 0, lastshipinfocurrenthe?.ShipInformation, cashledger?.CashTotal ?? cash, loan, progress, rank);
+                }
+            }
         }
 
         #endregion

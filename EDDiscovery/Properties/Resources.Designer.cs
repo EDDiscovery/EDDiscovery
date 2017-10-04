@@ -546,6 +546,16 @@ namespace EDDiscovery.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap shoppinglist {
+            get {
+                object obj = ResourceManager.GetObject("shoppinglist", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap SizeSelectorsLarge {
             get {
                 object obj = ResourceManager.GetObject("SizeSelectorsLarge", resourceCulture);

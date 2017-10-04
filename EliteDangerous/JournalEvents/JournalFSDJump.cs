@@ -112,59 +112,18 @@ Examples of trending states:
         {
             RealJournalEvent = evt["FuelUsed"].Empty(); // Old pre ED 2.2 messages has no Fuel used fields
 
-            // base class does StarSystem/StarPos
+            // base class does StarSystem/StarPos/Faction/Powerplay
 
-            Allegiance = JSONObjectExtensions.GetMultiStringDef(evt, new string[] { "SystemAllegiance", "Allegiance" });
-            Economy = JSONObjectExtensions.GetMultiStringDef(evt, new string[] { "SystemEconomy", "Economy" });
-            Economy_Localised = JSONObjectExtensions.GetMultiStringDef(evt, new string[] { "SystemEconomy_Localised", "Economy_Localised" });
-            Government = JSONObjectExtensions.GetMultiStringDef(evt, new string[] { "SystemGovernment", "Government" });
-            Government_Localised = JSONObjectExtensions.GetMultiStringDef(evt, new string[] { "", "SystemGovernment_Localised" });
-            Security = JSONObjectExtensions.GetMultiStringDef(evt, new string[] { "", "SystemSecurity" });
-            Security_Localised = JSONObjectExtensions.GetMultiStringDef(evt, new string[] { "", "SystemSecurity_Localised" });
-            Population = evt["Population"].LongNull();
             JumpDist = evt["JumpDist"].Double();
             FuelUsed = evt["FuelUsed"].Double();
             FuelLevel = evt["FuelLevel"].Double();
             BoostUsed = evt["BoostUsed"].Bool();
             BoostValue = evt["BoostUsed"].Int();
 
-            Faction = JSONObjectExtensions.GetMultiStringDef(evt, new string[] { "SystemFaction", "Faction" });
-            FactionState = evt["FactionState"].Str();           // PRE 2.3 .. not present in newer files, fixed up in next bit of code
-
-            if (evt["Factions"] != null)
-            {
-                Factions = evt["Factions"]?.ToObject<FactionInformation[]>().OrderByDescending(x => x.Influence).ToArray();  // POST 2.3
-                int i = Array.FindIndex(Factions, x => x.Name == Faction);
-                if (i != -1)
-                    FactionState = Factions[i].FactionState;        // set to State of controlling faction
-            }
-
-            PowerplayState = evt["PowerplayState"].Str();
-            if (!evt["Powers"].Empty())
-                Powers = evt.Value<JArray>("Powers").Values<string>().ToArray();
-
             JToken jm = evt["EDDMapColor"];
             MapColor = jm.Int(EliteDangerousCore.EliteConfigInstance.InstanceConfig.DefaultMapColour);
             if (jm.Empty())
                 evt["EDDMapColor"] = EliteDangerousCore.EliteConfigInstance.InstanceConfig.DefaultMapColour;      // new entries get this default map colour if its not already there
-
-            // Allegiance without Faction only occurs in Training
-            if (!String.IsNullOrEmpty(Allegiance) && Faction == null)
-            {
-                IsTrainingEvent = true;
-            }
-        }
-
-        public class FactionInformation
-        {
-            public string Name { get; set; }
-            public string FactionState { get; set; }
-            public string Government { get; set; }
-            public double Influence { get; set; }
-            public string Allegiance { get; set; }
-
-            public JournalLocation.PowerStatesInfo[] PendingStates { get; set; }
-            public JournalLocation.PowerStatesInfo[] RecoveringStates { get; set; }
         }
 
         public double JumpDist { get; set; }
@@ -172,22 +131,8 @@ Examples of trending states:
         public double FuelLevel { get; set; }
         public bool BoostUsed { get; set; }
         public int BoostValue { get; set; }
-        public string Faction { get; set; }
-        public string FactionState { get; set; }
-        public string Allegiance { get; set; }
-        public string Economy { get; set; }
-        public string Economy_Localised { get; set; }
-        public string Government { get; set; }
-        public string Government_Localised { get; set; }
-        public string Security { get; set; }
-        public string Security_Localised { get; set; }
-        public long? Population { get; set; }
-        public string PowerplayState { get; set; }
-        public string[] Powers { get; set; }
-        public FactionInformation[] Factions;
         public int MapColor { get; set; }
         public bool RealJournalEvent { get; private set; } // True if real ED 2.2+ journal event and not pre 2.2 imported.
-        public bool IsTrainingEvent { get; private set; } // True if detected to be in training
 
         public override void FillInformation(out string summary, out string info, out string detailed)  //V
         {

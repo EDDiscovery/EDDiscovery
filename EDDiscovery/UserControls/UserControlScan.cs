@@ -150,7 +150,7 @@ namespace EDDiscovery.UserControls
             HideInfo();
 
             imagebox.ClearImageList();  // does not clear the image, render will do that
-            rtbSystemInfo.Text = "";
+            lblSystemInfo.Text = "";
 
             if (last_he == null)
             {
@@ -275,9 +275,9 @@ namespace EDDiscovery.UserControls
 
         private void BuildSystemInfo(StarScan.SystemNode system)
         {
-            //systems are small... if they get too big and iterating repeatedly is a problem we'll have to move to a node-by-node
-            rtbSystemInfo.Text = BuildScanValue(system);
-
+            //systems are small... if they get too big and iterating repeatedly is a problem we'll have to move to a node-by-node approach, and move away from a single-line label
+            lblSystemInfo.Text = BuildScanValue(system);
+            
         }
 
         private string BuildScanValue(StarScan.SystemNode system)
@@ -292,7 +292,7 @@ namespace EDDiscovery.UserControls
                 }
             }
 
-            return $"Approx system scan value: {value:N0}";
+            return $"Approx value (known bodies): {value:N0}";
         }
 
         // return right bottom of area used from curpos
@@ -778,10 +778,6 @@ namespace EDDiscovery.UserControls
                 rtbNodeInfo.Size = new Size(panelStars.Width * 6 / 16, h);
                 rtbNodeInfo.PerformLayout();    // not sure why i need this..
             }
-
-            rtbSystemInfo.Location = new Point(panelStars.Width / 2 + panelStars.Width / 16, 10);
-            rtbSystemInfo.Size = new Size(panelStars.Width * 6 / 16, 40);
-            rtbSystemInfo.PerformLayout();    // not sure why i need this..
         }
 
         private void panelStars_Click(object sender, EventArgs e)

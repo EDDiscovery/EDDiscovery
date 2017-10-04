@@ -158,6 +158,7 @@ namespace EDDiscovery
             Controller.OnReportProgress += Controller_ReportProgress;
             Controller.OnSyncComplete += Controller_SyncComplete;
             Controller.OnSyncStarting += Controller_SyncStarting;
+            Controller.OnInitialisationComplete += Controller_InitialisationComplete;
         }
 
         public void Init(Action<string> msg)    // called from EDDApplicationContext .. continues on with the construction of the form
@@ -374,9 +375,6 @@ namespace EDDiscovery
             journalViewControl1.LoadLayoutSettings();
             gridControl.LoadLayoutSettings();
 
-            if (EDDConfig.AutoLoadPopOuts && EDDOptions.Instance.NoWindowReposition == false)
-                PopOuts.LoadSavedPopouts();
-
             string tab = SQLiteConnectionUser.GetSettingString("MajorTab", "");
             SelectTabPage(tab);
         }
@@ -447,8 +445,15 @@ namespace EDDiscovery
             settings.UpdateCommandersListBox();
         }
 
+        private void Controller_InitialisationComplete()
+        {
+            if (EDDConfig.AutoLoadPopOuts && EDDOptions.Instance.NoWindowReposition == false)
+                PopOuts.LoadSavedPopouts();  //moved from initial load so we don't open these before we can draw them properly
+        }
+
         private void Controller_RefreshComplete()
         {
+            
             RefreshButton(true);
             actioncontroller.ActionRunOnRefresh();
 

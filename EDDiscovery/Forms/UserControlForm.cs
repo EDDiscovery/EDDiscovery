@@ -160,6 +160,16 @@ namespace EDDiscovery.Forms
                 return null;
         }
 
+        public int TitleBarMinWidth()
+        {
+            int retval = 0;
+            foreach(Control c in panelTop.Controls)
+            {
+                if (c.Visible) retval += c.Width;
+            }
+            return retval;
+        }
+
 #endregion
 
 #region View Implementation
