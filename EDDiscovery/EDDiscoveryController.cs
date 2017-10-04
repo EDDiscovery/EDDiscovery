@@ -329,10 +329,10 @@ namespace EDDiscovery
 
         private static void InitializeDatabases()
         {
-            Trace.WriteLine("Initializing database");
+            Debug.WriteLine((Environment.TickCount % 100000) + " Initializing database");
             SQLiteConnectionUser.Initialize();
             SQLiteConnectionSystem.Initialize();
-            Trace.WriteLine("Database initialization complete");
+            Debug.WriteLine((Environment.TickCount % 100000) + " Database initialization complete");
         }
 
         private static void InitializeConfig()
@@ -373,6 +373,8 @@ namespace EDDiscovery
             }
 
             SQLiteConnectionUser.EarlyReadRegister();
+
+            Debug.WriteLine((Environment.TickCount % 100000) + " Init config finished");
         }
 
         #endregion
@@ -381,6 +383,7 @@ namespace EDDiscovery
 
         private void CheckSystems(Func<bool> cancelRequested, Action<int, string> reportProgress)  // ASYNC process, done via start up, must not be too slow.
         {
+            Debug.WriteLine((Environment.TickCount % 100000) + " Check systems");
             reportProgress(-1, "");
 
             string rwsystime = SQLiteConnectionSystem.GetSettingString("EDSMLastSystems", "2000-01-01 00:00:00"); // Latest time from RW file.
@@ -425,6 +428,7 @@ namespace EDDiscovery
                 if (DateTime.UtcNow.Subtract(time).TotalDays > 6.5)     // Get EDDB data once every week.
                     syncstate.performeddbsync = true;
             }
+            Debug.WriteLine((Environment.TickCount % 100000) + " Check systems complete");
         }
 
         #endregion
@@ -433,6 +437,7 @@ namespace EDDiscovery
 
         private void DoPerformSync()
         {
+            Debug.WriteLine((Environment.TickCount % 100000) + " Perform sync");
             try
             {
                 EliteDangerousCore.EDSM.SystemClassEDSM.PerformSync(() => PendingClose, (p, s) => ReportProgress(p, s), LogLine, LogLineHighlight, syncstate);
@@ -470,12 +475,14 @@ namespace EDDiscovery
 
                 resyncRequestedFlag = 0;
             }
+            Debug.WriteLine((Environment.TickCount % 100000) + " Perform sync completed");
         }
 
         private void HistoryFinishedRefreshing(object sender, EventArgs e)
         {
             HistoryRefreshed -= HistoryFinishedRefreshing;
             LogLine("Refreshing complete.");
+            Debug.WriteLine((Environment.TickCount % 100000) + " Refresh complete");
 
             if (syncstate.syncwasfirstrun)
             {
@@ -504,8 +511,10 @@ namespace EDDiscovery
             try
             {
                 refreshWorkerArgs = args;
+                Debug.WriteLine((Environment.TickCount % 100000) + " Load history");
                 hist = HistoryList.LoadHistory(journalmonitor, () => PendingClose, (p, s) => ReportProgress(p, $"Processing log file {s}"), args.NetLogPath, 
                     args.ForceJournalReload, args.ForceJournalReload, args.CheckEdsm, args.CurrentCommander , EDDConfig.Instance.ShowUIEvents );
+                Debug.WriteLine((Environment.TickCount % 100000) + " Load history complete");
             }
             catch (Exception ex)
             {
@@ -545,6 +554,8 @@ namespace EDDiscovery
 
                 refreshRequestedFlag = 0;
                 readyForNewRefresh.Set();
+
+                Debug.WriteLine((Environment.TickCount % 100000) + " refresh history complete");
             }
         }
 
