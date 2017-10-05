@@ -490,10 +490,17 @@ namespace EliteDangerousCore
             double dist;
             double dx, dy, dz;
             var list = distlist.Values.ToList();
+            HashSet<long> listids = new HashSet<long>();
+            HashSet<string> listnames = new HashSet<string>(StringComparer.InvariantCultureIgnoreCase);
+            foreach (ISystem sys in list)
+            {
+                listids.Add(sys.id);
+                listnames.Add(sys.name);
+            }
 
             foreach (HistoryEntry pos in historylist)
             {
-                if (pos.System.HasCoordinate && !list.Any(qx => (qx.id == pos.System.id || qx.name.Equals(pos.System.name, StringComparison.InvariantCultureIgnoreCase))))
+                if (pos.System.HasCoordinate && !listids.Contains(pos.System.id) && !listnames.Contains(pos.System.name))
                 {
                     dx = (pos.System.x - x);
                     dy = (pos.System.y - y);
@@ -506,7 +513,7 @@ namespace EliteDangerousCore
                     {
                         if (distlist.Count < maxitems)          // if less than max, add..
                             distlist.Add(dist, pos.System);
-                        else if (dist < distlist.Last().Key)   // if last entry (which must be the biggest) is greater than dist..
+                        else if (dist < distlist.Keys[distlist.Count - 1])   // if last entry (which must be the biggest) is greater than dist..
                         {
                             distlist.Add(dist, pos.System);           // add in
                             distlist.RemoveAt(maxitems);        // remove last..

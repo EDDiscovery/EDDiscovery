@@ -272,6 +272,21 @@ namespace EliteDangerousCore.EDSM
             }
         }
 
+        private class EDSMDumpSystemCoords
+        {
+            public double x;
+            public double y;
+            public double z;
+        }
+
+        private class EDSMDumpSystem
+        {
+            public string name;
+            public long id;
+            public DateTime date;
+            public EDSMDumpSystemCoords coords;
+        }
+
         private static long DoParseEDSMUpdateSystemsReader(JsonTextReader jr, ref string date, ref bool outoforder, Func<bool> cancelRequested, Action<int, string> reportProgress, bool useCache = true, bool useTempSystems = false)
         {
             DateTime maxdate;
@@ -291,11 +306,14 @@ namespace EliteDangerousCore.EDSM
             string edsmsysTableName = useTempSystems ? "EdsmSystems_temp" : "EdsmSystems";
             Stopwatch sw = Stopwatch.StartNew();
             const int BlockSize = 10000;
+            JsonSerializer ser = new JsonSerializer();
+            ser.MissingMemberHandling = MissingMemberHandling.Ignore;
+            ser.Culture = CultureInfo.InvariantCulture;
 
             while (!cancelRequested())
             {
                 bool jr_eof = false;
-                List<JObject> objs = new List<JObject>(BlockSize);
+                List<EDSMDumpSystem> objs = new List<EDSMDumpSystem>(BlockSize);
 
                 while (!cancelRequested())
                 {
@@ -303,7 +321,7 @@ namespace EliteDangerousCore.EDSM
                     {
                         if (jr.TokenType == JsonToken.StartObject)
                         {
-                            objs.Add(JObject.Load(jr));
+                            objs.Add(ser.Deserialize<EDSMDumpSystem>(jr));
 
                             if (objs.Count >= BlockSize)
                             {
@@ -318,7 +336,7 @@ namespace EliteDangerousCore.EDSM
                     }
                 }
 
-                IEnumerator<JObject> jo_enum = objs.GetEnumerator();
+                IEnumerator<EDSMDumpSystem> jo_enum = objs.GetEnumerator();
                 bool jo_enum_finished = false;
 
                 while (!jo_enum_finished && !cancelRequested())
@@ -397,20 +415,19 @@ namespace EliteDangerousCore.EDSM
                                         break;
                                     }
 
-                                    JObject jo = jo_enum.Current;
+                                    EDSMDumpSystem jo = jo_enum.Current;
+                                    EDSMDumpSystemCoords coords = jo.coords;
 
-                                    JObject coords = (JObject)jo["coords"];
-
-                                    if (coords != null && (coords["x"].Type == JTokenType.Float || coords["x"].Type == JTokenType.Integer))
+                                    if (coords != null)
                                     {
-                                        double x = coords["x"].Value<double>();
-                                        double y = coords["y"].Value<double>();
-                                        double z = coords["z"].Value<double>();
-                                        long edsmid = jo["id"].Value<long>();
-                                        string name = jo["name"].Value<string>();
+                                        double x = coords.x;
+                                        double y = coords.y;
+                                        double z = coords.z;
+                                        long edsmid = jo.id;
+                                        string name = jo.name;
                                         int gridid = GridId.Id(x, z);
                                         int randomid = rnd.Next(0, 99);
-                                        DateTime updatedate = jo["date"].Value<DateTime>();
+                                        DateTime updatedate = jo.date;
                                         histogramsystems[gridid]++;
 
                                         if (updatedate > maxdate)
