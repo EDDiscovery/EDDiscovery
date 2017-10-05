@@ -293,7 +293,7 @@ namespace EDDiscovery.UserControls
                 }
             }
 
-            return $"Approx value (known bodies): {value:N0}";
+            return $"Approx value: {value:N0}";
         }
 
         // return right bottom of area used from curpos
@@ -388,11 +388,10 @@ namespace EDDiscovery.UserControls
                 {
                     var starLabel = sn.customname ?? sn.ownname;
 
-                    var habZone = sc.HabZoneString();
+                    var habZone = sc.GetHabZoneStringLs();
                     if (!string.IsNullOrEmpty(habZone))
                     {
-                        starLabel += Environment.NewLine + $"({habZone})";
-                        labelvoff -= 15;
+                        starLabel += $" ({habZone})";
                     }
 
                     endpoint = CreateImageLabel(pc, sc.GetStarTypeImage(),
