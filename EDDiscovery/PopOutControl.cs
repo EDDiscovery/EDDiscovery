@@ -65,8 +65,9 @@ namespace EDDiscovery.Forms
             Grid,
             StarList,
             EstimatedValues,
-            EDSM,
+            EDSM,                   // 24
             ShoppingList,
+            Route,
             // ****** ADD More here DO NOT REORDER *****
             EndList,                // Keep here, used to work out MaxTabButtons
         };
@@ -89,6 +90,7 @@ namespace EDDiscovery.Forms
             { new PopOutInfo( PopOuts.Missions, "Missions", "Missions", EliteDangerous.Properties.Resources.missionaccepted , "Display Missions") },
             { new PopOutInfo( PopOuts.Synthesis, "Synthesis", "Synthesis", EliteDangerous.Properties.Resources.synthesis, "Display Synthesis planner") },
             { new PopOutInfo( PopOuts.Engineering, "Engineering", "Engineering", EliteDangerous.Properties.Resources.engineercraft , "Display Engineering planner") },
+            { new PopOutInfo( PopOuts.ShoppingList, "Shopping List", "ShoppingList", EDDiscovery.Properties.Resources.shoppinglist, "Shopping list of materials combining synthesis and engineering") },
             { new PopOutInfo( PopOuts.Scan, "Scan", "Scan", EliteDangerous.Properties.Resources.scan, "Display scan data", transparent: false) },
             { new PopOutInfo( PopOuts.EstimatedValues, "Estimated Values", "EstimatedValues", EliteDangerous.Properties.Resources.estval, "Display estimated scan values bodies in system", transparent: false) },
             { new PopOutInfo( PopOuts.Modules, "Loadout", "Modules", EliteDangerous.Properties.Resources.module, "Display Loadout for current ships and also stored modules") },
@@ -96,13 +98,13 @@ namespace EDDiscovery.Forms
             { new PopOutInfo( PopOuts.ScreenShot, "Screen Shot", "ScreenShot", EliteDangerous.Properties.Resources.screenshot, "Display the screen shot view") },
             { new PopOutInfo( PopOuts.Statistics, "Statistics", "Stats", EDDiscovery.Properties.Resources.stats, "Display statistics from the history") },
             { new PopOutInfo( PopOuts.SystemInformation, "System Information", "SystemInfo", EDDiscovery.Properties.Resources.starsystem , "Display System Information" , transparent:false ) },
+            { new PopOutInfo( PopOuts.EDSM, "EDSM Star Finder", "EDSMStarFinder", EDDiscovery.Properties.Resources.edsm24, "Display the EDSM Star finder") },
+            { new PopOutInfo( PopOuts.Route, "Route Finder", "RouteFinder", EDDiscovery.Properties.Resources.route, "Find Routes") },
             { new PopOutInfo( PopOuts.Spanel, "Summary Panel", "Spanel", EDDiscovery.Properties.Resources.spanel, "Display the travel system panel" , transparent: false ) },
             { new PopOutInfo( PopOuts.Trippanel, "Trip Computer", "Trippanel", EDDiscovery.Properties.Resources.trippanel, "Display the trip computer" , transparent: false) },
             { new PopOutInfo( PopOuts.NotePanel, "Notes", "NotePanel", EDDiscovery.Properties.Resources.notes, "Display current notes on a system" , transparent: false) },
             { new PopOutInfo( PopOuts.RouteTracker, "Route Tracker", "RouteTracker", EDDiscovery.Properties.Resources.routetracker, "Display the route tracker", transparent: false) },
-            { new PopOutInfo( PopOuts.EDSM, "EDSM Star Finder", "EDSMStarFinder", EDDiscovery.Properties.Resources.edsm24, "Display the EDSM Star finder") },
             { new PopOutInfo( PopOuts.Grid, "The Grid", "TheGrid", EDDiscovery.Properties.Resources.grid, "Display the grid which allows other panels to be placed on it" , transparent:false) },
-            { new PopOutInfo( PopOuts.ShoppingList, "Shopping List", "ShoppingList", EDDiscovery.Properties.Resources.shoppinglist, "Shopping list of materials combining synthesis and engineering") }
         };
 
         public class PopOutInfo
@@ -187,6 +189,7 @@ namespace EDDiscovery.Forms
                 case PopOuts.EDSM: return new UserControlEDSM();
                 case PopOuts.Grid: return new UserControlContainerGrid();
                 case PopOuts.ShoppingList: return new UserControlShoppingList();
+                case PopOuts.Route: return new UserControlRoute();
                 default: return null;
             }
         }

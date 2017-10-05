@@ -121,6 +121,7 @@
     <Compile Include="EliteDangerous\ModuleEDID.cs" />
     <Compile Include="EliteDangerous\NetLogClass.cs" />
     <Compile Include="EliteDangerous\NetLogReader.cs" />
+    <Compile Include="EliteDangerous\RoutePlotter.cs" />
     <Compile Include="EliteDangerous\ShipInformation.cs" />
     <Compile Include="EliteDangerous\StarScan.cs" />
     <Compile Include="EliteDangerous\SystemCache.cs" />

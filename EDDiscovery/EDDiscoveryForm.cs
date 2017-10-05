@@ -122,6 +122,8 @@ namespace EDDiscovery
         public event Action<JournalEntry> OnNewJournalEntry { add { Controller.OnNewJournalEntry += value; } remove { Controller.OnNewJournalEntry -= value; } }
         public event Action<string, Color> OnNewLogEntry { add { Controller.OnNewLogEntry += value; } remove { Controller.OnNewLogEntry -= value; } }
         public event Action<EliteDangerousCore.CompanionAPI.CompanionAPIClass,HistoryEntry> OnNewCompanionAPIData;
+        public event Action<List<ISystem>> OnNewCalculatedRoute;        // route plotter has a new one
+
         #endregion
 
         #region Logging
@@ -188,11 +190,10 @@ namespace EDDiscovery
 
             trilaterationControl.InitControl(this);
             travelHistoryControl.InitControl(this);
-
             settings.InitControl(this);
             journalViewControl1.InitControl(this, 0);
             gridControl.InitControl(this, 0);
-            routeControl1.InitControl(this);
+            routeControl1.InitControl(this,travelHistoryControl.GetTravelGrid,0);   // okay, this route is tied to the main travel grid
             savedRouteExpeditionControl1.InitControl(this);
 
             Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " Map manager");
@@ -262,6 +263,8 @@ namespace EDDiscovery
                 travelHistoryControl.LoadLayoutSettings();
                 Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " EDF Load layout of JVC");
                 journalViewControl1.LoadLayoutSettings();
+                Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " EDF Load layout of Route");
+                routeControl1.LoadLayoutSettings();
                 Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " EDF Load layout GC");
                 gridControl.LoadLayoutSettings();
                 Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " EDF Load layout Major Tab");
@@ -271,7 +274,6 @@ namespace EDDiscovery
 
                 Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " EDF Load show info panel");
                 ShowInfoPanel("Loading. Please wait!", true);
-                routeControl1.travelhistorycontrol1 = travelHistoryControl;
                 settings.InitSettingsTab();
                 savedRouteExpeditionControl1.LoadControl();
 
@@ -434,9 +436,6 @@ namespace EDDiscovery
         {
             screenshotconverter.Start();
 
-            routeControl1.EnableRouteTab(); // now we have systems, we can update this..
-
-            routeControl1.travelhistorycontrol1 = travelHistoryControl;
             ShowInfoPanel("", false);
 
             checkInstallerTask = CheckForNewInstallerAsync();
@@ -1252,6 +1251,12 @@ namespace EDDiscovery
         {
             if (OnNoteChanged != null)
                 OnNoteChanged(sender, snc,committed);
+        }
+
+        public void NewCalculatedRoute(List<ISystem> list)
+        {
+            if (OnNewCalculatedRoute != null)
+                OnNewCalculatedRoute(list);
         }
 
         #endregion
