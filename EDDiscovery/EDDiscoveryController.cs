@@ -87,7 +87,7 @@ namespace EDDiscovery
         #endregion
 
         #region Private vars
-        private List<JournalEntry> journalqueue = new List<JournalEntry>();
+        private Queue<JournalEntry> journalqueue = new Queue<JournalEntry>();
         private System.Threading.Timer journalqueuedelaytimer;
 
         #endregion
@@ -572,13 +572,13 @@ namespace EDDiscovery
             if (playdelay > 0)  // if delaying to see if a companion event occurs. add it to list. Set timer so we pick it up
             {
                 System.Diagnostics.Debug.WriteLine(Environment.TickCount + " Delay Play queue " + je.EventTypeID + " Delay for " + playdelay);
-                journalqueue.Add(je);
+                journalqueue.Enqueue(je);
                 journalqueuedelaytimer.Change(playdelay, Timeout.Infinite);
             }
             else
             {
                 journalqueuedelaytimer.Change(Timeout.Infinite, Timeout.Infinite);  // stop the timer, but if it occurs before this, not the end of the world
-                journalqueue.Add(je);  // add it to the play list.
+                journalqueue.Enqueue(je);  // add it to the play list.
                 //System.Diagnostics.Debug.WriteLine(Environment.TickCount + " No delay, issue " + je.EventTypeID );
                 PlayJournalList();    // and play
             }
@@ -591,8 +591,10 @@ namespace EDDiscovery
 
             JournalEntry prev = null;  // we start afresh from the point of merging so we don't merge with previous ones already shown
 
-            foreach (JournalEntry je in journalqueue)
+            while (journalqueue.Count > 0)
             {
+                JournalEntry je = journalqueue.Dequeue();
+
                 if (!HistoryList.MergeEntries(prev, je))                // if not merged
                 {
                     if (prev != null)                       // no merge, so if we have a merge candidate on top, run actions on it.
