@@ -159,7 +159,7 @@ namespace EDDiscovery.UserControls
 
             routeSystems = p.RouteIterative(AppendData);
 
-            this.BeginInvoke(new Action(() => ToggleButtons(true)));
+            this.BeginInvoke(new Action(() => { discoveryform.NewCalculatedRoute(routeSystems); ToggleButtons(true); }));
         }
 
         private void AppendData(RoutePlotter.ReturnInfo info)
