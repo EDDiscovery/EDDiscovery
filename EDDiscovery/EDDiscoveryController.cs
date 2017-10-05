@@ -528,6 +528,8 @@ namespace EDDiscovery
         {
             if (!PendingClose)
             {
+                Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " Refresh history worker completed");
+
                 if (hist != null)
                 {
                     history.Copy(hist);
@@ -541,12 +543,18 @@ namespace EDDiscovery
                     LogLine("Refresh Complete.");
 
                     RefreshDisplays();
+                    Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " Refresh Displays Completed");
                 }
+
+                Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " HR Refresh");
 
                 HistoryRefreshed?.Invoke(this, EventArgs.Empty);        // Internal hook call
 
+                Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " JMOn");
+
                 journalmonitor.StartMonitor();
 
+                Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " RFcomplete");
                 OnRefreshComplete?.Invoke();                            // History is completed
 
                 if (history.CommanderId >= 0)
