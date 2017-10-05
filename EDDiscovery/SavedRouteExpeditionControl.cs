@@ -42,6 +42,8 @@ namespace EDDiscovery
         private int _dragRowIndex;
         private bool _suppressCombo = false;
 
+        private List<ISystem> latestplottedroute;
+
         public SavedRouteExpeditionControl()
         {
             InitializeComponent();
@@ -54,6 +56,7 @@ namespace EDDiscovery
         {
             _discoveryForm = discoveryForm;
             edsm = new EDSMClass();
+            _discoveryForm.OnNewCalculatedRoute += _discoveryForm_OnNewCalculatedRoute;
         }
 
         public void LoadControl()
@@ -848,12 +851,16 @@ namespace EDDiscovery
             UpdateSystemRows();
         }
 
+        private void _discoveryForm_OnNewCalculatedRoute(List<ISystem> obj)
+        {
+            latestplottedroute = obj;
+        }
+
         private void toolStripButtonImportRoute_Click(object sender, EventArgs e)
         {
-            if (_discoveryForm.RouteControl.RouteSystems == null
-                || _discoveryForm.RouteControl.RouteSystems.Count == 0)
+            if (latestplottedroute == null || latestplottedroute.Count==0)
             {
-                ExtendedControls.MessageBoxTheme.Show(ParentForm, "Please create a route on the route tab", "Import from route tab");
+                ExtendedControls.MessageBoxTheme.Show(ParentForm, "Please create a route on a route panel", "Import from route panel");
                 return;
             }
             else if (!PromptAndSaveIfNeeded())
@@ -862,7 +869,7 @@ namespace EDDiscovery
             ClearRoute();
             toolStripComboBoxRouteSelection.SelectedItem = null;
 
-            foreach (ISystem s in _discoveryForm.RouteControl.RouteSystems)
+            foreach (ISystem s in latestplottedroute)
             {
                 dataGridViewRouteSystems.Rows.Add(s.name, "", "");
             }
