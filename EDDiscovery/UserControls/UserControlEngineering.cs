@@ -1219,6 +1219,7 @@ namespace EDDiscovery.UserControls
                 Wanted[rno] = 0;
             }
             Display();
+            if (OnChangedEngineeringWanted != null) OnChangedEngineeringWanted(wantedList);
         }
     }
 }
