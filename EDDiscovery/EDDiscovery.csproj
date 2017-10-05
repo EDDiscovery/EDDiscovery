@@ -760,6 +760,7 @@
     <None Include="Resources\edsm16.png" />
     <None Include="Resources\Volcano.bmp" />
     <None Include="Resources\Terraformable.png" />
+    <None Include="Resources\route.png" />
     <Content Include="x86\Microsoft.VC100.CRT\msvcp100.dll" />
     <Content Include="x86\Microsoft.VC100.CRT\msvcr100.dll" />
     <EmbeddedResource Include="2DMap\Form2DMap.resx">

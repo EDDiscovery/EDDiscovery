@@ -31,7 +31,6 @@
             this.components = new System.ComponentModel.Container();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.label5 = new System.Windows.Forms.Label();
             this.buttonExtExcel = new ExtendedControls.ButtonExt();
             this.textBox_ToName = new ExtendedControls.TextBoxBorder();
             this.textBox_FromName = new ExtendedControls.TextBoxBorder();
@@ -83,7 +82,6 @@
             // 
             // panel1
             // 
-            this.panel1.Controls.Add(this.label5);
             this.panel1.Controls.Add(this.buttonExtExcel);
             this.panel1.Controls.Add(this.textBox_ToName);
             this.panel1.Controls.Add(this.textBox_FromName);
@@ -116,17 +114,8 @@
             this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(1094, 159);
+            this.panel1.Size = new System.Drawing.Size(706, 193);
             this.panel1.TabIndex = 0;
-            // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(722, 108);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(53, 13);
-            this.label5.TabIndex = 60;
-            this.label5.Text = "Export To";
             // 
             // buttonExtExcel
             // 
@@ -135,7 +124,7 @@
             this.buttonExtExcel.ButtonDisabledScaling = 0.5F;
             this.buttonExtExcel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonExtExcel.Image = global::EDDiscovery.Properties.Resources.excel;
-            this.buttonExtExcel.Location = new System.Drawing.Point(812, 102);
+            this.buttonExtExcel.Location = new System.Drawing.Point(296, 148);
             this.buttonExtExcel.Name = "buttonExtExcel";
             this.buttonExtExcel.Size = new System.Drawing.Size(24, 24);
             this.buttonExtExcel.TabIndex = 59;
@@ -301,7 +290,7 @@
             this.cmd3DMap.BorderColorScaling = 1.25F;
             this.cmd3DMap.ButtonColorScaling = 0.5F;
             this.cmd3DMap.ButtonDisabledScaling = 0.5F;
-            this.cmd3DMap.Location = new System.Drawing.Point(725, 60);
+            this.cmd3DMap.Location = new System.Drawing.Point(174, 148);
             this.cmd3DMap.Name = "cmd3DMap";
             this.cmd3DMap.Size = new System.Drawing.Size(111, 26);
             this.cmd3DMap.TabIndex = 50;
@@ -350,7 +339,7 @@
             this.textBox_Range.BorderColorScaling = 0.5F;
             this.textBox_Range.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBox_Range.ControlBackground = System.Drawing.SystemColors.Control;
-            this.textBox_Range.Location = new System.Drawing.Point(631, 13);
+            this.textBox_Range.Location = new System.Drawing.Point(482, 121);
             this.textBox_Range.Multiline = false;
             this.textBox_Range.Name = "textBox_Range";
             this.textBox_Range.ReadOnly = true;
@@ -400,7 +389,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(694, 17);
+            this.label1.Location = new System.Drawing.Point(547, 150);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(14, 13);
             this.label1.TabIndex = 43;
@@ -409,7 +398,7 @@
             // label9
             // 
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(694, 43);
+            this.label9.Location = new System.Drawing.Point(547, 123);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(14, 13);
             this.label9.TabIndex = 44;
@@ -423,7 +412,7 @@
             this.textBox_Distance.BorderColorScaling = 0.5F;
             this.textBox_Distance.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBox_Distance.ControlBackground = System.Drawing.SystemColors.Control;
-            this.textBox_Distance.Location = new System.Drawing.Point(631, 41);
+            this.textBox_Distance.Location = new System.Drawing.Point(482, 154);
             this.textBox_Distance.Multiline = false;
             this.textBox_Distance.Name = "textBox_Distance";
             this.textBox_Distance.ReadOnly = true;
@@ -474,7 +463,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(566, 14);
+            this.label2.Location = new System.Drawing.Point(403, 122);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(52, 13);
             this.label2.TabIndex = 45;
@@ -507,7 +496,7 @@
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(569, 42);
+            this.label7.Location = new System.Drawing.Point(406, 155);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(49, 13);
             this.label7.TabIndex = 46;
@@ -576,7 +565,7 @@
             this.button_Route.ButtonColorScaling = 0.5F;
             this.button_Route.ButtonDisabledScaling = 0.5F;
             this.button_Route.Enabled = false;
-            this.button_Route.Location = new System.Drawing.Point(725, 13);
+            this.button_Route.Location = new System.Drawing.Point(57, 147);
             this.button_Route.Name = "button_Route";
             this.button_Route.Size = new System.Drawing.Size(111, 27);
             this.button_Route.TabIndex = 42;
@@ -669,8 +658,9 @@
             dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
             dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
             this.dataGridViewRoute.RowHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            this.dataGridViewRoute.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
             this.dataGridViewRoute.ScrollBars = System.Windows.Forms.ScrollBars.None;
-            this.dataGridViewRoute.Size = new System.Drawing.Size(1071, 492);
+            this.dataGridViewRoute.Size = new System.Drawing.Size(683, 221);
             this.dataGridViewRoute.TabIndex = 1;
             this.dataGridViewRoute.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewRoute_CellClick);
             this.dataGridViewRoute.MouseDown += new System.Windows.Forms.MouseEventHandler(this.dataGridViewRoute_MouseDown);
@@ -747,10 +737,10 @@
             this.dataViewScrollerPanel1.Controls.Add(this.dataGridViewRoute);
             this.dataViewScrollerPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataViewScrollerPanel1.InternalMargin = new System.Windows.Forms.Padding(0, 0, 3, 0);
-            this.dataViewScrollerPanel1.Location = new System.Drawing.Point(0, 159);
+            this.dataViewScrollerPanel1.Location = new System.Drawing.Point(0, 193);
             this.dataViewScrollerPanel1.Name = "dataViewScrollerPanel1";
             this.dataViewScrollerPanel1.ScrollBarWidth = 20;
-            this.dataViewScrollerPanel1.Size = new System.Drawing.Size(1094, 492);
+            this.dataViewScrollerPanel1.Size = new System.Drawing.Size(706, 221);
             this.dataViewScrollerPanel1.TabIndex = 29;
             this.dataViewScrollerPanel1.VerticalScrollBarDockRight = true;
             // 
@@ -765,13 +755,13 @@
             this.vScrollBarCustom1.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.vScrollBarCustom1.HideScrollBar = true;
             this.vScrollBarCustom1.LargeChange = 0;
-            this.vScrollBarCustom1.Location = new System.Drawing.Point(1071, 21);
+            this.vScrollBarCustom1.Location = new System.Drawing.Point(683, 34);
             this.vScrollBarCustom1.Maximum = -1;
             this.vScrollBarCustom1.Minimum = 0;
             this.vScrollBarCustom1.MouseOverButtonColor = System.Drawing.Color.Green;
             this.vScrollBarCustom1.MousePressedButtonColor = System.Drawing.Color.Red;
             this.vScrollBarCustom1.Name = "vScrollBarCustom1";
-            this.vScrollBarCustom1.Size = new System.Drawing.Size(20, 471);
+            this.vScrollBarCustom1.Size = new System.Drawing.Size(20, 187);
             this.vScrollBarCustom1.SliderColor = System.Drawing.Color.DarkGray;
             this.vScrollBarCustom1.SmallChange = 1;
             this.vScrollBarCustom1.TabIndex = 4;
@@ -790,7 +780,7 @@
             this.Controls.Add(this.dataViewScrollerPanel1);
             this.Controls.Add(this.panel1);
             this.Name = "UserControlRoute";
-            this.Size = new System.Drawing.Size(1094, 651);
+            this.Size = new System.Drawing.Size(706, 414);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewRoute)).EndInit();
@@ -803,7 +793,6 @@
         #endregion
 
         private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.Label label5;
         private ExtendedControls.ButtonExt buttonExtExcel;
         internal ExtendedControls.TextBoxBorder textBox_ToName;
         internal ExtendedControls.TextBoxBorder textBox_FromName;

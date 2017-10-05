@@ -206,7 +206,6 @@ namespace EDDiscovery
                 HistoryEntry currentsys = userControlTravelGrid.GetCurrentHistoryEntry;
 
                 _discoveryForm.Map.UpdateHistorySystem(currentsys.System);      // update some dumb friends
-                _discoveryForm.RouteControl.UpdateHistorySystem(currentsys.System.name);
 
                 if (userControlTravelGrid.GetCurrentHistoryEntry != null)        // paranoia
                     _discoveryForm.ActionRun(Actions.ActionEventEDList.onHistorySelection, userControlTravelGrid.GetCurrentHistoryEntry);
