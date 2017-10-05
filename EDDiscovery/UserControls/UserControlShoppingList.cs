@@ -132,9 +132,10 @@ namespace EDDiscovery.UserControls
 
                 if (shoppinglist.Any())
                 {
+                    wantedList.Append("Needed Mats:\n");
                     foreach (MaterialCommodities c in shoppinglist.OrderBy(mat => mat.name))      // and add new..
                     {
-                        wantedList.AppendFormat("{0} {1} required\n", c.scratchpad, c.name);
+                        wantedList.AppendFormat("  {0} {1}\n", c.scratchpad, c.name);
                     }
 
                     int currentMats = mcl.Where(m => m.category == MaterialCommodityDB.MaterialManufacturedCategory || m.category == MaterialCommodityDB.MaterialRawCategory)
@@ -146,14 +147,14 @@ namespace EDDiscovery.UserControls
 
                     if (currentMats + neededMats > PhysicalInventoryCapacity || currentData + neededData > DataInventoryCapacity)
                     {
-                        wantedList.Append("\nWarning");
+                        wantedList.Append("\nNeeded capacity");
                         if (currentMats + neededMats > PhysicalInventoryCapacity)
                         {
-                            wantedList.AppendFormat("\n   Needed space for materials is {0}\n   Current available is {1}", neededMats, PhysicalInventoryCapacity - currentMats);
+                            wantedList.AppendFormat("\n  {0} materials", currentMats + neededMats - PhysicalInventoryCapacity);
                         }
                         if (currentData + neededData > DataInventoryCapacity)
                         {
-                            wantedList.AppendFormat("\n   Needed space for data is {0}\n   Current available is {1}", neededData, DataInventoryCapacity - currentData);
+                            wantedList.AppendFormat("\n  {0} data", currentData + neededData - DataInventoryCapacity);
                         }
                     }
                 }
