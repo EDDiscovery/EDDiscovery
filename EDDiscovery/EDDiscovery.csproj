@@ -418,6 +418,12 @@
     <Compile Include="UserControls\UserControlEDSM.Designer.cs">
       <DependentUpon>UserControlEDSM.cs</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\UserControlRoute.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\UserControlRoute.Designer.cs">
+      <DependentUpon>UserControlRoute.cs</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\UserControlShoppingList.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -606,6 +612,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\UserControlJournalGrid.resx">
       <DependentUpon>UserControlJournalGrid.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\UserControlRoute.resx">
+      <DependentUpon>UserControlRoute.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\UserControlShoppingList.resx">
       <DependentUpon>UserControlShoppingList.cs</DependentUpon>

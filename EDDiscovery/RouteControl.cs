@@ -146,13 +146,13 @@ namespace EDDiscovery
             lastsys = str;
         }
 
-        private void AppendText(string msg)
+        private void AppendText(RoutePlotter.ReturnInfo info)
         {
             try
             {
                 BeginInvoke((MethodInvoker)delegate
                 {
-                    richTextBox_routeresult.AppendText(msg);
+                    richTextBox_routeresult.AppendText(info.name);
                 });
             }
             catch
@@ -684,97 +684,4 @@ namespace EDDiscovery
         }
     }
 
-    public class RoutePlotter
-    {
-        public float maxrange;
-        public bool usingcoordsfrom;
-        public Point3D coordsfrom;
-        public bool usingcoordsto;
-        public Point3D coordsto;
-        public string fromsys;
-        public string tosys;
-        public int routemethod;
-        public int possiblejumps;
-
-        // METRICs defined by systemclass GetSystemNearestTo function
-        public static string[] metric_options = {
-            "Nearest to Waypoint",
-            "Minimum Deviation from Path",
-            "Nearest to Waypoint with dev<=100ly",
-            "Nearest to Waypoint with dev<=250ly",
-            "Nearest to Waypoint with dev<=500ly",
-            "Nearest to Waypoint + Deviation / 2"
-        };
-
-        public List<ISystem> RouteIterative(Action<string> AppendText)
-        {
-            double traveldistance = Point3D.DistanceBetween(coordsfrom, coordsto);      // its based on a percentage of the traveldistance
-            List<ISystem> routeSystems = new List<ISystem>();
-            System.Diagnostics.Debug.WriteLine("From " + fromsys + " to  " + tosys);
-            routeSystems.Add(new SystemClass(fromsys, coordsfrom.X, coordsfrom.Y, coordsfrom.Z));
-
-            AppendText("Searching route from " + fromsys + " to " + tosys + " using " + metric_options[routemethod] + " metric" + Environment.NewLine);
-            AppendText("Total distance: " + traveldistance.ToString("0.00") + " in " + maxrange.ToString("0.00") + "ly jumps" + Environment.NewLine);
-
-            AppendText(Environment.NewLine);
-            AppendText(string.Format("{0,-40}    Depart          @ {1,9:0.00},{2,8:0.00},{3,9:0.00}" + Environment.NewLine, fromsys, coordsfrom.X, coordsfrom.Y, coordsfrom.Z));
-
-            Point3D curpos = coordsfrom;
-            int jump = 1;
-            double actualdistance = 0;
-#if DEBUG
-            //Console.WriteLine("-------------------------- BEGIN");
-#endif
-            do
-            {
-                double distancetogo = Point3D.DistanceBetween(coordsto, curpos);      // to go
-
-                if (distancetogo <= maxrange)                                         // within distance, we can go directly
-                    break;
-
-                Point3D travelvector = new Point3D(coordsto.X - curpos.X, coordsto.Y - curpos.Y, coordsto.Z - curpos.Z); // vector to destination
-                Point3D travelvectorperly = new Point3D(travelvector.X / distancetogo, travelvector.Y / distancetogo, travelvector.Z / distancetogo); // per ly travel vector
-
-                Point3D nextpos = new Point3D(curpos.X + maxrange * travelvectorperly.X,
-                                              curpos.Y + maxrange * travelvectorperly.Y,
-                                              curpos.Z + maxrange * travelvectorperly.Z);   // where we would like to be..
-
-#if DEBUG
-                //Console.WriteLine("Curpos " + curpos.X + "," + curpos.Y + "," + curpos.Z);
-                //Console.WriteLine(" next" + nextpos.X + "," + nextpos.Y + "," + nextpos.Z);
-#endif
-                ISystem bestsystem = SystemClassDB.GetSystemNearestTo(curpos, nextpos, maxrange, maxrange - 0.5, routemethod);
-
-                string sysname = "WAYPOINT";
-                double deltafromwaypoint = 0;
-                double deviation = 0;
-
-                if (bestsystem != null)
-                {
-                    Point3D bestposition = new Point3D(bestsystem.x, bestsystem.y, bestsystem.z);
-                    deltafromwaypoint = Point3D.DistanceBetween(bestposition, nextpos);     // how much in error
-                    deviation = Point3D.DistanceBetween(curpos.InterceptPoint(nextpos, bestposition), bestposition);
-                    nextpos = bestposition;
-                    sysname = bestsystem.name;
-                    routeSystems.Add(bestsystem);
-                }
-
-                AppendText(string.Format("{0,-40}{1,3} Dist:{2,8:0.00}ly @ {3,9:0.00},{4,8:0.00},{5,9:0.00} WPd:{6,8:0.00}ly Dev:{7,8:0.00}ly" + Environment.NewLine,
-                            sysname, jump, Point3D.DistanceBetween(curpos, nextpos), nextpos.X, nextpos.Y, nextpos.Z, deltafromwaypoint, deviation));
-
-                actualdistance += Point3D.DistanceBetween(curpos, nextpos);
-                curpos = nextpos;
-                jump++;
-
-            } while (true);
-
-            routeSystems.Add(new SystemClass(tosys, coordsto.X, coordsto.Y, coordsto.Z));
-            actualdistance += Point3D.DistanceBetween(curpos, coordsto);
-            AppendText(string.Format("{0,-40}{1,3} Dist:{2,8:0.00}ly @ {3,9:0.00},{4,8:0.00},{5,9:0.00}" + Environment.NewLine, tosys, jump, Point3D.DistanceBetween(curpos, coordsto), coordsto.X, coordsto.Y, coordsto.Z));
-            AppendText(Environment.NewLine);
-            AppendText(string.Format("Straight Line Distance {0,8:0.00}ly vs Travelled Distance {1,8:0.00}ly" + Environment.NewLine, traveldistance, actualdistance));
-
-            return routeSystems;
-        }
-    }
 }
