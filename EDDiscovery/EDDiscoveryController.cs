@@ -606,8 +606,6 @@ namespace EDDiscovery
 
             if (prev != null)                               // any left.. action it
                 ActionEntry(prev);
-
-            journalqueue.Clear();
         }
 
         void ActionEntry(JournalEntry je)               // issue the JE to the system
