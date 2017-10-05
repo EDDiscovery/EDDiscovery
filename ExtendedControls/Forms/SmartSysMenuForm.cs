@@ -48,7 +48,8 @@ namespace ExtendedControls
             get
             {
                 var cp = base.CreateParams;
-                if (_SysMenuCreationHackEnabled) cp.Style |= WS.SYSMENU;
+                if (_SysMenuCreationHackEnabled)
+                    cp.Style |= WS.SYSMENU;
                 return cp;
             }
         }
@@ -183,7 +184,7 @@ namespace ExtendedControls
             base.WndProc(ref m);
         }
 
-        // If WS.SYSMENU is not active at first WM.CREATE, the menu will not be created. Since FormBorderStyle may clear WS.SYSMENu, we have
+        // If WS.SYSMENU is not active at first WM.CREATE, the menu will not be created. Since FormBorderStyle may clear WS.SYSMENU, we have
         // to fake it during startup. WS.SYSMENU is meaningless to us outside of WM.CREATE. Seealso https://stackoverflow.com/a/16695606
         // CAUTION: if WS.SYSMENU is enabled but WS.CAPTION is not, all hittests, including our sysmenu, min/max/close, etc., will get ignored!
         private bool _SysMenuCreationHackEnabled = Environment.OSVersion.Platform == PlatformID.Win32NT;
