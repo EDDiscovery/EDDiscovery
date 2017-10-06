@@ -826,6 +826,16 @@ namespace EDDiscovery.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap triangulation {
+            get {
+                object obj = ResourceManager.GetObject("triangulation", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap trippanel {
             get {
                 object obj = ResourceManager.GetObject("trippanel", resourceCulture);

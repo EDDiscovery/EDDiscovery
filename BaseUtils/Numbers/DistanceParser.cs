@@ -16,7 +16,7 @@
 using System.Globalization;
 using System.Text.RegularExpressions;
 
-namespace EDDiscovery
+namespace BaseUtils
 {
     public static class DistanceParser
     {

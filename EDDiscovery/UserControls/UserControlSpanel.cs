@@ -23,7 +23,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using EDDiscovery.DB;
 using EMK.LightGeometry;
 using ExtendedControls;
 using Conditions;
