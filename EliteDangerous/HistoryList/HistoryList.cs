@@ -131,7 +131,7 @@ namespace EliteDangerousCore
         {
             get
             {
-                return (from s in historylist where s.EdsmSync == false && s.IsFSDJump orderby s.EventTimeUTC ascending select s).ToList();
+                return (from s in historylist where s.EdsmSync == false && s.IsLocOrJump orderby s.EventTimeUTC ascending select s).ToList();
             }
         }
 
