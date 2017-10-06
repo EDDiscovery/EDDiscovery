@@ -21,7 +21,7 @@ using System.Globalization;
 
 namespace EDDiscoveryTests
 {
-    [TestFixture(TestOf = typeof(DistanceParser))]
+    [TestFixture(TestOf = typeof(BaseUtils.DistanceParser))]
     public class DistanceParserTests
     {
         private static readonly CultureInfo frenchCulture = CultureInfo.GetCultureInfo("fr-FR");
@@ -44,19 +44,19 @@ namespace EDDiscoveryTests
         [Test]
         public void Empty_jump_distance_is_not_parsed()
         {
-            Check.That(DistanceParser.ParseJumpDistance("")).IsNull();
+            Check.That(BaseUtils.DistanceParser.ParseJumpDistance("")).IsNull();
         }
 
         [Test]
         public void Jump_distance_without_decimals_is_parsed_correctly()
         {
-            Check.That(DistanceParser.ParseJumpDistance("15")).IsEqualTo(15);
+            Check.That(BaseUtils.DistanceParser.ParseJumpDistance("15")).IsEqualTo(15);
         }
 
         [Test]
         public void Jump_distance_with_point_as_decimal_separator_is_parsed_correctly()
         {
-            Check.That(DistanceParser.ParseJumpDistance("15.5")).IsEqualTo(15.5);
+            Check.That(BaseUtils.DistanceParser.ParseJumpDistance("15.5")).IsEqualTo(15.5);
         }
 
         [Test]
@@ -74,7 +74,7 @@ namespace EDDiscoveryTests
         [Test]
         public void Jump_distance_with_comma_as_decimal_separator_is_parsed_correctly()
         {
-            Check.That(DistanceParser.ParseJumpDistance("15,5")).IsEqualTo(15.5);
+            Check.That(BaseUtils.DistanceParser.ParseJumpDistance("15,5")).IsEqualTo(15.5);
         }
 
         [Test]
@@ -92,43 +92,43 @@ namespace EDDiscoveryTests
         [Test]
         public void Jump_distance_greater_than_the_maximum_allowed_value_is_not_parsed()
         {
-            Check.That(DistanceParser.ParseJumpDistance("15", 14)).IsNull();
+            Check.That(BaseUtils.DistanceParser.ParseJumpDistance("15", 14)).IsNull();
         }
 
         [Test]
         public void Jump_distance_equal_to_the_maximum_allowed_value_is_parsed_correctly()
         {
-            Check.That(DistanceParser.ParseJumpDistance("15", 15)).IsEqualTo(15);
+            Check.That(BaseUtils.DistanceParser.ParseJumpDistance("15", 15)).IsEqualTo(15);
         }
 
         [Test]
         public void Negative_jump_distance_is_not_parsed()
         {
-            Check.That(DistanceParser.ParseJumpDistance("-15")).IsNull();
+            Check.That(BaseUtils.DistanceParser.ParseJumpDistance("-15")).IsNull();
         }
 
         [Test]
         public void Jump_distance_with_more_than_2_decimals_is_not_parsed()
         {
-            Check.That(DistanceParser.ParseJumpDistance("15.000")).IsNull();
+            Check.That(BaseUtils.DistanceParser.ParseJumpDistance("15.000")).IsNull();
         }
 
         [Test]
         public void Jump_distance_that_does_not_match_any_expected_format_is_not_parsed()
         {
-            Check.That(DistanceParser.ParseJumpDistance("not a distance")).IsNull();
+            Check.That(BaseUtils.DistanceParser.ParseJumpDistance("not a distance")).IsNull();
         }
 
         [Test]
         public void Interstellar_distance_without_any_decimal_separator_can_be_parsed()
         {
-            Check.That(DistanceParser.ParseInterstellarDistance("12345")).IsEqualTo(12345);
+            Check.That(BaseUtils.DistanceParser.ParseInterstellarDistance("12345")).IsEqualTo(12345);
         }
 
         [Test]
         public void Interstellar_distance_with_dot_decimal_separator_can_be_parsed()
         {
-            Check.That(DistanceParser.ParseInterstellarDistance("12345.6789")).IsEqualTo(12345.6789);
+            Check.That(BaseUtils.DistanceParser.ParseInterstellarDistance("12345.6789")).IsEqualTo(12345.6789);
         }
 
         [Test]
@@ -146,13 +146,13 @@ namespace EDDiscoveryTests
         [Test]
         public void Negative_interstellar_distance_is_not_parsed()
         {
-            Check.That(DistanceParser.ParseInterstellarDistance("-12345")).IsEqualTo(null);
+            Check.That(BaseUtils.DistanceParser.ParseInterstellarDistance("-12345")).IsEqualTo(null);
         }
 
         [Test]
         public void Interstellar_distance_with_comma_decimal_separator_can_be_parsed()
         {
-            Check.That(DistanceParser.ParseInterstellarDistance("12345,6789")).IsEqualTo(12345.6789);
+            Check.That(BaseUtils.DistanceParser.ParseInterstellarDistance("12345,6789")).IsEqualTo(12345.6789);
         }
 
         [Test]
@@ -170,19 +170,19 @@ namespace EDDiscoveryTests
         [Test]
         public void Invalid_interstellar_is_not_parsed()
         {
-            Check.That(DistanceParser.ParseInterstellarDistance("not a distance")).IsNull();
+            Check.That(BaseUtils.DistanceParser.ParseInterstellarDistance("not a distance")).IsNull();
         }
 
         [Test]
         public void Empty_interstellar_is_not_parsed()
         {
-            Check.That(DistanceParser.ParseInterstellarDistance("")).IsNull();
+            Check.That(BaseUtils.DistanceParser.ParseInterstellarDistance("")).IsNull();
         }
 
         [Test]
         public void Null_interstellar_is_not_parsed()
         {
-            Check.That(DistanceParser.ParseInterstellarDistance(null)).IsNull();
+            Check.That(BaseUtils.DistanceParser.ParseInterstellarDistance(null)).IsNull();
         }
     }
 }

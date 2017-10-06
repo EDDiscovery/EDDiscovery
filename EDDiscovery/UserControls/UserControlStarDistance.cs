@@ -32,7 +32,7 @@ namespace EDDiscovery.UserControls
 {
     public partial class UserControlStarDistance : UserControlCommonBase
     {
-        private EDDiscoveryForm _discoveryForm;
+        private EDDiscoveryForm discoveryform;
         private UserControlCursorType uctg;
         private StarDistanceComputer computer;
 
@@ -43,7 +43,7 @@ namespace EDDiscovery.UserControls
 
         public override void Init(EDDiscoveryForm ed, UserControlCursorType thc, int vn) //0=primary, 1 = first windowed version, etc
         {
-            _discoveryForm = ed;
+            discoveryform = ed;
             uctg = thc;
             uctg.OnTravelSelectionChanged += Uctg_OnTravelSelectionChanged;
 
@@ -88,7 +88,7 @@ namespace EDDiscovery.UserControls
         {
             System.Diagnostics.Debug.Assert(Application.MessageLoop);       // check!
 
-            _discoveryForm.history.CalculateSqDistances(list, sys.x, sys.y, sys.z, 50, true);   // add on any history list systems
+            discoveryform.history.CalculateSqDistances(list, sys.x, sys.y, sys.z, 50, true);   // add on any history list systems
 
             FillGrid(sys.name, list);
         }
@@ -103,7 +103,7 @@ namespace EDDiscovery.UserControls
                 SetControlText("Closest systems from " + name);
                 foreach (KeyValuePair<double, ISystem> tvp in csl)
                 {
-                    int visits = _discoveryForm.history.GetVisitsCount(tvp.Value.name, tvp.Value.id_edsm);
+                    int visits = discoveryform.history.GetVisitsCount(tvp.Value.name, tvp.Value.id_edsm);
                     object[] rowobj = { tvp.Value.name, Math.Sqrt(tvp.Key).ToString("0.00"), visits.ToStringInvariant()};       // distances are stored squared for speed, back to normal.
                     int rowindex = dataGridViewNearest.Rows.Add(rowobj);
                     dataGridViewNearest.Rows[rowindex].Tag = tvp.Value;
@@ -143,7 +143,7 @@ namespace EDDiscovery.UserControls
 
         private void addToTrilaterationToolStripMenuItem1_Click(object sender, EventArgs e)
         {
-            TrilaterationControl tctrl = _discoveryForm.trilaterationControl;
+            TrilaterationControl tctrl = discoveryform.trilaterationControl;
 
             IEnumerable<DataGridViewRow> selectedRows = dataGridViewNearest.SelectedCells.Cast<DataGridViewCell>()
                                                                         .Select(cell => cell.OwningRow)
@@ -155,8 +155,7 @@ namespace EDDiscovery.UserControls
             foreach (DataGridViewRow r in selectedRows)
             {
                 sysName = r.Cells[0].Value.ToString();
-
-                tctrl.AddSystemToDataGridViewDistances(sysName);
+                discoveryform.NewTriLatStars(new List<string>() { sysName }, false);
             }
 
             this.Cursor = Cursors.Default;

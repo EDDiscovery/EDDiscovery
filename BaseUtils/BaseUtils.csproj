@@ -65,6 +65,7 @@
     <Compile Include="Misc\Processes.cs" />
     <Compile Include="Misc\AppTicks.cs" />
     <Compile Include="Numbers\ColorObjectExtensions.cs" />
+    <Compile Include="Numbers\DistanceParser.cs" />
     <Compile Include="Numbers\LineStore.cs" />
     <Compile Include="Numbers\NumberObjectExtensions.cs" />
     <Compile Include="Files\CSVRead.cs" />

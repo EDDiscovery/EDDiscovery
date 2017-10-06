@@ -13,7 +13,6 @@
  * 
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
-using EDDiscovery.DB;
 using EliteDangerousCore;
 using EliteDangerousCore.DB;
 using EliteDangerousCore.EDSM;

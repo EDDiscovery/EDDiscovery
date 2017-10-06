@@ -729,14 +729,12 @@ namespace EDDiscovery.UserControls
 
             if (dist)
             {
-                foreach (string s in systemnamelist)
-                    tctrl.AddSystemToDataGridViewDistances(s);
+                discoveryform.NewTriLatStars(systemnamelist, false);
             }
 
             if (wanted)
             {
-                foreach (string s in systemnamelist)
-                    tctrl.AddWantedSystem(s);
+                discoveryform.NewTriLatStars(systemnamelist, true);
             }
 
             if (route)
