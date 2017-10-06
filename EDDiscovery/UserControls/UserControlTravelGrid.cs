@@ -741,7 +741,7 @@ namespace EDDiscovery.UserControls
 
             if (route)
             {
-                discoveryform.savedRouteExpeditionControl1.AppendRows(systemnamelist.ToArray());
+                discoveryform.NewExpeditionStars(systemnamelist);
             }
 
             this.Cursor = Cursors.Default;

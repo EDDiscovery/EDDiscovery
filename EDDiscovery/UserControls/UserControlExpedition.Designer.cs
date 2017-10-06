@@ -5,24 +5,24 @@
  * file except in compliance with the License. You may obtain a copy of the License at
  *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under
  * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
- * 
+ *
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 namespace EDDiscovery
 {
-    partial class SavedRouteExpeditionControl
+    partial class UserControlExpedition
     {
-        /// <summary> 
+        /// <summary>
         /// Required designer variable.
         /// </summary>
         private System.ComponentModel.IContainer components = null;
 
-        /// <summary> 
+        /// <summary>
         /// Clean up any resources being used.
         /// </summary>
         /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
@@ -37,8 +37,8 @@ namespace EDDiscovery
 
         #region Component Designer generated code
 
-        /// <summary> 
-        /// Required method for Designer support - do not modify 
+        /// <summary>
+        /// Required method for Designer support - do not modify
         /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent()
@@ -164,7 +164,7 @@ namespace EDDiscovery
             // 
             this.toolStripButtonShowOn3DMap.Image = global::EDDiscovery.Properties.Resources.toolStripButtonMap_Image;
             this.toolStripButtonShowOn3DMap.Name = "toolStripButtonShowOn3DMap";
-            this.toolStripButtonShowOn3DMap.Size = new System.Drawing.Size(117, 22);
+            this.toolStripButtonShowOn3DMap.Size = new System.Drawing.Size(117, 20);
             this.toolStripButtonShowOn3DMap.Text = "Show on 3D Map";
             this.toolStripButtonShowOn3DMap.Click += new System.EventHandler(this.toolStripButtonShowOn3DMap_Click);
             // 
@@ -273,15 +273,14 @@ namespace EDDiscovery
             // 
             // buttonReverseRoute
             // 
-            this.buttonReverseRoute.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.buttonReverseRoute.BorderColorScaling = 1.25F;
             this.buttonReverseRoute.ButtonColorScaling = 0.5F;
             this.buttonReverseRoute.ButtonDisabledScaling = 0.5F;
-            this.buttonReverseRoute.Location = new System.Drawing.Point(677, 55);
+            this.buttonReverseRoute.Location = new System.Drawing.Point(517, 4);
             this.buttonReverseRoute.Name = "buttonReverseRoute";
-            this.buttonReverseRoute.Size = new System.Drawing.Size(107, 23);
+            this.buttonReverseRoute.Size = new System.Drawing.Size(59, 23);
             this.buttonReverseRoute.TabIndex = 8;
-            this.buttonReverseRoute.Text = "Reverse Route";
+            this.buttonReverseRoute.Text = "Reverse";
             this.buttonReverseRoute.UseVisualStyleBackColor = true;
             this.buttonReverseRoute.Click += new System.EventHandler(this.buttonReverseRoute_Click);
             // 
@@ -373,8 +372,6 @@ namespace EDDiscovery
             // 
             // textBoxRouteName
             // 
-            this.textBoxRouteName.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.textBoxRouteName.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
             this.textBoxRouteName.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
             this.textBoxRouteName.BorderColor = System.Drawing.Color.Transparent;
@@ -388,7 +385,7 @@ namespace EDDiscovery
             this.textBoxRouteName.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.textBoxRouteName.SelectionLength = 0;
             this.textBoxRouteName.SelectionStart = 0;
-            this.textBoxRouteName.Size = new System.Drawing.Size(703, 20);
+            this.textBoxRouteName.Size = new System.Drawing.Size(352, 20);
             this.textBoxRouteName.TabIndex = 1;
             this.textBoxRouteName.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.textBoxRouteName.WordWrap = true;
@@ -504,22 +501,22 @@ namespace EDDiscovery
             this.ctxMenuCombo.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.ctxMenuItemUndelete});
             this.ctxMenuCombo.Name = "ctxMenuCombo";
-            this.ctxMenuCombo.Size = new System.Drawing.Size(153, 48);
+            this.ctxMenuCombo.Size = new System.Drawing.Size(122, 26);
             // 
             // ctxMenuItemUndelete
             // 
             this.ctxMenuItemUndelete.Name = "ctxMenuItemUndelete";
-            this.ctxMenuItemUndelete.Size = new System.Drawing.Size(152, 22);
+            this.ctxMenuItemUndelete.Size = new System.Drawing.Size(121, 22);
             this.ctxMenuItemUndelete.Text = "&Undelete";
             // 
-            // SavedRouteExpeditionControl
+            // UserControlExpedition
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.dataGridViewRouteSystems);
             this.Controls.Add(this.panelRouteInfo);
             this.Controls.Add(this.toolStrip1);
-            this.Name = "SavedRouteExpeditionControl";
+            this.Name = "UserControlExpedition";
             this.Size = new System.Drawing.Size(787, 550);
             this.toolStrip1.ResumeLayout(false);
             this.toolStrip1.PerformLayout();

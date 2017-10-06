@@ -33,11 +33,6 @@ namespace EDDiscovery.UserControls
         public UserControlRoute()
         {
             InitializeComponent();
-            button_Route.Enabled = false;
-            cmd3DMap.Enabled = false;
-            for (int i = 0; i < RoutePlotter.metric_options.Length; i++)
-                comboBoxRoutingMetric.Items.Add(RoutePlotter.metric_options[i]);
-
         }
 
         public override void Init(EDDiscoveryForm ed, UserControlCursorType thc, int vn) //0=primary, 1 = first windowed version, etc
@@ -46,13 +41,19 @@ namespace EDDiscovery.UserControls
             uctg = thc;
             displaynumber = vn;
 
+            button_Route.Enabled = false;
+            cmd3DMap.Enabled = false;
+
             fromupdatetimer = new System.Windows.Forms.Timer();
+            toupdatetimer = new System.Windows.Forms.Timer();
+
             fromupdatetimer.Interval = 500;
             fromupdatetimer.Tick += FromUpdateTick;
-
-            toupdatetimer = new System.Windows.Forms.Timer();
             toupdatetimer.Interval = 500;
             toupdatetimer.Tick += ToUpdateTick;
+
+            for (int i = 0; i < RoutePlotter.metric_options.Length; i++)
+                comboBoxRoutingMetric.Items.Add(RoutePlotter.metric_options[i]);
 
             textBox_From.SetAutoCompletor(SystemClassDB.ReturnSystemListForAutoComplete);
             textBox_To.SetAutoCompletor(SystemClassDB.ReturnSystemListForAutoComplete);
@@ -383,9 +384,11 @@ namespace EDDiscovery.UserControls
         private void textBox_From_Enter(object sender, EventArgs e)
         {
             SelectFromMaster(false);                              // enable system box
-            fromupdatetimer.Stop();
-            fromupdatetimer.Start();
-            //            Console.WriteLine("XYZE: Start at " + Environment.TickCount);
+            if (fromupdatetimer != null)  // for the designer
+            {
+                fromupdatetimer.Stop();
+                fromupdatetimer.Start();
+            }
         }
 
         private void textBox_FromXYZ_Enter(object sender, EventArgs e)
@@ -542,8 +545,12 @@ namespace EDDiscovery.UserControls
         private void textBox_To_Enter(object sender, EventArgs e)   // To has been tabbed/clicked..
         {
             SelectToMaster(false);                              // enable system box
-            toupdatetimer.Stop();
-            toupdatetimer.Start();
+
+            if (toupdatetimer != null)  // for the designer
+            {
+                toupdatetimer.Stop();
+                toupdatetimer.Start();
+            }
         }
 
         private void textBox_ToXYZ_Enter(object sender, EventArgs e)
