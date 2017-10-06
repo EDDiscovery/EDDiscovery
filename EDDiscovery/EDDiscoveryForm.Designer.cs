@@ -101,7 +101,7 @@ namespace EDDiscovery
             this.tabPageRoute = new System.Windows.Forms.TabPage();
             this.routeControl1 = new EDDiscovery.RouteControl();
             this.tabPageRoutesExpeditions = new System.Windows.Forms.TabPage();
-            this.savedRouteExpeditionControl1 = new EDDiscovery.SavedRouteExpeditionControl();
+            this.savedRouteExpeditionControl1 = new EDDiscovery.ExpeditionControl();
             this.tabPageSettings = new System.Windows.Forms.TabPage();
             this.settings = new EDDiscovery.Settings();
             this.buttonReloadActions = new ExtendedControls.ButtonExt();
@@ -645,7 +645,7 @@ namespace EDDiscovery
             this.tabPageRoutesExpeditions.Padding = new System.Windows.Forms.Padding(3);
             this.tabPageRoutesExpeditions.Size = new System.Drawing.Size(981, 640);
             this.tabPageRoutesExpeditions.TabIndex = 6;
-            this.tabPageRoutesExpeditions.Text = "Routes/Expeditions";
+            this.tabPageRoutesExpeditions.Text = "Expeditions";
             this.tabPageRoutesExpeditions.UseVisualStyleBackColor = true;
             // 
             // savedRouteExpeditionControl1
@@ -1035,7 +1035,7 @@ namespace EDDiscovery
         private System.Windows.Forms.ToolStripMenuItem editThemeToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
         private System.Windows.Forms.TabPage tabPageRoutesExpeditions;
-        public SavedRouteExpeditionControl savedRouteExpeditionControl1;
+        public ExpeditionControl savedRouteExpeditionControl1;
         private ExtendedControls.StatusStripCustom statusStrip1;
         private System.Windows.Forms.ToolStripMenuItem show3DMapsToolStripMenuItem;
         private System.Windows.Forms.ToolStripProgressBar toolStripProgressBar1;

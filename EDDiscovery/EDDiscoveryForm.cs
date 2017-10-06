@@ -56,7 +56,6 @@ namespace EDDiscovery
         public EDDTheme theme { get { return EDDTheme.Instance; } }
 
         public TravelHistoryControl TravelControl { get { return travelHistoryControl; } }
-        public RouteControl RouteControl { get { return routeControl1; } }
         
         public AudioExtensions.AudioQueue AudioQueueWave { get { return audioqueuewave; } }
         public AudioExtensions.AudioQueue AudioQueueSpeech { get { return audioqueuespeech; } }
@@ -103,6 +102,9 @@ namespace EDDiscovery
 
         public event Action<Object> OnNewTarget;
         public event Action<Object, HistoryEntry, bool> OnNoteChanged;                    // UI.Note has been updated attached to this note
+        public event Action<List<ISystem>> OnNewCalculatedRoute;        // route plotter has a new one
+        public event Action<List<string>> OnNewStarsForExpedition;      // add stars to expedition 
+        public event Action<List<string>,bool> OnNewStarsForTrilat;      // add stars to trilat (false distance, true wanted)
 
         #endregion
 
@@ -122,7 +124,6 @@ namespace EDDiscovery
         public event Action<JournalEntry> OnNewJournalEntry { add { Controller.OnNewJournalEntry += value; } remove { Controller.OnNewJournalEntry -= value; } }
         public event Action<string, Color> OnNewLogEntry { add { Controller.OnNewLogEntry += value; } remove { Controller.OnNewLogEntry -= value; } }
         public event Action<EliteDangerousCore.CompanionAPI.CompanionAPIClass,HistoryEntry> OnNewCompanionAPIData;
-        public event Action<List<ISystem>> OnNewCalculatedRoute;        // route plotter has a new one
 
         #endregion
 
@@ -192,9 +193,9 @@ namespace EDDiscovery
             travelHistoryControl.InitControl(this);
             settings.InitControl(this);
             journalViewControl1.InitControl(this, 0);
-            gridControl.InitControl(this, 0);
-            routeControl1.InitControl(this,travelHistoryControl.GetTravelGrid,0);   // okay, this route is tied to the main travel grid
-            savedRouteExpeditionControl1.InitControl(this);
+            gridControl.InitControl(this, travelHistoryControl.GetTravelGrid, 0);
+            routeControl1.InitControl(this,travelHistoryControl.GetTravelGrid,0);
+            savedRouteExpeditionControl1.InitControl(this, travelHistoryControl.GetTravelGrid, 0);
 
             Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " Map manager");
             Map = new EDDiscovery._3DMap.MapManager(EDDOptions.Instance.NoWindowReposition, this);
@@ -267,15 +268,16 @@ namespace EDDiscovery
                 routeControl1.LoadLayoutSettings();
                 Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " EDF Load layout GC");
                 gridControl.LoadLayoutSettings();
-                Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " EDF Load layout Major Tab");
+                Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " EDF Load layout Expedition");
+                savedRouteExpeditionControl1.LoadLayoutSettings();
 
+                Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " EDF Load layout Major Tab");
                 string tab = SQLiteConnectionUser.GetSettingString("MajorTab", "");
                 SelectTabPage(tab);
 
                 Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " EDF Load show info panel");
                 ShowInfoPanel("Loading. Please wait!", true);
                 settings.InitSettingsTab();
-                savedRouteExpeditionControl1.LoadControl();
 
                 if (EDDOptions.Instance.ActionButton)
                 {
@@ -736,11 +738,14 @@ namespace EDDiscovery
             SQLiteDBClass.PutSettingInt("FormLeft", _formLeft);
             SQLiteDBClass.PutSettingBool("ToolBarPanelPinState", panelToolBar.PinState);
 
-            routeControl1.SaveSettings();
             theme.SaveSettings(null);
+
             travelHistoryControl.SaveSettings();
             journalViewControl1.SaveSettings();
             gridControl.SaveSettings();
+            routeControl1.SaveSettings();
+            savedRouteExpeditionControl1.SaveSettings();
+
             if (EDDConfig.AutoSavePopOuts)
                 PopOuts.SaveCurrentPopouts();
 
@@ -1257,6 +1262,18 @@ namespace EDDiscovery
         {
             if (OnNewCalculatedRoute != null)
                 OnNewCalculatedRoute(list);
+        }
+
+        public void NewTriLatStars(List<string> list, bool wanted)
+        {
+            if (OnNewStarsForTrilat != null)
+                OnNewStarsForTrilat(list, wanted);
+        }
+
+        public void NewExpeditionStars(List<string> list)
+        {
+            if (OnNewStarsForExpedition != null)
+                OnNewStarsForExpedition(list);
         }
 
         #endregion

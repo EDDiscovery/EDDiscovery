@@ -12,17 +12,14 @@ namespace EDDiscovery
 {
     public partial class GridControl : UserControl
     {
-        EDDiscoveryForm discoveryForm;
-
         public GridControl()
         {
             InitializeComponent();
         }
 
-        public void InitControl(EDDiscoveryForm ed, int displaynumber)
+        public void InitControl(EDDiscoveryForm ed, UserControls.UserControlCursorType uctg, int displaynumber)
         {
-            discoveryForm = ed;
-            userControlContainerGrid.Init(ed, ed.TravelControl.GetTravelGrid, displaynumber);     // pass in the default TG
+            userControlContainerGrid.Init(ed, uctg, displaynumber);     // pass in the default TG
         }
 
         public void LoadLayoutSettings() // called by discovery form by us after its adjusted itself
