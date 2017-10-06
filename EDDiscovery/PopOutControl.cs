@@ -68,6 +68,7 @@ namespace EDDiscovery.Forms
             EDSM,                   // 24
             ShoppingList,
             Route,
+            Expedition,             // 27
             // ****** ADD More here DO NOT REORDER *****
             EndList,                // Keep here, used to work out MaxTabButtons
         };
@@ -99,7 +100,8 @@ namespace EDDiscovery.Forms
             { new PopOutInfo( PopOuts.Statistics, "Statistics", "Stats", EDDiscovery.Properties.Resources.stats, "Display statistics from the history") },
             { new PopOutInfo( PopOuts.SystemInformation, "System Information", "SystemInfo", EDDiscovery.Properties.Resources.starsystem , "Display System Information" , transparent:false ) },
             { new PopOutInfo( PopOuts.EDSM, "EDSM Star Finder", "EDSMStarFinder", EDDiscovery.Properties.Resources.edsm24, "Display the EDSM Star finder") },
-            { new PopOutInfo( PopOuts.Route, "Route Finder", "RouteFinder", EDDiscovery.Properties.Resources.route, "Find Routes") },
+            { new PopOutInfo( PopOuts.Route, "Route Finder", "RouteFinder", EDDiscovery.Properties.Resources.route, "Find Routes from star data") },
+            { new PopOutInfo( PopOuts.Expedition, "Expedition", "Expedition", EDDiscovery.Properties.Resources.expedition, "Plan an Expedition") },
             { new PopOutInfo( PopOuts.Spanel, "Summary Panel", "Spanel", EDDiscovery.Properties.Resources.spanel, "Display the travel system panel" , transparent: false ) },
             { new PopOutInfo( PopOuts.Trippanel, "Trip Computer", "Trippanel", EDDiscovery.Properties.Resources.trippanel, "Display the trip computer" , transparent: false) },
             { new PopOutInfo( PopOuts.NotePanel, "Notes", "NotePanel", EDDiscovery.Properties.Resources.notes, "Display current notes on a system" , transparent: false) },
@@ -190,6 +192,7 @@ namespace EDDiscovery.Forms
                 case PopOuts.Grid: return new UserControlContainerGrid();
                 case PopOuts.ShoppingList: return new UserControlShoppingList();
                 case PopOuts.Route: return new UserControlRoute();
+                case PopOuts.Expedition: return new UserControlExpedition();
                 default: return null;
             }
         }
