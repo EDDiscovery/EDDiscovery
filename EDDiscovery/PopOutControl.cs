@@ -104,10 +104,10 @@ namespace EDDiscovery.Forms
             { new PopOutInfo( PopOuts.Route, "Route Finder", "RouteFinder", EDDiscovery.Properties.Resources.route, "Find Routes from star data") },
             { new PopOutInfo( PopOuts.Expedition, "Expedition", "Expedition", EDDiscovery.Properties.Resources.expedition, "Plan an Expedition") },
             { new PopOutInfo( PopOuts.Trilateration, "Trilateration", "Trilateration", EDDiscovery.Properties.Resources.triangulation, "Trilateration of stars with unknown positions") },
-            { new PopOutInfo( PopOuts.Spanel, "Summary Panel", "Spanel", EDDiscovery.Properties.Resources.spanel, "Display the travel system panel" , transparent: false ) },
-            { new PopOutInfo( PopOuts.Trippanel, "Trip Computer", "Trippanel", EDDiscovery.Properties.Resources.trippanel, "Display the trip computer" , transparent: false) },
-            { new PopOutInfo( PopOuts.NotePanel, "Notes", "NotePanel", EDDiscovery.Properties.Resources.notes, "Display current notes on a system" , transparent: false) },
-            { new PopOutInfo( PopOuts.RouteTracker, "Route Tracker", "RouteTracker", EDDiscovery.Properties.Resources.routetracker, "Display the route tracker", transparent: false) },
+            { new PopOutInfo( PopOuts.Spanel, "Summary Panel", "Spanel", EDDiscovery.Properties.Resources.spanel, "Display the summary panel overlay" , transparent: false ) },
+            { new PopOutInfo( PopOuts.Trippanel, "Trip Computer", "Trippanel", EDDiscovery.Properties.Resources.trippanel, "Display the trip computer overlay" , transparent: false) },
+            { new PopOutInfo( PopOuts.NotePanel, "Notes", "NotePanel", EDDiscovery.Properties.Resources.notes, "Display current notes on a system overlay" , transparent: false) },
+            { new PopOutInfo( PopOuts.RouteTracker, "Route Tracker", "RouteTracker", EDDiscovery.Properties.Resources.routetracker, "Display the route tracker overlay", transparent: false) },
             { new PopOutInfo( PopOuts.Grid, "The Grid", "TheGrid", EDDiscovery.Properties.Resources.grid, "Display the grid which allows other panels to be placed on it" , transparent:false) },
         };
 
