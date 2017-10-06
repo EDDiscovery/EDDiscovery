@@ -13,15 +13,7 @@
  * 
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
-using EDDiscovery;
-using EDDiscovery.DB;
-using EDDiscovery2._3DMap;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Drawing;
-using OpenTK;
 
 namespace EDDiscovery2._3DMap.Tests
 {
@@ -34,7 +26,6 @@ namespace EDDiscovery2._3DMap.Tests
     partial class OneTimeSetupAttribute : Attribute { }
 #else
     // NUnit Test Framework
-    using NUnit.Framework;
 
     partial class TestClassAttribute : Attribute { }
     partial class TestMethodAttribute : Attribute { }
