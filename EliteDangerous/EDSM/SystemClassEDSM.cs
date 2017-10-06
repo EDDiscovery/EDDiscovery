@@ -274,6 +274,31 @@ namespace EliteDangerousCore.EDSM
 
         private class EDSMDumpSystemCoords
         {
+            public static EDSMDumpSystemCoords Deserialize(JsonReader rdr)
+            {
+                EDSMDumpSystemCoords c = new EDSMDumpSystemCoords();
+
+                if (rdr.TokenType != JsonToken.StartObject)
+                    rdr.Read();
+
+                Debug.Assert(rdr.TokenType == JsonToken.StartObject);
+
+                while (rdr.Read() && rdr.TokenType == JsonToken.PropertyName)
+                {
+                    string name = rdr.Value as string;
+                    switch (name)
+                    {
+                        case "x": c.x = rdr.ReadAsDouble() ?? Double.NaN; break;
+                        case "y": c.y = rdr.ReadAsDouble() ?? Double.NaN; break;
+                        case "z": c.z = rdr.ReadAsDouble() ?? Double.NaN; break;
+                    }
+                }
+
+                Debug.Assert(rdr.TokenType == JsonToken.EndObject);
+
+                return c;
+            }
+
             public double x;
             public double y;
             public double z;
@@ -281,6 +306,28 @@ namespace EliteDangerousCore.EDSM
 
         private class EDSMDumpSystem
         {
+            public static EDSMDumpSystem Deserialize(JsonReader rdr)
+            {
+                EDSMDumpSystem s = new EDSMDumpSystem();
+
+                while (rdr.Read() && rdr.TokenType == JsonToken.PropertyName)
+                {
+                    string name = rdr.Value as string;
+                    switch (name)
+                    {
+                        case "name": s.name = rdr.ReadAsString(); break;
+                        case "id": s.id = rdr.ReadAsInt32() ?? 0; break;
+                        case "date": s.date = rdr.ReadAsDateTime() ?? DateTime.MinValue; break;
+                        case "coords": s.coords = EDSMDumpSystemCoords.Deserialize(rdr); break;
+                        default: rdr.Read(); JToken.Load(rdr); break;
+                    }
+                }
+
+                Debug.Assert(rdr.TokenType == JsonToken.EndObject);
+
+                return s;
+            }
+
             public string name;
             public long id;
             public DateTime date;
@@ -306,9 +353,6 @@ namespace EliteDangerousCore.EDSM
             string edsmsysTableName = useTempSystems ? "EdsmSystems_temp" : "EdsmSystems";
             Stopwatch sw = Stopwatch.StartNew();
             const int BlockSize = 10000;
-            JsonSerializer ser = new JsonSerializer();
-            ser.MissingMemberHandling = MissingMemberHandling.Ignore;
-            ser.Culture = CultureInfo.InvariantCulture;
 
             while (!cancelRequested())
             {
@@ -321,7 +365,7 @@ namespace EliteDangerousCore.EDSM
                     {
                         if (jr.TokenType == JsonToken.StartObject)
                         {
-                            objs.Add(ser.Deserialize<EDSMDumpSystem>(jr));
+                            objs.Add(EDSMDumpSystem.Deserialize(jr));
 
                             if (objs.Count >= BlockSize)
                             {
