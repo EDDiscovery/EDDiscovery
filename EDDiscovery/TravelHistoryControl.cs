@@ -19,7 +19,6 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
-using EDDiscovery.DB;
 using System.Diagnostics;
 using EliteDangerousCore.EDSM;
 using System.Threading.Tasks;

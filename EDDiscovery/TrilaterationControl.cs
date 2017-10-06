@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2016 - 2017 EDDiscovery development team
+ * Copyright © 2015 - 2017 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -15,55 +15,40 @@
  */
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Drawing;
-using System.Data;
 using System.Linq;
-using System.Text;
+using System.Threading;
 using System.Windows.Forms;
-using EDDiscovery.Controls;
 using EliteDangerousCore.EDSM;
-using EDDiscovery.UserControls;
+using ExtendedControls;
+using EliteDangerousCore;
+using EliteDangerousCore.DB;
+using EliteDangerousCore.JournalEvents;
 
 namespace EDDiscovery
 {
-    public partial class JournalViewControl : UserControl
+    public partial class TrilaterationControl : UserControl
     {
-        EDDiscoveryForm discoveryForm;
-
-        public JournalViewControl()
+        public TrilaterationControl()
         {
             InitializeComponent();
         }
 
-        public void InitControl(EDDiscoveryForm ed, int displaynumber)
+        public void InitControl(EDDiscoveryForm discoveryForm, UserControls.UserControlCursorType uctg, int displaynumber)
         {
-            discoveryForm = ed;
-            userControlJournalGrid.Init(ed,null,displaynumber);     // does not hook to a THC
-            userControlJournalGrid.OnPopOut += PopOut;
-            userControlJournalGrid.ExtraIcons(true,true);
+            userControlTrilateration.Init(discoveryForm, uctg, displaynumber);
         }
-
-        #region Layout
 
         public void LoadLayoutSettings() // called by discovery form by us after its adjusted itself
         {
-            userControlJournalGrid.LoadLayout();
-            userControlJournalGrid.InitialDisplay();
+            userControlTrilateration.LoadLayout();
+            userControlTrilateration.InitialDisplay();
         }
 
         public void SaveSettings()     // called by form when closing
         {
-            userControlJournalGrid.Closing();
+            userControlTrilateration.Closing();
         }
-
-        public void PopOut()
-        {
-            discoveryForm.PopOuts.PopOut(Forms.PopOutControl.PopOuts.Journal);
-        }
-
-        #endregion
 
     }
-
 }

@@ -13,7 +13,6 @@
  *
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
-using EDDiscovery.DB;
 using EDDiscovery.UserControls;
 using EliteDangerousCore;
 using EliteDangerousCore.DB;
@@ -29,7 +28,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
-namespace EDDiscovery
+namespace EDDiscovery.UserControls
 {
     public partial class UserControlExpedition : UserControlCommonBase
     {
@@ -55,7 +54,7 @@ namespace EDDiscovery
             savedroute = new List<SavedRouteClass>();
         }
 
-        public override void Init(EDDiscoveryForm discoveryForm, UserControlCursorType thc, int vn) 
+        public override void Init(EDDiscoveryForm discoveryForm, UserControlCursorType thc, int vn)
         {
             discoveryform = discoveryForm;
             edsm = new EDSMClass();

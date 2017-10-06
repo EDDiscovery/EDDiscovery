@@ -13,7 +13,6 @@
  * 
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
-using EDDiscovery.DB;
 using EliteDangerousCore.EDDN;
 using EliteDangerousCore.EDSM;
 using EDDiscovery.Forms;
@@ -189,10 +188,10 @@ namespace EDDiscovery
             if (!EDDOptions.Instance.NoTheme)
                 themeok = theme.RestoreSettings();                                    // theme, remember your saved settings
 
-            trilaterationControl.InitControl(this);
             travelHistoryControl.InitControl(this);
             settings.InitControl(this);
             journalViewControl1.InitControl(this, 0);
+            trilaterationControl.InitControl(this, travelHistoryControl.GetTravelGrid, 0);
             gridControl.InitControl(this, travelHistoryControl.GetTravelGrid, 0);
             routeControl1.InitControl(this,travelHistoryControl.GetTravelGrid,0);
             savedRouteExpeditionControl1.InitControl(this, travelHistoryControl.GetTravelGrid, 0);
@@ -745,6 +744,7 @@ namespace EDDiscovery
             gridControl.SaveSettings();
             routeControl1.SaveSettings();
             savedRouteExpeditionControl1.SaveSettings();
+            trilaterationControl.SaveSettings();
 
             if (EDDConfig.AutoSavePopOuts)
                 PopOuts.SaveCurrentPopouts();

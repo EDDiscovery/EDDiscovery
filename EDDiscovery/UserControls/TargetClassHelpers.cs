@@ -25,7 +25,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace EDDiscovery.DB
+namespace EDDiscovery.UserControls
 {
     static class TargetHelpers
     {

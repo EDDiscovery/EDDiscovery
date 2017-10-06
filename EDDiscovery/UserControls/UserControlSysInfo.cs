@@ -298,7 +298,7 @@ namespace EDDiscovery.UserControls
         {
             if (e.KeyCode == Keys.Enter)
             {
-                DB.TargetHelpers.setTargetSystem(this,discoveryform, textBoxTarget.Text);
+                TargetHelpers.setTargetSystem(this,discoveryform, textBoxTarget.Text);
             }
         }
 
