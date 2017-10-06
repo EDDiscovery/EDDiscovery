@@ -14,7 +14,6 @@
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 using EDDiscovery;
-using EDDiscovery.DB;
 using EDDiscovery2._3DMap;
 using System;
 using System.Collections.Generic;
