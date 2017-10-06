@@ -362,11 +362,11 @@
     <Compile Include="RouteControl.Designer.cs">
       <DependentUpon>RouteControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="SavedRouteExpeditionControl.cs">
+    <Compile Include="ExpeditionControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="SavedRouteExpeditionControl.Designer.cs">
-      <DependentUpon>SavedRouteExpeditionControl.cs</DependentUpon>
+    <Compile Include="ExpeditionControl.Designer.cs">
+      <DependentUpon>ExpeditionControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Settings.cs">
       <SubType>UserControl</SubType>
@@ -405,6 +405,12 @@
     </Compile>
     <Compile Include="UserControls\UserControlEstimatedValues.Designer.cs">
       <DependentUpon>UserControlEstimatedValues.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\UserControlExpedition.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\UserControlExpedition.Designer.cs">
+      <DependentUpon>UserControlExpedition.cs</DependentUpon>
     </Compile>
     <Compile Include="UserControls\UserControlExploration.cs">
       <SubType>UserControl</SubType>
@@ -604,6 +610,9 @@
     <EmbeddedResource Include="UserControls\UserControlEstimatedValues.resx">
       <DependentUpon>UserControlEstimatedValues.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\UserControlExpedition.resx">
+      <DependentUpon>UserControlExpedition.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="UserControls\UserControlExploration.resx">
       <DependentUpon>UserControlExploration.cs</DependentUpon>
     </EmbeddedResource>
@@ -761,6 +770,7 @@
     <None Include="Resources\Volcano.bmp" />
     <None Include="Resources\Terraformable.png" />
     <None Include="Resources\route.png" />
+    <None Include="Resources\expedition.png" />
     <Content Include="x86\Microsoft.VC100.CRT\msvcp100.dll" />
     <Content Include="x86\Microsoft.VC100.CRT\msvcr100.dll" />
     <EmbeddedResource Include="2DMap\Form2DMap.resx">
@@ -810,8 +820,8 @@
     <EmbeddedResource Include="RouteControl.resx">
       <DependentUpon>RouteControl.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="SavedRouteExpeditionControl.resx">
-      <DependentUpon>SavedRouteExpeditionControl.cs</DependentUpon>
+    <EmbeddedResource Include="ExpeditionControl.resx">
+      <DependentUpon>ExpeditionControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Settings.resx">
       <DependentUpon>Settings.cs</DependentUpon>

@@ -114,6 +114,7 @@ namespace EDDiscovery.UserControls
             this.checkBoxMoveToTop.CheckBoxInnerColor = System.Drawing.Color.White;
             this.checkBoxMoveToTop.CheckColor = System.Drawing.Color.DarkBlue;
             this.checkBoxMoveToTop.FontNerfReduction = 0.5F;
+            this.checkBoxMoveToTop.ImageButtonDisabledScaling = 0.5F;
             this.checkBoxMoveToTop.Location = new System.Drawing.Point(637, 8);
             this.checkBoxMoveToTop.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.checkBoxMoveToTop.Name = "checkBoxMoveToTop";
@@ -381,7 +382,7 @@ namespace EDDiscovery.UserControls
             this.writeEventInfoToLogDebugToolStripMenuItem,
             this.copyJournalEntryToClipboardToolStripMenuItem});
             this.historyContextMenu.Name = "historyContextMenu";
-            this.historyContextMenu.Size = new System.Drawing.Size(294, 312);
+            this.historyContextMenu.Size = new System.Drawing.Size(294, 334);
             this.historyContextMenu.Opening += new System.ComponentModel.CancelEventHandler(this.historyContextMenu_Opening);
             // 
             // mapGotoStartoolStripMenuItem
@@ -426,29 +427,29 @@ namespace EDDiscovery.UserControls
             // trilaterationToolStripMenuItem
             // 
             this.trilaterationToolStripMenuItem.Name = "trilaterationToolStripMenuItem";
-            this.trilaterationToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
-            this.trilaterationToolStripMenuItem.Text = "Trilateration";
+            this.trilaterationToolStripMenuItem.Size = new System.Drawing.Size(276, 22);
+            this.trilaterationToolStripMenuItem.Text = "System on Trilateration Panel";
             this.trilaterationToolStripMenuItem.Click += new System.EventHandler(this.trilaterationToolStripMenuItem_Click);
             // 
             // wantedSystemsToolStripMenuItem
             // 
             this.wantedSystemsToolStripMenuItem.Name = "wantedSystemsToolStripMenuItem";
-            this.wantedSystemsToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
-            this.wantedSystemsToolStripMenuItem.Text = "Wanted Systems";
+            this.wantedSystemsToolStripMenuItem.Size = new System.Drawing.Size(276, 22);
+            this.wantedSystemsToolStripMenuItem.Text = "Wanted Systems on Trilateration Panel";
             this.wantedSystemsToolStripMenuItem.Click += new System.EventHandler(this.wantedSystemsToolStripMenuItem_Click);
             // 
             // bothToolStripMenuItem
             // 
             this.bothToolStripMenuItem.Name = "bothToolStripMenuItem";
-            this.bothToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
-            this.bothToolStripMenuItem.Text = "Both";
+            this.bothToolStripMenuItem.Size = new System.Drawing.Size(276, 22);
+            this.bothToolStripMenuItem.Text = "Both of the above";
             this.bothToolStripMenuItem.Click += new System.EventHandler(this.bothToolStripMenuItem_Click);
             // 
             // routeToolStripMenuItem
             // 
             this.routeToolStripMenuItem.Name = "routeToolStripMenuItem";
-            this.routeToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
-            this.routeToolStripMenuItem.Text = "Saved Route";
+            this.routeToolStripMenuItem.Size = new System.Drawing.Size(276, 22);
+            this.routeToolStripMenuItem.Text = "Expedition Panel";
             this.routeToolStripMenuItem.Click += new System.EventHandler(this.routeToolStripMenuItem_Click);
             // 
             // viewOnEDSMToolStripMenuItem
