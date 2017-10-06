@@ -23,7 +23,6 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using ExtendedControls;
-using EDDiscovery.DB;
 using System.Drawing.Drawing2D;
 using EliteDangerousCore.EDSM;
 using EliteDangerousCore.DB;

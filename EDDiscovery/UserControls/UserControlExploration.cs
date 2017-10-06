@@ -21,7 +21,6 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
-using EDDiscovery.DB;
 using EliteDangerousCore.EDSM;
 using System.IO;
 using EDDiscovery.UserControls;

@@ -69,6 +69,7 @@ namespace EDDiscovery.Forms
             ShoppingList,
             Route,
             Expedition,             // 27
+            Trilateration,          // 28
             // ****** ADD More here DO NOT REORDER *****
             EndList,                // Keep here, used to work out MaxTabButtons
         };
@@ -102,6 +103,7 @@ namespace EDDiscovery.Forms
             { new PopOutInfo( PopOuts.EDSM, "EDSM Star Finder", "EDSMStarFinder", EDDiscovery.Properties.Resources.edsm24, "Display the EDSM Star finder") },
             { new PopOutInfo( PopOuts.Route, "Route Finder", "RouteFinder", EDDiscovery.Properties.Resources.route, "Find Routes from star data") },
             { new PopOutInfo( PopOuts.Expedition, "Expedition", "Expedition", EDDiscovery.Properties.Resources.expedition, "Plan an Expedition") },
+            { new PopOutInfo( PopOuts.Trilateration, "Trilateration", "Trilateration", EDDiscovery.Properties.Resources.triangulation, "Trilateration of stars with unknown positions") },
             { new PopOutInfo( PopOuts.Spanel, "Summary Panel", "Spanel", EDDiscovery.Properties.Resources.spanel, "Display the travel system panel" , transparent: false ) },
             { new PopOutInfo( PopOuts.Trippanel, "Trip Computer", "Trippanel", EDDiscovery.Properties.Resources.trippanel, "Display the trip computer" , transparent: false) },
             { new PopOutInfo( PopOuts.NotePanel, "Notes", "NotePanel", EDDiscovery.Properties.Resources.notes, "Display current notes on a system" , transparent: false) },
@@ -193,6 +195,7 @@ namespace EDDiscovery.Forms
                 case PopOuts.ShoppingList: return new UserControlShoppingList();
                 case PopOuts.Route: return new UserControlRoute();
                 case PopOuts.Expedition: return new UserControlExpedition();
+                case PopOuts.Trilateration: return new UserControlTrilateration();
                 default: return null;
             }
         }

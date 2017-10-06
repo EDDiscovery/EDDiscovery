@@ -1,5 +1,5 @@
-﻿/*
- * Copyright © 2016 - 2017 EDDiscovery development team
+/*
+ * Copyright © 2015 - 2017 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -13,9 +13,11 @@
  * 
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
+using ExtendedControls;
+
 namespace EDDiscovery
 {
-    partial class ExpeditionControl
+    partial class TrilaterationControl
     {
         /// <summary> 
         /// Required designer variable.
@@ -43,30 +45,30 @@ namespace EDDiscovery
         /// </summary>
         private void InitializeComponent()
         {
-            this.userControlExpedition = new EDDiscovery.UserControls.UserControlExpedition();
+            this.userControlTrilateration = new EDDiscovery.UserControls.UserControlTrilateration();
             this.SuspendLayout();
             // 
-            // userControlExpedition
+            // userControlTrilateration
             // 
-            this.userControlExpedition.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.userControlExpedition.Location = new System.Drawing.Point(0, 0);
-            this.userControlExpedition.Name = "userControlExpedition";
-            this.userControlExpedition.Size = new System.Drawing.Size(787, 550);
-            this.userControlExpedition.TabIndex = 0;
+            this.userControlTrilateration.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.userControlTrilateration.Location = new System.Drawing.Point(0, 0);
+            this.userControlTrilateration.Name = "userControlTrilateration";
+            this.userControlTrilateration.Size = new System.Drawing.Size(924, 681);
+            this.userControlTrilateration.TabIndex = 0;
             // 
-            // ExpeditionControl
+            // TrilaterationControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.userControlExpedition);
-            this.Name = "ExpeditionControl";
-            this.Size = new System.Drawing.Size(787, 550);
+            this.Controls.Add(this.userControlTrilateration);
+            this.Name = "TrilaterationControl";
+            this.Size = new System.Drawing.Size(924, 681);
             this.ResumeLayout(false);
 
         }
 
         #endregion
 
-        private UserControls.UserControlExpedition userControlExpedition;
+        private UserControls.UserControlTrilateration userControlTrilateration;
     }
 }

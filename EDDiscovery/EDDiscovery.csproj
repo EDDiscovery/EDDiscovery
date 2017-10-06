@@ -272,7 +272,6 @@
       <DependentUpon>ShipDetails.cs</DependentUpon>
     </Compile>
     <Compile Include="IDiscoveryController.cs" />
-    <Compile Include="Trilateration\DistanceParser.cs" />
     <Compile Include="Forms\FindMaterialsForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -329,12 +328,6 @@
     <Compile Include="3DMap\FormMap.Designer.cs">
       <DependentUpon>FormMap.cs</DependentUpon>
     </Compile>
-    <Compile Include="Trilateration\SysWarning.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Trilateration\SysWarning.Designer.cs">
-      <DependentUpon>SysWarning.cs</DependentUpon>
-    </Compile>
     <Compile Include="UserControls\DataGridViewSorter.cs" />
     <Compile Include="Forms\AboutForm.cs">
       <SubType>Form</SubType>
@@ -382,10 +375,10 @@
     </Compile>
     <Compile Include="UserControls\EngineeringFilters.cs" />
     <Compile Include="UserControls\TravelHistoryFilter.cs" />
-    <Compile Include="Trilateration\TrilaterationControl.cs">
+    <Compile Include="TrilaterationControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Trilateration\TrilaterationControl.Designer.cs">
+    <Compile Include="TrilaterationControl.Designer.cs">
       <DependentUpon>TrilaterationControl.cs</DependentUpon>
     </Compile>
     <Compile Include="JournalViewControl.cs">
@@ -559,6 +552,12 @@
     <Compile Include="UserControls\UserControlTravelGrid.Designer.cs">
       <DependentUpon>UserControlTravelGrid.cs</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\UserControlTrilateration.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\UserControlTrilateration.designer.cs">
+      <DependentUpon>UserControlTrilateration.cs</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\UserControlTrippanel.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -600,9 +599,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\UserControlContainerGrid.resx">
       <DependentUpon>UserControlContainerGrid.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Trilateration\SysWarning.resx">
-      <DependentUpon>SysWarning.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\UserControlContainerResizable.resx">
       <DependentUpon>UserControlContainerResizable.cs</DependentUpon>
@@ -684,6 +680,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\UserControlTravelGrid.resx">
       <DependentUpon>UserControlTravelGrid.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\UserControlTrilateration.resx">
+      <DependentUpon>UserControlTrilateration.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\UserControlTrippanel.resx">
       <DependentUpon>UserControlTrippanel.cs</DependentUpon>
@@ -771,6 +770,7 @@
     <None Include="Resources\Terraformable.png" />
     <None Include="Resources\route.png" />
     <None Include="Resources\expedition.png" />
+    <None Include="Resources\triangulation.png" />
     <Content Include="x86\Microsoft.VC100.CRT\msvcp100.dll" />
     <Content Include="x86\Microsoft.VC100.CRT\msvcr100.dll" />
     <EmbeddedResource Include="2DMap\Form2DMap.resx">
@@ -830,7 +830,7 @@
       <DependentUpon>TravelHistoryControl.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Trilateration\TrilaterationControl.resx">
+    <EmbeddedResource Include="TrilaterationControl.resx">
       <DependentUpon>TrilaterationControl.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="EDDiscovery_TemporaryKey.pfx" />
