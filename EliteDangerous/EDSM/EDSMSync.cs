@@ -226,6 +226,9 @@ namespace EliteDangerousCore.EDSM
         public static void SendTravelLog(HistoryEntry he) // (verified with EDSM 29/9/2016, seen UTC time being sent, and same UTC time on ESDM).
         {
             EDSMClass edsm = new EDSMClass();
+            var cmdr = he.Commander;
+            edsm.commanderName = cmdr.EdsmName ?? cmdr.Name;
+            edsm.apiKey = cmdr.EdsmName ?? cmdr.Name;
 
             if (!edsm.IsApiKeySet)
                 return;
