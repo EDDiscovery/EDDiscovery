@@ -385,10 +385,9 @@ namespace EDDiscovery.UserControls
             map.Show();
         }
 
-        public bool Warn(string TargetSys, string Position)
+        private bool Query(string msg)
         {
-            string msg = string.Format("You are about to submit distances from {0}.\nThe most recent known location in your history is {1}.\nPlease ensure you are submitting against the correct system.", TargetSys, Position);
-            return MessageBoxTheme.Show(this, msg, "Trilateration Panel", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK;
+            return MessageBoxTheme.Show(this, msg, "Trilateration Panel", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes;
         }
 
         private void toolStripButtonSubmitDistances_Click(object sender, EventArgs e)
@@ -399,17 +398,24 @@ namespace EDDiscovery.UserControls
 
                 if (he != null && !he.System.name.Equals(targetsystem.name, StringComparison.OrdinalIgnoreCase))
                 {
-                    if (Warn(targetsystem.name, he.System.name))
+                    string question1 = $"You are about to submit distances from {targetsystem.name}.\nThe most recent known location in your history is {he.System.name}.\nSubmit distances without changing 'From' system?";
+                    if (!Query(question1))
                     {
-                        targetsystem = he.System;
-                        SetTargetSystemUI();
-                        LogText("Submitting system to EDSM, please wait..." + Environment.NewLine);
-                        FreezeTrilaterationUI();
-
-                        EDSMSubmissionThread = new Thread(SubmitToEDSM) { Name = "EDSM Submission" };
-                        EDSMSubmissionThread.Start();
+                        string question2 = $"Update 'From' system to current position ({he.System.name}) and submit entered distances?";
+                        if (Query(question2))
+                        {
+                            targetsystem = he.System;
+                            SetTargetSystemUI();
+                        }
+                        else
+                            return;
                     }
                 }
+                LogText("Submitting system to EDSM, please wait..." + Environment.NewLine);
+                FreezeTrilaterationUI();
+
+                EDSMSubmissionThread = new Thread(SubmitToEDSM) { Name = "EDSM Submission" };
+                EDSMSubmissionThread.Start();
             }
             catch (Exception ex)
             {
