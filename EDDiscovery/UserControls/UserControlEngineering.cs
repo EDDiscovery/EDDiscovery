@@ -237,7 +237,7 @@ namespace EDDiscovery.UserControls
                         dataGridViewEngineering[Notes.Index, i].Value = res.Item3;
 
                     }
-                    if (isEmbedded || Wanted[rno] > 0)      // embedded, need to 
+                    if (Wanted[rno] > 0 && (visible || isEmbedded))      // embedded, need to 
                     {
                         wantedList.Add(new Tuple<MaterialCommoditiesList.Recipe, int>(Recipes[rno], Wanted[rno]));
                     }
