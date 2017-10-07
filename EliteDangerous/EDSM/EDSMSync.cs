@@ -74,6 +74,15 @@ namespace EliteDangerousCore.EDSM
         {
             try
             {
+                // Make sure the EDSM class has this history's commander set
+                int cmdrid = hl.CommanderId;
+                EDCommander cmdr = EDCommander.GetCommander(cmdrid);
+                if (cmdr != null)
+                {
+                    edsm.commanderName = cmdr.EdsmName ?? cmdr.Name;
+                    edsm.apiKey = cmdr.APIKey;
+                }
+
                 logout("EDSM sync begin");
 
                 List<HistoryEntry> hlfsdunsyncedlist = hl.FilterByNotEDSMSyncedAndFSD;        // first entry is oldest
