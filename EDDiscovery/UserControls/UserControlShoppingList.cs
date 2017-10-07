@@ -31,11 +31,8 @@ namespace EDDiscovery.UserControls
     {
         private int displaynumber = 0;
         private EDDiscoveryForm discoveryform;
-        private UserControlCursorType uctg;
         private List<Tuple<MaterialCommoditiesList.Recipe, int>> EngineeringWanted = new List<Tuple<MaterialCommoditiesList.Recipe, int>>();
         private List<Tuple<MaterialCommoditiesList.Recipe, int>> SynthesisWanted = new List<Tuple<MaterialCommoditiesList.Recipe, int>>();
-        private Font displayfont;
-        HistoryEntry last_he = null;
         const int PhysicalInventoryCapacity = 1000;
         const int DataInventoryCapacity = 500;
 
@@ -49,34 +46,34 @@ namespace EDDiscovery.UserControls
         public override void Init(EDDiscoveryForm ed, UserControlCursorType thc, int vn) //0=primary, 1 = first windowed version, etc
         {
             discoveryform = ed;
-            discoveryform.OnNewEntry += Discoveryform_OnNewEntry;
-            uctg = thc;
             displaynumber = vn;
-            displayfont = discoveryform.theme.GetFont;
 
-            userControlEngineering.isEmbedded = true;
-            userControlEngineering.OnChangedEngineeringWanted += Engineering_OnWantedChange;
             //Can use display number for it, because their names for db save are unique between engineering and synthesis.
+            userControlEngineering.isEmbedded = true;
             userControlEngineering.Init(ed, thc, displaynumber);
+
             userControlSynthesis.isEmbedded = true;
-            userControlSynthesis.OnChangedSynthesisWanted += Synthesis_OnWantedChange;
             userControlSynthesis.Init(ed, thc, displaynumber);
+
+            // so the way it works, if the panels ever re-display (for whatever reason) they tell us, and we redisplay
+
+            userControlSynthesis.OnDisplayComplete += Synthesis_OnWantedChange;
+            userControlEngineering.OnDisplayComplete += Engineering_OnWantedChange;
         }
 
-        public override void ChangeCursorType(UserControlCursorType thc)
+        public override void Closing()
         {
-            uctg.OnTravelSelectionChanged -= Display;
-            uctg = thc;
-            uctg.OnTravelSelectionChanged += Display;
+            RevertToNormalSize();
+            userControlEngineering.Closing();
+            userControlSynthesis.Closing();
         }
 
         #endregion
 
         #region Display
 
-        public override void InitialDisplay()
+        public override void InitialDisplay()       // on start up, this will have an empty history
         {
-            last_he = uctg.GetCurrentHistoryEntry;
             userControlEngineering.InitialDisplay();
             userControlSynthesis.InitialDisplay();
             Display();
@@ -85,9 +82,9 @@ namespace EDDiscovery.UserControls
         public override Color ColorTransparency { get { return Color.Green; } }
         public override void SetTransparency(bool on, Color curcol)
         {
-            pictureBoxList.BackColor = this.BackColor = splitContainer1.BackColor = splitContainer2.BackColor = curcol;
-            splitContainer1.Panel1.BackColor = splitContainer1.Panel2.BackColor = curcol;
-            splitContainer2.Panel1.BackColor = splitContainer2.Panel2.BackColor = curcol;
+            pictureBoxList.BackColor = this.BackColor = splitContainerVertical.BackColor = splitContainerRightHorz.BackColor = curcol;
+            splitContainerVertical.Panel1.BackColor = splitContainerVertical.Panel2.BackColor = curcol;
+            splitContainerRightHorz.Panel1.BackColor = splitContainerRightHorz.Panel2.BackColor = curcol;
             Display();
         }
 
@@ -105,20 +102,20 @@ namespace EDDiscovery.UserControls
 
         private void Discoveryform_OnNewEntry(HistoryEntry he, HistoryList hl)
         {
-            last_he = he;
             if (he.journalEntry is IMaterialCommodityJournalEntry)
                 Display();
         }
 
         private void Display(HistoryEntry he, HistoryList hl)
         {
-            last_he = he;
             Display();
         }
         
         private void Display()
         {
-            if (last_he != null)
+            HistoryEntry last_he = userControlSynthesis.CurrentHistoryEntry;        // sync with what its showing
+
+            if (EngineeringWanted != null && SynthesisWanted != null && last_he != null)    // if we have all the ingredients (get it!)
             {
                 List<MaterialCommodities> mcl = last_he.MaterialCommodity.Sort(false);
                 MaterialCommoditiesList.ResetUsed(mcl);
@@ -159,47 +156,38 @@ namespace EDDiscovery.UserControls
                     }
                 }
                 else
-                { wantedList.Append("No materials currently required."); }
+                {
+                    wantedList.Append("No materials currently required.");
+                }
 
+                Font font = discoveryform.theme.GetFont;
                 pictureBoxList.ClearImageList();
-                PictureBoxHotspot.ImageElement displayList = pictureBoxList.AddTextAutoSize(new Point(0, 0), new Size(1000,1000), wantedList.ToNullSafeString(), displayfont, textcolour, backcolour, 1.0F);
+                PictureBoxHotspot.ImageElement displayList = pictureBoxList.AddTextAutoSize(new Point(0, 0), new Size(1000, 1000), wantedList.ToNullSafeString(), font, textcolour, backcolour, 1.0F);
                 pictureBoxList.Render();
+                font.Dispose();
+
+                // if transparent, we don't show the eng/synth panels
+
                 userControlEngineering.Visible = userControlSynthesis.Visible = !IsTransparent;
                 userControlEngineering.Enabled = userControlSynthesis.Enabled = !IsTransparent;
+
+                splitContainerVertical.Panel1MinSize = displayList.img.Width+8;       // panel left has minimum width to accomodate the text
+
                 if (IsTransparent)
                 {
                     RevertToNormalSize();
-                    int minWidth = ((UserControlForm)this.ParentForm).TitleBarMinWidth();
-                    splitContainer1.Panel2MinSize = 0;
-                    RequestTemporaryResize(new Size(Math.Max(minWidth, displayList.img.Width) + 8, displayList.img.Height + 4));
+                    int minWidth = Math.Max(((UserControlForm)this.ParentForm).TitleBarMinWidth(), displayList.img.Width) + 8;
+                    RequestTemporaryResize(new Size(minWidth, displayList.img.Height + 4));
                 }
                 else
                 {
-                    RevertToNormalSize();
+                    RevertToNormalSize();       // eng/synth is on, normal size
                 }
-                splitContainer1.Panel1MinSize = 0;
-                if (displayList.img.Width < splitContainer1.Width - splitContainer1.Panel2MinSize)
-                {
-                    splitContainer1.SplitterDistance = displayList.img.Width;
-                    splitContainer1.Panel1MinSize = displayList.img.Width;
-                }
-                else
-                    splitContainer1.SplitterDistance = Math.Max(0, splitContainer1.Width - splitContainer1.Panel2MinSize);
+
             }
         }
 
         #endregion
 
-        #region Layout
-
-        public override void Closing()
-        {
-            discoveryform.OnNewEntry -= Discoveryform_OnNewEntry;
-            RevertToNormalSize();
-            userControlEngineering.Closing();
-            userControlSynthesis.Closing();
-        }
-
-        #endregion
     }
 }

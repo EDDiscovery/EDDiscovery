@@ -181,6 +181,8 @@ namespace ExtendedControls
             }
         }
 
+        public Font GetFontMaxSized(float size) { return new Font(currentsettings.fontname, Math.Min(currentsettings.fontsize,size)); }
+
         public Settings currentsettings;           // if name = custom, then its not a standard theme..
         public ThemeToolStripRenderer toolstripRenderer;
         protected List<Settings> themelist;
