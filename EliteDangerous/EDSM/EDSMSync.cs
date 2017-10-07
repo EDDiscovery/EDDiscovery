@@ -74,6 +74,15 @@ namespace EliteDangerousCore.EDSM
         {
             try
             {
+                // Make sure the EDSM class has this history's commander set
+                int cmdrid = hl.CommanderId;
+                EDCommander cmdr = EDCommander.GetCommander(cmdrid);
+                if (cmdr != null)
+                {
+                    edsm.commanderName = cmdr.EdsmName ?? cmdr.Name;
+                    edsm.apiKey = cmdr.APIKey;
+                }
+
                 logout("EDSM sync begin");
 
                 List<HistoryEntry> hlfsdunsyncedlist = hl.FilterByNotEDSMSyncedAndFSD;        // first entry is oldest
@@ -217,6 +226,9 @@ namespace EliteDangerousCore.EDSM
         public static void SendTravelLog(HistoryEntry he) // (verified with EDSM 29/9/2016, seen UTC time being sent, and same UTC time on ESDM).
         {
             EDSMClass edsm = new EDSMClass();
+            var cmdr = he.Commander;
+            edsm.commanderName = cmdr.EdsmName ?? cmdr.Name;
+            edsm.apiKey = cmdr.EdsmName ?? cmdr.Name;
 
             if (!edsm.IsApiKeySet)
                 return;
