@@ -51,11 +51,9 @@ namespace EDDiscovery.UserControls
 
         int[] Order;        // order
         int[] Wanted;       // wanted, in order terms
-        internal bool isEmbedded = false;
-        private List<Tuple<MaterialCommoditiesList.Recipe, int>> wantedList;
 
-        public delegate void ChangedEngineeringWanted(List<Tuple<MaterialCommoditiesList.Recipe, int>> newWanted);
-        public event ChangedEngineeringWanted OnChangedEngineeringWanted;
+        internal bool isEmbedded = false;
+        public Action<List<Tuple<MaterialCommoditiesList.Recipe, int>>> OnDisplayComplete;  // called when display complete, for use by other UCs using this
 
         #region Init
 
@@ -141,7 +139,6 @@ namespace EDDiscovery.UserControls
         {
             last_he = uctg.GetCurrentHistoryEntry;
             Display();
-            if (OnChangedEngineeringWanted != null) OnChangedEngineeringWanted(wantedList);
         }
 
         private void Discoveryform_OnNewEntry(HistoryEntry he, HistoryList hl)
@@ -163,6 +160,8 @@ namespace EDDiscovery.UserControls
             //DONT turn on sorting in the future, thats not how it works.  You click and drag to sort manually since it gives you
             // the order of recipies.
 
+            List<Tuple<MaterialCommoditiesList.Recipe, int>> wantedList = null;
+
             if (last_he != null)
             {
                 List<MaterialCommodities> mcl = last_he.MaterialCommodity.Sort(false);
@@ -170,6 +169,7 @@ namespace EDDiscovery.UserControls
                 int fdrow = dataGridViewEngineering.FirstDisplayedScrollingRowIndex;      // remember where we were displaying
 
                 MaterialCommoditiesList.ResetUsed(mcl);
+
                 wantedList = new List<Tuple<MaterialCommoditiesList.Recipe, int>>();
 
                 string engineers = SQLiteDBClass.GetSettingString(DbEngFilterSave, "All");
@@ -237,7 +237,7 @@ namespace EDDiscovery.UserControls
                         dataGridViewEngineering[Notes.Index, i].Value = res.Item3;
 
                     }
-                    if (isEmbedded && Wanted[rno] > 0)
+                    if (Wanted[rno] > 0 && (visible || isEmbedded))      // embedded, need to 
                     {
                         wantedList.Add(new Tuple<MaterialCommoditiesList.Recipe, int>(Recipes[rno], Wanted[rno]));
                     }
@@ -271,6 +271,9 @@ namespace EDDiscovery.UserControls
                 if ( fdrow>=0 && dataGridViewEngineering.Rows[fdrow].Visible )        // better check visible, may have changed..
                     dataGridViewEngineering.FirstDisplayedScrollingRowIndex = fdrow;
             }
+
+            if (OnDisplayComplete != null)
+                OnDisplayComplete(wantedList);
         }
 
         #endregion
@@ -319,7 +322,6 @@ namespace EDDiscovery.UserControls
                     //System.Diagnostics.Debug.WriteLine("Set wanted {0} to {1}", rno, iv);
                     Wanted[rno] = iv;
                     Display();
-                    if (OnChangedEngineeringWanted != null) OnChangedEngineeringWanted(wantedList);
                 }
                 else
                     dataGridViewEngineering[WantedCol.Index, e.RowIndex].Value = Wanted[rno].ToStringInvariant();
@@ -1219,7 +1221,6 @@ namespace EDDiscovery.UserControls
                 Wanted[rno] = 0;
             }
             Display();
-            if (OnChangedEngineeringWanted != null) OnChangedEngineeringWanted(wantedList);
         }
     }
 }
