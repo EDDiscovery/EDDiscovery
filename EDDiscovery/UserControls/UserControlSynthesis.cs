@@ -33,7 +33,7 @@ namespace EDDiscovery.UserControls
         private int displaynumber = 0;
         private EDDiscoveryForm discoveryform;
         private UserControlCursorType uctg;
-        
+
         private string DbColumnSave { get { return ("SynthesisGrid") + ((displaynumber > 0) ? displaynumber.ToString() : "") + "DGVCol"; } }
         private string DbWSave { get { return "SynthesisWanted" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
         private string DbOSave { get { return "SynthesisOrder" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
@@ -42,10 +42,10 @@ namespace EDDiscovery.UserControls
         int[] Order;        // order
         int[] Wanted;       // wanted, in order terms
         internal bool isEmbedded = false;
-        private List<Tuple<MaterialCommoditiesList.Recipe, int>> wantedList;
 
-        public delegate void ChangedSynthesisWanted(List<Tuple<MaterialCommoditiesList.Recipe, int>> newWanted);
-        public event ChangedSynthesisWanted OnChangedSynthesisWanted;
+        public Action<List<Tuple<MaterialCommoditiesList.Recipe, int>>> OnDisplayComplete;  // called when display complete, for use by other UCs using this
+
+        public HistoryEntry CurrentHistoryEntry { get {return last_he;} }     //one in use, may be null
 
         #region Init
 
@@ -116,7 +116,6 @@ namespace EDDiscovery.UserControls
         {
             last_he = uctg.GetCurrentHistoryEntry;
             Display();
-            if (OnChangedSynthesisWanted != null) OnChangedSynthesisWanted(wantedList);
         }
 
         private void Discoveryform_OnNewEntry(HistoryEntry he, HistoryList hl)
@@ -137,15 +136,16 @@ namespace EDDiscovery.UserControls
         {
             //DONT turn on sorting in the future, thats not how it works.  You click and drag to sort manually since it gives you
             // the order of recipies.
+            List<Tuple<MaterialCommoditiesList.Recipe, int>> wantedList = null;
 
             if (last_he != null)
             {
                 List<MaterialCommodities> mcl = last_he.MaterialCommodity.Sort(false);
-                wantedList = new List<Tuple<MaterialCommoditiesList.Recipe, int>>();
-
                 int fdrow = dataGridViewSynthesis.FirstDisplayedScrollingRowIndex;      // remember where we were displaying
 
                 MaterialCommoditiesList.ResetUsed(mcl);
+
+                wantedList = new List<Tuple<MaterialCommoditiesList.Recipe, int>>();
 
                 string sel = (string)comboBoxSynthesis.SelectedItem;
 
@@ -159,7 +159,7 @@ namespace EDDiscovery.UserControls
                     if (sel == "Ammo")
                         visible = (rno >= FirstAmmoRow);
                     if (sel == "SRV")
-                        visible = (rno>= FirstSRVRow && rno< FirstAmmoRow);
+                        visible = (rno >= FirstSRVRow && rno < FirstAmmoRow);
 
                     dataGridViewSynthesis.Rows[i].Visible = visible;
                 }
@@ -201,10 +201,13 @@ namespace EDDiscovery.UserControls
                     }
                 }
 
-                if ( fdrow>=0 && dataGridViewSynthesis.Rows[fdrow].Visible )        // better check visible, may have changed..
+                if (fdrow >= 0 && dataGridViewSynthesis.Rows[fdrow].Visible)        // better check visible, may have changed..
                     dataGridViewSynthesis.FirstDisplayedScrollingRowIndex = fdrow;
-                
+
             }
+
+            if (OnDisplayComplete != null)
+                OnDisplayComplete(wantedList);
         }
 
         #endregion
@@ -252,7 +255,6 @@ namespace EDDiscovery.UserControls
                     //System.Diagnostics.Debug.WriteLine("Set wanted {0} to {1}", rno, iv);
                     Wanted[rno] = iv;
                     Display();
-                    if (OnChangedSynthesisWanted != null) OnChangedSynthesisWanted(wantedList);
                 }
             }
             else
@@ -370,7 +372,6 @@ namespace EDDiscovery.UserControls
                 Wanted[rno] = 0;
             }
             Display();
-            if (OnChangedSynthesisWanted != null) OnChangedSynthesisWanted(wantedList);
         }
     }
 }
