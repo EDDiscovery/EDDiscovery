@@ -710,7 +710,7 @@ namespace EliteDangerousCore.EDSM
             string encodedSys = HttpUtility.UrlEncode(sysName);
 
             string query = "bodies?systemName=" + sysName;
-            var response = RequestGet("api-v1/" + query, handleException: true);
+            var response = RequestGet("api-system-v1/" + query, handleException: true);
             if (response.Error)
                 return null;
 
