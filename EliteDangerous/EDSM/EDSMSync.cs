@@ -228,7 +228,7 @@ namespace EliteDangerousCore.EDSM
             EDSMClass edsm = new EDSMClass();
             var cmdr = he.Commander;
             edsm.commanderName = cmdr.EdsmName ?? cmdr.Name;
-            edsm.apiKey = cmdr.EdsmName ?? cmdr.Name;
+            edsm.apiKey = cmdr.APIKey;
 
             if (!edsm.IsApiKeySet)
                 return;
