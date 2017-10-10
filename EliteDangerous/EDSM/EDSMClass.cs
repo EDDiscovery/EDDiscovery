@@ -499,7 +499,7 @@ namespace EliteDangerousCore.EDSM
                         ISystem sc = SystemClassDB.GetSystem(id, cn, SystemClassDB.SystemIDType.EdsmId);
                         if (sc == null)
                         {
-                            sc = GetSystemsByName(name).FirstOrDefault(s => s.id_edsm == id);
+                            sc = GetSystemsByName(name)?.FirstOrDefault(s => s.id_edsm == id);
 
                             if (sc == null)
                             {
