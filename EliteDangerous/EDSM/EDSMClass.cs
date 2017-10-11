@@ -499,7 +499,8 @@ namespace EliteDangerousCore.EDSM
                         ISystem sc = SystemClassDB.GetSystem(id, cn, SystemClassDB.SystemIDType.EdsmId);
                         if (sc == null)
                         {
-                            sc = GetSystemsByName(name).FirstOrDefault(s => s.id_edsm == id);
+                            if (DateTime.UtcNow.Subtract(etutc).TotalHours < 6) // Avoid running into the rate limit
+                                sc = GetSystemsByName(name)?.FirstOrDefault(s => s.id_edsm == id);
 
                             if (sc == null)
                             {
