@@ -22,6 +22,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Text.RegularExpressions; // for check bodyname; i.e. if a body is a moon...
 using EDDiscovery.Controls;
 using EliteDangerousCore.DB;
 using EliteDangerousCore;
@@ -264,24 +265,48 @@ namespace EDDiscovery.UserControls
                             }
                             else
                             {
+                                // Earth Like World
                                 if (sc.PlanetTypeID == EDPlanet.Earthlike_body)
-                                    extrainfo = extrainfo.AppendPrePad(sc.BodyName + " is an earth like body", prefix);
-
+                                    extrainfo = extrainfo.AppendPrePad(sc.BodyName + " is an earth like planet", prefix);
+                                
                                 // Water Planets, not terraformable
                                 if (sc.PlanetTypeID == EDPlanet.Water_world && sc.Terraformable == false)
                                     extrainfo = extrainfo.AppendPrePad(sc.BodyName + " is a water world", prefix);
-                                // Check and inform if a water planet is terraformable
+                                // Check and inform if a Water Planet is terraformable
                                 if (sc.PlanetTypeID == EDPlanet.Water_world && sc.Terraformable == true)
                                     extrainfo = extrainfo.AppendPrePad(sc.BodyName + " is a terraformable water world", prefix);
                                 
                                 // Add information for other terraformable planets
                                 if (sc.Terraformable == true && sc.PlanetTypeID != EDPlanet.Water_world)
                                     extrainfo = extrainfo.AppendPrePad(sc.BodyName + " is terraformable", prefix);
-                                
+
+                                // Ammonia Worlds
                                 if (sc.PlanetTypeID == EDPlanet.Ammonia_world)
                                     extrainfo = extrainfo.AppendPrePad(sc.BodyName + " is an ammonia world", prefix);
 
-                                
+                                // Check if a body is a Moon
+                                Match isMoon= Regex.Match(sc.BodyName, @"\b([a-z]$)");
+
+                                // Tell us that a moon is special... 
+
+                                // Terraformable moon
+                                if (sc.Terraformable == true && sc.PlanetTypeID != EDPlanet.Water_world && isMoon.Success)
+                                    extrainfo = extrainfo.AppendPrePad(sc.BodyName + " is a terraformable moon", prefix);
+
+                                // Water moon
+                                if (sc.Terraformable == false && sc.PlanetTypeID == EDPlanet.Water_world && isMoon.Success)
+                                    extrainfo = extrainfo.AppendPrePad(sc.BodyName + " is a water moon", prefix);
+                                // Terraformable water moon
+                                if (sc.Terraformable == true && sc.PlanetTypeID == EDPlanet.Water_world && isMoon.Success)
+                                    extrainfo = extrainfo.AppendPrePad(sc.BodyName + " is a terraformable water moon", prefix);
+
+                                // Earth-like moon
+                                if (sc.PlanetTypeID == EDPlanet.Earthlike_body && isMoon.Success)
+                                    extrainfo = extrainfo.AppendPrePad(sc.BodyName + " is an earth like moon", prefix);
+
+                                // Ammonia moon
+                                if (sc.PlanetTypeID == EDPlanet.Ammonia_world && isMoon.Success)
+                                    extrainfo = extrainfo.AppendPrePad(sc.BodyName + " is an ammonia moon", prefix);   
                             }
                         }
                     }
