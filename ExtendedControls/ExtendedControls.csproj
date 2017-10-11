@@ -67,12 +67,6 @@
     <Compile Include="Forms\DraggableForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\FatalExceptionForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\FatalExceptionForm.Designer.cs">
-      <DependentUpon>FatalExceptionForm.cs</DependentUpon>
-    </Compile>
     <Compile Include="Forms\KeyForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -189,9 +183,6 @@
   <ItemGroup>
     <EmbeddedResource Include="Controls\AutoCompleteTextBox.resx">
       <DependentUpon>AutoCompleteTextBox.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\FatalExceptionForm.resx">
-      <DependentUpon>FatalExceptionForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\InfoForm.resx">
       <DependentUpon>InfoForm.cs</DependentUpon>
