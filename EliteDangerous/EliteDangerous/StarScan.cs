@@ -69,6 +69,7 @@ namespace EliteDangerousCore
             public string ownname;                  // own name              
             public string customname;               // e.g. Earth
             public SortedList<string, ScanNode> children;         // kids
+            public int level;                       // level within SystemNode
 
             private JournalScan scandata;            // can be null if no scan, its a place holder.
             private JournalScan.StarPlanetRing beltdata;
@@ -428,7 +429,8 @@ namespace EliteDangerousCore
                         fullname = lvl == 0 ? (sys.name + (ownname.Contains("Main") ? "" : (" " + ownname))) : node.fullname + " " + ownname,
                         ScanData = null,
                         children = null,
-                        type = sublvtype
+                        type = sublvtype,
+                        level = lvl
                     };
 
                     cnodes.Add(ownname, sublv);
@@ -473,7 +475,8 @@ namespace EliteDangerousCore
                             ScanData = null,
                             BeltData = ring,
                             children = null,
-                            type = ScanNodeType.belt
+                            type = ScanNodeType.belt,
+                            level = 1
                         };
 
                         node.children.Add(beltname, belt);
