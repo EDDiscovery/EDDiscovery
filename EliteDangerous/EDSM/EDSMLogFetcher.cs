@@ -82,9 +82,6 @@ namespace EliteDangerousCore.EDSM
                 waittime = (int)Math.Min(EDSMMaxLogAgeMinutes * 60000, Math.Min(BackoffInterval.TotalSeconds * 1000, EDSMRequestBackoffTime.Subtract(DateTime.UtcNow).TotalSeconds * 1000));
             }
 
-            // get them as of now.. since we are searching back in time it should be okay. On a refresh we would start again!
-            List<HistoryEntry> hlfsdlist = JournalEntry.GetAll(Commander.Nr).OfType<JournalLocOrJump>().OrderBy(je => je.EventTimeUTC).Select(je => HistoryEntry.FromJournalEntry(je, null, false, out jupdate)).ToList();
-
             while (!ExitRequested.WaitOne(waittime))
             {
                 EDSMClass edsm = new EDSMClass { apiKey = Commander.APIKey, commanderName = Commander.EdsmName };
@@ -134,6 +131,10 @@ namespace EliteDangerousCore.EDSM
 
                         if (logendtime > DateTime.UtcNow)
                             logendtime = DateTime.UtcNow;
+
+                        // Get all of the local entries now that we have the entries from EDSM
+                        // Moved here to avoid the race that could have been causing duplicate entries
+                        List<HistoryEntry> hlfsdlist = JournalEntry.GetAll(Commander.Nr).OfType<JournalLocOrJump>().OrderBy(je => je.EventTimeUTC).Select(je => HistoryEntry.FromJournalEntry(je, null, false, out jupdate)).ToList();
 
                         HistoryList hl = new HistoryList(hlfsdlist);
                         List<DateTime> hlfsdtimes = hlfsdlist.Select(he => he.EventTimeUTC).ToList();
