@@ -265,48 +265,58 @@ namespace EDDiscovery.UserControls
                             }
                             else
                             {
-                                // Earth Like World
-                                if (sc.PlanetTypeID == EDPlanet.Earthlike_body)
-                                    extrainfo = extrainfo.AppendPrePad(sc.BodyName + " is an earth like planet", prefix);
-                                
-                                // Water Planets, not terraformable
-                                if (sc.PlanetTypeID == EDPlanet.Water_world && sc.Terraformable == false)
-                                    extrainfo = extrainfo.AppendPrePad(sc.BodyName + " is a water world", prefix);
-                                // Check and inform if a Water Planet is terraformable
-                                if (sc.PlanetTypeID == EDPlanet.Water_world && sc.Terraformable == true)
-                                    extrainfo = extrainfo.AppendPrePad(sc.BodyName + " is a terraformable water world", prefix);
-                                
-                                // Add information for other terraformable planets
-                                if (sc.Terraformable == true && sc.PlanetTypeID != EDPlanet.Water_world)
-                                    extrainfo = extrainfo.AppendPrePad(sc.BodyName + " is terraformable", prefix);
+                                // Check if a non-star body is a moon or not. We want it to further refine our brief summary in the visited star list.
+                                // For multiple nested moons, we need to check both for low case letter at the end, or for a combination of low case and number.
+                                // So, something like My_Newly Discovered_System NU-D s11-1 A 4 b will match, as well as My_Newly Discovered_System NU-D s11-1 A 4 b 2 and My_Newly Discovered_System NU-D s11-1 A 4 b 2 c. And so on...
+                                // The following Regex will work on procedurally generated systems. By now, unless we have a journal information regard moons (with corresponding nesting orbits), it should be quite difficult to include human generated systems.
+                                Match isMoon = Regex.Match(sc.BodyName, @"\s+[a-z]+$|\s+[a-z]\s+[0-9]+$");
 
-                                // Ammonia Worlds
-                                if (sc.PlanetTypeID == EDPlanet.Ammonia_world)
-                                    extrainfo = extrainfo.AppendPrePad(sc.BodyName + " is an ammonia world", prefix);
+                                // To avoid duplicates in the brief star list information, we need to apply our filters before on the bodies recognized as a moon, than do the same for the other bodies that do not fulfill that criteria.
 
-                                // Check if a body is a Moon
-                                Match isMoon= Regex.Match(sc.BodyName, @"\b([a-z]$)");
+                                // Tell us that that special body is a moon. After all, it can be quite an outstanding discovery...
+                                if (isMoon.Success)
+                                {                                                                  
+                                    // Earth-like moon
+                                    if (sc.PlanetTypeID == EDPlanet.Earthlike_body)
+                                        extrainfo = extrainfo.AppendPrePad(sc.BodyName + " is an earth like moon", prefix);
 
-                                // Tell us that a moon is special... 
+                                    // Terraformable water moon
+                                    if (sc.Terraformable == true && sc.PlanetTypeID == EDPlanet.Water_world)
+                                        extrainfo = extrainfo.AppendPrePad(sc.BodyName + " is a terraformable water moon", prefix);
+                                    // Water moon
+                                    if (sc.Terraformable == false && sc.PlanetTypeID == EDPlanet.Water_world)
+                                        extrainfo = extrainfo.AppendPrePad(sc.BodyName + " is a water moon", prefix);
 
-                                // Terraformable moon
-                                if (sc.Terraformable == true && sc.PlanetTypeID != EDPlanet.Water_world && isMoon.Success)
-                                    extrainfo = extrainfo.AppendPrePad(sc.BodyName + " is a terraformable moon", prefix);
+                                    // Terraformable moon
+                                    if (sc.Terraformable == true && sc.PlanetTypeID != EDPlanet.Water_world)
+                                        extrainfo = extrainfo.AppendPrePad(sc.BodyName + " is a terraformable moon", prefix);
 
-                                // Water moon
-                                if (sc.Terraformable == false && sc.PlanetTypeID == EDPlanet.Water_world && isMoon.Success)
-                                    extrainfo = extrainfo.AppendPrePad(sc.BodyName + " is a water moon", prefix);
-                                // Terraformable water moon
-                                if (sc.Terraformable == true && sc.PlanetTypeID == EDPlanet.Water_world && isMoon.Success)
-                                    extrainfo = extrainfo.AppendPrePad(sc.BodyName + " is a terraformable water moon", prefix);
+                                    // Ammonia moon
+                                    if (sc.PlanetTypeID == EDPlanet.Ammonia_world)
+                                        extrainfo = extrainfo.AppendPrePad(sc.BodyName + " is an ammonia moon", prefix);                                  
+                                }
+                                else
+                                // Now, tell us the special state of planets.
+                                {
+                                    // Earth Like planet
+                                    if (sc.PlanetTypeID == EDPlanet.Earthlike_body)
+                                        extrainfo = extrainfo.AppendPrePad(sc.BodyName + " is an earth like planet", prefix);
 
-                                // Earth-like moon
-                                if (sc.PlanetTypeID == EDPlanet.Earthlike_body && isMoon.Success)
-                                    extrainfo = extrainfo.AppendPrePad(sc.BodyName + " is an earth like moon", prefix);
+                                    // Terraformable water world
+                                    if (sc.PlanetTypeID == EDPlanet.Water_world && sc.Terraformable == true)
+                                        extrainfo = extrainfo.AppendPrePad(sc.BodyName + " is a terraformable water world", prefix);
+                                    // Water world
+                                    if (sc.PlanetTypeID == EDPlanet.Water_world && sc.Terraformable == false)
+                                        extrainfo = extrainfo.AppendPrePad(sc.BodyName + " is a water world", prefix);
+                                    
+                                    // Terraformable planet
+                                    if (sc.Terraformable == true && sc.PlanetTypeID != EDPlanet.Water_world)
+                                        extrainfo = extrainfo.AppendPrePad(sc.BodyName + " is terraformable", prefix);
 
-                                // Ammonia moon
-                                if (sc.PlanetTypeID == EDPlanet.Ammonia_world && isMoon.Success)
-                                    extrainfo = extrainfo.AppendPrePad(sc.BodyName + " is an ammonia moon", prefix);   
+                                    // Ammonia world
+                                    if (sc.PlanetTypeID == EDPlanet.Ammonia_world)
+                                        extrainfo = extrainfo.AppendPrePad(sc.BodyName + " is an ammonia world", prefix);
+                                }
                             }
                         }
                     }
