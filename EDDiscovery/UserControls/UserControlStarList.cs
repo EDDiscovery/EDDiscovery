@@ -264,24 +264,54 @@ namespace EDDiscovery.UserControls
                             }
                             else
                             {
-                                if (sc.PlanetTypeID == EDPlanet.Earthlike_body)
-                                    extrainfo = extrainfo.AppendPrePad(sc.BodyName + " is an earth like body", prefix);
+                                // Check if a non-star body is a moon or not. We want it to further refine our brief summary in the visited star list.
+                                // To avoid duplicates, we need to apply our filters before on the bodies recognized as a moon, than do the same for the other bodies that do not fulfill that criteria.
+                                                               
+                                if (sn.level >= 2 && sn.type == StarScan.ScanNodeType.body)
+                                
+                                // Tell us that that special body is a moon. After all, it can be quite an outstanding discovery...
+                                {
+                                    // Earth-like moon
+                                    if (sc.PlanetTypeID == EDPlanet.Earthlike_body)
+                                        extrainfo = extrainfo.AppendPrePad(sc.BodyName + " is an earth like moon", prefix);
 
-                                // Water Planets, not terraformable
-                                if (sc.PlanetTypeID == EDPlanet.Water_world && sc.Terraformable == false)
-                                    extrainfo = extrainfo.AppendPrePad(sc.BodyName + " is a water world", prefix);
-                                // Check and inform if a water planet is terraformable
-                                if (sc.PlanetTypeID == EDPlanet.Water_world && sc.Terraformable == true)
-                                    extrainfo = extrainfo.AppendPrePad(sc.BodyName + " is a terraformable water world", prefix);
-                                
-                                // Add information for other terraformable planets
-                                if (sc.Terraformable == true && sc.PlanetTypeID != EDPlanet.Water_world)
-                                    extrainfo = extrainfo.AppendPrePad(sc.BodyName + " is terraformable", prefix);
-                                
-                                if (sc.PlanetTypeID == EDPlanet.Ammonia_world)
-                                    extrainfo = extrainfo.AppendPrePad(sc.BodyName + " is an ammonia world", prefix);
+                                    // Terraformable water moon
+                                    if (sc.Terraformable == true && sc.PlanetTypeID == EDPlanet.Water_world)
+                                        extrainfo = extrainfo.AppendPrePad(sc.BodyName + " is a terraformable water moon", prefix);
+                                    // Water moon
+                                    if (sc.Terraformable == false && sc.PlanetTypeID == EDPlanet.Water_world)
+                                        extrainfo = extrainfo.AppendPrePad(sc.BodyName + " is a water moon", prefix);
 
-                                
+                                    // Terraformable moon
+                                    if (sc.Terraformable == true && sc.PlanetTypeID != EDPlanet.Water_world)
+                                        extrainfo = extrainfo.AppendPrePad(sc.BodyName + " is a terraformable moon", prefix);
+
+                                    // Ammonia moon
+                                    if (sc.PlanetTypeID == EDPlanet.Ammonia_world)
+                                        extrainfo = extrainfo.AppendPrePad(sc.BodyName + " is an ammonia moon", prefix);                                  
+                                }
+                                else
+                                // Now, tell us the special state of planets.
+                                {
+                                    // Earth Like planet
+                                    if (sc.PlanetTypeID == EDPlanet.Earthlike_body)
+                                        extrainfo = extrainfo.AppendPrePad(sc.BodyName + " is an earth like planet", prefix);
+
+                                    // Terraformable water world
+                                    if (sc.PlanetTypeID == EDPlanet.Water_world && sc.Terraformable == true)
+                                        extrainfo = extrainfo.AppendPrePad(sc.BodyName + " is a terraformable water world", prefix);
+                                    // Water world
+                                    if (sc.PlanetTypeID == EDPlanet.Water_world && sc.Terraformable == false)
+                                        extrainfo = extrainfo.AppendPrePad(sc.BodyName + " is a water world", prefix);
+                                    
+                                    // Terraformable planet
+                                    if (sc.Terraformable == true && sc.PlanetTypeID != EDPlanet.Water_world)
+                                        extrainfo = extrainfo.AppendPrePad(sc.BodyName + " is a terraformable planet", prefix);
+
+                                    // Ammonia world
+                                    if (sc.PlanetTypeID == EDPlanet.Ammonia_world)
+                                        extrainfo = extrainfo.AppendPrePad(sc.BodyName + " is an ammonia world", prefix);
+                                }
                             }
                         }
                     }
