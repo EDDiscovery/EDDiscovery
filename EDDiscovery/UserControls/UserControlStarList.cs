@@ -22,7 +22,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Text.RegularExpressions; // for check bodyname; i.e. if a body is a moon...
 using EDDiscovery.Controls;
 using EliteDangerousCore.DB;
 using EliteDangerousCore;
