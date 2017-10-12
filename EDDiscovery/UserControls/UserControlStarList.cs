@@ -266,16 +266,12 @@ namespace EDDiscovery.UserControls
                             else
                             {
                                 // Check if a non-star body is a moon or not. We want it to further refine our brief summary in the visited star list.
-                                // For multiple nested moons, we need to check both for low case letter at the end, or for a combination of low case and number.
-                                // So, something like My_Newly Discovered_System NU-D s11-1 A 4 b will match, as well as My_Newly Discovered_System NU-D s11-1 A 4 b 2 and My_Newly Discovered_System NU-D s11-1 A 4 b 2 c. And so on...
-                                // The following Regex will work on procedurally generated systems. By now, unless we have a journal information regard moons (with corresponding nesting orbits), it should be quite difficult to include human generated systems.
-                                Match isMoon = Regex.Match(sc.BodyName, @"\s+[a-z]+$|\s+[a-z]\s+[0-9]+$");
-
-                                // To avoid duplicates in the brief star list information, we need to apply our filters before on the bodies recognized as a moon, than do the same for the other bodies that do not fulfill that criteria.
-
+                                // To avoid duplicates, we need to apply our filters before on the bodies recognized as a moon, than do the same for the other bodies that do not fulfill that criteria.
+                                                               
+                                if (sn.level >= 2 && sn.type == StarScan.ScanNodeType.body)
+                                
                                 // Tell us that that special body is a moon. After all, it can be quite an outstanding discovery...
-                                if (isMoon.Success)
-                                {                                                                  
+                                {
                                     // Earth-like moon
                                     if (sc.PlanetTypeID == EDPlanet.Earthlike_body)
                                         extrainfo = extrainfo.AppendPrePad(sc.BodyName + " is an earth like moon", prefix);
@@ -311,7 +307,7 @@ namespace EDDiscovery.UserControls
                                     
                                     // Terraformable planet
                                     if (sc.Terraformable == true && sc.PlanetTypeID != EDPlanet.Water_world)
-                                        extrainfo = extrainfo.AppendPrePad(sc.BodyName + " is terraformable", prefix);
+                                        extrainfo = extrainfo.AppendPrePad(sc.BodyName + " is a terraformable planet", prefix);
 
                                     // Ammonia world
                                     if (sc.PlanetTypeID == EDPlanet.Ammonia_world)
