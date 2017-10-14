@@ -149,7 +149,7 @@ namespace EliteDangerousCore.EDDN
 
             string bodydesig = journal.BodyDesignation ?? journal.BodyName;
 
-            if (!bodydesig.StartsWith(starSystem))  // For now test if its a different name ( a few exception for like sol system with named planets)  To catch a rare out of sync bug in historylist.
+            if (!bodydesig.StartsWith(starSystem, StringComparison.InvariantCultureIgnoreCase))  // For now test if its a different name ( a few exception for like sol system with named planets)  To catch a rare out of sync bug in historylist.
             {
                 return null;
             }
