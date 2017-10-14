@@ -23,7 +23,7 @@ using System.Windows.Forms;
 
 namespace EDDiscovery.UserControls
 {
-    public class EngineeringFilterSelector
+    public class RecipeFilterSelector
     {
         ExtendedControls.CheckedListControlCustom cc;
         string dbstring;
@@ -33,7 +33,7 @@ namespace EDDiscovery.UserControls
 
         private List<string> options;
 
-        public EngineeringFilterSelector(List<string> opts)
+        public RecipeFilterSelector(List<string> opts)
         {
             options = opts;
         }
