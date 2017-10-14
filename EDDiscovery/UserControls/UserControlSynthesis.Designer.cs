@@ -47,6 +47,7 @@ namespace EDDiscovery.UserControls
             this.dataViewScrollerPanel = new ExtendedControls.DataViewScrollerPanel();
             this.dataGridViewSynthesis = new System.Windows.Forms.DataGridView();
             this.UpgradeCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Level = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.MaxCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.WantedCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Available = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -54,9 +55,11 @@ namespace EDDiscovery.UserControls
             this.Recipe = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.vScrollBarCustomMC = new ExtendedControls.VScrollBarCustom();
             this.panelButtons = new System.Windows.Forms.Panel();
-            this.comboBoxSynthesis = new ExtendedControls.ComboBoxCustom();
-            this.toolTip = new System.Windows.Forms.ToolTip(this.components);
+            this.buttonRecipeFilter = new ExtendedControls.ButtonExt();
             this.buttonClear = new ExtendedControls.ButtonExt();
+            this.toolTip = new System.Windows.Forms.ToolTip(this.components);
+            this.buttonFilterLevel = new ExtendedControls.ButtonExt();
+            this.buttonMaterialFilter = new ExtendedControls.ButtonExt();
             this.dataViewScrollerPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewSynthesis)).BeginInit();
             this.panelButtons.SuspendLayout();
@@ -84,6 +87,7 @@ namespace EDDiscovery.UserControls
             this.dataGridViewSynthesis.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewSynthesis.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.UpgradeCol,
+            this.Level,
             this.MaxCol,
             this.WantedCol,
             this.Available,
@@ -109,6 +113,11 @@ namespace EDDiscovery.UserControls
             this.UpgradeCol.Name = "UpgradeCol";
             this.UpgradeCol.ReadOnly = true;
             this.UpgradeCol.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // Level
+            // 
+            this.Level.HeaderText = "Level";
+            this.Level.Name = "Level";
             // 
             // MaxCol
             // 
@@ -185,8 +194,10 @@ namespace EDDiscovery.UserControls
             // 
             // panelButtons
             // 
+            this.panelButtons.Controls.Add(this.buttonMaterialFilter);
+            this.panelButtons.Controls.Add(this.buttonFilterLevel);
+            this.panelButtons.Controls.Add(this.buttonRecipeFilter);
             this.panelButtons.Controls.Add(this.buttonClear);
-            this.panelButtons.Controls.Add(this.comboBoxSynthesis);
             this.panelButtons.Dock = System.Windows.Forms.DockStyle.Top;
             this.panelButtons.Location = new System.Drawing.Point(0, 0);
             this.panelButtons.Name = "panelButtons";
@@ -194,36 +205,18 @@ namespace EDDiscovery.UserControls
             this.panelButtons.TabIndex = 2;
             this.toolTip.SetToolTip(this.panelButtons, "Left click and drag on grid to reorder");
             // 
-            // comboBoxSynthesis
+            // buttonRecipeFilter
             // 
-            this.comboBoxSynthesis.ArrowWidth = 1;
-            this.comboBoxSynthesis.BorderColor = System.Drawing.Color.Red;
-            this.comboBoxSynthesis.ButtonColorScaling = 0.5F;
-            this.comboBoxSynthesis.DataSource = null;
-            this.comboBoxSynthesis.DisplayMember = "";
-            this.comboBoxSynthesis.DropDownBackgroundColor = System.Drawing.Color.Gray;
-            this.comboBoxSynthesis.DropDownHeight = 200;
-            this.comboBoxSynthesis.DropDownWidth = 1;
-            this.comboBoxSynthesis.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.comboBoxSynthesis.ItemHeight = 13;
-            this.comboBoxSynthesis.Location = new System.Drawing.Point(3, 4);
-            this.comboBoxSynthesis.MouseOverBackgroundColor = System.Drawing.Color.Silver;
-            this.comboBoxSynthesis.Name = "comboBoxSynthesis";
-            this.comboBoxSynthesis.ScrollBarButtonColor = System.Drawing.Color.LightGray;
-            this.comboBoxSynthesis.ScrollBarColor = System.Drawing.Color.LightGray;
-            this.comboBoxSynthesis.ScrollBarWidth = 16;
-            this.comboBoxSynthesis.SelectedIndex = -1;
-            this.comboBoxSynthesis.SelectedItem = null;
-            this.comboBoxSynthesis.SelectedValue = null;
-            this.comboBoxSynthesis.Size = new System.Drawing.Size(218, 21);
-            this.comboBoxSynthesis.TabIndex = 0;
-            this.toolTip.SetToolTip(this.comboBoxSynthesis, "Select Synthesis group");
-            this.comboBoxSynthesis.ValueMember = "";
-            this.comboBoxSynthesis.SelectedIndexChanged += new System.EventHandler(this.comboBoxHistoryWindow_SelectedIndexChanged);
-            // 
-            // toolTip
-            // 
-            this.toolTip.ShowAlways = true;
+            this.buttonRecipeFilter.BorderColorScaling = 1.25F;
+            this.buttonRecipeFilter.ButtonColorScaling = 0.5F;
+            this.buttonRecipeFilter.ButtonDisabledScaling = 0.5F;
+            this.buttonRecipeFilter.Location = new System.Drawing.Point(4, 4);
+            this.buttonRecipeFilter.Name = "buttonRecipeFilter";
+            this.buttonRecipeFilter.Size = new System.Drawing.Size(100, 23);
+            this.buttonRecipeFilter.TabIndex = 2;
+            this.buttonRecipeFilter.Text = "Filter By Synthesis";
+            this.buttonRecipeFilter.UseVisualStyleBackColor = true;
+            this.buttonRecipeFilter.Click += new System.EventHandler(this.buttonRecipeFilter_Click);
             // 
             // buttonClear
             // 
@@ -231,14 +224,44 @@ namespace EDDiscovery.UserControls
             this.buttonClear.BorderColorScaling = 1.25F;
             this.buttonClear.ButtonColorScaling = 0.5F;
             this.buttonClear.ButtonDisabledScaling = 0.5F;
-            this.buttonClear.Location = new System.Drawing.Point(693, 4);
+            this.buttonClear.Location = new System.Drawing.Point(697, 4);
             this.buttonClear.Name = "buttonClear";
-            this.buttonClear.Size = new System.Drawing.Size(87, 23);
+            this.buttonClear.Size = new System.Drawing.Size(100, 23);
             this.buttonClear.TabIndex = 1;
             this.buttonClear.Text = "Clear Wanted";
             this.toolTip.SetToolTip(this.buttonClear, "Set all wanted values to zero");
             this.buttonClear.UseVisualStyleBackColor = true;
             this.buttonClear.Click += new System.EventHandler(this.buttonClear_Click);
+            // 
+            // toolTip
+            // 
+            this.toolTip.ShowAlways = true;
+            // 
+            // buttonFilterLevel
+            // 
+            this.buttonFilterLevel.BorderColorScaling = 1.25F;
+            this.buttonFilterLevel.ButtonColorScaling = 0.5F;
+            this.buttonFilterLevel.ButtonDisabledScaling = 0.5F;
+            this.buttonFilterLevel.Location = new System.Drawing.Point(110, 4);
+            this.buttonFilterLevel.Name = "buttonFilterLevel";
+            this.buttonFilterLevel.Size = new System.Drawing.Size(100, 23);
+            this.buttonFilterLevel.TabIndex = 3;
+            this.buttonFilterLevel.Text = "Filter By Level";
+            this.buttonFilterLevel.UseVisualStyleBackColor = true;
+            this.buttonFilterLevel.Click += new System.EventHandler(this.buttonFilterLevel_Click);
+            // 
+            // buttonMaterialFilter
+            // 
+            this.buttonMaterialFilter.BorderColorScaling = 1.25F;
+            this.buttonMaterialFilter.ButtonColorScaling = 0.5F;
+            this.buttonMaterialFilter.ButtonDisabledScaling = 0.5F;
+            this.buttonMaterialFilter.Location = new System.Drawing.Point(216, 4);
+            this.buttonMaterialFilter.Name = "buttonMaterialFilter";
+            this.buttonMaterialFilter.Size = new System.Drawing.Size(100, 23);
+            this.buttonMaterialFilter.TabIndex = 4;
+            this.buttonMaterialFilter.Text = "Filter By Material";
+            this.buttonMaterialFilter.UseVisualStyleBackColor = true;
+            this.buttonMaterialFilter.Click += new System.EventHandler(this.buttonMaterialFilter_Click);
             // 
             // UserControlSynthesis
             // 
@@ -261,14 +284,17 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.DataGridView dataGridViewSynthesis;
         private ExtendedControls.VScrollBarCustom vScrollBarCustomMC;
         private System.Windows.Forms.Panel panelButtons;
-        internal ExtendedControls.ComboBoxCustom comboBoxSynthesis;
         private System.Windows.Forms.ToolTip toolTip;
+        private ExtendedControls.ButtonExt buttonClear;
         private System.Windows.Forms.DataGridViewTextBoxColumn UpgradeCol;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Level;
         private System.Windows.Forms.DataGridViewTextBoxColumn MaxCol;
         private System.Windows.Forms.DataGridViewTextBoxColumn WantedCol;
         private System.Windows.Forms.DataGridViewTextBoxColumn Available;
         private System.Windows.Forms.DataGridViewTextBoxColumn Notes;
         private System.Windows.Forms.DataGridViewTextBoxColumn Recipe;
-        private ExtendedControls.ButtonExt buttonClear;
+        private ExtendedControls.ButtonExt buttonRecipeFilter;
+        private ExtendedControls.ButtonExt buttonFilterLevel;
+        private ExtendedControls.ButtonExt buttonMaterialFilter;
     }
 }

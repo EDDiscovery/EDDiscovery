@@ -30,11 +30,11 @@ namespace EDDiscovery.UserControls
         private EDDiscoveryForm discoveryform;
         private UserControlCursorType uctg;
 
-        EngineeringFilterSelector efs;
-        EngineeringFilterSelector mfs;
-        EngineeringFilterSelector ufs;
-        EngineeringFilterSelector lfs;
-        EngineeringFilterSelector matfs;
+        RecipeFilterSelector efs;
+        RecipeFilterSelector mfs;
+        RecipeFilterSelector ufs;
+        RecipeFilterSelector lfs;
+        RecipeFilterSelector matfs;
 
         private List<string> levels = new List<string> { "1", "2", "3", "4", "5" };
         private List<Tuple<string, string>> matLookUp;
@@ -84,27 +84,27 @@ namespace EDDiscovery.UserControls
 
             List<string> engineers = Recipes.SelectMany(r => r.engineers).Distinct().ToList();
             engineers.Sort();
-            efs = new EngineeringFilterSelector(engineers);
+            efs = new RecipeFilterSelector(engineers);
             efs.Changed += FilterChanged;
 
-            lfs = new EngineeringFilterSelector(levels);
+            lfs = new RecipeFilterSelector(levels);
             lfs.Changed += FilterChanged;
 
             List<string> modules = Recipes.Select(r => r.module).Distinct().ToList();
             modules.Sort();
-            mfs = new EngineeringFilterSelector(modules);
+            mfs = new RecipeFilterSelector(modules);
             mfs.Changed += FilterChanged;
 
             var upgrades = Recipes.Select(r => r.name).Distinct().ToList();
             upgrades.Sort();
-            ufs = new EngineeringFilterSelector(upgrades);
+            ufs = new RecipeFilterSelector(upgrades);
             ufs.Changed += FilterChanged;
 
             List<string> matShortNames = Recipes.SelectMany(r => r.ingredients).Distinct().ToList();
             matLookUp = matShortNames.Select(sn => Tuple.Create<string,string>(sn, MaterialCommodityDB.GetCachedMaterialByShortName(sn).name)).ToList();
             List<string> matLongNames = matLookUp.Select(lu => lu.Item2).ToList();
             matLongNames.Sort();
-            matfs = new EngineeringFilterSelector(matLongNames);
+            matfs = new RecipeFilterSelector(matLongNames);
             matfs.Changed += FilterChanged;
 
             for (int i = 0; i < Recipes.Count; i++)         // pre-fill array.. preventing the crash on cell edit when you
