@@ -81,6 +81,7 @@ namespace EliteDangerousCore.EDSM
 
             query += "] } ";
 
+            MimeType = "application/json; charset=utf-8";
             var response = RequestPost("{ \"data\": " + query + " }", "api-v1/submit-distances", handleException: true);
             if (response.Error)
                 return null;
@@ -182,7 +183,7 @@ namespace EliteDangerousCore.EDSM
         public string RequestDistances(string date)
         {
             string query;
-            query = "?showId=1 & submitted=1 & startdatetime=" + HttpUtility.UrlEncode(date);
+            query = "?showId=1&submitted=1&startdatetime=" + HttpUtility.UrlEncode(date);
 
             var response = RequestGet("api-v1/distances" + query, handleException: true);
             if (response.Error)
@@ -341,7 +342,7 @@ namespace EliteDangerousCore.EDSM
                 return null;
 
             string query;
-            query = "set-comment?systemName=" + HttpUtility.UrlEncode(systemName) + "&commanderName=" + HttpUtility.UrlEncode(commanderName) + "&apiKey=" + apiKey + "&comment=" + HttpUtility.UrlEncode(note);
+            query = "systemName=" + HttpUtility.UrlEncode(systemName) + "&commanderName=" + HttpUtility.UrlEncode(commanderName) + "&apiKey=" + apiKey + "&comment=" + HttpUtility.UrlEncode(note);
 
             if (edsmid > 0)
             {
@@ -349,7 +350,8 @@ namespace EliteDangerousCore.EDSM
                 query += "&systemId=" + edsmid;
             }
 
-            var response = RequestGet("api-logs-v1/" + query, handleException: true);
+            MimeType = "application/x-www-form-urlencoded";
+            var response = RequestPost(query, "api-logs-v1/set-comment", handleException: true);
 
             if (response.Error)
                 return null;
@@ -363,10 +365,11 @@ namespace EliteDangerousCore.EDSM
                 return null;
 
             string query;
-            query = "set-log?systemName=" + HttpUtility.UrlEncode(systemName) + "&commanderName=" + HttpUtility.UrlEncode(commanderName) + "&apiKey=" + apiKey +
+            query = "systemName=" + HttpUtility.UrlEncode(systemName) + "&commanderName=" + HttpUtility.UrlEncode(commanderName) + "&apiKey=" + apiKey +
                  "&fromSoftware=" + HttpUtility.UrlEncode(fromSoftware) + "&fromSoftwareVersion=" + HttpUtility.UrlEncode(fromSoftwareVersion) +
                   "&dateVisited=" + HttpUtility.UrlEncode(dateVisitedutc.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture));
-            var response = RequestGet("api-logs-v1/" + query, handleException: true);
+            MimeType = "application/x-www-form-urlencoded";
+            var response = RequestPost(query, "api-logs-v1/set-log", handleException: true);
 
             if (response.Error)
                 return null;
@@ -380,12 +383,13 @@ namespace EliteDangerousCore.EDSM
                 return null;
 
             string query;
-            query = "set-log?systemName=" + HttpUtility.UrlEncode(systemName) + "&commanderName=" + HttpUtility.UrlEncode(commanderName) + "&apiKey=" + apiKey +
+            query = "systemName=" + HttpUtility.UrlEncode(systemName) + "&commanderName=" + HttpUtility.UrlEncode(commanderName) + "&apiKey=" + apiKey +
                  "&fromSoftware=" + HttpUtility.UrlEncode(fromSoftware) + "&fromSoftwareVersion=" + HttpUtility.UrlEncode(fromSoftwareVersion) +
                  "&x=" + HttpUtility.UrlEncode(x.ToString(CultureInfo.InvariantCulture)) + "&y=" + HttpUtility.UrlEncode(y.ToString(CultureInfo.InvariantCulture)) + "&z=" + HttpUtility.UrlEncode(z.ToString(CultureInfo.InvariantCulture)) +
                   "&dateVisited=" + HttpUtility.UrlEncode(dateVisitedutc.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture));
 
-            var response = RequestGet("api-logs-v1/" + query, handleException: true);
+            MimeType = "application/x-www-form-urlencoded";
+            var response = RequestPost(query, "api-logs-v1/set-log", handleException: true);
 
             if (response.Error)
                 return null;
@@ -393,18 +397,20 @@ namespace EliteDangerousCore.EDSM
             return response.Body;
         }
 
-        public bool SendTravelLog(string name, DateTime timeutc, bool coord, double x, double y, double z, out string error, out bool firstdiscover, out int edsmid)
+        public bool SendTravelLog(string name, DateTime timeutc, bool coord, double x, double y, double z, out string error, out int errno, out bool firstdiscover, out int edsmid)
         {
             firstdiscover = false;
             edsmid = 0;
 
             if (!IsApiKeySet)
             {
+                errno = -1;
                 error = "EDSM API Key not set";
                 return false;
             }
 
             error = "";
+            errno = 0;
 
             string json = null;
 
@@ -417,6 +423,7 @@ namespace EliteDangerousCore.EDSM
             }
             catch (Exception ex)
             {
+                errno = -1;
                 error = "EDSM sync error, connection to server failed";
                 System.Diagnostics.Trace.WriteLine("EDSM Sync error:" + ex.ToString());
             }
@@ -437,7 +444,8 @@ namespace EliteDangerousCore.EDSM
                 }
                 else
                 {
-                    error = "EDSM sync ERROR:" + msgnum.ToString() + ":" + msgstr;
+                    error = "EDSM sync error submitting system (" + name + "):" + msgnum.ToString() + ":" + msgstr;
+                    errno = msgnum;
                     System.Diagnostics.Trace.WriteLine("Error sync:" + msgnum.ToString() + " : " + name);
                 }
             }
@@ -938,7 +946,7 @@ namespace EliteDangerousCore.EDSM
                 return null;
 
             string query;
-            query = "set-ranks?commanderName=" + HttpUtility.UrlEncode(commanderName) + "&apiKey=" + apiKey;
+            query = "commanderName=" + HttpUtility.UrlEncode(commanderName) + "&apiKey=" + apiKey;
             query = query + "&Combat=" + combat_rank.ToString() + ";" + combat_progress.ToString();
             query = query + "&Trade=" + trade_rank.ToString() + ";" + trade_progress.ToString();
             query = query + "&Explore=" + explore_rank.ToString() + ";" + explore_progress.ToString();
@@ -947,7 +955,8 @@ namespace EliteDangerousCore.EDSM
             query = query + "&Empire=" + empire_rank.ToString() + ";" + empire_progress.ToString();
 
 
-            var response = RequestGet("api-commander-v1/" + query, handleException: true);
+            MimeType = "application/x-www-form-urlencoded";
+            var response = RequestPost(query, "api-commander-v1/set-ranks", handleException: true);
 
             if (response.Error)
                 return null;
@@ -961,12 +970,13 @@ namespace EliteDangerousCore.EDSM
                 return null;
 
             string query;
-            query = "set-credits?commanderName=" + HttpUtility.UrlEncode(commanderName) + "&apiKey=" + apiKey;
+            query = "commanderName=" + HttpUtility.UrlEncode(commanderName) + "&apiKey=" + apiKey;
             query = query + "&balance=" + credits.ToString();
             query = query + "&loan=" + loan.ToString();
 
 
-            var response = RequestGet("api-commander-v1/" + query, handleException: true);
+            MimeType = "application/x-www-form-urlencoded";
+            var response = RequestPost(query, "api-commander-v1/set-credits" + query, handleException: true);
 
             if (response.Error)
                 return null;
@@ -982,11 +992,12 @@ namespace EliteDangerousCore.EDSM
                 jo[kvp.Key] = kvp.Value;
             }
 
-            string query = "set-materials?commanderName=" + HttpUtility.UrlEncode(commanderName) + "&apiKey=" + apiKey;
+            string query = "commanderName=" + HttpUtility.UrlEncode(commanderName) + "&apiKey=" + apiKey;
             query += "&type=materials";
             query += "&values=" + HttpUtility.UrlEncode(jo.ToString());
 
-            var response = RequestGet("api-commander-v1/" + query, handleException: true);
+            MimeType = "application/x-www-form-urlencoded";
+            var response = RequestPost(query, "api-commander-v1/set-materials", handleException: true);
 
             if (response.Error)
                 return null;
@@ -1002,11 +1013,12 @@ namespace EliteDangerousCore.EDSM
                 jo[kvp.Key] = kvp.Value;
             }
 
-            string query = "set-materials?commanderName=" + HttpUtility.UrlEncode(commanderName) + "&apiKey=" + apiKey;
+            string query = "commanderName=" + HttpUtility.UrlEncode(commanderName) + "&apiKey=" + apiKey;
             query += "&type=data";
             query += "&values=" + HttpUtility.UrlEncode(jo.ToString());
 
-            var response = RequestGet("api-commander-v1/" + query, handleException: true);
+            MimeType = "application/x-www-form-urlencoded";
+            var response = RequestPost(query, "api-commander-v1/set-materials", handleException: true);
 
             if (response.Error)
                 return null;
@@ -1022,11 +1034,12 @@ namespace EliteDangerousCore.EDSM
                 jo[kvp.Key] = kvp.Value;
             }
 
-            string query = "set-materials?commanderName=" + HttpUtility.UrlEncode(commanderName) + "&apiKey=" + apiKey;
+            string query = "commanderName=" + HttpUtility.UrlEncode(commanderName) + "&apiKey=" + apiKey;
             query += "&type=cargo";
             query += "&values=" + HttpUtility.UrlEncode(jo.ToString());
 
-            var response = RequestGet("api-commander-v1/" + query, handleException: true);
+            MimeType = "application/x-www-form-urlencoded";
+            var response = RequestPost(query, "api-commander-v1/set-materials", handleException: true);
 
             if (response.Error)
                 return null;
@@ -1040,7 +1053,7 @@ namespace EliteDangerousCore.EDSM
                 return null;
 
             string query;
-            query = "update-ship?commanderName=" + HttpUtility.UrlEncode(commanderName) + "&apiKey=" + apiKey;
+            query = "commanderName=" + HttpUtility.UrlEncode(commanderName) + "&apiKey=" + apiKey;
             query = query + "&shipId=" + shipId.ToString();
             query = query + "&type=" + Uri.EscapeDataString(type);
 
@@ -1071,7 +1084,8 @@ namespace EliteDangerousCore.EDSM
                 query += "&linkToCoriolis=" + Uri.EscapeDataString(coriolisurl);
             }
 
-            var response = RequestGet("api-commander-v1/" + query, handleException: true);
+            MimeType = "application/x-www-form-urlencoded";
+            var response = RequestPost(query, "api-commander-v1/update-ship", handleException: true);
 
             if (response.Error)
                 return null;
@@ -1085,12 +1099,11 @@ namespace EliteDangerousCore.EDSM
                 return null;
 
             string query;
-            query = "set-ship-id?commanderName=" + HttpUtility.UrlEncode(commanderName) + "&apiKey=" + apiKey;
+            query = "commanderName=" + HttpUtility.UrlEncode(commanderName) + "&apiKey=" + apiKey;
             query = query + "&shipId=" + shipId.ToString();
 
-
-
-            var response = RequestGet("api-commander-v1/" + query, handleException: true);
+            MimeType = "application/x-www-form-urlencoded";
+            var response = RequestPost(query, "api-commander-v1/set-ship-id", handleException: true);
 
             if (response.Error)
                 return null;
