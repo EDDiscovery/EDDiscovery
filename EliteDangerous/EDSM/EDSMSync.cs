@@ -132,10 +132,11 @@ namespace EliteDangerousCore.EDSM
                         else
                         {
                             string errmsg;              // (verified with EDSM 29/9/2016)
+                            int errno;
                             bool firstdiscover;
                             int edsmid;
 
-                            if (edsm.SendTravelLog(he.System.name, he.EventTimeUTC, he.System.HasCoordinate && !he.IsStarPosFromEDSM, he.System.x, he.System.y, he.System.z, out errmsg, out firstdiscover, out edsmid))
+                            if (edsm.SendTravelLog(he.System.name, he.EventTimeUTC, he.System.HasCoordinate && !he.IsStarPosFromEDSM, he.System.x, he.System.y, he.System.z, out errmsg, out errno, out firstdiscover, out edsmid))
                             {
                                 if (edsmid != 0 && he.System.id_edsm <= 0)
                                 {
@@ -155,7 +156,11 @@ namespace EliteDangerousCore.EDSM
                             if (errmsg.Length > 0)
                             {
                                 logout(errmsg);
-                                break;
+
+                                if (errno != 303 && errno != 304) // Skip the system if EDSM rejects the system
+                                {
+                                    break;
+                                }
                             }
                         }
                     }
@@ -234,11 +239,12 @@ namespace EliteDangerousCore.EDSM
                 return;
 
             string errmsg;
+            int errno;
             bool firstdiscover;
             int edsmid;
             Task taskEDSM = Task.Factory.StartNew(() =>
             {                                                   // LOCAL time, there is a UTC converter inside this call
-                if (edsm.SendTravelLog(he.System.name, he.EventTimeUTC, he.System.HasCoordinate, he.System.x, he.System.y, he.System.z, out errmsg, out firstdiscover, out edsmid))
+                if (edsm.SendTravelLog(he.System.name, he.EventTimeUTC, he.System.HasCoordinate, he.System.x, he.System.y, he.System.z, out errmsg, out errno, out firstdiscover, out edsmid))
                 {
                     if (edsmid != 0 && he.System.id_edsm <= 0)
                     {
