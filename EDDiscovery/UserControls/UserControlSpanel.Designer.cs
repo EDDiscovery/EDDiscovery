@@ -152,7 +152,7 @@ namespace EDDiscovery.UserControls
             this.showHabitationMinimumAndMaximumDistanceToolStripMenuItem.CheckOnClick = true;
             this.showHabitationMinimumAndMaximumDistanceToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.showHabitationMinimumAndMaximumDistanceToolStripMenuItem.Name = "showHabitationMinimumAndMaximumDistanceToolStripMenuItem";
-            this.showHabitationMinimumAndMaximumDistanceToolStripMenuItem.Size = new System.Drawing.Size(346, 22);
+            this.showHabitationMinimumAndMaximumDistanceToolStripMenuItem.Size = new System.Drawing.Size(346, 44);
             this.showHabitationMinimumAndMaximumDistanceToolStripMenuItem.Text = "Show Habitation Minimum and Maximum Distance";
             this.showHabitationMinimumAndMaximumDistanceToolStripMenuItem.Click += new System.EventHandler(this.showHabitationMinimumAndMaximumDistanceToolStripMenuItem_Click);
             // 
