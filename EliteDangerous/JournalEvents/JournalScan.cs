@@ -732,7 +732,7 @@ namespace EliteDangerousCore.JournalEvents
                 case EDStar.WNC:
                 case EDStar.WC:
                 case EDStar.WO:
-                    return EliteDangerous.Properties.Resources.DefaultStar;
+                    return EliteDangerous.Properties.Resources.WolfRayet;
 
                 // Carbon
                 case EDStar.CS:
@@ -746,7 +746,7 @@ namespace EliteDangerousCore.JournalEvents
                     return EliteDangerous.Properties.Resources.M5V;
 
                 case EDStar.S:   // seen in log, data from http://elite-dangerous.wikia.com/wiki/Stars
-                    return EliteDangerous.Properties.Resources.DefaultStar;
+                    return EliteDangerous.Properties.Resources.M5V;
 
                 // white dwarf
                 case EDStar.D:
@@ -775,7 +775,7 @@ namespace EliteDangerousCore.JournalEvents
 
                 case EDStar.X:
                     // currently speculative, not confirmed with actual data... in journal
-                    return EliteDangerous.Properties.Resources.DefaultStar;
+                    return EliteDangerous.Properties.Resources.Globe;
 
                 // Journal.. really?  need evidence these actually are formatted like this.
 
@@ -784,15 +784,15 @@ namespace EliteDangerousCore.JournalEvents
                 case EDStar.A_BlueWhiteSuperGiant:
                     return EliteDangerous.Properties.Resources.A9III_White;
                 case EDStar.F_WhiteSuperGiant:
-                    return EliteDangerous.Properties.Resources.DefaultStar;
+                    return EliteDangerous.Properties.Resources.F5VAB;
                 case EDStar.M_RedSuperGiant:
-                    return EliteDangerous.Properties.Resources.DefaultStar;
+                    return EliteDangerous.Properties.Resources.M5V;
                 case EDStar.M_RedGiant:
-                    return EliteDangerous.Properties.Resources.DefaultStar;
+                    return EliteDangerous.Properties.Resources.M5V;
                 case EDStar.K_OrangeGiant:
-                    return EliteDangerous.Properties.Resources.DefaultStar;
+                    return EliteDangerous.Properties.Resources.K0V;
                 case EDStar.RoguePlanet:
-                    return EliteDangerous.Properties.Resources.DefaultStar;
+                    return EliteDangerous.Properties.Resources.Globe;
 
                 default:
                     return EliteDangerous.Properties.Resources.DefaultStar;
