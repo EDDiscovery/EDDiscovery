@@ -1127,28 +1127,28 @@ namespace EliteDangerousCore.EDSM
             {
                 if (!si.Equals(LastShipInfo))   // if we are sending new ship info..
                 {
-                    System.Diagnostics.Debug.WriteLine("Update EDSM with ship info" + si.ID + " " + si.ShipType + " " + cargo);
+                    System.Diagnostics.Trace.WriteLine("Update EDSM with ship info " + si.ID + " " + si.ShipType + " " + cargo);
                     CommanderUpdateShip(si.ID, si.ShipType.Alt("Unknown"), si, cargo);
                     LastShipInfo = si;
                 }
 
                 if (LastShipID != sicurrent.ID) // if we have a new current ship
                 {
-                    System.Diagnostics.Debug.WriteLine("Update EDSM with current ship" + sicurrent.ID);
+                    System.Diagnostics.Trace.WriteLine("Update EDSM with current ship " + sicurrent.ID);
                     CommanderSetCurrentShip(sicurrent.ID);
                     LastShipID = sicurrent.ID;
                 }
 
                 if (LastEDSMCredits != cash)    // if our cash has changed..
                 {
-                    System.Diagnostics.Debug.WriteLine("Update EDSM with credits" + cash);
+                    System.Diagnostics.Trace.WriteLine("Update EDSM with credits " + cash);
                     SetCredits(cash, loan);
                     LastEDSMCredits = cash;
                 }
 
                 if ( progress != null && rank != null && (!Object.ReferenceEquals(progress,LastProgress) || !Object.ReferenceEquals(rank,LastRank)) )
                 {
-                    System.Diagnostics.Debug.WriteLine("Update EDSM with ranks");
+                    System.Diagnostics.Trace.WriteLine("Update EDSM with ranks");
                     SetRanks((int)rank.Combat, progress.Combat, (int)rank.Trade, progress.Trade, (int)rank.Explore, progress.Explore, (int)rank.CQC, progress.CQC, (int)rank.Federation, progress.Federation, (int)rank.Empire, progress.Empire);
                     LastProgress = progress;
                     LastRank = rank;
@@ -1156,7 +1156,7 @@ namespace EliteDangerousCore.EDSM
 
                 if (matcommod != null && matcommod != LastMats)
                 {
-                    System.Diagnostics.Debug.WriteLine("Update EDSM with materials and cargo");
+                    System.Diagnostics.Trace.WriteLine("Update EDSM with materials and cargo");
                     List<MaterialCommodities> lmats = matcommod.Sort(false);
                     List<MaterialCommodities> lcargo = matcommod.Sort(true);
                     List<MaterialCommodities> ldata = lmats.Where(m => m.category == MaterialCommodities.MaterialEncodedCategory).ToList();
