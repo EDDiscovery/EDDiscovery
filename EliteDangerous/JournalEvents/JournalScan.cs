@@ -504,7 +504,7 @@ namespace EliteDangerousCore.JournalEvents
             if (IsStar && HabitableZoneInner.HasValue && HabitableZoneOuter.HasValue)
             {
                 StringBuilder habZone = new StringBuilder();
-                habZone.AppendFormat("Main Star Habitable Zone {0} ({1}-{2} AU)\n", GetHabZoneStringLs(),
+                habZone.AppendFormat("Habitable Zone Approx. {0} ({1}-{2} AU)\n", GetHabZoneStringLs(),
                                                                                   (HabitableZoneInner.Value / 499).ToString("N2"), (HabitableZoneOuter.Value / 499).ToString("N2"));
                 if (nSemiMajorAxis.HasValue && nSemiMajorAxis.Value > 0)
                     habZone.AppendFormat(" (Others stars not considered)\n");
