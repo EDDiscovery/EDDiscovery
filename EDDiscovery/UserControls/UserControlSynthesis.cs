@@ -25,6 +25,7 @@ using System.Windows.Forms;
 using EDDiscovery.Controls;
 using EliteDangerousCore.DB;
 using EliteDangerousCore;
+using static EDDiscovery.UserControls.Recipes;
 
 namespace EDDiscovery.UserControls
 {
@@ -74,34 +75,34 @@ namespace EDDiscovery.UserControls
             discoveryform.OnNewEntry += Discoveryform_OnNewEntry;
             uctg.OnTravelSelectionChanged += Display;
 
-            Order = SQLiteDBClass.GetSettingString(DbOSave, "").RestoreArrayFromString(0, Recipes.Count);
+            Order = SQLiteDBClass.GetSettingString(DbOSave, "").RestoreArrayFromString(0, SynthesisRecipes.Count);
             if (Order.Distinct().Count() != Order.Length)       // if not distinct..
                 for (int i = 0; i < Order.Length; i++)          // reset
                     Order[i] = i;
 
-            Wanted = SQLiteDBClass.GetSettingString(DbWSave, "").RestoreArrayFromString(0, Recipes.Count);
+            Wanted = SQLiteDBClass.GetSettingString(DbWSave, "").RestoreArrayFromString(0, SynthesisRecipes.Count);
 
-            var rcpes = Recipes.Select(r => r.name).Distinct().ToList();
+            var rcpes = SynthesisRecipes.Select(r => r.name).Distinct().ToList();
             rcpes.Sort();
             rfs = new RecipeFilterSelector(rcpes);
             rfs.Changed += FilterChanged;
 
-            var lvls = Recipes.Select(r => r.level).Distinct().ToList();
+            var lvls = SynthesisRecipes.Select(r => r.level).Distinct().ToList();
             lvls.Sort();
             lfs = new RecipeFilterSelector(lvls);
             lfs.Changed += FilterChanged;
 
-            List<string> matShortNames = Recipes.SelectMany(r => r.ingredients).Distinct().ToList();
+            List<string> matShortNames = SynthesisRecipes.SelectMany(r => r.ingredients).Distinct().ToList();
             matLookUp = matShortNames.Select(sn => Tuple.Create<string, string>(sn, MaterialCommodityDB.GetCachedMaterialByShortName(sn).name)).ToList();
             List<string> matLongNames = matLookUp.Select(lu => lu.Item2).ToList();
             matLongNames.Sort();
             mfs = new RecipeFilterSelector(matLongNames);
             mfs.Changed += FilterChanged;
 
-            for (int i = 0; i < Recipes.Count; i++)         // pre-fill array.. preventing the crash on cell edit when you
+            for (int i = 0; i < SynthesisRecipes.Count; i++)         // pre-fill array.. preventing the crash on cell edit when you
             {
                 int rno = Order[i];
-                MaterialCommoditiesList.SynthesisRecipe r = Recipes[rno];
+                MaterialCommoditiesList.SynthesisRecipe r = SynthesisRecipes[rno];
 
                 int rown = dataGridViewSynthesis.Rows.Add();
 
@@ -171,10 +172,10 @@ namespace EDDiscovery.UserControls
                 if (materials == "All" || materials == "None") { matList = new List<string>(); }
                 else { matList = materials.Split(';').Where(x => !string.IsNullOrEmpty(x)).Select(m => matLookUp.Where(u => u.Item2 == m).First().Item1).ToList(); }
 
-                for (int i = 0; i < Recipes.Count; i++)
+                for (int i = 0; i < SynthesisRecipes.Count; i++)
                 {
                     int rno = (int)dataGridViewSynthesis.Rows[i].Tag;
-                    dataGridViewSynthesis.Rows[i].Cells[2].Value = MaterialCommoditiesList.HowManyLeft(mcl, Recipes[rno]).Item1.ToStringInvariant();
+                    dataGridViewSynthesis.Rows[i].Cells[2].Value = MaterialCommoditiesList.HowManyLeft(mcl, SynthesisRecipes[rno]).Item1.ToStringInvariant();
                     bool visible = true;
                 
                     if (recep == "All" && levels == "All" && materials == "All")
@@ -187,17 +188,17 @@ namespace EDDiscovery.UserControls
                         if (recep == "All") { visible = true; }
                         else
                         {
-                            visible = recipeArray.Contains(Recipes[rno].name);
+                            visible = recipeArray.Contains(SynthesisRecipes[rno].name);
                         }
                         if (levels == "All") { visible = visible && true; }
                         else
                         {
-                            visible = visible && lvlArray.Contains(Recipes[rno].level);
+                            visible = visible && lvlArray.Contains(SynthesisRecipes[rno].level);
                         }
                         if (materials == "All") { visible = visible && true; }
                         else
                         {
-                            var included = matList.Intersect<string>(Recipes[rno].ingredients.ToList<string>());
+                            var included = matList.Intersect<string>(SynthesisRecipes[rno].ingredients.ToList<string>());
                             visible = visible && included.Count() > 0;
                         }
                     }
@@ -205,12 +206,12 @@ namespace EDDiscovery.UserControls
                     dataGridViewSynthesis.Rows[i].Visible = visible;
                 }
 
-                for (int i = 0; i < Recipes.Count; i++)
+                for (int i = 0; i < SynthesisRecipes.Count; i++)
                 {
                     int rno = (int)dataGridViewSynthesis.Rows[i].Tag;
                     if (dataGridViewSynthesis.Rows[i].Visible)
                     {
-                        Tuple<int, int, string> res = MaterialCommoditiesList.HowManyLeft(mcl, Recipes[rno], Wanted[rno]);
+                        Tuple<int, int, string> res = MaterialCommoditiesList.HowManyLeft(mcl, SynthesisRecipes[rno], Wanted[rno]);
                         //System.Diagnostics.Debug.WriteLine("{0} Recipe {1} executed {2} {3} ", i, rno, Wanted[rno], res.Item2);
 
                         using (DataGridViewRow row = dataGridViewSynthesis.Rows[i])
@@ -222,11 +223,11 @@ namespace EDDiscovery.UserControls
                     }
                     if (Wanted[rno] > 0 && (dataGridViewSynthesis.Rows[i].Visible || isEmbedded))
                     {
-                        wantedList.Add(new Tuple<MaterialCommoditiesList.Recipe, int>(Recipes[rno], Wanted[rno]));
+                        wantedList.Add(new Tuple<MaterialCommoditiesList.Recipe, int>(SynthesisRecipes[rno], Wanted[rno]));
                     }
                 }
 
-                dataGridViewSynthesis.RowCount = Recipes.Count;         // truncate previous shopping list..
+                dataGridViewSynthesis.RowCount = SynthesisRecipes.Count;         // truncate previous shopping list..
 
                 if (!isEmbedded)
                 {
@@ -322,7 +323,7 @@ namespace EDDiscovery.UserControls
         {
             rowFrom = dataGridViewSynthesis.HitTest(e.X, e.Y).RowIndex;
 
-            if (rowFrom >= 0 && rowFrom < Recipes.Count)        // only can drag recipes area..
+            if (rowFrom >= 0 && rowFrom < SynthesisRecipes.Count)        // only can drag SynthesisRecipes area..
             {
                 Size dragSize = SystemInformation.DragSize;
                 moveMoveDragBox = new Rectangle(new Point(e.X - (dragSize.Width / 2),
@@ -344,13 +345,13 @@ namespace EDDiscovery.UserControls
             //System.Diagnostics.Debug.WriteLine(Environment.TickCount + " drop at " + droprow);
 
             // If the drag operation was a move then remove and insert the row.
-            if (e.Effect == DragDropEffects.Move && droprow>=0 && droprow < Recipes.Count )
+            if (e.Effect == DragDropEffects.Move && droprow>=0 && droprow < SynthesisRecipes.Count )
             {
                 DataGridViewRow rowTo = e.Data.GetData( typeof(DataGridViewRow)) as DataGridViewRow;
                 dataGridViewSynthesis.Rows.RemoveAt(rowFrom);
                 dataGridViewSynthesis.Rows.Insert(droprow, rowTo);
 
-                for (int i = 0; i < Recipes.Count; i++)
+                for (int i = 0; i < SynthesisRecipes.Count; i++)
                     Order[i] = (int)dataGridViewSynthesis.Rows[i].Tag;          // reset the order array
 
                 //for (int i = 0; i < 10; i++)   System.Diagnostics.Debug.WriteLine(i.ToString() + "=" + Order[i]);
@@ -359,64 +360,9 @@ namespace EDDiscovery.UserControls
             }
         }
 
-        List<MaterialCommoditiesList.SynthesisRecipe> Recipes = new List<MaterialCommoditiesList.SynthesisRecipe>()
-        {
-            new MaterialCommoditiesList.SynthesisRecipe( "FSD", "Premium","3Nb,1As,1Po,1Y" ),
-            new MaterialCommoditiesList.SynthesisRecipe( "FSD", "Standard","1V,1Ge,2Cd,1Nb" ),
-            new MaterialCommoditiesList.SynthesisRecipe( "FSD", "Basic","2V,1Ge" ),
-
-            new MaterialCommoditiesList.SynthesisRecipe( "AFM Refill", "Premium","6V,4Cr,2Zn,2Zr,1Te,1Ru" ),
-            new MaterialCommoditiesList.SynthesisRecipe( "AFM Refill", "Standard","6V,2Mn,1Mo,1Zr,1Sn" ),
-            new MaterialCommoditiesList.SynthesisRecipe( "AFM Refill", "Basic","3V,2Ni,2Cr,2Zn" ),
-
-            new MaterialCommoditiesList.SynthesisRecipe( "SRV Ammo", "Premium","2P,2Se,1Mo,1Tc" ),
-            new MaterialCommoditiesList.SynthesisRecipe( "SRV Ammo", "Standard","1P,1Se,1Mn,1Mo" ),
-            new MaterialCommoditiesList.SynthesisRecipe( "SRV Ammo", "Basic","1P,2S" ),
-
-            new MaterialCommoditiesList.SynthesisRecipe( "SRV Repair", "Premium","2V,1Zn,2Cr,1W,1Te" ),
-            new MaterialCommoditiesList.SynthesisRecipe( "SRV Repair", "Standard","3Ni,2V,1Mn,1Mo" ),
-            new MaterialCommoditiesList.SynthesisRecipe( "SRV Repair", "Basic","2Fe,1Ni" ),
-
-            new MaterialCommoditiesList.SynthesisRecipe( "SRV Refuel", "Premium","1S,1As,1Hg,1Tc" ),
-            new MaterialCommoditiesList.SynthesisRecipe( "SRV Refuel", "Standard","1P,1S,1As,1Hg" ),
-            new MaterialCommoditiesList.SynthesisRecipe( "SRV Refuel", "Basic","1P,1S" ),
-
-            new MaterialCommoditiesList.SynthesisRecipe( "Plasma Munitions", "Premium", "5Se,4Mo,4Cd,2Tc" ),
-            new MaterialCommoditiesList.SynthesisRecipe( "Plasma Munitions", "Standard","5P,1Se,3Mn,4Mo" ),
-            new MaterialCommoditiesList.SynthesisRecipe( "Plasma Munitions", "Basic","4P,3S,1Mn" ),
-
-            new MaterialCommoditiesList.SynthesisRecipe( "Explosive Munitions", "Premium","5P,4As,5Hg,5Nb,5Po" ),
-            new MaterialCommoditiesList.SynthesisRecipe( "Explosive Munitions", "Standard","6P,6S,4As,2Hg" ),
-            new MaterialCommoditiesList.SynthesisRecipe( "Explosive Munitions", "Basic","4S,3Fe,3Ni,4C" ),
-
-            new MaterialCommoditiesList.SynthesisRecipe( "Small Calibre Munitions", "Premium","2P,2S,2Zr,2Hg,2W,1Sb" ),
-            new MaterialCommoditiesList.SynthesisRecipe( "Small Calibre Munitions", "Standard","2P,2Fe,2Zr,2Zn,2Se" ),
-            new MaterialCommoditiesList.SynthesisRecipe( "Small Calibre Munitions", "Basic","2S,2Fe,1Ni" ),
-
-            new MaterialCommoditiesList.SynthesisRecipe( "High Velocity Munitions", "Premium","4V,2Zr,4W,2Y" ),
-            new MaterialCommoditiesList.SynthesisRecipe( "High Velocity Munitions", "Standard","4Fe,3V,2Zr,2W" ),
-            new MaterialCommoditiesList.SynthesisRecipe( "High Velocity Munitions", "Basic","2Fe,1V" ),
-
-            new MaterialCommoditiesList.SynthesisRecipe( "Large Calibre Munitions", "Premium","8Zn,1As,1Hg,2W,2Sb" ),
-            new MaterialCommoditiesList.SynthesisRecipe( "Large Calibre Munitions", "Standard","3P,2Zr,3Zn,1As,2Sn" ),
-            new MaterialCommoditiesList.SynthesisRecipe( "Large Calibre Munitions", "Basic","2S,4Ni,3C" ),
-
-            new MaterialCommoditiesList.SynthesisRecipe( "Limpets", "Basic", "10Fe,10Ni"),
-
-            new MaterialCommoditiesList.SynthesisRecipe( "Chaff", "Premium", "1CC,2FiC,1ThA,1PRA"),
-            new MaterialCommoditiesList.SynthesisRecipe( "Chaff", "Standard", "1CC,2FiC,1ThA"),
-            new MaterialCommoditiesList.SynthesisRecipe( "Chaff", "Basic", "1CC,1FiC"),
-
-            new MaterialCommoditiesList.SynthesisRecipe( "Heat Sinks", "Premium", "2BaC,2HCW,2HE,1PHR"),
-            new MaterialCommoditiesList.SynthesisRecipe( "Heat Sinks", "Standard", "2BaC,2HCW,2HE"),
-            new MaterialCommoditiesList.SynthesisRecipe( "Heat Sinks", "Basic", "1BaC,1HCW"),
-
-            new MaterialCommoditiesList.SynthesisRecipe( "Life Support", "Basic", "2Fe,1Ni")
-        };
-
         private void buttonClear_Click(object sender, EventArgs e)
         {
-            for (int i = 0; i < Recipes.Count; i++)
+            for (int i = 0; i < SynthesisRecipes.Count; i++)
             {
                 int rno = (int)dataGridViewSynthesis.Rows[i].Tag;
                 Wanted[rno] = 0;
