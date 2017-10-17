@@ -24,6 +24,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using static EDDiscovery.UserControls.Recipes;
 
 namespace EDDiscovery.UserControls
 {
@@ -158,6 +159,15 @@ namespace EDDiscovery.UserControls
                 else
                 {
                     wantedList.Append("No materials currently required.");
+                }
+
+                if (1 ==1)  // TO-DO replace with a configurable setting
+                {
+                    MaterialCommoditiesList.ResetUsed(mcl);
+                    Tuple<int, int, string> basic = MaterialCommoditiesList.HowManyLeft(mcl, SynthesisRecipes.First(r => r.name == "FSD" && r.level == "Basic"));
+                    Tuple<int, int, string> standard = MaterialCommoditiesList.HowManyLeft(mcl, SynthesisRecipes.First(r => r.name == "FSD" && r.level == "Standard"));
+                    Tuple<int, int, string> premium = MaterialCommoditiesList.HowManyLeft(mcl, SynthesisRecipes.First(r => r.name == "FSD" && r.level == "Premium"));
+                    wantedList.Append($"\n\nMax Injections Available\n   {basic.Item1} Basic\n   {standard.Item1} Standard\n   {premium.Item1} Premium");
                 }
 
                 Font font = discoveryform.theme.GetFont;
