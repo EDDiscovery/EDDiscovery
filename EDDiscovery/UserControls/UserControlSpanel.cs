@@ -127,7 +127,7 @@ namespace EDDiscovery.UserControls
             discoveryform.OnNewTarget += NewTarget;
             discoveryform.OnNewUIEvent += OnNewUIEvent;
 
-            config = SQLiteDBClass.GetSettingInt(DbSave + "Config", (int)config) | ((long)SQLiteDBClass.GetSettingInt(DbSave + "ConfigH", (int)(config>>32)) << 32);
+            config = (long)(SQLiteDBClass.GetSettingInt(DbSave + "Config", (int)config)) | ((long)(SQLiteDBClass.GetSettingInt(DbSave + "ConfigH", (int)(config >> 32))) << 32);
             toolStripMenuItemTargetLine.Checked = Config(Configuration.showTargetLine);
             toolStripMenuItemTime.Checked = Config(Configuration.showTime);
             EDSMButtonToolStripMenuItem.Checked = Config(Configuration.showEDSMButton);
