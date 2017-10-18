@@ -17,6 +17,7 @@ using BaseUtils.Win32;
 using BaseUtils.Win32Constants;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -32,14 +33,31 @@ namespace ExtendedControls
     /// </summary>
     public class SmartSysMenuForm : Form
     {
+        public List<string> AdditionalSysMenus;         // null means none!  SET by derived class to add more menus!
+        public Action<int> AdditionalSysMenuSelected;   // called when additional menu X (0-N-1) selected
+
+        [DefaultValue(false)]
+        public new bool TopMost
+        {
+            get { return base.TopMost; }
+            set
+            {
+                if (base.TopMost != value)
+                {
+                    base.TopMost = value;
+                    OnTopMostChanged(EventArgs.Empty);
+                }
+            }
+        }
+
+        public event EventHandler TopMostChanged;
+
+
         // TODO: managed wrapper to keep track of these all up and down the inhertance stack.
         protected const int SC_ONTOP = 0x0001;
         protected const int SC_OPACITYSUBMENU = 0x0002;    // 100% = 0x3; 90% = 0x4; ...; 10% = 0xC; 0% = NOT USED!
         protected const int SC_ADDITIONALMENU = 0x0020;    
         // 0x000D-0x001F are reserved by us for future expansion, while 0x0000 and 0xF000+ are system reserved.
-
-        public List<string> AdditionalSysMenus;     // null means none!  SET by derived class to add more menus!
-        public Action<int> AdditionalSysMenuSelected;  // called when additional menu X (0-N-1) selected
 
         protected virtual bool AllowResize { get; } = true;
 
@@ -52,6 +70,13 @@ namespace ExtendedControls
                     cp.Style |= WS.SYSMENU;
                 return cp;
             }
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+                TopMostChanged = null;
+            base.Dispose(disposing);
         }
 
         protected override void OnHandleCreated(EventArgs e)
@@ -84,6 +109,11 @@ namespace ExtendedControls
                     }
                 }
             }
+        }
+
+        protected virtual void OnTopMostChanged(EventArgs e)
+        {
+            TopMostChanged?.Invoke(this, e);
         }
 
         protected IntPtr SendMessage(int msg, IntPtr wparam, IntPtr lparam)
@@ -130,7 +160,7 @@ namespace ExtendedControls
                                 UnsafeNativeMethods.EnableMenuItem(m.WParam, SC.CLOSE, MF.ENABLED);
                             }
 
-                            UnsafeNativeMethods.ModifyMenu(m.WParam, SC_ONTOP, MF.BYCOMMAND | (TopMost ? MF.CHECKED : MF.UNCHECKED), SC_ONTOP, "On &Top");
+                            UnsafeNativeMethods.ModifyMenu(m.WParam, SC_ONTOP, MF.BYCOMMAND | (base.TopMost ? MF.CHECKED : MF.UNCHECKED), SC_ONTOP, "On &Top");
                             int opac = (int)Math.Min(10, Math.Round(Opacity * 10));  // 0.000-1.00 => 10-100
                             for (int i = 10; i > 0; i--)
                             {
@@ -167,7 +197,7 @@ namespace ExtendedControls
                         int wp = (int)m.WParam;
 
                         if (m.WParam == (IntPtr)SC_ONTOP)
-                            TopMost = !TopMost;
+                            TopMost = !base.TopMost;
                         else if (wp > SC_OPACITYSUBMENU && wp <= SC_OPACITYSUBMENU + 10)
                             Opacity = (wp - SC_OPACITYSUBMENU) / 10f;
                         else if (wp >= SC_ADDITIONALMENU && AdditionalSysMenus != null && wp < SC_ADDITIONALMENU + AdditionalSysMenus.Count)
