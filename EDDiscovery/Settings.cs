@@ -184,7 +184,7 @@ namespace EDDiscovery
                     btnDeleteCommander.Enabled = EDCommander.NumberOfCommanders > 1;
                 }
                 else
-                    ExtendedControls.MessageBoxTheme.Show(this, "Command name is not valid or duplicate" , "Cannot create Commander", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
+                    ExtendedControls.MessageBoxTheme.Show(FindForm(), "Command name is not valid or duplicate" , "Cannot create Commander", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
             }
         }
 
@@ -218,7 +218,7 @@ namespace EDDiscovery
                 int row = dataGridViewCommanders.CurrentCell.RowIndex;
                 EDCommander cmdr = dataGridViewCommanders.Rows[row].DataBoundItem as EDCommander;
 
-                var result = ExtendedControls.MessageBoxTheme.Show("Do you wish to delete commander " + cmdr.Name + "?", "Delete commander", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
+                var result = ExtendedControls.MessageBoxTheme.Show(FindForm(), "Do you wish to delete commander " + cmdr.Name + "?", "Delete commander", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
 
                 if (result == DialogResult.Yes)
                 {
@@ -253,7 +253,7 @@ namespace EDDiscovery
             string fontwanted = null;                                               // don't check custom, only a stored theme..
             if (!themename.Equals("Custom") && !_discoveryForm.theme.IsFontAvailableInTheme(themename, out fontwanted))
             {
-                DialogResult res = ExtendedControls.MessageBoxTheme.Show("The font used by this theme is not available on your system" + Environment.NewLine +
+                DialogResult res = ExtendedControls.MessageBoxTheme.Show(FindForm(), "The font used by this theme is not available on your system" + Environment.NewLine +
                       "The font needed is \"" + fontwanted + "\"" + Environment.NewLine +
                       "Install this font and you can use this scheme." + Environment.NewLine +
                       "EuroCaps font is available www.edassets.org.",
