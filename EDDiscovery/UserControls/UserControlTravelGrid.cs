@@ -595,7 +595,7 @@ namespace EDDiscovery.UserControls
             HistoryEntry sp2 = (HistoryEntry)selectedRows.First().Cells[TravelHistoryColumns.HistoryTag].Tag;
             mapColorDialog.Color = Color.FromArgb(sp2.MapColour);
 
-            if (mapColorDialog.ShowDialog(this) == DialogResult.OK)
+            if (mapColorDialog.ShowDialog(FindForm()) == DialogResult.OK)
             {
                 this.Cursor = Cursors.WaitCursor;
 
@@ -665,7 +665,7 @@ namespace EDDiscovery.UserControls
 
             movefrm.Init();
 
-            DialogResult red = movefrm.ShowDialog(this);
+            DialogResult red = movefrm.ShowDialog(FindForm());
             if (red == DialogResult.OK)
             {
                 foreach (HistoryEntry sp in listsyspos)
@@ -757,7 +757,7 @@ namespace EDDiscovery.UserControls
             }
 
             if (!edsm.ShowSystemInEDSM(rightclicksystem.System.name, id_edsm))
-                ExtendedControls.MessageBoxTheme.Show("System could not be found - has not been synched or EDSM is unavailable");
+                ExtendedControls.MessageBoxTheme.Show(FindForm(), "System could not be found - has not been synched or EDSM is unavailable");
 
             this.Cursor = Cursors.Default;
         }
@@ -812,13 +812,13 @@ namespace EDDiscovery.UserControls
 
             if (journalent == null)
             {
-                ExtendedControls.MessageBoxTheme.Show("Could not find Location or FSDJump entry associated with selected journal entry");
+                ExtendedControls.MessageBoxTheme.Show(FindForm(), "Could not find Location or FSDJump entry associated with selected journal entry");
                 return;
             }
 
             using (Forms.AssignTravelLogSystemForm form = new Forms.AssignTravelLogSystemForm(journalent))
             {
-                DialogResult result = form.ShowDialog();
+                DialogResult result = form.ShowDialog(FindForm());
                 if (result == DialogResult.OK)
                 {
                     foreach (var jent in jents)
@@ -843,7 +843,7 @@ namespace EDDiscovery.UserControls
 
         private void removeJournalEntryToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (ExtendedControls.MessageBoxTheme.Show("Confirm you wish to remove this entry" + Environment.NewLine + "It may reappear if the logs are rescanned", "WARNING", MessageBoxButtons.OKCancel) == DialogResult.OK)
+            if (ExtendedControls.MessageBoxTheme.Show(FindForm(), "Confirm you wish to remove this entry" + Environment.NewLine + "It may reappear if the logs are rescanned", "WARNING", MessageBoxButtons.OKCancel) == DialogResult.OK)
             {
                 JournalEntry.Delete(rightclicksystem.Journalid);
                 discoveryform.RefreshHistoryAsync();
@@ -870,7 +870,7 @@ namespace EDDiscovery.UserControls
             {
                 using (Forms.SetNoteForm noteform = new Forms.SetNoteForm(rightclicksystem, discoveryform))
                 {
-                    if (noteform.ShowDialog(this) == DialogResult.OK)
+                    if (noteform.ShowDialog(FindForm()) == DialogResult.OK)
                     {
                         rightclicksystem.SetJournalSystemNoteText(noteform.NoteText, true , EDCommander.Current.SyncToEdsm);
 
@@ -926,7 +926,6 @@ namespace EDDiscovery.UserControls
                             JournalEntry.GetListOfEventsWithOptMethod(false),
                             (s) => { return BaseUtils.FieldNames.GetPropertyFieldNames(JournalEntry.TypeOfJournalEntry(s)); },
                             discoveryform.Globals.NameList, fieldfilter);
-            frm.TopMost = this.FindForm().TopMost;
             if (frm.ShowDialog(this.FindForm()) == DialogResult.OK)
             {
                 fieldfilter = frm.result;
@@ -944,7 +943,7 @@ namespace EDDiscovery.UserControls
             Forms.ExportForm frm = new Forms.ExportForm();
             frm.Init(new string[] { "View", "FSD Jumps only", "With Notes only" , "With Notes, no repeat"  });
 
-            if (frm.ShowDialog(this) == DialogResult.OK)
+            if (frm.ShowDialog(FindForm()) == DialogResult.OK)
             {
                 BaseUtils.CSVWriteGrid grd = new BaseUtils.CSVWriteGrid();
                 grd.SetCSVDelimiter(frm.Comma);
@@ -1062,7 +1061,7 @@ namespace EDDiscovery.UserControls
                         System.Diagnostics.Process.Start(frm.Path);
                 }
                 else
-                    ExtendedControls.MessageBoxTheme.Show("Failed to write to " + frm.Path, "Export Failed", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    ExtendedControls.MessageBoxTheme.Show(FindForm(), "Failed to write to " + frm.Path, "Export Failed", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             }
 
         }

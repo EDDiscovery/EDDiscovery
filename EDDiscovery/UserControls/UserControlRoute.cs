@@ -244,7 +244,7 @@ namespace EDDiscovery.UserControls
 
             if (plotter.possiblejumps > 100)
             {
-                DialogResult res = ExtendedControls.MessageBoxTheme.Show(this, "This will result in a large number (" + plotter.possiblejumps.ToString("0") + ") of jumps" + Environment.NewLine + Environment.NewLine + "Confirm please", "Confirm you want to compute", MessageBoxButtons.YesNo);
+                DialogResult res = ExtendedControls.MessageBoxTheme.Show(FindForm(), "This will result in a large number (" + plotter.possiblejumps.ToString("0") + ") of jumps" + Environment.NewLine + Environment.NewLine + "Confirm please", "Confirm you want to compute", MessageBoxButtons.YesNo);
                 if (res != System.Windows.Forms.DialogResult.Yes)
                 {
                     ToggleButtons(true);
@@ -275,7 +275,7 @@ namespace EDDiscovery.UserControls
             }
             else
             {
-                ExtendedControls.MessageBoxTheme.Show("No route set up, retry", "No Route", MessageBoxButtons.OK);
+                ExtendedControls.MessageBoxTheme.Show(FindForm(), "No route set up, retry", "No Route", MessageBoxButtons.OK);
                 return;
             }
         }
@@ -448,7 +448,7 @@ namespace EDDiscovery.UserControls
             if (url.Length > 0)         // may pass back empty string if not known, this solves another exception
                 Process.Start(url);
             else
-                ExtendedControls.MessageBoxTheme.Show("System unknown to EDSM");
+                ExtendedControls.MessageBoxTheme.Show(FindForm(), "System unknown to EDSM");
         }
 
 
@@ -610,7 +610,7 @@ namespace EDDiscovery.UserControls
             if (url.Length > 0)         // may pass back empty string if not known, this solves another exception
                 Process.Start(url);
             else
-                ExtendedControls.MessageBoxTheme.Show("System unknown to EDSM");
+                ExtendedControls.MessageBoxTheme.Show(FindForm(), "System unknown to EDSM");
 
         }
 
@@ -622,14 +622,14 @@ namespace EDDiscovery.UserControls
         {
             if ( dataGridViewRoute.Rows.Count == 0)
             {
-                ExtendedControls.MessageBoxTheme.Show("No Route Plotted", "Route", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                ExtendedControls.MessageBoxTheme.Show(FindForm(), "No Route Plotted", "Route", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return;
             }
 
             Forms.ExportForm frm = new Forms.ExportForm();
             frm.Init(new string[] { "All" }, disablestartendtime: true);
 
-            if (frm.ShowDialog(this) == DialogResult.OK)
+            if (frm.ShowDialog(FindForm()) == DialogResult.OK)
             {
                 BaseUtils.CSVWriteGrid grd = new BaseUtils.CSVWriteGrid();
                 grd.SetCSVDelimiter(frm.Comma);
@@ -663,7 +663,7 @@ namespace EDDiscovery.UserControls
                         System.Diagnostics.Process.Start(frm.Path);
                 }
                 else
-                    ExtendedControls.MessageBoxTheme.Show("Failed to write to " + frm.Path, "Export Failed", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    ExtendedControls.MessageBoxTheme.Show(FindForm(), "Failed to write to " + frm.Path, "Export Failed", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             }
         }
 
@@ -717,7 +717,7 @@ namespace EDDiscovery.UserControls
                 }
 
                 if (!edsm.ShowSystemInEDSM(sys.name, id_edsm))
-                    ExtendedControls.MessageBoxTheme.Show("System could not be found - has not been synched or EDSM is unavailable");
+                    ExtendedControls.MessageBoxTheme.Show(FindForm(), "System could not be found - has not been synched or EDSM is unavailable");
 
                 this.Cursor = Cursors.Default;
             }
