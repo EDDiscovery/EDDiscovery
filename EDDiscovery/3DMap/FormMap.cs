@@ -745,12 +745,12 @@ namespace EDDiscovery
             mapmsg?.Dispose();
             mapmsg = null;
 
-            if (msg != null && msg.Length > 0 && time > 0)
+            if (!string.IsNullOrEmpty(msg) && time > 0)
             {
                 TimedMessage newmsg = new TimedMessage();
                 newmsg.Init("", msg, time, true, 0.9F, Color.Black, Color.White, new Font("MS Sans Serif", 20.0F));
                 newmsg.Position(this, 0, 0, -1, -20, 0, 0);         // careful, it triggers a deactivate.. which tries to close it
-                newmsg.Show();
+                newmsg.Show(this);
                 mapmsg = newmsg;                                    // now we can set this.. if we did it above, we would end with a race condition on a null pointer of this object
                 glControl.Focus();
             }
