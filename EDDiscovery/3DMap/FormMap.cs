@@ -118,7 +118,7 @@ namespace EDDiscovery
         private ToolStripMenuItem _toolstripToggleNamingButton;     // for picking up this option quickly
         private ToolStripMenuItem _toolstripToggleRegionColouringButton;     // for picking up this option quickly
         
-        MapRecorder maprecorder = new MapRecorder();        // the recorder 
+        MapRecorder maprecorder = null;                     // the recorder 
         TimedMessage mapmsg = null;                         // and msg
 
         KeyboardActions _kbdActions = new KeyboardActions();        // needed to be held because it remembers key downs
@@ -304,6 +304,7 @@ namespace EDDiscovery
         public FormMap()
         {
             InitializeComponent();
+            maprecorder = new MapRecorder(this);
             // 
             // glControl
             // 
