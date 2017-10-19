@@ -365,7 +365,7 @@ namespace ActionLanguage
                                 actionfile.name, p, 
                                 actionfile.actionprogramlist.GetActionProgramList(), "", ModifierKeys.HasFlag(Keys.Shift));
 
-                    DialogResult res = apf.ShowDialog();
+                    DialogResult res = apf.ShowDialog(this);
 
                     if (res == DialogResult.OK)
                     {

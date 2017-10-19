@@ -229,7 +229,7 @@ namespace ActionLanguage
                 apf.Init("Action program ", this.Icon, actioncorecontroller, applicationfolder, onAdditionalNames(), actionfile.name, p, 
                                 actionfile.actionprogramlist.GetActionProgramList(), suggestedname, ModifierKeys.HasFlag(Keys.Shift));
 
-                DialogResult res = apf.ShowDialog();
+                DialogResult res = apf.ShowDialog(FindForm());
 
                 if (res == DialogResult.OK)
                 {

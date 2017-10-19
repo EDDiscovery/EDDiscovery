@@ -176,7 +176,7 @@ namespace EDDiscovery.UserControls
                 if (IsTransparent)
                 {
                     RevertToNormalSize();
-                    int minWidth = Math.Max(((UserControlForm)this.ParentForm).TitleBarMinWidth(), displayList.img.Width) + 8;
+                    int minWidth = Math.Max(((UserControlForm)FindForm()).TitleBarMinWidth(), displayList.img.Width) + 8;
                     RequestTemporaryResize(new Size(minWidth, displayList.img.Height + 4));
                 }
                 else
