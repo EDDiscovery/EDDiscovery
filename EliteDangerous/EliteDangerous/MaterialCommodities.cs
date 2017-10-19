@@ -262,17 +262,15 @@ namespace EliteDangerousCore
             AddCommodity("Battle Weapons;Landmines;Personal Weapons;Reactive Armour", wp);
             AddCommodity("Non-Lethal Weapons", wp, "nonlethalweapons");
            
-            AddRare("leatheryeggs", "Leathery Eggs");
-            AddRare("lucanonionhead", "Lucan Onion Head");
-            AddRare("azuremilk", "Azure Milk");
             AddRare("aepyornisegg", "Aepyornis Egg"); //!
 
-            AddRare("edenapplesofaerial", "Eden Apples of Aerial");
+            AddRare("aerialedenapple", "Eden Apples of Aerial");
             AddRare("aganipperush", "Aganippe Rush");
             AddRare("alacarakmoskinart", "Alacarakmo Skin Art");
             AddRare("albinoquechuamammoth", "Albino Quechua Mammoth");
+            AddRare("alieneggs", "Leathery Eggs");
             AddRare("altairianskin", "Altairian Skin");
-            AddRare("alyabodysoap", "Alya Body Soap");
+            AddRare("alyabodilysoap", "Alya Body Soap");
             AddRare("anduligafireworks", "Anduliga Fire Works");
             AddRare("anynacoffee", "Any Na Coffee");
             AddRare("aroucaconventualsweets", "Arouca Conventual Sweets");
@@ -281,9 +279,10 @@ namespace EliteDangerousCore
             AddRare("bankiamphibiousleather", "Banki Amphibious Leather");
             AddRare("bastsnakegin", "Bast Snake Gin");
             AddRare("belalansrayleather", "Belalans Ray Leather");
+            AddRare("bluemilk", "Azure Milk");
             AddRare("borasetanipathogenetics", "Borasetani Pathogenetics");
             AddRare("burnhambiledistillate", "Burnham Bile Distillate");
-            AddRare("cd-75kittenbrandcoffee", "CD-75 Kitten Brand Coffee");
+            AddRare("cd75catcoffee", "CD-75 Kitten Brand Coffee");
             AddRare("centaurimegagin", "Centauri Mega Gin");
             AddRare("ceremonialheiketea", "Ceremonial Heike Tea");
             AddRare("cetirabbits", "Ceti Rabbits");
@@ -298,7 +297,7 @@ namespace EliteDangerousCore
             AddRare("deuringastruffles", "Deuringas Truffles");
             AddRare("disomacorn", "Diso Ma Corn");
             AddRare("eleuthermals", "Eleu Thermals");
-            AddRare("eraninpearlwhiskey", "Eranin Pearl Whiskey");
+            AddRare("eraninpearlwhisky", "Eranin Pearl Whiskey");
             AddRare("eshuumbrellas", "Eshu Umbrellas");
             AddRare("esusekucaviar", "Esuseku Caviar");
             AddRare("ethgrezeteabuds", "Ethgreze Tea Buds");
@@ -325,14 +324,14 @@ namespace EliteDangerousCore
             AddRare("jaradharrepuzzlebox", "Jaradharre Puzzle Box");
             AddRare("jarouarice", "Jaroua Rice");
             AddRare("jotunmookah", "Jotun Mookah");
-            AddRare("kachiriginfilterleeches", "Kachirigin Filter Leeches");
+            AddRare("kachiriginleaches", "Kachirigin Filter Leeches");
             AddRare("kamitracigars", "Kamitra Cigars");
             AddRare("kamorinhistoricweapons", "Kamorin Historic Weapons");
             AddRare("karetiicouture", "Karetii Couture");
             AddRare("karsukilocusts", "Karsuki Locusts");
             AddRare("kinagoviolins", "Kinago Violins");
             AddRare("konggaale", "Kongga Ale");
-            AddRare("korokungpellets", "Koro Kung Pellets");
+            AddRare("korrokungpellets", "Koro Kung Pellets");                   // Note that the (revised) identifier has two 'r's while the alias has one.
             AddRare("lavianbrandy", "Lavian Brandy");
             AddRare("leestianeviljuice", "Leestian Evil Juice");
             AddRare("voidextractcoffee", "Void Extract Coffee");
@@ -360,10 +359,10 @@ namespace EliteDangerousCore
             AddRare("orrerianviciousbrew", "Orrerian Vicious Brew");
             AddRare("pantaaprayersticks", "Pantaa Prayer Sticks");
             AddRare("pavoniseargrubs", "Pavonis Ear Grubs");
-            AddRare("rajukrumulti-stoves", "Rajukru Multi-Stoves");
+            AddRare("rajukrustoves", "Rajukru Multi-Stoves");
             AddRare("rapabaosnakeskins", "Rapa Bao Snake Skins");
             AddRare("rusanioldsmokey", "Rusani Old Smokey");
-            AddRare("sanumadecorativemeat", "Sanuma Decorative Meat");
+            AddRare("sanumameat", "Sanuma Decorative Meat");
             AddRare("saxonwine", "Saxon Wine");
             AddRare("soontillrelics", "Soontill Relics");
             AddRare("sothiscrystallinegold", "Sothis Crystalline Gold");
@@ -376,8 +375,9 @@ namespace EliteDangerousCore
             AddRare("tiegfriessynthsilk", "Tiegfries Synth Silk");
             AddRare("tiolcewaste2pasteunits", "Tiolce Waste2paste Units");
             AddRare("toxandjivirocide", "Toxandji Virocide");
+            AddRare("transgeniconionhead", "Lucan Onion Head");
             AddRare("uszaiantreegrub", "Uszaian Tree Grub");
-            AddRare("utgaroarmillennialeggs", "Utgaroar Millennial Eggs");
+            AddRare("utgaroarmillenialeggs", "Utgaroar Millennial Eggs");       // Note that the (revised) identifier has one 'n' while the alias has two.
             AddRare("uzumokulow-gwings", "Uzumoku Low-G Wings");
             AddRare("vanayequiceratomorphafur", "Vanayequi Ceratomorpha Fur");
             AddRare("vegaslimweed", "Vega Slimweed");
@@ -390,9 +390,9 @@ namespace EliteDangerousCore
             AddRare("wolffesh", "Wolf Fesh");
             AddRare("wulpahyperboresystems", "Wulpa Hyperbore Systems");
             AddRare("wuthielokufroth", "Wuthielo ku froth");
-            AddRare("xihebiomorphiccompanions", "Xihe Biomorphic Companions");
+            AddRare("xihecompanions", "Xihe Biomorphic Companions");
             AddRare("yasokondileaf", "Yaso Kondi Leaf");
-            AddRare("zeesszeantgrubglue", "Zeessze Ant Grub Glue");
+            AddRare("zeesszeantglue", "Zeessze Ant Grub Glue");
             AddRare("trinketsofhiddenfortune", "Trinkets Of Hidden Fortune");
 
             // very common data
@@ -532,32 +532,46 @@ namespace EliteDangerousCore
         }
 
 
-        static Dictionary<string, string> fdnamemangling = new Dictionary<string, string>()
+        static Dictionary<string, string> fdnamemangling = new Dictionary<string, string>() // Key: old_identifier, Value: new_identifier
         {
             //2.2 to 2.3 changed some of the identifier names.. change the 2.2 ones to 2.3!  Anthor data from his materials db file
-            
+
             { "aberrantshieldpatternanalysis"       ,  "shieldpatternanalysis" },
             { "adaptiveencryptorscapture"           ,  "adaptiveencryptors" },
+            { "alyabodysoap"                        ,  "alyabodilysoap" },
             { "anomalousbulkscandata"               ,  "bulkscandata" },
             { "anomalousfsdtelemetry"               ,  "fsdtelemetry" },
             { "atypicaldisruptedwakeechoes"         ,  "disruptedwakeechoes" },
             { "atypicalencryptionarchives"          ,  "encryptionarchives" },
+            { "azuremilk"                           ,  "bluemilk" },
+            { "cd-75kittenbrandcoffee"              ,  "cd75catcoffee" },
             { "crackedindustrialfirmware"           ,  "industrialfirmware" },
             { "dataminedwakeexceptions"             ,  "dataminedwake" },
             { "distortedshieldcyclerecordings"      ,  "shieldcyclerecordings" },
             { "eccentrichyperspacetrajectories"     ,  "hyperspacetrajectories" },
+            { "edenapplesofaerial"                  ,  "aerialedenapple" },
+            { "eraninpearlwhiskey"                  ,  "eraninpearlwhisky" },
             { "exceptionalscrambledemissiondata"    ,  "scrambledemissiondata" },
             { "inconsistentshieldsoakanalysis"      ,  "shieldsoakanalysis" },
+            { "kachiriginfilterleeches"             ,  "kachiriginleaches" },
+            { "korokungpellets"                     ,  "korrokungpellets" },
+            { "leatheryeggs"                        ,  "alieneggs" },
+            { "lucanonionhead"                      ,  "transgeniconionhead" },
             { "modifiedconsumerfirmware"            ,  "consumerfirmware" },
             { "modifiedembeddedfirmware"            ,  "embeddedfirmware" },
             { "opensymmetrickeys"                   ,  "symmetrickeys" },
             { "peculiarshieldfrequencydata"         ,  "shieldfrequencydata" },
+            { "rajukrumulti-stoves"                 ,  "rajukrustoves" },
+            { "sanumadecorativemeat"                ,  "sanumameat" },
             { "securityfirmwarepatch"               ,  "securityfirmware" },
             { "specialisedlegacyfirmware"           ,  "legacyfirmware" },
             { "strangewakesolutions"                ,  "wakesolutions" },
             { "taggedencryptioncodes"               ,  "encryptioncodes" },
             { "unidentifiedscanarchives"            ,  "scanarchives" },
             { "unusualencryptedfiles"               ,  "encryptedfiles" },
+            { "utgaroarmillennialeggs"              ,  "utgaroarmillenialeggs" },
+            { "xihebiomorphiccompanions"            ,  "xihecompanions" },
+            { "zeesszeantgrubglue"                  ,  "zeesszeantglue" },
 
             //aliases found in commodities files from Anthor, change to last name in list.
             {"micro-weavecoolinghoses","coolinghoses"},
@@ -607,6 +621,8 @@ namespace EliteDangerousCore
 
         #region Anthor check 30 may 2017        
         // **** KEEP THIS, We will periodically ask Anthor for his files and then we can double check. 
+
+        // Or, just review the second ~half of https://github.com/EDSM-NET/Alias/blob/master/Station/Commodity/Type.php
 
         // WARNING !!!!
 
