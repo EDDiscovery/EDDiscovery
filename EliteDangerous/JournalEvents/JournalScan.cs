@@ -507,7 +507,7 @@ namespace EliteDangerousCore.JournalEvents
                 habZone.AppendFormat("Habitable Zone Approx. {0} ({1}-{2} AU)\n", GetHabZoneStringLs(),
                                                                                   (HabitableZoneInner.Value / 499).ToString("N2"), (HabitableZoneOuter.Value / 499).ToString("N2"));
                 if (nSemiMajorAxis.HasValue && nSemiMajorAxis.Value > 0)
-                    habZone.AppendFormat(" (Star only, others not considered)\n");
+                    habZone.AppendFormat(" (Others stars not considered)\n");
 
                 return habZone.ToNullSafeString();
             }
