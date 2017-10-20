@@ -382,7 +382,7 @@
     <Compile Include="TravelHistoryControl.Designer.cs">
       <DependentUpon>TravelHistoryControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="UserControls\EngineeringFilters.cs" />
+    <Compile Include="UserControls\RecipeFilters.cs" />
     <Compile Include="UserControls\TravelHistoryFilter.cs" />
     <Compile Include="TrilaterationControl.cs">
       <SubType>UserControl</SubType>
