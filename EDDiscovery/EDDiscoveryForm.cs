@@ -54,7 +54,7 @@ namespace EDDiscovery
         static public EDDConfig EDDConfig { get { return EDDConfig.Instance; } }
         public EDDTheme theme { get { return EDDTheme.Instance; } }
 
-        public TravelHistoryControl TravelControl { get { return travelHistoryControl; } }
+        public UserControlHistory TravelControl { get { return travelHistoryControl; } }
         
         public AudioExtensions.AudioQueue AudioQueueWave { get { return audioqueuewave; } }
         public AudioExtensions.AudioQueue AudioQueueSpeech { get { return audioqueuespeech; } }
@@ -188,13 +188,13 @@ namespace EDDiscovery
             if (!EDDOptions.Instance.NoTheme)
                 themeok = theme.RestoreSettings();                                    // theme, remember your saved settings
 
-            travelHistoryControl.InitControl(this);
+            travelHistoryControl.Init(this,null,0); // no cursor
             settings.InitControl(this);
-            journalViewControl1.InitControl(this, 0);
-            trilaterationControl.InitControl(this, travelHistoryControl.GetTravelGrid, 0);
-            gridControl.InitControl(this, travelHistoryControl.GetTravelGrid, 0);
-            routeControl1.InitControl(this,travelHistoryControl.GetTravelGrid,0);
-            savedRouteExpeditionControl1.InitControl(this, travelHistoryControl.GetTravelGrid, 0);
+            journalViewControl1.Init(this, null, 0);
+            trilaterationControl.Init(this, travelHistoryControl.GetTravelGrid, 0);
+            gridControl.Init(this, travelHistoryControl.GetTravelGrid, 0);
+            routeControl1.Init(this,travelHistoryControl.GetTravelGrid,0);
+            savedRouteExpeditionControl1.Init(this, travelHistoryControl.GetTravelGrid, 0);
 
             Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " Map manager");
             Map = new EDDiscovery._3DMap.MapManager(EDDOptions.Instance.NoWindowReposition, this);
@@ -260,15 +260,20 @@ namespace EDDiscovery
 
                 long t = Environment.TickCount;
                 Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " EDF Load layout of THC");
-                travelHistoryControl.LoadLayoutSettings();
+                travelHistoryControl.LoadLayout();
+                travelHistoryControl.InitialDisplay();
                 Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " EDF Load layout of JVC");
-                journalViewControl1.LoadLayoutSettings();
+                journalViewControl1.LoadLayout();
+                journalViewControl1.InitialDisplay();
                 Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " EDF Load layout of Route");
-                routeControl1.LoadLayoutSettings();
+                routeControl1.LoadLayout();
+                routeControl1.InitialDisplay();
                 Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " EDF Load layout GC");
-                gridControl.LoadLayoutSettings();
+                gridControl.LoadLayout();
+                gridControl.InitialDisplay();
                 Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " EDF Load layout Expedition");
-                savedRouteExpeditionControl1.LoadLayoutSettings();
+                savedRouteExpeditionControl1.LoadLayout();
+                savedRouteExpeditionControl1.InitialDisplay();
 
                 Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " EDF Load layout Major Tab");
                 string tab = SQLiteConnectionUser.GetSettingString("MajorTab", "");
@@ -739,12 +744,12 @@ namespace EDDiscovery
 
             theme.SaveSettings(null);
 
-            travelHistoryControl.SaveSettings();
-            journalViewControl1.SaveSettings();
-            gridControl.SaveSettings();
-            routeControl1.SaveSettings();
-            savedRouteExpeditionControl1.SaveSettings();
-            trilaterationControl.SaveSettings();
+            travelHistoryControl.Closing();
+            journalViewControl1.Closing();
+            gridControl.Closing();
+            routeControl1.Closing();
+            savedRouteExpeditionControl1.Closing();
+            trilaterationControl.Closing();
 
             if (EDDConfig.AutoSavePopOuts)
                 PopOuts.SaveCurrentPopouts();

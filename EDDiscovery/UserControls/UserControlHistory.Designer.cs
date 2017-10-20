@@ -15,7 +15,7 @@
  */
 namespace EDDiscovery
 {
-    partial class TravelHistoryControl
+    partial class UserControlHistory
     {
         /// <summary> 
         /// Required designer variable.
