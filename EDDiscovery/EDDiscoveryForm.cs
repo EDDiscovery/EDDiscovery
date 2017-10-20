@@ -1088,6 +1088,20 @@ namespace EDDiscovery
             this.Cursor = Cursors.Default;
         }
 
+        public void Open3DMapOnSystem(ISystem centerSystem )
+        {
+            this.Cursor = Cursors.WaitCursor;
+
+            if (centerSystem == null || !centerSystem.HasCoordinate)
+                centerSystem = history.GetLastWithPosition.System;
+
+            Map.Prepare(centerSystem, GetHomeSystem(), centerSystem,
+                             settings.MapZoom, history.FilterByTravel);
+
+            Map.Show();
+            this.Cursor = Cursors.Default;
+        }
+
         public void Open2DMap()
         {
             this.Cursor = Cursors.WaitCursor;

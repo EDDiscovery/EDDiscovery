@@ -1069,13 +1069,13 @@ namespace EDDiscovery
         private System.Windows.Forms.ToolStripMenuItem exportVistedStarsListToEliteDangerousToolStripMenuItem;
         private ExtendedControls.ButtonExt buttonExtPopOut;
         private System.Windows.Forms.TabPage tabPageSettings;
-        public UserControls.UserControlSettings settings;
+        private UserControls.UserControlSettings settings;
         private System.Windows.Forms.TabPage tabPageRoutesExpeditions;
-        public UserControls.UserControlExpedition savedRouteExpeditionControl1;
+        private UserControls.UserControlExpedition savedRouteExpeditionControl1;
         private System.Windows.Forms.TabPage tabPageRoute;
         private UserControls.UserControlRoute routeControl1;
         private System.Windows.Forms.TabPage tabPageTriletaration;
-        public UserControls.UserControlTrilateration trilaterationControl;
+        private UserControls.UserControlTrilateration trilaterationControl;
         private System.Windows.Forms.TabPage tabPageGrid;
         private UserControls.UserControlContainerGrid gridControl;
         private System.Windows.Forms.TabPage tabPageJournal;
