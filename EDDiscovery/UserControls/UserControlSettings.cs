@@ -26,12 +26,11 @@ using EDDiscovery.Forms;
 using EliteDangerousCore;
 using EliteDangerousCore.DB;
 
-namespace EDDiscovery
+namespace EDDiscovery.UserControls
 {
-    public partial class Settings : UserControl
+    public partial class UserControlSettings : UserControlCommonBase
     {
-        private EDDiscoveryForm _discoveryForm;
-        private ISystem _homeSystem = new SystemClass("Sol", 0, 0, 0);
+        private EDDiscoveryForm discoveryform;
         private ExtendedControls.ThemeStandardEditor themeeditor = null;
 
         public ISystem HomeSystem
@@ -49,17 +48,19 @@ namespace EDDiscovery
                 }
             }
         }
+        private ISystem _homeSystem = new SystemClass("Sol", 0, 0, 0);
+
         public float MapZoom { get { return float.Parse(textBoxDefaultZoom.Text); } }
         public bool MapCentreOnSelection { get { return radioButtonHistorySelection.Checked; } }
 
-        public Settings()
+        public UserControlSettings()
         {
             InitializeComponent();
         }
 
-        public void InitControl(EDDiscoveryForm discoveryForm)
+        public override void Init(EDDiscoveryForm discoveryForm, UserControlCursorType uctgnotused, int displaynumbernotused)
         {
-            _discoveryForm = discoveryForm;
+            discoveryform = discoveryForm;
 
             ResetThemeList();
             SetEntryThemeComboBox();
@@ -76,7 +77,7 @@ namespace EDDiscovery
 
         void SetEntryThemeComboBox()
         {
-            int i = _discoveryForm.theme.GetIndexOfCurrentTheme();
+            int i = discoveryform.theme.GetIndexOfCurrentTheme();
             if (i == -1)
                 comboBoxTheme.SelectedItem = "Custom";
             else
@@ -85,11 +86,11 @@ namespace EDDiscovery
 
         private void ResetThemeList()
         {
-            comboBoxTheme.Items = _discoveryForm.theme.GetThemeList();
+            comboBoxTheme.Items = discoveryform.theme.GetThemeList();
             comboBoxTheme.Items.Add("Custom");
         }
 
-        public void InitSettingsTab()
+        public override void InitialDisplay()
         {
             checkBoxEDSMLog.Checked = EDDiscoveryForm.EDDConfig.EDSMLog;
             checkBoxOrderRowsInverted.Checked = EDDiscoveryForm.EDDConfig.OrderRowsInverted;
@@ -118,10 +119,10 @@ namespace EDDiscovery
 
             this.comboBoxTheme.SelectedIndexChanged += this.comboBoxTheme_SelectedIndexChanged;    // now turn on the handler..
 
-            checkBoxCustomRemoveOriginals.Checked = _discoveryForm.screenshotconverter.RemoveOriginal;
-            checkBoxCustomMarkHiRes.Checked = _discoveryForm.screenshotconverter.MarkHiRes;
-            checkBoxCustomEnableScreenshots.Checked = _discoveryForm.screenshotconverter.AutoConvert;
-            checkBoxCustomCopyToClipboard.Checked = _discoveryForm.screenshotconverter.CopyToClipboard;
+            checkBoxCustomRemoveOriginals.Checked = discoveryform.screenshotconverter.RemoveOriginal;
+            checkBoxCustomMarkHiRes.Checked = discoveryform.screenshotconverter.MarkHiRes;
+            checkBoxCustomEnableScreenshots.Checked = discoveryform.screenshotconverter.AutoConvert;
+            checkBoxCustomCopyToClipboard.Checked = discoveryform.screenshotconverter.CopyToClipboard;
 
             this.checkBoxCustomRemoveOriginals.CheckedChanged += new System.EventHandler(this.checkBoxCustomRemoveOriginals_CheckedChanged);
             this.checkBoxCustomMarkHiRes.CheckedChanged += new System.EventHandler(this.checkBoxCustomMarkHiRes_CheckedChanged);
@@ -129,7 +130,7 @@ namespace EDDiscovery
             this.checkBoxCustomCopyToClipboard.CheckedChanged += new System.EventHandler(this.checkBoxCustomCopyToClipboard_CheckedChanged);
         }
 
-        public void SaveSettings()
+        public override void Closing()
         {
             SQLiteDBClass.PutSettingString("DefaultMapCenter", textBoxHomeSystem.Text);
             double zoom = 1;
@@ -137,7 +138,7 @@ namespace EDDiscovery
             SQLiteDBClass.PutSettingBool("CentreMapOnSelection", radioButtonHistorySelection.Checked);
 
             EDDiscoveryForm.EDDConfig.EDSMLog = checkBoxEDSMLog.Checked;
-            _discoveryForm.SetUpLogging();
+            discoveryform.SetUpLogging();
 
             EDDiscoveryForm.EDDConfig.UseNotifyIcon = checkBoxUseNotifyIcon.Checked;
             EDDiscoveryForm.EDDConfig.OrderRowsInverted = checkBoxOrderRowsInverted.Checked;
@@ -179,8 +180,8 @@ namespace EDDiscovery
                     cf.Update(cmdr);
                     EDCommander.Create(cmdr);
                     UpdateCommandersListBox();
-                    _discoveryForm.LoadCommandersListBox();
-                    _discoveryForm.RefreshHistoryAsync();           // will do a new parse on commander list adding/removing scanners
+                    discoveryform.LoadCommandersListBox();
+                    discoveryform.RefreshHistoryAsync();           // will do a new parse on commander list adding/removing scanners
                     btnDeleteCommander.Enabled = EDCommander.NumberOfCommanders > 1;
                 }
                 else
@@ -202,12 +203,12 @@ namespace EDDiscovery
                 {
                     cf.Update(cmdr);
                     List<EDCommander> edcommanders = (List<EDCommander>)dataGridViewCommanders.DataSource;
-                    _discoveryForm.LoadCommandersListBox();
+                    discoveryform.LoadCommandersListBox();
                     EDCommander.Update(edcommanders, false);
                 }
 
-                _discoveryForm.Capi.Logout();       // logout.. CAPI may have changed
-                _discoveryForm.RefreshHistoryAsync();           // do a resync, CAPI may have changed, anything else, make it work again
+                discoveryform.Capi.Logout();       // logout.. CAPI may have changed
+                discoveryform.RefreshHistoryAsync();           // do a resync, CAPI may have changed, anything else, make it work again
             }
         }
 
@@ -223,9 +224,9 @@ namespace EDDiscovery
                 if (result == DialogResult.Yes)
                 {
                     EDCommander.Delete(cmdr);
-                    _discoveryForm.LoadCommandersListBox();
+                    discoveryform.LoadCommandersListBox();
                     UpdateCommandersListBox();
-                    _discoveryForm.RefreshHistoryAsync();           // will do a new parse on commander list adding/removing scanners
+                    discoveryform.RefreshHistoryAsync();           // will do a new parse on commander list adding/removing scanners
 
                     btnDeleteCommander.Enabled = EDCommander.NumberOfCommanders > 1;
                 }
@@ -251,7 +252,7 @@ namespace EDDiscovery
             string themename = comboBoxTheme.Items[comboBoxTheme.SelectedIndex].ToString();
 
             string fontwanted = null;                                               // don't check custom, only a stored theme..
-            if (!themename.Equals("Custom") && !_discoveryForm.theme.IsFontAvailableInTheme(themename, out fontwanted))
+            if (!themename.Equals("Custom") && !discoveryform.theme.IsFontAvailableInTheme(themename, out fontwanted))
             {
                 DialogResult res = ExtendedControls.MessageBoxTheme.Show("The font used by this theme is not available on your system" + Environment.NewLine +
                       "The font needed is \"" + fontwanted + "\"" + Environment.NewLine +
@@ -259,16 +260,16 @@ namespace EDDiscovery
                       "EuroCaps font is available www.edassets.org.",
                       "Warning", MessageBoxButtons.OK);
 
-                _discoveryForm.theme.SetCustom();                              // go to custom theme whatever
+                discoveryform.theme.SetCustom();                              // go to custom theme whatever
                 SetEntryThemeComboBox();
                 return;
             }
 
-            if (!_discoveryForm.theme.SetThemeByName(themename))
-                _discoveryForm.theme.SetCustom();                                   // go to custom theme..
+            if (!discoveryform.theme.SetThemeByName(themename))
+                discoveryform.theme.SetCustom();                                   // go to custom theme..
 
             SetEntryThemeComboBox();
-            _discoveryForm.ApplyTheme();
+            discoveryform.ApplyTheme();
         }
 
         private void buttonSaveTheme_Click(object sender, EventArgs e)
@@ -281,16 +282,16 @@ namespace EDDiscovery
 
             if (dlg.ShowDialog() == DialogResult.OK)
             {
-                _discoveryForm.theme.SaveSettings(dlg.FileName);        // should create a new theme files
-                _discoveryForm.theme.LoadThemes();          // make sure up to data - we added a theme, reload them all
-                _discoveryForm.theme.Name = Path.GetFileNameWithoutExtension(dlg.FileName); // go to the theme name
+                discoveryform.theme.SaveSettings(dlg.FileName);        // should create a new theme files
+                discoveryform.theme.LoadThemes();          // make sure up to data - we added a theme, reload them all
+                discoveryform.theme.Name = Path.GetFileNameWithoutExtension(dlg.FileName); // go to the theme name
 
                 ResetThemeList();
 
-                int curindex = _discoveryForm.theme.GetIndexOfCurrentTheme();       // get theme index.. may be -1 if theme not loaded back
+                int curindex = discoveryform.theme.GetIndexOfCurrentTheme();       // get theme index.. may be -1 if theme not loaded back
 
                 if (curindex == -1)                                   // if not loaded, back to custom
-                    _discoveryForm.theme.SetCustom();   // custom
+                    discoveryform.theme.SetCustom();   // custom
 
                 SetEntryThemeComboBox();
             }
@@ -298,7 +299,7 @@ namespace EDDiscovery
 
         public void UpdateThemeChanges()
         {
-            _discoveryForm.ApplyTheme();
+            discoveryform.ApplyTheme();
         }
 
         public void button_edittheme_Click(object sender, EventArgs e)
@@ -331,7 +332,7 @@ namespace EDDiscovery
         {
             EDDConfig.Instance.KeepOnTop = checkBoxKeepOnTop.Checked;
             this.FindForm().TopMost = checkBoxKeepOnTop.Checked;
-            _discoveryForm.keepOnTopChanged(checkBoxKeepOnTop.Checked);
+            discoveryform.keepOnTopChanged(checkBoxKeepOnTop.Checked);
         }
 
         private void checkBoxShowUIEvents_CheckedChanged(object sender, EventArgs e)
@@ -354,23 +355,23 @@ namespace EDDiscovery
             bool chk = checkBoxUseNotifyIcon.Checked;
             EDDiscoveryForm.EDDConfig.UseNotifyIcon = chk;
             checkBoxMinimizeToNotifyIcon.Enabled = chk;
-            _discoveryForm.useNotifyIconChanged(chk);
+            discoveryform.useNotifyIconChanged(chk);
         }
 
         private void checkBoxUTC_CheckedChanged(object sender, EventArgs e)
         {
             EDDiscoveryForm.EDDConfig.DisplayUTC = checkBoxUTC.Checked;
-            _discoveryForm.RefreshDisplays();
+            discoveryform.RefreshDisplays();
         }
 
         private void buttonSaveSetup_Click(object sender, EventArgs e)
         {
-            _discoveryForm.SaveCurrentPopOuts();
+            discoveryform.SaveCurrentPopOuts();
         }
 
         private void buttonReloadSaved_Click(object sender, EventArgs e)
         {
-            _discoveryForm.LoadSavedPopouts();
+            discoveryform.LoadSavedPopouts();
         }
 
         private void textBoxHomeSystem_Validated(object sender, EventArgs e)
@@ -391,41 +392,41 @@ namespace EDDiscovery
         private void buttonExtScreenshot_Click(object sender, EventArgs e)
         {
             ScreenShots.ScreenShotConfigureForm frm = new ScreenShots.ScreenShotConfigureForm();
-            frm.Init(_discoveryForm.screenshotconverter, _discoveryForm.screenshotconverter.MarkHiRes);
+            frm.Init(discoveryform.screenshotconverter, discoveryform.screenshotconverter.MarkHiRes);
 
             if ( frm.ShowDialog() == DialogResult.OK )
             {
-                _discoveryForm.screenshotconverter.Stop();
-                _discoveryForm.screenshotconverter.ScreenshotsDir = frm.ScreenshotsDir;
-                _discoveryForm.screenshotconverter.OutputDir = frm.OutputDir;
-                _discoveryForm.screenshotconverter.InputFileExtension = frm.InputFileExtension;
-                _discoveryForm.screenshotconverter.OutputFileExtension = frm.OutputFileExtension;
-                _discoveryForm.screenshotconverter.FolderNameFormat = frm.FolderNameFormat;
-                _discoveryForm.screenshotconverter.FileNameFormat = frm.FileNameFormat;
-                _discoveryForm.screenshotconverter.CropImage = frm.CropImage;
-                _discoveryForm.screenshotconverter.CropArea = frm.CropArea;
-                _discoveryForm.screenshotconverter.Start();
+                discoveryform.screenshotconverter.Stop();
+                discoveryform.screenshotconverter.ScreenshotsDir = frm.ScreenshotsDir;
+                discoveryform.screenshotconverter.OutputDir = frm.OutputDir;
+                discoveryform.screenshotconverter.InputFileExtension = frm.InputFileExtension;
+                discoveryform.screenshotconverter.OutputFileExtension = frm.OutputFileExtension;
+                discoveryform.screenshotconverter.FolderNameFormat = frm.FolderNameFormat;
+                discoveryform.screenshotconverter.FileNameFormat = frm.FileNameFormat;
+                discoveryform.screenshotconverter.CropImage = frm.CropImage;
+                discoveryform.screenshotconverter.CropArea = frm.CropArea;
+                discoveryform.screenshotconverter.Start();
             }
         }
 
         private void checkBoxCustomEnableScreenshots_CheckedChanged(object sender, EventArgs e)
         {
-            _discoveryForm.screenshotconverter.AutoConvert = checkBoxCustomEnableScreenshots.Checked; 
+            discoveryform.screenshotconverter.AutoConvert = checkBoxCustomEnableScreenshots.Checked; 
         }
 
         private void checkBoxCustomRemoveOriginals_CheckedChanged(object sender, EventArgs e)
         {
-            _discoveryForm.screenshotconverter.RemoveOriginal = checkBoxCustomRemoveOriginals.Checked; 
+            discoveryform.screenshotconverter.RemoveOriginal = checkBoxCustomRemoveOriginals.Checked; 
         }
 
         private void checkBoxCustomMarkHiRes_CheckedChanged(object sender, EventArgs e)
         {
-            _discoveryForm.screenshotconverter.MarkHiRes = checkBoxCustomMarkHiRes.Checked;
+            discoveryform.screenshotconverter.MarkHiRes = checkBoxCustomMarkHiRes.Checked;
         }
 
         private void checkBoxCustomCopyToClipboard_CheckedChanged(object sender, EventArgs e)
         {
-            _discoveryForm.screenshotconverter.CopyToClipboard = checkBoxCustomCopyToClipboard.Checked;
+            discoveryform.screenshotconverter.CopyToClipboard = checkBoxCustomCopyToClipboard.Checked;
         }
     }
 }
