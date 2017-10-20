@@ -704,8 +704,6 @@ namespace EDDiscovery.UserControls
 
         private void AddSystemToOthers(bool dist, bool wanted, bool route)
         {
-            TrilaterationControl tctrl = discoveryform.trilaterationControl;
-
             IEnumerable<DataGridViewRow> selectedRows = dataGridViewTravel.SelectedCells.Cast<DataGridViewCell>()
                                                                         .Select(cell => cell.OwningRow)
                                                                         .Distinct()
