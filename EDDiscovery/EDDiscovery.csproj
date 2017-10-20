@@ -352,11 +352,11 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Settings.cs">
+    <Compile Include="UserControls\UserControlSettings.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Settings.Designer.cs">
-      <DependentUpon>Settings.cs</DependentUpon>
+    <Compile Include="UserControls\UserControlSettings.Designer.cs">
+      <DependentUpon>UserControlSettings.cs</DependentUpon>
     </Compile>
     <Compile Include="UserControls\UserControlHistory.cs">
       <SubType>UserControl</SubType>
@@ -366,12 +366,6 @@
     </Compile>
     <Compile Include="UserControls\RecipeFilters.cs" />
     <Compile Include="UserControls\TravelHistoryFilter.cs" />
-    <Compile Include="JournalViewControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="JournalViewControl.Designer.cs">
-      <DependentUpon>JournalViewControl.cs</DependentUpon>
-    </Compile>
     <Compile Include="UserControls\UserControlContainerResizable.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -791,16 +785,13 @@
     <EmbeddedResource Include="Forms\MoveToCommander.resx">
       <DependentUpon>MoveToCommander.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="JournalViewControl.resx">
-      <DependentUpon>JournalViewControl.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <SubType>Designer</SubType>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="Settings.resx">
-      <DependentUpon>Settings.cs</DependentUpon>
+    <EmbeddedResource Include="UserControls\UserControlSettings.resx">
+      <DependentUpon>UserControlSettings.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\UserControlHistory.resx">
       <DependentUpon>UserControlHistory.cs</DependentUpon>

@@ -112,7 +112,7 @@ namespace EDDiscovery
             this.panel_eddiscovery = new System.Windows.Forms.Panel();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.tabPageSettings = new System.Windows.Forms.TabPage();
-            this.settings = new EDDiscovery.Settings();
+            this.settings = new UserControls.UserControlSettings();
             this.tabPageRoutesExpeditions = new System.Windows.Forms.TabPage();
             this.savedRouteExpeditionControl1 = new UserControls.UserControlExpedition();
             this.tabPageRoute = new System.Windows.Forms.TabPage();
@@ -124,7 +124,7 @@ namespace EDDiscovery
             this.tabPageJournal = new System.Windows.Forms.TabPage();
             this.journalViewControl1 = new UserControls.UserControlJournalGrid();
             this.tabPageTravelHistory = new System.Windows.Forms.TabPage();
-            this.travelHistoryControl = new EDDiscovery.UserControlHistory();
+            this.travelHistoryControl = new UserControls.UserControlHistory();
             this.tabControlMain = new ExtendedControls.TabControlCustom();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
@@ -1069,7 +1069,7 @@ namespace EDDiscovery
         private System.Windows.Forms.ToolStripMenuItem exportVistedStarsListToEliteDangerousToolStripMenuItem;
         private ExtendedControls.ButtonExt buttonExtPopOut;
         private System.Windows.Forms.TabPage tabPageSettings;
-        public Settings settings;
+        public UserControls.UserControlSettings settings;
         private System.Windows.Forms.TabPage tabPageRoutesExpeditions;
         public UserControls.UserControlExpedition savedRouteExpeditionControl1;
         private System.Windows.Forms.TabPage tabPageRoute;
@@ -1081,7 +1081,7 @@ namespace EDDiscovery
         private System.Windows.Forms.TabPage tabPageJournal;
         private UserControls.UserControlJournalGrid journalViewControl1;
         private System.Windows.Forms.TabPage tabPageTravelHistory;
-        private UserControlHistory travelHistoryControl;
+        private UserControls.UserControlHistory travelHistoryControl;
         private ExtendedControls.TabControlCustom tabControlMain;
     }
 }

@@ -13,9 +13,9 @@
  * 
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
-namespace EDDiscovery
+namespace EDDiscovery.UserControls
 {
-    partial class Settings
+    partial class UserControlSettings
     {
         /// <summary> 
         /// Required designer variable.
@@ -44,7 +44,7 @@ namespace EDDiscovery
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Settings));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(UserControlSettings));
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.checkBoxKeepOnTop = new ExtendedControls.CheckBoxCustom();
             this.comboBoxTheme = new ExtendedControls.ComboBoxCustom();

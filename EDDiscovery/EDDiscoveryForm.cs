@@ -54,7 +54,7 @@ namespace EDDiscovery
         static public EDDConfig EDDConfig { get { return EDDConfig.Instance; } }
         public EDDTheme theme { get { return EDDTheme.Instance; } }
 
-        public UserControlHistory TravelControl { get { return travelHistoryControl; } }
+        public UserControls.UserControlHistory TravelControl { get { return travelHistoryControl; } }
         
         public AudioExtensions.AudioQueue AudioQueueWave { get { return audioqueuewave; } }
         public AudioExtensions.AudioQueue AudioQueueSpeech { get { return audioqueuespeech; } }
@@ -189,7 +189,7 @@ namespace EDDiscovery
                 themeok = theme.RestoreSettings();                                    // theme, remember your saved settings
 
             travelHistoryControl.Init(this,null,0); // no cursor
-            settings.InitControl(this);
+            settings.Init(this,null,0);
             journalViewControl1.Init(this, null, 0);
             trilaterationControl.Init(this, travelHistoryControl.GetTravelGrid, 0);
             gridControl.Init(this, travelHistoryControl.GetTravelGrid, 0);
@@ -281,7 +281,8 @@ namespace EDDiscovery
 
                 Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " EDF Load show info panel");
                 ShowInfoPanel("Loading. Please wait!", true);
-                settings.InitSettingsTab();
+                settings.LoadLayout();
+                settings.InitialDisplay();
 
                 if (EDDOptions.Instance.ActionButton)
                 {
@@ -731,7 +732,7 @@ namespace EDDiscovery
             // send any dirty notes.  if they are, the call back gets called. If we have EDSM sync on, and its an FSD entry, send it
             SystemNoteClass.CommitDirtyNotes((snc) => { if (EDCommander.Current.SyncToEdsm && snc.FSDEntry) EDSMSync.SendComments(snc.SystemName, snc.Note, snc.EdsmId); });
 
-            settings.SaveSettings();
+            settings.Closing();
 
             screenshotconverter.SaveSettings();
 

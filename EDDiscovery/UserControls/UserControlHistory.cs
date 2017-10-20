@@ -32,7 +32,7 @@ using EDDiscovery.Forms;
 using EliteDangerousCore;
 using EliteDangerousCore.DB;
 
-namespace EDDiscovery
+namespace EDDiscovery.UserControls
 {
     public partial class UserControlHistory : UserControlCommonBase
     {
