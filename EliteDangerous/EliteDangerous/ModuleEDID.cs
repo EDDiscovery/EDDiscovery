@@ -97,8 +97,17 @@ namespace EliteDangerousCore
 
                     if (itemfdname.Equals("dronecontrol"))      // this comes in two parts, so needs two underscores
                     {
-                        nextunderscore = ifd.IndexOf('_', nextunderscore + 1);
-                        itemfdname = ifd.Substring(firstunderscore + 1, nextunderscore - firstunderscore - 1);
+                        int tryNext = ifd.IndexOf('_', nextunderscore + 1);
+                        if (tryNext > 0)
+                        {
+                            nextunderscore = tryNext;
+                            itemfdname = ifd.Substring(firstunderscore + 1, nextunderscore - firstunderscore - 1);
+                        }
+                        else  // research limpet controllers only come in one size so that's it.  Not in Coriolis as I write this so no EDID anyway but prevent errors while we wait for one
+                        {
+                            itemfdname = ifd.Substring(firstunderscore + 1);
+                            nextunderscore = ifd.Length;
+                        }
                     }
 
                     extension = ifd.Substring(nextunderscore);      // include the underscore so we have a name delimiter
@@ -1090,6 +1099,30 @@ namespace EliteDangerousCore
             { "2A",128682014}, 
         };
 
+        static Dictionary<string, int> repair_limpet_controller = new Dictionary<string, int>
+        {
+            { "1E", 128777327 },
+            { "1D", 128777328 },
+            { "1C", 128777329 },
+            { "1B", 128777330 },
+            { "1A", 128777331 },
+            { "3E", 128777332 },
+            { "3D", 128777333 },
+            { "3C", 128777334 },
+            { "3B", 128777335 },
+            { "3A", 128777336 },
+            { "5E", 128777337 },
+            { "5D", 128777338 },
+            { "5C", 128777339 },
+            { "5B", 128777340 },
+            { "5A", 128777341 },
+            { "7E", 128777342 },
+            { "7D", 128777343 },
+            { "7C", 128777344 },
+            { "7B", 128777345 },
+            { "7A", 128777346 },
+        };
+
         #endregion
 
         #region Item name to Module List
@@ -1152,6 +1185,7 @@ namespace EliteDangerousCore
             { "sensors",sensors},   //V
             { "engine",thrusters},  //V
             { "enginefast",thrusters_fast},  // U NOT occuring in ED, specially redirected by code in ID. Evidence ED folders, engines having fast at end
+            { "dronecontrol_repair", repair_limpet_controller },
         };
 
         #endregion
