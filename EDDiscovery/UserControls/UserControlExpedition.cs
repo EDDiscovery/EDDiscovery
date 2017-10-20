@@ -296,7 +296,7 @@ namespace EDDiscovery.UserControls
             }
             else
             {
-                ExtendedControls.MessageBoxTheme.Show(ParentForm, "No route set up. Please add at least two systems.", "No Route", MessageBoxButtons.OK);
+                ExtendedControls.MessageBoxTheme.Show(FindForm(), "No route set up. Please add at least two systems.", "No Route", MessageBoxButtons.OK);
                 return;
             }
         }
@@ -311,7 +311,7 @@ namespace EDDiscovery.UserControls
 
         private void toolStripButtonDelete_Click(object sender, EventArgs e)
         {
-            if (ExtendedControls.MessageBoxTheme.Show(ParentForm, "Are you sure you want to delete this route?", "Delete Route", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+            if (ExtendedControls.MessageBoxTheme.Show(FindForm(), "Are you sure you want to delete this route?", "Delete Route", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
             {
                 if (currentroute.Id >= 0)
                 {
@@ -342,7 +342,7 @@ namespace EDDiscovery.UserControls
             ofd.Filter = "Text Files|*.txt";
             ofd.Title = "Select a route file";
 
-            if (ofd.ShowDialog() != System.Windows.Forms.DialogResult.OK)
+            if (ofd.ShowDialog(FindForm()) != System.Windows.Forms.DialogResult.OK)
                 return;
             string[] sysnames;
 
@@ -352,7 +352,7 @@ namespace EDDiscovery.UserControls
             }
             catch (IOException)
             {
-                ExtendedControls.MessageBoxTheme.Show(ParentForm, $"There was an error reading {ofd.FileName}",
+                ExtendedControls.MessageBoxTheme.Show(FindForm(), $"There was an error reading {ofd.FileName}",
                     "Import route", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
@@ -371,7 +371,7 @@ namespace EDDiscovery.UserControls
             }
             if (systems.Count == 0)
             {
-                ExtendedControls.MessageBoxTheme.Show(ParentForm, "The imported file contains no known system names",
+                ExtendedControls.MessageBoxTheme.Show(FindForm(), "The imported file contains no known system names",
                     "Import route", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return;
             }
@@ -390,7 +390,7 @@ namespace EDDiscovery.UserControls
         {
             if (latestplottedroute == null || latestplottedroute.Count == 0)
             {
-                ExtendedControls.MessageBoxTheme.Show(ParentForm, "Please create a route on a route panel", "Import from route panel");
+                ExtendedControls.MessageBoxTheme.Show(FindForm(), "Please create a route on a route panel", "Import from route panel");
                 return;
             }
             else if (!PromptAndSaveIfNeeded())
@@ -416,7 +416,7 @@ namespace EDDiscovery.UserControls
             {
                 if (rt.Systems.Count < 1)
                 {
-                    ExtendedControls.MessageBoxTheme.Show(ParentForm, "There is no route to export ",
+                    ExtendedControls.MessageBoxTheme.Show(FindForm(), "There is no route to export ",
                         "Export route", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                     return;
                 }
@@ -436,7 +436,7 @@ namespace EDDiscovery.UserControls
                 }
                 dlg.FileName = fileName;
 
-                if (dlg.ShowDialog() != DialogResult.OK)
+                if (dlg.ShowDialog(FindForm()) != DialogResult.OK)
                     return;
                 filename = dlg.FileName;
                 using (StreamWriter writer = new StreamWriter(filename, false))
@@ -447,11 +447,11 @@ namespace EDDiscovery.UserControls
                             writer.WriteLine(sysname);
                     }
                 }
-                ExtendedControls.MessageBoxTheme.Show(ParentForm, $"Export completed to {filename}", "Export route");
+                ExtendedControls.MessageBoxTheme.Show(FindForm(), $"Export completed to {filename}", "Export route");
             }
             catch (IOException)
             {
-                ExtendedControls.MessageBoxTheme.Show(ParentForm, $"Problem exporting route. Is file {filename} already open?",
+                ExtendedControls.MessageBoxTheme.Show(FindForm(), $"Problem exporting route. Is file {filename} already open?",
                     "Export route", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
@@ -671,7 +671,7 @@ namespace EDDiscovery.UserControls
             ISystem sc = SystemClassDB.GetSystem((string)obj);
             if (sc == null)
             {
-                ExtendedControls.MessageBoxTheme.Show(ParentForm, "Unknown system, system is without co-ordinates", "Edit bookmark", MessageBoxButtons.OK);
+                ExtendedControls.MessageBoxTheme.Show(FindForm(), "Unknown system, system is without co-ordinates", "Edit bookmark", MessageBoxButtons.OK);
             }
             else
                 TargetHelpers.showBookmarkForm(this, discoveryform, sc, null, false);
@@ -768,7 +768,7 @@ namespace EDDiscovery.UserControls
                 return true;
             else
             {
-                var result = ExtendedControls.MessageBoxTheme.Show(ParentForm, "There are unsaved changes to the current route." + Environment.NewLine
+                var result = ExtendedControls.MessageBoxTheme.Show(FindForm(), "There are unsaved changes to the current route." + Environment.NewLine
                     + "Would you like to save the current route before proceeding?", "Unsaved route", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Exclamation);
                 switch (result)
                 {
@@ -797,12 +797,12 @@ namespace EDDiscovery.UserControls
 
             if (string.IsNullOrEmpty(newrtname))
             {
-                ExtendedControls.MessageBoxTheme.Show(ParentForm, "Please specify a name for the route.", "Unsaved Route", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                ExtendedControls.MessageBoxTheme.Show(FindForm(), "Please specify a name for the route.", "Unsaved Route", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 textBoxRouteName.Select();
             }
             else if (EDSMClass.Expeditions.Any(r => r.Name.Equals(newrtname)))
             {
-                ExtendedControls.MessageBoxTheme.Show(ParentForm, "The current route name conflicts with a well-known expedition." + Environment.NewLine
+                ExtendedControls.MessageBoxTheme.Show(FindForm(), "The current route name conflicts with a well-known expedition." + Environment.NewLine
                     + "Please specify a new name to save your changes.", "Unsaved Route", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 textBoxRouteName.Select();
                 textBoxRouteName.SelectAll();
@@ -812,7 +812,7 @@ namespace EDDiscovery.UserControls
                 var overwriteroute = savedroute.Where(r => r.Name.Equals(newrtname) && r.Id != currentroute.Id).FirstOrDefault();
                 if (overwriteroute != null)
                 {
-                    if (MessageBoxTheme.Show(ParentForm, "Warning: route already exists. Would you like to overwrite it?", "Route Exists", MessageBoxButtons.YesNo) != DialogResult.Yes)
+                    if (MessageBoxTheme.Show(FindForm(), "Warning: route already exists. Would you like to overwrite it?", "Route Exists", MessageBoxButtons.YesNo) != DialogResult.Yes)
                         return false;
 
                     overwriteroute.Delete();

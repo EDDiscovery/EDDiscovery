@@ -32,7 +32,6 @@ namespace EDDiscovery
     {
         private EDDiscoveryForm _discoveryForm;
         private ISystem _homeSystem = new SystemClass("Sol", 0, 0, 0);
-        private ExtendedControls.ThemeStandardEditor themeeditor = null;
 
         public ISystem HomeSystem
         {
@@ -171,7 +170,7 @@ namespace EDDiscovery
             CommanderForm cf = new CommanderForm();
             cf.Init(true);
 
-            if (cf.ShowDialog(this) == DialogResult.OK)
+            if (cf.ShowDialog(FindForm()) == DialogResult.OK)
             {
                 if (cf.Valid && !EDCommander.IsCommanderPresent(cf.CommanderName))
                 {
@@ -184,7 +183,7 @@ namespace EDDiscovery
                     btnDeleteCommander.Enabled = EDCommander.NumberOfCommanders > 1;
                 }
                 else
-                    ExtendedControls.MessageBoxTheme.Show(this, "Command name is not valid or duplicate" , "Cannot create Commander", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
+                    ExtendedControls.MessageBoxTheme.Show(FindForm(), "Command name is not valid or duplicate" , "Cannot create Commander", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
             }
         }
 
@@ -198,7 +197,7 @@ namespace EDDiscovery
                 CommanderForm cf = new CommanderForm();
                 cf.Init(cmdr,false);
 
-                if (cf.ShowDialog(this) == DialogResult.OK)
+                if (cf.ShowDialog(FindForm()) == DialogResult.OK)
                 {
                     cf.Update(cmdr);
                     List<EDCommander> edcommanders = (List<EDCommander>)dataGridViewCommanders.DataSource;
@@ -218,7 +217,7 @@ namespace EDDiscovery
                 int row = dataGridViewCommanders.CurrentCell.RowIndex;
                 EDCommander cmdr = dataGridViewCommanders.Rows[row].DataBoundItem as EDCommander;
 
-                var result = ExtendedControls.MessageBoxTheme.Show("Do you wish to delete commander " + cmdr.Name + "?", "Delete commander", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
+                var result = ExtendedControls.MessageBoxTheme.Show(FindForm(), "Do you wish to delete commander " + cmdr.Name + "?", "Delete commander", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
 
                 if (result == DialogResult.Yes)
                 {
@@ -238,7 +237,7 @@ namespace EDDiscovery
             mapColorDialog.AllowFullOpen = true;
             mapColorDialog.FullOpen = true;
             mapColorDialog.Color = Color.FromArgb(EDDConfig.Instance.DefaultMapColour);
-            if (mapColorDialog.ShowDialog(this) == DialogResult.OK)
+            if (mapColorDialog.ShowDialog(FindForm()) == DialogResult.OK)
             {
                 EDDConfig.Instance.DefaultMapColour = mapColorDialog.Color.ToArgb();
                 EDDConfig.Instance.DefaultMapColour = EDDConfig.Instance.DefaultMapColour;
@@ -253,7 +252,7 @@ namespace EDDiscovery
             string fontwanted = null;                                               // don't check custom, only a stored theme..
             if (!themename.Equals("Custom") && !_discoveryForm.theme.IsFontAvailableInTheme(themename, out fontwanted))
             {
-                DialogResult res = ExtendedControls.MessageBoxTheme.Show("The font used by this theme is not available on your system" + Environment.NewLine +
+                DialogResult res = ExtendedControls.MessageBoxTheme.Show(FindForm(), "The font used by this theme is not available on your system" + Environment.NewLine +
                       "The font needed is \"" + fontwanted + "\"" + Environment.NewLine +
                       "Install this font and you can use this scheme." + Environment.NewLine +
                       "EuroCaps font is available www.edassets.org.",
@@ -279,7 +278,7 @@ namespace EDDiscovery
             dlg.DefaultExt = "eddtheme";
             dlg.AddExtension = true;
 
-            if (dlg.ShowDialog() == DialogResult.OK)
+            if (dlg.ShowDialog(FindForm()) == DialogResult.OK)
             {
                 _discoveryForm.theme.SaveSettings(dlg.FileName);        // should create a new theme files
                 _discoveryForm.theme.LoadThemes();          // make sure up to data - we added a theme, reload them all
@@ -296,34 +295,15 @@ namespace EDDiscovery
             }
         }
 
-        public void UpdateThemeChanges()
-        {
-            _discoveryForm.ApplyTheme();
-        }
-
         public void button_edittheme_Click(object sender, EventArgs e)
         {
-            if (themeeditor == null)                    // no theme editor, make one..
-            {
-                themeeditor = new ExtendedControls.ThemeStandardEditor();
-                themeeditor.ApplyChanges = UpdateThemeChanges;
-                themeeditor.InitForm();
-                themeeditor.FormClosing += close_edit;  // lets see when it closes
+            var themeeditor = new ExtendedControls.ThemeStandardEditor();
+            themeeditor.ApplyChanges += () => _discoveryForm.ApplyTheme();
+            themeeditor.InitForm();
+            themeeditor.ShowDialog(FindForm());                     // run form
+            themeeditor.Dispose();
 
-                comboBoxTheme.Enabled = false;          // no doing this while theme editor is open
-                buttonSaveTheme.Enabled = false;
-
-                themeeditor.Show();                     // run form
-            }
-            else
-                themeeditor.BringToFront();             // its up, make it at front to show it
-        }
-
-        public void close_edit(object sender, FormClosingEventArgs e)
-        {
-            themeeditor = null;                         // called when editor closes
             SetEntryThemeComboBox();
-            comboBoxTheme.Enabled = true;          // no doing this while theme editor is open
             buttonSaveTheme.Enabled = true;
         }
 
@@ -393,7 +373,7 @@ namespace EDDiscovery
             ScreenShots.ScreenShotConfigureForm frm = new ScreenShots.ScreenShotConfigureForm();
             frm.Init(_discoveryForm.screenshotconverter, _discoveryForm.screenshotconverter.MarkHiRes);
 
-            if ( frm.ShowDialog() == DialogResult.OK )
+            if ( frm.ShowDialog(FindForm()) == DialogResult.OK )
             {
                 _discoveryForm.screenshotconverter.Stop();
                 _discoveryForm.screenshotconverter.ScreenshotsDir = frm.ScreenshotsDir;

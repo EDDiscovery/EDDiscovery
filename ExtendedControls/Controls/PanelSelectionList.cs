@@ -97,7 +97,7 @@ namespace ExtendedControls
                         fittableitems = this.Items.Count();
 
                     ddc.Size = new Size(this.DropDownWidth > 9 ? this.DropDownWidth : this.Width, fittableitems * this.ItemHeight + 4);
-                    ddc.Show();
+                    ddc.Show(FindForm());
                 }
                 else
                 {

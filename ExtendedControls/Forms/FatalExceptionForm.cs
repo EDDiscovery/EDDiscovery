@@ -134,7 +134,7 @@ namespace ExtendedControls
             }
             else
             {
-                MessageBox.Show("You forget to give me the URL/executable path. Bad developer.");
+                MessageBox.Show(this, "You forget to give me the URL/executable path. Bad developer.");
             }
         }
 
