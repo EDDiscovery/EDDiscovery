@@ -33,26 +33,6 @@ namespace EDDiscovery.UserControls
         private EDDiscoveryForm discoveryform;
         private ExtendedControls.ThemeStandardEditor themeeditor = null;
 
-        public ISystem HomeSystem
-        {
-            get
-            {
-                return _homeSystem;
-            }
-            private set
-            {
-                if (value != null && value.HasCoordinate)
-                {
-                    _homeSystem = value;
-                    textBoxHomeSystem.Text = value.name;
-                }
-            }
-        }
-        private ISystem _homeSystem = new SystemClass("Sol", 0, 0, 0);
-
-        public float MapZoom { get { return float.Parse(textBoxDefaultZoom.Text); } }
-        public bool MapCentreOnSelection { get { return radioButtonHistorySelection.Checked; } }
-
         public UserControlSettings()
         {
             InitializeComponent();
@@ -104,11 +84,11 @@ namespace EDDiscovery.UserControls
 
             checkBoxMinimizeToNotifyIcon.Enabled = EDDiscoveryForm.EDDConfig.UseNotifyIcon;
 
-            HomeSystem = SystemClassDB.GetSystem(SQLiteDBClass.GetSettingString("DefaultMapCenter", "Sol"));
+            textBoxHomeSystem.Text = EDDConfig.Instance.HomeSystem.name;
 
-            textBoxDefaultZoom.Text = SQLiteDBClass.GetSettingDouble("DefaultMapZoom", 1.0).ToString();
+            textBoxDefaultZoom.Text = EDDConfig.Instance.MapZoom.ToString();
 
-            bool selectionCentre = SQLiteDBClass.GetSettingBool("CentreMapOnSelection", true);
+            bool selectionCentre = EDDConfig.Instance.MapCentreOnSelection;
             radioButtonHistorySelection.Checked = selectionCentre;
             radioButtonCentreHome.Checked = !selectionCentre;
 
@@ -132,32 +112,39 @@ namespace EDDiscovery.UserControls
 
         public override void Closing()
         {
-            SQLiteDBClass.PutSettingString("DefaultMapCenter", textBoxHomeSystem.Text);
-            double zoom = 1;
-            SQLiteDBClass.PutSettingDouble("DefaultMapZoom", Double.TryParse(textBoxDefaultZoom.Text, out zoom) ? zoom : 1.0);
-            SQLiteDBClass.PutSettingBool("CentreMapOnSelection", radioButtonHistorySelection.Checked);
-
-            EDDiscoveryForm.EDDConfig.EDSMLog = checkBoxEDSMLog.Checked;
-            discoveryform.SetUpLogging();
-
-            EDDiscoveryForm.EDDConfig.UseNotifyIcon = checkBoxUseNotifyIcon.Checked;
-            EDDiscoveryForm.EDDConfig.OrderRowsInverted = checkBoxOrderRowsInverted.Checked;
-            EDDiscoveryForm.EDDConfig.MinimizeToNotifyIcon = checkBoxMinimizeToNotifyIcon.Checked;
-            EDDiscoveryForm.EDDConfig.KeepOnTop = checkBoxKeepOnTop.Checked;
-            EDDiscoveryForm.EDDConfig.DisplayUTC = checkBoxUTC.Checked;
-            EDDiscoveryForm.EDDConfig.AutoLoadPopOuts = checkBoxAutoLoad.Checked;
+            EDDiscoveryForm.EDDConfig.AutoLoadPopOuts = checkBoxAutoLoad.Checked;   // ok to do here..
             EDDiscoveryForm.EDDConfig.AutoSavePopOuts = checkBoxAutoSave.Checked;
-            EDDiscoveryForm.EDDConfig.ShowUIEvents = checkBoxShowUIEvents.Checked;
+        }
+
+        private void textBoxHomeSystem_Validated(object sender, EventArgs e)
+        {
+            string t = textBoxHomeSystem.Text.Trim();
+            ISystem s = SystemClassDB.GetSystem(t);
+
+            if (s != null)
+            {
+                textBoxHomeSystem.Text = s.name;
+                EDDConfig.Instance.HomeSystem = s;
+            }
+            else
+                textBoxHomeSystem.Text = EDDConfig.Instance.HomeSystem.name;
         }
 
         private void textBoxDefaultZoom_Validating(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            var value = textBoxDefaultZoom.Text.Trim();
-            double parseout = 0;
-            if (!Double.TryParse(value, out parseout) || parseout < 0.01 || parseout > 50.0)
+            float? v = textBoxDefaultZoom.Text.InvariantParseFloatNull();
+            if (v != null)
             {
-                textBoxDefaultZoom.Text = "1";
+                textBoxDefaultZoom.Text = v.Value.ToStringInvariant();
+                EDDConfig.Instance.MapZoom = v.Value;
             }
+            else
+                textBoxDefaultZoom.Text = EDDConfig.Instance.MapZoom.ToStringInvariant();
+        }
+
+        private void radioButtonCentreHome_CheckedChanged(object sender, EventArgs e)
+        {
+            EDDConfig.Instance.MapCentreOnSelection = radioButtonHistorySelection.Checked;
         }
 
         public void UpdateCommandersListBox()
@@ -350,6 +337,11 @@ namespace EDDiscovery.UserControls
             EDDiscoveryForm.EDDConfig.MinimizeToNotifyIcon = checkBoxMinimizeToNotifyIcon.Checked;
         }
 
+        public void DisableNotifyIcon()
+        {
+            checkBoxUseNotifyIcon.Checked = false;
+        }
+
         private void checkBoxUseNotifyIcon_CheckedChanged(object sender, EventArgs e)
         {
             bool chk = checkBoxUseNotifyIcon.Checked;
@@ -374,13 +366,6 @@ namespace EDDiscovery.UserControls
             discoveryform.LoadSavedPopouts();
         }
 
-        private void textBoxHomeSystem_Validated(object sender, EventArgs e)
-        {
-            if (!string.IsNullOrWhiteSpace(textBoxHomeSystem.Text))
-            {
-                HomeSystem = SystemClassDB.GetSystem(textBoxHomeSystem.Text);
-            }
-        }
 
         private void comboBoxClickThruKey_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -427,6 +412,12 @@ namespace EDDiscovery.UserControls
         private void checkBoxCustomCopyToClipboard_CheckedChanged(object sender, EventArgs e)
         {
             discoveryform.screenshotconverter.CopyToClipboard = checkBoxCustomCopyToClipboard.Checked;
+        }
+
+        private void checkBoxEDSMLog_CheckStateChanged(object sender, EventArgs e)
+        {
+            EDDiscoveryForm.EDDConfig.EDSMLog = checkBoxEDSMLog.Checked;
+            discoveryform.SetUpLogging();
         }
     }
 }

@@ -285,6 +285,7 @@ namespace EDDiscovery.UserControls
             this.checkBoxEDSMLog.TickBoxReductionSize = 10;
             this.toolTip.SetToolTip(this.checkBoxEDSMLog, "Store EDSM queries in a log file");
             this.checkBoxEDSMLog.UseVisualStyleBackColor = true;
+            this.checkBoxEDSMLog.CheckStateChanged += new System.EventHandler(this.checkBoxEDSMLog_CheckStateChanged);
             // 
             // dataGridViewCommanders
             // 
@@ -528,6 +529,7 @@ namespace EDDiscovery.UserControls
             this.radioButtonCentreHome.Text = "Home System";
             this.toolTip.SetToolTip(this.radioButtonCentreHome, "Select home system as opening location");
             this.radioButtonCentreHome.UseVisualStyleBackColor = true;
+            this.radioButtonCentreHome.CheckedChanged += new System.EventHandler(this.radioButtonCentreHome_CheckedChanged);
             // 
             // buttonEditCommander
             // 
@@ -886,7 +888,7 @@ namespace EDDiscovery.UserControls
             this.checkBoxCustomEnableScreenshots.TickBoxReductionSize = 10;
             this.checkBoxCustomEnableScreenshots.UseVisualStyleBackColor = true;
             // 
-            // Settings
+            // UserControlSettings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -896,7 +898,7 @@ namespace EDDiscovery.UserControls
             this.Controls.Add(this.groupBox3dmap);
             this.Controls.Add(this.groupBoxOptions);
             this.Controls.Add(this.groupBoxCommanders);
-            this.Name = "Settings";
+            this.Name = "UserControlSettings";
             this.Size = new System.Drawing.Size(937, 725);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewCommanders)).EndInit();
             this.groupBoxPopOuts.ResumeLayout(false);
@@ -948,7 +950,7 @@ namespace EDDiscovery.UserControls
         private ExtendedControls.CheckBoxCustom checkBoxAutoSave;
         private ExtendedControls.CheckBoxCustom checkBoxAutoLoad;
         private ExtendedControls.CheckBoxCustom checkBoxMinimizeToNotifyIcon;
-        internal ExtendedControls.CheckBoxCustom checkBoxUseNotifyIcon;
+        private ExtendedControls.CheckBoxCustom checkBoxUseNotifyIcon;
         private ExtendedControls.ButtonExt buttonEditCommander;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnCommander;
         private System.Windows.Forms.DataGridViewTextBoxColumn EdsmName;
@@ -958,10 +960,10 @@ namespace EDDiscovery.UserControls
         private ExtendedControls.ComboBoxCustom comboBoxClickThruKey;
         private System.Windows.Forms.Label labelTKey;
         private ExtendedControls.GroupBoxCustom groupBoxCustomScreenShots;
-        internal ExtendedControls.CheckBoxCustom checkBoxCustomMarkHiRes;
-        internal ExtendedControls.CheckBoxCustom checkBoxCustomRemoveOriginals;
+        private ExtendedControls.CheckBoxCustom checkBoxCustomMarkHiRes;
+        private ExtendedControls.CheckBoxCustom checkBoxCustomRemoveOriginals;
         private ExtendedControls.ButtonExt buttonExtScreenshot;
-        internal ExtendedControls.CheckBoxCustom checkBoxCustomEnableScreenshots;
-        internal ExtendedControls.CheckBoxCustom checkBoxCustomCopyToClipboard;
+        private ExtendedControls.CheckBoxCustom checkBoxCustomEnableScreenshots;
+        private ExtendedControls.CheckBoxCustom checkBoxCustomCopyToClipboard;
     }
 }

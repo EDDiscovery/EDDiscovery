@@ -110,7 +110,22 @@ public static class ObjectExtensionsNumbersBool
     static public double? InvariantParseDoubleNull(this string s)
     {
         double i;
-        if (s != null && double.TryParse(s, System.Globalization.NumberStyles.Integer, System.Globalization.CultureInfo.InvariantCulture, out i))
+        if (s != null && double.TryParse(s, System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture, out i))
+            return i;
+        else
+            return null;
+    }
+
+    static public float InvariantParseFloat(this string s, float def)
+    {
+        float i;
+        return float.TryParse(s, System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture, out i) ? i : def;
+    }
+
+    static public float? InvariantParseFloatNull(this string s)
+    {
+        float i;
+        if (s != null && float.TryParse(s, System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture, out i))
             return i;
         else
             return null;

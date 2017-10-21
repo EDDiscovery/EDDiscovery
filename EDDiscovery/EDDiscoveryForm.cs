@@ -732,8 +732,6 @@ namespace EDDiscovery
             // send any dirty notes.  if they are, the call back gets called. If we have EDSM sync on, and its an FSD entry, send it
             SystemNoteClass.CommitDirtyNotes((snc) => { if (EDCommander.Current.SyncToEdsm && snc.FSDEntry) EDSMSync.SendComments(snc.SystemName, snc.Note, snc.EdsmId); });
 
-            settings.Closing();
-
             screenshotconverter.SaveSettings();
 
             SQLiteDBClass.PutSettingBool("FormMax", _formMax);
@@ -745,6 +743,7 @@ namespace EDDiscovery
 
             theme.SaveSettings(null);
 
+            settings.Closing();
             travelHistoryControl.Closing();
             journalViewControl1.Closing();
             gridControl.Closing();
@@ -1068,22 +1067,15 @@ namespace EDDiscovery
             }
         }
 
-        public ISystem GetHomeSystem()
-        {
-            return settings.HomeSystem;
-        }
-
         public void Open3DMap(HistoryEntry he)
         {
             this.Cursor = Cursors.WaitCursor;
 
-            ISystem HomeSystem = GetHomeSystem();
-
             Controller.history.FillInPositionsFSDJumps();
 
-            Map.Prepare(he?.System, HomeSystem,
-                        settings.MapCentreOnSelection ? he?.System : HomeSystem,
-                        settings.MapZoom, Controller.history.FilterByTravel);
+            Map.Prepare(he?.System, EDDConfig.Instance.HomeSystem,
+                        EDDConfig.Instance.MapCentreOnSelection ? he?.System : EDDConfig.Instance.HomeSystem,
+                        EDDConfig.Instance.MapZoom, Controller.history.FilterByTravel);
             Map.Show();
             this.Cursor = Cursors.Default;
         }
@@ -1095,8 +1087,8 @@ namespace EDDiscovery
             if (centerSystem == null || !centerSystem.HasCoordinate)
                 centerSystem = history.GetLastWithPosition.System;
 
-            Map.Prepare(centerSystem, GetHomeSystem(), centerSystem,
-                             settings.MapZoom, history.FilterByTravel);
+            Map.Prepare(centerSystem, EDDConfig.Instance.HomeSystem, centerSystem,
+                             EDDConfig.Instance.MapZoom, history.FilterByTravel);
 
             Map.Show();
             this.Cursor = Cursors.Default;
@@ -1144,7 +1136,7 @@ namespace EDDiscovery
         private void notifyIconMenu_Hide_Click(object sender, EventArgs e)
         {
             // Tray icon 'Hide Tray Icon' menu item was clicked.
-            settings.checkBoxUseNotifyIcon.Checked = false;
+            settings.DisableNotifyIcon();
         }
 
         private void notifyIconMenu_Open_Click(object sender, EventArgs e)
