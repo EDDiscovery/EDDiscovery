@@ -167,7 +167,7 @@ namespace EDDiscovery.UserControls
                     Tuple<int, int, string> basic = MaterialCommoditiesList.HowManyLeft(mcl, SynthesisRecipes.First(r => r.name == "FSD" && r.level == "Basic"));
                     Tuple<int, int, string> standard = MaterialCommoditiesList.HowManyLeft(mcl, SynthesisRecipes.First(r => r.name == "FSD" && r.level == "Standard"));
                     Tuple<int, int, string> premium = MaterialCommoditiesList.HowManyLeft(mcl, SynthesisRecipes.First(r => r.name == "FSD" && r.level == "Premium"));
-                    wantedList.Append($"\n\nMax Injections Available\n   {basic.Item1} Basic\n   {standard.Item1} Standard\n   {premium.Item1} Premium");
+                    wantedList.Append($"\nMax FSD Injections\n   {basic.Item1} Basic\n   {standard.Item1} Standard\n   {premium.Item1} Premium");
                 }
 
                 Font font = discoveryform.theme.GetFont;
