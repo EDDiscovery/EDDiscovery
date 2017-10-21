@@ -32,11 +32,11 @@ using EDDiscovery.Forms;
 using EliteDangerousCore;
 using EliteDangerousCore.DB;
 
-namespace EDDiscovery
+namespace EDDiscovery.UserControls
 {
-    public partial class TravelHistoryControl : UserControl
+    public partial class UserControlHistory : UserControlCommonBase
     {
-        public EDDiscoveryForm _discoveryForm;
+        private EDDiscoveryForm discoveryform;
 
         public HistoryEntry GetTravelHistoryCurrent {  get { return userControlTravelGrid.GetCurrentHistoryEntry; } }
 
@@ -57,26 +57,26 @@ namespace EDDiscovery
 
         #region Initialisation
 
-        public TravelHistoryControl()
+        public UserControlHistory()
         {
             InitializeComponent();
         }
 
-        public void InitControl(EDDiscoveryForm discoveryForm)
+        public override void Init(EDDiscoveryForm discoveryForm, UserControlCursorType uctg, int displayno )
         {
-            _discoveryForm = discoveryForm;
+            discoveryform = discoveryForm;
 
-            userControlTravelGrid.Init(_discoveryForm, userControlTravelGrid, 0);       // primary first instance - this registers with events in discoveryform to get info
+            userControlTravelGrid.Init(discoveryform, userControlTravelGrid, displayno);       // primary first instance - this registers with events in discoveryform to get info
                                                         // then this display, to update its own controls..
             userControlTravelGrid.OnChangedSelection += ChangedSelection;   // and if the user clicks on something
-            userControlTravelGrid.OnPopOut += () => { _discoveryForm.PopOuts.PopOut(PopOutControl.PopOuts.TravelGrid); };
+            userControlTravelGrid.OnPopOut += () => { discoveryform.PopOuts.PopOut(PopOutControl.PopOuts.TravelGrid); };
             userControlTravelGrid.OnKeyDownInCell += OnKeyDownInCell;
             userControlTravelGrid.ExtraIcons(true, true);
 
-            TabConfigure(tabStripBottom,"Bottom",1000);          // codes are used to save info, 0 = primary (journal/travelgrid), 1..N are popups, these are embedded UCs
-            TabConfigure(tabStripBottomRight,"Bottom-Right",1001);
-            TabConfigure(tabStripMiddleRight, "Middle-Right", 1002);
-            TabConfigure(tabStripTopRight, "Top-Right", 1003);
+            TabConfigure(tabStripBottom,"Bottom", displayno+1000);          // codes are used to save info, 0 = primary (journal/travelgrid), 1..N are popups, these are embedded UCs
+            TabConfigure(tabStripBottomRight,"Bottom-Right", displayno+1001);
+            TabConfigure(tabStripMiddleRight, "Middle-Right", displayno+1002);
+            TabConfigure(tabStripTopRight, "Top-Right", displayno+1003);
         }
 
         #endregion
@@ -106,7 +106,7 @@ namespace EDDiscovery
             Control c = PopOutControl.Create(si);
             c.Name = PopOutControl.PopOutList[si].WindowTitlePrefix;        // tabs uses Name field for display, must set it
 
-            _discoveryForm.ActionRun(Actions.ActionEventEDList.onPanelChange, null, new Conditions.ConditionVariables(new string[] { "PanelTabName", PopOutControl.PopOutList[si].WindowRefName, "PanelTabTitle" , PopOutControl.PopOutList[si].WindowTitlePrefix , "PanelName" , t.Name }));
+            discoveryform.ActionRun(Actions.ActionEventEDList.onPanelChange, null, new Conditions.ConditionVariables(new string[] { "PanelTabName", PopOutControl.PopOutList[si].WindowRefName, "PanelTabTitle" , PopOutControl.PopOutList[si].WindowTitlePrefix , "PanelName" , t.Name }));
 
             return c;
         }
@@ -119,26 +119,26 @@ namespace EDDiscovery
 
             if (uc != null)
             {
-                uc.Init(_discoveryForm, userControlTravelGrid, displaynumber);
+                uc.Init(discoveryform, userControlTravelGrid, displaynumber);
                 uc.LoadLayout();
                 uc.InitialDisplay();
             }
 
             //System.Diagnostics.Debug.WriteLine("And theme {0}", i);
-            _discoveryForm.theme.ApplyToControls(t);
+            discoveryform.theme.ApplyToControls(t);
         }
 
         void TabPopOut(ExtendedControls.TabStrip t, int i)        // pop out clicked
         {
-            _discoveryForm.PopOuts.PopOut(i);
+            discoveryform.PopOuts.PopOut(i);
         }
 
         #endregion
 
 
-        #region Grid Layout
+#region Grid Layout
 
-        public void LoadLayoutSettings() // called by discovery form by us after its adjusted itself
+        public override void LoadLayout() 
         {
             // ORDER IMPORTANT for right outer/inner splitter, otherwise windows fixes it 
 
@@ -172,7 +172,7 @@ namespace EDDiscovery
             tabStripTopRight.SelectedIndex = PopOutControl.GetPopOutIndexByEnum((PopOutControl.PopOuts)piindex_topright);
         }
 
-        public void SaveSettings()     // called by form when closing
+        public override void Closing()     // called by form when closing
         {
             userControlTravelGrid.Closing();
             ((UserControlCommonBase)(tabStripBottom.CurrentControl)).Closing();
@@ -194,7 +194,7 @@ namespace EDDiscovery
         #endregion
 
 
-        #region Reaction to UCTG changing
+#region Reaction to UCTG changing
 
         // history list was repainted, user changed selection, or auto move
 
@@ -204,10 +204,10 @@ namespace EDDiscovery
             {
                 HistoryEntry currentsys = userControlTravelGrid.GetCurrentHistoryEntry;
 
-                _discoveryForm.Map.UpdateHistorySystem(currentsys.System);      // update some dumb friends
+                discoveryform.Map.UpdateHistorySystem(currentsys.System);      // update some dumb friends
 
                 if (userControlTravelGrid.GetCurrentHistoryEntry != null)        // paranoia
-                    _discoveryForm.ActionRun(Actions.ActionEventEDList.onHistorySelection, userControlTravelGrid.GetCurrentHistoryEntry);
+                    discoveryform.ActionRun(Actions.ActionEventEDList.onHistorySelection, userControlTravelGrid.GetCurrentHistoryEntry);
 
                 // DEBUG ONLY.. useful for debugging this _discoveryForm.history.SendEDSMStatusInfo(currentsys, true);        // update if required..
             }
@@ -230,6 +230,6 @@ namespace EDDiscovery
             }
         }
 
-        #endregion
+#endregion
     }
 }

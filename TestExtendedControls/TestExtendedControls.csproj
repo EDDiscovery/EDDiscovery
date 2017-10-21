@@ -49,6 +49,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="EDCommander.cs" />
+    <Compile Include="TestTabControlCustom.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="TestTabControlCustom.Designer.cs">
+      <DependentUpon>TestTabControlCustom.cs</DependentUpon>
+    </Compile>
     <Compile Include="TestDirectInput.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -123,6 +129,9 @@
     </Compile>
     <EmbeddedResource Include="TestRollUpPanel.resx">
       <DependentUpon>TestRollUpPanel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="TestTabControlCustom.resx">
+      <DependentUpon>TestTabControlCustom.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="TestTabStrip.resx">
       <DependentUpon>TestTabStrip.cs</DependentUpon>

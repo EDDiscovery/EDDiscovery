@@ -158,7 +158,7 @@ namespace EDDiscovery.UserControls
 
                     textBoxPosition.Text = he.System.x.ToString(SingleCoordinateFormat) + separ + he.System.y.ToString(SingleCoordinateFormat) + separ + he.System.z.ToString(SingleCoordinateFormat);
 
-                    ISystem homesys = discoveryform.GetHomeSystem();
+                    ISystem homesys = EDDConfig.Instance.HomeSystem;
 
                     textBoxHomeDist.Text = SystemClassDB.Distance(he.System, homesys).ToString(SingleCoordinateFormat);
                     textBoxSolDist.Text = SystemClassDB.Distance(he.System, 0, 0, 0).ToString(SingleCoordinateFormat);

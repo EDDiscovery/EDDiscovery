@@ -54,7 +54,7 @@ namespace EDDiscovery
         static public EDDConfig EDDConfig { get { return EDDConfig.Instance; } }
         public EDDTheme theme { get { return EDDTheme.Instance; } }
 
-        public TravelHistoryControl TravelControl { get { return travelHistoryControl; } }
+        public UserControls.UserControlHistory TravelControl { get { return travelHistoryControl; } }
         
         public AudioExtensions.AudioQueue AudioQueueWave { get { return audioqueuewave; } }
         public AudioExtensions.AudioQueue AudioQueueSpeech { get { return audioqueuespeech; } }
@@ -188,13 +188,13 @@ namespace EDDiscovery
             if (!EDDOptions.Instance.NoTheme)
                 themeok = theme.RestoreSettings();                                    // theme, remember your saved settings
 
-            travelHistoryControl.InitControl(this);
-            settings.InitControl(this);
-            journalViewControl1.InitControl(this, 0);
-            trilaterationControl.InitControl(this, travelHistoryControl.GetTravelGrid, 0);
-            gridControl.InitControl(this, travelHistoryControl.GetTravelGrid, 0);
-            routeControl1.InitControl(this,travelHistoryControl.GetTravelGrid,0);
-            savedRouteExpeditionControl1.InitControl(this, travelHistoryControl.GetTravelGrid, 0);
+            travelHistoryControl.Init(this,null,0); // no cursor
+            settings.Init(this,null,0);
+            journalViewControl1.Init(this, null, 0);
+            trilaterationControl.Init(this, travelHistoryControl.GetTravelGrid, 0);
+            gridControl.Init(this, travelHistoryControl.GetTravelGrid, 0);
+            routeControl1.Init(this,travelHistoryControl.GetTravelGrid,0);
+            savedRouteExpeditionControl1.Init(this, travelHistoryControl.GetTravelGrid, 0);
 
             Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " Map manager");
             Map = new EDDiscovery._3DMap.MapManager(EDDOptions.Instance.NoWindowReposition, this);
@@ -260,15 +260,20 @@ namespace EDDiscovery
 
                 long t = Environment.TickCount;
                 Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " EDF Load layout of THC");
-                travelHistoryControl.LoadLayoutSettings();
+                travelHistoryControl.LoadLayout();
+                travelHistoryControl.InitialDisplay();
                 Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " EDF Load layout of JVC");
-                journalViewControl1.LoadLayoutSettings();
+                journalViewControl1.LoadLayout();
+                journalViewControl1.InitialDisplay();
                 Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " EDF Load layout of Route");
-                routeControl1.LoadLayoutSettings();
+                routeControl1.LoadLayout();
+                routeControl1.InitialDisplay();
                 Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " EDF Load layout GC");
-                gridControl.LoadLayoutSettings();
+                gridControl.LoadLayout();
+                gridControl.InitialDisplay();
                 Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " EDF Load layout Expedition");
-                savedRouteExpeditionControl1.LoadLayoutSettings();
+                savedRouteExpeditionControl1.LoadLayout();
+                savedRouteExpeditionControl1.InitialDisplay();
 
                 Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " EDF Load layout Major Tab");
                 string tab = SQLiteConnectionUser.GetSettingString("MajorTab", "");
@@ -276,7 +281,8 @@ namespace EDDiscovery
 
                 Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " EDF Load show info panel");
                 ShowInfoPanel("Loading. Please wait!", true);
-                settings.InitSettingsTab();
+                settings.LoadLayout();
+                settings.InitialDisplay();
 
                 if (EDDOptions.Instance.ActionButton)
                 {
@@ -726,8 +732,6 @@ namespace EDDiscovery
             // send any dirty notes.  if they are, the call back gets called. If we have EDSM sync on, and its an FSD entry, send it
             SystemNoteClass.CommitDirtyNotes((snc) => { if (EDCommander.Current.SyncToEdsm && snc.FSDEntry) EDSMSync.SendComments(snc.SystemName, snc.Note, snc.EdsmId); });
 
-            settings.SaveSettings();
-
             screenshotconverter.SaveSettings();
 
             SQLiteDBClass.PutSettingBool("FormMax", _formMax);
@@ -739,12 +743,13 @@ namespace EDDiscovery
 
             theme.SaveSettings(null);
 
-            travelHistoryControl.SaveSettings();
-            journalViewControl1.SaveSettings();
-            gridControl.SaveSettings();
-            routeControl1.SaveSettings();
-            savedRouteExpeditionControl1.SaveSettings();
-            trilaterationControl.SaveSettings();
+            settings.Closing();
+            travelHistoryControl.Closing();
+            journalViewControl1.Closing();
+            gridControl.Closing();
+            routeControl1.Closing();
+            savedRouteExpeditionControl1.Closing();
+            trilaterationControl.Closing();
 
             if (EDDConfig.AutoSavePopOuts)
                 PopOuts.SaveCurrentPopouts();
@@ -1062,22 +1067,29 @@ namespace EDDiscovery
             }
         }
 
-        public ISystem GetHomeSystem()
-        {
-            return settings.HomeSystem;
-        }
-
         public void Open3DMap(HistoryEntry he)
         {
             this.Cursor = Cursors.WaitCursor;
 
-            ISystem HomeSystem = GetHomeSystem();
-
             Controller.history.FillInPositionsFSDJumps();
 
-            Map.Prepare(he?.System, HomeSystem,
-                        settings.MapCentreOnSelection ? he?.System : HomeSystem,
-                        settings.MapZoom, Controller.history.FilterByTravel);
+            Map.Prepare(he?.System, EDDConfig.Instance.HomeSystem,
+                        EDDConfig.Instance.MapCentreOnSelection ? he?.System : EDDConfig.Instance.HomeSystem,
+                        EDDConfig.Instance.MapZoom, Controller.history.FilterByTravel);
+            Map.Show();
+            this.Cursor = Cursors.Default;
+        }
+
+        public void Open3DMapOnSystem(ISystem centerSystem )
+        {
+            this.Cursor = Cursors.WaitCursor;
+
+            if (centerSystem == null || !centerSystem.HasCoordinate)
+                centerSystem = history.GetLastWithPosition.System;
+
+            Map.Prepare(centerSystem, EDDConfig.Instance.HomeSystem, centerSystem,
+                             EDDConfig.Instance.MapZoom, history.FilterByTravel);
+
             Map.Show();
             this.Cursor = Cursors.Default;
         }
@@ -1124,7 +1136,7 @@ namespace EDDiscovery
         private void notifyIconMenu_Hide_Click(object sender, EventArgs e)
         {
             // Tray icon 'Hide Tray Icon' menu item was clicked.
-            settings.checkBoxUseNotifyIcon.Checked = false;
+            settings.DisableNotifyIcon();
         }
 
         private void notifyIconMenu_Open_Click(object sender, EventArgs e)

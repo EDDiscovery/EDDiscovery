@@ -312,5 +312,66 @@ namespace EDDiscovery
                 defmapcolour = value;
             }
         }
+
+        private EliteDangerousCore.ISystem homeSystem = null;
+
+        public EliteDangerousCore.ISystem HomeSystem
+        {
+            get
+            {
+                if (homeSystem == null)
+                    homeSystem = SystemClassDB.GetSystem(SQLiteDBClass.GetSettingString("DefaultMapCenter", "Sol"));
+                if ( homeSystem == null )
+                    homeSystem = new EliteDangerousCore.SystemClass("Sol", 0, 0, 0);
+                return homeSystem;
+            }
+            set
+            {
+                if (value != null && value.HasCoordinate)
+                {
+                    SQLiteDBClass.PutSettingString("DefaultMapCenter", value.name);
+                    homeSystem = value;
+                }
+            }
+        }
+
+        private float? mapzoom;
+
+        public float MapZoom
+        {
+            get
+            {
+                if (mapzoom == null)
+                    mapzoom = (float)SQLiteDBClass.GetSettingDouble("DefaultMapZoom", 1.0);
+                return mapzoom.Value;
+            }
+
+            set
+            {
+                //SQLiteDBClass.PutSettingDouble("DefaultMapZoom", Double.TryParse(textBoxDefaultZoom.Text, out zoom) ? zoom : 1.0);
+
+                SQLiteDBClass.PutSettingDouble("DefaultMapZoom", value);
+                mapzoom = value;
+            }
+
+        }
+
+        private bool? mapcentreonselection;
+
+        public bool MapCentreOnSelection
+        {
+            get
+            {
+                if (mapcentreonselection == null)
+                    mapcentreonselection = SQLiteDBClass.GetSettingBool("CentreMapOnSelection", true);
+                return mapcentreonselection.Value;
+            }
+
+            set
+            {
+                SQLiteDBClass.PutSettingBool("CentreMapOnSelection", value);
+                mapcentreonselection = value;
+            }
+        }
     }
 }

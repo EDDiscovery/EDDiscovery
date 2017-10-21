@@ -373,16 +373,7 @@ namespace EDDiscovery.UserControls
 
         private void toolStripButtonMap_Click(object sender, EventArgs e)
         {
-            var centerSystem = targetsystem;
-            if (centerSystem == null || !centerSystem.HasCoordinate)
-                centerSystem = discoveryform.history.GetLastWithPosition.System;
-
-            var map = discoveryform.Map;
-
-            map.Prepare(centerSystem, discoveryform.GetHomeSystem(), centerSystem,
-                        discoveryform.settings.MapZoom, discoveryform.history.FilterByTravel);
-
-            map.Show();
+            discoveryform.Open3DMapOnSystem(targetsystem);
         }
 
         private bool Query(string msg)

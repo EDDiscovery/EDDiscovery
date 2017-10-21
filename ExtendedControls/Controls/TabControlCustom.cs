@@ -62,6 +62,8 @@ namespace ExtendedControls
         // attach a tab style class which determines the shape and formatting.
         public TabStyleCustom TabStyle { get { return tabstyle; } set { ChangeTabStyle(value); } }
 
+        public bool AllowDragReorder { get; set; } = false;
+
         #endregion
 
         #region Initialisation
@@ -112,6 +114,10 @@ namespace ExtendedControls
                                 ControlStyles.Opaque | ControlStyles.ResizeRedraw, (flatstyle != FlatStyle.System));
         }
 
+        #endregion
+
+        #region Helpers
+
         public int CalculateMinimumTabWidth()                                // given fonts and the tab text, whats the minimum width?
         {
             Graphics gr = Parent.CreateGraphics();
@@ -132,34 +138,57 @@ namespace ExtendedControls
             return minsize;
         }
 
+        private int TabAt(Point position)
+        {
+            int count = TabCount;
+            for (int i = 0; i < count; i++)
+            {
+                if (GetTabRect(i).Contains(position))
+                    return i;
+            }
+
+            return -1;
+        }
+
         #endregion
 
         #region Mouse
 
+        int mouseclickedtab = -1;
+
+        protected override void OnMouseDown(MouseEventArgs e)
+        {
+            base.OnMouseDown(e);
+            mouseclickedtab = TabAt(e.Location);
+            System.Diagnostics.Debug.WriteLine("Clicked on "+ mouseclickedtab);
+        }
         protected override void OnMouseMove(MouseEventArgs e)
         {
             base.OnMouseMove(e);
 
             int currentmouseover = mouseover;
 
-            if (GetTabRect(SelectedIndex).Contains(e.Location))
+            mouseover = TabAt(e.Location);
+
+            System.Diagnostics.Debug.WriteLine("From " + currentmouseover + " to " + mouseover);
+
+            if (e.Button == MouseButtons.Left && mouseclickedtab != -1 && AllowDragReorder)
             {
-                mouseover = SelectedIndex;
+                if ( mouseclickedtab != mouseover && mouseover != -1)
+                {
+                    TabPage r = TabPages[mouseclickedtab];
+                    TabPages[mouseclickedtab] = TabPages[mouseover];
+                    TabPages[mouseover] = r;
+                    mouseclickedtab = mouseover;
+                    SelectedIndex = mouseover;
+
+               }
             }
             else
             {
-                mouseover = -1;
-                for (int i = 0; i < TabCount; i++)
-                {
-                    if (i != SelectedIndex && GetTabRect(i).Contains(e.Location))
-                    {
-                        mouseover = i;
-                    }
-                }
+                if (mouseover != currentmouseover && flatstyle != FlatStyle.System)
+                    Invalidate();
             }
-
-            if (mouseover != currentmouseover && flatstyle != FlatStyle.System)
-                Invalidate();
         }
 
         protected override void OnMouseLeave(EventArgs e)
