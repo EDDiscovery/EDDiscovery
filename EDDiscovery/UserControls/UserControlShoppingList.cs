@@ -24,6 +24,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using static EDDiscovery.UserControls.Recipes;
 
 namespace EDDiscovery.UserControls
 {
@@ -33,6 +34,8 @@ namespace EDDiscovery.UserControls
         private EDDiscoveryForm discoveryform;
         private List<Tuple<MaterialCommoditiesList.Recipe, int>> EngineeringWanted = new List<Tuple<MaterialCommoditiesList.Recipe, int>>();
         private List<Tuple<MaterialCommoditiesList.Recipe, int>> SynthesisWanted = new List<Tuple<MaterialCommoditiesList.Recipe, int>>();
+        private bool showMaxInjections;
+        private string DbShowInjectionsSave { get { return "ShoppingListShowFSD" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
         const int PhysicalInventoryCapacity = 1000;
         const int DataInventoryCapacity = 500;
 
@@ -59,11 +62,15 @@ namespace EDDiscovery.UserControls
 
             userControlSynthesis.OnDisplayComplete += Synthesis_OnWantedChange;
             userControlEngineering.OnDisplayComplete += Engineering_OnWantedChange;
+
+            showMaxInjections = SQLiteDBClass.GetSettingBool(DbShowInjectionsSave, true);
+            pictureBoxList.ContextMenuStrip = contextMenuConfig;
         }
 
         public override void Closing()
         {
             RevertToNormalSize();
+            SQLiteDBClass.PutSettingBool(DbShowInjectionsSave, showMaxInjections);
             userControlEngineering.Closing();
             userControlSynthesis.Closing();
         }
@@ -76,6 +83,7 @@ namespace EDDiscovery.UserControls
         {
             userControlEngineering.InitialDisplay();
             userControlSynthesis.InitialDisplay();
+            showMaxFSDInjectionsToolStripMenuItem.Checked = showMaxInjections;
             Display();
         }
 
@@ -160,6 +168,15 @@ namespace EDDiscovery.UserControls
                     wantedList.Append("No materials currently required.");
                 }
 
+                if (showMaxInjections)
+                {
+                    MaterialCommoditiesList.ResetUsed(mcl);
+                    Tuple<int, int, string> basic = MaterialCommoditiesList.HowManyLeft(mcl, SynthesisRecipes.First(r => r.name == "FSD" && r.level == "Basic"));
+                    Tuple<int, int, string> standard = MaterialCommoditiesList.HowManyLeft(mcl, SynthesisRecipes.First(r => r.name == "FSD" && r.level == "Standard"));
+                    Tuple<int, int, string> premium = MaterialCommoditiesList.HowManyLeft(mcl, SynthesisRecipes.First(r => r.name == "FSD" && r.level == "Premium"));
+                    wantedList.Append($"\nMax FSD Injections\n   {basic.Item1} Basic\n   {standard.Item1} Standard\n   {premium.Item1} Premium");
+                }
+
                 Font font = discoveryform.theme.GetFont;
                 pictureBoxList.ClearImageList();
                 PictureBoxHotspot.ImageElement displayList = pictureBoxList.AddTextAutoSize(new Point(0, 0), new Size(1000, 1000), wantedList.ToNullSafeString(), font, textcolour, backcolour, 1.0F);
@@ -189,5 +206,10 @@ namespace EDDiscovery.UserControls
 
         #endregion
 
+        private void showMaxFSDInjectionsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            showMaxInjections = ((ToolStripMenuItem)sender).Checked;
+            Display();
+        }
     }
 }
