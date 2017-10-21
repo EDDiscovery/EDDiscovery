@@ -290,7 +290,7 @@ namespace EDDiscovery.UserControls
             if (route.Count >= 2)
             {
                 discoveryform.history.FillInPositionsFSDJumps();
-                map.Prepare(route[0], discoveryform.GetHomeSystem(), route[0], 400 / CalculateRouteMaxDistFromOrigin(), discoveryform.history.FilterByTravel);
+                map.Prepare(route[0], EDDConfig.Instance.HomeSystem, route[0], 400 / CalculateRouteMaxDistFromOrigin(), discoveryform.history.FilterByTravel);
                 map.SetPlanned(route);
                 map.Show();
             }
