@@ -143,8 +143,6 @@ namespace EDDiscovery.UserControls
 
         private void addToTrilaterationToolStripMenuItem1_Click(object sender, EventArgs e)
         {
-            TrilaterationControl tctrl = discoveryform.trilaterationControl;
-
             IEnumerable<DataGridViewRow> selectedRows = dataGridViewNearest.SelectedCells.Cast<DataGridViewCell>()
                                                                         .Select(cell => cell.OwningRow)
                                                                         .Distinct()

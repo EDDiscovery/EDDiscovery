@@ -13,9 +13,9 @@
  * 
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
-namespace EDDiscovery
+namespace EDDiscovery.UserControls
 {
-    partial class TravelHistoryControl
+    partial class UserControlHistory
     {
         /// <summary> 
         /// Required designer variable.

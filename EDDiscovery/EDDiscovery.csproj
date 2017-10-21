@@ -216,12 +216,6 @@
     <Compile Include="Forms\SafeModeForm.Designer.cs">
       <DependentUpon>SafeModeForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="GridControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="GridControl.Designer.cs">
-      <DependentUpon>GridControl.cs</DependentUpon>
-    </Compile>
     <Compile Include="ScreenShots\ScreenShotConfigureForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -358,44 +352,20 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RouteControl.cs">
+    <Compile Include="UserControls\UserControlSettings.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="RouteControl.Designer.cs">
-      <DependentUpon>RouteControl.cs</DependentUpon>
+    <Compile Include="UserControls\UserControlSettings.Designer.cs">
+      <DependentUpon>UserControlSettings.cs</DependentUpon>
     </Compile>
-    <Compile Include="ExpeditionControl.cs">
+    <Compile Include="UserControls\UserControlHistory.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="ExpeditionControl.Designer.cs">
-      <DependentUpon>ExpeditionControl.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Settings.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Settings.Designer.cs">
-      <DependentUpon>Settings.cs</DependentUpon>
-    </Compile>
-    <Compile Include="TravelHistoryControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="TravelHistoryControl.Designer.cs">
-      <DependentUpon>TravelHistoryControl.cs</DependentUpon>
+    <Compile Include="UserControls\UserControlHistory.Designer.cs">
+      <DependentUpon>UserControlHistory.cs</DependentUpon>
     </Compile>
     <Compile Include="UserControls\RecipeFilters.cs" />
     <Compile Include="UserControls\TravelHistoryFilter.cs" />
-    <Compile Include="TrilaterationControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="TrilaterationControl.Designer.cs">
-      <DependentUpon>TrilaterationControl.cs</DependentUpon>
-    </Compile>
-    <Compile Include="JournalViewControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="JournalViewControl.Designer.cs">
-      <DependentUpon>JournalViewControl.cs</DependentUpon>
-    </Compile>
     <Compile Include="UserControls\UserControlContainerResizable.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -599,9 +569,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\UserControlForm.resx">
       <DependentUpon>UserControlForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="GridControl.resx">
-      <DependentUpon>GridControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ScreenShots\ScreenShotConfigureForm.resx">
       <DependentUpon>ScreenShotConfigureForm.cs</DependentUpon>
@@ -818,29 +785,17 @@
     <EmbeddedResource Include="Forms\MoveToCommander.resx">
       <DependentUpon>MoveToCommander.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="JournalViewControl.resx">
-      <DependentUpon>JournalViewControl.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <SubType>Designer</SubType>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="RouteControl.resx">
-      <DependentUpon>RouteControl.cs</DependentUpon>
+    <EmbeddedResource Include="UserControls\UserControlSettings.resx">
+      <DependentUpon>UserControlSettings.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ExpeditionControl.resx">
-      <DependentUpon>ExpeditionControl.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Settings.resx">
-      <DependentUpon>Settings.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="TravelHistoryControl.resx">
-      <DependentUpon>TravelHistoryControl.cs</DependentUpon>
+    <EmbeddedResource Include="UserControls\UserControlHistory.resx">
+      <DependentUpon>UserControlHistory.cs</DependentUpon>
       <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="TrilaterationControl.resx">
-      <DependentUpon>TrilaterationControl.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="EDDiscovery_TemporaryKey.pfx" />
     <None Include="packages.config">
