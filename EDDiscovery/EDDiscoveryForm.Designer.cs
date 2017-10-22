@@ -45,13 +45,11 @@ namespace EDDiscovery
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(EDDiscoveryForm));
-            ExtendedControls.TabStyleSquare tabStyleSquare1 = new ExtendedControls.TabStyleSquare();
+            ExtendedControls.TabStyleSquare tabStyleSquare2 = new ExtendedControls.TabStyleSquare();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.toolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.show2DMapsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.show3DMapsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.changeMapColorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.editThemeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.materialSearchToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.showAllPopoutsInTaskBarToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.showAllInTaskBarToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -111,33 +109,15 @@ namespace EDDiscovery
             this.buttonExt3dmap = new ExtendedControls.ButtonExt();
             this.panel_eddiscovery = new System.Windows.Forms.Panel();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
-            this.tabPageSettings = new System.Windows.Forms.TabPage();
-            this.settings = new UserControls.UserControlSettings();
-            this.tabPageRoutesExpeditions = new System.Windows.Forms.TabPage();
-            this.savedRouteExpeditionControl1 = new UserControls.UserControlExpedition();
-            this.tabPageRoute = new System.Windows.Forms.TabPage();
-            this.routeControl1 = new UserControls.UserControlRoute();
-            this.tabPageTriletaration = new System.Windows.Forms.TabPage();
-            this.trilaterationControl = new UserControls.UserControlTrilateration();
-            this.tabPageGrid = new System.Windows.Forms.TabPage();
-            this.gridControl = new UserControls.UserControlContainerGrid();
-            this.tabPageJournal = new System.Windows.Forms.TabPage();
-            this.journalViewControl1 = new UserControls.UserControlJournalGrid();
-            this.tabPageTravelHistory = new System.Windows.Forms.TabPage();
-            this.travelHistoryControl = new UserControls.UserControlHistory();
             this.tabControlMain = new ExtendedControls.TabControlCustom();
+            this.travelHistoryControl = new EDDiscovery.UserControls.UserControlHistory();
+            this.tabPageTravelHistory = new System.Windows.Forms.TabPage();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.notifyIconContextMenuStrip1.SuspendLayout();
             this.panelToolBar.SuspendLayout();
-            this.tabPageSettings.SuspendLayout();
-            this.tabPageRoutesExpeditions.SuspendLayout();
-            this.tabPageRoute.SuspendLayout();
-            this.tabPageTriletaration.SuspendLayout();
-            this.tabPageGrid.SuspendLayout();
-            this.tabPageJournal.SuspendLayout();
-            this.tabPageTravelHistory.SuspendLayout();
             this.tabControlMain.SuspendLayout();
+            this.tabPageTravelHistory.SuspendLayout();
             this.SuspendLayout();
             // 
             // menuStrip1
@@ -150,7 +130,7 @@ namespace EDDiscovery
             this.helpToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(2, 2);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(221, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(313, 24);
             this.menuStrip1.TabIndex = 16;
             this.menuStrip1.Text = "menuStrip1";
             this.menuStrip1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.MouseDownCAPTION);
@@ -161,8 +141,6 @@ namespace EDDiscovery
             this.toolsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.show2DMapsToolStripMenuItem,
             this.show3DMapsToolStripMenuItem,
-            this.changeMapColorToolStripMenuItem,
-            this.editThemeToolStripMenuItem,
             this.materialSearchToolStripMenuItem,
             this.showAllPopoutsInTaskBarToolStripMenuItem,
             this.exitToolStripMenuItem});
@@ -174,7 +152,7 @@ namespace EDDiscovery
             // 
             this.show2DMapsToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("show2DMapsToolStripMenuItem.Image")));
             this.show2DMapsToolStripMenuItem.Name = "show2DMapsToolStripMenuItem";
-            this.show2DMapsToolStripMenuItem.Size = new System.Drawing.Size(197, 22);
+            this.show2DMapsToolStripMenuItem.Size = new System.Drawing.Size(155, 22);
             this.show2DMapsToolStripMenuItem.Text = "Show &2D maps";
             this.show2DMapsToolStripMenuItem.Click += new System.EventHandler(this.show2DMapsToolStripMenuItem_Click);
             // 
@@ -185,22 +163,6 @@ namespace EDDiscovery
             this.show3DMapsToolStripMenuItem.Size = new System.Drawing.Size(197, 22);
             this.show3DMapsToolStripMenuItem.Text = "Show &3D maps";
             this.show3DMapsToolStripMenuItem.Click += new System.EventHandler(this.show3DMapsToolStripMenuItem_Click);
-            // 
-            // changeMapColorToolStripMenuItem
-            // 
-            this.changeMapColorToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("changeMapColorToolStripMenuItem.Image")));
-            this.changeMapColorToolStripMenuItem.Name = "changeMapColorToolStripMenuItem";
-            this.changeMapColorToolStripMenuItem.Size = new System.Drawing.Size(197, 22);
-            this.changeMapColorToolStripMenuItem.Text = "Set &Default Map Colour";
-            this.changeMapColorToolStripMenuItem.Click += new System.EventHandler(this.changeMapColorToolStripMenuItem_Click);
-            // 
-            // editThemeToolStripMenuItem
-            // 
-            this.editThemeToolStripMenuItem.Image = global::EDDiscovery.Properties.Resources.eye;
-            this.editThemeToolStripMenuItem.Name = "editThemeToolStripMenuItem";
-            this.editThemeToolStripMenuItem.Size = new System.Drawing.Size(197, 22);
-            this.editThemeToolStripMenuItem.Text = "&Edit Theme";
-            this.editThemeToolStripMenuItem.Click += new System.EventHandler(this.editThemeToolStripMenuItem_Click);
             // 
             // materialSearchToolStripMenuItem
             // 
@@ -793,139 +755,6 @@ namespace EDDiscovery
             this.panel_eddiscovery.TabIndex = 18;
             this.panel_eddiscovery.Click += new System.EventHandler(this.paneleddiscovery_Click);
             // 
-            // tabPageSettings
-            // 
-            this.tabPageSettings.Controls.Add(this.settings);
-            this.tabPageSettings.Location = new System.Drawing.Point(4, 22);
-            this.tabPageSettings.Name = "tabPageSettings";
-            this.tabPageSettings.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageSettings.Size = new System.Drawing.Size(981, 640);
-            this.tabPageSettings.TabIndex = 5;
-            this.tabPageSettings.Text = "Settings";
-            this.tabPageSettings.UseVisualStyleBackColor = true;
-            // 
-            // settings
-            // 
-            this.settings.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.settings.Location = new System.Drawing.Point(3, 3);
-            this.settings.Name = "settings";
-            this.settings.Size = new System.Drawing.Size(975, 634);
-            this.settings.TabIndex = 0;
-            // 
-            // tabPageRoutesExpeditions
-            // 
-            this.tabPageRoutesExpeditions.Controls.Add(this.savedRouteExpeditionControl1);
-            this.tabPageRoutesExpeditions.Location = new System.Drawing.Point(4, 22);
-            this.tabPageRoutesExpeditions.Name = "tabPageRoutesExpeditions";
-            this.tabPageRoutesExpeditions.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageRoutesExpeditions.Size = new System.Drawing.Size(981, 640);
-            this.tabPageRoutesExpeditions.TabIndex = 6;
-            this.tabPageRoutesExpeditions.Text = "Expeditions";
-            this.tabPageRoutesExpeditions.UseVisualStyleBackColor = true;
-            // 
-            // savedRouteExpeditionControl1
-            // 
-            this.savedRouteExpeditionControl1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.savedRouteExpeditionControl1.Location = new System.Drawing.Point(3, 3);
-            this.savedRouteExpeditionControl1.Name = "savedRouteExpeditionControl1";
-            this.savedRouteExpeditionControl1.Size = new System.Drawing.Size(975, 634);
-            this.savedRouteExpeditionControl1.TabIndex = 0;
-            // 
-            // tabPageRoute
-            // 
-            this.tabPageRoute.Controls.Add(this.routeControl1);
-            this.tabPageRoute.Location = new System.Drawing.Point(4, 22);
-            this.tabPageRoute.Name = "tabPageRoute";
-            this.tabPageRoute.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageRoute.Size = new System.Drawing.Size(981, 640);
-            this.tabPageRoute.TabIndex = 1;
-            this.tabPageRoute.Text = "Route";
-            this.tabPageRoute.UseVisualStyleBackColor = true;
-            // 
-            // routeControl1
-            // 
-            this.routeControl1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.routeControl1.Location = new System.Drawing.Point(3, 3);
-            this.routeControl1.Name = "routeControl1";
-            this.routeControl1.Size = new System.Drawing.Size(975, 634);
-            this.routeControl1.TabIndex = 0;
-            // 
-            // tabPageTriletaration
-            // 
-            this.tabPageTriletaration.Controls.Add(this.trilaterationControl);
-            this.tabPageTriletaration.Location = new System.Drawing.Point(4, 22);
-            this.tabPageTriletaration.Name = "tabPageTriletaration";
-            this.tabPageTriletaration.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageTriletaration.Size = new System.Drawing.Size(981, 640);
-            this.tabPageTriletaration.TabIndex = 3;
-            this.tabPageTriletaration.Text = "Trilateration";
-            this.tabPageTriletaration.UseVisualStyleBackColor = true;
-            // 
-            // trilaterationControl
-            // 
-            this.trilaterationControl.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.trilaterationControl.Location = new System.Drawing.Point(3, 3);
-            this.trilaterationControl.Name = "trilaterationControl";
-            this.trilaterationControl.Size = new System.Drawing.Size(975, 634);
-            this.trilaterationControl.TabIndex = 21;
-            // 
-            // tabPageGrid
-            // 
-            this.tabPageGrid.Controls.Add(this.gridControl);
-            this.tabPageGrid.Location = new System.Drawing.Point(4, 22);
-            this.tabPageGrid.Name = "tabPageGrid";
-            this.tabPageGrid.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageGrid.Size = new System.Drawing.Size(981, 640);
-            this.tabPageGrid.TabIndex = 9;
-            this.tabPageGrid.Text = "Grid";
-            this.tabPageGrid.UseVisualStyleBackColor = true;
-            // 
-            // gridControl
-            // 
-            this.gridControl.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.gridControl.Location = new System.Drawing.Point(3, 3);
-            this.gridControl.Name = "gridControl";
-            this.gridControl.Size = new System.Drawing.Size(975, 634);
-            this.gridControl.TabIndex = 0;
-            // 
-            // tabPageJournal
-            // 
-            this.tabPageJournal.Controls.Add(this.journalViewControl1);
-            this.tabPageJournal.Location = new System.Drawing.Point(4, 22);
-            this.tabPageJournal.Name = "tabPageJournal";
-            this.tabPageJournal.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageJournal.Size = new System.Drawing.Size(981, 640);
-            this.tabPageJournal.TabIndex = 7;
-            this.tabPageJournal.Text = "Journal";
-            this.tabPageJournal.UseVisualStyleBackColor = true;
-            // 
-            // journalViewControl1
-            // 
-            this.journalViewControl1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.journalViewControl1.Location = new System.Drawing.Point(3, 3);
-            this.journalViewControl1.Name = "journalViewControl1";
-            this.journalViewControl1.Size = new System.Drawing.Size(975, 634);
-            this.journalViewControl1.TabIndex = 0;
-            // 
-            // tabPageTravelHistory
-            // 
-            this.tabPageTravelHistory.Controls.Add(this.travelHistoryControl);
-            this.tabPageTravelHistory.Location = new System.Drawing.Point(4, 22);
-            this.tabPageTravelHistory.Name = "tabPageTravelHistory";
-            this.tabPageTravelHistory.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageTravelHistory.Size = new System.Drawing.Size(981, 640);
-            this.tabPageTravelHistory.TabIndex = 0;
-            this.tabPageTravelHistory.Text = "History";
-            this.tabPageTravelHistory.UseVisualStyleBackColor = true;
-            // 
-            // travelHistoryControl
-            // 
-            this.travelHistoryControl.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.travelHistoryControl.Location = new System.Drawing.Point(3, 3);
-            this.travelHistoryControl.Name = "travelHistoryControl";
-            this.travelHistoryControl.Size = new System.Drawing.Size(975, 634);
-            this.travelHistoryControl.TabIndex = 0;
-            // 
             // tabControlMain
             // 
             this.tabControlMain.AllowDragReorder = false;
@@ -933,12 +762,6 @@ namespace EDDiscovery
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.tabControlMain.Controls.Add(this.tabPageTravelHistory);
-            this.tabControlMain.Controls.Add(this.tabPageJournal);
-            this.tabControlMain.Controls.Add(this.tabPageGrid);
-            this.tabControlMain.Controls.Add(this.tabPageTriletaration);
-            this.tabControlMain.Controls.Add(this.tabPageRoute);
-            this.tabControlMain.Controls.Add(this.tabPageRoutesExpeditions);
-            this.tabControlMain.Controls.Add(this.tabPageSettings);
             this.tabControlMain.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.tabControlMain.Location = new System.Drawing.Point(2, 56);
             this.tabControlMain.Name = "tabControlMain";
@@ -954,10 +777,29 @@ namespace EDDiscovery
             this.tabControlMain.TabNotSelectedColor = System.Drawing.Color.Gray;
             this.tabControlMain.TabOpaque = 100F;
             this.tabControlMain.TabSelectedColor = System.Drawing.Color.LightGray;
-            this.tabControlMain.TabStyle = tabStyleSquare1;
+            this.tabControlMain.TabStyle = tabStyleSquare2;
             this.tabControlMain.TextNotSelectedColor = System.Drawing.SystemColors.ControlText;
             this.tabControlMain.TextSelectedColor = System.Drawing.SystemColors.ControlText;
             this.tabControlMain.SelectedIndexChanged += new System.EventHandler(this.tabControl1_SelectedIndexChanged);
+            // 
+            // travelHistoryControl
+            // 
+            this.travelHistoryControl.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.travelHistoryControl.Location = new System.Drawing.Point(3, 3);
+            this.travelHistoryControl.Name = "travelHistoryControl";
+            this.travelHistoryControl.Size = new System.Drawing.Size(975, 634);
+            this.travelHistoryControl.TabIndex = 0;
+            // 
+            // tabPageTravelHistory
+            // 
+            this.tabPageTravelHistory.Controls.Add(this.travelHistoryControl);
+            this.tabPageTravelHistory.Location = new System.Drawing.Point(4, 22);
+            this.tabPageTravelHistory.Name = "tabPageTravelHistory";
+            this.tabPageTravelHistory.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPageTravelHistory.Size = new System.Drawing.Size(981, 640);
+            this.tabPageTravelHistory.TabIndex = 0;
+            this.tabPageTravelHistory.Text = "History";
+            this.tabPageTravelHistory.UseVisualStyleBackColor = true;
             // 
             // EDDiscoveryForm
             // 
@@ -989,14 +831,8 @@ namespace EDDiscovery
             this.statusStrip1.PerformLayout();
             this.notifyIconContextMenuStrip1.ResumeLayout(false);
             this.panelToolBar.ResumeLayout(false);
-            this.tabPageSettings.ResumeLayout(false);
-            this.tabPageRoutesExpeditions.ResumeLayout(false);
-            this.tabPageRoute.ResumeLayout(false);
-            this.tabPageTriletaration.ResumeLayout(false);
-            this.tabPageGrid.ResumeLayout(false);
-            this.tabPageJournal.ResumeLayout(false);
-            this.tabPageTravelHistory.ResumeLayout(false);
             this.tabControlMain.ResumeLayout(false);
+            this.tabPageTravelHistory.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1023,8 +859,6 @@ namespace EDDiscovery
         private ExtendedControls.DrawnPanel panel_close;
         private ExtendedControls.DrawnPanel panel_minimize;
         private System.Windows.Forms.Label label_version;
-        private System.Windows.Forms.ToolStripMenuItem changeMapColorToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem editThemeToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
         private ExtendedControls.StatusStripCustom statusStrip1;
         private System.Windows.Forms.ToolStripMenuItem show3DMapsToolStripMenuItem;
@@ -1068,20 +902,8 @@ namespace EDDiscovery
         private System.Windows.Forms.ToolStripMenuItem howToRunInSafeModeToResetVariousParametersToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem exportVistedStarsListToEliteDangerousToolStripMenuItem;
         private ExtendedControls.ButtonExt buttonExtPopOut;
-        private System.Windows.Forms.TabPage tabPageSettings;
-        private UserControls.UserControlSettings settings;
-        private System.Windows.Forms.TabPage tabPageRoutesExpeditions;
-        private UserControls.UserControlExpedition savedRouteExpeditionControl1;
-        private System.Windows.Forms.TabPage tabPageRoute;
-        private UserControls.UserControlRoute routeControl1;
-        private System.Windows.Forms.TabPage tabPageTriletaration;
-        private UserControls.UserControlTrilateration trilaterationControl;
-        private System.Windows.Forms.TabPage tabPageGrid;
-        private UserControls.UserControlContainerGrid gridControl;
-        private System.Windows.Forms.TabPage tabPageJournal;
-        private UserControls.UserControlJournalGrid journalViewControl1;
+        private ExtendedControls.TabControlCustom tabControlMain;
         private System.Windows.Forms.TabPage tabPageTravelHistory;
         private UserControls.UserControlHistory travelHistoryControl;
-        private ExtendedControls.TabControlCustom tabControlMain;
     }
 }

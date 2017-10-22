@@ -53,6 +53,8 @@ namespace EDDiscovery.UserControls
             comboBoxClickThruKey.Items = KeyObjectExtensions.KeyListString(inclshifts:true);
             comboBoxClickThruKey.SelectedItem = EDDConfig.Instance.ClickThruKey.VKeyToString();
             comboBoxClickThruKey.SelectedIndexChanged += comboBoxClickThruKey_SelectedIndexChanged;
+
+            discoveryform.OnRefreshCommanders += DiscoveryForm_OnRefreshCommanders;
         }
 
         void SetEntryThemeComboBox()
@@ -114,7 +116,14 @@ namespace EDDiscovery.UserControls
         {
             EDDiscoveryForm.EDDConfig.AutoLoadPopOuts = checkBoxAutoLoad.Checked;   // ok to do here..
             EDDiscoveryForm.EDDConfig.AutoSavePopOuts = checkBoxAutoSave.Checked;
+            discoveryform.OnRefreshCommanders -= DiscoveryForm_OnRefreshCommanders;
         }
+
+        private void DiscoveryForm_OnRefreshCommanders()
+        {
+            UpdateCommandersListBox();
+        }
+
 
         private void textBoxHomeSystem_Validated(object sender, EventArgs e)
         {
