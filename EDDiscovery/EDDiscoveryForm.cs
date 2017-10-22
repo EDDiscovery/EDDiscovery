@@ -122,6 +122,7 @@ namespace EDDiscovery
         public event Action<string,bool> OnNewUIEvent { add { Controller.OnNewUIEvent += value; } remove { Controller.OnNewUIEvent -= value; } }
         public event Action<JournalEntry> OnNewJournalEntry { add { Controller.OnNewJournalEntry += value; } remove { Controller.OnNewJournalEntry -= value; } }
         public event Action<string, Color> OnNewLogEntry { add { Controller.OnNewLogEntry += value; } remove { Controller.OnNewLogEntry -= value; } }
+        public event Action OnRefreshCommanders { add { Controller.OnRefreshCommanders += value; } remove { Controller.OnRefreshCommanders -= value; } }
         public event Action<EliteDangerousCore.CompanionAPI.CompanionAPIClass,HistoryEntry> OnNewCompanionAPIData;
 
         #endregion
@@ -189,12 +190,28 @@ namespace EDDiscovery
                 themeok = theme.RestoreSettings();                                    // theme, remember your saved settings
 
             travelHistoryControl.Init(this,null,0); // no cursor
-            settings.Init(this,null,0);
-            journalViewControl1.Init(this, null, 0);
-            trilaterationControl.Init(this, travelHistoryControl.GetTravelGrid, 0);
-            gridControl.Init(this, travelHistoryControl.GetTravelGrid, 0);
-            routeControl1.Init(this,travelHistoryControl.GetTravelGrid,0);
-            savedRouteExpeditionControl1.Init(this, travelHistoryControl.GetTravelGrid, 0);
+
+            //            string majortabs = "UserControlHistory,0,UserControlJournalGrid,0,UserControlTrilateration,0,UserControlSettings,0";
+            string majortabs = "UserControlHistory,0,UserControlSettings,0";
+            string[] mtabinfo = majortabs.Split(',');
+            string ucrootname = typeof(UserControls.UserControlHistory).Namespace;
+
+            for ( int i = 0; i < mtabinfo.Length; i+=2)
+            {
+                Type t = Type.GetType(ucrootname + "." + mtabinfo[i], false, false); // no exception, ignore case here
+                if ( t != null && t != typeof(UserControls.UserControlHistory))     // history is precreate, ignore
+                {
+                    System.Diagnostics.Debug.WriteLine("Tab is " + t.Name);
+                    UserControls.UserControlCommonBase uccb = (UserControls.UserControlCommonBase)Activator.CreateInstance(t, null);
+                    uccb.Init(this, travelHistoryControl.GetTravelGrid, mtabinfo[i + 1].InvariantParseInt(0));
+
+                    TabPage p = new TabPage(uccb.Name);
+                    p.Controls.Add(uccb);
+
+                    tabControlMain.TabPages.Add(p);
+                }
+            }
+
 
             Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " Map manager");
             Map = new EDDiscovery._3DMap.MapManager(EDDOptions.Instance.NoWindowReposition, this);
@@ -262,27 +279,13 @@ namespace EDDiscovery
                 Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " EDF Load layout of THC");
                 travelHistoryControl.LoadLayout();
                 travelHistoryControl.InitialDisplay();
-                Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " EDF Load layout of JVC");
-                journalViewControl1.LoadLayout();
-                journalViewControl1.InitialDisplay();
-                Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " EDF Load layout of Route");
-                routeControl1.LoadLayout();
-                routeControl1.InitialDisplay();
-                Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " EDF Load layout GC");
-                gridControl.LoadLayout();
-                gridControl.InitialDisplay();
-                Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " EDF Load layout Expedition");
-                savedRouteExpeditionControl1.LoadLayout();
-                savedRouteExpeditionControl1.InitialDisplay();
+
+                Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " EDF Load show info panel");
+                ShowInfoPanel("Loading. Please wait!", true);
 
                 Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " EDF Load layout Major Tab");
                 string tab = SQLiteConnectionUser.GetSettingString("MajorTab", "");
                 SelectTabPage(tab);
-
-                Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " EDF Load show info panel");
-                ShowInfoPanel("Loading. Please wait!", true);
-                settings.LoadLayout();
-                settings.InitialDisplay();
 
                 if (EDDOptions.Instance.ActionButton)
                 {
@@ -467,7 +470,6 @@ namespace EDDiscovery
         private void Controller_RefreshCommanders()
         {
             LoadCommandersListBox();             // in case a new commander has been detected
-            settings.UpdateCommandersListBox();
         }
 
         private void Controller_InitialisationComplete()
@@ -743,15 +745,11 @@ namespace EDDiscovery
 
             theme.SaveSettings(null);
 
-            settings.Closing();
             travelHistoryControl.Closing();
-            journalViewControl1.Closing();
-            gridControl.Closing();
-            routeControl1.Closing();
-            savedRouteExpeditionControl1.Closing();
-            trilaterationControl.Closing();
 
-            if (EDDConfig.AutoSavePopOuts)
+            // tbd close others
+
+            if (EDDConfig.AutoSavePopOuts)      // must do after settings have saved state
                 PopOuts.SaveCurrentPopouts();
 
             SQLiteConnectionUser.PutSettingString("MajorTab", tabControlMain.SelectedTab.Text);
@@ -871,16 +869,6 @@ namespace EDDiscovery
             notifyIcon1.Visible = useNotifyIcon;
             if (!useNotifyIcon && !Visible)
                 Show();
-        }
-
-        private void changeMapColorToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            settings.panel_defaultmapcolor_Click(sender, e);
-        }
-
-        private void editThemeToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            settings.button_edittheme_Click(this, null);
         }
 
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1134,9 +1122,10 @@ namespace EDDiscovery
         }
 
         private void notifyIconMenu_Hide_Click(object sender, EventArgs e)
-        {
-            // Tray icon 'Hide Tray Icon' menu item was clicked.
-            settings.DisableNotifyIcon();
+        {       // horrible circular ref to this sub func then back up.. can't think of a fix for now.
+            UserControls.UserControlCommonBase uccb = GetMajorTab(typeof(UserControls.UserControlSettings));
+            if ( uccb != null )
+                (uccb as UserControls.UserControlSettings).DisableNotifyIcon();
         }
 
         private void notifyIconMenu_Open_Click(object sender, EventArgs e)
@@ -1401,6 +1390,12 @@ namespace EDDiscovery
             });
 
             actioncontroller.ActionRun(Actions.ActionEventEDList.onMenuItem, null, vars);
+        }
+
+        private UserControls.UserControlCommonBase GetMajorTab(Type t)
+        {
+            Control r = (from TabPage x in tabControlMain.TabPages where x.Controls[0].GetType() == t select x.Controls[0]).FirstOrDefault();
+            return r as UserControls.UserControlCommonBase;
         }
 
         public bool SelectTabPage(string name)
