@@ -15,151 +15,183 @@ namespace ExtendedControls
     {
         static public DialogResult Show(IWin32Window window, string text, string caption = "Warning", MessageBoxButtons buttons = MessageBoxButtons.OK, MessageBoxIcon icon = MessageBoxIcon.None, Icon windowicon = null)
         {
-            MessageBoxTheme msg = new MessageBoxTheme();
-            msg.StartPosition = FormStartPosition.CenterParent;
-            msg.Init(text, caption, buttons, icon, windowicon);
-            return msg.ShowDialog(window);
+            using (MessageBoxTheme msg = new MessageBoxTheme(text, caption, buttons, icon, windowicon))
+            {
+                return msg.ShowDialog(window);
+            }   
         }
 
         static public MessageBoxTheme ShowModeless(IWin32Window window, string text, string caption = "Warning", MessageBoxIcon icon = MessageBoxIcon.None, Icon windowicon = null)
         {
-            MessageBoxTheme msg = new MessageBoxTheme();
-            msg.Init(text, caption, null, icon, windowicon );
+            MessageBoxTheme msg = new MessageBoxTheme(text, caption, null, icon, windowicon);
             msg.Show(window);
-            msg.CenterToParent();
-            msg.Update();
             return msg;
         }
 
         static public DialogResult Show(string text, string caption = "Warning", MessageBoxButtons buttons = MessageBoxButtons.OK, MessageBoxIcon icon = MessageBoxIcon.None, Icon windowicon = null)
         {
-            MessageBoxTheme msg = new MessageBoxTheme();
-            msg.StartPosition = FormStartPosition.CenterScreen;
-            msg.Init(text, caption, buttons, icon, windowicon);
-            Form f = Application.OpenForms[0];
-            return msg.ShowDialog(f);
+            using (MessageBoxTheme msg = new MessageBoxTheme(text, caption, buttons, icon, windowicon))
+            {
+                return msg.ShowDialog(Application.OpenForms[0]);
+            }   
         }
 
-        public string MsgText { get { return text; } set { SetText(value); Invalidate(true); Update(); } }     // modeless update
+        public string MsgText { get { return msgText; } set { SetText(value); } }     // modeless update
 
-        string text;
-        Font fnt;
-        Rectangle textarea;
-        Icon icon;
-        Color forecolour;
-        int ystart;
+        MessageBoxButtons? buttons;     // The buttons that this dialog will display
+        MessageBoxIcon mbIcon;          // The icon that this dialog will show
+        string msgText;                 // The text displayed by this form
+        Image panelIcon;                // If not null, this icon will be drawn on the left of this form. Set from mbIcon in OnLoad
+        Rectangle textarea;             // The area where we will draw the message text
+        int ystart;                     // How far down does the text start from this.ClientArea.Top?
 
-        public MessageBoxTheme()
+        public MessageBoxTheme(string text, string caption, MessageBoxButtons? buttons = MessageBoxButtons.OK, MessageBoxIcon messageBoxIcon = MessageBoxIcon.None, Icon formIcon = null)
         {
             InitializeComponent();
+
+            DialogResult = DialogResult.None;
+
+            this.msgText = text;
+            this.Text = labelCaption.Text = caption ?? string.Empty;
+            this.buttons = buttons;
+            this.mbIcon = messageBoxIcon;
+            if (formIcon != null)
+                this.Icon = formIcon;
         }
 
-        public void Init(string ptext, string caption, MessageBoxButtons? buttons, MessageBoxIcon ic, System.Drawing.Icon windowicon)
+        protected override void OnFormClosed(FormClosedEventArgs e)
         {
-            if (buttons == null)
+            base.OnFormClosed(e);
+            panelIcon?.Dispose();
+        }
+
+        protected override void OnLoad(EventArgs e)
+        {
+            base.OnLoad(e);
+
+            switch (buttons)
             {
-                buttonExt1.Visible = false;
-                buttonExt2.Visible = false;
-                buttonExt3.Visible = false;
-            }
-            else if (buttons == MessageBoxButtons.AbortRetryIgnore)
-            {
-                buttonExt1.Tag = DialogResult.Ignore; buttonExt1.Text = "Ignore";
-                buttonExt2.Tag = DialogResult.Retry; buttonExt2.Text = "Retry";
-                buttonExt3.Tag = DialogResult.Abort; buttonExt3.Text = "Abort";
-            }
-            else if (buttons == MessageBoxButtons.OK)
-            {
-                buttonExt1.Tag = DialogResult.OK; buttonExt1.Text = "OK";
-                buttonExt2.Visible = false;
-                buttonExt3.Visible = false;
-                this.AcceptButton = this.CancelButton = buttonExt1;
-            }
-            else if (buttons == MessageBoxButtons.OKCancel)
-            {
-                buttonExt1.Tag = DialogResult.Cancel; buttonExt1.Text = "Cancel";
-                buttonExt2.Tag = DialogResult.OK; buttonExt2.Text = "OK";
-                buttonExt3.Visible = false;
-            }
-            else if (buttons == MessageBoxButtons.RetryCancel)
-            {
-                buttonExt1.Tag = DialogResult.Cancel; buttonExt1.Text = "Cancel";
-                buttonExt2.Tag = DialogResult.OK; buttonExt2.Text = "Retry";
-                buttonExt3.Visible = false;
-            }
-            else if (buttons == MessageBoxButtons.YesNo)
-            {
-                buttonExt1.Tag = DialogResult.No; buttonExt1.Text = "No";
-                buttonExt2.Tag = DialogResult.Yes; buttonExt2.Text = "Yes";
-                buttonExt3.Visible = false;
-            }
-            else if (buttons == MessageBoxButtons.YesNoCancel)
-            {
-                buttonExt1.Tag = DialogResult.Cancel; buttonExt1.Text = "Cancel";
-                buttonExt2.Tag = DialogResult.No; buttonExt2.Text = "No";
-                buttonExt3.Tag = DialogResult.Yes; buttonExt3.Text = "Yes";
+                case null:
+                    buttonExt1.Visible = buttonExt2.Visible = buttonExt3.Visible = false;
+                    break;
+                case MessageBoxButtons.AbortRetryIgnore:
+                    buttonExt1.DialogResult = DialogResult.Ignore; buttonExt1.Text = "&Ignore";
+                    buttonExt2.DialogResult = DialogResult.Retry; buttonExt2.Text = "&Retry";
+                    buttonExt3.DialogResult = DialogResult.Abort; buttonExt3.Text = "&Abort";
+                    this.AcceptButton = buttonExt2;
+                    this.CancelButton = buttonExt3;
+                    break;
+                case MessageBoxButtons.OKCancel:
+                    buttonExt1.DialogResult = DialogResult.Cancel; buttonExt1.Text = "&Cancel";
+                    buttonExt2.DialogResult = DialogResult.OK; buttonExt2.Text = "&OK";
+                    buttonExt3.Visible = false;
+                    this.AcceptButton = buttonExt2;
+                    this.CancelButton = buttonExt1;
+                    break;
+                case MessageBoxButtons.RetryCancel:
+                    buttonExt1.DialogResult = DialogResult.Cancel; buttonExt1.Text = "&Cancel";
+                    buttonExt2.DialogResult = DialogResult.OK; buttonExt2.Text = "&Retry";
+                    buttonExt3.Visible = false;
+                    this.AcceptButton = buttonExt2;
+                    this.CancelButton = buttonExt1;
+                    break;
+                case MessageBoxButtons.YesNo:
+                    buttonExt1.DialogResult = DialogResult.No; buttonExt1.Text = "&No";
+                    buttonExt2.DialogResult = DialogResult.Yes; buttonExt2.Text = "&Yes";
+                    buttonExt3.Visible = false;
+                    break;
+                case MessageBoxButtons.YesNoCancel:
+                    buttonExt1.DialogResult = DialogResult.Cancel; buttonExt1.Text = "&Cancel";
+                    buttonExt2.DialogResult = DialogResult.No; buttonExt2.Text = "&No";
+                    buttonExt3.DialogResult = DialogResult.Yes; buttonExt3.Text = "&Yes";
+                    this.AcceptButton = this.CancelButton = buttonExt1;
+                    break;
+                case MessageBoxButtons.OK:
+                default:
+                    buttonExt1.DialogResult = DialogResult.OK; buttonExt1.Text = "&OK";
+                    buttonExt2.Visible = false;
+                    buttonExt3.Visible = false;
+                    this.AcceptButton = this.CancelButton = buttonExt1;
+                    break;
             }
 
-            labelCaption.Text = this.Text = caption;
+            switch (mbIcon)
+            {
+                // case MessageBoxIcon.Information:
+                case MessageBoxIcon.Asterisk:
+                    panelIcon = SystemIcons.Asterisk.ToBitmap();
+                    break;
 
-            if (ic == MessageBoxIcon.Asterisk)
-                icon = SystemIcons.Asterisk;
-            else if (ic == MessageBoxIcon.Error)
-                icon = SystemIcons.Error;
-            else if (ic == MessageBoxIcon.Exclamation)
-                icon = SystemIcons.Exclamation;
-            else if (ic == MessageBoxIcon.Information)
-                icon = SystemIcons.Information;
-            else if (ic == MessageBoxIcon.Question)
-                icon = SystemIcons.Question;
-            else if (ic == MessageBoxIcon.Warning)
-                icon = SystemIcons.Warning;
+                // case MessageBoxIcon.Exclamation:
+                case MessageBoxIcon.Warning:
+                    panelIcon = SystemIcons.Warning.ToBitmap();
+                    break;
 
+                // case MessageBoxIcon.Error:
+                // case MessageBoxIcon.Stop:
+                case MessageBoxIcon.Hand:
+                    panelIcon = SystemIcons.Hand.ToBitmap();
+                    break;
+
+                case MessageBoxIcon.Question:
+                    panelIcon = SystemIcons.Question.ToBitmap();
+                    break;
+
+                case MessageBoxIcon.None:
+                default:
+                    break;
+            }
+
+            bool framed = !(FormBorderStyle == FormBorderStyle.None);
             ThemeableForms theme = ThemeableFormsInstance.Instance;
             if (theme != null)  // paranoid
             {
-                fnt = new Font(theme.FontName, 12.0F);
-                forecolour = theme.TextBlockColor;
-                bool border = theme.ApplyToForm(this, fnt);
-                if (!border)
-                    labelCaption.Visible = true;
-                ystart = 30 + (!border ? 20 : 0);
-                if (windowicon != null)
-                    this.Icon = windowicon;
-                else if (theme.MessageBoxWindowIcon != null)
+                this.Font = new Font(theme.FontName, 12.0F);
+                this.ForeColor = theme.TextBlockColor;
+                framed = theme.ApplyToForm(this, this.Font);
+                if (theme.MessageBoxWindowIcon != null)
                     this.Icon = theme.MessageBoxWindowIcon;
             }
             else
             {
-                fnt = new Font("MS Sans Serif", 12.0F);
-                forecolour = Color.Black;
-                if ( windowicon != null )
-                    this.Icon = windowicon;
-                ystart = 30;
+                this.Font = new Font("MS Sans Serif", 12.0F);
+                this.ForeColor = Color.Black;
             }
 
-            SetText(ptext);
+            labelCaption.Visible = !framed;
+            ystart = framed ? 30 : 50;
+
+            SetText(msgText);
         }
 
         private void SetText(string p)
         {
-            text = p;
+            SuspendLayout();
+
+            msgText = p;
             //System.Diagnostics.Debug.WriteLine("Set text " + text);
 
             int bordery = Bounds.Height - ClientRectangle.Height;
             int borderx = Bounds.Width - ClientRectangle.Width;
 
-            int left = (icon != null) ? 80 : 20;
+            int left = (panelIcon != null) ? 80 : 20;
 
             using (Graphics g = CreateGraphics())
             {
-                SizeF sizeftext = g.MeasureString(text, fnt);
-                SizeF sizefcaption = g.MeasureString(labelCaption.Text, fnt);
+                SizeF sizeftext = g.MeasureString(p, this.Font);
+                SizeF sizefcaption = g.MeasureString(labelCaption.Text, this.Font);
 
                 Height = (int)sizeftext.Height + ystart + 50 + bordery;
                 Width = Math.Min(Math.Max(300, left + (int)Math.Max(sizeftext.Width, sizefcaption.Width) + 20), 1800) + borderx;
 
                 textarea = new Rectangle(left, ystart, (int)(sizeftext.Width + 1), (int)(sizeftext.Height + 1));
+            }
+
+            ResumeLayout(true);
+
+            if (IsHandleCreated)
+            {
+                Refresh();
             }
         }
 
@@ -170,39 +202,21 @@ namespace ExtendedControls
 
             //      using (Brush b = new SolidBrush(Color.Gray)) e.Graphics.FillRectangle(b, textarea);  // DEBUG
 
-            using (Brush b = new SolidBrush(forecolour))
-            {
-                using (StringFormat f = new StringFormat() { Alignment = StringAlignment.Near, LineAlignment = StringAlignment.Near })
-                {
-                    e.Graphics.DrawString(text, fnt, b, textarea, f);
-                }
-            }
+            using (Brush b = new SolidBrush(this.ForeColor))
+            using (StringFormat f = new StringFormat() { Alignment = StringAlignment.Near, LineAlignment = StringAlignment.Near })
+                e.Graphics.DrawString(msgText, this.Font, b, textarea, f);
 
-            if (icon != null)
-                e.Graphics.DrawIcon(icon, new Rectangle(10, textarea.Top, 48, 48));
+            if (panelIcon != null)
+                e.Graphics.DrawImage(panelIcon, new Rectangle(10, textarea.Top, 48, 48));
 
             e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.Default;
         }
 
-        private void MessageBoxTheme_FormClosed(object sender, FormClosedEventArgs e)
+        private void button_MouseClick(object sender, MouseEventArgs e)
         {
-            fnt?.Dispose();
-        }
-
-        private void buttonExt1_Click(object sender, EventArgs e)
-        {
-            DialogResult = (DialogResult)(((ExtendedControls.ButtonExt)sender).Tag);
-            Close();
-        }
-        private void buttonExt2_Click(object sender, EventArgs e)
-        {
-            DialogResult = (DialogResult)(((ExtendedControls.ButtonExt)sender).Tag);
-            Close();
-        }
-        private void buttonExt3_Click(object sender, EventArgs e)
-        {
-            DialogResult = (DialogResult)(((ExtendedControls.ButtonExt)sender).Tag);
-            Close();
+            // Don't need to set this.DialogResult when the buttons have that property set; it's automatically handled.
+            if (e.Button == MouseButtons.Left)
+                Close();
         }
         
         private void pictureBox1_MouseDown(object sender, MouseEventArgs e)

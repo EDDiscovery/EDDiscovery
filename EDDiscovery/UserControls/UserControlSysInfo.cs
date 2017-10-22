@@ -288,7 +288,7 @@ namespace EDDiscovery.UserControls
                         if (url.Length > 0)         // may pass back empty string if not known, this solves another exception
                             Process.Start(url);
                         else
-                            ExtendedControls.MessageBoxTheme.Show("System unknown to EDSM");
+                            ExtendedControls.MessageBoxTheme.Show(FindForm(), "System unknown to EDSM");
                     }
                 }
             }
@@ -337,7 +337,7 @@ namespace EDDiscovery.UserControls
             if (url.Length > 0)         // may pass back empty string if not known, this solves another exception
                 Process.Start(url);
             else
-                ExtendedControls.MessageBoxTheme.Show("System unknown to EDSM");
+                ExtendedControls.MessageBoxTheme.Show(FindForm(), "System unknown to EDSM");
 
         }
 

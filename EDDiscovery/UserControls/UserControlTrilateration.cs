@@ -378,7 +378,7 @@ namespace EDDiscovery.UserControls
 
         private bool Query(string msg)
         {
-            return MessageBoxTheme.Show(this, msg, "Trilateration Panel", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes;
+            return MessageBoxTheme.Show(FindForm(), msg, "Trilateration Panel", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes;
         }
 
         private void toolStripButtonSubmitDistances_Click(object sender, EventArgs e)
@@ -625,7 +625,7 @@ namespace EDDiscovery.UserControls
                     {
                         this.BeginInvoke(new MethodInvoker(() =>
                         {
-                            ExtendedControls.MessageBoxTheme.Show("Please enter commander name before submitting the system!");
+                            ExtendedControls.MessageBoxTheme.Show(FindForm(), "Please enter commander name before submitting the system!");
                             UnfreezeTrilaterationUI();
                         }));
                         return;

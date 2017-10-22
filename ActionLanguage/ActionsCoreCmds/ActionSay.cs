@@ -99,7 +99,7 @@ namespace ActionLanguage
                         vars
                         );
 
-            if (cfg.ShowDialog(parent) == DialogResult.OK)
+            if (cfg.ShowDialog(parent.FindForm()) == DialogResult.OK)
             {
                 ConditionVariables cond = new ConditionVariables(cfg.Effects);// add on any effects variables (and may add in some previous variables, since we did not purge
                 cond.SetOrRemove(cfg.Wait, waitname, "1");

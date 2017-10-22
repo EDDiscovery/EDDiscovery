@@ -293,16 +293,16 @@ namespace ExtendedControls
             if (target.HasChars())
             {
                 if (target == BaseUtils.EnhancedSendKeys.CurrentWindow)
-                    MessageBoxTheme.Show("Name a process to test sending keys");
+                    MessageBoxTheme.Show(this, "Name a process to test sending keys");
                 else
                 {
                     string err = BaseUtils.EnhancedSendKeys.Send(textBoxKeys.Text, DefaultDelay, 2 , 2, textBoxSendTo.Text);
                     if (err.Length > 0)
-                        MessageBoxTheme.Show("Error " + err + " - check entry");
+                        MessageBoxTheme.Show(this, "Error " + err + " - check entry");
                 }
             }
             else
-                MessageBoxTheme.Show("No process names to send keys to");
+                MessageBoxTheme.Show(this, "No process names to send keys to");
         }
 
         private void textBox_Enter(object sender, EventArgs e)
