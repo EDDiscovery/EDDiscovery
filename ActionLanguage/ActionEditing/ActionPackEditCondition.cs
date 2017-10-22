@@ -125,7 +125,7 @@ namespace ActionLanguage
         {
             ExtendedControls.KeyForm kf = new ExtendedControls.KeyForm();
             kf.Init(this.Icon, false, ",", buttonKeys.Text.Equals("?") ? "" : buttonKeys.Text);
-            if ( kf.ShowDialog(this) == DialogResult.OK)
+            if ( kf.ShowDialog(FindForm()) == DialogResult.OK)
             {
                 buttonKeys.Text = kf.KeyList;
                 cd.fields[0].matchstring = kf.KeyList;

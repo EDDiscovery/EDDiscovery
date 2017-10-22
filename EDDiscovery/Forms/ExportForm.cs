@@ -83,7 +83,7 @@ namespace EDDiscovery.Forms
             dlg.Filter = "CSV export| *.csv";
             dlg.Title = "Export current History view to Excel (csv)";
 
-            if (dlg.ShowDialog() == DialogResult.OK)
+            if (dlg.ShowDialog(this) == DialogResult.OK)
             {
                 Path = dlg.FileName;
                 DialogResult = DialogResult.OK;

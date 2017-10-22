@@ -118,13 +118,14 @@ namespace EDDiscovery
         private ToolStripMenuItem _toolstripToggleNamingButton;     // for picking up this option quickly
         private ToolStripMenuItem _toolstripToggleRegionColouringButton;     // for picking up this option quickly
         
-        MapRecorder maprecorder = new MapRecorder();        // the recorder 
+        MapRecorder maprecorder = null;                     // the recorder 
         TimedMessage mapmsg = null;                         // and msg
 
         KeyboardActions _kbdActions = new KeyboardActions();        // needed to be held because it remembers key downs
 
         bool _allowresizematrixchange = false;           // prevent resize causing matrix calc before paint
         private OpenTK.GLControl glControl;
+        private ExtendedControls.InfoForm helpDialog;
 
         #endregion
 
@@ -303,6 +304,7 @@ namespace EDDiscovery
         public FormMap()
         {
             InitializeComponent();
+            maprecorder = new MapRecorder(this);
             // 
             // glControl
             // 
@@ -324,8 +326,10 @@ namespace EDDiscovery
             this.glControlContainer.ResumeLayout();
         }
 
-        private void FormMap_Load(object sender, EventArgs e)
+        protected override void OnLoad(EventArgs e)
         {
+            base.OnLoad(e);
+
             var top = SQLiteDBClass.GetSettingInt("Map3DFormTop", -1);
 
             if (top >= 0 && noWindowReposition == false)
@@ -366,17 +370,18 @@ namespace EDDiscovery
             SetCenterSystemTo(_centerSystem);                   // move to this..
 
             textboxFrom.SetAutoCompletor(SystemClassDB.ReturnSystemListForAutoComplete);
-
         }
 
-        private void FormMap_Shown(object sender, EventArgs e)
+        protected override void OnShown(EventArgs e)
         {
-            Console.WriteLine("Shown");
+            base.OnShown(e);
+
+            Console.WriteLine($"{nameof(FormMap)}.{nameof(OnShown)}");
             int helpno = SQLiteDBClass.GetSettingInt("Map3DShownHelp", 0);                 // force up help, to make sure they know it exists
 
             if (helpno != HELP_VERSION)
             {
-                toolStripButtonHelp_Click(null, null);
+                toolStripButtonHelp_Click(toolStripButtonHelp, EventArgs.Empty);
                 SQLiteDBClass.PutSettingInt("Map3DShownHelp", HELP_VERSION);
             }
 
@@ -400,8 +405,10 @@ namespace EDDiscovery
             }
         }
 
-        private void FormMap_Resize(object sender, EventArgs e)         // resizes changes glcontrol width/height, so needs a new viewport
+        protected override void OnResize(EventArgs e)           // resizes changes glcontrol width/height, so needs a new viewport
         {
+            base.OnResize(e);
+
             if (_allowresizematrixchange)
             {
                 SetModelProjectionMatrix();
@@ -409,22 +416,28 @@ namespace EDDiscovery
             }
         }
 
-        private void FormMap_Activated(object sender, EventArgs e)
+        protected override void OnActivated(EventArgs e)
         {
+            base.OnActivated(e);
+
             _isActivated = true;
             StartSystemTimer();                     // in case Close, then open, only get activated
             RequestPaint();
             glControl.Focus();
         }
 
-        private void FormMap_Deactivate(object sender, EventArgs e)
+        protected override void OnDeactivate(EventArgs e)
         {
+            base.OnDeactivate(e);
+
             _isActivated = false;
             VideoMessage();
         }
 
-        private void FormMap_FormClosing(object sender, FormClosingEventArgs e)
+        protected override void OnFormClosing(FormClosingEventArgs e)
         {
+            base.OnFormClosing(e);
+
             Console.WriteLine("{0} Close form" , Environment.TickCount);
 
             _systemtimer.Stop();
@@ -463,6 +476,29 @@ namespace EDDiscovery
 
             e.Cancel = true;
             this.Hide();
+        }
+
+        protected override void OnFormClosed(FormClosedEventArgs e)
+        {
+            base.OnFormClosed(e);
+
+            helpDialog?.Dispose();
+        }
+
+        protected override void OnTopMostChanged(EventArgs e)
+        {
+            base.OnTopMostChanged(e);
+
+            if (helpDialog != null)
+                helpDialog.TopMost = this.TopMost;
+        }
+
+        protected override void OnVisibleChanged(EventArgs e)
+        {
+            base.OnVisibleChanged(e);
+
+            if (helpDialog != null)
+                helpDialog.Visible = this.Visible;
         }
 
         private void glControl_Load(object sender, EventArgs e)
@@ -709,12 +745,12 @@ namespace EDDiscovery
             mapmsg?.Dispose();
             mapmsg = null;
 
-            if (msg != null && msg.Length > 0 && time > 0)
+            if (!string.IsNullOrEmpty(msg) && time > 0)
             {
                 TimedMessage newmsg = new TimedMessage();
                 newmsg.Init("", msg, time, true, 0.9F, Color.Black, Color.White, new Font("MS Sans Serif", 20.0F));
                 newmsg.Position(this, 0, 0, -1, -20, 0, 0);         // careful, it triggers a deactivate.. which tries to close it
-                newmsg.Show();
+                newmsg.Show(this);
                 mapmsg = newmsg;                                    // now we can set this.. if we did it above, we would end with a race condition on a null pointer of this object
                 glControl.Focus();
             }
@@ -1143,7 +1179,7 @@ namespace EDDiscovery
                     posdir.CameraLookAt(loc,zoomfov.Zoom, 2F);
             }
             else
-                ExtendedControls.MessageBoxTheme.Show("System or Object " + textboxFrom.Text + " not found");
+                ExtendedControls.MessageBoxTheme.Show(this, "System or Object " + textboxFrom.Text + " not found");
 
             glControl.Focus();
         }
@@ -1156,7 +1192,7 @@ namespace EDDiscovery
                 SetCenterSystemTo((he == null) ? _centerSystem.name : he.System.name);
             }
             else
-                ExtendedControls.MessageBoxTheme.Show("No travel history is available");
+                ExtendedControls.MessageBoxTheme.Show(this, "No travel history is available");
         }
 
         private void buttonHome_Click(object sender, EventArgs e)
@@ -1167,7 +1203,7 @@ namespace EDDiscovery
         private void buttonHistory_Click(object sender, EventArgs e)
         {
             if (_historySelection == null)
-                ExtendedControls.MessageBoxTheme.Show("No travel history is available");
+                ExtendedControls.MessageBoxTheme.Show(this, "No travel history is available");
             else
                 SetCenterSystemTo(_historySelection);
         }
@@ -1183,7 +1219,7 @@ namespace EDDiscovery
             }
             else
             {
-                ExtendedControls.MessageBoxTheme.Show("No target designated, create a bookmark or region mark, or use a Note mark, right click on it and set it as the target");
+                ExtendedControls.MessageBoxTheme.Show(this, "No target designated, create a bookmark or region mark, or use a Note mark, right click on it and set it as the target");
             }
         }
         
@@ -1195,7 +1231,7 @@ namespace EDDiscovery
                 SetCenterSystemTo((he == null) ? _centerSystem.name : he.System.name);
             }
             else
-                ExtendedControls.MessageBoxTheme.Show("No travel history is available");
+                ExtendedControls.MessageBoxTheme.Show(this, "No travel history is available");
         }
 
         private void toolStripButtonAutoForward_Click(object sender, EventArgs e)
@@ -1211,10 +1247,10 @@ namespace EDDiscovery
                 if (he != null )
                     SetCenterSystemTo(FindSystem(he.System.name));
                 else
-                    ExtendedControls.MessageBoxTheme.Show("No stars with defined co-ordinates available in travel history");
+                    ExtendedControls.MessageBoxTheme.Show(this, "No stars with defined co-ordinates available in travel history");
             }
             else
-                ExtendedControls.MessageBoxTheme.Show("No travel history is available");
+                ExtendedControls.MessageBoxTheme.Show(this, "No travel history is available");
         }
 
         private void drawLinesBetweenStarsWithPositionToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1327,7 +1363,7 @@ namespace EDDiscovery
             frm.InitialisePos(posdir.Position.X, posdir.Position.Y, posdir.Position.Z);
             DateTime tme = DateTime.Now;
             frm.RegionBookmark(tme.ToString());
-            DialogResult res = frm.ShowDialog();
+            DialogResult res = frm.ShowDialog(this);
 
             if (res == DialogResult.OK)
             {
@@ -1377,11 +1413,19 @@ namespace EDDiscovery
 
         private void toolStripButtonHelp_Click(object sender, EventArgs e)
         {
-            ExtendedControls.InfoForm dl = new ExtendedControls.InfoForm();
-            string text = EDDiscovery.Properties.Resources.maphelp3d;
-            dl.Info("3D Map Help", Icon.ExtractAssociatedIcon(System.Reflection.Assembly.GetExecutingAssembly().Location), 
-                        text, new Font("Microsoft Sans Serif", 10), new int[] { 50, 200, 400 });
-            dl.Show();
+            if (helpDialog == null)
+            {
+                helpDialog = new ExtendedControls.InfoForm() { TopMost = this.TopMost };
+                helpDialog.Info("3D Map Help", Icon.ExtractAssociatedIcon(System.Reflection.Assembly.GetExecutingAssembly().Location),
+                            Properties.Resources.maphelp3d, new Font("Microsoft Sans Serif", 10), new int[] { 50, 200, 400 });
+                helpDialog.Show();
+                helpDialog.Disposed += (s, ea) => helpDialog = null;
+            }
+            else
+            {
+                helpDialog.Activate();
+                helpDialog.BringToFront();
+            }
         }
 
         private void dropdownMapNames_DropDownItemClicked(object sender, EventArgs e)
@@ -1435,7 +1479,7 @@ namespace EDDiscovery
 
         private void toolStripMenuItemClearRecording_Click(object sender, EventArgs e)
         {
-            if (ExtendedControls.MessageBoxTheme.Show("Confirm you wish to clear the current recording", "WARNING", MessageBoxButtons.OKCancel) == DialogResult.OK)
+            if (ExtendedControls.MessageBoxTheme.Show(this, "Confirm you wish to clear the current recording", "WARNING", MessageBoxButtons.OKCancel) == DialogResult.OK)
                 maprecorder.Clear();
 
             SetDropDownRecordImage();
@@ -1511,7 +1555,7 @@ namespace EDDiscovery
             string file = (string)tmsi.Tag;
             if ( !maprecorder.ReadFromFile(file) )
             {
-                ExtendedControls.MessageBoxTheme.Show("Failed to load flight " + file + ". Check file path and file contents");
+                ExtendedControls.MessageBoxTheme.Show(this, "Failed to load flight " + file + ". Check file path and file contents");
             }
         }
 
@@ -1646,7 +1690,7 @@ namespace EDDiscovery
                     frm.Name = gmo.name;
                     frm.InitialisePos(gmo.points[0].X, gmo.points[0].Y, gmo.points[0].Z);
                     frm.GMO(gmo.name, gmo.description, targetid == gmo.id, gmo.galMapUrl);
-                    DialogResult res = frm.ShowDialog();
+                    DialogResult res = frm.ShowDialog(this);
 
                     if (res == DialogResult.OK)
                     {

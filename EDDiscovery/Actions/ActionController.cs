@@ -88,7 +88,7 @@ namespace EDDiscovery.Actions
 
             string errlist = actionfiles.LoadAllActionFiles(AppFolder);
             if (errlist.Length > 0)
-                ExtendedControls.MessageBoxTheme.Show("Failed to load files\r\n" + errlist, "WARNING!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                ExtendedControls.MessageBoxTheme.Show(discoveryform, "Failed to load files\r\n" + errlist, "WARNING!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
             actionrunasync = new ActionRun(this, actionfiles);        // this is the guy who runs programs asynchronously
             ActionConfigureKeys();
@@ -101,7 +101,7 @@ namespace EDDiscovery.Actions
             if (lasteditedpack.Length > 0 && EditActionFile(lasteditedpack))
                 return;
             else
-                ExtendedControls.MessageBoxTheme.Show("Action pack does not exist anymore or never set", "WARNING!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                ExtendedControls.MessageBoxTheme.Show(discoveryform, "Action pack does not exist anymore or never set", "WARNING!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
         }
 
         private bool EditActionFile(string name)            // edit pack name
@@ -121,9 +121,8 @@ namespace EDDiscovery.Actions
             if (f != null)
             {
                 frm.Init("Edit pack " + name, this.Icon, this, AppFolder, f, eventlist);
-                frm.TopMost = discoveryform.FindForm().TopMost;
 
-                frm.ShowDialog(discoveryform.FindForm()); // don't care about the result, the form does all the saving
+                frm.ShowDialog(discoveryform); // don't care about the result, the form does all the saving
 
                 ActionConfigureKeys();
 
@@ -235,7 +234,7 @@ namespace EDDiscovery.Actions
             ConditionVariablesForm avf = new ConditionVariablesForm();
             avf.Init("Global User variables to pass to program on run", this.Icon, PersistentVariables, showone: true);
 
-            if (avf.ShowDialog(discoveryform.FindForm()) == DialogResult.OK)
+            if (avf.ShowDialog(discoveryform) == DialogResult.OK)
             {
                 LoadPeristentVariables(avf.result);
             }
@@ -243,7 +242,7 @@ namespace EDDiscovery.Actions
 
         private void Dmf_OnCreateActionFile()
         {
-            String r = ExtendedControls.PromptSingleLine.ShowDialog(discoveryform.FindForm(), "New name", "", "Create new action file" , this.Icon);
+            String r = ExtendedControls.PromptSingleLine.ShowDialog(discoveryform, "New name", "", "Create new action file" , this.Icon);
             if ( r != null && r.Length>0 )
             {
                 if (actionfiles.Get(r, StringComparison.InvariantCultureIgnoreCase) == null)
@@ -251,7 +250,7 @@ namespace EDDiscovery.Actions
                     actionfiles.CreateSet(r,AppFolder);
                 }
                 else
-                    ExtendedControls.MessageBoxTheme.Show(discoveryform.FindForm(), "Duplicate name", "Create Action File Failed", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    ExtendedControls.MessageBoxTheme.Show(discoveryform, "Duplicate name", "Create Action File Failed", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             }
         }
 

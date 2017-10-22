@@ -488,13 +488,7 @@ namespace ExtendedControls
             _customdropdown.OtherKeyPressed += _customdropdown_OtherKeyPressed;
             _customdropdown.Deactivate += _customdropdown_Deactivate;
 
-            Control parent = this.Parent;
-            while (parent != null && !(parent is Form))
-            {
-                parent = parent.Parent;
-            }
-
-            _customdropdown.Show(parent);
+            _customdropdown.Show(FindForm());
              
             // enforce size.. some reason SHow is scaling it probably due to autosizing.. can't turn off. force back
             _customdropdown.Size = new Size(this.DropDownWidth > 9 ? this.DropDownWidth : this.Width, fittableitems * this.ItemHeight + 4);
