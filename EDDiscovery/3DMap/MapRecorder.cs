@@ -65,6 +65,7 @@ namespace EDDiscovery._3DMap
         }
 
         private List<FlightEntry> entries = null;
+        private FormMap owner = null;
 
         private bool record = false;
         private bool pause = false;
@@ -76,6 +77,11 @@ namespace EDDiscovery._3DMap
         private Stopwatch timer;
 
         int playbackpos = -1;
+
+        public MapRecorder(FormMap form)
+        {
+            owner = form;
+        }
 
         public void Clear()
         {
@@ -235,7 +241,7 @@ namespace EDDiscovery._3DMap
             {
                 RecordStep frm = new RecordStep();
                 frm.Init(pos, dir, zoom);
-                if (frm.ShowDialog() == DialogResult.OK)
+                if (frm.ShowDialog(owner) == DialogResult.OK)
                 {
                     RecordStep(frm.Pos, frm.Dir, frm.Zoom, frm.Elapsed, frm.FlyTime, frm.PanTime, frm.ZoomTime, frm.Msg, frm.MsgTime, frm.WaitForComplete, frm.DisplayMessageWhenComplete);
                 }
@@ -294,14 +300,14 @@ namespace EDDiscovery._3DMap
                 dlg.AddExtension = true;
                 dlg.Filter = "Flight files (*.flight)|*.flight|All files (*.*)|*.*";
 
-                if (dlg.ShowDialog() == DialogResult.OK)
+                if (dlg.ShowDialog(owner) == DialogResult.OK)
                 {
                     if ( !SaveToFile(dlg.FileName) )
-                        ExtendedControls.MessageBoxTheme.Show("Failed to save flight - check file path");
+                        ExtendedControls.MessageBoxTheme.Show(owner, "Failed to save flight - check file path");
                 }
             }
             else
-                ExtendedControls.MessageBoxTheme.Show("No flight recorded");
+                ExtendedControls.MessageBoxTheme.Show(owner, "No flight recorded");
         }
 
         public void LoadDialog()
@@ -320,10 +326,10 @@ namespace EDDiscovery._3DMap
 
             dlg.Filter = "Flight files (*.flight)|*.flight|All files (*.*)|*.*";
 
-            if (dlg.ShowDialog() == DialogResult.OK)
+            if (dlg.ShowDialog(owner) == DialogResult.OK)
             {
                 if (!ReadFromFile(dlg.FileName))
-                    ExtendedControls.MessageBoxTheme.Show("Failed to load flight " + dlg.FileName + ". Check file path and file contents");
+                    ExtendedControls.MessageBoxTheme.Show(owner, "Failed to load flight " + dlg.FileName + ". Check file path and file contents");
             }
         }
 

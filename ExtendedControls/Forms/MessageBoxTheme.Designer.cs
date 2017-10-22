@@ -76,7 +76,7 @@
             this.buttonExt3.TabIndex = 4;
             this.buttonExt3.Text = "Retry";
             this.buttonExt3.UseVisualStyleBackColor = true;
-            this.buttonExt3.Click += new System.EventHandler(this.buttonExt3_Click);
+            this.buttonExt3.MouseClick += new System.Windows.Forms.MouseEventHandler(this.button_MouseClick);
             // 
             // buttonExt1
             // 
@@ -90,7 +90,7 @@
             this.buttonExt1.TabIndex = 2;
             this.buttonExt1.Text = "OK";
             this.buttonExt1.UseVisualStyleBackColor = true;
-            this.buttonExt1.Click += new System.EventHandler(this.buttonExt1_Click);
+            this.buttonExt1.MouseClick += new System.Windows.Forms.MouseEventHandler(this.button_MouseClick);
             // 
             // buttonExt2
             // 
@@ -104,7 +104,7 @@
             this.buttonExt2.TabIndex = 3;
             this.buttonExt2.Text = "Cancel";
             this.buttonExt2.UseVisualStyleBackColor = true;
-            this.buttonExt2.Click += new System.EventHandler(this.buttonExt2_Click);
+            this.buttonExt2.MouseClick += new System.Windows.Forms.MouseEventHandler(this.button_MouseClick);
             // 
             // MessageBoxTheme
             // 
@@ -116,7 +116,6 @@
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "MessageBox";
-            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.MessageBoxTheme_FormClosed);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             this.ResumeLayout(false);

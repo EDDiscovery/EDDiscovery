@@ -602,7 +602,7 @@ namespace ActionLanguage
             dlg.AddExtension = true;
             dlg.Filter = "Action Text Files (*.atf)|*.atf|All files (*.*)|*.*";
 
-            if (dlg.ShowDialog() == DialogResult.OK)
+            if (dlg.ShowDialog(this) == DialogResult.OK)
             {
                 using (System.IO.StreamReader sr = new System.IO.StreamReader(dlg.FileName))
                 {
@@ -648,7 +648,7 @@ namespace ActionLanguage
                 dlg.AddExtension = true;
                 dlg.Filter = "Action Text Files (*.atf)|*.atf|All files (*.*)|*.*";
 
-                if (dlg.ShowDialog() == DialogResult.OK)
+                if (dlg.ShowDialog(this) == DialogResult.OK)
                 {
                     curprog.Rename(textBoxBorderName.Text.Trim());
                     if ( associate )

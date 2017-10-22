@@ -64,7 +64,7 @@ namespace ActionLanguage
             return FromString(userdata, out saying, out vars) ? null : "Key command line not in correct format";
         }
 
-        static public string Menu(Control parent , System.Drawing.Icon ic, string userdata)
+        static public string Menu(Form parent, System.Drawing.Icon ic, string userdata)
         {
             ConditionVariables vars;
             string keys;
