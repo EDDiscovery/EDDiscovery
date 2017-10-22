@@ -172,7 +172,7 @@ namespace EDDiscovery.UserControls
 
             if (!edsm.ShowSystemInEDSM(rightclicksystem.name, id_edsm))
             {
-                ExtendedControls.MessageBoxTheme.Show("System could not be found - has not been synched or EDSM is unavailable");
+                ExtendedControls.MessageBoxTheme.Show(FindForm(), "System could not be found - has not been synched or EDSM is unavailable");
             }
 
             this.Cursor = Cursors.Default;

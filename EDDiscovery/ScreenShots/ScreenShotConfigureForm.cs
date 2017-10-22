@@ -93,7 +93,7 @@ namespace EDDiscovery.ScreenShots
             dlg.Description = "Select ED screenshot folder";
             dlg.SelectedPath = textBoxScreenshotsDir.Text;
 
-            if (dlg.ShowDialog() == DialogResult.OK)
+            if (dlg.ShowDialog(this) == DialogResult.OK)
             {
                 initialssfolder = textBoxScreenshotsDir.Text = dlg.SelectedPath;
             }
@@ -106,7 +106,7 @@ namespace EDDiscovery.ScreenShots
             dlg.Description = "Select converted screenshot folder";
             dlg.SelectedPath = textBoxOutputDir.Text;
 
-            if (dlg.ShowDialog() == DialogResult.OK)
+            if (dlg.ShowDialog(this) == DialogResult.OK)
             {
                 textBoxOutputDir.Text = dlg.SelectedPath;
             }
@@ -121,7 +121,7 @@ namespace EDDiscovery.ScreenShots
         {
             if (!Directory.Exists(textBoxScreenshotsDir.Text))
             {
-                ExtendedControls.MessageBoxTheme.Show("Folder specified does not exist");
+                ExtendedControls.MessageBoxTheme.Show(this, "Folder specified does not exist");
                 textBoxScreenshotsDir.Text = initialssfolder;
             }
             else
@@ -144,7 +144,7 @@ namespace EDDiscovery.ScreenShots
                 Close();
             }
             else
-                ExtendedControls.MessageBoxTheme.Show("Folder specified for scanning does not exist, correct or cancel");
+                ExtendedControls.MessageBoxTheme.Show(this, "Folder specified for scanning does not exist, correct or cancel");
         }
 
         private void buttonExtCancel_Click(object sender, EventArgs e)

@@ -775,12 +775,6 @@ namespace EDDiscovery
             this.Name = "FormMap";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "3D Star Map";
-            this.Activated += new System.EventHandler(this.FormMap_Activated);
-            this.Deactivate += new System.EventHandler(this.FormMap_Deactivate);
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormMap_FormClosing);
-            this.Load += new System.EventHandler(this.FormMap_Load);
-            this.Shown += new System.EventHandler(this.FormMap_Shown);
-            this.Resize += new System.EventHandler(this.FormMap_Resize);
             this.toolStripShowAllStars.ResumeLayout(false);
             this.toolStripShowAllStars.PerformLayout();
             this.statusStrip.ResumeLayout(false);
