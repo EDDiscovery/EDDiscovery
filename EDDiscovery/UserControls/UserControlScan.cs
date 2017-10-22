@@ -789,7 +789,7 @@ namespace EDDiscovery.UserControls
             if (rtbNodeInfo.Visible)
             {
                 if (rtbNodeInfo.Tag != null && ((bool)rtbNodeInfo.Tag) == true)
-                    rtbNodeInfo.Location = new Point(panelStars.Width / 2 + panelStars.Width / 16, 50);
+                    rtbNodeInfo.Location = new Point(panelStars.Width / 2 + panelStars.Width / 16, 10);
                 else
                     rtbNodeInfo.Location = new Point(panelStars.Width / 16, 10);
 

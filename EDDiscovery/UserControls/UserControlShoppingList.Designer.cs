@@ -50,6 +50,8 @@ namespace EDDiscovery.UserControls
             this.splitContainerRightHorz = new ExtendedControls.SplitContainerCustom();
             this.userControlSynthesis = new EDDiscovery.UserControls.UserControlSynthesis();
             this.userControlEngineering = new EDDiscovery.UserControls.UserControlEngineering();
+            this.contextMenuConfig = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.showMaxFSDInjectionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerVertical)).BeginInit();
             this.splitContainerVertical.Panel1.SuspendLayout();
             this.splitContainerVertical.Panel2.SuspendLayout();
@@ -59,6 +61,7 @@ namespace EDDiscovery.UserControls
             this.splitContainerRightHorz.Panel1.SuspendLayout();
             this.splitContainerRightHorz.Panel2.SuspendLayout();
             this.splitContainerRightHorz.SuspendLayout();
+            this.contextMenuConfig.SuspendLayout();
             this.SuspendLayout();
             // 
             // toolTip1
@@ -131,6 +134,23 @@ namespace EDDiscovery.UserControls
             this.userControlEngineering.Size = new System.Drawing.Size(844, 352);
             this.userControlEngineering.TabIndex = 0;
             // 
+            // contextMenuConfig
+            // 
+            this.contextMenuConfig.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.showMaxFSDInjectionsToolStripMenuItem});
+            this.contextMenuConfig.Name = "contextMenuConfig";
+            this.contextMenuConfig.Size = new System.Drawing.Size(206, 48);
+            // 
+            // showMaxFSDInjectionsToolStripMenuItem
+            // 
+            this.showMaxFSDInjectionsToolStripMenuItem.Checked = true;
+            this.showMaxFSDInjectionsToolStripMenuItem.CheckOnClick = true;
+            this.showMaxFSDInjectionsToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.showMaxFSDInjectionsToolStripMenuItem.Name = "showMaxFSDInjectionsToolStripMenuItem";
+            this.showMaxFSDInjectionsToolStripMenuItem.Size = new System.Drawing.Size(205, 22);
+            this.showMaxFSDInjectionsToolStripMenuItem.Text = "Show Max FSD Injections";
+            this.showMaxFSDInjectionsToolStripMenuItem.Click += new System.EventHandler(this.showMaxFSDInjectionsToolStripMenuItem_Click);
+            // 
             // UserControlShoppingList
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -147,6 +167,7 @@ namespace EDDiscovery.UserControls
             this.splitContainerRightHorz.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerRightHorz)).EndInit();
             this.splitContainerRightHorz.ResumeLayout(false);
+            this.contextMenuConfig.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -158,5 +179,7 @@ namespace EDDiscovery.UserControls
         private ExtendedControls.SplitContainerCustom splitContainerRightHorz;
         private UserControlSynthesis userControlSynthesis;
         private UserControlEngineering userControlEngineering;
+        private System.Windows.Forms.ContextMenuStrip contextMenuConfig;
+        private System.Windows.Forms.ToolStripMenuItem showMaxFSDInjectionsToolStripMenuItem;
     }
 }
