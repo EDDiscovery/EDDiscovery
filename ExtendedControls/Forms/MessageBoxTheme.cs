@@ -75,40 +75,40 @@ namespace ExtendedControls
                     buttonExt1.Visible = buttonExt2.Visible = buttonExt3.Visible = false;
                     break;
                 case MessageBoxButtons.AbortRetryIgnore:
-                    buttonExt1.DialogResult = DialogResult.Ignore; buttonExt1.Text = "&Ignore";
-                    buttonExt2.DialogResult = DialogResult.Retry; buttonExt2.Text = "&Retry";
-                    buttonExt3.DialogResult = DialogResult.Abort; buttonExt3.Text = "&Abort";
+                    buttonExt1.DialogResult = DialogResult.Ignore; buttonExt1.Text = "Ignore";
+                    buttonExt2.DialogResult = DialogResult.Retry; buttonExt2.Text = "Retry";
+                    buttonExt3.DialogResult = DialogResult.Abort; buttonExt3.Text = "Abort";
                     this.AcceptButton = buttonExt2;
                     this.CancelButton = buttonExt3;
                     break;
                 case MessageBoxButtons.OKCancel:
-                    buttonExt1.DialogResult = DialogResult.Cancel; buttonExt1.Text = "&Cancel";
-                    buttonExt2.DialogResult = DialogResult.OK; buttonExt2.Text = "&OK";
+                    buttonExt1.DialogResult = DialogResult.Cancel; buttonExt1.Text = "Cancel";
+                    buttonExt2.DialogResult = DialogResult.OK; buttonExt2.Text = "OK";
                     buttonExt3.Visible = false;
                     this.AcceptButton = buttonExt2;
                     this.CancelButton = buttonExt1;
                     break;
                 case MessageBoxButtons.RetryCancel:
-                    buttonExt1.DialogResult = DialogResult.Cancel; buttonExt1.Text = "&Cancel";
-                    buttonExt2.DialogResult = DialogResult.OK; buttonExt2.Text = "&Retry";
+                    buttonExt1.DialogResult = DialogResult.Cancel; buttonExt1.Text = "Cancel";
+                    buttonExt2.DialogResult = DialogResult.OK; buttonExt2.Text = "Retry";
                     buttonExt3.Visible = false;
                     this.AcceptButton = buttonExt2;
                     this.CancelButton = buttonExt1;
                     break;
                 case MessageBoxButtons.YesNo:
-                    buttonExt1.DialogResult = DialogResult.No; buttonExt1.Text = "&No";
-                    buttonExt2.DialogResult = DialogResult.Yes; buttonExt2.Text = "&Yes";
+                    buttonExt1.DialogResult = DialogResult.No; buttonExt1.Text = "No";
+                    buttonExt2.DialogResult = DialogResult.Yes; buttonExt2.Text = "Yes";
                     buttonExt3.Visible = false;
                     break;
                 case MessageBoxButtons.YesNoCancel:
-                    buttonExt1.DialogResult = DialogResult.Cancel; buttonExt1.Text = "&Cancel";
-                    buttonExt2.DialogResult = DialogResult.No; buttonExt2.Text = "&No";
-                    buttonExt3.DialogResult = DialogResult.Yes; buttonExt3.Text = "&Yes";
+                    buttonExt1.DialogResult = DialogResult.Cancel; buttonExt1.Text = "Cancel";
+                    buttonExt2.DialogResult = DialogResult.No; buttonExt2.Text = "No";
+                    buttonExt3.DialogResult = DialogResult.Yes; buttonExt3.Text = "Yes";
                     this.AcceptButton = this.CancelButton = buttonExt1;
                     break;
                 case MessageBoxButtons.OK:
                 default:
-                    buttonExt1.DialogResult = DialogResult.OK; buttonExt1.Text = "&OK";
+                    buttonExt1.DialogResult = DialogResult.OK; buttonExt1.Text = "OK";
                     buttonExt2.Visible = false;
                     buttonExt3.Visible = false;
                     this.AcceptButton = this.CancelButton = buttonExt1;
