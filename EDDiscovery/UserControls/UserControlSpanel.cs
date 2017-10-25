@@ -34,9 +34,6 @@ namespace EDDiscovery.UserControls
 {
     public partial class UserControlSpanel : UserControlCommonBase
     {
-        private EDDiscoveryForm discoveryform;
-
-        private int displaynumber = 0;
         private string DbSave { get { return "SPanel" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
         private string DbFilterSave { get { return "SPanelEventFilter" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
         private string DbFieldFilter { get { return "SPanelFieldFilter" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
@@ -118,10 +115,8 @@ namespace EDDiscovery.UserControls
             InitializeComponent();
         }
 
-        public override void Init(EDDiscoveryForm ed, UserControlCursorType thc, int vn) //0=primary, 1 = first windowed version, etc
+        public override void Init()
         {
-            discoveryform = ed;
-            displaynumber = vn;
             discoveryform.OnHistoryChange += Display;
             discoveryform.OnNewEntry += NewEntry;
             discoveryform.OnNewTarget += NewTarget;

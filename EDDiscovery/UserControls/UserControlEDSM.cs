@@ -32,9 +32,6 @@ namespace EDDiscovery.UserControls
 {
     public partial class UserControlEDSM : UserControlCommonBase
     {
-        private EDDiscoveryForm discoveryform;
-        private int displaynumber;                          // since this is plugged into something other than a TabControlForm, can't rely on its display number
-
         private string DbColumnSave { get { return "UCEDSM" + ((displaynumber > 0) ? displaynumber.ToString() : "") + "DGVCol"; } }
         private string DbStar { get { return "UCEDSM" + ((displaynumber > 0) ? displaynumber.ToString() : "") + "Star"; } }
         private string DbRadius { get { return "UCEDSM" + ((displaynumber > 0) ? displaynumber.ToString() : "") + "Radius"; } }
@@ -47,11 +44,8 @@ namespace EDDiscovery.UserControls
             buttonExtEDSMSphere.Enabled = buttonExtDBLookup.Enabled = false;
         }
 
-        public override void Init(EDDiscoveryForm ed, UserControlCursorType thc, int vn) //0=primary, 1 = first windowed version, etc
+        public override void Init()
         {
-            discoveryform = ed;
-            displaynumber = vn;
-
             dataGridViewEDSM.MakeDoubleBuffered();
             dataGridViewEDSM.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
             dataGridViewEDSM.RowTemplate.Height = 26;

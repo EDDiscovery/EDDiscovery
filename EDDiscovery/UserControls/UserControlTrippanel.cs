@@ -32,11 +32,8 @@ namespace EDDiscovery.UserControls
 {
     public partial class UserControlTrippanel : UserControlCommonBase
     {
-        private EDDiscoveryForm discoveryform;
-
         //static String TITLE = "Trip panel";
 
-        private int displaynumber = 0;
         private string DbSave { get { return "TripPanel" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
 
         HistoryEntry lastHE;
@@ -48,11 +45,8 @@ namespace EDDiscovery.UserControls
             InitializeComponent();
         }
 
-        public override void Init(EDDiscoveryForm ed, UserControlCursorType thc, int vn) //0=primary, 1 = first windowed version, etc
+        public override void Init()
         {
-            discoveryform = ed;
-            displaynumber = vn;
-
             discoveryform.OnHistoryChange += Display;
             discoveryform.OnNewEntry += NewEntry;
             discoveryform.OnNewTarget += NewTarget;

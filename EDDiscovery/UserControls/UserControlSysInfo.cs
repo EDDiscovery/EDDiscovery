@@ -33,10 +33,6 @@ namespace EDDiscovery.UserControls
     {
         public bool IsNotesShowing { get { return richTextBoxNote.Visible; } }
 
-        private EDDiscoveryForm discoveryform;
-        private UserControlCursorType uctg;
-
-        private int displaynumber;
         private string DbSelection { get { return ("SystemInformationPanel") + ((displaynumber > 0) ? displaynumber.ToString() : "") + "Sel"; } }
         private string DbOSave { get { return "SystemInformationPanel" + ((displaynumber > 0) ? displaynumber.ToString() : "") + "Order"; } }
 
@@ -79,11 +75,8 @@ namespace EDDiscovery.UserControls
             InitializeComponent();
         }
 
-        public override void Init(EDDiscoveryForm ed, UserControlCursorType thc, int displayno)
+        public override void Init()
         {
-            discoveryform = ed;
-            uctg = thc;
-            this.displaynumber = displayno;
             uctg.OnTravelSelectionChanged += Display;    // get this whenever current selection or refreshed..
             discoveryform.OnNewTarget += RefreshTargetDisplay;
             discoveryform.OnNoteChanged += OnNoteChanged;

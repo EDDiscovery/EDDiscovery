@@ -30,7 +30,6 @@ namespace EDDiscovery.UserControls
 {
     public partial class UserControlTrilateration : UserControlCommonBase
     {
-        private EDDiscoveryForm discoveryform;
         private ISystem targetsystem;
         private EDSMClass edsm;
         private List<WantedSystemClass> wanted;
@@ -46,10 +45,9 @@ namespace EDDiscovery.UserControls
             InitializeComponent();
         }
 
-        public override void Init(EDDiscoveryForm discoveryForm, UserControlCursorType thc, int vn)
+        public override void Init()
         {
             ColumnSystem.AutoCompleteGenerator = SystemClassDB.ReturnOnlySystemsListForAutoComplete;
-            discoveryform = discoveryForm;
             FreezeTrilaterationUI();
             edsm = new EDSMClass();
             edsm.apiKey = EDCommander.Current.APIKey;
