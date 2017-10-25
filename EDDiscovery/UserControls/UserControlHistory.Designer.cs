@@ -227,12 +227,12 @@ namespace EDDiscovery.UserControls
             this.tabStripBottomRight.StripMode = ExtendedControls.TabStrip.StripModeType.ListSelection;
             this.tabStripBottomRight.TabIndex = 0;
             // 
-            // TravelHistoryControl
+            // UserControlHistory
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.splitContainerLeftRight);
-            this.Name = "TravelHistoryControl";
+            this.Name = "UserControlHistory";
             this.Size = new System.Drawing.Size(891, 650);
             this.splitContainerLeftRight.Panel1.ResumeLayout(false);
             this.splitContainerLeftRight.Panel2.ResumeLayout(false);

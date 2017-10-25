@@ -144,21 +144,18 @@ namespace EDDiscovery.UserControls
 
             if (!EDDOptions.Instance.NoWindowReposition)
             {
-                try
-                {
-                    splitContainerLeftRight.SplitterDistance = SQLiteDBClass.GetSettingInt("TravelControlSpliterLR", splitContainerLeftRight.SplitterDistance);
-                    splitContainerLeft.SplitterDistance = SQLiteDBClass.GetSettingInt("TravelControlSpliterL", splitContainerLeft.SplitterDistance);
-                    splitContainerRightOuter.SplitterDistance = SQLiteDBClass.GetSettingInt("TravelControlSpliterRO", splitContainerRightOuter.SplitterDistance);
-                    splitContainerRightInner.SplitterDistance = SQLiteDBClass.GetSettingInt("TravelControlSpliterR", splitContainerRightInner.SplitterDistance);
-                }
-                catch { };          // so splitter can except, if values are strange, but we don't really care, so lets throw away the exception
+                splitContainerLeftRight.SplitterDistance(SQLiteDBClass.GetSettingDouble("TravelControlSpliterLR", 0.75));
+                splitContainerLeft.SplitterDistance(SQLiteDBClass.GetSettingDouble("TravelControlSpliterL", 0.75));
+                splitContainerRightOuter.SplitterDistance(SQLiteDBClass.GetSettingDouble("TravelControlSpliterRO", 0.4));
+                splitContainerRightInner.SplitterDistance(SQLiteDBClass.GetSettingDouble("TravelControlSpliterR", 0.5));
+
             }
 
             userControlTravelGrid.LoadLayout();
 
             // NO NEED to reload the three tabstrips - code below will cause a LoadLayout on the one selected.
 
-            int max = (int)PopOutControl.PopOuts.EndList-1; // fix, its up to but not including endlist
+            int max = PopOutControl.GetNumberPanels()-1; // fix, its up to but not including endlist
 
             // saved as the pop out enum value, for historical reasons
             int piindex_bottom = Math.Min(SQLiteDBClass.GetSettingInt("TravelControlBottomTab", (int)(PopOutControl.PopOuts.Scan)), max);
@@ -172,23 +169,25 @@ namespace EDDiscovery.UserControls
             tabStripTopRight.SelectedIndex = PopOutControl.GetPopOutIndexByEnum((PopOutControl.PopOuts)piindex_topright);
         }
 
+
         public override void Closing()     // called by form when closing
         {
+            SQLiteDBClass.PutSettingDouble("TravelControlSpliterLR", splitContainerLeftRight.GetSplitterDistance());
+            SQLiteDBClass.PutSettingDouble("TravelControlSpliterL", splitContainerLeft.GetSplitterDistance());
+            SQLiteDBClass.PutSettingDouble("TravelControlSpliterRO", splitContainerRightOuter.GetSplitterDistance());
+            SQLiteDBClass.PutSettingDouble("TravelControlSpliterR", splitContainerRightInner.GetSplitterDistance());
+
+            SQLiteDBClass.PutSettingInt("TravelControlBottomRightTab", (int)PopOutControl.PopOutList[tabStripBottomRight.SelectedIndex].popoutid);
+            SQLiteDBClass.PutSettingInt("TravelControlBottomTab", (int)PopOutControl.PopOutList[tabStripBottom.SelectedIndex].popoutid);
+            SQLiteDBClass.PutSettingInt("TravelControlMiddleRightTab", (int)PopOutControl.PopOutList[tabStripMiddleRight.SelectedIndex].popoutid);
+            SQLiteDBClass.PutSettingInt("TravelControlTopRightTab", (int)PopOutControl.PopOutList[tabStripTopRight.SelectedIndex].popoutid);
+
             userControlTravelGrid.Closing();
             ((UserControlCommonBase)(tabStripBottom.CurrentControl)).Closing();
             ((UserControlCommonBase)(tabStripBottomRight.CurrentControl)).Closing();
             ((UserControlCommonBase)(tabStripMiddleRight.CurrentControl)).Closing();
             ((UserControlCommonBase)(tabStripTopRight.CurrentControl)).Closing();
 
-            SQLiteDBClass.PutSettingInt("TravelControlSpliterLR", splitContainerLeftRight.SplitterDistance);
-            SQLiteDBClass.PutSettingInt("TravelControlSpliterL", splitContainerLeft.SplitterDistance);
-            SQLiteDBClass.PutSettingInt("TravelControlSpliterRO", splitContainerRightOuter.SplitterDistance);
-            SQLiteDBClass.PutSettingInt("TravelControlSpliterR", splitContainerRightInner.SplitterDistance);
-
-            SQLiteDBClass.PutSettingInt("TravelControlBottomRightTab", (int)PopOutControl.PopOutList[tabStripBottomRight.SelectedIndex].popoutid);
-            SQLiteDBClass.PutSettingInt("TravelControlBottomTab", (int)PopOutControl.PopOutList[tabStripBottom.SelectedIndex].popoutid);
-            SQLiteDBClass.PutSettingInt("TravelControlMiddleRightTab", (int)PopOutControl.PopOutList[tabStripMiddleRight.SelectedIndex].popoutid);
-            SQLiteDBClass.PutSettingInt("TravelControlTopRightTab", (int)PopOutControl.PopOutList[tabStripTopRight.SelectedIndex].popoutid);
         }
 
         #endregion
@@ -230,6 +229,6 @@ namespace EDDiscovery.UserControls
             }
         }
 
-#endregion
+        #endregion
     }
 }

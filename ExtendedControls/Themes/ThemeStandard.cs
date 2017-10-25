@@ -327,10 +327,13 @@ namespace ExtendedControls
             return WindowsFrame;
         }
 
-        public void ApplyToControls(Control parent, Font fnt = null)
+        public void ApplyToControls(Control parent, Font fnt = null, bool applytothis = false)
         {
             if (fnt == null)
                 fnt = GetFont;                                          // do not apply to Form, only to sub controls
+
+            if (applytothis)
+                UpdateColorControls(parent.Parent, parent, fnt, 0);
 
             foreach (Control c in parent.Controls)
                 UpdateColorControls(parent, c, fnt, 0);

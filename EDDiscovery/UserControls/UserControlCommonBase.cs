@@ -30,13 +30,19 @@ namespace EDDiscovery.UserControls
     public class UserControlCommonBase : UserControl
     {
         // Displaynumbers.. 
-        // 0 = main travel control (travelhistorycontrol), 0 = main journal control (journalviewcontrol, via EDform)
+        // 0 = first instance of control on main tabs
+        // 100.. = second on instance of control on main tabs up to 199.
         // 1000 = Bottom history, 1001 = bottom right history, 1002 = middle right history, 1003 = top right history (travelhistorycontrol.cs)
-        // 1 = first pop out window of type, 2 = second, etc (popoutcontrol, PopOut func)
-        // When a grid open, displaynumber for its children is set by CreatePanel in UserControlContainerGrid
-        // 1050+ grid displaynumber * 1000 + index of type in grid
+        // 1 = first pop out window of type, 2 = second, etc (popoutcontrol, PopOut func) up to 99.
+
+        // When a grid is open, displaynumber for its children is set by CreatePanel in UserControlContainerGrid
+        // 1050 + grid displaynumber * 100 + index of type in grid
         // so, if a pop out grid of second instance, = 2, would get 1050+2000+index of type in grid
-        // this works for recursive grids to a enough for real world purposes.
+        // each grid gets 100 unique numbers, so 100 instances of each type in grid
+        // this works for recursive grids to a enough for 158real world purposes.
+
+        protected int DisplayNumberOfGridInstance(int displaynumber, int numopenedinside)
+        { return 1050 + displaynumber * 100 + numopenedinside; }
 
         // in calling order..
         public virtual void Init(EDDiscoveryForm ed, UserControlCursorType thc, int displayno) { }    // start up, give discovery form and cursor, and its display id

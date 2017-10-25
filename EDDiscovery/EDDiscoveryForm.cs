@@ -189,29 +189,9 @@ namespace EDDiscovery
             if (!EDDOptions.Instance.NoTheme)
                 themeok = theme.RestoreSettings();                                    // theme, remember your saved settings
 
-            travelHistoryControl.Init(this,null,0); // no cursor
-
-            //            string majortabs = "UserControlHistory,0,UserControlJournalGrid,0,UserControlTrilateration,0,UserControlSettings,0";
-            string majortabs = "UserControlHistory,0,UserControlSettings,0";
-            string[] mtabinfo = majortabs.Split(',');
-            string ucrootname = typeof(UserControls.UserControlHistory).Namespace;
-
-            for ( int i = 0; i < mtabinfo.Length; i+=2)
-            {
-                Type t = Type.GetType(ucrootname + "." + mtabinfo[i], false, false); // no exception, ignore case here
-                if ( t != null && t != typeof(UserControls.UserControlHistory))     // history is precreate, ignore
-                {
-                    System.Diagnostics.Debug.WriteLine("Tab is " + t.Name);
-                    UserControls.UserControlCommonBase uccb = (UserControls.UserControlCommonBase)Activator.CreateInstance(t, null);
-                    uccb.Init(this, travelHistoryControl.GetTravelGrid, mtabinfo[i + 1].InvariantParseInt(0));
-
-                    TabPage p = new TabPage(uccb.Name);
-                    p.Controls.Add(uccb);
-
-                    tabControlMain.TabPages.Add(p);
-                }
-            }
-
+            // open all the major tabs except the built in ones
+            Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " Creating major tabs");
+            CreateTabs();
 
             Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " Map manager");
             Map = new EDDiscovery._3DMap.MapManager(EDDOptions.Instance.NoWindowReposition, this);
@@ -273,19 +253,11 @@ namespace EDDiscovery
                 MaterialCommodityDB.SetUpInitialTable();
                 Controller.PostInit_Loaded();
 
-                RepositionForm();
-
-                long t = Environment.TickCount;
-                Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " EDF Load layout of THC");
-                travelHistoryControl.LoadLayout();
-                travelHistoryControl.InitialDisplay();
-
-                Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " EDF Load show info panel");
                 ShowInfoPanel("Loading. Please wait!", true);
 
-                Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " EDF Load layout Major Tab");
-                string tab = SQLiteConnectionUser.GetSettingString("MajorTab", "");
-                SelectTabPage(tab);
+                RepositionForm();
+
+                LoadTabs();
 
                 if (EDDOptions.Instance.ActionButton)
                 {
@@ -316,6 +288,10 @@ namespace EDDiscovery
 
             _shownOnce = true;
             Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " EDF shown complete");
+
+            // Form is fully loaded, we can do tab actions now
+
+            tabControlMain.SelectedIndexChanged += (snd, ea) => { ActionRun(Actions.ActionEventEDList.onTabChange, null, new Conditions.ConditionVariables("TabName", tabControlMain.TabPages[tabControlMain.SelectedIndex].Text)); };
         }
 
         #endregion
@@ -408,6 +384,135 @@ namespace EDDiscovery
             _formTop = Top;
             _formHeight = Height;
             _formWidth = Width;
+        }
+
+        #endregion
+
+        #region Tabs
+
+        void CreateTabs()       // called during part of Init
+        {
+            string majortabs = SQLiteConnectionUser.GetSettingString("MajorTabControlList", "");
+            int[] tabctrl;
+            if (!majortabs.RestoreArrayFromString(out tabctrl) || tabctrl.Length == 0 || (tabctrl.Length % 2) != 0)
+                tabctrl = new int[] { -1, 0, (int)PopOutControl.PopOuts.Journal, 0, (int)PopOutControl.PopOuts.Settings, 0 };
+
+            tabctrl = new int[] { (int)PopOutControl.PopOuts.Journal, 0, -1, 0, (int)PopOutControl.PopOuts.Settings, 0, (int)PopOutControl.PopOuts.Commodities, 0 };
+            // tabctrl = new int[] { -1, 0, (int)PopOutControl.PopOuts.Journal, 0, (int)PopOutControl.PopOuts.Settings, 0 };
+
+            TabPage history = tabControlMain.TabPages[0];       // remember history page, remove
+            tabControlMain.TabPages.Clear();
+
+            for (int i = 0; i < tabctrl.Length; i += 2)
+            {
+                if (tabctrl[i] >= 0)
+                {
+                    PopOutControl.PopOuts p = (PopOutControl.PopOuts)tabctrl[i];
+                    CreateTab(p, tabctrl[i + 1], tabControlMain.TabPages.Count, false);      // no need the theme, will be themed as part of overall load
+                }
+                else
+                {
+                    tabControlMain.TabPages.Add(history); // add back in right place
+                    travelHistoryControl.Init(this, null, 0); // and init at this point with 0 as dn
+                }
+            }
+
+            contextMenuStripTabs.Opening += ContextMenuStripTabs_Opening;
+
+            for (int i = 0; i < PopOutControl.GetNumberPanels(); i++)
+            {
+                addTabToolStripMenuItem.DropDownItems.Add(PopOutControl.MakeToolStripMenuItem(i, (s, e) =>
+                {
+                    UserControls.UserControlCommonBase uccb = CreateTab((PopOutControl.PopOuts)((s as ToolStripMenuItem).Tag), -1, tabControlMain.LastTabClicked, true);
+                    uccb.LoadLayout();
+                    uccb.InitialDisplay();
+                    tabControlMain.SelectedIndex = tabControlMain.LastTabClicked;   // and select the inserted one
+
+                }));
+            }
+        }
+
+        private void ContextMenuStripTabs_Opening(object sender, CancelEventArgs e)
+        {
+            System.Diagnostics.Debug.WriteLine("Tab is " + tabControlMain.LastTabClicked);
+            removeTabToolStripMenuItem.Enabled = false;
+        }
+
+
+        private UserControls.UserControlCommonBase CreateTab(PopOutControl.PopOuts p, int dn , int posindex, bool dotheme)
+        {
+            UserControls.UserControlCommonBase uccb = PopOutControl.Create(p);
+            uccb.Dock = System.Windows.Forms.DockStyle.Fill;    // uccb has to be fill, even though the VS designer does not indicate you need to set it.. copied from designer code
+            uccb.Location = new System.Drawing.Point(3, 3);
+
+            if ( dn == -1 ) // if work out display number
+            {
+                int numof = (from TabPage x in tabControlMain.TabPages where x.Controls[0].GetType() == uccb.GetType() select x).Count();
+                dn = (numof == 0) ? 0 : (99 + numof);        // first instance, 0, else 100,101,102
+            }
+
+            System.Diagnostics.Debug.WriteLine("Create tab {0} dn {1} at {2}", p, dn, posindex);
+
+            uccb.Init(this, travelHistoryControl.GetTravelGrid, dn);    // start the uccb up
+
+            TabPage page = new TabPage(PopOutControl.GetPopOutInfoByEnum(p).WindowTitlePrefix);
+            page.Location = new System.Drawing.Point(4, 22);    // copied from normal tab creation code
+            page.Padding = new System.Windows.Forms.Padding(3);
+
+            page.Controls.Add(uccb);
+
+            tabControlMain.TabPages.Insert(posindex, page);
+
+            if (dotheme)                // only user created ones need themeing
+                theme.ApplyToControls(page,applytothis:true);
+
+            return uccb;
+        }
+
+        private void LoadTabs()     // called on Loading..
+        {
+            //TBD
+            foreach (TabPage tp in tabControlMain.TabPages) System.Diagnostics.Debug.WriteLine("TP Size " + tp.Controls[0].DisplayRectangle);
+
+            foreach (TabPage p in tabControlMain.TabPages)      // all main tabs, load/display
+            {
+                // now a strange thing. tab 0, cause its shown, gets resized (due to repoisition form). Other tabs dont.
+                // LoadLayout could fail due to an incorrect size that would break something (such as spitters).. 
+                // so force size. tried perform layout to no avail
+                p.Size = tabControlMain.TabPages[0].Size;
+                UserControls.UserControlCommonBase uccb = (UserControls.UserControlCommonBase)p.Controls[0];
+                uccb.LoadLayout();
+                uccb.InitialDisplay();
+            }
+
+            //TBD
+            foreach (TabPage tp in tabControlMain.TabPages) System.Diagnostics.Debug.WriteLine("TP Size " + tp.Controls[0].DisplayRectangle);
+
+
+            Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " EDF Load layout Major Tab");
+            string tab = SQLiteConnectionUser.GetSettingString("MajorTab", "");
+            // TBD prob needs fixing
+            //   SelectTabPage(tab);
+        }
+
+        private UserControls.UserControlCommonBase GetMajorTab(Type t)
+        {
+            Control r = (from TabPage x in tabControlMain.TabPages where x.Controls[0].GetType() == t select x.Controls[0]).FirstOrDefault();
+            return r as UserControls.UserControlCommonBase;
+        }
+
+        public bool SelectTabPage(string name)
+        {
+            foreach (TabPage p in tabControlMain.TabPages)
+            {
+                if (p.Text.Equals(name, StringComparison.InvariantCultureIgnoreCase))
+                {
+                    tabControlMain.SelectTab(p);
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         #endregion
@@ -745,9 +850,10 @@ namespace EDDiscovery
 
             theme.SaveSettings(null);
 
-            travelHistoryControl.Closing();
-
-            // tbd close others
+            foreach (TabPage p in tabControlMain.TabPages)      // all main tabs, load/display
+            {
+                ((UserControls.UserControlCommonBase)p.Controls[0]).Closing();
+            }
 
             if (EDDConfig.AutoSavePopOuts)      // must do after settings have saved state
                 PopOuts.SaveCurrentPopouts();
@@ -1390,31 +1496,6 @@ namespace EDDiscovery
             });
 
             actioncontroller.ActionRun(Actions.ActionEventEDList.onMenuItem, null, vars);
-        }
-
-        private UserControls.UserControlCommonBase GetMajorTab(Type t)
-        {
-            Control r = (from TabPage x in tabControlMain.TabPages where x.Controls[0].GetType() == t select x.Controls[0]).FirstOrDefault();
-            return r as UserControls.UserControlCommonBase;
-        }
-
-        public bool SelectTabPage(string name)
-        {
-            foreach (TabPage p in tabControlMain.TabPages)
-            {
-                if (p.Text.Equals(name, StringComparison.InvariantCultureIgnoreCase))
-                {
-                    tabControlMain.SelectTab(p);
-                    return true;
-                }
-            }
-
-            return false;
-        }
-
-        private void tabControl1_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            ActionRun(Actions.ActionEventEDList.onTabChange, null, new Conditions.ConditionVariables("TabName", tabControlMain.TabPages[tabControlMain.SelectedIndex].Text));
         }
 
         public Conditions.ConditionVariables Globals { get { return actioncontroller.Globals; } }
