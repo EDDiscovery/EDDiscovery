@@ -976,7 +976,7 @@ namespace EliteDangerousCore.EDSM
 
 
             MimeType = "application/x-www-form-urlencoded";
-            var response = RequestPost(query, "api-commander-v1/set-credits" + query, handleException: true);
+            var response = RequestPost(query, "api-commander-v1/set-credits", handleException: true);
 
             if (response.Error)
                 return null;
