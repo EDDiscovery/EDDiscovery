@@ -36,8 +36,6 @@ namespace EDDiscovery.UserControls
 {
     public partial class UserControlHistory : UserControlCommonBase
     {
-        private EDDiscoveryForm discoveryform;
-
         public HistoryEntry GetTravelHistoryCurrent {  get { return userControlTravelGrid.GetCurrentHistoryEntry; } }
 
         public UserControlTravelGrid GetTravelGrid { get { return userControlTravelGrid; } }
@@ -62,21 +60,19 @@ namespace EDDiscovery.UserControls
             InitializeComponent();
         }
 
-        public override void Init(EDDiscoveryForm discoveryForm, UserControlCursorType uctg, int displayno )
+        public override void Init()
         {
-            discoveryform = discoveryForm;
-
-            userControlTravelGrid.Init(discoveryform, userControlTravelGrid, displayno);       // primary first instance - this registers with events in discoveryform to get info
+            userControlTravelGrid.Init(discoveryform, userControlTravelGrid, displaynumber);       // primary first instance - this registers with events in discoveryform to get info
                                                         // then this display, to update its own controls..
             userControlTravelGrid.OnChangedSelection += ChangedSelection;   // and if the user clicks on something
             userControlTravelGrid.OnPopOut += () => { discoveryform.PopOuts.PopOut(PopOutControl.PopOuts.TravelGrid); };
             userControlTravelGrid.OnKeyDownInCell += OnKeyDownInCell;
             userControlTravelGrid.ExtraIcons(true, true);
 
-            TabConfigure(tabStripBottom,"Bottom", displayno+1000);          // codes are used to save info, 0 = primary (journal/travelgrid), 1..N are popups, these are embedded UCs
-            TabConfigure(tabStripBottomRight,"Bottom-Right", displayno+1001);
-            TabConfigure(tabStripMiddleRight, "Middle-Right", displayno+1002);
-            TabConfigure(tabStripTopRight, "Top-Right", displayno+1003);
+            TabConfigure(tabStripBottom,"Bottom", displaynumber + 1000);          // codes are used to save info, 0 = primary (journal/travelgrid), 1..N are popups, these are embedded UCs
+            TabConfigure(tabStripBottomRight,"Bottom-Right", displaynumber + 1001);
+            TabConfigure(tabStripMiddleRight, "Middle-Right", displaynumber + 1002);
+            TabConfigure(tabStripTopRight, "Top-Right", displaynumber + 1003);
         }
 
         #endregion

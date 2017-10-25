@@ -18,10 +18,6 @@ namespace EDDiscovery.UserControls
 {
     public partial class UserControlRoute : UserControlCommonBase
     {
-        private int displaynumber = 0;
-        private EDDiscoveryForm discoveryform;
-        private UserControlCursorType uctg;
-
         private string DbSave(string s) { return ("UCRoute") + ((displaynumber > 0) ? displaynumber.ToString() : "") + "_" + s; }
 
         private List<ISystem> routeSystems; // only valid systems get passed back
@@ -35,12 +31,8 @@ namespace EDDiscovery.UserControls
             InitializeComponent();
         }
 
-        public override void Init(EDDiscoveryForm ed, UserControlCursorType thc, int vn) //0=primary, 1 = first windowed version, etc
+        public override void Init()
         {
-            discoveryform = ed;
-            uctg = thc;
-            displaynumber = vn;
-
             button_Route.Enabled = false;
             cmd3DMap.Enabled = false;
 

@@ -27,10 +27,6 @@ namespace EDDiscovery.UserControls
 {
     public partial class UserControlEngineering : UserControlCommonBase
     {
-        private int displaynumber = 0;
-        private EDDiscoveryForm discoveryform;
-        private UserControlCursorType uctg;
-
         RecipeFilterSelector efs;
         RecipeFilterSelector mfs;
         RecipeFilterSelector ufs;
@@ -63,12 +59,8 @@ namespace EDDiscovery.UserControls
             InitializeComponent();
         }
 
-        public override void Init(EDDiscoveryForm ed, UserControlCursorType thc, int vn) //0=primary, 1 = first windowed version, etc
+        public override void Init()
         {
-            discoveryform = ed;
-            uctg = thc;
-            displaynumber = vn;
-
             dataGridViewEngineering.MakeDoubleBuffered();
             dataGridViewEngineering.DefaultCellStyle.WrapMode = DataGridViewTriState.False;
             dataGridViewEngineering.RowTemplate.Height = 26;

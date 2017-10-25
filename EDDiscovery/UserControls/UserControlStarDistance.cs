@@ -32,8 +32,6 @@ namespace EDDiscovery.UserControls
 {
     public partial class UserControlStarDistance : UserControlCommonBase
     {
-        private EDDiscoveryForm discoveryform;
-        private UserControlCursorType uctg;
         private StarDistanceComputer computer;
 
         public UserControlStarDistance()
@@ -41,10 +39,8 @@ namespace EDDiscovery.UserControls
             InitializeComponent();
         }
 
-        public override void Init(EDDiscoveryForm ed, UserControlCursorType thc, int vn) //0=primary, 1 = first windowed version, etc
+        public override void Init()
         {
-            discoveryform = ed;
-            uctg = thc;
             uctg.OnTravelSelectionChanged += Uctg_OnTravelSelectionChanged;
 
             computer = new StarDistanceComputer();

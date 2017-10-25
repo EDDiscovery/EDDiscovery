@@ -30,10 +30,6 @@ namespace EDDiscovery.UserControls
 {
     public partial class UserControlMissions : UserControlCommonBase
     {
-        private int displaynumber = 0;
-        private EDDiscoveryForm discoveryform;
-        private UserControlCursorType uctg;
-
         private string DbColumnSaveCurrent { get { return ("MissionsGridCurrent") + ((displaynumber > 0) ? displaynumber.ToString() : "") + "DGVCol"; } }
         private string DbColumnSavePrevious { get { return ("MissionsGridPrevious") + ((displaynumber > 0) ? displaynumber.ToString() : "") + "DGVCol"; } }
         private string DbStartDate { get { return ("MissionsStartDate") + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
@@ -49,12 +45,8 @@ namespace EDDiscovery.UserControls
             InitializeComponent();
         }
 
-        public override void Init(EDDiscoveryForm ed, UserControlCursorType thc, int vn) //0=primary, 1 = first windowed version, etc
+        public override void Init()
         {
-            discoveryform = ed;
-            uctg = thc;
-            displaynumber = vn;
-
             dataGridViewCurrent.MakeDoubleBuffered();
             dataGridViewCurrent.RowTemplate.Height = 26;
             dataGridViewCurrent.DefaultCellStyle.WrapMode = DataGridViewTriState.True;

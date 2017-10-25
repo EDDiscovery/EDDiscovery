@@ -30,7 +30,6 @@ namespace EDDiscovery.UserControls
 {
     public partial class UserControlSettings : UserControlCommonBase
     {
-        private EDDiscoveryForm discoveryform;
         private ExtendedControls.ThemeStandardEditor themeeditor = null;
 
         public UserControlSettings()
@@ -38,10 +37,8 @@ namespace EDDiscovery.UserControls
             InitializeComponent();
         }
 
-        public override void Init(EDDiscoveryForm discoveryForm, UserControlCursorType uctgnotused, int displaynumbernotused)
+        public override void Init()
         {
-            discoveryform = discoveryForm;
-
             ResetThemeList();
             SetEntryThemeComboBox();
 

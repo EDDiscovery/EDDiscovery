@@ -41,11 +41,23 @@ namespace EDDiscovery.UserControls
         // each grid gets 100 unique numbers, so 100 instances of each type in grid
         // this works for recursive grids to a enough for 158real world purposes.
 
-        protected int DisplayNumberOfGridInstance(int displaynumber, int numopenedinside)
+        public int displaynumber { get; protected set; }
+        public EDDiscoveryForm discoveryform { get; protected set; }
+        public UserControlCursorType uctg { get; protected set; }
+
+        protected int DisplayNumberOfGridInstance(int numopenedinside)
         { return 1050 + displaynumber * 100 + numopenedinside; }
 
         // in calling order..
-        public virtual void Init(EDDiscoveryForm ed, UserControlCursorType thc, int displayno) { }    // start up, give discovery form and cursor, and its display id
+        public void Init(EDDiscoveryForm ed, UserControlCursorType thc, int dn) // with display number
+        {
+            discoveryform = ed;
+            displaynumber = dn;
+            uctg = thc;
+            Init();
+        }    
+
+        public virtual void Init() { }    // start up, give discovery form and cursor - for inherited classes
         public virtual void LoadLayout() { }        // then a chance to load a layout
         public virtual void InitialDisplay() { }    // then after the themeing, do the initial display
         public virtual void Closing() { }           // close it
