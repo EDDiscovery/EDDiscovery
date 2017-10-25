@@ -45,7 +45,7 @@ namespace EDDiscovery
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(EDDiscoveryForm));
-            ExtendedControls.TabStyleSquare tabStyleSquare2 = new ExtendedControls.TabStyleSquare();
+            ExtendedControls.TabStyleSquare tabStyleSquare1 = new ExtendedControls.TabStyleSquare();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.toolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.show2DMapsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -110,27 +110,30 @@ namespace EDDiscovery
             this.panel_eddiscovery = new System.Windows.Forms.Panel();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.tabControlMain = new ExtendedControls.TabControlCustom();
-            this.travelHistoryControl = new EDDiscovery.UserControls.UserControlHistory();
+            this.contextMenuStripTabs = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.addTabToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.removeTabToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tabPageTravelHistory = new System.Windows.Forms.TabPage();
+            this.travelHistoryControl = new EDDiscovery.UserControls.UserControlHistory();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.notifyIconContextMenuStrip1.SuspendLayout();
             this.panelToolBar.SuspendLayout();
             this.tabControlMain.SuspendLayout();
+            this.contextMenuStripTabs.SuspendLayout();
             this.tabPageTravelHistory.SuspendLayout();
             this.SuspendLayout();
             // 
             // menuStrip1
             // 
-            this.menuStrip1.Dock = System.Windows.Forms.DockStyle.None;
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolsToolStripMenuItem,
             this.adminToolStripMenuItem,
             this.addOnsToolStripMenuItem,
             this.helpToolStripMenuItem});
-            this.menuStrip1.Location = new System.Drawing.Point(2, 2);
+            this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(313, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(1004, 24);
             this.menuStrip1.TabIndex = 16;
             this.menuStrip1.Text = "menuStrip1";
             this.menuStrip1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.MouseDownCAPTION);
@@ -160,14 +163,14 @@ namespace EDDiscovery
             // 
             this.show3DMapsToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("show3DMapsToolStripMenuItem.Image")));
             this.show3DMapsToolStripMenuItem.Name = "show3DMapsToolStripMenuItem";
-            this.show3DMapsToolStripMenuItem.Size = new System.Drawing.Size(197, 22);
+            this.show3DMapsToolStripMenuItem.Size = new System.Drawing.Size(155, 22);
             this.show3DMapsToolStripMenuItem.Text = "Show &3D maps";
             this.show3DMapsToolStripMenuItem.Click += new System.EventHandler(this.show3DMapsToolStripMenuItem_Click);
             // 
             // materialSearchToolStripMenuItem
             // 
             this.materialSearchToolStripMenuItem.Name = "materialSearchToolStripMenuItem";
-            this.materialSearchToolStripMenuItem.Size = new System.Drawing.Size(197, 22);
+            this.materialSearchToolStripMenuItem.Size = new System.Drawing.Size(155, 22);
             this.materialSearchToolStripMenuItem.Text = "Material Search";
             this.materialSearchToolStripMenuItem.Visible = false;
             this.materialSearchToolStripMenuItem.Click += new System.EventHandler(this.materialSearchToolStripMenuItem_Click);
@@ -179,7 +182,7 @@ namespace EDDiscovery
             this.turnOffAllTransparencyToolStripMenuItem});
             this.showAllPopoutsInTaskBarToolStripMenuItem.Image = global::EDDiscovery.Properties.Resources.popout1;
             this.showAllPopoutsInTaskBarToolStripMenuItem.Name = "showAllPopoutsInTaskBarToolStripMenuItem";
-            this.showAllPopoutsInTaskBarToolStripMenuItem.Size = new System.Drawing.Size(197, 22);
+            this.showAllPopoutsInTaskBarToolStripMenuItem.Size = new System.Drawing.Size(155, 22);
             this.showAllPopoutsInTaskBarToolStripMenuItem.Text = "&Pop-outs";
             // 
             // showAllInTaskBarToolStripMenuItem
@@ -202,7 +205,7 @@ namespace EDDiscovery
             // 
             this.exitToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("exitToolStripMenuItem.Image")));
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(197, 22);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(155, 22);
             this.exitToolStripMenuItem.Text = "E&xit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
@@ -493,7 +496,7 @@ namespace EDDiscovery
             this.panel_minimize.BackColor = System.Drawing.SystemColors.Control;
             this.panel_minimize.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.panel_minimize.ImageSelected = ExtendedControls.DrawnPanel.ImageType.Minimize;
-            this.panel_minimize.Location = new System.Drawing.Point(941, 2);
+            this.panel_minimize.Location = new System.Drawing.Point(952, 2);
             this.panel_minimize.MarginSize = 6;
             this.panel_minimize.Name = "panel_minimize";
             this.panel_minimize.Size = new System.Drawing.Size(24, 24);
@@ -505,7 +508,7 @@ namespace EDDiscovery
             this.panel_close.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.panel_close.BackColor = System.Drawing.SystemColors.Control;
             this.panel_close.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.panel_close.Location = new System.Drawing.Point(966, 2);
+            this.panel_close.Location = new System.Drawing.Point(977, 2);
             this.panel_close.MarginSize = 6;
             this.panel_close.Name = "panel_close";
             this.panel_close.Size = new System.Drawing.Size(24, 24);
@@ -520,9 +523,9 @@ namespace EDDiscovery
             this.toolStripProgressBar1,
             this.toolStripStatusLabel1});
             this.statusStrip1.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.HorizontalStackWithOverflow;
-            this.statusStrip1.Location = new System.Drawing.Point(0, 722);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 512);
             this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(993, 22);
+            this.statusStrip1.Size = new System.Drawing.Size(1004, 22);
             this.statusStrip1.TabIndex = 22;
             this.statusStrip1.Text = "statusStrip1";
             // 
@@ -575,8 +578,6 @@ namespace EDDiscovery
             // 
             // panelToolBar
             // 
-            this.panelToolBar.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.panelToolBar.BackColor = System.Drawing.Color.Transparent;
             this.panelToolBar.Controls.Add(this.comboBoxCommander);
             this.panelToolBar.Controls.Add(this.buttonExtEDSMSync);
@@ -587,15 +588,16 @@ namespace EDDiscovery
             this.panelToolBar.Controls.Add(this.buttonExt2dmap);
             this.panelToolBar.Controls.Add(this.buttonExt3dmap);
             this.panelToolBar.Controls.Add(this.buttonReloadActions);
+            this.panelToolBar.Dock = System.Windows.Forms.DockStyle.Top;
             this.panelToolBar.HiddenMarkerWidth = 0;
-            this.panelToolBar.Location = new System.Drawing.Point(2, 24);
+            this.panelToolBar.Location = new System.Drawing.Point(0, 24);
             this.panelToolBar.Name = "panelToolBar";
             this.panelToolBar.PinState = true;
             this.panelToolBar.RolledUpHeight = 5;
             this.panelToolBar.RollUpAnimationTime = 500;
             this.panelToolBar.RollUpDelay = 1000;
             this.panelToolBar.ShowHiddenMarker = true;
-            this.panelToolBar.Size = new System.Drawing.Size(989, 32);
+            this.panelToolBar.Size = new System.Drawing.Size(1004, 32);
             this.panelToolBar.TabIndex = 1;
             this.panelToolBar.UnrolledHeight = 32;
             this.panelToolBar.UnrollHoverDelay = 1000;
@@ -749,7 +751,7 @@ namespace EDDiscovery
             this.panel_eddiscovery.BackColor = System.Drawing.SystemColors.Control;
             this.panel_eddiscovery.BackgroundImage = global::EDDiscovery.Properties.Resources.eddiscovery_logo;
             this.panel_eddiscovery.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.panel_eddiscovery.Location = new System.Drawing.Point(818, 2);
+            this.panel_eddiscovery.Location = new System.Drawing.Point(829, 2);
             this.panel_eddiscovery.Name = "panel_eddiscovery";
             this.panel_eddiscovery.Size = new System.Drawing.Size(101, 46);
             this.panel_eddiscovery.TabIndex = 18;
@@ -757,16 +759,15 @@ namespace EDDiscovery
             // 
             // tabControlMain
             // 
-            this.tabControlMain.AllowDragReorder = false;
-            this.tabControlMain.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.tabControlMain.AllowDragReorder = true;
+            this.tabControlMain.ContextMenuStrip = this.contextMenuStripTabs;
             this.tabControlMain.Controls.Add(this.tabPageTravelHistory);
+            this.tabControlMain.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabControlMain.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.tabControlMain.Location = new System.Drawing.Point(2, 56);
+            this.tabControlMain.Location = new System.Drawing.Point(0, 56);
             this.tabControlMain.Name = "tabControlMain";
             this.tabControlMain.SelectedIndex = 0;
-            this.tabControlMain.Size = new System.Drawing.Size(989, 666);
+            this.tabControlMain.Size = new System.Drawing.Size(1004, 456);
             this.tabControlMain.TabColorScaling = 0.5F;
             this.tabControlMain.TabControlBorderBrightColor = System.Drawing.Color.LightGray;
             this.tabControlMain.TabControlBorderColor = System.Drawing.Color.DarkGray;
@@ -777,18 +778,29 @@ namespace EDDiscovery
             this.tabControlMain.TabNotSelectedColor = System.Drawing.Color.Gray;
             this.tabControlMain.TabOpaque = 100F;
             this.tabControlMain.TabSelectedColor = System.Drawing.Color.LightGray;
-            this.tabControlMain.TabStyle = tabStyleSquare2;
+            this.tabControlMain.TabStyle = tabStyleSquare1;
             this.tabControlMain.TextNotSelectedColor = System.Drawing.SystemColors.ControlText;
             this.tabControlMain.TextSelectedColor = System.Drawing.SystemColors.ControlText;
-            this.tabControlMain.SelectedIndexChanged += new System.EventHandler(this.tabControl1_SelectedIndexChanged);
             // 
-            // travelHistoryControl
+            // contextMenuStripTabs
             // 
-            this.travelHistoryControl.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.travelHistoryControl.Location = new System.Drawing.Point(3, 3);
-            this.travelHistoryControl.Name = "travelHistoryControl";
-            this.travelHistoryControl.Size = new System.Drawing.Size(975, 634);
-            this.travelHistoryControl.TabIndex = 0;
+            this.contextMenuStripTabs.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.addTabToolStripMenuItem,
+            this.removeTabToolStripMenuItem});
+            this.contextMenuStripTabs.Name = "contextMenuStripTabs";
+            this.contextMenuStripTabs.Size = new System.Drawing.Size(153, 70);
+            // 
+            // addTabToolStripMenuItem
+            // 
+            this.addTabToolStripMenuItem.Name = "addTabToolStripMenuItem";
+            this.addTabToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.addTabToolStripMenuItem.Text = "Insert Panel";
+            // 
+            // removeTabToolStripMenuItem
+            // 
+            this.removeTabToolStripMenuItem.Name = "removeTabToolStripMenuItem";
+            this.removeTabToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.removeTabToolStripMenuItem.Text = "Remove Panel";
             // 
             // tabPageTravelHistory
             // 
@@ -796,25 +808,33 @@ namespace EDDiscovery
             this.tabPageTravelHistory.Location = new System.Drawing.Point(4, 22);
             this.tabPageTravelHistory.Name = "tabPageTravelHistory";
             this.tabPageTravelHistory.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageTravelHistory.Size = new System.Drawing.Size(981, 640);
+            this.tabPageTravelHistory.Size = new System.Drawing.Size(996, 430);
             this.tabPageTravelHistory.TabIndex = 0;
             this.tabPageTravelHistory.Text = "History";
             this.tabPageTravelHistory.UseVisualStyleBackColor = true;
+            // 
+            // travelHistoryControl
+            // 
+            this.travelHistoryControl.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.travelHistoryControl.Location = new System.Drawing.Point(3, 3);
+            this.travelHistoryControl.Name = "travelHistoryControl";
+            this.travelHistoryControl.Size = new System.Drawing.Size(990, 424);
+            this.travelHistoryControl.TabIndex = 0;
             // 
             // EDDiscoveryForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(993, 744);
+            this.ClientSize = new System.Drawing.Size(1004, 534);
             this.Controls.Add(this.labelInfoBoxTop);
             this.Controls.Add(this.label_version);
             this.Controls.Add(this.panel_eddiscovery);
-            this.Controls.Add(this.tabControlMain);
             this.Controls.Add(this.panel_minimize);
             this.Controls.Add(this.panel_close);
+            this.Controls.Add(this.tabControlMain);
+            this.Controls.Add(this.panelToolBar);
             this.Controls.Add(this.menuStrip1);
             this.Controls.Add(this.statusStrip1);
-            this.Controls.Add(this.panelToolBar);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "EDDiscoveryForm";
@@ -832,6 +852,7 @@ namespace EDDiscovery
             this.notifyIconContextMenuStrip1.ResumeLayout(false);
             this.panelToolBar.ResumeLayout(false);
             this.tabControlMain.ResumeLayout(false);
+            this.contextMenuStripTabs.ResumeLayout(false);
             this.tabPageTravelHistory.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -905,5 +926,8 @@ namespace EDDiscovery
         private ExtendedControls.TabControlCustom tabControlMain;
         private System.Windows.Forms.TabPage tabPageTravelHistory;
         private UserControls.UserControlHistory travelHistoryControl;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStripTabs;
+        private System.Windows.Forms.ToolStripMenuItem addTabToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem removeTabToolStripMenuItem;
     }
 }
