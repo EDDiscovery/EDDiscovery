@@ -122,6 +122,7 @@ namespace EDDiscovery
         public event Action<string,bool> OnNewUIEvent { add { Controller.OnNewUIEvent += value; } remove { Controller.OnNewUIEvent -= value; } }
         public event Action<JournalEntry> OnNewJournalEntry { add { Controller.OnNewJournalEntry += value; } remove { Controller.OnNewJournalEntry -= value; } }
         public event Action<string, Color> OnNewLogEntry { add { Controller.OnNewLogEntry += value; } remove { Controller.OnNewLogEntry -= value; } }
+        public event Action OnRefreshCommanders { add { Controller.OnRefreshCommanders += value; } remove { Controller.OnRefreshCommanders -= value; } }
         public event Action<EliteDangerousCore.CompanionAPI.CompanionAPIClass,HistoryEntry> OnNewCompanionAPIData;
 
         #endregion
@@ -188,13 +189,9 @@ namespace EDDiscovery
             if (!EDDOptions.Instance.NoTheme)
                 themeok = theme.RestoreSettings();                                    // theme, remember your saved settings
 
-            travelHistoryControl.Init(this,null,0); // no cursor
-            settings.Init(this,null,0);
-            journalViewControl1.Init(this, null, 0);
-            trilaterationControl.Init(this, travelHistoryControl.GetTravelGrid, 0);
-            gridControl.Init(this, travelHistoryControl.GetTravelGrid, 0);
-            routeControl1.Init(this,travelHistoryControl.GetTravelGrid,0);
-            savedRouteExpeditionControl1.Init(this, travelHistoryControl.GetTravelGrid, 0);
+            // open all the major tabs except the built in ones
+            Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " Creating major tabs");
+            CreateTabs();
 
             Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " Map manager");
             Map = new EDDiscovery._3DMap.MapManager(EDDOptions.Instance.NoWindowReposition, this);
@@ -256,33 +253,11 @@ namespace EDDiscovery
                 MaterialCommodityDB.SetUpInitialTable();
                 Controller.PostInit_Loaded();
 
+                ShowInfoPanel("Loading. Please wait!", true);
+
                 RepositionForm();
 
-                long t = Environment.TickCount;
-                Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " EDF Load layout of THC");
-                travelHistoryControl.LoadLayout();
-                travelHistoryControl.InitialDisplay();
-                Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " EDF Load layout of JVC");
-                journalViewControl1.LoadLayout();
-                journalViewControl1.InitialDisplay();
-                Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " EDF Load layout of Route");
-                routeControl1.LoadLayout();
-                routeControl1.InitialDisplay();
-                Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " EDF Load layout GC");
-                gridControl.LoadLayout();
-                gridControl.InitialDisplay();
-                Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " EDF Load layout Expedition");
-                savedRouteExpeditionControl1.LoadLayout();
-                savedRouteExpeditionControl1.InitialDisplay();
-
-                Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " EDF Load layout Major Tab");
-                string tab = SQLiteConnectionUser.GetSettingString("MajorTab", "");
-                SelectTabPage(tab);
-
-                Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " EDF Load show info panel");
-                ShowInfoPanel("Loading. Please wait!", true);
-                settings.LoadLayout();
-                settings.InitialDisplay();
+                LoadTabs();
 
                 if (EDDOptions.Instance.ActionButton)
                 {
@@ -313,6 +288,10 @@ namespace EDDiscovery
 
             _shownOnce = true;
             Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " EDF shown complete");
+
+            // Form is fully loaded, we can do tab actions now
+
+            tabControlMain.SelectedIndexChanged += (snd, ea) => { ActionRun(Actions.ActionEventEDList.onTabChange, null, new Conditions.ConditionVariables("TabName", tabControlMain.TabPages[tabControlMain.SelectedIndex].Text)); };
         }
 
         #endregion
@@ -409,6 +388,195 @@ namespace EDDiscovery
 
         #endregion
 
+        #region Tabs
+
+        void CreateTabs()       // called during part of Init
+        {
+            string majortabs = SQLiteConnectionUser.GetSettingString("MajorTabControlList", "");
+            int[] tabctrl;
+            if (!majortabs.RestoreArrayFromString(out tabctrl) || tabctrl.Length == 0 || (tabctrl.Length % 2) != 1) // need it odd as we have an index tab as first
+            {
+                tabctrl = new int[] { 0,        -1, 0 ,
+                                                (int)PanelInformation.PanelIDs.Route, 0,
+                                                (int)PanelInformation.PanelIDs.Expedition, 0,
+                                                (int)PanelInformation.PanelIDs.Settings,0
+                };
+            }
+
+            TabPage history = tabControlMain.TabPages[0];       // remember history page, remove
+            tabControlMain.TabPages.Clear();
+            bool donehistory = false;
+
+            for (int i = 1; i < tabctrl.Length; i += 2)
+            {
+                if (tabctrl[i] != -1)
+                {
+                    try
+                    {
+                        PanelInformation.PanelIDs p = (PanelInformation.PanelIDs)tabctrl[i];
+                        CreateTab(p, tabctrl[i + 1], tabControlMain.TabPages.Count, false);      // no need the theme, will be themed as part of overall load
+                                                                                                 // may fail if p is crap, then just ignore
+                    }
+                    catch { }   // paranoia in case tabctrl number is crappy.
+                }
+                else if ( !donehistory )
+                {
+                    tabControlMain.TabPages.Add(history); // add back in right place
+                    travelHistoryControl.Init(this, null, UserControls.UserControlCommonBase.DisplayNumberHistoryGrid); // and init at this point with 0 as dn
+                    donehistory = true;
+                }
+            }
+
+            if ( !donehistory)      // just in case its missing
+            {
+                tabControlMain.TabPages.Add(history); // add back in right place
+                travelHistoryControl.Init(this, null, UserControls.UserControlCommonBase.DisplayNumberHistoryGrid); // and init at this point with 0 as dn
+            }
+
+            contextMenuStripTabs.Opening += ContextMenuStripTabs_Opening;
+
+            for (int i = 0; i < PanelInformation.GetNumberPanels(); i++)
+            {
+                addTabToolStripMenuItem.DropDownItems.Add(PanelInformation.MakeToolStripMenuItem(i, (s, e) =>
+                {
+                    TabPage page = CreateTab((PanelInformation.PanelIDs)((s as ToolStripMenuItem).Tag), -1, tabControlMain.LastTabClicked, true);
+                    UserControls.UserControlCommonBase uccb = page.Controls[0] as UserControls.UserControlCommonBase;
+                    uccb.LoadLayout();
+                    uccb.InitialDisplay();
+                    tabControlMain.SelectedIndex = tabControlMain.LastTabClicked;   // and select the inserted one
+                }));
+            }
+
+            removeTabToolStripMenuItem.Click += (s, e) => 
+            {
+                TabPage page = tabControlMain.TabPages[tabControlMain.LastTabClicked];
+                UserControls.UserControlCommonBase uccb = page.Controls[0] as UserControls.UserControlCommonBase;
+                uccb.Closing();
+                page.Controls.Clear();
+                uccb.Dispose();
+                tabControlMain.TabPages.Remove(page);
+                page.Dispose();
+            };
+
+            if ( tabctrl.Length>0 && tabctrl[0]>=0 && tabctrl[0]<tabControlMain.TabPages.Count)
+                tabControlMain.SelectedIndex = tabctrl[0];  // make sure external data does not crash us
+        }
+
+        private void ContextMenuStripTabs_Opening(object sender, CancelEventArgs e)
+        {       // don't remove history!
+            removeTabToolStripMenuItem.Enabled = !(tabControlMain.TabPages[tabControlMain.LastTabClicked].Controls[0] is UserControls.UserControlHistory);
+        }
+
+        private TabPage CreateTab(PanelInformation.PanelIDs ptype, int dn , int posindex, bool dotheme)
+        {
+            UserControls.UserControlCommonBase uccb = PanelInformation.Create(ptype);   // must create, since its a ptype.
+            if (uccb == null)       // if ptype is crap, it returns null.. catch
+                return null;
+
+            uccb.Dock = System.Windows.Forms.DockStyle.Fill;    // uccb has to be fill, even though the VS designer does not indicate you need to set it.. copied from designer code
+            uccb.Location = new System.Drawing.Point(3, 3);
+
+            List<int> idlist = (from TabPage p in tabControlMain.TabPages where p.Controls[0].GetType() == uccb.GetType() select (p.Controls[0] as UserControls.UserControlCommonBase).displaynumber).ToList();
+
+            if (dn == -1) // if work out display number
+            {
+                // not travel grid (due to clash with History control) and not in list, use primary number (0)
+                if (ptype != PanelInformation.PanelIDs.TravelGrid && !idlist.Contains(UserControls.UserControlCommonBase.DisplayNumberPrimaryTab))
+                    dn = UserControls.UserControlCommonBase.DisplayNumberPrimaryTab;
+                else
+                {   // search for empty id.
+                    for (int i = UserControls.UserControlCommonBase.DisplayNumberStartExtraTabs; i <= UserControls.UserControlCommonBase.DisplayNumberStartExtraTabsMax; i++)
+                    {
+                        if (!idlist.Contains(i))
+                        {
+                            dn = i;
+                            break;
+                        }
+                    }
+                }
+            }
+
+            System.Diagnostics.Debug.WriteLine("Create tab {0} dn {1} at {2}", ptype, dn, posindex);
+
+            uccb.Init(this, travelHistoryControl.GetTravelGrid, dn);    // start the uccb up
+
+            string postfix;
+            if (ptype != PanelInformation.PanelIDs.TravelGrid)      // given the dn, work out the name
+                postfix = (dn == UserControls.UserControlCommonBase.DisplayNumberPrimaryTab) ? "" : "(" + (dn - UserControls.UserControlCommonBase.DisplayNumberStartExtraTabs + 1).ToStringInvariant() + ")";
+            else
+                postfix = (dn == UserControls.UserControlCommonBase.DisplayNumberStartExtraTabs) ? "" : "(" + (dn - UserControls.UserControlCommonBase.DisplayNumberStartExtraTabs).ToStringInvariant() + ")";
+
+            TabPage page = new TabPage(PanelInformation.GetPanelInfoByEnum(ptype).WindowTitlePrefix + postfix);
+            page.Location = new System.Drawing.Point(4, 22);    // copied from normal tab creation code
+            page.Padding = new System.Windows.Forms.Padding(3);
+
+            page.Controls.Add(uccb);
+
+            tabControlMain.TabPages.Insert(posindex, page);
+
+            if (dotheme)                // only user created ones need themeing
+                theme.ApplyToControls(page, applytothis: true);
+
+            return page;
+        }
+
+        private void LoadTabs()     // called on Loading..
+        {
+            //foreach (TabPage tp in tabControlMain.TabPages) System.Diagnostics.Debug.WriteLine("TP Size " + tp.Controls[0].DisplayRectangle);
+
+            foreach (TabPage p in tabControlMain.TabPages)      // all main tabs, load/display
+            {
+                // now a strange thing. tab Selected, cause its shown, gets resized (due to repoisition form). Other tabs dont.
+                // LoadLayout could fail due to an incorrect size that would break something (such as spitters).. 
+                // so force size. tried perform layout to no avail
+                p.Size = tabControlMain.TabPages[tabControlMain.SelectedIndex].Size;
+                UserControls.UserControlCommonBase uccb = (UserControls.UserControlCommonBase)p.Controls[0];
+                uccb.LoadLayout();
+                uccb.InitialDisplay();
+            }
+
+            //foreach (TabPage tp in tabControlMain.TabPages) System.Diagnostics.Debug.WriteLine("TP Size " + tp.Controls[0].DisplayRectangle);
+        }
+
+        private TabPage GetMajorTab(PanelInformation.PanelIDs ptype)
+        {
+            Type t = PanelInformation.GetPanelInfoByEnum(ptype).PopoutType;
+            return (from TabPage x in tabControlMain.TabPages where x.Controls[0].GetType() == t select x).FirstOrDefault();
+        }
+
+        private TabPage EnsureMajorTabIsPresent(PanelInformation.PanelIDs ptype, bool selectit)
+        {
+            TabPage page = GetMajorTab(ptype);
+            if (page == null)
+            {
+                page = CreateTab(ptype, -1, tabControlMain.TabCount, true);
+                UserControls.UserControlCommonBase uccb = page.Controls[0] as UserControls.UserControlCommonBase;
+                uccb.LoadLayout();
+                uccb.InitialDisplay();
+            }
+
+            if ( selectit )
+                tabControlMain.SelectTab(page);
+
+            return page;
+        }
+
+        public bool SelectTabPage(string name)
+        {
+            foreach (TabPage p in tabControlMain.TabPages)
+            {
+                if (p.Text.Equals(name, StringComparison.InvariantCultureIgnoreCase))
+                {
+                    tabControlMain.SelectTab(p);
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        #endregion
+
         #region Themeing
 
         public void ApplyTheme()
@@ -467,7 +635,6 @@ namespace EDDiscovery
         private void Controller_RefreshCommanders()
         {
             LoadCommandersListBox();             // in case a new commander has been detected
-            settings.UpdateCommandersListBox();
         }
 
         private void Controller_InitialisationComplete()
@@ -743,18 +910,24 @@ namespace EDDiscovery
 
             theme.SaveSettings(null);
 
-            settings.Closing();
-            travelHistoryControl.Closing();
-            journalViewControl1.Closing();
-            gridControl.Closing();
-            routeControl1.Closing();
-            savedRouteExpeditionControl1.Closing();
-            trilaterationControl.Closing();
+            List<int> idlist = new List<int>();
 
-            if (EDDConfig.AutoSavePopOuts)
+            idlist.Add(tabControlMain.SelectedIndex);   // first is current index
+
+            foreach (TabPage p in tabControlMain.TabPages)      // all main tabs, load/display
+            {
+                UserControls.UserControlCommonBase uccb = p.Controls[0] as UserControls.UserControlCommonBase;
+                uccb.Closing();
+                PanelInformation.PanelInfo pi = PanelInformation.GetPanelInfoByType(uccb.GetType());
+                idlist.Add(pi != null ? (int)pi.PopoutID : -1);
+                idlist.Add(uccb.displaynumber);
+            }
+
+            SQLiteConnectionUser.PutSettingString("MajorTabControlList", string.Join(",",idlist) );
+
+            if (EDDConfig.AutoSavePopOuts)      // must do after settings have saved state
                 PopOuts.SaveCurrentPopouts();
 
-            SQLiteConnectionUser.PutSettingString("MajorTab", tabControlMain.SelectedTab.Text);
             notifyIcon1.Visible = false;
 
             audioqueuespeech.Dispose();     // in order..
@@ -785,6 +958,12 @@ namespace EDDiscovery
             actioncontroller.onStartup();
         }
 
+        private void sendUnsyncedEGOScansToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            List<HistoryEntry> hlsyncunsyncedlist = Controller.history.FilterByScanNotEGOSynced;        // first entry is oldest
+            EDDiscoveryCore.EGO.EGOSync.SendEGOEvents(LogLine, hlsyncunsyncedlist);
+        }
+
         private void addNewStarToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Process.Start("http://robert.astronet.se/Elite/ed-systems/entry.html");
@@ -804,6 +983,12 @@ namespace EDDiscovery
         {
             Process.Start(Properties.Resources.URLProjectWiki);
         }
+
+        private void settingsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            EnsureMajorTabIsPresent(PanelInformation.PanelIDs.Settings, true);
+        }
+
 
         private void showLogfilesToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -866,16 +1051,6 @@ namespace EDDiscovery
             notifyIcon1.Visible = useNotifyIcon;
             if (!useNotifyIcon && !Visible)
                 Show();
-        }
-
-        private void changeMapColorToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            settings.panel_defaultmapcolor_Click(sender, e);
-        }
-
-        private void editThemeToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            settings.button_edittheme_Click(this, null);
         }
 
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1104,13 +1279,6 @@ namespace EDDiscovery
             EDDNSync.SendEDDNEvents(LogLine, hlsyncunsyncedlist);
         }
 
-        private void materialSearchToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            FindMaterialsForm frm = new FindMaterialsForm();
-
-            frm.Show();
-        }
-
         private void notifyIcon1_DoubleClick(object sender, EventArgs e)
         {
             // Tray icon was double-clicked.
@@ -1128,9 +1296,10 @@ namespace EDDiscovery
         }
 
         private void notifyIconMenu_Hide_Click(object sender, EventArgs e)
-        {
-            // Tray icon 'Hide Tray Icon' menu item was clicked.
-            settings.DisableNotifyIcon();
+        {       // horrible circular ref to this sub func then back up.. can't think of a fix for now.
+            TabPage t = GetMajorTab(PanelInformation.PanelIDs.Settings);
+            if ( t != null )
+                (t.Controls[0] as UserControls.UserControlSettings).DisableNotifyIcon();
         }
 
         private void notifyIconMenu_Open_Click(object sender, EventArgs e)
@@ -1397,25 +1566,6 @@ namespace EDDiscovery
             actioncontroller.ActionRun(Actions.ActionEventEDList.onMenuItem, null, vars);
         }
 
-        public bool SelectTabPage(string name)
-        {
-            foreach (TabPage p in tabControlMain.TabPages)
-            {
-                if (p.Text.Equals(name, StringComparison.InvariantCultureIgnoreCase))
-                {
-                    tabControlMain.SelectTab(p);
-                    return true;
-                }
-            }
-
-            return false;
-        }
-
-        private void tabControl1_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            ActionRun(Actions.ActionEventEDList.onTabChange, null, new Conditions.ConditionVariables("TabName", tabControlMain.TabPages[tabControlMain.SelectedIndex].Text));
-        }
-
         public Conditions.ConditionVariables Globals { get { return actioncontroller.Globals; } }
 
         public int ActionRunOnEntry(HistoryEntry he, ActionLanguage.ActionEvent av)
@@ -1518,8 +1668,8 @@ namespace EDDiscovery
             popoutdropdown = new ExtendedControls.DropDownCustom("", true);
 
             popoutdropdown.ItemHeight = 26;
-            popoutdropdown.Items = PopOutControl.GetPopOutToolTips().ToList();
-            popoutdropdown.ImageItems = PopOutControl.GetPopOutImages().ToList();
+            popoutdropdown.Items = PanelInformation.GetPanelToolTips().ToList();
+            popoutdropdown.ImageItems = PanelInformation.GetPanelImages().ToList();
             popoutdropdown.FlatStyle = FlatStyle.Popup;
             popoutdropdown.Activated += (s, ea) =>
             {
@@ -1532,7 +1682,7 @@ namespace EDDiscovery
                 PopOuts.PopOut(popoutdropdown.SelectedIndex);
             };
 
-            popoutdropdown.Size = new Size(500,400);
+            popoutdropdown.Size = new Size(500,600);
             theme.ApplyToControls(popoutdropdown);
             popoutdropdown.SelectionBackColor = theme.ButtonBackColor;
             popoutdropdown.Show(this);
@@ -1580,11 +1730,6 @@ namespace EDDiscovery
 
         #endregion
 
-        private void sendUnsyncedEGOScansToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            List<HistoryEntry> hlsyncunsyncedlist = Controller.history.FilterByScanNotEGOSynced;        // first entry is oldest
-            EDDiscoveryCore.EGO.EGOSync.SendEGOEvents(LogLine, hlsyncunsyncedlist);
-        }
 
     }
 }

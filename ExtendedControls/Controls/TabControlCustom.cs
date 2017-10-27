@@ -62,7 +62,10 @@ namespace ExtendedControls
         // attach a tab style class which determines the shape and formatting.
         public TabStyleCustom TabStyle { get { return tabstyle; } set { ChangeTabStyle(value); } }
 
+        // reordering 
         public bool AllowDragReorder { get; set; } = false;
+        // Tab clicked.. reports last tab clicked
+        public int LastTabClicked { get; private set; } = -1;
 
         #endregion
 
@@ -138,7 +141,7 @@ namespace ExtendedControls
             return minsize;
         }
 
-        private int TabAt(Point position)
+        public int TabAt(Point position)
         {
             int count = TabCount;
             for (int i = 0; i < count; i++)
@@ -154,13 +157,11 @@ namespace ExtendedControls
 
         #region Mouse
 
-        int mouseclickedtab = -1;
-
         protected override void OnMouseDown(MouseEventArgs e)
         {
             base.OnMouseDown(e);
-            mouseclickedtab = TabAt(e.Location);
-            System.Diagnostics.Debug.WriteLine("Clicked on "+ mouseclickedtab);
+            LastTabClicked = TabAt(e.Location);
+            //System.Diagnostics.Debug.WriteLine("Clicked on "+ mouseclickedtab);
         }
         protected override void OnMouseMove(MouseEventArgs e)
         {
@@ -170,16 +171,16 @@ namespace ExtendedControls
 
             mouseover = TabAt(e.Location);
 
-            System.Diagnostics.Debug.WriteLine("From " + currentmouseover + " to " + mouseover);
+            //System.Diagnostics.Debug.WriteLine("From " + currentmouseover + " to " + mouseover);
 
-            if (e.Button == MouseButtons.Left && mouseclickedtab != -1 && AllowDragReorder)
+            if (e.Button == MouseButtons.Left && LastTabClicked != -1 && AllowDragReorder)
             {
-                if ( mouseclickedtab != mouseover && mouseover != -1)
+                if ( LastTabClicked != mouseover && mouseover != -1)
                 {
-                    TabPage r = TabPages[mouseclickedtab];
-                    TabPages[mouseclickedtab] = TabPages[mouseover];
+                    TabPage r = TabPages[LastTabClicked];
+                    TabPages[LastTabClicked] = TabPages[mouseover];
                     TabPages[mouseover] = r;
-                    mouseclickedtab = mouseover;
+                    LastTabClicked = mouseover;
                     SelectedIndex = mouseover;
 
                }

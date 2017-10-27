@@ -30,7 +30,6 @@ namespace EDDiscovery.UserControls
 {
     public partial class UserControlSettings : UserControlCommonBase
     {
-        private EDDiscoveryForm discoveryform;
         private ExtendedControls.ThemeStandardEditor themeeditor = null;
 
         public UserControlSettings()
@@ -38,10 +37,8 @@ namespace EDDiscovery.UserControls
             InitializeComponent();
         }
 
-        public override void Init(EDDiscoveryForm discoveryForm, UserControlCursorType uctgnotused, int displaynumbernotused)
+        public override void Init()
         {
-            discoveryform = discoveryForm;
-
             ResetThemeList();
             SetEntryThemeComboBox();
 
@@ -53,6 +50,8 @@ namespace EDDiscovery.UserControls
             comboBoxClickThruKey.Items = KeyObjectExtensions.KeyListString(inclshifts:true);
             comboBoxClickThruKey.SelectedItem = EDDConfig.Instance.ClickThruKey.VKeyToString();
             comboBoxClickThruKey.SelectedIndexChanged += comboBoxClickThruKey_SelectedIndexChanged;
+
+            discoveryform.OnRefreshCommanders += DiscoveryForm_OnRefreshCommanders;
         }
 
         void SetEntryThemeComboBox()
@@ -114,11 +113,17 @@ namespace EDDiscovery.UserControls
         {
             EDDiscoveryForm.EDDConfig.AutoLoadPopOuts = checkBoxAutoLoad.Checked;   // ok to do here..
             EDDiscoveryForm.EDDConfig.AutoSavePopOuts = checkBoxAutoSave.Checked;
+            discoveryform.OnRefreshCommanders -= DiscoveryForm_OnRefreshCommanders;
 
             themeeditor?.Dispose();
             var frm = FindForm();
             if (typeof(ExtendedControls.SmartSysMenuForm).IsAssignableFrom(frm?.GetType()))
                 (frm as ExtendedControls.SmartSysMenuForm).TopMostChanged -= ParentForm_TopMostChanged;
+        }
+
+        private void DiscoveryForm_OnRefreshCommanders()
+        {
+            UpdateCommandersListBox();
         }
 
         protected override void OnLoad(EventArgs e)
@@ -128,6 +133,7 @@ namespace EDDiscovery.UserControls
             if (typeof(ExtendedControls.SmartSysMenuForm).IsAssignableFrom(frm?.GetType()))
                 (frm as ExtendedControls.SmartSysMenuForm).TopMostChanged += ParentForm_TopMostChanged;
         }
+
 
         private void textBoxHomeSystem_Validated(object sender, EventArgs e)
         {

@@ -27,8 +27,6 @@ namespace EDDiscovery.UserControls
 {
     public partial class UserControlLog : UserControlCommonBase
     {
-        private EDDiscoveryForm discoveryform;
-
         public UserControlLog()
         {
             InitializeComponent();
@@ -36,11 +34,10 @@ namespace EDDiscovery.UserControls
             richTextBox_History.SetContextMenuStrip(contextMenuStrip1);
         }
 
-        public override void Init( EDDiscoveryForm ed, UserControlCursorType thc, int displayno)
+        public override void Init()
         {
-            discoveryform = ed;
             discoveryform.OnNewLogEntry += AppendText;
-            AppendText(ed.LogText, ed.theme.TextBlockColor);
+            AppendText(discoveryform.LogText, discoveryform.theme.TextBlockColor);
         }
 
         public override void InitialDisplay()

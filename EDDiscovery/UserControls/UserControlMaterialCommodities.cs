@@ -29,11 +29,7 @@ namespace EDDiscovery.UserControls
 {
     public partial class UserControlMaterialCommodities : UserControlCommonBase
     {
-        private UserControlCursorType uctg;
-        private EDDiscoveryForm discoveryform;
-
         public bool materials = false;
-        private int displaynumber = 0;
 
         private string DbColumnSave { get { return ((materials) ? "MaterialsGrid" : "CommoditiesGrid") + ((displaynumber > 0) ? displaynumber.ToString() : "") + "DGVCol"; } }
 
@@ -44,12 +40,8 @@ namespace EDDiscovery.UserControls
             InitializeComponent();
         }
 
-        public override void Init( EDDiscoveryForm ed, UserControlCursorType thc, int vn) //0=primary, 1 = first windowed version, etc
+        public override void Init()
         {
-            discoveryform = ed;
-            uctg = thc;
-            displaynumber = vn;
-
             dataGridViewMC.MakeDoubleBuffered();
             dataGridViewMC.DefaultCellStyle.WrapMode = DataGridViewTriState.False;
             dataGridViewMC.RowTemplate.Height = 26;

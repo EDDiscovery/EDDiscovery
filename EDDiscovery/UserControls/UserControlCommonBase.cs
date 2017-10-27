@@ -28,18 +28,45 @@ using EliteDangerousCore;
 namespace EDDiscovery.UserControls
 {
     public class UserControlCommonBase : UserControl
-    {
-        // Displaynumbers.. 
-        // 0 = main travel control (travelhistorycontrol), 0 = main journal control (journalviewcontrol, via EDform)
-        // 1000 = Bottom history, 1001 = bottom right history, 1002 = middle right history, 1003 = top right history (travelhistorycontrol.cs)
-        // 1 = first pop out window of type, 2 = second, etc (popoutcontrol, PopOut func)
-        // When a grid open, displaynumber for its children is set by CreatePanel in UserControlContainerGrid
-        // 1050+ grid displaynumber * 1000 + index of type in grid
+    {       
+        public const int DisplayNumberHistoryGrid = 0;              // special codes, reserved for history grid
+        protected const int DisplayNumberHistoryBotLeft = 1000;     // historical numbers.. don't want to change
+        protected const int DisplayNumberHistoryBotRight = 1001;
+        protected const int DisplayNumberHistoryMidRight = 1002;
+        protected const int DisplayNumberHistoryTopRight = 1003;
+
+        public const int DisplayNumberPrimaryTab = 0;               // tabs are 0, or 100+.  0 for the first, 100+ for repeats
+        public const int DisplayNumberStartExtraTabs = 100;         // Excepting travelgrid which due to history grid using zero always starts at 100.
+        public const int DisplayNumberStartExtraTabsMax = 199;         // Excepting travelgrid which due to history grid using zero always starts at 100.
+
+        public const int DisplayNumberPopOuts = 1;                  // pop outs are 1-99.. of each specific type.
+
+        // When a grid is open, displaynumber for its children is set by CreatePanel in UserControlContainerGrid
+        // 1050 + grid displaynumber * 100 + index of type in grid
         // so, if a pop out grid of second instance, = 2, would get 1050+2000+index of type in grid
-        // this works for recursive grids to a enough for real world purposes.
+        // each grid gets 100 unique numbers, so 100 instances of each type in grid
+        // this works for recursive grids to a enough for 158real world purposes.
+
+        protected int DisplayNumberOfGridInstance(int numopenedinside)      // grid children are assigned this range..
+        { return 1050 + displaynumber * 100 + numopenedinside; }
+
+        // Common parameters of a UCCB
+
+        public int displaynumber { get; protected set; }
+        public EDDiscoveryForm discoveryform { get; protected set; }
+        public UserControlCursorType uctg { get; protected set; }
 
         // in calling order..
-        public virtual void Init(EDDiscoveryForm ed, UserControlCursorType thc, int displayno) { }    // start up, give discovery form and cursor, and its display id
+        public void Init(EDDiscoveryForm ed, UserControlCursorType thc, int dn)
+        {
+            System.Diagnostics.Debug.WriteLine("Open UCCB " + this.Name + " of " + this.GetType().Name + " with " + dn);
+            discoveryform = ed;
+            displaynumber = dn;
+            uctg = thc;
+            Init();
+        }    
+
+        public virtual void Init() { }              // start up, called by above Init
         public virtual void LoadLayout() { }        // then a chance to load a layout
         public virtual void InitialDisplay() { }    // then after the themeing, do the initial display
         public virtual void Closing() { }           // close it
@@ -67,8 +94,6 @@ namespace EDDiscovery.UserControls
                     return false;
             }
         }
-
-
 
         #region Resize
 

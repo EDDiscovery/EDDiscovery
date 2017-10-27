@@ -16,10 +16,8 @@ namespace EDDiscovery.UserControls
 {
     public partial class UserControlContainerGrid: UserControlCommonBase        // circular, huh! neat!
     {
-        private EDDiscoveryForm discoveryForm;
         private UserControlCursorType ucursor_history;     // one passed to us, refers to thc.uctg
         private UserControlCursorType ucursor_inuse;  // one in use
-        private int displaynumber;
 
         private List<UserControlContainerResizable> uccrlist = new List<UserControlContainerResizable>();
 
@@ -30,17 +28,14 @@ namespace EDDiscovery.UserControls
         public UserControlContainerGrid()
         {
             InitializeComponent();
-            comboBoxGridSelector.Items.AddRange(PopOutControl.GetPopOutNames());
-            comboBoxGridSelector.SelectedIndex = 0;
-            comboBoxGridSelector.SelectedIndexChanged += ComboBoxGridSelector_SelectedIndexChanged;
             rollUpPanelMenu.SetToolTip(toolTip);    // use the defaults
         }
 
-        public override void Init( EDDiscoveryForm f , UserControlCursorType thc, int dn )       //dn = 0 primary grid, or 1 first pop out, etc
-        {
-            discoveryForm = f;
-            ucursor_history = ucursor_inuse = thc;
-            displaynumber = dn;
+        ExtendedControls.DropDownCustom popoutdropdown;
+
+        public override void Init()
+        { 
+            ucursor_history = ucursor_inuse = uctg;
             //System.Diagnostics.Debug.WriteLine("Init Grid Use THC " + ucursor_inuse.GetHashCode());
         }
 
@@ -167,27 +162,27 @@ namespace EDDiscovery.UserControls
             uccr.Init(uccb);
             uccr.ResizeStart += ResizeStart;
             uccr.ResizeEnd += ResizeEnd;
-            uccr.BorderColor = discoveryForm.theme.GridBorderLines;
-            uccr.SelectedBorderColor = discoveryForm.theme.TextBlockHighlightColor;
+            uccr.BorderColor = discoveryform.theme.GridBorderLines;
+            uccr.SelectedBorderColor = discoveryform.theme.TextBlockHighlightColor;
 
             uccrlist.Add(uccr);
 
             int numopenedinside = uccrlist.Count(x => x.GetType().Equals(uccb.GetType()));    // how many others are there?
 
-            int dnum = 1050 + displaynumber * 100 + numopenedinside;
+            int dnum = DisplayNumberOfGridInstance(numopenedinside);
             //System.Diagnostics.Debug.WriteLine("  Create " + uccb.GetType().Name + " " + dnum + " Assign THC " + ucursor_inuse.GetHashCode() );
 
             panelPlayfield.Controls.Add(uccr);
 
-            uccb.Init(discoveryForm, ucursor_inuse, dnum);
+            uccb.Init(discoveryform, ucursor_inuse, dnum);
             uccb.LoadLayout();
 
-            uccr.Font = discoveryForm.theme.GetFont;        // Important. Apply font autoscaling to the user control
+            uccr.Font = discoveryform.theme.GetFont;        // Important. Apply font autoscaling to the user control
                                                             // ApplyToForm does not apply the font to the actual UC, only
                                                             // specific children controls.  The TabControl in the discoveryform ends up autoscaling most stuff
                                                             // the children directly attached to the discoveryform are not autoscaled
 
-            discoveryForm.theme.ApplyToControls(uccr, discoveryForm.theme.GetFont);
+            discoveryform.theme.ApplyToControls(uccr, discoveryform.theme.GetFont);
 
             uccr.Location = pos;
             uccr.Size = size;
@@ -282,17 +277,38 @@ namespace EDDiscovery.UserControls
         #endregion
 
         #region Clicks
-        private void ComboBoxGridSelector_SelectedIndexChanged(object sender, EventArgs e)
+
+        private void buttonExtPopOut_Click(object sender, EventArgs e)
         {
-            UserControlContainerResizable uccr = CreatePanel(PopOutControl.Create(comboBoxGridSelector.SelectedIndex) ,
-                                        new Point((uccrlist.Count % 5) * 50, (uccrlist.Count % 5) * 50),
-                                        new Size(Math.Min(300, panelPlayfield.Width - 10), Math.Min(300, panelPlayfield.Height - 10)));
-            Select(null);
-            uccr.Selected = true;
-            uccr.BringToFront();
-            UpdateButtons();
-            AssignTHC();
-        }   
+            popoutdropdown = new ExtendedControls.DropDownCustom("", true);
+
+            popoutdropdown.ItemHeight = 26;
+            popoutdropdown.Items = PanelInformation.GetPanelToolTips().ToList();
+            popoutdropdown.ImageItems = PanelInformation.GetPanelImages().ToList();
+            popoutdropdown.FlatStyle = FlatStyle.Popup;
+            popoutdropdown.Activated += (s, ea) =>
+            {
+                Point location = buttonExtPopOut.PointToScreen(new Point(0, 0));
+                popoutdropdown.Location = popoutdropdown.PositionWithinScreen(location.X + buttonExtPopOut.Width, location.Y);
+                this.Invalidate(true);
+            };
+            popoutdropdown.SelectedIndexChanged += (s, ea) =>
+            {
+                UserControlContainerResizable uccr = CreatePanel(PanelInformation.Create(popoutdropdown.SelectedIndex),
+                                            new Point((uccrlist.Count % 5) * 50, (uccrlist.Count % 5) * 50),
+                                            new Size(Math.Min(300, panelPlayfield.Width - 10), Math.Min(300, panelPlayfield.Height - 10)));
+                Select(null);
+                uccr.Selected = true;
+                uccr.BringToFront();
+                UpdateButtons();
+                AssignTHC();
+            };
+
+            popoutdropdown.Size = new Size(500, 26 * 20);
+            discoveryform.theme.ApplyToControls(popoutdropdown);
+            popoutdropdown.SelectionBackColor = discoveryform.theme.ButtonBackColor;
+            popoutdropdown.Show(this);
+        }
 
         private void buttonExtDelete_Click(object sender, EventArgs e)
         {
@@ -360,7 +376,7 @@ namespace EDDiscovery.UserControls
 
             foreach (UserControlContainerResizable r in uccrlist)
             {
-                r.BorderColor = on ? Color.Transparent : discoveryForm.theme.GridBorderLines;
+                r.BorderColor = on ? Color.Transparent : discoveryform.theme.GridBorderLines;
                 UserControlCommonBase uc = (UserControlCommonBase)r.control;
                 uc.SetTransparency(on, curcol);
             }

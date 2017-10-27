@@ -32,10 +32,6 @@ namespace EDDiscovery.UserControls
 {
     public partial class UserControlMarketData : UserControlCommonBase
     {
-        private int displaynumber = 0;
-        private EDDiscoveryForm discoveryform;
-        private UserControlCursorType uctg;
-
         private string DbColumnSave { get { return ("MarketDataGrid") + ((displaynumber > 0) ? displaynumber.ToString() : "") + "DGVCol"; } }
         private string DbBuyOnly { get { return "MarketDataBuyOnly" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
         private string DbAutoSwap { get { return "MarketDataAutoSwap" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
@@ -47,12 +43,8 @@ namespace EDDiscovery.UserControls
             InitializeComponent();
         }
 
-        public override void Init( EDDiscoveryForm ed, UserControlCursorType thc, int vn) //0=primary, 1 = first windowed version, etc
+        public override void Init()
         {
-            discoveryform = ed;
-            uctg = thc;
-            displaynumber = vn;
-
             dataGridViewMarketData.MakeDoubleBuffered();
             dataGridViewMarketData.DefaultCellStyle.WrapMode = DataGridViewTriState.False;
             dataGridViewMarketData.RowTemplate.Height = 26;
