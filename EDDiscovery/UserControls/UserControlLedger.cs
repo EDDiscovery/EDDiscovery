@@ -30,10 +30,6 @@ namespace EDDiscovery.UserControls
 {
     public partial class UserControlLedger : UserControlCommonBase
     {
-        private int displaynumber = 0;
-        private EDDiscoveryForm discoveryform;
-        private UserControlCursorType uctg;
-        
         EventFilterSelector cfs = new EventFilterSelector();
 
         private string DbFilterSave { get { return "LedgerGridEventFilter" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
@@ -47,12 +43,8 @@ namespace EDDiscovery.UserControls
             InitializeComponent();
         }
 
-        public override void Init( EDDiscoveryForm ed, UserControlCursorType thc, int vn) //0=primary, 1 = first windowed version, etc
+        public override void Init()
         {
-            discoveryform = ed;
-            uctg = thc;
-            displaynumber = vn;
-
             dataGridViewLedger.MakeDoubleBuffered();
             dataGridViewLedger.DefaultCellStyle.WrapMode = DataGridViewTriState.False;
             dataGridViewLedger.RowTemplate.Height = 26;

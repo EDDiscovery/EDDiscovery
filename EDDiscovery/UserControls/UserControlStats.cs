@@ -30,20 +30,13 @@ namespace EDDiscovery.UserControls
 {
     public partial class UserControlStats : UserControlCommonBase
     {
-        private int displaynumber = 0;
-        private EDDiscoveryForm discoveryform;
-        private UserControlCursorType uctg;
-
         public UserControlStats()
         {
             InitializeComponent();
         }
 
-        public override void Init( EDDiscoveryForm ed, UserControlCursorType thc,  int vn) //0=primary, 1 = first windowed version, etc
+        public override void Init()
         {
-            discoveryform = ed;
-            uctg = thc;
-            displaynumber = vn;
             discoveryform.OnNewEntry += AddNewEntry;
             uctg.OnTravelSelectionChanged += SelectionChanged;
             userControlStatsTimeScan.ScanMode = true;

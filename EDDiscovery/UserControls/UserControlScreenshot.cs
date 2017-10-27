@@ -31,10 +31,6 @@ namespace EDDiscovery.UserControls
 {
     public partial class UserControlScreenshot : UserControlCommonBase
     {
-        private int displaynumber = 0;
-        private EDDiscoveryForm discoveryform;
-        private UserControlCursorType uctg;
-
         string ImagePath = null;
         Point ImageSize;
 
@@ -44,11 +40,8 @@ namespace EDDiscovery.UserControls
             pictureBox.Visible = false;
         }
 
-        public override void Init( EDDiscoveryForm ed, UserControlCursorType thc, int vn) //0=primary, 1 = first windowed version, etc
+        public override void Init()
         {
-            discoveryform = ed;
-            uctg = thc;
-            displaynumber = vn;
             discoveryform.screenshotconverter.OnScreenShot += ScreenShot;
             uctg.OnTravelSelectionChanged += Display;
         }

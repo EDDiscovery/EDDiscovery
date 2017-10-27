@@ -35,16 +35,12 @@ namespace EDDiscovery.UserControls
 {
     public partial class UserControlExploration :  UserControlCommonBase
     {
-        private int displaynumber = 0;
-
         private string DbColumnSave { get { return ("ModulesGrid") + ((displaynumber > 0) ? displaynumber.ToString() : "") + "DGVCol"; } }
 
         public static bool DeleteIsPermanent = true;
 
         private List<ExplorationSetClass> _savedExplorationSets;
         private ExplorationSetClass _currentExplorationSet;
-        private EDDiscoveryForm _discoveryForm;
-        private UserControlCursorType uctg;
         private EDSMClass edsm;
         private Rectangle _dragBox;
         private int _dragRowIndex;
@@ -60,15 +56,12 @@ namespace EDDiscovery.UserControls
             _currentExplorationSet = new ExplorationSetClass();
         }
 
-        public override void Init(EDDiscoveryForm ed,  UserControlCursorType thc, int vn) //0=primary, 1 = first windowed version, etc
+        public override void Init()
         {
-            _discoveryForm = ed;
-            uctg = thc;
-            displaynumber = vn;
             edsm = new EDSMClass();
             _currentExplorationSet = new ExplorationSetClass();
             _savedExplorationSets = new List<ExplorationSetClass>();
-            _discoveryForm.OnNewEntry += NewEntry;
+            discoveryform.OnNewEntry += NewEntry;
             uctg.OnTravelSelectionChanged += Display;
         }
 
@@ -89,7 +82,7 @@ namespace EDDiscovery.UserControls
         {
             DGVSaveColumnLayout(dataGridViewExplore, DbColumnSave);
             uctg.OnTravelSelectionChanged -= Display;
-            _discoveryForm.OnNewEntry -= NewEntry;
+            discoveryform.OnNewEntry -= NewEntry;
         }
 
         public void NewEntry(HistoryEntry he, HistoryList hl)               // called when a new entry is made.. check to see if its a scan update
@@ -153,7 +146,7 @@ namespace EDDiscovery.UserControls
             const int idxNote = 9;
 
             if (hl == null)
-                hl = _discoveryForm.history;
+                hl = discoveryform.history;
 
             HistoryEntry last = hl.GetLast;
 
@@ -181,7 +174,7 @@ namespace EDDiscovery.UserControls
                 }
 
                 dataGridViewExplore[0, rowindex].Tag = sys;
-                dataGridViewExplore.Rows[rowindex].DefaultCellStyle.ForeColor = (sys != null && sys.HasCoordinate) ? _discoveryForm.theme.VisitedSystemColor : _discoveryForm.theme.NonVisitedSystemColor;
+                dataGridViewExplore.Rows[rowindex].DefaultCellStyle.ForeColor = (sys != null && sys.HasCoordinate) ? discoveryform.theme.VisitedSystemColor : discoveryform.theme.NonVisitedSystemColor;
 
 
                 if (sys != null)
@@ -250,7 +243,7 @@ namespace EDDiscovery.UserControls
                             note = bkmark.Note;
                         else
                         {
-                            var gmo = _discoveryForm.galacticMapping.Find(sys.name);
+                            var gmo = discoveryform.galacticMapping.Find(sys.name);
                             if (gmo != null && !string.IsNullOrWhiteSpace(gmo.description))
                                 note = gmo.description;
                         }
@@ -757,7 +750,7 @@ namespace EDDiscovery.UserControls
 
             if (obj == null)
                 return;
-            TargetHelpers.setTargetSystem(this,_discoveryForm, (string)obj);
+            TargetHelpers.setTargetSystem(this,discoveryform, (string)obj);
         }
 
         private void editBookmarkToolStripMenuItem_Click(object sender, EventArgs e)
@@ -776,7 +769,7 @@ namespace EDDiscovery.UserControls
                 ExtendedControls.MessageBoxTheme.Show(FindForm(), "Unknown system, system is without co-ordinates", "Edit bookmark", MessageBoxButtons.OK);
             }
             else
-                TargetHelpers.showBookmarkForm(this,_discoveryForm, sc, null, false);
+                TargetHelpers.showBookmarkForm(this,discoveryform, sc, null, false);
         }
 
         private void dataGridViewExplore_ColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
@@ -788,8 +781,10 @@ namespace EDDiscovery.UserControls
         {
             string systemName;
             double radius;
-            if (!ImportSphere.showDialog(_discoveryForm, out systemName, out radius, FindForm()))
+
+            if (!ImportSphere.showDialog(discoveryform, out systemName, out radius, FindForm()))
                 return;
+
             if (String.IsNullOrWhiteSpace(systemName))
             {
                 ExtendedControls.MessageBoxTheme.Show(FindForm(), "System name not set");

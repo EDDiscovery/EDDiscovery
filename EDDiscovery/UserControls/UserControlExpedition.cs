@@ -36,7 +36,6 @@ namespace EDDiscovery.UserControls
 
         private List<SavedRouteClass> savedroute;
         private SavedRouteClass currentroute;
-        private EDDiscoveryForm discoveryform;
         private EDSMClass edsm;
         private Rectangle _dragBox;
         private int _dragRowIndex;
@@ -54,9 +53,8 @@ namespace EDDiscovery.UserControls
             savedroute = new List<SavedRouteClass>();
         }
 
-        public override void Init(EDDiscoveryForm discoveryForm, UserControlCursorType thc, int vn)
+        public override void Init()
         {
-            discoveryform = discoveryForm;
             edsm = new EDSMClass();
             discoveryform.OnNewCalculatedRoute += _discoveryForm_OnNewCalculatedRoute;
             discoveryform.OnNewStarsForExpedition += Discoveryform_OnNewStarsForExpedition;

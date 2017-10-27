@@ -192,4 +192,22 @@ public static class ControlHelpersStaticFunc
         return new Point(x, y);
     }
 
+    static public void SplitterDistance(this SplitContainer sp, double value)           // set the splitter distance from a double value.. safe from exceptions.
+    {
+        int a = (sp.Orientation == Orientation.Vertical) ? sp.Width : sp.Height;
+        int b = (int)(a * value);
+        b = Math.Max(b, sp.Panel1MinSize);
+        b = Math.Min(b, a - sp.Panel2MinSize);  // clip to sides in case its too big.
+        if ( b >= sp.Panel1MinSize && b < a-sp.Panel2MinSize)   // still check, may be clipped out of bounds
+            sp.SplitterDistance = b;
+        //System.Diagnostics.Debug.WriteLine("Splitter {0} {1} {2} {3}-{4} Set {5:N2} wsize {6} -> {7} set {8}", sp.Name, sp.DisplayRectangle, sp.SplitterDistance,  sp.Panel1MinSize,sp.Panel2MinSize, value, a, b , sp.SplitterDistance);
+    }
+
+    static public double GetSplitterDistance(this SplitContainer sp)                    // get the splitter distance as a fractional double
+    {
+        int a = (sp.Orientation == Orientation.Vertical) ? sp.Width : sp.Height;
+        double v = (double)sp.SplitterDistance / (double)a;
+        //System.Diagnostics.Debug.WriteLine("Splitter {0} {1} {2} Get wsize {3} -> {4:N2}", sp.Name, sp.DisplayRectangle, sp.SplitterDistance, a, v);
+        return v;
+    }
 }

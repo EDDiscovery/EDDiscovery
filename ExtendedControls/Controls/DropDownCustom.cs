@@ -48,6 +48,7 @@ namespace ExtendedControls
             this._listcontrol.KeyPressed += _listcontrol_KeyPressed;
             this._listcontrol.OtherKeyPressed += _listcontrol_OtherKeyPressed;
             this._listcontrol.Margin = new Padding(0);
+            this._listcontrol.FitToItemsHeight = false;
             this.Padding = new Padding(0);
             this.Controls.Add(this._listcontrol);
         }

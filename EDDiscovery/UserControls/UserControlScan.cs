@@ -33,9 +33,6 @@ namespace EDDiscovery.UserControls
 {
     public partial class UserControlScan : UserControlCommonBase
     {
-        private EDDiscoveryForm discoveryform;
-        private UserControlCursorType uctg;
-        private int displaynumber = 0;
         Size starsize, beltsize, planetsize, moonsize, materialsize;
         Size itemsepar;
         int leftmargin;
@@ -59,11 +56,8 @@ namespace EDDiscovery.UserControls
             toolTip.ShowAlways = true;
         }
 
-        public override void Init(EDDiscoveryForm ed, UserControlCursorType thc, int vn) //0=primary, 1 = first windowed version, etc
+        public override void Init()
         {
-            discoveryform = ed;
-            uctg = thc;
-            displaynumber = vn;
             uctg.OnTravelSelectionChanged += Display;
             discoveryform.OnNewEntry += NewEntry;
 

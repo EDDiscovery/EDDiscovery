@@ -30,8 +30,6 @@ namespace EDDiscovery.UserControls
 {
     public partial class UserControlShoppingList : UserControlCommonBase
     {
-        private int displaynumber = 0;
-        private EDDiscoveryForm discoveryform;
         private List<Tuple<MaterialCommoditiesList.Recipe, int>> EngineeringWanted = new List<Tuple<MaterialCommoditiesList.Recipe, int>>();
         private List<Tuple<MaterialCommoditiesList.Recipe, int>> SynthesisWanted = new List<Tuple<MaterialCommoditiesList.Recipe, int>>();
         private bool showMaxInjections;
@@ -46,17 +44,14 @@ namespace EDDiscovery.UserControls
             InitializeComponent();
         }
 
-        public override void Init(EDDiscoveryForm ed, UserControlCursorType thc, int vn) //0=primary, 1 = first windowed version, etc
+        public override void Init()
         {
-            discoveryform = ed;
-            displaynumber = vn;
-
             //Can use display number for it, because their names for db save are unique between engineering and synthesis.
             userControlEngineering.isEmbedded = true;
-            userControlEngineering.Init(ed, thc, displaynumber);
+            userControlEngineering.Init(discoveryform, uctg, displaynumber);
 
             userControlSynthesis.isEmbedded = true;
-            userControlSynthesis.Init(ed, thc, displaynumber);
+            userControlSynthesis.Init(discoveryform, uctg, displaynumber);
 
             // so the way it works, if the panels ever re-display (for whatever reason) they tell us, and we redisplay
 
