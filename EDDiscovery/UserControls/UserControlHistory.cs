@@ -65,14 +65,14 @@ namespace EDDiscovery.UserControls
             userControlTravelGrid.Init(discoveryform, userControlTravelGrid, displaynumber);       // primary first instance - this registers with events in discoveryform to get info
                                                         // then this display, to update its own controls..
             userControlTravelGrid.OnChangedSelection += ChangedSelection;   // and if the user clicks on something
-            userControlTravelGrid.OnPopOut += () => { discoveryform.PopOuts.PopOut(PopOutControl.PopOuts.TravelGrid); };
+            userControlTravelGrid.OnPopOut += () => { discoveryform.PopOuts.PopOut(PanelInformation.PanelIDs.TravelGrid); };
             userControlTravelGrid.OnKeyDownInCell += OnKeyDownInCell;
             userControlTravelGrid.ExtraIcons(true, true);
 
-            TabConfigure(tabStripBottom,"Bottom", displaynumber + 1000);          // codes are used to save info, 0 = primary (journal/travelgrid), 1..N are popups, these are embedded UCs
-            TabConfigure(tabStripBottomRight,"Bottom-Right", displaynumber + 1001);
-            TabConfigure(tabStripMiddleRight, "Middle-Right", displaynumber + 1002);
-            TabConfigure(tabStripTopRight, "Top-Right", displaynumber + 1003);
+            TabConfigure(tabStripBottom,"Bottom", DisplayNumberHistoryBotLeft);          // codes are used to save info, 0 = primary (journal/travelgrid), 1..N are popups, these are embedded UCs
+            TabConfigure(tabStripBottomRight,"Bottom-Right", DisplayNumberHistoryBotRight);
+            TabConfigure(tabStripMiddleRight, "Middle-Right", DisplayNumberHistoryMidRight);
+            TabConfigure(tabStripTopRight, "Top-Right", DisplayNumberHistoryTopRight);
         }
 
         #endregion
@@ -81,8 +81,8 @@ namespace EDDiscovery.UserControls
 
         void TabConfigure(ExtendedControls.TabStrip t, string name, int displayno)
         {
-            t.ImageList = PopOutControl.GetPopOutImages();
-            t.TextList = PopOutControl.GetPopOutToolTips();
+            t.ImageList = PanelInformation.GetPanelImages();
+            t.TextList = PanelInformation.GetPanelToolTips();
             t.Tag = displayno;             // these are IDs for purposes of identifying different instances of a control.. 0 = main ones (main travel grid, main tab journal). 1..N are popups
             t.OnRemoving += TabRemoved;
             t.OnCreateTab += TabCreate;
@@ -99,10 +99,11 @@ namespace EDDiscovery.UserControls
 
         Control TabCreate(ExtendedControls.TabStrip t, int si)        // called by tab strip when selected index changes.. create a new one.. only create.
         {
-            Control c = PopOutControl.Create(si);
-            c.Name = PopOutControl.PopOutList[si].WindowTitlePrefix;        // tabs uses Name field for display, must set it
+            Control c = PanelInformation.Create(si);
+            c.Name = PanelInformation.PanelList[si].WindowTitlePrefix;        // tabs uses Name field for display, must set it
 
-            discoveryform.ActionRun(Actions.ActionEventEDList.onPanelChange, null, new Conditions.ConditionVariables(new string[] { "PanelTabName", PopOutControl.PopOutList[si].WindowRefName, "PanelTabTitle" , PopOutControl.PopOutList[si].WindowTitlePrefix , "PanelName" , t.Name }));
+            discoveryform.ActionRun(Actions.ActionEventEDList.onPanelChange, null, 
+                new Conditions.ConditionVariables(new string[] { "PanelTabName", PanelInformation.PanelList[si].WindowRefName, "PanelTabTitle" , PanelInformation.PanelList[si].WindowTitlePrefix , "PanelName" , t.Name }));
 
             return c;
         }
@@ -151,18 +152,18 @@ namespace EDDiscovery.UserControls
 
             // NO NEED to reload the three tabstrips - code below will cause a LoadLayout on the one selected.
 
-            int max = PopOutControl.GetNumberPanels()-1; // fix, its up to but not including endlist
+            int max = PanelInformation.GetNumberPanels()-1; // fix, its up to but not including endlist
 
             // saved as the pop out enum value, for historical reasons
-            int piindex_bottom = Math.Min(SQLiteDBClass.GetSettingInt("TravelControlBottomTab", (int)(PopOutControl.PopOuts.Scan)), max);
-            int piindex_bottomright = Math.Min(SQLiteDBClass.GetSettingInt("TravelControlBottomRightTab", (int)(PopOutControl.PopOuts.Log)), max);
-            int piindex_middleright = Math.Min(SQLiteDBClass.GetSettingInt("TravelControlMiddleRightTab", (int)(PopOutControl.PopOuts.StarDistance)), max);
-            int piindex_topright = Math.Min(SQLiteDBClass.GetSettingInt("TravelControlTopRightTab", (int)(PopOutControl.PopOuts.SystemInformation)), max);
+            int piindex_bottom = Math.Min(SQLiteDBClass.GetSettingInt("TravelControlBottomTab", (int)(PanelInformation.PanelIDs.Scan)), max);
+            int piindex_bottomright = Math.Min(SQLiteDBClass.GetSettingInt("TravelControlBottomRightTab", (int)(PanelInformation.PanelIDs.Log)), max);
+            int piindex_middleright = Math.Min(SQLiteDBClass.GetSettingInt("TravelControlMiddleRightTab", (int)(PanelInformation.PanelIDs.StarDistance)), max);
+            int piindex_topright = Math.Min(SQLiteDBClass.GetSettingInt("TravelControlTopRightTab", (int)(PanelInformation.PanelIDs.SystemInformation)), max);
 
-            tabStripBottom.SelectedIndex = PopOutControl.GetPopOutIndexByEnum((PopOutControl.PopOuts)piindex_bottom);       // translate to image index
-            tabStripBottomRight.SelectedIndex = PopOutControl.GetPopOutIndexByEnum((PopOutControl.PopOuts)piindex_bottomright);
-            tabStripMiddleRight.SelectedIndex = PopOutControl.GetPopOutIndexByEnum((PopOutControl.PopOuts)piindex_middleright);
-            tabStripTopRight.SelectedIndex = PopOutControl.GetPopOutIndexByEnum((PopOutControl.PopOuts)piindex_topright);
+            tabStripBottom.SelectedIndex = PanelInformation.GetPanelIndexByEnum((PanelInformation.PanelIDs)piindex_bottom);       // translate to image index
+            tabStripBottomRight.SelectedIndex = PanelInformation.GetPanelIndexByEnum((PanelInformation.PanelIDs)piindex_bottomright);
+            tabStripMiddleRight.SelectedIndex = PanelInformation.GetPanelIndexByEnum((PanelInformation.PanelIDs)piindex_middleright);
+            tabStripTopRight.SelectedIndex = PanelInformation.GetPanelIndexByEnum((PanelInformation.PanelIDs)piindex_topright);
         }
 
 
@@ -173,10 +174,10 @@ namespace EDDiscovery.UserControls
             SQLiteDBClass.PutSettingDouble("TravelControlSpliterRO", splitContainerRightOuter.GetSplitterDistance());
             SQLiteDBClass.PutSettingDouble("TravelControlSpliterR", splitContainerRightInner.GetSplitterDistance());
 
-            SQLiteDBClass.PutSettingInt("TravelControlBottomRightTab", (int)PopOutControl.PopOutList[tabStripBottomRight.SelectedIndex].popoutid);
-            SQLiteDBClass.PutSettingInt("TravelControlBottomTab", (int)PopOutControl.PopOutList[tabStripBottom.SelectedIndex].popoutid);
-            SQLiteDBClass.PutSettingInt("TravelControlMiddleRightTab", (int)PopOutControl.PopOutList[tabStripMiddleRight.SelectedIndex].popoutid);
-            SQLiteDBClass.PutSettingInt("TravelControlTopRightTab", (int)PopOutControl.PopOutList[tabStripTopRight.SelectedIndex].popoutid);
+            SQLiteDBClass.PutSettingInt("TravelControlBottomRightTab", (int)PanelInformation.PanelList[tabStripBottomRight.SelectedIndex].PopoutID);
+            SQLiteDBClass.PutSettingInt("TravelControlBottomTab", (int)PanelInformation.PanelList[tabStripBottom.SelectedIndex].PopoutID);
+            SQLiteDBClass.PutSettingInt("TravelControlMiddleRightTab", (int)PanelInformation.PanelList[tabStripMiddleRight.SelectedIndex].PopoutID);
+            SQLiteDBClass.PutSettingInt("TravelControlTopRightTab", (int)PanelInformation.PanelList[tabStripTopRight.SelectedIndex].PopoutID);
 
             userControlTravelGrid.Closing();
             ((UserControlCommonBase)(tabStripBottom.CurrentControl)).Closing();

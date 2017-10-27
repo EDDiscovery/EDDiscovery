@@ -170,7 +170,7 @@ namespace EDDiscovery.Actions
                     }
                     else
                     {
-                        int poi = Forms.PopOutControl.GetPopOutIndexByName(cmdname);
+                        int poi = Forms.PanelInformation.GetPanelIndexByName(cmdname);
 
                         if (poi>=0)
                         {

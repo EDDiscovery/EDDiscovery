@@ -28,11 +28,10 @@ namespace EDDiscovery.UserControls
         public UserControlContainerGrid()
         {
             InitializeComponent();
-            comboBoxGridSelector.Items.AddRange(PopOutControl.GetPopOutNames());
-            comboBoxGridSelector.SelectedIndex = 0;
-            comboBoxGridSelector.SelectedIndexChanged += ComboBoxGridSelector_SelectedIndexChanged;
             rollUpPanelMenu.SetToolTip(toolTip);    // use the defaults
         }
+
+        ExtendedControls.DropDownCustom popoutdropdown;
 
         public override void Init()
         { 
@@ -278,17 +277,38 @@ namespace EDDiscovery.UserControls
         #endregion
 
         #region Clicks
-        private void ComboBoxGridSelector_SelectedIndexChanged(object sender, EventArgs e)
+
+        private void buttonExtPopOut_Click(object sender, EventArgs e)
         {
-            UserControlContainerResizable uccr = CreatePanel(PopOutControl.Create(comboBoxGridSelector.SelectedIndex) ,
-                                        new Point((uccrlist.Count % 5) * 50, (uccrlist.Count % 5) * 50),
-                                        new Size(Math.Min(300, panelPlayfield.Width - 10), Math.Min(300, panelPlayfield.Height - 10)));
-            Select(null);
-            uccr.Selected = true;
-            uccr.BringToFront();
-            UpdateButtons();
-            AssignTHC();
-        }   
+            popoutdropdown = new ExtendedControls.DropDownCustom("", true);
+
+            popoutdropdown.ItemHeight = 26;
+            popoutdropdown.Items = PanelInformation.GetPanelToolTips().ToList();
+            popoutdropdown.ImageItems = PanelInformation.GetPanelImages().ToList();
+            popoutdropdown.FlatStyle = FlatStyle.Popup;
+            popoutdropdown.Activated += (s, ea) =>
+            {
+                Point location = buttonExtPopOut.PointToScreen(new Point(0, 0));
+                popoutdropdown.Location = popoutdropdown.PositionWithinScreen(location.X + buttonExtPopOut.Width, location.Y);
+                this.Invalidate(true);
+            };
+            popoutdropdown.SelectedIndexChanged += (s, ea) =>
+            {
+                UserControlContainerResizable uccr = CreatePanel(PanelInformation.Create(popoutdropdown.SelectedIndex),
+                                            new Point((uccrlist.Count % 5) * 50, (uccrlist.Count % 5) * 50),
+                                            new Size(Math.Min(300, panelPlayfield.Width - 10), Math.Min(300, panelPlayfield.Height - 10)));
+                Select(null);
+                uccr.Selected = true;
+                uccr.BringToFront();
+                UpdateButtons();
+                AssignTHC();
+            };
+
+            popoutdropdown.Size = new Size(500, 26 * 20);
+            discoveryform.theme.ApplyToControls(popoutdropdown);
+            popoutdropdown.SelectionBackColor = discoveryform.theme.ButtonBackColor;
+            popoutdropdown.Show(this);
+        }
 
         private void buttonExtDelete_Click(object sender, EventArgs e)
         {

@@ -191,9 +191,7 @@ namespace EDDiscovery.UserControls
             DGVLoadColumnLayout(dataGridViewCurrent, DbColumnSaveCurrent);
             DGVLoadColumnLayout(dataGridViewPrevious, DbColumnSavePrevious);
 
-            int splitter = SQLiteDBClass.GetSettingInt(DbSplitter, -1);
-            if (splitter >= 0)
-                splitContainer1.SplitterDistance = Math.Max(splitter, 10);
+            splitContainerMissions.SplitterDistance(SQLiteDBClass.GetSettingDouble(DbSplitter, 0.4));
         }
 
         public override void Closing()
@@ -210,7 +208,7 @@ namespace EDDiscovery.UserControls
             SQLiteDBClass.PutSettingBool(DbStartDateChecked, customDateTimePickerStart.Checked);
             SQLiteDBClass.PutSettingBool(DbEndDateChecked, customDateTimePickerEnd.Checked);
 
-            SQLiteDBClass.PutSettingInt(DbSplitter, splitContainer1.SplitterDistance);
+            SQLiteDBClass.PutSettingDouble(DbSplitter, splitContainerMissions.GetSplitterDistance());
         }
 
         #endregion
