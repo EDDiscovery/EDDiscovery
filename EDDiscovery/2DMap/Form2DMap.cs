@@ -80,7 +80,12 @@ namespace EDDiscovery
             this.pickerStop.ValueChanged += new System.EventHandler(this.dateTimePickerStop_ValueChanged);
 
             startDate = new DateTime(2010, 1, 1);
-            AddImages();
+            if ( !AddImages() )
+            {
+                ExtendedControls.MessageBoxTheme.Show(this, "2DMaps", "No maps available", MessageBoxButtons.OK,MessageBoxIcon.Exclamation);
+                Close();
+                return;
+            }
 
             toolStripComboBox1.Items.Clear();
 
@@ -105,14 +110,17 @@ namespace EDDiscovery
                 SQLiteDBClass.PutSettingInt("Map2DFormLeft", this.Left);
                 //Console.WriteLine("Save map " + this.Top + "," + this.Left + "," + this.Width + "," + this.Height);
             }
-            imageViewer1.Image.Dispose();
+            if (imageViewer1.Image != null)
+            {
+                imageViewer1.Image.Dispose();
+            }
             imageViewer1.Image = null;
             fgeimages = null;
             starpositions = null;
             GC.Collect();
         }
 
-        private void AddImages()
+        private bool AddImages()
         {
             fgeimages = new List<FGEImage>();
             string datapath = Path.Combine(EDDOptions.Instance.AppDataDirectory, "Maps");
@@ -120,7 +128,10 @@ namespace EDDiscovery
             {
                 fgeimages = FGEImage.LoadImages(datapath);
                 fgeimages.AddRange(FGEImage.LoadFixedImages(datapath));
+                return fgeimages.Count > 0;
             }
+            else
+                return false;
         }
 
         private void ShowImage(FGEImage fgeimg)

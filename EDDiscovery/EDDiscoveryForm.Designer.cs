@@ -48,9 +48,9 @@ namespace EDDiscovery
             ExtendedControls.TabStyleSquare tabStyleSquare1 = new ExtendedControls.TabStyleSquare();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.toolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.show2DMapsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.show3DMapsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.materialSearchToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.showAllPopoutsInTaskBarToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.showAllInTaskBarToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.turnOffAllTransparencyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -142,20 +142,28 @@ namespace EDDiscovery
             // toolsToolStripMenuItem
             // 
             this.toolsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.settingsToolStripMenuItem,
             this.show2DMapsToolStripMenuItem,
             this.show3DMapsToolStripMenuItem,
-            this.materialSearchToolStripMenuItem,
             this.showAllPopoutsInTaskBarToolStripMenuItem,
             this.exitToolStripMenuItem});
             this.toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
             this.toolsToolStripMenuItem.Size = new System.Drawing.Size(47, 20);
             this.toolsToolStripMenuItem.Text = "&Tools";
             // 
+            // settingsToolStripMenuItem
+            // 
+            this.settingsToolStripMenuItem.Image = global::EDDiscovery.Properties.Resources.settings;
+            this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
+            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.settingsToolStripMenuItem.Text = "Settings";
+            this.settingsToolStripMenuItem.Click += new System.EventHandler(this.settingsToolStripMenuItem_Click);
+            // 
             // show2DMapsToolStripMenuItem
             // 
             this.show2DMapsToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("show2DMapsToolStripMenuItem.Image")));
             this.show2DMapsToolStripMenuItem.Name = "show2DMapsToolStripMenuItem";
-            this.show2DMapsToolStripMenuItem.Size = new System.Drawing.Size(155, 22);
+            this.show2DMapsToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.show2DMapsToolStripMenuItem.Text = "Show &2D maps";
             this.show2DMapsToolStripMenuItem.Click += new System.EventHandler(this.show2DMapsToolStripMenuItem_Click);
             // 
@@ -163,17 +171,9 @@ namespace EDDiscovery
             // 
             this.show3DMapsToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("show3DMapsToolStripMenuItem.Image")));
             this.show3DMapsToolStripMenuItem.Name = "show3DMapsToolStripMenuItem";
-            this.show3DMapsToolStripMenuItem.Size = new System.Drawing.Size(155, 22);
+            this.show3DMapsToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.show3DMapsToolStripMenuItem.Text = "Show &3D maps";
             this.show3DMapsToolStripMenuItem.Click += new System.EventHandler(this.show3DMapsToolStripMenuItem_Click);
-            // 
-            // materialSearchToolStripMenuItem
-            // 
-            this.materialSearchToolStripMenuItem.Name = "materialSearchToolStripMenuItem";
-            this.materialSearchToolStripMenuItem.Size = new System.Drawing.Size(155, 22);
-            this.materialSearchToolStripMenuItem.Text = "Material Search";
-            this.materialSearchToolStripMenuItem.Visible = false;
-            this.materialSearchToolStripMenuItem.Click += new System.EventHandler(this.materialSearchToolStripMenuItem_Click);
             // 
             // showAllPopoutsInTaskBarToolStripMenuItem
             // 
@@ -182,7 +182,7 @@ namespace EDDiscovery
             this.turnOffAllTransparencyToolStripMenuItem});
             this.showAllPopoutsInTaskBarToolStripMenuItem.Image = global::EDDiscovery.Properties.Resources.popout1;
             this.showAllPopoutsInTaskBarToolStripMenuItem.Name = "showAllPopoutsInTaskBarToolStripMenuItem";
-            this.showAllPopoutsInTaskBarToolStripMenuItem.Size = new System.Drawing.Size(155, 22);
+            this.showAllPopoutsInTaskBarToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.showAllPopoutsInTaskBarToolStripMenuItem.Text = "&Pop-outs";
             // 
             // showAllInTaskBarToolStripMenuItem
@@ -205,7 +205,7 @@ namespace EDDiscovery
             // 
             this.exitToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("exitToolStripMenuItem.Image")));
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(155, 22);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.exitToolStripMenuItem.Text = "E&xit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
@@ -229,6 +229,7 @@ namespace EDDiscovery
             // 
             // forceEDDBUpdateToolStripMenuItem
             // 
+            this.forceEDDBUpdateToolStripMenuItem.Image = global::EDDiscovery.Properties.Resources.EDDB;
             this.forceEDDBUpdateToolStripMenuItem.Name = "forceEDDBUpdateToolStripMenuItem";
             this.forceEDDBUpdateToolStripMenuItem.Size = new System.Drawing.Size(396, 22);
             this.forceEDDBUpdateToolStripMenuItem.Text = "Synchronise with EDDB";
@@ -236,6 +237,7 @@ namespace EDDiscovery
             // 
             // syncEDSMSystemsToolStripMenuItem
             // 
+            this.syncEDSMSystemsToolStripMenuItem.Image = global::EDDiscovery.Properties.Resources.edsm24;
             this.syncEDSMSystemsToolStripMenuItem.Name = "syncEDSMSystemsToolStripMenuItem";
             this.syncEDSMSystemsToolStripMenuItem.Size = new System.Drawing.Size(396, 22);
             this.syncEDSMSystemsToolStripMenuItem.Text = "Synchronise with EDSM Stars";
@@ -243,6 +245,7 @@ namespace EDDiscovery
             // 
             // showLogfilesToolStripMenuItem
             // 
+            this.showLogfilesToolStripMenuItem.Image = global::EDDiscovery.Properties.Resources.journal;
             this.showLogfilesToolStripMenuItem.Name = "showLogfilesToolStripMenuItem";
             this.showLogfilesToolStripMenuItem.Size = new System.Drawing.Size(396, 22);
             this.showLogfilesToolStripMenuItem.Text = "Show journal files directory of current commander";
@@ -250,6 +253,7 @@ namespace EDDiscovery
             // 
             // dEBUGResetAllHistoryToFirstCommandeToolStripMenuItem
             // 
+            this.dEBUGResetAllHistoryToFirstCommandeToolStripMenuItem.Image = global::EDDiscovery.Properties.Resources.warning;
             this.dEBUGResetAllHistoryToFirstCommandeToolStripMenuItem.Name = "dEBUGResetAllHistoryToFirstCommandeToolStripMenuItem";
             this.dEBUGResetAllHistoryToFirstCommandeToolStripMenuItem.Size = new System.Drawing.Size(396, 22);
             this.dEBUGResetAllHistoryToFirstCommandeToolStripMenuItem.Text = "Reset all history to current commander";
@@ -259,6 +263,7 @@ namespace EDDiscovery
             // 
             this.read21AndFormerLogFilesToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.read21AndFormerLogFiles_forceReloadLogsToolStripMenuItem});
+            this.read21AndFormerLogFilesToolStripMenuItem.Image = global::EDDiscovery.Properties.Resources.Log;
             this.read21AndFormerLogFilesToolStripMenuItem.Name = "read21AndFormerLogFilesToolStripMenuItem";
             this.read21AndFormerLogFilesToolStripMenuItem.Size = new System.Drawing.Size(396, 22);
             this.read21AndFormerLogFilesToolStripMenuItem.Text = "Read 2.1 and former log files";
@@ -273,6 +278,7 @@ namespace EDDiscovery
             // 
             // rescanAllJournalFilesToolStripMenuItem
             // 
+            this.rescanAllJournalFilesToolStripMenuItem.Image = global::EDDiscovery.Properties.Resources.journal;
             this.rescanAllJournalFilesToolStripMenuItem.Name = "rescanAllJournalFilesToolStripMenuItem";
             this.rescanAllJournalFilesToolStripMenuItem.Size = new System.Drawing.Size(396, 22);
             this.rescanAllJournalFilesToolStripMenuItem.Text = "Re-scan all journal files";
@@ -280,6 +286,7 @@ namespace EDDiscovery
             // 
             // deleteDuplicateFSDJumpEntriesToolStripMenuItem
             // 
+            this.deleteDuplicateFSDJumpEntriesToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("deleteDuplicateFSDJumpEntriesToolStripMenuItem.Image")));
             this.deleteDuplicateFSDJumpEntriesToolStripMenuItem.Name = "deleteDuplicateFSDJumpEntriesToolStripMenuItem";
             this.deleteDuplicateFSDJumpEntriesToolStripMenuItem.Size = new System.Drawing.Size(396, 22);
             this.deleteDuplicateFSDJumpEntriesToolStripMenuItem.Text = "Delete duplicate FSD Jump entries";
@@ -287,6 +294,7 @@ namespace EDDiscovery
             // 
             // sendUnsuncedEDDNEventsToolStripMenuItem
             // 
+            this.sendUnsuncedEDDNEventsToolStripMenuItem.Image = global::EDDiscovery.Properties.Resources.EDDN;
             this.sendUnsuncedEDDNEventsToolStripMenuItem.Name = "sendUnsuncedEDDNEventsToolStripMenuItem";
             this.sendUnsuncedEDDNEventsToolStripMenuItem.Size = new System.Drawing.Size(396, 22);
             this.sendUnsuncedEDDNEventsToolStripMenuItem.Text = "Send unsynced EDDN events";
@@ -294,6 +302,7 @@ namespace EDDiscovery
             // 
             // sendUnsyncedEGOScansToolStripMenuItem
             // 
+            this.sendUnsyncedEGOScansToolStripMenuItem.Image = global::EDDiscovery.Properties.Resources.ego;
             this.sendUnsyncedEGOScansToolStripMenuItem.Name = "sendUnsyncedEGOScansToolStripMenuItem";
             this.sendUnsyncedEGOScansToolStripMenuItem.Size = new System.Drawing.Size(396, 22);
             this.sendUnsyncedEGOScansToolStripMenuItem.Text = "Send unsynced EGO scans";
@@ -301,6 +310,7 @@ namespace EDDiscovery
             // 
             // clearEDSMIDAssignedToAllRecordsForCurrentCommanderToolStripMenuItem
             // 
+            this.clearEDSMIDAssignedToAllRecordsForCurrentCommanderToolStripMenuItem.Image = global::EDDiscovery.Properties.Resources.edsm24;
             this.clearEDSMIDAssignedToAllRecordsForCurrentCommanderToolStripMenuItem.Name = "clearEDSMIDAssignedToAllRecordsForCurrentCommanderToolStripMenuItem";
             this.clearEDSMIDAssignedToAllRecordsForCurrentCommanderToolStripMenuItem.Size = new System.Drawing.Size(396, 22);
             this.clearEDSMIDAssignedToAllRecordsForCurrentCommanderToolStripMenuItem.Text = "Clear EDSM ID assigned to all records for current commander";
@@ -308,6 +318,7 @@ namespace EDDiscovery
             // 
             // exportVistedStarsListToEliteDangerousToolStripMenuItem
             // 
+            this.exportVistedStarsListToEliteDangerousToolStripMenuItem.Image = global::EDDiscovery.Properties.Resources.routetracker;
             this.exportVistedStarsListToEliteDangerousToolStripMenuItem.Name = "exportVistedStarsListToEliteDangerousToolStripMenuItem";
             this.exportVistedStarsListToEliteDangerousToolStripMenuItem.Size = new System.Drawing.Size(396, 22);
             this.exportVistedStarsListToEliteDangerousToolStripMenuItem.Text = "Export Visted Stars List to Elite Dangerous";
@@ -429,6 +440,7 @@ namespace EDDiscovery
             // 
             // howToRunInSafeModeToResetVariousParametersToolStripMenuItem
             // 
+            this.howToRunInSafeModeToResetVariousParametersToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("howToRunInSafeModeToResetVariousParametersToolStripMenuItem.Image")));
             this.howToRunInSafeModeToResetVariousParametersToolStripMenuItem.Name = "howToRunInSafeModeToResetVariousParametersToolStripMenuItem";
             this.howToRunInSafeModeToResetVariousParametersToolStripMenuItem.Size = new System.Drawing.Size(354, 22);
             this.howToRunInSafeModeToResetVariousParametersToolStripMenuItem.Text = "How to Run in Safe Mode to reset various parameters";
@@ -781,6 +793,7 @@ namespace EDDiscovery
             this.tabControlMain.TabStyle = tabStyleSquare1;
             this.tabControlMain.TextNotSelectedColor = System.Drawing.SystemColors.ControlText;
             this.tabControlMain.TextSelectedColor = System.Drawing.SystemColors.ControlText;
+            this.toolTip.SetToolTip(this.tabControlMain, "Right click to add/remove tabs, Left click drag to reorder");
             // 
             // contextMenuStripTabs
             // 
@@ -788,19 +801,19 @@ namespace EDDiscovery
             this.addTabToolStripMenuItem,
             this.removeTabToolStripMenuItem});
             this.contextMenuStripTabs.Name = "contextMenuStripTabs";
-            this.contextMenuStripTabs.Size = new System.Drawing.Size(153, 70);
+            this.contextMenuStripTabs.Size = new System.Drawing.Size(190, 70);
             // 
             // addTabToolStripMenuItem
             // 
             this.addTabToolStripMenuItem.Name = "addTabToolStripMenuItem";
-            this.addTabToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.addTabToolStripMenuItem.Text = "Insert Panel";
+            this.addTabToolStripMenuItem.Size = new System.Drawing.Size(189, 22);
+            this.addTabToolStripMenuItem.Text = "Insert Tab with panel..";
             // 
             // removeTabToolStripMenuItem
             // 
             this.removeTabToolStripMenuItem.Name = "removeTabToolStripMenuItem";
-            this.removeTabToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.removeTabToolStripMenuItem.Text = "Remove Panel";
+            this.removeTabToolStripMenuItem.Size = new System.Drawing.Size(189, 22);
+            this.removeTabToolStripMenuItem.Text = "Remove Tab";
             // 
             // tabPageTravelHistory
             // 
@@ -893,7 +906,6 @@ namespace EDDiscovery
         private System.Windows.Forms.ToolStripMenuItem checkForNewReleaseToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem deleteDuplicateFSDJumpEntriesToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem sendUnsuncedEDDNEventsToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem materialSearchToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem showAllPopoutsInTaskBarToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem showAllInTaskBarToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem turnOffAllTransparencyToolStripMenuItem;
@@ -929,5 +941,6 @@ namespace EDDiscovery
         private System.Windows.Forms.ContextMenuStrip contextMenuStripTabs;
         private System.Windows.Forms.ToolStripMenuItem addTabToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem removeTabToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem settingsToolStripMenuItem;
     }
 }

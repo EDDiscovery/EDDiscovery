@@ -32,9 +32,10 @@
             this.rollUpPanelMenu = new ExtendedControls.RollUpPanel();
             this.buttonExtTile = new ExtendedControls.ButtonExt();
             this.buttonExtDelete = new ExtendedControls.ButtonExt();
-            this.comboBoxGridSelector = new ExtendedControls.ComboBoxCustom();
             this.panelPlayfield = new System.Windows.Forms.Panel();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
+            this.buttonExtPopOut = new ExtendedControls.ButtonExt();
+            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.rollUpPanelMenu.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -42,13 +43,14 @@
             // 
             this.rollUpPanelMenu.Controls.Add(this.buttonExtTile);
             this.rollUpPanelMenu.Controls.Add(this.buttonExtDelete);
-            this.rollUpPanelMenu.Controls.Add(this.comboBoxGridSelector);
+            this.rollUpPanelMenu.Controls.Add(this.buttonExtPopOut);
             this.rollUpPanelMenu.Dock = System.Windows.Forms.DockStyle.Top;
             this.rollUpPanelMenu.HiddenMarkerWidth = 0;
             this.rollUpPanelMenu.Location = new System.Drawing.Point(0, 0);
             this.rollUpPanelMenu.Name = "rollUpPanelMenu";
             this.rollUpPanelMenu.PinState = true;
             this.rollUpPanelMenu.RolledUpHeight = 5;
+            this.rollUpPanelMenu.RollUpAnimationTime = 500;
             this.rollUpPanelMenu.RollUpDelay = 1000;
             this.rollUpPanelMenu.ShowHiddenMarker = true;
             this.rollUpPanelMenu.Size = new System.Drawing.Size(912, 32);
@@ -62,7 +64,7 @@
             this.buttonExtTile.ButtonColorScaling = 0.5F;
             this.buttonExtTile.ButtonDisabledScaling = 0.5F;
             this.buttonExtTile.Image = global::EDDiscovery.Properties.Resources.tilegrid;
-            this.buttonExtTile.Location = new System.Drawing.Point(200, 3);
+            this.buttonExtTile.Location = new System.Drawing.Point(63, 3);
             this.buttonExtTile.Name = "buttonExtTile";
             this.buttonExtTile.Size = new System.Drawing.Size(24, 24);
             this.buttonExtTile.TabIndex = 3;
@@ -76,40 +78,13 @@
             this.buttonExtDelete.ButtonColorScaling = 0.5F;
             this.buttonExtDelete.ButtonDisabledScaling = 0.5F;
             this.buttonExtDelete.Image = global::EDDiscovery.Properties.Resources.dustbinshorter;
-            this.buttonExtDelete.Location = new System.Drawing.Point(170, 3);
+            this.buttonExtDelete.Location = new System.Drawing.Point(33, 3);
             this.buttonExtDelete.Name = "buttonExtDelete";
             this.buttonExtDelete.Size = new System.Drawing.Size(24, 24);
             this.buttonExtDelete.TabIndex = 3;
             this.toolTip.SetToolTip(this.buttonExtDelete, "Remove selected panel");
             this.buttonExtDelete.UseVisualStyleBackColor = true;
             this.buttonExtDelete.Click += new System.EventHandler(this.buttonExtDelete_Click);
-            // 
-            // comboBoxGridSelector
-            // 
-            this.comboBoxGridSelector.ArrowWidth = 1;
-            this.comboBoxGridSelector.BorderColor = System.Drawing.Color.White;
-            this.comboBoxGridSelector.ButtonColorScaling = 0.5F;
-            this.comboBoxGridSelector.DataSource = null;
-            this.comboBoxGridSelector.DisplayMember = "";
-            this.comboBoxGridSelector.DropDownBackgroundColor = System.Drawing.Color.Gray;
-            this.comboBoxGridSelector.DropDownHeight = 400;
-            this.comboBoxGridSelector.DropDownWidth = 150;
-            this.comboBoxGridSelector.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.comboBoxGridSelector.ItemHeight = 13;
-            this.comboBoxGridSelector.Location = new System.Drawing.Point(4, 3);
-            this.comboBoxGridSelector.MouseOverBackgroundColor = System.Drawing.Color.Silver;
-            this.comboBoxGridSelector.Name = "comboBoxGridSelector";
-            this.comboBoxGridSelector.ScrollBarButtonColor = System.Drawing.Color.LightGray;
-            this.comboBoxGridSelector.ScrollBarColor = System.Drawing.Color.LightGray;
-            this.comboBoxGridSelector.ScrollBarWidth = 16;
-            this.comboBoxGridSelector.SelectedIndex = -1;
-            this.comboBoxGridSelector.SelectedItem = null;
-            this.comboBoxGridSelector.SelectedValue = null;
-            this.comboBoxGridSelector.Size = new System.Drawing.Size(150, 21);
-            this.comboBoxGridSelector.TabIndex = 2;
-            this.comboBoxGridSelector.TabStop = false;
-            this.toolTip.SetToolTip(this.comboBoxGridSelector, "Select Panel to open");
-            this.comboBoxGridSelector.ValueMember = "";
             // 
             // panelPlayfield
             // 
@@ -128,6 +103,21 @@
             this.toolTip.ReshowDelay = 50;
             this.toolTip.ShowAlways = true;
             // 
+            // buttonExtPopOut
+            // 
+            this.buttonExtPopOut.BackColor = System.Drawing.Color.Transparent;
+            this.buttonExtPopOut.BorderColorScaling = 1.25F;
+            this.buttonExtPopOut.ButtonColorScaling = 0.5F;
+            this.buttonExtPopOut.ButtonDisabledScaling = 0.5F;
+            this.buttonExtPopOut.Image = global::EDDiscovery.Properties.Resources.panels;
+            this.buttonExtPopOut.Location = new System.Drawing.Point(3, 3);
+            this.buttonExtPopOut.Name = "buttonExtPopOut";
+            this.buttonExtPopOut.Size = new System.Drawing.Size(24, 24);
+            this.buttonExtPopOut.TabIndex = 2;
+            this.toolTip1.SetToolTip(this.buttonExtPopOut, "Click to select a pop out panel to display");
+            this.buttonExtPopOut.UseVisualStyleBackColor = false;
+            this.buttonExtPopOut.Click += new System.EventHandler(this.buttonExtPopOut_Click);
+            // 
             // UserControlContainerGrid
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -143,10 +133,11 @@
 
         #endregion
         private ExtendedControls.RollUpPanel rollUpPanelMenu;
-        private ExtendedControls.ComboBoxCustom comboBoxGridSelector;
         private System.Windows.Forms.Panel panelPlayfield;
         private ExtendedControls.ButtonExt buttonExtDelete;
         private System.Windows.Forms.ToolTip toolTip;
         private ExtendedControls.ButtonExt buttonExtTile;
+        private ExtendedControls.ButtonExt buttonExtPopOut;
+        private System.Windows.Forms.ToolTip toolTip1;
     }
 }

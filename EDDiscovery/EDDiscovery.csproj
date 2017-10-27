@@ -267,7 +267,7 @@
     </Compile>
     <Compile Include="Forms\VersioningManager.cs" />
     <Compile Include="Actions\ActionsFromInputDevices.cs" />
-    <Compile Include="PopOutControl.cs" />
+    <Compile Include="PanelAndPopOuts.cs" />
     <Compile Include="Forms\ShipDetails.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -275,12 +275,6 @@
       <DependentUpon>ShipDetails.cs</DependentUpon>
     </Compile>
     <Compile Include="IDiscoveryController.cs" />
-    <Compile Include="Forms\FindMaterialsForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\FindMaterialsForm.Designer.cs">
-      <DependentUpon>FindMaterialsForm.cs</DependentUpon>
-    </Compile>
     <Compile Include="Forms\AssignTravelLogSystemForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -552,9 +546,6 @@
     <EmbeddedResource Include="Forms\ExportForm.resx">
       <DependentUpon>ExportForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\FindMaterialsForm.resx">
-      <DependentUpon>FindMaterialsForm.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Forms\ImportSphere.resx">
       <DependentUpon>ImportSphere.cs</DependentUpon>
     </EmbeddedResource>
@@ -747,6 +738,11 @@
     <None Include="Resources\route.png" />
     <None Include="Resources\expedition.png" />
     <None Include="Resources\triangulation.png" />
+    <None Include="Resources\settings.png" />
+    <None Include="Resources\warning.png" />
+    <None Include="Resources\ego.png" />
+    <None Include="Resources\EDDB.png" />
+    <None Include="Resources\EDDN.png" />
     <Content Include="x86\Microsoft.VC100.CRT\msvcp100.dll" />
     <Content Include="x86\Microsoft.VC100.CRT\msvcr100.dll" />
     <EmbeddedResource Include="2DMap\Form2DMap.resx">
