@@ -167,7 +167,7 @@ namespace EDDiscovery.Forms
         {
             if (textBoxBorderCompanionLogin.Text.Length>0 || textBoxBorderCompanionPassword.Text.Length>0)
             {
-                if (ExtendedControls.MessageBoxTheme.Show("You have entered text in the CAPI login or password fields, do you want to abandon CAPI credential check?", "Warning CAPI Information", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.Cancel)
+                if (ExtendedControls.MessageBoxTheme.Show(this, "You have entered text in the CAPI login or password fields, do you want to abandon CAPI credential check?", "Warning CAPI Information", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.Cancel)
                     return;
             }
 

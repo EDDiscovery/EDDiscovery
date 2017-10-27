@@ -1006,7 +1006,7 @@ namespace EDDiscovery
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Show log files exception: " + ex.Message);
+                MessageBox.Show(this, "Show log files exception: " + ex.Message);
             }
         }
 
@@ -1023,13 +1023,13 @@ namespace EDDiscovery
         private void forceEDDBUpdateToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (!Controller.AsyncPerformSync(eddbsync: true))      // we want it to have run, to completion, to allow another go..
-                ExtendedControls.MessageBoxTheme.Show("Synchronisation to databases is in operation or pending, please wait");
+                ExtendedControls.MessageBoxTheme.Show(this, "Synchronisation to databases is in operation or pending, please wait");
         }
 
         private void syncEDSMSystemsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (!Controller.AsyncPerformSync(edsmsync: true))      // we want it to have run, to completion, to allow another go..
-                ExtendedControls.MessageBoxTheme.Show("Synchronisation to databases is in operation or pending, please wait");
+                ExtendedControls.MessageBoxTheme.Show(this, "Synchronisation to databases is in operation or pending, please wait");
         }
 
         private void gitHubToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1040,11 +1040,6 @@ namespace EDDiscovery
         private void reportIssueIdeasToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Process.Start(Properties.Resources.URLProjectFeedback);
-        }
-
-        internal void keepOnTopChanged(bool keepOnTop)
-        {
-            this.TopMost = keepOnTop;
         }
 
         /// <summary>
@@ -1066,7 +1061,6 @@ namespace EDDiscovery
         public void AboutBox(Form parent = null)
         {
             AboutForm frm = new AboutForm();
-            frm.TopMost = parent?.TopMost ?? this.TopMost;
             frm.ShowDialog(parent ?? this);
         }
 
@@ -1101,7 +1095,7 @@ namespace EDDiscovery
 
         private void clearEDSMIDAssignedToAllRecordsForCurrentCommanderToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (ExtendedControls.MessageBoxTheme.Show("Confirm you wish to reset the assigned EDSM IDs to all the current commander history entries," +
+            if (ExtendedControls.MessageBoxTheme.Show(this, "Confirm you wish to reset the assigned EDSM IDs to all the current commander history entries," +
                                 " and clear all the assigned EDSM IDs in all your notes for all commanders\r\n\r\n" +
                                 "This will not change your history, but when you next refresh, it will try and reassign EDSM systems to " +
                                 "your history and notes.  Use only if you think that the assignment of EDSM systems to entries is grossly wrong," +
@@ -1140,7 +1134,7 @@ namespace EDDiscovery
                 if (cmdr != null)
                 {
                     FolderBrowserDialog dirdlg = new FolderBrowserDialog();
-                    DialogResult dlgResult = dirdlg.ShowDialog();
+                    DialogResult dlgResult = dirdlg.ShowDialog(this);
 
                     if (dlgResult == DialogResult.OK)
                     {
@@ -1154,7 +1148,7 @@ namespace EDDiscovery
 
         private void dEBUGResetAllHistoryToFirstCommandeToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (ExtendedControls.MessageBoxTheme.Show("Confirm you wish to reset all history entries to the current commander", "WARNING", MessageBoxButtons.OKCancel) == DialogResult.OK)
+            if (ExtendedControls.MessageBoxTheme.Show(this, "Confirm you wish to reset all history entries to the current commander", "WARNING", MessageBoxButtons.OKCancel) == DialogResult.OK)
             {
                 JournalEntry.ResetCommanderID(-1, EDCommander.CurrentCmdrID);
                 Controller.RefreshHistoryAsync();
@@ -1187,7 +1181,7 @@ namespace EDDiscovery
 
         private void deleteDuplicateFSDJumpEntriesToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (ExtendedControls.MessageBoxTheme.Show("Confirm you remove any duplicate FSD entries from the current commander", "WARNING", MessageBoxButtons.OKCancel) == DialogResult.OK)
+            if (ExtendedControls.MessageBoxTheme.Show(this, "Confirm you remove any duplicate FSD entries from the current commander", "WARNING", MessageBoxButtons.OKCancel) == DialogResult.OK)
             {
                 int n = JournalEntry.RemoveDuplicateFSDEntries(EDCommander.CurrentCmdrID);
                 Controller.LogLine("Removed " + n + " FSD entries");
@@ -1214,7 +1208,7 @@ namespace EDDiscovery
                 dlg.Title = "Could not find VisitedStarsCache.dat file, choose file";
                 dlg.FileName = "ImportStars.txt";
 
-                if (dlg.ShowDialog() != DialogResult.OK)
+                if (dlg.ShowDialog(this) != DialogResult.OK)
                     return;
                 exportfilename = dlg.FileName;
             }
@@ -1238,7 +1232,7 @@ namespace EDDiscovery
             }
             catch (IOException)
             {
-                ExtendedControls.MessageBoxTheme.Show("Error writing " + exportfilename, "Export visited stars", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                ExtendedControls.MessageBoxTheme.Show(this, "Error writing " + exportfilename, "Export visited stars", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -1648,7 +1642,7 @@ namespace EDDiscovery
 
             if (!edsm.IsApiKeySet)
             {
-                ExtendedControls.MessageBoxTheme.Show("Please ensure a commander is selected and it has a EDSM API key set");
+                ExtendedControls.MessageBoxTheme.Show(this, "Please ensure a commander is selected and it has a EDSM API key set");
                 return;
             }
 

@@ -38,7 +38,7 @@ namespace EDDiscovery.Forms
             systemName =  prompt.txtExportVisited.Text;
             bool worked = Double.TryParse(prompt.txtsphereRadius.Text, out radius);
             if (!worked)
-                ExtendedControls.MessageBoxTheme.Show("Radius in wrong format", "Spehere error");
+                ExtendedControls.MessageBoxTheme.Show(owner ?? discoveryForm, "Radius in wrong format", "Sphere error");
 
             return (res == DialogResult.OK && worked);
         }

@@ -80,8 +80,6 @@ namespace ActionLanguage
 
                     DialogResult res = ExtendedControls.MessageBoxTheme.Show(ap.actioncontroller.Form, exp[0], caption, but, icon);
 
-                    // debug ExtendedControls.MessageBoxTheme.Show(exp[0], caption, but, icon);
-
                     ap["DialogResult"] = res.ToString();
                 }
                 else

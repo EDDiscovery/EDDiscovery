@@ -813,7 +813,7 @@ namespace EDDiscovery.UserControls
                                     "Sold Exploration Data", // 5
                                         });
 
-            if (frm.ShowDialog(this) == DialogResult.OK)
+            if (frm.ShowDialog(FindForm()) == DialogResult.OK)
             {
                 BaseUtils.CSVWrite csv = new BaseUtils.CSVWrite();
                 csv.SetCSVDelimiter(frm.Comma);
@@ -891,7 +891,7 @@ namespace EDDiscovery.UserControls
 
                                 scans = new List<JournalScan>();
 
-                                if (dlg.ShowDialog() == DialogResult.OK)
+                                if (dlg.ShowDialog(FindForm()) == DialogResult.OK)
                                 {
 
                                     ExplorationSetClass _currentExplorationSet = new ExplorationSetClass();
@@ -1108,7 +1108,7 @@ namespace EDDiscovery.UserControls
                 }
                 catch
                 {
-                    ExtendedControls.MessageBoxTheme.Show("Failed to write to " + frm.Path, "Export Failed", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    ExtendedControls.MessageBoxTheme.Show(FindForm(), "Failed to write to " + frm.Path, "Export Failed", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 }
             }
         }

@@ -297,7 +297,7 @@ namespace EDDiscovery.UserControls
                 dlg.AddExtension = true;
                 dlg.Filter = "Explore file| *.json";
 
-                if (dlg.ShowDialog() == DialogResult.OK)
+                if (dlg.ShowDialog(FindForm()) == DialogResult.OK)
                 {
                     textBoxFileName.Text = dlg.FileName;
                 }
@@ -323,7 +323,7 @@ namespace EDDiscovery.UserControls
             dlg.AddExtension = true;
             dlg.Filter = "Explore file| *.json";
 
-            if (dlg.ShowDialog() == DialogResult.OK)
+            if (dlg.ShowDialog(FindForm()) == DialogResult.OK)
             {
                 textBoxFileName.Text = dlg.FileName;
                 _currentExplorationSet.Clear();
@@ -354,7 +354,7 @@ namespace EDDiscovery.UserControls
             dlg.Filter = "Explore file| *.json";
 
 
-            if (dlg.ShowDialog() == DialogResult.OK)
+            if (dlg.ShowDialog(FindForm()) == DialogResult.OK)
             {
                 textBoxFileName.Text = dlg.FileName;
                 UpdateExplorationInfo(_currentExplorationSet);
@@ -604,7 +604,7 @@ namespace EDDiscovery.UserControls
 
         private void toolStripButtonDelete_Click(object sender, EventArgs e)
         {
-            if (ExtendedControls.MessageBoxTheme.Show(discoveryform, "Are you sure you want to delete this route?", "Delete Route", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+            if (ExtendedControls.MessageBoxTheme.Show(FindForm(), "Are you sure you want to delete this route?", "Delete Route", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
             {
                 if (DeleteIsPermanent)
                 {
@@ -630,7 +630,7 @@ namespace EDDiscovery.UserControls
             ofd.Filter = "Text Files|*.txt";
             ofd.Title = "Select a exploration set file";
 
-            if (ofd.ShowDialog() != System.Windows.Forms.DialogResult.OK)
+            if (ofd.ShowDialog(FindForm()) != System.Windows.Forms.DialogResult.OK)
                 return;
 
             ClearExplorationSet();
@@ -645,7 +645,7 @@ namespace EDDiscovery.UserControls
             }
             catch (IOException)
             {
-                ExtendedControls.MessageBoxTheme.Show(String.Format("There has been an error openning file {0}", ofd.FileName), "Import file",
+                ExtendedControls.MessageBoxTheme.Show(FindForm(), $"There was a problem opening file {ofd.FileName}", "Import file",
                       MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
@@ -673,9 +673,9 @@ namespace EDDiscovery.UserControls
             }
             if (systems.Count == 0)
             {
-                ExtendedControls.MessageBoxTheme.Show(discoveryform,
-                String.Format("There are no known system names in the file import", countunknown),
-                "Unsaved", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                ExtendedControls.MessageBoxTheme.Show(FindForm(),
+                    "The imported file contains no known system names",
+                    "Unsaved", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return;
             }
 
@@ -698,7 +698,7 @@ namespace EDDiscovery.UserControls
                 if (dataGridViewExplore.Rows.Count == 0
                     || (dataGridViewExplore.Rows.Count == 1 && dataGridViewExplore[0, 0].Value == null))
                 {
-                    ExtendedControls.MessageBoxTheme.Show(discoveryform,
+                    ExtendedControls.MessageBoxTheme.Show(FindForm(),
                     "There is no route to export ", "Export route", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                     return;
                 }
@@ -718,7 +718,7 @@ namespace EDDiscovery.UserControls
                 }
                 dlg.FileName = fileName;
 
-                if (dlg.ShowDialog() != DialogResult.OK)
+                if (dlg.ShowDialog(FindForm()) != DialogResult.OK)
                     return;
                 filename = dlg.FileName;
                 using (StreamWriter writer = new StreamWriter(filename, false))
@@ -730,11 +730,11 @@ namespace EDDiscovery.UserControls
                             writer.WriteLine(sysname);
                     }
                 }
-                ExtendedControls.MessageBoxTheme.Show(String.Format("Export complete {0}", filename), "Export route");
+                ExtendedControls.MessageBoxTheme.Show(FindForm(), $"Export complete to {filename}", "Export route");
             }
             catch (IOException)
             {
-                ExtendedControls.MessageBoxTheme.Show(String.Format("Is file {0} open?", filename), "Export route",
+                ExtendedControls.MessageBoxTheme.Show(FindForm(), $"Error exporting route. Is file {filename} open?", "Export route",
                       MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
@@ -766,7 +766,7 @@ namespace EDDiscovery.UserControls
             ISystem sc = SystemClassDB.GetSystem((string)obj);
             if (sc == null)
             {
-                ExtendedControls.MessageBoxTheme.Show("Unknown system, system is without co-ordinates", "Edit bookmark", MessageBoxButtons.OK);
+                ExtendedControls.MessageBoxTheme.Show(FindForm(), "Unknown system, system is without co-ordinates", "Edit bookmark", MessageBoxButtons.OK);
             }
             else
                 TargetHelpers.showBookmarkForm(this,discoveryform, sc, null, false);
@@ -781,16 +781,18 @@ namespace EDDiscovery.UserControls
         {
             string systemName;
             double radius;
-            if (!ImportSphere.showDialog(discoveryform, out systemName, out radius, this.FindForm()))
+
+            if (!ImportSphere.showDialog(discoveryform, out systemName, out radius, FindForm()))
                 return;
+
             if (String.IsNullOrWhiteSpace(systemName))
             {
-                ExtendedControls.MessageBoxTheme.Show("System name not set");
+                ExtendedControls.MessageBoxTheme.Show(FindForm(), "System name not set");
                 return;
             }
 
             if (radius < 0 || radius > 1000.0) { 
-                ExtendedControls.MessageBoxTheme.Show("Radius should be a number 0.0 and 1000.0");
+                ExtendedControls.MessageBoxTheme.Show(FindForm(), "Radius should be a number 0.0 and 1000.0");
                 return;
             }
 
@@ -825,9 +827,8 @@ namespace EDDiscovery.UserControls
             }
             if (systems.Count == 0)
             {
-                ExtendedControls.MessageBoxTheme.Show(discoveryform,
-                String.Format("There are no known system names in the import", countunknown),
-                "Unsaved", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                ExtendedControls.MessageBoxTheme.Show(FindForm(), "The imported file contains no known system names",
+                    "Unsaved", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return;
             }
 
