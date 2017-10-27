@@ -175,7 +175,7 @@ namespace ExtendedControls
             MyDialog.FullOpen = true;
             MyDialog.Color = theme.currentsettings.colors[ex];
 
-            if (MyDialog.ShowDialog() == DialogResult.OK)
+            if (MyDialog.ShowDialog(this) == DialogResult.OK)
             {
                 theme.currentsettings.colors[ex] = MyDialog.Color;
                 theme.SetCustom();
@@ -197,7 +197,7 @@ namespace ExtendedControls
             fd.MinSize = 4;
             fd.MaxSize = 12;
 
-            if (fd.ShowDialog() == DialogResult.OK)
+            if (fd.ShowDialog(this) == DialogResult.OK)
             {
                 if (fd.Font.Style == FontStyle.Regular)
                 {
@@ -207,7 +207,7 @@ namespace ExtendedControls
                     ApplyChanges?.Invoke();
                 }
                 else
-                    ExtendedControls.MessageBoxTheme.Show("Font does not have regular style");
+                    ExtendedControls.MessageBoxTheme.Show(this, "Font does not have regular style");
             }
 
         }

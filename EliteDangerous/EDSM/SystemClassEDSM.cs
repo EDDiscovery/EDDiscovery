@@ -385,6 +385,11 @@ namespace EliteDangerousCore.EDSM
 
                 while (!jo_enum_finished && !cancelRequested())
                 {
+                    int blkcount = 0;
+                    int oldinsertcnt = insertcount;
+                    int oldupdatecnt = updatecount;
+                    int oldcount = count;
+
                     using (SQLiteConnectionSystem cn = new SQLiteConnectionSystem(mode: EDDbAccessMode.Writer))
                     {
                         using (DbTransaction txn = cn.BeginTransaction())
@@ -433,7 +438,7 @@ namespace EliteDangerousCore.EDSM
                                 selectNameCmd = cn.CreateCommand("SELECT Name FROM SystemNames WHERE EdsmId = @EdsmId");
                                 selectNameCmd.AddParameter("@EdsmId", DbType.Int64);
 
-                                while (!cancelRequested() && !SQLiteConnectionSystem.IsReadWaiting)
+                                while (!cancelRequested())
                                 {
                                     if (!jo_enum.MoveNext())
                                     {
@@ -457,6 +462,19 @@ namespace EliteDangerousCore.EDSM
 
                                         jo_enum_finished = true;
                                         break;
+                                    }
+                                    else if (SQLiteConnectionSystem.IsReadWaiting)
+                                    {
+                                        if (blkcount < objs.Count * 3 / 4) // Let the reader barge in if we've processed less than 3/4 of the items
+                                        {
+                                            // Reset the counts, roll back the transaction, and let the reader through...
+                                            insertcount = oldinsertcnt;
+                                            updatecount = oldupdatecnt;
+                                            count = oldcount;
+                                            jo_enum.Reset();
+                                            txn.Rollback();
+                                            break;
+                                        }
                                     }
 
                                     EDSMDumpSystem jo = jo_enum.Current;
@@ -579,6 +597,7 @@ namespace EliteDangerousCore.EDSM
                                     }
 
                                     count++;
+                                    blkcount++;
                                 }
                             }
                             finally

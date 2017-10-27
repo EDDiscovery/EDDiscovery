@@ -98,9 +98,10 @@ namespace EDDiscovery.Forms
             labelMessage.Size = new Size(ClientRectangle.Width - 8, ClientRectangle.Height - 8);
         }
 
-        public new void Show()
+        protected override void OnShown(EventArgs e)
         {
-            base.Show();
+            base.OnShown(e);
+
             ontimer.Start();
         }
 

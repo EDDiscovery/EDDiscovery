@@ -453,7 +453,7 @@ namespace EDDiscovery.Forms
                 if (IsTransparencySupported)
                     panel_transparency_Click(panel_transparent, EventArgs.Empty);
                 else
-                    ExtendedControls.MessageBoxTheme.Show("This panel does not support transparency");
+                    ExtendedControls.MessageBoxTheme.Show(this, "This panel does not support transparency");
             }
             else
             {

@@ -146,7 +146,7 @@ namespace EDDiscovery.UserControls
         {
             SavedRouteClass selectedRoute;
 
-            if (Prompt.ShowDialog(discoveryform, SavedRouteClass.GetAllSavedRoutes().Where(r => !r.Name.StartsWith("\x7F")).OrderBy(r => r.Name).ToList(),
+            if (Prompt.ShowDialog(FindForm(), SavedRouteClass.GetAllSavedRoutes().Where(r => !r.Name.StartsWith("\x7F")).OrderBy(r => r.Name).ToList(),
                 _currentRoute?.Name ?? string.Empty, "Select route", out selectedRoute))
             {
                 if (selectedRoute == null)

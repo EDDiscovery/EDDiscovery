@@ -279,7 +279,6 @@ namespace EDDiscovery.UserControls
                             JournalEntry.GetListOfEventsWithOptMethod(false) ,
                             (s) => { return BaseUtils.FieldNames.GetPropertyFieldNames(JournalEntry.TypeOfJournalEntry(s)); },
                             discoveryform.Globals.NameList, fieldfilter);
-            frm.TopMost = this.FindForm().TopMost;
             if (frm.ShowDialog(this.FindForm()) == DialogResult.OK)
             {
                 fieldfilter = frm.result;
@@ -364,7 +363,7 @@ namespace EDDiscovery.UserControls
             }
 
             if (!edsm.ShowSystemInEDSM(rightclicksystem.System.name, id_edsm))
-                ExtendedControls.MessageBoxTheme.Show("System could not be found - has not been synched or EDSM is unavailable");
+                ExtendedControls.MessageBoxTheme.Show(this.FindForm(), "System could not be found - has not been synched or EDSM is unavailable");
 
             this.Cursor = Cursors.Default;
         }
@@ -447,7 +446,7 @@ namespace EDDiscovery.UserControls
             Forms.ExportForm frm = new Forms.ExportForm();
             frm.Init(new string[] { "Export Current View" });
 
-            if (frm.ShowDialog(this) == DialogResult.OK)
+            if (frm.ShowDialog(this.FindForm()) == DialogResult.OK)
             {
                 if (frm.SelectedIndex == 0)
                 {
@@ -484,7 +483,7 @@ namespace EDDiscovery.UserControls
                             System.Diagnostics.Process.Start(frm.Path);
                     }
                     else
-                        ExtendedControls.MessageBoxTheme.Show("Failed to write to " + frm.Path, "Export Failed", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                        ExtendedControls.MessageBoxTheme.Show(this.FindForm(), "Failed to write to " + frm.Path, "Export Failed", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 }
             }
         }

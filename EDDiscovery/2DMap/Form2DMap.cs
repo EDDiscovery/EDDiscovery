@@ -330,7 +330,7 @@ namespace EDDiscovery
 
         private void buttonSave_Click(object sender, EventArgs e)
         {
-            if (saveFileDialog1.ShowDialog() == DialogResult.OK)
+            if (saveFileDialog1.ShowDialog(this) == DialogResult.OK)
             {
                 switch (saveFileDialog1.FilterIndex)
                 {

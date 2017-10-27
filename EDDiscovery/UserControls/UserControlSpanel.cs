@@ -559,7 +559,7 @@ namespace EDDiscovery.UserControls
                     if (url.Length > 0)         // may pass back empty string if not known, this solves another exception
                         System.Diagnostics.Process.Start(url);
                     else
-                        ExtendedControls.MessageBoxTheme.Show("System " + he.System.name + " unknown to EDSM");
+                        ExtendedControls.MessageBoxTheme.Show(FindForm(), "System " + he.System.name + " unknown to EDSM");
                 }
             }
         }
@@ -929,7 +929,6 @@ namespace EDDiscovery.UserControls
                             JournalEntry.GetListOfEventsWithOptMethod(false) ,
                             (s) => { return BaseUtils.FieldNames.GetPropertyFieldNames(JournalEntry.TypeOfJournalEntry(s)); },
                             discoveryform.Globals.NameList, fieldfilter);
-            frm.TopMost = this.FindForm().TopMost;
             if (frm.ShowDialog(this.FindForm()) == DialogResult.OK)
             {
                 fieldfilter = frm.result;
