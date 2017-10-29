@@ -433,8 +433,6 @@ namespace EDDiscovery
                 travelHistoryControl.Init(this, null, UserControls.UserControlCommonBase.DisplayNumberHistoryGrid); // and init at this point with 0 as dn
             }
 
-            contextMenuStripTabs.Opening += ContextMenuStripTabs_Opening;
-
             for (int i = 0; i < PanelInformation.GetNumberPanels(); i++)
             {
                 addTabToolStripMenuItem.DropDownItems.Add(PanelInformation.MakeToolStripMenuItem(i, (s, e) =>
@@ -464,7 +462,7 @@ namespace EDDiscovery
 
         private void ContextMenuStripTabs_Opening(object sender, CancelEventArgs e)
         {       // don't remove history!
-            removeTabToolStripMenuItem.Enabled = !(tabControlMain.TabPages[tabControlMain.LastTabClicked].Controls[0] is UserControls.UserControlHistory);
+            removeTabToolStripMenuItem.Enabled = tabControlMain.LastTabClicked >= 0 && tabControlMain.TabPages.Count >= tabControlMain.LastTabClicked && !(tabControlMain.TabPages[tabControlMain.LastTabClicked].Controls[0] is UserControls.UserControlHistory);
         }
 
         private TabPage CreateTab(PanelInformation.PanelIDs ptype, int dn , int posindex, bool dotheme)
@@ -573,6 +571,14 @@ namespace EDDiscovery
             }
 
             return false;
+        }
+
+        private void tabControlMain_MouseClick(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right && tabControlMain.TabAt(e.Location) != -1)
+            {
+                contextMenuStripTabs.Show(tabControlMain.PointToScreen(e.Location));
+            }
         }
 
         #endregion
