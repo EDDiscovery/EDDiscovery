@@ -202,7 +202,7 @@ namespace ExtendedControls
         public override AnchorStyles Anchor { get { return base.Anchor; } set { base.Anchor = value; _cbsystem.Anchor = value; } }
         public override DockStyle Dock { get { return base.Dock; } set { base.Dock = value; _cbsystem.Dock = value; } }
         public override Font Font { get { return base.Font; } set { base.Font = value; _cbsystem.Font = value; } }
-        public override string Text { get { return base.Text; } set { base.Text = value; _cbsystem.Text = value; } }
+        public override string Text { get { return base.Text; } set { base.Text = value; _cbsystem.Text = value; Invalidate();  } }
 
         // BEWARE SET value/display before DATA SOURCE
         public object DataSource { get { return _cbsystem.DataSource; } set { _cbsystem.DataSource = value; } }

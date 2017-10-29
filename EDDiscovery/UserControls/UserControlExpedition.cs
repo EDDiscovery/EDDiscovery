@@ -34,6 +34,9 @@ namespace EDDiscovery.UserControls
     {
         public static bool DeleteIsPermanent = true;
 
+        private const string DEL = "\x7F";
+        private static bool LoadedOnce = false;
+
         private List<SavedRouteClass> savedroute;
         private SavedRouteClass currentroute;
         private EDSMClass edsm;
@@ -42,6 +45,8 @@ namespace EDDiscovery.UserControls
         private bool _suppressCombo = false;
 
         private List<ISystem> latestplottedroute;
+
+        private string DbColumnSave { get { return $"UserControlExpedition{(displaynumber > 0 ? displaynumber.ToString() : string.Empty)}DGVCol"; } }
 
         #region Standard UC Interfaces
 
@@ -62,25 +67,45 @@ namespace EDDiscovery.UserControls
 
         public override void Closing()
         {
+            if (displaynumber >= 0)
+                DGVSaveColumnLayout(dataGridViewRouteSystems, DbColumnSave);
+
             discoveryform.OnNewCalculatedRoute -= _discoveryForm_OnNewCalculatedRoute;
             discoveryform.OnNewStarsForExpedition -= Discoveryform_OnNewStarsForExpedition;
         }
 
         public override void LoadLayout()
         {
+            if (displaynumber >= 0)
+                DGVLoadColumnLayout(dataGridViewRouteSystems, DbColumnSave);
+
             savedroute = SavedRouteClass.GetAllSavedRoutes();
 
-            foreach (var initroute in EDSMClass.Expeditions)
+            if (!LoadedOnce)
             {
-                if (!savedroute.Any(r => r.Name == initroute.Name || r.Name == "\x7F" + initroute.Name))
+                foreach (var initroute in EDSMClass.Expeditions)
                 {
-                    initroute.Add();
-                    savedroute.Add(initroute);
+                    var rt = savedroute.Find(r => initroute.Name.Equals(r.Name.TrimStart(DEL.ToCharArray()), StringComparison.InvariantCultureIgnoreCase));
+                    if (rt == null)
+                    {
+                        initroute.Add();
+                        savedroute.Add(initroute);
+                    }
+                    // Ensure that hard-coded expeditions are kept up-to-date, even if they've been "deleted" (also means that `a.Equals(b)` can't be used here).
+                    else if (initroute.StartDate != rt.StartDate || initroute.EndDate != rt.EndDate || !initroute.Systems.SequenceEqual(rt.Systems))
+                    {
+                        rt.Systems.Clear();
+                        rt.Systems.AddRange(initroute.Systems);
+                        rt.StartDate = initroute.StartDate;
+                        rt.EndDate = initroute.EndDate;
+                        rt.Update();
+                    }
                 }
+                LoadedOnce = true;
             }
 
-            savedroute = savedroute.Where(r => !r.Name.StartsWith("\x7F")).OrderBy(r => r.Name).ToList();
-
+            UpdateUndeleteMenu(savedroute);
+            savedroute = savedroute.Where(r => !r.Name.StartsWith(DEL)).OrderBy(r => r.Name).ToList();
             UpdateComboBox();
         }
 
@@ -137,9 +162,9 @@ namespace EDDiscovery.UserControls
             _suppressCombo = false;
         }
 
-        private void UpdateUndeleteMenu()
+        private void UpdateUndeleteMenu(List<SavedRouteClass> routes = null)
         {
-            var delrts = SavedRouteClass.GetAllSavedRoutes().Where(r => r.Name.StartsWith("\x7F")).OrderBy(r => r.Name);
+            var delrts = (routes ?? SavedRouteClass.GetAllSavedRoutes()).Where(r => r.Name.StartsWith(DEL)).OrderBy(r => r.Name);
 
             if (ctxMenuItemUndelete.HasDropDownItems)
             {
@@ -150,8 +175,12 @@ namespace EDDiscovery.UserControls
 
             foreach (var drt in delrts)
             {
-                var menuitem = new ToolStripMenuItem(drt.Name.TrimStart("\x7F".ToCharArray()));
-                menuitem.Tag = drt;
+                string rtnm = drt.Name.TrimStart(DEL.ToCharArray());
+                var menuitem = new ToolStripMenuItem(rtnm)
+                {
+                    Name = "UndeleteRouteSubMenuItem_" + rtnm.Replace(" ", string.Empty),
+                    Tag = drt
+                };
                 menuitem.Click += UndeleteRouteSubMenuItem_Click;
                 ctxMenuItemUndelete.DropDownItems.Add(menuitem);
             }
@@ -169,10 +198,11 @@ namespace EDDiscovery.UserControls
             rte.Name = tmi.Text;    // .Text already had the DEL prefix removed, so let's use that.
             rte.Update();
 
-            savedroute = SavedRouteClass.GetAllSavedRoutes().Where(r => !r.Name.StartsWith("\x7F")).OrderBy(r => r.Name).ToList();
+            savedroute.Add(rte);
+            savedroute = savedroute.OrderBy(r => r.Name).ToList();
             UpdateComboBox();
 
-            tmi.Dispose();  // Gets removed automatically.
+            tmi.Dispose();          // Gets removed automatically.
         }
 
 
@@ -255,11 +285,9 @@ namespace EDDiscovery.UserControls
 
         private void toolStripComboBoxRouteSelection_MouseUp(object sender, MouseEventArgs e)
         {
-            if (e.Button == MouseButtons.Right)
+            if (e.Button == MouseButtons.Right && ctxMenuItemUndelete.DropDownItems.Count > 0)
             {
-                UpdateUndeleteMenu();
-                if (ctxMenuItemUndelete.DropDownItems.Count > 0)
-                    ctxMenuCombo.Show(toolStripComboBoxRouteSelection.Control.PointToScreen(e.Location));
+                ctxMenuCombo.Show(toolStripComboBoxRouteSelection.Control.PointToScreen(e.Location));
             }
         }
 
@@ -319,8 +347,9 @@ namespace EDDiscovery.UserControls
                     }
                     else
                     {   // Expeditions shouldn't use .Delete(), as LoadControl will ignorantly re-create them at next startup.
-                        currentroute.Name = "\x7F" + currentroute.Name;
+                        currentroute.Name = DEL + currentroute.Name;
                         currentroute.Update();
+                        UpdateUndeleteMenu(savedroute);
                     }
 
                     savedroute.Remove(currentroute);
@@ -798,7 +827,7 @@ namespace EDDiscovery.UserControls
                 ExtendedControls.MessageBoxTheme.Show(FindForm(), "Please specify a name for the route.", "Unsaved Route", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 textBoxRouteName.Select();
             }
-            else if (EDSMClass.Expeditions.Any(r => r.Name.Equals(newrtname)))
+            else if (EDSMClass.Expeditions.Any(r => r.Name.Equals(newrtname, StringComparison.InvariantCultureIgnoreCase)))
             {
                 ExtendedControls.MessageBoxTheme.Show(FindForm(), "The current route name conflicts with a well-known expedition." + Environment.NewLine
                     + "Please specify a new name to save your changes.", "Unsaved Route", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
@@ -828,7 +857,7 @@ namespace EDDiscovery.UserControls
                 }
                 currentroute = newrt;
                 savedroute.Add(newrt);
-                savedroute = savedroute.Where(r => !r.Name.StartsWith("\x7F")).OrderBy(r => r.Name).ToList();
+                savedroute = savedroute.Where(r => !r.Name.StartsWith(DEL)).OrderBy(r => r.Name).ToList();
                 UpdateComboBox();
             }
 

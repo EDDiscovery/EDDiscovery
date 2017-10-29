@@ -16,11 +16,13 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Linq;
 using System.Data.Common;
+using System.Diagnostics;
+using System.Linq;
 
 namespace EliteDangerousCore.DB
 {
+    [DebuggerDisplay("{DebugDisplay,nq}")]
     public class SavedRouteClass : IEquatable<SavedRouteClass>
     {
         public SavedRouteClass()
@@ -63,8 +65,7 @@ namespace EliteDangerousCore.DB
             return (this.Name == other.Name || (String.IsNullOrEmpty(this.Name) && String.IsNullOrEmpty(other.Name))) &&
                    this.StartDate == other.StartDate &&
                    this.EndDate == other.EndDate &&
-                   this.Systems.Count == other.Systems.Count &&
-                   this.Systems.Zip(other.Systems, (t, o) => t == o).All(v => v);
+                   this.Systems.SequenceEqual(other.Systems);
         }
 
         public override bool Equals(object obj)
@@ -232,6 +233,15 @@ namespace EliteDangerousCore.DB
             }
 
             return retVal;
+        }
+
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        protected virtual string DebugDisplay
+        {
+            get
+            {
+                return $"\"{(Name ?? "(null)")}\" [{Id:n0}]: " + ((Systems == null || Systems.Count == 0) ? "no systems" : ((Systems?.Count == 1) ? "1 system" : (Systems.Count.ToString("n0") + " systems")));
+            }
         }
     }
 }
