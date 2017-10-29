@@ -772,7 +772,6 @@ namespace EDDiscovery
             // tabControlMain
             // 
             this.tabControlMain.AllowDragReorder = true;
-            this.tabControlMain.ContextMenuStrip = this.contextMenuStripTabs;
             this.tabControlMain.Controls.Add(this.tabPageTravelHistory);
             this.tabControlMain.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabControlMain.FlatStyle = System.Windows.Forms.FlatStyle.System;
@@ -794,6 +793,7 @@ namespace EDDiscovery
             this.tabControlMain.TextNotSelectedColor = System.Drawing.SystemColors.ControlText;
             this.tabControlMain.TextSelectedColor = System.Drawing.SystemColors.ControlText;
             this.toolTip.SetToolTip(this.tabControlMain, "Right click to add/remove tabs, Left click drag to reorder");
+            this.tabControlMain.MouseClick += new System.Windows.Forms.MouseEventHandler(this.tabControlMain_MouseClick);
             // 
             // contextMenuStripTabs
             // 
@@ -802,6 +802,7 @@ namespace EDDiscovery
             this.removeTabToolStripMenuItem});
             this.contextMenuStripTabs.Name = "contextMenuStripTabs";
             this.contextMenuStripTabs.Size = new System.Drawing.Size(190, 70);
+            this.contextMenuStripTabs.Opening += new System.ComponentModel.CancelEventHandler(this.ContextMenuStripTabs_Opening);
             // 
             // addTabToolStripMenuItem
             // 
