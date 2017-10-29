@@ -285,6 +285,8 @@ namespace EDDiscovery.Actions
                 {
                     actionrunasync.TerminateAll();
                     discoveryform.AudioQueueSpeech.StopAll();
+                    discoveryform.AudioQueueWave.StopAll();
+
                     ReLoad(false);      // reload from disk, new ones if required, refresh old ones and keep the vars
 
                     string changes = "";
