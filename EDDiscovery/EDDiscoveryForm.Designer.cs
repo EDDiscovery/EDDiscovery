@@ -126,14 +126,15 @@ namespace EDDiscovery
             // 
             // menuStrip1
             // 
+            this.menuStrip1.Dock = System.Windows.Forms.DockStyle.None;
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolsToolStripMenuItem,
             this.adminToolStripMenuItem,
             this.addOnsToolStripMenuItem,
             this.helpToolStripMenuItem});
-            this.menuStrip1.Location = new System.Drawing.Point(0, 0);
+            this.menuStrip1.Location = new System.Drawing.Point(2, 2);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(1004, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(313, 24);
             this.menuStrip1.TabIndex = 16;
             this.menuStrip1.Text = "menuStrip1";
             this.menuStrip1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.MouseDownCAPTION);
@@ -590,6 +591,8 @@ namespace EDDiscovery
             // 
             // panelToolBar
             // 
+            this.panelToolBar.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.panelToolBar.BackColor = System.Drawing.Color.Transparent;
             this.panelToolBar.Controls.Add(this.comboBoxCommander);
             this.panelToolBar.Controls.Add(this.buttonExtEDSMSync);
@@ -600,16 +603,15 @@ namespace EDDiscovery
             this.panelToolBar.Controls.Add(this.buttonExt2dmap);
             this.panelToolBar.Controls.Add(this.buttonExt3dmap);
             this.panelToolBar.Controls.Add(this.buttonReloadActions);
-            this.panelToolBar.Dock = System.Windows.Forms.DockStyle.Top;
             this.panelToolBar.HiddenMarkerWidth = 0;
-            this.panelToolBar.Location = new System.Drawing.Point(0, 24);
+            this.panelToolBar.Location = new System.Drawing.Point(2, 26);
             this.panelToolBar.Name = "panelToolBar";
             this.panelToolBar.PinState = true;
             this.panelToolBar.RolledUpHeight = 5;
             this.panelToolBar.RollUpAnimationTime = 500;
             this.panelToolBar.RollUpDelay = 1000;
             this.panelToolBar.ShowHiddenMarker = true;
-            this.panelToolBar.Size = new System.Drawing.Size(1004, 32);
+            this.panelToolBar.Size = new System.Drawing.Size(1000, 32);
             this.panelToolBar.TabIndex = 1;
             this.panelToolBar.UnrolledHeight = 32;
             this.panelToolBar.UnrollHoverDelay = 1000;
@@ -772,13 +774,15 @@ namespace EDDiscovery
             // tabControlMain
             // 
             this.tabControlMain.AllowDragReorder = true;
+            this.tabControlMain.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.tabControlMain.Controls.Add(this.tabPageTravelHistory);
-            this.tabControlMain.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabControlMain.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.tabControlMain.Location = new System.Drawing.Point(0, 56);
+            this.tabControlMain.Location = new System.Drawing.Point(2, 58);
             this.tabControlMain.Name = "tabControlMain";
             this.tabControlMain.SelectedIndex = 0;
-            this.tabControlMain.Size = new System.Drawing.Size(1004, 456);
+            this.tabControlMain.Size = new System.Drawing.Size(1000, 454);
             this.tabControlMain.TabColorScaling = 0.5F;
             this.tabControlMain.TabControlBorderBrightColor = System.Drawing.Color.LightGray;
             this.tabControlMain.TabControlBorderColor = System.Drawing.Color.DarkGray;
