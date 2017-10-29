@@ -265,7 +265,7 @@ namespace AudioExtensions
             Queue(s, p);
         }
 
-        public void StopCurrent()
+        public void StopCurrent()   // async
         {
             if (audioqueue.Count > 0)       // if we are playing, stop current
             {
@@ -274,10 +274,15 @@ namespace AudioExtensions
             }
         }
 
-        public void StopAll()
+        public void StopAll() // async
         {
-            audioqueue.Clear();
-            ad.Stop();
+            if ( audioqueue.Count>0)
+            {
+                 if (audioqueue.Count > 1)
+                    audioqueue.RemoveRange(1, audioqueue.Count - 1);
+
+                ad.Stop();  // async stop
+            }
         }
 
         public void Dispose()

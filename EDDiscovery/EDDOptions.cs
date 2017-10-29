@@ -36,6 +36,7 @@ namespace EDDiscovery
         public bool DisableShowDebugInfoInTitle { get; private set; }
         public string ReadJournal { get; private set; }
         public string OptionsFile { get; private set; }
+        public bool DontAskGithubForPacks { get; private set; }
 
         private string AppFolder { get; set; }      // internal to use.. for -appfolder option
         private bool StoreDataInProgramDirectory { get; set; }  // internal to us, to indicate portable
@@ -213,6 +214,7 @@ namespace EDDiscovery
                     case "nosystems": NoSystemsLoad = true; break;
                     case "tracelog": TraceLog = true; break;
                     case "logexceptions": LogExceptions = true; break;
+                    case "nogithubpacks": DontAskGithubForPacks = true; break;
                     case "edsmbeta":
                         EDSMClass.ServerAddress = "http://beta.edsm.net:8080/";
                         break;

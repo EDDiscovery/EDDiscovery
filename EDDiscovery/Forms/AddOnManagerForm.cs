@@ -132,7 +132,7 @@ namespace EDDiscovery.Forms
                 System.IO.Directory.CreateDirectory(downloadactdebugfolder);
 #endif
 
-            if (managedownloadmode)
+            if (managedownloadmode && EDDOptions.Instance.DontAskGithubForPacks == false )
             {
                 System.Diagnostics.Debug.WriteLine("Checking github");
                 DownloadFromGitHub(downloadactfolder, "ActionFiles/V1");
