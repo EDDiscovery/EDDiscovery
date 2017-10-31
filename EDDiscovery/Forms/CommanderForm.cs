@@ -136,7 +136,7 @@ namespace EDDiscovery.Forms
                 }
                 catch (Exception ex)
                 {
-                    ExtendedControls.MessageBoxTheme.Show(this, "Companion API Login", "Failed to login to Frontier Companion API:" + Environment.NewLine + ex.Message, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    ExtendedControls.MessageBoxTheme.Show(this, "Failed to login to Frontier Companion API:" + Environment.NewLine + ex.Message, "Companion API Login", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
             else if (buttonExtCAPI.Text == "Clear")
