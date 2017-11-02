@@ -79,8 +79,8 @@ namespace EDDiscovery.ScreenShots
             SQLiteDBClass.PutSettingBool("ImageHandlerClipboard", CopyToClipboard );
 
             SQLiteDBClass.PutSettingBool("ImageHandlerCropImage", CropImage );      // fires the checked handler which sets the readonly mode of the controls
-            SQLiteDBClass.PutSettingInt("ImageHandlerCropTop", CropArea.Left ) ;
-            SQLiteDBClass.PutSettingInt("ImageHandlerCropLeft", CropArea.Top );
+            SQLiteDBClass.PutSettingInt("ImageHandlerCropTop", CropArea.Top ) ;
+            SQLiteDBClass.PutSettingInt("ImageHandlerCropLeft", CropArea.Left );
             SQLiteDBClass.PutSettingInt("ImageHandlerCropWidth", CropArea.Width );
             SQLiteDBClass.PutSettingInt("ImageHandlerCropHeight", CropArea.Height );
 
