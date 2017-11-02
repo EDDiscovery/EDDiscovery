@@ -184,6 +184,9 @@ namespace EliteDangerousCore.EDSM
                     SQLiteConnectionSystem.ReplaceSystemsTable();
                     SQLiteConnectionSystem.PutSettingBool("EDSMSystemsOutOfOrder", outoforder);
                     reportProgress(-1, "");
+#if !DEBUG
+                    File.Delete(edsmsystems);
+#endif
                 }
                 else
                 {
