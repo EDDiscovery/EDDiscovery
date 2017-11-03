@@ -23,8 +23,8 @@ namespace ActionLanguage
 {
     public class ActionPackEditEventProgramCondition : ActionPackEditBase
     {
-        public System.Func<Control, System.Drawing.Icon, string, string> onEditKeys;   // edit the key string.. must provide
-        public System.Func<Control, string, ActionCoreController, string> onEditSay;   // edit the say string..
+        public System.Func<Form, System.Drawing.Icon, string, string> onEditKeys;   // edit the key string.. must provide
+        public System.Func<Form, string, ActionCoreController, string> onEditSay;   // edit the say string..
 
         private ExtendedControls.ComboBoxCustom eventtype;
 

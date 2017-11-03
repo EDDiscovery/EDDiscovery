@@ -29,8 +29,8 @@ namespace ActionLanguage
     public class ActionPackEditProgram : UserControl
     {
         public Func<List<string>> onAdditionalNames;        // give me more names must provide
-        public Func<Control, System.Drawing.Icon, string, string> onEditKeys;   // edit the key string.. must provide
-        public Func<Control, string, ActionCoreController,string> onEditSay;   // edit the say string.. must provide
+        public Func<Form, System.Drawing.Icon, string, string> onEditKeys;   // edit the key string.. must provide
+        public Func<Form, string, ActionCoreController,string> onEditSay;   // edit the say string.. must provide
         public Func<string> SuggestedName;      // give me a suggested program name must provide
         public System.Action RefreshEvent;     
 
@@ -292,7 +292,7 @@ namespace ActionLanguage
         {
             ActionProgram p = cd.action.HasChars() ? actionfile.actionprogramlist.Get(cd.action) : null;
 
-            string ud = onEditKeys(this, this.Icon, p != null ? p.keyuserdata.Alt("") : "");
+            string ud = onEditKeys(this.FindForm(), this.Icon, p != null ? p.keyuserdata.Alt("") : "");
 
             if ( ud != null )
             {
@@ -309,7 +309,7 @@ namespace ActionLanguage
         {
             ActionProgram p = cd.action.HasChars() ? actionfile.actionprogramlist.Get(cd.action) : null;
 
-            string ud = onEditSay(this, p != null ? p.sayuserdata.Alt("") : "" , actioncorecontroller );
+            string ud = onEditSay(this.FindForm(), p != null ? p.sayuserdata.Alt("") : "" , actioncorecontroller );
 
             if ( ud != null )
             {
