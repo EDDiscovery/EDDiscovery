@@ -149,10 +149,10 @@ namespace EDDiscovery.Actions
 
                 // make sure the voice condition is right.. if not, reset.
 
-                if (cd.eventname != Actions.ActionEventEDList.onVoiceInput.triggername || !cd.Is("VoiceInput", ConditionEntry.MatchType.Equals))
+                if (cd.eventname != Actions.ActionEventEDList.onVoiceInput.triggername || !cd.Is("VoiceInput", ConditionEntry.MatchType.MatchSemicolon))
                 {
                     cd.eventname = Actions.ActionEventEDList.onVoiceInput.triggername;
-                    cd.Set(new ConditionEntry("VoiceInput", ConditionEntry.MatchType.Equals, "?"));     // Voiceinput being the variable set to the expression
+                    cd.Set(new ConditionEntry("VoiceInput", ConditionEntry.MatchType.MatchSemicolon, "?"));     // Voiceinput being the variable set to the expression
                 }
 
                 return ev;
@@ -168,12 +168,12 @@ namespace EDDiscovery.Actions
             }
         }
 
-        private string onEditKeys(Control p, System.Drawing.Icon i, string keys)      // called when program wants to edit Key
+        private string onEditKeys(Form p, System.Drawing.Icon i, string keys)      // called when program wants to edit Key
         {
             return ActionKeyED.Menu(p, i, keys, discoveryform.FrontierBindings);
         }
 
-        private string onEditSay(Control p, string say, ActionCoreController cp)      // called when program wants to edit Key
+        private string onEditSay(Form p, string say, ActionCoreController cp)      // called when program wants to edit Key
         {
             return ActionSay.Menu(p, say, cp);
         }

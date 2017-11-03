@@ -27,9 +27,11 @@ namespace ActionLanguage
 {
     public class ActionKey: ActionBase
     {
-        public static string globalvarProcessID = "KeyProcessTo";
+        public static string programDefault = "Program Default";        // meaning use the program default vars for the process
+
+        public static string globalvarProcessID = "KeyProcessTo";       // var global
         public static string globalvarDelay = "KeyDelay";
-        protected static string ProcessID = "To";
+        protected static string ProcessID = "To";       // command tags
         protected static string DelayID = "Delay";
         protected const int DefaultDelay = 10;
         protected const int DefaultShiftDelay = 2;
@@ -64,20 +66,28 @@ namespace ActionLanguage
             return FromString(userdata, out saying, out vars) ? null : "Key command line not in correct format";
         }
 
-        static public string Menu(Form parent, System.Drawing.Icon ic, string userdata)
+        static public string Menu(Form parent, System.Drawing.Icon ic, string userdata, List<string> additionalkeys, BaseUtils.EnhancedSendKeys.AdditionalKeyParser additionalparser)
         {
             ConditionVariables vars;
             string keys;
             FromString(userdata, out keys, out vars);
 
             ExtendedControls.KeyForm kf = new ExtendedControls.KeyForm();
-            int defdelay = vars.Exists(DelayID) ? vars[DelayID].InvariantParseInt(DefaultDelay) : DefaultDelay;
+            int defdelay = vars.Exists(DelayID) ? vars[DelayID].InvariantParseInt(DefaultDelay) : ExtendedControls.KeyForm.DefaultDelayID;
             string process = vars.Exists(ProcessID) ? vars[ProcessID] : "";
-            kf.Init(ic, true, " ", keys, process , defdelay:defdelay );
+
+            kf.Init(ic, true, " ", keys, process , defdelay:defdelay, additionalkeys:additionalkeys ,parser:additionalparser );      // process="" default, defdelay = DefaultDelayID default
 
             if (kf.ShowDialog(parent) == DialogResult.OK)
             {
-                return ToString(kf.KeyList, new ConditionVariables( new string[] { ProcessID, kf.ProcessSelected, DelayID, kf.DefaultDelay.ToStringInvariant() } ));
+                ConditionVariables vlist = new ConditionVariables();
+
+                if (kf.DefaultDelay != ExtendedControls.KeyForm.DefaultDelayID)                                       // only add these into the command if set to non default
+                    vlist[DelayID] = kf.DefaultDelay.ToStringInvariant();
+                if (kf.ProcessSelected.Length > 0)
+                    vlist[ProcessID] = kf.ProcessSelected;
+
+                return ToString(kf.KeyList, vlist);
             }
             else
                 return null;
@@ -85,7 +95,7 @@ namespace ActionLanguage
 
         public override bool ConfigurationMenu(Form parent, ActionCoreController cp, List<string> eventvars)    // override again to expand any functionality
         {
-            string ud = Menu(parent, cp.Icon, userdata);      // base has no additional keys
+            string ud = Menu(parent, cp.Icon, userdata, null, null);      // base has no additional keys/parser
             if (ud != null)
             {
                 userdata = ud;
@@ -97,6 +107,11 @@ namespace ActionLanguage
 
         public override bool ExecuteAction(ActionProgramRun ap)
         {
+            return ExecuteAction(ap, null);
+        }
+
+        public bool ExecuteAction(ActionProgramRun ap, Func<string,string> keytx )      // keytx is passed in
+        { 
             string keys;
             ConditionVariables statementvars;
             if (FromString(userdata, out keys, out statementvars))
@@ -108,6 +123,9 @@ namespace ActionLanguage
                 {
                     int defdelay = vars.Exists(DelayID) ? vars[DelayID].InvariantParseInt(DefaultDelay) : (ap.VarExist(globalvarDelay) ? ap[globalvarDelay].InvariantParseInt(DefaultDelay) : DefaultDelay);
                     string process = vars.Exists(ProcessID) ? vars[ProcessID] : (ap.VarExist(globalvarProcessID) ? ap[globalvarProcessID] : "");
+
+                    if (keytx != null)
+                        keys = keytx(keys);
 
                     string res = BaseUtils.EnhancedSendKeys.Send(keys, defdelay, DefaultShiftDelay, DefaultUpDelay, process);
 
@@ -122,5 +140,7 @@ namespace ActionLanguage
 
             return true;
         }
+
+
     }
 }
