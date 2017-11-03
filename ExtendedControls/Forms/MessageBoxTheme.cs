@@ -181,8 +181,11 @@ namespace ExtendedControls
                 SizeF sizeftext = g.MeasureString(p, this.Font);
                 SizeF sizefcaption = g.MeasureString(labelCaption.Text, this.Font);
 
-                Height = (int)sizeftext.Height + ystart + 50 + bordery;
-                Width = Math.Min(Math.Max(300, left + (int)Math.Max(sizeftext.Width, sizefcaption.Width) + 20), 1800) + borderx;
+                Height = (int)sizeftext.Height + 20 + ystart + 50 + bordery;
+                int butwidth = buttonExt1.Right - (buttonExt3.Visible ? buttonExt3.Left : (buttonExt2.Visible ? buttonExt2.Left : buttonExt1.Left));
+                int textwidth = (int)Math.Max(sizeftext.Width, sizefcaption.Width);
+                //System.Diagnostics.Debug.WriteLine("But width {0} text width {1}", butwidth, textwidth);
+                Width = Math.Min(Math.Max(butwidth, textwidth) + left + 20, 1880) + borderx;
 
                 textarea = new Rectangle(left, ystart, (int)(sizeftext.Width + 1), (int)(sizeftext.Height + 1));
             }
