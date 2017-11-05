@@ -157,6 +157,11 @@ namespace EDDiscovery
         {
             readyForInitialLoad.Set();
         }
+
+        public void InitComplete()
+        {
+            initComplete.Set();
+        }
         #endregion
 
         #region Shutdown
@@ -311,6 +316,7 @@ namespace EDDiscovery
 
         private ManualResetEvent closeRequested = new ManualResetEvent(false);
         private ManualResetEvent readyForInitialLoad = new ManualResetEvent(false);
+        private ManualResetEvent initComplete = new ManualResetEvent(false);
         private ManualResetEvent readyForNewRefresh = new ManualResetEvent(false);
         private AutoResetEvent refreshRequested = new AutoResetEvent(false);
         private AutoResetEvent resyncRequestedEvent = new AutoResetEvent(false);
@@ -520,6 +526,8 @@ namespace EDDiscovery
             {
                 LogLineHighlight("History Refresh Error: " + ex);
             }
+
+            initComplete.WaitOne();
 
             InvokeAsyncOnUiThread(() => RefreshHistoryWorkerCompleted(hist));
         }
