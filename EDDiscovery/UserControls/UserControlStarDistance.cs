@@ -41,8 +41,6 @@ namespace EDDiscovery.UserControls
 
         public override void Init()
         {
-            uctg.OnTravelSelectionChanged += Uctg_OnTravelSelectionChanged;
-
             computer = new StarDistanceComputer();
 
             HistoryEntry he = uctg.GetCurrentHistoryEntry;      // does our UCTG have a system selected?
@@ -52,6 +50,8 @@ namespace EDDiscovery.UserControls
                 //System.Diagnostics.Debug.WriteLine("Star grid started, uctg selected, ask");
                 computer.CalculateClosestSystems(he.System, (s, d) => BeginInvoke((MethodInvoker)delegate { NewStarListComputed(s, d); }));     // hook here, force closes system update
             }
+
+            uctg.OnTravelSelectionChanged += Uctg_OnTravelSelectionChanged;
         }
 
         public override void ChangeCursorType(UserControlCursorType thc)

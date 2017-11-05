@@ -49,12 +49,12 @@ namespace EDDiscovery.UserControls
             dataGridViewMarketData.DefaultCellStyle.WrapMode = DataGridViewTriState.False;
             dataGridViewMarketData.RowTemplate.Height = 26;
 
-            discoveryform.OnNewEntry += OnChanged;
-            uctg.OnTravelSelectionChanged += OnChanged;
-
             checkBoxBuyOnly.Checked = SQLiteDBClass.GetSettingBool(DbBuyOnly, false);
             this.checkBoxBuyOnly.CheckedChanged += new System.EventHandler(this.checkBoxBuyOnly_CheckedChanged);
             checkBoxAutoSwap.Checked = SQLiteDBClass.GetSettingBool(DbAutoSwap, false);
+
+            discoveryform.OnNewEntry += OnChanged;
+            uctg.OnTravelSelectionChanged += OnChanged;
         }
 
         public override void ChangeCursorType(UserControlCursorType thc)

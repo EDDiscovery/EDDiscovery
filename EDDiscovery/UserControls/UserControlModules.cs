@@ -47,11 +47,11 @@ namespace EDDiscovery.UserControls
             dataGridViewModules.DefaultCellStyle.WrapMode = DataGridViewTriState.False;
             dataGridViewModules.RowTemplate.Height = 26;
 
+            buttonExtCoriolis.Visible = false;
+
             discoveryform.OnHistoryChange += Discoveryform_OnHistoryChange; ;
             discoveryform.OnNewEntry += Discoveryform_OnNewEntry;
             uctg.OnTravelSelectionChanged += Display;
-
-            buttonExtCoriolis.Visible = false;
         }
 
         public override void ChangeCursorType(UserControlCursorType thc)

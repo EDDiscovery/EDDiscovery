@@ -104,10 +104,6 @@ namespace EDDiscovery.UserControls
 
             checkBoxMoveToTop.Checked = SQLiteConnectionUser.GetSettingBool(DbAutoTop, true);
 
-            discoveryform.OnHistoryChange += HistoryChanged;
-            discoveryform.OnNewEntry += AddNewEntry;
-            discoveryform.OnNoteChanged += OnNoteChanged;
-
             dataGridViewTravel.MakeDoubleBuffered();
             dataGridViewTravel.RowTemplate.Height = DefaultRowHeight;
 
@@ -120,6 +116,10 @@ namespace EDDiscovery.UserControls
 #endif
 
             ExtraIcons(false,false);
+
+            discoveryform.OnHistoryChange += HistoryChanged;
+            discoveryform.OnNewEntry += AddNewEntry;
+            discoveryform.OnNoteChanged += OnNoteChanged;
         }
 
         public void ExtraIcons(bool icon, bool popout )

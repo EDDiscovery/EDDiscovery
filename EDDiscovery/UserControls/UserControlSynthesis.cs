@@ -64,9 +64,6 @@ namespace EDDiscovery.UserControls
             dataGridViewSynthesis.DefaultCellStyle.WrapMode = DataGridViewTriState.False;
             dataGridViewSynthesis.RowTemplate.Height = 26;
 
-            discoveryform.OnNewEntry += Discoveryform_OnNewEntry;
-            uctg.OnTravelSelectionChanged += Display;
-
             Order = SQLiteDBClass.GetSettingString(DbOSave, "").RestoreArrayFromString(0, SynthesisRecipes.Count);
             if (Order.Distinct().Count() != Order.Length)       // if not distinct..
                 for (int i = 0; i < Order.Length; i++)          // reset
@@ -107,6 +104,9 @@ namespace EDDiscovery.UserControls
                     row.Visible = false;
                 }
             }
+
+            discoveryform.OnNewEntry += Discoveryform_OnNewEntry;
+            uctg.OnTravelSelectionChanged += Display;
         }
 
         public override void ChangeCursorType(UserControlCursorType thc)
