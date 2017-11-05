@@ -80,14 +80,14 @@ namespace EDDiscovery.UserControls
 
             checkBoxMoveToTop.Checked = SQLiteConnectionUser.GetSettingBool(DbAutoTop, true);
 
-            discoveryform.OnHistoryChange += Display;
-            discoveryform.OnNewEntry += AddNewEntry;
-
             string filter = SQLiteDBClass.GetSettingString(DbFieldFilter, "");
             if (filter.Length > 0)
                 fieldfilter.FromJSON(filter);        // load filter
 
             ExtraIcons(false,false);
+
+            discoveryform.OnHistoryChange += Display;
+            discoveryform.OnNewEntry += AddNewEntry;
         }
 
         public void ExtraIcons(bool icon, bool popout)

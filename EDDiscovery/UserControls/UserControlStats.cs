@@ -37,9 +37,9 @@ namespace EDDiscovery.UserControls
 
         public override void Init()
         {
+            userControlStatsTimeScan.ScanMode = true;
             discoveryform.OnNewEntry += AddNewEntry;
             uctg.OnTravelSelectionChanged += SelectionChanged;
-            userControlStatsTimeScan.ScanMode = true;
         }
 
         public override void ChangeCursorType(UserControlCursorType thc)
