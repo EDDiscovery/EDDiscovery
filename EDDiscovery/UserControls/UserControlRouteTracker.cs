@@ -42,10 +42,6 @@ namespace EDDiscovery.UserControls
 
         public override void Init()
         {
-            discoveryform.OnHistoryChange += Display;
-            discoveryform.OnNewEntry += NewEntry;
-            discoveryform.OnNewTarget += NewTarget;
-
             displayfont = discoveryform.theme.GetFont;
 
             autoCopyWPToolStripMenuItem.Checked = SQLiteDBClass.GetSettingBool(DbSave + "autoCopyWP", false);
@@ -55,6 +51,10 @@ namespace EDDiscovery.UserControls
             long id = long.Parse(selRoute);
             _currentRoute = SavedRouteClass.GetAllSavedRoutes().Find(r => r.Id.Equals(id));
             updateScreen();
+
+            discoveryform.OnHistoryChange += Display;
+            discoveryform.OnNewEntry += NewEntry;
+            discoveryform.OnNewTarget += NewTarget;
         }
 
         public override void Closing()

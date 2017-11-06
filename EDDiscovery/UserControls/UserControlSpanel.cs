@@ -117,11 +117,6 @@ namespace EDDiscovery.UserControls
 
         public override void Init()
         {
-            discoveryform.OnHistoryChange += Display;
-            discoveryform.OnNewEntry += NewEntry;
-            discoveryform.OnNewTarget += NewTarget;
-            discoveryform.OnNewUIEvent += OnNewUIEvent;
-
             config = (long)(SQLiteDBClass.GetSettingInt(DbSave + "Config", (int)config)) | ((long)(SQLiteDBClass.GetSettingInt(DbSave + "ConfigH", (int)(config >> 32))) << 32);
             toolStripMenuItemTargetLine.Checked = Config(Configuration.showTargetLine);
             toolStripMenuItemTime.Checked = Config(Configuration.showTime);
@@ -175,6 +170,10 @@ namespace EDDiscovery.UserControls
 
             dividers = new ButtonExt[] { buttonExt0, buttonExt1, buttonExt2, buttonExt3, buttonExt4, buttonExt5, buttonExt6, buttonExt7, buttonExt8, buttonExt9, buttonExt10, buttonExt11, buttonExt12 };
 
+            discoveryform.OnHistoryChange += Display;
+            discoveryform.OnNewEntry += NewEntry;
+            discoveryform.OnNewTarget += NewTarget;
+            discoveryform.OnNewUIEvent += OnNewUIEvent;
         }
 
         public override void Closing()
