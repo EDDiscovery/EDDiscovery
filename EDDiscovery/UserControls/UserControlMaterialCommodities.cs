@@ -61,9 +61,9 @@ namespace EDDiscovery.UserControls
 
             }
 
-            uctg.OnTravelSelectionChanged += Display;
-
             SetCheckBoxes();
+
+            uctg.OnTravelSelectionChanged += Display;
         }
 
         public override void ChangeCursorType(UserControlCursorType thc)

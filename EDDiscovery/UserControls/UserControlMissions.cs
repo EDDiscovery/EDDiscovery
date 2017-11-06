@@ -57,9 +57,6 @@ namespace EDDiscovery.UserControls
             dataGridViewPrevious.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
             dataGridViewPrevious.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.DisplayedCells;     // NEW! appears to work https://msdn.microsoft.com/en-us/library/74b2wakt(v=vs.110).aspx
 
-            discoveryform.OnNewEntry += Discoveryform_OnNewEntry;
-            uctg.OnTravelSelectionChanged += Display;
-
             string start = SQLiteDBClass.GetSettingString(DbStartDate, "");
             DateTime dt;
             if (start != "" && DateTime.TryParse(start, System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out dt))
@@ -72,6 +69,9 @@ namespace EDDiscovery.UserControls
                 customDateTimePickerEnd.Value = dt;
 
             customDateTimePickerEnd.Checked = SQLiteDBClass.GetSettingBool(DbEndDateChecked, false);
+
+            discoveryform.OnNewEntry += Discoveryform_OnNewEntry;
+            uctg.OnTravelSelectionChanged += Display;
         }
 
         public override void ChangeCursorType(UserControlCursorType thc)

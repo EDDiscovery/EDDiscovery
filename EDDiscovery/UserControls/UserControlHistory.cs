@@ -64,15 +64,16 @@ namespace EDDiscovery.UserControls
         {
             userControlTravelGrid.Init(discoveryform, userControlTravelGrid, displaynumber);       // primary first instance - this registers with events in discoveryform to get info
                                                         // then this display, to update its own controls..
-            userControlTravelGrid.OnChangedSelection += ChangedSelection;   // and if the user clicks on something
-            userControlTravelGrid.OnPopOut += () => { discoveryform.PopOuts.PopOut(PanelInformation.PanelIDs.TravelGrid); };
-            userControlTravelGrid.OnKeyDownInCell += OnKeyDownInCell;
             userControlTravelGrid.ExtraIcons(true, true);
 
             TabConfigure(tabStripBottom,"Bottom", DisplayNumberHistoryBotLeft);          // codes are used to save info, 0 = primary (journal/travelgrid), 1..N are popups, these are embedded UCs
             TabConfigure(tabStripBottomRight,"Bottom-Right", DisplayNumberHistoryBotRight);
             TabConfigure(tabStripMiddleRight, "Middle-Right", DisplayNumberHistoryMidRight);
             TabConfigure(tabStripTopRight, "Top-Right", DisplayNumberHistoryTopRight);
+
+            userControlTravelGrid.OnChangedSelection += ChangedSelection;   // and if the user clicks on something
+            userControlTravelGrid.OnPopOut += () => { discoveryform.PopOuts.PopOut(PanelInformation.PanelIDs.TravelGrid); };
+            userControlTravelGrid.OnKeyDownInCell += OnKeyDownInCell;
         }
 
         #endregion
