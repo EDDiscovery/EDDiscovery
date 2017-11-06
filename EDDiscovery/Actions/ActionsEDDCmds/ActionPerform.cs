@@ -93,23 +93,23 @@ namespace EDDiscovery.Actions
                 else if (cmdname.Equals("configurewave"))
                     (ap.actioncontroller as ActionController).ConfigureWave(sp.NextQuotedWord() ?? "Configure Wave Output");
                 else if (cmdname.Equals("enableeliteinput"))
-                    (ap.actioncontroller as ActionController).DiscoveryForm.EliteInput(true, true);
+                    (ap.actioncontroller as ActionController).EliteInput(true, true);
                 else if (cmdname.Equals("enableeliteinputnoaxis"))
-                    (ap.actioncontroller as ActionController).DiscoveryForm.EliteInput(true, false);
+                    (ap.actioncontroller as ActionController).EliteInput(true, false);
                 else if (cmdname.Equals("disableeliteinput"))
-                    (ap.actioncontroller as ActionController).DiscoveryForm.EliteInput(false, false);
+                    (ap.actioncontroller as ActionController).EliteInput(false, false);
                 else if (cmdname.Equals("enablevoicerecognition"))
-                    (ap.actioncontroller as ActionController).DiscoveryForm.VoiceRecon(true, sp.NextQuotedWord() ?? "en-gb");
+                    (ap.actioncontroller as ActionController).VoiceRecon(true, sp.NextQuotedWord() ?? "en-gb");
                 else if (cmdname.Equals("disablevoicerecognition"))
-                    (ap.actioncontroller as ActionController).DiscoveryForm.VoiceRecon(false);
+                    (ap.actioncontroller as ActionController).VoiceRecon(false);
                 else if (cmdname.Equals("listeliteinput"))
                 {
-                    ap["EliteInput"] = (ap.actioncontroller as ActionController).DiscoveryForm.EliteInputList();
-                    ap["EliteInputCheck"] = (ap.actioncontroller as ActionController).DiscoveryForm.EliteInputCheck();
+                    ap["EliteInput"] = (ap.actioncontroller as ActionController).EliteInputList();
+                    ap["EliteInputCheck"] = (ap.actioncontroller as ActionController).EliteInputCheck();
                 }
                 else if (cmdname.Equals("voicenames"))
                 {
-                    ap["VoiceNames"] = (ap.actioncontroller as ActionController).DiscoveryForm.SpeechSynthesizer.GetVoiceNames().QuoteStrings();
+                    ap["VoiceNames"] = (ap.actioncontroller as ActionController).SpeechSynthesizer.GetVoiceNames().QuoteStrings();
                 }
                 else
                     ap.ReportError("Unknown command " + cmdname + " in Performaction");

@@ -45,7 +45,7 @@ namespace EDDiscovery.Actions
         {
             ActionController ac = cp as ActionController;
 
-            string ud = Menu(parent, cp.Icon, userdata , ac.DiscoveryForm.FrontierBindings );      // base has no additional keys
+            string ud = Menu(parent, cp.Icon, userdata , ac.FrontierBindings );      // base has no additional keys
             if (ud != null)
             {
                 userdata = ud;

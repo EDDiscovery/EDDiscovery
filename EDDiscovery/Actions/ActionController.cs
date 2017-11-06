@@ -48,10 +48,56 @@ namespace EDDiscovery.Actions
             return new ConditionEDDFunctions(c, vars, handles, recdepth);
         }
 
-        public ActionController(EDDiscoveryForm frm, EDDiscoveryController ctrl, System.Drawing.Icon ic) : base(frm.AudioQueueSpeech, frm.AudioQueueWave, frm.SpeechSynthesizer, frm, ic)
+        public override AudioExtensions.AudioQueue AudioQueueWave { get { return audioqueuewave; } }
+        public override AudioExtensions.AudioQueue AudioQueueSpeech { get { return audioqueuespeech; } }
+        public override AudioExtensions.SpeechSynthesizer SpeechSynthesizer { get { return speechsynth; } }
+        public AudioExtensions.VoiceRecognition VoiceRecognition { get { return voicerecon; } }
+        public BindingsFile FrontierBindings { get { return frontierbindings; } }
+
+        AudioExtensions.IAudioDriver audiodriverwave;
+        AudioExtensions.AudioQueue audioqueuewave;
+        AudioExtensions.IAudioDriver audiodriverspeech;
+        AudioExtensions.AudioQueue audioqueuespeech;
+        AudioExtensions.SpeechSynthesizer speechsynth;
+        AudioExtensions.VoiceRecognition voicerecon;
+
+        DirectInputDevices.InputDeviceList inputdevices;
+        Actions.ActionsFromInputDevices inputdevicesactions;
+        BindingsFile frontierbindings;
+
+        public ActionController(EDDiscoveryForm frm, EDDiscoveryController ctrl, System.Drawing.Icon ic) : base(frm, ic)
         {
             discoveryform = frm;
             discoverycontroller = ctrl;
+
+            #if !NO_SYSTEM_SPEECH
+            // Windows TTS (2000 and above). Speech *recognition* will be Version.Major >= 6 (Vista and above)
+            if (Environment.OSVersion.Platform == PlatformID.Win32NT && Environment.OSVersion.Version.Major >= 5)
+            {
+                audiodriverwave = new AudioExtensions.AudioDriverCSCore(EDDConfig.Instance.DefaultWaveDevice);
+                audiodriverspeech = new AudioExtensions.AudioDriverCSCore(EDDConfig.Instance.DefaultVoiceDevice);
+                speechsynth = new AudioExtensions.SpeechSynthesizer(new AudioExtensions.WindowsSpeechEngine());
+                voicerecon = new AudioExtensions.VoiceRecognitionWindows();
+            }
+            else
+            {
+                audiodriverwave = new AudioExtensions.AudioDriverDummy();
+                audiodriverspeech = new AudioExtensions.AudioDriverDummy();
+                speechsynth = new AudioExtensions.SpeechSynthesizer(new AudioExtensions.DummySpeechEngine());
+                voicerecon = new AudioExtensions.VoiceRecognitionDummy();
+            }
+#else
+            audiodriverwave = new AudioExtensions.AudioDriverDummy();
+            audiodriverspeech = new AudioExtensions.AudioDriverDummy();
+            speechsynth = new AudioExtensions.SpeechSynthesizer(new AudioExtensions.DummySpeechEngine());
+            voicerecon = new AudioExtensions.VoiceRecognitionDummy();
+#endif
+            audioqueuewave = new AudioExtensions.AudioQueue(audiodriverwave);
+            audioqueuespeech = new AudioExtensions.AudioQueue(audiodriverspeech);
+
+            frontierbindings = new BindingsFile();
+            inputdevices = new DirectInputDevices.InputDeviceList(a => discoveryform.BeginInvoke(a));
+            inputdevicesactions = new Actions.ActionsFromInputDevices(inputdevices, frontierbindings, this);
 
             ConditionFunctions.GetCFH = DefaultGetCFH;
 
@@ -170,7 +216,7 @@ namespace EDDiscovery.Actions
 
         private string onEditKeys(Form p, System.Drawing.Icon i, string keys)      // called when program wants to edit Key
         {
-            return ActionKeyED.Menu(p, i, keys, discoveryform.FrontierBindings);
+            return ActionKeyED.Menu(p, i, keys, FrontierBindings);
         }
 
         private string onEditSay(Form p, string say, ActionCoreController cp)      // called when program wants to edit Key
@@ -284,8 +330,8 @@ namespace EDDiscovery.Actions
                 if (dmf.changelist.Count > 0)
                 {
                     actionrunasync.TerminateAll();
-                    discoveryform.AudioQueueSpeech.StopAll();
-                    discoveryform.AudioQueueWave.StopAll();
+                    AudioQueueSpeech.StopAll();
+                    AudioQueueWave.StopAll();
 
                     ReLoad(false);      // reload from disk, new ones if required, refresh old ones and keep the vars
 
@@ -323,7 +369,7 @@ namespace EDDiscovery.Actions
             ConditionVariables effects = new ConditionVariables(PersistentVariables.GetString(ActionSay.globalvarspeecheffects, ""), ConditionVariables.FromMode.MultiEntryComma);
 
             SpeechConfigure cfg = new SpeechConfigure();
-            cfg.Init(discoveryform.AudioQueueSpeech, discoveryform.SpeechSynthesizer,
+            cfg.Init(AudioQueueSpeech, SpeechSynthesizer,
                         "Select voice synthesizer defaults", title, this.Icon,
                         null, false, false, AudioExtensions.AudioQueue.Priority.Normal, "", "",
                         voicename,
@@ -338,7 +384,7 @@ namespace EDDiscovery.Actions
                 SetPeristentGlobal(ActionSay.globalvarspeechrate, cfg.Rate);
                 SetPeristentGlobal(ActionSay.globalvarspeecheffects, cfg.Effects.ToString());
 
-                EDDConfig.Instance.DefaultVoiceDevice = discoveryform.AudioQueueSpeech.Driver.GetAudioEndpoint();
+                EDDConfig.Instance.DefaultVoiceDevice = AudioQueueSpeech.Driver.GetAudioEndpoint();
             }
         }
 
@@ -348,7 +394,7 @@ namespace EDDiscovery.Actions
             ConditionVariables effects = new ConditionVariables(PersistentVariables.GetString(ActionPlay.globalvarplayeffects, ""), ConditionVariables.FromMode.MultiEntryComma);
 
             WaveConfigureDialog dlg = new WaveConfigureDialog();
-            dlg.Init(discoveryform.AudioQueueWave, true,
+            dlg.Init(AudioQueueWave, true,
                         "Select Default device, volume and effects", title, this.Icon,
                         "",
                         false, AudioExtensions.AudioQueue.Priority.Normal, "", "",
@@ -361,7 +407,7 @@ namespace EDDiscovery.Actions
                 SetPeristentGlobal(ActionPlay.globalvarplayvolume, dlg.Volume);
                 SetPeristentGlobal(ActionPlay.globalvarplayeffects, dlg.Effects.ToString());
 
-                EDDConfig.Instance.DefaultWaveDevice = discoveryform.AudioQueueWave.Driver.GetAudioEndpoint();
+                EDDConfig.Instance.DefaultWaveDevice = AudioQueueWave.Driver.GetAudioEndpoint();
             }
         }
 
@@ -466,10 +512,24 @@ namespace EDDiscovery.Actions
             ActionRun(ActionEvent.onPostStartup);
         }
 
-        public void CloseDown()
+        public void HoldTillProgStops()
         {
             actionrunasync.WaitTillFinished(10000);
+        }
+
+        public void CloseDown()
+        {
             SQLiteConnectionUser.PutSettingString("UserGlobalActionVars", PersistentVariables.ToString());
+
+            audioqueuespeech.StopAll();
+            audioqueuewave.StopAll();
+            audioqueuespeech.Dispose();     // in order..
+            audiodriverspeech.Dispose();
+            audioqueuewave.Dispose();
+            audiodriverwave.Dispose();
+
+            inputdevicesactions.Stop();
+            inputdevices.Clear();
         }
 
         public override void LogLine(string s)
@@ -565,11 +625,11 @@ namespace EDDiscovery.Actions
         {
             if (cmd.Equals("bindings"))
             {
-                LogLine(DiscoveryForm.FrontierBindings.ListBindings());
+                LogLine(FrontierBindings.ListBindings());
             }
             else if (cmd.Equals("bindingvalues"))
             {
-                LogLine(DiscoveryForm.FrontierBindings.ListValues());
+                LogLine(FrontierBindings.ListValues());
             }
             else
                 return false;
@@ -579,7 +639,7 @@ namespace EDDiscovery.Actions
 
         #endregion
 
-        #region Voice Input
+        #region Voice
 
         public List<string> ActionVoicePrompts()
         {
@@ -588,6 +648,49 @@ namespace EDDiscovery.Actions
             return (from x in ret select x.Item1).ToList();
         }
 
+        public void VoiceRecon(bool on, string culture = null)
+        {
+            voicerecon.Close(); // can close without stopping
+
+            if (on)
+            {
+                List<string> voiceprompts = ActionVoicePrompts();
+
+                if (voiceprompts.Count > 0)
+                {
+                    voicerecon.Open(System.Globalization.CultureInfo.GetCultureInfo(culture));
+                    voicerecon.AddRange(voiceprompts);
+                    voicerecon.Start();
+                }
+
+            }
+        }
+
         #endregion
+
+        #region Elite Input 
+
+        public void EliteInput(bool on, bool axisevents)
+        {
+            inputdevicesactions.Stop();
+            inputdevices.Clear();
+
+#if !__MonoCS__
+            if (on)
+            {
+                DirectInputDevices.InputDeviceJoystickWindows.CreateJoysticks(inputdevices, axisevents);
+                DirectInputDevices.InputDeviceKeyboard.CreateKeyboard(inputdevices);              // Created.. not started..
+                DirectInputDevices.InputDeviceMouse.CreateMouse(inputdevices);
+                frontierbindings.LoadBindingsFile();
+                inputdevicesactions.Start();
+            }
+#endif
+        }
+
+        public string EliteInputList() { return inputdevices.ListDevices(); }
+        public string EliteInputCheck() { return inputdevicesactions.CheckBindings(); }
+
+        #endregion
+
     }
 }
