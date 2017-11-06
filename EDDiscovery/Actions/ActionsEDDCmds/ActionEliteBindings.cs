@@ -64,7 +64,7 @@ namespace EDDiscovery.Actions
                     cmdname = sp.NextQuotedWord();
                 }
 
-                BindingsFile bf = (ap.actioncontroller as ActionController).DiscoveryForm.FrontierBindings;
+                BindingsFile bf = (ap.actioncontroller as ActionController).FrontierBindings;
 
                 int matchno = 1;
                 string list = "";

@@ -56,27 +56,6 @@ namespace EDDiscovery
 
         public UserControls.UserControlHistory TravelControl { get { return travelHistoryControl; } }
         
-        public AudioExtensions.AudioQueue AudioQueueWave { get { return audioqueuewave; } }
-        public AudioExtensions.AudioQueue AudioQueueSpeech { get { return audioqueuespeech; } }
-        public AudioExtensions.SpeechSynthesizer SpeechSynthesizer { get { return speechsynth; } }
-        public AudioExtensions.VoiceRecognition VoiceRecognition { get { return voicerecon; } }
-
-        public string EliteInputList() { return inputdevices.ListDevices(); }
-        public string EliteInputCheck() { return inputdevicesactions.CheckBindings(); }
-
-        public BindingsFile FrontierBindings { get { return frontierbindings; } }
-
-        AudioExtensions.IAudioDriver audiodriverwave;
-        AudioExtensions.AudioQueue audioqueuewave;
-        AudioExtensions.IAudioDriver audiodriverspeech;
-        AudioExtensions.AudioQueue audioqueuespeech;
-        AudioExtensions.SpeechSynthesizer speechsynth;
-        AudioExtensions.VoiceRecognition voicerecon;
-
-        DirectInputDevices.InputDeviceList inputdevices;
-        Actions.ActionsFromInputDevices inputdevicesactions;
-        BindingsFile frontierbindings;
-
         public ScreenShots.ScreenShotConverter screenshotconverter;
 
         public EliteDangerousCore.CompanionAPI.CompanionAPIClass Capi { get; private set; } = new EliteDangerousCore.CompanionAPI.CompanionAPIClass();
@@ -200,42 +179,11 @@ namespace EDDiscovery
 
             this.TopMost = EDDConfig.KeepOnTop;
 
-#if !NO_SYSTEM_SPEECH
             Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " Audio");
 
-
-            // Windows TTS (2000 and above). Speech *recognition* will be Version.Major >= 6 (Vista and above)
-            if (Environment.OSVersion.Platform == PlatformID.Win32NT && Environment.OSVersion.Version.Major >= 5)
-            {
-                msg.Invoke("Activating Sensors");
-                audiodriverwave = new AudioExtensions.AudioDriverCSCore( EDDConfig.DefaultWaveDevice );
-                audiodriverspeech = new AudioExtensions.AudioDriverCSCore( EDDConfig.DefaultVoiceDevice );
-                speechsynth = new AudioExtensions.SpeechSynthesizer(new AudioExtensions.WindowsSpeechEngine());
-                voicerecon = new AudioExtensions.VoiceRecognitionWindows();
-            }
-            else
-            {
-                audiodriverwave = new AudioExtensions.AudioDriverDummy();
-                audiodriverspeech = new AudioExtensions.AudioDriverDummy();
-                speechsynth = new AudioExtensions.SpeechSynthesizer(new AudioExtensions.DummySpeechEngine());
-                voicerecon = new AudioExtensions.VoiceRecognitionDummy();
-            }
-#else
-            audiodriverwave = new AudioExtensions.AudioDriverDummy();
-            audiodriverspeech = new AudioExtensions.AudioDriverDummy();
-            speechsynth = new AudioExtensions.SpeechSynthesizer(new AudioExtensions.DummySpeechEngine());
-            voicerecon = new AudioExtensions.VoiceRecognitionDummy();
-#endif
-            audioqueuewave = new AudioExtensions.AudioQueue(audiodriverwave);
-            audioqueuespeech = new AudioExtensions.AudioQueue(audiodriverspeech);
-
-            Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " Action controller");
+            msg.Invoke("Activating Sensors");
 
             actioncontroller = new Actions.ActionController(this, Controller, this.Icon);
-
-            frontierbindings = new BindingsFile();
-            inputdevices = new DirectInputDevices.InputDeviceList(a => BeginInvoke(a));
-            inputdevicesactions = new Actions.ActionsFromInputDevices(inputdevices, frontierbindings, actioncontroller);
 
             screenshotconverter = new ScreenShots.ScreenShotConverter(this);
 
@@ -905,7 +853,7 @@ namespace EDDiscovery
 
         private void Controller_BgSafeClose()       // run in thread..
         {
-            actioncontroller.CloseDown();
+            actioncontroller.HoldTillProgStops();
         }
 
         private void Controller_FinalClose()        // run in UI, when controller finishes close
@@ -944,13 +892,7 @@ namespace EDDiscovery
 
             notifyIcon1.Visible = false;
 
-            audioqueuespeech.Dispose();     // in order..
-            audiodriverspeech.Dispose();
-            audioqueuewave.Dispose();
-            audiodriverwave.Dispose();
-
-            inputdevicesactions.Stop();
-            inputdevices.Clear();
+            actioncontroller.CloseDown();
 
             Close();
             Application.Exit();
@@ -1710,45 +1652,6 @@ namespace EDDiscovery
         internal void LoadSavedPopouts()
         {
             PopOuts.LoadSavedPopouts();
-        }
-
-        #endregion
-
-        #region Elite Input Voice
-
-        public void EliteInput(bool on, bool axisevents)
-        {
-            inputdevicesactions.Stop();
-            inputdevices.Clear();
-
-#if !__MonoCS__
-            if (on)
-            {
-                DirectInputDevices.InputDeviceJoystickWindows.CreateJoysticks(inputdevices, axisevents);
-                DirectInputDevices.InputDeviceKeyboard.CreateKeyboard(inputdevices);              // Created.. not started..
-                DirectInputDevices.InputDeviceMouse.CreateMouse(inputdevices);
-                frontierbindings.LoadBindingsFile();
-                inputdevicesactions.Start();
-            }
-#endif
-        }
-
-        public void VoiceRecon(bool on, string culture = null)
-        {
-            voicerecon.Close(); // can close without stopping
-
-            if (on)
-            {
-                List<string> voiceprompts = actioncontroller.ActionVoicePrompts();
-
-                if (voiceprompts.Count > 0)
-                {
-                    voicerecon.Open(System.Globalization.CultureInfo.GetCultureInfo(culture));
-                    voicerecon.AddRange(voiceprompts);
-                    voicerecon.Start();
-                }
-
-            }
         }
 
         #endregion
