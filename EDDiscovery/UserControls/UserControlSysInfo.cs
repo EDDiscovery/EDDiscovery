@@ -77,9 +77,6 @@ namespace EDDiscovery.UserControls
 
         public override void Init()
         {
-            uctg.OnTravelSelectionChanged += Display;    // get this whenever current selection or refreshed..
-            discoveryform.OnNewTarget += RefreshTargetDisplay;
-            discoveryform.OnNoteChanged += OnNoteChanged;
             textBoxTarget.SetAutoCompletor(SystemClassDB.ReturnSystemListForAutoComplete);
 
             // same order as Sel bits are defined in, one bit per selection item.
@@ -96,6 +93,10 @@ namespace EDDiscovery.UserControls
                 Reset();
             else
                 Lines = BaseUtils.LineStore.Restore(rs, HorzPositions);
+
+            uctg.OnTravelSelectionChanged += Display;    // get this whenever current selection or refreshed..
+            discoveryform.OnNewTarget += RefreshTargetDisplay;
+            discoveryform.OnNoteChanged += OnNoteChanged;
         }
 
         public override void ChangeCursorType(UserControlCursorType thc)

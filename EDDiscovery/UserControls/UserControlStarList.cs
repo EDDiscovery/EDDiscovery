@@ -80,9 +80,6 @@ namespace EDDiscovery.UserControls
 
             checkBoxMoveToTop.Checked = SQLiteConnectionUser.GetSettingBool(DbAutoTop, true);
 
-            discoveryform.OnHistoryChange += HistoryChanged;
-            discoveryform.OnNewEntry += AddNewEntry;
-
             dataGridViewStarList.MakeDoubleBuffered();
             dataGridViewStarList.RowTemplate.Height = DefaultRowHeight;
             dataGridViewStarList.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
@@ -92,6 +89,9 @@ namespace EDDiscovery.UserControls
             checkBoxEDSM.Checked = SQLiteDBClass.GetSettingBool(DbEDSM, false);
 
             ExtraIcons(false);
+
+            discoveryform.OnHistoryChange += HistoryChanged;
+            discoveryform.OnNewEntry += AddNewEntry;
         }
 
         public void ExtraIcons(bool icon)

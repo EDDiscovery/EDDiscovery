@@ -247,6 +247,8 @@ namespace EDDiscovery
             SetUpLogging();
 
             Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " Finish ED Init");
+
+            Controller.InitComplete();
         }
 
         // OnLoad is called the first time the form is shown, before OnShown or OnActivated are called

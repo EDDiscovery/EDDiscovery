@@ -55,11 +55,11 @@ namespace EDDiscovery.UserControls
 
             // so the way it works, if the panels ever re-display (for whatever reason) they tell us, and we redisplay
 
-            userControlSynthesis.OnDisplayComplete += Synthesis_OnWantedChange;
-            userControlEngineering.OnDisplayComplete += Engineering_OnWantedChange;
-
             showMaxInjections = SQLiteDBClass.GetSettingBool(DbShowInjectionsSave, true);
             pictureBoxList.ContextMenuStrip = contextMenuConfig;
+
+            userControlSynthesis.OnDisplayComplete += Synthesis_OnWantedChange;
+            userControlEngineering.OnDisplayComplete += Engineering_OnWantedChange;
         }
 
         public override void Closing()
