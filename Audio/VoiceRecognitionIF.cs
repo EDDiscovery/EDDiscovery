@@ -13,6 +13,7 @@ namespace AudioExtensions
     public interface VoiceRecognition
     {
         event SpeechRecognised SpeechRecognised;
+        bool IsOpen { get; }
         float Confidence { get; set; }
         bool Open(System.Globalization.CultureInfo ctp);        // Dispose to close
         bool Add(string s);
@@ -26,6 +27,7 @@ namespace AudioExtensions
     public class VoiceRecognitionDummy: VoiceRecognition
     {
         public event SpeechRecognised SpeechRecognised;
+        public bool IsOpen { get { return false; } }
         public float Confidence { get; set; } = 0.98F;
         public bool Open(System.Globalization.CultureInfo ctp) { return false; }       // Dispose to close
         public bool Start() { return false; }

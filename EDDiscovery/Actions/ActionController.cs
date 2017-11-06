@@ -99,6 +99,8 @@ namespace EDDiscovery.Actions
             inputdevices = new DirectInputDevices.InputDeviceList(a => discoveryform.BeginInvoke(a));
             inputdevicesactions = new Actions.ActionsFromInputDevices(inputdevices, frontierbindings, this);
 
+            voicerecon.SpeechRecognised += Voicerecon_SpeechRecognised;
+
             ConditionFunctions.GetCFH = DefaultGetCFH;
 
             LoadPeristentVariables(new ConditionVariables(SQLiteConnectionUser.GetSettingString("UserGlobalActionVars", ""), ConditionVariables.FromMode.MultiEntryComma));
@@ -138,6 +140,7 @@ namespace EDDiscovery.Actions
 
             actionrunasync = new ActionRun(this, actionfiles);        // this is the guy who runs programs asynchronously
             ActionConfigureKeys();
+            ActionConfigureVoiceRecon();
         }
 
         #region Edit Action Packs
@@ -171,6 +174,7 @@ namespace EDDiscovery.Actions
                 frm.ShowDialog(discoveryform); // don't care about the result, the form does all the saving
 
                 ActionConfigureKeys();
+                ActionConfigureVoiceRecon();
 
                 lasteditedpack = name;
                 SQLiteConnectionUser.PutSettingString("ActionPackLastFile", lasteditedpack);
@@ -609,8 +613,7 @@ namespace EDDiscovery.Actions
         {
             if (actionfileskeyevents.Contains("<" + keyname + ">"))  // fast string comparision to determine if key is overridden..
             {
-                SetInternalGlobal("KeyPress", keyname);
-                ActionRun(ActionEventEDList.onKeyPress);
+                ActionRun(ActionEventEDList.onKeyPress, new ConditionVariables("KeyPress", keyname));
                 return true;
             }
             else
@@ -641,29 +644,44 @@ namespace EDDiscovery.Actions
 
         #region Voice
 
-        public List<string> ActionVoicePrompts()
-        {
-            List<Tuple<string, ConditionEntry.MatchType>> ret = actionfiles.ReturnValuesOfSpecificConditions("VoiceInput", new List<ConditionEntry.MatchType>() { ConditionEntry.MatchType.MatchSemicolon });        // need these to decide
-//TBD here.. splitting up voice prompts
-            return (from x in ret select x.Item1).ToList();
-        }
-
         public void VoiceRecon(bool on, string culture = null)
         {
             voicerecon.Close(); // can close without stopping
 
             if (on)
             {
-                List<string> voiceprompts = ActionVoicePrompts();
+                voicerecon.Open(System.Globalization.CultureInfo.GetCultureInfo(culture));
+                ActionConfigureVoiceRecon();
+            }
+        }
 
-                if (voiceprompts.Count > 0)
+        void ActionConfigureVoiceRecon()
+        {
+            if ( voicerecon.IsOpen )
+            {
+                voicerecon.Stop();
+
+                List<Tuple<string, ConditionEntry.MatchType>> ret = actionfiles.ReturnValuesOfSpecificConditions("VoiceInput", new List<ConditionEntry.MatchType>() { ConditionEntry.MatchType.MatchSemicolon });        // need these to decide
+                List<string> prompts = new List<string>();
+
+                foreach ( var vp in ret)
                 {
-                    voicerecon.Open(System.Globalization.CultureInfo.GetCultureInfo(culture));
-                    voicerecon.AddRange(voiceprompts);
-                    voicerecon.Start();
+                    string[] list = vp.Item1.Split(';').Select(x => x.Trim()).ToArray();     // split and trim
+                    prompts.AddRange(list);
                 }
 
+                if (prompts.Count > 0)
+                {
+                    voicerecon.AddRange(prompts);
+                    voicerecon.Start();
+                }
             }
+        }
+
+        private void Voicerecon_SpeechRecognised(string text, float confidence)
+        {
+            System.Diagnostics.Debug.WriteLine("Dispatch " + text);
+            ActionRun(ActionEventEDList.onVoiceInput, new ConditionVariables("VoiceInput", text));
         }
 
         #endregion
