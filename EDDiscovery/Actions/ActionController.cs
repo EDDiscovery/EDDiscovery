@@ -48,10 +48,58 @@ namespace EDDiscovery.Actions
             return new ConditionEDDFunctions(c, vars, handles, recdepth);
         }
 
-        public ActionController(EDDiscoveryForm frm, EDDiscoveryController ctrl, System.Drawing.Icon ic) : base(frm.AudioQueueSpeech, frm.AudioQueueWave, frm.SpeechSynthesizer, frm , ic)
+        public override AudioExtensions.AudioQueue AudioQueueWave { get { return audioqueuewave; } }
+        public override AudioExtensions.AudioQueue AudioQueueSpeech { get { return audioqueuespeech; } }
+        public override AudioExtensions.SpeechSynthesizer SpeechSynthesizer { get { return speechsynth; } }
+        public AudioExtensions.VoiceRecognition VoiceRecognition { get { return voicerecon; } }
+        public BindingsFile FrontierBindings { get { return frontierbindings; } }
+
+        AudioExtensions.IAudioDriver audiodriverwave;
+        AudioExtensions.AudioQueue audioqueuewave;
+        AudioExtensions.IAudioDriver audiodriverspeech;
+        AudioExtensions.AudioQueue audioqueuespeech;
+        AudioExtensions.SpeechSynthesizer speechsynth;
+        AudioExtensions.VoiceRecognition voicerecon;
+
+        DirectInputDevices.InputDeviceList inputdevices;
+        Actions.ActionsFromInputDevices inputdevicesactions;
+        BindingsFile frontierbindings;
+
+        public ActionController(EDDiscoveryForm frm, EDDiscoveryController ctrl, System.Drawing.Icon ic) : base(frm, ic)
         {
             discoveryform = frm;
             discoverycontroller = ctrl;
+
+            #if !NO_SYSTEM_SPEECH
+            // Windows TTS (2000 and above). Speech *recognition* will be Version.Major >= 6 (Vista and above)
+            if (Environment.OSVersion.Platform == PlatformID.Win32NT && Environment.OSVersion.Version.Major >= 5)
+            {
+                audiodriverwave = new AudioExtensions.AudioDriverCSCore(EDDConfig.Instance.DefaultWaveDevice);
+                audiodriverspeech = new AudioExtensions.AudioDriverCSCore(EDDConfig.Instance.DefaultVoiceDevice);
+                speechsynth = new AudioExtensions.SpeechSynthesizer(new AudioExtensions.WindowsSpeechEngine());
+                voicerecon = new AudioExtensions.VoiceRecognitionWindows();
+            }
+            else
+            {
+                audiodriverwave = new AudioExtensions.AudioDriverDummy();
+                audiodriverspeech = new AudioExtensions.AudioDriverDummy();
+                speechsynth = new AudioExtensions.SpeechSynthesizer(new AudioExtensions.DummySpeechEngine());
+                voicerecon = new AudioExtensions.VoiceRecognitionDummy();
+            }
+#else
+            audiodriverwave = new AudioExtensions.AudioDriverDummy();
+            audiodriverspeech = new AudioExtensions.AudioDriverDummy();
+            speechsynth = new AudioExtensions.SpeechSynthesizer(new AudioExtensions.DummySpeechEngine());
+            voicerecon = new AudioExtensions.VoiceRecognitionDummy();
+#endif
+            audioqueuewave = new AudioExtensions.AudioQueue(audiodriverwave);
+            audioqueuespeech = new AudioExtensions.AudioQueue(audiodriverspeech);
+
+            frontierbindings = new BindingsFile();
+            inputdevices = new DirectInputDevices.InputDeviceList(a => discoveryform.BeginInvoke(a));
+            inputdevicesactions = new Actions.ActionsFromInputDevices(inputdevices, frontierbindings, this);
+
+            voicerecon.SpeechRecognised += Voicerecon_SpeechRecognised;
 
             ConditionFunctions.GetCFH = DefaultGetCFH;
 
@@ -81,9 +129,9 @@ namespace EDDiscovery.Actions
 
         static public string AppFolder { get { return System.IO.Path.Combine(EDDOptions.Instance.AppDataDirectory, "Actions"); } }
 
-        public void ReLoad( bool completereload = true)        // COMPLETE reload..
+        public void ReLoad(bool completereload = true)        // COMPLETE reload..
         {
-            if ( completereload )
+            if (completereload)
                 actionfiles = new ActionFileList();     // clear the list
 
             string errlist = actionfiles.LoadAllActionFiles(AppFolder);
@@ -92,6 +140,7 @@ namespace EDDiscovery.Actions
 
             actionrunasync = new ActionRun(this, actionfiles);        // this is the guy who runs programs asynchronously
             ActionConfigureKeys();
+            ActionConfigureVoiceRecon();
         }
 
         #region Edit Action Packs
@@ -125,6 +174,7 @@ namespace EDDiscovery.Actions
                 frm.ShowDialog(discoveryform); // don't care about the result, the form does all the saving
 
                 ActionConfigureKeys();
+                ActionConfigureVoiceRecon();
 
                 lasteditedpack = name;
                 SQLiteConnectionUser.PutSettingString("ActionPackLastFile", lasteditedpack);
@@ -136,7 +186,7 @@ namespace EDDiscovery.Actions
 
         // called when a new group is set up, what editor do you want?  and you can alter the condition
         // for new entries, cd = AlwaysTrue. For older entries, the condition
-        private ActionPackEditBase SetPackEditorAndCondition(string group, Condition cd)        
+        private ActionPackEditBase SetPackEditorAndCondition(string group, Condition cd)
         {
             List<string> addnames = new List<string>() { "{one}", "{two}" };
 
@@ -149,10 +199,10 @@ namespace EDDiscovery.Actions
 
                 // make sure the voice condition is right.. if not, reset.
 
-                if (cd.eventname != Actions.ActionEventEDList.onVoiceInput.triggername || !cd.Is("VoiceInput", ConditionEntry.MatchType.Equals))
+                if (cd.eventname != Actions.ActionEventEDList.onVoiceInput.triggername || !cd.Is("VoiceInput", ConditionEntry.MatchType.MatchSemicolon))
                 {
                     cd.eventname = Actions.ActionEventEDList.onVoiceInput.triggername;
-                    cd.Set(new ConditionEntry("VoiceInput", ConditionEntry.MatchType.Equals, "?"));     // Voiceinput being the variable set to the expression
+                    cd.Set(new ConditionEntry("VoiceInput", ConditionEntry.MatchType.MatchSemicolon, "?"));     // Voiceinput being the variable set to the expression
                 }
 
                 return ev;
@@ -168,19 +218,19 @@ namespace EDDiscovery.Actions
             }
         }
 
-        private string onEditKeys(Control p, System.Drawing.Icon i, string keys)      // called when program wants to edit Key
+        private string onEditKeys(Form p, System.Drawing.Icon i, string keys)      // called when program wants to edit Key
         {
-            return ActionKeyED.Menu(p, i, keys, discoveryform.FrontierBindings);
+            return ActionKeyED.Menu(p, i, keys, FrontierBindings);
         }
 
-        private string onEditSay(Control p, string say, ActionCoreController cp)      // called when program wants to edit Key
+        private string onEditSay(Form p, string say, ActionCoreController cp)      // called when program wants to edit Key
         {
             return ActionSay.Menu(p, say, cp);
         }
 
 
         // called when a event name is selected, what is the initial condition set up?
-        private ActionProgram.ProgramConditionClass SetEventCondition( Condition cd)          
+        private ActionProgram.ProgramConditionClass SetEventCondition(Condition cd)
         {                                                       // and what is the class selection for the program?
             ActionProgram.ProgramConditionClass cls = ActionProgram.ProgramConditionClass.Full;
 
@@ -214,8 +264,8 @@ namespace EDDiscovery.Actions
             List<string> fieldnames = new List<string>(discoveryform.Globals.NameList);
             fieldnames.Sort();
 
-            if ( evname.HasChars())
-            { 
+            if (evname.HasChars())
+            {
                 List<string> classnames = BaseUtils.FieldNames.GetPropertyFieldNames(JournalEntry.TypeOfJournalEntry(evname), "EventClass_");
                 if (classnames != null)
                     fieldnames.InsertRange(0, classnames);
@@ -242,12 +292,12 @@ namespace EDDiscovery.Actions
 
         private void Dmf_OnCreateActionFile()
         {
-            String r = ExtendedControls.PromptSingleLine.ShowDialog(discoveryform, "New name", "", "Create new action file" , this.Icon);
-            if ( r != null && r.Length>0 )
+            String r = ExtendedControls.PromptSingleLine.ShowDialog(discoveryform, "New name", "", "Create new action file", this.Icon);
+            if (r != null && r.Length > 0)
             {
                 if (actionfiles.Get(r, StringComparison.InvariantCultureIgnoreCase) == null)
                 {
-                    actionfiles.CreateSet(r,AppFolder);
+                    actionfiles.CreateSet(r, AppFolder);
                 }
                 else
                     ExtendedControls.MessageBoxTheme.Show(discoveryform, "Duplicate name", "Create Action File Failed", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
@@ -284,8 +334,8 @@ namespace EDDiscovery.Actions
                 if (dmf.changelist.Count > 0)
                 {
                     actionrunasync.TerminateAll();
-                    discoveryform.AudioQueueSpeech.StopAll();
-                    discoveryform.AudioQueueWave.StopAll();
+                    AudioQueueSpeech.StopAll();
+                    AudioQueueWave.StopAll();
 
                     ReLoad(false);      // reload from disk, new ones if required, refresh old ones and keep the vars
 
@@ -318,17 +368,17 @@ namespace EDDiscovery.Actions
         public void ConfigureVoice(string title)
         {
             string voicename = Globals.GetString(ActionSay.globalvarspeechvoice, "Default");
-            string volume = Globals.GetString(ActionSay.globalvarspeechvolume,"Default");
-            string rate = Globals.GetString(ActionSay.globalvarspeechrate,"Default");
-            ConditionVariables effects = new ConditionVariables( PersistentVariables.GetString(ActionSay.globalvarspeecheffects, ""),ConditionVariables.FromMode.MultiEntryComma);
+            string volume = Globals.GetString(ActionSay.globalvarspeechvolume, "Default");
+            string rate = Globals.GetString(ActionSay.globalvarspeechrate, "Default");
+            ConditionVariables effects = new ConditionVariables(PersistentVariables.GetString(ActionSay.globalvarspeecheffects, ""), ConditionVariables.FromMode.MultiEntryComma);
 
             SpeechConfigure cfg = new SpeechConfigure();
-            cfg.Init( discoveryform.AudioQueueSpeech, discoveryform.SpeechSynthesizer,
+            cfg.Init(AudioQueueSpeech, SpeechSynthesizer,
                         "Select voice synthesizer defaults", title, this.Icon,
                         null, false, false, AudioExtensions.AudioQueue.Priority.Normal, "", "",
                         voicename,
                         volume,
-                        rate, 
+                        rate,
                         effects);
 
             if (cfg.ShowDialog(discoveryform) == DialogResult.OK)
@@ -338,7 +388,7 @@ namespace EDDiscovery.Actions
                 SetPeristentGlobal(ActionSay.globalvarspeechrate, cfg.Rate);
                 SetPeristentGlobal(ActionSay.globalvarspeecheffects, cfg.Effects.ToString());
 
-                EDDConfig.Instance.DefaultVoiceDevice = discoveryform.AudioQueueSpeech.Driver.GetAudioEndpoint();
+                EDDConfig.Instance.DefaultVoiceDevice = AudioQueueSpeech.Driver.GetAudioEndpoint();
             }
         }
 
@@ -348,7 +398,7 @@ namespace EDDiscovery.Actions
             ConditionVariables effects = new ConditionVariables(PersistentVariables.GetString(ActionPlay.globalvarplayeffects, ""), ConditionVariables.FromMode.MultiEntryComma);
 
             WaveConfigureDialog dlg = new WaveConfigureDialog();
-            dlg.Init(discoveryform.AudioQueueWave, true, 
+            dlg.Init(AudioQueueWave, true,
                         "Select Default device, volume and effects", title, this.Icon,
                         "",
                         false, AudioExtensions.AudioQueue.Priority.Normal, "", "",
@@ -361,7 +411,7 @@ namespace EDDiscovery.Actions
                 SetPeristentGlobal(ActionPlay.globalvarplayvolume, dlg.Volume);
                 SetPeristentGlobal(ActionPlay.globalvarplayeffects, dlg.Effects.ToString());
 
-                EDDConfig.Instance.DefaultWaveDevice = discoveryform.AudioQueueWave.Driver.GetAudioEndpoint();
+                EDDConfig.Instance.DefaultWaveDevice = AudioQueueWave.Driver.GetAudioEndpoint();
             }
         }
 
@@ -418,7 +468,7 @@ namespace EDDiscovery.Actions
         {
             List<ActionFileList.MatchingSets> ale = actionfiles.GetMatchingConditions(ev.triggername, flagstart);      // look thru all actions, find matching ones
 
-            if (ale.Count > 0)                  
+            if (ale.Count > 0)
             {
                 ConditionVariables eventvars = new ConditionVariables();
                 Actions.ActionVars.TriggerVars(eventvars, ev.triggername, ev.triggertype);
@@ -430,7 +480,7 @@ namespace EDDiscovery.Actions
                 ConditionVariables testvars = new ConditionVariables(Globals);
                 testvars.Add(eventvars);
 
-                ConditionFunctions functions = new ConditionFunctions(testvars,null);
+                ConditionFunctions functions = new ConditionFunctions(testvars, null);
 
                 if (actionfiles.CheckActions(ale, he?.journalEntry, testvars, functions) > 0)
                 {
@@ -443,7 +493,7 @@ namespace EDDiscovery.Actions
             return ale.Count;
         }
 
-        public bool ActionRunProgram(string packname, string programname , ConditionVariables runvars , bool now = false )
+        public bool ActionRunProgram(string packname, string programname, ConditionVariables runvars, bool now = false)
         {
             Tuple<ActionFile, ActionProgram> found = actionfiles.FindProgram(packname, programname);
 
@@ -466,16 +516,32 @@ namespace EDDiscovery.Actions
             ActionRun(ActionEvent.onPostStartup);
         }
 
-        public void CloseDown()
+        public void HoldTillProgStops()
         {
             actionrunasync.WaitTillFinished(10000);
+        }
+
+        public void CloseDown()
+        {
             SQLiteConnectionUser.PutSettingString("UserGlobalActionVars", PersistentVariables.ToString());
+
+            audioqueuespeech.StopAll();
+            audioqueuewave.StopAll();
+            audioqueuespeech.Dispose();     // in order..
+            audiodriverspeech.Dispose();
+            audioqueuewave.Dispose();
+            audiodriverwave.Dispose();
+
+            inputdevicesactions.Stop();
+            inputdevices.Clear();
         }
 
         public override void LogLine(string s)
         {
             discoveryform.LogLine(s);
         }
+
+        #region Keys
 
         protected class ActionMessageFilter : IMessageFilter
         {
@@ -547,29 +613,102 @@ namespace EDDiscovery.Actions
         {
             if (actionfileskeyevents.Contains("<" + keyname + ">"))  // fast string comparision to determine if key is overridden..
             {
-                SetInternalGlobal("KeyPress", keyname);
-                ActionRun(ActionEventEDList.onKeyPress);
+                ActionRun(ActionEventEDList.onKeyPress, new ConditionVariables("KeyPress", keyname));
                 return true;
             }
             else
                 return false;
         }
 
+        #endregion
+
+        #region Misc overrides
+
         public override bool Pragma(string cmd)     // extra pragmas.
         {
             if (cmd.Equals("bindings"))
             {
-                LogLine(DiscoveryForm.FrontierBindings.ListBindings());
+                LogLine(FrontierBindings.ListBindings());
             }
             else if (cmd.Equals("bindingvalues"))
             {
-                LogLine(DiscoveryForm.FrontierBindings.ListValues());
+                LogLine(FrontierBindings.ListValues());
             }
             else
                 return false;
 
             return true;
         }
+
+        #endregion
+
+        #region Voice
+
+        public void VoiceRecon(bool on, string culture = null)
+        {
+            voicerecon.Close(); // can close without stopping
+
+            if (on)
+            {
+                voicerecon.Open(System.Globalization.CultureInfo.GetCultureInfo(culture));
+                ActionConfigureVoiceRecon();
+            }
+        }
+
+        void ActionConfigureVoiceRecon()
+        {
+            if ( voicerecon.IsOpen )
+            {
+                voicerecon.Stop();
+
+                List<Tuple<string, ConditionEntry.MatchType>> ret = actionfiles.ReturnValuesOfSpecificConditions("VoiceInput", new List<ConditionEntry.MatchType>() { ConditionEntry.MatchType.MatchSemicolon });        // need these to decide
+                List<string> prompts = new List<string>();
+
+                foreach ( var vp in ret)
+                {
+                    string[] list = vp.Item1.Split(';').Select(x => x.Trim()).ToArray();     // split and trim
+                    prompts.AddRange(list);
+                }
+
+                if (prompts.Count > 0)
+                {
+                    voicerecon.AddRange(prompts);
+                    voicerecon.Start();
+                }
+            }
+        }
+
+        private void Voicerecon_SpeechRecognised(string text, float confidence)
+        {
+            System.Diagnostics.Debug.WriteLine("Dispatch " + text);
+            ActionRun(ActionEventEDList.onVoiceInput, new ConditionVariables("VoiceInput", text));
+        }
+
+        #endregion
+
+        #region Elite Input 
+
+        public void EliteInput(bool on, bool axisevents)
+        {
+            inputdevicesactions.Stop();
+            inputdevices.Clear();
+
+#if !__MonoCS__
+            if (on)
+            {
+                DirectInputDevices.InputDeviceJoystickWindows.CreateJoysticks(inputdevices, axisevents);
+                DirectInputDevices.InputDeviceKeyboard.CreateKeyboard(inputdevices);              // Created.. not started..
+                DirectInputDevices.InputDeviceMouse.CreateMouse(inputdevices);
+                frontierbindings.LoadBindingsFile();
+                inputdevicesactions.Start();
+            }
+#endif
+        }
+
+        public string EliteInputList() { return inputdevices.ListDevices(); }
+        public string EliteInputCheck() { return inputdevicesactions.CheckBindings(); }
+
+        #endregion
 
     }
 }

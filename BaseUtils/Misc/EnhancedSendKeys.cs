@@ -50,6 +50,7 @@ namespace BaseUtils
     public class EnhancedSendKeys
     {
         public static string CurrentWindow = "Current window";
+        public delegate Tuple<string, int, string> AdditionalKeyParser(string s);      // return replace key string, or null if not recognised.  int is parse length, Any errors signal in second string
 
         static EnhancedSendKeys()
         {
@@ -103,7 +104,7 @@ namespace BaseUtils
 
         enum KMode { press, up, down };
 
-        public static string ParseKeys(string s, int defdelay , int defshiftdelay , int defupdelay)
+        public static string ParseKeys(string s, int defdelay , int defshiftdelay , int defupdelay, AdditionalKeyParser additionalkeyparser = null)
         {
             //debugevents = null;
             s = s.Trim();
@@ -111,6 +112,19 @@ namespace BaseUtils
 
             while (s.Length > 0)
             {
+                if (additionalkeyparser != null )                               // at each major point
+                {
+                    Tuple<string, int, string> t = additionalkeyparser(s);      // Allow the parser to sniff the string
+
+                    if (t.Item3 != null)                                        // error condition here, such as no matching key binding
+                        return t.Item3;
+
+                    if ( t.Item1 != null )                                      // if replace.. (and the parser can return multiple keys)
+                    {
+                        s = t.Item1 + " " + s.Substring(t.Item2);               // its the replace string, followed by the cut out current string
+                    }
+                }
+
                 KMode kmd = KMode.press;
 
                 int d1 = -1, d2 = -1, d3 = -1;
@@ -214,7 +228,7 @@ namespace BaseUtils
                             //System.Diagnostics.Debug.WriteLine(shift + " " + alt + " " + ctrl + "  press " + key.VKeyToString());
                         }
                         else
-                        {
+                        { 
                             while (word.Length > 0)
                             {
                                 string ch = new string(word[0], 1);
@@ -353,12 +367,13 @@ namespace BaseUtils
             UnsafeNativeMethods.SetKeyboardState(keystate);
         }
 
-        public static string Send(string keys, int keydelay, int shiftdelay , int updelay, string pname = null)
+
+        public static string Send(string keys, int keydelay, int shiftdelay , int updelay, string pname = null, AdditionalKeyParser additionalkeyparser = null)
         {
             if (!keys.HasChars())
                 return "";
 
-            string err = ParseKeys(keys,keydelay, shiftdelay , updelay);
+            string err = ParseKeys(keys,keydelay, shiftdelay , updelay , additionalkeyparser );
             if (err != "")
                 return err;
 

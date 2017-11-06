@@ -28,30 +28,24 @@ namespace EDDiscovery.Actions
 {
     public class ActionKeyED : ActionKey        // extends Key
     {
-        static public string Menu(Control parent, System.Drawing.Icon ic, string userdata , EliteDangerousCore.BindingsFile bf)
+        static public string Menu(Form parent, System.Drawing.Icon ic, string userdata, EliteDangerousCore.BindingsFile bf)
         {
-            ConditionVariables vars;
-            string keys;
-            FromString(userdata, out keys, out vars);
+            // use bf to get new list of stuff, pass thru to null TBD
+            List<string> example = new List<string>() { "{one}", "{two}" };
+            return Menu(parent, ic, userdata, example, BFParser);
+         
+        }
 
-            ExtendedControls.KeyForm kf = new ExtendedControls.KeyForm();
-            int defdelay = vars.Exists(DelayID) ? vars[DelayID].InvariantParseInt(DefaultDelay) : DefaultDelay;
-            string process = vars.Exists(ProcessID) ? vars[ProcessID] : "";
-            kf.Init(ic, true, " ", keys, process, defdelay: defdelay);
-
-            if (kf.ShowDialog(parent) == DialogResult.OK)
-            {
-                return ToString(kf.KeyList, new ConditionVariables(new string[] { ProcessID, kf.ProcessSelected, DelayID, kf.DefaultDelay.ToStringInvariant() }));
-            }
-            else
-                return null;
+        static Tuple<string,int,string> BFParser(string s)
+        {
+            return new Tuple<string,int,string>(null,0,null);
         }
 
         public override bool ConfigurationMenu(Form parent, ActionCoreController cp, List<string> eventvars)    // override again to expand any functionality
         {
             ActionController ac = cp as ActionController;
 
-            string ud = Menu(parent, cp.Icon, userdata , ac.DiscoveryForm.FrontierBindings );      // base has no additional keys
+            string ud = Menu(parent, cp.Icon, userdata , ac.FrontierBindings );      // base has no additional keys
             if (ud != null)
             {
                 userdata = ud;
@@ -63,33 +57,7 @@ namespace EDDiscovery.Actions
 
         public override bool ExecuteAction(ActionProgramRun ap)
         {
-            string keys;
-            ConditionVariables statementvars;
-            if (FromString(userdata, out keys, out statementvars))
-            {
-                string errlist = null;
-                ConditionVariables vars = statementvars.ExpandAll(ap.functions, statementvars, out errlist);
-
-                if (errlist == null)
-                {
-                    int defdelay = vars.Exists(DelayID) ? vars[DelayID].InvariantParseInt(DefaultDelay) : DefaultDelay;
-                    string process = vars.Exists(ProcessID) ? vars[ProcessID] : "";
-
-                    ActionController ac = ap.actioncontroller as ActionController;
-                    EliteDangerousCore.BindingsFile bf = ac.DiscoveryForm.FrontierBindings;
-
-                    string res = BaseUtils.EnhancedSendKeys.Send(keys, defdelay, DefaultShiftDelay, DefaultUpDelay, process);
-
-                    if (res.HasChars())
-                        ap.ReportError("Key Syntax error : " + res);
-                }
-                else
-                    ap.ReportError(errlist);
-            }
-            else
-                ap.ReportError("Key command line not in correct format");
-
-            return true;
+            return ExecuteAction(ap, null); //base, TBD pass in tx funct
         }
     }
 }
