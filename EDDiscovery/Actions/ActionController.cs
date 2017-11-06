@@ -48,7 +48,7 @@ namespace EDDiscovery.Actions
             return new ConditionEDDFunctions(c, vars, handles, recdepth);
         }
 
-        public ActionController(EDDiscoveryForm frm, EDDiscoveryController ctrl, System.Drawing.Icon ic) : base(frm.AudioQueueSpeech, frm.AudioQueueWave, frm.SpeechSynthesizer, frm , ic)
+        public ActionController(EDDiscoveryForm frm, EDDiscoveryController ctrl, System.Drawing.Icon ic) : base(frm.AudioQueueSpeech, frm.AudioQueueWave, frm.SpeechSynthesizer, frm, ic)
         {
             discoveryform = frm;
             discoverycontroller = ctrl;
@@ -81,9 +81,9 @@ namespace EDDiscovery.Actions
 
         static public string AppFolder { get { return System.IO.Path.Combine(EDDOptions.Instance.AppDataDirectory, "Actions"); } }
 
-        public void ReLoad( bool completereload = true)        // COMPLETE reload..
+        public void ReLoad(bool completereload = true)        // COMPLETE reload..
         {
-            if ( completereload )
+            if (completereload)
                 actionfiles = new ActionFileList();     // clear the list
 
             string errlist = actionfiles.LoadAllActionFiles(AppFolder);
@@ -136,7 +136,7 @@ namespace EDDiscovery.Actions
 
         // called when a new group is set up, what editor do you want?  and you can alter the condition
         // for new entries, cd = AlwaysTrue. For older entries, the condition
-        private ActionPackEditBase SetPackEditorAndCondition(string group, Condition cd)        
+        private ActionPackEditBase SetPackEditorAndCondition(string group, Condition cd)
         {
             List<string> addnames = new List<string>() { "{one}", "{two}" };
 
@@ -180,7 +180,7 @@ namespace EDDiscovery.Actions
 
 
         // called when a event name is selected, what is the initial condition set up?
-        private ActionProgram.ProgramConditionClass SetEventCondition( Condition cd)          
+        private ActionProgram.ProgramConditionClass SetEventCondition(Condition cd)
         {                                                       // and what is the class selection for the program?
             ActionProgram.ProgramConditionClass cls = ActionProgram.ProgramConditionClass.Full;
 
@@ -214,8 +214,8 @@ namespace EDDiscovery.Actions
             List<string> fieldnames = new List<string>(discoveryform.Globals.NameList);
             fieldnames.Sort();
 
-            if ( evname.HasChars())
-            { 
+            if (evname.HasChars())
+            {
                 List<string> classnames = BaseUtils.FieldNames.GetPropertyFieldNames(JournalEntry.TypeOfJournalEntry(evname), "EventClass_");
                 if (classnames != null)
                     fieldnames.InsertRange(0, classnames);
@@ -242,12 +242,12 @@ namespace EDDiscovery.Actions
 
         private void Dmf_OnCreateActionFile()
         {
-            String r = ExtendedControls.PromptSingleLine.ShowDialog(discoveryform, "New name", "", "Create new action file" , this.Icon);
-            if ( r != null && r.Length>0 )
+            String r = ExtendedControls.PromptSingleLine.ShowDialog(discoveryform, "New name", "", "Create new action file", this.Icon);
+            if (r != null && r.Length > 0)
             {
                 if (actionfiles.Get(r, StringComparison.InvariantCultureIgnoreCase) == null)
                 {
-                    actionfiles.CreateSet(r,AppFolder);
+                    actionfiles.CreateSet(r, AppFolder);
                 }
                 else
                     ExtendedControls.MessageBoxTheme.Show(discoveryform, "Duplicate name", "Create Action File Failed", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
@@ -318,17 +318,17 @@ namespace EDDiscovery.Actions
         public void ConfigureVoice(string title)
         {
             string voicename = Globals.GetString(ActionSay.globalvarspeechvoice, "Default");
-            string volume = Globals.GetString(ActionSay.globalvarspeechvolume,"Default");
-            string rate = Globals.GetString(ActionSay.globalvarspeechrate,"Default");
-            ConditionVariables effects = new ConditionVariables( PersistentVariables.GetString(ActionSay.globalvarspeecheffects, ""),ConditionVariables.FromMode.MultiEntryComma);
+            string volume = Globals.GetString(ActionSay.globalvarspeechvolume, "Default");
+            string rate = Globals.GetString(ActionSay.globalvarspeechrate, "Default");
+            ConditionVariables effects = new ConditionVariables(PersistentVariables.GetString(ActionSay.globalvarspeecheffects, ""), ConditionVariables.FromMode.MultiEntryComma);
 
             SpeechConfigure cfg = new SpeechConfigure();
-            cfg.Init( discoveryform.AudioQueueSpeech, discoveryform.SpeechSynthesizer,
+            cfg.Init(discoveryform.AudioQueueSpeech, discoveryform.SpeechSynthesizer,
                         "Select voice synthesizer defaults", title, this.Icon,
                         null, false, false, AudioExtensions.AudioQueue.Priority.Normal, "", "",
                         voicename,
                         volume,
-                        rate, 
+                        rate,
                         effects);
 
             if (cfg.ShowDialog(discoveryform) == DialogResult.OK)
@@ -348,7 +348,7 @@ namespace EDDiscovery.Actions
             ConditionVariables effects = new ConditionVariables(PersistentVariables.GetString(ActionPlay.globalvarplayeffects, ""), ConditionVariables.FromMode.MultiEntryComma);
 
             WaveConfigureDialog dlg = new WaveConfigureDialog();
-            dlg.Init(discoveryform.AudioQueueWave, true, 
+            dlg.Init(discoveryform.AudioQueueWave, true,
                         "Select Default device, volume and effects", title, this.Icon,
                         "",
                         false, AudioExtensions.AudioQueue.Priority.Normal, "", "",
@@ -418,7 +418,7 @@ namespace EDDiscovery.Actions
         {
             List<ActionFileList.MatchingSets> ale = actionfiles.GetMatchingConditions(ev.triggername, flagstart);      // look thru all actions, find matching ones
 
-            if (ale.Count > 0)                  
+            if (ale.Count > 0)
             {
                 ConditionVariables eventvars = new ConditionVariables();
                 Actions.ActionVars.TriggerVars(eventvars, ev.triggername, ev.triggertype);
@@ -430,7 +430,7 @@ namespace EDDiscovery.Actions
                 ConditionVariables testvars = new ConditionVariables(Globals);
                 testvars.Add(eventvars);
 
-                ConditionFunctions functions = new ConditionFunctions(testvars,null);
+                ConditionFunctions functions = new ConditionFunctions(testvars, null);
 
                 if (actionfiles.CheckActions(ale, he?.journalEntry, testvars, functions) > 0)
                 {
@@ -443,7 +443,7 @@ namespace EDDiscovery.Actions
             return ale.Count;
         }
 
-        public bool ActionRunProgram(string packname, string programname , ConditionVariables runvars , bool now = false )
+        public bool ActionRunProgram(string packname, string programname, ConditionVariables runvars, bool now = false)
         {
             Tuple<ActionFile, ActionProgram> found = actionfiles.FindProgram(packname, programname);
 
@@ -476,6 +476,8 @@ namespace EDDiscovery.Actions
         {
             discoveryform.LogLine(s);
         }
+
+        #region Keys
 
         protected class ActionMessageFilter : IMessageFilter
         {
@@ -555,6 +557,10 @@ namespace EDDiscovery.Actions
                 return false;
         }
 
+        #endregion
+
+        #region Misc overrides
+
         public override bool Pragma(string cmd)     // extra pragmas.
         {
             if (cmd.Equals("bindings"))
@@ -571,5 +577,17 @@ namespace EDDiscovery.Actions
             return true;
         }
 
+        #endregion
+
+        #region Voice Input
+
+        public List<string> ActionVoicePrompts()
+        {
+            List<Tuple<string, ConditionEntry.MatchType>> ret = actionfiles.ReturnValuesOfSpecificConditions("VoiceInput", new List<ConditionEntry.MatchType>() { ConditionEntry.MatchType.MatchSemicolon });        // need these to decide
+//TBD here.. splitting up voice prompts
+            return (from x in ret select x.Item1).ToList();
+        }
+
+        #endregion
     }
 }

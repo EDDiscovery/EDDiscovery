@@ -98,6 +98,10 @@ namespace EDDiscovery.Actions
                     (ap.actioncontroller as ActionController).DiscoveryForm.EliteInput(true, false);
                 else if (cmdname.Equals("disableeliteinput"))
                     (ap.actioncontroller as ActionController).DiscoveryForm.EliteInput(false, false);
+                else if (cmdname.Equals("enablevoicerecognition"))
+                    (ap.actioncontroller as ActionController).DiscoveryForm.VoiceRecon(true, sp.NextQuotedWord() ?? "en-gb");
+                else if (cmdname.Equals("disablevoicerecognition"))
+                    (ap.actioncontroller as ActionController).DiscoveryForm.VoiceRecon(false);
                 else if (cmdname.Equals("listeliteinput"))
                 {
                     ap["EliteInput"] = (ap.actioncontroller as ActionController).DiscoveryForm.EliteInputList();

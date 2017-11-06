@@ -59,6 +59,7 @@ namespace EDDiscovery
         public AudioExtensions.AudioQueue AudioQueueWave { get { return audioqueuewave; } }
         public AudioExtensions.AudioQueue AudioQueueSpeech { get { return audioqueuespeech; } }
         public AudioExtensions.SpeechSynthesizer SpeechSynthesizer { get { return speechsynth; } }
+        public AudioExtensions.VoiceRecognition VoiceRecognition { get { return voicerecon; } }
 
         public string EliteInputList() { return inputdevices.ListDevices(); }
         public string EliteInputCheck() { return inputdevicesactions.CheckBindings(); }
@@ -70,6 +71,7 @@ namespace EDDiscovery
         AudioExtensions.IAudioDriver audiodriverspeech;
         AudioExtensions.AudioQueue audioqueuespeech;
         AudioExtensions.SpeechSynthesizer speechsynth;
+        AudioExtensions.VoiceRecognition voicerecon;
 
         DirectInputDevices.InputDeviceList inputdevices;
         Actions.ActionsFromInputDevices inputdevicesactions;
@@ -201,6 +203,7 @@ namespace EDDiscovery
 #if !NO_SYSTEM_SPEECH
             Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " Audio");
 
+
             // Windows TTS (2000 and above). Speech *recognition* will be Version.Major >= 6 (Vista and above)
             if (Environment.OSVersion.Platform == PlatformID.Win32NT && Environment.OSVersion.Version.Major >= 5)
             {
@@ -208,17 +211,20 @@ namespace EDDiscovery
                 audiodriverwave = new AudioExtensions.AudioDriverCSCore( EDDConfig.DefaultWaveDevice );
                 audiodriverspeech = new AudioExtensions.AudioDriverCSCore( EDDConfig.DefaultVoiceDevice );
                 speechsynth = new AudioExtensions.SpeechSynthesizer(new AudioExtensions.WindowsSpeechEngine());
+                voicerecon = new AudioExtensions.VoiceRecognitionWindows();
             }
             else
             {
                 audiodriverwave = new AudioExtensions.AudioDriverDummy();
                 audiodriverspeech = new AudioExtensions.AudioDriverDummy();
                 speechsynth = new AudioExtensions.SpeechSynthesizer(new AudioExtensions.DummySpeechEngine());
+                voicerecon = new AudioExtensions.VoiceRecognitionDummy();
             }
 #else
             audiodriverwave = new AudioExtensions.AudioDriverDummy();
             audiodriverspeech = new AudioExtensions.AudioDriverDummy();
             speechsynth = new AudioExtensions.SpeechSynthesizer(new AudioExtensions.DummySpeechEngine());
+            voicerecon = new AudioExtensions.VoiceRecognitionDummy();
 #endif
             audioqueuewave = new AudioExtensions.AudioQueue(audiodriverwave);
             audioqueuespeech = new AudioExtensions.AudioQueue(audiodriverspeech);
@@ -1706,7 +1712,7 @@ namespace EDDiscovery
 
         #endregion
 
-        #region Elite Input
+        #region Elite Input Voice
 
         public void EliteInput(bool on, bool axisevents)
         {
@@ -1723,6 +1729,24 @@ namespace EDDiscovery
                 inputdevicesactions.Start();
             }
 #endif
+        }
+
+        public void VoiceRecon(bool on, string culture = null)
+        {
+            voicerecon.Close(); // can close without stopping
+
+            if (on)
+            {
+                List<string> voiceprompts = actioncontroller.ActionVoicePrompts();
+
+                if (voiceprompts.Count > 0)
+                {
+                    voicerecon.Open(System.Globalization.CultureInfo.GetCultureInfo(culture));
+                    voicerecon.AddRange(voiceprompts);
+                    voicerecon.Start();
+                }
+
+            }
         }
 
         #endregion
