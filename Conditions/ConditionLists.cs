@@ -207,6 +207,11 @@ namespace Conditions
                                     matched = ret.Contains(leftside, StringComparer.InvariantCultureIgnoreCase);
                                 }
                             }
+                            else if (f.matchtype == ConditionEntry.MatchType.MatchSemicolon)
+                            {
+                                string[] list = rightside.Split(';').Select(x=>x.Trim()).ToArray();     // split and trim
+                                matched = list.Contains(leftside.Trim(),StringComparer.InvariantCultureIgnoreCase); // compare, trimmed, case insensitive
+                            }
                             else if (f.matchtype == ConditionEntry.MatchType.AnyOfAny)
                             {
                                 StringParser l = new StringParser(leftside);

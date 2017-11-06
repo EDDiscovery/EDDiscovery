@@ -55,6 +55,7 @@ namespace Conditions
 
             IsOneOf,            // left, is it one of a quoted comma list on right
             AnyOfAny,           // is any in a comma separ on left, one of a quoted comma list on right
+            MatchSemicolon,     // left, is it one of the semicolon list on right
 
             AlwaysTrue,         // Always true
             AlwaysFalse,          // never true
@@ -120,6 +121,7 @@ namespace Conditions
                                        "Not Present",
                                        "Is One Of",
                                        "Any Of Any",
+                                       "Match Semicolon",
                                        "Always True/Enable",
                                        "Always False/Disable"
                                     };
@@ -149,6 +151,7 @@ namespace Conditions
                                        "NotPresent",
                                        "IsOneOf",
                                        "AnyOfAny",
+                                       "MatchSemicolon",
                                        "AlwaysTrue",
                                        "AlwaysFalse"
                                     };
