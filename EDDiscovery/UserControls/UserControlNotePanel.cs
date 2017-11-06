@@ -56,11 +56,11 @@ namespace EDDiscovery.UserControls
         {
             config = (Configuration)SQLiteDBClass.GetSettingInt(DbSave + "Config", (int)config);
 
+            displayfont = discoveryform.theme.GetFont;
+
             discoveryform.OnHistoryChange += Display;
             discoveryform.OnNewEntry += NewEntry;
             uctg.OnTravelSelectionChanged += DisplaySelected;
-
-            displayfont = discoveryform.theme.GetFont;
         }
 
         public override void InitialDisplay()

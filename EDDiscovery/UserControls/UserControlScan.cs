@@ -58,9 +58,6 @@ namespace EDDiscovery.UserControls
 
         public override void Init()
         {
-            uctg.OnTravelSelectionChanged += Display;
-            discoveryform.OnNewEntry += NewEntry;
-
             progchange = true;
             checkBoxMaterials.Checked = SQLiteDBClass.GetSettingBool(DbSave + "Materials", true);
             checkBoxMaterialsRare.Checked = SQLiteDBClass.GetSettingBool(DbSave + "MaterialsRare", false);
@@ -71,6 +68,9 @@ namespace EDDiscovery.UserControls
 
             int size = SQLiteDBClass.GetSettingInt(DbSave + "Size", 64);
             SetSizeCheckBoxes(size);
+
+            uctg.OnTravelSelectionChanged += Display;
+            discoveryform.OnNewEntry += NewEntry;
 
             imagebox.ClickElement += ClickElement;
         }

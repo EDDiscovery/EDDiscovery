@@ -47,10 +47,6 @@ namespace EDDiscovery.UserControls
 
         public override void Init()
         {
-            discoveryform.OnHistoryChange += Display;
-            discoveryform.OnNewEntry += NewEntry;
-            discoveryform.OnNewTarget += NewTarget;
-
             displayfont = discoveryform.theme.GetFont;
 
             jumpRange = SQLiteDBClass.GetSettingDouble(DbSave + "JumpRange", -1.0);
@@ -65,7 +61,9 @@ namespace EDDiscovery.UserControls
             fsdDrive = SQLiteDBClass.GetSettingString(DbSave + "fsdDrive", null);
             tankWarning = SQLiteDBClass.GetSettingDouble(DbSave + "TankWarning", -1);
 
-
+            discoveryform.OnHistoryChange += Display;
+            discoveryform.OnNewEntry += NewEntry;
+            discoveryform.OnNewTarget += NewTarget;
         }
 
         private double jumpRange = -1;
