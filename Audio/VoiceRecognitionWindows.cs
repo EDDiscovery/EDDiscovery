@@ -12,6 +12,7 @@ namespace AudioExtensions
         public float Confidence { get; set; } = 0.98F;
 
         public event SpeechRecognised SpeechRecognised;
+        public bool IsOpen { get { return engine != null; } }
 
         private SpeechRecognitionEngine engine;
         private System.Globalization.CultureInfo ct;
@@ -24,7 +25,6 @@ namespace AudioExtensions
                 engine.Dispose();
 
             engine = new SpeechRecognitionEngine(ct);
-            engine.SetInputToDefaultAudioDevice();
 
             try
             {
@@ -33,6 +33,7 @@ namespace AudioExtensions
             catch
             {
                 Stop();
+                return false;
             }
 
             engine.SpeechRecognized += Engine_SpeechRecognized;
