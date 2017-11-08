@@ -125,7 +125,7 @@ namespace EliteDangerousCore.DB
                 _cn = DbFactory.CreateConnection();
 
                 // Use the database selected by maindb as the 'main' database
-                _cn.ConnectionString = "Data Source=" + DBFile + ";Pooling=true;";
+                _cn.ConnectionString = "Data Source=" + DBFile.Replace("\\", "\\\\") + ";Pooling=true;";
 
                 if (utctimeindicator)   // indicate treat dates as UTC.
                     _cn.ConnectionString += "DateTimeKind=Utc;";
