@@ -105,12 +105,12 @@ namespace ActionLanguage
                 return false;
         }
 
-        public override bool ExecuteAction(ActionProgramRun ap)
+        public override bool ExecuteAction(ActionProgramRun ap)     // standard action.. at this class level in action language we do not have an additional parser.
         {
             return ExecuteAction(ap, null);
         }
 
-        public bool ExecuteAction(ActionProgramRun ap, Func<string,string> keytx )      // keytx is passed in
+        public bool ExecuteAction(ActionProgramRun ap, BaseUtils.EnhancedSendKeys.AdditionalKeyParser akp )      // additional parser
         { 
             string keys;
             ConditionVariables statementvars;
@@ -124,13 +124,17 @@ namespace ActionLanguage
                     int defdelay = vars.Exists(DelayID) ? vars[DelayID].InvariantParseInt(DefaultDelay) : (ap.VarExist(globalvarDelay) ? ap[globalvarDelay].InvariantParseInt(DefaultDelay) : DefaultDelay);
                     string process = vars.Exists(ProcessID) ? vars[ProcessID] : (ap.VarExist(globalvarProcessID) ? ap[globalvarProcessID] : "");
 
-                    if (keytx != null)
-                        keys = keytx(keys);
+                    //string res = BaseUtils.EnhancedSendKeys.Send(keys, defdelay, DefaultShiftDelay, DefaultUpDelay, process);
 
-                    string res = BaseUtils.EnhancedSendKeys.Send(keys, defdelay, DefaultShiftDelay, DefaultUpDelay, process);
+                    List<string> list;
+                    string res = BaseUtils.EnhancedSendKeys.GenerateEventList(out list, keys, defdelay, DefaultShiftDelay, DefaultUpDelay, akp);
+                    foreach( string s in list)
+                    {
+                        System.Diagnostics.Debug.WriteLine(">>" + s);
+                    }
 
                     if (res.HasChars())
-                        ap.ReportError("Key Syntax error : " + res);
+                        ap.ReportError("Sequence not recognised: " + res);
                 }
                 else
                     ap.ReportError(errlist);

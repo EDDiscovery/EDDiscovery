@@ -9,7 +9,7 @@ namespace AudioExtensions
 {
     public class VoiceRecognitionWindows : VoiceRecognition
     {
-        public float Confidence { get; set; } = 0.98F;
+        public float Confidence { get; set; } = 0.96F;
 
         public event SpeechRecognised SpeechRecognised;
         public bool IsOpen { get { return engine != null; } }
@@ -76,9 +76,10 @@ namespace AudioExtensions
         {
             if (engine != null && engine.AudioState != AudioState.Stopped)
             {
-                System.Diagnostics.Debug.WriteLine("Stopping ");
+                System.Diagnostics.Debug.WriteLine("Voice Recognition Stopping");
                 engine.UnloadAllGrammars();
                 engine.RecognizeAsyncCancel();
+                System.Diagnostics.Debug.WriteLine("Voice Recognition Stopped");
             }
         }
 
@@ -98,7 +99,6 @@ namespace AudioExtensions
             if (engine != null && engine.AudioState == AudioState.Stopped)
             {
                 GrammarBuilder builder = new GrammarBuilder(s);
-                System.Diagnostics.Debug.WriteLine(builder.DebugShowPhrases);
                 builder.Culture = ct;
 
                 Grammar gr = new Grammar(builder);
@@ -118,6 +118,8 @@ namespace AudioExtensions
             DumpInfo("Recognised", e.Result);
             if (e.Result.Confidence >= Confidence)
                 SpeechRecognised?.Invoke(e.Result.Text, e.Result.Confidence);
+            else
+                System.Diagnostics.Debug.WriteLine("Failed confidence threshold {0} {1}", e.Result.Confidence, Confidence);
         }
 
         private void Engine_SpeechRecognitionRejected(object sender, SpeechRecognitionRejectedEventArgs e)

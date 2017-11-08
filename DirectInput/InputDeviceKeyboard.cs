@@ -23,153 +23,9 @@ using System.Windows.Forms;
 
 namespace DirectInputDevices
 {
-    public class InputDeviceKeyboard : InputDeviceInterface
+    static public class KeyConversion       // three naming conventsion, lovely!
     {
-        public InputDeviceIdentity ID() { return ksi; }
-        InputDeviceIdentity ksi;
-
-        SharpDX.DirectInput.Keyboard keyboard;
-
-        System.Threading.AutoResetEvent eventhandle = new System.Threading.AutoResetEvent(false);       // used by joy to signal data
-        public System.Threading.AutoResetEvent Eventhandle() { return eventhandle; }
-
-        public InputDeviceKeyboard(DirectInput di,DeviceInstance d)
-        {
-            // those silly foreign people call keyboard something other than it in english, so we need to fix it to english
-
-            ksi = new InputDeviceIdentity() { Instanceguid = d.InstanceGuid, Productguid = d.ProductGuid, Name = "Keyboard"};
-
-            keyboard = new Keyboard(di);
-            keyboard.Properties.BufferSize = 128;
-            keyboard.SetNotification(eventhandle);
-            keyboard.Acquire();
-        }
-
-        public void Dispose()
-        {
-            if (keyboard != null)
-            {
-                keyboard.Unacquire();
-                keyboard.Dispose();
-                keyboard = null;
-            }
-        }
-
-        KeyboardState ks;
-
-        public List<InputDeviceEvent> GetEvents()
-        {
-            ks = keyboard.GetCurrentState();
-            KeyboardUpdate[] ke = keyboard.GetBufferedData();
-
-            List<InputDeviceEvent> events = new List<InputDeviceEvent>();
-            foreach (KeyboardUpdate k in ke)
-            {
-                //System.Diagnostics.Debug.WriteLine("key " + k.Key + " " + k.IsPressed );
-                events.Add(new InputDeviceEvent(this, (int)k.Key, k.IsPressed));
-            }
-
-            return (events.Count > 0) ? events : null;
-        }
-
-        public string EventName(InputDeviceEvent e) // need to return frontier naming convention!
-        {
-            Key k = (Key)(e.EventNumber);
-            return DIKeyToFrontier(k);
-        }
-
-        public bool? IsPressed(string frontierkeyname )      // frontier naming convention..  GetEvents must have filled in ks
-        {
-            frontierkeyname = frontierkeyname.Substring(4);
-            if (frontierkeyname.Length == 1 && (frontierkeyname[0] >= '0' && frontierkeyname[0] <= '9'))
-                frontierkeyname = "D" + frontierkeyname;
-            else if (frontierkeyname.StartsWith("Numpad_") && char.IsDigit(frontierkeyname[7]))
-                frontierkeyname = "NumberPad" + frontierkeyname[7];
-            else
-            {
-                int i = Array.FindIndex(strtx, x => x.Item2.Equals(frontierkeyname));
-                if (i >= 0)
-                    frontierkeyname = strtx[i].Item1;
-            }
-
-            Key k;
-            if (Enum.TryParse<Key>(frontierkeyname, out k))
-            {
-                return (ks!=null) ? ks.IsPressed(k) : false;
-            }
-            else
-            {
-                System.Diagnostics.Debug.WriteLine("FAILED IsPressed " + frontierkeyname);
-            }
-
-            return false;
-        }
-
-        public bool IsDIPressed(Key k, bool recheck = false) // check. Optional rescan or use GetEvents
-        {
-            if (recheck || ks == null)
-                ks = keyboard.GetCurrentState();
-
-            return ks.IsPressed(k);
-        }
-
-        public bool IsKeyPressed(Keys k, bool recheck = false) // check. Optional rescan or use GetEvents. Needs a diff name from above for some reason
-        {
-            if (recheck || ks == null)
-                ks = keyboard.GetCurrentState();
-
-            Key ky = KeysToKey(k);
-            return ks.IsPressed(ky);
-        }
-
-        public override string ToString()
-        {
-            return ksi.Name + ":" + ksi.Instanceguid + ":" + ksi.Productguid;
-        }
-
-        public static void CreateKeyboard(InputDeviceList ilist)
-        {
-            DirectInput dinput = new DirectInput();
-
-            foreach (DeviceInstance di in dinput.GetDevices(DeviceClass.Keyboard, DeviceEnumerationFlags.AttachedOnly))
-            {
-                InputDeviceKeyboard k = new InputDeviceKeyboard(dinput, di);
-                ilist.Add(k);
-            }
-        }
-
-        public static InputDeviceKeyboard CreateKeyboard()      // direct keyboard make, not part of elite UI
-        {
-            DirectInput dinput = new DirectInput();
-
-            foreach (DeviceInstance di in dinput.GetDevices(DeviceClass.Keyboard, DeviceEnumerationFlags.AttachedOnly))
-            {
-                InputDeviceKeyboard k = new InputDeviceKeyboard(dinput, di);
-                return k;
-            }
-
-            return null;
-        }
-
-        static Tuple<string, string>[] strtx = new Tuple<string, string>[] // frontier naming convention, not quite c# naming conventions
-        {
-            new Tuple<string,string>("Up","UpArrow"),
-            new Tuple<string,string>("Down","DownArrow"),
-            new Tuple<string,string>("Left","LeftArrow"),
-            new Tuple<string,string>("Right","RightArrow"),
-            new Tuple<string,string>("Return","Enter"),
-            new Tuple<string,string>("Capital","CapsLock"),
-            new Tuple<string,string>("Back","Backspace"),
-            new Tuple<string,string>("NumberLock","NumLock"),
-            new Tuple<string,string>("Subtract","Numpad_Subtract"),
-            new Tuple<string,string>("Divide","Numpad_Divide"),
-            new Tuple<string,string>("Multiply","Numpad_Multiply"),
-            new Tuple<string,string>("Add","Numpad_Add"),
-            new Tuple<string,string>("NumberPadEnter","Numpad_Enter"),
-            new Tuple<string,string>("Decimal","Numpad_Decimal"),
-        };
-
-        static public string DIKeyToFrontier(SharpDX.DirectInput.Key k)     // Sharp DX to frontier name
+        static public string SharpKeyToFrontierName(SharpDX.DirectInput.Key k)     // Sharp DX to frontier name
         {
             string keyname = k.ToString();
             string newname = keyname;
@@ -190,23 +46,68 @@ namespace DirectInputDevices
             return newname;
         }
 
-        static public System.Windows.Forms.Keys KeyToKeys(SharpDX.DirectInput.Key k)
+        static public SharpDX.DirectInput.Key? FrontierNameToSharpKey(string frontierkeyname)
+        {
+            frontierkeyname = frontierkeyname.Substring(4);
+            if (frontierkeyname.Length == 1 && (frontierkeyname[0] >= '0' && frontierkeyname[0] <= '9'))
+                frontierkeyname = "D" + frontierkeyname;
+            else if (frontierkeyname.StartsWith("Numpad_") && char.IsDigit(frontierkeyname[7]))
+                frontierkeyname = "NumberPad" + frontierkeyname[7];
+            else
+            {
+                int i = Array.FindIndex(strtx, x => x.Item2.Equals(frontierkeyname));
+                if (i >= 0)
+                    frontierkeyname = strtx[i].Item1;
+            }
+
+            Key k;
+            if (Enum.TryParse<Key>(frontierkeyname, out k))
+                return k;
+            else
+                return null;
+        }
+
+        static public System.Windows.Forms.Keys SharpKeyToKeys(SharpDX.DirectInput.Key k)        // Sharp DX - > Windows Keys
         {
             if (tx.ContainsKey(k))
                 return tx[k];
             return Keys.None;
         }
 
-        static public SharpDX.DirectInput.Key KeysToKey(System.Windows.Forms.Keys ky)
+        static public SharpDX.DirectInput.Key KeysToSharpKey(System.Windows.Forms.Keys ky)       // Keys -> Sharp DX
         {
             Key k = tx.FirstOrDefault(x => x.Value == ky).Key; // if not found, returns enum 0, or Key.Unknown!
             return k;
         }
 
-        static public System.Windows.Forms.Keys ToKeys(InputDeviceEvent ev) // safe to call without including SharpDirectInput
+        static public Keys FrontierNameToKeys(string frontiername)       // None means no translation
         {
-            return KeyToKeys((Key)ev.EventNumber);
+            Key? sk = FrontierNameToSharpKey(frontiername);     // slighly long way around it, but go to sharp, then to keys.
+            if (sk != null)
+            {
+                return SharpKeyToKeys(sk.Value);
+            }
+            else
+                return Keys.None;
         }
+
+        static Tuple<string, string>[] strtx = new Tuple<string, string>[] // frontier naming convention, not quite c# naming conventions
+        {
+            new Tuple<string,string>("Up","UpArrow"),
+            new Tuple<string,string>("Down","DownArrow"),
+            new Tuple<string,string>("Left","LeftArrow"),
+            new Tuple<string,string>("Right","RightArrow"),
+            new Tuple<string,string>("Return","Enter"),
+            new Tuple<string,string>("Capital","CapsLock"),
+            new Tuple<string,string>("Back","Backspace"),
+            new Tuple<string,string>("NumberLock","NumLock"),
+            new Tuple<string,string>("Subtract","Numpad_Subtract"),
+            new Tuple<string,string>("Divide","Numpad_Divide"),
+            new Tuple<string,string>("Multiply","Numpad_Multiply"),
+            new Tuple<string,string>("Add","Numpad_Add"),
+            new Tuple<string,string>("NumberPadEnter","Numpad_Enter"),
+            new Tuple<string,string>("Decimal","Numpad_Decimal"),
+        };
 
         // manual table to go from DI Key to VKEY.. check on 11/sept/2017
         static Dictionary<SharpDX.DirectInput.Key, System.Windows.Forms.Keys> tx = new Dictionary<Key, Keys>()
@@ -357,5 +258,127 @@ namespace DirectInputDevices
             {        SharpDX.DirectInput.Key.Mail , Keys.None },
             {        SharpDX.DirectInput.Key.MediaSelect , Keys.None },
         };
+    }
+
+
+    public class InputDeviceKeyboard : InputDeviceInterface
+    {
+        public InputDeviceIdentity ID() { return ksi; }
+        InputDeviceIdentity ksi;
+
+        SharpDX.DirectInput.Keyboard keyboard;
+
+        System.Threading.AutoResetEvent eventhandle = new System.Threading.AutoResetEvent(false);       // used by joy to signal data
+        public System.Threading.AutoResetEvent Eventhandle() { return eventhandle; }
+
+        public InputDeviceKeyboard(DirectInput di,DeviceInstance d)
+        {
+            // those silly foreign people call keyboard something other than it in english, so we need to fix it to english
+
+            ksi = new InputDeviceIdentity() { Instanceguid = d.InstanceGuid, Productguid = d.ProductGuid, Name = "Keyboard"};
+
+            keyboard = new Keyboard(di);
+            keyboard.Properties.BufferSize = 128;
+            keyboard.SetNotification(eventhandle);
+            keyboard.Acquire();
+        }
+
+        public void Dispose()
+        {
+            if (keyboard != null)
+            {
+                keyboard.Unacquire();
+                keyboard.Dispose();
+                keyboard = null;
+            }
+        }
+
+        KeyboardState ks;
+
+        public List<InputDeviceEvent> GetEvents()
+        {
+            ks = keyboard.GetCurrentState();
+            KeyboardUpdate[] ke = keyboard.GetBufferedData();
+
+            List<InputDeviceEvent> events = new List<InputDeviceEvent>();
+            foreach (KeyboardUpdate k in ke)
+            {
+                //System.Diagnostics.Debug.WriteLine("key " + k.Key + " " + k.IsPressed );
+                events.Add(new InputDeviceEvent(this, (int)k.Key, k.IsPressed));
+            }
+
+            return (events.Count > 0) ? events : null;
+        }
+
+        public string EventName(InputDeviceEvent e) // need to return frontier naming convention!
+        {
+            Key k = (Key)(e.EventNumber);
+            return KeyConversion.SharpKeyToFrontierName(k);
+        }
+
+        public bool? IsPressed(string frontierkeyname )      // frontier naming convention..  GetEvents must have filled in ks
+        {
+            Key? k = KeyConversion.FrontierNameToSharpKey(frontierkeyname);
+
+            if ( k != null )
+                return (ks != null) ? ks.IsPressed(k.Value) : false;
+            else
+            {
+                System.Diagnostics.Debug.WriteLine("FAILED IsPressed " + frontierkeyname);
+            }
+
+            return false;
+        }
+
+        public bool IsDIPressed(Key k, bool recheck = false) // check. Optional rescan or use GetEvents
+        {
+            if (recheck || ks == null)
+                ks = keyboard.GetCurrentState();
+
+            return ks.IsPressed(k);
+        }
+
+        public bool IsKeyPressed(Keys k, bool recheck = false) // check. Optional rescan or use GetEvents. Needs a diff name from above for some reason
+        {
+            if (recheck || ks == null)
+                ks = keyboard.GetCurrentState();
+
+            Key ky = KeyConversion.KeysToSharpKey(k);
+            return ks.IsPressed(ky);
+        }
+
+        public override string ToString()
+        {
+            return ksi.Name + ":" + ksi.Instanceguid + ":" + ksi.Productguid;
+        }
+
+        public static void CreateKeyboard(InputDeviceList ilist)
+        {
+            DirectInput dinput = new DirectInput();
+
+            foreach (DeviceInstance di in dinput.GetDevices(DeviceClass.Keyboard, DeviceEnumerationFlags.AttachedOnly))
+            {
+                InputDeviceKeyboard k = new InputDeviceKeyboard(dinput, di);
+                ilist.Add(k);
+            }
+        }
+
+        public static InputDeviceKeyboard CreateKeyboard()      // direct keyboard make, not part of elite UI
+        {
+            DirectInput dinput = new DirectInput();
+
+            foreach (DeviceInstance di in dinput.GetDevices(DeviceClass.Keyboard, DeviceEnumerationFlags.AttachedOnly))
+            {
+                InputDeviceKeyboard k = new InputDeviceKeyboard(dinput, di);
+                return k;
+            }
+
+            return null;
+        }
+
+        static public System.Windows.Forms.Keys ToKeys(InputDeviceEvent ev) // safe to call without including SharpDirectInput
+        {
+            return KeyConversion.SharpKeyToKeys((Key)ev.EventNumber);
+        }
    }
 }
