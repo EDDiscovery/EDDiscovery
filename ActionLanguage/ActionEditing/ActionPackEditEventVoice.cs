@@ -56,7 +56,11 @@ namespace ActionLanguage
             ucprog.onEditKeys = onEditKeys;
             ucprog.onEditSay = onEditSay;
             ucprog.onAdditionalNames += () => { return func(null); };
-            ucprog.SuggestedName += () => { return "VoiceInput"; };
+            ucprog.SuggestedName += () => 
+            {
+                string textparse = (textBoxInput.Text.Length > 0 && !textBoxInput.Text.Equals("?")) ? ("_" + textBoxInput.Text.Split(';')[0].SafeVariableString()) : "";
+                return "VoiceInput" + textparse;
+            };
             ucprog.RefreshEvent += () => { RefreshIt(); };
             Controls.Add(ucprog);
 

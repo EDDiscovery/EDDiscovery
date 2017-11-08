@@ -99,6 +99,10 @@ namespace EDDiscovery.Actions
             inputdevices = new DirectInputDevices.InputDeviceList(a => discoveryform.BeginInvoke(a));
             inputdevicesactions = new Actions.ActionsFromInputDevices(inputdevices, frontierbindings, this);
 
+            frontierbindings.LoadBindingsFile();
+            //System.Diagnostics.Debug.WriteLine("Bindings" + frontierbindings.ListBindings());
+            //System.Diagnostics.Debug.WriteLine("Key Names" + frontierbindings.ListKeyNames());
+
             voicerecon.SpeechRecognised += Voicerecon_SpeechRecognised;
 
             ConditionFunctions.GetCFH = DefaultGetCFH;
@@ -220,7 +224,7 @@ namespace EDDiscovery.Actions
 
         private string onEditKeys(Form p, System.Drawing.Icon i, string keys)      // called when program wants to edit Key
         {
-            return ActionKeyED.Menu(p, i, keys, FrontierBindings);
+            return ActionKeyED.Menu(p, i, keys, frontierbindings);
         }
 
         private string onEditSay(Form p, string say, ActionCoreController cp)      // called when program wants to edit Key
@@ -628,11 +632,11 @@ namespace EDDiscovery.Actions
         {
             if (cmd.Equals("bindings"))
             {
-                LogLine(FrontierBindings.ListBindings());
+                LogLine(frontierbindings.ListBindings());
             }
             else if (cmd.Equals("bindingvalues"))
             {
-                LogLine(FrontierBindings.ListValues());
+                LogLine(frontierbindings.ListValues());
             }
             else
                 return false;
@@ -657,6 +661,7 @@ namespace EDDiscovery.Actions
 
         void ActionConfigureVoiceRecon()
         {
+            System.Diagnostics.Debug.WriteLine("Action config voice recon " + voicerecon.IsOpen);
             if ( voicerecon.IsOpen )
             {
                 voicerecon.Stop();
@@ -664,11 +669,14 @@ namespace EDDiscovery.Actions
                 List<Tuple<string, ConditionEntry.MatchType>> ret = actionfiles.ReturnValuesOfSpecificConditions("VoiceInput", new List<ConditionEntry.MatchType>() { ConditionEntry.MatchType.MatchSemicolon });        // need these to decide
                 List<string> prompts = new List<string>();
 
+                System.Diagnostics.Debug.WriteLine("Recognised voice recon entries" + ret.Count);
                 foreach ( var vp in ret)
                 {
                     string[] list = vp.Item1.Split(';').Select(x => x.Trim()).ToArray();     // split and trim
                     prompts.AddRange(list);
                 }
+
+                System.Diagnostics.Debug.WriteLine("Recognised voice add entries" + prompts.Count);
 
                 if (prompts.Count > 0)
                 {
@@ -699,7 +707,6 @@ namespace EDDiscovery.Actions
                 DirectInputDevices.InputDeviceJoystickWindows.CreateJoysticks(inputdevices, axisevents);
                 DirectInputDevices.InputDeviceKeyboard.CreateKeyboard(inputdevices);              // Created.. not started..
                 DirectInputDevices.InputDeviceMouse.CreateMouse(inputdevices);
-                frontierbindings.LoadBindingsFile();
                 inputdevicesactions.Start();
             }
 #endif

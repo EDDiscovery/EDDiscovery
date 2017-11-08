@@ -28,17 +28,53 @@ namespace EDDiscovery.Actions
 {
     public class ActionKeyED : ActionKey        // extends Key
     {
-        static public string Menu(Form parent, System.Drawing.Icon ic, string userdata, EliteDangerousCore.BindingsFile bf)
+        class AKP : BaseUtils.EnhancedSendKeys.AdditionalKeyParser      // AKP parser to pass to SendKeys
         {
-            // use bf to get new list of stuff, pass thru to null TBD
-            List<string> example = new List<string>() { "{one}", "{two}" };
-            return Menu(parent, ic, userdata, example, BFParser);
-         
+            public EliteDangerousCore.BindingsFile bindingsfile;
+
+            public Tuple<string, int, string> Parse(string s)
+            {
+                if ( s.Length > 0 && s.StartsWith("{"))     // frontier bindings start with decoration
+                {
+                    int endindex = s.IndexOf("}");
+                    if ( endindex>=0 )                      // valid {}
+                    {
+                        string binding = s.Substring(1, endindex - 1);
+
+                        List<Tuple<EliteDangerousCore.BindingsFile.Device, EliteDangerousCore.BindingsFile.Assignment>> matches 
+                                    = bindingsfile.FindAssignedFunc(binding, EliteDangerousCore.BindingsFile.KeyboardDeviceName);   // just give me keyboard bindings, thats all i can do
+
+                        if ( matches != null )
+                        {
+                            string keyseq = "";
+                            foreach( var k in matches[0].Item2.keys )       // all keys.. list out for pressing (may need more work)
+                            {
+                                Keys vkey = DirectInputDevices.KeyConversion.FrontierNameToKeys(k.Key);
+                                if ( vkey == Keys.None )
+                                {
+                                    return new Tuple<string, int, string>(null, 0, "Conversion of Frontier key " + k.Key + " failed ");
+                                }
+
+                                keyseq += vkey.VKeyToString() + " ";
+                            }
+
+                            return new Tuple<string, int, string>(keyseq, endindex + 1, null);
+                        }
+                        else
+                            return new Tuple<string, int, string>(null, 0, "For binding " + binding + " the current bindings file has no key assignments");
+
+                    }
+                }
+
+                return new Tuple<string, int, string>(null, 0, null);
+            }
         }
 
-        static Tuple<string,int,string> BFParser(string s)
+        static public string Menu(Form parent, System.Drawing.Icon ic, string userdata, EliteDangerousCore.BindingsFile bf)
         {
-            return new Tuple<string,int,string>(null,0,null);
+            List<string> decorated = (from x in bf.KeyNames select "{"+x+"}").ToList();
+            return Menu(parent, ic, userdata, decorated, new AKP() { bindingsfile = bf });
+        
         }
 
         public override bool ConfigurationMenu(Form parent, ActionCoreController cp, List<string> eventvars)    // override again to expand any functionality
@@ -57,7 +93,8 @@ namespace EDDiscovery.Actions
 
         public override bool ExecuteAction(ActionProgramRun ap)
         {
-            return ExecuteAction(ap, null); //base, TBD pass in tx funct
+            ActionController ac = ap.actioncontroller as ActionController;
+            return ExecuteAction(ap, new AKP() { bindingsfile = ac.FrontierBindings }); //base, TBD pass in tx funct
         }
     }
 }
