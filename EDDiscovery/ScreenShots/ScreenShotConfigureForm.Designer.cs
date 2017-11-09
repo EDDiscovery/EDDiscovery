@@ -96,9 +96,6 @@
             // 
             // buttonExtCancel
             // 
-            this.buttonExtCancel.BorderColorScaling = 1.25F;
-            this.buttonExtCancel.ButtonColorScaling = 0.5F;
-            this.buttonExtCancel.ButtonDisabledScaling = 0.5F;
             this.buttonExtCancel.Location = new System.Drawing.Point(641, 291);
             this.buttonExtCancel.Name = "buttonExtCancel";
             this.buttonExtCancel.Size = new System.Drawing.Size(75, 23);
@@ -109,9 +106,6 @@
             // 
             // buttonExtOK
             // 
-            this.buttonExtOK.BorderColorScaling = 1.25F;
-            this.buttonExtOK.ButtonColorScaling = 0.5F;
-            this.buttonExtOK.ButtonDisabledScaling = 0.5F;
             this.buttonExtOK.Location = new System.Drawing.Point(732, 291);
             this.buttonExtOK.Name = "buttonExtOK";
             this.buttonExtOK.Size = new System.Drawing.Size(75, 23);
@@ -322,9 +316,6 @@
             // 
             // buttonChangeScreenshotsFolder
             // 
-            this.buttonChangeScreenshotsFolder.BorderColorScaling = 1.25F;
-            this.buttonChangeScreenshotsFolder.ButtonColorScaling = 0.5F;
-            this.buttonChangeScreenshotsFolder.ButtonDisabledScaling = 0.5F;
             this.buttonChangeScreenshotsFolder.Location = new System.Drawing.Point(510, 12);
             this.buttonChangeScreenshotsFolder.Name = "buttonChangeScreenshotsFolder";
             this.buttonChangeScreenshotsFolder.Size = new System.Drawing.Size(57, 23);
@@ -434,9 +425,6 @@
             // 
             // buttonEDChangeOutputFolder
             // 
-            this.buttonEDChangeOutputFolder.BorderColorScaling = 1.25F;
-            this.buttonEDChangeOutputFolder.ButtonColorScaling = 0.5F;
-            this.buttonEDChangeOutputFolder.ButtonDisabledScaling = 0.5F;
             this.buttonEDChangeOutputFolder.Location = new System.Drawing.Point(510, 38);
             this.buttonEDChangeOutputFolder.Name = "buttonEDChangeOutputFolder";
             this.buttonEDChangeOutputFolder.Size = new System.Drawing.Size(57, 23);

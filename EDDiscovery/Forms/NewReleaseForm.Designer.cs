@@ -101,9 +101,6 @@ namespace EDDiscovery.Forms
             // 
             // buttonUrlOpen
             // 
-            this.buttonUrlOpen.BorderColorScaling = 1.25F;
-            this.buttonUrlOpen.ButtonColorScaling = 0.5F;
-            this.buttonUrlOpen.ButtonDisabledScaling = 0.5F;
             this.buttonUrlOpen.Location = new System.Drawing.Point(385, 50);
             this.buttonUrlOpen.Name = "buttonUrlOpen";
             this.buttonUrlOpen.Size = new System.Drawing.Size(75, 23);
@@ -135,9 +132,6 @@ namespace EDDiscovery.Forms
             // 
             // buttonExeInstaller
             // 
-            this.buttonExeInstaller.BorderColorScaling = 1.25F;
-            this.buttonExeInstaller.ButtonColorScaling = 0.5F;
-            this.buttonExeInstaller.ButtonDisabledScaling = 0.5F;
             this.buttonExeInstaller.Location = new System.Drawing.Point(101, 292);
             this.buttonExeInstaller.Name = "buttonExeInstaller";
             this.buttonExeInstaller.Size = new System.Drawing.Size(107, 23);
@@ -148,9 +142,6 @@ namespace EDDiscovery.Forms
             // 
             // buttonPortablezip
             // 
-            this.buttonPortablezip.BorderColorScaling = 1.25F;
-            this.buttonPortablezip.ButtonColorScaling = 0.5F;
-            this.buttonPortablezip.ButtonDisabledScaling = 0.5F;
             this.buttonPortablezip.Location = new System.Drawing.Point(327, 292);
             this.buttonPortablezip.Name = "buttonPortablezip";
             this.buttonPortablezip.Size = new System.Drawing.Size(132, 23);
@@ -170,9 +161,6 @@ namespace EDDiscovery.Forms
             // 
             // buttonMsiInstaller
             // 
-            this.buttonMsiInstaller.BorderColorScaling = 1.25F;
-            this.buttonMsiInstaller.ButtonColorScaling = 0.5F;
-            this.buttonMsiInstaller.ButtonDisabledScaling = 0.5F;
             this.buttonMsiInstaller.Location = new System.Drawing.Point(214, 292);
             this.buttonMsiInstaller.Name = "buttonMsiInstaller";
             this.buttonMsiInstaller.Size = new System.Drawing.Size(107, 23);
@@ -183,9 +171,6 @@ namespace EDDiscovery.Forms
             // 
             // buttonExtCancel
             // 
-            this.buttonExtCancel.BorderColorScaling = 1.25F;
-            this.buttonExtCancel.ButtonColorScaling = 0.5F;
-            this.buttonExtCancel.ButtonDisabledScaling = 0.5F;
             this.buttonExtCancel.Location = new System.Drawing.Point(385, 330);
             this.buttonExtCancel.Name = "buttonExtCancel";
             this.buttonExtCancel.Size = new System.Drawing.Size(75, 23);

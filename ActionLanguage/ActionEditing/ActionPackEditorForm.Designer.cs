@@ -117,9 +117,6 @@
             // 
             // buttonInstallationVars
             // 
-            this.buttonInstallationVars.BorderColorScaling = 1.25F;
-            this.buttonInstallationVars.ButtonColorScaling = 0.5F;
-            this.buttonInstallationVars.ButtonDisabledScaling = 0.5F;
             this.buttonInstallationVars.Location = new System.Drawing.Point(417, 4);
             this.buttonInstallationVars.Name = "buttonInstallationVars";
             this.buttonInstallationVars.Size = new System.Drawing.Size(56, 23);
@@ -131,9 +128,6 @@
             // 
             // buttonSort2
             // 
-            this.buttonSort2.BorderColorScaling = 1.25F;
-            this.buttonSort2.ButtonColorScaling = 0.5F;
-            this.buttonSort2.ButtonDisabledScaling = 0.5F;
             this.buttonSort2.Location = new System.Drawing.Point(339, 4);
             this.buttonSort2.Name = "buttonSort2";
             this.buttonSort2.Size = new System.Drawing.Size(45, 23);
@@ -145,9 +139,6 @@
             // 
             // buttonSort
             // 
-            this.buttonSort.BorderColorScaling = 1.25F;
-            this.buttonSort.ButtonColorScaling = 0.5F;
-            this.buttonSort.ButtonDisabledScaling = 0.5F;
             this.buttonSort.Location = new System.Drawing.Point(275, 3);
             this.buttonSort.Name = "buttonSort";
             this.buttonSort.Size = new System.Drawing.Size(45, 23);
@@ -196,9 +187,6 @@
             // buttonCancel
             // 
             this.buttonCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonCancel.BorderColorScaling = 1.25F;
-            this.buttonCancel.ButtonColorScaling = 0.5F;
-            this.buttonCancel.ButtonDisabledScaling = 0.5F;
             this.buttonCancel.Location = new System.Drawing.Point(892, 4);
             this.buttonCancel.Name = "buttonCancel";
             this.buttonCancel.Size = new System.Drawing.Size(75, 23);
@@ -210,9 +198,6 @@
             // buttonOK
             // 
             this.buttonOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonOK.BorderColorScaling = 1.25F;
-            this.buttonOK.ButtonColorScaling = 0.5F;
-            this.buttonOK.ButtonDisabledScaling = 0.5F;
             this.buttonOK.Location = new System.Drawing.Point(989, 4);
             this.buttonOK.Name = "buttonOK";
             this.buttonOK.Size = new System.Drawing.Size(75, 23);
@@ -277,9 +262,6 @@
             // 
             // buttonMore
             // 
-            this.buttonMore.BorderColorScaling = 1.25F;
-            this.buttonMore.ButtonColorScaling = 0.5F;
-            this.buttonMore.ButtonDisabledScaling = 0.5F;
             this.buttonMore.Location = new System.Drawing.Point(6, 6);
             this.buttonMore.Name = "buttonMore";
             this.buttonMore.Size = new System.Drawing.Size(24, 24);

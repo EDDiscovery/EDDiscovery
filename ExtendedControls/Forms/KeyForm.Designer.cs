@@ -143,9 +143,6 @@
             // 
             // buttonReset
             // 
-            this.buttonReset.BorderColorScaling = 1.25F;
-            this.buttonReset.ButtonColorScaling = 0.5F;
-            this.buttonReset.ButtonDisabledScaling = 0.5F;
             this.buttonReset.Location = new System.Drawing.Point(3, 233);
             this.buttonReset.Name = "buttonReset";
             this.buttonReset.Size = new System.Drawing.Size(75, 23);
@@ -156,9 +153,6 @@
             // 
             // buttonNext
             // 
-            this.buttonNext.BorderColorScaling = 1.25F;
-            this.buttonNext.ButtonColorScaling = 0.5F;
-            this.buttonNext.ButtonDisabledScaling = 0.5F;
             this.buttonNext.Location = new System.Drawing.Point(182, 233);
             this.buttonNext.Name = "buttonNext";
             this.buttonNext.Size = new System.Drawing.Size(75, 23);
@@ -200,9 +194,6 @@
             // 
             // buttonTest
             // 
-            this.buttonTest.BorderColorScaling = 1.25F;
-            this.buttonTest.ButtonColorScaling = 0.5F;
-            this.buttonTest.ButtonDisabledScaling = 0.5F;
             this.buttonTest.Location = new System.Drawing.Point(272, 275);
             this.buttonTest.Name = "buttonTest";
             this.buttonTest.Size = new System.Drawing.Size(75, 23);
@@ -253,9 +244,6 @@
             // 
             // buttonOK
             // 
-            this.buttonOK.BorderColorScaling = 1.25F;
-            this.buttonOK.ButtonColorScaling = 0.5F;
-            this.buttonOK.ButtonDisabledScaling = 0.5F;
             this.buttonOK.Location = new System.Drawing.Point(275, 355);
             this.buttonOK.Name = "buttonOK";
             this.buttonOK.Size = new System.Drawing.Size(75, 23);
@@ -266,9 +254,6 @@
             // 
             // buttonCancel
             // 
-            this.buttonCancel.BorderColorScaling = 1.25F;
-            this.buttonCancel.ButtonColorScaling = 0.5F;
-            this.buttonCancel.ButtonDisabledScaling = 0.5F;
             this.buttonCancel.Location = new System.Drawing.Point(179, 355);
             this.buttonCancel.Name = "buttonCancel";
             this.buttonCancel.Size = new System.Drawing.Size(75, 23);
@@ -481,9 +466,6 @@
             // 
             // buttonDelete
             // 
-            this.buttonDelete.BorderColorScaling = 1.25F;
-            this.buttonDelete.ButtonColorScaling = 0.5F;
-            this.buttonDelete.ButtonDisabledScaling = 0.5F;
             this.buttonDelete.Location = new System.Drawing.Point(95, 233);
             this.buttonDelete.Name = "buttonDelete";
             this.buttonDelete.Size = new System.Drawing.Size(75, 23);

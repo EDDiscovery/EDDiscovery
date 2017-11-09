@@ -490,9 +490,6 @@ namespace EDDiscovery
             // 
             // buttonReloadActions
             // 
-            this.buttonReloadActions.BorderColorScaling = 1.25F;
-            this.buttonReloadActions.ButtonColorScaling = 0.5F;
-            this.buttonReloadActions.ButtonDisabledScaling = 0.5F;
             this.buttonReloadActions.Location = new System.Drawing.Point(651, 4);
             this.buttonReloadActions.Name = "buttonReloadActions";
             this.buttonReloadActions.Size = new System.Drawing.Size(71, 23);
@@ -651,9 +648,6 @@ namespace EDDiscovery
             // 
             // buttonExtEDSMSync
             // 
-            this.buttonExtEDSMSync.BorderColorScaling = 1.25F;
-            this.buttonExtEDSMSync.ButtonColorScaling = 0.5F;
-            this.buttonExtEDSMSync.ButtonDisabledScaling = 0.5F;
             this.buttonExtEDSMSync.Image = global::EDDiscovery.Properties.Resources.edsm16;
             this.buttonExtEDSMSync.Location = new System.Drawing.Point(332, 3);
             this.buttonExtEDSMSync.Name = "buttonExtEDSMSync";
@@ -666,9 +660,6 @@ namespace EDDiscovery
             // buttonExtPopOut
             // 
             this.buttonExtPopOut.BackColor = System.Drawing.Color.Transparent;
-            this.buttonExtPopOut.BorderColorScaling = 1.25F;
-            this.buttonExtPopOut.ButtonColorScaling = 0.5F;
-            this.buttonExtPopOut.ButtonDisabledScaling = 0.5F;
             this.buttonExtPopOut.Image = global::EDDiscovery.Properties.Resources.panels;
             this.buttonExtPopOut.Location = new System.Drawing.Point(362, 3);
             this.buttonExtPopOut.Name = "buttonExtPopOut";
@@ -681,9 +672,6 @@ namespace EDDiscovery
             // buttonExtEditAddOns
             // 
             this.buttonExtEditAddOns.BackColor = System.Drawing.Color.Transparent;
-            this.buttonExtEditAddOns.BorderColorScaling = 1.25F;
-            this.buttonExtEditAddOns.ButtonColorScaling = 0.5F;
-            this.buttonExtEditAddOns.ButtonDisabledScaling = 0.5F;
             this.buttonExtEditAddOns.Image = global::EDDiscovery.Properties.Resources.Log;
             this.buttonExtEditAddOns.Location = new System.Drawing.Point(422, 3);
             this.buttonExtEditAddOns.Name = "buttonExtEditAddOns";
@@ -696,9 +684,6 @@ namespace EDDiscovery
             // buttonExtManageAddOns
             // 
             this.buttonExtManageAddOns.BackColor = System.Drawing.Color.Transparent;
-            this.buttonExtManageAddOns.BorderColorScaling = 1.25F;
-            this.buttonExtManageAddOns.ButtonColorScaling = 0.5F;
-            this.buttonExtManageAddOns.ButtonDisabledScaling = 0.5F;
             this.buttonExtManageAddOns.Image = global::EDDiscovery.Properties.Resources.manageaddons;
             this.buttonExtManageAddOns.Location = new System.Drawing.Point(392, 3);
             this.buttonExtManageAddOns.Name = "buttonExtManageAddOns";
@@ -711,9 +696,6 @@ namespace EDDiscovery
             // buttonExtRefresh
             // 
             this.buttonExtRefresh.BackColor = System.Drawing.Color.Transparent;
-            this.buttonExtRefresh.BorderColorScaling = 1.25F;
-            this.buttonExtRefresh.ButtonColorScaling = 0.5F;
-            this.buttonExtRefresh.ButtonDisabledScaling = 0.5F;
             this.buttonExtRefresh.Image = global::EDDiscovery.Properties.Resources.refresh_blue18;
             this.buttonExtRefresh.Location = new System.Drawing.Point(167, 3);
             this.buttonExtRefresh.Name = "buttonExtRefresh";
@@ -726,9 +708,6 @@ namespace EDDiscovery
             // buttonExt2dmap
             // 
             this.buttonExt2dmap.BackColor = System.Drawing.Color.Transparent;
-            this.buttonExt2dmap.BorderColorScaling = 1.25F;
-            this.buttonExt2dmap.ButtonColorScaling = 0.5F;
-            this.buttonExt2dmap.ButtonDisabledScaling = 0.5F;
             this.buttonExt2dmap.Image = global::EDDiscovery.Properties.Resources.galaxy_gray;
             this.buttonExt2dmap.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.buttonExt2dmap.Location = new System.Drawing.Point(210, 3);
@@ -744,9 +723,6 @@ namespace EDDiscovery
             // buttonExt3dmap
             // 
             this.buttonExt3dmap.BackColor = System.Drawing.Color.Transparent;
-            this.buttonExt3dmap.BorderColorScaling = 1.25F;
-            this.buttonExt3dmap.ButtonColorScaling = 0.5F;
-            this.buttonExt3dmap.ButtonDisabledScaling = 0.5F;
             this.buttonExt3dmap.Image = global::EDDiscovery.Properties.Resources.galaxy_gray;
             this.buttonExt3dmap.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.buttonExt3dmap.Location = new System.Drawing.Point(270, 3);

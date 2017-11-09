@@ -116,9 +116,6 @@ namespace EDDiscovery.Forms
             // 
             // btnExportTravel
             // 
-            this.btnExportTravel.BorderColorScaling = 1.25F;
-            this.btnExportTravel.ButtonColorScaling = 0.5F;
-            this.btnExportTravel.ButtonDisabledScaling = 0.5F;
             this.btnExportTravel.Location = new System.Drawing.Point(263, 7);
             this.btnExportTravel.Name = "btnExportTravel";
             this.btnExportTravel.Size = new System.Drawing.Size(111, 23);

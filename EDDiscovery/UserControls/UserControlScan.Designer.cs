@@ -390,9 +390,6 @@ namespace EDDiscovery.UserControls
             // 
             // buttonExtExcel
             // 
-            this.buttonExtExcel.BorderColorScaling = 1.25F;
-            this.buttonExtExcel.ButtonColorScaling = 0.5F;
-            this.buttonExtExcel.ButtonDisabledScaling = 0.5F;
             this.buttonExtExcel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonExtExcel.Image = global::EDDiscovery.Properties.Resources.excel;
             this.buttonExtExcel.Location = new System.Drawing.Point(353, 4);

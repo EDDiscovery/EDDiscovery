@@ -215,11 +215,10 @@ namespace ExtendedControls
             e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.Default;
         }
 
-        private void button_MouseClick(object sender, MouseEventArgs e)
+        private void button_Click(object sender, EventArgs e)
         {
             // Don't need to set this.DialogResult when the buttons have that property set; it's automatically handled.
-            if (e.Button == MouseButtons.Left)
-                Close();
+            Close();
         }
         
         private void pictureBox1_MouseDown(object sender, MouseEventArgs e)

@@ -67,44 +67,35 @@
             // buttonExt3
             // 
             this.buttonExt3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonExt3.BorderColorScaling = 1.25F;
-            this.buttonExt3.ButtonColorScaling = 0.5F;
-            this.buttonExt3.ButtonDisabledScaling = 0.5F;
             this.buttonExt3.Location = new System.Drawing.Point(76, 178);
             this.buttonExt3.Name = "buttonExt3";
             this.buttonExt3.Size = new System.Drawing.Size(75, 24);
             this.buttonExt3.TabIndex = 4;
             this.buttonExt3.Text = "Retry";
             this.buttonExt3.UseVisualStyleBackColor = true;
-            this.buttonExt3.MouseClick += new System.Windows.Forms.MouseEventHandler(this.button_MouseClick);
+            this.buttonExt3.Click += new System.EventHandler(this.button_Click);
             // 
             // buttonExt1
             // 
             this.buttonExt1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonExt1.BorderColorScaling = 1.25F;
-            this.buttonExt1.ButtonColorScaling = 0.5F;
-            this.buttonExt1.ButtonDisabledScaling = 0.5F;
             this.buttonExt1.Location = new System.Drawing.Point(257, 178);
             this.buttonExt1.Name = "buttonExt1";
             this.buttonExt1.Size = new System.Drawing.Size(75, 24);
             this.buttonExt1.TabIndex = 2;
             this.buttonExt1.Text = "OK";
             this.buttonExt1.UseVisualStyleBackColor = true;
-            this.buttonExt1.MouseClick += new System.Windows.Forms.MouseEventHandler(this.button_MouseClick);
+            this.buttonExt1.Click += new System.EventHandler(this.button_Click);
             // 
             // buttonExt2
             // 
             this.buttonExt2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonExt2.BorderColorScaling = 1.25F;
-            this.buttonExt2.ButtonColorScaling = 0.5F;
-            this.buttonExt2.ButtonDisabledScaling = 0.5F;
             this.buttonExt2.Location = new System.Drawing.Point(167, 178);
             this.buttonExt2.Name = "buttonExt2";
             this.buttonExt2.Size = new System.Drawing.Size(75, 24);
             this.buttonExt2.TabIndex = 3;
             this.buttonExt2.Text = "Cancel";
             this.buttonExt2.UseVisualStyleBackColor = true;
-            this.buttonExt2.MouseClick += new System.Windows.Forms.MouseEventHandler(this.button_MouseClick);
+            this.buttonExt2.Click += new System.EventHandler(this.button_Click);
             // 
             // MessageBoxTheme
             // 

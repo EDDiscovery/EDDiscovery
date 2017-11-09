@@ -119,9 +119,6 @@
             // 
             // buttonExt1
             // 
-            this.buttonExt1.BorderColorScaling = 1.25F;
-            this.buttonExt1.ButtonColorScaling = 0.5F;
-            this.buttonExt1.ButtonDisabledScaling = 0.5F;
             this.buttonExt1.Location = new System.Drawing.Point(236, 0);
             this.buttonExt1.Name = "buttonExt1";
             this.buttonExt1.Size = new System.Drawing.Size(75, 23);

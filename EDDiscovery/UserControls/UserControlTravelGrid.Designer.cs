@@ -127,9 +127,6 @@ namespace EDDiscovery.UserControls
             // 
             // buttonExtExcel
             // 
-            this.buttonExtExcel.BorderColorScaling = 1.25F;
-            this.buttonExtExcel.ButtonColorScaling = 0.5F;
-            this.buttonExtExcel.ButtonDisabledScaling = 0.5F;
             this.buttonExtExcel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonExtExcel.Image = global::EDDiscovery.Properties.Resources.excel;
             this.buttonExtExcel.Location = new System.Drawing.Point(606, 4);
@@ -162,9 +159,6 @@ namespace EDDiscovery.UserControls
             // 
             // buttonField
             // 
-            this.buttonField.BorderColorScaling = 1.25F;
-            this.buttonField.ButtonColorScaling = 0.5F;
-            this.buttonField.ButtonDisabledScaling = 0.5F;
             this.buttonField.Location = new System.Drawing.Point(525, 3);
             this.buttonField.Name = "buttonField";
             this.buttonField.Size = new System.Drawing.Size(75, 23);
@@ -176,9 +170,6 @@ namespace EDDiscovery.UserControls
             // 
             // buttonFilter
             // 
-            this.buttonFilter.BorderColorScaling = 1.25F;
-            this.buttonFilter.ButtonColorScaling = 0.5F;
-            this.buttonFilter.ButtonDisabledScaling = 0.5F;
             this.buttonFilter.Location = new System.Drawing.Point(444, 3);
             this.buttonFilter.Name = "buttonFilter";
             this.buttonFilter.Size = new System.Drawing.Size(75, 23);

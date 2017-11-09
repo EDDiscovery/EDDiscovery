@@ -164,9 +164,6 @@ namespace EDDiscovery.Forms
             // 
             // btnFindSystem
             // 
-            this.btnFindSystem.BorderColorScaling = 1.25F;
-            this.btnFindSystem.ButtonColorScaling = 0.5F;
-            this.btnFindSystem.ButtonDisabledScaling = 0.5F;
             this.btnFindSystem.Location = new System.Drawing.Point(370, 133);
             this.btnFindSystem.Name = "btnFindSystem";
             this.btnFindSystem.Size = new System.Drawing.Size(75, 23);
@@ -203,9 +200,6 @@ namespace EDDiscovery.Forms
             // 
             // btnCancel
             // 
-            this.btnCancel.BorderColorScaling = 1.25F;
-            this.btnCancel.ButtonColorScaling = 0.5F;
-            this.btnCancel.ButtonDisabledScaling = 0.5F;
             this.btnCancel.Location = new System.Drawing.Point(280, 246);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(75, 23);
@@ -216,9 +210,6 @@ namespace EDDiscovery.Forms
             // 
             // btnOK
             // 
-            this.btnOK.BorderColorScaling = 1.25F;
-            this.btnOK.ButtonColorScaling = 0.5F;
-            this.btnOK.ButtonDisabledScaling = 0.5F;
             this.btnOK.Location = new System.Drawing.Point(370, 246);
             this.btnOK.Name = "btnOK";
             this.btnOK.Size = new System.Drawing.Size(75, 23);

@@ -203,9 +203,6 @@ namespace EDDiscovery.UserControls
             // 
             // buttonExtDBLookup
             // 
-            this.buttonExtDBLookup.BorderColorScaling = 1.25F;
-            this.buttonExtDBLookup.ButtonColorScaling = 0.5F;
-            this.buttonExtDBLookup.ButtonDisabledScaling = 0.5F;
             this.buttonExtDBLookup.Location = new System.Drawing.Point(258, 7);
             this.buttonExtDBLookup.Name = "buttonExtDBLookup";
             this.buttonExtDBLookup.Size = new System.Drawing.Size(176, 23);
@@ -216,9 +213,6 @@ namespace EDDiscovery.UserControls
             // 
             // buttonExtEDSMSphere
             // 
-            this.buttonExtEDSMSphere.BorderColorScaling = 1.25F;
-            this.buttonExtEDSMSphere.ButtonColorScaling = 0.5F;
-            this.buttonExtEDSMSphere.ButtonDisabledScaling = 0.5F;
             this.buttonExtEDSMSphere.Location = new System.Drawing.Point(258, 50);
             this.buttonExtEDSMSphere.Name = "buttonExtEDSMSphere";
             this.buttonExtEDSMSphere.Size = new System.Drawing.Size(176, 23);
@@ -229,9 +223,6 @@ namespace EDDiscovery.UserControls
             // 
             // buttonExtExcel
             // 
-            this.buttonExtExcel.BorderColorScaling = 1.25F;
-            this.buttonExtExcel.ButtonColorScaling = 0.5F;
-            this.buttonExtExcel.ButtonDisabledScaling = 0.5F;
             this.buttonExtExcel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonExtExcel.Image = global::EDDiscovery.Properties.Resources.excel;
             this.buttonExtExcel.Location = new System.Drawing.Point(447, 8);

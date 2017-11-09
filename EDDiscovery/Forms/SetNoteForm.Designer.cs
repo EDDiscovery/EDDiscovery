@@ -136,9 +136,6 @@
             // 
             // buttonCancel
             // 
-            this.buttonCancel.BorderColorScaling = 1.25F;
-            this.buttonCancel.ButtonColorScaling = 0.5F;
-            this.buttonCancel.ButtonDisabledScaling = 0.5F;
             this.buttonCancel.Location = new System.Drawing.Point(203, 289);
             this.buttonCancel.Name = "buttonCancel";
             this.buttonCancel.Size = new System.Drawing.Size(75, 23);
@@ -149,9 +146,6 @@
             // 
             // buttonSave
             // 
-            this.buttonSave.BorderColorScaling = 1.25F;
-            this.buttonSave.ButtonColorScaling = 0.5F;
-            this.buttonSave.ButtonDisabledScaling = 0.5F;
             this.buttonSave.Location = new System.Drawing.Point(301, 289);
             this.buttonSave.Name = "buttonSave";
             this.buttonSave.Size = new System.Drawing.Size(75, 23);

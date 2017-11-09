@@ -684,9 +684,6 @@
             // buttonExt1
             // 
             this.buttonExt1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(192)))), ((int)(((byte)(128)))));
-            this.buttonExt1.BorderColorScaling = 1.25F;
-            this.buttonExt1.ButtonColorScaling = 0.5F;
-            this.buttonExt1.ButtonDisabledScaling = 0.5F;
             this.buttonExt1.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
             this.buttonExt1.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Red;
             this.buttonExt1.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));

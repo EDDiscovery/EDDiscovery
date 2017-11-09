@@ -76,9 +76,6 @@ namespace EDDiscovery.Forms
             // 
             // buttonTransfer
             // 
-            this.buttonTransfer.BorderColorScaling = 1.25F;
-            this.buttonTransfer.ButtonColorScaling = 0.5F;
-            this.buttonTransfer.ButtonDisabledScaling = 0.5F;
             this.buttonTransfer.Location = new System.Drawing.Point(234, 100);
             this.buttonTransfer.Name = "buttonTransfer";
             this.buttonTransfer.Size = new System.Drawing.Size(75, 23);
@@ -115,9 +112,6 @@ namespace EDDiscovery.Forms
             // 
             // buttonExtCancel
             // 
-            this.buttonExtCancel.BorderColorScaling = 1.25F;
-            this.buttonExtCancel.ButtonColorScaling = 0.5F;
-            this.buttonExtCancel.ButtonDisabledScaling = 0.5F;
             this.buttonExtCancel.Location = new System.Drawing.Point(141, 100);
             this.buttonExtCancel.Name = "buttonExtCancel";
             this.buttonExtCancel.Size = new System.Drawing.Size(75, 23);

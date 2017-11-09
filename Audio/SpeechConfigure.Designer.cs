@@ -204,9 +204,6 @@ namespace AudioExtensions
             // 
             // buttonExtTest
             // 
-            this.buttonExtTest.BorderColorScaling = 1.25F;
-            this.buttonExtTest.ButtonColorScaling = 0.5F;
-            this.buttonExtTest.ButtonDisabledScaling = 0.5F;
             this.buttonExtTest.Location = new System.Drawing.Point(340, 368);
             this.buttonExtTest.Name = "buttonExtTest";
             this.buttonExtTest.Size = new System.Drawing.Size(75, 23);
@@ -217,9 +214,6 @@ namespace AudioExtensions
             // 
             // buttonExtDevice
             // 
-            this.buttonExtDevice.BorderColorScaling = 1.25F;
-            this.buttonExtDevice.ButtonColorScaling = 0.5F;
-            this.buttonExtDevice.ButtonDisabledScaling = 0.5F;
             this.buttonExtDevice.Location = new System.Drawing.Point(340, 256);
             this.buttonExtDevice.Name = "buttonExtDevice";
             this.buttonExtDevice.Size = new System.Drawing.Size(75, 23);
@@ -230,9 +224,6 @@ namespace AudioExtensions
             // 
             // buttonExtEffects
             // 
-            this.buttonExtEffects.BorderColorScaling = 1.25F;
-            this.buttonExtEffects.ButtonColorScaling = 0.5F;
-            this.buttonExtEffects.ButtonDisabledScaling = 0.5F;
             this.buttonExtEffects.Location = new System.Drawing.Point(340, 211);
             this.buttonExtEffects.Name = "buttonExtEffects";
             this.buttonExtEffects.Size = new System.Drawing.Size(75, 23);
@@ -254,9 +245,6 @@ namespace AudioExtensions
             // 
             // buttonExtCancel
             // 
-            this.buttonExtCancel.BorderColorScaling = 1.25F;
-            this.buttonExtCancel.ButtonColorScaling = 0.5F;
-            this.buttonExtCancel.ButtonDisabledScaling = 0.5F;
             this.buttonExtCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.buttonExtCancel.Location = new System.Drawing.Point(249, 433);
             this.buttonExtCancel.Name = "buttonExtCancel";
@@ -267,9 +255,6 @@ namespace AudioExtensions
             // 
             // buttonExtOK
             // 
-            this.buttonExtOK.BorderColorScaling = 1.25F;
-            this.buttonExtOK.ButtonColorScaling = 0.5F;
-            this.buttonExtOK.ButtonDisabledScaling = 0.5F;
             this.buttonExtOK.Location = new System.Drawing.Point(340, 433);
             this.buttonExtOK.Name = "buttonExtOK";
             this.buttonExtOK.Size = new System.Drawing.Size(75, 23);

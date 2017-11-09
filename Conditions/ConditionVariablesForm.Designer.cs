@@ -67,9 +67,6 @@ namespace Conditions
             // buttonCancel
             // 
             this.buttonCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonCancel.BorderColorScaling = 1.25F;
-            this.buttonCancel.ButtonColorScaling = 0.5F;
-            this.buttonCancel.ButtonDisabledScaling = 0.5F;
             this.buttonCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.buttonCancel.Location = new System.Drawing.Point(468, 4);
             this.buttonCancel.Name = "buttonCancel";
@@ -82,9 +79,6 @@ namespace Conditions
             // buttonOK
             // 
             this.buttonOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonOK.BorderColorScaling = 1.25F;
-            this.buttonOK.ButtonColorScaling = 0.5F;
-            this.buttonOK.ButtonDisabledScaling = 0.5F;
             this.buttonOK.Location = new System.Drawing.Point(562, 4);
             this.buttonOK.Name = "buttonOK";
             this.buttonOK.Size = new System.Drawing.Size(75, 23);
@@ -232,9 +226,6 @@ namespace Conditions
             // 
             // buttonMore
             // 
-            this.buttonMore.BorderColorScaling = 1.25F;
-            this.buttonMore.ButtonColorScaling = 0.5F;
-            this.buttonMore.ButtonDisabledScaling = 0.5F;
             this.buttonMore.Location = new System.Drawing.Point(6, 6);
             this.buttonMore.Name = "buttonMore";
             this.buttonMore.Size = new System.Drawing.Size(24, 24);
