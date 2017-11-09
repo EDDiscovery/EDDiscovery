@@ -60,9 +60,6 @@
             // 
             // buttonExtTile
             // 
-            this.buttonExtTile.BorderColorScaling = 1.25F;
-            this.buttonExtTile.ButtonColorScaling = 0.5F;
-            this.buttonExtTile.ButtonDisabledScaling = 0.5F;
             this.buttonExtTile.Image = global::EDDiscovery.Properties.Resources.tilegrid;
             this.buttonExtTile.Location = new System.Drawing.Point(63, 3);
             this.buttonExtTile.Name = "buttonExtTile";
@@ -74,9 +71,6 @@
             // 
             // buttonExtDelete
             // 
-            this.buttonExtDelete.BorderColorScaling = 1.25F;
-            this.buttonExtDelete.ButtonColorScaling = 0.5F;
-            this.buttonExtDelete.ButtonDisabledScaling = 0.5F;
             this.buttonExtDelete.Image = global::EDDiscovery.Properties.Resources.dustbinshorter;
             this.buttonExtDelete.Location = new System.Drawing.Point(33, 3);
             this.buttonExtDelete.Name = "buttonExtDelete";
@@ -106,9 +100,6 @@
             // buttonExtPopOut
             // 
             this.buttonExtPopOut.BackColor = System.Drawing.Color.Transparent;
-            this.buttonExtPopOut.BorderColorScaling = 1.25F;
-            this.buttonExtPopOut.ButtonColorScaling = 0.5F;
-            this.buttonExtPopOut.ButtonDisabledScaling = 0.5F;
             this.buttonExtPopOut.Image = global::EDDiscovery.Properties.Resources.panels;
             this.buttonExtPopOut.Location = new System.Drawing.Point(3, 3);
             this.buttonExtPopOut.Name = "buttonExtPopOut";

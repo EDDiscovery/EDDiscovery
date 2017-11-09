@@ -141,9 +141,6 @@ namespace ActionLanguage
             // 
             // buttonMore
             // 
-            this.buttonMore.BorderColorScaling = 1.25F;
-            this.buttonMore.ButtonColorScaling = 0.5F;
-            this.buttonMore.ButtonDisabledScaling = 0.5F;
             this.buttonMore.Location = new System.Drawing.Point(6, 6);
             this.buttonMore.Name = "buttonMore";
             this.buttonMore.Size = new System.Drawing.Size(24, 24);
@@ -167,9 +164,6 @@ namespace ActionLanguage
             // buttonExtDelete
             // 
             this.buttonExtDelete.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonExtDelete.BorderColorScaling = 1.25F;
-            this.buttonExtDelete.ButtonColorScaling = 0.5F;
-            this.buttonExtDelete.ButtonDisabledScaling = 0.5F;
             this.buttonExtDelete.Location = new System.Drawing.Point(833, 4);
             this.buttonExtDelete.Name = "buttonExtDelete";
             this.buttonExtDelete.Size = new System.Drawing.Size(25, 23);
@@ -281,9 +275,6 @@ namespace ActionLanguage
             // 
             // buttonExtDisk
             // 
-            this.buttonExtDisk.BorderColorScaling = 1.25F;
-            this.buttonExtDisk.ButtonColorScaling = 0.5F;
-            this.buttonExtDisk.ButtonDisabledScaling = 0.5F;
             this.buttonExtDisk.Location = new System.Drawing.Point(275, 4);
             this.buttonExtDisk.Name = "buttonExtDisk";
             this.buttonExtDisk.Size = new System.Drawing.Size(75, 23);
@@ -294,9 +285,6 @@ namespace ActionLanguage
             // 
             // buttonExtLoad
             // 
-            this.buttonExtLoad.BorderColorScaling = 1.25F;
-            this.buttonExtLoad.ButtonColorScaling = 0.5F;
-            this.buttonExtLoad.ButtonDisabledScaling = 0.5F;
             this.buttonExtLoad.Location = new System.Drawing.Point(170, 4);
             this.buttonExtLoad.Name = "buttonExtLoad";
             this.buttonExtLoad.Size = new System.Drawing.Size(75, 23);
@@ -307,9 +295,6 @@ namespace ActionLanguage
             // 
             // buttonExtSave
             // 
-            this.buttonExtSave.BorderColorScaling = 1.25F;
-            this.buttonExtSave.ButtonColorScaling = 0.5F;
-            this.buttonExtSave.ButtonDisabledScaling = 0.5F;
             this.buttonExtSave.Location = new System.Drawing.Point(88, 4);
             this.buttonExtSave.Name = "buttonExtSave";
             this.buttonExtSave.Size = new System.Drawing.Size(75, 23);
@@ -320,9 +305,6 @@ namespace ActionLanguage
             // 
             // buttonExtEdit
             // 
-            this.buttonExtEdit.BorderColorScaling = 1.25F;
-            this.buttonExtEdit.ButtonColorScaling = 0.5F;
-            this.buttonExtEdit.ButtonDisabledScaling = 0.5F;
             this.buttonExtEdit.Location = new System.Drawing.Point(6, 4);
             this.buttonExtEdit.Name = "buttonExtEdit";
             this.buttonExtEdit.Size = new System.Drawing.Size(75, 23);
@@ -334,9 +316,6 @@ namespace ActionLanguage
             // buttonCancel
             // 
             this.buttonCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonCancel.BorderColorScaling = 1.25F;
-            this.buttonCancel.ButtonColorScaling = 0.5F;
-            this.buttonCancel.ButtonDisabledScaling = 0.5F;
             this.buttonCancel.Location = new System.Drawing.Point(686, 4);
             this.buttonCancel.Name = "buttonCancel";
             this.buttonCancel.Size = new System.Drawing.Size(75, 23);
@@ -348,9 +327,6 @@ namespace ActionLanguage
             // buttonOK
             // 
             this.buttonOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonOK.BorderColorScaling = 1.25F;
-            this.buttonOK.ButtonColorScaling = 0.5F;
-            this.buttonOK.ButtonDisabledScaling = 0.5F;
             this.buttonOK.Location = new System.Drawing.Point(783, 4);
             this.buttonOK.Name = "buttonOK";
             this.buttonOK.Size = new System.Drawing.Size(75, 23);

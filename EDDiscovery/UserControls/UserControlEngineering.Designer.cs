@@ -160,9 +160,6 @@ namespace EDDiscovery.UserControls
             // buttonClear
             // 
             this.buttonClear.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonClear.BorderColorScaling = 1.25F;
-            this.buttonClear.ButtonColorScaling = 0.5F;
-            this.buttonClear.ButtonDisabledScaling = 0.5F;
             this.buttonClear.Location = new System.Drawing.Point(692, 4);
             this.buttonClear.Name = "buttonClear";
             this.buttonClear.Size = new System.Drawing.Size(88, 23);
@@ -174,9 +171,6 @@ namespace EDDiscovery.UserControls
             // 
             // buttonFilterMaterial
             // 
-            this.buttonFilterMaterial.BorderColorScaling = 1.25F;
-            this.buttonFilterMaterial.ButtonColorScaling = 0.5F;
-            this.buttonFilterMaterial.ButtonDisabledScaling = 0.5F;
             this.buttonFilterMaterial.Location = new System.Drawing.Point(427, 4);
             this.buttonFilterMaterial.Name = "buttonFilterMaterial";
             this.buttonFilterMaterial.Size = new System.Drawing.Size(100, 23);
@@ -188,9 +182,6 @@ namespace EDDiscovery.UserControls
             // 
             // buttonFilterUpgrade
             // 
-            this.buttonFilterUpgrade.BorderColorScaling = 1.25F;
-            this.buttonFilterUpgrade.ButtonColorScaling = 0.5F;
-            this.buttonFilterUpgrade.ButtonDisabledScaling = 0.5F;
             this.buttonFilterUpgrade.Location = new System.Drawing.Point(3, 4);
             this.buttonFilterUpgrade.Name = "buttonFilterUpgrade";
             this.buttonFilterUpgrade.Size = new System.Drawing.Size(100, 23);
@@ -202,9 +193,6 @@ namespace EDDiscovery.UserControls
             // 
             // buttonFilterLevel
             // 
-            this.buttonFilterLevel.BorderColorScaling = 1.25F;
-            this.buttonFilterLevel.ButtonColorScaling = 0.5F;
-            this.buttonFilterLevel.ButtonDisabledScaling = 0.5F;
             this.buttonFilterLevel.Location = new System.Drawing.Point(215, 4);
             this.buttonFilterLevel.Name = "buttonFilterLevel";
             this.buttonFilterLevel.Size = new System.Drawing.Size(100, 23);
@@ -216,9 +204,6 @@ namespace EDDiscovery.UserControls
             // 
             // buttonFilterEngineer
             // 
-            this.buttonFilterEngineer.BorderColorScaling = 1.25F;
-            this.buttonFilterEngineer.ButtonColorScaling = 0.5F;
-            this.buttonFilterEngineer.ButtonDisabledScaling = 0.5F;
             this.buttonFilterEngineer.Location = new System.Drawing.Point(321, 4);
             this.buttonFilterEngineer.Name = "buttonFilterEngineer";
             this.buttonFilterEngineer.Size = new System.Drawing.Size(100, 23);
@@ -230,9 +215,6 @@ namespace EDDiscovery.UserControls
             // 
             // buttonFilterModule
             // 
-            this.buttonFilterModule.BorderColorScaling = 1.25F;
-            this.buttonFilterModule.ButtonColorScaling = 0.5F;
-            this.buttonFilterModule.ButtonDisabledScaling = 0.5F;
             this.buttonFilterModule.Location = new System.Drawing.Point(109, 4);
             this.buttonFilterModule.Name = "buttonFilterModule";
             this.buttonFilterModule.Size = new System.Drawing.Size(100, 23);

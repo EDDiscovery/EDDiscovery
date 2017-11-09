@@ -154,9 +154,6 @@ namespace EDDiscovery.UserControls
             // 
             // button_edittheme
             // 
-            this.button_edittheme.BorderColorScaling = 1.25F;
-            this.button_edittheme.ButtonColorScaling = 0.5F;
-            this.button_edittheme.ButtonDisabledScaling = 0.5F;
             this.button_edittheme.Location = new System.Drawing.Point(232, 63);
             this.button_edittheme.Name = "button_edittheme";
             this.button_edittheme.Size = new System.Drawing.Size(95, 23);
@@ -168,9 +165,6 @@ namespace EDDiscovery.UserControls
             // 
             // buttonSaveTheme
             // 
-            this.buttonSaveTheme.BorderColorScaling = 1.25F;
-            this.buttonSaveTheme.ButtonColorScaling = 0.5F;
-            this.buttonSaveTheme.ButtonDisabledScaling = 0.5F;
             this.buttonSaveTheme.Location = new System.Drawing.Point(232, 19);
             this.buttonSaveTheme.Name = "buttonSaveTheme";
             this.buttonSaveTheme.Size = new System.Drawing.Size(95, 23);
@@ -351,9 +345,6 @@ namespace EDDiscovery.UserControls
             // 
             // btnDeleteCommander
             // 
-            this.btnDeleteCommander.BorderColorScaling = 1.25F;
-            this.btnDeleteCommander.ButtonColorScaling = 0.5F;
-            this.btnDeleteCommander.ButtonDisabledScaling = 0.5F;
             this.btnDeleteCommander.Location = new System.Drawing.Point(713, 100);
             this.btnDeleteCommander.Name = "btnDeleteCommander";
             this.btnDeleteCommander.Size = new System.Drawing.Size(71, 23);
@@ -365,9 +356,6 @@ namespace EDDiscovery.UserControls
             // 
             // buttonAddCommander
             // 
-            this.buttonAddCommander.BorderColorScaling = 1.25F;
-            this.buttonAddCommander.ButtonColorScaling = 0.5F;
-            this.buttonAddCommander.ButtonDisabledScaling = 0.5F;
             this.buttonAddCommander.Location = new System.Drawing.Point(713, 20);
             this.buttonAddCommander.Name = "buttonAddCommander";
             this.buttonAddCommander.Size = new System.Drawing.Size(71, 23);
@@ -432,9 +420,6 @@ namespace EDDiscovery.UserControls
             // 
             // buttonReloadSaved
             // 
-            this.buttonReloadSaved.BorderColorScaling = 1.25F;
-            this.buttonReloadSaved.ButtonColorScaling = 0.5F;
-            this.buttonReloadSaved.ButtonDisabledScaling = 0.5F;
             this.buttonReloadSaved.Location = new System.Drawing.Point(218, 16);
             this.buttonReloadSaved.Name = "buttonReloadSaved";
             this.buttonReloadSaved.Size = new System.Drawing.Size(126, 23);
@@ -446,9 +431,6 @@ namespace EDDiscovery.UserControls
             // 
             // buttonSaveSetup
             // 
-            this.buttonSaveSetup.BorderColorScaling = 1.25F;
-            this.buttonSaveSetup.ButtonColorScaling = 0.5F;
-            this.buttonSaveSetup.ButtonDisabledScaling = 0.5F;
             this.buttonSaveSetup.Location = new System.Drawing.Point(218, 46);
             this.buttonSaveSetup.Name = "buttonSaveSetup";
             this.buttonSaveSetup.Size = new System.Drawing.Size(126, 23);
@@ -533,9 +515,6 @@ namespace EDDiscovery.UserControls
             // 
             // buttonEditCommander
             // 
-            this.buttonEditCommander.BorderColorScaling = 1.25F;
-            this.buttonEditCommander.ButtonColorScaling = 0.5F;
-            this.buttonEditCommander.ButtonDisabledScaling = 0.5F;
             this.buttonEditCommander.Location = new System.Drawing.Point(713, 60);
             this.buttonEditCommander.Name = "buttonEditCommander";
             this.buttonEditCommander.Size = new System.Drawing.Size(71, 23);
@@ -860,9 +839,6 @@ namespace EDDiscovery.UserControls
             // 
             // buttonExtScreenshot
             // 
-            this.buttonExtScreenshot.BorderColorScaling = 1.25F;
-            this.buttonExtScreenshot.ButtonColorScaling = 0.5F;
-            this.buttonExtScreenshot.ButtonDisabledScaling = 0.5F;
             this.buttonExtScreenshot.Location = new System.Drawing.Point(231, 19);
             this.buttonExtScreenshot.Name = "buttonExtScreenshot";
             this.buttonExtScreenshot.Size = new System.Drawing.Size(95, 23);

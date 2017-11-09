@@ -273,9 +273,6 @@ namespace EDDiscovery.UserControls
             // 
             // buttonReverseRoute
             // 
-            this.buttonReverseRoute.BorderColorScaling = 1.25F;
-            this.buttonReverseRoute.ButtonColorScaling = 0.5F;
-            this.buttonReverseRoute.ButtonDisabledScaling = 0.5F;
             this.buttonReverseRoute.Location = new System.Drawing.Point(517, 4);
             this.buttonReverseRoute.Name = "buttonReverseRoute";
             this.buttonReverseRoute.Size = new System.Drawing.Size(59, 23);

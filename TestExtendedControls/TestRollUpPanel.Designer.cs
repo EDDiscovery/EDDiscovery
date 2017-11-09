@@ -66,9 +66,6 @@
             // 
             // buttonExt4
             // 
-            this.buttonExt4.BorderColorScaling = 1.25F;
-            this.buttonExt4.ButtonColorScaling = 0.5F;
-            this.buttonExt4.ButtonDisabledScaling = 0.5F;
             this.buttonExt4.Image = global::DialogTest.Properties.Resources.galaxy_black;
             this.buttonExt4.Location = new System.Drawing.Point(314, 6);
             this.buttonExt4.Name = "buttonExt4";
@@ -139,9 +136,6 @@
             // buttonExt3
             // 
             this.buttonExt3.BackColor = System.Drawing.Color.DimGray;
-            this.buttonExt3.BorderColorScaling = 1.25F;
-            this.buttonExt3.ButtonColorScaling = 0.5F;
-            this.buttonExt3.ButtonDisabledScaling = 0.5F;
             this.buttonExt3.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
             this.buttonExt3.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Red;
             this.buttonExt3.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Lime;
@@ -159,9 +153,6 @@
             // 
             // buttonExt2
             // 
-            this.buttonExt2.BorderColorScaling = 1.25F;
-            this.buttonExt2.ButtonColorScaling = 0.5F;
-            this.buttonExt2.ButtonDisabledScaling = 0.5F;
             this.buttonExt2.Location = new System.Drawing.Point(117, 5);
             this.buttonExt2.Name = "buttonExt2";
             this.buttonExt2.Size = new System.Drawing.Size(75, 23);
@@ -172,9 +163,6 @@
             // 
             // buttonExt1
             // 
-            this.buttonExt1.BorderColorScaling = 1.25F;
-            this.buttonExt1.ButtonColorScaling = 0.5F;
-            this.buttonExt1.ButtonDisabledScaling = 0.5F;
             this.buttonExt1.Location = new System.Drawing.Point(13, 6);
             this.buttonExt1.Name = "buttonExt1";
             this.buttonExt1.Size = new System.Drawing.Size(75, 23);

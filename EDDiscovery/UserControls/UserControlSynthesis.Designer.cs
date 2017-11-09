@@ -207,9 +207,6 @@ namespace EDDiscovery.UserControls
             // 
             // buttonRecipeFilter
             // 
-            this.buttonRecipeFilter.BorderColorScaling = 1.25F;
-            this.buttonRecipeFilter.ButtonColorScaling = 0.5F;
-            this.buttonRecipeFilter.ButtonDisabledScaling = 0.5F;
             this.buttonRecipeFilter.Location = new System.Drawing.Point(4, 4);
             this.buttonRecipeFilter.Name = "buttonRecipeFilter";
             this.buttonRecipeFilter.Size = new System.Drawing.Size(100, 23);
@@ -221,9 +218,6 @@ namespace EDDiscovery.UserControls
             // buttonClear
             // 
             this.buttonClear.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonClear.BorderColorScaling = 1.25F;
-            this.buttonClear.ButtonColorScaling = 0.5F;
-            this.buttonClear.ButtonDisabledScaling = 0.5F;
             this.buttonClear.Location = new System.Drawing.Point(697, 4);
             this.buttonClear.Name = "buttonClear";
             this.buttonClear.Size = new System.Drawing.Size(100, 23);
@@ -239,9 +233,6 @@ namespace EDDiscovery.UserControls
             // 
             // buttonFilterLevel
             // 
-            this.buttonFilterLevel.BorderColorScaling = 1.25F;
-            this.buttonFilterLevel.ButtonColorScaling = 0.5F;
-            this.buttonFilterLevel.ButtonDisabledScaling = 0.5F;
             this.buttonFilterLevel.Location = new System.Drawing.Point(110, 4);
             this.buttonFilterLevel.Name = "buttonFilterLevel";
             this.buttonFilterLevel.Size = new System.Drawing.Size(100, 23);
@@ -252,9 +243,6 @@ namespace EDDiscovery.UserControls
             // 
             // buttonMaterialFilter
             // 
-            this.buttonMaterialFilter.BorderColorScaling = 1.25F;
-            this.buttonMaterialFilter.ButtonColorScaling = 0.5F;
-            this.buttonMaterialFilter.ButtonDisabledScaling = 0.5F;
             this.buttonMaterialFilter.Location = new System.Drawing.Point(216, 4);
             this.buttonMaterialFilter.Name = "buttonMaterialFilter";
             this.buttonMaterialFilter.Size = new System.Drawing.Size(100, 23);

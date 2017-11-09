@@ -119,9 +119,6 @@
             // 
             // buttonExtExcel
             // 
-            this.buttonExtExcel.BorderColorScaling = 1.25F;
-            this.buttonExtExcel.ButtonColorScaling = 0.5F;
-            this.buttonExtExcel.ButtonDisabledScaling = 0.5F;
             this.buttonExtExcel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonExtExcel.Image = global::EDDiscovery.Properties.Resources.excel;
             this.buttonExtExcel.Location = new System.Drawing.Point(296, 148);
@@ -203,9 +200,6 @@
             // 
             // buttonExtTravelTo
             // 
-            this.buttonExtTravelTo.BorderColorScaling = 1.25F;
-            this.buttonExtTravelTo.ButtonColorScaling = 0.5F;
-            this.buttonExtTravelTo.ButtonDisabledScaling = 0.5F;
             this.buttonExtTravelTo.Location = new System.Drawing.Point(326, 91);
             this.buttonExtTravelTo.Name = "buttonExtTravelTo";
             this.buttonExtTravelTo.Size = new System.Drawing.Size(53, 23);
@@ -217,9 +211,6 @@
             // 
             // buttonExtTravelFrom
             // 
-            this.buttonExtTravelFrom.BorderColorScaling = 1.25F;
-            this.buttonExtTravelFrom.ButtonColorScaling = 0.5F;
-            this.buttonExtTravelFrom.ButtonDisabledScaling = 0.5F;
             this.buttonExtTravelFrom.Location = new System.Drawing.Point(57, 91);
             this.buttonExtTravelFrom.Name = "buttonExtTravelFrom";
             this.buttonExtTravelFrom.Size = new System.Drawing.Size(53, 23);
@@ -231,9 +222,6 @@
             // 
             // buttonExtTargetTo
             // 
-            this.buttonExtTargetTo.BorderColorScaling = 1.25F;
-            this.buttonExtTargetTo.ButtonColorScaling = 0.5F;
-            this.buttonExtTargetTo.ButtonDisabledScaling = 0.5F;
             this.buttonExtTargetTo.Location = new System.Drawing.Point(404, 91);
             this.buttonExtTargetTo.Name = "buttonExtTargetTo";
             this.buttonExtTargetTo.Size = new System.Drawing.Size(53, 23);
@@ -245,9 +233,6 @@
             // 
             // buttonToEDSM
             // 
-            this.buttonToEDSM.BorderColorScaling = 1.25F;
-            this.buttonToEDSM.ButtonColorScaling = 0.5F;
-            this.buttonToEDSM.ButtonDisabledScaling = 0.5F;
             this.buttonToEDSM.Location = new System.Drawing.Point(482, 91);
             this.buttonToEDSM.Name = "buttonToEDSM";
             this.buttonToEDSM.Size = new System.Drawing.Size(53, 23);
@@ -259,9 +244,6 @@
             // 
             // buttonFromEDSM
             // 
-            this.buttonFromEDSM.BorderColorScaling = 1.25F;
-            this.buttonFromEDSM.ButtonColorScaling = 0.5F;
-            this.buttonFromEDSM.ButtonDisabledScaling = 0.5F;
             this.buttonFromEDSM.Location = new System.Drawing.Point(213, 91);
             this.buttonFromEDSM.Name = "buttonFromEDSM";
             this.buttonFromEDSM.Size = new System.Drawing.Size(53, 23);
@@ -273,9 +255,6 @@
             // 
             // buttonTargetFrom
             // 
-            this.buttonTargetFrom.BorderColorScaling = 1.25F;
-            this.buttonTargetFrom.ButtonColorScaling = 0.5F;
-            this.buttonTargetFrom.ButtonDisabledScaling = 0.5F;
             this.buttonTargetFrom.Location = new System.Drawing.Point(135, 91);
             this.buttonTargetFrom.Name = "buttonTargetFrom";
             this.buttonTargetFrom.Size = new System.Drawing.Size(53, 23);
@@ -287,9 +266,6 @@
             // 
             // cmd3DMap
             // 
-            this.cmd3DMap.BorderColorScaling = 1.25F;
-            this.cmd3DMap.ButtonColorScaling = 0.5F;
-            this.cmd3DMap.ButtonDisabledScaling = 0.5F;
             this.cmd3DMap.Location = new System.Drawing.Point(174, 148);
             this.cmd3DMap.Name = "cmd3DMap";
             this.cmd3DMap.Size = new System.Drawing.Size(111, 26);
@@ -561,9 +537,6 @@
             // 
             // button_Route
             // 
-            this.button_Route.BorderColorScaling = 1.25F;
-            this.button_Route.ButtonColorScaling = 0.5F;
-            this.button_Route.ButtonDisabledScaling = 0.5F;
             this.button_Route.Enabled = false;
             this.button_Route.Location = new System.Drawing.Point(57, 147);
             this.button_Route.Name = "button_Route";

@@ -238,9 +238,6 @@ namespace EDDiscovery.Forms
             // 
             // btnCancel
             // 
-            this.btnCancel.BorderColorScaling = 1.25F;
-            this.btnCancel.ButtonColorScaling = 0.5F;
-            this.btnCancel.ButtonDisabledScaling = 0.5F;
             this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.btnCancel.Location = new System.Drawing.Point(214, 294);
             this.btnCancel.Name = "btnCancel";
@@ -252,9 +249,6 @@ namespace EDDiscovery.Forms
             // 
             // btnOK
             // 
-            this.btnOK.BorderColorScaling = 1.25F;
-            this.btnOK.ButtonColorScaling = 0.5F;
-            this.btnOK.ButtonDisabledScaling = 0.5F;
             this.btnOK.DialogResult = System.Windows.Forms.DialogResult.OK;
             this.btnOK.Location = new System.Drawing.Point(298, 294);
             this.btnOK.Name = "btnOK";

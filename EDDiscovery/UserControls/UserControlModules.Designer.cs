@@ -199,9 +199,6 @@ namespace EDDiscovery.UserControls
             // buttonExtCoriolis
             // 
             this.buttonExtCoriolis.BackColor = System.Drawing.Color.Transparent;
-            this.buttonExtCoriolis.BorderColorScaling = 1.25F;
-            this.buttonExtCoriolis.ButtonColorScaling = 0.5F;
-            this.buttonExtCoriolis.ButtonDisabledScaling = 0.5F;
             this.buttonExtCoriolis.Image = global::EDDiscovery.Properties.Resources.coriolis;
             this.buttonExtCoriolis.Location = new System.Drawing.Point(255, 3);
             this.buttonExtCoriolis.Name = "buttonExtCoriolis";

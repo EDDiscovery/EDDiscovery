@@ -167,9 +167,6 @@
             // 
             // buttonExtCAPI
             // 
-            this.buttonExtCAPI.BorderColorScaling = 1.25F;
-            this.buttonExtCAPI.ButtonColorScaling = 0.5F;
-            this.buttonExtCAPI.ButtonDisabledScaling = 0.5F;
             this.buttonExtCAPI.Location = new System.Drawing.Point(418, 27);
             this.buttonExtCAPI.Name = "buttonExtCAPI";
             this.buttonExtCAPI.Size = new System.Drawing.Size(102, 23);
@@ -237,9 +234,6 @@
             // 
             // buttonExtBrowse
             // 
-            this.buttonExtBrowse.BorderColorScaling = 1.25F;
-            this.buttonExtBrowse.ButtonColorScaling = 0.5F;
-            this.buttonExtBrowse.ButtonDisabledScaling = 0.5F;
             this.buttonExtBrowse.Location = new System.Drawing.Point(494, 60);
             this.buttonExtBrowse.Name = "buttonExtBrowse";
             this.buttonExtBrowse.Size = new System.Drawing.Size(75, 23);
@@ -631,9 +625,6 @@
             // buttonCancel
             // 
             this.buttonCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonCancel.BorderColorScaling = 1.25F;
-            this.buttonCancel.ButtonColorScaling = 0.5F;
-            this.buttonCancel.ButtonDisabledScaling = 0.5F;
             this.buttonCancel.Location = new System.Drawing.Point(418, 672);
             this.buttonCancel.Name = "buttonCancel";
             this.buttonCancel.Size = new System.Drawing.Size(75, 23);
@@ -645,9 +636,6 @@
             // buttonOK
             // 
             this.buttonOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonOK.BorderColorScaling = 1.25F;
-            this.buttonOK.ButtonColorScaling = 0.5F;
-            this.buttonOK.ButtonDisabledScaling = 0.5F;
             this.buttonOK.Location = new System.Drawing.Point(519, 672);
             this.buttonOK.Name = "buttonOK";
             this.buttonOK.Size = new System.Drawing.Size(75, 23);
