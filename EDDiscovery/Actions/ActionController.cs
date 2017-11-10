@@ -51,7 +51,7 @@ namespace EDDiscovery.Actions
         public override AudioExtensions.AudioQueue AudioQueueWave { get { return audioqueuewave; } }
         public override AudioExtensions.AudioQueue AudioQueueSpeech { get { return audioqueuespeech; } }
         public override AudioExtensions.SpeechSynthesizer SpeechSynthesizer { get { return speechsynth; } }
-        public AudioExtensions.VoiceRecognition VoiceRecognition { get { return voicerecon; } }
+        public AudioExtensions.IVoiceRecogniser VoiceRecognition { get { return voicerecon; } }
         public BindingsFile FrontierBindings { get { return frontierbindings; } }
 
         AudioExtensions.IAudioDriver audiodriverwave;
@@ -59,7 +59,7 @@ namespace EDDiscovery.Actions
         AudioExtensions.IAudioDriver audiodriverspeech;
         AudioExtensions.AudioQueue audioqueuespeech;
         AudioExtensions.SpeechSynthesizer speechsynth;
-        AudioExtensions.VoiceRecognition voicerecon;
+        AudioExtensions.IVoiceRecogniser voicerecon;
 
         DirectInputDevices.InputDeviceList inputdevices;
         Actions.ActionsFromInputDevices inputdevicesactions;
