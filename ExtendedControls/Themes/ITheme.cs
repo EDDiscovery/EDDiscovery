@@ -13,11 +13,18 @@
  * 
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
+using System.Drawing;
+using System.Windows.Forms;
 
 namespace ExtendedControls
 {
-    public static class ThemeableFormsInstance
+    public interface ITheme             // Extended controls use this if they want to be themed
     {
-        static public ITheme Instance { get; set; }
+        bool ApplyToForm(Form form, Font fnt = null);   // null means use standard one
+        void ApplyToControls(Control parent, Font fnt = null, bool applytothis = false);
+        Color TextBlockColor { get; set; }
+        string FontName { get; set; }
+        bool WindowsFrame { get; set; }
+        Icon MessageBoxWindowIcon { get; set; }
     }
 }

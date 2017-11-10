@@ -105,7 +105,7 @@ namespace ExtendedControls
             //System.Diagnostics.Debug.WriteLine("T" + textBoxKeys.Text + " at " + curinsertpoint + " >" + textBoxSendTo.Text);
 
             bool border = true;
-            ThemeableForms theme = ThemeableFormsInstance.Instance;
+            ITheme theme = ThemeableFormsInstance.Instance;
             if (theme != null)  // paranoid
             {
                 border = theme.ApplyToForm(this);

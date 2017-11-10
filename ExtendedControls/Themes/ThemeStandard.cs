@@ -12,7 +12,7 @@ namespace ExtendedControls
 {
     // specific implementation of a Themeable system.. does not include save/load to file etc due to the user may want their own implementation
 
-    public class ThemeStandard : ThemeableForms
+    public class ThemeStandard : ITheme
     {
         public static readonly string[] ButtonStyles = "System Flat Gradient".Split();
         public static readonly string[] TextboxBorderStyles = "None FixedSingle Fixed3D Colour".Split();
