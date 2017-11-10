@@ -50,7 +50,7 @@ namespace EliteDangerousCore.JournalEvents
         public int MissionId { get; set; }
         public string Name { get; set; }
 
-        public override System.Drawing.Bitmap Icon { get { return EliteDangerous.Properties.Resources.missionredirected; } }  
+        public override System.Drawing.Bitmap DefaultIcon { get { return EliteDangerous.Properties.Resources.missionredirected; } }  
 
         public override void FillInformation(out string summary, out string info, out string detailed) //V
         {

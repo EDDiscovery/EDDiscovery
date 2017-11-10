@@ -33,7 +33,7 @@ namespace EliteDangerousCore.JournalEvents
         public double Scooped { get; set; }
         public double Total { get; set; }
 
-        public override System.Drawing.Bitmap Icon { get { return EliteDangerous.Properties.Resources.fuelscoop; } }
+        public override System.Drawing.Bitmap DefaultIcon { get { return EliteDangerous.Properties.Resources.fuelscoop; } }
 
         public override void FillInformation(out string summary, out string info, out string detailed) //V
         {

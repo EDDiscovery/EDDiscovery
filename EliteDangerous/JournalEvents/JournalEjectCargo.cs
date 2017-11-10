@@ -43,7 +43,7 @@ namespace EliteDangerousCore.JournalEvents
         public bool Abandoned { get; set; }
         public string PowerplayOrigin { get; set; }
 
-        public override System.Drawing.Bitmap Icon { get { return EliteDangerous.Properties.Resources.ejectcargo; } }
+        public override System.Drawing.Bitmap DefaultIcon { get { return EliteDangerous.Properties.Resources.ejectcargo; } }
 
         public void MaterialList(MaterialCommoditiesList mc, DB.SQLiteConnectionUser conn)
         {

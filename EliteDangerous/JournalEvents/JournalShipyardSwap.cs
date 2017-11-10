@@ -47,7 +47,7 @@ namespace EliteDangerousCore.JournalEvents
         public string StoreOldShip { get; set; }
         public int? StoreShipId { get; set; }
 
-        public override System.Drawing.Bitmap Icon { get { return EliteDangerous.Properties.Resources.shipyardswap; } }
+        public override System.Drawing.Bitmap DefaultIcon { get { return EliteDangerous.Properties.Resources.shipyardswap; } }
         public void ShipInformation(ShipInformationList shp, DB.SQLiteConnectionUser conn)
         {
             shp.ShipyardSwap(this);

@@ -35,7 +35,7 @@ namespace EliteDangerousCore.JournalEvents
         public string FromPower { get; set; }
         public string ToPower { get; set; }
 
-        public override System.Drawing.Bitmap Icon { get { return EliteDangerous.Properties.Resources.powerplaydefect; } }
+        public override System.Drawing.Bitmap DefaultIcon { get { return EliteDangerous.Properties.Resources.powerplaydefect; } }
 
         public override void FillInformation(out string summary, out string info, out string detailed) //V
         {

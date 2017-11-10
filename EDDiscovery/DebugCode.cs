@@ -174,7 +174,7 @@ namespace EDDiscovery
 
                 EliteDangerousCore.JournalEntry j = EliteDangerousCore.JournalEntry.CreateJournalEntry(json);
 
-                Debug.Assert(j.Icon != null);
+                Debug.Assert(j.DefaultIcon != null);
 
                 string summary, info, detailed;
                 j.FillInformation(out summary, out info, out detailed);

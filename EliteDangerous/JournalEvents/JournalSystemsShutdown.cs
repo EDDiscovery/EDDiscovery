@@ -33,7 +33,7 @@ namespace EliteDangerousCore.JournalEvents
     {
         public JournalSystemsShutdown(JObject evt) : base(evt, JournalTypeEnum.SystemsShutdown) { }
 
-        public override System.Drawing.Bitmap Icon
+        public override System.Drawing.Bitmap DefaultIcon
         {
             get
             {

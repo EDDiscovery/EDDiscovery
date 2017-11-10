@@ -45,7 +45,7 @@ namespace EliteDangerousCore.JournalEvents
             mcl.AddEventNoCash(Id, EventTimeUTC, EventTypeID, FriendlyType );
         }
 
-        public override System.Drawing.Bitmap Icon { get { return EliteDangerous.Properties.Resources.miningrefined; } }
+        public override System.Drawing.Bitmap DefaultIcon { get { return EliteDangerous.Properties.Resources.miningrefined; } }
 
         public override void FillInformation(out string summary, out string info, out string detailed) //V
         {

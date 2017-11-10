@@ -33,7 +33,7 @@ namespace EliteDangerousCore.JournalEvents
         public string Name { get; set; }
         public string Package { get; set; }
 
-        public override System.Drawing.Bitmap Icon { get { return EliteDangerous.Properties.Resources.newcommander; } }
+        public override System.Drawing.Bitmap DefaultIcon { get { return EliteDangerous.Properties.Resources.newcommander; } }
 
         public override void FillInformation(out string summary, out string info, out string detailed) //V
         {

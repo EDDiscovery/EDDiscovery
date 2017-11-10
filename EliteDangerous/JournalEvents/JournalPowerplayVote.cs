@@ -36,7 +36,7 @@ namespace EliteDangerousCore.JournalEvents
         public string System { get; set; }
         public int Votes { get; set; }
 
-        public override System.Drawing.Bitmap Icon { get { return EliteDangerous.Properties.Resources.powerplayvote; } }
+        public override System.Drawing.Bitmap DefaultIcon { get { return EliteDangerous.Properties.Resources.powerplayvote; } }
 
         public override void FillInformation(out string summary, out string info, out string detailed) //V
         {

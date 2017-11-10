@@ -179,6 +179,9 @@ namespace EliteDangerousCore
 
         EDDItemSet = 2000,
         EDDCommodityPrices = 2010,
+
+        RestockVehicle_SRV = 10750,
+        RestockVehicle_Fighter = 10751,
     }
 
     public enum CombatRank
@@ -350,7 +353,27 @@ namespace EliteDangerousCore
 
         #region Formatting control and Icons
 
-        public abstract System.Drawing.Bitmap Icon { get; }
+        public abstract System.Drawing.Bitmap DefaultIcon { get; }
+
+        public static System.Drawing.Image GetIcon(JournalTypeEnum type)
+        {
+            Dictionary<JournalTypeEnum, System.Drawing.Image> lookup = EliteConfigInstance.InstanceConfig?.JournalTypeIcons;
+
+            if (lookup != null && lookup.ContainsKey(type))
+            {
+                return lookup[type];
+            }
+
+            return null;
+        }
+
+        public virtual System.Drawing.Image Icon
+        {
+            get
+            {
+                return GetIcon(this.EventTypeID) ?? this.DefaultIcon;
+            }
+        }
 
         public abstract void FillInformation(out string summary, out string info, out string detailed);
 

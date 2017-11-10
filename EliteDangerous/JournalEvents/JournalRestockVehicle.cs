@@ -15,6 +15,7 @@
  */
 using Newtonsoft.Json.Linq;
 using System.Linq;
+using System.Drawing;
 
 namespace EliteDangerousCore.JournalEvents
 {
@@ -44,13 +45,28 @@ namespace EliteDangerousCore.JournalEvents
             mcl.AddEvent(Id, EventTimeUTC, EventTypeID, Type + " " + Count.ToString(), -Cost);
         }
 
-        public override System.Drawing.Bitmap Icon { get
+        public override System.Drawing.Bitmap DefaultIcon { get
             {
                 if (Type.Contains("SRV") )
                     return EliteDangerous.Properties.Resources.restocksrv;
                 else
                     return EliteDangerous.Properties.Resources.restockfighter;
             } }
+
+        public override Image Icon
+        {
+            get
+            {
+                if (Type.Contains("SRV"))
+                {
+                    return GetIcon(JournalTypeEnum.RestockVehicle_SRV) ?? EliteDangerous.Properties.Resources.restocksrv;
+                }
+                else
+                {
+                    return GetIcon(JournalTypeEnum.RestockVehicle_Fighter) ?? EliteDangerous.Properties.Resources.restockfighter;
+                }
+            }
+        }
 
         public override void FillInformation(out string summary, out string info, out string detailed) //V
         {

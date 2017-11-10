@@ -35,7 +35,7 @@ namespace EliteDangerousCore.JournalEvents
         public string To_Localised { get; set; }
         public string Message { get; set; }
 
-        public override System.Drawing.Bitmap Icon { get { return EliteDangerous.Properties.Resources.sendtext; } }
+        public override System.Drawing.Bitmap DefaultIcon { get { return EliteDangerous.Properties.Resources.sendtext; } }
 
         public override void FillInformation(out string summary, out string info, out string detailed) //V
         {

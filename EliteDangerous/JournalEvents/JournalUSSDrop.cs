@@ -35,7 +35,7 @@ namespace EliteDangerousCore.JournalEvents
         public int USSThreat { get; set; }
         public string USSTypeLocalised { get; set; }
 
-        public override System.Drawing.Bitmap Icon { get { return EliteDangerous.Properties.Resources.uss; } }
+        public override System.Drawing.Bitmap DefaultIcon { get { return EliteDangerous.Properties.Resources.uss; } }
 
         public override void FillInformation(out string summary, out string info, out string detailed) //V
         {

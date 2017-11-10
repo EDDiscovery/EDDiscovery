@@ -33,7 +33,7 @@ namespace EliteDangerousCore.JournalEvents
         public string Name { get; set; }
         public string Role { get; set; }
 
-        public override System.Drawing.Bitmap Icon { get { return EliteDangerous.Properties.Resources.crewassign; } }
+        public override System.Drawing.Bitmap DefaultIcon { get { return EliteDangerous.Properties.Resources.crewassign; } }
 
         public override void FillInformation(out string summary, out string info, out string detailed) //V
         {

@@ -52,7 +52,7 @@ namespace EliteDangerousCore.JournalEvents
         public string ShipFD { get; set; }
         public int ShipId { get; set; }
 
-        public override System.Drawing.Bitmap Icon { get { return EliteDangerous.Properties.Resources.modulesell; } }
+        public override System.Drawing.Bitmap DefaultIcon { get { return EliteDangerous.Properties.Resources.modulesell; } }
 
         public void Ledger(Ledger mcl, DB.SQLiteConnectionUser conn)
         {

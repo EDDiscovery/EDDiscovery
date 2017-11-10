@@ -32,7 +32,7 @@ namespace EliteDangerousCore.JournalEvents
         }
         public string To { get; set; }
 
-        public override System.Drawing.Bitmap Icon
+        public override System.Drawing.Bitmap DefaultIcon
         {
             get
             {

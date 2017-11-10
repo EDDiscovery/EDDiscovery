@@ -37,7 +37,7 @@ namespace EliteDangerousCore.JournalEvents
         public string Type { get; set; }
         public int Count { get; set; }
 
-        public override System.Drawing.Bitmap Icon { get { return EliteDangerous.Properties.Resources.powerplaydeliver; } }
+        public override System.Drawing.Bitmap DefaultIcon { get { return EliteDangerous.Properties.Resources.powerplaydeliver; } }
 
         public override void FillInformation(out string summary, out string info, out string detailed) //V
         {

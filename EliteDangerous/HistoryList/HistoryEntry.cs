@@ -458,16 +458,16 @@ namespace EliteDangerousCore
 
         #endregion
 
-        public System.Drawing.Bitmap GetIcon
+        public System.Drawing.Image GetIcon
         {
             get
             {
                 if (journalEntry != null)
                     return journalEntry.Icon;
                 else if (EntryType == JournalTypeEnum.FSDJump)
-                    return EliteDangerous.Properties.Resources.hyperspace;
+                    return JournalEntry.GetIcon(JournalTypeEnum.FSDJump) ?? EliteDangerous.Properties.Resources.hyperspace;
                 else
-                    return EliteDangerous.Properties.Resources.genericevent;
+                    return JournalEntry.GetIcon(JournalTypeEnum.Unknown) ?? EliteDangerous.Properties.Resources.genericevent;
             }
         }
 

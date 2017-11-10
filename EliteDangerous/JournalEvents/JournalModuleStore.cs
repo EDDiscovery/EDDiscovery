@@ -64,7 +64,7 @@ namespace EliteDangerousCore.JournalEvents
         public string ReplacementItemLocalised { get; set; }
         public long? Cost { get; set; }
 
-        public override System.Drawing.Bitmap Icon { get { return EliteDangerous.Properties.Resources.modulestore; } }
+        public override System.Drawing.Bitmap DefaultIcon { get { return EliteDangerous.Properties.Resources.modulestore; } }
 
         public void Ledger(Ledger mcl, DB.SQLiteConnectionUser conn)
         {

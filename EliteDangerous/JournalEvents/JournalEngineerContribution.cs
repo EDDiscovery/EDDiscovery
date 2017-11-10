@@ -56,7 +56,7 @@ namespace EliteDangerousCore.JournalEvents
         public int Quantity { get; set; }
         public int TotalQuantity { get; set; }
 
-        public override System.Drawing.Bitmap Icon
+        public override System.Drawing.Bitmap DefaultIcon
         {
             get
             {
