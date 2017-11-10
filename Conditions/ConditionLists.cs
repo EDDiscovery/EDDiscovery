@@ -26,21 +26,25 @@ namespace Conditions
     public class ConditionLists
     {
         private List<Condition> conditionlist = new List<Condition>();
+        private List<string> groupname = new List<string>();    // used to associate a group name with a condition..
 
         public ConditionLists()
         {
         }
 
         public Condition Get(int n) { return (n < conditionlist.Count) ? conditionlist[n] : null; }
+        public string GetGroupName(int n) { return (n < groupname.Count) ? groupname[n] : null; }
 
-        public void Add(Condition fe)
+        public void Add(Condition fe, string gr = null)
         {
             conditionlist.Add(fe);
+            groupname.Add(gr);
         }
 
         public void Clear()
         {
             conditionlist.Clear();
+            groupname.Clear();
         }
 
         public int Count { get { return conditionlist.Count; } }
