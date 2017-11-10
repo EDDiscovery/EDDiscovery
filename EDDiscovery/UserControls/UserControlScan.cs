@@ -75,7 +75,7 @@ namespace EDDiscovery.UserControls
             imagebox.ClickElement += ClickElement;
         }
 
-        public override void ChangeCursorType(UserControlCursorType thc)
+        public override void ChangeCursorType(IHistoryCursor thc)
         {
             uctg.OnTravelSelectionChanged -= Display;
             uctg = thc;

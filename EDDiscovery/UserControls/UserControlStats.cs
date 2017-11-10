@@ -42,7 +42,7 @@ namespace EDDiscovery.UserControls
             uctg.OnTravelSelectionChanged += SelectionChanged;
         }
 
-        public override void ChangeCursorType(UserControlCursorType thc)
+        public override void ChangeCursorType(IHistoryCursor thc)
         {
             uctg.OnTravelSelectionChanged -= SelectionChanged;
             uctg = thc;
