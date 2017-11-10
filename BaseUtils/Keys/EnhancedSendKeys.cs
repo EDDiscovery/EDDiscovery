@@ -398,6 +398,7 @@ namespace BaseUtils
 
             if (pname.HasChars() && !pname.Equals(CurrentWindow, StringComparison.InvariantCultureIgnoreCase) && pname.Length > 0)
             {
+
                 p = Process.GetProcessesByName(pname).FirstOrDefault();
 
                 if (p != null)
@@ -408,7 +409,7 @@ namespace BaseUtils
                     BaseUtils.Win32.UnsafeNativeMethods.SetForegroundWindow(p.MainWindowHandle);
                 }
                 else
-                    return "No such process";
+                    return "Process given does not exist";
             }
 
             SendInput(oldstate);

@@ -124,17 +124,15 @@ namespace ActionLanguage
                     int defdelay = vars.Exists(DelayID) ? vars[DelayID].InvariantParseInt(DefaultDelay) : (ap.VarExist(globalvarDelay) ? ap[globalvarDelay].InvariantParseInt(DefaultDelay) : DefaultDelay);
                     string process = vars.Exists(ProcessID) ? vars[ProcessID] : (ap.VarExist(globalvarProcessID) ? ap[globalvarProcessID] : "");
 
-                    //string res = BaseUtils.EnhancedSendKeys.Send(keys, defdelay, DefaultShiftDelay, DefaultUpDelay, process);
+                    string res = BaseUtils.EnhancedSendKeys.Send(keys, defdelay, DefaultShiftDelay, DefaultUpDelay, process, akp);
 
-                    List<string> list;
-                    string res = BaseUtils.EnhancedSendKeys.GenerateEventList(out list, keys, defdelay, DefaultShiftDelay, DefaultUpDelay, akp);
-                    foreach( string s in list)
-                    {
-                        System.Diagnostics.Debug.WriteLine(">>" + s);
-                    }
+                    //List<string> list;
+                    //string res = BaseUtils.EnhancedSendKeys.GenerateEventList(out list, keys, defdelay, DefaultShiftDelay, DefaultUpDelay, akp);
+                    //foreach( string s in list) System.Diagnostics.Debug.WriteLine(">>" + s);
+                   
 
                     if (res.HasChars())
-                        ap.ReportError("Sequence not recognised: " + res);
+                        ap.ReportError(res);
                 }
                 else
                     ap.ReportError(errlist);

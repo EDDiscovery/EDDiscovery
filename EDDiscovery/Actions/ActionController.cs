@@ -101,7 +101,7 @@ namespace EDDiscovery.Actions
 
             frontierbindings.LoadBindingsFile();
             //System.Diagnostics.Debug.WriteLine("Bindings" + frontierbindings.ListBindings());
-            //System.Diagnostics.Debug.WriteLine("Key Names" + frontierbindings.ListKeyNames());
+           // System.Diagnostics.Debug.WriteLine("Key Names" + frontierbindings.ListKeyNames("{","}"));
 
             voicerecon.SpeechRecognised += Voicerecon_SpeechRecognised;
 
@@ -659,12 +659,17 @@ namespace EDDiscovery.Actions
             }
         }
 
+        public void VoiceReconConfidence(float conf)
+        {
+            voicerecon.Confidence = conf;
+        }
+
         void ActionConfigureVoiceRecon()
         {
             System.Diagnostics.Debug.WriteLine("Action config voice recon " + voicerecon.IsOpen);
             if ( voicerecon.IsOpen )
             {
-                voicerecon.Stop();
+                voicerecon.Stop(true);
 
                 List<Tuple<string, ConditionEntry.MatchType>> ret = actionfiles.ReturnValuesOfSpecificConditions("VoiceInput", new List<ConditionEntry.MatchType>() { ConditionEntry.MatchType.MatchSemicolon });        // need these to decide
                 List<string> prompts = new List<string>();

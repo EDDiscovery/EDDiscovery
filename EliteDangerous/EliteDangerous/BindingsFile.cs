@@ -320,22 +320,22 @@ namespace EliteDangerousCore
             return null;
         }
 
-        public List<Tuple<Device, Assignment>> FindAssignedFunc(string name, string preferreddevice=null)
+        public List<Tuple<Device, Assignment>> FindAssignedFunc(string name, string preferreddevice=null)       // NULL if no match found 
         {
-            if ( AssignedNames.ContainsKey(name))
+            if (AssignedNames.ContainsKey(name))
             {
                 List<Tuple<Device, Assignment>> ret = new List<Tuple<Device, Assignment>>();
 
-                foreach ( Tuple<Device,Assignment> a in AssignedNames[name])
+                foreach (Tuple<Device, Assignment> a in AssignedNames[name])
                 {
-                    if ( preferreddevice == null || a.Item1.Name.Equals(preferreddevice))
+                    if (preferreddevice == null || a.Item1.Name.Equals(preferreddevice))
                     {
                         //System.Diagnostics.Debug.WriteLine("Func " + name + " " + a.Item1.Name + " " + a.Item2.keys[0].Key);
-                        ret.Add(new Tuple<Device,Assignment>(a.Item1, a.Item2));
+                        ret.Add(new Tuple<Device, Assignment>(a.Item1, a.Item2));
                     }
                 }
 
-                return ret;
+                return ret.Count > 0 ? ret : null;
             }
 
             return null;
@@ -412,9 +412,9 @@ namespace EliteDangerousCore
             return String.Join(Environment.NewLine, (from x in values.Keys select x));
         }
 
-        public string ListKeyNames()
+        public string ListKeyNames(string prefix = "", string postfix = "")
         {
-            return String.Join(Environment.NewLine, (from x in KeyNames select x));
+            return String.Join(Environment.NewLine, (from x in KeyNames select prefix + x + postfix));
         }
 
 

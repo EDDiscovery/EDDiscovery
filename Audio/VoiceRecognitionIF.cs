@@ -19,7 +19,7 @@ namespace AudioExtensions
         bool Add(string s);
         bool AddRange(List<string> s);
         bool Start();
-        void Stop();    // after stop you can add/start
+        void Stop(bool waitforstop);    // after stop you can add/start
         void Close();   // can close without stop
     }
 
@@ -33,7 +33,7 @@ namespace AudioExtensions
         public bool Start() { return false; }
         public bool Add(string s) { return false; }
         public bool AddRange(List<string> s) { return false; }
-        public void Stop() { }
+        public void Stop(bool stop) { }
         public void Close() { }
     }
 

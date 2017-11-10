@@ -45,7 +45,7 @@ namespace DialogTest
 
                 case "keyform":
                     ExtendedControls.KeyForm f = new ExtendedControls.KeyForm();
-                    f.Init(null, true, " ", "", "", -1, false, new List<string>() { "{1}", "{2}" }, keyparser);
+                    f.Init(null, true, " ", "", "", -1, false);
                     sel = f;
                     break;
 
@@ -62,9 +62,9 @@ namespace DialogTest
                     break;
             }
 
-            Tuple<string,int,string> keyparser(string s) { return new Tuple<string,int,string>("F1",s.IndexOf("}")+1,null); }
 
             Application.Run(sel);
         }
+
     }
 }

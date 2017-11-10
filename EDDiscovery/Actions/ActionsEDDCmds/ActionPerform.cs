@@ -45,7 +45,7 @@ namespace EDDiscovery.Actions
             if (ap.functions.ExpandString(UserData, out res) != Conditions.ConditionFunctions.ExpandResult.Failed)
             {
                 StringParser sp = new StringParser(res);
-                string cmdname = sp.NextWord(" ", lowercase:true);
+                string cmdname = sp.NextWord(" ", lowercase: true);
 
                 if (cmdname == null)
                 {
@@ -99,9 +99,23 @@ namespace EDDiscovery.Actions
                 else if (cmdname.Equals("disableeliteinput"))
                     (ap.actioncontroller as ActionController).EliteInput(false, false);
                 else if (cmdname.Equals("enablevoicerecognition"))
-                    (ap.actioncontroller as ActionController).VoiceRecon(true, sp.NextQuotedWord() ?? "en-gb");
+                {
+                    string culture = sp.NextQuotedWord();
+                    if (culture != null)
+                        (ap.actioncontroller as ActionController).VoiceRecon(true, culture);
+                    else
+                        ap.ReportError("EnableVoiceRecognition requires a culture");
+                }
                 else if (cmdname.Equals("disablevoicerecognition"))
                     (ap.actioncontroller as ActionController).VoiceRecon(false);
+                else if (cmdname.Equals("voicerecognitionconfidencelevel"))
+                {
+                    float? conf = sp.NextWord().InvariantParseFloatNull();
+                    if (conf != null)
+                        (ap.actioncontroller as ActionController).VoiceReconConfidence(conf.Value);
+                    else
+                        ap.ReportError("VoiceRecognitionConfidencelLevel requires a confidence value");
+                }
                 else if (cmdname.Equals("listeliteinput"))
                 {
                     ap["EliteInput"] = (ap.actioncontroller as ActionController).EliteInputList();
