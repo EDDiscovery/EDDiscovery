@@ -18,7 +18,9 @@ namespace ExtendedControls
         public static readonly string[] TextboxBorderStyles = "None FixedSingle Fixed3D Colour".Split();
 
         protected static string buttonstyle_system = ButtonStyles[0];
+        protected static string buttonstyle_flat = ButtonStyles[1];
         protected static string buttonstyle_gradient = ButtonStyles[2];
+        protected static string textboxborderstyle_fixedsingle = TextboxBorderStyles[1];
         protected static string textboxborderstyle_fixed3D = TextboxBorderStyles[2];
         protected static string textboxborderstyle_color = TextboxBorderStyles[3];
 
@@ -209,6 +211,24 @@ namespace ExtendedControls
             themelist.Clear();
 
             themelist.Add(new Settings("Windows Default"));         // windows default..
+
+            themelist.Add(new Settings("EDSM", Color.FromArgb(255, 39, 43, 48), // form
+                Color.FromArgb(255, 71, 77, 84), Color.FromArgb(255, 245, 245, 245), Color.FromArgb(255, 41, 46, 51), buttonstyle_flat, // button back, text, border
+                Color.FromArgb(255, 62, 68, 77), Color.FromArgb(255, 200, 200, 200), // grid borderback, bordertext
+                Color.FromArgb(255, 28, 30, 34), Color.FromArgb(255, 200, 200, 200), Color.FromArgb(255, 62, 68, 77), // grid cellbackground, text, borderlines
+                Color.FromArgb(255, 28, 30, 34), Color.FromArgb(255, 200, 200, 200), Color.FromArgb(255, 72, 78, 85), // grid sliderback, arrow, scrollbutton
+                Color.FromArgb(255, 200, 200, 200), Color.FromArgb(255, 90, 196, 222), // travelgrid_nonvisited, visited
+                Color.FromArgb(255, 28, 30, 34), Color.FromArgb(255, 200, 200, 200), Color.FromArgb(255, 248, 148, 6), Color.FromArgb(255, 90, 196, 90), Color.FromArgb(255, 46, 51, 56), textboxborderstyle_color, // textbox back, fore, highlight, success, border
+                Color.FromArgb(255, 28, 30, 34), Color.FromArgb(255, 200, 200, 200), Color.FromArgb(255, 72, 78, 85), // text sliderback, scrollarrow, scrollbutton
+                Color.FromArgb(255, 200, 200, 200), Color.FromArgb(255, 98, 196, 98), // checkbox, checkboxtick
+                Color.FromArgb(255, 58, 63, 68), Color.FromArgb(255, 245, 245, 245), Color.FromArgb(255, 58, 63, 68), Color.FromArgb(255, 200, 200, 200),  // menuback, fore, dropdownback, dropdownfore
+                Color.FromArgb(255, 200, 200, 200),  // label
+                Color.FromArgb(255, 46, 51, 56), Color.FromArgb(255, 200, 200, 200), Color.FromArgb(255, 41, 46, 51), // group back, text, border
+                Color.FromArgb(255, 41, 46, 51), // tab control borderlines
+                Color.Black, Color.FromArgb(255, 46, 51, 56), Color.FromArgb(255, 41, 46, 51), Color.FromArgb(255, 255, 0, 0), // toolstrip ?, back, border, ?
+                false, 100, "Arial Narrow", 10.25F));
+
+          //  themelist.Add(new Settings(themelist[themelist.Count - 1], "Elite EuroCaps", "EDSM", 12F, 95));
 
             themelist.Add(new Settings("Orange Delight", Color.Black,
                 Color.FromArgb(255, 48, 48, 48), Color.Orange, Color.DarkOrange, buttonstyle_gradient, // button
