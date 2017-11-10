@@ -44,10 +44,10 @@ namespace EDDiscovery.Actions
                         List<Tuple<EliteDangerousCore.BindingsFile.Device, EliteDangerousCore.BindingsFile.Assignment>> matches 
                                     = bindingsfile.FindAssignedFunc(binding, EliteDangerousCore.BindingsFile.KeyboardDeviceName);   // just give me keyboard bindings, thats all i can do
 
-                        if ( matches != null )
+                        if ( matches != null )      // null if no matches to keyboard is found
                         {
                             string keyseq = "";
-                            foreach( var k in matches[0].Item2.keys )       // all keys.. list out for pressing (may need more work)
+                            foreach( var k in matches[0].Item2.keys )       // all keys.. list out for pressing (will need more work)
                             {
                                 Keys vkey = DirectInputDevices.KeyConversion.FrontierNameToKeys(k.Key);
                                 if ( vkey == Keys.None )
@@ -61,7 +61,7 @@ namespace EDDiscovery.Actions
                             return new Tuple<string, int, string>(keyseq, endindex + 1, null);
                         }
                         else
-                            return new Tuple<string, int, string>(null, 0, "For binding " + binding + " the current bindings file has no key assignments");
+                            return new Tuple<string, int, string>(null, 0, "Bindings file does not have a keyboard binding for " + binding );
 
                     }
                 }
@@ -73,6 +73,7 @@ namespace EDDiscovery.Actions
         static public string Menu(Form parent, System.Drawing.Icon ic, string userdata, EliteDangerousCore.BindingsFile bf)
         {
             List<string> decorated = (from x in bf.KeyNames select "{"+x+"}").ToList();
+            decorated.Sort();
             return Menu(parent, ic, userdata, decorated, new AKP() { bindingsfile = bf });
         
         }

@@ -341,9 +341,9 @@ namespace ActionLanguage
 
                                     e += ", ";
 
-                                    if (evl.Length + e.Length > 100)
+                                    if (evl.Length>0 && evl.Length + e.Length > 120 )   // if we have text, and adding this on makes it long
                                     {
-                                        sr.WriteLine("// Events: " + evl);
+                                        sr.WriteLine("// Events: " + evl);  // write current out
                                         evl = "";
                                     }
 
@@ -353,7 +353,7 @@ namespace ActionLanguage
 
                             if (evl.Length > 0)
                             {
-                                evl = evl.Substring(0, evl.Length - 2);
+                                evl = evl.Substring(0, evl.Length - 2); // remove ,
                                 sr.WriteLine("// Events: " + evl);
                             }
 

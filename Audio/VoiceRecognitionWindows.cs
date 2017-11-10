@@ -32,7 +32,7 @@ namespace AudioExtensions
             }
             catch
             {
-                Stop();
+                engine = null;
                 return false;
             }
 
@@ -51,9 +51,8 @@ namespace AudioExtensions
         {
             if (engine != null )
             {
-                Stop();
+                Stop(true);
                 System.Diagnostics.Debug.WriteLine("Closing");
-                engine.RecognizeAsyncCancel();
                 engine.SpeechRecognized -= Engine_SpeechRecognized;
                 engine.Dispose();
                 engine = null;
@@ -72,14 +71,24 @@ namespace AudioExtensions
                 return false;
         }
 
-        public void Stop()
+        public void Stop(bool waitfor)
         {
             if (engine != null && engine.AudioState != AudioState.Stopped)
             {
-                System.Diagnostics.Debug.WriteLine("Voice Recognition Stopping");
+                System.Diagnostics.Debug.WriteLine(Environment.TickCount + " Voice Recognition Stopping");
                 engine.UnloadAllGrammars();
                 engine.RecognizeAsyncCancel();
-                System.Diagnostics.Debug.WriteLine("Voice Recognition Stopped");
+
+                if (waitfor)
+                {
+                    int max = 100;
+                    while (max-- > 0 && engine.AudioState != AudioState.Stopped)
+                        System.Threading.Thread.Sleep(10);
+                    if (max <= 0)
+                        ExtendedControls.MessageBoxTheme.Show("Voice recon did not stop", "Voice Audio Problem");
+                }
+
+                System.Diagnostics.Debug.WriteLine(Environment.TickCount + "Voice Recognition Stopped");
             }
         }
 
@@ -87,7 +96,7 @@ namespace AudioExtensions
         {
             foreach (string x in s)
             {
-                if (!Add(x))
+                if (x.Length>0 && !Add(x))
                     return false;
             }
 
@@ -96,7 +105,8 @@ namespace AudioExtensions
 
         public bool Add(string s)
         {
-            if (engine != null && engine.AudioState == AudioState.Stopped)
+           // System.Diagnostics.Debug.WriteLine("Engine State" + engine?.AudioState);
+            if (engine != null && engine.AudioState == AudioState.Stopped && s.Length>0)
             {
                 GrammarBuilder builder = new GrammarBuilder(s);
                 builder.Culture = ct;
@@ -116,10 +126,9 @@ namespace AudioExtensions
         {
             var x = e.Result;
             DumpInfo("Recognised", e.Result);
+            System.Diagnostics.Debug.WriteLine("Confidence {0} vs threshold {1}", e.Result.Confidence, Confidence);
             if (e.Result.Confidence >= Confidence)
                 SpeechRecognised?.Invoke(e.Result.Text, e.Result.Confidence);
-            else
-                System.Diagnostics.Debug.WriteLine("Failed confidence threshold {0} {1}", e.Result.Confidence, Confidence);
         }
 
         private void Engine_SpeechRecognitionRejected(object sender, SpeechRecognitionRejectedEventArgs e)
