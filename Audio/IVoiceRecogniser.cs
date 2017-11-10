@@ -13,11 +13,23 @@
  * 
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
+using System.Collections.Generic;
+using System.Globalization;
 
-namespace ExtendedControls
+namespace AudioExtensions
 {
-    public static class ThemeableFormsInstance
+    public delegate void SpeechRecognisedHandler(string text, float confidence);
+
+    public interface IVoiceRecogniser
     {
-        static public ITheme Instance { get; set; }
+        event SpeechRecognisedHandler SpeechRecognised;
+        bool IsOpen { get; }
+        float Confidence { get; set; }
+        bool Open(CultureInfo ctp);        // Dispose to close
+        bool Add(string s);
+        bool AddRange(List<string> s);
+        bool Start();
+        void Stop();    // after stop you can add/start
+        void Close();   // can close without stop
     }
 }

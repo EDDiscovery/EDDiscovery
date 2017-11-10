@@ -9,11 +9,11 @@ namespace AudioExtensions
 #if !NO_SYSTEM_SPEECH
     using System.Speech.Recognition;
 
-    public class VoiceRecognitionWindows : VoiceRecognition
+    public class VoiceRecognitionWindows : IVoiceRecogniser
     {
         public float Confidence { get; set; } = 0.98F;
 
-        public event SpeechRecognised SpeechRecognised;
+        public event SpeechRecognisedHandler SpeechRecognised;
         public bool IsOpen { get { return engine != null; } }
 
         private SpeechRecognitionEngine engine;

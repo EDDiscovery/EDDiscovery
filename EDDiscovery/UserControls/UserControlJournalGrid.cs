@@ -30,7 +30,7 @@ using EliteDangerousCore;
 
 namespace EDDiscovery.UserControls
 {
-    public partial class UserControlJournalGrid : UserControlCommonBase, UserControlCursorType
+    public partial class UserControlJournalGrid : UserControlCommonBase, IHistoryCursor
     {
         EventFilterSelector cfs = new EventFilterSelector();
         private Conditions.ConditionLists fieldfilter = new Conditions.ConditionLists();
@@ -47,8 +47,8 @@ namespace EDDiscovery.UserControls
 
         private HistoryList current_historylist;        // the last one set, for internal refresh purposes on sort
 
-        public event ChangedSelection OnChangedSelection;   // After a change of selection by the user, or after a OnHistoryChanged, or after a sort.
-        public event ChangedSelectionHE OnTravelSelectionChanged;   // as above, different format, for certain older controls
+        public event ChangedSelectionHandler OnChangedSelection;   // After a change of selection by the user, or after a OnHistoryChanged, or after a sort.
+        public event ChangedSelectionHEHandler OnTravelSelectionChanged;   // as above, different format, for certain older controls
         public HistoryEntry GetCurrentHistoryEntry { get { return dataGridViewJournal.CurrentCell != null ? dataGridViewJournal.Rows[dataGridViewJournal.CurrentCell.RowIndex].Cells[JournalHistoryColumns.HistoryTag].Tag as HistoryEntry : null; } }
 
 

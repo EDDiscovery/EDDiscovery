@@ -31,7 +31,7 @@ using EliteDangerousCore.DB;
 
 namespace EDDiscovery
 {
-    public class EDDConfig : EliteDangerousCore.EliteConfig
+    public class EDDConfig : EliteDangerousCore.IEliteConfig
     {
         private static EDDConfig _instance;
 

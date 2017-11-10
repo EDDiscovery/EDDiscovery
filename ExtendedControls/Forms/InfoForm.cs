@@ -40,7 +40,7 @@ namespace ExtendedControls
             textBoxInfo.Text = info;
             textBoxInfo.Select(0, 0);
 
-            ThemeableForms theme = ThemeableFormsInstance.Instance;
+            ITheme theme = ThemeableFormsInstance.Instance;
 
             if ( themeit && theme != null)
             {

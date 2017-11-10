@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2017 EDDiscovery development team
+ * Copyright © 2016 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -14,10 +14,13 @@
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 
-namespace ExtendedControls
+// provides access to some config items via interface and singleton needed by this code.
+
+namespace EliteDangerousCore
 {
-    public static class ThemeableFormsInstance
+    public static class EliteConfigInstance
     {
-        static public ITheme Instance { get; set; }
+        static public IEliteOptions InstanceOptions { get; set; }
+        static public IEliteConfig InstanceConfig { get; set; }
     }
 }

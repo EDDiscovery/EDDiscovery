@@ -27,7 +27,7 @@ namespace ExtendedControls
         // lab sets the items, def can be less or null
         public static List<string> ShowDialog(Form p, string caption, Icon ic, string[] lab, string[] def, bool multiline = false, string[] tooltips = null)
         {
-            ThemeableForms theme = ThemeableFormsInstance.Instance;
+            ITheme theme = ThemeableFormsInstance.Instance;
 
             int vstart = theme.WindowsFrame ? 20 : 40;
             int vspacing = multiline ? 60 : 40;
@@ -219,7 +219,7 @@ namespace ExtendedControls
             entries = e;
             callertag = t;      // passed back to caller via trigger
 
-            ThemeableForms theme = ThemeableFormsInstance.Instance;
+            ITheme theme = ThemeableFormsInstance.Instance;
 
             FormBorderStyle = FormBorderStyle.FixedDialog;
 
