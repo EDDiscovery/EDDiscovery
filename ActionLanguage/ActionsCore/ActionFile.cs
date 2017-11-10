@@ -63,7 +63,9 @@ namespace ActionLanguage
         public string filepath { get; private set; }                                       // where it came from
         public string name { get; private set; }                                           // its logical name
         public bool enabled { get; private set; }                                          // if enabled.
-        public Encoding fileencoding {get; private set;}                                    // file encoding
+
+        public Encoding fileencoding {get; private set;}                                    // file encoding (auto calc, not saved)
+        public List<int> CollapseState { get; set; } = new List<int>();                                     // view remember, not saved.
 
         public void ChangeEventList(ConditionLists s)
         {
@@ -148,6 +150,8 @@ namespace ActionLanguage
             {
                 var utc8nobom = new UTF8Encoding(false);        // give it the default UTF8 no BOM encoding, it will detect BOM or UCS-2 automatically
 
+                string currenteventgroup = null;
+
                 using (StreamReader sr = new StreamReader(filename, utc8nobom))         // read directly from file.. presume UTF8 no bom
                 {
                     string firstline = sr.ReadLine();
@@ -228,7 +232,11 @@ namespace ActionLanguage
                                 else if (c.action.Length == 0 || c.eventname.Length == 0)
                                     return name + " " + lineno + " EVENT Missing event name or action" + Environment.NewLine;
 
-                                actioneventlist.Add(c);
+                                actioneventlist.Add(c,currenteventgroup);
+                            }
+                            else if (line.StartsWith("GROUP", StringComparison.InvariantCultureIgnoreCase))
+                            {
+                                currenteventgroup = line.Substring(5).Trim();
                             }
                             else if (line.StartsWith("INSTALL", StringComparison.InvariantCultureIgnoreCase))
                             {
@@ -308,8 +316,21 @@ namespace ActionLanguage
 
                     if (actioneventlist.Count > 0)
                     {
+                        string currenteventgroup = null;
+
                         for (int i = 0; i < actioneventlist.Count; i++)
+                        {
+                            string evgroup = actioneventlist.GetGroupName(i);
+                            if ( evgroup != currenteventgroup )
+                            {
+                                if ( currenteventgroup != null )
+                                    sr.WriteLine("");
+                                currenteventgroup = evgroup;
+                                sr.WriteLine("GROUP " + currenteventgroup);
+                            }
+
                             sr.WriteLine("EVENT " + actioneventlist.Get(i).ToString(includeaction: true));
+                        }
 
                         sr.WriteLine();
                     }
