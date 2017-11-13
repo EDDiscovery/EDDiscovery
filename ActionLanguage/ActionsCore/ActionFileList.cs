@@ -30,6 +30,8 @@ namespace ActionLanguage
 
         public List<string> GetList { get { return (from af in actionfiles select af.name).ToList(); } }
 
+        public IEnumerable<ActionFile> Enumerable { get { return actionfiles; } }
+
         // normally pack names are case sensitive, except when we are checking it can be written to a file.. then we would want a case insensitive version
         public ActionFile Get(string name, StringComparison c = StringComparison.InvariantCulture) { return actionfiles.Find(x => x.name.Equals(name,c)); }
 

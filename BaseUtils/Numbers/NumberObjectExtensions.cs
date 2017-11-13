@@ -208,23 +208,26 @@ public static class ObjectExtensionsNumbersBool
 
         return newarray;
     }
-
-    static public List<int> RestoreIntListFromString(this string plist, int def, int length)      // fill array from comma separ string, with defined length and defined default
+    // fill array from comma separ string, with min leng (def if less) and max length
+    static public List<int> RestoreIntListFromString(this string plist, int minlength = 0, int def = 0, int maxlength = int.MaxValue)
     {
-        List<int> list = new List<int>(length);
+        List<int> list = new List<int>();
 
-        string[] parray = plist.Split(',');
-        if (length == 0)
-            length = parray.Length;
-
-        for (int i = 0; i < length; i++)
+        if (plist.Length > 0)
         {
-            int v;
-            if (i >= parray.Length || !parray[i].InvariantParse(out v))
-                list.Add(def);
-            else
-                list.Add(v);
+            string[] parray = plist.Split(',');
+
+            for (int i = 0; i < parray.Length && list.Count < maxlength; i++)
+            {
+                int v;
+                if (parray[i].InvariantParse(out v))
+                    list.Add(v);
+            }
+
         }
+
+        while (list.Count < minlength)
+            list.Add(def);
 
         return list;
     }

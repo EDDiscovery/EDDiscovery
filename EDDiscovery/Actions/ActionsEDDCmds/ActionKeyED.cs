@@ -41,8 +41,15 @@ namespace EDDiscovery.Actions
                     {
                         string binding = s.Substring(1, endindex - 1);
 
+                        if (!bindingsfile.KeyNames.Contains(binding))       // first check its a valid name..
+                        {
+                            return new Tuple<string, int, string>(null, 0, "Binding name " + binding + " is not an known binding");
+                        }
+
                         List<Tuple<EliteDangerousCore.BindingsFile.Device, EliteDangerousCore.BindingsFile.Assignment>> matches 
                                     = bindingsfile.FindAssignedFunc(binding, EliteDangerousCore.BindingsFile.KeyboardDeviceName);   // just give me keyboard bindings, thats all i can do
+
+// TBD Shift handling
 
                         if ( matches != null )      // null if no matches to keyboard is found
                         {
@@ -52,17 +59,19 @@ namespace EDDiscovery.Actions
                                 Keys vkey = DirectInputDevices.KeyConversion.FrontierNameToKeys(k.Key);
                                 if ( vkey == Keys.None )
                                 {
-                                    return new Tuple<string, int, string>(null, 0, "Conversion of Frontier key " + k.Key + " failed ");
+                                    return new Tuple<string, int, string>(null, 0, "Control binding not set for " + k.Key);
                                 }
 
                                 keyseq += vkey.VKeyToString() + " ";
                             }
-
+                            System.Diagnostics.Debug.WriteLine("Frontier " + binding + "->" + keyseq);
                             return new Tuple<string, int, string>(keyseq, endindex + 1, null);
                         }
                         else
-                            return new Tuple<string, int, string>(null, 0, "Bindings file does not have a keyboard binding for " + binding );
-
+                        {
+                            System.Diagnostics.Debug.WriteLine("NO binding for " + binding);
+                            return new Tuple<string, int, string>(null, 0, "No keyboard binding for " + binding);
+                        }
                     }
                 }
 
@@ -96,6 +105,25 @@ namespace EDDiscovery.Actions
         {
             ActionController ac = ap.actioncontroller as ActionController;
             return ExecuteAction(ap, new AKP() { bindingsfile = ac.FrontierBindings }); //base, TBD pass in tx funct
+        }
+
+        static public string VerifyBinding(string userdata, EliteDangerousCore.BindingsFile bf)    // empty string okay
+        {
+            string keys;
+            ConditionVariables statementvars;
+            if (FromString(userdata, out keys, out statementvars))
+            {
+                // during this check, we don't moan about a binding not being present, since we don't need to..
+
+                string ret = BaseUtils.EnhancedSendKeys.VerifyKeys(keys, new AKP() { bindingsfile = bf });
+
+                if (ret.Contains("No keyboard binding for"))     // Ignore these..
+                    return "";
+                else
+                    return ret;
+            }
+            else
+                return "Bad Key Line";
         }
     }
 }

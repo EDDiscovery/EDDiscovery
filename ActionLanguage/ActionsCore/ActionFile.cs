@@ -56,16 +56,15 @@ namespace ActionLanguage
         }
 
         public ConditionLists actioneventlist { get; private set; }                        // note we use the list, but not the evaluate between conditions..
-        public ActionProgramList actionprogramlist { get; private set; }                    // programs associated with this pack
+        public ActionProgramList actionprogramlist { get; private set; }                   // programs associated with this pack
         public ConditionVariables installationvariables { get; private set; }              // used to pass to the installer various options, such as disable other packs
         public ConditionVariables filevariables { get; private set; }                      // variables defined using the static.. private to this program.  Not persistent. 
-        public Dictionary<string, ExtendedControls.ConfigurableForm> dialogs;                         // persistent dialogs owned by this file
+        public Dictionary<string, ExtendedControls.ConfigurableForm> dialogs;              // persistent dialogs owned by this file
         public string filepath { get; private set; }                                       // where it came from
         public string name { get; private set; }                                           // its logical name
         public bool enabled { get; private set; }                                          // if enabled.
 
-        public Encoding fileencoding {get; private set;}                                    // file encoding (auto calc, not saved)
-        public List<int> CollapseState { get; set; } = new List<int>();                                     // view remember, not saved.
+        public Encoding fileencoding {get; private set;}                                   // file encoding (auto calc, not saved)
 
         public void ChangeEventList(ConditionLists s)
         {
@@ -255,7 +254,15 @@ namespace ActionLanguage
                                 return name + " " + lineno + " Invalid command" + Environment.NewLine;
                         }
 
-                        return "";
+                        string missing = "";
+                        foreach( Condition c in actioneventlist.Enumerable )        // lets see if any programs are missing
+                        {
+                            string progname = c.action;
+                            if ( actionprogramlist.Get(progname) == null )
+                                missing += "Missing program " + progname + Environment.NewLine;
+                        }
+
+                        return missing;
                     }
                     else
                     {

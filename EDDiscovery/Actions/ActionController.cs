@@ -139,12 +139,35 @@ namespace EDDiscovery.Actions
                 actionfiles = new ActionFileList();     // clear the list
 
             string errlist = actionfiles.LoadAllActionFiles(AppFolder);
+
+            AdditionalChecks(ref errlist);
+
             if (errlist.Length > 0)
                 ExtendedControls.MessageBoxTheme.Show(discoveryform, "Failed to load files\r\n" + errlist, "WARNING!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
             actionrunasync = new ActionRun(this, actionfiles);        // this is the guy who runs programs asynchronously
             ActionConfigureKeys();
             ActionConfigureVoiceRecon();
+        }
+
+        public void AdditionalChecks(ref string errlist)        // perform additional checks which can only be done when
+        {                                                       // the full system is available at this level of code heirarchy
+            foreach (ActionFile af in actionfiles.Enumerable)
+            {
+                foreach (ActionProgram p in af.actionprogramlist.Enumerable)
+                {
+                    foreach (ActionBase b in p.Enumerable)
+                    {
+                        if (b.Name == "Key")
+                        {
+                            string err = ActionKeyED.VerifyBinding(b.UserData, frontierbindings);
+                            //System.Diagnostics.Debug.WriteLine("{0} Step {1} UD '{2}' err '{3}'", p.Name, b.Name, b.UserData, err);
+                            if (err.Length > 0)
+                                errlist = af.name +":" + p.Name + ":" + b.LineNumber + " " + err + Environment.NewLine;
+                        }
+                    }
+                }
+            }
         }
 
         #region Edit Action Packs
@@ -173,9 +196,13 @@ namespace EDDiscovery.Actions
 
             if (f != null)
             {
-                frm.Init("Edit pack " + name, this.Icon, this, AppFolder, f, eventlist);
+                string collapsestate = SQLiteConnectionUser.GetSettingString("ActionEditorCollapseState_" + name, "");  // get any collapsed state info for this pack
+
+                frm.Init("Edit pack " + name, this.Icon, this, AppFolder, f, eventlist, collapsestate);
 
                 frm.ShowDialog(discoveryform); // don't care about the result, the form does all the saving
+
+                SQLiteConnectionUser.PutSettingString("ActionEditorCollapseState_" + name, frm.CollapsedState());  // get any collapsed state info for this pack
 
                 ActionConfigureKeys();
                 ActionConfigureVoiceRecon();

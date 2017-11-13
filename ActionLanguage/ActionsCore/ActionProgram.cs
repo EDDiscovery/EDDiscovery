@@ -35,6 +35,7 @@ namespace ActionLanguage
         public string sayuserdata;        // if progclass includes say, here is the speech (full)
 
         public int Count { get { return programsteps.Count; } }
+        public IEnumerable<ActionBase> Enumerable { get { return programsteps; } }
 
         public ActionProgram(string n = null, string subfile = null)
         {

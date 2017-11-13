@@ -35,6 +35,8 @@ namespace Conditions
         public Condition Get(int n) { return (n < conditionlist.Count) ? conditionlist[n] : null; }
         public string GetGroupName(int n) { return (n < groupname.Count) ? groupname[n] : null; }
 
+        public IEnumerable<Condition> Enumerable { get { return conditionlist; } }
+
         public void Add(Condition fe, string gr = null)
         {
             conditionlist.Add(fe);

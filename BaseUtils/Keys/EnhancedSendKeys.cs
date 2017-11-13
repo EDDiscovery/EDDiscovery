@@ -84,7 +84,7 @@ namespace BaseUtils
                     sc = (short)BaseUtils.Win32.UnsafeNativeMethods.MapVirtualKey((uint)vkey, 0);
                 extkey = ((Keys)vk).IsExtendedKey();
                 delay = del;
-                System.Diagnostics.Debug.WriteLine("Queue " + wm + " : " + vk.VKeyToString() + " " + sc + " " + extkey + " " + delay + "ms");
+                //System.Diagnostics.Debug.WriteLine("Queue " + wm + " : " + vk.VKeyToString() + " " + sc + " " + extkey + " " + delay + "ms");
             }
 
             public override string ToString()
@@ -114,8 +114,11 @@ namespace BaseUtils
 
         enum KMode { press, up, down };
 
-        public static string ParseKeys(string s, int defdelay, int defshiftdelay, int defupdelay, AdditionalKeyParser additionalkeyparser = null)
+        private static string ParseKeys(string s, int defdelay, int defshiftdelay, int defupdelay, AdditionalKeyParser additionalkeyparser = null)
         {
+            if ( events != null )
+                events.Clear();
+
             //debugevents = null;
             s = s.Trim();
             IntPtr hwnd = (IntPtr)0;
@@ -208,7 +211,7 @@ namespace BaseUtils
                 // if in up/down mode, its d1 or def up.   If its got a main part, its d3/defup.  else its d2/defup
                 int keyupdelay = (kmd == KMode.up || kmd == KMode.down) ? (d1 != -1 ? d1 : defupdelay) : (mainpart ? (d3 != -1 ? d3 : defupdelay) : (d2 != -1 ? d2 : defupdelay));
 
-                System.Diagnostics.Debug.WriteLine(string.Format("{0} {1} {2} {3} {4} {5} ", d1, d2, d3, keydowndelay, shiftdelay, keyupdelay));
+                //System.Diagnostics.Debug.WriteLine(string.Format("{0} {1} {2} {3} {4} {5} ", d1, d2, d3, keydowndelay, shiftdelay, keyupdelay));
 
                 if (shift != Keys.None)         // we already run shift keys here. If we are doing UP, we send a up, else we are doing down/press
                     AddEvent(new SKEvent(kmd == KMode.up ? BaseUtils.Win32Constants.WM.KEYUP : BaseUtils.Win32Constants.WM.KEYDOWN, shift, shiftdelay));
@@ -338,7 +341,7 @@ namespace BaseUtils
 
                         currentInput[0].inputUnion.ki.wVk = skEvent.vkey;
 
-                        //System.Diagnostics.Debug.WriteLine("Send " + currentInput[0].inputUnion.ki.wVk + " " + currentInput[0].inputUnion.ki.wScan.ToString("2X") + " " + currentInput[0].inputUnion.ki.dwFlags);
+                        System.Diagnostics.Debug.WriteLine("Send " + currentInput[0].inputUnion.ki.wVk + " " + currentInput[0].inputUnion.ki.wScan.ToString("2X") + " " + currentInput[0].inputUnion.ki.dwFlags);
                         // send only currentInput[0]
                         eventsSent += UnsafeNativeMethods.SendInput(1, currentInput, INPUTSize);
 
@@ -409,7 +412,7 @@ namespace BaseUtils
                     BaseUtils.Win32.UnsafeNativeMethods.SetForegroundWindow(p.MainWindowHandle);
                 }
                 else
-                    return "Process given does not exist";
+                    return "Process " + pname + " is not running";
             }
 
             SendInput(oldstate);
@@ -422,21 +425,10 @@ namespace BaseUtils
             return "";
         }
 
-        public static string GenerateEventList(out List<string> output, string keys, int keydelay, int shiftdelay, int updelay, AdditionalKeyParser additionalkeyparser = null)
+        public static string VerifyKeys(string s, AdditionalKeyParser additionalkeyparser = null)
         {
-            output = new List<string>();
-
-            string err = ParseKeys(keys, keydelay, shiftdelay, updelay, additionalkeyparser);
-            if (err != "")
-                return err;
-
-            while (events.Count > 0)
-            {
-                SKEvent skEvent = (SKEvent)events.Dequeue();
-                output.Add(skEvent.ToString());
-            }
-
-            return "";
+            return ParseKeys(s, 10, 10, 10, additionalkeyparser);
         }
+
     }
 }
