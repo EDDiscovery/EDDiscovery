@@ -25,6 +25,8 @@ namespace DialogTest
             t.Start();
         }
 
+        Keys vkey;
+
         private void T_Tick(object sender, EventArgs e)
         {
             List<InputDeviceEvent> events = idk.GetEvents();
@@ -35,7 +37,13 @@ namespace DialogTest
                     if (ev.Pressed)
                     {
                         Keys k = InputDeviceKeyboard.ToKeys(ev);
-                        string t = "Event " + ev.EventNumber + " " + ev.EventName() + " " + ev.Pressed + " " + ev.EventNumber + " Keys " + k.VKeyToString();
+                        string t = "Sharp Name: " + InputDeviceKeyboard.SharpKeyName(ev) + Environment.NewLine;
+                        t += "Frontier Name " + ev.EventName() + Environment.NewLine;
+
+                        if (!InputDeviceKeyboard.CheckTranslation(ev, vkey))
+                            t += Environment.NewLine + " ERROR TX WRONG!";
+
+                        string frontiername = 
                         richTextBox1.Text += t + Environment.NewLine;
                         richTextBox1.Select(richTextBox1.Text.Length, richTextBox1.Text.Length);
                     }
@@ -45,9 +53,16 @@ namespace DialogTest
 
         private void richTextBox1_KeyDown(object sender, KeyEventArgs e)
         {
-            richTextBox1.Text += "vkey " + e.KeyCode + " " + e.KeyCode.VKeyToString() + Environment.NewLine;
+            vkey = e.KeyCode;
+            richTextBox1.Text += "VK:" + e.KeyCode.VKeyToString() + " " + e.KeyCode + " " + Environment.NewLine;
             richTextBox1.Select(richTextBox1.Text.Length, richTextBox1.Text.Length);
+        }
 
+        protected override bool ProcessDialogKey(Keys keyData)
+        {
+            return false;
         }
     }
+
+
 }

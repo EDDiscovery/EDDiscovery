@@ -28,9 +28,10 @@ namespace EliteDangerousCore
     {
         public bool Loaded { get { return devices.Count > 0; } }
 
-        public HashSet<string> AxisNames { get; private set; } = new HashSet<string>();        // from Bindings in frontier file
-        public HashSet<string> KeyNames { get; private set; } = new HashSet<string>();         // from Primary or Secondary in frontier file
-                                                                                               // assignedfunc to device and assignment, may be many
+        public HashSet<string> AxisNames { get; private set; } = new HashSet<string>();        // from Bindings in frontier file - all names even if not assigned
+        public HashSet<string> KeyNames { get; private set; } = new HashSet<string>();         // from Primary or Secondary in frontier file - all names even if not assigned
+
+        // assignedfunc to device and assignment, may be many
         public Dictionary<string, List<Tuple<Device, Assignment>>> AssignedNames { get; private set; } = new Dictionary<string, List<Tuple<Device, Assignment>>>();
 
         private Dictionary<string, Device> devices = new Dictionary<string, Device>();

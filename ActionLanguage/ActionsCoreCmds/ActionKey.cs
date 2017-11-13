@@ -31,8 +31,10 @@ namespace ActionLanguage
 
         public static string globalvarProcessID = "KeyProcessTo";       // var global
         public static string globalvarDelay = "KeyDelay";
+        public static string globalvarSilentOnErrors = "KeySilentOnError";
         protected static string ProcessID = "To";       // command tags
         protected static string DelayID = "Delay";
+        protected static string SilentOnErrors = "SilentOnError";
         protected const int DefaultDelay = 10;
         protected const int DefaultShiftDelay = 2;
         protected const int DefaultUpDelay = 2;
@@ -110,6 +112,8 @@ namespace ActionLanguage
             return ExecuteAction(ap, null);
         }
 
+        static List<string> errorsreported = new List<string>();
+
         public bool ExecuteAction(ActionProgramRun ap, BaseUtils.EnhancedSendKeys.AdditionalKeyParser akp )      // additional parser
         { 
             string keys;
@@ -123,16 +127,32 @@ namespace ActionLanguage
                 {
                     int defdelay = vars.Exists(DelayID) ? vars[DelayID].InvariantParseInt(DefaultDelay) : (ap.VarExist(globalvarDelay) ? ap[globalvarDelay].InvariantParseInt(DefaultDelay) : DefaultDelay);
                     string process = vars.Exists(ProcessID) ? vars[ProcessID] : (ap.VarExist(globalvarProcessID) ? ap[globalvarProcessID] : "");
+                    string silentonerrors = vars.Exists(SilentOnErrors) ? vars[SilentOnErrors] : (ap.VarExist(globalvarSilentOnErrors) ? ap[globalvarSilentOnErrors] : "0");
 
                     string res = BaseUtils.EnhancedSendKeys.Send(keys, defdelay, DefaultShiftDelay, DefaultUpDelay, process, akp);
 
-                    //List<string> list;
-                    //string res = BaseUtils.EnhancedSendKeys.GenerateEventList(out list, keys, defdelay, DefaultShiftDelay, DefaultUpDelay, akp);
-                    //foreach( string s in list) System.Diagnostics.Debug.WriteLine(">>" + s);
-                   
-
                     if (res.HasChars())
-                        ap.ReportError(res);
+                    {
+                        if (silentonerrors.Equals("2") || (errorsreported.Contains(res) && silentonerrors.Equals("1")))
+                        {
+                            System.Diagnostics.Debug.WriteLine("Swallow key error " + res);
+                            ap.actioncontroller.TerminateAll();
+                        }
+                        else
+                        {
+                            errorsreported.Add(res);
+
+                            if (ap.VarExist("KeyAnnounciate"))
+                            {
+                                string culture = ap.VarExist(ActionSay.globalvarspeechculture) ? ap[ActionSay.globalvarspeechculture] : "Default";
+                                System.IO.MemoryStream ms = ap.actioncontroller.SpeechSynthesizer.Speak("Cannot press key due to " + res, culture, "Default", 0);
+                                AudioQueue.AudioSample audio = ap.actioncontroller.AudioQueueSpeech.Generate(ms);
+                                ap.actioncontroller.AudioQueueSpeech.Submit(audio, 80, AudioQueue.Priority.Normal);
+                            }
+
+                            ap.ReportError(res);
+                        }
+                    }
                 }
                 else
                     ap.ReportError(errlist);

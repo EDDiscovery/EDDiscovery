@@ -25,7 +25,9 @@ namespace DirectInputDevices
 {
     static public class KeyConversion       // three naming conventsion, lovely!
     {
-        static public string SharpKeyToFrontierName(SharpDX.DirectInput.Key k)     // Sharp DX to frontier name
+        // Table defined differences, some are easy to fix programatically (Numberpad)
+
+        static public string SharpKeyToFrontierName(SharpDX.DirectInput.Key k)     
         {
             string keyname = k.ToString();
             string newname = keyname;
@@ -36,9 +38,9 @@ namespace DirectInputDevices
                 newname = "Numpad_" + keyname[9];
             else
             {
-                int i = Array.FindIndex(strtx, x => x.Item1.Equals(keyname));
+                int i = Array.FindIndex(sharptofrontiername, x => x.Item1.Equals(keyname));
                 if (i >= 0)
-                    newname = strtx[i].Item2;
+                    newname = sharptofrontiername[i].Item2;
             }
 
             newname = "Key_" + newname;
@@ -46,7 +48,7 @@ namespace DirectInputDevices
             return newname;
         }
 
-        static public SharpDX.DirectInput.Key? FrontierNameToSharpKey(string frontierkeyname)
+        static public SharpDX.DirectInput.Key? FrontierNameToSharpKey(string frontierkeyname)  
         {
             frontierkeyname = frontierkeyname.Substring(4);
             if (frontierkeyname.Length == 1 && (frontierkeyname[0] >= '0' && frontierkeyname[0] <= '9'))
@@ -55,13 +57,13 @@ namespace DirectInputDevices
                 frontierkeyname = "NumberPad" + frontierkeyname[7];
             else
             {
-                int i = Array.FindIndex(strtx, x => x.Item2.Equals(frontierkeyname));
+                int i = Array.FindIndex(sharptofrontiername, x => x.Item2.Equals(frontierkeyname));
                 if (i >= 0)
-                    frontierkeyname = strtx[i].Item1;
+                    frontierkeyname = sharptofrontiername[i].Item1;
             }
 
             Key k;
-            if (Enum.TryParse<Key>(frontierkeyname, out k))
+            if (Enum.TryParse<Key>(frontierkeyname, true, out k))   // a few sharp names have case differences (Semicolon) ignore it
                 return k;
             else
                 return null;
@@ -69,14 +71,14 @@ namespace DirectInputDevices
 
         static public System.Windows.Forms.Keys SharpKeyToKeys(SharpDX.DirectInput.Key k)        // Sharp DX - > Windows Keys
         {
-            if (tx.ContainsKey(k))
-                return tx[k];
+            if (sharptokeys.ContainsKey(k))
+                return sharptokeys[k];
             return Keys.None;
         }
 
         static public SharpDX.DirectInput.Key KeysToSharpKey(System.Windows.Forms.Keys ky)       // Keys -> Sharp DX
         {
-            Key k = tx.FirstOrDefault(x => x.Value == ky).Key; // if not found, returns enum 0, or Key.Unknown!
+            Key k = sharptokeys.FirstOrDefault(x => x.Value == ky).Key; // if not found, returns enum 0, or Key.Unknown!
             return k;
         }
 
@@ -91,7 +93,18 @@ namespace DirectInputDevices
                 return Keys.None;
         }
 
-        static Tuple<string, string>[] strtx = new Tuple<string, string>[] // frontier naming convention, not quite c# naming conventions
+        static public bool CheckTranslation(Key k, Keys winkey)     // test function just for debugging
+        {
+            System.Diagnostics.Debug.WriteLine("Check " + k + " vs " + winkey);
+            if (sharptokeys.ContainsKey(k))
+            {
+                return sharptokeys[k] == winkey;
+            }
+
+            return false;
+        }
+
+        static Tuple<string, string>[] sharptofrontiername = new Tuple<string, string>[] // sharp name to Frontier Name
         {
             new Tuple<string,string>("Up","UpArrow"),
             new Tuple<string,string>("Down","DownArrow"),
@@ -107,10 +120,18 @@ namespace DirectInputDevices
             new Tuple<string,string>("Add","Numpad_Add"),
             new Tuple<string,string>("NumberPadEnter","Numpad_Enter"),
             new Tuple<string,string>("Decimal","Numpad_Decimal"),
+            new Tuple<string,string>("Backslash","Hash"),     // new 13/11/2017
+            new Tuple<string,string>("Back","Backspace"),     // new 13/11/2017
+            new Tuple<string,string>("Oem102","Backslash"),     // new 13/11/2017
+            // same:
+            // Apostrophe (OEM3/Tilde)
+            // SemiColon (Ome1/OemSemicolon)
+            // Comma, Period, Slash, LeftBracket, RightBracket, Minus, Equals, Grave, 
         };
 
-        // manual table to go from DI Key to VKEY.. check on 11/sept/2017
-        static Dictionary<SharpDX.DirectInput.Key, System.Windows.Forms.Keys> tx = new Dictionary<Key, Keys>()
+        // See word document edcontrols for map of sharp to keys
+        // manual table to go from DI Key to VKEY.. check on 11/sept/2017, rechecked 13 nov 2017
+        static Dictionary<SharpDX.DirectInput.Key, System.Windows.Forms.Keys> sharptokeys = new Dictionary<Key, Keys>()
         {
             {        SharpDX.DirectInput.Key.Unknown , Keys.None},
             {        SharpDX.DirectInput.Key.Escape , Keys.Escape},
@@ -155,7 +176,7 @@ namespace DirectInputDevices
             {        SharpDX.DirectInput.Key.Apostrophe , Keys.Oemtilde},
             {        SharpDX.DirectInput.Key.Grave , Keys.Oem8 },
             {        SharpDX.DirectInput.Key.LeftShift , Keys.ShiftKey},
-            {        SharpDX.DirectInput.Key.Backslash , Keys.OemQuotes},
+            {        SharpDX.DirectInput.Key.Backslash , Keys.OemQuotes},       // NOT SURE
             {        SharpDX.DirectInput.Key.Z , Keys.Z},
             {        SharpDX.DirectInput.Key.X , Keys.X},
             {        SharpDX.DirectInput.Key.C , Keys.C},
@@ -380,5 +401,15 @@ namespace DirectInputDevices
         {
             return KeyConversion.SharpKeyToKeys((Key)ev.EventNumber);
         }
-   }
+
+        static public string SharpKeyName(InputDeviceEvent ev) // safe to call without including SharpDirectInput
+        {
+            return ((Key)ev.EventNumber).ToString();
+        }
+
+        static public bool CheckTranslation(InputDeviceEvent ev, Keys winkey) // safe to call without including SharpDirectInput
+        {
+            return KeyConversion.CheckTranslation((Key)ev.EventNumber, winkey);
+        }
+    }
 }

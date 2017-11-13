@@ -96,7 +96,7 @@ namespace ActionLanguage
             InitializeComponent();
         }
 
-        public void Init(string t, Icon ic, ActionCoreController cp, string appfolder, ActionFile file, List<ActionEvent> evlist)       // here, change to using events
+        public void Init(string t, Icon ic, ActionCoreController cp, string appfolder, ActionFile file, List<ActionEvent> evlist , string collapsestate)       // here, change to using events
         {
             this.Icon = ic;
             actioncorecontroller = cp;
@@ -124,7 +124,7 @@ namespace ActionLanguage
                 {
                     eventname = gname;
                     Group gg = CreateGroup(false, null, gname);
-                    gg.collapsed = actionfile.CollapseState.Contains(groups.Count);
+                    gg.collapsed = collapsestate.Contains("<" + gname + ";");
                     groups.Add(gg);
                 }
 
@@ -348,15 +348,12 @@ namespace ActionLanguage
 
         private void buttonCancel_Click(object sender, EventArgs e)
         {
-            WriteCollapsedState();
             DialogResult = DialogResult.Cancel;
             Close();
         }
 
         private void buttonOK_Click(object sender, EventArgs e)
         {
-            WriteCollapsedState();
-            
             string res = Check();
 
             if (res.Length > 0)
@@ -700,17 +697,17 @@ namespace ActionLanguage
             PositionGroups(g.collapsed == false);
         }
 
-        private void WriteCollapsedState()      // save it per session so its not so horrible if you reenter
+        public string CollapsedState()      // save it per session so its not so horrible if you reenter
         {
-            List<int> list = new List<int>();
+            string str = "";
 
             foreach (Group g in groups)
             {
                 if (g.IsGroupName && g.collapsed == true)
-                    list.Add(groups.IndexOf(g));
+                    str += "<" + g.groupnamelabel.Text + ";";
             }
 
-            actionfile.CollapseState = list;
+            return str;
         }
 
         #endregion
