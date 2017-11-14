@@ -23,11 +23,14 @@ using BaseUtils;
 using AudioExtensions;
 using Conditions;
 using ActionLanguage;
+using static EliteDangerousCore.BindingsFile;
 
 namespace EDDiscovery.Actions
 {
     public class ActionKeyED : ActionKey        // extends Key
     {
+        const string errmsgforbinding = "No keyboard binding for ";
+
         class AKP : BaseUtils.EnhancedSendKeys.AdditionalKeyParser      // AKP parser to pass to SendKeys
         {
             public EliteDangerousCore.BindingsFile bindingsfile;
@@ -46,31 +49,31 @@ namespace EDDiscovery.Actions
                             return new Tuple<string, int, string>(null, 0, "Binding name " + binding + " is not an known binding");
                         }
 
-                        List<Tuple<EliteDangerousCore.BindingsFile.Device, EliteDangerousCore.BindingsFile.Assignment>> matches 
-                                    = bindingsfile.FindAssignedFunc(binding, EliteDangerousCore.BindingsFile.KeyboardDeviceName);   // just give me keyboard bindings, thats all i can do
-
-// TBD Shift handling
+                        List<Tuple<Device, Assignment>> matches 
+                                    = bindingsfile.FindAssignedFunc(binding, KeyboardDeviceName);   // just give me keyboard bindings, thats all i can do
 
                         if ( matches != null )      // null if no matches to keyboard is found
                         {
-                            string keyseq = "";
-                            foreach( var k in matches[0].Item2.keys )       // all keys.. list out for pressing (will need more work)
-                            {
-                                Keys vkey = DirectInputDevices.KeyConversion.FrontierNameToKeys(k.Key);
-                                if ( vkey == Keys.None )
-                                {
-                                    return new Tuple<string, int, string>(null, 0, "Control binding not set for " + k.Key);
-                                }
+                            Tuple<Device, Assignment> match = matches[0];      // just use the first one.. since they have been prechecked for keys one is the same as another
 
-                                keyseq += vkey.VKeyToString() + " ";
+                            // pick out the keys and convert them from fontier to Keys
+                            Keys[] keys = (from x in matches[0].Item2.keys select DirectInputDevices.KeyConversion.FrontierNameToKeys(x.Key)).ToArray();
+
+                            if ( !keys.Contains(Keys.None)) // if no errors
+                            {
+                                string keyseq = EnhancedSendKeys.GenerateCombinedSequence(keys);
+                                System.Diagnostics.Debug.WriteLine("Frontier " + binding + "->" + keyseq);
+                                return new Tuple<string, int, string>(keyseq, endindex + 1, null);
                             }
-                            System.Diagnostics.Debug.WriteLine("Frontier " + binding + "->" + keyseq);
-                            return new Tuple<string, int, string>(keyseq, endindex + 1, null);
+                            else
+                            {
+                                return new Tuple<string, int, string>(null, 0, "Control binding not recognised");
+                            }
                         }
                         else
                         {
                             System.Diagnostics.Debug.WriteLine("NO binding for " + binding);
-                            return new Tuple<string, int, string>(null, 0, "No keyboard binding for " + binding);
+                            return new Tuple<string, int, string>(null, 0, errmsgforbinding + binding);
                         }
                     }
                 }
@@ -107,6 +110,7 @@ namespace EDDiscovery.Actions
             return ExecuteAction(ap, new AKP() { bindingsfile = ac.FrontierBindings }); //base, TBD pass in tx funct
         }
 
+        // check binding in userdata for consistency.
         static public string VerifyBinding(string userdata, EliteDangerousCore.BindingsFile bf)    // empty string okay
         {
             string keys;
@@ -117,7 +121,7 @@ namespace EDDiscovery.Actions
 
                 string ret = BaseUtils.EnhancedSendKeys.VerifyKeys(keys, new AKP() { bindingsfile = bf });
 
-                if (ret.Contains("No keyboard binding for"))     // Ignore these..
+                if (ret.Contains(errmsgforbinding))     // Ignore these..
                     return "";
                 else
                     return ret;

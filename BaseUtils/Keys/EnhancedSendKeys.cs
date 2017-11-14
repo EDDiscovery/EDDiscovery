@@ -116,7 +116,7 @@ namespace BaseUtils
 
         private static string ParseKeys(string s, int defdelay, int defshiftdelay, int defupdelay, AdditionalKeyParser additionalkeyparser = null)
         {
-            if ( events != null )
+            if (events != null)
                 events.Clear();
 
             //debugevents = null;
@@ -428,6 +428,56 @@ namespace BaseUtils
         public static string VerifyKeys(string s, AdditionalKeyParser additionalkeyparser = null)
         {
             return ParseKeys(s, 10, 10, 10, additionalkeyparser);
+        }
+
+        // tested 14/11/2017 with alt/shift/ctrl combinations.. left and right
+
+        public static string GenerateCombinedSequence(Keys[] keys)      // first one is the primary, the rest are shifters
+        {
+            if (keys.Length == 2)       // combinations with shift second..  nicer to do it this way because it keeps the timings
+            {
+                if (keys[1] == Keys.ShiftKey || keys[1] == Keys.LShiftKey)          
+                {
+                    return "Shift+" + keys[0].VKeyToString();
+                }
+                else if (keys[1] == Keys.ControlKey || keys[1] == Keys.LControlKey)
+                {
+                    return "Ctrl+" + keys[0].VKeyToString();
+                }
+                else if (keys[1] == Keys.Menu || keys[1] == Keys.LMenu)
+                {
+                    return "Alt+" + keys[0].VKeyToString();
+                }
+                else if (keys[1] == Keys.RShiftKey)
+                {
+                    return "RShift+" + keys[0].VKeyToString();
+                }
+                else if (keys[1] == Keys.RControlKey)
+                {
+                    return "RCtrl+" + keys[0].VKeyToString();
+                }
+                else if (keys[1] == Keys.RMenu)
+                {
+                    return "RAlt+" + keys[0].VKeyToString();
+                }
+            }
+
+            // else we just play the keys out manually
+
+            string keyseq = "";
+            for (int i = keys.Length - 1; i >= 1; i--)      // press down shifters in order
+            {
+                keyseq += "!" + keys[i].ToString() + " ";
+            }
+
+            keyseq += keys[0].ToString() + " ";             // press release key
+
+            for (int i = 1; i < keys.Length; i++)           // lift up shifters in order
+            {
+                keyseq += "^" + keys[i].ToString() + " ";
+            }
+
+            return keyseq;
         }
 
     }

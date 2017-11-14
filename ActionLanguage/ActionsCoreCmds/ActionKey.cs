@@ -32,9 +32,13 @@ namespace ActionLanguage
         public static string globalvarProcessID = "KeyProcessTo";       // var global
         public static string globalvarDelay = "KeyDelay";
         public static string globalvarSilentOnErrors = "KeySilentOnError";
+        public static string globalvarAnnounciateOnError = "KeyAnnounciateOnError";
+
         protected static string ProcessID = "To";       // command tags
         protected static string DelayID = "Delay";
-        protected static string SilentOnErrors = "SilentOnError";
+        protected static string SilentOnError = "SilentOnError";
+        protected static string AnnounciateOnError = "AnnounicateOnError";
+
         protected const int DefaultDelay = 10;
         protected const int DefaultShiftDelay = 2;
         protected const int DefaultUpDelay = 2;
@@ -127,7 +131,8 @@ namespace ActionLanguage
                 {
                     int defdelay = vars.Exists(DelayID) ? vars[DelayID].InvariantParseInt(DefaultDelay) : (ap.VarExist(globalvarDelay) ? ap[globalvarDelay].InvariantParseInt(DefaultDelay) : DefaultDelay);
                     string process = vars.Exists(ProcessID) ? vars[ProcessID] : (ap.VarExist(globalvarProcessID) ? ap[globalvarProcessID] : "");
-                    string silentonerrors = vars.Exists(SilentOnErrors) ? vars[SilentOnErrors] : (ap.VarExist(globalvarSilentOnErrors) ? ap[globalvarSilentOnErrors] : "0");
+                    string silentonerrors = vars.Exists(SilentOnError) ? vars[SilentOnError] : (ap.VarExist(globalvarSilentOnErrors) ? ap[globalvarSilentOnErrors] : "0");
+                    string announciateonerrors = vars.Exists(AnnounciateOnError) ? vars[AnnounciateOnError] : (ap.VarExist(globalvarAnnounciateOnError) ? ap[globalvarAnnounciateOnError] : "0");
 
                     string res = BaseUtils.EnhancedSendKeys.Send(keys, defdelay, DefaultShiftDelay, DefaultUpDelay, process, akp);
 
@@ -142,7 +147,7 @@ namespace ActionLanguage
                         {
                             errorsreported.Add(res);
 
-                            if (ap.VarExist("KeyAnnounciate"))
+                            if (announciateonerrors.Equals("1"))
                             {
                                 string culture = ap.VarExist(ActionSay.globalvarspeechculture) ? ap[ActionSay.globalvarspeechculture] : "Default";
                                 System.IO.MemoryStream ms = ap.actioncontroller.SpeechSynthesizer.Speak("Cannot press key due to " + res, culture, "Default", 0);
