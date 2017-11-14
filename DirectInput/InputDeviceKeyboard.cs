@@ -104,25 +104,43 @@ namespace DirectInputDevices
             return false;
         }
 
+        public const string FDKeys_Up = "UpArrow";          // naming as per Keys
+        public const string FDKeys_Down = "DownArrow";
+        public const string FDKeys_Left = "LeftArrow";
+        public const string FDKeys_Right = "RightArrow";
+        public const string FDKeys_Return = "Enter";
+        public const string FDKeys_Capital = "CapsLock";
+        public const string FDKeys_Back = "Backspace";
+        public const string FDKeys_NumLock = "NumLock";
+        public const string FDKeys_Subtract = "Numpad_Subtract";
+        public const string FDKeys_Divide = "Numpad_Divide";
+        public const string FDKeys_Multiply = "Numpad_Multiply";
+        public const string FDKeys_Add = "Numpad_Add";
+        public const string FDKeys_NumEnter = "Numpad_Enter";
+        public const string FDKeys_Decimal = "Numpad_Decimal";
+        public const string FDKeys_Quotes = "Hash";
+        public const string FDKeys_Pipe = "Backslash";
+        public const string FDKeys_LeftShift = "LeftShift";
+        public const string FDKeys_LeftControl = "LeftControl";
+
         static Tuple<string, string>[] sharptofrontiername = new Tuple<string, string>[] // sharp name to Frontier Name
         {
-            new Tuple<string,string>("Up","UpArrow"),
-            new Tuple<string,string>("Down","DownArrow"),
-            new Tuple<string,string>("Left","LeftArrow"),
-            new Tuple<string,string>("Right","RightArrow"),
-            new Tuple<string,string>("Return","Enter"),
-            new Tuple<string,string>("Capital","CapsLock"),
-            new Tuple<string,string>("Back","Backspace"),
-            new Tuple<string,string>("NumberLock","NumLock"),
-            new Tuple<string,string>("Subtract","Numpad_Subtract"),
-            new Tuple<string,string>("Divide","Numpad_Divide"),
-            new Tuple<string,string>("Multiply","Numpad_Multiply"),
-            new Tuple<string,string>("Add","Numpad_Add"),
-            new Tuple<string,string>("NumberPadEnter","Numpad_Enter"),
-            new Tuple<string,string>("Decimal","Numpad_Decimal"),
-            new Tuple<string,string>("Backslash","Hash"),     // new 13/11/2017
-            new Tuple<string,string>("Back","Backspace"),     // new 13/11/2017
-            new Tuple<string,string>("Oem102","Backslash"),     // new 13/11/2017
+            new Tuple<string,string>(SharpDX.DirectInput.Key.Up.ToString(),FDKeys_Up),
+            new Tuple<string,string>(SharpDX.DirectInput.Key.Down.ToString(),FDKeys_Down),
+            new Tuple<string,string>(SharpDX.DirectInput.Key.Left.ToString(),FDKeys_Left),
+            new Tuple<string,string>(SharpDX.DirectInput.Key.Right.ToString(),FDKeys_Right),
+            new Tuple<string,string>(SharpDX.DirectInput.Key.Return.ToString(),FDKeys_Return),
+            new Tuple<string,string>(SharpDX.DirectInput.Key.Capital.ToString(),FDKeys_Capital),
+            new Tuple<string,string>(SharpDX.DirectInput.Key.Back.ToString(),FDKeys_Back),
+            new Tuple<string,string>(SharpDX.DirectInput.Key.NumberLock.ToString(),FDKeys_NumLock),
+            new Tuple<string,string>(SharpDX.DirectInput.Key.Subtract.ToString(),FDKeys_Subtract),
+            new Tuple<string,string>(SharpDX.DirectInput.Key.Divide.ToString(),FDKeys_Divide),
+            new Tuple<string,string>(SharpDX.DirectInput.Key.Multiply.ToString(),FDKeys_Multiply),
+            new Tuple<string,string>(SharpDX.DirectInput.Key.Add.ToString(),FDKeys_Add),
+            new Tuple<string,string>(SharpDX.DirectInput.Key.NumberPadEnter.ToString(),FDKeys_NumEnter),
+            new Tuple<string,string>(SharpDX.DirectInput.Key.Decimal.ToString(),FDKeys_Decimal),
+            new Tuple<string,string>(SharpDX.DirectInput.Key.Backslash.ToString(),FDKeys_Quotes),     // new 13/11/2017
+            new Tuple<string,string>(SharpDX.DirectInput.Key.Oem102.ToString(),FDKeys_Pipe),     // new 13/11/2017
             // same:
             // Apostrophe (OEM3/Tilde)
             // SemiColon (Ome1/OemSemicolon)

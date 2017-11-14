@@ -114,6 +114,16 @@ namespace EliteDangerousCore
                 }
                 return true;
             }
+
+            public int NumberOfKeysWithDevice(string name)
+            {
+                return (from x in keys where x.Device.Name.Equals(name, StringComparison.InvariantCultureIgnoreCase) select x).Count();
+            }
+
+            public bool AllOfDevice(string name)
+            {
+                return NumberOfKeysWithDevice(name) == keys.Count;
+            }
         }
 
         [System.Diagnostics.DebuggerDisplay("Device {Name} {Assignments.Count}")]
@@ -327,13 +337,10 @@ namespace EliteDangerousCore
             {
                 List<Tuple<Device, Assignment>> ret = new List<Tuple<Device, Assignment>>();
 
-                foreach (Tuple<Device, Assignment> a in AssignedNames[name])
+                foreach (Tuple<Device, Assignment> a in AssignedNames[name])        // search assignments under this name
                 {
-                    if (preferreddevice == null || a.Item1.Name.Equals(preferreddevice))
-                    {
-                        //System.Diagnostics.Debug.WriteLine("Func " + name + " " + a.Item1.Name + " " + a.Item2.keys[0].Key);
+                    if ( preferreddevice == null || a.Item2.AllOfDevice(preferreddevice) )      // if null, or all of this device.. return
                         ret.Add(new Tuple<Device, Assignment>(a.Item1, a.Item2));
-                    }
                 }
 
                 return ret.Count > 0 ? ret : null;
