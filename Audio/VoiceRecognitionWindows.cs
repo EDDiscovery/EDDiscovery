@@ -115,7 +115,7 @@ namespace AudioExtensions
                 {
                     if (p.Length > 0)
                     {
-                        System.Diagnostics.Debug.Write(p);
+                        System.Diagnostics.Debug.Write(p + ". ");
                         builder.Append(p);
                     }
 
@@ -176,7 +176,7 @@ namespace AudioExtensions
         {
             var x = e.Result;
             DumpInfo("Recognised", e.Result);
-            System.Diagnostics.Debug.WriteLine("Confidence {0} vs threshold {1}", e.Result.Confidence, Confidence);
+            System.Diagnostics.Debug.WriteLine("Confidence {0} vs threshold {1} for {2}", e.Result.Confidence, Confidence, e.Result.Text);
             if (e.Result.Confidence >= Confidence)
                 SpeechRecognised?.Invoke(e.Result.Text, e.Result.Confidence);
         }
