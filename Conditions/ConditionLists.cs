@@ -215,8 +215,20 @@ namespace Conditions
                             }
                             else if (f.matchtype == ConditionEntry.MatchType.MatchSemicolon)
                             {
-                                string[] list = rightside.Split(';').Select(x=>x.Trim()).ToArray();     // split and trim
-                                matched = list.Contains(leftside.Trim(),StringComparer.InvariantCultureIgnoreCase); // compare, trimmed, case insensitive
+                                string[] list = rightside.Split(';').Select(x => x.Trim()).ToArray();     // split and trim
+                                matched = list.Contains(leftside.Trim(), StringComparer.InvariantCultureIgnoreCase); // compare, trimmed, case insensitive
+                            }
+                            else if (f.matchtype == ConditionEntry.MatchType.MatchCommaList)
+                            {
+                                StringCombinations sc = new StringCombinations(',');
+                                sc.ParseString(rightside);      // parse, give all combinations
+                                matched = sc.Permutations.Contains(leftside.Trim(), StringComparer.InvariantCultureIgnoreCase); // compare, trimmed, case insensitive
+                            }
+                            else if (f.matchtype == ConditionEntry.MatchType.MatchSemicolonList)
+                            {
+                                StringCombinations sc = new StringCombinations(';');
+                                sc.ParseString(rightside);      // parse, give all combinations
+                                matched = sc.Permutations.Contains(leftside.Trim(), StringComparer.InvariantCultureIgnoreCase); // compare, trimmed, case insensitive
                             }
                             else if (f.matchtype == ConditionEntry.MatchType.AnyOfAny)
                             {

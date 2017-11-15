@@ -54,6 +54,8 @@ namespace EDDiscovery.Actions
         public AudioExtensions.VoiceRecognition VoiceRecognition { get { return voicerecon; } }
         public BindingsFile FrontierBindings { get { return frontierbindings; } }
 
+        public string ErrorList;        // set on Reload, use to display warnings at right point
+
         AudioExtensions.IAudioDriver audiodriverwave;
         AudioExtensions.AudioQueue audioqueuewave;
         AudioExtensions.IAudioDriver audiodriverspeech;
@@ -127,8 +129,6 @@ namespace EDDiscovery.Actions
             ActionBase.AddCommand("Ship", typeof(ActionShip), ActionBase.ActionType.Cmd);
             ActionBase.AddCommand("Star", typeof(ActionStar), ActionBase.ActionType.Cmd);
             ActionBase.AddCommand("Timer", typeof(ActionTimer), ActionBase.ActionType.Cmd);
-
-            ReLoad();
         }
 
         static public string AppFolder { get { return System.IO.Path.Combine(EDDOptions.Instance.AppDataDirectory, "Actions"); } }
@@ -138,16 +138,19 @@ namespace EDDiscovery.Actions
             if (completereload)
                 actionfiles = new ActionFileList();     // clear the list
 
-            string errlist = actionfiles.LoadAllActionFiles(AppFolder);
+            ErrorList = actionfiles.LoadAllActionFiles(AppFolder);
 
-            AdditionalChecks(ref errlist);
-
-            if (errlist.Length > 0)
-                ExtendedControls.MessageBoxTheme.Show(discoveryform, "Failed to load files\r\n" + errlist, "WARNING!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            AdditionalChecks(ref ErrorList);
 
             actionrunasync = new ActionRun(this, actionfiles);        // this is the guy who runs programs asynchronously
             ActionConfigureKeys();
             ActionConfigureVoiceRecon();
+        }
+
+        public void CheckWarn()
+        {
+            if (ErrorList.Length > 0)
+                ExtendedControls.MessageBoxTheme.Show(discoveryform, "Failed to load files\r\n" + ErrorList, "WARNING!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
         }
 
         public void AdditionalChecks(ref string errlist)        // perform additional checks which can only be done when
@@ -230,10 +233,11 @@ namespace EDDiscovery.Actions
 
                 // make sure the voice condition is right.. if not, reset.
 
-                if (cd.eventname != Actions.ActionEventEDList.onVoiceInput.triggername || !cd.Is("VoiceInput", ConditionEntry.MatchType.MatchSemicolon))
+                if (cd.eventname != Actions.ActionEventEDList.onVoiceInput.triggername || 
+                        ( !cd.Is("VoiceInput", ConditionEntry.MatchType.MatchSemicolonList) && !cd.Is("VoiceInput", ConditionEntry.MatchType.MatchSemicolon)))
                 {
                     cd.eventname = Actions.ActionEventEDList.onVoiceInput.triggername;
-                    cd.Set(new ConditionEntry("VoiceInput", ConditionEntry.MatchType.MatchSemicolon, "?"));     // Voiceinput being the variable set to the expression
+                    cd.Set(new ConditionEntry("VoiceInput", ConditionEntry.MatchType.MatchSemicolonList, "?"));     // Voiceinput being the variable set to the expression
                 }
 
                 return ev;
@@ -341,15 +345,15 @@ namespace EDDiscovery.Actions
 
         public void ManageAddOns()
         {
-            RunAddOns(true);
+            RunManageAddOns(true);
         }
 
         public void EditAddOns()
         {
-            RunAddOns(false);
+            RunManageAddOns(false);
         }
 
-        private void RunAddOns(bool manage)
+        private void RunManageAddOns(bool manage)
         {
             using (AddOnManagerForm dmf = new AddOnManagerForm())
             {
@@ -369,6 +373,7 @@ namespace EDDiscovery.Actions
                     AudioQueueWave.StopAll();
 
                     ReLoad(false);      // reload from disk, new ones if required, refresh old ones and keep the vars
+                    CheckWarn();
 
                     string changes = "";
                     foreach (KeyValuePair<string, string> kv in dmf.changelist)
@@ -698,21 +703,17 @@ namespace EDDiscovery.Actions
             {
                 voicerecon.Stop(true);
 
-                List<Tuple<string, ConditionEntry.MatchType>> ret = actionfiles.ReturnValuesOfSpecificConditions("VoiceInput", new List<ConditionEntry.MatchType>() { ConditionEntry.MatchType.MatchSemicolon });        // need these to decide
-                List<string> prompts = new List<string>();
+                List<Tuple<string, ConditionEntry.MatchType>> ret = actionfiles.ReturnValuesOfSpecificConditions("VoiceInput", new List<ConditionEntry.MatchType>() { ConditionEntry.MatchType.MatchSemicolonList, ConditionEntry.MatchType.MatchSemicolon });        // need these to decide
 
-                System.Diagnostics.Debug.WriteLine("Recognised voice recon entries" + ret.Count);
-                foreach ( var vp in ret)
+                if (ret.Count > 0)
                 {
-                    string[] list = vp.Item1.Split(';').Select(x => x.Trim()).ToArray();     // split and trim
-                    prompts.AddRange(list);
-                }
+                    System.Diagnostics.Debug.WriteLine("Recognised voice recon entries" + ret.Count);
 
-                System.Diagnostics.Debug.WriteLine("Recognised voice add entries" + prompts.Count);
+                    foreach (var vp in ret)
+                    {
+                        voicerecon.Add(vp.Item1);
+                    }
 
-                if (prompts.Count > 0)
-                {
-                    voicerecon.AddRange(prompts);
                     voicerecon.Start();
                 }
             }

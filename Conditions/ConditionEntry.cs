@@ -56,10 +56,34 @@ namespace Conditions
             IsOneOf,            // left, is it one of a quoted comma list on right
             AnyOfAny,           // is any in a comma separ on left, one of a quoted comma list on right
             MatchSemicolon,     // left, is it one of the semicolon list on right
+            MatchCommaList,     // left, is it one of the comma list on right
+            MatchSemicolonList, // left, is it one of the semicolon list on right, use OR
 
             AlwaysTrue,         // Always true
             AlwaysFalse,          // never true
         };
+
+        static public string[] MatchNames = {       // used for display
+            "Contains", "Not Contains", "== (Str)", "!= (Str)", "Contains(CS)", "Not Contains(CS)", "== (CS)","!= (CS)",
+            "Is Empty", "Is Not Empty",
+            "Is True (Int)", "Is False (Int)",
+            "== (Num)", "!= (Num)", "> (Num)",">= (Num)", "< (Num)",                                   "<= (Num)",
+            ">= (Date)", "< (Date)",
+            "Is Present", "Not Present",
+            "Is One Of", "Any Of Any",  "Match Semicolon",  "Match Comma List",  "Match Semicolon List",
+            "Always True/Enable", "Always False/Disable"
+        };
+
+        static public string[] OperatorNames = {        // used for ASCII rep .
+            "Contains","NotContains","$==","$!=","CSContains","CSNotContains","CS==","CS!=",
+            "Empty","IsNotEmpty",
+            "IsTrue","IsFalse",
+            "==","!=",">",">=","<","<=",
+            "D>=","D<",
+            "IsPresent","NotPresent",
+            "IsOneOf","AnyOfAny","MatchSemicolon","MatchCommaList","MatchSemicolonList",
+            "AlwaysTrue","AlwaysFalse"
+         };
 
         public static bool IsNullOperation(MatchType matchtype) { return matchtype == MatchType.AlwaysTrue || matchtype == MatchType.AlwaysFalse; }
         public static bool IsUnaryOperation(MatchType matchtype) { return matchtype == MatchType.IsNotPresent || matchtype == MatchType.IsPresent || matchtype == MatchType.IsTrue || matchtype == MatchType.IsFalse || matchtype == MatchType.IsEmpty || matchtype == MatchType.IsNotEmpty; }
@@ -97,64 +121,7 @@ namespace Conditions
             }
         }
 
-        static public string[] MatchNames = { "Contains",       // used for display
-                                       "Not Contains",
-                                       "== (Str)",
-                                       "!= (Str)",
-                                       "Contains(CS)",
-                                       "Not Contains(CS)",
-                                       "== (CS)",
-                                       "!= (CS)",
-                                       "Is Empty",
-                                       "Is Not Empty",
-                                       "Is True (Int)",
-                                       "Is False (Int)",
-                                       "== (Num)",
-                                       "!= (Num)",
-                                       "> (Num)",
-                                       ">= (Num)",
-                                       "< (Num)",
-                                       "<= (Num)",
-                                       ">= (Date)",
-                                       "< (Date)",
-                                       "Is Present",
-                                       "Not Present",
-                                       "Is One Of",
-                                       "Any Of Any",
-                                       "Match Semicolon",
-                                       "Always True/Enable",
-                                       "Always False/Disable"
-                                    };
 
-        static public string[] OperatorNames = {        // used for ASCII rep .
-                                       "Contains",
-                                       "NotContains",
-                                       "$==",
-                                       "$!=",
-                                       "CSContains",
-                                       "CSNotContains",
-                                       "CS==",
-                                       "CS!=",
-                                       "Empty",
-                                       "IsNotEmpty",
-                                       "IsTrue",
-                                       "IsFalse",
-                                       "==",
-                                       "!=",
-                                       ">",
-                                       ">=",
-                                       "<",
-                                       "<=",
-                                       "D>=",
-                                       "D<",
-                                       "IsPresent",
-                                       "NotPresent",
-                                       "IsOneOf",
-                                       "AnyOfAny",
-                                       "MatchSemicolon",
-                                       "AlwaysTrue",
-                                       "AlwaysFalse"
-                                    };
 
         public enum LogicalCondition
         {

@@ -103,18 +103,68 @@ namespace AudioExtensions
             return true;
         }
 
-        public bool Add(string s)
+        public bool Add(string s)       // S is in voice prompt format with [] and | and ; seperating
         {
            // System.Diagnostics.Debug.WriteLine("Engine State" + engine?.AudioState);
             if (engine != null && engine.AudioState == AudioState.Stopped && s.Length>0)
             {
-                GrammarBuilder builder = new GrammarBuilder(s);
+                GrammarBuilder builder = new GrammarBuilder();
+
+                string[] b = s.Split(';');
+                foreach( string p in b )
+                {
+                    if (p.Length > 0)
+                    {
+                        System.Diagnostics.Debug.Write(p);
+                        builder.Append(p);
+                    }
+
+                }
+
+                //BaseUtils.StringCombinations sb = new BaseUtils.StringCombinations();
+
+                //foreach (List<List<string>> groups in sb.ParseGroup(s))     // for each semicolon group, give me the word combinations
+                //{
+                //    foreach (List<string> wordlist in groups)     // for each vertical word list
+                //    {
+                //        if (wordlist.Count == 1)      // single entry, must be simple, just add
+                //        {
+                //            builder.Append(wordlist[0]);
+                //            System.Diagnostics.Debug.Write(wordlist[0]);
+                //        }
+                //        else
+                //        {
+                //            List<GrammarBuilder> sub = new List<GrammarBuilder>();
+
+                //            int emptycount = (from x in wordlist where x.Length == 0 select x).Count();   // is there any empty ones indicating optionality
+
+                //            foreach (string o in wordlist)
+                //            {
+                //                if (o.Length > 0)
+                //                {
+                //                    sub.Add(new GrammarBuilder());
+                //                    sub.Last().Append(o, (emptycount > 0) ? 0 : 1, 1);      // indicate number of times, either 1:1 or 0,1 if we have an optional entry
+                //                    System.Diagnostics.Debug.Write((wordlist.IndexOf(o) > 0 ? "|" : "") + o);
+                //                }
+                //                else
+                //                    System.Diagnostics.Debug.Write("|[]");
+                //            }
+
+                //            Choices c = new Choices(sub.ToArray());
+                //            builder.Append(c);
+                //        }
+
+                //        System.Diagnostics.Debug.Write(" ");
+                //    }
+                //    System.Diagnostics.Debug.WriteLine("");
+                //}
+
+
                 builder.Culture = ct;
 
                 Grammar gr = new Grammar(builder);
                 engine.LoadGrammar(gr);
 
-                System.Diagnostics.Debug.WriteLine("add " + s + " total " + engine.Grammars.Count);
                 return true;
             }
             else

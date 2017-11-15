@@ -21,6 +21,7 @@ using System.Threading.Tasks;
 
 namespace BaseUtils
 {
+    [System.Diagnostics.DebuggerDisplay("Action {line.Substring(pos)} : ({line})")]
     public class StringParser
     {
         private int pos;        // always left after an operation on the next non space char
