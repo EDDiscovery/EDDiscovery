@@ -129,8 +129,16 @@ namespace EliteDangerousCore.JournalEvents
             }
         }
 
-        // Classes
+        public const double solarRadius_m = 695700000;
+        public const double oneLS_m = 299792458;
+        public const double oneAU_m = 149597870700;
+        public const double oneAU_LS = oneAU_m / oneLS_m;
+        public const double oneDay_s = 86400;
+        public const double oneMoon_MT = 73420000000000;
+        public const double oneAtmosphere_Pa = 101325;
+        public const double oneGee_m_s2 = 9.80665;
 
+        // Classes
         public class StarPlanetRing
         {
             public string Name;     // may be null
@@ -146,8 +154,8 @@ namespace EliteDangerousCore.JournalEvents
                 scanText.AppendFormat("  Mass: {0}{1}\n", (MassMT * scale).ToString("N4"), scaletype);
                 if (parentIsStar && InnerRad > 3000000)
                 {
-                    scanText.AppendFormat("  Inner Radius: {0:0.00}ls\n", (InnerRad / 300000000));
-                    scanText.AppendFormat("  Outer Radius: {0:0.00}ls\n", (OuterRad / 300000000));
+                    scanText.AppendFormat("  Inner Radius: {0:0.00}ls\n", (InnerRad / oneLS_m));
+                    scanText.AppendFormat("  Outer Radius: {0:0.00}ls\n", (OuterRad / oneLS_m));
                 }
                 else
                 {
@@ -183,11 +191,6 @@ namespace EliteDangerousCore.JournalEvents
                 }
             }
         }
-
-        public const double solarRadius_m = 695700000;
-        public const double oneAU_m = 149597870000;
-        public const double oneDay_s = 86400;
-        public const double oneMoon_MT = 73420000000000;
 
         public JournalScan(JObject evt) : base(evt, JournalTypeEnum.Scan)
         {
@@ -317,7 +320,7 @@ namespace EliteDangerousCore.JournalEvents
                     r = r / 1000;
                 double? g = nSurfaceGravity;
                 if (g.HasValue)
-                    g = g / 9.8;
+                    g = g / oneGee_m_s2;
 
                 info = BaseUtils.FieldBuilder.Build("", PlanetClass, "Mass:;EM;0.00", nMassEM, "<;, Landable", IsLandable, "<;, Terraformable", TerraformState == "Terraformable", "", Atmosphere, "Gravity:;G;0.0", g, "Radius:;km;0", r);
             }
@@ -393,10 +396,10 @@ namespace EliteDangerousCore.JournalEvents
                 scanText.AppendFormat("Luminosity: {0}\n", Luminosity);
 
             if (nSurfaceGravity.HasValue)
-                scanText.AppendFormat("Gravity: {0:0.0}g\n", nSurfaceGravity.Value / 9.8);
+                scanText.AppendFormat("Gravity: {0:0.0}g\n", nSurfaceGravity.Value / oneGee_m_s2);
 
             if (nSurfacePressure.HasValue && nSurfacePressure.Value > 0.00 && !PlanetClass.ToLower().Contains("gas"))
-                if (nSurfacePressure.Value > 1000) { scanText.AppendFormat("Surface Pressure: {0} Atmospheres\n", (nSurfacePressure.Value / 100000).ToString("N2")); }
+                if (nSurfacePressure.Value > 1000) { scanText.AppendFormat("Surface Pressure: {0} Atmospheres\n", (nSurfacePressure.Value / oneAtmosphere_Pa).ToString("N2")); }
                 else { { scanText.AppendFormat("Surface Pressure: {0} Pa\n", (nSurfacePressure.Value).ToString("N2")); } }
 
             if (Volcanism != null)
@@ -449,7 +452,7 @@ namespace EliteDangerousCore.JournalEvents
                     scanText.AppendFormat("Belt{0}", Rings.Count() == 1 ? ":" : "s:");
                     for (int i = 0; i < Rings.Length; i++)
                     {
-                        if (Rings[i].MassMT > 7342000000)
+                        if (Rings[i].MassMT > (oneMoon_MT / 10000))
                         {
                             scanText.Append("\n" + RingInformation(i, 1.0 / oneMoon_MT, " Moons"));
                         }
@@ -505,7 +508,7 @@ namespace EliteDangerousCore.JournalEvents
             {
                 StringBuilder habZone = new StringBuilder();
                 habZone.AppendFormat("Habitable Zone Approx. {0} ({1}-{2} AU)\n", GetHabZoneStringLs(),
-                                                                                  (HabitableZoneInner.Value / 499).ToString("N2"), (HabitableZoneOuter.Value / 499).ToString("N2"));
+                                                                                  (HabitableZoneInner.Value / oneAU_LS).ToString("N2"), (HabitableZoneOuter.Value / oneAU_LS).ToString("N2"));
                 if (nSemiMajorAxis.HasValue && nSemiMajorAxis.Value > 0)
                     habZone.AppendFormat(" (Others stars not considered)\n");
 
@@ -674,7 +677,7 @@ namespace EliteDangerousCore.JournalEvents
                 case EDStar.K_OrangeGiant:
                     return "K Orange Giant";
                 case EDStar.RoguePlanet:
-                    return "Rouge Planet";
+                    return "Rogue Planet";
 
                 default:
                     return string.Format("Class {0} star\n", StarType.Replace("_", " "));
@@ -937,7 +940,7 @@ namespace EliteDangerousCore.JournalEvents
             double top = Math.Pow(nRadius.Value, 2.0) * Math.Pow(nSurfaceTemperature.Value, 4.0);
             double bottom = 4.0 * Math.Pow(targetTemp, 4.0);
             double radius_metres = Math.Pow(top / bottom, 0.5);
-            return radius_metres / 300000000;
+            return radius_metres / oneLS_m;
         }
 
         public int EstimatedValue()
