@@ -147,15 +147,16 @@ namespace EDDiscovery.UserControls
 
                     if (currentMats + neededMats > PhysicalInventoryCapacity || currentData + neededData > DataInventoryCapacity)
                     {
-                        wantedList.Append("\nNeeded capacity");
+                        wantedList.Append("\nCapacity Warning:");
                         if (currentMats + neededMats > PhysicalInventoryCapacity)
                         {
-                            wantedList.AppendFormat("\n  {0} materials", currentMats + neededMats - PhysicalInventoryCapacity);
+                            wantedList.AppendFormat("\n  {0}/{1} materials space free", PhysicalInventoryCapacity - currentMats, neededMats);
                         }
                         if (currentData + neededData > DataInventoryCapacity)
                         {
-                            wantedList.AppendFormat("\n  {0} data", currentData + neededData - DataInventoryCapacity);
+                            wantedList.AppendFormat("\n  {0}/{1} data space free", DataInventoryCapacity - currentData, neededData);
                         }
+                        wantedList.Append("\n");
                     }
                 }
                 else

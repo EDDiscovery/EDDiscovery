@@ -918,7 +918,7 @@ namespace EDDiscovery.UserControls
             {
                 var systemCell = dataGridViewDistances[0, i];
                 var oldSystem = (ISystem)systemCell.Tag;
-                if (!oldSystem.HasCoordinate)
+                if (oldSystem != null && !oldSystem.HasCoordinate)
                 {
                     var value = systemCell.Value as string;
                     var newSystem = SystemClassDB.GetSystem(value);
