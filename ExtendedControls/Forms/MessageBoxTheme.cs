@@ -231,5 +231,14 @@ namespace ExtendedControls
         {
             OnCaptionMouseUp((Control)sender, e);
         }
+
+        private void MessageBoxTheme_Shown(object sender, EventArgs e)
+        {
+            if (StartPosition == FormStartPosition.CenterParent)        // because of Font resizing, because of width control above, lets recenter
+            {
+                Left = Owner.Left + Owner.Width / 2 - Width / 2;
+                Top = Owner.Top + Owner.Height / 2 - Height / 2;
+            }
+        }
     }
 }

@@ -76,6 +76,7 @@
     <Compile Include="Numbers\NumberObjectExtensions.cs" />
     <Compile Include="Files\CSVRead.cs" />
     <Compile Include="Files\CSVWrite.cs" />
+    <Compile Include="Strings\StringCombinations.cs" />
     <Compile Include="Strings\FieldBuilder.cs" />
     <Compile Include="Files\FileHelpers.cs" />
     <Compile Include="Files\LogToFile.cs" />
