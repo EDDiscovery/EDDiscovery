@@ -62,7 +62,7 @@ namespace EDDiscovery.Actions
                             if ( !keys.Contains(Keys.None)) // if no errors
                             {
                                 string keyseq = EnhancedSendKeys.GenerateCombinedSequence(keys);
-                                System.Diagnostics.Debug.WriteLine("Frontier " + binding + "->" + keyseq);
+                               // System.Diagnostics.Debug.WriteLine("Frontier " + binding + "->" + keyseq);
                                 return new Tuple<string, int, string>(keyseq, endindex + 1, null);
                             }
                             else
