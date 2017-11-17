@@ -77,7 +77,7 @@ namespace EDDiscovery.UserControls
 
         }
 
-        public override void ChangeCursorType(UserControlCursorType thc)
+        public override void ChangeCursorType(IHistoryCursor thc)
         {
             uctg = thc;
         }
