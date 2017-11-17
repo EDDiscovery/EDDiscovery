@@ -58,7 +58,7 @@
     <Compile Include="HTTP\GitHubRelease.cs" />
     <Compile Include="HTTP\HttpCom.cs" />
     <Compile Include="HTTP\ResponseData.cs" />
-    <Compile Include="Misc\EnhancedSendKeys.cs" />
+    <Compile Include="Keys\EnhancedSendKeys.cs" />
     <Compile Include="Misc\ExceptionForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -66,7 +66,7 @@
       <DependentUpon>ExceptionForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Misc\FileHandles.cs" />
-    <Compile Include="Misc\KeyObjectExtensions.cs" />
+    <Compile Include="Keys\KeyObjectExtensions.cs" />
     <Compile Include="Misc\NativeMethods.cs" />
     <Compile Include="Misc\Processes.cs" />
     <Compile Include="Misc\AppTicks.cs" />
@@ -76,6 +76,7 @@
     <Compile Include="Numbers\NumberObjectExtensions.cs" />
     <Compile Include="Files\CSVRead.cs" />
     <Compile Include="Files\CSVWrite.cs" />
+    <Compile Include="Strings\StringCombinations.cs" />
     <Compile Include="Strings\FieldBuilder.cs" />
     <Compile Include="Files\FileHelpers.cs" />
     <Compile Include="Files\LogToFile.cs" />

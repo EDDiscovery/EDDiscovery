@@ -10,30 +10,41 @@ namespace AudioExtensions
 {
     public delegate void SpeechRecognised(string text, float confidence);
 
-    public interface VoiceRecognition
+    public interface IVoiceRecognition
     {
         event SpeechRecognised SpeechRecognised;
         bool IsOpen { get; }
         float Confidence { get; set; }
-        bool Open(System.Globalization.CultureInfo ctp);        // Dispose to close
+        int BabbleTimeout { get; set; }
+        int EndSilenceTimeout { get; set; }
+        int EndSilenceTimeoutAmbigious { get; set; }
+        int InitialSilenceTimeout { get; set; }
+
+        bool Open(System.Globalization.CultureInfo ctp);     
         bool Add(string s);
         bool AddRange(List<string> s);
-        bool Start();
-        void Stop();    // after stop you can add/start
+        bool Start();       // start recognition
+        void Stop(bool waitforstop);    // after stop you can add/start
+        bool Clear();       // unload all grammars, must be stopped. then Add/Start
         void Close();   // can close without stop
     }
 
 
-    public class VoiceRecognitionDummy: VoiceRecognition
+    public class VoiceRecognitionDummy: IVoiceRecognition
     {
         public event SpeechRecognised SpeechRecognised;
         public bool IsOpen { get { return false; } }
         public float Confidence { get; set; } = 0.98F;
+        public int BabbleTimeout { get; set; }
+        public int EndSilenceTimeout { get; set; }
+        public int EndSilenceTimeoutAmbigious { get; set; }
+        public int InitialSilenceTimeout { get; set; }
         public bool Open(System.Globalization.CultureInfo ctp) { return false; }       // Dispose to close
         public bool Start() { return false; }
         public bool Add(string s) { return false; }
         public bool AddRange(List<string> s) { return false; }
-        public void Stop() { }
+        public void Stop(bool stop) { }
+        public bool Clear() { return false; }
         public void Close() { }
     }
 

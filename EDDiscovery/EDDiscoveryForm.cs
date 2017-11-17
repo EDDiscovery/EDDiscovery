@@ -185,6 +185,8 @@ namespace EDDiscovery
 
             actioncontroller = new Actions.ActionController(this, Controller, this.Icon);
 
+            actioncontroller.ReLoad();          // load system up here
+
             screenshotconverter = new ScreenShots.ScreenShotConverter(this);
 
             Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " Theming");
@@ -248,6 +250,8 @@ namespace EDDiscovery
             // Form is fully loaded, we can do tab actions now
 
             tabControlMain.SelectedIndexChanged += (snd, ea) => { ActionRun(Actions.ActionEventEDList.onTabChange, null, new Conditions.ConditionVariables("TabName", tabControlMain.TabPages[tabControlMain.SelectedIndex].Text)); };
+
+            actioncontroller.CheckWarn();
         }
 
         #endregion
@@ -911,6 +915,7 @@ namespace EDDiscovery
         private void buttonReloadActions_Click(object sender, EventArgs e)
         {
             actioncontroller.ReLoad();
+            actioncontroller.CheckWarn();
             actioncontroller.onStartup();
         }
 

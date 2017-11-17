@@ -23,22 +23,71 @@ using BaseUtils;
 using AudioExtensions;
 using Conditions;
 using ActionLanguage;
+using static EliteDangerousCore.BindingsFile;
 
 namespace EDDiscovery.Actions
 {
     public class ActionKeyED : ActionKey        // extends Key
     {
-        static public string Menu(Form parent, System.Drawing.Icon ic, string userdata, EliteDangerousCore.BindingsFile bf)
+        const string errmsgforbinding = "No keyboard binding for ";
+
+        class AKP : BaseUtils.EnhancedSendKeys.AdditionalKeyParser      // AKP parser to pass to SendKeys
         {
-            // use bf to get new list of stuff, pass thru to null TBD
-            List<string> example = new List<string>() { "{one}", "{two}" };
-            return Menu(parent, ic, userdata, example, BFParser);
-         
+            public EliteDangerousCore.BindingsFile bindingsfile;
+
+            public Tuple<string, int, string> Parse(string s)
+            {
+                if ( s.Length > 0 && s.StartsWith("{"))     // frontier bindings start with decoration
+                {
+                    int endindex = s.IndexOf("}");
+                    if ( endindex>=0 )                      // valid {}
+                    {
+                        string binding = s.Substring(1, endindex - 1);
+
+                        if (!bindingsfile.KeyNames.Contains(binding))       // first check its a valid name..
+                        {
+                            return new Tuple<string, int, string>(null, 0, "Binding name " + binding + " is not an known binding");
+                        }
+
+                        List<Tuple<Device, Assignment>> matches 
+                                    = bindingsfile.FindAssignedFunc(binding, KeyboardDeviceName);   // just give me keyboard bindings, thats all i can do
+
+                        if ( matches != null )      // null if no matches to keyboard is found
+                        {
+                            Tuple<Device, Assignment> match = matches[0];      // just use the first one.. since they have been prechecked for keys one is the same as another
+
+                            // pick out the keys and convert them from fontier to Keys
+                            Keys[] keys = (from x in matches[0].Item2.keys select DirectInputDevices.KeyConversion.FrontierNameToKeys(x.Key)).ToArray();
+
+                            if ( !keys.Contains(Keys.None)) // if no errors
+                            {
+                                string keyseq = EnhancedSendKeys.GenerateCombinedSequence(keys);
+                               // System.Diagnostics.Debug.WriteLine("Frontier " + binding + "->" + keyseq);
+                                return new Tuple<string, int, string>(keyseq, endindex + 1, null);
+                            }
+                            else
+                            {
+                                return new Tuple<string, int, string>(null, 0, "Control binding not recognised");
+                            }
+                        }
+                        else
+                        {
+                            System.Diagnostics.Debug.WriteLine("NO binding for " + binding);
+                            return new Tuple<string, int, string>(null, 0, errmsgforbinding + binding);
+                        }
+                    }
+                }
+
+                return new Tuple<string, int, string>(null, 0, null);
+            }
         }
 
-        static Tuple<string,int,string> BFParser(string s)
+        static public string Menu(Form parent, System.Drawing.Icon ic, string userdata, EliteDangerousCore.BindingsFile bf)
         {
-            return new Tuple<string,int,string>(null,0,null);
+            List<string> decorated = (from x in bf.KeyNames select "{"+x+"}").ToList();
+            decorated.Sort();
+            return Menu(parent, ic, userdata, decorated, new AKP() { bindingsfile = bf });
+        
         }
 
         public override bool ConfigurationMenu(Form parent, ActionCoreController cp, List<string> eventvars)    // override again to expand any functionality
@@ -57,7 +106,28 @@ namespace EDDiscovery.Actions
 
         public override bool ExecuteAction(ActionProgramRun ap)
         {
-            return ExecuteAction(ap, null); //base, TBD pass in tx funct
+            ActionController ac = ap.actioncontroller as ActionController;
+            return ExecuteAction(ap, new AKP() { bindingsfile = ac.FrontierBindings }); //base, TBD pass in tx funct
+        }
+
+        // check binding in userdata for consistency.
+        static public string VerifyBinding(string userdata, EliteDangerousCore.BindingsFile bf)    // empty string okay
+        {
+            string keys;
+            ConditionVariables statementvars;
+            if (FromString(userdata, out keys, out statementvars))
+            {
+                // during this check, we don't moan about a binding not being present, since we don't need to..
+
+                string ret = BaseUtils.EnhancedSendKeys.VerifyKeys(keys, new AKP() { bindingsfile = bf });
+
+                if (ret.Contains(errmsgforbinding))     // Ignore these..
+                    return "";
+                else
+                    return ret;
+            }
+            else
+                return "Bad Key Line";
         }
     }
 }

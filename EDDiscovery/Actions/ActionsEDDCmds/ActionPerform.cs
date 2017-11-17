@@ -45,7 +45,7 @@ namespace EDDiscovery.Actions
             if (ap.functions.ExpandString(UserData, out res) != Conditions.ConditionFunctions.ExpandResult.Failed)
             {
                 StringParser sp = new StringParser(res);
-                string cmdname = sp.NextWord(" ", lowercase:true);
+                string cmdname = sp.NextWord(" ", lowercase: true);
 
                 if (cmdname == null)
                 {
@@ -99,9 +99,41 @@ namespace EDDiscovery.Actions
                 else if (cmdname.Equals("disableeliteinput"))
                     (ap.actioncontroller as ActionController).EliteInput(false, false);
                 else if (cmdname.Equals("enablevoicerecognition"))
-                    (ap.actioncontroller as ActionController).VoiceRecon(true, sp.NextQuotedWord() ?? "en-gb");
+                {
+                    string culture = sp.NextQuotedWord();
+                    if (culture != null)
+                        (ap.actioncontroller as ActionController).VoiceReconOn(culture);
+                    else
+                        ap.ReportError("EnableVoiceRecognition requires a culture");
+                }
                 else if (cmdname.Equals("disablevoicerecognition"))
-                    (ap.actioncontroller as ActionController).VoiceRecon(false);
+                    (ap.actioncontroller as ActionController).VoiceReconOff();
+                else if (cmdname.Equals("beginvoicerecognition"))
+                    (ap.actioncontroller as ActionController).VoiceLoadEvents();
+                else if (cmdname.Equals("voicerecognitionconfidencelevel"))
+                {
+                    float? conf = sp.NextWord().InvariantParseFloatNull();
+                    if (conf != null)
+                        (ap.actioncontroller as ActionController).VoiceReconConfidence(conf.Value);
+                    else
+                        ap.ReportError("VoiceRecognitionConfidencelLevel requires a confidence value");
+                }
+                else if (cmdname.Equals("voicerecognitionparameters"))
+                {
+                    int? babble = sp.NextWordComma().InvariantParseIntNull();        // babble at end
+                    int? initialsilence = sp.NextWordComma().InvariantParseIntNull(); // silence at end
+                    int? endsilence = sp.NextWordComma().InvariantParseIntNull();        // unambigious timeout
+                    int? endsilenceambigious = sp.NextWordComma().InvariantParseIntNull(); // ambiguous timeout
+
+                    if (babble != null && initialsilence != null && endsilence != null && endsilenceambigious != null)
+                        (ap.actioncontroller as ActionController).VoiceReconParameters(babble.Value, initialsilence.Value, endsilence.Value, endsilenceambigious.Value);
+                    else
+                        ap.ReportError("VoiceRecognitionParameters requires four values");
+                }
+                else if (cmdname.Equals("voicerecognitionphrases"))
+                {
+                    ap["Phrases"] = (ap.actioncontroller as ActionController).VoicePhrases(Environment.NewLine);
+                }
                 else if (cmdname.Equals("listeliteinput"))
                 {
                     ap["EliteInput"] = (ap.actioncontroller as ActionController).EliteInputList();

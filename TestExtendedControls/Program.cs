@@ -45,8 +45,18 @@ namespace DialogTest
 
                 case "keyform":
                     ExtendedControls.KeyForm f = new ExtendedControls.KeyForm();
-                    f.Init(null, true, " ", "", "", -1, false, new List<string>() { "{1}", "{2}" }, keyparser);
+                    f.Init(null, true, " ", "", "", -1, false);
                     sel = f;
+                    break;
+
+                case "infoform":
+                    ExtendedControls.ThemeStandard th = new ExtendedControls.ThemeStandard();
+                    th.LoadBaseThemes();
+                    th.SetThemeByName("Elite Verdana");
+                    ExtendedControls.ThemeableFormsInstance.Instance = th;
+                    ExtendedControls.InfoForm inf = new ExtendedControls.InfoForm();
+                    inf.Info("Info form", Properties.Resources._3x3_grid, "This is a nice test\r\nOf the info form\r\n", null, new int[] { 0, 100, 200, 300, 400, 500, 600 }, true);
+                    sel = inf;
                     break;
 
                 case "testtabstrip":
@@ -62,9 +72,9 @@ namespace DialogTest
                     break;
             }
 
-            Tuple<string,int,string> keyparser(string s) { return new Tuple<string,int,string>("F1",s.IndexOf("}")+1,null); }
 
             Application.Run(sel);
         }
+
     }
 }

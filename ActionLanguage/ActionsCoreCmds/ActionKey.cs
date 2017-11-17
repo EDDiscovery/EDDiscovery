@@ -31,8 +31,14 @@ namespace ActionLanguage
 
         public static string globalvarProcessID = "KeyProcessTo";       // var global
         public static string globalvarDelay = "KeyDelay";
+        public static string globalvarSilentOnErrors = "KeySilentOnError";
+        public static string globalvarAnnounciateOnError = "KeyAnnounciateOnError";
+
         protected static string ProcessID = "To";       // command tags
         protected static string DelayID = "Delay";
+        protected static string SilentOnError = "SilentOnError";
+        protected static string AnnounciateOnError = "AnnounicateOnError";
+
         protected const int DefaultDelay = 10;
         protected const int DefaultShiftDelay = 2;
         protected const int DefaultUpDelay = 2;
@@ -105,12 +111,14 @@ namespace ActionLanguage
                 return false;
         }
 
-        public override bool ExecuteAction(ActionProgramRun ap)
+        public override bool ExecuteAction(ActionProgramRun ap)     // standard action.. at this class level in action language we do not have an additional parser.
         {
             return ExecuteAction(ap, null);
         }
 
-        public bool ExecuteAction(ActionProgramRun ap, Func<string,string> keytx )      // keytx is passed in
+        static List<string> errorsreported = new List<string>();
+
+        public bool ExecuteAction(ActionProgramRun ap, BaseUtils.EnhancedSendKeys.AdditionalKeyParser akp )      // additional parser
         { 
             string keys;
             ConditionVariables statementvars;
@@ -123,14 +131,33 @@ namespace ActionLanguage
                 {
                     int defdelay = vars.Exists(DelayID) ? vars[DelayID].InvariantParseInt(DefaultDelay) : (ap.VarExist(globalvarDelay) ? ap[globalvarDelay].InvariantParseInt(DefaultDelay) : DefaultDelay);
                     string process = vars.Exists(ProcessID) ? vars[ProcessID] : (ap.VarExist(globalvarProcessID) ? ap[globalvarProcessID] : "");
+                    string silentonerrors = vars.Exists(SilentOnError) ? vars[SilentOnError] : (ap.VarExist(globalvarSilentOnErrors) ? ap[globalvarSilentOnErrors] : "0");
+                    string announciateonerrors = vars.Exists(AnnounciateOnError) ? vars[AnnounciateOnError] : (ap.VarExist(globalvarAnnounciateOnError) ? ap[globalvarAnnounciateOnError] : "0");
 
-                    if (keytx != null)
-                        keys = keytx(keys);
-
-                    string res = BaseUtils.EnhancedSendKeys.Send(keys, defdelay, DefaultShiftDelay, DefaultUpDelay, process);
+                    string res = BaseUtils.EnhancedSendKeys.Send(keys, defdelay, DefaultShiftDelay, DefaultUpDelay, process, akp);
 
                     if (res.HasChars())
-                        ap.ReportError("Key Syntax error : " + res);
+                    {
+                        if (silentonerrors.Equals("2") || (errorsreported.Contains(res) && silentonerrors.Equals("1")))
+                        {
+                            System.Diagnostics.Debug.WriteLine("Swallow key error " + res);
+                            ap.actioncontroller.TerminateAll();
+                        }
+                        else
+                        {
+                            errorsreported.Add(res);
+
+                            if (announciateonerrors.Equals("1"))
+                            {
+                                string culture = ap.VarExist(ActionSay.globalvarspeechculture) ? ap[ActionSay.globalvarspeechculture] : "Default";
+                                System.IO.MemoryStream ms = ap.actioncontroller.SpeechSynthesizer.Speak("Cannot press key due to " + res, culture, "Default", 0);
+                                AudioQueue.AudioSample audio = ap.actioncontroller.AudioQueueSpeech.Generate(ms);
+                                ap.actioncontroller.AudioQueueSpeech.Submit(audio, 80, AudioQueue.Priority.Normal);
+                            }
+
+                            ap.ReportError(res);
+                        }
+                    }
                 }
                 else
                     ap.ReportError(errlist);

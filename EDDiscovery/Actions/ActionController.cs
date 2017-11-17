@@ -51,15 +51,17 @@ namespace EDDiscovery.Actions
         public override AudioExtensions.AudioQueue AudioQueueWave { get { return audioqueuewave; } }
         public override AudioExtensions.AudioQueue AudioQueueSpeech { get { return audioqueuespeech; } }
         public override AudioExtensions.SpeechSynthesizer SpeechSynthesizer { get { return speechsynth; } }
-        public AudioExtensions.VoiceRecognition VoiceRecognition { get { return voicerecon; } }
+        public AudioExtensions.IVoiceRecognition VoiceRecognition { get { return voicerecon; } }
         public BindingsFile FrontierBindings { get { return frontierbindings; } }
+
+        public string ErrorList;        // set on Reload, use to display warnings at right point
 
         AudioExtensions.IAudioDriver audiodriverwave;
         AudioExtensions.AudioQueue audioqueuewave;
         AudioExtensions.IAudioDriver audiodriverspeech;
         AudioExtensions.AudioQueue audioqueuespeech;
         AudioExtensions.SpeechSynthesizer speechsynth;
-        AudioExtensions.VoiceRecognition voicerecon;
+        AudioExtensions.IVoiceRecognition voicerecon;
 
         DirectInputDevices.InputDeviceList inputdevices;
         Actions.ActionsFromInputDevices inputdevicesactions;
@@ -99,6 +101,10 @@ namespace EDDiscovery.Actions
             inputdevices = new DirectInputDevices.InputDeviceList(a => discoveryform.BeginInvoke(a));
             inputdevicesactions = new Actions.ActionsFromInputDevices(inputdevices, frontierbindings, this);
 
+            frontierbindings.LoadBindingsFile();
+            //System.Diagnostics.Debug.WriteLine("Bindings" + frontierbindings.ListBindings());
+           // System.Diagnostics.Debug.WriteLine("Key Names" + frontierbindings.ListKeyNames("{","}"));
+
             voicerecon.SpeechRecognised += Voicerecon_SpeechRecognised;
 
             ConditionFunctions.GetCFH = DefaultGetCFH;
@@ -123,8 +129,6 @@ namespace EDDiscovery.Actions
             ActionBase.AddCommand("Ship", typeof(ActionShip), ActionBase.ActionType.Cmd);
             ActionBase.AddCommand("Star", typeof(ActionStar), ActionBase.ActionType.Cmd);
             ActionBase.AddCommand("Timer", typeof(ActionTimer), ActionBase.ActionType.Cmd);
-
-            ReLoad();
         }
 
         static public string AppFolder { get { return System.IO.Path.Combine(EDDOptions.Instance.AppDataDirectory, "Actions"); } }
@@ -134,13 +138,39 @@ namespace EDDiscovery.Actions
             if (completereload)
                 actionfiles = new ActionFileList();     // clear the list
 
-            string errlist = actionfiles.LoadAllActionFiles(AppFolder);
-            if (errlist.Length > 0)
-                ExtendedControls.MessageBoxTheme.Show(discoveryform, "Failed to load files\r\n" + errlist, "WARNING!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            ErrorList = actionfiles.LoadAllActionFiles(AppFolder);
+
+            AdditionalChecks(ref ErrorList);
 
             actionrunasync = new ActionRun(this, actionfiles);        // this is the guy who runs programs asynchronously
             ActionConfigureKeys();
-            ActionConfigureVoiceRecon();
+            VoiceLoadEvents();
+        }
+
+        public void CheckWarn()
+        {
+            if (ErrorList.Length > 0)
+                ExtendedControls.MessageBoxTheme.Show(discoveryform, "Failed to load files\r\n" + ErrorList, "WARNING!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+        }
+
+        public void AdditionalChecks(ref string errlist)        // perform additional checks which can only be done when
+        {                                                       // the full system is available at this level of code heirarchy
+            foreach (ActionFile af in actionfiles.Enumerable)
+            {
+                foreach (ActionProgram p in af.actionprogramlist.Enumerable)
+                {
+                    foreach (ActionBase b in p.Enumerable)
+                    {
+                        if (b.Name == "Key")
+                        {
+                            string err = ActionKeyED.VerifyBinding(b.UserData, frontierbindings);
+                            //System.Diagnostics.Debug.WriteLine("{0} Step {1} UD '{2}' err '{3}'", p.Name, b.Name, b.UserData, err);
+                            if (err.Length > 0)
+                                errlist = af.name +":" + p.Name + ":" + b.LineNumber + " " + err + Environment.NewLine;
+                        }
+                    }
+                }
+            }
         }
 
         #region Edit Action Packs
@@ -169,12 +199,16 @@ namespace EDDiscovery.Actions
 
             if (f != null)
             {
-                frm.Init("Edit pack " + name, this.Icon, this, AppFolder, f, eventlist);
+                string collapsestate = SQLiteConnectionUser.GetSettingString("ActionEditorCollapseState_" + name, "");  // get any collapsed state info for this pack
+
+                frm.Init("Edit pack " + name, this.Icon, this, AppFolder, f, eventlist, collapsestate);
 
                 frm.ShowDialog(discoveryform); // don't care about the result, the form does all the saving
 
+                SQLiteConnectionUser.PutSettingString("ActionEditorCollapseState_" + name, frm.CollapsedState());  // get any collapsed state info for this pack
+
                 ActionConfigureKeys();
-                ActionConfigureVoiceRecon();
+                VoiceLoadEvents();
 
                 lasteditedpack = name;
                 SQLiteConnectionUser.PutSettingString("ActionPackLastFile", lasteditedpack);
@@ -199,10 +233,11 @@ namespace EDDiscovery.Actions
 
                 // make sure the voice condition is right.. if not, reset.
 
-                if (cd.eventname != Actions.ActionEventEDList.onVoiceInput.triggername || !cd.Is("VoiceInput", ConditionEntry.MatchType.MatchSemicolon))
+                if (cd.eventname != Actions.ActionEventEDList.onVoiceInput.triggername || 
+                        ( !cd.Is("VoiceInput", ConditionEntry.MatchType.MatchSemicolonList) && !cd.Is("VoiceInput", ConditionEntry.MatchType.MatchSemicolon)))
                 {
                     cd.eventname = Actions.ActionEventEDList.onVoiceInput.triggername;
-                    cd.Set(new ConditionEntry("VoiceInput", ConditionEntry.MatchType.MatchSemicolon, "?"));     // Voiceinput being the variable set to the expression
+                    cd.Set(new ConditionEntry("VoiceInput", ConditionEntry.MatchType.MatchSemicolonList, "?"));     // Voiceinput being the variable set to the expression
                 }
 
                 return ev;
@@ -220,7 +255,7 @@ namespace EDDiscovery.Actions
 
         private string onEditKeys(Form p, System.Drawing.Icon i, string keys)      // called when program wants to edit Key
         {
-            return ActionKeyED.Menu(p, i, keys, FrontierBindings);
+            return ActionKeyED.Menu(p, i, keys, frontierbindings);
         }
 
         private string onEditSay(Form p, string say, ActionCoreController cp)      // called when program wants to edit Key
@@ -310,15 +345,15 @@ namespace EDDiscovery.Actions
 
         public void ManageAddOns()
         {
-            RunAddOns(true);
+            RunManageAddOns(true);
         }
 
         public void EditAddOns()
         {
-            RunAddOns(false);
+            RunManageAddOns(false);
         }
 
-        private void RunAddOns(bool manage)
+        private void RunManageAddOns(bool manage)
         {
             using (AddOnManagerForm dmf = new AddOnManagerForm())
             {
@@ -338,6 +373,7 @@ namespace EDDiscovery.Actions
                     AudioQueueWave.StopAll();
 
                     ReLoad(false);      // reload from disk, new ones if required, refresh old ones and keep the vars
+                    CheckWarn();
 
                     string changes = "";
                     foreach (KeyValuePair<string, string> kv in dmf.changelist)
@@ -628,11 +664,11 @@ namespace EDDiscovery.Actions
         {
             if (cmd.Equals("bindings"))
             {
-                LogLine(FrontierBindings.ListBindings());
+                LogLine(frontierbindings.ListBindings());
             }
             else if (cmd.Equals("bindingvalues"))
             {
-                LogLine(FrontierBindings.ListValues());
+                LogLine(frontierbindings.ListValues());
             }
             else
                 return false;
@@ -644,38 +680,78 @@ namespace EDDiscovery.Actions
 
         #region Voice
 
-        public void VoiceRecon(bool on, string culture = null)
+        public void VoiceReconOn(string culture = null)     // perform enableVR
         {
             voicerecon.Close(); // can close without stopping
+            voicerecon.Open(System.Globalization.CultureInfo.GetCultureInfo(culture));
+        }
 
-            if (on)
+        public void VoiceReconOff()                         // perform disableVR
+        {
+            voicerecon.Close();
+        }
+
+        public void VoiceReconConfidence(float conf)
+        {
+            voicerecon.Confidence = conf;
+        }
+
+        public void VoiceReconParameters(int babble, int initialsilence, int endsilence, int endsilenceambigious)
+        {
+            if (voicerecon.IsOpen)
             {
-                voicerecon.Open(System.Globalization.CultureInfo.GetCultureInfo(culture));
-                ActionConfigureVoiceRecon();
+                voicerecon.Stop(true);
+                try
+                {
+                    voicerecon.BabbleTimeout = babble;
+                    voicerecon.InitialSilenceTimeout = initialsilence;
+                    voicerecon.EndSilenceTimeout = endsilence;
+                    voicerecon.EndSilenceTimeoutAmbigious = endsilenceambigious;
+                }
+                catch { };
+
+                voicerecon.Start();
             }
         }
 
-        void ActionConfigureVoiceRecon()
+        public void VoiceLoadEvents()
         {
+            System.Diagnostics.Debug.WriteLine("Action config voice recon " + voicerecon.IsOpen);
             if ( voicerecon.IsOpen )
             {
-                voicerecon.Stop();
+                voicerecon.Stop(true);
 
-                List<Tuple<string, ConditionEntry.MatchType>> ret = actionfiles.ReturnValuesOfSpecificConditions("VoiceInput", new List<ConditionEntry.MatchType>() { ConditionEntry.MatchType.MatchSemicolon });        // need these to decide
-                List<string> prompts = new List<string>();
+                voicerecon.Clear(); // clear grammars
 
-                foreach ( var vp in ret)
+                List<Tuple<string, ConditionEntry.MatchType>> ret = actionfiles.ReturnValuesOfSpecificConditions("VoiceInput", new List<ConditionEntry.MatchType>() { ConditionEntry.MatchType.MatchSemicolonList, ConditionEntry.MatchType.MatchSemicolon });        // need these to decide
+
+                if (ret.Count > 0)
                 {
-                    string[] list = vp.Item1.Split(';').Select(x => x.Trim()).ToArray();     // split and trim
-                    prompts.AddRange(list);
-                }
+                    System.Diagnostics.Debug.WriteLine("Recognised voice recon entries" + ret.Count);
 
-                if (prompts.Count > 0)
-                {
-                    voicerecon.AddRange(prompts);
+                    foreach (var vp in ret)
+                    {
+                        voicerecon.Add(vp.Item1);
+                    }
+
                     voicerecon.Start();
                 }
             }
+        }
+
+        public string VoicePhrases(string sep)
+        {
+            List<Tuple<string, ConditionEntry.MatchType>> ret = actionfiles.ReturnValuesOfSpecificConditions("VoiceInput", new List<ConditionEntry.MatchType>() { ConditionEntry.MatchType.MatchSemicolonList, ConditionEntry.MatchType.MatchSemicolon });        // need these to decide
+
+            string s = "";
+            foreach (var vp in ret)
+            {
+                BaseUtils.StringCombinations sb = new BaseUtils.StringCombinations();
+                sb.ParseString(vp.Item1);
+                s += String.Join(",", sb.Permutations.ToArray()) + sep;
+            }
+
+            return s;
         }
 
         private void Voicerecon_SpeechRecognised(string text, float confidence)
@@ -699,7 +775,6 @@ namespace EDDiscovery.Actions
                 DirectInputDevices.InputDeviceJoystickWindows.CreateJoysticks(inputdevices, axisevents);
                 DirectInputDevices.InputDeviceKeyboard.CreateKeyboard(inputdevices);              // Created.. not started..
                 DirectInputDevices.InputDeviceMouse.CreateMouse(inputdevices);
-                frontierbindings.LoadBindingsFile();
                 inputdevicesactions.Start();
             }
 #endif
