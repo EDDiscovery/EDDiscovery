@@ -26,21 +26,27 @@ namespace Conditions
     public class ConditionLists
     {
         private List<Condition> conditionlist = new List<Condition>();
+        private List<string> groupname = new List<string>();    // used to associate a group name with a condition..
 
         public ConditionLists()
         {
         }
 
         public Condition Get(int n) { return (n < conditionlist.Count) ? conditionlist[n] : null; }
+        public string GetGroupName(int n) { return (n < groupname.Count) ? groupname[n] : null; }
 
-        public void Add(Condition fe)
+        public IEnumerable<Condition> Enumerable { get { return conditionlist; } }
+
+        public void Add(Condition fe, string gr = null)
         {
             conditionlist.Add(fe);
+            groupname.Add(gr);
         }
 
         public void Clear()
         {
             conditionlist.Clear();
+            groupname.Clear();
         }
 
         public int Count { get { return conditionlist.Count; } }
@@ -209,8 +215,20 @@ namespace Conditions
                             }
                             else if (f.matchtype == ConditionEntry.MatchType.MatchSemicolon)
                             {
-                                string[] list = rightside.Split(';').Select(x=>x.Trim()).ToArray();     // split and trim
-                                matched = list.Contains(leftside.Trim(),StringComparer.InvariantCultureIgnoreCase); // compare, trimmed, case insensitive
+                                string[] list = rightside.Split(';').Select(x => x.Trim()).ToArray();     // split and trim
+                                matched = list.Contains(leftside.Trim(), StringComparer.InvariantCultureIgnoreCase); // compare, trimmed, case insensitive
+                            }
+                            else if (f.matchtype == ConditionEntry.MatchType.MatchCommaList)
+                            {
+                                StringCombinations sc = new StringCombinations(',');
+                                sc.ParseString(rightside);      // parse, give all combinations
+                                matched = sc.Permutations.Contains(leftside.Trim(), StringComparer.InvariantCultureIgnoreCase); // compare, trimmed, case insensitive
+                            }
+                            else if (f.matchtype == ConditionEntry.MatchType.MatchSemicolonList)
+                            {
+                                StringCombinations sc = new StringCombinations(';');
+                                sc.ParseString(rightside);      // parse, give all combinations
+                                matched = sc.Permutations.Contains(leftside.Trim(), StringComparer.InvariantCultureIgnoreCase); // compare, trimmed, case insensitive
                             }
                             else if (f.matchtype == ConditionEntry.MatchType.AnyOfAny)
                             {

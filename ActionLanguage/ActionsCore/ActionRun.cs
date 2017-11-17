@@ -136,6 +136,8 @@ namespace ActionLanguage
 
                 ActionBase ac = progcurrent.GetNextStep();      // get the step. move PC on.
 
+                //System.Diagnostics.Debug.WriteLine((Environment.TickCount % 10000).ToString("00000") + " @ " + progcurrent.Location +" Lv " + progcurrent.ExecLevel + " e " + (progcurrent.IsExecuteOn ? "1" : "0") + " up " + ac.LevelUp + " " + progcurrent.PushPos + " " + ac.Name);
+
                 if (ac.LevelUp > 0 && progcurrent.LevelUp(ac.LevelUp, ac) )        // level up..
                 {
                     //System.Diagnostics.Debug.WriteLine((Environment.TickCount % 10000).ToString("00000") + " Abort Lv" + progcurrent.ExecLevel + " e " + (progcurrent.IsExecuteOn ? "1" : "0") + " up " + ac.LevelUp + ": " + progcurrent.StepNumber + " " + ac.Name + " " + ac.DisplayedUserData);

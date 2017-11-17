@@ -323,8 +323,8 @@
             this.comboBoxKeySelector.DataSource = null;
             this.comboBoxKeySelector.DisplayMember = "";
             this.comboBoxKeySelector.DropDownBackgroundColor = System.Drawing.Color.Gray;
-            this.comboBoxKeySelector.DropDownHeight = 400;
-            this.comboBoxKeySelector.DropDownWidth = 162;
+            this.comboBoxKeySelector.DropDownHeight = 600;
+            this.comboBoxKeySelector.DropDownWidth = 250;
             this.comboBoxKeySelector.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.comboBoxKeySelector.ItemHeight = 13;
             this.comboBoxKeySelector.Location = new System.Drawing.Point(104, 86);

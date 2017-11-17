@@ -22,6 +22,7 @@ using System.Windows.Forms;
 
 namespace ActionLanguage
 {
+    [System.Diagnostics.DebuggerDisplay("Action {actionname} {actiontype} {levelup} {userdata}")]
     public class ActionBase
     {
         public enum ActionType { Cmd, Call, Return,         // NOT auto

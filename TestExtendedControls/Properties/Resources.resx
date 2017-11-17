@@ -142,4 +142,7 @@
   <data name="galaxy_gray" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\galaxy_gray.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="_3x3_grid" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\3x3_grid.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
 </root>

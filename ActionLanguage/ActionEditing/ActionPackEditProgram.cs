@@ -337,7 +337,7 @@ namespace ActionLanguage
             int n = 2;
             while (actionfile.actionprogramlist.GetActionProgramList().Contains(suggestedname))
             {
-                suggestedname = sroot + "_" + n.ToString(System.Globalization.CultureInfo.InvariantCulture);
+                suggestedname = sroot + "_" + n.ToStringInvariant();
                 n++;
             }
 

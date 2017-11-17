@@ -25,7 +25,23 @@ namespace ExtendedControls
     {
         bool ApplyToForm(System.Windows.Forms.Form form, System.Drawing.Font fnt = null);   // null means use standard one
         void ApplyToControls(System.Windows.Forms.Control parent, System.Drawing.Font fnt = null, bool applytothis = false);
+
+        System.Drawing.Color ButtonBackColor { get; set; }
+        System.Drawing.Color ButtonTextColor { get; set; }
+        System.Drawing.Color ButtonBorderColor { get; set; }
+
+        System.Drawing.Color GridCellText { get; set; }
+        System.Drawing.Color GridBorderLines { get; set; }
+
         System.Drawing.Color TextBlockColor { get; set; }
+        System.Drawing.Color TextBlockHighlightColor { get; set; }
+        System.Drawing.Color TextBlockSuccessColor { get; set; }
+        System.Drawing.Color TextBackColor { get; set; }
+        System.Drawing.Color TextBlockBorderColor { get; set; }
+
+        System.Drawing.Color LabelColor { get; set; }
+
+
         string FontName { get; set; }
         bool WindowsFrame { get; set; }
         System.Drawing.Icon MessageBoxWindowIcon { get; set; }
