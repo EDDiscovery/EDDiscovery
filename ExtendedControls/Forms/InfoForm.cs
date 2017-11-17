@@ -42,7 +42,7 @@ namespace ExtendedControls
 
             labelCaption.Text = title;
 
-            ThemeableForms theme = ThemeableFormsInstance.Instance;
+            ITheme theme = ThemeableFormsInstance.Instance;
 
             if (themeit && theme != null)
             {
