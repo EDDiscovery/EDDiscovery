@@ -22,7 +22,7 @@ using System.Threading.Tasks;
 
 namespace DirectInputDevices
 {
-    public class InputDeviceJoystickWindows : InputDeviceInterface
+    public class InputDeviceJoystickWindows : IInputDevice
     {
         public InputDeviceIdentity ID() { return jsi;  }
         InputDeviceIdentity jsi;

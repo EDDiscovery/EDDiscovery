@@ -29,13 +29,13 @@ namespace DirectInputDevices
 
     public class InputDeviceEvent
     {
-        public InputDeviceInterface Device;
+        public IInputDevice Device;
 
         public int EventNumber { get; set; }     // indentity of event : keys code, joystick buttons/axis/pov number, etc
         public bool Pressed { get; set; }   // button pressed.. or POV is not centred, or null if it does not press.
         public int Value { get; set; }      // if applicable, axis for instance..
 
-        public InputDeviceEvent(InputDeviceInterface d, int en , bool p, int v = 0)
+        public InputDeviceEvent(IInputDevice d, int en , bool p, int v = 0)
         {
             Device = d; EventNumber = en; Pressed = p; Value = v; 
         }
@@ -47,20 +47,5 @@ namespace DirectInputDevices
 
         //public Tuple<string, bool> BindingsMatch() { return Device.BindingsMatch(this); }
         public string EventName() { return Device.EventName(this); }
-    }
-
-    public interface InputDeviceInterface
-    {
-        InputDeviceIdentity ID();
-        System.Threading.AutoResetEvent Eventhandle();          // set when device changes state
-
-        List<InputDeviceEvent> GetEvents();                     // get events after change state
-        void Dispose();
-
-        string EventName(InputDeviceEvent e);   // Frontier event name from input event
-
-        bool? IsPressed(string eventname);       // if an input supports pressed, true/false, else null
-
-        string ToString();
     }
 }
