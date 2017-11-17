@@ -7,9 +7,15 @@ using System.Threading.Tasks;
 
 namespace AudioExtensions
 {
-    public class VoiceRecognitionWindows : VoiceRecognition
+    public class VoiceRecognitionWindows : IVoiceRecognition
     {
         public float Confidence { get; set; } = 0.96F;
+
+        // WARNING Engine must be started, and they may except if out of range.
+        public int BabbleTimeout { get { return (int)engine.BabbleTimeout.TotalMilliseconds; } set { engine.BabbleTimeout = new TimeSpan(0, 0, 0, 0, value); } }
+        public int EndSilenceTimeout { get { return (int)engine.EndSilenceTimeout.TotalMilliseconds; } set { engine.EndSilenceTimeout = new TimeSpan(0, 0, 0, 0, value); } }
+        public int EndSilenceTimeoutAmbigious { get { return (int)engine.EndSilenceTimeoutAmbiguous.TotalMilliseconds; } set { engine.EndSilenceTimeoutAmbiguous = new TimeSpan(0, 0, 0, 0, value); } }
+        public int InitialSilenceTimeout { get { return (int)engine.InitialSilenceTimeout.TotalMilliseconds; } set { engine.InitialSilenceTimeout = new TimeSpan(0, 0, 0, 0, value); } }
 
         public event SpeechRecognised SpeechRecognised;
         public bool IsOpen { get { return engine != null; } }
@@ -37,12 +43,13 @@ namespace AudioExtensions
             }
 
             engine.SpeechRecognized += Engine_SpeechRecognized;
-            engine.SpeechHypothesized += Engine_SpeechHypothesized;
-            engine.SpeechRecognitionRejected += Engine_SpeechRecognitionRejected;
 
-            System.Diagnostics.Debug.WriteLine("Engine {0}", engine.RecognizerInfo.Description);
-            foreach (var x in engine.RecognizerInfo.AdditionalInfo)
-                System.Diagnostics.Debug.WriteLine(".. " + x.Key + "=" + x.Value);
+            // disabled for normal use, kept for debugging
+            //engine.SpeechHypothesized += Engine_SpeechHypothesized;
+            //engine.SpeechRecognitionRejected += Engine_SpeechRecognitionRejected;
+            //System.Diagnostics.Debug.WriteLine("Engine {0}", engine.RecognizerInfo.Description);
+            //foreach (var x in engine.RecognizerInfo.AdditionalInfo)
+            //    System.Diagnostics.Debug.WriteLine(".. " + x.Key + "=" + x.Value);
 
             return true;
         }
@@ -52,7 +59,6 @@ namespace AudioExtensions
             if (engine != null )
             {
                 Stop(true);
-                System.Diagnostics.Debug.WriteLine("Closing");
                 engine.SpeechRecognized -= Engine_SpeechRecognized;
                 engine.Dispose();
                 engine = null;
@@ -63,7 +69,7 @@ namespace AudioExtensions
         {
             if (engine != null && engine.Grammars.Count > 0 && engine.AudioState == AudioState.Stopped)
             {
-                System.Diagnostics.Debug.WriteLine("Starting with {0} Babble {1} EndSel {2} EndSelAmb {3} Initial {4} MaxAlt {5}", engine.Grammars.Count, engine.BabbleTimeout, engine.EndSilenceTimeout, engine.EndSilenceTimeoutAmbiguous, engine.InitialSilenceTimeout, engine.MaxAlternates);
+                //System.Diagnostics.Debug.WriteLine("Starting with {0} Babble {1} EndSel {2} EndSelAmb {3} Initial {4} MaxAlt {5}", engine.Grammars.Count, engine.BabbleTimeout, engine.EndSilenceTimeout, engine.EndSilenceTimeoutAmbiguous, engine.InitialSilenceTimeout, engine.MaxAlternates);
                 engine.RecognizeAsync(RecognizeMode.Multiple);        // got a grammar, start..
                 return true;
             }
@@ -76,7 +82,6 @@ namespace AudioExtensions
             if (engine != null && engine.AudioState != AudioState.Stopped)
             {
                 System.Diagnostics.Debug.WriteLine(Environment.TickCount + " Voice Recognition Stopping");
-                engine.UnloadAllGrammars();
                 engine.RecognizeAsyncCancel();
 
                 if (waitfor)
@@ -90,6 +95,17 @@ namespace AudioExtensions
 
                 System.Diagnostics.Debug.WriteLine(Environment.TickCount + "Voice Recognition Stopped");
             }
+        }
+
+        public bool Clear()     // clear loaded grammars
+        {
+            if (engine != null && engine.AudioState == AudioState.Stopped)
+            {
+                engine.UnloadAllGrammars();
+                return true;
+            }
+            else
+                return false;
         }
 
         public bool AddRange(List<string> s)
@@ -119,7 +135,7 @@ namespace AudioExtensions
                         if (wordlist.Count == 1)      // single entry, must be simple, just add
                         {
                             builder.Append(wordlist[0]);
-                            System.Diagnostics.Debug.Write(wordlist[0]);
+                            //System.Diagnostics.Debug.Write(wordlist[0]);
                         }
                         else
                         {                             // conditional list..
@@ -133,11 +149,11 @@ namespace AudioExtensions
                                 {
                                     sub.Add(new GrammarBuilder());
                                     sub.Last().Append(o, (emptycount > 0) ? 0 : 1, 1);      // indicate number of times, either 1:1 or 0,1 if we have an optional entry
-                                    System.Diagnostics.Debug.Write((wordlist.IndexOf(o) > 0 ? "|" : "") + o);
+                                    //System.Diagnostics.Debug.Write((wordlist.IndexOf(o) > 0 ? "|" : "") + o);
                                 }
                                 else
                                 {
-                                    System.Diagnostics.Debug.Write("|[]");
+                                    //System.Diagnostics.Debug.Write("|[]");
                                 }
                             }
 
@@ -145,14 +161,14 @@ namespace AudioExtensions
                             builder.Append(c);
                         }
 
-                        System.Diagnostics.Debug.Write(" ");
+                        //System.Diagnostics.Debug.Write(" ");
                     }
 
                     builder.Culture = ct;
                     Grammar gr = new Grammar(builder);
                     engine.LoadGrammar(gr);
 
-                    System.Diagnostics.Debug.WriteLine("");
+                    //System.Diagnostics.Debug.WriteLine("");
                 }
                 
                 return true;
@@ -165,7 +181,7 @@ namespace AudioExtensions
         private void Engine_SpeechRecognized(object sender, SpeechRecognizedEventArgs e)
         {
             var x = e.Result;
-            DumpInfo("Recognised", e.Result);
+            //DumpInfo("Recognised", e.Result);
             System.Diagnostics.Debug.WriteLine("Confidence {0} vs threshold {1} for {2}", e.Result.Confidence, Confidence, e.Result.Text);
             if (e.Result.Confidence >= Confidence)
                 SpeechRecognised?.Invoke(e.Result.Text, e.Result.Confidence);
@@ -184,7 +200,7 @@ namespace AudioExtensions
 
         void DumpInfo(string t, RecognitionResult r)
         {
-            System.Diagnostics.Debug.WriteLine(t + " " + r.Text + " " + r.Confidence.ToString("#.00"));
+            System.Diagnostics.Debug.WriteLine((Environment.TickCount%10000) + ":" + t + " " + r.Text + " " + r.Confidence.ToString("#.00"));
             foreach (RecognizedPhrase p in r.Alternates)
                 System.Diagnostics.Debug.WriteLine("... alt " + p.Text + p.Confidence.ToString("#.00"));
 
