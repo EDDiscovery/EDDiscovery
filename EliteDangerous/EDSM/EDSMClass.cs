@@ -834,7 +834,7 @@ namespace EliteDangerousCore.EDSM
                     jout["Radius"] = jo["radius"].Double() * 1000.0; // km -> metres
                     jout["PlanetClass"] = EDSMPlanet2JournalName(jo["subType"].Str());
                     if (jo["terraformingState"] != null) jout["TerraformState"] = jo["terraformingState"];
-                    if (jo["surfacePressure"] != null) jout["SurfacePressure"] = jo["surfacePressure"].Double() * 101325; // atmospheres -> pascals
+                    if (jo["surfacePressure"] != null) jout["SurfacePressure"] = jo["surfacePressure"].Double() * JournalScan.oneAtmosphere_Pa; // atmospheres -> pascals
                     if (jout["TerraformState"].Str() == "Candidate for terraforming")
                         jout["TerraformState"] = "Terraformable";
                 }
