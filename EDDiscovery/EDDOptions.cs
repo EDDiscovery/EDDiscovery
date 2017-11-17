@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace EDDiscovery
 {
-    public class EDDOptions : EliteDangerousCore.EliteOptions
+    public class EDDOptions : EliteDangerousCore.IEliteOptions
     {
         public static EDDOptions Instance
         {
