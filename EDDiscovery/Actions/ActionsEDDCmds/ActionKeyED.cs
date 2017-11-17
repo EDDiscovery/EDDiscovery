@@ -31,7 +31,7 @@ namespace EDDiscovery.Actions
     {
         const string errmsgforbinding = "No keyboard binding for ";
 
-        class AKP : BaseUtils.EnhancedSendKeys.AdditionalKeyParser      // AKP parser to pass to SendKeys
+        class AKP : BaseUtils.EnhancedSendKeys.IAdditionalKeyParser      // AKP parser to pass to SendKeys
         {
             public EliteDangerousCore.BindingsFile bindingsfile;
 
