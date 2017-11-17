@@ -49,6 +49,16 @@ namespace DialogTest
                     sel = f;
                     break;
 
+                case "infoform":
+                    ExtendedControls.ThemeStandard th = new ExtendedControls.ThemeStandard();
+                    th.LoadBaseThemes();
+                    th.SetThemeByName("Elite Verdana");
+                    ExtendedControls.ThemeableFormsInstance.Instance = th;
+                    ExtendedControls.InfoForm inf = new ExtendedControls.InfoForm();
+                    inf.Info("Info form", Properties.Resources._3x3_grid, "This is a nice test\r\nOf the info form\r\n", null, new int[] { 0, 100, 200, 300, 400, 500, 600 }, true);
+                    sel = inf;
+                    break;
+
                 case "testtabstrip":
                     sel = new TestTabStrip();
                     break;

@@ -51,7 +51,7 @@ namespace EDDiscovery.Actions
         public override AudioExtensions.AudioQueue AudioQueueWave { get { return audioqueuewave; } }
         public override AudioExtensions.AudioQueue AudioQueueSpeech { get { return audioqueuespeech; } }
         public override AudioExtensions.SpeechSynthesizer SpeechSynthesizer { get { return speechsynth; } }
-        public AudioExtensions.VoiceRecognition VoiceRecognition { get { return voicerecon; } }
+        public AudioExtensions.IVoiceRecognition VoiceRecognition { get { return voicerecon; } }
         public BindingsFile FrontierBindings { get { return frontierbindings; } }
 
         public string ErrorList;        // set on Reload, use to display warnings at right point
@@ -61,7 +61,7 @@ namespace EDDiscovery.Actions
         AudioExtensions.IAudioDriver audiodriverspeech;
         AudioExtensions.AudioQueue audioqueuespeech;
         AudioExtensions.SpeechSynthesizer speechsynth;
-        AudioExtensions.VoiceRecognition voicerecon;
+        AudioExtensions.IVoiceRecognition voicerecon;
 
         DirectInputDevices.InputDeviceList inputdevices;
         Actions.ActionsFromInputDevices inputdevicesactions;
@@ -144,7 +144,7 @@ namespace EDDiscovery.Actions
 
             actionrunasync = new ActionRun(this, actionfiles);        // this is the guy who runs programs asynchronously
             ActionConfigureKeys();
-            ActionConfigureVoiceRecon();
+            VoiceLoadEvents();
         }
 
         public void CheckWarn()
@@ -208,7 +208,7 @@ namespace EDDiscovery.Actions
                 SQLiteConnectionUser.PutSettingString("ActionEditorCollapseState_" + name, frm.CollapsedState());  // get any collapsed state info for this pack
 
                 ActionConfigureKeys();
-                ActionConfigureVoiceRecon();
+                VoiceLoadEvents();
 
                 lasteditedpack = name;
                 SQLiteConnectionUser.PutSettingString("ActionPackLastFile", lasteditedpack);
@@ -680,15 +680,15 @@ namespace EDDiscovery.Actions
 
         #region Voice
 
-        public void VoiceRecon(bool on, string culture = null)
+        public void VoiceReconOn(string culture = null)     // perform enableVR
         {
             voicerecon.Close(); // can close without stopping
+            voicerecon.Open(System.Globalization.CultureInfo.GetCultureInfo(culture));
+        }
 
-            if (on)
-            {
-                voicerecon.Open(System.Globalization.CultureInfo.GetCultureInfo(culture));
-                ActionConfigureVoiceRecon();
-            }
+        public void VoiceReconOff()                         // perform disableVR
+        {
+            voicerecon.Close();
         }
 
         public void VoiceReconConfidence(float conf)
@@ -696,12 +696,32 @@ namespace EDDiscovery.Actions
             voicerecon.Confidence = conf;
         }
 
-        void ActionConfigureVoiceRecon()
+        public void VoiceReconParameters(int babble, int initialsilence, int endsilence, int endsilenceambigious)
+        {
+            if (voicerecon.IsOpen)
+            {
+                voicerecon.Stop(true);
+                try
+                {
+                    voicerecon.BabbleTimeout = babble;
+                    voicerecon.InitialSilenceTimeout = initialsilence;
+                    voicerecon.EndSilenceTimeout = endsilence;
+                    voicerecon.EndSilenceTimeoutAmbigious = endsilenceambigious;
+                }
+                catch { };
+
+                voicerecon.Start();
+            }
+        }
+
+        public void VoiceLoadEvents()
         {
             System.Diagnostics.Debug.WriteLine("Action config voice recon " + voicerecon.IsOpen);
             if ( voicerecon.IsOpen )
             {
                 voicerecon.Stop(true);
+
+                voicerecon.Clear(); // clear grammars
 
                 List<Tuple<string, ConditionEntry.MatchType>> ret = actionfiles.ReturnValuesOfSpecificConditions("VoiceInput", new List<ConditionEntry.MatchType>() { ConditionEntry.MatchType.MatchSemicolonList, ConditionEntry.MatchType.MatchSemicolon });        // need these to decide
 
@@ -717,6 +737,21 @@ namespace EDDiscovery.Actions
                     voicerecon.Start();
                 }
             }
+        }
+
+        public string VoicePhrases(string sep)
+        {
+            List<Tuple<string, ConditionEntry.MatchType>> ret = actionfiles.ReturnValuesOfSpecificConditions("VoiceInput", new List<ConditionEntry.MatchType>() { ConditionEntry.MatchType.MatchSemicolonList, ConditionEntry.MatchType.MatchSemicolon });        // need these to decide
+
+            string s = "";
+            foreach (var vp in ret)
+            {
+                BaseUtils.StringCombinations sb = new BaseUtils.StringCombinations();
+                sb.ParseString(vp.Item1);
+                s += String.Join(",", sb.Permutations.ToArray()) + sep;
+            }
+
+            return s;
         }
 
         private void Voicerecon_SpeechRecognised(string text, float confidence)

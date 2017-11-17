@@ -23,10 +23,8 @@ using System.Windows.Forms;
 
 namespace DirectInputDevices
 {
-    static public class KeyConversion       // three naming conventsion, lovely!
+    static public class KeyConversion       // three naming conventsions, lovely!
     {
-        // Table defined differences, some are easy to fix programatically (Numberpad)
-
         static public string SharpKeyToFrontierName(SharpDX.DirectInput.Key k)     
         {
             string keyname = k.ToString();
