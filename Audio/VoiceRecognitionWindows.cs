@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Speech.Recognition;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace AudioExtensions
 {
+#if !NO_SYSTEM_SPEECH
+    using System.Speech.Recognition;
+
     public class VoiceRecognitionWindows : IVoiceRecognition
     {
         public float Confidence { get; set; } = 0.96F;
@@ -221,4 +223,5 @@ namespace AudioExtensions
         }
 
     }
+#endif
 }
