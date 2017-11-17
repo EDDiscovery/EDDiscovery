@@ -30,7 +30,7 @@ using EliteDangerousCore.EDDN;
 
 namespace EDDiscovery.UserControls
 {
-    public partial class UserControlTravelGrid : UserControlCommonBase, UserControlCursorType
+    public partial class UserControlTravelGrid : UserControlCommonBase, IHistoryCursor
     {
         #region Public IF
 
@@ -44,9 +44,9 @@ namespace EDDiscovery.UserControls
 
         #region Events
 
-        // implement UserControlCursorType fields
-        public event ChangedSelection OnChangedSelection;   // After a change of selection by the user, or after a OnHistoryChanged, or after a sort.
-        public event ChangedSelectionHE OnTravelSelectionChanged;   // as above, different format, for certain older controls
+        // implement IHistoryCursor fields
+        public event ChangedSelectionHandler OnChangedSelection;   // After a change of selection by the user, or after a OnHistoryChanged, or after a sort.
+        public event ChangedSelectionHEHandler OnTravelSelectionChanged;   // as above, different format, for certain older controls
 
         // for primary travel grid for auto note jump
         public delegate void KeyDownInCell(int asciikeycode, int rowno, int colno, bool note);

@@ -31,7 +31,7 @@ using EliteDangerousCore.JournalEvents;
 
 namespace EDDiscovery.UserControls
 {
-    public partial class UserControlStarList : UserControlCommonBase, UserControlCursorType
+    public partial class UserControlStarList : UserControlCommonBase, IHistoryCursor
     {
         #region Public IF
 
@@ -42,9 +42,9 @@ namespace EDDiscovery.UserControls
 
         #region Events
 
-        // implement UserControlCursorType fields
-        public event ChangedSelection OnChangedSelection;   // After a change of selection by the user, or after a OnHistoryChanged, or after a sort.
-        public event ChangedSelectionHE OnTravelSelectionChanged;   // as above, different format, for certain older controls
+        // implement IHistoryCursor fields
+        public event ChangedSelectionHandler OnChangedSelection;   // After a change of selection by the user, or after a OnHistoryChanged, or after a sort.
+        public event ChangedSelectionHEHandler OnTravelSelectionChanged;   // as above, different format, for certain older controls
 
         #endregion
 
