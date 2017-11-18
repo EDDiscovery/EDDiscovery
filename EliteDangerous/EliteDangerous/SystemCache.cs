@@ -139,7 +139,7 @@ namespace EliteDangerousCore
                 }
             }
 
-            return dbsys;
+            return sys;
         }
     }
 }
