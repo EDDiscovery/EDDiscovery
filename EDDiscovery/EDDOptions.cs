@@ -31,6 +31,8 @@ namespace EDDiscovery
         public bool NoLoad { get; private set; }
         public bool NoTheme { get; set; }
         public bool NoSystemsLoad { get; private set; }
+        public bool NoSound { get; private set; }
+        public bool No3DMap { get; private set; }
         public bool TraceLog { get; private set; }
         public bool LogExceptions { get; private set; }
         public bool DisableShowDebugInfoInTitle { get; private set; }
@@ -225,6 +227,8 @@ namespace EDDiscovery
                         EliteDangerousCore.EDJournalReader.disable_beta_commander_check = true;
                         break;
                     case "notheme": NoTheme = true; break;
+                    case "nosound": NoSound = true; break;
+                    case "no3dmap": No3DMap = true; break;
                     case "notitleinfo": DisableShowDebugInfoInTitle = true; break;
                     default:
                         Console.WriteLine($"Unrecognized option -{opt}");

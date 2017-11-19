@@ -74,7 +74,7 @@ namespace EDDiscovery.Actions
 
             #if !NO_SYSTEM_SPEECH
             // Windows TTS (2000 and above). Speech *recognition* will be Version.Major >= 6 (Vista and above)
-            if (Environment.OSVersion.Platform == PlatformID.Win32NT && Environment.OSVersion.Version.Major >= 5)
+            if (Environment.OSVersion.Platform == PlatformID.Win32NT && Environment.OSVersion.Version.Major >= 5 && !EDDOptions.Instance.NoSound)
             {
                 audiodriverwave = new AudioExtensions.AudioDriverCSCore(EDDConfig.Instance.DefaultWaveDevice);
                 audiodriverspeech = new AudioExtensions.AudioDriverCSCore(EDDConfig.Instance.DefaultVoiceDevice);
