@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace DirectInputDevices
 {
-    public class InputDeviceMouse : InputDeviceInterface
+    public class InputDeviceMouse : IInputDevice
     {
         public InputDeviceIdentity ID() { return msi; }
         InputDeviceIdentity msi;

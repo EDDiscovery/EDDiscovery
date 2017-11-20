@@ -72,7 +72,7 @@ namespace ActionLanguage
             return FromString(userdata, out saying, out vars) ? null : "Key command line not in correct format";
         }
 
-        static public string Menu(Form parent, System.Drawing.Icon ic, string userdata, List<string> additionalkeys, BaseUtils.EnhancedSendKeys.AdditionalKeyParser additionalparser)
+        static public string Menu(Form parent, System.Drawing.Icon ic, string userdata, List<string> additionalkeys, BaseUtils.EnhancedSendKeys.IAdditionalKeyParser additionalparser)
         {
             ConditionVariables vars;
             string keys;
@@ -118,7 +118,7 @@ namespace ActionLanguage
 
         static List<string> errorsreported = new List<string>();
 
-        public bool ExecuteAction(ActionProgramRun ap, BaseUtils.EnhancedSendKeys.AdditionalKeyParser akp )      // additional parser
+        public bool ExecuteAction(ActionProgramRun ap, BaseUtils.EnhancedSendKeys.IAdditionalKeyParser akp )      // additional parser
         { 
             string keys;
             ConditionVariables statementvars;

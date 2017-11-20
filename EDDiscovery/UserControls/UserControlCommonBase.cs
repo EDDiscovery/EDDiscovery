@@ -54,10 +54,10 @@ namespace EDDiscovery.UserControls
 
         public int displaynumber { get; protected set; }
         public EDDiscoveryForm discoveryform { get; protected set; }
-        public UserControlCursorType uctg { get; protected set; }
+        public IHistoryCursor uctg { get; protected set; }
 
         // in calling order..
-        public void Init(EDDiscoveryForm ed, UserControlCursorType thc, int dn)
+        public void Init(EDDiscoveryForm ed, IHistoryCursor thc, int dn)
         {
             System.Diagnostics.Debug.WriteLine("Open UCCB " + this.Name + " of " + this.GetType().Name + " with " + dn);
             discoveryform = ed;
@@ -71,7 +71,7 @@ namespace EDDiscovery.UserControls
         public virtual void InitialDisplay() { }    // then after the themeing, do the initial display
         public virtual void Closing() { }           // close it
 
-        public virtual void ChangeCursorType(UserControlCursorType thc) { }     // optional, cursor has changed
+        public virtual void ChangeCursorType(IHistoryCursor thc) { }     // optional, cursor has changed
 
         public virtual Color ColorTransparency { get { return Color.Transparent; } }        // override to say support transparency, and what colour you want.
         public virtual void SetTransparency(bool on, Color curcol) { }                      // set on/off transparency of components.
@@ -176,19 +176,5 @@ namespace EDDiscovery.UserControls
         }
 
         #endregion
-    }
-
-    // Any UCs wanting to be a cursor, must implement this interface
-
-    public delegate void ChangedSelection(int rowno, int colno, bool doubleclick, bool note);
-    public delegate void ChangedSelectionHE(HistoryEntry he, HistoryList hl);
-
-    public interface UserControlCursorType
-    {
-        event ChangedSelection OnChangedSelection;   // After a change of selection by the user, or after a OnHistoryChanged, or after a sort.
-        event ChangedSelectionHE OnTravelSelectionChanged;   // as above, different format, for certain older controls
-        void FireChangeSelection(); // fire a change sel event to everyone
-        void GotoPosByJID(long jid);    // goto a pos by JID
-        HistoryEntry GetCurrentHistoryEntry { get; }    // whats your current entry, null if not
     }
 }

@@ -298,7 +298,7 @@ namespace DirectInputDevices
     }
 
 
-    public class InputDeviceKeyboard : InputDeviceInterface
+    public class InputDeviceKeyboard : IInputDevice
     {
         public InputDeviceIdentity ID() { return ksi; }
         InputDeviceIdentity ksi;

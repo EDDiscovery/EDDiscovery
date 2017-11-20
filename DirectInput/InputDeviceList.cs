@@ -24,31 +24,31 @@ namespace DirectInputDevices
 {
     // list of devices, and main event loop.  Hook to OnNewEvent
 
-    public class InputDeviceList : IEnumerable<InputDeviceInterface>
+    public class InputDeviceList : IEnumerable<IInputDevice>
     {
         public event Action<List<InputDeviceEvent>> OnNewEvent;
 
         private Action<Action> invokeAsyncOnUiThread;
         private System.Threading.AutoResetEvent stophandle = new System.Threading.AutoResetEvent(false);        // used by dispose to tell thread to stop
         private System.Threading.Thread waitfordatathread;      // the background worker
-        private List<InputDeviceInterface> inputdevices { get; set; } = new List<InputDeviceInterface>();
+        private List<IInputDevice> inputdevices { get; set; } = new List<IInputDevice>();
 
         public InputDeviceList(Action<Action> i)            // Action context is pass to call in.. 
         {
             invokeAsyncOnUiThread = i;
         }
 
-        public void Add(InputDeviceInterface i)
+        public void Add(IInputDevice i)
         {
             inputdevices.Add(i);
         }
 
-        public InputDeviceInterface Find(Predicate<InputDeviceInterface> p)
+        public IInputDevice Find(Predicate<IInputDevice> p)
         {
             return inputdevices.Find(p);
         }
 
-        public IEnumerator<InputDeviceInterface> GetEnumerator()
+        public IEnumerator<IInputDevice> GetEnumerator()
         {
             foreach (var e in inputdevices)
                 yield return e;
@@ -62,7 +62,7 @@ namespace DirectInputDevices
         public string ListDevices()
         {
             string ret = "";
-            foreach (InputDeviceInterface i in inputdevices)
+            foreach (IInputDevice i in inputdevices)
                 ret += i.ToString() + Environment.NewLine;
             return ret;
         }
@@ -91,7 +91,7 @@ namespace DirectInputDevices
         {
             Stop();
 
-            foreach (InputDeviceInterface i in inputdevices)
+            foreach (IInputDevice i in inputdevices)
                 i.Dispose();
 
             inputdevices.Clear();

@@ -74,7 +74,9 @@
     <Compile Include="CompanionAPI\CStarport.cs" />
     <Compile Include="CompanionAPI\CSystem.cs" />
     <Compile Include="CompanionAPI\RijndaelCrypt.cs" />
-    <Compile Include="Config\EliteConfig.cs" />
+    <Compile Include="Config\EliteConfigInstance.cs" />
+    <Compile Include="Config\IEliteConfig.cs" />
+    <Compile Include="Config\IEliteOptions.cs" />
     <Compile Include="DB\BookmarkClass.cs" />
     <Compile Include="DB\IVisitedSystems.cs" />
     <Compile Include="DB\RegisterEntry.cs" />

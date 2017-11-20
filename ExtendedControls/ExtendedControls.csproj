@@ -83,6 +83,7 @@
     <Compile Include="Controls\PanelSelectionList.Designer.cs">
       <DependentUpon>PanelSelectionList.cs</DependentUpon>
     </Compile>
+    <Compile Include="Themes\ITheme.cs" />
     <Compile Include="Themes\ThemeStandardEditor.cs">
       <SubType>Form</SubType>
     </Compile>
