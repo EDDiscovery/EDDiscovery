@@ -43,6 +43,8 @@ namespace EDDiscovery.UserControls
         public UserControlMissions()
         {
             InitializeComponent();
+            var corner = dataGridViewCurrent.TopLeftHeaderCell; // work around #1487
+            var corner2 = dataGridViewPrevious.TopLeftHeaderCell; // work around #1487
         }
 
         public override void Init()
