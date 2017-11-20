@@ -56,6 +56,7 @@ namespace EDDiscovery.UserControls
         public UserControlSynthesis()
         {
             InitializeComponent();
+            var corner = dataGridViewSynthesis.TopLeftHeaderCell; // work around #1487
         }
 
         public override void Init()

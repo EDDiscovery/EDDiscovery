@@ -43,6 +43,8 @@ namespace EDDiscovery.UserControls
         public UserControlTrilateration()
         {
             InitializeComponent();
+            var corner = dataGridViewDistances.TopLeftHeaderCell; // work around #1487
+            var corner2 = dataGridViewClosestSystems.TopLeftHeaderCell; // work around #1487
         }
 
         public override void Init()
