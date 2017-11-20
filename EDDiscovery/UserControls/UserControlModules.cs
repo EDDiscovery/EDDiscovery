@@ -39,6 +39,7 @@ namespace EDDiscovery.UserControls
         public UserControlModules()
         {
             InitializeComponent();
+            var corner = dataGridViewModules.TopLeftHeaderCell; // work around #1487
         }
 
         public override void Init()

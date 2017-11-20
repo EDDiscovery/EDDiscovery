@@ -94,6 +94,7 @@ namespace EDDiscovery.UserControls
         public UserControlTravelGrid()
         {
             InitializeComponent();
+            var corner = dataGridViewTravel.TopLeftHeaderCell; // work around #1487
         }
 
         public override void Init()
