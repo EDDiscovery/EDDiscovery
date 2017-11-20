@@ -35,7 +35,6 @@ namespace EliteDangerousCore.JournalEvents
         public string Victim { get; set; }
         public CombatRank CombatRank { get; set; }
 
-        public override System.Drawing.Bitmap DefaultIcon { get { return EliteDangerous.Properties.Resources.pvpkill; } }
 
         public override void FillInformation(out string summary, out string info, out string detailed)  //V
         {

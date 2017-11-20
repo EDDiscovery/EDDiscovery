@@ -45,26 +45,11 @@ namespace EliteDangerousCore.JournalEvents
             mcl.AddEvent(Id, EventTimeUTC, EventTypeID, Type + " " + Count.ToString(), -Cost);
         }
 
-        public override System.Drawing.Bitmap DefaultIcon { get
-            {
-                if (Type.Contains("SRV") )
-                    return EliteDangerous.Properties.Resources.restocksrv;
-                else
-                    return EliteDangerous.Properties.Resources.restockfighter;
-            } }
-
         public override Image Icon
         {
             get
             {
-                if (Type.Contains("SRV"))
-                {
-                    return GetIcon(JournalTypeEnum.RestockVehicle_SRV) ?? EliteDangerous.Properties.Resources.restocksrv;
-                }
-                else
-                {
-                    return GetIcon(JournalTypeEnum.RestockVehicle_Fighter) ?? EliteDangerous.Properties.Resources.restockfighter;
-                }
+                return Type.Contains("SRV") ? GetIcon(JournalTypeEnum.RestockVehicle_SRV) : GetIcon(JournalTypeEnum.RestockVehicle_Fighter);
             }
         }
 

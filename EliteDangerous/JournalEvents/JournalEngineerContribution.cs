@@ -56,17 +56,6 @@ namespace EliteDangerousCore.JournalEvents
         public int Quantity { get; set; }
         public int TotalQuantity { get; set; }
 
-        public override System.Drawing.Bitmap DefaultIcon
-        {
-            get
-            {
-                if (unknownType)
-                    return EliteDangerous.Properties.Resources.genericevent;
-                else
-                    return EliteDangerous.Properties.Resources.engineerapply;
-            }
-        }
-
         public override void FillInformation(out string summary, out string info, out string detailed) //V
         {
             summary = EventTypeStr.SplitCapsWord();

@@ -358,107 +358,6 @@ namespace EliteDangerousCore
             return EDReserve.None;
         }
 
-        #region Default Body Type Images
-        private static Dictionary<EDStar, System.Drawing.Image> DefaultStarIcons = new Dictionary<EDStar, System.Drawing.Image>
-        {
-            // Main Sequence
-            [EDStar.O] = EliteDangerous.Properties.Resources.O,
-            [EDStar.B] = EliteDangerous.Properties.Resources.B6V_Blueish,
-            [EDStar.A] = EliteDangerous.Properties.Resources.A9III_White,
-            [EDStar.F] = EliteDangerous.Properties.Resources.F5VAB,
-            [EDStar.G] = EliteDangerous.Properties.Resources.G1IV,
-            [EDStar.K] = EliteDangerous.Properties.Resources.Star_K1IV,
-            [EDStar.M] = EliteDangerous.Properties.Resources.M5V,
-            // Giants
-            [EDStar.A_BlueWhiteSuperGiant] = EliteDangerous.Properties.Resources.A9III_White,
-            [EDStar.F_WhiteSuperGiant] = EliteDangerous.Properties.Resources.F5VAB,
-            [EDStar.M_RedSuperGiant] = EliteDangerous.Properties.Resources.M5V,
-            [EDStar.M_RedGiant] = EliteDangerous.Properties.Resources.M5V,
-            [EDStar.K_OrangeGiant] = EliteDangerous.Properties.Resources.K0V,
-            // Brown Dwarfs
-            [EDStar.L] = EliteDangerous.Properties.Resources.L3V,
-            [EDStar.T] = EliteDangerous.Properties.Resources.T4V,
-            [EDStar.Y] = EliteDangerous.Properties.Resources.Y2,
-            // Proto Stars
-            [EDStar.AeBe] = EliteDangerous.Properties.Resources.DefaultStar,    // Herbig
-            [EDStar.TTS] = EliteDangerous.Properties.Resources.DefaultStar,     // T Tauri
-            // Wolf Rayet
-            [EDStar.W] = EliteDangerous.Properties.Resources.WolfRayet,
-            [EDStar.WN] = EliteDangerous.Properties.Resources.WolfRayet,
-            [EDStar.WNC] = EliteDangerous.Properties.Resources.WolfRayet,
-            [EDStar.WC] = EliteDangerous.Properties.Resources.WolfRayet,
-            [EDStar.WO] = EliteDangerous.Properties.Resources.WolfRayet,
-            // Carbon
-            [EDStar.CS] = EliteDangerous.Properties.Resources.C7III,
-            [EDStar.C] = EliteDangerous.Properties.Resources.C7III,
-            [EDStar.CN] = EliteDangerous.Properties.Resources.C7III,
-            [EDStar.CJ] = EliteDangerous.Properties.Resources.C7III,
-            [EDStar.CHd] = EliteDangerous.Properties.Resources.C7III,
-            // White Dwarf
-            [EDStar.D] = EliteDangerous.Properties.Resources.DA6VII_White,
-            [EDStar.DA] = EliteDangerous.Properties.Resources.DA6VII_White,
-            [EDStar.DAB] = EliteDangerous.Properties.Resources.DA6VII_White,
-            [EDStar.DAO] = EliteDangerous.Properties.Resources.DA6VII_White,
-            [EDStar.DAZ] = EliteDangerous.Properties.Resources.DA6VII_White,
-            [EDStar.DAV] = EliteDangerous.Properties.Resources.DA6VII_White,
-            [EDStar.DB] = EliteDangerous.Properties.Resources.DA6VII_White,
-            [EDStar.DBZ] = EliteDangerous.Properties.Resources.DA6VII_White,
-            [EDStar.DBV] = EliteDangerous.Properties.Resources.DA6VII_White,
-            [EDStar.DO] = EliteDangerous.Properties.Resources.DA6VII_White,
-            [EDStar.DOV] = EliteDangerous.Properties.Resources.DA6VII_White,
-            [EDStar.DQ] = EliteDangerous.Properties.Resources.DA6VII_White,
-            [EDStar.DC] = EliteDangerous.Properties.Resources.DA6VII_White,
-            [EDStar.DCV] = EliteDangerous.Properties.Resources.DA6VII_White,
-            [EDStar.DX] = EliteDangerous.Properties.Resources.DA6VII_White,
-            // S Stars - https://en.wikipedia.org/wiki/S-type_star
-            [EDStar.MS] = EliteDangerous.Properties.Resources.M5V,
-            [EDStar.S] = EliteDangerous.Properties.Resources.M5V,
-            // Neutron Star
-            [EDStar.N] = EliteDangerous.Properties.Resources.Neutron_Star,
-            // Black Hole
-            [EDStar.H] = EliteDangerous.Properties.Resources.Black_Hole,
-            // Super-massive Black Hole
-            [EDStar.SuperMassiveBlackHole] = EliteDangerous.Properties.Resources.Black_Hole,
-            // Exotic objects (not yet seen)
-            [EDStar.X] = EliteDangerous.Properties.Resources.Globe,
-            [EDStar.RoguePlanet] = EliteDangerous.Properties.Resources.Globe,
-            [EDStar.Nebula] = EliteDangerous.Properties.Resources.Globe,
-            [EDStar.StellarRemnantNebula] = EliteDangerous.Properties.Resources.Globe,
-            [EDStar.Unknown] = EliteDangerous.Properties.Resources.Globe_yellow
-        };
-
-        private static Dictionary<EDPlanet, System.Drawing.Image> DefaultPlanetIcons = new Dictionary<EDPlanet, System.Drawing.Image>
-        {
-            // Gas giants
-            [EDPlanet.Helium_gas_giant] = EliteDangerous.Properties.Resources.Helium_Rich_Gas_Giant1,
-            [EDPlanet.Helium_rich_gas_giant] = EliteDangerous.Properties.Resources.Helium_Rich_Gas_Giant1,
-            [EDPlanet.Gas_giant_with_water_based_life] = EliteDangerous.Properties.Resources.Gas_giant_water_based_life_Brown3,
-            [EDPlanet.Gas_giant_with_ammonia_based_life] = EliteDangerous.Properties.Resources.Gas_giant_ammonia_based_life1,
-            [EDPlanet.Sudarsky_class_I_gas_giant] = EliteDangerous.Properties.Resources.Class_I_Gas_Giant_Brown2,
-            [EDPlanet.Sudarsky_class_II_gas_giant] = EliteDangerous.Properties.Resources.Class_II_Gas_Giant_Sand1,
-            [EDPlanet.Sudarsky_class_III_gas_giant] = EliteDangerous.Properties.Resources.Class_III_Gas_Giant_Blue3,
-            [EDPlanet.Sudarsky_class_IV_gas_giant] = EliteDangerous.Properties.Resources.Class_I_Gas_Giant_Brown2,  // MISSING
-            [EDPlanet.Sudarsky_class_V_gas_giant] = EliteDangerous.Properties.Resources.Class_I_Gas_Giant_Brown2,   // MISSING
-            // Other giants
-            [EDPlanet.Water_giant] = EliteDangerous.Properties.Resources.Water_Giant1,
-            [EDPlanet.Water_giant_with_life] = EliteDangerous.Properties.Resources.Water_Giant1,
-            // Rocky with atmospheres
-            [EDPlanet.Water_world] = EliteDangerous.Properties.Resources.Water_World_Poles_Cloudless4,
-            [EDPlanet.Earthlike_body] = EliteDangerous.Properties.Resources.Earth_Like_Standard,
-            [EDPlanet.Ammonia_world] = EliteDangerous.Properties.Resources.Ammonia_Brown,
-            [EDPlanet.High_metal_content_body_hot_thick] = EliteDangerous.Properties.Resources.High_metal_content_world_White3,
-            // Other rocky bodies
-            [EDPlanet.Icy_body] = EliteDangerous.Properties.Resources.Icy_Body_Greenish1,
-            [EDPlanet.Rocky_ice_body] = EliteDangerous.Properties.Resources.Rocky_Ice_World_Sol_Titan,
-            [EDPlanet.Rocky_body] = EliteDangerous.Properties.Resources.Rocky_Body_Sand2,
-            [EDPlanet.High_metal_content_body] = EliteDangerous.Properties.Resources.High_metal_content_world_Orange8,
-            [EDPlanet.High_metal_content_body_250] = EliteDangerous.Properties.Resources.High_metal_content_world_Mix3,
-            [EDPlanet.High_metal_content_body_700] = EliteDangerous.Properties.Resources.High_metal_content_world_Lava1,
-            [EDPlanet.Metal_rich_body] = EliteDangerous.Properties.Resources.metal_rich,
-            [EDPlanet.Unknown] = EliteDangerous.Properties.Resources.Globe,
-        };
-        #endregion
-
         public static System.Drawing.Image GetStarTypeImage(EDStar type)
         {
             IReadOnlyDictionary<EDStar, System.Drawing.Image> icons = EliteConfigInstance.InstanceIconSet?.StarTypeIcons;
@@ -466,10 +365,6 @@ namespace EliteDangerousCore
             if (icons != null && icons.ContainsKey(type))
             {
                 return icons[type];
-            }
-            else if (Bodies.DefaultStarIcons.ContainsKey(type))
-            {
-                return Bodies.DefaultStarIcons[type];
             }
             else if (icons.ContainsKey(EDStar.Unknown))
             {
@@ -488,10 +383,6 @@ namespace EliteDangerousCore
             if (icons != null && icons.ContainsKey(type))
             {
                 return icons[type];
-            }
-            else if (Bodies.DefaultPlanetIcons.ContainsKey(type))
-            {
-                return Bodies.DefaultPlanetIcons[type];
             }
             else if (icons != null && icons.ContainsKey(EDPlanet.Unknown))
             {

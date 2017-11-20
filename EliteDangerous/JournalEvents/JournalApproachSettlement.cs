@@ -34,8 +34,6 @@ namespace EliteDangerousCore.JournalEvents
         public string Name { get; set; }
         public string Name_Localised { get; set; }
 
-        public override System.Drawing.Bitmap DefaultIcon { get { return EliteDangerous.Properties.Resources.approachsettlement; } }
-
         public override void FillInformation(out string summary, out string info, out string detailed) //V
         {
             summary = EventTypeStr.SplitCapsWord();

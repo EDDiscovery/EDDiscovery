@@ -34,7 +34,6 @@ namespace EliteDangerousCore.JournalEvents
         }
         public string Name { get; set; }
 
-        public override System.Drawing.Bitmap DefaultIcon { get { return EliteDangerous.Properties.Resources.crewfire; } }
 
         public override void FillInformation(out string summary, out string info, out string detailed) //V
         {

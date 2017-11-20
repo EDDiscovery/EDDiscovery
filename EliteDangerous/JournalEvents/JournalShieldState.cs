@@ -33,11 +33,11 @@ namespace EliteDangerousCore.JournalEvents
         }
         public bool ShieldsUp { get; set; }
 
-        public override System.Drawing.Bitmap DefaultIcon
+        public override System.Drawing.Image Icon
         {
             get
             {
-                return ShieldsUp ? EliteDangerous.Properties.Resources.shieldsup : EliteDangerous.Properties.Resources.shieldsdown;
+                return ShieldsUp ? GetIcon(JournalTypeEnum.ShieldState_ShieldsUp) : GetIcon(JournalTypeEnum.ShieldState_ShieldsDown);
             }
         }
 

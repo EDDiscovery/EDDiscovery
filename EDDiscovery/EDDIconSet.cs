@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace EDDiscovery
 {
-    public class EDDIconSet : EliteDangerousCore.EliteIconSet
+    public class EDDIconSet : EliteDangerousCore.IconSet
     {
         private EDDIconSet() { }
 
@@ -17,11 +17,5 @@ namespace EDDiscovery
         }
 
         public static EDDIconSet Instance { get; private set; }
-
-        public IReadOnlyDictionary<EliteDangerousCore.EDStar, System.Drawing.Image> StarTypeIcons { get; set; }
-
-        public IReadOnlyDictionary<EliteDangerousCore.EDPlanet, System.Drawing.Image> PlanetTypeIcons { get; set; }
-
-        public IReadOnlyDictionary<EliteDangerousCore.JournalTypeEnum, System.Drawing.Image> JournalTypeIcons { get; set; }
     }
 }

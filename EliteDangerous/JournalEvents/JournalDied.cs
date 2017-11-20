@@ -69,7 +69,6 @@ namespace EliteDangerousCore.JournalEvents
 
         public Killer[] Killers { get; set; }
 
-        public override System.Drawing.Bitmap DefaultIcon { get { return EliteDangerous.Properties.Resources.Coffinicon; } }
 
         public override void FillInformation(out string summary, out string info, out string detailed) //V
         {

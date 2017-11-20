@@ -53,7 +53,6 @@ namespace EliteDangerousCore.JournalEvents
         public Material[] Manufactured { get; set; }
         public Material[] Encoded { get; set; }
 
-        public override System.Drawing.Bitmap DefaultIcon { get { return EliteDangerous.Properties.Resources.materials; } }
 
         void FixNames(Material[] a)
         {

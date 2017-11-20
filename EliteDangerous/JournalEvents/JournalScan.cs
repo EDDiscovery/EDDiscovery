@@ -755,7 +755,6 @@ namespace EliteDangerousCore.JournalEvents
 
         }
 
-        public override System.Drawing.Bitmap DefaultIcon { get { return EliteDangerous.Properties.Resources.scan; } }
 
         public bool IsStarNameRelated(string starname, string designation = null)
         {

@@ -60,7 +60,6 @@ namespace EliteDangerousCore.JournalEvents
         public long TransferPrice { get; set; }
         public int? nTransferTime { get; set; }
 
-        public override System.Drawing.Bitmap DefaultIcon { get { return EliteDangerous.Properties.Resources.shipyardtransfer; } }
 
         public void Ledger(Ledger mcl, DB.SQLiteConnectionUser conn)
         {

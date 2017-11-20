@@ -291,7 +291,7 @@ namespace EDDiscovery._3DMap
                 {
                     if (gmo.galMapType.Enabled)
                     {
-                        Bitmap touse = gmo.galMapType.Image;                        // under our control, so must have it
+                        Bitmap touse = new Bitmap(gmo.galMapType.Image);                        // under our control, so must have it
 
                         if (touse != null && gmo.points.Count > 0)             // if it has an image its a point object , and has co-ord
                         {

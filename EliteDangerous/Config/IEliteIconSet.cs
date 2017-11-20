@@ -14,12 +14,21 @@
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 
+using EliteDangerousCore.EDSM;
+using System;
+using System.Collections.Generic;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
 namespace EliteDangerousCore
 {
     public interface EliteIconSet
     {
-        IReadOnlyDictionary<EDStar, System.Drawing.Image> StarTypeIcons { get; }
-        IReadOnlyDictionary<EDPlanet, System.Drawing.Image> PlanetTypeIcons { get; }
-        IReadOnlyDictionary<JournalTypeEnum, System.Drawing.Image> JournalTypeIcons { get; }
+        IReadOnlyDictionary<EDStar, Image> StarTypeIcons { get; }
+        IReadOnlyDictionary<EDPlanet, Image> PlanetTypeIcons { get; }
+        IReadOnlyDictionary<JournalTypeEnum, Image> JournalTypeIcons { get; }
+        IReadOnlyDictionary<GalMapTypeEnum, Image> GalMapTypeIcons { get; }
     }
 }

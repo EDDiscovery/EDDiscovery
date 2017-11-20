@@ -38,7 +38,6 @@ namespace EliteDangerousCore.JournalEvents
         public long Cost { get; set; }
         public bool Bankrupt { get; set; }
 
-        public override System.Drawing.Bitmap DefaultIcon { get { return EliteDangerous.Properties.Resources.ressurect; } }
 
         public void Ledger(Ledger mcl, DB.SQLiteConnectionUser conn)
         {

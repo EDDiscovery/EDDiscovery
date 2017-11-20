@@ -32,7 +32,6 @@ namespace EliteDangerousCore.JournalEvents
 
         public string Name { get; set; }
         public string System { get; set; }
-        public override System.Drawing.Bitmap DefaultIcon { get { return EliteDangerous.Properties.Resources.communitygoaldiscard; } }
 
         public override void FillInformation(out string summary, out string info, out string detailed) //V
         {

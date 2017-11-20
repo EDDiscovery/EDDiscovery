@@ -33,7 +33,6 @@ namespace EliteDangerousCore.JournalEvents
             shp.DockSRV();
         }
 
-        public override System.Drawing.Bitmap DefaultIcon { get { return EliteDangerous.Properties.Resources.docksrv; } }
 
         public override void FillInformation(out string summary, out string info, out string detailed)  //V
         {

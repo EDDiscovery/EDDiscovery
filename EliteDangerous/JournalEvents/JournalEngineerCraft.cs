@@ -67,7 +67,6 @@ namespace EliteDangerousCore.JournalEvents
         public int Level { get; set; }
         public Dictionary<string, int> Ingredients { get; set; }
 
-        public override System.Drawing.Bitmap DefaultIcon { get { return EliteDangerous.Properties.Resources.engineercraft; } }
 
         public void MaterialList(MaterialCommoditiesList mc, DB.SQLiteConnectionUser conn)
         {

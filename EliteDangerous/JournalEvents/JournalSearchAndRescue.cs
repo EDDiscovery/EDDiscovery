@@ -41,8 +41,6 @@ namespace EliteDangerousCore.JournalEvents
         public int Count { get; set; }
         public long Reward { get; set; }
 
-        public override System.Drawing.Bitmap DefaultIcon { get { return EliteDangerous.Properties.Resources.searchrescue; } }  
-
         public override void FillInformation(out string summary, out string info, out string detailed) //V
         {
             summary = EventTypeStr.SplitCapsWord();

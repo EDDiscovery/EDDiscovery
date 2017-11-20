@@ -30,7 +30,6 @@ namespace EliteDangerousCore.JournalEvents
 
         }
         public string Power { get; set; }
-        public override System.Drawing.Bitmap DefaultIcon { get { return EliteDangerous.Properties.Resources.powerplayjoin; } }
 
         public override void FillInformation(out string summary, out string info, out string detailed) //V
         {

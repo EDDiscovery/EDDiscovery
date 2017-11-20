@@ -182,6 +182,10 @@ namespace EliteDangerousCore
 
         RestockVehicle_SRV = 10750,
         RestockVehicle_Fighter = 10751,
+        ShieldState_ShieldsUp = 10830,
+        ShieldState_ShieldsDown = 10831,
+        VehicleSwitch_Mothership = 10950,
+        VehicleSwitch_Fighter = 10951,
     }
 
     public enum CombatRank
@@ -353,8 +357,6 @@ namespace EliteDangerousCore
 
         #region Formatting control and Icons
 
-        public abstract System.Drawing.Bitmap DefaultIcon { get; }
-
         public static System.Drawing.Image GetIcon(JournalTypeEnum type)
         {
             IReadOnlyDictionary<JournalTypeEnum, System.Drawing.Image> lookup = EliteConfigInstance.InstanceIconSet?.JournalTypeIcons;
@@ -371,7 +373,7 @@ namespace EliteDangerousCore
         {
             get
             {
-                return GetIcon(this.EventTypeID) ?? this.DefaultIcon;
+                return GetIcon(this.EventTypeID) ?? EliteDangerous.Properties.Resources._event;
             }
         }
 

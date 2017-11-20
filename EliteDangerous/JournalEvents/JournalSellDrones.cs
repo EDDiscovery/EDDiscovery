@@ -39,7 +39,6 @@ namespace EliteDangerousCore.JournalEvents
         public long SellPrice { get; set; }
         public long TotalSale { get; set; }
 
-        public override System.Drawing.Bitmap DefaultIcon { get { return EliteDangerous.Properties.Resources.selldrones; } }
 
         public void Ledger(Ledger mcl, DB.SQLiteConnectionUser conn)
         {

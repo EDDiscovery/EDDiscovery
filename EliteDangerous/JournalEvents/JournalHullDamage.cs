@@ -30,7 +30,6 @@ namespace EliteDangerousCore.JournalEvents
         }
         public double Health { get; set; }
 
-        public override System.Drawing.Bitmap DefaultIcon { get { return EliteDangerous.Properties.Resources.damage; } }
 
         public override void FillInformation(out string summary, out string info, out string detailed) //V
         {

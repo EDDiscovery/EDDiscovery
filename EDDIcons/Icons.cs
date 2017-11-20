@@ -7,8 +7,7 @@ using System.Drawing;
 using System.Reflection;
 using System.IO;
 using System.Collections;
-using EliteDangerousCore;
-    
+
 namespace EDDiscovery.Icons
 {
     public static class Icons
@@ -55,29 +54,5 @@ namespace EDDiscovery.Icons
         public IEnumerator<KeyValuePair<T, Image>> GetEnumerator() => icons.GetEnumerator();
         public bool TryGetValue(T key, out Image value) => icons.TryGetValue(key, out value);
         IEnumerator IEnumerable.GetEnumerator() => icons.GetEnumerator();
-    }
-
-    public class PlanetIcons : Icons<EDPlanet>
-    {
-        public PlanetIcons()
-        {
-            Init("Planets", Enum.GetValues(typeof(EDPlanet)).OfType<EDPlanet>());
-        }
-    }
-
-    public class StarIcons : Icons<EDStar>
-    {
-        public StarIcons()
-        {
-            Init("Stars", Enum.GetValues(typeof(EDStar)).OfType<EDStar>());
-        }
-    }
-
-    public class JournalIcons : Icons<JournalTypeEnum>
-    {
-        public JournalIcons()
-        {
-            Init("Journal", Enum.GetValues(typeof(JournalTypeEnum)).OfType<JournalTypeEnum>());
-        }
     }
 }

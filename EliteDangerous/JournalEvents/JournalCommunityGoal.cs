@@ -129,8 +129,6 @@ namespace EliteDangerousCore.JournalEvents
         public List<CommunityGoal> CommunityGoals;
         public string CommunityGoalList;
 
-        public override System.Drawing.Bitmap DefaultIcon { get { return EliteDangerous.Properties.Resources.communitygoal; } }
-
         public override void FillInformation(out string summary, out string info, out string detailed) //V
         {
             summary = EventTypeStr.SplitCapsWord();

@@ -34,7 +34,6 @@ namespace EliteDangerousCore.JournalEvents
         public string Power { get; set; }
         public long Cost { get; set; }
 
-        public override System.Drawing.Bitmap DefaultIcon { get { return EliteDangerous.Properties.Resources.powerplayfasttrack; } }
 
         public void Ledger(Ledger mcl, DB.SQLiteConnectionUser conn)
         {

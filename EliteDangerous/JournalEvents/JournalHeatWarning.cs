@@ -27,7 +27,6 @@ namespace EliteDangerousCore.JournalEvents
         {
         }
 
-        public override System.Drawing.Bitmap DefaultIcon { get { return EliteDangerous.Properties.Resources.heatdamage; } }
 
         public override void FillInformation(out string summary, out string info, out string detailed) //V
         {

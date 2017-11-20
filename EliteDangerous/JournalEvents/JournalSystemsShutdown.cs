@@ -33,14 +33,6 @@ namespace EliteDangerousCore.JournalEvents
     {
         public JournalSystemsShutdown(JObject evt) : base(evt, JournalTypeEnum.SystemsShutdown) { }
 
-        public override System.Drawing.Bitmap DefaultIcon
-        {
-            get
-            {
-                return EliteDangerous.Properties.Resources.scanned;
-            }
-        }
-
         public override void FillInformation(out string summary, out string info, out string detailed)
         {
             summary = EventTypeStr.SplitCapsWord();

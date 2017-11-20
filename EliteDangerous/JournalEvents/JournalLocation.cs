@@ -108,7 +108,6 @@ namespace EliteDangerousCore.JournalEvents
 
 
 
-        public override System.Drawing.Bitmap DefaultIcon { get { return EliteDangerous.Properties.Resources.location; } }
 
     }
 }

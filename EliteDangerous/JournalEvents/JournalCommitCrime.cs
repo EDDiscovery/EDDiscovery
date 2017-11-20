@@ -45,8 +45,6 @@ namespace EliteDangerousCore.JournalEvents
         public long? Fine { get; set; }
         public long? Bounty { get; set; }
 
-        public override System.Drawing.Bitmap DefaultIcon { get { return EliteDangerous.Properties.Resources.commitcrime; } }
-
         public void LedgerNC(Ledger mcl, DB.SQLiteConnectionUser conn)
         {
             string v = (VictimLocalised.Length > 0) ? VictimLocalised : Victim;

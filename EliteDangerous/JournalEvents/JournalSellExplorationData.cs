@@ -43,7 +43,6 @@ namespace EliteDangerousCore.JournalEvents
         public long BaseValue { get; set; }
         public long Bonus { get; set; }
 
-        public override System.Drawing.Bitmap DefaultIcon { get { return EliteDangerous.Properties.Resources.sellexplorationdata; } }
 
         public void Ledger(Ledger mcl, DB.SQLiteConnectionUser conn)
         {

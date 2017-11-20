@@ -51,8 +51,6 @@ Note: Other music track names may be used in future
         public string MusicTrack { get; set; }
         public EDMusicTrackEnum MusicTrackID { get; set; }
 
-        public override System.Drawing.Bitmap DefaultIcon { get { return EliteDangerous.Properties.Resources.music; } }  // TODO?
-
         public override void FillInformation(out string summary, out string info, out string detailed) //V
         {
             summary = EventTypeStr.SplitCapsWord();

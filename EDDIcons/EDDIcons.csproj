@@ -9,8 +9,9 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>EDDiscovery.Icons</RootNamespace>
     <AssemblyName>EDDiscovery.Icons</AssemblyName>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -45,7 +46,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Icons.cs" />
-    <Compile Include="IconSet.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -277,12 +277,6 @@
     <EmbeddedResource Include="Stars\Y.png" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\EliteDangerous\EliteDangerous.csproj">
-      <Project>{019917a4-7342-4f67-8aaf-9e20c016a935}</Project>
-      <Name>EliteDangerous</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="Stars\Unknown.png" />
   </ItemGroup>
   <ItemGroup>
@@ -293,5 +287,49 @@
     <EmbeddedResource Include="Journal\ShieldState.png" />
     <EmbeddedResource Include="Journal\ShieldState_Up.png" />
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="GalMap\beacon.png" />
+    <EmbeddedResource Include="GalMap\blackHole.png" />
+    <EmbeddedResource Include="GalMap\cometaryBody.png" />
+    <EmbeddedResource Include="GalMap\deepSpaceOutpost.png" />
+    <EmbeddedResource Include="GalMap\EDSMUnknown.png" />
+    <EmbeddedResource Include="GalMap\historicalLocation.png" />
+    <EmbeddedResource Include="GalMap\jumponiumRichSystem.png" />
+    <EmbeddedResource Include="GalMap\minorPOI.png" />
+    <EmbeddedResource Include="GalMap\mysteryPOI.png" />
+    <EmbeddedResource Include="GalMap\nebula.png" />
+    <EmbeddedResource Include="GalMap\planetaryNebula.png" />
+    <EmbeddedResource Include="GalMap\planetFeatures.png" />
+    <EmbeddedResource Include="GalMap\pulsar.png" />
+    <EmbeddedResource Include="GalMap\restrictedSectors.png" />
+    <EmbeddedResource Include="GalMap\starCluster.png" />
+    <EmbeddedResource Include="GalMap\stellarRemnant.png" />
+    <EmbeddedResource Include="GalMap\surfacePOI.png" />
+    <EmbeddedResource Include="Panel\Commodities.png" />
+    <EmbeddedResource Include="Panel\EDSM.png" />
+    <EmbeddedResource Include="Panel\EstimatedValues.png" />
+    <EmbeddedResource Include="Panel\Expedition.png" />
+    <EmbeddedResource Include="Panel\Exploration.png" />
+    <EmbeddedResource Include="Panel\Grid.png" />
+    <EmbeddedResource Include="Panel\Journal.png" />
+    <EmbeddedResource Include="Panel\Ledger.png" />
+    <EmbeddedResource Include="Panel\Materials.png" />
+    <EmbeddedResource Include="Panel\Modules.png" />
+    <EmbeddedResource Include="Panel\NotePanel.png" />
+    <EmbeddedResource Include="Panel\Route.png" />
+    <EmbeddedResource Include="Panel\RouteTracker.png" />
+    <EmbeddedResource Include="Panel\Scan.png" />
+    <EmbeddedResource Include="Panel\ScreenShot.png" />
+    <EmbeddedResource Include="Panel\Settings.png" />
+    <EmbeddedResource Include="Panel\ShoppingList.png" />
+    <EmbeddedResource Include="Panel\Spanel.png" />
+    <EmbeddedResource Include="Panel\StarList.png" />
+    <EmbeddedResource Include="Panel\Statistics.png" />
+    <EmbeddedResource Include="Panel\Synthesis.png" />
+    <EmbeddedResource Include="Panel\TravelGrid.png" />
+    <EmbeddedResource Include="Panel\Trilateration.png" />
+    <EmbeddedResource Include="Panel\Trippanel.png" />
+  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
