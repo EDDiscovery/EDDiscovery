@@ -41,6 +41,7 @@ namespace EDDiscovery.UserControls
         public UserControlEDSM()
         {
             InitializeComponent();
+            var corner = dataGridViewEDSM.TopLeftHeaderCell; // work around #1487
             buttonExtEDSMSphere.Enabled = buttonExtDBLookup.Enabled = false;
         }
 
