@@ -18,8 +18,8 @@ namespace EliteDangerousCore
 {
     public interface EliteIconSet
     {
-        Dictionary<EDStar, System.Drawing.Image> StarTypeIcons { get; }
-        Dictionary<EDPlanet, System.Drawing.Image> PlanetTypeIcons { get; }
-        Dictionary<JournalTypeEnum, System.Drawing.Image> JournalTypeIcons { get; }
+        IReadOnlyDictionary<EDStar, System.Drawing.Image> StarTypeIcons { get; }
+        IReadOnlyDictionary<EDPlanet, System.Drawing.Image> PlanetTypeIcons { get; }
+        IReadOnlyDictionary<JournalTypeEnum, System.Drawing.Image> JournalTypeIcons { get; }
     }
 }

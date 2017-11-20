@@ -18,10 +18,10 @@ namespace EDDiscovery
 
         public static EDDIconSet Instance { get; private set; }
 
-        public Dictionary<EliteDangerousCore.EDStar, System.Drawing.Image> StarTypeIcons { get; set; }
+        public IReadOnlyDictionary<EliteDangerousCore.EDStar, System.Drawing.Image> StarTypeIcons { get; set; }
 
-        public Dictionary<EliteDangerousCore.EDPlanet, System.Drawing.Image> PlanetTypeIcons { get; set; }
+        public IReadOnlyDictionary<EliteDangerousCore.EDPlanet, System.Drawing.Image> PlanetTypeIcons { get; set; }
 
-        public Dictionary<EliteDangerousCore.JournalTypeEnum, System.Drawing.Image> JournalTypeIcons { get; set; }
+        public IReadOnlyDictionary<EliteDangerousCore.JournalTypeEnum, System.Drawing.Image> JournalTypeIcons { get; set; }
     }
 }
