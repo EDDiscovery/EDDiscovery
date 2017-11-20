@@ -38,6 +38,7 @@ namespace EDDiscovery.UserControls
         public UserControlMaterialCommodities()
         {
             InitializeComponent();
+            var corner = dataGridViewMC.TopLeftHeaderCell; // work around #1487
         }
 
         public override void Init()
