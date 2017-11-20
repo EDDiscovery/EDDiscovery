@@ -51,7 +51,7 @@ namespace BaseUtils
     {
         public static string CurrentWindow = "Current window";
 
-        public interface AdditionalKeyParser
+        public interface IAdditionalKeyParser
         {
             Tuple<string, int, string> Parse(string s);      // return replace key string, or null if not recognised.  int is parse length, Any errors signal in second string or null
         }
@@ -114,7 +114,7 @@ namespace BaseUtils
 
         enum KMode { press, up, down };
 
-        private static string ParseKeys(string s, int defdelay, int defshiftdelay, int defupdelay, AdditionalKeyParser additionalkeyparser = null)
+        private static string ParseKeys(string s, int defdelay, int defshiftdelay, int defupdelay, IAdditionalKeyParser additionalkeyparser = null)
         {
             if (events != null)
                 events.Clear();
@@ -381,7 +381,7 @@ namespace BaseUtils
         }
 
 
-        public static string Send(string keys, int keydelay, int shiftdelay, int updelay, string pname = null, AdditionalKeyParser additionalkeyparser = null)
+        public static string Send(string keys, int keydelay, int shiftdelay, int updelay, string pname = null, IAdditionalKeyParser additionalkeyparser = null)
         {
             if (!keys.HasChars())
                 return "";
@@ -425,7 +425,7 @@ namespace BaseUtils
             return "";
         }
 
-        public static string VerifyKeys(string s, AdditionalKeyParser additionalkeyparser = null)
+        public static string VerifyKeys(string s, IAdditionalKeyParser additionalkeyparser = null)
         {
             return ParseKeys(s, 10, 10, 10, additionalkeyparser);
         }

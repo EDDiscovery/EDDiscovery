@@ -143,7 +143,7 @@ namespace ExtendedControls
             }
 
             bool framed = !(FormBorderStyle == FormBorderStyle.None);
-            ThemeableForms theme = ThemeableFormsInstance.Instance;
+            ITheme theme = ThemeableFormsInstance.Instance;
             if (theme != null)  // paranoid
             {
                 this.Font = new Font(theme.FontName, 12.0F);

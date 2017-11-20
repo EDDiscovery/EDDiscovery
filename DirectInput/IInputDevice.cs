@@ -13,11 +13,23 @@
  * 
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
+using System.Collections.Generic;
+using System.Threading;
 
-namespace ExtendedControls
+namespace DirectInputDevices
 {
-    public static class ThemeableFormsInstance
+    public interface IInputDevice
     {
-        static public ITheme Instance { get; set; }
+        InputDeviceIdentity ID();
+        AutoResetEvent Eventhandle();               // set when device changes state
+
+        List<InputDeviceEvent> GetEvents();         // get events after change state
+        void Dispose();
+
+        string EventName(InputDeviceEvent e);       // Frontier event name from input event
+
+        bool? IsPressed(string eventname);          // if an input supports pressed, true/false, else null
+
+        string ToString();
     }
 }

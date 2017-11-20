@@ -16,8 +16,8 @@ namespace EDDiscovery.UserControls
 {
     public partial class UserControlContainerGrid: UserControlCommonBase        // circular, huh! neat!
     {
-        private UserControlCursorType ucursor_history;     // one passed to us, refers to thc.uctg
-        private UserControlCursorType ucursor_inuse;  // one in use
+        private IHistoryCursor ucursor_history;     // one passed to us, refers to thc.uctg
+        private IHistoryCursor ucursor_inuse;  // one in use
 
         private List<UserControlContainerResizable> uccrlist = new List<UserControlContainerResizable>();
 
@@ -138,7 +138,7 @@ namespace EDDiscovery.UserControls
             System.Diagnostics.Debug.WriteLine("---- END Grid Saving to " + DbWindows);
         }
 
-        public override void ChangeCursorType(UserControlCursorType thc)     // a grid below changed its travel grid, update our history one
+        public override void ChangeCursorType(IHistoryCursor thc)     // a grid below changed its travel grid, update our history one
         {
             bool changedinuse = Object.ReferenceEquals(ucursor_inuse, ucursor_history);   // if we are using the history as the current tg
             //System.Diagnostics.Debug.WriteLine("Grid CTG " + ucursor_history.GetHashCode() + " IU " + ucursor_inuse.GetHashCode() + " New " + thc.GetHashCode());
@@ -241,7 +241,7 @@ namespace EDDiscovery.UserControls
             if (v == null)
                 v = uccrlist.Find(x => x.control.GetType() == typeof(UserControlStarList));   // find one with Journal grid if no TG
 
-            UserControlCursorType uctgfound = (v != null) ? (v.control as UserControlCursorType) : null;    // if found, set to it
+            IHistoryCursor uctgfound = (v != null) ? (v.control as IHistoryCursor) : null;    // if found, set to it
 
             if ( (uctgfound != null && !Object.ReferenceEquals(uctgfound,ucursor_inuse) ) ||    // if got one but its not the one currently in use
                  (uctgfound == null && !Object.ReferenceEquals(ucursor_history,ucursor_inuse))    // or not found, but we are not on the history one

@@ -45,7 +45,7 @@ namespace EDDiscovery.UserControls
             discoveryform.OnNewEntry += NewEntry;
         }
 
-        public override void ChangeCursorType(UserControlCursorType thc)
+        public override void ChangeCursorType(IHistoryCursor thc)
         {
             uctg.OnTravelSelectionChanged -= Display;
             uctg = thc;
