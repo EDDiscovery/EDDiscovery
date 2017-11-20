@@ -461,7 +461,7 @@ namespace EliteDangerousCore
 
         public static System.Drawing.Image GetStarTypeImage(EDStar type)
         {
-            Dictionary<EDStar, System.Drawing.Image> icons = EliteConfigInstance.InstanceConfig?.StarTypeIcons;
+            Dictionary<EDStar, System.Drawing.Image> icons = EliteConfigInstance.InstanceIconSet?.StarTypeIcons;
 
             if (icons != null && icons.ContainsKey(type))
             {
@@ -483,7 +483,7 @@ namespace EliteDangerousCore
 
         public static System.Drawing.Image GetPlanetClassImage(EDPlanet type)
         {
-            Dictionary<EDPlanet, System.Drawing.Image> icons = EliteConfigInstance.InstanceConfig?.PlanetTypeIcons;
+            Dictionary<EDPlanet, System.Drawing.Image> icons = EliteConfigInstance.InstanceIconSet?.PlanetTypeIcons;
 
             if (icons != null && icons.ContainsKey(type))
             {

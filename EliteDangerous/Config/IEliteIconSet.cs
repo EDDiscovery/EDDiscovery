@@ -1,5 +1,5 @@
-﻿/*
- * Copyright © 2016 EDDiscovery development team
+/*
+ * Copyright � 2016 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -16,10 +16,10 @@
 
 namespace EliteDangerousCore
 {
-    public interface IEliteConfig
+    public interface EliteIconSet
     {
-        int DefaultMapColour { get; }
-        bool ClearCommodities { get; }
-        bool ClearMaterials { get; }
+        Dictionary<EDStar, System.Drawing.Image> StarTypeIcons { get; }
+        Dictionary<EDPlanet, System.Drawing.Image> PlanetTypeIcons { get; }
+        Dictionary<JournalTypeEnum, System.Drawing.Image> JournalTypeIcons { get; }
     }
 }

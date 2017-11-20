@@ -373,11 +373,5 @@ namespace EDDiscovery
                 mapcentreonselection = value;
             }
         }
-
-        public Dictionary<EliteDangerousCore.EDStar, System.Drawing.Image> StarTypeIcons { get; set; }
-
-        public Dictionary<EliteDangerousCore.EDPlanet, System.Drawing.Image> PlanetTypeIcons { get; set; }
-
-        public Dictionary<EliteDangerousCore.JournalTypeEnum, System.Drawing.Image> JournalTypeIcons { get; set; }
     }
 }

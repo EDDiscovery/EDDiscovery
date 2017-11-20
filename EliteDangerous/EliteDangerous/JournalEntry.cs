@@ -357,7 +357,7 @@ namespace EliteDangerousCore
 
         public static System.Drawing.Image GetIcon(JournalTypeEnum type)
         {
-            Dictionary<JournalTypeEnum, System.Drawing.Image> lookup = EliteConfigInstance.InstanceConfig?.JournalTypeIcons;
+            Dictionary<JournalTypeEnum, System.Drawing.Image> lookup = EliteConfigInstance.InstanceIconSet?.JournalTypeIcons;
 
             if (lookup != null && lookup.ContainsKey(type))
             {
