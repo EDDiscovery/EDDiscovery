@@ -862,11 +862,11 @@ namespace EliteDangerousCore.EDSM
                 jout["Rings"] = jring;
             }
 
-            if (!jo["Materials"].Empty())  // Check if matieals has null
+            if (!jo["materials"].Empty())  // Check if materials has null
             {
                 Dictionary<string, double?> mats;
                 Dictionary<string, double> mats2;
-                mats = jo["Materials"]?.ToObject<Dictionary<string, double?>>();
+                mats = jo["materials"]?.ToObject<Dictionary<string, double?>>();
                 mats2 = new Dictionary<string, double>();
 
                 foreach (string key in mats.Keys)
