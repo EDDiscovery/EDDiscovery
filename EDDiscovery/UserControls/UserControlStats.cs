@@ -33,6 +33,7 @@ namespace EDDiscovery.UserControls
         public UserControlStats()
         {
             InitializeComponent();
+            var corner = dataGridViewStats.TopLeftHeaderCell; // work around #1487
         }
 
         public override void Init()

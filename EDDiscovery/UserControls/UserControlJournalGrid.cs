@@ -66,6 +66,7 @@ namespace EDDiscovery.UserControls
         public UserControlJournalGrid()
         {
             InitializeComponent();
+            var corner = dataGridViewJournal.TopLeftHeaderCell; // work around #1487
         }
 
         public override void Init()
