@@ -177,13 +177,13 @@ namespace EDDiscovery.Actions
 
         public void EditLastPack()
         {
-            if (lasteditedpack.Length > 0 && EditActionFile(lasteditedpack))
+            if (lasteditedpack.Length > 0 && EditPack(lasteditedpack))
                 return;
             else
                 ExtendedControls.MessageBoxTheme.Show(discoveryform, "Action pack does not exist anymore or never set", "WARNING!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
         }
 
-        private bool EditActionFile(string name)            // edit pack name
+        public bool EditPack(string name)            // edit pack name
         {
             List<string> jevents = JournalEntry.GetListOfEventsWithOptMethod(towords: false);
             jevents.Sort();
@@ -311,7 +311,7 @@ namespace EDDiscovery.Actions
 
         private void Dmf_OnEditActionFile(string name)      // wanna edit
         {
-            EditActionFile(name);
+            EditPack(name);
         }
 
         private void Dmf_OnEditGlobals()                    // edit the globals

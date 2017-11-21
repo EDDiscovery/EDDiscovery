@@ -31,7 +31,7 @@ namespace EDDiscovery.Actions
     {
         const string errmsgforbinding = "No keyboard binding for ";
 
-        class AKP : BaseUtils.EnhancedSendKeys.IAdditionalKeyParser      // AKP parser to pass to SendKeys
+        class AKP : BaseUtils.EnhancedSendKeysParser.IAdditionalKeyParser      // AKP parser to pass to SendKeys
         {
             public EliteDangerousCore.BindingsFile bindingsfile;
 
@@ -61,7 +61,7 @@ namespace EDDiscovery.Actions
 
                             if ( !keys.Contains(Keys.None)) // if no errors
                             {
-                                string keyseq = EnhancedSendKeys.GenerateCombinedSequence(keys);
+                                string keyseq = keys.GenerateSequence();
                                // System.Diagnostics.Debug.WriteLine("Frontier " + binding + "->" + keyseq);
                                 return new Tuple<string, int, string>(keyseq, endindex + 1, null);
                             }
@@ -119,7 +119,7 @@ namespace EDDiscovery.Actions
             {
                 // during this check, we don't moan about a binding not being present, since we don't need to..
 
-                string ret = BaseUtils.EnhancedSendKeys.VerifyKeys(keys, new AKP() { bindingsfile = bf });
+                string ret = BaseUtils.EnhancedSendKeysParser.VerifyKeys(keys, new AKP() { bindingsfile = bf });
 
                 if (ret.Contains(errmsgforbinding))     // Ignore these..
                     return "";

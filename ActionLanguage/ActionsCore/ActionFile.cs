@@ -53,6 +53,8 @@ namespace ActionLanguage
             filepath = f;
             name = n;
             fileencoding = Encoding.UTF8;
+            filevariables["ActionPackName"] = name;         
+            filevariables["ActionPackFilePath"] = filepath;
         }
 
         public ConditionLists actioneventlist { get; private set; }                        // note we use the list, but not the evaluate between conditions..

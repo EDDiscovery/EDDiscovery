@@ -44,7 +44,7 @@ namespace ExtendedControls
         int curinsertpoint = 0;
         string seperator;
         const string DefaultProcessID = "Default";
-        BaseUtils.EnhancedSendKeys.IAdditionalKeyParser additionalkeyparser;
+        BaseUtils.EnhancedSendKeysParser.IAdditionalKeyParser additionalkeyparser;
 
         public KeyForm()
         {
@@ -63,7 +63,7 @@ namespace ExtendedControls
                                 int defdelay = 50,     // -1 means program default, return -1 back
                                 bool allowkeysedit = false,
                                 List<string> additionalkeys = null,
-                                BaseUtils.EnhancedSendKeys.IAdditionalKeyParser parser = null)
+                                BaseUtils.EnhancedSendKeysParser.IAdditionalKeyParser parser = null)
         {
             if ( i != null )
                 Icon = i;
@@ -309,7 +309,7 @@ namespace ExtendedControls
                     MessageBoxTheme.Show(this, "Name a process to test sending keys");
                 else
                 {
-                    string err = BaseUtils.EnhancedSendKeys.Send(textBoxKeys.Text, DefaultDelay <= DefaultDelayID ? 10 : DefaultDelay, 2 , 2, textBoxSendTo.Text, additionalkeyparser);
+                    string err = BaseUtils.EnhancedSendKeys.SendToProcess(textBoxKeys.Text, DefaultDelay <= DefaultDelayID ? 10 : DefaultDelay, 2 , 2, textBoxSendTo.Text, additionalkeyparser);
                     if (err.Length > 0)
                         MessageBoxTheme.Show(this, "Error " + err + " - check entry");
                 }

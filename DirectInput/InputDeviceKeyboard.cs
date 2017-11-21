@@ -93,7 +93,7 @@ namespace DirectInputDevices
 
         static public bool CheckTranslation(Key k, Keys winkey)     // test function just for debugging
         {
-            System.Diagnostics.Debug.WriteLine("Check " + k + " vs " + winkey);
+            //System.Diagnostics.Debug.WriteLine("Check " + k + " vs " + winkey);
             if (sharptokeys.ContainsKey(k))
             {
                 return sharptokeys[k] == winkey;

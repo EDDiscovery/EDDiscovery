@@ -30,18 +30,24 @@ namespace ActionLanguage
         public static string programDefault = "Program Default";        // meaning use the program default vars for the process
 
         public static string globalvarProcessID = "KeyProcessTo";       // var global
-        public static string globalvarDelay = "KeyDelay";
-        public static string globalvarSilentOnErrors = "KeySilentOnError";
-        public static string globalvarAnnounciateOnError = "KeyAnnounciateOnError";
-
         protected static string ProcessID = "To";       // command tags
+
+        public static string globalvarDelay = "KeyDelay";
         protected static string DelayID = "Delay";
+
+        public static string globalvarUpDelay = "KeyUpDelay";
+        protected static string UpDelayID = "UpDelay";
+
+        public static string globalvarShiftDelay = "KeyShiftDelay";
+        protected static string ShiftDelayID = "ShiftDelay";
+
+        public static string globalvarSilentOnErrors = "KeySilentOnError";
         protected static string SilentOnError = "SilentOnError";
+
+        public static string globalvarAnnounciateOnError = "KeyAnnounciateOnError";
         protected static string AnnounciateOnError = "AnnounicateOnError";
 
         protected const int DefaultDelay = 10;
-        protected const int DefaultShiftDelay = 2;
-        protected const int DefaultUpDelay = 2;
 
         static public bool FromString(string s, out string keys, out ConditionVariables vars)
         {
@@ -72,7 +78,7 @@ namespace ActionLanguage
             return FromString(userdata, out saying, out vars) ? null : "Key command line not in correct format";
         }
 
-        static public string Menu(Form parent, System.Drawing.Icon ic, string userdata, List<string> additionalkeys, BaseUtils.EnhancedSendKeys.IAdditionalKeyParser additionalparser)
+        static public string Menu(Form parent, System.Drawing.Icon ic, string userdata, List<string> additionalkeys, BaseUtils.EnhancedSendKeysParser.IAdditionalKeyParser additionalparser)
         {
             ConditionVariables vars;
             string keys;
@@ -118,7 +124,7 @@ namespace ActionLanguage
 
         static List<string> errorsreported = new List<string>();
 
-        public bool ExecuteAction(ActionProgramRun ap, BaseUtils.EnhancedSendKeys.IAdditionalKeyParser akp )      // additional parser
+        public bool ExecuteAction(ActionProgramRun ap, BaseUtils.EnhancedSendKeysParser.IAdditionalKeyParser akp )      // additional parser
         { 
             string keys;
             ConditionVariables statementvars;
@@ -129,12 +135,14 @@ namespace ActionLanguage
 
                 if (errlist == null)
                 {
-                    int defdelay = vars.Exists(DelayID) ? vars[DelayID].InvariantParseInt(DefaultDelay) : (ap.VarExist(globalvarDelay) ? ap[globalvarDelay].InvariantParseInt(DefaultDelay) : DefaultDelay);
+                    int delay = vars.Exists(DelayID) ? vars[DelayID].InvariantParseInt(DefaultDelay) : (ap.VarExist(globalvarDelay) ? ap[globalvarDelay].InvariantParseInt(DefaultDelay) : DefaultDelay);
+                    int updelay = vars.Exists(UpDelayID) ? vars[UpDelayID].InvariantParseInt(DefaultDelay) : (ap.VarExist(globalvarUpDelay) ? ap[globalvarUpDelay].InvariantParseInt(DefaultDelay) : DefaultDelay);
+                    int shiftdelay = vars.Exists(ShiftDelayID) ? vars[ShiftDelayID].InvariantParseInt(DefaultDelay) : (ap.VarExist(globalvarShiftDelay) ? ap[globalvarShiftDelay].InvariantParseInt(DefaultDelay) : DefaultDelay);
                     string process = vars.Exists(ProcessID) ? vars[ProcessID] : (ap.VarExist(globalvarProcessID) ? ap[globalvarProcessID] : "");
                     string silentonerrors = vars.Exists(SilentOnError) ? vars[SilentOnError] : (ap.VarExist(globalvarSilentOnErrors) ? ap[globalvarSilentOnErrors] : "0");
                     string announciateonerrors = vars.Exists(AnnounciateOnError) ? vars[AnnounciateOnError] : (ap.VarExist(globalvarAnnounciateOnError) ? ap[globalvarAnnounciateOnError] : "0");
 
-                    string res = BaseUtils.EnhancedSendKeys.Send(keys, defdelay, DefaultShiftDelay, DefaultUpDelay, process, akp);
+                    string res = BaseUtils.EnhancedSendKeys.SendToProcess(keys, delay, shiftdelay, updelay, process, akp);
 
                     if (res.HasChars())
                     {
