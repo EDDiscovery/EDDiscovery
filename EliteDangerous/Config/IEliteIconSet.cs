@@ -24,7 +24,7 @@ using System.Threading.Tasks;
 
 namespace EliteDangerousCore
 {
-    public interface EliteIconSet
+    public interface IEliteIconSet
     {
         IReadOnlyDictionary<EDStar, Image> StarTypeIcons { get; }
         IReadOnlyDictionary<EDPlanet, Image> PlanetTypeIcons { get; }

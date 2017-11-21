@@ -76,6 +76,7 @@
     <Compile Include="CompanionAPI\RijndaelCrypt.cs" />
     <Compile Include="Config\EliteConfigInstance.cs" />
     <Compile Include="Config\IEliteConfig.cs" />
+    <Compile Include="Config\IEliteIconSet.cs" />
     <Compile Include="Config\IEliteOptions.cs" />
     <Compile Include="DB\BookmarkClass.cs" />
     <Compile Include="DB\IVisitedSystems.cs" />

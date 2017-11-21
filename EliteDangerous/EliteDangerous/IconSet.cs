@@ -41,7 +41,7 @@ namespace EliteDangerousCore
         }
     }
 
-    public class IconSet : EliteIconSet
+    public class IconSet : IEliteIconSet
     {
         public IReadOnlyDictionary<EDStar, Image> StarTypeIcons { get; } = new StarIcons();
 
