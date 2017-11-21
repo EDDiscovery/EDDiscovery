@@ -281,7 +281,7 @@ namespace EDDiscovery.UserControls
             // 
             this.checkBoxMaterials.Appearance = System.Windows.Forms.Appearance.Button;
             this.checkBoxMaterials.BackColor = System.Drawing.Color.Transparent;
-            this.checkBoxMaterials.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("checkBoxMaterials.BackgroundImage")));
+            this.checkBoxMaterials.BackgroundImage = global::EDDiscovery.Icons.Properties.Resources.material;
             this.checkBoxMaterials.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.checkBoxMaterials.CheckBoxColor = System.Drawing.Color.White;
             this.checkBoxMaterials.CheckBoxInnerColor = System.Drawing.Color.White;

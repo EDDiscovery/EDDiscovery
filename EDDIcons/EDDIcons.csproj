@@ -293,9 +293,9 @@
     <EmbeddedResource Include="Journal\RestockVehicle.png" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Journal\ShieldState_Down.png" />
+    <EmbeddedResource Include="Journal\ShieldState_ShieldsDown.png" />
     <EmbeddedResource Include="Journal\ShieldState.png" />
-    <EmbeddedResource Include="Journal\ShieldState_Up.png" />
+    <EmbeddedResource Include="Journal\ShieldState_ShieldsUp.png" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="GalMap\beacon.png" />
@@ -315,30 +315,30 @@
     <EmbeddedResource Include="GalMap\starCluster.png" />
     <EmbeddedResource Include="GalMap\stellarRemnant.png" />
     <EmbeddedResource Include="GalMap\surfacePOI.png" />
-    <EmbeddedResource Include="Panel\Commodities.png" />
-    <EmbeddedResource Include="Panel\EDSM.png" />
-    <EmbeddedResource Include="Panel\EstimatedValues.png" />
-    <EmbeddedResource Include="Panel\Expedition.png" />
-    <EmbeddedResource Include="Panel\Exploration.png" />
-    <EmbeddedResource Include="Panel\Grid.png" />
-    <EmbeddedResource Include="Panel\Journal.png" />
-    <EmbeddedResource Include="Panel\Ledger.png" />
-    <EmbeddedResource Include="Panel\Materials.png" />
-    <EmbeddedResource Include="Panel\Modules.png" />
-    <EmbeddedResource Include="Panel\NotePanel.png" />
-    <EmbeddedResource Include="Panel\Route.png" />
-    <EmbeddedResource Include="Panel\RouteTracker.png" />
-    <EmbeddedResource Include="Panel\Scan.png" />
-    <EmbeddedResource Include="Panel\ScreenShot.png" />
-    <EmbeddedResource Include="Panel\Settings.png" />
-    <EmbeddedResource Include="Panel\ShoppingList.png" />
-    <EmbeddedResource Include="Panel\Spanel.png" />
-    <EmbeddedResource Include="Panel\StarList.png" />
-    <EmbeddedResource Include="Panel\Statistics.png" />
-    <EmbeddedResource Include="Panel\Synthesis.png" />
-    <EmbeddedResource Include="Panel\TravelGrid.png" />
-    <EmbeddedResource Include="Panel\Trilateration.png" />
-    <EmbeddedResource Include="Panel\Trippanel.png" />
+    <EmbeddedResource Include="Panels\Commodities.png" />
+    <EmbeddedResource Include="Panels\EDSM.png" />
+    <EmbeddedResource Include="Panels\EstimatedValues.png" />
+    <EmbeddedResource Include="Panels\Expedition.png" />
+    <EmbeddedResource Include="Panels\Exploration.png" />
+    <EmbeddedResource Include="Panels\Grid.png" />
+    <EmbeddedResource Include="Panels\Journal.png" />
+    <EmbeddedResource Include="Panels\Ledger.png" />
+    <EmbeddedResource Include="Panels\Materials.png" />
+    <EmbeddedResource Include="Panels\Modules.png" />
+    <EmbeddedResource Include="Panels\NotePanel.png" />
+    <EmbeddedResource Include="Panels\Route.png" />
+    <EmbeddedResource Include="Panels\RouteTracker.png" />
+    <EmbeddedResource Include="Panels\Scan.png" />
+    <EmbeddedResource Include="Panels\ScreenShot.png" />
+    <EmbeddedResource Include="Panels\Settings.png" />
+    <EmbeddedResource Include="Panels\ShoppingList.png" />
+    <EmbeddedResource Include="Panels\Spanel.png" />
+    <EmbeddedResource Include="Panels\StarList.png" />
+    <EmbeddedResource Include="Panels\Statistics.png" />
+    <EmbeddedResource Include="Panels\Synthesis.png" />
+    <EmbeddedResource Include="Panels\TravelGrid.png" />
+    <EmbeddedResource Include="Panels\Trilateration.png" />
+    <EmbeddedResource Include="Panels\Trippanel.png" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Legacy\eddiscovery_logo_100.png" />
@@ -629,6 +629,26 @@
     <EmbeddedResource Include="Legacy\WolfRayet.png" />
     <EmbeddedResource Include="Legacy\Y2.png" />
     <EmbeddedResource Include="Legacy\YellowDot.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Panels\Log.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Panels\Engineering.png" />
+    <EmbeddedResource Include="Panels\MarketData.png" />
+    <EmbeddedResource Include="Panels\StarDistance.png" />
+    <EmbeddedResource Include="Panels\SystemInformation.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Panels\Missions.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Journal\AfmuRepair.png" />
+    <EmbeddedResource Include="Journal\EngineerContribution_MatCommod.png" />
+    <EmbeddedResource Include="Journal\EngineerContribution_Unknown.png" />
+    <EmbeddedResource Include="Journal\FuelScope.png" />
+    <EmbeddedResource Include="Journal\VehicleSwitch_Fighter.png" />
+    <EmbeddedResource Include="Journal\VehicleSwitch_Mothership.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

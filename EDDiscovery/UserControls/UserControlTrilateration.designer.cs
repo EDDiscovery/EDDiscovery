@@ -215,7 +215,7 @@ namespace EDDiscovery.UserControls
             // toolStripButtonSubmitDistances
             // 
             this.toolStripButtonSubmitDistances.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
-            this.toolStripButtonSubmitDistances.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonSubmitDistances.Image")));
+            this.toolStripButtonSubmitDistances.Image = EDDiscovery.Icons.Properties.Resources.toolStripButtonSubmitDistances;
             this.toolStripButtonSubmitDistances.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonSubmitDistances.Name = "toolStripButtonSubmitDistances";
             this.toolStripButtonSubmitDistances.Size = new System.Drawing.Size(118, 22);
