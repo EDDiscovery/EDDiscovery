@@ -155,6 +155,17 @@ namespace BaseUtils.Win32
         public static extern int SetForegroundWindow(IntPtr point);
         [DllImport("User32.dll")]
         public static extern IntPtr GetForegroundWindow();
+
+        public static IntPtr GetForegroundWindowOf(string pname)
+        {
+            System.Diagnostics.Process p = System.Diagnostics.Process.GetProcessesByName(pname).FirstOrDefault();
+            if (p != null)
+                return p.MainWindowHandle;
+            else
+                return (IntPtr)0;
+        }
+
+
         [DllImport("User32.dll")]
         public static extern uint MapVirtualKey(uint uCode, uint uMapType);
 

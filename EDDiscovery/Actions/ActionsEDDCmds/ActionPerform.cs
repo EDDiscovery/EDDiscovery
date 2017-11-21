@@ -88,6 +88,17 @@ namespace EDDiscovery.Actions
                     (ap.actioncontroller as ActionController).EditAddOns();
                 else if (cmdname.Equals("editlastpack"))
                     (ap.actioncontroller as ActionController).EditLastPack();
+                else if (cmdname.Equals("editpack"))
+                {
+                    string pack = sp.NextQuotedWord();
+                    if (pack != null)
+                    {
+                        if (!(ap.actioncontroller as ActionController).EditPack(pack))
+                            ap.ReportError("Pack " + pack + " not found");
+                    }
+                    else
+                        ap.ReportError("EditPack requires a pack name");
+                }
                 else if (cmdname.Equals("editspeechtext"))
                     (ap.actioncontroller as ActionController).EditSpeechText();
                 else if (cmdname.Equals("configurewave"))
