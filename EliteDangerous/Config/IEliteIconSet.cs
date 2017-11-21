@@ -30,5 +30,6 @@ namespace EliteDangerousCore
         IReadOnlyDictionary<EDPlanet, Image> PlanetTypeIcons { get; }
         IReadOnlyDictionary<JournalTypeEnum, Image> JournalTypeIcons { get; }
         IReadOnlyDictionary<GalMapTypeEnum, Image> GalMapTypeIcons { get; }
+        Image GetIcon(string name);
     }
 }

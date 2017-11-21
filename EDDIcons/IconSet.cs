@@ -10,16 +10,16 @@ using System.Collections;
 
 namespace EDDiscovery.Icons
 {
-    public static class Icons
+    public static class IconSet
     {
         private static Dictionary<string, Image> icons;
 
-        static Icons()
+        static IconSet()
         {
             Assembly asm = Assembly.GetExecutingAssembly();
             string[] resnames = asm.GetManifestResourceNames();
             icons = new Dictionary<string, Image>();
-            string basename = typeof(Icons).Namespace + ".";
+            string basename = typeof(IconSet).Namespace + ".";
 
             foreach (string resname in resnames)
             {
@@ -35,15 +35,20 @@ namespace EDDiscovery.Icons
         {
             return icons[name];
         }
+
+        public static bool HasIcon(string name)
+        {
+            return icons.ContainsKey(name);
+        }
     }
 
-    public abstract class Icons<T> : IReadOnlyDictionary<T, Image>
+    public abstract class IconSet<T> : IReadOnlyDictionary<T, Image>
     {
         protected Dictionary<T, Image> icons;
 
         protected void Init(string basedir, IEnumerable<T> keys)
         {
-            icons = keys.ToDictionary(e => e, e => Icons.GetIcon(basedir + "." + e.ToString()));
+            icons = keys.ToDictionary(e => e, e => IconSet.GetIcon(basedir + "." + e.ToString()));
         }
 
         public Image this[T key] => icons[key];

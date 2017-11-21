@@ -372,7 +372,7 @@ namespace EliteDangerousCore
             }
             else
             {
-                return EliteDangerous.Properties.Resources.DefaultStar;
+                return EDDiscovery.Icons.Properties.Resources.DefaultStar;
             }
         }
 
@@ -390,7 +390,7 @@ namespace EliteDangerousCore
             }
             else
             {
-                return EliteDangerous.Properties.Resources.Globe;
+                return EDDiscovery.Icons.Properties.Resources.Globe;
             }
         }
 

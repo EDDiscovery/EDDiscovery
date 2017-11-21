@@ -131,7 +131,7 @@ namespace EDDiscovery.UserControls
             this.buttonExtExcel.ButtonColorScaling = 0.5F;
             this.buttonExtExcel.ButtonDisabledScaling = 0.5F;
             this.buttonExtExcel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.buttonExtExcel.Image = global::EDDiscovery.Properties.Resources.excel;
+            this.buttonExtExcel.Image = global::EDDiscovery.Icons.Properties.Resources.excel;
             this.buttonExtExcel.Location = new System.Drawing.Point(606, 4);
             this.buttonExtExcel.Name = "buttonExtExcel";
             this.buttonExtExcel.Size = new System.Drawing.Size(24, 24);
@@ -142,7 +142,7 @@ namespace EDDiscovery.UserControls
             // 
             // drawnPanelPopOut
             // 
-            this.drawnPanelPopOut.DrawnImage = global::EDDiscovery.Properties.Resources.popout1;
+            this.drawnPanelPopOut.DrawnImage = global::EDDiscovery.Icons.Properties.Resources.popout1;
             this.drawnPanelPopOut.ImageSelected = ExtendedControls.DrawnPanel.ImageType.None;
             this.drawnPanelPopOut.Location = new System.Drawing.Point(32, 3);
             this.drawnPanelPopOut.Name = "drawnPanelPopOut";
@@ -153,7 +153,7 @@ namespace EDDiscovery.UserControls
             // 
             // panelHistoryIcon
             // 
-            this.panelHistoryIcon.BackgroundImage = global::EDDiscovery.Properties.Resources.travelgrid;
+            this.panelHistoryIcon.BackgroundImage = global::EDDiscovery.Icons.Properties.Resources.travelgrid;
             this.panelHistoryIcon.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.panelHistoryIcon.Location = new System.Drawing.Point(3, 4);
             this.panelHistoryIcon.Name = "panelHistoryIcon";

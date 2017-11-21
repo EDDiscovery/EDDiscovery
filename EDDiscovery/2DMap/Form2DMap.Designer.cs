@@ -135,7 +135,7 @@ namespace EDDiscovery
             // 
             this.toolStripButtonStars.CheckOnClick = true;
             this.toolStripButtonStars.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButtonStars.Image = global::EDDiscovery.Properties.Resources.star;
+            this.toolStripButtonStars.Image = global::EDDiscovery.Icons.Properties.Resources.star;
             this.toolStripButtonStars.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonStars.Name = "toolStripButtonStars";
             this.toolStripButtonStars.Size = new System.Drawing.Size(26, 26);
@@ -157,7 +157,7 @@ namespace EDDiscovery
             // buttonSave
             // 
             this.buttonSave.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonSave.Image = global::EDDiscovery.Properties.Resources.save;
+            this.buttonSave.Image = global::EDDiscovery.Icons.Properties.Resources.save;
             this.buttonSave.Location = new System.Drawing.Point(954, 0);
             this.buttonSave.Name = "buttonSave";
             this.buttonSave.Size = new System.Drawing.Size(30, 28);

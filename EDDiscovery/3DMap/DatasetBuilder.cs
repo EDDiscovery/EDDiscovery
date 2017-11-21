@@ -767,7 +767,7 @@ namespace EDDiscovery._3DMap
 
         public List<IData3DSet> BuildSelected(ISystem centersystem, ISystem selectedsystem, GalacticMapObject selectedgmo, float widthly, float heightly, Vector3 rotation )
         {
-            Bitmap selmark  = (Bitmap)EDDiscovery.Properties.Resources.selectedmarker;
+            Bitmap selmark  = (Bitmap)EDDiscovery.Icons.Properties.Resources.selectedmarker;
 
             if (centersystem != null)
             {

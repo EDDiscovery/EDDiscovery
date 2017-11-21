@@ -240,7 +240,7 @@ namespace EDDiscovery
             // toolStripButtonHome
             // 
             this.toolStripButtonHome.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButtonHome.Image = global::EDDiscovery.Properties.Resources.Homeicon;
+            this.toolStripButtonHome.Image = global::EDDiscovery.Icons.Properties.Resources.Homeicon;
             this.toolStripButtonHome.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonHome.Name = "toolStripButtonHome";
             this.toolStripButtonHome.Size = new System.Drawing.Size(23, 37);
@@ -251,7 +251,7 @@ namespace EDDiscovery
             // toolStripButtonHistory
             // 
             this.toolStripButtonHistory.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButtonHistory.Image = global::EDDiscovery.Properties.Resources.Travelicon;
+            this.toolStripButtonHistory.Image = global::EDDiscovery.Icons.Properties.Resources.Travelicon;
             this.toolStripButtonHistory.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonHistory.Name = "toolStripButtonHistory";
             this.toolStripButtonHistory.Size = new System.Drawing.Size(23, 37);
@@ -282,7 +282,7 @@ namespace EDDiscovery
             this.drawLinesBetweenStarsWithPositionToolStripMenuItem,
             this.drawADiscOnStarsWithPositionToolStripMenuItem,
             this.useWhiteForDiscsInsteadOfAssignedMapColourToolStripMenuItem});
-            this.toolStripDropDownButtonVisitedStars.Image = global::EDDiscovery.Properties.Resources.ImageTravel;
+            this.toolStripDropDownButtonVisitedStars.Image = global::EDDiscovery.Icons.Properties.Resources.ImageTravel;
             this.toolStripDropDownButtonVisitedStars.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripDropDownButtonVisitedStars.Name = "toolStripDropDownButtonVisitedStars";
             this.toolStripDropDownButtonVisitedStars.Size = new System.Drawing.Size(29, 37);
@@ -294,7 +294,7 @@ namespace EDDiscovery
             this.drawLinesBetweenStarsWithPositionToolStripMenuItem.Checked = true;
             this.drawLinesBetweenStarsWithPositionToolStripMenuItem.CheckOnClick = true;
             this.drawLinesBetweenStarsWithPositionToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.drawLinesBetweenStarsWithPositionToolStripMenuItem.Image = global::EDDiscovery.Properties.Resources.ImageTravel;
+            this.drawLinesBetweenStarsWithPositionToolStripMenuItem.Image = global::EDDiscovery.Icons.Properties.Resources.ImageTravel;
             this.drawLinesBetweenStarsWithPositionToolStripMenuItem.Name = "drawLinesBetweenStarsWithPositionToolStripMenuItem";
             this.drawLinesBetweenStarsWithPositionToolStripMenuItem.Size = new System.Drawing.Size(342, 22);
             this.drawLinesBetweenStarsWithPositionToolStripMenuItem.Text = "Draw lines between stars with position";
@@ -306,7 +306,7 @@ namespace EDDiscovery
             this.drawADiscOnStarsWithPositionToolStripMenuItem.Checked = true;
             this.drawADiscOnStarsWithPositionToolStripMenuItem.CheckOnClick = true;
             this.drawADiscOnStarsWithPositionToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.drawADiscOnStarsWithPositionToolStripMenuItem.Image = global::EDDiscovery.Properties.Resources.ImageStarDisc;
+            this.drawADiscOnStarsWithPositionToolStripMenuItem.Image = global::EDDiscovery.Icons.Properties.Resources.ImageStarDisc;
             this.drawADiscOnStarsWithPositionToolStripMenuItem.Name = "drawADiscOnStarsWithPositionToolStripMenuItem";
             this.drawADiscOnStarsWithPositionToolStripMenuItem.Size = new System.Drawing.Size(342, 22);
             this.drawADiscOnStarsWithPositionToolStripMenuItem.Text = "Draw a disc on stars with position";
@@ -318,7 +318,7 @@ namespace EDDiscovery
             this.useWhiteForDiscsInsteadOfAssignedMapColourToolStripMenuItem.Checked = true;
             this.useWhiteForDiscsInsteadOfAssignedMapColourToolStripMenuItem.CheckOnClick = true;
             this.useWhiteForDiscsInsteadOfAssignedMapColourToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.useWhiteForDiscsInsteadOfAssignedMapColourToolStripMenuItem.Image = global::EDDiscovery.Properties.Resources.ImageStarDiscWhite;
+            this.useWhiteForDiscsInsteadOfAssignedMapColourToolStripMenuItem.Image = global::EDDiscovery.Icons.Properties.Resources.ImageStarDiscWhite;
             this.useWhiteForDiscsInsteadOfAssignedMapColourToolStripMenuItem.Name = "useWhiteForDiscsInsteadOfAssignedMapColourToolStripMenuItem";
             this.useWhiteForDiscsInsteadOfAssignedMapColourToolStripMenuItem.Size = new System.Drawing.Size(342, 22);
             this.useWhiteForDiscsInsteadOfAssignedMapColourToolStripMenuItem.Text = "Use White for discs instead of assigned map colour";
@@ -394,7 +394,7 @@ namespace EDDiscovery
             // showDiscsToolStripMenuItem
             // 
             this.showDiscsToolStripMenuItem.CheckOnClick = true;
-            this.showDiscsToolStripMenuItem.Image = global::EDDiscovery.Properties.Resources.ImageStarDisc;
+            this.showDiscsToolStripMenuItem.Image = global::EDDiscovery.Icons.Properties.Resources.ImageStarDisc;
             this.showDiscsToolStripMenuItem.Name = "showDiscsToolStripMenuItem";
             this.showDiscsToolStripMenuItem.Size = new System.Drawing.Size(143, 22);
             this.showDiscsToolStripMenuItem.Text = "Show Discs";
@@ -588,7 +588,7 @@ namespace EDDiscovery
             this.playbackToolStripMenuItem,
             this.saveToFileToolStripMenuItem,
             this.LoadFileToolStripMenuItem});
-            this.toolStripDropDownRecord.Image = global::EDDiscovery.Properties.Resources.VideoRecorder;
+            this.toolStripDropDownRecord.Image = global::EDDiscovery.Icons.Properties.Resources.VideoRecorder;
             this.toolStripDropDownRecord.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripDropDownRecord.Name = "toolStripDropDownRecord";
             this.toolStripDropDownRecord.Size = new System.Drawing.Size(29, 20);
@@ -598,7 +598,7 @@ namespace EDDiscovery
             // 
             // recordToolStripMenuItem
             // 
-            this.recordToolStripMenuItem.Image = global::EDDiscovery.Properties.Resources.RecordPressed;
+            this.recordToolStripMenuItem.Image = global::EDDiscovery.Icons.Properties.Resources.RecordPressed;
             this.recordToolStripMenuItem.Name = "recordToolStripMenuItem";
             this.recordToolStripMenuItem.Size = new System.Drawing.Size(187, 22);
             this.recordToolStripMenuItem.Text = "Record (F5)";
@@ -606,7 +606,7 @@ namespace EDDiscovery
             // 
             // recordStepToStepToolStripMenuItem
             // 
-            this.recordStepToStepToolStripMenuItem.Image = global::EDDiscovery.Properties.Resources.RecordPressed;
+            this.recordStepToStepToolStripMenuItem.Image = global::EDDiscovery.Icons.Properties.Resources.RecordPressed;
             this.recordStepToStepToolStripMenuItem.Name = "recordStepToStepToolStripMenuItem";
             this.recordStepToStepToolStripMenuItem.Size = new System.Drawing.Size(187, 22);
             this.recordStepToStepToolStripMenuItem.Text = "Record Step (F6)";
@@ -614,7 +614,7 @@ namespace EDDiscovery
             // 
             // newRecordStepToolStripMenuItem
             // 
-            this.newRecordStepToolStripMenuItem.Image = global::EDDiscovery.Properties.Resources.RecordPressed;
+            this.newRecordStepToolStripMenuItem.Image = global::EDDiscovery.Icons.Properties.Resources.RecordPressed;
             this.newRecordStepToolStripMenuItem.Name = "newRecordStepToolStripMenuItem";
             this.newRecordStepToolStripMenuItem.Size = new System.Drawing.Size(187, 22);
             this.newRecordStepToolStripMenuItem.Text = "New Record Step (F7)";
@@ -622,7 +622,7 @@ namespace EDDiscovery
             // 
             // pauseRecordToolStripMenuItem
             // 
-            this.pauseRecordToolStripMenuItem.Image = global::EDDiscovery.Properties.Resources.PauseNormalRed;
+            this.pauseRecordToolStripMenuItem.Image = global::EDDiscovery.Icons.Properties.Resources.PauseNormalRed;
             this.pauseRecordToolStripMenuItem.Name = "pauseRecordToolStripMenuItem";
             this.pauseRecordToolStripMenuItem.Size = new System.Drawing.Size(187, 22);
             this.pauseRecordToolStripMenuItem.Text = "Pause Record (F8)";
@@ -630,7 +630,7 @@ namespace EDDiscovery
             // 
             // toolStripMenuItemClearRecording
             // 
-            this.toolStripMenuItemClearRecording.Image = global::EDDiscovery.Properties.Resources.StopNormalRed;
+            this.toolStripMenuItemClearRecording.Image = global::EDDiscovery.Icons.Properties.Resources.StopNormalRed;
             this.toolStripMenuItemClearRecording.Name = "toolStripMenuItemClearRecording";
             this.toolStripMenuItemClearRecording.Size = new System.Drawing.Size(187, 22);
             this.toolStripMenuItemClearRecording.Text = "Clear Recording";
@@ -638,7 +638,7 @@ namespace EDDiscovery
             // 
             // playbackToolStripMenuItem
             // 
-            this.playbackToolStripMenuItem.Image = global::EDDiscovery.Properties.Resources.PlayNormal;
+            this.playbackToolStripMenuItem.Image = global::EDDiscovery.Icons.Properties.Resources.PlayNormal;
             this.playbackToolStripMenuItem.Name = "playbackToolStripMenuItem";
             this.playbackToolStripMenuItem.Size = new System.Drawing.Size(187, 22);
             this.playbackToolStripMenuItem.Text = "Playback (F9)";
@@ -646,7 +646,7 @@ namespace EDDiscovery
             // 
             // saveToFileToolStripMenuItem
             // 
-            this.saveToFileToolStripMenuItem.Image = global::EDDiscovery.Properties.Resources.floppy;
+            this.saveToFileToolStripMenuItem.Image = global::EDDiscovery.Icons.Properties.Resources.floppy;
             this.saveToFileToolStripMenuItem.Name = "saveToFileToolStripMenuItem";
             this.saveToFileToolStripMenuItem.Size = new System.Drawing.Size(187, 22);
             this.saveToFileToolStripMenuItem.Text = "Save flight to file";
@@ -654,7 +654,7 @@ namespace EDDiscovery
             // 
             // LoadFileToolStripMenuItem
             // 
-            this.LoadFileToolStripMenuItem.Image = global::EDDiscovery.Properties.Resources.floppy;
+            this.LoadFileToolStripMenuItem.Image = global::EDDiscovery.Icons.Properties.Resources.floppy;
             this.LoadFileToolStripMenuItem.Name = "LoadFileToolStripMenuItem";
             this.LoadFileToolStripMenuItem.Size = new System.Drawing.Size(187, 22);
             this.LoadFileToolStripMenuItem.Text = "Load flight from file";
@@ -678,8 +678,8 @@ namespace EDDiscovery
             // 
             // dotSelectedSystemCoords
             // 
-            this.dotSelectedSystemCoords.Image = global::EDDiscovery.Properties.Resources.OrangeDot;
-            this.dotSelectedSystemCoords.InitialImage = global::EDDiscovery.Properties.Resources.OrangeDot;
+            this.dotSelectedSystemCoords.Image = global::EDDiscovery.Icons.Properties.Resources.OrangeDot;
+            this.dotSelectedSystemCoords.InitialImage = global::EDDiscovery.Icons.Properties.Resources.OrangeDot;
             this.dotSelectedSystemCoords.Location = new System.Drawing.Point(193, 22);
             this.dotSelectedSystemCoords.Name = "dotSelectedSystemCoords";
             this.dotSelectedSystemCoords.Size = new System.Drawing.Size(12, 12);
@@ -690,8 +690,8 @@ namespace EDDiscovery
             // 
             // dotSystemCoords
             // 
-            this.dotSystemCoords.Image = global::EDDiscovery.Properties.Resources.YellowDot;
-            this.dotSystemCoords.InitialImage = global::EDDiscovery.Properties.Resources.YellowDot;
+            this.dotSystemCoords.Image = global::EDDiscovery.Icons.Properties.Resources.YellowDot;
+            this.dotSystemCoords.InitialImage = global::EDDiscovery.Icons.Properties.Resources.YellowDot;
             this.dotSystemCoords.Location = new System.Drawing.Point(193, 4);
             this.dotSystemCoords.Name = "dotSystemCoords";
             this.dotSystemCoords.Size = new System.Drawing.Size(12, 12);
@@ -714,7 +714,7 @@ namespace EDDiscovery
             // 
             // buttonLookAt
             // 
-            this.buttonLookAt.Image = global::EDDiscovery.Properties.Resources.eye;
+            this.buttonLookAt.Image = global::EDDiscovery.Icons.Properties.Resources.eye;
             this.buttonLookAt.Location = new System.Drawing.Point(164, 7);
             this.buttonLookAt.Name = "buttonLookAt";
             this.buttonLookAt.Size = new System.Drawing.Size(23, 23);

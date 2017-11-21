@@ -106,7 +106,7 @@ namespace EDDiscovery.UserControls
             // 
             // toolStripButtonNew
             // 
-            this.toolStripButtonNew.Image = global::EDDiscovery.Properties.Resources.toolStripButtonNew_Image;
+            this.toolStripButtonNew.Image = global::EDDiscovery.Icons.Properties.Resources.toolStripButtonNew_Image;
             this.toolStripButtonNew.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonNew.Name = "toolStripButtonNew";
             this.toolStripButtonNew.Size = new System.Drawing.Size(85, 22);
@@ -115,7 +115,7 @@ namespace EDDiscovery.UserControls
             // 
             // toolStripButtonImportFile
             // 
-            this.toolStripButtonImportFile.Image = global::EDDiscovery.Properties.Resources.toolStripButtonNew_Image;
+            this.toolStripButtonImportFile.Image = global::EDDiscovery.Icons.Properties.Resources.toolStripButtonNew_Image;
             this.toolStripButtonImportFile.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonImportFile.Name = "toolStripButtonImportFile";
             this.toolStripButtonImportFile.Size = new System.Drawing.Size(82, 22);
@@ -124,7 +124,7 @@ namespace EDDiscovery.UserControls
             // 
             // toolStripButtonImportRoute
             // 
-            this.toolStripButtonImportRoute.Image = global::EDDiscovery.Properties.Resources.toolStripButtonNew_Image;
+            this.toolStripButtonImportRoute.Image = global::EDDiscovery.Icons.Properties.Resources.toolStripButtonNew_Image;
             this.toolStripButtonImportRoute.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonImportRoute.Name = "toolStripButtonImportRoute";
             this.toolStripButtonImportRoute.Size = new System.Drawing.Size(94, 22);
@@ -134,7 +134,7 @@ namespace EDDiscovery.UserControls
             // 
             // toolStripButtonSave
             // 
-            this.toolStripButtonSave.Image = global::EDDiscovery.Properties.Resources.toolStripButtonSubmitDistances_Image;
+            this.toolStripButtonSave.Image = global::EDDiscovery.Icons.Properties.Resources.toolStripButtonSubmitDistances_Image;
             this.toolStripButtonSave.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonSave.Name = "toolStripButtonSave";
             this.toolStripButtonSave.Size = new System.Drawing.Size(85, 22);
@@ -143,7 +143,7 @@ namespace EDDiscovery.UserControls
             // 
             // toolStripButtonExport
             // 
-            this.toolStripButtonExport.Image = global::EDDiscovery.Properties.Resources.toolStripButtonSubmitDistances_Image;
+            this.toolStripButtonExport.Image = global::EDDiscovery.Icons.Properties.Resources.toolStripButtonSubmitDistances_Image;
             this.toolStripButtonExport.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonExport.Name = "toolStripButtonExport";
             this.toolStripButtonExport.Size = new System.Drawing.Size(60, 22);
@@ -153,7 +153,7 @@ namespace EDDiscovery.UserControls
             // 
             // toolStripButtonDelete
             // 
-            this.toolStripButtonDelete.Image = global::EDDiscovery.Properties.Resources.toolStripButtonRemoveAll_Image;
+            this.toolStripButtonDelete.Image = global::EDDiscovery.Icons.Properties.Resources.toolStripButtonRemoveAll_Image;
             this.toolStripButtonDelete.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonDelete.Name = "toolStripButtonDelete";
             this.toolStripButtonDelete.Size = new System.Drawing.Size(94, 22);
@@ -162,7 +162,7 @@ namespace EDDiscovery.UserControls
             // 
             // toolStripButtonShowOn3DMap
             // 
-            this.toolStripButtonShowOn3DMap.Image = global::EDDiscovery.Properties.Resources.toolStripButtonMap_Image;
+            this.toolStripButtonShowOn3DMap.Image = global::EDDiscovery.Icons.Properties.Resources.toolStripButtonMap_Image;
             this.toolStripButtonShowOn3DMap.Name = "toolStripButtonShowOn3DMap";
             this.toolStripButtonShowOn3DMap.Size = new System.Drawing.Size(117, 20);
             this.toolStripButtonShowOn3DMap.Text = "Show on 3D Map";

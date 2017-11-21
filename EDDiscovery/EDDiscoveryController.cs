@@ -127,6 +127,8 @@ namespace EDDiscovery
                 };
             }
 
+            EDDIconSet.Init();
+
             backgroundWorker = new Thread(BackgroundWorkerThread);
             backgroundWorker.IsBackground = true;
             backgroundWorker.Name = "Background Worker Thread";

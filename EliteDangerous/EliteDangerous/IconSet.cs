@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace EliteDangerousCore
 {
-    public class PlanetIcons : Icons<EDPlanet>
+    public class PlanetIcons : IconSet<EDPlanet>
     {
         public PlanetIcons()
         {
@@ -17,7 +17,7 @@ namespace EliteDangerousCore
         }
     }
 
-    public class StarIcons : Icons<EDStar>
+    public class StarIcons : IconSet<EDStar>
     {
         public StarIcons()
         {
@@ -25,7 +25,7 @@ namespace EliteDangerousCore
         }
     }
 
-    public class JournalIcons : Icons<JournalTypeEnum>
+    public class JournalIcons : IconSet<JournalTypeEnum>
     {
         public JournalIcons()
         {
@@ -33,7 +33,7 @@ namespace EliteDangerousCore
         }
     }
 
-    public class GalMapIcons : Icons<GalMapTypeEnum>
+    public class GalMapIcons : IconSet<GalMapTypeEnum>
     {
         public GalMapIcons()
         {
@@ -50,5 +50,15 @@ namespace EliteDangerousCore
         public IReadOnlyDictionary<JournalTypeEnum, Image> JournalTypeIcons { get; } = new JournalIcons();
 
         public IReadOnlyDictionary<GalMapTypeEnum, Image> GalMapTypeIcons { get; } = new GalMapIcons();
+
+        public Image GetIcon(string name)
+        {
+            if (!name.Contains("."))
+            {
+                name = "Legacy." + name;
+            }
+
+            return EDDiscovery.Icons.IconSet.HasIcon(name) ? EDDiscovery.Icons.IconSet.GetIcon(name) : null;
+        }
     }
 }
