@@ -223,6 +223,146 @@ namespace EDDiscovery.Icons.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        public static System.Drawing.Bitmap buttonCenter {
+            get {
+                object obj = ResourceManager.GetObject("buttonCenter", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap buttonExt0 {
+            get {
+                object obj = ResourceManager.GetObject("buttonExt0", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap buttonExt1 {
+            get {
+                object obj = ResourceManager.GetObject("buttonExt1", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap buttonExt10 {
+            get {
+                object obj = ResourceManager.GetObject("buttonExt10", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap buttonExt11 {
+            get {
+                object obj = ResourceManager.GetObject("buttonExt11", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap buttonExt12 {
+            get {
+                object obj = ResourceManager.GetObject("buttonExt12", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap buttonExt2 {
+            get {
+                object obj = ResourceManager.GetObject("buttonExt2", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap buttonExt3 {
+            get {
+                object obj = ResourceManager.GetObject("buttonExt3", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap buttonExt4 {
+            get {
+                object obj = ResourceManager.GetObject("buttonExt4", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap buttonExt5 {
+            get {
+                object obj = ResourceManager.GetObject("buttonExt5", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap buttonExt6 {
+            get {
+                object obj = ResourceManager.GetObject("buttonExt6", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap buttonExt7 {
+            get {
+                object obj = ResourceManager.GetObject("buttonExt7", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap buttonExt8 {
+            get {
+                object obj = ResourceManager.GetObject("buttonExt8", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap buttonExt9 {
+            get {
+                object obj = ResourceManager.GetObject("buttonExt9", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         public static System.Drawing.Bitmap buydrones {
             get {
                 object obj = ResourceManager.GetObject("buydrones", resourceCulture);
@@ -306,6 +446,66 @@ namespace EDDiscovery.Icons.Properties {
         public static System.Drawing.Bitmap changecrewrols {
             get {
                 object obj = ResourceManager.GetObject("changecrewrols", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap checkBoxCustomGraph {
+            get {
+                object obj = ResourceManager.GetObject("checkBoxCustomGraph", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap checkBoxCustomPlanets {
+            get {
+                object obj = ResourceManager.GetObject("checkBoxCustomPlanets", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap checkBoxCustomStars {
+            get {
+                object obj = ResourceManager.GetObject("checkBoxCustomStars", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap checkBoxCustomText {
+            get {
+                object obj = ResourceManager.GetObject("checkBoxCustomText", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap checkBoxMaterials {
+            get {
+                object obj = ResourceManager.GetObject("checkBoxMaterials", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap checkForNewReleaseToolStripMenuItem {
+            get {
+                object obj = ResourceManager.GetObject("checkForNewReleaseToolStripMenuItem", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -573,6 +773,16 @@ namespace EDDiscovery.Icons.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        public static System.Drawing.Bitmap deleteDuplicateFSDJumpEntriesToolStripMenuItem {
+            get {
+                object obj = ResourceManager.GetObject("deleteDuplicateFSDJumpEntriesToolStripMenuItem", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         public static System.Drawing.Bitmap dockfighter {
             get {
                 object obj = ResourceManager.GetObject("dockfighter", resourceCulture);
@@ -643,6 +853,26 @@ namespace EDDiscovery.Icons.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        public static System.Drawing.Bitmap dropdownFilterDate {
+            get {
+                object obj = ResourceManager.GetObject("dropdownFilterDate", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap dropdownMapNames {
+            get {
+                object obj = ResourceManager.GetObject("dropdownMapNames", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         public static System.Drawing.Bitmap dustbinshorter {
             get {
                 object obj = ResourceManager.GetObject("dustbinshorter", resourceCulture);
@@ -676,6 +906,16 @@ namespace EDDiscovery.Icons.Properties {
         public static System.Drawing.Bitmap eddiscovery_logo {
             get {
                 object obj = ResourceManager.GetObject("eddiscovery_logo", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap eDDiscoveryChatDiscordToolStripMenuItem {
+            get {
+                object obj = ResourceManager.GetObject("eDDiscoveryChatDiscordToolStripMenuItem", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -743,6 +983,16 @@ namespace EDDiscovery.Icons.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        public static System.Drawing.Bitmap enableColoursToolStripMenuItem {
+            get {
+                object obj = ResourceManager.GetObject("enableColoursToolStripMenuItem", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         public static System.Drawing.Bitmap engineerapply {
             get {
                 object obj = ResourceManager.GetObject("engineerapply", resourceCulture);
@@ -796,6 +1046,16 @@ namespace EDDiscovery.Icons.Properties {
         public static System.Drawing.Bitmap excel {
             get {
                 object obj = ResourceManager.GetObject("excel", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap exitToolStripMenuItem {
+            get {
+                object obj = ResourceManager.GetObject("exitToolStripMenuItem", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -886,6 +1146,16 @@ namespace EDDiscovery.Icons.Properties {
         public static System.Drawing.Bitmap friends {
             get {
                 object obj = ResourceManager.GetObject("friends", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap frontierForumThreadToolStripMenuItem {
+            get {
+                object obj = ResourceManager.GetObject("frontierForumThreadToolStripMenuItem", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -1056,6 +1326,16 @@ namespace EDDiscovery.Icons.Properties {
         public static System.Drawing.Bitmap Homeicon {
             get {
                 object obj = ResourceManager.GetObject("Homeicon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap howToRunInSafeModeToResetVariousParametersToolStripMenuItem {
+            get {
+                object obj = ResourceManager.GetObject("howToRunInSafeModeToResetVariousParametersToolStripMenuItem", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -1633,6 +1913,16 @@ namespace EDDiscovery.Icons.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        public static System.Drawing.Bitmap newRegionBookmarkToolStripMenuItem {
+            get {
+                object obj = ResourceManager.GetObject("newRegionBookmarkToolStripMenuItem", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         public static System.Drawing.Bitmap no_entry {
             get {
                 object obj = ResourceManager.GetObject("no_entry", resourceCulture);
@@ -1666,6 +1956,26 @@ namespace EDDiscovery.Icons.Properties {
         public static System.Drawing.Bitmap OrangeDot {
             get {
                 object obj = ResourceManager.GetObject("OrangeDot", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap panel_eddiscovery {
+            get {
+                object obj = ResourceManager.GetObject("panel_eddiscovery", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap panelLogo {
+            get {
+                object obj = ResourceManager.GetObject("panelLogo", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -2013,6 +2323,16 @@ namespace EDDiscovery.Icons.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        public static System.Drawing.Bitmap reportIssueIdeasToolStripMenuItem {
+            get {
+                object obj = ResourceManager.GetObject("reportIssueIdeasToolStripMenuItem", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         public static System.Drawing.Bitmap ressurect {
             get {
                 object obj = ResourceManager.GetObject("ressurect", resourceCulture);
@@ -2323,6 +2643,86 @@ namespace EDDiscovery.Icons.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        public static System.Drawing.Bitmap show2DMapsToolStripMenuItem {
+            get {
+                object obj = ResourceManager.GetObject("show2DMapsToolStripMenuItem", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap show3DMapsToolStripMenuItem {
+            get {
+                object obj = ResourceManager.GetObject("show3DMapsToolStripMenuItem", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap showAllInTaskBarToolStripMenuItem {
+            get {
+                object obj = ResourceManager.GetObject("showAllInTaskBarToolStripMenuItem", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap showBookmarksToolStripMenuItem {
+            get {
+                object obj = ResourceManager.GetObject("showBookmarksToolStripMenuItem", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap showNamesToolStripMenuItem {
+            get {
+                object obj = ResourceManager.GetObject("showNamesToolStripMenuItem", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap showNoteMarksToolStripMenuItem {
+            get {
+                object obj = ResourceManager.GetObject("showNoteMarksToolStripMenuItem", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap showStarstoolStripMenuItem {
+            get {
+                object obj = ResourceManager.GetObject("showStarstoolStripMenuItem", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap showStationsToolStripMenuItem {
+            get {
+                object obj = ResourceManager.GetObject("showStationsToolStripMenuItem", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         public static System.Drawing.Bitmap SizeSelectorsLarge {
             get {
                 object obj = ResourceManager.GetObject("SizeSelectorsLarge", resourceCulture);
@@ -2593,6 +2993,136 @@ namespace EDDiscovery.Icons.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        public static System.Drawing.Bitmap toolStripButtonAutoForward {
+            get {
+                object obj = ResourceManager.GetObject("toolStripButtonAutoForward", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap toolStripButtonCoords {
+            get {
+                object obj = ResourceManager.GetObject("toolStripButtonCoords", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap toolStripButtonDelete {
+            get {
+                object obj = ResourceManager.GetObject("toolStripButtonDelete", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap toolStripButtonEliteMovement {
+            get {
+                object obj = ResourceManager.GetObject("toolStripButtonEliteMovement", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap toolStripButtonExport {
+            get {
+                object obj = ResourceManager.GetObject("toolStripButtonExport", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap toolStripButtonFineGrid {
+            get {
+                object obj = ResourceManager.GetObject("toolStripButtonFineGrid", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap toolStripButtonGoBackward {
+            get {
+                object obj = ResourceManager.GetObject("toolStripButtonGoBackward", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap toolStripButtonGoForward {
+            get {
+                object obj = ResourceManager.GetObject("toolStripButtonGoForward", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap toolStripButtonGrid {
+            get {
+                object obj = ResourceManager.GetObject("toolStripButtonGrid", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap toolStripButtonHelp {
+            get {
+                object obj = ResourceManager.GetObject("toolStripButtonHelp", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap toolStripButtonImportFile {
+            get {
+                object obj = ResourceManager.GetObject("toolStripButtonImportFile", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap toolStripButtonLastKnownPosition {
+            get {
+                object obj = ResourceManager.GetObject("toolStripButtonLastKnownPosition", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap toolStripButtonLoad {
+            get {
+                object obj = ResourceManager.GetObject("toolStripButtonLoad", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         public static System.Drawing.Bitmap toolStripButtonMap_Image {
             get {
                 object obj = ResourceManager.GetObject("toolStripButtonMap_Image", resourceCulture);
@@ -2603,9 +3133,29 @@ namespace EDDiscovery.Icons.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        public static System.Drawing.Bitmap toolStripButtonNew {
+            get {
+                object obj = ResourceManager.GetObject("toolStripButtonNew", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         public static System.Drawing.Bitmap toolStripButtonNew_Image {
             get {
                 object obj = ResourceManager.GetObject("toolStripButtonNew_Image", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap toolStripButtonPerspective {
+            get {
+                object obj = ResourceManager.GetObject("toolStripButtonPerspective", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -2633,9 +3183,109 @@ namespace EDDiscovery.Icons.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        public static System.Drawing.Bitmap toolStripButtonSave {
+            get {
+                object obj = ResourceManager.GetObject("toolStripButtonSave", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap toolStripButtonSubmitDistances {
+            get {
+                object obj = ResourceManager.GetObject("toolStripButtonSubmitDistances", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         public static System.Drawing.Bitmap toolStripButtonSubmitDistances_Image {
             get {
                 object obj = ResourceManager.GetObject("toolStripButtonSubmitDistances_Image", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap toolStripButtonTarget {
+            get {
+                object obj = ResourceManager.GetObject("toolStripButtonTarget", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap toolStripButtonZoomIn {
+            get {
+                object obj = ResourceManager.GetObject("toolStripButtonZoomIn", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap toolStripButtonZoomOut {
+            get {
+                object obj = ResourceManager.GetObject("toolStripButtonZoomOut", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap toolStripButtonZoomtoFit {
+            get {
+                object obj = ResourceManager.GetObject("toolStripButtonZoomtoFit", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap toolStripDropDownButtonBookmarks {
+            get {
+                object obj = ResourceManager.GetObject("toolStripDropDownButtonBookmarks", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap toolStripDropDownButtonFilterStars {
+            get {
+                object obj = ResourceManager.GetObject("toolStripDropDownButtonFilterStars", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap toolStripDropDownButtonGalObjects {
+            get {
+                object obj = ResourceManager.GetObject("toolStripDropDownButtonGalObjects", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap toolStripDropDownButtonNameStars {
+            get {
+                object obj = ResourceManager.GetObject("toolStripDropDownButtonNameStars", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -2686,6 +3336,26 @@ namespace EDDiscovery.Icons.Properties {
         public static System.Drawing.Bitmap trippanel {
             get {
                 object obj = ResourceManager.GetObject("trippanel", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap tsbImportSphere {
+            get {
+                object obj = ResourceManager.GetObject("tsbImportSphere", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap turnOffAllTransparencyToolStripMenuItem {
+            get {
+                object obj = ResourceManager.GetObject("turnOffAllTransparencyToolStripMenuItem", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

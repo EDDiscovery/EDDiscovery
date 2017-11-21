@@ -943,4 +943,205 @@
   <data name="Volcano" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Legacy\Volcano.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="buttonCenter" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Legacy\buttonCenter.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="buttonExt0" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Legacy\buttonExt0.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="buttonExt1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Legacy\buttonExt1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="buttonExt10" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Legacy\buttonExt10.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="buttonExt11" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Legacy\buttonExt11.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="buttonExt12" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Legacy\buttonExt12.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="buttonExt2" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Legacy\buttonExt2.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="buttonExt3" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Legacy\buttonExt3.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="buttonExt4" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Legacy\buttonExt4.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="buttonExt5" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Legacy\buttonExt5.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="buttonExt6" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Legacy\buttonExt6.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="buttonExt7" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Legacy\buttonExt7.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="buttonExt8" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Legacy\buttonExt8.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="buttonExt9" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Legacy\buttonExt9.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="checkBoxCustomGraph" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Legacy\checkBoxCustomGraph.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="checkBoxCustomPlanets" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Legacy\checkBoxCustomPlanets.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="checkBoxCustomStars" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Legacy\checkBoxCustomStars.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="checkBoxCustomText" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Legacy\checkBoxCustomText.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="checkBoxMaterials" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Legacy\checkBoxMaterials.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="checkForNewReleaseToolStripMenuItem" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Legacy\checkForNewReleaseToolStripMenuItem.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="deleteDuplicateFSDJumpEntriesToolStripMenuItem" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Legacy\deleteDuplicateFSDJumpEntriesToolStripMenuItem.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="dropdownFilterDate" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Legacy\dropdownFilterDate.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="dropdownMapNames" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Legacy\dropdownMapNames.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="eDDiscoveryChatDiscordToolStripMenuItem" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Legacy\eDDiscoveryChatDiscordToolStripMenuItem.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="enableColoursToolStripMenuItem" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Legacy\enableColoursToolStripMenuItem.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="exitToolStripMenuItem" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Legacy\exitToolStripMenuItem.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="frontierForumThreadToolStripMenuItem" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Legacy\frontierForumThreadToolStripMenuItem.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="howToRunInSafeModeToResetVariousParametersToolStripMenuItem" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Legacy\howToRunInSafeModeToResetVariousParametersToolStripMenuItem.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="newRegionBookmarkToolStripMenuItem" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Legacy\newRegionBookmarkToolStripMenuItem.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="panelLogo" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Legacy\panelLogo.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="panel_eddiscovery" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Legacy\panel_eddiscovery.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="reportIssueIdeasToolStripMenuItem" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Legacy\reportIssueIdeasToolStripMenuItem.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="show2DMapsToolStripMenuItem" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Legacy\show2DMapsToolStripMenuItem.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="show3DMapsToolStripMenuItem" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Legacy\show3DMapsToolStripMenuItem.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="showAllInTaskBarToolStripMenuItem" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Legacy\showAllInTaskBarToolStripMenuItem.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="showBookmarksToolStripMenuItem" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Legacy\showBookmarksToolStripMenuItem.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="showNamesToolStripMenuItem" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Legacy\showNamesToolStripMenuItem.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="showNoteMarksToolStripMenuItem" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Legacy\showNoteMarksToolStripMenuItem.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="showStarstoolStripMenuItem" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Legacy\showStarstoolStripMenuItem.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="showStationsToolStripMenuItem" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Legacy\showStationsToolStripMenuItem.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="toolStripButtonAutoForward" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Legacy\toolStripButtonAutoForward.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="toolStripButtonCoords" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Legacy\toolStripButtonCoords.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="toolStripButtonDelete" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Legacy\toolStripButtonDelete.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="toolStripButtonEliteMovement" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Legacy\toolStripButtonEliteMovement.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="toolStripButtonExport" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Legacy\toolStripButtonExport.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="toolStripButtonFineGrid" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Legacy\toolStripButtonFineGrid.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="toolStripButtonGoBackward" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Legacy\toolStripButtonGoBackward.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="toolStripButtonGoForward" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Legacy\toolStripButtonGoForward.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="toolStripButtonGrid" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Legacy\toolStripButtonGrid.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="toolStripButtonHelp" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Legacy\toolStripButtonHelp.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="toolStripButtonImportFile" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Legacy\toolStripButtonImportFile.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="toolStripButtonLastKnownPosition" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Legacy\toolStripButtonLastKnownPosition.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="toolStripButtonLoad" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Legacy\toolStripButtonLoad.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="toolStripButtonNew" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Legacy\toolStripButtonNew.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="toolStripButtonPerspective" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Legacy\toolStripButtonPerspective.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="toolStripButtonSave" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Legacy\toolStripButtonSave.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="toolStripButtonSubmitDistances" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Legacy\toolStripButtonSubmitDistances.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="toolStripButtonTarget" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Legacy\toolStripButtonTarget.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="toolStripButtonZoomIn" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Legacy\toolStripButtonZoomIn.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="toolStripButtonZoomOut" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Legacy\toolStripButtonZoomOut.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="toolStripButtonZoomtoFit" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Legacy\toolStripButtonZoomtoFit.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="toolStripDropDownButtonBookmarks" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Legacy\toolStripDropDownButtonBookmarks.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="toolStripDropDownButtonFilterStars" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Legacy\toolStripDropDownButtonFilterStars.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="toolStripDropDownButtonGalObjects" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Legacy\toolStripDropDownButtonGalObjects.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="toolStripDropDownButtonNameStars" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Legacy\toolStripDropDownButtonNameStars.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="tsbImportSphere" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Legacy\tsbImportSphere.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="turnOffAllTransparencyToolStripMenuItem" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Legacy\turnOffAllTransparencyToolStripMenuItem.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
 </root>
