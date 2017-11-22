@@ -44,7 +44,7 @@ using EliteDangerous.CompanionAPI;
 
 namespace EDDiscovery
 {
-    public partial class EDDiscoveryForm : ExtendedControls.DraggableForm, IDiscoveryController
+    public partial class EDDiscoveryForm : ExtendedControls.DraggableForm, IDiscoveryController, ExtendedControls.IIconPackControl
     {
         #region Variables
 
@@ -1668,7 +1668,50 @@ namespace EDDiscovery
 
         #endregion
 
+        #region Icon Replacement
+        string ExtendedControls.IIconPackControl.BaseName { get; } = "Main";
 
+        void ExtendedControls.IIconPackControl.ReplaceImages(ExtendedControls.IconPackImageReplacer swap)
+        {
+            swap(img => settingsToolStripMenuItem.Image = img, "Tools.Settings");
+            swap(img => show2DMapsToolStripMenuItem.Image = img, "Tools.Open2DMap");
+            swap(img => show3DMapsToolStripMenuItem.Image = img, "Tools.Open3DMap");
+            swap(img => showAllPopoutsInTaskBarToolStripMenuItem.Image = img, "Tools.Popouts.Menu");
+            swap(img => showAllInTaskBarToolStripMenuItem.Image = img, "Tools.Popouts.ShowAllInTaskbar");
+            swap(img => turnOffAllTransparencyToolStripMenuItem.Image = img, "Tools.Popouts.DisableTransparency");
+            swap(img => exitToolStripMenuItem.Image = img, "Tools.Exit");
+            swap(img => forceEDDBUpdateToolStripMenuItem.Image = img, "Admin.EDDBSystemsSync");
+            swap(img => syncEDSMSystemsToolStripMenuItem.Image = img, "Admin.EDSMSystemsSync");
+            swap(img => showLogfilesToolStripMenuItem.Image = img, "Admin.ShowLogFiles");
+            swap(img => dEBUGResetAllHistoryToFirstCommandeToolStripMenuItem.Image = img, "Admin.ResetHistory");
+            swap(img => read21AndFormerLogFilesToolStripMenuItem.Image = img, "Admin.ReadNetLogs");
+            swap(img => rescanAllJournalFilesToolStripMenuItem.Image = img, "Admin.RescanJournals");
+            swap(img => deleteDuplicateFSDJumpEntriesToolStripMenuItem.Image = img, "Admin.DeleteDupFSDJumps");
+            swap(img => sendUnsuncedEDDNEventsToolStripMenuItem.Image = img, "Admin.SendUnsyncedEDDN");
+            swap(img => sendUnsyncedEGOScansToolStripMenuItem.Image = img, "Admin.SendUnsyncedEGO");
+            swap(img => clearEDSMIDAssignedToAllRecordsForCurrentCommanderToolStripMenuItem.Image = img, "Admin.ClearEDSMIDs");
+            swap(img => exportVistedStarsListToEliteDangerousToolStripMenuItem.Image = img, "Admin.ExportVisitedStars");
+            swap(img => manageAddOnsToolStripMenuItem.Image = img, "Addons.ManageAddOns");
+            swap(img => configureAddOnActionsToolStripMenuItem.Image = img, "Addons.ConfigureAddOnActions");
+            swap(img => editLastActionPackToolStripMenuItem.Image = img, "Addons.EditLastActionPack");
+            swap(img => stopCurrentlyRunningActionProgramToolStripMenuItem.Image = img, "Addons.StopCurrentAction");
+            swap(img => aboutToolStripMenuItem.Image = img, "Help.About");
+            swap(img => eDDiscoveryHomepageToolStripMenuItem.Image = img, "Help.Homepage");
+            swap(img => eDDiscoveryChatDiscordToolStripMenuItem.Image = img, "Help.DiscordChat");
+            swap(img => frontierForumThreadToolStripMenuItem.Image = img, "Help.FrontierForumThread");
+            swap(img => gitHubToolStripMenuItem.Image = img, "Help.Github");
+            swap(img => reportIssueIdeasToolStripMenuItem.Image = img, "Help.ReportIssue");
+            swap(img => howToRunInSafeModeToResetVariousParametersToolStripMenuItem.Image = img, "Help.SafeModeHelp");
+            swap(img => checkForNewReleaseToolStripMenuItem.Image = img, "Help.CheckForNewRelease");
+            swap(img => buttonExtEDSMSync.Image = img, "Toolbar.SyncEDSM");
+            swap(img => buttonExtPopOut.Image = img, "Toolbar.Popouts");
+            swap(img => buttonExtEditAddOns.Image = img, "Toolbar.EditAddons");
+            swap(img => buttonExtManageAddOns.Image = img, "Toolbar.ManageAddOns");
+            swap(img => buttonExtRefresh.Image = img, "Toolbar.Refresh");
+            swap(img => buttonExt2dmap.Image = img, "Toolbar.Open2DMap");
+            swap(img => buttonExt3dmap.Image = img, "Toolbar.Open3DMap");
+        }
+        #endregion
     }
 }
 

@@ -54,7 +54,7 @@ namespace EDDiscovery
 
             public void ReplaceImage(Action<Image> setter, string name)
             {
-                Image newimg = GetImage(BaseName + "." + name);
+                Image newimg = GetImage("Controls." + BaseName + "." + name);
                 if (newimg != null)
                 {
                     setter(newimg);
@@ -121,6 +121,12 @@ namespace EDDiscovery
                 IIconPackControl ctrl = ((IIconPackControl)control);
                 IconReplacer replacer = new IconReplacer(ctrl, GetIcon);
                 ctrl.ReplaceImages(replacer.ReplaceImage);
+            }
+
+            if (control is TabStrip)
+            {
+                TabStrip ts = (TabStrip)control;
+                ts.ImageList = PanelInformation.GetPanelImages();
             }
 
             if (control.HasChildren)

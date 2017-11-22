@@ -101,11 +101,12 @@ namespace EDDiscovery.Forms
 
         public class PanelInfo
         {
+            protected Image tabicon;
             public PanelIDs PopoutID;
             public Type PopoutType;
             public string WindowTitlePrefix;
             public string WindowRefName;
-            public Image TabIcon;
+            public Image TabIcon { get { return tabicon ?? EDDIconSet.Instance.PanelTypeIcons[PopoutID]; } set { tabicon = value; } }
             public string Tooltip;
             public bool SupportsTransparency;
             public bool DefaultTransparent;
@@ -116,7 +117,7 @@ namespace EDDiscovery.Forms
                 PopoutType = t;
                 WindowTitlePrefix = prefix;
                 WindowRefName = rf;
-                TabIcon = icon ?? EDDIconSet.Instance.PanelTypeIcons[p];
+                TabIcon = icon;
                 Tooltip = tooltip;
                 SupportsTransparency = transparent != null;
                 DefaultTransparent = transparent ?? false;

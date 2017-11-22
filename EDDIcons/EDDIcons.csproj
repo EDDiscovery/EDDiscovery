@@ -787,5 +787,52 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="Controls\DateTimePicker\Calendar.png" />
+    <Content Include="Controls\Main\Addons\EditLastActionPack.png" />
+    <Content Include="Controls\Main\Addons\ManageAddOns.png" />
+    <Content Include="Controls\Main\Addons\StopCurrentAction.png" />
+    <Content Include="Controls\Main\Admin\DeleteDupFSDJumps.png" />
+    <Content Include="Controls\Main\Admin\EDDBSystemsSync.png" />
+    <Content Include="Controls\Main\Admin\ClearEDSMIDs.png" />
+    <Content Include="Controls\Main\Admin\SendUnsyncedEDDN.png" />
+    <Content Include="Controls\Main\Admin\EDSMSystemsSync.png" />
+    <Content Include="Controls\Main\Admin\SendUnsynedEGO.png" />
+    <Content Include="Controls\Main\Addons\ConfigureAddOnActions.png" />
+    <Content Include="Controls\Main\Admin\RescanJournals.png" />
+    <Content Include="Controls\Main\Admin\ShowLogFiles.png" />
+    <Content Include="Controls\Main\Admin\ReadNetLogs.png" />
+    <Content Include="Controls\Main\Admin\ExportVisitedStars.png" />
+    <Content Include="Controls\Main\Admin\ResetHistory.png" />
+    <Content Include="Controls\Main\Toolbar\SyncEDSM.png" />
+    <Content Include="Controls\Main\Toolbar\Open2DMap.png" />
+    <Content Include="Controls\Main\Toolbar\Open3DMap.png" />
+    <Content Include="Controls\Main\Toolbar\EditAddons.png" />
+    <Content Include="Controls\Main\Toolbar\ManageAddons.png" />
+    <Content Include="Controls\Main\Toolbar\Popouts.png" />
+    <Content Include="Controls\Main\Toolbar\Refresh.png" />
+    <Content Include="Controls\Main\Help\CheckForNewRelease.png" />
+    <Content Include="Controls\Main\Help\DiscordChat.png" />
+    <Content Include="Controls\Main\Help\FrontierForumThread.png" />
+    <Content Include="Controls\Main\Help\Github.png" />
+    <Content Include="Controls\Main\Help\SafeModeHelp.png" />
+    <Content Include="Controls\Main\Help\ReportIssue.png" />
+    <Content Include="Controls\Main\Help\Homepage.png" />
+    <Content Include="Controls\Main\Help\About.png" />
+    <Content Include="Controls\Main\Tools\Exit.png" />
+    <Content Include="Controls\Main\Tools\Popouts\Menu.png" />
+    <Content Include="Controls\Main\Tools\Settings.png" />
+    <Content Include="Controls\Main\Tools\Open2DMap.png" />
+    <Content Include="Controls\Main\Tools\Open3DMap.png" />
+    <Content Include="Controls\Main\Tools\Popouts\ShowAllInTaskbar.png" />
+    <Content Include="Controls\Main\Tools\Popouts\DisableTransparency.png" />
+    <Content Include="Controls\RollUpPanel\PinDown.png" />
+    <Content Include="Controls\RollUpPanel\PinUp.png" />
+    <Content Include="Controls\TabStrip\ArrowLeft.png" />
+    <Content Include="Controls\TabStrip\ArrowRight.png" />
+    <Content Include="Controls\TabStrip\PanelList.png" />
+    <Content Include="Controls\TabStrip\Popout.png" />
+    <Content Include="Controls\TabStrip\NoPanelSelected.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
