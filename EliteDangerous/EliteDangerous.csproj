@@ -115,7 +115,6 @@
     <Compile Include="EliteDangerous\EDJournalClass.cs" />
     <Compile Include="EliteDangerous\EDJournalReader.cs" />
     <Compile Include="EliteDangerous\EDTypesFromJSON.cs" />
-    <Compile Include="EliteDangerous\IconSet.cs" />
     <Compile Include="EliteDangerous\ISystem.cs" />
     <Compile Include="EliteDangerous\JournalEntry.cs" />
     <Compile Include="EliteDangerous\JournalEntryAttributes.cs" />
@@ -309,10 +308,6 @@
     <ProjectReference Include="..\BaseUtils\BaseUtils.csproj">
       <Project>{c657c881-f3e1-45ba-aca5-966348010414}</Project>
       <Name>BaseUtils</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\EDDIcons\EDDIcons.csproj">
-      <Project>{646f71be-f102-444e-9254-818e5a320ab8}</Project>
-      <Name>EDDIcons</Name>
     </ProjectReference>
     <ProjectReference Include="..\ExtendedControls\ExtendedControls.csproj">
       <Project>{2049403f-f4c7-45e6-b777-6390c78e4d2b}</Project>

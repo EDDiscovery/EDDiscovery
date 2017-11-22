@@ -7,18 +7,20 @@ using System.Drawing;
 using System.Reflection;
 using System.IO;
 using System.Collections;
+using System.IO.Compression;
 
 namespace EDDiscovery.Icons
 {
     public static class IconSet
     {
+        private static Dictionary<string, Image> defaultIcons;
         private static Dictionary<string, Image> icons;
 
         static IconSet()
         {
             Assembly asm = Assembly.GetExecutingAssembly();
             string[] resnames = asm.GetManifestResourceNames();
-            icons = new Dictionary<string, Image>();
+            defaultIcons = new Dictionary<string, Image>();
             string basename = typeof(IconSet).Namespace + ".";
 
             foreach (string resname in resnames)
@@ -26,38 +28,80 @@ namespace EDDiscovery.Icons
                 if (resname.StartsWith(basename) && resname.EndsWith(".png"))
                 {
                     string name = resname.Substring(basename.Length, resname.Length - basename.Length - 4);
-                    icons[name] = Image.FromStream(asm.GetManifestResourceStream(resname));
+                    defaultIcons[name] = Image.FromStream(asm.GetManifestResourceStream(resname));
+                }
+            }
+
+            ResetIcons();
+        }
+
+        public static void ResetIcons()
+        {
+            icons = defaultIcons.ToArray().ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
+        }
+
+        public static void LoadIconsFromDirectory(string path)
+        {
+            if (Directory.Exists(path))
+            {
+                foreach (var file in Directory.EnumerateFiles(path, "*.png", SearchOption.AllDirectories))
+                {
+                    string name = file.Substring(path.Length + 1).Replace('/', '.').Replace('\\', '.');
+                    Image img = null;
+
+                    try
+                    {
+                        img = Image.FromFile(file);
+                    }
+                    catch
+                    {
+                        // Ignore any bad images
+                        continue;
+                    }
+
+                    icons[name] = img;
+                }
+            }
+        }
+
+        public static void LoadIconsFromZipFile(string path)
+        {
+            if (File.Exists(path))
+            {
+                using (var zipfile = ZipFile.Open(path, ZipArchiveMode.Read))
+                {
+                    foreach (var entry in zipfile.Entries)
+                    {
+                        if (entry.FullName.EndsWith(".png"))
+                        {
+                            string name = entry.FullName.Replace('/', '.').Replace('\\', '.');
+                            Image img = null;
+
+                            try
+                            {
+                                using (var zipstrm = entry.Open())
+                                {
+                                    var memstrm = new MemoryStream(); // Image will own this
+                                    zipstrm.CopyTo(memstrm);
+                                    img = Image.FromStream(memstrm);
+                                }
+                            }
+                            catch
+                            {
+                                // Ignore any bad images
+                                continue;
+                            }
+
+                            icons[name] = img;
+                        }
+                    }
                 }
             }
         }
 
         public static Image GetIcon(string name)
         {
-            return icons[name];
+            return icons.ContainsKey(name) ? icons[name] : null;
         }
-
-        public static bool HasIcon(string name)
-        {
-            return icons.ContainsKey(name);
-        }
-    }
-
-    public abstract class IconSet<T> : IReadOnlyDictionary<T, Image>
-    {
-        protected Dictionary<T, Image> icons;
-
-        protected void Init(string basedir, IEnumerable<T> keys)
-        {
-            icons = keys.ToDictionary(e => e, e => IconSet.GetIcon(basedir + "." + e.ToString()));
-        }
-
-        public Image this[T key] => icons[key];
-        public IEnumerable<T> Keys => icons.Keys;
-        public IEnumerable<Image> Values => icons.Values;
-        public int Count => icons.Count;
-        public bool ContainsKey(T key) => icons.ContainsKey(key);
-        public IEnumerator<KeyValuePair<T, Image>> GetEnumerator() => icons.GetEnumerator();
-        public bool TryGetValue(T key, out Image value) => icons.TryGetValue(key, out value);
-        IEnumerator IEnumerable.GetEnumerator() => icons.GetEnumerator();
     }
 }

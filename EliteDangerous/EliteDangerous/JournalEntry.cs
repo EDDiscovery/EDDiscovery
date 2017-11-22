@@ -373,7 +373,7 @@ namespace EliteDangerousCore
         {
             get
             {
-                return GetIcon(this.EventTypeID) ?? EDDiscovery.Icons.Properties.Resources._event;
+                return GetIcon(this.EventTypeID) ?? GetIcon(JournalTypeEnum.Unknown);
             }
         }
 

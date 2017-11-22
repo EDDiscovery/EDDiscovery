@@ -362,17 +362,13 @@ namespace EliteDangerousCore
         {
             IReadOnlyDictionary<EDStar, System.Drawing.Image> icons = EliteConfigInstance.InstanceIconSet?.StarTypeIcons;
 
-            if (icons != null && icons.ContainsKey(type))
+            if (icons.ContainsKey(type))
             {
                 return icons[type];
             }
-            else if (icons.ContainsKey(EDStar.Unknown))
-            {
-                return icons[EDStar.Unknown];
-            }
             else
             {
-                return EDDiscovery.Icons.Properties.Resources.DefaultStar;
+                return icons[EDStar.Unknown];
             }
         }
 
@@ -380,17 +376,13 @@ namespace EliteDangerousCore
         {
             IReadOnlyDictionary<EDPlanet, System.Drawing.Image> icons = EliteConfigInstance.InstanceIconSet?.PlanetTypeIcons;
 
-            if (icons != null && icons.ContainsKey(type))
+            if (icons.ContainsKey(type))
             {
                 return icons[type];
             }
-            else if (icons != null && icons.ContainsKey(EDPlanet.Unknown))
-            {
-                return icons[EDPlanet.Unknown];
-            }
             else
             {
-                return EDDiscovery.Icons.Properties.Resources.Globe;
+                return icons[EDPlanet.Unknown];
             }
         }
 

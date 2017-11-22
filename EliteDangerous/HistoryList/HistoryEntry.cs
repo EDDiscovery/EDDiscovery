@@ -465,9 +465,9 @@ namespace EliteDangerousCore
                 if (journalEntry != null)
                     return journalEntry.Icon;
                 else if (EntryType == JournalTypeEnum.FSDJump)
-                    return JournalEntry.GetIcon(JournalTypeEnum.FSDJump) ?? EDDiscovery.Icons.Properties.Resources.hyperspace;
+                    return JournalEntry.GetIcon(JournalTypeEnum.FSDJump);
                 else
-                    return JournalEntry.GetIcon(JournalTypeEnum.Unknown) ?? EDDiscovery.Icons.Properties.Resources.genericevent;
+                    return JournalEntry.GetIcon(JournalTypeEnum.Unknown);
             }
         }
 

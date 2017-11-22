@@ -1,19 +1,54 @@
 ﻿using EDDiscovery.Icons;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using EDDiscovery.Forms;
+using EliteDangerousCore;
+using EliteDangerousCore.EDSM;
 
 namespace EDDiscovery
 {
-    public class EDDIconSet : EliteDangerousCore.IconSet
+    public class EDDIconSet : IEliteIconSet
     {
-        private static EDDIconSet _instance;
+        public class IconGroup<T> : IReadOnlyDictionary<T, Image>
+        {
+            protected Dictionary<T, Image> icons;
 
-        private EDDIconSet() { }
+            public IconGroup(string basedir, Func<string, Image> geticon)
+            {
+                Init(basedir, Enum.GetValues(typeof(T)).OfType<T>(), geticon);
+            }
+
+            protected void Init(string basedir, IEnumerable<T> keys, Func<string, Image> geticon)
+            {
+                icons = keys.ToDictionary(e => e, e => geticon(basedir + "." + e.ToString()));
+            }
+
+            public Image this[T key] => icons[key];
+            public IEnumerable<T> Keys => icons.Keys;
+            public IEnumerable<Image> Values => icons.Values;
+            public int Count => icons.Count;
+            public bool ContainsKey(T key) => icons.ContainsKey(key);
+            public IEnumerator<KeyValuePair<T, Image>> GetEnumerator() => icons.GetEnumerator();
+            public bool TryGetValue(T key, out Image value) => icons.TryGetValue(key, out value);
+            IEnumerator IEnumerable.GetEnumerator() => icons.GetEnumerator();
+        }
+
+        private static EDDIconSet _instance;
+        private Func<string, Image> getIcon;
+
+        private EDDIconSet()
+        {
+            StarTypeIcons = new IconGroup<EDStar>("Stars", this.GetIcon);
+            PlanetTypeIcons = new IconGroup<EDPlanet>("Planets", this.GetIcon);
+            JournalTypeIcons = new IconGroup<JournalTypeEnum>("Journal", this.GetIcon);
+            GalMapTypeIcons = new IconGroup<GalMapTypeEnum>("GalMap", this.GetIcon);
+            PanelTypeIcons = new IconGroup<PanelInformation.PanelIDs>("Panels", this.GetIcon);
+        }
 
         public static EDDIconSet Instance
         {
@@ -22,7 +57,7 @@ namespace EDDiscovery
                 if (_instance == null)
                 {
                     _instance = new EDDIconSet();
-                    EliteDangerousCore.EliteConfigInstance.InstanceIconSet = _instance;
+                    EliteConfigInstance.InstanceIconSet = _instance;
                 }
 
                 return _instance;
@@ -30,23 +65,29 @@ namespace EDDiscovery
             set
             {
                 _instance = value;
-                EliteDangerousCore.EliteConfigInstance.InstanceIconSet = value;
+                EliteConfigInstance.InstanceIconSet = value;
             }
         }
 
-        public static void Init()
+        public static void Init(Func<string, Image> geticon)
         {
-            EliteDangerousCore.EliteConfigInstance.InstanceIconSet = Instance;
+            EliteConfigInstance.InstanceIconSet = Instance;
         }
 
-        public IReadOnlyDictionary<PanelInformation.PanelIDs, Image> PanelTypeIcons { get; } = new PanelIcons();
-    }
+        public IReadOnlyDictionary<PanelInformation.PanelIDs, Image> PanelTypeIcons { get; private set; }
+        public IReadOnlyDictionary<EDStar, Image> StarTypeIcons { get; private set; }
+        public IReadOnlyDictionary<EDPlanet, Image> PlanetTypeIcons { get; private set; }
+        public IReadOnlyDictionary<JournalTypeEnum, Image> JournalTypeIcons { get; private set; }
+        public IReadOnlyDictionary<GalMapTypeEnum, Image> GalMapTypeIcons { get; private set; }
 
-    public class PanelIcons : IconSet<PanelInformation.PanelIDs>
-    {
-        public PanelIcons()
+        public Image GetIcon(string name)
         {
-            Init("Panels", Enum.GetValues(typeof(PanelInformation.PanelIDs)).OfType<PanelInformation.PanelIDs>());
+            if (!name.Contains("."))
+            {
+                name = "Legacy." + name;
+            }
+
+            return getIcon(name);
         }
     }
 }
