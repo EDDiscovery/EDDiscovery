@@ -37,7 +37,7 @@ using System.Windows.Forms;
 
 namespace EDDiscovery
 {
-    public partial class FormMap : ExtendedControls.SmartSysMenuForm
+    public partial class FormMap : ExtendedControls.SmartSysMenuForm, ExtendedControls.IIconPackControl
     {
 
 
@@ -2411,6 +2411,59 @@ namespace EDDiscovery
 
         #endregion
 
+        #region Icon Replacement
+        string ExtendedControls.IIconPackControl.BaseName { get; } = "Map3D";
+
+        void ExtendedControls.IIconPackControl.ReplaceImages(ExtendedControls.IconPackImageReplacer swap)
+        {
+            swap(img => toolStripButtonGoBackward.Image = img, "Nagivation.GoBackward");
+            swap(img => toolStripButtonGoForward.Image = img, "Navigation.GoForward");
+            swap(img => toolStripButtonLastKnownPosition.Image = img, "Navigation.LastKnownPosition");
+            swap(img => toolStripButtonAutoForward.Image = img, "Navigation.GoForwardOnJump");
+            swap(img => toolStripButtonHome.Image = img, "Navigation.GoToHomeSystem");
+            swap(img => toolStripButtonHistory.Image = img, "Navigation.GoToHistorySelection");
+            swap(img => toolStripButtonTarget.Image = img, "Navigation.GoToTarget");
+            swap(img => toolStripDropDownButtonVisitedStars.Image = img, "Travel.Menu");
+            swap(img => drawLinesBetweenStarsWithPositionToolStripMenuItem.Image = img, "Travel.DrawLines");
+            swap(img => drawADiscOnStarsWithPositionToolStripMenuItem.Image = img, "Travel.DrawStars");
+            swap(img => useWhiteForDiscsInsteadOfAssignedMapColourToolStripMenuItem.Image = img, "Travel.WhiteStars");
+            swap(img => toolStripDropDownButtonFilterStars.Image = img, "Filter.Menu");
+            swap(img => showStarstoolStripMenuItem.Image = img, "Filter.ShowAllStars");
+            swap(img => showStationsToolStripMenuItem.Image = img, "Filter.ShowPopSystems");
+            swap(img => enableColoursToolStripMenuItem.Image = img, "Filter.DisplayColours");
+            swap(img => toolStripDropDownButtonNameStars.Image = img, "Stars.Menu");
+            swap(img => showDiscsToolStripMenuItem.Image = img, "Stars.ShowDiscs");
+            swap(img => showNamesToolStripMenuItem.Image = img, "Stars.ShowNames");
+            swap(img => toolStripDropDownButtonBookmarks.Image = img, "Bookmarks.Menu");
+            swap(img => showBookmarksToolStripMenuItem.Image = img, "Bookmarks.ShowBookmarks");
+            swap(img => showNoteMarksToolStripMenuItem.Image = img, "Bookmarks.ShowNotemarks");
+            swap(img => newRegionBookmarkToolStripMenuItem.Image = img, "Bookmarks.AddRegionBookmark");
+            swap(img => toolStripDropDownButtonGalObjects.Image = img, "GalObjects");
+            swap(img => toolStripButtonGrid.Image = img, "Grid.Grid");
+            swap(img => toolStripButtonFineGrid.Image = img, "Grid.FineGrid");
+            swap(img => toolStripButtonCoords.Image = img, "Grid.Coords");
+            swap(img => toolStripButtonPerspective.Image = img, "Perspective");
+            swap(img => toolStripButtonEliteMovement.Image = img, "EliteMovement");
+            swap(img => dropdownMapNames.Image = img, "MapNames");
+            swap(img => dropdownFilterDate.Image = img, "FilterDate");
+            swap(img => toolStripButtonHelp.Image = img, "Help");
+            swap(img => toolStripDropDownRecord.Image = img, "Recorder.Menu");
+            swap(img => recordToolStripMenuItem.Image = img, "Recorder.Record");
+            swap(img => recordStepToStepToolStripMenuItem.Image = img, "Recorder.RecordStep");
+            swap(img => newRecordStepToolStripMenuItem.Image = img, "Recorder.NewRecordStep");
+            swap(img => pauseRecordToolStripMenuItem.Image = img, "Recorder.Pause");
+            swap(img => toolStripMenuItemClearRecording.Image = img, "Recorder.Clear");
+            swap(img => playbackToolStripMenuItem.Image = img, "Recorder.Play");
+            swap(img => saveToFileToolStripMenuItem.Image = img, "Recorder.Save");
+            swap(img => LoadFileToolStripMenuItem.Image = img, "Recorder.Load");
+            swap(img => dotSelectedSystemCoords.Image = img, "OrangeDot");
+            swap(img => dotSelectedSystemCoords.InitialImage = img, "OrangeDot");
+            swap(img => dotSystemCoords.Image = img, "YellowDot");
+            swap(img => dotSystemCoords.InitialImage = img, "YellowDot");
+            swap(img => buttonCenter.Image = img, "Navigation.CenterOnSystem");
+            swap(img => buttonLookAt.Image = img, "Navigation.LookAtSystem");
+        }
+        #endregion
     }
 
 

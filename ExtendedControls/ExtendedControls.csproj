@@ -64,6 +64,7 @@
     <Compile Include="Controls\ComboBoxCustom.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Controls\IIconPackControl.cs" />
     <Compile Include="Forms\SmartSysMenuForm.cs">
       <SubType>Form</SubType>
     </Compile>

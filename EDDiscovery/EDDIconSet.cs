@@ -9,6 +9,9 @@ using System.Threading.Tasks;
 using EDDiscovery.Forms;
 using EliteDangerousCore;
 using EliteDangerousCore.EDSM;
+using System.Windows.Forms;
+using ExtendedControls;
+using ExtendedControls.Controls;
 
 namespace EDDiscovery
 {
@@ -36,6 +39,27 @@ namespace EDDiscovery
             public IEnumerator<KeyValuePair<T, Image>> GetEnumerator() => icons.GetEnumerator();
             public bool TryGetValue(T key, out Image value) => icons.TryGetValue(key, out value);
             IEnumerator IEnumerable.GetEnumerator() => icons.GetEnumerator();
+        }
+
+        public class IconReplacer
+        {
+            public string BaseName { get; private set; }
+            protected Func<string, Image> GetImage { get; set; }
+
+            public IconReplacer(IIconPackControl control, Func<string, Image> getimage)
+            {
+                BaseName = control.BaseName;
+                GetImage = getimage;
+            }
+
+            public void ReplaceImage(Action<Image> setter, string name)
+            {
+                Image newimg = GetImage(BaseName + "." + name);
+                if (newimg != null)
+                {
+                    setter(newimg);
+                }
+            }
         }
 
         private static EDDIconSet _instance;
@@ -88,6 +112,24 @@ namespace EDDiscovery
             }
 
             return getIcon(name);
+        }
+
+        public void ReplaceIcons(Control control)
+        {
+            if (control is IIconPackControl)
+            {
+                IIconPackControl ctrl = ((IIconPackControl)control);
+                IconReplacer replacer = new IconReplacer(ctrl, GetIcon);
+                ctrl.ReplaceImages(replacer.ReplaceImage);
+            }
+
+            if (control.HasChildren)
+            {
+                foreach (Control child in control.Controls)
+                {
+                    ReplaceIcons(child);
+                }
+            }
         }
     }
 }

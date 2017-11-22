@@ -30,7 +30,7 @@ using System.Windows.Forms;
 
 namespace EDDiscovery
 {
-    public partial class Form2DMap : Form
+    public partial class Form2DMap : Form, ExtendedControls.IIconPackControl
     {
         public List<FGEImage> fgeimages;
         private FGEImage currentFGEImage;
@@ -366,5 +366,17 @@ namespace EDDiscovery
         {
 
         }
+
+        #region Icon Replacement
+        string ExtendedControls.IIconPackControl.BaseName { get; } = "Map2D";
+
+        void ExtendedControls.IIconPackControl.ReplaceImages(ExtendedControls.IconPackImageReplacer swap)
+        {
+            swap(img => toolStripButtonZoomIn.Image = img, "ZoomIn");
+            swap(img => toolStripButtonZoomOut.Image = img, "ZoomOut");
+            swap(img => toolStripButtonZoomtoFit.Image = img, "ZoomToFit");
+            swap(img => buttonSave.Image = img, "Save");
+        }
+        #endregion
     }
 }
