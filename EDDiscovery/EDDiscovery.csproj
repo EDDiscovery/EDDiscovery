@@ -771,7 +771,6 @@
     <None Include="Resources\JournalGrid.Journal.png" />
     <None Include="Resources\JournalGrid.Popout.png" />
     <None Include="Resources\Map2D.Save.png" />
-    <None Include="Resources\Map3D.Nagivation.GoBackward.png" />
     <None Include="Resources\Modules.ShowOnCoriolis.png" />
     <None Include="Resources\Route.ExportToExcel.png" />
     <None Include="Resources\Scan.ExportToExcel.png" />
