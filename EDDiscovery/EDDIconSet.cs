@@ -11,7 +11,6 @@ using EliteDangerousCore;
 using EliteDangerousCore.EDSM;
 using System.Windows.Forms;
 using ExtendedControls;
-using ExtendedControls.Controls;
 
 namespace EDDiscovery
 {
