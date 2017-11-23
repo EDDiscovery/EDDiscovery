@@ -41,7 +41,7 @@ namespace EDDiscovery.UserControls
     }
 
 
-    public partial class UserControlStatsTime : UserControl
+    public partial class UserControlStatsTime : UserControl, ExtendedControls.IIconPackControl
     {
         public event EventHandler TimeModeChanged;
         public event EventHandler DrawModeChanged;
@@ -256,5 +256,17 @@ namespace EDDiscovery.UserControls
             if (this.TimeModeChanged != null)
                 TimeModeChanged(this, e);
         }
+
+        #region Icon Replacement
+        string ExtendedControls.IIconPackControl.BaseName { get; } = "StatsTime";
+
+        void ExtendedControls.IIconPackControl.ReplaceImages(ExtendedControls.IconPackImageReplacer swap)
+        {
+            swap(img => checkBoxCustomStars.Image = img, "Stars");
+            swap(img => checkBoxCustomPlanets.Image = img, "Planets");
+            swap(img => checkBoxCustomGraph.Image = img, "Graph");
+            swap(img => checkBoxCustomText.Image = img, "Text");
+        }
+        #endregion
     }
 }

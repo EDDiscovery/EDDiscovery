@@ -29,7 +29,7 @@ using EliteDangerousCore.DB;
 
 namespace EDDiscovery.UserControls
 {
-    public partial class UserControlModules : UserControlCommonBase
+    public partial class UserControlModules : UserControlCommonBase, ExtendedControls.IIconPackControl
     {
         private string DbColumnSave { get { return ("ModulesGrid") + ((displaynumber > 0) ? displaynumber.ToString() : "") + "DGVCol"; } }
         private string DbShipSave { get { return "ModulesGridShipSelect" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
@@ -313,5 +313,14 @@ namespace EDDiscovery.UserControls
                 e.Handled = true;
             }
         }
+
+        #region Icon Replacement
+        string ExtendedControls.IIconPackControl.BaseName { get; } = "Modules";
+
+        void ExtendedControls.IIconPackControl.ReplaceImages(ExtendedControls.IconPackImageReplacer swap)
+        {
+            swap(img => buttonExtCoriolis.Image = img, "ShowOnCoriolis");
+        }
+        #endregion
     }
 }

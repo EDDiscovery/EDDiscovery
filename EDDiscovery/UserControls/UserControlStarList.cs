@@ -31,7 +31,7 @@ using EliteDangerousCore.JournalEvents;
 
 namespace EDDiscovery.UserControls
 {
-    public partial class UserControlStarList : UserControlCommonBase, IHistoryCursor
+    public partial class UserControlStarList : UserControlCommonBase, IHistoryCursor, ExtendedControls.IIconPackControl
     {
         #region Public IF
 
@@ -638,8 +638,19 @@ namespace EDDiscovery.UserControls
             if (current_historylist != null && checkBoxEDSM.Checked)
                 HistoryChanged(current_historylist);        
         }
-    }
 
-    #endregion
+        #endregion
+
+        #region Icon Replacement
+        string ExtendedControls.IIconPackControl.BaseName { get; } = "StatsTime";
+
+        void ExtendedControls.IIconPackControl.ReplaceImages(ExtendedControls.IconPackImageReplacer swap)
+        {
+            swap(img => buttonExtExcel.Image = img, "ExportToExcel");
+            swap(img => panelHistoryIcon.BackgroundImage = img, "History");
+            swap(img => checkBoxEDSM.Image = img, "EDSM");
+        }
+        #endregion
+    }
 }
     

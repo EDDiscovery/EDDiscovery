@@ -33,7 +33,7 @@ using EliteDangerousCore.JournalEvents;
 
 namespace EDDiscovery.UserControls
 {
-    public partial class UserControlExploration :  UserControlCommonBase
+    public partial class UserControlExploration :  UserControlCommonBase, ExtendedControls.IIconPackControl
     {
         private string DbColumnSave { get { return ("ModulesGrid") + ((displaynumber > 0) ? displaynumber.ToString() : "") + "DGVCol"; } }
 
@@ -840,6 +840,21 @@ namespace EDDiscovery.UserControls
             }
             UpdateSystemRows();
         }
+
+        #region Icon Replacement
+        string ExtendedControls.IIconPackControl.BaseName { get; } = "Exploration";
+
+        void ExtendedControls.IIconPackControl.ReplaceImages(ExtendedControls.IconPackImageReplacer swap)
+        {
+            swap(img => toolStripButtonNew.Image = img, "New");
+            swap(img => toolStripButtonImportFile.Image = img, "ImportFile");
+            swap(img => tsbImportSphere.Image = img, "ImportSphere");
+            swap(img => toolStripButtonLoad.Image = img, "Load");
+            swap(img => toolStripButtonSave.Image = img, "Save");
+            swap(img => toolStripButtonExport.Image = img, "Export");
+            swap(img => toolStripButtonDelete.Image = img, "Delete");
+        }
+        #endregion
     }
 
     public class ExplorationSetClass

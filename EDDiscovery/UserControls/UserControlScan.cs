@@ -31,7 +31,7 @@ using EliteDangerousCore.JournalEvents;
 
 namespace EDDiscovery.UserControls
 {
-    public partial class UserControlScan : UserControlCommonBase
+    public partial class UserControlScan : UserControlCommonBase, IIconPackControl
     {
         Size starsize, beltsize, planetsize, moonsize, materialsize;
         Size itemsepar;
@@ -1113,6 +1113,24 @@ namespace EDDiscovery.UserControls
             }
         }
 
+        #endregion
+
+        #region Icon Replacement
+        string ExtendedControls.IIconPackControl.BaseName { get; } = "Exploration";
+
+        void ExtendedControls.IIconPackControl.ReplaceImages(ExtendedControls.IconPackImageReplacer swap)
+        {
+            swap(img => checkBoxTiny.BackgroundImage = img, "SizeTiny");
+            swap(img => checkBoxSmall.BackgroundImage = img, "SizeSmall");
+            swap(img => checkBoxMedium.BackgroundImage = img, "SizeMedium");
+            swap(img => checkBoxLarge.BackgroundImage = img, "SizeLarge");
+            swap(img => checkBoxMoons.BackgroundImage = img, "ShowMoons");
+            swap(img => checkBoxMaterials.BackgroundImage = img, "ShowAllMaterials");
+            swap(img => checkBoxMaterialsRare.BackgroundImage = img, "ShowRareMaterials");
+            swap(img => buttonExtExcel.Image = img, "ExportToExcel");
+            swap(img => checkBoxEDSM.Image = img, "FetchEDSMBodies");
+            swap(img => chkShowOverlays.Image = img, "ShowOverlays");
+        }
         #endregion
     }
 }

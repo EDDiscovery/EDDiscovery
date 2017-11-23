@@ -30,7 +30,7 @@ using EliteDangerousCore.EDDN;
 
 namespace EDDiscovery.UserControls
 {
-    public partial class UserControlTravelGrid : UserControlCommonBase, IHistoryCursor
+    public partial class UserControlTravelGrid : UserControlCommonBase, IHistoryCursor, ExtendedControls.IIconPackControl
     {
         #region Public IF
 
@@ -1068,5 +1068,15 @@ namespace EDDiscovery.UserControls
                 OnPopOut();
         }
 
+        #region Icon Replacement
+        string ExtendedControls.IIconPackControl.BaseName { get; } = "TravelGrid";
+
+        void ExtendedControls.IIconPackControl.ReplaceImages(ExtendedControls.IconPackImageReplacer swap)
+        {
+            swap(img => buttonExtExcel.Image = img, "ExportToExcel");
+            swap(img => drawnPanelPopOut.DrawnImage = img, "Popout");
+            swap(img => panelHistoryIcon.BackgroundImage = img, "History");
+        }
+        #endregion
     }
 }

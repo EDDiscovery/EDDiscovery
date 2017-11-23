@@ -777,7 +777,6 @@
     <EmbeddedResource Include="Legacy\turnOffAllTransparencyToolStripMenuItem.png" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Controls\Expedition\" />
     <Folder Include="Controls\Exploration\" />
     <Folder Include="Controls\Scan\" />
     <Folder Include="Controls\SPanel\" />
@@ -789,6 +788,13 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Controls\DateTimePicker\Calendar.png" />
+    <Content Include="Controls\Expedition\ShowOnMap.png" />
+    <Content Include="Controls\Expedition\New.png" />
+    <Content Include="Controls\Expedition\ImportFile.png" />
+    <Content Include="Controls\Expedition\ImportRoute.png" />
+    <Content Include="Controls\Expedition\Delete.png" />
+    <Content Include="Controls\Expedition\Save.png" />
+    <Content Include="Controls\Expedition\Export.png" />
     <Content Include="Controls\Main\Addons\EditLastActionPack.png" />
     <Content Include="Controls\Main\Addons\ManageAddOns.png" />
     <Content Include="Controls\Main\Addons\StopCurrentAction.png" />

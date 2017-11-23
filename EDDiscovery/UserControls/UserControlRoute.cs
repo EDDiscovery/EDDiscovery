@@ -16,7 +16,7 @@ using System.Diagnostics;
 
 namespace EDDiscovery.UserControls
 {
-    public partial class UserControlRoute : UserControlCommonBase
+    public partial class UserControlRoute : UserControlCommonBase, ExtendedControls.IIconPackControl
     {
         private string DbSave(string s) { return ("UCRoute") + ((displaynumber > 0) ? displaynumber.ToString() : "") + "_" + s; }
 
@@ -727,8 +727,16 @@ namespace EDDiscovery.UserControls
                 catch { }
             }
         }
+
+        #endregion
+
+        #region Icon Replacement
+        string ExtendedControls.IIconPackControl.BaseName { get; } = "Route";
+
+        void ExtendedControls.IIconPackControl.ReplaceImages(ExtendedControls.IconPackImageReplacer swap)
+        {
+            swap(img => buttonExtExcel.Image = img, "ExportToExcel");
+        }
+        #endregion
     }
-
-    #endregion
-
 }
