@@ -62,7 +62,7 @@ namespace EDDiscovery
         }
 
         private static EDDIconSet _instance;
-        private Func<string, Image> getIcon;
+        private static Func<string, Image> getIcon;
 
         private EDDIconSet()
         {
@@ -94,6 +94,7 @@ namespace EDDiscovery
 
         public static void Init(Func<string, Image> geticon)
         {
+            getIcon = geticon;
             EliteConfigInstance.InstanceIconSet = Instance;
         }
 

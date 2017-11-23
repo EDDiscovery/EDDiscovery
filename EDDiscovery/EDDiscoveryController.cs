@@ -715,6 +715,7 @@ namespace EDDiscovery
 
         private void LoadIconPack()
         {
+            Icons.IconSet.ResetIcons();
             EDDIconSet.Init(Icons.IconSet.GetIcon);
 
             string path = EDDOptions.Instance.IconsPath;

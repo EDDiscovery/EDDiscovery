@@ -184,6 +184,36 @@
   <data name="Expedition_ShowOnMap" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Expedition.ShowOnMap.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="Exploration_Delete" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Exploration.Delete.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Exploration_Export" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Exploration.Export.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Exploration_ImportFile" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Exploration.ImportFile.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Exploration_ImportSphere" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Exploration.ImportSphere.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Exploration_Load" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Exploration.Load.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Exploration_New" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Exploration.New.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Exploration_Save" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Exploration.Save.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="JournalGrid_ExportToExcel" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\JournalGrid.ExportToExcel.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="JournalGrid_Journal" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\JournalGrid.Journal.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="JournalGrid_Popout" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\JournalGrid.Popout.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="Main_Addons_ConfigureAddOnActions" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Main.Addons.ConfigureAddOnActions.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -223,8 +253,8 @@
   <data name="Main_Admin_SendUnsyncedEDDN" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Main.Admin.SendUnsyncedEDDN.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="Main_Admin_SendUnsynedEGO" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Main.Admin.SendUnsynedEGO.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="Main_Admin_SendUnsyncedEGO" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Main.Admin.SendUnsyncedEGO.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Main_Admin_ShowLogFiles" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Main.Admin.ShowLogFiles.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -256,7 +286,7 @@
   <data name="Main_Toolbar_EditAddons" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Main.Toolbar.EditAddons.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="Main_Toolbar_ManageAddons" type="System.Resources.ResXFileRef, System.Windows.Forms">
+  <data name="Main_Toolbar_ManageAddOns" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Main.Toolbar.ManageAddons.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Main_Toolbar_Open2DMap" type="System.Resources.ResXFileRef, System.Windows.Forms">
@@ -294,6 +324,9 @@
   </data>
   <data name="Main_Tools_Settings" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Main.Tools.Settings.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Map2D_Save" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Map2D.Save.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Map2D_ShowAllStars" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Map2D.ShowAllStars.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -354,6 +387,9 @@
   </data>
   <data name="Map3D_MapNames" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Map3D.MapNames.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Map3D_Nagivation_GoBackward" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Map3D.Nagivation.GoBackward.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Map3D_Navigation_CenterOnSystem" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Map3D.Navigation.CenterOnSystem.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -441,6 +477,87 @@
   </data>
   <data name="Map3D_YellowDot" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Map3D.YellowDot.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Modules_ShowOnCoriolis" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Modules.ShowOnCoriolis.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Route_ExportToExcel" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Route.ExportToExcel.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Scan_ExportToExcel" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Scan.ExportToExcel.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Scan_FetchEDSMBodies" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Scan.FetchEDSMBodies.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Scan_ShowAllMaterials" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Scan.ShowAllMaterials.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Scan_ShowMoons" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Scan.ShowMoons.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Scan_ShowOverlays" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Scan.ShowOverlays.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Scan_ShowRareMaterials" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Scan.ShowRareMaterials.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Scan_SizeLarge" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Scan.SizeLarge.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Scan_SizeMedium" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Scan.SizeMedium.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Scan_SizeSmall" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Scan.SizeSmall.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Scan_SizeTiny" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Scan.SizeTiny.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="StarList_EDSM" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\StarList.EDSM.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="StarList_ExportToExcel" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\StarList.ExportToExcel.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="StarList_History" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\StarList.History.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="StatsTime_Graph" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\StatsTime.Graph.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="StatsTime_Planets" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\StatsTime.Planets.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="StatsTime_Stars" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\StatsTime.Stars.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="StatsTime_Text" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\StatsTime.Text.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="TravelGrid_ExportToExcel" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\TravelGrid.ExportToExcel.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="TravelGrid_History" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\TravelGrid.History.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="TravelGrid_Popout" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\TravelGrid.Popout.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Trilateration_RemoveAll" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Trilateration.RemoveAll.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Trilateration_RemoveUnused" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Trilateration.RemoveUnused.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Trilateration_ShowOnMap" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Trilateration.ShowOnMap.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Trilateration_StartNew" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Trilateration.StartNew.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Trilateration_SubmitDistances" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Trilateration.SubmitDistances.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="UCContainer_Panels" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\UCContainer.Panels.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
