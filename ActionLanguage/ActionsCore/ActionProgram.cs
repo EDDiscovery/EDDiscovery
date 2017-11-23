@@ -151,12 +151,12 @@ namespace ActionLanguage
             return errlist;
         }
 
-        public string Read(System.IO.TextReader sr, ref int lineno)         // read from stream
+        public string Read(System.IO.TextReader sr, ref int lineno, string prenamed = "")         // read from stream. At this lineno, plus it may already be named
         {
             string err = "";
 
             programsteps = new List<ActionBase>();
-            Name = "";
+            Name = prenamed;
 
             List<int> indents = new List<int>();
             List<int> level = new List<int>();
@@ -203,7 +203,12 @@ namespace ActionLanguage
                     }
 
                     if (cmd.Equals("PROGRAM", StringComparison.InvariantCultureIgnoreCase))
-                        Name = line;
+                    {
+                        if ( Name.Length == 0 ) // should not be named at this point.. otherwise a block failure
+                            Name = line;
+                        else
+                            err += lineno + " " + Name + " Duplicate PROGRAM line" + Environment.NewLine;
+                    }
                     else if (cmd.Equals("END", StringComparison.InvariantCultureIgnoreCase) && line.Equals("PROGRAM", StringComparison.InvariantCultureIgnoreCase))
                         break;
                     else

@@ -13,6 +13,7 @@ namespace AudioExtensions
     public interface IVoiceRecognition
     {
         event SpeechRecognised SpeechRecognised;
+        event SpeechRecognised SpeechNotRecognised;
         bool IsOpen { get; }
         float Confidence { get; set; }
         int BabbleTimeout { get; set; }
@@ -33,6 +34,7 @@ namespace AudioExtensions
     public class VoiceRecognitionDummy: IVoiceRecognition
     {
         public event SpeechRecognised SpeechRecognised;
+        public event SpeechRecognised SpeechNotRecognised;
         public bool IsOpen { get { return false; } }
         public float Confidence { get; set; } = 0.98F;
         public int BabbleTimeout { get; set; }
