@@ -2416,7 +2416,7 @@ namespace EDDiscovery
 
         void ExtendedControls.IIconPackControl.ReplaceImages(ExtendedControls.IconPackImageReplacer swap)
         {
-            swap(img => toolStripButtonGoBackward.Image = img, "Nagivation.GoBackward");
+            swap(img => toolStripButtonGoBackward.Image = img, "Navigation.GoBackward");
             swap(img => toolStripButtonGoForward.Image = img, "Navigation.GoForward");
             swap(img => toolStripButtonLastKnownPosition.Image = img, "Navigation.LastKnownPosition");
             swap(img => toolStripButtonAutoForward.Image = img, "Navigation.GoForwardOnJump");

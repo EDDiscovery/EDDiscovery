@@ -388,9 +388,6 @@
   <data name="Map3D_MapNames" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Map3D.MapNames.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="Map3D_Nagivation_GoBackward" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Map3D.Nagivation.GoBackward.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="Map3D_Navigation_CenterOnSystem" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Map3D.Navigation.CenterOnSystem.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>

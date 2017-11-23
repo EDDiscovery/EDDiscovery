@@ -850,16 +850,6 @@ namespace EDDiscovery.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Map3D_Nagivation_GoBackward {
-            get {
-                object obj = ResourceManager.GetObject("Map3D_Nagivation_GoBackward", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
         internal static System.Drawing.Bitmap Map3D_Navigation_CenterOnSystem {
             get {
                 object obj = ResourceManager.GetObject("Map3D_Navigation_CenterOnSystem", resourceCulture);

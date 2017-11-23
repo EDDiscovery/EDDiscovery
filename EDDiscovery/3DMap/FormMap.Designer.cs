@@ -197,7 +197,7 @@ namespace EDDiscovery
             // toolStripButtonGoBackward
             // 
             this.toolStripButtonGoBackward.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButtonGoBackward.Image = global::EDDiscovery.Properties.Resources.Map3D_Nagivation_GoBackward;
+            this.toolStripButtonGoBackward.Image = global::EDDiscovery.Properties.Resources.Map3D_Navigation_GoBackward;
             this.toolStripButtonGoBackward.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonGoBackward.Name = "toolStripButtonGoBackward";
             this.toolStripButtonGoBackward.Size = new System.Drawing.Size(23, 37);
