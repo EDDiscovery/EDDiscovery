@@ -20,6 +20,8 @@ namespace AudioExtensions
         public int InitialSilenceTimeout { get { return (int)engine.InitialSilenceTimeout.TotalMilliseconds; } set { engine.InitialSilenceTimeout = new TimeSpan(0, 0, 0, 0, value); } }
 
         public event SpeechRecognised SpeechRecognised;
+        public event SpeechRecognised SpeechNotRecognised;
+
         public bool IsOpen { get { return engine != null; } }
 
         private SpeechRecognitionEngine engine;
@@ -45,10 +47,9 @@ namespace AudioExtensions
             }
 
             engine.SpeechRecognized += Engine_SpeechRecognized;
+            engine.SpeechHypothesized += Engine_SpeechHypothesized;
+            engine.SpeechRecognitionRejected += Engine_SpeechRecognitionRejected;
 
-            // disabled for normal use, kept for debugging
-            //engine.SpeechHypothesized += Engine_SpeechHypothesized;
-            //engine.SpeechRecognitionRejected += Engine_SpeechRecognitionRejected;
             //System.Diagnostics.Debug.WriteLine("Engine {0}", engine.RecognizerInfo.Description);
             //foreach (var x in engine.RecognizerInfo.AdditionalInfo)
             //    System.Diagnostics.Debug.WriteLine(".. " + x.Key + "=" + x.Value);
@@ -182,21 +183,23 @@ namespace AudioExtensions
 
         private void Engine_SpeechRecognized(object sender, SpeechRecognizedEventArgs e)
         {
-            var x = e.Result;
             //DumpInfo("Recognised", e.Result);
-            System.Diagnostics.Debug.WriteLine("Confidence {0} vs threshold {1} for {2}", e.Result.Confidence, Confidence, e.Result.Text);
+            //System.Diagnostics.Debug.WriteLine("Confidence {0} vs threshold {1} for {2}", e.Result.Confidence, Confidence, e.Result.Text);
             if (e.Result.Confidence >= Confidence)
                 SpeechRecognised?.Invoke(e.Result.Text, e.Result.Confidence);
+            else
+                SpeechNotRecognised?.Invoke(e.Result.Text, e.Result.Confidence);
         }
 
         private void Engine_SpeechRecognitionRejected(object sender, SpeechRecognitionRejectedEventArgs e)
         {
-            DumpInfo("Rejected", e.Result);
+            //DumpInfo("Rejected", e.Result);
+            SpeechNotRecognised?.Invoke(e.Result.Text, e.Result.Confidence);
         }
 
         private void Engine_SpeechHypothesized(object sender, SpeechHypothesizedEventArgs e)
         {
-            DumpInfo("Hypothesised", e.Result);
+            //DumpInfo("Hypothesised", e.Result);
         }
 
 

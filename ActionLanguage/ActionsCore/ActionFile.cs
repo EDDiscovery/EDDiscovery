@@ -200,13 +200,12 @@ namespace ActionLanguage
                             }
                             else if (line.StartsWith("PROGRAM", StringComparison.InvariantCultureIgnoreCase))
                             {
-                                ActionProgram ap = new ActionProgram();
-                                string err = ap.Read(sr, ref lineno);
+                                ActionProgram ap = new ActionProgram();     
+                                string err = ap.Read(sr, ref lineno, line.Substring(7).Trim()); // Read it, prename it..
 
                                 if (err.Length > 0)
                                     return name + " " + err;
 
-                                ap.Rename(line.Substring(7).Trim());        //MUST rename now, after read, as read clears the name expecting PROGRAM
                                 actionprogramlist.Add(ap);
                             }
                             else if (line.StartsWith("INCLUDE", StringComparison.InvariantCultureIgnoreCase))

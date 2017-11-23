@@ -103,9 +103,10 @@ namespace EDDiscovery.Actions
 
             frontierbindings.LoadBindingsFile();
             //System.Diagnostics.Debug.WriteLine("Bindings" + frontierbindings.ListBindings());
-           // System.Diagnostics.Debug.WriteLine("Key Names" + frontierbindings.ListKeyNames("{","}"));
+            // System.Diagnostics.Debug.WriteLine("Key Names" + frontierbindings.ListKeyNames("{","}"));
 
             voicerecon.SpeechRecognised += Voicerecon_SpeechRecognised;
+            voicerecon.SpeechNotRecognised += Voicerecon_SpeechNotRecognised;
 
             ConditionFunctions.GetCFH = DefaultGetCFH;
 
@@ -756,8 +757,14 @@ namespace EDDiscovery.Actions
 
         private void Voicerecon_SpeechRecognised(string text, float confidence)
         {
-            System.Diagnostics.Debug.WriteLine("Dispatch " + text);
-            ActionRun(ActionEventEDList.onVoiceInput, new ConditionVariables("VoiceInput", text));
+            System.Diagnostics.Debug.WriteLine("Recognised " + text + " " + confidence.ToStringInvariant("0.0"));
+            ActionRun(ActionEventEDList.onVoiceInput, new ConditionVariables(new string[] { "VoiceInput", text, "VoiceConfidence", (confidence*100F).ToStringInvariant("0.00") }));
+        }
+
+        private void Voicerecon_SpeechNotRecognised(string text, float confidence)
+        {
+            System.Diagnostics.Debug.WriteLine("Failed recognition " + text + " " + confidence.ToStringInvariant("0.00"));
+            ActionRun(ActionEventEDList.onVoiceInputFailed, new ConditionVariables(new string[] { "VoiceInput", text, "VoiceConfidence", (confidence*100F).ToStringInvariant("0.00") }));
         }
 
         #endregion

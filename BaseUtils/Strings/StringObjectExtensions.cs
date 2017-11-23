@@ -344,17 +344,21 @@ public static class ObjectExtensionsStrings
     {
         return v.ToString(System.Globalization.CultureInfo.InvariantCulture);
     }
+    public static string ToStringInvariant(this float v, string format)
+    {
+        return v.ToString(format, System.Globalization.CultureInfo.InvariantCulture);
+    }
     public static string ToStringInvariant(this float v)
     {
         return v.ToString(System.Globalization.CultureInfo.InvariantCulture);
     }
     public static string ToStringInvariant(this double? v, string format)
     {
-        return (v.HasValue) ? v.Value.ToString(format) : "";
+        return (v.HasValue) ? v.Value.ToString(format, System.Globalization.CultureInfo.InvariantCulture) : "";
     }
     public static string ToStringInvariant(this float? v, string format)
     {
-        return (v.HasValue) ? v.Value.ToString(format) : "";
+        return (v.HasValue) ? v.Value.ToString(format, System.Globalization.CultureInfo.InvariantCulture) : "";
     }
     public static string ToStringInvariant(this int? v)
     {
