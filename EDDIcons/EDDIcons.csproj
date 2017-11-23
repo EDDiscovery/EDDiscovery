@@ -829,7 +829,7 @@
     <EmbeddedResource Include="Controls\Main\Help\Github.png" />
     <EmbeddedResource Include="Controls\Main\Help\SafeModeHelp.png" />
     <EmbeddedResource Include="Controls\Main\Help\ReportIssue.png" />
-    <EmbeddedResource Include="Controls\Main\Help\Homepage.png" />
+    <EmbeddedResource Include="Controls\Main\Help\Help.png" />
     <EmbeddedResource Include="Controls\Main\Help\About.png" />
     <EmbeddedResource Include="Controls\Main\Tools\Exit.png" />
     <EmbeddedResource Include="Controls\Main\Tools\Popouts\Menu.png" />

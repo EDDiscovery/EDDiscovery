@@ -1696,7 +1696,7 @@ namespace EDDiscovery
             swap(img => editLastActionPackToolStripMenuItem.Image = img, "Addons.EditLastActionPack");
             swap(img => stopCurrentlyRunningActionProgramToolStripMenuItem.Image = img, "Addons.StopCurrentAction");
             swap(img => aboutToolStripMenuItem.Image = img, "Help.About");
-            swap(img => eDDiscoveryHomepageToolStripMenuItem.Image = img, "Help.Homepage");
+            swap(img => eDDiscoveryHomepageToolStripMenuItem.Image = img, "Help.Help");
             swap(img => eDDiscoveryChatDiscordToolStripMenuItem.Image = img, "Help.DiscordChat");
             swap(img => frontierForumThreadToolStripMenuItem.Image = img, "Help.FrontierForumThread");
             swap(img => gitHubToolStripMenuItem.Image = img, "Help.Github");

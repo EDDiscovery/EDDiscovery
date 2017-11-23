@@ -691,7 +691,7 @@
     <None Include="Resources\Main.Help.DiscordChat.png" />
     <None Include="Resources\Main.Help.FrontierForumThread.png" />
     <None Include="Resources\Main.Help.Github.png" />
-    <None Include="Resources\Main.Help.Homepage.png" />
+    <None Include="Resources\Main.Help.Help.png" />
     <None Include="Resources\Main.Help.ReportIssue.png" />
     <None Include="Resources\Main.Help.SafeModeHelp.png" />
     <None Include="Resources\Main.Toolbar.EditAddons.png" />

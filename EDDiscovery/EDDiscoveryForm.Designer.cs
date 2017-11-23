@@ -395,7 +395,7 @@ namespace EDDiscovery
             // 
             // eDDiscoveryHomepageToolStripMenuItem
             // 
-            this.eDDiscoveryHomepageToolStripMenuItem.Image = global::EDDiscovery.Properties.Resources.Main_Help_Homepage;
+            this.eDDiscoveryHomepageToolStripMenuItem.Image = global::EDDiscovery.Properties.Resources.Main_Help_Help;
             this.eDDiscoveryHomepageToolStripMenuItem.Name = "eDDiscoveryHomepageToolStripMenuItem";
             this.eDDiscoveryHomepageToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F1;
             this.eDDiscoveryHomepageToolStripMenuItem.Size = new System.Drawing.Size(354, 22);
