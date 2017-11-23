@@ -510,7 +510,7 @@ namespace EDDiscovery.UserControls
         }
 
         #region Icon Replacement
-        string ExtendedControls.IIconPackControl.BaseName { get; } = "TravelGrid";
+        string ExtendedControls.IIconPackControl.BaseName { get; } = "JournalGrid";
 
         void ExtendedControls.IIconPackControl.ReplaceImages(ExtendedControls.IconPackImageReplacer swap)
         {

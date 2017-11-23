@@ -642,7 +642,7 @@ namespace EDDiscovery.UserControls
         #endregion
 
         #region Icon Replacement
-        string ExtendedControls.IIconPackControl.BaseName { get; } = "StatsTime";
+        string ExtendedControls.IIconPackControl.BaseName { get; } = "StarList";
 
         void ExtendedControls.IIconPackControl.ReplaceImages(ExtendedControls.IconPackImageReplacer swap)
         {

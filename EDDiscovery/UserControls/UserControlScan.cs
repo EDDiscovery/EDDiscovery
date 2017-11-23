@@ -1116,7 +1116,7 @@ namespace EDDiscovery.UserControls
         #endregion
 
         #region Icon Replacement
-        string ExtendedControls.IIconPackControl.BaseName { get; } = "Exploration";
+        string ExtendedControls.IIconPackControl.BaseName { get; } = "Scan";
 
         void ExtendedControls.IIconPackControl.ReplaceImages(ExtendedControls.IconPackImageReplacer swap)
         {
