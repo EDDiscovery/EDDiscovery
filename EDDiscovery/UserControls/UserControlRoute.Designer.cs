@@ -123,7 +123,7 @@
             this.buttonExtExcel.ButtonColorScaling = 0.5F;
             this.buttonExtExcel.ButtonDisabledScaling = 0.5F;
             this.buttonExtExcel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.buttonExtExcel.Image = global::EDDiscovery.Icons.Properties.Resources.excel;
+            this.buttonExtExcel.Image = global::EDDiscovery.Properties.Resources.Route_ExportToExcel;
             this.buttonExtExcel.Location = new System.Drawing.Point(296, 148);
             this.buttonExtExcel.Name = "buttonExtExcel";
             this.buttonExtExcel.Size = new System.Drawing.Size(24, 24);

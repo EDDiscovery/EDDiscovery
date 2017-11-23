@@ -163,4 +163,292 @@
   <data name="edlogo_3mo_icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\edlogo_3mo_icon.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="Expedition_Delete" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Expedition.Delete.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Expedition_Export" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Expedition.Export.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Expedition_ImportFile" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Expedition.ImportFile.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Expedition_ImportRoute" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Expedition.ImportRoute.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Expedition_New" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Expedition.New.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Expedition_Save" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Expedition.Save.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Expedition_ShowOnMap" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Expedition.ShowOnMap.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Main_Addons_ConfigureAddOnActions" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Main.Addons.ConfigureAddOnActions.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Main_Addons_EditLastActionPack" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Main.Addons.EditLastActionPack.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Main_Addons_ManageAddOns" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Main.Addons.ManageAddOns.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Main_Addons_StopCurrentAction" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Main.Addons.StopCurrentAction.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Main_Admin_ClearEDSMIDs" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Main.Admin.ClearEDSMIDs.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Main_Admin_DeleteDupFSDJumps" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Main.Admin.DeleteDupFSDJumps.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Main_Admin_EDDBSystemsSync" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Main.Admin.EDDBSystemsSync.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Main_Admin_EDSMSystemsSync" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Main.Admin.EDSMSystemsSync.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Main_Admin_ExportVisitedStars" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Main.Admin.ExportVisitedStars.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Main_Admin_ReadNetLogs" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Main.Admin.ReadNetLogs.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Main_Admin_RescanJournals" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Main.Admin.RescanJournals.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Main_Admin_ResetHistory" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Main.Admin.ResetHistory.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Main_Admin_SendUnsyncedEDDN" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Main.Admin.SendUnsyncedEDDN.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Main_Admin_SendUnsynedEGO" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Main.Admin.SendUnsynedEGO.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Main_Admin_ShowLogFiles" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Main.Admin.ShowLogFiles.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Main_Help_About" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Main.Help.About.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Main_Help_CheckForNewRelease" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Main.Help.CheckForNewRelease.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Main_Help_DiscordChat" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Main.Help.DiscordChat.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Main_Help_FrontierForumThread" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Main.Help.FrontierForumThread.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Main_Help_Github" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Main.Help.Github.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Main_Help_Homepage" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Main.Help.Homepage.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Main_Help_ReportIssue" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Main.Help.ReportIssue.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Main_Help_SafeModeHelp" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Main.Help.SafeModeHelp.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Main_Toolbar_EditAddons" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Main.Toolbar.EditAddons.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Main_Toolbar_ManageAddons" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Main.Toolbar.ManageAddons.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Main_Toolbar_Open2DMap" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Main.Toolbar.Open2DMap.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Main_Toolbar_Open3DMap" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Main.Toolbar.Open3DMap.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Main_Toolbar_Popouts" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Main.Toolbar.Popouts.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Main_Toolbar_Refresh" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Main.Toolbar.Refresh.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Main_Toolbar_SyncEDSM" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Main.Toolbar.SyncEDSM.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Main_Tools_Exit" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Main.Tools.Exit.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Main_Tools_Open2DMap" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Main.Tools.Open2DMap.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Main_Tools_Open3DMap" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Main.Tools.Open3DMap.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Main_Tools_Popouts_DisableTransparency" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Main.Tools.Popouts.DisableTransparency.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Main_Tools_Popouts_Menu" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Main.Tools.Popouts.Menu.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Main_Tools_Popouts_ShowAllInTaskbar" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Main.Tools.Popouts.ShowAllInTaskbar.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Main_Tools_Settings" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Main.Tools.Settings.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Map2D_ShowAllStars" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Map2D.ShowAllStars.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Map2D_ZoomIn" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Map2D.ZoomIn.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Map2D_ZoomOut" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Map2D.ZoomOut.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Map2D_ZoomToFit" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Map2D.ZoomToFit.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Map3D_Bookmarks_AddRegionBookmark" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Map3D.Bookmarks.AddRegionBookmark.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Map3D_Bookmarks_Menu" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Map3D.Bookmarks.Menu.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Map3D_Bookmarks_ShowBookmarks" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Map3D.Bookmarks.ShowBookmarks.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Map3D_Bookmarks_ShowNotemarks" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Map3D.Bookmarks.ShowNotemarks.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Map3D_EliteMovement" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Map3D.EliteMovement.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Map3D_FilterDate" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Map3D.FilterDate.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Map3D_Filter_DisplayColours" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Map3D.Filter.DisplayColours.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Map3D_Filter_Menu" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Map3D.Filter.Menu.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Map3D_Filter_ShowAllStars" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Map3D.Filter.ShowAllStars.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Map3D_Filter_ShowPopSystems" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Map3D.Filter.ShowPopSystems.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Map3D_GalObjects" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Map3D.GalObjects.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Map3D_Grid_Coords" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Map3D.Grid.Coords.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Map3D_Grid_FineGrid" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Map3D.Grid.FineGrid.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Map3D_Grid_Grid" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Map3D.Grid.Grid.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Map3D_Help" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Map3D.Help.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Map3D_MapNames" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Map3D.MapNames.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Map3D_Navigation_CenterOnSystem" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Map3D.Navigation.CenterOnSystem.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Map3D_Navigation_GoBackward" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Map3D.Navigation.GoBackward.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Map3D_Navigation_GoForward" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Map3D.Navigation.GoForward.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Map3D_Navigation_GoForwardOnJump" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Map3D.Navigation.GoForwardOnJump.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Map3D_Navigation_GoToHistorySelection" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Map3D.Navigation.GoToHistorySelection.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Map3D_Navigation_GoToHomeSystem" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Map3D.Navigation.GoToHomeSystem.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Map3D_Navigation_GoToTarget" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Map3D.Navigation.GoToTarget.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Map3D_Navigation_LastKnownPosition" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Map3D.Navigation.LastKnownPosition.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Map3D_Navigation_LookAtSystem" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Map3D.Navigation.LookAtSystem.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Map3D_OrangeDot" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Map3D.OrangeDot.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Map3D_Perspective" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Map3D.Perspective.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Map3D_Recorder_Clear" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Map3D.Recorder.Clear.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Map3D_Recorder_Load" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Map3D.Recorder.Load.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Map3D_Recorder_Menu" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Map3D.Recorder.Menu.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Map3D_Recorder_NewRecordStep" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Map3D.Recorder.NewRecordStep.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Map3D_Recorder_Pause" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Map3D.Recorder.Pause.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Map3D_Recorder_Play" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Map3D.Recorder.Play.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Map3D_Recorder_Record" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Map3D.Recorder.Record.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Map3D_Recorder_RecordStep" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Map3D.Recorder.RecordStep.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Map3D_Recorder_Save" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Map3D.Recorder.Save.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Map3D_Stars_Menu" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Map3D.Stars.Menu.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Map3D_Stars_ShowDiscs" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Map3D.Stars.ShowDiscs.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Map3D_Stars_ShowNames" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Map3D.Stars.ShowNames.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Map3D_StopNormalBlue" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Map3D.StopNormalBlue.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Map3D_Travel_DrawLines" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Map3D.Travel.DrawLines.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Map3D_Travel_DrawStars" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Map3D.Travel.DrawStars.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Map3D_Travel_Menu" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Map3D.Travel.Menu.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Map3D_Travel_WhiteStars" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Map3D.Travel.WhiteStars.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Map3D_YellowDot" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Map3D.YellowDot.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="UCContainer_Panels" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\UCContainer.Panels.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="UCContainer_Remove" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\UCContainer.Remove.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="UCContainer_Tile" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\UCContainer.Tile.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
 </root>
