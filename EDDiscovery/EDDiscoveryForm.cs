@@ -405,16 +405,7 @@ namespace EDDiscovery
                 }));
             }
 
-            removeTabToolStripMenuItem.Click += (s, e) => 
-            {
-                TabPage page = tabControlMain.TabPages[tabControlMain.LastTabClicked];
-                UserControls.UserControlCommonBase uccb = page.Controls[0] as UserControls.UserControlCommonBase;
-                uccb.Closing();
-                page.Controls.Clear();
-                uccb.Dispose();
-                tabControlMain.TabPages.Remove(page);
-                page.Dispose();
-            };
+            removeTabToolStripMenuItem.Click += (s, e) => RemoveTabAtIndex(tabControlMain.LastTabClicked);
 
             if ( tabctrl.Length>0 && tabctrl[0]>=0 && tabctrl[0]<tabControlMain.TabPages.Count)
                 tabControlMain.SelectedIndex = tabctrl[0];  // make sure external data does not crash us
@@ -519,6 +510,17 @@ namespace EDDiscovery
             return page;
         }
 
+        private void RemoveTabAtIndex(int tabIndex)
+        {
+            if (tabIndex >= 0 && tabIndex < tabControlMain.TabPages.Count && !(tabControlMain.TabPages[tabIndex].Controls[0] is UserControls.UserControlHistory))
+            {
+                TabPage page = tabControlMain.TabPages[tabIndex];
+                UserControls.UserControlCommonBase uccb = page.Controls[0] as UserControls.UserControlCommonBase;
+                uccb.Closing();
+                page.Dispose();
+            }
+        }
+
         public bool SelectTabPage(string name)
         {
             foreach (TabPage p in tabControlMain.TabPages)
@@ -535,9 +537,13 @@ namespace EDDiscovery
 
         private void tabControlMain_MouseClick(object sender, MouseEventArgs e)
         {
-            if (e.Button == MouseButtons.Right && tabControlMain.TabAt(e.Location) != -1)
+            int n = tabControlMain.TabAt(e.Location);
+            if (n != -1)
             {
-                contextMenuStripTabs.Show(tabControlMain.PointToScreen(e.Location));
+                if (e.Button == MouseButtons.Right)
+                    contextMenuStripTabs.Show(tabControlMain.PointToScreen(e.Location));
+                else if (e.Button == MouseButtons.Middle)
+                    RemoveTabAtIndex(n);
             }
         }
 
