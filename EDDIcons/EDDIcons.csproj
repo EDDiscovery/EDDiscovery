@@ -55,11 +55,6 @@
   <ItemGroup>
     <Compile Include="IconSet.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Journal\AfmuRepairs.png" />
@@ -237,11 +232,6 @@
     <EmbeddedResource Include="Planets\Water_world.png" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <SubType>Designer</SubType>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
     <EmbeddedResource Include="Stars\A.png" />
     <EmbeddedResource Include="Stars\AeBe.png" />
     <EmbeddedResource Include="Stars\A_BlueWhiteSuperGiant.png" />
@@ -776,9 +766,7 @@
     <EmbeddedResource Include="Legacy\tsbImportSphere.png" />
     <EmbeddedResource Include="Legacy\turnOffAllTransparencyToolStripMenuItem.png" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Controls\SPanel\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
@@ -872,6 +860,30 @@
     <EmbeddedResource Include="Controls\Trilateration\ShowOnMap.png" />
     <EmbeddedResource Include="Controls\Trilateration\StartNew.png" />
     <EmbeddedResource Include="Controls\Trilateration\SubmitDistances.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Controls\Map3D\Bookmarks\Noted.png" />
+    <Content Include="Controls\Map3D\Bookmarks\Star.png" />
+    <Content Include="Controls\Map3D\Bookmarks\Target.png" />
+    <Content Include="Controls\Map3D\Bookmarks\Region.png" />
+    <Content Include="Controls\Map3D\Markers\Selected.png" />
+    <Content Include="Controls\Map3D\Recorder\PausePlay.png" />
+    <Content Include="Controls\Map3D\Recorder\PauseRecord.png" />
+    <Content Include="Controls\Map3D\Recorder\StopPlay.png" />
+    <Content Include="Controls\Map3D\Recorder\StopRecord.png" />
+    <Content Include="Controls\Scan\Bodies\Barycentre.png" />
+    <Content Include="Controls\Scan\Bodies\Belt.png" />
+    <Content Include="Controls\Scan\Bodies\Landable.png" />
+    <Content Include="Controls\Scan\Bodies\HighValue.png" />
+    <Content Include="Controls\Scan\Bodies\Material.png" />
+    <Content Include="Controls\Scan\Bodies\MaterialMore.png" />
+    <Content Include="Controls\Scan\Bodies\RingOnly.png" />
+    <Content Include="Controls\Scan\Bodies\RingGap.png" />
+    <Content Include="Controls\Scan\Bodies\Terraformable.png" />
+    <Content Include="Controls\Scan\Bodies\Volcanism.png" />
+    <Content Include="Controls\SPanel\ResizeColumn.png" />
+    <Content Include="Controls\TravelGrid\FlagStart.png" />
+    <Content Include="Controls\TravelGrid\FlagStop.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

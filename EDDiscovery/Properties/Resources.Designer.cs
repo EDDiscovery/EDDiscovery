@@ -61,6 +61,16 @@ namespace EDDiscovery.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap eddiscovery_logo {
+            get {
+                object obj = ResourceManager.GetObject("eddiscovery_logo", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
         internal static System.Drawing.Icon edlogo_3mo_icon {
@@ -1279,6 +1289,16 @@ namespace EDDiscovery.Properties {
         internal static System.Drawing.Bitmap Scan_SizeTiny {
             get {
                 object obj = ResourceManager.GetObject("Scan_SizeTiny", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Spanel_ResizeColumn {
+            get {
+                object obj = ResourceManager.GetObject("Spanel_ResizeColumn", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

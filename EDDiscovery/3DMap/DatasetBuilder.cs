@@ -41,6 +41,8 @@ namespace EDDiscovery._3DMap
         Color CentredSystem = System.Drawing.Color.Yellow;
         Color PlannedRouteColor = System.Drawing.Color.Green;
 
+        Bitmap SelectedMarker = (Bitmap)EDDIconSet.Instance.GetIcon("Controls.Map3D.Markers.Selected");
+
         public Vector2 MinGridPos { get; set; } = new Vector2(-50000.0f, -20000.0f);
         public Vector2 MaxGridPos { get; set; } = new Vector2(50000.0f, 80000.0f);
 
@@ -767,7 +769,7 @@ namespace EDDiscovery._3DMap
 
         public List<IData3DSet> BuildSelected(ISystem centersystem, ISystem selectedsystem, GalacticMapObject selectedgmo, float widthly, float heightly, Vector3 rotation )
         {
-            Bitmap selmark  = (Bitmap)EDDiscovery.Icons.Properties.Resources.selectedmarker;
+            Bitmap selmark  = SelectedMarker;
 
             if (centersystem != null)
             {

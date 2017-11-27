@@ -53,7 +53,7 @@ namespace EDDiscovery.Forms
             // 
             this.panel_eddiscovery.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.panel_eddiscovery.BackColor = System.Drawing.Color.Black;
-            this.panel_eddiscovery.BackgroundImage = EDDiscovery.Icons.Properties.Resources.panel_eddiscovery;
+            this.panel_eddiscovery.BackgroundImage = EDDiscovery.Properties.Resources.eddiscovery_logo;
             this.panel_eddiscovery.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.panel_eddiscovery.Location = new System.Drawing.Point(12, 53);
             this.panel_eddiscovery.Name = "panel_eddiscovery";

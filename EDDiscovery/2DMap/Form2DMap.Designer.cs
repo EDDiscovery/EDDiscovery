@@ -135,7 +135,7 @@ namespace EDDiscovery
             // 
             this.toolStripButtonStars.CheckOnClick = true;
             this.toolStripButtonStars.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButtonStars.Image = global::EDDiscovery.Icons.Properties.Resources.star;
+            this.toolStripButtonStars.Image = global::EDDiscovery.Properties.Resources.Map2D_ShowAllStars;
             this.toolStripButtonStars.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonStars.Name = "toolStripButtonStars";
             this.toolStripButtonStars.Size = new System.Drawing.Size(26, 26);

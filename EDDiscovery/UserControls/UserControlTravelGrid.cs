@@ -464,9 +464,9 @@ namespace EDDiscovery.UserControls
             }
 
             if (he.StartMarker)
-                e.Graphics.DrawImage(EDDiscovery.Icons.Properties.Resources.startflag, new Rectangle(hstart, top, size, size));
+                e.Graphics.DrawImage(EDDIconSet.Controls.TravelGrid.FlagStart, new Rectangle(hstart, top, size, size));
             else if (he.StopMarker)
-                e.Graphics.DrawImage(EDDiscovery.Icons.Properties.Resources.stopflag, new Rectangle(hstart, top, size, size));
+                e.Graphics.DrawImage(EDDIconSet.Controls.TravelGrid.FlagStop, new Rectangle(hstart, top, size, size));
 
         }
 
