@@ -25,7 +25,7 @@ namespace EDDiscovery.Icons
 
             foreach (string resname in resnames)
             {
-                if (resname.StartsWith(basename) && resname.EndsWith(".png"))
+                if (resname.StartsWith(basename) && resname.EndsWith(".png", StringComparison.InvariantCultureIgnoreCase))
                 {
                     string name = resname.Substring(basename.Length, resname.Length - basename.Length - 4);
                     defaultIcons[name] = Image.FromStream(asm.GetManifestResourceStream(resname));
@@ -72,9 +72,9 @@ namespace EDDiscovery.Icons
                 {
                     foreach (var entry in zipfile.Entries)
                     {
-                        if (entry.FullName.EndsWith(".png"))
+                        if (entry.FullName.EndsWith(".png", StringComparison.InvariantCultureIgnoreCase))
                         {
-                            string name = entry.FullName.Replace('/', '.').Replace('\\', '.');
+                            string name = entry.FullName.Substring(0, entry.FullName.Length - 4).Replace('/', '.').Replace('\\', '.');
                             Image img = null;
 
                             try
@@ -101,7 +101,7 @@ namespace EDDiscovery.Icons
 
         public static Image GetIcon(string name)
         {
-            return icons.ContainsKey(name) ? icons[name] : null;
+            return icons.ContainsKey(name) ? icons[name] : (defaultIcons.ContainsKey(name) ? defaultIcons[name] : null);
         }
     }
 }
