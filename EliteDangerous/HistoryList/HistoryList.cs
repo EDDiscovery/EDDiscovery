@@ -301,11 +301,11 @@ namespace EliteDangerousCore
             return (from s in historylist where s.journalEntry.EventTypeID == JournalTypeEnum.Scan && s.EventTimeLocal >= start && s.EventTimeLocal < to select s).Count();
         }
 
-        public int GetScanValue(DateTime start, DateTime to)
+        public long GetScanValue(DateTime start, DateTime to)
         {
             var list = (from s in historylist where s.EntryType == JournalTypeEnum.Scan && s.EventTimeLocal >= start && s.EventTimeLocal < to select s.journalEntry as JournalScan).ToList<JournalScan>();
 
-            return (from t in list select t.EstimatedValue()).Sum();
+            return (from t in list select (long)t.EstimatedValue()).Sum();
         }
 
         public int GetDocked(DateTime start, DateTime to)
