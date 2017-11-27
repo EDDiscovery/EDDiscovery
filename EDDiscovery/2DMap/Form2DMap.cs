@@ -50,6 +50,7 @@ namespace EDDiscovery
         {
             syslist = sl;
             InitializeComponent();
+            EDDIconSet.Instance.ReplaceIcons(this);
         }
 
         bool initdone = false;

@@ -43,6 +43,7 @@ namespace EDDiscovery.UserControls
         public UserControlTrilateration()
         {
             InitializeComponent();
+            EDDIconSet.Instance.ReplaceIcons(this);
             var corner = dataGridViewDistances.TopLeftHeaderCell; // work around #1487
             var corner2 = dataGridViewClosestSystems.TopLeftHeaderCell; // work around #1487
         }

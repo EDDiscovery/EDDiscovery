@@ -29,6 +29,7 @@ namespace EDDiscovery.UserControls
         public UserControlRoute()
         {
             InitializeComponent();
+            EDDIconSet.Instance.ReplaceIcons(this);
             var corner = dataGridViewRoute.TopLeftHeaderCell; // work around #1487
         }
 

@@ -154,6 +154,7 @@ namespace EDDiscovery
 
             // Some components require the controller to be initialized
             InitializeComponent();
+            EDDIconSet.Instance.ReplaceIcons(this);
 
             panelToolBar.HiddenMarkerWidth = 200;
             panelToolBar.PinState = SQLiteConnectionUser.GetSettingBool("ToolBarPanelPinState", true);

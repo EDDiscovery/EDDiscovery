@@ -50,6 +50,7 @@ namespace EDDiscovery.UserControls
         public UserControlStatsTime()
         {
             InitializeComponent();
+            EDDIconSet.Instance.ReplaceIcons(this);
 
             CustomDateTimePickerFrom.Value = DateTime.Today.AddMonths(-1);
             CustomDateTimePickerTo.Value = DateTime.Today;

@@ -72,6 +72,7 @@ namespace EDDiscovery.UserControls
         public UserControlStarList()
         {
             InitializeComponent();
+            EDDIconSet.Instance.ReplaceIcons(this);
             var corner = dataGridViewStarList.TopLeftHeaderCell; // work around #1487
         }
 

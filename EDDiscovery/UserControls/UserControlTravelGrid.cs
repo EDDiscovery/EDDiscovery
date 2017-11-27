@@ -94,6 +94,7 @@ namespace EDDiscovery.UserControls
         public UserControlTravelGrid()
         {
             InitializeComponent();
+            EDDIconSet.Instance.ReplaceIcons(this);
             var corner = dataGridViewTravel.TopLeftHeaderCell; // work around #1487
         }
 

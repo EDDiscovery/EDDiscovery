@@ -304,6 +304,7 @@ namespace EDDiscovery
         public FormMap()
         {
             InitializeComponent();
+            EDDIconSet.Instance.ReplaceIcons(this);
             maprecorder = new MapRecorder(this);
             // 
             // glControl

@@ -51,6 +51,7 @@ namespace EDDiscovery.UserControls
         public UserControlScan()
         {
             InitializeComponent();
+            EDDIconSet.Instance.ReplaceIcons(this);
             this.AutoScaleMode = AutoScaleMode.None;            // we are dealing with graphics.. lets turn off dialog scaling.
             rtbNodeInfo.Visible = false;
             toolTip.ShowAlways = true;

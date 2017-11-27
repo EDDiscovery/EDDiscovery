@@ -66,6 +66,7 @@ namespace EDDiscovery.UserControls
         public UserControlJournalGrid()
         {
             InitializeComponent();
+            EDDIconSet.Instance.ReplaceIcons(this);
             var corner = dataGridViewJournal.TopLeftHeaderCell; // work around #1487
         }
 

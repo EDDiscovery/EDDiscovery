@@ -52,6 +52,7 @@ namespace EDDiscovery.UserControls
         public UserControlExploration()
         {
             InitializeComponent();
+            EDDIconSet.Instance.ReplaceIcons(this);
             var corner = dataGridViewExplore.TopLeftHeaderCell; // work around #1487
             ColumnSystemName.AutoCompleteGenerator = SystemClassDB.ReturnOnlySystemsListForAutoComplete;
             _currentExplorationSet = new ExplorationSetClass();

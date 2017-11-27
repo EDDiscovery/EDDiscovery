@@ -29,6 +29,7 @@ namespace EDDiscovery.UserControls
         {
             InitializeComponent();
             rollUpPanelMenu.SetToolTip(toolTip);    // use the defaults
+
         }
 
         ExtendedControls.DropDownCustom popoutdropdown;
