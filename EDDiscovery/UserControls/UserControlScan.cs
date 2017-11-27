@@ -467,7 +467,7 @@ namespace EDDiscovery.UserControls
                     else
                     {
                         endpoint = CreateImageLabel(pc, nodeimage, new Point(curpos.X + offset, curpos.Y + alignv), size,
-                                                    sn.customname ?? sn.ownname, tip, alignv + labelvoff, sc.IsEDSMBody);
+                                                    sn.customname ?? sn.ownname, tip, alignv + labelvoff, sc.IsEDSMBody, false);
                         offset += size.Width / 2;
                     }
 
