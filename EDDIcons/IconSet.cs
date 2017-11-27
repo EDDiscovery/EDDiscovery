@@ -20,7 +20,7 @@ namespace EDDiscovery.Icons
         {
             Assembly asm = Assembly.GetExecutingAssembly();
             string[] resnames = asm.GetManifestResourceNames();
-            defaultIcons = new Dictionary<string, Image>();
+            defaultIcons = new Dictionary<string, Image>(StringComparer.InvariantCultureIgnoreCase);
             string basename = typeof(IconSet).Namespace + ".";
 
             foreach (string resname in resnames)
@@ -37,7 +37,7 @@ namespace EDDiscovery.Icons
 
         public static void ResetIcons()
         {
-            icons = defaultIcons.ToArray().ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
+            icons = defaultIcons.ToArray().ToDictionary(kvp => kvp.Key, kvp => kvp.Value, StringComparer.InvariantCultureIgnoreCase);
         }
 
         public static void LoadIconsFromDirectory(string path)
