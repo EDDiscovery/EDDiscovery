@@ -48,7 +48,7 @@ namespace EDDiscovery.Actions
                 StringParser sp = new StringParser(res);
                 string prefix = "P_";
 
-                string cmdname = sp.NextWord();
+                string cmdname = sp.NextQuotedWord();
 
                 if (cmdname != null && cmdname.Equals("PREFIX", StringComparison.InvariantCultureIgnoreCase))
                 {
@@ -60,7 +60,7 @@ namespace EDDiscovery.Actions
                         return true;
                     }
 
-                    cmdname = sp.NextWord();
+                    cmdname = sp.NextQuotedWord();
                 }
 
                 Forms.PopOutControl poc = (ap.actioncontroller as ActionController).DiscoveryForm.PopOuts;
@@ -77,19 +77,19 @@ namespace EDDiscovery.Actions
                 }
                 else
                 {
-                    Forms.UserControlForm ucf = poc.Get(cmdname);
+                    Forms.UserControlForm ucf = poc.GetByWindowsRefName(cmdname);
 
                     string nextcmd = sp.NextWord(" ",true);
 
-                    if ( nextcmd == null )
+                    if (nextcmd == null)
                     {
                         ap.ReportError("Missing command after popout name in Popout");
                     }
-                    else if ( nextcmd.Equals("status"))
+                    else if (nextcmd.Equals("status"))
                     {
                         ap[prefix + "Exists"] = (ucf != null) ? "1" : "0";
 
-                        if ( ucf!= null)
+                        if (ucf != null)
                         {
                             ap[prefix + "Transparent"] = ucf.IsTransparent ? "1" : "0";
                             ap[prefix + "TopMost"] = ucf.TopMost ? "1" : "0";
@@ -169,12 +169,15 @@ namespace EDDiscovery.Actions
                             ap.ReportError("Unknown option " + nextcmd + " after popout name in Popout");
                     }
                     else
-                    {
-                        int poi = Forms.PanelInformation.GetPanelIndexByName(cmdname);
+                    {       // pop out not found..
+                        int poi = Forms.PanelInformation.GetPanelIndexByWindowsRefName(cmdname);
 
-                        if (poi>=0)
+                        if (poi >= 0)
                         {
-                            if (nextcmd.Equals("toggle") || nextcmd.Equals("on"))
+                            if (nextcmd.Equals("off")) // if off, do nothing
+                            {
+                            }
+                            else if (nextcmd.Equals("toggle") || nextcmd.Equals("on"))
                             {
                                 poc.PopOut(poi);
                             }

@@ -138,7 +138,7 @@ namespace EDDiscovery.Forms
             return (from PanelInfo x in PanelList select x.TabIcon).ToArray();
         }
 
-        static public int GetPanelIndexByName(string name)
+        static public int GetPanelIndexByWindowsRefName(string name)
         {
             return PanelList.FindIndex(x => x.WindowRefName.Equals(name, StringComparison.InvariantCultureIgnoreCase));
         }
@@ -198,7 +198,7 @@ namespace EDDiscovery.Forms
         }
 
         public int Count { get { return usercontrolsforms.Count;  } }
-        public UserControlForm Get(string name) { return usercontrolsforms.Get(name); }
+        public UserControlForm GetByWindowsRefName(string name) { return usercontrolsforms.GetByWindowsRefName(name); }
         public UserControlForm this[int i] { get { return usercontrolsforms[i]; } }
 
         public void ShowAllPopOutsInTaskBar()

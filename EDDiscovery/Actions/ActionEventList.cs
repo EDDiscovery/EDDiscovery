@@ -35,7 +35,7 @@ namespace EDDiscovery.Actions
             new ActionEventEDList("onEGOSync", "ProgramEvent", "Program"),  //17
             new ActionEventEDList("onEDSMSync", "ProgramEvent", "Program"),  //18
             new ActionEventEDList("onVoiceInput", "Voice", "Voice"), //19
-            new ActionEventEDList("onVoiceInputFailed", "Voice", "Voice"), //19
+            new ActionEventEDList("onVoiceInputFailed", "Voice", "VoiceOther"), //19
 
             new ActionEventEDList("All","","Misc"),                      // All, special match only
         };
