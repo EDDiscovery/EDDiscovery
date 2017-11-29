@@ -10,7 +10,7 @@ using System.Windows.Forms;
 
 namespace ExtendedControls
 {
-    public class CustomDateTimePicker : Control
+    public class CustomDateTimePicker : Control, IIconPackControl
     {
         public DateTime Value { get { return datetimevalue; } set { datetimevalue = value; Invalidate(); } }
 
@@ -471,5 +471,16 @@ namespace ExtendedControls
             if (handler != null) handler(this, new EventArgs());
         }
 
+        #region Icon Replacement
+        string IIconPackControl.BaseName { get; } = "DateTimePicker";
+
+        void IIconPackControl.ReplaceImages(IconPackImageReplacer swap)
+        {
+            swap(img => calendaricon.Image = img, "CalendarIcon");
+            int offset = BorderColor.IsFullyTransparent() ? 0 : 2;
+            calendaricon.Location = new Point(ClientRectangle.Width - offset - calendaricon.Image.Width - 4, ClientRectangle.Height / 2 - calendaricon.Image.Height / 2);
+            calendaricon.Size = calendaricon.Image.Size;
+        }
+        #endregion
     }
 }

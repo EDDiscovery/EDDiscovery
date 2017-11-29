@@ -23,7 +23,7 @@ using System.Windows.Forms;
 
 namespace ExtendedControls
 {
-    public class RollUpPanel : Panel
+    public class RollUpPanel : Panel, IIconPackControl
     {
         public int RollUpDelay { get; set; } = 1000;            // before rolling
         public int UnrollHoverDelay { get; set; } = 1000;       // set to large value and forces click to open functionality
@@ -352,6 +352,14 @@ namespace ExtendedControls
             }
         }
 
+        #region Icon Replacement
+        string IIconPackControl.BaseName { get; } = "RollUpPanel";
 
+        void IIconPackControl.ReplaceImages(IconPackImageReplacer swap)
+        {
+            swap(img => pinbutton.Image = img, "PinDown");
+            swap(img => pinbutton.ImageUnchecked = img, "PinUp");
+        }
+        #endregion
     }
 }

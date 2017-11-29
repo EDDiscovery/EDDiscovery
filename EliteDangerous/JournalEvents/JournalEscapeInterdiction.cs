@@ -34,7 +34,6 @@ namespace EliteDangerousCore.JournalEvents
         public string Interdictor { get; set; }
         public bool IsPlayer { get; set; }
 
-        public override System.Drawing.Bitmap Icon { get { return EliteDangerous.Properties.Resources.escapeinterdiction; } }
 
         public override void FillInformation(out string summary, out string info, out string detailed) //V
         {

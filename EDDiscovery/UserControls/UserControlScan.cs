@@ -31,7 +31,7 @@ using EliteDangerousCore.JournalEvents;
 
 namespace EDDiscovery.UserControls
 {
-    public partial class UserControlScan : UserControlCommonBase
+    public partial class UserControlScan : UserControlCommonBase, IIconPackControl
     {
         Size starsize, beltsize, planetsize, moonsize, materialsize;
         Size itemsepar;
@@ -51,6 +51,7 @@ namespace EDDiscovery.UserControls
         public UserControlScan()
         {
             InitializeComponent();
+            EDDIconSet.Instance.ReplaceIcons(this);
             this.AutoScaleMode = AutoScaleMode.None;            // we are dealing with graphics.. lets turn off dialog scaling.
             rtbNodeInfo.Visible = false;
             toolTip.ShowAlways = true;
@@ -171,7 +172,7 @@ namespace EDDiscovery.UserControls
                 {
                     int offset = 0;
                     Point maxstarpos = DrawNode(starcontrols, starnode,
-                                (starnode.type == StarScan.ScanNodeType.barycentre) ? Properties.Resources.Barycentre : JournalScan.GetStarImageNotScanned(),
+                                (starnode.type == StarScan.ScanNodeType.barycentre) ? EDDIconSet.Controls.Scan.Bodies_Barycentre : JournalScan.GetStarImageNotScanned(),
                                 curpos, starsize, ref offset, false, (planetsize.Height * 6 / 4 - starsize.Height) / 2, true);       // the last part nerfs the label down to the right position
 
                     Point maxitemspos = maxstarpos;
@@ -204,7 +205,7 @@ namespace EDDiscovery.UserControls
                                     curpos = new Point(firstcolumn.X, maxitemspos.Y + planetsize.Height);
                                 }
 
-                                DrawNode(starcontrols, lastbelt, EDDiscovery.Properties.Resources.Belt,
+                                DrawNode(starcontrols, lastbelt, EDDIconSet.Controls.Scan.Bodies_Belt,
                                          new Point(curpos.X + (planetsize.Width - beltsize.Width) / 2, curpos.Y), beltsize, ref offset, false);
 
                                 curpos = new Point(curpos.X + planetsize.Width, curpos.Y);
@@ -249,7 +250,7 @@ namespace EDDiscovery.UserControls
                                 curpos = new Point(firstcolumn.X, maxitemspos.Y + planetsize.Height);
                             }
 
-                            DrawNode(starcontrols, lastbelt, EDDiscovery.Properties.Resources.Belt,
+                            DrawNode(starcontrols, lastbelt, EDDIconSet.Controls.Scan.Bodies_Belt,
                                      new Point(curpos.X + (planetsize.Width - beltsize.Width) / 2, curpos.Y), beltsize, ref offset, false);
 
                             curpos = new Point(curpos.X + planetsize.Width, curpos.Y);
@@ -434,28 +435,28 @@ namespace EDDiscovery.UserControls
                             g.DrawImage(nodeimage, size.Width / 2, quarterheight, size.Width, size.Height);
 
                             if (sc.IsLandable)
-                                g.DrawImage(EDDiscovery.Properties.Resources.planet_landing, new Rectangle(quarterheight, 0, quarterheight * 6, quarterheight * 6));
+                                g.DrawImage(EDDIconSet.Controls.Scan.Bodies_Landable, new Rectangle(quarterheight, 0, quarterheight * 6, quarterheight * 6));
 
                             if (sc.HasRings)
-                                g.DrawImage(sc.Rings.Count() > 1 ? EDDiscovery.Properties.Resources.RingGap512 : EDDiscovery.Properties.Resources.Ring_Only_512,
+                                g.DrawImage(sc.Rings.Count() > 1 ? EDDIconSet.Controls.Scan.Bodies_RingGap : EDDIconSet.Controls.Scan.Bodies_RingOnly,
                                                 new Rectangle(-2, quarterheight, size.Width * 2, size.Height));
 
                             if (chkShowOverlays.Checked)
                             {
                                 if (sc.Terraformable)
-                                    g.DrawImage(EDDiscovery.Properties.Resources.Terraformable, new Rectangle(quarterheight / 2, quarterheight / 2, quarterheight, quarterheight));
+                                    g.DrawImage(EDDIconSet.Controls.Scan.Bodies_Terraformable, new Rectangle(quarterheight / 2, quarterheight / 2, quarterheight, quarterheight));
 
                                 if (HasMeaningfulVolcanism(sc)) //this renders below the terraformable icon if present
-                                    g.DrawImage(EDDiscovery.Properties.Resources.Volcano, new Rectangle(quarterheight / 2, (int)(quarterheight * 1.5), quarterheight, quarterheight));
+                                    g.DrawImage(EDDIconSet.Controls.Scan.Bodies_Volcanism, new Rectangle(quarterheight / 2, (int)(quarterheight * 1.5), quarterheight, quarterheight));
 
                                 //experiment - does this take all the fun out of it?
                                 if (sc.EstimatedValue() > 50000)
-                                    g.DrawImage(EDDiscovery.Properties.Resources.startflag, new Rectangle(quarterheight / 2, (int)(quarterheight * 2.5), quarterheight, quarterheight));
+                                    g.DrawImage(EDDIconSet.Controls.Scan.Bodies_HighValue, new Rectangle(quarterheight / 2, (int)(quarterheight * 2.5), quarterheight, quarterheight));
                             }
 
                             if (indicatematerials)
                             {
-                                Image mm = EDDiscovery.Properties.Resources.materiamoreindicator;
+                                Image mm = EDDIconSet.Controls.Scan.Bodies_MaterialMore;
                                 g.DrawImage(mm, new Rectangle(bmp.Width - mm.Width, bmp.Height - mm.Height, mm.Width, mm.Height));
                             }
                         }
@@ -466,7 +467,7 @@ namespace EDDiscovery.UserControls
                     else
                     {
                         endpoint = CreateImageLabel(pc, nodeimage, new Point(curpos.X + offset, curpos.Y + alignv), size,
-                                                    sn.customname ?? sn.ownname, tip, alignv + labelvoff, sc.IsEDSMBody);
+                                                    sn.customname ?? sn.ownname, tip, alignv + labelvoff, sc.IsEDSMBody, false);
                         offset += size.Width / 2;
                     }
 
@@ -496,7 +497,7 @@ namespace EDDiscovery.UserControls
                     }
                 }
 
-                endpoint = CreateImageLabel(pc, EDDiscovery.Properties.Resources.Belt,
+                endpoint = CreateImageLabel(pc, EDDIconSet.Controls.Scan.Bodies_Belt,
                     new Point(curpos.X, curpos.Y + alignv), new Size(size.Width, size.Height), sn.ownname,
                                                     tip, alignv + labelvoff, false, false);
                 offset += size.Width;
@@ -579,7 +580,7 @@ namespace EDDiscovery.UserControls
             colormap.OldColor = Color.White;    // this is the marker colour to replace
             colormap.NewColor = matcolour;
 
-            Bitmap mat = BitMapHelpers.ReplaceColourInBitmap(EDDiscovery.Properties.Resources.materialmarkerorangefilled, new System.Drawing.Imaging.ColorMap[] { colormap });
+            Bitmap mat = BitMapHelpers.ReplaceColourInBitmap((Bitmap)EDDIconSet.Controls.Scan.Bodies_Material, new System.Drawing.Imaging.ColorMap[] { colormap });
 
             BitMapHelpers.DrawTextCentreIntoBitmap(ref mat, text, stdfont, textcolour);
 
@@ -1113,6 +1114,24 @@ namespace EDDiscovery.UserControls
             }
         }
 
+        #endregion
+
+        #region Icon Replacement
+        string ExtendedControls.IIconPackControl.BaseName { get; } = "Scan";
+
+        void ExtendedControls.IIconPackControl.ReplaceImages(ExtendedControls.IconPackImageReplacer swap)
+        {
+            swap(img => checkBoxTiny.BackgroundImage = img, "SizeTiny");
+            swap(img => checkBoxSmall.BackgroundImage = img, "SizeSmall");
+            swap(img => checkBoxMedium.BackgroundImage = img, "SizeMedium");
+            swap(img => checkBoxLarge.BackgroundImage = img, "SizeLarge");
+            swap(img => checkBoxMoons.BackgroundImage = img, "ShowMoons");
+            swap(img => checkBoxMaterials.BackgroundImage = img, "ShowAllMaterials");
+            swap(img => checkBoxMaterialsRare.BackgroundImage = img, "ShowRareMaterials");
+            swap(img => buttonExtExcel.Image = img, "ExportToExcel");
+            swap(img => checkBoxEDSM.Image = img, "FetchEDSMBodies");
+            swap(img => chkShowOverlays.Image = img, "ShowOverlays");
+        }
         #endregion
     }
 }

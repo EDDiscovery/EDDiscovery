@@ -30,7 +30,7 @@ using EliteDangerousCore;
 
 namespace EDDiscovery.UserControls
 {
-    public partial class UserControlEDSM : UserControlCommonBase
+    public partial class UserControlEDSM : UserControlCommonBase, ExtendedControls.IIconPackControl
     {
         private string DbColumnSave { get { return "UCEDSM" + ((displaynumber > 0) ? displaynumber.ToString() : "") + "DGVCol"; } }
         private string DbStar { get { return "UCEDSM" + ((displaynumber > 0) ? displaynumber.ToString() : "") + "Star"; } }
@@ -308,5 +308,13 @@ namespace EDDiscovery.UserControls
             }
         }
 
+        #region Icon Replacement
+        string ExtendedControls.IIconPackControl.BaseName { get; } = "TravelGrid";
+
+        void ExtendedControls.IIconPackControl.ReplaceImages(ExtendedControls.IconPackImageReplacer swap)
+        {
+            swap(img => buttonExtExcel.Image = img, "ExportToExcel");
+        }
+        #endregion
     }
 }

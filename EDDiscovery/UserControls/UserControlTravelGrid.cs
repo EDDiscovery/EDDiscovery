@@ -30,7 +30,7 @@ using EliteDangerousCore.EDDN;
 
 namespace EDDiscovery.UserControls
 {
-    public partial class UserControlTravelGrid : UserControlCommonBase, IHistoryCursor
+    public partial class UserControlTravelGrid : UserControlCommonBase, IHistoryCursor, ExtendedControls.IIconPackControl
     {
         #region Public IF
 
@@ -94,6 +94,7 @@ namespace EDDiscovery.UserControls
         public UserControlTravelGrid()
         {
             InitializeComponent();
+            EDDIconSet.Instance.ReplaceIcons(this);
             var corner = dataGridViewTravel.TopLeftHeaderCell; // work around #1487
         }
 
@@ -464,9 +465,9 @@ namespace EDDiscovery.UserControls
             }
 
             if (he.StartMarker)
-                e.Graphics.DrawImage(EDDiscovery.Properties.Resources.startflag, new Rectangle(hstart, top, size, size));
+                e.Graphics.DrawImage(EDDIconSet.Controls.TravelGrid.FlagStart, new Rectangle(hstart, top, size, size));
             else if (he.StopMarker)
-                e.Graphics.DrawImage(EDDiscovery.Properties.Resources.stopflag, new Rectangle(hstart, top, size, size));
+                e.Graphics.DrawImage(EDDIconSet.Controls.TravelGrid.FlagStop, new Rectangle(hstart, top, size, size));
 
         }
 
@@ -1068,5 +1069,15 @@ namespace EDDiscovery.UserControls
                 OnPopOut();
         }
 
+        #region Icon Replacement
+        string ExtendedControls.IIconPackControl.BaseName { get; } = "TravelGrid";
+
+        void ExtendedControls.IIconPackControl.ReplaceImages(ExtendedControls.IconPackImageReplacer swap)
+        {
+            swap(img => buttonExtExcel.Image = img, "ExportToExcel");
+            swap(img => drawnPanelPopOut.DrawnImage = img, "Popout");
+            swap(img => panelHistoryIcon.BackgroundImage = img, "History");
+        }
+        #endregion
     }
 }

@@ -26,10 +26,11 @@ using System.Drawing.Imaging;
 
 namespace ExtendedControls
 {
-    public partial class TabStrip : UserControl
+    public partial class TabStrip : UserControl, IIconPackControl
     {
         public enum StripModeType { StripTop, StripBottom, ListSelection };
         public StripModeType StripMode { get; set; } = StripModeType.StripTop;
+        public Image EmptyPanelIcon { get; set; } = Properties.Resources.Stop;
         public Image[] ImageList;     // images
         public string[] TextList;       // text associated - tooltips or text on list selection
         public bool ShowPopOut { get; set; }= true;
@@ -70,7 +71,7 @@ namespace ExtendedControls
             autorepeat.Interval = 200;
             autorepeat.Tick += Autorepeat_Tick;
             drawnPanelListSelection.Location = new Point(labelControlText.Right + 16, labelControlText.Top);
-            panelSelectedIcon.BackgroundImage = ExtendedControls.Properties.Resources.Stop;
+            panelSelectedIcon.BackgroundImage = EmptyPanelIcon;
             SetIconVisibility();
         }
 
@@ -105,7 +106,7 @@ namespace ExtendedControls
                 si = -1;
                 labelControlText.Text = "";
                 labelCurrent.Text = "None";
-                panelSelectedIcon.BackgroundImage = ExtendedControls.Properties.Resources.Stop;
+                panelSelectedIcon.BackgroundImage = EmptyPanelIcon;
             }
 
             if (OnCreateTab != null)
@@ -477,5 +478,17 @@ namespace ExtendedControls
 
         #endregion
 
+        #region Icon Replacement
+        string IIconPackControl.BaseName { get; } = "TabStrip";
+
+        void IIconPackControl.ReplaceImages(IconPackImageReplacer swap)
+        {
+            swap(img => drawnPanelListSelection.DrawnImage = img, "PanelList");
+            swap(img => drawnPanelPopOut.DrawnImage = img, "Popout");
+            swap(img => panelArrowLeft.BackgroundImage = img, "ArrowLeft");
+            swap(img => panelArrowRight.BackgroundImage = img, "ArrowRight");
+            swap(img => EmptyPanelIcon = img, "NoPanelSelected");
+        }
+        #endregion
     }
 }

@@ -55,7 +55,6 @@ namespace EliteDangerousCore.JournalEvents
         public FederationRank Federation { get; set; }
         public CQCRank CQC { get; set; }
 
-        public override System.Drawing.Bitmap Icon { get { return EliteDangerous.Properties.Resources.rank; } }
 
         public override void FillInformation(out string summary, out string info, out string detailed) //V
         {

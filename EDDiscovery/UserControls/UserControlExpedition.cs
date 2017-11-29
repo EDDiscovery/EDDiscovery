@@ -30,7 +30,7 @@ using System.Windows.Forms;
 
 namespace EDDiscovery.UserControls
 {
-    public partial class UserControlExpedition : UserControlCommonBase
+    public partial class UserControlExpedition : UserControlCommonBase, IIconPackControl
     {
         public static bool DeleteIsPermanent = true;
 
@@ -53,6 +53,7 @@ namespace EDDiscovery.UserControls
         public UserControlExpedition()
         {
             InitializeComponent();
+            EDDIconSet.Instance.ReplaceIcons(this);
             var corner = dataGridViewRouteSystems.TopLeftHeaderCell; // work around #1487
             SystemName.AutoCompleteGenerator = SystemClassDB.ReturnOnlySystemsListForAutoComplete;
             currentroute = new SavedRouteClass("");
@@ -1042,8 +1043,19 @@ namespace EDDiscovery.UserControls
 
         #endregion
 
+        #region Icon Replacement
+        string IIconPackControl.BaseName { get; } = "Expedition";
 
-
-
+        void IIconPackControl.ReplaceImages(IconPackImageReplacer swap)
+        {
+            swap(img => toolStripButtonNew.Image = img, "New");
+            swap(img => toolStripButtonImportFile.Image = img, "ImportFile");
+            swap(img => toolStripButtonImportRoute.Image = img, "ImportRoute");
+            swap(img => toolStripButtonSave.Image = img, "Save");
+            swap(img => toolStripButtonExport.Image = img, "Export");
+            swap(img => toolStripButtonDelete.Image = img, "Delete");
+            swap(img => toolStripButtonShowOn3DMap.Image = img, "ShowOnMap");
+        }
+        #endregion
     }
 }

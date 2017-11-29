@@ -111,7 +111,7 @@ namespace EDDiscovery.UserControls
             this.buttonExtExcel.ButtonColorScaling = 0.5F;
             this.buttonExtExcel.ButtonDisabledScaling = 0.5F;
             this.buttonExtExcel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.buttonExtExcel.Image = global::EDDiscovery.Properties.Resources.excel;
+            this.buttonExtExcel.Image = global::EDDiscovery.Properties.Resources.StarList_ExportToExcel;
             this.buttonExtExcel.Location = new System.Drawing.Point(470, 6);
             this.buttonExtExcel.Name = "buttonExtExcel";
             this.buttonExtExcel.Size = new System.Drawing.Size(24, 24);
@@ -122,7 +122,7 @@ namespace EDDiscovery.UserControls
             // 
             // panelHistoryIcon
             // 
-            this.panelHistoryIcon.BackgroundImage = global::EDDiscovery.Properties.Resources.starlist;
+            this.panelHistoryIcon.BackgroundImage = global::EDDiscovery.Properties.Resources.StarList_History;
             this.panelHistoryIcon.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.panelHistoryIcon.Location = new System.Drawing.Point(3, 4);
             this.panelHistoryIcon.Name = "panelHistoryIcon";
@@ -350,7 +350,7 @@ namespace EDDiscovery.UserControls
             this.checkBoxEDSM.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Silver;
             this.checkBoxEDSM.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.checkBoxEDSM.FontNerfReduction = 0.5F;
-            this.checkBoxEDSM.Image = global::EDDiscovery.Properties.Resources.edsm24;
+            this.checkBoxEDSM.Image = global::EDDiscovery.Properties.Resources.StarList_EDSM;
             this.checkBoxEDSM.ImageButtonDisabledScaling = 0.5F;
             this.checkBoxEDSM.Location = new System.Drawing.Point(432, 3);
             this.checkBoxEDSM.MouseOverColor = System.Drawing.Color.CornflowerBlue;

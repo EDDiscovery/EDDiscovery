@@ -39,7 +39,6 @@ namespace EliteDangerousCore.JournalEvents
         public string ItemLocalised { get; set; }
         public long Cost { get; set; }
 
-        public override System.Drawing.Bitmap Icon { get { return EliteDangerous.Properties.Resources.repair; } }
 
         public void Ledger(Ledger mcl, DB.SQLiteConnectionUser conn)
         {

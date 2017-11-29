@@ -335,7 +335,7 @@ namespace EDDiscovery._3DMap
 
         public delegate void loadaction(Object sender, EventArgs e);
 
-        public void UpdateStoredVideosToolButton( ToolStripDropDownButton tsb , loadaction ab ,Bitmap image )
+        public void UpdateStoredVideosToolButton( ToolStripDropDownButton tsb , loadaction ab ,Image image )
         {
             List<ToolStripMenuItem> removelist = new List<ToolStripMenuItem>();
 

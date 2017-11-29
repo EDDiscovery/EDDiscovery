@@ -33,7 +33,6 @@ namespace EliteDangerousCore.JournalEvents
         public string Name { get; set; }
         public int MissionId { get; set; }
 
-        public override System.Drawing.Bitmap Icon { get { return EliteDangerous.Properties.Resources.missionabandoned; } }
 
         public override void FillInformation(out string summary, out string info, out string detailed) //V
         {

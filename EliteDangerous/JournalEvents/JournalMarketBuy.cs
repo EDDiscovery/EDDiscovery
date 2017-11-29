@@ -43,7 +43,6 @@ namespace EliteDangerousCore.JournalEvents
         public long BuyPrice { get; set; }
         public long TotalCost { get; set; }
 
-        public override System.Drawing.Bitmap Icon { get { return EliteDangerous.Properties.Resources.marketbuy; } }
 
         public void MaterialList(MaterialCommoditiesList mc, DB.SQLiteConnectionUser conn)
         {

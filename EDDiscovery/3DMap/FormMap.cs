@@ -37,7 +37,7 @@ using System.Windows.Forms;
 
 namespace EDDiscovery
 {
-    public partial class FormMap : ExtendedControls.SmartSysMenuForm
+    public partial class FormMap : ExtendedControls.SmartSysMenuForm, ExtendedControls.IIconPackControl
     {
 
 
@@ -204,7 +204,7 @@ namespace EDDiscovery
                 toolStripDropDownButtonGalObjects.DropDownItems.Add(_toolstripToggleNamingButton);
             }
 
-            maprecorder.UpdateStoredVideosToolButton(toolStripDropDownRecord, LoadVideo, EDDiscovery.Properties.Resources.floppy);
+            maprecorder.UpdateStoredVideosToolButton(toolStripDropDownRecord, LoadVideo, EDDIconSet.Controls.Map3D.Recorder_Save);
 
             discoveryForm.OnNewTarget -= UpdateTarget;  // in case called multi times
             discoveryForm.OnNewTarget += UpdateTarget;
@@ -304,6 +304,7 @@ namespace EDDiscovery
         public FormMap()
         {
             InitializeComponent();
+            EDDIconSet.Instance.ReplaceIcons(this);
             maprecorder = new MapRecorder(this);
             // 
             // glControl
@@ -1007,10 +1008,10 @@ namespace EDDiscovery
 
         private void GenerateDataSetsBNG()      // because the target is bound up with all three, best to do all three at once in ONE FUNCTION!
         {
-            Bitmap maptarget = (Bitmap)EDDiscovery.Properties.Resources.bookmarktarget;
-            Bitmap mapstar = (Bitmap)EDDiscovery.Properties.Resources.bookmarkgreen;
-            Bitmap mapregion = (Bitmap)EDDiscovery.Properties.Resources.bookmarkyellow;
-            Bitmap mapnotedbkmark = (Bitmap)EDDiscovery.Properties.Resources.bookmarkbrightred;
+            Bitmap maptarget = (Bitmap)EDDIconSet.Controls.Map3D.Bookmarks_Target;
+            Bitmap mapstar = (Bitmap)EDDIconSet.Controls.Map3D.Bookmarks_Star;
+            Bitmap mapregion = (Bitmap)EDDIconSet.Controls.Map3D.Bookmarks_Region;
+            Bitmap mapnotedbkmark = (Bitmap)EDDIconSet.Controls.Map3D.Bookmarks_Noted;
             Debug.Assert(mapnotedbkmark != null && maptarget != null);
             Debug.Assert(mapstar != null && mapregion != null);
 
@@ -1453,11 +1454,11 @@ namespace EDDiscovery
         void SetDropDownRecordImage()
         {
             if (maprecorder.InPlayBack)
-                toolStripDropDownRecord.Image = (maprecorder.Paused) ? EDDiscovery.Properties.Resources.pauseblue : EDDiscovery.Properties.Resources.PlayNormal;
+                toolStripDropDownRecord.Image = (maprecorder.Paused) ? EDDIconSet.Controls.Map3D.Recorder_PausePlay : EDDIconSet.Controls.Map3D.Recorder_Play;
             else if (maprecorder.Recording)
-                toolStripDropDownRecord.Image = (maprecorder.Paused) ? EDDiscovery.Properties.Resources.PauseNormalRed : EDDiscovery.Properties.Resources.RecordPressed;
+                toolStripDropDownRecord.Image = (maprecorder.Paused) ? EDDIconSet.Controls.Map3D.Recorder_PauseRecord : EDDIconSet.Controls.Map3D.Recorder_Record;
             else
-                toolStripDropDownRecord.Image = EDDiscovery.Properties.Resources.VideoRecorder;
+                toolStripDropDownRecord.Image = EDDIconSet.Controls.Map3D.Recorder_Menu;
         }
 
         private void recordToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1502,11 +1503,11 @@ namespace EDDiscovery
         private void toolStripDropDownRecord_DropDownOpening(object sender, EventArgs e)
         {
             recordToolStripMenuItem.Text = maprecorder.Recording ? "Stop Recording (F5)" : maprecorder.Entries ? "Resume Recording (F5)" : "Start Recording (F5)";
-            recordToolStripMenuItem.Image = maprecorder.Recording ? EDDiscovery.Properties.Resources.StopNormalRed : EDDiscovery.Properties.Resources.RecordPressed;
+            recordToolStripMenuItem.Image = maprecorder.Recording ? EDDIconSet.Controls.Map3D.Recorder_StopRecord : EDDIconSet.Controls.Map3D.Recorder_Record;
             recordToolStripMenuItem.Enabled = !maprecorder.InPlayBack && !maprecorder.RecordingStep;
 
             recordStepToStepToolStripMenuItem.Text = maprecorder.Recording ? "Stop Step Recording (F6)" : maprecorder.Entries ? "Resume Step Recording (F6)" : "Start Step Recording (F6)";
-            recordStepToStepToolStripMenuItem.Image = maprecorder.Recording ? EDDiscovery.Properties.Resources.StopNormalRed : EDDiscovery.Properties.Resources.RecordPressed;
+            recordStepToStepToolStripMenuItem.Image = maprecorder.Recording ? EDDIconSet.Controls.Map3D.Recorder_StopRecord : EDDIconSet.Controls.Map3D.Recorder_RecordStep;
             recordStepToStepToolStripMenuItem.Enabled = !maprecorder.InPlayBack && !maprecorder.RecordingNormal;
 
             newRecordStepToolStripMenuItem.Enabled = maprecorder.Recording;
@@ -1514,23 +1515,23 @@ namespace EDDiscovery
             toolStripMenuItemClearRecording.Enabled = maprecorder.Entries;
 
             playbackToolStripMenuItem.Text = maprecorder.InPlayBack ? "Stop Playback (F9)" : "Start Playback (F9)";
-            playbackToolStripMenuItem.Image = maprecorder.InPlayBack ? EDDiscovery.Properties.Resources.StopNormalBlue : EDDiscovery.Properties.Resources.PlayNormal;
+            playbackToolStripMenuItem.Image = maprecorder.InPlayBack ? EDDIconSet.Controls.Map3D.Recorder_StopPlay : EDDIconSet.Controls.Map3D.Recorder_Play;
             playbackToolStripMenuItem.Enabled = maprecorder.Entries;
 
             if (maprecorder.InPlayBack)
             {
                 pauseRecordToolStripMenuItem.Text = maprecorder.Paused ? "Resume Playback (F8)" : "Pause Playback (F8)";
-                pauseRecordToolStripMenuItem.Image = EDDiscovery.Properties.Resources.pauseblue;
+                pauseRecordToolStripMenuItem.Image = EDDIconSet.Controls.Map3D.Recorder_PausePlay;
             }
             else if (maprecorder.Recording)
             {
                 pauseRecordToolStripMenuItem.Text = maprecorder.Paused ? "Resume Recording (F8)" : "Pause Recording (F8)";
-                pauseRecordToolStripMenuItem.Image = EDDiscovery.Properties.Resources.PauseNormalRed;
+                pauseRecordToolStripMenuItem.Image = EDDIconSet.Controls.Map3D.Recorder_PauseRecord;
             }
             else
             {
                 pauseRecordToolStripMenuItem.Text = "Pause (F8)";
-                pauseRecordToolStripMenuItem.Image = EDDiscovery.Properties.Resources.PauseNormalRed;
+                pauseRecordToolStripMenuItem.Image = EDDIconSet.Controls.Map3D.Recorder_Pause;
             }
 
             pauseRecordToolStripMenuItem.Enabled = maprecorder.Recording || maprecorder.InPlayBack;
@@ -1541,7 +1542,7 @@ namespace EDDiscovery
         private void saveToFileToolStripMenuItem_Click(object sender, EventArgs e)
         {
             maprecorder.SaveDialog();
-            maprecorder.UpdateStoredVideosToolButton(toolStripDropDownRecord, LoadVideo, EDDiscovery.Properties.Resources.floppy);
+            maprecorder.UpdateStoredVideosToolButton(toolStripDropDownRecord, LoadVideo, EDDIconSet.Controls.Map3D.Recorder_Save);
         }
 
         private void LoadFileToolStripMenuItem_Click(object sender, EventArgs e)
@@ -2411,6 +2412,59 @@ namespace EDDiscovery
 
         #endregion
 
+        #region Icon Replacement
+        string ExtendedControls.IIconPackControl.BaseName { get; } = "Map3D";
+
+        void ExtendedControls.IIconPackControl.ReplaceImages(ExtendedControls.IconPackImageReplacer swap)
+        {
+            swap(img => toolStripButtonGoBackward.Image = img, "Navigation.GoBackward");
+            swap(img => toolStripButtonGoForward.Image = img, "Navigation.GoForward");
+            swap(img => toolStripButtonLastKnownPosition.Image = img, "Navigation.LastKnownPosition");
+            swap(img => toolStripButtonAutoForward.Image = img, "Navigation.GoForwardOnJump");
+            swap(img => toolStripButtonHome.Image = img, "Navigation.GoToHomeSystem");
+            swap(img => toolStripButtonHistory.Image = img, "Navigation.GoToHistorySelection");
+            swap(img => toolStripButtonTarget.Image = img, "Navigation.GoToTarget");
+            swap(img => toolStripDropDownButtonVisitedStars.Image = img, "Travel.Menu");
+            swap(img => drawLinesBetweenStarsWithPositionToolStripMenuItem.Image = img, "Travel.DrawLines");
+            swap(img => drawADiscOnStarsWithPositionToolStripMenuItem.Image = img, "Travel.DrawStars");
+            swap(img => useWhiteForDiscsInsteadOfAssignedMapColourToolStripMenuItem.Image = img, "Travel.WhiteStars");
+            swap(img => toolStripDropDownButtonFilterStars.Image = img, "Filter.Menu");
+            swap(img => showStarstoolStripMenuItem.Image = img, "Filter.ShowAllStars");
+            swap(img => showStationsToolStripMenuItem.Image = img, "Filter.ShowPopSystems");
+            swap(img => enableColoursToolStripMenuItem.Image = img, "Filter.DisplayColours");
+            swap(img => toolStripDropDownButtonNameStars.Image = img, "Stars.Menu");
+            swap(img => showDiscsToolStripMenuItem.Image = img, "Stars.ShowDiscs");
+            swap(img => showNamesToolStripMenuItem.Image = img, "Stars.ShowNames");
+            swap(img => toolStripDropDownButtonBookmarks.Image = img, "Bookmarks.Menu");
+            swap(img => showBookmarksToolStripMenuItem.Image = img, "Bookmarks.ShowBookmarks");
+            swap(img => showNoteMarksToolStripMenuItem.Image = img, "Bookmarks.ShowNotemarks");
+            swap(img => newRegionBookmarkToolStripMenuItem.Image = img, "Bookmarks.AddRegionBookmark");
+            swap(img => toolStripDropDownButtonGalObjects.Image = img, "GalObjects");
+            swap(img => toolStripButtonGrid.Image = img, "Grid.Grid");
+            swap(img => toolStripButtonFineGrid.Image = img, "Grid.FineGrid");
+            swap(img => toolStripButtonCoords.Image = img, "Grid.Coords");
+            swap(img => toolStripButtonPerspective.Image = img, "Perspective");
+            swap(img => toolStripButtonEliteMovement.Image = img, "EliteMovement");
+            swap(img => dropdownMapNames.Image = img, "MapNames");
+            swap(img => dropdownFilterDate.Image = img, "FilterDate");
+            swap(img => toolStripButtonHelp.Image = img, "Help");
+            swap(img => toolStripDropDownRecord.Image = img, "Recorder.Menu");
+            swap(img => recordToolStripMenuItem.Image = img, "Recorder.Record");
+            swap(img => recordStepToStepToolStripMenuItem.Image = img, "Recorder.RecordStep");
+            swap(img => newRecordStepToolStripMenuItem.Image = img, "Recorder.NewRecordStep");
+            swap(img => pauseRecordToolStripMenuItem.Image = img, "Recorder.Pause");
+            swap(img => toolStripMenuItemClearRecording.Image = img, "Recorder.Clear");
+            swap(img => playbackToolStripMenuItem.Image = img, "Recorder.Play");
+            swap(img => saveToFileToolStripMenuItem.Image = img, "Recorder.Save");
+            swap(img => LoadFileToolStripMenuItem.Image = img, "Recorder.Load");
+            swap(img => dotSelectedSystemCoords.Image = img, "OrangeDot");
+            swap(img => dotSelectedSystemCoords.InitialImage = img, "OrangeDot");
+            swap(img => dotSystemCoords.Image = img, "YellowDot");
+            swap(img => dotSystemCoords.InitialImage = img, "YellowDot");
+            swap(img => buttonCenter.Image = img, "Navigation.CenterOnSystem");
+            swap(img => buttonLookAt.Image = img, "Navigation.LookAtSystem");
+        }
+        #endregion
     }
 
 

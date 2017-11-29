@@ -33,7 +33,6 @@ namespace EliteDangerousCore.JournalEvents
         public string Message { get; set; }
         public string MessageLocalised { get; set; }
 
-        public override System.Drawing.Bitmap Icon { get { return EliteDangerous.Properties.Resources.datalinkscan; } }
 
         public override void FillInformation(out string summary, out string info, out string detailed) //V
         {

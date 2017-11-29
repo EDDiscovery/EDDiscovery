@@ -28,7 +28,7 @@ using EDDiscovery.UserControls;
 
 namespace EDDiscovery.UserControls
 {
-    public partial class UserControlTrilateration : UserControlCommonBase
+    public partial class UserControlTrilateration : UserControlCommonBase, IIconPackControl
     {
         private ISystem targetsystem;
         private EDSMClass edsm;
@@ -43,6 +43,7 @@ namespace EDDiscovery.UserControls
         public UserControlTrilateration()
         {
             InitializeComponent();
+            EDDIconSet.Instance.ReplaceIcons(this);
             var corner = dataGridViewDistances.TopLeftHeaderCell; // work around #1487
             var corner2 = dataGridViewClosestSystems.TopLeftHeaderCell; // work around #1487
         }
@@ -1036,6 +1037,19 @@ namespace EDDiscovery.UserControls
             }
         }
 
+        #endregion
+
+        #region Icon Replacement
+        string ExtendedControls.IIconPackControl.BaseName { get; } = "Trilateration";
+
+        void ExtendedControls.IIconPackControl.ReplaceImages(ExtendedControls.IconPackImageReplacer swap)
+        {
+            swap(img => toolStripButtonSubmitDistances.Image = img, "SubmitDistances");
+            swap(img => toolStripButtonNew.Image = img, "StartNew");
+            swap(img => toolStripButtonRemoveUnused.Image = img, "RemoveUnused");
+            swap(img => toolStripButtonRemoveAll.Image = img, "RemoveAll");
+            swap(img => toolStripButtonMap.Image = img, "ShowOnMap");
+        }
         #endregion
     }
 }

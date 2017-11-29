@@ -119,6 +119,11 @@ namespace EliteDangerousCore
         Sudarsky_class_V_gas_giant,
         Helium_rich_gas_giant,
         Helium_gas_giant,
+
+        // Custom types
+        High_metal_content_body_700 = 2000,
+        High_metal_content_body_250,
+        High_metal_content_body_hot_thick,
     }
 
     [Flags]
@@ -353,6 +358,33 @@ namespace EliteDangerousCore
             return EDReserve.None;
         }
 
+        public static System.Drawing.Image GetStarTypeImage(EDStar type)
+        {
+            IReadOnlyDictionary<EDStar, System.Drawing.Image> icons = EliteConfigInstance.InstanceIconSet?.StarTypeIcons;
+
+            if (icons.ContainsKey(type))
+            {
+                return icons[type];
+            }
+            else
+            {
+                return icons[EDStar.Unknown];
+            }
+        }
+
+        public static System.Drawing.Image GetPlanetClassImage(EDPlanet type)
+        {
+            IReadOnlyDictionary<EDPlanet, System.Drawing.Image> icons = EliteConfigInstance.InstanceIconSet?.PlanetTypeIcons;
+
+            if (icons.ContainsKey(type))
+            {
+                return icons[type];
+            }
+            else
+            {
+                return icons[EDPlanet.Unknown];
+            }
+        }
 
     }
 }

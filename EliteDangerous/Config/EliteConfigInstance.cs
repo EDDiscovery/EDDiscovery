@@ -22,5 +22,6 @@ namespace EliteDangerousCore
     {
         static public IEliteOptions InstanceOptions { get; set; }
         static public IEliteConfig InstanceConfig { get; set; }
+        static public IEliteIconSet InstanceIconSet { get; set; }
     }
 }

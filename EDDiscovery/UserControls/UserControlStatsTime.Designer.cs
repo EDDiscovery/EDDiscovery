@@ -120,7 +120,7 @@ namespace EDDiscovery.UserControls
             this.checkBoxCustomStars.CheckBoxInnerColor = System.Drawing.Color.White;
             this.checkBoxCustomStars.CheckColor = System.Drawing.Color.DarkBlue;
             this.checkBoxCustomStars.FontNerfReduction = 0.5F;
-            this.checkBoxCustomStars.Image = ((System.Drawing.Image)(resources.GetObject("checkBoxCustomStars.Image")));
+            this.checkBoxCustomStars.Image = global::EDDiscovery.Properties.Resources.StatsTime_Stars;
             this.checkBoxCustomStars.Location = new System.Drawing.Point(191, 0);
             this.checkBoxCustomStars.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.checkBoxCustomStars.Name = "checkBoxCustomStars";
@@ -139,7 +139,7 @@ namespace EDDiscovery.UserControls
             this.checkBoxCustomPlanets.CheckBoxInnerColor = System.Drawing.Color.White;
             this.checkBoxCustomPlanets.CheckColor = System.Drawing.Color.DarkBlue;
             this.checkBoxCustomPlanets.FontNerfReduction = 0.5F;
-            this.checkBoxCustomPlanets.Image = ((System.Drawing.Image)(resources.GetObject("checkBoxCustomPlanets.Image")));
+            this.checkBoxCustomPlanets.Image = global::EDDiscovery.Properties.Resources.StatsTime_Planets;
             this.checkBoxCustomPlanets.Location = new System.Drawing.Point(159, 0);
             this.checkBoxCustomPlanets.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.checkBoxCustomPlanets.Name = "checkBoxCustomPlanets";
@@ -158,7 +158,7 @@ namespace EDDiscovery.UserControls
             this.checkBoxCustomGraph.CheckBoxInnerColor = System.Drawing.Color.White;
             this.checkBoxCustomGraph.CheckColor = System.Drawing.Color.DarkBlue;
             this.checkBoxCustomGraph.FontNerfReduction = 0.5F;
-            this.checkBoxCustomGraph.Image = ((System.Drawing.Image)(resources.GetObject("checkBoxCustomGraph.Image")));
+            this.checkBoxCustomGraph.Image = global::EDDiscovery.Properties.Resources.StatsTime_Graph;
             this.checkBoxCustomGraph.Location = new System.Drawing.Point(761, 0);
             this.checkBoxCustomGraph.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.checkBoxCustomGraph.Name = "checkBoxCustomGraph";
@@ -177,7 +177,7 @@ namespace EDDiscovery.UserControls
             this.checkBoxCustomText.CheckBoxInnerColor = System.Drawing.Color.White;
             this.checkBoxCustomText.CheckColor = System.Drawing.Color.DarkBlue;
             this.checkBoxCustomText.FontNerfReduction = 0.5F;
-            this.checkBoxCustomText.Image = ((System.Drawing.Image)(resources.GetObject("checkBoxCustomText.Image")));
+            this.checkBoxCustomText.Image = global::EDDiscovery.Properties.Resources.StatsTime_Text;
             this.checkBoxCustomText.Location = new System.Drawing.Point(729, 0);
             this.checkBoxCustomText.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.checkBoxCustomText.Name = "checkBoxCustomText";

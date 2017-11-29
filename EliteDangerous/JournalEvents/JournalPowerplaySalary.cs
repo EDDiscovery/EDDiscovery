@@ -33,7 +33,6 @@ namespace EliteDangerousCore.JournalEvents
         public string Power { get; set; }
         public long Amount { get; set; }
 
-        public override System.Drawing.Bitmap Icon { get { return EliteDangerous.Properties.Resources.powerplaysalary; } }
 
         public void Ledger(Ledger mcl, DB.SQLiteConnectionUser conn)
         {

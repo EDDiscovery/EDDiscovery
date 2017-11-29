@@ -46,8 +46,6 @@ namespace EliteDangerousCore.JournalEvents
 
         public Cargo[] Inventory { get; set; }
 
-        public override System.Drawing.Bitmap Icon { get { return EliteDangerous.Properties.Resources.cargomanifest; } }
-
         public override void FillInformation(out string summary, out string info, out string detailed) //V
         {
             summary = EventTypeStr.SplitCapsWord();

@@ -113,7 +113,6 @@ namespace EliteDangerousCore.JournalEvents
 
         public System.Tuple<string, int>[] CommodityReward { get; set; }            // Verified in fdname, not in $_name. Must be in fdname format
 
-        public override System.Drawing.Bitmap Icon { get { return EliteDangerous.Properties.Resources.missioncompleted; } }
 
         public void MaterialList(MaterialCommoditiesList mc, DB.SQLiteConnectionUser conn)
         {

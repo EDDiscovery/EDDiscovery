@@ -30,7 +30,7 @@ using EliteDangerousCore;
 
 namespace EDDiscovery.UserControls
 {
-    public partial class UserControlJournalGrid : UserControlCommonBase, IHistoryCursor
+    public partial class UserControlJournalGrid : UserControlCommonBase, IHistoryCursor, ExtendedControls.IIconPackControl
     {
         EventFilterSelector cfs = new EventFilterSelector();
         private Conditions.ConditionLists fieldfilter = new Conditions.ConditionLists();
@@ -66,6 +66,7 @@ namespace EDDiscovery.UserControls
         public UserControlJournalGrid()
         {
             InitializeComponent();
+            EDDIconSet.Instance.ReplaceIcons(this);
             var corner = dataGridViewJournal.TopLeftHeaderCell; // work around #1487
         }
 
@@ -509,5 +510,15 @@ namespace EDDiscovery.UserControls
             }
         }
 
+        #region Icon Replacement
+        string ExtendedControls.IIconPackControl.BaseName { get; } = "JournalGrid";
+
+        void ExtendedControls.IIconPackControl.ReplaceImages(ExtendedControls.IconPackImageReplacer swap)
+        {
+            swap(img => buttonExtExcel.Image = img, "ExportToExcel");
+            swap(img => drawnPanelPopOut.DrawnImage = img, "Popout");
+            swap(img => panelJournalIcon.BackgroundImage = img, "Journal");
+        }
+        #endregion
     }
 }

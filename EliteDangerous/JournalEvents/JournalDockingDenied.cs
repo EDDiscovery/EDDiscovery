@@ -35,7 +35,6 @@ namespace EliteDangerousCore.JournalEvents
         public string StationName { get; set; }
         public string Reason { get; set; }
 
-        public override System.Drawing.Bitmap Icon { get { return EliteDangerous.Properties.Resources.dockingdenied; } }
 
         public override void FillInformation(out string summary, out string info, out string detailed) //V
         {

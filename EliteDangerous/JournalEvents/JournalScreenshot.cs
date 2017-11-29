@@ -56,7 +56,6 @@ namespace EliteDangerousCore.JournalEvents
         public double? nLatitude { get; set; }
         public double? nLongitude { get; set; }
 
-        public override System.Drawing.Bitmap Icon { get { return EliteDangerous.Properties.Resources.screenshot; } }
 
         public override void FillInformation(out string summary, out string info, out string detailed)  //V
         {

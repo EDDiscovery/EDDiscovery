@@ -37,7 +37,6 @@ namespace EliteDangerousCore.JournalEvents
         public string StarSystem { get; set; }
         public string StarClass { get; set; }
 
-        public override System.Drawing.Bitmap Icon { get { return EliteDangerous.Properties.Resources.startjump; } }
 
         public override void FillInformation(out string summary, out string info, out string detailed) //V
         {

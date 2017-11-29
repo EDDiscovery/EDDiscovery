@@ -43,7 +43,6 @@ namespace EliteDangerousCore.JournalEvents
         public long ShipPrice { get; set; }
         public string System { get; set; }
 
-        public override System.Drawing.Bitmap Icon { get { return EliteDangerous.Properties.Resources.shipyardsell; } }
 
         public void Ledger(Ledger mcl, DB.SQLiteConnectionUser conn)
         {

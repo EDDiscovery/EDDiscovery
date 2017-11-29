@@ -129,7 +129,7 @@ namespace EDDiscovery
             var launchArg = ((EDDFormLaunchArgs)tim?.Tag)?.Clone() ?? new EDDFormLaunchArgs();
             tim?.Dispose();
 
-            try
+            //try
             {
                 EDDMainForm = new EDDiscoveryForm();
                 SetLoadingMsg("Checking Ship Systems");
@@ -144,11 +144,13 @@ namespace EDDiscovery
                 SetLoadingMsg("Establishing Telepresence");
                 SwitchContext(EDDMainForm);         // Ignition, and liftoff!
             }
+            /*
             catch (Exception ex)
             {   // There's so many ways that things could go wrong during init; let's fail for everything!
                 EDDMainForm?.Dispose();
                 BaseUtils.ExceptionForm.ShowException(ex, "A fatal exception was encountered while initializing EDDiscovery.", Properties.Resources.URLProjectFeedback, isFatal: true, parent: MainForm);
             }
+             */
         }
 
 

@@ -38,7 +38,6 @@ namespace EliteDangerousCore.JournalEvents
         public string Name { get; set; }
         public int Count { get; set; }
 
-        public override System.Drawing.Bitmap Icon { get { return EliteDangerous.Properties.Resources.materialcollected; } }
 
         public void MaterialList(MaterialCommoditiesList mc, DB.SQLiteConnectionUser conn)
         {
