@@ -71,7 +71,7 @@ namespace EDDiscovery.Actions
                         else
                         {
                             Forms.PopOutControl poc = (ap.actioncontroller as ActionController).DiscoveryForm.PopOuts;
-                            int poi = Forms.PanelInformation.GetPanelIndexByName(nextcmd);
+                            int poi = Forms.PanelInformation.GetPanelIndexByWindowsRefName(nextcmd);
 
                             if (poi>=0)
                             {

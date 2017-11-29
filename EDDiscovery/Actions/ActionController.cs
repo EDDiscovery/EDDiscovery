@@ -144,8 +144,6 @@ namespace EDDiscovery.Actions
             AdditionalChecks(ref ErrorList);
 
             actionrunasync = new ActionRun(this, actionfiles);        // this is the guy who runs programs asynchronously
-            ActionConfigureKeys();
-            VoiceLoadEvents();
         }
 
         public void CheckWarn()
@@ -208,8 +206,8 @@ namespace EDDiscovery.Actions
 
                 SQLiteConnectionUser.PutSettingString("ActionEditorCollapseState_" + name, frm.CollapsedState());  // get any collapsed state info for this pack
 
-                ActionConfigureKeys();
-                VoiceLoadEvents();
+                ActionConfigureKeys();  // kick it to load in case its changed
+                VoiceLoadEvents();      
 
                 lasteditedpack = name;
                 SQLiteConnectionUser.PutSettingString("ActionPackLastFile", lasteditedpack);
@@ -223,8 +221,6 @@ namespace EDDiscovery.Actions
         // for new entries, cd = AlwaysTrue. For older entries, the condition
         private ActionPackEditBase SetPackEditorAndCondition(string group, Condition cd)
         {
-            List<string> addnames = new List<string>() { "{one}", "{two}" };
-
             if (group == "Voice")
             {
                 ActionPackEditVoice ev = new ActionPackEditVoice();
@@ -346,15 +342,15 @@ namespace EDDiscovery.Actions
 
         public void ManageAddOns()
         {
-            RunManageAddOns(true);
+            ManagerAddOns(true);
         }
 
         public void EditAddOns()
         {
-            RunManageAddOns(false);
+            ManagerAddOns(false);
         }
 
-        private void RunManageAddOns(bool manage)
+        private void ManagerAddOns(bool manage)
         {
             using (AddOnManagerForm dmf = new AddOnManagerForm())
             {
@@ -390,6 +386,8 @@ namespace EDDiscovery.Actions
                     }
 
                     ActionRun(ActionEventEDList.onInstall, null, new ConditionVariables("InstallList", changes));
+
+                    ActionConfigureKeys();
                 }
             }
         }
@@ -547,10 +545,13 @@ namespace EDDiscovery.Actions
 
         #endregion
 
-        public void onStartup()
+        public void onStartup()     // on main thread
         {
+            System.Diagnostics.Debug.Assert(Application.MessageLoop);
+
             ActionRun(ActionEvent.onStartup);
             ActionRun(ActionEvent.onPostStartup);
+            ActionConfigureKeys();          // reload keys
         }
 
         public void HoldTillProgStops()
@@ -715,9 +716,8 @@ namespace EDDiscovery.Actions
             }
         }
 
-        public void VoiceLoadEvents()
+        public void VoiceLoadEvents()       // kicked by Action.Perform so synchornised with voice pack (or via editor)
         {
-            System.Diagnostics.Debug.WriteLine("Action config voice recon " + voicerecon.IsOpen);
             if ( voicerecon.IsOpen )
             {
                 voicerecon.Stop(true);
@@ -728,8 +728,6 @@ namespace EDDiscovery.Actions
 
                 if (ret.Count > 0)
                 {
-                    System.Diagnostics.Debug.WriteLine("Recognised voice recon entries" + ret.Count);
-
                     foreach (var vp in ret)
                     {
                         voicerecon.Add(vp.Item1);
