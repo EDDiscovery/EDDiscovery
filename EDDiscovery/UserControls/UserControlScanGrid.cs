@@ -115,6 +115,10 @@ namespace EDDiscovery.UserControls
 
                     // populate the body class
                     StringBuilder bdClass = new StringBuilder();
+                    if (sn.ScanData != null && sn.ScanData.BodyName != null && sn.ScanData.IsLandable == true)
+                    {
+                        bdClass.Append("Landable, ");
+                    }
                     if (sn.ScanData != null && sn.ScanData.BodyName != null && sn.ScanData.Terraformable == true)
                     {
                         bdClass.Append("Terraformable ");
