@@ -24,6 +24,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using EliteDangerousCore.JournalEvents;
 using static EDDiscovery.UserControls.Recipes;
 
 namespace EDDiscovery.UserControls
@@ -33,7 +34,11 @@ namespace EDDiscovery.UserControls
         private List<Tuple<MaterialCommoditiesList.Recipe, int>> EngineeringWanted = new List<Tuple<MaterialCommoditiesList.Recipe, int>>();
         private List<Tuple<MaterialCommoditiesList.Recipe, int>> SynthesisWanted = new List<Tuple<MaterialCommoditiesList.Recipe, int>>();
         private bool showMaxInjections;
+        private bool showPlanetMats;
+        private bool showListAvailability;
         private string DbShowInjectionsSave { get { return "ShoppingListShowFSD" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
+        private string DbShowAllMatsLandedSave { get { return "ShoppingListShowPlanetMats" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
+        private string DbHighlightAvailableMats { get { return "ShoppingListHighlightAvailable" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
         const int PhysicalInventoryCapacity = 1000;
         const int DataInventoryCapacity = 500;
 
@@ -56,6 +61,8 @@ namespace EDDiscovery.UserControls
             // so the way it works, if the panels ever re-display (for whatever reason) they tell us, and we redisplay
 
             showMaxInjections = SQLiteDBClass.GetSettingBool(DbShowInjectionsSave, true);
+            showPlanetMats = SQLiteDBClass.GetSettingBool(DbShowAllMatsLandedSave, true);
+            showListAvailability = SQLiteDBClass.GetSettingBool(DbHighlightAvailableMats, true);
             pictureBoxList.ContextMenuStrip = contextMenuConfig;
 
             userControlSynthesis.OnDisplayComplete += Synthesis_OnWantedChange;
@@ -66,6 +73,8 @@ namespace EDDiscovery.UserControls
         {
             RevertToNormalSize();
             SQLiteDBClass.PutSettingBool(DbShowInjectionsSave, showMaxInjections);
+            SQLiteDBClass.PutSettingBool(DbShowAllMatsLandedSave, showPlanetMats);
+            SQLiteDBClass.PutSettingBool(DbHighlightAvailableMats, showListAvailability);
             userControlEngineering.Closing();
             userControlSynthesis.Closing();
         }
@@ -79,6 +88,8 @@ namespace EDDiscovery.UserControls
             userControlEngineering.InitialDisplay();
             userControlSynthesis.InitialDisplay();
             showMaxFSDInjectionsToolStripMenuItem.Checked = showMaxInjections;
+            showAllMaterialsWhenLandedToolStripMenuItem.Checked = showPlanetMats;
+            showAvailableMaterialsInListWhenLandedToolStripMenuItem.Checked = showListAvailability;
             Display();
         }
 
@@ -103,12 +114,6 @@ namespace EDDiscovery.UserControls
             Display();
         }
 
-        private void Discoveryform_OnNewEntry(HistoryEntry he, HistoryList hl)
-        {
-            if (he.journalEntry is IMaterialCommodityJournalEntry)
-                Display();
-        }
-
         private void Display(HistoryEntry he, HistoryList hl)
         {
             Display();
@@ -127,6 +132,12 @@ namespace EDDiscovery.UserControls
                 List<Tuple<MaterialCommoditiesList.Recipe, int>> totalWanted = EngineeringWanted.Concat(SynthesisWanted).ToList();
 
                 List<MaterialCommodities> shoppinglist = MaterialCommoditiesList.GetShoppingList(totalWanted, mcl);
+                JournalScan sd = null;
+
+                if (last_he.IsLanded)
+                {
+                    sd = discoveryform.history.GetScans(last_he.System.name).Where(sc => sc.BodyName == last_he.WhereAmI).FirstOrDefault();
+                }
 
                 StringBuilder wantedList = new StringBuilder();
 
@@ -135,7 +146,21 @@ namespace EDDiscovery.UserControls
                     wantedList.Append("Needed Mats:\n");
                     foreach (MaterialCommodities c in shoppinglist.OrderBy(mat => mat.name))      // and add new..
                     {
-                        wantedList.AppendFormat("  {0} {1}\n", c.scratchpad, c.name);
+                        string present = "";
+                        if (showListAvailability)
+                        {
+                            if (sd != null)
+                            {
+                                double available;
+                                if (sd.Materials.TryGetValue(c.fdname, out available))
+                                {
+                                    present = $" {available.ToString("N1")}%";
+                                }
+                                else
+                                { present = " -"; }
+                            }
+                        }
+                        wantedList.Append($"  {c.scratchpad} {c.name}{present}\n");
                     }
 
                     int currentMats = mcl.Where(m => m.category == MaterialCommodityDB.MaterialManufacturedCategory || m.category == MaterialCommodityDB.MaterialRawCategory)
@@ -150,11 +175,11 @@ namespace EDDiscovery.UserControls
                         wantedList.Append("\nCapacity Warning:");
                         if (currentMats + neededMats > PhysicalInventoryCapacity)
                         {
-                            wantedList.AppendFormat("\n  {0}/{1} materials space free", PhysicalInventoryCapacity - currentMats, neededMats);
+                            wantedList.Append($"\n  {PhysicalInventoryCapacity - currentMats}/{neededMats} materials space free");
                         }
                         if (currentData + neededData > DataInventoryCapacity)
                         {
-                            wantedList.AppendFormat("\n  {0}/{1} data space free", DataInventoryCapacity - currentData, neededData);
+                            wantedList.Append($"\n  {DataInventoryCapacity - currentData}/{neededData} data space free");
                         }
                         wantedList.Append("\n");
                     }
@@ -171,6 +196,16 @@ namespace EDDiscovery.UserControls
                     Tuple<int, int, string> standard = MaterialCommoditiesList.HowManyLeft(mcl, SynthesisRecipes.First(r => r.name == "FSD" && r.level == "Standard"));
                     Tuple<int, int, string> premium = MaterialCommoditiesList.HowManyLeft(mcl, SynthesisRecipes.First(r => r.name == "FSD" && r.level == "Premium"));
                     wantedList.Append($"\nMax FSD Injections\n   {basic.Item1} Basic\n   {standard.Item1} Standard\n   {premium.Item1} Premium");
+                }
+
+                if (showPlanetMats && sd != null)  //for user configurable setting
+                {
+                    wantedList.Append($"\n\nMaterials on {last_he.WhereAmI}\n");
+                    foreach (KeyValuePair<string, double> mat in sd.Materials)
+                    {
+                        wantedList.AppendFormat("   {0} {1}%\n", System.Threading.Thread.CurrentThread.CurrentCulture.TextInfo.ToTitleCase(mat.Key.ToLower()),
+                                                                        mat.Value.ToString("N1"));
+                    }
                 }
 
                 Font font = discoveryform.theme.GetFont;
@@ -205,6 +240,18 @@ namespace EDDiscovery.UserControls
         private void showMaxFSDInjectionsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             showMaxInjections = ((ToolStripMenuItem)sender).Checked;
+            Display();
+        }
+
+        private void showAllMaterialsWhenLandedToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            showPlanetMats = ((ToolStripMenuItem)sender).Checked;
+            Display();
+        }
+
+        private void showAvailableMaterialsInListWhenLandedToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            showListAvailability = ((ToolStripMenuItem)sender).Checked;
             Display();
         }
     }
