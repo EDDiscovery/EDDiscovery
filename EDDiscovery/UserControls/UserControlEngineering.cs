@@ -115,14 +115,6 @@ namespace EDDiscovery.UserControls
             }
 
             discoveryform.OnNewEntry += Discoveryform_OnNewEntry;
-            uctg.OnTravelSelectionChanged += Display;
-        }
-
-        public override void ChangeCursorType(IHistoryCursor thc)
-        {
-            uctg.OnTravelSelectionChanged -= Display;
-            uctg = thc;
-            uctg.OnTravelSelectionChanged += Display;
         }
 
         #endregion
@@ -131,7 +123,7 @@ namespace EDDiscovery.UserControls
 
         public override void InitialDisplay()
         {
-            last_he = uctg.GetCurrentHistoryEntry;
+            last_he = discoveryform.history.GetLast;
             Display();
         }
 

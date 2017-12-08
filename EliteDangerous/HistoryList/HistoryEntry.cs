@@ -308,6 +308,7 @@ namespace EliteDangerousCore
             {
                 JournalLocation jl = je as JournalLocation;
                 he.docked = jl.Docked;
+                he.landed = jl.Latitude.HasValue;
                 he.whereami = jl.Docked ? jl.StationName : jl.Body;
                 he.hyperspace = false;
             }
@@ -322,7 +323,7 @@ namespace EliteDangerousCore
             else if (je.EventTypeID == JournalTypeEnum.Touchdown)
                 he.landed = true;
             else if (je.EventTypeID == JournalTypeEnum.Liftoff)
-                he.landed = false;
+                he.landed = !(je as JournalLiftoff).PlayerControlled;
             else if (je.EventTypeID == JournalTypeEnum.SupercruiseEntry)
             {
                 he.whereami = (je as JournalSupercruiseEntry).StarSystem;

@@ -107,14 +107,6 @@ namespace EDDiscovery.UserControls
             }
 
             discoveryform.OnNewEntry += Discoveryform_OnNewEntry;
-            uctg.OnTravelSelectionChanged += Display;
-        }
-
-        public override void ChangeCursorType(IHistoryCursor thc)
-        {
-            uctg.OnTravelSelectionChanged -= Display;
-            uctg = thc;
-            uctg.OnTravelSelectionChanged += Display;
         }
 
         #endregion
@@ -123,14 +115,15 @@ namespace EDDiscovery.UserControls
 
         public override void InitialDisplay()
         {
-            last_he = uctg.GetCurrentHistoryEntry;
+            last_he = discoveryform.history.GetLast;
             Display();
         }
 
         private void Discoveryform_OnNewEntry(HistoryEntry he, HistoryList hl)
         {
             last_he = he;
-            if (he.journalEntry is IMaterialCommodityJournalEntry)
+            //touchdown and liftoff ensure shopping list refresh in case displaying landed planet ma
+            if (he.journalEntry is IMaterialCommodityJournalEntry || he.journalEntry.EventTypeID == JournalTypeEnum.Touchdown || he.journalEntry.EventTypeID == JournalTypeEnum.Liftoff  || he.IsLocOrJump)
                 Display();
         }
 
