@@ -43,12 +43,15 @@ namespace EDDiscovery.UserControls
         /// </summary>
         private void InitializeComponent()
         {
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(UserControlScanGrid));
             this.dataViewScrollerPanel2 = new ExtendedControls.DataViewScrollerPanel();
             this.dataGridViewNearest = new System.Windows.Forms.DataGridView();
-            this.vScrollBarCustom2 = new ExtendedControls.VScrollBarCustom();
             this.BodyName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.img = new System.Windows.Forms.DataGridViewImageColumn();
             this.BodyClass = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.BodyDetails = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.vScrollBarCustom2 = new ExtendedControls.VScrollBarCustom();
             this.dataViewScrollerPanel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewNearest)).BeginInit();
             this.SuspendLayout();
@@ -75,6 +78,7 @@ namespace EDDiscovery.UserControls
             this.dataGridViewNearest.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewNearest.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.BodyName,
+            this.img,
             this.BodyClass,
             this.BodyDetails});
             this.dataGridViewNearest.Dock = System.Windows.Forms.DockStyle.Bottom;
@@ -84,6 +88,39 @@ namespace EDDiscovery.UserControls
             this.dataGridViewNearest.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.dataGridViewNearest.Size = new System.Drawing.Size(552, 572);
             this.dataGridViewNearest.TabIndex = 23;
+            // 
+            // BodyName
+            // 
+            this.BodyName.FillWeight = 25F;
+            this.BodyName.HeaderText = "Body";
+            this.BodyName.MinimumWidth = 20;
+            this.BodyName.Name = "BodyName";
+            // 
+            // img
+            // 
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle1.NullValue = ((object)(resources.GetObject("dataGridViewCellStyle1.NullValue")));
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.img.DefaultCellStyle = dataGridViewCellStyle1;
+            this.img.FillWeight = 5F;
+            this.img.HeaderText = "";
+            this.img.Name = "img";
+            this.img.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.img.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
+            // 
+            // BodyClass
+            // 
+            this.BodyClass.FillWeight = 35F;
+            this.BodyClass.HeaderText = "Class";
+            this.BodyClass.MinimumWidth = 20;
+            this.BodyClass.Name = "BodyClass";
+            // 
+            // BodyDetails
+            // 
+            this.BodyDetails.FillWeight = 40F;
+            this.BodyDetails.HeaderText = "Details";
+            this.BodyDetails.MinimumWidth = 30;
+            this.BodyDetails.Name = "BodyDetails";
             // 
             // vScrollBarCustom2
             // 
@@ -115,27 +152,6 @@ namespace EDDiscovery.UserControls
             this.vScrollBarCustom2.Value = -1;
             this.vScrollBarCustom2.ValueLimited = -1;
             // 
-            // BodyName
-            // 
-            this.BodyName.FillWeight = 25F;
-            this.BodyName.HeaderText = "Body";
-            this.BodyName.MinimumWidth = 20;
-            this.BodyName.Name = "BodyName";
-            // 
-            // BodyClass
-            // 
-            this.BodyClass.FillWeight = 35F;
-            this.BodyClass.HeaderText = "Class";
-            this.BodyClass.MinimumWidth = 20;
-            this.BodyClass.Name = "BodyClass";
-            // 
-            // BodyDetails
-            // 
-            this.BodyDetails.FillWeight = 40F;
-            this.BodyDetails.HeaderText = "Details";
-            this.BodyDetails.MinimumWidth = 30;
-            this.BodyDetails.Name = "BodyDetails";
-            // 
             // UserControlScanGrid
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -154,6 +170,7 @@ namespace EDDiscovery.UserControls
         private ExtendedControls.VScrollBarCustom vScrollBarCustom2;
         private System.Windows.Forms.DataGridView dataGridViewNearest;
         private System.Windows.Forms.DataGridViewTextBoxColumn BodyName;
+        private System.Windows.Forms.DataGridViewImageColumn img;
         private System.Windows.Forms.DataGridViewTextBoxColumn BodyClass;
         private System.Windows.Forms.DataGridViewTextBoxColumn BodyDetails;
     }

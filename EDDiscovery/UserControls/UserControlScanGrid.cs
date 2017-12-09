@@ -34,6 +34,7 @@ namespace EDDiscovery.UserControls
     public partial class UserControlScanGrid : UserControlCommonBase
     {
         private HistoryEntry last_he = null;
+        private object bdImage;
 
         public UserControlScanGrid()
         {
@@ -43,7 +44,7 @@ namespace EDDiscovery.UserControls
 
         public override void Init()
         {
-            uctg.OnTravelSelectionChanged += Display;      
+            uctg.OnTravelSelectionChanged += Display;
             discoveryform.OnNewEntry += NewEntry;
         }
 
@@ -75,7 +76,6 @@ namespace EDDiscovery.UserControls
             }
         }
 
-
         private void Display(HistoryEntry he, HistoryList hl)            // Called at first start or hooked to change cursor
         {
             if (he != null && (last_he == null || he.System != last_he.System))
@@ -95,6 +95,7 @@ namespace EDDiscovery.UserControls
                 return;
             }
 
+
             StarScan.SystemNode last_sn = discoveryform.history.starscan.FindSystem(last_he.System, true);
 
             SetControlText((last_sn == null) ? "No Scan" : ("Brief Scan Summary for " + last_sn.system.name));
@@ -107,10 +108,12 @@ namespace EDDiscovery.UserControls
                     all_nodes = Flatten(starnode, all_nodes);
                 }
 
+
                 // flatten tree of scan nodes to prepare for listing
                 foreach (StarScan.ScanNode sn in all_nodes)
                 {
 
+                    
                     // create the grid data
 
                     // populate the body class
@@ -174,10 +177,17 @@ namespace EDDiscovery.UserControls
                             bdDetails.AppendFormat("Habitable Zone Approx. {0}", sn.ScanData.GetHabZoneStringLs(), (sn.ScanData.HabitableZoneInner.Value).ToString("N2"), (sn.ScanData.HabitableZoneOuter.Value).ToString("N2"));
                     }
 
+                    // Image Column
+                    if (sn.ScanData.IsStar != false)
+                    { Image bdImage = sn.ScanData.GetStarTypeImage(); }
+                    else
+                    { Image bdImage = sn.ScanData.GetPlanetClassImage(); }
+                    
                     // populate the grid
                     if (sn.ScanData != null && sn.ScanData.BodyName != null && bdClass != null && bdDetails != null)
                     {
-                        dataGridViewNearest.Rows.Add(new object[] { sn.ScanData.BodyName, bdClass, bdDetails });
+                                                
+                        dataGridViewNearest.Rows.Add(new object[] { sn.ScanData.BodyName, bdImage , bdClass, bdDetails });
                     }
                 }
 
