@@ -34,8 +34,7 @@ namespace EDDiscovery.UserControls
     public partial class UserControlScanGrid : UserControlCommonBase
     {
         private HistoryEntry last_he = null;
-        private object bdImage;
-
+        
         public UserControlScanGrid()
         {
             InitializeComponent();
