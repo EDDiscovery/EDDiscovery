@@ -250,19 +250,23 @@ namespace EDDiscovery.UserControls
                         if (sn.ScanData!=null)
                         {
                             JournalScan sc = sn.ScanData;
+                                                                                    
+                            if (sc.IsStar) // brief notification for special or uncommon celestial bodies, useful to traverse the history and search for that special body you discovered.
+                            {
+                                // testing
+                                if (sc.BodyName != null)
+                                    extrainfo = extrainfo.AppendPrePad(sc.BodyName + " is a " + sc.StarTypeText, prefix);
 
-                            // Sagittarius A* is a special body: is the only one which is classified as Super Massive Black Hole. Yet, it refuse to work as expected...
-                            string SagA = "Sagittarius A";
-                            if (sc.GetStarTypeName() == "Super Massive Black Hole" || sc.StarTypeID == EDStar.SuperMassiveBlackHole || sc.BodyName.Contains(SagA))
-                                extrainfo = extrainfo.AppendPrePad(sc.BodyName + " is a super massive black hole", prefix);
+                                // Sagittarius A* is a special body: is the only one which is classified as Super Massive Black Hole. Yet, it refuse to work as expected...
+                                string SagA = "Sagittarius A";
+                                if (sc.GetStarTypeName() == "Super Massive Black Hole" || sc.StarTypeID == EDStar.SuperMassiveBlackHole || sc.BodyName.Contains(SagA))
+                                    extrainfo = extrainfo.AppendPrePad(sc.BodyName + " is a super massive black hole", prefix);
 
-                            // black holes (they are buggy - many shows up without problems, but a few refuse to cooperate). More work needed
-                            string BlackHole = "Black Hole";
-                            if (sc.StarTypeID == EDStar.H || sn.ScanData.StarTypeText == "Black Hole" || sc.StarTypeText.Contains(BlackHole))
-                                extrainfo = extrainfo.AppendPrePad(sc.BodyName + " is a black hole", prefix);
-                            
-                            if (sc.IsStar == true) // brief notification for special or uncommon celestial bodies, useful to traverse the history and search for that special body you discovered.
-                            {   
+                                // black holes (they are buggy - many shows up without problems, but a few refuse to cooperate). More work needed
+                                string BlackHole = "Black Hole";
+                                if (sc.StarTypeID == EDStar.H || sn.ScanData.StarTypeText == "Black Hole" || sc.StarTypeText.Contains(BlackHole))
+                                    extrainfo = extrainfo.AppendPrePad(sc.BodyName + " is a black hole", prefix);
+
                                 // neutron stars
                                 if (sc.StarTypeID == EDStar.N)
                                     extrainfo = extrainfo.AppendPrePad(sc.BodyName + " is a neutron star", prefix);
@@ -307,7 +311,9 @@ namespace EDDiscovery.UserControls
                                 if (sc.StarTypeID == EDStar.RoguePlanet || sc.StarTypeText.Contains(RouguePlanet))
                                     extrainfo = extrainfo.AppendPrePad(sc.BodyName + " is a rougue planet", prefix);
                             }
+
                             else
+
                             {
                                 // Check if a non-star body is a moon or not. We want it to further refine our brief summary in the visited star list.
                                 // To avoid duplicates, we need to apply our filters before on the bodies recognized as a moon, than do the same for the other bodies that do not fulfill that criteria.
