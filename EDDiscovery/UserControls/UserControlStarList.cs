@@ -250,15 +250,64 @@ namespace EDDiscovery.UserControls
                         if (sn.ScanData!=null)
                         {
                             JournalScan sc = sn.ScanData;
-
-                            if (sc.IsStar)
+                                                                                    
+                            if (sc.IsStar) // brief notification for special or uncommon celestial bodies, useful to traverse the history and search for that special body you discovered.
                             {
-                                if (sc.StarTypeID == EDStar.N)
-                                    extrainfo = extrainfo.AppendPrePad(sc.BodyName + " is a neutron star", prefix);
+                                // Sagittarius A* is a special body: is the centre of the Milky Way, and the only one which is classified as Super Massive Black Hole.                                
+                                if (sc.StarTypeID == EDStar.SuperMassiveBlackHole)
+                                    extrainfo = extrainfo.AppendPrePad(sc.BodyName + " is a super massive black hole", prefix);
+
+                                // black holes
                                 if (sc.StarTypeID == EDStar.H)
                                     extrainfo = extrainfo.AppendPrePad(sc.BodyName + " is a black hole", prefix);
+
+                                // neutron stars
+                                if (sc.StarTypeID == EDStar.N)
+                                    extrainfo = extrainfo.AppendPrePad(sc.BodyName + " is a neutron star", prefix);
+
+                                // white dwarf D, DA, DAB, DAO, DAZ, DAV, DB, DBZ, DBV, DO, DOV, DQ, DC, DCV, DX,
+                                if (sc.StarTypeID == EDStar.D || sc.StarTypeID == EDStar.DA || sc.StarTypeID == EDStar.DAB || sc.StarTypeID == EDStar.DAO || sc.StarTypeID == EDStar.DAZ || sc.StarTypeID == EDStar.DAV || 
+                                    sc.StarTypeID == EDStar.DB || sc.StarTypeID == EDStar.DBZ || sc.StarTypeID == EDStar.DBV || sc.StarTypeID == EDStar.DO || sc.StarTypeID == EDStar.DOV || sc.StarTypeID == EDStar.DQ || 
+                                    sc.StarTypeID == EDStar.DC || sc.StarTypeID == EDStar.DCV || sc.StarTypeID == EDStar.DX)
+                                    extrainfo = extrainfo.AppendPrePad(sc.BodyName + " is a " + sc.StarTypeID + " white dwarf star", prefix);
+
+                                // wolf rayet W, WN, WNC, WC, WO
+                                if (sc.StarTypeID == EDStar.W || sc.StarTypeID == EDStar.WN || sc.StarTypeID == EDStar.WNC || sc.StarTypeID == EDStar.WC || sc.StarTypeID == EDStar.WO)
+                                    extrainfo = extrainfo.AppendPrePad(sc.BodyName + " is a " + sc.StarTypeID + " wolf-rayet star", prefix);
+
+                                // A_BlueWhiteSuperGiant
+                                string ABlueWhiteSuperGiant = "A Blue White Super Giant";
+                                if (sc.StarTypeID == EDStar.A_BlueWhiteSuperGiant || sc.StarTypeText.Contains(ABlueWhiteSuperGiant))
+                                    extrainfo = extrainfo.AppendPrePad(sc.BodyName + " is a A Blue White Super Giant", prefix);
+
+                                string FWhiteSuperGiant = "F White Super Giant";
+                                // F_WhiteSuperGiant
+                                if (sc.StarTypeID == EDStar.F_WhiteSuperGiant || sc.StarTypeText.Contains(FWhiteSuperGiant))
+                                    extrainfo = extrainfo.AppendPrePad(sc.BodyName + " is a F White Super Giant", prefix);
+
+                                // K_OrangeGiant
+                                string KOrangeGiant = "K Orange Giant";
+                                if (sc.StarTypeID == EDStar.K_OrangeGiant || sc.StarTypeText.Contains(KOrangeGiant))
+                                    extrainfo = extrainfo.AppendPrePad(sc.BodyName + " is a K Orange Giant", prefix);
+
+                                // M_RedSuperGiant
+                                string MRedSuperGiant = "M Red Super Giant";
+                                if (sc.StarTypeID == EDStar.M_RedSuperGiant || sc.StarTypeText.Contains(MRedSuperGiant))
+                                    extrainfo = extrainfo.AppendPrePad(sc.BodyName + " is a M Red Super Giant", prefix);
+
+                                // M_RedGiant
+                                string MRedGiant = "M Red Giant";
+                                if (sc.StarTypeID == EDStar.M_RedGiant || sc.StarTypeText.Contains(MRedGiant))
+                                    extrainfo = extrainfo.AppendPrePad(sc.BodyName + " is a M Red Giant", prefix);
+
+                                // RoguePlanet,
+                                string RouguePlanet = "Rougue";
+                                if (sc.StarTypeID == EDStar.RoguePlanet || sc.StarTypeText.Contains(RouguePlanet))
+                                    extrainfo = extrainfo.AppendPrePad(sc.BodyName + " is a rougue planet", prefix);
                             }
+
                             else
+
                             {
                                 // Check if a non-star body is a moon or not. We want it to further refine our brief summary in the visited star list.
                                 // To avoid duplicates, we need to apply our filters before on the bodies recognized as a moon, than do the same for the other bodies that do not fulfill that criteria.
@@ -316,6 +365,10 @@ namespace EDDiscovery.UserControls
                     if (total > 0)
                     {
                         infostr = infostr.AppendPrePad(total.ToStringInvariant() + " Other bod" + ((total > 1) ? "ies" : "y"), ", ");
+                        infostr = infostr.AppendPrePad(extrainfo, prefix);
+                    }
+                    else
+                    {
                         infostr = infostr.AppendPrePad(extrainfo, prefix);
                     }
                 }

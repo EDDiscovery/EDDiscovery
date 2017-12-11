@@ -15,7 +15,7 @@
  */
 namespace EDDiscovery.UserControls
 {
-    partial class UserControlEstimatedValues
+    partial class UserControlScanGrid
     {
         /// <summary> 
         /// Required designer variable.
@@ -43,19 +43,23 @@ namespace EDDiscovery.UserControls
         /// </summary>
         private void InitializeComponent()
         {
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(UserControlScanGrid));
             this.dataViewScrollerPanel2 = new ExtendedControls.DataViewScrollerPanel();
+            this.dataGridViewScangrid = new System.Windows.Forms.DataGridView();
             this.vScrollBarCustom2 = new ExtendedControls.VScrollBarCustom();
-            this.dataGridViewEstimated = new System.Windows.Forms.DataGridView();
+            this.img = new System.Windows.Forms.DataGridViewImageColumn();
             this.BodyName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.EstValue = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.BodyClass = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.BodyDetails = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataViewScrollerPanel2.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewEstimated)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewScangrid)).BeginInit();
             this.SuspendLayout();
             // 
             // dataViewScrollerPanel2
             // 
+            this.dataViewScrollerPanel2.Controls.Add(this.dataGridViewScangrid);
             this.dataViewScrollerPanel2.Controls.Add(this.vScrollBarCustom2);
-            this.dataViewScrollerPanel2.Controls.Add(this.dataGridViewEstimated);
             this.dataViewScrollerPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataViewScrollerPanel2.InternalMargin = new System.Windows.Forms.Padding(0);
             this.dataViewScrollerPanel2.Location = new System.Drawing.Point(0, 0);
@@ -64,6 +68,27 @@ namespace EDDiscovery.UserControls
             this.dataViewScrollerPanel2.Size = new System.Drawing.Size(572, 572);
             this.dataViewScrollerPanel2.TabIndex = 25;
             this.dataViewScrollerPanel2.VerticalScrollBarDockRight = true;
+            // 
+            // dataGridViewScangrid
+            // 
+            this.dataGridViewScangrid.AllowUserToAddRows = false;
+            this.dataGridViewScangrid.AllowUserToDeleteRows = false;
+            this.dataGridViewScangrid.AllowUserToResizeRows = false;
+            this.dataGridViewScangrid.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.dataGridViewScangrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridViewScangrid.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.img,
+            this.BodyName,
+            this.BodyClass,
+            this.BodyDetails});
+            this.dataGridViewScangrid.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.dataGridViewScangrid.Location = new System.Drawing.Point(0, 0);
+            this.dataGridViewScangrid.Name = "dataGridViewScangrid";
+            this.dataGridViewScangrid.RowHeadersVisible = false;
+            this.dataGridViewScangrid.RowTemplate.Height = 35;
+            this.dataGridViewScangrid.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.dataGridViewScangrid.Size = new System.Drawing.Size(552, 572);
+            this.dataGridViewScangrid.TabIndex = 23;
             // 
             // vScrollBarCustom2
             // 
@@ -95,47 +120,48 @@ namespace EDDiscovery.UserControls
             this.vScrollBarCustom2.Value = -1;
             this.vScrollBarCustom2.ValueLimited = -1;
             // 
-            // dataGridViewEstimated
+            // img
             // 
-            this.dataGridViewEstimated.AllowUserToAddRows = false;
-            this.dataGridViewEstimated.AllowUserToDeleteRows = false;
-            this.dataGridViewEstimated.AllowUserToResizeRows = false;
-            this.dataGridViewEstimated.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            this.dataGridViewEstimated.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridViewEstimated.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.BodyName,
-            this.EstValue});
-            this.dataGridViewEstimated.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.dataGridViewEstimated.Location = new System.Drawing.Point(0, 0);
-            this.dataGridViewEstimated.Name = "dataGridViewEstimated";
-            this.dataGridViewEstimated.RowHeadersVisible = false;
-            this.dataGridViewEstimated.ScrollBars = System.Windows.Forms.ScrollBars.None;
-            this.dataGridViewEstimated.Size = new System.Drawing.Size(552, 572);
-            this.dataGridViewEstimated.TabIndex = 23;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle1.NullValue = ((object)(resources.GetObject("dataGridViewCellStyle1.NullValue")));
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.img.DefaultCellStyle = dataGridViewCellStyle1;
+            this.img.FillWeight = 5F;
+            this.img.HeaderText = "";
+            this.img.Name = "img";
+            this.img.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.img.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
             // 
             // BodyName
             // 
-            this.BodyName.FillWeight = 70F;
-            this.BodyName.HeaderText = "Body Name";
-            this.BodyName.MinimumWidth = 50;
+            this.BodyName.FillWeight = 15F;
+            this.BodyName.HeaderText = "Name";
+            this.BodyName.MinimumWidth = 20;
             this.BodyName.Name = "BodyName";
             // 
-            // EstValue
+            // BodyClass
             // 
-            this.EstValue.FillWeight = 15F;
-            this.EstValue.HeaderText = "Est Value";
-            this.EstValue.MinimumWidth = 50;
-            this.EstValue.Name = "EstValue";
+            this.BodyClass.FillWeight = 25F;
+            this.BodyClass.HeaderText = "Class";
+            this.BodyClass.MinimumWidth = 20;
+            this.BodyClass.Name = "BodyClass";
             // 
-            // UserControlEstimatedValues
+            // BodyDetails
+            // 
+            this.BodyDetails.FillWeight = 50F;
+            this.BodyDetails.HeaderText = "Briefing";
+            this.BodyDetails.MinimumWidth = 30;
+            this.BodyDetails.Name = "BodyDetails";
+            // 
+            // UserControlScanGrid
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.dataViewScrollerPanel2);
-            this.Name = "UserControlEstimatedValues";
+            this.Name = "UserControlScanGrid";
             this.Size = new System.Drawing.Size(572, 572);
             this.dataViewScrollerPanel2.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewEstimated)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewScangrid)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -143,8 +169,10 @@ namespace EDDiscovery.UserControls
         #endregion
         private ExtendedControls.DataViewScrollerPanel dataViewScrollerPanel2;
         private ExtendedControls.VScrollBarCustom vScrollBarCustom2;
-        private System.Windows.Forms.DataGridView dataGridViewEstimated;
+        private System.Windows.Forms.DataGridView dataGridViewScangrid;
+        private System.Windows.Forms.DataGridViewImageColumn img;
         private System.Windows.Forms.DataGridViewTextBoxColumn BodyName;
-        private System.Windows.Forms.DataGridViewTextBoxColumn EstValue;
+        private System.Windows.Forms.DataGridViewTextBoxColumn BodyClass;
+        private System.Windows.Forms.DataGridViewTextBoxColumn BodyDetails;
     }
 }

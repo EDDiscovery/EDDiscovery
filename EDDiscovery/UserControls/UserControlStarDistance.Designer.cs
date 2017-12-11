@@ -161,7 +161,7 @@ namespace EDDiscovery.UserControls
             // Visited
             // 
             this.Visited.FillWeight = 25F;
-            this.Visited.HeaderText = "Visited";
+            this.Visited.HeaderText = "Visits";
             this.Visited.Name = "Visited";
             // 
             // UserControlStarDistance
