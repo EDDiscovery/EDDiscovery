@@ -47,11 +47,11 @@ namespace EDDiscovery.UserControls
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(UserControlScanGrid));
             this.dataViewScrollerPanel2 = new ExtendedControls.DataViewScrollerPanel();
             this.dataGridViewScangrid = new System.Windows.Forms.DataGridView();
+            this.vScrollBarCustom2 = new ExtendedControls.VScrollBarCustom();
             this.img = new System.Windows.Forms.DataGridViewImageColumn();
             this.BodyName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.BodyClass = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.BodyDetails = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.vScrollBarCustom2 = new ExtendedControls.VScrollBarCustom();
             this.dataViewScrollerPanel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewScangrid)).BeginInit();
             this.SuspendLayout();
@@ -90,39 +90,6 @@ namespace EDDiscovery.UserControls
             this.dataGridViewScangrid.Size = new System.Drawing.Size(552, 572);
             this.dataGridViewScangrid.TabIndex = 23;
             // 
-            // img
-            // 
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle1.NullValue = ((object)(resources.GetObject("dataGridViewCellStyle1.NullValue")));
-            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.img.DefaultCellStyle = dataGridViewCellStyle1;
-            this.img.FillWeight = 5F;
-            this.img.HeaderText = "";
-            this.img.Name = "img";
-            this.img.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            this.img.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
-            // 
-            // BodyName
-            // 
-            this.BodyName.FillWeight = 15.60211F;
-            this.BodyName.HeaderText = "Name";
-            this.BodyName.MinimumWidth = 20;
-            this.BodyName.Name = "BodyName";
-            // 
-            // BodyClass
-            // 
-            this.BodyClass.FillWeight = 27.30368F;
-            this.BodyClass.HeaderText = "Class";
-            this.BodyClass.MinimumWidth = 20;
-            this.BodyClass.Name = "BodyClass";
-            // 
-            // BodyDetails
-            // 
-            this.BodyDetails.FillWeight = 31.20421F;
-            this.BodyDetails.HeaderText = "Details";
-            this.BodyDetails.MinimumWidth = 30;
-            this.BodyDetails.Name = "BodyDetails";
-            // 
             // vScrollBarCustom2
             // 
             this.vScrollBarCustom2.ArrowBorderColor = System.Drawing.Color.LightBlue;
@@ -152,6 +119,39 @@ namespace EDDiscovery.UserControls
             this.vScrollBarCustom2.ThumbDrawAngle = 0F;
             this.vScrollBarCustom2.Value = -1;
             this.vScrollBarCustom2.ValueLimited = -1;
+            // 
+            // img
+            // 
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle1.NullValue = ((object)(resources.GetObject("dataGridViewCellStyle1.NullValue")));
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.img.DefaultCellStyle = dataGridViewCellStyle1;
+            this.img.FillWeight = 5F;
+            this.img.HeaderText = "";
+            this.img.Name = "img";
+            this.img.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.img.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
+            // 
+            // BodyName
+            // 
+            this.BodyName.FillWeight = 15F;
+            this.BodyName.HeaderText = "Name";
+            this.BodyName.MinimumWidth = 20;
+            this.BodyName.Name = "BodyName";
+            // 
+            // BodyClass
+            // 
+            this.BodyClass.FillWeight = 25F;
+            this.BodyClass.HeaderText = "Class";
+            this.BodyClass.MinimumWidth = 20;
+            this.BodyClass.Name = "BodyClass";
+            // 
+            // BodyDetails
+            // 
+            this.BodyDetails.FillWeight = 50F;
+            this.BodyDetails.HeaderText = "Details";
+            this.BodyDetails.MinimumWidth = 30;
+            this.BodyDetails.Name = "BodyDetails";
             // 
             // UserControlScanGrid
             // 

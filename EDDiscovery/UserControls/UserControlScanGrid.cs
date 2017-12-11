@@ -117,18 +117,7 @@ namespace EDDiscovery.UserControls
 
                     // populate the body class
                     StringBuilder bdClass = new StringBuilder();
-                    /*if (sn.ScanData != null && sn.ScanData.BodyName != null && sn.ScanData.IsLandable == true)
-                    {
-                        bdClass.Append("Landable, ");
-                    }*/
-                    if (sn.ScanData != null && sn.ScanData.BodyName != null && sn.ScanData.Terraformable == true)
-                    {
-                        bdClass.Append("Terraformable ");
-                    }
-                    if (sn.ScanData != null && sn.ScanData.BodyName != null && sn.ScanData.HasRings == true && sn.ScanData.IsStar == false)
-                    {
-                        bdClass.Append("Ringed, ");
-                    }
+                    
                     if (sn.ScanData != null && sn.ScanData.BodyName != null && sn.ScanData.PlanetClass != null)
                     {
                         bdClass.Append(sn.ScanData.PlanetClass);
@@ -137,43 +126,37 @@ namespace EDDiscovery.UserControls
                     {
                         bdClass.Append(sn.ScanData.StarTypeText);
                     }
+                    if (sn.level >= 2 && sn.type == StarScan.ScanNodeType.body)
+                    {
+                        bdClass.Append(" Moon");
+                    }
 
-                    // populate the detailed information
-                    StringBuilder bdDetails = new StringBuilder();
+                        // populate the detailed information
+                        StringBuilder bdDetails = new StringBuilder();
 
+                    if (sn.ScanData != null && sn.ScanData.BodyName != null && sn.ScanData.Terraformable == true)
+                    {
+                        bdDetails.Append("Terraformable, ");
+                    }
+                    if (sn.ScanData != null && sn.ScanData.BodyName != null && sn.ScanData.HasRings == true && sn.ScanData.IsStar == false)
+                    {
+                        bdDetails.Append("Ringed, ");
+                    }
+
+                    if (sn.ScanData != null && sn.ScanData.BodyName != null && sn.ScanData.IsLandable == true)
+                    {
+                        bdDetails.Append("Landable. " + "G:" + sn.ScanData.nSurfaceGravity.Value.ToString());
+                    }
+                                        
                     if (sn.ScanData != null && sn.ScanData.BodyName != null && sn.ScanData.IsStar == true)
                     {
-                        bdDetails.Append("M: " + sn.ScanData.nStellarMass.Value.ToString("N2") + ", ");
+                        bdDetails.Append("M:" + sn.ScanData.nStellarMass.Value.ToString("N2") + ", ");
                     }
-
-                        // planet mass
-                        if (sn.ScanData != null && sn.ScanData.BodyName != null && sn.ScanData.nMassEM != null)
-                    {
-                        bdDetails.Append("M: " + sn.ScanData.nMassEM.Value.ToString("N2") + ", ");
-                    }
-
-                    // radius
-                    if (sn.ScanData != null && sn.ScanData.BodyName != null && sn.ScanData.nRadius != null)
-                    {
-                        bdDetails.Append("r: " + sn.ScanData.nRadius.Value.ToString("N0") + ", ");
-                    }
-                    
-                    // gravity
-                    if (sn.ScanData != null && sn.ScanData.BodyName != null && sn.ScanData.nSurfaceGravity != null)
-                    {
-                        bdDetails.Append("G: " + sn.ScanData.nSurfaceGravity.Value.ToString("N1") + ", ");
-                    }
-
-                    // temperature
-                    if (sn.ScanData != null && sn.ScanData.BodyName != null && sn.ScanData.nSurfaceTemperature != null)
-                    {
-                        bdDetails.Append("K: " + sn.ScanData.nSurfaceTemperature.Value.ToString("N0") + ", ");
-                    }
-
+                                        
                     // habitable zone
-                    if (sn.ScanData != null && sn.ScanData.BodyName != null && sn.ScanData.HabitableZoneInner != null && sn.ScanData.HabitableZoneOuter != null)
+                    if (sn.ScanData != null && sn.ScanData.BodyName != null && sn.ScanData.HabitableZoneInner != null && sn.ScanData.HabitableZoneOuter != null && sn.ScanData.StarTypeID != EDStar.H)
                     {
-                            bdDetails.AppendFormat("Habitable Zone Approx. {0}", sn.ScanData.GetHabZoneStringLs(), (sn.ScanData.HabitableZoneInner.Value).ToString("N2"), (sn.ScanData.HabitableZoneOuter.Value).ToString("N2"));
+                        bdDetails.AppendFormat("Habitable Zone Approx. {0}", sn.ScanData.GetHabZoneStringLs(), (sn.ScanData.HabitableZoneInner.Value).ToString("N2"), (sn.ScanData.HabitableZoneOuter.Value).ToString("N2"));
                     }
 
                     // populate the grid                                                          

@@ -253,18 +253,12 @@ namespace EDDiscovery.UserControls
                                                                                     
                             if (sc.IsStar) // brief notification for special or uncommon celestial bodies, useful to traverse the history and search for that special body you discovered.
                             {
-                                // testing
-                                if (sc.BodyName != null)
-                                    extrainfo = extrainfo.AppendPrePad(sc.BodyName + " is a " + sc.StarTypeText, prefix);
-
-                                // Sagittarius A* is a special body: is the only one which is classified as Super Massive Black Hole. Yet, it refuse to work as expected...
-                                string SagA = "Sagittarius A";
-                                if (sc.GetStarTypeName() == "Super Massive Black Hole" || sc.StarTypeID == EDStar.SuperMassiveBlackHole || sc.BodyName.Contains(SagA))
+                                // Sagittarius A* is a special body: is the centre of the Milky Way, and the only one which is classified as Super Massive Black Hole.                                
+                                if (sc.StarTypeID == EDStar.SuperMassiveBlackHole)
                                     extrainfo = extrainfo.AppendPrePad(sc.BodyName + " is a super massive black hole", prefix);
 
-                                // black holes (they are buggy - many shows up without problems, but a few refuse to cooperate). More work needed
-                                string BlackHole = "Black Hole";
-                                if (sc.StarTypeID == EDStar.H || sn.ScanData.StarTypeText == "Black Hole" || sc.StarTypeText.Contains(BlackHole))
+                                // black holes
+                                if (sc.StarTypeID == EDStar.H)
                                     extrainfo = extrainfo.AppendPrePad(sc.BodyName + " is a black hole", prefix);
 
                                 // neutron stars
@@ -371,6 +365,10 @@ namespace EDDiscovery.UserControls
                     if (total > 0)
                     {
                         infostr = infostr.AppendPrePad(total.ToStringInvariant() + " Other bod" + ((total > 1) ? "ies" : "y"), ", ");
+                        infostr = infostr.AppendPrePad(extrainfo, prefix);
+                    }
+                    else
+                    {
                         infostr = infostr.AppendPrePad(extrainfo, prefix);
                     }
                 }
