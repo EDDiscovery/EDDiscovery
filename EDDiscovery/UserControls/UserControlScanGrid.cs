@@ -177,16 +177,22 @@ namespace EDDiscovery.UserControls
                     }
 
                     // Image Column
-                    if (sn.ScanData.IsStar != false)
+                    /* if (sn.ScanData.IsStar != false)
                     { Image bdImage = sn.ScanData.GetStarTypeImage(); }
                     else
-                    { Image bdImage = sn.ScanData.GetPlanetClassImage(); }
-                    
+                    { Image bdImage = sn.ScanData.GetPlanetClassImage(); } */
+
                     // populate the grid
-                    if (sn.ScanData != null && sn.ScanData.BodyName != null && bdClass != null && bdDetails != null)
+                    if (sn.ScanData != null && sn.ScanData.BodyName != null && bdClass != null && bdDetails != null && sn.ScanData.IsStar == true)
                     {
-                                                
+                        Image bdImage = sn.ScanData.GetStarTypeImage();
                         dataGridViewNearest.Rows.Add(new object[] { sn.ScanData.BodyName, bdImage , bdClass, bdDetails });
+                    }
+
+                    if (sn.ScanData != null && sn.ScanData.BodyName != null && bdClass != null && bdDetails != null && sn.ScanData.IsStar == false)
+                    {
+                        Image bdImage = sn.ScanData.GetPlanetClassImage();
+                        dataGridViewNearest.Rows.Add(new object[] { sn.ScanData.BodyName, bdImage, bdClass, bdDetails });
                     }
                 }
 

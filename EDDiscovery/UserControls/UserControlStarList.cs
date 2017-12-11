@@ -253,10 +253,15 @@ namespace EDDiscovery.UserControls
 
                             if (sc.IsStar)
                             {
+                                // wolf rayet W, WN, WNC, WC, WO
+                                if (sc.StarTypeID == EDStar.W || sc.StarTypeID == EDStar.WN || sc.StarTypeID == EDStar.WNC || sc.StarTypeID == EDStar.WC || sc.StarTypeID == EDStar.WO)
+                                    extrainfo = extrainfo.AppendPrePad(sc.BodyName + " is a wolf-rayet star", prefix);
                                 if (sc.StarTypeID == EDStar.N)
                                     extrainfo = extrainfo.AppendPrePad(sc.BodyName + " is a neutron star", prefix);
-                                if (sc.StarTypeID == EDStar.H)
-                                    extrainfo = extrainfo.AppendPrePad(sc.BodyName + " is a black hole", prefix);
+                                if (sc.StarTypeID == EDStar.H || sc.StarTypeText == "Black Hole" || sc.StarTypeText == "Black hole")
+                                    extrainfo = extrainfo.AppendPrePad(sc.BodyName + " is a black hole", prefix);                   
+                                if (sc.BodyName == "Sagittarius A*")
+                                    extrainfo = extrainfo.AppendPrePad(sc.BodyName + " is a super massive black hole", prefix);
                             }
                             else
                             {
