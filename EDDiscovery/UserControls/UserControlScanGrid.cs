@@ -145,9 +145,19 @@ namespace EDDiscovery.UserControls
 
                     if (sn.ScanData != null && sn.ScanData.BodyName != null && sn.ScanData.IsLandable == true)
                     {
-                        bdDetails.Append("Landable. " + "Gravity " + sn.ScanData.nSurfaceGravity);
+                        bdDetails.Append("Landable. ");
                     }
-                                        
+
+                    if (sn.ScanData.Volcanism != null)
+                    {
+                        bdDetails.Append("Volcanic activities. ");
+                    }
+
+                    if (sn.ScanData.HasMaterials != null)
+                    {
+                        bdDetails.Append("\n" + sn.ScanData.DisplayMaterials());
+                    }
+
                     if (sn.ScanData != null && sn.ScanData.BodyName != null && sn.ScanData.IsStar == true)
                     {
                         bdDetails.Append("M:" + sn.ScanData.nStellarMass.Value.ToString("N2") + ", ");
