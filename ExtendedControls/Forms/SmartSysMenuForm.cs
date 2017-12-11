@@ -123,6 +123,21 @@ namespace ExtendedControls
             return message.Result;
         }
 
+        protected void ShowSystemMenu(Point screenPt)
+        {
+            if (Environment.OSVersion.Platform == PlatformID.Win32NT && IsHandleCreated)
+            {
+                var hMenu = UnsafeNativeMethods.GetSystemMenu(Handle, false);
+                if (hMenu != IntPtr.Zero)
+                {
+                    int cmd = UnsafeNativeMethods.TrackPopupMenuEx(hMenu, UnsafeNativeMethods.GetSystemMetrics(SystemMetrics.MENUDROPALIGNMENT) | TPM.RETURNCMD,
+                        screenPt.X, screenPt.Y, Handle, IntPtr.Zero);
+                    if (cmd != 0)
+                        UnsafeNativeMethods.PostMessage(Handle, WM.SYSCOMMAND, (IntPtr)cmd, IntPtr.Zero);
+                }
+            }
+        }
+
         protected override void WndProc(ref Message m)
         {
             switch (m.Msg)
@@ -176,16 +191,9 @@ namespace ExtendedControls
 
                 case WM.NCRBUTTONUP:    // Win32: Display the system menu.
                     {
-                        if (FormBorderStyle == FormBorderStyle.None && m.WParam == (IntPtr)HT.CAPTION && Environment.OSVersion.Platform == PlatformID.Win32NT && IsHandleCreated)
+                        if (FormBorderStyle == FormBorderStyle.None && m.WParam == (IntPtr)HT.CAPTION)
                         {
-                            Point p = new Point((int)m.LParam);
-                            var hMenu = UnsafeNativeMethods.GetSystemMenu(Handle, false);
-                            if (hMenu != IntPtr.Zero)
-                            {
-                                int cmd = UnsafeNativeMethods.TrackPopupMenuEx(hMenu, UnsafeNativeMethods.GetSystemMetrics(SystemMetrics.MENUDROPALIGNMENT) | TPM.RETURNCMD, p.X, p.Y, Handle, IntPtr.Zero);
-                                if (cmd != 0)
-                                    UnsafeNativeMethods.PostMessage(Handle, WM.SYSCOMMAND, (IntPtr)cmd, IntPtr.Zero);
-                            }
+                            ShowSystemMenu(new Point((int)m.LParam));
                             m.Result = IntPtr.Zero;
                             return;
                         }
@@ -194,7 +202,7 @@ namespace ExtendedControls
 
                 case WM.SYSCOMMAND:     // Process any system commands intended for this window (SC_ONTOP / SC_OPACITYSUBMENU).
                     {
-                        int wp = (int)m.WParam;
+                        int wp = unchecked((int)(long)m.WParam);
 
                         if (m.WParam == (IntPtr)SC_ONTOP)
                             TopMost = !base.TopMost;
@@ -202,6 +210,8 @@ namespace ExtendedControls
                             Opacity = (wp - SC_OPACITYSUBMENU) / 10f;
                         else if (wp >= SC_ADDITIONALMENU && AdditionalSysMenus != null && wp < SC_ADDITIONALMENU + AdditionalSysMenus.Count)
                             AdditionalSysMenuSelected?.Invoke(wp - SC_ADDITIONALMENU);
+                        else if (m.WParam == (IntPtr)SC.KEYMENU && (CreateParams.Style & WS.SYSMENU) == 0 && (CreateParams.Style & WS.CAPTION) == 0)
+                            ShowSystemMenu(PointToScreen(new Point(5, 5)));
                         else if (!AllowResize && (m.WParam == (IntPtr)SC.MAXIMIZE || m.WParam == (IntPtr)SC.SIZE || m.WParam == (IntPtr)SC.RESTORE))
                             return;     // Access Denied.
                         else
