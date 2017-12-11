@@ -339,7 +339,7 @@ namespace EDDiscovery.UserControls
             // 
             // Icon
             // 
-            this.Icon.HeaderText = "Star";
+            this.Icon.HeaderText = "System";
             this.Icon.MinimumWidth = 50;
             this.Icon.Name = "Icon";
             this.Icon.ReadOnly = true;

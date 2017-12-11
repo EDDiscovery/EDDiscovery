@@ -37,7 +37,7 @@ namespace EDDiscovery.UserControls
         public UserControlEstimatedValues()
         {
             InitializeComponent();
-            var corner = dataGridViewNearest.TopLeftHeaderCell; // work around #1487
+            var corner = dataGridViewEstimated.TopLeftHeaderCell; // work around #1487
         }
 
         public override void Init()
@@ -86,7 +86,7 @@ namespace EDDiscovery.UserControls
 
         void DrawSystem()   // draw last_sn, last_he
         {
-            dataGridViewNearest.Rows.Clear();
+            dataGridViewEstimated.Rows.Clear();
 
             if (last_he == null)
             {
@@ -110,10 +110,10 @@ namespace EDDiscovery.UserControls
                 foreach(StarScan.ScanNode sn in all_nodes)
                 {
                     if ( sn.ScanData != null && sn.ScanData.BodyName != null )
-                        dataGridViewNearest.Rows.Add(new object[] { sn.ScanData.BodyName, sn.ScanData.EstimatedValue() });
+                        dataGridViewEstimated.Rows.Add(new object[] { sn.ScanData.BodyName, sn.ScanData.EstimatedValue() });
                 }
 
-                dataGridViewNearest.Sort(this.EstValue, ListSortDirection.Descending);
+                dataGridViewEstimated.Sort(this.EstValue, ListSortDirection.Descending);
             }
         }
 

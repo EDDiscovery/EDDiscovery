@@ -149,7 +149,7 @@ namespace EDDiscovery.UserControls
             // BodyDetails
             // 
             this.BodyDetails.FillWeight = 50F;
-            this.BodyDetails.HeaderText = "Details";
+            this.BodyDetails.HeaderText = "Briefing";
             this.BodyDetails.MinimumWidth = 30;
             this.BodyDetails.Name = "BodyDetails";
             // 
