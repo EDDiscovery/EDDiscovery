@@ -136,16 +136,16 @@ namespace EDDiscovery.UserControls
 
                     if (sn.ScanData != null && sn.ScanData.BodyName != null && sn.ScanData.Terraformable == true)
                     {
-                        bdDetails.Append("Terraformable, ");
+                        bdDetails.Append("Terraformable. ");
                     }
                     if (sn.ScanData != null && sn.ScanData.BodyName != null && sn.ScanData.HasRings == true && sn.ScanData.IsStar == false)
                     {
-                        bdDetails.Append("Ringed, ");
+                        bdDetails.Append("Ringed. ");
                     }
 
                     if (sn.ScanData != null && sn.ScanData.BodyName != null && sn.ScanData.IsLandable == true)
                     {
-                        bdDetails.Append("Landable. " + "G:" + sn.ScanData.nSurfaceGravity.Value.ToString());
+                        bdDetails.Append("Landable. " + "Gravity " + sn.ScanData.nSurfaceGravity);
                     }
                                         
                     if (sn.ScanData != null && sn.ScanData.BodyName != null && sn.ScanData.IsStar == true)
