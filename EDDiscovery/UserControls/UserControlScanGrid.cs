@@ -38,7 +38,7 @@ namespace EDDiscovery.UserControls
         public UserControlScanGrid()
         {
             InitializeComponent();
-            var corner = dataGridViewNearest.TopLeftHeaderCell; // work around #1487
+            var corner = dataGridViewScangrid.TopLeftHeaderCell; // work around #1487
         }
 
         public override void Init()
@@ -86,7 +86,7 @@ namespace EDDiscovery.UserControls
 
         void DrawSystem()   // draw last_sn, last_he
         {
-            dataGridViewNearest.Rows.Clear();
+            dataGridViewScangrid.Rows.Clear();
 
             if (last_he == null)
             {
@@ -117,10 +117,10 @@ namespace EDDiscovery.UserControls
 
                     // populate the body class
                     StringBuilder bdClass = new StringBuilder();
-                    if (sn.ScanData != null && sn.ScanData.BodyName != null && sn.ScanData.IsLandable == true)
+                    /*if (sn.ScanData != null && sn.ScanData.BodyName != null && sn.ScanData.IsLandable == true)
                     {
                         bdClass.Append("Landable, ");
-                    }
+                    }*/
                     if (sn.ScanData != null && sn.ScanData.BodyName != null && sn.ScanData.Terraformable == true)
                     {
                         bdClass.Append("Terraformable ");
@@ -176,24 +176,19 @@ namespace EDDiscovery.UserControls
                             bdDetails.AppendFormat("Habitable Zone Approx. {0}", sn.ScanData.GetHabZoneStringLs(), (sn.ScanData.HabitableZoneInner.Value).ToString("N2"), (sn.ScanData.HabitableZoneOuter.Value).ToString("N2"));
                     }
 
-                    // Image Column
-                    /* if (sn.ScanData.IsStar != false)
-                    { Image bdImage = sn.ScanData.GetStarTypeImage(); }
-                    else
-                    { Image bdImage = sn.ScanData.GetPlanetClassImage(); } */
-
-                    // populate the grid
+                    // populate the grid                                                          
                     if (sn.ScanData != null && sn.ScanData.BodyName != null && bdClass != null && bdDetails != null && sn.ScanData.IsStar == true)
                     {
-                        Image bdImage = sn.ScanData.GetStarTypeImage();
-                        dataGridViewNearest.Rows.Add(new object[] { sn.ScanData.BodyName, bdImage , bdClass, bdDetails });
+                        Image bdImage = sn.ScanData.GetStarTypeImage(); // if is a star, use the StarTypeImage property
+                        dataGridViewScangrid.Rows.Add(new object[] { bdImage, sn.ScanData.BodyName, bdClass, bdDetails });
                     }
 
                     if (sn.ScanData != null && sn.ScanData.BodyName != null && bdClass != null && bdDetails != null && sn.ScanData.IsStar == false)
                     {
-                        Image bdImage = sn.ScanData.GetPlanetClassImage();
-                        dataGridViewNearest.Rows.Add(new object[] { sn.ScanData.BodyName, bdImage, bdClass, bdDetails });
+                        Image bdImage = sn.ScanData.GetPlanetClassImage(); // is is a planet or a moon, use the PlanetClassImage property
+                        dataGridViewScangrid.Rows.Add(new object[] { bdImage, sn.ScanData.BodyName, bdClass, bdDetails });
                     }
+                    
                 }
 
             }
@@ -202,6 +197,8 @@ namespace EDDiscovery.UserControls
         private List<StarScan.ScanNode> Flatten(StarScan.ScanNode sn, List<StarScan.ScanNode> flattened)
         {
             flattened.Add(sn);
+
+
             if (sn.children != null)
             {
                 foreach (StarScan.ScanNode node in sn.children.Values)

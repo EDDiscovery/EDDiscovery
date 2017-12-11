@@ -251,17 +251,61 @@ namespace EDDiscovery.UserControls
                         {
                             JournalScan sc = sn.ScanData;
 
-                            if (sc.IsStar)
-                            {
-                                // wolf rayet W, WN, WNC, WC, WO
-                                if (sc.StarTypeID == EDStar.W || sc.StarTypeID == EDStar.WN || sc.StarTypeID == EDStar.WNC || sc.StarTypeID == EDStar.WC || sc.StarTypeID == EDStar.WO)
-                                    extrainfo = extrainfo.AppendPrePad(sc.BodyName + " is a wolf-rayet star", prefix);
+                            // Sagittarius A* is a special body: is the only one which is classified as Super Massive Black Hole. Yet, it refuse to work as expected...
+                            string SagA = "Sagittarius A";
+                            if (sc.GetStarTypeName() == "Super Massive Black Hole" || sc.StarTypeID == EDStar.SuperMassiveBlackHole || sc.BodyName.Contains(SagA))
+                                extrainfo = extrainfo.AppendPrePad(sc.BodyName + " is a super massive black hole", prefix);
+
+                            // black holes (they are buggy - many shows up without problems, but a few refuse to cooperate). More work needed
+                            string BlackHole = "Black Hole";
+                            if (sc.StarTypeID == EDStar.H || sn.ScanData.StarTypeText == "Black Hole" || sc.StarTypeText.Contains(BlackHole))
+                                extrainfo = extrainfo.AppendPrePad(sc.BodyName + " is a black hole", prefix);
+                            
+                            if (sc.IsStar == true) // brief notification for special or uncommon celestial bodies, useful to traverse the history and search for that special body you discovered.
+                            {   
+                                // neutron stars
                                 if (sc.StarTypeID == EDStar.N)
                                     extrainfo = extrainfo.AppendPrePad(sc.BodyName + " is a neutron star", prefix);
-                                if (sc.StarTypeID == EDStar.H || sc.StarTypeText == "Black Hole" || sc.StarTypeText == "Black hole")
-                                    extrainfo = extrainfo.AppendPrePad(sc.BodyName + " is a black hole", prefix);                   
-                                if (sc.BodyName == "Sagittarius A*")
-                                    extrainfo = extrainfo.AppendPrePad(sc.BodyName + " is a super massive black hole", prefix);
+
+                                // white dwarf D, DA, DAB, DAO, DAZ, DAV, DB, DBZ, DBV, DO, DOV, DQ, DC, DCV, DX,
+                                if (sc.StarTypeID == EDStar.D || sc.StarTypeID == EDStar.DA || sc.StarTypeID == EDStar.DAB || sc.StarTypeID == EDStar.DAO || sc.StarTypeID == EDStar.DAZ || sc.StarTypeID == EDStar.DAV || 
+                                    sc.StarTypeID == EDStar.DB || sc.StarTypeID == EDStar.DBZ || sc.StarTypeID == EDStar.DBV || sc.StarTypeID == EDStar.DO || sc.StarTypeID == EDStar.DOV || sc.StarTypeID == EDStar.DQ || 
+                                    sc.StarTypeID == EDStar.DC || sc.StarTypeID == EDStar.DCV || sc.StarTypeID == EDStar.DX)
+                                    extrainfo = extrainfo.AppendPrePad(sc.BodyName + " is a " + sc.StarTypeID + " white dwarf star", prefix);
+
+                                // wolf rayet W, WN, WNC, WC, WO
+                                if (sc.StarTypeID == EDStar.W || sc.StarTypeID == EDStar.WN || sc.StarTypeID == EDStar.WNC || sc.StarTypeID == EDStar.WC || sc.StarTypeID == EDStar.WO)
+                                    extrainfo = extrainfo.AppendPrePad(sc.BodyName + " is a " + sc.StarTypeID + " wolf-rayet star", prefix);
+
+                                // A_BlueWhiteSuperGiant
+                                string ABlueWhiteSuperGiant = "A Blue White Super Giant";
+                                if (sc.StarTypeID == EDStar.A_BlueWhiteSuperGiant || sc.StarTypeText.Contains(ABlueWhiteSuperGiant))
+                                    extrainfo = extrainfo.AppendPrePad(sc.BodyName + " is a A Blue White Super Giant", prefix);
+
+                                string FWhiteSuperGiant = "F White Super Giant";
+                                // F_WhiteSuperGiant
+                                if (sc.StarTypeID == EDStar.F_WhiteSuperGiant || sc.StarTypeText.Contains(FWhiteSuperGiant))
+                                    extrainfo = extrainfo.AppendPrePad(sc.BodyName + " is a F White Super Giant", prefix);
+
+                                // K_OrangeGiant
+                                string KOrangeGiant = "K Orange Giant";
+                                if (sc.StarTypeID == EDStar.K_OrangeGiant || sc.StarTypeText.Contains(KOrangeGiant))
+                                    extrainfo = extrainfo.AppendPrePad(sc.BodyName + " is a K Orange Giant", prefix);
+
+                                // M_RedSuperGiant
+                                string MRedSuperGiant = "M Red Super Giant";
+                                if (sc.StarTypeID == EDStar.M_RedSuperGiant || sc.StarTypeText.Contains(MRedSuperGiant))
+                                    extrainfo = extrainfo.AppendPrePad(sc.BodyName + " is a M Red Super Giant", prefix);
+
+                                // M_RedGiant
+                                string MRedGiant = "M Red Giant";
+                                if (sc.StarTypeID == EDStar.M_RedGiant || sc.StarTypeText.Contains(MRedGiant))
+                                    extrainfo = extrainfo.AppendPrePad(sc.BodyName + " is a M Red Giant", prefix);
+
+                                // RoguePlanet,
+                                string RouguePlanet = "Rougue";
+                                if (sc.StarTypeID == EDStar.RoguePlanet || sc.StarTypeText.Contains(RouguePlanet))
+                                    extrainfo = extrainfo.AppendPrePad(sc.BodyName + " is a rougue planet", prefix);
                             }
                             else
                             {

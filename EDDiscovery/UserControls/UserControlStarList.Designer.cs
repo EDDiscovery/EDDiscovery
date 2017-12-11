@@ -45,6 +45,7 @@ namespace EDDiscovery.UserControls
         {
             this.components = new System.ComponentModel.Container();
             this.TopPanel = new System.Windows.Forms.Panel();
+            this.checkBoxEDSM = new ExtendedControls.CheckBoxCustom();
             this.checkBoxMoveToTop = new ExtendedControls.CheckBoxCustom();
             this.buttonExtExcel = new ExtendedControls.ButtonExt();
             this.panelHistoryIcon = new System.Windows.Forms.Panel();
@@ -64,7 +65,6 @@ namespace EDDiscovery.UserControls
             this.Icon = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColumnSystem = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColumnDistance = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.checkBoxEDSM = new ExtendedControls.CheckBoxCustom();
             this.TopPanel.SuspendLayout();
             this.dataViewScrollerPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewStarList)).BeginInit();
@@ -87,6 +87,34 @@ namespace EDDiscovery.UserControls
             this.TopPanel.Size = new System.Drawing.Size(870, 38);
             this.TopPanel.TabIndex = 27;
             // 
+            // checkBoxEDSM
+            // 
+            this.checkBoxEDSM.Appearance = System.Windows.Forms.Appearance.Button;
+            this.checkBoxEDSM.BackColor = System.Drawing.Color.Transparent;
+            this.checkBoxEDSM.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.checkBoxEDSM.CheckBoxColor = System.Drawing.Color.White;
+            this.checkBoxEDSM.CheckBoxInnerColor = System.Drawing.Color.White;
+            this.checkBoxEDSM.CheckColor = System.Drawing.Color.DarkBlue;
+            this.checkBoxEDSM.Cursor = System.Windows.Forms.Cursors.Default;
+            this.checkBoxEDSM.FlatAppearance.BorderColor = System.Drawing.SystemColors.ControlDarkDark;
+            this.checkBoxEDSM.FlatAppearance.CheckedBackColor = System.Drawing.Color.Green;
+            this.checkBoxEDSM.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
+            this.checkBoxEDSM.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Silver;
+            this.checkBoxEDSM.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.checkBoxEDSM.FontNerfReduction = 0.5F;
+            this.checkBoxEDSM.Image = global::EDDiscovery.Properties.Resources.edsm24;
+            this.checkBoxEDSM.ImageButtonDisabledScaling = 0.5F;
+            this.checkBoxEDSM.Location = new System.Drawing.Point(432, 3);
+            this.checkBoxEDSM.MouseOverColor = System.Drawing.Color.CornflowerBlue;
+            this.checkBoxEDSM.Name = "checkBoxEDSM";
+            this.checkBoxEDSM.Size = new System.Drawing.Size(32, 32);
+            this.checkBoxEDSM.TabIndex = 30;
+            this.checkBoxEDSM.TickBoxReductionSize = 10;
+            this.toolTip.SetToolTip(this.checkBoxEDSM, "Show/Hide Body data from EDSM. Due to server constraints, you must click on a sys" +
+        "tem to retreive data on it from EDSM.");
+            this.checkBoxEDSM.UseVisualStyleBackColor = false;
+            this.checkBoxEDSM.CheckedChanged += new System.EventHandler(this.checkBoxEDSM_CheckedChanged);
+            // 
             // checkBoxMoveToTop
             // 
             this.checkBoxMoveToTop.AutoSize = true;
@@ -107,9 +135,6 @@ namespace EDDiscovery.UserControls
             // 
             // buttonExtExcel
             // 
-            this.buttonExtExcel.BorderColorScaling = 1.25F;
-            this.buttonExtExcel.ButtonColorScaling = 0.5F;
-            this.buttonExtExcel.ButtonDisabledScaling = 0.5F;
             this.buttonExtExcel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonExtExcel.Image = global::EDDiscovery.Properties.Resources.excel;
             this.buttonExtExcel.Location = new System.Drawing.Point(470, 6);
@@ -322,7 +347,7 @@ namespace EDDiscovery.UserControls
             // ColumnSystem
             // 
             this.ColumnSystem.FillWeight = 40F;
-            this.ColumnSystem.HeaderText = "No Visits";
+            this.ColumnSystem.HeaderText = "Visits";
             this.ColumnSystem.MinimumWidth = 50;
             this.ColumnSystem.Name = "ColumnSystem";
             this.ColumnSystem.ReadOnly = true;
@@ -334,34 +359,6 @@ namespace EDDiscovery.UserControls
             this.ColumnDistance.MinimumWidth = 50;
             this.ColumnDistance.Name = "ColumnDistance";
             this.ColumnDistance.ReadOnly = true;
-            // 
-            // checkBoxEDSM
-            // 
-            this.checkBoxEDSM.Appearance = System.Windows.Forms.Appearance.Button;
-            this.checkBoxEDSM.BackColor = System.Drawing.Color.Transparent;
-            this.checkBoxEDSM.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.checkBoxEDSM.CheckBoxColor = System.Drawing.Color.White;
-            this.checkBoxEDSM.CheckBoxInnerColor = System.Drawing.Color.White;
-            this.checkBoxEDSM.CheckColor = System.Drawing.Color.DarkBlue;
-            this.checkBoxEDSM.Cursor = System.Windows.Forms.Cursors.Default;
-            this.checkBoxEDSM.FlatAppearance.BorderColor = System.Drawing.SystemColors.ControlDarkDark;
-            this.checkBoxEDSM.FlatAppearance.CheckedBackColor = System.Drawing.Color.Green;
-            this.checkBoxEDSM.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
-            this.checkBoxEDSM.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Silver;
-            this.checkBoxEDSM.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.checkBoxEDSM.FontNerfReduction = 0.5F;
-            this.checkBoxEDSM.Image = global::EDDiscovery.Properties.Resources.edsm24;
-            this.checkBoxEDSM.ImageButtonDisabledScaling = 0.5F;
-            this.checkBoxEDSM.Location = new System.Drawing.Point(432, 3);
-            this.checkBoxEDSM.MouseOverColor = System.Drawing.Color.CornflowerBlue;
-            this.checkBoxEDSM.Name = "checkBoxEDSM";
-            this.checkBoxEDSM.Size = new System.Drawing.Size(32, 32);
-            this.checkBoxEDSM.TabIndex = 30;
-            this.checkBoxEDSM.TickBoxReductionSize = 10;
-            this.toolTip.SetToolTip(this.checkBoxEDSM, "Show/Hide Body data from EDSM. Due to server constraints, you must click on a sys" +
-        "tem to retreive data on it from EDSM.");
-            this.checkBoxEDSM.UseVisualStyleBackColor = false;
-            this.checkBoxEDSM.CheckedChanged += new System.EventHandler(this.checkBoxEDSM_CheckedChanged);
             // 
             // UserControlStarList
             // 
@@ -398,10 +395,10 @@ namespace EDDiscovery.UserControls
         private ExtendedControls.ButtonExt buttonExtExcel;
         private ExtendedControls.CheckBoxCustom checkBoxMoveToTop;
         private System.Windows.Forms.ToolStripMenuItem setNoteToolStripMenuItem;
+        private ExtendedControls.CheckBoxCustom checkBoxEDSM;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnTime;
         private System.Windows.Forms.DataGridViewTextBoxColumn Icon;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnSystem;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnDistance;
-        private ExtendedControls.CheckBoxCustom checkBoxEDSM;
     }
 }

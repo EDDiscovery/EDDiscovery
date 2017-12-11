@@ -46,19 +46,19 @@ namespace EDDiscovery.UserControls
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(UserControlScanGrid));
             this.dataViewScrollerPanel2 = new ExtendedControls.DataViewScrollerPanel();
-            this.dataGridViewNearest = new System.Windows.Forms.DataGridView();
-            this.BodyName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dataGridViewScangrid = new System.Windows.Forms.DataGridView();
             this.img = new System.Windows.Forms.DataGridViewImageColumn();
+            this.BodyName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.BodyClass = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.BodyDetails = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.vScrollBarCustom2 = new ExtendedControls.VScrollBarCustom();
             this.dataViewScrollerPanel2.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewNearest)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewScangrid)).BeginInit();
             this.SuspendLayout();
             // 
             // dataViewScrollerPanel2
             // 
-            this.dataViewScrollerPanel2.Controls.Add(this.dataGridViewNearest);
+            this.dataViewScrollerPanel2.Controls.Add(this.dataGridViewScangrid);
             this.dataViewScrollerPanel2.Controls.Add(this.vScrollBarCustom2);
             this.dataViewScrollerPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataViewScrollerPanel2.InternalMargin = new System.Windows.Forms.Padding(0);
@@ -69,32 +69,26 @@ namespace EDDiscovery.UserControls
             this.dataViewScrollerPanel2.TabIndex = 25;
             this.dataViewScrollerPanel2.VerticalScrollBarDockRight = true;
             // 
-            // dataGridViewNearest
+            // dataGridViewScangrid
             // 
-            this.dataGridViewNearest.AllowUserToAddRows = false;
-            this.dataGridViewNearest.AllowUserToDeleteRows = false;
-            this.dataGridViewNearest.AllowUserToResizeRows = false;
-            this.dataGridViewNearest.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            this.dataGridViewNearest.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridViewNearest.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.BodyName,
+            this.dataGridViewScangrid.AllowUserToAddRows = false;
+            this.dataGridViewScangrid.AllowUserToDeleteRows = false;
+            this.dataGridViewScangrid.AllowUserToResizeRows = false;
+            this.dataGridViewScangrid.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.dataGridViewScangrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridViewScangrid.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.img,
+            this.BodyName,
             this.BodyClass,
             this.BodyDetails});
-            this.dataGridViewNearest.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.dataGridViewNearest.Location = new System.Drawing.Point(0, 0);
-            this.dataGridViewNearest.Name = "dataGridViewNearest";
-            this.dataGridViewNearest.RowHeadersVisible = false;
-            this.dataGridViewNearest.ScrollBars = System.Windows.Forms.ScrollBars.None;
-            this.dataGridViewNearest.Size = new System.Drawing.Size(552, 572);
-            this.dataGridViewNearest.TabIndex = 23;
-            // 
-            // BodyName
-            // 
-            this.BodyName.FillWeight = 25F;
-            this.BodyName.HeaderText = "Body";
-            this.BodyName.MinimumWidth = 20;
-            this.BodyName.Name = "BodyName";
+            this.dataGridViewScangrid.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.dataGridViewScangrid.Location = new System.Drawing.Point(0, 0);
+            this.dataGridViewScangrid.Name = "dataGridViewScangrid";
+            this.dataGridViewScangrid.RowHeadersVisible = false;
+            this.dataGridViewScangrid.RowTemplate.Height = 35;
+            this.dataGridViewScangrid.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.dataGridViewScangrid.Size = new System.Drawing.Size(552, 572);
+            this.dataGridViewScangrid.TabIndex = 23;
             // 
             // img
             // 
@@ -108,16 +102,23 @@ namespace EDDiscovery.UserControls
             this.img.Resizable = System.Windows.Forms.DataGridViewTriState.True;
             this.img.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
             // 
+            // BodyName
+            // 
+            this.BodyName.FillWeight = 15.60211F;
+            this.BodyName.HeaderText = "Name";
+            this.BodyName.MinimumWidth = 20;
+            this.BodyName.Name = "BodyName";
+            // 
             // BodyClass
             // 
-            this.BodyClass.FillWeight = 35F;
+            this.BodyClass.FillWeight = 27.30368F;
             this.BodyClass.HeaderText = "Class";
             this.BodyClass.MinimumWidth = 20;
             this.BodyClass.Name = "BodyClass";
             // 
             // BodyDetails
             // 
-            this.BodyDetails.FillWeight = 40F;
+            this.BodyDetails.FillWeight = 31.20421F;
             this.BodyDetails.HeaderText = "Details";
             this.BodyDetails.MinimumWidth = 30;
             this.BodyDetails.Name = "BodyDetails";
@@ -160,7 +161,7 @@ namespace EDDiscovery.UserControls
             this.Name = "UserControlScanGrid";
             this.Size = new System.Drawing.Size(572, 572);
             this.dataViewScrollerPanel2.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewNearest)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewScangrid)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -168,9 +169,9 @@ namespace EDDiscovery.UserControls
         #endregion
         private ExtendedControls.DataViewScrollerPanel dataViewScrollerPanel2;
         private ExtendedControls.VScrollBarCustom vScrollBarCustom2;
-        private System.Windows.Forms.DataGridView dataGridViewNearest;
-        private System.Windows.Forms.DataGridViewTextBoxColumn BodyName;
+        private System.Windows.Forms.DataGridView dataGridViewScangrid;
         private System.Windows.Forms.DataGridViewImageColumn img;
+        private System.Windows.Forms.DataGridViewTextBoxColumn BodyName;
         private System.Windows.Forms.DataGridViewTextBoxColumn BodyClass;
         private System.Windows.Forms.DataGridViewTextBoxColumn BodyDetails;
     }
