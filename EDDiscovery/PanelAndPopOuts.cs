@@ -256,8 +256,7 @@ namespace EDDiscovery.Forms
         public void PopOut(int ix)
         {
             UserControlForm tcf = usercontrolsforms.NewForm(EDDiscovery.EDDOptions.Instance.NoWindowReposition);
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(EDDiscovery.EDDiscoveryForm));
-            tcf.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            tcf.Icon = Properties.Resources.edlogo_3mo_icon;
 
             UserControlCommonBase ctrl = PanelInformation.Create(ix);
 

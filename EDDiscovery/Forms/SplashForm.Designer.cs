@@ -43,7 +43,6 @@ namespace EDDiscovery.Forms
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SplashForm));
             this.panel_eddiscovery = new System.Windows.Forms.Panel();
             this.label1 = new System.Windows.Forms.Label();
             this.label_version = new System.Windows.Forms.Label();
