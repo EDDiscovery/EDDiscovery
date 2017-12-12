@@ -28,7 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ScreenShotConfigureForm));
             this.panelConfigure = new System.Windows.Forms.Panel();
             this.buttonExtCancel = new ExtendedControls.ButtonExt();
             this.buttonExtOK = new ExtendedControls.ButtonExt();
@@ -567,7 +566,7 @@
             this.ClientSize = new System.Drawing.Size(822, 364);
             this.Controls.Add(this.panelConfigure);
             this.Controls.Add(this.panelTop);
-            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.Icon = global::EDDiscovery.Properties.Resources.edlogo_3mo_icon;
             this.Name = "ScreenShotConfigureForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "ScreenShotConfigureForm";

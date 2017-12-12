@@ -51,7 +51,6 @@ namespace EDDiscovery
             private void InitializeComponent()
             {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormMap));
             this.glControlContainer = new System.Windows.Forms.Panel();
             this.textboxFrom = new ExtendedControls.AutoCompleteTextBox();
             this.labelSystemCoords = new System.Windows.Forms.Label();
@@ -771,7 +770,7 @@ namespace EDDiscovery
             this.Controls.Add(this.glControlContainer);
             this.Controls.Add(this.toolStripShowAllStars);
             this.Controls.Add(this.panelRight);
-            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.Icon = global::EDDiscovery.Properties.Resources.edlogo_3mo_icon;
             this.Name = "FormMap";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "3D Star Map";

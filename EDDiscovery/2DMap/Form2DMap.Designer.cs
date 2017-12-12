@@ -43,7 +43,6 @@ namespace EDDiscovery
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form2DMap));
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.toolStripComboBox1 = new System.Windows.Forms.ToolStripComboBox();
             this.toolStripComboBoxTime = new System.Windows.Forms.ToolStripComboBox();
@@ -187,7 +186,7 @@ namespace EDDiscovery
             this.Controls.Add(this.buttonSave);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.toolStrip1);
-            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.Icon = global::EDDiscovery.Properties.Resources.edlogo_3mo_icon;
             this.Name = "Form2DMap";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "2D Map";

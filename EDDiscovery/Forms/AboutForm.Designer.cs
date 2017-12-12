@@ -317,7 +317,7 @@ namespace EDDiscovery.Forms
             this.Controls.Add(this.buttonOK);
             this.Controls.Add(this.labelDevelopersEnum);
             this.DoubleBuffered = true;
-            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.Icon = global::EDDiscovery.Properties.Resources.edlogo_3mo_icon;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.MinimumSize = new System.Drawing.Size(650, 470);
