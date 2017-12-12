@@ -59,8 +59,6 @@ namespace EliteDangerousCore.JournalEvents
             mcl.AddEvent(Id, EventTimeUTC, EventTypeID, StoredItemLocalised + " on " + Ship, -TransferCost);
         }
 
-        public override System.Drawing.Bitmap Icon { get { return EliteDangerous.Properties.Resources.fetchremotemodule; } }
-
         public override void FillInformation(out string summary, out string info, out string detailed) //V
         {
             summary = EventTypeStr.SplitCapsWord();

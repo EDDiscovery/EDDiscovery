@@ -31,8 +31,6 @@ namespace EliteDangerousCore.JournalEvents
             json = evt.ToString();
         }
 
-        public override System.Drawing.Bitmap Icon { get { return EliteDangerous.Properties.Resources.genericevent; } }
-
         public override void FillInformation(out string summary, out string info, out string detailed) //V
         {
             summary = EventTypeStr.SplitCapsWord();

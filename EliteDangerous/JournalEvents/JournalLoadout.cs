@@ -155,8 +155,6 @@ namespace EliteDangerousCore.JournalEvents
             shp.Loadout(ShipId, Ship, ShipFD, ShipName, ShipIdent, ShipModules);
         }
 
-        public override System.Drawing.Bitmap Icon { get { return EliteDangerous.Properties.Resources.loadout; } }
-
         public override void FillInformation(out string summary, out string info, out string detailed) //V
         {
             summary = EventTypeStr.SplitCapsWord();

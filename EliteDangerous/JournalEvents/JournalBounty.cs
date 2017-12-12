@@ -53,8 +53,6 @@ namespace EliteDangerousCore.JournalEvents
         public bool SharedWithOthers { get; set; }
         public BountyReward[] Rewards { get; set; }
 
-        public override System.Drawing.Bitmap Icon { get { return EliteDangerous.Properties.Resources.bounty; } }
-
         public void LedgerNC(Ledger mcl, DB.SQLiteConnectionUser conn)
         {
             string n = (VictimFactionLocalised.Length > 0) ? VictimFactionLocalised : VictimFaction;

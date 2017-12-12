@@ -672,8 +672,8 @@ namespace EDDiscovery.UserControls
             if (current_historylist != null && checkBoxEDSM.Checked)
                 HistoryChanged(current_historylist);        
         }
-    }
 
-    #endregion
+        #endregion
+    }
 }
     

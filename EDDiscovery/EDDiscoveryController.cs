@@ -127,6 +127,8 @@ namespace EDDiscovery
                 };
             }
 
+            LoadIconPack();
+
             backgroundWorker = new Thread(BackgroundWorkerThread);
             backgroundWorker.IsBackground = true;
             backgroundWorker.Name = "Background Worker Thread";
@@ -710,6 +712,48 @@ namespace EDDiscovery
             });
         }
 
+        private void LoadIconPack()
+        {
+            Icons.IconSet.ResetIcons();
+
+            string path = EDDOptions.Instance.IconsPath;
+
+            if (path != null)
+            {
+                if (!Path.IsPathRooted(path))
+                {
+                    string testpath = Path.Combine(EDDOptions.Instance.AppDataDirectory, path);
+                    if (File.Exists(testpath) || Directory.Exists(testpath))
+                    {
+                        path = testpath;
+                    }
+                    else
+                    {
+                        path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, path);
+                    }
+                }
+
+                if (Directory.Exists(path))
+                {
+                    Icons.IconSet.LoadIconsFromDirectory(path);
+                }
+                else if (File.Exists(path))
+                {
+                    try
+                    {
+                        Icons.IconSet.LoadIconsFromZipFile(path);
+                    }
+                    catch (Exception ex)
+                    {
+                        Trace.WriteLine($"Unable to load icons from {path}: {ex.Message}");
+                    }
+                }
+                else
+                {
+                    Trace.WriteLine($"Unable to load icons from {path}: Path not found");
+                }
+            }
+        }
 
         private void BackgroundInit()
         {

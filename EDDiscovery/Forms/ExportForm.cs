@@ -25,7 +25,6 @@ namespace EDDiscovery.Forms
         public ExportForm()
         {
             InitializeComponent();
-
         }
 
         public void Init(string[] exportlist, bool disablestartendtime = false)

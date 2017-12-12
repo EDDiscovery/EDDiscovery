@@ -58,8 +58,6 @@ namespace EliteDangerousCore.JournalEvents
         public int OnlineCount { get; set; }        // always counts
         public int OfflineCount { get; set; }
 
-        public override System.Drawing.Bitmap Icon { get { return EliteDangerous.Properties.Resources.friends; } }
-
         public override void FillInformation(out string summary, out string info, out string detailed) //V
         {
             summary = EventTypeStr.SplitCapsWord();

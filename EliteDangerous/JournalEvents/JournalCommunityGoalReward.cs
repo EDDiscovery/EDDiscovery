@@ -41,8 +41,6 @@ namespace EliteDangerousCore.JournalEvents
             mcl.AddEvent(Id, EventTimeUTC, EventTypeID, Name + " " + System, Reward);
         }
 
-        public override System.Drawing.Bitmap Icon { get { return EliteDangerous.Properties.Resources.communitygoalreward; } }
-
         public override void FillInformation(out string summary, out string info, out string detailed) //V
         {
             summary = EventTypeStr.SplitCapsWord();

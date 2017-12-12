@@ -1021,9 +1021,5 @@ namespace EDDiscovery.UserControls
         }
 
         #endregion
-
-
-
-
     }
 }
