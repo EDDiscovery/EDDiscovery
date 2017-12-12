@@ -293,7 +293,7 @@ namespace EDDiscovery.Forms
             // panelLogo
             // 
             this.panelLogo.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panelLogo.Image = ((System.Drawing.Image)(resources.GetObject("panelLogo.Image")));
+            this.panelLogo.Image = global::EDDiscovery.Properties.Resources.panelLogo;
             this.panelLogo.Location = new System.Drawing.Point(3, 3);
             this.panelLogo.Name = "panelLogo";
             this.panelLogo.Padding = new System.Windows.Forms.Padding(1);

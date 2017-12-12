@@ -101,7 +101,7 @@ namespace EDDiscovery
             // toolStripButtonZoomIn
             // 
             this.toolStripButtonZoomIn.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButtonZoomIn.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonZoomIn.Image")));
+            this.toolStripButtonZoomIn.Image = global::EDDiscovery.Properties.Resources.toolStripButtonZoomIn;
             this.toolStripButtonZoomIn.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonZoomIn.Name = "toolStripButtonZoomIn";
             this.toolStripButtonZoomIn.Size = new System.Drawing.Size(26, 26);
@@ -112,7 +112,7 @@ namespace EDDiscovery
             // toolStripButtonZoomOut
             // 
             this.toolStripButtonZoomOut.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButtonZoomOut.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonZoomOut.Image")));
+            this.toolStripButtonZoomOut.Image = global::EDDiscovery.Properties.Resources.toolStripButtonZoomOut;
             this.toolStripButtonZoomOut.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonZoomOut.Name = "toolStripButtonZoomOut";
             this.toolStripButtonZoomOut.Size = new System.Drawing.Size(26, 26);
@@ -123,7 +123,7 @@ namespace EDDiscovery
             // toolStripButtonZoomtoFit
             // 
             this.toolStripButtonZoomtoFit.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButtonZoomtoFit.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonZoomtoFit.Image")));
+            this.toolStripButtonZoomtoFit.Image = global::EDDiscovery.Properties.Resources.toolStripButtonZoomtoFit;
             this.toolStripButtonZoomtoFit.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonZoomtoFit.Name = "toolStripButtonZoomtoFit";
             this.toolStripButtonZoomtoFit.Size = new System.Drawing.Size(26, 26);

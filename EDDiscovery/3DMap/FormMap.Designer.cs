@@ -197,7 +197,7 @@ namespace EDDiscovery
             // toolStripButtonGoBackward
             // 
             this.toolStripButtonGoBackward.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButtonGoBackward.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonGoBackward.Image")));
+            this.toolStripButtonGoBackward.Image = global::EDDiscovery.Properties.Resources.toolStripButtonGoBackward;
             this.toolStripButtonGoBackward.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonGoBackward.Name = "toolStripButtonGoBackward";
             this.toolStripButtonGoBackward.Size = new System.Drawing.Size(23, 37);
@@ -207,7 +207,7 @@ namespace EDDiscovery
             // toolStripButtonGoForward
             // 
             this.toolStripButtonGoForward.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButtonGoForward.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonGoForward.Image")));
+            this.toolStripButtonGoForward.Image = global::EDDiscovery.Properties.Resources.toolStripButtonGoForward;
             this.toolStripButtonGoForward.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonGoForward.Name = "toolStripButtonGoForward";
             this.toolStripButtonGoForward.Size = new System.Drawing.Size(23, 37);
@@ -217,7 +217,7 @@ namespace EDDiscovery
             // toolStripButtonLastKnownPosition
             // 
             this.toolStripButtonLastKnownPosition.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButtonLastKnownPosition.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonLastKnownPosition.Image")));
+            this.toolStripButtonLastKnownPosition.Image = global::EDDiscovery.Properties.Resources.toolStripButtonLastKnownPosition;
             this.toolStripButtonLastKnownPosition.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonLastKnownPosition.Name = "toolStripButtonLastKnownPosition";
             this.toolStripButtonLastKnownPosition.Size = new System.Drawing.Size(23, 37);
@@ -230,7 +230,7 @@ namespace EDDiscovery
             this.toolStripButtonAutoForward.CheckOnClick = true;
             this.toolStripButtonAutoForward.CheckState = System.Windows.Forms.CheckState.Checked;
             this.toolStripButtonAutoForward.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButtonAutoForward.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonAutoForward.Image")));
+            this.toolStripButtonAutoForward.Image = global::EDDiscovery.Properties.Resources.toolStripButtonAutoForward;
             this.toolStripButtonAutoForward.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonAutoForward.Name = "toolStripButtonAutoForward";
             this.toolStripButtonAutoForward.Size = new System.Drawing.Size(23, 37);
@@ -262,7 +262,7 @@ namespace EDDiscovery
             // toolStripButtonTarget
             // 
             this.toolStripButtonTarget.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButtonTarget.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonTarget.Image")));
+            this.toolStripButtonTarget.Image = global::EDDiscovery.Properties.Resources.toolStripButtonTarget;
             this.toolStripButtonTarget.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonTarget.Name = "toolStripButtonTarget";
             this.toolStripButtonTarget.Size = new System.Drawing.Size(23, 37);
@@ -334,7 +334,7 @@ namespace EDDiscovery
             this.showStarstoolStripMenuItem,
             this.showStationsToolStripMenuItem,
             this.enableColoursToolStripMenuItem});
-            this.toolStripDropDownButtonFilterStars.Image = ((System.Drawing.Image)(resources.GetObject("toolStripDropDownButtonFilterStars.Image")));
+            this.toolStripDropDownButtonFilterStars.Image = global::EDDiscovery.Properties.Resources.toolStripDropDownButtonFilterStars;
             this.toolStripDropDownButtonFilterStars.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripDropDownButtonFilterStars.Name = "toolStripDropDownButtonFilterStars";
             this.toolStripDropDownButtonFilterStars.Size = new System.Drawing.Size(29, 37);
@@ -350,7 +350,7 @@ namespace EDDiscovery
             this.showStarstoolStripMenuItem.Checked = true;
             this.showStarstoolStripMenuItem.CheckOnClick = true;
             this.showStarstoolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.showStarstoolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("showStarstoolStripMenuItem.Image")));
+            this.showStarstoolStripMenuItem.Image = global::EDDiscovery.Properties.Resources.showStarstoolStripMenuItem;
             this.showStarstoolStripMenuItem.Name = "showStarstoolStripMenuItem";
             this.showStarstoolStripMenuItem.Size = new System.Drawing.Size(153, 22);
             this.showStarstoolStripMenuItem.Text = "Show All Stars";
@@ -362,7 +362,7 @@ namespace EDDiscovery
             this.showStationsToolStripMenuItem.Checked = true;
             this.showStationsToolStripMenuItem.CheckOnClick = true;
             this.showStationsToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.showStationsToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("showStationsToolStripMenuItem.Image")));
+            this.showStationsToolStripMenuItem.Image = global::EDDiscovery.Properties.Resources.showStationsToolStripMenuItem;
             this.showStationsToolStripMenuItem.Name = "showStationsToolStripMenuItem";
             this.showStationsToolStripMenuItem.Size = new System.Drawing.Size(153, 22);
             this.showStationsToolStripMenuItem.Text = "Show Stations";
@@ -372,7 +372,7 @@ namespace EDDiscovery
             // enableColoursToolStripMenuItem
             // 
             this.enableColoursToolStripMenuItem.CheckOnClick = true;
-            this.enableColoursToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("enableColoursToolStripMenuItem.Image")));
+            this.enableColoursToolStripMenuItem.Image = global::EDDiscovery.Properties.Resources.enableColoursToolStripMenuItem;
             this.enableColoursToolStripMenuItem.Name = "enableColoursToolStripMenuItem";
             this.enableColoursToolStripMenuItem.Size = new System.Drawing.Size(153, 22);
             this.enableColoursToolStripMenuItem.Text = "Display Colours";
@@ -384,7 +384,7 @@ namespace EDDiscovery
             this.toolStripDropDownButtonNameStars.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.showDiscsToolStripMenuItem,
             this.showNamesToolStripMenuItem});
-            this.toolStripDropDownButtonNameStars.Image = ((System.Drawing.Image)(resources.GetObject("toolStripDropDownButtonNameStars.Image")));
+            this.toolStripDropDownButtonNameStars.Image = global::EDDiscovery.Properties.Resources.toolStripDropDownButtonNameStars;
             this.toolStripDropDownButtonNameStars.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripDropDownButtonNameStars.Name = "toolStripDropDownButtonNameStars";
             this.toolStripDropDownButtonNameStars.Size = new System.Drawing.Size(29, 37);
@@ -403,7 +403,7 @@ namespace EDDiscovery
             // showNamesToolStripMenuItem
             // 
             this.showNamesToolStripMenuItem.CheckOnClick = true;
-            this.showNamesToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("showNamesToolStripMenuItem.Image")));
+            this.showNamesToolStripMenuItem.Image = global::EDDiscovery.Properties.Resources.showNamesToolStripMenuItem;
             this.showNamesToolStripMenuItem.Name = "showNamesToolStripMenuItem";
             this.showNamesToolStripMenuItem.Size = new System.Drawing.Size(143, 22);
             this.showNamesToolStripMenuItem.Text = "Show Names";
@@ -416,7 +416,7 @@ namespace EDDiscovery
             this.showBookmarksToolStripMenuItem,
             this.showNoteMarksToolStripMenuItem,
             this.newRegionBookmarkToolStripMenuItem});
-            this.toolStripDropDownButtonBookmarks.Image = ((System.Drawing.Image)(resources.GetObject("toolStripDropDownButtonBookmarks.Image")));
+            this.toolStripDropDownButtonBookmarks.Image = global::EDDiscovery.Properties.Resources.toolStripDropDownButtonBookmarks;
             this.toolStripDropDownButtonBookmarks.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripDropDownButtonBookmarks.Name = "toolStripDropDownButtonBookmarks";
             this.toolStripDropDownButtonBookmarks.Size = new System.Drawing.Size(29, 37);
@@ -428,7 +428,7 @@ namespace EDDiscovery
             this.showBookmarksToolStripMenuItem.Checked = true;
             this.showBookmarksToolStripMenuItem.CheckOnClick = true;
             this.showBookmarksToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.showBookmarksToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("showBookmarksToolStripMenuItem.Image")));
+            this.showBookmarksToolStripMenuItem.Image = global::EDDiscovery.Properties.Resources.showBookmarksToolStripMenuItem;
             this.showBookmarksToolStripMenuItem.Name = "showBookmarksToolStripMenuItem";
             this.showBookmarksToolStripMenuItem.Size = new System.Drawing.Size(195, 22);
             this.showBookmarksToolStripMenuItem.Text = "Show Bookmarks";
@@ -439,7 +439,7 @@ namespace EDDiscovery
             this.showNoteMarksToolStripMenuItem.Checked = true;
             this.showNoteMarksToolStripMenuItem.CheckOnClick = true;
             this.showNoteMarksToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.showNoteMarksToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("showNoteMarksToolStripMenuItem.Image")));
+            this.showNoteMarksToolStripMenuItem.Image = global::EDDiscovery.Properties.Resources.showNoteMarksToolStripMenuItem;
             this.showNoteMarksToolStripMenuItem.Name = "showNoteMarksToolStripMenuItem";
             this.showNoteMarksToolStripMenuItem.Size = new System.Drawing.Size(195, 22);
             this.showNoteMarksToolStripMenuItem.Text = "Show Note marks";
@@ -447,7 +447,7 @@ namespace EDDiscovery
             // 
             // newRegionBookmarkToolStripMenuItem
             // 
-            this.newRegionBookmarkToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("newRegionBookmarkToolStripMenuItem.Image")));
+            this.newRegionBookmarkToolStripMenuItem.Image = global::EDDiscovery.Properties.Resources.newRegionBookmarkToolStripMenuItem;
             this.newRegionBookmarkToolStripMenuItem.Name = "newRegionBookmarkToolStripMenuItem";
             this.newRegionBookmarkToolStripMenuItem.Size = new System.Drawing.Size(195, 22);
             this.newRegionBookmarkToolStripMenuItem.Text = "New Region Bookmark";
@@ -456,7 +456,7 @@ namespace EDDiscovery
             // toolStripDropDownButtonGalObjects
             // 
             this.toolStripDropDownButtonGalObjects.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripDropDownButtonGalObjects.Image = ((System.Drawing.Image)(resources.GetObject("toolStripDropDownButtonGalObjects.Image")));
+            this.toolStripDropDownButtonGalObjects.Image = global::EDDiscovery.Properties.Resources.toolStripDropDownButtonGalObjects;
             this.toolStripDropDownButtonGalObjects.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripDropDownButtonGalObjects.Name = "toolStripDropDownButtonGalObjects";
             this.toolStripDropDownButtonGalObjects.Size = new System.Drawing.Size(29, 37);
@@ -467,7 +467,7 @@ namespace EDDiscovery
             // 
             this.toolStripButtonGrid.CheckOnClick = true;
             this.toolStripButtonGrid.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButtonGrid.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonGrid.Image")));
+            this.toolStripButtonGrid.Image = global::EDDiscovery.Properties.Resources.toolStripButtonGrid;
             this.toolStripButtonGrid.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonGrid.Name = "toolStripButtonGrid";
             this.toolStripButtonGrid.Size = new System.Drawing.Size(23, 37);
@@ -479,7 +479,7 @@ namespace EDDiscovery
             // 
             this.toolStripButtonFineGrid.CheckOnClick = true;
             this.toolStripButtonFineGrid.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButtonFineGrid.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonFineGrid.Image")));
+            this.toolStripButtonFineGrid.Image = global::EDDiscovery.Properties.Resources.toolStripButtonFineGrid;
             this.toolStripButtonFineGrid.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonFineGrid.Name = "toolStripButtonFineGrid";
             this.toolStripButtonFineGrid.Size = new System.Drawing.Size(23, 37);
@@ -491,7 +491,7 @@ namespace EDDiscovery
             // 
             this.toolStripButtonCoords.CheckOnClick = true;
             this.toolStripButtonCoords.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButtonCoords.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonCoords.Image")));
+            this.toolStripButtonCoords.Image = global::EDDiscovery.Properties.Resources.toolStripButtonCoords;
             this.toolStripButtonCoords.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonCoords.Name = "toolStripButtonCoords";
             this.toolStripButtonCoords.Size = new System.Drawing.Size(23, 37);
@@ -508,7 +508,7 @@ namespace EDDiscovery
             // 
             this.toolStripButtonPerspective.CheckOnClick = true;
             this.toolStripButtonPerspective.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButtonPerspective.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonPerspective.Image")));
+            this.toolStripButtonPerspective.Image = global::EDDiscovery.Properties.Resources.toolStripButtonPerspective;
             this.toolStripButtonPerspective.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonPerspective.Name = "toolStripButtonPerspective";
             this.toolStripButtonPerspective.Size = new System.Drawing.Size(23, 37);
@@ -525,7 +525,7 @@ namespace EDDiscovery
             // 
             this.toolStripButtonEliteMovement.CheckOnClick = true;
             this.toolStripButtonEliteMovement.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButtonEliteMovement.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonEliteMovement.Image")));
+            this.toolStripButtonEliteMovement.Image = global::EDDiscovery.Properties.Resources.toolStripButtonEliteMovement;
             this.toolStripButtonEliteMovement.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonEliteMovement.Name = "toolStripButtonEliteMovement";
             this.toolStripButtonEliteMovement.Size = new System.Drawing.Size(23, 37);
@@ -541,7 +541,7 @@ namespace EDDiscovery
             // dropdownMapNames
             // 
             this.dropdownMapNames.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.dropdownMapNames.Image = ((System.Drawing.Image)(resources.GetObject("dropdownMapNames.Image")));
+            this.dropdownMapNames.Image = global::EDDiscovery.Properties.Resources.dropdownMapNames;
             this.dropdownMapNames.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.dropdownMapNames.Name = "dropdownMapNames";
             this.dropdownMapNames.Size = new System.Drawing.Size(29, 37);
@@ -550,7 +550,7 @@ namespace EDDiscovery
             // dropdownFilterDate
             // 
             this.dropdownFilterDate.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.dropdownFilterDate.Image = ((System.Drawing.Image)(resources.GetObject("dropdownFilterDate.Image")));
+            this.dropdownFilterDate.Image = global::EDDiscovery.Properties.Resources.dropdownFilterDate;
             this.dropdownFilterDate.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.dropdownFilterDate.Name = "dropdownFilterDate";
             this.dropdownFilterDate.Size = new System.Drawing.Size(29, 37);
@@ -564,7 +564,7 @@ namespace EDDiscovery
             // toolStripButtonHelp
             // 
             this.toolStripButtonHelp.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButtonHelp.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonHelp.Image")));
+            this.toolStripButtonHelp.Image = global::EDDiscovery.Properties.Resources.toolStripButtonHelp;
             this.toolStripButtonHelp.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonHelp.Name = "toolStripButtonHelp";
             this.toolStripButtonHelp.Size = new System.Drawing.Size(23, 37);
@@ -702,7 +702,7 @@ namespace EDDiscovery
             // 
             // buttonCenter
             // 
-            this.buttonCenter.Image = ((System.Drawing.Image)(resources.GetObject("buttonCenter.Image")));
+            this.buttonCenter.Image = global::EDDiscovery.Properties.Resources.buttonCenter;
             this.buttonCenter.Location = new System.Drawing.Point(134, 7);
             this.buttonCenter.Name = "buttonCenter";
             this.buttonCenter.Size = new System.Drawing.Size(23, 23);
