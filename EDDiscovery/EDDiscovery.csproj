@@ -347,6 +347,12 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UserControls\UserControlScanGrid.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\UserControlScanGrid.Designer.cs">
+      <DependentUpon>UserControlScanGrid.cs</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\UserControlSettings.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -570,6 +576,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\UserControlContainerResizable.resx">
       <DependentUpon>UserControlContainerResizable.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\UserControlScanGrid.resx">
+      <DependentUpon>UserControlScanGrid.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\UserControlEstimatedValues.resx">
       <DependentUpon>UserControlEstimatedValues.cs</DependentUpon>
