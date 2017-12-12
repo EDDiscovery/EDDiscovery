@@ -46,8 +46,6 @@ Example:
         public long ShipPrice { get; set; }
 
 
-        public override System.Drawing.Bitmap Icon { get { return EliteDangerous.Properties.Resources.sellshiponrebuy; } }  
-
         public void Ledger(Ledger mcl, DB.SQLiteConnectionUser conn)
         {
             mcl.AddEvent(Id, EventTimeUTC, EventTypeID, ShipType, ShipPrice);

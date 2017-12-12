@@ -1,0 +1,572 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{646F71BE-F102-444E-9254-818E5A320AB8}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>EDDiscovery.Icons</RootNamespace>
+    <AssemblyName>EDDiscovery.Icons</AssemblyName>
+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.IO.Compression, Version=4.1.2.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.IO.Compression.4.3.0\lib\net46\System.IO.Compression.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.IO.Compression.FileSystem" />
+    <Reference Include="System.IO.Compression.ZipFile, Version=4.0.2.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.IO.Compression.ZipFile.4.3.0\lib\net46\System.IO.Compression.ZipFile.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Controls\Controls.cs" />
+    <None Include="Controls\Fakes\Controls.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Controls.resx</DependentUpon>
+    </None>
+    <Compile Include="IconGroup.cs" />
+    <Compile Include="IconSet.cs" />
+    <Compile Include="IIconPackControl.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Controls\Fakes\Controls.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Controls.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>EDDiscovery.Icons</CustomToolNamespace>
+    </None>
+    <EmbeddedResource Include="Journal\AfmuRepairs.png" />
+    <EmbeddedResource Include="Journal\ApproachSettlement.png" />
+    <EmbeddedResource Include="Journal\Bounty.png" />
+    <EmbeddedResource Include="Journal\BuyAmmo.png" />
+    <EmbeddedResource Include="Journal\BuyDrones.png" />
+    <EmbeddedResource Include="Journal\BuyExplorationData.png" />
+    <EmbeddedResource Include="Journal\BuyTradeData.png" />
+    <EmbeddedResource Include="Journal\CapShipBond.png" />
+    <EmbeddedResource Include="Journal\Cargo.png" />
+    <EmbeddedResource Include="Journal\ChangeCrewRole.png" />
+    <EmbeddedResource Include="Journal\ClearSavedGame.png" />
+    <EmbeddedResource Include="Journal\CockpitBreached.png" />
+    <EmbeddedResource Include="Journal\CollectCargo.png" />
+    <EmbeddedResource Include="Journal\CommitCrime.png" />
+    <EmbeddedResource Include="Journal\CommunityGoal.png" />
+    <EmbeddedResource Include="Journal\CommunityGoalDiscard.png" />
+    <EmbeddedResource Include="Journal\CommunityGoalJoin.png" />
+    <EmbeddedResource Include="Journal\CommunityGoalReward.png" />
+    <EmbeddedResource Include="Journal\Continued.png" />
+    <EmbeddedResource Include="Journal\CrewAssign.png" />
+    <EmbeddedResource Include="Journal\CrewFire.png" />
+    <EmbeddedResource Include="Journal\CrewHire.png" />
+    <EmbeddedResource Include="Journal\CrewLaunchFighter.png" />
+    <EmbeddedResource Include="Journal\CrewMemberJoins.png" />
+    <EmbeddedResource Include="Journal\CrewMemberQuits.png" />
+    <EmbeddedResource Include="Journal\CrewMemberRoleChange.png" />
+    <EmbeddedResource Include="Journal\DatalinkScan.png" />
+    <EmbeddedResource Include="Journal\DatalinkVoucher.png" />
+    <EmbeddedResource Include="Journal\DataScanned.png" />
+    <EmbeddedResource Include="Journal\Died.png" />
+    <EmbeddedResource Include="Journal\Docked.png" />
+    <EmbeddedResource Include="Journal\DockFighter.png" />
+    <EmbeddedResource Include="Journal\DockingCancelled.png" />
+    <EmbeddedResource Include="Journal\DockingDenied.png" />
+    <EmbeddedResource Include="Journal\DockingGranted.png" />
+    <EmbeddedResource Include="Journal\DockingRequested.png" />
+    <EmbeddedResource Include="Journal\DockingTimeout.png" />
+    <EmbeddedResource Include="Journal\DockSRV.png" />
+    <EmbeddedResource Include="Journal\EDDCommodityPrices.png" />
+    <EmbeddedResource Include="Journal\EDDItemSet.png" />
+    <EmbeddedResource Include="Journal\EjectCargo.png" />
+    <EmbeddedResource Include="Journal\EndCrewSession.png" />
+    <EmbeddedResource Include="Journal\EngineerApply.png" />
+    <EmbeddedResource Include="Journal\EngineerContribution.png" />
+    <EmbeddedResource Include="Journal\EngineerCraft.png" />
+    <EmbeddedResource Include="Journal\EngineerProgress.png" />
+    <EmbeddedResource Include="Journal\EscapeInterdiction.png" />
+    <EmbeddedResource Include="Journal\FactionKillBond.png" />
+    <EmbeddedResource Include="Journal\FetchRemoteModule.png" />
+    <EmbeddedResource Include="Journal\Fileheader.png" />
+    <EmbeddedResource Include="Journal\Friends.png" />
+    <EmbeddedResource Include="Journal\FSDJump.png" />
+    <EmbeddedResource Include="Journal\FuelScoop.png" />
+    <EmbeddedResource Include="Journal\HeatDamage.png" />
+    <EmbeddedResource Include="Journal\HeatWarning.png" />
+    <EmbeddedResource Include="Journal\HullDamage.png" />
+    <EmbeddedResource Include="Journal\Interdicted.png" />
+    <EmbeddedResource Include="Journal\Interdiction.png" />
+    <EmbeddedResource Include="Journal\JetConeBoost.png" />
+    <EmbeddedResource Include="Journal\JetConeDamage.png" />
+    <EmbeddedResource Include="Journal\JoinACrew.png" />
+    <EmbeddedResource Include="Journal\KickCrewMember.png" />
+    <EmbeddedResource Include="Journal\LaunchFighter.png" />
+    <EmbeddedResource Include="Journal\LaunchSRV.png" />
+    <EmbeddedResource Include="Journal\Liftoff.png" />
+    <EmbeddedResource Include="Journal\LoadGame.png" />
+    <EmbeddedResource Include="Journal\Loadout.png" />
+    <EmbeddedResource Include="Journal\Location.png" />
+    <EmbeddedResource Include="Journal\MarketBuy.png" />
+    <EmbeddedResource Include="Journal\MarketSell.png" />
+    <EmbeddedResource Include="Journal\MassModuleStore.png" />
+    <EmbeddedResource Include="Journal\MaterialCollected.png" />
+    <EmbeddedResource Include="Journal\MaterialDiscarded.png" />
+    <EmbeddedResource Include="Journal\MaterialDiscovered.png" />
+    <EmbeddedResource Include="Journal\Materials.png" />
+    <EmbeddedResource Include="Journal\MiningRefined.png" />
+    <EmbeddedResource Include="Journal\MissionAbandoned.png" />
+    <EmbeddedResource Include="Journal\MissionAccepted.png" />
+    <EmbeddedResource Include="Journal\MissionCompleted.png" />
+    <EmbeddedResource Include="Journal\MissionFailed.png" />
+    <EmbeddedResource Include="Journal\MissionRedirected.png" />
+    <EmbeddedResource Include="Journal\ModuleBuy.png" />
+    <EmbeddedResource Include="Journal\ModuleRetrieve.png" />
+    <EmbeddedResource Include="Journal\ModuleSell.png" />
+    <EmbeddedResource Include="Journal\ModuleSellRemote.png" />
+    <EmbeddedResource Include="Journal\ModuleStore.png" />
+    <EmbeddedResource Include="Journal\ModuleSwap.png" />
+    <EmbeddedResource Include="Journal\Music.png" />
+    <EmbeddedResource Include="Journal\NavBeaconScan.png" />
+    <EmbeddedResource Include="Journal\NewCommander.png" />
+    <EmbeddedResource Include="Journal\Passengers.png" />
+    <EmbeddedResource Include="Journal\PayFines.png" />
+    <EmbeddedResource Include="Journal\PayLegacyFines.png" />
+    <EmbeddedResource Include="Journal\PowerplayCollect.png" />
+    <EmbeddedResource Include="Journal\PowerplayDefect.png" />
+    <EmbeddedResource Include="Journal\PowerplayDeliver.png" />
+    <EmbeddedResource Include="Journal\PowerplayFastTrack.png" />
+    <EmbeddedResource Include="Journal\PowerplayJoin.png" />
+    <EmbeddedResource Include="Journal\PowerplayLeave.png" />
+    <EmbeddedResource Include="Journal\PowerplaySalary.png" />
+    <EmbeddedResource Include="Journal\PowerplayVote.png" />
+    <EmbeddedResource Include="Journal\PowerplayVoucher.png" />
+    <EmbeddedResource Include="Journal\Progress.png" />
+    <EmbeddedResource Include="Journal\Promotion.png" />
+    <EmbeddedResource Include="Journal\PVPKill.png" />
+    <EmbeddedResource Include="Journal\QuitACrew.png" />
+    <EmbeddedResource Include="Journal\Rank.png" />
+    <EmbeddedResource Include="Journal\RebootRepair.png" />
+    <EmbeddedResource Include="Journal\ReceiveText.png" />
+    <EmbeddedResource Include="Journal\RedeemVoucher.png" />
+    <EmbeddedResource Include="Journal\RefuelAll.png" />
+    <EmbeddedResource Include="Journal\RefuelPartial.png" />
+    <EmbeddedResource Include="Journal\Repair.png" />
+    <EmbeddedResource Include="Journal\RepairAll.png" />
+    <EmbeddedResource Include="Journal\RepairDrone.png" />
+    <EmbeddedResource Include="Journal\RestockVehicle_Fighter.png" />
+    <EmbeddedResource Include="Journal\RestockVehicle_SRV.png" />
+    <EmbeddedResource Include="Journal\Resurrect.png" />
+    <EmbeddedResource Include="Journal\Scan.png" />
+    <EmbeddedResource Include="Journal\Scanned.png" />
+    <EmbeddedResource Include="Journal\ScientificResearch.png" />
+    <EmbeddedResource Include="Journal\Screenshot.png" />
+    <EmbeddedResource Include="Journal\SearchAndRescue.png" />
+    <EmbeddedResource Include="Journal\SelfDestruct.png" />
+    <EmbeddedResource Include="Journal\SellDrones.png" />
+    <EmbeddedResource Include="Journal\SellExplorationData.png" />
+    <EmbeddedResource Include="Journal\SellShipOnRebuy.png" />
+    <EmbeddedResource Include="Journal\SendText.png" />
+    <EmbeddedResource Include="Journal\SetUserShipName.png" />
+    <EmbeddedResource Include="Journal\ShipyardBuy.png" />
+    <EmbeddedResource Include="Journal\ShipyardNew.png" />
+    <EmbeddedResource Include="Journal\ShipyardSell.png" />
+    <EmbeddedResource Include="Journal\ShipyardSwap.png" />
+    <EmbeddedResource Include="Journal\ShipyardTransfer.png" />
+    <EmbeddedResource Include="Journal\StartJump.png" />
+    <EmbeddedResource Include="Journal\SupercruiseEntry.png" />
+    <EmbeddedResource Include="Journal\SupercruiseExit.png" />
+    <EmbeddedResource Include="Journal\Synthesis.png" />
+    <EmbeddedResource Include="Journal\SystemsShutdown.png" />
+    <EmbeddedResource Include="Journal\Touchdown.png" />
+    <EmbeddedResource Include="Journal\Undocked.png" />
+    <EmbeddedResource Include="Journal\Unknown.png" />
+    <EmbeddedResource Include="Journal\USSDrop.png" />
+    <EmbeddedResource Include="Journal\VehicleSwitch.png" />
+    <EmbeddedResource Include="Journal\WingAdd.png" />
+    <EmbeddedResource Include="Journal\WingInvite.png" />
+    <EmbeddedResource Include="Journal\WingJoin.png" />
+    <EmbeddedResource Include="Journal\WingLeave.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Legacy\eddiscovery_logo.png" />
+    <EmbeddedResource Include="Legacy\edsmown.png" />
+    <EmbeddedResource Include="Legacy\G8V_and_G9V.png" />
+    <EmbeddedResource Include="Legacy\Globe_yellow.png" />
+    <EmbeddedResource Include="Legacy\M1VA.png" />
+    <EmbeddedResource Include="Legacy\module.png" />
+    <EmbeddedResource Include="Legacy\speaker.png" />
+    <EmbeddedResource Include="Legacy\star.png" />
+    <EmbeddedResource Include="Legacy\textreceived.png" />
+    <EmbeddedResource Include="Legacy\textsent.png" />
+    <EmbeddedResource Include="Planets\Ammonia_world.png" />
+    <EmbeddedResource Include="Planets\Earthlike_body.png" />
+    <EmbeddedResource Include="Planets\Gas_giant_with_ammonia_based_life.png" />
+    <EmbeddedResource Include="Planets\Gas_giant_with_water_based_life.png" />
+    <EmbeddedResource Include="Planets\Helium_gas_giant.png" />
+    <EmbeddedResource Include="Planets\Helium_rich_gas_giant.png" />
+    <EmbeddedResource Include="Planets\High_metal_content_body.png" />
+    <EmbeddedResource Include="Planets\High_metal_content_body_250.png" />
+    <EmbeddedResource Include="Planets\High_metal_content_body_700.png" />
+    <EmbeddedResource Include="Planets\High_metal_content_body_hot_thick.png" />
+    <EmbeddedResource Include="Planets\Icy_body.png" />
+    <EmbeddedResource Include="Planets\Metal_rich_body.png" />
+    <EmbeddedResource Include="Planets\Rocky_body.png" />
+    <EmbeddedResource Include="Planets\Rocky_ice_body.png" />
+    <EmbeddedResource Include="Planets\Sudarsky_class_III_gas_giant.png" />
+    <EmbeddedResource Include="Planets\Sudarsky_class_II_gas_giant.png" />
+    <EmbeddedResource Include="Planets\Sudarsky_class_IV_gas_giant.png" />
+    <EmbeddedResource Include="Planets\Sudarsky_class_I_gas_giant.png" />
+    <EmbeddedResource Include="Planets\Sudarsky_class_V_gas_giant.png" />
+    <EmbeddedResource Include="Planets\Unknown.png" />
+    <EmbeddedResource Include="Planets\Water_giant.png" />
+    <EmbeddedResource Include="Planets\Water_giant_with_life.png" />
+    <EmbeddedResource Include="Planets\Water_world.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Stars\A.png" />
+    <EmbeddedResource Include="Stars\AeBe.png" />
+    <EmbeddedResource Include="Stars\A_BlueWhiteSuperGiant.png" />
+    <EmbeddedResource Include="Stars\B.png" />
+    <EmbeddedResource Include="Stars\C.png" />
+    <EmbeddedResource Include="Stars\CHd.png" />
+    <EmbeddedResource Include="Stars\CJ.png" />
+    <EmbeddedResource Include="Stars\CN.png" />
+    <EmbeddedResource Include="Stars\CS.png" />
+    <EmbeddedResource Include="Stars\D.png" />
+    <EmbeddedResource Include="Stars\DA.png" />
+    <EmbeddedResource Include="Stars\DAB.png" />
+    <EmbeddedResource Include="Stars\DAO.png" />
+    <EmbeddedResource Include="Stars\DAV.png" />
+    <EmbeddedResource Include="Stars\DAZ.png" />
+    <EmbeddedResource Include="Stars\DB.png" />
+    <EmbeddedResource Include="Stars\DBV.png" />
+    <EmbeddedResource Include="Stars\DBZ.png" />
+    <EmbeddedResource Include="Stars\DC.png" />
+    <EmbeddedResource Include="Stars\DCV.png" />
+    <EmbeddedResource Include="Stars\DO.png" />
+    <EmbeddedResource Include="Stars\DOV.png" />
+    <EmbeddedResource Include="Stars\DQ.png" />
+    <EmbeddedResource Include="Stars\DX.png" />
+    <EmbeddedResource Include="Stars\F.png" />
+    <EmbeddedResource Include="Stars\F_WhiteSuperGiant.png" />
+    <EmbeddedResource Include="Stars\G.png" />
+    <EmbeddedResource Include="Stars\H.png" />
+    <EmbeddedResource Include="Stars\K.png" />
+    <EmbeddedResource Include="Stars\K_OrangeGiant.png" />
+    <EmbeddedResource Include="Stars\L.png" />
+    <EmbeddedResource Include="Stars\M.png" />
+    <EmbeddedResource Include="Stars\MS.png" />
+    <EmbeddedResource Include="Stars\M_RedGiant.png" />
+    <EmbeddedResource Include="Stars\M_RedSuperGiant.png" />
+    <EmbeddedResource Include="Stars\N.png" />
+    <EmbeddedResource Include="Stars\Nebula.png" />
+    <EmbeddedResource Include="Stars\O.png" />
+    <EmbeddedResource Include="Stars\RoguePlanet.png" />
+    <EmbeddedResource Include="Stars\S.png" />
+    <EmbeddedResource Include="Stars\StellarRemnantNebula.png" />
+    <EmbeddedResource Include="Stars\SuperMassiveBlackHole.png" />
+    <EmbeddedResource Include="Stars\T.png" />
+    <EmbeddedResource Include="Stars\TTS.png" />
+    <EmbeddedResource Include="Stars\W.png" />
+    <EmbeddedResource Include="Stars\WC.png" />
+    <EmbeddedResource Include="Stars\WN.png" />
+    <EmbeddedResource Include="Stars\WNC.png" />
+    <EmbeddedResource Include="Stars\WO.png" />
+    <EmbeddedResource Include="Stars\X.png" />
+    <EmbeddedResource Include="Stars\Y.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Stars\Unknown.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Journal\RestockVehicle.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Journal\ShieldState_ShieldsDown.png" />
+    <EmbeddedResource Include="Journal\ShieldState.png" />
+    <EmbeddedResource Include="Journal\ShieldState_ShieldsUp.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="GalMap\beacon.png" />
+    <EmbeddedResource Include="GalMap\blackHole.png" />
+    <EmbeddedResource Include="GalMap\cometaryBody.png" />
+    <EmbeddedResource Include="GalMap\deepSpaceOutpost.png" />
+    <EmbeddedResource Include="GalMap\EDSMUnknown.png" />
+    <EmbeddedResource Include="GalMap\historicalLocation.png" />
+    <EmbeddedResource Include="GalMap\jumponiumRichSystem.png" />
+    <EmbeddedResource Include="GalMap\minorPOI.png" />
+    <EmbeddedResource Include="GalMap\mysteryPOI.png" />
+    <EmbeddedResource Include="GalMap\nebula.png" />
+    <EmbeddedResource Include="GalMap\planetaryNebula.png" />
+    <EmbeddedResource Include="GalMap\planetFeatures.png" />
+    <EmbeddedResource Include="GalMap\pulsar.png" />
+    <EmbeddedResource Include="GalMap\restrictedSectors.png" />
+    <EmbeddedResource Include="GalMap\starCluster.png" />
+    <EmbeddedResource Include="GalMap\stellarRemnant.png" />
+    <EmbeddedResource Include="GalMap\surfacePOI.png" />
+    <EmbeddedResource Include="Panels\Commodities.png" />
+    <EmbeddedResource Include="Panels\EDSM.png" />
+    <EmbeddedResource Include="Panels\EstimatedValues.png" />
+    <EmbeddedResource Include="Panels\Expedition.png" />
+    <EmbeddedResource Include="Panels\Exploration.png" />
+    <EmbeddedResource Include="Panels\Grid.png" />
+    <EmbeddedResource Include="Panels\Journal.png" />
+    <EmbeddedResource Include="Panels\Ledger.png" />
+    <EmbeddedResource Include="Panels\Materials.png" />
+    <EmbeddedResource Include="Panels\Modules.png" />
+    <EmbeddedResource Include="Panels\NotePanel.png" />
+    <EmbeddedResource Include="Panels\Route.png" />
+    <EmbeddedResource Include="Panels\RouteTracker.png" />
+    <EmbeddedResource Include="Panels\Scan.png" />
+    <EmbeddedResource Include="Panels\ScreenShot.png" />
+    <EmbeddedResource Include="Panels\Settings.png" />
+    <EmbeddedResource Include="Panels\ShoppingList.png" />
+    <EmbeddedResource Include="Panels\Spanel.png" />
+    <EmbeddedResource Include="Panels\StarList.png" />
+    <EmbeddedResource Include="Panels\Statistics.png" />
+    <EmbeddedResource Include="Panels\Synthesis.png" />
+    <EmbeddedResource Include="Panels\TravelGrid.png" />
+    <EmbeddedResource Include="Panels\Trilateration.png" />
+    <EmbeddedResource Include="Panels\Trippanel.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Panels\Log.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Panels\Engineering.png" />
+    <EmbeddedResource Include="Panels\MarketData.png" />
+    <EmbeddedResource Include="Panels\StarDistance.png" />
+    <EmbeddedResource Include="Panels\SystemInformation.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Panels\Missions.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Journal\AfmuRepair.png" />
+    <EmbeddedResource Include="Journal\EngineerContribution_MatCommod.png" />
+    <EmbeddedResource Include="Journal\EngineerContribution_Unknown.png" />
+    <EmbeddedResource Include="Journal\FuelScope.png" />
+    <EmbeddedResource Include="Journal\VehicleSwitch_Fighter.png" />
+    <EmbeddedResource Include="Journal\VehicleSwitch_Mothership.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Controls\Map2D\ShowAllStars.png" />
+    <EmbeddedResource Include="Controls\Map2D\ZoomIn.png" />
+    <EmbeddedResource Include="Controls\Map2D\ZoomOut.png" />
+    <EmbeddedResource Include="Controls\Map2D\ZoomToFit.png" />
+    <EmbeddedResource Include="Controls\Map3D\Navigation\CenterOnSystem.png" />
+    <EmbeddedResource Include="Controls\Map3D\FilterDate.png" />
+    <EmbeddedResource Include="Controls\Map3D\MapNames.png" />
+    <EmbeddedResource Include="Controls\Map3D\Stars\DisplayColours.png" />
+    <EmbeddedResource Include="Controls\Map3D\Navigation\LookAtSystem.png" />
+    <EmbeddedResource Include="Controls\Map3D\Recorder\Load.png" />
+    <EmbeddedResource Include="Controls\Map3D\Recorder\Save.png" />
+    <EmbeddedResource Include="Controls\Map3D\Navigation\GoToHomeSystem.png" />
+    <EmbeddedResource Include="Controls\Map3D\Recorder\NewRecordStep.png" />
+    <EmbeddedResource Include="Controls\Map3D\Recorder\RecordStep.png" />
+    <EmbeddedResource Include="Controls\Map3D\Stars\ShowDiscs.png" />
+    <EmbeddedResource Include="Controls\Map3D\Travel\DrawStars.png" />
+    <EmbeddedResource Include="Controls\Map3D\Travel\WhiteStars.png" />
+    <EmbeddedResource Include="Controls\Map3D\Travel\DrawLines.png" />
+    <EmbeddedResource Include="Controls\Map3D\Travel\Menu.png" />
+    <EmbeddedResource Include="Controls\Map3D\Bookmarks\AddRegionBookmark.png" />
+    <EmbeddedResource Include="Controls\Map3D\OrangeDot.png" />
+    <EmbeddedResource Include="Controls\Map3D\Recorder\Pause.png" />
+    <EmbeddedResource Include="Controls\Map3D\Recorder\Play.png" />
+    <EmbeddedResource Include="Controls\Map3D\Recorder\Record.png" />
+    <EmbeddedResource Include="Controls\Map3D\Bookmarks\ShowBookmarks.png" />
+    <EmbeddedResource Include="Controls\Map3D\Stars\ShowNames.png" />
+    <EmbeddedResource Include="Controls\Map3D\Bookmarks\ShowNotemarks.png" />
+    <EmbeddedResource Include="Controls\Map3D\Filter\ShowAllStars.png" />
+    <EmbeddedResource Include="Controls\Map3D\Filter\ShowPopSystems.png" />
+    <EmbeddedResource Include="Controls\Map3D\Recorder\Clear.png" />
+    <EmbeddedResource Include="Controls\Map3D\Navigation\GoForwardOnJump.png" />
+    <EmbeddedResource Include="Controls\Map3D\Grid\Coords.png" />
+    <EmbeddedResource Include="Controls\Map3D\EliteMovement.png" />
+    <EmbeddedResource Include="Controls\Map3D\Grid\FineGrid.png" />
+    <EmbeddedResource Include="Controls\Map3D\Navigation\GoBackward.png" />
+    <EmbeddedResource Include="Controls\Map3D\Navigation\GoForward.png" />
+    <EmbeddedResource Include="Controls\Map3D\Grid\Grid.png" />
+    <EmbeddedResource Include="Controls\Map3D\Help.png" />
+    <EmbeddedResource Include="Controls\Map3D\Navigation\LastKnownPosition.png" />
+    <EmbeddedResource Include="Controls\Map3D\Perspective.png" />
+    <EmbeddedResource Include="Controls\Map3D\Navigation\GoToTarget.png" />
+    <EmbeddedResource Include="Controls\Map3D\Bookmarks\Menu.png" />
+    <EmbeddedResource Include="Controls\Map3D\Filter\Menu.png" />
+    <EmbeddedResource Include="Controls\Map3D\GalObjects.png" />
+    <EmbeddedResource Include="Controls\Map3D\Stars\Menu.png" />
+    <EmbeddedResource Include="Controls\Map3D\Navigation\GoToHistorySelection.png" />
+    <EmbeddedResource Include="Controls\Map3D\Recorder\Menu.png" />
+    <EmbeddedResource Include="Controls\Map3D\YellowDot.png" />
+    <EmbeddedResource Include="Controls\UCContainer\Remove.png" />
+    <EmbeddedResource Include="Controls\UCContainer\Panels.png" />
+    <EmbeddedResource Include="Controls\UCContainer\Tile.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Controls\DateTimePicker\Calendar.png" />
+    <EmbeddedResource Include="Controls\Expedition\ShowOnMap.png" />
+    <EmbeddedResource Include="Controls\Expedition\New.png" />
+    <EmbeddedResource Include="Controls\Expedition\ImportFile.png" />
+    <EmbeddedResource Include="Controls\Expedition\ImportRoute.png" />
+    <EmbeddedResource Include="Controls\Expedition\Delete.png" />
+    <EmbeddedResource Include="Controls\Expedition\Save.png" />
+    <EmbeddedResource Include="Controls\Expedition\Export.png" />
+    <EmbeddedResource Include="Controls\Exploration\Delete.png" />
+    <EmbeddedResource Include="Controls\Exploration\Export.png" />
+    <EmbeddedResource Include="Controls\Exploration\ImportFile.png" />
+    <EmbeddedResource Include="Controls\Exploration\ImportSphere.png" />
+    <EmbeddedResource Include="Controls\Exploration\Load.png" />
+    <EmbeddedResource Include="Controls\Exploration\New.png" />
+    <EmbeddedResource Include="Controls\Exploration\Save.png" />
+    <EmbeddedResource Include="Controls\JournalGrid\ExportToExcel.png" />
+    <EmbeddedResource Include="Controls\JournalGrid\Journal.png" />
+    <EmbeddedResource Include="Controls\JournalGrid\Popout.png" />
+    <EmbeddedResource Include="Controls\Main\Addons\EditLastActionPack.png" />
+    <EmbeddedResource Include="Controls\Main\Addons\ManageAddOns.png" />
+    <EmbeddedResource Include="Controls\Main\Addons\StopCurrentAction.png" />
+    <EmbeddedResource Include="Controls\Main\Admin\DeleteDupFSDJumps.png" />
+    <EmbeddedResource Include="Controls\Main\Admin\EDDBSystemsSync.png" />
+    <EmbeddedResource Include="Controls\Main\Admin\ClearEDSMIDs.png" />
+    <EmbeddedResource Include="Controls\Main\Admin\SendUnsyncedEDDN.png" />
+    <EmbeddedResource Include="Controls\Main\Admin\EDSMSystemsSync.png" />
+    <EmbeddedResource Include="Controls\Main\Addons\ConfigureAddOnActions.png" />
+    <EmbeddedResource Include="Controls\Main\Admin\RescanJournals.png" />
+    <EmbeddedResource Include="Controls\Main\Admin\ShowLogFiles.png" />
+    <EmbeddedResource Include="Controls\Main\Admin\ReadNetLogs.png" />
+    <EmbeddedResource Include="Controls\Main\Admin\ExportVisitedStars.png" />
+    <EmbeddedResource Include="Controls\Main\Admin\ResetHistory.png" />
+    <EmbeddedResource Include="Controls\Main\Toolbar\SyncEDSM.png" />
+    <EmbeddedResource Include="Controls\Main\Toolbar\Open2DMap.png" />
+    <EmbeddedResource Include="Controls\Main\Toolbar\Open3DMap.png" />
+    <EmbeddedResource Include="Controls\Main\Toolbar\EditAddons.png" />
+    <EmbeddedResource Include="Controls\Main\Toolbar\ManageAddOns.png" />
+    <EmbeddedResource Include="Controls\Main\Toolbar\Popouts.png" />
+    <EmbeddedResource Include="Controls\Main\Toolbar\Refresh.png" />
+    <EmbeddedResource Include="Controls\Main\Help\CheckForNewRelease.png" />
+    <EmbeddedResource Include="Controls\Main\Help\DiscordChat.png" />
+    <EmbeddedResource Include="Controls\Main\Help\FrontierForumThread.png" />
+    <EmbeddedResource Include="Controls\Main\Help\Github.png" />
+    <EmbeddedResource Include="Controls\Main\Help\SafeModeHelp.png" />
+    <EmbeddedResource Include="Controls\Main\Help\ReportIssue.png" />
+    <EmbeddedResource Include="Controls\Main\Help\Help.png" />
+    <EmbeddedResource Include="Controls\Main\Help\About.png" />
+    <EmbeddedResource Include="Controls\Main\Tools\Exit.png" />
+    <EmbeddedResource Include="Controls\Main\Tools\Popouts\Menu.png" />
+    <EmbeddedResource Include="Controls\Main\Tools\Settings.png" />
+    <EmbeddedResource Include="Controls\Main\Tools\Open2DMap.png" />
+    <EmbeddedResource Include="Controls\Main\Tools\Open3DMap.png" />
+    <EmbeddedResource Include="Controls\Main\Tools\Popouts\ShowAllInTaskbar.png" />
+    <EmbeddedResource Include="Controls\Main\Tools\Popouts\DisableTransparency.png" />
+    <EmbeddedResource Include="Controls\Map2D\Save.png" />
+    <EmbeddedResource Include="Controls\RollUpPanel\PinDown.png" />
+    <EmbeddedResource Include="Controls\RollUpPanel\PinUp.png" />
+    <EmbeddedResource Include="Controls\Route\ExportToExcel.png" />
+    <EmbeddedResource Include="Controls\Scan\ExportToExcel.png" />
+    <EmbeddedResource Include="Controls\Scan\FetchEDSMBodies.png" />
+    <EmbeddedResource Include="Controls\Scan\ShowAllMaterials.png" />
+    <EmbeddedResource Include="Controls\Scan\ShowMoons.png" />
+    <EmbeddedResource Include="Controls\Scan\ShowOverlays.png" />
+    <EmbeddedResource Include="Controls\Scan\ShowRareMaterials.png" />
+    <EmbeddedResource Include="Controls\Scan\SizeLarge.png" />
+    <EmbeddedResource Include="Controls\Scan\SizeMedium.png" />
+    <EmbeddedResource Include="Controls\Scan\SizeSmall.png" />
+    <EmbeddedResource Include="Controls\Scan\SizeTiny.png" />
+    <EmbeddedResource Include="Controls\StarList\EDSM.png" />
+    <EmbeddedResource Include="Controls\StarList\ExportToExcel.png" />
+    <EmbeddedResource Include="Controls\StarList\History.png" />
+    <EmbeddedResource Include="Controls\StatsTime\Graph.png" />
+    <EmbeddedResource Include="Controls\StatsTime\Planets.png" />
+    <EmbeddedResource Include="Controls\StatsTime\Stars.png" />
+    <EmbeddedResource Include="Controls\StatsTime\Text.png" />
+    <EmbeddedResource Include="Controls\TabStrip\ArrowLeft.png" />
+    <EmbeddedResource Include="Controls\TabStrip\ArrowRight.png" />
+    <EmbeddedResource Include="Controls\TabStrip\PanelList.png" />
+    <EmbeddedResource Include="Controls\TabStrip\Popout.png" />
+    <EmbeddedResource Include="Controls\TabStrip\NoPanelSelected.png" />
+    <EmbeddedResource Include="Controls\TravelGrid\ExportToExcel.png" />
+    <EmbeddedResource Include="Controls\TravelGrid\History.png" />
+    <EmbeddedResource Include="Controls\TravelGrid\Popout.png" />
+    <EmbeddedResource Include="Controls\Trilateration\RemoveAll.png" />
+    <EmbeddedResource Include="Controls\Trilateration\RemoveUnused.png" />
+    <EmbeddedResource Include="Controls\Trilateration\ShowOnMap.png" />
+    <EmbeddedResource Include="Controls\Trilateration\StartNew.png" />
+    <EmbeddedResource Include="Controls\Trilateration\SubmitDistances.png" />
+    <EmbeddedResource Include="Controls\Map3D\Bookmarks\Noted.png" />
+    <EmbeddedResource Include="Controls\Map3D\Bookmarks\Star.png" />
+    <EmbeddedResource Include="Controls\Map3D\Bookmarks\Target.png" />
+    <EmbeddedResource Include="Controls\Map3D\Bookmarks\Region.png" />
+    <EmbeddedResource Include="Controls\Map3D\Markers\Selected.png" />
+    <EmbeddedResource Include="Controls\Map3D\Recorder\PausePlay.png" />
+    <EmbeddedResource Include="Controls\Map3D\Recorder\PauseRecord.png" />
+    <EmbeddedResource Include="Controls\Map3D\Recorder\StopPlay.png" />
+    <EmbeddedResource Include="Controls\Map3D\Recorder\StopRecord.png" />
+    <EmbeddedResource Include="Controls\Scan\Bodies\Barycentre.png" />
+    <EmbeddedResource Include="Controls\Scan\Bodies\Belt.png" />
+    <EmbeddedResource Include="Controls\Scan\Bodies\Landable.png" />
+    <EmbeddedResource Include="Controls\Scan\Bodies\HighValue.png" />
+    <EmbeddedResource Include="Controls\Scan\Bodies\Material.png" />
+    <EmbeddedResource Include="Controls\Scan\Bodies\MaterialMore.png" />
+    <EmbeddedResource Include="Controls\Scan\Bodies\RingOnly.png" />
+    <EmbeddedResource Include="Controls\Scan\Bodies\RingGap.png" />
+    <EmbeddedResource Include="Controls\Scan\Bodies\Terraformable.png" />
+    <EmbeddedResource Include="Controls\Scan\Bodies\Volcanism.png" />
+    <EmbeddedResource Include="Controls\SPanel\ResizeColumn.png" />
+    <EmbeddedResource Include="Controls\TravelGrid\FlagStart.png" />
+    <EmbeddedResource Include="Controls\TravelGrid\FlagStop.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Panels\ScanGrid.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Controls\EDSM\ExportToExcel.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Controls\Modules\ShowOnCoriolis.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ExtendedControls\ExtendedControls.csproj">
+      <Project>{2049403f-f4c7-45e6-b777-6390c78e4d2b}</Project>
+      <Name>ExtendedControls</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Controls\Main\Admin\SendUnsyncedEGO.png" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

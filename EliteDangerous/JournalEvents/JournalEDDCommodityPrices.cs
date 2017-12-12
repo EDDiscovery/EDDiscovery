@@ -51,8 +51,6 @@ namespace EliteDangerousCore.JournalEvents
         public string Faction { get; private set; }
         public List<CCommodities> Commodities { get; private set; }
 
-        public override System.Drawing.Bitmap Icon { get { return EliteDangerous.Properties.Resources.commodities; } }
-
         public override void FillInformation(out string summary, out string info, out string detailed) //V
         {
             summary = EventTypeStr.SplitCapsWord();

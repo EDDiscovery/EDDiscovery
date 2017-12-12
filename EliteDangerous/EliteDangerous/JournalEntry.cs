@@ -13,6 +13,7 @@
  * 
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
+using EDDiscovery.Icons;
 using EliteDangerousCore.DB;
 using EliteDangerousCore.JournalEvents;
 using Newtonsoft.Json.Linq;
@@ -21,6 +22,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
 using System.Diagnostics;
+using System.Drawing;
 using System.Globalization;
 using System.Linq;
 using System.Text;
@@ -179,6 +181,15 @@ namespace EliteDangerousCore
 
         EDDItemSet = 2000,
         EDDCommodityPrices = 2010,
+
+        RestockVehicle_SRV = 10750,
+        RestockVehicle_Fighter = 10751,
+        ShieldState_ShieldsUp = 10830,
+        ShieldState_ShieldsDown = 10831,
+        VehicleSwitch_Mothership = 10950,
+        VehicleSwitch_Fighter = 10951,
+        EngineerContribution_Unknown = 10235,
+        EngineerContribution_MatCommod = 10236,
     }
 
     public enum CombatRank
@@ -346,11 +357,27 @@ namespace EliteDangerousCore
             return typedict;
         }
 
+        public static IReadOnlyDictionary<JournalTypeEnum, Image> JournalTypeIcons { get; } = new IconGroup<JournalTypeEnum>("Journal");
+
         #endregion
 
         #region Formatting control and Icons
 
-        public abstract System.Drawing.Bitmap Icon { get; }
+        protected virtual JournalTypeEnum IconEventType
+        {
+            get
+            {
+                return EventTypeID;
+            }
+        }
+
+        public virtual System.Drawing.Image Icon
+        {
+            get
+            {
+                return JournalTypeIcons[this.IconEventType];
+            }
+        }
 
         public abstract void FillInformation(out string summary, out string info, out string detailed);
 

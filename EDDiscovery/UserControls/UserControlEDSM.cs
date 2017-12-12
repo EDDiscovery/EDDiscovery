@@ -307,6 +307,5 @@ namespace EDDiscovery.UserControls
                 }
             }
         }
-
     }
 }

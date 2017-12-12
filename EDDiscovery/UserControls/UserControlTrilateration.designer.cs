@@ -215,7 +215,7 @@ namespace EDDiscovery.UserControls
             // toolStripButtonSubmitDistances
             // 
             this.toolStripButtonSubmitDistances.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
-            this.toolStripButtonSubmitDistances.Image = global::EDDiscovery.Properties.Resources.toolStripButtonSubmitDistances;
+            this.toolStripButtonSubmitDistances.Image = global::EDDiscovery.Icons.Controls.Trilateration_SubmitDistances;
             this.toolStripButtonSubmitDistances.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonSubmitDistances.Name = "toolStripButtonSubmitDistances";
             this.toolStripButtonSubmitDistances.Size = new System.Drawing.Size(118, 22);
@@ -224,7 +224,7 @@ namespace EDDiscovery.UserControls
             // 
             // toolStripButtonNew
             // 
-            this.toolStripButtonNew.Image = global::EDDiscovery.Properties.Resources.toolStripButtonNew_Image;
+            this.toolStripButtonNew.Image = global::EDDiscovery.Icons.Controls.Trilateration_StartNew;
             this.toolStripButtonNew.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonNew.Name = "toolStripButtonNew";
             this.toolStripButtonNew.Size = new System.Drawing.Size(76, 22);
@@ -240,7 +240,7 @@ namespace EDDiscovery.UserControls
             // toolStripButtonRemoveUnused
             // 
             this.toolStripButtonRemoveUnused.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButtonRemoveUnused.Image = global::EDDiscovery.Properties.Resources.toolStripButtonRemoveUnused_Image;
+            this.toolStripButtonRemoveUnused.Image = global::EDDiscovery.Icons.Controls.Trilateration_RemoveUnused;
             this.toolStripButtonRemoveUnused.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonRemoveUnused.Name = "toolStripButtonRemoveUnused";
             this.toolStripButtonRemoveUnused.Size = new System.Drawing.Size(23, 22);
@@ -251,7 +251,7 @@ namespace EDDiscovery.UserControls
             // toolStripButtonRemoveAll
             // 
             this.toolStripButtonRemoveAll.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButtonRemoveAll.Image = global::EDDiscovery.Properties.Resources.toolStripButtonRemoveAll_Image;
+            this.toolStripButtonRemoveAll.Image = global::EDDiscovery.Icons.Controls.Trilateration_RemoveAll;
             this.toolStripButtonRemoveAll.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonRemoveAll.Name = "toolStripButtonRemoveAll";
             this.toolStripButtonRemoveAll.Size = new System.Drawing.Size(23, 22);
@@ -262,7 +262,7 @@ namespace EDDiscovery.UserControls
             // toolStripButtonMap
             // 
             this.toolStripButtonMap.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButtonMap.Image = global::EDDiscovery.Properties.Resources.toolStripButtonMap_Image;
+            this.toolStripButtonMap.Image = global::EDDiscovery.Icons.Controls.Trilateration_ShowOnMap;
             this.toolStripButtonMap.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonMap.Name = "toolStripButtonMap";
             this.toolStripButtonMap.Size = new System.Drawing.Size(23, 22);

@@ -32,8 +32,6 @@ namespace EliteDangerousCore.JournalEvents
         }
         public long Cost { get; set; }
 
-        public override System.Drawing.Bitmap Icon { get { return EliteDangerous.Properties.Resources.repairall; } }
-
         public void Ledger(Ledger mcl, DB.SQLiteConnectionUser conn)
         {
             mcl.AddEvent(Id, EventTimeUTC, EventTypeID, "", -Cost);

@@ -100,7 +100,7 @@ namespace EDDiscovery
             // toolStripButtonZoomIn
             // 
             this.toolStripButtonZoomIn.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButtonZoomIn.Image = global::EDDiscovery.Properties.Resources.toolStripButtonZoomIn;
+            this.toolStripButtonZoomIn.Image = global::EDDiscovery.Icons.Controls.Map2D_ZoomIn;
             this.toolStripButtonZoomIn.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonZoomIn.Name = "toolStripButtonZoomIn";
             this.toolStripButtonZoomIn.Size = new System.Drawing.Size(26, 26);
@@ -111,7 +111,7 @@ namespace EDDiscovery
             // toolStripButtonZoomOut
             // 
             this.toolStripButtonZoomOut.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButtonZoomOut.Image = global::EDDiscovery.Properties.Resources.toolStripButtonZoomOut;
+            this.toolStripButtonZoomOut.Image = global::EDDiscovery.Icons.Controls.Map2D_ZoomOut;
             this.toolStripButtonZoomOut.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonZoomOut.Name = "toolStripButtonZoomOut";
             this.toolStripButtonZoomOut.Size = new System.Drawing.Size(26, 26);
@@ -122,7 +122,7 @@ namespace EDDiscovery
             // toolStripButtonZoomtoFit
             // 
             this.toolStripButtonZoomtoFit.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButtonZoomtoFit.Image = global::EDDiscovery.Properties.Resources.toolStripButtonZoomtoFit;
+            this.toolStripButtonZoomtoFit.Image = global::EDDiscovery.Icons.Controls.Map2D_ZoomToFit;
             this.toolStripButtonZoomtoFit.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonZoomtoFit.Name = "toolStripButtonZoomtoFit";
             this.toolStripButtonZoomtoFit.Size = new System.Drawing.Size(26, 26);
@@ -134,7 +134,7 @@ namespace EDDiscovery
             // 
             this.toolStripButtonStars.CheckOnClick = true;
             this.toolStripButtonStars.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButtonStars.Image = global::EDDiscovery.Properties.Resources.star;
+            this.toolStripButtonStars.Image = global::EDDiscovery.Icons.Controls.Map2D_ShowAllStars;
             this.toolStripButtonStars.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonStars.Name = "toolStripButtonStars";
             this.toolStripButtonStars.Size = new System.Drawing.Size(26, 26);
@@ -156,7 +156,7 @@ namespace EDDiscovery
             // buttonSave
             // 
             this.buttonSave.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonSave.Image = global::EDDiscovery.Properties.Resources.save;
+            this.buttonSave.Image = global::EDDiscovery.Icons.Controls.Map2D_Save;
             this.buttonSave.Location = new System.Drawing.Point(954, 0);
             this.buttonSave.Name = "buttonSave";
             this.buttonSave.Size = new System.Drawing.Size(30, 28);

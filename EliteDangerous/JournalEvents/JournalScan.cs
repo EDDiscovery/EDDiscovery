@@ -577,198 +577,50 @@ namespace EliteDangerousCore.JournalEvents
 
         public System.Drawing.Image GetStarTypeImage()           // give image and description to star class
         {
-            System.Drawing.Image ret = EliteDangerous.Properties.Resources.Star_K1IV;
-
-            switch (StarTypeID)       // see journal, section 11.2
-            {
-                case EDStar.O:
-                    return EliteDangerous.Properties.Resources.O;
-
-                case EDStar.B:
-                    // also have an B1V
-                    return EliteDangerous.Properties.Resources.B6V_Blueish;
-
-                case EDStar.A:
-                    // also have an A3V..
-                    return EliteDangerous.Properties.Resources.A9III_White;
-
-                case EDStar.F:
-                    return EliteDangerous.Properties.Resources.F5VAB;
-
-                case EDStar.G:
-                    // also have a G8V
-                    return EliteDangerous.Properties.Resources.G1IV;
-
-                case EDStar.K:
-                    // also have a K0V
-                    return EliteDangerous.Properties.Resources.Star_K1IV;
-                case EDStar.M:
-                    // also have a M1VA
-                    return EliteDangerous.Properties.Resources.M5V;
-
-                // dwarfs
-                case EDStar.L:
-                    return EliteDangerous.Properties.Resources.L3V;
-                case EDStar.T:
-                    return EliteDangerous.Properties.Resources.T4V;
-                case EDStar.Y:
-                    return EliteDangerous.Properties.Resources.Y2;
-
-                // proto stars
-                case EDStar.AeBe:    // Herbig
-                    return EliteDangerous.Properties.Resources.DefaultStar;
-                case EDStar.TTS:     // seen in logs
-                    return EliteDangerous.Properties.Resources.DefaultStar;
-
-                // wolf rayet
-                case EDStar.W:
-                case EDStar.WN:
-                case EDStar.WNC:
-                case EDStar.WC:
-                case EDStar.WO:
-                    return EliteDangerous.Properties.Resources.WolfRayet;
-
-                // Carbon
-                case EDStar.CS:
-                case EDStar.C:
-                case EDStar.CN:
-                case EDStar.CJ:
-                case EDStar.CHd:
-                    return EliteDangerous.Properties.Resources.C7III;
-
-                case EDStar.MS: //seen in log https://en.wikipedia.org/wiki/S-type_star
-                    return EliteDangerous.Properties.Resources.M5V;
-
-                case EDStar.S:   // seen in log, data from http://elite-dangerous.wikia.com/wiki/Stars
-                    return EliteDangerous.Properties.Resources.M5V;
-
-                // white dwarf
-                case EDStar.D:
-                case EDStar.DA:
-                case EDStar.DAB:
-                case EDStar.DAO:
-                case EDStar.DAZ:
-                case EDStar.DAV:
-                case EDStar.DB:
-                case EDStar.DBZ:
-                case EDStar.DBV:
-                case EDStar.DO:
-                case EDStar.DOV:
-                case EDStar.DQ:
-                case EDStar.DC:
-                case EDStar.DCV:
-                case EDStar.DX:
-                    return EliteDangerous.Properties.Resources.DA6VII_White;
-
-                case EDStar.N:
-                    return EliteDangerous.Properties.Resources.Neutron_Star;
-
-                case EDStar.H:
-
-                    return EliteDangerous.Properties.Resources.Black_Hole;
-
-                case EDStar.X:
-                    // currently speculative, not confirmed with actual data... in journal
-                    return EliteDangerous.Properties.Resources.Globe;
-
-                // Journal.. really?  need evidence these actually are formatted like this.
-
-                case EDStar.SuperMassiveBlackHole:
-                    return EliteDangerous.Properties.Resources.Black_Hole;
-                case EDStar.A_BlueWhiteSuperGiant:
-                    return EliteDangerous.Properties.Resources.A9III_White;
-                case EDStar.F_WhiteSuperGiant:
-                    return EliteDangerous.Properties.Resources.F5VAB;
-                case EDStar.M_RedSuperGiant:
-                    return EliteDangerous.Properties.Resources.M5V;
-                case EDStar.M_RedGiant:
-                    return EliteDangerous.Properties.Resources.M5V;
-                case EDStar.K_OrangeGiant:
-                    return EliteDangerous.Properties.Resources.K0V;
-                case EDStar.RoguePlanet:
-                    return EliteDangerous.Properties.Resources.Globe;
-
-                default:
-                    return EliteDangerous.Properties.Resources.DefaultStar;
-            }
+            return Bodies.GetStarTypeImage(StarTypeID);
         }
 
         static public System.Drawing.Image GetStarImageNotScanned()
         {
-            return EliteDangerous.Properties.Resources.Globe_yellow;
+            return Bodies.GetStarTypeImage(EDStar.Unknown);
         }
 
         public System.Drawing.Image GetPlanetClassImage()
         {
             if (PlanetClass == null)
             {
-                return EliteDangerous.Properties.Resources.Globe;
+                return GetPlanetImageNotScanned();
             }
 
-            string name = PlanetClass.ToLower();
+            EDPlanet planetclass = PlanetTypeID;
 
-            if (name.Contains("gas"))
-            {
-                if (name.Contains("helium"))
-                    return EliteDangerous.Properties.Resources.Helium_Rich_Gas_Giant1;
-                else if (name.Contains("water"))
-                    return EliteDangerous.Properties.Resources.Gas_giant_water_based_life_Brown3;
-                else if (name.Contains("ammonia"))
-                    return EliteDangerous.Properties.Resources.Gas_giant_ammonia_based_life1;
-                else if (name.Contains("iv"))
-                    return EliteDangerous.Properties.Resources.Class_I_Gas_Giant_Brown2;               // MISSING.
-                else if (name.Contains("iii"))
-                    return EliteDangerous.Properties.Resources.Class_III_Gas_Giant_Blue3;
-                else if (name.Contains("ii"))
-                    return EliteDangerous.Properties.Resources.Class_II_Gas_Giant_Sand1;
-                else if (name.Contains("v"))
-                    return EliteDangerous.Properties.Resources.Class_I_Gas_Giant_Brown2;               // MISSING.
-                else
-                    return EliteDangerous.Properties.Resources.Class_I_Gas_Giant_Brown2;
-            }
-            else if (name.Contains("ammonia"))
-                return EliteDangerous.Properties.Resources.Ammonia_Brown;      // also have orange.
-            else if (name.Contains("earth"))
-                return EliteDangerous.Properties.Resources.Earth_Like_Standard;
-            else if (name.Contains("ice"))
-                return EliteDangerous.Properties.Resources.Rocky_Ice_World_Sol_Titan;
-            else if (name.Contains("icy"))
-                return EliteDangerous.Properties.Resources.Icy_Body_Greenish1;
-            else if (name.Contains("water"))
-            {
-                if (name.Contains("giant"))
-                    return EliteDangerous.Properties.Resources.Water_Giant1;
-                else
-                    return EliteDangerous.Properties.Resources.Water_World_Poles_Cloudless4;
-            }
-            else if (name.Contains("metal"))
+            if (planetclass == EDPlanet.High_metal_content_body || planetclass == EDPlanet.Metal_rich_body)
             {
                 if (AtmosphereProperty == (EDAtmosphereProperty.Hot | EDAtmosphereProperty.Thick))
-                    return EliteDangerous.Properties.Resources.High_metal_content_world_White3;
-
-                if (name.Contains("rich"))
-                    return EliteDangerous.Properties.Resources.metal_rich;
-                else if (nSurfaceTemperature > 700)
-                    return EliteDangerous.Properties.Resources.High_metal_content_world_Lava1;
-                else if (nSurfaceTemperature > 250)
-                    return EliteDangerous.Properties.Resources.High_metal_content_world_Mix3;
-                else
-                    return EliteDangerous.Properties.Resources.High_metal_content_world_Orange8;
+                {
+                    planetclass = EDPlanet.High_metal_content_body_hot_thick;
+                }
+                else if (planetclass == EDPlanet.High_metal_content_body && nSurfaceTemperature > 700)
+                {
+                    planetclass = EDPlanet.High_metal_content_body_700;
+                }
+                else if (planetclass == EDPlanet.High_metal_content_body && nSurfaceTemperature > 250)
+                {
+                    planetclass = EDPlanet.High_metal_content_body_250;
+                }
             }
-            else if (name.Contains("rocky"))
-                return EliteDangerous.Properties.Resources.Rocky_Body_Sand2;
-            else
-                return EliteDangerous.Properties.Resources.Globe;
+
+            return Bodies.GetPlanetClassImage(planetclass);
         }
 
         static public System.Drawing.Image GetPlanetImageNotScanned()
         {
-            return EliteDangerous.Properties.Resources.Globe;
+            return Bodies.GetPlanetClassImage(EDPlanet.Unknown);
         }
 
         static public System.Drawing.Image GetMoonImageNotScanned()
         {
-            return EliteDangerous.Properties.Resources.Globe;
+            return Bodies.GetPlanetClassImage(EDPlanet.Unknown);
         }
 
         public double GetMaterial(string v)
@@ -793,8 +645,6 @@ namespace EliteDangerousCore.JournalEvents
             return AtmosphereComposition[c];
 
         }
-
-        public override System.Drawing.Bitmap Icon { get { return EliteDangerous.Properties.Resources.scan; } }
 
         public bool IsStarNameRelated(string starname, string designation = null)
         {
