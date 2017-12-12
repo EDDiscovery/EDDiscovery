@@ -148,15 +148,10 @@ namespace EDDiscovery.UserControls
                         bdDetails.Append("Landable. ");
                     }
 
-                    if (sn.ScanData.Volcanism != null)
+                    if (sn.ScanData != null && sn.ScanData.BodyName != null && sn.ScanData.Volcanism != null)
                     {
                         bdDetails.Append("Volcanic activities. ");
-                    }
-
-                    if (sn.ScanData.HasMaterials != null)
-                    {
-                        bdDetails.Append("\n" + sn.ScanData.DisplayMaterials());
-                    }
+                    }                                      
 
                     if (sn.ScanData != null && sn.ScanData.BodyName != null && sn.ScanData.IsStar == true)
                     {
