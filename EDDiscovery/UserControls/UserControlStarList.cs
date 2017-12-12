@@ -250,15 +250,43 @@ namespace EDDiscovery.UserControls
                         if (sn.ScanData!=null)
                         {
                             JournalScan sc = sn.ScanData;
-
-                            if (sc.IsStar)
+                                                                                    
+                            if (sc.IsStar) // brief notification for special or uncommon celestial bodies, useful to traverse the history and search for that special body you discovered.
                             {
-                                if (sc.StarTypeID == EDStar.N)
-                                    extrainfo = extrainfo.AppendPrePad(sc.BodyName + " is a neutron star", prefix);
+                                // Sagittarius A* is a special body: is the centre of the Milky Way, and the only one which is classified as a Super Massive Black Hole. As far as we know...                                
+                                if (sc.StarTypeID == EDStar.SuperMassiveBlackHole)
+                                    extrainfo = extrainfo.AppendPrePad(sc.BodyName + " is a super massive black hole", prefix);
+
+                                // black holes
                                 if (sc.StarTypeID == EDStar.H)
                                     extrainfo = extrainfo.AppendPrePad(sc.BodyName + " is a black hole", prefix);
+
+                                // neutron stars
+                                if (sc.StarTypeID == EDStar.N)
+                                    extrainfo = extrainfo.AppendPrePad(sc.BodyName + " is a neutron star", prefix);
+
+                                // white dwarf (D, DA, DAB, DAO, DAZ, DAV, DB, DBZ, DBV, DO, DOV, DQ, DC, DCV, DX)
+                                string WhiteDwarf = "White Dwarf";
+                                if (sc.StarTypeText.Contains(WhiteDwarf))
+                                    extrainfo = extrainfo.AppendPrePad(sc.BodyName + " is a " + sc.StarTypeID + " white dwarf star", prefix);
+
+                                // wolf rayet (W, WN, WNC, WC, WO)
+                                string WolfRayet = "Wolf-Rayet";
+                                if (sc.StarTypeText.Contains(WolfRayet))
+                                    extrainfo = extrainfo.AppendPrePad(sc.BodyName + " is a " + sc.StarTypeID + " wolf-rayet star", prefix);
+                                
+                                // giants. It should recognize all classes of giants.
+                                string Giant = "Giant";
+                                if (sc.StarTypeText.Contains(Giant))
+                                    extrainfo = extrainfo.AppendPrePad(sc.BodyName + " is a " + sc.StarTypeText, prefix);
+
+                                // rogue planets - not sure if they really exists, but they are in the journal, so...
+                                if (sc.StarTypeID == EDStar.RoguePlanet)
+                                    extrainfo = extrainfo.AppendPrePad(sc.BodyName + " is a rogue planet", prefix);
                             }
+
                             else
+
                             {
                                 // Check if a non-star body is a moon or not. We want it to further refine our brief summary in the visited star list.
                                 // To avoid duplicates, we need to apply our filters before on the bodies recognized as a moon, than do the same for the other bodies that do not fulfill that criteria.
@@ -286,8 +314,10 @@ namespace EDDiscovery.UserControls
                                     if (sc.PlanetTypeID == EDPlanet.Ammonia_world)
                                         extrainfo = extrainfo.AppendPrePad(sc.BodyName + " is an ammonia moon", prefix);                                  
                                 }
+
                                 else
-                                // Now, tell us the special state of planets.
+
+                                // Do the same, for all planets
                                 {
                                     // Earth Like planet
                                     if (sc.PlanetTypeID == EDPlanet.Earthlike_body)
@@ -314,8 +344,12 @@ namespace EDDiscovery.UserControls
 
                     total -= node.starnodes.Count;
                     if (total > 0)
-                    {
+                    {   // tell us that a system has other bodies, and how much, beside stars
                         infostr = infostr.AppendPrePad(total.ToStringInvariant() + " Other bod" + ((total > 1) ? "ies" : "y"), ", ");
+                        infostr = infostr.AppendPrePad(extrainfo, prefix);
+                    }
+                    else
+                    {   // we need this to allow the panel to scan also through systems which has only stars
                         infostr = infostr.AppendPrePad(extrainfo, prefix);
                     }
                 }
