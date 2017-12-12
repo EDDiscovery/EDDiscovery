@@ -138,19 +138,25 @@ namespace EDDiscovery.UserControls
                     {
                         bdDetails.Append("Terraformable. ");
                     }
+
+                    if (sn.ScanData != null && sn.ScanData.BodyName != null && sn.ScanData.IsLandable == true)
+                    {
+                        double? g = sn.ScanData.nSurfaceGravity;
+                        double? oneGee_m_s2 = 9.80665;
+                        if (g.HasValue)
+                            g = g / oneGee_m_s2;
+                        string Gg = g.Value.ToString("N1");
+                        bdDetails.Append("Landable, " + "(G: " + Gg + "). ");
+                    }
+
                     if (sn.ScanData != null && sn.ScanData.BodyName != null && sn.ScanData.HasRings == true && sn.ScanData.IsStar == false)
                     {
                         bdDetails.Append("Ringed. ");
                     }
 
-                    if (sn.ScanData != null && sn.ScanData.BodyName != null && sn.ScanData.IsLandable == true)
-                    {
-                        bdDetails.Append("Landable. ");
-                    }
-
                     if (sn.ScanData != null && sn.ScanData.BodyName != null && sn.ScanData.Volcanism != null)
                     {
-                        bdDetails.Append("Volcanic activities. ");
+                        bdDetails.Append("Volcanism. ");
                     }                                      
 
                     if (sn.ScanData != null && sn.ScanData.BodyName != null && sn.ScanData.IsStar == true)
@@ -158,7 +164,7 @@ namespace EDDiscovery.UserControls
                         bdDetails.Append("M:" + sn.ScanData.nStellarMass.Value.ToString("N2") + ", ");
                     }
                                         
-                    // habitable zone
+                    // habitable zone - do not display for black holes.
                     if (sn.ScanData != null && sn.ScanData.BodyName != null && sn.ScanData.HabitableZoneInner != null && sn.ScanData.HabitableZoneOuter != null && sn.ScanData.StarTypeID != EDStar.H)
                     {
                         bdDetails.AppendFormat("Habitable Zone Approx. {0}", sn.ScanData.GetHabZoneStringLs(), (sn.ScanData.HabitableZoneInner.Value).ToString("N2"), (sn.ScanData.HabitableZoneOuter.Value).ToString("N2"));
@@ -167,13 +173,13 @@ namespace EDDiscovery.UserControls
                     // populate the grid                                                          
                     if (sn.ScanData != null && sn.ScanData.BodyName != null && bdClass != null && bdDetails != null && sn.ScanData.IsStar == true)
                     {
-                        Image bdImage = sn.ScanData.GetStarTypeImage(); // if is a star, use the StarTypeImage property
+                        Image bdImage = sn.ScanData.GetStarTypeImage(); // if is a star, use the Star image
                         dataGridViewScangrid.Rows.Add(new object[] { bdImage, sn.ScanData.BodyName, bdClass, bdDetails });
                     }
 
                     if (sn.ScanData != null && sn.ScanData.BodyName != null && bdClass != null && bdDetails != null && sn.ScanData.IsStar == false)
                     {
-                        Image bdImage = sn.ScanData.GetPlanetClassImage(); // is is a planet or a moon, use the PlanetClassImage property
+                        Image bdImage = sn.ScanData.GetPlanetClassImage(); // if is a planet or a moon, use the Planet image
                         dataGridViewScangrid.Rows.Add(new object[] { bdImage, sn.ScanData.BodyName, bdClass, bdDetails });
                     }
                     
