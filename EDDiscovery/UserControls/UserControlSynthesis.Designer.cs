@@ -55,12 +55,12 @@ namespace EDDiscovery.UserControls
             this.Recipe = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.vScrollBarCustomMC = new ExtendedControls.VScrollBarCustom();
             this.panelButtons = new System.Windows.Forms.Panel();
+            this.chkHistoric = new ExtendedControls.CheckBoxCustom();
             this.buttonMaterialFilter = new ExtendedControls.ButtonExt();
             this.buttonFilterLevel = new ExtendedControls.ButtonExt();
             this.buttonRecipeFilter = new ExtendedControls.ButtonExt();
             this.buttonClear = new ExtendedControls.ButtonExt();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
-            this.chkHistoric = new ExtendedControls.CheckBoxCustom();
             this.dataViewScrollerPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewSynthesis)).BeginInit();
             this.panelButtons.SuspendLayout();
@@ -207,6 +207,26 @@ namespace EDDiscovery.UserControls
             this.panelButtons.TabIndex = 2;
             this.toolTip.SetToolTip(this.panelButtons, "Left click and drag on grid to reorder");
             // 
+            // chkHistoric
+            // 
+            this.chkHistoric.AutoSize = true;
+            this.chkHistoric.CheckBoxColor = System.Drawing.Color.Gray;
+            this.chkHistoric.CheckBoxInnerColor = System.Drawing.Color.White;
+            this.chkHistoric.CheckColor = System.Drawing.Color.DarkBlue;
+            this.chkHistoric.FontNerfReduction = 0.5F;
+            this.chkHistoric.ImageButtonDisabledScaling = 0.5F;
+            this.chkHistoric.Location = new System.Drawing.Point(322, 8);
+            this.chkHistoric.MouseOverColor = System.Drawing.Color.CornflowerBlue;
+            this.chkHistoric.Name = "chkHistoric";
+            this.chkHistoric.Size = new System.Drawing.Size(118, 17);
+            this.chkHistoric.TabIndex = 7;
+            this.chkHistoric.Text = "Use Cursor Position";
+            this.chkHistoric.TickBoxReductionSize = 10;
+            this.toolTip.SetToolTip(this.chkHistoric, "When clicked on, use the materials at the cursor to estimate, when off always use" +
+        " the latest materials.");
+            this.chkHistoric.UseVisualStyleBackColor = true;
+            this.chkHistoric.CheckedChanged += new System.EventHandler(this.chkHistoric_CheckedChanged);
+            // 
             // buttonMaterialFilter
             // 
             this.buttonMaterialFilter.Location = new System.Drawing.Point(216, 4);
@@ -214,6 +234,7 @@ namespace EDDiscovery.UserControls
             this.buttonMaterialFilter.Size = new System.Drawing.Size(100, 23);
             this.buttonMaterialFilter.TabIndex = 4;
             this.buttonMaterialFilter.Text = "Filter By Material";
+            this.toolTip.SetToolTip(this.buttonMaterialFilter, "Filter the table by the material type");
             this.buttonMaterialFilter.UseVisualStyleBackColor = true;
             this.buttonMaterialFilter.Click += new System.EventHandler(this.buttonMaterialFilter_Click);
             // 
@@ -224,6 +245,7 @@ namespace EDDiscovery.UserControls
             this.buttonFilterLevel.Size = new System.Drawing.Size(100, 23);
             this.buttonFilterLevel.TabIndex = 3;
             this.buttonFilterLevel.Text = "Filter By Level";
+            this.toolTip.SetToolTip(this.buttonFilterLevel, "Filter the table by the synthesis level");
             this.buttonFilterLevel.UseVisualStyleBackColor = true;
             this.buttonFilterLevel.Click += new System.EventHandler(this.buttonFilterLevel_Click);
             // 
@@ -234,6 +256,7 @@ namespace EDDiscovery.UserControls
             this.buttonRecipeFilter.Size = new System.Drawing.Size(100, 23);
             this.buttonRecipeFilter.TabIndex = 2;
             this.buttonRecipeFilter.Text = "Filter By Synthesis";
+            this.toolTip.SetToolTip(this.buttonRecipeFilter, "Filter the table by the synthesis type");
             this.buttonRecipeFilter.UseVisualStyleBackColor = true;
             this.buttonRecipeFilter.Click += new System.EventHandler(this.buttonRecipeFilter_Click);
             // 
@@ -252,24 +275,6 @@ namespace EDDiscovery.UserControls
             // toolTip
             // 
             this.toolTip.ShowAlways = true;
-            // 
-            // chkHistoric
-            // 
-            this.chkHistoric.AutoSize = true;
-            this.chkHistoric.CheckBoxColor = System.Drawing.Color.Gray;
-            this.chkHistoric.CheckBoxInnerColor = System.Drawing.Color.White;
-            this.chkHistoric.CheckColor = System.Drawing.Color.DarkBlue;
-            this.chkHistoric.FontNerfReduction = 0.5F;
-            this.chkHistoric.ImageButtonDisabledScaling = 0.5F;
-            this.chkHistoric.Location = new System.Drawing.Point(322, 8);
-            this.chkHistoric.MouseOverColor = System.Drawing.Color.CornflowerBlue;
-            this.chkHistoric.Name = "chkHistoric";
-            this.chkHistoric.Size = new System.Drawing.Size(128, 17);
-            this.chkHistoric.TabIndex = 7;
-            this.chkHistoric.Text = "Use Historic Materials";
-            this.chkHistoric.TickBoxReductionSize = 10;
-            this.chkHistoric.UseVisualStyleBackColor = true;
-            this.chkHistoric.CheckedChanged += new System.EventHandler(this.chkHistoric_CheckedChanged);
             // 
             // UserControlSynthesis
             // 
