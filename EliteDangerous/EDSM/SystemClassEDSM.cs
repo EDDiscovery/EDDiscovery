@@ -625,7 +625,7 @@ namespace EliteDangerousCore.EDSM
                 throw new OperationCanceledException();
             }
 
-            return updatecount + insertcount;
+            return count;
         }
 
         private static long ParseEDSMUpdateSystemsReader(JsonTextReader jr, ref string date, ref bool outoforder, bool removenonedsmids, Func<bool> cancelRequested, Action<int, string> reportProgress, bool useCache = true, bool useTempSystems = false)
