@@ -172,6 +172,7 @@ namespace EDDiscovery
 
             // open all the major tabs except the built in ones
             Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " Creating major tabs");
+            MaterialCommodityDB.SetUpInitialTable();
             CreateTabs();
 
             Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " Map manager");
@@ -208,7 +209,6 @@ namespace EDDiscovery
             {
                 Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " EDF Load");
 
-                MaterialCommodityDB.SetUpInitialTable();
                 Controller.PostInit_Loaded();
 
                 ShowInfoPanel("Loading. Please wait!", true);
