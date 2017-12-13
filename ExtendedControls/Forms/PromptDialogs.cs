@@ -30,7 +30,7 @@ namespace ExtendedControls
             ITheme theme = ThemeableFormsInstance.Instance;
 
             int vstart = theme.WindowsFrame ? 20 : 40;
-            int vspacing = multiline ? 60 : 40;
+            int vspacing = multiline ? 80 : 40;
             int lw = 100;
             int lx = 10;
             int tx = 10 + lw + 8;
@@ -70,8 +70,8 @@ namespace ExtendedControls
                     Top = y,
                     Width = prompt.Width - 50 - tx,
                     Text = (def != null && i < def.Length) ? def[i] : "",
+                    Multiline = multiline,      // set before height!
                     Height = vspacing - 20,
-                    Multiline = multiline,
                     ScrollBars = (multiline) ? ScrollBars.Vertical : ScrollBars.None,
                     WordWrap = multiline
                 };
