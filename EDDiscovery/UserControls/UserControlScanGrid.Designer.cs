@@ -15,7 +15,7 @@
  */
 namespace EDDiscovery.UserControls
 {
-    partial class UserControlEstimatedValues
+    partial class UserControlScanGrid
     {
         /// <summary> 
         /// Required designer variable.
@@ -43,19 +43,22 @@ namespace EDDiscovery.UserControls
         /// </summary>
         private void InitializeComponent()
         {
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             this.dataViewScrollerPanel2 = new ExtendedControls.DataViewScrollerPanel();
+            this.dataGridViewScangrid = new System.Windows.Forms.DataGridView();
             this.vScrollBarCustom2 = new ExtendedControls.VScrollBarCustom();
-            this.dataGridViewEstimatedValues = new System.Windows.Forms.DataGridView();
-            this.BodyName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.EstValue = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colImage = new System.Windows.Forms.DataGridViewImageColumn();
+            this.colName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colClass = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colBriefing = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataViewScrollerPanel2.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewEstimatedValues)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewScangrid)).BeginInit();
             this.SuspendLayout();
             // 
             // dataViewScrollerPanel2
             // 
+            this.dataViewScrollerPanel2.Controls.Add(this.dataGridViewScangrid);
             this.dataViewScrollerPanel2.Controls.Add(this.vScrollBarCustom2);
-            this.dataViewScrollerPanel2.Controls.Add(this.dataGridViewEstimatedValues);
             this.dataViewScrollerPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataViewScrollerPanel2.InternalMargin = new System.Windows.Forms.Padding(0);
             this.dataViewScrollerPanel2.Location = new System.Drawing.Point(0, 0);
@@ -64,6 +67,29 @@ namespace EDDiscovery.UserControls
             this.dataViewScrollerPanel2.Size = new System.Drawing.Size(572, 572);
             this.dataViewScrollerPanel2.TabIndex = 25;
             this.dataViewScrollerPanel2.VerticalScrollBarDockRight = true;
+            // 
+            // dataGridViewScangrid
+            // 
+            this.dataGridViewScangrid.AllowUserToAddRows = false;
+            this.dataGridViewScangrid.AllowUserToDeleteRows = false;
+            this.dataGridViewScangrid.AllowUserToResizeRows = false;
+            this.dataGridViewScangrid.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.dataGridViewScangrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridViewScangrid.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.colImage,
+            this.colName,
+            this.colClass,
+            this.colBriefing});
+            this.dataGridViewScangrid.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.dataGridViewScangrid.Location = new System.Drawing.Point(0, 0);
+            this.dataGridViewScangrid.Name = "dataGridViewScangrid";
+            this.dataGridViewScangrid.ReadOnly = true;
+            this.dataGridViewScangrid.RowHeadersVisible = false;
+            this.dataGridViewScangrid.RowTemplate.Height = 36;
+            this.dataGridViewScangrid.RowTemplate.ReadOnly = true;
+            this.dataGridViewScangrid.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.dataGridViewScangrid.Size = new System.Drawing.Size(552, 572);
+            this.dataGridViewScangrid.TabIndex = 23;
             // 
             // vScrollBarCustom2
             // 
@@ -77,13 +103,13 @@ namespace EDDiscovery.UserControls
             this.vScrollBarCustom2.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.vScrollBarCustom2.HideScrollBar = true;
             this.vScrollBarCustom2.LargeChange = 0;
-            this.vScrollBarCustom2.Location = new System.Drawing.Point(552, 21);
+            this.vScrollBarCustom2.Location = new System.Drawing.Point(552, 23);
             this.vScrollBarCustom2.Maximum = -1;
             this.vScrollBarCustom2.Minimum = 0;
             this.vScrollBarCustom2.MouseOverButtonColor = System.Drawing.Color.Green;
             this.vScrollBarCustom2.MousePressedButtonColor = System.Drawing.Color.Red;
             this.vScrollBarCustom2.Name = "vScrollBarCustom2";
-            this.vScrollBarCustom2.Size = new System.Drawing.Size(20, 551);
+            this.vScrollBarCustom2.Size = new System.Drawing.Size(20, 549);
             this.vScrollBarCustom2.SliderColor = System.Drawing.Color.DarkGray;
             this.vScrollBarCustom2.SmallChange = 1;
             this.vScrollBarCustom2.TabIndex = 24;
@@ -95,47 +121,52 @@ namespace EDDiscovery.UserControls
             this.vScrollBarCustom2.Value = -1;
             this.vScrollBarCustom2.ValueLimited = -1;
             // 
-            // dataGridViewEstimatedValues
+            // colImage
             // 
-            this.dataGridViewEstimatedValues.AllowUserToAddRows = false;
-            this.dataGridViewEstimatedValues.AllowUserToDeleteRows = false;
-            this.dataGridViewEstimatedValues.AllowUserToResizeRows = false;
-            this.dataGridViewEstimatedValues.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            this.dataGridViewEstimatedValues.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridViewEstimatedValues.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.BodyName,
-            this.EstValue});
-            this.dataGridViewEstimatedValues.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.dataGridViewEstimatedValues.Location = new System.Drawing.Point(0, 0);
-            this.dataGridViewEstimatedValues.Name = "dataGridViewEstimatedValues";
-            this.dataGridViewEstimatedValues.RowHeadersVisible = false;
-            this.dataGridViewEstimatedValues.ScrollBars = System.Windows.Forms.ScrollBars.None;
-            this.dataGridViewEstimatedValues.Size = new System.Drawing.Size(552, 572);
-            this.dataGridViewEstimatedValues.TabIndex = 23;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle1.NullValue = null;
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.colImage.DefaultCellStyle = dataGridViewCellStyle1;
+            this.colImage.FillWeight = 5F;
+            this.colImage.HeaderText = "";
+            this.colImage.Name = "colImage";
+            this.colImage.ReadOnly = true;
+            this.colImage.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.colImage.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
             // 
-            // BodyName
+            // colName
             // 
-            this.BodyName.FillWeight = 70F;
-            this.BodyName.HeaderText = "Body Name";
-            this.BodyName.MinimumWidth = 50;
-            this.BodyName.Name = "BodyName";
+            this.colName.FillWeight = 25F;
+            this.colName.HeaderText = "Name";
+            this.colName.MinimumWidth = 20;
+            this.colName.Name = "colName";
+            this.colName.ReadOnly = true;
             // 
-            // EstValue
+            // colClass
             // 
-            this.EstValue.FillWeight = 15F;
-            this.EstValue.HeaderText = "Est Value";
-            this.EstValue.MinimumWidth = 50;
-            this.EstValue.Name = "EstValue";
+            this.colClass.FillWeight = 25F;
+            this.colClass.HeaderText = "Class";
+            this.colClass.MinimumWidth = 20;
+            this.colClass.Name = "colClass";
+            this.colClass.ReadOnly = true;
             // 
-            // UserControlEstimatedValues
+            // colBriefing
+            // 
+            this.colBriefing.FillWeight = 40F;
+            this.colBriefing.HeaderText = "Briefing";
+            this.colBriefing.MinimumWidth = 30;
+            this.colBriefing.Name = "colBriefing";
+            this.colBriefing.ReadOnly = true;
+            // 
+            // UserControlScanGrid
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.dataViewScrollerPanel2);
-            this.Name = "UserControlEstimatedValues";
+            this.Name = "UserControlScanGrid";
             this.Size = new System.Drawing.Size(572, 572);
             this.dataViewScrollerPanel2.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewEstimatedValues)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewScangrid)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -143,8 +174,10 @@ namespace EDDiscovery.UserControls
         #endregion
         private ExtendedControls.DataViewScrollerPanel dataViewScrollerPanel2;
         private ExtendedControls.VScrollBarCustom vScrollBarCustom2;
-        private System.Windows.Forms.DataGridView dataGridViewEstimatedValues;
-        private System.Windows.Forms.DataGridViewTextBoxColumn BodyName;
-        private System.Windows.Forms.DataGridViewTextBoxColumn EstValue;
+        private System.Windows.Forms.DataGridView dataGridViewScangrid;
+        private System.Windows.Forms.DataGridViewImageColumn colImage;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colName;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colClass;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colBriefing;
     }
 }
