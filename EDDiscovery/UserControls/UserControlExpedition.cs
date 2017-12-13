@@ -39,7 +39,6 @@ namespace EDDiscovery.UserControls
 
         private List<SavedRouteClass> savedroute;
         private SavedRouteClass currentroute;
-        private EDSMClass edsm;
         private Rectangle _dragBox;
         private int _dragRowIndex;
         private bool _suppressCombo = false;
@@ -61,7 +60,6 @@ namespace EDDiscovery.UserControls
 
         public override void Init()
         {
-            edsm = new EDSMClass();
             discoveryform.OnNewCalculatedRoute += _discoveryForm_OnNewCalculatedRoute;
             discoveryform.OnNewStarsForExpedition += Discoveryform_OnNewStarsForExpedition;
         }
@@ -316,10 +314,13 @@ namespace EDDiscovery.UserControls
 
             if (route.Count >= 2)
             {
+                this.Cursor = Cursors.WaitCursor;
                 discoveryform.history.FillInPositionsFSDJumps();
-                map.Prepare(route[0], EDDConfig.Instance.HomeSystem, route[0], 400 / CalculateRouteMaxDistFromOrigin(), discoveryform.history.FilterByTravel);
+                map.Prepare(route[0], EDDConfig.Instance.HomeSystem, route[0], 400 / CalculateRouteMaxDistFromOrigin(route), discoveryform.history.FilterByTravel);
                 map.SetPlanned(route);
+                map.MoveToSystem(route[0]);
                 map.Show();
+                this.Cursor = Cursors.Default;
             }
             else
             {
@@ -696,7 +697,7 @@ namespace EDDiscovery.UserControls
 
             if (obj == null)
                 return;
-            ISystem sc = SystemClassDB.GetSystem((string)obj);
+            ISystem sc = GetSystem((string)obj);
             if (sc == null)
             {
                 ExtendedControls.MessageBoxTheme.Show(FindForm(), "Unknown system, system is without co-ordinates", "Edit bookmark", MessageBoxButtons.OK);
@@ -748,40 +749,21 @@ namespace EDDiscovery.UserControls
             txtP2PDIstance.Text = "";
         }
 
-        private float CalculateRouteMaxDistFromOrigin()
+        private static float CalculateRouteMaxDistFromOrigin(List<ISystem> systems)
         {
-            if (dataGridViewRouteSystems.Rows.Count < 2)
+            var locSystems = systems?.Where(s => s != null && s.HasCoordinate).Distinct().ToList();
+            if (locSystems == null || locSystems.Count < 2)
                 return 100;
 
-            double maxdist = 25;
-            var systems = dataGridViewRouteSystems.Rows.OfType<DataGridViewRow>()
-                .Where(r => r.Index < dataGridViewRouteSystems.NewRowIndex && r.Cells[0].Tag != null)
-                .Select(r => r.Cells[0].Tag as ISystemBase)
-                .Where(s => s.HasCoordinate);
-            var sys0 = systems.FirstOrDefault();
-
-            if (sys0 != null)
-            {
-                foreach (var sys in systems)
-                {
-                    double dist = SystemClassDB.Distance(sys0, sys);
-
-                    if (dist > maxdist)
-                    {
-                        maxdist = dist;
-                    }
-                }
-            }
-
-            return (float)maxdist;
+            return (float)locSystems
+                .Except(new[] { locSystems[0] })
+                .Select(s => SystemClassDB.Distance(locSystems[0], s))
+                .Max();
         }
 
-        private ISystemBase GetSystem(string sysname)
+        private ISystem GetSystem(string sysname)
         {
-            ISystemBase sys;
-            if (!SystemClassDB.TryGetSystem(sysname, out sys, true) && edsm.IsKnownSystem(sysname))
-                sys = new SystemClass(sysname);
-
+            SystemClassDB.TryGetSystem(sysname, out ISystem sys, true);
             return sys;
         }
 
@@ -1017,11 +999,8 @@ namespace EDDiscovery.UserControls
             {
                 string sysname = e.FormattedValue.ToString();
                 var row = dataGridViewRouteSystems.Rows[e.RowIndex];
-                var cell = dataGridViewRouteSystems[e.ColumnIndex, e.RowIndex];
 
-                ISystem sys = SystemClassDB.GetSystem(sysname);
-
-                if (sysname != "" && sys == null && !edsm.IsKnownSystem(sysname))
+                if (sysname != "" && GetSystem(sysname) == null)
                 {
                     row.ErrorText = "System not known to EDSM";
                 }
