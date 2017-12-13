@@ -169,8 +169,12 @@ namespace EDDiscovery.UserControls
         HistoryEntry last_he = null;
         private void Display(HistoryEntry he, HistoryList hl)
         {
-            last_he = he;
-            Display();
+            if (isHistoric)
+            {
+                // this event isn't reliably disconnecting when calling SetHistoric(false) - not sure why
+                last_he = he;
+                Display();
+            }
         }
         
         private void Display()
