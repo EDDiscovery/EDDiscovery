@@ -34,8 +34,9 @@ namespace EDDiscovery.UserControls
     public partial class UserControlScanGrid : UserControlCommonBase
     {
         private HistoryEntry last_he = null;
+        private string DbColumnSave { get { return ("ScanGridPanel") + ((displaynumber > 0) ? displaynumber.ToString() : "") + "DGVCol"; } }
 
-            public UserControlScanGrid()
+        public UserControlScanGrid()
         {
             InitializeComponent();
             var corner = dataGridViewScangrid.TopLeftHeaderCell; // work around #1487
@@ -61,6 +62,11 @@ namespace EDDiscovery.UserControls
             discoveryform.OnNewEntry += NewEntry;
         }
 
+        public override void LoadLayout()
+        {
+            DGVLoadColumnLayout(dataGridViewScangrid, DbColumnSave);
+        }
+
         public override void ChangeCursorType(IHistoryCursor thc)
         {
             uctg.OnTravelSelectionChanged -= Display;
@@ -70,6 +76,7 @@ namespace EDDiscovery.UserControls
 
         public override void Closing()
         {
+            DGVSaveColumnLayout(dataGridViewScangrid, DbColumnSave);
             uctg.OnTravelSelectionChanged -= Display;
             discoveryform.OnNewEntry -= NewEntry;
         }
@@ -108,7 +115,6 @@ namespace EDDiscovery.UserControls
                 return;
             }
 
-
             StarScan.SystemNode last_sn = discoveryform.history.starscan.FindSystem(last_he.System, true);
 
             SetControlText((last_sn == null) ? "No Scan" : ("Brief Scan Summary for " + last_sn.system.name));
@@ -121,12 +127,9 @@ namespace EDDiscovery.UserControls
                     all_nodes = Flatten(starnode, all_nodes);
                 }
 
-
                 // flatten tree of scan nodes to prepare for listing
                 foreach (StarScan.ScanNode sn in all_nodes)
                 {
-
-                    
                     // create the grid data
 
                     // populate the body class
@@ -144,13 +147,21 @@ namespace EDDiscovery.UserControls
                     {
                         bdClass.Append(" Moon");
                     }
-                                        
 
+                    StringBuilder bdDist = new StringBuilder();
                     // populate the detailed information
                     StringBuilder bdDetails = new StringBuilder();
 
                     if (sn.ScanData != null && sn.ScanData.BodyName != null)
                     {
+                        if (sn.ScanData.nSemiMajorAxis.HasValue)
+                        {
+                            if (sn.ScanData.IsStar || sn.ScanData.nSemiMajorAxis.Value > EliteDangerousCore.JournalEvents.JournalScan.oneAU_m / 10)
+                                bdDist.AppendFormat("{0:0.00}AU", (sn.ScanData.nSemiMajorAxis.Value / EliteDangerousCore.JournalEvents.JournalScan.oneAU_m));
+                            else
+                                bdDist.AppendFormat("{0}km", (sn.ScanData.nSemiMajorAxis.Value / 1000).ToString("N1"));
+                        }
+
                         // append the terraformable state to the planet class
                         if (sn.ScanData.Terraformable == true)
                             bdDetails.Append("Terraformable. ");
@@ -158,12 +169,15 @@ namespace EDDiscovery.UserControls
                         // tell us that a bodie is landable, and shows its gravity
                         if (sn.ScanData.IsLandable == true)
                         {
-                            double? g = sn.ScanData.nSurfaceGravity;
-                            double? oneGee_m_s2 = 9.80665;
-                            if (g.HasValue)
-                                g = g / oneGee_m_s2;
-                            string Gg = g.Value.ToString("N1");
-                            bdDetails.Append("Landable, " + "(G: " + Gg + "). ");
+                            string Gg = "";
+
+                            if (sn.ScanData.nSurfaceGravity.HasValue)
+                            {
+                                double? g = sn.ScanData.nSurfaceGravity / EliteDangerousCore.JournalEvents.JournalScan.oneGee_m_s2;
+                                Gg = " (G: " + g.Value.ToString("N1") + ")";
+                            }
+
+                            bdDetails.Append("Landable" + Gg + ". ");
                         }
 
                         // have some ring?
@@ -189,12 +203,12 @@ namespace EDDiscovery.UserControls
                         if (sn.ScanData.IsStar == true)
                         {
                             Image bdImage = sn.ScanData.GetStarTypeImage(); // if is a star, use the Star image
-                            dataGridViewScangrid.Rows.Add(new object[] { bdImage, sn.ScanData.BodyName, bdClass, bdDetails });
+                            dataGridViewScangrid.Rows.Add(new object[] { bdImage, sn.ScanData.BodyName, bdClass, bdDist, bdDetails });
                         }
                         if (sn.ScanData.IsStar == false)
                         {                           
                             Image bdImage = sn.ScanData.GetPlanetClassImage(); // use the correct image in case of planets and moons
-                            dataGridViewScangrid.Rows.Add(new object[] { bdImage, sn.ScanData.BodyName, bdClass, bdDetails });                            
+                            dataGridViewScangrid.Rows.Add(new object[] { bdImage, sn.ScanData.BodyName, bdClass , bdDist, bdDetails });                            
                         }                        
                     }
                     

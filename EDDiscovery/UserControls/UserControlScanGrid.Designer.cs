@@ -50,6 +50,7 @@ namespace EDDiscovery.UserControls
             this.colImage = new System.Windows.Forms.DataGridViewImageColumn();
             this.colName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colClass = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Distance = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colBriefing = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataViewScrollerPanel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewScangrid)).BeginInit();
@@ -79,6 +80,7 @@ namespace EDDiscovery.UserControls
             this.colImage,
             this.colName,
             this.colClass,
+            this.Distance,
             this.colBriefing});
             this.dataGridViewScangrid.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.dataGridViewScangrid.Location = new System.Drawing.Point(0, 0);
@@ -103,13 +105,13 @@ namespace EDDiscovery.UserControls
             this.vScrollBarCustom2.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.vScrollBarCustom2.HideScrollBar = true;
             this.vScrollBarCustom2.LargeChange = 0;
-            this.vScrollBarCustom2.Location = new System.Drawing.Point(552, 23);
+            this.vScrollBarCustom2.Location = new System.Drawing.Point(552, 21);
             this.vScrollBarCustom2.Maximum = -1;
             this.vScrollBarCustom2.Minimum = 0;
             this.vScrollBarCustom2.MouseOverButtonColor = System.Drawing.Color.Green;
             this.vScrollBarCustom2.MousePressedButtonColor = System.Drawing.Color.Red;
             this.vScrollBarCustom2.Name = "vScrollBarCustom2";
-            this.vScrollBarCustom2.Size = new System.Drawing.Size(20, 549);
+            this.vScrollBarCustom2.Size = new System.Drawing.Size(20, 551);
             this.vScrollBarCustom2.SliderColor = System.Drawing.Color.DarkGray;
             this.vScrollBarCustom2.SmallChange = 1;
             this.vScrollBarCustom2.TabIndex = 24;
@@ -127,8 +129,10 @@ namespace EDDiscovery.UserControls
             dataGridViewCellStyle1.NullValue = null;
             dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
             this.colImage.DefaultCellStyle = dataGridViewCellStyle1;
-            this.colImage.FillWeight = 5F;
+            this.colImage.FillWeight = 30.45685F;
             this.colImage.HeaderText = "";
+            this.colImage.ImageLayout = System.Windows.Forms.DataGridViewImageCellLayout.Stretch;
+            this.colImage.MinimumWidth = 20;
             this.colImage.Name = "colImage";
             this.colImage.ReadOnly = true;
             this.colImage.Resizable = System.Windows.Forms.DataGridViewTriState.False;
@@ -136,7 +140,7 @@ namespace EDDiscovery.UserControls
             // 
             // colName
             // 
-            this.colName.FillWeight = 25F;
+            this.colName.FillWeight = 96.26541F;
             this.colName.HeaderText = "Name";
             this.colName.MinimumWidth = 20;
             this.colName.Name = "colName";
@@ -144,17 +148,24 @@ namespace EDDiscovery.UserControls
             // 
             // colClass
             // 
-            this.colClass.FillWeight = 25F;
+            this.colClass.FillWeight = 48.13271F;
             this.colClass.HeaderText = "Class";
             this.colClass.MinimumWidth = 20;
             this.colClass.Name = "colClass";
             this.colClass.ReadOnly = true;
             // 
+            // Distance
+            // 
+            this.Distance.FillWeight = 28.87962F;
+            this.Distance.HeaderText = "Distance";
+            this.Distance.Name = "Distance";
+            this.Distance.ReadOnly = true;
+            // 
             // colBriefing
             // 
-            this.colBriefing.FillWeight = 40F;
+            this.colBriefing.FillWeight = 96.26541F;
             this.colBriefing.HeaderText = "Briefing";
-            this.colBriefing.MinimumWidth = 30;
+            this.colBriefing.MinimumWidth = 20;
             this.colBriefing.Name = "colBriefing";
             this.colBriefing.ReadOnly = true;
             // 
@@ -178,6 +189,7 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.DataGridViewImageColumn colImage;
         private System.Windows.Forms.DataGridViewTextBoxColumn colName;
         private System.Windows.Forms.DataGridViewTextBoxColumn colClass;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Distance;
         private System.Windows.Forms.DataGridViewTextBoxColumn colBriefing;
     }
 }
