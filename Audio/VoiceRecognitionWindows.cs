@@ -84,7 +84,7 @@ namespace AudioExtensions
         {
             if (engine != null && engine.AudioState != AudioState.Stopped)
             {
-                System.Diagnostics.Debug.WriteLine(Environment.TickCount + " Voice Recognition Stopping");
+                System.Diagnostics.Debug.WriteLine(Environment.TickCount % 10000+ " Voice Recognition Stopping");
                 engine.RecognizeAsyncCancel();
 
                 if (waitfor)
@@ -96,7 +96,7 @@ namespace AudioExtensions
                         ExtendedControls.MessageBoxTheme.Show("Voice recon did not stop", "Voice Audio Problem");
                 }
 
-                System.Diagnostics.Debug.WriteLine(Environment.TickCount + "Voice Recognition Stopped");
+                System.Diagnostics.Debug.WriteLine(Environment.TickCount % 10000 + " Voice Recognition Stopped");
             }
         }
 

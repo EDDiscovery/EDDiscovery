@@ -572,6 +572,10 @@ namespace EDDiscovery.Actions
 
             inputdevicesactions.Stop();
             inputdevices.Clear();
+
+            voicerecon.Close();
+
+            System.Diagnostics.Debug.WriteLine(Environment.TickCount % 10000 + " AC Closedown complete");
         }
 
         public override void LogLine(string s)
@@ -755,13 +759,13 @@ namespace EDDiscovery.Actions
 
         private void Voicerecon_SpeechRecognised(string text, float confidence)
         {
-            System.Diagnostics.Debug.WriteLine("Recognised " + text + " " + confidence.ToStringInvariant("0.0"));
+            System.Diagnostics.Debug.WriteLine(Environment.TickCount % 10000 + " Recognised " + text + " " + confidence.ToStringInvariant("0.0"));
             ActionRun(ActionEventEDList.onVoiceInput, new ConditionVariables(new string[] { "VoiceInput", text, "VoiceConfidence", (confidence*100F).ToStringInvariant("0.00") }));
         }
 
         private void Voicerecon_SpeechNotRecognised(string text, float confidence)
         {
-            System.Diagnostics.Debug.WriteLine("Failed recognition " + text + " " + confidence.ToStringInvariant("0.00"));
+            System.Diagnostics.Debug.WriteLine(Environment.TickCount % 10000 + " Failed recognition " + text + " " + confidence.ToStringInvariant("0.00"));
             ActionRun(ActionEventEDList.onVoiceInputFailed, new ConditionVariables(new string[] { "VoiceInput", text, "VoiceConfidence", (confidence*100F).ToStringInvariant("0.00") }));
         }
 
