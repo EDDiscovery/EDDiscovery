@@ -45,11 +45,13 @@ namespace EDDiscovery.UserControls
         private string DbLevelFilterSave { get { return "EngineeringGridControlLevelFilter" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
         private string DbUpgradeFilterSave { get { return "EngineeringGridControlUpgradeFilter" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
         private string DbMaterialFilterSave { get { return "EngineeringGridControlMaterialFilter" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
+        private string DbHistoricMatsSave { get { return "EngineeringGridHistoricMaterials" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
 
         int[] Order;        // order
         int[] Wanted;       // wanted, in order terms
 
         internal bool isEmbedded = false;
+        internal bool isHistoric = false;
         public Action<List<Tuple<MaterialCommoditiesList.Recipe, int>>> OnDisplayComplete;  // called when display complete, for use by other UCs using this
 
         #region Init
@@ -114,24 +116,46 @@ namespace EDDiscovery.UserControls
                 row.Visible = false;
             }
 
+            isHistoric = SQLiteDBClass.GetSettingBool(DbHistoricMatsSave, false);
+            chkHistoric.Checked = isHistoric;
+            chkHistoric.Visible = !isEmbedded;
+
             discoveryform.OnNewEntry += Discoveryform_OnNewEntry;
-            uctg.OnTravelSelectionChanged += Display;
+            if (isHistoric) uctg.OnTravelSelectionChanged += Display;
         }
 
         public override void ChangeCursorType(IHistoryCursor thc)
         {
-            uctg.OnTravelSelectionChanged -= Display;
-            uctg = thc;
-            uctg.OnTravelSelectionChanged += Display;
+            if (isHistoric)
+            {
+                uctg.OnTravelSelectionChanged -= Display;
+                uctg = thc;
+                uctg.OnTravelSelectionChanged += Display;
+            }
         }
 
         #endregion
 
         #region Display
+        internal void SetHistoric(bool newVal)
+        {
+            isHistoric = newVal;
+            if (isHistoric)
+            {
+                uctg.OnTravelSelectionChanged += Display;
+                last_he = uctg.GetCurrentHistoryEntry;
+            }
+            else
+            {
+                uctg.OnTravelSelectionChanged -= Display;
+                last_he = discoveryform.history.GetLast;
+            }
+            Display();
+        }
 
         public override void InitialDisplay()
         {
-            last_he = uctg.GetCurrentHistoryEntry;
+            last_he = isHistoric ? uctg.GetCurrentHistoryEntry : discoveryform.history.GetLast;
             Display();
         }
 
@@ -145,10 +169,14 @@ namespace EDDiscovery.UserControls
         HistoryEntry last_he = null;
         private void Display(HistoryEntry he, HistoryList hl)
         {
-            last_he = he;
-            Display();
+            if (isHistoric)
+            {
+                // this event isn't reliably disconnecting when calling SetHistoric(false) - not sure why
+                last_he = he;
+                Display();
+            }
         }
-
+        
         private void Display()
         {
             //DONT turn on sorting in the future, thats not how it works.  You click and drag to sort manually since it gives you
@@ -288,6 +316,7 @@ namespace EDDiscovery.UserControls
 
             SQLiteDBClass.PutSettingString(DbOSave, Order.ToString(","));
             SQLiteDBClass.PutSettingString(DbWSave, Wanted.ToString(","));
+            SQLiteDBClass.PutSettingBool(DbHistoricMatsSave, isHistoric);
         }
 
         #endregion
@@ -422,6 +451,11 @@ namespace EDDiscovery.UserControls
                 Wanted[rno] = 0;
             }
             Display();
+        }
+
+        private void chkHistoric_CheckedChanged(object sender, EventArgs e)
+        {
+            SetHistoric(chkHistoric.Checked);
         }
     }
 }

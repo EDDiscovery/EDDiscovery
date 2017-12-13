@@ -37,10 +37,12 @@ namespace EDDiscovery.UserControls
         private string DbRecipeFilterSave { get { return "SynthesisRecipeFilter" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
         private string DbLevelFilterSave { get { return "SynthesisLevelFilter" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
         private string DbMaterialFilterSave { get { return "SynthesisMaterialFilter" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
+        private string DbHistoricMatsSave { get { return "SynthesisHistoricMaterials" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
 
         int[] Order;        // order
         int[] Wanted;       // wanted, in order terms
         internal bool isEmbedded = false;
+        internal bool isHistoric = false;
 
         private List<Tuple<string, string>> matLookUp;
         RecipeFilterSelector rfs;
@@ -106,39 +108,66 @@ namespace EDDiscovery.UserControls
                 }
             }
 
+            isHistoric = SQLiteDBClass.GetSettingBool(DbHistoricMatsSave, false);
+            chkHistoric.Checked = isHistoric;
+            chkHistoric.Visible = !isEmbedded;
+
             discoveryform.OnNewEntry += Discoveryform_OnNewEntry;
-            uctg.OnTravelSelectionChanged += Display;
+            if (isHistoric) uctg.OnTravelSelectionChanged += Display;
         }
 
         public override void ChangeCursorType(IHistoryCursor thc)
         {
-            uctg.OnTravelSelectionChanged -= Display;
-            uctg = thc;
-            uctg.OnTravelSelectionChanged += Display;
+            if (isHistoric)
+            {
+                uctg.OnTravelSelectionChanged -= Display;
+                uctg = thc;
+                uctg.OnTravelSelectionChanged += Display;
+            }
         }
 
         #endregion
 
         #region Display
+        internal void SetHistoric(bool newVal)
+        {
+            isHistoric = newVal;
+            if (isHistoric)
+            {
+                uctg.OnTravelSelectionChanged += Display;
+                last_he = uctg.GetCurrentHistoryEntry;
+            }
+            else
+            {
+                uctg.OnTravelSelectionChanged -= Display;
+                last_he = discoveryform.history.GetLast;
+            }
+            Display();
+        }
 
         public override void InitialDisplay()
         {
-            last_he = uctg.GetCurrentHistoryEntry;
+            last_he = isHistoric ? uctg.GetCurrentHistoryEntry : discoveryform.history.GetLast;
             Display();
         }
 
         private void Discoveryform_OnNewEntry(HistoryEntry he, HistoryList hl)
         {
             last_he = he;
-            if (he.journalEntry is IMaterialCommodityJournalEntry)
+            //touchdown and liftoff ensure shopping list refresh in case displaying landed planet ma
+            if (he.journalEntry is IMaterialCommodityJournalEntry || he.journalEntry.EventTypeID == JournalTypeEnum.Touchdown || he.journalEntry.EventTypeID == JournalTypeEnum.Liftoff  || he.IsLocOrJump)
                 Display();
         }
 
         HistoryEntry last_he = null;
         private void Display(HistoryEntry he, HistoryList hl)
         {
-            last_he = he;
-            Display();
+            if (isHistoric)
+            {
+                // this event isn't reliably disconnecting when calling SetHistoric(false) - not sure why
+                last_he = he;
+                Display();
+            }
         }
 
         private void Display()
@@ -263,6 +292,7 @@ namespace EDDiscovery.UserControls
 
             SQLiteDBClass.PutSettingString(DbOSave, Order.ToString(","));
             SQLiteDBClass.PutSettingString(DbWSave, Wanted.ToString(","));
+            SQLiteDBClass.PutSettingBool(DbHistoricMatsSave, isHistoric);
         }
 
         #endregion
@@ -382,6 +412,11 @@ namespace EDDiscovery.UserControls
             Button b = sender as Button;
             mfs.FilterButton(DbMaterialFilterSave, b,
                              discoveryform.theme.TextBackColor, discoveryform.theme.TextBlockColor, this.FindForm());
+        }
+
+        private void chkHistoric_CheckedChanged(object sender, EventArgs e)
+        {
+            SetHistoric(chkHistoric.Checked);
         }
     }
 }
