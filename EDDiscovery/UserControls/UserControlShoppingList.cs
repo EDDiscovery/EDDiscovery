@@ -36,6 +36,7 @@ namespace EDDiscovery.UserControls
         private bool showMaxInjections;
         private bool showPlanetMats;
         private bool showListAvailability;
+        private bool useHistoric = false;
         private string DbShowInjectionsSave { get { return "ShoppingListShowFSD" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
         private string DbShowAllMatsLandedSave { get { return "ShoppingListShowPlanetMats" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
         private string DbHighlightAvailableMats { get { return "ShoppingListHighlightAvailable" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
@@ -54,6 +55,7 @@ namespace EDDiscovery.UserControls
             //Can use display number for it, because their names for db save are unique between engineering and synthesis.
             userControlEngineering.isEmbedded = true;
             userControlEngineering.Init(discoveryform, uctg, displaynumber);
+            useHistoric = userControlEngineering.isHistoric;
 
             userControlSynthesis.isEmbedded = true;
             userControlSynthesis.Init(discoveryform, uctg, displaynumber);
@@ -90,6 +92,7 @@ namespace EDDiscovery.UserControls
             showMaxFSDInjectionsToolStripMenuItem.Checked = showMaxInjections;
             showAllMaterialsWhenLandedToolStripMenuItem.Checked = showPlanetMats;
             showAvailableMaterialsInListWhenLandedToolStripMenuItem.Checked = showListAvailability;
+            useHistoricMaterialCountsToolStripMenuItem.Checked = useHistoric;
             Display();
         }
 
@@ -252,6 +255,14 @@ namespace EDDiscovery.UserControls
         private void showAvailableMaterialsInListWhenLandedToolStripMenuItem_Click(object sender, EventArgs e)
         {
             showListAvailability = ((ToolStripMenuItem)sender).Checked;
+            Display();
+        }
+
+        private void useHistoricMaterialCountsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            useHistoric = ((ToolStripMenuItem)sender).Checked;
+            userControlSynthesis.SetHistoric(useHistoric);
+            userControlEngineering.SetHistoric(useHistoric);
             Display();
         }
     }
