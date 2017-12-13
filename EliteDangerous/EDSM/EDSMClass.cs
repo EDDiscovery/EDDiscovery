@@ -270,8 +270,16 @@ namespace EliteDangerousCore.EDSM
                     break;
                 }
 
-                updates += SystemClassEDSM.ParseEDSMUpdateSystemsString(json, ref lstsyst, ref outoforder, false, cancelRequested, reportProgress, false);
-                lstsystdate += TimeSpan.FromHours(12);
+                long cnt = SystemClassEDSM.ParseEDSMUpdateSystemsString(json, ref lstsyst, ref outoforder, false, cancelRequested, reportProgress, false);
+                updates += cnt;
+                if (cnt < 100)
+                {
+                    lstsystdate += TimeSpan.FromHours(12);
+                }
+                else
+                {
+                    lstsystdate = DateTime.Parse(lstsyst, CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal | DateTimeStyles.AdjustToUniversal);
+                }
             }
             logLine($"System download complete");
 
