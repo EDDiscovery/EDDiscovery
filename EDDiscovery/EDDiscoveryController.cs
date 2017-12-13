@@ -177,6 +177,8 @@ namespace EDDiscovery
                 LogLineHighlight("Closing down, please wait..");
                 Console.WriteLine("Close.. safe close launched");
                 closeRequested.Set();
+                journalqueuedelaytimer.Change(Timeout.Infinite, Timeout.Infinite);
+                journalqueuedelaytimer.Dispose();
             }
         }
         #endregion
