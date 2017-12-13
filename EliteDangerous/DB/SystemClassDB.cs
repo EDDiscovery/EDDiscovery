@@ -483,26 +483,22 @@ namespace EliteDangerousCore.DB
         }
 
         /// <summary>
-        /// Get an <see cref="ISystemBase"/> from <paramref name="systemName"/> optionally checking for merged systems if no exact match is found. Returns true if the system was found.
+        /// Get an <see cref="ISystem"/> from <paramref name="systemName"/> optionally checking for merged systems if no exact match is found. Returns true if the system was found.
         /// </summary>
         /// <param name="systemName">The human-readable name for the system to be checked.</param>
         /// <param name="result">Will be <c>null</c> if the return value is <c>false</c>. Otherwise, will be the system known as the supplied <paramref name="systemName"/>.</param>
         /// <param name="checkMergers">If <c>true</c>, and no system exactly matches <paramref name="systemName"/>, check to see if it has was merged to another system.</param>
         /// <param name="cn">The database connection to use.</param>
         /// <returns><c>true</c> if the system is known (with the system in <paramref name="result"/>), <c>false</c> otherwise.</returns>
-        public static bool TryGetSystem(string systemName, out ISystemBase result, bool checkMergers = false, SQLiteConnectionSystem cn = null)
+        public static bool TryGetSystem(string systemName, out ISystem result, bool checkMergers = false, SQLiteConnectionSystem cn = null)
         {
             result = null;
             if (string.IsNullOrWhiteSpace(systemName))  // No way José.
                 return false;
 
             result = GetSystem(systemName, cn);
-            if (result == null && checkMergers)
-            {
-                ISystemBase s;
-                if (privTryGetMergedSystem(systemName, out s, cn))
-                    result = s;
-            }
+            if (result == null && checkMergers && privTryGetMergedSystem(systemName, out ISystem s, cn))
+                result = s;
 
             return (result != null);
         }
@@ -1293,7 +1289,7 @@ namespace EliteDangerousCore.DB
         /// <param name="result">Will be <c>null</c> if the return value is <c>false</c>. Otherwise, will be the system that was once named <paramref name="systemName"/>.</param>
         /// <param name="cn">The database connection to use.</param>
         /// <returns><c>true</c> if the system is known by a different name (with the system in <paramref name="result"/>), <c>false</c> otherwise.</returns>
-        private static bool privTryGetMergedSystem(string systemName, out ISystemBase result, SQLiteConnectionSystem cn = null)
+        private static bool privTryGetMergedSystem(string systemName, out ISystem result, SQLiteConnectionSystem cn = null)
         {
             result = null;
             bool createdCn = false;
