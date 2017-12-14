@@ -895,48 +895,57 @@ namespace EliteDangerousCore
             return (T)GetLast(before, e => e is T && (filter == null || filter((T)e)));
         }
 
-        public static void RemoveGeneratedKeys(JObject obj, bool removeLocalised)
+        public static JObject RemoveEDDGeneratedKeys(JObject obj)      // obj not changed
         {
+            JObject jcopy = null;
+
             foreach (JProperty prop in obj.Properties().ToList())
             {
-                if (prop.Name.StartsWith("EDD") || (removeLocalised && prop.Name.EndsWith("_Localised")))
+                if (prop.Name.StartsWith("EDD") || prop.Name.Equals("StarPosFromEDSM"))//|| (removeLocalised && prop.Name.EndsWith("_Localised")))
                 {
-                    obj.Remove(prop.Name);
+                    if (jcopy == null)      // only pay the expense if it has one of the entries in it
+                        jcopy = (JObject)obj.DeepClone();
+
+                    jcopy.Remove(prop.Name);
                 }
             }
 
-            obj.Remove("StarPosFromEDSM");
+            return jcopy != null ? jcopy : obj;
         }
 
+        // optionally pass in json for speed reasons.  Guaranteed that ent1jo and 2 are not altered by the compare!
         public static bool AreSameEntry(JournalEntry ent1, JournalEntry ent2, JObject ent1jo = null, JObject ent2jo = null)
         {
             if (ent1jo == null && ent1 != null)
             {
-                ent1jo = GetJson(ent1.Id);
-                if (ent1jo != null)
-                {
-                    RemoveGeneratedKeys(ent1jo, false);
-                }
+                ent1jo = GetJson(ent1.Id);      // read from db the json since we don't have it
             }
 
             if (ent2jo == null && ent2 != null)
             {
-                ent2jo = GetJson(ent2.Id);
-                if (ent2jo != null)
-                {
-                    RemoveGeneratedKeys(ent2jo, false);
-                }
+                ent2jo = GetJson(ent2.Id);      // read from db the json since we don't have it
             }
 
             if (ent1jo == null || ent2jo == null)
             {
-                return false;
+                return false;       
             }
 
-            return JToken.DeepEquals(ent1jo, ent2jo);
+            //System.Diagnostics.Debug.WriteLine("Compare " + ent1jo.ToString() + " with " + ent2jo.ToString());
+
+            // Fixed problem #1518, Prev. the remove was only done on GetJson's above.  
+            // during a scan though, ent1jo is filled in, so the remove was not being performed on ent1jo.
+            // So if your current map colour was different in FSD entries then
+            // the newly created entry would differ from the db version by map colour - causing #1518
+            // secondly, this function should not alter ent1jo/ent2jo as its a compare function.  it was.  Change RemoveEDDGenKeys to copy if it alters it.
+
+            JObject ent1jorm = RemoveEDDGeneratedKeys(ent1jo);     // remove keys, but don't alter originals as they can be used later 
+            JObject ent2jorm = RemoveEDDGeneratedKeys(ent2jo);
+
+            return JToken.DeepEquals(ent1jorm, ent2jorm);
         }
 
-        public static List<JournalEntry> FindEntry(JournalEntry ent, JObject entjo = null)
+        public static List<JournalEntry> FindEntry(JournalEntry ent, JObject entjo = null)      // entjo is not changed.
         {
             List<JournalEntry> entries = new List<JournalEntry>();
             if (entjo == null)
@@ -944,8 +953,7 @@ namespace EliteDangerousCore
                 entjo = GetJson(ent.Id);
             }
 
-            entjo = (JObject)entjo.DeepClone();
-            RemoveGeneratedKeys(entjo, false);
+            entjo = RemoveEDDGeneratedKeys(entjo);
 
             using (SQLiteConnectionUser cn = new SQLiteConnectionUser(utc: true))
             {
