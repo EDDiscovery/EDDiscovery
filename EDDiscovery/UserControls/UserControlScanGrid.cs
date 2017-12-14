@@ -42,19 +42,12 @@ namespace EDDiscovery.UserControls
             InitializeComponent();
             var corner = dataGridViewScangrid.TopLeftHeaderCell; // work around #1487
 
-            // dataGridView setup
-            dataGridViewScangrid.AllowUserToAddRows = false;
-            dataGridViewScangrid.AllowUserToDeleteRows = false;
-            dataGridViewScangrid.AllowUserToOrderColumns = true;
-            dataGridViewScangrid.ReadOnly = true;
-            dataGridViewScangrid.MultiSelect = true;
-            dataGridViewScangrid.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.None;
-            dataGridViewScangrid.AllowUserToResizeRows = false;
-            dataGridViewScangrid.RowTemplate.Height = 35;
-            DataGridViewColumn colImage = dataGridViewScangrid.Columns[0];
-            colImage.Width = 35;
-            colImage.AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
-            dataGridViewScangrid.Columns[0].DefaultCellStyle.NullValue = null; // Replace the ugly red 'X' image with an empty image.            
+            // dataGridView setup - the rule is, use the designer for most properties.. only do these here since they are so buried or not available.
+
+            // this allows the row to grow to accomodate the text.. with a min height of 32.
+            dataGridViewScangrid.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
+            dataGridViewScangrid.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.DisplayedCells;     // NEW! appears to work https://msdn.microsoft.com/en-us/library/74b2wakt(v=vs.110).aspx
+            dataGridViewScangrid.RowTemplate.MinimumHeight = 32;
         }
 
         public override void Init()
@@ -134,13 +127,12 @@ namespace EDDiscovery.UserControls
                 // flatten tree of scan nodes to prepare for listing
                 foreach (StarScan.ScanNode sn in all_nodes)
                 {
-                    // create the grid data
-
-                    // populate the body class
-                    StringBuilder bdClass = new StringBuilder();
-
                     if (sn.ScanData != null && sn.ScanData.BodyName != null)
                     {
+                        StringBuilder bdClass = new StringBuilder();
+                        StringBuilder bdDist = new StringBuilder();
+                        StringBuilder bdDetails = new StringBuilder();
+
                         if (sn.ScanData.PlanetClass != null)
                             bdClass.Append(sn.ScanData.PlanetClass);
                         if (sn.ScanData.StarTypeText != null)
@@ -150,20 +142,12 @@ namespace EDDiscovery.UserControls
                         {
                             bdClass.Append(" Moon");
                         }
-                    }
 
-                    StringBuilder bdDist = new StringBuilder();
-                    // populate the detailed information
-                    StringBuilder bdDetails = new StringBuilder();
-
-                    if (sn.ScanData != null && sn.ScanData.BodyName != null)
-                    {   
                         if (sn.ScanData.IsStar && sn.ScanData.BodyName.EndsWith(" A"))
                         {
                             bdDist.AppendFormat("Main Star");
                         }
-                        else
-                        if (sn.ScanData.nSemiMajorAxis.HasValue)
+                        else if (sn.ScanData.nSemiMajorAxis.HasValue)
                         {
                             if (sn.ScanData.IsStar || sn.ScanData.nSemiMajorAxis.Value > JournalScan.oneAU_m / 10)
                                 bdDist.AppendFormat("{0:0.00}AU ({1:0.00}ls)", (sn.ScanData.nSemiMajorAxis.Value / JournalScan.oneAU_m), sn.ScanData.nSemiMajorAxis.Value / JournalScan.oneLS_m);
@@ -218,27 +202,33 @@ namespace EDDiscovery.UserControls
                         }
                             
                             // tell us that there is some volcanic activity
-                            if (sn.ScanData.Volcanism != null)
+                        if (sn.ScanData.Volcanism != null)
                             bdDetails.Append("Volcanism. ");
 
                         // print the main atmospheric composition
                         if (sn.ScanData.Atmosphere != null && sn.ScanData.Atmosphere != "None")
-                            bdDetails.Append(sn.ScanData.Atmosphere);                        
-                        }
+                            bdDetails.Append(sn.ScanData.Atmosphere + ". ");
 
-                    // populate the grid                                                          
-                    if (sn.ScanData != null && sn.ScanData.BodyName != null && bdClass != null && bdDetails != null)
-                    {
+                        int value = sn.ScanData.EstimatedValueED22();
+                        bdDetails.Append("Value " + value.ToString("N0"));
+
+                        Image img = null;
+
                         if (sn.ScanData.IsStar == true)
                         {
-                            Image bdImage = sn.ScanData.GetStarTypeImage(); // if is a star, use the Star image
-                            dataGridViewScangrid.Rows.Add(new object[] { bdImage, sn.ScanData.BodyName, bdClass, bdDist, bdDetails });
+                            img = sn.ScanData.GetStarTypeImage(); // if is a star, use the Star image
                         }
-                        if (sn.ScanData.IsStar == false)
+                        else 
                         {
-                            Image bdImage = sn.ScanData.GetPlanetClassImage(); // use the correct image in case of planets and moons
-                            dataGridViewScangrid.Rows.Add(new object[] { bdImage, sn.ScanData.BodyName, bdClass, bdDist, bdDetails });
+                            img = sn.ScanData.GetPlanetClassImage(); // use the correct image in case of planets and moons
                         }
+
+                        dataGridViewScangrid.Rows.Add(new object[] { null, sn.ScanData.BodyName, bdClass, bdDist, bdDetails });
+
+                        DataGridViewRow cur = dataGridViewScangrid.Rows[dataGridViewScangrid.Rows.Count - 1];
+
+                        cur.Cells[1].ToolTipText = sn.ScanData.DisplayString();
+                        cur.Tag = img;
                     }
                 }
             }
@@ -247,7 +237,6 @@ namespace EDDiscovery.UserControls
         private List<StarScan.ScanNode> Flatten(StarScan.ScanNode sn, List<StarScan.ScanNode> flattened)
         {
             flattened.Add(sn);
-
 
             if (sn.children != null)
             {
@@ -259,5 +248,17 @@ namespace EDDiscovery.UserControls
             return flattened;
         }
 
+        private void dataGridViewScangrid_RowPostPaint(object sender, DataGridViewRowPostPaintEventArgs e)
+        {
+            DataGridViewRow cur = dataGridViewScangrid.Rows[e.RowIndex];
+            if ( cur.Tag != null )
+            {
+                // we programatically draw the image because we have control over its pos/ size this way, which you can't do
+                // with a image column - there you can only draw a fixed image or stretch it to cell contents.. which we don't want to do
+                int sz = dataGridViewScangrid.RowTemplate.MinimumHeight - 2;
+                int vpos = e.RowBounds.Top + e.RowBounds.Height / 2 - sz / 2;
+                e.Graphics.DrawImage((Image)cur.Tag, new Rectangle(e.RowBounds.Left+1,vpos,sz,sz));
+            }
+        }
     }
 }
