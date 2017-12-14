@@ -785,7 +785,7 @@ namespace EliteDangerousCore
 
                     if (je.IsUIEvent && !Keepuievents)              // filter out any UI events
                     {
-                        System.Diagnostics.Debug.WriteLine("**** Filter out " + je.EventTypeStr + " on " + je.EventTimeLocal.ToString());
+                        //System.Diagnostics.Debug.WriteLine("**** Filter out " + je.EventTypeStr + " on " + je.EventTimeLocal.ToString());
                         continue;
                     }
 
