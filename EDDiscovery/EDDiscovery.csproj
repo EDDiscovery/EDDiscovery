@@ -672,6 +672,7 @@
     <None Include="Resources\ImportHelp.txt" />
     <None Include="Resources\edlogo_3mo_icon.ico" />
     <None Include="Resources\GNE.ico" />
+    <None Include="Resources\Ring Only 512.png" />
     <None Include="Resources\selectedmarker.png" />
     <None Include="Resources\SizeSelectorsSmall.png" />
     <None Include="Resources\SizeSelectorsMedium.png" />
@@ -706,7 +707,6 @@
     <None Include="Resources\excel.png" />
     <None Include="Resources\materiamoreindicator.png" />
     <None Include="Resources\RingGap512.png" />
-    <None Include="Resources\Ring Only 512.png" />
     <None Include="Resources\materialmarkerorangefilled.png" />
     <None Include="Resources\planet landing.png" />
     <None Include="Resources\toolStripButtonRemoveUnused.Image.png" />
