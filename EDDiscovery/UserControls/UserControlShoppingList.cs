@@ -36,10 +36,14 @@ namespace EDDiscovery.UserControls
         private bool showMaxInjections;
         private bool showPlanetMats;
         private bool showListAvailability;
+        private bool showSystemAvailability;
+        private bool useEDSMForSystemAvailability;
         private bool useHistoric = false;
         private string DbShowInjectionsSave { get { return "ShoppingListShowFSD" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
         private string DbShowAllMatsLandedSave { get { return "ShoppingListShowPlanetMats" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
         private string DbHighlightAvailableMats { get { return "ShoppingListHighlightAvailable" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
+        private string DBShowSystemAvailability { get { return "ShoppingListSystemAvailability" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
+        private string DBUseEDSMForSystemAvailability { get { return "ShoppingListUseEDSM" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
         const int PhysicalInventoryCapacity = 1000;
         const int DataInventoryCapacity = 500;
 
@@ -65,6 +69,8 @@ namespace EDDiscovery.UserControls
             showMaxInjections = SQLiteDBClass.GetSettingBool(DbShowInjectionsSave, true);
             showPlanetMats = SQLiteDBClass.GetSettingBool(DbShowAllMatsLandedSave, true);
             showListAvailability = SQLiteDBClass.GetSettingBool(DbHighlightAvailableMats, true);
+            showSystemAvailability = SQLiteDBClass.GetSettingBool(DBShowSystemAvailability, true);
+            useEDSMForSystemAvailability = SQLiteDBClass.GetSettingBool(DBUseEDSMForSystemAvailability, false);
             pictureBoxList.ContextMenuStrip = contextMenuConfig;
 
             userControlSynthesis.OnDisplayComplete += Synthesis_OnWantedChange;
@@ -77,6 +83,8 @@ namespace EDDiscovery.UserControls
             SQLiteDBClass.PutSettingBool(DbShowInjectionsSave, showMaxInjections);
             SQLiteDBClass.PutSettingBool(DbShowAllMatsLandedSave, showPlanetMats);
             SQLiteDBClass.PutSettingBool(DbHighlightAvailableMats, showListAvailability);
+            SQLiteDBClass.PutSettingBool(DBShowSystemAvailability, showSystemAvailability);
+            SQLiteDBClass.PutSettingBool(DBUseEDSMForSystemAvailability, useEDSMForSystemAvailability);
             userControlEngineering.Closing();
             userControlSynthesis.Closing();
         }
@@ -93,6 +101,8 @@ namespace EDDiscovery.UserControls
             showAllMaterialsWhenLandedToolStripMenuItem.Checked = showPlanetMats;
             showAvailableMaterialsInListWhenLandedToolStripMenuItem.Checked = showListAvailability;
             useHistoricMaterialCountsToolStripMenuItem.Checked = useHistoric;
+            showSystemAvailabilityOfMaterialsInShoppingListToolStripMenuItem.Checked = showSystemAvailability;
+            useEDSMDataInSystemAvailabilityToolStripMenuItem.Checked = useEDSMForSystemAvailability;
             Display();
         }
 
@@ -136,16 +146,22 @@ namespace EDDiscovery.UserControls
 
                 List<MaterialCommodities> shoppinglist = MaterialCommoditiesList.GetShoppingList(totalWanted, mcl);
                 JournalScan sd = null;
+                StarScan.SystemNode last_sn = null;
 
-                if (last_he.IsLanded)
+                if (last_he.IsLanded && (showListAvailability || showPlanetMats))
                 {
                     sd = discoveryform.history.GetScans(last_he.System.name).Where(sc => sc.BodyName == last_he.WhereAmI).FirstOrDefault();
+                }
+                if (!last_he.IsLanded && showSystemAvailability)  //replace true with a setting
+                {
+                    last_sn = discoveryform.history.starscan.FindSystem(last_he.System, useEDSMForSystemAvailability);
                 }
 
                 StringBuilder wantedList = new StringBuilder();
 
                 if (shoppinglist.Any())
                 {
+                    double available;
                     wantedList.Append("Needed Mats:\n");
                     foreach (MaterialCommodities c in shoppinglist.OrderBy(mat => mat.name))      // and add new..
                     {
@@ -154,7 +170,6 @@ namespace EDDiscovery.UserControls
                         {
                             if (sd != null)
                             {
-                                double available;
                                 if (sd.Materials.TryGetValue(c.fdname, out available))
                                 {
                                     present = $" {available.ToString("N1")}%";
@@ -163,7 +178,28 @@ namespace EDDiscovery.UserControls
                                 { present = " -"; }
                             }
                         }
-                        wantedList.Append($"  {c.scratchpad} {c.name}{present}\n");
+                        wantedList.Append($"  {c.scratchpad} {c.name}{present}");
+                        if (!last_he.IsLanded && last_sn != null)
+                        {
+                            var landables = last_sn.Bodies.Where(b => b.ScanData != null && (!b.ScanData.IsEDSMBody || useEDSMForSystemAvailability) && 
+                                                                 b.ScanData.HasMaterials && b.ScanData.Materials.ContainsKey(c.fdname));
+                            if (landables.Count() > 0)
+                            {
+                                wantedList.Append("\n    ");
+                                List<Tuple<string, double>> allMats = new List<Tuple<string, double>>();
+                                foreach (StarScan.ScanNode sn in landables)
+                                {
+                                    sn.ScanData.Materials.TryGetValue(c.fdname, out available);
+                                    allMats.Add(new Tuple<string, double>(sn.fullname.Replace(last_he.System.name, "", StringComparison.InvariantCultureIgnoreCase).Trim(), available));
+                                }
+                                allMats = allMats.OrderByDescending(m => m.Item2).ToList();
+                                foreach(Tuple<string, double> m in allMats)
+                                {
+                                    wantedList.Append($"{m.Item1}: {m.Item2.ToString("N1")}% ");
+                                }
+                            }
+                        }
+                        wantedList.Append("\n");
                     }
 
                     int currentMats = mcl.Where(m => m.category == MaterialCommodityDB.MaterialManufacturedCategory || m.category == MaterialCommodityDB.MaterialRawCategory)
@@ -263,6 +299,18 @@ namespace EDDiscovery.UserControls
             useHistoric = ((ToolStripMenuItem)sender).Checked;
             userControlSynthesis.SetHistoric(useHistoric);
             userControlEngineering.SetHistoric(useHistoric);
+            Display();
+        }
+
+        private void showSystemAvailabilityOfMaterialsInShoppingListToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            showSystemAvailability = ((ToolStripMenuItem)sender).Checked;
+            Display();
+        }
+
+        private void useEDSMDataInSystemAvailabilityToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            useEDSMForSystemAvailability = ((ToolStripMenuItem)sender).Checked;
             Display();
         }
     }
