@@ -24,6 +24,7 @@ namespace NetLogEntry
                                   "Options: MusicNormal MusicGalMap MusicSysMap\n" +
                                   "Options: Friends Name\n" +
                                   "Options: FuelScoop amount total\n" +
+                                  "Options: JetConeBoost\n" +
                                   "Or EDDBSTARS <filename> or EDDBPLANETS or EDDBSTARNAMES for the eddb dump\n" +
                                   "Or Phoneme <filename> <fileout> for EDDI phoneme tx\n" +
                                   "Or Voicerecon <filename>" +
@@ -172,6 +173,8 @@ namespace NetLogEntry
                 lineout = "{ " + TimeStamp() + F("event", "Friends") + F("Status", "Online") + FF("Name", optparas[0]) + " }";
             else if (writetype.Equals("FuelScoop", StringComparison.InvariantCultureIgnoreCase) && optparas.Length >= 2)
                 lineout = "{ " + TimeStamp() + F("event", "FuelScoop") + F("Scooped", optparas[0]) + FF("Total", optparas[1]) + " }";
+            else if (writetype.Equals("JetConeBoost", StringComparison.InvariantCultureIgnoreCase) )
+                lineout = "{ " + TimeStamp() + F("event", "JetConeBoost") + FF("BoostValue", "1.5") + " }";
 
             if (lineout != null)
                 Write(filename, lineout);
