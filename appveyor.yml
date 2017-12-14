@@ -12,4 +12,4 @@ after_build:
 artifacts:
   - path: EDDiscovery.Portable.zip
 cache:
-  - packages -> **\package.config
+  - packages -> **\packages.config
