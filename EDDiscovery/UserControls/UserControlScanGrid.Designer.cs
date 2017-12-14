@@ -46,12 +46,12 @@ namespace EDDiscovery.UserControls
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             this.dataViewScrollerPanel2 = new ExtendedControls.DataViewScrollerPanel();
             this.dataGridViewScangrid = new System.Windows.Forms.DataGridView();
-            this.vScrollBarCustom2 = new ExtendedControls.VScrollBarCustom();
             this.colImage = new System.Windows.Forms.DataGridViewImageColumn();
             this.colName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colClass = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Distance = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colBriefing = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.vScrollBarCustom2 = new ExtendedControls.VScrollBarCustom();
             this.dataViewScrollerPanel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewScangrid)).BeginInit();
             this.SuspendLayout();
@@ -93,6 +93,52 @@ namespace EDDiscovery.UserControls
             this.dataGridViewScangrid.Size = new System.Drawing.Size(552, 572);
             this.dataGridViewScangrid.TabIndex = 23;
             // 
+            // colImage
+            // 
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle1.NullValue = null;
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.colImage.DefaultCellStyle = dataGridViewCellStyle1;
+            this.colImage.FillWeight = 43.60909F;
+            this.colImage.HeaderText = "";
+            this.colImage.ImageLayout = System.Windows.Forms.DataGridViewImageCellLayout.Stretch;
+            this.colImage.MinimumWidth = 20;
+            this.colImage.Name = "colImage";
+            this.colImage.ReadOnly = true;
+            this.colImage.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.colImage.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
+            // 
+            // colName
+            // 
+            this.colName.FillWeight = 37.56873F;
+            this.colName.HeaderText = "Name";
+            this.colName.MinimumWidth = 20;
+            this.colName.Name = "colName";
+            this.colName.ReadOnly = true;
+            // 
+            // colClass
+            // 
+            this.colClass.FillWeight = 46.96092F;
+            this.colClass.HeaderText = "Class";
+            this.colClass.MinimumWidth = 20;
+            this.colClass.Name = "colClass";
+            this.colClass.ReadOnly = true;
+            // 
+            // Distance
+            // 
+            this.Distance.FillWeight = 23.39628F;
+            this.Distance.HeaderText = "Distance";
+            this.Distance.Name = "Distance";
+            this.Distance.ReadOnly = true;
+            // 
+            // colBriefing
+            // 
+            this.colBriefing.FillWeight = 93.92184F;
+            this.colBriefing.HeaderText = "Briefing";
+            this.colBriefing.MinimumWidth = 20;
+            this.colBriefing.Name = "colBriefing";
+            this.colBriefing.ReadOnly = true;
+            // 
             // vScrollBarCustom2
             // 
             this.vScrollBarCustom2.ArrowBorderColor = System.Drawing.Color.LightBlue;
@@ -122,52 +168,6 @@ namespace EDDiscovery.UserControls
             this.vScrollBarCustom2.ThumbDrawAngle = 0F;
             this.vScrollBarCustom2.Value = -1;
             this.vScrollBarCustom2.ValueLimited = -1;
-            // 
-            // colImage
-            // 
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle1.NullValue = null;
-            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.colImage.DefaultCellStyle = dataGridViewCellStyle1;
-            this.colImage.FillWeight = 30.45685F;
-            this.colImage.HeaderText = "";
-            this.colImage.ImageLayout = System.Windows.Forms.DataGridViewImageCellLayout.Stretch;
-            this.colImage.MinimumWidth = 20;
-            this.colImage.Name = "colImage";
-            this.colImage.ReadOnly = true;
-            this.colImage.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            this.colImage.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
-            // 
-            // colName
-            // 
-            this.colName.FillWeight = 96.26541F;
-            this.colName.HeaderText = "Name";
-            this.colName.MinimumWidth = 20;
-            this.colName.Name = "colName";
-            this.colName.ReadOnly = true;
-            // 
-            // colClass
-            // 
-            this.colClass.FillWeight = 48.13271F;
-            this.colClass.HeaderText = "Class";
-            this.colClass.MinimumWidth = 20;
-            this.colClass.Name = "colClass";
-            this.colClass.ReadOnly = true;
-            // 
-            // Distance
-            // 
-            this.Distance.FillWeight = 28.87962F;
-            this.Distance.HeaderText = "Distance";
-            this.Distance.Name = "Distance";
-            this.Distance.ReadOnly = true;
-            // 
-            // colBriefing
-            // 
-            this.colBriefing.FillWeight = 96.26541F;
-            this.colBriefing.HeaderText = "Briefing";
-            this.colBriefing.MinimumWidth = 20;
-            this.colBriefing.Name = "colBriefing";
-            this.colBriefing.ReadOnly = true;
             // 
             // UserControlScanGrid
             // 

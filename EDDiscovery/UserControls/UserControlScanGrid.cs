@@ -28,6 +28,7 @@ using System.Drawing.Drawing2D;
 using EliteDangerousCore;
 using EliteDangerousCore.EDSM;
 using EliteDangerousCore.DB;
+using EliteDangerousCore.JournalEvents;
 
 namespace EDDiscovery.UserControls
 {
@@ -93,6 +94,7 @@ namespace EDDiscovery.UserControls
             {
                 last_he = he;
                 DrawSystem();
+                dataGridViewScangrid.Update();
             }
         }
 
@@ -108,6 +110,8 @@ namespace EDDiscovery.UserControls
         void DrawSystem()   // draw last_sn, last_he
         {
             dataGridViewScangrid.Rows.Clear();
+
+            dataGridViewScangrid.Refresh();
 
             if (last_he == null)
             {
@@ -141,11 +145,11 @@ namespace EDDiscovery.UserControls
                             bdClass.Append(sn.ScanData.PlanetClass);
                         if (sn.ScanData.StarTypeText != null)
                             bdClass.Append(sn.ScanData.StarTypeText);
-                    }
 
-                    if (sn.level >= 2 && sn.type == StarScan.ScanNodeType.body)
-                    {
-                        bdClass.Append(" Moon");
+                        if (sn.level >= 2 && sn.type == StarScan.ScanNodeType.body)
+                        {
+                            bdClass.Append(" Moon");
+                        }
                     }
 
                     StringBuilder bdDist = new StringBuilder();
@@ -153,14 +157,27 @@ namespace EDDiscovery.UserControls
                     StringBuilder bdDetails = new StringBuilder();
 
                     if (sn.ScanData != null && sn.ScanData.BodyName != null)
-                    {
+                    {   
+                        if (sn.ScanData.IsStar && sn.ScanData.BodyName.EndsWith(" A"))
+                        {
+                            bdDist.AppendFormat("Main Star");
+                        }
+                        else
                         if (sn.ScanData.nSemiMajorAxis.HasValue)
                         {
-                            if (sn.ScanData.IsStar || sn.ScanData.nSemiMajorAxis.Value > EliteDangerousCore.JournalEvents.JournalScan.oneAU_m / 10)
-                                bdDist.AppendFormat("{0:0.00}AU", (sn.ScanData.nSemiMajorAxis.Value / EliteDangerousCore.JournalEvents.JournalScan.oneAU_m));
+                            if (sn.ScanData.IsStar || sn.ScanData.nSemiMajorAxis.Value > JournalScan.oneAU_m / 10)
+                                bdDist.AppendFormat("{0:0.00}AU ({1:0.00}ls)", (sn.ScanData.nSemiMajorAxis.Value / JournalScan.oneAU_m), sn.ScanData.nSemiMajorAxis.Value / JournalScan.oneLS_m);
                             else
                                 bdDist.AppendFormat("{0}km", (sn.ScanData.nSemiMajorAxis.Value / 1000).ToString("N1"));
                         }
+
+                        // display stars and stellar bodies mass
+                        if (sn.ScanData.IsStar)
+                            bdDetails.Append("M:" + sn.ScanData.nStellarMass.Value.ToString("N2") + ", ");
+
+                        // habitable zone - do not display for black holes.
+                        if (sn.ScanData.HabitableZoneInner != null && sn.ScanData.HabitableZoneOuter != null && sn.ScanData.StarTypeID != EDStar.H)
+                            bdDetails.AppendFormat("Habitable Zone Approx. {0}-{1}AU ({2})", (sn.ScanData.HabitableZoneInner.Value / JournalScan.oneAU_LS).ToString("N2"), (sn.ScanData.HabitableZoneOuter.Value / JournalScan.oneAU_LS).ToString("N2"), sn.ScanData.GetHabZoneStringLs());
 
                         // append the terraformable state to the planet class
                         if (sn.ScanData.Terraformable == true)
@@ -173,7 +190,7 @@ namespace EDDiscovery.UserControls
 
                             if (sn.ScanData.nSurfaceGravity.HasValue)
                             {
-                                double? g = sn.ScanData.nSurfaceGravity / EliteDangerousCore.JournalEvents.JournalScan.oneGee_m_s2;
+                                double? g = sn.ScanData.nSurfaceGravity / JournalScan.oneGee_m_s2;
                                 Gg = " (G: " + g.Value.ToString("N1") + ")";
                             }
 
@@ -181,21 +198,33 @@ namespace EDDiscovery.UserControls
                         }
 
                         // have some ring?
-                        if (sn.ScanData.HasRings == true && sn.ScanData.IsStar == false)
-                            bdDetails.Append("Ringed. ");
+                        if (sn.ScanData.HasRings && sn.ScanData.IsStar == false)
+                        {
+                            if (sn.ScanData.Rings.Count() > 1)
+                            {
+                                bdDetails.Append("Has " + sn.ScanData.Rings.Count() + " rings. ");
+                            }
+                            else
+                            {
+                                bdDetails.Append("Has 1 ring. ");
+                            }
 
-                        // tell us that there is some volcanic activity
-                        if (sn.ScanData.Volcanism != null)
+                            for (int i = 0; i < sn.ScanData.Rings.Length; i++)
+                            {
+                                string RingName = sn.ScanData.Rings[i].Name;
+                                bdDetails.Append(JournalScan.StarPlanetRing.DisplayStringFromRingClass(sn.ScanData.Rings[i].RingClass) + " ");
+                                bdDetails.Append((sn.ScanData.Rings[i].InnerRad / JournalScan.oneLS_m).ToString("N2") + "ls to " + (sn.ScanData.Rings[i].OuterRad / JournalScan.oneLS_m).ToString("N2") + "ls ");
+                            }
+                        }
+                            
+                            // tell us that there is some volcanic activity
+                            if (sn.ScanData.Volcanism != null)
                             bdDetails.Append("Volcanism. ");
 
-                        // display stars and stellar bodies mass
-                        if (sn.ScanData.IsStar == true)
-                            bdDetails.Append("M:" + sn.ScanData.nStellarMass.Value.ToString("N2") + ", ");
-
-                        // habitable zone - do not display for black holes.
-                        if (sn.ScanData.HabitableZoneInner != null && sn.ScanData.HabitableZoneOuter != null && sn.ScanData.StarTypeID != EDStar.H)
-                            bdDetails.AppendFormat("Habitable Zone Approx. {0}", sn.ScanData.GetHabZoneStringLs(), (sn.ScanData.HabitableZoneInner.Value).ToString("N2"), (sn.ScanData.HabitableZoneOuter.Value).ToString("N2"));
-                    }
+                        // print the main atmospheric composition
+                        if (sn.ScanData.Atmosphere != null && sn.ScanData.Atmosphere != "None")
+                            bdDetails.Append(sn.ScanData.Atmosphere);                        
+                        }
 
                     // populate the grid                                                          
                     if (sn.ScanData != null && sn.ScanData.BodyName != null && bdClass != null && bdDetails != null)
@@ -206,14 +235,12 @@ namespace EDDiscovery.UserControls
                             dataGridViewScangrid.Rows.Add(new object[] { bdImage, sn.ScanData.BodyName, bdClass, bdDist, bdDetails });
                         }
                         if (sn.ScanData.IsStar == false)
-                        {                           
+                        {
                             Image bdImage = sn.ScanData.GetPlanetClassImage(); // use the correct image in case of planets and moons
-                            dataGridViewScangrid.Rows.Add(new object[] { bdImage, sn.ScanData.BodyName, bdClass , bdDist, bdDetails });                            
-                        }                        
+                            dataGridViewScangrid.Rows.Add(new object[] { bdImage, sn.ScanData.BodyName, bdClass, bdDist, bdDetails });
+                        }
                     }
-                    
                 }
-
             }
         }
 
