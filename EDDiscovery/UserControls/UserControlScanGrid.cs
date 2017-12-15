@@ -161,7 +161,7 @@ namespace EDDiscovery.UserControls
 
                         // habitable zone for stars - do not display for black holes.
                         if (sn.ScanData.HabitableZoneInner != null && sn.ScanData.HabitableZoneOuter != null && sn.ScanData.StarTypeID != EDStar.H)
-                            bdDetails.AppendFormat("Habitable Zone Approx. {0}-{1}AU ({2})", (sn.ScanData.HabitableZoneInner.Value / JournalScan.oneAU_LS).ToString("N2"), (sn.ScanData.HabitableZoneOuter.Value / JournalScan.oneAU_LS).ToString("N2"), sn.ScanData.GetHabZoneStringLs() + " ");
+                            bdDetails.AppendFormat("Habitable Zone: {0}-{1}AU ({2})", (sn.ScanData.HabitableZoneInner.Value / JournalScan.oneAU_LS).ToString("N2"), (sn.ScanData.HabitableZoneOuter.Value / JournalScan.oneAU_LS).ToString("N2"), sn.ScanData.GetHabZoneStringLs() + " ");
 
                         // append the terraformable state to the planet class
                         if (sn.ScanData.Terraformable == true)
