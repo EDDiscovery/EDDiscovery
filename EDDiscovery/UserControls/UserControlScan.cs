@@ -466,7 +466,7 @@ namespace EDDiscovery.UserControls
                     else
                     {
                         endpoint = CreateImageLabel(pc, nodeimage, new Point(curpos.X + offset, curpos.Y + alignv), size,
-                                                    sn.customname ?? sn.ownname, tip, alignv + labelvoff, sc.IsEDSMBody);
+                                                    sn.customname ?? sn.ownname, tip, alignv + labelvoff, sc.IsEDSMBody, false);
                         offset += size.Width / 2;
                     }
 
@@ -508,7 +508,7 @@ namespace EDDiscovery.UserControls
                 else
                     tip = sn.ownname + "\n\nNo scan data available";
 
-                endpoint = CreateImageLabel(pc, notscanned, new Point(curpos.X + offset, curpos.Y + alignv), size, sn.customname ?? sn.ownname, tip, alignv + labelvoff, false);
+                endpoint = CreateImageLabel(pc, notscanned, new Point(curpos.X + offset, curpos.Y + alignv), size, sn.customname ?? sn.ownname, tip, alignv + labelvoff, false, false);
                 offset += size.Width / 2;       // return the middle used was this..
             }
 
