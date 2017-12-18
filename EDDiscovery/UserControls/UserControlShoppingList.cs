@@ -196,9 +196,9 @@ namespace EDDiscovery.UserControls
                                 int n = 1;
                                 foreach(Tuple<string, double> m in allMats)
                                 {
+                                    if (n % 6 == 0) wantedList.Append("\n    ");
                                     wantedList.Append($"{m.Item1.ToUpperInvariant()}: {m.Item2.ToString("N1")}% ");
                                     n++;
-                                    if (n%6 == 0) wantedList.Append("\n    ");
                                 }
                             }
                         }
