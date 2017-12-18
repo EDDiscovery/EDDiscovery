@@ -55,6 +55,8 @@ namespace EDDiscovery.UserControls
             this.showAllMaterialsWhenLandedToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.showAvailableMaterialsInListWhenLandedToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.useHistoricMaterialCountsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.showSystemAvailabilityOfMaterialsInShoppingListToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.useEDSMDataInSystemAvailabilityToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerVertical)).BeginInit();
             this.splitContainerVertical.Panel1.SuspendLayout();
             this.splitContainerVertical.Panel2.SuspendLayout();
@@ -143,9 +145,11 @@ namespace EDDiscovery.UserControls
             this.showMaxFSDInjectionsToolStripMenuItem,
             this.showAllMaterialsWhenLandedToolStripMenuItem,
             this.showAvailableMaterialsInListWhenLandedToolStripMenuItem,
+            this.showSystemAvailabilityOfMaterialsInShoppingListToolStripMenuItem,
+            this.useEDSMDataInSystemAvailabilityToolStripMenuItem,
             this.useHistoricMaterialCountsToolStripMenuItem});
             this.contextMenuConfig.Name = "contextMenuConfig";
-            this.contextMenuConfig.Size = new System.Drawing.Size(369, 114);
+            this.contextMenuConfig.Size = new System.Drawing.Size(369, 158);
             // 
             // showMaxFSDInjectionsToolStripMenuItem
             // 
@@ -181,6 +185,22 @@ namespace EDDiscovery.UserControls
             this.useHistoricMaterialCountsToolStripMenuItem.Text = "Use Historic Material Counts";
             this.useHistoricMaterialCountsToolStripMenuItem.Click += new System.EventHandler(this.useHistoricMaterialCountsToolStripMenuItem_Click);
             // 
+            // showSystemAvailabilityOfMaterialsInShoppingListToolStripMenuItem
+            // 
+            this.showSystemAvailabilityOfMaterialsInShoppingListToolStripMenuItem.CheckOnClick = true;
+            this.showSystemAvailabilityOfMaterialsInShoppingListToolStripMenuItem.Name = "showSystemAvailabilityOfMaterialsInShoppingListToolStripMenuItem";
+            this.showSystemAvailabilityOfMaterialsInShoppingListToolStripMenuItem.Size = new System.Drawing.Size(368, 22);
+            this.showSystemAvailabilityOfMaterialsInShoppingListToolStripMenuItem.Text = "Show System Availability in Shopping List in flight";
+            this.showSystemAvailabilityOfMaterialsInShoppingListToolStripMenuItem.Click += new System.EventHandler(this.showSystemAvailabilityOfMaterialsInShoppingListToolStripMenuItem_Click);
+            // 
+            // useEDSMDataInSystemAvailabilityToolStripMenuItem
+            // 
+            this.useEDSMDataInSystemAvailabilityToolStripMenuItem.CheckOnClick = true;
+            this.useEDSMDataInSystemAvailabilityToolStripMenuItem.Name = "useEDSMDataInSystemAvailabilityToolStripMenuItem";
+            this.useEDSMDataInSystemAvailabilityToolStripMenuItem.Size = new System.Drawing.Size(368, 22);
+            this.useEDSMDataInSystemAvailabilityToolStripMenuItem.Text = "Use EDSM data in System Availability";
+            this.useEDSMDataInSystemAvailabilityToolStripMenuItem.Click += new System.EventHandler(this.useEDSMDataInSystemAvailabilityToolStripMenuItem_Click);
+            // 
             // UserControlShoppingList
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -214,5 +234,7 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.ToolStripMenuItem showAllMaterialsWhenLandedToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem showAvailableMaterialsInListWhenLandedToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem useHistoricMaterialCountsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem showSystemAvailabilityOfMaterialsInShoppingListToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem useEDSMDataInSystemAvailabilityToolStripMenuItem;
     }
 }

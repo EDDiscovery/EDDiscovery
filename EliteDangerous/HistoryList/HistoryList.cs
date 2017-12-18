@@ -305,7 +305,7 @@ namespace EliteDangerousCore
         {
             var list = (from s in historylist where s.EntryType == JournalTypeEnum.Scan && s.EventTimeLocal >= start && s.EventTimeLocal < to select s.journalEntry as JournalScan).ToList<JournalScan>();
 
-            return (from t in list select (long)t.EstimatedValue()).Sum();
+            return (from t in list select (long)t.EstimatedValue).Sum();
         }
 
         public int GetDocked(DateTime start, DateTime to)
@@ -785,7 +785,7 @@ namespace EliteDangerousCore
 
                     if (je.IsUIEvent && !Keepuievents)              // filter out any UI events
                     {
-                        System.Diagnostics.Debug.WriteLine("**** Filter out " + je.EventTypeStr + " on " + je.EventTimeLocal.ToString());
+                        //System.Diagnostics.Debug.WriteLine("**** Filter out " + je.EventTypeStr + " on " + je.EventTimeLocal.ToString());
                         continue;
                     }
 
