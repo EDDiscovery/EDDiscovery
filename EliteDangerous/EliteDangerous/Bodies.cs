@@ -95,7 +95,6 @@ namespace EliteDangerousCore
         SuperMassiveBlackHole,
     };
 
-
     public enum EDPlanet
     {
         Unknown = 0,
@@ -354,5 +353,120 @@ namespace EliteDangerousCore
         }
 
 
+        public static string StarName( EDStar id )
+        {
+            switch (id)       // see journal, section 11.2
+            {
+                case EDStar.O:
+                    return string.Format("Luminous Hot Main Sequence {0} star", id.ToString());
+
+                case EDStar.B:
+                    // also have an B1V
+                    return string.Format("Luminous Blue Main Sequence {0} star", id.ToString());
+
+                case EDStar.A:
+                    // also have an A3V..
+                    return string.Format("Bluish-White Main Sequence {0} star", id.ToString());
+
+                case EDStar.F:
+                    return string.Format("White Main Sequence {0} star", id.ToString());
+
+                case EDStar.G:
+                    // also have a G8V
+                    return string.Format("Yellow Main Sequence {0} star", id.ToString());
+
+                case EDStar.K:
+                    // also have a K0V
+                    return string.Format("Orange Main Sequence {0} star", id.ToString());
+                case EDStar.M:
+                    // also have a M1VA
+                    return string.Format("Red Main Sequence {0} star", id.ToString());
+
+                // dwarfs
+                case EDStar.L:
+                    return string.Format("Dark Red Non Main Sequence {0} star", id.ToString());
+                case EDStar.T:
+                    return string.Format("Methane Dwarf star");
+                case EDStar.Y:
+                    return string.Format("Brown Dwarf star");
+
+                // proto stars
+                case EDStar.AeBe:    // Herbig
+                    return "Herbig Ae/Be";
+                case EDStar.TTS:     // seen in logs
+                    return "T Tauri";
+
+                // wolf rayet
+                case EDStar.W:
+                case EDStar.WN:
+                case EDStar.WNC:
+                case EDStar.WC:
+                case EDStar.WO:
+                    return string.Format("Wolf-Rayet {0} star", id.ToString());
+
+                // Carbon
+                case EDStar.CS:
+                case EDStar.C:
+                case EDStar.CN:
+                case EDStar.CJ:
+                case EDStar.CHd:
+                    return string.Format("Carbon {0} star", id.ToString());
+
+                case EDStar.MS: //seen in log https://en.wikipedia.org/wiki/S-type_star
+                    return string.Format("Intermediate low Zirconium Monoxide Type star");
+
+                case EDStar.S:   // seen in log, data from http://elite-dangerous.wikia.com/wiki/Stars
+                    return string.Format("Cool Giant Zirconium Monoxide rich Type star");
+
+                // white dwarf
+                case EDStar.D:
+                case EDStar.DA:
+                case EDStar.DAB:
+                case EDStar.DAO:
+                case EDStar.DAZ:
+                case EDStar.DAV:
+                case EDStar.DB:
+                case EDStar.DBZ:
+                case EDStar.DBV:
+                case EDStar.DO:
+                case EDStar.DOV:
+                case EDStar.DQ:
+                case EDStar.DC:
+                case EDStar.DCV:
+                case EDStar.DX:
+                    return string.Format("White Dwarf {0} star", id.ToString());
+
+                case EDStar.N:
+                    return "Neutron Star";
+
+                case EDStar.H:
+
+                    return "Black Hole";
+
+                case EDStar.X:
+                    // currently speculative, not confirmed with actual data... in journal
+                    return "Exotic";
+
+                // Journal.. really?  need evidence these actually are formatted like this.
+
+                case EDStar.SuperMassiveBlackHole:
+                    return "Super Massive Black Hole";
+                case EDStar.A_BlueWhiteSuperGiant:
+                    return "Blue White Super Giant";
+                case EDStar.F_WhiteSuperGiant:
+                    return "F White Super Giant";
+                case EDStar.M_RedSuperGiant:
+                    return "M Red Super Giant";
+                case EDStar.M_RedGiant:
+                    return "M Red Giant";
+                case EDStar.K_OrangeGiant:
+                    return "K Orange Giant";
+                case EDStar.RoguePlanet:
+                    return "Rogue Planet";
+
+                default:
+                    return string.Format("Class {0} star\n", id.ToString());
+            }
+        }
     }
 }

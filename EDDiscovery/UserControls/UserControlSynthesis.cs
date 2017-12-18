@@ -154,8 +154,9 @@ namespace EDDiscovery.UserControls
         private void Discoveryform_OnNewEntry(HistoryEntry he, HistoryList hl)
         {
             last_he = he;
-            //touchdown and liftoff ensure shopping list refresh in case displaying landed planet ma
-            if (he.journalEntry is IMaterialCommodityJournalEntry || he.journalEntry.EventTypeID == JournalTypeEnum.Touchdown || he.journalEntry.EventTypeID == JournalTypeEnum.Liftoff  || he.IsLocOrJump)
+            //touchdown and liftoff ensure shopping list refresh in case displaying landed planet mats, scan for mat availability while flying in same
+            if (he.journalEntry is IMaterialCommodityJournalEntry || he.journalEntry.EventTypeID == JournalTypeEnum.Touchdown || he.journalEntry.EventTypeID == JournalTypeEnum.Liftoff  
+                || he.IsLocOrJump || he.journalEntry.EventTypeID == JournalTypeEnum.Scan)
                 Display();
         }
 

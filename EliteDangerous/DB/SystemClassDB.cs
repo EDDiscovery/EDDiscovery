@@ -497,7 +497,8 @@ namespace EliteDangerousCore.DB
                 return false;
 
             result = GetSystem(systemName, cn);
-            if (result == null && checkMergers && privTryGetMergedSystem(systemName, out ISystem s, cn))
+            ISystem s;
+            if (result == null && checkMergers && privTryGetMergedSystem(systemName, out s, cn))
                 result = s;
 
             return (result != null);
