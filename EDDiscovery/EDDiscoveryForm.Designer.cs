@@ -506,26 +506,26 @@ namespace EDDiscovery
             // panel_minimize
             // 
             this.panel_minimize.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.panel_minimize.BackColor = System.Drawing.SystemColors.Control;
-            this.panel_minimize.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.panel_minimize.ImageSelected = ExtendedControls.DrawnPanel.ImageType.Minimize;
             this.panel_minimize.Location = new System.Drawing.Point(952, 2);
-            this.panel_minimize.MarginSize = 6;
             this.panel_minimize.Name = "panel_minimize";
+            this.panel_minimize.Padding = new System.Windows.Forms.Padding(6);
+            this.panel_minimize.Selectable = false;
             this.panel_minimize.Size = new System.Drawing.Size(24, 24);
             this.panel_minimize.TabIndex = 20;
+            this.panel_minimize.TabStop = false;
             this.panel_minimize.MouseClick += new System.Windows.Forms.MouseEventHandler(this.panel_minimize_MouseClick);
             // 
             // panel_close
             // 
             this.panel_close.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.panel_close.BackColor = System.Drawing.SystemColors.Control;
-            this.panel_close.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.panel_close.Location = new System.Drawing.Point(977, 2);
-            this.panel_close.MarginSize = 6;
             this.panel_close.Name = "panel_close";
+            this.panel_close.Padding = new System.Windows.Forms.Padding(6);
+            this.panel_close.Selectable = false;
             this.panel_close.Size = new System.Drawing.Size(24, 24);
             this.panel_close.TabIndex = 19;
+            this.panel_close.TabStop = false;
             this.panel_close.MouseClick += new System.Windows.Forms.MouseEventHandler(this.panel_close_MouseClick);
             // 
             // statusStrip1

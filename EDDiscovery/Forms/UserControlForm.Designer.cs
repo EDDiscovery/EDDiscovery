@@ -86,26 +86,24 @@ namespace EDDiscovery.Forms
             // panel_minimize
             // 
             this.panel_minimize.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.panel_minimize.BackColor = System.Drawing.SystemColors.Control;
-            this.panel_minimize.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.panel_minimize.ImageSelected = ExtendedControls.DrawnPanel.ImageType.Minimize;
             this.panel_minimize.Location = new System.Drawing.Point(582, -2);
-            this.panel_minimize.MarginSize = 6;
             this.panel_minimize.Name = "panel_minimize";
+            this.panel_minimize.Padding = new System.Windows.Forms.Padding(6);
+            this.panel_minimize.Selectable = false;
             this.panel_minimize.Size = new System.Drawing.Size(24, 24);
             this.panel_minimize.TabIndex = 24;
+            this.panel_minimize.TabStop = false;
             this.toolTip1.SetToolTip(this.panel_minimize, "Minimise");
             this.panel_minimize.Click += new System.EventHandler(this.panel_minimize_Click);
             // 
             // panel_ontop
             // 
             this.panel_ontop.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.panel_ontop.BackColor = System.Drawing.SystemColors.Control;
-            this.panel_ontop.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.panel_ontop.ImageSelected = ExtendedControls.DrawnPanel.ImageType.Floating;
             this.panel_ontop.Location = new System.Drawing.Point(558, -2);
-            this.panel_ontop.MarginSize = 6;
             this.panel_ontop.Name = "panel_ontop";
+            this.panel_ontop.Padding = new System.Windows.Forms.Padding(6);
             this.panel_ontop.Size = new System.Drawing.Size(24, 24);
             this.panel_ontop.TabIndex = 24;
             this.toolTip1.SetToolTip(this.panel_ontop, "Toggle window on top of others");
@@ -114,12 +112,10 @@ namespace EDDiscovery.Forms
             // panel_transparent
             // 
             this.panel_transparent.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.panel_transparent.BackColor = System.Drawing.SystemColors.Control;
-            this.panel_transparent.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.panel_transparent.ImageSelected = ExtendedControls.DrawnPanel.ImageType.Transparent;
             this.panel_transparent.Location = new System.Drawing.Point(486, -2);
-            this.panel_transparent.MarginSize = 6;
             this.panel_transparent.Name = "panel_transparent";
+            this.panel_transparent.Padding = new System.Windows.Forms.Padding(6);
             this.panel_transparent.Size = new System.Drawing.Size(24, 24);
             this.panel_transparent.TabIndex = 24;
             this.toolTip1.SetToolTip(this.panel_transparent, resources.GetString("panel_transparent.ToolTip"));
@@ -128,25 +124,23 @@ namespace EDDiscovery.Forms
             // panel_close
             // 
             this.panel_close.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.panel_close.BackColor = System.Drawing.SystemColors.Control;
-            this.panel_close.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.panel_close.Location = new System.Drawing.Point(606, -2);
-            this.panel_close.MarginSize = 6;
             this.panel_close.Name = "panel_close";
+            this.panel_close.Padding = new System.Windows.Forms.Padding(6);
+            this.panel_close.Selectable = false;
             this.panel_close.Size = new System.Drawing.Size(24, 24);
             this.panel_close.TabIndex = 25;
+            this.panel_close.TabStop = false;
             this.toolTip1.SetToolTip(this.panel_close, "Close");
             this.panel_close.Click += new System.EventHandler(this.panel_close_Click);
             // 
             // panel_taskbaricon
             // 
             this.panel_taskbaricon.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.panel_taskbaricon.BackColor = System.Drawing.SystemColors.Control;
-            this.panel_taskbaricon.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.panel_taskbaricon.ImageSelected = ExtendedControls.DrawnPanel.ImageType.WindowInTaskBar;
             this.panel_taskbaricon.Location = new System.Drawing.Point(534, -2);
-            this.panel_taskbaricon.MarginSize = 6;
             this.panel_taskbaricon.Name = "panel_taskbaricon";
+            this.panel_taskbaricon.Padding = new System.Windows.Forms.Padding(6);
             this.panel_taskbaricon.Size = new System.Drawing.Size(24, 24);
             this.panel_taskbaricon.TabIndex = 24;
             this.toolTip1.SetToolTip(this.panel_taskbaricon, "Toggle show taskbar icon for this window");
@@ -157,8 +151,8 @@ namespace EDDiscovery.Forms
             this.panel_showtitle.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.panel_showtitle.ImageSelected = ExtendedControls.DrawnPanel.ImageType.Captioned;
             this.panel_showtitle.Location = new System.Drawing.Point(510, -2);
-            this.panel_showtitle.MarginSize = 6;
             this.panel_showtitle.Name = "panel_showtitle";
+            this.panel_showtitle.Padding = new System.Windows.Forms.Padding(6);
             this.panel_showtitle.Size = new System.Drawing.Size(24, 24);
             this.panel_showtitle.TabIndex = 26;
             this.toolTip1.SetToolTip(this.panel_showtitle, "Toggle title visibility for this window when transparent");
