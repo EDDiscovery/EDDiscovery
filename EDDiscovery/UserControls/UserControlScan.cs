@@ -280,9 +280,9 @@ namespace EDDiscovery.UserControls
 
             foreach (var body in system.Bodies)
             {
-                if (body?.ScanData?.EstimatedValue() != null)
+                if (body?.ScanData?.EstimatedValue != null)
                 {
-                    value += body.ScanData.EstimatedValue();
+                    value += body.ScanData.EstimatedValue;
                 }
             }
 
@@ -449,7 +449,7 @@ namespace EDDiscovery.UserControls
                                     g.DrawImage(EDDiscovery.Properties.Resources.Volcano, new Rectangle(quarterheight / 2, (int)(quarterheight * 1.5), quarterheight, quarterheight));
 
                                 //experiment - does this take all the fun out of it?
-                                if (sc.EstimatedValue() > 50000)
+                                if (sc.EstimatedValue > 50000)
                                     g.DrawImage(EDDiscovery.Properties.Resources.startflag, new Rectangle(quarterheight / 2, (int)(quarterheight * 2.5), quarterheight, quarterheight));
                             }
 
@@ -522,7 +522,7 @@ namespace EDDiscovery.UserControls
                 indicatematerials || 
                 sc.Terraformable ||
                 HasMeaningfulVolcanism(sc) ||
-                sc.EstimatedValue() > 50000;
+                sc.EstimatedValue > 50000;
         }
 
         private static bool HasMeaningfulVolcanism(JournalScan sc)
@@ -1019,7 +1019,7 @@ namespace EDDiscovery.UserControls
 
                                 writer.Write(csv.Format(scan.EventTimeUTC));
                                 writer.Write(csv.Format(scan.BodyName));
-                                writer.Write(csv.Format(scan.EstimatedValue()));
+                                writer.Write(csv.Format(scan.EstimatedValue));
                                 writer.Write(csv.Format(scan.DistanceFromArrivalLS));
 
                                 if (ShowStars)
