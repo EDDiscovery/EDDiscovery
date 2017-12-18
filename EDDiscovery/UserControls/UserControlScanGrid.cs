@@ -80,7 +80,7 @@ namespace EDDiscovery.UserControls
             Display(uctg.GetCurrentHistoryEntry, discoveryform.history);
         }
 
-        public void NewEntry(HistoryEntry he, HistoryList hl)               // called when a new entry is made.. check to see if its a scan update
+        public void NewEntry(HistoryEntry he, HistoryList hl) // called when a new entry is made.. check to see if its a scan update
         {
             // if he valid, and last is null, or not he, or we have a new scan
             if (he != null && (last_he == null || he != last_he || he.EntryType == JournalTypeEnum.Scan))
@@ -91,7 +91,7 @@ namespace EDDiscovery.UserControls
             }
         }
 
-        private void Display(HistoryEntry he, HistoryList hl)            // Called at first start or hooked to change cursor
+        private void Display(HistoryEntry he, HistoryList hl) // Called at first start or hooked to change cursor
         {
             if (he != null && (last_he == null || he.System != last_he.System))
             {
@@ -100,7 +100,7 @@ namespace EDDiscovery.UserControls
             }
         }
 
-        void DrawSystem()   // draw last_sn, last_he
+        void DrawSystem() // draw last_sn, last_he
         {
             dataGridViewScangrid.Rows.Clear();
 
@@ -157,11 +157,11 @@ namespace EDDiscovery.UserControls
 
                         // display stars and stellar bodies mass
                         if (sn.ScanData.IsStar)
-                            bdDetails.Append("M:" + sn.ScanData.nStellarMass.Value.ToString("N2") + ", ");
+                            bdDetails.Append("Mass:" + sn.ScanData.nStellarMass.Value.ToString("N2") + ", ");
 
-                        // habitable zone - do not display for black holes.
+                        // habitable zone for stars - do not display for black holes.
                         if (sn.ScanData.HabitableZoneInner != null && sn.ScanData.HabitableZoneOuter != null && sn.ScanData.StarTypeID != EDStar.H)
-                            bdDetails.AppendFormat("Habitable Zone Approx. {0}-{1}AU ({2})", (sn.ScanData.HabitableZoneInner.Value / JournalScan.oneAU_LS).ToString("N2"), (sn.ScanData.HabitableZoneOuter.Value / JournalScan.oneAU_LS).ToString("N2"), sn.ScanData.GetHabZoneStringLs());
+                            bdDetails.AppendFormat("Habitable Zone: {0}-{1}AU ({2})", (sn.ScanData.HabitableZoneInner.Value / JournalScan.oneAU_LS).ToString("N2"), (sn.ScanData.HabitableZoneOuter.Value / JournalScan.oneAU_LS).ToString("N2"), sn.ScanData.GetHabZoneStringLs() + " ");
 
                         // append the terraformable state to the planet class
                         if (sn.ScanData.Terraformable == true)
@@ -227,6 +227,7 @@ namespace EDDiscovery.UserControls
 
                         DataGridViewRow cur = dataGridViewScangrid.Rows[dataGridViewScangrid.Rows.Count - 1];
 
+                        cur.Cells[0].ToolTipText = sn.ScanData.DisplayString(); // display tooltip with full information when hower bodies image and name
                         cur.Cells[1].ToolTipText = sn.ScanData.DisplayString();
                         cur.Tag = img;
                     }
