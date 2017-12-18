@@ -275,8 +275,10 @@ namespace EDDiscovery.Forms
             this.pnlMaxRestore.ImageSelected = ExtendedControls.DrawnPanel.ImageType.Maximize;
             this.pnlMaxRestore.Location = new System.Drawing.Point(359, 0);
             this.pnlMaxRestore.Name = "pnlMaxRestore";
+            this.pnlMaxRestore.Selectable = false;
             this.pnlMaxRestore.Size = new System.Drawing.Size(24, 24);
             this.pnlMaxRestore.TabIndex = 2;
+            this.pnlMaxRestore.TabStop = false;
             this.pnlMaxRestore.MouseClick += new System.Windows.Forms.MouseEventHandler(this.pnlMaxRestore_MouseClick);
             // 
             // pnlClose
@@ -284,8 +286,10 @@ namespace EDDiscovery.Forms
             this.pnlClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.pnlClose.Location = new System.Drawing.Point(389, 0);
             this.pnlClose.Name = "pnlClose";
+            this.pnlClose.Selectable = false;
             this.pnlClose.Size = new System.Drawing.Size(24, 24);
             this.pnlClose.TabIndex = 1;
+            this.pnlClose.TabStop = false;
             this.pnlClose.MouseClick += new System.Windows.Forms.MouseEventHandler(this.pnlClose_MouseClick);
             // 
             // lblCaption
