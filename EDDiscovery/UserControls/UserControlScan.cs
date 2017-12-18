@@ -204,7 +204,7 @@ namespace EDDiscovery.UserControls
                                     curpos = new Point(firstcolumn.X, maxitemspos.Y + planetsize.Height);
                                 }
 
-                                DrawNode(starcontrols, lastbelt, EDDiscovery.Properties.Resources.Belt,
+                                DrawNode(starcontrols, lastbelt, Properties.Resources.Belt,
                                          new Point(curpos.X + (planetsize.Width - beltsize.Width) / 2, curpos.Y), beltsize, ref offset, false);
 
                                 curpos = new Point(curpos.X + planetsize.Width, curpos.Y);
@@ -249,7 +249,7 @@ namespace EDDiscovery.UserControls
                                 curpos = new Point(firstcolumn.X, maxitemspos.Y + planetsize.Height);
                             }
 
-                            DrawNode(starcontrols, lastbelt, EDDiscovery.Properties.Resources.Belt,
+                            DrawNode(starcontrols, lastbelt, Properties.Resources.Belt,
                                      new Point(curpos.X + (planetsize.Width - beltsize.Width) / 2, curpos.Y), beltsize, ref offset, false);
 
                             curpos = new Point(curpos.X + planetsize.Width, curpos.Y);
@@ -434,33 +434,39 @@ namespace EDDiscovery.UserControls
                             g.DrawImage(nodeimage, size.Width / 2, quarterheight, size.Width, size.Height);
 
                             if (sc.IsLandable)
-                                g.DrawImage(EDDiscovery.Properties.Resources.planet_landing, new Rectangle(quarterheight, 0, quarterheight * 6, quarterheight * 6));
+                                g.DrawImage(Properties.Resources.planet_landing, new Rectangle(quarterheight, 0, quarterheight * 6, quarterheight * 6));
 
                             if (sc.HasRings)
-                                g.DrawImage(sc.Rings.Count() > 1 ? EDDiscovery.Properties.Resources.RingGap512 : EDDiscovery.Properties.Resources.Ring_Only_512,
+                                g.DrawImage(sc.Rings.Count() > 1 ? Properties.Resources.RingGap512 : Properties.Resources.Ring_Only_512,
                                                 new Rectangle(-2, quarterheight, size.Width * 2, size.Height));
 
                             if (chkShowOverlays.Checked)
                             {
                                 if (sc.Terraformable)
-                                    g.DrawImage(EDDiscovery.Properties.Resources.Terraformable, new Rectangle(quarterheight / 2, quarterheight / 2, quarterheight, quarterheight));
+                                    g.DrawImage(Properties.Resources.Terraformable, new Rectangle(quarterheight / 2, quarterheight / 2, quarterheight, quarterheight));
 
                                 if (HasMeaningfulVolcanism(sc)) //this renders below the terraformable icon if present
-                                    g.DrawImage(EDDiscovery.Properties.Resources.Volcano, new Rectangle(quarterheight / 2, (int)(quarterheight * 1.5), quarterheight, quarterheight));
+                                    g.DrawImage(Properties.Resources.Volcano, new Rectangle(quarterheight / 2, (int)(quarterheight * 1.5), quarterheight, quarterheight));
 
                                 //experiment - does this take all the fun out of it?
                                 if (sc.EstimatedValue > 50000)
-                                    g.DrawImage(EDDiscovery.Properties.Resources.startflag, new Rectangle(quarterheight / 2, (int)(quarterheight * 2.5), quarterheight, quarterheight));
+                                    g.DrawImage(Properties.Resources.startflag, new Rectangle(quarterheight / 2, (int)(quarterheight * 2.5), quarterheight, quarterheight));
                             }
 
                             if (indicatematerials)
                             {
-                                Image mm = EDDiscovery.Properties.Resources.materiamoreindicator;
+                                Image mm = Properties.Resources.materiamoreindicator;
                                 g.DrawImage(mm, new Rectangle(bmp.Width - mm.Width, bmp.Height - mm.Height, mm.Width, mm.Height));
                             }
                         }
 
-                        endpoint = CreateImageLabel(pc, bmp, curpos, new Size(bmp.Width, bmp.Height), sn.customname ?? sn.ownname, tip, labelvoff, sc.IsEDSMBody);
+                        var nodeLabel = sn.customname ?? sn.ownname;
+                        if (sn.ScanData.IsLandable && sn.ScanData.nSurfaceGravity != null)
+                        {
+                            nodeLabel += $" ({sn.ScanData.nSurfaceGravity:N2}g)";
+                        }
+
+                        endpoint = CreateImageLabel(pc, bmp, curpos, new Size(bmp.Width, bmp.Height), nodeLabel, tip, labelvoff, sc.IsEDSMBody);
                         offset = size.Width;                                        // return that the middle is now this
                     }
                     else
