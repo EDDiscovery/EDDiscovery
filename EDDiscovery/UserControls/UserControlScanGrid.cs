@@ -156,7 +156,7 @@ namespace EDDiscovery.UserControls
                         }
 
                         // display stars and stellar bodies mass
-                        if (sn.ScanData.IsStar)
+                        if (sn.ScanData.IsStar && sn.ScanData.nStellarMass.HasValue)
                             bdDetails.Append("Mass:" + sn.ScanData.nStellarMass.Value.ToString("N2") + ", ");
 
                         // habitable zone for stars - do not display for black holes.
@@ -227,8 +227,9 @@ namespace EDDiscovery.UserControls
 
                         DataGridViewRow cur = dataGridViewScangrid.Rows[dataGridViewScangrid.Rows.Count - 1];
 
-                        cur.Cells[0].ToolTipText = sn.ScanData.DisplayString(); // display tooltip with full information when hower bodies image and name
-                        cur.Cells[1].ToolTipText = sn.ScanData.DisplayString();
+                        string scan = sn.ScanData.DisplayString(); // display tooltip with full information when hower bodies image and name
+                        cur.Cells[0].ToolTipText = scan;
+                        cur.Cells[1].ToolTipText = scan;
                         cur.Tag = img;
                     }
                 }
