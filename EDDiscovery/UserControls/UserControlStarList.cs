@@ -31,7 +31,7 @@ using EliteDangerousCore.JournalEvents;
 
 namespace EDDiscovery.UserControls
 {
-    public partial class UserControlStarList : UserControlCommonBase, UserControlCursorType
+    public partial class UserControlStarList : UserControlCommonBase, IHistoryCursor
     {
         #region Public IF
 
@@ -42,9 +42,9 @@ namespace EDDiscovery.UserControls
 
         #region Events
 
-        // implement UserControlCursorType fields
-        public event ChangedSelection OnChangedSelection;   // After a change of selection by the user, or after a OnHistoryChanged, or after a sort.
-        public event ChangedSelectionHE OnTravelSelectionChanged;   // as above, different format, for certain older controls
+        // implement IHistoryCursor fields
+        public event ChangedSelectionHandler OnChangedSelection;   // After a change of selection by the user, or after a OnHistoryChanged, or after a sort.
+        public event ChangedSelectionHEHandler OnTravelSelectionChanged;   // as above, different format, for certain older controls
 
         #endregion
 
@@ -60,9 +60,6 @@ namespace EDDiscovery.UserControls
 
         private const int DefaultRowHeight = 26;
 
-        private static EDDiscoveryForm discoveryform;
-        private int displaynumber;
-
         private string DbColumnSave { get { return "StarListControl" + ((displaynumber > 0) ? displaynumber.ToString() : "") + "DGVCol"; } }
         private string DbHistorySave { get { return "StarListControlEDUIHistory" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
         private string DbAutoTop { get { return "StarListControlAutoTop" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
@@ -75,18 +72,14 @@ namespace EDDiscovery.UserControls
         public UserControlStarList()
         {
             InitializeComponent();
+            var corner = dataGridViewStarList.TopLeftHeaderCell; // work around #1487
         }
 
-        public override void Init(EDDiscoveryForm ed, UserControlCursorType tg, int vn) // TG is not used.
+        public override void Init()
         {
-            discoveryform = ed;
-            displaynumber = vn;
             TravelHistoryFilter.InitaliseComboBox(comboBoxHistoryWindow, DbHistorySave);
 
             checkBoxMoveToTop.Checked = SQLiteConnectionUser.GetSettingBool(DbAutoTop, true);
-
-            discoveryform.OnHistoryChange += HistoryChanged;
-            discoveryform.OnNewEntry += AddNewEntry;
 
             dataGridViewStarList.MakeDoubleBuffered();
             dataGridViewStarList.RowTemplate.Height = DefaultRowHeight;
@@ -97,6 +90,9 @@ namespace EDDiscovery.UserControls
             checkBoxEDSM.Checked = SQLiteDBClass.GetSettingBool(DbEDSM, false);
 
             ExtraIcons(false);
+
+            discoveryform.OnHistoryChange += HistoryChanged;
+            discoveryform.OnNewEntry += AddNewEntry;
         }
 
         public void ExtraIcons(bool icon)
@@ -254,30 +250,106 @@ namespace EDDiscovery.UserControls
                         if (sn.ScanData!=null)
                         {
                             JournalScan sc = sn.ScanData;
-
-                            if (sc.IsStar)
+                                                                                    
+                            if (sc.IsStar) // brief notification for special or uncommon celestial bodies, useful to traverse the history and search for that special body you discovered.
                             {
-                                if (sc.StarTypeID == EDStar.N)
-                                    extrainfo = extrainfo.AppendPrePad(sc.BodyName + " is a neutron star", prefix);
+                                // Sagittarius A* is a special body: is the centre of the Milky Way, and the only one which is classified as a Super Massive Black Hole. As far as we know...                                
+                                if (sc.StarTypeID == EDStar.SuperMassiveBlackHole)
+                                    extrainfo = extrainfo.AppendPrePad(sc.BodyName + " is a super massive black hole", prefix);
+
+                                // black holes
                                 if (sc.StarTypeID == EDStar.H)
                                     extrainfo = extrainfo.AppendPrePad(sc.BodyName + " is a black hole", prefix);
+
+                                // neutron stars
+                                if (sc.StarTypeID == EDStar.N)
+                                    extrainfo = extrainfo.AppendPrePad(sc.BodyName + " is a neutron star", prefix);
+
+                                // white dwarf (D, DA, DAB, DAO, DAZ, DAV, DB, DBZ, DBV, DO, DOV, DQ, DC, DCV, DX)
+                                string WhiteDwarf = "White Dwarf";
+                                if (sc.StarTypeText.Contains(WhiteDwarf))
+                                    extrainfo = extrainfo.AppendPrePad(sc.BodyName + " is a " + sc.StarTypeID + " white dwarf star", prefix);
+
+                                // wolf rayet (W, WN, WNC, WC, WO)
+                                string WolfRayet = "Wolf-Rayet";
+                                if (sc.StarTypeText.Contains(WolfRayet))
+                                    extrainfo = extrainfo.AppendPrePad(sc.BodyName + " is a " + sc.StarTypeID + " wolf-rayet star", prefix);
+                                
+                                // giants. It should recognize all classes of giants.
+                                string Giant = "Giant";
+                                if (sc.StarTypeText.Contains(Giant))
+                                    extrainfo = extrainfo.AppendPrePad(sc.BodyName + " is a " + sc.StarTypeText, prefix);
+
+                                // rogue planets - not sure if they really exists, but they are in the journal, so...
+                                if (sc.StarTypeID == EDStar.RoguePlanet)
+                                    extrainfo = extrainfo.AppendPrePad(sc.BodyName + " is a rogue planet", prefix);
                             }
+
                             else
+
                             {
-                                if (sc.PlanetTypeID == EDPlanet.Earthlike_body)
-                                    extrainfo = extrainfo.AppendPrePad(sc.BodyName + " is a earth like body", prefix);
-                                if (sc.PlanetTypeID == EDPlanet.Water_world)
-                                    extrainfo = extrainfo.AppendPrePad(sc.BodyName + " is a water world", prefix);
-                                if (sc.PlanetTypeID == EDPlanet.Ammonia_world)
-                                    extrainfo = extrainfo.AppendPrePad(sc.BodyName + " is a ammonia world", prefix);
+                                // Check if a non-star body is a moon or not. We want it to further refine our brief summary in the visited star list.
+                                // To avoid duplicates, we need to apply our filters before on the bodies recognized as a moon, than do the same for the other bodies that do not fulfill that criteria.
+                                                               
+                                if (sn.level >= 2 && sn.type == StarScan.ScanNodeType.body)
+                                
+                                // Tell us that that special body is a moon. After all, it can be quite an outstanding discovery...
+                                {
+                                    // Earth-like moon
+                                    if (sc.PlanetTypeID == EDPlanet.Earthlike_body)
+                                        extrainfo = extrainfo.AppendPrePad(sc.BodyName + " is an earth like moon", prefix);
+
+                                    // Terraformable water moon
+                                    if (sc.Terraformable == true && sc.PlanetTypeID == EDPlanet.Water_world)
+                                        extrainfo = extrainfo.AppendPrePad(sc.BodyName + " is a terraformable water moon", prefix);
+                                    // Water moon
+                                    if (sc.Terraformable == false && sc.PlanetTypeID == EDPlanet.Water_world)
+                                        extrainfo = extrainfo.AppendPrePad(sc.BodyName + " is a water moon", prefix);
+
+                                    // Terraformable moon
+                                    if (sc.Terraformable == true && sc.PlanetTypeID != EDPlanet.Water_world)
+                                        extrainfo = extrainfo.AppendPrePad(sc.BodyName + " is a terraformable moon", prefix);
+
+                                    // Ammonia moon
+                                    if (sc.PlanetTypeID == EDPlanet.Ammonia_world)
+                                        extrainfo = extrainfo.AppendPrePad(sc.BodyName + " is an ammonia moon", prefix);                                  
+                                }
+
+                                else
+
+                                // Do the same, for all planets
+                                {
+                                    // Earth Like planet
+                                    if (sc.PlanetTypeID == EDPlanet.Earthlike_body)
+                                        extrainfo = extrainfo.AppendPrePad(sc.BodyName + " is an earth like planet", prefix);
+
+                                    // Terraformable water world
+                                    if (sc.PlanetTypeID == EDPlanet.Water_world && sc.Terraformable == true)
+                                        extrainfo = extrainfo.AppendPrePad(sc.BodyName + " is a terraformable water world", prefix);
+                                    // Water world
+                                    if (sc.PlanetTypeID == EDPlanet.Water_world && sc.Terraformable == false)
+                                        extrainfo = extrainfo.AppendPrePad(sc.BodyName + " is a water world", prefix);
+                                    
+                                    // Terraformable planet
+                                    if (sc.Terraformable == true && sc.PlanetTypeID != EDPlanet.Water_world)
+                                        extrainfo = extrainfo.AppendPrePad(sc.BodyName + " is a terraformable planet", prefix);
+
+                                    // Ammonia world
+                                    if (sc.PlanetTypeID == EDPlanet.Ammonia_world)
+                                        extrainfo = extrainfo.AppendPrePad(sc.BodyName + " is an ammonia world", prefix);
+                                }
                             }
                         }
                     }
 
                     total -= node.starnodes.Count;
                     if (total > 0)
-                    {
+                    {   // tell us that a system has other bodies, and how much, beside stars
                         infostr = infostr.AppendPrePad(total.ToStringInvariant() + " Other bod" + ((total > 1) ? "ies" : "y"), ", ");
+                        infostr = infostr.AppendPrePad(extrainfo, prefix);
+                    }
+                    else
+                    {   // we need this to allow the panel to scan also through systems which has only stars
                         infostr = infostr.AppendPrePad(extrainfo, prefix);
                     }
                 }
@@ -494,7 +566,7 @@ namespace EDDiscovery.UserControls
             }
 
             if (!edsm.ShowSystemInEDSM(rightclicksystem.System.name, id_edsm))
-                ExtendedControls.MessageBoxTheme.Show("System could not be found - has not been synched or EDSM is unavailable");
+                ExtendedControls.MessageBoxTheme.Show(FindForm(), "System could not be found - has not been synched or EDSM is unavailable");
 
             this.Cursor = Cursors.Default;
         }
@@ -505,7 +577,7 @@ namespace EDDiscovery.UserControls
             {
                 using (Forms.SetNoteForm noteform = new Forms.SetNoteForm(rightclicksystem, discoveryform))
                 {
-                    if (noteform.ShowDialog(this) == DialogResult.OK)
+                    if (noteform.ShowDialog(FindForm()) == DialogResult.OK)
                     {
                         rightclicksystem.SetJournalSystemNoteText(noteform.NoteText, true, EDCommander.Current.SyncToEdsm);
 
@@ -524,7 +596,7 @@ namespace EDDiscovery.UserControls
             Forms.ExportForm frm = new Forms.ExportForm();
             frm.Init(new string[] { "Export Current View" });
 
-            if (frm.ShowDialog(this) == DialogResult.OK)
+            if (frm.ShowDialog(FindForm()) == DialogResult.OK)
             {
                 if (frm.SelectedIndex == 0)
                 {
@@ -588,7 +660,7 @@ namespace EDDiscovery.UserControls
                             System.Diagnostics.Process.Start(frm.Path);
                     }
                     else
-                        ExtendedControls.MessageBoxTheme.Show("Failed to write to " + frm.Path, "Export Failed", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                        ExtendedControls.MessageBoxTheme.Show(FindForm(), "Failed to write to " + frm.Path, "Export Failed", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
 
                 }
             }

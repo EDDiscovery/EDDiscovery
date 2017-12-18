@@ -30,44 +30,53 @@ namespace EDDiscovery._3DMap
 
         public MapManager(bool nowindowreposition,EDDiscoveryForm frm)
         {
-            _formMap = new FormMap();
-            _formMap.discoveryForm = frm;
-            _formMap.noWindowReposition = nowindowreposition;
+            if (!EDDOptions.Instance.No3DMap)
+            {
+                _formMap = new FormMap()
+                {
+                    discoveryForm = frm,
+                    noWindowReposition = nowindowreposition,
+                    TopMost = frm.TopMost
+                };
+                frm.TopMostChanged += (s, e) => _formMap.TopMost = ((EDDiscoveryForm)s).TopMost;
+            }
         }
 
         public bool Is3DMapsRunning { get { return _formMap.Is3DMapsRunning; } }
 
         public void Prepare(ISystem historysel, string homesys, ISystem centersys, float zoom, List<HistoryEntry> visited)
         {
-            _formMap.Prepare(historysel, homesys, centersys, zoom, visited);
+            _formMap?.Prepare(historysel, homesys, centersys, zoom, visited);
         }
 
         public void Prepare(ISystem historysel, ISystem homesys, ISystem centersys, float zoom, List<HistoryEntry> visited)
         {
-            _formMap.Prepare(historysel, homesys, centersys, zoom, visited);
+            _formMap?.Prepare(historysel, homesys, centersys, zoom, visited);
         }
 
         public void SetPlanned(List<ISystem> plannedr)
         {
-            _formMap.SetPlannedRoute(plannedr);
+            _formMap?.SetPlannedRoute(plannedr);
         }
 
         public void UpdateHistorySystem(ISystem historysel)
         {
-            _formMap.UpdateHistorySystem(historysel);
+            _formMap?.UpdateHistorySystem(historysel);
         }
 
         public bool MoveToSystem(ISystem system)
         {
-            return _formMap.SetCenterSystemTo(system);
+            return _formMap?.SetCenterSystemTo(system) ?? true;
         }
 
         public void Show()
         {
-            _formMap.TopMost = EDDiscoveryForm.EDDConfig.KeepOnTop;
             // TODO: set Opacity to match EDDiscoveryForm
-            _formMap.Show();
-            _formMap.Focus();
+            if (_formMap != null)
+            {
+                _formMap.Show();
+                _formMap.Focus();
+            }
         }
     }
 }

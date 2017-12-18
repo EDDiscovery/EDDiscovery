@@ -53,17 +53,20 @@ namespace ActionLanguage
             filepath = f;
             name = n;
             fileencoding = Encoding.UTF8;
+            filevariables["ActionPackName"] = name;         
+            filevariables["ActionPackFilePath"] = filepath;
         }
 
         public ConditionLists actioneventlist { get; private set; }                        // note we use the list, but not the evaluate between conditions..
-        public ActionProgramList actionprogramlist { get; private set; }                    // programs associated with this pack
+        public ActionProgramList actionprogramlist { get; private set; }                   // programs associated with this pack
         public ConditionVariables installationvariables { get; private set; }              // used to pass to the installer various options, such as disable other packs
         public ConditionVariables filevariables { get; private set; }                      // variables defined using the static.. private to this program.  Not persistent. 
-        public Dictionary<string, ExtendedControls.ConfigurableForm> dialogs;                         // persistent dialogs owned by this file
+        public Dictionary<string, ExtendedControls.ConfigurableForm> dialogs;              // persistent dialogs owned by this file
         public string filepath { get; private set; }                                       // where it came from
         public string name { get; private set; }                                           // its logical name
         public bool enabled { get; private set; }                                          // if enabled.
-        public Encoding fileencoding {get; private set;}                                    // file encoding
+
+        public Encoding fileencoding {get; private set;}                                   // file encoding (auto calc, not saved)
 
         public void ChangeEventList(ConditionLists s)
         {
@@ -148,6 +151,8 @@ namespace ActionLanguage
             {
                 var utc8nobom = new UTF8Encoding(false);        // give it the default UTF8 no BOM encoding, it will detect BOM or UCS-2 automatically
 
+                string currenteventgroup = null;
+
                 using (StreamReader sr = new StreamReader(filename, utc8nobom))         // read directly from file.. presume UTF8 no bom
                 {
                     string firstline = sr.ReadLine();
@@ -195,13 +200,12 @@ namespace ActionLanguage
                             }
                             else if (line.StartsWith("PROGRAM", StringComparison.InvariantCultureIgnoreCase))
                             {
-                                ActionProgram ap = new ActionProgram();
-                                string err = ap.Read(sr, ref lineno);
+                                ActionProgram ap = new ActionProgram();     
+                                string err = ap.Read(sr, ref lineno, line.Substring(7).Trim()); // Read it, prename it..
 
                                 if (err.Length > 0)
                                     return name + " " + err;
 
-                                ap.Rename(line.Substring(7).Trim());        //MUST rename now, after read, as read clears the name expecting PROGRAM
                                 actionprogramlist.Add(ap);
                             }
                             else if (line.StartsWith("INCLUDE", StringComparison.InvariantCultureIgnoreCase))
@@ -228,7 +232,11 @@ namespace ActionLanguage
                                 else if (c.action.Length == 0 || c.eventname.Length == 0)
                                     return name + " " + lineno + " EVENT Missing event name or action" + Environment.NewLine;
 
-                                actioneventlist.Add(c);
+                                actioneventlist.Add(c,currenteventgroup);
+                            }
+                            else if (line.StartsWith("GROUP", StringComparison.InvariantCultureIgnoreCase))
+                            {
+                                currenteventgroup = line.Substring(5).Trim();
                             }
                             else if (line.StartsWith("INSTALL", StringComparison.InvariantCultureIgnoreCase))
                             {
@@ -247,7 +255,15 @@ namespace ActionLanguage
                                 return name + " " + lineno + " Invalid command" + Environment.NewLine;
                         }
 
-                        return "";
+                        string missing = "";
+                        foreach( Condition c in actioneventlist.Enumerable )        // lets see if any programs are missing
+                        {
+                            string progname = c.action;
+                            if ( actionprogramlist.Get(progname) == null )
+                                missing += "Missing program " + progname + Environment.NewLine;
+                        }
+
+                        return missing;
                     }
                     else
                     {
@@ -308,8 +324,21 @@ namespace ActionLanguage
 
                     if (actioneventlist.Count > 0)
                     {
+                        string currenteventgroup = null;
+
                         for (int i = 0; i < actioneventlist.Count; i++)
+                        {
+                            string evgroup = actioneventlist.GetGroupName(i);
+                            if ( evgroup != currenteventgroup )
+                            {
+                                if ( currenteventgroup != null )
+                                    sr.WriteLine("");
+                                currenteventgroup = evgroup;
+                                sr.WriteLine("GROUP " + currenteventgroup);
+                            }
+
                             sr.WriteLine("EVENT " + actioneventlist.Get(i).ToString(includeaction: true));
+                        }
 
                         sr.WriteLine();
                     }
@@ -341,9 +370,9 @@ namespace ActionLanguage
 
                                     e += ", ";
 
-                                    if (evl.Length + e.Length > 100)
+                                    if (evl.Length>0 && evl.Length + e.Length > 120 )   // if we have text, and adding this on makes it long
                                     {
-                                        sr.WriteLine("// Events: " + evl);
+                                        sr.WriteLine("// Events: " + evl);  // write current out
                                         evl = "";
                                     }
 
@@ -353,7 +382,7 @@ namespace ActionLanguage
 
                             if (evl.Length > 0)
                             {
-                                evl = evl.Substring(0, evl.Length - 2);
+                                evl = evl.Substring(0, evl.Length - 2); // remove ,
                                 sr.WriteLine("// Events: " + evl);
                             }
 

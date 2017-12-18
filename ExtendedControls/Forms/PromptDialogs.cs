@@ -27,10 +27,10 @@ namespace ExtendedControls
         // lab sets the items, def can be less or null
         public static List<string> ShowDialog(Form p, string caption, Icon ic, string[] lab, string[] def, bool multiline = false, string[] tooltips = null)
         {
-            ThemeableForms theme = ThemeableFormsInstance.Instance;
+            ITheme theme = ThemeableFormsInstance.Instance;
 
             int vstart = theme.WindowsFrame ? 20 : 40;
-            int vspacing = multiline ? 60 : 40;
+            int vspacing = multiline ? 80 : 40;
             int lw = 100;
             int lx = 10;
             int tx = 10 + lw + 8;
@@ -70,8 +70,8 @@ namespace ExtendedControls
                     Top = y,
                     Width = prompt.Width - 50 - tx,
                     Text = (def != null && i < def.Length) ? def[i] : "",
+                    Multiline = multiline,      // set before height!
                     Height = vspacing - 20,
-                    Multiline = multiline,
                     ScrollBars = (multiline) ? ScrollBars.Vertical : ScrollBars.None,
                     WordWrap = multiline
                 };
@@ -81,7 +81,7 @@ namespace ExtendedControls
                 if (tooltips != null && i < tooltips.Length)
                 {
                     tt.SetToolTip(lbs[i], tooltips[i]);
-                    tt.SetToolTip(tbs[i], tooltips[i]);
+                    tbs[i].SetTipDynamically(tt, tooltips[i]);      // no container here, set tool tip on text boxes using this
                 }
 
                 y += vspacing;
@@ -142,7 +142,24 @@ namespace ExtendedControls
             public string comboboxitems;
         }
 
-        static public string MakeEntry(string instr , out Entry entry , ref System.Drawing.Point lastpos )
+        private System.ComponentModel.IContainer components = null;     // replicate normal component container, so controls which look this
+                                                                        // up for finding the tooltip can (TextBoxBorder)
+        public ConfigurableForm()
+        {
+            this.components = new System.ComponentModel.Container();
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing && (components != null))
+            {
+                components.Dispose();
+            }
+            base.Dispose(disposing);
+        }
+
+
+        static public string MakeEntry(string instr, out Entry entry, ref System.Drawing.Point lastpos)
         {
             entry = null;
 
@@ -190,7 +207,7 @@ namespace ExtendedControls
             entry = new ConfigurableForm.Entry(name, ctype,
                         text, new System.Drawing.Point(x.Value, y.Value), new System.Drawing.Size(w.Value, h.Value), tip);
 
-            if (type.Contains("textbox") && tip != null )
+            if (type.Contains("textbox") && tip != null)
             {
                 int? v = sp.NextWordComma().InvariantParseIntNull();
                 entry.textboxmultiline = v.HasValue && v.Value != 0;
@@ -215,11 +232,12 @@ namespace ExtendedControls
 
         public void Show(Form p, string lname, Icon icon, System.Drawing.Size size, System.Drawing.Point pos, string caption, Entry[] e, Object t )
         {
+    
             logicalname = lname;    // passed back to caller via trigger
             entries = e;
             callertag = t;      // passed back to caller via trigger
 
-            ThemeableForms theme = ThemeableFormsInstance.Instance;
+            ITheme theme = ThemeableFormsInstance.Instance;
 
             FormBorderStyle = FormBorderStyle.FixedDialog;
 
@@ -253,7 +271,7 @@ namespace ExtendedControls
             if (!theme.WindowsFrame)
                 outer.Controls.Add(textLabel);
 
-            ToolTip tt = new ToolTip();
+            ToolTip tt = new ToolTip(components);
             tt.ShowAlways = true;
             for (int i = 0; i < entries.Length; i++)
             {

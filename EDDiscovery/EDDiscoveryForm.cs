@@ -13,7 +13,6 @@
  * 
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
-using EDDiscovery.DB;
 using EliteDangerousCore.EDDN;
 using EliteDangerousCore.EDSM;
 using EDDiscovery.Forms;
@@ -41,6 +40,7 @@ using System.Windows.Forms;
 using EliteDangerousCore;
 using EliteDangerousCore.DB;
 using EliteDangerousCore.JournalEvents;
+using EliteDangerous.CompanionAPI;
 
 namespace EDDiscovery
 {
@@ -54,28 +54,8 @@ namespace EDDiscovery
         static public EDDConfig EDDConfig { get { return EDDConfig.Instance; } }
         public EDDTheme theme { get { return EDDTheme.Instance; } }
 
-        public TravelHistoryControl TravelControl { get { return travelHistoryControl; } }
-        public RouteControl RouteControl { get { return routeControl1; } }
+        public UserControls.UserControlHistory TravelControl { get { return travelHistoryControl; } }
         
-        public AudioExtensions.AudioQueue AudioQueueWave { get { return audioqueuewave; } }
-        public AudioExtensions.AudioQueue AudioQueueSpeech { get { return audioqueuespeech; } }
-        public AudioExtensions.SpeechSynthesizer SpeechSynthesizer { get { return speechsynth; } }
-
-        public string EliteInputList() { return inputdevices.ListDevices(); }
-        public string EliteInputCheck() { return inputdevicesactions.CheckBindings(); }
-
-        public BindingsFile FrontierBindings { get { return frontierbindings; } }
-
-        AudioExtensions.IAudioDriver audiodriverwave;
-        AudioExtensions.AudioQueue audioqueuewave;
-        AudioExtensions.IAudioDriver audiodriverspeech;
-        AudioExtensions.AudioQueue audioqueuespeech;
-        AudioExtensions.SpeechSynthesizer speechsynth;
-
-        DirectInputDevices.InputDeviceList inputdevices;
-        Actions.ActionsFromInputDevices inputdevicesactions;
-        BindingsFile frontierbindings;
-
         public ScreenShots.ScreenShotConverter screenshotconverter;
 
         public EliteDangerousCore.CompanionAPI.CompanionAPIClass Capi { get; private set; } = new EliteDangerousCore.CompanionAPI.CompanionAPIClass();
@@ -102,6 +82,9 @@ namespace EDDiscovery
 
         public event Action<Object> OnNewTarget;
         public event Action<Object, HistoryEntry, bool> OnNoteChanged;                    // UI.Note has been updated attached to this note
+        public event Action<List<ISystem>> OnNewCalculatedRoute;        // route plotter has a new one
+        public event Action<List<string>> OnNewStarsForExpedition;      // add stars to expedition 
+        public event Action<List<string>,bool> OnNewStarsForTrilat;      // add stars to trilat (false distance, true wanted)
 
         #endregion
 
@@ -120,7 +103,9 @@ namespace EDDiscovery
         public event Action<string,bool> OnNewUIEvent { add { Controller.OnNewUIEvent += value; } remove { Controller.OnNewUIEvent -= value; } }
         public event Action<JournalEntry> OnNewJournalEntry { add { Controller.OnNewJournalEntry += value; } remove { Controller.OnNewJournalEntry -= value; } }
         public event Action<string, Color> OnNewLogEntry { add { Controller.OnNewLogEntry += value; } remove { Controller.OnNewLogEntry -= value; } }
+        public event Action OnRefreshCommanders { add { Controller.OnRefreshCommanders += value; } remove { Controller.OnRefreshCommanders -= value; } }
         public event Action<EliteDangerousCore.CompanionAPI.CompanionAPIClass,HistoryEntry> OnNewCompanionAPIData;
+
         #endregion
 
         #region Logging
@@ -163,6 +148,7 @@ namespace EDDiscovery
 
         public void Init(Action<string> msg)    // called from EDDApplicationContext .. continues on with the construction of the form
         {
+            Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " ED init");
             msg.Invoke("Modulating Shields");
             Controller.Init();
 
@@ -172,13 +158,9 @@ namespace EDDiscovery
             panelToolBar.HiddenMarkerWidth = 200;
             panelToolBar.PinState = SQLiteConnectionUser.GetSettingBool("ToolBarPanelPinState", true);
 
-            comboBoxCustomPopOut.Enabled = false;
-            comboBoxCustomPopOut.Items.AddRange(PopOutControl.GetPopOutNames());
-            comboBoxCustomPopOut.SelectedIndex = 0;
-            comboBoxCustomPopOut.Enabled = true;
-
             label_version.Text = EDDOptions.Instance.VersionDisplayString;
 
+            Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " Load popouts, themes, init controls");
             PopOuts = new PopOutControl(this);
 
             ToolStripManager.Renderer = theme.toolstripRenderer;
@@ -188,55 +170,36 @@ namespace EDDiscovery
             if (!EDDOptions.Instance.NoTheme)
                 themeok = theme.RestoreSettings();                                    // theme, remember your saved settings
 
-            trilaterationControl.InitControl(this);
-            travelHistoryControl.InitControl(this);
+            // open all the major tabs except the built in ones
+            Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " Creating major tabs");
+            MaterialCommodityDB.SetUpInitialTable();
+            CreateTabs();
 
-            settings.InitControl(this);
-            journalViewControl1.InitControl(this, 0);
-            gridControl.InitControl(this, 0);
-            routeControl1.InitControl(this);
-            savedRouteExpeditionControl1.InitControl(this);
-
+            Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " Map manager");
             Map = new EDDiscovery._3DMap.MapManager(EDDOptions.Instance.NoWindowReposition, this);
 
             this.TopMost = EDDConfig.KeepOnTop;
 
-#if !NO_SYSTEM_SPEECH
-            // Windows TTS (2000 and above). Speech *recognition* will be Version.Major >= 6 (Vista and above)
-            if (Environment.OSVersion.Platform == PlatformID.Win32NT && Environment.OSVersion.Version.Major >= 5)
-            {
-                msg.Invoke("Activating Sensors");
-                audiodriverwave = new AudioExtensions.AudioDriverCSCore( EDDConfig.DefaultWaveDevice );
-                audiodriverspeech = new AudioExtensions.AudioDriverCSCore( EDDConfig.DefaultVoiceDevice );
-                speechsynth = new AudioExtensions.SpeechSynthesizer(new AudioExtensions.WindowsSpeechEngine());
-            }
-            else
-            {
-                audiodriverwave = new AudioExtensions.AudioDriverDummy();
-                audiodriverspeech = new AudioExtensions.AudioDriverDummy();
-                speechsynth = new AudioExtensions.SpeechSynthesizer(new AudioExtensions.DummySpeechEngine());
-            }
-#else
-            audiodriverwave = new AudioExtensions.AudioDriverDummy();
-            audiodriverspeech = new AudioExtensions.AudioDriverDummy();
-            speechsynth = new AudioExtensions.SpeechSynthesizer(new AudioExtensions.DummySpeechEngine());
-#endif
-            audioqueuewave = new AudioExtensions.AudioQueue(audiodriverwave);
-            audioqueuespeech = new AudioExtensions.AudioQueue(audiodriverspeech);
+            Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " Audio");
+
+            msg.Invoke("Activating Sensors");
 
             actioncontroller = new Actions.ActionController(this, Controller, this.Icon);
 
-            frontierbindings = new BindingsFile();
-            inputdevices = new DirectInputDevices.InputDeviceList(a => BeginInvoke(a));
-            inputdevicesactions = new Actions.ActionsFromInputDevices(inputdevices, frontierbindings, actioncontroller);
+            actioncontroller.ReLoad();          // load system up here
 
             screenshotconverter = new ScreenShots.ScreenShotConverter(this);
 
+            Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " Theming");
             ApplyTheme();
 
             notifyIcon1.Visible = EDDConfig.UseNotifyIcon;
 
             SetUpLogging();
+
+            Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " Finish ED Init");
+
+            Controller.InitComplete();
         }
 
         // OnLoad is called the first time the form is shown, before OnShown or OnActivated are called
@@ -244,20 +207,22 @@ namespace EDDiscovery
         {
             try
             {
-                MaterialCommodityDB.SetUpInitialTable();
+                Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " EDF Load");
+
                 Controller.PostInit_Loaded();
 
-                RepositionForm();
                 ShowInfoPanel("Loading. Please wait!", true);
-                routeControl1.travelhistorycontrol1 = travelHistoryControl;
-                settings.InitSettingsTab();
-                savedRouteExpeditionControl1.LoadControl();
+
+                RepositionForm();
+
+                LoadTabs();
 
                 if (EDDOptions.Instance.ActionButton)
                 {
                     buttonReloadActions.Visible = true;
                 }
 
+                Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " EDF load complete");
             }
             catch (Exception ex)
             {
@@ -268,6 +233,7 @@ namespace EDDiscovery
         // OnShown is called every time Show is called
         private void EDDiscoveryForm_Shown(object sender, EventArgs e)
         {
+            Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " EDF shown");
             Controller.PostInit_Shown();
 
             if (!themeok)
@@ -279,6 +245,13 @@ namespace EDDiscovery
             actioncontroller.onStartup();
 
             _shownOnce = true;
+            Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " EDF shown complete");
+
+            // Form is fully loaded, we can do tab actions now
+
+            tabControlMain.SelectedIndexChanged += (snd, ea) => { ActionRun(Actions.ActionEventEDList.onTabChange, null, new Conditions.ConditionVariables("TabName", tabControlMain.TabPages[tabControlMain.SelectedIndex].Text)); };
+
+            actioncontroller.CheckWarn();
         }
 
         #endregion
@@ -366,17 +339,212 @@ namespace EDDiscovery
                 _formMax = SQLiteDBClass.GetSettingBool("FormMax", false);
                 if (_formMax) this.WindowState = FormWindowState.Maximized;
             }
+
             _formLeft = Left;
             _formTop = Top;
             _formHeight = Height;
             _formWidth = Width;
+        }
 
-            travelHistoryControl.LoadLayoutSettings();
-            journalViewControl1.LoadLayoutSettings();
-            gridControl.LoadLayoutSettings();
+        #endregion
 
-            string tab = SQLiteConnectionUser.GetSettingString("MajorTab", "");
-            SelectTabPage(tab);
+        #region Tabs
+
+        void CreateTabs()       // called during part of Init
+        {
+            string majortabs = SQLiteConnectionUser.GetSettingString("MajorTabControlList", "");
+            int[] tabctrl;
+            if (!majortabs.RestoreArrayFromString(out tabctrl) || tabctrl.Length == 0 || (tabctrl.Length % 2) != 1) // need it odd as we have an index tab as first
+            {
+                tabctrl = new int[] { 0,        -1, 0 ,
+                                                (int)PanelInformation.PanelIDs.Route, 0,
+                                                (int)PanelInformation.PanelIDs.Expedition, 0,
+                                                (int)PanelInformation.PanelIDs.Settings,0
+                };
+            }
+
+            TabPage history = tabControlMain.TabPages[0];       // remember history page, remove
+            tabControlMain.TabPages.Clear();
+            bool donehistory = false;
+
+            for (int i = 1; i < tabctrl.Length; i += 2)
+            {
+                if (tabctrl[i] != -1)
+                {
+                    try
+                    {
+                        PanelInformation.PanelIDs p = (PanelInformation.PanelIDs)tabctrl[i];
+                        CreateTab(p, tabctrl[i + 1], tabControlMain.TabPages.Count, false);      // no need the theme, will be themed as part of overall load
+                                                                                                 // may fail if p is crap, then just ignore
+                    }
+                    catch { }   // paranoia in case tabctrl number is crappy.
+                }
+                else if ( !donehistory )
+                {
+                    tabControlMain.TabPages.Add(history); // add back in right place
+                    travelHistoryControl.Init(this, null, UserControls.UserControlCommonBase.DisplayNumberHistoryGrid); // and init at this point with 0 as dn
+                    donehistory = true;
+                }
+            }
+
+            if ( !donehistory)      // just in case its missing
+            {
+                tabControlMain.TabPages.Add(history); // add back in right place
+                travelHistoryControl.Init(this, null, UserControls.UserControlCommonBase.DisplayNumberHistoryGrid); // and init at this point with 0 as dn
+            }
+
+            for (int i = 0; i < PanelInformation.GetNumberPanels(); i++)
+            {
+                addTabToolStripMenuItem.DropDownItems.Add(PanelInformation.MakeToolStripMenuItem(i, (s, e) =>
+                {
+                    TabPage page = CreateTab((PanelInformation.PanelIDs)((s as ToolStripMenuItem).Tag), -1, tabControlMain.LastTabClicked, true);
+                    UserControls.UserControlCommonBase uccb = page.Controls[0] as UserControls.UserControlCommonBase;
+                    uccb.LoadLayout();
+                    uccb.InitialDisplay();
+                    tabControlMain.SelectedIndex = tabControlMain.LastTabClicked;   // and select the inserted one
+                }));
+            }
+
+            removeTabToolStripMenuItem.Click += (s, e) => RemoveTabAtIndex(tabControlMain.LastTabClicked);
+
+            if ( tabctrl.Length>0 && tabctrl[0]>=0 && tabctrl[0]<tabControlMain.TabPages.Count)
+                tabControlMain.SelectedIndex = tabctrl[0];  // make sure external data does not crash us
+        }
+
+        private void ContextMenuStripTabs_Opening(object sender, CancelEventArgs e)
+        {       // don't remove history!
+            removeTabToolStripMenuItem.Enabled = tabControlMain.LastTabClicked >= 0 && tabControlMain.TabPages.Count >= tabControlMain.LastTabClicked && !(tabControlMain.TabPages[tabControlMain.LastTabClicked].Controls[0] is UserControls.UserControlHistory);
+        }
+
+        private TabPage CreateTab(PanelInformation.PanelIDs ptype, int dn , int posindex, bool dotheme)
+        {
+            UserControls.UserControlCommonBase uccb = PanelInformation.Create(ptype);   // must create, since its a ptype.
+            if (uccb == null)       // if ptype is crap, it returns null.. catch
+                return null;
+
+            uccb.Dock = System.Windows.Forms.DockStyle.Fill;    // uccb has to be fill, even though the VS designer does not indicate you need to set it.. copied from designer code
+            uccb.Location = new System.Drawing.Point(3, 3);
+
+            List<int> idlist = (from TabPage p in tabControlMain.TabPages where p.Controls[0].GetType() == uccb.GetType() select (p.Controls[0] as UserControls.UserControlCommonBase).displaynumber).ToList();
+
+            if (dn == -1) // if work out display number
+            {
+                // not travel grid (due to clash with History control) and not in list, use primary number (0)
+                if (ptype != PanelInformation.PanelIDs.TravelGrid && !idlist.Contains(UserControls.UserControlCommonBase.DisplayNumberPrimaryTab))
+                    dn = UserControls.UserControlCommonBase.DisplayNumberPrimaryTab;
+                else
+                {   // search for empty id.
+                    for (int i = UserControls.UserControlCommonBase.DisplayNumberStartExtraTabs; i <= UserControls.UserControlCommonBase.DisplayNumberStartExtraTabsMax; i++)
+                    {
+                        if (!idlist.Contains(i))
+                        {
+                            dn = i;
+                            break;
+                        }
+                    }
+                }
+            }
+
+            System.Diagnostics.Debug.WriteLine("Create tab {0} dn {1} at {2}", ptype, dn, posindex);
+
+            uccb.Init(this, travelHistoryControl.GetTravelGrid, dn);    // start the uccb up
+
+            string postfix;
+            if (ptype != PanelInformation.PanelIDs.TravelGrid)      // given the dn, work out the name
+                postfix = (dn == UserControls.UserControlCommonBase.DisplayNumberPrimaryTab) ? "" : "(" + (dn - UserControls.UserControlCommonBase.DisplayNumberStartExtraTabs + 1).ToStringInvariant() + ")";
+            else
+                postfix = (dn == UserControls.UserControlCommonBase.DisplayNumberStartExtraTabs) ? "" : "(" + (dn - UserControls.UserControlCommonBase.DisplayNumberStartExtraTabs).ToStringInvariant() + ")";
+
+            TabPage page = new TabPage(PanelInformation.GetPanelInfoByEnum(ptype).WindowTitlePrefix + postfix);
+            page.Location = new System.Drawing.Point(4, 22);    // copied from normal tab creation code
+            page.Padding = new System.Windows.Forms.Padding(3);
+
+            page.Controls.Add(uccb);
+
+            tabControlMain.TabPages.Insert(posindex, page);
+
+            if (dotheme)                // only user created ones need themeing
+                theme.ApplyToControls(page, applytothis: true);
+
+            return page;
+        }
+
+        private void LoadTabs()     // called on Loading..
+        {
+            //foreach (TabPage tp in tabControlMain.TabPages) System.Diagnostics.Debug.WriteLine("TP Size " + tp.Controls[0].DisplayRectangle);
+
+            foreach (TabPage p in tabControlMain.TabPages)      // all main tabs, load/display
+            {
+                // now a strange thing. tab Selected, cause its shown, gets resized (due to repoisition form). Other tabs dont.
+                // LoadLayout could fail due to an incorrect size that would break something (such as spitters).. 
+                // so force size. tried perform layout to no avail
+                p.Size = tabControlMain.TabPages[tabControlMain.SelectedIndex].Size;
+                UserControls.UserControlCommonBase uccb = (UserControls.UserControlCommonBase)p.Controls[0];
+                uccb.LoadLayout();
+                uccb.InitialDisplay();
+            }
+
+            //foreach (TabPage tp in tabControlMain.TabPages) System.Diagnostics.Debug.WriteLine("TP Size " + tp.Controls[0].DisplayRectangle);
+        }
+
+        private TabPage GetMajorTab(PanelInformation.PanelIDs ptype)
+        {
+            Type t = PanelInformation.GetPanelInfoByEnum(ptype).PopoutType;
+            return (from TabPage x in tabControlMain.TabPages where x.Controls[0].GetType() == t select x).FirstOrDefault();
+        }
+
+        private TabPage EnsureMajorTabIsPresent(PanelInformation.PanelIDs ptype, bool selectit)
+        {
+            TabPage page = GetMajorTab(ptype);
+            if (page == null)
+            {
+                page = CreateTab(ptype, -1, tabControlMain.TabCount, true);
+                UserControls.UserControlCommonBase uccb = page.Controls[0] as UserControls.UserControlCommonBase;
+                uccb.LoadLayout();
+                uccb.InitialDisplay();
+            }
+
+            if ( selectit )
+                tabControlMain.SelectTab(page);
+
+            return page;
+        }
+
+        private void RemoveTabAtIndex(int tabIndex)
+        {
+            if (tabIndex >= 0 && tabIndex < tabControlMain.TabPages.Count && !(tabControlMain.TabPages[tabIndex].Controls[0] is UserControls.UserControlHistory))
+            {
+                TabPage page = tabControlMain.TabPages[tabIndex];
+                UserControls.UserControlCommonBase uccb = page.Controls[0] as UserControls.UserControlCommonBase;
+                uccb.Closing();
+                page.Dispose();
+            }
+        }
+
+        public bool SelectTabPage(string name)
+        {
+            foreach (TabPage p in tabControlMain.TabPages)
+            {
+                if (p.Text.Equals(name, StringComparison.InvariantCultureIgnoreCase))
+                {
+                    tabControlMain.SelectTab(p);
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        private void tabControlMain_MouseClick(object sender, MouseEventArgs e)
+        {
+            int n = tabControlMain.TabAt(e.Location);
+            if (n != -1)
+            {
+                if (e.Button == MouseButtons.Right)
+                    contextMenuStripTabs.Show(tabControlMain.PointToScreen(e.Location));
+                else if (e.Button == MouseButtons.Middle)
+                    RemoveTabAtIndex(n);
+            }
         }
 
         #endregion
@@ -415,9 +583,6 @@ namespace EDDiscovery
         {
             screenshotconverter.Start();
 
-            routeControl1.EnableRouteTab(); // now we have systems, we can update this..
-
-            routeControl1.travelhistorycontrol1 = travelHistoryControl;
             ShowInfoPanel("", false);
 
             checkInstallerTask = CheckForNewInstallerAsync();
@@ -442,7 +607,6 @@ namespace EDDiscovery
         private void Controller_RefreshCommanders()
         {
             LoadCommandersListBox();             // in case a new commander has been detected
-            settings.UpdateCommandersListBox();
         }
 
         private void Controller_InitialisationComplete()
@@ -453,15 +617,13 @@ namespace EDDiscovery
 
         private void Controller_RefreshComplete()
         {
-            
+
+            Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " Refresh complete");
+
             RefreshButton(true);
             actioncontroller.ActionRunOnRefresh();
 
-            if ( DateTime.UtcNow > new DateTime (2017, 9, 26, 12 ,0 ,0 ))
-            {
-                LogLineHighlight("Companion API is temporarily disabled due to changed in the API by Frontier for 2.4." + Environment.NewLine + "As Arnie says, I'll be back!");
-            }
-            else
+
 
             if (!Capi.IsCommanderLoggedin(EDCommander.Current.Name))
             {
@@ -514,6 +676,8 @@ namespace EDDiscovery
                     }
                 }
             }
+
+            Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " Refresh complete finished");
         }
 
         private void Controller_NewEntrySecond(HistoryEntry he, HistoryList hl)         // called after all UI's have had their chance
@@ -537,6 +701,7 @@ namespace EDDiscovery
                         try
                         {
                             Capi.GetProfile();
+                            CMarket market = Capi.GetMarket();
 
                             JournalDocked dockevt = he.journalEntry as JournalDocked;
 
@@ -555,16 +720,21 @@ namespace EDDiscovery
                                 LogLineHighlight("CAPI profileStationRequired is " + dockevt.StationName + ", profile station is " + Capi.Profile.StarPort.name);
                                 // Todo add a retry later...
                             }
+                            else if (!dockevt.StationName.Equals(market.name))
+                            {
+                                LogLineHighlight("CAPI stationname  " + dockevt.StationName + ",´market station is " + market.name);
+                                // Todo add a retry later...
+                            }
                             else
                             {
-                                JournalEDDCommodityPrices entry = JournalEntry.AddEDDCommodityPrices(EDCommander.Current.Nr, he.journalEntry.EventTimeUTC.AddSeconds(1), Capi.Profile.StarPort.name, Capi.Profile.StarPort.faction, Capi.Profile.StarPort.jcommodities);
+                                JournalEDDCommodityPrices entry = JournalEntry.AddEDDCommodityPrices(EDCommander.Current.Nr, he.journalEntry.EventTimeUTC.AddSeconds(1), Capi.Profile.StarPort.name, Capi.Profile.StarPort.faction, market.jcommodities);
                                 if (entry != null)
                                 {
                                     Controller.NewEntry(entry);
                                     OnNewCompanionAPIData?.Invoke(Capi, he);
 
                                     if (EDCommander.Current.SyncToEddn)
-                                        SendPricestoEDDN(he);
+                                        SendPricestoEDDN(he, market);
 
                                 }
                             }
@@ -627,7 +797,7 @@ namespace EDDiscovery
             actioncontroller.ActionRun(Actions.ActionEventEDList.onUIEvent , new Conditions.ConditionVariables(new string[] { "UIEvent", name, "UIDisplayed", shown ? "1" : "0" }));
         }
 
-        private void SendPricestoEDDN(HistoryEntry he)
+        private void SendPricestoEDDN(HistoryEntry he, CMarket market)
         {
             try
             {
@@ -640,7 +810,7 @@ namespace EDDiscovery
                 if (he.Commander.Name.StartsWith("[BETA]", StringComparison.InvariantCultureIgnoreCase) || he.IsBetaMessage)
                     eddn.isBeta = true;
 
-                JObject msg = eddn.CreateEDDNCommodityMessage(Capi.Profile.StarPort.commodities, Capi.Profile.CurrentStarSystem.name, Capi.Profile.StarPort.name, DateTime.UtcNow);
+                JObject msg = eddn.CreateEDDNCommodityMessage(market.commodities, Capi.Profile.CurrentStarSystem.name, Capi.Profile.StarPort.name, DateTime.UtcNow);
 
                 if (msg != null)
                 {
@@ -693,15 +863,13 @@ namespace EDDiscovery
 
         private void Controller_BgSafeClose()       // run in thread..
         {
-            actioncontroller.CloseDown();
+            actioncontroller.HoldTillProgStops();
         }
 
         private void Controller_FinalClose()        // run in UI, when controller finishes close
         {
             // send any dirty notes.  if they are, the call back gets called. If we have EDSM sync on, and its an FSD entry, send it
             SystemNoteClass.CommitDirtyNotes((snc) => { if (EDCommander.Current.SyncToEdsm && snc.FSDEntry) EDSMSync.SendComments(snc.SystemName, snc.Note, snc.EdsmId); });
-
-            settings.SaveSettings();
 
             screenshotconverter.SaveSettings();
 
@@ -712,24 +880,29 @@ namespace EDDiscovery
             SQLiteDBClass.PutSettingInt("FormLeft", _formLeft);
             SQLiteDBClass.PutSettingBool("ToolBarPanelPinState", panelToolBar.PinState);
 
-            routeControl1.SaveSettings();
             theme.SaveSettings(null);
-            travelHistoryControl.SaveSettings();
-            journalViewControl1.SaveSettings();
-            gridControl.SaveSettings();
-            if (EDDConfig.AutoSavePopOuts)
+
+            List<int> idlist = new List<int>();
+
+            idlist.Add(tabControlMain.SelectedIndex);   // first is current index
+
+            foreach (TabPage p in tabControlMain.TabPages)      // all main tabs, load/display
+            {
+                UserControls.UserControlCommonBase uccb = p.Controls[0] as UserControls.UserControlCommonBase;
+                uccb.Closing();
+                PanelInformation.PanelInfo pi = PanelInformation.GetPanelInfoByType(uccb.GetType());
+                idlist.Add(pi != null ? (int)pi.PopoutID : -1);
+                idlist.Add(uccb.displaynumber);
+            }
+
+            SQLiteConnectionUser.PutSettingString("MajorTabControlList", string.Join(",",idlist) );
+
+            if (EDDConfig.AutoSavePopOuts)      // must do after settings have saved state
                 PopOuts.SaveCurrentPopouts();
 
-            SQLiteConnectionUser.PutSettingString("MajorTab", tabControlMain.SelectedTab.Text);
             notifyIcon1.Visible = false;
 
-            audioqueuespeech.Dispose();     // in order..
-            audiodriverspeech.Dispose();
-            audioqueuewave.Dispose();
-            audiodriverwave.Dispose();
-
-            inputdevicesactions.Stop();
-            inputdevices.Clear();
+            actioncontroller.CloseDown();
 
             Close();
             Application.Exit();
@@ -748,7 +921,14 @@ namespace EDDiscovery
         private void buttonReloadActions_Click(object sender, EventArgs e)
         {
             actioncontroller.ReLoad();
+            actioncontroller.CheckWarn();
             actioncontroller.onStartup();
+        }
+
+        private void sendUnsyncedEGOScansToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            List<HistoryEntry> hlsyncunsyncedlist = Controller.history.FilterByScanNotEGOSynced;        // first entry is oldest
+            EDDiscoveryCore.EGO.EGOSync.SendEGOEvents(LogLine, hlsyncunsyncedlist);
         }
 
         private void addNewStarToolStripMenuItem_Click(object sender, EventArgs e)
@@ -771,6 +951,12 @@ namespace EDDiscovery
             Process.Start(Properties.Resources.URLProjectWiki);
         }
 
+        private void settingsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            EnsureMajorTabIsPresent(PanelInformation.PanelIDs.Settings, true);
+        }
+
+
         private void showLogfilesToolStripMenuItem_Click(object sender, EventArgs e)
         {
             try
@@ -787,7 +973,7 @@ namespace EDDiscovery
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Show log files exception: " + ex.Message);
+                MessageBox.Show(this, "Show log files exception: " + ex.Message);
             }
         }
 
@@ -804,13 +990,13 @@ namespace EDDiscovery
         private void forceEDDBUpdateToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (!Controller.AsyncPerformSync(eddbsync: true))      // we want it to have run, to completion, to allow another go..
-                ExtendedControls.MessageBoxTheme.Show("Synchronisation to databases is in operation or pending, please wait");
+                ExtendedControls.MessageBoxTheme.Show(this, "Synchronisation to databases is in operation or pending, please wait");
         }
 
         private void syncEDSMSystemsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (!Controller.AsyncPerformSync(edsmsync: true))      // we want it to have run, to completion, to allow another go..
-                ExtendedControls.MessageBoxTheme.Show("Synchronisation to databases is in operation or pending, please wait");
+                ExtendedControls.MessageBoxTheme.Show(this, "Synchronisation to databases is in operation or pending, please wait");
         }
 
         private void gitHubToolStripMenuItem_Click(object sender, EventArgs e)
@@ -821,11 +1007,6 @@ namespace EDDiscovery
         private void reportIssueIdeasToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Process.Start(Properties.Resources.URLProjectFeedback);
-        }
-
-        internal void keepOnTopChanged(bool keepOnTop)
-        {
-            this.TopMost = keepOnTop;
         }
 
         /// <summary>
@@ -839,16 +1020,6 @@ namespace EDDiscovery
                 Show();
         }
 
-        private void changeMapColorToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            settings.panel_defaultmapcolor_Click(sender, e);
-        }
-
-        private void editThemeToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            settings.button_edittheme_Click(this, null);
-        }
-
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Close();
@@ -857,7 +1028,6 @@ namespace EDDiscovery
         public void AboutBox(Form parent = null)
         {
             AboutForm frm = new AboutForm();
-            frm.TopMost = parent?.TopMost ?? this.TopMost;
             frm.ShowDialog(parent ?? this);
         }
 
@@ -892,7 +1062,7 @@ namespace EDDiscovery
 
         private void clearEDSMIDAssignedToAllRecordsForCurrentCommanderToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (ExtendedControls.MessageBoxTheme.Show("Confirm you wish to reset the assigned EDSM IDs to all the current commander history entries," +
+            if (ExtendedControls.MessageBoxTheme.Show(this, "Confirm you wish to reset the assigned EDSM IDs to all the current commander history entries," +
                                 " and clear all the assigned EDSM IDs in all your notes for all commanders\r\n\r\n" +
                                 "This will not change your history, but when you next refresh, it will try and reassign EDSM systems to " +
                                 "your history and notes.  Use only if you think that the assignment of EDSM systems to entries is grossly wrong," +
@@ -931,7 +1101,7 @@ namespace EDDiscovery
                 if (cmdr != null)
                 {
                     FolderBrowserDialog dirdlg = new FolderBrowserDialog();
-                    DialogResult dlgResult = dirdlg.ShowDialog();
+                    DialogResult dlgResult = dirdlg.ShowDialog(this);
 
                     if (dlgResult == DialogResult.OK)
                     {
@@ -945,7 +1115,7 @@ namespace EDDiscovery
 
         private void dEBUGResetAllHistoryToFirstCommandeToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (ExtendedControls.MessageBoxTheme.Show("Confirm you wish to reset all history entries to the current commander", "WARNING", MessageBoxButtons.OKCancel) == DialogResult.OK)
+            if (ExtendedControls.MessageBoxTheme.Show(this, "Confirm you wish to reset all history entries to the current commander", "WARNING", MessageBoxButtons.OKCancel) == DialogResult.OK)
             {
                 JournalEntry.ResetCommanderID(-1, EDCommander.CurrentCmdrID);
                 Controller.RefreshHistoryAsync();
@@ -978,7 +1148,7 @@ namespace EDDiscovery
 
         private void deleteDuplicateFSDJumpEntriesToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (ExtendedControls.MessageBoxTheme.Show("Confirm you remove any duplicate FSD entries from the current commander", "WARNING", MessageBoxButtons.OKCancel) == DialogResult.OK)
+            if (ExtendedControls.MessageBoxTheme.Show(this, "Confirm you remove any duplicate FSD entries from the current commander", "WARNING", MessageBoxButtons.OKCancel) == DialogResult.OK)
             {
                 int n = JournalEntry.RemoveDuplicateFSDEntries(EDCommander.CurrentCmdrID);
                 Controller.LogLine("Removed " + n + " FSD entries");
@@ -1005,7 +1175,7 @@ namespace EDDiscovery
                 dlg.Title = "Could not find VisitedStarsCache.dat file, choose file";
                 dlg.FileName = "ImportStars.txt";
 
-                if (dlg.ShowDialog() != DialogResult.OK)
+                if (dlg.ShowDialog(this) != DialogResult.OK)
                     return;
                 exportfilename = dlg.FileName;
             }
@@ -1029,26 +1199,33 @@ namespace EDDiscovery
             }
             catch (IOException)
             {
-                ExtendedControls.MessageBoxTheme.Show("Error writing " + exportfilename, "Export visited stars", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                ExtendedControls.MessageBoxTheme.Show(this, "Error writing " + exportfilename, "Export visited stars", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-        }
-
-        public ISystem GetHomeSystem()
-        {
-            return settings.HomeSystem;
         }
 
         public void Open3DMap(HistoryEntry he)
         {
             this.Cursor = Cursors.WaitCursor;
 
-            ISystem HomeSystem = GetHomeSystem();
-
             Controller.history.FillInPositionsFSDJumps();
 
-            Map.Prepare(he?.System, HomeSystem,
-                        settings.MapCentreOnSelection ? he?.System : HomeSystem,
-                        settings.MapZoom, Controller.history.FilterByTravel);
+            Map.Prepare(he?.System, EDDConfig.Instance.HomeSystem,
+                        EDDConfig.Instance.MapCentreOnSelection ? he?.System : EDDConfig.Instance.HomeSystem,
+                        EDDConfig.Instance.MapZoom, Controller.history.FilterByTravel);
+            Map.Show();
+            this.Cursor = Cursors.Default;
+        }
+
+        public void Open3DMapOnSystem(ISystem centerSystem )
+        {
+            this.Cursor = Cursors.WaitCursor;
+
+            if (centerSystem == null || !centerSystem.HasCoordinate)
+                centerSystem = history.GetLastWithPosition.System;
+
+            Map.Prepare(centerSystem, EDDConfig.Instance.HomeSystem, centerSystem,
+                             EDDConfig.Instance.MapZoom, history.FilterByTravel);
+
             Map.Show();
             this.Cursor = Cursors.Default;
         }
@@ -1069,13 +1246,6 @@ namespace EDDiscovery
             EDDNSync.SendEDDNEvents(LogLine, hlsyncunsyncedlist);
         }
 
-        private void materialSearchToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            FindMaterialsForm frm = new FindMaterialsForm();
-
-            frm.Show(this);
-        }
-
         private void notifyIcon1_DoubleClick(object sender, EventArgs e)
         {
             // Tray icon was double-clicked.
@@ -1093,9 +1263,10 @@ namespace EDDiscovery
         }
 
         private void notifyIconMenu_Hide_Click(object sender, EventArgs e)
-        {
-            // Tray icon 'Hide Tray Icon' menu item was clicked.
-            settings.checkBoxUseNotifyIcon.Checked = false;
+        {       // horrible circular ref to this sub func then back up.. can't think of a fix for now.
+            TabPage t = GetMajorTab(PanelInformation.PanelIDs.Settings);
+            if ( t != null )
+                (t.Controls[0] as UserControls.UserControlSettings).DisableNotifyIcon();
         }
 
         private void notifyIconMenu_Open_Click(object sender, EventArgs e)
@@ -1229,6 +1400,24 @@ namespace EDDiscovery
                 OnNoteChanged(sender, snc,committed);
         }
 
+        public void NewCalculatedRoute(List<ISystem> list)
+        {
+            if (OnNewCalculatedRoute != null)
+                OnNewCalculatedRoute(list);
+        }
+
+        public void NewTriLatStars(List<string> list, bool wanted)
+        {
+            if (OnNewStarsForTrilat != null)
+                OnNewStarsForTrilat(list, wanted);
+        }
+
+        public void NewExpeditionStars(List<string> list)
+        {
+            if (OnNewStarsForExpedition != null)
+                OnNewStarsForExpedition(list);
+        }
+
         #endregion
 
         #region Add Ons
@@ -1344,25 +1533,6 @@ namespace EDDiscovery
             actioncontroller.ActionRun(Actions.ActionEventEDList.onMenuItem, null, vars);
         }
 
-        public bool SelectTabPage(string name)
-        {
-            foreach (TabPage p in tabControlMain.TabPages)
-            {
-                if (p.Text.Equals(name, StringComparison.InvariantCultureIgnoreCase))
-                {
-                    tabControlMain.SelectTab(p);
-                    return true;
-                }
-            }
-
-            return false;
-        }
-
-        private void tabControl1_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            ActionRun(Actions.ActionEventEDList.onTabChange, null, new Conditions.ConditionVariables("TabName", tabControlMain.TabPages[tabControlMain.SelectedIndex].Text));
-        }
-
         public Conditions.ConditionVariables Globals { get { return actioncontroller.Globals; } }
 
         public int ActionRunOnEntry(HistoryEntry he, ActionLanguage.ActionEvent av)
@@ -1439,7 +1609,7 @@ namespace EDDiscovery
 
             if (!edsm.IsApiKeySet)
             {
-                ExtendedControls.MessageBoxTheme.Show("Please ensure a commander is selected and it has a EDSM API key set");
+                ExtendedControls.MessageBoxTheme.Show(this, "Please ensure a commander is selected and it has a EDSM API key set");
                 return;
             }
 
@@ -1454,21 +1624,36 @@ namespace EDDiscovery
 
         }
 
-        private void comboBoxCustomPopOut_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (comboBoxCustomPopOut.Enabled)
-            {
-                PopOuts.PopOut(comboBoxCustomPopOut.SelectedIndex);
-
-                comboBoxCustomPopOut.Enabled = false;
-                comboBoxCustomPopOut.SelectedIndex = 0;
-                comboBoxCustomPopOut.Enabled = true;
-            }
-        }
-
         #endregion
 
         #region PopOuts
+
+        ExtendedControls.DropDownCustom popoutdropdown;
+
+        private void buttonExtPopOut_Click(object sender, EventArgs e)
+        {
+            popoutdropdown = new ExtendedControls.DropDownCustom("", true);
+
+            popoutdropdown.ItemHeight = 26;
+            popoutdropdown.Items = PanelInformation.GetPanelToolTips().ToList();
+            popoutdropdown.ImageItems = PanelInformation.GetPanelImages().ToList();
+            popoutdropdown.FlatStyle = FlatStyle.Popup;
+            popoutdropdown.Activated += (s, ea) =>
+            {
+                Point location = buttonExtPopOut.PointToScreen(new Point(0, 0));
+                popoutdropdown.Location = popoutdropdown.PositionWithinScreen(location.X + buttonExtPopOut.Width, location.Y);
+                this.Invalidate(true);
+            };
+            popoutdropdown.SelectedIndexChanged += (s, ea) =>
+            {
+                PopOuts.PopOut(popoutdropdown.SelectedIndex);
+            };
+
+            popoutdropdown.Size = new Size(500,600);
+            theme.ApplyToControls(popoutdropdown);
+            popoutdropdown.SelectionBackColor = theme.ButtonBackColor;
+            popoutdropdown.Show(this);
+        }
 
         internal void SaveCurrentPopOuts()
         {
@@ -1482,27 +1667,6 @@ namespace EDDiscovery
 
         #endregion
 
-        #region Elite Input
-
-        public void EliteInput(bool on, bool axisevents)
-        {
-            inputdevicesactions.Stop();
-            inputdevices.Clear();
-
-#if !__MonoCS__
-            if (on)
-            {
-                DirectInputDevices.InputDeviceJoystickWindows.CreateJoysticks(inputdevices, axisevents);
-                DirectInputDevices.InputDeviceKeyboard.CreateKeyboard(inputdevices);              // Created.. not started..
-                DirectInputDevices.InputDeviceMouse.CreateMouse(inputdevices);
-                frontierbindings.LoadBindingsFile();
-                inputdevicesactions.Start();
-            }
-#endif
-        }
-
-        #endregion
-
         #region Misc
 
         public void SetUpLogging()      // controls logging of HTTP stuff
@@ -1512,11 +1676,6 @@ namespace EDDiscovery
 
         #endregion
 
-        private void sendUnsyncedEGOScansToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            List<HistoryEntry> hlsyncunsyncedlist = Controller.history.FilterByScanNotEGOSynced;        // first entry is oldest
-            EDDiscoveryCore.EGO.EGOSync.SendEGOEvents(LogLine, hlsyncunsyncedlist);
-        }
 
     }
 }

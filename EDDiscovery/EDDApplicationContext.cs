@@ -147,7 +147,7 @@ namespace EDDiscovery
             catch (Exception ex)
             {   // There's so many ways that things could go wrong during init; let's fail for everything!
                 EDDMainForm?.Dispose();
-                FatalExceptionForm.ShowAndDie(MainForm, "Initializing", Properties.Resources.URLProjectFeedback, ex);
+                BaseUtils.ExceptionForm.ShowException(ex, "A fatal exception was encountered while initializing EDDiscovery.", Properties.Resources.URLProjectFeedback, isFatal: true, parent: MainForm);
             }
         }
 

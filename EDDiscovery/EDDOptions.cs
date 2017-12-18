@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace EDDiscovery
 {
-    public class EDDOptions : EliteDangerousCore.EliteOptions
+    public class EDDOptions : EliteDangerousCore.IEliteOptions
     {
         public static EDDOptions Instance
         {
@@ -31,11 +31,14 @@ namespace EDDiscovery
         public bool NoLoad { get; private set; }
         public bool NoTheme { get; set; }
         public bool NoSystemsLoad { get; private set; }
+        public bool NoSound { get; private set; }
+        public bool No3DMap { get; private set; }
         public bool TraceLog { get; private set; }
         public bool LogExceptions { get; private set; }
         public bool DisableShowDebugInfoInTitle { get; private set; }
         public string ReadJournal { get; private set; }
         public string OptionsFile { get; private set; }
+        public bool DontAskGithubForPacks { get; private set; }
 
         private string AppFolder { get; set; }      // internal to use.. for -appfolder option
         private bool StoreDataInProgramDirectory { get; set; }  // internal to us, to indicate portable
@@ -213,6 +216,7 @@ namespace EDDiscovery
                     case "nosystems": NoSystemsLoad = true; break;
                     case "tracelog": TraceLog = true; break;
                     case "logexceptions": LogExceptions = true; break;
+                    case "nogithubpacks": DontAskGithubForPacks = true; break;
                     case "edsmbeta":
                         EDSMClass.ServerAddress = "http://beta.edsm.net:8080/";
                         break;
@@ -223,6 +227,8 @@ namespace EDDiscovery
                         EliteDangerousCore.EDJournalReader.disable_beta_commander_check = true;
                         break;
                     case "notheme": NoTheme = true; break;
+                    case "nosound": NoSound = true; break;
+                    case "no3dmap": No3DMap = true; break;
                     case "notitleinfo": DisableShowDebugInfoInTitle = true; break;
                     default:
                         Console.WriteLine($"Unrecognized option -{opt}");

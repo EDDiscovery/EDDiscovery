@@ -24,7 +24,7 @@ using System.Windows.Forms;
 
 namespace ExtendedControls
 {
-    public partial class InfoForm : Form
+    public partial class InfoForm : DraggableForm
     {
         public InfoForm()
         {
@@ -40,33 +40,51 @@ namespace ExtendedControls
             textBoxInfo.Text = info;
             textBoxInfo.Select(0, 0);
 
-            ThemeableForms theme = ThemeableFormsInstance.Instance;
+            labelCaption.Text = title;
 
-            if ( themeit && theme != null)
+            ITheme theme = ThemeableFormsInstance.Instance;
+
+            if (themeit && theme != null)
             {
-                if ( fnt == null )
+                if (fnt == null)
                     fnt = new Font(theme.FontName, 12.0F);
-                theme.ApplyToForm(this, fnt);
+                bool winborder = theme.ApplyToForm(this, fnt);
+                if (winborder)
+                    panelTop.Visible = false;
             }
-            
+            else
+            {
+                panelTop.Visible = false;
+                if (fnt == null)
+                    fnt = new Font(Font.SystemFontName, 12.0F);
+            }
+
             textBoxInfo.Font = fnt;
          }
-
-        private void InfoForm_Resize(object sender, EventArgs e)
-        {
-        }
 
         private void buttonOK_Click(object sender, EventArgs e)
         {
             Close();
         }
 
-        private void InfoForm_Layout(object sender, LayoutEventArgs e)
+        private void panel_close_MouseClick(object sender, MouseEventArgs e)
         {
-            textBoxInfo.Location = new Point(2, 2);
-            textBoxInfo.Size = new Size(ClientRectangle.Width - 4, ClientRectangle.Height - buttonOK.Size.Height*2);
-            buttonOK.Location = new Point(ClientRectangle.Width - 100, ClientRectangle.Height - buttonOK.Size.Height*3/2);
+            Close();
+        }
 
+        private void panel_minimize_MouseClick(object sender, MouseEventArgs e)
+        {
+            this.WindowState = FormWindowState.Minimized;
+        }
+
+        private void panelTop_MouseDown(object sender, MouseEventArgs e)
+        {
+            OnCaptionMouseDown((Control)sender, e);
+        }
+
+        private void labelCaption_MouseDown(object sender, MouseEventArgs e)
+        {
+            OnCaptionMouseDown((Control)sender, e);
         }
     }
 }

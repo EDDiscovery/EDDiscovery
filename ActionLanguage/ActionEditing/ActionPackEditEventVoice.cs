@@ -23,8 +23,8 @@ namespace ActionLanguage
 {
     public class ActionPackEditVoice : ActionPackEditBase
     {
-        public System.Func<Control, System.Drawing.Icon, string, string> onEditKeys;   // edit the key string..  must provide
-        public System.Func<Control, string, ActionCoreController, string> onEditSay;   // edit the say string..  must provide
+        public System.Func<Form, System.Drawing.Icon, string, string> onEditKeys;   // edit the key string..  must provide
+        public System.Func<Form, string, ActionCoreController, string> onEditSay;   // edit the say string..  must provide
 
         private ExtendedControls.TextBoxBorder textBoxInput;
         private ActionPackEditProgram ucprog;
@@ -56,7 +56,11 @@ namespace ActionLanguage
             ucprog.onEditKeys = onEditKeys;
             ucprog.onEditSay = onEditSay;
             ucprog.onAdditionalNames += () => { return func(null); };
-            ucprog.SuggestedName += () => { return "VoiceInput"; };
+            ucprog.SuggestedName += () => 
+            {
+                string textparse = (textBoxInput.Text.Length > 0 && !textBoxInput.Text.Equals("?")) ? ("_" + textBoxInput.Text.Split(';')[0].SafeVariableString()) : "";
+                return "VoiceInput" + textparse;
+            };
             ucprog.RefreshEvent += () => { RefreshIt(); };
             Controls.Add(ucprog);
 

@@ -1,4 +1,5 @@
-version: 3.2.1.{build}
+version: 8.4.1.{build}
+image: Visual Studio 2017
 configuration: Release
 before_build:
   - nuget restore
@@ -11,4 +12,4 @@ after_build:
 artifacts:
   - path: EDDiscovery.Portable.zip
 cache:
-  - packages -> **\package.config
+  - packages -> **\packages.config

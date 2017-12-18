@@ -181,4 +181,41 @@ public static class ControlHelpersStaticFunc
             Disabled.SetColorMatrix(new ColorMatrix(disabledMatrix), ColorMatrixFlag.Default, ColorAdjustType.Bitmap);
         }
     }
+
+    static public Point PositionWithinScreen(this Control p, int x, int y)
+    {
+        Screen scr = Screen.FromControl(p);
+        Rectangle scrb = scr.Bounds;
+        //System.Diagnostics.Debug.WriteLine("Screen is " + scrb);
+        x = Math.Min(Math.Max(x, scrb.Left), scrb.Right - p.Width);
+        y = Math.Min(Math.Max(y, scrb.Top), scrb.Bottom - p.Height);
+        return new Point(x, y);
+    }
+
+    static public void SplitterDistance(this SplitContainer sp, double value)           // set the splitter distance from a double value.. safe from exceptions.
+    {
+        if (!double.IsNaN(value) && !double.IsInfinity(value))
+        {
+            int a = (sp.Orientation == Orientation.Vertical) ? sp.Width : sp.Height;
+            int curDist = sp.SplitterDistance;
+            if (a == 0)     // Sometimes the size is {0,0} if minimized. Calc dimension from the inner panels. See issue #1508.
+                a = (sp.Orientation == Orientation.Vertical ? sp.Panel1.Width + sp.Panel2.Width : sp.Panel1.Height + sp.Panel2.Height) + sp.SplitterWidth;
+            sp.SplitterDistance = Math.Min(Math.Max((int)Math.Round(a * value), sp.Panel1MinSize), a - sp.Panel2MinSize);
+            //System.Diagnostics.Debug.WriteLine($"SplitContainer {sp.Name} {sp.DisplayRectangle} {sp.Panel1MinSize}-{sp.Panel2MinSize} Set SplitterDistance to {value:N2} (was {curDist}, now {sp.SplitterDistance})");
+        }
+        else
+        {
+            System.Diagnostics.Debug.WriteLine($"SplitContainer {sp.Name} {sp.DisplayRectangle} {sp.Panel1MinSize}-{sp.Panel2MinSize} Set SplitterDistance attempted with unsupported value ({value})");
+        }
+    }
+
+    static public double GetSplitterDistance(this SplitContainer sp)                    // get the splitter distance as a fractional double
+    {
+        int a = (sp.Orientation == Orientation.Vertical) ? sp.Width : sp.Height;
+        if (a == 0)     // Sometimes the size is {0,0} if minimized. Calc dimension from the inner panels. See issue #1508.
+            a = (sp.Orientation == Orientation.Vertical ? sp.Panel1.Width + sp.Panel2.Width : sp.Panel1.Height + sp.Panel2.Height) + sp.SplitterWidth;
+        double v = (double)sp.SplitterDistance / (double)a;
+        //System.Diagnostics.Debug.WriteLine($"SplitContainer {sp.Name} {sp.DisplayRectangle} {sp.SplitterDistance} Get SplitterDistance {a} -> {v:N2}");
+        return v;
+    }
 }

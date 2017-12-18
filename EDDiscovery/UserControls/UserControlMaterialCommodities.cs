@@ -29,11 +29,7 @@ namespace EDDiscovery.UserControls
 {
     public partial class UserControlMaterialCommodities : UserControlCommonBase
     {
-        private UserControlCursorType uctg;
-        private EDDiscoveryForm discoveryform;
-
         public bool materials = false;
-        private int displaynumber = 0;
 
         private string DbColumnSave { get { return ((materials) ? "MaterialsGrid" : "CommoditiesGrid") + ((displaynumber > 0) ? displaynumber.ToString() : "") + "DGVCol"; } }
 
@@ -42,14 +38,11 @@ namespace EDDiscovery.UserControls
         public UserControlMaterialCommodities()
         {
             InitializeComponent();
+            var corner = dataGridViewMC.TopLeftHeaderCell; // work around #1487
         }
 
-        public override void Init( EDDiscoveryForm ed, UserControlCursorType thc, int vn) //0=primary, 1 = first windowed version, etc
+        public override void Init()
         {
-            discoveryform = ed;
-            uctg = thc;
-            displaynumber = vn;
-
             dataGridViewMC.MakeDoubleBuffered();
             dataGridViewMC.DefaultCellStyle.WrapMode = DataGridViewTriState.False;
             dataGridViewMC.RowTemplate.Height = 26;
@@ -69,12 +62,12 @@ namespace EDDiscovery.UserControls
 
             }
 
-            uctg.OnTravelSelectionChanged += Display;
-
             SetCheckBoxes();
+
+            uctg.OnTravelSelectionChanged += Display;
         }
 
-        public override void ChangeCursorType(UserControlCursorType thc)
+        public override void ChangeCursorType(IHistoryCursor thc)
         {
             uctg.OnTravelSelectionChanged -= Display;
             uctg = thc;

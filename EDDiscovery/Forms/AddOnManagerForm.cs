@@ -132,7 +132,7 @@ namespace EDDiscovery.Forms
                 System.IO.Directory.CreateDirectory(downloadactdebugfolder);
 #endif
 
-            if (managedownloadmode)
+            if (managedownloadmode && EDDOptions.Instance.DontAskGithubForPacks == false )
             {
                 System.Diagnostics.Debug.WriteLine("Checking github");
                 DownloadFromGitHub(downloadactfolder, "ActionFiles/V1");
@@ -181,9 +181,9 @@ namespace EDDiscovery.Forms
 
             int[] tabs;
             if ( managedownloadmode )
-                tabs = new int[] { 0, 100, 260, 340, 550, 730, 820, 900 };
+                tabs = new int[] { 0, 100, 300, 380, 590, 770, 860, 940 };
             else
-                tabs = new int[] { 0, 100, 260, 340, 550, 550, 700, 800 };
+                tabs = new int[] { 0, 100, 300, 380, 590, 590, 740, 840 };
 
             panelVScroll.Controls.Add(new Label() { Location = new Point(tabs[0] + panelleftmargin, panelheightmargin), Size = new Size(80, 24), Text = "Type" });
             panelVScroll.Controls.Add(new Label() { Location = new Point(tabs[1] + panelleftmargin, panelheightmargin), Size = new Size(80, 24), Text = "Name" });

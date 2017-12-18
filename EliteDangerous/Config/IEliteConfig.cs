@@ -14,33 +14,12 @@
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 
- using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-// provides access to some config items via interface and singleton needed by this code.
-
 namespace EliteDangerousCore
 {
-    public interface EliteOptions
-    {
-        string AppDataDirectory { get; }
-        string SystemDatabasePath { get; }
-        string UserDatabasePath { get; }
-    }
-
-    public interface EliteConfig
+    public interface IEliteConfig
     {
         int DefaultMapColour { get; }
         bool ClearCommodities { get; }
         bool ClearMaterials { get; }
-    }
-
-    public static class EliteConfigInstance
-    {
-        static public EliteOptions InstanceOptions { get; set; }
-        static public EliteConfig InstanceConfig { get; set; }
     }
 }

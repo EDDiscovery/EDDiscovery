@@ -14,6 +14,7 @@
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 
+using EliteDangerous.CompanionAPI;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
@@ -33,6 +34,7 @@ namespace EliteDangerousCore.CompanionAPI
         private static string LOGIN_URL = "/user/login";
         private static string CONFIRM_URL = "/user/confirm";
         private static string PROFILE_URL = "/profile";
+        private static string MARKET_URL = "/market";
 
         public bool IsCommanderLoggedin( string commandername )
         {
@@ -363,6 +365,51 @@ namespace EliteDangerousCore.CompanionAPI
             Profile = new CProfile(jo);
         }
 
+
+        public CMarket GetMarket()
+        {
+            if (NeedLogin == true)
+                throw new CompanionAppIllegalStateException("Service is not logged in to profile");
+
+            if (!Credentials.Confirmed)
+                throw new CompanionAppIllegalStateException("Credentials are not confirmed");
+
+            string data = DownloadMarket();
+
+            if (data == null || data == "Profile unavailable")
+            {
+                // Happens if there is a problem with the API.  Logging in again might clear this...
+                Credentials.appId = null;
+                relogin();
+                data = DownloadMarket();
+
+                if (data == null || data == "Profile unavailable")
+                {
+                    // Try logging in again without clearing the session ID
+                    relogin();
+                    data = DownloadMarket();
+
+                    if (data == null || data == "Profile unavailable")      // uhoh
+                    {
+                        Logout();
+                        throw new CompanionAppException("Failed to obtain data from Frontier server");
+                    }
+                }
+            }
+
+            ProfileString = data;
+            JObject jo = JObject.Parse(ProfileString);
+            ProfileString = jo.ToString(Formatting.Indented);       // nicer
+            //System.Diagnostics.Debug.WriteLine(ProfileString);
+            CMarket market = new CMarket();
+
+            if (market.FromJson(jo))
+                return market;
+            else
+                return null;
+        }
+
+
         private string DownloadProfile()
         {
             HttpWebRequest request = GetRequest(BASE_URL + PROFILE_URL);
@@ -383,6 +430,28 @@ namespace EliteDangerousCore.CompanionAPI
                 return getResponseData(response);
             }
         }
+
+        private string DownloadMarket()
+        {
+            HttpWebRequest request = GetRequest(BASE_URL + MARKET_URL);
+            using (HttpWebResponse response = GetResponse(request))
+            {
+                if (response == null)
+                {
+                    Trace.WriteLine("Failed to contact API server");
+
+                    throw new CompanionAppException("Failed to contact API server");
+                }
+
+                if (response.StatusCode == HttpStatusCode.Forbidden || response.Headers["Location"] == LOGIN_URL)
+                {
+                    return null;
+                }
+
+                return getResponseData(response);
+            }
+        }
+
 
         /**
          * Try to relogin if there is some issue that requires it.

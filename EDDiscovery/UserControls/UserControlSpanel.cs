@@ -23,7 +23,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using EDDiscovery.DB;
 using EMK.LightGeometry;
 using ExtendedControls;
 using Conditions;
@@ -35,9 +34,6 @@ namespace EDDiscovery.UserControls
 {
     public partial class UserControlSpanel : UserControlCommonBase
     {
-        private EDDiscoveryForm discoveryform;
-
-        private int displaynumber = 0;
         private string DbSave { get { return "SPanel" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
         private string DbFilterSave { get { return "SPanelEventFilter" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
         private string DbFieldFilter { get { return "SPanelFieldFilter" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
@@ -119,16 +115,9 @@ namespace EDDiscovery.UserControls
             InitializeComponent();
         }
 
-        public override void Init(EDDiscoveryForm ed, UserControlCursorType thc, int vn) //0=primary, 1 = first windowed version, etc
+        public override void Init()
         {
-            discoveryform = ed;
-            displaynumber = vn;
-            discoveryform.OnHistoryChange += Display;
-            discoveryform.OnNewEntry += NewEntry;
-            discoveryform.OnNewTarget += NewTarget;
-            discoveryform.OnNewUIEvent += OnNewUIEvent;
-
-            config = SQLiteDBClass.GetSettingInt(DbSave + "Config", (int)config) | ((long)SQLiteDBClass.GetSettingInt(DbSave + "ConfigH", (int)(config>>32)) << 32);
+            config = (long)(SQLiteDBClass.GetSettingInt(DbSave + "Config", (int)config)) | ((long)(SQLiteDBClass.GetSettingInt(DbSave + "ConfigH", (int)(config >> 32))) << 32);
             toolStripMenuItemTargetLine.Checked = Config(Configuration.showTargetLine);
             toolStripMenuItemTime.Checked = Config(Configuration.showTime);
             EDSMButtonToolStripMenuItem.Checked = Config(Configuration.showEDSMButton);
@@ -181,6 +170,10 @@ namespace EDDiscovery.UserControls
 
             dividers = new ButtonExt[] { buttonExt0, buttonExt1, buttonExt2, buttonExt3, buttonExt4, buttonExt5, buttonExt6, buttonExt7, buttonExt8, buttonExt9, buttonExt10, buttonExt11, buttonExt12 };
 
+            discoveryform.OnHistoryChange += Display;
+            discoveryform.OnNewEntry += NewEntry;
+            discoveryform.OnNewTarget += NewTarget;
+            discoveryform.OnNewUIEvent += OnNewUIEvent;
         }
 
         public override void Closing()
@@ -565,7 +558,7 @@ namespace EDDiscovery.UserControls
                     if (url.Length > 0)         // may pass back empty string if not known, this solves another exception
                         System.Diagnostics.Process.Start(url);
                     else
-                        ExtendedControls.MessageBoxTheme.Show("System " + he.System.name + " unknown to EDSM");
+                        ExtendedControls.MessageBoxTheme.Show(FindForm(), "System " + he.System.name + " unknown to EDSM");
                 }
             }
         }
@@ -935,7 +928,6 @@ namespace EDDiscovery.UserControls
                             JournalEntry.GetListOfEventsWithOptMethod(false) ,
                             (s) => { return BaseUtils.FieldNames.GetPropertyFieldNames(JournalEntry.TypeOfJournalEntry(s)); },
                             discoveryform.Globals.NameList, fieldfilter);
-            frm.TopMost = this.FindForm().TopMost;
             if (frm.ShowDialog(this.FindForm()) == DialogResult.OK)
             {
                 fieldfilter = frm.result;

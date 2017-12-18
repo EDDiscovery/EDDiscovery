@@ -28,7 +28,7 @@ namespace EliteDangerousCore.EDSM
             {
                 // ReadMe:
                 //      When logged into EDSM, start and end dates will be localized. Either set EDSM to use UTC or go incognito.
-                //      For TBD entries: duplicate the prior system.
+                //      For TBD entries: duplicate the prior system, and mark with a "TBD" comment for searching.
                 //      Be extremely careful when changing any route names.
                 return new SavedRouteClass[] {
                     #region 01: Distant Worlds (3302)
@@ -507,7 +507,7 @@ namespace EliteDangerousCore.EDSM
                         "Dryae Greau AA-A h19",
                         "Juenoe EG-Y g1913",
                         "Agnairt LN-T e3-3751",
-                        "Eol Prou LW-L c8-76"
+                        "Ratraii"
                     )
                     {
                         StartDate = new DateTime(2017, 3, 5, 20, 0, 0, DateTimeKind.Utc).ToLocalTime(),
@@ -781,7 +781,7 @@ namespace EliteDangerousCore.EDSM
                         "Stuemiae BB-O e6-61",
                         "Hypua Flyoae WU-X e1-4448",
                         "Dryooe Prou HH-C d1536",
-                        "Eol Prou LW-L c8-211"
+                        "Centralis"
                     )
                     {
                         StartDate = new DateTime(2018, 1, 20, 12, 0, 0, DateTimeKind.Utc).ToLocalTime(),
@@ -826,26 +826,200 @@ namespace EliteDangerousCore.EDSM
                     new SavedRouteClass(
                         "Minerva Centaurus Expedition",
                         "HIP 72043",
-                        "Nyeakio WU-S c6-7",
+                        "Nyeakio RU-V d3-21",
                         "Prooe Phio PZ-Z c0",
-                        "Droeth IM-W d1-164",
-                        "Phrooe Flyuae QE-Y d1-44",
-                        "Oob Chrea UY-L b35-7",
-                        "Kyloopeia BA-W b4-1",
-                        "Byeethiae FL-Y a0",
-                        "Preou Free AA-A h0",
-                        "Byooe Aoscs FG-Y g3",
-                        "Throefuae DL-Y g7",
-                        "Plio Broae AW-E b11-0",
-                        "Byeia Aoscs TD-K d8-17",
-                        "Bleethai DL-Y g5",
-                        "Dryoea Gree YE-A g1",
+                        "Droeth FS-K c8-36",
+                        "Phrooe Flyuae QE-Y d1-4",
+                        "Oob Chrea CV-U b30-3",
+                        "Kyloopeia BA-A g4",
+                        "Byeethiae TM-L c21-11",
+                        "Preou Free VC-F c26-2",
+                        "Byooe Aoscs BG-F d11-14",
+                        "Throefuae VZ-O e6-16",
+                        "Plio Broae JM-W d1-100",
+                        "Byeia Aoscs PS-S c17-6",
+                        "Bleethai UP-J c24-58",
+                        "Dryoea Gree BW-B a40-5",
                         "Hypiae Ausms JU-I c12-1",
                         "Colonia"
                     )
                     {
-                        StartDate = new DateTime(2017, 11, 8, 0, 0, 0, DateTimeKind.Utc).ToLocalTime(),
-                        EndDate = new DateTime(2018, 3, 18, 0, 0, 0, DateTimeKind.Utc).ToLocalTime()
+                        StartDate = new DateTime(2017, 11, 19, 19, 0, 0, DateTimeKind.Utc).ToLocalTime(),
+                        EndDate = new DateTime(2018, 3, 11, 19, 0, 0, DateTimeKind.Utc).ToLocalTime()
+                    },
+                    #endregion
+
+                    #region 32: The Dead End's Circumnavigation Expedition
+                    // https://www.edsm.net/en/expeditions/summary/id/32/name/The+Dead+End%27s+Circumnavigation+Expedition
+                    new SavedRouteClass(
+                        "Dead End's Circumnavigation",
+                        "HIP 23759",
+                        "Crab Sector DL-Y d9",
+                        "3 Geminorum",
+                        "Angosk DL-P d5-0",
+                        "Angosk OM-W d1-0",
+                        "Lyed YJ-I d9-0",
+                        "Hypuae Euq ZK-P d5-0",
+                        "Aicods KD-K d8-3",
+                        "Syroifoe CL-Y g1",
+                        "HIP 117078",
+                        "Spongou FA-A e2",
+                        "Cyuefai BC-D d12-4",
+                        "Cyuefoo LC-D d12-0",
+                        "Byaa Thoi EW-E d11-0",
+                        "Byaa Thoi GC-D d12-0",
+                        "Auzorts NR-N d6-0",
+                        "Lyruewry BK-R d4-12",
+                        "Hypou Chreou RS-S c17-6",
+                        "Hypiae Brue DI-D c12-0",
+                        "Sphiesi HX-L d7-0",
+                        "Flyae Proae IN-S e4-1",
+                        "Footie AA-A g0",
+                        "Oedgaf DL-Y g0",
+                        "Gria Bloae YE-A g0",
+                        "Exahn AZ-S d3-8",
+                        "Chua Eop ZC-T c20-0",
+                        "Beagle Point",
+                        "Cheae Eurl AA-A e0",
+                        "Hyphielia QH-K c22-0",
+                        "Praei Bre WO-R d4-3",
+                        "Suvua FG-Y f0",
+                        "Hypaa Byio ZE-A g1",
+                        "Eembaitl DL-Y d13",
+                        "Synookaea MX-L d7-0",
+                        "Blea Airgh EI-B d13-1",
+                        "Ood Fleau ZJ-I d9-0",
+                        "Plae Eur DW-E d11-0",
+                        "Haffner 18 LSS 27",
+                        "Achrende"
+                    )
+                    {
+                        StartDate = new DateTime(2017, 10, 14, 0, 0, 0, DateTimeKind.Utc).ToLocalTime(),
+                        EndDate = new DateTime(2018, 10, 13, 0, 0, 0, DateTimeKind.Utc).ToLocalTime()
+                    },
+                    #endregion
+
+                    #region 33: Distant Friends Expedition
+                    // https://www.edsm.net/en/expeditions/summary/id/33/name/Distant+Friends+Expedition
+                    new SavedRouteClass(
+                        "Distant Friends Expedition",
+                        "Sol",
+                        "Beagle Point"
+                    )
+                    {
+                        StartDate = new DateTime(2017, 11, 7, 12, 0, 0, DateTimeKind.Utc).ToLocalTime(),
+                        EndDate = new DateTime(2018, 1, 7, 16, 0, 0, DateTimeKind.Utc).ToLocalTime()
+                    },
+                    #endregion
+
+                    #region 34: Knights of Karma INRA Expedition
+                    // https://www.edsm.net/en/expeditions/summary/id/34/name/Knights+of+Karma+INRA+Expedition
+                    new SavedRouteClass(
+                        "Knights of Karma INRA Expedition",
+                        "Diaguandri",
+                        "HIP 15329",
+                        "Hermitage",
+                        "Alnath",
+                        "HIP 59382",
+                        "HIP 7158",
+                        "LP 389-95",
+                        "Conn",
+                        "HIP 16824",
+                        "HIP 12099",
+                        "12 Trianguli",
+                        "Qa'wakana"
+                    )
+                    {
+                        // Yes, it really was only a few hours long...
+                        StartDate = new DateTime(2017, 11, 25, 17, 0, 0, DateTimeKind.Utc).ToLocalTime(),
+                        EndDate = new DateTime(2017, 11, 25, 23, 0, 0, DateTimeKind.Utc).ToLocalTime()
+                    },
+                    #endregion
+
+                    #region 35: Orange Run
+                    // https://www.edsm.net/en/expeditions/summary/id/35/name/Orange+run
+                    new SavedRouteClass(
+                        "Orange Run",
+                        "Tembala",
+                        "HD 175876",
+                        "Lagoon Sector NI-S b4-10",
+                        "Blae Hypue VN-S d4-21",
+                        "Blua Hypa HT-F d12-1226",
+                        "Boewnst KS-S c20-959",
+                        "Colonia",
+                        "Dryaea Flee HR-W e1-124",
+                        "Scheau Flyi KR-W e1-6736",
+                        "Shrogea MH-V e2-1763",
+                        "Sagittarius A*",
+                        "Oupailks CW-L c8-1",
+                        "Cheae Euq ER-L c21-0",
+                        "Beagle Point",
+                        "Greae Bluae YE-A g3",
+                        "Oedgaf DL-Y g0",
+                        "Flyoo Groa SO-Z e0",
+                        "Hypi Bra TI-B d25",
+                        "Eos Brai KR-W e1-4",
+                        "Byua Aeb BA-A g2",
+                        "Thraikio ON-B d13-2",
+                        "Byaa Thoi GC-D d12-0",
+                        "Blia Thio RY-S e3-5",
+                        "Plooe Thio OA-A d14",
+                        "Bubble Sector FB-X c1-25",
+                        "Heart Sector ZE-A e11",
+                        "Soul Sector EL-Y d7",
+                        "S171 36",
+                        "Tembala"
+                    )
+                    {
+                        StartDate = new DateTime(2017, 12, 15, 15, 0, 0, DateTimeKind.Utc).ToLocalTime(),
+                        EndDate = new DateTime(2018, 4, 24, 15, 0, 0, DateTimeKind.Utc).ToLocalTime()
+                    },
+                    #endregion
+
+                    #region 36: Christmas Carriers Convoy 2
+                    // https://www.edsm.net/en/expeditions/summary/id/36/name/Christmas+Carriers+Convoy+2
+                    new SavedRouteClass(
+                        "Christmas Carriers 2",
+                        "Haritanis",
+                        "Blu Thua AI-A c14-10",
+                        "Lagoon Sector NI-S b4-10",
+                        "Eagle Sector IR-W d1-117",
+                        "Skaudai CH-B d14-34",
+                        "Gru Hypue KS-T d3-31",
+                        "Boewnst KS-S c20-959",
+                        "Centralis"
+                    )
+                    {
+                        StartDate = new DateTime(2017, 12, 2, 0, 0, 0, DateTimeKind.Utc).ToLocalTime(),
+                        EndDate = new DateTime(2017, 12, 24, 23, 59, 59, DateTimeKind.Utc).ToLocalTime()
+                    },
+                    #endregion
+
+                    #region 37: Christmas Delights
+                    // https://www.edsm.net/en/expeditions/summary/id/37/name/Christmas+Delights
+                    new SavedRouteClass(
+                        "Christmas Delights",
+                        "Wapiya",
+                        "Karsuki Ti",
+                        "Jaroua",
+                        "Goman",
+                        "Any Na",
+                        "Arouca",
+                        "Deuringas",
+                        "Aegaeon",
+                        "Witchhaul",
+                        "Hecate",
+                        "Thrutis",
+                        "Kongga",
+                        "Esuseku",
+                        "Harma",
+                        "Kamitra",
+                        "Njambalba",
+                        "Wapiya"
+                    )
+                    {
+                        StartDate = new DateTime(2017, 12, 1, 0, 0, 0, DateTimeKind.Utc).ToLocalTime(),
+                        EndDate = new DateTime(2017, 12, 24, 23, 59, 59, DateTimeKind.Utc).ToLocalTime()
                     },
                     #endregion
                 };

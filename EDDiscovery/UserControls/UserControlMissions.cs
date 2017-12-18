@@ -30,10 +30,6 @@ namespace EDDiscovery.UserControls
 {
     public partial class UserControlMissions : UserControlCommonBase
     {
-        private int displaynumber = 0;
-        private EDDiscoveryForm discoveryform;
-        private UserControlCursorType uctg;
-
         private string DbColumnSaveCurrent { get { return ("MissionsGridCurrent") + ((displaynumber > 0) ? displaynumber.ToString() : "") + "DGVCol"; } }
         private string DbColumnSavePrevious { get { return ("MissionsGridPrevious") + ((displaynumber > 0) ? displaynumber.ToString() : "") + "DGVCol"; } }
         private string DbStartDate { get { return ("MissionsStartDate") + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
@@ -47,14 +43,12 @@ namespace EDDiscovery.UserControls
         public UserControlMissions()
         {
             InitializeComponent();
+            var corner = dataGridViewCurrent.TopLeftHeaderCell; // work around #1487
+            var corner2 = dataGridViewPrevious.TopLeftHeaderCell; // work around #1487
         }
 
-        public override void Init(EDDiscoveryForm ed, UserControlCursorType thc, int vn) //0=primary, 1 = first windowed version, etc
+        public override void Init()
         {
-            discoveryform = ed;
-            uctg = thc;
-            displaynumber = vn;
-
             dataGridViewCurrent.MakeDoubleBuffered();
             dataGridViewCurrent.RowTemplate.Height = 26;
             dataGridViewCurrent.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
@@ -64,9 +58,6 @@ namespace EDDiscovery.UserControls
             dataGridViewPrevious.RowTemplate.Height = 26;
             dataGridViewPrevious.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
             dataGridViewPrevious.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.DisplayedCells;     // NEW! appears to work https://msdn.microsoft.com/en-us/library/74b2wakt(v=vs.110).aspx
-
-            discoveryform.OnNewEntry += Discoveryform_OnNewEntry;
-            uctg.OnTravelSelectionChanged += Display;
 
             string start = SQLiteDBClass.GetSettingString(DbStartDate, "");
             DateTime dt;
@@ -80,9 +71,12 @@ namespace EDDiscovery.UserControls
                 customDateTimePickerEnd.Value = dt;
 
             customDateTimePickerEnd.Checked = SQLiteDBClass.GetSettingBool(DbEndDateChecked, false);
+
+            discoveryform.OnNewEntry += Discoveryform_OnNewEntry;
+            uctg.OnTravelSelectionChanged += Display;
         }
 
-        public override void ChangeCursorType(UserControlCursorType thc)
+        public override void ChangeCursorType(IHistoryCursor thc)
         {
             uctg.OnTravelSelectionChanged -= Display;
             uctg = thc;
@@ -199,9 +193,7 @@ namespace EDDiscovery.UserControls
             DGVLoadColumnLayout(dataGridViewCurrent, DbColumnSaveCurrent);
             DGVLoadColumnLayout(dataGridViewPrevious, DbColumnSavePrevious);
 
-            int splitter = SQLiteDBClass.GetSettingInt(DbSplitter, -1);
-            if (splitter >= 0)
-                splitContainer1.SplitterDistance = Math.Max(splitter, 10);
+            splitContainerMissions.SplitterDistance(SQLiteDBClass.GetSettingDouble(DbSplitter, 0.4));
         }
 
         public override void Closing()
@@ -218,7 +210,7 @@ namespace EDDiscovery.UserControls
             SQLiteDBClass.PutSettingBool(DbStartDateChecked, customDateTimePickerStart.Checked);
             SQLiteDBClass.PutSettingBool(DbEndDateChecked, customDateTimePickerEnd.Checked);
 
-            SQLiteDBClass.PutSettingInt(DbSplitter, splitContainer1.SplitterDistance);
+            SQLiteDBClass.PutSettingDouble(DbSplitter, splitContainerMissions.GetSplitterDistance());
         }
 
         #endregion

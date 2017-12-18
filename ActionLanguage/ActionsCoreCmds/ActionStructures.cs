@@ -42,8 +42,7 @@ namespace ActionLanguage
             ConditionFilterForm frm = new ConditionFilterForm();
             frm.InitCondition("Define condition", cp.Icon, eventvars, jf);
 
-            frm.TopMost = parent.FindForm().TopMost;
-            if (frm.ShowDialog(parent.FindForm()) == DialogResult.OK)
+            if (frm.ShowDialog(parent) == DialogResult.OK)
             {
                 jf = frm.result;
                 return true;
@@ -502,7 +501,7 @@ namespace ActionLanguage
                 ConditionVariablesForm avf = new ConditionVariablesForm();
                 avf.Init("Variables to pass into called program", cp.Icon, cond, showone: true, allownoexpand: true, altops: altops);
 
-                if (avf.ShowDialog(parent.FindForm()) == DialogResult.OK)
+                if (avf.ShowDialog(parent) == DialogResult.OK)
                 {
                     userdata = ToString(promptValue, avf.result, avf.result_altops);
                     return true;

@@ -74,6 +74,8 @@
     <Compile Include="SpeechSynthesizer.cs" />
     <Compile Include="SpeechSythesizerDummy.cs" />
     <Compile Include="SpeechSythesizerWindows.cs" />
+    <Compile Include="VoiceRecognitionIF.cs" />
+    <Compile Include="VoiceRecognitionWindows.cs" />
     <Compile Include="WaveConfigureDialog.cs">
       <SubType>Form</SubType>
     </Compile>

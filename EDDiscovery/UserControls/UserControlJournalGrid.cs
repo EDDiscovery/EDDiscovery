@@ -30,10 +30,8 @@ using EliteDangerousCore;
 
 namespace EDDiscovery.UserControls
 {
-    public partial class UserControlJournalGrid : UserControlCommonBase, UserControlCursorType
+    public partial class UserControlJournalGrid : UserControlCommonBase, IHistoryCursor
     {
-        private EDDiscoveryForm discoveryform;
-        private int displaynumber;                          // since this is plugged into something other than a TabControlForm, can't rely on its display number
         EventFilterSelector cfs = new EventFilterSelector();
         private Conditions.ConditionLists fieldfilter = new Conditions.ConditionLists();
         private Dictionary<long, DataGridViewRow> rowsbyjournalid = new Dictionary<long, DataGridViewRow>();
@@ -49,8 +47,8 @@ namespace EDDiscovery.UserControls
 
         private HistoryList current_historylist;        // the last one set, for internal refresh purposes on sort
 
-        public event ChangedSelection OnChangedSelection;   // After a change of selection by the user, or after a OnHistoryChanged, or after a sort.
-        public event ChangedSelectionHE OnTravelSelectionChanged;   // as above, different format, for certain older controls
+        public event ChangedSelectionHandler OnChangedSelection;   // After a change of selection by the user, or after a OnHistoryChanged, or after a sort.
+        public event ChangedSelectionHEHandler OnTravelSelectionChanged;   // as above, different format, for certain older controls
         public HistoryEntry GetCurrentHistoryEntry { get { return dataGridViewJournal.CurrentCell != null ? dataGridViewJournal.Rows[dataGridViewJournal.CurrentCell.RowIndex].Cells[JournalHistoryColumns.HistoryTag].Tag as HistoryEntry : null; } }
 
 
@@ -68,13 +66,11 @@ namespace EDDiscovery.UserControls
         public UserControlJournalGrid()
         {
             InitializeComponent();
+            var corner = dataGridViewJournal.TopLeftHeaderCell; // work around #1487
         }
 
-        public override void Init(EDDiscoveryForm ed, UserControlCursorType thc, int vn) //0=primary, 1 = first windowed version, etc
+        public override void Init()
         {
-            discoveryform = ed;
-            displaynumber = vn;
-
             dataGridViewJournal.MakeDoubleBuffered();
             dataGridViewJournal.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
             dataGridViewJournal.RowTemplate.Height = 26;
@@ -85,14 +81,14 @@ namespace EDDiscovery.UserControls
 
             checkBoxMoveToTop.Checked = SQLiteConnectionUser.GetSettingBool(DbAutoTop, true);
 
-            discoveryform.OnHistoryChange += Display;
-            discoveryform.OnNewEntry += AddNewEntry;
-
             string filter = SQLiteDBClass.GetSettingString(DbFieldFilter, "");
             if (filter.Length > 0)
                 fieldfilter.FromJSON(filter);        // load filter
 
             ExtraIcons(false,false);
+
+            discoveryform.OnHistoryChange += Display;
+            discoveryform.OnNewEntry += AddNewEntry;
         }
 
         public void ExtraIcons(bool icon, bool popout)
@@ -284,7 +280,6 @@ namespace EDDiscovery.UserControls
                             JournalEntry.GetListOfEventsWithOptMethod(false) ,
                             (s) => { return BaseUtils.FieldNames.GetPropertyFieldNames(JournalEntry.TypeOfJournalEntry(s)); },
                             discoveryform.Globals.NameList, fieldfilter);
-            frm.TopMost = this.FindForm().TopMost;
             if (frm.ShowDialog(this.FindForm()) == DialogResult.OK)
             {
                 fieldfilter = frm.result;
@@ -369,7 +364,7 @@ namespace EDDiscovery.UserControls
             }
 
             if (!edsm.ShowSystemInEDSM(rightclicksystem.System.name, id_edsm))
-                ExtendedControls.MessageBoxTheme.Show("System could not be found - has not been synched or EDSM is unavailable");
+                ExtendedControls.MessageBoxTheme.Show(this.FindForm(), "System could not be found - has not been synched or EDSM is unavailable");
 
             this.Cursor = Cursors.Default;
         }
@@ -452,7 +447,7 @@ namespace EDDiscovery.UserControls
             Forms.ExportForm frm = new Forms.ExportForm();
             frm.Init(new string[] { "Export Current View" });
 
-            if (frm.ShowDialog(this) == DialogResult.OK)
+            if (frm.ShowDialog(this.FindForm()) == DialogResult.OK)
             {
                 if (frm.SelectedIndex == 0)
                 {
@@ -489,7 +484,7 @@ namespace EDDiscovery.UserControls
                             System.Diagnostics.Process.Start(frm.Path);
                     }
                     else
-                        ExtendedControls.MessageBoxTheme.Show("Failed to write to " + frm.Path, "Export Failed", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                        ExtendedControls.MessageBoxTheme.Show(this.FindForm(), "Failed to write to " + frm.Path, "Export Failed", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 }
             }
         }

@@ -17,6 +17,7 @@ namespace ExtendedControls
         public event KeyEventHandler OtherKeyPressed;
 
         public List<string> Items { get { return _listcontrol.Items; } set { _listcontrol.Items = value; } }
+        public List<Image> ImageItems { get { return _listcontrol.ImageItems; } set { _listcontrol.ImageItems = value; } }
         public Color MouseOverBackgroundColor { get { return _listcontrol.MouseOverBackgroundColor; } set { _listcontrol.MouseOverBackgroundColor = value; } }
         public int SelectedIndex { get { return _listcontrol.SelectedIndex; } set { _listcontrol.SelectedIndex = value; } }
         public Color SelectionBackColor { get { return _listcontrol.SelectionBackColor; } set { _listcontrol.SelectionBackColor = value; this.BackColor = value; } }
@@ -47,6 +48,7 @@ namespace ExtendedControls
             this._listcontrol.KeyPressed += _listcontrol_KeyPressed;
             this._listcontrol.OtherKeyPressed += _listcontrol_OtherKeyPressed;
             this._listcontrol.Margin = new Padding(0);
+            this._listcontrol.FitToItemsHeight = false;
             this.Padding = new Padding(0);
             this.Controls.Add(this._listcontrol);
         }

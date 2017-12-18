@@ -102,7 +102,7 @@ namespace EliteDangerousCore.JournalEvents
                 if (Priority.HasValue)
                     pe = "P" + (Priority.Value+1).ToString();
                 if (Enabled.HasValue)
-                    pe += "E";
+                    pe += Enabled.Value ? "E" : "D";
 
                 return pe;
             }

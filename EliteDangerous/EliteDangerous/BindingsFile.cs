@@ -1,4 +1,4 @@
-﻿/*
+﻿/*e
  * Copyright © 2016 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
@@ -27,16 +27,26 @@ namespace EliteDangerousCore
     public class BindingsFile : IEnumerable<BindingsFile.Device>
     {
         public bool Loaded { get { return devices.Count > 0; } }
+
+        public HashSet<string> AxisNames { get; private set; } = new HashSet<string>();        // from Bindings in frontier file - all names even if not assigned
+        public HashSet<string> KeyNames { get; private set; } = new HashSet<string>();         // from Primary or Secondary in frontier file - all names even if not assigned
+
+        // assignedfunc to device and assignment, may be many
+        public Dictionary<string, List<Tuple<Device, Assignment>>> AssignedNames { get; private set; } = new Dictionary<string, List<Tuple<Device, Assignment>>>();
+
         private Dictionary<string, Device> devices = new Dictionary<string, Device>();
         private Dictionary<string, string> values = new Dictionary<string, string>();
 
+        public const string KeyboardDeviceName = "Keyboard";     // frontier name for keyboard device
+
+        [System.Diagnostics.DebuggerDisplay("DKP {Device.Name} {Key}")]
         public class DeviceKeyPair
         {
             public Device Device;
-            public string Key;
+            public string Key;          // in Frontier naming convention
         }
 
-        //[System.Diagnostics.DebuggerDisplay("Assignment ")]
+        [System.Diagnostics.DebuggerDisplay("Assignment {assignedfunc} Keys {keys.Count}" )]
         public class Assignment
         {
             public List<DeviceKeyPair> keys;  // first is always the primary one
@@ -104,9 +114,19 @@ namespace EliteDangerousCore
                 }
                 return true;
             }
+
+            public int NumberOfKeysWithDevice(string name)
+            {
+                return (from x in keys where x.Device.Name.Equals(name, StringComparison.InvariantCultureIgnoreCase) select x).Count();
+            }
+
+            public bool AllOfDevice(string name)
+            {
+                return NumberOfKeysWithDevice(name) == keys.Count;
+            }
         }
 
-        [System.Diagnostics.DebuggerDisplay("Device {name} {assignments.Count}")]
+        [System.Diagnostics.DebuggerDisplay("Device {Name} {Assignments.Count}")]
         public class Device
         {
             public string Name;
@@ -184,31 +204,21 @@ namespace EliteDangerousCore
 
                 Assignment a = new Assignment() { assignedfunc = d.Name.ToString(), keys = dvp };
 
+                if (!AssignedNames.ContainsKey(a.assignedfunc))
+                    AssignedNames[a.assignedfunc] = new List<Tuple<Device, Assignment>>();
+
+                AssignedNames[a.assignedfunc].Add(new Tuple<Device, Assignment>(dvp[0].Device, a));
+
                 foreach (DeviceKeyPair dkp in dvp)      // all keys mentioned need adding
                 {
+                    //System.Diagnostics.Debug.WriteLine("{0} {1}", dkp.Device.Name, a.assignedfunc);
+
                     if (!dkp.Device.Assignments.ContainsKey(dkp.Key))
                         dkp.Device.Assignments[dkp.Key] = new List<Assignment>();
 
                     dkp.Device.Assignments[dkp.Key].Add(a);
                 }
             }
-        }
-
-        public string Mappings(string devicename)
-        {
-            StringBuilder s = new StringBuilder(128);
-            if (devices.ContainsKey(devicename))
-            {
-                foreach (string keyname in devices[devicename].Assignments.Keys)
-                {
-                    foreach (Assignment a in devices[devicename].Assignments[keyname])
-                    {
-                        s.Append("Key " + keyname + "=>" + a.ToString());
-                        s.AppendLine();
-                    }
-                }
-            }
-            return s.ToString();
         }
 
         private string ChkValue(string s)
@@ -244,8 +254,15 @@ namespace EliteDangerousCore
                         {
                             foreach (XElement y in x.Descendants())
                             {
-                                if (y.Name == "Binding" || y.Name == "Primary" || y.Name == "Secondary")
+                                if (y.Name == "Binding")
                                 {
+                                    AxisNames.Add(x.Name.LocalName);
+                                    AssignToDevice(x, y);
+                                }
+                                else if (y.Name == "Primary" || y.Name == "Secondary")
+                                {
+                                    //System.Diagnostics.Debug.WriteLine("Binding Point " + x.NodeType + " " + x.Name + " Element " + y.Name);
+                                    KeyNames.Add(x.Name.LocalName);
                                     AssignToDevice(x, y);
                                 }
                                 else
@@ -274,28 +291,6 @@ namespace EliteDangerousCore
             }
 
             return false;
-        }
-
-        public string ListBindings()
-        {
-            string ret = "";
-            foreach (string s in devices.Keys)
-            {
-                ret += s + Environment.NewLine + Mappings(s) + Environment.NewLine;
-            }
-            return ret;
-
-        }
-
-        public string ListValues()
-        {
-            string ret = "";
-            foreach (string s in values.Keys)
-            {
-                ret += s + "=" + values[s] + Environment.NewLine;
-            }
-
-            return ret;
         }
 
         public Device GetDevice(string name)
@@ -336,6 +331,24 @@ namespace EliteDangerousCore
             return null;
         }
 
+        public List<Tuple<Device, Assignment>> FindAssignedFunc(string name, string preferreddevice=null)       // NULL if no match found 
+        {
+            if (AssignedNames.ContainsKey(name))
+            {
+                List<Tuple<Device, Assignment>> ret = new List<Tuple<Device, Assignment>>();
+
+                foreach (Tuple<Device, Assignment> a in AssignedNames[name])        // search assignments under this name
+                {
+                    if ( preferreddevice == null || a.Item2.AllOfDevice(preferreddevice) )      // if null, or all of this device.. return
+                        ret.Add(new Tuple<Device, Assignment>(a.Item1, a.Item2));
+                }
+
+                return ret.Count > 0 ? ret : null;
+            }
+
+            return null;
+        }
+
         string GuidExtract(Guid g, bool rev)
         {
             string s = g.ToString();
@@ -372,6 +385,46 @@ namespace EliteDangerousCore
             else
                 return (from v in values where v.Key.Equals(s) select v).ToDictionary(x => x.Key, x => x.Value);
         }
+
+
+        private string Mappings(string devicename)
+        {
+            StringBuilder s = new StringBuilder(128);
+            if (devices.ContainsKey(devicename))
+            {
+                foreach (string keyname in devices[devicename].Assignments.Keys)
+                {
+                    foreach (Assignment a in devices[devicename].Assignments[keyname])
+                    {
+                        s.Append("Key " + keyname + "=>" + a.ToString());
+                        s.AppendLine();
+                    }
+                }
+            }
+            return s.ToString();
+        }
+
+        public string ListBindings()
+        {
+            string ret = "";
+            foreach (string s in devices.Keys)
+            {
+                ret += s + Environment.NewLine + Mappings(s) + Environment.NewLine;
+            }
+            return ret;
+
+        }
+
+        public string ListValues()
+        {
+            return String.Join(Environment.NewLine, (from x in values.Keys select x));
+        }
+
+        public string ListKeyNames(string prefix = "", string postfix = "")
+        {
+            return String.Join(Environment.NewLine, (from x in KeyNames select prefix + x + postfix));
+        }
+
 
     }
 }

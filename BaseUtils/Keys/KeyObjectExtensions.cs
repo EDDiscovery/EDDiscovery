@@ -237,5 +237,55 @@ public static class KeyObjectExtensions
         return ks;
     }
 
+    // tested 14/11/2017 with alt/shift/ctrl combinations.. left and right
+
+    public static string GenerateSequence(this Keys[] keys)      // first one is the primary, the rest are shifters
+    {
+        if (keys.Length == 2)       // combinations with shift second..  nicer to do it this way because it keeps the timings
+        {
+            if (keys[1] == Keys.ShiftKey || keys[1] == Keys.LShiftKey)
+            {
+                return "Shift+" + keys[0].VKeyToString();
+            }
+            else if (keys[1] == Keys.ControlKey || keys[1] == Keys.LControlKey)
+            {
+                return "Ctrl+" + keys[0].VKeyToString();
+            }
+            else if (keys[1] == Keys.Menu || keys[1] == Keys.LMenu)
+            {
+                return "Alt+" + keys[0].VKeyToString();
+            }
+            else if (keys[1] == Keys.RShiftKey)
+            {
+                return "RShift+" + keys[0].VKeyToString();
+            }
+            else if (keys[1] == Keys.RControlKey)
+            {
+                return "RCtrl+" + keys[0].VKeyToString();
+            }
+            else if (keys[1] == Keys.RMenu)
+            {
+                return "RAlt+" + keys[0].VKeyToString();
+            }
+        }
+
+        // else we just play the keys out manually
+
+        string keyseq = "";
+        for (int i = keys.Length - 1; i >= 1; i--)      // press down shifters in order
+        {
+            keyseq += "!" + keys[i].VKeyToString() + " ";
+        }
+
+        keyseq += keys[0].ToString() + " ";             // press release key
+
+        for (int i = 1; i < keys.Length; i++)           // lift up shifters in order
+        {
+            keyseq += "^" + keys[i].VKeyToString() + " ";
+        }
+
+        return keyseq;
+    }
+
 }
 

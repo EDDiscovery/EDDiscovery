@@ -60,9 +60,10 @@ namespace EDDiscovery.UserControls
             this.checkBoxMaterialsRare = new ExtendedControls.CheckBoxCustom();
             this.checkBoxTiny = new ExtendedControls.CheckBoxCustom();
             this.panelControls = new System.Windows.Forms.Panel();
+            this.lblSystemInfo = new System.Windows.Forms.Label();
             this.buttonExtExcel = new ExtendedControls.ButtonExt();
             this.checkBoxEDSM = new ExtendedControls.CheckBoxCustom();
-            this.rtbSystemInfo = new ExtendedControls.RichTextBoxScroll();
+            this.chkShowOverlays = new ExtendedControls.CheckBoxCustom();
             this.panelStars.SuspendLayout();
             this.contextMenuStrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.imagebox)).BeginInit();
@@ -72,7 +73,6 @@ namespace EDDiscovery.UserControls
             // panelStars
             // 
             this.panelStars.ContextMenuStrip = this.contextMenuStrip;
-            this.panelStars.Controls.Add(this.rtbSystemInfo);
             this.panelStars.Controls.Add(this.rtbNodeInfo);
             this.panelStars.Controls.Add(this.imagebox);
             this.panelStars.Controls.Add(this.vScrollBarCustom);
@@ -105,7 +105,7 @@ namespace EDDiscovery.UserControls
             this.rtbNodeInfo.BorderColor = System.Drawing.Color.Transparent;
             this.rtbNodeInfo.BorderColorScaling = 0.5F;
             this.rtbNodeInfo.HideScrollBar = true;
-            this.rtbNodeInfo.Location = new System.Drawing.Point(468, 99);
+            this.rtbNodeInfo.Location = new System.Drawing.Point(472, 6);
             this.rtbNodeInfo.Name = "rtbNodeInfo";
             this.rtbNodeInfo.ReadOnly = false;
             this.rtbNodeInfo.ScrollBarArrowBorderColor = System.Drawing.Color.LightBlue;
@@ -361,6 +361,8 @@ namespace EDDiscovery.UserControls
             // panelControls
             // 
             this.panelControls.ContextMenuStrip = this.contextMenuStrip;
+            this.panelControls.Controls.Add(this.chkShowOverlays);
+            this.panelControls.Controls.Add(this.lblSystemInfo);
             this.panelControls.Controls.Add(this.buttonExtExcel);
             this.panelControls.Controls.Add(this.checkBoxEDSM);
             this.panelControls.Controls.Add(this.checkBoxTiny);
@@ -377,6 +379,15 @@ namespace EDDiscovery.UserControls
             this.panelControls.TabIndex = 4;
             this.toolTip.SetToolTip(this.panelControls, "Right click on panel to show/hide the toolbar");
             // 
+            // lblSystemInfo
+            // 
+            this.lblSystemInfo.AutoSize = true;
+            this.lblSystemInfo.Location = new System.Drawing.Point(383, 4);
+            this.lblSystemInfo.Name = "lblSystemInfo";
+            this.lblSystemInfo.Size = new System.Drawing.Size(35, 13);
+            this.lblSystemInfo.TabIndex = 30;
+            this.lblSystemInfo.Text = "label1";
+            // 
             // buttonExtExcel
             // 
             this.buttonExtExcel.BorderColorScaling = 1.25F;
@@ -384,7 +395,7 @@ namespace EDDiscovery.UserControls
             this.buttonExtExcel.ButtonDisabledScaling = 0.5F;
             this.buttonExtExcel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonExtExcel.Image = global::EDDiscovery.Properties.Resources.excel;
-            this.buttonExtExcel.Location = new System.Drawing.Point(310, 5);
+            this.buttonExtExcel.Location = new System.Drawing.Point(353, 4);
             this.buttonExtExcel.Name = "buttonExtExcel";
             this.buttonExtExcel.Size = new System.Drawing.Size(24, 24);
             this.buttonExtExcel.TabIndex = 29;
@@ -419,31 +430,32 @@ namespace EDDiscovery.UserControls
             this.checkBoxEDSM.UseVisualStyleBackColor = false;
             this.checkBoxEDSM.CheckedChanged += new System.EventHandler(this.checkBoxEDSM_CheckedChanged);
             // 
-            // rtbSystemInfo
+            // chkShowOverlays
             // 
-            this.rtbSystemInfo.BorderColor = System.Drawing.Color.Transparent;
-            this.rtbSystemInfo.BorderColorScaling = 0.5F;
-            this.rtbSystemInfo.HideScrollBar = true;
-            this.rtbSystemInfo.Location = new System.Drawing.Point(468, 3);
-            this.rtbSystemInfo.Name = "rtbSystemInfo";
-            this.rtbSystemInfo.ReadOnly = false;
-            this.rtbSystemInfo.ScrollBarArrowBorderColor = System.Drawing.Color.LightBlue;
-            this.rtbSystemInfo.ScrollBarArrowButtonColor = System.Drawing.Color.LightGray;
-            this.rtbSystemInfo.ScrollBarBackColor = System.Drawing.SystemColors.Control;
-            this.rtbSystemInfo.ScrollBarBorderColor = System.Drawing.Color.White;
-            this.rtbSystemInfo.ScrollBarFlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.rtbSystemInfo.ScrollBarForeColor = System.Drawing.SystemColors.ControlText;
-            this.rtbSystemInfo.ScrollBarMouseOverButtonColor = System.Drawing.Color.Green;
-            this.rtbSystemInfo.ScrollBarMousePressedButtonColor = System.Drawing.Color.Red;
-            this.rtbSystemInfo.ScrollBarSliderColor = System.Drawing.Color.DarkGray;
-            this.rtbSystemInfo.ScrollBarThumbBorderColor = System.Drawing.Color.Yellow;
-            this.rtbSystemInfo.ScrollBarThumbButtonColor = System.Drawing.Color.DarkBlue;
-            this.rtbSystemInfo.ScrollBarWidth = 20;
-            this.rtbSystemInfo.ShowLineCount = false;
-            this.rtbSystemInfo.Size = new System.Drawing.Size(200, 90);
-            this.rtbSystemInfo.TabIndex = 4;
-            this.rtbSystemInfo.TextBoxBackColor = System.Drawing.SystemColors.Control;
-            this.rtbSystemInfo.TextBoxForeColor = System.Drawing.SystemColors.ControlText;
+            this.chkShowOverlays.Appearance = System.Windows.Forms.Appearance.Button;
+            this.chkShowOverlays.BackColor = System.Drawing.Color.Transparent;
+            this.chkShowOverlays.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.chkShowOverlays.CheckBoxColor = System.Drawing.Color.White;
+            this.chkShowOverlays.CheckBoxInnerColor = System.Drawing.Color.White;
+            this.chkShowOverlays.CheckColor = System.Drawing.Color.DarkBlue;
+            this.chkShowOverlays.Cursor = System.Windows.Forms.Cursors.Default;
+            this.chkShowOverlays.FlatAppearance.BorderColor = System.Drawing.SystemColors.ControlDarkDark;
+            this.chkShowOverlays.FlatAppearance.CheckedBackColor = System.Drawing.Color.Green;
+            this.chkShowOverlays.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
+            this.chkShowOverlays.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Silver;
+            this.chkShowOverlays.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.chkShowOverlays.FontNerfReduction = 0.5F;
+            this.chkShowOverlays.Image = global::EDDiscovery.Properties.Resources.Volcano;
+            this.chkShowOverlays.ImageButtonDisabledScaling = 0.5F;
+            this.chkShowOverlays.Location = new System.Drawing.Point(315, 0);
+            this.chkShowOverlays.MouseOverColor = System.Drawing.Color.CornflowerBlue;
+            this.chkShowOverlays.Name = "chkShowOverlays";
+            this.chkShowOverlays.Size = new System.Drawing.Size(32, 32);
+            this.chkShowOverlays.TabIndex = 31;
+            this.chkShowOverlays.TickBoxReductionSize = 10;
+            this.toolTip.SetToolTip(this.chkShowOverlays, "Show/Hide body status icons");
+            this.chkShowOverlays.UseVisualStyleBackColor = false;
+            this.chkShowOverlays.CheckedChanged += new System.EventHandler(this.chkShowOverlays_CheckedChanged);
             // 
             // UserControlScan
             // 
@@ -458,6 +470,7 @@ namespace EDDiscovery.UserControls
             this.contextMenuStrip.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.imagebox)).EndInit();
             this.panelControls.ResumeLayout(false);
+            this.panelControls.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -480,6 +493,7 @@ namespace EDDiscovery.UserControls
         private ExtendedControls.PictureBoxHotspot imagebox;
         private ExtendedControls.CheckBoxCustom checkBoxEDSM;
         private ExtendedControls.ButtonExt buttonExtExcel;
-        private ExtendedControls.RichTextBoxScroll rtbSystemInfo;
+        private System.Windows.Forms.Label lblSystemInfo;
+        private ExtendedControls.CheckBoxCustom chkShowOverlays;
     }
 }

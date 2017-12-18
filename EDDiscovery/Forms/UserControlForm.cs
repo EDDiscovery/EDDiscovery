@@ -453,7 +453,7 @@ namespace EDDiscovery.Forms
                 if (IsTransparencySupported)
                     panel_transparency_Click(panel_transparent, EventArgs.Empty);
                 else
-                    ExtendedControls.MessageBoxTheme.Show("This panel does not support transparency");
+                    ExtendedControls.MessageBoxTheme.Show(this, "This panel does not support transparency");
             }
             else
             {
@@ -501,17 +501,17 @@ namespace EDDiscovery.Forms
 
         public UserControlForm this[int i] { get { return tabforms[i]; } }
 
-        public UserControlForm Get(string name)
+        public UserControlForm GetByWindowsRefName(string name)
         {
-            foreach (UserControlForm u in tabforms)
+            foreach (UserControlForm u in tabforms)     // first complete name
             {
-                if (u.Name.Equals(name, StringComparison.InvariantCultureIgnoreCase))
+                if (u.Name.Equals(name, StringComparison.InvariantCultureIgnoreCase) )
                     return u;
             }
 
-            foreach (UserControlForm u in tabforms)
+            foreach (UserControlForm u in tabforms)     // then partial start name
             {
-                if (u.Name.StartsWith(name, StringComparison.InvariantCultureIgnoreCase))
+                if (u.Name.StartsWith(name, StringComparison.InvariantCultureIgnoreCase) )
                     return u;
             }
 

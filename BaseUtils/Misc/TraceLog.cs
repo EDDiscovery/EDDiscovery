@@ -214,7 +214,7 @@ namespace BaseUtils
                 WriteLine($"\n==== UNHANDLED EXCEPTION ====\n{e.ExceptionObject.ToString()}\n==== cut ====");
                 WriteLine(null);
                 LogLineQueueEvent.WaitOne(100);
-                MessageBox.Show($"There was an unhandled exception.\nPlease report this at {urlfeedback} and attach {LogFileName}\nException: {e.ExceptionObject.ToString()}\n\nThis application must now close", "Unhandled Exception");
+                ExceptionForm.ShowException(e.ExceptionObject as Exception, "An unhandled fatal exception has occurred.", urlfeedback, isFatal: true);
             }
             catch
             {
@@ -228,20 +228,13 @@ namespace BaseUtils
         // Log the exception, ask the user to report it, and exit.
         private static void Application_ThreadException(object sender, ThreadExceptionEventArgs e)
         {
-            DialogResult res = DialogResult.Abort;
-
             try
             {
                 WriteLine($"\n==== UNHANDLED UI EXCEPTION ====\n{e.Exception.ToString()}\n==== cut ====");
-                res = MessageBox.Show($"There was an unhandled UI exception.\nPlease report this at {urlfeedback} and attach {LogFileName}\nException: {e.Exception.Message}\n{e.Exception.StackTrace}\n\nDo you wish to abort, or ignore the exception and try to continue?", "Unhandled Exception", MessageBoxButtons.AbortRetryIgnore);
+                ExceptionForm.ShowException(e.Exception, "There was an unhandled UI exception.", urlfeedback);
             }
             catch
             {
-            }
-
-            if (res == DialogResult.Abort)
-            {
-                Environment.Exit(1);
             }
         }
 

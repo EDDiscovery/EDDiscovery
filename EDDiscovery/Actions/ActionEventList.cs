@@ -34,7 +34,8 @@ namespace EDDiscovery.Actions
             new ActionEventEDList("onEDDNSync", "ProgramEvent", "Program"),  //16
             new ActionEventEDList("onEGOSync", "ProgramEvent", "Program"),  //17
             new ActionEventEDList("onEDSMSync", "ProgramEvent", "Program"),  //18
-            //TBD for 9.0 new ActionEventEDList("onVoiceInput", "Voice", "Voice"), 
+            new ActionEventEDList("onVoiceInput", "Voice", "Voice"), //19
+            new ActionEventEDList("onVoiceInputFailed", "Voice", "VoiceOther"), //19
 
             new ActionEventEDList("All","","Misc"),                      // All, special match only
         };
@@ -58,8 +59,8 @@ namespace EDDiscovery.Actions
         public static ActionEvent onEDDNSync { get { return events[16]; } }
         public static ActionEvent onEGOSync { get { return events[17]; } }
         public static ActionEvent onEDSMSync { get { return events[18]; } }
-
-        public static ActionEvent onVoiceInput { get { return events[0]; } }   // TBD for voice, fix index
+        public static ActionEvent onVoiceInput { get { return events[19]; } }
+        public static ActionEvent onVoiceInputFailed { get { return events[20]; } }
 
         public static ActionEvent RefreshJournal(EliteDangerousCore.HistoryEntry he) { return new ActionEventEDList(he.journalEntry.EventTypeStr, "onRefresh", ""); }
         public static ActionEvent NewEntry(EliteDangerousCore.HistoryEntry he) { return new ActionEventEDList(he.journalEntry.EventTypeStr, "NewEntry", ""); }

@@ -1,21 +1,6 @@
-﻿/*
- * Copyright © 2015 - 2017 EDDiscovery development team
- *
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
- * file except in compliance with the License. You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- * 
- * Unless required by applicable law or agreed to in writing, software distributed under
- * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
- * ANY KIND, either express or implied. See the License for the specific language
- * governing permissions and limitations under the License.
- * 
- * EDDiscovery is not affiliated with Frontier Developments plc.
- */
-namespace EDDiscovery
+﻿namespace EDDiscovery.UserControls
 {
-    partial class RouteControl
+    partial class UserControlRoute
     {
         /// <summary> 
         /// Required designer variable.
@@ -44,12 +29,12 @@ namespace EDDiscovery
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            this.comboBoxRoutingMetric = new ExtendedControls.ComboBoxCustom();
-            this.richTextBox_routeresult = new ExtendedControls.RichTextBoxScroll();
-            this.groupBox_Entries = new ExtendedControls.GroupBoxCustom();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            this.panel1 = new System.Windows.Forms.Panel();
             this.buttonExtExcel = new ExtendedControls.ButtonExt();
             this.textBox_ToName = new ExtendedControls.TextBoxBorder();
             this.textBox_FromName = new ExtendedControls.TextBoxBorder();
+            this.comboBoxRoutingMetric = new ExtendedControls.ComboBoxCustom();
             this.buttonExtTravelTo = new ExtendedControls.ButtonExt();
             this.buttonExtTravelFrom = new ExtendedControls.ButtonExt();
             this.buttonExtTargetTo = new ExtendedControls.ButtonExt();
@@ -75,10 +60,119 @@ namespace EDDiscovery
             this.textBox_FromY = new ExtendedControls.TextBoxBorder();
             this.label3 = new System.Windows.Forms.Label();
             this.textBox_FromX = new ExtendedControls.TextBoxBorder();
+            this.dataGridViewRoute = new System.Windows.Forms.DataGridView();
+            this.SystemCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.DistanceCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.XCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.YCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ZCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.WayPointDistCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.DeviationCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.contextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.showInEDSMToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.copyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.dataViewScrollerPanel1 = new ExtendedControls.DataViewScrollerPanel();
+            this.vScrollBarCustom1 = new ExtendedControls.VScrollBarCustom();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
-            this.label5 = new System.Windows.Forms.Label();
-            this.groupBox_Entries.SuspendLayout();
+            this.panel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewRoute)).BeginInit();
+            this.contextMenuStrip.SuspendLayout();
+            this.dataViewScrollerPanel1.SuspendLayout();
             this.SuspendLayout();
+            // 
+            // panel1
+            // 
+            this.panel1.Controls.Add(this.buttonExtExcel);
+            this.panel1.Controls.Add(this.textBox_ToName);
+            this.panel1.Controls.Add(this.textBox_FromName);
+            this.panel1.Controls.Add(this.comboBoxRoutingMetric);
+            this.panel1.Controls.Add(this.buttonExtTravelTo);
+            this.panel1.Controls.Add(this.buttonExtTravelFrom);
+            this.panel1.Controls.Add(this.buttonExtTargetTo);
+            this.panel1.Controls.Add(this.buttonToEDSM);
+            this.panel1.Controls.Add(this.buttonFromEDSM);
+            this.panel1.Controls.Add(this.buttonTargetFrom);
+            this.panel1.Controls.Add(this.cmd3DMap);
+            this.panel1.Controls.Add(this.textBox_From);
+            this.panel1.Controls.Add(this.textBox_Range);
+            this.panel1.Controls.Add(this.textBox_To);
+            this.panel1.Controls.Add(this.label1);
+            this.panel1.Controls.Add(this.label9);
+            this.panel1.Controls.Add(this.textBox_Distance);
+            this.panel1.Controls.Add(this.label4);
+            this.panel1.Controls.Add(this.textBox_ToZ);
+            this.panel1.Controls.Add(this.label2);
+            this.panel1.Controls.Add(this.textBox_ToY);
+            this.panel1.Controls.Add(this.label7);
+            this.panel1.Controls.Add(this.textBox_ToX);
+            this.panel1.Controls.Add(this.label6);
+            this.panel1.Controls.Add(this.textBox_FromZ);
+            this.panel1.Controls.Add(this.button_Route);
+            this.panel1.Controls.Add(this.textBox_FromY);
+            this.panel1.Controls.Add(this.label3);
+            this.panel1.Controls.Add(this.textBox_FromX);
+            this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panel1.Location = new System.Drawing.Point(0, 0);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(706, 193);
+            this.panel1.TabIndex = 0;
+            // 
+            // buttonExtExcel
+            // 
+            this.buttonExtExcel.BorderColorScaling = 1.25F;
+            this.buttonExtExcel.ButtonColorScaling = 0.5F;
+            this.buttonExtExcel.ButtonDisabledScaling = 0.5F;
+            this.buttonExtExcel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonExtExcel.Image = global::EDDiscovery.Properties.Resources.excel;
+            this.buttonExtExcel.Location = new System.Drawing.Point(296, 148);
+            this.buttonExtExcel.Name = "buttonExtExcel";
+            this.buttonExtExcel.Size = new System.Drawing.Size(24, 24);
+            this.buttonExtExcel.TabIndex = 59;
+            this.toolTip.SetToolTip(this.buttonExtExcel, "Send data on grid to excel");
+            this.buttonExtExcel.UseVisualStyleBackColor = true;
+            this.buttonExtExcel.Click += new System.EventHandler(this.buttonExtExcel_Click);
+            // 
+            // textBox_ToName
+            // 
+            this.textBox_ToName.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
+            this.textBox_ToName.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource;
+            this.textBox_ToName.BorderColor = System.Drawing.Color.Transparent;
+            this.textBox_ToName.BorderColorScaling = 0.5F;
+            this.textBox_ToName.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.textBox_ToName.ControlBackground = System.Drawing.SystemColors.Control;
+            this.textBox_ToName.Location = new System.Drawing.Point(326, 39);
+            this.textBox_ToName.Multiline = false;
+            this.textBox_ToName.Name = "textBox_ToName";
+            this.textBox_ToName.ReadOnly = true;
+            this.textBox_ToName.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.textBox_ToName.SelectionLength = 0;
+            this.textBox_ToName.SelectionStart = 0;
+            this.textBox_ToName.Size = new System.Drawing.Size(234, 20);
+            this.textBox_ToName.TabIndex = 58;
+            this.textBox_ToName.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.toolTip.SetToolTip(this.textBox_ToName, "Alternate Name");
+            this.textBox_ToName.WordWrap = true;
+            // 
+            // textBox_FromName
+            // 
+            this.textBox_FromName.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
+            this.textBox_FromName.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource;
+            this.textBox_FromName.BorderColor = System.Drawing.Color.Transparent;
+            this.textBox_FromName.BorderColorScaling = 0.5F;
+            this.textBox_FromName.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.textBox_FromName.ControlBackground = System.Drawing.SystemColors.Control;
+            this.textBox_FromName.Location = new System.Drawing.Point(57, 39);
+            this.textBox_FromName.Multiline = false;
+            this.textBox_FromName.Name = "textBox_FromName";
+            this.textBox_FromName.ReadOnly = true;
+            this.textBox_FromName.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.textBox_FromName.SelectionLength = 0;
+            this.textBox_FromName.SelectionStart = 0;
+            this.textBox_FromName.Size = new System.Drawing.Size(234, 20);
+            this.textBox_FromName.TabIndex = 57;
+            this.textBox_FromName.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.toolTip.SetToolTip(this.textBox_FromName, "Alternate name");
+            this.textBox_FromName.WordWrap = true;
             // 
             // comboBoxRoutingMetric
             // 
@@ -93,7 +187,7 @@ namespace EDDiscovery
             this.comboBoxRoutingMetric.Enabled = false;
             this.comboBoxRoutingMetric.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.comboBoxRoutingMetric.ItemHeight = 13;
-            this.comboBoxRoutingMetric.Location = new System.Drawing.Point(57, 126);
+            this.comboBoxRoutingMetric.Location = new System.Drawing.Point(57, 120);
             this.comboBoxRoutingMetric.MouseOverBackgroundColor = System.Drawing.Color.Silver;
             this.comboBoxRoutingMetric.Name = "comboBoxRoutingMetric";
             this.comboBoxRoutingMetric.ScrollBarButtonColor = System.Drawing.Color.LightGray;
@@ -103,151 +197,19 @@ namespace EDDiscovery
             this.comboBoxRoutingMetric.SelectedItem = null;
             this.comboBoxRoutingMetric.SelectedValue = null;
             this.comboBoxRoutingMetric.Size = new System.Drawing.Size(234, 21);
-            this.comboBoxRoutingMetric.TabIndex = 9;
+            this.comboBoxRoutingMetric.TabIndex = 41;
             this.toolTip.SetToolTip(this.comboBoxRoutingMetric, "Pick the metric to use when searching for a route");
             this.comboBoxRoutingMetric.ValueMember = "";
-            this.comboBoxRoutingMetric.SelectedIndexChanged += new System.EventHandler(this.comboBoxRoutingMetric_SelectedIndexChanged);
-            // 
-            // richTextBox_routeresult
-            // 
-            this.richTextBox_routeresult.BorderColor = System.Drawing.Color.Transparent;
-            this.richTextBox_routeresult.BorderColorScaling = 0.5F;
-            this.richTextBox_routeresult.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.richTextBox_routeresult.Font = new System.Drawing.Font("Courier New", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.richTextBox_routeresult.HideScrollBar = true;
-            this.richTextBox_routeresult.Location = new System.Drawing.Point(0, 154);
-            this.richTextBox_routeresult.Name = "richTextBox_routeresult";
-            this.richTextBox_routeresult.ReadOnly = false;
-            this.richTextBox_routeresult.ScrollBarArrowBorderColor = System.Drawing.Color.LightBlue;
-            this.richTextBox_routeresult.ScrollBarArrowButtonColor = System.Drawing.Color.LightGray;
-            this.richTextBox_routeresult.ScrollBarBackColor = System.Drawing.SystemColors.Control;
-            this.richTextBox_routeresult.ScrollBarBorderColor = System.Drawing.Color.White;
-            this.richTextBox_routeresult.ScrollBarFlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.richTextBox_routeresult.ScrollBarForeColor = System.Drawing.SystemColors.ControlText;
-            this.richTextBox_routeresult.ScrollBarMouseOverButtonColor = System.Drawing.Color.Green;
-            this.richTextBox_routeresult.ScrollBarMousePressedButtonColor = System.Drawing.Color.Red;
-            this.richTextBox_routeresult.ScrollBarSliderColor = System.Drawing.Color.DarkGray;
-            this.richTextBox_routeresult.ScrollBarThumbBorderColor = System.Drawing.Color.Yellow;
-            this.richTextBox_routeresult.ScrollBarThumbButtonColor = System.Drawing.Color.DarkBlue;
-            this.richTextBox_routeresult.ScrollBarWidth = 20;
-            this.richTextBox_routeresult.ShowLineCount = false;
-            this.richTextBox_routeresult.Size = new System.Drawing.Size(897, 275);
-            this.richTextBox_routeresult.TabIndex = 11;
-            this.richTextBox_routeresult.TextBoxBackColor = System.Drawing.SystemColors.Control;
-            this.richTextBox_routeresult.TextBoxForeColor = System.Drawing.SystemColors.ControlText;
-            // 
-            // groupBox_Entries
-            // 
-            this.groupBox_Entries.AlternateClientBackColor = System.Drawing.Color.Blue;
-            this.groupBox_Entries.BackColorScaling = 0.5F;
-            this.groupBox_Entries.BorderColor = System.Drawing.Color.LightGray;
-            this.groupBox_Entries.BorderColorScaling = 0.5F;
-            this.groupBox_Entries.Controls.Add(this.label5);
-            this.groupBox_Entries.Controls.Add(this.buttonExtExcel);
-            this.groupBox_Entries.Controls.Add(this.textBox_ToName);
-            this.groupBox_Entries.Controls.Add(this.textBox_FromName);
-            this.groupBox_Entries.Controls.Add(this.comboBoxRoutingMetric);
-            this.groupBox_Entries.Controls.Add(this.buttonExtTravelTo);
-            this.groupBox_Entries.Controls.Add(this.buttonExtTravelFrom);
-            this.groupBox_Entries.Controls.Add(this.buttonExtTargetTo);
-            this.groupBox_Entries.Controls.Add(this.buttonToEDSM);
-            this.groupBox_Entries.Controls.Add(this.buttonFromEDSM);
-            this.groupBox_Entries.Controls.Add(this.buttonTargetFrom);
-            this.groupBox_Entries.Controls.Add(this.cmd3DMap);
-            this.groupBox_Entries.Controls.Add(this.textBox_From);
-            this.groupBox_Entries.Controls.Add(this.textBox_Range);
-            this.groupBox_Entries.Controls.Add(this.textBox_To);
-            this.groupBox_Entries.Controls.Add(this.label1);
-            this.groupBox_Entries.Controls.Add(this.label9);
-            this.groupBox_Entries.Controls.Add(this.textBox_Distance);
-            this.groupBox_Entries.Controls.Add(this.label4);
-            this.groupBox_Entries.Controls.Add(this.textBox_ToZ);
-            this.groupBox_Entries.Controls.Add(this.label2);
-            this.groupBox_Entries.Controls.Add(this.textBox_ToY);
-            this.groupBox_Entries.Controls.Add(this.label7);
-            this.groupBox_Entries.Controls.Add(this.textBox_ToX);
-            this.groupBox_Entries.Controls.Add(this.label6);
-            this.groupBox_Entries.Controls.Add(this.textBox_FromZ);
-            this.groupBox_Entries.Controls.Add(this.button_Route);
-            this.groupBox_Entries.Controls.Add(this.textBox_FromY);
-            this.groupBox_Entries.Controls.Add(this.label3);
-            this.groupBox_Entries.Controls.Add(this.textBox_FromX);
-            this.groupBox_Entries.Dock = System.Windows.Forms.DockStyle.Top;
-            this.groupBox_Entries.FillClientAreaWithAlternateColor = false;
-            this.groupBox_Entries.Location = new System.Drawing.Point(0, 0);
-            this.groupBox_Entries.Name = "groupBox_Entries";
-            this.groupBox_Entries.Size = new System.Drawing.Size(897, 154);
-            this.groupBox_Entries.TabIndex = 24;
-            this.groupBox_Entries.TabStop = false;
-            this.groupBox_Entries.TextPadding = 0;
-            this.groupBox_Entries.TextStartPosition = -1;
-            // 
-            // buttonExtExcel
-            // 
-            this.buttonExtExcel.BorderColorScaling = 1.25F;
-            this.buttonExtExcel.ButtonColorScaling = 0.5F;
-            this.buttonExtExcel.ButtonDisabledScaling = 0.5F;
-            this.buttonExtExcel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.buttonExtExcel.Image = global::EDDiscovery.Properties.Resources.excel;
-            this.buttonExtExcel.Location = new System.Drawing.Point(832, 108);
-            this.buttonExtExcel.Name = "buttonExtExcel";
-            this.buttonExtExcel.Size = new System.Drawing.Size(24, 24);
-            this.buttonExtExcel.TabIndex = 29;
-            this.toolTip.SetToolTip(this.buttonExtExcel, "Send data on grid to excel");
-            this.buttonExtExcel.UseVisualStyleBackColor = true;
-            this.buttonExtExcel.Click += new System.EventHandler(this.buttonExtExcel_Click);
-            // 
-            // textBox_ToName
-            // 
-            this.textBox_ToName.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
-            this.textBox_ToName.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource;
-            this.textBox_ToName.BorderColor = System.Drawing.Color.Transparent;
-            this.textBox_ToName.BorderColorScaling = 0.5F;
-            this.textBox_ToName.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.textBox_ToName.ControlBackground = System.Drawing.SystemColors.Control;
-            this.textBox_ToName.Location = new System.Drawing.Point(326, 45);
-            this.textBox_ToName.Multiline = false;
-            this.textBox_ToName.Name = "textBox_ToName";
-            this.textBox_ToName.ReadOnly = true;
-            this.textBox_ToName.ScrollBars = System.Windows.Forms.ScrollBars.None;
-            this.textBox_ToName.SelectionLength = 0;
-            this.textBox_ToName.SelectionStart = 0;
-            this.textBox_ToName.Size = new System.Drawing.Size(234, 20);
-            this.textBox_ToName.TabIndex = 27;
-            this.textBox_ToName.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
-            this.toolTip.SetToolTip(this.textBox_ToName, "Alternate Name");
-            this.textBox_ToName.WordWrap = true;
-            // 
-            // textBox_FromName
-            // 
-            this.textBox_FromName.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
-            this.textBox_FromName.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource;
-            this.textBox_FromName.BorderColor = System.Drawing.Color.Transparent;
-            this.textBox_FromName.BorderColorScaling = 0.5F;
-            this.textBox_FromName.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.textBox_FromName.ControlBackground = System.Drawing.SystemColors.Control;
-            this.textBox_FromName.Location = new System.Drawing.Point(57, 45);
-            this.textBox_FromName.Multiline = false;
-            this.textBox_FromName.Name = "textBox_FromName";
-            this.textBox_FromName.ReadOnly = true;
-            this.textBox_FromName.ScrollBars = System.Windows.Forms.ScrollBars.None;
-            this.textBox_FromName.SelectionLength = 0;
-            this.textBox_FromName.SelectionStart = 0;
-            this.textBox_FromName.Size = new System.Drawing.Size(234, 20);
-            this.textBox_FromName.TabIndex = 26;
-            this.textBox_FromName.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
-            this.toolTip.SetToolTip(this.textBox_FromName, "Alternate name");
-            this.textBox_FromName.WordWrap = true;
             // 
             // buttonExtTravelTo
             // 
             this.buttonExtTravelTo.BorderColorScaling = 1.25F;
             this.buttonExtTravelTo.ButtonColorScaling = 0.5F;
             this.buttonExtTravelTo.ButtonDisabledScaling = 0.5F;
-            this.buttonExtTravelTo.Location = new System.Drawing.Point(326, 97);
+            this.buttonExtTravelTo.Location = new System.Drawing.Point(326, 91);
             this.buttonExtTravelTo.Name = "buttonExtTravelTo";
             this.buttonExtTravelTo.Size = new System.Drawing.Size(53, 23);
-            this.buttonExtTravelTo.TabIndex = 25;
+            this.buttonExtTravelTo.TabIndex = 56;
             this.buttonExtTravelTo.Text = "History";
             this.toolTip.SetToolTip(this.buttonExtTravelTo, "Copy the entry in the main travel grid to end route entry");
             this.buttonExtTravelTo.UseVisualStyleBackColor = true;
@@ -258,10 +220,10 @@ namespace EDDiscovery
             this.buttonExtTravelFrom.BorderColorScaling = 1.25F;
             this.buttonExtTravelFrom.ButtonColorScaling = 0.5F;
             this.buttonExtTravelFrom.ButtonDisabledScaling = 0.5F;
-            this.buttonExtTravelFrom.Location = new System.Drawing.Point(57, 97);
+            this.buttonExtTravelFrom.Location = new System.Drawing.Point(57, 91);
             this.buttonExtTravelFrom.Name = "buttonExtTravelFrom";
             this.buttonExtTravelFrom.Size = new System.Drawing.Size(53, 23);
-            this.buttonExtTravelFrom.TabIndex = 25;
+            this.buttonExtTravelFrom.TabIndex = 55;
             this.buttonExtTravelFrom.Text = "History";
             this.toolTip.SetToolTip(this.buttonExtTravelFrom, "Copy the entry in the main travel grid to start route entry");
             this.buttonExtTravelFrom.UseVisualStyleBackColor = true;
@@ -272,10 +234,10 @@ namespace EDDiscovery
             this.buttonExtTargetTo.BorderColorScaling = 1.25F;
             this.buttonExtTargetTo.ButtonColorScaling = 0.5F;
             this.buttonExtTargetTo.ButtonDisabledScaling = 0.5F;
-            this.buttonExtTargetTo.Location = new System.Drawing.Point(404, 97);
+            this.buttonExtTargetTo.Location = new System.Drawing.Point(404, 91);
             this.buttonExtTargetTo.Name = "buttonExtTargetTo";
             this.buttonExtTargetTo.Size = new System.Drawing.Size(53, 23);
-            this.buttonExtTargetTo.TabIndex = 25;
+            this.buttonExtTargetTo.TabIndex = 54;
             this.buttonExtTargetTo.Text = "Target";
             this.toolTip.SetToolTip(this.buttonExtTargetTo, "Copy the target system to end route entry");
             this.buttonExtTargetTo.UseVisualStyleBackColor = true;
@@ -286,10 +248,10 @@ namespace EDDiscovery
             this.buttonToEDSM.BorderColorScaling = 1.25F;
             this.buttonToEDSM.ButtonColorScaling = 0.5F;
             this.buttonToEDSM.ButtonDisabledScaling = 0.5F;
-            this.buttonToEDSM.Location = new System.Drawing.Point(482, 97);
+            this.buttonToEDSM.Location = new System.Drawing.Point(482, 91);
             this.buttonToEDSM.Name = "buttonToEDSM";
             this.buttonToEDSM.Size = new System.Drawing.Size(53, 23);
-            this.buttonToEDSM.TabIndex = 25;
+            this.buttonToEDSM.TabIndex = 53;
             this.buttonToEDSM.Text = "EDSM";
             this.toolTip.SetToolTip(this.buttonToEDSM, "Open this end route system in EDSM");
             this.buttonToEDSM.UseVisualStyleBackColor = true;
@@ -300,10 +262,10 @@ namespace EDDiscovery
             this.buttonFromEDSM.BorderColorScaling = 1.25F;
             this.buttonFromEDSM.ButtonColorScaling = 0.5F;
             this.buttonFromEDSM.ButtonDisabledScaling = 0.5F;
-            this.buttonFromEDSM.Location = new System.Drawing.Point(213, 97);
+            this.buttonFromEDSM.Location = new System.Drawing.Point(213, 91);
             this.buttonFromEDSM.Name = "buttonFromEDSM";
             this.buttonFromEDSM.Size = new System.Drawing.Size(53, 23);
-            this.buttonFromEDSM.TabIndex = 25;
+            this.buttonFromEDSM.TabIndex = 52;
             this.buttonFromEDSM.Text = "EDSM";
             this.toolTip.SetToolTip(this.buttonFromEDSM, "Open this start route system in EDSM");
             this.buttonFromEDSM.UseVisualStyleBackColor = true;
@@ -314,10 +276,10 @@ namespace EDDiscovery
             this.buttonTargetFrom.BorderColorScaling = 1.25F;
             this.buttonTargetFrom.ButtonColorScaling = 0.5F;
             this.buttonTargetFrom.ButtonDisabledScaling = 0.5F;
-            this.buttonTargetFrom.Location = new System.Drawing.Point(135, 97);
+            this.buttonTargetFrom.Location = new System.Drawing.Point(135, 91);
             this.buttonTargetFrom.Name = "buttonTargetFrom";
             this.buttonTargetFrom.Size = new System.Drawing.Size(53, 23);
-            this.buttonTargetFrom.TabIndex = 25;
+            this.buttonTargetFrom.TabIndex = 51;
             this.buttonTargetFrom.Text = "Target";
             this.toolTip.SetToolTip(this.buttonTargetFrom, "Copy the target system to start route entry");
             this.buttonTargetFrom.UseVisualStyleBackColor = true;
@@ -328,10 +290,10 @@ namespace EDDiscovery
             this.cmd3DMap.BorderColorScaling = 1.25F;
             this.cmd3DMap.ButtonColorScaling = 0.5F;
             this.cmd3DMap.ButtonDisabledScaling = 0.5F;
-            this.cmd3DMap.Location = new System.Drawing.Point(745, 66);
+            this.cmd3DMap.Location = new System.Drawing.Point(174, 148);
             this.cmd3DMap.Name = "cmd3DMap";
             this.cmd3DMap.Size = new System.Drawing.Size(111, 26);
-            this.cmd3DMap.TabIndex = 24;
+            this.cmd3DMap.TabIndex = 50;
             this.cmd3DMap.Text = "3D Map";
             this.toolTip.SetToolTip(this.cmd3DMap, "Show route on 3D Map");
             this.cmd3DMap.UseVisualStyleBackColor = true;
@@ -354,7 +316,7 @@ namespace EDDiscovery
             this.textBox_From.DropDownScrollBarColor = System.Drawing.Color.LightGray;
             this.textBox_From.DropDownWidth = 0;
             this.textBox_From.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.textBox_From.Location = new System.Drawing.Point(57, 19);
+            this.textBox_From.Location = new System.Drawing.Point(57, 13);
             this.textBox_From.Multiline = false;
             this.textBox_From.Name = "textBox_From";
             this.textBox_From.ReadOnly = true;
@@ -362,7 +324,7 @@ namespace EDDiscovery
             this.textBox_From.SelectionLength = 0;
             this.textBox_From.SelectionStart = 0;
             this.textBox_From.Size = new System.Drawing.Size(234, 20);
-            this.textBox_From.TabIndex = 0;
+            this.textBox_From.TabIndex = 31;
             this.textBox_From.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.toolTip.SetToolTip(this.textBox_From, "Select system to start the route");
             this.textBox_From.WordWrap = true;
@@ -377,7 +339,7 @@ namespace EDDiscovery
             this.textBox_Range.BorderColorScaling = 0.5F;
             this.textBox_Range.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBox_Range.ControlBackground = System.Drawing.SystemColors.Control;
-            this.textBox_Range.Location = new System.Drawing.Point(631, 19);
+            this.textBox_Range.Location = new System.Drawing.Point(482, 121);
             this.textBox_Range.Multiline = false;
             this.textBox_Range.Name = "textBox_Range";
             this.textBox_Range.ReadOnly = true;
@@ -385,7 +347,7 @@ namespace EDDiscovery
             this.textBox_Range.SelectionLength = 0;
             this.textBox_Range.SelectionStart = 0;
             this.textBox_Range.Size = new System.Drawing.Size(57, 20);
-            this.textBox_Range.TabIndex = 2;
+            this.textBox_Range.TabIndex = 33;
             this.textBox_Range.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.toolTip.SetToolTip(this.textBox_Range, "Give your jump range, or search range for long jumps");
             this.textBox_Range.WordWrap = true;
@@ -409,7 +371,7 @@ namespace EDDiscovery
             this.textBox_To.DropDownScrollBarColor = System.Drawing.Color.LightGray;
             this.textBox_To.DropDownWidth = 0;
             this.textBox_To.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.textBox_To.Location = new System.Drawing.Point(326, 19);
+            this.textBox_To.Location = new System.Drawing.Point(326, 13);
             this.textBox_To.Multiline = false;
             this.textBox_To.Name = "textBox_To";
             this.textBox_To.ReadOnly = true;
@@ -417,7 +379,7 @@ namespace EDDiscovery
             this.textBox_To.SelectionLength = 0;
             this.textBox_To.SelectionStart = 0;
             this.textBox_To.Size = new System.Drawing.Size(234, 20);
-            this.textBox_To.TabIndex = 1;
+            this.textBox_To.TabIndex = 32;
             this.textBox_To.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.toolTip.SetToolTip(this.textBox_To, "Select the system to end in");
             this.textBox_To.WordWrap = true;
@@ -427,19 +389,19 @@ namespace EDDiscovery
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(694, 23);
+            this.label1.Location = new System.Drawing.Point(547, 150);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(14, 13);
-            this.label1.TabIndex = 18;
+            this.label1.TabIndex = 43;
             this.label1.Text = "ly";
             // 
             // label9
             // 
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(694, 49);
+            this.label9.Location = new System.Drawing.Point(547, 123);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(14, 13);
-            this.label9.TabIndex = 18;
+            this.label9.TabIndex = 44;
             this.label9.Text = "ly";
             // 
             // textBox_Distance
@@ -450,7 +412,7 @@ namespace EDDiscovery
             this.textBox_Distance.BorderColorScaling = 0.5F;
             this.textBox_Distance.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBox_Distance.ControlBackground = System.Drawing.SystemColors.Control;
-            this.textBox_Distance.Location = new System.Drawing.Point(631, 47);
+            this.textBox_Distance.Location = new System.Drawing.Point(482, 154);
             this.textBox_Distance.Multiline = false;
             this.textBox_Distance.Name = "textBox_Distance";
             this.textBox_Distance.ReadOnly = true;
@@ -458,7 +420,7 @@ namespace EDDiscovery
             this.textBox_Distance.SelectionLength = 0;
             this.textBox_Distance.SelectionStart = 0;
             this.textBox_Distance.Size = new System.Drawing.Size(57, 20);
-            this.textBox_Distance.TabIndex = 8;
+            this.textBox_Distance.TabIndex = 40;
             this.textBox_Distance.TabStop = false;
             this.textBox_Distance.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.toolTip.SetToolTip(this.textBox_Distance, "Distance between start and end");
@@ -468,10 +430,10 @@ namespace EDDiscovery
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(297, 20);
+            this.label4.Location = new System.Drawing.Point(297, 14);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(20, 13);
-            this.label4.TabIndex = 21;
+            this.label4.TabIndex = 49;
             this.label4.Text = "To";
             // 
             // textBox_ToZ
@@ -482,7 +444,7 @@ namespace EDDiscovery
             this.textBox_ToZ.BorderColorScaling = 0.5F;
             this.textBox_ToZ.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBox_ToZ.ControlBackground = System.Drawing.SystemColors.Control;
-            this.textBox_ToZ.Location = new System.Drawing.Point(482, 71);
+            this.textBox_ToZ.Location = new System.Drawing.Point(482, 65);
             this.textBox_ToZ.Multiline = false;
             this.textBox_ToZ.Name = "textBox_ToZ";
             this.textBox_ToZ.ReadOnly = true;
@@ -490,21 +452,21 @@ namespace EDDiscovery
             this.textBox_ToZ.SelectionLength = 0;
             this.textBox_ToZ.SelectionStart = 0;
             this.textBox_ToZ.Size = new System.Drawing.Size(72, 20);
-            this.textBox_ToZ.TabIndex = 8;
+            this.textBox_ToZ.TabIndex = 39;
             this.textBox_ToZ.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.toolTip.SetToolTip(this.textBox_ToZ, "Z Co-ord");
             this.textBox_ToZ.WordWrap = true;
-            this.textBox_ToZ.TextChanged += new System.EventHandler(this.textBox_XYZ_To_Changed);
+            this.textBox_ToZ.TextChanged += new System.EventHandler(this.textBox_ToXYZ_TextChanged);
             this.textBox_ToZ.Click += new System.EventHandler(this.textBox_Clicked);
             this.textBox_ToZ.Enter += new System.EventHandler(this.textBox_ToXYZ_Enter);
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(566, 20);
+            this.label2.Location = new System.Drawing.Point(403, 122);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(52, 13);
-            this.label2.TabIndex = 19;
+            this.label2.TabIndex = 45;
             this.label2.Text = "Max jump";
             // 
             // textBox_ToY
@@ -515,7 +477,7 @@ namespace EDDiscovery
             this.textBox_ToY.BorderColorScaling = 0.5F;
             this.textBox_ToY.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBox_ToY.ControlBackground = System.Drawing.SystemColors.Control;
-            this.textBox_ToY.Location = new System.Drawing.Point(404, 71);
+            this.textBox_ToY.Location = new System.Drawing.Point(404, 65);
             this.textBox_ToY.Multiline = false;
             this.textBox_ToY.Name = "textBox_ToY";
             this.textBox_ToY.ReadOnly = true;
@@ -523,21 +485,21 @@ namespace EDDiscovery
             this.textBox_ToY.SelectionLength = 0;
             this.textBox_ToY.SelectionStart = 0;
             this.textBox_ToY.Size = new System.Drawing.Size(72, 20);
-            this.textBox_ToY.TabIndex = 7;
+            this.textBox_ToY.TabIndex = 38;
             this.textBox_ToY.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.toolTip.SetToolTip(this.textBox_ToY, "Y (Vertical) Co-ord");
             this.textBox_ToY.WordWrap = true;
-            this.textBox_ToY.TextChanged += new System.EventHandler(this.textBox_XYZ_To_Changed);
+            this.textBox_ToY.TextChanged += new System.EventHandler(this.textBox_ToXYZ_TextChanged);
             this.textBox_ToY.Click += new System.EventHandler(this.textBox_Clicked);
             this.textBox_ToY.Enter += new System.EventHandler(this.textBox_ToXYZ_Enter);
             // 
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(569, 48);
+            this.label7.Location = new System.Drawing.Point(406, 155);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(49, 13);
-            this.label7.TabIndex = 19;
+            this.label7.TabIndex = 46;
             this.label7.Text = "Distance";
             // 
             // textBox_ToX
@@ -548,7 +510,7 @@ namespace EDDiscovery
             this.textBox_ToX.BorderColorScaling = 0.5F;
             this.textBox_ToX.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBox_ToX.ControlBackground = System.Drawing.SystemColors.Control;
-            this.textBox_ToX.Location = new System.Drawing.Point(326, 71);
+            this.textBox_ToX.Location = new System.Drawing.Point(326, 65);
             this.textBox_ToX.Multiline = false;
             this.textBox_ToX.Name = "textBox_ToX";
             this.textBox_ToX.ReadOnly = true;
@@ -556,21 +518,21 @@ namespace EDDiscovery
             this.textBox_ToX.SelectionLength = 0;
             this.textBox_ToX.SelectionStart = 0;
             this.textBox_ToX.Size = new System.Drawing.Size(72, 20);
-            this.textBox_ToX.TabIndex = 6;
+            this.textBox_ToX.TabIndex = 37;
             this.textBox_ToX.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.toolTip.SetToolTip(this.textBox_ToX, "X Co-Ord");
             this.textBox_ToX.WordWrap = true;
-            this.textBox_ToX.TextChanged += new System.EventHandler(this.textBox_XYZ_To_Changed);
+            this.textBox_ToX.TextChanged += new System.EventHandler(this.textBox_ToXYZ_TextChanged);
             this.textBox_ToX.Click += new System.EventHandler(this.textBox_Clicked);
             this.textBox_ToX.Enter += new System.EventHandler(this.textBox_ToXYZ_Enter);
             // 
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(8, 128);
+            this.label6.Location = new System.Drawing.Point(8, 122);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(36, 13);
-            this.label6.TabIndex = 19;
+            this.label6.TabIndex = 47;
             this.label6.Text = "Metric";
             // 
             // textBox_FromZ
@@ -581,7 +543,7 @@ namespace EDDiscovery
             this.textBox_FromZ.BorderColorScaling = 0.5F;
             this.textBox_FromZ.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBox_FromZ.ControlBackground = System.Drawing.SystemColors.Control;
-            this.textBox_FromZ.Location = new System.Drawing.Point(213, 71);
+            this.textBox_FromZ.Location = new System.Drawing.Point(213, 65);
             this.textBox_FromZ.Multiline = false;
             this.textBox_FromZ.Name = "textBox_FromZ";
             this.textBox_FromZ.ReadOnly = true;
@@ -589,11 +551,11 @@ namespace EDDiscovery
             this.textBox_FromZ.SelectionLength = 0;
             this.textBox_FromZ.SelectionStart = 0;
             this.textBox_FromZ.Size = new System.Drawing.Size(72, 20);
-            this.textBox_FromZ.TabIndex = 5;
+            this.textBox_FromZ.TabIndex = 36;
             this.textBox_FromZ.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
-            this.toolTip.SetToolTip(this.textBox_FromZ, "Z Co-Ord");
+            this.toolTip.SetToolTip(this.textBox_FromZ, "Z Co-ord");
             this.textBox_FromZ.WordWrap = true;
-            this.textBox_FromZ.TextChanged += new System.EventHandler(this.textBox_XYZ_From_Changed);
+            this.textBox_FromZ.TextChanged += new System.EventHandler(this.textBox_FromXYZ_TextChanged);
             this.textBox_FromZ.Click += new System.EventHandler(this.textBox_Clicked);
             this.textBox_FromZ.Enter += new System.EventHandler(this.textBox_FromXYZ_Enter);
             // 
@@ -603,14 +565,14 @@ namespace EDDiscovery
             this.button_Route.ButtonColorScaling = 0.5F;
             this.button_Route.ButtonDisabledScaling = 0.5F;
             this.button_Route.Enabled = false;
-            this.button_Route.Location = new System.Drawing.Point(745, 19);
+            this.button_Route.Location = new System.Drawing.Point(57, 147);
             this.button_Route.Name = "button_Route";
             this.button_Route.Size = new System.Drawing.Size(111, 27);
-            this.button_Route.TabIndex = 10;
+            this.button_Route.TabIndex = 42;
             this.button_Route.Text = "Find route";
             this.toolTip.SetToolTip(this.button_Route, "Compute the route");
             this.button_Route.UseVisualStyleBackColor = true;
-            this.button_Route.Click += new System.EventHandler(this.button_Route_Click_1);
+            this.button_Route.Click += new System.EventHandler(this.button_Route_Click);
             // 
             // textBox_FromY
             // 
@@ -620,7 +582,7 @@ namespace EDDiscovery
             this.textBox_FromY.BorderColorScaling = 0.5F;
             this.textBox_FromY.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBox_FromY.ControlBackground = System.Drawing.SystemColors.Control;
-            this.textBox_FromY.Location = new System.Drawing.Point(135, 71);
+            this.textBox_FromY.Location = new System.Drawing.Point(135, 65);
             this.textBox_FromY.Multiline = false;
             this.textBox_FromY.Name = "textBox_FromY";
             this.textBox_FromY.ReadOnly = true;
@@ -628,21 +590,21 @@ namespace EDDiscovery
             this.textBox_FromY.SelectionLength = 0;
             this.textBox_FromY.SelectionStart = 0;
             this.textBox_FromY.Size = new System.Drawing.Size(72, 20);
-            this.textBox_FromY.TabIndex = 4;
+            this.textBox_FromY.TabIndex = 35;
             this.textBox_FromY.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.toolTip.SetToolTip(this.textBox_FromY, "Y (Vertical) Co-ord");
             this.textBox_FromY.WordWrap = true;
-            this.textBox_FromY.TextChanged += new System.EventHandler(this.textBox_XYZ_From_Changed);
+            this.textBox_FromY.TextChanged += new System.EventHandler(this.textBox_FromXYZ_TextChanged);
             this.textBox_FromY.Click += new System.EventHandler(this.textBox_Clicked);
             this.textBox_FromY.Enter += new System.EventHandler(this.textBox_FromXYZ_Enter);
             // 
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(8, 20);
+            this.label3.Location = new System.Drawing.Point(8, 14);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(30, 13);
-            this.label3.TabIndex = 20;
+            this.label3.TabIndex = 48;
             this.label3.Text = "From";
             // 
             // textBox_FromX
@@ -653,7 +615,7 @@ namespace EDDiscovery
             this.textBox_FromX.BorderColorScaling = 0.5F;
             this.textBox_FromX.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBox_FromX.ControlBackground = System.Drawing.SystemColors.Control;
-            this.textBox_FromX.Location = new System.Drawing.Point(57, 71);
+            this.textBox_FromX.Location = new System.Drawing.Point(57, 65);
             this.textBox_FromX.Multiline = false;
             this.textBox_FromX.Name = "textBox_FromX";
             this.textBox_FromX.ReadOnly = true;
@@ -661,75 +623,218 @@ namespace EDDiscovery
             this.textBox_FromX.SelectionLength = 0;
             this.textBox_FromX.SelectionStart = 0;
             this.textBox_FromX.Size = new System.Drawing.Size(72, 20);
-            this.textBox_FromX.TabIndex = 3;
+            this.textBox_FromX.TabIndex = 34;
             this.textBox_FromX.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.toolTip.SetToolTip(this.textBox_FromX, "X Co-ord");
             this.textBox_FromX.WordWrap = true;
-            this.textBox_FromX.TextChanged += new System.EventHandler(this.textBox_XYZ_From_Changed);
+            this.textBox_FromX.TextChanged += new System.EventHandler(this.textBox_FromXYZ_TextChanged);
             this.textBox_FromX.Click += new System.EventHandler(this.textBox_Clicked);
             this.textBox_FromX.Enter += new System.EventHandler(this.textBox_FromXYZ_Enter);
             // 
-            // toolTip
+            // dataGridViewRoute
             // 
-            this.toolTip.ShowAlways = true;
+            this.dataGridViewRoute.AllowUserToAddRows = false;
+            this.dataGridViewRoute.AllowUserToDeleteRows = false;
+            this.dataGridViewRoute.AllowUserToResizeRows = false;
+            this.dataGridViewRoute.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.dataGridViewRoute.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridViewRoute.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.SystemCol,
+            this.DistanceCol,
+            this.XCol,
+            this.YCol,
+            this.ZCol,
+            this.WayPointDistCol,
+            this.DeviationCol});
+            this.dataGridViewRoute.ContextMenuStrip = this.contextMenuStrip;
+            this.dataGridViewRoute.Location = new System.Drawing.Point(0, 0);
+            this.dataGridViewRoute.Name = "dataGridViewRoute";
+            this.dataGridViewRoute.ReadOnly = true;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dataGridViewRoute.RowHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            this.dataGridViewRoute.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
+            this.dataGridViewRoute.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.dataGridViewRoute.Size = new System.Drawing.Size(683, 221);
+            this.dataGridViewRoute.TabIndex = 1;
+            this.dataGridViewRoute.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewRoute_CellClick);
+            this.dataGridViewRoute.MouseDown += new System.Windows.Forms.MouseEventHandler(this.dataGridViewRoute_MouseDown);
             // 
-            // label5
+            // SystemCol
             // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(742, 114);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(53, 13);
-            this.label5.TabIndex = 30;
-            this.label5.Text = "Export To";
+            this.SystemCol.FillWeight = 200F;
+            this.SystemCol.HeaderText = "System";
+            this.SystemCol.MinimumWidth = 50;
+            this.SystemCol.Name = "SystemCol";
+            this.SystemCol.ReadOnly = true;
             // 
-            // RouteControl
+            // DistanceCol
+            // 
+            this.DistanceCol.HeaderText = "Distance";
+            this.DistanceCol.Name = "DistanceCol";
+            this.DistanceCol.ReadOnly = true;
+            // 
+            // XCol
+            // 
+            this.XCol.HeaderText = "X";
+            this.XCol.Name = "XCol";
+            this.XCol.ReadOnly = true;
+            // 
+            // YCol
+            // 
+            this.YCol.HeaderText = "Y";
+            this.YCol.Name = "YCol";
+            this.YCol.ReadOnly = true;
+            // 
+            // ZCol
+            // 
+            this.ZCol.HeaderText = "Z";
+            this.ZCol.Name = "ZCol";
+            this.ZCol.ReadOnly = true;
+            // 
+            // WayPointDistCol
+            // 
+            this.WayPointDistCol.HeaderText = "Dist. Waypoint";
+            this.WayPointDistCol.Name = "WayPointDistCol";
+            this.WayPointDistCol.ReadOnly = true;
+            // 
+            // DeviationCol
+            // 
+            this.DeviationCol.HeaderText = "Deviation";
+            this.DeviationCol.Name = "DeviationCol";
+            this.DeviationCol.ReadOnly = true;
+            // 
+            // contextMenuStrip
+            // 
+            this.contextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.showInEDSMToolStripMenuItem,
+            this.copyToolStripMenuItem});
+            this.contextMenuStrip.Name = "contextMenuStrip";
+            this.contextMenuStrip.Size = new System.Drawing.Size(151, 48);
+            // 
+            // showInEDSMToolStripMenuItem
+            // 
+            this.showInEDSMToolStripMenuItem.Name = "showInEDSMToolStripMenuItem";
+            this.showInEDSMToolStripMenuItem.Size = new System.Drawing.Size(150, 22);
+            this.showInEDSMToolStripMenuItem.Text = "Show in EDSM";
+            this.showInEDSMToolStripMenuItem.Click += new System.EventHandler(this.showInEDSMToolStripMenuItem_Click);
+            // 
+            // copyToolStripMenuItem
+            // 
+            this.copyToolStripMenuItem.Name = "copyToolStripMenuItem";
+            this.copyToolStripMenuItem.Size = new System.Drawing.Size(150, 22);
+            this.copyToolStripMenuItem.Text = "Copy";
+            this.copyToolStripMenuItem.Click += new System.EventHandler(this.copyToolStripMenuItem_Click);
+            // 
+            // dataViewScrollerPanel1
+            // 
+            this.dataViewScrollerPanel1.Controls.Add(this.vScrollBarCustom1);
+            this.dataViewScrollerPanel1.Controls.Add(this.dataGridViewRoute);
+            this.dataViewScrollerPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dataViewScrollerPanel1.InternalMargin = new System.Windows.Forms.Padding(0, 0, 3, 0);
+            this.dataViewScrollerPanel1.Location = new System.Drawing.Point(0, 193);
+            this.dataViewScrollerPanel1.Name = "dataViewScrollerPanel1";
+            this.dataViewScrollerPanel1.ScrollBarWidth = 20;
+            this.dataViewScrollerPanel1.Size = new System.Drawing.Size(706, 221);
+            this.dataViewScrollerPanel1.TabIndex = 29;
+            this.dataViewScrollerPanel1.VerticalScrollBarDockRight = true;
+            // 
+            // vScrollBarCustom1
+            // 
+            this.vScrollBarCustom1.ArrowBorderColor = System.Drawing.Color.LightBlue;
+            this.vScrollBarCustom1.ArrowButtonColor = System.Drawing.Color.LightGray;
+            this.vScrollBarCustom1.ArrowColorScaling = 0.5F;
+            this.vScrollBarCustom1.ArrowDownDrawAngle = 270F;
+            this.vScrollBarCustom1.ArrowUpDrawAngle = 90F;
+            this.vScrollBarCustom1.BorderColor = System.Drawing.Color.White;
+            this.vScrollBarCustom1.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.vScrollBarCustom1.HideScrollBar = true;
+            this.vScrollBarCustom1.LargeChange = 0;
+            this.vScrollBarCustom1.Location = new System.Drawing.Point(683, 34);
+            this.vScrollBarCustom1.Maximum = -1;
+            this.vScrollBarCustom1.Minimum = 0;
+            this.vScrollBarCustom1.MouseOverButtonColor = System.Drawing.Color.Green;
+            this.vScrollBarCustom1.MousePressedButtonColor = System.Drawing.Color.Red;
+            this.vScrollBarCustom1.Name = "vScrollBarCustom1";
+            this.vScrollBarCustom1.Size = new System.Drawing.Size(20, 187);
+            this.vScrollBarCustom1.SliderColor = System.Drawing.Color.DarkGray;
+            this.vScrollBarCustom1.SmallChange = 1;
+            this.vScrollBarCustom1.TabIndex = 4;
+            this.vScrollBarCustom1.Text = "vScrollBarCustom1";
+            this.vScrollBarCustom1.ThumbBorderColor = System.Drawing.Color.Yellow;
+            this.vScrollBarCustom1.ThumbButtonColor = System.Drawing.Color.DarkBlue;
+            this.vScrollBarCustom1.ThumbColorScaling = 0.5F;
+            this.vScrollBarCustom1.ThumbDrawAngle = 0F;
+            this.vScrollBarCustom1.Value = -1;
+            this.vScrollBarCustom1.ValueLimited = -1;
+            // 
+            // UserControlRoute
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.richTextBox_routeresult);
-            this.Controls.Add(this.groupBox_Entries);
-            this.Name = "RouteControl";
-            this.Size = new System.Drawing.Size(897, 429);
-            this.groupBox_Entries.ResumeLayout(false);
-            this.groupBox_Entries.PerformLayout();
+            this.Controls.Add(this.dataViewScrollerPanel1);
+            this.Controls.Add(this.panel1);
+            this.Name = "UserControlRoute";
+            this.Size = new System.Drawing.Size(706, 414);
+            this.panel1.ResumeLayout(false);
+            this.panel1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewRoute)).EndInit();
+            this.contextMenuStrip.ResumeLayout(false);
+            this.dataViewScrollerPanel1.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
 
         #endregion
 
-        private ExtendedControls.RichTextBoxScroll richTextBox_routeresult;
-        internal ExtendedControls.AutoCompleteTextBox textBox_From;
-        private System.Windows.Forms.Label label3;
-        private ExtendedControls.ButtonExt button_Route;
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.Label label1;
-        internal ExtendedControls.AutoCompleteTextBox textBox_To;
-        internal ExtendedControls.TextBoxBorder textBox_Range;
-        internal ExtendedControls.TextBoxBorder textBox_FromX;
-        internal ExtendedControls.TextBoxBorder textBox_FromY;
-        internal ExtendedControls.TextBoxBorder textBox_FromZ;
-        internal ExtendedControls.TextBoxBorder textBox_ToX;
-        internal ExtendedControls.TextBoxBorder textBox_ToY;
-        internal ExtendedControls.TextBoxBorder textBox_ToZ;
-        private ExtendedControls.ComboBoxCustom comboBoxRoutingMetric;
-        private System.Windows.Forms.Label label6;
-        internal ExtendedControls.TextBoxBorder textBox_Distance;
-        private System.Windows.Forms.Label label7;
-        private System.Windows.Forms.Label label9;
-        private ExtendedControls.GroupBoxCustom groupBox_Entries;
-        private ExtendedControls.ButtonExt cmd3DMap;
-        private ExtendedControls.ButtonExt buttonTargetFrom;
-        private ExtendedControls.ButtonExt buttonExtTravelFrom;
-        private ExtendedControls.ButtonExt buttonExtTravelTo;
-        private ExtendedControls.ButtonExt buttonExtTargetTo;
+        private System.Windows.Forms.Panel panel1;
+        private ExtendedControls.ButtonExt buttonExtExcel;
         internal ExtendedControls.TextBoxBorder textBox_ToName;
         internal ExtendedControls.TextBoxBorder textBox_FromName;
-        private ExtendedControls.ButtonExt buttonFromEDSM;
+        private ExtendedControls.ComboBoxCustom comboBoxRoutingMetric;
+        private ExtendedControls.ButtonExt buttonExtTravelTo;
+        private ExtendedControls.ButtonExt buttonExtTravelFrom;
+        private ExtendedControls.ButtonExt buttonExtTargetTo;
         private ExtendedControls.ButtonExt buttonToEDSM;
+        private ExtendedControls.ButtonExt buttonFromEDSM;
+        private ExtendedControls.ButtonExt buttonTargetFrom;
+        private ExtendedControls.ButtonExt cmd3DMap;
+        internal ExtendedControls.AutoCompleteTextBox textBox_From;
+        internal ExtendedControls.TextBoxBorder textBox_Range;
+        internal ExtendedControls.AutoCompleteTextBox textBox_To;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label label9;
+        internal ExtendedControls.TextBoxBorder textBox_Distance;
+        private System.Windows.Forms.Label label4;
+        internal ExtendedControls.TextBoxBorder textBox_ToZ;
+        private System.Windows.Forms.Label label2;
+        internal ExtendedControls.TextBoxBorder textBox_ToY;
+        private System.Windows.Forms.Label label7;
+        internal ExtendedControls.TextBoxBorder textBox_ToX;
+        private System.Windows.Forms.Label label6;
+        internal ExtendedControls.TextBoxBorder textBox_FromZ;
+        private ExtendedControls.ButtonExt button_Route;
+        internal ExtendedControls.TextBoxBorder textBox_FromY;
+        private System.Windows.Forms.Label label3;
+        internal ExtendedControls.TextBoxBorder textBox_FromX;
+        private System.Windows.Forms.DataGridView dataGridViewRoute;
+        private ExtendedControls.DataViewScrollerPanel dataViewScrollerPanel1;
+        private ExtendedControls.VScrollBarCustom vScrollBarCustom1;
+        private System.Windows.Forms.DataGridViewTextBoxColumn SystemCol;
+        private System.Windows.Forms.DataGridViewTextBoxColumn DistanceCol;
+        private System.Windows.Forms.DataGridViewTextBoxColumn XCol;
+        private System.Windows.Forms.DataGridViewTextBoxColumn YCol;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ZCol;
+        private System.Windows.Forms.DataGridViewTextBoxColumn WayPointDistCol;
+        private System.Windows.Forms.DataGridViewTextBoxColumn DeviationCol;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStrip;
+        private System.Windows.Forms.ToolStripMenuItem showInEDSMToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem copyToolStripMenuItem;
         private System.Windows.Forms.ToolTip toolTip;
-        private ExtendedControls.ButtonExt buttonExtExcel;
-        private System.Windows.Forms.Label label5;
     }
 }

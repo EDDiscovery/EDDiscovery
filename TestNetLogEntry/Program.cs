@@ -24,8 +24,10 @@ namespace NetLogEntry
                                   "Options: MusicNormal MusicGalMap MusicSysMap\n" +
                                   "Options: Friends Name\n" +
                                   "Options: FuelScoop amount total\n" +
+                                  "Options: JetConeBoost\n" +
                                   "Or EDDBSTARS <filename> or EDDBPLANETS or EDDBSTARNAMES for the eddb dump\n" +
                                   "Or Phoneme <filename> <fileout> for EDDI phoneme tx\n" +
+                                  "Or Voicerecon <filename>" +
                                   "Path = <pathto>Journal.<name>.log (example c:\\test\\Journal.test1.log)\n" +
                                   "x y z = position as double\n" +
                                   "A means auto mode, Space make a new system Return enters chatter\n"
@@ -50,6 +52,12 @@ namespace NetLogEntry
             if (args.Length >= 2 && filename.Equals("EDDBSTARNAMES", StringComparison.InvariantCultureIgnoreCase))
             {
                 EDDBLog(cmdrname, "\"Star\"", "\"name\"", "Star Name");
+                return;
+            }
+
+            if (args.Length >= 2 && filename.Equals("voicerecon", StringComparison.InvariantCultureIgnoreCase))
+            {
+                Bindings(cmdrname);
                 return;
             }
 
@@ -165,6 +173,8 @@ namespace NetLogEntry
                 lineout = "{ " + TimeStamp() + F("event", "Friends") + F("Status", "Online") + FF("Name", optparas[0]) + " }";
             else if (writetype.Equals("FuelScoop", StringComparison.InvariantCultureIgnoreCase) && optparas.Length >= 2)
                 lineout = "{ " + TimeStamp() + F("event", "FuelScoop") + F("Scooped", optparas[0]) + FF("Total", optparas[1]) + " }";
+            else if (writetype.Equals("JetConeBoost", StringComparison.InvariantCultureIgnoreCase) )
+                lineout = "{ " + TimeStamp() + F("event", "JetConeBoost") + FF("BoostValue", "1.5") + " }";
 
             if (lineout != null)
                 Write(filename, lineout);
@@ -417,6 +427,67 @@ namespace NetLogEntry
                             }
                         }
                     }
+                }
+            }
+        }
+
+        public static void Bindings(string filename)
+        {
+            using (Stream fs = new FileStream(filename, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+            {
+                List<string> bindings = new List<string>();
+                List<string> say = new List<string>();
+                List<string> saydef = new List<string>();
+
+                using (StreamReader sr = new StreamReader(fs))
+                {
+                    string s;
+                    while ((s = sr.ReadLine()) != null)
+                    {
+                        int i = s.IndexOf("KEY ", StringComparison.InvariantCultureIgnoreCase);
+                        if (i >= 0 && i < 16)
+                        {
+                            s = s.Substring(i + 4).Trim();
+                            if (!bindings.Contains(s))
+                                bindings.Add(s);
+                        }
+                        i = s.IndexOf("Say ", StringComparison.InvariantCultureIgnoreCase);
+                        if (i >= 0 && i < 16)
+                        {
+                            s = s.Substring(i + 4).Trim();
+                            if (!say.Contains(s))
+                                say.Add(s);
+                        }
+                        i = s.IndexOf("Static say_", StringComparison.InvariantCultureIgnoreCase);
+                        if (i >= 0 && i < 16)
+                        {
+                            //Console.WriteLine("saw " + s);
+                            s = s.Substring(i + 7).Trim();
+                            i = s.IndexOf(" ");
+                            if (i >= 0)
+                                s = s.Substring(0,i);
+                            if (!saydef.Contains(s))
+                                saydef.Add(s);
+                        }
+                    }
+                }
+
+                bindings.Sort();
+
+                Console.WriteLine("*** Bindings:");
+                foreach (string s in bindings)
+                {
+                    Console.WriteLine(s);
+                }
+                Console.WriteLine("*** Say definitions:");
+                foreach (string s in saydef)
+                {
+                    Console.WriteLine(s);
+                }
+                Console.WriteLine("*** Say commands:");
+                foreach (string s in say)
+                {
+                    Console.WriteLine(s);
                 }
             }
         }

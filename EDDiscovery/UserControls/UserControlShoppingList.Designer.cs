@@ -45,69 +45,79 @@ namespace EDDiscovery.UserControls
         {
             this.components = new System.ComponentModel.Container();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.splitContainer1 = new ExtendedControls.SplitContainerCustom();
+            this.splitContainerVertical = new ExtendedControls.SplitContainerCustom();
             this.pictureBoxList = new ExtendedControls.PictureBoxHotspot();
-            this.splitContainer2 = new ExtendedControls.SplitContainerCustom();
+            this.splitContainerRightHorz = new ExtendedControls.SplitContainerCustom();
             this.userControlSynthesis = new EDDiscovery.UserControls.UserControlSynthesis();
             this.userControlEngineering = new EDDiscovery.UserControls.UserControlEngineering();
-            ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
-            this.splitContainer1.Panel1.SuspendLayout();
-            this.splitContainer1.Panel2.SuspendLayout();
-            this.splitContainer1.SuspendLayout();
+            this.contextMenuConfig = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.showMaxFSDInjectionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.showAllMaterialsWhenLandedToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.showAvailableMaterialsInListWhenLandedToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.useHistoricMaterialCountsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.showSystemAvailabilityOfMaterialsInShoppingListToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.useEDSMDataInSystemAvailabilityToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainerVertical)).BeginInit();
+            this.splitContainerVertical.Panel1.SuspendLayout();
+            this.splitContainerVertical.Panel2.SuspendLayout();
+            this.splitContainerVertical.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxList)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).BeginInit();
-            this.splitContainer2.Panel1.SuspendLayout();
-            this.splitContainer2.Panel2.SuspendLayout();
-            this.splitContainer2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainerRightHorz)).BeginInit();
+            this.splitContainerRightHorz.Panel1.SuspendLayout();
+            this.splitContainerRightHorz.Panel2.SuspendLayout();
+            this.splitContainerRightHorz.SuspendLayout();
+            this.contextMenuConfig.SuspendLayout();
             this.SuspendLayout();
             // 
             // toolTip1
             // 
             this.toolTip1.ShowAlways = true;
             // 
-            // splitContainer1
+            // splitContainerVertical
             // 
-            this.splitContainer1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.splitContainerVertical.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.splitContainer1.Location = new System.Drawing.Point(0, 0);
-            this.splitContainer1.Name = "splitContainer1";
+            this.splitContainerVertical.Location = new System.Drawing.Point(0, 0);
+            this.splitContainerVertical.Name = "splitContainerVertical";
             // 
-            // splitContainer1.Panel1
+            // splitContainerVertical.Panel1
             // 
-            this.splitContainer1.Panel1.Controls.Add(this.pictureBoxList);
+            this.splitContainerVertical.Panel1.Controls.Add(this.pictureBoxList);
+            this.splitContainerVertical.Panel1MinSize = 100;
             // 
-            // splitContainer1.Panel2
+            // splitContainerVertical.Panel2
             // 
-            this.splitContainer1.Panel2.Controls.Add(this.splitContainer2);
-            this.splitContainer1.Size = new System.Drawing.Size(971, 572);
-            this.splitContainer1.SplitterDistance = 323;
-            this.splitContainer1.TabIndex = 0;
+            this.splitContainerVertical.Panel2.Controls.Add(this.splitContainerRightHorz);
+            this.splitContainerVertical.Size = new System.Drawing.Size(971, 572);
+            this.splitContainerVertical.SplitterDistance = 120;
+            this.splitContainerVertical.TabIndex = 0;
             // 
             // pictureBoxList
             // 
+            this.pictureBoxList.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pictureBoxList.Location = new System.Drawing.Point(0, 0);
             this.pictureBoxList.Name = "pictureBoxList";
-            this.pictureBoxList.Size = new System.Drawing.Size(320, 569);
+            this.pictureBoxList.Size = new System.Drawing.Size(120, 572);
             this.pictureBoxList.TabIndex = 0;
             // 
-            // splitContainer2
+            // splitContainerRightHorz
             // 
-            this.splitContainer2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.splitContainer2.Location = new System.Drawing.Point(0, 0);
-            this.splitContainer2.Name = "splitContainer2";
-            this.splitContainer2.Orientation = System.Windows.Forms.Orientation.Horizontal;
+            this.splitContainerRightHorz.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitContainerRightHorz.Location = new System.Drawing.Point(0, 0);
+            this.splitContainerRightHorz.Name = "splitContainerRightHorz";
+            this.splitContainerRightHorz.Orientation = System.Windows.Forms.Orientation.Horizontal;
             // 
-            // splitContainer2.Panel1
+            // splitContainerRightHorz.Panel1
             // 
-            this.splitContainer2.Panel1.Controls.Add(this.userControlSynthesis);
+            this.splitContainerRightHorz.Panel1.Controls.Add(this.userControlSynthesis);
             // 
-            // splitContainer2.Panel2
+            // splitContainerRightHorz.Panel2
             // 
-            this.splitContainer2.Panel2.Controls.Add(this.userControlEngineering);
-            this.splitContainer2.Size = new System.Drawing.Size(644, 572);
-            this.splitContainer2.SplitterDistance = 214;
-            this.splitContainer2.TabIndex = 0;
+            this.splitContainerRightHorz.Panel2.Controls.Add(this.userControlEngineering);
+            this.splitContainerRightHorz.Size = new System.Drawing.Size(847, 572);
+            this.splitContainerRightHorz.SplitterDistance = 214;
+            this.splitContainerRightHorz.TabIndex = 0;
             // 
             // userControlSynthesis
             // 
@@ -116,7 +126,7 @@ namespace EDDiscovery.UserControls
             | System.Windows.Forms.AnchorStyles.Right)));
             this.userControlSynthesis.Location = new System.Drawing.Point(0, 0);
             this.userControlSynthesis.Name = "userControlSynthesis";
-            this.userControlSynthesis.Size = new System.Drawing.Size(641, 211);
+            this.userControlSynthesis.Size = new System.Drawing.Size(844, 211);
             this.userControlSynthesis.TabIndex = 0;
             // 
             // userControlEngineering
@@ -126,35 +136,105 @@ namespace EDDiscovery.UserControls
             | System.Windows.Forms.AnchorStyles.Right)));
             this.userControlEngineering.Location = new System.Drawing.Point(0, -1);
             this.userControlEngineering.Name = "userControlEngineering";
-            this.userControlEngineering.Size = new System.Drawing.Size(641, 352);
+            this.userControlEngineering.Size = new System.Drawing.Size(844, 352);
             this.userControlEngineering.TabIndex = 0;
+            // 
+            // contextMenuConfig
+            // 
+            this.contextMenuConfig.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.showMaxFSDInjectionsToolStripMenuItem,
+            this.showAllMaterialsWhenLandedToolStripMenuItem,
+            this.showAvailableMaterialsInListWhenLandedToolStripMenuItem,
+            this.showSystemAvailabilityOfMaterialsInShoppingListToolStripMenuItem,
+            this.useEDSMDataInSystemAvailabilityToolStripMenuItem,
+            this.useHistoricMaterialCountsToolStripMenuItem});
+            this.contextMenuConfig.Name = "contextMenuConfig";
+            this.contextMenuConfig.Size = new System.Drawing.Size(369, 158);
+            // 
+            // showMaxFSDInjectionsToolStripMenuItem
+            // 
+            this.showMaxFSDInjectionsToolStripMenuItem.Checked = true;
+            this.showMaxFSDInjectionsToolStripMenuItem.CheckOnClick = true;
+            this.showMaxFSDInjectionsToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.showMaxFSDInjectionsToolStripMenuItem.Name = "showMaxFSDInjectionsToolStripMenuItem";
+            this.showMaxFSDInjectionsToolStripMenuItem.Size = new System.Drawing.Size(368, 22);
+            this.showMaxFSDInjectionsToolStripMenuItem.Text = "Show Max FSD Injections";
+            this.showMaxFSDInjectionsToolStripMenuItem.Click += new System.EventHandler(this.showMaxFSDInjectionsToolStripMenuItem_Click);
+            // 
+            // showAllMaterialsWhenLandedToolStripMenuItem
+            // 
+            this.showAllMaterialsWhenLandedToolStripMenuItem.CheckOnClick = true;
+            this.showAllMaterialsWhenLandedToolStripMenuItem.Name = "showAllMaterialsWhenLandedToolStripMenuItem";
+            this.showAllMaterialsWhenLandedToolStripMenuItem.Size = new System.Drawing.Size(368, 22);
+            this.showAllMaterialsWhenLandedToolStripMenuItem.Text = "Show Body Materials When Landed";
+            this.showAllMaterialsWhenLandedToolStripMenuItem.Click += new System.EventHandler(this.showAllMaterialsWhenLandedToolStripMenuItem_Click);
+            // 
+            // showAvailableMaterialsInListWhenLandedToolStripMenuItem
+            // 
+            this.showAvailableMaterialsInListWhenLandedToolStripMenuItem.CheckOnClick = true;
+            this.showAvailableMaterialsInListWhenLandedToolStripMenuItem.Name = "showAvailableMaterialsInListWhenLandedToolStripMenuItem";
+            this.showAvailableMaterialsInListWhenLandedToolStripMenuItem.Size = new System.Drawing.Size(368, 22);
+            this.showAvailableMaterialsInListWhenLandedToolStripMenuItem.Text = "Include Material %age on Landed Body in Shopping List";
+            this.showAvailableMaterialsInListWhenLandedToolStripMenuItem.Click += new System.EventHandler(this.showAvailableMaterialsInListWhenLandedToolStripMenuItem_Click);
+            // 
+            // useHistoricMaterialCountsToolStripMenuItem
+            // 
+            this.useHistoricMaterialCountsToolStripMenuItem.CheckOnClick = true;
+            this.useHistoricMaterialCountsToolStripMenuItem.Name = "useHistoricMaterialCountsToolStripMenuItem";
+            this.useHistoricMaterialCountsToolStripMenuItem.Size = new System.Drawing.Size(368, 22);
+            this.useHistoricMaterialCountsToolStripMenuItem.Text = "Use Historic Material Counts";
+            this.useHistoricMaterialCountsToolStripMenuItem.Click += new System.EventHandler(this.useHistoricMaterialCountsToolStripMenuItem_Click);
+            // 
+            // showSystemAvailabilityOfMaterialsInShoppingListToolStripMenuItem
+            // 
+            this.showSystemAvailabilityOfMaterialsInShoppingListToolStripMenuItem.CheckOnClick = true;
+            this.showSystemAvailabilityOfMaterialsInShoppingListToolStripMenuItem.Name = "showSystemAvailabilityOfMaterialsInShoppingListToolStripMenuItem";
+            this.showSystemAvailabilityOfMaterialsInShoppingListToolStripMenuItem.Size = new System.Drawing.Size(368, 22);
+            this.showSystemAvailabilityOfMaterialsInShoppingListToolStripMenuItem.Text = "Show System Availability in Shopping List in flight";
+            this.showSystemAvailabilityOfMaterialsInShoppingListToolStripMenuItem.Click += new System.EventHandler(this.showSystemAvailabilityOfMaterialsInShoppingListToolStripMenuItem_Click);
+            // 
+            // useEDSMDataInSystemAvailabilityToolStripMenuItem
+            // 
+            this.useEDSMDataInSystemAvailabilityToolStripMenuItem.CheckOnClick = true;
+            this.useEDSMDataInSystemAvailabilityToolStripMenuItem.Name = "useEDSMDataInSystemAvailabilityToolStripMenuItem";
+            this.useEDSMDataInSystemAvailabilityToolStripMenuItem.Size = new System.Drawing.Size(368, 22);
+            this.useEDSMDataInSystemAvailabilityToolStripMenuItem.Text = "Use EDSM data in System Availability";
+            this.useEDSMDataInSystemAvailabilityToolStripMenuItem.Click += new System.EventHandler(this.useEDSMDataInSystemAvailabilityToolStripMenuItem_Click);
             // 
             // UserControlShoppingList
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.splitContainer1);
+            this.Controls.Add(this.splitContainerVertical);
             this.Name = "UserControlShoppingList";
             this.Size = new System.Drawing.Size(971, 572);
-            this.splitContainer1.Panel1.ResumeLayout(false);
-            this.splitContainer1.Panel2.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
-            this.splitContainer1.ResumeLayout(false);
+            this.splitContainerVertical.Panel1.ResumeLayout(false);
+            this.splitContainerVertical.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainerVertical)).EndInit();
+            this.splitContainerVertical.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxList)).EndInit();
-            this.splitContainer2.Panel1.ResumeLayout(false);
-            this.splitContainer2.Panel2.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).EndInit();
-            this.splitContainer2.ResumeLayout(false);
+            this.splitContainerRightHorz.Panel1.ResumeLayout(false);
+            this.splitContainerRightHorz.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainerRightHorz)).EndInit();
+            this.splitContainerRightHorz.ResumeLayout(false);
+            this.contextMenuConfig.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
 
         #endregion
         private System.Windows.Forms.ToolTip toolTip1;
-        private ExtendedControls.SplitContainerCustom splitContainer1;
+        private ExtendedControls.SplitContainerCustom splitContainerVertical;
         private ExtendedControls.PictureBoxHotspot pictureBoxList;
-        private ExtendedControls.SplitContainerCustom splitContainer2;
+        private ExtendedControls.SplitContainerCustom splitContainerRightHorz;
         private UserControlSynthesis userControlSynthesis;
         private UserControlEngineering userControlEngineering;
+        private System.Windows.Forms.ContextMenuStrip contextMenuConfig;
+        private System.Windows.Forms.ToolStripMenuItem showMaxFSDInjectionsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem showAllMaterialsWhenLandedToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem showAvailableMaterialsInListWhenLandedToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem useHistoricMaterialCountsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem showSystemAvailabilityOfMaterialsInShoppingListToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem useEDSMDataInSystemAvailabilityToolStripMenuItem;
     }
 }

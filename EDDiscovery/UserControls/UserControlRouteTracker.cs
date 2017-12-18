@@ -23,15 +23,12 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using EliteDangerousCore.DB;
-using EDDiscovery.DB;
 using EliteDangerousCore;
 
 namespace EDDiscovery.UserControls
 {
     public partial class UserControlRouteTracker :   UserControlCommonBase
     {
-        private EDDiscoveryForm discoveryform;
-        private int displaynumber = 0;
         private Font displayfont;
         private string DbSave { get { return "RouteTracker" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
         private SavedRouteClass _currentRoute;
@@ -43,15 +40,8 @@ namespace EDDiscovery.UserControls
             InitializeComponent();
         }
 
-        public override void Init(EDDiscoveryForm ed, UserControlCursorType thc, int vn) //0=primary, 1 = first windowed version, etc
+        public override void Init()
         {
-            discoveryform = ed;
-            displaynumber = vn;
-
-            discoveryform.OnHistoryChange += Display;
-            discoveryform.OnNewEntry += NewEntry;
-            discoveryform.OnNewTarget += NewTarget;
-
             displayfont = discoveryform.theme.GetFont;
 
             autoCopyWPToolStripMenuItem.Checked = SQLiteDBClass.GetSettingBool(DbSave + "autoCopyWP", false);
@@ -61,6 +51,10 @@ namespace EDDiscovery.UserControls
             long id = long.Parse(selRoute);
             _currentRoute = SavedRouteClass.GetAllSavedRoutes().Find(r => r.Id.Equals(id));
             updateScreen();
+
+            discoveryform.OnHistoryChange += Display;
+            discoveryform.OnNewEntry += NewEntry;
+            discoveryform.OnNewTarget += NewTarget;
         }
 
         public override void Closing()
@@ -152,7 +146,7 @@ namespace EDDiscovery.UserControls
         {
             SavedRouteClass selectedRoute;
 
-            if (Prompt.ShowDialog(discoveryform, SavedRouteClass.GetAllSavedRoutes().Where(r => !r.Name.StartsWith("\x7F")).OrderBy(r => r.Name).ToList(),
+            if (Prompt.ShowDialog(FindForm(), SavedRouteClass.GetAllSavedRoutes().Where(r => !r.Name.StartsWith("\x7F")).OrderBy(r => r.Name).ToList(),
                 _currentRoute?.Name ?? string.Empty, "Select route", out selectedRoute))
             {
                 if (selectedRoute == null)

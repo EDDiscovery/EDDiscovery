@@ -23,7 +23,6 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using ExtendedControls;
-using EDDiscovery.DB;
 using System.Drawing.Drawing2D;
 using EliteDangerousCore.EDSM;
 using EliteDangerousCore.DB;
@@ -34,17 +33,14 @@ namespace EDDiscovery.UserControls
 {
     public partial class UserControlScan : UserControlCommonBase
     {
-        private EDDiscoveryForm discoveryform;
-        private UserControlCursorType uctg;
-        private int displaynumber = 0;
-        Size starsize,beltsize,planetsize,moonsize,materialsize;
+        Size starsize, beltsize, planetsize, moonsize, materialsize;
         Size itemsepar;
         int leftmargin;
         int topmargin;
         const int materialspacer = 4;
 
         Font stdfont = new Font("Microsoft Sans Serif", 8.25F);
-        Font stdfontUnderline  = new Font("Microsoft Sans Serif", 8.25F, FontStyle.Underline);
+        Font stdfontUnderline = new Font("Microsoft Sans Serif", 8.25F, FontStyle.Underline);
 
         private string DbSave { get { return "ScanPanel" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
 
@@ -60,28 +56,26 @@ namespace EDDiscovery.UserControls
             toolTip.ShowAlways = true;
         }
 
-        public override void Init(EDDiscoveryForm ed, UserControlCursorType thc, int vn) //0=primary, 1 = first windowed version, etc
+        public override void Init()
         {
-            discoveryform = ed;
-            uctg = thc;
-            displaynumber = vn;
-            uctg.OnTravelSelectionChanged += Display;
-            discoveryform.OnNewEntry += NewEntry;
-
             progchange = true;
-            checkBoxMaterials.Checked = SQLiteDBClass.GetSettingBool(DbSave+"Materials", true);
-            checkBoxMaterialsRare.Checked = SQLiteDBClass.GetSettingBool(DbSave+"MaterialsRare", false);
-            checkBoxMoons.Checked = SQLiteDBClass.GetSettingBool(DbSave+"Moons", true);
+            checkBoxMaterials.Checked = SQLiteDBClass.GetSettingBool(DbSave + "Materials", true);
+            checkBoxMaterialsRare.Checked = SQLiteDBClass.GetSettingBool(DbSave + "MaterialsRare", false);
+            checkBoxMoons.Checked = SQLiteDBClass.GetSettingBool(DbSave + "Moons", true);
             checkBoxEDSM.Checked = SQLiteDBClass.GetSettingBool(DbSave + "EDSM", false);
+            chkShowOverlays.Checked = SQLiteDBClass.GetSettingBool(DbSave + "BodyOverlays", false);
             progchange = false;
 
-            int size = SQLiteDBClass.GetSettingInt(DbSave+"Size", 64);
+            int size = SQLiteDBClass.GetSettingInt(DbSave + "Size", 64);
             SetSizeCheckBoxes(size);
+
+            uctg.OnTravelSelectionChanged += Display;
+            discoveryform.OnNewEntry += NewEntry;
 
             imagebox.ClickElement += ClickElement;
         }
 
-        public override void ChangeCursorType(UserControlCursorType thc)
+        public override void ChangeCursorType(IHistoryCursor thc)
         {
             uctg.OnTravelSelectionChanged -= Display;
             uctg = thc;
@@ -95,7 +89,7 @@ namespace EDDiscovery.UserControls
         }
 
         Color transparencycolor = Color.Green;
-        public override Color ColorTransparency {  get { return transparencycolor; } }
+        public override Color ColorTransparency { get { return transparencycolor; } }
         public override void SetTransparency(bool on, Color curcol)
         {
             imagebox.BackColor = this.BackColor = panelStars.BackColor = panelStars.vsc.SliderColor = panelStars.vsc.BackColor = panelControls.BackColor = curcol;
@@ -133,12 +127,12 @@ namespace EDDiscovery.UserControls
 
         public override void InitialDisplay()
         {
-            Display(uctg.GetCurrentHistoryEntry,discoveryform.history);
+            Display(uctg.GetCurrentHistoryEntry, discoveryform.history);
         }
 
         private void Display(HistoryEntry he, HistoryList hl)            // when user clicks around..
         {
-            if (he != null && (last_he == null || he.System != last_he.System ))
+            if (he != null && (last_he == null || he.System != last_he.System))
             {
                 last_he = he;
                 DrawSystem();
@@ -150,9 +144,9 @@ namespace EDDiscovery.UserControls
             HideInfo();
 
             imagebox.ClearImageList();  // does not clear the image, render will do that
-            rtbSystemInfo.Text = "";
+            lblSystemInfo.Text = "";
 
-            if ( last_he == null )
+            if (last_he == null)
             {
                 SetControlText("No System");
                 imagebox.Render();
@@ -178,7 +172,7 @@ namespace EDDiscovery.UserControls
                     int offset = 0;
                     Point maxstarpos = DrawNode(starcontrols, starnode,
                                 (starnode.type == StarScan.ScanNodeType.barycentre) ? Properties.Resources.Barycentre : JournalScan.GetStarImageNotScanned(),
-                                curpos, starsize, ref offset , false, (planetsize.Height*6/4-starsize.Height)/2, true);       // the last part nerfs the label down to the right position
+                                curpos, starsize, ref offset, false, (planetsize.Height * 6 / 4 - starsize.Height) / 2, true);       // the last part nerfs the label down to the right position
 
                     Point maxitemspos = maxstarpos;
 
@@ -275,8 +269,8 @@ namespace EDDiscovery.UserControls
 
         private void BuildSystemInfo(StarScan.SystemNode system)
         {
-            //systems are small... if they get too big and iterating repeatedly is a problem we'll have to move to a node-by-node
-            rtbSystemInfo.Text = BuildScanValue(system);
+            //systems are small... if they get too big and iterating repeatedly is a problem we'll have to move to a node-by-node approach, and move away from a single-line label
+            lblSystemInfo.Text = BuildScanValue(system);
             
         }
 
@@ -286,13 +280,13 @@ namespace EDDiscovery.UserControls
 
             foreach (var body in system.Bodies)
             {
-                if (body?.ScanData?.EstimatedValue() != null)
+                if (body?.ScanData?.EstimatedValue != null)
                 {
-                    value += body.ScanData.EstimatedValue();
+                    value += body.ScanData.EstimatedValue;
                 }
             }
 
-            return $"Approx system scan value: {value:N0}";
+            return $"Approx value: {value:N0}";
         }
 
         // return right bottom of area used from curpos
@@ -301,10 +295,10 @@ namespace EDDiscovery.UserControls
             // PLANETWIDTH|PLANETWIDTH  (if drawing a full planet with rings/landing)
             // or
             // MOONWIDTH|MOONWIDTH      (if drawing a single width planet)
-                                                                          // this offset, ONLY used if a single width planet, allows for two moons
+            // this offset, ONLY used if a single width planet, allows for two moons
             int offset = moonsize.Width - planetsize.Width / 2;           // centre is moon width, back off by planetwidth/2 to place the left edge of the planet
 
-            Point maxtreepos = DrawNode(pc, planetnode, JournalScan.GetPlanetImageNotScanned(), 
+            Point maxtreepos = DrawNode(pc, planetnode, JournalScan.GetPlanetImageNotScanned(),
                                 curpos, planetsize, ref offset, true);        // offset passes in the suggested offset, returns the centre offset
 
             if (planetnode.children != null && checkBoxMoons.Checked)
@@ -366,8 +360,8 @@ namespace EDDiscovery.UserControls
         // labelvoff : any additional compensation for label pos
 
         // return right bottom of area used from curpos
-        Point DrawNode(List<PictureBoxHotspot.ImageElement> pc, StarScan.ScanNode sn, Image notscanned, Point curpos, 
-                                    Size size, ref int offset , bool aligndown = false , int labelvoff = 0,
+        Point DrawNode(List<PictureBoxHotspot.ImageElement> pc, StarScan.ScanNode sn, Image notscanned, Point curpos,
+                                    Size size, ref int offset, bool aligndown = false, int labelvoff = 0,
                                     bool toplevel = false)
         {
             string tip;
@@ -385,9 +379,17 @@ namespace EDDiscovery.UserControls
 
                 if (sc.IsStar && toplevel)
                 {
-                    endpoint = CreateImageLabel(pc, sc.GetStarTypeImage().Item1,
+                    var starLabel = sn.customname ?? sn.ownname;
+
+                    var habZone = sc.GetHabZoneStringLs();
+                    if (!string.IsNullOrEmpty(habZone))
+                    {
+                        starLabel += $" ({habZone})";
+                    }
+
+                    endpoint = CreateImageLabel(pc, sc.GetStarTypeImage(),
                                                 new Point(curpos.X + offset, curpos.Y + alignv),      // WE are basing it on a 1/4 + 1 + 1/4 grid, this is not being made bigger, move off
-                                                size, sn.customname ?? sn.ownname, tip, alignv + labelvoff, sc.IsEDSMBody, false);          // and the label needs to be a quarter height below it..
+                                                size, starLabel, tip, alignv + labelvoff, sc.IsEDSMBody, false);          // and the label needs to be a quarter height below it..
 
                     /*
                     if (sc.HasRings)
@@ -417,15 +419,15 @@ namespace EDDiscovery.UserControls
 
                     offset += size.Width / 2;       // return the middle used was this..
                 }
-                else
+                else //else not a top-level star
                 {
                     bool indicatematerials = sc.HasMaterials && !checkBoxMaterials.Checked;
 
-                    Image nodeimage = sc.IsStar ? sc.GetStarTypeImage().Item1 : sc.GetPlanetClassImage();
+                    Image nodeimage = sc.IsStar ? sc.GetStarTypeImage() : sc.GetPlanetClassImage();
 
-                    if ((sc.IsLandable || sc.HasRings || indicatematerials))
+                    if (ImageRequiresAnOverlay(sc, indicatematerials))
                     {
-                        Bitmap bmp = new Bitmap(size.Width * 2, quarterheight * 6);          
+                        Bitmap bmp = new Bitmap(size.Width * 2, quarterheight * 6);
 
                         using (Graphics g = Graphics.FromImage(bmp))
                         {
@@ -437,6 +439,19 @@ namespace EDDiscovery.UserControls
                             if (sc.HasRings)
                                 g.DrawImage(sc.Rings.Count() > 1 ? EDDiscovery.Properties.Resources.RingGap512 : EDDiscovery.Properties.Resources.Ring_Only_512,
                                                 new Rectangle(-2, quarterheight, size.Width * 2, size.Height));
+
+                            if (chkShowOverlays.Checked)
+                            {
+                                if (sc.Terraformable)
+                                    g.DrawImage(EDDiscovery.Properties.Resources.Terraformable, new Rectangle(quarterheight / 2, quarterheight / 2, quarterheight, quarterheight));
+
+                                if (HasMeaningfulVolcanism(sc)) //this renders below the terraformable icon if present
+                                    g.DrawImage(EDDiscovery.Properties.Resources.Volcano, new Rectangle(quarterheight / 2, (int)(quarterheight * 1.5), quarterheight, quarterheight));
+
+                                //experiment - does this take all the fun out of it?
+                                if (sc.EstimatedValue > 50000)
+                                    g.DrawImage(EDDiscovery.Properties.Resources.startflag, new Rectangle(quarterheight / 2, (int)(quarterheight * 2.5), quarterheight, quarterheight));
+                            }
 
                             if (indicatematerials)
                             {
@@ -450,12 +465,12 @@ namespace EDDiscovery.UserControls
                     }
                     else
                     {
-                        endpoint = CreateImageLabel(pc, nodeimage, new Point(curpos.X + offset, curpos.Y + alignv), size, 
-                                                    sn.customname ?? sn.ownname, tip, alignv + labelvoff, sc.IsEDSMBody);
+                        endpoint = CreateImageLabel(pc, nodeimage, new Point(curpos.X + offset, curpos.Y + alignv), size,
+                                                    sn.customname ?? sn.ownname, tip, alignv + labelvoff, sc.IsEDSMBody, false);
                         offset += size.Width / 2;
                     }
 
-                    if (sc.HasMaterials && checkBoxMaterials.Checked )
+                    if (sc.HasMaterials && checkBoxMaterials.Checked)
                     {
                         Point matpos = new Point(endpoint.X + 4, curpos.Y);
                         Point endmat = CreateMaterialNodes(pc, sc, matpos, materialsize);
@@ -493,13 +508,27 @@ namespace EDDiscovery.UserControls
                 else
                     tip = sn.ownname + "\n\nNo scan data available";
 
-                endpoint = CreateImageLabel(pc, notscanned, new Point(curpos.X + offset, curpos.Y + alignv), size, sn.customname ?? sn.ownname, tip , alignv + labelvoff, false);
+                endpoint = CreateImageLabel(pc, notscanned, new Point(curpos.X + offset, curpos.Y + alignv), size, sn.customname ?? sn.ownname, tip, alignv + labelvoff, false, false);
                 offset += size.Width / 2;       // return the middle used was this..
             }
 
             return endpoint;
         }
 
+        private static bool ImageRequiresAnOverlay(JournalScan sc, bool indicatematerials)
+        {
+            return sc.IsLandable || 
+                sc.HasRings || 
+                indicatematerials || 
+                sc.Terraformable ||
+                HasMeaningfulVolcanism(sc) ||
+                sc.EstimatedValue > 50000;
+        }
+
+        private static bool HasMeaningfulVolcanism(JournalScan sc)
+        {
+            return sc.VolcanismID != EDVolcanism.None && sc.VolcanismID != EDVolcanism.Unknown;
+        }
 
         Point CreateMaterialNodes(List<PictureBoxHotspot.ImageElement> pc, JournalScan sn, Point matpos, Size matsize)
         {
@@ -544,7 +573,7 @@ namespace EDDiscovery.UserControls
             return maximum;
         }
 
-        void CreateMaterialImage(List<PictureBoxHotspot.ImageElement> pc, Point matpos, Size matsize, string text, string mattag, string mattip, Color matcolour , Color textcolour)
+        void CreateMaterialImage(List<PictureBoxHotspot.ImageElement> pc, Point matpos, Size matsize, string text, string mattag, string mattip, Color matcolour, Color textcolour)
         {
             System.Drawing.Imaging.ColorMap colormap = new System.Drawing.Imaging.ColorMap();
             colormap.OldColor = Color.White;    // this is the marker colour to replace
@@ -554,14 +583,14 @@ namespace EDDiscovery.UserControls
 
             BitMapHelpers.DrawTextCentreIntoBitmap(ref mat, text, stdfont, textcolour);
 
-            PictureBoxHotspot.ImageElement ie = new PictureBoxHotspot.ImageElement(  
+            PictureBoxHotspot.ImageElement ie = new PictureBoxHotspot.ImageElement(
                             new Rectangle(matpos.X, matpos.Y, matsize.Width, matsize.Height), mat, mattag, mattip);
 
             pc.Add(ie);
         }
 
         Point CreateImageLabel(List<PictureBoxHotspot.ImageElement> c, Image i, Point postopright, Size size, string label,
-                                    string ttext , int labelhoff, bool fromEDSM, bool imgowned = true)
+                                    string ttext, int labelhoff, bool fromEDSM, bool imgowned = true)
         {
             //System.Diagnostics.Debug.WriteLine("    " + label + " " + postopright + " size " + size + " hoff " + labelhoff + " laby " + (postopright.Y + size.Height + labelhoff));
             if (fromEDSM)
@@ -580,9 +609,9 @@ namespace EDDiscovery.UserControls
                 Point labposcenthorz = new Point(postopright.X + size.Width / 2, postopright.Y + size.Height + labelhoff);
 
                 PictureBoxHotspot.ImageElement lab = new PictureBoxHotspot.ImageElement();
-                Size maxsize = new Size(300, 20);
+                Size maxsize = new Size(300, 30);
 
-                lab.TextCentreAutosize(labposcenthorz, maxsize, label, font, discoveryform.theme.LabelColor, this.BackColor );
+                lab.TextCentreAutosize(labposcenthorz, maxsize, label, font, discoveryform.theme.LabelColor, this.BackColor);
 
                 if (lab.pos.X < postopright.X)
                 {
@@ -595,7 +624,7 @@ namespace EDDiscovery.UserControls
 
                 max = new Point(Math.Max(lab.pos.X + lab.pos.Width, max.X), lab.pos.Y + lab.pos.Height);
             }
-            
+
             c.Add(ie);
 
             //System.Diagnostics.Debug.WriteLine(" ... to " + label + " " + max + " size " + (new Size(max.X-postopright.X,max.Y-postopright.Y)));
@@ -615,16 +644,16 @@ namespace EDDiscovery.UserControls
             planetsize = new Size(starsize.Width * 3 / 4, starsize.Height * 3 / 4);
             moonsize = new Size(starsize.Width * 2 / 4, starsize.Height * 2 / 4);
             materialsize = new Size(24, 24);
-            itemsepar = new Size(stars/16, stars/16);
+            itemsepar = new Size(stars / 16, stars / 16);
             topmargin = 10;
             leftmargin = 0;
         }
 
-#endregion
+        #endregion
 
-#region User interaction
+        #region User interaction
 
-        private void ClickElement(object sender, MouseEventArgs e, PictureBoxHotspot.ImageElement i , object tag)
+        private void ClickElement(object sender, MouseEventArgs e, PictureBoxHotspot.ImageElement i, object tag)
         {
             if (i != null)
                 ShowInfo((string)tag, i.pos.Location.X < panelStars.Width / 2);
@@ -650,7 +679,7 @@ namespace EDDiscovery.UserControls
                 SQLiteDBClass.PutSettingBool(DbSave + "MaterialsRare", checkBoxMaterialsRare.Checked);
 
                 progchange = true;
-                checkBoxMaterials.Checked = true;       
+                checkBoxMaterials.Checked = true;
                 progchange = false;
 
                 DrawSystem();
@@ -719,12 +748,21 @@ namespace EDDiscovery.UserControls
             }
         }
 
+        private void chkShowOverlays_CheckedChanged(object sender, EventArgs e)
+        {
+            if (!progchange)
+            {
+                SQLiteDBClass.PutSettingBool(DbSave + "BodyOverlays", chkShowOverlays.Checked);
+                DrawSystem();
+            }
+        }
+
         private void toolStripMenuItemToolbar_Click(object sender, EventArgs e)
         {
             panelControls.Visible = !panelControls.Visible;
         }
 
-        void ShowInfo(string text , bool onright )
+        void ShowInfo(string text, bool onright)
         {
             rtbNodeInfo.Text = text;
             rtbNodeInfo.Tag = onright;
@@ -732,7 +770,9 @@ namespace EDDiscovery.UserControls
             rtbNodeInfo.Show();
             PositionInfo();
         }
-        
+
+
+
         void HideInfo()
         {
             rtbNodeInfo.Visible = false;
@@ -743,7 +783,7 @@ namespace EDDiscovery.UserControls
             if (rtbNodeInfo.Visible)
             {
                 if (rtbNodeInfo.Tag != null && ((bool)rtbNodeInfo.Tag) == true)
-                    rtbNodeInfo.Location = new Point(panelStars.Width / 2 + panelStars.Width / 16, 50);
+                    rtbNodeInfo.Location = new Point(panelStars.Width / 2 + panelStars.Width / 16, 10);
                 else
                     rtbNodeInfo.Location = new Point(panelStars.Width / 16, 10);
 
@@ -752,10 +792,6 @@ namespace EDDiscovery.UserControls
                 rtbNodeInfo.Size = new Size(panelStars.Width * 6 / 16, h);
                 rtbNodeInfo.PerformLayout();    // not sure why i need this..
             }
-
-            rtbSystemInfo.Location = new Point(panelStars.Width / 2 + panelStars.Width / 16, 10);
-            rtbSystemInfo.Size = new Size(panelStars.Width * 6 / 16, 40);
-            rtbSystemInfo.PerformLayout();    // not sure why i need this..
         }
 
         private void panelStars_Click(object sender, EventArgs e)
@@ -777,7 +813,7 @@ namespace EDDiscovery.UserControls
                                     "Sold Exploration Data", // 5
                                         });
 
-            if (frm.ShowDialog(this) == DialogResult.OK)
+            if (frm.ShowDialog(FindForm()) == DialogResult.OK)
             {
                 BaseUtils.CSVWrite csv = new BaseUtils.CSVWrite();
                 csv.SetCSVDelimiter(frm.Comma);
@@ -799,7 +835,7 @@ namespace EDDiscovery.UserControls
                                 writer.Write(csv.Format("Time"));
                                 writer.Write(csv.Format("System"));
                                 writer.Write(csv.Format("Star type"));
-                                writer.Write(csv.Format("Planet type",false));
+                                writer.Write(csv.Format("Planet type", false));
                                 writer.WriteLine();
                             }
 
@@ -855,7 +891,7 @@ namespace EDDiscovery.UserControls
 
                                 scans = new List<JournalScan>();
 
-                                if (dlg.ShowDialog() == DialogResult.OK)
+                                if (dlg.ShowDialog(FindForm()) == DialogResult.OK)
                                 {
 
                                     ExplorationSetClass _currentExplorationSet = new ExplorationSetClass();
@@ -898,6 +934,7 @@ namespace EDDiscovery.UserControls
                                     writer.Write(csv.Format("StellarMass"));
                                     writer.Write(csv.Format("AbsoluteMagnitude"));
                                     writer.Write(csv.Format("Age MY"));
+                                    writer.Write(csv.Format("Luminosity"));
                                 }
                                 writer.Write(csv.Format("Radius"));
                                 writer.Write(csv.Format("RotationPeriod"));
@@ -933,6 +970,7 @@ namespace EDDiscovery.UserControls
                                 writer.Write(csv.Format("OrbitalInclination"));
                                 writer.Write(csv.Format("Periapsis"));
                                 writer.Write(csv.Format("OrbitalPeriod"));
+                                writer.Write(csv.Format("AxialTilt"));
 
 
                                 if (ShowPlanets)
@@ -981,7 +1019,7 @@ namespace EDDiscovery.UserControls
 
                                 writer.Write(csv.Format(scan.EventTimeUTC));
                                 writer.Write(csv.Format(scan.BodyName));
-                                writer.Write(csv.Format(scan.EstimatedValue()));
+                                writer.Write(csv.Format(scan.EstimatedValue));
                                 writer.Write(csv.Format(scan.DistanceFromArrivalLS));
 
                                 if (ShowStars)
@@ -990,6 +1028,7 @@ namespace EDDiscovery.UserControls
                                     writer.Write(csv.Format((scan.nStellarMass.HasValue) ? scan.nStellarMass.Value : 0));
                                     writer.Write(csv.Format((scan.nAbsoluteMagnitude.HasValue) ? scan.nAbsoluteMagnitude.Value : 0));
                                     writer.Write(csv.Format((scan.nAge.HasValue) ? scan.nAge.Value : 0));
+                                    writer.Write(csv.Format(scan.Luminosity));
                                 }
 
 
@@ -1027,6 +1066,7 @@ namespace EDDiscovery.UserControls
                                 writer.Write(csv.Format(scan.nOrbitalInclination.HasValue ? scan.nOrbitalInclination.Value : 0));
                                 writer.Write(csv.Format(scan.nPeriapsis.HasValue ? scan.nPeriapsis.Value : 0));
                                 writer.Write(csv.Format(scan.nOrbitalPeriod.HasValue ? scan.nOrbitalPeriod.Value : 0));
+                                writer.Write(csv.Format(scan.nAxialTilt.HasValue ? scan.nAxialTilt : null));
 
                                 if (ShowPlanets)
                                 {
@@ -1068,7 +1108,7 @@ namespace EDDiscovery.UserControls
                 }
                 catch
                 {
-                    ExtendedControls.MessageBoxTheme.Show("Failed to write to " + frm.Path, "Export Failed", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    ExtendedControls.MessageBoxTheme.Show(FindForm(), "Failed to write to " + frm.Path, "Export Failed", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 }
             }
         }

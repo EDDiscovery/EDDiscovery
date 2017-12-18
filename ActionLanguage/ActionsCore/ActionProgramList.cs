@@ -40,6 +40,8 @@ namespace ActionLanguage
 
         public int Count { get { return programs.Count; } }
 
+        public IEnumerable<ActionProgram> Enumerable { get { return programs; } }
+
         public ActionProgram Get(int n)
         {
             return (n < programs.Count) ? programs[n] : null;

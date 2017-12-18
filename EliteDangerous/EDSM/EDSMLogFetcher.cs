@@ -83,9 +83,6 @@ namespace EliteDangerousCore.EDSM
                 waittime = (int)Math.Min(EDSMMaxLogAgeMinutes * 60000, Math.Min(BackoffInterval.TotalSeconds * 1000, EDSMRequestBackoffTime.Subtract(DateTime.UtcNow).TotalSeconds * 1000));
             }
 
-            // get them as of now.. since we are searching back in time it should be okay. On a refresh we would start again!
-            List<HistoryEntry> hlfsdlist = JournalEntry.GetAll(Commander.Nr).OfType<JournalLocOrJump>().OrderBy(je => je.EventTimeUTC).Select(je => HistoryEntry.FromJournalEntry(je, null, false, out jupdate)).ToList();
-
             while (!ExitRequested.WaitOne(waittime))
             {
                 EDSMClass edsm = new EDSMClass { apiKey = Commander.APIKey, commanderName = Commander.EdsmName };
@@ -98,12 +95,12 @@ namespace EliteDangerousCore.EDSM
                 {
                     if (DateTime.UtcNow.Subtract(LastEventTime).TotalMinutes >= EDSMMaxLogAgeMinutes)
                     {
-                        Trace.WriteLine($"Retrieving EDSM logs starting {LastEventTime}");
+                        //Trace.WriteLine($"Retrieving EDSM logs starting {LastEventTime}");
                         res = edsm.GetLogs(LastEventTime, null, out edsmlogs, out logstarttime, out logendtime);
                     }
                     else if (FirstEventTime > GammaStart)
                     {
-                        Trace.WriteLine($"Retrieving EDSM logs ending {FirstEventTime}");
+                        //Trace.WriteLine($"Retrieving EDSM logs ending {FirstEventTime}");
                         res = edsm.GetLogs(null, FirstEventTime, out edsmlogs, out logstarttime, out logendtime);
                     }
                 }
@@ -127,14 +124,20 @@ namespace EliteDangerousCore.EDSM
                 }
                 else if (res == 100 && edsmlogs != null )
                 {
-                    Trace.WriteLine($"Retrieving EDSM logs count {edsmlogs.Count}");
-
                     if (edsmlogs.Count > 0)     // if anything to process..
                     {
+                        //Trace.WriteLine($"Retrieving EDSM logs count {edsmlogs.Count}");
+
                         BackoffInterval = TimeSpan.FromSeconds(60);
 
                         if (logendtime > DateTime.UtcNow)
                             logendtime = DateTime.UtcNow;
+                        if (logstarttime < DateTime.MinValue.AddDays(1))
+                            logstarttime = DateTime.MinValue.AddDays(1);
+
+                        // Get all of the local entries now that we have the entries from EDSM
+                        // Moved here to avoid the race that could have been causing duplicate entries
+                        List<HistoryEntry> hlfsdlist = JournalEntry.GetAll(Commander.Nr, logstarttime.AddDays(-1), logendtime.AddDays(1)).OfType<JournalLocOrJump>().OrderBy(je => je.EventTimeUTC).Select(je => HistoryEntry.FromJournalEntry(je, null, false, out jupdate)).ToList();
 
                         HistoryList hl = new HistoryList(hlfsdlist);
                         List<DateTime> hlfsdtimes = hlfsdlist.Select(he => he.EventTimeUTC).ToList();

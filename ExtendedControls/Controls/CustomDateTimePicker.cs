@@ -271,6 +271,8 @@ namespace ExtendedControls
 
         protected override void OnMouseDown(MouseEventArgs mevent)
         {
+            base.OnMouseDown(mevent);
+
             //System.Diagnostics.Debug.WriteLine("Mouse down");
 
             for (int i = 0; i < partlist.Count; i++)

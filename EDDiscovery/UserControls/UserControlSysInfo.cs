@@ -33,10 +33,6 @@ namespace EDDiscovery.UserControls
     {
         public bool IsNotesShowing { get { return richTextBoxNote.Visible; } }
 
-        private EDDiscoveryForm discoveryform;
-        private UserControlCursorType uctg;
-
-        private int displaynumber;
         private string DbSelection { get { return ("SystemInformationPanel") + ((displaynumber > 0) ? displaynumber.ToString() : "") + "Sel"; } }
         private string DbOSave { get { return "SystemInformationPanel" + ((displaynumber > 0) ? displaynumber.ToString() : "") + "Order"; } }
 
@@ -79,14 +75,8 @@ namespace EDDiscovery.UserControls
             InitializeComponent();
         }
 
-        public override void Init(EDDiscoveryForm ed, UserControlCursorType thc, int displayno)
+        public override void Init()
         {
-            discoveryform = ed;
-            uctg = thc;
-            this.displaynumber = displayno;
-            uctg.OnTravelSelectionChanged += Display;    // get this whenever current selection or refreshed..
-            discoveryform.OnNewTarget += RefreshTargetDisplay;
-            discoveryform.OnNoteChanged += OnNoteChanged;
             textBoxTarget.SetAutoCompletor(SystemClassDB.ReturnSystemListForAutoComplete);
 
             // same order as Sel bits are defined in, one bit per selection item.
@@ -103,9 +93,13 @@ namespace EDDiscovery.UserControls
                 Reset();
             else
                 Lines = BaseUtils.LineStore.Restore(rs, HorzPositions);
+
+            uctg.OnTravelSelectionChanged += Display;    // get this whenever current selection or refreshed..
+            discoveryform.OnNewTarget += RefreshTargetDisplay;
+            discoveryform.OnNoteChanged += OnNoteChanged;
         }
 
-        public override void ChangeCursorType(UserControlCursorType thc)
+        public override void ChangeCursorType(IHistoryCursor thc)
         {
             uctg.OnTravelSelectionChanged -= Display;
             uctg = thc;
@@ -146,7 +140,7 @@ namespace EDDiscovery.UserControls
             {
                 SetControlText(he.System.name);
                 textBoxSystem.Text = he.System.name;
-                discoveryform.history.FillEDSM(he, reload: true); // Fill in any EDSM info we have, force it to try again.. in case system db updated
+                discoveryform.history.FillEDSM(he, reload: true, useedsm: true); // Fill in any EDSM info we have, force it to try again.. in case system db updated
 
                 textBoxBody.Text = he.WhereAmI + ((he.IsInHyperSpace) ? " (HS)": "");
 
@@ -158,7 +152,7 @@ namespace EDDiscovery.UserControls
 
                     textBoxPosition.Text = he.System.x.ToString(SingleCoordinateFormat) + separ + he.System.y.ToString(SingleCoordinateFormat) + separ + he.System.z.ToString(SingleCoordinateFormat);
 
-                    ISystem homesys = discoveryform.GetHomeSystem();
+                    ISystem homesys = EDDConfig.Instance.HomeSystem;
 
                     textBoxHomeDist.Text = SystemClassDB.Distance(he.System, homesys).ToString(SingleCoordinateFormat);
                     textBoxSolDist.Text = SystemClassDB.Distance(he.System, 0, 0, 0).ToString(SingleCoordinateFormat);
@@ -288,7 +282,7 @@ namespace EDDiscovery.UserControls
                         if (url.Length > 0)         // may pass back empty string if not known, this solves another exception
                             Process.Start(url);
                         else
-                            ExtendedControls.MessageBoxTheme.Show("System unknown to EDSM");
+                            ExtendedControls.MessageBoxTheme.Show(FindForm(), "System unknown to EDSM");
                     }
                 }
             }
@@ -298,7 +292,7 @@ namespace EDDiscovery.UserControls
         {
             if (e.KeyCode == Keys.Enter)
             {
-                DB.TargetHelpers.setTargetSystem(this,discoveryform, textBoxTarget.Text);
+                TargetHelpers.setTargetSystem(this,discoveryform, textBoxTarget.Text);
             }
         }
 
@@ -337,7 +331,7 @@ namespace EDDiscovery.UserControls
             if (url.Length > 0)         // may pass back empty string if not known, this solves another exception
                 Process.Start(url);
             else
-                ExtendedControls.MessageBoxTheme.Show("System unknown to EDSM");
+                ExtendedControls.MessageBoxTheme.Show(FindForm(), "System unknown to EDSM");
 
         }
 

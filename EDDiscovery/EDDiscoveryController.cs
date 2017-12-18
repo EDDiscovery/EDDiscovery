@@ -87,7 +87,7 @@ namespace EDDiscovery
         #endregion
 
         #region Private vars
-        private List<JournalEntry> journalqueue = new List<JournalEntry>();
+        private Queue<JournalEntry> journalqueue = new Queue<JournalEntry>();
         private System.Threading.Timer journalqueuedelaytimer;
 
         #endregion
@@ -117,7 +117,7 @@ namespace EDDiscovery
             EDDConfig.Instance.Update(false);
         }
 
-        public void Init()
+        public void Init()      // ED Discovery calls this during its init
         {
             if (!Debugger.IsAttached || EDDOptions.Instance.TraceLog)
             {
@@ -157,6 +157,11 @@ namespace EDDiscovery
         {
             readyForInitialLoad.Set();
         }
+
+        public void InitComplete()
+        {
+            initComplete.Set();
+        }
         #endregion
 
         #region Shutdown
@@ -172,6 +177,8 @@ namespace EDDiscovery
                 LogLineHighlight("Closing down, please wait..");
                 Console.WriteLine("Close.. safe close launched");
                 closeRequested.Set();
+                journalqueuedelaytimer.Change(Timeout.Infinite, Timeout.Infinite);
+                journalqueuedelaytimer.Dispose();
             }
         }
         #endregion
@@ -311,6 +318,7 @@ namespace EDDiscovery
 
         private ManualResetEvent closeRequested = new ManualResetEvent(false);
         private ManualResetEvent readyForInitialLoad = new ManualResetEvent(false);
+        private ManualResetEvent initComplete = new ManualResetEvent(false);
         private ManualResetEvent readyForNewRefresh = new ManualResetEvent(false);
         private AutoResetEvent refreshRequested = new AutoResetEvent(false);
         private AutoResetEvent resyncRequestedEvent = new AutoResetEvent(false);
@@ -329,10 +337,10 @@ namespace EDDiscovery
 
         private static void InitializeDatabases()
         {
-            Trace.WriteLine("Initializing database");
+            Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " Initializing database");
             SQLiteConnectionUser.Initialize();
             SQLiteConnectionSystem.Initialize();
-            Trace.WriteLine("Database initialization complete");
+            Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " Database initialization complete");
         }
 
         private static void InitializeConfig()
@@ -373,6 +381,8 @@ namespace EDDiscovery
             }
 
             SQLiteConnectionUser.EarlyReadRegister();
+
+            Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " Init config finished");
         }
 
         #endregion
@@ -381,6 +391,7 @@ namespace EDDiscovery
 
         private void CheckSystems(Func<bool> cancelRequested, Action<int, string> reportProgress)  // ASYNC process, done via start up, must not be too slow.
         {
+            Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " Check systems");
             reportProgress(-1, "");
 
             string rwsystime = SQLiteConnectionSystem.GetSettingString("EDSMLastSystems", "2000-01-01 00:00:00"); // Latest time from RW file.
@@ -425,6 +436,7 @@ namespace EDDiscovery
                 if (DateTime.UtcNow.Subtract(time).TotalDays > 6.5)     // Get EDDB data once every week.
                     syncstate.performeddbsync = true;
             }
+            Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " Check systems complete");
         }
 
         #endregion
@@ -433,6 +445,7 @@ namespace EDDiscovery
 
         private void DoPerformSync()
         {
+            Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " Perform sync");
             try
             {
                 EliteDangerousCore.EDSM.SystemClassEDSM.PerformSync(() => PendingClose, (p, s) => ReportProgress(p, s), LogLine, LogLineHighlight, syncstate);
@@ -470,12 +483,14 @@ namespace EDDiscovery
 
                 resyncRequestedFlag = 0;
             }
+            Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " Perform sync completed");
         }
 
         private void HistoryFinishedRefreshing(object sender, EventArgs e)
         {
             HistoryRefreshed -= HistoryFinishedRefreshing;
             LogLine("Refreshing complete.");
+            Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " Refresh complete");
 
             if (syncstate.syncwasfirstrun)
             {
@@ -504,13 +519,17 @@ namespace EDDiscovery
             try
             {
                 refreshWorkerArgs = args;
+                Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " Load history");
                 hist = HistoryList.LoadHistory(journalmonitor, () => PendingClose, (p, s) => ReportProgress(p, $"Processing log file {s}"), args.NetLogPath, 
                     args.ForceJournalReload, args.ForceJournalReload, args.CheckEdsm, args.CurrentCommander , EDDConfig.Instance.ShowUIEvents );
+                Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " Load history complete");
             }
             catch (Exception ex)
             {
                 LogLineHighlight("History Refresh Error: " + ex);
             }
+
+            initComplete.WaitOne();
 
             InvokeAsyncOnUiThread(() => RefreshHistoryWorkerCompleted(hist));
         }
@@ -519,6 +538,8 @@ namespace EDDiscovery
         {
             if (!PendingClose)
             {
+                Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " Refresh history worker completed");
+
                 if (hist != null)
                 {
                     history.Copy(hist);
@@ -532,12 +553,18 @@ namespace EDDiscovery
                     LogLine("Refresh Complete.");
 
                     RefreshDisplays();
+                    Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " Refresh Displays Completed");
                 }
+
+                Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " HR Refresh");
 
                 HistoryRefreshed?.Invoke(this, EventArgs.Empty);        // Internal hook call
 
+                Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " JMOn");
+
                 journalmonitor.StartMonitor();
 
+                Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " RFcomplete");
                 OnRefreshComplete?.Invoke();                            // History is completed
 
                 if (history.CommanderId >= 0)
@@ -545,6 +572,8 @@ namespace EDDiscovery
 
                 refreshRequestedFlag = 0;
                 readyForNewRefresh.Set();
+
+                Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " refresh history complete");
             }
         }
 
@@ -561,13 +590,13 @@ namespace EDDiscovery
             if (playdelay > 0)  // if delaying to see if a companion event occurs. add it to list. Set timer so we pick it up
             {
                 System.Diagnostics.Debug.WriteLine(Environment.TickCount + " Delay Play queue " + je.EventTypeID + " Delay for " + playdelay);
-                journalqueue.Add(je);
+                journalqueue.Enqueue(je);
                 journalqueuedelaytimer.Change(playdelay, Timeout.Infinite);
             }
             else
             {
                 journalqueuedelaytimer.Change(Timeout.Infinite, Timeout.Infinite);  // stop the timer, but if it occurs before this, not the end of the world
-                journalqueue.Add(je);  // add it to the play list.
+                journalqueue.Enqueue(je);  // add it to the play list.
                 //System.Diagnostics.Debug.WriteLine(Environment.TickCount + " No delay, issue " + je.EventTypeID );
                 PlayJournalList();    // and play
             }
@@ -580,8 +609,10 @@ namespace EDDiscovery
 
             JournalEntry prev = null;  // we start afresh from the point of merging so we don't merge with previous ones already shown
 
-            foreach (JournalEntry je in journalqueue)
+            while( journalqueue.Count > 0 )
             {
+                JournalEntry je = journalqueue.Dequeue();
+
                 if (!HistoryList.MergeEntries(prev, je))                // if not merged
                 {
                     if (prev != null)                       // no merge, so if we have a merge candidate on top, run actions on it.
@@ -593,8 +624,6 @@ namespace EDDiscovery
 
             if (prev != null)                               // any left.. action it
                 ActionEntry(prev);
-
-            journalqueue.Clear();
         }
 
         void ActionEntry(JournalEntry je)               // issue the JE to the system
