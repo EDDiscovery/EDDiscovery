@@ -826,15 +826,15 @@ namespace EliteDangerousCore.EDSM
                     new SavedRouteClass(
                         "Minerva Centaurus Expedition",
                         "HIP 72043",
-                        "HIP 72043",                    // TBD
+                        "Nyeakio RU-V d3-21",
                         "Prooe Phio PZ-Z c0",
                         "Droeth FS-K c8-36",
                         "Phrooe Flyuae QE-Y d1-4",
                         "Oob Chrea CV-U b30-3",
-                        "Kyloopeia BA-W b4-1",
-                        "Byeethiae FL-Y a0",
-                        "Preou Free AA-A h0",
-                        "Byooe Aoscs FG-Y g3",
+                        "Kyloopeia BA-A g4",
+                        "Byeethiae TM-L c21-11",
+                        "Preou Free VC-F c26-2",
+                        "Byooe Aoscs BG-F d11-14",
                         "Throefuae VZ-O e6-16",
                         "Plio Broae JM-W d1-100",
                         "Byeia Aoscs PS-S c17-6",
@@ -909,6 +909,117 @@ namespace EliteDangerousCore.EDSM
                     {
                         StartDate = new DateTime(2017, 11, 7, 12, 0, 0, DateTimeKind.Utc).ToLocalTime(),
                         EndDate = new DateTime(2018, 1, 7, 16, 0, 0, DateTimeKind.Utc).ToLocalTime()
+                    },
+                    #endregion
+
+                    #region 34: Knights of Karma INRA Expedition
+                    // https://www.edsm.net/en/expeditions/summary/id/34/name/Knights+of+Karma+INRA+Expedition
+                    new SavedRouteClass(
+                        "Knights of Karma INRA Expedition",
+                        "Diaguandri",
+                        "HIP 15329",
+                        "Hermitage",
+                        "Alnath",
+                        "HIP 59382",
+                        "HIP 7158",
+                        "LP 389-95",
+                        "Conn",
+                        "HIP 16824",
+                        "HIP 12099",
+                        "12 Trianguli",
+                        "Qa'wakana"
+                    )
+                    {
+                        // Yes, it really was only a few hours long...
+                        StartDate = new DateTime(2017, 11, 25, 17, 0, 0, DateTimeKind.Utc).ToLocalTime(),
+                        EndDate = new DateTime(2017, 11, 25, 23, 0, 0, DateTimeKind.Utc).ToLocalTime()
+                    },
+                    #endregion
+
+                    #region 35: Orange Run
+                    // https://www.edsm.net/en/expeditions/summary/id/35/name/Orange+run
+                    new SavedRouteClass(
+                        "Orange Run",
+                        "Tembala",
+                        "HD 175876",
+                        "Lagoon Sector NI-S b4-10",
+                        "Blae Hypue VN-S d4-21",
+                        "Blua Hypa HT-F d12-1226",
+                        "Boewnst KS-S c20-959",
+                        "Colonia",
+                        "Dryaea Flee HR-W e1-124",
+                        "Scheau Flyi KR-W e1-6736",
+                        "Shrogea MH-V e2-1763",
+                        "Sagittarius A*",
+                        "Oupailks CW-L c8-1",
+                        "Cheae Euq ER-L c21-0",
+                        "Beagle Point",
+                        "Greae Bluae YE-A g3",
+                        "Oedgaf DL-Y g0",
+                        "Flyoo Groa SO-Z e0",
+                        "Hypi Bra TI-B d25",
+                        "Eos Brai KR-W e1-4",
+                        "Byua Aeb BA-A g2",
+                        "Thraikio ON-B d13-2",
+                        "Byaa Thoi GC-D d12-0",
+                        "Blia Thio RY-S e3-5",
+                        "Plooe Thio OA-A d14",
+                        "Bubble Sector FB-X c1-25",
+                        "Heart Sector ZE-A e11",
+                        "Soul Sector EL-Y d7",
+                        "S171 36",
+                        "Tembala"
+                    )
+                    {
+                        StartDate = new DateTime(2017, 12, 15, 15, 0, 0, DateTimeKind.Utc).ToLocalTime(),
+                        EndDate = new DateTime(2018, 4, 24, 15, 0, 0, DateTimeKind.Utc).ToLocalTime()
+                    },
+                    #endregion
+
+                    #region 36: Christmas Carriers Convoy 2
+                    // https://www.edsm.net/en/expeditions/summary/id/36/name/Christmas+Carriers+Convoy+2
+                    new SavedRouteClass(
+                        "Christmas Carriers 2",
+                        "Haritanis",
+                        "Blu Thua AI-A c14-10",
+                        "Lagoon Sector NI-S b4-10",
+                        "Eagle Sector IR-W d1-117",
+                        "Skaudai CH-B d14-34",
+                        "Gru Hypue KS-T d3-31",
+                        "Boewnst KS-S c20-959",
+                        "Centralis"
+                    )
+                    {
+                        StartDate = new DateTime(2017, 12, 2, 0, 0, 0, DateTimeKind.Utc).ToLocalTime(),
+                        EndDate = new DateTime(2017, 12, 24, 23, 59, 59, DateTimeKind.Utc).ToLocalTime()
+                    },
+                    #endregion
+
+                    #region 37: Christmas Delights
+                    // https://www.edsm.net/en/expeditions/summary/id/37/name/Christmas+Delights
+                    new SavedRouteClass(
+                        "Christmas Delights",
+                        "Wapiya",
+                        "Karsuki Ti",
+                        "Jaroua",
+                        "Goman",
+                        "Any Na",
+                        "Arouca",
+                        "Deuringas",
+                        "Aegaeon",
+                        "Witchhaul",
+                        "Hecate",
+                        "Thrutis",
+                        "Kongga",
+                        "Esuseku",
+                        "Harma",
+                        "Kamitra",
+                        "Njambalba",
+                        "Wapiya"
+                    )
+                    {
+                        StartDate = new DateTime(2017, 12, 1, 0, 0, 0, DateTimeKind.Utc).ToLocalTime(),
+                        EndDate = new DateTime(2017, 12, 24, 23, 59, 59, DateTimeKind.Utc).ToLocalTime()
                     },
                     #endregion
                 };
