@@ -209,7 +209,7 @@ namespace EDDiscovery.UserControls
                         if (sn.ScanData.Atmosphere != null && sn.ScanData.Atmosphere != "None")
                             bdDetails.Append(sn.ScanData.Atmosphere + ". ");
 
-                        int value = sn.ScanData.EstimatedValueED22();
+                        int value = sn.ScanData.EstimatedValue;
                         bdDetails.Append("Value " + value.ToString("N0"));
 
                         Image img = null;
