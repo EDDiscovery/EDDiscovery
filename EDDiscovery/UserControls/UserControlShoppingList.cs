@@ -193,9 +193,12 @@ namespace EDDiscovery.UserControls
                                     allMats.Add(new Tuple<string, double>(sn.fullname.Replace(last_he.System.name, "", StringComparison.InvariantCultureIgnoreCase).Trim(), available));
                                 }
                                 allMats = allMats.OrderByDescending(m => m.Item2).ToList();
+                                int n = 1;
                                 foreach(Tuple<string, double> m in allMats)
                                 {
-                                    wantedList.Append($"{m.Item1}: {m.Item2.ToString("N1")}% ");
+                                    wantedList.Append($"{m.Item1.ToUpperInvariant()}: {m.Item2.ToString("N1")}% ");
+                                    n++;
+                                    if (n%6 == 0) wantedList.Append("\n    ");
                                 }
                             }
                         }
