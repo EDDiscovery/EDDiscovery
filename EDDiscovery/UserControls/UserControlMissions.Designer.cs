@@ -75,7 +75,7 @@ namespace EDDiscovery.UserControls
             this.customDateTimePickerStart = new ExtendedControls.CustomDateTimePicker();
             this.panelCurrent = new System.Windows.Forms.Panel();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+            this.splitContainerMissions = new System.Windows.Forms.SplitContainer();
             this.dataViewScrollerPanelCurrent.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewCurrent)).BeginInit();
             this.panelPrev.SuspendLayout();
@@ -83,10 +83,10 @@ namespace EDDiscovery.UserControls
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewPrevious)).BeginInit();
             this.panelButtons.SuspendLayout();
             this.panelCurrent.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
-            this.splitContainer1.Panel1.SuspendLayout();
-            this.splitContainer1.Panel2.SuspendLayout();
-            this.splitContainer1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainerMissions)).BeginInit();
+            this.splitContainerMissions.Panel1.SuspendLayout();
+            this.splitContainerMissions.Panel2.SuspendLayout();
+            this.splitContainerMissions.SuspendLayout();
             this.SuspendLayout();
             // 
             // dataViewScrollerPanelCurrent
@@ -449,29 +449,29 @@ namespace EDDiscovery.UserControls
             // 
             this.toolTip1.ShowAlways = true;
             // 
-            // splitContainer1
+            // splitContainerMissions
             // 
-            this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.splitContainer1.Location = new System.Drawing.Point(0, 0);
-            this.splitContainer1.Name = "splitContainer1";
-            this.splitContainer1.Orientation = System.Windows.Forms.Orientation.Horizontal;
+            this.splitContainerMissions.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitContainerMissions.Location = new System.Drawing.Point(0, 0);
+            this.splitContainerMissions.Name = "splitContainerMissions";
+            this.splitContainerMissions.Orientation = System.Windows.Forms.Orientation.Horizontal;
             // 
-            // splitContainer1.Panel1
+            // splitContainerMissions.Panel1
             // 
-            this.splitContainer1.Panel1.Controls.Add(this.panelCurrent);
+            this.splitContainerMissions.Panel1.Controls.Add(this.panelCurrent);
             // 
-            // splitContainer1.Panel2
+            // splitContainerMissions.Panel2
             // 
-            this.splitContainer1.Panel2.Controls.Add(this.panelPrev);
-            this.splitContainer1.Size = new System.Drawing.Size(800, 572);
-            this.splitContainer1.SplitterDistance = 266;
-            this.splitContainer1.TabIndex = 3;
+            this.splitContainerMissions.Panel2.Controls.Add(this.panelPrev);
+            this.splitContainerMissions.Size = new System.Drawing.Size(800, 572);
+            this.splitContainerMissions.SplitterDistance = 266;
+            this.splitContainerMissions.TabIndex = 3;
             // 
             // UserControlMissions
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.splitContainer1);
+            this.Controls.Add(this.splitContainerMissions);
             this.Name = "UserControlMissions";
             this.Size = new System.Drawing.Size(800, 572);
             this.dataViewScrollerPanelCurrent.ResumeLayout(false);
@@ -482,10 +482,10 @@ namespace EDDiscovery.UserControls
             this.panelButtons.ResumeLayout(false);
             this.panelButtons.PerformLayout();
             this.panelCurrent.ResumeLayout(false);
-            this.splitContainer1.Panel1.ResumeLayout(false);
-            this.splitContainer1.Panel2.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
-            this.splitContainer1.ResumeLayout(false);
+            this.splitContainerMissions.Panel1.ResumeLayout(false);
+            this.splitContainerMissions.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainerMissions)).EndInit();
+            this.splitContainerMissions.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -519,7 +519,7 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.DataGridViewTextBoxColumn pColTargetFaction;
         private System.Windows.Forms.DataGridViewTextBoxColumn pColResult;
         private System.Windows.Forms.DataGridViewTextBoxColumn pColInfo;
-        private System.Windows.Forms.SplitContainer splitContainer1;
+        private System.Windows.Forms.SplitContainer splitContainerMissions;
         private ExtendedControls.CustomDateTimePicker customDateTimePickerStart;
         private System.Windows.Forms.Label label1;
         private ExtendedControls.CustomDateTimePicker customDateTimePickerEnd;

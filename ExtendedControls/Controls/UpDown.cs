@@ -180,7 +180,7 @@ namespace ExtendedControls
 
         protected override void OnMouseUp(MouseEventArgs mevent)
         {
-            base.OnMouseDown(mevent);
+            base.OnMouseUp(mevent);
             mousedown = MouseOver.MouseOverNone;
             repeatclick.Stop();
             Invalidate();

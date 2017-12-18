@@ -32,11 +32,8 @@ namespace EDDiscovery.UserControls
 {
     public partial class UserControlTrippanel : UserControlCommonBase
     {
-        private EDDiscoveryForm discoveryform;
-
         //static String TITLE = "Trip panel";
 
-        private int displaynumber = 0;
         private string DbSave { get { return "TripPanel" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
 
         HistoryEntry lastHE;
@@ -48,15 +45,8 @@ namespace EDDiscovery.UserControls
             InitializeComponent();
         }
 
-        public override void Init(EDDiscoveryForm ed, UserControlCursorType thc, int vn) //0=primary, 1 = first windowed version, etc
+        public override void Init()
         {
-            discoveryform = ed;
-            displaynumber = vn;
-
-            discoveryform.OnHistoryChange += Display;
-            discoveryform.OnNewEntry += NewEntry;
-            discoveryform.OnNewTarget += NewTarget;
-
             displayfont = discoveryform.theme.GetFont;
 
             jumpRange = SQLiteDBClass.GetSettingDouble(DbSave + "JumpRange", -1.0);
@@ -71,7 +61,9 @@ namespace EDDiscovery.UserControls
             fsdDrive = SQLiteDBClass.GetSettingString(DbSave + "fsdDrive", null);
             tankWarning = SQLiteDBClass.GetSettingDouble(DbSave + "TankWarning", -1);
 
-
+            discoveryform.OnHistoryChange += Display;
+            discoveryform.OnNewEntry += NewEntry;
+            discoveryform.OnNewTarget += NewTarget;
         }
 
         private double jumpRange = -1;
@@ -284,7 +276,7 @@ namespace EDDiscovery.UserControls
                     if (url.Length > 0)         // may pass back empty string if not known, this solves another exception
                         System.Diagnostics.Process.Start(url);
                     else
-                        ExtendedControls.MessageBoxTheme.Show("System " + he.System.name + " unknown to EDSM");
+                        ExtendedControls.MessageBoxTheme.Show(FindForm(), "System " + he.System.name + " unknown to EDSM");
                 }
                 else
                 {

@@ -202,7 +202,7 @@ namespace ExtendedControls
         public override AnchorStyles Anchor { get { return base.Anchor; } set { base.Anchor = value; _cbsystem.Anchor = value; } }
         public override DockStyle Dock { get { return base.Dock; } set { base.Dock = value; _cbsystem.Dock = value; } }
         public override Font Font { get { return base.Font; } set { base.Font = value; _cbsystem.Font = value; } }
-        public override string Text { get { return base.Text; } set { base.Text = value; _cbsystem.Text = value; } }
+        public override string Text { get { return base.Text; } set { base.Text = value; _cbsystem.Text = value; Invalidate();  } }
 
         // BEWARE SET value/display before DATA SOURCE
         public object DataSource { get { return _cbsystem.DataSource; } set { _cbsystem.DataSource = value; } }
@@ -488,13 +488,7 @@ namespace ExtendedControls
             _customdropdown.OtherKeyPressed += _customdropdown_OtherKeyPressed;
             _customdropdown.Deactivate += _customdropdown_Deactivate;
 
-            Control parent = this.Parent;
-            while (parent != null && !(parent is Form))
-            {
-                parent = parent.Parent;
-            }
-
-            _customdropdown.Show(parent);
+            _customdropdown.Show(FindForm());
              
             // enforce size.. some reason SHow is scaling it probably due to autosizing.. can't turn off. force back
             _customdropdown.Size = new Size(this.DropDownWidth > 9 ? this.DropDownWidth : this.Width, fittableitems * this.ItemHeight + 4);

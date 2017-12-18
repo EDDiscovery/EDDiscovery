@@ -35,7 +35,7 @@ namespace AudioExtensions
         event AudioStopped AudioStoppedEvent;
 
         void Start(AudioData o, int vol);      // start with this audio
-        void Stop();
+        void Stop();                           // async stop.. does not stop, just terminates the current audio
         void Dispose(AudioData o);             // finish with this audio
 
         AudioData Generate(string file, SoundEffectSettings effects = null);       // generate audio samples and return. Effects 

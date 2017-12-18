@@ -29,8 +29,8 @@ namespace ActionLanguage
     public class ActionPackEditProgram : UserControl
     {
         public Func<List<string>> onAdditionalNames;        // give me more names must provide
-        public Func<Control, System.Drawing.Icon, string, string> onEditKeys;   // edit the key string.. must provide
-        public Func<Control, string, ActionCoreController,string> onEditSay;   // edit the say string.. must provide
+        public Func<Form, System.Drawing.Icon, string, string> onEditKeys;   // edit the key string.. must provide
+        public Func<Form, string, ActionCoreController,string> onEditSay;   // edit the say string.. must provide
         public Func<string> SuggestedName;      // give me a suggested program name must provide
         public System.Action RefreshEvent;     
 
@@ -193,7 +193,7 @@ namespace ActionLanguage
 
             if (p != null && p.StoredInSubFile != null && shift)        // if we have a stored in sub file, but we shift hit, cancel it
             {
-                if (ExtendedControls.MessageBoxTheme.Show(this, "Do you want to bring the file back into the main file", "WARNING", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK)
+                if (ExtendedControls.MessageBoxTheme.Show(FindForm(), "Do you want to bring the file back into the main file", "WARNING", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK)
                 {
                     p.CancelSubFileStorage();
                     shift = false;
@@ -220,7 +220,7 @@ namespace ActionLanguage
                 apf.EditProgram += (s) =>
                 {
                     if (!actionfile.actionprogramlist.EditProgram(s, actionfile.name, actioncorecontroller, applicationfolder))
-                        ExtendedControls.MessageBoxTheme.Show(this, "Unknown program or not in this file " + s);
+                        ExtendedControls.MessageBoxTheme.Show(FindForm(), "Unknown program or not in this file " + s);
                 };
 
                 // we init with a variable list based on the field names of the group (normally the event field names got by SetFieldNames)
@@ -229,7 +229,7 @@ namespace ActionLanguage
                 apf.Init("Action program ", this.Icon, actioncorecontroller, applicationfolder, onAdditionalNames(), actionfile.name, p, 
                                 actionfile.actionprogramlist.GetActionProgramList(), suggestedname, ModifierKeys.HasFlag(Keys.Shift));
 
-                DialogResult res = apf.ShowDialog();
+                DialogResult res = apf.ShowDialog(FindForm());
 
                 if (res == DialogResult.OK)
                 {
@@ -259,7 +259,7 @@ namespace ActionLanguage
             ConditionVariablesForm avf = new ConditionVariablesForm();
             avf.Init("Input parameters and flags to pass to program on run", this.Icon, cond, showone: true, showrefresh: true, showrefreshstate: flag.Equals(ConditionVariables.flagRunAtRefresh));
 
-            if (avf.ShowDialog(this) == DialogResult.OK)
+            if (avf.ShowDialog(FindForm()) == DialogResult.OK)
             {
                 cd.actiondata = paras.Text = avf.result.ToActionDataString(avf.result_refresh ? ConditionVariables.flagRunAtRefresh : "");
             }
@@ -292,7 +292,7 @@ namespace ActionLanguage
         {
             ActionProgram p = cd.action.HasChars() ? actionfile.actionprogramlist.Get(cd.action) : null;
 
-            string ud = onEditKeys(this, this.Icon, p != null ? p.keyuserdata.Alt("") : "");
+            string ud = onEditKeys(this.FindForm(), this.Icon, p != null ? p.keyuserdata.Alt("") : "");
 
             if ( ud != null )
             {
@@ -309,7 +309,7 @@ namespace ActionLanguage
         {
             ActionProgram p = cd.action.HasChars() ? actionfile.actionprogramlist.Get(cd.action) : null;
 
-            string ud = onEditSay(this, p != null ? p.sayuserdata.Alt("") : "" , actioncorecontroller );
+            string ud = onEditSay(this.FindForm(), p != null ? p.sayuserdata.Alt("") : "" , actioncorecontroller );
 
             if ( ud != null )
             {
@@ -337,7 +337,7 @@ namespace ActionLanguage
             int n = 2;
             while (actionfile.actionprogramlist.GetActionProgramList().Contains(suggestedname))
             {
-                suggestedname = sroot + "_" + n.ToString(System.Globalization.CultureInfo.InvariantCulture);
+                suggestedname = sroot + "_" + n.ToStringInvariant();
                 n++;
             }
 

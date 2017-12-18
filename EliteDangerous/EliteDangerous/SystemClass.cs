@@ -26,9 +26,9 @@ namespace EliteDangerousCore
         public long id { get; set; }
         public long id_edsm { get; set; }
         public string name { get; set; }
-        public double x { get; set; }
-        public double y { get; set; }
-        public double z { get; set; }
+        public double x { get; set; } = double.NaN;
+        public double y { get; set; } = double.NaN;
+        public double z { get; set; } = double.NaN;
         public DateTime UpdateDate { get; set; }
         public int gridid { get; set; }
         public int randomid { get; set; }
@@ -63,9 +63,6 @@ namespace EliteDangerousCore
         {
             name = Name;
             status = DB.SystemStatusEnum.Unknown;
-            x = double.NaN;
-            y = double.NaN;
-            z = double.NaN;
         }
 
         public SystemClass(string Name, double vx, double vy, double vz)

@@ -17,6 +17,7 @@ using BaseUtils.Win32;
 using BaseUtils.Win32Constants;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -32,14 +33,31 @@ namespace ExtendedControls
     /// </summary>
     public class SmartSysMenuForm : Form
     {
+        public List<string> AdditionalSysMenus;         // null means none!  SET by derived class to add more menus!
+        public Action<int> AdditionalSysMenuSelected;   // called when additional menu X (0-N-1) selected
+
+        [DefaultValue(false)]
+        public new bool TopMost
+        {
+            get { return base.TopMost; }
+            set
+            {
+                if (base.TopMost != value)
+                {
+                    base.TopMost = value;
+                    OnTopMostChanged(EventArgs.Empty);
+                }
+            }
+        }
+
+        public event EventHandler TopMostChanged;
+
+
         // TODO: managed wrapper to keep track of these all up and down the inhertance stack.
         protected const int SC_ONTOP = 0x0001;
         protected const int SC_OPACITYSUBMENU = 0x0002;    // 100% = 0x3; 90% = 0x4; ...; 10% = 0xC; 0% = NOT USED!
         protected const int SC_ADDITIONALMENU = 0x0020;    
         // 0x000D-0x001F are reserved by us for future expansion, while 0x0000 and 0xF000+ are system reserved.
-
-        public List<string> AdditionalSysMenus;     // null means none!  SET by derived class to add more menus!
-        public Action<int> AdditionalSysMenuSelected;  // called when additional menu X (0-N-1) selected
 
         protected virtual bool AllowResize { get; } = true;
 
@@ -48,9 +66,17 @@ namespace ExtendedControls
             get
             {
                 var cp = base.CreateParams;
-                if (_SysMenuCreationHackEnabled) cp.Style |= WS.SYSMENU;
+                if (_SysMenuCreationHackEnabled)
+                    cp.Style |= WS.SYSMENU;
                 return cp;
             }
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+                TopMostChanged = null;
+            base.Dispose(disposing);
         }
 
         protected override void OnHandleCreated(EventArgs e)
@@ -85,11 +111,31 @@ namespace ExtendedControls
             }
         }
 
+        protected virtual void OnTopMostChanged(EventArgs e)
+        {
+            TopMostChanged?.Invoke(this, e);
+        }
+
         protected IntPtr SendMessage(int msg, IntPtr wparam, IntPtr lparam)
         {
             Message message = Message.Create(this.Handle, msg, wparam, lparam);
             this.WndProc(ref message);
             return message.Result;
+        }
+
+        protected void ShowSystemMenu(Point screenPt)
+        {
+            if (Environment.OSVersion.Platform == PlatformID.Win32NT && IsHandleCreated)
+            {
+                var hMenu = UnsafeNativeMethods.GetSystemMenu(Handle, false);
+                if (hMenu != IntPtr.Zero)
+                {
+                    int cmd = UnsafeNativeMethods.TrackPopupMenuEx(hMenu, UnsafeNativeMethods.GetSystemMetrics(SystemMetrics.MENUDROPALIGNMENT) | TPM.RETURNCMD,
+                        screenPt.X, screenPt.Y, Handle, IntPtr.Zero);
+                    if (cmd != 0)
+                        UnsafeNativeMethods.PostMessage(Handle, WM.SYSCOMMAND, (IntPtr)cmd, IntPtr.Zero);
+                }
+            }
         }
 
         protected override void WndProc(ref Message m)
@@ -129,7 +175,7 @@ namespace ExtendedControls
                                 UnsafeNativeMethods.EnableMenuItem(m.WParam, SC.CLOSE, MF.ENABLED);
                             }
 
-                            UnsafeNativeMethods.ModifyMenu(m.WParam, SC_ONTOP, MF.BYCOMMAND | (TopMost ? MF.CHECKED : MF.UNCHECKED), SC_ONTOP, "On &Top");
+                            UnsafeNativeMethods.ModifyMenu(m.WParam, SC_ONTOP, MF.BYCOMMAND | (base.TopMost ? MF.CHECKED : MF.UNCHECKED), SC_ONTOP, "On &Top");
                             int opac = (int)Math.Min(10, Math.Round(Opacity * 10));  // 0.000-1.00 => 10-100
                             for (int i = 10; i > 0; i--)
                             {
@@ -145,16 +191,9 @@ namespace ExtendedControls
 
                 case WM.NCRBUTTONUP:    // Win32: Display the system menu.
                     {
-                        if (FormBorderStyle == FormBorderStyle.None && m.WParam == (IntPtr)HT.CAPTION && Environment.OSVersion.Platform == PlatformID.Win32NT && IsHandleCreated)
+                        if (FormBorderStyle == FormBorderStyle.None && m.WParam == (IntPtr)HT.CAPTION)
                         {
-                            Point p = new Point((int)m.LParam);
-                            var hMenu = UnsafeNativeMethods.GetSystemMenu(Handle, false);
-                            if (hMenu != IntPtr.Zero)
-                            {
-                                int cmd = UnsafeNativeMethods.TrackPopupMenuEx(hMenu, UnsafeNativeMethods.GetSystemMetrics(SystemMetrics.MENUDROPALIGNMENT) | TPM.RETURNCMD, p.X, p.Y, Handle, IntPtr.Zero);
-                                if (cmd != 0)
-                                    UnsafeNativeMethods.PostMessage(Handle, WM.SYSCOMMAND, (IntPtr)cmd, IntPtr.Zero);
-                            }
+                            ShowSystemMenu(new Point((int)m.LParam));
                             m.Result = IntPtr.Zero;
                             return;
                         }
@@ -163,14 +202,16 @@ namespace ExtendedControls
 
                 case WM.SYSCOMMAND:     // Process any system commands intended for this window (SC_ONTOP / SC_OPACITYSUBMENU).
                     {
-                        int wp = (int)m.WParam;
+                        int wp = unchecked((int)(long)m.WParam);
 
                         if (m.WParam == (IntPtr)SC_ONTOP)
-                            TopMost = !TopMost;
+                            TopMost = !base.TopMost;
                         else if (wp > SC_OPACITYSUBMENU && wp <= SC_OPACITYSUBMENU + 10)
                             Opacity = (wp - SC_OPACITYSUBMENU) / 10f;
                         else if (wp >= SC_ADDITIONALMENU && AdditionalSysMenus != null && wp < SC_ADDITIONALMENU + AdditionalSysMenus.Count)
                             AdditionalSysMenuSelected?.Invoke(wp - SC_ADDITIONALMENU);
+                        else if (m.WParam == (IntPtr)SC.KEYMENU && (CreateParams.Style & WS.SYSMENU) == 0 && (CreateParams.Style & WS.CAPTION) == 0)
+                            ShowSystemMenu(PointToScreen(new Point(5, 5)));
                         else if (!AllowResize && (m.WParam == (IntPtr)SC.MAXIMIZE || m.WParam == (IntPtr)SC.SIZE || m.WParam == (IntPtr)SC.RESTORE))
                             return;     // Access Denied.
                         else
@@ -183,7 +224,7 @@ namespace ExtendedControls
             base.WndProc(ref m);
         }
 
-        // If WS.SYSMENU is not active at first WM.CREATE, the menu will not be created. Since FormBorderStyle may clear WS.SYSMENu, we have
+        // If WS.SYSMENU is not active at first WM.CREATE, the menu will not be created. Since FormBorderStyle may clear WS.SYSMENU, we have
         // to fake it during startup. WS.SYSMENU is meaningless to us outside of WM.CREATE. Seealso https://stackoverflow.com/a/16695606
         // CAUTION: if WS.SYSMENU is enabled but WS.CAPTION is not, all hittests, including our sysmenu, min/max/close, etc., will get ignored!
         private bool _SysMenuCreationHackEnabled = Environment.OSVersion.Platform == PlatformID.Win32NT;

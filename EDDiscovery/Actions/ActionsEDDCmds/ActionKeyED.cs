@@ -23,35 +23,78 @@ using BaseUtils;
 using AudioExtensions;
 using Conditions;
 using ActionLanguage;
+using static EliteDangerousCore.BindingsFile;
 
 namespace EDDiscovery.Actions
 {
     public class ActionKeyED : ActionKey        // extends Key
     {
-        static public string Menu(Control parent, System.Drawing.Icon ic, string userdata , EliteDangerousCore.BindingsFile bf)
+        const string errmsgforbinding = "No keyboard binding for ";
+
+        class AKP : BaseUtils.EnhancedSendKeysParser.IAdditionalKeyParser      // AKP parser to pass to SendKeys
         {
-            ConditionVariables vars;
-            string keys;
-            FromString(userdata, out keys, out vars);
+            public EliteDangerousCore.BindingsFile bindingsfile;
 
-            ExtendedControls.KeyForm kf = new ExtendedControls.KeyForm();
-            int defdelay = vars.Exists(DelayID) ? vars[DelayID].InvariantParseInt(DefaultDelay) : DefaultDelay;
-            string process = vars.Exists(ProcessID) ? vars[ProcessID] : "";
-            kf.Init(ic, true, " ", keys, process, defdelay: defdelay);
-
-            if (kf.ShowDialog(parent) == DialogResult.OK)
+            public Tuple<string, int, string> Parse(string s)
             {
-                return ToString(kf.KeyList, new ConditionVariables(new string[] { ProcessID, kf.ProcessSelected, DelayID, kf.DefaultDelay.ToStringInvariant() }));
+                if ( s.Length > 0 && s.StartsWith("{"))     // frontier bindings start with decoration
+                {
+                    int endindex = s.IndexOf("}");
+                    if ( endindex>=0 )                      // valid {}
+                    {
+                        string binding = s.Substring(1, endindex - 1);
+
+                        if (!bindingsfile.KeyNames.Contains(binding))       // first check its a valid name..
+                        {
+                            return new Tuple<string, int, string>(null, 0, "Binding name " + binding + " is not an known binding");
+                        }
+
+                        List<Tuple<Device, Assignment>> matches 
+                                    = bindingsfile.FindAssignedFunc(binding, KeyboardDeviceName);   // just give me keyboard bindings, thats all i can do
+
+                        if ( matches != null )      // null if no matches to keyboard is found
+                        {
+                            Tuple<Device, Assignment> match = matches[0];      // just use the first one.. since they have been prechecked for keys one is the same as another
+
+                            // pick out the keys and convert them from fontier to Keys
+                            Keys[] keys = (from x in matches[0].Item2.keys select DirectInputDevices.KeyConversion.FrontierNameToKeys(x.Key)).ToArray();
+
+                            if ( !keys.Contains(Keys.None)) // if no errors
+                            {
+                                string keyseq = keys.GenerateSequence();
+                               // System.Diagnostics.Debug.WriteLine("Frontier " + binding + "->" + keyseq);
+                                return new Tuple<string, int, string>(keyseq, endindex + 1, null);
+                            }
+                            else
+                            {
+                                return new Tuple<string, int, string>(null, 0, "Control binding not recognised");
+                            }
+                        }
+                        else
+                        {
+                            System.Diagnostics.Debug.WriteLine("NO binding for " + binding);
+                            return new Tuple<string, int, string>(null, 0, errmsgforbinding + binding);
+                        }
+                    }
+                }
+
+                return new Tuple<string, int, string>(null, 0, null);
             }
-            else
-                return null;
+        }
+
+        static public string Menu(Form parent, System.Drawing.Icon ic, string userdata, EliteDangerousCore.BindingsFile bf)
+        {
+            List<string> decorated = (from x in bf.KeyNames select "{"+x+"}").ToList();
+            decorated.Sort();
+            return Menu(parent, ic, userdata, decorated, new AKP() { bindingsfile = bf });
+        
         }
 
         public override bool ConfigurationMenu(Form parent, ActionCoreController cp, List<string> eventvars)    // override again to expand any functionality
         {
             ActionController ac = cp as ActionController;
 
-            string ud = Menu(parent, cp.Icon, userdata , ac.DiscoveryForm.FrontierBindings );      // base has no additional keys
+            string ud = Menu(parent, cp.Icon, userdata , ac.FrontierBindings );      // base has no additional keys
             if (ud != null)
             {
                 userdata = ud;
@@ -63,33 +106,28 @@ namespace EDDiscovery.Actions
 
         public override bool ExecuteAction(ActionProgramRun ap)
         {
+            ActionController ac = ap.actioncontroller as ActionController;
+            return ExecuteAction(ap, new AKP() { bindingsfile = ac.FrontierBindings }); //base, TBD pass in tx funct
+        }
+
+        // check binding in userdata for consistency.
+        static public string VerifyBinding(string userdata, EliteDangerousCore.BindingsFile bf)    // empty string okay
+        {
             string keys;
             ConditionVariables statementvars;
             if (FromString(userdata, out keys, out statementvars))
             {
-                string errlist = null;
-                ConditionVariables vars = statementvars.ExpandAll(ap.functions, statementvars, out errlist);
+                // during this check, we don't moan about a binding not being present, since we don't need to..
 
-                if (errlist == null)
-                {
-                    int defdelay = vars.Exists(DelayID) ? vars[DelayID].InvariantParseInt(DefaultDelay) : DefaultDelay;
-                    string process = vars.Exists(ProcessID) ? vars[ProcessID] : "";
+                string ret = BaseUtils.EnhancedSendKeysParser.VerifyKeys(keys, new AKP() { bindingsfile = bf });
 
-                    ActionController ac = ap.actioncontroller as ActionController;
-                    EliteDangerousCore.BindingsFile bf = ac.DiscoveryForm.FrontierBindings;
-
-                    string res = BaseUtils.EnhancedSendKeys.Send(keys, defdelay, DefaultShiftDelay, DefaultUpDelay, process);
-
-                    if (res.HasChars())
-                        ap.ReportError("Key Syntax error : " + res);
-                }
+                if (ret.Contains(errmsgforbinding))     // Ignore these..
+                    return "";
                 else
-                    ap.ReportError(errlist);
+                    return ret;
             }
             else
-                ap.ReportError("Key command line not in correct format");
-
-            return true;
+                return "Bad Key Line";
         }
     }
 }

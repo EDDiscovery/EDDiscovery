@@ -57,7 +57,7 @@ namespace EDDiscovery.Actions
             string ret = "";
             foreach (BindingsFile.Device bd in bf)     // for all devices listed in the binding file
             {
-                InputDeviceInterface idi = GetInputDeviceFromBindingDevice(bd);
+                IInputDevice idi = GetInputDeviceFromBindingDevice(bd);
 
                 if (idi == null)
                     ret += "ERROR: Missing physical device for " + bd.Name + Environment.NewLine;
@@ -168,7 +168,7 @@ namespace EDDiscovery.Actions
 
             foreach (BindingsFile.DeviceKeyPair ma in a.keys)
             {
-                InputDeviceInterface idi = GetInputDeviceFromBindingDevice(ma.Device);
+                IInputDevice idi = GetInputDeviceFromBindingDevice(ma.Device);
 
                 if (idi == null )       // no device, false
                     return new Tuple<bool,bool>(false,false);
@@ -193,9 +193,9 @@ namespace EDDiscovery.Actions
             return dv;
         }
 
-        InputDeviceInterface GetInputDeviceFromBindingDevice(BindingsFile.Device dv)
+        IInputDevice GetInputDeviceFromBindingDevice(BindingsFile.Device dv)
         {
-            InputDeviceInterface i = devices.Find(x =>
+            IInputDevice i = devices.Find(x =>
             {
                 BindingsFile.Device b = bf.FindDevice(x.ID().Name, x.ID().Instanceguid, x.ID().Productguid);
                 return b != null && b.Name.Equals(dv.Name);

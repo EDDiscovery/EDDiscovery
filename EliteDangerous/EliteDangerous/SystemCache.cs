@@ -106,7 +106,7 @@ namespace EliteDangerousCore
             {
                 dbsys = DB.SystemClassDB.FindEDSM(sys, conn: conn, useedsm: false);
 
-                if (useedsm && dbsys == null && (sys.id_edsm <= 0 || !sys.HasCoordinate || DateTime.UtcNow.Subtract(sys.UpdateDate).TotalDays > 7))
+                if (false && useedsm && dbsys == null && (sys.id_edsm <= 0 || !sys.HasCoordinate || DateTime.UtcNow.Subtract(sys.UpdateDate).TotalDays > 7))
                 {
                     dbsys = DB.SystemClassDB.FindEDSM(sys, conn: conn, useedsm: true);
                 }
@@ -139,7 +139,7 @@ namespace EliteDangerousCore
                 }
             }
 
-            return dbsys;
+            return sys;
         }
     }
 }

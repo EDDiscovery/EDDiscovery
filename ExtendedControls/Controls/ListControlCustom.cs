@@ -29,6 +29,10 @@ namespace ExtendedControls
     {
         // BackColor paints the whole control - set Transparent if you don't want this. (but its a fake transparent note).
 
+        public FlatStyle FlatStyle { get { return flatstyle; } set { SetFlatStyle(value); } }
+
+        // in all styles
+
         public List<string> Items { get { return items; } set           // allow items to be changed
             { items = value;
                 lbsys.Items.Clear();
@@ -36,18 +40,21 @@ namespace ExtendedControls
                 Invalidate(true); Update();
             } }
 
+        public List<Image> ImageItems { get { return imageitems; } set { imageitems = value; } }
+        public int ItemHeight { get { return itemheight; } set { itemheight = value; lbsys.ItemHeight = value; } }
+
+        // in non standard styles
+
         public bool FitToItemsHeight { get; set; } = true;                    // if set, move the border to integer of item height.
         public int ScrollBarWidth { get; set; } = 16;
-        public int ItemHeight { get; set; } = 20;
-        public FlatStyle FlatStyle { get { return flatstyle; } set { SetFlatStyle(value); } }
-        FlatStyle flatstyle = FlatStyle.System;
-
         public Color SelectionBackColor { get; set; } = Color.Gray;     // the area actually used (Not system)
         public Color BorderColor { get; set; } = Color.Red;             // not system
         public float GradientColorScaling { get; set; } = 0.5F;
         public Color ScrollBarColor { get; set; } = Color.LightGray;    // not system
         public Color ScrollBarButtonColor { get; set; } = Color.LightGray;    // not system
         public Color MouseOverBackgroundColor { get; set; } = Color.Silver;
+
+        // All modes
 
         public int SelectedIndex { get; set; } = -1;
 
@@ -60,8 +67,13 @@ namespace ExtendedControls
         public delegate void OnAnyOtherKeyPressed(object sender, KeyEventArgs e);
         public event OnAnyOtherKeyPressed OtherKeyPressed;
 
+        // privates
+
         private ListBox lbsys;
         private List<string> items;
+        private List<Image> imageitems;
+        private int itemheight = 20;
+        private FlatStyle flatstyle = FlatStyle.System;
 
         #region Implementation
 
@@ -79,6 +91,9 @@ namespace ExtendedControls
             lbsys = new ListBox();
             this.Controls.Add(lbsys);
             lbsys.SelectedIndexChanged += lbsys_SelectedIndexChanged;
+            lbsys.DrawItem += Lbsys_DrawItem;
+            lbsys.ItemHeight = itemheight;
+            lbsys.DrawMode = DrawMode.OwnerDrawFixed;
         }
 
         public void SetFlatStyle( FlatStyle v)
@@ -108,14 +123,14 @@ namespace ExtendedControls
             int items = (Items != null) ? Items.Count() : 0;
             itemslayoutestimatedon = items;
 
-            displayableitems = (ClientRectangle.Height-bordersize*2) / ItemHeight;            // number of items to display
+            displayableitems = (ClientRectangle.Height-bordersize*2) / itemheight;            // number of items to display
 
             if (items > 0 && displayableitems > items)
                 displayableitems = items;
 
             mainarea = new Rectangle(bordersize, bordersize, 
                             ClientRectangle.Width - bordersize * 2, 
-                            (FitToItemsHeight) ? (displayableitems * ItemHeight) : (ClientRectangle.Height - bordersize*2));
+                            (FitToItemsHeight) ? (displayableitems * itemheight) : (ClientRectangle.Height - bordersize*2));
             borderrect = mainarea;
             borderrect.Inflate(bordersize,bordersize);
             borderrect.Width--; borderrect.Height--;        // adjust to rect not area.
@@ -149,6 +164,7 @@ namespace ExtendedControls
 
             if (Items != null && itemslayoutestimatedon != Items.Count())  // item count changed, rework it out.
                 CalculateLayout();
+
             if (firstindex < 0)                                           // if invalid (at start)
             {
                 if (SelectedIndex == -1 || Items == null)                  // screen out null..
@@ -194,8 +210,17 @@ namespace ExtendedControls
 
             if (Items != null && Items.Count > 0)
             {
-                Rectangle pos = mainarea;
-                pos.Height = ItemHeight;
+                Rectangle totalarea = mainarea;     // total width area
+                totalarea.Height = itemheight;
+                Rectangle textarea = totalarea;     // where we draw text
+                Rectangle imagearea = totalarea;
+                if ( imageitems != null )           // if we have images, allocate space between the 
+                {
+                    int width = imageitems.Max(x => x.Width);
+                    textarea.X += width;
+                    imagearea.Width = width;
+                }
+
                 int offset = 0;
 
                 e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
@@ -211,12 +236,18 @@ namespace ExtendedControls
                         {
                             if (offset == focusindex)
                             {
-                                e.Graphics.FillRectangle(highlight, pos);
+                                e.Graphics.FillRectangle(highlight, totalarea);
                             }
 
-                            e.Graphics.DrawString(s, this.Font, textb, pos, f);
+                            if (imageitems != null && offset < imageitems.Count)
+                            {
+                                e.Graphics.DrawImage(imageitems[offset], imagearea);
+                            }
 
-                            pos.Y += ItemHeight;
+                            e.Graphics.DrawString(s, this.Font, textb, textarea, f);
+
+                            totalarea.Y += itemheight;
+                            textarea.Y = imagearea.Y = totalarea.Y;
                         }
 
                         offset++;
@@ -225,6 +256,31 @@ namespace ExtendedControls
 
                 e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.Default;
             }
+        }
+
+        private void Lbsys_DrawItem(object sender, DrawItemEventArgs e) // for system draw with ICON
+        {
+            e.DrawBackground();
+
+            using (Brush textb = new SolidBrush(this.ForeColor))
+            {
+                Rectangle textarea = e.Bounds;
+
+                if (imageitems != null)
+                {
+                    int width = imageitems.Max(x => x.Width);
+                    textarea.X += width;
+                    Rectangle bitmaparea = e.Bounds;
+                    bitmaparea.Width = width;
+
+                    if (e.Index < imageitems.Count)
+                        e.Graphics.DrawImage(imageitems[e.Index], bitmaparea);
+                }
+
+                e.Graphics.DrawString(items[e.Index],
+                    e.Font, textb, textarea, StringFormat.GenericDefault);
+            }
+            e.DrawFocusRectangle();
         }
 
 
@@ -243,7 +299,7 @@ namespace ExtendedControls
 
             if (items > 0)                                // if any items.. just to check
             {
-                int index = firstindex + e.Location.Y / ItemHeight;
+                int index = firstindex + e.Location.Y / itemheight;
 
                 if (index >= items)                 // due to the few pixels for border.  we let them have this
                     index = items - 1;
@@ -316,7 +372,7 @@ namespace ExtendedControls
                 return;
 
             int y = e.Location.Y;
-            int index = (y / ItemHeight) + firstindex;
+            int index = (y / itemheight) + firstindex;
             focusindex = index;
             Invalidate();
         }

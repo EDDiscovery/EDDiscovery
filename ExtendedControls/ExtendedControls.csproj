@@ -21,6 +21,8 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -29,6 +31,8 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -67,12 +71,6 @@
     <Compile Include="Forms\DraggableForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\FatalExceptionForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\FatalExceptionForm.Designer.cs">
-      <DependentUpon>FatalExceptionForm.cs</DependentUpon>
-    </Compile>
     <Compile Include="Forms\KeyForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -85,6 +83,7 @@
     <Compile Include="Controls\PanelSelectionList.Designer.cs">
       <DependentUpon>PanelSelectionList.cs</DependentUpon>
     </Compile>
+    <Compile Include="Themes\ITheme.cs" />
     <Compile Include="Themes\ThemeStandardEditor.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -190,9 +189,6 @@
     <EmbeddedResource Include="Controls\AutoCompleteTextBox.resx">
       <DependentUpon>AutoCompleteTextBox.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\FatalExceptionForm.resx">
-      <DependentUpon>FatalExceptionForm.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Forms\InfoForm.resx">
       <DependentUpon>InfoForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -251,6 +247,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\pinupwhite2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Stop.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\panels.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

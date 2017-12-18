@@ -114,13 +114,18 @@ namespace ExtendedControls
             ScrollTo(99999999);
         }
 
+        public void ToCurrent()
+        {
+            ScrollTo(scrollpos);
+        }
+
         private int ScrollTo(int newscrollpos )
         {
             //System.Diagnostics.Debug.WriteLine((Environment.TickCount % 10000).ToString("00000") + "  VS Scroll to");
             int maxy = 0;
             foreach (Control c in Controls)
             {
-                if (!(c is VScrollBarCustom))
+                if (!(c is VScrollBarCustom) && c.Visible)
                 {
                     int ynoscroll = c.Location.Y + scrollpos;
                     maxy = Math.Max(maxy, ynoscroll + c.Height + 4);

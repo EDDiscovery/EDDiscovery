@@ -25,7 +25,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace EDDiscovery.DB
+namespace EDDiscovery.UserControls
 {
     static class TargetHelpers
     {
@@ -36,11 +36,13 @@ namespace EDDiscovery.DB
         }
         public static void setTargetSystem(Object sender, EDDiscoveryForm _discoveryForm, String sn, Boolean prompt)
         {
+            Form senderForm = ((Control)sender)?.FindForm() ?? _discoveryForm;
+
             if (string.IsNullOrWhiteSpace(sn))
             {
                 if (prompt && TargetClass.IsTargetSet())      // if prompting, and target is set, ask for delete
                 {
-                    if (ExtendedControls.MessageBoxTheme.Show("Confirm deletion of target", "Delete a target", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK)
+                    if (ExtendedControls.MessageBoxTheme.Show(senderForm, "Confirm deletion of target", "Delete a target", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK)
                     {
                         TargetClass.ClearTarget();
                         _discoveryForm.NewTargetSet(sender);          // tells everyone who cares a new target was set
@@ -74,7 +76,7 @@ namespace EDDiscovery.DB
                     else
                     {
                         bool createbookmark = false;
-                        if ((prompt && ExtendedControls.MessageBoxTheme.Show("Make a bookmark on " + sc.name + " and set as target?", "Make Bookmark", MessageBoxButtons.OKCancel) == DialogResult.OK) || !prompt)
+                        if ((prompt && ExtendedControls.MessageBoxTheme.Show(senderForm, "Make a bookmark on " + sc.name + " and set as target?", "Make Bookmark", MessageBoxButtons.OKCancel) == DialogResult.OK) || !prompt)
                         {
                             createbookmark = true;
                         }
@@ -115,13 +117,15 @@ namespace EDDiscovery.DB
             _discoveryForm.NewTargetSet(sender);          // tells everyone who cares a new target was set
 
             if (msgboxtext != null && prompt)
-                ExtendedControls.MessageBoxTheme.Show(msgboxtext, "Create a target", MessageBoxButtons.OK);
+                ExtendedControls.MessageBoxTheme.Show(senderForm, msgboxtext, "Create a target", MessageBoxButtons.OK);
 
         }
 
         public static void showBookmarkForm(Object sender,
             EDDiscoveryForm discoveryForm, ISystem cursystem, BookmarkClass curbookmark, bool notedsystem)
         {
+            Form senderForm = ((Control)sender)?.FindForm() ?? discoveryForm;
+
             // try and find the associated bookmark..
             BookmarkClass bkmark = (curbookmark != null) ? curbookmark : BookmarkClass.bookmarks.Find(x => x.StarName != null && x.StarName.Equals(cursystem.name));
 
@@ -137,7 +141,7 @@ namespace EDDiscovery.DB
 
                 frm.InitialisePos(cursystem.x, cursystem.y, cursystem.z);
                 frm.NotedSystem(cursystem.name, note, noteid == targetid);       // note may be passed in null
-                frm.ShowDialog();
+                frm.ShowDialog(senderForm);
 
                 if ((frm.IsTarget && targetid != noteid) || (!frm.IsTarget && targetid == noteid)) // changed..
                 {
@@ -168,7 +172,7 @@ namespace EDDiscovery.DB
                     frm.Update(regionmarker ? bkmark.Heading : bkmark.StarName, note, bkmark.Note, tme.ToString(), regionmarker, targetid == bkmark.id);
                 }
 
-                DialogResult res = frm.ShowDialog();
+                DialogResult res = frm.ShowDialog(senderForm);
 
                 if (res == DialogResult.OK)
                 {

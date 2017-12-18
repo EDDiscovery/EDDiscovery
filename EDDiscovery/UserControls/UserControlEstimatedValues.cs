@@ -32,24 +32,21 @@ namespace EDDiscovery.UserControls
 {
     public partial class UserControlEstimatedValues : UserControlCommonBase
     {
-        private EDDiscoveryForm _discoveryForm;
-        private UserControlCursorType uctg;
         private HistoryEntry last_he = null;
 
         public UserControlEstimatedValues()
         {
             InitializeComponent();
+            var corner = dataGridViewEstimatedValues.TopLeftHeaderCell; // work around #1487
         }
 
-        public override void Init(EDDiscoveryForm ed, UserControlCursorType thc, int vn) //0=primary, 1 = first windowed version, etc
+        public override void Init()
         {
-            _discoveryForm = ed;
-            uctg = thc;
             uctg.OnTravelSelectionChanged += Display;      
-            ed.OnNewEntry += NewEntry;
+            discoveryform.OnNewEntry += NewEntry;
         }
 
-        public override void ChangeCursorType(UserControlCursorType thc)
+        public override void ChangeCursorType(IHistoryCursor thc)
         {
             uctg.OnTravelSelectionChanged -= Display;
             uctg = thc;
@@ -59,12 +56,12 @@ namespace EDDiscovery.UserControls
         public override void Closing()
         {
             uctg.OnTravelSelectionChanged -= Display;
-            _discoveryForm.OnNewEntry -= NewEntry;
+            discoveryform.OnNewEntry -= NewEntry;
         }
 
         public override void InitialDisplay()
         {
-            Display(uctg.GetCurrentHistoryEntry, _discoveryForm.history);
+            Display(uctg.GetCurrentHistoryEntry, discoveryform.history);
         }
 
         public void NewEntry(HistoryEntry he, HistoryList hl)               // called when a new entry is made.. check to see if its a scan update
@@ -89,7 +86,7 @@ namespace EDDiscovery.UserControls
 
         void DrawSystem()   // draw last_sn, last_he
         {
-            dataGridViewNearest.Rows.Clear();
+            dataGridViewEstimatedValues.Rows.Clear();
 
             if (last_he == null)
             {
@@ -97,7 +94,7 @@ namespace EDDiscovery.UserControls
                 return;
             }
 
-            StarScan.SystemNode last_sn = _discoveryForm.history.starscan.FindSystem(last_he.System, true);
+            StarScan.SystemNode last_sn = discoveryform.history.starscan.FindSystem(last_he.System, true);
 
             SetControlText((last_sn == null) ? "No Scan" : ("Estimated Scan Values for " + last_sn.system.name));
 
@@ -113,10 +110,10 @@ namespace EDDiscovery.UserControls
                 foreach(StarScan.ScanNode sn in all_nodes)
                 {
                     if ( sn.ScanData != null && sn.ScanData.BodyName != null )
-                        dataGridViewNearest.Rows.Add(new object[] { sn.ScanData.BodyName, sn.ScanData.EstimatedValue() });
+                        dataGridViewEstimatedValues.Rows.Add(new object[] { sn.ScanData.BodyName, sn.ScanData.EstimatedValue });
                 }
 
-                dataGridViewNearest.Sort(this.EstValue, ListSortDirection.Descending);
+                dataGridViewEstimatedValues.Sort(this.EstValue, ListSortDirection.Descending);
             }
         }
 

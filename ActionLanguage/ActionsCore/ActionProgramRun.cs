@@ -208,6 +208,12 @@ namespace ActionLanguage
         {
             while (up-- > 0)
             {
+                if (execlevel == 0)
+                {
+                    ReportError("Nested program level error, tring to move up while on level 0");
+                    return true;
+                }
+
                 if (IsExecutingType(ActionBase.ActionType.Do))                // DO needs a while at level -1..
                 {
                     if (action != null && action.Type == ActionBase.ActionType.While)

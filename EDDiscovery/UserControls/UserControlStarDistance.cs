@@ -32,21 +32,16 @@ namespace EDDiscovery.UserControls
 {
     public partial class UserControlStarDistance : UserControlCommonBase
     {
-        private EDDiscoveryForm _discoveryForm;
-        private UserControlCursorType uctg;
         private StarDistanceComputer computer;
 
         public UserControlStarDistance()
         {
             InitializeComponent();
+            var corner = dataGridViewNearest.TopLeftHeaderCell; // work around #1487
         }
 
-        public override void Init(EDDiscoveryForm ed, UserControlCursorType thc, int vn) //0=primary, 1 = first windowed version, etc
+        public override void Init()
         {
-            _discoveryForm = ed;
-            uctg = thc;
-            uctg.OnTravelSelectionChanged += Uctg_OnTravelSelectionChanged;
-
             computer = new StarDistanceComputer();
 
             HistoryEntry he = uctg.GetCurrentHistoryEntry;      // does our UCTG have a system selected?
@@ -56,9 +51,11 @@ namespace EDDiscovery.UserControls
                 //System.Diagnostics.Debug.WriteLine("Star grid started, uctg selected, ask");
                 computer.CalculateClosestSystems(he.System, (s, d) => BeginInvoke((MethodInvoker)delegate { NewStarListComputed(s, d); }));     // hook here, force closes system update
             }
+
+            uctg.OnTravelSelectionChanged += Uctg_OnTravelSelectionChanged;
         }
 
-        public override void ChangeCursorType(UserControlCursorType thc)
+        public override void ChangeCursorType(IHistoryCursor thc)
         {
             uctg.OnTravelSelectionChanged -= Uctg_OnTravelSelectionChanged;
             uctg = thc;
@@ -88,7 +85,7 @@ namespace EDDiscovery.UserControls
         {
             System.Diagnostics.Debug.Assert(Application.MessageLoop);       // check!
 
-            _discoveryForm.history.CalculateSqDistances(list, sys.x, sys.y, sys.z, 50, true);   // add on any history list systems
+            discoveryform.history.CalculateSqDistances(list, sys.x, sys.y, sys.z, 50, true);   // add on any history list systems
 
             FillGrid(sys.name, list);
         }
@@ -103,7 +100,7 @@ namespace EDDiscovery.UserControls
                 SetControlText("Closest systems from " + name);
                 foreach (KeyValuePair<double, ISystem> tvp in csl)
                 {
-                    int visits = _discoveryForm.history.GetVisitsCount(tvp.Value.name, tvp.Value.id_edsm);
+                    int visits = discoveryform.history.GetVisitsCount(tvp.Value.name, tvp.Value.id_edsm);
                     object[] rowobj = { tvp.Value.name, Math.Sqrt(tvp.Key).ToString("0.00"), visits.ToStringInvariant()};       // distances are stored squared for speed, back to normal.
                     int rowindex = dataGridViewNearest.Rows.Add(rowobj);
                     dataGridViewNearest.Rows[rowindex].Tag = tvp.Value;
@@ -143,8 +140,6 @@ namespace EDDiscovery.UserControls
 
         private void addToTrilaterationToolStripMenuItem1_Click(object sender, EventArgs e)
         {
-            TrilaterationControl tctrl = _discoveryForm.trilaterationControl;
-
             IEnumerable<DataGridViewRow> selectedRows = dataGridViewNearest.SelectedCells.Cast<DataGridViewCell>()
                                                                         .Select(cell => cell.OwningRow)
                                                                         .Distinct()
@@ -155,8 +150,7 @@ namespace EDDiscovery.UserControls
             foreach (DataGridViewRow r in selectedRows)
             {
                 sysName = r.Cells[0].Value.ToString();
-
-                tctrl.AddSystemToDataGridViewDistances(sysName);
+                discoveryform.NewTriLatStars(new List<string>() { sysName }, false);
             }
 
             this.Cursor = Cursors.Default;
@@ -175,7 +169,7 @@ namespace EDDiscovery.UserControls
 
             if (!edsm.ShowSystemInEDSM(rightclicksystem.name, id_edsm))
             {
-                ExtendedControls.MessageBoxTheme.Show("System could not be found - has not been synched or EDSM is unavailable");
+                ExtendedControls.MessageBoxTheme.Show(FindForm(), "System could not be found - has not been synched or EDSM is unavailable");
             }
 
             this.Cursor = Cursors.Default;

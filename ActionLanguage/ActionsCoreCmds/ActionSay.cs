@@ -34,6 +34,7 @@ namespace ActionLanguage
         public static string globalvarspeechvoice = "SpeechVoice";
         public static string globalvarspeecheffects = "SpeechEffects";
         public static string globalvarspeechculture = "SpeechCulture";
+        public static string globalvarspeechpriority = "SpeechPriority";
 
         static string volumename = "Volume";
         static string voicename = "Voice";
@@ -99,7 +100,7 @@ namespace ActionLanguage
                         vars
                         );
 
-            if (cfg.ShowDialog(parent) == DialogResult.OK)
+            if (cfg.ShowDialog(parent.FindForm()) == DialogResult.OK)
             {
                 ConditionVariables cond = new ConditionVariables(cfg.Effects);// add on any effects variables (and may add in some previous variables, since we did not purge
                 cond.SetOrRemove(cfg.Wait, waitname, "1");
@@ -154,7 +155,10 @@ namespace ActionLanguage
                 if (errlist == null)
                 {
                     bool wait = vars.GetInt(waitname, 0) != 0;
-                    AudioQueue.Priority priority = AudioQueue.GetPriority(vars.GetString(priorityname, "Normal"));
+
+                    string prior = (vars.Exists(priorityname) && vars[priorityname].Length > 0) ? vars[priorityname] : (ap.VarExist(globalvarspeechpriority) ? ap[globalvarspeechpriority] : "Normal");
+                    AudioQueue.Priority priority = AudioQueue.GetPriority(prior);
+
                     string start = vars.GetString(startname, checklen: true);
                     string finish = vars.GetString(finishname, checklen: true);
                     string voice = (vars.Exists(voicename) && vars[voicename].Length>0)? vars[voicename] : (ap.VarExist(globalvarspeechvoice) ? ap[globalvarspeechvoice] : "Default");
@@ -169,7 +173,7 @@ namespace ActionLanguage
 
                     int queuelimitms = vars.GetInt(queuelimit, 0);
 
-                    string culture = ( vars.Exists(culturename) && vars[culturename].Length>0 ) ? vars[culturename] : (ap.VarExist(globalvarspeechculture) ? ap[globalvarspeechculture] : "Default");
+                    string culture = (vars.Exists(culturename) && vars[culturename].Length > 0) ? vars[culturename] : (ap.VarExist(globalvarspeechculture) ? ap[globalvarspeechculture] : "Default");
 
                     bool literal = vars.GetInt(literalname, 0) != 0;
                     bool dontspeak = vars.GetInt(dontspeakname, 0) != 0;

@@ -240,9 +240,23 @@ namespace EliteDangerousCore
                 count = new int[ilist.Length];
                 for (int i = 0; i < ilist.Length; i++)
                 {
-                    ingredients[i] = ilist[i].Substring(1);
-                    count[i] = ilist[i][0] - '0';       // should be good enough
+                    //Thanks to 10Fe and 10 Ni to synthesis a limpet we can no longer assume the first character is a number and the rest is the material
+                    //Maybe worth changing the class to pass ingredients and numbers as separate lists but not today...
+                    string s = new string(ilist[i].TakeWhile(c => !Char.IsLetter(c)).ToArray());
+                    ingredients[i] = ilist[i].Substring(s.Length);
+                    count[i] = int.Parse(s);
                 }
+            }
+        }
+
+        public class SynthesisRecipe : Recipe
+        {
+            public string level;
+
+            public SynthesisRecipe(string n, string l, string indg)
+                : base(n, indg)
+            {
+                level = l;
             }
         }
 

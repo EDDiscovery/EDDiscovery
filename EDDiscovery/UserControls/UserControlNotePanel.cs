@@ -30,10 +30,6 @@ namespace EDDiscovery.UserControls
 {
     public partial class UserControlNotePanel : UserControlCommonBase
     {
-        private EDDiscoveryForm discoveryform;
-        private UserControlCursorType uctg;
-
-        private int displaynumber = 0;
         private string DbSave { get { return "NotePanel" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
 
         HistoryEntry lastHE;
@@ -56,19 +52,15 @@ namespace EDDiscovery.UserControls
             InitializeComponent();
         }
 
-        public override void Init(EDDiscoveryForm ed, UserControlCursorType thc, int vn) //0=primary, 1 = first windowed version, etc
+        public override void Init()
         {
             config = (Configuration)SQLiteDBClass.GetSettingInt(DbSave + "Config", (int)config);
 
-            discoveryform = ed;
-            uctg = thc;
-            displaynumber = vn;
+            displayfont = discoveryform.theme.GetFont;
 
             discoveryform.OnHistoryChange += Display;
             discoveryform.OnNewEntry += NewEntry;
             uctg.OnTravelSelectionChanged += DisplaySelected;
-
-            displayfont = discoveryform.theme.GetFont;
         }
 
         public override void InitialDisplay()
@@ -76,7 +68,7 @@ namespace EDDiscovery.UserControls
             DisplaySelected(uctg.GetCurrentHistoryEntry, discoveryform.history);
         }
 
-        public override void ChangeCursorType(UserControlCursorType thc)
+        public override void ChangeCursorType(IHistoryCursor thc)
         {
             uctg.OnTravelSelectionChanged -= DisplaySelected;
             uctg = thc;

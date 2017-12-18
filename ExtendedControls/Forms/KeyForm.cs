@@ -33,14 +33,18 @@ namespace ExtendedControls
     public partial class KeyForm : DraggableForm
     {
         public string KeyList { get { return textBoxKeys.Text; } }
-        public string ProcessSelected { get { return textBoxSendTo.Text; } }
-        public int DefaultDelay { get { int t; return textBoxDelay.Text.InvariantParse(out t) ? t : 50; } }
+        public string ProcessSelected { get { return textBoxSendTo.Text.Equals(DefaultProcessID)? "" :textBoxSendTo.Text; } }    // Default means program default hence "", else target
+        public int DefaultDelay { get { int t; return textBoxDelay.Text.InvariantParse(out t) ? t : DefaultDelayID; } }     // -1 means program default, else number
+
+        public const int DefaultDelayID = -1;
 
         KeyFormMessageFilter keyformmessagefilter;
         string basekeystroke = "";
         
         int curinsertpoint = 0;
         string seperator;
+        const string DefaultProcessID = "Default";
+        BaseUtils.EnhancedSendKeysParser.IAdditionalKeyParser additionalkeyparser;
 
         public KeyForm()
         {
@@ -52,8 +56,14 @@ namespace ExtendedControls
 
         protected override bool AllowResize { get { return false; } }   // Tell dragger no resizing.
 
-        public void Init(Icon i , bool showprocess, string separ ,string keystring = "", string process = "" , 
-                        List<string> additionalkeys = null , int defdelay = 50 , bool allowkeysedit = false)
+        public void Init(Icon i, bool showprocess, 
+                                string separ = " ",   // and separ between entries
+                                string keystring = "", // current key string
+                                string process = "",  // empty means program default, return empty back
+                                int defdelay = 50,     // -1 means program default, return -1 back
+                                bool allowkeysedit = false,
+                                List<string> additionalkeys = null,
+                                BaseUtils.EnhancedSendKeysParser.IAdditionalKeyParser parser = null)
         {
             if ( i != null )
                 Icon = i;
@@ -63,13 +73,16 @@ namespace ExtendedControls
             textBoxKeys.Text = keystring;
             curinsertpoint = keystring.Length;
 
-            textBoxSendTo.Text = process.Alt(BaseUtils.EnhancedSendKeys.CurrentWindow);
-            textBoxDelay.Text = textBoxNextDelay.Text = defdelay.ToStringInvariant();
+            textBoxSendTo.Text = process.Alt(DefaultProcessID);
+            textBoxNextDelay.Text = textBoxDelay.Text = defdelay != DefaultDelayID ? defdelay.ToStringInvariant() : "Default";
             radioButtonPress.Checked = true;
 
             if ( additionalkeys!=null )
                 comboBoxKeySelector.Items.AddRange(additionalkeys);
             comboBoxKeySelector.Items.AddRange(KeyObjectExtensions.KeyListString());
+
+            additionalkeyparser = parser;
+
             //System.Diagnostics.Debug.WriteLine(String.Join(",",KeyObjectExtensions.VKeyList()));
             comboBoxKeySelector.Text = "";
             comboBoxKeySelector.SelectedIndexChanged += new System.EventHandler(this.comboBoxKeySelector_SelectedIndexChanged);
@@ -92,7 +105,7 @@ namespace ExtendedControls
             //System.Diagnostics.Debug.WriteLine("T" + textBoxKeys.Text + " at " + curinsertpoint + " >" + textBoxSendTo.Text);
 
             bool border = true;
-            ThemeableForms theme = ThemeableFormsInstance.Instance;
+            ITheme theme = ThemeableFormsInstance.Instance;
             if (theme != null)  // paranoid
             {
                 border = theme.ApplyToForm(this);
@@ -199,14 +212,14 @@ namespace ExtendedControls
             //System.Diagnostics.Debug.WriteLine("T" + textBoxKeys.Text + " at " + curinsertpoint + " " + fullname);
 
             textBoxNextDelay.ReadOnly = (curinsertpoint == 0);
-            int nextdelay = DefaultDelay;
-            textBoxNextDelay.Text.InvariantParse(out nextdelay);
+
+            int nextdelay = textBoxNextDelay.Text.InvariantParseInt(DefaultDelay);      // if its an int, use it, else use default delay
 
             string res = textBoxKeys.Text.Substring(0, curinsertpoint);
 
             string partstring = "";
 
-            if (DefaultDelay != nextdelay)
+            if (DefaultDelay != nextdelay)              // delay is different to default, so it must be signalled
                 partstring += "[" + nextdelay.ToStringInvariant() + "]";
 
             if (radioButtonDown.Checked)
@@ -292,17 +305,17 @@ namespace ExtendedControls
 
             if (target.HasChars())
             {
-                if (target == BaseUtils.EnhancedSendKeys.CurrentWindow)
-                    MessageBoxTheme.Show("Name a process to test sending keys");
+                if (target == BaseUtils.EnhancedSendKeys.CurrentWindow || target.Equals(DefaultProcessID))
+                    MessageBoxTheme.Show(this, "Name a process to test sending keys");
                 else
                 {
-                    string err = BaseUtils.EnhancedSendKeys.Send(textBoxKeys.Text, DefaultDelay, 2 , 2, textBoxSendTo.Text);
+                    string err = BaseUtils.EnhancedSendKeys.SendToProcess(textBoxKeys.Text, DefaultDelay <= DefaultDelayID ? 10 : DefaultDelay, 2 , 2, textBoxSendTo.Text, additionalkeyparser);
                     if (err.Length > 0)
-                        MessageBoxTheme.Show("Error " + err + " - check entry");
+                        MessageBoxTheme.Show(this, "Error " + err + " - check entry");
                 }
             }
             else
-                MessageBoxTheme.Show("No process names to send keys to");
+                MessageBoxTheme.Show(this, "No process names to send keys to");
         }
 
         private void textBox_Enter(object sender, EventArgs e)

@@ -81,6 +81,7 @@ namespace EliteDangerousCore.EDSM
 
             query += "] } ";
 
+            MimeType = "application/json; charset=utf-8";
             var response = RequestPost("{ \"data\": " + query + " }", "api-v1/submit-distances", handleException: true);
             if (response.Error)
                 return null;
@@ -182,7 +183,7 @@ namespace EliteDangerousCore.EDSM
         public string RequestDistances(string date)
         {
             string query;
-            query = "?showId=1 & submitted=1 & startdatetime=" + HttpUtility.UrlEncode(date);
+            query = "?showId=1&submitted=1&startdatetime=" + HttpUtility.UrlEncode(date);
 
             var response = RequestGet("api-v1/distances" + query, handleException: true);
             if (response.Error)
@@ -269,8 +270,16 @@ namespace EliteDangerousCore.EDSM
                     break;
                 }
 
-                updates += SystemClassEDSM.ParseEDSMUpdateSystemsString(json, ref lstsyst, ref outoforder, false, cancelRequested, reportProgress, false);
-                lstsystdate += TimeSpan.FromHours(12);
+                long cnt = SystemClassEDSM.ParseEDSMUpdateSystemsString(json, ref lstsyst, ref outoforder, false, cancelRequested, reportProgress, false);
+                updates += cnt;
+                if (cnt < 100)
+                {
+                    lstsystdate += TimeSpan.FromHours(12);
+                }
+                else
+                {
+                    lstsystdate = DateTime.Parse(lstsyst, CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal | DateTimeStyles.AdjustToUniversal);
+                }
             }
             logLine($"System download complete");
 
@@ -341,7 +350,7 @@ namespace EliteDangerousCore.EDSM
                 return null;
 
             string query;
-            query = "set-comment?systemName=" + HttpUtility.UrlEncode(systemName) + "&commanderName=" + HttpUtility.UrlEncode(commanderName) + "&apiKey=" + apiKey + "&comment=" + HttpUtility.UrlEncode(note);
+            query = "systemName=" + HttpUtility.UrlEncode(systemName) + "&commanderName=" + HttpUtility.UrlEncode(commanderName) + "&apiKey=" + apiKey + "&comment=" + HttpUtility.UrlEncode(note);
 
             if (edsmid > 0)
             {
@@ -349,7 +358,8 @@ namespace EliteDangerousCore.EDSM
                 query += "&systemId=" + edsmid;
             }
 
-            var response = RequestGet("api-logs-v1/" + query, handleException: true);
+            MimeType = "application/x-www-form-urlencoded";
+            var response = RequestPost(query, "api-logs-v1/set-comment", handleException: true);
 
             if (response.Error)
                 return null;
@@ -363,10 +373,11 @@ namespace EliteDangerousCore.EDSM
                 return null;
 
             string query;
-            query = "set-log?systemName=" + HttpUtility.UrlEncode(systemName) + "&commanderName=" + HttpUtility.UrlEncode(commanderName) + "&apiKey=" + apiKey +
+            query = "systemName=" + HttpUtility.UrlEncode(systemName) + "&commanderName=" + HttpUtility.UrlEncode(commanderName) + "&apiKey=" + apiKey +
                  "&fromSoftware=" + HttpUtility.UrlEncode(fromSoftware) + "&fromSoftwareVersion=" + HttpUtility.UrlEncode(fromSoftwareVersion) +
                   "&dateVisited=" + HttpUtility.UrlEncode(dateVisitedutc.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture));
-            var response = RequestGet("api-logs-v1/" + query, handleException: true);
+            MimeType = "application/x-www-form-urlencoded";
+            var response = RequestPost(query, "api-logs-v1/set-log", handleException: true);
 
             if (response.Error)
                 return null;
@@ -380,12 +391,13 @@ namespace EliteDangerousCore.EDSM
                 return null;
 
             string query;
-            query = "set-log?systemName=" + HttpUtility.UrlEncode(systemName) + "&commanderName=" + HttpUtility.UrlEncode(commanderName) + "&apiKey=" + apiKey +
+            query = "systemName=" + HttpUtility.UrlEncode(systemName) + "&commanderName=" + HttpUtility.UrlEncode(commanderName) + "&apiKey=" + apiKey +
                  "&fromSoftware=" + HttpUtility.UrlEncode(fromSoftware) + "&fromSoftwareVersion=" + HttpUtility.UrlEncode(fromSoftwareVersion) +
                  "&x=" + HttpUtility.UrlEncode(x.ToString(CultureInfo.InvariantCulture)) + "&y=" + HttpUtility.UrlEncode(y.ToString(CultureInfo.InvariantCulture)) + "&z=" + HttpUtility.UrlEncode(z.ToString(CultureInfo.InvariantCulture)) +
                   "&dateVisited=" + HttpUtility.UrlEncode(dateVisitedutc.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture));
 
-            var response = RequestGet("api-logs-v1/" + query, handleException: true);
+            MimeType = "application/x-www-form-urlencoded";
+            var response = RequestPost(query, "api-logs-v1/set-log", handleException: true);
 
             if (response.Error)
                 return null;
@@ -393,18 +405,20 @@ namespace EliteDangerousCore.EDSM
             return response.Body;
         }
 
-        public bool SendTravelLog(string name, DateTime timeutc, bool coord, double x, double y, double z, out string error, out bool firstdiscover, out int edsmid)
+        public bool SendTravelLog(string name, DateTime timeutc, bool coord, double x, double y, double z, out string error, out int errno, out bool firstdiscover, out int edsmid)
         {
             firstdiscover = false;
             edsmid = 0;
 
             if (!IsApiKeySet)
             {
+                errno = -1;
                 error = "EDSM API Key not set";
                 return false;
             }
 
             error = "";
+            errno = 0;
 
             string json = null;
 
@@ -417,6 +431,7 @@ namespace EliteDangerousCore.EDSM
             }
             catch (Exception ex)
             {
+                errno = -1;
                 error = "EDSM sync error, connection to server failed";
                 System.Diagnostics.Trace.WriteLine("EDSM Sync error:" + ex.ToString());
             }
@@ -437,7 +452,8 @@ namespace EliteDangerousCore.EDSM
                 }
                 else
                 {
-                    error = "EDSM sync ERROR:" + msgnum.ToString() + ":" + msgstr;
+                    error = "EDSM sync error submitting system (" + name + "):" + msgnum.ToString() + ":" + msgstr;
+                    errno = msgnum;
                     System.Diagnostics.Trace.WriteLine("Error sync:" + msgnum.ToString() + " : " + name);
                 }
             }
@@ -499,7 +515,8 @@ namespace EliteDangerousCore.EDSM
                         ISystem sc = SystemClassDB.GetSystem(id, cn, SystemClassDB.SystemIDType.EdsmId);
                         if (sc == null)
                         {
-                            sc = GetSystemsByName(name).FirstOrDefault(s => s.id_edsm == id);
+                            if (DateTime.UtcNow.Subtract(etutc).TotalHours < 6) // Avoid running into the rate limit
+                                sc = GetSystemsByName(name)?.FirstOrDefault(s => s.id_edsm == id);
 
                             if (sc == null)
                             {
@@ -710,7 +727,7 @@ namespace EliteDangerousCore.EDSM
             string encodedSys = HttpUtility.UrlEncode(sysName);
 
             string query = "bodies?systemName=" + sysName;
-            var response = RequestGet("api-v1/" + query, handleException: true);
+            var response = RequestGet("api-system-v1/" + query, handleException: true);
             if (response.Error)
                 return null;
 
@@ -825,7 +842,7 @@ namespace EliteDangerousCore.EDSM
                     jout["Radius"] = jo["radius"].Double() * 1000.0; // km -> metres
                     jout["PlanetClass"] = EDSMPlanet2JournalName(jo["subType"].Str());
                     if (jo["terraformingState"] != null) jout["TerraformState"] = jo["terraformingState"];
-                    if (jo["surfacePressure"] != null) jout["SurfacePressure"] = jo["surfacePressure"].Double() * 101325; // atmospheres -> pascals
+                    if (jo["surfacePressure"] != null) jout["SurfacePressure"] = jo["surfacePressure"].Double() * JournalScan.oneAtmosphere_Pa; // atmospheres -> pascals
                     if (jout["TerraformState"].Str() == "Candidate for terraforming")
                         jout["TerraformState"] = "Terraformable";
                 }
@@ -853,11 +870,11 @@ namespace EliteDangerousCore.EDSM
                 jout["Rings"] = jring;
             }
 
-            if (!jo["Materials"].Empty())  // Check if matieals has null
+            if (!jo["materials"].Empty())  // Check if materials has null
             {
                 Dictionary<string, double?> mats;
                 Dictionary<string, double> mats2;
-                mats = jo["Materials"]?.ToObject<Dictionary<string, double?>>();
+                mats = jo["materials"]?.ToObject<Dictionary<string, double?>>();
                 mats2 = new Dictionary<string, double>();
 
                 foreach (string key in mats.Keys)
@@ -937,7 +954,7 @@ namespace EliteDangerousCore.EDSM
                 return null;
 
             string query;
-            query = "set-ranks?commanderName=" + HttpUtility.UrlEncode(commanderName) + "&apiKey=" + apiKey;
+            query = "commanderName=" + HttpUtility.UrlEncode(commanderName) + "&apiKey=" + apiKey;
             query = query + "&Combat=" + combat_rank.ToString() + ";" + combat_progress.ToString();
             query = query + "&Trade=" + trade_rank.ToString() + ";" + trade_progress.ToString();
             query = query + "&Explore=" + explore_rank.ToString() + ";" + explore_progress.ToString();
@@ -946,7 +963,8 @@ namespace EliteDangerousCore.EDSM
             query = query + "&Empire=" + empire_rank.ToString() + ";" + empire_progress.ToString();
 
 
-            var response = RequestGet("api-commander-v1/" + query, handleException: true);
+            MimeType = "application/x-www-form-urlencoded";
+            var response = RequestPost(query, "api-commander-v1/set-ranks", handleException: true);
 
             if (response.Error)
                 return null;
@@ -960,12 +978,13 @@ namespace EliteDangerousCore.EDSM
                 return null;
 
             string query;
-            query = "set-credits?commanderName=" + HttpUtility.UrlEncode(commanderName) + "&apiKey=" + apiKey;
+            query = "commanderName=" + HttpUtility.UrlEncode(commanderName) + "&apiKey=" + apiKey;
             query = query + "&balance=" + credits.ToString();
             query = query + "&loan=" + loan.ToString();
 
 
-            var response = RequestGet("api-commander-v1/" + query, handleException: true);
+            MimeType = "application/x-www-form-urlencoded";
+            var response = RequestPost(query, "api-commander-v1/set-credits", handleException: true);
 
             if (response.Error)
                 return null;
@@ -981,11 +1000,12 @@ namespace EliteDangerousCore.EDSM
                 jo[kvp.Key] = kvp.Value;
             }
 
-            string query = "set-materials?commanderName=" + HttpUtility.UrlEncode(commanderName) + "&apiKey=" + apiKey;
+            string query = "commanderName=" + HttpUtility.UrlEncode(commanderName) + "&apiKey=" + apiKey;
             query += "&type=materials";
             query += "&values=" + HttpUtility.UrlEncode(jo.ToString());
 
-            var response = RequestGet("api-commander-v1/" + query, handleException: true);
+            MimeType = "application/x-www-form-urlencoded";
+            var response = RequestPost(query, "api-commander-v1/set-materials", handleException: true);
 
             if (response.Error)
                 return null;
@@ -1001,11 +1021,12 @@ namespace EliteDangerousCore.EDSM
                 jo[kvp.Key] = kvp.Value;
             }
 
-            string query = "set-materials?commanderName=" + HttpUtility.UrlEncode(commanderName) + "&apiKey=" + apiKey;
+            string query = "commanderName=" + HttpUtility.UrlEncode(commanderName) + "&apiKey=" + apiKey;
             query += "&type=data";
             query += "&values=" + HttpUtility.UrlEncode(jo.ToString());
 
-            var response = RequestGet("api-commander-v1/" + query, handleException: true);
+            MimeType = "application/x-www-form-urlencoded";
+            var response = RequestPost(query, "api-commander-v1/set-materials", handleException: true);
 
             if (response.Error)
                 return null;
@@ -1021,11 +1042,12 @@ namespace EliteDangerousCore.EDSM
                 jo[kvp.Key] = kvp.Value;
             }
 
-            string query = "set-materials?commanderName=" + HttpUtility.UrlEncode(commanderName) + "&apiKey=" + apiKey;
+            string query = "commanderName=" + HttpUtility.UrlEncode(commanderName) + "&apiKey=" + apiKey;
             query += "&type=cargo";
             query += "&values=" + HttpUtility.UrlEncode(jo.ToString());
 
-            var response = RequestGet("api-commander-v1/" + query, handleException: true);
+            MimeType = "application/x-www-form-urlencoded";
+            var response = RequestPost(query, "api-commander-v1/set-materials", handleException: true);
 
             if (response.Error)
                 return null;
@@ -1039,7 +1061,7 @@ namespace EliteDangerousCore.EDSM
                 return null;
 
             string query;
-            query = "update-ship?commanderName=" + HttpUtility.UrlEncode(commanderName) + "&apiKey=" + apiKey;
+            query = "commanderName=" + HttpUtility.UrlEncode(commanderName) + "&apiKey=" + apiKey;
             query = query + "&shipId=" + shipId.ToString();
             query = query + "&type=" + Uri.EscapeDataString(type);
 
@@ -1070,7 +1092,8 @@ namespace EliteDangerousCore.EDSM
                 query += "&linkToCoriolis=" + Uri.EscapeDataString(coriolisurl);
             }
 
-            var response = RequestGet("api-commander-v1/" + query, handleException: true);
+            MimeType = "application/x-www-form-urlencoded";
+            var response = RequestPost(query, "api-commander-v1/update-ship", handleException: true);
 
             if (response.Error)
                 return null;
@@ -1084,12 +1107,11 @@ namespace EliteDangerousCore.EDSM
                 return null;
 
             string query;
-            query = "set-ship-id?commanderName=" + HttpUtility.UrlEncode(commanderName) + "&apiKey=" + apiKey;
+            query = "commanderName=" + HttpUtility.UrlEncode(commanderName) + "&apiKey=" + apiKey;
             query = query + "&shipId=" + shipId.ToString();
 
-
-
-            var response = RequestGet("api-commander-v1/" + query, handleException: true);
+            MimeType = "application/x-www-form-urlencoded";
+            var response = RequestPost(query, "api-commander-v1/set-ship-id", handleException: true);
 
             if (response.Error)
                 return null;
@@ -1113,28 +1135,28 @@ namespace EliteDangerousCore.EDSM
             {
                 if (!si.Equals(LastShipInfo))   // if we are sending new ship info..
                 {
-                    System.Diagnostics.Debug.WriteLine("Update EDSM with ship info" + si.ID + " " + si.ShipType + " " + cargo);
+                    System.Diagnostics.Trace.WriteLine("Update EDSM with ship info " + si.ID + " " + si.ShipType + " " + cargo);
                     CommanderUpdateShip(si.ID, si.ShipType.Alt("Unknown"), si, cargo);
                     LastShipInfo = si;
                 }
 
                 if (LastShipID != sicurrent.ID) // if we have a new current ship
                 {
-                    System.Diagnostics.Debug.WriteLine("Update EDSM with current ship" + sicurrent.ID);
+                    System.Diagnostics.Trace.WriteLine("Update EDSM with current ship " + sicurrent.ID);
                     CommanderSetCurrentShip(sicurrent.ID);
                     LastShipID = sicurrent.ID;
                 }
 
                 if (LastEDSMCredits != cash)    // if our cash has changed..
                 {
-                    System.Diagnostics.Debug.WriteLine("Update EDSM with credits" + cash);
+                    System.Diagnostics.Trace.WriteLine("Update EDSM with credits " + cash);
                     SetCredits(cash, loan);
                     LastEDSMCredits = cash;
                 }
 
                 if ( progress != null && rank != null && (!Object.ReferenceEquals(progress,LastProgress) || !Object.ReferenceEquals(rank,LastRank)) )
                 {
-                    System.Diagnostics.Debug.WriteLine("Update EDSM with ranks");
+                    System.Diagnostics.Trace.WriteLine("Update EDSM with ranks");
                     SetRanks((int)rank.Combat, progress.Combat, (int)rank.Trade, progress.Trade, (int)rank.Explore, progress.Explore, (int)rank.CQC, progress.CQC, (int)rank.Federation, progress.Federation, (int)rank.Empire, progress.Empire);
                     LastProgress = progress;
                     LastRank = rank;
@@ -1142,7 +1164,7 @@ namespace EliteDangerousCore.EDSM
 
                 if (matcommod != null && matcommod != LastMats)
                 {
-                    System.Diagnostics.Debug.WriteLine("Update EDSM with materials and cargo");
+                    System.Diagnostics.Trace.WriteLine("Update EDSM with materials and cargo");
                     List<MaterialCommodities> lmats = matcommod.Sort(false);
                     List<MaterialCommodities> lcargo = matcommod.Sort(true);
                     List<MaterialCommodities> ldata = lmats.Where(m => m.category == MaterialCommodities.MaterialEncodedCategory).ToList();

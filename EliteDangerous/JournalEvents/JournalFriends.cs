@@ -31,7 +31,7 @@ namespace EliteDangerousCore.JournalEvents
             OnlineCount = Status.Equals("online", System.StringComparison.InvariantCultureIgnoreCase) ? 1 : 0;
         }
 
-        public void AddFriend(JObject evt)
+        public void AddFriend(JournalFriends next)
         {
             if (StatusList == null)     // if first time we added, move to status list format
             {
@@ -40,10 +40,10 @@ namespace EliteDangerousCore.JournalEvents
                 Status = Name = string.Empty;
             }
 
-            string stat = evt["Status"].Str();
+            string stat = next.Status;
 
             StatusList.Add(stat);
-            NameList.Add(evt["Name"].Str());
+            NameList.Add(next.Name);
 
             OfflineCount += stat.Equals("offline", System.StringComparison.InvariantCultureIgnoreCase) ? 1 : 0;
             OnlineCount += stat.Equals("online", System.StringComparison.InvariantCultureIgnoreCase) ? 1 : 0;

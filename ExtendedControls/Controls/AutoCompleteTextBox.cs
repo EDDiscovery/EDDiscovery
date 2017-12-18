@@ -190,13 +190,7 @@ namespace ExtendedControls
                     _cbdropdown.Activated += _cbdropdown_DropDown;
                     _cbdropdown.SelectedIndexChanged += _cbdropdown_SelectedIndexChanged;
 
-                    Control parent = this.Parent;
-                    while (parent != null && !(parent is Form))
-                    {
-                        parent = parent.Parent;
-                    }
-
-                    _cbdropdown.Show(parent);
+                    _cbdropdown.Show(FindForm());
                     Focus();                // Major change.. we now keep the focus at all times
                 }
                 else

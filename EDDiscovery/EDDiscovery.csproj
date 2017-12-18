@@ -42,8 +42,8 @@
     <OutputPath>bin\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>0</WarningLevel>
-    <RunCodeAnalysis>false</RunCodeAnalysis>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <UseVSHostingProcess>false</UseVSHostingProcess>
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
@@ -55,8 +55,59 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <UseVSHostingProcess>false</UseVSHostingProcess>
     <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x64\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <OutputPath>bin\x64\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <PlatformTarget>x86</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup>
     <ManifestCertificateThumbprint>6586052CF2C6A2D8348CC25AA17842FA028AED2F</ManifestCertificateThumbprint>
@@ -79,48 +130,6 @@
   </PropertyGroup>
   <PropertyGroup>
     <NoWin32Manifest>true</NoWin32Manifest>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
-    <DebugSymbols>true</DebugSymbols>
-    <OutputPath>bin\x64\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <DebugType>full</DebugType>
-    <PlatformTarget>x64</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
-    <OutputPath>bin\x64\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <Optimize>true</Optimize>
-    <DebugType>pdbonly</DebugType>
-    <PlatformTarget>x64</PlatformTarget>
-    <UseVSHostingProcess>false</UseVSHostingProcess>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
-    <DebugSymbols>true</DebugSymbols>
-    <OutputPath>bin\x86\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <DebugType>full</DebugType>
-    <PlatformTarget>x86</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
-    <OutputPath>bin\x86\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <Optimize>true</Optimize>
-    <DebugType>pdbonly</DebugType>
-    <PlatformTarget>x86</PlatformTarget>
-    <UseVSHostingProcess>false</UseVSHostingProcess>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
@@ -207,12 +216,6 @@
     <Compile Include="Forms\SafeModeForm.Designer.cs">
       <DependentUpon>SafeModeForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="GridControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="GridControl.Designer.cs">
-      <DependentUpon>GridControl.cs</DependentUpon>
-    </Compile>
     <Compile Include="ScreenShots\ScreenShotConfigureForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -222,6 +225,7 @@
     <Compile Include="ScreenShots\ScreenShotConverter.cs" />
     <Compile Include="ScreenShots\ScreenShotDirectoryWatcher.cs" />
     <Compile Include="ScreenShots\ScreenShotImageConverter.cs" />
+    <Compile Include="UserControls\IHistoryCursor.cs" />
     <Compile Include="UserControls\UserControlContainerGrid.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -264,7 +268,7 @@
     </Compile>
     <Compile Include="Forms\VersioningManager.cs" />
     <Compile Include="Actions\ActionsFromInputDevices.cs" />
-    <Compile Include="PopOutControl.cs" />
+    <Compile Include="PanelAndPopOuts.cs" />
     <Compile Include="Forms\ShipDetails.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -272,13 +276,6 @@
       <DependentUpon>ShipDetails.cs</DependentUpon>
     </Compile>
     <Compile Include="IDiscoveryController.cs" />
-    <Compile Include="Trilateration\DistanceParser.cs" />
-    <Compile Include="Forms\FindMaterialsForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\FindMaterialsForm.Designer.cs">
-      <DependentUpon>FindMaterialsForm.cs</DependentUpon>
-    </Compile>
     <Compile Include="Forms\AssignTravelLogSystemForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -329,12 +326,6 @@
     <Compile Include="3DMap\FormMap.Designer.cs">
       <DependentUpon>FormMap.cs</DependentUpon>
     </Compile>
-    <Compile Include="Trilateration\SysWarning.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Trilateration\SysWarning.Designer.cs">
-      <DependentUpon>SysWarning.cs</DependentUpon>
-    </Compile>
     <Compile Include="UserControls\DataGridViewSorter.cs" />
     <Compile Include="Forms\AboutForm.cs">
       <SubType>Form</SubType>
@@ -356,44 +347,26 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RouteControl.cs">
+    <Compile Include="UserControls\UserControlScanGrid.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="RouteControl.Designer.cs">
-      <DependentUpon>RouteControl.cs</DependentUpon>
+    <Compile Include="UserControls\UserControlScanGrid.Designer.cs">
+      <DependentUpon>UserControlScanGrid.cs</DependentUpon>
     </Compile>
-    <Compile Include="SavedRouteExpeditionControl.cs">
+    <Compile Include="UserControls\UserControlSettings.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="SavedRouteExpeditionControl.Designer.cs">
-      <DependentUpon>SavedRouteExpeditionControl.cs</DependentUpon>
+    <Compile Include="UserControls\UserControlSettings.Designer.cs">
+      <DependentUpon>UserControlSettings.cs</DependentUpon>
     </Compile>
-    <Compile Include="Settings.cs">
+    <Compile Include="UserControls\UserControlHistory.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Settings.Designer.cs">
-      <DependentUpon>Settings.cs</DependentUpon>
+    <Compile Include="UserControls\UserControlHistory.Designer.cs">
+      <DependentUpon>UserControlHistory.cs</DependentUpon>
     </Compile>
-    <Compile Include="TravelHistoryControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="TravelHistoryControl.Designer.cs">
-      <DependentUpon>TravelHistoryControl.cs</DependentUpon>
-    </Compile>
-    <Compile Include="UserControls\EngineeringFilters.cs" />
+    <Compile Include="UserControls\RecipeFilters.cs" />
     <Compile Include="UserControls\TravelHistoryFilter.cs" />
-    <Compile Include="Trilateration\TrilaterationControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Trilateration\TrilaterationControl.Designer.cs">
-      <DependentUpon>TrilaterationControl.cs</DependentUpon>
-    </Compile>
-    <Compile Include="JournalViewControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="JournalViewControl.Designer.cs">
-      <DependentUpon>JournalViewControl.cs</DependentUpon>
-    </Compile>
     <Compile Include="UserControls\UserControlContainerResizable.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -406,6 +379,12 @@
     <Compile Include="UserControls\UserControlEstimatedValues.Designer.cs">
       <DependentUpon>UserControlEstimatedValues.cs</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\UserControlExpedition.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\UserControlExpedition.Designer.cs">
+      <DependentUpon>UserControlExpedition.cs</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\UserControlExploration.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -417,6 +396,12 @@
     </Compile>
     <Compile Include="UserControls\UserControlEDSM.Designer.cs">
       <DependentUpon>UserControlEDSM.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\UserControlRoute.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\UserControlRoute.Designer.cs">
+      <DependentUpon>UserControlRoute.cs</DependentUpon>
     </Compile>
     <Compile Include="UserControls\UserControlShoppingList.cs">
       <SubType>UserControl</SubType>
@@ -547,6 +532,12 @@
     <Compile Include="UserControls\UserControlTravelGrid.Designer.cs">
       <DependentUpon>UserControlTravelGrid.cs</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\UserControlTrilateration.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\UserControlTrilateration.designer.cs">
+      <DependentUpon>UserControlTrilateration.cs</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\UserControlTrippanel.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -561,9 +552,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\ExportForm.resx">
       <DependentUpon>ExportForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\FindMaterialsForm.resx">
-      <DependentUpon>FindMaterialsForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\ImportSphere.resx">
       <DependentUpon>ImportSphere.cs</DependentUpon>
@@ -580,23 +568,23 @@
     <EmbeddedResource Include="Forms\UserControlForm.resx">
       <DependentUpon>UserControlForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="GridControl.resx">
-      <DependentUpon>GridControl.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="ScreenShots\ScreenShotConfigureForm.resx">
       <DependentUpon>ScreenShotConfigureForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\UserControlContainerGrid.resx">
       <DependentUpon>UserControlContainerGrid.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Trilateration\SysWarning.resx">
-      <DependentUpon>SysWarning.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="UserControls\UserControlContainerResizable.resx">
       <DependentUpon>UserControlContainerResizable.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\UserControlScanGrid.resx">
+      <DependentUpon>UserControlScanGrid.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="UserControls\UserControlEstimatedValues.resx">
       <DependentUpon>UserControlEstimatedValues.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\UserControlExpedition.resx">
+      <DependentUpon>UserControlExpedition.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\UserControlExploration.resx">
       <DependentUpon>UserControlExploration.cs</DependentUpon>
@@ -606,6 +594,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\UserControlJournalGrid.resx">
       <DependentUpon>UserControlJournalGrid.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\UserControlRoute.resx">
+      <DependentUpon>UserControlRoute.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\UserControlShoppingList.resx">
       <DependentUpon>UserControlShoppingList.cs</DependentUpon>
@@ -667,6 +658,9 @@
     <EmbeddedResource Include="UserControls\UserControlTravelGrid.resx">
       <DependentUpon>UserControlTravelGrid.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\UserControlTrilateration.resx">
+      <DependentUpon>UserControlTrilateration.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="UserControls\UserControlTrippanel.resx">
       <DependentUpon>UserControlTrippanel.cs</DependentUpon>
     </EmbeddedResource>
@@ -678,6 +672,7 @@
     <None Include="Resources\ImportHelp.txt" />
     <None Include="Resources\edlogo_3mo_icon.ico" />
     <None Include="Resources\GNE.ico" />
+    <None Include="Resources\Ring Only 512.png" />
     <None Include="Resources\selectedmarker.png" />
     <None Include="Resources\SizeSelectorsSmall.png" />
     <None Include="Resources\SizeSelectorsMedium.png" />
@@ -712,7 +707,6 @@
     <None Include="Resources\excel.png" />
     <None Include="Resources\materiamoreindicator.png" />
     <None Include="Resources\RingGap512.png" />
-    <None Include="Resources\Ring Only 512.png" />
     <None Include="Resources\materialmarkerorangefilled.png" />
     <None Include="Resources\planet landing.png" />
     <None Include="Resources\toolStripButtonRemoveUnused.Image.png" />
@@ -746,6 +740,20 @@
     <None Include="Resources\starlist.png" />
     <None Include="Resources\edsm24.png" />
     <None Include="Resources\shoppinglist.bmp" />
+    <None Include="Resources\panels.png" />
+    <None Include="Resources\shoppinglist.png" />
+    <None Include="Resources\edsm16.png" />
+    <None Include="Resources\Volcano.bmp" />
+    <None Include="Resources\Terraformable.png" />
+    <None Include="Resources\route.png" />
+    <None Include="Resources\expedition.png" />
+    <None Include="Resources\triangulation.png" />
+    <None Include="Resources\settings.png" />
+    <None Include="Resources\warning.png" />
+    <None Include="Resources\ego.png" />
+    <None Include="Resources\EDDB.png" />
+    <None Include="Resources\EDDN.png" />
+    <None Include="Resources\scangrid.png" />
     <Content Include="x86\Microsoft.VC100.CRT\msvcp100.dll" />
     <Content Include="x86\Microsoft.VC100.CRT\msvcr100.dll" />
     <EmbeddedResource Include="2DMap\Form2DMap.resx">
@@ -784,29 +792,17 @@
     <EmbeddedResource Include="Forms\MoveToCommander.resx">
       <DependentUpon>MoveToCommander.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="JournalViewControl.resx">
-      <DependentUpon>JournalViewControl.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <SubType>Designer</SubType>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="RouteControl.resx">
-      <DependentUpon>RouteControl.cs</DependentUpon>
+    <EmbeddedResource Include="UserControls\UserControlSettings.resx">
+      <DependentUpon>UserControlSettings.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="SavedRouteExpeditionControl.resx">
-      <DependentUpon>SavedRouteExpeditionControl.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Settings.resx">
-      <DependentUpon>Settings.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="TravelHistoryControl.resx">
-      <DependentUpon>TravelHistoryControl.cs</DependentUpon>
+    <EmbeddedResource Include="UserControls\UserControlHistory.resx">
+      <DependentUpon>UserControlHistory.cs</DependentUpon>
       <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Trilateration\TrilaterationControl.resx">
-      <DependentUpon>TrilaterationControl.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="EDDiscovery_TemporaryKey.pfx" />
     <None Include="packages.config">

@@ -30,7 +30,7 @@ using EliteDangerousCore.EDDN;
 
 namespace EDDiscovery.UserControls
 {
-    public partial class UserControlTravelGrid : UserControlCommonBase, UserControlCursorType
+    public partial class UserControlTravelGrid : UserControlCommonBase, IHistoryCursor
     {
         #region Public IF
 
@@ -44,9 +44,9 @@ namespace EDDiscovery.UserControls
 
         #region Events
 
-        // implement UserControlCursorType fields
-        public event ChangedSelection OnChangedSelection;   // After a change of selection by the user, or after a OnHistoryChanged, or after a sort.
-        public event ChangedSelectionHE OnTravelSelectionChanged;   // as above, different format, for certain older controls
+        // implement IHistoryCursor fields
+        public event ChangedSelectionHandler OnChangedSelection;   // After a change of selection by the user, or after a OnHistoryChanged, or after a sort.
+        public event ChangedSelectionHEHandler OnTravelSelectionChanged;   // as above, different format, for certain older controls
 
         // for primary travel grid for auto note jump
         public delegate void KeyDownInCell(int asciikeycode, int rowno, int colno, bool note);
@@ -77,9 +77,6 @@ namespace EDDiscovery.UserControls
 
         private const int DefaultRowHeight = 26;
 
-        private static EDDiscoveryForm discoveryform;
-        private int displaynumber;
-
         private string DbFilterSave { get { return "TravelHistoryControlEventFilter" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
         private string DbColumnSave { get { return "TravelControl" + ((displaynumber > 0) ? displaynumber.ToString() : "") + "DGVCol"; } }
         private string DbHistorySave { get { return "EDUIHistory" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
@@ -97,21 +94,16 @@ namespace EDDiscovery.UserControls
         public UserControlTravelGrid()
         {
             InitializeComponent();
+            var corner = dataGridViewTravel.TopLeftHeaderCell; // work around #1487
         }
 
-        public override void Init(EDDiscoveryForm ed, UserControlCursorType tg, int vn) // TG is not used.
+        public override void Init()
         {                       
-            discoveryform = ed;
-            displaynumber = vn;
             cfs.ConfigureThirdOption("Travel", "Docked;FSD Jump;Undocked;");
             cfs.Changed += EventFilterChanged;
             TravelHistoryFilter.InitaliseComboBox(comboBoxHistoryWindow, DbHistorySave);
 
             checkBoxMoveToTop.Checked = SQLiteConnectionUser.GetSettingBool(DbAutoTop, true);
-
-            discoveryform.OnHistoryChange += HistoryChanged;
-            discoveryform.OnNewEntry += AddNewEntry;
-            discoveryform.OnNoteChanged += OnNoteChanged;
 
             dataGridViewTravel.MakeDoubleBuffered();
             dataGridViewTravel.RowTemplate.Height = DefaultRowHeight;
@@ -125,6 +117,10 @@ namespace EDDiscovery.UserControls
 #endif
 
             ExtraIcons(false,false);
+
+            discoveryform.OnHistoryChange += HistoryChanged;
+            discoveryform.OnNewEntry += AddNewEntry;
+            discoveryform.OnNoteChanged += OnNoteChanged;
         }
 
         public void ExtraIcons(bool icon, bool popout )
@@ -595,7 +591,7 @@ namespace EDDiscovery.UserControls
             HistoryEntry sp2 = (HistoryEntry)selectedRows.First().Cells[TravelHistoryColumns.HistoryTag].Tag;
             mapColorDialog.Color = Color.FromArgb(sp2.MapColour);
 
-            if (mapColorDialog.ShowDialog(this) == DialogResult.OK)
+            if (mapColorDialog.ShowDialog(FindForm()) == DialogResult.OK)
             {
                 this.Cursor = Cursors.WaitCursor;
 
@@ -665,7 +661,7 @@ namespace EDDiscovery.UserControls
 
             movefrm.Init();
 
-            DialogResult red = movefrm.ShowDialog(this);
+            DialogResult red = movefrm.ShowDialog(FindForm());
             if (red == DialogResult.OK)
             {
                 foreach (HistoryEntry sp in listsyspos)
@@ -704,8 +700,6 @@ namespace EDDiscovery.UserControls
 
         private void AddSystemToOthers(bool dist, bool wanted, bool route)
         {
-            TrilaterationControl tctrl = discoveryform.trilaterationControl;
-
             IEnumerable<DataGridViewRow> selectedRows = dataGridViewTravel.SelectedCells.Cast<DataGridViewCell>()
                                                                         .Select(cell => cell.OwningRow)
                                                                         .Distinct()
@@ -729,19 +723,17 @@ namespace EDDiscovery.UserControls
 
             if (dist)
             {
-                foreach (string s in systemnamelist)
-                    tctrl.AddSystemToDataGridViewDistances(s);
+                discoveryform.NewTriLatStars(systemnamelist, false);
             }
 
             if (wanted)
             {
-                foreach (string s in systemnamelist)
-                    tctrl.AddWantedSystem(s);
+                discoveryform.NewTriLatStars(systemnamelist, true);
             }
 
             if (route)
             {
-                discoveryform.savedRouteExpeditionControl1.AppendRows(systemnamelist.ToArray());
+                discoveryform.NewExpeditionStars(systemnamelist);
             }
 
             this.Cursor = Cursors.Default;
@@ -759,7 +751,7 @@ namespace EDDiscovery.UserControls
             }
 
             if (!edsm.ShowSystemInEDSM(rightclicksystem.System.name, id_edsm))
-                ExtendedControls.MessageBoxTheme.Show("System could not be found - has not been synched or EDSM is unavailable");
+                ExtendedControls.MessageBoxTheme.Show(FindForm(), "System could not be found - has not been synched or EDSM is unavailable");
 
             this.Cursor = Cursors.Default;
         }
@@ -814,13 +806,13 @@ namespace EDDiscovery.UserControls
 
             if (journalent == null)
             {
-                ExtendedControls.MessageBoxTheme.Show("Could not find Location or FSDJump entry associated with selected journal entry");
+                ExtendedControls.MessageBoxTheme.Show(FindForm(), "Could not find Location or FSDJump entry associated with selected journal entry");
                 return;
             }
 
             using (Forms.AssignTravelLogSystemForm form = new Forms.AssignTravelLogSystemForm(journalent))
             {
-                DialogResult result = form.ShowDialog();
+                DialogResult result = form.ShowDialog(FindForm());
                 if (result == DialogResult.OK)
                 {
                     foreach (var jent in jents)
@@ -845,7 +837,7 @@ namespace EDDiscovery.UserControls
 
         private void removeJournalEntryToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (ExtendedControls.MessageBoxTheme.Show("Confirm you wish to remove this entry" + Environment.NewLine + "It may reappear if the logs are rescanned", "WARNING", MessageBoxButtons.OKCancel) == DialogResult.OK)
+            if (ExtendedControls.MessageBoxTheme.Show(FindForm(), "Confirm you wish to remove this entry" + Environment.NewLine + "It may reappear if the logs are rescanned", "WARNING", MessageBoxButtons.OKCancel) == DialogResult.OK)
             {
                 JournalEntry.Delete(rightclicksystem.Journalid);
                 discoveryform.RefreshHistoryAsync();
@@ -872,7 +864,7 @@ namespace EDDiscovery.UserControls
             {
                 using (Forms.SetNoteForm noteform = new Forms.SetNoteForm(rightclicksystem, discoveryform))
                 {
-                    if (noteform.ShowDialog(this) == DialogResult.OK)
+                    if (noteform.ShowDialog(FindForm()) == DialogResult.OK)
                     {
                         rightclicksystem.SetJournalSystemNoteText(noteform.NoteText, true , EDCommander.Current.SyncToEdsm);
 
@@ -928,7 +920,6 @@ namespace EDDiscovery.UserControls
                             JournalEntry.GetListOfEventsWithOptMethod(false),
                             (s) => { return BaseUtils.FieldNames.GetPropertyFieldNames(JournalEntry.TypeOfJournalEntry(s)); },
                             discoveryform.Globals.NameList, fieldfilter);
-            frm.TopMost = this.FindForm().TopMost;
             if (frm.ShowDialog(this.FindForm()) == DialogResult.OK)
             {
                 fieldfilter = frm.result;
@@ -946,7 +937,7 @@ namespace EDDiscovery.UserControls
             Forms.ExportForm frm = new Forms.ExportForm();
             frm.Init(new string[] { "View", "FSD Jumps only", "With Notes only" , "With Notes, no repeat"  });
 
-            if (frm.ShowDialog(this) == DialogResult.OK)
+            if (frm.ShowDialog(FindForm()) == DialogResult.OK)
             {
                 BaseUtils.CSVWriteGrid grd = new BaseUtils.CSVWriteGrid();
                 grd.SetCSVDelimiter(frm.Comma);
@@ -1064,7 +1055,7 @@ namespace EDDiscovery.UserControls
                         System.Diagnostics.Process.Start(frm.Path);
                 }
                 else
-                    ExtendedControls.MessageBoxTheme.Show("Failed to write to " + frm.Path, "Export Failed", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    ExtendedControls.MessageBoxTheme.Show(FindForm(), "Failed to write to " + frm.Path, "Export Failed", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             }
 
         }

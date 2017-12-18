@@ -74,6 +74,15 @@ namespace EliteDangerousCore.EDSM
         {
             try
             {
+                // Make sure the EDSM class has this history's commander set
+                int cmdrid = hl.CommanderId;
+                EDCommander cmdr = EDCommander.GetCommander(cmdrid);
+                if (cmdr != null)
+                {
+                    edsm.commanderName = cmdr.EdsmName ?? cmdr.Name;
+                    edsm.apiKey = cmdr.APIKey;
+                }
+
                 logout("EDSM sync begin");
 
                 List<HistoryEntry> hlfsdunsyncedlist = hl.FilterByNotEDSMSyncedAndFSD;        // first entry is oldest
@@ -123,10 +132,11 @@ namespace EliteDangerousCore.EDSM
                         else
                         {
                             string errmsg;              // (verified with EDSM 29/9/2016)
+                            int errno;
                             bool firstdiscover;
                             int edsmid;
 
-                            if (edsm.SendTravelLog(he.System.name, he.EventTimeUTC, he.System.HasCoordinate && !he.IsStarPosFromEDSM, he.System.x, he.System.y, he.System.z, out errmsg, out firstdiscover, out edsmid))
+                            if (edsm.SendTravelLog(he.System.name, he.EventTimeUTC, he.System.HasCoordinate && !he.IsStarPosFromEDSM, he.System.x, he.System.y, he.System.z, out errmsg, out errno, out firstdiscover, out edsmid))
                             {
                                 if (edsmid != 0 && he.System.id_edsm <= 0)
                                 {
@@ -146,7 +156,11 @@ namespace EliteDangerousCore.EDSM
                             if (errmsg.Length > 0)
                             {
                                 logout(errmsg);
-                                break;
+
+                                if (errno != 303 && errno != 304) // Skip the system if EDSM rejects the system
+                                {
+                                    break;
+                                }
                             }
                         }
                     }
@@ -217,16 +231,20 @@ namespace EliteDangerousCore.EDSM
         public static void SendTravelLog(HistoryEntry he) // (verified with EDSM 29/9/2016, seen UTC time being sent, and same UTC time on ESDM).
         {
             EDSMClass edsm = new EDSMClass();
+            var cmdr = he.Commander;
+            edsm.commanderName = cmdr.EdsmName ?? cmdr.Name;
+            edsm.apiKey = cmdr.APIKey;
 
             if (!edsm.IsApiKeySet)
                 return;
 
             string errmsg;
+            int errno;
             bool firstdiscover;
             int edsmid;
             Task taskEDSM = Task.Factory.StartNew(() =>
             {                                                   // LOCAL time, there is a UTC converter inside this call
-                if (edsm.SendTravelLog(he.System.name, he.EventTimeUTC, he.System.HasCoordinate, he.System.x, he.System.y, he.System.z, out errmsg, out firstdiscover, out edsmid))
+                if (edsm.SendTravelLog(he.System.name, he.EventTimeUTC, he.System.HasCoordinate, he.System.x, he.System.y, he.System.z, out errmsg, out errno, out firstdiscover, out edsmid))
                 {
                     if (edsmid != 0 && he.System.id_edsm <= 0)
                     {

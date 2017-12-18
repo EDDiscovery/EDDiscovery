@@ -36,6 +36,21 @@ namespace ExtendedControls
         }
 
 
+        protected override CreateParams CreateParams
+        {
+            get
+            {
+                var cp = base.CreateParams;
+                // Allow minimize/restore operations to occur by clicking on the TaskBar icon, even when unframed.
+                if (MinimizeBox && ShowInTaskbar)
+                {
+                    cp.ClassStyle |= CS.DBLCLKS;
+                    cp.Style |= WS.MINIMIZEBOX;
+                }
+                return cp;
+            }
+        }
+
         protected virtual bool DraggableDisableResize { get; } = false;       // SET true to stop your form from resizing
 
 
@@ -121,6 +136,9 @@ namespace ExtendedControls
                         else
                         {
                             base.WndProc(ref m);
+
+                            if (WindowState == FormWindowState.Minimized)
+                                return;
 
                             var p = PointToClient(new Point((int)m.LParam));
                             const int CaptionHeight = 32;

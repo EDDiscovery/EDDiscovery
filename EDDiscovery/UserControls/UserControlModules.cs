@@ -31,10 +31,6 @@ namespace EDDiscovery.UserControls
 {
     public partial class UserControlModules : UserControlCommonBase
     {
-        private int displaynumber = 0;
-        private EDDiscoveryForm discoveryform;
-        private UserControlCursorType uctg;
-
         private string DbColumnSave { get { return ("ModulesGrid") + ((displaynumber > 0) ? displaynumber.ToString() : "") + "DGVCol"; } }
         private string DbShipSave { get { return "ModulesGridShipSelect" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
 
@@ -43,26 +39,23 @@ namespace EDDiscovery.UserControls
         public UserControlModules()
         {
             InitializeComponent();
+            var corner = dataGridViewModules.TopLeftHeaderCell; // work around #1487
         }
 
-        public override void Init( EDDiscoveryForm ed, UserControlCursorType thc, int vn) //0=primary, 1 = first windowed version, etc
+        public override void Init()
         {
-            discoveryform = ed;
-            uctg = thc;
-            displaynumber = vn;
-
             dataGridViewModules.MakeDoubleBuffered();
             dataGridViewModules.DefaultCellStyle.WrapMode = DataGridViewTriState.False;
             dataGridViewModules.RowTemplate.Height = 26;
 
+            buttonExtCoriolis.Visible = false;
+
             discoveryform.OnHistoryChange += Discoveryform_OnHistoryChange; ;
             discoveryform.OnNewEntry += Discoveryform_OnNewEntry;
             uctg.OnTravelSelectionChanged += Display;
-
-            buttonExtCoriolis.Visible = false;
         }
 
-        public override void ChangeCursorType(UserControlCursorType thc)
+        public override void ChangeCursorType(IHistoryCursor thc)
         {
             uctg.OnTravelSelectionChanged -= Display;
             uctg = thc;
@@ -249,7 +242,7 @@ namespace EDDiscovery.UserControls
                 string s = si.ToJSON(out errstr);
 
                 if (errstr.Length > 0)
-                    ExtendedControls.MessageBoxTheme.Show(this, errstr + Environment.NewLine + "This is probably a new or powerplay module" + Environment.NewLine + "Report to EDD Team by Github giving the full text above", "Unknown Module Type");
+                    ExtendedControls.MessageBoxTheme.Show(FindForm(), errstr + Environment.NewLine + "This is probably a new or powerplay module" + Environment.NewLine + "Report to EDD Team by Github giving the full text above", "Unknown Module Type");
 
                 string uri = null;
 
@@ -281,7 +274,7 @@ namespace EDDiscovery.UserControls
                                 }
                                 catch (Exception ex)
                                 {
-                                    ExtendedControls.MessageBoxTheme.Show(this, "Unable to launch browser" + ex.Message, "Browser Launch Error");
+                                    ExtendedControls.MessageBoxTheme.Show(FindForm(), "Unable to launch browser" + ex.Message, "Browser Launch Error");
                                 }
                             }
                         }
@@ -292,7 +285,7 @@ namespace EDDiscovery.UserControls
                 ExtendedControls.InfoForm info = new ExtendedControls.InfoForm();
                 info.Info("Cannot launch browser, use this JSON for manual Coriolis import", Icon.ExtractAssociatedIcon(System.Reflection.Assembly.GetExecutingAssembly().Location), 
                                 s, new Font("MS Sans Serif", 10), new int[] { 0, 100 });
-                info.ShowDialog(this);
+                info.ShowDialog(FindForm());
             }
         }
 

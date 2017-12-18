@@ -110,7 +110,22 @@ public static class ObjectExtensionsNumbersBool
     static public double? InvariantParseDoubleNull(this string s)
     {
         double i;
-        if (s != null && double.TryParse(s, System.Globalization.NumberStyles.Integer, System.Globalization.CultureInfo.InvariantCulture, out i))
+        if (s != null && double.TryParse(s, System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture, out i))
+            return i;
+        else
+            return null;
+    }
+
+    static public float InvariantParseFloat(this string s, float def)
+    {
+        float i;
+        return float.TryParse(s, System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture, out i) ? i : def;
+    }
+
+    static public float? InvariantParseFloatNull(this string s)
+    {
+        float i;
+        if (s != null && float.TryParse(s, System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture, out i))
             return i;
         else
             return null;
@@ -193,23 +208,26 @@ public static class ObjectExtensionsNumbersBool
 
         return newarray;
     }
-
-    static public List<int> RestoreIntListFromString(this string plist, int def, int length)      // fill array from comma separ string, with defined length and defined default
+    // fill array from comma separ string, with min leng (def if less) and max length
+    static public List<int> RestoreIntListFromString(this string plist, int minlength = 0, int def = 0, int maxlength = int.MaxValue)
     {
-        List<int> list = new List<int>(length);
+        List<int> list = new List<int>();
 
-        string[] parray = plist.Split(',');
-        if (length == 0)
-            length = parray.Length;
-
-        for (int i = 0; i < length; i++)
+        if (plist.Length > 0)
         {
-            int v;
-            if (i >= parray.Length || !parray[i].InvariantParse(out v))
-                list.Add(def);
-            else
-                list.Add(v);
+            string[] parray = plist.Split(',');
+
+            for (int i = 0; i < parray.Length && list.Count < maxlength; i++)
+            {
+                int v;
+                if (parray[i].InvariantParse(out v))
+                    list.Add(v);
+            }
+
         }
+
+        while (list.Count < minlength)
+            list.Add(def);
 
         return list;
     }

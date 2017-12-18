@@ -48,7 +48,7 @@ namespace ActionLanguage
             ConditionVariablesForm avf = new ConditionVariablesForm();
             avf.Init("Define Variable:", cp.Icon, av, showone: true, allowadd: allowaddv, allownoexpand: allownoexpandv, altops:operations, allowmultiple:false);
 
-            if (avf.ShowDialog(parent.FindForm()) == DialogResult.OK)
+            if (avf.ShowDialog(parent) == DialogResult.OK)
             {
                 userdata = ToString(avf.result,avf.result_altops);
                 return true;

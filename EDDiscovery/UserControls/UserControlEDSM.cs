@@ -32,9 +32,6 @@ namespace EDDiscovery.UserControls
 {
     public partial class UserControlEDSM : UserControlCommonBase
     {
-        private EDDiscoveryForm discoveryform;
-        private int displaynumber;                          // since this is plugged into something other than a TabControlForm, can't rely on its display number
-
         private string DbColumnSave { get { return "UCEDSM" + ((displaynumber > 0) ? displaynumber.ToString() : "") + "DGVCol"; } }
         private string DbStar { get { return "UCEDSM" + ((displaynumber > 0) ? displaynumber.ToString() : "") + "Star"; } }
         private string DbRadius { get { return "UCEDSM" + ((displaynumber > 0) ? displaynumber.ToString() : "") + "Radius"; } }
@@ -44,14 +41,12 @@ namespace EDDiscovery.UserControls
         public UserControlEDSM()
         {
             InitializeComponent();
+            var corner = dataGridViewEDSM.TopLeftHeaderCell; // work around #1487
             buttonExtEDSMSphere.Enabled = buttonExtDBLookup.Enabled = false;
         }
 
-        public override void Init(EDDiscoveryForm ed, UserControlCursorType thc, int vn) //0=primary, 1 = first windowed version, etc
+        public override void Init()
         {
-            discoveryform = ed;
-            displaynumber = vn;
-
             dataGridViewEDSM.MakeDoubleBuffered();
             dataGridViewEDSM.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
             dataGridViewEDSM.RowTemplate.Height = 26;
@@ -101,14 +96,14 @@ namespace EDDiscovery.UserControls
         {
             if ( dataGridViewEDSM.Rows.Count == 0)
             {
-                ExtendedControls.MessageBoxTheme.Show("No data to export", "Export EDSM", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                ExtendedControls.MessageBoxTheme.Show(FindForm(), "No data to export", "Export EDSM", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return;
             }
 
             Forms.ExportForm frm = new Forms.ExportForm();
             frm.Init(new string[] { "Export Current View" }, disablestartendtime:true);
 
-            if (frm.ShowDialog(this) == DialogResult.OK)
+            if (frm.ShowDialog(FindForm()) == DialogResult.OK)
             {
                 if (frm.SelectedIndex == 0)
                 {
@@ -148,7 +143,7 @@ namespace EDDiscovery.UserControls
                             System.Diagnostics.Process.Start(frm.Path);
                     }
                     else
-                        ExtendedControls.MessageBoxTheme.Show("Failed to write to " + frm.Path, "Export Failed", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                        ExtendedControls.MessageBoxTheme.Show(FindForm(), "Failed to write to " + frm.Path, "Export Failed", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 }
             }
         }
@@ -160,7 +155,7 @@ namespace EDDiscovery.UserControls
             double radius = textBoxRadius.Text.InvariantParseDouble(20);
             if ( radius > 100 )
             {
-                if (ExtendedControls.MessageBoxTheme.Show("This is a large radius, it make take a long time or not work, are you sure?", "Warning - Large radius", MessageBoxButtons.OKCancel, MessageBoxIcon.Asterisk) == DialogResult.Cancel)
+                if (ExtendedControls.MessageBoxTheme.Show(FindForm(), "This is a large radius, it make take a long time or not work, are you sure?", "Warning - Large radius", MessageBoxButtons.OKCancel, MessageBoxIcon.Asterisk) == DialogResult.Cancel)
                     return;
             }
 
@@ -277,7 +272,7 @@ namespace EDDiscovery.UserControls
             }
 
             if (!edsm.ShowSystemInEDSM(rightclicksystem.name, id_edsm))
-                ExtendedControls.MessageBoxTheme.Show("System could not be found - has not been synched or EDSM is unavailable");
+                ExtendedControls.MessageBoxTheme.Show(FindForm(), "System could not be found - has not been synched or EDSM is unavailable");
 
             this.Cursor = Cursors.Default;
         }

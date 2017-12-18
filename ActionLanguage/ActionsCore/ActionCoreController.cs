@@ -39,26 +39,21 @@ namespace ActionLanguage
             globalvariables = new ConditionVariables(persistentglobalvariables, programrunglobalvariables);
         }
 
+        virtual public AudioExtensions.AudioQueue AudioQueueWave { get; }
+        virtual public AudioExtensions.AudioQueue AudioQueueSpeech { get; }
+        virtual public AudioExtensions.SpeechSynthesizer SpeechSynthesizer { get; }
+
         public ConditionVariables Globals { get { return globalvariables; } }
 
-        protected AudioQueue audiospeech;
-        protected AudioQueue audiowave;
-        protected SpeechSynthesizer synth;
         protected System.Windows.Forms.Form form;
 
-        public AudioQueue AudioQueueSpeech { get { return audiospeech; } }
-        public AudioQueue AudioQueueWave { get { return audiowave; } }
-        public SpeechSynthesizer SpeechSynthesizer { get { return synth; } }
         public System.Windows.Forms.Form Form { get { return form; } }
 
         public System.Drawing.Icon Icon { get; private set;}
 
-        public ActionCoreController( AudioQueue speech , AudioQueue wave , SpeechSynthesizer synt , System.Windows.Forms.Form frm, System.Drawing.Icon ic )
+        public ActionCoreController(System.Windows.Forms.Form frm, System.Drawing.Icon ic )
         {
             Icon = ic;
-            audiospeech = speech;
-            audiowave = wave;
-            synth = synt;
             form = frm;
 
             persistentglobalvariables = new ConditionVariables();

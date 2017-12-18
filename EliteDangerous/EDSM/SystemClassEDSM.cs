@@ -184,6 +184,9 @@ namespace EliteDangerousCore.EDSM
                     SQLiteConnectionSystem.ReplaceSystemsTable();
                     SQLiteConnectionSystem.PutSettingBool("EDSMSystemsOutOfOrder", outoforder);
                     reportProgress(-1, "");
+#if !DEBUG
+                    File.Delete(edsmsystems);
+#endif
                 }
                 else
                 {
@@ -272,6 +275,68 @@ namespace EliteDangerousCore.EDSM
             }
         }
 
+        private class EDSMDumpSystemCoords
+        {
+            public static EDSMDumpSystemCoords Deserialize(JsonReader rdr)
+            {
+                EDSMDumpSystemCoords c = new EDSMDumpSystemCoords();
+
+                if (rdr.TokenType != JsonToken.StartObject)
+                    rdr.Read();
+
+                Debug.Assert(rdr.TokenType == JsonToken.StartObject);
+
+                while (rdr.Read() && rdr.TokenType == JsonToken.PropertyName)
+                {
+                    string name = rdr.Value as string;
+                    switch (name)
+                    {
+                        case "x": c.x = rdr.ReadAsDouble() ?? Double.NaN; break;
+                        case "y": c.y = rdr.ReadAsDouble() ?? Double.NaN; break;
+                        case "z": c.z = rdr.ReadAsDouble() ?? Double.NaN; break;
+                    }
+                }
+
+                Debug.Assert(rdr.TokenType == JsonToken.EndObject);
+
+                return c;
+            }
+
+            public double x;
+            public double y;
+            public double z;
+        }
+
+        private class EDSMDumpSystem
+        {
+            public static EDSMDumpSystem Deserialize(JsonReader rdr)
+            {
+                EDSMDumpSystem s = new EDSMDumpSystem();
+
+                while (rdr.Read() && rdr.TokenType == JsonToken.PropertyName)
+                {
+                    string name = rdr.Value as string;
+                    switch (name)
+                    {
+                        case "name": s.name = rdr.ReadAsString(); break;
+                        case "id": s.id = rdr.ReadAsInt32() ?? 0; break;
+                        case "date": s.date = rdr.ReadAsDateTime() ?? DateTime.MinValue; break;
+                        case "coords": s.coords = EDSMDumpSystemCoords.Deserialize(rdr); break;
+                        default: rdr.Read(); JToken.Load(rdr); break;
+                    }
+                }
+
+                Debug.Assert(rdr.TokenType == JsonToken.EndObject);
+
+                return s;
+            }
+
+            public string name;
+            public long id;
+            public DateTime date;
+            public EDSMDumpSystemCoords coords;
+        }
+
         private static long DoParseEDSMUpdateSystemsReader(JsonTextReader jr, ref string date, ref bool outoforder, Func<bool> cancelRequested, Action<int, string> reportProgress, bool useCache = true, bool useTempSystems = false)
         {
             DateTime maxdate;
@@ -295,7 +360,7 @@ namespace EliteDangerousCore.EDSM
             while (!cancelRequested())
             {
                 bool jr_eof = false;
-                List<JObject> objs = new List<JObject>(BlockSize);
+                List<EDSMDumpSystem> objs = new List<EDSMDumpSystem>(BlockSize);
 
                 while (!cancelRequested())
                 {
@@ -303,7 +368,7 @@ namespace EliteDangerousCore.EDSM
                     {
                         if (jr.TokenType == JsonToken.StartObject)
                         {
-                            objs.Add(JObject.Load(jr));
+                            objs.Add(EDSMDumpSystem.Deserialize(jr));
 
                             if (objs.Count >= BlockSize)
                             {
@@ -318,215 +383,237 @@ namespace EliteDangerousCore.EDSM
                     }
                 }
 
-                IEnumerator<JObject> jo_enum = objs.GetEnumerator();
+                IEnumerator<EDSMDumpSystem> jo_enum = objs.GetEnumerator();
                 bool jo_enum_finished = false;
 
                 while (!jo_enum_finished && !cancelRequested())
                 {
-                    using (SQLiteConnectionSystem cn = new SQLiteConnectionSystem(mode: EDDbAccessMode.Writer))
+                    int blkcount = 0;
+                    int oldinsertcnt = insertcount;
+                    int oldupdatecnt = updatecount;
+                    int oldcount = count;
+
+                    using (SQLiteTxnLockED<SQLiteConnectionSystem> tl = new SQLiteTxnLockED<SQLiteConnectionSystem>())
                     {
-                        using (DbTransaction txn = cn.BeginTransaction())
+                        tl.OpenWriter();
+                        using (SQLiteConnectionSystem cn = new SQLiteConnectionSystem(mode: EDDbAccessMode.Writer))
                         {
-                            DbCommand updateNameCmd = null;
-                            DbCommand updateSysCmd = null;
-                            DbCommand insertNameCmd = null;
-                            DbCommand insertSysCmd = null;
-                            DbCommand selectSysCmd = null;
-                            DbCommand selectNameCmd = null;
-
-                            try
+                            using (DbTransaction txn = cn.BeginTransaction())
                             {
-                                updateNameCmd = cn.CreateCommand("UPDATE SystemNames SET Name=@Name WHERE EdsmId=@EdsmId", txn);
-                                updateNameCmd.AddParameter("@Name", DbType.String);
-                                updateNameCmd.AddParameter("@EdsmId", DbType.Int64);
+                                DbCommand updateNameCmd = null;
+                                DbCommand updateSysCmd = null;
+                                DbCommand insertNameCmd = null;
+                                DbCommand insertSysCmd = null;
+                                DbCommand selectSysCmd = null;
+                                DbCommand selectNameCmd = null;
 
-                                updateSysCmd = cn.CreateCommand("UPDATE EdsmSystems SET X=@X, Y=@Y, Z=@Z, UpdateTimestamp=@UpdateTimestamp, VersionTimestamp=@VersionTimestamp, GridId=@GridId, RandomId=@RandomId WHERE EdsmId=@EdsmId", txn);
-                                updateSysCmd.AddParameter("@X", DbType.Int64);
-                                updateSysCmd.AddParameter("@Y", DbType.Int64);
-                                updateSysCmd.AddParameter("@Z", DbType.Int64);
-                                updateSysCmd.AddParameter("@UpdateTimestamp", DbType.Int64);
-                                updateSysCmd.AddParameter("@VersionTimestamp", DbType.Int64);
-                                updateSysCmd.AddParameter("@GridId", DbType.Int64);
-                                updateSysCmd.AddParameter("@RandomId", DbType.Int64);
-                                updateSysCmd.AddParameter("@EdsmId", DbType.Int64);
-
-                                insertNameCmd = cn.CreateCommand("INSERT INTO " + sysnamesTableName + " (Name, EdsmId) VALUES (@Name, @EdsmId)", txn);
-                                insertNameCmd.AddParameter("@Name", DbType.String);
-                                insertNameCmd.AddParameter("@EdsmId", DbType.Int64);
-
-                                insertSysCmd = cn.CreateCommand("INSERT INTO " + edsmsysTableName + " (EdsmId, X, Y, Z, CreateTimestamp, UpdateTimestamp, VersionTimestamp, GridId, RandomId) VALUES (@EdsmId, @X, @Y, @Z, @CreateTimestamp, @UpdateTimestamp, @VersionTimestamp, @GridId, @RandomId)", txn);
-                                insertSysCmd.AddParameter("@EdsmId", DbType.Int64);
-                                insertSysCmd.AddParameter("@X", DbType.Int64);
-                                insertSysCmd.AddParameter("@Y", DbType.Int64);
-                                insertSysCmd.AddParameter("@Z", DbType.Int64);
-                                insertSysCmd.AddParameter("@CreateTimestamp", DbType.Int64);
-                                insertSysCmd.AddParameter("@UpdateTimestamp", DbType.Int64);
-                                insertSysCmd.AddParameter("@VersionTimestamp", DbType.Int64);
-                                insertSysCmd.AddParameter("@GridId", DbType.Int64);
-                                insertSysCmd.AddParameter("@RandomId", DbType.Int64);
-
-                                selectSysCmd = cn.CreateCommand("SELECT Id, X, Y, Z, GridId, RandomId FROM EdsmSystems WHERE EdsmId=@EdsmId");
-                                selectSysCmd.AddParameter("@EdsmId", DbType.Int64);
-
-                                selectNameCmd = cn.CreateCommand("SELECT Name FROM SystemNames WHERE EdsmId = @EdsmId");
-                                selectNameCmd.AddParameter("@EdsmId", DbType.Int64);
-
-                                while (!cancelRequested() && !SQLiteConnectionSystem.IsReadWaiting)
+                                try
                                 {
-                                    if (!jo_enum.MoveNext())
+                                    updateNameCmd = cn.CreateCommand("UPDATE SystemNames SET Name=@Name WHERE EdsmId=@EdsmId", txn);
+                                    updateNameCmd.AddParameter("@Name", DbType.String);
+                                    updateNameCmd.AddParameter("@EdsmId", DbType.Int64);
+
+                                    updateSysCmd = cn.CreateCommand("UPDATE EdsmSystems SET X=@X, Y=@Y, Z=@Z, UpdateTimestamp=@UpdateTimestamp, VersionTimestamp=@VersionTimestamp, GridId=@GridId, RandomId=@RandomId WHERE EdsmId=@EdsmId", txn);
+                                    updateSysCmd.AddParameter("@X", DbType.Int64);
+                                    updateSysCmd.AddParameter("@Y", DbType.Int64);
+                                    updateSysCmd.AddParameter("@Z", DbType.Int64);
+                                    updateSysCmd.AddParameter("@UpdateTimestamp", DbType.Int64);
+                                    updateSysCmd.AddParameter("@VersionTimestamp", DbType.Int64);
+                                    updateSysCmd.AddParameter("@GridId", DbType.Int64);
+                                    updateSysCmd.AddParameter("@RandomId", DbType.Int64);
+                                    updateSysCmd.AddParameter("@EdsmId", DbType.Int64);
+
+                                    insertNameCmd = cn.CreateCommand("INSERT INTO " + sysnamesTableName + " (Name, EdsmId) VALUES (@Name, @EdsmId)", txn);
+                                    insertNameCmd.AddParameter("@Name", DbType.String);
+                                    insertNameCmd.AddParameter("@EdsmId", DbType.Int64);
+
+                                    insertSysCmd = cn.CreateCommand("INSERT INTO " + edsmsysTableName + " (EdsmId, X, Y, Z, CreateTimestamp, UpdateTimestamp, VersionTimestamp, GridId, RandomId) VALUES (@EdsmId, @X, @Y, @Z, @CreateTimestamp, @UpdateTimestamp, @VersionTimestamp, @GridId, @RandomId)", txn);
+                                    insertSysCmd.AddParameter("@EdsmId", DbType.Int64);
+                                    insertSysCmd.AddParameter("@X", DbType.Int64);
+                                    insertSysCmd.AddParameter("@Y", DbType.Int64);
+                                    insertSysCmd.AddParameter("@Z", DbType.Int64);
+                                    insertSysCmd.AddParameter("@CreateTimestamp", DbType.Int64);
+                                    insertSysCmd.AddParameter("@UpdateTimestamp", DbType.Int64);
+                                    insertSysCmd.AddParameter("@VersionTimestamp", DbType.Int64);
+                                    insertSysCmd.AddParameter("@GridId", DbType.Int64);
+                                    insertSysCmd.AddParameter("@RandomId", DbType.Int64);
+
+                                    selectSysCmd = cn.CreateCommand("SELECT Id, X, Y, Z, GridId, RandomId FROM EdsmSystems WHERE EdsmId=@EdsmId");
+                                    selectSysCmd.AddParameter("@EdsmId", DbType.Int64);
+
+                                    selectNameCmd = cn.CreateCommand("SELECT Name FROM SystemNames WHERE EdsmId = @EdsmId");
+                                    selectNameCmd.AddParameter("@EdsmId", DbType.Int64);
+
+                                    while (!cancelRequested())
                                     {
-                                        reportProgress(-1, $"Syncing EDSM systems: {count:N0} processed, {insertcount:N0} new systems, {updatecount:N0} updated systems");
-                                        txn.Commit();
-
-                                        if (jr_eof)
+                                        if (!jo_enum.MoveNext())
                                         {
-                                            date = maxdate.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
+                                            reportProgress(-1, $"Syncing EDSM systems: {count:N0} processed, {insertcount:N0} new systems, {updatecount:N0} updated systems");
+                                            txn.Commit();
 
-                                            Console.WriteLine($"Import took {sw.ElapsedMilliseconds}ms");
-
-                                            for (int id = 0; id < histogramsystems.Length; id++)
+                                            if (jr_eof)
                                             {
-                                                if (histogramsystems[id] != 0)
-                                                    Console.WriteLine("Id " + id + " count " + histogramsystems[id]);
-                                            }
+                                                date = maxdate.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
 
-                                            return updatecount + insertcount;
-                                        }
+                                                Console.WriteLine($"Import took {sw.ElapsedMilliseconds}ms");
 
-                                        jo_enum_finished = true;
-                                        break;
-                                    }
-
-                                    JObject jo = jo_enum.Current;
-
-                                    JObject coords = (JObject)jo["coords"];
-
-                                    if (coords != null && (coords["x"].Type == JTokenType.Float || coords["x"].Type == JTokenType.Integer))
-                                    {
-                                        double x = coords["x"].Value<double>();
-                                        double y = coords["y"].Value<double>();
-                                        double z = coords["z"].Value<double>();
-                                        long edsmid = jo["id"].Value<long>();
-                                        string name = jo["name"].Value<string>();
-                                        int gridid = GridId.Id(x, z);
-                                        int randomid = rnd.Next(0, 99);
-                                        DateTime updatedate = jo["date"].Value<DateTime>();
-                                        histogramsystems[gridid]++;
-
-                                        if (updatedate > maxdate)
-                                            maxdate = updatedate;
-                                        else if (updatedate < maxdate - TimeSpan.FromHours(1))
-                                            outoforder = true;
-
-                                        SystemClassBase dbsys = null;
-
-                                        if (!useTempSystems)
-                                        {
-                                            if (useCache && systemsByEdsmId.ContainsKey(edsmid))
-                                                dbsys = systemsByEdsmId[edsmid];
-
-                                            if (!useCache)
-                                            {
-                                                selectSysCmd.Parameters["@EdsmId"].Value = edsmid;
-                                                using (DbDataReader reader = selectSysCmd.ExecuteReader())
+                                                for (int id = 0; id < histogramsystems.Length; id++)
                                                 {
-                                                    if (reader.Read())
-                                                    {
-                                                        dbsys = new SystemClassBase
-                                                        {
-                                                            id = (long)reader["id"],
-                                                            id_edsm = edsmid
-                                                        };
-
-                                                        if (System.DBNull.Value == reader["x"])
-                                                        {
-                                                            dbsys.x = double.NaN;
-                                                            dbsys.y = double.NaN;
-                                                            dbsys.z = double.NaN;
-                                                        }
-                                                        else
-                                                        {
-                                                            dbsys.x = ((double)(long)reader["X"]) / SystemClassDB.XYZScalar;
-                                                            dbsys.y = ((double)(long)reader["Y"]) / SystemClassDB.XYZScalar;
-                                                            dbsys.z = ((double)(long)reader["Z"]) / SystemClassDB.XYZScalar;
-                                                        }
-
-                                                        dbsys.id_edsm = edsmid;
-                                                        dbsys.gridid = reader["GridId"] == DBNull.Value ? 0 : (int)((long)reader["GridId"]);
-                                                        dbsys.randomid = reader["RandomId"] == DBNull.Value ? 0 : (int)((long)reader["RandomId"]);
-                                                    }
+                                                    if (histogramsystems[id] != 0)
+                                                        Console.WriteLine("Id " + id + " count " + histogramsystems[id]);
                                                 }
 
-                                                if (dbsys != null)
+                                                return updatecount + insertcount;
+                                            }
+
+                                            jo_enum_finished = true;
+                                            break;
+                                        }
+                                        else if (SQLiteConnectionSystem.IsReadWaiting)
+                                        {
+                                            if (blkcount < objs.Count * 3 / 4) // Let the reader barge in if we've processed less than 3/4 of the items
+                                            {
+                                                // Reset the counts, roll back the transaction, and let the reader through...
+                                                insertcount = oldinsertcnt;
+                                                updatecount = oldupdatecnt;
+                                                count = oldcount;
+                                                jo_enum.Reset();
+                                                txn.Rollback();
+                                                break;
+                                            }
+                                        }
+
+                                        EDSMDumpSystem jo = jo_enum.Current;
+                                        EDSMDumpSystemCoords coords = jo.coords;
+
+                                        if (coords != null)
+                                        {
+                                            double x = coords.x;
+                                            double y = coords.y;
+                                            double z = coords.z;
+                                            long edsmid = jo.id;
+                                            string name = jo.name;
+                                            int gridid = GridId.Id(x, z);
+                                            int randomid = rnd.Next(0, 99);
+                                            DateTime updatedate = jo.date;
+                                            histogramsystems[gridid]++;
+
+                                            if (updatedate > maxdate)
+                                                maxdate = updatedate;
+                                            else if (updatedate < maxdate - TimeSpan.FromHours(1))
+                                                outoforder = true;
+
+                                            SystemClassBase dbsys = null;
+
+                                            if (!useTempSystems)
+                                            {
+                                                if (useCache && systemsByEdsmId.ContainsKey(edsmid))
+                                                    dbsys = systemsByEdsmId[edsmid];
+
+                                                if (!useCache)
                                                 {
-                                                    selectNameCmd.Parameters["@EdsmId"].Value = edsmid;
-                                                    using (DbDataReader reader = selectNameCmd.ExecuteReader())
+                                                    selectSysCmd.Parameters["@EdsmId"].Value = edsmid;
+                                                    using (DbDataReader reader = selectSysCmd.ExecuteReader())
                                                     {
                                                         if (reader.Read())
                                                         {
-                                                            dbsys.name = (string)reader["Name"];
+                                                            dbsys = new SystemClassBase
+                                                            {
+                                                                id = (long)reader["id"],
+                                                                id_edsm = edsmid
+                                                            };
+
+                                                            if (System.DBNull.Value == reader["x"])
+                                                            {
+                                                                dbsys.x = double.NaN;
+                                                                dbsys.y = double.NaN;
+                                                                dbsys.z = double.NaN;
+                                                            }
+                                                            else
+                                                            {
+                                                                dbsys.x = ((double)(long)reader["X"]) / SystemClassDB.XYZScalar;
+                                                                dbsys.y = ((double)(long)reader["Y"]) / SystemClassDB.XYZScalar;
+                                                                dbsys.z = ((double)(long)reader["Z"]) / SystemClassDB.XYZScalar;
+                                                            }
+
+                                                            dbsys.id_edsm = edsmid;
+                                                            dbsys.gridid = reader["GridId"] == DBNull.Value ? 0 : (int)((long)reader["GridId"]);
+                                                            dbsys.randomid = reader["RandomId"] == DBNull.Value ? 0 : (int)((long)reader["RandomId"]);
+                                                        }
+                                                    }
+
+                                                    if (dbsys != null)
+                                                    {
+                                                        selectNameCmd.Parameters["@EdsmId"].Value = edsmid;
+                                                        using (DbDataReader reader = selectNameCmd.ExecuteReader())
+                                                        {
+                                                            if (reader.Read())
+                                                            {
+                                                                dbsys.name = (string)reader["Name"];
+                                                            }
                                                         }
                                                     }
                                                 }
                                             }
+
+                                            if (dbsys != null)
+                                            {
+                                                // see if EDSM data changed..
+                                                if (!dbsys.name.Equals(name))
+                                                {
+                                                    updateNameCmd.Parameters["@Name"].Value = name;
+                                                    updateNameCmd.Parameters["@EdsmId"].Value = edsmid;
+                                                    updateNameCmd.ExecuteNonQuery();
+                                                }
+
+                                                if (Math.Abs(dbsys.x - x) > 0.01 ||
+                                                    Math.Abs(dbsys.y - y) > 0.01 ||
+                                                    Math.Abs(dbsys.z - z) > 0.01 ||
+                                                    dbsys.gridid != gridid)  // position changed
+                                                {
+                                                    updateSysCmd.Parameters["@X"].Value = (long)(x * SystemClassDB.XYZScalar);
+                                                    updateSysCmd.Parameters["@Y"].Value = (long)(y * SystemClassDB.XYZScalar);
+                                                    updateSysCmd.Parameters["@Z"].Value = (long)(z * SystemClassDB.XYZScalar);
+                                                    updateSysCmd.Parameters["@UpdateTimestamp"].Value = updatedate.Subtract(new DateTime(2015, 1, 1)).TotalSeconds;
+                                                    updateSysCmd.Parameters["@VersionTimestamp"].Value = DateTime.UtcNow.Subtract(new DateTime(2015, 1, 1)).TotalSeconds;
+                                                    updateSysCmd.Parameters["@GridId"].Value = gridid;
+                                                    updateSysCmd.Parameters["@RandomId"].Value = randomid;
+                                                    updateSysCmd.Parameters["@EdsmId"].Value = edsmid;
+                                                    updateSysCmd.ExecuteNonQuery();
+                                                    updatecount++;
+                                                }
+                                            }
+                                            else                                                                  // not in database..
+                                            {
+                                                insertNameCmd.Parameters["@Name"].Value = name;
+                                                insertNameCmd.Parameters["@EdsmId"].Value = edsmid;
+                                                insertNameCmd.ExecuteNonQuery();
+                                                insertSysCmd.Parameters["@EdsmId"].Value = edsmid;
+                                                insertSysCmd.Parameters["@X"].Value = (long)(x * SystemClassDB.XYZScalar);
+                                                insertSysCmd.Parameters["@Y"].Value = (long)(y * SystemClassDB.XYZScalar);
+                                                insertSysCmd.Parameters["@Z"].Value = (long)(z * SystemClassDB.XYZScalar);
+                                                insertSysCmd.Parameters["@CreateTimestamp"].Value = updatedate.Subtract(new DateTime(2015, 1, 1)).TotalSeconds;
+                                                insertSysCmd.Parameters["@UpdateTimestamp"].Value = updatedate.Subtract(new DateTime(2015, 1, 1)).TotalSeconds;
+                                                insertSysCmd.Parameters["@VersionTimestamp"].Value = DateTime.UtcNow.Subtract(new DateTime(2015, 1, 1)).TotalSeconds;
+                                                insertSysCmd.Parameters["@GridId"].Value = gridid;
+                                                insertSysCmd.Parameters["@RandomId"].Value = randomid;
+                                                insertSysCmd.ExecuteNonQuery();
+                                                insertcount++;
+                                            }
                                         }
 
-                                        if (dbsys != null)
-                                        {
-                                            // see if EDSM data changed..
-                                            if (!dbsys.name.Equals(name))
-                                            {
-                                                updateNameCmd.Parameters["@Name"].Value = name;
-                                                updateNameCmd.Parameters["@EdsmId"].Value = edsmid;
-                                                updateNameCmd.ExecuteNonQuery();
-                                            }
-
-                                            if (Math.Abs(dbsys.x - x) > 0.01 ||
-                                                Math.Abs(dbsys.y - y) > 0.01 ||
-                                                Math.Abs(dbsys.z - z) > 0.01 ||
-                                                dbsys.gridid != gridid)  // position changed
-                                            {
-                                                updateSysCmd.Parameters["@X"].Value = (long)(x * SystemClassDB.XYZScalar);
-                                                updateSysCmd.Parameters["@Y"].Value = (long)(y * SystemClassDB.XYZScalar);
-                                                updateSysCmd.Parameters["@Z"].Value = (long)(z * SystemClassDB.XYZScalar);
-                                                updateSysCmd.Parameters["@UpdateTimestamp"].Value = updatedate.Subtract(new DateTime(2015, 1, 1)).TotalSeconds;
-                                                updateSysCmd.Parameters["@VersionTimestamp"].Value = DateTime.UtcNow.Subtract(new DateTime(2015, 1, 1)).TotalSeconds;
-                                                updateSysCmd.Parameters["@GridId"].Value = gridid;
-                                                updateSysCmd.Parameters["@RandomId"].Value = randomid;
-                                                updateSysCmd.Parameters["@EdsmId"].Value = edsmid;
-                                                updateSysCmd.ExecuteNonQuery();
-                                                updatecount++;
-                                            }
-                                        }
-                                        else                                                                  // not in database..
-                                        {
-                                            insertNameCmd.Parameters["@Name"].Value = name;
-                                            insertNameCmd.Parameters["@EdsmId"].Value = edsmid;
-                                            insertNameCmd.ExecuteNonQuery();
-                                            insertSysCmd.Parameters["@EdsmId"].Value = edsmid;
-                                            insertSysCmd.Parameters["@X"].Value = (long)(x * SystemClassDB.XYZScalar);
-                                            insertSysCmd.Parameters["@Y"].Value = (long)(y * SystemClassDB.XYZScalar);
-                                            insertSysCmd.Parameters["@Z"].Value = (long)(z * SystemClassDB.XYZScalar);
-                                            insertSysCmd.Parameters["@CreateTimestamp"].Value = updatedate.Subtract(new DateTime(2015, 1, 1)).TotalSeconds;
-                                            insertSysCmd.Parameters["@UpdateTimestamp"].Value = updatedate.Subtract(new DateTime(2015, 1, 1)).TotalSeconds;
-                                            insertSysCmd.Parameters["@VersionTimestamp"].Value = DateTime.UtcNow.Subtract(new DateTime(2015, 1, 1)).TotalSeconds;
-                                            insertSysCmd.Parameters["@GridId"].Value = gridid;
-                                            insertSysCmd.Parameters["@RandomId"].Value = randomid;
-                                            insertSysCmd.ExecuteNonQuery();
-                                            insertcount++;
-                                        }
+                                        count++;
+                                        blkcount++;
                                     }
-
-                                    count++;
                                 }
-                            }
-                            finally
-                            {
-                                if (updateNameCmd != null) updateNameCmd.Dispose();
-                                if (updateSysCmd != null) updateSysCmd.Dispose();
-                                if (insertNameCmd != null) insertNameCmd.Dispose();
-                                if (insertSysCmd != null) insertSysCmd.Dispose();
-                                if (selectSysCmd != null) selectSysCmd.Dispose();
+                                finally
+                                {
+                                    if (updateNameCmd != null) updateNameCmd.Dispose();
+                                    if (updateSysCmd != null) updateSysCmd.Dispose();
+                                    if (insertNameCmd != null) insertNameCmd.Dispose();
+                                    if (insertSysCmd != null) insertSysCmd.Dispose();
+                                    if (selectSysCmd != null) selectSysCmd.Dispose();
+                                }
                             }
                         }
                     }
@@ -538,7 +625,7 @@ namespace EliteDangerousCore.EDSM
                 throw new OperationCanceledException();
             }
 
-            return updatecount + insertcount;
+            return count;
         }
 
         private static long ParseEDSMUpdateSystemsReader(JsonTextReader jr, ref string date, ref bool outoforder, bool removenonedsmids, Func<bool> cancelRequested, Action<int, string> reportProgress, bool useCache = true, bool useTempSystems = false)

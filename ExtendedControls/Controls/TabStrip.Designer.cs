@@ -44,35 +44,37 @@ namespace ExtendedControls
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            this.panelBottom = new System.Windows.Forms.Panel();
+            this.panelStrip = new System.Windows.Forms.Panel();
             this.labelControlText = new System.Windows.Forms.Label();
+            this.drawnPanelListSelection = new ExtendedControls.DrawnPanel();
             this.drawnPanelPopOut = new ExtendedControls.DrawnPanel();
             this.panelArrowRight = new System.Windows.Forms.Panel();
             this.panelArrowLeft = new System.Windows.Forms.Panel();
-            this.panelSelected = new System.Windows.Forms.Panel();
+            this.panelSelectedIcon = new System.Windows.Forms.Panel();
             this.labelCurrent = new System.Windows.Forms.Label();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.toolStripMenuItemPopOut = new System.Windows.Forms.ToolStripMenuItem();
-            this.panelBottom.SuspendLayout();
+            this.panelStrip.SuspendLayout();
             this.contextMenuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
-            // panelBottom
+            // panelStrip
             // 
-            this.panelBottom.Controls.Add(this.labelControlText);
-            this.panelBottom.Controls.Add(this.drawnPanelPopOut);
-            this.panelBottom.Controls.Add(this.panelArrowRight);
-            this.panelBottom.Controls.Add(this.panelArrowLeft);
-            this.panelBottom.Controls.Add(this.panelSelected);
-            this.panelBottom.Controls.Add(this.labelCurrent);
-            this.panelBottom.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panelBottom.Location = new System.Drawing.Point(0, 322);
-            this.panelBottom.Name = "panelBottom";
-            this.panelBottom.Size = new System.Drawing.Size(562, 30);
-            this.panelBottom.TabIndex = 0;
-            this.panelBottom.MouseEnter += new System.EventHandler(this.panelBottom_MouseEnter);
-            this.panelBottom.MouseLeave += new System.EventHandler(this.panelBottom_MouseLeave);
+            this.panelStrip.Controls.Add(this.labelControlText);
+            this.panelStrip.Controls.Add(this.drawnPanelListSelection);
+            this.panelStrip.Controls.Add(this.drawnPanelPopOut);
+            this.panelStrip.Controls.Add(this.panelArrowRight);
+            this.panelStrip.Controls.Add(this.panelArrowLeft);
+            this.panelStrip.Controls.Add(this.panelSelectedIcon);
+            this.panelStrip.Controls.Add(this.labelCurrent);
+            this.panelStrip.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.panelStrip.Location = new System.Drawing.Point(0, 322);
+            this.panelStrip.Name = "panelStrip";
+            this.panelStrip.Size = new System.Drawing.Size(562, 30);
+            this.panelStrip.TabIndex = 0;
+            this.panelStrip.MouseEnter += new System.EventHandler(this.MouseEnterPanelObjects);
+            this.panelStrip.MouseLeave += new System.EventHandler(this.MouseLeavePanelObjects);
             // 
             // labelControlText
             // 
@@ -82,8 +84,20 @@ namespace ExtendedControls
             this.labelControlText.Size = new System.Drawing.Size(98, 13);
             this.labelControlText.TabIndex = 4;
             this.labelControlText.Text = "Control text defined";
-            this.labelControlText.MouseEnter += new System.EventHandler(this.panelBottom_MouseEnter);
-            this.labelControlText.MouseLeave += new System.EventHandler(this.panelBottom_MouseLeave);
+            this.labelControlText.MouseEnter += new System.EventHandler(this.MouseEnterPanelObjects);
+            this.labelControlText.MouseLeave += new System.EventHandler(this.MouseLeavePanelObjects);
+            // 
+            // drawnPanelListSelection
+            // 
+            this.drawnPanelListSelection.DrawnImage = global::ExtendedControls.Properties.Resources.panels;
+            this.drawnPanelListSelection.ImageSelected = ExtendedControls.DrawnPanel.ImageType.None;
+            this.drawnPanelListSelection.Location = new System.Drawing.Point(210, 3);
+            this.drawnPanelListSelection.Name = "drawnPanelListSelection";
+            this.drawnPanelListSelection.Size = new System.Drawing.Size(24, 24);
+            this.drawnPanelListSelection.TabIndex = 3;
+            this.drawnPanelListSelection.Click += new System.EventHandler(this.drawnPanelListSelection_Click);
+            this.drawnPanelListSelection.MouseEnter += new System.EventHandler(this.MouseEnterPanelObjects);
+            this.drawnPanelListSelection.MouseLeave += new System.EventHandler(this.MouseLeavePanelObjects);
             // 
             // drawnPanelPopOut
             // 
@@ -95,8 +109,8 @@ namespace ExtendedControls
             this.drawnPanelPopOut.TabIndex = 3;
             this.toolTip1.SetToolTip(this.drawnPanelPopOut, "Click to pop out the current panel into another window");
             this.drawnPanelPopOut.Click += new System.EventHandler(this.panelPopOut_Click);
-            this.drawnPanelPopOut.MouseEnter += new System.EventHandler(this.panelBottom_MouseEnter);
-            this.drawnPanelPopOut.MouseLeave += new System.EventHandler(this.panelBottom_MouseLeave);
+            this.drawnPanelPopOut.MouseEnter += new System.EventHandler(this.MouseEnterPanelObjects);
+            this.drawnPanelPopOut.MouseLeave += new System.EventHandler(this.MouseLeavePanelObjects);
             // 
             // panelArrowRight
             // 
@@ -109,8 +123,8 @@ namespace ExtendedControls
             this.toolTip1.SetToolTip(this.panelArrowRight, "Click to scroll the list right");
             this.panelArrowRight.Visible = false;
             this.panelArrowRight.MouseDown += new System.Windows.Forms.MouseEventHandler(this.panelArrowRight_MouseDown);
-            this.panelArrowRight.MouseEnter += new System.EventHandler(this.panelBottom_MouseEnter);
-            this.panelArrowRight.MouseLeave += new System.EventHandler(this.panelBottom_MouseLeave);
+            this.panelArrowRight.MouseEnter += new System.EventHandler(this.MouseEnterPanelObjects);
+            this.panelArrowRight.MouseLeave += new System.EventHandler(this.MouseLeavePanelObjects);
             this.panelArrowRight.MouseUp += new System.Windows.Forms.MouseEventHandler(this.panelArrowRight_MouseUp);
             // 
             // panelArrowLeft
@@ -124,19 +138,19 @@ namespace ExtendedControls
             this.toolTip1.SetToolTip(this.panelArrowLeft, "Click to scroll the list left");
             this.panelArrowLeft.Visible = false;
             this.panelArrowLeft.MouseDown += new System.Windows.Forms.MouseEventHandler(this.panelArrowLeft_MouseDown);
-            this.panelArrowLeft.MouseEnter += new System.EventHandler(this.panelBottom_MouseEnter);
-            this.panelArrowLeft.MouseLeave += new System.EventHandler(this.panelBottom_MouseLeave);
+            this.panelArrowLeft.MouseEnter += new System.EventHandler(this.MouseEnterPanelObjects);
+            this.panelArrowLeft.MouseLeave += new System.EventHandler(this.MouseLeavePanelObjects);
             this.panelArrowLeft.MouseUp += new System.Windows.Forms.MouseEventHandler(this.panelArrowLeft_MouseUp);
             // 
-            // panelSelected
+            // panelSelectedIcon
             // 
-            this.panelSelected.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this.panelSelected.Location = new System.Drawing.Point(3, 3);
-            this.panelSelected.Name = "panelSelected";
-            this.panelSelected.Size = new System.Drawing.Size(24, 24);
-            this.panelSelected.TabIndex = 1;
-            this.panelSelected.MouseEnter += new System.EventHandler(this.panelBottom_MouseEnter);
-            this.panelSelected.MouseLeave += new System.EventHandler(this.panelBottom_MouseLeave);
+            this.panelSelectedIcon.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+            this.panelSelectedIcon.Location = new System.Drawing.Point(3, 3);
+            this.panelSelectedIcon.Name = "panelSelectedIcon";
+            this.panelSelectedIcon.Size = new System.Drawing.Size(24, 24);
+            this.panelSelectedIcon.TabIndex = 1;
+            this.panelSelectedIcon.MouseEnter += new System.EventHandler(this.MouseEnterPanelObjects);
+            this.panelSelectedIcon.MouseLeave += new System.EventHandler(this.MouseLeavePanelObjects);
             // 
             // labelCurrent
             // 
@@ -146,8 +160,8 @@ namespace ExtendedControls
             this.labelCurrent.Size = new System.Drawing.Size(92, 13);
             this.labelCurrent.TabIndex = 0;
             this.labelCurrent.Text = "Tab Strip Control..";
-            this.labelCurrent.MouseEnter += new System.EventHandler(this.panelBottom_MouseEnter);
-            this.labelCurrent.MouseLeave += new System.EventHandler(this.panelBottom_MouseLeave);
+            this.labelCurrent.MouseEnter += new System.EventHandler(this.MouseEnterPanelObjects);
+            this.labelCurrent.MouseLeave += new System.EventHandler(this.MouseLeavePanelObjects);
             // 
             // toolTip1
             // 
@@ -171,13 +185,13 @@ namespace ExtendedControls
             // 
             // TabStrip
             // 
-            this.Controls.Add(this.panelBottom);
+            this.Controls.Add(this.panelStrip);
             this.Name = "TabStrip";
             this.Size = new System.Drawing.Size(562, 352);
             this.Layout += new System.Windows.Forms.LayoutEventHandler(this.TabStrip_Layout);
             this.Resize += new System.EventHandler(this.TabStrip_Resize);
-            this.panelBottom.ResumeLayout(false);
-            this.panelBottom.PerformLayout();
+            this.panelStrip.ResumeLayout(false);
+            this.panelStrip.PerformLayout();
             this.contextMenuStrip1.ResumeLayout(false);
             this.ResumeLayout(false);
 
@@ -185,9 +199,9 @@ namespace ExtendedControls
 
         #endregion
 
-        private System.Windows.Forms.Panel panelBottom;
+        private System.Windows.Forms.Panel panelStrip;
         private System.Windows.Forms.Label labelCurrent;
-        private System.Windows.Forms.Panel panelSelected;
+        private System.Windows.Forms.Panel panelSelectedIcon;
         private System.Windows.Forms.ToolTip toolTip1;
         private System.Windows.Forms.Panel panelArrowRight;
         private System.Windows.Forms.Panel panelArrowLeft;
@@ -195,5 +209,6 @@ namespace ExtendedControls
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemPopOut;
         private System.Windows.Forms.Label labelControlText;
+        private DrawnPanel drawnPanelListSelection;
     }
 }

@@ -12,7 +12,7 @@ namespace ExtendedControls
 {
     // specific implementation of a Themeable system.. does not include save/load to file etc due to the user may want their own implementation
 
-    public class ThemeStandard : ThemeableForms
+    public class ThemeStandard : ITheme
     {
         public static readonly string[] ButtonStyles = "System Flat Gradient".Split();
         public static readonly string[] TextboxBorderStyles = "None FixedSingle Fixed3D Colour".Split();
@@ -143,17 +143,29 @@ namespace ExtendedControls
 
         public string Name { get { return currentsettings.name; } set { currentsettings.name = value; } }
 
-        public Color LabelColor { get { return currentsettings.colors[Settings.CI.label]; } set { SetCustom(); currentsettings.colors[Settings.CI.label] = value; } }
-        public Color SPanelColor { get { return currentsettings.colors[Settings.CI.s_panel]; } set { SetCustom(); currentsettings.colors[Settings.CI.s_panel] = value; } }
-        public Color TextBackColor { get { return currentsettings.colors[Settings.CI.textbox_back]; } set { SetCustom(); currentsettings.colors[Settings.CI.textbox_back] = value; } }
+        public Color Form { get { return currentsettings.colors[Settings.CI.form]; } set { SetCustom(); currentsettings.colors[Settings.CI.form] = value; } }
+
+        public Color ButtonBackColor { get { return currentsettings.colors[Settings.CI.button_back]; } set { SetCustom(); currentsettings.colors[Settings.CI.button_back] = value; } }
+        public Color ButtonBorderColor { get { return currentsettings.colors[Settings.CI.button_border]; } set { SetCustom(); currentsettings.colors[Settings.CI.button_border] = value; } }
+        public Color ButtonTextColor { get { return currentsettings.colors[Settings.CI.button_text]; } set { SetCustom(); currentsettings.colors[Settings.CI.button_text] = value; } }
+
+        public Color GridCellText { get { return currentsettings.colors[Settings.CI.grid_celltext]; } set { SetCustom(); currentsettings.colors[Settings.CI.grid_celltext] = value; } }
+        public Color GridBorderLines { get { return currentsettings.colors[Settings.CI.grid_borderlines]; } set { SetCustom(); currentsettings.colors[Settings.CI.grid_borderlines] = value; } }
+
         public Color TextBlockColor { get { return currentsettings.colors[Settings.CI.textbox_fore]; } set { SetCustom(); currentsettings.colors[Settings.CI.textbox_fore] = value; } }
         public Color TextBlockHighlightColor { get { return currentsettings.colors[Settings.CI.textbox_highlight]; } set { SetCustom(); currentsettings.colors[Settings.CI.textbox_highlight] = value; } }
         public Color TextBlockSuccessColor { get { return currentsettings.colors[Settings.CI.textbox_success]; } set { SetCustom(); currentsettings.colors[Settings.CI.textbox_success] = value; } }
-        public string TextBlockBorderStyle { get { return currentsettings.textboxborderstyle; } set { SetCustom(); currentsettings.textboxborderstyle = value; } }
+        public Color TextBackColor { get { return currentsettings.colors[Settings.CI.textbox_back]; } set { SetCustom(); currentsettings.colors[Settings.CI.textbox_back] = value; } }
+        public Color TextBlockBorderColor { get { return currentsettings.colors[Settings.CI.textbox_border]; } set { SetCustom(); currentsettings.colors[Settings.CI.textbox_border] = value; } }
+
         public Color VisitedSystemColor { get { return currentsettings.colors[Settings.CI.travelgrid_visited]; } set { SetCustom(); currentsettings.colors[Settings.CI.travelgrid_visited] = value; } }
         public Color NonVisitedSystemColor { get { return currentsettings.colors[Settings.CI.travelgrid_nonvisted]; } set { SetCustom(); currentsettings.colors[Settings.CI.travelgrid_nonvisted] = value; } }
-        public Color GridCellText { get { return currentsettings.colors[Settings.CI.grid_celltext]; } set { SetCustom(); currentsettings.colors[Settings.CI.grid_celltext] = value; } }
-        public Color GridBorderLines { get { return currentsettings.colors[Settings.CI.grid_borderlines]; } set { SetCustom(); currentsettings.colors[Settings.CI.grid_borderlines] = value; } }
+
+        public Color LabelColor { get { return currentsettings.colors[Settings.CI.label]; } set { SetCustom(); currentsettings.colors[Settings.CI.label] = value; } }
+
+        public Color SPanelColor { get { return currentsettings.colors[Settings.CI.s_panel]; } set { SetCustom(); currentsettings.colors[Settings.CI.s_panel] = value; } }
+
+        public string TextBlockBorderStyle { get { return currentsettings.textboxborderstyle; } set { SetCustom(); currentsettings.textboxborderstyle = value; } }
 
         public string ButtonStyle { get { return currentsettings.buttonstyle; } set { SetCustom(); currentsettings.buttonstyle = value; } }
 
@@ -178,6 +190,8 @@ namespace ExtendedControls
                 return new Font(currentsettings.fontname, currentsettings.fontsize);
             }
         }
+
+        public Font GetFontMaxSized(float size) { return new Font(currentsettings.fontname, Math.Min(currentsettings.fontsize,size)); }
 
         public Settings currentsettings;           // if name = custom, then its not a standard theme..
         public ThemeToolStripRenderer toolstripRenderer;
@@ -323,10 +337,13 @@ namespace ExtendedControls
             return WindowsFrame;
         }
 
-        public void ApplyToControls(Control parent, Font fnt = null)
+        public void ApplyToControls(Control parent, Font fnt = null, bool applytothis = false)
         {
             if (fnt == null)
                 fnt = GetFont;                                          // do not apply to Form, only to sub controls
+
+            if (applytothis)
+                UpdateColorControls(parent.Parent, parent, fnt, 0);
 
             foreach (Control c in parent.Controls)
                 UpdateColorControls(parent, c, fnt, 0);
@@ -800,6 +817,16 @@ namespace ExtendedControls
                         i.BackColor = currentsettings.colors[Settings.CI.textbox_back];
                     }
                 }
+            }
+            else if (myControl is TabStrip )
+            {
+                TabStrip ts = myControl as TabStrip;
+                ts.DropDownBackgroundColor = currentsettings.colors[Settings.CI.button_back];
+                ts.DropDownBorderColor = currentsettings.colors[Settings.CI.textbox_border];
+                ts.DropDownScrollBarButtonColor = currentsettings.colors[Settings.CI.textbox_scrollbutton];
+                ts.DropDownScrollBarColor = currentsettings.colors[Settings.CI.textbox_sliderback];
+                ts.DropDownMouseOverBackgroundColor = currentsettings.colors[Settings.CI.button_back].Multiply(mouseoverscaling);
+                return;
             }
             else
             {
