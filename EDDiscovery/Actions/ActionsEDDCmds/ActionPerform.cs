@@ -154,6 +154,14 @@ namespace EDDiscovery.Actions
                 {
                     ap["VoiceNames"] = (ap.actioncontroller as ActionController).SpeechSynthesizer.GetVoiceNames().QuoteStrings();
                 }
+                else if (cmdname.Equals("bindings"))
+                {
+                    ap["Bindings"] = (ap.actioncontroller as ActionController).FrontierBindings.ListBindings();
+                }
+                else if (cmdname.Equals("bindingvalues"))
+                {
+                    ap["BindingValues"] = (ap.actioncontroller as ActionController).FrontierBindings.ListValues();
+                }
                 else
                     ap.ReportError("Unknown command " + cmdname + " in Performaction");
             }
