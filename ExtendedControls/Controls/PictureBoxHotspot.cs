@@ -218,9 +218,15 @@ namespace ExtendedControls
                 foreach (var e in elements)
                 {
                     if (e.imgowned)
+                    {
                         e.img?.Dispose();
+                    }
+                    e.img = null;
                     if (e.altimgowned)
+                    {
                         e.altimg?.Dispose();
+                    }
+                    e.altimg = null;
                     e.tag = null;
                 }
                 elements.Clear();
@@ -246,6 +252,7 @@ namespace ExtendedControls
         {
             Size max = DisplaySize();
             Image?.Dispose();
+            Image = null;
             if (max.Width > 0 && max.Height > 0 ) // will be zero if no elements
             {
                 elementin = null;
