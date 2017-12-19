@@ -12,16 +12,16 @@
     <ROW Property="AI_FrameColor" Value="powderblue" MultiBuildValue="AnyCPU_Debug:orange" MsiKey="AI_FrameColor"/>
     <ROW Property="AI_ImagesColor" Value="powderblue" MultiBuildValue="AnyCPU_Debug:orange" MsiKey="AI_ImagesColor"/>
     <ROW Property="ALLUSERS" Value="1" MultiBuildValue="AnyCPU_Debug:2"/>
-    <ROW Property="ARPHELPLINK" Value="https://forums.frontier.co.uk/showthread.php?t=138155&amp;p=2113535"/>
+    <ROW Property="ARPHELPLINK" Value="https://github.com/EDDiscovery/EDDiscovery/wiki"/>
     <ROW Property="ARPNOREPAIR" MultiBuildValue="AnyCPU_Debug:1"/>
     <ROW Property="ARPURLINFOABOUT" Value="https://github.com/EDDiscovery/EDDiscovery"/>
-    <ROW Property="ARPURLUPDATEINFO" Value="http://eddiscovery.astronet.se/release/"/>
+    <ROW Property="ARPURLUPDATEINFO" Value="https://github.com/EDDiscovery/EDDiscovery/releases"/>
     <ROW Property="CTRLS" Value="2"/>
     <ROW Property="Manufacturer" Value="EDDiscovery"/>
-    <ROW Property="ProductCode" Value="1033:{308A53F1-D459-4ED3-A235-208227C01DD6} 1053:{D2BA92CC-9F21-4D91-97E6-CA351B86DAC3} " Type="16"/>
+    <ROW Property="ProductCode" Value="1033:{296AA011-89A2-4881-8307-AF62E3922492} 1053:{B7FF20A2-2D2F-47EA-8247-42D296E5DC72} " Type="16"/>
     <ROW Property="ProductLanguage" Value="1033"/>
     <ROW Property="ProductName" Value="EDDiscovery"/>
-    <ROW Property="ProductVersion" Value="9.0.0" Type="32"/>
+    <ROW Property="ProductVersion" Value="9.0.1" Type="32"/>
     <ROW Property="SecureCustomProperties" Value="OLDPRODUCTS;AI_NEWERPRODUCTFOUND;UPGRADE_1;AI_SETUPEXEPATH;SETUPEXEDIR"/>
     <ROW Property="UpgradeCode" Value="{27EA2F84-C7C5-41E2-9C59-CC42CCDC9FEF}"/>
     <ROW Property="WindowsType9X" MultiBuildValue="AnyCPU_Debug:Windows 9x/ME" ValueLocId="-"/>
