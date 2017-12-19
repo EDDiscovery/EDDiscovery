@@ -47,7 +47,7 @@ namespace EDDiscovery.UserControls
             // this allows the row to grow to accomodate the text.. with a min height of 32.
             dataGridViewScangrid.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
             dataGridViewScangrid.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.DisplayedCells;     // NEW! appears to work https://msdn.microsoft.com/en-us/library/74b2wakt(v=vs.110).aspx
-            dataGridViewScangrid.RowTemplate.MinimumHeight = 32;
+            dataGridViewScangrid.RowTemplate.MinimumHeight = 32;            
         }
 
         public override void Init()
@@ -86,8 +86,7 @@ namespace EDDiscovery.UserControls
             if (he != null && (last_he == null || he != last_he || he.EntryType == JournalTypeEnum.Scan))
             {
                 last_he = he;
-                DrawSystem();
-                dataGridViewScangrid.Update();
+                DrawSystem();                
             }
         }
 
@@ -97,14 +96,14 @@ namespace EDDiscovery.UserControls
             {
                 last_he = he;
                 DrawSystem();
+                dataGridViewScangrid.Refresh();
+                dataGridViewScangrid.ClearSelection();
             }
         }
 
         void DrawSystem() // draw last_sn, last_he
         {
-            dataGridViewScangrid.Rows.Clear();
-
-            dataGridViewScangrid.Refresh();
+            dataGridViewScangrid.Rows.Clear();            
 
             if (last_he == null)
             {
@@ -161,11 +160,7 @@ namespace EDDiscovery.UserControls
 
                         // habitable zone for stars - do not display for black holes.
                         if (sn.ScanData.HabitableZoneInner != null && sn.ScanData.HabitableZoneOuter != null && sn.ScanData.StarTypeID != EDStar.H)
-                            bdDetails.AppendFormat("Habitable Zone: {0}-{1}AU ({2})", (sn.ScanData.HabitableZoneInner.Value / JournalScan.oneAU_LS).ToString("N2"), (sn.ScanData.HabitableZoneOuter.Value / JournalScan.oneAU_LS).ToString("N2"), sn.ScanData.GetHabZoneStringLs() + " ");
-
-                        // append the terraformable state to the planet class
-                        if (sn.ScanData.Terraformable == true)
-                            bdDetails.Append("Terraformable. ");
+                            bdDetails.AppendFormat("Habitable Zone: {0}-{1}AU ({2}). ", (sn.ScanData.HabitableZoneInner.Value / JournalScan.oneAU_LS).ToString("N2"), (sn.ScanData.HabitableZoneOuter.Value / JournalScan.oneAU_LS).ToString("N2"), sn.ScanData.GetHabZoneStringLs());
 
                         // tell us that a bodie is landable, and shows its gravity
                         if (sn.ScanData.IsLandable == true)
@@ -181,29 +176,33 @@ namespace EDDiscovery.UserControls
                             bdDetails.Append("Landable" + Gg + ". ");
                         }
 
+                        // append the terraformable state to the planet class
+                        if (sn.ScanData.Terraformable == true)
+                            bdDetails.Append("Terraformable. ");                                               
+
+                        // tell us that there is some volcanic activity
+                        if (sn.ScanData.Volcanism != null)
+                            bdDetails.Append("Volcanism. ");
+
                         // have some ring?
                         if (sn.ScanData.HasRings && sn.ScanData.IsStar == false)
                         {
                             if (sn.ScanData.Rings.Count() > 1)
                             {
-                                bdDetails.Append("Has " + sn.ScanData.Rings.Count() + " rings. ");
+                                bdDetails.Append("Has " + sn.ScanData.Rings.Count() + " rings: ");
                             }
                             else
                             {
-                                bdDetails.Append("Has 1 ring. ");
+                                bdDetails.Append("Has 1 ring: ");
                             }
 
                             for (int i = 0; i < sn.ScanData.Rings.Length; i++)
                             {
                                 string RingName = sn.ScanData.Rings[i].Name;
                                 bdDetails.Append(JournalScan.StarPlanetRing.DisplayStringFromRingClass(sn.ScanData.Rings[i].RingClass) + " ");
-                                bdDetails.Append((sn.ScanData.Rings[i].InnerRad / JournalScan.oneLS_m).ToString("N2") + "ls to " + (sn.ScanData.Rings[i].OuterRad / JournalScan.oneLS_m).ToString("N2") + "ls ");
+                                bdDetails.Append((sn.ScanData.Rings[i].InnerRad / JournalScan.oneLS_m).ToString("N2") + "ls to " + (sn.ScanData.Rings[i].OuterRad / JournalScan.oneLS_m).ToString("N2") + "ls. ");
                             }
-                        }
-                            
-                            // tell us that there is some volcanic activity
-                        if (sn.ScanData.Volcanism != null)
-                            bdDetails.Append("Volcanism. ");
+                        }                                                        
 
                         // print the main atmospheric composition
                         if (sn.ScanData.Atmosphere != null && sn.ScanData.Atmosphere != "None")
@@ -244,7 +243,7 @@ namespace EDDiscovery.UserControls
             {
                 foreach (StarScan.ScanNode node in sn.children.Values)
                 {
-                    Flatten(node, flattened);
+                    Flatten(node, flattened);                
                 }
             }
             return flattened;
