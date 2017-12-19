@@ -42,6 +42,7 @@ namespace EliteDangerousCore.JournalEvents
     //•	PassengerVIPs: bool
     //•	PassengerWanted: bool
     //•	PassengerType: eg Tourist, Soldier, Explorer,...
+    //•	Reward: Credit reward for completing the mission
 
 
     [JournalEntryType(JournalTypeEnum.MissionAccepted)]
@@ -86,6 +87,8 @@ namespace EliteDangerousCore.JournalEvents
             PassengerWanted = evt["PassengerWanted"].BoolNull();
             PassengerType = evt["PassengerType"].StrNull();
 
+            Reward = evt["Reward"].IntNull();
+
         }
 
         public string Faction { get; set; }                 // in MissionAccepted order
@@ -114,6 +117,8 @@ namespace EliteDangerousCore.JournalEvents
         public bool? PassengerVIPs { get; set; }
         public bool? PassengerWanted { get; set; }
         public string PassengerType { get; set; }
+
+        public int? Reward { get; set; }
 
         public override System.Drawing.Bitmap Icon { get { return EliteDangerous.Properties.Resources.missionaccepted; } }
 
