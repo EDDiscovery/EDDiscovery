@@ -27,6 +27,7 @@ using EliteDangerousCore.DB;
 using EliteDangerousCore;
 using EliteDangerousCore.EDSM;
 using EliteDangerousCore.EDDN;
+using System.Threading;
 
 namespace EDDiscovery.UserControls
 {
@@ -98,7 +99,7 @@ namespace EDDiscovery.UserControls
         }
 
         public override void Init()
-        {                       
+        {
             cfs.ConfigureThirdOption("Travel", "Docked;FSD Jump;Undocked;");
             cfs.Changed += EventFilterChanged;
             TravelHistoryFilter.InitaliseComboBox(comboBoxHistoryWindow, DbHistorySave);
@@ -116,14 +117,14 @@ namespace EDDiscovery.UserControls
             writeEventInfoToLogDebugToolStripMenuItem.Visible = false;
 #endif
 
-            ExtraIcons(false,false);
+            ExtraIcons(false, false);
 
             discoveryform.OnHistoryChange += HistoryChanged;
             discoveryform.OnNewEntry += AddNewEntry;
             discoveryform.OnNoteChanged += OnNoteChanged;
         }
 
-        public void ExtraIcons(bool icon, bool popout )
+        public void ExtraIcons(bool icon, bool popout)
         {
             panelHistoryIcon.Visible = icon;
             drawnPanelPopOut.Visible = popout;
@@ -367,7 +368,7 @@ namespace EDDiscovery.UserControls
         {
             //System.Diagnostics.Debug.WriteLine("KP " + (int)e.KeyChar);
 
-            if (OnKeyDownInCell != null && dataGridViewTravel.CurrentCell != null )
+            if (OnKeyDownInCell != null && dataGridViewTravel.CurrentCell != null)
                 OnKeyDownInCell(e.KeyChar, dataGridViewTravel.CurrentCell.RowIndex, dataGridViewTravel.CurrentCell.ColumnIndex, dataGridViewTravel.CurrentCell.ColumnIndex == TravelHistoryColumns.Note);
         }
 
@@ -379,31 +380,67 @@ namespace EDDiscovery.UserControls
         }
 
         void CheckForSelection(Keys code)
-        { 
+        {
             bool cursorkeydown = (code == Keys.Up || code == Keys.Down || code == Keys.PageDown || code == Keys.PageUp || code == Keys.Left || code == Keys.Right);
 
             if (cursorkeydown)
                 FireChangeSelection();
         }
 
-        private void OnNoteChanged(Object sender,HistoryEntry he, bool committed)
+        private void OnNoteChanged(Object sender, HistoryEntry he, bool committed)
         {
-            if (rowsbyjournalid.ContainsKey(he.Journalid) ) // if we can find the grid entry
+            if (rowsbyjournalid.ContainsKey(he.Journalid)) // if we can find the grid entry
             {
                 string s = (he.snc != null) ? he.snc.Note : "";     // snc may have gone null, so cope with it
                 rowsbyjournalid[he.Journalid].Cells[TravelHistoryColumns.Note].Value = s;
             }
         }
 
+
+        private const int SEARCH_DELAY_MS = 750;
+        private System.Threading.Timer _delayedSearchTimer;
         private void textBoxFilter_TextChanged(object sender, EventArgs e)
         {
-            Tuple<long, int> pos = CurrentGridPosByJID();
+            if (_delayedSearchTimer == null) //first search, init the timer
+            {
+                _delayedSearchTimer = new System.Threading.Timer(PerformSearch, null, Timeout.Infinite, 0);
+            }
 
-            StaticFilters.FilterGridView(dataGridViewTravel, textBoxFilter.Text);
+            //start the timer ready to search in a little while.
+            _delayedSearchTimer.Change(SEARCH_DELAY_MS, SEARCH_DELAY_MS);
 
-            int rowno = FindGridPosByJID(pos.Item1,true);
-            if (rowno >= 0)
-                dataGridViewTravel.CurrentCell = dataGridViewTravel.Rows[rowno].Cells[pos.Item2];
+        }
+
+        private void PerformSearch(object _)
+        {
+            // We're not disposing of the timer in the control Dispose.  Given the small window in which the form would have to be closed with an undisposed timer, 
+            // getting the locking right to prevent double-dispose attempts etc feels like the bigger problem atm.  Revisit this if we start seeing undisposed timers in the 
+            // mem-dumps.
+            _delayedSearchTimer.Dispose();
+            _delayedSearchTimer = null;
+
+            BeginInvoke(new Action(() =>
+            {
+                labelSearch.Text = "Searching...";
+                Application.DoEvents();
+
+                try
+                {
+                    Tuple<long, int> pos = CurrentGridPosByJID();
+
+                    StaticFilters.FilterGridView(dataGridViewTravel, textBoxFilter.Text);
+
+                    int rowno = FindGridPosByJID(pos.Item1, true);
+                    if (rowno >= 0)
+                        dataGridViewTravel.CurrentCell = dataGridViewTravel.Rows[rowno].Cells[pos.Item2];
+                }
+                finally
+                {
+                    labelSearch.Text = "Search";
+                }
+
+
+            }));
         }
 
         private void dataGridViewTravel_RowPostPaint(object sender, DataGridViewRowPostPaintEventArgs e)
@@ -866,9 +903,9 @@ namespace EDDiscovery.UserControls
                 {
                     if (noteform.ShowDialog(FindForm()) == DialogResult.OK)
                     {
-                        rightclicksystem.SetJournalSystemNoteText(noteform.NoteText, true , EDCommander.Current.SyncToEdsm);
+                        rightclicksystem.SetJournalSystemNoteText(noteform.NoteText, true, EDCommander.Current.SyncToEdsm);
 
-                        discoveryform.NoteChanged(this,rightclicksystem, true);
+                        discoveryform.NoteChanged(this, rightclicksystem, true);
                     }
                 }
             }
@@ -935,7 +972,7 @@ namespace EDDiscovery.UserControls
         private void buttonExtExcel_Click(object sender, EventArgs e)
         {
             Forms.ExportForm frm = new Forms.ExportForm();
-            frm.Init(new string[] { "View", "FSD Jumps only", "With Notes only" , "With Notes, no repeat"  });
+            frm.Init(new string[] { "View", "FSD Jumps only", "With Notes only", "With Notes, no repeat" });
 
             if (frm.ShowDialog(FindForm()) == DialogResult.OK)
             {
@@ -985,7 +1022,7 @@ namespace EDDiscovery.UserControls
                             fsd.BoostUsed,
                             he.snc != null ? he.snc.Note : "",
                         };
-                        
+
                     };
                 }
                 else
@@ -1060,7 +1097,7 @@ namespace EDDiscovery.UserControls
 
         }
 
-#endregion
+        #endregion
 
         private void drawnPanelPopOut_Click(object sender, EventArgs e)
         {
