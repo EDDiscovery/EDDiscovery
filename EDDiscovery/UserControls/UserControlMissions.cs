@@ -127,6 +127,7 @@ namespace EDDiscovery.UserControls
                                         ms.Mission.Faction,
                                         ms.Mission.DestinationSystem + ((ms.Mission.DestinationStation.Length>0) ? ":" +ms.Mission.DestinationStation :""),
                                         ms.Mission.TargetFaction,
+                                        ms.Mission.Reward.GetValueOrDefault().ToString("N0"),
                                         ms.Info()
                     };
 
