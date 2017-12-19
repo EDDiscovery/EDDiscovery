@@ -260,7 +260,11 @@ namespace EDDiscovery.Forms
             if (IsTransparencySupported)
                 transparentmode = (TransparencyMode)SQLiteDBClass.GetSettingInt(dbrefname + "Transparent", deftransparent ? (int)TransparencyMode.On : (int)TransparencyMode.Off);
 
-            SetTopMost(SQLiteDBClass.GetSettingBool(dbrefname + "TopMost", deftopmost)); // this also establishes transparency
+            bool wantedTopMost = SQLiteDBClass.GetSettingBool(dbrefname + "TopMost", deftopmost);
+            //kludge 
+            SetTopMost(wantedTopMost);
+            SetTopMost(!wantedTopMost);
+            SetTopMost(wantedTopMost); // this also establishes transparency
 
             var top = SQLiteDBClass.GetSettingInt(dbrefname + "Top", -999);
             //System.Diagnostics.Debug.WriteLine("Position Top is {0} {1}", dbrefname, top);
