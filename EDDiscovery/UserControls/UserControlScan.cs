@@ -391,32 +391,6 @@ namespace EDDiscovery.UserControls
                                                 new Point(curpos.X + offset, curpos.Y + alignv),      // WE are basing it on a 1/4 + 1 + 1/4 grid, this is not being made bigger, move off
                                                 size, starLabel, tip, alignv + labelvoff, sc.IsEDSMBody, false);          // and the label needs to be a quarter height below it..
 
-                    /*
-                    if (sc.HasRings)
-                    {
-                        curpos = new Point(endpoint.X + itemsepar.Width, curpos.Y);
-
-                        Point endbelt = curpos;
-
-                        for (int i = 0; i < sc.Rings.Length; i++)
-                        {
-                            string name = sc.Rings[i].Name;
-                            if (name.Length > sn.fullname.Length && name.Substring(0, sn.fullname.Length).Equals(sn.fullname))
-                                name = name.Substring(sn.fullname.Length).Trim();
-
-                            curpos.X += 4;      // a little spacing, image is tight
-
-                            endbelt = CreateImageLabel(pc, EDDiscovery.Properties.Resources.Belt,
-                                new Point(curpos.X, curpos.Y + alignv), new Size(size.Width / 2, size.Height), name,
-                                                                sc.RingInformationMoons(i), alignv + labelvoff, sc.IsEDSMBody, false);
-
-                            curpos = new Point(endbelt.X + itemsepar.Width, curpos.Y);
-                        }
-
-                        endpoint = new Point(curpos.X, endpoint.Y);
-                    }
-                     */
-
                     offset += size.Width / 2;       // return the middle used was this..
                 }
                 else //else not a top-level star
@@ -448,7 +422,6 @@ namespace EDDiscovery.UserControls
                                 if (HasMeaningfulVolcanism(sc)) //this renders below the terraformable icon if present
                                     g.DrawImage(Properties.Resources.Volcano, new Rectangle(quarterheight / 2, (int)(quarterheight * 1.5), quarterheight, quarterheight));
 
-                                //experiment - does this take all the fun out of it?
                                 if (sc.EstimatedValue > 50000)
                                     g.DrawImage(Properties.Resources.startflag, new Rectangle(quarterheight / 2, (int)(quarterheight * 2.5), quarterheight, quarterheight));
                             }
