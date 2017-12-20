@@ -233,6 +233,10 @@ namespace EDDiscovery.UserControls
                         string scan = sn.ScanData.DisplayString(); // display tooltip with full information when hower bodies image and name
                         cur.Cells[0].ToolTipText = scan;
                         cur.Cells[1].ToolTipText = scan;
+                        cur.Cells[2].ToolTipText = scan;
+                        cur.Cells[3].ToolTipText = scan;
+                        cur.Cells[4].ToolTipText = scan;
+
                         cur.Tag = img;
 
                         BuildSystemInfo(last_sn);
