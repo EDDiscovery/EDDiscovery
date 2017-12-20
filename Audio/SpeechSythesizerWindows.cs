@@ -49,7 +49,17 @@ namespace AudioExtensions
                 if (culture.Equals("Default"))
                     pb = new System.Speech.Synthesis.PromptBuilder();
                 else
-                    pb = new System.Speech.Synthesis.PromptBuilder(new System.Globalization.CultureInfo(culture));
+                {
+                    try
+                    {
+                        pb = new System.Speech.Synthesis.PromptBuilder(new System.Globalization.CultureInfo(culture)); // may except if crap culture for machine
+                    }
+                    catch
+                    {
+                        pb = new System.Speech.Synthesis.PromptBuilder();
+                    }
+                }
+                   
 
                 if (voice.Equals("Female", StringComparison.InvariantCultureIgnoreCase))
                     pb.StartVoice(System.Speech.Synthesis.VoiceGender.Female);

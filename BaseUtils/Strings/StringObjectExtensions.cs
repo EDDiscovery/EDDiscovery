@@ -332,6 +332,10 @@ public static class ObjectExtensionsStrings
     {
         return v.ToString(System.Globalization.CultureInfo.InvariantCulture);
     }
+    public static string ToStringInvariant(this bool v)
+    {
+        return v ? "1" : "0";
+    }
     public static string ToStringInvariant(this bool? v)
     {
         return (v.HasValue) ? (v.Value ? "1" : "0") : "";
