@@ -113,7 +113,9 @@ namespace EDDiscovery.Actions
                 {
                     string culture = sp.NextQuotedWord();
                     if (culture != null)
-                        (ap.actioncontroller as ActionController).VoiceReconOn(culture);
+                    {
+                        ap["VoiceRecognitionEnabled"] = ((ap.actioncontroller as ActionController).VoiceReconOn(culture)).ToStringInvariant();
+                    }
                     else
                         ap.ReportError("EnableVoiceRecognition requires a culture");
                 }
