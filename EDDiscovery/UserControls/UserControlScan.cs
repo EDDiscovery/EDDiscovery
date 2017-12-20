@@ -436,7 +436,7 @@ namespace EDDiscovery.UserControls
                         var nodeLabel = sn.customname ?? sn.ownname;
                         if (sn.ScanData.IsLandable && sn.ScanData.nSurfaceGravity != null)
                         {
-                            nodeLabel += $" ({sn.ScanData.nSurfaceGravity:N2}g)";
+                            nodeLabel += $" ({(sn.ScanData.nSurfaceGravity / JournalScan.oneGee_m_s2):N2}g)";
                         }
 
                         endpoint = CreateImageLabel(pc, bmp, curpos, new Size(bmp.Width, bmp.Height), nodeLabel, tip, labelvoff, sc.IsEDSMBody);
