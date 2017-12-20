@@ -102,5 +102,26 @@ namespace EDDiscovery.Forms
             else
                 MessageBox.Show(this, "You need to run EDD first and let it create the dBs before it can move them!", "Move Databases", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
         }
+
+        private void buttonDeleteSystemDB_Click(object sender, EventArgs e)
+        {
+            EDDiscovery.EDDOptions opt = new EDDiscovery.EDDOptions();
+            opt.Init();
+
+            if (File.Exists(opt.SystemDatabasePath))
+            {
+                if (MessageBox.Show(this, "Current system database is located at:" + Environment.NewLine + Environment.NewLine +
+                                "System: " + opt.SystemDatabasePath +
+                                Environment.NewLine + Environment.NewLine + "Do you wish to delete this and let EDD rebuild it" + Environment.NewLine + 
+                                "No user settings will be lost", 
+                                "Delete/Rebuild System Database", MessageBoxButtons.OKCancel, MessageBoxIcon.Asterisk) == DialogResult.OK)
+                {
+                    File.Delete(opt.SystemDatabasePath);
+                }
+            }
+            else
+                MessageBox.Show(this, "You need to run EDD first and let it create the dBs before it can delete any!", "Delete/Rebuild System Database", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+
+        }
     }
 }
