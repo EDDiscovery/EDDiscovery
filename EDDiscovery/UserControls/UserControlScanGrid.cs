@@ -47,7 +47,8 @@ namespace EDDiscovery.UserControls
             // this allows the row to grow to accomodate the text.. with a min height of 32.
             dataGridViewScangrid.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
             dataGridViewScangrid.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.DisplayedCells;     // NEW! appears to work https://msdn.microsoft.com/en-us/library/74b2wakt(v=vs.110).aspx
-            dataGridViewScangrid.RowTemplate.MinimumHeight = 32;            
+            dataGridViewScangrid.RowTemplate.MinimumHeight = 32;
+            this.dataGridViewScangrid.Columns["ImageColumn"].DefaultCellStyle.SelectionBackColor = System.Drawing.Color.Transparent;
         }
 
         public override void Init()
@@ -80,6 +81,12 @@ namespace EDDiscovery.UserControls
             Display(uctg.GetCurrentHistoryEntry, discoveryform.history);
         }
 
+        private void dataGridViewScangrid_SelectionChanged(object sender, EventArgs e)
+        {
+            if (dataGridViewScangrid.CurrentCell.ColumnIndex == 1)
+                dataGridViewScangrid.CurrentCell.Selected = false;
+        }
+
         public void NewEntry(HistoryEntry he, HistoryList hl) // called when a new entry is made.. check to see if its a scan update
         {
             // if he valid, and last is null, or not he, or we have a new scan
@@ -89,13 +96,14 @@ namespace EDDiscovery.UserControls
                 DrawSystem();                
             }
         }
+               
 
         private void Display(HistoryEntry he, HistoryList hl) // Called at first start or hooked to change cursor
         {
             if (he != null && (last_he == null || he.System != last_he.System))
             {
                 last_he = he;
-                DrawSystem();
+                DrawSystem();                
                 dataGridViewScangrid.Refresh();
                 dataGridViewScangrid.ClearSelection();
             }
@@ -114,6 +122,8 @@ namespace EDDiscovery.UserControls
             StarScan.SystemNode last_sn = discoveryform.history.starscan.FindSystem(last_he.System, true);
 
             SetControlText((last_sn == null) ? "No Scan" : ("Brief Scan Summary for " + last_sn.system.name));
+
+            BuildSystemInfo(last_sn);
 
             if (last_sn != null)
             {
@@ -260,6 +270,28 @@ namespace EDDiscovery.UserControls
                 int vpos = e.RowBounds.Top + e.RowBounds.Height / 2 - sz / 2;
                 e.Graphics.DrawImage((Image)cur.Tag, new Rectangle(e.RowBounds.Left+1,vpos,sz,sz));
             }
+        }
+
+        private void BuildSystemInfo(StarScan.SystemNode system)
+        {
+            //systems are small... if they get too big and iterating repeatedly is a problem we'll have to move to a node-by-node approach, and move away from a single-line label
+            labelTotalValue.Text = BuildScanValue(system);
+
+        }
+
+        private string BuildScanValue(StarScan.SystemNode system)
+        {
+            var value = 0;
+
+            foreach (var body in system.Bodies)
+            {
+                if (body?.ScanData?.EstimatedValue != null)
+                {
+                    value += body.ScanData.EstimatedValue;
+                }
+            }
+
+            return $"Approx total scan value: {value:N0}";
         }
     }
 }
