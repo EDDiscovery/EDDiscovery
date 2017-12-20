@@ -1207,7 +1207,7 @@ namespace EDDiscovery
         {
             this.Cursor = Cursors.WaitCursor;
 
-            Controller.history.FillInPositionsFSDJumps();
+            //Controller.history.FillInPositionsFSDJumps();
 
             Map.Prepare(he?.System, EDDConfig.Instance.HomeSystem,
                         EDDConfig.Instance.MapCentreOnSelection ? he?.System : EDDConfig.Instance.HomeSystem,
