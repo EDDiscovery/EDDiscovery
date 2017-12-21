@@ -54,8 +54,6 @@ namespace EDDiscovery.Actions
 
                         if ( matches != null )      // null if no matches to keyboard is found
                         {
-                            Tuple<Device, Assignment> match = matches[0];      // just use the first one.. since they have been prechecked for keys one is the same as another
-
                             // pick out the keys and convert them from fontier to Keys
                             Keys[] keys = (from x in matches[0].Item2.keys select DirectInputDevices.KeyConversion.FrontierNameToKeys(x.Key)).ToArray();
 
