@@ -409,6 +409,12 @@
     <Compile Include="UserControls\UserControlShoppingList.Designer.cs">
       <DependentUpon>UserControlShoppingList.cs</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\UserControlStarsInRange.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\UserControlStarsInRange.Designer.cs">
+      <DependentUpon>UserControlStarsInRange.cs</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\UserControlSysInfo.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -601,6 +607,9 @@
     <EmbeddedResource Include="UserControls\UserControlShoppingList.resx">
       <DependentUpon>UserControlShoppingList.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\UserControlStarsInRange.resx">
+      <DependentUpon>UserControlStarsInRange.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="UserControls\UserControlSysInfo.resx">
       <DependentUpon>UserControlSysInfo.cs</DependentUpon>
     </EmbeddedResource>
@@ -754,6 +763,7 @@
     <None Include="Resources\EDDB.png" />
     <None Include="Resources\EDDN.png" />
     <None Include="Resources\scangrid.png" />
+    <Content Include="Resources\starsinrange.png" />
     <Content Include="x86\Microsoft.VC100.CRT\msvcp100.dll" />
     <Content Include="x86\Microsoft.VC100.CRT\msvcr100.dll" />
     <EmbeddedResource Include="2DMap\Form2DMap.resx">
