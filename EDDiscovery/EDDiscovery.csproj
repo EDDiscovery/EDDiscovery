@@ -403,6 +403,12 @@
     <Compile Include="UserControls\UserControlRoute.Designer.cs">
       <DependentUpon>UserControlRoute.cs</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\UserControlCompass.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\UserControlCompass.Designer.cs">
+      <DependentUpon>UserControlCompass.cs</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\UserControlShoppingList.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -598,6 +604,9 @@
     <EmbeddedResource Include="UserControls\UserControlRoute.resx">
       <DependentUpon>UserControlRoute.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\UserControlCompass.resx">
+      <DependentUpon>UserControlCompass.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="UserControls\UserControlShoppingList.resx">
       <DependentUpon>UserControlShoppingList.cs</DependentUpon>
     </EmbeddedResource>
@@ -754,6 +763,7 @@
     <None Include="Resources\EDDB.png" />
     <None Include="Resources\EDDN.png" />
     <None Include="Resources\scangrid.png" />
+    <None Include="Resources\compass.png" />
     <Content Include="x86\Microsoft.VC100.CRT\msvcp100.dll" />
     <Content Include="x86\Microsoft.VC100.CRT\msvcr100.dll" />
     <EmbeddedResource Include="2DMap\Form2DMap.resx">
