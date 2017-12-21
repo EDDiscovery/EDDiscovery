@@ -131,7 +131,7 @@ namespace EDDiscovery.UserControls
                         StringBuilder bdClass = new StringBuilder();
                         StringBuilder bdDist = new StringBuilder();
                         StringBuilder bdDetails = new StringBuilder();
-
+                        
                         if (sn.ScanData.PlanetClass != null)
                             bdClass.Append(sn.ScanData.PlanetClass);
                         if (sn.ScanData.StarTypeText != null)
@@ -202,14 +202,19 @@ namespace EDDiscovery.UserControls
                                 bdDetails.Append(JournalScan.StarPlanetRing.DisplayStringFromRingClass(sn.ScanData.Rings[i].RingClass) + " ");
                                 bdDetails.Append((sn.ScanData.Rings[i].InnerRad / JournalScan.oneLS_m).ToString("N2") + "ls to " + (sn.ScanData.Rings[i].OuterRad / JournalScan.oneLS_m).ToString("N2") + "ls. ");
                             }
-                        }                                                        
-
+                        }                                     
+                         
                         // print the main atmospheric composition
                         if (sn.ScanData.Atmosphere != null && sn.ScanData.Atmosphere != "None")
                             bdDetails.Append(sn.ScanData.Atmosphere + ". ");
 
                         int value = sn.ScanData.EstimatedValue;
                         bdDetails.Append("Value " + value.ToString("N0"));
+
+                        if (sn.ScanData.HasMaterials)
+                        {
+                            bdDetails.Append("\n" + sn.ScanData.DisplayMaterialsBrief(2) + ". ");
+                        }
 
                         Image img = null;
 
