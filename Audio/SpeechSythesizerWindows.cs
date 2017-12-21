@@ -112,6 +112,8 @@ namespace AudioExtensions
 
                         string ssmlcmd = phrase.Substring(0, indexofend).Replace('\'', '"');
 
+                        //for (int i = 0; i < ssmlcmd.Length; i++) System.Diagnostics.Debug.WriteLine("SSML :" + (int)ssmlcmd[i] + " = " + ssmlcmd[i]);
+
                         try
                         {
                             pb.AppendSsmlMarkup(ssmlcmd);
@@ -133,7 +135,7 @@ namespace AudioExtensions
                 }
                 catch
                 {
-                    synth.Speak("Bad SSML Markup in phrase, contact developers");
+                    synth.Speak("Bad SSML Markup in phrase, your chosen voice may not support all options. See voice configuration menu to disable SSML");
                 }
 
                 //System.Diagnostics.Debug.WriteLine("Speech " + stream.Length);
