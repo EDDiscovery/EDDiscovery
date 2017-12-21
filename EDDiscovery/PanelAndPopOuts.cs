@@ -60,6 +60,7 @@ namespace EDDiscovery.Forms
             Trilateration,          // 28
             Settings,               // 29
             ScanGrid,               // 30
+            StarsInRange,           // 31
             // ****** ADD More here DO NOT REORDER *****
         };
 
@@ -70,6 +71,7 @@ namespace EDDiscovery.Forms
         {
             { new PanelInfo( PanelIDs.Log , typeof(UserControlLog),"Log", "Log", EDDiscovery.Properties.Resources.Log , "Display the program log" ) },
             { new PanelInfo( PanelIDs.StarDistance, typeof(UserControlStarDistance), "Nearest Stars", "StarDistance", EDDiscovery.Properties.Resources.star,"Display the nearest stars to the currently selected entry") },
+            { new PanelInfo( PanelIDs.StarsInRange, typeof(UserControlStarsInRange), "Stars In Range", "StarsInRange", EDDiscovery.Properties.Resources.star,"Display the stars inside the selected radius") },
             { new PanelInfo( PanelIDs.Materials, typeof(UserControlMaterials) , "Materials", "Materials", EliteDangerous.Properties.Resources.material, "Display the material count at the currently selected entry" ) },
             { new PanelInfo( PanelIDs.Commodities, typeof(UserControlCommodities), "Commodities", "Commodities", EliteDangerous.Properties.Resources.commodities, "Display the commodity count at the currently selected entry") },
             { new PanelInfo( PanelIDs.Ledger, typeof(UserControlLedger), "Ledger", "Ledger", EDDiscovery.Properties.Resources.ledger, "Display a ledger of cash related entries") },

@@ -409,6 +409,12 @@
     <Compile Include="UserControls\UserControlShoppingList.Designer.cs">
       <DependentUpon>UserControlShoppingList.cs</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\UserControlStarsInRange.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\UserControlStarsInRange.Designer.cs">
+      <DependentUpon>UserControlStarsInRange.cs</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\UserControlSysInfo.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -600,6 +606,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\UserControlShoppingList.resx">
       <DependentUpon>UserControlShoppingList.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\UserControlStarsInRange.resx">
+      <DependentUpon>UserControlStarsInRange.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\UserControlSysInfo.resx">
       <DependentUpon>UserControlSysInfo.cs</DependentUpon>
