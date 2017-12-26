@@ -171,7 +171,7 @@ namespace EDDiscovery
                 themeok = theme.RestoreSettings();                                    // theme, remember your saved settings
 
             // open all the major tabs except the built in ones
-            Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " Creating major tabs");
+            Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " Creating major tabs Now");
             MaterialCommodityDB.SetUpInitialTable();
             CreateTabs();
 

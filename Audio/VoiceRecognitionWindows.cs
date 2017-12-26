@@ -34,10 +34,9 @@ namespace AudioExtensions
             if (engine != null)
                 engine.Dispose();
 
-            engine = new SpeechRecognitionEngine(ct);
-
             try
             {
+                engine = new SpeechRecognitionEngine(ct);       // may except if ct is not there on machine
                 engine.SetInputToDefaultAudioDevice(); // crashes if no default device..
             }
             catch

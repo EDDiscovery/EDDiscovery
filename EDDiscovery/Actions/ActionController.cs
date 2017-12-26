@@ -686,10 +686,11 @@ namespace EDDiscovery.Actions
 
         #region Voice
 
-        public void VoiceReconOn(string culture = null)     // perform enableVR
+        public bool VoiceReconOn(string culture = null)     // perform enableVR
         {
             voicerecon.Close(); // can close without stopping
             voicerecon.Open(System.Globalization.CultureInfo.GetCultureInfo(culture));
+            return voicerecon.IsOpen;
         }
 
         public void VoiceReconOff()                         // perform disableVR
