@@ -65,7 +65,8 @@ namespace EDDiscovery.Actions
                             }
                             else
                             {
-                                return new Tuple<string, int, string>(null, 0, "Control binding not recognised");
+                                string[] names = (from x in matches[0].Item2.keys select x.Key).ToArray();
+                                return new Tuple<string, int, string>(null, 0, "Frontier Key name not recognised: " + String.Join(",",names) );
                             }
                         }
                         else
