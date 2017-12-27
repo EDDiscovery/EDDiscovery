@@ -476,7 +476,7 @@ namespace EDDiscovery
                 {
                     LogLine("Refresh due to updating systems");
                     HistoryRefreshed += HistoryFinishedRefreshing;
-                    RefreshHistoryAsync();
+                    RefreshHistoryAsync(checkedsm:true);
                 }
 
                 OnSyncComplete?.Invoke();
