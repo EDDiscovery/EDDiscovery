@@ -211,9 +211,36 @@ namespace EDDiscovery.UserControls
                         int value = sn.ScanData.EstimatedValue;
                         bdDetails.Append("Value " + value.ToString("N0"));
 
+                        // materials                        
                         if (sn.ScanData.HasMaterials)
-                        {
-                            bdDetails.Append("\n" + sn.ScanData.DisplayMaterialsBrief(2) + ". ");
+                        {                            
+                            string MaterialsBrief = sn.ScanData.DisplayMaterialsBrief(2).ToString();
+                            // jumponium materials: Arsenic (As), Cadmium (Cd), Germanium (Ge), Niobium (Nb), Polonium (Po), Vanadium (V), Yttrium (Y)
+                            string Arsenic = "As";
+                            string Cadmium = "Cd";
+                            string Germanium = "Ge";
+                            string Niobium = "Nb";
+                            string Polonium = "Po";
+                            string Vanadium = "V";
+                            string Yttrium = "Y";
+
+                            // level I FSD Boost
+                            if (MaterialsBrief.Contains(Vanadium) && MaterialsBrief.Contains(Germanium))
+                            {
+                                bdDetails.Append("\n" + "This body has materials for a 1st level FSD Boost.");
+                            }
+
+                            // level II FSD Boot
+                            if (MaterialsBrief.Contains(Vanadium) && MaterialsBrief.Contains(Germanium) && MaterialsBrief.Contains(Cadmium) && MaterialsBrief.Contains(Niobium))
+                            {
+                                bdDetails.Append("\n" + "This body has materials for a 2nd level FSD Boost.");
+                            }
+
+                            // level III FSD Boost
+                            if (MaterialsBrief.Contains(Arsenic) && MaterialsBrief.Contains(Niobium) && MaterialsBrief.Contains(Yttrium) && MaterialsBrief.Contains(Polonium))
+                            {
+                                bdDetails.Append("\n" + "This body has materials for a 3rd level FSD Boost.");
+                            }                            
                         }
 
                         Image img = null;
