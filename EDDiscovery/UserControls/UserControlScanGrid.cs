@@ -223,24 +223,42 @@ namespace EDDiscovery.UserControls
                             string Polonium = "Po";
                             string Vanadium = "V";
                             string Yttrium = "Y";
-
-                            // level I FSD Boost
-                            if (MaterialsBrief.Contains(Vanadium) && MaterialsBrief.Contains(Germanium))
+                            
+                            if (MaterialsBrief.Contains(Vanadium) || MaterialsBrief.Contains(Germanium) || MaterialsBrief.Contains(Cadmium) 
+                                || MaterialsBrief.Contains(Niobium) || MaterialsBrief.Contains(Arsenic) || MaterialsBrief.Contains(Polonium) 
+                                || MaterialsBrief.Contains(Yttrium))
                             {
-                                bdDetails.Append("\n" + "This body has materials for a 1st level FSD Boost.");
+                                bdDetails.Append("\n" + "This body contains: ");
                             }
 
-                            // level II FSD Boot
-                            if (MaterialsBrief.Contains(Vanadium) && MaterialsBrief.Contains(Germanium) && MaterialsBrief.Contains(Cadmium) && MaterialsBrief.Contains(Niobium))
+                            if (MaterialsBrief.Contains(Vanadium))
                             {
-                                bdDetails.Append("\n" + "This body has materials for a 2nd level FSD Boost.");
+                                bdDetails.Append("Vanadium. ");
                             }
-
-                            // level III FSD Boost
-                            if (MaterialsBrief.Contains(Arsenic) && MaterialsBrief.Contains(Niobium) && MaterialsBrief.Contains(Yttrium) && MaterialsBrief.Contains(Polonium))
+                            if (MaterialsBrief.Contains(Germanium))
                             {
-                                bdDetails.Append("\n" + "This body has materials for a 3rd level FSD Boost.");
-                            }                            
+                                bdDetails.Append("Germanium. ");
+                            }
+                            if (MaterialsBrief.Contains(Cadmium))
+                            {
+                                bdDetails.Append("Cadmium. ");
+                            }
+                            if (MaterialsBrief.Contains(Niobium))
+                            {
+                                bdDetails.Append("Niobium. ");
+                            }
+                            if (MaterialsBrief.Contains(Arsenic))
+                            {
+                                bdDetails.Append("Arsenic. ");
+                            }
+                            if (MaterialsBrief.Contains(Yttrium))
+                            {
+                                bdDetails.Append("Yttrium. ");
+                            }
+                            if (MaterialsBrief.Contains(Polonium))
+                            {
+                                bdDetails.Append("Polonium. ");
+                            }                           
                         }
 
                         Image img = null;
