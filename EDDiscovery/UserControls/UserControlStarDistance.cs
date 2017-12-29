@@ -127,6 +127,7 @@ namespace EDDiscovery.UserControls
                     int visits = discoveryform.history.GetVisitsCount(tvp.Value.name, tvp.Value.id_edsm);
                     object[] rowobj = { tvp.Value.name, Math.Sqrt(tvp.Key).ToString("0.00"), visits.ToStringInvariant() };       // distances are stored squared for speed, back to normal.
 
+                    // Apply radius filter
                     if (checkBoxFullRadius.Checked == true)
                     {
                         double range = Math.Sqrt(tvp.Key);
@@ -137,9 +138,43 @@ namespace EDDiscovery.UserControls
                         }
                     }
                     else
-                    {
-                        int rowindex = dataGridViewNearest.Rows.Add(rowobj);
+                    {   int rowindex = dataGridViewNearest.Rows.Add(rowobj);
                         dataGridViewNearest.Rows[rowindex].Tag = tvp.Value;
+                    }
+
+                    // Check for duplicated entries and remove them
+                    if (dataGridViewNearest.Rows.Count > 2)
+                    {
+                        for (int currentRow = 0; currentRow < dataGridViewNearest.Rows.Count; currentRow++)
+                        {
+                            var rowToCompare = dataGridViewNearest.Rows[currentRow]; // Get row to compare against other rows
+
+                            // Iterate through all rows 
+                            //
+                            foreach (DataGridViewRow row in dataGridViewNearest.Rows)
+                            {
+                                if (rowToCompare.Equals(row))
+                                {
+                                    continue;
+                                }
+                                // If row is the same row being compared, skip.
+
+                                bool duplicateRow = true;
+
+                                // Compare the value of all cells
+                                if (rowToCompare.Cells[0].Value != null && rowToCompare.Cells[0].Value.ToString() != row.Cells[0].Value.ToString())
+                                {
+                                    duplicateRow = false;
+                                }
+
+                                // If duplicated, remove
+                                if (duplicateRow)
+                                {
+                                    dataGridViewNearest.Rows.RemoveAt(row.Index);
+                                    break;
+                                }
+                            }
+                        }
                     }
                 }
             }
