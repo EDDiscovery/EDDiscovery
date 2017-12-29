@@ -138,7 +138,8 @@ namespace EDDiscovery.UserControls
                         }
                     }
                     else
-                    {   int rowindex = dataGridViewNearest.Rows.Add(rowobj);
+                    {   
+                        int rowindex = dataGridViewNearest.Rows.Add(rowobj);
                         dataGridViewNearest.Rows[rowindex].Tag = tvp.Value;
                     }
 
