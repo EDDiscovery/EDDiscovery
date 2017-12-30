@@ -160,7 +160,7 @@ namespace EDDiscovery.UserControls
 
                         // display stars and stellar bodies mass
                         if (sn.ScanData.IsStar && sn.ScanData.nStellarMass.HasValue)
-                            bdDetails.Append("Mass:" + sn.ScanData.nStellarMass.Value.ToString("N2") + ", ");
+                            bdDetails.Append("Mass: " + sn.ScanData.nStellarMass.Value.ToString("N2") + ", ");
 
                         // habitable zone for stars - do not display for black holes.
                         if (sn.ScanData.HabitableZoneInner != null && sn.ScanData.HabitableZoneOuter != null && sn.ScanData.StarTypeID != EDStar.H)
