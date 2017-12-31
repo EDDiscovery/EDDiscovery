@@ -261,7 +261,7 @@ namespace EDDiscovery.UserControls
                 userControlEngineering.Visible = userControlSynthesis.Visible = !IsTransparent;
                 userControlEngineering.Enabled = userControlSynthesis.Enabled = !IsTransparent;
 
-                splitContainerVertical.Panel1MinSize = displayList.img.Width+8;       // panel left has minimum width to accomodate the text
+                splitContainerVertical.Panel1MinSize = displayList.img.Width + 8;       // panel left has minimum width to accomodate the text
 
                 if (IsTransparent)
                 {

@@ -121,17 +121,14 @@ namespace EDDiscovery.UserControls
             chkHistoric.Visible = !isEmbedded;
 
             discoveryform.OnNewEntry += Discoveryform_OnNewEntry;
-            if (isHistoric) uctg.OnTravelSelectionChanged += Display;
+            uctg.OnTravelSelectionChanged += Display;
         }
 
         public override void ChangeCursorType(IHistoryCursor thc)
         {
-            if (isHistoric)
-            {
-                uctg.OnTravelSelectionChanged -= Display;
-                uctg = thc;
-                uctg.OnTravelSelectionChanged += Display;
-            }
+            uctg.OnTravelSelectionChanged -= Display;
+            uctg = thc;
+            uctg.OnTravelSelectionChanged += Display;
         }
 
         #endregion
@@ -142,12 +139,10 @@ namespace EDDiscovery.UserControls
             isHistoric = newVal;
             if (isHistoric)
             {
-                uctg.OnTravelSelectionChanged += Display;
                 last_he = uctg.GetCurrentHistoryEntry;
             }
             else
             {
-                uctg.OnTravelSelectionChanged -= Display;
                 last_he = discoveryform.history.GetLast;
             }
             Display();
@@ -169,9 +164,8 @@ namespace EDDiscovery.UserControls
         HistoryEntry last_he = null;
         private void Display(HistoryEntry he, HistoryList hl)
         {
-            if (isHistoric)
+            if (isHistoric || last_he == null)
             {
-                // this event isn't reliably disconnecting when calling SetHistoric(false) - not sure why
                 last_he = he;
                 Display();
             }

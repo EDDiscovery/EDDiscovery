@@ -54,9 +54,9 @@ namespace EDDiscovery.UserControls
             this.showMaxFSDInjectionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.showAllMaterialsWhenLandedToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.showAvailableMaterialsInListWhenLandedToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.useHistoricMaterialCountsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.showSystemAvailabilityOfMaterialsInShoppingListToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.useEDSMDataInSystemAvailabilityToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.useHistoricMaterialCountsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerVertical)).BeginInit();
             this.splitContainerVertical.Panel1.SuspendLayout();
             this.splitContainerVertical.Panel2.SuspendLayout();
@@ -75,9 +75,6 @@ namespace EDDiscovery.UserControls
             // 
             // splitContainerVertical
             // 
-            this.splitContainerVertical.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.splitContainerVertical.Location = new System.Drawing.Point(0, 0);
             this.splitContainerVertical.Name = "splitContainerVertical";
             // 
@@ -149,7 +146,7 @@ namespace EDDiscovery.UserControls
             this.useEDSMDataInSystemAvailabilityToolStripMenuItem,
             this.useHistoricMaterialCountsToolStripMenuItem});
             this.contextMenuConfig.Name = "contextMenuConfig";
-            this.contextMenuConfig.Size = new System.Drawing.Size(369, 158);
+            this.contextMenuConfig.Size = new System.Drawing.Size(369, 136);
             // 
             // showMaxFSDInjectionsToolStripMenuItem
             // 
@@ -177,14 +174,6 @@ namespace EDDiscovery.UserControls
             this.showAvailableMaterialsInListWhenLandedToolStripMenuItem.Text = "Include Material %age on Landed Body in Shopping List";
             this.showAvailableMaterialsInListWhenLandedToolStripMenuItem.Click += new System.EventHandler(this.showAvailableMaterialsInListWhenLandedToolStripMenuItem_Click);
             // 
-            // useHistoricMaterialCountsToolStripMenuItem
-            // 
-            this.useHistoricMaterialCountsToolStripMenuItem.CheckOnClick = true;
-            this.useHistoricMaterialCountsToolStripMenuItem.Name = "useHistoricMaterialCountsToolStripMenuItem";
-            this.useHistoricMaterialCountsToolStripMenuItem.Size = new System.Drawing.Size(368, 22);
-            this.useHistoricMaterialCountsToolStripMenuItem.Text = "Use Historic Material Counts";
-            this.useHistoricMaterialCountsToolStripMenuItem.Click += new System.EventHandler(this.useHistoricMaterialCountsToolStripMenuItem_Click);
-            // 
             // showSystemAvailabilityOfMaterialsInShoppingListToolStripMenuItem
             // 
             this.showSystemAvailabilityOfMaterialsInShoppingListToolStripMenuItem.CheckOnClick = true;
@@ -200,6 +189,14 @@ namespace EDDiscovery.UserControls
             this.useEDSMDataInSystemAvailabilityToolStripMenuItem.Size = new System.Drawing.Size(368, 22);
             this.useEDSMDataInSystemAvailabilityToolStripMenuItem.Text = "Use EDSM data in System Availability";
             this.useEDSMDataInSystemAvailabilityToolStripMenuItem.Click += new System.EventHandler(this.useEDSMDataInSystemAvailabilityToolStripMenuItem_Click);
+            // 
+            // useHistoricMaterialCountsToolStripMenuItem
+            // 
+            this.useHistoricMaterialCountsToolStripMenuItem.CheckOnClick = true;
+            this.useHistoricMaterialCountsToolStripMenuItem.Name = "useHistoricMaterialCountsToolStripMenuItem";
+            this.useHistoricMaterialCountsToolStripMenuItem.Size = new System.Drawing.Size(368, 22);
+            this.useHistoricMaterialCountsToolStripMenuItem.Text = "Use Historic Material Counts";
+            this.useHistoricMaterialCountsToolStripMenuItem.Click += new System.EventHandler(this.useHistoricMaterialCountsToolStripMenuItem_Click);
             // 
             // UserControlShoppingList
             // 
