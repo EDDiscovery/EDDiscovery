@@ -17,6 +17,7 @@
 using EliteDangerousCore;
 using EliteDangerousCore.JournalEvents;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -28,8 +29,8 @@ namespace EliteDangerousCore
 
     public class StarScan
     {
-        Dictionary<Tuple<string, long>, SystemNode> scandata = new Dictionary<Tuple<string, long>, SystemNode>();
-        Dictionary<string, List<SystemNode>> scandataByName = new Dictionary<string, List<SystemNode>>();
+        ConcurrentDictionary<Tuple<string, long>, SystemNode> scandata = new ConcurrentDictionary<Tuple<string, long>, SystemNode>();
+        ConcurrentDictionary<string, List<SystemNode>> scandataByName = new ConcurrentDictionary<string, List<SystemNode>>();
         private static Dictionary<string, Dictionary<string, string>> planetDesignationMap = new Dictionary<string, Dictionary<string, string>>(StringComparer.InvariantCultureIgnoreCase);
         private static Dictionary<string, Dictionary<string, string>> starDesignationMap = new Dictionary<string, Dictionary<string, string>>(StringComparer.InvariantCultureIgnoreCase);
         private static Dictionary<string, List<JournalScan>> primaryStarScans = new Dictionary<string, List<JournalScan>>(StringComparer.InvariantCultureIgnoreCase);
@@ -292,7 +293,7 @@ namespace EliteDangerousCore
         private SystemNode GetOrCreateSystemNode(ISystem sys)
         {
             Tuple<string, long> withedsm = new Tuple<string, long>(sys.name, sys.id_edsm);
-
+            
             SystemNode sn = null;
             if (scandata.ContainsKey(withedsm))         // if with edsm (if id_edsm=0, then thats okay)
                 sn = scandata[withedsm];
@@ -304,7 +305,7 @@ namespace EliteDangerousCore
                     {
                         if (sys.id_edsm != 0)             // yep, replace
                         {
-                            scandata.Add(new Tuple<string, long>(sys.name, sys.id_edsm), _sn);
+                            scandata.TryAdd(new Tuple<string, long>(sys.name, sys.id_edsm), _sn);
                         }
                         sn = _sn;
                         break;
@@ -325,7 +326,7 @@ namespace EliteDangerousCore
 
                 if (sys.id_edsm != 0)
                 {
-                    scandata.Add(new Tuple<string, long>(sys.name, sys.id_edsm), sn);
+                    scandata.TryAdd(new Tuple<string, long>(sys.name, sys.id_edsm), sn);
                 }
             }
 
