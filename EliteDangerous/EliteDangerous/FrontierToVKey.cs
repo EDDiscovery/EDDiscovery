@@ -490,7 +490,8 @@ namespace EliteDangerousCore
 
             System.Diagnostics.Debug.WriteLine("     Key {0} => {1} {2} {3}" + Environment.NewLine, key, output, kc, check);
         }
+#endif
+
     }
 
-#endif
 }
