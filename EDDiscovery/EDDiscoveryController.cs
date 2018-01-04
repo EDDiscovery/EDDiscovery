@@ -224,7 +224,7 @@ namespace EDDiscovery
         #endregion
 
         #region History
-        public bool RefreshHistoryAsync(string netlogpath = null, bool forcenetlogreload = false, bool forcejournalreload = false, bool checkedsm = false, int? currentcmdr = null)
+        public bool RefreshHistoryAsync(string netlogpath = null, bool forcenetlogreload = false, bool forcejournalreload = false, int? currentcmdr = null)
         {
             if (PendingClose)
             {
@@ -237,7 +237,6 @@ namespace EDDiscovery
             if (refreshRequestedFlag == 0)
             {
                 if (curargs == null ||
-                    curargs.CheckEdsm != checkedsm ||
                     curargs.ForceNetLogReload != forcenetlogreload ||
                     curargs.ForceJournalReload != forcejournalreload ||
                     curargs.CurrentCommander != (currentcmdr ?? history.CommanderId) ||
@@ -254,7 +253,6 @@ namespace EDDiscovery
                     NetLogPath = netlogpath,
                     ForceNetLogReload = forcenetlogreload,
                     ForceJournalReload = forcejournalreload,
-                    CheckEdsm = checkedsm,
                     CurrentCommander = currentcmdr ?? history.CommanderId
                 });
 
@@ -476,7 +474,7 @@ namespace EDDiscovery
                 {
                     LogLine("Refresh due to updating systems");
                     HistoryRefreshed += HistoryFinishedRefreshing;
-                    RefreshHistoryAsync(checkedsm:true);
+                    RefreshHistoryAsync();
                 }
 
                 OnSyncComplete?.Invoke();
@@ -509,7 +507,6 @@ namespace EDDiscovery
             public string NetLogPath;
             public bool ForceNetLogReload;
             public bool ForceJournalReload;
-            public bool CheckEdsm;
             public int CurrentCommander;
         }
 
@@ -521,7 +518,7 @@ namespace EDDiscovery
                 refreshWorkerArgs = args;
                 Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " Load history");
                 hist = HistoryList.LoadHistory(journalmonitor, () => PendingClose, (p, s) => ReportProgress(p, $"Processing log file {s}"), args.NetLogPath, 
-                    args.ForceJournalReload, args.ForceJournalReload, args.CheckEdsm, args.CurrentCommander , EDDConfig.Instance.ShowUIEvents );
+                    args.ForceJournalReload, args.ForceJournalReload, args.CurrentCommander , EDDConfig.Instance.ShowUIEvents );
                 Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " Load history complete");
             }
             catch (Exception ex)
