@@ -234,7 +234,7 @@ namespace EDDiscovery.UserControls
                 infostr = "First visit " + syslist.Last().EventTimeLocal.ToShortDateString();
 
             HistoryEntry he = syslist[0];
-            StarScan.SystemNode node = discoveryform.history.starscan?.FindSystem(he.System);
+            StarScan.SystemNode node = discoveryform.history.starscan?.FindSystem(he.System,false);
 
             if (node != null)
             {
