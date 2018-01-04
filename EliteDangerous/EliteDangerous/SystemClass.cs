@@ -62,13 +62,13 @@ namespace EliteDangerousCore
         public SystemClass(string Name)
         {
             name = Name;
-            status = DB.SystemStatusEnum.Unknown;
+            status = SystemStatusEnum.Unknown;
         }
 
         public SystemClass(string Name, double vx, double vy, double vz)
         {
             name = Name;
-            status = DB.SystemStatusEnum.Unknown;
+            status = SystemStatusEnum.Unknown;
             x = vx; y = vy; z = vz;
         }
 
@@ -76,7 +76,8 @@ namespace EliteDangerousCore
         public string CommanderCreate { get; set; }
         public DateTime CreateDate { get; set; }
         public string CommanderUpdate { get; set; }
-        public EliteDangerousCore.DB.SystemStatusEnum status { get; set; }
+
+        public SystemStatusEnum status { get; set; }
         public string SystemNote { get; set; }
 
         public long id_eddb { get; set; }

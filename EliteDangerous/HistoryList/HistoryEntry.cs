@@ -172,8 +172,6 @@ namespace EliteDangerousCore
                 (je.EventTypeID == JournalTypeEnum.StartJump && (je as JournalStartJump)?.JumpType == "Hyperspace"))
             {
                 JournalLocOrJump jl = je as JournalLocOrJump;
-                JournalFSDJump jfsd = je as JournalFSDJump;
-                JournalStartJump js = je as JournalStartJump;
 
                 ISystem newsys;
 
@@ -193,13 +191,7 @@ namespace EliteDangerousCore
                         status = SystemStatusEnum.EDDiscovery,
                     };
 
-                    if (jfsd != null && jfsd.JumpDist <= 0 && isys.HasCoordinate)     // if we don't have a jump distance (pre 2.2) but the last sys does have pos, we can compute distance and update entry
-                    {
-                        jfsd.JumpDist = SystemClassDB.Distance(isys, newsys); // fill it out here
-                        journalupdate = true;
-                    }
-
-                    // If it was a new system, pass the coords back to the StartJump
+                    // If it was a new system, pass the coords back to the StartJump, presuming its before and has the same name
                     if (prev != null && prev.System.name == newsys.name && !prev.System.HasCoordinate)
                     {
                         prev.System.x = newsys.x;
@@ -209,46 +201,47 @@ namespace EliteDangerousCore
                 }
                 else
                 {                           // Default one
-                    string sysname = jl?.StarSystem ?? js?.StarSystem;
+                    JournalStartJump js = je as JournalStartJump;
+
+                    string sysname = jl?.StarSystem ?? js?.StarSystem;      // no co-ord, or its a startjump, estimate where we are..
 
                     newsys = new SystemClass(sysname);
                     newsys.id_edsm = je.EdsmID;
 
-                    if (checkedsm)          // see if we can find the right system
-                    {
-                        ISystem s = SystemCache.FindEDSM(newsys, conn: conn, usedb: true, useedsm: true);      // has no co-ord, did we find it?
+                    ISystem s = SystemCache.FindSystem(newsys, checkedsm:checkedsm, conn: conn);      // has no co-ord, did we find it?
 
-                        if (s != null)                                          // yes, use, and update the journal with the esdmid, and also the position if we have a co-ord
-                        {                                                       // so next time we don't have to do this again..
-                            if (jl != null && jl.HasCoordinate)
-                            {
-                                s.x = Math.Round(jl.StarPos.X * 32.0) / 32.0;
-                                s.y = Math.Round(jl.StarPos.Y * 32.0) / 32.0;
-                                s.z = Math.Round(jl.StarPos.Z * 32.0) / 32.0;
-                            }
+                    if (s != null)                               // found a system..
+                    {                                                       
+                        if (jl != null && jl.HasCoordinate)         
+                        {
+                            s.x = Math.Round(jl.StarPos.X * 32.0) / 32.0;
+                            s.y = Math.Round(jl.StarPos.Y * 32.0) / 32.0;
+                            s.z = Math.Round(jl.StarPos.Z * 32.0) / 32.0;
+                        }
 
-                            newsys = s;
+                        newsys = s;
 
-                            if (jfsd != null && jfsd.JumpDist <= 0 && newsys.HasCoordinate && isys.HasCoordinate)     // if we don't have a jump distance (pre 2.2) but the last sys does, we can compute
-                            {
-                                jfsd.JumpDist = SystemClassDB.Distance(isys, newsys); // fill it out here.  EDSM systems always have co-ords, but we should check anyway
-                                journalupdate = true;
-                            }
-
-                            if (je.EdsmID <= 0 && newsys.id_edsm > 0)
-                            {
-                                journalupdate = true;
-                            }
+                        if (jl != null && je.EdsmID <= 0 && newsys.id_edsm > 0) // only update on a JL..
+                        {
+                            journalupdate = true;
+                            Debug.WriteLine("Je EDSM ID update requested {0} {1}", newsys.id_edsm, newsys.name);
                         }
                     }
                 }
 
-                if (jfsd != null)
+                JournalFSDJump jfsd = je as JournalFSDJump;
+
+                if (jfsd != null )
                 {
                     if (jfsd.JumpDist <= 0 && isys.HasCoordinate && newsys.HasCoordinate) // if no JDist, its a really old entry, and if previous has a co-ord
                     {
                         jfsd.JumpDist = SystemClassDB.Distance(isys, newsys); // fill it out here
-                        journalupdate = true;
+
+                        if (jfsd.JumpDist > 0)
+                        {
+                            journalupdate = true;
+                            Debug.WriteLine("Je Jump distance update(3) requested {0} {1} {2}", newsys.id_edsm, newsys.name, jfsd.JumpDist);
+                        }
                     }
 
                     mapcolour = jfsd.MapColor;

@@ -106,7 +106,14 @@ namespace EliteDangerousCore
         Terraforming = 8,
         Tourism = 9,
         None = 10,
+    }
 
+    public enum SystemStatusEnum                // Who made the information?
+    {
+        Unknown = 0,
+        EDSM = 1,
+        EDDiscovery = 3,
+        EDDB = 4,
     }
 
     public interface ISystemBase : IEquatable<ISystemBase>
@@ -148,7 +155,7 @@ namespace EliteDangerousCore
         string CommanderCreate { get; set; }
         DateTime CreateDate { get; set; }
         string CommanderUpdate { get; set; }
-        EliteDangerousCore.DB.SystemStatusEnum status { get; set; }        // Who made this entry, where did the info come from?
+        SystemStatusEnum status { get; set; }        // Who made this entry, where did the info come from?
         string SystemNote { get; set; }
     }
 }
