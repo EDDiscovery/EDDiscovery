@@ -54,8 +54,8 @@ namespace EDDiscovery.Actions
 
                         if ( matches != null )      // null if no matches to keyboard is found
                         {
-                            // pick out the keys and convert them from fontier to Keys
-                            Keys[] keys = (from x in matches[0].Item2.keys select DirectInputDevices.KeyConversion.FrontierNameToKeys(x.Key)).ToArray();
+                            // pick out the keys and convert them from text to Vkey (they are in Vkey naming format)
+                            Keys[] keys = (from x in matches[0].Item2.keys select x.Key.ToVkey()).ToArray();        // bindings returns keys
 
                             if ( !keys.Contains(Keys.None)) // if no errors
                             {
@@ -66,12 +66,12 @@ namespace EDDiscovery.Actions
                             else
                             {
                                 string[] names = (from x in matches[0].Item2.keys select x.Key).ToArray();
-                                return new Tuple<string, int, string>(null, 0, "Frontier Key name not recognised: " + String.Join(",",names) );
+                                return new Tuple<string, int, string>(null, 0, "Key name(s) not recognised: " + String.Join(",",names) );
                             }
                         }
                         else
                         {
-                            System.Diagnostics.Debug.WriteLine("NO binding for " + binding);
+                            System.Diagnostics.Debug.WriteLine("No key binding for " + binding);
                             return new Tuple<string, int, string>(null, 0, errmsgforbinding + binding);
                         }
                     }

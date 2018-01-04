@@ -114,6 +114,7 @@
     <Compile Include="EliteDangerous\EDJournalClass.cs" />
     <Compile Include="EliteDangerous\EDJournalReader.cs" />
     <Compile Include="EliteDangerous\EDTypesFromJSON.cs" />
+    <Compile Include="EliteDangerous\FrontierToVKey.cs" />
     <Compile Include="EliteDangerous\ISystem.cs" />
     <Compile Include="EliteDangerous\JournalEntry.cs" />
     <Compile Include="EliteDangerous\JournalEntryAttributes.cs" />

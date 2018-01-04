@@ -48,15 +48,17 @@ namespace DialogTest
                     if (ev.Pressed)
                     {
                         Keys k = InputDeviceKeyboard.ToKeys(ev);
-                        string t = "Sharp Name: " + InputDeviceKeyboard.SharpKeyName(ev) + Environment.NewLine;
-                        t += "Frontier Name " + ev.EventName() + Environment.NewLine;
+                        string t = ev.EventName() + " (" + k.VKeyToString() + ")" + " Vkey " + vkey.VKeyToString();
 
-                        System.Diagnostics.Debug.WriteLine("Direct Input detected " + t);
+                        bool ok = InputDeviceKeyboard.CheckTranslation(ev);
 
-                        if (!InputDeviceKeyboard.CheckTranslation(ev, vkey))
-                            t += Environment.NewLine + " ERROR TX WRONG!";
+                        if (!ok)
+                            t += " **** ERROR in sharp conversion";
 
-                        richTextBox1.Text += t + Environment.NewLine;
+                        if (vkey != k)
+                            t += "**** vkey not same as DI vkey";
+
+                        richTextBox1.Text += "Direct Input "  + t + Environment.NewLine;
                         richTextBox1.Select(richTextBox1.Text.Length, richTextBox1.Text.Length);
 
                     }
