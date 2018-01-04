@@ -66,17 +66,24 @@ namespace EliteDangerousCore.CompanionAPI
 
         public string Decrypt(string encryptedValue)
         {
-            using (var decryptor = rijndael.CreateDecryptor())
-            using (var stream = new MemoryStream())
-            using (var crypto = new CryptoStream(stream, decryptor, CryptoStreamMode.Write))
+            try
             {
-                var encrypted = Convert.FromBase64String(encryptedValue);
-                crypto.Write(encrypted, 0, encrypted.Length);
-                crypto.FlushFinalBlock();
-                stream.Position = 0;
-                var decryptedBytes = new Byte[stream.Length];
-                stream.Read(decryptedBytes, 0, decryptedBytes.Length);
-                return encoding.GetString(decryptedBytes);
+                using (var decryptor = rijndael.CreateDecryptor())
+                using (var stream = new MemoryStream())
+                using (var crypto = new CryptoStream(stream, decryptor, CryptoStreamMode.Write))
+                {
+                    var encrypted = Convert.FromBase64String(encryptedValue);
+                    crypto.Write(encrypted, 0, encrypted.Length);
+                    crypto.FlushFinalBlock();
+                    stream.Position = 0;
+                    var decryptedBytes = new Byte[stream.Length];
+                    stream.Read(decryptedBytes, 0, decryptedBytes.Length);
+                    return encoding.GetString(decryptedBytes);
+                }
+            }
+            catch
+            {
+                return null;
             }
         }
 
