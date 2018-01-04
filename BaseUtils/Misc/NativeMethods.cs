@@ -108,6 +108,11 @@ namespace BaseUtils.Win32
         [DllImport("user32.dll", CharSet = CharSet.Auto)]
         public static extern short VkKeyScan(char key);
         [DllImport("user32.dll", CharSet = CharSet.Auto)]
+        public static extern short VkKeyScanEx(char key, IntPtr dwhkl);
+        [DllImport("user32.dll", CharSet = CharSet.Auto)]
+        public static extern int GetKeyNameText(int lParam, [Out] StringBuilder str, int len);
+
+        [DllImport("user32.dll", CharSet = CharSet.Auto)]
         public static extern IntPtr SetWindowsHookEx(int hookid, NativeMethods.HookProc pfnhook, HandleRef hinst, int threadid);
         [DllImport("user32.dll", EntryPoint = "GetWindowLong")]
         public static extern int GetWindowLong(IntPtr hWnd, GWL nIndex);

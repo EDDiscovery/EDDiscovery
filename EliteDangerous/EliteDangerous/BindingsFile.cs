@@ -20,6 +20,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Windows.Forms;
 using System.Xml.Linq;
 
 namespace EliteDangerousCore
@@ -43,7 +44,7 @@ namespace EliteDangerousCore
         public class DeviceKeyPair
         {
             public Device Device;
-            public string Key;          // in Frontier naming convention
+            public string Key;          // Keyboard: in Keys naming convention - converted from Frontier on input.
         }
 
         [System.Diagnostics.DebuggerDisplay("Assignment {assignedfunc} Keys {keys.Count}" )]
@@ -74,7 +75,7 @@ namespace EliteDangerousCore
                 return s.ToNullSafeString();
             }
 
-            public bool HasKeyAssignment(string key)        // is key in this list
+            public bool HasKeyAssignment(string key)        // is key in this list (Keys naming convention)
             {
                 foreach (DeviceKeyPair k in keys)
                 {
@@ -196,11 +197,11 @@ namespace EliteDangerousCore
                                 key = povroot + ((key.Contains("Up") || vm.Contains("Up")) ? "UpRight" : "DownRight");
                         }
                         else
-                            dvp.Add(new DeviceKeyPair() { Device = FindOrMakeDevice(km), Key = vm });
+                            dvp.Add(new DeviceKeyPair() { Device = FindOrMakeDevice(km), Key = FrontierToKeys(km, vm) });
                     }
                 }
 
-                dvp.Insert(0, new DeviceKeyPair() { Device = FindOrMakeDevice(xdevice.Value), Key = key });
+                dvp.Insert(0, new DeviceKeyPair() { Device = FindOrMakeDevice(xdevice.Value), Key = FrontierToKeys(xdevice.Value, key) });
 
                 Assignment a = new Assignment() { assignedfunc = d.Name.ToString(), keys = dvp };
 
@@ -423,6 +424,19 @@ namespace EliteDangerousCore
         public string ListKeyNames(string prefix = "", string postfix = "")
         {
             return String.Join(Environment.NewLine, (from x in KeyNames select prefix + x + postfix));
+        }
+
+
+        static private string FrontierToKeys(string device, string frontiername)
+        {
+            if (device == KeyboardDeviceName)
+            {
+                string ret = EliteDangerousCore.FrontierKeyConversion.FrontierToKeys(frontiername);
+                System.Diagnostics.Debug.WriteLine("Frontier Name Convert {0} to {1}", frontiername, ret);
+                return ret;
+            }
+            else
+                return frontiername;
         }
 
 
