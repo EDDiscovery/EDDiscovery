@@ -47,13 +47,15 @@ namespace EDDiscovery.UserControls
             // this allows the row to grow to accomodate the text.. with a min height of 32.
             dataGridViewScangrid.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
             dataGridViewScangrid.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.DisplayedCells;     // NEW! appears to work https://msdn.microsoft.com/en-us/library/74b2wakt(v=vs.110).aspx
-            dataGridViewScangrid.RowTemplate.MinimumHeight = 32;            
+            dataGridViewScangrid.RowTemplate.MinimumHeight = 32;
+            this.dataGridViewScangrid.Columns["ImageColumn"].DefaultCellStyle.SelectionBackColor = System.Drawing.Color.Transparent;
         }
 
         public override void Init()
         {
             uctg.OnTravelSelectionChanged += Display;
             discoveryform.OnNewEntry += NewEntry;
+            labelTotalValue.Text = $"No scan data yet.";
         }
 
         public override void LoadLayout()
@@ -65,7 +67,7 @@ namespace EDDiscovery.UserControls
         {
             uctg.OnTravelSelectionChanged -= Display;
             uctg = thc;
-            uctg.OnTravelSelectionChanged += Display;
+            uctg.OnTravelSelectionChanged += Display;            
         }
 
         public override void Closing()
@@ -78,7 +80,7 @@ namespace EDDiscovery.UserControls
         public override void InitialDisplay()
         {
             Display(uctg.GetCurrentHistoryEntry, discoveryform.history);
-        }
+        }             
 
         public void NewEntry(HistoryEntry he, HistoryList hl) // called when a new entry is made.. check to see if its a scan update
         {
@@ -89,15 +91,17 @@ namespace EDDiscovery.UserControls
                 DrawSystem();                
             }
         }
+               
 
         private void Display(HistoryEntry he, HistoryList hl) // Called at first start or hooked to change cursor
         {
             if (he != null && (last_he == null || he.System != last_he.System))
             {
                 last_he = he;
-                DrawSystem();
+                labelTotalValue.Text = $"No scan data available.";
                 dataGridViewScangrid.Refresh();
-                dataGridViewScangrid.ClearSelection();
+                DrawSystem();
+                dataGridViewScangrid.ClearSelection();                
             }
         }
 
@@ -108,7 +112,7 @@ namespace EDDiscovery.UserControls
             if (last_he == null)
             {
                 SetControlText("No Scan");
-                return;
+                return;                
             }
 
             StarScan.SystemNode last_sn = discoveryform.history.starscan.FindSystem(last_he.System, true);
@@ -126,8 +130,8 @@ namespace EDDiscovery.UserControls
                 // flatten tree of scan nodes to prepare for listing
                 foreach (StarScan.ScanNode sn in all_nodes)
                 {
-                    if (sn.ScanData != null && sn.ScanData.BodyName != null)
-                    {
+                        if (sn.ScanData != null && sn.ScanData.BodyName != null)
+                    {                        
                         StringBuilder bdClass = new StringBuilder();
                         StringBuilder bdDist = new StringBuilder();
                         StringBuilder bdDetails = new StringBuilder();
@@ -156,7 +160,7 @@ namespace EDDiscovery.UserControls
 
                         // display stars and stellar bodies mass
                         if (sn.ScanData.IsStar && sn.ScanData.nStellarMass.HasValue)
-                            bdDetails.Append("Mass:" + sn.ScanData.nStellarMass.Value.ToString("N2") + ", ");
+                            bdDetails.Append("Mass: " + sn.ScanData.nStellarMass.Value.ToString("N2") + ", ");
 
                         // habitable zone for stars - do not display for black holes.
                         if (sn.ScanData.HabitableZoneInner != null && sn.ScanData.HabitableZoneOuter != null && sn.ScanData.StarTypeID != EDStar.H)
@@ -229,8 +233,14 @@ namespace EDDiscovery.UserControls
                         string scan = sn.ScanData.DisplayString(); // display tooltip with full information when hower bodies image and name
                         cur.Cells[0].ToolTipText = scan;
                         cur.Cells[1].ToolTipText = scan;
+                        cur.Cells[2].ToolTipText = scan;
+                        cur.Cells[3].ToolTipText = scan;
+                        cur.Cells[4].ToolTipText = scan;
+
                         cur.Tag = img;
-                    }
+
+                        BuildSystemInfo(last_sn);
+                    }                   
                 }
             }
         }
@@ -260,6 +270,26 @@ namespace EDDiscovery.UserControls
                 int vpos = e.RowBounds.Top + e.RowBounds.Height / 2 - sz / 2;
                 e.Graphics.DrawImage((Image)cur.Tag, new Rectangle(e.RowBounds.Left+1,vpos,sz,sz));
             }
+        }              
+
+        private void BuildSystemInfo(StarScan.SystemNode system)
+        {
+            labelTotalValue.Text = BuildScanValue(system);
+        }
+
+        private string BuildScanValue(StarScan.SystemNode system)
+        {
+            var value = 0;
+
+                foreach (var body in system.Bodies)
+                {
+                    if (body?.ScanData?.EstimatedValue != null)
+                    {
+                        value += body.ScanData.EstimatedValue;
+                    }
+                }
+
+            return $"Approx total scan value: {value:N0}";
         }
     }
 }

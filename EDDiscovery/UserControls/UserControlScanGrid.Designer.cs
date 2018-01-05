@@ -45,6 +45,7 @@ namespace EDDiscovery.UserControls
         {
             this.components = new System.ComponentModel.Container();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             this.dataViewScrollerPanel2 = new ExtendedControls.DataViewScrollerPanel();
             this.dataGridViewScangrid = new System.Windows.Forms.DataGridView();
             this.ImageColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -53,9 +54,17 @@ namespace EDDiscovery.UserControls
             this.Distance = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colBriefing = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.vScrollBarCustom2 = new ExtendedControls.VScrollBarCustom();
+            this.labelTotalValue = new System.Windows.Forms.Label();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.dataViewScrollerPanel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewScangrid)).BeginInit();
+            this.panel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
+            this.splitContainer1.Panel1.SuspendLayout();
+            this.splitContainer1.Panel2.SuspendLayout();
+            this.splitContainer1.SuspendLayout();
             this.SuspendLayout();
             // 
             // dataViewScrollerPanel2
@@ -65,9 +74,11 @@ namespace EDDiscovery.UserControls
             this.dataViewScrollerPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataViewScrollerPanel2.InternalMargin = new System.Windows.Forms.Padding(0);
             this.dataViewScrollerPanel2.Location = new System.Drawing.Point(0, 0);
+            this.dataViewScrollerPanel2.Margin = new System.Windows.Forms.Padding(3, 3, 3, 23);
             this.dataViewScrollerPanel2.Name = "dataViewScrollerPanel2";
+            this.dataViewScrollerPanel2.Padding = new System.Windows.Forms.Padding(0, 0, 0, 23);
             this.dataViewScrollerPanel2.ScrollBarWidth = 20;
-            this.dataViewScrollerPanel2.Size = new System.Drawing.Size(572, 572);
+            this.dataViewScrollerPanel2.Size = new System.Drawing.Size(572, 542);
             this.dataViewScrollerPanel2.TabIndex = 25;
             this.dataViewScrollerPanel2.VerticalScrollBarDockRight = true;
             // 
@@ -78,6 +89,15 @@ namespace EDDiscovery.UserControls
             this.dataGridViewScangrid.AllowUserToResizeRows = false;
             this.dataGridViewScangrid.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dataGridViewScangrid.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.DisplayedCells;
+            this.dataGridViewScangrid.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.None;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dataGridViewScangrid.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
             this.dataGridViewScangrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewScangrid.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.ImageColumn,
@@ -85,23 +105,24 @@ namespace EDDiscovery.UserControls
             this.colClass,
             this.Distance,
             this.colBriefing});
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dataGridViewScangrid.DefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dataGridViewScangrid.DefaultCellStyle = dataGridViewCellStyle2;
             this.dataGridViewScangrid.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataGridViewScangrid.Location = new System.Drawing.Point(0, 0);
+            this.dataGridViewScangrid.Margin = new System.Windows.Forms.Padding(3, 3, 3, 23);
             this.dataGridViewScangrid.Name = "dataGridViewScangrid";
             this.dataGridViewScangrid.ReadOnly = true;
             this.dataGridViewScangrid.RowHeadersVisible = false;
             this.dataGridViewScangrid.RowTemplate.Height = 36;
             this.dataGridViewScangrid.RowTemplate.ReadOnly = true;
             this.dataGridViewScangrid.ScrollBars = System.Windows.Forms.ScrollBars.None;
-            this.dataGridViewScangrid.Size = new System.Drawing.Size(552, 572);
+            this.dataGridViewScangrid.Size = new System.Drawing.Size(552, 542);
             this.dataGridViewScangrid.TabIndex = 23;
             this.dataGridViewScangrid.RowPostPaint += new System.Windows.Forms.DataGridViewRowPostPaintEventHandler(this.dataGridViewScangrid_RowPostPaint);
             // 
@@ -109,11 +130,11 @@ namespace EDDiscovery.UserControls
             // 
             this.ImageColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
             this.ImageColumn.HeaderText = "";
-            this.ImageColumn.MinimumWidth = 36;
+            this.ImageColumn.MinimumWidth = 32;
             this.ImageColumn.Name = "ImageColumn";
             this.ImageColumn.ReadOnly = true;
             this.ImageColumn.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            this.ImageColumn.Width = 36;
+            this.ImageColumn.Width = 32;
             // 
             // colName
             // 
@@ -158,13 +179,14 @@ namespace EDDiscovery.UserControls
             this.vScrollBarCustom2.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.vScrollBarCustom2.HideScrollBar = true;
             this.vScrollBarCustom2.LargeChange = 0;
-            this.vScrollBarCustom2.Location = new System.Drawing.Point(552, 21);
+            this.vScrollBarCustom2.Location = new System.Drawing.Point(552, 18);
+            this.vScrollBarCustom2.Margin = new System.Windows.Forms.Padding(3, 3, 3, 23);
             this.vScrollBarCustom2.Maximum = -1;
             this.vScrollBarCustom2.Minimum = 0;
             this.vScrollBarCustom2.MouseOverButtonColor = System.Drawing.Color.Green;
             this.vScrollBarCustom2.MousePressedButtonColor = System.Drawing.Color.Red;
             this.vScrollBarCustom2.Name = "vScrollBarCustom2";
-            this.vScrollBarCustom2.Size = new System.Drawing.Size(20, 551);
+            this.vScrollBarCustom2.Size = new System.Drawing.Size(20, 524);
             this.vScrollBarCustom2.SliderColor = System.Drawing.Color.DarkGray;
             this.vScrollBarCustom2.SmallChange = 1;
             this.vScrollBarCustom2.TabIndex = 24;
@@ -176,15 +198,59 @@ namespace EDDiscovery.UserControls
             this.vScrollBarCustom2.Value = -1;
             this.vScrollBarCustom2.ValueLimited = -1;
             // 
+            // labelTotalValue
+            // 
+            this.labelTotalValue.AutoSize = true;
+            this.labelTotalValue.BackColor = System.Drawing.Color.Transparent;
+            this.labelTotalValue.Dock = System.Windows.Forms.DockStyle.Left;
+            this.labelTotalValue.Location = new System.Drawing.Point(0, 0);
+            this.labelTotalValue.Name = "labelTotalValue";
+            this.labelTotalValue.Size = new System.Drawing.Size(0, 13);
+            this.labelTotalValue.TabIndex = 25;
+            this.labelTotalValue.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // panel1
+            // 
+            this.panel1.Controls.Add(this.labelTotalValue);
+            this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel1.Location = new System.Drawing.Point(0, 0);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(572, 26);
+            this.panel1.TabIndex = 23;
+            // 
+            // splitContainer1
+            // 
+            this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitContainer1.Location = new System.Drawing.Point(0, 0);
+            this.splitContainer1.Name = "splitContainer1";
+            this.splitContainer1.Orientation = System.Windows.Forms.Orientation.Horizontal;
+            // 
+            // splitContainer1.Panel1
+            // 
+            this.splitContainer1.Panel1.Controls.Add(this.dataViewScrollerPanel2);
+            // 
+            // splitContainer1.Panel2
+            // 
+            this.splitContainer1.Panel2.Controls.Add(this.panel1);
+            this.splitContainer1.Size = new System.Drawing.Size(572, 572);
+            this.splitContainer1.SplitterDistance = 542;
+            this.splitContainer1.TabIndex = 27;
+            // 
             // UserControlScanGrid
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.dataViewScrollerPanel2);
+            this.Controls.Add(this.splitContainer1);
             this.Name = "UserControlScanGrid";
             this.Size = new System.Drawing.Size(572, 572);
             this.dataViewScrollerPanel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewScangrid)).EndInit();
+            this.panel1.ResumeLayout(false);
+            this.panel1.PerformLayout();
+            this.splitContainer1.Panel1.ResumeLayout(false);
+            this.splitContainer1.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
+            this.splitContainer1.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -199,5 +265,8 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.DataGridViewTextBoxColumn colClass;
         private System.Windows.Forms.DataGridViewTextBoxColumn Distance;
         private System.Windows.Forms.DataGridViewTextBoxColumn colBriefing;
+        private System.Windows.Forms.Label labelTotalValue;
+        private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.SplitContainer splitContainer1;
     }
 }
