@@ -47,13 +47,14 @@ namespace EDDiscovery.UserControls
             // this allows the row to grow to accomodate the text.. with a min height of 32.
             dataGridViewScangrid.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
             dataGridViewScangrid.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.DisplayedCells;     // NEW! appears to work https://msdn.microsoft.com/en-us/library/74b2wakt(v=vs.110).aspx
-            dataGridViewScangrid.RowTemplate.MinimumHeight = 32;            
+            dataGridViewScangrid.RowTemplate.MinimumHeight = 32;
         }
 
         public override void Init()
         {
             uctg.OnTravelSelectionChanged += Display;
             discoveryform.OnNewEntry += NewEntry;
+            labelTotalValue.Text = $"No scan data yet.";
         }
 
         public override void LoadLayout()
@@ -86,7 +87,7 @@ namespace EDDiscovery.UserControls
             if (he != null && (last_he == null || he != last_he || he.EntryType == JournalTypeEnum.Scan))
             {
                 last_he = he;
-                DrawSystem();                
+                DrawSystem();
             }
         }
 
@@ -95,6 +96,7 @@ namespace EDDiscovery.UserControls
             if (he != null && (last_he == null || he.System != last_he.System))
             {
                 last_he = he;
+                labelTotalValue.Text = $"No scan data available.";
                 DrawSystem();
                 dataGridViewScangrid.Refresh();
                 dataGridViewScangrid.ClearSelection();
@@ -103,7 +105,7 @@ namespace EDDiscovery.UserControls
 
         void DrawSystem() // draw last_sn, last_he
         {
-            dataGridViewScangrid.Rows.Clear();            
+            dataGridViewScangrid.Rows.Clear();
 
             if (last_he == null)
             {
@@ -156,7 +158,7 @@ namespace EDDiscovery.UserControls
 
                         // display stars and stellar bodies mass
                         if (sn.ScanData.IsStar && sn.ScanData.nStellarMass.HasValue)
-                            bdDetails.Append("Mass:" + sn.ScanData.nStellarMass.Value.ToString("N2") + ", ");
+                            bdDetails.Append("Mass: " + sn.ScanData.nStellarMass.Value.ToString("N2") + ", ");
 
                         // habitable zone for stars - do not display for black holes.
                         if (sn.ScanData.HabitableZoneInner != null && sn.ScanData.HabitableZoneOuter != null && sn.ScanData.StarTypeID != EDStar.H)
@@ -178,7 +180,7 @@ namespace EDDiscovery.UserControls
 
                         // append the terraformable state to the planet class
                         if (sn.ScanData.Terraformable == true)
-                            bdDetails.Append("Terraformable. ");                                               
+                            bdDetails.Append("Terraformable. ");
 
                         // tell us that there is some volcanic activity
                         if (sn.ScanData.Volcanism != null)
@@ -202,11 +204,54 @@ namespace EDDiscovery.UserControls
                                 bdDetails.Append(JournalScan.StarPlanetRing.DisplayStringFromRingClass(sn.ScanData.Rings[i].RingClass) + " ");
                                 bdDetails.Append((sn.ScanData.Rings[i].InnerRad / JournalScan.oneLS_m).ToString("N2") + "ls to " + (sn.ScanData.Rings[i].OuterRad / JournalScan.oneLS_m).ToString("N2") + "ls. ");
                             }
-                        }                                                        
+                        }
 
                         // print the main atmospheric composition
                         if (sn.ScanData.Atmosphere != null && sn.ScanData.Atmosphere != "None")
                             bdDetails.Append(sn.ScanData.Atmosphere + ". ");
+
+                        // materials                        
+                        if (sn.ScanData.HasMaterials)
+                        {
+                            string MaterialsBrief = sn.ScanData.DisplayMaterials(4).ToString();
+                            // jumponium materials: Arsenic (As), Cadmium (Cd), Germanium (Ge), Niobium (Nb), Polonium (Po), Vanadium (V), Yttrium (Y)
+                            
+                            if (MaterialsBrief.Contains("Arsenic") || MaterialsBrief.Contains("Cadmium") || MaterialsBrief.Contains("Germanium")
+                                || MaterialsBrief.Contains("Niobium") || MaterialsBrief.Contains("Polonium") || MaterialsBrief.Contains("Vanadium")
+                                || MaterialsBrief.Contains("Yttrium"))
+                            {
+                                bdDetails.Append("\n" + "This body contains: ");
+                            }
+
+                            if (MaterialsBrief.Contains("Arsenic"))
+                            {
+                                bdDetails.Append("Arsenic. ");
+                            }
+                            if (MaterialsBrief.Contains("Cadmium"))
+                            {
+                                bdDetails.Append("Cadmium. ");
+                            }
+                            if (MaterialsBrief.Contains("Germanium"))
+                            {
+                                bdDetails.Append("Germanium. ");
+                            }
+                            if (MaterialsBrief.Contains("Niobium"))
+                            {
+                                bdDetails.Append("Niobium. ");
+                            }
+                            if (MaterialsBrief.Contains("Polonium"))
+                            {
+                                bdDetails.Append("Polonium. ");
+                            }
+                            if (MaterialsBrief.Contains("Vanadium"))
+                            {
+                                bdDetails.Append("Vanadium. ");
+                            }
+                            if (MaterialsBrief.Contains("Yttrium"))
+                            {
+                                bdDetails.Append("Yttrium. ");
+                            }
+                        }
 
                         int value = sn.ScanData.EstimatedValue;
                         bdDetails.Append("Value " + value.ToString("N0"));
@@ -217,7 +262,7 @@ namespace EDDiscovery.UserControls
                         {
                             img = sn.ScanData.GetStarTypeImage(); // if is a star, use the Star image
                         }
-                        else 
+                        else
                         {
                             img = sn.ScanData.GetPlanetClassImage(); // use the correct image in case of planets and moons
                         }
@@ -226,10 +271,12 @@ namespace EDDiscovery.UserControls
 
                         DataGridViewRow cur = dataGridViewScangrid.Rows[dataGridViewScangrid.Rows.Count - 1];
 
-                        string scan = sn.ScanData.DisplayString(); // display tooltip with full information when hower bodies image and name
+                        string scan = sn.ScanData.DisplayString(); // display tooltip with full information when hower bodies image
                         cur.Cells[0].ToolTipText = scan;
-                        cur.Cells[1].ToolTipText = scan;
                         cur.Tag = img;
+
+                        // display total scan values
+                        BuildSystemInfo(last_sn);
                     }
                 }
             }
@@ -243,7 +290,7 @@ namespace EDDiscovery.UserControls
             {
                 foreach (StarScan.ScanNode node in sn.children.Values)
                 {
-                    Flatten(node, flattened);                
+                    Flatten(node, flattened);
                 }
             }
             return flattened;
@@ -252,14 +299,35 @@ namespace EDDiscovery.UserControls
         private void dataGridViewScangrid_RowPostPaint(object sender, DataGridViewRowPostPaintEventArgs e)
         {
             DataGridViewRow cur = dataGridViewScangrid.Rows[e.RowIndex];
-            if ( cur.Tag != null )
+            if (cur.Tag != null)
             {
                 // we programatically draw the image because we have control over its pos/ size this way, which you can't do
                 // with a image column - there you can only draw a fixed image or stretch it to cell contents.. which we don't want to do
                 int sz = dataGridViewScangrid.RowTemplate.MinimumHeight - 2;
                 int vpos = e.RowBounds.Top + e.RowBounds.Height / 2 - sz / 2;
-                e.Graphics.DrawImage((Image)cur.Tag, new Rectangle(e.RowBounds.Left+1,vpos,sz,sz));
+                e.Graphics.DrawImage((Image)cur.Tag, new Rectangle(e.RowBounds.Left + 1, vpos, sz, sz));
             }
+        }
+
+        private void BuildSystemInfo(StarScan.SystemNode system)
+        {
+            labelTotalValue.Text = BuildScanValue(system);
+        }
+
+        private string BuildScanValue(StarScan.SystemNode system)
+        {
+            var value = 0;
+
+            foreach (var body in system.Bodies)
+            {
+                if (body?.ScanData?.EstimatedValue != null)
+                {
+                    value += body.ScanData.EstimatedValue;
+                }
+            }
+
+            return $"Approx total scan value: {value:N0}";
         }
     }
 }
+
