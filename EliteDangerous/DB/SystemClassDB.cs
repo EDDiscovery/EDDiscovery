@@ -628,8 +628,10 @@ namespace EliteDangerousCore.DB
         }
 
 
-        public static void GetSystemSqDistancesFrom(SortedList<double, ISystem> distlist, double x, double y, double z, int maxitems, bool removezerodiststar, 
-                                                    double maxdist = 200 , SQLiteConnectionSystem cn = null)
+        public static void GetSystemSqDistancesFrom(SortedList<double, ISystem> distlist, double x, double y, double z, 
+                                                    int maxitems, 
+                                                    double mindist = 0, double maxdist = 200 , 
+                                                    SQLiteConnectionSystem cn = null)
         {
             bool closeit = false;
 
@@ -650,35 +652,38 @@ namespace EliteDangerousCore.DB
                     "AND y <= @yv + @maxdist " +
                     "AND z >= @zv - @maxdist " +
                     "AND z <= @zv + @maxdist " +
+                    "AND (x-@xv)*(x-@xv)+(y-@yv)*(y-@yv)+(z-@zv)*(z-@zv)>=@mindist " +
                     "ORDER BY (x-@xv)*(x-@xv)+(y-@yv)*(y-@yv)+(z-@zv)*(z-@zv) " +
-                    "LIMIT @max"))
+                    "LIMIT @max"
+                    ))
                 {
+                    //System.Diagnostics.Debug.WriteLine("DB query " + maxitems + " " + mindist + " " + maxdist);
                     cmd.AddParameterWithValue("xv", (long)(x * XYZScalar));
                     cmd.AddParameterWithValue("yv", (long)(y * XYZScalar));
                     cmd.AddParameterWithValue("zv", (long)(z * XYZScalar));
                     cmd.AddParameterWithValue("max", maxitems + 1);     // 1 more, because if we are on a star, that will be returned
                     cmd.AddParameterWithValue("maxdist", (long)(maxdist * XYZScalar));
+                    cmd.AddParameterWithValue("mindist", (long)(mindist * mindist * XYZScalar * XYZScalar));  // note the double XYZScalar! needed
 
                     using (DbDataReader reader = cmd.ExecuteReader())
                     {
-                        while (reader.Read() && distlist.Count < maxitems)           // already sorted, and already limited to max items
+                        while (reader.Read())// && distlist.Count < maxitems)           // already sorted, and already limited to max items
                         {
                             long edsmid = (long)reader[0];
 
                             if (System.DBNull.Value != reader[1])                 // paranoid check for null
                             {
-                                double dx = ((double)(long)reader[1]) / XYZScalar - x;
-                                double dy = ((double)(long)reader[2]) / XYZScalar - y;
-                                double dz = ((double)(long)reader[3]) / XYZScalar - z;
-
-                                double dist = dx * dx + dy * dy + dz * dz;
-                                if (dist > 0.001 || !removezerodiststar)
+                                ISystem sys = GetSystem(edsmid, cn, SystemIDType.EdsmId);
+                                // System.Diagnostics.Debug.WriteLine("Return " + sys.name + " " + Math.Sqrt(dist));
+                                if (sys != null && sys.name != null)
                                 {
-                                    ISystem sys = GetSystem(edsmid, cn, SystemIDType.EdsmId);
-                                    if (sys != null && sys.name != null)
-                                    {
-                                        distlist.Add(dist, sys);
-                                    }
+                                    double dx = ((double)(long)reader[1]) / XYZScalar - x;
+                                    double dy = ((double)(long)reader[2]) / XYZScalar - y;
+                                    double dz = ((double)(long)reader[3]) / XYZScalar - z;
+
+                                    double dist = dx * dx + dy * dy + dz * dz;
+
+                                    distlist.Add(dist, sys);
                                 }
                             }
                         }
@@ -702,7 +707,7 @@ namespace EliteDangerousCore.DB
         public static ISystem FindNearestSystem(double x, double y, double z, bool removezerodiststar = false, double maxdist = 1000, SQLiteConnectionSystem cn = null)
         {
             SortedList<double, ISystem> distlist = new SortedList<double, ISystem>();
-            GetSystemSqDistancesFrom(distlist, x, y, z, 1, removezerodiststar, maxdist,cn);
+            GetSystemSqDistancesFrom(distlist, x, y, z, 1, 8.0/128.0, maxdist,cn);
             return distlist.Select(v => v.Value).FirstOrDefault();
         }
 
