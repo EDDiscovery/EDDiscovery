@@ -814,7 +814,7 @@ namespace EliteDangerousCore
                             double dist = (je is JournalFSDJump) ? (je as JournalFSDJump).JumpDist : 0;
                             bool updatecoord = (je is JournalLocOrJump) ? (!(je as JournalLocOrJump).HasCoordinate && he.System.HasCoordinate) : false;
 
-                            Debug.WriteLine("Push update {0} {1}", he.System.id_edsm, he.System.name);
+                            Debug.WriteLine("Push update {0} {1} to JE {2} HE {3}", he.System.id_edsm, he.System.name, je.Id, he.Indexno);
                             JournalEntry.UpdateEDSMIDPosJump(je.Id, he.System, updatecoord, dist, conn, txn);
                         }
 
