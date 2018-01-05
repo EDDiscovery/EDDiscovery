@@ -117,9 +117,9 @@ namespace EDDiscovery
         #endregion
 
         #region History
-        public bool RefreshHistoryAsync(string netlogpath = null, bool forcenetlogreload = false, bool forcejournalreload = false, bool checkedsm = false, int? currentcmdr = null)
+        public bool RefreshHistoryAsync(string netlogpath = null, bool forcenetlogreload = false, bool forcejournalreload = false, int? currentcmdr = null)
         {
-            return Controller.RefreshHistoryAsync(netlogpath, forcenetlogreload, forcejournalreload, checkedsm, currentcmdr);
+            return Controller.RefreshHistoryAsync(netlogpath, forcenetlogreload, forcejournalreload, currentcmdr);
         }
         public void RefreshDisplays() { Controller.RefreshDisplays(); }
         public void RecalculateHistoryDBs() { Controller.RecalculateHistoryDBs(); }
@@ -1125,7 +1125,7 @@ namespace EDDiscovery
 
         private void rescanAllJournalFilesToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Controller.RefreshHistoryAsync(forcejournalreload: true, checkedsm: true);
+            Controller.RefreshHistoryAsync(forcejournalreload: true);
         }
 
         private void checkForNewReleaseToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1206,6 +1206,8 @@ namespace EDDiscovery
         public void Open3DMap(HistoryEntry he)
         {
             this.Cursor = Cursors.WaitCursor;
+
+            history.FillInPositionsFSDJumps();
 
             Map.Prepare(he?.System, EDDConfig.Instance.HomeSystem,
                         EDDConfig.Instance.MapCentreOnSelection ? he?.System : EDDConfig.Instance.HomeSystem,
@@ -1598,7 +1600,7 @@ namespace EDDiscovery
         private void buttonExtRefresh_Click(object sender, EventArgs e)
         {
             LogLine("Refresh History.");
-            RefreshHistoryAsync(checkedsm: true);
+            RefreshHistoryAsync();
         }
 
         private void buttonExtEDSMSync_Click(object sender, EventArgs e)
