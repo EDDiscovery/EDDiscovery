@@ -479,38 +479,42 @@ namespace EliteDangerousCore
 
         #region General Info
 
-        public void CalculateSqDistances(SortedList<double, ISystem> distlist, double x, double y, double z, int maxitems, bool removezerodiststar)
+        public void CalculateSqDistances(SortedList<double, ISystem> distlist, double x, double y, double z, 
+                        int maxitems, double mindistance, double maxdistance )
         {
-            double dist;
-            double dx, dy, dz;
             var list = distlist.Values.ToList();
+
             HashSet<long> listids = new HashSet<long>();
             HashSet<string> listnames = new HashSet<string>(StringComparer.InvariantCultureIgnoreCase);
+
             foreach (ISystem sys in list)
             {
                 listids.Add(sys.id);
                 listnames.Add(sys.name);
             }
 
+            mindistance *= mindistance;
+            maxdistance *= maxdistance;     // Square it for comparision
+
             foreach (HistoryEntry pos in historylist)
             {
                 if (pos.System.HasCoordinate && !listnames.Contains(pos.System.name) && !listids.Contains(pos.System.id) )
                 {
-                    dx = (pos.System.x - x);
-                    dy = (pos.System.y - y);
-                    dz = (pos.System.z - z);
-                    dist = dx * dx + dy * dy + dz * dz;
+                    double dx = (pos.System.x - x);
+                    double dy = (pos.System.y - y);
+                    double dz = (pos.System.z - z);
+                    double distsq = dx * dx + dy * dy + dz * dz;
 
                     list.Add(pos.System);
                     listnames.Add(pos.System.name); //stops repeats..
 
-                    if (dist >= 0.1 || !removezerodiststar)
+                    if ( distsq >= mindistance && distsq <= maxdistance)
                     {
                         if (distlist.Count < maxitems)          // if less than max, add..
-                            distlist.Add(dist, pos.System);
-                        else if (dist < distlist.Keys[distlist.Count - 1])   // if last entry (which must be the biggest) is greater than dist..
+                            distlist.Add(distsq, pos.System);
+                        else if (distsq < distlist.Keys[distlist.Count - 1])   // if last entry (which must be the biggest) is greater than dist..
                         {
-                            distlist.Add(dist, pos.System);           // add in
+                            distlist.Add(distsq, pos.System);           // add in
                             distlist.RemoveAt(maxitems);        // remove last..
                         }
                     }
