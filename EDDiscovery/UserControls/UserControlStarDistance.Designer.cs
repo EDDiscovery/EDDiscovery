@@ -56,25 +56,15 @@ namespace EDDiscovery.UserControls
             this.Col1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Distance = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Visited = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.splitPanel = new System.Windows.Forms.SplitContainer();
-            this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
-            this.checkBoxFullRadius = new ExtendedControls.CheckBoxCustom();
-            this.panelMin = new System.Windows.Forms.Panel();
-            this.labelExt1 = new ExtendedControls.LabelExt();
+            this.labelExt1 = new System.Windows.Forms.Label();
             this.textMinRadius = new ExtendedControls.TextBoxBorder();
-            this.panelMax = new System.Windows.Forms.Panel();
-            this.labelExt3 = new ExtendedControls.LabelExt();
+            this.labelExt3 = new System.Windows.Forms.Label();
             this.textMaxRadius = new ExtendedControls.TextBoxBorder();
+            this.panelTop = new System.Windows.Forms.Panel();
             this.closestContextMenu.SuspendLayout();
             this.dataViewScrollerPanel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewNearest)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.splitPanel)).BeginInit();
-            this.splitPanel.Panel1.SuspendLayout();
-            this.splitPanel.Panel2.SuspendLayout();
-            this.splitPanel.SuspendLayout();
-            this.flowLayoutPanel1.SuspendLayout();
-            this.panelMin.SuspendLayout();
-            this.panelMax.SuspendLayout();
+            this.panelTop.SuspendLayout();
             this.SuspendLayout();
             // 
             // closestContextMenu
@@ -105,10 +95,10 @@ namespace EDDiscovery.UserControls
             this.dataViewScrollerPanel2.Controls.Add(this.dataGridViewNearest);
             this.dataViewScrollerPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataViewScrollerPanel2.InternalMargin = new System.Windows.Forms.Padding(0);
-            this.dataViewScrollerPanel2.Location = new System.Drawing.Point(0, 0);
+            this.dataViewScrollerPanel2.Location = new System.Drawing.Point(0, 31);
             this.dataViewScrollerPanel2.Name = "dataViewScrollerPanel2";
             this.dataViewScrollerPanel2.ScrollBarWidth = 20;
-            this.dataViewScrollerPanel2.Size = new System.Drawing.Size(352, 540);
+            this.dataViewScrollerPanel2.Size = new System.Drawing.Size(352, 541);
             this.dataViewScrollerPanel2.TabIndex = 25;
             this.dataViewScrollerPanel2.VerticalScrollBarDockRight = true;
             // 
@@ -130,7 +120,7 @@ namespace EDDiscovery.UserControls
             this.vScrollBarCustom2.MouseOverButtonColor = System.Drawing.Color.Green;
             this.vScrollBarCustom2.MousePressedButtonColor = System.Drawing.Color.Red;
             this.vScrollBarCustom2.Name = "vScrollBarCustom2";
-            this.vScrollBarCustom2.Size = new System.Drawing.Size(20, 519);
+            this.vScrollBarCustom2.Size = new System.Drawing.Size(20, 520);
             this.vScrollBarCustom2.SliderColor = System.Drawing.Color.DarkGray;
             this.vScrollBarCustom2.SmallChange = 1;
             this.vScrollBarCustom2.TabIndex = 24;
@@ -159,7 +149,7 @@ namespace EDDiscovery.UserControls
             this.dataGridViewNearest.Name = "dataGridViewNearest";
             this.dataGridViewNearest.RowHeadersVisible = false;
             this.dataGridViewNearest.ScrollBars = System.Windows.Forms.ScrollBars.None;
-            this.dataGridViewNearest.Size = new System.Drawing.Size(332, 540);
+            this.dataGridViewNearest.Size = new System.Drawing.Size(332, 541);
             this.dataGridViewNearest.TabIndex = 23;
             this.dataGridViewNearest.SortCompare += new System.Windows.Forms.DataGridViewSortCompareEventHandler(this.dataGridViewNearest_SortCompare);
             this.dataGridViewNearest.MouseDown += new System.Windows.Forms.MouseEventHandler(this.dataGridViewNearest_MouseDown);
@@ -183,70 +173,10 @@ namespace EDDiscovery.UserControls
             this.Visited.HeaderText = "Visited";
             this.Visited.Name = "Visited";
             // 
-            // splitPanel
-            // 
-            this.splitPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.splitPanel.Location = new System.Drawing.Point(0, 0);
-            this.splitPanel.Name = "splitPanel";
-            this.splitPanel.Orientation = System.Windows.Forms.Orientation.Horizontal;
-            // 
-            // splitPanel.Panel1
-            // 
-            this.splitPanel.Panel1.Controls.Add(this.flowLayoutPanel1);
-            this.splitPanel.Panel1MinSize = 2;
-            // 
-            // splitPanel.Panel2
-            // 
-            this.splitPanel.Panel2.Controls.Add(this.dataViewScrollerPanel2);
-            this.splitPanel.Panel2MinSize = 50;
-            this.splitPanel.Size = new System.Drawing.Size(352, 572);
-            this.splitPanel.SplitterDistance = 28;
-            this.splitPanel.TabIndex = 26;
-            // 
-            // flowLayoutPanel1
-            // 
-            this.flowLayoutPanel1.Controls.Add(this.checkBoxFullRadius);
-            this.flowLayoutPanel1.Controls.Add(this.panelMin);
-            this.flowLayoutPanel1.Controls.Add(this.panelMax);
-            this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.flowLayoutPanel1.Location = new System.Drawing.Point(0, 0);
-            this.flowLayoutPanel1.Name = "flowLayoutPanel1";
-            this.flowLayoutPanel1.Size = new System.Drawing.Size(352, 28);
-            this.flowLayoutPanel1.TabIndex = 1;
-            // 
-            // checkBoxFullRadius
-            // 
-            this.checkBoxFullRadius.AutoSize = true;
-            this.checkBoxFullRadius.CheckBoxColor = System.Drawing.Color.Gray;
-            this.checkBoxFullRadius.CheckBoxInnerColor = System.Drawing.Color.White;
-            this.checkBoxFullRadius.CheckColor = System.Drawing.Color.DarkBlue;
-            this.checkBoxFullRadius.FontNerfReduction = 0.5F;
-            this.checkBoxFullRadius.ImageButtonDisabledScaling = 0.5F;
-            this.checkBoxFullRadius.Location = new System.Drawing.Point(8, 5);
-            this.checkBoxFullRadius.Margin = new System.Windows.Forms.Padding(8, 5, 0, 3);
-            this.checkBoxFullRadius.MouseOverColor = System.Drawing.Color.CornflowerBlue;
-            this.checkBoxFullRadius.Name = "checkBoxFullRadius";
-            this.checkBoxFullRadius.Size = new System.Drawing.Size(78, 17);
-            this.checkBoxFullRadius.TabIndex = 0;
-            this.checkBoxFullRadius.Text = "full / radius";
-            this.checkBoxFullRadius.TickBoxReductionSize = 10;
-            this.checkBoxFullRadius.UseVisualStyleBackColor = true;
-            this.checkBoxFullRadius.CheckedChanged += new System.EventHandler(this.checkBoxFullRadius_CheckedChanged);
-            // 
-            // panelMin
-            // 
-            this.panelMin.Controls.Add(this.labelExt1);
-            this.panelMin.Controls.Add(this.textMinRadius);
-            this.panelMin.Location = new System.Drawing.Point(86, 0);
-            this.panelMin.Margin = new System.Windows.Forms.Padding(0, 0, 3, 3);
-            this.panelMin.Name = "panelMin";
-            this.panelMin.Size = new System.Drawing.Size(60, 26);
-            this.panelMin.TabIndex = 1;
-            // 
             // labelExt1
             // 
             this.labelExt1.AutoSize = true;
-            this.labelExt1.Location = new System.Drawing.Point(3, 7);
+            this.labelExt1.Location = new System.Drawing.Point(3, 6);
             this.labelExt1.Name = "labelExt1";
             this.labelExt1.Size = new System.Drawing.Size(24, 13);
             this.labelExt1.TabIndex = 3;
@@ -260,33 +190,23 @@ namespace EDDiscovery.UserControls
             this.textMinRadius.BorderColorScaling = 0.5F;
             this.textMinRadius.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textMinRadius.ControlBackground = System.Drawing.SystemColors.Control;
-            this.textMinRadius.Location = new System.Drawing.Point(28, 3);
+            this.textMinRadius.Location = new System.Drawing.Point(33, 3);
             this.textMinRadius.Multiline = false;
             this.textMinRadius.Name = "textMinRadius";
             this.textMinRadius.ReadOnly = false;
             this.textMinRadius.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.textMinRadius.SelectionLength = 0;
             this.textMinRadius.SelectionStart = 0;
-            this.textMinRadius.Size = new System.Drawing.Size(30, 20);
+            this.textMinRadius.Size = new System.Drawing.Size(50, 20);
             this.textMinRadius.TabIndex = 1;
             this.textMinRadius.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.textMinRadius.WordWrap = true;
             this.textMinRadius.TextChanged += new System.EventHandler(this.textMinRadius_TextChanged);
             // 
-            // panelMax
-            // 
-            this.panelMax.Controls.Add(this.labelExt3);
-            this.panelMax.Controls.Add(this.textMaxRadius);
-            this.panelMax.Location = new System.Drawing.Point(149, 0);
-            this.panelMax.Margin = new System.Windows.Forms.Padding(0, 0, 3, 3);
-            this.panelMax.Name = "panelMax";
-            this.panelMax.Size = new System.Drawing.Size(62, 26);
-            this.panelMax.TabIndex = 5;
-            // 
             // labelExt3
             // 
             this.labelExt3.AutoSize = true;
-            this.labelExt3.Location = new System.Drawing.Point(3, 7);
+            this.labelExt3.Location = new System.Drawing.Point(96, 6);
             this.labelExt3.Name = "labelExt3";
             this.labelExt3.Size = new System.Drawing.Size(27, 13);
             this.labelExt3.TabIndex = 3;
@@ -300,39 +220,44 @@ namespace EDDiscovery.UserControls
             this.textMaxRadius.BorderColorScaling = 0.5F;
             this.textMaxRadius.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textMaxRadius.ControlBackground = System.Drawing.SystemColors.Control;
-            this.textMaxRadius.Location = new System.Drawing.Point(30, 3);
+            this.textMaxRadius.Location = new System.Drawing.Point(129, 3);
             this.textMaxRadius.Multiline = false;
             this.textMaxRadius.Name = "textMaxRadius";
             this.textMaxRadius.ReadOnly = false;
             this.textMaxRadius.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.textMaxRadius.SelectionLength = 0;
             this.textMaxRadius.SelectionStart = 0;
-            this.textMaxRadius.Size = new System.Drawing.Size(30, 20);
+            this.textMaxRadius.Size = new System.Drawing.Size(50, 20);
             this.textMaxRadius.TabIndex = 1;
             this.textMaxRadius.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.textMaxRadius.WordWrap = true;
             this.textMaxRadius.TextChanged += new System.EventHandler(this.textMaxRadius_TextChanged);
             // 
+            // panelTop
+            // 
+            this.panelTop.Controls.Add(this.labelExt1);
+            this.panelTop.Controls.Add(this.textMinRadius);
+            this.panelTop.Controls.Add(this.labelExt3);
+            this.panelTop.Controls.Add(this.textMaxRadius);
+            this.panelTop.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panelTop.Location = new System.Drawing.Point(0, 0);
+            this.panelTop.Name = "panelTop";
+            this.panelTop.Size = new System.Drawing.Size(352, 31);
+            this.panelTop.TabIndex = 25;
+            // 
             // UserControlStarDistance
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.splitPanel);
+            this.Controls.Add(this.dataViewScrollerPanel2);
+            this.Controls.Add(this.panelTop);
             this.Name = "UserControlStarDistance";
             this.Size = new System.Drawing.Size(352, 572);
             this.closestContextMenu.ResumeLayout(false);
             this.dataViewScrollerPanel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewNearest)).EndInit();
-            this.splitPanel.Panel1.ResumeLayout(false);
-            this.splitPanel.Panel2.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.splitPanel)).EndInit();
-            this.splitPanel.ResumeLayout(false);
-            this.flowLayoutPanel1.ResumeLayout(false);
-            this.flowLayoutPanel1.PerformLayout();
-            this.panelMin.ResumeLayout(false);
-            this.panelMin.PerformLayout();
-            this.panelMax.ResumeLayout(false);
-            this.panelMax.PerformLayout();
+            this.panelTop.ResumeLayout(false);
+            this.panelTop.PerformLayout();
             this.ResumeLayout(false);
 
         }               
@@ -347,14 +272,10 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.DataGridViewTextBoxColumn Col1;
         private System.Windows.Forms.DataGridViewTextBoxColumn Distance;
         private System.Windows.Forms.DataGridViewTextBoxColumn Visited;
-        private System.Windows.Forms.SplitContainer splitPanel;
-        private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
-        private ExtendedControls.CheckBoxCustom checkBoxFullRadius;
-        private System.Windows.Forms.Panel panelMin;
-        private ExtendedControls.LabelExt labelExt1;
+        private System.Windows.Forms.Label labelExt1;
         private ExtendedControls.TextBoxBorder textMinRadius;
-        private System.Windows.Forms.Panel panelMax;
-        private ExtendedControls.LabelExt labelExt3;
+        private System.Windows.Forms.Label labelExt3;
         private ExtendedControls.TextBoxBorder textMaxRadius;
+        private Panel panelTop;
     }
 }
