@@ -153,7 +153,6 @@ namespace EDDiscovery.UserControls
                 return;
             }
 
-            discoveryform.history.FillEDSM(last_he, reload: true); // Fill in any EDSM info we have, force it to try again.. in case system db updated
             StarScan.SystemNode last_sn = discoveryform.history.starscan.FindSystem(last_he.System, checkBoxEDSM.Checked);
 
             SetControlText((last_sn == null) ? "No Scan" : last_sn.system.name);

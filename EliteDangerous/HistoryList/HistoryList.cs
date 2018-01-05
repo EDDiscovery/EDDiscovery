@@ -427,7 +427,7 @@ namespace EliteDangerousCore
                 {
                     // because of the volume of requests, and for speed, do not do EDSM lookup
                     if (he.IsFSDJump && !he.System.HasCoordinate)   // try and load ones without position.. if its got pos we are happy
-                        updatesystems.Add(new Tuple<HistoryEntry, ISystem>(he, SystemCache.FindSystemConditional(he.System,checkedsm:false,reload:false,conn:cn)));
+                        updatesystems.Add(new Tuple<HistoryEntry, ISystem>(he, SystemCache.FindSystemConditional(he.System,reload:false,conn:cn)));
                 }
             }
 
@@ -452,7 +452,7 @@ namespace EliteDangerousCore
 
             if (edsmsys == null)                              // if we found it externally, do not find again
             {
-                edsmsys = SystemCache.FindSystem(syspos.System, checkedsm:true );   // low volume clicks which call this can do EDSM lookups
+                edsmsys = SystemCache.FindSystem(syspos.System);   
             }
 
             if (edsmsys != null)
@@ -687,7 +687,7 @@ namespace EliteDangerousCore
             HistoryEntry prev = GetLast;
 
             bool journalupdate = false;
-            HistoryEntry he = HistoryEntry.FromJournalEntry(je, prev, true, out journalupdate);     // we may check edsm for this entry
+            HistoryEntry he = HistoryEntry.FromJournalEntry(je, prev, out journalupdate);     // we may check edsm for this entry
 
             if (journalupdate)
             {
@@ -783,7 +783,7 @@ namespace EliteDangerousCore
                     }
 
                     bool journalupdate = false;
-                    HistoryEntry he = HistoryEntry.FromJournalEntry(je, prev, false, out journalupdate, conn, cmdr);
+                    HistoryEntry he = HistoryEntry.FromJournalEntry(je, prev, out journalupdate, conn, cmdr);
 
                     prev = he;
                     jprev = je;

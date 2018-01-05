@@ -158,7 +158,7 @@ namespace EliteDangerousCore
             };
         }
 
-        public static HistoryEntry FromJournalEntry(JournalEntry je, HistoryEntry prev, bool checkedsm, out bool journalupdate, SQLiteConnectionSystem conn = null, EDCommander cmdr = null)
+        public static HistoryEntry FromJournalEntry(JournalEntry je, HistoryEntry prev, out bool journalupdate, SQLiteConnectionSystem conn = null, EDCommander cmdr = null)
         {
             ISystem isys = prev == null ? new SystemClass("Unknown") : prev.System;
             int indexno = prev == null ? 1 : prev.Indexno + 1;
@@ -168,8 +168,7 @@ namespace EliteDangerousCore
             bool starposfromedsm = false;
             bool firstdiscover = false;
 
-            if (je.EventTypeID == JournalTypeEnum.Location || je.EventTypeID == JournalTypeEnum.FSDJump ||
-                (je.EventTypeID == JournalTypeEnum.StartJump && (je as JournalStartJump)?.JumpType == "Hyperspace"))
+            if (je.EventTypeID == JournalTypeEnum.Location || je.EventTypeID == JournalTypeEnum.FSDJump)
             {
                 JournalLocOrJump jl = je as JournalLocOrJump;
 
@@ -191,24 +190,18 @@ namespace EliteDangerousCore
                         status = SystemStatusEnum.EDDiscovery,
                     };
 
-                    // If it was a new system, pass the coords back to the StartJump, presuming its before and has the same name
-                    if (prev != null && prev.System.name == newsys.name && !prev.System.HasCoordinate)
+                    // If it was a new system, pass the coords back to the StartJump
+                    if (prev != null && prev.journalEntry is JournalStartJump )
                     {
-                        prev.System.x = newsys.x;
-                        prev.System.y = newsys.y;
-                        prev.System.z = newsys.z;
+                        prev.System = newsys;       // give the previous startjump our system..
                     }
                 }
                 else
                 {                           // Default one
-                    JournalStartJump js = je as JournalStartJump;
-
-                    string sysname = jl?.StarSystem ?? js?.StarSystem;      // no co-ord, or its a startjump, estimate where we are..
-
-                    newsys = new SystemClass(sysname);
+                    newsys = new SystemClass(jl.StarSystem);
                     newsys.id_edsm = je.EdsmID;
 
-                    ISystem s = SystemCache.FindSystem(newsys, checkedsm:checkedsm, conn: conn);      // has no co-ord, did we find it?
+                    ISystem s = SystemCache.FindSystem(newsys, conn);      // has no co-ord, did we find it?
 
                     if (s != null)                               // found a system..
                     {                                                       
