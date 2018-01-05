@@ -131,7 +131,7 @@ namespace EDDiscovery.UserControls
                         StringBuilder bdClass = new StringBuilder();
                         StringBuilder bdDist = new StringBuilder();
                         StringBuilder bdDetails = new StringBuilder();
-
+                        
                         if (sn.ScanData.PlanetClass != null)
                             bdClass.Append(sn.ScanData.PlanetClass);
                         if (sn.ScanData.StarTypeText != null)
@@ -202,14 +202,64 @@ namespace EDDiscovery.UserControls
                                 bdDetails.Append(JournalScan.StarPlanetRing.DisplayStringFromRingClass(sn.ScanData.Rings[i].RingClass) + " ");
                                 bdDetails.Append((sn.ScanData.Rings[i].InnerRad / JournalScan.oneLS_m).ToString("N2") + "ls to " + (sn.ScanData.Rings[i].OuterRad / JournalScan.oneLS_m).ToString("N2") + "ls. ");
                             }
-                        }                                                        
-
+                        }                                     
+                         
                         // print the main atmospheric composition
                         if (sn.ScanData.Atmosphere != null && sn.ScanData.Atmosphere != "None")
                             bdDetails.Append(sn.ScanData.Atmosphere + ". ");
 
                         int value = sn.ScanData.EstimatedValue;
                         bdDetails.Append("Value " + value.ToString("N0"));
+
+                        // materials                        
+                        if (sn.ScanData.HasMaterials)
+                        {                            
+                            string MaterialsBrief = sn.ScanData.DisplayMaterialsBrief(2).ToString();
+                            // jumponium materials: Arsenic (As), Cadmium (Cd), Germanium (Ge), Niobium (Nb), Polonium (Po), Vanadium (V), Yttrium (Y)
+                            string Arsenic = "As";
+                            string Cadmium = "Cd";
+                            string Germanium = "Ge";
+                            string Niobium = "Nb";
+                            string Polonium = "Po";
+                            string Vanadium = "V";
+                            string Yttrium = "Y";
+                            
+                            if (MaterialsBrief.Contains(Vanadium) || MaterialsBrief.Contains(Germanium) || MaterialsBrief.Contains(Cadmium) 
+                                || MaterialsBrief.Contains(Niobium) || MaterialsBrief.Contains(Arsenic) || MaterialsBrief.Contains(Polonium) 
+                                || MaterialsBrief.Contains(Yttrium))
+                            {
+                                bdDetails.Append("\n" + "This body contains: ");
+                            }
+
+                            if (MaterialsBrief.Contains(Vanadium))
+                            {
+                                bdDetails.Append("Vanadium. ");
+                            }
+                            if (MaterialsBrief.Contains(Germanium))
+                            {
+                                bdDetails.Append("Germanium. ");
+                            }
+                            if (MaterialsBrief.Contains(Cadmium))
+                            {
+                                bdDetails.Append("Cadmium. ");
+                            }
+                            if (MaterialsBrief.Contains(Niobium))
+                            {
+                                bdDetails.Append("Niobium. ");
+                            }
+                            if (MaterialsBrief.Contains(Arsenic))
+                            {
+                                bdDetails.Append("Arsenic. ");
+                            }
+                            if (MaterialsBrief.Contains(Yttrium))
+                            {
+                                bdDetails.Append("Yttrium. ");
+                            }
+                            if (MaterialsBrief.Contains(Polonium))
+                            {
+                                bdDetails.Append("Polonium. ");
+                            }                           
+                        }
 
                         Image img = null;
 

@@ -542,6 +542,28 @@ namespace EliteDangerousCore.JournalEvents
             return scanText.ToNullSafeString();
         }
 
+        public string DisplayMaterialsBrief(int indent = 0)
+        {
+            StringBuilder scanText = new StringBuilder();
+            string indents = new string(' ', indent);
+
+            scanText.Append("Materials: ");
+            foreach (KeyValuePair<string, double> mat in Materials)
+            {
+                MaterialCommodityDB mc = MaterialCommodityDB.GetCachedMaterial(mat.Key);
+                if (mc != null)
+                    scanText.AppendFormat(indents + "{0} {1}%", mc.shortname, mat.Value.ToString("N1"));
+                else
+                    scanText.AppendFormat(indents + "{0} {1}%\n", System.Threading.Thread.CurrentThread.CurrentCulture.TextInfo.ToTitleCase(mat.Key.ToLower()),
+                                                                mat.Value.ToString("N1"));
+            }
+
+            if (scanText.Length > 0 && scanText[scanText.Length - 1] == '\n')
+                scanText.Remove(scanText.Length - 1, 1);
+
+            return scanText.ToNullSafeString();
+        }
+
         public string DisplayAtmosphere(int indent = 0)
         {
             StringBuilder scanText = new StringBuilder();
