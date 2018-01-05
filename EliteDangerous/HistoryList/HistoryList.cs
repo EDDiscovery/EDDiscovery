@@ -494,7 +494,7 @@ namespace EliteDangerousCore
 
             foreach (HistoryEntry pos in historylist)
             {
-                if (pos.System.HasCoordinate && !listids.Contains(pos.System.id) && !listnames.Contains(pos.System.name))
+                if (pos.System.HasCoordinate && !listnames.Contains(pos.System.name) && !listids.Contains(pos.System.id) )
                 {
                     dx = (pos.System.x - x);
                     dy = (pos.System.y - y);
@@ -502,6 +502,7 @@ namespace EliteDangerousCore
                     dist = dx * dx + dy * dy + dz * dz;
 
                     list.Add(pos.System);
+                    listnames.Add(pos.System.name); //stops repeats..
 
                     if (dist >= 0.1 || !removezerodiststar)
                     {
