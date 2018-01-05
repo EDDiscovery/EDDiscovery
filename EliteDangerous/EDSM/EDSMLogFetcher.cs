@@ -137,7 +137,7 @@ namespace EliteDangerousCore.EDSM
 
                         // Get all of the local entries now that we have the entries from EDSM
                         // Moved here to avoid the race that could have been causing duplicate entries
-                        List<HistoryEntry> hlfsdlist = JournalEntry.GetAll(Commander.Nr, logstarttime.AddDays(-1), logendtime.AddDays(1)).OfType<JournalLocOrJump>().OrderBy(je => je.EventTimeUTC).Select(je => HistoryEntry.FromJournalEntry(je, null, false, out jupdate)).ToList();
+                        List<HistoryEntry> hlfsdlist = JournalEntry.GetAll(Commander.Nr, logstarttime.AddDays(-1), logendtime.AddDays(1)).OfType<JournalLocOrJump>().OrderBy(je => je.EventTimeUTC).Select(je => HistoryEntry.FromJournalEntry(je, null, out jupdate)).ToList();
 
                         HistoryList hl = new HistoryList(hlfsdlist);
                         List<DateTime> hlfsdtimes = hlfsdlist.Select(he => he.EventTimeUTC).ToList();
