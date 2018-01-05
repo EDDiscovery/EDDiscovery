@@ -95,15 +95,88 @@ namespace EDDiscovery.UserControls
             SetControlText("");
             dataGridViewNearest.Rows.Clear();
 
+            double minRadius;
+            double maxRadius;
+
+            // handle empty textboxes, assign default values or user defined ranges
+            if (textMinRadius.Text != "")
+            {
+                minRadius = double.Parse(textMinRadius.Text);
+            }
+            else
+            {
+                minRadius = 0;
+                textMinRadius.Text = minRadius.ToString();
+            }
+
+            if (textMaxRadius.Text != "")
+            {
+                maxRadius = double.Parse(textMaxRadius.Text);
+            }
+            else
+            {
+                maxRadius = 20;
+                textMaxRadius.Text = maxRadius.ToString();
+            }
+
             if (csl.Count() > 0)
             {
                 SetControlText("Closest systems from " + name);
                 foreach (KeyValuePair<double, ISystem> tvp in csl)
                 {
                     int visits = discoveryform.history.GetVisitsCount(tvp.Value.name, tvp.Value.id_edsm);
-                    object[] rowobj = { tvp.Value.name, Math.Sqrt(tvp.Key).ToString("0.00"), visits.ToStringInvariant()};       // distances are stored squared for speed, back to normal.
-                    int rowindex = dataGridViewNearest.Rows.Add(rowobj);
-                    dataGridViewNearest.Rows[rowindex].Tag = tvp.Value;
+                    object[] rowobj = { tvp.Value.name, Math.Sqrt(tvp.Key).ToString("0.00"), visits.ToStringInvariant() };       // distances are stored squared for speed, back to normal.
+
+                    // Apply radius filter
+                    if (checkBoxFullRadius.Checked == true)
+                    {
+                        double range = Math.Sqrt(tvp.Key);
+                        if (range >= minRadius && range <= maxRadius) // shows only the systems inside the defined radius
+                        {
+                            int rowindex = dataGridViewNearest.Rows.Add(rowobj);
+                            dataGridViewNearest.Rows[rowindex].Tag = tvp.Value;
+                        }
+                    }
+                    else
+                    {   
+                        int rowindex = dataGridViewNearest.Rows.Add(rowobj);
+                        dataGridViewNearest.Rows[rowindex].Tag = tvp.Value;
+                    }
+
+                    // Check for duplicated entries and remove them
+                    if (dataGridViewNearest.Rows.Count > 2)
+                    {
+                        for (int currentRow = 0; currentRow < dataGridViewNearest.Rows.Count; currentRow++)
+                        {
+                            var rowToCompare = dataGridViewNearest.Rows[currentRow]; // Get row to compare against other rows
+
+                            // Iterate through all rows 
+                            //
+                            foreach (DataGridViewRow row in dataGridViewNearest.Rows)
+                            {
+                                if (rowToCompare.Equals(row))
+                                {
+                                    continue;
+                                }
+                                // If row is the same row being compared, skip.
+
+                                bool duplicateRow = true;
+
+                                // Compare the value of all cells
+                                if (rowToCompare.Cells[0].Value != null && rowToCompare.Cells[0].Value.ToString() != row.Cells[0].Value.ToString())
+                                {
+                                    duplicateRow = false;
+                                }
+
+                                // If duplicated, remove
+                                if (duplicateRow)
+                                {
+                                    dataGridViewNearest.Rows.RemoveAt(row.Index);
+                                    break;
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -190,89 +263,119 @@ namespace EDDiscovery.UserControls
             }
         }
 
-    }
-
-
-    class StarDistanceComputer
-    {
-        private Thread backgroundStardistWorker;
-        private bool PendingClose { get;  set; }           // we want to close boys!
-
-        private class StardistRequest
+        class StarDistanceComputer
         {
-            public ISystem System;
-            public bool IgnoreOnDuplicate;
-            public Action<ISystem, SortedList<double, ISystem>> Callback;
-        }
+            private Thread backgroundStardistWorker;
+            private bool PendingClose { get; set; }           // we want to close boys!
 
-        private ConcurrentQueue<StardistRequest> closestsystem_queue = new ConcurrentQueue<StardistRequest>();
-
-        private AutoResetEvent stardistRequested = new AutoResetEvent(false);
-        private AutoResetEvent closeRequested = new AutoResetEvent(false);
-
-        public StarDistanceComputer()
-        {
-            PendingClose = false;
-            backgroundStardistWorker = new Thread(BackgroundStardistWorkerThread) { Name = "Star Distance Worker", IsBackground = true };
-            backgroundStardistWorker.Start();
-        }
-
-        public void CalculateClosestSystems(ISystem sys, Action<ISystem, SortedList<double, ISystem>> callback, bool ignoreDuplicates = true)
-        {
-            closestsystem_queue.Enqueue(new StardistRequest { System = sys, Callback = callback, IgnoreOnDuplicate = ignoreDuplicates });
-            stardistRequested.Set();
-        }
-
-        public void ShutDown()
-        {
-            PendingClose = true;
-            closeRequested.Set();
-            backgroundStardistWorker.Join();
-        }
-
-        private void BackgroundStardistWorkerThread()
-        {
-            while (!PendingClose)
+            private class StardistRequest
             {
-                int wh = WaitHandle.WaitAny(new WaitHandle[] { closeRequested, stardistRequested });
+                public ISystem System;
+                public bool IgnoreOnDuplicate;
+                public Action<ISystem, SortedList<double, ISystem>> Callback;
+            }
 
-                if (PendingClose)
-                    break;
+            private ConcurrentQueue<StardistRequest> closestsystem_queue = new ConcurrentQueue<StardistRequest>();
 
-                StardistRequest stardistreq = null;
+            private AutoResetEvent stardistRequested = new AutoResetEvent(false);
+            private AutoResetEvent closeRequested = new AutoResetEvent(false);
 
-                switch (wh)
+            public StarDistanceComputer()
+            {
+                PendingClose = false;
+                backgroundStardistWorker = new Thread(BackgroundStardistWorkerThread) { Name = "Star Distance Worker", IsBackground = true };
+                backgroundStardistWorker.Start();
+            }
+
+            public void CalculateClosestSystems(ISystem sys, Action<ISystem, SortedList<double, ISystem>> callback, bool ignoreDuplicates = true)
+            {
+                closestsystem_queue.Enqueue(new StardistRequest { System = sys, Callback = callback, IgnoreOnDuplicate = ignoreDuplicates });
+                stardistRequested.Set();
+            }
+
+            public void ShutDown()
+            {
+                PendingClose = true;
+                closeRequested.Set();
+                backgroundStardistWorker.Join();
+            }
+
+            private void BackgroundStardistWorkerThread()
+            {
+                while (!PendingClose)
                 {
-                    case 0:  // Close Requested
+                    int wh = WaitHandle.WaitAny(new WaitHandle[] { closeRequested, stardistRequested });
+
+                    if (PendingClose)
                         break;
-                    case 1:  // Star Distances Requested
-                        while (!PendingClose && closestsystem_queue.TryDequeue(out stardistreq))
-                        {
-                            if (!stardistreq.IgnoreOnDuplicate || closestsystem_queue.Count == 0)
+
+                    StardistRequest stardistreq = null;
+
+                    switch (wh)
+                    {
+                        case 0:  // Close Requested
+                            break;
+                        case 1:  // Star Distances Requested
+                            while (!PendingClose && closestsystem_queue.TryDequeue(out stardistreq))
                             {
-                                StardistRequest req = stardistreq;
-                                ISystem sys = req.System;
-                                SortedList<double, ISystem> closestsystemlist = new SortedList<double, ISystem>(new DuplicateKeyComparer<double>()); //lovely list allowing duplicate keys - can only iterate in it.
-                                SystemClassDB.GetSystemSqDistancesFrom(closestsystemlist, sys.x, sys.y, sys.z, 50, true, 1000);
-                                if (!PendingClose)
+                                if (!stardistreq.IgnoreOnDuplicate || closestsystem_queue.Count == 0)
                                 {
-                                    req.Callback(sys, closestsystemlist);
+                                    StardistRequest req = stardistreq;
+                                    ISystem sys = req.System;
+                                    SortedList<double, ISystem> closestsystemlist = new SortedList<double, ISystem>(new DuplicateKeyComparer<double>()); //lovely list allowing duplicate keys - can only iterate in it.
+                                    SystemClassDB.GetSystemSqDistancesFrom(closestsystemlist, sys.x, sys.y, sys.z, 50, true, 1000);
+                                    if (!PendingClose)
+                                    {
+                                        req.Callback(sys, closestsystemlist);
+                                    }
                                 }
                             }
-                        }
 
-                        break;
+                            break;
+                    }
+                }
+            }
+
+            private class DuplicateKeyComparer<TKey> : IComparer<TKey> where TKey : IComparable      // special compare for sortedlist
+            {
+                public int Compare(TKey x, TKey y)
+                {
+                    int result = x.CompareTo(y);
+                    return (result == 0) ? 1 : result;      // for this, equals just means greater than, to allow duplicate distance values to be added.
                 }
             }
         }
 
-        private class DuplicateKeyComparer<TKey> : IComparer<TKey> where TKey : IComparable      // special compare for sortedlist
+        // Event Handler
+        private void checkBoxFullRadius_CheckedChanged(object sender, EventArgs e)
         {
-            public int Compare(TKey x, TKey y)
+            Init();
+        }
+        
+        private void textMinRadius_TextChanged(object sender, EventArgs e)
+        {
+            double parsedValue;
+
+            if (!double.TryParse(textMinRadius.Text, out parsedValue))
             {
-                int result = x.CompareTo(y);
-                return (result == 0) ? 1 : result;      // for this, equals just means greater than, to allow duplicate distance values to be added.
+                textMinRadius.Text = "";
             }
+
+            Thread.Sleep(250);
+            Init();
+        }
+        
+        private void textMaxRadius_TextChanged(object sender, EventArgs e)
+        {
+            double parsedValue;
+
+            if (!double.TryParse(textMaxRadius.Text, out parsedValue))
+            {
+                textMaxRadius.Text = "";
+            }
+
+            Thread.Sleep(250);
+            Init();
         }
     }
 }
