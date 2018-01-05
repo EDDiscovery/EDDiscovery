@@ -12,58 +12,6 @@ namespace EliteDangerousCore
         private static Dictionary<long, ISystem> systemsByEdsmId = new Dictionary<long, ISystem>();
         private static Dictionary<string, List<ISystem>> systemsByName = new Dictionary<string, List<ISystem>>(StringComparer.InvariantCultureIgnoreCase);
 
-        public static List<ISystem> GetSystemsByName(string name)
-        {
-            if (systemsByName.ContainsKey(name))
-            {
-                return systemsByName[name];
-            }
-            else
-            {
-                List<ISystem> systems = DB.SystemClassDB.GetSystemsByName(name);
-
-                if (systems.Count != 0)
-                {
-                    systemsByName[name] = systems;
-
-                    foreach (ISystem sys in systems)
-                    {
-                        if (sys.id_edsm > 0)
-                        {
-                            systemsByEdsmId[sys.id_edsm] = sys;
-                        }
-                    }
-                }
-
-                return systems;
-            }
-        }
-
-        public static ISystem GetSystemByEdsmId(long id)
-        {
-            if (systemsByEdsmId.ContainsKey(id))
-            {
-                return systemsByEdsmId[id];
-            }
-            else
-            {
-                ISystem sys = DB.SystemClassDB.GetSystem(id, idtype: DB.SystemClassDB.SystemIDType.EdsmId);
-                if (sys != null)
-                {
-                    systemsByEdsmId[id] = sys;
-                }
-                return sys;
-            }
-        }
-
-        private static double SqDist(ISystem a, ISystem b)
-        {
-            double dx = a.x - b.x;
-            double dy = a.y - b.y;
-            double dz = a.z - b.z;
-            return dx * dx + dy * dy + dz * dz;
-        }
-
         public static ISystem FindSystemConditional(ISystem sys, bool reload, DB.SQLiteConnectionSystem conn = null)
         {
             if (sys.status == SystemStatusEnum.EDSM || (!reload && sys.id_edsm == -1))  // if set already, or we tried and failed..
