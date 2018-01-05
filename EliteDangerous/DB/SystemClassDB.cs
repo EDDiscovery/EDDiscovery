@@ -14,7 +14,6 @@
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 
-using EliteDangerousCore.EDSM;
 using EMK.LightGeometry;
 using Newtonsoft.Json.Linq;
 using System;
@@ -27,108 +26,47 @@ using System.Linq;
 
 namespace EliteDangerousCore.DB
 {
-    public enum SystemStatusEnum                // Who made the information?
-    {
-        Unknown = 0,
-        EDSC = 1,
-        RedWizzard = 2,
-        EDDiscovery = 3,
-        EDDB = 4,
-        Inhumierer = 5,
-    }
-
-    public enum SystemInfoSource
-    {
-        _RW = 1,
-        _EDSC = 2,
-        EDDB = 4,
-        EDSM = 5
-    }
-
-
     public static class SystemClassDB
     {
         public const float XYZScalar = 128.0F;     // scaling between DB stored values and floats
 
-        public static ISystem FromJson(JObject jo, SystemInfoSource source)
+        public static ISystem FromEDDB(JObject jo)
         {
             ISystem sys = new SystemClass();
 
             try
             {
-                if (source == SystemInfoSource.EDSM)
-                {
-                    JObject coords = (JObject)jo["coords"];
+                sys.name = jo["name"].Value<string>();
 
-                    sys.name = jo["name"].Value<string>();
+                sys.cr = 1;
 
-                    //cr = jo["cr"].Value<int>();
-                    sys.x = double.NaN;
-                    sys.y = double.NaN;
-                    sys.z = double.NaN;
+                sys.x = jo["x"].Value<double>();
+                sys.y = jo["y"].Value<double>();
+                sys.z = jo["z"].Value<double>();
 
-                    if (coords != null && (coords["x"].Type == JTokenType.Float || coords["x"].Type == JTokenType.Integer))
-                    {
-                        sys.x = coords["x"].Value<double>();
-                        sys.y = coords["y"].Value<double>();
-                        sys.z = coords["z"].Value<double>();
-                    }
-                    JArray submitted = (JArray)jo["submitted"];
+                sys.id_eddb = jo["id"].Value<int>();
 
-                    if (submitted != null && submitted.Count > 0)
-                    {
-                        if (submitted[0]["cmdrname"] != null)
-                            sys.CommanderCreate = submitted[0]["cmdrname"].Value<string>();
-                        sys.CreateDate = submitted[0]["date"].Value<DateTime>();
+                sys.faction = jo["controlling_minor_faction"].Value<string>();
 
-                        if (submitted[submitted.Count - 1]["cmdrname"] != null)
-                            sys.CommanderUpdate = submitted[submitted.Count - 1]["cmdrname"].Value<string>();
-                        sys.UpdateDate = submitted[submitted.Count - 1]["date"].Value<DateTime>();
+                if (jo["population"].Type == JTokenType.Integer)
+                    sys.population = jo["population"].Value<long>();
 
-                    }
+                sys.government = EliteDangerousTypesFromJSON.Government2ID(jo["government"]);
+                sys.allegiance = EliteDangerousTypesFromJSON.Allegiance2ID(jo["allegiance"]);
 
-                    sys.UpdateDate = jo["date"].Value<DateTime>();
-                    if (sys.CreateDate.Year <= 1)
-                        sys.CreateDate = sys.UpdateDate;
+                sys.state = EliteDangerousTypesFromJSON.EDState2ID(jo["state"]);
+                sys.security = EliteDangerousTypesFromJSON.EDSecurity2ID(jo["security"]);
 
-                    sys.id_edsm = (long)jo["id"];                         // pick up its edsm ID
+                sys.primary_economy = EliteDangerousTypesFromJSON.EDEconomy2ID(jo["primary_economy"]);
 
-                    sys.status = SystemStatusEnum.EDSC;
-                }
-                else if (source == SystemInfoSource.EDDB)
-                {
-                    sys.name = jo["name"].Value<string>();
+                if (jo["needs_permit"].Type == JTokenType.Integer)
+                    sys.needs_permit = jo["needs_permit"].Value<int>();
 
-                    sys.cr = 1;
+                sys.eddb_updated_at = jo["updated_at"].Value<int>();
 
-                    sys.x = jo["x"].Value<double>();
-                    sys.y = jo["y"].Value<double>();
-                    sys.z = jo["z"].Value<double>();
+                sys.id_edsm = jo["edsm_id"].Long();                         // pick up its edsm ID
 
-                    sys.id_eddb = jo["id"].Value<int>();
-
-                    sys.faction = jo["controlling_minor_faction"].Value<string>();
-
-                    if (jo["population"].Type == JTokenType.Integer)
-                        sys.population = jo["population"].Value<long>();
-
-                    sys.government = EliteDangerousTypesFromJSON.Government2ID(jo["government"]);
-                    sys.allegiance = EliteDangerousTypesFromJSON.Allegiance2ID(jo["allegiance"]);
-
-                    sys.state = EliteDangerousTypesFromJSON.EDState2ID(jo["state"]);
-                    sys.security = EliteDangerousTypesFromJSON.EDSecurity2ID(jo["security"]);
-
-                    sys.primary_economy = EliteDangerousTypesFromJSON.EDEconomy2ID(jo["primary_economy"]);
-
-                    if (jo["needs_permit"].Type == JTokenType.Integer)
-                        sys.needs_permit = jo["needs_permit"].Value<int>();
-
-                    sys.eddb_updated_at = jo["updated_at"].Value<int>();
-
-                    sys.id_edsm = jo["edsm_id"].Long();                         // pick up its edsm ID
-
-                    sys.status = SystemStatusEnum.EDDB;
-                }
+                sys.status = SystemStatusEnum.EDDB;
             }
             catch (Exception ex)
             {
@@ -324,7 +262,7 @@ namespace EliteDangerousCore.DB
             return GetSystemsByName(name, cn).FirstOrDefault();
         }
 
-        public static List<ISystem> GetSystemsByName(string name, SQLiteConnectionSystem cn = null, bool uselike = false, bool useedsm = false)
+        public static List<ISystem> GetSystemsByName(string name, SQLiteConnectionSystem cn = null, bool uselike = false) 
         {
             List<ISystem> systems = new List<ISystem>();
 
@@ -339,17 +277,6 @@ namespace EliteDangerousCore.DB
                     {
                         systems.Add(sys);
                     }
-                }
-            }
-            else if (useedsm && name != "" && name.Length >= 2)
-            {
-                System.Diagnostics.Trace.WriteLine($"System {name} not in local DB; fetching from EDSM");
-                EDSMClass edsm = new EDSMClass();
-                List<ISystem> _systems = edsm.GetSystemsByName(name, uselike);
-
-                if (_systems != null)
-                {
-                    systems = _systems;
                 }
             }
 
@@ -388,7 +315,7 @@ namespace EliteDangerousCore.DB
                                 CreateDate = new DateTime(2015, 1, 1, 0, 0, 0, DateTimeKind.Utc) + TimeSpan.FromSeconds((long)reader["CreateTimestamp"]),
                                 UpdateDate = new DateTime(2015, 1, 1, 0, 0, 0, DateTimeKind.Utc) + TimeSpan.FromSeconds((long)reader["UpdateTimestamp"]),
                                 cr = 0,
-                                status = SystemStatusEnum.EDSC,
+                                status = SystemStatusEnum.EDSM,
                                 gridid = (int)(long)reader["GridId"],
                                 randomid = (int)(long)reader["RandomId"]
                             };
@@ -786,9 +713,19 @@ namespace EliteDangerousCore.DB
         public const int metric_maximum500ly = 4;
         public const int metric_waypointdev2 = 5;
 
-        public static ISystem GetSystemNearestTo(double x, double y, double z, SQLiteConnectionSystem conn)
+        public static ISystem GetSystemNearestTo(double x, double y, double z, SQLiteConnectionSystem cn)
         {
-            using (DbCommand selectByPosCmd = conn.CreateCommand(
+            bool closeit = false;
+
+            if (cn == null)
+            {
+                closeit = true;
+                cn = new SQLiteConnectionSystem();
+            }
+
+            ISystem sys = null;
+
+            using (DbCommand selectByPosCmd = cn.CreateCommand(
                 "SELECT s.EdsmId FROM EdsmSystems s " +         // 16 is 0.125 of 1/128, so pick system near this one
                 "WHERE s.X >= @X - 16 " +
                 "AND s.X <= @X + 16 " +
@@ -806,13 +743,18 @@ namespace EliteDangerousCore.DB
                     while (reader.Read())
                     {
                         long pos_edsmid = (long)reader["EdsmId"];
-                        ISystem sys = GetSystem(pos_edsmid, conn, SystemIDType.EdsmId);
-                        return sys;
+                        sys = GetSystem(pos_edsmid, cn, SystemIDType.EdsmId);
+                        break;
                     }
                 }
             }
 
-            return null;
+            if (closeit && cn != null)
+            {
+                cn.Dispose();
+            }
+
+            return sys;
         }
 
         public static ISystem GetSystemNearestTo(Point3D curpos, Point3D wantedpos, double maxfromcurpos, double maxfromwanted,
@@ -1230,56 +1172,6 @@ namespace EliteDangerousCore.DB
             return ret;
         }
 
-        public static ISystem FindEDSM(ISystem s, SQLiteConnectionSystem conn = null, bool useedsm = true) // called find an EDSM system corresponding to s
-        {
-            ISystem system = null;
-
-            if (s.status != SystemStatusEnum.EDSC)      // if not EDSM already..
-            {
-                bool closeit = false;
-
-                if (conn == null)
-                {
-                    closeit = true;
-                    conn = new SQLiteConnectionSystem();
-                }
-
-                if (s.id_edsm > 0)                      // if it has an ID, look it up
-                    system = GetSystem(s.id_edsm, conn, SystemClassDB.SystemIDType.EdsmId);
-
-                if (system == null)                   // not found, so  try
-                {
-                    List<ISystem> systemsByName = GetSystemsByName(s.name, conn, useedsm: useedsm);
-
-                    if (systemsByName.Count == 0 && s.HasCoordinate)
-                    {
-                        system = GetSystemNearestTo(s.x, s.y, s.z, conn);
-                    }
-                    else
-                    {
-                        double mindist = 0.5;
-
-                        foreach (ISystem sys in systemsByName)
-                        {
-                            double dist = Distance(sys, s);
-
-                            if (dist < mindist)
-                            {
-                                mindist = dist;
-                                system = sys;
-                            }
-                        }
-                    }
-                }
-
-                if (closeit && conn != null)
-                {
-                    conn.Dispose();
-                }
-            }
-
-            return system;
-        }
 
         #region Private implementation
 

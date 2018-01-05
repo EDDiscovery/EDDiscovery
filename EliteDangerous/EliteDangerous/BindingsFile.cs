@@ -432,7 +432,7 @@ namespace EliteDangerousCore
             if (device == KeyboardDeviceName)
             {
                 string ret = EliteDangerousCore.FrontierKeyConversion.FrontierToKeys(frontiername);
-                System.Diagnostics.Debug.WriteLine("Frontier Name Convert {0} to {1}", frontiername, ret);
+                //System.Diagnostics.Debug.WriteLine("Frontier Name Convert {0} to {1}", frontiername, ret);
                 return ret;
             }
             else

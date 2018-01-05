@@ -413,7 +413,6 @@ namespace EliteDangerousCore
             }
         }
 
-
         #endregion
 
         #region EDSM
@@ -426,8 +425,9 @@ namespace EliteDangerousCore
             {
                 foreach (HistoryEntry he in historylist)
                 {
+                    // because of the volume of requests, and for speed, do not do EDSM lookup
                     if (he.IsFSDJump && !he.System.HasCoordinate)   // try and load ones without position.. if its got pos we are happy
-                        updatesystems.Add(new Tuple<HistoryEntry, ISystem>(he, FindEDSM(he)));
+                        updatesystems.Add(new Tuple<HistoryEntry, ISystem>(he, SystemCache.FindSystemConditional(he.System,reload:false,conn:cn)));
                 }
             }
 
@@ -437,35 +437,29 @@ namespace EliteDangerousCore
             }
         }
 
-        private ISystem FindEDSM(HistoryEntry syspos, SQLiteConnectionSystem conn = null, bool reload = false, bool useedsm = false)
+        public void FillEDSM(HistoryEntry syspos, ISystem edsmsys = null, bool reload = false, SQLiteConnectionUser uconn = null)       // call to fill in ESDM data for entry, and also fills in all others pointing to the system object
         {
-            if (syspos.System.status == SystemStatusEnum.EDSC || (!reload && syspos.System.id_edsm == -1))  // if set already, or we tried and failed..
-                return null;
-
-            return SystemCache.FindEDSM(syspos.System, usedb: true, useedsm: useedsm, conn: conn);
-        }
-
-        public void FillEDSM(HistoryEntry syspos, ISystem edsmsys = null, bool reload = false, SQLiteConnectionUser uconn = null, bool useedsm = false)       // call to fill in ESDM data for entry, and also fills in all others pointing to the system object
-        {
-            if (syspos.System.status == SystemStatusEnum.EDSC || (!reload && syspos.System.id_edsm == -1))  // if set already, or we tried and failed..
+            if (syspos.System.status == SystemStatusEnum.EDSM || (!reload && syspos.System.id_edsm == -1))  // if set already, or we tried and failed..
                 return;
 
             List<HistoryEntry> alsomatching = new List<HistoryEntry>();
 
             foreach (HistoryEntry he in historylist)       // list of systems in historylist using the same system object
             {
-                if (Object.ReferenceEquals(he.System, syspos.System))
+                if (Object.ReferenceEquals(he.System, syspos.System))  
                     alsomatching.Add(he);
             }
 
             if (edsmsys == null)                              // if we found it externally, do not find again
-                edsmsys = FindEDSM(syspos, reload: reload, useedsm: useedsm);
+            {
+                edsmsys = SystemCache.FindSystem(syspos.System);   
+            }
 
             if (edsmsys != null)
             {
                 foreach (HistoryEntry he in alsomatching)       // list of systems in historylist using the same system object
                 {
-                    bool updateedsmid = he.System.id_edsm <= 0;
+                    bool updateedsmid = he.System.id_edsm <= 0 && edsmsys.id_edsm>0;
                     bool updatepos = (he.EntryType == JournalTypeEnum.FSDJump || he.EntryType == JournalTypeEnum.Location) && !syspos.System.HasCoordinate && edsmsys.HasCoordinate;
 
                     if (updatepos || updateedsmid)
@@ -693,7 +687,7 @@ namespace EliteDangerousCore
             HistoryEntry prev = GetLast;
 
             bool journalupdate = false;
-            HistoryEntry he = HistoryEntry.FromJournalEntry(je, prev, true, out journalupdate);
+            HistoryEntry he = HistoryEntry.FromJournalEntry(je, prev, out journalupdate);     // we may check edsm for this entry
 
             if (journalupdate)
             {
@@ -745,7 +739,6 @@ namespace EliteDangerousCore
                                     string NetLogPath = null,
                                     bool ForceNetLogReload = false,
                                     bool ForceJournalReload = false,
-                                    bool CheckEdsm = false,
                                     int CurrentCommander = Int32.MinValue,
                                     bool Keepuievents = true)
         {
@@ -790,7 +783,7 @@ namespace EliteDangerousCore
                     }
 
                     bool journalupdate = false;
-                    HistoryEntry he = HistoryEntry.FromJournalEntry(je, prev, CheckEdsm, out journalupdate, conn, cmdr);
+                    HistoryEntry he = HistoryEntry.FromJournalEntry(je, prev, out journalupdate, conn, cmdr);
 
                     prev = he;
                     jprev = je;
@@ -800,6 +793,7 @@ namespace EliteDangerousCore
                     if (journalupdate)
                     {
                         jlistUpdated.Add(new Tuple<JournalEntry, HistoryEntry>(je, he));
+                        Debug.WriteLine("Queued update requested {0} {1}", he.System.id_edsm, he.System.name);
                     }
                 }
             }
@@ -816,11 +810,12 @@ namespace EliteDangerousCore
                         {
                             JournalEntry je = jehe.Item1;
                             HistoryEntry he = jehe.Item2;
-                            JournalFSDJump jfsd = je as JournalFSDJump;
-                            if (jfsd != null)
-                            {
-                                JournalEntry.UpdateEDSMIDPosJump(jfsd.Id, he.System, !jfsd.HasCoordinate && he.System.HasCoordinate, jfsd.JumpDist, conn, txn);
-                            }
+
+                            double dist = (je is JournalFSDJump) ? (je as JournalFSDJump).JumpDist : 0;
+                            bool updatecoord = (je is JournalLocOrJump) ? (!(je as JournalLocOrJump).HasCoordinate && he.System.HasCoordinate) : false;
+
+                            Debug.WriteLine("Push update {0} {1} to JE {2} HE {3}", he.System.id_edsm, he.System.name, je.Id, he.Indexno);
+                            JournalEntry.UpdateEDSMIDPosJump(je.Id, he.System, updatecoord, dist, conn, txn);
                         }
 
                         txn.Commit();
@@ -838,6 +833,7 @@ namespace EliteDangerousCore
 
             return hist;
         }
+
 
         // go through the history list and recalculate the materials ledger and the materials count, plus any other stuff..
         public void ProcessUserHistoryListEntries(Func<HistoryList, List<HistoryEntry>> hlfilter)

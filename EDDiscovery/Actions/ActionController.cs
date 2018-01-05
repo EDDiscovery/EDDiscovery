@@ -102,8 +102,8 @@ namespace EDDiscovery.Actions
             inputdevicesactions = new Actions.ActionsFromInputDevices(inputdevices, frontierbindings, this);
 
             frontierbindings.LoadBindingsFile();
-            System.Diagnostics.Debug.WriteLine("Bindings" + frontierbindings.ListBindings());
-            System.Diagnostics.Debug.WriteLine("Key Names" + frontierbindings.ListKeyNames("{","}"));
+            //System.Diagnostics.Debug.WriteLine("Bindings" + frontierbindings.ListBindings());
+            //System.Diagnostics.Debug.WriteLine("Key Names" + frontierbindings.ListKeyNames("{","}"));
 
             voicerecon.SpeechRecognised += Voicerecon_SpeechRecognised;
             voicerecon.SpeechNotRecognised += Voicerecon_SpeechNotRecognised;

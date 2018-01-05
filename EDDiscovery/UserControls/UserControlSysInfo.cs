@@ -140,7 +140,7 @@ namespace EDDiscovery.UserControls
             {
                 SetControlText(he.System.name);
                 textBoxSystem.Text = he.System.name;
-                discoveryform.history.FillEDSM(he, reload: true, useedsm: true); // Fill in any EDSM info we have, force it to try again.. in case system db updated
+                discoveryform.history.FillEDSM(he, reload: true); // Fill in any EDSM info we have, force it to try again.. in case system db updated
 
                 textBoxBody.Text = he.WhereAmI + ((he.IsInHyperSpace) ? " (HS)": "");
 
