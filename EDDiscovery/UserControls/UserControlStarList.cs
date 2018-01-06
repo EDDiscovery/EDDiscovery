@@ -384,7 +384,6 @@ namespace EDDiscovery.UserControls
                                     {
                                         njump = jump1 + jump2 + jump3;
 
-                                        //string jumpLevel = "";
                                         StringBuilder jumpLevel = new StringBuilder();
                                             
                                         // level I
@@ -405,7 +404,7 @@ namespace EDDiscovery.UserControls
                                         // level II and III
                                         if (jump1 == 0 && jump2 != 0 && jump3 != 0)
                                         {
-                                            jumpLevel.Append(jump2 + " level II and " + jump2 + " level III");
+                                            jumpLevel.Append(jump2 + " level II and " + jump3 + " level III");
                                         }
                                         // level III
                                         if (jump1 == 0 && jump2 == 0 && jump3 != 0)
@@ -433,7 +432,6 @@ namespace EDDiscovery.UserControls
                                             extrainfo = extrainfo.AppendPrePad("jumponium material. ");
                                         }
                                     }
-
                                 }
                             }
                         }
