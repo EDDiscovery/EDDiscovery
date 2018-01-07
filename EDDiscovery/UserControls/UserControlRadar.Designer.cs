@@ -56,17 +56,47 @@ namespace EDDiscovery.UserControls
             System.Windows.Forms.DataVisualization.Charting.Series series5 = new System.Windows.Forms.DataVisualization.Charting.Series();
             System.Windows.Forms.DataVisualization.Charting.Series series6 = new System.Windows.Forms.DataVisualization.Charting.Series();
             System.Windows.Forms.DataVisualization.Charting.Title title2 = new System.Windows.Forms.DataVisualization.Charting.Title();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea3 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Series series7 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Series series8 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Series series9 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Series series10 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Series series11 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Series series12 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Series series13 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Series series14 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Series series15 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Series series16 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Series series17 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Series series18 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Series series19 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Series series20 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Series series21 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Series series22 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Series series23 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Series series24 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Series series25 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Series series26 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Series series27 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Series series28 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Series series29 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Series series30 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Series series31 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Title title3 = new System.Windows.Forms.DataVisualization.Charting.Title();
             this.labelExt1 = new System.Windows.Forms.Label();
             this.textMinRadius = new ExtendedControls.TextBoxBorder();
             this.labelExt3 = new System.Windows.Forms.Label();
             this.textMaxRadius = new ExtendedControls.TextBoxBorder();
             this.panelTop = new System.Windows.Forms.Panel();
             this.checkBoxSwitchCharts = new ExtendedControls.CheckBoxCustom();
+            this.buttonExt1 = new ExtendedControls.ButtonExt();
             this.chartXY = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.chartXZ = new System.Windows.Forms.DataVisualization.Charting.Chart();
+            this.chartPseudo3D = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.panelTop.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.chartXY)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.chartXZ)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.chartPseudo3D)).BeginInit();
             this.SuspendLayout();
             // 
             // labelExt1
@@ -132,6 +162,7 @@ namespace EDDiscovery.UserControls
             // panelTop
             // 
             this.panelTop.Controls.Add(this.checkBoxSwitchCharts);
+            this.panelTop.Controls.Add(this.buttonExt1);
             this.panelTop.Controls.Add(this.labelExt1);
             this.panelTop.Controls.Add(this.textMinRadius);
             this.panelTop.Controls.Add(this.labelExt3);
@@ -153,7 +184,7 @@ namespace EDDiscovery.UserControls
             this.checkBoxSwitchCharts.Dock = System.Windows.Forms.DockStyle.Right;
             this.checkBoxSwitchCharts.FontNerfReduction = 0.5F;
             this.checkBoxSwitchCharts.ImageButtonDisabledScaling = 0.5F;
-            this.checkBoxSwitchCharts.Location = new System.Drawing.Point(246, 0);
+            this.checkBoxSwitchCharts.Location = new System.Drawing.Point(191, 0);
             this.checkBoxSwitchCharts.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.checkBoxSwitchCharts.Name = "checkBoxSwitchCharts";
             this.checkBoxSwitchCharts.Size = new System.Drawing.Size(89, 31);
@@ -163,6 +194,17 @@ namespace EDDiscovery.UserControls
             this.checkBoxSwitchCharts.UseVisualStyleBackColor = true;
             this.checkBoxSwitchCharts.CheckedChanged += new System.EventHandler(this.checkBoxSwitchCharts_CheckedChanged);
             this.checkBoxSwitchCharts.CheckStateChanged += new System.EventHandler(this.checkBoxSwitchCharts_CheckStateChanged);
+            // 
+            // buttonExt1
+            // 
+            this.buttonExt1.Dock = System.Windows.Forms.DockStyle.Right;
+            this.buttonExt1.Location = new System.Drawing.Point(280, 0);
+            this.buttonExt1.Name = "buttonExt1";
+            this.buttonExt1.Size = new System.Drawing.Size(55, 31);
+            this.buttonExt1.TabIndex = 5;
+            this.buttonExt1.Text = "2D/3D";
+            this.buttonExt1.UseVisualStyleBackColor = true;
+            this.buttonExt1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.buttonExt1_MouseDown);
             // 
             // chartXY
             // 
@@ -230,6 +272,7 @@ namespace EDDiscovery.UserControls
             title1.Name = "XY";
             title1.Text = "Radar Plot X,Y + Z ";
             this.chartXY.Titles.Add(title1);
+            this.chartXY.Visible = false;
             // 
             // chartXZ
             // 
@@ -297,14 +340,175 @@ namespace EDDiscovery.UserControls
             title2.Name = "XZ";
             title2.Text = "Radar Plot X,Z + Y";
             this.chartXZ.Titles.Add(title2);
-            this.chartXZ.Visible = false;
+            // 
+            // chartPseudo3D
+            // 
+            this.chartPseudo3D.BackColor = System.Drawing.Color.Black;
+            this.chartPseudo3D.BackSecondaryColor = System.Drawing.Color.Transparent;
+            this.chartPseudo3D.BorderSkin.BorderColor = System.Drawing.Color.White;
+            chartArea3.Area3DStyle.Enable3D = true;
+            chartArea3.Area3DStyle.Inclination = 45;
+            chartArea3.Area3DStyle.IsRightAngleAxes = false;
+            chartArea3.Area3DStyle.LightStyle = System.Windows.Forms.DataVisualization.Charting.LightStyle.None;
+            chartArea3.AxisX.LabelStyle.ForeColor = System.Drawing.Color.White;
+            chartArea3.AxisX.LineColor = System.Drawing.Color.White;
+            chartArea3.AxisX2.LabelStyle.ForeColor = System.Drawing.Color.White;
+            chartArea3.AxisX2.LineColor = System.Drawing.Color.White;
+            chartArea3.AxisY.LabelStyle.ForeColor = System.Drawing.Color.White;
+            chartArea3.AxisY.LineColor = System.Drawing.Color.White;
+            chartArea3.AxisY2.LabelStyle.ForeColor = System.Drawing.Color.White;
+            chartArea3.AxisY2.LineColor = System.Drawing.Color.White;
+            chartArea3.BackColor = System.Drawing.Color.Black;
+            chartArea3.BackSecondaryColor = System.Drawing.Color.White;
+            chartArea3.Name = "ChartArea1";
+            this.chartPseudo3D.ChartAreas.Add(chartArea3);
+            this.chartPseudo3D.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.chartPseudo3D.Location = new System.Drawing.Point(0, 31);
+            this.chartPseudo3D.Margin = new System.Windows.Forms.Padding(0);
+            this.chartPseudo3D.Name = "chartPseudo3D";
+            series7.BackImageTransparentColor = System.Drawing.Color.Transparent;
+            series7.ChartArea = "ChartArea1";
+            series7.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Point;
+            series7.Color = System.Drawing.Color.Transparent;
+            series7.CustomProperties = "BubbleMinSize=6, BubbleMaxSize=6";
+            series7.LabelToolTip = "#LABEL";
+            series7.MarkerColor = System.Drawing.Color.Gray;
+            series7.MarkerSize = 6;
+            series7.MarkerStyle = System.Windows.Forms.DataVisualization.Charting.MarkerStyle.Circle;
+            series7.Name = "Current";
+            series7.YValuesPerPoint = 2;
+            series8.ChartArea = "ChartArea1";
+            series8.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Point;
+            series8.Color = System.Drawing.Color.Transparent;
+            series8.CustomProperties = "BubbleMinSize=4, BubbleMaxSize=16";
+            series8.IsVisibleInLegend = false;
+            series8.LabelToolTip = "#LABEL";
+            series8.MarkerBorderColor = System.Drawing.Color.Teal;
+            series8.MarkerColor = System.Drawing.Color.RoyalBlue;
+            series8.MarkerStyle = System.Windows.Forms.DataVisualization.Charting.MarkerStyle.Circle;
+            series8.Name = "Visited";
+            series8.YValuesPerPoint = 2;
+            series9.ChartArea = "ChartArea1";
+            series9.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Point;
+            series9.Color = System.Drawing.Color.Transparent;
+            series9.CustomProperties = "BubbleMinSize=4, BubbleMaxSize=16";
+            series9.LabelToolTip = "#LABEL";
+            series9.MarkerBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(192)))), ((int)(((byte)(128)))));
+            series9.MarkerColor = System.Drawing.Color.Gold;
+            series9.MarkerStyle = System.Windows.Forms.DataVisualization.Charting.MarkerStyle.Circle;
+            series9.Name = "Unvisited";
+            series9.YValuesPerPoint = 2;
+            series10.ChartArea = "ChartArea1";
+            series10.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Point;
+            series10.Name = "Series4";
+            series11.ChartArea = "ChartArea1";
+            series11.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Point;
+            series11.Name = "Series5";
+            series12.ChartArea = "ChartArea1";
+            series12.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Point;
+            series12.Name = "Series6";
+            series13.ChartArea = "ChartArea1";
+            series13.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Point;
+            series13.Name = "Series7";
+            series14.ChartArea = "ChartArea1";
+            series14.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Point;
+            series14.Name = "Series8";
+            series15.ChartArea = "ChartArea1";
+            series15.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Point;
+            series15.Name = "Series9";
+            series16.ChartArea = "ChartArea1";
+            series16.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Point;
+            series16.Name = "Series10";
+            series17.ChartArea = "ChartArea1";
+            series17.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Point;
+            series17.Name = "Series11";
+            series18.ChartArea = "ChartArea1";
+            series18.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Point;
+            series18.Name = "Series12";
+            series19.ChartArea = "ChartArea1";
+            series19.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Point;
+            series19.MarkerColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
+            series19.MarkerSize = 10;
+            series19.MarkerStyle = System.Windows.Forms.DataVisualization.Charting.MarkerStyle.Circle;
+            series19.Name = "Series13";
+            series20.ChartArea = "ChartArea1";
+            series20.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Point;
+            series20.Name = "Series14";
+            series21.ChartArea = "ChartArea1";
+            series21.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Point;
+            series21.Name = "Series15";
+            series22.ChartArea = "ChartArea1";
+            series22.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Point;
+            series22.Name = "Series16";
+            series23.ChartArea = "ChartArea1";
+            series23.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Point;
+            series23.Name = "Series17";
+            series24.ChartArea = "ChartArea1";
+            series24.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Point;
+            series24.Name = "Series18";
+            series25.ChartArea = "ChartArea1";
+            series25.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Point;
+            series25.Name = "Series19";
+            series26.ChartArea = "ChartArea1";
+            series26.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Point;
+            series26.Name = "Series20";
+            series27.ChartArea = "ChartArea1";
+            series27.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Point;
+            series27.Name = "Series21";
+            series28.ChartArea = "ChartArea1";
+            series28.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Point;
+            series28.Name = "Series22";
+            series29.ChartArea = "ChartArea1";
+            series29.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Point;
+            series29.Name = "Series23";
+            series30.ChartArea = "ChartArea1";
+            series30.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Point;
+            series30.Name = "Series24";
+            series31.ChartArea = "ChartArea1";
+            series31.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Point;
+            series31.Name = "Series25";
+            this.chartPseudo3D.Series.Add(series7);
+            this.chartPseudo3D.Series.Add(series8);
+            this.chartPseudo3D.Series.Add(series9);
+            this.chartPseudo3D.Series.Add(series10);
+            this.chartPseudo3D.Series.Add(series11);
+            this.chartPseudo3D.Series.Add(series12);
+            this.chartPseudo3D.Series.Add(series13);
+            this.chartPseudo3D.Series.Add(series14);
+            this.chartPseudo3D.Series.Add(series15);
+            this.chartPseudo3D.Series.Add(series16);
+            this.chartPseudo3D.Series.Add(series17);
+            this.chartPseudo3D.Series.Add(series18);
+            this.chartPseudo3D.Series.Add(series19);
+            this.chartPseudo3D.Series.Add(series20);
+            this.chartPseudo3D.Series.Add(series21);
+            this.chartPseudo3D.Series.Add(series22);
+            this.chartPseudo3D.Series.Add(series23);
+            this.chartPseudo3D.Series.Add(series24);
+            this.chartPseudo3D.Series.Add(series25);
+            this.chartPseudo3D.Series.Add(series26);
+            this.chartPseudo3D.Series.Add(series27);
+            this.chartPseudo3D.Series.Add(series28);
+            this.chartPseudo3D.Series.Add(series29);
+            this.chartPseudo3D.Series.Add(series30);
+            this.chartPseudo3D.Series.Add(series31);
+            this.chartPseudo3D.Size = new System.Drawing.Size(335, 312);
+            this.chartPseudo3D.SuppressExceptions = true;
+            this.chartPseudo3D.TabIndex = 29;
+            this.chartPseudo3D.Text = "chart2";
+            title3.ForeColor = System.Drawing.Color.White;
+            title3.Name = "Pseudo3D";
+            title3.Text = "Pseudo 3D Radar";
+            this.chartPseudo3D.Titles.Add(title3);
+            this.chartPseudo3D.Visible = false;
             // 
             // UserControlRadar
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.chartXY);
+            this.Controls.Add(this.chartPseudo3D);
             this.Controls.Add(this.chartXZ);
+            this.Controls.Add(this.chartXY);
             this.Controls.Add(this.panelTop);
             this.Name = "UserControlRadar";
             this.Size = new System.Drawing.Size(335, 343);
@@ -312,6 +516,7 @@ namespace EDDiscovery.UserControls
             this.panelTop.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.chartXY)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.chartXZ)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.chartPseudo3D)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -325,5 +530,7 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.DataVisualization.Charting.Chart chartXY;
         private ExtendedControls.CheckBoxCustom checkBoxSwitchCharts;
         private System.Windows.Forms.DataVisualization.Charting.Chart chartXZ;
+        private System.Windows.Forms.DataVisualization.Charting.Chart chartPseudo3D;
+        private ExtendedControls.ButtonExt buttonExt1;
     }
 }

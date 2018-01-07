@@ -89,6 +89,8 @@ namespace EDDiscovery.UserControls
             chartXY.Series[0].ToolTip = he.System.name;
             chartXZ.Series[0].Points.AddXY(0, 0, 0);
             chartXZ.Series[0].ToolTip = he.System.name;
+            chartPseudo3D.Series[13].Points.AddXY(0, 0, 0);
+            chartPseudo3D.Series[13].ToolTip = he.System.name;
         }
         
         private void KickComputation(HistoryEntry he)
@@ -159,6 +161,12 @@ namespace EDDiscovery.UserControls
                     int py = (int)sysY2;
                     int pz = (int)sysZ2;
 
+                    int spy = 0;
+
+                    spy = ((range / 100) * py) / 4;
+
+                    chartPseudo3D.Series[spy].Points.AddXY(px, pz);
+
                     if (visits > 0) // visited system are blue
                     {
                         chartXY.Series[1].Points.AddXY(px, py, pz);
@@ -200,7 +208,7 @@ namespace EDDiscovery.UserControls
         {
             chartXY.Series[1].Points.Clear();
             chartXY.Series[2].Points.Clear();
-
+            
             chartXY.Update();
             chartXY.Legends.Clear();
 
@@ -221,6 +229,11 @@ namespace EDDiscovery.UserControls
             chartXZ.ChartAreas[0].AxisX.Minimum = range * -1;
             chartXZ.ChartAreas[0].AxisY.Maximum = range;
             chartXZ.ChartAreas[0].AxisY.Minimum = range * -1;
+
+            chartPseudo3D.ChartAreas[0].AxisX.Maximum = range;
+            chartPseudo3D.ChartAreas[0].AxisX.Minimum = range * -1;
+            chartPseudo3D.ChartAreas[0].AxisY.Maximum = range;
+            chartPseudo3D.ChartAreas[0].AxisY.Minimum = range * -1;
         }
 
         /// <summary>
@@ -340,12 +353,21 @@ namespace EDDiscovery.UserControls
             {
                 chartXY.Visible = false;
                 chartXZ.Visible = true;
+                chartPseudo3D.Visible = false;
             }
             else if (checkBoxSwitchCharts.Checked == false)
             {
                 chartXY.Visible = true;
                 chartXZ.Visible = false;
+                chartPseudo3D.Visible = false;
             }
-        }                
+        }
+
+        private void buttonExt1_MouseDown(object sender, MouseEventArgs e)
+        {
+            chartXY.Visible = false;
+            chartXZ.Visible = false;
+            chartPseudo3D.Visible = true;
+        }
     }
 }
