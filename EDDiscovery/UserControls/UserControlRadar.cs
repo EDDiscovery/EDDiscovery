@@ -39,7 +39,7 @@ namespace EDDiscovery.UserControls
 
         public UserControlRadar()
         {
-            InitializeComponent();         
+            InitializeComponent();
         }
 
         const double defaultmaximumradarradius = 75;
@@ -162,14 +162,14 @@ namespace EDDiscovery.UserControls
                     if (visits > 0) // visited system are blue
                     {
                         chartXY.Series[1].Points.AddXY(px, py, pz);
-                        chartXY.Series[1].ToolTip = label;
+                        chartXY.Series[1].ToolTip = label;                        
                         chartXZ.Series[1].Points.AddXY(px, pz, py);
                         chartXZ.Series[1].ToolTip = label;
                     }
                     else if (visits == 0) // non visited sytems are yellow
                     {
                         chartXY.Series[2].Points.AddXY(px, py, pz);
-                        chartXY.Series[2].ToolTip = label;
+                        chartXY.Series[2].ToolTip = label;                        
                         chartXZ.Series[2].Points.AddXY(px, pz, py);
                         chartXZ.Series[2].ToolTip = label;                        
                     }
@@ -338,14 +338,14 @@ namespace EDDiscovery.UserControls
         {
             if (checkBoxSwitchCharts.Checked == true)
             {
-                chartXY.Visible = true;
-                chartXZ.Visible = false;
-            }
-            else if (checkBoxSwitchCharts.Checked == false)
-            {
                 chartXY.Visible = false;
                 chartXZ.Visible = true;
             }
-        }
+            else if (checkBoxSwitchCharts.Checked == false)
+            {
+                chartXY.Visible = true;
+                chartXZ.Visible = false;
+            }
+        }                
     }
 }
