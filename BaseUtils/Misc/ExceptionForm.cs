@@ -141,7 +141,7 @@ namespace BaseUtils
             }
 
             string appShortName = Assembly.GetEntryAssembly().GetName().Name;
-            Text = appShortName + (_IsFatal ? " Fatal" : string.Empty) + " Error";
+            Text = BrowserInfo.UserAgent + (_IsFatal ? " Fatal" : string.Empty) + " Error";
 
             lblHeader.Text =
                   _Description + DoubleNewLine
@@ -162,7 +162,7 @@ namespace BaseUtils
                     + "### Additional Information" + Environment.NewLine
                     + "<!-- Please attach (drag and drop) any relevant trace logs, screenshots, and/or journal files here to provide information about the problem. -->" + DoubleNewLine
                     + "### Exception Details:" + Environment.NewLine
-                    + ">" + _Description + Environment.NewLine
+                    + ">" + BrowserInfo.UserAgent + " " + _Description + Environment.NewLine
                     + ">```" + Environment.NewLine
                     + ">==== BEGIN ====" + Environment.NewLine
                     + ">" + _Exception.ToString().Replace(Environment.NewLine, Environment.NewLine + ">") + Environment.NewLine
