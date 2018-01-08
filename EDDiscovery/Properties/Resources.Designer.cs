@@ -456,6 +456,16 @@ namespace EDDiscovery.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap money {
+            get {
+                object obj = ResourceManager.GetObject("money", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Moon24 {
             get {
                 object obj = ResourceManager.GetObject("Moon24", resourceCulture);
@@ -796,9 +806,9 @@ namespace EDDiscovery.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Terraformable {
+        internal static System.Drawing.Bitmap terraform {
             get {
-                object obj = ResourceManager.GetObject("Terraformable", resourceCulture);
+                object obj = ResourceManager.GetObject("terraform", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

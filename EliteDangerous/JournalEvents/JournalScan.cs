@@ -107,6 +107,7 @@ namespace EliteDangerousCore.JournalEvents
         public Dictionary<string, double> AtmosphereComposition { get; set; }
         public string Volcanism { get; set; }                       // direct from journal
         public EDVolcanism VolcanismID { get; }                     // Volcanism -> ID (Water_Magma, Nitrogen_Magma etc)
+        public bool HasMeaningfulVolcanism { get { return VolcanismID != EDVolcanism.None && VolcanismID != EDVolcanism.Unknown; } }
         public EDVolcanismProperty VolcanismProperty;               // Volcanism -> Property (None, Major, Minor)
         public double? nSurfaceGravity { get; set; }                // direct
         public double? nSurfacePressure { get; set; }               // direct
