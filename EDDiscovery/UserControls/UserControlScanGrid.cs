@@ -55,7 +55,6 @@ namespace EDDiscovery.UserControls
         {
             uctg.OnTravelSelectionChanged += Display;
             discoveryform.OnNewEntry += NewEntry;
-            labelTotalValue.Text = $"No scan data yet.";
         }
 
         public override void LoadLayout()
@@ -97,7 +96,6 @@ namespace EDDiscovery.UserControls
             if (he != null && (last_he == null || he.System != last_he.System))
             {
                 last_he = he;
-                labelTotalValue.Text = $"No scan data available.";
                 DrawSystem();
                 dataGridViewScangrid.Refresh();
                 dataGridViewScangrid.ClearSelection();
@@ -116,7 +114,7 @@ namespace EDDiscovery.UserControls
 
             StarScan.SystemNode last_sn = discoveryform.history.starscan.FindSystem(last_he.System, true);
 
-            SetControlText((last_sn == null) ? "No Scan" : ("Brief Scan Summary for " + last_sn.system.name));
+            SetControlText("No Scan");
 
             if (last_sn != null)
             {
@@ -276,10 +274,11 @@ namespace EDDiscovery.UserControls
                         cur.Cells[0].ToolTipText = scan;
                         cur.Tag = img;
 
-                        // display total scan values
-                        BuildSystemInfo(last_sn);
                     }
                 }
+
+                // display total scan values
+                SetControlText("Scan Summary for " + last_sn.system.name + ". " + BuildScanValue(last_sn));
             }
         }
 
@@ -308,11 +307,6 @@ namespace EDDiscovery.UserControls
                 int vpos = e.RowBounds.Top + e.RowBounds.Height / 2 - sz / 2;
                 e.Graphics.DrawImage((Image)cur.Tag, new Rectangle(e.RowBounds.Left + 1, vpos, sz, sz));
             }
-        }
-
-        private void BuildSystemInfo(StarScan.SystemNode system)
-        {
-            labelTotalValue.Text = BuildScanValue(system);
         }
 
         private string BuildScanValue(StarScan.SystemNode system)
