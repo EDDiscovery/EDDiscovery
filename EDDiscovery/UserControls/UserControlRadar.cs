@@ -89,8 +89,8 @@ namespace EDDiscovery.UserControls
             chartXY.Series[0].ToolTip = he.System.name;
             chartXZ.Series[0].Points.AddXY(0, 0, 0);
             chartXZ.Series[0].ToolTip = he.System.name;
-            chartPseudo3D.Series[26].Points.AddXY(0, 0); // this is the central serie
-            chartPseudo3D.Series[26].ToolTip = he.System.name;
+            chartPseudo3D.Series[25].Points.AddXY(0, 0); // this is the central serie
+            chartPseudo3D.Series[25].ToolTip = he.System.name;
         }
         
         private void KickComputation(HistoryEntry he)
@@ -166,7 +166,7 @@ namespace EDDiscovery.UserControls
                     double spy = py * ratio; // step of the point y coordinate
                     
                     chartPseudo3D.Series[(int)Math.Floor(spy)].Points.AddXY(px, pz);
-                    chartPseudo3D.Series[(int)Math.Floor(spy)].ToolTip = "It's a name";
+                    chartPseudo3D.Series[(int)Math.Floor(spy)].ToolTip = label;
 
                     if (visits > 0) // visited system are blue
                     {
@@ -185,22 +185,7 @@ namespace EDDiscovery.UserControls
                     //                    
                 }                
             }            
-        }
-
-        private Point _mousePos;
-        private void chartPseudo3D_MouseMove(object sender, MouseEventArgs e)
-        {
-            if (e.Button != MouseButtons.Left) return;
-            if (!_mousePos.IsEmpty)
-            {
-                var style = chartPseudo3D.ChartAreas[0].Area3DStyle;
-                style.Rotation = Math.Min(180, Math.Max(-180,
-                    style.Rotation - (e.Location.X - _mousePos.X)));
-                style.Inclination = Math.Min(90, Math.Max(-90,
-                    style.Inclination + (e.Location.Y - _mousePos.Y)));
-            }
-            _mousePos = e.Location;
-        }
+        }                
 
         private void textMinRadius_TextChanged(object sender, EventArgs e)
         {
@@ -224,17 +209,17 @@ namespace EDDiscovery.UserControls
         {
             chartXY.Series[1].Points.Clear();
             chartXY.Series[2].Points.Clear();
-            chartXY.Update();
+            //chartXY.Update();
             
             chartXZ.Series[1].Points.Clear();
             chartXZ.Series[2].Points.Clear();
-            chartXZ.Update();
+            //chartXZ.Update();
             
-            foreach(var i in Enumerable.Range(0, 51))
+            foreach(var i in Enumerable.Range(0, 50))
             { 
                 chartPseudo3D.Series[i].Points.Clear();
             }
-            chartPseudo3D.Update();
+            //chartPseudo3D.Update();
 
             int range = int.Parse(SQLiteConnectionUser.GetSettingDouble(DbSave + "RadarMax", defaultmaximumradarradius).ToStringInvariant());
 
@@ -350,7 +335,7 @@ namespace EDDiscovery.UserControls
                 }
             }
         }
-
+        /*
         private void checkBoxSwitchCharts_CheckedChanged(object sender, EventArgs e)
         {
             if (checkBoxSwitchCharts.Checked == true)
@@ -379,13 +364,43 @@ namespace EDDiscovery.UserControls
                 chartXZ.Visible = false;
                 chartPseudo3D.Visible = false;
             }
+        }*/
+
+        private void buttonExt2dtop_MouseDown(object sender, MouseEventArgs e)
+        {
+            chartXY.Visible = true;
+            chartXZ.Visible = false;
+            chartPseudo3D.Visible = false;
         }
 
-        private void buttonExt1_MouseDown(object sender, MouseEventArgs e)
+        private void buttonExt2dfront_MouseDown(object sender, MouseEventArgs e)
+        {
+            chartXY.Visible = false;
+            chartXZ.Visible = true;
+            chartPseudo3D.Visible = false;
+        }
+
+        private void buttonExt3d_MouseDown(object sender, MouseEventArgs e)
         {
             chartXY.Visible = false;
             chartXZ.Visible = false;
             chartPseudo3D.Visible = true;
         }
-    }
+
+        private Point _mousePos;
+
+        private void chartPseudo3D_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button != MouseButtons.Left) return;
+            if (!_mousePos.IsEmpty)
+            {
+                var style = chartPseudo3D.ChartAreas[0].Area3DStyle;
+                style.Rotation = Math.Min(180, Math.Max(-180,
+                    style.Rotation - (e.Location.X - _mousePos.X)));
+                style.Inclination = Math.Min(90, Math.Max(-90,
+                    style.Inclination + (e.Location.Y - _mousePos.Y)));
+            }
+            _mousePos = e.Location;
+        }
+    }    
 }
