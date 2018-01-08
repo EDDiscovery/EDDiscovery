@@ -350,6 +350,9 @@ namespace EDDiscovery.UserControls
             chartArea3.Area3DStyle.Inclination = 45;
             chartArea3.Area3DStyle.IsRightAngleAxes = false;
             chartArea3.Area3DStyle.LightStyle = System.Windows.Forms.DataVisualization.Charting.LightStyle.None;
+            chartArea3.Area3DStyle.PointGapDepth = 150;
+            chartArea3.Area3DStyle.Rotation = 35;
+            chartArea3.Area3DStyle.WallWidth = 5;
             chartArea3.AxisX.LabelStyle.ForeColor = System.Drawing.Color.White;
             chartArea3.AxisX.LineColor = System.Drawing.Color.White;
             chartArea3.AxisX2.LabelStyle.ForeColor = System.Drawing.Color.White;

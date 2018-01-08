@@ -89,7 +89,7 @@ namespace EDDiscovery.UserControls
             chartXY.Series[0].ToolTip = he.System.name;
             chartXZ.Series[0].Points.AddXY(0, 0, 0);
             chartXZ.Series[0].ToolTip = he.System.name;
-            chartPseudo3D.Series[13].Points.AddXY(0, 0, 0);
+            chartPseudo3D.Series[13].Points.AddXY(0, 0);
             chartPseudo3D.Series[13].ToolTip = he.System.name;
         }
         
@@ -161,11 +161,10 @@ namespace EDDiscovery.UserControls
                     int py = (int)sysY2;
                     int pz = (int)sysZ2;
 
-                    int spy = 0;
-
+                    double spy = 0;
                     spy = ((range / 100) * py) / 4;
-
-                    chartPseudo3D.Series[spy].Points.AddXY(px, pz);
+                    
+                    chartPseudo3D.Series[(int)Math.Floor(spy)].Points.AddXY(px, pz);
 
                     if (visits > 0) // visited system are blue
                     {
@@ -208,7 +207,7 @@ namespace EDDiscovery.UserControls
         {
             chartXY.Series[1].Points.Clear();
             chartXY.Series[2].Points.Clear();
-            
+                        
             chartXY.Update();
             chartXY.Legends.Clear();
 
@@ -217,6 +216,12 @@ namespace EDDiscovery.UserControls
 
             chartXZ.Update();
             chartXZ.Legends.Clear();
+
+            foreach(var i in Enumerable.Range(0, 25))
+            { 
+                chartPseudo3D.Series[i].Points.Clear();
+            }
+            chartPseudo3D.Update();
 
             int range = int.Parse(SQLiteConnectionUser.GetSettingDouble(DbSave + "RadarMax", defaultmaximumradarradius).ToStringInvariant());
 
