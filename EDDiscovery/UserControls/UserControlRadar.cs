@@ -89,8 +89,8 @@ namespace EDDiscovery.UserControls
             chartXY.Series[0].ToolTip = he.System.name;
             chartXZ.Series[0].Points.AddXY(0, 0, 0);
             chartXZ.Series[0].ToolTip = he.System.name;
-            chartPseudo3D.Series[13].Points.AddXY(0, 0);
-            chartPseudo3D.Series[13].ToolTip = he.System.name;
+            chartPseudo3D.Series[26].Points.AddXY(0, 0); // this is the central serie
+            chartPseudo3D.Series[26].ToolTip = he.System.name;
         }
         
         private void KickComputation(HistoryEntry he)
@@ -140,7 +140,7 @@ namespace EDDiscovery.UserControls
                     // mockup with random coordinates
 
                     int range = int.Parse(SQLiteConnectionUser.GetSettingDouble(DbSave + "RadarMax", defaultmaximumradarradius).ToStringInvariant());
-
+                    
                     // distances from center
                     Random rnd = new Random();
                     int sysX2 = rnd.Next((range * -1), range);
@@ -161,30 +161,47 @@ namespace EDDiscovery.UserControls
                     int py = (int)sysY2;
                     int pz = (int)sysZ2;
 
-                    double spy = 0; // step of the point y coordinate
-                    spy = ((range / 100) * py) / 4; // calculate the steps in the series sequence of each y coordinate
+                    int nseries = 51; // number of series in the 3d plot
+                    double ratio = (100 / range) / nseries;
+                    double spy = py * ratio; // step of the point y coordinate
                     
                     chartPseudo3D.Series[(int)Math.Floor(spy)].Points.AddXY(px, pz);
+                    chartPseudo3D.Series[(int)Math.Floor(spy)].ToolTip = "It's a name";
 
                     if (visits > 0) // visited system are blue
                     {
                         chartXY.Series[1].Points.AddXY(px, py, pz);
-                        chartXY.Series[1].ToolTip = label;                        
+                        chartXY.Series[1].ToolTip = "It's a name";
                         chartXZ.Series[1].Points.AddXY(px, pz, py);
                         chartXZ.Series[1].ToolTip = label;
                     }
                     else if (visits == 0) // non visited sytems are yellow
                     {
                         chartXY.Series[2].Points.AddXY(px, py, pz);
-                        chartXY.Series[2].ToolTip = label;                        
+                        chartXY.Series[2].ToolTip = "It's a name";
                         chartXZ.Series[2].Points.AddXY(px, pz, py);
                         chartXZ.Series[2].ToolTip = label;                        
                     }
                     //                    
                 }                
             }            
-        }        
-                
+        }
+
+        private Point _mousePos;
+        private void chartPseudo3D_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (e.Button != MouseButtons.Left) return;
+            if (!_mousePos.IsEmpty)
+            {
+                var style = chartPseudo3D.ChartAreas[0].Area3DStyle;
+                style.Rotation = Math.Min(180, Math.Max(-180,
+                    style.Rotation - (e.Location.X - _mousePos.X)));
+                style.Inclination = Math.Min(90, Math.Max(-90,
+                    style.Inclination + (e.Location.Y - _mousePos.Y)));
+            }
+            _mousePos = e.Location;
+        }
+
         private void textMinRadius_TextChanged(object sender, EventArgs e)
         {
             double? min = textMinRadius.Text.InvariantParseDoubleNull();
@@ -207,17 +224,13 @@ namespace EDDiscovery.UserControls
         {
             chartXY.Series[1].Points.Clear();
             chartXY.Series[2].Points.Clear();
-                        
             chartXY.Update();
-            chartXY.Legends.Clear();
-
+            
             chartXZ.Series[1].Points.Clear();
             chartXZ.Series[2].Points.Clear();
-
             chartXZ.Update();
-            chartXZ.Legends.Clear();
-
-            foreach(var i in Enumerable.Range(0, 25))
+            
+            foreach(var i in Enumerable.Range(0, 51))
             { 
                 chartPseudo3D.Series[i].Points.Clear();
             }
