@@ -114,12 +114,12 @@ namespace EDDiscovery.UserControls
             this.labelExt3 = new System.Windows.Forms.Label();
             this.textMaxRadius = new ExtendedControls.TextBoxBorder();
             this.panelTop = new System.Windows.Forms.Panel();
+            this.buttonExt2dtop = new ExtendedControls.ButtonExt();
+            this.buttonExt2dfront = new ExtendedControls.ButtonExt();
             this.buttonExt3d = new ExtendedControls.ButtonExt();
             this.chartXY = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.chartXZ = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.chartPseudo3D = new System.Windows.Forms.DataVisualization.Charting.Chart();
-            this.buttonExt2dtop = new ExtendedControls.ButtonExt();
-            this.buttonExt2dfront = new ExtendedControls.ButtonExt();
             this.panelTop.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.chartXY)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.chartXZ)).BeginInit();
@@ -188,6 +188,7 @@ namespace EDDiscovery.UserControls
             // 
             // panelTop
             // 
+            this.panelTop.BackColor = System.Drawing.SystemColors.Control;
             this.panelTop.Controls.Add(this.buttonExt2dtop);
             this.panelTop.Controls.Add(this.buttonExt2dfront);
             this.panelTop.Controls.Add(this.buttonExt3d);
@@ -200,6 +201,28 @@ namespace EDDiscovery.UserControls
             this.panelTop.Name = "panelTop";
             this.panelTop.Size = new System.Drawing.Size(335, 31);
             this.panelTop.TabIndex = 25;
+            // 
+            // buttonExt2dtop
+            // 
+            this.buttonExt2dtop.Dock = System.Windows.Forms.DockStyle.Right;
+            this.buttonExt2dtop.Location = new System.Drawing.Point(180, 0);
+            this.buttonExt2dtop.Name = "buttonExt2dtop";
+            this.buttonExt2dtop.Size = new System.Drawing.Size(55, 31);
+            this.buttonExt2dtop.TabIndex = 6;
+            this.buttonExt2dtop.Text = "2D Top";
+            this.buttonExt2dtop.UseVisualStyleBackColor = true;
+            this.buttonExt2dtop.MouseDown += new System.Windows.Forms.MouseEventHandler(this.buttonExt2dtop_MouseDown);
+            // 
+            // buttonExt2dfront
+            // 
+            this.buttonExt2dfront.Dock = System.Windows.Forms.DockStyle.Right;
+            this.buttonExt2dfront.Location = new System.Drawing.Point(235, 0);
+            this.buttonExt2dfront.Name = "buttonExt2dfront";
+            this.buttonExt2dfront.Size = new System.Drawing.Size(60, 31);
+            this.buttonExt2dfront.TabIndex = 7;
+            this.buttonExt2dfront.Text = "2D Front";
+            this.buttonExt2dfront.UseVisualStyleBackColor = true;
+            this.buttonExt2dfront.MouseDown += new System.Windows.Forms.MouseEventHandler(this.buttonExt2dfront_MouseDown);
             // 
             // buttonExt3d
             // 
@@ -340,6 +363,7 @@ namespace EDDiscovery.UserControls
             title5.Name = "XZ";
             title5.Text = "Radar Plot X,Z + Y";
             this.chartXZ.Titles.Add(title5);
+            this.chartXZ.Visible = false;
             // 
             // chartPseudo3D
             // 
@@ -350,8 +374,8 @@ namespace EDDiscovery.UserControls
             chartArea6.Area3DStyle.Inclination = 45;
             chartArea6.Area3DStyle.IsRightAngleAxes = false;
             chartArea6.Area3DStyle.LightStyle = System.Windows.Forms.DataVisualization.Charting.LightStyle.None;
-            chartArea6.Area3DStyle.PointGapDepth = 150;
-            chartArea6.Area3DStyle.Rotation = 35;
+            chartArea6.Area3DStyle.Perspective = 3;
+            chartArea6.Area3DStyle.PointDepth = 75;
             chartArea6.Area3DStyle.WallWidth = 5;
             chartArea6.AxisX.LabelStyle.ForeColor = System.Drawing.Color.White;
             chartArea6.AxisX.LineColor = System.Drawing.Color.White;
@@ -685,37 +709,14 @@ namespace EDDiscovery.UserControls
             title6.Name = "Pseudo3D";
             title6.Text = "Pseudo 3D Radar";
             this.chartPseudo3D.Titles.Add(title6);
-            this.chartPseudo3D.Visible = false;
             this.chartPseudo3D.MouseDown += new System.Windows.Forms.MouseEventHandler(this.chartPseudo3D_MouseDown);
-            // 
-            // buttonExt2dtop
-            // 
-            this.buttonExt2dtop.Dock = System.Windows.Forms.DockStyle.Right;
-            this.buttonExt2dtop.Location = new System.Drawing.Point(180, 0);
-            this.buttonExt2dtop.Name = "buttonExt2dtop";
-            this.buttonExt2dtop.Size = new System.Drawing.Size(55, 31);
-            this.buttonExt2dtop.TabIndex = 6;
-            this.buttonExt2dtop.Text = "2D Top";
-            this.buttonExt2dtop.UseVisualStyleBackColor = true;
-            this.buttonExt2dtop.MouseDown += new System.Windows.Forms.MouseEventHandler(this.buttonExt2dtop_MouseDown);
-
-            // 
-            // buttonExt2dfront
-            // 
-            this.buttonExt2dfront.Dock = System.Windows.Forms.DockStyle.Right;
-            this.buttonExt2dfront.Location = new System.Drawing.Point(235, 0);
-            this.buttonExt2dfront.Name = "buttonExt2dfront";
-            this.buttonExt2dfront.Size = new System.Drawing.Size(60, 31);
-            this.buttonExt2dfront.TabIndex = 7;
-            this.buttonExt2dfront.Text = "2D Front";
-            this.buttonExt2dfront.UseVisualStyleBackColor = true;
-            this.buttonExt2dfront.MouseDown += new System.Windows.Forms.MouseEventHandler(this.buttonExt2dfront_MouseDown);
-
+            this.chartPseudo3D.MouseMove += new System.Windows.Forms.MouseEventHandler(this.chartPseudo3D_MouseMove);
             // 
             // UserControlRadar
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackColor = System.Drawing.Color.Black;
             this.Controls.Add(this.chartPseudo3D);
             this.Controls.Add(this.chartXZ);
             this.Controls.Add(this.chartXY);

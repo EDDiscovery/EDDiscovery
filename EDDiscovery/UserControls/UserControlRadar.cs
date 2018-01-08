@@ -161,28 +161,28 @@ namespace EDDiscovery.UserControls
                     int py = (int)sysY2;
                     int pz = (int)sysZ2;
 
-                    int nseries = 51; // number of series in the 3d plot
+                    int nseries = 51; // # of series in the 3d plot
                     double ratio = (100 / range) / nseries;
                     double spy = py * ratio; // step of the point y coordinate
                     
                     chartPseudo3D.Series[(int)Math.Floor(spy)].Points.AddXY(px, pz);
                     chartPseudo3D.Series[(int)Math.Floor(spy)].ToolTip = label;
 
-                    if (visits > 0) // visited system are blue
+                    // visited systems go to the serie #1, unvisited to the serie #2. Serie #0 is for the current system...
+                    int pv = 2;
+                    if (visits > 0)
                     {
-                        chartXY.Series[1].Points.AddXY(px, py, pz);
-                        chartXY.Series[1].ToolTip = "It's a name";
-                        chartXZ.Series[1].Points.AddXY(px, pz, py);
-                        chartXZ.Series[1].ToolTip = label;
+                        pv = 1;
                     }
-                    else if (visits == 0) // non visited sytems are yellow
+                    else
                     {
-                        chartXY.Series[2].Points.AddXY(px, py, pz);
-                        chartXY.Series[2].ToolTip = "It's a name";
-                        chartXZ.Series[2].Points.AddXY(px, pz, py);
-                        chartXZ.Series[2].ToolTip = label;                        
+                        pv = 2;
                     }
-                    //                    
+
+                    chartXY.Series[pv].Points.AddXY(px, py, pz);
+                    chartXY.Series[pv].ToolTip = label;
+                    chartXZ.Series[pv].Points.AddXY(px, pz, py);
+                    chartXZ.Series[pv].ToolTip = label;
                 }                
             }            
         }                
@@ -335,37 +335,7 @@ namespace EDDiscovery.UserControls
                 }
             }
         }
-        /*
-        private void checkBoxSwitchCharts_CheckedChanged(object sender, EventArgs e)
-        {
-            if (checkBoxSwitchCharts.Checked == true)
-            {
-                chartXY.Visible = true;
-                chartXZ.Visible = false;
-            }
-            else if (checkBoxSwitchCharts.Checked == false)
-            {
-                chartXY.Visible = false;
-                chartXZ.Visible = true;
-            }
-        }
-
-        private void checkBoxSwitchCharts_CheckStateChanged(object sender, EventArgs e)
-        {
-            if (checkBoxSwitchCharts.Checked == true)
-            {
-                chartXY.Visible = false;
-                chartXZ.Visible = true;
-                chartPseudo3D.Visible = false;
-            }
-            else if (checkBoxSwitchCharts.Checked == false)
-            {
-                chartXY.Visible = true;
-                chartXZ.Visible = false;
-                chartPseudo3D.Visible = false;
-            }
-        }*/
-
+        
         private void buttonExt2dtop_MouseDown(object sender, MouseEventArgs e)
         {
             chartXY.Visible = true;
@@ -390,6 +360,20 @@ namespace EDDiscovery.UserControls
         private Point _mousePos;
 
         private void chartPseudo3D_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button != MouseButtons.Left) return;
+            if (!_mousePos.IsEmpty)
+            {
+                var style = chartPseudo3D.ChartAreas[0].Area3DStyle;
+                style.Rotation = Math.Min(180, Math.Max(-180,
+                    style.Rotation - (e.Location.X - _mousePos.X)));
+                style.Inclination = Math.Min(90, Math.Max(-90,
+                    style.Inclination + (e.Location.Y - _mousePos.Y)));
+            }
+            _mousePos = e.Location;
+        }
+
+        private void chartPseudo3D_MouseMove(object sender, MouseEventArgs e)
         {
             if (e.Button != MouseButtons.Left) return;
             if (!_mousePos.IsEmpty)
