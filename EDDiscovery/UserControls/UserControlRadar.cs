@@ -161,8 +161,8 @@ namespace EDDiscovery.UserControls
                     int py = (int)sysY2;
                     int pz = (int)sysZ2;
 
-                    double spy = 0;
-                    spy = ((range / 100) * py) / 4;
+                    double spy = 0; // step of the point y coordinate
+                    spy = ((range / 100) * py) / 4; // calculate the steps in the series sequence of each y coordinate
                     
                     chartPseudo3D.Series[(int)Math.Floor(spy)].Points.AddXY(px, pz);
 

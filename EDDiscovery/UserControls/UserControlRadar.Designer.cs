@@ -368,6 +368,7 @@ namespace EDDiscovery.UserControls
             this.chartPseudo3D.Dock = System.Windows.Forms.DockStyle.Fill;
             this.chartPseudo3D.Location = new System.Drawing.Point(0, 31);
             this.chartPseudo3D.Margin = new System.Windows.Forms.Padding(0);
+            this.chartPseudo3D.MinimumSize = new System.Drawing.Size(50, 50);
             this.chartPseudo3D.Name = "chartPseudo3D";
             series7.BackImageTransparentColor = System.Drawing.Color.Transparent;
             series7.ChartArea = "ChartArea1";
