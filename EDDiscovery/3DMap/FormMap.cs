@@ -19,10 +19,13 @@ using EDDiscovery.Forms;
 using EliteDangerousCore;
 using EliteDangerousCore.DB;
 using EliteDangerousCore.EDSM;
+
 using OpenTK;
 using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL;
 using OpenTK.Input;
+
+
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
