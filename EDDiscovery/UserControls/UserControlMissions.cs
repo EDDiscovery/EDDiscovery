@@ -144,7 +144,7 @@ namespace EDDiscovery.UserControls
                 }
 
 
-                cColValue.HeaderText = $"Reward (cr) \nTotal: {totalReward:N0}";
+                cColValue.HeaderText = (totalReward!=0) ? $"Reward (cr)\nTotal: {totalReward:N0}" : "Reward (cr)";
 
                 List<MissionState> mprev = (from MissionState ms in ml.Missions.Values where !ms.InProgressDateTime(hetime) orderby ms.Mission.EventTimeUTC descending select ms).ToList();
 

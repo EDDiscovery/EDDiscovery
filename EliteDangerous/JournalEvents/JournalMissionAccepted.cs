@@ -87,7 +87,7 @@ namespace EliteDangerousCore.JournalEvents
             PassengerWanted = evt["PassengerWanted"].BoolNull();
             PassengerType = evt["PassengerType"].StrNull();
 
-            Reward = evt["Reward"].IntNull();
+            Reward = evt["Reward"].IntNull();   // not in DOC V13, but present in latest journal entries
 
         }
 
@@ -136,7 +136,8 @@ namespace EliteDangerousCore.JournalEvents
                                       "Station:", DestinationStation, 
                                       "Expiry:", exp,
                                       "Influence:", Influence,
-                                      "Reputation:", Reputation);
+                                      "Reputation:", Reputation,
+                                      "Reward:", Reward);
 
             detailed = BaseUtils.FieldBuilder.Build("Deliver:", CommodityLocalised.Alt(FriendlyCommodity), 
                                            "Target:", TargetLocalised.Alt(TargetFriendly), 
