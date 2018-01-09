@@ -209,6 +209,7 @@ namespace EDDiscovery.UserControls
             {
                 topline = String.Format("{0} {1} WPs remain", _currentRoute.Name, _currentRoute.Systems.Count);
             }
+
             ISystem nearestSystem = null;
             double minDist = double.MaxValue;
             int nearestidx = -1;
@@ -234,25 +235,31 @@ namespace EDDiscovery.UserControls
             string name = null;
             if (nearestSystem != null && firstSystem != null)
             {
+                string nextName = null;
+
+
+                if (nearestidx < _currentRoute.Systems.Count - 1)           // this is the name of the system beyond the nearest one to us.
+                    nextName = _currentRoute.Systems[nearestidx + 1];
+
                 double first2Neasest = SystemClassDB.Distance(firstSystem, nearestSystem);
                 double first2Me = SystemClassDB.Distance(firstSystem, currentSystem.System);
 
-                string nextName = null;
-                int wp = nearestidx + 1;
-                if (nearestidx < _currentRoute.Systems.Count - 1)
-                    nextName = _currentRoute.Systems[nearestidx + 1];
+                int wp = nearestidx+1;  // we make this 1 + so 1=first entry, 2=second
+
+                // if distance between me and the first system is > than between the nearest and the first, we are past the nearest, thus must move onto the next
                 if (first2Me >= first2Neasest && !String.IsNullOrWhiteSpace(nextName))
                 {
-                    name = nextName;
-                    wp++;
+                    name = nextName;        // we use this system..
+                    wp++;                   // and our waypoint number increases
                 }
                 else
-                    name = nearestSystem.name;
+                    name = nearestSystem.name;      // else we use the nearest system, with the same WP number
 
                 ISystem nextSystem = SystemClassDB.GetSystem(name);
-                if (nextSystem == null)
+
+                if (nextSystem == null)     // if we no co-ords
                 {
-                    bottomLine = String.Format("WP{0}: {1} {2}", wp, nextName, autoCopyWPToolStripMenuItem.Checked ? " (AUTO)" : "");
+                    bottomLine = String.Format("WP{0}: {1} {2}", wp, name, autoCopyWPToolStripMenuItem.Checked ? " (AUTO)" : "");
                 }
                 else
                 {
@@ -260,11 +267,13 @@ namespace EDDiscovery.UserControls
                     bottomLine = String.Format("{0:N2}ly to WP{1}: {2} {3}", distance, wp, name, autoCopyWPToolStripMenuItem.Checked ? " (AUTO)" : "");
                 }
 
-            }else 
+            }
+            else 
             {
                 bottomLine = String.Format("WP{0}: {1} {2}", 1, firstSystemName, autoCopyWPToolStripMenuItem.Checked ? " (AUTO)" : "");
                 name = firstSystemName;
             }
+
             if (name!=null && name.CompareTo(lastsystem) != 0)
             {
                 if (autoCopyWPToolStripMenuItem.Checked)
