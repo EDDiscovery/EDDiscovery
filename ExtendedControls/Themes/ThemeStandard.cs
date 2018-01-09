@@ -818,7 +818,7 @@ namespace ExtendedControls
                     }
                 }
             }
-            else if (myControl is TabStrip )
+            else if (myControl is TabStrip)
             {
                 TabStrip ts = myControl as TabStrip;
                 ts.DropDownBackgroundColor = currentsettings.colors[Settings.CI.button_back];
@@ -826,7 +826,6 @@ namespace ExtendedControls
                 ts.DropDownScrollBarButtonColor = currentsettings.colors[Settings.CI.textbox_scrollbutton];
                 ts.DropDownScrollBarColor = currentsettings.colors[Settings.CI.textbox_sliderback];
                 ts.DropDownMouseOverBackgroundColor = currentsettings.colors[Settings.CI.button_back].Multiply(mouseoverscaling);
-                return;
             }
             else
             {
