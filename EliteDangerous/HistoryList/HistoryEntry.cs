@@ -197,7 +197,13 @@ namespace EliteDangerousCore
                     }
                 }
                 else
-                {                           // Default one
+                {   
+                    // NOTE Rob: 09-JAN-2018 I've removed the Jumpstart looking up a system by name since they were using up lots of lookup time during history reading.  
+                    // This is used for pre 2.2 systems without co-ords, which now should be limited.
+                    // JumpStart still gets the system when the FSD loc is processed, see above.
+                    // Jumpstart was also screwing about with the EDSM ID fill in which was broken.  This is now working again.
+                    
+                    // Default one
                     newsys = new SystemClass(jl.StarSystem);
                     newsys.id_edsm = je.EdsmID;
 
