@@ -540,9 +540,11 @@ namespace EliteDangerousCore
                     cn = new SQLiteConnectionUser(utc: true);
                 }
 
-                JObject jo = GetJson(journalid, cn, tn);
+                bool updatejson = jsonpos || dist > 0;
 
-                if (jo != null)
+                JObject jo = updatejson ? GetJson(journalid, cn, tn) : null;       // if JSON pos update, get it, else null
+                                                                                    // no need to JSON read if just doing an EDSM update
+                if (jo != null || !updatejson )        // if got it, or no pos
                 {
                     if (jsonpos)
                     {
@@ -553,13 +555,22 @@ namespace EliteDangerousCore
                     if (dist > 0)
                         jo["JumpDist"] = dist;
 
-                    using (DbCommand cmd2 = cn.CreateCommand("Update JournalEntries set EventData = @EventData, EdsmId = @EdsmId where ID = @ID", tn))
+                    using (DbCommand cmd2 = cn.CreateCommand("Update JournalEntries set EdsmId = @EdsmId where ID = @ID", tn))
                     {
+                        if ( updatejson )
+                        {
+                            cmd2.CommandText = "Update JournalEntries set EventData = @EventData, EdsmId = @EdsmId where ID = @ID";
+                            cmd2.AddParameterWithValue("@EventData", jo.ToString());
+                            System.Diagnostics.Trace.WriteLine(string.Format("Update journal ID {0} with pos/edsmid {1} dist {2}", journalid, system.id_edsm, dist));
+                        }
+                        else
+                        {
+                            System.Diagnostics.Trace.WriteLine(string.Format("Update journal ID {0} with edsmid {1}", journalid, system.id_edsm));
+                        }
+
                         cmd2.AddParameterWithValue("@ID", journalid);
-                        cmd2.AddParameterWithValue("@EventData", jo.ToString());
                         cmd2.AddParameterWithValue("@EdsmId", system.id_edsm);
 
-                        System.Diagnostics.Trace.WriteLine(string.Format("Update journal ID {0} with pos {1}/edsmid {2} dist {3}", journalid, jsonpos, system.id_edsm, dist));
                         cmd2.ExecuteNonQuery();
                     }
                 }

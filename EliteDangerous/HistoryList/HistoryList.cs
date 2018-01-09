@@ -431,16 +431,45 @@ namespace EliteDangerousCore
                 }
             }
 
-            foreach (Tuple<HistoryEntry, ISystem> he in updatesystems)
+            using (SQLiteConnectionUser uconn = new SQLiteConnectionUser(utc: true))
             {
-                FillEDSM(he.Item1, edsmsys: he.Item2);  // fill, we already have an EDSM system to use
+                using (DbTransaction txn = uconn.BeginTransaction())        // take a transaction over this
+                {
+                    foreach (Tuple<HistoryEntry, ISystem> he in updatesystems)
+                    {
+                        FillInSystemFromDBInt(he.Item1, he.Item2, false, uconn, txn);  // fill, we already have an EDSM system to use
+                    }
+
+                    txn.Commit();
+                }
             }
         }
 
-        public void FillEDSM(HistoryEntry syspos, ISystem edsmsys = null, bool reload = false, SQLiteConnectionUser uconn = null)       // call to fill in ESDM data for entry, and also fills in all others pointing to the system object
+        public void FillEDSM(HistoryEntry syspos, ISystem edsmsys = null, bool reload = false)       // call to fill in ESDM data for entry, and also fills in all others pointing to the system object
         {
             if (syspos.System.status == SystemStatusEnum.EDSM || (!reload && syspos.System.id_edsm == -1))  // if set already, or we tried and failed..
+            {
+                System.Diagnostics.Debug.WriteLine("Fill in system already executed " + syspos.System.name);
                 return;
+            }
+
+            using (SQLiteConnectionUser uconn = new SQLiteConnectionUser(utc: true))        // lets do this in a transaction for speed.
+            {
+                using (DbTransaction txn = uconn.BeginTransaction())
+                {
+                    FillInSystemFromDBInt(syspos, edsmsys, reload, uconn, txn);
+                    txn.Commit();
+                }
+            }
+        }
+
+        private void FillInSystemFromDBInt(HistoryEntry syspos, ISystem edsmsys, bool reload, SQLiteConnectionUser uconn, DbTransaction utn )       // call to fill in ESDM data for entry, and also fills in all others pointing to the system object
+        {
+            if (syspos.System.status == SystemStatusEnum.EDSM || (!reload && syspos.System.id_edsm == -1))  // if set already, or we tried and failed..
+            {
+                System.Diagnostics.Debug.WriteLine("Fill in system already executed " + syspos.System.name);
+                return;
+            }
 
             List<HistoryEntry> alsomatching = new List<HistoryEntry>();
 
@@ -463,7 +492,7 @@ namespace EliteDangerousCore
                     bool updatepos = (he.EntryType == JournalTypeEnum.FSDJump || he.EntryType == JournalTypeEnum.Location) && !syspos.System.HasCoordinate && edsmsys.HasCoordinate;
 
                     if (updatepos || updateedsmid)
-                        JournalEntry.UpdateEDSMIDPosJump(he.Journalid, edsmsys, updatepos, -1, uconn);  // update pos and edsmid, jdist not updated
+                        JournalEntry.UpdateEDSMIDPosJump(he.Journalid, edsmsys, updatepos, -1, uconn , utn);  // update pos and edsmid, jdist not updated
 
                     he.System = edsmsys;
                 }
