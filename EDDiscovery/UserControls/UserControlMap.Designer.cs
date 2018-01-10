@@ -18,7 +18,7 @@ using System.Windows.Forms;
 
 namespace EDDiscovery.UserControls
 {
-    partial class UserControlRadar
+    partial class UserControlMap
     {
         /// <summary> 
         /// Required designer variable.

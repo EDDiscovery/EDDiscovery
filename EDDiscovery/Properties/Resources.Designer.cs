@@ -398,6 +398,16 @@ namespace EDDiscovery.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap map {
+            get {
+                object obj = ResourceManager.GetObject("map", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Help for 3D star Map.
         ///
         ///Keyboard:
@@ -559,16 +569,6 @@ namespace EDDiscovery.Properties {
         internal static System.Drawing.Bitmap popout1 {
             get {
                 object obj = ResourceManager.GetObject("popout1", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap radar {
-            get {
-                object obj = ResourceManager.GetObject("radar", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

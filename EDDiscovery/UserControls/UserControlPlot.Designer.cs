@@ -157,33 +157,33 @@ namespace EDDiscovery.UserControls
             // buttonExt2dtop
             // 
             this.buttonExt2dtop.Dock = System.Windows.Forms.DockStyle.Right;
-            this.buttonExt2dtop.Location = new System.Drawing.Point(165, 0);
+            this.buttonExt2dtop.Location = new System.Drawing.Point(185, 0);
             this.buttonExt2dtop.Name = "buttonExt2dtop";
-            this.buttonExt2dtop.Size = new System.Drawing.Size(55, 26);
+            this.buttonExt2dtop.Size = new System.Drawing.Size(50, 26);
             this.buttonExt2dtop.TabIndex = 6;
-            this.buttonExt2dtop.Text = "2D Top";
+            this.buttonExt2dtop.Text = "Top";
             this.buttonExt2dtop.UseVisualStyleBackColor = true;
             this.buttonExt2dtop.MouseDown += new System.Windows.Forms.MouseEventHandler(this.buttonExt2dtop_MouseDown);
             // 
             // buttonExt2dfront
             // 
             this.buttonExt2dfront.Dock = System.Windows.Forms.DockStyle.Right;
-            this.buttonExt2dfront.Location = new System.Drawing.Point(220, 0);
+            this.buttonExt2dfront.Location = new System.Drawing.Point(235, 0);
             this.buttonExt2dfront.Name = "buttonExt2dfront";
-            this.buttonExt2dfront.Size = new System.Drawing.Size(60, 26);
+            this.buttonExt2dfront.Size = new System.Drawing.Size(50, 26);
             this.buttonExt2dfront.TabIndex = 7;
-            this.buttonExt2dfront.Text = "2D Front";
+            this.buttonExt2dfront.Text = "Front";
             this.buttonExt2dfront.UseVisualStyleBackColor = true;
             this.buttonExt2dfront.MouseDown += new System.Windows.Forms.MouseEventHandler(this.buttonExt2dfront_MouseDown);
             // 
             // buttonExt2dside
             // 
             this.buttonExt2dside.Dock = System.Windows.Forms.DockStyle.Right;
-            this.buttonExt2dside.Location = new System.Drawing.Point(280, 0);
+            this.buttonExt2dside.Location = new System.Drawing.Point(285, 0);
             this.buttonExt2dside.Name = "buttonExt2dside";
-            this.buttonExt2dside.Size = new System.Drawing.Size(55, 26);
+            this.buttonExt2dside.Size = new System.Drawing.Size(50, 26);
             this.buttonExt2dside.TabIndex = 8;
-            this.buttonExt2dside.Text = "2D Side";
+            this.buttonExt2dside.Text = "Side";
             this.buttonExt2dside.UseVisualStyleBackColor = true;
             this.buttonExt2dside.MouseDown += new System.Windows.Forms.MouseEventHandler(this.buttonExt2dside_MouseDown);
             // 

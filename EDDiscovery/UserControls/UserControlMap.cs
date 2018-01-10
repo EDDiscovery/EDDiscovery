@@ -31,13 +31,13 @@ using EliteDangerousCore.DB;
 
 namespace EDDiscovery.UserControls
 {
-    public partial class UserControlRadar : UserControlCommonBase
+    public partial class UserControlMap : UserControlCommonBase
     {
         private string DbSave { get { return "StarDistancePanel" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
 
         private StarDistanceComputer computer;
 
-        public UserControlRadar()
+        public UserControlMap()
         {
             InitializeComponent();
         }
