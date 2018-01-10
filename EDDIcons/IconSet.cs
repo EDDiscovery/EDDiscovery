@@ -71,6 +71,7 @@ namespace EDDiscovery.Icons
             icons["Legacy.Class_II_Gas_Giant_Sand1"] = IconSet.GetIcon("Planets.Sudarsky_class_II_gas_giant");
             icons["Legacy.Class_I_Gas_Giant_Brown2"] = IconSet.GetIcon("Planets.Sudarsky_class_I_gas_giant");
             icons["Legacy.Coffinicon"] = IconSet.GetIcon("Journal.Died");
+            icons["Legacy.Compass"] = IconSet.GetIcon("Panels.Compass");
             icons["Legacy.DA6VII_White"] = IconSet.GetIcon("Stars.DA");
             icons["Legacy.DefaultStar"] = IconSet.GetIcon("GalMap.stellarRemnant");
             icons["Legacy.EDDB"] = IconSet.GetIcon("Controls.Main.Admin.EDDBSystemsSync");
@@ -118,7 +119,7 @@ namespace EDDiscovery.Icons
             icons["Legacy.StopNormalBlue"] = IconSet.GetIcon("Controls.Map3D.Recorder.StopPlay");
             icons["Legacy.StopNormalRed"] = IconSet.GetIcon("Controls.Map3D.Recorder.StopRecord");
             icons["Legacy.T4V"] = IconSet.GetIcon("Stars.T");
-            icons["Legacy.Terraformable"] = IconSet.GetIcon("Controls.Scan.Bodies.Terraformable");
+            icons["Legacy.terraform"] = IconSet.GetIcon("Controls.Scan.Bodies.Terraformable");
             icons["Legacy.Travelicon"] = IconSet.GetIcon("Controls.Map3D.Navigation.GoToHistorySelection");
             icons["Legacy.VideoRecorder"] = IconSet.GetIcon("Controls.Map3D.Recorder.Menu");
             icons["Legacy.Volcano"] = IconSet.GetIcon("Controls.Scan.Bodies.Volcanism");
@@ -261,6 +262,7 @@ namespace EDDiscovery.Icons
             icons["Legacy.modulesell"] = IconSet.GetIcon("Journal.ModuleSell");
             icons["Legacy.modulestore"] = IconSet.GetIcon("Journal.ModuleStore");
             icons["Legacy.moduleswap"] = IconSet.GetIcon("Journal.ModuleSwap");
+            icons["Legacy.money"] = IconSet.GetIcon("Controls.Scan.Bodies.HighValue");
             icons["Legacy.mothership"] = IconSet.GetIcon("Journal.VehicleSwitch_Mothership");
             icons["Legacy.music"] = IconSet.GetIcon("Journal.Music");
             icons["Legacy.navbeacon"] = IconSet.GetIcon("Journal.NavBeaconScan");
