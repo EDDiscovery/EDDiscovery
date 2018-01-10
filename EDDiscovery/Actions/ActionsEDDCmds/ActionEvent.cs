@@ -174,7 +174,7 @@ namespace EDDiscovery.Actions
                     else if (cmdname.Equals("edsm"))
                     {
                         HistoryEntry he = hl.EntryOrder[jidindex];
-                        (ap.actioncontroller as ActionController).HistoryList.FillEDSM(he, reload: true);
+                        (ap.actioncontroller as ActionController).HistoryList.FillEDSM(he);
 
                         long? id_edsm = he.System.id_edsm;
                         if (id_edsm <= 0)
@@ -193,7 +193,7 @@ namespace EDDiscovery.Actions
                     else if (cmdname.Equals("ross"))
                     {
                         HistoryEntry he = hl.EntryOrder[jidindex];
-                        (ap.actioncontroller as ActionController).HistoryList.FillEDSM(he, reload: true);
+                        (ap.actioncontroller as ActionController).HistoryList.FillEDSM(he);
 
                         string url = "";
 
