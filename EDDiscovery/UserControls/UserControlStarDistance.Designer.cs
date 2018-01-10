@@ -95,10 +95,10 @@ namespace EDDiscovery.UserControls
             this.dataViewScrollerPanel2.Controls.Add(this.dataGridViewNearest);
             this.dataViewScrollerPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataViewScrollerPanel2.InternalMargin = new System.Windows.Forms.Padding(0);
-            this.dataViewScrollerPanel2.Location = new System.Drawing.Point(0, 31);
+            this.dataViewScrollerPanel2.Location = new System.Drawing.Point(0, 26);
             this.dataViewScrollerPanel2.Name = "dataViewScrollerPanel2";
             this.dataViewScrollerPanel2.ScrollBarWidth = 20;
-            this.dataViewScrollerPanel2.Size = new System.Drawing.Size(352, 541);
+            this.dataViewScrollerPanel2.Size = new System.Drawing.Size(352, 546);
             this.dataViewScrollerPanel2.TabIndex = 25;
             this.dataViewScrollerPanel2.VerticalScrollBarDockRight = true;
             // 
@@ -120,7 +120,7 @@ namespace EDDiscovery.UserControls
             this.vScrollBarCustom2.MouseOverButtonColor = System.Drawing.Color.Green;
             this.vScrollBarCustom2.MousePressedButtonColor = System.Drawing.Color.Red;
             this.vScrollBarCustom2.Name = "vScrollBarCustom2";
-            this.vScrollBarCustom2.Size = new System.Drawing.Size(20, 520);
+            this.vScrollBarCustom2.Size = new System.Drawing.Size(20, 525);
             this.vScrollBarCustom2.SliderColor = System.Drawing.Color.DarkGray;
             this.vScrollBarCustom2.SmallChange = 1;
             this.vScrollBarCustom2.TabIndex = 24;
@@ -149,7 +149,7 @@ namespace EDDiscovery.UserControls
             this.dataGridViewNearest.Name = "dataGridViewNearest";
             this.dataGridViewNearest.RowHeadersVisible = false;
             this.dataGridViewNearest.ScrollBars = System.Windows.Forms.ScrollBars.None;
-            this.dataGridViewNearest.Size = new System.Drawing.Size(332, 541);
+            this.dataGridViewNearest.Size = new System.Drawing.Size(332, 546);
             this.dataGridViewNearest.TabIndex = 23;
             this.dataGridViewNearest.SortCompare += new System.Windows.Forms.DataGridViewSortCompareEventHandler(this.dataGridViewNearest_SortCompare);
             this.dataGridViewNearest.MouseDown += new System.Windows.Forms.MouseEventHandler(this.dataGridViewNearest_MouseDown);
@@ -242,7 +242,7 @@ namespace EDDiscovery.UserControls
             this.panelTop.Dock = System.Windows.Forms.DockStyle.Top;
             this.panelTop.Location = new System.Drawing.Point(0, 0);
             this.panelTop.Name = "panelTop";
-            this.panelTop.Size = new System.Drawing.Size(352, 31);
+            this.panelTop.Size = new System.Drawing.Size(352, 26);
             this.panelTop.TabIndex = 25;
             // 
             // UserControlStarDistance
