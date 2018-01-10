@@ -49,7 +49,7 @@ namespace EliteDangerousCore
                 if (State != MissionState.StateTypes.Completed)
                     return State.ToString();
                 else
-                    return Completed.RewardOrDonation + "cr";
+                    return Completed.Value.ToString("N0");
             }
         }
 

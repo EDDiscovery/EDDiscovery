@@ -60,7 +60,7 @@ namespace EDDiscovery.Actions
                 IInputDevice idi = GetInputDeviceFromBindingDevice(bd);
 
                 if (idi == null)
-                    ret += "ERROR: Missing physical device for " + bd.Name + Environment.NewLine;
+                    ret += "ERROR: Missing physical device for FD Device " + bd.Name + Environment.NewLine;
                 else
                     ret += "Match of FD Device " + bd.Name + " to " + idi.ID().Name + Environment.NewLine;
             }
