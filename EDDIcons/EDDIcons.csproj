@@ -568,5 +568,8 @@
   <ItemGroup>
     <EmbeddedResource Include="Controls\Main\Admin\SendUnsyncedEGO.png" />
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Panels\Compass.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
