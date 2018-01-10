@@ -210,22 +210,25 @@ namespace EliteDangerousCore
                     ISystem s = SystemCache.FindSystem(newsys, conn);      // has no co-ord, did we find it?
 
                     if (s != null)                               // found a system..
-                    {                                                       
-                        if (jl != null && jl.HasCoordinate)         
+                    {
+                        if (jl != null && jl.HasCoordinate)         // if journal Loc, and journal has a star position, use that instead of EDSM..
                         {
                             s.x = Math.Round(jl.StarPos.X * 32.0) / 32.0;
                             s.y = Math.Round(jl.StarPos.Y * 32.0) / 32.0;
                             s.z = Math.Round(jl.StarPos.Z * 32.0) / 32.0;
                         }
 
+                        //Debug.WriteLine("HistoryList found system {0} {1}", s.id_edsm, s.name);
                         newsys = s;
 
                         if (jl != null && je.EdsmID <= 0 && newsys.id_edsm > 0) // only update on a JL..
                         {
                             journalupdate = true;
-                            Debug.WriteLine("Je EDSM ID update requested {0} {1}", newsys.id_edsm, newsys.name);
+                            Debug.WriteLine("HE EDSM ID update requested {0} {1}", newsys.id_edsm, newsys.name);
                         }
                     }
+                    else
+                        newsys.id_edsm = -1;        // mark as checked but not found
                 }
 
                 JournalFSDJump jfsd = je as JournalFSDJump;

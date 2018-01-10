@@ -425,63 +425,68 @@ namespace EliteDangerousCore
             {
                 foreach (HistoryEntry he in historylist)
                 {
-                    // because of the volume of requests, and for speed, do not do EDSM lookup
-                    if (he.IsFSDJump && !he.System.HasCoordinate)   // try and load ones without position.. if its got pos we are happy
-                        updatesystems.Add(new Tuple<HistoryEntry, ISystem>(he, SystemCache.FindSystemConditional(he.System,reload:false,conn:cn)));
-                }
-            }
-
-            using (SQLiteConnectionUser uconn = new SQLiteConnectionUser(utc: true))
-            {
-                using (DbTransaction txn = uconn.BeginTransaction())        // take a transaction over this
-                {
-                    foreach (Tuple<HistoryEntry, ISystem> he in updatesystems)
-                    {
-                        FillInSystemFromDBInt(he.Item1, he.Item2, false, uconn, txn);  // fill, we already have an EDSM system to use
+                    if (he.IsFSDJump && !he.System.HasCoordinate)// try and load ones without position.. if its got pos we are happy
+                    {           // done in two IFs for debugging, in case your wondering why!
+                        if (he.System.status != SystemStatusEnum.EDSM && he.System.id_edsm == 0)   // and its not from EDSM and we have not already tried
+                        {
+                            ISystem found = SystemCache.FindSystem(he.System, cn);
+                            if (found != null)
+                                updatesystems.Add(new Tuple<HistoryEntry, ISystem>(he, found));
+                        }
                     }
-
-                    txn.Commit();
                 }
             }
-        }
 
-        public void FillEDSM(HistoryEntry syspos, ISystem edsmsys = null, bool reload = false)       // call to fill in ESDM data for entry, and also fills in all others pointing to the system object
-        {
-            if (syspos.System.status == SystemStatusEnum.EDSM || (!reload && syspos.System.id_edsm == -1))  // if set already, or we tried and failed..
+            if (updatesystems.Count > 0)
             {
-                System.Diagnostics.Debug.WriteLine("Fill in system already executed " + syspos.System.name);
-                return;
-            }
-
-            using (SQLiteConnectionUser uconn = new SQLiteConnectionUser(utc: true))        // lets do this in a transaction for speed.
-            {
-                using (DbTransaction txn = uconn.BeginTransaction())
+                using (SQLiteConnectionUser uconn = new SQLiteConnectionUser(utc: true))
                 {
-                    FillInSystemFromDBInt(syspos, edsmsys, reload, uconn, txn);
-                    txn.Commit();
+                    using (DbTransaction txn = uconn.BeginTransaction())        // take a transaction over this
+                    {
+                        foreach (Tuple<HistoryEntry, ISystem> he in updatesystems)
+                        {
+                            FillInSystemFromDBInt(he.Item1, he.Item2, uconn, txn);  // fill, we already have an EDSM system to use
+                        }
+
+                        txn.Commit();
+                    }
                 }
             }
         }
 
-        private void FillInSystemFromDBInt(HistoryEntry syspos, ISystem edsmsys, bool reload, SQLiteConnectionUser uconn, DbTransaction utn )       // call to fill in ESDM data for entry, and also fills in all others pointing to the system object
+        public void FillEDSM(HistoryEntry syspos)       // call to fill in ESDM data for entry, and also fills in all others pointing to the system object
         {
-            if (syspos.System.status == SystemStatusEnum.EDSM || (!reload && syspos.System.id_edsm == -1))  // if set already, or we tried and failed..
+            if (syspos.System.status == SystemStatusEnum.EDSM || syspos.System.id_edsm == -1)  // if set already, or we tried and failed..
             {
-                System.Diagnostics.Debug.WriteLine("Fill in system already executed " + syspos.System.name);
+                System.Diagnostics.Debug.WriteLine("Checked System {0} already id {1} ", syspos.System.name , syspos.System.id_edsm);
                 return;
             }
 
+            ISystem edsmsys = SystemCache.FindSystem(syspos.System);        // see if we have it..
+
+            if (edsmsys != null)                                            // if we found it externally, fill in info
+            {
+                using (SQLiteConnectionUser uconn = new SQLiteConnectionUser(utc: true))        // lets do this in a transaction for speed.
+                {
+                    using (DbTransaction txn = uconn.BeginTransaction())
+                    {
+                        FillInSystemFromDBInt(syspos, edsmsys, uconn, txn); // and fill in using this connection/tx
+                        txn.Commit();
+                    }
+                }
+            }
+            else
+                FillInSystemFromDBInt(syspos, null, null, null);        // else fill in using null system, which means just mark it checked
+        }
+
+        private void FillInSystemFromDBInt(HistoryEntry syspos, ISystem edsmsys, SQLiteConnectionUser uconn, DbTransaction utn )       // call to fill in ESDM data for entry, and also fills in all others pointing to the system object
+        {
             List<HistoryEntry> alsomatching = new List<HistoryEntry>();
 
             foreach (HistoryEntry he in historylist)       // list of systems in historylist using the same system object
             {
                 if (Object.ReferenceEquals(he.System, syspos.System))  
                     alsomatching.Add(he);
-            }
-
-            if (edsmsys == null)                              // if we found it externally, do not find again
-            {
-                edsmsys = SystemCache.FindSystem(syspos.System);   
             }
 
             if (edsmsys != null)

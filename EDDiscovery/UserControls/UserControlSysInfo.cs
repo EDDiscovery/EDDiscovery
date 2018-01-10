@@ -140,7 +140,7 @@ namespace EDDiscovery.UserControls
             {
                 SetControlText(he.System.name);
                 textBoxSystem.Text = he.System.name;
-                discoveryform.history.FillEDSM(he, reload: true); // Fill in any EDSM info we have, force it to try again.. in case system db updated
+                discoveryform.history.FillEDSM(he); // Fill in any EDSM info we have
 
                 textBoxBody.Text = he.WhereAmI + ((he.IsInHyperSpace) ? " (HS)": "");
 
@@ -253,7 +253,7 @@ namespace EDDiscovery.UserControls
         {
             if (last_he != null)
             {
-                discoveryform.history.FillEDSM(last_he, reload: true);
+                discoveryform.history.FillEDSM(last_he);
 
                 if (last_he.System.id_eddb > 0)
                     Process.Start("http://ross.eddb.io/system/update/" + last_he.System.id_eddb.ToString());
@@ -264,7 +264,7 @@ namespace EDDiscovery.UserControls
         {
             if (last_he != null)
             {
-                discoveryform.history.FillEDSM(last_he, reload: true);
+                discoveryform.history.FillEDSM(last_he);
 
                 if (last_he.System != null) // solve a possible exception
                 {
