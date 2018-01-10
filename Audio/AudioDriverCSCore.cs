@@ -122,8 +122,11 @@ namespace AudioExtensions
 
         public void Dispose()
         {
-            if ( aout != null )
+            if (aout != null)
+            {
+                aout.Stop();
                 aout.Dispose();
+            }
         }
 
         public void Dispose(AudioData o)

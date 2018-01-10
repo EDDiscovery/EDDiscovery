@@ -61,6 +61,7 @@ namespace EDDiscovery.Forms
             Trilateration,          // 28
             Settings,               // 29
             ScanGrid,               // 30
+            Compass,
             // ****** ADD More here DO NOT REORDER *****
         };
 
@@ -100,6 +101,7 @@ namespace EDDiscovery.Forms
             { new PanelInfo( PanelIDs.RouteTracker, typeof(UserControlRouteTracker),"Route Tracker", "RouteTracker", "Display the route tracker overlay", transparent: false) },
             { new PanelInfo( PanelIDs.Settings, typeof(UserControlSettings), "Settings", "SettingsPanel", "Display the settings panel") },
             { new PanelInfo( PanelIDs.Grid, typeof(UserControlContainerGrid), "Grid", "TheGrid", "Display the grid which allows other panels to be placed on it" , transparent:false) },
+            { new PanelInfo( PanelIDs.Compass, typeof(UserControlCompass), "Compass", "Compass", "Ground compass navigation panel to work out the bearing between planetary coordinates", transparent:true) },
         };
 
         public static IReadOnlyDictionary<PanelIDs, Image> PanelTypeIcons { get; } = new IconGroup<PanelIDs>("Panels");

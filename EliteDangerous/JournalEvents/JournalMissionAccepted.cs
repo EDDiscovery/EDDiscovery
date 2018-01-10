@@ -42,6 +42,7 @@ namespace EliteDangerousCore.JournalEvents
     //•	PassengerVIPs: bool
     //•	PassengerWanted: bool
     //•	PassengerType: eg Tourist, Soldier, Explorer,...
+    //•	Reward: Credit reward for completing the mission
 
 
     [JournalEntryType(JournalTypeEnum.MissionAccepted)]
@@ -86,6 +87,8 @@ namespace EliteDangerousCore.JournalEvents
             PassengerWanted = evt["PassengerWanted"].BoolNull();
             PassengerType = evt["PassengerType"].StrNull();
 
+            Reward = evt["Reward"].IntNull();   // not in DOC V13, but present in latest journal entries
+
         }
 
         public string Faction { get; set; }                 // in MissionAccepted order
@@ -115,6 +118,8 @@ namespace EliteDangerousCore.JournalEvents
         public bool? PassengerWanted { get; set; }
         public string PassengerType { get; set; }
 
+        public int? Reward { get; set; }
+
         public override void FillInformation(out string summary, out string info, out string detailed) //V
         {
             summary = EventTypeStr.SplitCapsWord();
@@ -129,7 +134,8 @@ namespace EliteDangerousCore.JournalEvents
                                       "Station:", DestinationStation, 
                                       "Expiry:", exp,
                                       "Influence:", Influence,
-                                      "Reputation:", Reputation);
+                                      "Reputation:", Reputation,
+                                      "Reward:", Reward);
 
             detailed = BaseUtils.FieldBuilder.Build("Deliver:", CommodityLocalised.Alt(FriendlyCommodity), 
                                            "Target:", TargetLocalised.Alt(TargetFriendly), 

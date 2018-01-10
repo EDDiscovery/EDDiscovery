@@ -416,14 +416,25 @@ namespace EDDiscovery.UserControls
 
                             if (chkShowOverlays.Checked)
                             {
+                                bool valuable = sc.EstimatedValue > 50000;
+                                int overlaystotal = (sc.Terraformable ? 1 : 0) + (sc.HasMeaningfulVolcanism ? 1 : 0) + (valuable ? 1 : 0);
+                                int ovsize = (overlaystotal>1) ? quarterheight : (quarterheight*3/2);
+                                int pos = 0;
+
                                 if (sc.Terraformable)
-                                    g.DrawImage(Icons.Controls.Scan_Bodies_Terraformable, new Rectangle(quarterheight / 2, quarterheight / 2, quarterheight, quarterheight));
+                                {
+                                    g.DrawImage(Icons.Controls.Scan_Bodies_Terraformable, new Rectangle(0, pos, ovsize, ovsize));
+                                    pos += ovsize + 1;
+                                }
 
-                                if (HasMeaningfulVolcanism(sc)) //this renders below the terraformable icon if present
-                                    g.DrawImage(Icons.Controls.Scan_Bodies_Volcanism, new Rectangle(quarterheight / 2, (int)(quarterheight * 1.5), quarterheight, quarterheight));
+                                if (sc.HasMeaningfulVolcanism) //this renders below the terraformable icon if present
+                                {
+                                    g.DrawImage(Icons.Controls.Scan_Bodies_Volcanism, new Rectangle(0, pos, ovsize, ovsize));
+                                    pos += ovsize + 1;
+                                }
 
-                                if (sc.EstimatedValue > 50000)
-                                    g.DrawImage(Icons.Controls.Scan_Bodies_HighValue, new Rectangle(quarterheight / 2, (int)(quarterheight * 2.5), quarterheight, quarterheight));
+                                if (valuable)
+                                    g.DrawImage(Icons.Controls.Scan_Bodies_HighValue, new Rectangle(0, pos, ovsize, ovsize)); 
                             }
 
                             if (indicatematerials)
@@ -500,14 +511,10 @@ namespace EDDiscovery.UserControls
                 sc.HasRings || 
                 indicatematerials || 
                 sc.Terraformable ||
-                HasMeaningfulVolcanism(sc) ||
+                sc.HasMeaningfulVolcanism ||
                 sc.EstimatedValue > 50000;
         }
 
-        private static bool HasMeaningfulVolcanism(JournalScan sc)
-        {
-            return sc.VolcanismID != EDVolcanism.None && sc.VolcanismID != EDVolcanism.Unknown;
-        }
 
         Point CreateMaterialNodes(List<PictureBoxHotspot.ImageElement> pc, JournalScan sn, Point matpos, Size matsize)
         {
