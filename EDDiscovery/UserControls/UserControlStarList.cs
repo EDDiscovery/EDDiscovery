@@ -229,6 +229,8 @@ namespace EDDiscovery.UserControls
         string Infoline(List<HistoryEntry> syslist)
         {
             string infostr = "";
+            string jumponium = "";
+            int hasmaterials = 0;
 
             if (syslist.Count > 1)
                 infostr = "First visit " + syslist.Last().EventTimeLocal.ToShortDateString();
@@ -342,6 +344,8 @@ namespace EDDiscovery.UserControls
                                 // Landable bodies with valuable materials
                                 if (sn.ScanData.IsLandable == true && sn.ScanData.HasMaterials)
                                 {
+                                    hasmaterials = 1;
+
                                     string MaterialsBrief = sn.ScanData.DisplayMaterials(4).ToString();
                                     // jumponium materials: Arsenic (As), Cadmium (Cd), Germanium (Ge), Niobium (Nb), Polonium (Po), Vanadium (V), Yttrium (Y)
                                     
@@ -421,16 +425,8 @@ namespace EDDiscovery.UserControls
                                         {
                                             jumpLevel.Append(jump1 + " level I, " + jump2 + " level II and " + jump3 + " level III");
                                         }
-
-                                        extrainfo = extrainfo.AppendPrePad("\n" + sc.BodyName + " has " + jumpLevel );
-                                        if (njump > 1)
-                                        {
-                                            extrainfo = extrainfo.AppendPrePad("jumponium materials. ");
-                                        }
-                                        else
-                                        {
-                                            extrainfo = extrainfo.AppendPrePad("jumponium material. ");
-                                        }
+                                                                                
+                                        jumponium = jumponium.AppendPrePad("\n" + sc.BodyName + " has " + jumpLevel );                                        
                                     }
                                 }
                             }
@@ -442,6 +438,12 @@ namespace EDDiscovery.UserControls
                     {   // tell us that a system has other bodies, and how much, beside stars
                         infostr = infostr.AppendPrePad(total.ToStringInvariant() + " Other bod" + ((total > 1) ? "ies" : "y"), ", ");
                         infostr = infostr.AppendPrePad(extrainfo, prefix);
+
+                        if ( hasmaterials != 0)
+                        {
+                            infostr = infostr.AppendPrePad("\nThis system has jumponium materials: ");
+                            infostr = infostr.AppendPrePad(jumponium);
+                        }
                     }
                     else
                     {   // we need this to allow the panel to scan also through systems which has only stars
