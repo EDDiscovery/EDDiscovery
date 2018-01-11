@@ -60,11 +60,11 @@ namespace EDDiscovery.UserControls
             this.textMinRadius = new ExtendedControls.TextBoxBorder();
             this.labelExt3 = new System.Windows.Forms.Label();
             this.textMaxRadius = new ExtendedControls.TextBoxBorder();
-            this.panelTop = new System.Windows.Forms.Panel();
+            this.rollUpPanel = new ExtendedControls.RollUpPanel();
             this.closestContextMenu.SuspendLayout();
             this.dataViewScrollerPanel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewNearest)).BeginInit();
-            this.panelTop.SuspendLayout();
+            this.rollUpPanel.SuspendLayout();
             this.SuspendLayout();
             // 
             // closestContextMenu
@@ -95,10 +95,10 @@ namespace EDDiscovery.UserControls
             this.dataViewScrollerPanel2.Controls.Add(this.dataGridViewNearest);
             this.dataViewScrollerPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataViewScrollerPanel2.InternalMargin = new System.Windows.Forms.Padding(0);
-            this.dataViewScrollerPanel2.Location = new System.Drawing.Point(0, 31);
+            this.dataViewScrollerPanel2.Location = new System.Drawing.Point(0, 5);
             this.dataViewScrollerPanel2.Name = "dataViewScrollerPanel2";
             this.dataViewScrollerPanel2.ScrollBarWidth = 20;
-            this.dataViewScrollerPanel2.Size = new System.Drawing.Size(352, 541);
+            this.dataViewScrollerPanel2.Size = new System.Drawing.Size(352, 567);
             this.dataViewScrollerPanel2.TabIndex = 25;
             this.dataViewScrollerPanel2.VerticalScrollBarDockRight = true;
             // 
@@ -120,7 +120,7 @@ namespace EDDiscovery.UserControls
             this.vScrollBarCustom2.MouseOverButtonColor = System.Drawing.Color.Green;
             this.vScrollBarCustom2.MousePressedButtonColor = System.Drawing.Color.Red;
             this.vScrollBarCustom2.Name = "vScrollBarCustom2";
-            this.vScrollBarCustom2.Size = new System.Drawing.Size(20, 520);
+            this.vScrollBarCustom2.Size = new System.Drawing.Size(20, 546);
             this.vScrollBarCustom2.SliderColor = System.Drawing.Color.DarkGray;
             this.vScrollBarCustom2.SmallChange = 1;
             this.vScrollBarCustom2.TabIndex = 24;
@@ -149,7 +149,7 @@ namespace EDDiscovery.UserControls
             this.dataGridViewNearest.Name = "dataGridViewNearest";
             this.dataGridViewNearest.RowHeadersVisible = false;
             this.dataGridViewNearest.ScrollBars = System.Windows.Forms.ScrollBars.None;
-            this.dataGridViewNearest.Size = new System.Drawing.Size(332, 541);
+            this.dataGridViewNearest.Size = new System.Drawing.Size(332, 567);
             this.dataGridViewNearest.TabIndex = 23;
             this.dataGridViewNearest.SortCompare += new System.Windows.Forms.DataGridViewSortCompareEventHandler(this.dataGridViewNearest_SortCompare);
             this.dataGridViewNearest.MouseDown += new System.Windows.Forms.MouseEventHandler(this.dataGridViewNearest_MouseDown);
@@ -176,7 +176,8 @@ namespace EDDiscovery.UserControls
             // labelExt1
             // 
             this.labelExt1.AutoSize = true;
-            this.labelExt1.Location = new System.Drawing.Point(3, 6);
+            this.labelExt1.Dock = System.Windows.Forms.DockStyle.Left;
+            this.labelExt1.Location = new System.Drawing.Point(0, 5);
             this.labelExt1.Name = "labelExt1";
             this.labelExt1.Size = new System.Drawing.Size(24, 13);
             this.labelExt1.TabIndex = 3;
@@ -190,7 +191,8 @@ namespace EDDiscovery.UserControls
             this.textMinRadius.BorderColorScaling = 0.5F;
             this.textMinRadius.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textMinRadius.ControlBackground = System.Drawing.SystemColors.Control;
-            this.textMinRadius.Location = new System.Drawing.Point(33, 3);
+            this.textMinRadius.Dock = System.Windows.Forms.DockStyle.Left;
+            this.textMinRadius.Location = new System.Drawing.Point(24, 5);
             this.textMinRadius.Multiline = false;
             this.textMinRadius.Name = "textMinRadius";
             this.textMinRadius.ReadOnly = false;
@@ -206,7 +208,8 @@ namespace EDDiscovery.UserControls
             // labelExt3
             // 
             this.labelExt3.AutoSize = true;
-            this.labelExt3.Location = new System.Drawing.Point(96, 6);
+            this.labelExt3.Dock = System.Windows.Forms.DockStyle.Left;
+            this.labelExt3.Location = new System.Drawing.Point(74, 5);
             this.labelExt3.Name = "labelExt3";
             this.labelExt3.Size = new System.Drawing.Size(27, 13);
             this.labelExt3.TabIndex = 3;
@@ -220,7 +223,8 @@ namespace EDDiscovery.UserControls
             this.textMaxRadius.BorderColorScaling = 0.5F;
             this.textMaxRadius.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textMaxRadius.ControlBackground = System.Drawing.SystemColors.Control;
-            this.textMaxRadius.Location = new System.Drawing.Point(129, 3);
+            this.textMaxRadius.Dock = System.Windows.Forms.DockStyle.Left;
+            this.textMaxRadius.Location = new System.Drawing.Point(101, 5);
             this.textMaxRadius.Multiline = false;
             this.textMaxRadius.Name = "textMaxRadius";
             this.textMaxRadius.ReadOnly = false;
@@ -233,31 +237,40 @@ namespace EDDiscovery.UserControls
             this.textMaxRadius.WordWrap = true;
             this.textMaxRadius.TextChanged += new System.EventHandler(this.textMaxRadius_TextChanged);
             // 
-            // panelTop
+            // rollUpPanel
             // 
-            this.panelTop.Controls.Add(this.labelExt1);
-            this.panelTop.Controls.Add(this.textMinRadius);
-            this.panelTop.Controls.Add(this.labelExt3);
-            this.panelTop.Controls.Add(this.textMaxRadius);
-            this.panelTop.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelTop.Location = new System.Drawing.Point(0, 0);
-            this.panelTop.Name = "panelTop";
-            this.panelTop.Size = new System.Drawing.Size(352, 31);
-            this.panelTop.TabIndex = 25;
+            this.rollUpPanel.Controls.Add(this.textMaxRadius);
+            this.rollUpPanel.Controls.Add(this.labelExt3);
+            this.rollUpPanel.Controls.Add(this.textMinRadius);
+            this.rollUpPanel.Controls.Add(this.labelExt1);
+            this.rollUpPanel.Dock = System.Windows.Forms.DockStyle.Top;
+            this.rollUpPanel.HiddenMarkerWidth = 0;
+            this.rollUpPanel.Location = new System.Drawing.Point(0, 0);
+            this.rollUpPanel.Name = "rollUpPanel";
+            this.rollUpPanel.Padding = new System.Windows.Forms.Padding(0, 5, 0, 3);
+            this.rollUpPanel.PinState = false;
+            this.rollUpPanel.RolledUpHeight = 5;
+            this.rollUpPanel.RollUpAnimationTime = 250;
+            this.rollUpPanel.RollUpDelay = 500;
+            this.rollUpPanel.ShowHiddenMarker = true;
+            this.rollUpPanel.Size = new System.Drawing.Size(352, 5);
+            this.rollUpPanel.TabIndex = 4;
+            this.rollUpPanel.UnrolledHeight = 32;
+            this.rollUpPanel.UnrollHoverDelay = 1000;
             // 
             // UserControlStarDistance
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.dataViewScrollerPanel2);
-            this.Controls.Add(this.panelTop);
+            this.Controls.Add(this.rollUpPanel);
             this.Name = "UserControlStarDistance";
             this.Size = new System.Drawing.Size(352, 572);
             this.closestContextMenu.ResumeLayout(false);
             this.dataViewScrollerPanel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewNearest)).EndInit();
-            this.panelTop.ResumeLayout(false);
-            this.panelTop.PerformLayout();
+            this.rollUpPanel.ResumeLayout(false);
+            this.rollUpPanel.PerformLayout();
             this.ResumeLayout(false);
 
         }               
@@ -276,6 +289,6 @@ namespace EDDiscovery.UserControls
         private ExtendedControls.TextBoxBorder textMinRadius;
         private System.Windows.Forms.Label labelExt3;
         private ExtendedControls.TextBoxBorder textMaxRadius;
-        private Panel panelTop;
+        private ExtendedControls.RollUpPanel rollUpPanel;
     }
 }
