@@ -69,6 +69,9 @@ namespace DirectInputDevices
 
             DeviceProperties p = stick.Properties;
 
+            jsi.VendorId = p.VendorId;
+            jsi.ProductId = p.ProductId;
+
             //   string s = p.PortDisplayName;
 
             System.Diagnostics.Debug.WriteLine("JOY {0} {1} but {2} pov {3}", jsi.Name, jsi.Productguid, butstate.Length, povvalue.Length);
@@ -256,7 +259,7 @@ namespace DirectInputDevices
 
         public override string ToString()
         {
-            return jsi.Name + ":" + jsi.Instanceguid + ":" + jsi.Productguid + ":" + butstate.Length + "," + povvalue.Length + "," + slidercount;
+            return jsi.Name + ":" + jsi.Instanceguid + ":" + jsi.Productguid + ":" + jsi.ProductId.ToString("x") + "," + jsi.VendorId.ToString("x") + ":" + butstate.Length + "," + povvalue.Length + "," + slidercount;
         }
 
         public static void CreateJoysticks(InputDeviceList ilist, bool axisevents)

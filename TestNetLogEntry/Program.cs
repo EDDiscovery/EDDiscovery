@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace NetLogEntry
 {
@@ -39,7 +40,7 @@ namespace NetLogEntry
 
             int repeatdelay = 0;
 
-            while(true) // read optional args
+            while (true) // read optional args
             {
                 string opt = (args.Left > 0) ? args[0] : null;
 
@@ -50,10 +51,10 @@ namespace NetLogEntry
                         repeatdelay = -1;
                         args.Remove();
                     }
-                    else if (opt.Equals("-repeat", StringComparison.InvariantCultureIgnoreCase) && args.Left>=1)
+                    else if (opt.Equals("-repeat", StringComparison.InvariantCultureIgnoreCase) && args.Left >= 1)
                     {
                         args.Remove();
-                        if ( !int.TryParse(args.Next,out repeatdelay))
+                        if (!int.TryParse(args.Next, out repeatdelay))
                         {
                             Console.WriteLine("Bad repeat delay\n");
                             return;
@@ -68,24 +69,23 @@ namespace NetLogEntry
 
             if (args.Left < 2)
             {
-                Console.WriteLine("Path [-keyrepeat]|[-repeat ms] CMDRname [options]\n" +
-                                  " Options: FSD name x y z\n" +
-                                  " Options: Loc name x y z\n" +
-                                  " Options: Interdiction name success isplayer combatrank faction power\n" +
-                                  " Options: Docked, Undocked, Touchdown, Liftoff, CommitCrime MissionCompleted MissionCompleted2 MiningRefined\n" +
-                                  " Options: ScanPlanet name\n" +
-                                  " Options: ScanStar NavBeaconScan ScanEarth SellShipOnRebuy SearchANdRescue MissionRedirected\n" +
-                                  " Options: RepairDrone CommunityGoal\n" +
-                                  " Options: MusicNormal MusicGalMap MusicSysMap\n" +
-                                  " Options: Friends Name\n" +
-                                  " Options: FuelScoop amount total\n" +
-                                  " Options: JetConeBoost\n" +
-                                  "Or EDDBSTARS <filename> or EDDBPLANETS or EDDBSTARNAMES for the eddb dump\n" +
-                                  "Or Phoneme <filename> <fileout> for EDDI phoneme tx\n" +
-                                  "Or Voicerecon <filename>" +
-                                  "Path = <pathto>Journal.<name>.log (example c:\\test\\Journal.test1.log)\n" +
-                                  "x y z = position as double\n" +
-                                  "A means auto mode, Space make a new system Return enters chatter\n"
+                Console.WriteLine("[-keyrepeat]|[-repeat ms]\n" +
+                                  "JournalPath CMDRname Options..\n" +
+                                  "     Options: FSD name x y z (x y z is position as double)\n" +
+                                  "     Options: Loc name x y z\n" +
+                                  "     Options: Interdiction name success isplayer combatrank faction power\n" +
+                                  "     Options: Docked, Undocked, Touchdown, Liftoff, CommitCrime MissionCompleted MissionCompleted2 MiningRefined\n" +
+                                  "     Options: ScanPlanet name\n" +
+                                  "     Options: ScanStar NavBeaconScan ScanEarth SellShipOnRebuy SearchANdRescue MissionRedirected\n" +
+                                  "     Options: RepairDrone CommunityGoal\n" +
+                                  "     Options: MusicNormal MusicGalMap MusicSysMap\n" +
+                                  "     Options: Friends Name\n" +
+                                  "     Options: FuelScoop amount total\n" +
+                                  "     Options: JetConeBoost\n" +
+                                  "EDDBSTARS <filename> or EDDBPLANETS or EDDBSTARNAMES for the eddb dump\n" +
+                                  "Phoneme <filename> <fileout> for EDDI phoneme tx\n" +
+                                  "Voicerecon <filename>\n" +
+                                  "DeviceMappings <filename>\n"
                                   );
                 return;
             }
@@ -116,6 +116,12 @@ namespace NetLogEntry
                 return;
             }
 
+            if (filename.Equals("devicemappings", StringComparison.InvariantCultureIgnoreCase))
+            {
+                DeviceMappings(cmdrname);
+                return;
+            }
+
 
             if (filename.Equals("Phoneme", StringComparison.InvariantCultureIgnoreCase) && args.Left == 1)
             {
@@ -132,8 +138,8 @@ namespace NetLogEntry
             JournalEntry(filename, cmdrname, args, repeatdelay);
         }
 
-        static void JournalEntry(string filename, string cmdrname , Args argsentry , int repeatdelay )
-        { 
+        static void JournalEntry(string filename, string cmdrname, Args argsentry, int repeatdelay)
+        {
             if (!File.Exists(filename))
             {
                 using (Stream fs = new FileStream(filename, FileMode.Create, FileAccess.Write, FileShare.ReadWrite))
@@ -318,7 +324,7 @@ namespace NetLogEntry
             Write(filename, line);
         }
 
-        static void FSDJump(Args args, string filename , int repeatcount)
+        static void FSDJump(Args args, string filename, int repeatcount)
         {
             if (args.Left < 4)
             {
@@ -534,7 +540,7 @@ namespace NetLogEntry
                             s = s.Substring(i + 7).Trim();
                             i = s.IndexOf(" ");
                             if (i >= 0)
-                                s = s.Substring(0,i);
+                                s = s.Substring(0, i);
                             if (!saydef.Contains(s))
                                 saydef.Add(s);
                         }
@@ -559,6 +565,69 @@ namespace NetLogEntry
                     Console.WriteLine(s);
                 }
             }
+        }
+
+
+        public static void DeviceMappings(string filename)
+        {
+            try
+            {
+                XElement bindings = XElement.Load(filename);
+
+                System.Diagnostics.Debug.WriteLine("Top " + bindings.NodeType + " " + bindings.Name);
+
+                Console.WriteLine("Dictionary<Tuple<int, int>, string> ctrls = new Dictionary<Tuple<int, int>, string>()" + Environment.NewLine + "{" + Environment.NewLine);
+
+                foreach (XElement x in bindings.Elements())
+                {
+                    string ctrltype = x.Name.LocalName;
+                    List<Tuple<int, int>> pv = new List<Tuple<int, int>>();
+
+                    int pid = 0;
+                    int vid = 0;
+
+                    int.TryParse(x.Element("PID").Value, System.Globalization.NumberStyles.AllowHexSpecifier, System.Globalization.CultureInfo.InvariantCulture, out pid);
+                    int.TryParse(x.Element("VID").Value, System.Globalization.NumberStyles.AllowHexSpecifier, System.Globalization.CultureInfo.InvariantCulture, out vid);
+
+                    pv.Add(new Tuple<int, int>(pid, vid));
+
+                    foreach (XElement y in x.Elements())
+                    {
+                        if (y.Name.LocalName.Equals("Alternative"))
+                        {
+                            int.TryParse(y.Element("PID").Value, System.Globalization.NumberStyles.AllowHexSpecifier, System.Globalization.CultureInfo.InvariantCulture, out pid);
+                            int.TryParse(y.Element("VID").Value, System.Globalization.NumberStyles.AllowHexSpecifier, System.Globalization.CultureInfo.InvariantCulture, out vid);
+
+                            pv.Add(new Tuple<int, int>(pid, vid));
+                        }
+                    }
+
+                    System.Diagnostics.Debug.WriteLine("Ctrl " + ctrltype);
+                    foreach (Tuple<int, int> v in pv)
+                        System.Diagnostics.Debug.WriteLine("  " + v.Item1.ToString("x") + " " + v.Item2.ToString("x"));
+
+                    foreach (Tuple<int, int> v in pv)
+                    {
+                        System.Diagnostics.Debug.WriteLine("  " + v.Item1.ToString("x") + " " + v.Item2.ToString("x"));
+                        Console.WriteLine("     {  new Tuple<int,int>(0x" + v.Item1.ToString("X") + ", 0x" + v.Item2.ToString("X") + "), \"" + ctrltype + "\" },");
+                    }
+                }
+
+                Console.WriteLine("};");
+            }
+
+            catch
+            {
+
+            }
+
+            //example..
+            Dictionary<Tuple<int, int>, string> ct2rls = new Dictionary<Tuple<int, int>, string>()
+            {
+                { new Tuple<int,int>(1,1), "Fred" },
+            };
+
+
         }
     }
 }

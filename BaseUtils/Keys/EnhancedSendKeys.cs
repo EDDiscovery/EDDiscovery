@@ -100,7 +100,7 @@ namespace BaseUtils
 
             while (s.Length > 0)
             {
-                if (additionalkeyparser != null)                               // at each major point
+                if (additionalkeyparser != null)                               // See if key needs translating out - moved to here to allow for control sequences before this key
                 {
                     Tuple<string, int, string> t = additionalkeyparser.Parse(s);      // Allow the parser to sniff the string
 
@@ -112,8 +112,6 @@ namespace BaseUtils
                         s = t.Item1 + " " + s.Substring(t.Item2);               // its the replace string, followed by the cut out current string
                     }
                 }
-
-                KMode kmd = KMode.press;
 
                 int d1 = -1, d2 = -1, d3 = -1;
 
@@ -146,6 +144,8 @@ namespace BaseUtils
                         return "Missing closing ] in delay";
                 }
 
+                KMode kmd = KMode.press;
+
                 if (s[0] == '^' || s[0] == '<')
                 {
                     kmd = KMode.up;
@@ -155,6 +155,19 @@ namespace BaseUtils
                 {
                     kmd = KMode.down;
                     s = s.Substring(1);
+                }
+
+                if (additionalkeyparser != null)                               // Also see here if key needs translating out - 9.0.3.0
+                {
+                    Tuple<string, int, string> t = additionalkeyparser.Parse(s);      // Allow the parser to sniff the string
+
+                    if (t.Item3 != null)                                        // error condition here, such as no matching key binding
+                        return t.Item3;
+
+                    if (t.Item1 != null)                                      // if replace.. (and the parser can return multiple keys)
+                    {
+                        s = t.Item1 + " " + s.Substring(t.Item2);               // its the replace string, followed by the cut out current string
+                    }
                 }
 
                 Keys shift = KeyObjectExtensions.IsShiftPrefix(ref s);

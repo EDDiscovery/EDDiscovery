@@ -25,6 +25,8 @@ namespace DirectInputDevices
     {
         public string Name;
         public Guid Instanceguid, Productguid;
+        public int VendorId;
+        public int ProductId;
     }
 
     public class InputDeviceEvent
