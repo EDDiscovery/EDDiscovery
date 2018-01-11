@@ -1138,10 +1138,8 @@ namespace EDDiscovery
             {
                 if (newRelease != null)
                 {
-                    NewReleaseForm frm = new NewReleaseForm();
-                    frm.release = newRelease;
-
-                    frm.ShowDialog(this);
+                    using (NewReleaseForm frm = new NewReleaseForm(newRelease))
+                        frm.ShowDialog(this);
                 }
             }
             else
@@ -1308,10 +1306,8 @@ namespace EDDiscovery
         {
             if (e.Button == MouseButtons.Left && newRelease != null)
             {
-                NewReleaseForm frm = new NewReleaseForm();
-                frm.release = newRelease;
-
-                frm.ShowDialog(this);
+                using (NewReleaseForm frm = new NewReleaseForm(newRelease))
+                    frm.ShowDialog(this);
             }
             else
             {
