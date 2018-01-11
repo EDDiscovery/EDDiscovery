@@ -119,13 +119,15 @@ namespace ExtendedControls
 
                             if (AllowResize)
                             {
-                                mmi.ptMaxSize.X = wa.Width;
-                                mmi.ptMaxSize.Y = wa.Height;
-
                                 if (!this.MaximumSize.IsEmpty)
                                 {
-                                    mmi.ptMaxTrackSize.X = this.MaximumSize.Width;
-                                    mmi.ptMaxTrackSize.Y = this.MaximumSize.Height;
+                                    mmi.ptMaxSize.X = mmi.ptMaxTrackSize.X = this.MaximumSize.Width;
+                                    mmi.ptMaxSize.Y = mmi.ptMaxTrackSize.Y = this.MaximumSize.Height;
+                                }
+                                else
+                                {
+                                    mmi.ptMaxSize.X = wa.Width;
+                                    mmi.ptMaxSize.Y = wa.Height;
                                 }
 
                                 if (!this.MinimumSize.IsEmpty)
