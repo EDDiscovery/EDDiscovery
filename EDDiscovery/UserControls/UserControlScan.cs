@@ -92,7 +92,7 @@ namespace EDDiscovery.UserControls
         public override Color ColorTransparency { get { return transparencycolor; } }
         public override void SetTransparency(bool on, Color curcol)
         {
-            imagebox.BackColor = this.BackColor = panelStars.BackColor = panelStars.vsc.SliderColor = panelStars.vsc.BackColor = panelControls.BackColor = curcol;
+            imagebox.BackColor = this.BackColor = panelStars.BackColor = panelStars.vsc.SliderColor = panelStars.vsc.BackColor = rollUpPanel.BackColor = curcol;
         }
 
         private void UserControlScan_Resize(object sender, EventArgs e)
@@ -742,12 +742,7 @@ namespace EDDiscovery.UserControls
                 DrawSystem();
             }
         }
-
-        private void toolStripMenuItemToolbar_Click(object sender, EventArgs e)
-        {
-            panelControls.Visible = !panelControls.Visible;
-        }
-
+        
         void ShowInfo(string text, bool onright)
         {
             rtbNodeInfo.Text = text;

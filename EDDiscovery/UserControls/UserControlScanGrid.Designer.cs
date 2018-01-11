@@ -54,8 +54,11 @@ namespace EDDiscovery.UserControls
             this.colBriefing = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.vScrollBarCustom2 = new ExtendedControls.VScrollBarCustom();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.rollUpPanel = new ExtendedControls.RollUpPanel();
+            this.labelTotalValue = new System.Windows.Forms.Label();
             this.dataViewScrollerPanel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewScangrid)).BeginInit();
+            this.rollUpPanel.SuspendLayout();
             this.SuspendLayout();
             // 
             // dataViewScrollerPanel2
@@ -64,10 +67,10 @@ namespace EDDiscovery.UserControls
             this.dataViewScrollerPanel2.Controls.Add(this.vScrollBarCustom2);
             this.dataViewScrollerPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataViewScrollerPanel2.InternalMargin = new System.Windows.Forms.Padding(0);
-            this.dataViewScrollerPanel2.Location = new System.Drawing.Point(0, 0);
+            this.dataViewScrollerPanel2.Location = new System.Drawing.Point(0, 32);
             this.dataViewScrollerPanel2.Name = "dataViewScrollerPanel2";
             this.dataViewScrollerPanel2.ScrollBarWidth = 20;
-            this.dataViewScrollerPanel2.Size = new System.Drawing.Size(572, 572);
+            this.dataViewScrollerPanel2.Size = new System.Drawing.Size(572, 540);
             this.dataViewScrollerPanel2.TabIndex = 25;
             this.dataViewScrollerPanel2.VerticalScrollBarDockRight = true;
             // 
@@ -93,7 +96,6 @@ namespace EDDiscovery.UserControls
             dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
             dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
             this.dataGridViewScangrid.DefaultCellStyle = dataGridViewCellStyle1;
-            this.dataGridViewScangrid.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataGridViewScangrid.Location = new System.Drawing.Point(0, 0);
             this.dataGridViewScangrid.Name = "dataGridViewScangrid";
             this.dataGridViewScangrid.ReadOnly = true;
@@ -101,7 +103,7 @@ namespace EDDiscovery.UserControls
             this.dataGridViewScangrid.RowTemplate.Height = 36;
             this.dataGridViewScangrid.RowTemplate.ReadOnly = true;
             this.dataGridViewScangrid.ScrollBars = System.Windows.Forms.ScrollBars.None;
-            this.dataGridViewScangrid.Size = new System.Drawing.Size(552, 572);
+            this.dataGridViewScangrid.Size = new System.Drawing.Size(552, 540);
             this.dataGridViewScangrid.TabIndex = 23;
             this.dataGridViewScangrid.RowPostPaint += new System.Windows.Forms.DataGridViewRowPostPaintEventHandler(this.dataGridViewScangrid_RowPostPaint);
             // 
@@ -164,7 +166,7 @@ namespace EDDiscovery.UserControls
             this.vScrollBarCustom2.MouseOverButtonColor = System.Drawing.Color.Green;
             this.vScrollBarCustom2.MousePressedButtonColor = System.Drawing.Color.Red;
             this.vScrollBarCustom2.Name = "vScrollBarCustom2";
-            this.vScrollBarCustom2.Size = new System.Drawing.Size(20, 551);
+            this.vScrollBarCustom2.Size = new System.Drawing.Size(20, 519);
             this.vScrollBarCustom2.SliderColor = System.Drawing.Color.DarkGray;
             this.vScrollBarCustom2.SmallChange = 1;
             this.vScrollBarCustom2.TabIndex = 24;
@@ -176,15 +178,45 @@ namespace EDDiscovery.UserControls
             this.vScrollBarCustom2.Value = -1;
             this.vScrollBarCustom2.ValueLimited = -1;
             // 
+            // rollUpPanel
+            // 
+            this.rollUpPanel.Controls.Add(this.labelTotalValue);
+            this.rollUpPanel.Dock = System.Windows.Forms.DockStyle.Top;
+            this.rollUpPanel.HiddenMarkerWidth = 0;
+            this.rollUpPanel.Location = new System.Drawing.Point(0, 0);
+            this.rollUpPanel.Name = "rollUpPanel";
+            this.rollUpPanel.PinState = true;
+            this.rollUpPanel.RolledUpHeight = 5;
+            this.rollUpPanel.RollUpAnimationTime = 250;
+            this.rollUpPanel.RollUpDelay = 500;
+            this.rollUpPanel.ShowHiddenMarker = true;
+            this.rollUpPanel.Size = new System.Drawing.Size(572, 32);
+            this.rollUpPanel.TabIndex = 25;
+            this.rollUpPanel.UnrolledHeight = 32;
+            this.rollUpPanel.UnrollHoverDelay = 500;
+            // 
+            // labelTotalValue
+            // 
+            this.labelTotalValue.AutoSize = true;
+            this.labelTotalValue.Dock = System.Windows.Forms.DockStyle.Right;
+            this.labelTotalValue.Location = new System.Drawing.Point(572, 0);
+            this.labelTotalValue.Name = "labelTotalValue";
+            this.labelTotalValue.Padding = new System.Windows.Forms.Padding(0, 5, 0, 0);
+            this.labelTotalValue.Size = new System.Drawing.Size(0, 18);
+            this.labelTotalValue.TabIndex = 2;
+            // 
             // UserControlScanGrid
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.dataViewScrollerPanel2);
+            this.Controls.Add(this.rollUpPanel);
             this.Name = "UserControlScanGrid";
             this.Size = new System.Drawing.Size(572, 572);
             this.dataViewScrollerPanel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewScangrid)).EndInit();
+            this.rollUpPanel.ResumeLayout(false);
+            this.rollUpPanel.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -199,5 +231,7 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.DataGridViewTextBoxColumn colClass;
         private System.Windows.Forms.DataGridViewTextBoxColumn Distance;
         private System.Windows.Forms.DataGridViewTextBoxColumn colBriefing;
+        private ExtendedControls.RollUpPanel rollUpPanel;
+        private System.Windows.Forms.Label labelTotalValue;
     }
 }
