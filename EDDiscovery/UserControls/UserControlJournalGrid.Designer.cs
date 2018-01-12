@@ -65,7 +65,7 @@ namespace EDDiscovery.UserControls
             this.drawnPanelPopOut = new ExtendedControls.DrawnPanel();
             this.buttonField = new ExtendedControls.ButtonExt();
             this.textBoxFilter = new ExtendedControls.TextBoxBorder();
-            this.label1 = new System.Windows.Forms.Label();
+            this.lblSearch = new System.Windows.Forms.Label();
             this.buttonFilter = new ExtendedControls.ButtonExt();
             this.comboBoxJournalWindow = new ExtendedControls.ComboBoxCustom();
             this.labelTime = new System.Windows.Forms.Label();
@@ -235,7 +235,7 @@ namespace EDDiscovery.UserControls
             this.panel1.Controls.Add(this.drawnPanelPopOut);
             this.panel1.Controls.Add(this.buttonField);
             this.panel1.Controls.Add(this.textBoxFilter);
-            this.panel1.Controls.Add(this.label1);
+            this.panel1.Controls.Add(this.lblSearch);
             this.panel1.Controls.Add(this.buttonFilter);
             this.panel1.Controls.Add(this.comboBoxJournalWindow);
             this.panel1.Controls.Add(this.labelTime);
@@ -265,9 +265,6 @@ namespace EDDiscovery.UserControls
             // 
             // buttonExtExcel
             // 
-            this.buttonExtExcel.BorderColorScaling = 1.25F;
-            this.buttonExtExcel.ButtonColorScaling = 0.5F;
-            this.buttonExtExcel.ButtonDisabledScaling = 0.5F;
             this.buttonExtExcel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonExtExcel.Image = global::EDDiscovery.Properties.Resources.excel;
             this.buttonExtExcel.Location = new System.Drawing.Point(606, 4);
@@ -300,9 +297,6 @@ namespace EDDiscovery.UserControls
             // 
             // buttonField
             // 
-            this.buttonField.BorderColorScaling = 1.25F;
-            this.buttonField.ButtonColorScaling = 0.5F;
-            this.buttonField.ButtonDisabledScaling = 0.5F;
             this.buttonField.Location = new System.Drawing.Point(525, 3);
             this.buttonField.Name = "buttonField";
             this.buttonField.Size = new System.Drawing.Size(75, 23);
@@ -333,20 +327,17 @@ namespace EDDiscovery.UserControls
             this.textBoxFilter.WordWrap = true;
             this.textBoxFilter.TextChanged += new System.EventHandler(this.textBoxFilter_TextChanged);
             // 
-            // label1
+            // lblSearch
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(220, 7);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(41, 13);
-            this.label1.TabIndex = 24;
-            this.label1.Text = "Search";
+            this.lblSearch.AutoSize = true;
+            this.lblSearch.Location = new System.Drawing.Point(220, 7);
+            this.lblSearch.Name = "lblSearch";
+            this.lblSearch.Size = new System.Drawing.Size(41, 13);
+            this.lblSearch.TabIndex = 24;
+            this.lblSearch.Text = "Search";
             // 
             // buttonFilter
             // 
-            this.buttonFilter.BorderColorScaling = 1.25F;
-            this.buttonFilter.ButtonColorScaling = 0.5F;
-            this.buttonFilter.ButtonDisabledScaling = 0.5F;
             this.buttonFilter.Location = new System.Drawing.Point(444, 3);
             this.buttonFilter.Name = "buttonFilter";
             this.buttonFilter.Size = new System.Drawing.Size(75, 23);
@@ -423,7 +414,7 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.DataGridView dataGridViewJournal;
         private System.Windows.Forms.Panel panel1;
         private ExtendedControls.TextBoxBorder textBoxFilter;
-        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label lblSearch;
         private ExtendedControls.ButtonExt buttonFilter;
         private ExtendedControls.ComboBoxCustom comboBoxJournalWindow;
         private System.Windows.Forms.Label labelTime;

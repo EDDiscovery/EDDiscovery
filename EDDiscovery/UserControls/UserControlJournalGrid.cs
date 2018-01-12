@@ -27,6 +27,7 @@ using EliteDangerousCore.EDSM;
 using EliteDangerousCore.EDDN;
 using EliteDangerousCore.DB;
 using EliteDangerousCore;
+using System.Threading;
 
 namespace EDDiscovery.UserControls
 {
@@ -85,7 +86,7 @@ namespace EDDiscovery.UserControls
             if (filter.Length > 0)
                 fieldfilter.FromJSON(filter);        // load filter
 
-            ExtraIcons(false,false);
+            ExtraIcons(false, false);
 
             discoveryform.OnHistoryChange += Display;
             discoveryform.OnNewEntry += AddNewEntry;
@@ -150,7 +151,7 @@ namespace EDDiscovery.UserControls
 
             StaticFilters.FilterGridView(dataGridViewJournal, textBoxFilter.Text);
 
-            int rowno = FindGridPosByJID(pos.Item1,true);
+            int rowno = FindGridPosByJID(pos.Item1, true);
 
             if (rowno >= 0)
             {
@@ -183,7 +184,7 @@ namespace EDDiscovery.UserControls
             else
             {
                 rownr = dataGridViewJournal.Rows.Add(rw);
-            }   
+            }
 
             rowsbyjournalid[item.Journalid] = dataGridViewJournal.Rows[rownr];
         }
@@ -230,7 +231,7 @@ namespace EDDiscovery.UserControls
             }
         }
 
-	    #endregion
+        #endregion
 
         #region Buttons
 
@@ -246,15 +247,51 @@ namespace EDDiscovery.UserControls
             Display(current_historylist);
         }
 
+        private const int SEARCH_DELAY_MS = 750;
+        private System.Threading.Timer _delayedSearchTimer;
+
         private void textBoxFilter_TextChanged(object sender, EventArgs e)
         {
-            Tuple<long, int> pos = CurrentGridPosByJID();
+            if (_delayedSearchTimer == null) //first search, init the timer
+            {
+                _delayedSearchTimer = new System.Threading.Timer(PerformSearch, null, Timeout.Infinite, 0);
+            }
 
-            StaticFilters.FilterGridView(dataGridViewJournal, textBoxFilter.Text);
+            //start the timer ready to search in a little while.
+            _delayedSearchTimer.Change(SEARCH_DELAY_MS, SEARCH_DELAY_MS);
 
-            int rowno = FindGridPosByJID(pos.Item1,true);
-            if (rowno >= 0)
-                dataGridViewJournal.CurrentCell = dataGridViewJournal.Rows[rowno].Cells[pos.Item2];       // its the current cell which needs to be set, moves the row marker as well            currentGridRow = (rowno!=-1) ? 
+        }
+
+        private void PerformSearch(object _)
+        {
+            // We're not disposing of the timer in the control Dispose.  Given the small window in which the form would have to be closed with an undisposed timer, 
+            // getting the locking right to prevent double-dispose attempts etc feels like the bigger problem atm.  Revisit this if we start seeing undisposed timers in the 
+            // mem-dumps.
+            _delayedSearchTimer.Dispose();
+            _delayedSearchTimer = null;
+
+            BeginInvoke(new Action(() =>
+            {
+                lblSearch.Text = "Searching...";
+                Application.DoEvents();
+
+                try
+                {
+                    Tuple<long, int> pos = CurrentGridPosByJID();
+
+                    StaticFilters.FilterGridView(dataGridViewJournal, textBoxFilter.Text);
+
+                    int rowno = FindGridPosByJID(pos.Item1, true);
+                    if (rowno >= 0)
+                        dataGridViewJournal.CurrentCell = dataGridViewJournal.Rows[rowno].Cells[pos.Item2];       // its the current cell which needs to be set, moves the row marker as well            currentGridRow = (rowno!=-1) ? 
+                }
+                finally
+                {
+                    lblSearch.Text = "Search";
+                }
+
+
+            }));
         }
 
         private void comboBoxJournalWindow_SelectedIndexChanged(object sender, EventArgs e)
@@ -277,7 +314,7 @@ namespace EDDiscovery.UserControls
             Conditions.ConditionFilterForm frm = new Conditions.ConditionFilterForm();
             frm.InitFilter("Journal: Filter out fields",
                             Icon.ExtractAssociatedIcon(System.Reflection.Assembly.GetExecutingAssembly().Location),
-                            JournalEntry.GetListOfEventsWithOptMethod(false) ,
+                            JournalEntry.GetListOfEventsWithOptMethod(false),
                             (s) => { return BaseUtils.FieldNames.GetPropertyFieldNames(JournalEntry.TypeOfJournalEntry(s)); },
                             discoveryform.Globals.NameList, fieldfilter);
             if (frm.ShowDialog(this.FindForm()) == DialogResult.OK)
