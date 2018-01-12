@@ -36,6 +36,7 @@
             this.listControlCustom2 = new ExtendedControls.ListControlCustom();
             this.listBox1 = new System.Windows.Forms.ListBox();
             this.listControlCustom3 = new ExtendedControls.ListControlCustom();
+            this.tabStrip2 = new ExtendedControls.TabStrip();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -51,18 +52,26 @@
             // tabStrip1
             // 
             this.tabStrip1.BackColor = System.Drawing.SystemColors.ActiveCaption;
+            this.tabStrip1.DropDownBackgroundColor = System.Drawing.Color.Gray;
+            this.tabStrip1.DropDownBorderColor = System.Drawing.Color.Green;
+            this.tabStrip1.DropDownHeight = 200;
+            this.tabStrip1.DropDownMouseOverBackgroundColor = System.Drawing.Color.Red;
+            this.tabStrip1.DropDownScrollBarButtonColor = System.Drawing.Color.LightGray;
+            this.tabStrip1.DropDownScrollBarColor = System.Drawing.Color.LightGray;
+            this.tabStrip1.DropDownWidth = 400;
             this.tabStrip1.Location = new System.Drawing.Point(3, 3);
             this.tabStrip1.Name = "tabStrip1";
             this.tabStrip1.SelectedIndex = -1;
             this.tabStrip1.ShowPopOut = true;
             this.tabStrip1.Size = new System.Drawing.Size(484, 96);
+            this.tabStrip1.StripMode = ExtendedControls.TabStrip.StripModeType.StripTop;
             this.tabStrip1.TabIndex = 0;
             // 
             // listView1
             // 
             this.listView1.CheckBoxes = true;
             this.listView1.GridLines = true;
-            this.listView1.Location = new System.Drawing.Point(45, 179);
+            this.listView1.Location = new System.Drawing.Point(45, 337);
             this.listView1.Name = "listView1";
             this.listView1.Size = new System.Drawing.Size(341, 190);
             this.listView1.TabIndex = 1;
@@ -78,7 +87,7 @@
             this.listControlCustom1.ImageItems = null;
             this.listControlCustom1.ItemHeight = 20;
             this.listControlCustom1.Items = ((System.Collections.Generic.List<string>)(resources.GetObject("listControlCustom1.Items")));
-            this.listControlCustom1.Location = new System.Drawing.Point(587, 179);
+            this.listControlCustom1.Location = new System.Drawing.Point(587, 337);
             this.listControlCustom1.MouseOverBackgroundColor = System.Drawing.Color.Silver;
             this.listControlCustom1.Name = "listControlCustom1";
             this.listControlCustom1.ScrollBarButtonColor = System.Drawing.Color.LightGray;
@@ -99,7 +108,7 @@
             this.listControlCustom2.ImageItems = null;
             this.listControlCustom2.ItemHeight = 20;
             this.listControlCustom2.Items = ((System.Collections.Generic.List<string>)(resources.GetObject("listControlCustom2.Items")));
-            this.listControlCustom2.Location = new System.Drawing.Point(678, 179);
+            this.listControlCustom2.Location = new System.Drawing.Point(678, 337);
             this.listControlCustom2.MouseOverBackgroundColor = System.Drawing.Color.Silver;
             this.listControlCustom2.Name = "listControlCustom2";
             this.listControlCustom2.ScrollBarButtonColor = System.Drawing.Color.LightGray;
@@ -116,7 +125,7 @@
             this.listBox1.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
             this.listBox1.FormattingEnabled = true;
             this.listBox1.ItemHeight = 30;
-            this.listBox1.Location = new System.Drawing.Point(430, 179);
+            this.listBox1.Location = new System.Drawing.Point(430, 337);
             this.listBox1.Name = "listBox1";
             this.listBox1.Size = new System.Drawing.Size(134, 154);
             this.listBox1.TabIndex = 3;
@@ -131,7 +140,7 @@
             this.listControlCustom3.ImageItems = null;
             this.listControlCustom3.ItemHeight = 26;
             this.listControlCustom3.Items = ((System.Collections.Generic.List<string>)(resources.GetObject("listControlCustom3.Items")));
-            this.listControlCustom3.Location = new System.Drawing.Point(769, 179);
+            this.listControlCustom3.Location = new System.Drawing.Point(769, 337);
             this.listControlCustom3.MouseOverBackgroundColor = System.Drawing.Color.Silver;
             this.listControlCustom3.Name = "listControlCustom3";
             this.listControlCustom3.ScrollBarButtonColor = System.Drawing.Color.LightGray;
@@ -143,11 +152,31 @@
             this.listControlCustom3.TabIndex = 2;
             this.listControlCustom3.Text = "listControlCustom1";
             // 
+            // tabStrip2
+            // 
+            this.tabStrip2.BackColor = System.Drawing.SystemColors.ActiveCaption;
+            this.tabStrip2.DropDownBackgroundColor = System.Drawing.Color.Gray;
+            this.tabStrip2.DropDownBorderColor = System.Drawing.Color.Green;
+            this.tabStrip2.DropDownHeight = 200;
+            this.tabStrip2.DropDownMouseOverBackgroundColor = System.Drawing.Color.Red;
+            this.tabStrip2.DropDownScrollBarButtonColor = System.Drawing.Color.LightGray;
+            this.tabStrip2.DropDownScrollBarColor = System.Drawing.Color.LightGray;
+            this.tabStrip2.DropDownWidth = 400;
+            this.tabStrip2.Location = new System.Drawing.Point(45, 195);
+            this.tabStrip2.Name = "tabStrip2";
+            this.tabStrip2.SelectedIndex = -1;
+            this.tabStrip2.ShowPopOut = true;
+            this.tabStrip2.Size = new System.Drawing.Size(484, 96);
+            this.tabStrip2.StripMode = ExtendedControls.TabStrip.StripModeType.StripTop;
+            this.tabStrip2.TabFieldSpacing = 8;
+            this.tabStrip2.TabIndex = 1;
+            // 
             // TestTabStrip
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(926, 546);
+            this.Controls.Add(this.tabStrip2);
             this.Controls.Add(this.listBox1);
             this.Controls.Add(this.listControlCustom2);
             this.Controls.Add(this.listControlCustom3);
@@ -155,7 +184,7 @@
             this.Controls.Add(this.listView1);
             this.Controls.Add(this.panel1);
             this.Name = "TestTabStrip";
-            this.Text = "TestTabControl";
+            this.Text = "TestTabStrip";
             this.panel1.ResumeLayout(false);
             this.ResumeLayout(false);
 
@@ -170,5 +199,6 @@
         private ExtendedControls.ListControlCustom listControlCustom2;
         private System.Windows.Forms.ListBox listBox1;
         private ExtendedControls.ListControlCustom listControlCustom3;
+        private ExtendedControls.TabStrip tabStrip2;
     }
 }
