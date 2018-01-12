@@ -91,6 +91,8 @@ namespace EDDiscovery.UserControls
 
         EventFilterSelector cfs = new EventFilterSelector();
 
+        Timer searchtimer;
+
         public UserControlTravelGrid()
         {
             InitializeComponent();
@@ -118,6 +120,9 @@ namespace EDDiscovery.UserControls
 
             ExtraIcons(false,false);
 
+            searchtimer = new Timer() { Interval = 500 };
+            searchtimer.Tick += Searchtimer_Tick;
+
             discoveryform.OnHistoryChange += HistoryChanged;
             discoveryform.OnNewEntry += AddNewEntry;
             discoveryform.OnNoteChanged += OnNoteChanged;
@@ -141,6 +146,7 @@ namespace EDDiscovery.UserControls
             discoveryform.OnHistoryChange -= HistoryChanged;
             discoveryform.OnNewEntry -= AddNewEntry;
             SQLiteConnectionUser.PutSettingBool(DbAutoTop, checkBoxMoveToTop.Checked);
+            searchtimer.Dispose();
         }
 
         #endregion
@@ -395,15 +401,30 @@ namespace EDDiscovery.UserControls
             }
         }
 
+
         private void textBoxFilter_TextChanged(object sender, EventArgs e)
         {
+            searchtimer.Stop();
+            searchtimer.Start();
+            //System.Diagnostics.Debug.WriteLine(Environment.TickCount % 10000 + "Char");
+        }
+
+        private void Searchtimer_Tick(object sender, EventArgs e)
+        {
+            searchtimer.Stop();
+            this.Cursor = Cursors.WaitCursor;
+
+            //System.Diagnostics.Debug.WriteLine(Environment.TickCount % 10000 + "Searching");
             Tuple<long, int> pos = CurrentGridPosByJID();
 
             StaticFilters.FilterGridView(dataGridViewTravel, textBoxFilter.Text);
 
-            int rowno = FindGridPosByJID(pos.Item1,true);
+            int rowno = FindGridPosByJID(pos.Item1, true);
             if (rowno >= 0)
                 dataGridViewTravel.CurrentCell = dataGridViewTravel.Rows[rowno].Cells[pos.Item2];
+
+            this.Cursor = Cursors.Default;
+            //System.Diagnostics.Debug.WriteLine(Environment.TickCount % 10000 + "Complete");
         }
 
         private void dataGridViewTravel_RowPostPaint(object sender, DataGridViewRowPostPaintEventArgs e)
