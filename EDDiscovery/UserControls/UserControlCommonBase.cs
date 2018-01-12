@@ -82,6 +82,8 @@ namespace EDDiscovery.UserControls
                 ((ExtendedControls.TabStrip)(this.Parent)).SetControlText(s);
             else if (this.Parent is Forms.UserControlForm)
                 ((Forms.UserControlForm)(this.Parent)).SetControlText(s);
+            else if (this.Parent is UserControlContainerResizable)
+                ((UserControlContainerResizable)(this.Parent)).SetControlText(s);
         }
 
         public bool IsTransparent
