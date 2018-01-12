@@ -210,7 +210,7 @@ namespace ExtendedControls
                             Opacity = (wp - SC_OPACITYSUBMENU) / 10f;
                         else if (wp >= SC_ADDITIONALMENU && AdditionalSysMenus != null && wp < SC_ADDITIONALMENU + AdditionalSysMenus.Count)
                             AdditionalSysMenuSelected?.Invoke(wp - SC_ADDITIONALMENU);
-                        else if (m.WParam == (IntPtr)SC.KEYMENU && (CreateParams.Style & WS.SYSMENU) == 0 && (CreateParams.Style & WS.CAPTION) == 0)
+                        else if (m.WParam == (IntPtr)SC.KEYMENU && m.LParam == (IntPtr)' ' && (CreateParams.Style & WS.SYSMENU) == 0 && (CreateParams.Style & WS.CAPTION) == 0)
                             ShowSystemMenu(PointToScreen(new Point(5, 5)));
                         else if (!AllowResize && (m.WParam == (IntPtr)SC.MAXIMIZE || m.WParam == (IntPtr)SC.SIZE || m.WParam == (IntPtr)SC.RESTORE))
                             return;     // Access Denied.
