@@ -51,7 +51,7 @@ namespace ExtendedControls
             this.panelArrowRight = new System.Windows.Forms.Panel();
             this.panelArrowLeft = new System.Windows.Forms.Panel();
             this.panelSelectedIcon = new System.Windows.Forms.Panel();
-            this.labelCurrent = new System.Windows.Forms.Label();
+            this.labelTitle = new System.Windows.Forms.Label();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.toolStripMenuItemPopOut = new System.Windows.Forms.ToolStripMenuItem();
@@ -67,7 +67,7 @@ namespace ExtendedControls
             this.panelStrip.Controls.Add(this.panelArrowRight);
             this.panelStrip.Controls.Add(this.panelArrowLeft);
             this.panelStrip.Controls.Add(this.panelSelectedIcon);
-            this.panelStrip.Controls.Add(this.labelCurrent);
+            this.panelStrip.Controls.Add(this.labelTitle);
             this.panelStrip.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.panelStrip.Location = new System.Drawing.Point(0, 322);
             this.panelStrip.Name = "panelStrip";
@@ -154,14 +154,14 @@ namespace ExtendedControls
             // 
             // labelCurrent
             // 
-            this.labelCurrent.AutoSize = true;
-            this.labelCurrent.Location = new System.Drawing.Point(33, 8);
-            this.labelCurrent.Name = "labelCurrent";
-            this.labelCurrent.Size = new System.Drawing.Size(92, 13);
-            this.labelCurrent.TabIndex = 0;
-            this.labelCurrent.Text = "Tab Strip Control..";
-            this.labelCurrent.MouseEnter += new System.EventHandler(this.MouseEnterPanelObjects);
-            this.labelCurrent.MouseLeave += new System.EventHandler(this.MouseLeavePanelObjects);
+            this.labelTitle.AutoSize = true;
+            this.labelTitle.Location = new System.Drawing.Point(33, 8);
+            this.labelTitle.Name = "labelCurrent";
+            this.labelTitle.Size = new System.Drawing.Size(92, 13);
+            this.labelTitle.TabIndex = 0;
+            this.labelTitle.Text = "Tab Strip Control..";
+            this.labelTitle.MouseEnter += new System.EventHandler(this.MouseEnterPanelObjects);
+            this.labelTitle.MouseLeave += new System.EventHandler(this.MouseLeavePanelObjects);
             // 
             // toolTip1
             // 
@@ -200,7 +200,7 @@ namespace ExtendedControls
         #endregion
 
         private System.Windows.Forms.Panel panelStrip;
-        private System.Windows.Forms.Label labelCurrent;
+        private System.Windows.Forms.Label labelTitle;
         private System.Windows.Forms.Panel panelSelectedIcon;
         private System.Windows.Forms.ToolTip toolTip1;
         private System.Windows.Forms.Panel panelArrowRight;

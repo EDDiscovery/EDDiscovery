@@ -41,10 +41,27 @@ namespace DialogTest
                 "icon 18", "icon 19",
             };
 
-            tabStrip1.StripMode = ExtendedControls.TabStrip.StripModeType.StripTop; //.ListSelection;
-            //tabStrip1.StripMode = ExtendedControls.TabStrip.StripModeType.ListSelection;
+            tabStrip2.ImageList = new Bitmap[] {
+                DialogTest.Properties.Resources.galaxy_red,
+                DialogTest.Properties.Resources.galaxy_gray,
+                DialogTest.Properties.Resources.galaxy_gray,
+                DialogTest.Properties.Resources.galaxy_white,
+                DialogTest.Properties.Resources.galaxy_gray,
+                DialogTest.Properties.Resources.galaxy_white,
+                                            };
+            tabStrip2.TextList = new string[] { "icon 0", "icon 1",
+                "icon 2", "icon 3",
+                "icon 4", "icon 5",
+            };
+
+            bool mode = false;
+            ExtendedControls.TabStrip.StripModeType mt = mode ? ExtendedControls.TabStrip.StripModeType.StripTop : ExtendedControls.TabStrip.StripModeType.ListSelection;
+
+            tabStrip1.StripMode = mt; //.ListSelection;
+            tabStrip2.StripMode = mt;
 
             tabStrip1.OnCreateTab += TabStrip1_OnCreateTab;
+            tabStrip2.OnCreateTab += TabStrip1_OnCreateTab;
 
             ListViewItem item1 = new ListViewItem("item1", 0);
             // Place a check mark next to the item.
@@ -118,7 +135,7 @@ namespace DialogTest
             uc.Name = "UC " + no;
             uc.Dock = DockStyle.Fill;
             uc.Controls.Add(lb);
-            tabStrip1.SetControlText("<" + uc.Name + ">");
+            tabStrip1.SetControlText("CT<" + uc.Name + ">");
             return uc;
         }
 
