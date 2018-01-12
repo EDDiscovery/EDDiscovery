@@ -26,6 +26,18 @@ namespace BaseUtils.Win32Constants
     public static class CS
     {
         /// <summary>
+        /// CS_VREDRAW: Redraws the entire window if a movement or size adjustment changes the height of the client
+        /// area.
+        /// </summary>
+        public const int VREDRAW = 0x0001;
+
+        /// <summary>
+        /// CS_HREDRAW: Redraws the entire window if a movement or size adjustment changes the width of the client
+        /// area.
+        /// </summary>
+        public const int HREDRAW = 0x0002;
+
+        /// <summary>
         /// CS_DBLCLKS: Sends a double-click message to the window procedure when the user double-clicks the mouse
         /// while the cursor is within a window belonging to the class. Also allows for minimize/restore operations
         /// when clicking a <see cref="System.Windows.Forms.Form"/>'s TaskBar icon.
@@ -583,6 +595,7 @@ namespace BaseUtils.Win32Constants
         /// default minimum or maximum tracking size. wParam is not used, while lParam is a pointer to a
         /// <see cref="Win32.UnsafeNativeMethods.MINMAXINFO"/> struct.
         /// </summary>
+        /// <seealso href="https://msdn.microsoft.com/en-us/library/windows/desktop/ms632626(v=vs.85).aspx"/>
         public const int GETMINMAXINFO = 0x0024;
 
         /// <summary>

@@ -105,9 +105,9 @@ namespace ExtendedControls
 
             switch (m.Msg)
             {
-                case WM.GETMINMAXINFO:  // Don't overlap the taskbar when maximizing without a windows border.
+                case WM.GETMINMAXINFO:  // Set form min/max sizes when not using a windows border.
                     {
-                        if (m.LParam != IntPtr.Zero && !windowsborder && AllowResize)
+                        if (m.LParam != IntPtr.Zero && Environment.OSVersion.Platform == PlatformID.Win32NT && !windowsborder)
                         {
                             var sc = Screen.FromControl(this);
                             var scb = sc.Bounds;
@@ -117,8 +117,35 @@ namespace ExtendedControls
                             mmi.ptMaxPosition.X = wa.Left - scb.Left;
                             mmi.ptMaxPosition.Y = wa.Top - scb.Top;
 
-                            mmi.ptMaxSize.X = wa.Width;
-                            mmi.ptMaxSize.Y = wa.Height;
+                            if (AllowResize)
+                            {
+                                if (!this.MaximumSize.IsEmpty)
+                                {
+                                    mmi.ptMaxSize.X = mmi.ptMaxTrackSize.X = this.MaximumSize.Width;
+                                    mmi.ptMaxSize.Y = mmi.ptMaxTrackSize.Y = this.MaximumSize.Height;
+                                }
+                                else
+                                {
+                                    mmi.ptMaxSize.X = wa.Width;
+                                    mmi.ptMaxSize.Y = wa.Height;
+                                }
+
+                                if (!this.MinimumSize.IsEmpty)
+                                {
+                                    mmi.ptMinTrackSize.X = this.MinimumSize.Width;
+                                    mmi.ptMinTrackSize.Y = this.MinimumSize.Height;
+                                }
+                                else
+                                {
+                                    mmi.ptMinTrackSize.X = UnsafeNativeMethods.GetSystemMetrics(SystemMetrics.CXMINTRACK);
+                                    mmi.ptMinTrackSize.Y = UnsafeNativeMethods.GetSystemMetrics(SystemMetrics.CYMINTRACK);
+                                }
+                            }
+                            else
+                            {
+                                mmi.ptMaxSize.X = mmi.ptMaxTrackSize.X = mmi.ptMinTrackSize.X = ClientSize.Width;
+                                mmi.ptMaxSize.Y = mmi.ptMaxTrackSize.Y = mmi.ptMinTrackSize.Y = ClientSize.Height;
+                            }
 
                             Marshal.StructureToPtr(mmi, m.LParam, false);
                             m.Result = IntPtr.Zero;

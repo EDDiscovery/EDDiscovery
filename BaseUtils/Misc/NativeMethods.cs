@@ -266,10 +266,15 @@ namespace BaseUtils.Win32
         [StructLayout(LayoutKind.Sequential)]
         public struct MINMAXINFO
         {
+            /// <summary>Reserved. DO NOT USE.</summary>
             public System.Drawing.Point ptReserved;
+            /// <summary>The size of the window if it were maximized without being moved. This value defaults to the size of the primary monitor.</summary>
             public System.Drawing.Point ptMaxSize;
+            /// <summary>The position of the window if it were to be maximized without being moved.</summary>
             public System.Drawing.Point ptMaxPosition;
+            /// <summary>The minimum tracking size of the window.</summary>
             public System.Drawing.Point ptMinTrackSize;
+            /// <summary>The maximum tracking size of the window. This value defaults to slighter larger than the size of the virtual screen.</summary>
             public System.Drawing.Point ptMaxTrackSize;
         }
     }
