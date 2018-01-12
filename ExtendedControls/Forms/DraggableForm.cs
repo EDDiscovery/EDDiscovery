@@ -36,6 +36,16 @@ namespace ExtendedControls
         }
 
 
+        /// <summary>
+        /// The number of pixels from the top of the <see cref="SmartSysMenuForm"/> that will be interpreted as caption
+        /// area when the <see cref="SmartSysMenuForm"/> is unframed.
+        /// </summary>
+        /// <seealso cref="OnCaptionMouseDown"/>
+        /// <seealso cref="OnCaptionMouseUp"/>
+        [DefaultValue(20), Description("The number of pixels from the top of the Form that will be interpreted as the Form's caption area.")]
+        public uint CaptionHeight { get; set; } = 20;
+
+
         protected override CreateParams CreateParams
         {
             get
@@ -71,14 +81,19 @@ namespace ExtendedControls
             sender.Capture = false;
             if (FormBorderStyle == FormBorderStyle.None)
             {
-                var p = sender.PointToScreen(e.Location);
-                var lParam = (IntPtr)((ushort)p.X | (p.Y << 16));
+                var ptScreen = sender.PointToScreen(e.Location);
+                var ptForm = this.PointToClient(ptScreen);
 
-                switch (e.Button)
+                if (ptForm.Y >= 0 && ptForm.Y < this.CaptionHeight)
                 {
-                    case MouseButtons.Left:     SendMessage(WM.NCLBUTTONDOWN, (IntPtr)HT.CAPTION, lParam); break;
-                    case MouseButtons.Middle:   SendMessage(WM.NCMBUTTONDOWN, (IntPtr)HT.CAPTION, lParam); break;
-                    case MouseButtons.Right:    SendMessage(WM.NCRBUTTONDOWN, (IntPtr)HT.CAPTION, lParam); break;
+                    var lParam = (IntPtr)((ushort)ptScreen.X | (ptScreen.Y << 16));
+
+                    switch (e.Button)
+                    {
+                        case MouseButtons.Left:     SendMessage(WM.NCLBUTTONDOWN, (IntPtr)HT.CAPTION, lParam); break;
+                        case MouseButtons.Middle:   SendMessage(WM.NCMBUTTONDOWN, (IntPtr)HT.CAPTION, lParam); break;
+                        case MouseButtons.Right:    SendMessage(WM.NCRBUTTONDOWN, (IntPtr)HT.CAPTION, lParam); break;
+                    }
                 }
             }
         }
@@ -87,14 +102,19 @@ namespace ExtendedControls
         {
             if (FormBorderStyle == FormBorderStyle.None)
             {
-                var p = sender.PointToScreen(e.Location);
-                var lParam = (IntPtr)((ushort)p.X | (p.Y << 16));
+                var ptScreen = sender.PointToScreen(e.Location);
+                var ptForm = this.PointToClient(ptScreen);
 
-                switch (e.Button)
+                if (ptForm.Y >= 0 && ptForm.Y < this.CaptionHeight)
                 {
-                    case MouseButtons.Left:     SendMessage(WM.NCLBUTTONUP, (IntPtr)HT.CAPTION, lParam); break;
-                    case MouseButtons.Middle:   SendMessage(WM.NCMBUTTONUP, (IntPtr)HT.CAPTION, lParam); break;
-                    case MouseButtons.Right:    SendMessage(WM.NCRBUTTONUP, (IntPtr)HT.CAPTION, lParam); break;
+                    var lParam = (IntPtr)((ushort)ptScreen.X | (ptScreen.Y << 16));
+
+                    switch (e.Button)
+                    {
+                        case MouseButtons.Left:     SendMessage(WM.NCLBUTTONUP, (IntPtr)HT.CAPTION, lParam); break;
+                        case MouseButtons.Middle:   SendMessage(WM.NCMBUTTONUP, (IntPtr)HT.CAPTION, lParam); break;
+                        case MouseButtons.Right:    SendMessage(WM.NCRBUTTONUP, (IntPtr)HT.CAPTION, lParam); break;
+                    }
                 }
             }
         }
