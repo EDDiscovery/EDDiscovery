@@ -159,7 +159,9 @@ namespace EDDiscovery.UserControls
         private UserControlContainerResizable CreatePanel(UserControlCommonBase uccb , Point pos, Size size)
         {
             UserControlContainerResizable uccr = new UserControlContainerResizable();
-            uccr.Init(uccb);
+
+            PanelInformation.PanelInfo pi = PanelInformation.GetPanelInfoByType(uccb.GetType());
+            uccr.Init(uccb,pi.WindowTitlePrefix);
             uccr.ResizeStart += ResizeStart;
             uccr.ResizeEnd += ResizeEnd;
             uccr.BorderColor = discoveryform.theme.GridBorderLines;
