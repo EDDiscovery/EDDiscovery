@@ -113,7 +113,7 @@ namespace EDDiscovery.UserControls
 
             if (csl.Count() > 0)
             {
-                SetControlText("Closest systems from " + name);
+                SetControlText("Systems in a " + ((Convert.ToInt16(textMinRadius.Text) > 0) ? ((Convert.ToInt16(textMinRadius.Text) + "-" + textMaxRadius.Text.InvariantParseDouble(defaultmaximumradius) + "ly shell")):(textMaxRadius.Text.InvariantParseDouble(defaultmaximumradius) + "ly radius")) + " from " + name);
                 foreach (KeyValuePair<double, ISystem> tvp in csl)
                 {
                     int visits = discoveryform.history.GetVisitsCount(tvp.Value.name, tvp.Value.id_edsm);
