@@ -52,7 +52,7 @@ namespace BaseUtils
         {
             get
             {
-                var asset = jo["assets"].FirstOrDefault(j => j["name"].Str().EndsWith(".exe"));
+                var asset = jo["assets"].FirstOrDefault(j => j["name"].Str().ToLower().EndsWith(".exe"));
                 if (asset != null)
                 {
                     string url = asset["browser_download_url"].Str();
@@ -65,7 +65,7 @@ namespace BaseUtils
         {
             get
             {
-                var asset = jo["assets"].FirstOrDefault(j => j["name"].Str().EndsWith(".msi"));
+                var asset = jo["assets"].FirstOrDefault(j => j["name"].Str().ToLower().EndsWith(".msi"));
                 if (asset != null)
                 {
                     string url = asset["browser_download_url"].Str();
@@ -78,7 +78,7 @@ namespace BaseUtils
         {
             get
             {
-                var asset = jo["assets"].FirstOrDefault(j => j["name"].Str().EndsWith(".Portable.zip"));
+                var asset = jo["assets"].FirstOrDefault(j => j["name"].Str().ToLower().EndsWith(".zip") && j["name"].Str().ToLower().Contains("portable"));
                 if (asset != null)
                 {
                     string url = asset["browser_download_url"].Str();
