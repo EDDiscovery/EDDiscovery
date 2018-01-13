@@ -76,7 +76,7 @@ namespace EDDiscovery.Forms
             this.panelTop.Dock = System.Windows.Forms.DockStyle.Top;
             this.panelTop.Location = new System.Drawing.Point(0, 0);
             this.panelTop.Name = "panelTop";
-            this.panelTop.Size = new System.Drawing.Size(1087, 32);
+            this.panelTop.Size = new System.Drawing.Size(1087, 26);
             this.panelTop.TabIndex = 30;
             this.panelTop.MouseDown += new System.Windows.Forms.MouseEventHandler(this.label_index_MouseDown);
             this.panelTop.MouseUp += new System.Windows.Forms.MouseEventHandler(this.label_index_MouseUp);
@@ -109,7 +109,7 @@ namespace EDDiscovery.Forms
             // label_index
             // 
             this.label_index.AutoSize = true;
-            this.label_index.Location = new System.Drawing.Point(3, 8);
+            this.label_index.Location = new System.Drawing.Point(3, 3);
             this.label_index.Name = "label_index";
             this.label_index.Size = new System.Drawing.Size(88, 13);
             this.label_index.TabIndex = 23;
@@ -122,10 +122,10 @@ namespace EDDiscovery.Forms
             this.panelOuter.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.panelOuter.Controls.Add(this.splitContainer1);
             this.panelOuter.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panelOuter.Location = new System.Drawing.Point(0, 32);
+            this.panelOuter.Location = new System.Drawing.Point(0, 26);
             this.panelOuter.Name = "panelOuter";
             this.panelOuter.Padding = new System.Windows.Forms.Padding(3);
-            this.panelOuter.Size = new System.Drawing.Size(1087, 575);
+            this.panelOuter.Size = new System.Drawing.Size(1087, 581);
             this.panelOuter.TabIndex = 32;
             // 
             // splitContainer1
@@ -142,8 +142,8 @@ namespace EDDiscovery.Forms
             // splitContainer1.Panel2
             // 
             this.splitContainer1.Panel2.Controls.Add(this.richTextBoxScrollDescription);
-            this.splitContainer1.Size = new System.Drawing.Size(1079, 567);
-            this.splitContainer1.SplitterDistance = 355;
+            this.splitContainer1.Size = new System.Drawing.Size(1079, 573);
+            this.splitContainer1.SplitterDistance = 358;
             this.splitContainer1.TabIndex = 1;
             // 
             // panelVScroll
@@ -155,7 +155,7 @@ namespace EDDiscovery.Forms
             this.panelVScroll.Location = new System.Drawing.Point(0, 0);
             this.panelVScroll.Name = "panelVScroll";
             this.panelVScroll.ScrollBarWidth = 20;
-            this.panelVScroll.Size = new System.Drawing.Size(1079, 355);
+            this.panelVScroll.Size = new System.Drawing.Size(1079, 358);
             this.panelVScroll.TabIndex = 2;
             this.panelVScroll.VerticalScrollBarDockRight = true;
             // 
@@ -171,12 +171,12 @@ namespace EDDiscovery.Forms
             this.vScrollBarCustom1.HideScrollBar = false;
             this.vScrollBarCustom1.LargeChange = 10;
             this.vScrollBarCustom1.Location = new System.Drawing.Point(1059, 0);
-            this.vScrollBarCustom1.Maximum = -302;
+            this.vScrollBarCustom1.Maximum = -305;
             this.vScrollBarCustom1.Minimum = 0;
             this.vScrollBarCustom1.MouseOverButtonColor = System.Drawing.Color.Green;
             this.vScrollBarCustom1.MousePressedButtonColor = System.Drawing.Color.Red;
             this.vScrollBarCustom1.Name = "vScrollBarCustom1";
-            this.vScrollBarCustom1.Size = new System.Drawing.Size(20, 355);
+            this.vScrollBarCustom1.Size = new System.Drawing.Size(20, 358);
             this.vScrollBarCustom1.SliderColor = System.Drawing.Color.DarkGray;
             this.vScrollBarCustom1.SmallChange = 1;
             this.vScrollBarCustom1.TabIndex = 0;
@@ -185,8 +185,8 @@ namespace EDDiscovery.Forms
             this.vScrollBarCustom1.ThumbButtonColor = System.Drawing.Color.DarkBlue;
             this.vScrollBarCustom1.ThumbColorScaling = 0.5F;
             this.vScrollBarCustom1.ThumbDrawAngle = 0F;
-            this.vScrollBarCustom1.Value = -302;
-            this.vScrollBarCustom1.ValueLimited = -302;
+            this.vScrollBarCustom1.Value = -305;
+            this.vScrollBarCustom1.ValueLimited = -305;
             // 
             // buttonMore
             // 
@@ -220,7 +220,7 @@ namespace EDDiscovery.Forms
             this.richTextBoxScrollDescription.ScrollBarThumbButtonColor = System.Drawing.Color.DarkBlue;
             this.richTextBoxScrollDescription.ScrollBarWidth = 20;
             this.richTextBoxScrollDescription.ShowLineCount = false;
-            this.richTextBoxScrollDescription.Size = new System.Drawing.Size(1079, 208);
+            this.richTextBoxScrollDescription.Size = new System.Drawing.Size(1079, 211);
             this.richTextBoxScrollDescription.TabIndex = 1;
             this.richTextBoxScrollDescription.TextBoxBackColor = System.Drawing.SystemColors.Control;
             this.richTextBoxScrollDescription.TextBoxForeColor = System.Drawing.SystemColors.ControlText;

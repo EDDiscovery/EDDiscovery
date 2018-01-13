@@ -20,18 +20,28 @@ namespace EDDiscovery.UserControls
         public bool Selected { get { return selected; } set { SetSelected(value); } }
 
         private const int margin = 3;
+        private const int ycontroltext = 18;    // space for title/control text. Control text replaces title on UCs where its called.
         private bool selected = false;
+
+        private Label lcontroltext;
 
         public UserControlContainerResizable()
         {
             InitializeComponent();
         }
 
-        public void Init( UserControlCommonBase c)
+        public void Init( UserControlCommonBase c, string title)
         {
             control = c;
+            lcontroltext = new Label() { Top = margin, Left = margin, Text = title };
             Controls.Add(control);
+            Controls.Add(lcontroltext);
             PerformLayout();
+        }
+
+        public void SetControlText(string s)
+        {
+            lcontroltext.Text = s;
         }
 
         private void SetSelected(bool s)
@@ -43,8 +53,9 @@ namespace EDDiscovery.UserControls
         protected override void OnLayout(LayoutEventArgs e)
         {
             base.OnLayout(e);
-            control.Location = new Point(margin, margin);
-            control.Size = new Size(ClientRectangle.Width - margin * 2, ClientRectangle.Height - margin * 2);
+            lcontroltext.Width = ClientRectangle.Width - lcontroltext.Left - margin*2;
+            control.Location = new Point(margin, margin+ycontroltext);
+            control.Size = new Size(ClientRectangle.Width - margin * 2, ClientRectangle.Height - margin * 2 - ycontroltext);
         }
 
         protected override void OnPaint(PaintEventArgs e)
@@ -115,7 +126,7 @@ namespace EDDiscovery.UserControls
             startsize = Size;
             dp = DragType(e);
             dragmoved = false;
-            System.Diagnostics.Debug.WriteLine("Drag start here " + dp);
+            //System.Diagnostics.Debug.WriteLine("Drag start here " + dp);
 
             ResizeStart?.Invoke(this);
         }
@@ -133,7 +144,7 @@ namespace EDDiscovery.UserControls
                 int absxdelta = Math.Abs(xdelta);
                 int absydelta = Math.Abs(ydelta);
 
-                System.Diagnostics.Debug.WriteLine("Drag " + dp + " moved " + dragmoved + " delta " + absxdelta + "," + absydelta);
+                //System.Diagnostics.Debug.WriteLine("Drag " + dp + " moved " + dragmoved + " delta " + absxdelta + "," + absydelta);
 
                 if (dragmoved == false)
                 {
@@ -182,13 +193,13 @@ namespace EDDiscovery.UserControls
 
         private void UserControlContainerResizable_MouseUp(object sender, MouseEventArgs e)
         {
-            System.Diagnostics.Debug.WriteLine("Mouse up " + dp);
+            //System.Diagnostics.Debug.WriteLine("Mouse up " + dp);
             StopDrag();
         }
 
         void StopDrag()
         {
-            System.Diagnostics.Debug.WriteLine("Stop drag " + dp + " " + dragmoved);
+            //System.Diagnostics.Debug.WriteLine("Stop drag " + dp + " " + dragmoved);
             if (dragmoved)
                 Cursor.Current = Cursors.Default;
 
