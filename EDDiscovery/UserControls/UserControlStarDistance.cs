@@ -44,6 +44,7 @@ namespace EDDiscovery.UserControls
 
         const double defaultmaximumradius = 1000;
         const int maxitems = 500;
+        int behaviour = 0; // switch from cubical or spherical behaviour, default is cubical.
 
         public override void Init()
         {
@@ -119,8 +120,19 @@ namespace EDDiscovery.UserControls
                     int visits = discoveryform.history.GetVisitsCount(tvp.Value.name, tvp.Value.id_edsm);
                     object[] rowobj = { tvp.Value.name, Math.Sqrt(tvp.Key).ToString("0.00"), visits.ToStringInvariant() };       // distances are stored squared for speed, back to normal.
 
-                    int rowindex = dataGridViewNearest.Rows.Add(rowobj);
-                    dataGridViewNearest.Rows[rowindex].Tag = tvp.Value;
+                    if (behaviour == 0)
+                    {
+                        int rowindex = dataGridViewNearest.Rows.Add(rowobj);
+                        dataGridViewNearest.Rows[rowindex].Tag = tvp.Value;
+                    }
+                    else if (behaviour == 1)
+                    {
+                        if (Math.Sqrt(tvp.Key) < Convert.ToDouble(textMaxRadius.Text))
+                        {
+                            int rowindex = dataGridViewNearest.Rows.Add(rowobj);
+                            dataGridViewNearest.Rows[rowindex].Tag = tvp.Value;
+                        }
+                    }
                 }
                 
             }
@@ -320,6 +332,21 @@ namespace EDDiscovery.UserControls
                 }
             }
         }
-
+        
+        private void buttonCubeSphere_MouseClick(object sender, MouseEventArgs e)
+        {
+            if (behaviour == 0)
+            {
+                behaviour = 1;
+                buttonCubeSphere.Text = "Sphere";
+                KickComputation(uctg.GetCurrentHistoryEntry);
+            }
+            else if (behaviour == 1)
+            {
+                behaviour = 0;
+                buttonCubeSphere.Text = "Cube";
+                KickComputation(uctg.GetCurrentHistoryEntry);
+            }
+        }
     }
 }
