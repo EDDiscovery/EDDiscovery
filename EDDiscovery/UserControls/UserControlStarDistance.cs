@@ -44,7 +44,7 @@ namespace EDDiscovery.UserControls
 
         const double defaultmaximumradius = 1000;
         const int maxitems = 500;
-        int behaviour = 0; // switch from cubical or spherical behaviour, default is cubical.
+        int behaviour; // switch from cubical or spherical behaviour.
 
         public override void Init()
         {
@@ -54,6 +54,11 @@ namespace EDDiscovery.UserControls
 
             textMinRadius.Text = SQLiteConnectionUser.GetSettingDouble(DbSave + "Min", 0).ToStringInvariant();
             textMaxRadius.Text = SQLiteConnectionUser.GetSettingDouble(DbSave + "Max", defaultmaximumradius).ToStringInvariant();
+            behaviour = SQLiteConnectionUser.GetSettingInt(DbSave + "Behaviour", behaviour);
+            if (behaviour == 0)
+            { buttonCubeSphere.Text = "Cube"; }
+            else
+            { buttonCubeSphere.Text = "Sphere"; }
         }
 
         public override void ChangeCursorType(IHistoryCursor thc)
@@ -69,6 +74,7 @@ namespace EDDiscovery.UserControls
             computer.ShutDown();
             SQLiteConnectionUser.PutSettingDouble(DbSave + "Min", textMinRadius.Text.InvariantParseDouble(0));
             SQLiteConnectionUser.PutSettingDouble(DbSave + "Max", textMaxRadius.Text.InvariantParseDouble(defaultmaximumradius));
+            SQLiteConnectionUser.PutSettingInt(DbSave + "Behaviour", behaviour);
         }
 
         public override void InitialDisplay()
