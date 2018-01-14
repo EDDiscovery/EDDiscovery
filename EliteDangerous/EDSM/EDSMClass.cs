@@ -527,6 +527,9 @@ namespace EliteDangerousCore.EDSM
                             }
                         }
 
+                        if (sc.name == null)
+                            sc.name = name;
+
                         HistoryEntry he = HistoryEntry.MakeVSEntry(sc, etutc, EliteConfigInstance.InstanceConfig.DefaultMapColour, "", "", firstdiscover: firstdiscover);       // FSD jump entry
                         log.Add(he);
                     }
