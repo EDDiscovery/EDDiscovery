@@ -35,6 +35,7 @@ namespace EDDiscovery.UserControls
         private string DbSave { get { return "StarDistancePanel" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
 
         private StarDistanceComputer computer;
+        HistoryEntry last_he;
 
         public UserControlStarDistance()
         {
@@ -44,7 +45,6 @@ namespace EDDiscovery.UserControls
 
         const double defaultmaximumradius = 1000;
         const int maxitems = 500;
-        int behaviour; // switch from cubical or spherical behaviour.
 
         public override void Init()
         {
@@ -54,11 +54,7 @@ namespace EDDiscovery.UserControls
 
             textMinRadius.Text = SQLiteConnectionUser.GetSettingDouble(DbSave + "Min", 0).ToStringInvariant();
             textMaxRadius.Text = SQLiteConnectionUser.GetSettingDouble(DbSave + "Max", defaultmaximumradius).ToStringInvariant();
-            behaviour = SQLiteConnectionUser.GetSettingInt(DbSave + "Behaviour", behaviour);
-            if (behaviour == 0)
-            { buttonCubeSphere.Text = "Cube"; }
-            else
-            { buttonCubeSphere.Text = "Sphere"; }
+            checkBoxCube.Checked = SQLiteConnectionUser.GetSettingBool(DbSave + "Behaviour", false);
         }
 
         public override void ChangeCursorType(IHistoryCursor thc)
@@ -74,7 +70,7 @@ namespace EDDiscovery.UserControls
             computer.ShutDown();
             SQLiteConnectionUser.PutSettingDouble(DbSave + "Min", textMinRadius.Text.InvariantParseDouble(0));
             SQLiteConnectionUser.PutSettingDouble(DbSave + "Max", textMaxRadius.Text.InvariantParseDouble(defaultmaximumradius));
-            SQLiteConnectionUser.PutSettingInt(DbSave + "Behaviour", behaviour);
+            SQLiteConnectionUser.PutSettingBool(DbSave + "Behaviour", checkBoxCube.Checked);
         }
 
         public override void InitialDisplay()
@@ -91,12 +87,16 @@ namespace EDDiscovery.UserControls
         {
             if (he != null)
             {
+                last_he = he;
+
                 //System.Diagnostics.Debug.WriteLine("Star grid started, uctg selected, ask");
                 computer.CalculateClosestSystems(he.System, 
                     (s, d) => BeginInvoke((MethodInvoker)delegate { NewStarListComputed(s, d); }) , 
                     maxitems,
                     Math.Max(textMinRadius.Text.InvariantParseDouble(0), 8.0/128.0),     // min to exclude our star
-                    textMaxRadius.Text.InvariantParseDouble(defaultmaximumradius));     // hook here, force closes system update
+                    textMaxRadius.Text.InvariantParseDouble(defaultmaximumradius),
+                    !checkBoxCube.Checked
+                    );     // hook here, force closes system update
             }
         }
 
@@ -104,10 +104,12 @@ namespace EDDiscovery.UserControls
         {
             System.Diagnostics.Debug.Assert(Application.MessageLoop);       // check!
 
+            list.Clear();
             discoveryform.history.CalculateSqDistances(list, sys.x, sys.y, sys.z,
                                 maxitems,
                                 Math.Max(textMinRadius.Text.InvariantParseDouble(0), 8.0/128.0),     // min to exclude our star
-                                textMaxRadius.Text.InvariantParseDouble(defaultmaximumradius)
+                                textMaxRadius.Text.InvariantParseDouble(defaultmaximumradius),
+                                !checkBoxCube.Checked
                                 );
 
             FillGrid(sys.name, list);
@@ -118,26 +120,25 @@ namespace EDDiscovery.UserControls
             SetControlText("");
             dataGridViewNearest.Rows.Clear();
 
+            double? sphere = textMaxRadius.Text.InvariantParseDoubleNull();
+
             if (csl.Count() > 0)
             {
-                SetControlText("Systems in a " + ((Convert.ToInt16(textMinRadius.Text) > 0) ? ((Convert.ToInt16(textMinRadius.Text) + "-" + textMaxRadius.Text.InvariantParseDouble(defaultmaximumradius) + "ly shell")):(textMaxRadius.Text.InvariantParseDouble(defaultmaximumradius) + "ly radius")) + " from " + name);
+                SetControlText("From " + name);
                 foreach (KeyValuePair<double, ISystem> tvp in csl)
                 {
                     int visits = discoveryform.history.GetVisitsCount(tvp.Value.name, tvp.Value.id_edsm);
                     object[] rowobj = { tvp.Value.name, Math.Sqrt(tvp.Key).ToString("0.00"), visits.ToStringInvariant() };       // distances are stored squared for speed, back to normal.
 
-                    if (behaviour == 0)
+                    if (checkBoxCube.Checked || sphere == null )        // if cube, or sphere value incorrect, just add
                     {
                         int rowindex = dataGridViewNearest.Rows.Add(rowobj);
                         dataGridViewNearest.Rows[rowindex].Tag = tvp.Value;
                     }
-                    else if (behaviour == 1)
-                    {
-                        if (Math.Sqrt(tvp.Key) < Convert.ToDouble(textMaxRadius.Text))
-                        {
-                            int rowindex = dataGridViewNearest.Rows.Add(rowobj);
-                            dataGridViewNearest.Rows[rowindex].Tag = tvp.Value;
-                        }
+                    else if (Math.Sqrt(tvp.Key) <= sphere.Value)
+                    { 
+                        int rowindex = dataGridViewNearest.Rows.Add(rowobj);
+                        dataGridViewNearest.Rows[rowindex].Tag = tvp.Value;
                     }
                 }
                 
@@ -257,6 +258,7 @@ namespace EDDiscovery.UserControls
                 public bool IgnoreOnDuplicate;      // don't compute until last one is present
                 public double MinDistance;
                 public double MaxDistance;
+                public bool Spherical;
                 public int MaxItems;
                 public Action<ISystem, SortedList<double, ISystem>> Callback;
             }
@@ -274,10 +276,10 @@ namespace EDDiscovery.UserControls
             }
 
             public void CalculateClosestSystems(ISystem sys, Action<ISystem, SortedList<double, ISystem>> callback, 
-                            int maxitems, double mindistance, double maxdistance, bool ignoreDuplicates = true)
+                            int maxitems, double mindistance, double maxdistance, bool spherical, bool ignoreDuplicates = true)
             {
                 closestsystem_queue.Enqueue(new StardistRequest { System = sys, Callback = callback,
-                                MaxItems = maxitems, MinDistance = mindistance, MaxDistance = maxdistance,  IgnoreOnDuplicate = ignoreDuplicates });
+                                MaxItems = maxitems, MinDistance = mindistance, MaxDistance = maxdistance,  Spherical = spherical , IgnoreOnDuplicate = ignoreDuplicates });
                 stardistRequested.Set();
             }
 
@@ -315,7 +317,7 @@ namespace EDDiscovery.UserControls
                                     //System.Diagnostics.Debug.WriteLine("DB Computer Max distance " + req.MaxDistance);
 
                                     SystemClassDB.GetSystemSqDistancesFrom(closestsystemlist, sys.x, sys.y, sys.z, req.MaxItems , 
-                                                    req.MinDistance, req.MaxDistance);
+                                                    req.MinDistance, req.MaxDistance , req.Spherical);
 
                                     if (!PendingClose)
                                     {
@@ -339,20 +341,9 @@ namespace EDDiscovery.UserControls
             }
         }
         
-        private void buttonCubeSphere_MouseClick(object sender, MouseEventArgs e)
+        private void checkBoxCube_CheckedChanged(object sender, EventArgs e)
         {
-            if (behaviour == 0)
-            {
-                behaviour = 1;
-                buttonCubeSphere.Text = "Sphere";
-                KickComputation(uctg.GetCurrentHistoryEntry);
-            }
-            else if (behaviour == 1)
-            {
-                behaviour = 0;
-                buttonCubeSphere.Text = "Cube";
-                KickComputation(uctg.GetCurrentHistoryEntry);
-            }
+            KickComputation(last_he ?? uctg.GetCurrentHistoryEntry);
         }
     }
 }
