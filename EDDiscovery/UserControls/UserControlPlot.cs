@@ -35,7 +35,7 @@ namespace EDDiscovery.UserControls
     {
         private string DbSave { get { return "StarDistancePanel" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
 
-        private StarDistanceComputer computer;
+        private UserControlStarDistance.StarDistanceComputer computer;
 
         public UserControlPlot()
         {
@@ -50,7 +50,7 @@ namespace EDDiscovery.UserControls
         
         public override void Init()
         {
-            computer = new StarDistanceComputer();
+            computer = new UserControlStarDistance.StarDistanceComputer();
 
             uctg.OnTravelSelectionChanged += Uctg_OnTravelSelectionChanged;
 
@@ -100,7 +100,7 @@ namespace EDDiscovery.UserControls
             {
                 computer.CalculateClosestSystems(he.System,
                     (s, d) => BeginInvoke((MethodInvoker)delegate { NewStarListComputed(s, d); }),
-                    maxitems, MinRadius, MaxRadius);
+                    maxitems, MinRadius, MaxRadius, true);
             }
         }
         private void NewStarListComputed(ISystem sys, SortedList<double, ISystem> list)      // In UI
@@ -114,7 +114,7 @@ namespace EDDiscovery.UserControls
                 MinRadius = float.Parse(textMinRadius.Text);
 
             System.Diagnostics.Debug.Assert(Application.MessageLoop);       // check!
-            discoveryform.history.CalculateSqDistances(list, sys.x, sys.y, sys.z, maxitems, MinRadius, MaxRadius);
+            discoveryform.history.CalculateSqDistances(list, sys.x, sys.y, sys.z, maxitems, MinRadius, MaxRadius, true);
             FillRadar(list, sys);
         }
         
@@ -236,103 +236,6 @@ namespace EDDiscovery.UserControls
             chartBubble.Update();            
         }
 
-        /// <summary>
-        /// Computer
-        /// </summary>
-
-        class StarDistanceComputer
-        {
-            private Thread backgroundStardistWorker;
-            private bool PendingClose { get; set; }           // we want to close boys!
-
-            private class StardistRequest
-            {
-                public ISystem System;
-                public bool IgnoreOnDuplicate;      // don't compute until last one is present
-                public double MinDistance;
-                public double MaxDistance;
-                public int MaxItems;
-                public Action<ISystem, SortedList<double, ISystem>> Callback;
-            }
-
-            private ConcurrentQueue<StardistRequest> closestsystem_queue = new ConcurrentQueue<StardistRequest>();
-
-            private AutoResetEvent stardistRequested = new AutoResetEvent(false);
-            private AutoResetEvent closeRequested = new AutoResetEvent(false);
-
-            public StarDistanceComputer()
-            {
-                PendingClose = false;
-                backgroundStardistWorker = new Thread(BackgroundStardistWorkerThread) { Name = "Star Distance Worker", IsBackground = true };
-                backgroundStardistWorker.Start();
-            }
-
-            public void CalculateClosestSystems(ISystem sys, Action<ISystem, SortedList<double, ISystem>> callback, 
-                            int maxitems, double mindistance, double maxdistance, bool ignoreDuplicates = true)
-            {
-                closestsystem_queue.Enqueue(new StardistRequest { System = sys, Callback = callback,
-                                MaxItems = maxitems, MinDistance = mindistance, MaxDistance = maxdistance,  IgnoreOnDuplicate = ignoreDuplicates });
-                stardistRequested.Set();
-            }
-
-            public void ShutDown()
-            {
-                PendingClose = true;
-                closeRequested.Set();
-                backgroundStardistWorker.Join();
-            }
-
-            private void BackgroundStardistWorkerThread()
-            {
-                while (!PendingClose)
-                {
-                    int wh = WaitHandle.WaitAny(new WaitHandle[] { closeRequested, stardistRequested });
-
-                    if (PendingClose)
-                        break;
-
-                    StardistRequest stardistreq = null;
-
-                    switch (wh)
-                    {
-                        case 0:  // Close Requested
-                            break;
-                        case 1:  // Star Distances Requested
-                            while (!PendingClose && closestsystem_queue.TryDequeue(out stardistreq))
-                            {
-                                if (!stardistreq.IgnoreOnDuplicate || closestsystem_queue.Count == 0)
-                                {
-                                    StardistRequest req = stardistreq;
-                                    ISystem sys = req.System;
-                                    SortedList<double, ISystem> closestsystemlist = new SortedList<double, ISystem>(new DuplicateKeyComparer<double>()); //lovely list allowing duplicate keys - can only iterate in it.
-
-                                    //System.Diagnostics.Debug.WriteLine("DB Computer Max distance " + req.MaxDistance);
-
-                                    SystemClassDB.GetSystemSqDistancesFrom(closestsystemlist, sys.x, sys.y, sys.z, req.MaxItems , 
-                                                    req.MinDistance, req.MaxDistance);
-
-                                    if (!PendingClose)
-                                    {
-                                        req.Callback(sys, closestsystemlist);
-                                    }
-                                }
-                            }
-
-                            break;
-                    }
-                }
-            }
-
-            private class DuplicateKeyComparer<TKey> : IComparer<TKey> where TKey : IComparable      // special compare for sortedlist
-            {
-                public int Compare(TKey x, TKey y)
-                {
-                    int result = x.CompareTo(y);
-                    return (result == 0) ? 1 : result;      // for this, equals just means greater than, to allow duplicate distance values to be added.
-                }
-            }
-        }
-        
         private void buttonExt2dtop_MouseDown(object sender, MouseEventArgs e)
         {
             chartBubble.ChartAreas[0].Visible = false;
