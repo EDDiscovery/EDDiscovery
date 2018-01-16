@@ -101,6 +101,11 @@ namespace EDDiscovery.Forms
             OnCaptionMouseDown((Control)sender, e);
         }
 
+        private void label_index_MouseUp(object sender, MouseEventArgs e)
+        {
+            OnCaptionMouseUp((Control)sender, e);
+        }
+
         private void panel_close_MouseClick(object sender, MouseEventArgs e)
         {
             Close();
