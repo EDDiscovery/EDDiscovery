@@ -213,7 +213,7 @@ namespace EliteDangerousCore.EDSM
                                                                                                       EliteConfigInstance.InstanceConfig.DefaultMapColour);
                                     JournalEntry je =
                                         JournalEntry.CreateFSDJournalEntry(tlu.id, tlu.CommanderId.Value,
-                                                                                                      (int)SyncFlags.EDSM, jo);
+                                                                                                      (int)SyncFlags.EDSM, jo, he.System.id_edsm);
 
                                     System.Diagnostics.Trace.WriteLine(string.Format("Add {0} {1}", je.EventTimeUTC, he.System.name));
                                     je.Add(jo, cn);
