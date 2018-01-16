@@ -81,21 +81,27 @@ namespace EDDiscovery.ScreenShots
             this.WindowState = FormWindowState.Minimized;
         }
 
-        private void label_index_MouseDown(object sender, MouseEventArgs e)
+        private void captionControl_MouseDown(object sender, MouseEventArgs e)
         {
             OnCaptionMouseDown((Control)sender, e);
         }
 
+        private void captionControl_MouseUp(object sender, MouseEventArgs e)
+        {
+            OnCaptionMouseUp((Control)sender, e);
+        }
+
         private void buttonChangeEDScreenshot_Click(object sender, EventArgs e)
         {
-            FolderBrowserDialog dlg = new FolderBrowserDialog();
-
-            dlg.Description = "Select ED screenshot folder";
-            dlg.SelectedPath = textBoxScreenshotsDir.Text;
-
-            if (dlg.ShowDialog(this) == DialogResult.OK)
+            using (var dlg = new FolderBrowserDialog())
             {
-                initialssfolder = textBoxScreenshotsDir.Text = dlg.SelectedPath;
+                dlg.Description = "Select ED screenshot folder";
+                dlg.SelectedPath = textBoxScreenshotsDir.Text;
+
+                if (dlg.ShowDialog(this) == DialogResult.OK)
+                {
+                    initialssfolder = textBoxScreenshotsDir.Text = dlg.SelectedPath;
+                }
             }
         }
 
