@@ -551,6 +551,39 @@ namespace EliteDangerousCore.EDSM
             return (json.ToString() != "[]");
         }
 
+        public List<string> CheckForNewCoordinates(List<string> sysNames)
+        {
+            List<string> nowKnown = new List<string>();
+            string query = "api-v1/systems?onlyKnownCoordinates=1&";
+            bool first = true;
+            foreach (string s in sysNames)
+            {
+                if (first) first = false;
+                else query = query + "&";
+                query = query + $"systemName[]={HttpUtility.UrlEncode(s)}";
+            }
+
+            var response = RequestGet(query, handleException: true);
+            if (response.Error)
+                return nowKnown;
+
+            var json = response.Body;
+            if (json == null)
+                return nowKnown;
+
+            JArray msg = JArray.Parse(json);
+
+            if (msg != null)
+            {
+                foreach (JObject sysname in msg)
+                {
+                    nowKnown.Add(sysname["name"].ToString());
+                }
+            }
+
+            return nowKnown;
+        }
+
         public List<String> GetPushedSystems()
         {
             List<String> systems = new List<string>();
