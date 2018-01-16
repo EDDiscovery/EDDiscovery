@@ -413,12 +413,13 @@ namespace EliteDangerousCore
             return jo;
         }
 
-        public static JournalEntry CreateFSDJournalEntry(long tluid, int cmdrid, int syncflag, JObject jo)
+        public static JournalEntry CreateFSDJournalEntry(long tluid, int cmdrid, int syncflag, JObject jo, long edsmid = 0)
         {
             JournalEntry je = CreateJournalEntry(jo.ToString());
             je.TLUId = tluid;
             je.CommanderId = cmdrid;
             je.Synced = syncflag;
+            je.EdsmID = edsmid;
             return je;
         }
 
