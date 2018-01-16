@@ -238,6 +238,7 @@ namespace EDDiscovery.Icons
             icons["Legacy.loadgame"] = IconSet.GetIcon("Journal.LoadGame");
             icons["Legacy.loadout"] = IconSet.GetIcon("Journal.Loadout");
             icons["Legacy.location"] = IconSet.GetIcon("Journal.Location");
+            icons["Legacy.map"] = IconSet.GetIcon("Panels.Map");
             icons["Legacy.manageaddons"] = IconSet.GetIcon("Controls.Main.Addons.ManageAddOns");
             icons["Legacy.marketbuy"] = IconSet.GetIcon("Journal.MarketBuy");
             icons["Legacy.marketdata"] = IconSet.GetIcon("Panels.MarketData");
@@ -276,6 +277,7 @@ namespace EDDiscovery.Icons
             icons["Legacy.pauseblue"] = IconSet.GetIcon("Controls.Map3D.Recorder.PauseRecord");
             icons["Legacy.payfines"] = IconSet.GetIcon("Journal.PayFines");
             icons["Legacy.planet landing"] = IconSet.GetIcon("Controls.Scan.Bodies.Landable");
+            icons["Legacy.plot"] = IconSet.GetIcon("Panels.Plot");
             icons["Legacy.pointofinterest"] = IconSet.GetIcon("GalMap.beacon");
             icons["Legacy.popout1"] = IconSet.GetIcon("Controls.Main.Tools.Popouts.Menu");
             icons["Legacy.powerplaycollect"] = IconSet.GetIcon("Journal.PowerplayCollect");
