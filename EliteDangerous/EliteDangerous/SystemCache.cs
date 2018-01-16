@@ -130,7 +130,7 @@ namespace EliteDangerousCore
             {
                 if (isys.HasCoordinate)
                 {
-                    double dist = DB.SystemClassDB.Distance(isys, comparesystem);
+                    double dist = isys.Distance(comparesystem);
 
                     if (dist < mindist)
                     {
