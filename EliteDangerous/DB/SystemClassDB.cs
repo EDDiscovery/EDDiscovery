@@ -285,6 +285,9 @@ namespace EliteDangerousCore.DB
 
         public enum SystemIDType { id, EdsmId, EddbId };       // which ID to match?
 
+        // for rare circumstances, you can name it, but will only be used if for some reason the system name table is missing the entry
+        // which should never occur, unless something nasty happened during table updates.
+
         public static ISystem GetSystem(long id,  SQLiteConnectionSystem cn = null, SystemIDType idtype = SystemIDType.id, string name = null)      // using an id
         {
             ISystem sys = null;
@@ -349,16 +352,13 @@ namespace EliteDangerousCore.DB
                             }
                         }
                     }
-
-                    if (sys.name == null && name != null)
-                    {
-                        sys.name = name;
-                    }
-                    else
-                    {
-                        return null;
-                    }
                 }
+
+                if (sys.name == null)       // if no name, name it..
+                    sys.name = name;
+
+                if (sys.name == null)       // must have a name.
+                    sys = null;
 
                 if (sys != null && sys.id_eddb != 0)
                 {
