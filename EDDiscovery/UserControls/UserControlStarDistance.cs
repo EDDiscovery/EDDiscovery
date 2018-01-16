@@ -247,7 +247,7 @@ namespace EDDiscovery.UserControls
         /// Computer
         /// </summary>
 
-        class StarDistanceComputer
+        public class StarDistanceComputer
         {
             private Thread backgroundStardistWorker;
             private bool PendingClose { get; set; }           // we want to close boys!
