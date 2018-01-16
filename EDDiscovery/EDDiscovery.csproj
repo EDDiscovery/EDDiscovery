@@ -347,6 +347,12 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UserControls\UserControlPlot.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\UserControlPlot.Designer.cs">
+      <DependentUpon>UserControlPlot.cs</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\UserControlScanGrid.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -414,6 +420,12 @@
     </Compile>
     <Compile Include="UserControls\UserControlShoppingList.Designer.cs">
       <DependentUpon>UserControlShoppingList.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\UserControlMap.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\UserControlMap.Designer.cs">
+      <DependentUpon>UserControlMap.cs</DependentUpon>
     </Compile>
     <Compile Include="UserControls\UserControlSysInfo.cs">
       <SubType>UserControl</SubType>
@@ -583,6 +595,9 @@
     <EmbeddedResource Include="UserControls\UserControlContainerResizable.resx">
       <DependentUpon>UserControlContainerResizable.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\UserControlPlot.resx">
+      <DependentUpon>UserControlPlot.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="UserControls\UserControlScanGrid.resx">
       <DependentUpon>UserControlScanGrid.cs</DependentUpon>
     </EmbeddedResource>
@@ -609,6 +624,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\UserControlShoppingList.resx">
       <DependentUpon>UserControlShoppingList.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\UserControlMap.resx">
+      <DependentUpon>UserControlMap.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\UserControlSysInfo.resx">
       <DependentUpon>UserControlSysInfo.cs</DependentUpon>

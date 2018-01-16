@@ -61,7 +61,9 @@ namespace EDDiscovery.Forms
             Trilateration,          // 28
             Settings,               // 29
             ScanGrid,               // 30
-            Compass,
+            Compass,                // 31
+            Map,                    // 32
+            Plot,                   // 33
             // ****** ADD More here DO NOT REORDER *****
         };
 
@@ -78,6 +80,8 @@ namespace EDDiscovery.Forms
             { new PanelInfo( PanelIDs.Journal, typeof(UserControlJournalGrid), "Journal", "JournalHistory", "Display the journal grid view") },
             { new PanelInfo( PanelIDs.TravelGrid, typeof(UserControlTravelGrid), "Travel History", "TravelHistory", "Display the history grid view") },
             { new PanelInfo( PanelIDs.StarList, typeof(UserControlStarList), "Star List", "StarList", "Display the visited star list", transparent: false) },
+            { new PanelInfo( PanelIDs.Map, typeof(UserControlMap), "Map", "Map", "3D Map of systems in range", transparent: false) },
+            { new PanelInfo( PanelIDs.Plot, typeof(UserControlPlot), "2D Plot", "Plot", "2D Plot of systems in range", transparent: false) },
             { new PanelInfo( PanelIDs.MarketData, typeof(UserControlMarketData), "Market Data", "MarketData", "Display Market Data (Requires Frontier Commander login)" ) },
             { new PanelInfo( PanelIDs.Missions, typeof(UserControlMissions), "Missions", "Missions", "Display Missions") },
             { new PanelInfo( PanelIDs.Synthesis, typeof(UserControlSynthesis), "Synthesis", "Synthesis", "Display Synthesis planner") },

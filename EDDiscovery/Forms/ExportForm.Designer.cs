@@ -257,6 +257,7 @@
             this.label_index.TabIndex = 28;
             this.label_index.Text = "Export";
             this.label_index.MouseDown += new System.Windows.Forms.MouseEventHandler(this.label_index_MouseDown);
+            this.label_index.MouseUp += new System.Windows.Forms.MouseEventHandler(this.label_index_MouseUp);
             // 
             // panelOuter
             // 

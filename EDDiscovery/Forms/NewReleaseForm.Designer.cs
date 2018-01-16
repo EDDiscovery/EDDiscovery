@@ -289,10 +289,12 @@ namespace EDDiscovery.Forms
             // 
             // lblCaption
             // 
-            this.lblCaption.AutoSize = true;
+            this.lblCaption.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.lblCaption.AutoEllipsis = true;
             this.lblCaption.Location = new System.Drawing.Point(9, 6);
             this.lblCaption.Name = "lblCaption";
-            this.lblCaption.Size = new System.Drawing.Size(111, 13);
+            this.lblCaption.Size = new System.Drawing.Size(344, 13);
             this.lblCaption.TabIndex = 0;
             this.lblCaption.Text = "EDDiscovery Release";
             this.lblCaption.MouseDown += new System.Windows.Forms.MouseEventHandler(this.Caption_MouseDown);
@@ -316,6 +318,7 @@ namespace EDDiscovery.Forms
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btnClose;
+            this.CaptionHeight = ((uint)(27u));
             this.ClientSize = new System.Drawing.Size(419, 246);
             this.Controls.Add(this.pnlBack);
             this.DoubleBuffered = true;
@@ -330,7 +333,6 @@ namespace EDDiscovery.Forms
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             this.pnlCaption.ResumeLayout(false);
-            this.pnlCaption.PerformLayout();
             this.pnlBack.ResumeLayout(false);
             this.ResumeLayout(false);
 

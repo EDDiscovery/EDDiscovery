@@ -630,7 +630,7 @@ namespace EliteDangerousCore.DB
 
         public static void GetSystemSqDistancesFrom(SortedList<double, ISystem> distlist, double x, double y, double z, 
                                                     int maxitems, 
-                                                    double mindist = 0, double maxdist = 200 , 
+                                                    double mindist , double maxdist , bool spherical,
                                                     SQLiteConnectionSystem cn = null)
         {
             bool closeit = false;
@@ -652,7 +652,7 @@ namespace EliteDangerousCore.DB
                     "AND y <= @yv + @maxdist " +
                     "AND z >= @zv - @maxdist " +
                     "AND z <= @zv + @maxdist " +
-                    "AND (x-@xv)*(x-@xv)+(y-@yv)*(y-@yv)+(z-@zv)*(z-@zv)>=@mindist " +
+                    "AND (x-@xv)*(x-@xv)+(y-@yv)*(y-@yv)+(z-@zv)*(z-@zv)>=@mindist " +     // tried a direct spherical lookup using <=maxdist, too slow
                     "ORDER BY (x-@xv)*(x-@xv)+(y-@yv)*(y-@yv)+(z-@zv)*(z-@zv) " +
                     "LIMIT @max"
                     ))
@@ -681,9 +681,10 @@ namespace EliteDangerousCore.DB
                                     double dy = ((double)(long)reader[2]) / XYZScalar - y;
                                     double dz = ((double)(long)reader[3]) / XYZScalar - z;
 
-                                    double dist = dx * dx + dy * dy + dz * dz;
+                                    double distsq = dx * dx + dy * dy + dz * dz;
 
-                                    distlist.Add(dist, sys);
+                                    if ( !spherical || distsq <= maxdist*maxdist )
+                                        distlist.Add(distsq, sys);
                                 }
                             }
                         }
@@ -707,7 +708,7 @@ namespace EliteDangerousCore.DB
         public static ISystem FindNearestSystem(double x, double y, double z, bool removezerodiststar = false, double maxdist = 1000, SQLiteConnectionSystem cn = null)
         {
             SortedList<double, ISystem> distlist = new SortedList<double, ISystem>();
-            GetSystemSqDistancesFrom(distlist, x, y, z, 1, 8.0/128.0, maxdist,cn);
+            GetSystemSqDistancesFrom(distlist, x, y, z, 1, 8.0/128.0, maxdist,false,cn);
             return distlist.Select(v => v.Value).FirstOrDefault();
         }
 
