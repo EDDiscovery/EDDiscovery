@@ -421,6 +421,12 @@
     <Compile Include="UserControls\UserControlShoppingList.Designer.cs">
       <DependentUpon>UserControlShoppingList.cs</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\UserControlMap.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\UserControlMap.Designer.cs">
+      <DependentUpon>UserControlMap.cs</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\UserControlSysInfo.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -619,6 +625,9 @@
     <EmbeddedResource Include="UserControls\UserControlShoppingList.resx">
       <DependentUpon>UserControlShoppingList.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\UserControlMap.resx">
+      <DependentUpon>UserControlMap.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="UserControls\UserControlSysInfo.resx">
       <DependentUpon>UserControlSysInfo.cs</DependentUpon>
     </EmbeddedResource>
@@ -776,6 +785,7 @@
     <None Include="Resources\volcano.png" />
     <None Include="Resources\money.png" />
     <None Include="Resources\terraform.png" />
+    <Content Include="Resources\map.png" />
     <Content Include="Resources\plot.png" />
     <Content Include="x86\Microsoft.VC100.CRT\msvcp100.dll" />
     <Content Include="x86\Microsoft.VC100.CRT\msvcr100.dll" />
