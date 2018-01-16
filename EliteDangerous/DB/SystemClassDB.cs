@@ -272,7 +272,7 @@ namespace EliteDangerousCore.DB
             {
                 foreach (long edsmid in edsmidlist)
                 {
-                    ISystem sys = GetSystem(edsmid, cn, SystemIDType.EdsmId);
+                    ISystem sys = GetSystem(edsmid, cn, SystemIDType.EdsmId, name: name);
                     if (sys != null)
                     {
                         systems.Add(sys);
@@ -285,7 +285,7 @@ namespace EliteDangerousCore.DB
 
         public enum SystemIDType { id, EdsmId, EddbId };       // which ID to match?
 
-        public static ISystem GetSystem(long id,  SQLiteConnectionSystem cn = null, SystemIDType idtype = SystemIDType.id)      // using an id
+        public static ISystem GetSystem(long id,  SQLiteConnectionSystem cn = null, SystemIDType idtype = SystemIDType.id, string name = null)      // using an id
         {
             ISystem sys = null;
             bool closeit = false;
@@ -348,6 +348,15 @@ namespace EliteDangerousCore.DB
                                 sys.name = (string)reader["Name"];
                             }
                         }
+                    }
+
+                    if (sys.name == null && name != null)
+                    {
+                        sys.name = name;
+                    }
+                    else
+                    {
+                        return null;
                     }
                 }
 
@@ -606,7 +615,9 @@ namespace EliteDangerousCore.DB
                         {
                             long edsmid = (long)reader[0];
                             {
-                                    distlist.Add(GetSystem(edsmid, cn, SystemIDType.EdsmId));
+                                ISystem sys = GetSystem(edsmid, cn, SystemIDType.EdsmId);
+                                if (sys != null)
+                                    distlist.Add(sys);
                             }
                         }
                     }
@@ -749,7 +760,8 @@ namespace EliteDangerousCore.DB
                     {
                         long pos_edsmid = (long)reader["EdsmId"];
                         sys = GetSystem(pos_edsmid, cn, SystemIDType.EdsmId);
-                        break;
+                        if (sys != null)
+                            break;
                     }
                 }
             }
@@ -945,14 +957,18 @@ namespace EliteDangerousCore.DB
                 if (sel_edsmid != 0)
                 {
                     edsmidmatch = GetSystem(sel_edsmid, cn, SystemIDType.EdsmId);
-                    matches.Add(edsmidmatch.id, edsmidmatch);
-
-                    while (aliasesById.ContainsKey(sel_edsmid))
+                    if (edsmidmatch != null)
                     {
-                        sel_edsmid = aliasesById[sel_edsmid];
-                        ISystem sys = GetSystem(sel_edsmid, cn, SystemIDType.EdsmId);
-                        altmatches.Add(sys.id, sys);
-                        edsmidmatch = null;
+                        matches.Add(edsmidmatch.id, edsmidmatch);
+
+                        while (aliasesById.ContainsKey(sel_edsmid))
+                        {
+                            sel_edsmid = aliasesById[sel_edsmid];
+                            ISystem sys = GetSystem(sel_edsmid, cn, SystemIDType.EdsmId);
+                            if (sys != null)
+                                altmatches.Add(sys.id, sys);
+                            edsmidmatch = null;
+                        }
                     }
                 }
 
