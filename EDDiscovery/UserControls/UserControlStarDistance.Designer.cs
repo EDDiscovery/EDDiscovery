@@ -64,7 +64,8 @@ namespace EDDiscovery.UserControls
             this.labelExt3 = new System.Windows.Forms.Label();
             this.textMaxRadius = new ExtendedControls.TextBoxBorder();
             this.panelTop = new System.Windows.Forms.Panel();
-            this.buttonCubeSphere = new ExtendedControls.ButtonExt();
+            this.checkBoxCube = new ExtendedControls.CheckBoxCustom();
+            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.closestContextMenu.SuspendLayout();
             this.dataViewScrollerPanel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewNearest)).BeginInit();
@@ -228,6 +229,7 @@ namespace EDDiscovery.UserControls
             this.textMinRadius.Size = new System.Drawing.Size(40, 20);
             this.textMinRadius.TabIndex = 1;
             this.textMinRadius.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.toolTip1.SetToolTip(this.textMinRadius, "Minimum star distance in ly");
             this.textMinRadius.WordWrap = true;
             this.textMinRadius.TextChanged += new System.EventHandler(this.textMinRadius_TextChanged);
             // 
@@ -258,12 +260,13 @@ namespace EDDiscovery.UserControls
             this.textMaxRadius.Size = new System.Drawing.Size(40, 20);
             this.textMaxRadius.TabIndex = 1;
             this.textMaxRadius.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.toolTip1.SetToolTip(this.textMaxRadius, "Maximum star distance in ly");
             this.textMaxRadius.WordWrap = true;
             this.textMaxRadius.TextChanged += new System.EventHandler(this.textMaxRadius_TextChanged);
             // 
             // panelTop
             // 
-            this.panelTop.Controls.Add(this.buttonCubeSphere);
+            this.panelTop.Controls.Add(this.checkBoxCube);
             this.panelTop.Controls.Add(this.labelExt1);
             this.panelTop.Controls.Add(this.textMinRadius);
             this.panelTop.Controls.Add(this.labelExt3);
@@ -274,16 +277,24 @@ namespace EDDiscovery.UserControls
             this.panelTop.Size = new System.Drawing.Size(352, 31);
             this.panelTop.TabIndex = 25;
             // 
-            // buttonCubeSphere
+            // checkBoxCube
             // 
-            this.buttonCubeSphere.Dock = System.Windows.Forms.DockStyle.Right;
-            this.buttonCubeSphere.Location = new System.Drawing.Point(297, 0);
-            this.buttonCubeSphere.Name = "buttonCubeSphere";
-            this.buttonCubeSphere.Size = new System.Drawing.Size(55, 31);
-            this.buttonCubeSphere.TabIndex = 4;
-            this.buttonCubeSphere.Text = "Cube";
-            this.buttonCubeSphere.UseVisualStyleBackColor = true;
-            this.buttonCubeSphere.MouseClick += new System.Windows.Forms.MouseEventHandler(this.buttonCubeSphere_MouseClick);
+            this.checkBoxCube.AutoSize = true;
+            this.checkBoxCube.CheckBoxColor = System.Drawing.Color.Gray;
+            this.checkBoxCube.CheckBoxInnerColor = System.Drawing.Color.White;
+            this.checkBoxCube.CheckColor = System.Drawing.Color.DarkBlue;
+            this.checkBoxCube.FontNerfReduction = 0.5F;
+            this.checkBoxCube.ImageButtonDisabledScaling = 0.5F;
+            this.checkBoxCube.Location = new System.Drawing.Point(181, 5);
+            this.checkBoxCube.MouseOverColor = System.Drawing.Color.CornflowerBlue;
+            this.checkBoxCube.Name = "checkBoxCube";
+            this.checkBoxCube.Size = new System.Drawing.Size(51, 17);
+            this.checkBoxCube.TabIndex = 4;
+            this.checkBoxCube.Text = "Cube";
+            this.checkBoxCube.TickBoxReductionSize = 10;
+            this.toolTip1.SetToolTip(this.checkBoxCube, "Check to indicate use a cube instead of a sphere for distances");
+            this.checkBoxCube.UseVisualStyleBackColor = true;
+            this.checkBoxCube.CheckedChanged += new System.EventHandler(this.checkBoxCube_CheckedChanged);
             // 
             // UserControlStarDistance
             // 
@@ -317,6 +328,7 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.Label labelExt3;
         private ExtendedControls.TextBoxBorder textMaxRadius;
         private Panel panelTop;
-        private ExtendedControls.ButtonExt buttonCubeSphere;
+        private ToolTip toolTip1;
+        private ExtendedControls.CheckBoxCustom checkBoxCube;
     }
 }
