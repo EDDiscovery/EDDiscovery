@@ -237,7 +237,7 @@ namespace EliteDangerousCore
                 {
                     if (jfsd.JumpDist <= 0 && isys.HasCoordinate && newsys.HasCoordinate) // if no JDist, its a really old entry, and if previous has a co-ord
                     {
-                        jfsd.JumpDist = SystemClassDB.Distance(isys, newsys); // fill it out here
+                        jfsd.JumpDist = isys.Distance(newsys); // fill it out here
 
                         if (jfsd.JumpDist > 0)
                         {

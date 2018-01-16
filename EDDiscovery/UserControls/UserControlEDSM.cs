@@ -220,7 +220,7 @@ namespace EDDiscovery.UserControls
 
                 string dist = "";
                 if (sys.HasCoordinate)
-                    dist = SystemClassDB.Distance(sys, home).ToString("0.#");
+                    dist = sys.Distance(home).ToString("0.#");
 
                 object[] rowobj = { sys.name, dist, sys.x.ToString("0.#") + sep + sys.y.ToString("0.#") + sep + sys.z.ToString("0.#"), sys.id_edsm.ToStringInvariant() };
                 dataGridViewEDSM.Rows.Add(rowobj);

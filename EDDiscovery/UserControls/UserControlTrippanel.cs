@@ -149,7 +149,7 @@ namespace EDDiscovery.UserControls
 
                 if (targetpresent)
                 {
-                    double dist = SystemClassDB.Distance(he.System, tpos.X, tpos.Y, tpos.Z);
+                    double dist = he.System.Distance(tpos.X, tpos.Y, tpos.Z);
 
                     string mesg = "Left";
                     if (jumpRange > 0)
