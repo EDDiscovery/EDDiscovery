@@ -62,6 +62,7 @@ namespace EDDiscovery.Forms
             ScanGrid,               // 30
             Compass,                // 31
             Map,                    // 32
+            Plot,                   // 33
             // ****** ADD More here DO NOT REORDER *****
         };
 
@@ -79,6 +80,7 @@ namespace EDDiscovery.Forms
             { new PanelInfo( PanelIDs.TravelGrid, typeof(UserControlTravelGrid), "Travel History", "TravelHistory", EDDiscovery.Properties.Resources.travelgrid, "History grid view") },
             { new PanelInfo( PanelIDs.StarList, typeof(UserControlStarList), "Star List", "StarList", EDDiscovery.Properties.Resources.starlist, "Visited star list", transparent: false) },
             { new PanelInfo( PanelIDs.Map, typeof(UserControlMap), "Map", "Map", EDDiscovery.Properties.Resources.map, "3D Map of systems in range", transparent: false) },
+            { new PanelInfo( PanelIDs.Plot, typeof(UserControlPlot), "2D Plot", "Plot", EDDiscovery.Properties.Resources.plot, "2D Plot of systems in range", transparent: false) },
             { new PanelInfo( PanelIDs.MarketData, typeof(UserControlMarketData), "Market Data", "MarketData", EliteDangerous.Properties.Resources.marketdata , "Market data (Requires Frontier Commander login)" ) },
             { new PanelInfo( PanelIDs.Missions, typeof(UserControlMissions), "Missions", "Missions", EliteDangerous.Properties.Resources.missionaccepted , "Mission list") },
             { new PanelInfo( PanelIDs.Synthesis, typeof(UserControlSynthesis), "Synthesis", "Synthesis", EliteDangerous.Properties.Resources.synthesis, "Synthesis planner") },

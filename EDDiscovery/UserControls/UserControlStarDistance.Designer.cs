@@ -47,6 +47,9 @@ namespace EDDiscovery.UserControls
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
             this.closestContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.addToTrilaterationToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.viewOnEDSMToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
@@ -61,6 +64,8 @@ namespace EDDiscovery.UserControls
             this.labelExt3 = new System.Windows.Forms.Label();
             this.textMaxRadius = new ExtendedControls.TextBoxBorder();
             this.panelTop = new System.Windows.Forms.Panel();
+            this.checkBoxCube = new ExtendedControls.CheckBoxCustom();
+            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.closestContextMenu.SuspendLayout();
             this.dataViewScrollerPanel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewNearest)).BeginInit();
@@ -138,15 +143,39 @@ namespace EDDiscovery.UserControls
             this.dataGridViewNearest.AllowUserToDeleteRows = false;
             this.dataGridViewNearest.AllowUserToResizeRows = false;
             this.dataGridViewNearest.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dataGridViewNearest.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
             this.dataGridViewNearest.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewNearest.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.Col1,
             this.Distance,
             this.Visited});
             this.dataGridViewNearest.ContextMenuStrip = this.closestContextMenu;
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dataGridViewNearest.DefaultCellStyle = dataGridViewCellStyle2;
             this.dataGridViewNearest.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.dataGridViewNearest.Location = new System.Drawing.Point(0, 0);
             this.dataGridViewNearest.Name = "dataGridViewNearest";
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dataGridViewNearest.RowHeadersDefaultCellStyle = dataGridViewCellStyle3;
             this.dataGridViewNearest.RowHeadersVisible = false;
             this.dataGridViewNearest.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.dataGridViewNearest.Size = new System.Drawing.Size(332, 541);
@@ -190,23 +219,24 @@ namespace EDDiscovery.UserControls
             this.textMinRadius.BorderColorScaling = 0.5F;
             this.textMinRadius.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textMinRadius.ControlBackground = System.Drawing.SystemColors.Control;
-            this.textMinRadius.Location = new System.Drawing.Point(33, 3);
+            this.textMinRadius.Location = new System.Drawing.Point(30, 3);
             this.textMinRadius.Multiline = false;
             this.textMinRadius.Name = "textMinRadius";
             this.textMinRadius.ReadOnly = false;
             this.textMinRadius.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.textMinRadius.SelectionLength = 0;
             this.textMinRadius.SelectionStart = 0;
-            this.textMinRadius.Size = new System.Drawing.Size(50, 20);
+            this.textMinRadius.Size = new System.Drawing.Size(40, 20);
             this.textMinRadius.TabIndex = 1;
             this.textMinRadius.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.toolTip1.SetToolTip(this.textMinRadius, "Minimum star distance in ly");
             this.textMinRadius.WordWrap = true;
             this.textMinRadius.TextChanged += new System.EventHandler(this.textMinRadius_TextChanged);
             // 
             // labelExt3
             // 
             this.labelExt3.AutoSize = true;
-            this.labelExt3.Location = new System.Drawing.Point(96, 6);
+            this.labelExt3.Location = new System.Drawing.Point(88, 6);
             this.labelExt3.Name = "labelExt3";
             this.labelExt3.Size = new System.Drawing.Size(27, 13);
             this.labelExt3.TabIndex = 3;
@@ -220,21 +250,23 @@ namespace EDDiscovery.UserControls
             this.textMaxRadius.BorderColorScaling = 0.5F;
             this.textMaxRadius.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textMaxRadius.ControlBackground = System.Drawing.SystemColors.Control;
-            this.textMaxRadius.Location = new System.Drawing.Point(129, 3);
+            this.textMaxRadius.Location = new System.Drawing.Point(121, 3);
             this.textMaxRadius.Multiline = false;
             this.textMaxRadius.Name = "textMaxRadius";
             this.textMaxRadius.ReadOnly = false;
             this.textMaxRadius.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.textMaxRadius.SelectionLength = 0;
             this.textMaxRadius.SelectionStart = 0;
-            this.textMaxRadius.Size = new System.Drawing.Size(50, 20);
+            this.textMaxRadius.Size = new System.Drawing.Size(40, 20);
             this.textMaxRadius.TabIndex = 1;
             this.textMaxRadius.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.toolTip1.SetToolTip(this.textMaxRadius, "Maximum star distance in ly");
             this.textMaxRadius.WordWrap = true;
             this.textMaxRadius.TextChanged += new System.EventHandler(this.textMaxRadius_TextChanged);
             // 
             // panelTop
             // 
+            this.panelTop.Controls.Add(this.checkBoxCube);
             this.panelTop.Controls.Add(this.labelExt1);
             this.panelTop.Controls.Add(this.textMinRadius);
             this.panelTop.Controls.Add(this.labelExt3);
@@ -244,6 +276,25 @@ namespace EDDiscovery.UserControls
             this.panelTop.Name = "panelTop";
             this.panelTop.Size = new System.Drawing.Size(352, 31);
             this.panelTop.TabIndex = 25;
+            // 
+            // checkBoxCube
+            // 
+            this.checkBoxCube.AutoSize = true;
+            this.checkBoxCube.CheckBoxColor = System.Drawing.Color.Gray;
+            this.checkBoxCube.CheckBoxInnerColor = System.Drawing.Color.White;
+            this.checkBoxCube.CheckColor = System.Drawing.Color.DarkBlue;
+            this.checkBoxCube.FontNerfReduction = 0.5F;
+            this.checkBoxCube.ImageButtonDisabledScaling = 0.5F;
+            this.checkBoxCube.Location = new System.Drawing.Point(181, 5);
+            this.checkBoxCube.MouseOverColor = System.Drawing.Color.CornflowerBlue;
+            this.checkBoxCube.Name = "checkBoxCube";
+            this.checkBoxCube.Size = new System.Drawing.Size(51, 17);
+            this.checkBoxCube.TabIndex = 4;
+            this.checkBoxCube.Text = "Cube";
+            this.checkBoxCube.TickBoxReductionSize = 10;
+            this.toolTip1.SetToolTip(this.checkBoxCube, "Check to indicate use a cube instead of a sphere for distances");
+            this.checkBoxCube.UseVisualStyleBackColor = true;
+            this.checkBoxCube.CheckedChanged += new System.EventHandler(this.checkBoxCube_CheckedChanged);
             // 
             // UserControlStarDistance
             // 
@@ -277,5 +328,7 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.Label labelExt3;
         private ExtendedControls.TextBoxBorder textMaxRadius;
         private Panel panelTop;
+        private ToolTip toolTip1;
+        private ExtendedControls.CheckBoxCustom checkBoxCube;
     }
 }

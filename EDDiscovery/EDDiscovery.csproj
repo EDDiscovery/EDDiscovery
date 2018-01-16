@@ -347,6 +347,12 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UserControls\UserControlPlot.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\UserControlPlot.Designer.cs">
+      <DependentUpon>UserControlPlot.cs</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\UserControlScanGrid.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -589,6 +595,9 @@
     <EmbeddedResource Include="UserControls\UserControlContainerResizable.resx">
       <DependentUpon>UserControlContainerResizable.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\UserControlPlot.resx">
+      <DependentUpon>UserControlPlot.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="UserControls\UserControlScanGrid.resx">
       <DependentUpon>UserControlScanGrid.cs</DependentUpon>
     </EmbeddedResource>
@@ -777,6 +786,7 @@
     <None Include="Resources\money.png" />
     <None Include="Resources\terraform.png" />
     <Content Include="Resources\map.png" />
+    <Content Include="Resources\plot.png" />
     <Content Include="x86\Microsoft.VC100.CRT\msvcp100.dll" />
     <Content Include="x86\Microsoft.VC100.CRT\msvcr100.dll" />
     <EmbeddedResource Include="2DMap\Form2DMap.resx">
