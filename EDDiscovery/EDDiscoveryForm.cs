@@ -757,15 +757,30 @@ namespace EDDiscovery
                     LogLine(string.Format("Arrived at system {0} Visit No. {1}", he.System.name, count));
 
                     System.Diagnostics.Trace.WriteLine("Arrived at system: " + he.System.name + " " + count + ":th visit.");
+                }
 
-                    if (EDCommander.Current.SyncToEdsm == true)
+                if (!EDDOptions.Instance.SendEDSMJournals)
+                {
+                    if (he.IsFSDJump)
                     {
-                        EDSMSync.SendTravelLog(he);
+                        if (EDCommander.Current.SyncToEdsm == true)
+                        {
+                            EDSMSync.SendTravelLog(he);
+                            ActionRunOnEntry(he, Actions.ActionEventEDList.onEDSMSync);
+                        }
+                    }
+
+                    hl.SendEDSMStatusInfo(he, true);
+                }
+                else if (EDCommander.Current.SyncToEdsm)
+                {
+                    EDSMJournalSync.SendEDSMEvents(LogLine, he);
+
+                    if (he.EntryType == JournalTypeEnum.FSDJump)
+                    {
                         ActionRunOnEntry(he, Actions.ActionEventEDList.onEDSMSync);
                     }
                 }
-
-                hl.SendEDSMStatusInfo(he, true);
 
                 if (he.ISEDDNMessage && he.AgeOfEntry() < TimeSpan.FromDays(1.0))
                 {
