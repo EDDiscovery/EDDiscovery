@@ -171,7 +171,7 @@ namespace EDDiscovery.UserControls
                 {
                     int offset = 0;
                     Point maxstarpos = DrawNode(starcontrols, starnode,
-                                (starnode.type == StarScan.ScanNodeType.barycentre) ? Properties.Resources.Barycentre : JournalScan.GetStarImageNotScanned(),
+                                (starnode.type == StarScan.ScanNodeType.barycentre) ? Icons.Controls.Scan_Bodies_Barycentre : JournalScan.GetStarImageNotScanned(),
                                 curpos, starsize, ref offset, false, (planetsize.Height * 6 / 4 - starsize.Height) / 2, true);       // the last part nerfs the label down to the right position
 
                     Point maxitemspos = maxstarpos;
@@ -204,7 +204,7 @@ namespace EDDiscovery.UserControls
                                     curpos = new Point(firstcolumn.X, maxitemspos.Y + planetsize.Height);
                                 }
 
-                                DrawNode(starcontrols, lastbelt, Properties.Resources.Belt,
+                                DrawNode(starcontrols, lastbelt, Icons.Controls.Scan_Bodies_Belt,
                                          new Point(curpos.X + (planetsize.Width - beltsize.Width) / 2, curpos.Y), beltsize, ref offset, false);
 
                                 curpos = new Point(curpos.X + planetsize.Width, curpos.Y);
@@ -249,7 +249,7 @@ namespace EDDiscovery.UserControls
                                 curpos = new Point(firstcolumn.X, maxitemspos.Y + planetsize.Height);
                             }
 
-                            DrawNode(starcontrols, lastbelt, Properties.Resources.Belt,
+                            DrawNode(starcontrols, lastbelt, Icons.Controls.Scan_Bodies_Belt,
                                      new Point(curpos.X + (planetsize.Width - beltsize.Width) / 2, curpos.Y), beltsize, ref offset, false);
 
                             curpos = new Point(curpos.X + planetsize.Width, curpos.Y);
@@ -408,10 +408,10 @@ namespace EDDiscovery.UserControls
                             g.DrawImage(nodeimage, size.Width / 2, quarterheight, size.Width, size.Height);
 
                             if (sc.IsLandable)
-                                g.DrawImage(Properties.Resources.planet_landing, new Rectangle(quarterheight, 0, quarterheight * 6, quarterheight * 6));
+                                g.DrawImage(Icons.Controls.Scan_Bodies_Landable, new Rectangle(quarterheight, 0, quarterheight * 6, quarterheight * 6));
 
                             if (sc.HasRings)
-                                g.DrawImage(sc.Rings.Count() > 1 ? Properties.Resources.RingGap512 : Properties.Resources.Ring_Only_512,
+                                g.DrawImage(sc.Rings.Count() > 1 ? Icons.Controls.Scan_Bodies_RingGap : Icons.Controls.Scan_Bodies_RingOnly,
                                                 new Rectangle(-2, quarterheight, size.Width * 2, size.Height));
 
                             if (chkShowOverlays.Checked)
@@ -423,23 +423,23 @@ namespace EDDiscovery.UserControls
 
                                 if (sc.Terraformable)
                                 {
-                                    g.DrawImage(Properties.Resources.terraform, new Rectangle(0, pos, ovsize, ovsize));
+                                    g.DrawImage(Icons.Controls.Scan_Bodies_Terraformable, new Rectangle(0, pos, ovsize, ovsize));
                                     pos += ovsize + 1;
                                 }
 
                                 if (sc.HasMeaningfulVolcanism) //this renders below the terraformable icon if present
                                 {
-                                    g.DrawImage(Properties.Resources.Volcano, new Rectangle(0, pos, ovsize, ovsize));
+                                    g.DrawImage(Icons.Controls.Scan_Bodies_Volcanism, new Rectangle(0, pos, ovsize, ovsize));
                                     pos += ovsize + 1;
                                 }
 
                                 if (valuable)
-                                    g.DrawImage(Properties.Resources.money, new Rectangle(0, pos, ovsize, ovsize)); 
+                                    g.DrawImage(Icons.Controls.Scan_Bodies_HighValue, new Rectangle(0, pos, ovsize, ovsize)); 
                             }
-                
+
                             if (indicatematerials)
                             {
-                                Image mm = Properties.Resources.materiamoreindicator;
+                                Image mm = Icons.Controls.Scan_Bodies_MaterialMore;
                                 g.DrawImage(mm, new Rectangle(bmp.Width - mm.Width, bmp.Height - mm.Height, mm.Width, mm.Height));
                             }
                         }
@@ -486,7 +486,7 @@ namespace EDDiscovery.UserControls
                     }
                 }
 
-                endpoint = CreateImageLabel(pc, EDDiscovery.Properties.Resources.Belt,
+                endpoint = CreateImageLabel(pc, Icons.Controls.Scan_Bodies_Belt,
                     new Point(curpos.X, curpos.Y + alignv), new Size(size.Width, size.Height), sn.ownname,
                                                     tip, alignv + labelvoff, false, false);
                 offset += size.Width;
@@ -565,7 +565,7 @@ namespace EDDiscovery.UserControls
             colormap.OldColor = Color.White;    // this is the marker colour to replace
             colormap.NewColor = matcolour;
 
-            Bitmap mat = BitMapHelpers.ReplaceColourInBitmap(EDDiscovery.Properties.Resources.materialmarkerorangefilled, new System.Drawing.Imaging.ColorMap[] { colormap });
+            Bitmap mat = BitMapHelpers.ReplaceColourInBitmap((Bitmap)Icons.Controls.Scan_Bodies_Material, new System.Drawing.Imaging.ColorMap[] { colormap });
 
             BitMapHelpers.DrawTextCentreIntoBitmap(ref mat, text, stdfont, textcolour);
 

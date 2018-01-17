@@ -43,7 +43,6 @@ namespace EDDiscovery.Forms
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(NewReleaseForm));
             this.textBoxReleaseName = new ExtendedControls.TextBoxBorder();
             this.labelName = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
@@ -323,7 +322,7 @@ namespace EDDiscovery.Forms
             this.ClientSize = new System.Drawing.Size(419, 246);
             this.Controls.Add(this.pnlBack);
             this.DoubleBuffered = true;
-            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.Icon = global::EDDiscovery.Properties.Resources.edlogo_3mo_icon;
             this.MinimizeBox = false;
             this.MinimumSize = new System.Drawing.Size(435, 285);
             this.Name = "NewReleaseForm";

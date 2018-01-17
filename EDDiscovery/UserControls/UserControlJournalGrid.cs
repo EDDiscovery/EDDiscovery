@@ -525,6 +525,5 @@ namespace EDDiscovery.UserControls
                     OnTravelSelectionChanged(dataGridViewJournal.Rows[row].Cells[JournalHistoryColumns.HistoryTag].Tag as HistoryEntry, current_historylist);
             }
         }
-
     }
 }
