@@ -56,16 +56,7 @@ namespace EliteDangerousCore.JournalEvents
         public int Quantity { get; set; }
         public int TotalQuantity { get; set; }
 
-        public override System.Drawing.Bitmap Icon
-        {
-            get
-            {
-                if (unknownType)
-                    return EliteDangerous.Properties.Resources.genericevent;
-                else
-                    return EliteDangerous.Properties.Resources.engineerapply;
-            }
-        }
+        protected override JournalTypeEnum IconEventType { get { return unknownType ? JournalTypeEnum.EngineerContribution_Unknown : JournalTypeEnum.EngineerContribution_MatCommod; } }
 
         public override void FillInformation(out string summary, out string info, out string detailed) //V
         {

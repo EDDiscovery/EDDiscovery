@@ -36,8 +36,6 @@ namespace EliteDangerousCore.JournalEvents
         public int NumBodies { get; set; }            // Hyperspace, Supercruise
 
 
-        public override System.Drawing.Bitmap Icon { get { return EliteDangerous.Properties.Resources.navbeacon; } }
-
         public override void FillInformation(out string summary, out string info, out string detailed) //V
         {
             summary = EventTypeStr.SplitCapsWord();

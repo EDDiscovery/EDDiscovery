@@ -41,6 +41,7 @@ using EliteDangerousCore;
 using EliteDangerousCore.DB;
 using EliteDangerousCore.JournalEvents;
 using EliteDangerous.CompanionAPI;
+using EDDiscovery.Icons;
 
 namespace EDDiscovery
 {
@@ -153,6 +154,7 @@ namespace EDDiscovery
             Controller.Init();
 
             // Some components require the controller to be initialized
+            IconSet.SetPanelImageListGetter(PanelInformation.GetPanelImages);
             InitializeComponent();
 
             panelToolBar.HiddenMarkerWidth = 200;
@@ -1467,9 +1469,7 @@ namespace EDDiscovery
             else
                 return false;
 
-            Object res = Properties.Resources.ResourceManager.GetObject(icon);
-            if ( res == null )
-                res = EliteDangerous.Properties.Resources.ResourceManager.GetObject(icon);
+            Image img = IconSet.GetIcon(icon);
 
             var x = (from ToolStripItem p in parent.DropDownItems where p.Text.Equals(menutext) && p.Tag != null && p.Name.Equals(menuname) select p);
 
@@ -1479,8 +1479,8 @@ namespace EDDiscovery
                 it.Text = menutext;
                 it.Name = menuname;
                 it.Tag = packname;
-                if (res != null && res is Bitmap)
-                    it.Image = (Bitmap)res;
+                if (img != null)
+                    it.Image = img;
                 it.Size = new Size(313, 22);
                 it.Click += MenuTrigger_Click;
                 parent.DropDownItems.Add(it);
@@ -1674,8 +1674,6 @@ namespace EDDiscovery
         }
 
         #endregion
-
-
     }
 }
 

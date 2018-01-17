@@ -67,8 +67,6 @@ namespace EliteDangerousCore.JournalEvents
             detailed = BaseUtils.FieldBuilder.Build("Mode:", GameMode , "Group:" , Group , "Not Landed;Landed" , StartLanded , "Fuel Level:;;0.0", FuelLevel , "Capacity:;;0.0" , FuelCapacity);
         }
 
-        public override System.Drawing.Bitmap Icon { get { return EliteDangerous.Properties.Resources.loadgame; } }
-
         public void Ledger(Ledger mcl, DB.SQLiteConnectionUser conn)
         {
             if (mcl.CashTotal != Credits)
