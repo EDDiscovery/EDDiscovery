@@ -486,8 +486,8 @@ namespace ExtendedControls
         #region Icon Replacement
         public void ReplaceIcons(Func<string, Image> getIcon)
         {
-            drawnPanelListSelection.DrawnImage = getIcon("PanelList");
-            drawnPanelPopOut.DrawnImage = getIcon("Popout");
+            drawnPanelListSelection.Image = getIcon("PanelList");
+            drawnPanelPopOut.Image = getIcon("Popout");
             panelArrowLeft.BackgroundImage = getIcon("ArrowLeft");
             panelArrowRight.BackgroundImage = getIcon("ArrowRight");
             EmptyPanelIcon = getIcon("NoPanelSelected");
