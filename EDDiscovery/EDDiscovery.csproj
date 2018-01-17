@@ -240,7 +240,6 @@
     <Compile Include="UserControls\FilterHelpers.cs" />
     <Compile Include="UserControls\TargetClassHelpers.cs" />
     <Compile Include="EDDApplicationContext.cs" />
-    <Compile Include="DebugCode.cs" />
     <Compile Include="EDDiscoveryController.cs" />
     <Compile Include="Forms\CommanderForm.cs">
       <SubType>Form</SubType>

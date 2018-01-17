@@ -36,7 +36,6 @@ namespace EDDiscovery
         public bool TraceLog { get; private set; }
         public bool LogExceptions { get; private set; }
         public bool DisableShowDebugInfoInTitle { get; private set; }
-        public string ReadJournal { get; private set; }
         public string OptionsFile { get; private set; }
         public bool DontAskGithubForPacks { get; private set; }
 
@@ -185,11 +184,6 @@ namespace EDDiscovery
                 {
                     AppFolder = optval;
                 }
-                return true;
-            }
-            else if (optname == "-readjournal")
-            {
-                ReadJournal = optval;
                 return true;
             }
             else if (optname == "-userdbpath")

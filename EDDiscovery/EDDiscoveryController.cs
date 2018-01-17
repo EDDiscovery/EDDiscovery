@@ -345,11 +345,6 @@ namespace EDDiscovery
         {
             EDDOptions.Instance.Init();
 
-            if (EDDOptions.Instance.ReadJournal != null && File.Exists(EDDOptions.Instance.ReadJournal))
-            {
-                DebugCode.ReadCmdLineJournal(EDDOptions.Instance.ReadJournal);
-            }
-
             string logpath = "";
             try
             {
