@@ -33,7 +33,6 @@ namespace EDDiscovery.Icons
     {
         private static Dictionary<string, Image> defaultIcons;
         private static Dictionary<string, Image> icons;
-        private static Func<Image[]> getPanelImageList;
 
         static IconSet()
         {
@@ -52,12 +51,14 @@ namespace EDDiscovery.Icons
                     defaultIcons[name] = img;
                 }
             }
-
-            ResetIcons();
         }
 
         private static void InitLegacyIcons()
         {
+            icons["Legacy.settings"] = IconSet.GetIcon("Controls.Main.Tools.Settings");
+            icons["Legacy.missioncompleted"] = IconSet.GetIcon("Journal.MissionCompleted");
+
+#if false
             icons["Legacy.A9III_White"] = IconSet.GetIcon("Stars.A");
             icons["Legacy.Ammonia_Brown"] = IconSet.GetIcon("Planets.Ammonia_world");
             icons["Legacy.B6V_Blueish"] = IconSet.GetIcon("Stars.B");
@@ -395,6 +396,7 @@ namespace EDDiscovery.Icons
             icons["Legacy.wingleave"] = IconSet.GetIcon("Journal.WingLeave");
             icons["Legacy.panelLogo"] = IconSet.GetIcon("Legacy.eddiscovery_logo");
             icons["Legacy.panel_eddiscovery"] = IconSet.GetIcon("Legacy.eddiscovery_logo");
+#endif        
         }
 
         public static void ResetIcons()
@@ -471,48 +473,16 @@ namespace EDDiscovery.Icons
                 name = "Legacy." + name;
             }
 
-            return icons.ContainsKey(name) ? icons[name] : (defaultIcons.ContainsKey(name) ? defaultIcons[name] : null);
-        }
+            System.Diagnostics.Debug.WriteLine("ICON " + name);
 
-        public static void SetPanelImageListGetter(Func<Image[]> getter)
-        {
-            getPanelImageList = getter;
-        }
-
-        public static void ReplaceIcons(Control control)
-        {
-            if (control is IIconPackControl ctrl)
+            if (icons.ContainsKey(name))            // written this way so you can debug step it.
+                return icons[name];
+            else if (defaultIcons.ContainsKey(name))
+                return defaultIcons[name];
+            else
             {
-                ctrl.ReplaceIcons();
-            }
-            else if (control is CustomDateTimePicker dt)
-            {
-                dt.ReplaceIcons(n => IconSet.GetIcon("Controls.DateTimePicker." + n));
-            }
-            else if (control is RollUpPanel rp)
-            {
-                rp.ReplaceIcons(n => IconSet.GetIcon("Controls.RollUpPanel." + n));
-            }
-            else if (control is TabStrip ts)
-            {
-                ts.ReplaceIcons(n => IconSet.GetIcon("Controls.TabStrip." + n));
-                ts.ImageList = getPanelImageList();
-            }
-
-            if (control.HasChildren)
-            {
-                foreach (Control child in control.Controls)
-                {
-                    ReplaceIcons(child);
-                }
-            }
-        }
-
-        public static Dictionary<string, Image> DisposedImages
-        {
-            get
-            {
-                return icons.Where(i => i.Value == null || i.Value.PixelFormat == System.Drawing.Imaging.PixelFormat.DontCare).ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
+                System.Diagnostics.Debug.WriteLine("**************************** ************************" + Environment.NewLine + " Missing Icon " + name);
+                return defaultIcons["Legacy.star"];
             }
         }
     }

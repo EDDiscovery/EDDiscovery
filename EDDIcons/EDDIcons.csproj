@@ -62,7 +62,6 @@
     </None>
     <Compile Include="IconGroup.cs" />
     <Compile Include="IconSet.cs" />
-    <Compile Include="IIconPackControl.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

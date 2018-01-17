@@ -154,7 +154,7 @@ namespace EDDiscovery
             Controller.Init();
 
             // Some components require the controller to be initialized
-            IconSet.SetPanelImageListGetter(PanelInformation.GetPanelImages);
+            // obsolete remove IconSet.SetPanelImageListGetter(PanelInformation.GetPanelImages);
             InitializeComponent();
 
             panelToolBar.HiddenMarkerWidth = 200;
