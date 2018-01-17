@@ -35,6 +35,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -49,6 +52,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="EDCommander.cs" />
+    <Compile Include="TestJournalRead.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="TestJournalRead.Designer.cs">
+      <DependentUpon>TestJournalRead.cs</DependentUpon>
+    </Compile>
     <Compile Include="TestTabControlCustom.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -108,6 +117,9 @@
     <EmbeddedResource Include="TestDirectInput.resx">
       <DependentUpon>TestDirectInput.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="TestJournalRead.resx">
+      <DependentUpon>TestJournalRead.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="TestSelectionPanel.resx">
       <DependentUpon>TestSelectionPanel.cs</DependentUpon>
     </EmbeddedResource>
@@ -142,6 +154,7 @@
     <EmbeddedResource Include="UserControl2.resx">
       <DependentUpon>UserControl2.cs</DependentUpon>
     </EmbeddedResource>
+    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -174,6 +187,10 @@
     <ProjectReference Include="..\DirectInput\DirectInput.csproj">
       <Project>{390b1547-a455-45e3-974f-e1f9b1613ad5}</Project>
       <Name>DirectInput</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\EliteDangerous\EliteDangerous.csproj">
+      <Project>{019917a4-7342-4f67-8aaf-9e20c016a935}</Project>
+      <Name>EliteDangerous</Name>
     </ProjectReference>
     <ProjectReference Include="..\ExtendedControls\ExtendedControls.csproj">
       <Project>{2049403f-f4c7-45e6-b777-6390c78e4d2b}</Project>
