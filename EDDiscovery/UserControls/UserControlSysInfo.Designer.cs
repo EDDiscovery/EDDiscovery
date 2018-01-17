@@ -603,13 +603,11 @@ namespace EDDiscovery.UserControls
             // 
             // buttonEDDB
             // 
-            this.buttonEDDB.BackColor = System.Drawing.SystemColors.Control;
             this.buttonEDDB.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.buttonEDDB.ForeColor = System.Drawing.SystemColors.ControlText;
             this.buttonEDDB.ImageSelected = ExtendedControls.DrawnPanel.ImageType.EDDB;
             this.buttonEDDB.Location = new System.Drawing.Point(97, 30);
-            this.buttonEDDB.MarginSize = 0;
             this.buttonEDDB.Name = "buttonEDDB";
+            this.buttonEDDB.Padding = new System.Windows.Forms.Padding(0);
             this.buttonEDDB.Size = new System.Drawing.Size(20, 20);
             this.buttonEDDB.TabIndex = 5;
             this.buttonEDDB.Click += new System.EventHandler(this.buttonEDDB_Click);
@@ -619,13 +617,11 @@ namespace EDDiscovery.UserControls
             // 
             // buttonRoss
             // 
-            this.buttonRoss.BackColor = System.Drawing.SystemColors.ControlText;
             this.buttonRoss.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.buttonRoss.ForeColor = System.Drawing.SystemColors.Control;
             this.buttonRoss.ImageSelected = ExtendedControls.DrawnPanel.ImageType.Ross;
             this.buttonRoss.Location = new System.Drawing.Point(120, 30);
-            this.buttonRoss.MarginSize = 0;
             this.buttonRoss.Name = "buttonRoss";
+            this.buttonRoss.Padding = new System.Windows.Forms.Padding(0);
             this.buttonRoss.Size = new System.Drawing.Size(20, 20);
             this.buttonRoss.TabIndex = 6;
             this.buttonRoss.Click += new System.EventHandler(this.buttonRoss_Click);
@@ -672,14 +668,13 @@ namespace EDDiscovery.UserControls
             // 
             // buttonEDSM
             // 
-            this.buttonEDSM.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.buttonEDSM.ImageSelected = ExtendedControls.DrawnPanel.ImageType.InverseText;
-            this.buttonEDSM.ImageText = "EDSM";
             this.buttonEDSM.Location = new System.Drawing.Point(53, 30);
-            this.buttonEDSM.MarginSize = 0;
             this.buttonEDSM.Name = "buttonEDSM";
+            this.buttonEDSM.Padding = new System.Windows.Forms.Padding(0);
             this.buttonEDSM.Size = new System.Drawing.Size(44, 20);
             this.buttonEDSM.TabIndex = 4;
+            this.buttonEDSM.Text = "EDSM";
             this.buttonEDSM.Click += new System.EventHandler(this.buttonEDSM_Click);
             this.buttonEDSM.MouseDown += new System.Windows.Forms.MouseEventHandler(this.controlMouseDown);
             this.buttonEDSM.MouseMove += new System.Windows.Forms.MouseEventHandler(this.controlMouseMove);
@@ -779,14 +774,13 @@ namespace EDDiscovery.UserControls
             // 
             // buttonEDSMTarget
             // 
-            this.buttonEDSMTarget.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.buttonEDSMTarget.ImageSelected = ExtendedControls.DrawnPanel.ImageType.InverseText;
-            this.buttonEDSMTarget.ImageText = "EDSM";
             this.buttonEDSMTarget.Location = new System.Drawing.Point(216, 335);
-            this.buttonEDSMTarget.MarginSize = 0;
             this.buttonEDSMTarget.Name = "buttonEDSMTarget";
+            this.buttonEDSMTarget.Padding = new System.Windows.Forms.Padding(0);
             this.buttonEDSMTarget.Size = new System.Drawing.Size(44, 20);
             this.buttonEDSMTarget.TabIndex = 23;
+            this.buttonEDSMTarget.Text = "EDSM";
             this.buttonEDSMTarget.Click += new System.EventHandler(this.buttonEDSMTarget_Click);
             this.buttonEDSMTarget.MouseDown += new System.Windows.Forms.MouseEventHandler(this.controlMouseDown);
             this.buttonEDSMTarget.MouseMove += new System.Windows.Forms.MouseEventHandler(this.controlMouseMove);
