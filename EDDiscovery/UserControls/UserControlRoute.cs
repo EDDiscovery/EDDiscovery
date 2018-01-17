@@ -727,8 +727,7 @@ namespace EDDiscovery.UserControls
                 catch { }
             }
         }
+
+        #endregion
     }
-
-    #endregion
-
 }

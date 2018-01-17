@@ -48,7 +48,7 @@ namespace EliteDangerousCore
 
                 if (find.id_edsm > 0)        // if we have an ID, look it up
                 {
-                    found = DB.SystemClassDB.GetSystem(find.id_edsm, conn, DB.SystemClassDB.SystemIDType.EdsmId);
+                    found = DB.SystemClassDB.GetSystem(find.id_edsm, conn, DB.SystemClassDB.SystemIDType.EdsmId, name: find.name);
                 }
                  
                 // if not found, or no co-ord (unlikely), or its old as the hills, AND has a name
@@ -130,7 +130,7 @@ namespace EliteDangerousCore
             {
                 if (isys.HasCoordinate)
                 {
-                    double dist = DB.SystemClassDB.Distance(isys, comparesystem);
+                    double dist = isys.Distance(comparesystem);
 
                     if (dist < mindist)
                     {

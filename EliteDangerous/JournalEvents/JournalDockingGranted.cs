@@ -29,8 +29,6 @@ namespace EliteDangerousCore.JournalEvents
         public string StationName { get; set; }
         public int LandingPad { get; set; }
 
-        public override System.Drawing.Bitmap Icon { get { return EliteDangerous.Properties.Resources.dockinggranted; } }
-
         public override void FillInformation(out string summary, out string info, out string detailed) //V
         {
             summary = EventTypeStr.SplitCapsWord();

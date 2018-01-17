@@ -293,7 +293,7 @@ namespace EDDiscovery.Forms
             // panelLogo
             // 
             this.panelLogo.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panelLogo.Image = ((System.Drawing.Image)(resources.GetObject("panelLogo.Image")));
+            this.panelLogo.Image = global::EDDiscovery.Properties.Resources.Logo;
             this.panelLogo.Location = new System.Drawing.Point(3, 3);
             this.panelLogo.Name = "panelLogo";
             this.panelLogo.Padding = new System.Windows.Forms.Padding(1);
@@ -317,7 +317,7 @@ namespace EDDiscovery.Forms
             this.Controls.Add(this.buttonOK);
             this.Controls.Add(this.labelDevelopersEnum);
             this.DoubleBuffered = true;
-            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.Icon = global::EDDiscovery.Properties.Resources.edlogo_3mo_icon;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.MinimumSize = new System.Drawing.Size(650, 470);

@@ -154,8 +154,8 @@ namespace EDDiscovery.UserControls
 
                     ISystem homesys = EDDConfig.Instance.HomeSystem;
 
-                    textBoxHomeDist.Text = SystemClassDB.Distance(he.System, homesys).ToString(SingleCoordinateFormat);
-                    textBoxSolDist.Text = SystemClassDB.Distance(he.System, 0, 0, 0).ToString(SingleCoordinateFormat);
+                    textBoxHomeDist.Text = he.System.Distance(homesys).ToString(SingleCoordinateFormat);
+                    textBoxSolDist.Text = he.System.Distance(0, 0, 0).ToString(SingleCoordinateFormat);
                 }
                 else
                 {
@@ -311,7 +311,7 @@ namespace EDDiscovery.UserControls
 
                 HistoryEntry cs = discoveryform.history.GetLastWithPosition;
                 if (cs != null)
-                    textBoxTargetDist.Text = SystemClassDB.Distance(cs.System, x, y, z).ToString("0.0");
+                    textBoxTargetDist.Text = cs.System.Distance(x, y, z).ToString("0.0");
 
                 textBoxTarget.SetTipDynamically(toolTip1, "Position is " + x.ToString("0.00") + "," + y.ToString("0.00") + "," + z.ToString("0.00"));
             }

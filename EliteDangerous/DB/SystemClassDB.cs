@@ -38,8 +38,6 @@ namespace EliteDangerousCore.DB
             {
                 sys.name = jo["name"].Value<string>();
 
-                sys.cr = 1;
-
                 sys.x = jo["x"].Value<double>();
                 sys.y = jo["y"].Value<double>();
                 sys.z = jo["z"].Value<double>();
@@ -76,21 +74,6 @@ namespace EliteDangerousCore.DB
             return sys;
         }
 
-        public static double Distance(ISystemBase s1, ISystemBase s2)
-        {
-            if (s1 != null && s2 != null && s1.HasCoordinate && s2.HasCoordinate)
-                return Math.Sqrt((s1.x - s2.x) * (s1.x - s2.x) + (s1.y - s2.y) * (s1.y - s2.y) + (s1.z - s2.z) * (s1.z - s2.z));
-            else
-                return -1;
-        }
-
-        public static double Distance(ISystem s1, double x, double y, double z)
-        {
-            if (s1 != null && s1.HasCoordinate)
-                return Math.Sqrt((s1.x - x) * (s1.x - x) + (s1.y - y) * (s1.y - y) + (s1.z - z) * (s1.z - z));
-            else
-                return -1;
-        }
 
         public enum SystemAskType { AnyStars, PopulatedStars, UnPopulatedStars };
         public static int GetSystemVector<V>(int gridid, ref V[] vertices, ref uint[] colours,
@@ -272,7 +255,7 @@ namespace EliteDangerousCore.DB
             {
                 foreach (long edsmid in edsmidlist)
                 {
-                    ISystem sys = GetSystem(edsmid, cn, SystemIDType.EdsmId);
+                    ISystem sys = GetSystem(edsmid, cn, SystemIDType.EdsmId, name: name);
                     if (sys != null)
                     {
                         systems.Add(sys);
@@ -285,7 +268,10 @@ namespace EliteDangerousCore.DB
 
         public enum SystemIDType { id, EdsmId, EddbId };       // which ID to match?
 
-        public static ISystem GetSystem(long id,  SQLiteConnectionSystem cn = null, SystemIDType idtype = SystemIDType.id)      // using an id
+        // for rare circumstances, you can name it, but will only be used if for some reason the system name table is missing the entry
+        // which should never occur, unless something nasty happened during table updates.
+
+        public static ISystem GetSystem(long id,  SQLiteConnectionSystem cn = null, SystemIDType idtype = SystemIDType.id, string name = null)      // using an id
         {
             ISystem sys = null;
             bool closeit = false;
@@ -314,7 +300,6 @@ namespace EliteDangerousCore.DB
                                 id_eddb = reader["EddbId"] == System.DBNull.Value ? 0 : (long)reader["EddbId"],
                                 CreateDate = new DateTime(2015, 1, 1, 0, 0, 0, DateTimeKind.Utc) + TimeSpan.FromSeconds((long)reader["CreateTimestamp"]),
                                 UpdateDate = new DateTime(2015, 1, 1, 0, 0, 0, DateTimeKind.Utc) + TimeSpan.FromSeconds((long)reader["UpdateTimestamp"]),
-                                cr = 0,
                                 status = SystemStatusEnum.EDSM,
                                 gridid = (int)(long)reader["GridId"],
                                 randomid = (int)(long)reader["RandomId"]
@@ -350,6 +335,12 @@ namespace EliteDangerousCore.DB
                         }
                     }
                 }
+
+                if (sys.name == null)       // if no name, name it..
+                    sys.name = name;
+
+                if (sys.name == null)       // must have a name.
+                    sys = null;
 
                 if (sys != null && sys.id_eddb != 0)
                 {
@@ -606,7 +597,9 @@ namespace EliteDangerousCore.DB
                         {
                             long edsmid = (long)reader[0];
                             {
-                                    distlist.Add(GetSystem(edsmid, cn, SystemIDType.EdsmId));
+                                ISystem sys = GetSystem(edsmid, cn, SystemIDType.EdsmId);
+                                if (sys != null)
+                                    distlist.Add(sys);
                             }
                         }
                     }
@@ -630,7 +623,7 @@ namespace EliteDangerousCore.DB
 
         public static void GetSystemSqDistancesFrom(SortedList<double, ISystem> distlist, double x, double y, double z, 
                                                     int maxitems, 
-                                                    double mindist = 0, double maxdist = 200 , 
+                                                    double mindist , double maxdist , bool spherical,
                                                     SQLiteConnectionSystem cn = null)
         {
             bool closeit = false;
@@ -652,7 +645,7 @@ namespace EliteDangerousCore.DB
                     "AND y <= @yv + @maxdist " +
                     "AND z >= @zv - @maxdist " +
                     "AND z <= @zv + @maxdist " +
-                    "AND (x-@xv)*(x-@xv)+(y-@yv)*(y-@yv)+(z-@zv)*(z-@zv)>=@mindist " +
+                    "AND (x-@xv)*(x-@xv)+(y-@yv)*(y-@yv)+(z-@zv)*(z-@zv)>=@mindist " +     // tried a direct spherical lookup using <=maxdist, too slow
                     "ORDER BY (x-@xv)*(x-@xv)+(y-@yv)*(y-@yv)+(z-@zv)*(z-@zv) " +
                     "LIMIT @max"
                     ))
@@ -681,9 +674,10 @@ namespace EliteDangerousCore.DB
                                     double dy = ((double)(long)reader[2]) / XYZScalar - y;
                                     double dz = ((double)(long)reader[3]) / XYZScalar - z;
 
-                                    double dist = dx * dx + dy * dy + dz * dz;
+                                    double distsq = dx * dx + dy * dy + dz * dz;
 
-                                    distlist.Add(dist, sys);
+                                    if ( !spherical || distsq <= maxdist*maxdist )
+                                        distlist.Add(distsq, sys);
                                 }
                             }
                         }
@@ -707,7 +701,7 @@ namespace EliteDangerousCore.DB
         public static ISystem FindNearestSystem(double x, double y, double z, bool removezerodiststar = false, double maxdist = 1000, SQLiteConnectionSystem cn = null)
         {
             SortedList<double, ISystem> distlist = new SortedList<double, ISystem>();
-            GetSystemSqDistancesFrom(distlist, x, y, z, 1, 8.0/128.0, maxdist,cn);
+            GetSystemSqDistancesFrom(distlist, x, y, z, 1, 8.0/128.0, maxdist,false,cn);
             return distlist.Select(v => v.Value).FirstOrDefault();
         }
 
@@ -749,7 +743,8 @@ namespace EliteDangerousCore.DB
                     {
                         long pos_edsmid = (long)reader["EdsmId"];
                         sys = GetSystem(pos_edsmid, cn, SystemIDType.EdsmId);
-                        break;
+                        if (sys != null)
+                            break;
                     }
                 }
             }
@@ -945,14 +940,18 @@ namespace EliteDangerousCore.DB
                 if (sel_edsmid != 0)
                 {
                     edsmidmatch = GetSystem(sel_edsmid, cn, SystemIDType.EdsmId);
-                    matches.Add(edsmidmatch.id, edsmidmatch);
-
-                    while (aliasesById.ContainsKey(sel_edsmid))
+                    if (edsmidmatch != null)
                     {
-                        sel_edsmid = aliasesById[sel_edsmid];
-                        ISystem sys = GetSystem(sel_edsmid, cn, SystemIDType.EdsmId);
-                        altmatches.Add(sys.id, sys);
-                        edsmidmatch = null;
+                        matches.Add(edsmidmatch.id, edsmidmatch);
+
+                        while (aliasesById.ContainsKey(sel_edsmid))
+                        {
+                            sel_edsmid = aliasesById[sel_edsmid];
+                            ISystem sys = GetSystem(sel_edsmid, cn, SystemIDType.EdsmId);
+                            if (sys != null)
+                                altmatches.Add(sys.id, sys);
+                            edsmidmatch = null;
+                        }
                     }
                 }
 

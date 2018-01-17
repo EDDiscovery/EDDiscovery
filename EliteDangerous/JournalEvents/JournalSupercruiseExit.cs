@@ -37,8 +37,6 @@ namespace EliteDangerousCore.JournalEvents
         public string Body { get; set; }
         public string BodyType { get; set; }
 
-        public override System.Drawing.Bitmap Icon { get { return EliteDangerous.Properties.Resources.supercruiseexit; } }
-
         public override void FillInformation(out string summary, out string info, out string detailed) //V
         {
             summary = EventTypeStr.SplitCapsWord();

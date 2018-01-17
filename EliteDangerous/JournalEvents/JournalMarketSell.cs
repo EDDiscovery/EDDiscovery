@@ -55,8 +55,6 @@ namespace EliteDangerousCore.JournalEvents
         public bool StolenGoods { get; set; }
         public bool BlackMarket { get; set; }
 
-        public override System.Drawing.Bitmap Icon { get { return EliteDangerous.Properties.Resources.marketsell; } }
-
         public void MaterialList(MaterialCommoditiesList mc, DB.SQLiteConnectionUser conn)
         {
             mc.Change(MaterialCommodities.CommodityCategory, Type, -Count, 0, conn);

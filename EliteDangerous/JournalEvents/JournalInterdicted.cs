@@ -47,8 +47,6 @@ namespace EliteDangerousCore.JournalEvents
         public string Faction { get; set; }
         public string Power { get; set; }
 
-        public override System.Drawing.Bitmap Icon { get { return EliteDangerous.Properties.Resources.interdicted; } }
-
         public override void FillInformation(out string summary, out string info, out string detailed) //V
         {
             summary = EventTypeStr.SplitCapsWord();

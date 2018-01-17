@@ -512,7 +512,7 @@ namespace EliteDangerousCore.EDSM
                         bool firstdiscover = jo["firstDiscover"].Value<bool>();
                         DateTime etutc = DateTime.ParseExact(ts, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.AdjustToUniversal|DateTimeStyles.AssumeUniversal); // UTC time
 
-                        ISystem sc = SystemClassDB.GetSystem(id, cn, SystemClassDB.SystemIDType.EdsmId);
+                        ISystem sc = SystemClassDB.GetSystem(id, cn, SystemClassDB.SystemIDType.EdsmId, name: name);
                         if (sc == null)
                         {
                             if (DateTime.UtcNow.Subtract(etutc).TotalHours < 6) // Avoid running into the rate limit
@@ -549,6 +549,39 @@ namespace EliteDangerousCore.EDSM
                 return false;
 
             return (json.ToString() != "[]");
+        }
+
+        public List<string> CheckForNewCoordinates(List<string> sysNames)
+        {
+            List<string> nowKnown = new List<string>();
+            string query = "api-v1/systems?onlyKnownCoordinates=1&";
+            bool first = true;
+            foreach (string s in sysNames)
+            {
+                if (first) first = false;
+                else query = query + "&";
+                query = query + $"systemName[]={HttpUtility.UrlEncode(s)}";
+            }
+
+            var response = RequestGet(query, handleException: true);
+            if (response.Error)
+                return nowKnown;
+
+            var json = response.Body;
+            if (json == null)
+                return nowKnown;
+
+            JArray msg = JArray.Parse(json);
+
+            if (msg != null)
+            {
+                foreach (JObject sysname in msg)
+                {
+                    nowKnown.Add(sysname["name"].ToString());
+                }
+            }
+
+            return nowKnown;
         }
 
         public List<String> GetPushedSystems()

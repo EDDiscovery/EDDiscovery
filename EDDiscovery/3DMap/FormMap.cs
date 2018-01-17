@@ -204,7 +204,7 @@ namespace EDDiscovery
                 toolStripDropDownButtonGalObjects.DropDownItems.Add(_toolstripToggleNamingButton);
             }
 
-            maprecorder.UpdateStoredVideosToolButton(toolStripDropDownRecord, LoadVideo, EDDiscovery.Properties.Resources.floppy);
+            maprecorder.UpdateStoredVideosToolButton(toolStripDropDownRecord, LoadVideo, Icons.Controls.Map3D_Recorder_Save);
 
             discoveryForm.OnNewTarget -= UpdateTarget;  // in case called multi times
             discoveryForm.OnNewTarget += UpdateTarget;
@@ -1007,10 +1007,10 @@ namespace EDDiscovery
 
         private void GenerateDataSetsBNG()      // because the target is bound up with all three, best to do all three at once in ONE FUNCTION!
         {
-            Bitmap maptarget = (Bitmap)EDDiscovery.Properties.Resources.bookmarktarget;
-            Bitmap mapstar = (Bitmap)EDDiscovery.Properties.Resources.bookmarkgreen;
-            Bitmap mapregion = (Bitmap)EDDiscovery.Properties.Resources.bookmarkyellow;
-            Bitmap mapnotedbkmark = (Bitmap)EDDiscovery.Properties.Resources.bookmarkbrightred;
+            Bitmap maptarget = (Bitmap)Icons.Controls.Map3D_Bookmarks_Target;
+            Bitmap mapstar = (Bitmap)Icons.Controls.Map3D_Bookmarks_Star;
+            Bitmap mapregion = (Bitmap)Icons.Controls.Map3D_Bookmarks_Region;
+            Bitmap mapnotedbkmark = (Bitmap)Icons.Controls.Map3D_Bookmarks_Noted;
             Debug.Assert(mapnotedbkmark != null && maptarget != null);
             Debug.Assert(mapstar != null && mapregion != null);
 
@@ -1453,11 +1453,11 @@ namespace EDDiscovery
         void SetDropDownRecordImage()
         {
             if (maprecorder.InPlayBack)
-                toolStripDropDownRecord.Image = (maprecorder.Paused) ? EDDiscovery.Properties.Resources.pauseblue : EDDiscovery.Properties.Resources.PlayNormal;
+                toolStripDropDownRecord.Image = (maprecorder.Paused) ? Icons.Controls.Map3D_Recorder_PausePlay : Icons.Controls.Map3D_Recorder_Play;
             else if (maprecorder.Recording)
-                toolStripDropDownRecord.Image = (maprecorder.Paused) ? EDDiscovery.Properties.Resources.PauseNormalRed : EDDiscovery.Properties.Resources.RecordPressed;
+                toolStripDropDownRecord.Image = (maprecorder.Paused) ? Icons.Controls.Map3D_Recorder_PauseRecord : Icons.Controls.Map3D_Recorder_Record;
             else
-                toolStripDropDownRecord.Image = EDDiscovery.Properties.Resources.VideoRecorder;
+                toolStripDropDownRecord.Image = Icons.Controls.Map3D_Recorder_Menu;
         }
 
         private void recordToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1502,11 +1502,11 @@ namespace EDDiscovery
         private void toolStripDropDownRecord_DropDownOpening(object sender, EventArgs e)
         {
             recordToolStripMenuItem.Text = maprecorder.Recording ? "Stop Recording (F5)" : maprecorder.Entries ? "Resume Recording (F5)" : "Start Recording (F5)";
-            recordToolStripMenuItem.Image = maprecorder.Recording ? EDDiscovery.Properties.Resources.StopNormalRed : EDDiscovery.Properties.Resources.RecordPressed;
+            recordToolStripMenuItem.Image = maprecorder.Recording ? Icons.Controls.Map3D_Recorder_StopRecord : Icons.Controls.Map3D_Recorder_Record;
             recordToolStripMenuItem.Enabled = !maprecorder.InPlayBack && !maprecorder.RecordingStep;
 
             recordStepToStepToolStripMenuItem.Text = maprecorder.Recording ? "Stop Step Recording (F6)" : maprecorder.Entries ? "Resume Step Recording (F6)" : "Start Step Recording (F6)";
-            recordStepToStepToolStripMenuItem.Image = maprecorder.Recording ? EDDiscovery.Properties.Resources.StopNormalRed : EDDiscovery.Properties.Resources.RecordPressed;
+            recordStepToStepToolStripMenuItem.Image = maprecorder.Recording ? Icons.Controls.Map3D_Recorder_StopRecord : Icons.Controls.Map3D_Recorder_RecordStep;
             recordStepToStepToolStripMenuItem.Enabled = !maprecorder.InPlayBack && !maprecorder.RecordingNormal;
 
             newRecordStepToolStripMenuItem.Enabled = maprecorder.Recording;
@@ -1514,23 +1514,23 @@ namespace EDDiscovery
             toolStripMenuItemClearRecording.Enabled = maprecorder.Entries;
 
             playbackToolStripMenuItem.Text = maprecorder.InPlayBack ? "Stop Playback (F9)" : "Start Playback (F9)";
-            playbackToolStripMenuItem.Image = maprecorder.InPlayBack ? EDDiscovery.Properties.Resources.StopNormalBlue : EDDiscovery.Properties.Resources.PlayNormal;
+            playbackToolStripMenuItem.Image = maprecorder.InPlayBack ? Icons.Controls.Map3D_Recorder_StopPlay : Icons.Controls.Map3D_Recorder_Play;
             playbackToolStripMenuItem.Enabled = maprecorder.Entries;
 
             if (maprecorder.InPlayBack)
             {
                 pauseRecordToolStripMenuItem.Text = maprecorder.Paused ? "Resume Playback (F8)" : "Pause Playback (F8)";
-                pauseRecordToolStripMenuItem.Image = EDDiscovery.Properties.Resources.pauseblue;
+                pauseRecordToolStripMenuItem.Image = Icons.Controls.Map3D_Recorder_PausePlay;
             }
             else if (maprecorder.Recording)
             {
                 pauseRecordToolStripMenuItem.Text = maprecorder.Paused ? "Resume Recording (F8)" : "Pause Recording (F8)";
-                pauseRecordToolStripMenuItem.Image = EDDiscovery.Properties.Resources.PauseNormalRed;
+                pauseRecordToolStripMenuItem.Image = Icons.Controls.Map3D_Recorder_PauseRecord;
             }
             else
             {
                 pauseRecordToolStripMenuItem.Text = "Pause (F8)";
-                pauseRecordToolStripMenuItem.Image = EDDiscovery.Properties.Resources.PauseNormalRed;
+                pauseRecordToolStripMenuItem.Image = Icons.Controls.Map3D_Recorder_Pause;
             }
 
             pauseRecordToolStripMenuItem.Enabled = maprecorder.Recording || maprecorder.InPlayBack;
@@ -1541,7 +1541,7 @@ namespace EDDiscovery
         private void saveToFileToolStripMenuItem_Click(object sender, EventArgs e)
         {
             maprecorder.SaveDialog();
-            maprecorder.UpdateStoredVideosToolButton(toolStripDropDownRecord, LoadVideo, EDDiscovery.Properties.Resources.floppy);
+            maprecorder.UpdateStoredVideosToolButton(toolStripDropDownRecord, LoadVideo, Icons.Controls.Map3D_Recorder_Save);
         }
 
         private void LoadFileToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1826,7 +1826,7 @@ namespace EDDiscovery
                 info = hoversystem.name + Environment.NewLine + string.Format("x:{0} y:{1} z:{2}", hoversystem.x.ToString("0.00"), hoversystem.y.ToString("0.00"), hoversystem.z.ToString("0.00"));
                 pos = new Vector3d(hoversystem.x, hoversystem.y, hoversystem.z);
 
-                ISystem sysclass = (hoversystem.id != 0) ? SystemClassDB.GetSystem(hoversystem.id) : SystemClassDB.GetSystem(hoversystem.name);
+                ISystem sysclass = (hoversystem.id != 0) ? SystemClassDB.GetSystem(hoversystem.id, name: hoversystem.name) : SystemClassDB.GetSystem(hoversystem.name);
 
                 if (sysclass != null)
                 {
@@ -2410,7 +2410,6 @@ namespace EDDiscovery
 
 
         #endregion
-
     }
 
 
