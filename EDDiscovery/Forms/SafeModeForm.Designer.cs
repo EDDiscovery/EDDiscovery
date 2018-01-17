@@ -28,7 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SafeModeForm));
             this.buttonDbs = new System.Windows.Forms.Button();
             this.buttonNormal = new System.Windows.Forms.Button();
             this.buttonPositions = new System.Windows.Forms.Button();
@@ -110,7 +109,7 @@
             this.Controls.Add(this.buttonDbs);
             this.Controls.Add(this.buttonPositions);
             this.Controls.Add(this.buttonResetTheme);
-            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.Icon = global::EDDiscovery.Properties.Resources.edlogo_3mo_icon;
             this.Name = "SafeModeForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "EDDiscovery Safe Mode";

@@ -28,7 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ExportForm));
             this.panelBottom = new System.Windows.Forms.Panel();
             this.buttonCancel = new ExtendedControls.ButtonExt();
             this.label1 = new System.Windows.Forms.Label();
@@ -281,7 +280,7 @@
             this.Controls.Add(this.panel_close);
             this.Controls.Add(this.panel_minimize);
             this.Controls.Add(this.label_index);
-            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.Icon = global::EDDiscovery.Properties.Resources.edlogo_3mo_icon;
             this.Name = "ExportForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "ExportForm";

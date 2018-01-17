@@ -514,21 +514,18 @@ namespace EliteDangerousCore
         #region General Info
 
         public void CalculateSqDistances(SortedList<double, ISystem> distlist, double x, double y, double z, 
-                        int maxitems, double mindistance, double maxdistance )
+                        int maxitems, double mindistance, double maxdistance , bool spherical )
         {
-            var list = distlist.Values.ToList();
-
             HashSet<long> listids = new HashSet<long>();
             HashSet<string> listnames = new HashSet<string>(StringComparer.InvariantCultureIgnoreCase);
 
-            foreach (ISystem sys in list)
+            foreach (ISystem sys in distlist.Values.ToList())
             {
                 listids.Add(sys.id);
                 listnames.Add(sys.name);
             }
 
             mindistance *= mindistance;
-            maxdistance *= maxdistance;     // Square it for comparision
 
             foreach (HistoryEntry pos in historylist)
             {
@@ -539,13 +536,16 @@ namespace EliteDangerousCore
                     double dz = (pos.System.z - z);
                     double distsq = dx * dx + dy * dy + dz * dz;
 
-                    list.Add(pos.System);
                     listnames.Add(pos.System.name); //stops repeats..
 
-                    if ( distsq >= mindistance && distsq <= maxdistance)
+                    if ( distsq >= mindistance && 
+                            (( spherical && distsq <= maxdistance*maxdistance) || 
+                            (!spherical && Math.Abs(dx) <= maxdistance && Math.Abs(dy) <= maxdistance && Math.Abs(dz) <= maxdistance)))
                     {
                         if (distlist.Count < maxitems)          // if less than max, add..
+                        {
                             distlist.Add(distsq, pos.System);
+                        }
                         else if (distsq < distlist.Keys[distlist.Count - 1])   // if last entry (which must be the biggest) is greater than dist..
                         {
                             distlist.Add(distsq, pos.System);           // add in

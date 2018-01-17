@@ -39,8 +39,6 @@ namespace EliteDangerousCore.JournalEvents
         public long Cost { get; set; }
         public CombatRank CombatRank { get; set; }
 
-        public override System.Drawing.Bitmap Icon { get { return EliteDangerous.Properties.Resources.crewhire; } }
-
         public void Ledger(Ledger mcl, DB.SQLiteConnectionUser conn)
         {
             mcl.AddEvent(Id, EventTimeUTC, EventTypeID, Name + " " + Faction, -Cost);

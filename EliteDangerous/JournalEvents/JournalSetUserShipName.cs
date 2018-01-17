@@ -47,8 +47,6 @@ namespace EliteDangerousCore.JournalEvents
         public string ShipName { get; set; }
         public string ShipIdent { get; set; }
 
-        public override System.Drawing.Bitmap Icon { get { return EliteDangerous.Properties.Resources.setusershipname; } }
-
         public void ShipInformation(ShipInformationList shp, DB.SQLiteConnectionUser conn)
         {
             shp.SetUserShipName(this);

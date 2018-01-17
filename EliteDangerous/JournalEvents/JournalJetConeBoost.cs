@@ -31,8 +31,6 @@ namespace EliteDangerousCore.JournalEvents
         }
         public double BoostValue { get; set; }
 
-        public override System.Drawing.Bitmap Icon { get { return EliteDangerous.Properties.Resources.jetconeboost; } }
-
         public override void FillInformation(out string summary, out string info, out string detailed) //V
         {
             summary = EventTypeStr.SplitCapsWord();

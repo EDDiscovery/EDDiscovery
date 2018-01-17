@@ -70,6 +70,10 @@ namespace DialogTest
                 case "testtabcontrolcustom":
                     sel = new TestTabControlCustom();
                     break;
+
+                case "testjournalread":
+                    sel = new TestJournalRead();
+                    break;
             }
 
 

@@ -471,5 +471,14 @@ namespace ExtendedControls
             if (handler != null) handler(this, new EventArgs());
         }
 
+        #region Icon Replacement
+        public void ReplaceIcons(Func<string, Image> getIcon)
+        {
+            calendaricon.Image = getIcon("CalendarIcon");
+            int offset = BorderColor.IsFullyTransparent() ? 0 : 2;
+            calendaricon.Location = new Point(ClientRectangle.Width - offset - calendaricon.Image.Width - 4, ClientRectangle.Height / 2 - calendaricon.Image.Height / 2);
+            calendaricon.Size = calendaricon.Image.Size;
+        }
+        #endregion
     }
 }

@@ -26,6 +26,7 @@ namespace EDDiscovery
         public string AppDataDirectory { get; private set; }
         public string UserDatabasePath { get; private set; }
         public string SystemDatabasePath { get; private set; }
+        public string IconsPath { get; private set; }
         public bool NoWindowReposition { get;  set; }
         public bool ActionButton { get; private set; }
         public bool NoLoad { get; private set; }
@@ -36,7 +37,6 @@ namespace EDDiscovery
         public bool TraceLog { get; private set; }
         public bool LogExceptions { get; private set; }
         public bool DisableShowDebugInfoInTitle { get; private set; }
-        public string ReadJournal { get; private set; }
         public string OptionsFile { get; private set; }
         public bool DontAskGithubForPacks { get; private set; }
 
@@ -187,11 +187,6 @@ namespace EDDiscovery
                 }
                 return true;
             }
-            else if (optname == "-readjournal")
-            {
-                ReadJournal = optval;
-                return true;
-            }
             else if (optname == "-userdbpath")
             {
                 UserDatabasePath = optval;
@@ -200,6 +195,11 @@ namespace EDDiscovery
             else if (optname == "-systemsdbpath")
             {
                 SystemDatabasePath = optval;
+                return true;
+            }
+            else if (optname == "-iconspath")
+            {
+                IconsPath = optval;
                 return true;
             }
             else if (optname.StartsWith("-"))
