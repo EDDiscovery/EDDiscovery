@@ -117,6 +117,25 @@ namespace EliteDangerousCore.EDDN
             return msg;
         }
 
+        public JObject CreateEDDNMessage(JournalLocation journal)
+        {
+            if (!journal.HasCoordinate || journal.StarPosFromEDSM)
+                return null;
+
+            JObject msg = new JObject();
+
+            msg["header"] = Header();
+            msg["$schemaRef"] = GetEDDNJournalSchemaRef();
+
+            JObject message = journal.GetJson();
+
+            message = RemoveCommonKeys(message);
+            message.Remove("StarPosFromEDSM");
+
+            msg["message"] = message;
+            return msg;
+        }
+
         public JObject CreateEDDNMessage(JournalDocked journal, double x, double y, double z)
         {
             JObject msg = new JObject();
