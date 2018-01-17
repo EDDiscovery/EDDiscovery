@@ -27,16 +27,17 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using BaseUtils;
 
 namespace EDDiscovery
 {
     public partial class Form2DMap : Form
     {
-        public List<FGEImage> fgeimages;
-        private FGEImage currentFGEImage;
+        public List<Map2d> fgeimages;
+        private Map2d currentFGEImage;
         
         private DateTime startDate, endDate;
-        public bool Test = false;
+        public bool DisplayTestGrid = false;
 
         private DateTimePicker pickerStart, pickerStop;
         ToolStripControlHost host1, host2;
@@ -89,7 +90,7 @@ namespace EDDiscovery
 
             toolStripComboBox1.Items.Clear();
 
-            foreach (FGEImage img in fgeimages)
+            foreach (Map2d img in fgeimages)
             {
                 toolStripComboBox1.Items.Add(img.FileName);
             }
@@ -122,19 +123,18 @@ namespace EDDiscovery
 
         private bool AddImages()
         {
-            fgeimages = new List<FGEImage>();
+            fgeimages = new List<Map2d>();
             string datapath = Path.Combine(EDDOptions.Instance.AppDataDirectory, "Maps");
             if (Directory.Exists(datapath))
             {
-                fgeimages = FGEImage.LoadImages(datapath);
-                fgeimages.AddRange(FGEImage.LoadFixedImages(datapath));
+                fgeimages = Map2d.LoadImages(datapath);
                 return fgeimages.Count > 0;
             }
             else
                 return false;
         }
 
-        private void ShowImage(FGEImage fgeimg)
+        private void ShowImage(Map2d fgeimg)
         {
             //currentImage = (Bitmap)Image.FromFile(fgeimg.Name, true);
             if (fgeimg != null && initdone)
@@ -176,10 +176,7 @@ namespace EDDiscovery
                     }
                 }
 
-                Point test1 = currentFGEImage.TransformCoordinate(currentFGEImage.BottomLeft);
-                Point test2 = currentFGEImage.TransformCoordinate(currentFGEImage.TopRight);
-
-                if (Test)
+                if (DisplayTestGrid)
                     TestGrid(gfx);
             }
         }
@@ -219,9 +216,9 @@ namespace EDDiscovery
         private void TestGrid(Graphics gfx)
         {
             using (Pen pointPen = new Pen(Color.LawnGreen, 3))
-                for (int x = currentFGEImage.BottomLeft.X; x<= currentFGEImage.BottomRight.X; x+= 1000)
-                    for (int z = currentFGEImage.BottomLeft.Y; z<= currentFGEImage.TopLeft.Y; z+= 1000)
-                        gfx.DrawLine(pointPen, currentFGEImage.TransformCoordinate(new Point(x,z)), currentFGEImage.TransformCoordinate(new Point(x+10, z)));
+                for (int x = currentFGEImage.BottomLeft.X; x <= currentFGEImage.BottomRight.X; x += 1000)
+                    for (int z = currentFGEImage.BottomLeft.Y; z <= currentFGEImage.TopLeft.Y; z += 1000)
+                        gfx.DrawLine(pointPen, currentFGEImage.TransformCoordinate(new Point(x, z)), currentFGEImage.TransformCoordinate(new Point(x + 10, z)));
         }
 
 
@@ -247,7 +244,7 @@ namespace EDDiscovery
         {
             string str = toolStripComboBox1.SelectedItem.ToString();
 
-            FGEImage img = fgeimages.FirstOrDefault(i => i.FileName == str);
+            Map2d img = fgeimages.FirstOrDefault(i => i.FileName == str);
             ShowImage(img);
         }
 

@@ -69,6 +69,12 @@
     <Compile Include="Controls\DrawnPanelNoTheme.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Controls\ImageViewer.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controls\ImageViewer.Designer.cs">
+      <DependentUpon>ImageViewer.cs</DependentUpon>
+    </Compile>
     <Compile Include="Controls\PanelNoTheme.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -196,6 +202,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Controls\AutoCompleteTextBox.resx">
       <DependentUpon>AutoCompleteTextBox.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\ImageViewer.resx">
+      <DependentUpon>ImageViewer.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\InfoForm.resx">
       <DependentUpon>InfoForm.cs</DependentUpon>

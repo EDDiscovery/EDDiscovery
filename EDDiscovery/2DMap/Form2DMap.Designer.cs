@@ -53,7 +53,7 @@ namespace EDDiscovery
             this.panel1 = new System.Windows.Forms.Panel();
             this.buttonSave = new System.Windows.Forms.Button();
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
-            this.imageViewer1 = new EDDiscovery._2DMap.ImageViewer();
+            this.imageViewer1 = new ExtendedControls.ImageViewer();
             this.toolStrip1.SuspendLayout();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
@@ -205,7 +205,7 @@ namespace EDDiscovery
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.ToolStripComboBox toolStripComboBox1;
         private System.Windows.Forms.ToolStripComboBox toolStripComboBoxTime;
-        private _2DMap.ImageViewer imageViewer1;
+        private ExtendedControls.ImageViewer imageViewer1;
         private System.Windows.Forms.ToolStripButton toolStripButtonZoomIn;
         private System.Windows.Forms.ToolStripButton toolStripButtonZoomOut;
         private System.Windows.Forms.ToolStripButton toolStripButtonZoomtoFit;

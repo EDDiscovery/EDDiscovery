@@ -103,7 +103,7 @@ namespace EDDiscovery
         public List<HistoryEntry> _systemlist { get; set; }
         private List<ISystem> _plannedRoute { get; set; }
 
-        public List<FGEImage> fgeimages = new List<FGEImage>();
+        public List<BaseUtils.Map2d> fgeimages = new List<BaseUtils.Map2d>();
 
         public DateTime startTime { get; set; }
         public DateTime endTime { get; set; }
@@ -966,7 +966,7 @@ namespace EDDiscovery
             DeleteDataset(ref _datasets_maps);
             _datasets_maps = null;
 
-            FGEImage[] _selected = dropdownMapNames.DropDownItems.OfType<ToolStripButton>().Where(b => b.Checked).Select(b => b.Tag as FGEImage).ToArray();
+            BaseUtils.Map2d[] _selected = dropdownMapNames.DropDownItems.OfType<ToolStripButton>().Where(b => b.Checked).Select(b => b.Tag as BaseUtils.Map2d).ToArray();
 
             DatasetBuilder builder = new DatasetBuilder();
             _datasets_maps = builder.AddMapImages(_selected);
@@ -2290,8 +2290,7 @@ namespace EDDiscovery
             string datapath = System.IO.Path.Combine(EDDOptions.Instance.AppDataDirectory, "Maps");
             if (System.IO.Directory.Exists(datapath))
             {
-                fgeimages = FGEImage.LoadImages(datapath);
-                fgeimages.AddRange(FGEImage.LoadFixedImages(datapath));
+                fgeimages = BaseUtils.Map2d.LoadImages(datapath);
             }
 
             dropdownMapNames.DropDownItems.Clear();
