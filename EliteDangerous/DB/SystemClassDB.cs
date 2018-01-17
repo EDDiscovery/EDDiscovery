@@ -38,8 +38,6 @@ namespace EliteDangerousCore.DB
             {
                 sys.name = jo["name"].Value<string>();
 
-                sys.cr = 1;
-
                 sys.x = jo["x"].Value<double>();
                 sys.y = jo["y"].Value<double>();
                 sys.z = jo["z"].Value<double>();
@@ -76,21 +74,6 @@ namespace EliteDangerousCore.DB
             return sys;
         }
 
-        public static double Distance(ISystemBase s1, ISystemBase s2)
-        {
-            if (s1 != null && s2 != null && s1.HasCoordinate && s2.HasCoordinate)
-                return Math.Sqrt((s1.x - s2.x) * (s1.x - s2.x) + (s1.y - s2.y) * (s1.y - s2.y) + (s1.z - s2.z) * (s1.z - s2.z));
-            else
-                return -1;
-        }
-
-        public static double Distance(ISystem s1, double x, double y, double z)
-        {
-            if (s1 != null && s1.HasCoordinate)
-                return Math.Sqrt((s1.x - x) * (s1.x - x) + (s1.y - y) * (s1.y - y) + (s1.z - z) * (s1.z - z));
-            else
-                return -1;
-        }
 
         public enum SystemAskType { AnyStars, PopulatedStars, UnPopulatedStars };
         public static int GetSystemVector<V>(int gridid, ref V[] vertices, ref uint[] colours,
@@ -317,7 +300,6 @@ namespace EliteDangerousCore.DB
                                 id_eddb = reader["EddbId"] == System.DBNull.Value ? 0 : (long)reader["EddbId"],
                                 CreateDate = new DateTime(2015, 1, 1, 0, 0, 0, DateTimeKind.Utc) + TimeSpan.FromSeconds((long)reader["CreateTimestamp"]),
                                 UpdateDate = new DateTime(2015, 1, 1, 0, 0, 0, DateTimeKind.Utc) + TimeSpan.FromSeconds((long)reader["UpdateTimestamp"]),
-                                cr = 0,
                                 status = SystemStatusEnum.EDSM,
                                 gridid = (int)(long)reader["GridId"],
                                 randomid = (int)(long)reader["RandomId"]
