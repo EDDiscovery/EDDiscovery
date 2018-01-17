@@ -436,6 +436,34 @@ namespace EDDiscovery
 
         #endregion
 
+        #region 2dmaps
+
+        public static Task<bool> DownloadMaps(IDiscoveryController discoveryform, Func<bool> cancelRequested, Action<string> logLine, Action<string> logError)          // ASYNC process
+        {
+            try
+            {
+                string mapsdir = Path.Combine(EDDOptions.Instance.AppDataDirectory, "Maps");
+                if (!Directory.Exists(mapsdir))
+                    Directory.CreateDirectory(mapsdir);
+
+                logLine("Checking for new EDDiscovery maps");
+
+                BaseUtils.GitHubClass github = new BaseUtils.GitHubClass(EDDiscovery.Properties.Resources.URLGithubDownload, discoveryform.LogLine);
+
+                var files = github.GetDataFiles("Maps/V1");
+                return Task.Factory.StartNew(() => github.DownloadFiles(files, mapsdir));
+            }
+            catch (Exception ex)
+            {
+                logError("DownloadImages exception: " + ex.Message);
+                var tcs = new TaskCompletionSource<bool>();
+                tcs.SetException(ex);
+                return tcs.Task;
+            }
+        }
+
+        #endregion
+
         #region Async EDSM/EDDB Full Sync
 
         private void DoPerformSync()
@@ -757,7 +785,7 @@ namespace EDDiscovery
 
             if (!EDDOptions.Instance.NoSystemsLoad)
             {
-                downloadMapsTask = FGEImage.DownloadMaps(this, () => PendingClose, LogLine, LogLineHighlight);
+                downloadMapsTask = DownloadMaps(this, () => PendingClose, LogLine, LogLineHighlight);
                 CheckSystems(() => PendingClose, (p, s) => ReportProgress(p, s));
             }
 

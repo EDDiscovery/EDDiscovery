@@ -162,18 +162,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="2DMap\FGEImage.cs" />
     <Compile Include="2DMap\Form2DMap.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="2DMap\Form2DMap.Designer.cs">
       <DependentUpon>Form2DMap.cs</DependentUpon>
-    </Compile>
-    <Compile Include="2DMap\ImageViewer.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="2DMap\ImageViewer.Designer.cs">
-      <DependentUpon>ImageViewer.cs</DependentUpon>
     </Compile>
     <Compile Include="3DMap\CameraDirectionMovement.cs" />
     <Compile Include="3DMap\PositionDirection.cs" />
@@ -703,9 +696,6 @@
     <Content Include="x86\Microsoft.VC100.CRT\msvcr100.dll" />
     <EmbeddedResource Include="2DMap\Form2DMap.resx">
       <DependentUpon>Form2DMap.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="2DMap\ImageViewer.resx">
-      <DependentUpon>ImageViewer.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="EDDiscoveryForm.resx">
       <DependentUpon>EDDiscoveryForm.cs</DependentUpon>

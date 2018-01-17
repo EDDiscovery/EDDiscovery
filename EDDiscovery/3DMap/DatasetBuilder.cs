@@ -56,7 +56,7 @@ namespace EDDiscovery._3DMap
 
         #region MAPS
 
-       public List<IData3DSet> AddMapImages(FGEImage [] list)
+       public List<IData3DSet> AddMapImages(BaseUtils.Map2d [] list)
         {
             if (list.Length > 0 )
             {
@@ -64,7 +64,7 @@ namespace EDDiscovery._3DMap
 
                 for( int i = 0; i < list.Length; i++)
                 {
-                    FGEImage img = list[i];
+                    BaseUtils.Map2d img = list[i];
 
                     if (_cachedTextures.ContainsKey(img.FileName))
                     {
