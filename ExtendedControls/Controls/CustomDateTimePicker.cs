@@ -471,8 +471,9 @@ namespace ExtendedControls
             if (handler != null) handler(this, new EventArgs());
         }
 
+        // NOT IN USE
         #region Icon Replacement
-        public void ReplaceIcons(Func<string, Image> getIcon)
+        public void ReplaceIconsNOTINUSE(Func<string, Image> getIcon)
         {
             calendaricon.Image = getIcon("CalendarIcon");
             int offset = BorderColor.IsFullyTransparent() ? 0 : 2;
