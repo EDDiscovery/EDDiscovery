@@ -38,6 +38,7 @@ namespace EDDiscovery
         public bool DisableShowDebugInfoInTitle { get; private set; }
         public string OptionsFile { get; private set; }
         public bool DontAskGithubForPacks { get; private set; }
+        public bool SendEDSMJournals { get; private set; }
 
         private string AppFolder { get; set; }      // internal to use.. for -appfolder option
         private bool StoreDataInProgramDirectory { get; set; }  // internal to us, to indicate portable
@@ -224,6 +225,8 @@ namespace EDDiscovery
                     case "nosound": NoSound = true; break;
                     case "no3dmap": No3DMap = true; break;
                     case "notitleinfo": DisableShowDebugInfoInTitle = true; break;
+                    case "edsmjournal": SendEDSMJournals = true; break;
+                    case "noedsmjournal": SendEDSMJournals = false; break;
                     default:
                         Console.WriteLine($"Unrecognized option -{opt}");
                         break;
