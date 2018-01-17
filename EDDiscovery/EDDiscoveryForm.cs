@@ -657,12 +657,12 @@ namespace EDDiscovery
 
             if (Capi.LoggedIn)
             {
-                if (Controller.history != null && Controller.history.Count > 0 && Controller.history.GetLast.ContainsRares())
-                {
-                    LogLine("Not performing Companion API get due to carrying rares");
-                }
-                else
-                { 
+                // Remove 17/1/2018 told capi bug was over
+                //if (Controller.history != null && Controller.history.Count > 0 && Controller.history.GetLast.ContainsRares())
+                //{
+                    //LogLine("Not performing Companion API get due to carrying rares");
+                //}
+
                     try
                     {
                         Capi.GetProfile();
@@ -674,7 +674,6 @@ namespace EDDiscovery
                         if (!(ex is EliteDangerousCore.CompanionAPI.CompanionAppException))
                             LogLineHighlight(ex.StackTrace);
                     }
-                }
             }
 
             Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " Refresh complete finished");
