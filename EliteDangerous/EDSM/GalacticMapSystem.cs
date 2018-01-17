@@ -17,7 +17,6 @@ namespace EliteDangerousCore.EDSM
             this.allegiance = sys.allegiance;
             this.CommanderCreate = sys.CommanderCreate;
             this.CommanderUpdate = sys.CommanderUpdate;
-            this.cr = sys.cr;
             this.CreateDate = sys.CreateDate;
             this.eddb_updated_at = sys.eddb_updated_at;
             this.faction = sys.faction;

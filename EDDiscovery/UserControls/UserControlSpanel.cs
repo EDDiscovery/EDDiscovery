@@ -300,7 +300,7 @@ namespace EDDiscovery.UserControls
 
                         if (targetpresent && Config(Configuration.showTargetLine) && currentsystem != null)
                         {
-                            string dist = (currentsystem.HasCoordinate) ? SystemClassDB.Distance(currentsystem, tpos.X, tpos.Y, tpos.Z).ToString("0.00") : "Unknown";
+                            string dist = (currentsystem.HasCoordinate) ? currentsystem.Distance(tpos.X, tpos.Y, tpos.Z).ToString("0.00") : "Unknown";
                             AddColText(0, 0, rowpos, rowheight, "Target: " + name + " @ " + dist +" ly", textcolour, backcolour, null);
                             rowpos += rowheight;
                         }
@@ -502,7 +502,7 @@ namespace EDDiscovery.UserControls
             string res = "";
             if (!double.IsNaN(tpos.X))
             {
-                double dist = SystemClassDB.Distance(he.System, tpos.X, tpos.Y, tpos.Z);
+                double dist = he.System.Distance(tpos.X, tpos.Y, tpos.Z);
                 if (dist >= 0)
                     res = dist.ToString("0.00");
             }
