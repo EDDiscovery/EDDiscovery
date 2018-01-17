@@ -1209,5 +1209,38 @@ namespace EliteDangerousCore.EDSM
                 }
             }
         }
+
+        public List<string> GetJournalEventsToDiscard()
+        {
+            string action = "api-journal-v1/discard";
+            var response = RequestGet(action);
+            return JArray.Parse(response.Body).Cast<string>().ToList();
+        }
+
+        public int SendJournalEvents(List<JObject> entries, out string errmsg)
+        {
+            JObject data = new JObject
+            {
+                ["commanderName"] = commanderName,
+                ["apiKey"] = apiKey,
+                ["fromSoftware"] = fromSoftware,
+                ["fromSoftwareVersion"] = fromSoftwareVersion,
+                ["message"] = new JArray(entries)
+            };
+
+            string postdata = data.ToString();
+            MimeType = "application/json; charset=utf-8";
+            var response = RequestPost(postdata, "api-journal-v1", handleException: true);
+
+            if (response.Error)
+            {
+                errmsg = response.StatusCode.ToString();
+                return -1;
+            }
+
+            JObject resp = JObject.Parse(response.Body);
+            errmsg = resp["msg"]?.ToString();
+            return resp["msgnum"].Int(0);
+        }
     }
 }

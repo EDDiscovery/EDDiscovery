@@ -95,6 +95,7 @@
     <Compile Include="EDDB\SystemClassEDDB.cs" />
     <Compile Include="EDDN\EDDNClass.cs" />
     <Compile Include="EDDN\EDDNSync.cs" />
+    <Compile Include="EDSM\EDSMJournalSync.cs" />
     <Compile Include="EDSM\EDSMClass.cs" />
     <Compile Include="EDSM\EDSMLogFetcher.cs" />
     <Compile Include="EDSM\EDSMSync.cs" />
