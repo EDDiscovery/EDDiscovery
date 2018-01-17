@@ -142,7 +142,7 @@ namespace EDDiscovery.UserControls
             // 
             // drawnPanelPopOut
             // 
-            this.drawnPanelPopOut.DrawnImage = global::EDDiscovery.Icons.Controls.TravelGrid_Popout;
+            this.drawnPanelPopOut.Image = global::EDDiscovery.Icons.Controls.TravelGrid_Popout;
             this.drawnPanelPopOut.ImageSelected = ExtendedControls.DrawnPanel.ImageType.None;
             this.drawnPanelPopOut.Location = new System.Drawing.Point(32, 3);
             this.drawnPanelPopOut.Name = "drawnPanelPopOut";
