@@ -40,14 +40,17 @@ namespace EDDiscovery.UserControls
         public UserControlMap()
         {
             InitializeComponent();
+            this.chart3DPlot.MouseWheel += Zoom_MouseWheel;            
         }
 
-        const double defaultmaximumradarradius = 100;
-        int maxitems = 500;
+        const double defaultMaximumMapRadius = 100;
+
+        int maxitems = 500;        
 
         double MaxRadius = 100;
         double MinRadius = 0;
-        
+
+        #region init
 
         public override void Init()
         {
@@ -55,10 +58,15 @@ namespace EDDiscovery.UserControls
 
             uctg.OnTravelSelectionChanged += Uctg_OnTravelSelectionChanged;
 
-            textMinRadius.Text = SQLiteConnectionUser.GetSettingDouble(DbSave + "RadarMin", 0).ToStringInvariant();
-            textMaxRadius.Text = SQLiteConnectionUser.GetSettingDouble(DbSave + "RadarMax", defaultmaximumradarradius).ToStringInvariant();
+            textMinRadius.Text = SQLiteConnectionUser.GetSettingDouble(DbSave + "MapMin", 0).ToStringInvariant();
+            textMaxRadius.Text = SQLiteConnectionUser.GetSettingDouble(DbSave + "MapMax", defaultMaximumMapRadius).ToStringInvariant();
+            maxitems = SQLiteConnectionUser.GetSettingInt(DbSave + "MapMaxItems", maxitems);
+            trackBarMaxItems.Value = SQLiteConnectionUser.GetSettingInt(DbSave + "MapMaxItems", maxitems);
             MaxRadius = float.Parse(textMaxRadius.Text);
             MinRadius = float.Parse(textMinRadius.Text);
+
+            trackBarMaxItems.Minimum = 50;
+            trackBarMaxItems.Maximum = 500;
         }
 
         public override void ChangeCursorType(IHistoryCursor thc)
@@ -67,27 +75,31 @@ namespace EDDiscovery.UserControls
             uctg = thc;
             uctg.OnTravelSelectionChanged += Uctg_OnTravelSelectionChanged;
 
-            refreshRadar();
+            refreshMap();
         }
 
         public override void Closing()
         {
             uctg.OnTravelSelectionChanged -= Uctg_OnTravelSelectionChanged;
             computer.ShutDown();
-            SQLiteConnectionUser.PutSettingDouble(DbSave + "RadarMin", textMinRadius.Text.InvariantParseDouble(0));
-            SQLiteConnectionUser.PutSettingDouble(DbSave + "RadarMax", textMaxRadius.Text.InvariantParseDouble(defaultmaximumradarradius));
+            SQLiteConnectionUser.PutSettingDouble(DbSave + "MapMin", textMinRadius.Text.InvariantParseDouble(0));
+            SQLiteConnectionUser.PutSettingDouble(DbSave + "MapMax", textMaxRadius.Text.InvariantParseDouble(defaultMaximumMapRadius));
+            SQLiteConnectionUser.PutSettingInt(DbSave + "MapMaxItems", maxitems);
         }
 
         public override void InitialDisplay()
         {
             KickComputation(uctg.GetCurrentHistoryEntry);            
-
         }
+
+        #endregion
+
+        #region compute
 
         private void Uctg_OnTravelSelectionChanged(HistoryEntry he, HistoryList hl)
         {
             KickComputation(he);
-            refreshRadar();            
+            refreshMap();            
         }
 
         private void KickComputation(HistoryEntry he)
@@ -197,12 +209,16 @@ namespace EDDiscovery.UserControls
                             }
                                                         
                             chart3DPlot.Series[ispy].Points.AddXY(px, pz);
-                            chart3DPlot.Series[ispy].ToolTip = label.ToString();
+                            chart3DPlot.Series[ispy].ToolTip = label.ToString();                            
                         }
                     }
                 }
             }
         }
+
+        #endregion
+
+        #region radius_changes
 
         private void textMinRadius_TextChanged(object sender, EventArgs e)
         {
@@ -212,7 +228,7 @@ namespace EDDiscovery.UserControls
 
             KickComputation(uctg.GetCurrentHistoryEntry);
 
-            refreshRadar();
+            refreshMap();
         }
 
         private void textMaxRadius_TextChanged(object sender, EventArgs e)
@@ -223,37 +239,182 @@ namespace EDDiscovery.UserControls
 
             KickComputation(uctg.GetCurrentHistoryEntry);
 
-            refreshRadar();            
+            refreshMap();            
         }
-                
-        private void refreshRadar()
+
+        #endregion
+
+        #region refresh
+
+        private void refreshMap()
         {
+            ControlResize(chart3DPlot);
+            
             foreach (int s in Enumerable.Range(0, 100))
             {
                 chart3DPlot.Series[s].Points.Clear();
             }
 
-            chart3DPlot.Update();
+            chart3DPlot.Update();            
         }
 
+        #endregion
 
-        
+        #region rotation
+
         // enable the mouse to rotate the map
-
         private Point _mousePos;
-                
-        private void chartPseudo3D_MouseMove(object sender, MouseEventArgs e)
+        
+        private void chart3DPlot_MouseMove(object sender, MouseEventArgs e)
         {
-            if (e.Button != MouseButtons.Left) return;
-            if (!_mousePos.IsEmpty)
-            {
-                var style = chart3DPlot.ChartAreas[0].Area3DStyle;
-                style.Rotation = Math.Min(180, Math.Max(-180,
-                style.Rotation - (e.Location.X - _mousePos.X)));
-                style.Inclination = Math.Min(90, Math.Max(-90,
-                style.Inclination + (e.Location.Y - _mousePos.Y)));
+            
+            var style = chart3DPlot.ChartAreas[0].Area3DStyle;
+            var location = chart3DPlot.Location;
+            
+            if (e.Button == MouseButtons.Left)
+            {                
+                if (!_mousePos.IsEmpty)
+                {
+                    var lastPoint = new Point();
+                    var point = new Point(e.Location.X, e.Location.Y);
+                    point.X = point.X - lastPoint.X;
+                    point.Y = point.Y - lastPoint.Y;
+
+                    style.Rotation = Math.Min(180, Math.Max(-180, style.Rotation - (e.Location.X - _mousePos.X )));
+                    style.Inclination = Math.Min(90, Math.Max(-90, style.Inclination + (e.Location.Y - _mousePos.Y )));
+                    
+                    lastPoint.X = e.Location.X;
+                    lastPoint.Y = e.Location.Y;
+                }
+
+                _mousePos = e.Location;
             }
-            _mousePos = e.Location;
+
+            if (e.Button == MouseButtons.Middle)
+            {
+                if (!_mousePos.IsEmpty)
+                {
+                    var lastPoint = new Point();
+                    var point = new Point(e.Location.X, e.Location.Y);
+                    point.X = (point.X - (chart3DPlot.Width / 2) - lastPoint.X);
+                    point.Y = (point.Y - (chart3DPlot.Height / 2) - lastPoint.Y);
+                    chart3DPlot.Location = point;
+                    lastPoint.X = e.Location.X;
+                    lastPoint.Y = e.Location.Y;
+                }
+
+                _mousePos = e.Location;
+            }
+        }
+
+        #endregion
+        
+        #region zoom
+
+        // fake zoom workaround        
+                
+        private void Zoom_MouseWheel(object sender, MouseEventArgs e)
+        {
+            int minWidth = pictureBox.Width;
+            int minHeight = pictureBox.Height;
+                        
+                if (e.Delta > 0)
+                {
+                    // oversize the chart while mantain it in the center
+                    ZoomInControl(chart3DPlot);
+                }
+                else if (e.Delta < 0)
+                {
+                    // shrink the chart size
+                    ZoomOutControl(chart3DPlot);
+                }            
+        }
+
+        private void ZoomInControl(Control ctrlToZoom)
+        {   
+            ctrlToZoom.Height = ctrlToZoom.Height + 100;
+            ctrlToZoom.Width = ctrlToZoom.Width + 100;
+            var point = new Point(ctrlToZoom.Location.X - 50, ctrlToZoom.Location.Y - 50);
+            ctrlToZoom.Location = point;
+        }
+
+        private void ZoomOutControl(Control ctrlToZoom)
+        {
+            if (ctrlToZoom.Height >= 150)
+            {
+                ctrlToZoom.Height = ctrlToZoom.Height - 100;
+                ctrlToZoom.Width = ctrlToZoom.Width - 100;
+                var point = new Point(ctrlToZoom.Location.X + 50, ctrlToZoom.Location.Y + 50);
+                ctrlToZoom.Location = point;
+            }
+        }
+
+        private void ControlResize(Control ctrlResize)
+        {   
+            ctrlResize.Height = pictureBox.Height;
+            ctrlResize.Width = pictureBox.Width;
+            var point = new Point(pictureBox.Location.X, pictureBox.Location.Y);
+            ctrlResize.Location = point;                
+        }
+
+        private void UserControlMap_Load(object sender, EventArgs e)
+        {
+            ControlResize(chart3DPlot);
+        }
+
+        // mantain the chart in the center of the control when resize the UserControl
+        private void pictureBox_SizeChanged(object sender, EventArgs e)
+        {
+            ControlResize(chart3DPlot);
+        }
+
+        #endregion
+
+
+        #region maxitems_slide
+
+        // slide 
+        //
+        // wait while move the slide, than refresh the chart...
+        private void Wait(int ms)
+        {
+            DateTime start = DateTime.Now;
+            while ((DateTime.Now - start).TotalMilliseconds < ms)
+                Application.DoEvents();
+        }
+        
+        private void trackBarMaxItems_Scroll(object sender, EventArgs e)
+        {
+            toolTip1.SetToolTip(trackBarMaxItems, trackBarMaxItems.Value.ToString());
+
+            maxitems = trackBarMaxItems.Value;
+
+            Wait(500);
+            KickComputation(uctg.GetCurrentHistoryEntry);
+            refreshMap();
+        }
+
+        private void trackBarMaxItems_MouseHover(object sender, EventArgs e)
+        {
+            toolTip1.SetToolTip(trackBarMaxItems, trackBarMaxItems.Value.ToString()+ " max number of systems.");
+        }
+
+        #endregion
+
+        private void chart3DPlot_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Middle)
+            {
+                Cursor.Current = Cursors.NoMove2D;
+            }
+        }
+
+        private void chart3DPlot_MouseUp(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Middle)
+            {
+                Cursor.Current = Cursors.Cross;
+            }
         }
     }    
 }
