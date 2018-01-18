@@ -56,9 +56,9 @@ namespace EDDiscovery.UserControls
             this.dataViewScrollerPanel2 = new ExtendedControls.DataViewScrollerPanel();
             this.vScrollBarCustom2 = new ExtendedControls.VScrollBarCustom();
             this.dataGridViewNearest = new System.Windows.Forms.DataGridView();
-            this.Col1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Distance = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Visited = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colDistance = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colVisited = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.labelExt1 = new System.Windows.Forms.Label();
             this.textMinRadius = new ExtendedControls.TextBoxBorder();
             this.labelExt3 = new System.Windows.Forms.Label();
@@ -153,9 +153,9 @@ namespace EDDiscovery.UserControls
             this.dataGridViewNearest.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
             this.dataGridViewNearest.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewNearest.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.Col1,
-            this.Distance,
-            this.Visited});
+            this.colName,
+            this.colDistance,
+            this.colVisited});
             this.dataGridViewNearest.ContextMenuStrip = this.closestContextMenu;
             dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window;
@@ -183,24 +183,27 @@ namespace EDDiscovery.UserControls
             this.dataGridViewNearest.SortCompare += new System.Windows.Forms.DataGridViewSortCompareEventHandler(this.dataGridViewNearest_SortCompare);
             this.dataGridViewNearest.MouseDown += new System.Windows.Forms.MouseEventHandler(this.dataGridViewNearest_MouseDown);
             // 
-            // Col1
+            // colName
             // 
-            this.Col1.HeaderText = "Name";
-            this.Col1.MinimumWidth = 50;
-            this.Col1.Name = "Col1";
+            this.colName.HeaderText = "Name";
+            this.colName.MinimumWidth = 50;
+            this.colName.Name = "colName";
+            this.colName.ReadOnly = true;
             // 
-            // Distance
+            // colDistance
             // 
-            this.Distance.FillWeight = 25F;
-            this.Distance.HeaderText = "Distance";
-            this.Distance.MinimumWidth = 50;
-            this.Distance.Name = "Distance";
+            this.colDistance.FillWeight = 25F;
+            this.colDistance.HeaderText = "Distance";
+            this.colDistance.MinimumWidth = 50;
+            this.colDistance.Name = "colDistance";
+            this.colDistance.ReadOnly = true;
             // 
-            // Visited
+            // colVisited
             // 
-            this.Visited.FillWeight = 25F;
-            this.Visited.HeaderText = "Visited";
-            this.Visited.Name = "Visited";
+            this.colVisited.FillWeight = 25F;
+            this.colVisited.HeaderText = "Visited";
+            this.colVisited.Name = "colVisited";
+            this.colVisited.ReadOnly = true;
             // 
             // labelExt1
             // 
@@ -226,12 +229,14 @@ namespace EDDiscovery.UserControls
             this.textMinRadius.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.textMinRadius.SelectionLength = 0;
             this.textMinRadius.SelectionStart = 0;
-            this.textMinRadius.Size = new System.Drawing.Size(40, 20);
+            this.textMinRadius.Size = new System.Drawing.Size(52, 20);
             this.textMinRadius.TabIndex = 1;
+            this.textMinRadius.Text = "0.00";
             this.textMinRadius.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.toolTip1.SetToolTip(this.textMinRadius, "Minimum star distance in ly");
             this.textMinRadius.WordWrap = true;
             this.textMinRadius.TextChanged += new System.EventHandler(this.textMinRadius_TextChanged);
+            this.textMinRadius.Leave += new System.EventHandler(this.textMinRadius_Leave);
             // 
             // labelExt3
             // 
@@ -257,12 +262,14 @@ namespace EDDiscovery.UserControls
             this.textMaxRadius.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.textMaxRadius.SelectionLength = 0;
             this.textMaxRadius.SelectionStart = 0;
-            this.textMaxRadius.Size = new System.Drawing.Size(40, 20);
+            this.textMaxRadius.Size = new System.Drawing.Size(52, 20);
             this.textMaxRadius.TabIndex = 1;
+            this.textMaxRadius.Text = "1000.00";
             this.textMaxRadius.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.toolTip1.SetToolTip(this.textMaxRadius, "Maximum star distance in ly");
             this.textMaxRadius.WordWrap = true;
             this.textMaxRadius.TextChanged += new System.EventHandler(this.textMaxRadius_TextChanged);
+            this.textMaxRadius.Leave += new System.EventHandler(this.textMaxRadius_Leave);
             // 
             // panelTop
             // 
@@ -320,9 +327,9 @@ namespace EDDiscovery.UserControls
         private ExtendedControls.DataViewScrollerPanel dataViewScrollerPanel2;
         private ExtendedControls.VScrollBarCustom vScrollBarCustom2;
         private System.Windows.Forms.DataGridView dataGridViewNearest;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Col1;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Distance;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Visited;
+        private DataGridViewTextBoxColumn colName;
+        private DataGridViewTextBoxColumn colDistance;
+        private DataGridViewTextBoxColumn colVisited;
         private System.Windows.Forms.Label labelExt1;
         private ExtendedControls.TextBoxBorder textMinRadius;
         private System.Windows.Forms.Label labelExt3;
