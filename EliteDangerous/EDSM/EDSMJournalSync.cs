@@ -15,6 +15,7 @@
  */
 using Newtonsoft.Json.Linq;
 using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.Collections.Concurrent;
 using System.Threading;
@@ -124,6 +125,19 @@ namespace EliteDangerousCore.EDSM
             JournalTypeEnum.ShipyardNew,
             JournalTypeEnum.ShipyardSwap
         };
+
+        private static JObject RemoveCommonKeys(JObject obj)
+        {
+            foreach (JProperty prop in obj.Properties().ToList())
+            {
+                if (prop.Name.StartsWith("EDD"))
+                {
+                    obj.Remove(prop.Name);
+                }
+            }
+
+            return obj;
+        }
 
         public static bool SendEDSMEvent(Action<string> logger, HistoryEntry helist)
         {
@@ -324,6 +338,8 @@ namespace EliteDangerousCore.EDSM
                 }
 
                 JObject json = je.GetJson();
+                RemoveCommonKeys(json);
+                json.Remove("StarPosFromEDSM");
                 entries.Add(json);
             }
 
