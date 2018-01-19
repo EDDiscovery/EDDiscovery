@@ -55,8 +55,8 @@ namespace EDDiscovery.UserControls
 
             uctg.OnTravelSelectionChanged += Uctg_OnTravelSelectionChanged;
 
-            textMinRadius.Text = SQLiteConnectionUser.GetSettingDouble(DbSave + "RadarMin", 0).ToStringInvariant();
-            textMaxRadius.Text = SQLiteConnectionUser.GetSettingDouble(DbSave + "RadarMax", defaultmaximumradarradius).ToStringInvariant();
+            textMinRadius.Text = SQLiteConnectionUser.GetSettingDouble(DbSave + "MapMin", 0).ToStringInvariant();
+            textMaxRadius.Text = SQLiteConnectionUser.GetSettingDouble(DbSave + "MapMax", defaultmaximumradarradius).ToStringInvariant();
             MaxRadius = float.Parse(textMaxRadius.Text);
             MinRadius = float.Parse(textMinRadius.Text);
         }
@@ -67,15 +67,15 @@ namespace EDDiscovery.UserControls
             uctg = thc;
             uctg.OnTravelSelectionChanged += Uctg_OnTravelSelectionChanged;
 
-            refreshRadar();
+            refreshMap();
         }
 
         public override void Closing()
         {
             uctg.OnTravelSelectionChanged -= Uctg_OnTravelSelectionChanged;
             computer.ShutDown();
-            SQLiteConnectionUser.PutSettingDouble(DbSave + "RadarMin", textMinRadius.Text.InvariantParseDouble(0));
-            SQLiteConnectionUser.PutSettingDouble(DbSave + "RadarMax", textMaxRadius.Text.InvariantParseDouble(defaultmaximumradarradius));
+            SQLiteConnectionUser.PutSettingDouble(DbSave + "MapMin", textMinRadius.Text.InvariantParseDouble(0));
+            SQLiteConnectionUser.PutSettingDouble(DbSave + "MapMax", textMaxRadius.Text.InvariantParseDouble(defaultmaximumradarradius));
         }
 
         public override void InitialDisplay()
@@ -87,7 +87,7 @@ namespace EDDiscovery.UserControls
         private void Uctg_OnTravelSelectionChanged(HistoryEntry he, HistoryList hl)
         {
             KickComputation(he);
-            refreshRadar();            
+            refreshMap();            
         }
 
         private void KickComputation(HistoryEntry he)
@@ -212,7 +212,7 @@ namespace EDDiscovery.UserControls
 
             KickComputation(uctg.GetCurrentHistoryEntry);
 
-            refreshRadar();
+            refreshMap();
         }
 
         private void textMaxRadius_TextChanged(object sender, EventArgs e)
@@ -223,10 +223,10 @@ namespace EDDiscovery.UserControls
 
             KickComputation(uctg.GetCurrentHistoryEntry);
 
-            refreshRadar();            
+            refreshMap();            
         }
                 
-        private void refreshRadar()
+        private void refreshMap()
         {
             foreach (int s in Enumerable.Range(0, 100))
             {
@@ -235,8 +235,6 @@ namespace EDDiscovery.UserControls
 
             chart3DPlot.Update();
         }
-
-
         
         // enable the mouse to rotate the map
 

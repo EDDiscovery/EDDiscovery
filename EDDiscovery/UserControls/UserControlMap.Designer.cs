@@ -46,6 +46,7 @@ namespace EDDiscovery.UserControls
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
             System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
             System.Windows.Forms.DataVisualization.Charting.Series series2 = new System.Windows.Forms.DataVisualization.Charting.Series();
@@ -154,8 +155,11 @@ namespace EDDiscovery.UserControls
             this.textMaxRadius = new ExtendedControls.TextBoxBorder();
             this.panelTop = new System.Windows.Forms.Panel();
             this.chart3DPlot = new System.Windows.Forms.DataVisualization.Charting.Chart();
+            this.slideMaxItems = new System.Windows.Forms.TrackBar();
+            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.panelTop.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.chart3DPlot)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.slideMaxItems)).BeginInit();
             this.SuspendLayout();
             // 
             // labelExt1
@@ -191,7 +195,7 @@ namespace EDDiscovery.UserControls
             // labelExt3
             // 
             this.labelExt3.AutoSize = true;
-            this.labelExt3.Location = new System.Drawing.Point(81, 6);
+            this.labelExt3.Location = new System.Drawing.Point(78, 6);
             this.labelExt3.Name = "labelExt3";
             this.labelExt3.Size = new System.Drawing.Size(27, 13);
             this.labelExt3.TabIndex = 3;
@@ -205,7 +209,7 @@ namespace EDDiscovery.UserControls
             this.textMaxRadius.BorderColorScaling = 0.5F;
             this.textMaxRadius.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textMaxRadius.ControlBackground = System.Drawing.SystemColors.Control;
-            this.textMaxRadius.Location = new System.Drawing.Point(109, 3);
+            this.textMaxRadius.Location = new System.Drawing.Point(106, 3);
             this.textMaxRadius.Multiline = false;
             this.textMaxRadius.Name = "textMaxRadius";
             this.textMaxRadius.ReadOnly = false;
@@ -221,6 +225,7 @@ namespace EDDiscovery.UserControls
             // panelTop
             // 
             this.panelTop.BackColor = System.Drawing.SystemColors.Control;
+            this.panelTop.Controls.Add(this.slideMaxItems);
             this.panelTop.Controls.Add(this.labelExt1);
             this.panelTop.Controls.Add(this.textMinRadius);
             this.panelTop.Controls.Add(this.labelExt3);
@@ -228,7 +233,7 @@ namespace EDDiscovery.UserControls
             this.panelTop.Dock = System.Windows.Forms.DockStyle.Top;
             this.panelTop.Location = new System.Drawing.Point(0, 0);
             this.panelTop.Name = "panelTop";
-            this.panelTop.Size = new System.Drawing.Size(489, 26);
+            this.panelTop.Size = new System.Drawing.Size(400, 26);
             this.panelTop.TabIndex = 25;
             // 
             // chart3DPlot
@@ -280,8 +285,7 @@ namespace EDDiscovery.UserControls
             chartArea1.BackSecondaryColor = System.Drawing.Color.Black;
             chartArea1.Name = "ChartArea";
             this.chart3DPlot.ChartAreas.Add(chartArea1);
-            this.chart3DPlot.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.chart3DPlot.Location = new System.Drawing.Point(0, 26);
+            this.chart3DPlot.Location = new System.Drawing.Point(47, 65);
             this.chart3DPlot.Margin = new System.Windows.Forms.Padding(0);
             this.chart3DPlot.MinimumSize = new System.Drawing.Size(50, 50);
             this.chart3DPlot.Name = "chart3DPlot";
@@ -992,24 +996,37 @@ namespace EDDiscovery.UserControls
             this.chart3DPlot.Series.Add(series99);
             this.chart3DPlot.Series.Add(series100);
             this.chart3DPlot.Series.Add(series101);
-            this.chart3DPlot.Size = new System.Drawing.Size(489, 404);
+            this.chart3DPlot.Size = new System.Drawing.Size(300, 300);
             this.chart3DPlot.SuppressExceptions = true;
             this.chart3DPlot.TabIndex = 29;
             this.chart3DPlot.Text = "chart2";
             this.chart3DPlot.MouseMove += new System.Windows.Forms.MouseEventHandler(this.chartPseudo3D_MouseMove);
+            // 
+            // slideMaxItems
+            // 
+            this.slideMaxItems.Dock = System.Windows.Forms.DockStyle.Right;
+            this.slideMaxItems.LargeChange = 4;
+            this.slideMaxItems.Location = new System.Drawing.Point(310, 0);
+            this.slideMaxItems.Maximum = 1000;
+            this.slideMaxItems.Minimum = 50;
+            this.slideMaxItems.Name = "slideMaxItems";
+            this.slideMaxItems.Size = new System.Drawing.Size(90, 26);
+            this.slideMaxItems.TabIndex = 4;
+            this.slideMaxItems.Value = 50;
             // 
             // UserControlMap
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Black;
-            this.Controls.Add(this.chart3DPlot);
             this.Controls.Add(this.panelTop);
+            this.Controls.Add(this.chart3DPlot);
             this.Name = "UserControlMap";
-            this.Size = new System.Drawing.Size(489, 430);
+            this.Size = new System.Drawing.Size(400, 426);
             this.panelTop.ResumeLayout(false);
             this.panelTop.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.chart3DPlot)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.slideMaxItems)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -1021,5 +1038,7 @@ namespace EDDiscovery.UserControls
         private ExtendedControls.TextBoxBorder textMaxRadius;
         private Panel panelTop;
         private System.Windows.Forms.DataVisualization.Charting.Chart chart3DPlot;
+        private TrackBar slideMaxItems;
+        private ToolTip toolTip1;
     }
 }
