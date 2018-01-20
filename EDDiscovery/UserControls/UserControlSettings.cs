@@ -108,6 +108,11 @@ namespace EDDiscovery.UserControls
             this.checkBoxCustomMarkHiRes.CheckedChanged += new System.EventHandler(this.checkBoxCustomMarkHiRes_CheckedChanged);
             this.checkBoxCustomEnableScreenshots.CheckedChanged += new System.EventHandler(this.checkBoxCustomEnableScreenshots_CheckedChanged);
             this.checkBoxCustomCopyToClipboard.CheckedChanged += new System.EventHandler(this.checkBoxCustomCopyToClipboard_CheckedChanged);
+
+            checkBoxCustomEDSMDownload.Checked = EDDConfig.Instance.EDSMDownload;
+            checkBoxCustomEDDBDownload.Checked = EDDConfig.Instance.EDDBDownload;
+            this.checkBoxCustomEDSMDownload.CheckedChanged += new System.EventHandler(this.checkBoxCustomEDSMDownload_CheckedChanged);
+            this.checkBoxCustomEDDBDownload.CheckedChanged += new System.EventHandler(this.checkBoxCustomEDDBDownload_CheckedChanged);
         }
 
         public override void Closing()
@@ -445,6 +450,35 @@ namespace EDDiscovery.UserControls
         {
             EDDiscoveryForm.EDDConfig.EDSMLog = checkBoxEDSMLog.Checked;
             discoveryform.SetUpLogging();
+        }
+
+        private void checkBoxCustomEDSMDownload_CheckedChanged(object sender, EventArgs e)
+        {
+            EDDConfig.Instance.EDSMDownload = checkBoxCustomEDSMDownload.Checked;
+        }
+
+        private void checkBoxCustomEDDBDownload_CheckedChanged(object sender, EventArgs e)
+        {
+            EDDConfig.Instance.EDDBDownload = checkBoxCustomEDDBDownload.Checked;
+        }
+
+        private void buttonExtEDSMConfigureArea_Click(object sender, EventArgs e)
+        {
+            GalaxySectorSelect gss = new GalaxySectorSelect();
+            gss.Init(EDDConfig.Instance.EDSMGridIDs);
+            if ( gss.ShowDialog() == DialogResult.OK )
+            {
+                EDDConfig.Instance.EDSMGridIDs = gss.Selection;
+
+                if (gss.Action == GalaxySectorSelect.ActionToDo.Add)
+                {
+                    System.Diagnostics.Debug.WriteLine("ADD");
+                }
+                else if (gss.Action == GalaxySectorSelect.ActionToDo.Remove)
+                {
+                    System.Diagnostics.Debug.WriteLine("Remove " + string.Join(",",gss.RemoveList));
+                }
+            }
         }
     }
 }

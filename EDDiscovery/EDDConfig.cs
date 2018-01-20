@@ -68,6 +68,9 @@ namespace EDDiscovery
         private System.Windows.Forms.Keys _clickthrukey = System.Windows.Forms.Keys.ShiftKey;
         private string _defaultwavedevice = "Default";
         private string _defaultvoicedevice = "Default";
+        private bool _EDSMDownload = true;
+        private bool _EDDBDownload = true;
+        private string _EDSMGridIDs = "All";
 
         public bool EDSMLog
         {
@@ -261,6 +264,45 @@ namespace EDDiscovery
             }
         }
 
+        public bool EDSMDownload
+        {
+            get
+            {
+                return _EDSMDownload;
+            }
+            set
+            {
+                _EDSMDownload = value;
+                SQLiteConnectionUser.PutSettingBool("EDSMDownloadData", value);
+            }
+        }
+
+        public bool EDDBDownload
+        {
+            get
+            {
+                return _EDDBDownload;
+            }
+            set
+            {
+                _EDDBDownload = value;
+                SQLiteConnectionUser.PutSettingBool("EDDBDownloadData", value);
+            }
+        }
+
+        public string EDSMGridIDs
+        {
+            get
+            {
+                return _EDSMGridIDs;
+            }
+            set
+            {
+                _EDSMGridIDs = value;
+                SQLiteConnectionUser.PutSettingString("EDSMGridIDs", value);
+            }
+        }
+
         #endregion
 
         #region Update at start
@@ -283,6 +325,9 @@ namespace EDDiscovery
                 _defaultwavedevice = SQLiteConnectionUser.GetSettingString("WaveAudioDevice", "Default", conn);
                 _showuievents = SQLiteConnectionUser.GetSettingBool("ShowUIEvents", false, conn);
                 _clickthrukey = (System.Windows.Forms.Keys)SQLiteConnectionUser.GetSettingInt("ClickThruKey", (int)System.Windows.Forms.Keys.ShiftKey, conn);
+                _EDSMDownload = SQLiteConnectionUser.GetSettingBool("EDSMDownloadData", true, conn);
+                _EDDBDownload = SQLiteConnectionUser.GetSettingBool("EDDBDownloadData", true, conn);
+                _EDSMGridIDs = SQLiteConnectionUser.GetSettingString("EDSMGridIDs", "All", conn);
 
                 EliteDangerousCore.EDCommander.Load(write, conn);
             }

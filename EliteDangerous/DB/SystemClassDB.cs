@@ -1258,12 +1258,12 @@ namespace EliteDangerousCore.DB
             return compresstablex[(int)x] + 100 * compresstablez[(int)z];
         }
 
-        public static int IdFromComponents(int x, int z)
+        public static int IdFromComponents(int x, int z)                // given x grid/ y grid give ID
         {
             return x + 100 * z;
         }
 
-        public static bool XZ(int id, out float x, out float z)
+        public static bool XZ(int id, out float x, out float z , bool mid = true)         // given id, return x/z pos of left bottom
         {
             x = 0; z = 0;
             if (id >= 0)
@@ -1282,7 +1282,7 @@ namespace EliteDangerousCore.DB
                             while (i < compresstablex.Length && compresstablex[i] == xid)
                                 i++;
 
-                            x = (float)((((i * 1000) + xleft) + startx) / 2.0);
+                            x = (mid) ? (float)((((i * 1000) + xleft) + startx) / 2.0) : (float)startx;
                             break;
                         }
                     }
@@ -1296,7 +1296,7 @@ namespace EliteDangerousCore.DB
                             while (i < compresstablez.Length && compresstablez[i] == zid)
                                 i++;
 
-                            z = (float)((((i * 1000) + zbot) + startz) / 2.0);
+                            z = (mid) ? (float)((((i * 1000) + zbot) + startz) / 2.0) : (float)startz;
                             break;
                         }
                     }
@@ -1307,7 +1307,53 @@ namespace EliteDangerousCore.DB
 
             return false;
         }
-       
+
+        public static List<int> AllId()
+        {
+            List<int> list = new List<int>();
+
+            for (int z = 0; z < gridzrange; z++)
+            {
+                for (int x = 0; x < gridxrange; x++)
+                    list.Add(IdFromComponents(x, z));
+            }
+            return list;
+        }
+
+        public static int[] XLines(int endentry)            // fill in the LY values, plus an end stop one
+        {
+            int[] xlines = new int[gridxrange + 1];
+
+            for (int x = 0; x < gridxrange; x++)
+            {
+                float xp, zp;
+                int id = GridId.IdFromComponents(x, 0);
+                GridId.XZ(id, out xp, out zp,false);
+                xlines[x] = (int)xp;
+            }
+
+            xlines[gridxrange ] = endentry;
+
+            return xlines;
+        }
+
+        public static int[] ZLines(int endentry)
+        {
+            int[] zlines = new int[gridzrange + 1];
+
+            for (int z = 0; z < gridzrange; z++)
+            {
+                float xp, zp;
+                int id = GridId.IdFromComponents(0, z);
+                GridId.XZ(id, out xp, out zp,false);
+                zlines[z] = (int)zp;
+            }
+
+            zlines[gridzrange] = endentry;
+
+            return zlines;
+        }
+
     }
 }
 

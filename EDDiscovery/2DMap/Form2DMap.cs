@@ -54,7 +54,7 @@ namespace EDDiscovery
         }
 
         bool initdone = false;
-        private void FormSagCarinaMission_Load(object sender, EventArgs e)
+        private void Form2dLoad(object sender, EventArgs e)
         {
             var top = SQLiteDBClass.GetSettingInt("Map2DFormTop", -1);
 
@@ -101,7 +101,7 @@ namespace EDDiscovery
             ShowSelectedImage();
         }
 
-        private void FormSagCarinaMission_FormClosing(object sender, FormClosingEventArgs e)
+        private void Form2dClosing(object sender, FormClosingEventArgs e)
         {
             if (Visible)
             {
