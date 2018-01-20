@@ -701,7 +701,7 @@ namespace EliteDangerousCore.DB
         public static ISystem FindNearestSystem(double x, double y, double z, bool removezerodiststar = false, double maxdist = 1000, SQLiteConnectionSystem cn = null)
         {
             SortedList<double, ISystem> distlist = new SortedList<double, ISystem>();
-            GetSystemSqDistancesFrom(distlist, x, y, z, 1, 8.0/128.0, maxdist,false,cn);
+            GetSystemSqDistancesFrom(distlist, x, y, z, 1, removezerodiststar ? 8.0/128.0 : 0.0, maxdist,false,cn);
             return distlist.Select(v => v.Value).FirstOrDefault();
         }
 
