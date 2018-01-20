@@ -104,7 +104,6 @@ namespace EDDiscovery.UserControls
         {
             System.Diagnostics.Debug.Assert(Application.MessageLoop);       // check!
 
-            list.Clear();
             discoveryform.history.CalculateSqDistances(list, sys.x, sys.y, sys.z,
                                 maxitems,
                                 Math.Max(textMinRadius.Text.InvariantParseDouble(0), 8.0/128.0),     // min to exclude our star
