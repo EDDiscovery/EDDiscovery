@@ -156,7 +156,7 @@ namespace EDDiscovery.UserControls
             this.panelTop = new System.Windows.Forms.Panel();
             this.slideMaxItems = new System.Windows.Forms.TrackBar();
             this.chartMap = new System.Windows.Forms.DataVisualization.Charting.Chart();
-            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.panelTop.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.slideMaxItems)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.chartMap)).BeginInit();
@@ -190,7 +190,7 @@ namespace EDDiscovery.UserControls
             this.textMinRadius.TabIndex = 1;
             this.textMinRadius.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.textMinRadius.WordWrap = true;
-            this.textMinRadius.TextChanged += new System.EventHandler(this.textMinRadius_TextChanged);
+            this.textMinRadius.TextChanged += new System.EventHandler(this.TextMinRadius_TextChanged);
             // 
             // labelExt3
             // 
@@ -220,7 +220,7 @@ namespace EDDiscovery.UserControls
             this.textMaxRadius.TabIndex = 1;
             this.textMaxRadius.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.textMaxRadius.WordWrap = true;
-            this.textMaxRadius.TextChanged += new System.EventHandler(this.textMaxRadius_TextChanged);
+            this.textMaxRadius.TextChanged += new System.EventHandler(this.TextMaxRadius_TextChanged);
             // 
             // panelTop
             // 
@@ -241,16 +241,16 @@ namespace EDDiscovery.UserControls
             this.slideMaxItems.Dock = System.Windows.Forms.DockStyle.Right;
             this.slideMaxItems.LargeChange = 50;
             this.slideMaxItems.Location = new System.Drawing.Point(310, 0);
-            this.slideMaxItems.Maximum = 1000;
+            this.slideMaxItems.Maximum = 500;
             this.slideMaxItems.Minimum = 50;
             this.slideMaxItems.Name = "slideMaxItems";
             this.slideMaxItems.Size = new System.Drawing.Size(90, 26);
             this.slideMaxItems.SmallChange = 10;
             this.slideMaxItems.TabIndex = 4;
             this.slideMaxItems.TickFrequency = 50;
-            this.slideMaxItems.Value = 100;
-            this.slideMaxItems.Scroll += new System.EventHandler(this.slideMaxItems_Scroll);
-            this.slideMaxItems.MouseHover += new System.EventHandler(this.slideMaxItems_MouseHover);
+            this.slideMaxItems.Value = 250;
+            this.slideMaxItems.Scroll += new System.EventHandler(this.SlideMaxItems_Scroll);
+            this.slideMaxItems.MouseHover += new System.EventHandler(this.SlideMaxItems_MouseHover);
             // 
             // chartMap
             // 
@@ -1016,9 +1016,9 @@ namespace EDDiscovery.UserControls
             this.chartMap.SuppressExceptions = true;
             this.chartMap.TabIndex = 29;
             this.chartMap.Text = "chart2";
-            this.chartMap.MouseMove += new System.Windows.Forms.MouseEventHandler(this.chartMap_MouseMove);
-            this.chartMap.MouseDown += new System.Windows.Forms.MouseEventHandler(this.chartMap_MouseDown);
-            this.chartMap.MouseUp += new System.Windows.Forms.MouseEventHandler(this.chartMap_MouseUp);
+            this.chartMap.MouseDown += new System.Windows.Forms.MouseEventHandler(this.ChartMap_MouseDown);
+            this.chartMap.MouseMove += new System.Windows.Forms.MouseEventHandler(this.ChartMap_MouseMove);
+            this.chartMap.MouseUp += new System.Windows.Forms.MouseEventHandler(this.ChartMap_MouseUp);
             // 
             // UserControlMap
             // 
@@ -1047,6 +1047,6 @@ namespace EDDiscovery.UserControls
         private Panel panelTop;
         private System.Windows.Forms.DataVisualization.Charting.Chart chartMap;
         private TrackBar slideMaxItems;
-        private ToolTip toolTip1;
+        private ToolTip toolTip;
     }
 }

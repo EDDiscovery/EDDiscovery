@@ -71,7 +71,8 @@ namespace EDDiscovery.UserControls
             uctg = thc;
             uctg.OnTravelSelectionChanged += Uctg_OnTravelSelectionChanged;
 
-            refreshMap();
+            RefreshMap();
+            ControlResize(chartMap);
         }
 
         public override void Closing()
@@ -92,7 +93,8 @@ namespace EDDiscovery.UserControls
         private void Uctg_OnTravelSelectionChanged(HistoryEntry he, HistoryList hl)
         {
             KickComputation(he);
-            refreshMap();            
+            RefreshMap();
+            ControlResize(chartMap);
         }
 
         #region computer
@@ -215,7 +217,7 @@ namespace EDDiscovery.UserControls
 
         #region refresh
 
-        private void textMinRadius_TextChanged(object sender, EventArgs e)
+        private void TextMinRadius_TextChanged(object sender, EventArgs e)
         {
             double? min = textMinRadius.Text.InvariantParseDoubleNull();
             if (min != null)
@@ -223,10 +225,10 @@ namespace EDDiscovery.UserControls
 
             KickComputation(uctg.GetCurrentHistoryEntry);
 
-            refreshMap();
+            RefreshMap();
         }
 
-        private void textMaxRadius_TextChanged(object sender, EventArgs e)
+        private void TextMaxRadius_TextChanged(object sender, EventArgs e)
         {
             double? max = textMaxRadius.Text.InvariantParseDoubleNull();
             if (max != null)
@@ -234,64 +236,60 @@ namespace EDDiscovery.UserControls
 
             KickComputation(uctg.GetCurrentHistoryEntry);
 
-            refreshMap();            
+            RefreshMap();            
         }
                 
-        private void refreshMap()
+        private void RefreshMap()
         {
             foreach (int s in Enumerable.Range(0, 100))
             {
                 chartMap.Series[s].Points.Clear();
             }
 
-            chartMap.Update();
+            chartMap.Update();            
         }
 
         #endregion
                 
-        private Point _mousePos;
+        private Point mousePos;
                 
-        private void chartMap_MouseMove(object sender, MouseEventArgs e)
+        private void ChartMap_MouseMove(object sender, MouseEventArgs e)
         {
             // rotate the map with the firt mouse button
 
             if (e.Button == MouseButtons.Left)
             {
-                // return the mouse to the last coordinates, to avoid view resets            
-                if (!_mousePos.IsEmpty)
+                // rotate the chart            
+                if (!mousePos.IsEmpty)
                 {
                     var style = chartMap.ChartAreas[0].Area3DStyle;
                     style.Rotation = Math.Min(180, Math.Max(-180,
-                        style.Rotation - (e.Location.X - _mousePos.X)));
+                        style.Rotation - (e.Location.X - mousePos.X)));
                     style.Inclination = Math.Min(90, Math.Max(-90,
-                        style.Inclination + (e.Location.Y - _mousePos.Y)));
+                        style.Inclination + (e.Location.Y - mousePos.Y)));
                 }
-                _mousePos = e.Location;
+                mousePos = e.Location;
             }
 
             // pan the chart with the middle mouse buttom
-
             if (e.Button == MouseButtons.Middle)
             {
-                if (!_mousePos.IsEmpty)
+                if (!mousePos.IsEmpty)
                 {
-                    var lastPoint = new Point();
+                    /*var lastPoint = new Point();
                     var point = new Point(e.Location.X, e.Location.Y);
                     point.X = (point.X - (chartMap.Width / 2) - lastPoint.X);
                     point.Y = (point.Y - (chartMap.Height / 2) - lastPoint.Y);
                     chartMap.Location = point;
                     lastPoint.X = e.Location.X;
-                    lastPoint.Y = e.Location.Y;
+                    lastPoint.Y = e.Location.Y;*/
                 }
 
-                _mousePos = e.Location;
+                mousePos = e.Location;
             }
-
-
         }
 
-        // fake zoom workaround        
-
+        // zoom the chart
         private void Zoom_MouseWheel(object sender, MouseEventArgs e)
         {
             int minWidth = chartMap.Parent.Width;
@@ -319,7 +317,7 @@ namespace EDDiscovery.UserControls
 
         private void ZoomOutControl(Control ctrlToZoom)
         {
-            if (ctrlToZoom.Height > 250)
+            if (ctrlToZoom.Height >= ctrlToZoom.Parent.Height)
             {
                 ctrlToZoom.Height = ctrlToZoom.Height - 100;
                 ctrlToZoom.Width = ctrlToZoom.Width - 100;
@@ -335,6 +333,74 @@ namespace EDDiscovery.UserControls
             var point = new Point(chartMap.Parent.Location.X, chartMap.Parent.Location.Y);
             ctrlResize.Location = point;
         }
+                
+        // coordinates for rotation mouse reposition computation
+        public Int32 xr = 0;
+        public Int32 yr = 0;
+        public Int32 prevxr;
+        public Int32 prevyr;
+
+        // coordinates for zooming center to current mouse position
+        public Int32 xz = 0;
+        public Int32 yz = 0;
+        public Int32 lastxz;
+        public Int32 lastyz;
+
+        // coordinates to smooth the movement of the chart pan
+        public Int32 xp = 0;
+        public Int32 yp = 0;
+        public Int32 lastxp;
+        public Int32 lastyp;
+
+        private void ChartMap_MouseDown(object sender, MouseEventArgs e)
+        {            
+            if (e.Button == MouseButtons.Left)
+            {
+                // Smooth out the rotation of the chart
+                Cursor.Hide(); // hide the cursor
+                xr = Cursor.Position.X; // record the initial mouse position
+                yr = Cursor.Position.Y; // 
+
+                if (prevxr.ToString() != null || prevyr.ToString() != null)
+                {
+                    Cursor.Position = new Point(prevxr, prevyr);
+                }
+            }
+
+            if (e.Button == MouseButtons.Middle)
+            {
+            }
+        }
+              
+        private void ChartMap_MouseUp(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+            {
+                prevxr = Cursor.Position.X; // record the last mouse position
+                prevyr = Cursor.Position.Y; //                
+                CenterMouseOverControl(chartMap);
+                Cursor.Show(); // show the cursor
+            }
+
+            if (e.Button == MouseButtons.Middle)
+            {
+            }
+        }
+
+        // Center the mouse over a control.
+        private void CenterMouseOverControl(Control centerToCtrl)
+        {
+            // calculate the center of the control
+            Point target = new Point(
+                (centerToCtrl.Left + centerToCtrl.Right) / 2,
+                (centerToCtrl.Top + centerToCtrl.Bottom) / 2);
+
+            // convert to screen coordinates
+            Point screen_coords = centerToCtrl.Parent.PointToScreen(target);
+
+            // move the cursor to the center of teh control
+            Cursor.Position = screen_coords;
+        }        
 
         // slide 
         //
@@ -346,65 +412,23 @@ namespace EDDiscovery.UserControls
                 Application.DoEvents();
         }
 
-        private void slideMaxItems_Scroll(object sender, EventArgs e)
+        private void SlideMaxItems_Scroll(object sender, EventArgs e)
         {
-            toolTip1.SetToolTip(slideMaxItems, slideMaxItems.Value.ToString());
+            toolTip.SetToolTip(slideMaxItems, slideMaxItems.Value.ToString());
 
             maxitems = slideMaxItems.Value;
 
             Wait(500);
             KickComputation(uctg.GetCurrentHistoryEntry);
-            refreshMap();
+            RefreshMap();
         }
 
-        private void slideMaxItems_MouseHover(object sender, EventArgs e)
+        private void SlideMaxItems_MouseHover(object sender, EventArgs e)
         {
-            toolTip1.SetToolTip(slideMaxItems, slideMaxItems.Value.ToString() + " max number of systems.");
+            toolTip.SetToolTip(slideMaxItems, slideMaxItems.Value.ToString() + " max number of systems.");
         }
 
-        Point lastpoint = new Point();
-
-        private void chartMap_MouseDown(object sender, MouseEventArgs e)
-        {            
-            if (e.Button == MouseButtons.Left)
-            {
-                if (lastpoint != null)
-                {
-                    //mousePositionSet(lastpoint);
-                }
-            }
-
-            if (e.Button == MouseButtons.Middle)
-            {
-                Cursor.Current = Cursors.NoMove2D;
-            }
-        }
-              
-        private void chartMap_MouseUp(object sender, MouseEventArgs e)
-        {
-            if (e.Button == MouseButtons.Left)
-            {
-                //mousePositionGet();
-            }
-
-            if (e.Button == MouseButtons.Middle)
-            {
-                Cursor.Current = Cursors.Cross;
-            }
-        }
-
-        private void mousePositionGet()
-        {
-            Point ctrlCentre = new Point(chartMap.Width / 2, chartMap.Height / 2);
-            Point lastpoint = chartMap.PointToClient(ctrlCentre);
-        }
-
-        private void mousePositionSet(Point lastpoint)
-        {
-            Cursor.Position = lastpoint;
-        }
-
-    private void UserControlMap_Load(object sender, EventArgs e)
+        private void UserControlMap_Load(object sender, EventArgs e)
         {
             ControlResize(chartMap);
         }
