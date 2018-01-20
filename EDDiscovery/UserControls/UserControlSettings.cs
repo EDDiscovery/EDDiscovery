@@ -266,15 +266,19 @@ namespace EDDiscovery.UserControls
             string fontwanted = null;                                               // don't check custom, only a stored theme..
             if (!themename.Equals("Custom") && !discoveryform.theme.IsFontAvailableInTheme(themename, out fontwanted))
             {
-                DialogResult res = ExtendedControls.MessageBoxTheme.Show(FindForm(), "The font used by this theme is not available on your system" + Environment.NewLine +
-                      "The font needed is \"" + fontwanted + "\"" + Environment.NewLine +
-                      "Install this font and you can use this scheme." + Environment.NewLine +
-                      "EuroCaps font is available www.edassets.org.",
-                      "Warning", MessageBoxButtons.OK);
-
-                discoveryform.theme.SetCustom();                              // go to custom theme whatever
-                SetEntryThemeComboBox();
-                return;
+                DialogResult res = ExtendedControls.MessageBoxTheme.Show(FindForm(),
+                      "The font used by this theme is not available on your system." + Environment.NewLine +
+                      "The font needed is \"" + fontwanted + "\"." + Environment.NewLine +
+                      "Install this font to fully use this theme." + Environment.NewLine +
+                      "Euro Caps font is freely available from www.edassets.org." + Environment.NewLine + Environment.NewLine +
+                      "Would you like to load this theme using a replacement font?",
+                      "Warning", MessageBoxButtons.YesNo);
+                if (res != DialogResult.Yes)
+                {
+                    // Reset the combo box to the previous theme name and don't change anything else.
+                    SetEntryThemeComboBox();
+                    return;
+                }   
             }
 
             if (!discoveryform.theme.SetThemeByName(themename))
