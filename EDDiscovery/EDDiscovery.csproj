@@ -203,6 +203,12 @@
     <Compile Include="Forms\ExportForm.Designer.cs">
       <DependentUpon>ExportForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\GalaxySectorSelect.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\GalaxySectorSelect.Designer.cs">
+      <DependentUpon>GalaxySectorSelect.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\SafeModeForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -562,6 +568,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\ExportForm.resx">
       <DependentUpon>ExportForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\GalaxySectorSelect.resx">
+      <DependentUpon>GalaxySectorSelect.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\ImportSphere.resx">
       <DependentUpon>ImportSphere.cs</DependentUpon>

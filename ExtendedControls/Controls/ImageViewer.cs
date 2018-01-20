@@ -34,6 +34,7 @@ namespace ExtendedControls
 
         private bool _autoCenter;
         private bool _autoPan;
+        private bool _clicktozoom;
 
         private System.Drawing.Image _image;
         private InterpolationMode _interpolationMode;
@@ -58,8 +59,9 @@ namespace ExtendedControls
             this.BackColor = Color.White;
             this.AutoSize = true;
             this.AutoPan = true;
+            this.ClickToZoom = true;
             this.Zoom = 100;
-            this.ZoomIncrement = 20;
+            this.ZoomIncrement = 5;
             this.InterpolationMode = InterpolationMode.Default;
             this.AutoCenter = true;
         }
@@ -235,7 +237,7 @@ namespace ExtendedControls
 
         protected override void OnMouseClick(MouseEventArgs e)
         {
-            if (!this.IsPanning && !this.SizeToFit)
+            if (!this.IsPanning && !this.SizeToFit && ClickToZoom)
             {
                 if (e.Button == MouseButtons.Left && Control.ModifierKeys == Keys.None)
                 {
@@ -355,7 +357,10 @@ namespace ExtendedControls
 
             // draw the image
             if (this.Image != null)
-                this.DrawImage(e.Graphics);
+            {
+                e.Graphics.InterpolationMode = this.InterpolationMode;
+                e.Graphics.DrawImage(this.Image, this.GetImageViewPort(), this.GetSourceImageRegion(), GraphicsUnit.Pixel);
+            }
 
             base.OnPaint(e);
         }
@@ -545,6 +550,16 @@ namespace ExtendedControls
             }
         }
 
+        [DefaultValue(true), Category("Behavior")]
+        public bool ClickToZoom
+        {
+            get { return _clicktozoom; }
+            set
+            {
+                _clicktozoom = value;
+            }
+        }
+
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public new Size AutoScrollMinSize
         {
@@ -661,19 +676,15 @@ namespace ExtendedControls
             }
         }
 
-
-        #region  Protected Properties  
-
-        protected virtual int ScaledImageHeight
+        public virtual int ScaledImageHeight
         { get { return this.Image != null ? (int)(this.Image.Size.Height * this.ZoomFactor) : 0; } }
 
-        protected virtual int ScaledImageWidth
+        public virtual int ScaledImageWidth
         { get { return this.Image != null ? (int)(this.Image.Size.Width * this.ZoomFactor) : 0; } }
 
-        protected virtual double ZoomFactor
+        public virtual double ZoomFactor
         { get { return (double)this.Zoom / 100; } }
 
-        #endregion  Protected Properties  
 
         #region  Protected Methods  
 
@@ -709,12 +720,6 @@ namespace ExtendedControls
                 this.AutoScrollMinSize = new Size(this.ScaledImageWidth + this.Padding.Horizontal, this.ScaledImageHeight + this.Padding.Vertical);
         }
 
-
-        protected virtual void DrawImage(Graphics g)
-        {
-            g.InterpolationMode = this.InterpolationMode;
-            g.DrawImage(this.Image, this.GetImageViewPort(), this.GetSourceImageRegion(), GraphicsUnit.Pixel);
-        }
 
         protected virtual void OnAutoCenterChanged(EventArgs e)
         {

@@ -190,8 +190,8 @@ namespace EDDiscovery
             this.Name = "Form2DMap";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "2D Map";
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormSagCarinaMission_FormClosing);
-            this.Load += new System.EventHandler(this.FormSagCarinaMission_Load);
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form2dClosing);
+            this.Load += new System.EventHandler(this.Form2dLoad);
             this.toolStrip1.ResumeLayout(false);
             this.toolStrip1.PerformLayout();
             this.panel1.ResumeLayout(false);
