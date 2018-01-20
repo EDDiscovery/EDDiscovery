@@ -468,6 +468,9 @@ namespace EDDiscovery.Icons
 
         public static Image GetIcon(string name)
         {
+            if (icons == null)      // seen designer barfing over this
+                return null;
+
             if (!name.Contains("."))
             {
                 name = "Legacy." + name;
