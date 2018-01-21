@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace EliteDangerousCore.EDDB
 {
-    class SystemClassEDDB
+    public class SystemClassEDDB
     {
         static public long ParseEDDBUpdateSystems(string filename, Action<string> logline)
         {
@@ -223,6 +223,15 @@ namespace EliteDangerousCore.EDDB
             GC.Collect();
         }
 
+        static public DateTime GetLastEDDBDownloadTime()
+        {
+            string timestr = SQLiteConnectionSystem.GetSettingString("EDDBSystemsTime", "0");
+            return new DateTime(Convert.ToInt64(timestr), DateTimeKind.Utc);
+        }
 
+        static public void ForceEDDBFullUpdate()
+        {
+            SQLiteConnectionSystem.PutSettingString("EDDBSystemsTime", "0");
+        }
     }
 }

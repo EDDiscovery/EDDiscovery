@@ -79,9 +79,8 @@ namespace EDDiscovery.UserControls
             this.checkBoxCustomRemoveOriginals = new ExtendedControls.CheckBoxCustom();
             this.buttonExtScreenshot = new ExtendedControls.ButtonExt();
             this.checkBoxCustomEnableScreenshots = new ExtendedControls.CheckBoxCustom();
-            this.checkBoxCustomEDDBDownload = new ExtendedControls.CheckBoxCustom();
             this.buttonExtEDSMConfigureArea = new ExtendedControls.ButtonExt();
-            this.checkBoxCustomEDSMDownload = new ExtendedControls.CheckBoxCustom();
+            this.checkBoxCustomEDSMEDDBDownload = new ExtendedControls.CheckBoxCustom();
             this.groupBoxPopOuts = new ExtendedControls.GroupBoxCustom();
             this.labelTKey = new System.Windows.Forms.Label();
             this.groupBoxTheme = new ExtendedControls.GroupBoxCustom();
@@ -658,52 +657,34 @@ namespace EDDiscovery.UserControls
             this.toolTip.SetToolTip(this.checkBoxCustomEnableScreenshots, "Screen shot conversion on/off");
             this.checkBoxCustomEnableScreenshots.UseVisualStyleBackColor = true;
             // 
-            // checkBoxCustomEDDBDownload
-            // 
-            this.checkBoxCustomEDDBDownload.AutoSize = true;
-            this.checkBoxCustomEDDBDownload.CheckBoxColor = System.Drawing.Color.Gray;
-            this.checkBoxCustomEDDBDownload.CheckBoxInnerColor = System.Drawing.Color.White;
-            this.checkBoxCustomEDDBDownload.CheckColor = System.Drawing.Color.DarkBlue;
-            this.checkBoxCustomEDDBDownload.FontNerfReduction = 0.5F;
-            this.checkBoxCustomEDDBDownload.ImageButtonDisabledScaling = 0.5F;
-            this.checkBoxCustomEDDBDownload.Location = new System.Drawing.Point(9, 42);
-            this.checkBoxCustomEDDBDownload.MouseOverColor = System.Drawing.Color.CornflowerBlue;
-            this.checkBoxCustomEDDBDownload.Name = "checkBoxCustomEDDBDownload";
-            this.checkBoxCustomEDDBDownload.Size = new System.Drawing.Size(180, 17);
-            this.checkBoxCustomEDDBDownload.TabIndex = 5;
-            this.checkBoxCustomEDDBDownload.Text = "Enable EDDB System Download";
-            this.checkBoxCustomEDDBDownload.TickBoxReductionSize = 10;
-            this.toolTip.SetToolTip(this.checkBoxCustomEDDBDownload, "Click to enable download of EDDB data on system status");
-            this.checkBoxCustomEDDBDownload.UseVisualStyleBackColor = true;
-            // 
             // buttonExtEDSMConfigureArea
             // 
             this.buttonExtEDSMConfigureArea.Location = new System.Drawing.Point(218, 19);
             this.buttonExtEDSMConfigureArea.Name = "buttonExtEDSMConfigureArea";
             this.buttonExtEDSMConfigureArea.Size = new System.Drawing.Size(95, 23);
             this.buttonExtEDSMConfigureArea.TabIndex = 10;
-            this.buttonExtEDSMConfigureArea.Text = "EDSM Galaxy";
+            this.buttonExtEDSMConfigureArea.Text = "Galaxy Select";
             this.toolTip.SetToolTip(this.buttonExtEDSMConfigureArea, "Configure what parts of the galaxy is stored in the databases");
             this.buttonExtEDSMConfigureArea.UseVisualStyleBackColor = true;
             this.buttonExtEDSMConfigureArea.Click += new System.EventHandler(this.buttonExtEDSMConfigureArea_Click);
             // 
-            // checkBoxCustomEDSMDownload
+            // checkBoxCustomEDSMEDDBDownload
             // 
-            this.checkBoxCustomEDSMDownload.AutoSize = true;
-            this.checkBoxCustomEDSMDownload.CheckBoxColor = System.Drawing.Color.Gray;
-            this.checkBoxCustomEDSMDownload.CheckBoxInnerColor = System.Drawing.Color.White;
-            this.checkBoxCustomEDSMDownload.CheckColor = System.Drawing.Color.DarkBlue;
-            this.checkBoxCustomEDSMDownload.FontNerfReduction = 0.5F;
-            this.checkBoxCustomEDSMDownload.ImageButtonDisabledScaling = 0.5F;
-            this.checkBoxCustomEDSMDownload.Location = new System.Drawing.Point(9, 19);
-            this.checkBoxCustomEDSMDownload.MouseOverColor = System.Drawing.Color.CornflowerBlue;
-            this.checkBoxCustomEDSMDownload.Name = "checkBoxCustomEDSMDownload";
-            this.checkBoxCustomEDSMDownload.Size = new System.Drawing.Size(166, 17);
-            this.checkBoxCustomEDSMDownload.TabIndex = 5;
-            this.checkBoxCustomEDSMDownload.Text = "Enable EDSM Star Download";
-            this.checkBoxCustomEDSMDownload.TickBoxReductionSize = 10;
-            this.toolTip.SetToolTip(this.checkBoxCustomEDSMDownload, "Click to enable downloading of stars from EDSM");
-            this.checkBoxCustomEDSMDownload.UseVisualStyleBackColor = true;
+            this.checkBoxCustomEDSMEDDBDownload.AutoSize = true;
+            this.checkBoxCustomEDSMEDDBDownload.CheckBoxColor = System.Drawing.Color.Gray;
+            this.checkBoxCustomEDSMEDDBDownload.CheckBoxInnerColor = System.Drawing.Color.White;
+            this.checkBoxCustomEDSMEDDBDownload.CheckColor = System.Drawing.Color.DarkBlue;
+            this.checkBoxCustomEDSMEDDBDownload.FontNerfReduction = 0.5F;
+            this.checkBoxCustomEDSMEDDBDownload.ImageButtonDisabledScaling = 0.5F;
+            this.checkBoxCustomEDSMEDDBDownload.Location = new System.Drawing.Point(9, 19);
+            this.checkBoxCustomEDSMEDDBDownload.MouseOverColor = System.Drawing.Color.CornflowerBlue;
+            this.checkBoxCustomEDSMEDDBDownload.Name = "checkBoxCustomEDSMEDDBDownload";
+            this.checkBoxCustomEDSMEDDBDownload.Size = new System.Drawing.Size(158, 17);
+            this.checkBoxCustomEDSMEDDBDownload.TabIndex = 5;
+            this.checkBoxCustomEDSMEDDBDownload.Text = "Enable Star Data Download";
+            this.checkBoxCustomEDSMEDDBDownload.TickBoxReductionSize = 10;
+            this.toolTip.SetToolTip(this.checkBoxCustomEDSMEDDBDownload, "Click to enable downloading of stars from EDSM and system information from EDDB");
+            this.checkBoxCustomEDSMEDDBDownload.UseVisualStyleBackColor = true;
             // 
             // groupBoxPopOuts
             // 
@@ -927,9 +908,8 @@ namespace EDDiscovery.UserControls
             this.groupBoxCustomEDSM.BackColorScaling = 0.5F;
             this.groupBoxCustomEDSM.BorderColor = System.Drawing.Color.LightGray;
             this.groupBoxCustomEDSM.BorderColorScaling = 0.5F;
-            this.groupBoxCustomEDSM.Controls.Add(this.checkBoxCustomEDDBDownload);
             this.groupBoxCustomEDSM.Controls.Add(this.buttonExtEDSMConfigureArea);
-            this.groupBoxCustomEDSM.Controls.Add(this.checkBoxCustomEDSMDownload);
+            this.groupBoxCustomEDSM.Controls.Add(this.checkBoxCustomEDSMEDDBDownload);
             this.groupBoxCustomEDSM.FillClientAreaWithAlternateColor = false;
             this.groupBoxCustomEDSM.Location = new System.Drawing.Point(440, 404);
             this.groupBoxCustomEDSM.Name = "groupBoxCustomEDSM";
@@ -1021,8 +1001,7 @@ namespace EDDiscovery.UserControls
         private ExtendedControls.CheckBoxCustom checkBoxCustomEnableScreenshots;
         private ExtendedControls.CheckBoxCustom checkBoxCustomCopyToClipboard;
         private ExtendedControls.GroupBoxCustom groupBoxCustomEDSM;
-        private ExtendedControls.CheckBoxCustom checkBoxCustomEDDBDownload;
         private ExtendedControls.ButtonExt buttonExtEDSMConfigureArea;
-        private ExtendedControls.CheckBoxCustom checkBoxCustomEDSMDownload;
+        private ExtendedControls.CheckBoxCustom checkBoxCustomEDSMEDDBDownload;
     }
 }

@@ -192,7 +192,7 @@ namespace EliteDangerousCore.EDSM
         }
 
         
-        internal long GetNewSystems(Func<bool> cancelRequested, Action<int, string> reportProgress, Action<string> logLine)
+        internal long GetNewSystems(bool[] grididallow, Func<bool> cancelRequested, Action<int, string> reportProgress, Action<string> logLine)
         {
             string lstsyst;
 
@@ -270,7 +270,7 @@ namespace EliteDangerousCore.EDSM
                     break;
                 }
 
-                long cnt = SystemClassEDSM.ParseEDSMUpdateSystemsString(json, ref lstsyst, ref outoforder, false, cancelRequested, reportProgress, false);
+                long cnt = SystemClassEDSM.ParseEDSMUpdateSystemsString(json, grididallow, ref lstsyst, ref outoforder, false, cancelRequested, reportProgress, false);
                 updates += cnt;
                 if (cnt < 100)
                 {

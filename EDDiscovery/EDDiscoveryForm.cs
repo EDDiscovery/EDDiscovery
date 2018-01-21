@@ -578,6 +578,11 @@ namespace EDDiscovery
             Controller.AsyncPerformSync();
         }
 
+        public void ForceEDSMEDDBFullRefresh()
+        {
+            Controller.AsyncPerformSync(true, true);
+        }
+
         #endregion
 
         #region Controller event handlers 

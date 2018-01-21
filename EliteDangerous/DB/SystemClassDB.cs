@@ -74,8 +74,43 @@ namespace EliteDangerousCore.DB
             return sys;
         }
 
+        public static void RemoveGridSystems(List<int> gridids)
+        {
+            using (SQLiteConnectionSystem cn = new SQLiteConnectionSystem())
+            {
+                using (DbCommand cmd1 = cn.CreateCommand("DELETE FROM EdsmSystems Where gridid IN (" + string.Join(",", gridids) + ")"))
+                {
+                    cmd1.ExecuteNonQuery();
+                }
+            }
+        }
+
+        public static void RemoveGridNames(List<int> gridids)
+        {
+            using (SQLiteConnectionSystem cn = new SQLiteConnectionSystem())
+            {
+                using (DbCommand cmd2 = cn.CreateCommand("DELETE FROM SystemNames Where gridid IN (" + string.Join(",", gridids) + ")"))
+                {
+                    cmd2.ExecuteNonQuery();
+                }
+            }
+        }
+
+
+        public static void Vacuum()
+        {
+            using (SQLiteConnectionSystem cn = new SQLiteConnectionSystem())
+            {
+                using (DbCommand cmd = cn.CreateCommand("VACUUM"))
+                {
+                    cmd.ExecuteNonQuery();
+                }
+            }
+        }
 
         public enum SystemAskType { AnyStars, PopulatedStars, UnPopulatedStars };
+
+        // Return vector of stars, for gridid
         public static int GetSystemVector<V>(int gridid, ref V[] vertices, ref uint[] colours,
                                                SystemAskType ask, int percentage,
                                                Func<float,float,float,V> tovect)
@@ -864,35 +899,7 @@ namespace EliteDangerousCore.DB
             return nearestsystem;
         }
 
-        //public static bool GetSystemAndAlternatives(EliteDangerous.JournalEvents.JournalLocOrJump vsc, out ISystem system, out List<ISystem> alternatives, out string namestatus)
-        //{
-        //    ISystem refsystem = new EliteDangerous.SystemClass
-        //    {
-        //        name = vsc.StarSystem,
-        //        x = vsc.HasCoordinate ? vsc.StarPos.X : Double.NaN,
-        //        y = vsc.HasCoordinate ? vsc.StarPos.Y : Double.NaN,
-        //        z = vsc.HasCoordinate ? vsc.StarPos.Z : Double.NaN,
-        //        id_edsm = vsc.EdsmID
-        //    };
-
-        //    return GetSystemAndAlternatives(refsystem, out system, out alternatives, out namestatus);
-        //}
-
-        //public static bool GetSystemAndAlternatives(string sysname, out ISystem system, out List<ISystem> alternatives, out string namestatus)
-        //{
-        //    ISystem refsystem = new EliteDangerous.SystemClass
-        //    {
-        //        name = sysname,
-        //        x = Double.NaN,
-        //        y = Double.NaN,
-        //        z = Double.NaN,
-        //        id_edsm = 0
-        //    };
-
-        //    return GetSystemAndAlternatives(refsystem, out system, out alternatives, out namestatus);
-        //}
-
-        
+      
 
         public static bool GetSystemAndAlternatives(ISystem refsys, out ISystem system, out List<ISystem> alternatives, out string namestatus)
         {
@@ -1225,7 +1232,7 @@ namespace EliteDangerousCore.DB
 
     public class GridId
     {
-        public const int gridxrange = 20;
+        public const int GridXRange = 20;
         static private int[] compresstablex = {
                                                 0,1,1,1,1, 2,2,2,2,2,                   // 0   -20
                                                 3,3,4,4,5, 5,6,7,8,9,                   // 10   -10,-8,-6,..
@@ -1233,7 +1240,7 @@ namespace EliteDangerousCore.DB
                                                 17,17,17,17,17, 18,18,18,18,18,         // 30   +10
                                                 19,19                                   // 40   +20
                                             };
-        public const int gridzrange = 26;
+        public const int GridZRange = 26;
         static private int[] compresstablez = {
                                                 0,1,1,2,2,      3,4,5,6,7,              // 0  -10
                                                 8,9,10,11,12,   12,13,13,14,14,         // 10 Sol 0
@@ -1249,18 +1256,23 @@ namespace EliteDangerousCore.DB
         public const int zbot = -10500;
         public const int ztop = 60000;
 
+        public const int MinGridID = 0;
+        public const int MaxGridID = GridZRange * ZMult + GridXRange;
+
+        private const int ZMult = 100;
+
         public static int Id(double x, double z)
         {
             x = Math.Min(Math.Max(x - xleft, 0), xright - xleft);       // 40500
             z = Math.Min(Math.Max(z - zbot, 0), ztop - zbot);           // 70500
             x /= 1000;                                                  // 0-40.5 inc
             z /= 1000;                                                  // 0-70.5 inc
-            return compresstablex[(int)x] + 100 * compresstablez[(int)z];
+            return compresstablex[(int)x] + ZMult * compresstablez[(int)z];
         }
 
         public static int IdFromComponents(int x, int z)                // given x grid/ y grid give ID
         {
-            return x + 100 * z;
+            return x + ZMult * z;
         }
 
         public static bool XZ(int id, out float x, out float z , bool mid = true)         // given id, return x/z pos of left bottom
@@ -1268,10 +1280,10 @@ namespace EliteDangerousCore.DB
             x = 0; z = 0;
             if (id >= 0)
             {
-                int xid = (id % 100);
-                int zid = (id / 100);
+                int xid = (id % ZMult);
+                int zid = (id / ZMult);
 
-                if (xid < gridxrange && zid < gridzrange)
+                if (xid < GridXRange && zid < GridZRange)
                 {
                     for (int i = 0; i < compresstablex.Length; i++)
                     {
@@ -1312,9 +1324,9 @@ namespace EliteDangerousCore.DB
         {
             List<int> list = new List<int>();
 
-            for (int z = 0; z < gridzrange; z++)
+            for (int z = 0; z < GridZRange; z++)
             {
-                for (int x = 0; x < gridxrange; x++)
+                for (int x = 0; x < GridXRange; x++)
                     list.Add(IdFromComponents(x, z));
             }
             return list;
@@ -1322,9 +1334,9 @@ namespace EliteDangerousCore.DB
 
         public static int[] XLines(int endentry)            // fill in the LY values, plus an end stop one
         {
-            int[] xlines = new int[gridxrange + 1];
+            int[] xlines = new int[GridXRange + 1];
 
-            for (int x = 0; x < gridxrange; x++)
+            for (int x = 0; x < GridXRange; x++)
             {
                 float xp, zp;
                 int id = GridId.IdFromComponents(x, 0);
@@ -1332,16 +1344,16 @@ namespace EliteDangerousCore.DB
                 xlines[x] = (int)xp;
             }
 
-            xlines[gridxrange ] = endentry;
+            xlines[GridXRange ] = endentry;
 
             return xlines;
         }
 
         public static int[] ZLines(int endentry)
         {
-            int[] zlines = new int[gridzrange + 1];
+            int[] zlines = new int[GridZRange + 1];
 
-            for (int z = 0; z < gridzrange; z++)
+            for (int z = 0; z < GridZRange; z++)
             {
                 float xp, zp;
                 int id = GridId.IdFromComponents(0, z);
@@ -1349,9 +1361,26 @@ namespace EliteDangerousCore.DB
                 zlines[z] = (int)zp;
             }
 
-            zlines[gridzrange] = endentry;
+            zlines[GridZRange] = endentry;
 
             return zlines;
+        }
+
+        public static List<int> FromString(string s)
+        {
+            if (s == "All")
+                return GridId.AllId();
+            else
+                return s.RestoreIntListFromString();
+        }
+
+        public static string ToString(List<int> ids)
+        {
+            List<int> allid = GridId.AllId();
+            if (ids.Count == allid.Count)
+                return "All";
+            else
+                return string.Join(",", ids);
         }
 
     }
