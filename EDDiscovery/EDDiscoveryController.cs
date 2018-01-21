@@ -145,6 +145,49 @@ namespace EDDiscovery
             journalmonitor.OnNewJournalEntry += NewEntry;
         }
 
+        private void LoadIconPack()
+        {
+            Icons.IconSet.ResetIcons();
+
+            string path = EDDOptions.Instance.IconsPath;
+
+            if (path != null)
+            {
+                if (!Path.IsPathRooted(path))
+                {
+                    string testpath = Path.Combine(EDDOptions.Instance.AppDataDirectory, path);
+                    if (File.Exists(testpath) || Directory.Exists(testpath))
+                    {
+                        path = testpath;
+                    }
+                    else
+                    {
+                        path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, path);
+                    }
+                }
+
+                if (Directory.Exists(path))
+                {
+                    Icons.IconSet.LoadIconsFromDirectory(path);
+                }
+                else if (File.Exists(path))
+                {
+                    try
+                    {
+                        Icons.IconSet.LoadIconsFromZipFile(path);
+                    }
+                    catch (Exception ex)
+                    {
+                        Trace.WriteLine($"Unable to load icons from {path}: {ex.Message}");
+                    }
+                }
+                else
+                {
+                    Trace.WriteLine($"Unable to load icons from {path}: Path not found");
+                }
+            }
+        }
+
         public void Logger(string s)
         {
             LogLine(s);
@@ -382,60 +425,6 @@ namespace EDDiscovery
 
         #endregion
 
-        #region Initial Check Systems
-
-        private void CheckSystems(Func<bool> cancelRequested, Action<int, string> reportProgress)  // ASYNC process, done via start up, must not be too slow.
-        {
-            Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " Check systems");
-            reportProgress(-1, "");
-
-            string rwsystime = SQLiteConnectionSystem.GetSettingString("EDSMLastSystems", "2000-01-01 00:00:00"); // Latest time from RW file.
-            DateTime edsmdate;
-
-            if (!DateTime.TryParse(rwsystime, CultureInfo.InvariantCulture, DateTimeStyles.None, out edsmdate))
-            {
-                edsmdate = new DateTime(2000, 1, 1);
-            }
-
-            if (DateTime.Now.Subtract(edsmdate).TotalDays > 7)  // Over 7 days do a sync from EDSM
-            {
-                // Also update galactic mapping from EDSM
-                LogLine("Get galactic mapping from EDSM.");
-                galacticMapping.DownloadFromEDSM();
-
-                // Skip EDSM full update if update has been performed in last 4 days
-                bool outoforder = SQLiteConnectionSystem.GetSettingBool("EDSMSystemsOutOfOrder", true);
-                DateTime lastmod = outoforder ? SystemClassDB.GetLastSystemModifiedTime() : SystemClassDB.GetLastSystemModifiedTimeFast();
-
-                if (DateTime.UtcNow.Subtract(lastmod).TotalDays > 4 ||
-                    DateTime.UtcNow.Subtract(edsmdate).TotalDays > 28)
-                {
-                    syncstate.performedsmsync = true;
-                }
-                else
-                {
-                    SQLiteConnectionSystem.PutSettingString("EDSMLastSystems", DateTime.Now.ToString(CultureInfo.InvariantCulture));
-                }
-            }
-
-            if (!cancelRequested())
-            {
-                SQLiteConnectionSystem.CreateSystemsTableIndexes();
-                galacticMapping.ParseData();                            // at this point, EDSM data is loaded..
-                SystemClassDB.AddToAutoComplete(galacticMapping.GetGMONames());
-
-                LogLine("Loaded Notes, Bookmarks and Galactic mapping.");
-
-                string timestr = SQLiteConnectionSystem.GetSettingString("EDDBSystemsTime", "0");
-                DateTime time = new DateTime(Convert.ToInt64(timestr), DateTimeKind.Utc);
-                if (DateTime.UtcNow.Subtract(time).TotalDays > 6.5)     // Get EDDB data once every week.
-                    syncstate.performeddbsync = true;
-            }
-            Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " Check systems complete");
-        }
-
-        #endregion
-
         #region 2dmaps
 
         public static Task<bool> DownloadMaps(IDiscoveryController discoveryform, Func<bool> cancelRequested, Action<string> logLine, Action<string> logError)          // ASYNC process
@@ -466,12 +455,17 @@ namespace EDDiscovery
 
         #region Async EDSM/EDDB Full Sync
 
+        //done after CheckSystems, in BackgroundInit
+
         private void DoPerformSync()
         {
             Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " Perform sync");
             try
             {
-                EliteDangerousCore.EDSM.SystemClassEDSM.PerformSync(() => PendingClose, (p, s) => ReportProgress(p, s), LogLine, LogLineHighlight, syncstate);
+                bool[] grids = new bool[GridId.MaxGridID];
+                foreach (int i in GridId.FromString(EDDConfig.Instance.EDSMGridIDs))
+                    grids[i] = true;
+                EliteDangerousCore.EDSM.SystemClassEDSM.PerformSync(grids, () => PendingClose, (p, s) => ReportProgress(p, s), LogLine, LogLineHighlight, syncstate);
             }
             catch (OperationCanceledException)
             {
@@ -485,8 +479,9 @@ namespace EDDiscovery
             InvokeAsyncOnUiThread(() => PerformSyncCompleted());
         }
 
+        // Done in UI thread after DoPerformSync completes
 
-        private void PerformSyncCompleted()
+        private void PerformSyncCompleted()    
         {
             ReportProgress(-1, "");
 
@@ -699,8 +694,10 @@ namespace EDDiscovery
 
                 try
                 {
-                    if (!EDDOptions.Instance.NoSystemsLoad)
+                    if (!EDDOptions.Instance.NoSystemsLoad && EDDConfig.Instance.EDSMEDDBDownload)      // if no system off, and EDSM download on
                         DoPerformSync();
+                    else
+                        LogLine("Star data download disabled by User, use Settings to reenable it");
 
                     while (!PendingClose)
                     {
@@ -713,7 +710,8 @@ namespace EDDiscovery
                             case 0:  // Close Requested
                                 break;
                             case 1:  // Resync Requested
-                                DoPerformSync();
+                                if (!EDDOptions.Instance.NoSystemsLoad && EDDConfig.Instance.EDSMEDDBDownload)      // if no system off, and EDSM download on
+                                    DoPerformSync();
                                 break;
                         }
                     }
@@ -735,62 +733,73 @@ namespace EDDiscovery
             });
         }
 
-        private void LoadIconPack()
-        {
-            Icons.IconSet.ResetIcons();
-
-            string path = EDDOptions.Instance.IconsPath;
-
-            if (path != null)
-            {
-                if (!Path.IsPathRooted(path))
-                {
-                    string testpath = Path.Combine(EDDOptions.Instance.AppDataDirectory, path);
-                    if (File.Exists(testpath) || Directory.Exists(testpath))
-                    {
-                        path = testpath;
-                    }
-                    else
-                    {
-                        path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, path);
-                    }
-                }
-
-                if (Directory.Exists(path))
-                {
-                    Icons.IconSet.LoadIconsFromDirectory(path);
-                }
-                else if (File.Exists(path))
-                {
-                    try
-                    {
-                        Icons.IconSet.LoadIconsFromZipFile(path);
-                    }
-                    catch (Exception ex)
-                    {
-                        Trace.WriteLine($"Unable to load icons from {path}: {ex.Message}");
-                    }
-                }
-                else
-                {
-                    Trace.WriteLine($"Unable to load icons from {path}: Path not found");
-                }
-            }
-        }
+        // Called from Background Thread Worker at Init() 
 
         private void BackgroundInit()
         {
             StarScan.LoadBodyDesignationMap();
             MaterialCommodityDB.SetUpInitialTable();
 
+            SQLiteConnectionSystem.CreateSystemsTableIndexes();     // just make sure they are there..
+
+            Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " Check systems");
+            ReportProgress(-1, "");
+
             if (!EDDOptions.Instance.NoSystemsLoad)
-            {
+            { 
+                // Async load of maps in another thread
+
                 downloadMapsTask = DownloadMaps(this, () => PendingClose, LogLine, LogLineHighlight);
-                CheckSystems(() => PendingClose, (p, s) => ReportProgress(p, s));
+
+                // Former CheckSystems, reworked to accomodate new switches..
+                // Check to see what sync refreshes we need
+
+                DateTime edsmdate = SystemClassEDSM.GetLastEDSMDownloadTime();
+
+                if (DateTime.Now.Subtract(edsmdate).TotalDays > 7)  // Over 7 days do a sync from EDSM
+                {
+                    // Skip EDSM full update if update has been performed in last 4 days
+                    bool outoforder = SQLiteConnectionSystem.GetSettingBool("EDSMSystemsOutOfOrder", true);
+                    DateTime lastmod = outoforder ? SystemClassDB.GetLastSystemModifiedTime() : SystemClassDB.GetLastSystemModifiedTimeFast();
+
+                    if (DateTime.UtcNow.Subtract(lastmod).TotalDays > 4 ||
+                        DateTime.UtcNow.Subtract(edsmdate).TotalDays > 28)
+                    {
+                        syncstate.performedsmsync = true;
+                    }
+                    else
+                    {
+                        SystemClassEDSM.SetLastEDSMDownloadTimeNow();
+                    }
+                }
+
+                DateTime time = EliteDangerousCore.EDDB.SystemClassEDDB.GetLastEDDBDownloadTime();
+                if (DateTime.UtcNow.Subtract(time).TotalDays > 6.5)     // Get EDDB data once every week.
+                    syncstate.performeddbsync = true;
+           
+                // New Galmap load - it was not doing a refresh if EDSM sync kept on happening. Now has its own timer
+
+                string rwgalmaptime = SQLiteConnectionSystem.GetSettingString("EDSMGalMapLast", "2000-01-01 00:00:00"); // Latest time from RW file.
+                DateTime galmaptime;
+                if (!DateTime.TryParse(rwgalmaptime, CultureInfo.InvariantCulture, DateTimeStyles.None, out galmaptime))
+                    galmaptime = new DateTime(2000, 1, 1);
+
+                if (DateTime.Now.Subtract(galmaptime).TotalDays > 14)  // Over 14 days do a sync from EDSM for galmap
+                {
+                    LogLine("Get galactic mapping from EDSM.");
+                    galacticMapping.DownloadFromEDSM();
+                    SQLiteConnectionSystem.PutSettingString("EDSMGalMapLast", DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss"));
+                }
+
+                Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " Check systems complete");
             }
 
-            SystemNoteClass.GetAllSystemNotes();                                // fill up memory with notes, bookmarks, galactic mapping
+            galacticMapping.ParseData();                            // at this point, gal map data has been uploaded - get it into memory
+            SystemClassDB.AddToAutoComplete(galacticMapping.GetGMONames());
+            SystemNoteClass.GetAllSystemNotes();                             
             BookmarkClass.GetAllBookmarks();
+
+            LogLine("Loaded Notes, Bookmarks and Galactic mapping.");
 
             ReportProgress(-1, "");
             InvokeAsyncOnUiThread(() => OnInitialSyncComplete?.Invoke());

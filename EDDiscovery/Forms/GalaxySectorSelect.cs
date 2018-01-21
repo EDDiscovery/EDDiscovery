@@ -24,31 +24,27 @@ namespace EDDiscovery.Forms
         {
             get
             {
-                List<int> allid = GridId.AllId();
-                if (imageViewer.Selection.Count == allid.Count)
-                    return "All";
-                else
-                    return string.Join(",", imageViewer.Selection);
+                return GridId.ToString(imageViewer.Selection);
             }
 
             set
             {
-                if (value == "All")
-                    imageViewer.Selection = GridId.AllId();
-                else
-                    imageViewer.Selection = value.RestoreIntListFromString();
+                imageViewer.Selection = GridId.FromString(value);
             }
         }
 
         public enum ActionToDo { None, Add, Remove };
         public ActionToDo Action = ActionToDo.None;
-        public List<int> RemoveList = null;
+
+        public List<int> AllRemoveSectors;          // For remove, all sectors not wanted
+        public List<int> Removed;                   // For remove, new sectors not wanted
 
         List<Tuple<string, string>> defaultsel = new List<Tuple<string, string>>()
         {
             new Tuple<string,string>("Custom",""),
             new Tuple<string,string>("Reset","Reset"),
             new Tuple<string,string>("All","All"),
+            new Tuple<string,string>("None",""),
             new Tuple<string, string>("Bubble","608,609,610,611,612,708,709,710,711,712,808,809,810,811,812,908,909,910,911,912,1008,1009,1010,1011,1012"),
             new Tuple<string, string>("Bubble+Colonia","608,609,610,611,612,708,709,710,711,712,808,809,810,811,812,908,909,910,911,912,1008,1009,1010,1011,1012,1108,1109,1110,1207,1208,1209,1306,1307,1308,1405,1406,1407,1504,1505,1603,1604,1703"),
         };
@@ -59,7 +55,6 @@ namespace EDDiscovery.Forms
 
             imageViewer.MouseMove += ImageViewer_MouseMove;
             imageViewer.onChange += ChangedSel;
-
         }
 
         public bool Init(string cellset)
@@ -80,6 +75,8 @@ namespace EDDiscovery.Forms
                     initiallist = new List<int>(imageViewer.Selection);     // copy of..
 
                     SetComboBox();
+
+                    // later EDDTheme.Instance.ApplyToForm(this);
 
                     return true;
                 }
@@ -108,7 +105,7 @@ namespace EDDiscovery.Forms
                 string sel = defaultsel[selitem].Item2;
                 if (sel == "Reset")
                     Selection = initialsel;
-                else if (sel.Length > 0)
+                else if ( sel != "Custom")
                     Selection = sel;
             }
         }
@@ -160,24 +157,28 @@ namespace EDDiscovery.Forms
             }
             else
             {
-                RemoveList = new List<int>();
+                Removed = new List<int>();
 
                 foreach (int i in initiallist)
                 {
                     if (!currentsel.Contains(i))       // if initial list does not include a current sel
-                        RemoveList.Add(i);
+                        Removed.Add(i);
                 }
 
-                if (RemoveList.Count > 0)
+                if (Removed.Count>0)
                 {
-                    if (ExtendedControls.MessageBoxTheme.Show(this, "You have removed sectors!" + Environment.NewLine +
-                            "This will require the DB to be cleaned of entries, which will take time" + Environment.NewLine +
-                            "Confirm you wish to do this?", "Warning!", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK)
-                    {
-                        Action = ActionToDo.Remove;
-                    }
-                    else
-                        return;
+                    AllRemoveSectors = (from int i in GridId.AllId() where !currentsel.Contains(i) select i).ToList();
+
+                    //if (ExtendedControls.MessageBoxTheme.Show(this, "You have removed sectors!" + Environment.NewLine +
+                    //        "This will require the DB to be cleaned of entries, which will take time" + Environment.NewLine +
+                    //        "Confirm you wish to do this?", "Warning!", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK)
+                    //{
+                    //    Action = ActionToDo.Remove;
+                    //}
+                    //else
+                    //    return;
+
+                    Action = ActionToDo.Remove;
                 }
             }
 

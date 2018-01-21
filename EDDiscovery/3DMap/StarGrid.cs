@@ -390,9 +390,9 @@ namespace EDDiscovery
 
         public void Initialise()
         {
-            for (int z = 0; z < GridId.gridzrange; z++)
+            for (int z = 0; z < GridId.GridZRange; z++)
             {
-                for (int x = 0; x < GridId.gridxrange; x++)
+                for (int x = 0; x < GridId.GridXRange; x++)
                 {
                     int id = GridId.IdFromComponents(x, z);
                     float xp = 0, zp = 0;

@@ -81,6 +81,9 @@ namespace EliteDangerousCore.DB
                     if (dbver < 102)
                         UpgradeSystemsDB102(conn);
 
+                    if (dbver < 103)
+                        UpgradeSystemsDB103(conn);
+
                     CreateSystemDBTableIndexes(conn);
 
                     return true;
@@ -229,7 +232,18 @@ namespace EliteDangerousCore.DB
         }
 
 
-        public static void DropOldSystemTables(SQLiteConnectionSystem conn)
+        private static void UpgradeSystemsDB103(SQLiteConnectionED conn)
+        {
+            string query1 = "ALTER TABLE SystemNames ADD COLUMN gridid Integer NOT NULL DEFAULT -1";
+            string query2 = "UPDATE SystemNames " +
+                            "SET GridId = (SELECT GridId FROM EdsmSystems WHERE SystemNames.EdsmId = EdsmSystems.EdsmId) " +
+                            "WHERE Exists(SELECT GridId FROM EdsmSystems WHERE SystemNames.EdsmId = EdsmSystems.EdsmId)";
+            string query3 = "CREATE INDEX IF NOT EXISTS SystemNames_GridId ON SystemNames (GridId)";
+
+            PerformUpgrade(conn, 103, true, false, new[] { query1 , query2 , query3 });
+        }
+
+        public static void DropOldSystemTables(SQLiteConnectionSystem conn)         // UPGRADE
         {
             string[] queries = new[]
             {
@@ -252,7 +266,7 @@ namespace EliteDangerousCore.DB
             }
         }
 
-        private static void CreateSystemDBTableIndexes(SQLiteConnectionSystem conn)
+        private static void CreateSystemDBTableIndexes(SQLiteConnectionSystem conn)     // UPGRADE
         {
             string[] queries = new[]
             {
@@ -277,7 +291,7 @@ namespace EliteDangerousCore.DB
             }
         }
 
-        public static void DropSystemsTableIndexes()
+        public static void DropSystemsTableIndexes()        // PERFORM during full table replacement
         {
             string[] queries = new[]
             {
@@ -298,6 +312,7 @@ namespace EliteDangerousCore.DB
                 "DROP INDEX IF EXISTS SystemNames_EdsmId",
                 "DROP INDEX IF EXISTS SystemNames_IdName",
                 "DROP INDEX IF EXISTS SystemNames_NameId",
+                "DROP INDEX IF EXISTS SystemNames_GridId",
                 "DROP INDEX IF EXISTS sqlite_autoindex_SystemNames_1"
             };
             using (SQLiteConnectionSystem conn = new SQLiteConnectionSystem())
@@ -320,7 +335,7 @@ namespace EliteDangerousCore.DB
             }
         }
 
-        private static void CreateSystemsTableIndexesNoLock()
+        private static void CreateSystemsTableIndexesNoLock()           // PERFORM AFTER SYSTEM TABLE REPLACEMENT
         {
             string[] queries = new[]
             {
@@ -332,6 +347,7 @@ namespace EliteDangerousCore.DB
                 "CREATE INDEX IF NOT EXISTS EdsmSystems_StarGrid ON EdsmSystems (GridId, RandomId, EdsmId, EddbId, X, Y, Z)",
                 "CREATE INDEX IF NOT EXISTS SystemNames_IdName ON SystemNames (EdsmId,Name)",
                 "CREATE INDEX IF NOT EXISTS SystemNames_NameId ON SystemNames (Name,EdsmId)",
+                "CREATE INDEX IF NOT EXISTS SystemNames_GridId ON SystemNames (GridId)",
             };
             using (SQLiteConnectionSystem conn = new SQLiteConnectionSystem())
             {
@@ -345,7 +361,7 @@ namespace EliteDangerousCore.DB
             }
         }
 
-        public static void CreateTempSystemsTable()
+        public static void CreateTempSystemsTable()         // PERFORM AT START SYSTEM TABLE REPLACEMENT
         {
             using (var conn = new SQLiteConnectionSystem())
             {
@@ -355,7 +371,9 @@ namespace EliteDangerousCore.DB
                     "CREATE TABLE SystemNames_temp (" +
                         "Id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, " +
                         "Name TEXT NOT NULL COLLATE NOCASE, " +
-                        "EdsmId INTEGER NOT NULL)");
+                        "EdsmId INTEGER NOT NULL," +
+                        "GridId INTEGER NOT NULL DEFAULT -1)");
+
                 ExecuteQuery(conn,
                     "CREATE TABLE EdsmSystems_temp (" +
                         "Id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, " +
@@ -372,7 +390,7 @@ namespace EliteDangerousCore.DB
             }
         }
 
-        public static void ReplaceSystemsTable()
+        public static void ReplaceSystemsTable()                // PERFORM AFTER TEMP SYSTEM TABLE UPDATED
         {
             using (var slock = new SchemaLock())
             {

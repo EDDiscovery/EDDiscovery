@@ -60,7 +60,14 @@ namespace ExtendedControls
             }
 
             textBoxInfo.Font = fnt;
-         }
+        }
+
+        public void AddText(string text)
+        {
+            textBoxInfo.Text += text;
+            textBoxInfo.Select(textBoxInfo.Text.Length, textBoxInfo.Text.Length);
+            textBoxInfo.ScrollToCaret();
+        }
 
         private void buttonOK_Click(object sender, EventArgs e)
         {
