@@ -45,7 +45,8 @@ namespace EDDiscovery.Forms
             new Tuple<string,string>("Reset","Reset"),
             new Tuple<string,string>("All","All"),
             new Tuple<string,string>("None",""),
-            new Tuple<string, string>("Bubble","608,609,610,611,612,708,709,710,711,712,808,809,810,811,812,908,909,910,911,912,1008,1009,1010,1011,1012"),
+            new Tuple<string, string>("Bubble","810"),
+            new Tuple<string, string>("Extended Bubble","608,609,610,611,612,708,709,710,711,712,808,809,810,811,812,908,909,910,911,912,1008,1009,1010,1011,1012"),
             new Tuple<string, string>("Bubble+Colonia","608,609,610,611,612,708,709,710,711,712,808,809,810,811,812,908,909,910,911,912,1008,1009,1010,1011,1012,1108,1109,1110,1207,1208,1209,1306,1307,1308,1405,1406,1407,1504,1505,1603,1604,1703"),
         };
 

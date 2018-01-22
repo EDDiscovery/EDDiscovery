@@ -25,7 +25,7 @@ using System.Data.Common;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
-
+using System.Net;
 
 namespace EliteDangerousCore.EDSM
 {
@@ -245,38 +245,31 @@ namespace EliteDangerousCore.EDSM
 
         #region Parse and store in DB
 
-        public static long ParseEDSMUpdateSystemsString(string json, bool[] grididallow, ref string date, ref bool outoforder, bool removenonedsmids, Func<bool> cancelRequested, Action<int, string> reportProgress, bool useCache = true)
+        public static long ParseEDSMUpdateSystemsString(string json, bool[] grididallow, ref DateTime date, bool removenonedsmids, Func<bool> cancelRequested, Action<int, string> reportProgress, bool useCache = true)
         {
             using (StringReader sr = new StringReader(json))
-                return ParseEDSMUpdateSystemsStream(sr, grididallow, ref date, ref outoforder, removenonedsmids, cancelRequested, reportProgress, useCache);
+                return ParseEDSMUpdateSystemsStream(sr, grididallow, ref date,  removenonedsmids, cancelRequested, reportProgress, useCache);
         }
 
-        public static long ParseEDSMUpdateSystemsFile(string filename, bool[] grididallow, ref string date, ref bool outoforder, bool removenonedsmids, Func<bool> cancelRequested, Action<int, string> reportProgress, bool useCache = true)
+        public static long ParseEDSMUpdateSystemsFile(string filename, bool[] grididallow, ref DateTime date, bool removenonedsmids, Func<bool> cancelRequested, Action<int, string> reportProgress, bool useCache = true)
         {
             using (StreamReader sr = new StreamReader(filename))         // read directly from file..
-                return ParseEDSMUpdateSystemsStream(sr, grididallow, ref date, ref outoforder, removenonedsmids, cancelRequested, reportProgress, useCache);
+                return ParseEDSMUpdateSystemsStream(sr, grididallow, ref date,  removenonedsmids, cancelRequested, reportProgress, useCache);
         }
 
-        public static long ParseEDSMUpdateSystemsStream(TextReader sr, bool[] grididallow, ref string date, ref bool outoforder, bool removenonedsmids, Func<bool> cancelRequested, Action<int, string> reportProgress, bool useCache = true, bool useTempSystems = false)
+        public static long ParseEDSMUpdateSystemsStream(TextReader sr, bool[] grididallow, ref DateTime date, bool removenonedsmids, Func<bool> cancelRequested, Action<int, string> reportProgress, bool useCache = true, bool useTempSystems = false)
         {
             using (JsonTextReader jr = new JsonTextReader(sr))
-                return ParseEDSMUpdateSystemsReader(jr, grididallow, ref date, ref outoforder, removenonedsmids, cancelRequested, reportProgress, useCache, useTempSystems);
+                return ParseEDSMUpdateSystemsReader(jr, grididallow, ref date,  removenonedsmids, cancelRequested, reportProgress, useCache, useTempSystems);
         }
 
-        private static long ParseEDSMUpdateSystemsReader(JsonTextReader jr, bool[] grididallow, ref string date, ref bool outoforder, bool removenonedsmids, Func<bool> cancelRequested, Action<int, string> reportProgress, bool useCache = true, bool useTempSystems = false)
+        private static long ParseEDSMUpdateSystemsReader(JsonTextReader jr, bool[] grididallow, ref DateTime date,  bool removenonedsmids, Func<bool> cancelRequested, Action<int, string> reportProgress, bool useCache = true, bool useTempSystems = false)
         {
-            return DoParseEDSMUpdateSystemsReader(jr, grididallow, ref date, ref outoforder, cancelRequested, reportProgress, useCache, useTempSystems);
+            return DoParseEDSMUpdateSystemsReader(jr, grididallow, ref date,  cancelRequested, reportProgress, useCache, useTempSystems);
         }
 
-        private static long DoParseEDSMUpdateSystemsReader(JsonTextReader jr, bool[] grididallowed, ref string date, ref bool outoforder, Func<bool> cancelRequested, Action<int, string> reportProgress, bool useCache = true, bool useTempSystems = false)
+        private static long DoParseEDSMUpdateSystemsReader(JsonTextReader jr, bool[] grididallowed, ref DateTime maxdate, Func<bool> cancelRequested, Action<int, string> reportProgress, bool useCache = true, bool useTempSystems = false)
         {
-            DateTime maxdate;
-
-            if (!DateTime.TryParse(date, CultureInfo.InvariantCulture, DateTimeStyles.None, out maxdate))
-            {
-                maxdate = new DateTime(2010, 1, 1);
-            }
-
             Dictionary<long, SystemClassBase> systemsByEdsmId = useCache ? GetEdsmSystemsLite() : new Dictionary<long, SystemClassBase>();
             int count = 0;
             int updatecount = 0;
@@ -385,9 +378,7 @@ namespace EliteDangerousCore.EDSM
 
                                             if (jr_eof)
                                             {
-                                                date = maxdate.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
                                                 System.Diagnostics.Debug.WriteLine("Maximum date was " + maxdate.ToString());
-
                                                 System.Diagnostics.Debug.WriteLine($"Import took {sw.ElapsedMilliseconds}ms");
 
                                                 return updatecount + insertcount;
@@ -419,8 +410,6 @@ namespace EliteDangerousCore.EDSM
 
                                             if (updatedate > maxdate)                                   // even if we reject it due to grid id, keep last date up to date
                                                 maxdate = updatedate;
-                                            else if (updatedate < maxdate - TimeSpan.FromHours(1))
-                                                outoforder = true;
 
                                             double x = coords.x;
                                             double z = coords.z;
@@ -578,178 +567,205 @@ namespace EliteDangerousCore.EDSM
 
         public class SystemsSyncState
         {
-            public bool performhistoryrefresh = false;
-            public bool syncwasfirstrun = false;
-            public bool syncwaseddboredsm = false;
-            public bool performedsmsync = false;
-            public bool performeddbsync = false;
+            public bool perform_edsm_sync = false;
+            public bool perform_eddb_sync = false;
 
+            public long edsm_fullsync_count = 0;
+            public long edsm_updatesync_count = 0;
+            public long eddb_sync_count = 0;
+
+            public void ClearCounters()
+            {
+                eddb_sync_count = 0;
+                edsm_fullsync_count = 0;
+                edsm_updatesync_count = 0;
+            }
         }
 
-        // Called from EDDiscoveryController, in back thread, by DoPerformSync
+        // Called from EDDiscoveryController, in back Init thread, to determine what sync to do..
 
-        public static void PerformSync(bool[] grididallow, Func<bool> cancelRequested, Action<int, string> reportProgress, Action<string> logLine, Action<string> logError, SystemsSyncState state)           // big check.. done in a thread.
+        public static void DetermineStartSyncState(SystemsSyncState state)
         {
-            reportProgress(-1, "");
+            DateTime lastfullsync = GetLastFullSyncTimeUTC();
+            DateTime lastrecordtime = GetLastEDSMRecordTimeUTC();
 
-            state.performhistoryrefresh = false;
-            state.syncwasfirstrun = SystemClassDB.IsSystemsTableEmpty();                 // remember if DB is empty
-
-            // Force a full sync if newest data is more than 14 days old 
-
-            bool outoforder = SQLiteConnectionSystem.GetSettingBool("EDSMSystemsOutOfOrder", true);
-            DateTime lastmod = outoforder ? SystemClassDB.GetLastSystemModifiedTime() : SystemClassDB.GetLastSystemModifiedTimeFast();
-            if (DateTime.UtcNow.Subtract(lastmod).TotalDays >= 14)
+            if (DateTime.UtcNow.Subtract(lastfullsync).TotalDays >= 28 || DateTime.UtcNow.Subtract(lastrecordtime).TotalDays >= 7)  // If we have not full resynced for 28 days, or last record was > 7 days in the past
             {
-                state.performedsmsync = true;
+                System.Diagnostics.Debug.WriteLine("EDSM FULL SYNC Last full delta {0} Record Time Delta {1}", DateTime.UtcNow.Subtract(lastfullsync).TotalDays, DateTime.UtcNow.Subtract(lastrecordtime).TotalDays);
+                state.perform_edsm_sync = true;       // do a full sync.
             }
-
-            bool edsmoreddbsync = state.performedsmsync || state.performeddbsync;           // remember if we are syncing
-            state.syncwaseddboredsm = edsmoreddbsync;
-
-            if (state.performedsmsync || state.performeddbsync)
-            {
-                if (state.performedsmsync && !cancelRequested())
-                {
-                    // Download new systems
-                    try
-                    {
-                        state.performhistoryrefresh |= PerformEDSMFullSync(grididallow, cancelRequested, reportProgress, logLine, logError);
-                        state.performedsmsync = false;
-                    }
-                    catch (Exception ex)
-                    {
-                        logError("GetAllEDSMSystems exception:" + ex.Message);
-                    }
-                }
-
-                if (!cancelRequested())
-                {
-                    logLine("Indexing systems table");
-                    SQLiteConnectionSystem.CreateSystemsTableIndexes();
-
-                    try
-                    {
-                        EliteDangerousCore.EDDB.SystemClassEDDB.PerformEDDBFullSync(cancelRequested, reportProgress, logLine, logError);
-                        state.performeddbsync = false;
-                    }
-                    catch (Exception ex)
-                    {
-                        logError("GetEDDBUpdate exception: " + ex.Message);
-                    }
-                    state.performhistoryrefresh = true;
-                }
-            }
-
-            if (!cancelRequested())
-            {
-                logLine("Indexing systems table");
-                SQLiteConnectionSystem.CreateSystemsTableIndexes();
-
-                lastmod = outoforder ? SystemClassDB.GetLastSystemModifiedTime() : SystemClassDB.GetLastSystemModifiedTimeFast();
-                if (DateTime.UtcNow.Subtract(lastmod).TotalHours >= 1)
-                {
-                    logLine("Checking for new EDSM systems (may take a few moments).");
-                    EDSMClass edsm = new EDSMClass();
-                    long updates = edsm.GetNewSystems(grididallow, cancelRequested, reportProgress, logLine);
-                    logLine($"EDSM updated {updates:N0} systems.");
-                    state.performhistoryrefresh |= (updates > 0);
-                }
-            }
-
-            reportProgress(-1, "");
         }
 
+        // Called from EDDiscoveryController, in DoPerform, on back thread, to determine what sync to do..
 
-        public static bool PerformEDSMFullSync(bool[] grididallow, Func<bool> cancelRequested, Action<int, string> reportProgress, Action<string> logLine, Action<string> logError)
+        public static long PerformEDSMFullSync(bool[] grididallow, Func<bool> PendingClose, Action<int, string> ReportProgress, Action<string> LogLine, Action<string> LogLineHighlight)
         {
             long updates = 0;
 
-            ForceEDSMFullUpdate();
-            EDDB.SystemClassEDDB.ForceEDDBFullUpdate();
-
             EDSMClass edsm = new EDSMClass();
 
-            logLine("Get hidden systems from EDSM and remove from database");
+            LogLine("Get hidden systems from EDSM and remove from database");
 
             RemoveHiddenSystems();
 
-            if (cancelRequested())
-                return false;
+            if (PendingClose())
+                return updates;
 
-            logLine("Download systems file from EDSM.");
+            LogLine("Download systems file from EDSM.");
 
             string edsmsystems = Path.Combine(EliteConfigInstance.InstanceOptions.AppDataDirectory, "edsmsystems.json");
 
-            logLine("Resyncing all downloaded EDSM systems with local database." + Environment.NewLine + "This will take a while.");
+            LogLine("Resyncing all downloaded EDSM systems with System Database." + Environment.NewLine + "This will take a while.");
 
-            //             string s = edsmsystems; bool success = true; // debug, comment out next two lines
+                         string s = edsmsystems; bool success = true; // debug, comment out next two lines
 
-            bool newfile;
-            bool success = BaseUtils.DownloadFileHandler.DownloadFile(EDSMClass.ServerAddress + "dump/systemsWithCoordinates.json", edsmsystems, out newfile, (n, s) =>
+            //bool newfile;
+            //bool success = BaseUtils.DownloadFileHandler.DownloadFile(EDSMClass.ServerAddress + "dump/systemsWithCoordinates.json", edsmsystems, out newfile, (n, s) =>
             {
                 SQLiteConnectionSystem.CreateTempSystemsTable();
 
-                string rwsysfiletime = "2014-01-01 00:00:00";
-                bool outoforder = false;
-                using (var reader = new StreamReader(s))
-                    updates = ParseEDSMUpdateSystemsStream(reader, grididallow, ref rwsysfiletime, ref outoforder, true, cancelRequested, reportProgress, useCache: false, useTempSystems: true);
+                DateTime maxdate = new DateTime(2000, 1, 1);
 
-                if (!cancelRequested())       // abort, without saving time, to make it do it again
+                using (var reader = new StreamReader(s))
+                    updates = ParseEDSMUpdateSystemsStream(reader, grididallow, ref maxdate, true, PendingClose, ReportProgress, useCache: false, useTempSystems: true);
+
+                if (!PendingClose())       // abort, without saving time, to make it do it again
                 {
-                    SQLiteConnectionSystem.PutSettingString("EDSMLastSystems", rwsysfiletime);
-                    logLine("Replacing old systems table with new systems table and re-indexing - please wait");
-                    reportProgress(-1, "Replacing old systems table with new systems table and re-indexing - please wait");
+                    LogLine("Replacing old systems table with new systems table and re-indexing - please wait");
+                    ReportProgress(-1, "Replacing old systems table with new systems table and re-indexing - please wait");
+
                     SQLiteConnectionSystem.ReplaceSystemsTable();
-                    SQLiteConnectionSystem.PutSettingBool("EDSMSystemsOutOfOrder", outoforder);
-                    reportProgress(-1, "");
-#if !DEBUG
-                    File.Delete(edsmsystems);
-#endif
+
+                    SetLastEDSMRecordTimeUTC(maxdate);      // record the last record seen in time
+                    SetLastFullSyncTimeNowUTC(); // record we full sync now successfully now, causing this not to trigger again soon
+
+                    ReportProgress(-1, "");
+
+                    LogLine("System Database updated with EDSM data, " + updates + " systems updated.");
+
+                    GC.Collect();
                 }
                 else
                 {
+                    success = false;
                     throw new OperationCanceledException();
                 }
-            });
+            };//);
 
             if (!success)
             {
-                logLine("Failed to download EDSM system file from server, will check next time");
-                return false;
+                LogLine("Failed to download EDSM system file from server, will check next time");
             }
 
-            // Stop if requested
-            if (cancelRequested())
-                return false;
-
-            logLine("Local database updated with EDSM data, " + updates + " systems updated.");
-
-            GC.Collect();
-
-            return (updates > 0);
+            return updates;
         }
 
-
-        static public DateTime GetLastEDSMDownloadTime()
+        public static long PerformEDSMUpdateSync(bool[] grididallow, Func<bool> PendingClose, Action<int, string> ReportProgress, Action<string> LogLine, Action<string> LogLineHighlight)
         {
-            string rwsystime = SQLiteConnectionSystem.GetSettingString("EDSMLastSystems", "2000-01-01 00:00:00"); // Latest time from RW file.
+            long updates = 0;
+            EDSMClass edsm = new EDSMClass();
+
+            DateTime lastrecordtime = GetLastEDSMRecordTimeUTC();      // this is in UTC, as it comes out of the EDSM records
+
+            while (lastrecordtime < DateTime.UtcNow)
+            {
+                if (PendingClose())
+                    return updates;
+
+                DateTime enddate = lastrecordtime + TimeSpan.FromHours(12);
+                if (enddate > DateTime.UtcNow)
+                    enddate = DateTime.UtcNow;
+
+                LogLine($"Downloading systems from UTC {lastrecordtime.ToUniversalTime().ToString()} to {enddate.ToUniversalTime().ToString()}");
+                ReportProgress(-1, "Requesting systems from EDSM");
+                System.Diagnostics.Debug.WriteLine($"Downloading systems from UTC {lastrecordtime.ToUniversalTime().ToString()} to {enddate.ToUniversalTime().ToString()}");
+
+                string json = null;
+                try
+                {
+                    json = edsm.RequestSystems(lastrecordtime, enddate);
+                }
+                catch (WebException ex)
+                {
+                    ReportProgress(-1, $"EDSM request failed");
+                    if (ex.Status == WebExceptionStatus.ProtocolError && ex.Response != null && ex.Response is HttpWebResponse)
+                    {
+                        string status = ((HttpWebResponse)ex.Response).StatusDescription;
+                        LogLine($"Download of EDSM systems from the server failed ({status}), will try next time program is run");
+                    }
+                    else
+                    {
+                        LogLine($"Download of EDSM systems from the server failed ({ex.Status.ToString()}), will try next time program is run");
+                    }
+
+                    return updates;
+                }
+                catch (Exception ex)
+                {
+                    ReportProgress(-1, $"EDSM request failed");
+                    LogLine($"Download of EDSM systems from the server failed ({ex.Message}), will try next time program is run");
+                    return updates;
+                }
+
+                if (json == null)
+                {
+                    ReportProgress(-1, "EDSM request failed");
+                    LogLine("Download of EDSM systems from the server failed (no data returned), will try next time program is run");
+                    return updates;
+                }
+
+                long cnt = ParseEDSMUpdateSystemsString(json, grididallow, ref lastrecordtime, false, PendingClose, ReportProgress, false);
+                System.Diagnostics.Debug.WriteLine($".. Updated {cnt} to {lastrecordtime.ToUniversalTime().ToString()}");
+
+                if (cnt < 100)      // if very few, just move the time on 12 hrs, else we had a lot, so use the last record time since EDSM will limit the no of records returned
+                {
+                    lastrecordtime += TimeSpan.FromHours(12);
+                }
+
+                updates += cnt;
+
+                SetLastEDSMRecordTimeUTC(lastrecordtime);       // keep on storing this in case next time we get an exception
+            }
+
+            return updates;
+        }
+
+        static public DateTime GetLastFullSyncTimeUTC()
+        {
+            string rwsystime = SQLiteConnectionSystem.GetSettingString("EDSMLastFullSyncSystems", "2000-01-01 00:00:00"); // Last time full sync was tried
             DateTime edsmdate;
 
-            if (!DateTime.TryParse(rwsystime, CultureInfo.InvariantCulture, DateTimeStyles.None, out edsmdate))
+            if (!DateTime.TryParse(rwsystime, CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal, out edsmdate))
                 edsmdate = new DateTime(2000, 1, 1);
 
             return edsmdate;
         }
 
-        static public void SetLastEDSMDownloadTimeNow()
+        static public void SetLastFullSyncTimeNowUTC()
         {
-            SQLiteConnectionSystem.PutSettingString("EDSMLastSystems", DateTime.Now.ToString(CultureInfo.InvariantCulture));
+            SQLiteConnectionSystem.PutSettingString("EDSMLastFullSyncSystems", DateTime.UtcNow.ToString(CultureInfo.InvariantCulture));
         }
 
         static public void ForceEDSMFullUpdate()
         {
-            SQLiteConnectionSystem.PutSettingString("EDSMLastSystems", "2010-01-01 00:00:00");
+            SQLiteConnectionSystem.PutSettingString("EDSMLastFullSyncSystems", "2010-01-01 00:00:00");
+        }
+
+        static public DateTime GetLastEDSMRecordTimeUTC()
+        {
+            string rwsystime = SQLiteConnectionSystem.GetSettingString("EDSMLastSystems", "2000-01-01 00:00:00"); // Latest time from RW file.
+            DateTime edsmdate;
+
+            if (!DateTime.TryParse(rwsystime, CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal, out edsmdate))
+                edsmdate = new DateTime(2000, 1, 1);
+
+            return edsmdate;
+        }
+
+        static public void SetLastEDSMRecordTimeUTC(DateTime time)
+        {
+            SQLiteConnectionSystem.PutSettingString("EDSMLastSystems", time.ToString(CultureInfo.InvariantCulture));
+            System.Diagnostics.Debug.WriteLine("Last EDSM record " + time.ToString());
         }
 
         #endregion

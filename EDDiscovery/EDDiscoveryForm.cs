@@ -580,6 +580,8 @@ namespace EDDiscovery
 
         public void ForceEDSMEDDBFullRefresh()
         {
+            SystemClassEDSM.ForceEDSMFullUpdate();
+            EliteDangerousCore.EDDB.SystemClassEDDB.ForceEDDBFullUpdate();
             Controller.AsyncPerformSync(true, true);
         }
 
