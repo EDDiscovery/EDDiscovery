@@ -199,10 +199,7 @@ namespace EliteDangerousCore.DB
             string query3 = "DROP TABLE IF EXISTS Distances";
             string query4 = "VACUUM";
 
-            PerformUpgrade(conn, 101, true, false, new[] { query1, query2, query3, query4 }, () =>
-            {
-                //                PutSettingString("EDSMLastSystems", "2010 - 01 - 01 00:00:00", conn);        // force EDSM sync..
-            });
+            PerformUpgrade(conn, 101, true, false, new[] { query1, query2, query3, query4 });
         }
 
         private static void UpgradeUserDB102(SQLiteConnectionED conn)

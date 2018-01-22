@@ -99,6 +99,8 @@ namespace EDDiscovery
             toolStripComboBoxTime.SelectedIndex = 0;
             initdone = true;
             ShowSelectedImage();
+
+            imageViewer1.BackColor = Color.FromArgb(5, 5,5);
         }
 
         private void Form2dClosing(object sender, FormClosingEventArgs e)

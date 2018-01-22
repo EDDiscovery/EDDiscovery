@@ -175,7 +175,7 @@ namespace EliteDangerousCore.DB
 
             PerformUpgrade(conn, 20, true, false, new[] { query1, query2 }, () =>
             {
-                conn.PutSettingStringCN("EDSMLastSystems", "2010 - 01 - 01 00:00:00");        // force EDSM sync..
+                EDSM.SystemClassEDSM.ForceEDSMFullUpdate();
             });
         }
 
@@ -192,7 +192,6 @@ namespace EliteDangerousCore.DB
 
             PerformUpgrade(conn, 101, true, false, new[] { query1, query2, query3, query4, query5, query6, query7 }, () =>
             {
-                //                PutSettingString("EDSMLastSystems", "2010 - 01 - 01 00:00:00", conn);        // force EDSM sync..
             });
         }
 

@@ -329,8 +329,8 @@ namespace EDDiscovery
             if (Interlocked.CompareExchange(ref resyncRequestedFlag, 1, 0) == 0)
             {
                 OnSyncStarting?.Invoke();
-                syncstate.performeddbsync |= eddbsync;
-                syncstate.performedsmsync |= edsmsync;
+                syncstate.perform_eddb_sync |= eddbsync;
+                syncstate.perform_edsm_sync |= edsmsync;
                 resyncRequestedEvent.Set();
                 return true;
             }
@@ -465,7 +465,60 @@ namespace EDDiscovery
                 bool[] grids = new bool[GridId.MaxGridID];
                 foreach (int i in GridId.FromString(EDDConfig.Instance.EDSMGridIDs))
                     grids[i] = true;
-                EliteDangerousCore.EDSM.SystemClassEDSM.PerformSync(grids, () => PendingClose, (p, s) => ReportProgress(p, s), LogLine, LogLineHighlight, syncstate);
+
+                ReportProgress(-1, "");
+
+                syncstate.ClearCounters();
+
+                if (syncstate.perform_edsm_sync || syncstate.perform_eddb_sync)
+                {
+                    if (syncstate.perform_edsm_sync && !PendingClose)
+                    {
+                        // Download new systems
+                        try
+                        {
+                            syncstate.edsm_fullsync_count = SystemClassEDSM.PerformEDSMFullSync(grids, () => PendingClose, ReportProgress, LogLine, LogLineHighlight);
+                            syncstate.perform_edsm_sync = false;
+                        }
+                        catch (Exception ex)
+                        {
+                            LogLineHighlight("GetAllEDSMSystems exception:" + ex.Message);
+                        }
+
+                    }
+
+                    if (!PendingClose)
+                    {
+                        LogLine("Indexing systems table");
+                        SQLiteConnectionSystem.CreateSystemsTableIndexes();
+
+                        try
+                        {
+                            syncstate.eddb_sync_count = EliteDangerousCore.EDDB.SystemClassEDDB.PerformEDDBFullSync(()=>PendingClose, ReportProgress, LogLine, LogLineHighlight);
+                            syncstate.perform_eddb_sync = false;
+                        }
+                        catch (Exception ex)
+                        {
+                            LogLineHighlight("GetEDDBUpdate exception: " + ex.Message);
+                        }
+                    }
+                }
+
+                if (!PendingClose)
+                {
+                    LogLine("Indexing systems table");
+                    SQLiteConnectionSystem.CreateSystemsTableIndexes();
+
+                    DateTime lastrecordtime = SystemClassEDSM.GetLastEDSMRecordTimeUTC();
+
+                    if (DateTime.UtcNow.Subtract(lastrecordtime).TotalHours >= 1)  // If we have partial synced for 1 hour, do it..
+                    {
+                        LogLine("Checking for updated EDSM systems (may take a few moments).");
+                        syncstate.edsm_updatesync_count = EliteDangerousCore.EDSM.SystemClassEDSM.PerformEDSMUpdateSync(grids, () => PendingClose, ReportProgress, LogLine, LogLineHighlight);
+                    }
+                }
+
+                ReportProgress(-1, "");
             }
             catch (OperationCanceledException)
             {
@@ -490,9 +543,9 @@ namespace EDDiscovery
                 long totalsystems = SystemClassDB.GetTotalSystems();
                 LogLineSuccess($"Loading completed, total of {totalsystems:N0} systems");
 
-                if (syncstate.performhistoryrefresh)
+                if (syncstate.edsm_fullsync_count > 0 || syncstate.eddb_sync_count > 0)   // if we have done a major resync
                 {
-                    LogLine("Refresh due to updating systems");
+                    LogLine("Refresh due to updating EDSM or EDDB data");
                     HistoryRefreshed += HistoryFinishedRefreshing;
                     RefreshHistoryAsync();
                 }
@@ -510,12 +563,13 @@ namespace EDDiscovery
             LogLine("Refreshing complete.");
             Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " Refresh complete");
 
-            if (syncstate.syncwasfirstrun)
-            {
-                LogLine("EDSM and EDDB update complete. Please restart ED Discovery to complete the synchronisation ");
-            }
-            else if (syncstate.syncwaseddboredsm)
-                LogLine("EDSM and/or EDDB update complete.");
+            if (syncstate.edsm_fullsync_count > 0 || syncstate.edsm_updatesync_count > 0)
+                LogLine(string.Format("EDSM update complete with {0} systems", syncstate.edsm_fullsync_count + syncstate.edsm_updatesync_count));
+
+            if (syncstate.eddb_sync_count > 0 )
+                LogLine(string.Format("EDSM update complete with {0} systems", syncstate.eddb_sync_count));
+
+            syncstate.ClearCounters();
         }
 
         #endregion
@@ -754,29 +808,9 @@ namespace EDDiscovery
                 // Former CheckSystems, reworked to accomodate new switches..
                 // Check to see what sync refreshes we need
 
-                DateTime edsmdate = SystemClassEDSM.GetLastEDSMDownloadTime();
+                SystemClassEDSM.DetermineStartSyncState(syncstate);
+                EliteDangerousCore.EDDB.SystemClassEDDB.DetermineStartSyncState(syncstate);
 
-                if (DateTime.Now.Subtract(edsmdate).TotalDays > 7)  // Over 7 days do a sync from EDSM
-                {
-                    // Skip EDSM full update if update has been performed in last 4 days
-                    bool outoforder = SQLiteConnectionSystem.GetSettingBool("EDSMSystemsOutOfOrder", true);
-                    DateTime lastmod = outoforder ? SystemClassDB.GetLastSystemModifiedTime() : SystemClassDB.GetLastSystemModifiedTimeFast();
-
-                    if (DateTime.UtcNow.Subtract(lastmod).TotalDays > 4 ||
-                        DateTime.UtcNow.Subtract(edsmdate).TotalDays > 28)
-                    {
-                        syncstate.performedsmsync = true;
-                    }
-                    else
-                    {
-                        SystemClassEDSM.SetLastEDSMDownloadTimeNow();
-                    }
-                }
-
-                DateTime time = EliteDangerousCore.EDDB.SystemClassEDDB.GetLastEDDBDownloadTime();
-                if (DateTime.UtcNow.Subtract(time).TotalDays > 6.5)     // Get EDDB data once every week.
-                    syncstate.performeddbsync = true;
-           
                 // New Galmap load - it was not doing a refresh if EDSM sync kept on happening. Now has its own timer
 
                 string rwgalmaptime = SQLiteConnectionSystem.GetSettingString("EDSMGalMapLast", "2000-01-01 00:00:00"); // Latest time from RW file.
@@ -824,14 +858,15 @@ namespace EDDiscovery
 
             if (PendingClose) return;
 
-            if (syncstate.performeddbsync || syncstate.performedsmsync)
+            if (syncstate.perform_eddb_sync || syncstate.perform_edsm_sync)
             {
-                string databases = (syncstate.performedsmsync && syncstate.performeddbsync) ? "EDSM and EDDB" : ((syncstate.performedsmsync) ? "EDSM" : "EDDB");
+                string databases = (syncstate.perform_edsm_sync && syncstate.perform_eddb_sync) ? "EDSM and EDDB" : ((syncstate.perform_edsm_sync) ? "EDSM" : "EDDB");
 
                 LogLine("ED Discovery will now synchronise to the " + databases + " databases to obtain star information." + Environment.NewLine +
                                 "This will take a while, up to 15 minutes, please be patient." + Environment.NewLine +
                                 "Please continue running ED Discovery until refresh is complete.");
             }
+
             InvokeAsyncOnUiThread(() => OnInitialisationComplete?.Invoke());
         }
 

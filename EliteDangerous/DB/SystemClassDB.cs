@@ -541,65 +541,6 @@ namespace EliteDangerousCore.DB
             return isempty;
         }
 
-        public static DateTime GetLastSystemModifiedTime()
-        {
-            DateTime lasttime = new DateTime(2010, 1, 1, 0, 0, 0);
-
-            try
-            {
-                using (SQLiteConnectionSystem cn = new SQLiteConnectionSystem())
-                {
-                    using (DbCommand cmd = cn.CreateCommand("SELECT UpdateTimestamp FROM EdsmSystems ORDER BY UpdateTimestamp DESC LIMIT 1"))
-                    {
-                        using (DbDataReader reader = cmd.ExecuteReader())
-                        {
-                            if (reader.Read() && System.DBNull.Value != reader["UpdateTimestamp"])
-                                lasttime = new DateTime(2015, 1, 1, 0, 0, 0, DateTimeKind.Utc) + TimeSpan.FromSeconds((long)reader["UpdateTimestamp"]);
-                        }
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Trace.WriteLine("Exception : " + ex.Message);
-                System.Diagnostics.Trace.WriteLine(ex.StackTrace);
-            }
-
-            return lasttime;
-        }
-
-        // Systems in data dumps are now sorted by modify time ascending, so
-        // the last inserted system should be the most recently modified system.
-        //
-        // The beta.edsm.net dumps are currently still in coordinate order, so
-        // anything using this should check whether the last dump was ordered by date
-        public static DateTime GetLastSystemModifiedTimeFast()
-        {
-            DateTime lasttime = new DateTime(2010, 1, 1, 0, 0, 0);
-
-            try
-            {
-                using (SQLiteConnectionSystem cn = new SQLiteConnectionSystem())
-                {
-                    using (DbCommand cmd = cn.CreateCommand("SELECT UpdateTimestamp FROM EdsmSystems ORDER BY Id DESC LIMIT 1"))
-                    {
-                        using (DbDataReader reader = cmd.ExecuteReader())
-                        {
-                            if (reader.Read() && System.DBNull.Value != reader["UpdateTimestamp"])
-                                lasttime = new DateTime(2015, 1, 1, 0, 0, 0, DateTimeKind.Utc) + TimeSpan.FromSeconds((long)reader["UpdateTimestamp"]);
-                        }
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Trace.WriteLine("Exception : " + ex.Message);
-                System.Diagnostics.Trace.WriteLine(ex.StackTrace);
-            }
-
-            return lasttime;
-        }
-
         public static List<ISystem>  GetSystemDistancesFrom(double x, double y, double z, int maxitems, double maxdist = 200, SQLiteConnectionSystem cn = null)
         {
             bool closeit = false;
