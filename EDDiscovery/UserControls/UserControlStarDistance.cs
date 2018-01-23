@@ -315,7 +315,7 @@ namespace EDDiscovery.UserControls
 
                                     //System.Diagnostics.Debug.WriteLine("DB Computer Max distance " + req.MaxDistance);
 
-                                    SystemClassDB.GetSystemSqDistancesFrom(closestsystemlist, sys.x, sys.y, sys.z, req.MaxItems , 
+                                    SystemClassDB.GetSystemListBySqDistancesFrom(closestsystemlist, sys.x, sys.y, sys.z, req.MaxItems , 
                                                     req.MinDistance, req.MaxDistance , req.Spherical);
 
                                     if (!PendingClose)

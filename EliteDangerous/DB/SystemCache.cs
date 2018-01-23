@@ -83,7 +83,7 @@ namespace EliteDangerousCore
                 }
 
                 if (found == null && find.HasCoordinate)           // finally, not found, but we have a co-ord, find it from the db  by distance
-                    found = DB.SystemClassDB.GetSystemNearestTo(find.x, find.y, find.z, conn);
+                    found = DB.SystemClassDB.GetSystemByPosition(find.x, find.y, find.z, conn);
 
                 if (closeit && conn != null)                // finished with db, close
                 {

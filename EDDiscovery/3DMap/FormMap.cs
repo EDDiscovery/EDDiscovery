@@ -2236,7 +2236,7 @@ namespace EDDiscovery
                     return vsc.System;
             }
 
-            return SystemClassDB.FindNearestSystem(pos.X, pos.Y, pos.Z, false, 0.1,cn);
+            return SystemClassDB.GetSystemByPosition(pos.X, pos.Y, pos.Z, cn);
         }
 
         private ISystem SafeSystem(ISystem s)

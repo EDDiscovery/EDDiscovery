@@ -456,31 +456,9 @@ namespace EliteDangerousCore.DB
             return sys;
         }
 
-        /// <summary>
-        /// Get an <see cref="ISystem"/> from <paramref name="systemName"/> optionally checking for merged systems if no exact match is found. Returns true if the system was found.
-        /// </summary>
-        /// <param name="systemName">The human-readable name for the system to be checked.</param>
-        /// <param name="result">Will be <c>null</c> if the return value is <c>false</c>. Otherwise, will be the system known as the supplied <paramref name="systemName"/>.</param>
-        /// <param name="checkMergers">If <c>true</c>, and no system exactly matches <paramref name="systemName"/>, check to see if it has was merged to another system.</param>
-        /// <param name="cn">The database connection to use.</param>
-        /// <returns><c>true</c> if the system is known (with the system in <paramref name="result"/>), <c>false</c> otherwise.</returns>
-        public static bool TryGetSystem(string systemName, out ISystem result, bool checkMergers = false, SQLiteConnectionSystem cn = null)
-        {
-            result = null;
-            if (string.IsNullOrWhiteSpace(systemName))  // No way José.
-                return false;
-
-            result = GetSystem(systemName, cn);
-            ISystem s;
-            if (result == null && checkMergers && privTryGetMergedSystem(systemName, out s, cn))
-                result = s;
-
-            return (result != null);
-        }
-
         // Only hidden systems are deleted, so should be close.
 
-        public static long GetTotalSystemsFast()
+        public static long GetTotalSystemsFast()        // it is indeed much faster
         {
             long value = 0;
 
@@ -515,12 +493,12 @@ namespace EliteDangerousCore.DB
             {
                 using (SQLiteConnectionSystem cn = new SQLiteConnectionSystem())
                 {
-                    using (DbCommand cmd = cn.CreateCommand("select Count(*) from EdsmSystems"))
+                    using (DbCommand cmd = cn.CreateCommand("select Count(EdsmId) from EdsmSystems"))
                     {
                         using (DbDataReader reader = cmd.ExecuteReader())
                         {
                             if (reader.Read())
-                                value = (long)reader["Count(*)"];
+                                value = (long)reader["Count(EdsmId)"];
                         }
                     }
                 }
@@ -534,90 +512,17 @@ namespace EliteDangerousCore.DB
             return value;
         }
 
-        public static bool IsSystemsTableEmpty()
+        // give nearest star to maxdistance limit
+        public static ISystem FindNearestSystemTo(double x, double y, double z, double maxdistance = 1000 , SQLiteConnectionSystem cn = null)
         {
-            bool isempty = true;
-
-            try
-            {
-                using (SQLiteConnectionSystem cn = new SQLiteConnectionSystem())
-                {
-                    using (DbCommand cmd = cn.CreateCommand("select Id from EdsmSystems LIMIT 1"))
-                    {
-                        using (DbDataReader reader = cmd.ExecuteReader())
-                        {
-                            if (reader.Read())
-                                isempty = false;
-                        }
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Trace.WriteLine("Exception : " + ex.Message);
-                System.Diagnostics.Trace.WriteLine(ex.StackTrace);
-            }
-
-            return isempty;
+            SortedList<double, ISystem> distlist = new SortedList<double, ISystem>();
+            GetSystemListBySqDistancesFrom(distlist, x, y, z, 1, 0.0, maxdistance, false, cn);
+            return distlist.Select(v => v.Value).FirstOrDefault();
         }
 
-        public static List<ISystem> GetSystemDistancesFrom(double x, double y, double z, int maxitems, double maxdist = 200, SQLiteConnectionSystem cn = null)
-        {
-            bool closeit = false;
-            List<ISystem> distlist = new List<ISystem>();
+        // List stars, in dist order, from x/y/z, with min/max dist, limited to list, by spherical or cube.
 
-            try
-            {
-                if (cn == null)
-                {
-                    closeit = true;
-                    cn = new SQLiteConnectionSystem();
-                }
-
-                using (DbCommand cmd = cn.CreateCommand(
-                    "SELECT EdsmId " +
-                    "FROM EdsmSystems " +
-                    "WHERE (x-@xv)*(x-@xv)+(y-@yv)*(y-@yv)+(z-@zv)*(z-@zv) < @maxsqdist " +
-                    "ORDER BY (x-@xv)*(x-@xv)+(y-@yv)*(y-@yv)+(z-@zv)*(z-@zv) " +
-                    "LIMIT @max"))
-                {
-                    cmd.AddParameterWithValue("@maxsqdist", (long)(maxdist * maxdist * XYZScalar * XYZScalar));
-                    cmd.AddParameterWithValue("@max", maxitems);
-                    cmd.AddParameterWithValue("xv", (long)(x * XYZScalar));
-                    cmd.AddParameterWithValue("yv", (long)(y * XYZScalar));
-                    cmd.AddParameterWithValue("zv", (long)(z * XYZScalar));
-
-                    using (DbDataReader reader = cmd.ExecuteReader())
-                    {
-                        while (reader.Read() && distlist.Count < maxitems)
-                        {
-                            long edsmid = (long)reader[0];
-                            {
-                                ISystem sys = GetSystem(edsmid, cn, SystemIDType.EdsmId);
-                                if (sys != null)
-                                    distlist.Add(sys);
-                            }
-                        }
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Trace.WriteLine("Exception : " + ex.Message);
-                System.Diagnostics.Trace.WriteLine(ex.StackTrace);
-            }
-            finally
-            {
-                if (closeit && cn != null)
-                {
-                    cn.Dispose();
-                }
-            }
-            return distlist;
-        }
-
-
-        public static void GetSystemSqDistancesFrom(SortedList<double, ISystem> distlist, double x, double y, double z,
+        public static void GetSystemListBySqDistancesFrom(SortedList<double, ISystem> distlist, double x, double y, double z,
                                                     int maxitems,
                                                     double mindist, double maxdist, bool spherical,
                                                     SQLiteConnectionSystem cn = null)
@@ -663,7 +568,7 @@ namespace EliteDangerousCore.DB
                             if (System.DBNull.Value != reader[1])                 // paranoid check for null
                             {
                                 ISystem sys = SystemCache.FindSystem(edsmid, cn); // pass it thru the cache..
-                                // System.Diagnostics.Debug.WriteLine("Return " + sys.name + " " + Math.Sqrt(dist));        
+                                 System.Diagnostics.Debug.WriteLine("Return " + sys.name );        
                                 if (sys != null && sys.name != null)
                                 {
                                     double dx = ((double)(long)reader[1]) / XYZScalar - x;
@@ -672,7 +577,7 @@ namespace EliteDangerousCore.DB
 
                                     double distsq = dx * dx + dy * dy + dz * dz;
 
-                                    if (!spherical || distsq <= maxdist * maxdist)
+                                    if ((!spherical || distsq <= maxdist * maxdist) && !distlist.ContainsKey(distsq)) // protect against EDSM having two at the same point
                                         distlist.Add(distsq, sys);
                                 }
                             }
@@ -694,21 +599,9 @@ namespace EliteDangerousCore.DB
             }
         }
 
-        public static ISystem FindNearestSystem(double x, double y, double z, bool removezerodiststar = false, double maxdist = 1000, SQLiteConnectionSystem cn = null)
-        {
-            SortedList<double, ISystem> distlist = new SortedList<double, ISystem>();
-            GetSystemSqDistancesFrom(distlist, x, y, z, 1, removezerodiststar ? 8.0 / 128.0 : 0.0, maxdist, false, cn);
-            return distlist.Select(v => v.Value).FirstOrDefault();
-        }
+        // System must be here, within reason, else its a null
 
-        public const int metric_nearestwaypoint = 0;     // easiest way to synchronise metric selection..
-        public const int metric_mindevfrompath = 1;
-        public const int metric_maximum100ly = 2;
-        public const int metric_maximum250ly = 3;
-        public const int metric_maximum500ly = 4;
-        public const int metric_waypointdev2 = 5;
-
-        public static ISystem GetSystemNearestTo(double x, double y, double z, SQLiteConnectionSystem cn)
+        public static ISystem GetSystemByPosition(double x, double y, double z, SQLiteConnectionSystem cn)
         {
             bool closeit = false;
 
@@ -752,6 +645,15 @@ namespace EliteDangerousCore.DB
 
             return sys;
         }
+
+
+
+        public const int metric_nearestwaypoint = 0;     // easiest way to synchronise metric selection..
+        public const int metric_mindevfrompath = 1;
+        public const int metric_maximum100ly = 2;
+        public const int metric_maximum250ly = 3;
+        public const int metric_maximum500ly = 4;
+        public const int metric_waypointdev2 = 5;
 
         public static ISystem GetSystemNearestTo(Point3D curpos, Point3D wantedpos, double maxfromcurpos, double maxfromwanted,
                                     int routemethod)
@@ -1082,6 +984,7 @@ namespace EliteDangerousCore.DB
             return false;
         }
 
+        #region Autocomplete
 
         public static List<string> AutoCompleteAdditionalList = new List<string>();
 
@@ -1144,8 +1047,29 @@ namespace EliteDangerousCore.DB
             return ret;
         }
 
+        #endregion
 
-        #region Private implementation
+        /// <summary>
+        /// Get an <see cref="ISystem"/> from <paramref name="systemName"/> optionally checking for merged systems if no exact match is found. Returns true if the system was found.
+        /// </summary>
+        /// <param name="systemName">The human-readable name for the system to be checked.</param>
+        /// <param name="result">Will be <c>null</c> if the return value is <c>false</c>. Otherwise, will be the system known as the supplied <paramref name="systemName"/>.</param>
+        /// <param name="checkMergers">If <c>true</c>, and no system exactly matches <paramref name="systemName"/>, check to see if it has was merged to another system.</param>
+        /// <param name="cn">The database connection to use.</param>
+        /// <returns><c>true</c> if the system is known (with the system in <paramref name="result"/>), <c>false</c> otherwise.</returns>
+        public static bool TryGetSystem(string systemName, out ISystem result, bool checkMergers = false, SQLiteConnectionSystem cn = null)
+        {
+            result = null;
+            if (string.IsNullOrWhiteSpace(systemName))  // No way José.
+                return false;
+
+            result = GetSystem(systemName, cn);
+            ISystem s;
+            if (result == null && checkMergers && privTryGetMergedSystem(systemName, out s, cn))
+                result = s;
+
+            return (result != null);
+        }
 
         /// <summary>
         /// Test if <paramref name="systemName"/> has been merged to another system. The return value indicates if a merged system was found.
@@ -1188,7 +1112,6 @@ namespace EliteDangerousCore.DB
             return (result != null);
         }
 
-        #endregion
     }
 
     public class GridId
