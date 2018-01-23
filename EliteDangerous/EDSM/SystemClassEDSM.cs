@@ -268,6 +268,8 @@ namespace EliteDangerousCore.EDSM
             return DoParseEDSMUpdateSystemsReader(jr, grididallow, ref date,  cancelRequested, reportProgress, useCache, useTempSystems);
         }
 
+        // returns no of updates + inserts, not no of items processed.  
+
         private static long DoParseEDSMUpdateSystemsReader(JsonTextReader jr, bool[] grididallowed, ref DateTime maxdate, Func<bool> cancelRequested, Action<int, string> reportProgress, bool useCache = true, bool useTempSystems = false)
         {
             Dictionary<long, SystemClassBase> systemsByEdsmId = useCache ? GetEdsmSystemsLite() : new Dictionary<long, SystemClassBase>();
@@ -332,10 +334,9 @@ namespace EliteDangerousCore.EDSM
 
                                 try
                                 {
-                                    updateNameCmd = cn.CreateCommand("UPDATE SystemNames SET Name=@Name GridId=@GridId WHERE EdsmId=@EdsmId", txn);
+                                    updateNameCmd = cn.CreateCommand("UPDATE SystemNames SET Name=@Name WHERE EdsmId=@EdsmId", txn);
                                     updateNameCmd.AddParameter("@Name", DbType.String);
                                     updateNameCmd.AddParameter("@EdsmId", DbType.Int64);
-                                    updateNameCmd.AddParameter("@GridId", DbType.Int64);
 
                                     updateSysCmd = cn.CreateCommand("UPDATE EdsmSystems SET X=@X, Y=@Y, Z=@Z, UpdateTimestamp=@UpdateTimestamp, VersionTimestamp=@VersionTimestamp, GridId=@GridId, RandomId=@RandomId WHERE EdsmId=@EdsmId", txn);
                                     updateSysCmd.AddParameter("@X", DbType.Int64);
@@ -347,10 +348,9 @@ namespace EliteDangerousCore.EDSM
                                     updateSysCmd.AddParameter("@RandomId", DbType.Int64);
                                     updateSysCmd.AddParameter("@EdsmId", DbType.Int64);
 
-                                    insertNameCmd = cn.CreateCommand("INSERT INTO " + sysnamesTableName + " (Name, EdsmId, GridId) VALUES (@Name, @EdsmId, @GridId)", txn);
+                                    insertNameCmd = cn.CreateCommand("INSERT INTO " + sysnamesTableName + " (Name, EdsmId) VALUES (@Name, @EdsmId)", txn);
                                     insertNameCmd.AddParameter("@Name", DbType.String);
                                     insertNameCmd.AddParameter("@EdsmId", DbType.Int64);
-                                    insertNameCmd.AddParameter("@GridId", DbType.Int64);
 
                                     insertSysCmd = cn.CreateCommand("INSERT INTO " + edsmsysTableName + " (EdsmId, X, Y, Z, CreateTimestamp, UpdateTimestamp, VersionTimestamp, GridId, RandomId) VALUES (@EdsmId, @X, @Y, @Z, @CreateTimestamp, @UpdateTimestamp, @VersionTimestamp, @GridId, @RandomId)", txn);
                                     insertSysCmd.AddParameter("@EdsmId", DbType.Int64);
@@ -484,7 +484,6 @@ namespace EliteDangerousCore.EDSM
                                                     {
                                                         updateNameCmd.Parameters["@Name"].Value = name;
                                                         updateNameCmd.Parameters["@EdsmId"].Value = edsmid;
-                                                        updateNameCmd.Parameters["@GridId"].Value = gridid;
                                                         updateNameCmd.ExecuteNonQuery();
                                                     }
 
@@ -509,7 +508,7 @@ namespace EliteDangerousCore.EDSM
                                                 {
                                                     insertNameCmd.Parameters["@Name"].Value = name;
                                                     insertNameCmd.Parameters["@EdsmId"].Value = edsmid;
-                                                    insertNameCmd.Parameters["@GridId"].Value = gridid;
+
                                                     insertNameCmd.ExecuteNonQuery();
                                                     insertSysCmd.Parameters["@EdsmId"].Value = edsmid;
                                                     insertSysCmd.Parameters["@X"].Value = (long)(x * SystemClassDB.XYZScalar);
@@ -558,7 +557,7 @@ namespace EliteDangerousCore.EDSM
                 throw new OperationCanceledException();
             }
 
-            return count;
+            return updatecount + insertcount;
         }
 
         #endregion
@@ -567,7 +566,7 @@ namespace EliteDangerousCore.EDSM
 
         public class SystemsSyncState
         {
-            public bool perform_edsm_sync = false;
+            public bool perform_edsm_fullsync = false;
             public bool perform_eddb_sync = false;
 
             public long edsm_fullsync_count = 0;
@@ -582,17 +581,18 @@ namespace EliteDangerousCore.EDSM
             }
         }
 
-        // Called from EDDiscoveryController, in back Init thread, to determine what sync to do..
+        // Called from EDDiscoveryController, in back Init thread, to determine what sync to do on power on..
 
-        public static void DetermineStartSyncState(SystemsSyncState state)
+        public static void DetermineIfFullEDSMSyncRequired(SystemsSyncState state)
         {
-            DateTime lastfullsync = GetLastFullSyncTimeUTC();
             DateTime lastrecordtime = GetLastEDSMRecordTimeUTC();
 
-            if (DateTime.UtcNow.Subtract(lastfullsync).TotalDays >= 28 || DateTime.UtcNow.Subtract(lastrecordtime).TotalDays >= 7)  // If we have not full resynced for 28 days, or last record was > 7 days in the past
+            // If we do not have a record for at least X days, do a full one since performing X*2 updates is too much
+
+            if (DateTime.UtcNow.Subtract(lastrecordtime).TotalDays >= 28)   // 600k ish per 12hours.  So 33MB.  Much less than a full download which is (23/1/2018) 2400MB, or 600MB compressed
             {
-                System.Diagnostics.Debug.WriteLine("EDSM FULL SYNC Last full delta {0} Record Time Delta {1}", DateTime.UtcNow.Subtract(lastfullsync).TotalDays, DateTime.UtcNow.Subtract(lastrecordtime).TotalDays);
-                state.perform_edsm_sync = true;       // do a full sync.
+                System.Diagnostics.Debug.WriteLine("EDSM full sync ordered, time since {0}",DateTime.UtcNow.Subtract(lastrecordtime).TotalDays);
+                state.perform_edsm_fullsync = true;       // do a full sync.
             }
         }
 
@@ -637,7 +637,6 @@ namespace EliteDangerousCore.EDSM
                     SQLiteConnectionSystem.ReplaceSystemsTable();
 
                     SetLastEDSMRecordTimeUTC(maxdate);      // record the last record seen in time
-                    SetLastFullSyncTimeNowUTC(); // record we full sync now successfully now, causing this not to trigger again soon
 
                     ReportProgress(-1, "");
 
@@ -660,16 +659,29 @@ namespace EliteDangerousCore.EDSM
             return updates;
         }
 
+        // Partial update sync, do the 12 hour get and store until we come up to UTC time now approx.
+
         public static long PerformEDSMUpdateSync(bool[] grididallow, Func<bool> PendingClose, Action<int, string> ReportProgress, Action<string> LogLine, Action<string> LogLineHighlight)
         {
             long updates = 0;
-            EDSMClass edsm = new EDSMClass();
-
             DateTime lastrecordtime = GetLastEDSMRecordTimeUTC();      // this is in UTC, as it comes out of the EDSM records
 
-            while (lastrecordtime < DateTime.UtcNow)
+            if (DateTime.UtcNow.Subtract(lastrecordtime).TotalHours <= 1)  // If we have partial synced for 1 hour, don't waste our time
             {
-                if (PendingClose())
+                System.Diagnostics.Debug.WriteLine("Reject partial sync, last record less than 1 hour old");
+                return updates;
+            }
+
+            // Go For SYNC
+
+            LogLine("Checking for updated EDSM systems (may take a few moments).");
+
+            EDSMClass edsm = new EDSMClass();
+
+            while (lastrecordtime < DateTime.UtcNow.Subtract(new TimeSpan(0,30,0)))     // stop at X mins before now, so we don't get in a condition
+            {                                                                           // where we do a set, the time moves to just before now, 
+                                                                                        // and we then do another set with minimum amount of hours
+                if (PendingClose())     
                     return updates;
 
                 DateTime enddate = lastrecordtime + TimeSpan.FromHours(12);
@@ -714,15 +726,23 @@ namespace EliteDangerousCore.EDSM
                     return updates;
                 }
 
-                long cnt = ParseEDSMUpdateSystemsString(json, grididallow, ref lastrecordtime, false, PendingClose, ReportProgress, false);
-                System.Diagnostics.Debug.WriteLine($".. Updated {cnt} to {lastrecordtime.ToUniversalTime().ToString()}");
+                // debug File.WriteAllText(@"c:\code\json.txt", json);
 
-                if (cnt < 100)      // if very few, just move the time on 12 hrs, else we had a lot, so use the last record time since EDSM will limit the no of records returned
+                DateTime prevrectime = lastrecordtime;
+                System.Diagnostics.Debug.WriteLine("Last record time {0} JSON size {1}", lastrecordtime.ToUniversalTime() , json.Length);
+
+                long updated = ParseEDSMUpdateSystemsString(json, grididallow, ref lastrecordtime, false, PendingClose, ReportProgress, false);
+                System.Diagnostics.Debug.WriteLine($".. Updated {updated} to {lastrecordtime.ToUniversalTime().ToString()}");
+
+                System.Diagnostics.Debug.WriteLine("Updated to time {0}", lastrecordtime.ToUniversalTime());
+
+                // if lastrecordtime did not change (=) or worse still, EDSM somehow moved the time back (unlikely)
+                if ( lastrecordtime <= prevrectime )     
                 {
-                    lastrecordtime += TimeSpan.FromHours(12);
+                    lastrecordtime += TimeSpan.FromHours(12);       // Lets move on manually so we don't get stuck
                 }
 
-                updates += cnt;
+                updates += updated;
 
                 SetLastEDSMRecordTimeUTC(lastrecordtime);       // keep on storing this in case next time we get an exception
             }
@@ -730,25 +750,11 @@ namespace EliteDangerousCore.EDSM
             return updates;
         }
 
-        static public DateTime GetLastFullSyncTimeUTC()
-        {
-            string rwsystime = SQLiteConnectionSystem.GetSettingString("EDSMLastFullSyncSystems", "2000-01-01 00:00:00"); // Last time full sync was tried
-            DateTime edsmdate;
-
-            if (!DateTime.TryParse(rwsystime, CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal, out edsmdate))
-                edsmdate = new DateTime(2000, 1, 1);
-
-            return edsmdate;
-        }
-
-        static public void SetLastFullSyncTimeNowUTC()
-        {
-            SQLiteConnectionSystem.PutSettingString("EDSMLastFullSyncSystems", DateTime.UtcNow.ToString(CultureInfo.InvariantCulture));
-        }
+        // Time storers
 
         static public void ForceEDSMFullUpdate()
         {
-            SQLiteConnectionSystem.PutSettingString("EDSMLastFullSyncSystems", "2010-01-01 00:00:00");
+            SQLiteConnectionSystem.PutSettingString("EDSMLastSystems", "2010-01-01 00:00:00");
         }
 
         static public DateTime GetLastEDSMRecordTimeUTC()

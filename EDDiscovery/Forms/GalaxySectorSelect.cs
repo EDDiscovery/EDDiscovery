@@ -13,7 +13,7 @@ using System.Windows.Forms;
 
 namespace EDDiscovery.Forms
 {
-    public partial class GalaxySectorSelect : Form
+    public partial class GalaxySectorSelect : ExtendedControls.DraggableForm
     {
         Map2d galaxy;
 
@@ -75,9 +75,13 @@ namespace EDDiscovery.Forms
                     initialsel = Selection = cellset;
                     initiallist = new List<int>(imageViewer.Selection);     // copy of..
 
+                    EDDiscovery.EDDTheme theme = EDDiscovery.EDDTheme.Instance;
+                    bool winborder = theme.ApplyToForm(this);
+                    statusStripCustom.Visible = panel_close.Visible = panel_minimize.Visible = !winborder;
+
                     SetComboBox();
 
-                    // later EDDTheme.Instance.ApplyToForm(this);
+                    imageViewer.BackColor = Color.FromArgb(5, 5, 5);
 
                     return true;
                 }
@@ -170,14 +174,14 @@ namespace EDDiscovery.Forms
                 {
                     AllRemoveSectors = (from int i in GridId.AllId() where !currentsel.Contains(i) select i).ToList();
 
-                    //if (ExtendedControls.MessageBoxTheme.Show(this, "You have removed sectors!" + Environment.NewLine +
-                    //        "This will require the DB to be cleaned of entries, which will take time" + Environment.NewLine +
-                    //        "Confirm you wish to do this?", "Warning!", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK)
-                    //{
-                    //    Action = ActionToDo.Remove;
-                    //}
-                    //else
-                    //    return;
+                    if (ExtendedControls.MessageBoxTheme.Show(this, "You have removed sectors!" + Environment.NewLine +
+                            "This will require the DB to be cleaned of entries, which will take time" + Environment.NewLine +
+                            "Confirm you wish to do this?", "Warning!", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK)
+                    {
+                        Action = ActionToDo.Remove;
+                    }
+                    else
+                        return;
 
                     Action = ActionToDo.Remove;
                 }
@@ -192,6 +196,22 @@ namespace EDDiscovery.Forms
             DialogResult = DialogResult.Cancel;
             Close();
         }
+
+        private void panel_close_Click(object sender, EventArgs e)
+        {
+            Close();
+        }
+
+        private void panel_minimize_Click(object sender, EventArgs e)
+        {
+            this.WindowState = FormWindowState.Minimized;
+        }
+
+        private void panelTop_MouseDown(object sender, MouseEventArgs e)
+        {
+            OnCaptionMouseDown((Control)sender, e);
+        }
+
     }
 
     public class ImageViewerWithGrid : ExtendedControls.ImageViewer

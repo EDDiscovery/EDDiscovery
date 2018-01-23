@@ -683,7 +683,8 @@ namespace EDDiscovery.UserControls
             this.checkBoxCustomEDSMEDDBDownload.TabIndex = 5;
             this.checkBoxCustomEDSMEDDBDownload.Text = "Enable Star Data Download";
             this.checkBoxCustomEDSMEDDBDownload.TickBoxReductionSize = 10;
-            this.toolTip.SetToolTip(this.checkBoxCustomEDSMEDDBDownload, "Click to enable downloading of stars from EDSM and system information from EDDB");
+            this.toolTip.SetToolTip(this.checkBoxCustomEDSMEDDBDownload, "Click to enable downloading of stars from EDSM and system information from EDDB. " +
+        " Will apply at next start.");
             this.checkBoxCustomEDSMEDDBDownload.UseVisualStyleBackColor = true;
             // 
             // groupBoxPopOuts

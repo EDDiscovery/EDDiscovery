@@ -43,43 +43,49 @@ namespace EDDiscovery
         /// </summary>
         private void InitializeComponent()
         {
-            this.toolStrip1 = new System.Windows.Forms.ToolStrip();
-            this.toolStripComboBox1 = new System.Windows.Forms.ToolStripComboBox();
+            this.toolStrip = new System.Windows.Forms.ToolStrip();
+            this.toolStripComboExpo = new System.Windows.Forms.ToolStripComboBox();
             this.toolStripComboBoxTime = new System.Windows.Forms.ToolStripComboBox();
             this.toolStripButtonZoomIn = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonZoomOut = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonZoomtoFit = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonStars = new System.Windows.Forms.ToolStripButton();
-            this.panel1 = new System.Windows.Forms.Panel();
-            this.buttonSave = new System.Windows.Forms.Button();
+            this.toolStripButtonSave = new System.Windows.Forms.ToolStripButton();
+            this.panelTop = new System.Windows.Forms.Panel();
+            this.panel_minimize = new ExtendedControls.DrawnPanel();
+            this.panel_close = new ExtendedControls.DrawnPanel();
+            this.imageViewer = new ExtendedControls.ImageViewer();
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
-            this.imageViewer1 = new ExtendedControls.ImageViewer();
-            this.toolStrip1.SuspendLayout();
-            this.panel1.SuspendLayout();
+            this.panelOuter = new System.Windows.Forms.Panel();
+            this.statusStripCustom = new ExtendedControls.StatusStripCustom();
+            this.toolStrip.SuspendLayout();
+            this.panelTop.SuspendLayout();
+            this.panelOuter.SuspendLayout();
             this.SuspendLayout();
             // 
-            // toolStrip1
+            // toolStrip
             // 
-            this.toolStrip1.ImageScalingSize = new System.Drawing.Size(22, 22);
-            this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripComboBox1,
+            this.toolStrip.Dock = System.Windows.Forms.DockStyle.None;
+            this.toolStrip.ImageScalingSize = new System.Drawing.Size(22, 22);
+            this.toolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripComboExpo,
             this.toolStripComboBoxTime,
             this.toolStripButtonZoomIn,
             this.toolStripButtonZoomOut,
             this.toolStripButtonZoomtoFit,
-            this.toolStripButtonStars});
-            this.toolStrip1.Location = new System.Drawing.Point(0, 0);
-            this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(984, 29);
-            this.toolStrip1.TabIndex = 1;
-            this.toolStrip1.Text = "toolStrip1";
-            this.toolStrip1.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.toolStrip1_ItemClicked);
+            this.toolStripButtonStars,
+            this.toolStripButtonSave});
+            this.toolStrip.Location = new System.Drawing.Point(0, 2);
+            this.toolStrip.Name = "toolStrip";
+            this.toolStrip.Size = new System.Drawing.Size(438, 29);
+            this.toolStrip.TabIndex = 1;
+            this.toolStrip.Text = "toolStrip1";
             // 
-            // toolStripComboBox1
+            // toolStripComboExpo
             // 
-            this.toolStripComboBox1.Name = "toolStripComboBox1";
-            this.toolStripComboBox1.Size = new System.Drawing.Size(121, 29);
-            this.toolStripComboBox1.SelectedIndexChanged += new System.EventHandler(this.toolStripComboBox1_SelectedIndexChanged);
+            this.toolStripComboExpo.Name = "toolStripComboExpo";
+            this.toolStripComboExpo.Size = new System.Drawing.Size(121, 29);
+            this.toolStripComboExpo.SelectedIndexChanged += new System.EventHandler(this.toolStripComboBoxExpo_SelectedIndexChanged);
             // 
             // toolStripComboBoxTime
             // 
@@ -95,7 +101,6 @@ namespace EDDiscovery
             this.toolStripComboBoxTime.Name = "toolStripComboBoxTime";
             this.toolStripComboBoxTime.Size = new System.Drawing.Size(140, 29);
             this.toolStripComboBoxTime.SelectedIndexChanged += new System.EventHandler(this.toolStripComboBoxTime_SelectedIndexChanged);
-            this.toolStripComboBoxTime.Click += new System.EventHandler(this.toolStripComboBox2_Click);
             // 
             // toolStripButtonZoomIn
             // 
@@ -142,75 +147,127 @@ namespace EDDiscovery
             this.toolStripButtonStars.ToolTipText = "Show all stars";
             this.toolStripButtonStars.Click += new System.EventHandler(this.toolStripButtonStars_Click);
             // 
-            // panel1
+            // toolStripButtonSave
             // 
-            this.panel1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.panel1.Controls.Add(this.imageViewer1);
-            this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel1.Location = new System.Drawing.Point(0, 29);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(984, 733);
-            this.panel1.TabIndex = 2;
-            this.panel1.Paint += new System.Windows.Forms.PaintEventHandler(this.panel1_Paint);
+            this.toolStripButtonSave.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButtonSave.Image = global::EDDiscovery.Icons.Controls.Map2D_Save;
+            this.toolStripButtonSave.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonSave.Name = "toolStripButtonSave";
+            this.toolStripButtonSave.Size = new System.Drawing.Size(26, 26);
+            this.toolStripButtonSave.Text = "Save";
+            this.toolStripButtonSave.Click += new System.EventHandler(this.toolStripButtonSave_Click);
             // 
-            // buttonSave
+            // panelTop
             // 
-            this.buttonSave.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonSave.Image = global::EDDiscovery.Icons.Controls.Map2D_Save;
-            this.buttonSave.Location = new System.Drawing.Point(954, 0);
-            this.buttonSave.Name = "buttonSave";
-            this.buttonSave.Size = new System.Drawing.Size(30, 28);
-            this.buttonSave.TabIndex = 3;
-            this.buttonSave.UseVisualStyleBackColor = true;
-            this.buttonSave.Click += new System.EventHandler(this.buttonSave_Click);
+            this.panelTop.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.panelTop.Controls.Add(this.panel_minimize);
+            this.panelTop.Controls.Add(this.panel_close);
+            this.panelTop.Controls.Add(this.toolStrip);
+            this.panelTop.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panelTop.Location = new System.Drawing.Point(0, 0);
+            this.panelTop.Name = "panelTop";
+            this.panelTop.Size = new System.Drawing.Size(982, 32);
+            this.panelTop.TabIndex = 2;
+            this.panelTop.MouseDown += new System.Windows.Forms.MouseEventHandler(this.panelTop_MouseDown);
+            // 
+            // panel_minimize
+            // 
+            this.panel_minimize.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.panel_minimize.ImageSelected = ExtendedControls.DrawnPanel.ImageType.Minimize;
+            this.panel_minimize.Location = new System.Drawing.Point(925, 5);
+            this.panel_minimize.Name = "panel_minimize";
+            this.panel_minimize.Padding = new System.Windows.Forms.Padding(6);
+            this.panel_minimize.Selectable = false;
+            this.panel_minimize.Size = new System.Drawing.Size(24, 24);
+            this.panel_minimize.TabIndex = 30;
+            this.panel_minimize.TabStop = false;
+            this.panel_minimize.Click += new System.EventHandler(this.panel_minimize_Click);
+            // 
+            // panel_close
+            // 
+            this.panel_close.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.panel_close.Location = new System.Drawing.Point(955, 5);
+            this.panel_close.Name = "panel_close";
+            this.panel_close.Padding = new System.Windows.Forms.Padding(6);
+            this.panel_close.Selectable = false;
+            this.panel_close.Size = new System.Drawing.Size(24, 24);
+            this.panel_close.TabIndex = 31;
+            this.panel_close.TabStop = false;
+            this.panel_close.Click += new System.EventHandler(this.panel_close_Click);
+            // 
+            // imageViewer
+            // 
+            this.imageViewer.AutoScroll = true;
+            this.imageViewer.AutoSize = false;
+            this.imageViewer.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.imageViewer.Location = new System.Drawing.Point(0, 32);
+            this.imageViewer.Name = "imageViewer";
+            this.imageViewer.Size = new System.Drawing.Size(982, 706);
+            this.imageViewer.TabIndex = 0;
+            this.imageViewer.ZoomIncrement = 10;
             // 
             // saveFileDialog1
             // 
             this.saveFileDialog1.Filter = "PNG Image|*.png|Bitmap Image|*.bmp|JPEG Image|*.jpg";
             // 
-            // imageViewer1
+            // panelOuter
             // 
-            this.imageViewer1.AutoScroll = true;
-            this.imageViewer1.AutoSize = false;
-            this.imageViewer1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.imageViewer1.Location = new System.Drawing.Point(0, 0);
-            this.imageViewer1.Name = "imageViewer1";
-            this.imageViewer1.Size = new System.Drawing.Size(984, 733);
-            this.imageViewer1.TabIndex = 0;
+            this.panelOuter.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panelOuter.Controls.Add(this.imageViewer);
+            this.panelOuter.Controls.Add(this.panelTop);
+            this.panelOuter.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panelOuter.Location = new System.Drawing.Point(0, 0);
+            this.panelOuter.Name = "panelOuter";
+            this.panelOuter.Size = new System.Drawing.Size(984, 740);
+            this.panelOuter.TabIndex = 0;
             // 
-            // FormSagCarinaMission
+            // statusStripCustom
+            // 
+            this.statusStripCustom.GripStyle = System.Windows.Forms.ToolStripGripStyle.Visible;
+            this.statusStripCustom.Location = new System.Drawing.Point(0, 740);
+            this.statusStripCustom.Name = "statusStripCustom";
+            this.statusStripCustom.Size = new System.Drawing.Size(984, 22);
+            this.statusStripCustom.TabIndex = 32;
+            this.statusStripCustom.Text = "statusStripCustom1";
+            // 
+            // Form2DMap
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(984, 762);
-            this.Controls.Add(this.buttonSave);
-            this.Controls.Add(this.panel1);
-            this.Controls.Add(this.toolStrip1);
+            this.Controls.Add(this.panelOuter);
+            this.Controls.Add(this.statusStripCustom);
             this.Icon = global::EDDiscovery.Properties.Resources.edlogo_3mo_icon;
             this.Name = "Form2DMap";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "2D Map";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form2dClosing);
             this.Load += new System.EventHandler(this.Form2dLoad);
-            this.toolStrip1.ResumeLayout(false);
-            this.toolStrip1.PerformLayout();
-            this.panel1.ResumeLayout(false);
+            this.toolStrip.ResumeLayout(false);
+            this.toolStrip.PerformLayout();
+            this.panelTop.ResumeLayout(false);
+            this.panelTop.PerformLayout();
+            this.panelOuter.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
         }
 
         #endregion
-        private System.Windows.Forms.ToolStrip toolStrip1;
-        private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.ToolStripComboBox toolStripComboBox1;
+        private System.Windows.Forms.ToolStrip toolStrip;
+        private System.Windows.Forms.Panel panelTop;
+        private System.Windows.Forms.ToolStripComboBox toolStripComboExpo;
         private System.Windows.Forms.ToolStripComboBox toolStripComboBoxTime;
-        private ExtendedControls.ImageViewer imageViewer1;
+        private ExtendedControls.ImageViewer imageViewer;
         private System.Windows.Forms.ToolStripButton toolStripButtonZoomIn;
         private System.Windows.Forms.ToolStripButton toolStripButtonZoomOut;
         private System.Windows.Forms.ToolStripButton toolStripButtonZoomtoFit;
-        private System.Windows.Forms.Button buttonSave;
         private System.Windows.Forms.SaveFileDialog saveFileDialog1;
         private System.Windows.Forms.ToolStripButton toolStripButtonStars;
+        private ExtendedControls.DrawnPanel panel_close;
+        private ExtendedControls.DrawnPanel panel_minimize;
+        private System.Windows.Forms.ToolStripButton toolStripButtonSave;
+        private System.Windows.Forms.Panel panelOuter;
+        private ExtendedControls.StatusStripCustom statusStripCustom;
     }
 }

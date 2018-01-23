@@ -330,7 +330,7 @@ namespace EDDiscovery
             {
                 OnSyncStarting?.Invoke();
                 syncstate.perform_eddb_sync |= eddbsync;
-                syncstate.perform_edsm_sync |= edsmsync;
+                syncstate.perform_edsm_fullsync |= edsmsync;
                 resyncRequestedEvent.Set();
                 return true;
             }
@@ -346,7 +346,6 @@ namespace EDDiscovery
         #region Implementation
         #region Variables
         private string logtext = "";     // to keep in case of no logs..
-        private event EventHandler HistoryRefreshed; // this is an internal hook
 
         private Task<bool> downloadMapsTask = null;
 
@@ -453,203 +452,6 @@ namespace EDDiscovery
 
         #endregion
 
-        #region Async EDSM/EDDB Full Sync
-
-        //done after CheckSystems, in BackgroundInit
-
-        private void DoPerformSync()
-        {
-            Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " Perform sync");
-            try
-            {
-                bool[] grids = new bool[GridId.MaxGridID];
-                foreach (int i in GridId.FromString(EDDConfig.Instance.EDSMGridIDs))
-                    grids[i] = true;
-
-                ReportProgress(-1, "");
-
-                syncstate.ClearCounters();
-
-                if (syncstate.perform_edsm_sync || syncstate.perform_eddb_sync)
-                {
-                    if (syncstate.perform_edsm_sync && !PendingClose)
-                    {
-                        // Download new systems
-                        try
-                        {
-                            syncstate.edsm_fullsync_count = SystemClassEDSM.PerformEDSMFullSync(grids, () => PendingClose, ReportProgress, LogLine, LogLineHighlight);
-                            syncstate.perform_edsm_sync = false;
-                        }
-                        catch (Exception ex)
-                        {
-                            LogLineHighlight("GetAllEDSMSystems exception:" + ex.Message);
-                        }
-
-                    }
-
-                    if (!PendingClose)
-                    {
-                        LogLine("Indexing systems table");
-                        SQLiteConnectionSystem.CreateSystemsTableIndexes();
-
-                        try
-                        {
-                            syncstate.eddb_sync_count = EliteDangerousCore.EDDB.SystemClassEDDB.PerformEDDBFullSync(()=>PendingClose, ReportProgress, LogLine, LogLineHighlight);
-                            syncstate.perform_eddb_sync = false;
-                        }
-                        catch (Exception ex)
-                        {
-                            LogLineHighlight("GetEDDBUpdate exception: " + ex.Message);
-                        }
-                    }
-                }
-
-                if (!PendingClose)
-                {
-                    LogLine("Indexing systems table");
-                    SQLiteConnectionSystem.CreateSystemsTableIndexes();
-
-                    DateTime lastrecordtime = SystemClassEDSM.GetLastEDSMRecordTimeUTC();
-
-                    if (DateTime.UtcNow.Subtract(lastrecordtime).TotalHours >= 1)  // If we have partial synced for 1 hour, do it..
-                    {
-                        LogLine("Checking for updated EDSM systems (may take a few moments).");
-                        syncstate.edsm_updatesync_count = EliteDangerousCore.EDSM.SystemClassEDSM.PerformEDSMUpdateSync(grids, () => PendingClose, ReportProgress, LogLine, LogLineHighlight);
-                    }
-                }
-
-                ReportProgress(-1, "");
-            }
-            catch (OperationCanceledException)
-            {
-                // Swallow Operation Cancelled exceptions
-            }
-            catch (Exception ex)
-            {
-                LogLineHighlight("Check Systems exception: " + ex.Message + Environment.NewLine + "Trace: " + ex.StackTrace);
-            }
-
-            InvokeAsyncOnUiThread(() => PerformSyncCompleted());
-        }
-
-        // Done in UI thread after DoPerformSync completes
-
-        private void PerformSyncCompleted()    
-        {
-            ReportProgress(-1, "");
-
-            if (!PendingClose)
-            {
-                long totalsystems = SystemClassDB.GetTotalSystems();
-                LogLineSuccess($"Loading completed, total of {totalsystems:N0} systems");
-
-                if (syncstate.edsm_fullsync_count > 0 || syncstate.eddb_sync_count > 0)   // if we have done a major resync
-                {
-                    LogLine("Refresh due to updating EDSM or EDDB data");
-                    HistoryRefreshed += HistoryFinishedRefreshing;
-                    RefreshHistoryAsync();
-                }
-
-                OnSyncComplete?.Invoke();
-
-                resyncRequestedFlag = 0;
-            }
-            Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " Perform sync completed");
-        }
-
-        private void HistoryFinishedRefreshing(object sender, EventArgs e)
-        {
-            HistoryRefreshed -= HistoryFinishedRefreshing;
-            LogLine("Refreshing complete.");
-            Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " Refresh complete");
-
-            if (syncstate.edsm_fullsync_count > 0 || syncstate.edsm_updatesync_count > 0)
-                LogLine(string.Format("EDSM update complete with {0} systems", syncstate.edsm_fullsync_count + syncstate.edsm_updatesync_count));
-
-            if (syncstate.eddb_sync_count > 0 )
-                LogLine(string.Format("EDSM update complete with {0} systems", syncstate.eddb_sync_count));
-
-            syncstate.ClearCounters();
-        }
-
-        #endregion
-
-        #region Update Data
-
-        protected class RefreshWorkerArgs
-        {
-            public string NetLogPath;
-            public bool ForceNetLogReload;
-            public bool ForceJournalReload;
-            public int CurrentCommander;
-        }
-
-        private void DoRefreshHistory(RefreshWorkerArgs args)
-        {
-            HistoryList hist = null;
-            try
-            {
-                refreshWorkerArgs = args;
-                Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " Load history");
-                hist = HistoryList.LoadHistory(journalmonitor, () => PendingClose, (p, s) => ReportProgress(p, $"Processing log file {s}"), args.NetLogPath, 
-                    args.ForceJournalReload, args.ForceJournalReload, args.CurrentCommander , EDDConfig.Instance.ShowUIEvents );
-                Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " Load history complete");
-            }
-            catch (Exception ex)
-            {
-                LogLineHighlight("History Refresh Error: " + ex);
-            }
-
-            initComplete.WaitOne();
-
-            InvokeAsyncOnUiThread(() => RefreshHistoryWorkerCompleted(hist));
-        }
-
-        private void RefreshHistoryWorkerCompleted(HistoryList hist)
-        {
-            if (!PendingClose)
-            {
-                Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " Refresh history worker completed");
-
-                if (hist != null)
-                {
-                    history.Copy(hist);
-
-                    OnRefreshCommanders?.Invoke();
-
-                    EdsmLogFetcher.StopCheck();
-
-
-                    ReportProgress(-1, "");
-                    LogLine("Refresh Complete.");
-
-                    RefreshDisplays();
-                    Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " Refresh Displays Completed");
-                }
-
-                Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " HR Refresh");
-
-                HistoryRefreshed?.Invoke(this, EventArgs.Empty);        // Internal hook call
-
-                Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " JMOn");
-
-                journalmonitor.StartMonitor();
-
-                Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " RFcomplete");
-                OnRefreshComplete?.Invoke();                            // History is completed
-
-                if (history.CommanderId >= 0)
-                    EdsmLogFetcher.Start(EDCommander.Current);
-
-                refreshRequestedFlag = 0;
-                readyForNewRefresh.Set();
-
-                Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " refresh history complete");
-            }
-        }
-
-        #endregion
-
         #region New Entry with merge
 
         public void NewEntry(JournalEntry je)        // on UI thread. hooked into journal monitor and receives new entries.. Also call if you programatically add an entry
@@ -734,22 +536,24 @@ namespace EDDiscovery
 
         #endregion
 
-        #region Background Worker Threads
-        private void BackgroundWorkerThread()
+
+        #region Background Worker Threads - kicked off by Controller.Init, which itself is kicked by DiscoveryForm Init.
+
+        private void BackgroundWorkerThread()     
         {
             readyForInitialLoad.WaitOne();
 
-            BackgroundInit();
+            BackgroundInit();       // main init code
 
             if (!PendingClose)
             {
-                backgroundRefreshWorker = new Thread(BackgroundRefreshWorkerThread) { Name = "Background Refresh Worker", IsBackground = true };
-                backgroundRefreshWorker.Start();
+                backgroundRefreshWorker = new Thread(BackgroundHistoryRefreshWorkerThread) { Name = "Background Refresh Worker", IsBackground = true };
+                backgroundRefreshWorker.Start();        // start the refresh worker, another thread which does subsequenct (not the primary one) refresh work in the background..
 
                 try
                 {
                     if (!EDDOptions.Instance.NoSystemsLoad && EDDConfig.Instance.EDSMEDDBDownload)      // if no system off, and EDSM download on
-                        DoPerformSync();
+                        DoPerformSync();        // this is done after the initial history load..
                     else
                         LogLine("Star data download disabled by User, use Settings to reenable it");
 
@@ -777,7 +581,9 @@ namespace EDDiscovery
                 backgroundRefreshWorker.Join();
             }
 
-            closeRequested.WaitOne();
+            // Now we have been ordered to close down, so go thru the process
+
+            closeRequested.WaitOne();      
 
             OnBgSafeClose?.Invoke();
             ReadyForFinalClose = true;
@@ -808,14 +614,14 @@ namespace EDDiscovery
                 // Former CheckSystems, reworked to accomodate new switches..
                 // Check to see what sync refreshes we need
 
-                SystemClassEDSM.DetermineStartSyncState(syncstate);
-                EliteDangerousCore.EDDB.SystemClassEDDB.DetermineStartSyncState(syncstate);
+                SystemClassEDSM.DetermineIfFullEDSMSyncRequired(syncstate);
+                EliteDangerousCore.EDDB.SystemClassEDDB.DetermineIfEDDBSyncRequired(syncstate);
 
                 // New Galmap load - it was not doing a refresh if EDSM sync kept on happening. Now has its own timer
 
                 string rwgalmaptime = SQLiteConnectionSystem.GetSettingString("EDSMGalMapLast", "2000-01-01 00:00:00"); // Latest time from RW file.
                 DateTime galmaptime;
-                if (!DateTime.TryParse(rwgalmaptime, CultureInfo.InvariantCulture, DateTimeStyles.None, out galmaptime))
+                if (!DateTime.TryParse(rwgalmaptime, CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal, out galmaptime))
                     galmaptime = new DateTime(2000, 1, 1);
 
                 if (DateTime.Now.Subtract(galmaptime).TotalDays > 14)  // Over 14 days do a sync from EDSM for galmap
@@ -848,19 +654,18 @@ namespace EDDiscovery
                 }
             }
 
-            if (PendingClose) return;
             LogLine("Reading travel history");
 
-            if (!EDDOptions.Instance.NoLoad)
+            if (!EDDOptions.Instance.NoLoad)        // here in this thread, we do a refresh of history. 
             {
-                DoRefreshHistory(new RefreshWorkerArgs { CurrentCommander = EDCommander.CurrentCmdrID });
+                DoRefreshHistory(new RefreshWorkerArgs { CurrentCommander = EDCommander.CurrentCmdrID });       // kick the background refresh worker thread into action
             }
 
             if (PendingClose) return;
 
-            if (syncstate.perform_eddb_sync || syncstate.perform_edsm_sync)
+            if (syncstate.perform_eddb_sync || syncstate.perform_edsm_fullsync)
             {
-                string databases = (syncstate.perform_edsm_sync && syncstate.perform_eddb_sync) ? "EDSM and EDDB" : ((syncstate.perform_edsm_sync) ? "EDSM" : "EDDB");
+                string databases = (syncstate.perform_edsm_fullsync && syncstate.perform_eddb_sync) ? "EDSM and EDDB" : ((syncstate.perform_edsm_fullsync) ? "EDSM" : "EDDB");
 
                 LogLine("ED Discovery will now synchronise to the " + databases + " databases to obtain star information." + Environment.NewLine +
                                 "This will take a while, up to 15 minutes, please be patient." + Environment.NewLine +
@@ -870,7 +675,125 @@ namespace EDDiscovery
             InvokeAsyncOnUiThread(() => OnInitialisationComplete?.Invoke());
         }
 
-        private void BackgroundRefreshWorkerThread()
+        #endregion
+
+
+        #region Sync Perform to EDSM/EDDB
+
+        private void DoPerformSync()        // in Background worker
+        {
+            Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " Perform sync");
+            try
+            {
+                bool[] grids = new bool[GridId.MaxGridID];
+                foreach (int i in GridId.FromString(EDDConfig.Instance.EDSMGridIDs))
+                    grids[i] = true;
+
+                ReportProgress(-1, "");
+
+                syncstate.ClearCounters();
+
+                if (syncstate.perform_edsm_fullsync || syncstate.perform_eddb_sync)
+                {
+                    if (syncstate.perform_edsm_fullsync && !PendingClose)
+                    {
+                        // Download new systems
+                        try
+                        {
+                            syncstate.edsm_fullsync_count = SystemClassEDSM.PerformEDSMFullSync(grids, () => PendingClose, ReportProgress, LogLine, LogLineHighlight);
+                            syncstate.perform_edsm_fullsync = false;
+                        }
+                        catch (Exception ex)
+                        {
+                            LogLineHighlight("GetAllEDSMSystems exception:" + ex.Message);
+                        }
+
+                    }
+
+                    if (!PendingClose)
+                    {
+                        SQLiteConnectionSystem.CreateSystemsTableIndexes();  // again check indexes.. sometimes SQL does not create them due to schema change
+
+                        try
+                        {
+                            syncstate.eddb_sync_count = EliteDangerousCore.EDDB.SystemClassEDDB.PerformEDDBFullSync(() => PendingClose, ReportProgress, LogLine, LogLineHighlight);
+                            syncstate.perform_eddb_sync = false;
+                        }
+                        catch (Exception ex)
+                        {
+                            LogLineHighlight("GetEDDBUpdate exception: " + ex.Message);
+                        }
+                    }
+                }
+
+                if (!PendingClose)
+                {
+                    SQLiteConnectionSystem.CreateSystemsTableIndexes();         // again check indexes.. sometimes SQL does not create them due to schema change
+
+                    syncstate.edsm_updatesync_count = EliteDangerousCore.EDSM.SystemClassEDSM.PerformEDSMUpdateSync(grids, () => PendingClose, ReportProgress, LogLine, LogLineHighlight);
+                }
+
+                ReportProgress(-1, "");
+            }
+            catch (OperationCanceledException)
+            {
+                // Swallow Operation Cancelled exceptions
+            }
+            catch (Exception ex)
+            {
+                LogLineHighlight("Check Systems exception: " + ex.Message + Environment.NewLine + "Trace: " + ex.StackTrace);
+            }
+
+            InvokeAsyncOnUiThread(() => PerformSyncCompleted());
+        }
+
+        // Done in UI thread after DoPerformSync completes
+
+        private void PerformSyncCompleted()
+        {
+            Debug.Assert(System.Windows.Forms.Application.MessageLoop);
+
+            ReportProgress(-1, "");
+
+            if (syncstate.edsm_fullsync_count > 0 || syncstate.edsm_updatesync_count > 0)
+                LogLine(string.Format("EDSM update complete with {0} systems", syncstate.edsm_fullsync_count + syncstate.edsm_updatesync_count));
+
+            if (syncstate.eddb_sync_count > 0)
+                LogLine(string.Format("EDDB update complete with {0} systems", syncstate.eddb_sync_count));
+
+            long totalsystems = SystemClassDB.GetTotalSystems();
+            LogLineSuccess($"Loading completed, total of {totalsystems:N0} systems stored");
+
+            if (syncstate.edsm_fullsync_count > 0 || syncstate.eddb_sync_count > 0 || syncstate.edsm_updatesync_count > 20000)   // if we have done a resync, or a major update sync (arb no)
+            {
+                LogLine("Refresh due to updating EDSM or EDDB data");
+                RefreshHistoryAsync();
+            }
+
+            OnSyncComplete?.Invoke();
+
+            resyncRequestedFlag = 0;        // releases flag and allow another async to happen
+
+            Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " Perform sync completed");
+        }
+
+        #endregion
+
+
+        #region History Refresh System
+
+        protected class RefreshWorkerArgs
+        {
+            public string NetLogPath;
+            public bool ForceNetLogReload;
+            public bool ForceJournalReload;
+            public int CurrentCommander;
+        }
+
+        // this thread waits around until told to do a refresh then performs it.  
+        // ONLY used for subsequent refreshes, first one done on background worker
+
+        private void BackgroundHistoryRefreshWorkerThread()
         {
             WaitHandle.WaitAny(new WaitHandle[] { closeRequested, readyForNewRefresh }); // Wait to be ready for new refresh after initial refresh
             while (!PendingClose)
@@ -887,12 +810,11 @@ namespace EDDiscovery
                         break;
                     case 1:  // Refresh Requested
                         journalmonitor.StopMonitor();          // this is called by the foreground.  Ensure background is stopped.  Foreground must restart it.
-                        EdsmLogFetcher.AsyncStop();     
+                        EdsmLogFetcher.AsyncStop();
                         InvokeAsyncOnUiThread(() =>
                         {
                             OnRefreshStarting?.Invoke();
                         });
-
 
                         while (refreshWorkerQueue.TryDequeue(out argstemp)) // Get the most recent refresh
                         {
@@ -910,7 +832,73 @@ namespace EDDiscovery
             }
         }
 
+        // this function does the history refresh, executes on Background worker or background history refresh thread
+        private void DoRefreshHistory(RefreshWorkerArgs args)
+        {
+            HistoryList hist = null;
+            try
+            {
+                refreshWorkerArgs = args;
+                Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " Load history");
+                hist = HistoryList.LoadHistory(journalmonitor, () => PendingClose, (p, s) => ReportProgress(p, $"Processing log file {s}"), args.NetLogPath,
+                    args.ForceJournalReload, args.ForceJournalReload, args.CurrentCommander, EDDConfig.Instance.ShowUIEvents);
+                Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " Load history complete");
+            }
+            catch (Exception ex)
+            {
+                LogLineHighlight("History Refresh Error: " + ex);
+            }
+
+            initComplete.WaitOne();
+
+            InvokeAsyncOnUiThread(() => ForegroundHistoryRefreshComplete(hist));
+        }
+
+        // Called on foreground after history has refreshed
+
+        private void ForegroundHistoryRefreshComplete(HistoryList hist)
+        {
+            Debug.Assert(System.Windows.Forms.Application.MessageLoop);
+
+            if (!PendingClose)
+            {
+                Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " Refresh history worker completed");
+
+                if (hist != null)
+                {
+                    history.Copy(hist);
+
+                    OnRefreshCommanders?.Invoke();
+
+                    EdsmLogFetcher.StopCheck();
+
+                    ReportProgress(-1, "");
+
+                    RefreshDisplays();
+                    Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " Refresh Displays Completed");
+                }
+
+                Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " JMOn");
+
+                journalmonitor.StartMonitor();
+
+                Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " RFcomplete");
+                OnRefreshComplete?.Invoke();                            // History is completed
+
+                if (history.CommanderId >= 0)
+                    EdsmLogFetcher.Start(EDCommander.Current);
+
+                refreshRequestedFlag = 0;
+                readyForNewRefresh.Set();
+
+                LogLine("History refresh complete.");
+
+                Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " refresh history complete");
+            }
+        }
+
         #endregion
+
 
         #endregion
 

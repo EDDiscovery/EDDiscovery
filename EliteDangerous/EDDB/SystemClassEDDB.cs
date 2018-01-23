@@ -196,7 +196,7 @@ namespace EliteDangerousCore.EDDB
 
         // Called from EDDiscoveryController, in back thread, to determine what sync to do..
 
-        public static void DetermineStartSyncState(EliteDangerousCore.EDSM.SystemClassEDSM.SystemsSyncState state)
+        public static void DetermineIfEDDBSyncRequired(EliteDangerousCore.EDSM.SystemClassEDSM.SystemsSyncState state)
         {
             DateTime time = EliteDangerousCore.EDDB.SystemClassEDDB.GetLastEDDBDownloadTime();
 

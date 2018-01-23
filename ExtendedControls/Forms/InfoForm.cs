@@ -26,6 +26,8 @@ namespace ExtendedControls
 {
     public partial class InfoForm : DraggableForm
     {
+        public bool EnableClose { get { return buttonOK.Enabled; } set { buttonOK.Enabled = panel_close.Enabled = value; } }
+
         public InfoForm()
         {
             InitializeComponent();
@@ -92,6 +94,11 @@ namespace ExtendedControls
         private void labelCaption_MouseDown(object sender, MouseEventArgs e)
         {
             OnCaptionMouseDown((Control)sender, e);
+        }
+
+        private void InfoForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            e.Cancel = !buttonOK.Enabled;
         }
     }
 }
