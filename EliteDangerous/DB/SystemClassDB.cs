@@ -336,11 +336,14 @@ namespace EliteDangerousCore.DB
                     }
                 }
 
-                if (sys.name == null)       // if no name, name it..
-                    sys.name = name;
+                if (sys != null)
+                {
+                    if (sys.name == null)       // if no name, name it..
+                        sys.name = name;
 
-                if (sys.name == null)       // must have a name.
-                    sys = null;
+                    if (sys.name == null)       // must have a name.
+                        sys = null;
+                }
 
                 if (sys != null && sys.id_eddb != 0)
                 {
