@@ -285,7 +285,7 @@ namespace EDDiscovery
             set
             {
                 _EDSMGridIDs = value;
-                SQLiteConnectionUser.PutSettingString("EDSMGridIDs", value);
+                SQLiteConnectionSystem.PutSettingString("EDSMGridIDs", value);
             }
         }
 
@@ -311,8 +311,8 @@ namespace EDDiscovery
                 _defaultwavedevice = SQLiteConnectionUser.GetSettingString("WaveAudioDevice", "Default", conn);
                 _showuievents = SQLiteConnectionUser.GetSettingBool("ShowUIEvents", false, conn);
                 _clickthrukey = (System.Windows.Forms.Keys)SQLiteConnectionUser.GetSettingInt("ClickThruKey", (int)System.Windows.Forms.Keys.ShiftKey, conn);
-                _EDSMEDDBDownload = SQLiteConnectionUser.GetSettingBool("EDSMEDDBDownloadData", true, conn);
-                _EDSMGridIDs = SQLiteConnectionUser.GetSettingString("EDSMGridIDs", "All", conn);
+                _EDSMEDDBDownload = SQLiteConnectionUser.GetSettingBool("EDSMEDDBDownloadData", true, conn);    // this goes with the USER on purpose, so its kept over a system db delete
+                _EDSMGridIDs = SQLiteConnectionSystem.GetSettingString("EDSMGridIDs", "All"); // from system database, not user, to keep setting with system data
 
                 EliteDangerousCore.EDCommander.Load(write, conn);
             }

@@ -931,7 +931,7 @@ namespace EDDiscovery
             actioncontroller.ReLoad();
             actioncontroller.CheckWarn();
             actioncontroller.onStartup();
-        }
+         }
 
         private void sendUnsyncedEGOScansToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -997,14 +997,21 @@ namespace EDDiscovery
 
         private void forceEDDBUpdateToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (!Controller.AsyncPerformSync(eddbsync: true))      // we want it to have run, to completion, to allow another go..
+            if (!EDDConfig.Instance.EDSMEDDBDownload)
+                ExtendedControls.MessageBoxTheme.Show(this, "Star Data download is disabled. Use Settings to reenable it");
+            else if (!Controller.AsyncPerformSync(eddbsync: true))      // we want it to have run, to completion, to allow another go..
                 ExtendedControls.MessageBoxTheme.Show(this, "Synchronisation to databases is in operation or pending, please wait");
         }
 
         private void syncEDSMSystemsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (!Controller.AsyncPerformSync(edsmsync: true))      // we want it to have run, to completion, to allow another go..
-                ExtendedControls.MessageBoxTheme.Show(this, "Synchronisation to databases is in operation or pending, please wait");
+            if (!EDDConfig.Instance.EDSMEDDBDownload)
+                ExtendedControls.MessageBoxTheme.Show(this, "Star Data download is disabled. Use Settings to reenable it");
+            else if (ExtendedControls.MessageBoxTheme.Show(this, "This can take a considerable amount of time and bandwidth" + Environment.NewLine + "Confirm you want to do this?", "EDSM Download Warning", MessageBoxButtons.OKCancel, MessageBoxIcon.Asterisk)  == DialogResult.OK )
+            {
+                if (!Controller.AsyncPerformSync(edsmsync: true))      // we want it to have run, to completion, to allow another go..
+                    ExtendedControls.MessageBoxTheme.Show(this, "Synchronisation to databases is in operation or pending, please wait");
+            }
         }
 
         private void gitHubToolStripMenuItem_Click(object sender, EventArgs e)

@@ -493,7 +493,8 @@ namespace EDDiscovery.UserControls
                                 "but it may be slow to respond. Do not close down EDD until this window says" + Environment.NewLine+
                                 "the process has finished" + Environment.NewLine + Environment.NewLine
                                 , null, new int[] { 0 }, true);
-                    info.Show();
+                    info.EnableClose = false;
+                    info.Show(discoveryform);
 
                     taskremovesectors = Task.Factory.StartNew(()=> RemoveSectors(gss.AllRemoveSectors,(s) => discoveryform.Invoke(new Action(()=> { info.AddText(s); }))));
 
@@ -506,10 +507,10 @@ namespace EDDiscovery.UserControls
 
         public static void RemoveSectors(List<int> sectors, Action<string> inform)
         {
-            inform("Removing System Information" + Environment.NewLine);
-            SystemClassDB.RemoveGridSystems(sectors);
             inform("Removing Names" + Environment.NewLine);
-            SystemClassDB.RemoveGridNames(sectors);
+            SystemClassDB.RemoveGridNames(sectors, inform);     // MUST do first as relies on system grid for info
+            inform("Removing System Information" + Environment.NewLine);
+            SystemClassDB.RemoveGridSystems(sectors, inform);
             inform("Vacuum Database for size" + Environment.NewLine);
             SystemClassDB.Vacuum();
         }
@@ -522,6 +523,7 @@ namespace EDDiscovery.UserControls
             {
                 removetimer.Stop();
                 taskremovesectors.Dispose();
+                info.EnableClose = true;
                 info.AddText("Finished, Please close the window." + Environment.NewLine + 
                     "If you already have the 3dmap open, changes will not be reflected in that map until the next start of EDD" + Environment.NewLine);
             }

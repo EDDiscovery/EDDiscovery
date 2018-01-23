@@ -131,7 +131,7 @@
     <Compile Include="EliteDangerous\RoutePlotter.cs" />
     <Compile Include="EliteDangerous\ShipInformation.cs" />
     <Compile Include="EliteDangerous\StarScan.cs" />
-    <Compile Include="EliteDangerous\SystemCache.cs" />
+    <Compile Include="DB\SystemCache.cs" />
     <Compile Include="EliteDangerous\SystemClass.cs" />
     <Compile Include="EliteDangerous\VisitingStarsCacheFolder.cs" />
     <Compile Include="HistoryList\HistoryEntry.cs" />

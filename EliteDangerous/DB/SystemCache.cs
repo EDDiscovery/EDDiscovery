@@ -13,7 +13,15 @@ namespace EliteDangerousCore
         private static Dictionary<string, List<ISystem>> systemsByName = new Dictionary<string, List<ISystem>>(StringComparer.InvariantCultureIgnoreCase);
 
         // may return null if not found
+        // by design, it keeps on trying.  Rob thought about caching the misses but the problem is, this is done at start up
+        // the system db may not be full at that point.  So a restart would be required to clear the misses..
+        // difficult
 
+        public static ISystem FindSystem(long edsmid, DB.SQLiteConnectionSystem conn = null)
+        {
+            return FindSystem(new SystemClass(edsmid),conn);
+        }
+        
         public static ISystem FindSystem(ISystem find, DB.SQLiteConnectionSystem conn = null)
         {
             ISystem orgsys = find;
@@ -21,10 +29,16 @@ namespace EliteDangerousCore
             List<ISystem> foundlist = new List<ISystem>();
 
             if (find.id_edsm > 0 && systemsByEdsmId.ContainsKey(find.id_edsm))        // add to list
-                foundlist.Add(systemsByEdsmId[find.id_edsm]);
+            {
+                ISystem s = systemsByEdsmId[find.id_edsm];
+                foundlist.Add(s);
+            }
 
             if (systemsByName.ContainsKey(find.name))            // and all names cached
-                foundlist.AddRange(systemsByName[find.name]);
+            {
+                List<ISystem> s = systemsByName[find.name];
+                foundlist.AddRange(s);
+            }
 
             ISystem found = null;
 
