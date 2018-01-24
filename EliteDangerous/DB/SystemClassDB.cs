@@ -513,7 +513,7 @@ namespace EliteDangerousCore.DB
         }
 
         // give nearest star to maxdistance limit
-        public static ISystem FindNearestSystemTo(double x, double y, double z, double maxdistance = 1000 , SQLiteConnectionSystem cn = null)
+        public static ISystem FindNearestSystemTo(double x, double y, double z, double maxdistance = 1000, SQLiteConnectionSystem cn = null)
         {
             BaseUtils.SortedListDoubleDuplicate<ISystem> distlist = new BaseUtils.SortedListDoubleDuplicate<ISystem>();
             GetSystemListBySqDistancesFrom(distlist, x, y, z, 1, 0.0, maxdistance, false, cn);
@@ -570,7 +570,7 @@ namespace EliteDangerousCore.DB
                             if (System.DBNull.Value != reader[1])                 // paranoid check for null
                             {
                                 ISystem sys = SystemCache.FindSystem(edsmid, cn); // pass it thru the cache..
-                                 System.Diagnostics.Debug.WriteLine("Return " + sys.name );        
+                                System.Diagnostics.Debug.WriteLine("Return " + sys.name);
                                 if (sys != null && sys.name != null)
                                 {
                                     double dx = ((double)(long)reader[1]) / XYZScalar - x;
@@ -1114,6 +1114,61 @@ namespace EliteDangerousCore.DB
             return (result != null);
         }
 
+        #region Star Database Debugging-  not for main line code.
+
+        // give me list of duplicate systems by position
+
+        static public void DuplicateSystemsByPosition()       
+        {
+            using (SQLiteConnectionSystem cn = new SQLiteConnectionSystem())
+            {
+                List<Tuple<long, long, long>> pos = new List<Tuple<long, long, long>>();
+
+                using (DbCommand cmd = cn.CreateCommand("SELECT X,y,Z,count(1) as CNT From EdsmSystems s Group By X,y,Z having CNT>1"))
+                {
+                    using (DbDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            long xs = (long)reader["x"];
+                            long ys = (long)reader["y"];
+                            long zs = (long)reader["z"];
+
+                            System.Diagnostics.Debug.WriteLine("Duplicate at {0} {1} {2}", xs/128.0, ys/128.0, zs/128.0);
+                            pos.Add(new Tuple<long, long, long>(xs, ys, zs));
+                        }
+                    }
+                }
+
+                foreach (var p in pos)
+                {
+                    using (DbCommand cmd2 = cn.CreateCommand("SELECT s.*,n.Name From EdsmSystems s join SystemNames n on n.EdsmId=s.Edsmid where x=@x And y=@y And z=@z"))
+                    {
+                        cmd2.AddParameterWithValue("@x", p.Item1);
+                        cmd2.AddParameterWithValue("@y", p.Item2);
+                        cmd2.AddParameterWithValue("@z", p.Item3);
+
+                        using (DbDataReader reader = cmd2.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                string name = (string)reader["Name"];
+                                long edsmid = (long)reader["EdsmId"];
+                                long xs = (long)reader["x"];
+                                long ys = (long)reader["y"];
+                                long zs = (long)reader["z"];
+                                System.Diagnostics.Debug.WriteLine("Dup {0} {1} at {2},{3},{4}", name, edsmid, xs / 128.0, ys / 128.0, zs / 128.0);
+                            }
+
+                            System.Diagnostics.Debug.WriteLine("");
+                        }
+
+                    }
+                }
+            }
+
+            #endregion
+        }
     }
 
     public class GridId

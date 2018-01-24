@@ -45,8 +45,8 @@ using EDDiscovery.Icons;
 
 namespace EDDiscovery
 {
-    public partial class EDDiscoveryForm : ExtendedControls.DraggableForm, IDiscoveryController
-    {
+    public partial class EDDiscoveryForm : ExtendedControls.DraggableForm
+    { 
         #region Variables
 
         private EDDiscoveryController Controller;
@@ -118,9 +118,9 @@ namespace EDDiscovery
         #endregion
 
         #region History
-        public bool RefreshHistoryAsync(string netlogpath = null, bool forcenetlogreload = false, bool forcejournalreload = false, int? currentcmdr = null)
+        public bool RefreshHistoryAsync()           // we only supply the basic refresh for the rest of the system..
         {
-            return Controller.RefreshHistoryAsync(netlogpath, forcenetlogreload, forcejournalreload, currentcmdr);
+            return Controller.RefreshHistoryAsync();
         }
         public void RefreshDisplays() { Controller.RefreshDisplays(); }
         public void RecalculateHistoryDBs() { Controller.RecalculateHistoryDBs(); }
@@ -1009,7 +1009,7 @@ namespace EDDiscovery
                 ExtendedControls.MessageBoxTheme.Show(this, "Star Data download is disabled. Use Settings to reenable it");
             else if (ExtendedControls.MessageBoxTheme.Show(this, "This can take a considerable amount of time and bandwidth" + Environment.NewLine + "Confirm you want to do this?", "EDSM Download Warning", MessageBoxButtons.OKCancel, MessageBoxIcon.Asterisk)  == DialogResult.OK )
             {
-                if (!Controller.AsyncPerformSync(edsmsync: true))      // we want it to have run, to completion, to allow another go..
+                if (!Controller.AsyncPerformSync(edsmfullsync: true))      // we want it to have run, to completion, to allow another go..
                     ExtendedControls.MessageBoxTheme.Show(this, "Synchronisation to databases is in operation or pending, please wait");
             }
         }
@@ -1583,13 +1583,13 @@ namespace EDDiscovery
             if (comboBoxCommander.SelectedIndex >= 0 && comboBoxCommander.Enabled)     // DONT trigger during LoadCommandersListBox
             {
                 if (comboBoxCommander.SelectedIndex == 0)
-                    RefreshHistoryAsync(currentcmdr: -1);                                   // which will cause DIsplay to be called as some point
+                    Controller.RefreshHistoryAsync(currentcmdr: -1);                                   // which will cause DIsplay to be called as some point
                 else
                 {
                     var itm = (from EDCommander c in EDCommander.GetList() where c.Name.Equals(comboBoxCommander.Text) select c).ToList();
 
                     EDCommander.CurrentCmdrID = itm[0].Nr;
-                    RefreshHistoryAsync(currentcmdr: EDCommander.CurrentCmdrID);                                   // which will cause DIsplay to be called as some point
+                    Controller.RefreshHistoryAsync(currentcmdr: EDCommander.CurrentCmdrID);                                   // which will cause DIsplay to be called as some point
                 }
             }
 

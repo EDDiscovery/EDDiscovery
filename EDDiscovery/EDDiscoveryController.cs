@@ -269,6 +269,9 @@ namespace EDDiscovery
         #endregion
 
         #region History
+
+        // indicate change commander, indicate netlogpath load (with forced refresh), indicate forced journal load
+
         public bool RefreshHistoryAsync(string netlogpath = null, bool forcenetlogreload = false, bool forcejournalreload = false, int? currentcmdr = null)
         {
             if (PendingClose)
@@ -279,19 +282,19 @@ namespace EDDiscovery
             bool newrefresh = false;
 
             RefreshWorkerArgs curargs = refreshWorkerArgs;
-            if (refreshRequestedFlag == 0)
+            if (refreshHistoryRequestedFlag == 0)                                                           // if we are not operating
             {
-                if (curargs == null ||
+                if (curargs == null ||                                                                      // and we have mateirlally changed comething important
                     curargs.ForceNetLogReload != forcenetlogreload ||
                     curargs.ForceJournalReload != forcejournalreload ||
                     curargs.CurrentCommander != (currentcmdr ?? history.CommanderId) ||
                     curargs.NetLogPath != netlogpath)
                 {
-                    newrefresh = true;
+                    newrefresh = true;                                                                      // we queue the refresh, even if we have a async refresh pending..
                 }
             }
 
-            if (Interlocked.CompareExchange(ref refreshRequestedFlag, 1, 0) == 0 || newrefresh)
+            if (Interlocked.CompareExchange(ref refreshHistoryRequestedFlag, 1, 0) == 0 || newrefresh)      // set the refresh requested to 1 in all circumstances, to stop a 
             {
                 refreshWorkerQueue.Enqueue(new RefreshWorkerArgs
                 {
@@ -324,13 +327,13 @@ namespace EDDiscovery
         #endregion
 
         #region EDSM / EDDB
-        public bool AsyncPerformSync(bool eddbsync = false, bool edsmsync = false)
+        public bool AsyncPerformSync(bool eddbsync = false, bool edsmfullsync = false)
         {
-            if (Interlocked.CompareExchange(ref resyncRequestedFlag, 1, 0) == 0)
+            if (Interlocked.CompareExchange(ref resyncEDSMEDDBRequestedFlag, 1, 0) == 0)
             {
                 OnSyncStarting?.Invoke();
                 syncstate.perform_eddb_sync |= eddbsync;
-                syncstate.perform_edsm_fullsync |= edsmsync;
+                syncstate.perform_edsm_fullsync |= edsmfullsync;
                 resyncRequestedEvent.Set();
                 return true;
             }
@@ -351,9 +354,11 @@ namespace EDDiscovery
 
         private EDJournalClass journalmonitor;
 
-        private ConcurrentQueue<RefreshWorkerArgs> refreshWorkerQueue = new ConcurrentQueue<RefreshWorkerArgs>();
-        private EliteDangerousCore.EDSM.SystemClassEDSM.SystemsSyncState syncstate = new EliteDangerousCore.EDSM.SystemClassEDSM.SystemsSyncState();
         private RefreshWorkerArgs refreshWorkerArgs = new RefreshWorkerArgs();
+        private ConcurrentQueue<RefreshWorkerArgs> refreshWorkerQueue = new ConcurrentQueue<RefreshWorkerArgs>();           // QUEUE of refreshes pending, each with their own args..
+        private int refreshHistoryRequestedFlag = 0;            // flag gets set during History refresh, cleared at end, interlocked exchange during request..
+
+        private EliteDangerousCore.EDSM.SystemClassEDSM.SystemsSyncState syncstate = new EliteDangerousCore.EDSM.SystemClassEDSM.SystemsSyncState();
 
         private Thread backgroundWorker;
         private Thread backgroundRefreshWorker;
@@ -364,8 +369,8 @@ namespace EDDiscovery
         private ManualResetEvent readyForNewRefresh = new ManualResetEvent(false);
         private AutoResetEvent refreshRequested = new AutoResetEvent(false);
         private AutoResetEvent resyncRequestedEvent = new AutoResetEvent(false);
-        private int refreshRequestedFlag = 0;
-        private int resyncRequestedFlag = 0;
+
+        private int resyncEDSMEDDBRequestedFlag = 0;            // flag gets set during EDSM refresh, cleared at end, interlocked exchange during request..
         #endregion
 
         #region Accessors
@@ -659,6 +664,8 @@ namespace EDDiscovery
 
         private void DoPerformSync()        // in Background worker
         {
+            resyncEDSMEDDBRequestedFlag = 1;     // sync is happening, stop any async requests..
+
             Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " Perform sync");
             try
             {
@@ -749,7 +756,7 @@ namespace EDDiscovery
 
             OnSyncComplete?.Invoke();
 
-            resyncRequestedFlag = 0;        // releases flag and allow another async to happen
+            resyncEDSMEDDBRequestedFlag = 0;        // releases flag and allow another async to happen
 
             Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " Perform sync completed");
         }
@@ -865,7 +872,7 @@ namespace EDDiscovery
                 if (history.CommanderId >= 0)
                     EdsmLogFetcher.Start(EDCommander.Current);
 
-                refreshRequestedFlag = 0;
+                refreshHistoryRequestedFlag = 0;
                 readyForNewRefresh.Set();
 
                 LogLine("History refresh complete.");
