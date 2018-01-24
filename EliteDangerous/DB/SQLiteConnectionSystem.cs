@@ -172,8 +172,8 @@ namespace EliteDangerousCore.DB
 
             PerformUpgrade(conn, 20, true, false, new[] { query1, query2 }, () =>
             {
-                EDSM.SystemClassEDSM.ForceEDSMFullUpdate();
-            });
+                conn.PutSettingStringCN("EDSMLastSystems", "2010 - 01 - 01 00:00:00"); // force EDSM sync..  MUST do this manually, can't use main function as it needs internal one
+            }); 
         }
 
         private static void UpgradeSystemsDB101(SQLiteConnectionED conn)

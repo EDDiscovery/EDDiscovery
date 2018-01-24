@@ -515,14 +515,16 @@ namespace EliteDangerousCore.DB
         // give nearest star to maxdistance limit
         public static ISystem FindNearestSystemTo(double x, double y, double z, double maxdistance = 1000 , SQLiteConnectionSystem cn = null)
         {
-            SortedList<double, ISystem> distlist = new SortedList<double, ISystem>();
+            BaseUtils.SortedListDoubleDuplicate<ISystem> distlist = new BaseUtils.SortedListDoubleDuplicate<ISystem>();
             GetSystemListBySqDistancesFrom(distlist, x, y, z, 1, 0.0, maxdistance, false, cn);
             return distlist.Select(v => v.Value).FirstOrDefault();
         }
 
         // List stars, in dist order, from x/y/z, with min/max dist, limited to list, by spherical or cube.
+        // Must use the duplicate class. Previously you could just use a sorted list, but FindNearestSystemTo was using the non
+        // duplicate key compararer and faulting over two systems with the same distance! Doh
 
-        public static void GetSystemListBySqDistancesFrom(SortedList<double, ISystem> distlist, double x, double y, double z,
+        public static void GetSystemListBySqDistancesFrom(BaseUtils.SortedListDoubleDuplicate<ISystem> distlist, double x, double y, double z,
                                                     int maxitems,
                                                     double mindist, double maxdist, bool spherical,
                                                     SQLiteConnectionSystem cn = null)
@@ -577,8 +579,8 @@ namespace EliteDangerousCore.DB
 
                                     double distsq = dx * dx + dy * dy + dz * dz;
 
-                                    if ((!spherical || distsq <= maxdist * maxdist) && !distlist.ContainsKey(distsq)) // protect against EDSM having two at the same point
-                                        distlist.Add(distsq, sys);
+                                    if ((!spherical || distsq <= maxdist * maxdist))// MUST use duplicate double list to protect against EDSM having two at the same point
+                                        distlist.Add(distsq, sys);                  // which Rob has seen crashing the program! Bad EDSM!
                                 }
                             }
                         }

@@ -155,6 +155,9 @@ namespace EDDiscovery.Forms
                         "This will require a complete re-download of the EDSM data" + Environment.NewLine +
                         "Confirm you wish to do this?", "Warning!", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK)
                 {
+                    if (!EDDConfig.Instance.EDSMEDDBDownload)
+                        ExtendedControls.MessageBoxTheme.Show(this, "Synchronisation to star data disabled in settings." + Environment.NewLine + "Reenable to allow star data to be updated", "Warning - EDSM/EDDB Sync Disabled", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+
                     Action = ActionToDo.Add;
                 }
                 else
