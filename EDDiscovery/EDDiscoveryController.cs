@@ -424,34 +424,6 @@ namespace EDDiscovery
 
         #endregion
 
-        #region 2dmaps
-
-        public static Task<bool> DownloadMaps(IDiscoveryController discoveryform, Func<bool> cancelRequested, Action<string> logLine, Action<string> logError)          // ASYNC process
-        {
-            try
-            {
-                string mapsdir = Path.Combine(EDDOptions.Instance.AppDataDirectory, "Maps");
-                if (!Directory.Exists(mapsdir))
-                    Directory.CreateDirectory(mapsdir);
-
-                logLine("Checking for new EDDiscovery maps");
-
-                BaseUtils.GitHubClass github = new BaseUtils.GitHubClass(EDDiscovery.Properties.Resources.URLGithubDownload, discoveryform.LogLine);
-
-                var files = github.GetDataFiles("Maps/V1");
-                return Task.Factory.StartNew(() => github.DownloadFiles(files, mapsdir));
-            }
-            catch (Exception ex)
-            {
-                logError("DownloadImages exception: " + ex.Message);
-                var tcs = new TaskCompletionSource<bool>();
-                tcs.SetException(ex);
-                return tcs.Task;
-            }
-        }
-
-        #endregion
-
         #region New Entry with merge
 
         public void NewEntry(JournalEntry je)        // on UI thread. hooked into journal monitor and receives new entries.. Also call if you programatically add an entry
@@ -554,8 +526,6 @@ namespace EDDiscovery
                 {
                     if (!EDDOptions.Instance.NoSystemsLoad && EDDConfig.Instance.EDSMEDDBDownload)      // if no system off, and EDSM download on
                         DoPerformSync();        // this is done after the initial history load..
-                    else
-                        LogLine("Star data download disabled by User, use Settings to reenable it");
 
                     while (!PendingClose)
                     {
@@ -614,9 +584,6 @@ namespace EDDiscovery
                 // Former CheckSystems, reworked to accomodate new switches..
                 // Check to see what sync refreshes we need
 
-                SystemClassEDSM.DetermineIfFullEDSMSyncRequired(syncstate);
-                EliteDangerousCore.EDDB.SystemClassEDDB.DetermineIfEDDBSyncRequired(syncstate);
-
                 // New Galmap load - it was not doing a refresh if EDSM sync kept on happening. Now has its own timer
 
                 string rwgalmaptime = SQLiteConnectionSystem.GetSettingString("EDSMGalMapLast", "2000-01-01 00:00:00"); // Latest time from RW file.
@@ -654,22 +621,32 @@ namespace EDDiscovery
                 }
             }
 
-            LogLine("Reading travel history");
-
             if (!EDDOptions.Instance.NoLoad)        // here in this thread, we do a refresh of history. 
             {
+                LogLine("Reading travel history");
                 DoRefreshHistory(new RefreshWorkerArgs { CurrentCommander = EDCommander.CurrentCmdrID });       // kick the background refresh worker thread into action
             }
 
             if (PendingClose) return;
 
-            if (syncstate.perform_eddb_sync || syncstate.perform_edsm_fullsync)
+            if (!EDDOptions.Instance.NoSystemsLoad && EDDConfig.Instance.EDSMEDDBDownload)        // if enabled
             {
-                string databases = (syncstate.perform_edsm_fullsync && syncstate.perform_eddb_sync) ? "EDSM and EDDB" : ((syncstate.perform_edsm_fullsync) ? "EDSM" : "EDDB");
+                SystemClassEDSM.DetermineIfFullEDSMSyncRequired(syncstate);                         // ask EDSM and EDDB if they want to do a Full sync..
+                EliteDangerousCore.EDDB.SystemClassEDDB.DetermineIfEDDBSyncRequired(syncstate);
 
-                LogLine("ED Discovery will now synchronise to the " + databases + " databases to obtain star information." + Environment.NewLine +
-                                "This will take a while, up to 15 minutes, please be patient." + Environment.NewLine +
-                                "Please continue running ED Discovery until refresh is complete.");
+                if (syncstate.perform_eddb_sync || syncstate.perform_edsm_fullsync)
+                {
+                    string databases = (syncstate.perform_edsm_fullsync && syncstate.perform_eddb_sync) ? "EDSM and EDDB" : ((syncstate.perform_edsm_fullsync) ? "EDSM" : "EDDB");
+
+                    LogLine("Full synchronisation to the " + databases + " databases required."+ Environment.NewLine +
+                                    "This will take a while, up to 15 minutes, please be patient." + Environment.NewLine +
+                                    "Please continue running ED Discovery until refresh is complete.");
+                }
+
+            }
+            else
+            {
+                LogLine("Synchronisation to EDSM and EDDB disabled. Use Settings panel to reenable");
             }
 
             InvokeAsyncOnUiThread(() => OnInitialisationComplete?.Invoke());
@@ -899,6 +876,34 @@ namespace EDDiscovery
 
         #endregion
 
+        #region 2dmaps
+
+        // in its own thread..
+        public static Task<bool> DownloadMaps(IDiscoveryController discoveryform, Func<bool> cancelRequested, Action<string> logLine, Action<string> logError)          // ASYNC process
+        {
+            try
+            {
+                string mapsdir = Path.Combine(EDDOptions.Instance.AppDataDirectory, "Maps");
+                if (!Directory.Exists(mapsdir))
+                    Directory.CreateDirectory(mapsdir);
+
+                logLine("Checking for new EDDiscovery maps");
+
+                BaseUtils.GitHubClass github = new BaseUtils.GitHubClass(EDDiscovery.Properties.Resources.URLGithubDownload, discoveryform.LogLine);
+
+                var files = github.GetDataFiles("Maps/V1");
+                return Task.Factory.StartNew(() => github.DownloadFiles(files, mapsdir));
+            }
+            catch (Exception ex)
+            {
+                logError("DownloadImages exception: " + ex.Message);
+                var tcs = new TaskCompletionSource<bool>();
+                tcs.SetException(ex);
+                return tcs.Task;
+            }
+        }
+
+        #endregion
 
         #endregion
 

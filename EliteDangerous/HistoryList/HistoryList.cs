@@ -513,7 +513,7 @@ namespace EliteDangerousCore
 
         #region General Info
 
-        public void CalculateSqDistances(SortedList<double, ISystem> distlist, double x, double y, double z, 
+        public void CalculateSqDistances(BaseUtils.SortedListDoubleDuplicate<ISystem> distlist, double x, double y, double z, 
                         int maxitems, double mindistance, double maxdistance , bool spherical )
         {
             HashSet<long> listids = new HashSet<long>();

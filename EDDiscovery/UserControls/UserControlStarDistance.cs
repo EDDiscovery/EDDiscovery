@@ -100,7 +100,7 @@ namespace EDDiscovery.UserControls
             }
         }
 
-        private void NewStarListComputed(ISystem sys, SortedList<double, ISystem> list)      // In UI
+        private void NewStarListComputed(ISystem sys, BaseUtils.SortedListDoubleDuplicate<ISystem> list)      // In UI
         {
             System.Diagnostics.Debug.Assert(Application.MessageLoop);       // check!
 
@@ -114,7 +114,7 @@ namespace EDDiscovery.UserControls
             FillGrid(sys.name, list);
         }
 
-        private void FillGrid(string name, SortedList<double, ISystem> csl)
+        private void FillGrid(string name, BaseUtils.SortedListDoubleDuplicate<ISystem> csl)
         {
             SetControlText("");
             dataGridViewNearest.Rows.Clear();
@@ -259,7 +259,7 @@ namespace EDDiscovery.UserControls
                 public double MaxDistance;
                 public bool Spherical;
                 public int MaxItems;
-                public Action<ISystem, SortedList<double, ISystem>> Callback;
+                public Action<ISystem, BaseUtils.SortedListDoubleDuplicate<ISystem>> Callback;
             }
 
             private ConcurrentQueue<StardistRequest> closestsystem_queue = new ConcurrentQueue<StardistRequest>();
@@ -274,7 +274,7 @@ namespace EDDiscovery.UserControls
                 backgroundStardistWorker.Start();
             }
 
-            public void CalculateClosestSystems(ISystem sys, Action<ISystem, SortedList<double, ISystem>> callback, 
+            public void CalculateClosestSystems(ISystem sys, Action<ISystem, BaseUtils.SortedListDoubleDuplicate<ISystem>> callback, 
                             int maxitems, double mindistance, double maxdistance, bool spherical, bool ignoreDuplicates = true)
             {
                 closestsystem_queue.Enqueue(new StardistRequest { System = sys, Callback = callback,
@@ -311,7 +311,7 @@ namespace EDDiscovery.UserControls
                                 {
                                     StardistRequest req = stardistreq;
                                     ISystem sys = req.System;
-                                    SortedList<double, ISystem> closestsystemlist = new SortedList<double, ISystem>(new DuplicateKeyComparer<double>()); //lovely list allowing duplicate keys - can only iterate in it.
+                                    BaseUtils.SortedListDoubleDuplicate<ISystem> closestsystemlist = new BaseUtils.SortedListDoubleDuplicate<ISystem>(); //lovely list allowing duplicate keys - can only iterate in it.
 
                                     //System.Diagnostics.Debug.WriteLine("DB Computer Max distance " + req.MaxDistance);
 
@@ -327,15 +327,6 @@ namespace EDDiscovery.UserControls
 
                             break;
                     }
-                }
-            }
-
-            private class DuplicateKeyComparer<TKey> : IComparer<TKey> where TKey : IComparable      // special compare for sortedlist
-            {
-                public int Compare(TKey x, TKey y)
-                {
-                    int result = x.CompareTo(y);
-                    return (result == 0) ? 1 : result;      // for this, equals just means greater than, to allow duplicate distance values to be added.
                 }
             }
         }
