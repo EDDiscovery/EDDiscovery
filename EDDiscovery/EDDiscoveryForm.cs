@@ -395,7 +395,7 @@ namespace EDDiscovery
                 travelHistoryControl.Init(this, null, UserControls.UserControlCommonBase.DisplayNumberHistoryGrid); // and init at this point with 0 as dn
             }
 
-            for (int i = 0; i < PanelInformation.GetNumberPanels(); i++)
+            for (int i = 0; i < PanelInformation.GetNumberPanels; i++)
             {
                 addTabToolStripMenuItem.DropDownItems.Add(PanelInformation.MakeToolStripMenuItem(i, (s, e) =>
                 {
@@ -939,19 +939,9 @@ namespace EDDiscovery
             EDDiscoveryCore.EGO.EGOSync.SendEGOEvents(LogLine, hlsyncunsyncedlist);
         }
 
-        private void addNewStarToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            Process.Start("http://robert.astronet.se/Elite/ed-systems/entry.html");
-        }
-
         private void frontierForumThreadToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Process.Start(Properties.Resources.URLProjectEDForumPost);
-        }
-
-        private void eDDiscoveryFGESupportThreadToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            Process.Start("http://firstgreatexpedition.org/mybb/showthread.php?tid=1406");
         }
 
         private void eDDiscoveryHomepageToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1471,7 +1461,7 @@ namespace EDDiscovery
         {
             ToolStripMenuItem parent;
 
-            menu = menu.ToLower();
+            menu = menu.ToLower(CultureInfo.InvariantCulture);
             if (menu.Equals("add-ons"))
                 parent = addOnsToolStripMenuItem;
             else if (menu.Equals("help"))

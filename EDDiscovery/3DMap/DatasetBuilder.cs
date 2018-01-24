@@ -593,7 +593,7 @@ namespace EDDiscovery._3DMap
             using (Graphics g = Graphics.FromImage(text_bmp))
             {
                 using (Brush br = new SolidBrush(CoarseGridLines))
-                    g.DrawString(x.ToString("0") + "," + z.ToString("0"), fnt, br, new Point(px, py));
+                    g.DrawString(x.ToStringInvariant("0") + "," + z.ToStringInvariant("0"), fnt, br, new Point(px, py));
             }
 
             return text_bmp;

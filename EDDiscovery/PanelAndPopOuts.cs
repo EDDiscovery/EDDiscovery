@@ -26,7 +26,7 @@ using System.Threading.Tasks;
 
 namespace EDDiscovery.Forms
 {
-    public class PanelInformation
+    static public class PanelInformation
     {
         public enum PanelIDs        // id's.. used in tab controls, and in button pop outs button
         {
@@ -158,10 +158,7 @@ namespace EDDiscovery.Forms
             return PanelList.FindIndex(x => x.PopoutID == p);
         }
 
-        static public int GetNumberPanels()
-        {
-            return PanelList.Count;
-        }
+        static public int GetNumberPanels { get { return PanelList.Count; } }
 
         static public PanelInfo GetPanelInfoByEnum(PanelIDs p)
         {

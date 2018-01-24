@@ -376,7 +376,6 @@ namespace EDDiscovery
         {
             base.OnShown(e);
 
-            Console.WriteLine($"{nameof(FormMap)}.{nameof(OnShown)}");
             int helpno = SQLiteDBClass.GetSettingInt("Map3DShownHelp", 0);                 // force up help, to make sure they know it exists
 
             if (helpno != HELP_VERSION)

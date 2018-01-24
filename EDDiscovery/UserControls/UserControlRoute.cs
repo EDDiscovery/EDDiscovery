@@ -110,7 +110,7 @@ namespace EDDiscovery.UserControls
             int atpos = s.IndexOf('@');
             if (s != null && atpos != -1)
                 s = s.Substring(0, atpos);
-            s.Trim();
+            s = s.Trim();
             return s;
         }
 
