@@ -149,19 +149,13 @@ namespace EDDiscovery.UserControls
 
         public bool ScanMode
         {
+            get
+            {
+                return checkBoxCustomStars.Visible;
+            }
             set
             {
-                if (value == true)
-                {
-                    checkBoxCustomStars.Visible = true;
-                    checkBoxCustomPlanets.Visible = true;
-                }
-                else
-                {
-                    checkBoxCustomStars.Visible = false;
-                    checkBoxCustomPlanets.Visible = false;
-
-                }
+                checkBoxCustomStars.Visible = checkBoxCustomPlanets.Visible = value;
             }
         }
 

@@ -125,7 +125,6 @@ namespace EDDiscovery
             imageViewer.Image = null;
             fgeimages = null;
             starpositions = null;
-            GC.Collect();
         }
 
         private bool AddImages()
