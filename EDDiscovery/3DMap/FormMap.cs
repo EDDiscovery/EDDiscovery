@@ -158,8 +158,6 @@ namespace EDDiscovery
 
             _plannedRoute = null;
 
-            toolStripControls.Renderer = new MyRenderer();
-
             drawLinesBetweenStarsWithPositionToolStripMenuItem.Checked = SQLiteDBClass.GetSettingBool("Map3DDrawLines", true);
             drawADiscOnStarsWithPositionToolStripMenuItem.Checked = SQLiteDBClass.GetSettingBool("Map3DDrawTravelDisc", true);
             useWhiteForDiscsInsteadOfAssignedMapColourToolStripMenuItem.Checked = SQLiteDBClass.GetSettingBool("Map3DDrawTravelWhiteDisc", true);
@@ -296,6 +294,13 @@ namespace EDDiscovery
             }
         }
 
+        public void IconSelect(bool winborder)      // called to set up icons
+        {
+            panel_minimize.Visible = panel_close.Visible = !winborder;
+            int spaceforclose = winborder ? 0 : (panel_close.Right - panel_minimize.Left) + 16;
+            panelAuxControls.Left = ClientRectangle.Width - panelAuxControls.Width - spaceforclose;
+        }
+
 
         #endregion
 
@@ -391,7 +396,7 @@ namespace EDDiscovery
             glControl.Focus();
         }
 
-        void StartSystemTimer()
+        private void StartSystemTimer()
         {
             if ( !_systemtimer.Enabled )
             {
@@ -505,7 +510,7 @@ namespace EDDiscovery
             GL.ClearColor((Color)System.Drawing.ColorTranslator.FromHtml("#0D0D10"));
         }
 
-        public void SetModelProjectionMatrix()
+        private void SetModelProjectionMatrix()
         {
             posdir.InPerspectiveMode = toolStripButtonPerspective.Checked;
 
@@ -1558,6 +1563,22 @@ namespace EDDiscovery
             }
         }
 
+        private void panel_close_Click(object sender, EventArgs e)
+        {
+            Close();
+        }
+
+        private void panel_minimize_Click(object sender, EventArgs e)
+        {
+            this.WindowState = FormWindowState.Minimized;
+        }
+
+        private void panelTop_MouseDown(object sender, System.Windows.Forms.MouseEventArgs e)
+        {
+            OnCaptionMouseDown((Control)sender, e);
+        }
+
+
         #endregion
 
         #region Mouse
@@ -2197,20 +2218,6 @@ namespace EDDiscovery
 
         #region Misc
 
-        private class MyRenderer : ToolStripProfessionalRenderer
-        {
-            protected override void OnRenderButtonBackground(ToolStripItemRenderEventArgs e)
-            {
-                var btn = e.Item as ToolStripButton;
-                if (btn != null && btn.CheckOnClick && btn.Checked)
-                {
-                    Rectangle bounds = new Rectangle(Point.Empty, e.Item.Size);
-                    e.Graphics.FillRectangle(Brushes.Orange, bounds);
-                }
-                else base.OnRenderButtonBackground(e);
-            }
-        }
-
         public ISystem FindSystem(string name, SQLiteConnectionSystem cn = null)    // nice wrapper for this
         {
             if (_systemlist != null)
@@ -2408,6 +2415,7 @@ namespace EDDiscovery
 
 
         #endregion
+
     }
 
 

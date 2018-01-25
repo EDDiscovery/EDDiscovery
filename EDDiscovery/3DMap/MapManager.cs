@@ -75,7 +75,7 @@ namespace EDDiscovery._3DMap
             if (_formMap != null)
             {
                 EDDiscovery.EDDTheme theme = EDDiscovery.EDDTheme.Instance;
-                theme.ApplyToForm(_formMap);
+                _formMap.IconSelect(theme.ApplyToForm(_formMap));
 
                 _formMap.Show();
                 _formMap.Focus();

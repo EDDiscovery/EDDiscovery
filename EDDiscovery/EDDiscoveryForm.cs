@@ -45,7 +45,7 @@ using EDDiscovery.Icons;
 
 namespace EDDiscovery
 {
-    public partial class EDDiscoveryForm : ExtendedControls.DraggableForm
+    public partial class EDDiscoveryForm : Forms.DraggableFormPos
     { 
         #region Variables
 
@@ -71,11 +71,6 @@ namespace EDDiscovery
         public PopOutControl PopOuts;
 
         private bool _shownOnce = false;
-        private bool _formMax;
-        private int _formWidth;
-        private int _formHeight;
-        private int _formTop;
-        private int _formLeft;
 
         #endregion
 
@@ -130,8 +125,12 @@ namespace EDDiscovery
 
         #region Initialisation
 
-        public EDDiscoveryForm()        // note we do not do the traditional Initialize component here.. we wait for splash form to call it
+        // note we do not do the traditional Initialize component here.. we wait for splash form to call it
+        // and we need to tell the drag form pos our save name
+        public EDDiscoveryForm()
         {
+            RestoreFormPositionRegKey = "Form";
+
             Controller = new EDDiscoveryController(() => theme.TextBlockColor, () => theme.TextBlockHighlightColor, () => theme.TextBlockSuccessColor, a => BeginInvoke(a));
             Controller.OnNewEntrySecond += Controller_NewEntrySecond;       // called after UI updates themselves with NewEntry
             Controller.OnNewUIEvent += Controller_NewUIEvent;       // called if its an UI event
@@ -214,7 +213,7 @@ namespace EDDiscovery
 
                 ShowInfoPanel("Loading. Please wait!", true);
 
-                RepositionForm();
+                RestoreFormPosition();
 
                 LoadTabs();
 
@@ -303,48 +302,6 @@ namespace EDDiscovery
             }
 
             return false;
-        }
-
-        #endregion
-
-        #region Form positioning
-
-        private void RepositionForm()
-        {
-            var top = SQLiteDBClass.GetSettingInt("FormTop", -999);
-            if (top != -999 && EDDOptions.Instance.NoWindowReposition == false)
-            {
-                var left = SQLiteDBClass.GetSettingInt("FormLeft", 0);
-                var height = SQLiteDBClass.GetSettingInt("FormHeight", 800);
-                var width = SQLiteDBClass.GetSettingInt("FormWidth", 800);
-
-                // Adjust so window fits on screen; just in case user unplugged a monitor or something
-
-                var screen = SystemInformation.VirtualScreen;
-                if (height > screen.Height) height = screen.Height;
-                if (top + height > screen.Height + screen.Top) top = screen.Height + screen.Top - height;
-                if (width > screen.Width) width = screen.Width;
-                if (left + width > screen.Width + screen.Left) left = screen.Width + screen.Left - width;
-                if (top < screen.Top) top = screen.Top;
-                if (left < screen.Left) left = screen.Left;
-
-                this.Top = top;
-                this.Left = left;
-                this.Height = height;
-                this.Width = width;
-
-                this.CreateParams.X = this.Left;
-                this.CreateParams.Y = this.Top;
-                this.StartPosition = FormStartPosition.Manual;
-
-                _formMax = SQLiteDBClass.GetSettingBool("FormMax", false);
-                if (_formMax) this.WindowState = FormWindowState.Maximized;
-            }
-
-            _formLeft = Left;
-            _formTop = Top;
-            _formHeight = Height;
-            _formWidth = Width;
         }
 
         #endregion
@@ -878,12 +835,7 @@ namespace EDDiscovery
             SystemNoteClass.CommitDirtyNotes((snc) => { if (EDCommander.Current.SyncToEdsm && snc.FSDEntry) EDSMSync.SendComments(snc.SystemName, snc.Note, snc.EdsmId); });
 
             screenshotconverter.SaveSettings();
-
-            SQLiteDBClass.PutSettingBool("FormMax", _formMax);
-            SQLiteDBClass.PutSettingInt("FormWidth", _formWidth);
-            SQLiteDBClass.PutSettingInt("FormHeight", _formHeight);
-            SQLiteDBClass.PutSettingInt("FormTop", _formTop);
-            SQLiteDBClass.PutSettingInt("FormLeft", _formLeft);
+            SaveFormPosition();
             SQLiteDBClass.PutSettingBool("ToolBarPanelPinState", panelToolBar.PinState);
 
             theme.SaveSettings(null);
@@ -1239,7 +1191,6 @@ namespace EDDiscovery
         {
             this.Cursor = Cursors.WaitCursor;
             Form2DMap frm = new Form2DMap(Controller.history.FilterByFSDAndPosition);
-            frm.Nowindowreposition = EDDOptions.Instance.NoWindowReposition;
             frm.Show();
             this.Cursor = Cursors.Default;
         }
@@ -1258,7 +1209,8 @@ namespace EDDiscovery
             {
                 if (EDDConfig.MinimizeToNotifyIcon)
                     Show();
-                if (_formMax)
+
+                if (FormIsMaximised)
                     WindowState = FormWindowState.Maximized;
                 else
                     WindowState = FormWindowState.Normal;
@@ -1281,7 +1233,8 @@ namespace EDDiscovery
             {
                 if (EDDConfig.UseNotifyIcon && EDDConfig.MinimizeToNotifyIcon)
                     Show();
-                if (_formMax)
+
+                if (FormIsMaximised)
                     WindowState = FormWindowState.Maximized;
                 else
                     WindowState = FormWindowState.Normal;
@@ -1336,18 +1289,6 @@ namespace EDDiscovery
 
         #endregion
 
-        private void RecordPosition()
-        {
-            if (FormWindowState.Minimized != WindowState)
-            {
-                _formLeft = this.Left;
-                _formTop = this.Top;
-                _formWidth = this.Width;
-                _formHeight = this.Height;
-                _formMax = FormWindowState.Maximized == WindowState;
-            }
-        }
-
         private void EDDiscoveryForm_Resize(object sender, EventArgs e)
         {
             // We may be getting called by this.ResumeLayout() from InitializeComponent().
@@ -1360,14 +1301,14 @@ namespace EDDiscovery
                     else if (!Visible)
                         Show();
                 }
-                RecordPosition();
+                RecordFormPosition();
                 notifyIconMenu_Open.Enabled = FormWindowState.Minimized == WindowState;
             }
         }
 
-        private void EDDiscoveryForm_ResizeEnd(object sender, EventArgs e)
+        private void EDDiscoveryForm_ResizeEnd(object sender, EventArgs e)      // occurs at end, during a resize or location change
         {
-            RecordPosition();
+            RecordFormPosition();
         }
 
         #region panelToolBar animation

@@ -84,7 +84,7 @@ namespace EDDiscovery
             this.toolStripButtonSave});
             this.toolStrip.Location = new System.Drawing.Point(0, 0);
             this.toolStrip.Name = "toolStrip";
-            this.toolStrip.Size = new System.Drawing.Size(541, 29);
+            this.toolStrip.Size = new System.Drawing.Size(510, 29);
             this.toolStrip.TabIndex = 1;
             this.toolStrip.Text = "toolStrip1";
             // 
@@ -115,7 +115,7 @@ namespace EDDiscovery
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 32);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 29);
             // 
             // toolStripComboBoxTime
             // 
@@ -144,7 +144,7 @@ namespace EDDiscovery
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(6, 32);
+            this.toolStripSeparator2.Size = new System.Drawing.Size(6, 29);
             // 
             // toolStripButtonZoomIn
             // 
@@ -152,7 +152,7 @@ namespace EDDiscovery
             this.toolStripButtonZoomIn.Image = global::EDDiscovery.Icons.Controls.Map2D_ZoomIn;
             this.toolStripButtonZoomIn.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonZoomIn.Name = "toolStripButtonZoomIn";
-            this.toolStripButtonZoomIn.Size = new System.Drawing.Size(26, 29);
+            this.toolStripButtonZoomIn.Size = new System.Drawing.Size(26, 26);
             this.toolStripButtonZoomIn.Text = "toolStripButton1";
             this.toolStripButtonZoomIn.ToolTipText = "Zoom in";
             this.toolStripButtonZoomIn.Click += new System.EventHandler(this.toolStripButtonZoomIn_Click);
@@ -163,7 +163,7 @@ namespace EDDiscovery
             this.toolStripButtonZoomOut.Image = global::EDDiscovery.Icons.Controls.Map2D_ZoomOut;
             this.toolStripButtonZoomOut.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonZoomOut.Name = "toolStripButtonZoomOut";
-            this.toolStripButtonZoomOut.Size = new System.Drawing.Size(26, 29);
+            this.toolStripButtonZoomOut.Size = new System.Drawing.Size(26, 26);
             this.toolStripButtonZoomOut.Text = "toolStripButtonZoomOut";
             this.toolStripButtonZoomOut.ToolTipText = "Zoom out";
             this.toolStripButtonZoomOut.Click += new System.EventHandler(this.toolStripButtonZoomOut_Click);
@@ -174,7 +174,7 @@ namespace EDDiscovery
             this.toolStripButtonZoomtoFit.Image = global::EDDiscovery.Icons.Controls.Map2D_ZoomToFit;
             this.toolStripButtonZoomtoFit.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonZoomtoFit.Name = "toolStripButtonZoomtoFit";
-            this.toolStripButtonZoomtoFit.Size = new System.Drawing.Size(26, 29);
+            this.toolStripButtonZoomtoFit.Size = new System.Drawing.Size(26, 26);
             this.toolStripButtonZoomtoFit.Text = "toolStripButtonZoomtoFit";
             this.toolStripButtonZoomtoFit.ToolTipText = "Zoom to best fit";
             this.toolStripButtonZoomtoFit.Click += new System.EventHandler(this.toolStripButtonZoomtoFit_Click);
@@ -182,7 +182,7 @@ namespace EDDiscovery
             // toolStripSeparator3
             // 
             this.toolStripSeparator3.Name = "toolStripSeparator3";
-            this.toolStripSeparator3.Size = new System.Drawing.Size(6, 32);
+            this.toolStripSeparator3.Size = new System.Drawing.Size(6, 29);
             // 
             // toolStripButtonStars
             // 
@@ -191,7 +191,7 @@ namespace EDDiscovery
             this.toolStripButtonStars.Image = global::EDDiscovery.Icons.Controls.Map2D_ShowAllStars;
             this.toolStripButtonStars.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonStars.Name = "toolStripButtonStars";
-            this.toolStripButtonStars.Size = new System.Drawing.Size(26, 29);
+            this.toolStripButtonStars.Size = new System.Drawing.Size(26, 26);
             this.toolStripButtonStars.Text = "Stars";
             this.toolStripButtonStars.ToolTipText = "Show all stars";
             this.toolStripButtonStars.Click += new System.EventHandler(this.toolStripButtonStars_Click);
@@ -202,7 +202,7 @@ namespace EDDiscovery
             this.toolStripButtonSave.Image = global::EDDiscovery.Icons.Controls.Map2D_Save;
             this.toolStripButtonSave.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonSave.Name = "toolStripButtonSave";
-            this.toolStripButtonSave.Size = new System.Drawing.Size(26, 29);
+            this.toolStripButtonSave.Size = new System.Drawing.Size(26, 26);
             this.toolStripButtonSave.Text = "Save";
             this.toolStripButtonSave.Click += new System.EventHandler(this.toolStripButtonSave_Click);
             // 
@@ -292,6 +292,8 @@ namespace EDDiscovery
             this.Text = "2D Map";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form2dClosing);
             this.Load += new System.EventHandler(this.Form2dLoad);
+            this.ResizeEnd += new System.EventHandler(this.Form2DMap_ResizeEnd);
+            this.Resize += new System.EventHandler(this.Form2DMap_ResizeEnd);
             this.toolStrip.ResumeLayout(false);
             this.toolStrip.PerformLayout();
             this.panelTop.ResumeLayout(false);
