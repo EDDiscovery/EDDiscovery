@@ -37,7 +37,7 @@ using System.Windows.Forms;
 
 namespace EDDiscovery
 {
-    public partial class FormMap : ExtendedControls.SmartSysMenuForm
+    public partial class FormMap : ExtendedControls.DraggableForm
     {
 
 
@@ -158,7 +158,7 @@ namespace EDDiscovery
 
             _plannedRoute = null;
 
-            toolStripShowAllStars.Renderer = new MyRenderer();
+            toolStripControls.Renderer = new MyRenderer();
 
             drawLinesBetweenStarsWithPositionToolStripMenuItem.Checked = SQLiteDBClass.GetSettingBool("Map3DDrawLines", true);
             drawADiscOnStarsWithPositionToolStripMenuItem.Checked = SQLiteDBClass.GetSettingBool("Map3DDrawTravelDisc", true);
@@ -2402,8 +2402,8 @@ namespace EDDiscovery
             endPickerHost = new ToolStripControlHost(endPicker) { Visible = false };
             startPickerHost.Size = new Size(150, 20);
             endPickerHost.Size = new Size(150, 20);
-            toolStripShowAllStars.Items.Add(startPickerHost);
-            toolStripShowAllStars.Items.Add(endPickerHost);
+            toolStripControls.Items.Add(startPickerHost);
+            toolStripControls.Items.Add(endPickerHost);
         }
 
 
