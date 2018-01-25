@@ -89,6 +89,7 @@ namespace EDDiscovery.UserControls
             // 
             // toolStrip1
             // 
+            this.toolStrip1.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripButtonNew,
             this.toolStripButtonImportFile,
@@ -177,6 +178,7 @@ namespace EDDiscovery.UserControls
             this.toolStripComboBoxRouteSelection.DisplayMember = "";
             this.toolStripComboBoxRouteSelection.DropDownBackgroundColor = System.Drawing.Color.Gray;
             this.toolStripComboBoxRouteSelection.DropDownHeight = 200;
+            this.toolStripComboBoxRouteSelection.DropDownWidth = 200;
             this.toolStripComboBoxRouteSelection.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.toolStripComboBoxRouteSelection.ItemHeight = 13;
             this.toolStripComboBoxRouteSelection.MouseOverBackgroundColor = System.Drawing.Color.Silver;
@@ -273,9 +275,6 @@ namespace EDDiscovery.UserControls
             // 
             // buttonReverseRoute
             // 
-            this.buttonReverseRoute.BorderColorScaling = 1.25F;
-            this.buttonReverseRoute.ButtonColorScaling = 0.5F;
-            this.buttonReverseRoute.ButtonDisabledScaling = 0.5F;
             this.buttonReverseRoute.Location = new System.Drawing.Point(517, 4);
             this.buttonReverseRoute.Name = "buttonReverseRoute";
             this.buttonReverseRoute.Size = new System.Drawing.Size(59, 23);
