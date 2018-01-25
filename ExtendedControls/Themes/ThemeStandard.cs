@@ -853,7 +853,7 @@ namespace ExtendedControls
             {
                 foreach (ToolStripItem i in ((ToolStrip)myControl).Items)   // make sure any buttons have the button back colour set
                 {
-                    if (i is ToolStripButton)
+                    if (i is ToolStripButton || i is ToolStripDropDownButton)
                     {           // theme the back colour, this is the way its done.. not via the tool strip renderer
                         i.BackColor = currentsettings.colors[Settings.CI.button_back];
                     }
@@ -912,8 +912,6 @@ namespace ExtendedControls
             toolstripRenderer.colortable.colCheckButtonPressed =
             toolstripRenderer.colortable.colCheckButtonHighlighted = menuchecked.Multiply(1.1F);
 
-            toolstripRenderer.colortable.colLeftSelectionMargin = currentsettings.colors[Settings.CI.menu_back].Multiply(0.9F);
-
             toolstripRenderer.colortable.colToolStripButtonCheckedBack = menuchecked;
             toolstripRenderer.colortable.colToolStripButtonPressedBack =
             toolstripRenderer.colortable.colToolStripButtonSelectedBack = menuchecked.Multiply(1.1F);
@@ -921,7 +919,7 @@ namespace ExtendedControls
             toolstripRenderer.colortable.colToolStripBackground = currentsettings.colors[Settings.CI.toolstrip_back];
             toolstripRenderer.colortable.colToolStripBorder = currentsettings.colors[Settings.CI.toolstrip_border];
             toolstripRenderer.colortable.colToolStripSeparator = currentsettings.colors[Settings.CI.toolstrip_border];
-            toolstripRenderer.colortable.colOverflowButton = currentsettings.colors[Settings.CI.toolstrip_border];
+            toolstripRenderer.colortable.colOverflowButton = currentsettings.colors[Settings.CI.menu_back];
             toolstripRenderer.colortable.colGripper = currentsettings.colors[Settings.CI.toolstrip_border];
         }
 

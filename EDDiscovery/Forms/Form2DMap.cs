@@ -31,7 +31,7 @@ using BaseUtils;
 
 namespace EDDiscovery
 {
-    public partial class Form2DMap : ExtendedControls.DraggableForm
+    public partial class Form2DMap : Forms.DraggableFormPos
     {
         public List<Map2d> fgeimages;
         private Map2d currentFGEImage;
@@ -45,10 +45,9 @@ namespace EDDiscovery
 
         List<HistoryEntry> syslist;
 
-        public bool Nowindowreposition { get; set; } = false;
-
-        public Form2DMap(List<HistoryEntry> sl)
+        public Form2DMap(List<HistoryEntry> sl) 
         {
+            RestoreFormPositionRegKey = "Map2DForm";
             syslist = sl;
             InitializeComponent();
         }
@@ -56,17 +55,7 @@ namespace EDDiscovery
         bool initdone = false;
         private void Form2dLoad(object sender, EventArgs e)
         {
-            var top = SQLiteDBClass.GetSettingInt("Map2DFormTop", -1);
-
-            if (top >= 0 && Nowindowreposition == false)
-            {
-                var left = SQLiteDBClass.GetSettingInt("Map2DFormLeft", 0);
-                var height = SQLiteDBClass.GetSettingInt("Map2DFormHeight", 800);
-                var width = SQLiteDBClass.GetSettingInt("Map2DFormWidth", 800);
-                this.Location = new Point(left, top);
-                this.Size = new Size(width, height);
-                //Console.WriteLine("Restore map " + this.Top + "," + this.Left + "," + this.Width + "," + this.Height);
-            }
+            RestoreFormPosition();
 
             initdone = false;
             pickerStart = new DateTimePicker();
@@ -119,14 +108,8 @@ namespace EDDiscovery
 
         private void Form2dClosing(object sender, FormClosingEventArgs e)
         {
-            if (Visible)
-            {
-                SQLiteDBClass.PutSettingInt("Map2DFormWidth", this.Width);
-                SQLiteDBClass.PutSettingInt("Map2DFormHeight", this.Height);
-                SQLiteDBClass.PutSettingInt("Map2DFormTop", this.Top);
-                SQLiteDBClass.PutSettingInt("Map2DFormLeft", this.Left);
-                //Console.WriteLine("Save map " + this.Top + "," + this.Left + "," + this.Width + "," + this.Height);
-            }
+            SaveFormPosition();
+
             if (imageViewer.Image != null)
             {
                 imageViewer.Image.Dispose();
@@ -353,6 +336,11 @@ namespace EDDiscovery
                         break;
                 }
             }
+        }
+
+        private void Form2DMap_ResizeEnd(object sender, EventArgs e)
+        {
+            RecordFormPosition();
         }
 
         private void toolStripButtonZoomOut_Click(object sender, EventArgs e)
