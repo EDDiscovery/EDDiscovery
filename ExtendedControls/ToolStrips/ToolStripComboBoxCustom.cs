@@ -60,6 +60,7 @@ namespace ExtendedControls
         public Color ScrollBarButtonColor { get { return ComboBox.ScrollBarButtonColor; } set { ComboBox.ScrollBarButtonColor = value; } }
 
         public FlatStyle FlatStyle { get { return ComboBox.FlatStyle; } set { ComboBox.FlatStyle = value; } }
+        public int DropDownWidth { get { return ComboBox.DropDownWidth; } set { ComboBox.DropDownWidth = value; } }
         public int DropDownHeight { get { return ComboBox.DropDownHeight; } set { ComboBox.DropDownHeight = value; } }
         public int ArrowWidth { get { return ComboBox.ArrowWidth; } set { ComboBox.ArrowWidth = value; } }
         public float ButtonColorScaling { get { return ComboBox.ButtonColorScaling; } set { ComboBox.ButtonColorScaling = value; } }

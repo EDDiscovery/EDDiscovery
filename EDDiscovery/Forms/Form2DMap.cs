@@ -94,7 +94,16 @@ namespace EDDiscovery
             {
                 toolStripComboExpo.Items.Add(img.FileName);
             }
-            
+
+            toolStripComboBoxTime.Items.AddRange(new string[] {
+            "Distant Worlds Expedition",
+            "FGE Expedition start",
+            "Last Week",
+            "Last Month",
+            "Last Year",
+            "All",
+            "Custom"});
+
             toolStripComboExpo.SelectedIndex = 0;
             toolStripComboBoxTime.SelectedIndex = 0;
             initdone = true;

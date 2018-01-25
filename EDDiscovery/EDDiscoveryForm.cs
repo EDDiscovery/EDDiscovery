@@ -165,7 +165,6 @@ namespace EDDiscovery
             Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " Load popouts, themes, init controls");
             PopOuts = new PopOutControl(this);
 
-            ToolStripManager.Renderer = theme.toolstripRenderer;
             msg.Invoke("Repairing Canopy");
             theme.LoadThemes();                                         // default themes and ones on disk loaded
 
@@ -555,7 +554,6 @@ namespace EDDiscovery
 
         public void ApplyTheme()
         {
-            ToolStripManager.Renderer = theme.toolstripRenderer;
             panel_close.Visible = !theme.WindowsFrame;
             panel_minimize.Visible = !theme.WindowsFrame;
             label_version.Visible = !theme.WindowsFrame;

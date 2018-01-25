@@ -74,6 +74,9 @@ namespace EDDiscovery._3DMap
             // TODO: set Opacity to match EDDiscoveryForm
             if (_formMap != null)
             {
+                EDDiscovery.EDDTheme theme = EDDiscovery.EDDTheme.Instance;
+                theme.ApplyToForm(_formMap);
+
                 _formMap.Show();
                 _formMap.Focus();
             }

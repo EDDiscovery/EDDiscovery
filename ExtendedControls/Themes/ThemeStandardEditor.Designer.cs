@@ -46,6 +46,8 @@ namespace ExtendedControls
             this.components = new System.ComponentModel.Container();
             this.buttonOK = new System.Windows.Forms.Button();
             this.groupBoxColors = new System.Windows.Forms.GroupBox();
+            this.label29 = new System.Windows.Forms.Label();
+            this.panel_theme71 = new System.Windows.Forms.Panel();
             this.label8 = new System.Windows.Forms.Label();
             this.comboBox_ButtonStyle = new System.Windows.Forms.ComboBox();
             this.comboBox_TextBorder = new System.Windows.Forms.ComboBox();
@@ -54,7 +56,6 @@ namespace ExtendedControls
             this.label23 = new System.Windows.Forms.Label();
             this.label18 = new System.Windows.Forms.Label();
             this.label25 = new System.Windows.Forms.Label();
-            this.label27 = new System.Windows.Forms.Label();
             this.label24 = new System.Windows.Forms.Label();
             this.label17 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
@@ -94,7 +95,6 @@ namespace ExtendedControls
             this.panel_theme6 = new System.Windows.Forms.Panel();
             this.panel_theme10 = new System.Windows.Forms.Panel();
             this.panel_theme17 = new System.Windows.Forms.Panel();
-            this.panel_theme62 = new System.Windows.Forms.Panel();
             this.panel_theme61 = new System.Windows.Forms.Panel();
             this.panel_theme60 = new System.Windows.Forms.Panel();
             this.panel_theme70 = new System.Windows.Forms.Panel();
@@ -118,8 +118,6 @@ namespace ExtendedControls
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.label3 = new System.Windows.Forms.Label();
-            this.panel_theme71 = new System.Windows.Forms.Panel();
-            this.label29 = new System.Windows.Forms.Label();
             this.groupBoxColors.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar_theme_opacity)).BeginInit();
             this.groupBox1.SuspendLayout();
@@ -148,7 +146,6 @@ namespace ExtendedControls
             this.groupBoxColors.Controls.Add(this.label23);
             this.groupBoxColors.Controls.Add(this.label18);
             this.groupBoxColors.Controls.Add(this.label25);
-            this.groupBoxColors.Controls.Add(this.label27);
             this.groupBoxColors.Controls.Add(this.label24);
             this.groupBoxColors.Controls.Add(this.label17);
             this.groupBoxColors.Controls.Add(this.label2);
@@ -188,7 +185,6 @@ namespace ExtendedControls
             this.groupBoxColors.Controls.Add(this.panel_theme6);
             this.groupBoxColors.Controls.Add(this.panel_theme10);
             this.groupBoxColors.Controls.Add(this.panel_theme17);
-            this.groupBoxColors.Controls.Add(this.panel_theme62);
             this.groupBoxColors.Controls.Add(this.panel_theme61);
             this.groupBoxColors.Controls.Add(this.panel_theme60);
             this.groupBoxColors.Controls.Add(this.panel_theme70);
@@ -211,6 +207,25 @@ namespace ExtendedControls
             this.groupBoxColors.TabIndex = 19;
             this.groupBoxColors.TabStop = false;
             this.groupBoxColors.Text = "Colours";
+            // 
+            // label29
+            // 
+            this.label29.AutoSize = true;
+            this.label29.Location = new System.Drawing.Point(531, 196);
+            this.label29.Name = "label29";
+            this.label29.Size = new System.Drawing.Size(44, 13);
+            this.label29.TabIndex = 11;
+            this.label29.Text = "S-Panel";
+            // 
+            // panel_theme71
+            // 
+            this.panel_theme71.AccessibleDescription = "";
+            this.panel_theme71.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel_theme71.Location = new System.Drawing.Point(608, 190);
+            this.panel_theme71.Name = "panel_theme71";
+            this.panel_theme71.Size = new System.Drawing.Size(28, 28);
+            this.panel_theme71.TabIndex = 6;
+            this.panel_theme71.Tag = "";
             // 
             // label8
             // 
@@ -295,15 +310,6 @@ namespace ExtendedControls
             this.label25.Size = new System.Drawing.Size(76, 13);
             this.label25.TabIndex = 6;
             this.label25.Text = "Dropdown text";
-            // 
-            // label27
-            // 
-            this.label27.AutoSize = true;
-            this.label27.Location = new System.Drawing.Point(666, 266);
-            this.label27.Name = "label27";
-            this.label27.Size = new System.Drawing.Size(50, 13);
-            this.label27.TabIndex = 6;
-            this.label27.Text = "Checked";
             // 
             // label24
             // 
@@ -673,16 +679,6 @@ namespace ExtendedControls
             this.panel_theme17.TabIndex = 5;
             this.panel_theme17.Tag = "";
             // 
-            // panel_theme62
-            // 
-            this.panel_theme62.AccessibleDescription = "";
-            this.panel_theme62.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panel_theme62.Location = new System.Drawing.Point(731, 260);
-            this.panel_theme62.Name = "panel_theme62";
-            this.panel_theme62.Size = new System.Drawing.Size(28, 28);
-            this.panel_theme62.TabIndex = 5;
-            this.panel_theme62.Tag = "";
-            // 
             // panel_theme61
             // 
             this.panel_theme61.AccessibleDescription = "";
@@ -907,26 +903,7 @@ namespace ExtendedControls
             this.label3.TabIndex = 4;
             this.label3.Text = "Font";
             // 
-            // panel_theme71
-            // 
-            this.panel_theme71.AccessibleDescription = "";
-            this.panel_theme71.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panel_theme71.Location = new System.Drawing.Point(608, 190);
-            this.panel_theme71.Name = "panel_theme71";
-            this.panel_theme71.Size = new System.Drawing.Size(28, 28);
-            this.panel_theme71.TabIndex = 6;
-            this.panel_theme71.Tag = "";
-            // 
-            // label29
-            // 
-            this.label29.AutoSize = true;
-            this.label29.Location = new System.Drawing.Point(531, 196);
-            this.label29.Name = "label29";
-            this.label29.Size = new System.Drawing.Size(44, 13);
-            this.label29.TabIndex = 11;
-            this.label29.Text = "S-Panel";
-            // 
-            // ThemeEditor
+            // ThemeStandardEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -937,7 +914,7 @@ namespace ExtendedControls
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
-            this.Name = "ThemeEditor";
+            this.Name = "ThemeStandardEditor";
             this.Text = "Edit Theme";
             this.groupBoxColors.ResumeLayout(false);
             this.groupBoxColors.PerformLayout();
@@ -1019,8 +996,6 @@ namespace ExtendedControls
         private System.Windows.Forms.Panel panel_theme60;
         private System.Windows.Forms.Panel panel_theme51;
         private System.Windows.Forms.Panel panel_theme50;
-        private System.Windows.Forms.Label label27;
-        private System.Windows.Forms.Panel panel_theme62;
         private System.Windows.Forms.Panel panel_theme61;
         private System.Windows.Forms.Label label28;
         private System.Windows.Forms.Panel panel_theme70;

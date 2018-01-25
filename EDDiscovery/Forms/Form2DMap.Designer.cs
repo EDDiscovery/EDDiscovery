@@ -44,11 +44,14 @@ namespace EDDiscovery
         private void InitializeComponent()
         {
             this.toolStrip = new System.Windows.Forms.ToolStrip();
-            this.toolStripComboExpo = new System.Windows.Forms.ToolStripComboBox();
-            this.toolStripComboBoxTime = new System.Windows.Forms.ToolStripComboBox();
+            this.toolStripComboExpo = new ExtendedControls.ToolStripComboBoxCustom();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripComboBoxTime = new ExtendedControls.ToolStripComboBoxCustom();
+            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripButtonZoomIn = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonZoomOut = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonZoomtoFit = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripButtonStars = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonSave = new System.Windows.Forms.ToolStripButton();
             this.panelTop = new System.Windows.Forms.Panel();
@@ -66,41 +69,82 @@ namespace EDDiscovery
             // toolStrip
             // 
             this.toolStrip.Dock = System.Windows.Forms.DockStyle.None;
+            this.toolStrip.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
             this.toolStrip.ImageScalingSize = new System.Drawing.Size(22, 22);
             this.toolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripComboExpo,
+            this.toolStripSeparator1,
             this.toolStripComboBoxTime,
+            this.toolStripSeparator2,
             this.toolStripButtonZoomIn,
             this.toolStripButtonZoomOut,
             this.toolStripButtonZoomtoFit,
+            this.toolStripSeparator3,
             this.toolStripButtonStars,
             this.toolStripButtonSave});
-            this.toolStrip.Location = new System.Drawing.Point(0, 2);
+            this.toolStrip.Location = new System.Drawing.Point(0, 0);
             this.toolStrip.Name = "toolStrip";
-            this.toolStrip.Size = new System.Drawing.Size(438, 29);
+            this.toolStrip.Size = new System.Drawing.Size(541, 29);
             this.toolStrip.TabIndex = 1;
             this.toolStrip.Text = "toolStrip1";
             // 
             // toolStripComboExpo
             // 
+            this.toolStripComboExpo.ArrowWidth = 1;
+            this.toolStripComboExpo.BorderColor = System.Drawing.Color.White;
+            this.toolStripComboExpo.ButtonColorScaling = 0.5F;
+            this.toolStripComboExpo.DataSource = null;
+            this.toolStripComboExpo.DisplayMember = "";
+            this.toolStripComboExpo.DropDownBackgroundColor = System.Drawing.Color.Gray;
+            this.toolStripComboExpo.DropDownHeight = 106;
+            this.toolStripComboExpo.DropDownWidth = 150;
+            this.toolStripComboExpo.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.toolStripComboExpo.ItemHeight = 13;
+            this.toolStripComboExpo.Margin = new System.Windows.Forms.Padding(3, 0, 2, 0);
+            this.toolStripComboExpo.MouseOverBackgroundColor = System.Drawing.Color.Silver;
             this.toolStripComboExpo.Name = "toolStripComboExpo";
-            this.toolStripComboExpo.Size = new System.Drawing.Size(121, 29);
+            this.toolStripComboExpo.ScrollBarButtonColor = System.Drawing.Color.LightGray;
+            this.toolStripComboExpo.ScrollBarColor = System.Drawing.Color.LightGray;
+            this.toolStripComboExpo.ScrollBarWidth = 16;
+            this.toolStripComboExpo.SelectedIndex = -1;
+            this.toolStripComboExpo.SelectedItem = null;
+            this.toolStripComboExpo.Size = new System.Drawing.Size(150, 29);
+            this.toolStripComboExpo.ValueMember = "";
             this.toolStripComboExpo.SelectedIndexChanged += new System.EventHandler(this.toolStripComboBoxExpo_SelectedIndexChanged);
+            // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 32);
             // 
             // toolStripComboBoxTime
             // 
+            this.toolStripComboBoxTime.ArrowWidth = 1;
+            this.toolStripComboBoxTime.BorderColor = System.Drawing.Color.White;
+            this.toolStripComboBoxTime.ButtonColorScaling = 0.5F;
+            this.toolStripComboBoxTime.DataSource = null;
+            this.toolStripComboBoxTime.DisplayMember = "";
+            this.toolStripComboBoxTime.DropDownBackgroundColor = System.Drawing.Color.Gray;
+            this.toolStripComboBoxTime.DropDownHeight = 106;
             this.toolStripComboBoxTime.DropDownWidth = 140;
-            this.toolStripComboBoxTime.Items.AddRange(new object[] {
-            "Distant Worlds Expedition",
-            "FGE Expedition start",
-            "Last Week",
-            "Last Month",
-            "Last Year",
-            "All",
-            "Custom"});
+            this.toolStripComboBoxTime.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.toolStripComboBoxTime.ItemHeight = 13;
+            this.toolStripComboBoxTime.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.toolStripComboBoxTime.MouseOverBackgroundColor = System.Drawing.Color.Silver;
             this.toolStripComboBoxTime.Name = "toolStripComboBoxTime";
-            this.toolStripComboBoxTime.Size = new System.Drawing.Size(140, 29);
+            this.toolStripComboBoxTime.ScrollBarButtonColor = System.Drawing.Color.LightGray;
+            this.toolStripComboBoxTime.ScrollBarColor = System.Drawing.Color.LightGray;
+            this.toolStripComboBoxTime.ScrollBarWidth = 16;
+            this.toolStripComboBoxTime.SelectedIndex = -1;
+            this.toolStripComboBoxTime.SelectedItem = null;
+            this.toolStripComboBoxTime.Size = new System.Drawing.Size(200, 29);
+            this.toolStripComboBoxTime.ValueMember = "";
             this.toolStripComboBoxTime.SelectedIndexChanged += new System.EventHandler(this.toolStripComboBoxTime_SelectedIndexChanged);
+            // 
+            // toolStripSeparator2
+            // 
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(6, 32);
             // 
             // toolStripButtonZoomIn
             // 
@@ -108,7 +152,7 @@ namespace EDDiscovery
             this.toolStripButtonZoomIn.Image = global::EDDiscovery.Icons.Controls.Map2D_ZoomIn;
             this.toolStripButtonZoomIn.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonZoomIn.Name = "toolStripButtonZoomIn";
-            this.toolStripButtonZoomIn.Size = new System.Drawing.Size(26, 26);
+            this.toolStripButtonZoomIn.Size = new System.Drawing.Size(26, 29);
             this.toolStripButtonZoomIn.Text = "toolStripButton1";
             this.toolStripButtonZoomIn.ToolTipText = "Zoom in";
             this.toolStripButtonZoomIn.Click += new System.EventHandler(this.toolStripButtonZoomIn_Click);
@@ -119,7 +163,7 @@ namespace EDDiscovery
             this.toolStripButtonZoomOut.Image = global::EDDiscovery.Icons.Controls.Map2D_ZoomOut;
             this.toolStripButtonZoomOut.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonZoomOut.Name = "toolStripButtonZoomOut";
-            this.toolStripButtonZoomOut.Size = new System.Drawing.Size(26, 26);
+            this.toolStripButtonZoomOut.Size = new System.Drawing.Size(26, 29);
             this.toolStripButtonZoomOut.Text = "toolStripButtonZoomOut";
             this.toolStripButtonZoomOut.ToolTipText = "Zoom out";
             this.toolStripButtonZoomOut.Click += new System.EventHandler(this.toolStripButtonZoomOut_Click);
@@ -130,10 +174,15 @@ namespace EDDiscovery
             this.toolStripButtonZoomtoFit.Image = global::EDDiscovery.Icons.Controls.Map2D_ZoomToFit;
             this.toolStripButtonZoomtoFit.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonZoomtoFit.Name = "toolStripButtonZoomtoFit";
-            this.toolStripButtonZoomtoFit.Size = new System.Drawing.Size(26, 26);
+            this.toolStripButtonZoomtoFit.Size = new System.Drawing.Size(26, 29);
             this.toolStripButtonZoomtoFit.Text = "toolStripButtonZoomtoFit";
             this.toolStripButtonZoomtoFit.ToolTipText = "Zoom to best fit";
             this.toolStripButtonZoomtoFit.Click += new System.EventHandler(this.toolStripButtonZoomtoFit_Click);
+            // 
+            // toolStripSeparator3
+            // 
+            this.toolStripSeparator3.Name = "toolStripSeparator3";
+            this.toolStripSeparator3.Size = new System.Drawing.Size(6, 32);
             // 
             // toolStripButtonStars
             // 
@@ -142,7 +191,7 @@ namespace EDDiscovery
             this.toolStripButtonStars.Image = global::EDDiscovery.Icons.Controls.Map2D_ShowAllStars;
             this.toolStripButtonStars.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonStars.Name = "toolStripButtonStars";
-            this.toolStripButtonStars.Size = new System.Drawing.Size(26, 26);
+            this.toolStripButtonStars.Size = new System.Drawing.Size(26, 29);
             this.toolStripButtonStars.Text = "Stars";
             this.toolStripButtonStars.ToolTipText = "Show all stars";
             this.toolStripButtonStars.Click += new System.EventHandler(this.toolStripButtonStars_Click);
@@ -153,7 +202,7 @@ namespace EDDiscovery
             this.toolStripButtonSave.Image = global::EDDiscovery.Icons.Controls.Map2D_Save;
             this.toolStripButtonSave.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonSave.Name = "toolStripButtonSave";
-            this.toolStripButtonSave.Size = new System.Drawing.Size(26, 26);
+            this.toolStripButtonSave.Size = new System.Drawing.Size(26, 29);
             this.toolStripButtonSave.Text = "Save";
             this.toolStripButtonSave.Click += new System.EventHandler(this.toolStripButtonSave_Click);
             // 
@@ -256,8 +305,8 @@ namespace EDDiscovery
         #endregion
         private System.Windows.Forms.ToolStrip toolStrip;
         private System.Windows.Forms.Panel panelTop;
-        private System.Windows.Forms.ToolStripComboBox toolStripComboExpo;
-        private System.Windows.Forms.ToolStripComboBox toolStripComboBoxTime;
+        private ExtendedControls.ToolStripComboBoxCustom toolStripComboExpo;
+        private ExtendedControls.ToolStripComboBoxCustom toolStripComboBoxTime;
         private ExtendedControls.ImageViewer imageViewer;
         private System.Windows.Forms.ToolStripButton toolStripButtonZoomIn;
         private System.Windows.Forms.ToolStripButton toolStripButtonZoomOut;
@@ -269,5 +318,8 @@ namespace EDDiscovery
         private System.Windows.Forms.ToolStripButton toolStripButtonSave;
         private System.Windows.Forms.Panel panelOuter;
         private ExtendedControls.StatusStripCustom statusStripCustom;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
     }
 }
