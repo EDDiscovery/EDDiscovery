@@ -27,32 +27,31 @@ using System.Windows.Forms;
 
 namespace EDDiscovery.Forms
 {
-    // inherit and it will save the form position for you
+    // inherit and it will save the form position for you. You supply the RestoreFormPositionRegKey in your constructor.
 
     public partial class DraggableFormPos : ExtendedControls.DraggableForm
     {
-        protected bool FormIsMaximised { get { return formMax; } }
-        protected string RestoreFormPositionRegKey { private get; set; } = null;
-        protected bool FormShownOnce { get; private set; } = false;
-        public bool IsTemporaryResized { get; private set; } = false;
+        protected bool FormIsMaximised { get { return formMax; } }                  
+        protected string RestoreFormPositionRegKey { private get; set; } = null;        // must be set in constructor of derived class
+        protected bool FormShownOnce { get; private set; } = false;                     // its been up once
+        public bool IsTemporaryResized { get; private set; } = false;                   // We are in a resize..
 
         public DraggableFormPos()
         { 
             InitializeComponent();
         }
 
-        // Ask for a bigger area but don't save it
+        #region Temp Resizing Ask for a different area but don't save it
 
-        public void RequestTemporaryResize(Size w)                  // Size w is the client area above
+        public void RequestTemporaryResize(Size w)                  // Size w is the client area wanted inside the window (in total)
         {
             if (!IsTemporaryResized)
             {
                 IsTemporaryResized = true;      // disable resize saving..
 
-                int widthoutsideclient = (Bounds.Size.Width - ClientRectangle.Width);
+                int widthoutsideclient = (Bounds.Size.Width - ClientRectangle.Width);       // add on bounds are
                 int heightoutsideclient = (Bounds.Size.Height - ClientRectangle.Height);
-                int heightlosttoothercontrols = 0;// UserControl.Location.Y + statusStripBottom.Height; // and the area used by the other bits of the window outside the user control
-                this.Size = new Size(w.Width + widthoutsideclient, w.Height + heightlosttoothercontrols + heightoutsideclient);
+                this.Size = new Size(w.Width + widthoutsideclient, w.Height + heightoutsideclient); // will cause a resize but will be ignored
             }
         }
 
@@ -60,10 +59,14 @@ namespace EDDiscovery.Forms
         {
             if (IsTemporaryResized)
             {
-                this.Size = new Size(formWidth, formHeight);        // restore to saved defaults
+                this.Size = new Size(formWidth, formHeight);        // restore to saved defaults.. will cause a resize event but will be ignored.
                 IsTemporaryResized = false;         // and not resized..
             }
         }
+
+        #endregion
+
+        #region Implementation
 
         private bool formMax;
         private int formWidth;
@@ -73,6 +76,9 @@ namespace EDDiscovery.Forms
 
         private void RestoreFormPosition()
         {
+            if (!EDDOptions.Instanced) // crap way of screening out designer
+                return;
+
             var top = SQLiteDBClass.GetSettingInt(RestoreFormPositionRegKey+"Top", -999);
 
             if (top != -999 && EDDOptions.Instance.NoWindowReposition == false)
@@ -81,7 +87,7 @@ namespace EDDiscovery.Forms
                 var height = SQLiteDBClass.GetSettingInt(RestoreFormPositionRegKey+"Height", 800);
                 var width = SQLiteDBClass.GetSettingInt(RestoreFormPositionRegKey+"Width", 800);
 
-                System.Diagnostics.Debug.WriteLine("Restore {0},{1} {2},{3}", left, top, width, height);
+                //System.Diagnostics.Debug.WriteLine("Restore {0},{1} {2},{3} {4}", left, top, width, height, RestoreFormPositionRegKey);
 
                 // Adjust so window fits on screen; just in case user unplugged a monitor or something
 
@@ -93,7 +99,7 @@ namespace EDDiscovery.Forms
                 if (top < screen.Top) top = screen.Top;
                 if (left < screen.Left) left = screen.Left;
 
-                System.Diagnostics.Debug.WriteLine("Bounded {0},{1} {2},{3}", left, top, width, height);
+                //System.Diagnostics.Debug.WriteLine("Bounded {0},{1} {2},{3}", left, top, width, height);
 
                 this.Top = top;
                 this.Left = left;
@@ -118,7 +124,7 @@ namespace EDDiscovery.Forms
 
         private void SaveFormPosition()
         {
-            System.Diagnostics.Debug.WriteLine("Store {0},{1} {2},{3}", formLeft, formTop, formWidth, formHeight);
+            //System.Diagnostics.Debug.WriteLine("Store {0},{1} {2},{3} {4}", formLeft, formTop, formWidth, formHeight, RestoreFormPositionRegKey);
             SQLiteDBClass.PutSettingBool(RestoreFormPositionRegKey+"Max", formMax);
             SQLiteDBClass.PutSettingInt(RestoreFormPositionRegKey+"Width", formWidth);
             SQLiteDBClass.PutSettingInt(RestoreFormPositionRegKey+"Height", formHeight);
@@ -128,8 +134,6 @@ namespace EDDiscovery.Forms
 
         private void RecordFormPosition()     // HOOK into Resize (for Max) AND ResizeEnd (for drag and size)
         {
-            System.Diagnostics.Debug.WriteLine("Resize Event {0} {1},{2} {3},{4}", WindowState, Left, Top, Width, Height);
-
             if (FormWindowState.Maximized == WindowState)       // if maximized, note..
             {
                 formMax = true;
@@ -171,6 +175,7 @@ namespace EDDiscovery.Forms
             SaveFormPosition();     // even if its cancelled, still s
         }
 
-        
+
+        #endregion
     }
 }
