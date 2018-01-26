@@ -37,15 +37,12 @@ using System.Windows.Forms;
 
 namespace EDDiscovery
 {
-    public partial class FormMap : ExtendedControls.SmartSysMenuForm
+    public partial class FormMap : Forms.DraggableFormPos
     {
-
-
         #region Variables
 
         public bool Is3DMapsRunning { get { return _stargrids != null; } }
 
-        public bool noWindowReposition { get; set; } = false;                       // set externally
         public EDDiscoveryForm discoveryForm { get; set; } = null;      // set externally
 
         const int HELP_VERSION = 5;         // increment this to force help onto the screen of users first time.
@@ -157,8 +154,6 @@ namespace EDDiscovery
             zoomfov.SetDefaultZoom(zoom);
 
             _plannedRoute = null;
-
-            toolStripShowAllStars.Renderer = new MyRenderer();
 
             drawLinesBetweenStarsWithPositionToolStripMenuItem.Checked = SQLiteDBClass.GetSettingBool("Map3DDrawLines", true);
             drawADiscOnStarsWithPositionToolStripMenuItem.Checked = SQLiteDBClass.GetSettingBool("Map3DDrawTravelDisc", true);
@@ -296,6 +291,13 @@ namespace EDDiscovery
             }
         }
 
+        public void IconSelect(bool winborder)      // called to set up icons
+        {
+            panel_minimize.Visible = panel_close.Visible = !winborder;
+            int spaceforclose = winborder ? 0 : (panel_close.Right - panel_minimize.Left) + 16;
+            panelAuxControls.Left = ClientRectangle.Width - panelAuxControls.Width - spaceforclose;
+        }
+
 
         #endregion
 
@@ -303,6 +305,7 @@ namespace EDDiscovery
 
         public FormMap()
         {
+            RestoreFormPositionRegKey = "Map3DForm";
             InitializeComponent();
             maprecorder = new MapRecorder(this);
             // 
@@ -329,18 +332,6 @@ namespace EDDiscovery
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
-
-            var top = SQLiteDBClass.GetSettingInt("Map3DFormTop", -1);
-
-            if (top >= 0 && noWindowReposition == false)
-            {
-                var left = SQLiteDBClass.GetSettingInt("Map3DFormLeft", 0);
-                var height = SQLiteDBClass.GetSettingInt("Map3DFormHeight", 800);
-                var width = SQLiteDBClass.GetSettingInt("Map3DFormWidth", 800);
-                this.Location = new Point(left, top);
-                this.Size = new Size(width, height);
-                //Console.WriteLine("Restore map " + this.Top + "," + this.Left + "," + this.Width + "," + this.Height);
-            }
 
             KeyDown += new KeyEventHandler(_kbdActions.KeyDown);
             glControl.KeyDown += new KeyEventHandler(_kbdActions.KeyDown);
@@ -376,7 +367,6 @@ namespace EDDiscovery
         {
             base.OnShown(e);
 
-            Console.WriteLine($"{nameof(FormMap)}.{nameof(OnShown)}");
             int helpno = SQLiteDBClass.GetSettingInt("Map3DShownHelp", 0);                 // force up help, to make sure they know it exists
 
             if (helpno != HELP_VERSION)
@@ -392,7 +382,7 @@ namespace EDDiscovery
             glControl.Focus();
         }
 
-        void StartSystemTimer()
+        private void StartSystemTimer()
         {
             if ( !_systemtimer.Enabled )
             {
@@ -443,14 +433,6 @@ namespace EDDiscovery
             _systemtimer.Stop();
             _systemtickinterval.Stop();
             VideoMessage();
-
-            if (Visible)
-            {
-                SQLiteDBClass.PutSettingInt("Map3DFormWidth", this.Width);
-                SQLiteDBClass.PutSettingInt("Map3DFormHeight", this.Height);
-                SQLiteDBClass.PutSettingInt("Map3DFormTop", this.Top);
-                SQLiteDBClass.PutSettingInt("Map3DFormLeft", this.Left);
-            }
 
             SQLiteDBClass.PutSettingBool("Map3DAutoForward", toolStripButtonAutoForward.Checked);
             SQLiteDBClass.PutSettingBool("Map3DDrawLines", drawLinesBetweenStarsWithPositionToolStripMenuItem.Checked);
@@ -506,7 +488,7 @@ namespace EDDiscovery
             GL.ClearColor((Color)System.Drawing.ColorTranslator.FromHtml("#0D0D10"));
         }
 
-        public void SetModelProjectionMatrix()
+        private void SetModelProjectionMatrix()
         {
             posdir.InPerspectiveMode = toolStripButtonPerspective.Checked;
 
@@ -1559,6 +1541,22 @@ namespace EDDiscovery
             }
         }
 
+        private void panel_close_Click(object sender, EventArgs e)
+        {
+            Close();
+        }
+
+        private void panel_minimize_Click(object sender, EventArgs e)
+        {
+            this.WindowState = FormWindowState.Minimized;
+        }
+
+        private void panelTop_MouseDown(object sender, System.Windows.Forms.MouseEventArgs e)
+        {
+            OnCaptionMouseDown((Control)sender, e);
+        }
+
+
         #endregion
 
         #region Mouse
@@ -2198,20 +2196,6 @@ namespace EDDiscovery
 
         #region Misc
 
-        private class MyRenderer : ToolStripProfessionalRenderer
-        {
-            protected override void OnRenderButtonBackground(ToolStripItemRenderEventArgs e)
-            {
-                var btn = e.Item as ToolStripButton;
-                if (btn != null && btn.CheckOnClick && btn.Checked)
-                {
-                    Rectangle bounds = new Rectangle(Point.Empty, e.Item.Size);
-                    e.Graphics.FillRectangle(Brushes.Orange, bounds);
-                }
-                else base.OnRenderButtonBackground(e);
-            }
-        }
-
         public ISystem FindSystem(string name, SQLiteConnectionSystem cn = null)    // nice wrapper for this
         {
             if (_systemlist != null)
@@ -2236,7 +2220,7 @@ namespace EDDiscovery
                     return vsc.System;
             }
 
-            return SystemClassDB.FindNearestSystem(pos.X, pos.Y, pos.Z, false, 0.1,cn);
+            return SystemClassDB.GetSystemByPosition(pos.X, pos.Y, pos.Z, cn);
         }
 
         private ISystem SafeSystem(ISystem s)
@@ -2403,12 +2387,13 @@ namespace EDDiscovery
             endPickerHost = new ToolStripControlHost(endPicker) { Visible = false };
             startPickerHost.Size = new Size(150, 20);
             endPickerHost.Size = new Size(150, 20);
-            toolStripShowAllStars.Items.Add(startPickerHost);
-            toolStripShowAllStars.Items.Add(endPickerHost);
+            toolStripControls.Items.Add(startPickerHost);
+            toolStripControls.Items.Add(endPickerHost);
         }
 
 
         #endregion
+
     }
 
 

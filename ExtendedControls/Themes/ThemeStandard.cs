@@ -46,7 +46,8 @@ namespace ExtendedControls
                 checkbox, checkbox_tick,
                 label,
                 tabcontrol_borderlines,
-                toolstrip_back, toolstrip_border, toolstrip_buttonchecked, s_panel
+                toolstrip_back, toolstrip_border, unused_entry,     // previously assigned to toolstrip_checkbox thing
+                s_panel
             };
 
             public string name;         // name of scheme
@@ -70,7 +71,8 @@ namespace ExtendedControls
                                         Color l,
                                         Color grpb, Color grpt, Color grlines,
                                         Color tabborderlines,
-                                        Color ttb, Color ttborder, Color ttbuttonchecked, Color sPanel,
+                                        Color ttb, Color ttborder, Color ttbuttonchecked, 
+                                        Color sPanel,
                                         bool wf, double op, string ft, float fs)            // ft = empty means don't set it
             {
                 name = n;
@@ -90,7 +92,7 @@ namespace ExtendedControls
                 colors.Add(CI.label, l);
                 colors.Add(CI.group_back, grpb); colors.Add(CI.group_text, grpt); colors.Add(CI.group_borderlines, grlines);
                 colors.Add(CI.tabcontrol_borderlines, tabborderlines);
-                colors.Add(CI.toolstrip_back, ttb); colors.Add(CI.toolstrip_border, ttborder); colors.Add(CI.toolstrip_buttonchecked, ttbuttonchecked);
+                colors.Add(CI.toolstrip_back, ttb); colors.Add(CI.toolstrip_border, ttborder); colors.Add(CI.unused_entry, ttbuttonchecked);
                 colors.Add(CI.s_panel, sPanel);
                 buttonstyle = bstyle; textboxborderstyle = tbbstyle;
                 windowsframe = wf; formopacity = op; fontname = ft; fontsize = fs;
@@ -113,7 +115,7 @@ namespace ExtendedControls
                 colors.Add(CI.label, SystemColors.MenuText);
                 colors.Add(CI.group_back, SystemColors.Menu); colors.Add(CI.group_text, SystemColors.MenuText); colors.Add(CI.group_borderlines, SystemColors.ControlDark);
                 colors.Add(CI.tabcontrol_borderlines, SystemColors.ControlDark);
-                colors.Add(CI.toolstrip_back, SystemColors.Window); colors.Add(CI.toolstrip_border, SystemColors.Menu); colors.Add(CI.toolstrip_buttonchecked, SystemColors.MenuText);
+                colors.Add(CI.toolstrip_back, SystemColors.Control); colors.Add(CI.toolstrip_border, SystemColors.Menu); colors.Add(CI.unused_entry, SystemColors.MenuText);
                 colors.Add(CI.s_panel, Color.Orange);
                 buttonstyle = buttonstyle_system;
                 textboxborderstyle = textboxborderstyle_fixed3D;
@@ -189,21 +191,22 @@ namespace ExtendedControls
                     currentsettings.fontsize = 8.25F;
                 }
 
-                return new Font(currentsettings.fontname, currentsettings.fontsize);
+                Font fnt = new Font(currentsettings.fontname, currentsettings.fontsize);        // if it does not know the font, it will substitute Sans serif
+                currentsettings.fontname = fnt.Name;    // save back what we are using, in case we had a bad name
+                return fnt;
             }
         }
 
         public Font GetFontMaxSized(float size) { return new Font(currentsettings.fontname, Math.Min(currentsettings.fontsize,size)); }
 
         public Settings currentsettings;           // if name = custom, then its not a standard theme..
-        public ThemeToolStripRenderer toolstripRenderer;
         protected List<Settings> themelist;
 
         public ThemeStandard()
         {
             themelist = new List<Settings>();           // theme list in
             currentsettings = new Settings("Windows Default");  // this is our default
-            toolstripRenderer = new ThemeToolStripRenderer();
+            ToolStripManager.Renderer = new ThemeToolStripRenderer();
         }
 
         public void LoadBaseThemes()                                    // base themes load
@@ -211,6 +214,53 @@ namespace ExtendedControls
             themelist.Clear();
 
             themelist.Add(new Settings("Windows Default"));         // windows default..
+
+            themelist.Add(new Settings("Orange Delight", Color.Black,
+                Color.FromArgb(255, 48, 48, 48), Color.Orange, Color.DarkOrange, buttonstyle_gradient, // button
+                Color.FromArgb(255, 176, 115, 0), Color.Black,  // grid border
+                Color.Black, Color.Orange, Color.DarkOrange, // grid
+                Color.Black, Color.Orange, Color.DarkOrange, // grid back, arrow, button
+                Color.Orange, Color.White, // travel
+                Color.Black, Color.Orange, Color.Red, Color.Green, Color.DarkOrange, textboxborderstyle_color, // text box
+                Color.Black, Color.Orange, Color.DarkOrange, // text back, arrow, button
+                Color.Orange, Color.FromArgb(255, 65, 33, 33), // checkbox
+                Color.Black, Color.Orange, Color.DarkOrange, Color.Yellow,  // menu
+                Color.Orange,  // label
+                Color.FromArgb(255, 32, 32, 32), Color.Orange, Color.FromArgb(255, 130, 71, 0), // group back, text, border
+                Color.DarkOrange, // tab control
+                Color.Black, Color.DarkOrange, Color.Orange, // toolstrip
+                Color.Orange, // spanel
+                false, 95, "Microsoft Sans Serif", 8.25F));
+
+            // ON purpose, always show them the euro caps one to give a hint!
+            themelist.Add(new Settings(themelist[themelist.Count - 1], "Elite EuroCaps", "Euro Caps", 12F, 95));
+
+            if (IsFontAvailable("Euro Caps"))
+            {
+                Color butback = Color.FromArgb(255, 32, 32, 32);
+                themelist.Add(new Settings("Elite EuroCaps Less Border", Color.Black,
+                    Color.FromArgb(255, 64, 64, 64), Color.Orange, Color.FromArgb(255, 96, 96, 96), buttonstyle_gradient, // button
+                    Color.FromArgb(255, 176, 115, 0), Color.Black,  // grid border
+                    butback, Color.Orange, Color.DarkOrange, // grid
+                    butback, Color.Orange, Color.DarkOrange, // grid back, arrow, button
+                    Color.Orange, Color.White, // travel
+                    butback, Color.Orange, Color.Red, Color.Green, Color.FromArgb(255, 64, 64, 64), textboxborderstyle_color, // text box
+                    butback, Color.Orange, Color.DarkOrange, // text back, arrow, button
+                    Color.Orange, Color.FromArgb(255, 65, 33, 33),// checkbox
+                    Color.Black, Color.Orange, Color.DarkOrange, Color.Yellow,  // menu
+                    Color.Orange,  // label
+                    Color.Black, Color.Orange, Color.FromArgb(255, 130, 71, 0), // group
+                    Color.DarkOrange, // tab control
+                    Color.Black, Color.DarkOrange, Color.Orange, // toolstrips
+                    Color.Orange, // spanel
+                    false, 100, "Euro Caps", 12F));
+            }
+
+            if (IsFontAvailable("Verdana"))
+                themelist.Add(new Settings(themelist[themelist.Count - 1], "Elite Verdana", "Verdana", 8F));
+
+            if (IsFontAvailable("Calisto MT"))
+                themelist.Add(new Settings(themelist[themelist.Count - 1], "Elite Calisto", "Calisto MT", 12F));
 
             themelist.Add(new Settings("EDSM", Color.FromArgb(255, 39, 43, 48), // form
                 Color.FromArgb(255, 71, 77, 84), Color.FromArgb(255, 245, 245, 245), Color.FromArgb(255, 41, 46, 51), buttonstyle_flat, // button back, text, border
@@ -225,48 +275,15 @@ namespace ExtendedControls
                 Color.FromArgb(255, 200, 200, 200),  // label
                 Color.FromArgb(255, 46, 51, 56), Color.FromArgb(255, 200, 200, 200), Color.FromArgb(255, 41, 46, 51), // group back, text, border
                 Color.FromArgb(255, 41, 46, 51), // tab control borderlines
-                Color.Black, Color.FromArgb(255, 46, 51, 56), Color.FromArgb(255, 41, 46, 51), Color.FromArgb(255, 255, 0, 0), // toolstrip ?, back, border, ?
-                false, 100, "Arial Narrow", 10.25F));
+                Color.FromArgb(255, 71, 77, 84), Color.FromArgb(255, 46, 51, 56), Color.FromArgb(255, 41, 46, 51), // toolstrip, back, border
+                Color.FromArgb(255, 255, 0, 0), // spanel
+                false, 100, "Arial", 10.25F));
 
-          //  themelist.Add(new Settings(themelist[themelist.Count - 1], "Elite EuroCaps", "EDSM", 12F, 95));
 
-            themelist.Add(new Settings("Orange Delight", Color.Black,
-                Color.FromArgb(255, 48, 48, 48), Color.Orange, Color.DarkOrange, buttonstyle_gradient, // button
-                Color.FromArgb(255, 176, 115, 0), Color.Black,  // grid border
-                Color.Black, Color.Orange, Color.DarkOrange, // grid
-                Color.Black, Color.Orange, Color.DarkOrange, // grid back, arrow, button
-                Color.Orange, Color.White, // travel
-                Color.Black, Color.Orange, Color.Red, Color.Green, Color.DarkOrange, textboxborderstyle_color, // text box
-                Color.Black, Color.Orange, Color.DarkOrange, // text back, arrow, button
-                Color.Orange, Color.FromArgb(255, 65, 33, 33), // checkbox
-                Color.Black, Color.Orange, Color.DarkOrange, Color.Yellow,  // menu
-                Color.Orange,  // label
-                Color.FromArgb(255, 32, 32, 32), Color.Orange, Color.FromArgb(255, 130, 71, 0), // group
-                Color.DarkOrange, // tab control
-                Color.Black, Color.DarkOrange, Color.Orange, Color.Orange, // tooltip
-                false, 95, "Microsoft Sans Serif", 8.25F));
-
-            themelist.Add(new Settings(themelist[themelist.Count - 1], "Elite EuroCaps", "Euro Caps", 12F, 95));
-
-            Color butback = Color.FromArgb(255, 32, 32, 32);
-            themelist.Add(new Settings("Elite EuroCaps Less Border", Color.Black,
-                Color.FromArgb(255, 64, 64, 64), Color.Orange, Color.FromArgb(255, 96, 96, 96), buttonstyle_gradient, // button
-                Color.FromArgb(255, 176, 115, 0), Color.Black,  // grid border
-                butback, Color.Orange, Color.DarkOrange, // grid
-                butback, Color.Orange, Color.DarkOrange, // grid back, arrow, button
-                Color.Orange, Color.White, // travel
-                butback, Color.Orange, Color.Red, Color.Green, Color.FromArgb(255, 64, 64, 64), textboxborderstyle_color, // text box
-                butback, Color.Orange, Color.DarkOrange, // text back, arrow, button
-                Color.Orange, Color.FromArgb(255, 65, 33, 33),// checkbox
-                Color.Black, Color.Orange, Color.DarkOrange, Color.Yellow,  // menu
-                Color.Orange,  // label
-                Color.Black, Color.Orange, Color.FromArgb(255, 130, 71, 0), // group
-                Color.DarkOrange, // tab control
-                Color.Black, Color.DarkOrange, Color.Orange, Color.Orange, // tooltip
-                false, 100, "Euro Caps", 12F));
-
-            themelist.Add(new Settings(themelist[themelist.Count - 1], "Elite Verdana", "Verdana", 8F));
-            themelist.Add(new Settings(themelist[themelist.Count - 1], "Elite Calisto", "Calisto MT", 12F));
+            if (IsFontAvailable("Arial Narrow"))
+                themelist.Add(new Settings(themelist[themelist.Count - 1], "EDSM Arial Narrow", "Arial Narrow", 10.25F, 95));
+            if (IsFontAvailable("Euro Caps"))
+                themelist.Add(new Settings(themelist[themelist.Count - 1], "EDSM EuroCaps", "Euro Caps", 10.25F, 95));
 
             Color r1 = Color.FromArgb(255, 160, 0, 0);
             Color r2 = Color.FromArgb(255, 64, 0, 0);
@@ -283,12 +300,16 @@ namespace ExtendedControls
                 r1,  // label
                 Color.FromArgb(255, 8, 8, 8), r1, Color.FromArgb(255, 130, 71, 0), // group
                 r2, // tab control
-                Color.Black, r2, r1, r1, // tooltip
+                Color.Black, r2, r1, // toolstrip
+                r1, // spanel
                 false, 95, "Microsoft Sans Serif", 10F));
 
-            themelist.Add(new Settings(themelist[themelist.Count - 1], "Night Vision EuroCaps", "Euro Caps", 12F, 95));
+            if (IsFontAvailable("Euro Caps"))
+                themelist.Add(new Settings(themelist[themelist.Count - 1], "Night Vision EuroCaps", "Euro Caps", 12F, 95));
 
-            themelist.Add(new Settings("EuroCaps Grey",
+            if (IsFontAvailable("Euro Caps"))
+            {
+                themelist.Add(new Settings("EuroCaps Grey",
                                         SystemColors.Menu,
                                         SystemColors.Control, SystemColors.ControlText, Color.DarkGray, buttonstyle_gradient,// button
                                         SystemColors.Menu, SystemColors.MenuText,  // grid border
@@ -302,10 +323,13 @@ namespace ExtendedControls
                                         SystemColors.MenuText,  // label
                                         SystemColors.Menu, SystemColors.MenuText, SystemColors.ControlDark, // group
                                         SystemColors.ControlDark, // tab control
-                                        SystemColors.Window, SystemColors.Menu, SystemColors.MenuText, SystemColors.ControlLightLight, //tooltip
+                                        SystemColors.Menu, SystemColors.Menu, SystemColors.MenuText,  // toolstrip
+                                        SystemColors.ControlLightLight, // spanel
                                         false, 95, "Euro Caps", 12F));
+            }
 
-            themelist.Add(new Settings(themelist[themelist.Count - 1], "Verdana Grey", "Verdana", 8F));
+            if (IsFontAvailable("Verdana"))
+                themelist.Add(new Settings(themelist[themelist.Count - 1], "Verdana Grey", "Verdana", 8F));
 
             themelist.Add(new Settings("Blue Wonder", Color.DarkBlue,
                                                Color.Blue, Color.White, Color.White, buttonstyle_gradient,// button
@@ -320,7 +344,8 @@ namespace ExtendedControls
                                                Color.White,  // label
                                                Color.DarkBlue, Color.White, Color.Blue, // group
                                                Color.Blue,
-                                               Color.DarkBlue, Color.White, Color.Red, Color.LightBlue,
+                                               Color.DarkBlue, Color.White, Color.Red,  // toolstrip
+                                               Color.LightBlue, // spanel
                                                false, 95, "Microsoft Sans Serif", 8.25F));
 
             Color baizegreen = Color.FromArgb(255, 13, 68, 13);
@@ -336,8 +361,9 @@ namespace ExtendedControls
                                                baizegreen, Color.White, baizegreen, Color.White,  // menu
                                                Color.White,  // label
                                                baizegreen, Color.White, Color.LightGreen, // group
-                                               Color.LightGreen, Color.White, Color.Red,
-                                               baizegreen, baizegreen,
+                                               Color.LightGreen,    // tabcontrol
+                                               baizegreen, Color.White, Color.White, 
+                                               baizegreen, 
                                                false, 95, "Microsoft Sans Serif", 8.25F));
         }
 
@@ -827,7 +853,7 @@ namespace ExtendedControls
             {
                 foreach (ToolStripItem i in ((ToolStrip)myControl).Items)   // make sure any buttons have the button back colour set
                 {
-                    if (i is ToolStripButton)
+                    if (i is ToolStripButton || i is ToolStripDropDownButton)
                     {           // theme the back colour, this is the way its done.. not via the tool strip renderer
                         i.BackColor = currentsettings.colors[Settings.CI.button_back];
                     }
@@ -863,6 +889,11 @@ namespace ExtendedControls
 
         private void UpdateToolsTripRenderer()
         {
+            ThemeToolStripRenderer toolstripRenderer = ToolStripManager.Renderer as ThemeToolStripRenderer;
+
+            if (toolstripRenderer == null)
+                return;
+
             Color menuback = currentsettings.colors[Settings.CI.menu_back];
             bool toodark = (menuback.GetBrightness() < 0.1);
 
@@ -872,29 +903,24 @@ namespace ExtendedControls
             toolstripRenderer.colortable.colMenuBarBackground = currentsettings.colors[Settings.CI.form];
             toolstripRenderer.colortable.colMenuBorder = currentsettings.colors[Settings.CI.button_border];
             toolstripRenderer.colortable.colMenuSelectedBack = currentsettings.colors[Settings.CI.menu_dropdownback];
-
             toolstripRenderer.colortable.colMenuHighlightBorder = currentsettings.colors[Settings.CI.button_border];
             toolstripRenderer.colortable.colMenuHighlightBack = toodark ? currentsettings.colors[Settings.CI.menu_dropdownback].Multiply(0.7F) : currentsettings.colors[Settings.CI.menu_back].Multiply(1.3F);        // whole menu back
 
             Color menuchecked = toodark ? currentsettings.colors[Settings.CI.menu_dropdownback].Multiply(0.6F) : currentsettings.colors[Settings.CI.menu_back].Multiply(1.5F);        // whole menu back
 
-            toolstripRenderer.colortable.colToolStripButtonCheckedBack = menuchecked;
-            toolstripRenderer.colortable.colToolStripButtonPressedBack =
-            toolstripRenderer.colortable.colToolStripButtonSelectedBack = menuchecked.Multiply(1.1F);
-
             toolstripRenderer.colortable.colCheckButtonChecked = menuchecked;
             toolstripRenderer.colortable.colCheckButtonPressed =
             toolstripRenderer.colortable.colCheckButtonHighlighted = menuchecked.Multiply(1.1F);
 
-            toolstripRenderer.colortable.colLeftSelectionMargin = currentsettings.colors[Settings.CI.menu_back].Multiply(0.9F);
+            toolstripRenderer.colortable.colToolStripButtonCheckedBack = menuchecked;
+            toolstripRenderer.colortable.colToolStripButtonPressedBack =
+            toolstripRenderer.colortable.colToolStripButtonSelectedBack = menuchecked.Multiply(1.1F);
 
-            toolstripRenderer.colortable.colToolStripBackground = toodark ? currentsettings.colors[Settings.CI.menu_fore].Multiply(0.2F) : menuback;
-
-            toolstripRenderer.colortable.colGripper =
-            toolstripRenderer.colortable.colToolStripSeparator =
-            toolstripRenderer.colortable.colToolStripBorder = currentsettings.colors[Settings.CI.button_border];
-
-            
+            toolstripRenderer.colortable.colToolStripBackground = currentsettings.colors[Settings.CI.toolstrip_back];
+            toolstripRenderer.colortable.colToolStripBorder = currentsettings.colors[Settings.CI.toolstrip_border];
+            toolstripRenderer.colortable.colToolStripSeparator = currentsettings.colors[Settings.CI.toolstrip_border];
+            toolstripRenderer.colortable.colOverflowButton = currentsettings.colors[Settings.CI.menu_back];
+            toolstripRenderer.colortable.colGripper = currentsettings.colors[Settings.CI.toolstrip_border];
         }
 
         public Color GroupBoxOverride(Control parent, Color d)      // if its a group box behind the control, use the group box back color..
@@ -940,13 +966,21 @@ namespace ExtendedControls
                 if (size < 1)
                     size = 9;
 
-                using (Font fntnew = new Font(fontwanted, size, FontStyle.Regular))
+                using (Font fntnew = new Font(fontwanted, size))
                 {
                     return string.Compare(fntnew.Name, fontwanted, true) == 0;
                 }
             }
 
             return false;
+        }
+
+        public bool IsFontAvailable(string fontwanted)
+        {
+            using (Font fntnew = new Font(fontwanted, 12))
+            {
+                return string.Compare(fntnew.Name, fontwanted, true) == 0;
+            }
         }
 
         public bool SetThemeByName(string themename)                           // given a theme name, select it if possible

@@ -43,6 +43,17 @@ namespace BaseUtils
             Yaxispoints = new List<Point>();
         }
 
+        public Point LYPos(Point p)     // p is pixel.. (0,0) = top of map
+        {
+            return new Point(p.X * LYWidth / PixelWidth + TopLeft.X, TopRight.Y - p.Y * LYHeight / PixelHeight);
+        }
+
+        public int PixelWidth { get { return pxTopRight.X - pxTopLeft.X; } }
+        public int PixelHeight { get { return pxBottomRight.Y - pxTopRight.Y; } }
+
+        public int LYWidth { get { return BottomRight.X - BottomLeft.X; } }
+        public int LYHeight { get { return (TopLeft.Y - BottomLeft.Y); } }
+
         public string FileName
         {
             get
@@ -239,74 +250,81 @@ namespace BaseUtils
 
         public static List<Map2d> LoadImages(string datapath)
         {
-            List<Map2d> fgeimages = new List<Map2d>();
-            DirectoryInfo dirInfo = new DirectoryInfo(datapath);
-            FileInfo[] allFiles = null;
+            List<Map2d> maps = new List<Map2d>();
 
             try
             {
-                allFiles = dirInfo.GetFiles("*.json");
+                DirectoryInfo dirInfo = new DirectoryInfo(datapath);
+                FileInfo[] allFiles = dirInfo.GetFiles("*.json");
+
+                if (allFiles != null)
+                {
+                    foreach (FileInfo fi in allFiles)
+                    {
+                        Map2d map = LoadImage(fi.FullName);
+                        if (map != null)
+                            maps.Add(map);
+                    }
+
+                    maps.Sort(delegate (Map2d p1, Map2d p2)      // biggest first.. name if same.. 
+                    {
+                        if (p1.Area == p2.Area)
+                            return p1.FileName.CompareTo(p2.FileName);
+                        else if (p1.Area < p2.Area)
+                            return 1;
+                        else
+                            return -1;
+                    }
+                    );
+                }
             }
             catch
             {
             }
 
-            if (allFiles != null)
+            return maps;
+        }
+
+        static public Map2d LoadImage(string filename)          // give the JSON file name
+        {
+            JObject pfile = null;
+            string json = BaseUtils.FileHelpers.TryReadAllTextFromFile(filename);
+
+            if (json != null)
             {
-                foreach (FileInfo fi in allFiles)
+                try
                 {
-                    JObject pfile = null;
-                    string json = BaseUtils.FileHelpers.TryReadAllTextFromFile(fi.FullName);
+                    pfile = (JObject)JObject.Parse(json);
 
-                    if (json != null)
-                    {
-                        Map2d fgeimg;
-                        try
-                        {
-                            pfile = (JObject)JObject.Parse(json);
-                        }
-                        catch
-                        {
-                            continue;
-                        }
+                    Map2d map;
 
-                        if (File.Exists(fi.FullName.Replace(".json", ".png")))
-                            fgeimg = new Map2d(fi.FullName.Replace(".json", ".png"));
-                        else
-                            fgeimg = new Map2d(fi.FullName.Replace(".json", ".jpg"));
-
-                        fgeimg.TopLeft = new Point(pfile["x1"].Int(), pfile["y1"].Int());
-                        fgeimg.pxTopLeft = new Point(pfile["px1"].Int(), pfile["py1"].Int());
-
-                        fgeimg.TopRight = new Point(pfile["x2"].Int(), pfile["y1"].Int());
-                        fgeimg.pxTopRight = new Point(pfile["px2"].Int(), pfile["py1"].Int());
-
-                        fgeimg.BottomLeft = new Point(pfile["x1"].Int(), pfile["y2"].Int());
-                        fgeimg.pxBottomLeft = new Point(pfile["px1"].Int(), pfile["py2"].Int());
-
-                        fgeimg.BottomRight = new Point(pfile["x2"].Int(), pfile["y2"].Int());
-                        fgeimg.pxBottomRight = new Point(pfile["px2"].Int(), pfile["py2"].Int());
-
-                        fgeimg.Area = (double)(fgeimg.TopRight.X - fgeimg.TopLeft.X) * (double)(fgeimg.TopLeft.Y - fgeimg.BottomRight.Y);
-                        //Console.WriteLine("img {0} {1}", fgeimg.FileName, fgeimg.Area);
-
-                        fgeimages.Add(fgeimg);
-                    }
-                }
-
-                fgeimages.Sort(delegate (Map2d p1, Map2d p2)      // biggest first.. name if same.. 
-                {
-                    if (p1.Area == p2.Area)
-                        return p1.FileName.CompareTo(p2.FileName);
-                    else if (p1.Area < p2.Area)
-                        return 1;
+                    if (File.Exists(filename.Replace(".json", ".png")))
+                        map = new Map2d(filename.Replace(".json", ".png"));
                     else
-                        return -1;
+                        map = new Map2d(filename.Replace(".json", ".jpg"));
+
+                    map.TopLeft = new Point(pfile["x1"].Int(), pfile["y1"].Int());
+                    map.pxTopLeft = new Point(pfile["px1"].Int(), pfile["py1"].Int());
+
+                    map.TopRight = new Point(pfile["x2"].Int(), pfile["y1"].Int());
+                    map.pxTopRight = new Point(pfile["px2"].Int(), pfile["py1"].Int());
+
+                    map.BottomLeft = new Point(pfile["x1"].Int(), pfile["y2"].Int());
+                    map.pxBottomLeft = new Point(pfile["px1"].Int(), pfile["py2"].Int());
+
+                    map.BottomRight = new Point(pfile["x2"].Int(), pfile["y2"].Int());
+                    map.pxBottomRight = new Point(pfile["px2"].Int(), pfile["py2"].Int());
+
+                    map.Area = (double)(map.TopRight.X - map.TopLeft.X) * (double)(map.TopLeft.Y - map.BottomRight.Y);
+
+                    return map;
                 }
-                );
+                catch
+                {
+                }
             }
 
-            return fgeimages;
+            return null;
         }
     }
 }

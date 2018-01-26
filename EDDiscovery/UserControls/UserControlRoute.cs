@@ -110,7 +110,7 @@ namespace EDDiscovery.UserControls
             int atpos = s.IndexOf('@');
             if (s != null && atpos != -1)
                 s = s.Substring(0, atpos);
-            s.Trim();
+            s = s.Trim();
             return s;
         }
 
@@ -345,7 +345,7 @@ namespace EDDiscovery.UserControls
                 Point3D curpos;
                 if (GetCoordsFrom(out curpos))
                 {
-                    ISystem nearest = SystemClassDB.FindNearestSystem(curpos.X, curpos.Y, curpos.Z);
+                    ISystem nearest = SystemClassDB.FindNearestSystemTo(curpos.X, curpos.Y, curpos.Z);
 
                     if (nearest != null)
                     {
@@ -507,7 +507,7 @@ namespace EDDiscovery.UserControls
                 Point3D curpos;
                 if (GetCoordsTo(out curpos))
                 {
-                    ISystem nearest = SystemClassDB.FindNearestSystem(curpos.X, curpos.Y, curpos.Z);
+                    ISystem nearest = SystemClassDB.FindNearestSystemTo(curpos.X, curpos.Y, curpos.Z);
 
                     if (nearest != null)
                     {

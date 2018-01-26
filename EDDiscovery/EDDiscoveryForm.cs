@@ -45,8 +45,8 @@ using EDDiscovery.Icons;
 
 namespace EDDiscovery
 {
-    public partial class EDDiscoveryForm : ExtendedControls.DraggableForm, IDiscoveryController
-    {
+    public partial class EDDiscoveryForm : Forms.DraggableFormPos
+    { 
         #region Variables
 
         private EDDiscoveryController Controller;
@@ -69,13 +69,6 @@ namespace EDDiscovery
         BaseUtils.GitHubRelease newRelease;
 
         public PopOutControl PopOuts;
-
-        private bool _shownOnce = false;
-        private bool _formMax;
-        private int _formWidth;
-        private int _formHeight;
-        private int _formTop;
-        private int _formLeft;
 
         #endregion
 
@@ -118,9 +111,9 @@ namespace EDDiscovery
         #endregion
 
         #region History
-        public bool RefreshHistoryAsync(string netlogpath = null, bool forcenetlogreload = false, bool forcejournalreload = false, int? currentcmdr = null)
+        public bool RefreshHistoryAsync()           // we only supply the basic refresh for the rest of the system..
         {
-            return Controller.RefreshHistoryAsync(netlogpath, forcenetlogreload, forcejournalreload, currentcmdr);
+            return Controller.RefreshHistoryAsync();
         }
         public void RefreshDisplays() { Controller.RefreshDisplays(); }
         public void RecalculateHistoryDBs() { Controller.RecalculateHistoryDBs(); }
@@ -130,8 +123,12 @@ namespace EDDiscovery
 
         #region Initialisation
 
-        public EDDiscoveryForm()        // note we do not do the traditional Initialize component here.. we wait for splash form to call it
+        // note we do not do the traditional Initialize component here.. we wait for splash form to call it
+        // and we need to tell the drag form pos our save name
+        public EDDiscoveryForm()
         {
+            RestoreFormPositionRegKey = "Form";
+
             Controller = new EDDiscoveryController(() => theme.TextBlockColor, () => theme.TextBlockHighlightColor, () => theme.TextBlockSuccessColor, a => BeginInvoke(a));
             Controller.OnNewEntrySecond += Controller_NewEntrySecond;       // called after UI updates themselves with NewEntry
             Controller.OnNewUIEvent += Controller_NewUIEvent;       // called if its an UI event
@@ -165,7 +162,6 @@ namespace EDDiscovery
             Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " Load popouts, themes, init controls");
             PopOuts = new PopOutControl(this);
 
-            ToolStripManager.Renderer = theme.toolstripRenderer;
             msg.Invoke("Repairing Canopy");
             theme.LoadThemes();                                         // default themes and ones on disk loaded
 
@@ -178,7 +174,7 @@ namespace EDDiscovery
             CreateTabs();
 
             Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " Map manager");
-            Map = new EDDiscovery._3DMap.MapManager(EDDOptions.Instance.NoWindowReposition, this);
+            Map = new EDDiscovery._3DMap.MapManager(this);
 
             this.TopMost = EDDConfig.KeepOnTop;
 
@@ -215,8 +211,6 @@ namespace EDDiscovery
 
                 ShowInfoPanel("Loading. Please wait!", true);
 
-                RepositionForm();
-
                 LoadTabs();
 
                 if (EDDOptions.Instance.ActionButton)
@@ -246,7 +240,6 @@ namespace EDDiscovery
 
             actioncontroller.onStartup();
 
-            _shownOnce = true;
             Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " EDF shown complete");
 
             // Form is fully loaded, we can do tab actions now
@@ -308,48 +301,6 @@ namespace EDDiscovery
 
         #endregion
 
-        #region Form positioning
-
-        private void RepositionForm()
-        {
-            var top = SQLiteDBClass.GetSettingInt("FormTop", -999);
-            if (top != -999 && EDDOptions.Instance.NoWindowReposition == false)
-            {
-                var left = SQLiteDBClass.GetSettingInt("FormLeft", 0);
-                var height = SQLiteDBClass.GetSettingInt("FormHeight", 800);
-                var width = SQLiteDBClass.GetSettingInt("FormWidth", 800);
-
-                // Adjust so window fits on screen; just in case user unplugged a monitor or something
-
-                var screen = SystemInformation.VirtualScreen;
-                if (height > screen.Height) height = screen.Height;
-                if (top + height > screen.Height + screen.Top) top = screen.Height + screen.Top - height;
-                if (width > screen.Width) width = screen.Width;
-                if (left + width > screen.Width + screen.Left) left = screen.Width + screen.Left - width;
-                if (top < screen.Top) top = screen.Top;
-                if (left < screen.Left) left = screen.Left;
-
-                this.Top = top;
-                this.Left = left;
-                this.Height = height;
-                this.Width = width;
-
-                this.CreateParams.X = this.Left;
-                this.CreateParams.Y = this.Top;
-                this.StartPosition = FormStartPosition.Manual;
-
-                _formMax = SQLiteDBClass.GetSettingBool("FormMax", false);
-                if (_formMax) this.WindowState = FormWindowState.Maximized;
-            }
-
-            _formLeft = Left;
-            _formTop = Top;
-            _formHeight = Height;
-            _formWidth = Width;
-        }
-
-        #endregion
-
         #region Tabs
 
         void CreateTabs()       // called during part of Init
@@ -395,7 +346,7 @@ namespace EDDiscovery
                 travelHistoryControl.Init(this, null, UserControls.UserControlCommonBase.DisplayNumberHistoryGrid); // and init at this point with 0 as dn
             }
 
-            for (int i = 0; i < PanelInformation.GetNumberPanels(); i++)
+            for (int i = 0; i < PanelInformation.GetNumberPanels; i++)
             {
                 addTabToolStripMenuItem.DropDownItems.Add(PanelInformation.MakeToolStripMenuItem(i, (s, e) =>
                 {
@@ -555,7 +506,6 @@ namespace EDDiscovery
 
         public void ApplyTheme()
         {
-            ToolStripManager.Renderer = theme.toolstripRenderer;
             panel_close.Visible = !theme.WindowsFrame;
             panel_minimize.Visible = !theme.WindowsFrame;
             label_version.Visible = !theme.WindowsFrame;
@@ -576,6 +526,13 @@ namespace EDDiscovery
         private void edsmRefreshTimer_Tick(object sender, EventArgs e)
         {
             Controller.AsyncPerformSync();
+        }
+
+        public void ForceEDSMEDDBFullRefresh()
+        {
+            SystemClassEDSM.ForceEDSMFullUpdate();
+            EliteDangerousCore.EDDB.SystemClassEDDB.ForceEDDBFullUpdate();
+            Controller.AsyncPerformSync(true, true);
         }
 
         #endregion
@@ -873,12 +830,6 @@ namespace EDDiscovery
             SystemNoteClass.CommitDirtyNotes((snc) => { if (EDCommander.Current.SyncToEdsm && snc.FSDEntry) EDSMSync.SendComments(snc.SystemName, snc.Note, snc.EdsmId); });
 
             screenshotconverter.SaveSettings();
-
-            SQLiteDBClass.PutSettingBool("FormMax", _formMax);
-            SQLiteDBClass.PutSettingInt("FormWidth", _formWidth);
-            SQLiteDBClass.PutSettingInt("FormHeight", _formHeight);
-            SQLiteDBClass.PutSettingInt("FormTop", _formTop);
-            SQLiteDBClass.PutSettingInt("FormLeft", _formLeft);
             SQLiteDBClass.PutSettingBool("ToolBarPanelPinState", panelToolBar.PinState);
 
             theme.SaveSettings(null);
@@ -924,7 +875,7 @@ namespace EDDiscovery
             actioncontroller.ReLoad();
             actioncontroller.CheckWarn();
             actioncontroller.onStartup();
-        }
+         }
 
         private void sendUnsyncedEGOScansToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -932,19 +883,9 @@ namespace EDDiscovery
             EDDiscoveryCore.EGO.EGOSync.SendEGOEvents(LogLine, hlsyncunsyncedlist);
         }
 
-        private void addNewStarToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            Process.Start("http://robert.astronet.se/Elite/ed-systems/entry.html");
-        }
-
         private void frontierForumThreadToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Process.Start(Properties.Resources.URLProjectEDForumPost);
-        }
-
-        private void eDDiscoveryFGESupportThreadToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            Process.Start("http://firstgreatexpedition.org/mybb/showthread.php?tid=1406");
         }
 
         private void eDDiscoveryHomepageToolStripMenuItem_Click(object sender, EventArgs e)
@@ -990,14 +931,21 @@ namespace EDDiscovery
 
         private void forceEDDBUpdateToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (!Controller.AsyncPerformSync(eddbsync: true))      // we want it to have run, to completion, to allow another go..
+            if (!EDDConfig.Instance.EDSMEDDBDownload)
+                ExtendedControls.MessageBoxTheme.Show(this, "Star Data download is disabled. Use Settings to reenable it");
+            else if (!Controller.AsyncPerformSync(eddbsync: true))      // we want it to have run, to completion, to allow another go..
                 ExtendedControls.MessageBoxTheme.Show(this, "Synchronisation to databases is in operation or pending, please wait");
         }
 
         private void syncEDSMSystemsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (!Controller.AsyncPerformSync(edsmsync: true))      // we want it to have run, to completion, to allow another go..
-                ExtendedControls.MessageBoxTheme.Show(this, "Synchronisation to databases is in operation or pending, please wait");
+            if (!EDDConfig.Instance.EDSMEDDBDownload)
+                ExtendedControls.MessageBoxTheme.Show(this, "Star Data download is disabled. Use Settings to reenable it");
+            else if (ExtendedControls.MessageBoxTheme.Show(this, "This can take a considerable amount of time and bandwidth" + Environment.NewLine + "Confirm you want to do this?", "EDSM Download Warning", MessageBoxButtons.OKCancel, MessageBoxIcon.Asterisk)  == DialogResult.OK )
+            {
+                if (!Controller.AsyncPerformSync(edsmfullsync: true))      // we want it to have run, to completion, to allow another go..
+                    ExtendedControls.MessageBoxTheme.Show(this, "Synchronisation to databases is in operation or pending, please wait");
+            }
         }
 
         private void gitHubToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1237,7 +1185,6 @@ namespace EDDiscovery
         {
             this.Cursor = Cursors.WaitCursor;
             Form2DMap frm = new Form2DMap(Controller.history.FilterByFSDAndPosition);
-            frm.Nowindowreposition = EDDOptions.Instance.NoWindowReposition;
             frm.Show();
             this.Cursor = Cursors.Default;
         }
@@ -1256,7 +1203,8 @@ namespace EDDiscovery
             {
                 if (EDDConfig.MinimizeToNotifyIcon)
                     Show();
-                if (_formMax)
+
+                if (FormIsMaximised)
                     WindowState = FormWindowState.Maximized;
                 else
                     WindowState = FormWindowState.Normal;
@@ -1279,7 +1227,8 @@ namespace EDDiscovery
             {
                 if (EDDConfig.UseNotifyIcon && EDDConfig.MinimizeToNotifyIcon)
                     Show();
-                if (_formMax)
+
+                if (FormIsMaximised)
                     WindowState = FormWindowState.Maximized;
                 else
                     WindowState = FormWindowState.Normal;
@@ -1334,22 +1283,10 @@ namespace EDDiscovery
 
         #endregion
 
-        private void RecordPosition()
-        {
-            if (FormWindowState.Minimized != WindowState)
-            {
-                _formLeft = this.Left;
-                _formTop = this.Top;
-                _formWidth = this.Width;
-                _formHeight = this.Height;
-                _formMax = FormWindowState.Maximized == WindowState;
-            }
-        }
-
         private void EDDiscoveryForm_Resize(object sender, EventArgs e)
         {
             // We may be getting called by this.ResumeLayout() from InitializeComponent().
-            if (EDDConfig != null && _shownOnce)
+            if (EDDConfig != null && FormShownOnce)
             {
                 if (EDDConfig.UseNotifyIcon && EDDConfig.MinimizeToNotifyIcon)
                 {
@@ -1358,15 +1295,11 @@ namespace EDDiscovery
                     else if (!Visible)
                         Show();
                 }
-                RecordPosition();
+
                 notifyIconMenu_Open.Enabled = FormWindowState.Minimized == WindowState;
             }
         }
 
-        private void EDDiscoveryForm_ResizeEnd(object sender, EventArgs e)
-        {
-            RecordPosition();
-        }
 
         #region panelToolBar animation
 
@@ -1457,7 +1390,7 @@ namespace EDDiscovery
         {
             ToolStripMenuItem parent;
 
-            menu = menu.ToLower();
+            menu = menu.ToLower(CultureInfo.InvariantCulture);
             if (menu.Equals("add-ons"))
                 parent = addOnsToolStripMenuItem;
             else if (menu.Equals("help"))
@@ -1569,13 +1502,13 @@ namespace EDDiscovery
             if (comboBoxCommander.SelectedIndex >= 0 && comboBoxCommander.Enabled)     // DONT trigger during LoadCommandersListBox
             {
                 if (comboBoxCommander.SelectedIndex == 0)
-                    RefreshHistoryAsync(currentcmdr: -1);                                   // which will cause DIsplay to be called as some point
+                    Controller.RefreshHistoryAsync(currentcmdr: -1);                                   // which will cause DIsplay to be called as some point
                 else
                 {
                     var itm = (from EDCommander c in EDCommander.GetList() where c.Name.Equals(comboBoxCommander.Text) select c).ToList();
 
                     EDCommander.CurrentCmdrID = itm[0].Nr;
-                    RefreshHistoryAsync(currentcmdr: EDCommander.CurrentCmdrID);                                   // which will cause DIsplay to be called as some point
+                    Controller.RefreshHistoryAsync(currentcmdr: EDCommander.CurrentCmdrID);                                   // which will cause DIsplay to be called as some point
                 }
             }
 

@@ -82,6 +82,12 @@ namespace EliteDangerousCore
             status = SystemStatusEnum.Unknown;
         }
 
+        public SystemClass(long id)
+        {
+            name = "UnKnown";
+            id_edsm = id;
+        }
+
         public SystemClass(string Name, double vx, double vy, double vz)
         {
             name = Name;

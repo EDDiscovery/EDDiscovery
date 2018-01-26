@@ -667,13 +667,13 @@ namespace EDDiscovery.Actions
 
         #region Misc overrides
 
-        public override bool Pragma(string cmd)     // extra pragmas.
+        public override bool Pragma(string s)     // extra pragmas.
         {
-            if (cmd.Equals("bindings"))
+            if (s.Equals("bindings"))
             {
                 LogLine(frontierbindings.ListBindings());
             }
-            else if (cmd.Equals("bindingvalues"))
+            else if (s.Equals("bindingvalues"))
             {
                 LogLine(frontierbindings.ListValues());
             }

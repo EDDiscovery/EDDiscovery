@@ -172,8 +172,8 @@ namespace EliteDangerousCore.DB
 
             PerformUpgrade(conn, 20, true, false, new[] { query1, query2 }, () =>
             {
-                conn.PutSettingStringCN("EDSMLastSystems", "2010 - 01 - 01 00:00:00");        // force EDSM sync..
-            });
+                conn.PutSettingStringCN("EDSMLastSystems", "2010 - 01 - 01 00:00:00"); // force EDSM sync..  MUST do this manually, can't use main function as it needs internal one
+            }); 
         }
 
         private static void UpgradeSystemsDB101(SQLiteConnectionED conn)
@@ -189,7 +189,6 @@ namespace EliteDangerousCore.DB
 
             PerformUpgrade(conn, 101, true, false, new[] { query1, query2, query3, query4, query5, query6, query7 }, () =>
             {
-                //                PutSettingString("EDSMLastSystems", "2010 - 01 - 01 00:00:00", conn);        // force EDSM sync..
             });
         }
 
@@ -229,7 +228,7 @@ namespace EliteDangerousCore.DB
         }
 
 
-        public static void DropOldSystemTables(SQLiteConnectionSystem conn)
+        public static void DropOldSystemTables(SQLiteConnectionSystem conn)         // UPGRADE
         {
             string[] queries = new[]
             {
@@ -252,7 +251,7 @@ namespace EliteDangerousCore.DB
             }
         }
 
-        private static void CreateSystemDBTableIndexes(SQLiteConnectionSystem conn)
+        private static void CreateSystemDBTableIndexes(SQLiteConnectionSystem conn)     // UPGRADE
         {
             string[] queries = new[]
             {
@@ -277,7 +276,7 @@ namespace EliteDangerousCore.DB
             }
         }
 
-        public static void DropSystemsTableIndexes()
+        public static void DropSystemsTableIndexes()        // PERFORM during full table replacement
         {
             string[] queries = new[]
             {
@@ -320,7 +319,7 @@ namespace EliteDangerousCore.DB
             }
         }
 
-        private static void CreateSystemsTableIndexesNoLock()
+        private static void CreateSystemsTableIndexesNoLock()           // PERFORM AFTER SYSTEM TABLE REPLACEMENT
         {
             string[] queries = new[]
             {
@@ -345,7 +344,7 @@ namespace EliteDangerousCore.DB
             }
         }
 
-        public static void CreateTempSystemsTable()
+        public static void CreateTempSystemsTable()         // PERFORM AT START SYSTEM TABLE REPLACEMENT
         {
             using (var conn = new SQLiteConnectionSystem())
             {
@@ -355,7 +354,9 @@ namespace EliteDangerousCore.DB
                     "CREATE TABLE SystemNames_temp (" +
                         "Id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, " +
                         "Name TEXT NOT NULL COLLATE NOCASE, " +
-                        "EdsmId INTEGER NOT NULL)");
+                        "EdsmId INTEGER NOT NULL," +
+                        "GridId INTEGER NOT NULL DEFAULT -1)");
+
                 ExecuteQuery(conn,
                     "CREATE TABLE EdsmSystems_temp (" +
                         "Id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, " +
@@ -372,7 +373,7 @@ namespace EliteDangerousCore.DB
             }
         }
 
-        public static void ReplaceSystemsTable()
+        public static void ReplaceSystemsTable()                // PERFORM AFTER TEMP SYSTEM TABLE UPDATED
         {
             using (var slock = new SchemaLock())
             {

@@ -162,10 +162,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="2DMap\Form2DMap.cs">
+    <Compile Include="Forms\DraggableFormPos.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="2DMap\Form2DMap.Designer.cs">
+    <Compile Include="Forms\DraggableFormPos.Designer.cs">
+      <DependentUpon>DraggableFormPos.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Form2DMap.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Form2DMap.Designer.cs">
       <DependentUpon>Form2DMap.cs</DependentUpon>
     </Compile>
     <Compile Include="3DMap\CameraDirectionMovement.cs" />
@@ -202,6 +208,12 @@
     </Compile>
     <Compile Include="Forms\ExportForm.Designer.cs">
       <DependentUpon>ExportForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\GalaxySectorSelect.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\GalaxySectorSelect.Designer.cs">
+      <DependentUpon>GalaxySectorSelect.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\SafeModeForm.cs">
       <SubType>Form</SubType>
@@ -560,8 +572,14 @@
     <EmbeddedResource Include="Forms\AddOnManagerForm.resx">
       <DependentUpon>AddOnManagerForm.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\DraggableFormPos.resx">
+      <DependentUpon>DraggableFormPos.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\ExportForm.resx">
       <DependentUpon>ExportForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\GalaxySectorSelect.resx">
+      <DependentUpon>GalaxySectorSelect.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\ImportSphere.resx">
       <DependentUpon>ImportSphere.cs</DependentUpon>
@@ -694,7 +712,7 @@
     <None Include="Resources\Logo.png" />
     <Content Include="x86\Microsoft.VC100.CRT\msvcp100.dll" />
     <Content Include="x86\Microsoft.VC100.CRT\msvcr100.dll" />
-    <EmbeddedResource Include="2DMap\Form2DMap.resx">
+    <EmbeddedResource Include="Forms\Form2DMap.resx">
       <DependentUpon>Form2DMap.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="EDDiscoveryForm.resx">

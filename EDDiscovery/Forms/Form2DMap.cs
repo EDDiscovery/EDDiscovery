@@ -31,7 +31,7 @@ using BaseUtils;
 
 namespace EDDiscovery
 {
-    public partial class Form2DMap : Form
+    public partial class Form2DMap : Forms.DraggableFormPos
     {
         public List<Map2d> fgeimages;
         private Map2d currentFGEImage;
@@ -45,36 +45,23 @@ namespace EDDiscovery
 
         List<HistoryEntry> syslist;
 
-        public bool Nowindowreposition { get; set; } = false;
-
-        public Form2DMap(List<HistoryEntry> sl)
+        public Form2DMap(List<HistoryEntry> sl) 
         {
+            RestoreFormPositionRegKey = "Map2DForm";
             syslist = sl;
             InitializeComponent();
         }
 
         bool initdone = false;
-        private void FormSagCarinaMission_Load(object sender, EventArgs e)
+        private void Form2dLoad(object sender, EventArgs e)
         {
-            var top = SQLiteDBClass.GetSettingInt("Map2DFormTop", -1);
-
-            if (top >= 0 && Nowindowreposition == false)
-            {
-                var left = SQLiteDBClass.GetSettingInt("Map2DFormLeft", 0);
-                var height = SQLiteDBClass.GetSettingInt("Map2DFormHeight", 800);
-                var width = SQLiteDBClass.GetSettingInt("Map2DFormWidth", 800);
-                this.Location = new Point(left, top);
-                this.Size = new Size(width, height);
-                //Console.WriteLine("Restore map " + this.Top + "," + this.Left + "," + this.Width + "," + this.Height);
-            }
-
             initdone = false;
             pickerStart = new DateTimePicker();
             pickerStop = new DateTimePicker();
             host1 = new ToolStripControlHost(pickerStart);
-            toolStrip1.Items.Add(host1);
+            toolStrip.Items.Add(host1);
             host2 = new ToolStripControlHost(pickerStop);
-            toolStrip1.Items.Add(host2);
+            toolStrip.Items.Add(host2);
             pickerStart.Value = DateTime.Today.AddMonths(-1);
 
             this.pickerStart.ValueChanged += new System.EventHandler(this.dateTimePickerStart_ValueChanged);
@@ -88,37 +75,44 @@ namespace EDDiscovery
                 return;
             }
 
-            toolStripComboBox1.Items.Clear();
+            toolStripComboExpo.Items.Clear();
 
             foreach (Map2d img in fgeimages)
             {
-                toolStripComboBox1.Items.Add(img.FileName);
+                toolStripComboExpo.Items.Add(img.FileName);
             }
-            
-            toolStripComboBox1.SelectedIndex = 0;
+
+            toolStripComboBoxTime.Items.AddRange(new string[] {
+            "Distant Worlds Expedition",
+            "FGE Expedition start",
+            "Last Week",
+            "Last Month",
+            "Last Year",
+            "All",
+            "Custom"});
+
+            toolStripComboExpo.SelectedIndex = 0;
             toolStripComboBoxTime.SelectedIndex = 0;
             initdone = true;
             ShowSelectedImage();
+
+            imageViewer.BackColor = Color.FromArgb(5, 5, 5);
+
+            EDDiscovery.EDDTheme theme = EDDiscovery.EDDTheme.Instance;
+            bool winborder = theme.ApplyToForm(this);
+            statusStripCustom.Visible = panel_close.Visible = panel_minimize.Visible = !winborder;
+            
         }
 
-        private void FormSagCarinaMission_FormClosing(object sender, FormClosingEventArgs e)
+        private void Form2dClosing(object sender, FormClosingEventArgs e)
         {
-            if (Visible)
+            if (imageViewer.Image != null)
             {
-                SQLiteDBClass.PutSettingInt("Map2DFormWidth", this.Width);
-                SQLiteDBClass.PutSettingInt("Map2DFormHeight", this.Height);
-                SQLiteDBClass.PutSettingInt("Map2DFormTop", this.Top);
-                SQLiteDBClass.PutSettingInt("Map2DFormLeft", this.Left);
-                //Console.WriteLine("Save map " + this.Top + "," + this.Left + "," + this.Width + "," + this.Height);
+                imageViewer.Image.Dispose();
             }
-            if (imageViewer1.Image != null)
-            {
-                imageViewer1.Image.Dispose();
-            }
-            imageViewer1.Image = null;
+            imageViewer.Image = null;
             fgeimages = null;
             starpositions = null;
-            GC.Collect();
         }
 
         private bool AddImages()
@@ -134,25 +128,6 @@ namespace EDDiscovery
                 return false;
         }
 
-        private void ShowImage(Map2d fgeimg)
-        {
-            //currentImage = (Bitmap)Image.FromFile(fgeimg.Name, true);
-            if (fgeimg != null && initdone)
-            {
-                imageViewer1.Image?.Dispose();
-                //panel1.BackgroundImage = new Bitmap(fgeimg.FilePath);
-                imageViewer1.Image = new Bitmap(fgeimg.FilePath);
-                imageViewer1.ZoomToFit();
-                currentFGEImage = fgeimg;
-
-                if (toolStripButtonStars.Checked)
-                    DrawStars();
-
-                DrawTravelHistory();
-            }
-        }
-
-
         private void DrawTravelHistory()
         {
             DateTime start = startDate;
@@ -162,7 +137,7 @@ namespace EDDiscovery
             var history = from systems in syslist where systems.EventTimeLocal > start && systems.EventTimeLocal<endDate && systems.System.HasCoordinate == true  orderby systems.EventTimeUTC  select systems;
             List<HistoryEntry> listHistory = history.ToList();
 
-            using (Graphics gfx = Graphics.FromImage(imageViewer1.Image))
+            using (Graphics gfx = Graphics.FromImage(imageViewer.Image))
             {
                 if (listHistory.Count > 1)
                 {
@@ -183,17 +158,21 @@ namespace EDDiscovery
 
         private void DrawStars()
         {
+            Cursor.Current = Cursors.WaitCursor;
+
             if ( starpositions == null )
-                starpositions = SystemClassDB.GetStarPositions();
+                starpositions = SystemClassDB.GetStarPositions(25);     // limit to 25%
 
             using (Pen pen = new Pen(Color.White, 2))
-            using (Graphics gfx = Graphics.FromImage(imageViewer1.Image))
+            using (Graphics gfx = Graphics.FromImage(imageViewer.Image))
             {
                 foreach (Point3D si in starpositions)
                 {
                     DrawPoint(gfx, pen, si.X,si.Z );
                 }
             }
+
+            Cursor.Current = Cursors.Default;
         }
 
         private void DrawLine(Graphics gfx, Pen pen, ISystem sys1, ISystem sys2)
@@ -224,33 +203,34 @@ namespace EDDiscovery
 
         private Point Transform2Screen(Point point)
         {
-            //Point np = new Point(point.X / 4, point.Y / 4);
-
             return point;
         }
 
-
-        private void panel1_Paint(object sender, PaintEventArgs e)
-        {
-            //DrawTravelHistory();
-        }
-
-        private void toolStripComboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        private void toolStripComboBoxExpo_SelectedIndexChanged(object sender, EventArgs e)
         {
             ShowSelectedImage();
         }
 
         private void ShowSelectedImage()
         {
-            string str = toolStripComboBox1.SelectedItem.ToString();
+            string str = toolStripComboExpo.SelectedItem.ToString();
 
-            Map2d img = fgeimages.FirstOrDefault(i => i.FileName == str);
-            ShowImage(img);
-        }
+            Map2d fgeimg = fgeimages.FirstOrDefault(i => i.FileName == str);
 
-        private void toolStripComboBox2_Click(object sender, EventArgs e)
-        {
+            if (fgeimg != null && initdone)
+            {
+                imageViewer.Image?.Dispose();
+                //panel1.BackgroundImage = new Bitmap(fgeimg.FilePath);
+                imageViewer.Image = new Bitmap(fgeimg.FilePath);
+                imageViewer.ZoomToFit();
+                currentFGEImage = fgeimg;
 
+                if (toolStripButtonStars.Checked)
+                    DrawStars();
+
+                DrawTravelHistory();
+                imageViewer.Invalidate();
+            }
         }
 
         private void toolStripComboBoxTime_SelectedIndexChanged(object sender, EventArgs e)
@@ -281,7 +261,6 @@ namespace EDDiscovery
             else if (nr == 6)  // Custom
                 startDate = new DateTime(2010, 8, 1);
 
-
             if (nr == 6)
             {
                 host1.Visible = true;
@@ -295,22 +274,13 @@ namespace EDDiscovery
                 host2.Visible = false;
                 endDate = DateTime.Today.AddDays(1);
             }
-
-
-
-
-
+            
             ShowSelectedImage();
         }
 
         private void toolStripButtonZoomIn_Click(object sender, EventArgs e)
         {
-            imageViewer1.ZoomIn();
-        }
-
-        private void toolStrip1_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
-        {
-
+            imageViewer.ZoomIn();
         }
 
         private void dateTimePickerStart_ValueChanged(object sender, EventArgs e)
@@ -325,43 +295,53 @@ namespace EDDiscovery
             ShowSelectedImage();
         }
 
-        private void buttonSave_Click(object sender, EventArgs e)
+        private void toolStripButtonStars_Click(object sender, EventArgs e)
+        {
+            ShowSelectedImage();
+        }
+
+        private void panel_close_Click(object sender, EventArgs e)
+        {
+            Close();
+        }
+
+        private void panel_minimize_Click(object sender, EventArgs e)
+        {
+            this.WindowState = FormWindowState.Minimized;
+        }
+
+        private void panelTop_MouseDown(object sender, MouseEventArgs e)
+        {
+            OnCaptionMouseDown((Control)sender, e);
+        }
+
+        private void toolStripButtonSave_Click(object sender, EventArgs e)
         {
             if (saveFileDialog1.ShowDialog(this) == DialogResult.OK)
             {
                 switch (saveFileDialog1.FilterIndex)
                 {
                     case 1:
-                        imageViewer1.Image.Save(saveFileDialog1.FileName, System.Drawing.Imaging.ImageFormat.Png);
+                        imageViewer.Image.Save(saveFileDialog1.FileName, System.Drawing.Imaging.ImageFormat.Png);
                         break;
                     case 2:
-                        imageViewer1.Image.Save(saveFileDialog1.FileName, System.Drawing.Imaging.ImageFormat.Bmp);
+                        imageViewer.Image.Save(saveFileDialog1.FileName, System.Drawing.Imaging.ImageFormat.Bmp);
                         break;
                     case 3:
-                        imageViewer1.Image.Save(saveFileDialog1.FileName, System.Drawing.Imaging.ImageFormat.Jpeg);
+                        imageViewer.Image.Save(saveFileDialog1.FileName, System.Drawing.Imaging.ImageFormat.Jpeg);
                         break;
                 }
             }
         }
 
-        private void toolStripButtonStars_Click(object sender, EventArgs e)
-        {
-            ShowSelectedImage();
-        }
-
         private void toolStripButtonZoomOut_Click(object sender, EventArgs e)
         {
-            imageViewer1.ZoomOut();
+            imageViewer.ZoomOut();
         }
 
         private void toolStripButtonZoomtoFit_Click(object sender, EventArgs e)
         {
-            imageViewer1.ZoomToFit();
-        }
-
-        private void dateTimePicker1_ValueChanged(object sender, EventArgs e)
-        {
-
+            imageViewer.ZoomToFit();
         }
     }
 }
