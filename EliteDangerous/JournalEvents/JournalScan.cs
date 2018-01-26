@@ -67,6 +67,7 @@ namespace EliteDangerousCore.JournalEvents
 
         // ALL
         public string BodyName { get; set; }                        // direct (meaning no translation)
+        public int? BodyID { get; set; }                            // direct
         public double DistanceFromArrivalLS { get; set; }           // direct
         public double? nRotationPeriod { get; set; }                // direct
         public double? nSurfaceTemperature { get; set; }            // direct
@@ -197,6 +198,7 @@ namespace EliteDangerousCore.JournalEvents
         public JournalScan(JObject evt) : base(evt, JournalTypeEnum.Scan)
         {
             BodyName = evt["BodyName"].Str();
+            BodyID = evt["BodyID"].IntNull();
             StarType = evt["StarType"].StrNull();
 
             DistanceFromArrivalLS = evt["DistanceFromArrivalLS"].Double();

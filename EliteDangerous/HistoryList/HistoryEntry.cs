@@ -188,6 +188,7 @@ namespace EliteDangerousCore
                         allegiance = jl.EDAllegiance,
                         UpdateDate = jl.EventTimeUTC,
                         status = SystemStatusEnum.EDDiscovery,
+                        SystemAddress = jl.SystemAddress,
                     };
 
                     // If it was a new system, pass the coords back to the StartJump
