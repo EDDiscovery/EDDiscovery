@@ -37,15 +37,12 @@ using System.Windows.Forms;
 
 namespace EDDiscovery
 {
-    public partial class FormMap : ExtendedControls.DraggableForm
+    public partial class FormMap : Forms.DraggableFormPos
     {
-
-
         #region Variables
 
         public bool Is3DMapsRunning { get { return _stargrids != null; } }
 
-        public bool noWindowReposition { get; set; } = false;                       // set externally
         public EDDiscoveryForm discoveryForm { get; set; } = null;      // set externally
 
         const int HELP_VERSION = 5;         // increment this to force help onto the screen of users first time.
@@ -308,6 +305,7 @@ namespace EDDiscovery
 
         public FormMap()
         {
+            RestoreFormPositionRegKey = "Map3DForm";
             InitializeComponent();
             maprecorder = new MapRecorder(this);
             // 
@@ -334,18 +332,6 @@ namespace EDDiscovery
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
-
-            var top = SQLiteDBClass.GetSettingInt("Map3DFormTop", -1);
-
-            if (top >= 0 && noWindowReposition == false)
-            {
-                var left = SQLiteDBClass.GetSettingInt("Map3DFormLeft", 0);
-                var height = SQLiteDBClass.GetSettingInt("Map3DFormHeight", 800);
-                var width = SQLiteDBClass.GetSettingInt("Map3DFormWidth", 800);
-                this.Location = new Point(left, top);
-                this.Size = new Size(width, height);
-                //Console.WriteLine("Restore map " + this.Top + "," + this.Left + "," + this.Width + "," + this.Height);
-            }
 
             KeyDown += new KeyEventHandler(_kbdActions.KeyDown);
             glControl.KeyDown += new KeyEventHandler(_kbdActions.KeyDown);
@@ -447,14 +433,6 @@ namespace EDDiscovery
             _systemtimer.Stop();
             _systemtickinterval.Stop();
             VideoMessage();
-
-            if (Visible)
-            {
-                SQLiteDBClass.PutSettingInt("Map3DFormWidth", this.Width);
-                SQLiteDBClass.PutSettingInt("Map3DFormHeight", this.Height);
-                SQLiteDBClass.PutSettingInt("Map3DFormTop", this.Top);
-                SQLiteDBClass.PutSettingInt("Map3DFormLeft", this.Left);
-            }
 
             SQLiteDBClass.PutSettingBool("Map3DAutoForward", toolStripButtonAutoForward.Checked);
             SQLiteDBClass.PutSettingBool("Map3DDrawLines", drawLinesBetweenStarsWithPositionToolStripMenuItem.Checked);

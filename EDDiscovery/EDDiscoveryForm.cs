@@ -70,8 +70,6 @@ namespace EDDiscovery
 
         public PopOutControl PopOuts;
 
-        private bool _shownOnce = false;
-
         #endregion
 
         #region Callbacks from us
@@ -176,7 +174,7 @@ namespace EDDiscovery
             CreateTabs();
 
             Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " Map manager");
-            Map = new EDDiscovery._3DMap.MapManager(EDDOptions.Instance.NoWindowReposition, this);
+            Map = new EDDiscovery._3DMap.MapManager(this);
 
             this.TopMost = EDDConfig.KeepOnTop;
 
@@ -213,8 +211,6 @@ namespace EDDiscovery
 
                 ShowInfoPanel("Loading. Please wait!", true);
 
-                RestoreFormPosition();
-
                 LoadTabs();
 
                 if (EDDOptions.Instance.ActionButton)
@@ -244,7 +240,6 @@ namespace EDDiscovery
 
             actioncontroller.onStartup();
 
-            _shownOnce = true;
             Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " EDF shown complete");
 
             // Form is fully loaded, we can do tab actions now
@@ -835,7 +830,6 @@ namespace EDDiscovery
             SystemNoteClass.CommitDirtyNotes((snc) => { if (EDCommander.Current.SyncToEdsm && snc.FSDEntry) EDSMSync.SendComments(snc.SystemName, snc.Note, snc.EdsmId); });
 
             screenshotconverter.SaveSettings();
-            SaveFormPosition();
             SQLiteDBClass.PutSettingBool("ToolBarPanelPinState", panelToolBar.PinState);
 
             theme.SaveSettings(null);
@@ -1292,7 +1286,7 @@ namespace EDDiscovery
         private void EDDiscoveryForm_Resize(object sender, EventArgs e)
         {
             // We may be getting called by this.ResumeLayout() from InitializeComponent().
-            if (EDDConfig != null && _shownOnce)
+            if (EDDConfig != null && FormShownOnce)
             {
                 if (EDDConfig.UseNotifyIcon && EDDConfig.MinimizeToNotifyIcon)
                 {
@@ -1301,15 +1295,11 @@ namespace EDDiscovery
                     else if (!Visible)
                         Show();
                 }
-                RecordFormPosition();
+
                 notifyIconMenu_Open.Enabled = FormWindowState.Minimized == WindowState;
             }
         }
 
-        private void EDDiscoveryForm_ResizeEnd(object sender, EventArgs e)      // occurs at end, during a resize or location change
-        {
-            RecordFormPosition();
-        }
 
         #region panelToolBar animation
 

@@ -292,8 +292,6 @@ namespace EDDiscovery
             this.Text = "2D Map";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form2dClosing);
             this.Load += new System.EventHandler(this.Form2dLoad);
-            this.ResizeEnd += new System.EventHandler(this.Form2DMap_ResizeEnd);
-            this.Resize += new System.EventHandler(this.Form2DMap_ResizeEnd);
             this.toolStrip.ResumeLayout(false);
             this.toolStrip.PerformLayout();
             this.panelTop.ResumeLayout(false);

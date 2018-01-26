@@ -99,15 +99,15 @@ namespace EDDiscovery.UserControls
 
         #region Resize
 
-        public bool inresizeduetoexpand = false;                                            // FUNCTIONS to allow a form to grow temporarily.  Does not work when inside the panels
+        public bool InResizeDueToExpand = false;                                            // FUNCTIONS to allow a form to grow temporarily.  Does not work when inside the panels
 
         public void RequestTemporaryMinimumSize(Size w)         // w is client area
         {
             if (this.Parent is Forms.UserControlForm)
             {
-                inresizeduetoexpand = true;
+                InResizeDueToExpand = true;
                 ((Forms.UserControlForm)(this.Parent)).RequestTemporaryMinimiumSize(w);
-                inresizeduetoexpand = false;
+                InResizeDueToExpand = false;
             }
         }
 
@@ -115,9 +115,9 @@ namespace EDDiscovery.UserControls
         {
             if (this.Parent is Forms.UserControlForm)
             {
-                inresizeduetoexpand = true;
+                InResizeDueToExpand = true;
                 ((Forms.UserControlForm)(this.Parent)).RequestTemporaryResizeExpand(w);
-                inresizeduetoexpand = false;
+                InResizeDueToExpand = false;
             }
         }
 
@@ -125,9 +125,9 @@ namespace EDDiscovery.UserControls
         {
             if (this.Parent is Forms.UserControlForm)
             {
-                inresizeduetoexpand = true;
+                InResizeDueToExpand = true;
                 ((Forms.UserControlForm)(this.Parent)).RequestTemporaryResize(w);
-                inresizeduetoexpand = false;
+                InResizeDueToExpand = false;
             }
         }
 
@@ -135,16 +135,16 @@ namespace EDDiscovery.UserControls
         {
             if (this.Parent is Forms.UserControlForm)
             {
-                inresizeduetoexpand = true;
+                InResizeDueToExpand = true;
                 ((Forms.UserControlForm)(this.Parent)).RevertToNormalSize();
-                inresizeduetoexpand = false;
+                InResizeDueToExpand = false;
             }
         }
 
         public bool IsInTemporaryResize                         // have we grown?
         { get
             {
-                return (this.Parent is Forms.UserControlForm) ? ((Forms.UserControlForm)(this.Parent)).istemporaryresized : false;
+                return (this.Parent is Forms.UserControlForm) ? ((Forms.UserControlForm)(this.Parent)).IsTemporaryResized : false;
             }
         }
 

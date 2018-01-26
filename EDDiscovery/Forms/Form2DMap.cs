@@ -55,8 +55,6 @@ namespace EDDiscovery
         bool initdone = false;
         private void Form2dLoad(object sender, EventArgs e)
         {
-            RestoreFormPosition();
-
             initdone = false;
             pickerStart = new DateTimePicker();
             pickerStop = new DateTimePicker();
@@ -108,8 +106,6 @@ namespace EDDiscovery
 
         private void Form2dClosing(object sender, FormClosingEventArgs e)
         {
-            SaveFormPosition();
-
             if (imageViewer.Image != null)
             {
                 imageViewer.Image.Dispose();
@@ -338,11 +334,6 @@ namespace EDDiscovery
             }
         }
 
-        private void Form2DMap_ResizeEnd(object sender, EventArgs e)
-        {
-            RecordFormPosition();
-        }
-
         private void toolStripButtonZoomOut_Click(object sender, EventArgs e)
         {
             imageViewer.ZoomOut();
@@ -351,11 +342,6 @@ namespace EDDiscovery
         private void toolStripButtonZoomtoFit_Click(object sender, EventArgs e)
         {
             imageViewer.ZoomToFit();
-        }
-
-        private void dateTimePicker1_ValueChanged(object sender, EventArgs e)
-        {
-
         }
     }
 }
