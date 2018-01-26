@@ -28,13 +28,17 @@ namespace EliteDangerousCore.JournalEvents
         public JournalSupercruiseExit(JObject evt ) : base(evt, JournalTypeEnum.SupercruiseExit)
         {
             StarSystem = evt["StarSystem"].Str();
+            SystemAddress = evt["SystemAddress"].LongNull();
             Body = evt["Body"].Str();
+            BodyID = evt["BodyID"].IntNull();
             BodyType = evt["BodyType"].Str();
             if (BodyType.Equals("Null", System.StringComparison.InvariantCultureIgnoreCase)) // obv a frontier bug
                 BodyType = "";
         }
         public string StarSystem { get; set; }
+        public long? SystemAddress { get; set; }
         public string Body { get; set; }
+        public int? BodyID { get; set; }
         public string BodyType { get; set; }
 
         public override void FillInformation(out string summary, out string info, out string detailed) //V

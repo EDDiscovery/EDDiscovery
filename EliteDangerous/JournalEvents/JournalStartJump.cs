@@ -32,10 +32,12 @@ namespace EliteDangerousCore.JournalEvents
             StarSystem = evt["StarSystem"].Str();
             StarClass = evt["StarClass"].Str();
             FriendlyStarClass = (StarClass.Length > 0) ? Bodies.StarName(Bodies.StarStr2Enum(StarClass)) : "";
+            SystemAddress = evt["SystemAddress"].LongNull();
         }
 
         public string JumpType { get; set; }            // Hyperspace, Supercruise
         public string StarSystem { get; set; }
+        public long? SystemAddress { get; set; }
         public string StarClass { get; set; }
         public string FriendlyStarClass { get; set; }
 

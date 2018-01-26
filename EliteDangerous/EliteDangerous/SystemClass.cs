@@ -32,6 +32,7 @@ namespace EliteDangerousCore
         public DateTime UpdateDate { get; set; }
         public int gridid { get; set; }
         public int randomid { get; set; }
+        public long? SystemAddress { get; set; }
 
         public bool HasCoordinate
         {

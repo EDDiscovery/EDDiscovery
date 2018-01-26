@@ -136,7 +136,7 @@ namespace EliteDangerousCore.EDDN
             return msg;
         }
 
-        public JObject CreateEDDNMessage(JournalDocked journal, double x, double y, double z)
+        public JObject CreateEDDNMessage(JournalDocked journal, double x, double y, double z, long? systemAddress)
         {
             JObject msg = new JObject();
 
@@ -150,11 +150,14 @@ namespace EliteDangerousCore.EDDN
 
             message["StarPos"] = new JArray(new float[] { (float)x, (float)y, (float)z });
 
+            if (systemAddress != null)
+                message["SystemAddress"] = systemAddress;
+
             msg["message"] = message;
             return msg;
         }
 
-        public JObject CreateEDDNMessage(JournalScan journal, string starSystem, double x, double y, double z)
+        public JObject CreateEDDNMessage(JournalScan journal, string starSystem, double x, double y, double z, long? systemAddress = null)
         {
             JObject msg = new JObject();
 
@@ -165,6 +168,9 @@ namespace EliteDangerousCore.EDDN
 
             message["StarSystem"] = starSystem;
             message["StarPos"] = new JArray(new float[] { (float)x, (float)y, (float)z });
+
+            if (systemAddress != null)
+                message["SystemAddress"] = systemAddress;
 
             string bodydesig = journal.BodyDesignation ?? journal.BodyName;
 
