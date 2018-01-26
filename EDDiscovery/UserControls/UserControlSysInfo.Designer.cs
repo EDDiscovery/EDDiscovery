@@ -607,7 +607,7 @@ namespace EDDiscovery.UserControls
             this.buttonEDDB.ImageSelected = ExtendedControls.DrawnPanel.ImageType.EDDB;
             this.buttonEDDB.Location = new System.Drawing.Point(97, 30);
             this.buttonEDDB.Name = "buttonEDDB";
-            this.buttonEDDB.Padding = new System.Windows.Forms.Padding(0);
+            this.buttonEDDB.Padding = new System.Windows.Forms.Padding(2);
             this.buttonEDDB.Size = new System.Drawing.Size(20, 20);
             this.buttonEDDB.TabIndex = 5;
             this.buttonEDDB.Click += new System.EventHandler(this.buttonEDDB_Click);
@@ -621,7 +621,7 @@ namespace EDDiscovery.UserControls
             this.buttonRoss.ImageSelected = ExtendedControls.DrawnPanel.ImageType.Ross;
             this.buttonRoss.Location = new System.Drawing.Point(120, 30);
             this.buttonRoss.Name = "buttonRoss";
-            this.buttonRoss.Padding = new System.Windows.Forms.Padding(0);
+            this.buttonRoss.Padding = new System.Windows.Forms.Padding(2);
             this.buttonRoss.Size = new System.Drawing.Size(20, 20);
             this.buttonRoss.TabIndex = 6;
             this.buttonRoss.Click += new System.EventHandler(this.buttonRoss_Click);
@@ -671,7 +671,7 @@ namespace EDDiscovery.UserControls
             this.buttonEDSM.ImageSelected = ExtendedControls.DrawnPanel.ImageType.InverseText;
             this.buttonEDSM.Location = new System.Drawing.Point(53, 30);
             this.buttonEDSM.Name = "buttonEDSM";
-            this.buttonEDSM.Padding = new System.Windows.Forms.Padding(0);
+            this.buttonEDSM.Padding = new System.Windows.Forms.Padding(2);
             this.buttonEDSM.Size = new System.Drawing.Size(44, 20);
             this.buttonEDSM.TabIndex = 4;
             this.buttonEDSM.Text = "EDSM";
@@ -777,7 +777,7 @@ namespace EDDiscovery.UserControls
             this.buttonEDSMTarget.ImageSelected = ExtendedControls.DrawnPanel.ImageType.InverseText;
             this.buttonEDSMTarget.Location = new System.Drawing.Point(216, 335);
             this.buttonEDSMTarget.Name = "buttonEDSMTarget";
-            this.buttonEDSMTarget.Padding = new System.Windows.Forms.Padding(0);
+            this.buttonEDSMTarget.Padding = new System.Windows.Forms.Padding(2);
             this.buttonEDSMTarget.Size = new System.Drawing.Size(44, 20);
             this.buttonEDSMTarget.TabIndex = 23;
             this.buttonEDSMTarget.Text = "EDSM";
