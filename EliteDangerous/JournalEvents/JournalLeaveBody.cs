@@ -5,12 +5,12 @@
  * file except in compliance with the License. You may obtain a copy of the License at
  *
  * http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
  * Unless required by applicable law or agreed to in writing, software distributed under
  * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
- *
+ * 
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 using Newtonsoft.Json.Linq;
@@ -18,29 +18,35 @@ using System.Linq;
 
 namespace EliteDangerousCore.JournalEvents
 {
-    //When written: liftoff from a landing pad in a station, outpost or settlement
+    //When written: when leaving an astronomical body
     //Parameters:
-    //•	StationName: name of station
+    // •	StarSystem
+    // •	SystemAddress
+    // •	Body
+    // •	BodyID
 
-    //•	Security
-    [JournalEntryType(JournalTypeEnum.Undocked)]
-    public class JournalUndocked : JournalEntry
+    [JournalEntryType(JournalTypeEnum.LeaveBody)]
+    public class JournalLeaveBody : JournalEntry
     {
-        public JournalUndocked(JObject evt ) : base(evt, JournalTypeEnum.Undocked)
+        public JournalLeaveBody(JObject evt) : base(evt, JournalTypeEnum.LeaveBody)
         {
-            StationName = evt["StationName"].Str();
-            StationType = evt["StationType"].Str().SplitCapsWord();
-            MarketID = evt["MarketID"].LongNull();
+            StarSystem = evt["StarSystem"].Str();
+            SystemAddress = evt["SystemAddress"].Long();
+            Body = evt["Body"].Str();
+            BodyID = evt["BodyID"].Int();
         }
-        public string StationName { get; set; }
-        public string StationType { get; set; }
-        public long? MarketID { get; set; }
+
+        public string StarSystem { get; set; }
+        public long SystemAddress { get; set; }
+        public string Body { get; set; }
+        public int BodyID { get; set; }
 
         public override void FillInformation(out string summary, out string info, out string detailed) //V
         {
             summary = EventTypeStr.SplitCapsWord();
-            info = BaseUtils.FieldBuilder.Build("", StationName, "Type:", StationType);
+            info = Body;
             detailed = "";
         }
+
     }
 }
