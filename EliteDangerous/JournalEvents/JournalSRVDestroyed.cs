@@ -18,29 +18,27 @@ using System.Linq;
 
 namespace EliteDangerousCore.JournalEvents
 {
-    //When written: liftoff from a landing pad in a station, outpost or settlement
-    //Parameters:
-    //•	StationName: name of station
-
-    //•	Security
-    [JournalEntryType(JournalTypeEnum.Undocked)]
-    public class JournalUndocked : JournalEntry
+    //When written: SRV is destroyed
+    //Parameters: none
+    [JournalEntryType(JournalTypeEnum.SRVDestroyed)]
+    public class JournalSRVDestroyed : JournalEntry, IShipInformation
     {
-        public JournalUndocked(JObject evt ) : base(evt, JournalTypeEnum.Undocked)
+        public JournalSRVDestroyed(JObject evt ) : base(evt, JournalTypeEnum.SRVDestroyed)
         {
-            StationName = evt["StationName"].Str();
-            StationType = evt["StationType"].Str().SplitCapsWord();
-            MarketID = evt["MarketID"].LongNull();
+
         }
-        public string StationName { get; set; }
-        public string StationType { get; set; }
-        public long? MarketID { get; set; }
+
+        public void ShipInformation(ShipInformationList shp, DB.SQLiteConnectionUser conn)
+        {
+            shp.DockSRV();
+        }
 
         public override void FillInformation(out string summary, out string info, out string detailed) //V
         {
             summary = EventTypeStr.SplitCapsWord();
-            info = BaseUtils.FieldBuilder.Build("", StationName, "Type:", StationType);
+            info = "";
             detailed = "";
         }
+
     }
 }

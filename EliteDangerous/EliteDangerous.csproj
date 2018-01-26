@@ -136,6 +136,9 @@
     <Compile Include="EliteDangerous\VisitingStarsCacheFolder.cs" />
     <Compile Include="HistoryList\HistoryEntry.cs" />
     <Compile Include="HistoryList\HistoryList.cs" />
+    <Compile Include="JournalEvents\JournalLeaveBody.cs" />
+    <Compile Include="JournalEvents\JournalApproachBody.cs" />
+    <Compile Include="JournalEvents\JournalDiscoveryScan.cs" />
     <Compile Include="JournalEvents\JournalApproachSettlement.cs" />
     <Compile Include="JournalEvents\JournalBounty.cs" />
     <Compile Include="JournalEvents\JournalBuyAmmo.cs" />
@@ -201,11 +204,17 @@
     <Compile Include="JournalEvents\JournalLaunchSRV.cs" />
     <Compile Include="JournalEvents\JournalLiftoff.cs" />
     <Compile Include="JournalEvents\JournalLoadGame.cs" />
+    <Compile Include="JournalEvents\JournalModuleInfo.cs" />
     <Compile Include="JournalEvents\JournalLoadout.cs" />
     <Compile Include="JournalEvents\JournalLocOrJump.cs" />
     <Compile Include="JournalEvents\JournalLocation.cs" />
     <Compile Include="JournalEvents\JournalMarketBuy.cs" />
     <Compile Include="JournalEvents\JournalMarketSell.cs" />
+    <Compile Include="JournalEvents\JournalMarket.cs" />
+    <Compile Include="JournalEvents\JournalMissions.cs" />
+    <Compile Include="JournalEvents\JournalShipyard.cs" />
+    <Compile Include="JournalEvents\JournalOutfitting.cs" />
+    <Compile Include="JournalEvents\JournalStoredModules.cs" />
     <Compile Include="JournalEvents\JournalMassModuleStore.cs" />
     <Compile Include="JournalEvents\JournalMaterialCollected.cs" />
     <Compile Include="JournalEvents\JournalMaterialDiscarded.cs" />
@@ -277,6 +286,7 @@
     <Compile Include="JournalEvents\JournalSynthesis.cs" />
     <Compile Include="JournalEvents\JournalSystemsShutdown.cs" />
     <Compile Include="JournalEvents\JournalTouchdown.cs" />
+    <Compile Include="JournalEvents\JournalShipTargeted.cs" />
     <Compile Include="JournalEvents\JournalUSSDrop.cs" />
     <Compile Include="JournalEvents\JournalUndocked.cs" />
     <Compile Include="JournalEvents\JournalUnknown.cs" />
@@ -284,6 +294,8 @@
     <Compile Include="JournalEvents\JournalWingAdd.cs" />
     <Compile Include="JournalEvents\JournalWingInvite.cs" />
     <Compile Include="JournalEvents\JournalWingJoin.cs" />
+    <Compile Include="JournalEvents\JournalSRVDestroyed.cs" />
+    <Compile Include="JournalEvents\JournalUnderAttack.cs" />
     <Compile Include="JournalEvents\JournalWingLeave.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
