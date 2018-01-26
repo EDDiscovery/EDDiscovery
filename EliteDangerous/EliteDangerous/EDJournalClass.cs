@@ -221,6 +221,68 @@ namespace EliteDangerousCore
             }
         }
 
+        private string GetExtraInfoFileName(JournalTypeEnum jtype)
+        {
+            switch (jtype)
+            {
+                case JournalTypeEnum.Market: return "Market.json";
+                case JournalTypeEnum.Outfitting: return "Outfitting.json";
+                case JournalTypeEnum.Shipyard: return "Shipyard.json";
+                case JournalTypeEnum.ModuleInfo: return "ModulesInfo.json";
+                default: return null;
+            }
+        }
+
+        private bool ReadExtraInfoFromFile(JournalEntry je, EDJournalReader rdr, out JournalReaderEntry jre)
+        {
+            jre = null;
+
+            string extrafile = GetExtraInfoFileName(je.EventTypeID);
+
+            if (extrafile == null)
+            {
+                return false;
+            }
+
+            extrafile = Path.Combine(Path.GetDirectoryName(rdr.FileName), extrafile);
+
+            if (File.Exists(extrafile))
+            {
+                JObject jo = null;
+
+                for (int retries = 0; retries < 5; retries++)
+                {
+                    try
+                    {
+                        string json = File.ReadAllText(extrafile);
+                        if (json != null)
+                        {
+                            jo = JObject.Parse(json);
+                            JournalEntry newje = JournalEntry.CreateJournalEntry(jo);
+
+                            if (newje.EventTimeUTC == je.EventTimeUTC && newje.EventTypeStr == je.EventTypeStr)
+                            {
+                                jre = new JournalReaderEntry
+                                {
+                                    JournalEntry = newje,
+                                    Json = jo
+                                };
+
+                                return true;
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Trace.WriteLine($"Unable to read extra info from {extrafile}: {ex.Message}");
+                        Thread.Sleep(500);
+                    }
+                }
+            }
+
+            return false;
+        }
+
         private void ScanReader(EDJournalReader nfi, List<JournalEntry> entries)
         {
             int netlogpos = 0;
@@ -247,9 +309,19 @@ namespace EliteDangerousCore
 
                             foreach (JournalReaderEntry jre in ents)
                             {
-                                entries.Add(jre.JournalEntry);
-                                jre.JournalEntry.Add(jre.Json, cn, txn);
-                                ticksNoActivity = 0;
+                                JournalReaderEntry xjre = null;
+                                if (ReadExtraInfoFromFile(jre.JournalEntry, nfi, out xjre))
+                                {
+                                    entries.Add(xjre.JournalEntry);
+                                    jre.JournalEntry.Add(xjre.Json, cn, txn);
+                                    ticksNoActivity = 0;
+                                }
+                                else
+                                {
+                                    entries.Add(jre.JournalEntry);
+                                    jre.JournalEntry.Add(jre.Json, cn, txn);
+                                    ticksNoActivity = 0;
+                                }
                             }
 
                             nfi.TravelLogUnit.Update(cn);
