@@ -18,28 +18,34 @@ using System.Linq;
 
 namespace EliteDangerousCore.JournalEvents
 {
-    //When written: liftoff from a landing pad in a station, outpost or settlement
-    //Parameters:
-    //•	StationName: name of station
-
-    //•	Security
-    [JournalEntryType(JournalTypeEnum.Undocked)]
-    public class JournalUndocked : JournalEntry
+    /*
+     When written: when repairing modules using the Auto Field Maintenance Unit (AFMU)
+    Parameters:
+     Module: module name
+     FullyRepaired: (bool)
+     Health; (float 0.0..1.0)
+    If the AFMU runs out of ammo, the module may not be fully repaired.
+    Example:
+    { "timestamp":"2017-08-14T15:41:50Z", "event":"AfmuRepairs",
+    "Module":"$modularcargobaydoor_name;", "Module_Localised":"Cargo Hatch",
+    "FullyRepaired":true, "Health":1.000000 } 
+     */
+    [JournalEntryType(JournalTypeEnum.DiscoveryScan)]
+    public class JournalDiscoveryScan : JournalEntry
     {
-        public JournalUndocked(JObject evt ) : base(evt, JournalTypeEnum.Undocked)
+        public JournalDiscoveryScan(JObject evt) : base(evt, JournalTypeEnum.DiscoveryScan)
         {
-            StationName = evt["StationName"].Str();
-            StationType = evt["StationType"].Str().SplitCapsWord();
-            MarketID = evt["MarketID"].LongNull();
+            SystemAddress = evt["SystemAddress"].Long();
+            Bodies = evt["Bodies"].Int();
         }
-        public string StationName { get; set; }
-        public string StationType { get; set; }
-        public long? MarketID { get; set; }
+
+        public long SystemAddress { get; set; }
+        public int Bodies { get; set; }
 
         public override void FillInformation(out string summary, out string info, out string detailed) //V
         {
             summary = EventTypeStr.SplitCapsWord();
-            info = BaseUtils.FieldBuilder.Build("", StationName, "Type:", StationType);
+            info = BaseUtils.FieldBuilder.Build("New bodies discovered:", Bodies);
             detailed = "";
         }
     }

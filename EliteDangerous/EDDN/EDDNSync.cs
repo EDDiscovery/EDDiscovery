@@ -164,11 +164,23 @@ namespace EliteDangerousCore.EDDN
             }
             else if (je.EventTypeID == JournalTypeEnum.Docked)
             {
-                msg = eddn.CreateEDDNMessage(je as JournalDocked, he.System.x, he.System.y, he.System.z);
+                msg = eddn.CreateEDDNMessage(je as JournalDocked, he.System.x, he.System.y, he.System.z, he.System.SystemAddress);
             }
             else if (je.EventTypeID == JournalTypeEnum.Scan)
             {
-                msg = eddn.CreateEDDNMessage(je as JournalScan, he.System.name, he.System.x, he.System.y, he.System.z);
+                msg = eddn.CreateEDDNMessage(je as JournalScan, he.System.name, he.System.x, he.System.y, he.System.z, he.System.SystemAddress);
+            }
+            else if (je.EventTypeID == JournalTypeEnum.Outfitting)
+            {
+                msg = eddn.CreateEDDNMessage(je as JournalOutfitting, he.System.x, he.System.y, he.System.z, he.System.SystemAddress);
+            }
+            else if (je.EventTypeID == JournalTypeEnum.Shipyard)
+            {
+                msg = eddn.CreateEDDNMessage(je as JournalShipyard, he.System.x, he.System.y, he.System.z, he.System.SystemAddress);
+            }
+            else if (je.EventTypeID == JournalTypeEnum.Market)
+            {
+                msg = eddn.CreateEDDNMessage(je as JournalMarket, he.System.x, he.System.y, he.System.z, he.System.SystemAddress);
             }
 
             if (msg != null)
