@@ -298,6 +298,7 @@
     <Compile Include="JournalEvents\JournalSRVDestroyed.cs" />
     <Compile Include="JournalEvents\JournalUnderAttack.cs" />
     <Compile Include="JournalEvents\JournalShutdown.cs" />
+    <Compile Include="JournalEvents\JournalStatistics.cs" />
     <Compile Include="JournalEvents\JournalWingLeave.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">

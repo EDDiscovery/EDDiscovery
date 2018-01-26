@@ -182,7 +182,38 @@ public static class JSONObjectExtensions
         catch { return defc; }
     }
 
+    public static JToken RemoveKeyUnderscores(this JToken jo)
+    {
+        if (jo == null || jo.Empty() || !(jo is JObject))
+            return jo;
 
+        JObject ret = new JObject();
+
+        foreach (JProperty prop in ((JObject)jo).Properties())
+        {
+            ret[prop.Name.Replace("_", "")] = prop.Value;
+        }
+
+        return ret;
+    }
+
+    public static JToken RemoveKeyPrefix(this JToken jo, string prefix)
+    {
+        if (jo == null || jo.Empty() || !(jo is JObject))
+            return jo;
+
+        JObject ret = new JObject();
+
+        foreach (JProperty prop in ((JObject)jo).Properties())
+        {
+            string key = prop.Name;
+            if (key.StartsWith(prefix))
+                key = key.Substring(prefix.Length);
+            ret[key] = prop.Value;
+        }
+
+        return ret;
+    }
 }
 
 
