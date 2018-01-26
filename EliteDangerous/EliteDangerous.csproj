@@ -214,6 +214,7 @@
     <Compile Include="JournalEvents\JournalMissions.cs" />
     <Compile Include="JournalEvents\JournalShipyard.cs" />
     <Compile Include="JournalEvents\JournalOutfitting.cs" />
+    <Compile Include="JournalEvents\JournalStoredShips.cs" />
     <Compile Include="JournalEvents\JournalStoredModules.cs" />
     <Compile Include="JournalEvents\JournalMassModuleStore.cs" />
     <Compile Include="JournalEvents\JournalMaterialCollected.cs" />
