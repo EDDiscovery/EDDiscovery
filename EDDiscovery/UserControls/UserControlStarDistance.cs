@@ -13,38 +13,90 @@
  * 
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
+using EliteDangerousCore;
+using EliteDangerousCore.DB;
+using EliteDangerousCore.EDSM;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Drawing;
 using System.Data;
+using System.Diagnostics;
+using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Collections.Concurrent;
-using System.Threading;
-using EliteDangerousCore;
-using EliteDangerousCore.EDSM;
-using EliteDangerousCore.DB;
 
 namespace EDDiscovery.UserControls
 {
     public partial class UserControlStarDistance : UserControlCommonBase
     {
-        private string DbSave { get { return "StarDistancePanel" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
-
-        private StarDistanceComputer computer;
-        HistoryEntry last_he;
-
         public UserControlStarDistance()
         {
             InitializeComponent();
             var corner = dataGridViewNearest.TopLeftHeaderCell; // work around #1487
         }
 
-        const double defaultmaximumradius = 1000;
-        const int maxitems = 500;
+        private string DbSave { get { return "StarDistancePanel" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
+        [DefaultValue(defaultMaxRadius)]
+        private double MaxRadius
+        {
+            get { return _MaxRadius; }
+            set
+            {
+                if (double.IsNaN(value) || double.IsInfinity(value) || value <= 0)
+                    value = defaultMaxRadius;
+                if (_MaxRadius != value)
+                {
+                    _MaxRadius = value;
+                    if (last_he != null || uctg != null)
+                        KickComputation(last_he ?? uctg.GetCurrentHistoryEntry);
+                }
+                // Don't adjust text in a focused textbox while a user is typing.
+                if (textMaxRadius.ContainsFocus)
+                    pendingText = $"{value:0.00}";
+                else
+                    textMaxRadius.Text = $"{value:0.00}";
+            }
+        }
+        [DefaultValue(defaultMinRadius)]
+        private double MinRadius
+        {
+            get { return _MinRadius; }
+            set
+            {
+                if (double.IsNaN(value) || double.IsInfinity(value) || value < 0)
+                    value = defaultMinRadius;
+                if (_MinRadius != value)
+                {
+                    _MinRadius = value;
+                    if (last_he != null || uctg != null)
+                        KickComputation(last_he ?? uctg.GetCurrentHistoryEntry);
+                }
+                // Don't adjust text in a focused textbox while a user is typing.
+                if (textMinRadius.ContainsFocus)
+                    pendingText = $"{value:0.00}";
+                else
+                    textMinRadius.Text = $"{value:0.00}";
+            }
+        }
+
+        private StarDistanceComputer computer = null;
+        private HistoryEntry last_he = null;
+        private ISystem rightclicksystem = null;
+        private int rightclickrow = -1;
+        private string pendingText = null;
+
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        private double _MaxRadius = defaultMaxRadius;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        private double _MinRadius = defaultMinRadius;
+
+        private const double defaultMaxRadius = 1000;
+        private const double defaultMinRadius = 0;
+        private const int maxitems = 500;
 
         public override void Init()
         {
@@ -52,8 +104,8 @@ namespace EDDiscovery.UserControls
 
             uctg.OnTravelSelectionChanged += Uctg_OnTravelSelectionChanged;
 
-            textMinRadius.Text = SQLiteConnectionUser.GetSettingDouble(DbSave + "Min", 0).ToStringInvariant();
-            textMaxRadius.Text = SQLiteConnectionUser.GetSettingDouble(DbSave + "Max", defaultmaximumradius).ToStringInvariant();
+            MaxRadius = SQLiteConnectionUser.GetSettingDouble(DbSave + "Max", MaxRadius);
+            MinRadius = SQLiteConnectionUser.GetSettingDouble(DbSave + "Min", MinRadius);
             checkBoxCube.Checked = SQLiteConnectionUser.GetSettingBool(DbSave + "Behaviour", false);
         }
 
@@ -68,8 +120,8 @@ namespace EDDiscovery.UserControls
         {
             uctg.OnTravelSelectionChanged -= Uctg_OnTravelSelectionChanged;
             computer.ShutDown();
-            SQLiteConnectionUser.PutSettingDouble(DbSave + "Min", textMinRadius.Text.InvariantParseDouble(0));
-            SQLiteConnectionUser.PutSettingDouble(DbSave + "Max", textMaxRadius.Text.InvariantParseDouble(defaultmaximumradius));
+            SQLiteConnectionUser.PutSettingDouble(DbSave + "Min", MinRadius);
+            SQLiteConnectionUser.PutSettingDouble(DbSave + "Max", MaxRadius);
             SQLiteConnectionUser.PutSettingBool(DbSave + "Behaviour", checkBoxCube.Checked);
         }
 
@@ -90,12 +142,11 @@ namespace EDDiscovery.UserControls
                 last_he = he;
 
                 //System.Diagnostics.Debug.WriteLine("Star grid started, uctg selected, ask");
+
+                // Get nearby systems from the systems DB.
                 computer.CalculateClosestSystems(he.System, 
                     (s, d) => BeginInvoke((MethodInvoker)delegate { NewStarListComputed(s, d); }) , 
-                    maxitems,
-                    Math.Max(textMinRadius.Text.InvariantParseDouble(0), 8.0/128.0),     // min to exclude our star
-                    textMaxRadius.Text.InvariantParseDouble(defaultmaximumradius),
-                    !checkBoxCube.Checked
+                    maxitems, MinRadius, MaxRadius, !checkBoxCube.Checked
                     );     // hook here, force closes system update
             }
         }
@@ -104,11 +155,9 @@ namespace EDDiscovery.UserControls
         {
             System.Diagnostics.Debug.Assert(Application.MessageLoop);       // check!
 
+            // Get nearby systems from our travel history. This will filter out duplicates from the systems DB.
             discoveryform.history.CalculateSqDistances(list, sys.x, sys.y, sys.z,
-                                maxitems,
-                                Math.Max(textMinRadius.Text.InvariantParseDouble(0), 8.0/128.0),     // min to exclude our star
-                                textMaxRadius.Text.InvariantParseDouble(defaultmaximumradius),
-                                !checkBoxCube.Checked
+                                maxitems, MinRadius, MaxRadius, !checkBoxCube.Checked
                                 );
 
             FillGrid(sys.name, list);
@@ -116,36 +165,30 @@ namespace EDDiscovery.UserControls
 
         private void FillGrid(string name, BaseUtils.SortedListDoubleDuplicate<ISystem> csl)
         {
-            SetControlText("");
             dataGridViewNearest.Rows.Clear();
 
-            double? sphere = textMaxRadius.Text.InvariantParseDoubleNull();
-
-            if (csl.Count() > 0)
+            if (csl != null && csl.Any())
             {
                 SetControlText("From " + name);
                 foreach (KeyValuePair<double, ISystem> tvp in csl)
                 {
-                    int visits = discoveryform.history.GetVisitsCount(tvp.Value.name, tvp.Value.id_edsm);
-                    object[] rowobj = { tvp.Value.name, Math.Sqrt(tvp.Key).ToString("0.00"), visits.ToStringInvariant() };       // distances are stored squared for speed, back to normal.
+                    double dist = Math.Sqrt(tvp.Key);   // distances are stored squared for speed, back to normal.
 
-                    if (checkBoxCube.Checked || sphere == null )        // if cube, or sphere value incorrect, just add
+                    if (tvp.Value.name != name && (checkBoxCube.Checked || (dist >= MinRadius && dist <= MaxRadius)))
                     {
-                        int rowindex = dataGridViewNearest.Rows.Add(rowobj);
-                        dataGridViewNearest.Rows[rowindex].Tag = tvp.Value;
-                    }
-                    else if (Math.Sqrt(tvp.Key) <= sphere.Value)
-                    { 
+                        int visits = discoveryform.history.GetVisitsCount(tvp.Value.name, tvp.Value.id_edsm);
+                        object[] rowobj = { tvp.Value.name, $"{dist:0.00}", $"{visits:n0}" };
+
                         int rowindex = dataGridViewNearest.Rows.Add(rowobj);
                         dataGridViewNearest.Rows[rowindex].Tag = tvp.Value;
                     }
                 }
-                
+            }
+            else
+            {
+                SetControlText(string.Empty);
             }
         }
-
-        ISystem rightclicksystem = null;
-        int rightclickrow = -1;
 
         private void dataGridViewNearest_MouseDown(object sender, MouseEventArgs e)
         {
@@ -213,7 +256,7 @@ namespace EDDiscovery.UserControls
 
         private void dataGridViewNearest_SortCompare(object sender, DataGridViewSortCompareEventArgs e)
         {
-            if (e.Column.Index >= 1)
+            if (colDistance.Equals(e.Column))
             {
                 double v1, v2;
                 string vs1 = e.CellValue1?.ToString();
@@ -224,28 +267,63 @@ namespace EDDiscovery.UserControls
                     e.Handled = true;
                 }
             }
+            else if (colVisited.Equals(e.Column))
+            {
+                int v1, v2;
+                string s1 = e.CellValue1?.ToString();
+                string s2 = e.CellValue2?.ToString();
+                if (!string.IsNullOrEmpty(s1) && !string.IsNullOrEmpty(s2) && int.TryParse(s1, out v1) && int.TryParse(s2, out v2))
+                {
+                    e.SortResult = v1.CompareTo(v2);
+                    e.Handled = true;
+                }
+            }
         }
 
 
         private void textMinRadius_TextChanged(object sender, EventArgs e)
         {
-            double? min = textMinRadius.Text.InvariantParseDoubleNull();
-            if (min != null)
-                KickComputation(uctg.GetCurrentHistoryEntry);
+            // Don't let others directly assigning to textMinRadius.Text result in parsing.
+            if (textMinRadius.ContainsFocus)
+            {
+                double? min = textMinRadius.Text.InvariantParseDoubleNull();
+                MinRadius = min ?? defaultMinRadius;
+            }
+        }
+
+        private void textMinRadius_Leave(object sender, EventArgs e)
+        {
+            if (pendingText != null)
+                textMinRadius.Text = pendingText;
+            pendingText = null;
         }
 
         private void textMaxRadius_TextChanged(object sender, EventArgs e)
         {
-            double? max = textMaxRadius.Text.InvariantParseDoubleNull();
-            if (max != null)
-                KickComputation(uctg.GetCurrentHistoryEntry);
+            // Don't let others directly assigning to textMaxRadius.Text result in parsing.
+            if (textMaxRadius.ContainsFocus)
+            {
+                double? max = textMaxRadius.Text.InvariantParseDoubleNull();
+                MaxRadius = max ?? defaultMaxRadius;
+            }
+        }
+
+        private void textMaxRadius_Leave(object sender, EventArgs e)
+        {
+            if (pendingText != null)
+                textMaxRadius.Text = pendingText;
+            pendingText = null;
+        }
+
+        private void checkBoxCube_CheckedChanged(object sender, EventArgs e)
+        {
+            KickComputation(last_he ?? uctg.GetCurrentHistoryEntry);
         }
 
 
         /// <summary>
         /// Computer
         /// </summary>
-
         public class StarDistanceComputer
         {
             private Thread backgroundStardistWorker;
@@ -329,11 +407,6 @@ namespace EDDiscovery.UserControls
                     }
                 }
             }
-        }
-        
-        private void checkBoxCube_CheckedChanged(object sender, EventArgs e)
-        {
-            KickComputation(last_he ?? uctg.GetCurrentHistoryEntry);
         }
     }
 }
