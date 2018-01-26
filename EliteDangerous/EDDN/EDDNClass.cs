@@ -157,6 +157,75 @@ namespace EliteDangerousCore.EDDN
             return msg;
         }
 
+        public JObject CreateEDDNMessage(JournalOutfitting journal, double x, double y, double z, long? systemAddress)
+        {
+            if (journal.ModuleItems == null)
+                return null;
+
+            JObject msg = new JObject();
+
+            msg["header"] = Header();
+            msg["$schemaRef"] = GetEDDNJournalSchemaRef();
+
+            JObject message = journal.GetJson();
+
+            message = RemoveCommonKeys(message);
+
+            message["StarPos"] = new JArray(new float[] { (float)x, (float)y, (float)z });
+
+            if (systemAddress != null)
+                message["SystemAddress"] = systemAddress;
+
+            msg["message"] = message;
+            return msg;
+        }
+
+        public JObject CreateEDDNMessage(JournalShipyard journal, double x, double y, double z, long? systemAddress)
+        {
+            if (journal.ShipyardItems == null)
+                return null;
+
+            JObject msg = new JObject();
+
+            msg["header"] = Header();
+            msg["$schemaRef"] = GetEDDNJournalSchemaRef();
+
+            JObject message = journal.GetJson();
+
+            message = RemoveCommonKeys(message);
+
+            message["StarPos"] = new JArray(new float[] { (float)x, (float)y, (float)z });
+
+            if (systemAddress != null)
+                message["SystemAddress"] = systemAddress;
+
+            msg["message"] = message;
+            return msg;
+        }
+
+        public JObject CreateEDDNMessage(JournalMarket journal, double x, double y, double z, long? systemAddress)
+        {
+            if (journal.MarketItems == null)
+                return null;
+
+            JObject msg = new JObject();
+
+            msg["header"] = Header();
+            msg["$schemaRef"] = GetEDDNJournalSchemaRef();
+
+            JObject message = journal.GetJson();
+
+            message = RemoveCommonKeys(message);
+
+            message["StarPos"] = new JArray(new float[] { (float)x, (float)y, (float)z });
+
+            if (systemAddress != null)
+                message["SystemAddress"] = systemAddress;
+
+            msg["message"] = message;
+            return msg;
+        }
+
         public JObject CreateEDDNMessage(JournalScan journal, string starSystem, double x, double y, double z, long? systemAddress = null)
         {
             JObject msg = new JObject();
