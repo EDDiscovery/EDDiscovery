@@ -25,17 +25,19 @@ namespace EliteDangerousCore.JournalEvents
     public class JournalUnknown : JournalEntry
     {
         public string json;
+        public string eventname;
 
         public JournalUnknown(JObject evt) : base(evt, JournalTypeEnum.Unknown)
         {
             json = evt.ToString();
+            eventname = evt["event"].Str("No event tag");
         }
 
         public override void FillInformation(out string summary, out string info, out string detailed) //V
         {
-            summary = EventTypeStr.SplitCapsWord();
-            info = "Report to EDDiscovery team an unknown event";
-            detailed = json;
+            summary = eventname.SplitCapsWord();
+            info = "Unhandled Journal event, Report to EDDiscovery team. " + Environment.NewLine + json;
+            detailed = "";
         }
     }
 
