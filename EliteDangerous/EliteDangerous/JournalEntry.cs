@@ -177,6 +177,7 @@ namespace EliteDangerousCore
         Shutdown = 882,
         SRVDestroyed = 883,
         StartJump = 885,
+        Statistics = 888,
         StoredModules = 886,
         StoredShips = 887,
         SupercruiseEntry = 890,
