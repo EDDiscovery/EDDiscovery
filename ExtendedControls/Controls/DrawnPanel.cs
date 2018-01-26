@@ -44,13 +44,16 @@ namespace ExtendedControls
             base.BackgroundImageLayout = ImageLayout.Zoom;
 
             SetStyle(
-                ControlStyles.AllPaintingInWmPaint |
-                ControlStyles.OptimizedDoubleBuffer |
-                ControlStyles.ResizeRedraw |
-                ControlStyles.SupportsTransparentBackColor |
-                ControlStyles.UserPaint, true);
+                ControlStyles.AllPaintingInWmPaint |        // "Free" double-buffering (1/3).
+                ControlStyles.OptimizedDoubleBuffer |       // "Free" double-buffering (2/3).
+                ControlStyles.ResizeRedraw |                // Invalidate after a resize or if the Padding changes.
+                ControlStyles.Selectable |                  // We can receive focus from mouse-click or tab (see the Selectable prop).
+                ControlStyles.SupportsTransparentBackColor |// BackColor.A can be less than 255.
+                ControlStyles.UserPaint |                   // "Free" double-buffering (3/3); OnPaintBackground and OnPaint are needed.
+                ControlStyles.UseTextForAccessibility,      // Use Text for the mnemonic char (and accessibility) if not empty, else the previous Label in the tab order.
+                true);
 
-            // We have to handle MouseClick-to-Click logic, otherwise Click fires for any mouse button.
+            // We have to handle MouseClick-to-Click logic, otherwise Click fires for any mouse button. Double-click is fully ignored.
             SetStyle(ControlStyles.StandardClick | ControlStyles.StandardDoubleClick, false);
         }
 
@@ -423,6 +426,16 @@ namespace ExtendedControls
         }
 
         /// <summary>
+        /// Raises the <see cref="Control.GotFocus"/> event.
+        /// </summary>
+        /// <param name="e">An <see cref="EventArgs"/> containing the event data.</param>
+        protected override void OnGotFocus(EventArgs e)
+        {
+            base.OnGotFocus(e);
+            Invalidate();   // Invalidate to update the focus rectangle.
+        }
+
+        /// <summary>
         /// Raises the <see cref="ImageSelectedChanged"/> event.
         /// </summary>
         /// <param name="e">An <see cref="EventArgs"/> containing the event data.</param>
@@ -464,13 +477,23 @@ namespace ExtendedControls
         }
 
         /// <summary>
+        /// Raises the <see cref="Control.LostFocus"/> event.
+        /// </summary>
+        /// <param name="e">An <see cref="EventArgs"/> containing the event data.</param>
+        protected override void OnLostFocus(EventArgs e)
+        {
+            base.OnLostFocus(e);
+            Invalidate();   // Invalidate to update the focus rectangle.
+        }
+
+        /// <summary>
         /// Raises the <see cref="Control.MouseClick"/> event.
         /// </summary>
         /// <param name="e">A <see cref="MouseEventArgs"/> containing the event data.</param>
         protected override void OnMouseClick(MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Left && !GetStyle(ControlStyles.StandardClick))
-                OnClick(EventArgs.Empty);
+                OnClick(e);
 
             base.OnMouseClick(e);
         }
@@ -540,6 +563,22 @@ namespace ExtendedControls
         {
             //Debug.WriteLine($"{nameof(DrawnPanel)}.{nameof(OnPaint)} ({this.Name ?? "unnamed"}): Enabled {Enabled}, State {_DrawState}");
 
+            Color cFore = this.ForeColor;
+            switch (drawState)
+            {
+                case DrawState.Disabled:
+                    cFore = this.ForeColor.Average(this.BackColor, PanelDisabledScaling);
+                    break;
+                case DrawState.Hover:
+                    if (MouseSelectedColorEnable)
+                        cFore = this.MouseOverColor;
+                    break;
+                case DrawState.Click:
+                    if (MouseSelectedColorEnable)
+                        cFore = this.MouseSelectedColor;
+                    break;
+            }
+
             if (_ImageSelected != ImageType.None)
             {
                 var rcClip = new Rectangle(this.ClientRectangle.Left + this.Padding.Left, this.ClientRectangle.Top + this.Padding.Top,
@@ -550,36 +589,18 @@ namespace ExtendedControls
                 int centrehorzpx = (this.ClientRectangle.Width - 1) / 2;
                 int centrevertpx = (this.ClientRectangle.Height - 1) / 2;
 
-                Color cFore = this.ForeColor;
-                switch (drawState)
-                {
-                    case DrawState.Disabled:
-                        cFore = this.ForeColor.Average(this.BackColor, PanelDisabledScaling);
-                        break;
-                    case DrawState.Hover:
-                        if (MouseSelectedColorEnable)
-                            cFore = this.MouseOverColor;
-                        break;
-                    case DrawState.Click:
-                        if (MouseSelectedColorEnable)
-                            cFore = this.MouseSelectedColor;
-                        break;
-                }
+                e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
 
                 switch (_ImageSelected)
                 {
                     case ImageType.Close:
                         {
                             // Draw a centered 'X'
-                            e.Graphics.SmoothingMode = SmoothingMode.AntiAlias; // AA for diagonal lines
-
                             using (var p2 = new Pen(cFore, 2.0F))
                             {
                                 e.Graphics.DrawLine(p2, new Point(sqClip.Left, sqClip.Top), new Point(sqClip.Right, sqClip.Bottom));
                                 e.Graphics.DrawLine(p2, new Point(sqClip.Left, sqClip.Bottom), new Point(sqClip.Right, sqClip.Top));
                             }
-
-                            e.Graphics.SmoothingMode = SmoothingMode.Default;
                             break;
                         }
                     case ImageType.Minimize:
@@ -671,15 +692,12 @@ namespace ExtendedControls
                         {
                             // Draw 3 thin parallel diagonal lines from the bottom edge to the right edge
                             int mDim = (int)Math.Round(shortestDim / 6f);
-                            e.Graphics.SmoothingMode = SmoothingMode.AntiAlias; // AA for diagonal lines
 
                             using (var p1 = new Pen(cFore, 1.0F))
                             {
                                 for (int i = 0; i < 3; i++)
                                     e.Graphics.DrawLine(p1, new Point(rcClip.Right - i * mDim, rcClip.Bottom), new Point(rcClip.Right, rcClip.Bottom - i * mDim));
                             }
-
-                            e.Graphics.SmoothingMode = SmoothingMode.Default;
                             break;
                         }
                     case ImageType.EDDB:
@@ -692,16 +710,15 @@ namespace ExtendedControls
                             var topLeftCenter = new Point(centrehorzpx - 1 - mDim, topCenter.Y + mDim);
                             var topRightCenter = new Point(centrehorzpx - 1 + mDim, topCenter.Y + mDim);
 
-                            e.Graphics.SmoothingMode = SmoothingMode.AntiAlias; // AA for diagonal lines
-                            using (Pen pb = new Pen(this.BackColor, 2.0F))
+                            cFore = this.BackColor;     // INVERTED
+
+                            using (Pen pb = new Pen(cFore, 2.0F))
                             {
                                 e.Graphics.DrawLine(pb, btmRight, btmCenter);
                                 e.Graphics.DrawLine(pb, btmCenter, topCenter);
                                 e.Graphics.DrawLine(pb, topCenter, topLeftCenter);
                                 e.Graphics.DrawLine(pb, topCenter, topRightCenter);
                             }
-                            e.Graphics.SmoothingMode = SmoothingMode.Default;
-
                             break;
                         }
                     case ImageType.EDSM:
@@ -712,41 +729,23 @@ namespace ExtendedControls
                     case ImageType.Ross:
                         {
                             // Draw an inverted thick '┌'-style symbol
-                            using (Pen pb = new Pen(this.BackColor, 3.0F))
+                            cFore = this.BackColor;     // INVERTED
+                            int mDim = (int)Math.Round(shortestDim / 6f);
+                            using (Pen pb = new Pen(cFore, 3.0F))
                             {
-                                e.Graphics.DrawLine(pb, new Point(rcClip.Left, rcClip.Bottom), new Point(rcClip.Left, rcClip.Top + 4));
-                                e.Graphics.DrawLine(pb, new Point(rcClip.Left, rcClip.Top + 4), new Point(centrehorzpx + 2, rcClip.Top + 4));
+                                e.Graphics.DrawLine(pb, new Point(rcClip.Left + mDim, rcClip.Bottom), new Point(rcClip.Left + mDim, rcClip.Top + 4));
+                                e.Graphics.DrawLine(pb, new Point(rcClip.Left + mDim, rcClip.Top + 4), new Point(centrehorzpx + 2, rcClip.Top + 4));
                             }
                             break;
                         }
                     case ImageType.InverseText:
-                        {
-                            // Draw inverted Text
-                            if (!string.IsNullOrWhiteSpace(this.Text))
-                            {
-                                e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;     // Use AA for the text
-
-                                using (var fmt = ControlHelpersStaticFunc.StringFormatFromContentAlignment(RtlTranslateAlignment(TextAlign)))
-                                using (var textb = new SolidBrush(this.BackColor))
-                                {
-                                    if (this.UseMnemonic)
-                                        fmt.HotkeyPrefix = this.ShowKeyboardCues ? HotkeyPrefix.Show : HotkeyPrefix.Hide;
-                                    if (this.AutoEllipsis)
-                                        fmt.Trimming = StringTrimming.EllipsisCharacter;
-                                    e.Graphics.DrawString(this.Text, this.Font, textb, this.ClientRectangle, fmt);
-                                }
-
-                                e.Graphics.SmoothingMode = SmoothingMode.Default;
-                            }
-                            break;
-                        }
+                        cFore = this.BackColor;     // INVERTED
+                        goto case ImageType.Text;   // FALL THROUGH
                     case ImageType.Text:
                         {
-                            // Draw Text
+                            // Draw Text, potentially inverted
                             if (!string.IsNullOrWhiteSpace(this.Text))
                             {
-                                e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;     // Use AA for the text
-
                                 using (var fmt = ControlHelpersStaticFunc.StringFormatFromContentAlignment(RtlTranslateAlignment(TextAlign)))
                                 using (var textb = new SolidBrush(cFore))
                                 {
@@ -756,8 +755,6 @@ namespace ExtendedControls
                                         fmt.Trimming = StringTrimming.EllipsisCharacter;
                                     e.Graphics.DrawString(this.Text, this.Font, textb, this.ClientRectangle, fmt);
                                 }
-
-                                e.Graphics.SmoothingMode = SmoothingMode.Default;
                             }
                             break;
                         }
@@ -776,7 +773,6 @@ namespace ExtendedControls
                                 e.Graphics.DrawLine(p2, btmCenter, topCenter);
                                 e.Graphics.DrawLine(p2, lftCenter, rgtCenter);
 
-                                e.Graphics.SmoothingMode = SmoothingMode.AntiAlias; // AA for diagonal lines
                                 e.Graphics.DrawLine(p1, btmCenter, new Point(centrehorzpx - mDim, sqClip.Bottom - mDim));
                                 e.Graphics.DrawLine(p1, btmCenter, new Point(centrehorzpx + mDim, sqClip.Bottom - mDim));
                                 e.Graphics.DrawLine(p1, topCenter, new Point(centrehorzpx - mDim, sqClip.Top + mDim));
@@ -786,7 +782,6 @@ namespace ExtendedControls
                                 e.Graphics.DrawLine(p1, lftCenter, new Point(sqClip.Left + mDim, centrevertpx + mDim));
                                 e.Graphics.DrawLine(p1, rgtCenter, new Point(sqClip.Right - mDim, centrevertpx - mDim));
                                 e.Graphics.DrawLine(p1, rgtCenter, new Point(sqClip.Right - mDim, centrevertpx + mDim));
-                                e.Graphics.SmoothingMode = SmoothingMode.Default;
                             }
                             break;
                         }
@@ -855,6 +850,26 @@ namespace ExtendedControls
                             }
                             break;
                         }
+
+                    default:
+                        throw new NotImplementedException($"ImageType ({_ImageSelected}) painting is apparantly not implemented; please add support for it.");
+                }
+
+                e.Graphics.SmoothingMode = SmoothingMode.Default;
+            }
+
+            // Draw a focus rectangle. CanFocus: (IsHandleCreated && Visible && Enabled)
+            if (this.CanFocus && this.Focused && this.ShowFocusCues)
+            {
+                using (var p = new Pen(cFore))
+                {
+                    var rcFocus = new Rectangle(new Point(1, 1), new Size(this.ClientSize.Width - 3, this.ClientSize.Height - 3));
+                    e.Graphics.DrawRectangle(p, rcFocus);   // Draw a rectangle outline 1px smaller than ClientSize ...
+
+                    rcFocus.Inflate(-1, -1);
+                    p.DashStyle = DashStyle.Dash;
+                    p.DashPattern = new[] { 1f, 1f };
+                    e.Graphics.DrawRectangle(p, rcFocus);   // Then draw a dashed rectangle outline 1px smaller than that.
                 }
             }
 
@@ -873,21 +888,40 @@ namespace ExtendedControls
                 case ImageType.EDDB:
                 case ImageType.InverseText:
                 case ImageType.Ross:
-                    using (var b = new SolidBrush(this.Enabled ? this.ForeColor : this.ForeColor.Average(this.BackColor, PanelDisabledScaling)))
-                        e.Graphics.FillRectangle(b, this.ClientRectangle);
-                    break;
+                    {
+                        // This colour is used for the background of the inverted image types.
+                        Color cFore = this.ForeColor;
+                        switch (drawState)
+                        {
+                            case DrawState.Disabled:
+                                cFore = cFore.Average(this.BackColor, PanelDisabledScaling);
+                                break;
+                            case DrawState.Hover:
+                                if (MouseSelectedColorEnable)
+                                    cFore = this.MouseOverColor;
+                                break;
+                            case DrawState.Click:
+                                if (MouseSelectedColorEnable)
+                                    cFore = this.MouseSelectedColor;
+                                break;
+                        }
 
+                        using (var b = new SolidBrush(cFore))
+                            e.Graphics.FillRectangle(b, this.ClientRectangle);
+                        break;
+                    }
+
+                // Otherwise, base can handle it.
                 default:
-                    // Otherwise, base can handle it.
-                    base.OnPaintBackground(e);
-                    break;
+                    {
+                        base.OnPaintBackground(e);
+                        break;
+                    }
             }
 
             if (_Image != null)
             {
-                ImageAttributes iattrib = null;
-                if ((Enabled && drawnImageAttributesEnabled != null) || (!Enabled && drawnImageAttributesDisabled != null))
-                    iattrib = this.Enabled ? drawnImageAttributesEnabled : drawnImageAttributesDisabled;
+                ImageAttributes iattrib = this.Enabled ? drawnImageAttributesEnabled : drawnImageAttributesDisabled;
 
                 switch (base.BackgroundImageLayout)
                 {
@@ -963,7 +997,7 @@ namespace ExtendedControls
                             {
                                 dstRc.Width = (int)((_Image.Width * hRatio) + 0.5);
                                 dstRc.X = (this.ClientSize.Width - dstRc.Width) / 2;
-                            }   
+                            }
 
                             if (iattrib != null)
                                 e.Graphics.DrawImage(_Image, dstRc, 0, 0, _Image.Width, _Image.Height, GraphicsUnit.Pixel, iattrib);
