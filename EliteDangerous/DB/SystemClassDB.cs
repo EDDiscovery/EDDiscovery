@@ -570,7 +570,7 @@ namespace EliteDangerousCore.DB
                             if (System.DBNull.Value != reader[1])                 // paranoid check for null
                             {
                                 ISystem sys = SystemCache.FindSystem(edsmid, cn); // pass it thru the cache..
-                                System.Diagnostics.Debug.WriteLine("Return " + sys.name);
+                               // System.Diagnostics.Debug.WriteLine("Return " + sys.name);
                                 if (sys != null && sys.name != null)
                                 {
                                     double dx = ((double)(long)reader[1]) / XYZScalar - x;
