@@ -18,29 +18,47 @@ using System.Linq;
 
 namespace EliteDangerousCore.JournalEvents
 {
-    //When written: liftoff from a landing pad in a station, outpost or settlement
+    //    When written: when starting game
     //Parameters:
-    //•	StationName: name of station
+    //•	Active: Array of records
+    //o   id
+    //o   Name
+    //o   PassengerMission
+    //o   Expires
 
-    //•	Security
-    [JournalEntryType(JournalTypeEnum.Undocked)]
-    public class JournalUndocked : JournalEntry
+    [JournalEntryType(JournalTypeEnum.Missions)]
+    public class JournalMissions : JournalEntry
     {
-        public JournalUndocked(JObject evt ) : base(evt, JournalTypeEnum.Undocked)
+        public JournalMissions(JObject evt) : base(evt, JournalTypeEnum.Missions)
         {
-            StationName = evt["StationName"].Str();
-            StationType = evt["StationType"].Str().SplitCapsWord();
-            MarketID = evt["MarketID"].LongNull();
+            ActiveMissions = evt["Active"]?.ToObject<MissionItem[]>();
+            FailedMissions = evt["Failed"]?.ToObject<MissionItem[]>();
+            CompletedMissions = evt["Completed"]?.ToObject<MissionItem[]>();
         }
+
         public string StationName { get; set; }
-        public string StationType { get; set; }
-        public long? MarketID { get; set; }
+        public string StarSystem { get; set; }
+        public long MarketID { get; set; }
+
+        public MissionItem[] ActiveMissions { get; set; }
+        public MissionItem[] FailedMissions { get; set; }
+        public MissionItem[] CompletedMissions { get; set; }
 
         public override void FillInformation(out string summary, out string info, out string detailed) //V
         {
             summary = EventTypeStr.SplitCapsWord();
-            info = BaseUtils.FieldBuilder.Build("", StationName, "Type:", StationType);
+            info = "";
             detailed = "";
         }
     }
+
+
+    public class MissionItem
+    {
+        public long id;
+        public string Name;
+        public bool PassengerMission;
+        public int Expires;
+    }
+
 }

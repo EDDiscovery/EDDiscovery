@@ -129,6 +129,8 @@ namespace EliteDangerousCore
         bool HasCoordinate { get; }
         int gridid { get; set; }
         int randomid { get; set; }
+        long? SystemAddress { get; set; }
+
         double Distance(ISystemBase other);
         double Distance(double x,double y,double z);
     }

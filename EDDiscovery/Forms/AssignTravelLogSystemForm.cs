@@ -66,7 +66,7 @@ namespace EDDiscovery.Forms
         private List<SystemLink> _systemLinkList;
 
         public AssignTravelLogSystemForm(EliteDangerousCore.JournalEvents.JournalLocOrJump vsc)
-            : this(new SystemClass { name = vsc.StarSystem, x = vsc.HasCoordinate ? vsc.StarPos.X : Double.NaN, y = vsc.HasCoordinate ? vsc.StarPos.Y : Double.NaN, z = vsc.HasCoordinate ? vsc.StarPos.Z : Double.NaN, id_edsm = vsc.EdsmID }, vsc.EventTimeLocal)
+            : this(new SystemClass { name = vsc.StarSystem, x = vsc.HasCoordinate ? vsc.StarPos.X : Double.NaN, y = vsc.HasCoordinate ? vsc.StarPos.Y : Double.NaN, z = vsc.HasCoordinate ? vsc.StarPos.Z : Double.NaN, id_edsm = vsc.EdsmID, SystemAddress = vsc.SystemAddress }, vsc.EventTimeLocal)
         {
         }
 

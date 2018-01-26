@@ -18,29 +18,25 @@ using System.Linq;
 
 namespace EliteDangerousCore.JournalEvents
 {
-    //When written: liftoff from a landing pad in a station, outpost or settlement
+    //When written: target is under attack
     //Parameters:
-    //•	StationName: name of station
-
-    //•	Security
-    [JournalEntryType(JournalTypeEnum.Undocked)]
-    public class JournalUndocked : JournalEntry
+    //* Target
+    [JournalEntryType(JournalTypeEnum.UnderAttack)]
+    public class JournalUnderAttack : JournalEntry
     {
-        public JournalUndocked(JObject evt ) : base(evt, JournalTypeEnum.Undocked)
+        public JournalUnderAttack(JObject evt ) : base(evt, JournalTypeEnum.UnderAttack)
         {
-            StationName = evt["StationName"].Str();
-            StationType = evt["StationType"].Str().SplitCapsWord();
-            MarketID = evt["MarketID"].LongNull();
+            Target = evt["Target"].Str();
         }
-        public string StationName { get; set; }
-        public string StationType { get; set; }
-        public long? MarketID { get; set; }
+
+        public string Target { get; set; }
 
         public override void FillInformation(out string summary, out string info, out string detailed) //V
         {
             summary = EventTypeStr.SplitCapsWord();
-            info = BaseUtils.FieldBuilder.Build("", StationName, "Type:", StationType);
+            info = "";
             detailed = "";
         }
+
     }
 }
