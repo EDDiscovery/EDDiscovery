@@ -906,9 +906,9 @@ namespace ExtendedControls
             toolstripRenderer.colortable.colMenuHighlightBorder = currentsettings.colors[Settings.CI.button_border];
             toolstripRenderer.colortable.colMenuHighlightBack = toodark ? currentsettings.colors[Settings.CI.menu_dropdownback].Multiply(0.7F) : currentsettings.colors[Settings.CI.menu_back].Multiply(1.3F);        // whole menu back
 
-            Color menuchecked = toodark ? currentsettings.colors[Settings.CI.menu_dropdownback].Multiply(0.6F) : currentsettings.colors[Settings.CI.menu_back].Multiply(1.5F);        // whole menu back
+            Color menuchecked = toodark ? currentsettings.colors[Settings.CI.menu_dropdownback].Multiply(0.8F) : currentsettings.colors[Settings.CI.menu_back].Multiply(1.5F);        // whole menu back
 
-            toolstripRenderer.colortable.colCheckButtonChecked = menuchecked;
+            toolstripRenderer.colortable.colCheckButtonChecked =  menuchecked;
             toolstripRenderer.colortable.colCheckButtonPressed =
             toolstripRenderer.colortable.colCheckButtonHighlighted = menuchecked.Multiply(1.1F);
 
@@ -921,6 +921,10 @@ namespace ExtendedControls
             toolstripRenderer.colortable.colToolStripSeparator = currentsettings.colors[Settings.CI.toolstrip_border];
             toolstripRenderer.colortable.colOverflowButton = currentsettings.colors[Settings.CI.menu_back];
             toolstripRenderer.colortable.colGripper = currentsettings.colors[Settings.CI.toolstrip_border];
+
+            toolstripRenderer.colortable.colToolStripDropDownMenuImageMargin = currentsettings.colors[Settings.CI.button_back];
+            toolstripRenderer.colortable.colToolStripDropDownMenuImageRevealed = Color.Purple;      // NO evidence, set to show up
+
         }
 
         public Color GroupBoxOverride(Control parent, Color d)      // if its a group box behind the control, use the group box back color..
