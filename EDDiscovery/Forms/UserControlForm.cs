@@ -32,7 +32,7 @@ namespace EDDiscovery.Forms
     public partial class UserControlForm : Forms.DraggableFormPos
     {
         public UserControlCommonBase UserControl;
-        public bool IsLoaded { get; private set; } = false;
+        public bool IsLoaded { get; private set; } = false;         // After shown, but before closing
 
         public enum TransparencyMode { Off, On, OnClickThru, OnFullyTransparent };
 
@@ -77,7 +77,7 @@ namespace EDDiscovery.Forms
         public void Init(EDDiscovery.UserControls.UserControlCommonBase c, string title, bool winborder, string rf, bool deftopmostp ,
                          bool deftransparentp , Color labelnormal , Color labeltransparent )
         {
-            RestoreFormPositionRegKey = "PopUpForm" + rf + "Form";      // position remember key
+            RestoreFormPositionRegKey = "PopUpForm" + rf;      // position remember key
 
             UserControl = c;
             c.Dock = DockStyle.None;
@@ -243,12 +243,14 @@ namespace EDDiscovery.Forms
             panel_ontop.ImageSelected = TopMost ? ExtendedControls.DrawnPanel.ImageType.OnTop : ExtendedControls.DrawnPanel.ImageType.Floating;
         }
 
+        const int UCPaddingWidth = 3;
+
         private void UserControlForm_Layout(object sender, LayoutEventArgs e)
         {
             if (UserControl != null)
             {
                 UserControl.Location = new Point(3, curwindowsborder ? 2 : panelTop.Location.Y + panelTop.Height);
-                UserControl.Size = new Size(ClientRectangle.Width - 6, ClientRectangle.Height - UserControl.Location.Y - (curwindowsborder ? 0 : statusStripBottom.Height));
+                UserControl.Size = new Size(ClientRectangle.Width - UCPaddingWidth*2, ClientRectangle.Height - UserControl.Location.Y - (curwindowsborder ? 0 : statusStripBottom.Height));
             }
         }
 
@@ -369,24 +371,32 @@ namespace EDDiscovery.Forms
         }
 
 
+        #endregion
 
+        #region Resizing
 
-#endregion
-
-#region Resizing
-
-        public void RequestTemporaryMinimiumSize(Size w)            // Size w is the client area used by the UserControl..
+        public new void RequestTemporaryResize(Size w)                  // Size w is the Form UserControl area wanted inside the window (26/1/2018)
         {
-            int width = ClientRectangle.Width < w.Width ? (w.Width - ClientRectangle.Width) : 0;
-            int height = ClientRectangle.Height < w.Height ? (w.Height - ClientRectangle.Height) : 0;
-
-            RequestTemporaryResizeExpand(new Size(width, height));
+            w.Width += UCPaddingWidth * 2 + 2;  //2 is a kludge     We need to add on area used by Form controls..
+            w.Height += 2 + UserControl.Location.Y + statusStripBottom.Height;
+            base.RequestTemporaryResize(new Size(w.Width, w.Height));        // need to add on control area.
         }
 
-        public void RequestTemporaryResizeExpand(Size w)            // Size w is the client area above
+        public void RequestTemporaryMinimiumSize(Size w)            // again, in terms of UserControl area. (26/1/2018)
         {
-            if (w.Width != 0 || w.Height != 0)
-                RequestTemporaryResize(new Size(ClientRectangle.Width + w.Width, ClientRectangle.Height + w.Height));
+            w.Width += UCPaddingWidth * 2 + 2;  //2 is a kludge
+            w.Height += 2;
+            w.Height += UserControl.Location.Y + statusStripBottom.Height;      // add on height for form controls
+
+            if (ClientRectangle.Height < w.Height || ClientRectangle.Width < w.Width)
+                base.RequestTemporaryResize(w);
+        }
+
+        public void RequestTemporaryResizeExpand(Size w)            // again, in terms of UserControl area. What more do we want.. (26/1/2018)
+        {
+            w.Width += ClientRectangle.Width;                       // expand 
+            w.Height += ClientRectangle.Height;
+            base.RequestTemporaryResize(w);
         }
 
         #endregion

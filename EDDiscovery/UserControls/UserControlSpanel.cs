@@ -201,7 +201,7 @@ namespace EDDiscovery.UserControls
 
         private void UserControlSpanel_Resize(object sender, EventArgs e)
         {
-            if ( !InResizeDueToExpand && !IsInTemporaryResize && this.Width>0)
+            if ( !ResizingNow && !IsInTemporaryResize && this.Width>0)
                 Display(current_historylist);
         }
 

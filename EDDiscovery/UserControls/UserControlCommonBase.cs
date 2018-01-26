@@ -99,35 +99,35 @@ namespace EDDiscovery.UserControls
 
         #region Resize
 
-        public bool InResizeDueToExpand = false;                                            // FUNCTIONS to allow a form to grow temporarily.  Does not work when inside the panels
+        public bool ResizingNow = false;                                            // FUNCTIONS to allow a form to grow temporarily.  Does not work when inside the panels
 
-        public void RequestTemporaryMinimumSize(Size w)         // w is client area
-        {
+        public void RequestTemporaryMinimumSize(Size w)         // w is UC area
+        { 
             if (this.Parent is Forms.UserControlForm)
             {
-                InResizeDueToExpand = true;
+                ResizingNow = true;
                 ((Forms.UserControlForm)(this.Parent)).RequestTemporaryMinimiumSize(w);
-                InResizeDueToExpand = false;
+                ResizingNow = false;
             }
         }
 
-        public void RequestTemporaryResizeExpand(Size w)        // by this client size
+        public void RequestTemporaryResizeExpand(Size w)        // by this area expand
         {
             if (this.Parent is Forms.UserControlForm)
             {
-                InResizeDueToExpand = true;
+                ResizingNow = true;
                 ((Forms.UserControlForm)(this.Parent)).RequestTemporaryResizeExpand(w);
-                InResizeDueToExpand = false;
+                ResizingNow = false;
             }
         }
 
-        public void RequestTemporaryResize(Size w)              // w is client area
+        public void RequestTemporaryResize(Size w)              // w is the UC area
         {
             if (this.Parent is Forms.UserControlForm)
             {
-                InResizeDueToExpand = true;
+                ResizingNow = true;
                 ((Forms.UserControlForm)(this.Parent)).RequestTemporaryResize(w);
-                InResizeDueToExpand = false;
+                ResizingNow = false;
             }
         }
 
@@ -135,9 +135,9 @@ namespace EDDiscovery.UserControls
         {
             if (this.Parent is Forms.UserControlForm)
             {
-                InResizeDueToExpand = true;
+                ResizingNow = true;
                 ((Forms.UserControlForm)(this.Parent)).RevertToNormalSize();
-                InResizeDueToExpand = false;
+                ResizingNow = false;
             }
         }
 
