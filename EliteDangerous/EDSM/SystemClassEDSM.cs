@@ -617,10 +617,10 @@ namespace EliteDangerousCore.EDSM
 
             LogLine("Resyncing all downloaded EDSM systems with System Database." + Environment.NewLine + "This will take a while.");
 
-                         string s = edsmsystems; bool success = true; // debug, comment out next two lines
+            //  string s = edsmsystems; bool success = true; // debug, comment out next two lines
 
-            //bool newfile;
-            //bool success = BaseUtils.DownloadFileHandler.DownloadFile(EDSMClass.ServerAddress + "dump/systemsWithCoordinates.json", edsmsystems, out newfile, (n, s) =>
+            bool newfile;
+            bool success = BaseUtils.DownloadFileHandler.DownloadFile(EDSMClass.ServerAddress + "dump/systemsWithCoordinates.json", edsmsystems, out newfile, (n, s) =>
             {
                 SQLiteConnectionSystem.CreateTempSystemsTable();
 
@@ -649,7 +649,7 @@ namespace EliteDangerousCore.EDSM
                     success = false;
                     throw new OperationCanceledException();
                 }
-            };//);
+            });
 
             if (!success)
             {
