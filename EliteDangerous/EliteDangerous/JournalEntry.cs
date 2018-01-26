@@ -174,6 +174,7 @@ namespace EliteDangerousCore
         ShipyardSwap = 870,
         ShipyardTransfer = 880,
         ShipTargeted = 881,
+        Shutdown = 882,
         SRVDestroyed = 883,
         StartJump = 885,
         StoredModules = 886,
