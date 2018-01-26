@@ -153,6 +153,7 @@ namespace EliteDangerousCore.EDDN
             }
 
             JObject msg = null;
+            JObject msg2 = null;
 
             if (je.EventTypeID == JournalTypeEnum.FSDJump)
             {
@@ -172,21 +173,29 @@ namespace EliteDangerousCore.EDDN
             }
             else if (je.EventTypeID == JournalTypeEnum.Outfitting)
             {
-                msg = eddn.CreateEDDNMessage(je as JournalOutfitting, he.System.x, he.System.y, he.System.z, he.System.SystemAddress);
+                msg2 = eddn.CreateEDDNJournalMessage(je as JournalOutfitting, he.System.x, he.System.y, he.System.z, he.System.SystemAddress);
+                msg = eddn.CreateEDDNOutfittingMessage(je as JournalOutfitting, he.System.SystemAddress);
             }
             else if (je.EventTypeID == JournalTypeEnum.Shipyard)
             {
-                msg = eddn.CreateEDDNMessage(je as JournalShipyard, he.System.x, he.System.y, he.System.z, he.System.SystemAddress);
+                msg2 = eddn.CreateEDDNJournalMessage(je as JournalShipyard, he.System.x, he.System.y, he.System.z, he.System.SystemAddress);
+                msg = eddn.CreateEDDNShipyardMessage(je as JournalShipyard, he.System.SystemAddress);
             }
             else if (je.EventTypeID == JournalTypeEnum.Market)
             {
-                msg = eddn.CreateEDDNMessage(je as JournalMarket, he.System.x, he.System.y, he.System.z, he.System.SystemAddress);
+                msg2 = eddn.CreateEDDNJournalMessage(je as JournalMarket, he.System.x, he.System.y, he.System.z, he.System.SystemAddress);
+                msg = eddn.CreateEDDNCommodityMessage(je as JournalMarket, he.System.SystemAddress);
             }
 
             if (msg != null)
             {
                 if (eddn.PostMessage(msg))
                 {
+                    if (msg2 != null)
+                    {
+                        eddn.PostMessage(msg2);
+                    }
+
                     he.SetEddnSync();
                     return true;
                 }
