@@ -235,6 +235,7 @@ namespace EDDiscovery.UserControls
             this.panelTop.Name = "panelTop";
             this.panelTop.Size = new System.Drawing.Size(400, 26);
             this.panelTop.TabIndex = 25;
+            this.toolTip.SetToolTip(this.panelTop, "Rotate with 1st mouse button; Zoom with ScrollWheel; Pan with WASD");
             // 
             // slideMaxItems
             // 
@@ -1016,6 +1017,7 @@ namespace EDDiscovery.UserControls
             this.chartMap.SuppressExceptions = true;
             this.chartMap.TabIndex = 29;
             this.chartMap.Text = "chart2";
+            this.chartMap.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.chartMap_KeyPress);
             this.chartMap.MouseDown += new System.Windows.Forms.MouseEventHandler(this.ChartMap_MouseDown);
             this.chartMap.MouseMove += new System.Windows.Forms.MouseEventHandler(this.ChartMap_MouseMove);
             this.chartMap.MouseUp += new System.Windows.Forms.MouseEventHandler(this.ChartMap_MouseUp);
@@ -1030,6 +1032,7 @@ namespace EDDiscovery.UserControls
             this.Name = "UserControlMap";
             this.Size = new System.Drawing.Size(400, 426);
             this.Load += new System.EventHandler(this.UserControlMap_Load);
+            this.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.UserControlMap_KeyPress);
             this.Resize += new System.EventHandler(this.UserControlMap_Resize);
             this.panelTop.ResumeLayout(false);
             this.panelTop.PerformLayout();
