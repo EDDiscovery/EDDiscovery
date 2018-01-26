@@ -10,6 +10,8 @@ namespace EDDiscovery
 {
     public class EDDOptions : EliteDangerousCore.IEliteOptions
     {
+        public static bool Instanced { get { return options != null; } }
+
         public static EDDOptions Instance
         {
             get

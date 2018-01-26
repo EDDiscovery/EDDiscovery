@@ -23,7 +23,7 @@ using System.Text;
 namespace EDDiscovery._3DMap
 {
     
-    public class PolygonTriangulator
+    static public class PolygonTriangulator
     {
         // some of it is from https://gist.github.com/KvanTTT/3855122 but a lot of it has been added/changed
 
@@ -102,8 +102,7 @@ namespace EDDiscovery._3DMap
             float totalweight = 0;
             foreach (List<Vector2> poly in polys)
             {
-                float area;
-                Vector2 pos = Centroid(poly, out area);
+                Vector2 pos = Centroid(poly, out float area);
                 pos *= area;
                 mean += pos;
                 totalweight += area;
@@ -222,10 +221,10 @@ namespace EDDiscovery._3DMap
             return new List<List<Vector2>> { Polygon };
         }
 
-        public static List<List<Vector2>> Triangulate(List<Vector2> Polygon, bool triangulate = false)
+        public static List<List<Vector2>> Triangulate(List<Vector2> Polygon, bool triangleit = false)
         {
             var splitpolys = SplitSelfJoiningPolygons(Polygon);
-            return splitpolys.SelectMany(p => _Triangulate(p, triangulate)).ToList();
+            return splitpolys.SelectMany(p => _Triangulate(p, triangleit)).ToList();
         }
 
         static List<List<Vector2>> _Triangulate(List<Vector2> Polygon, bool triangulate = false)

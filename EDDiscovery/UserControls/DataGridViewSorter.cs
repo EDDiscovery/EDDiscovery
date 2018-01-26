@@ -22,7 +22,7 @@ using System.Windows.Forms;
 
 namespace EDDiscovery.UserControls
 {
-    public class DataGridViewSorter
+    static public class DataGridViewSorter
     {
         public static void DataGridSort(DataGridView dgv, int column)
         {
@@ -108,10 +108,10 @@ namespace EDDiscovery.UserControls
                             result = dx.CompareTo(dy);
                             break;
                         case TypeCode.String:
-                            result = (new CaseInsensitiveComparer()).Compare(sx, sy);
+                            result = (new CaseInsensitiveComparer(System.Globalization.CultureInfo.InvariantCulture)).Compare(sx, sy);
                             break;
                         default:
-                            result = (new CaseInsensitiveComparer()).Compare(sx, sy);
+                            result = (new CaseInsensitiveComparer(System.Globalization.CultureInfo.InvariantCulture)).Compare(sx, sy);
                             break;
                     }
                 }
@@ -156,7 +156,7 @@ namespace EDDiscovery.UserControls
 
 
 
-    public class DataGridViewSorter2
+    static public class DataGridViewSorter2
     {
         public static void DataGridSort2(DataGridView dgv, int column)
         {
@@ -235,7 +235,7 @@ namespace EDDiscovery.UserControls
                 }
                 else
                 {
-                      result = (new CaseInsensitiveComparer()).Compare(sx, sy);
+                      result = (new CaseInsensitiveComparer(System.Globalization.CultureInfo.InvariantCulture)).Compare(sx, sy);
                 }
 
                 if (OrderOfSort == SortOrder.Descending)

@@ -29,12 +29,10 @@ using EliteDangerousCore.DB;
 
 namespace EDDiscovery.Forms
 {
-    public partial class UserControlForm : ExtendedControls.DraggableForm
+    public partial class UserControlForm : Forms.DraggableFormPos
     {
         public UserControlCommonBase UserControl;
-        public bool isloaded = false;
-        public bool norepositionwindow = false;
-        public bool istemporaryresized = false;
+        public bool IsLoaded { get; private set; } = false;         // After shown, but before closing
 
         public enum TransparencyMode { Off, On, OnClickThru, OnFullyTransparent };
 
@@ -56,7 +54,6 @@ namespace EDDiscovery.Forms
 
         private Timer timer = new Timer();      // timer to monitor for entry into form when transparent.. only sane way in forms
         private bool deftopmost, deftransparent;
-        private Size normalsize;
 
 #if !__MonoCS__
         private DirectInputDevices.InputDeviceKeyboard idk;     // used to sniff in transparency mode
@@ -80,6 +77,8 @@ namespace EDDiscovery.Forms
         public void Init(EDDiscovery.UserControls.UserControlCommonBase c, string title, bool winborder, string rf, bool deftopmostp ,
                          bool deftransparentp , Color labelnormal , Color labeltransparent )
         {
+            RestoreFormPositionRegKey = "PopUpForm" + rf;      // position remember key
+
             UserControl = c;
             c.Dock = DockStyle.None;
             c.Location = new Point(0, 10);
@@ -244,12 +243,14 @@ namespace EDDiscovery.Forms
             panel_ontop.ImageSelected = TopMost ? ExtendedControls.DrawnPanel.ImageType.OnTop : ExtendedControls.DrawnPanel.ImageType.Floating;
         }
 
+        const int UCPaddingWidth = 3;
+
         private void UserControlForm_Layout(object sender, LayoutEventArgs e)
         {
             if (UserControl != null)
             {
                 UserControl.Location = new Point(3, curwindowsborder ? 2 : panelTop.Location.Y + panelTop.Height);
-                UserControl.Size = new Size(ClientRectangle.Width - 6, ClientRectangle.Height - UserControl.Location.Y - (curwindowsborder ? 0 : statusStripBottom.Height));
+                UserControl.Size = new Size(ClientRectangle.Width - UCPaddingWidth*2, ClientRectangle.Height - UserControl.Location.Y - (curwindowsborder ? 0 : statusStripBottom.Height));
             }
         }
 
@@ -269,37 +270,10 @@ namespace EDDiscovery.Forms
             var top = SQLiteDBClass.GetSettingInt(dbrefname + "Top", -999);
             //System.Diagnostics.Debug.WriteLine("Position Top is {0} {1}", dbrefname, top);
 
-            if (top != -999 && norepositionwindow == false)
-            {
-                var left = SQLiteDBClass.GetSettingInt(dbrefname + "Left", 0);
-                var height = SQLiteDBClass.GetSettingInt(dbrefname + "Height", 800);
-                var width = SQLiteDBClass.GetSettingInt(dbrefname + "Width", 800);
-
-                System.Diagnostics.Debug.WriteLine("Position {0} {1} {2} {3} {4}", dbrefname, top, left, width, height);
-                // Adjust so window fits on screen; just in case user unplugged a monitor or something
-
-                var screen = SystemInformation.VirtualScreen;
-                if (height > screen.Height) height = screen.Height;
-                if (top + height > screen.Height + screen.Top) top = screen.Height + screen.Top - height;
-                if (width > screen.Width) width = screen.Width;
-                if (left + width > screen.Width + screen.Left) left = screen.Width + screen.Left - width;
-                if (top < screen.Top) top = screen.Top;
-                if (left < screen.Left) left = screen.Left;
-
-                this.Top = top;
-                this.Left = left;
-                this.Height = height;
-                this.Width = width;
-
-                this.CreateParams.X = this.Left;
-                this.CreateParams.Y = this.Top;
-                this.StartPosition = FormStartPosition.Manual;
-            }
-
             if (UserControl != null)
                 UserControl.LoadLayout();
 
-            isloaded = true;
+            IsLoaded = true;
         }
 
         protected override void OnFormClosing(FormClosingEventArgs e)
@@ -309,17 +283,10 @@ namespace EDDiscovery.Forms
 
         private void UserControlForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            isloaded = false;
+            IsLoaded = false;
 
             if (UserControl != null)
                 UserControl.Closing();
-
-            Size winsize = (istemporaryresized) ? normalsize : this.Size;
-            SQLiteDBClass.PutSettingInt(dbrefname + "Width", winsize.Width);
-            SQLiteDBClass.PutSettingInt(dbrefname + "Height", winsize.Height);
-            SQLiteDBClass.PutSettingInt(dbrefname + "Top", this.Top);
-            SQLiteDBClass.PutSettingInt(dbrefname + "Left", this.Left);
-            System.Diagnostics.Debug.WriteLine("Save Position {0} {1} {2} {3} {4}", dbrefname, Top, Left, winsize.Width, winsize.Height);
         }
 
 #endregion
@@ -367,7 +334,7 @@ namespace EDDiscovery.Forms
 
         private void CheckMouse(object sender, EventArgs e)     // best way of knowing your inside the client.. using mouseleave/enter with transparency does not work..
         {
-            if (isloaded)
+            if (IsLoaded)
             {
                 //System.Diagnostics.Debug.WriteLine(Environment.TickCount + " Tick " + Name + " " + Text + " " + transparentmode + " " + inpanelshow);
                 if (ClientRectangle.Contains(this.PointToClient(MousePosition)))
@@ -404,51 +371,37 @@ namespace EDDiscovery.Forms
         }
 
 
+        #endregion
 
+        #region Resizing
 
-#endregion
-
-#region Resizing
-
-        public void RequestTemporaryMinimiumSize(Size w)            // Size w is the client area used by the UserControl..
+        public new void RequestTemporaryResize(Size w)                  // Size w is the Form UserControl area wanted inside the window (26/1/2018)
         {
-            int width = ClientRectangle.Width < w.Width ? (w.Width - ClientRectangle.Width) : 0;
-            int height = ClientRectangle.Height < w.Height ? (w.Height - ClientRectangle.Height) : 0;
-
-            RequestTemporaryResizeExpand(new Size(width, height));
+            w.Width += UCPaddingWidth * 2 + 2;  //2 is a kludge     We need to add on area used by Form controls..
+            w.Height += 2 + UserControl.Location.Y + statusStripBottom.Height;
+            base.RequestTemporaryResize(new Size(w.Width, w.Height));        // need to add on control area.
         }
 
-        public void RequestTemporaryResizeExpand(Size w)            // Size w is the client area above
+        public void RequestTemporaryMinimiumSize(Size w)            // again, in terms of UserControl area. (26/1/2018)
         {
-            if (w.Width != 0 || w.Height != 0)
-                RequestTemporaryResize(new Size(ClientRectangle.Width + w.Width, ClientRectangle.Height + w.Height));
+            w.Width += UCPaddingWidth * 2 + 2;  //2 is a kludge
+            w.Height += 2;
+            w.Height += UserControl.Location.Y + statusStripBottom.Height;      // add on height for form controls
+
+            if (ClientRectangle.Height < w.Height || ClientRectangle.Width < w.Width)
+                base.RequestTemporaryResize(w);
         }
 
-        public void RequestTemporaryResize(Size w)                  // Size w is the client area above
+        public void RequestTemporaryResizeExpand(Size w)            // again, in terms of UserControl area. What more do we want.. (26/1/2018)
         {
-            if (!istemporaryresized)
-            {
-                normalsize = this.Size;
-                istemporaryresized = true;                          // we are setting window size, so we need to consider the bounds around the window
-                int widthoutsideclient = (Bounds.Size.Width - ClientRectangle.Width);
-                int heightoutsideclient = (Bounds.Size.Height - ClientRectangle.Height);
-                int heightlosttoothercontrols = UserControl.Location.Y + statusStripBottom.Height; // and the area used by the other bits of the window outside the user control
-                this.Size = new Size(w.Width + widthoutsideclient, w.Height + heightlosttoothercontrols + heightoutsideclient);
-            }
+            w.Width += ClientRectangle.Width;                       // expand 
+            w.Height += ClientRectangle.Height;
+            base.RequestTemporaryResize(w);
         }
 
-        public void RevertToNormalSize()
-        {
-            if (istemporaryresized)
-            {
-                this.Size = normalsize;
-                istemporaryresized = false;
-            }
-        }
+        #endregion
 
-#endregion
-
-#region System menu for border windows - added in in Init for smartsysmenu
+        #region System menu for border windows - added in in Init for smartsysmenu
 
         void SystemMenu(int v)      // index into array
         {
@@ -522,12 +475,10 @@ namespace EDDiscovery.Forms
             return null;
         }
 
-        public UserControlForm NewForm(bool noreposition)
+        public UserControlForm NewForm()
         {
             UserControlForm tcf = new UserControlForm();
             tabforms.Add(tcf);
-
-            tcf.norepositionwindow = noreposition;
             tcf.FormClosed += FormClosed;
             return tcf;
         }
@@ -545,7 +496,7 @@ namespace EDDiscovery.Forms
 
             foreach (UserControlForm tcf in tabforms)
             {
-                if (tcf.isloaded)
+                if (tcf.IsLoaded)
                 {
                     UserControlCommonBase uc = tcf.FindUserControl(c);
                     if (uc != null)
@@ -573,7 +524,7 @@ namespace EDDiscovery.Forms
         {
             foreach (UserControlForm ucf in tabforms)
             {
-                if (ucf.isloaded) ucf.SetShowInTaskBar(true);
+                if (ucf.IsLoaded) ucf.SetShowInTaskBar(true);
             }
         }
 
@@ -581,7 +532,7 @@ namespace EDDiscovery.Forms
         {
             foreach (UserControlForm ucf in tabforms)
             {
-                if (ucf.isloaded)
+                if (ucf.IsLoaded)
                 {
                     ucf.SetTransparency(UserControlForm.TransparencyMode.Off);
                     ucf.SetShowTitleInTransparency(true);
