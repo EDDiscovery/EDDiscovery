@@ -572,6 +572,9 @@
     <EmbeddedResource Include="Forms\AddOnManagerForm.resx">
       <DependentUpon>AddOnManagerForm.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\DraggableFormPos.resx">
+      <DependentUpon>DraggableFormPos.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\ExportForm.resx">
       <DependentUpon>ExportForm.cs</DependentUpon>
     </EmbeddedResource>

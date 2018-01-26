@@ -28,9 +28,22 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
+            this.SuspendLayout();
+            // 
+            // DraggableFormPos
+            // 
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.ClientSize = new System.Drawing.Size(284, 261);
+            this.Name = "DraggableFormPos";
             this.Text = "DraggableFormPos";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.DraggableFormPos_FormClosing);
+            this.Load += new System.EventHandler(this.DraggableFormPos_Load);
+            this.Shown += new System.EventHandler(this.DraggableFormPos_Shown);
+            this.ResizeEnd += new System.EventHandler(this.DraggableFormPos_ResizeEnd);
+            this.Resize += new System.EventHandler(this.DraggableFormPos_Resize);
+            this.ResumeLayout(false);
+
         }
 
         #endregion

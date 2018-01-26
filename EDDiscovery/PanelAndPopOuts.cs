@@ -260,7 +260,7 @@ namespace EDDiscovery.Forms
 
         public void PopOut(int ix)
         {
-            UserControlForm tcf = usercontrolsforms.NewForm(EDDiscovery.EDDOptions.Instance.NoWindowReposition);
+            UserControlForm tcf = usercontrolsforms.NewForm();
             tcf.Icon = Properties.Resources.edlogo_3mo_icon;
 
             UserControlCommonBase ctrl = PanelInformation.Create(ix);
