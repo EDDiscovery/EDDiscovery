@@ -27,6 +27,7 @@ namespace EliteDangerousCore.JournalEvents
     {
         public JournalNewCommander(JObject evt ) : base(evt, JournalTypeEnum.NewCommander)
         {
+            Name = evt["Name"].Str();
             Package = evt["Package"].Str();
         }
 
@@ -36,7 +37,7 @@ namespace EliteDangerousCore.JournalEvents
         public override void FillInformation(out string summary, out string info, out string detailed) //V
         {
             summary = EventTypeStr.SplitCapsWord();
-            info = Package;
+            info = BaseUtils.FieldBuilder.Build("Cmdr ", Name , "Starting Package:", Package); 
             detailed = "";
         }
     }
