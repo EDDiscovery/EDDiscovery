@@ -1556,6 +1556,10 @@ namespace EDDiscovery
             OnCaptionMouseDown((Control)sender, e);
         }
 
+        private void panelTop_MouseUp(object sender, System.Windows.Forms.MouseEventArgs e)
+        {
+            OnCaptionMouseUp((Control)sender, e);
+        }
 
         #endregion
 

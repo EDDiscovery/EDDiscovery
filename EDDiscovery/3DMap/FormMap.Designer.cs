@@ -177,6 +177,7 @@ namespace EDDiscovery
             this.labelSystemCoords.TabIndex = 18;
             this.labelSystemCoords.Text = "Sol x=0.00";
             this.labelSystemCoords.MouseDown += new System.Windows.Forms.MouseEventHandler(this.panelTop_MouseDown);
+            this.labelSystemCoords.MouseUp += new System.Windows.Forms.MouseEventHandler(this.panelTop_MouseUp);
             // 
             // toolStripControls
             // 
@@ -787,6 +788,7 @@ namespace EDDiscovery
             this.panelAuxControls.Size = new System.Drawing.Size(506, 40);
             this.panelAuxControls.TabIndex = 27;
             this.panelAuxControls.MouseDown += new System.Windows.Forms.MouseEventHandler(this.panelTop_MouseDown);
+            this.panelAuxControls.MouseUp += new System.Windows.Forms.MouseEventHandler(this.panelTop_MouseUp);
             // 
             // panelTop
             // 
@@ -800,6 +802,7 @@ namespace EDDiscovery
             this.panelTop.Size = new System.Drawing.Size(1564, 40);
             this.panelTop.TabIndex = 0;
             this.panelTop.MouseDown += new System.Windows.Forms.MouseEventHandler(this.panelTop_MouseDown);
+            this.panelTop.MouseUp += new System.Windows.Forms.MouseEventHandler(this.panelTop_MouseUp);
             // 
             // panel_minimize
             // 

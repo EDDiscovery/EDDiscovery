@@ -100,7 +100,8 @@ namespace ExtendedControls
             this.labelCaption.Size = new System.Drawing.Size(98, 13);
             this.labelCaption.TabIndex = 6;
             this.labelCaption.Text = "Captiony thing here";
-            this.labelCaption.MouseDown += new System.Windows.Forms.MouseEventHandler(this.labelCaption_MouseDown);
+            this.labelCaption.MouseDown += new System.Windows.Forms.MouseEventHandler(this.panelTop_MouseDown);
+            this.labelCaption.MouseUp += new System.Windows.Forms.MouseEventHandler(this.panelTop_MouseUp);
             // 
             // panel_close
             // 
@@ -138,6 +139,7 @@ namespace ExtendedControls
             this.panelTop.Size = new System.Drawing.Size(824, 30);
             this.panelTop.TabIndex = 30;
             this.panelTop.MouseDown += new System.Windows.Forms.MouseEventHandler(this.panelTop_MouseDown);
+            this.panelTop.MouseUp += new System.Windows.Forms.MouseEventHandler(this.panelTop_MouseUp);
             // 
             // panelBottom
             // 
