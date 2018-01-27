@@ -218,6 +218,7 @@ namespace EDDiscovery
             this.panelTop.Size = new System.Drawing.Size(982, 32);
             this.panelTop.TabIndex = 2;
             this.panelTop.MouseDown += new System.Windows.Forms.MouseEventHandler(this.panelTop_MouseDown);
+            this.panelTop.MouseUp += new System.Windows.Forms.MouseEventHandler(this.panelTop_MouseUp);
             // 
             // panel_minimize
             // 
