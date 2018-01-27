@@ -35,6 +35,7 @@ namespace EliteDangerousCore.JournalEvents
         {
             public string Name { get; set; }            // FDNAME
             public int Count { get; set; }
+            public int Stolen { get; set; }
         }
 
         public JournalCargo(JObject evt) : base(evt, JournalTypeEnum.Cargo)
@@ -65,7 +66,10 @@ namespace EliteDangerousCore.JournalEvents
                 {
                     if (detailed.Length > 0)
                         detailed += Environment.NewLine;
-                    detailed += BaseUtils.FieldBuilder.Build("", JournalFieldNaming.RMat(c.Name), "; items", c.Count);
+                    int? stolen = null;
+                    if (c.Stolen > 0)
+                        stolen = c.Stolen;
+                    detailed += BaseUtils.FieldBuilder.Build("", JournalFieldNaming.RMat(c.Name), "; items", c.Count , "(;)" , stolen);
                 }
             }
         }
