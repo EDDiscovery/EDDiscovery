@@ -147,6 +147,14 @@ namespace EliteDangerousCore.EDDN
 
             message = RemoveCommonKeys(message);
             message.Remove("StarPosFromEDSM");
+            message.Remove("Latitude");
+            message.Remove("Longitude");
+            if (!journal.Docked)
+            {
+                message.Remove("Body");
+                message.Remove("BodyType");
+                message.Remove("BodyID");
+            }
 
             msg["message"] = message;
             return msg;
