@@ -74,7 +74,7 @@ namespace EDDiscovery.Forms
 
         private void RestoreFormPosition()
         {
-            if (this.DesignMode)
+            if (this.DesignMode || !EDDOptions.Instanced)       // this stops the designer barfing.
                 return;
 
             var top = SQLiteDBClass.GetSettingInt(RestoreFormPositionRegKey+"Top", int.MinValue);
