@@ -79,6 +79,7 @@
             this.panelTop.Size = new System.Drawing.Size(1182, 32);
             this.panelTop.TabIndex = 1;
             this.panelTop.MouseDown += new System.Windows.Forms.MouseEventHandler(this.panelTop_MouseDown);
+            this.panelTop.MouseUp += new System.Windows.Forms.MouseEventHandler(this.panelTop_MouseUp);
             // 
             // panel_close
             // 

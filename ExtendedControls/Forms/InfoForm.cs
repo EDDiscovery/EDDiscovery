@@ -91,9 +91,9 @@ namespace ExtendedControls
             OnCaptionMouseDown((Control)sender, e);
         }
 
-        private void labelCaption_MouseDown(object sender, MouseEventArgs e)
+        private void panelTop_MouseUp(object sender, MouseEventArgs e)
         {
-            OnCaptionMouseDown((Control)sender, e);
+            OnCaptionMouseUp((Control)sender, e);
         }
 
         private void InfoForm_FormClosing(object sender, FormClosingEventArgs e)
