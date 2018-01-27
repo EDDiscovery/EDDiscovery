@@ -1,4 +1,19 @@
-﻿using BaseUtils;
+﻿/*
+ * Copyright © 2017 EDDiscovery development team
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
+ * file except in compliance with the License. You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software distributed under
+ * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
+ * ANY KIND, either express or implied. See the License for the specific language
+ * governing permissions and limitations under the License.
+ * 
+ * EDDiscovery is not affiliated with Frontier Developments plc.
+ */
+using BaseUtils;
 using EliteDangerousCore.DB;
 using System;
 using System.Collections.Generic;
@@ -138,16 +153,7 @@ namespace EDDiscovery.Forms
 
             System.Diagnostics.Debug.WriteLine("Initial Sectors " + string.Join(",", initiallist));
             System.Diagnostics.Debug.WriteLine("Cur Sectors " + string.Join(",", currentsel));
-            bool added = false;
-
-            foreach (int i in currentsel)
-            {
-                if (!initiallist.Contains(i))       // if initial list does not include a current sel
-                {
-                    added = true;
-                    break;
-                }
-            }
+            bool added = currentsel.Except(initiallist).Any();  // if initial list does not include a current sel
 
             if (added)                            // we added some..
             {
@@ -165,15 +171,9 @@ namespace EDDiscovery.Forms
             }
             else
             {
-                Removed = new List<int>();
+                Removed = initiallist.Except(currentsel).ToList();  // if initial list does not include a current sel
 
-                foreach (int i in initiallist)
-                {
-                    if (!currentsel.Contains(i))       // if initial list does not include a current sel
-                        Removed.Add(i);
-                }
-
-                if (Removed.Count>0)
+                if (Removed.Any())
                 {
                     AllRemoveSectors = (from int i in GridId.AllId() where !currentsel.Contains(i) select i).ToList();
 
@@ -215,6 +215,10 @@ namespace EDDiscovery.Forms
             OnCaptionMouseDown((Control)sender, e);
         }
 
+        private void panelTop_MouseUp(object sender, MouseEventArgs e)
+        {
+            OnCaptionMouseUp((Control)sender, e);
+        }
     }
 
     public class ImageViewerWithGrid : ExtendedControls.ImageViewer

@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2015 - 2016 EDDiscovery development team
+ * Copyright © 2015 - 2017 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -13,7 +13,7 @@
  * 
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
-
+using BaseUtils;
 using EliteDangerousCore;
 using EliteDangerousCore.DB;
 using EMK.LightGeometry;
@@ -27,7 +27,6 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
-using BaseUtils;
 
 namespace EDDiscovery
 {
@@ -313,6 +312,11 @@ namespace EDDiscovery
         private void panelTop_MouseDown(object sender, MouseEventArgs e)
         {
             OnCaptionMouseDown((Control)sender, e);
+        }
+
+        private void panelTop_MouseUp(object sender, MouseEventArgs e)
+        {
+            OnCaptionMouseUp((Control)sender, e);
         }
 
         private void toolStripButtonSave_Click(object sender, EventArgs e)
