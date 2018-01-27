@@ -574,5 +574,14 @@
     <EmbeddedResource Include="Panels\Map.png" />
     <EmbeddedResource Include="Panels\Plot.png" />
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Journal\DiscoveryScan.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Journal\ApproachBody.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Journal\LeaveBody.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

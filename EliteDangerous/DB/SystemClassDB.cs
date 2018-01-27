@@ -363,7 +363,7 @@ namespace EliteDangerousCore.DB
                     if (strpara != null)
                     {
                         cmd.AddParameterWithValue("@string", strpara);
-                        System.Diagnostics.Debug.WriteLine("Lookup " + strpara);
+                        //System.Diagnostics.Debug.WriteLine("Lookup " + strpara);
                     }
 
                     using (DbDataReader reader = cmd.ExecuteReader())
