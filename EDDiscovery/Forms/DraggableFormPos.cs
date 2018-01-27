@@ -146,33 +146,43 @@ namespace EDDiscovery.Forms
             }
         }
 
-        private void DraggableFormPos_Load(object sender, EventArgs e)      // on load we restore
+        protected override void OnLoad(EventArgs e)         // on load we restore
         {
             RestoreFormPosition();
+
+            base.OnLoad(e);
         }
 
-        private void DraggableFormPos_Shown(object sender, EventArgs e)     // some classes need this to screen out stuff as well as us
+        protected override void OnShown(EventArgs e)        // some classes need this to screen out stuff as well as us
         {
+            base.OnShown(e);
+
             FormShownOnce = true;
         }
 
-        private void DraggableFormPos_Resize(object sender, EventArgs e)        // this is a resize or a max..
+        protected override void OnResize(EventArgs e)       // this is a resize or a max..
         {
+            base.OnResize(e);
+
             if (FormShownOnce && !IsTemporaryResized) // to make sure that we have been shown and we are saving size
                 RecordFormPosition();
         }
 
-        private void DraggableFormPos_ResizeEnd(object sender, EventArgs e)     // this is a resize of a location change.
+        protected override void OnResizeEnd(EventArgs e)    // this is a resize or a location change.
         {
+            base.OnResizeEnd(e);
+
             if (FormShownOnce && !IsTemporaryResized) // to make sure that we have been shown and we are saving size
                 RecordFormPosition();
         }
 
-        private void DraggableFormPos_FormClosing(object sender, FormClosingEventArgs e)
+        protected override void OnFormClosing(FormClosingEventArgs e)
         {
-            SaveFormPosition();     // even if its cancelled, still s
-        }
+            base.OnFormClosing(e);
 
+            if (!e.Cancel)
+                SaveFormPosition();
+        }
 
         #endregion
     }
