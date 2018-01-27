@@ -13,7 +13,6 @@
  * 
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
-
 using EliteDangerousCore.DB;
 using System;
 using System.Collections.Generic;
@@ -28,7 +27,6 @@ using System.Windows.Forms;
 namespace EDDiscovery.Forms
 {
     // inherit and it will save the form position for you. You supply the RestoreFormPositionRegKey in your constructor.
-
     public partial class DraggableFormPos : ExtendedControls.DraggableForm
     {
         protected bool FormIsMaximised { get { return formMax; } }                  
@@ -76,12 +74,12 @@ namespace EDDiscovery.Forms
 
         private void RestoreFormPosition()
         {
-            if (!EDDOptions.Instanced) // crap way of screening out designer
+            if (this.DesignMode)
                 return;
 
-            var top = SQLiteDBClass.GetSettingInt(RestoreFormPositionRegKey+"Top", -999);
+            var top = SQLiteDBClass.GetSettingInt(RestoreFormPositionRegKey+"Top", int.MinValue);
 
-            if (top != -999 && EDDOptions.Instance.NoWindowReposition == false)
+            if (top != int.MinValue && EDDOptions.Instance.NoWindowReposition == false)
             {
                 var left = SQLiteDBClass.GetSettingInt(RestoreFormPositionRegKey+"Left", 0);
                 var height = SQLiteDBClass.GetSettingInt(RestoreFormPositionRegKey+"Height", 800);
