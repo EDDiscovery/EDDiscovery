@@ -136,6 +136,7 @@
     <Compile Include="EliteDangerous\VisitingStarsCacheFolder.cs" />
     <Compile Include="HistoryList\HistoryEntry.cs" />
     <Compile Include="HistoryList\HistoryList.cs" />
+    <Compile Include="JournalEvents\JournalReputation.cs" />
     <Compile Include="JournalEvents\JournalLeaveBody.cs" />
     <Compile Include="JournalEvents\JournalApproachBody.cs" />
     <Compile Include="JournalEvents\JournalDiscoveryScan.cs" />
@@ -288,6 +289,7 @@
     <Compile Include="JournalEvents\JournalSystemsShutdown.cs" />
     <Compile Include="JournalEvents\JournalTouchdown.cs" />
     <Compile Include="JournalEvents\JournalShipTargeted.cs" />
+    <Compile Include="JournalEvents\JournalCommander.cs" />
     <Compile Include="JournalEvents\JournalUSSDrop.cs" />
     <Compile Include="JournalEvents\JournalUndocked.cs" />
     <Compile Include="JournalEvents\JournalUnknown.cs" />
