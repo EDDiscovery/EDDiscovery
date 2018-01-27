@@ -153,16 +153,7 @@ namespace EDDiscovery.Forms
 
             System.Diagnostics.Debug.WriteLine("Initial Sectors " + string.Join(",", initiallist));
             System.Diagnostics.Debug.WriteLine("Cur Sectors " + string.Join(",", currentsel));
-            bool added = false;
-
-            foreach (int i in currentsel)
-            {
-                if (!initiallist.Contains(i))       // if initial list does not include a current sel
-                {
-                    added = true;
-                    break;
-                }
-            }
+            bool added = currentsel.Except(initiallist).Any();  // if initial list does not include a current sel
 
             if (added)                            // we added some..
             {
@@ -180,15 +171,9 @@ namespace EDDiscovery.Forms
             }
             else
             {
-                Removed = new List<int>();
+                Removed = initiallist.Except(currentsel).ToList();  // if initial list does not include a current sel
 
-                foreach (int i in initiallist)
-                {
-                    if (!currentsel.Contains(i))       // if initial list does not include a current sel
-                        Removed.Add(i);
-                }
-
-                if (Removed.Count>0)
+                if (Removed.Any())
                 {
                     AllRemoveSectors = (from int i in GridId.AllId() where !currentsel.Contains(i) select i).ToList();
 
