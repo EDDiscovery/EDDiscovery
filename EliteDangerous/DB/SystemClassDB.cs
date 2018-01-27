@@ -318,16 +318,22 @@ namespace EliteDangerousCore.DB
         public enum SystemIDType { id, EdsmId, EddbId };       // which ID to match?
         public static ISystem GetSystem(long id, SQLiteConnectionSystem cn = null, SystemIDType idtype = SystemIDType.id, string name = null)      // using an id
         {
-            string cmdtext = "where s." + idtype.ToString() + " = " + id.ToStringInvariant() + " LIMIT 1";
-            return GetSystemCmd(cmdtext, "", cn, name);
+            // Outer JOIN - name is optional in lookup, but then enforced later in code
+            string cmdtext = "Select s.*,n.Name " +
+                            "From EdsmSystems s left Outer Join SystemNames n On n.EdsmId=s.EdsmId " +
+                            "where s." + idtype.ToString() + " = " + id.ToStringInvariant() + " LIMIT 1";
+
+            return GetSystemCmd(cmdtext, null, cn, name);
         }
 
         public static ISystem GetSystem(string name, SQLiteConnectionSystem cn = null)      // get a name.. 
         {
-            if (name.Length == 0)   // some bad behaving code is feed thru empty strings.. route planner!
+            if (string.IsNullOrEmpty(name))   // some bad behaving code is feed thru empty strings.. route planner!
                 return null;
 
-            string cmdtext = "where n.Name = @string LIMIT 1";
+            // JOIN - edsmsystems is mandatory.. 
+            string cmdtext = "Select s.*,n.Name From SystemNames n Join EdsmSystems s On n.EdsmId=s.EdsmId Where n.Name = @string LIMIT 1";
+
             return GetSystemCmd(cmdtext, name, cn, name);
         }
 
@@ -352,13 +358,13 @@ namespace EliteDangerousCore.DB
                 // Tested on 23/1/2018 
                 // Code for EDDB lookup but its slower "Select s.*,n.Name,e.Population,e.Faction,e.GovernmentId,e.AllegianceId,e.PrimaryEconomyId,e.Security,e.EddbUpdatedAt,e.State,e.NeedsPermit " | Left Outer Join EddbSystems e on e.Edsmid=s.EdsmId 
 
-                cmdtext = "Select s.*,n.Name " +
-                          "From EdsmSystems s left Outer Join SystemNames n On n.EdsmId=s.EdsmId " +
-                          cmdtext;
-
                 using (DbCommand cmd = cn.CreateCommand(cmdtext))
                 {
-                    cmd.AddParameterWithValue("@string", strpara);
+                    if (strpara != null)
+                    {
+                        cmd.AddParameterWithValue("@string", strpara);
+                        System.Diagnostics.Debug.WriteLine("Lookup " + strpara);
+                    }
 
                     using (DbDataReader reader = cmd.ExecuteReader())
                     {
