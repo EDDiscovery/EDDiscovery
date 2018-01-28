@@ -30,14 +30,16 @@ namespace EliteDangerousCore
 {
     public class EDJournalClass
     {
-        public delegate void NewJournalEntryHandler(JournalEntry je);
-        public event NewJournalEntryHandler OnNewJournalEntry;
+        public Action<JournalEntry> OnNewJournalEntry; 
+        public Action<UIEvent> OnNewUIEvent;
 
         private Thread ScanThread;
         private ManualResetEvent StopRequested;
         private Action<Action> InvokeAsyncOnUiThread;
         private List<JournalMonitorWatcher> watchers = new List<JournalMonitorWatcher>();
+        private List<StatusMonitorWatcher> statuswatchers = new List<StatusMonitorWatcher>();
         private string frontierfolder;
+        private static Guid Win32FolderId_SavedGames = new Guid("4C5C32FF-BB9D-43b0-B5B4-2D72E54EAAA4");
 
         public EDJournalClass(Action<Action> invokeAsyncOnUiThread)
         {
@@ -80,60 +82,6 @@ namespace EliteDangerousCore
             return (d == null || d.Length == 0) ? frontierfolder : d;
         }
 
-        public void ParseJournalFiles(Func<bool> cancelRequested, Action<int, string> updateProgress, bool forceReload = false)
-        {
-            List<EDCommander> listCommanders = EDCommander.GetList();
-
-            if (frontierfolder != null && frontierfolder.Length != 0 && Directory.Exists(frontierfolder))
-            {
-                if (watchers.FindIndex(x => x.m_watcherfolder.Equals(frontierfolder)) < 0)
-                {
-                    System.Diagnostics.Trace.WriteLine(string.Format("New watch on {0}", frontierfolder));
-                    JournalMonitorWatcher mw = new JournalMonitorWatcher(frontierfolder);
-                    watchers.Add(mw);
-                }
-            }
-
-            for (int i = 0; i < listCommanders.Count; i++)             // see if new watchers are needed
-            {
-                string datapath = GetWatchFolder(listCommanders[i].JournalDir);
-
-                if (datapath == null || datapath.Length == 0 || !Directory.Exists(datapath))
-                    continue;
-
-                if (watchers.FindIndex(x => x.m_watcherfolder.Equals(datapath)) >= 0)       // if we already have a watch on this folder..
-                    continue;       // already done
-
-                System.Diagnostics.Trace.WriteLine(string.Format("New watch on {0}", datapath));
-                JournalMonitorWatcher mw = new JournalMonitorWatcher(datapath);
-                watchers.Add(mw);
-            }
-
-            List<int> tobedeleted = new List<int>();
-            for (int i = 0; i < watchers.Count; i++)
-            {
-                bool found = false;
-                for (int j = 0; j < listCommanders.Count; j++)          // all commanders, see if this watch folder is present
-                    found |= watchers[i].m_watcherfolder.Equals(GetWatchFolder(listCommanders[j].JournalDir));
-
-                if (!found)
-                    tobedeleted.Add(i);
-            }
-
-            foreach (int i in tobedeleted)
-            {
-                System.Diagnostics.Trace.WriteLine(string.Format("Delete watch on {0}", watchers[i].m_watcherfolder));
-                JournalMonitorWatcher mw = watchers[i];
-                mw.StopMonitor();          // just in case
-                watchers.Remove(mw);
-            }
-
-            for (int i = 0; i < watchers.Count; i++)             // parse files of all folders being watched
-            {
-                watchers[i].ParseJournalFiles(cancelRequested, updateProgress, forceReload);     // may create new commanders at the end, but won't need any new watchers, because they will obv be in the same folder
-            }
-        }
-
         public void StartMonitor()
         {
             StopRequested = new ManualResetEvent(false);
@@ -144,11 +92,21 @@ namespace EliteDangerousCore
             {
                 mw.StartMonitor();
             }
+
+            foreach (StatusMonitorWatcher mw in statuswatchers)
+            {
+                mw.StartMonitor();
+            }
         }
 
         public void StopMonitor()
         {
             foreach (JournalMonitorWatcher mw in watchers)
+            {
+                mw.StopMonitor();
+            }
+
+            foreach (StatusMonitorWatcher mw in statuswatchers)
             {
                 mw.StopMonitor();
             }
@@ -165,6 +123,8 @@ namespace EliteDangerousCore
                 ScanThread = null;
             }
         }
+
+        // Journal scanner main tick - every tick, do scan tick worker, pass anything found to foreground for dispatch
 
         private void ScanThreadProc()
         {
@@ -198,7 +158,7 @@ namespace EliteDangerousCore
             return entries;
         }
 
-        private void ScanTickDone(List<JournalEntry> entries)
+        private void ScanTickDone(List<JournalEntry> entries)       // in UI thread..
         {
             if (entries != null)
             {
@@ -211,6 +171,114 @@ namespace EliteDangerousCore
             }
         }
 
-        private static Guid Win32FolderId_SavedGames = new Guid("4C5C32FF-BB9D-43b0-B5B4-2D72E54EAAA4");
+
+        // History refresh calls this for a global reparse of all journal event folders during load history
+
+        public void ParseJournalFiles(Func<bool> cancelRequested, Action<int, string> updateProgress, bool forceReload = false)
+        {
+            List<EDCommander> listCommanders = EDCommander.GetList();
+
+            // add the default frontier folder in
+
+            if (!string.IsNullOrEmpty(frontierfolder) && Directory.Exists(frontierfolder))  // if it exists..
+            {
+                if (watchers.FindIndex(x => x.m_watcherfolder.Equals(frontierfolder)) < 0)  // and we are not watching it..
+                {
+                    System.Diagnostics.Trace.WriteLine(string.Format("New watch on {0}", frontierfolder));
+                    JournalMonitorWatcher mw = new JournalMonitorWatcher(frontierfolder);
+                    watchers.Add(mw);
+
+                    StatusMonitorWatcher sw = new StatusMonitorWatcher(frontierfolder);
+                    sw.UIEventCallBack += UIEvent;
+                    statuswatchers.Add(sw);
+                }
+            }
+
+            for (int i = 0; i < listCommanders.Count; i++)             // see if new watchers are needed
+            {
+                string datapath = GetWatchFolder(listCommanders[i].JournalDir);
+
+                if (string.IsNullOrEmpty(datapath) || !Directory.Exists(datapath))  // not exist, ignore
+                    continue;
+
+                if (watchers.FindIndex(x => x.m_watcherfolder.Equals(datapath)) >= 0)       // if we already have a watch on this folder..
+                    continue;       // already done
+
+                System.Diagnostics.Trace.WriteLine(string.Format("New watch on {0}", datapath));
+                JournalMonitorWatcher mw = new JournalMonitorWatcher(datapath);
+                watchers.Add(mw);
+
+                StatusMonitorWatcher sw = new StatusMonitorWatcher(datapath);
+                sw.UIEventCallBack += UIEvent;
+                statuswatchers.Add(sw);
+
+            }
+
+            // clean up monitors on journals
+            {
+                List<int> tobedeleted = new List<int>();
+                for (int i = 0; i < watchers.Count; i++)
+                {
+                    bool found = false;
+                    for (int j = 0; j < listCommanders.Count; j++)          // all commanders, see if this watch folder is present
+                        found |= watchers[i].m_watcherfolder.Equals(GetWatchFolder(listCommanders[j].JournalDir));
+
+                    if (!found)
+                        tobedeleted.Add(i);
+                }
+
+                foreach (int i in tobedeleted)
+                {
+                    System.Diagnostics.Trace.WriteLine(string.Format("Delete watch on {0}", watchers[i].m_watcherfolder));
+                    JournalMonitorWatcher mw = watchers[i];
+                    mw.StopMonitor();          // just in case
+                    watchers.Remove(mw);
+                }
+            }
+
+            // and on status files
+            {
+                List<int> statustobedeleted = new List<int>();
+                for (int i = 0; i < statuswatchers.Count; i++)
+                {
+                    bool found = false;
+                    for (int j = 0; j < listCommanders.Count; j++)          // all commanders, see if this watch folder is present
+                        found |= statuswatchers[i].watcherfolder.Equals(GetWatchFolder(listCommanders[j].JournalDir));
+
+                    if (!found)
+                        statustobedeleted.Add(i);
+                }
+
+                foreach (int i in statustobedeleted)
+                {
+                    System.Diagnostics.Trace.WriteLine(string.Format("Delete status watch on {0}", watchers[i].m_watcherfolder));
+                    StatusMonitorWatcher mw = statuswatchers[i];
+                    mw.StopMonitor();          // just in case
+                    statuswatchers.Remove(mw);
+                }
+            }
+
+            for (int i = 0; i < watchers.Count; i++)             // parse files of all folders being watched
+            {
+                watchers[i].ParseJournalFiles(cancelRequested, updateProgress, forceReload);     // may create new commanders at the end, but won't need any new watchers, because they will obv be in the same folder
+            }
+        }
+
+        // UI processing
+
+        public void UIEvent(List<UIEvent> events, string folder)     // in Thread.. from monitor
+        {
+            InvokeAsyncOnUiThread(() => UIEventPost(events));
+        }
+
+        public void UIEventPost(List<UIEvent> events)       // UI thread
+        {
+            Debug.Assert(System.Windows.Forms.Application.MessageLoop);
+
+            foreach (UIEvent u in events)
+            {
+                OnNewUIEvent?.Invoke(u);
+            }
+        }
     }
 }

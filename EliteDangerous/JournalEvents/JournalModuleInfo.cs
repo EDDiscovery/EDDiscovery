@@ -112,7 +112,9 @@ namespace EliteDangerousCore.JournalEvents
                 if (detailed.Length > 0)
                     detailed += Environment.NewLine;
 
-                detailed += BaseUtils.FieldBuilder.Build("", m.Slot, "<:", m.Item, "Power:;MW", m.Power);
+                double? power = (m.Power.HasValue && m.Power.Value > 0) ? m.Power : null;
+
+                detailed += BaseUtils.FieldBuilder.Build("", m.Slot, "<:", m.Item, "Power:; MW;0.###", power);
             }
         }
     }

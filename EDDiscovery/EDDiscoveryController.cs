@@ -58,7 +58,7 @@ namespace EDDiscovery
 
         // DURING A new Journal entry by the monitor, in order..
 
-        public event Action<string, bool> OnNewUIEvent;                     // UI. MAJOR. UC. Mirrored. Always called irrespective of commander
+        public event Action<UIEvent> OnNewUIEvent;                          // UI. MAJOR. UC. Mirrored. Always called irrespective of commander
 
                                                                             // Next two ONLY called if its for the current commander, and its not a screened out event (uievent)
         public event Action<HistoryEntry, HistoryList> OnNewEntry;          // UI. MAJOR. UC. Mirrored. Current commander. Called before OnNewJournalEntry, when NewEntry is called with a new item for the CURRENT commander
@@ -143,6 +143,7 @@ namespace EDDiscovery
 
             journalmonitor = new EDJournalClass(InvokeAsyncOnUiThread);
             journalmonitor.OnNewJournalEntry += NewEntry;
+            journalmonitor.OnNewUIEvent += NewUIEvent;
         }
 
         private void LoadIconPack()
@@ -481,7 +482,10 @@ namespace EDDiscovery
             if (je.IsUIEvent)            // give windows time to set up for OnNewEvent, and tell them if its coming via showuievents
             {
                 if (je is EliteDangerousCore.JournalEvents.JournalMusic)
-                    OnNewUIEvent?.Invoke((je as EliteDangerousCore.JournalEvents.JournalMusic).MusicTrack, EDDConfig.Instance.ShowUIEvents);
+                {
+                    //System.Diagnostics.Debug.WriteLine("Dispatch from controller Journal UI event ");
+                    OnNewUIEvent?.Invoke(new EliteDangerousCore.UIEvents.UIJournalMusic((je as EliteDangerousCore.JournalEvents.JournalMusic).MusicTrack, EDDConfig.Instance.ShowUIEvents, DateTime.UtcNow));
+                }
             }
 
             OnNewJournalEntry?.Invoke(je);          // Always call this on all entries...
@@ -509,6 +513,18 @@ namespace EDDiscovery
             {
                 PlayJournalList();
             });
+        }
+
+        #endregion
+
+        #region New UI event
+
+        void NewUIEvent(UIEvent u)
+        {
+            Debug.Assert(System.Windows.Forms.Application.MessageLoop);
+            //System.Diagnostics.Debug.WriteLine("Dispatch from controller UI event " + u.EventTypeStr);
+
+            OnNewUIEvent?.Invoke(u);
         }
 
         #endregion

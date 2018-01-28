@@ -114,6 +114,7 @@
     <Compile Include="EliteDangerous\EDJournalClass.cs" />
     <Compile Include="EliteDangerous\EDJournalReader.cs" />
     <Compile Include="EliteDangerous\EDJournalMonitorWatcher.cs" />
+    <Compile Include="EliteDangerous\EDStatusMonitorWatcher.cs" />
     <Compile Include="EliteDangerous\EDTypesFromJSON.cs" />
     <Compile Include="EliteDangerous\FrontierToVKey.cs" />
     <Compile Include="EliteDangerous\ISystem.cs" />
@@ -309,6 +310,39 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="EliteDangerous\UIEvents.cs" />
+    <Compile Include="UIEvents\UIFireGroup.cs" />
+    <Compile Include="UIEvents\UIPosition.cs" />
+    <Compile Include="UIEvents\UIPips.cs" />
+    <Compile Include="UIEvents\UIJournalMusic.cs" />
+    <Compile Include="UIEvents\UIBeingInterdicted.cs" />
+    <Compile Include="UIEvents\UICargoScoopDeployed.cs" />
+    <Compile Include="UIEvents\UIDocked.cs" />
+    <Compile Include="UIEvents\UIFlightAssist.cs" />
+    <Compile Include="UIEvents\UIFsdCharging.cs" />
+    <Compile Include="UIEvents\UIFsdCooldown.cs" />
+    <Compile Include="UIEvents\UIFsdMassLocked.cs" />
+    <Compile Include="UIEvents\UIGUIFocus.cs" />
+    <Compile Include="UIEvents\UIHardpointsDeployed.cs" />
+    <Compile Include="UIEvents\UIHasLatLong.cs" />
+    <Compile Include="UIEvents\UIInFighter.cs" />
+    <Compile Include="UIEvents\UIInMainShip.cs" />
+    <Compile Include="UIEvents\UIInSRV.cs" />
+    <Compile Include="UIEvents\UIInWing.cs" />
+    <Compile Include="UIEvents\UIIsInDanger.cs" />
+    <Compile Include="UIEvents\UILanded.cs" />
+    <Compile Include="UIEvents\UILandingGear.cs" />
+    <Compile Include="UIEvents\UILights.cs" />
+    <Compile Include="UIEvents\UILowFuel.cs" />
+    <Compile Include="UIEvents\UIOverHeating.cs" />
+    <Compile Include="UIEvents\UIScoopingFuel.cs" />
+    <Compile Include="UIEvents\UIShieldsUp.cs" />
+    <Compile Include="UIEvents\UISlientRunning.cs" />
+    <Compile Include="UIEvents\UISrvDriveAssist.cs" />
+    <Compile Include="UIEvents\UISrvHandbrake.cs" />
+    <Compile Include="UIEvents\UISrvTurret.cs" />
+    <Compile Include="UIEvents\UISrvUnderShip.cs" />
+    <Compile Include="UIEvents\UISupercruise.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
