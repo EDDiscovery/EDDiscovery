@@ -27,9 +27,11 @@ namespace EliteDangerousCore.JournalEvents
     {
         public JournalCommunityGoalJoin(JObject evt ) : base(evt, JournalTypeEnum.CommunityGoalJoin)
         {
+            CGID = evt["CGID"].Int();
             Name = evt["Name"].Str();
             System = evt["System"].Str();
         }
+        public int CGID { get; set; }
         public string Name { get; set; }
         public string System { get; set; }
 

@@ -94,7 +94,7 @@ namespace EDDiscovery
         #region Events - see the EDDiscoveryControl for meaning and context
         public event Action<HistoryList> OnHistoryChange { add { Controller.OnHistoryChange += value; } remove { Controller.OnHistoryChange -= value; } }
         public event Action<HistoryEntry, HistoryList> OnNewEntry { add { Controller.OnNewEntry += value; } remove { Controller.OnNewEntry -= value; } }
-        public event Action<string,bool> OnNewUIEvent { add { Controller.OnNewUIEvent += value; } remove { Controller.OnNewUIEvent -= value; } }
+        public event Action<UIEvent> OnNewUIEvent { add { Controller.OnNewUIEvent += value; } remove { Controller.OnNewUIEvent -= value; } }
         public event Action<JournalEntry> OnNewJournalEntry { add { Controller.OnNewJournalEntry += value; } remove { Controller.OnNewJournalEntry -= value; } }
         public event Action<string, Color> OnNewLogEntry { add { Controller.OnNewLogEntry += value; } remove { Controller.OnNewLogEntry -= value; } }
         public event Action OnRefreshCommanders { add { Controller.OnRefreshCommanders += value; } remove { Controller.OnRefreshCommanders -= value; } }
@@ -750,9 +750,13 @@ namespace EDDiscovery
             }
         }
 
-        private void Controller_NewUIEvent(string name,bool shown)      
+        private void Controller_NewUIEvent(UIEvent uievent)      
         {
-            actioncontroller.ActionRun(Actions.ActionEventEDList.onUIEvent , new Conditions.ConditionVariables(new string[] { "UIEvent", name, "UIDisplayed", shown ? "1" : "0" }));
+            Conditions.ConditionVariables cv = new Conditions.ConditionVariables();
+            cv.AddPropertiesFieldsOfClass(uievent, "UI", new Type[] { typeof(System.Drawing.Bitmap), typeof(Newtonsoft.Json.Linq.JObject) }, 5);
+            cv["UIEvent"] = uievent.EventTypeStr;
+            cv["UIDisplayed"] = EDDConfig.ShowUIEvents ? "1" : "0";
+            actioncontroller.ActionRun(Actions.ActionEventEDList.onUIEvent , cv);
         }
 
         private void SendPricestoEDDN(HistoryEntry he, CMarket market)

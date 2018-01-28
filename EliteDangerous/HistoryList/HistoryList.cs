@@ -458,7 +458,7 @@ namespace EliteDangerousCore
         {
             if (syspos.System.status == SystemStatusEnum.EDSM || syspos.System.id_edsm == -1)  // if set already, or we tried and failed..
             {
-                System.Diagnostics.Debug.WriteLine("Checked System {0} already id {1} ", syspos.System.name , syspos.System.id_edsm);
+                //System.Diagnostics.Debug.WriteLine("Checked System {0} already id {1} ", syspos.System.name , syspos.System.id_edsm);
                 return;
             }
 

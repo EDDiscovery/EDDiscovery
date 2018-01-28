@@ -28,15 +28,17 @@ namespace EliteDangerousCore.JournalEvents
         {
             Name = JournalFieldNaming.GetBetterMissionName(evt["Name"].Str());
             MissionId = evt["MissionID"].Int();
+            Fine = evt["Fine"].LongNull();
         }
 
         public string Name { get; set; }
         public int MissionId { get; set; }
+        public long? Fine { get; set; }
 
         public override void FillInformation(out string summary, out string info, out string detailed) //V
         {
             summary = EventTypeStr.SplitCapsWord();
-            info = Name;
+            info = BaseUtils.FieldBuilder.Build("", Name,"Fine:",Fine);
             detailed = "";
         }
 

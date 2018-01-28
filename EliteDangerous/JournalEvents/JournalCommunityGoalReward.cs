@@ -28,10 +28,12 @@ namespace EliteDangerousCore.JournalEvents
     {
         public JournalCommunityGoalReward(JObject evt ) : base(evt, JournalTypeEnum.CommunityGoalReward)
         {
+            CGID = evt["CGID"].Int();
             Name = evt["Name"].Str();
             System = evt["System"].Str();
             Reward = evt["Reward"].Long();
         }
+        public int CGID { get; set; }
         public string Name { get; set; }
         public string System { get; set; }
         public long Reward { get; set; }
