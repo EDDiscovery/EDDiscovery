@@ -762,7 +762,7 @@ namespace EliteDangerousCore.EDSM
             string rwsystime = SQLiteConnectionSystem.GetSettingString("EDSMLastSystems", "2000-01-01 00:00:00"); // Latest time from RW file.
             DateTime edsmdate;
 
-            if (!DateTime.TryParse(rwsystime, CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal, out edsmdate))
+            if (!DateTime.TryParse(rwsystime, CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal | DateTimeStyles.AdjustToUniversal, out edsmdate))
                 edsmdate = new DateTime(2000, 1, 1);
 
             return edsmdate;
