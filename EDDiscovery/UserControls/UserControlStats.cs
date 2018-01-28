@@ -309,7 +309,7 @@ namespace EDDiscovery.UserControls
                 StatToDGV(dataGridViewTravel, "Jet Cone Boost", strarr);
 
                 for (int ii = 0; ii < intervals; ii++)
-                    strarr[ii] = hl.GetTouchDown(timearr[ii], endTime).ToString("N0", System.Globalization.CultureInfo.CurrentCulture);
+                    strarr[ii] = hl.GetPlayerControlledTouchDown(timearr[ii], endTime).ToString("N0", System.Globalization.CultureInfo.CurrentCulture);
                 StatToDGV(dataGridViewTravel, "Landed", strarr);
 
 
@@ -415,7 +415,7 @@ namespace EDDiscovery.UserControls
                 StatToDGV(dataGridViewTravel, "Docked", strarr);
 
                 for (int ii = 0; ii < intervals; ii++)
-                    strarr[ii] = hl.GetTouchDown(timeintervals[ii + 1], timeintervals[ii]).ToString("N0", System.Globalization.CultureInfo.CurrentCulture);
+                    strarr[ii] = hl.GetPlayerControlledTouchDown(timeintervals[ii + 1], timeintervals[ii]).ToString("N0", System.Globalization.CultureInfo.CurrentCulture);
                 StatToDGV(dataGridViewTravel, "Landed", strarr);
 
 
