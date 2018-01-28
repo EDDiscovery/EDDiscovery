@@ -441,11 +441,23 @@ namespace EDDiscovery.UserControls
 
         private void toolStripAddFromHistory_Click(object sender, EventArgs e)
         {
+            AddUnknownFromHistory(false);
+        }
+
+        private void toolStripAddRecentHistory_Click(object sender, EventArgs e)
+        {
+            AddUnknownFromHistory(true);
+        }
+
+        private void AddUnknownFromHistory(bool descending)
+        {
             if (wanted == null) PopulateLocalWantedSystems();
             int i = 0;
             var unknown = discoveryform.history
                             .FilterByFSD.ConvertAll<JournalFSDJump>(he => (he.journalEntry as JournalFSDJump))
-                            .Where(fsd => !fsd.HasCoordinate).OrderBy(fsd => fsd.EventTimeUTC);
+                            .Where(fsd => !fsd.HasCoordinate);
+            if(descending) unknown = unknown.OrderByDescending(fsd => fsd.EventTimeUTC);
+            else unknown = unknown.OrderBy(fsd => fsd.EventTimeUTC);
             foreach (JournalFSDJump jmp in unknown)
             {
                 if (wanted.Where(w => w.system == jmp.StarSystem).Count() == 0)
@@ -1004,6 +1016,12 @@ namespace EDDiscovery.UserControls
         {
             if (wanted == null)
                 PopulateLocalWantedSystems();
+            else
+            {
+                // there can be multiple instances tied to the history form so this might already exist...
+                List<WantedSystemClass> dbCheck = WantedSystemClass.GetAllWantedSystems();
+                if (dbCheck.Where(s => s.system == sysName).Any()) return;
+            }
 
             WantedSystemClass entry = wanted.Where(x => x.system == sysName).FirstOrDefault();  //duplicate?
 
@@ -1056,5 +1074,6 @@ namespace EDDiscovery.UserControls
         }
 
         #endregion
+        
     }
 }
