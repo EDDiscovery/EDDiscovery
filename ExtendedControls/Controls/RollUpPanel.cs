@@ -352,6 +352,13 @@ namespace ExtendedControls
             }
         }
 
-
+        // NOT IN USE
+        #region Icon Replacement
+        public void ReplaceIconsNOTINUSE(Func<string, Image> getIcon)
+        {
+            pinbutton.Image = getIcon("PinDown");
+            pinbutton.ImageUnchecked = getIcon("PinUp");
+        }
+        #endregion
     }
 }

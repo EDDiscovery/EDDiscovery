@@ -118,8 +118,11 @@ namespace EDDiscovery.UserControls
 
                 List<MissionState> mcurrent = (from MissionState ms in ml.Missions.Values where ms.InProgressDateTime(hetime) orderby ms.Mission.EventTimeUTC descending select ms).ToList();
 
+                var totalReward = 0;
                 foreach (MissionState ms in mcurrent)
                 {
+
+
                     object[] rowobj = { JournalFieldNaming.ShortenMissionName(ms.Mission.Name) ,
                                         EDDiscoveryForm.EDDConfig.DisplayUTC ? ms.Mission.EventTimeUTC : ms.Mission.EventTimeLocal,
                                         EDDiscoveryForm.EDDConfig.DisplayUTC ? ms.Mission.Expiry : ms.Mission.Expiry.ToLocalTime(),
@@ -127,12 +130,21 @@ namespace EDDiscovery.UserControls
                                         ms.Mission.Faction,
                                         ms.Mission.DestinationSystem + ((ms.Mission.DestinationStation.Length>0) ? ":" +ms.Mission.DestinationStation :""),
                                         ms.Mission.TargetFaction,
+                                        ms.Mission.Reward.GetValueOrDefault().ToString("N0"),
                                         ms.Info()
                     };
+
+                    if (ms.Mission.Reward.HasValue)
+                    {
+                        totalReward += ms.Mission.Reward.Value;
+                    }
 
                     int rowno = dataGridViewCurrent.Rows.Add(rowobj);
                     dataGridViewCurrent.Rows[rowno].Tag = ms;
                 }
+
+
+                cColValue.HeaderText = (totalReward!=0) ? $"Reward (cr)\nTotal: {totalReward:N0}" : "Reward (cr)";
 
                 List<MissionState> mprev = (from MissionState ms in ml.Missions.Values where !ms.InProgressDateTime(hetime) orderby ms.Mission.EventTimeUTC descending select ms).ToList();
 

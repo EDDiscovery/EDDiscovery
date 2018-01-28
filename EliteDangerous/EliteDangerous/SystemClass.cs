@@ -32,6 +32,7 @@ namespace EliteDangerousCore
         public DateTime UpdateDate { get; set; }
         public int gridid { get; set; }
         public int randomid { get; set; }
+        public long? SystemAddress { get; set; }
 
         public bool HasCoordinate
         {
@@ -50,6 +51,23 @@ namespace EliteDangerousCore
                      Math.Abs(this.y - other.y) < 0.125 &&
                      Math.Abs(this.z - other.z) < 0.125));
         }
+
+        public double Distance(ISystemBase s2)
+        {
+            if (s2 != null && HasCoordinate && s2.HasCoordinate)
+                return Math.Sqrt((x - s2.x) * (x - s2.x) + (y - s2.y) * (y - s2.y) + (z - s2.z) * (z - s2.z));
+            else
+                return -1;
+        }
+
+        public double Distance(double ox, double oy, double oz)
+        {
+            if (HasCoordinate)
+                return Math.Sqrt((x - ox) * (x - ox) + (y - oy) * (y - oy) + (z - oz) * (z - oz));
+            else
+                return -1;
+        }
+
     }
 
     [DebuggerDisplay("System {name} ({x,nq},{y,nq},{z,nq})")]
@@ -62,21 +80,27 @@ namespace EliteDangerousCore
         public SystemClass(string Name)
         {
             name = Name;
-            status = DB.SystemStatusEnum.Unknown;
+            status = SystemStatusEnum.Unknown;
+        }
+
+        public SystemClass(long id)
+        {
+            name = "UnKnown";
+            id_edsm = id;
         }
 
         public SystemClass(string Name, double vx, double vy, double vz)
         {
             name = Name;
-            status = DB.SystemStatusEnum.Unknown;
+            status = SystemStatusEnum.Unknown;
             x = vx; y = vy; z = vz;
         }
 
-        public int cr { get; set; }
         public string CommanderCreate { get; set; }
         public DateTime CreateDate { get; set; }
         public string CommanderUpdate { get; set; }
-        public EliteDangerousCore.DB.SystemStatusEnum status { get; set; }
+
+        public SystemStatusEnum status { get; set; }
         public string SystemNote { get; set; }
 
         public long id_eddb { get; set; }

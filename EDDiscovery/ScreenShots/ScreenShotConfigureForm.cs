@@ -71,31 +71,37 @@ namespace EDDiscovery.ScreenShots
             numericUpDownTop.Enabled = numericUpDownLeft.Enabled = numericUpDownWidth.Enabled = numericUpDownHeight.Enabled = checkBoxCropImage.Checked;
         }
 
-        private void panel_close_MouseClick(object sender, MouseEventArgs e)
+        private void panel_close_Click(object sender, EventArgs e)
         {
             Close();
         }
 
-        private void panel_minimize_MouseClick(object sender, MouseEventArgs e)
+        private void panel_minimize_Click(object sender, EventArgs e)
         {
             this.WindowState = FormWindowState.Minimized;
         }
 
-        private void label_index_MouseDown(object sender, MouseEventArgs e)
+        private void captionControl_MouseDown(object sender, MouseEventArgs e)
         {
             OnCaptionMouseDown((Control)sender, e);
         }
 
+        private void captionControl_MouseUp(object sender, MouseEventArgs e)
+        {
+            OnCaptionMouseUp((Control)sender, e);
+        }
+
         private void buttonChangeEDScreenshot_Click(object sender, EventArgs e)
         {
-            FolderBrowserDialog dlg = new FolderBrowserDialog();
-
-            dlg.Description = "Select ED screenshot folder";
-            dlg.SelectedPath = textBoxScreenshotsDir.Text;
-
-            if (dlg.ShowDialog(this) == DialogResult.OK)
+            using (var dlg = new FolderBrowserDialog())
             {
-                initialssfolder = textBoxScreenshotsDir.Text = dlg.SelectedPath;
+                dlg.Description = "Select ED screenshot folder";
+                dlg.SelectedPath = textBoxScreenshotsDir.Text;
+
+                if (dlg.ShowDialog(this) == DialogResult.OK)
+                {
+                    initialssfolder = textBoxScreenshotsDir.Text = dlg.SelectedPath;
+                }
             }
         }
 

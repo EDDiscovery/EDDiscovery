@@ -89,6 +89,7 @@ namespace EDDiscovery.UserControls
             // 
             // toolStrip1
             // 
+            this.toolStrip1.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripButtonNew,
             this.toolStripButtonImportFile,
@@ -106,7 +107,7 @@ namespace EDDiscovery.UserControls
             // 
             // toolStripButtonNew
             // 
-            this.toolStripButtonNew.Image = global::EDDiscovery.Properties.Resources.toolStripButtonNew_Image;
+            this.toolStripButtonNew.Image = global::EDDiscovery.Icons.Controls.Expedition_New;
             this.toolStripButtonNew.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonNew.Name = "toolStripButtonNew";
             this.toolStripButtonNew.Size = new System.Drawing.Size(85, 22);
@@ -115,7 +116,7 @@ namespace EDDiscovery.UserControls
             // 
             // toolStripButtonImportFile
             // 
-            this.toolStripButtonImportFile.Image = global::EDDiscovery.Properties.Resources.toolStripButtonNew_Image;
+            this.toolStripButtonImportFile.Image = global::EDDiscovery.Icons.Controls.Expedition_ImportFile;
             this.toolStripButtonImportFile.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonImportFile.Name = "toolStripButtonImportFile";
             this.toolStripButtonImportFile.Size = new System.Drawing.Size(82, 22);
@@ -124,7 +125,7 @@ namespace EDDiscovery.UserControls
             // 
             // toolStripButtonImportRoute
             // 
-            this.toolStripButtonImportRoute.Image = global::EDDiscovery.Properties.Resources.toolStripButtonNew_Image;
+            this.toolStripButtonImportRoute.Image = global::EDDiscovery.Icons.Controls.Expedition_ImportRoute;
             this.toolStripButtonImportRoute.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonImportRoute.Name = "toolStripButtonImportRoute";
             this.toolStripButtonImportRoute.Size = new System.Drawing.Size(94, 22);
@@ -134,7 +135,7 @@ namespace EDDiscovery.UserControls
             // 
             // toolStripButtonSave
             // 
-            this.toolStripButtonSave.Image = global::EDDiscovery.Properties.Resources.toolStripButtonSubmitDistances_Image;
+            this.toolStripButtonSave.Image = global::EDDiscovery.Icons.Controls.Expedition_Save;
             this.toolStripButtonSave.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonSave.Name = "toolStripButtonSave";
             this.toolStripButtonSave.Size = new System.Drawing.Size(85, 22);
@@ -143,7 +144,7 @@ namespace EDDiscovery.UserControls
             // 
             // toolStripButtonExport
             // 
-            this.toolStripButtonExport.Image = global::EDDiscovery.Properties.Resources.toolStripButtonSubmitDistances_Image;
+            this.toolStripButtonExport.Image = global::EDDiscovery.Icons.Controls.Expedition_Export;
             this.toolStripButtonExport.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonExport.Name = "toolStripButtonExport";
             this.toolStripButtonExport.Size = new System.Drawing.Size(60, 22);
@@ -153,7 +154,7 @@ namespace EDDiscovery.UserControls
             // 
             // toolStripButtonDelete
             // 
-            this.toolStripButtonDelete.Image = global::EDDiscovery.Properties.Resources.toolStripButtonRemoveAll_Image;
+            this.toolStripButtonDelete.Image = global::EDDiscovery.Icons.Controls.Expedition_Delete;
             this.toolStripButtonDelete.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonDelete.Name = "toolStripButtonDelete";
             this.toolStripButtonDelete.Size = new System.Drawing.Size(94, 22);
@@ -162,7 +163,7 @@ namespace EDDiscovery.UserControls
             // 
             // toolStripButtonShowOn3DMap
             // 
-            this.toolStripButtonShowOn3DMap.Image = global::EDDiscovery.Properties.Resources.toolStripButtonMap_Image;
+            this.toolStripButtonShowOn3DMap.Image = global::EDDiscovery.Icons.Controls.Expedition_ShowOnMap;
             this.toolStripButtonShowOn3DMap.Name = "toolStripButtonShowOn3DMap";
             this.toolStripButtonShowOn3DMap.Size = new System.Drawing.Size(117, 20);
             this.toolStripButtonShowOn3DMap.Text = "Show on 3D Map";
@@ -177,6 +178,7 @@ namespace EDDiscovery.UserControls
             this.toolStripComboBoxRouteSelection.DisplayMember = "";
             this.toolStripComboBoxRouteSelection.DropDownBackgroundColor = System.Drawing.Color.Gray;
             this.toolStripComboBoxRouteSelection.DropDownHeight = 200;
+            this.toolStripComboBoxRouteSelection.DropDownWidth = 200;
             this.toolStripComboBoxRouteSelection.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.toolStripComboBoxRouteSelection.ItemHeight = 13;
             this.toolStripComboBoxRouteSelection.MouseOverBackgroundColor = System.Drawing.Color.Silver;
@@ -273,9 +275,6 @@ namespace EDDiscovery.UserControls
             // 
             // buttonReverseRoute
             // 
-            this.buttonReverseRoute.BorderColorScaling = 1.25F;
-            this.buttonReverseRoute.ButtonColorScaling = 0.5F;
-            this.buttonReverseRoute.ButtonDisabledScaling = 0.5F;
             this.buttonReverseRoute.Location = new System.Drawing.Point(517, 4);
             this.buttonReverseRoute.Name = "buttonReverseRoute";
             this.buttonReverseRoute.Size = new System.Drawing.Size(59, 23);

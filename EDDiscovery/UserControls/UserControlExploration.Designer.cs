@@ -105,7 +105,7 @@ namespace EDDiscovery.UserControls
             // 
             // toolStripButtonNew
             // 
-            this.toolStripButtonNew.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonNew.Image")));
+            this.toolStripButtonNew.Image = global::EDDiscovery.Icons.Controls.Exploration_New;
             this.toolStripButtonNew.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonNew.Name = "toolStripButtonNew";
             this.toolStripButtonNew.Size = new System.Drawing.Size(51, 22);
@@ -114,7 +114,7 @@ namespace EDDiscovery.UserControls
             // 
             // toolStripButtonImportFile
             // 
-            this.toolStripButtonImportFile.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonImportFile.Image")));
+            this.toolStripButtonImportFile.Image = global::EDDiscovery.Icons.Controls.Exploration_ImportFile;
             this.toolStripButtonImportFile.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonImportFile.Name = "toolStripButtonImportFile";
             this.toolStripButtonImportFile.Size = new System.Drawing.Size(82, 22);
@@ -123,7 +123,7 @@ namespace EDDiscovery.UserControls
             // 
             // tsbImportSphere
             // 
-            this.tsbImportSphere.Image = ((System.Drawing.Image)(resources.GetObject("tsbImportSphere.Image")));
+            this.tsbImportSphere.Image = global::EDDiscovery.Icons.Controls.Exploration_ImportSphere;
             this.tsbImportSphere.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbImportSphere.Name = "tsbImportSphere";
             this.tsbImportSphere.Size = new System.Drawing.Size(102, 22);
@@ -132,7 +132,7 @@ namespace EDDiscovery.UserControls
             // 
             // toolStripButtonLoad
             // 
-            this.toolStripButtonLoad.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonLoad.Image")));
+            this.toolStripButtonLoad.Image = global::EDDiscovery.Icons.Controls.Exploration_Load;
             this.toolStripButtonLoad.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonLoad.Name = "toolStripButtonLoad";
             this.toolStripButtonLoad.Size = new System.Drawing.Size(53, 22);
@@ -141,7 +141,7 @@ namespace EDDiscovery.UserControls
             // 
             // toolStripButtonSave
             // 
-            this.toolStripButtonSave.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonSave.Image")));
+            this.toolStripButtonSave.Image = global::EDDiscovery.Icons.Controls.Exploration_Save;
             this.toolStripButtonSave.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonSave.Name = "toolStripButtonSave";
             this.toolStripButtonSave.Size = new System.Drawing.Size(51, 22);
@@ -150,7 +150,7 @@ namespace EDDiscovery.UserControls
             // 
             // toolStripButtonExport
             // 
-            this.toolStripButtonExport.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonExport.Image")));
+            this.toolStripButtonExport.Image = global::EDDiscovery.Icons.Controls.Exploration_Export;
             this.toolStripButtonExport.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonExport.Name = "toolStripButtonExport";
             this.toolStripButtonExport.Size = new System.Drawing.Size(60, 22);
@@ -160,7 +160,7 @@ namespace EDDiscovery.UserControls
             // 
             // toolStripButtonDelete
             // 
-            this.toolStripButtonDelete.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonDelete.Image")));
+            this.toolStripButtonDelete.Image = global::EDDiscovery.Icons.Controls.Exploration_Delete;
             this.toolStripButtonDelete.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonDelete.Name = "toolStripButtonDelete";
             this.toolStripButtonDelete.Size = new System.Drawing.Size(60, 22);

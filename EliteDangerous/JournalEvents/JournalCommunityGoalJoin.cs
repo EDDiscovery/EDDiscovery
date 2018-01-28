@@ -27,12 +27,13 @@ namespace EliteDangerousCore.JournalEvents
     {
         public JournalCommunityGoalJoin(JObject evt ) : base(evt, JournalTypeEnum.CommunityGoalJoin)
         {
+            CGID = evt["CGID"].Int();
             Name = evt["Name"].Str();
             System = evt["System"].Str();
         }
+        public int CGID { get; set; }
         public string Name { get; set; }
         public string System { get; set; }
-        public override System.Drawing.Bitmap Icon { get { return EliteDangerous.Properties.Resources.communitygoaljoin; } }
 
         public override void FillInformation(out string summary, out string info, out string detailed) //V
         {

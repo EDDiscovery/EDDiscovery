@@ -37,8 +37,6 @@ namespace EliteDangerousCore.JournalEvents
         public string Progress { get; set; }
         public int? Rank { get; set; }
 
-        public override System.Drawing.Bitmap Icon { get { return EliteDangerous.Properties.Resources.engineerprogress; } }
-
         public override void FillInformation(out string summary, out string info, out string detailed) //V
         {
             summary = EventTypeStr.SplitCapsWord();

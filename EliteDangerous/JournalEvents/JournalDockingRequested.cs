@@ -27,10 +27,13 @@ namespace EliteDangerousCore.JournalEvents
         public JournalDockingRequested(JObject evt ) : base(evt, JournalTypeEnum.DockingRequested)
         {
             StationName = evt["StationName"].Str();
+            StationType = evt["StationType"].Str().SplitCapsWord();
+            MarketID = evt["MarketID"].LongNull();
         }
-        public string StationName { get; set; }
 
-        public override System.Drawing.Bitmap Icon { get { return EliteDangerous.Properties.Resources.dockingrequest; } }
+        public string StationName { get; set; }
+        public string StationType { get; set; }
+        public long? MarketID { get; set; }
 
         public override void FillInformation(out string summary, out string info, out string detailed) //V
         {

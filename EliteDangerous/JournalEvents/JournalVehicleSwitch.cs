@@ -32,16 +32,7 @@ namespace EliteDangerousCore.JournalEvents
         }
         public string To { get; set; }
 
-        public override System.Drawing.Bitmap Icon
-        {
-            get
-            {
-                if (To.Contains("Mothership"))
-                    return EliteDangerous.Properties.Resources.mothership;
-                else
-                    return EliteDangerous.Properties.Resources.fighter;
-            }
-        }
+        protected override JournalTypeEnum IconEventType { get { return To.Contains("Mothership") ? JournalTypeEnum.VehicleSwitch_Mothership : JournalTypeEnum.VehicleSwitch_Fighter; } }
 
         public void ShipInformation(ShipInformationList shp, DB.SQLiteConnectionUser conn)
         {

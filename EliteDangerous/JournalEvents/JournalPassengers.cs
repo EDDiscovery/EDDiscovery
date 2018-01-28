@@ -66,8 +66,6 @@ namespace EliteDangerousCore.JournalEvents
 
         public Passengers[] Manifest { get; set; }
 
-        public override System.Drawing.Bitmap Icon { get { return EliteDangerous.Properties.Resources.passengers; } }
-
         public override void FillInformation(out string summary, out string info, out string detailed) //U
         {
             summary = EventTypeStr.SplitCapsWord();
@@ -80,7 +78,7 @@ namespace EliteDangerousCore.JournalEvents
                 {
                     if (info.Length > 0)
                         info += ", ";
-                    info += BaseUtils.FieldBuilder.Build("", p.Type , "> ", p.Count , "; (VIP)" , p.VIP , "; (Wanted)" , p.Wanted);
+                    info += BaseUtils.FieldBuilder.Build("", p.Type , "< ", p.Count , "; (VIP)" , p.VIP , "; (Wanted)" , p.Wanted);
                 }
             }
 

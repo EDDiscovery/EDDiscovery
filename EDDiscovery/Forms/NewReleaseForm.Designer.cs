@@ -43,7 +43,6 @@ namespace EDDiscovery.Forms
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(NewReleaseForm));
             this.textBoxReleaseName = new ExtendedControls.TextBoxBorder();
             this.labelName = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
@@ -55,79 +54,124 @@ namespace EDDiscovery.Forms
             this.buttonPortablezip = new ExtendedControls.ButtonExt();
             this.label3 = new System.Windows.Forms.Label();
             this.buttonMsiInstaller = new ExtendedControls.ButtonExt();
-            this.buttonExtCancel = new ExtendedControls.ButtonExt();
+            this.btnClose = new ExtendedControls.ButtonExt();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.pnlCaption = new System.Windows.Forms.Panel();
+            this.pnlMaxRestore = new ExtendedControls.DrawnPanel();
+            this.pnlClose = new ExtendedControls.DrawnPanel();
+            this.lblCaption = new System.Windows.Forms.Label();
+            this.pnlBack = new System.Windows.Forms.Panel();
             this.panel1.SuspendLayout();
+            this.pnlCaption.SuspendLayout();
+            this.pnlBack.SuspendLayout();
             this.SuspendLayout();
             // 
             // textBoxReleaseName
             // 
+            this.textBoxReleaseName.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.textBoxReleaseName.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
+            this.textBoxReleaseName.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
             this.textBoxReleaseName.BorderColor = System.Drawing.Color.Transparent;
             this.textBoxReleaseName.BorderColorScaling = 0.5F;
-            this.textBoxReleaseName.Location = new System.Drawing.Point(99, 19);
+            this.textBoxReleaseName.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.textBoxReleaseName.ControlBackground = System.Drawing.SystemColors.Control;
+            this.textBoxReleaseName.Location = new System.Drawing.Point(99, 9);
+            this.textBoxReleaseName.Multiline = false;
             this.textBoxReleaseName.Name = "textBoxReleaseName";
             this.textBoxReleaseName.ReadOnly = true;
-            this.textBoxReleaseName.Size = new System.Drawing.Size(155, 20);
+            this.textBoxReleaseName.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.textBoxReleaseName.SelectionLength = 0;
+            this.textBoxReleaseName.SelectionStart = 0;
+            this.textBoxReleaseName.Size = new System.Drawing.Size(298, 20);
             this.textBoxReleaseName.TabIndex = 0;
+            this.textBoxReleaseName.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.textBoxReleaseName.WordWrap = true;
             // 
             // labelName
             // 
             this.labelName.AutoSize = true;
-            this.labelName.Location = new System.Drawing.Point(14, 22);
+            this.labelName.Location = new System.Drawing.Point(15, 12);
             this.labelName.Name = "labelName";
             this.labelName.Size = new System.Drawing.Size(35, 13);
             this.labelName.TabIndex = 1;
             this.labelName.Text = "Name";
-            this.labelName.Click += new System.EventHandler(this.labelName_Click);
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(14, 55);
+            this.label1.Location = new System.Drawing.Point(15, 43);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(54, 13);
+            this.label1.Size = new System.Drawing.Size(65, 13);
             this.label1.TabIndex = 2;
-            this.label1.Text = "GitHub url";
+            this.label1.Text = "GitHub URL";
             // 
             // textBoxGitHubURL
             // 
+            this.textBoxGitHubURL.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.textBoxGitHubURL.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
+            this.textBoxGitHubURL.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
             this.textBoxGitHubURL.BorderColor = System.Drawing.Color.Transparent;
             this.textBoxGitHubURL.BorderColorScaling = 0.5F;
-            this.textBoxGitHubURL.Location = new System.Drawing.Point(101, 52);
+            this.textBoxGitHubURL.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.textBoxGitHubURL.ControlBackground = System.Drawing.SystemColors.Control;
+            this.textBoxGitHubURL.Location = new System.Drawing.Point(99, 38);
+            this.textBoxGitHubURL.Multiline = false;
             this.textBoxGitHubURL.Name = "textBoxGitHubURL";
             this.textBoxGitHubURL.ReadOnly = true;
-            this.textBoxGitHubURL.Size = new System.Drawing.Size(278, 20);
+            this.textBoxGitHubURL.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.textBoxGitHubURL.SelectionLength = 0;
+            this.textBoxGitHubURL.SelectionStart = 0;
+            this.textBoxGitHubURL.Size = new System.Drawing.Size(218, 20);
             this.textBoxGitHubURL.TabIndex = 3;
+            this.textBoxGitHubURL.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.textBoxGitHubURL.WordWrap = true;
             // 
             // buttonUrlOpen
             // 
-            this.buttonUrlOpen.BorderColorScaling = 1.25F;
-            this.buttonUrlOpen.ButtonColorScaling = 0.5F;
-            this.buttonUrlOpen.ButtonDisabledScaling = 0.5F;
-            this.buttonUrlOpen.Location = new System.Drawing.Point(385, 50);
+            this.buttonUrlOpen.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.buttonUrlOpen.Location = new System.Drawing.Point(323, 38);
             this.buttonUrlOpen.Name = "buttonUrlOpen";
-            this.buttonUrlOpen.Size = new System.Drawing.Size(75, 23);
+            this.buttonUrlOpen.Size = new System.Drawing.Size(74, 23);
             this.buttonUrlOpen.TabIndex = 4;
-            this.buttonUrlOpen.Text = "Open";
+            this.buttonUrlOpen.Text = "&Open";
             this.buttonUrlOpen.UseVisualStyleBackColor = true;
             this.buttonUrlOpen.Click += new System.EventHandler(this.buttonUrlOpen_Click);
             // 
             // richTextBoxReleaseInfo
             // 
+            this.richTextBoxReleaseInfo.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.richTextBoxReleaseInfo.BorderColor = System.Drawing.Color.Transparent;
             this.richTextBoxReleaseInfo.BorderColorScaling = 0.5F;
             this.richTextBoxReleaseInfo.HideScrollBar = true;
-            this.richTextBoxReleaseInfo.Location = new System.Drawing.Point(101, 92);
+            this.richTextBoxReleaseInfo.Location = new System.Drawing.Point(99, 67);
             this.richTextBoxReleaseInfo.Name = "richTextBoxReleaseInfo";
+            this.richTextBoxReleaseInfo.ReadOnly = true;
+            this.richTextBoxReleaseInfo.ScrollBarArrowBorderColor = System.Drawing.Color.LightBlue;
+            this.richTextBoxReleaseInfo.ScrollBarArrowButtonColor = System.Drawing.Color.LightGray;
+            this.richTextBoxReleaseInfo.ScrollBarBackColor = System.Drawing.SystemColors.Control;
+            this.richTextBoxReleaseInfo.ScrollBarBorderColor = System.Drawing.Color.White;
+            this.richTextBoxReleaseInfo.ScrollBarFlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.richTextBoxReleaseInfo.ScrollBarForeColor = System.Drawing.SystemColors.ControlText;
+            this.richTextBoxReleaseInfo.ScrollBarMouseOverButtonColor = System.Drawing.Color.Green;
+            this.richTextBoxReleaseInfo.ScrollBarMousePressedButtonColor = System.Drawing.Color.Red;
+            this.richTextBoxReleaseInfo.ScrollBarSliderColor = System.Drawing.Color.DarkGray;
+            this.richTextBoxReleaseInfo.ScrollBarThumbBorderColor = System.Drawing.Color.Yellow;
+            this.richTextBoxReleaseInfo.ScrollBarThumbButtonColor = System.Drawing.Color.DarkBlue;
             this.richTextBoxReleaseInfo.ScrollBarWidth = 20;
             this.richTextBoxReleaseInfo.ShowLineCount = false;
-            this.richTextBoxReleaseInfo.Size = new System.Drawing.Size(358, 180);
+            this.richTextBoxReleaseInfo.Size = new System.Drawing.Size(298, 75);
             this.richTextBoxReleaseInfo.TabIndex = 5;
+            this.richTextBoxReleaseInfo.TextBoxBackColor = System.Drawing.SystemColors.Control;
+            this.richTextBoxReleaseInfo.TextBoxForeColor = System.Drawing.SystemColors.ControlText;
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(14, 95);
+            this.label2.Location = new System.Drawing.Point(15, 67);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(66, 13);
             this.label2.TabIndex = 6;
@@ -135,34 +179,31 @@ namespace EDDiscovery.Forms
             // 
             // buttonExeInstaller
             // 
-            this.buttonExeInstaller.BorderColorScaling = 1.25F;
-            this.buttonExeInstaller.ButtonColorScaling = 0.5F;
-            this.buttonExeInstaller.ButtonDisabledScaling = 0.5F;
-            this.buttonExeInstaller.Location = new System.Drawing.Point(101, 292);
+            this.buttonExeInstaller.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.buttonExeInstaller.Location = new System.Drawing.Point(100, 148);
             this.buttonExeInstaller.Name = "buttonExeInstaller";
-            this.buttonExeInstaller.Size = new System.Drawing.Size(107, 23);
+            this.buttonExeInstaller.Size = new System.Drawing.Size(95, 23);
             this.buttonExeInstaller.TabIndex = 7;
-            this.buttonExeInstaller.Text = "Exe installer";
+            this.buttonExeInstaller.Text = "&Exe Installer";
             this.buttonExeInstaller.UseVisualStyleBackColor = true;
             this.buttonExeInstaller.Click += new System.EventHandler(this.buttonExeInstaller_Click);
             // 
             // buttonPortablezip
             // 
-            this.buttonPortablezip.BorderColorScaling = 1.25F;
-            this.buttonPortablezip.ButtonColorScaling = 0.5F;
-            this.buttonPortablezip.ButtonDisabledScaling = 0.5F;
-            this.buttonPortablezip.Location = new System.Drawing.Point(327, 292);
+            this.buttonPortablezip.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.buttonPortablezip.Location = new System.Drawing.Point(302, 148);
             this.buttonPortablezip.Name = "buttonPortablezip";
-            this.buttonPortablezip.Size = new System.Drawing.Size(132, 23);
+            this.buttonPortablezip.Size = new System.Drawing.Size(95, 23);
             this.buttonPortablezip.TabIndex = 8;
-            this.buttonPortablezip.Text = "Portable Zip";
+            this.buttonPortablezip.Text = "&Portable Zip";
             this.buttonPortablezip.UseVisualStyleBackColor = true;
             this.buttonPortablezip.Click += new System.EventHandler(this.buttonPortablezip_Click);
             // 
             // label3
             // 
+            this.label3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(14, 297);
+            this.label3.Location = new System.Drawing.Point(15, 153);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(55, 13);
             this.label3.TabIndex = 9;
@@ -170,35 +211,34 @@ namespace EDDiscovery.Forms
             // 
             // buttonMsiInstaller
             // 
-            this.buttonMsiInstaller.BorderColorScaling = 1.25F;
-            this.buttonMsiInstaller.ButtonColorScaling = 0.5F;
-            this.buttonMsiInstaller.ButtonDisabledScaling = 0.5F;
-            this.buttonMsiInstaller.Location = new System.Drawing.Point(214, 292);
+            this.buttonMsiInstaller.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.buttonMsiInstaller.Location = new System.Drawing.Point(201, 148);
             this.buttonMsiInstaller.Name = "buttonMsiInstaller";
-            this.buttonMsiInstaller.Size = new System.Drawing.Size(107, 23);
+            this.buttonMsiInstaller.Size = new System.Drawing.Size(95, 23);
             this.buttonMsiInstaller.TabIndex = 10;
-            this.buttonMsiInstaller.Text = "Msi installer";
+            this.buttonMsiInstaller.Text = "&Msi Installer";
             this.buttonMsiInstaller.UseVisualStyleBackColor = true;
             this.buttonMsiInstaller.Click += new System.EventHandler(this.buttonMsiInstaller_Click);
             // 
-            // buttonExtCancel
+            // btnClose
             // 
-            this.buttonExtCancel.BorderColorScaling = 1.25F;
-            this.buttonExtCancel.ButtonColorScaling = 0.5F;
-            this.buttonExtCancel.ButtonDisabledScaling = 0.5F;
-            this.buttonExtCancel.Location = new System.Drawing.Point(385, 330);
-            this.buttonExtCancel.Name = "buttonExtCancel";
-            this.buttonExtCancel.Size = new System.Drawing.Size(75, 23);
-            this.buttonExtCancel.TabIndex = 11;
-            this.buttonExtCancel.Text = "Close";
-            this.buttonExtCancel.UseVisualStyleBackColor = true;
-            this.buttonExtCancel.Click += new System.EventHandler(this.buttonExtCancel_Click);
+            this.btnClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnClose.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.btnClose.Location = new System.Drawing.Point(322, 177);
+            this.btnClose.Name = "btnClose";
+            this.btnClose.Size = new System.Drawing.Size(75, 23);
+            this.btnClose.TabIndex = 11;
+            this.btnClose.Text = "&Close";
+            this.btnClose.UseVisualStyleBackColor = true;
+            this.btnClose.Click += new System.EventHandler(this.btnClose_Click);
             // 
             // panel1
             // 
-            this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.panel1.Controls.Add(this.labelName);
-            this.panel1.Controls.Add(this.buttonExtCancel);
+            this.panel1.Controls.Add(this.btnClose);
             this.panel1.Controls.Add(this.textBoxReleaseName);
             this.panel1.Controls.Add(this.buttonMsiInstaller);
             this.panel1.Controls.Add(this.label1);
@@ -209,25 +249,95 @@ namespace EDDiscovery.Forms
             this.panel1.Controls.Add(this.buttonExeInstaller);
             this.panel1.Controls.Add(this.richTextBoxReleaseInfo);
             this.panel1.Controls.Add(this.label2);
-            this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel1.Location = new System.Drawing.Point(0, 0);
+            this.panel1.Location = new System.Drawing.Point(0, 30);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(477, 368);
+            this.panel1.Size = new System.Drawing.Size(413, 210);
             this.panel1.TabIndex = 12;
+            // 
+            // pnlCaption
+            // 
+            this.pnlCaption.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.pnlCaption.Controls.Add(this.pnlMaxRestore);
+            this.pnlCaption.Controls.Add(this.pnlClose);
+            this.pnlCaption.Controls.Add(this.lblCaption);
+            this.pnlCaption.Location = new System.Drawing.Point(0, 0);
+            this.pnlCaption.Name = "pnlCaption";
+            this.pnlCaption.Size = new System.Drawing.Size(413, 24);
+            this.pnlCaption.TabIndex = 12;
+            this.pnlCaption.MouseDown += new System.Windows.Forms.MouseEventHandler(this.Caption_MouseDown);
+            this.pnlCaption.MouseUp += new System.Windows.Forms.MouseEventHandler(this.Caption_MouseUp);
+            // 
+            // pnlMaxRestore
+            // 
+            this.pnlMaxRestore.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.pnlMaxRestore.ImageSelected = ExtendedControls.DrawnPanel.ImageType.Maximize;
+            this.pnlMaxRestore.Location = new System.Drawing.Point(359, 0);
+            this.pnlMaxRestore.Name = "pnlMaxRestore";
+            this.pnlMaxRestore.Selectable = false;
+            this.pnlMaxRestore.Size = new System.Drawing.Size(24, 24);
+            this.pnlMaxRestore.TabIndex = 2;
+            this.pnlMaxRestore.TabStop = false;
+            this.pnlMaxRestore.MouseClick += new System.Windows.Forms.MouseEventHandler(this.pnlMaxRestore_MouseClick);
+            // 
+            // pnlClose
+            // 
+            this.pnlClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.pnlClose.Location = new System.Drawing.Point(389, 0);
+            this.pnlClose.Name = "pnlClose";
+            this.pnlClose.Selectable = false;
+            this.pnlClose.Size = new System.Drawing.Size(24, 24);
+            this.pnlClose.TabIndex = 1;
+            this.pnlClose.TabStop = false;
+            this.pnlClose.MouseClick += new System.Windows.Forms.MouseEventHandler(this.pnlClose_MouseClick);
+            // 
+            // lblCaption
+            // 
+            this.lblCaption.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.lblCaption.AutoEllipsis = true;
+            this.lblCaption.Location = new System.Drawing.Point(9, 6);
+            this.lblCaption.Name = "lblCaption";
+            this.lblCaption.Size = new System.Drawing.Size(344, 13);
+            this.lblCaption.TabIndex = 0;
+            this.lblCaption.Text = "EDDiscovery Release";
+            this.lblCaption.MouseDown += new System.Windows.Forms.MouseEventHandler(this.Caption_MouseDown);
+            this.lblCaption.MouseUp += new System.Windows.Forms.MouseEventHandler(this.Caption_MouseUp);
+            // 
+            // pnlBack
+            // 
+            this.pnlBack.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.pnlBack.Controls.Add(this.panel1);
+            this.pnlBack.Controls.Add(this.pnlCaption);
+            this.pnlBack.Location = new System.Drawing.Point(3, 3);
+            this.pnlBack.Name = "pnlBack";
+            this.pnlBack.Size = new System.Drawing.Size(413, 240);
+            this.pnlBack.TabIndex = 13;
             // 
             // NewReleaseForm
             // 
+            this.AcceptButton = this.btnClose;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(477, 368);
-            this.Controls.Add(this.panel1);
-            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.CancelButton = this.btnClose;
+            this.CaptionHeight = ((uint)(27u));
+            this.ClientSize = new System.Drawing.Size(419, 246);
+            this.Controls.Add(this.pnlBack);
+            this.DoubleBuffered = true;
+            this.Icon = global::EDDiscovery.Properties.Resources.edlogo_3mo_icon;
+            this.MinimizeBox = false;
+            this.MinimumSize = new System.Drawing.Size(435, 285);
             this.Name = "NewReleaseForm";
+            this.ShowInTaskbar = false;
+            this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "EDDiscovery release";
-            this.Load += new System.EventHandler(this.NewReleaseForm_Load);
+            this.Text = "EDDiscovery Release";
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
+            this.pnlCaption.ResumeLayout(false);
+            this.pnlBack.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -245,7 +355,12 @@ namespace EDDiscovery.Forms
         private ExtendedControls.ButtonExt buttonPortablezip;
         private System.Windows.Forms.Label label3;
         private ExtendedControls.ButtonExt buttonMsiInstaller;
-        private ExtendedControls.ButtonExt buttonExtCancel;
+        private ExtendedControls.ButtonExt btnClose;
         private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.Panel pnlCaption;
+        private System.Windows.Forms.Label lblCaption;
+        private ExtendedControls.DrawnPanel pnlMaxRestore;
+        private ExtendedControls.DrawnPanel pnlClose;
+        private System.Windows.Forms.Panel pnlBack;
     }
 }

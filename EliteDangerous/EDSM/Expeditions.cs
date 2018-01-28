@@ -1022,6 +1022,33 @@ namespace EliteDangerousCore.EDSM
                         EndDate = new DateTime(2017, 12, 24, 23, 59, 59, DateTimeKind.Utc).ToLocalTime()
                     },
                     #endregion
+
+                    #region 38: Enigma Expedition
+                    // https://www.edsm.net/en/expeditions/summary/id/38/name/Enigma+Expedition
+                    new SavedRouteClass(
+                        "Enigma Expedition",
+                        "Jackson's Lighthouse",
+                        "CSI-21-22270",
+                        "Mammon",
+                        "46 Upsilon Sagittarii",
+                        "HD 175876",
+                        "Red Spider Sector UJ-Q b5-0",
+                        "Thor's Eye",
+                        "Omega Sector PD-S b4-0",
+                        "Rohini",
+                        "Pru Aescs HW-S b31-2",
+                        "Skaudai AM-B d14-138",
+                        "Nuekuae AA-A h52",
+                        "Blaa Phoe NC-D d12-230",
+                        "Boewnst KS-S c20-959",
+                        "Kashyapa",
+                        "Colonia"
+                    )
+                    {
+                        StartDate = new DateTime(2018, 1, 12, 19, 0, 0, DateTimeKind.Utc).ToLocalTime(),
+                        EndDate = new DateTime(2018, 2, 10, 22, 0, 0, DateTimeKind.Utc).ToLocalTime()
+                    },
+                    #endregion
                 };
             }
         }

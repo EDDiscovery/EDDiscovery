@@ -30,9 +30,12 @@ namespace ExtendedControls
     {
         public enum StripModeType { StripTop, StripBottom, ListSelection };
         public StripModeType StripMode { get; set; } = StripModeType.StripTop;
+        public Image EmptyPanelIcon { get; set; } = Properties.Resources.Stop;
         public Image[] ImageList;     // images
         public string[] TextList;       // text associated - tooltips or text on list selection
-        public bool ShowPopOut { get; set; }= true;
+        public bool ShowPopOut { get; set; }= true; // Pop out icon show
+
+        public int TabFieldSpacing { get; set; } = 8;
 
         // only if using ListSelection:
         public int DropDownWidth { get; set; } = 400;
@@ -65,12 +68,11 @@ namespace ExtendedControls
         {
             InitializeComponent();
             labelControlText.Text = "";
-            labelCurrent.Text = "None";
+            labelTitle.Text = "None";
             autofadeinouttimer.Tick += AutoFadeInOutTick;
             autorepeat.Interval = 200;
             autorepeat.Tick += Autorepeat_Tick;
-            drawnPanelListSelection.Location = new Point(labelControlText.Right + 16, labelControlText.Top);
-            panelSelectedIcon.BackgroundImage = ExtendedControls.Properties.Resources.Stop;
+            panelSelectedIcon.BackgroundImage = EmptyPanelIcon;
             SetIconVisibility();
         }
 
@@ -104,8 +106,8 @@ namespace ExtendedControls
                 CurrentControl = null;
                 si = -1;
                 labelControlText.Text = "";
-                labelCurrent.Text = "None";
-                panelSelectedIcon.BackgroundImage = ExtendedControls.Properties.Resources.Stop;
+                labelTitle.Text = "None";
+                panelSelectedIcon.BackgroundImage = EmptyPanelIcon;
             }
 
             if (OnCreateTab != null)
@@ -137,7 +139,7 @@ namespace ExtendedControls
                     if ( i < ImageList.Length )
                         panelSelectedIcon.BackgroundImage = ImageList[i];   // paranoia..
 
-                    labelCurrent.Text = CurrentControl.Name;
+                    labelTitle.Text = CurrentControl.Name;
                 }
             }
 
@@ -175,29 +177,33 @@ namespace ExtendedControls
 
         #region Show hide info control
 
-        bool tobevisible = false;   // records if going to be shown
+        bool tobevisible = false;   // records if going to be shown during pausing
         bool tabstripvisible = false; // is shown
-        bool selectioniconvisible = true; //defaults
+        bool selectioniconvisible = true; // Only used for tab icon strips, turns off first icon
 
         void SetIconVisibility()
         {
             bool showpopout = ShowPopOut && tabstripvisible && si != -1;
+
             drawnPanelPopOut.Visible = showpopout && selectioniconvisible;
             panelSelectedIcon.Visible = !showpopout && selectioniconvisible;
 
-            drawnPanelPopOut.Location = panelSelectedIcon.Location;
-            labelControlText.Location = new Point(labelCurrent.Right + 16, labelControlText.Top);
+            drawnPanelPopOut.Location = panelSelectedIcon.Location;     // same position, mutually exclusive
 
             if (StripMode == StripModeType.ListSelection)
             {
-                labelCurrent.Visible = true;
+                drawnPanelListSelection.Location = new Point(panelSelectedIcon.Right + TabFieldSpacing, panelSelectedIcon.Top);
+                labelTitle.Location = new Point(tabstripvisible ? drawnPanelListSelection.Right+ TabFieldSpacing : drawnPanelListSelection.Left, labelTitle.Top);
+                labelControlText.Location = new Point(labelTitle.Right + TabFieldSpacing, labelControlText.Top);
+                labelTitle.Visible = true;
                 labelControlText.Visible = labelControlText.Text.Length > 0;
-                drawnPanelListSelection.Location = new Point(labelControlText.Text.Length > 0 ? (labelControlText.Right + 16) : (labelCurrent.Right+16), 2);
                 drawnPanelListSelection.Visible = tabstripvisible;
             }
             else
             {
-                labelCurrent.Visible = !tabstripvisible;
+                labelTitle.Location = new Point(33, 8);
+                labelTitle.Visible = !tabstripvisible;
+                labelControlText.Location = new Point(labelTitle.Right + TabFieldSpacing, labelControlText.Top);
                 labelControlText.Visible = !tabstripvisible && labelControlText.Text.Length > 0;
                 drawnPanelListSelection.Visible = false;
             }
@@ -477,5 +483,17 @@ namespace ExtendedControls
 
         #endregion
 
+
+        // NOT IN USE        
+        #region Icon Replacement
+        public void ReplaceIconsNOTINUSE(Func<string, Image> getIcon)
+        {
+            drawnPanelListSelection.Image = getIcon("PanelList");
+            drawnPanelPopOut.Image = getIcon("Popout");
+            panelArrowLeft.BackgroundImage = getIcon("ArrowLeft");
+            panelArrowRight.BackgroundImage = getIcon("ArrowRight");
+            EmptyPanelIcon = getIcon("NoPanelSelected");
+        }
+        #endregion
     }
 }

@@ -177,7 +177,7 @@ namespace BaseUtils
 
                 foreach (string filename in filenames)
                 {
-                    using (FileStream fs = new FileStream(filename, FileMode.Open))
+                    using (FileStream fs = new FileStream(filename, FileMode.Open, FileAccess.Read))
                     {
                         using (BinaryReader br = new BinaryReader(fs))
                             ms.Write(br.ReadBytes((int)fs.Length), 0, (int)fs.Length);

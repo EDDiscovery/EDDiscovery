@@ -37,15 +37,12 @@ using System.Windows.Forms;
 
 namespace EDDiscovery
 {
-    public partial class FormMap : ExtendedControls.SmartSysMenuForm
+    public partial class FormMap : Forms.DraggableFormPos
     {
-
-
         #region Variables
 
         public bool Is3DMapsRunning { get { return _stargrids != null; } }
 
-        public bool noWindowReposition { get; set; } = false;                       // set externally
         public EDDiscoveryForm discoveryForm { get; set; } = null;      // set externally
 
         const int HELP_VERSION = 5;         // increment this to force help onto the screen of users first time.
@@ -103,7 +100,7 @@ namespace EDDiscovery
         public List<HistoryEntry> _systemlist { get; set; }
         private List<ISystem> _plannedRoute { get; set; }
 
-        public List<FGEImage> fgeimages = new List<FGEImage>();
+        public List<BaseUtils.Map2d> fgeimages = new List<BaseUtils.Map2d>();
 
         public DateTime startTime { get; set; }
         public DateTime endTime { get; set; }
@@ -158,8 +155,6 @@ namespace EDDiscovery
 
             _plannedRoute = null;
 
-            toolStripShowAllStars.Renderer = new MyRenderer();
-
             drawLinesBetweenStarsWithPositionToolStripMenuItem.Checked = SQLiteDBClass.GetSettingBool("Map3DDrawLines", true);
             drawADiscOnStarsWithPositionToolStripMenuItem.Checked = SQLiteDBClass.GetSettingBool("Map3DDrawTravelDisc", true);
             useWhiteForDiscsInsteadOfAssignedMapColourToolStripMenuItem.Checked = SQLiteDBClass.GetSettingBool("Map3DDrawTravelWhiteDisc", true);
@@ -204,7 +199,7 @@ namespace EDDiscovery
                 toolStripDropDownButtonGalObjects.DropDownItems.Add(_toolstripToggleNamingButton);
             }
 
-            maprecorder.UpdateStoredVideosToolButton(toolStripDropDownRecord, LoadVideo, EDDiscovery.Properties.Resources.floppy);
+            maprecorder.UpdateStoredVideosToolButton(toolStripDropDownRecord, LoadVideo, Icons.Controls.Map3D_Recorder_Save);
 
             discoveryForm.OnNewTarget -= UpdateTarget;  // in case called multi times
             discoveryForm.OnNewTarget += UpdateTarget;
@@ -296,6 +291,13 @@ namespace EDDiscovery
             }
         }
 
+        public void IconSelect(bool winborder)      // called to set up icons
+        {
+            panel_minimize.Visible = panel_close.Visible = !winborder;
+            int spaceforclose = winborder ? 0 : (panel_close.Right - panel_minimize.Left) + 16;
+            panelAuxControls.Left = ClientRectangle.Width - panelAuxControls.Width - spaceforclose;
+        }
+
 
         #endregion
 
@@ -303,6 +305,7 @@ namespace EDDiscovery
 
         public FormMap()
         {
+            RestoreFormPositionRegKey = "Map3DForm";
             InitializeComponent();
             maprecorder = new MapRecorder(this);
             // 
@@ -329,18 +332,6 @@ namespace EDDiscovery
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
-
-            var top = SQLiteDBClass.GetSettingInt("Map3DFormTop", -1);
-
-            if (top >= 0 && noWindowReposition == false)
-            {
-                var left = SQLiteDBClass.GetSettingInt("Map3DFormLeft", 0);
-                var height = SQLiteDBClass.GetSettingInt("Map3DFormHeight", 800);
-                var width = SQLiteDBClass.GetSettingInt("Map3DFormWidth", 800);
-                this.Location = new Point(left, top);
-                this.Size = new Size(width, height);
-                //Console.WriteLine("Restore map " + this.Top + "," + this.Left + "," + this.Width + "," + this.Height);
-            }
 
             KeyDown += new KeyEventHandler(_kbdActions.KeyDown);
             glControl.KeyDown += new KeyEventHandler(_kbdActions.KeyDown);
@@ -376,7 +367,6 @@ namespace EDDiscovery
         {
             base.OnShown(e);
 
-            Console.WriteLine($"{nameof(FormMap)}.{nameof(OnShown)}");
             int helpno = SQLiteDBClass.GetSettingInt("Map3DShownHelp", 0);                 // force up help, to make sure they know it exists
 
             if (helpno != HELP_VERSION)
@@ -392,7 +382,7 @@ namespace EDDiscovery
             glControl.Focus();
         }
 
-        void StartSystemTimer()
+        private void StartSystemTimer()
         {
             if ( !_systemtimer.Enabled )
             {
@@ -443,14 +433,6 @@ namespace EDDiscovery
             _systemtimer.Stop();
             _systemtickinterval.Stop();
             VideoMessage();
-
-            if (Visible)
-            {
-                SQLiteDBClass.PutSettingInt("Map3DFormWidth", this.Width);
-                SQLiteDBClass.PutSettingInt("Map3DFormHeight", this.Height);
-                SQLiteDBClass.PutSettingInt("Map3DFormTop", this.Top);
-                SQLiteDBClass.PutSettingInt("Map3DFormLeft", this.Left);
-            }
 
             SQLiteDBClass.PutSettingBool("Map3DAutoForward", toolStripButtonAutoForward.Checked);
             SQLiteDBClass.PutSettingBool("Map3DDrawLines", drawLinesBetweenStarsWithPositionToolStripMenuItem.Checked);
@@ -506,7 +488,7 @@ namespace EDDiscovery
             GL.ClearColor((Color)System.Drawing.ColorTranslator.FromHtml("#0D0D10"));
         }
 
-        public void SetModelProjectionMatrix()
+        private void SetModelProjectionMatrix()
         {
             posdir.InPerspectiveMode = toolStripButtonPerspective.Checked;
 
@@ -966,7 +948,7 @@ namespace EDDiscovery
             DeleteDataset(ref _datasets_maps);
             _datasets_maps = null;
 
-            FGEImage[] _selected = dropdownMapNames.DropDownItems.OfType<ToolStripButton>().Where(b => b.Checked).Select(b => b.Tag as FGEImage).ToArray();
+            BaseUtils.Map2d[] _selected = dropdownMapNames.DropDownItems.OfType<ToolStripButton>().Where(b => b.Checked).Select(b => b.Tag as BaseUtils.Map2d).ToArray();
 
             DatasetBuilder builder = new DatasetBuilder();
             _datasets_maps = builder.AddMapImages(_selected);
@@ -1007,10 +989,10 @@ namespace EDDiscovery
 
         private void GenerateDataSetsBNG()      // because the target is bound up with all three, best to do all three at once in ONE FUNCTION!
         {
-            Bitmap maptarget = (Bitmap)EDDiscovery.Properties.Resources.bookmarktarget;
-            Bitmap mapstar = (Bitmap)EDDiscovery.Properties.Resources.bookmarkgreen;
-            Bitmap mapregion = (Bitmap)EDDiscovery.Properties.Resources.bookmarkyellow;
-            Bitmap mapnotedbkmark = (Bitmap)EDDiscovery.Properties.Resources.bookmarkbrightred;
+            Bitmap maptarget = (Bitmap)Icons.Controls.Map3D_Bookmarks_Target;
+            Bitmap mapstar = (Bitmap)Icons.Controls.Map3D_Bookmarks_Star;
+            Bitmap mapregion = (Bitmap)Icons.Controls.Map3D_Bookmarks_Region;
+            Bitmap mapnotedbkmark = (Bitmap)Icons.Controls.Map3D_Bookmarks_Noted;
             Debug.Assert(mapnotedbkmark != null && maptarget != null);
             Debug.Assert(mapstar != null && mapregion != null);
 
@@ -1453,11 +1435,11 @@ namespace EDDiscovery
         void SetDropDownRecordImage()
         {
             if (maprecorder.InPlayBack)
-                toolStripDropDownRecord.Image = (maprecorder.Paused) ? EDDiscovery.Properties.Resources.pauseblue : EDDiscovery.Properties.Resources.PlayNormal;
+                toolStripDropDownRecord.Image = (maprecorder.Paused) ? Icons.Controls.Map3D_Recorder_PausePlay : Icons.Controls.Map3D_Recorder_Play;
             else if (maprecorder.Recording)
-                toolStripDropDownRecord.Image = (maprecorder.Paused) ? EDDiscovery.Properties.Resources.PauseNormalRed : EDDiscovery.Properties.Resources.RecordPressed;
+                toolStripDropDownRecord.Image = (maprecorder.Paused) ? Icons.Controls.Map3D_Recorder_PauseRecord : Icons.Controls.Map3D_Recorder_Record;
             else
-                toolStripDropDownRecord.Image = EDDiscovery.Properties.Resources.VideoRecorder;
+                toolStripDropDownRecord.Image = Icons.Controls.Map3D_Recorder_Menu;
         }
 
         private void recordToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1502,11 +1484,11 @@ namespace EDDiscovery
         private void toolStripDropDownRecord_DropDownOpening(object sender, EventArgs e)
         {
             recordToolStripMenuItem.Text = maprecorder.Recording ? "Stop Recording (F5)" : maprecorder.Entries ? "Resume Recording (F5)" : "Start Recording (F5)";
-            recordToolStripMenuItem.Image = maprecorder.Recording ? EDDiscovery.Properties.Resources.StopNormalRed : EDDiscovery.Properties.Resources.RecordPressed;
+            recordToolStripMenuItem.Image = maprecorder.Recording ? Icons.Controls.Map3D_Recorder_StopRecord : Icons.Controls.Map3D_Recorder_Record;
             recordToolStripMenuItem.Enabled = !maprecorder.InPlayBack && !maprecorder.RecordingStep;
 
             recordStepToStepToolStripMenuItem.Text = maprecorder.Recording ? "Stop Step Recording (F6)" : maprecorder.Entries ? "Resume Step Recording (F6)" : "Start Step Recording (F6)";
-            recordStepToStepToolStripMenuItem.Image = maprecorder.Recording ? EDDiscovery.Properties.Resources.StopNormalRed : EDDiscovery.Properties.Resources.RecordPressed;
+            recordStepToStepToolStripMenuItem.Image = maprecorder.Recording ? Icons.Controls.Map3D_Recorder_StopRecord : Icons.Controls.Map3D_Recorder_RecordStep;
             recordStepToStepToolStripMenuItem.Enabled = !maprecorder.InPlayBack && !maprecorder.RecordingNormal;
 
             newRecordStepToolStripMenuItem.Enabled = maprecorder.Recording;
@@ -1514,23 +1496,23 @@ namespace EDDiscovery
             toolStripMenuItemClearRecording.Enabled = maprecorder.Entries;
 
             playbackToolStripMenuItem.Text = maprecorder.InPlayBack ? "Stop Playback (F9)" : "Start Playback (F9)";
-            playbackToolStripMenuItem.Image = maprecorder.InPlayBack ? EDDiscovery.Properties.Resources.StopNormalBlue : EDDiscovery.Properties.Resources.PlayNormal;
+            playbackToolStripMenuItem.Image = maprecorder.InPlayBack ? Icons.Controls.Map3D_Recorder_StopPlay : Icons.Controls.Map3D_Recorder_Play;
             playbackToolStripMenuItem.Enabled = maprecorder.Entries;
 
             if (maprecorder.InPlayBack)
             {
                 pauseRecordToolStripMenuItem.Text = maprecorder.Paused ? "Resume Playback (F8)" : "Pause Playback (F8)";
-                pauseRecordToolStripMenuItem.Image = EDDiscovery.Properties.Resources.pauseblue;
+                pauseRecordToolStripMenuItem.Image = Icons.Controls.Map3D_Recorder_PausePlay;
             }
             else if (maprecorder.Recording)
             {
                 pauseRecordToolStripMenuItem.Text = maprecorder.Paused ? "Resume Recording (F8)" : "Pause Recording (F8)";
-                pauseRecordToolStripMenuItem.Image = EDDiscovery.Properties.Resources.PauseNormalRed;
+                pauseRecordToolStripMenuItem.Image = Icons.Controls.Map3D_Recorder_PauseRecord;
             }
             else
             {
                 pauseRecordToolStripMenuItem.Text = "Pause (F8)";
-                pauseRecordToolStripMenuItem.Image = EDDiscovery.Properties.Resources.PauseNormalRed;
+                pauseRecordToolStripMenuItem.Image = Icons.Controls.Map3D_Recorder_Pause;
             }
 
             pauseRecordToolStripMenuItem.Enabled = maprecorder.Recording || maprecorder.InPlayBack;
@@ -1541,7 +1523,7 @@ namespace EDDiscovery
         private void saveToFileToolStripMenuItem_Click(object sender, EventArgs e)
         {
             maprecorder.SaveDialog();
-            maprecorder.UpdateStoredVideosToolButton(toolStripDropDownRecord, LoadVideo, EDDiscovery.Properties.Resources.floppy);
+            maprecorder.UpdateStoredVideosToolButton(toolStripDropDownRecord, LoadVideo, Icons.Controls.Map3D_Recorder_Save);
         }
 
         private void LoadFileToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1557,6 +1539,26 @@ namespace EDDiscovery
             {
                 ExtendedControls.MessageBoxTheme.Show(this, "Failed to load flight " + file + ". Check file path and file contents");
             }
+        }
+
+        private void panel_close_Click(object sender, EventArgs e)
+        {
+            Close();
+        }
+
+        private void panel_minimize_Click(object sender, EventArgs e)
+        {
+            this.WindowState = FormWindowState.Minimized;
+        }
+
+        private void panelTop_MouseDown(object sender, System.Windows.Forms.MouseEventArgs e)
+        {
+            OnCaptionMouseDown((Control)sender, e);
+        }
+
+        private void panelTop_MouseUp(object sender, System.Windows.Forms.MouseEventArgs e)
+        {
+            OnCaptionMouseUp((Control)sender, e);
         }
 
         #endregion
@@ -1826,7 +1828,7 @@ namespace EDDiscovery
                 info = hoversystem.name + Environment.NewLine + string.Format("x:{0} y:{1} z:{2}", hoversystem.x.ToString("0.00"), hoversystem.y.ToString("0.00"), hoversystem.z.ToString("0.00"));
                 pos = new Vector3d(hoversystem.x, hoversystem.y, hoversystem.z);
 
-                ISystem sysclass = (hoversystem.id != 0) ? SystemClassDB.GetSystem(hoversystem.id) : SystemClassDB.GetSystem(hoversystem.name);
+                ISystem sysclass = (hoversystem.id != 0) ? SystemClassDB.GetSystem(hoversystem.id, name: hoversystem.name) : SystemClassDB.GetSystem(hoversystem.name);
 
                 if (sysclass != null)
                 {
@@ -2198,20 +2200,6 @@ namespace EDDiscovery
 
         #region Misc
 
-        private class MyRenderer : ToolStripProfessionalRenderer
-        {
-            protected override void OnRenderButtonBackground(ToolStripItemRenderEventArgs e)
-            {
-                var btn = e.Item as ToolStripButton;
-                if (btn != null && btn.CheckOnClick && btn.Checked)
-                {
-                    Rectangle bounds = new Rectangle(Point.Empty, e.Item.Size);
-                    e.Graphics.FillRectangle(Brushes.Orange, bounds);
-                }
-                else base.OnRenderButtonBackground(e);
-            }
-        }
-
         public ISystem FindSystem(string name, SQLiteConnectionSystem cn = null)    // nice wrapper for this
         {
             if (_systemlist != null)
@@ -2236,7 +2224,7 @@ namespace EDDiscovery
                     return vsc.System;
             }
 
-            return SystemClassDB.FindNearestSystem(pos.X, pos.Y, pos.Z, false, 0.1,cn);
+            return SystemClassDB.GetSystemByPosition(pos.X, pos.Y, pos.Z, cn);
         }
 
         private ISystem SafeSystem(ISystem s)
@@ -2290,8 +2278,7 @@ namespace EDDiscovery
             string datapath = System.IO.Path.Combine(EDDOptions.Instance.AppDataDirectory, "Maps");
             if (System.IO.Directory.Exists(datapath))
             {
-                fgeimages = FGEImage.LoadImages(datapath);
-                fgeimages.AddRange(FGEImage.LoadFixedImages(datapath));
+                fgeimages = BaseUtils.Map2d.LoadImages(datapath);
             }
 
             dropdownMapNames.DropDownItems.Clear();
@@ -2404,8 +2391,8 @@ namespace EDDiscovery
             endPickerHost = new ToolStripControlHost(endPicker) { Visible = false };
             startPickerHost.Size = new Size(150, 20);
             endPickerHost.Size = new Size(150, 20);
-            toolStripShowAllStars.Items.Add(startPickerHost);
-            toolStripShowAllStars.Items.Add(endPickerHost);
+            toolStripControls.Items.Add(startPickerHost);
+            toolStripControls.Items.Add(endPickerHost);
         }
 
 

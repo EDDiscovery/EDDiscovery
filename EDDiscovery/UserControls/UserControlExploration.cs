@@ -169,7 +169,7 @@ namespace EDDiscovery.UserControls
 
                 if (sys != null && currentSystem != null)
                 {
-                    double dist = SystemClassDB.Distance(sys, currentSystem);
+                    double dist = sys.Distance(currentSystem);
                     string strdist = dist >= 0 ? ((double)dist).ToString("0.00") : "";
                     dataGridViewExplore[1, rowindex].Value = strdist;
                 }

@@ -25,6 +25,7 @@ using System.IO;
 using EDDiscovery.Forms;
 using EliteDangerousCore;
 using EliteDangerousCore.DB;
+using System.Threading.Tasks;
 
 namespace EDDiscovery.UserControls
 {
@@ -108,6 +109,9 @@ namespace EDDiscovery.UserControls
             this.checkBoxCustomMarkHiRes.CheckedChanged += new System.EventHandler(this.checkBoxCustomMarkHiRes_CheckedChanged);
             this.checkBoxCustomEnableScreenshots.CheckedChanged += new System.EventHandler(this.checkBoxCustomEnableScreenshots_CheckedChanged);
             this.checkBoxCustomCopyToClipboard.CheckedChanged += new System.EventHandler(this.checkBoxCustomCopyToClipboard_CheckedChanged);
+
+            checkBoxCustomEDSMEDDBDownload.Checked = EDDConfig.Instance.EDSMEDDBDownload;
+            this.checkBoxCustomEDSMEDDBDownload.CheckedChanged += new System.EventHandler(this.checkBoxCustomEDSMDownload_CheckedChanged);
         }
 
         public override void Closing()
@@ -261,15 +265,19 @@ namespace EDDiscovery.UserControls
             string fontwanted = null;                                               // don't check custom, only a stored theme..
             if (!themename.Equals("Custom") && !discoveryform.theme.IsFontAvailableInTheme(themename, out fontwanted))
             {
-                DialogResult res = ExtendedControls.MessageBoxTheme.Show(FindForm(), "The font used by this theme is not available on your system" + Environment.NewLine +
-                      "The font needed is \"" + fontwanted + "\"" + Environment.NewLine +
-                      "Install this font and you can use this scheme." + Environment.NewLine +
-                      "EuroCaps font is available www.edassets.org.",
-                      "Warning", MessageBoxButtons.OK);
-
-                discoveryform.theme.SetCustom();                              // go to custom theme whatever
-                SetEntryThemeComboBox();
-                return;
+                DialogResult res = ExtendedControls.MessageBoxTheme.Show(FindForm(),
+                      "The font used by this theme is not available on your system." + Environment.NewLine +
+                      "The font needed is \"" + fontwanted + "\"." + Environment.NewLine +
+                      "Install this font to fully use this theme." + Environment.NewLine +
+                      "Euro Caps font is freely available from www.edassets.org." + Environment.NewLine + Environment.NewLine +
+                      "Would you like to load this theme using a replacement font?",
+                      "Warning", MessageBoxButtons.YesNo);
+                if (res != DialogResult.Yes)
+                {
+                    // Reset the combo box to the previous theme name and don't change anything else.
+                    SetEntryThemeComboBox();
+                    return;
+                }   
             }
 
             if (!discoveryform.theme.SetThemeByName(themename))
@@ -446,6 +454,82 @@ namespace EDDiscovery.UserControls
             EDDiscoveryForm.EDDConfig.EDSMLog = checkBoxEDSMLog.Checked;
             discoveryform.SetUpLogging();
         }
+
+        private void checkBoxCustomEDSMDownload_CheckedChanged(object sender, EventArgs e)
+        {
+            EDDConfig.Instance.EDSMEDDBDownload = checkBoxCustomEDSMEDDBDownload.Checked;
+        }
+
+        #region EDSM Galaxy
+
+        ExtendedControls.InfoForm info;
+        System.Windows.Forms.Timer removetimer;
+
+        private void buttonExtEDSMConfigureArea_Click(object sender, EventArgs e)
+        {
+            GalaxySectorSelect gss = new GalaxySectorSelect();
+
+            if (!gss.Init(EDDConfig.Instance.EDSMGridIDs))
+            {
+                ExtendedControls.MessageBoxTheme.Show(this, "Failed", "No map downloaded - please wait for it to download");
+            }
+            else if ( gss.ShowDialog() == DialogResult.OK )
+            {
+                EDDConfig.Instance.EDSMGridIDs = gss.Selection;
+
+                if (gss.Action == GalaxySectorSelect.ActionToDo.Add)
+                {
+                    discoveryform.ForceEDSMEDDBFullRefresh();
+                }
+                else if (gss.Action == GalaxySectorSelect.ActionToDo.Remove)
+                {
+                    System.Diagnostics.Debug.WriteLine("Remove " );
+
+                    info = new ExtendedControls.InfoForm();
+                    info.Info("Remove Sectors", EDDiscovery.Properties.Resources.edlogo_3mo_icon, 
+                                "Removing " + gss.Removed.Count +" Sector(s)." + Environment.NewLine+ Environment.NewLine +
+                                "This will take a while (up to 30 mins dep on drive type and amount of sectors)." + Environment.NewLine +
+                                "You may continue to use EDD while this operation takes place" + Environment.NewLine+
+                                "but it may be slow to respond. Do not close down EDD until this window says" + Environment.NewLine+
+                                "the process has finished" + Environment.NewLine + Environment.NewLine
+                                , null, new int[] { 0 }, true);
+                    info.EnableClose = false;
+                    info.Show(discoveryform);
+
+                    taskremovesectors = Task.Factory.StartNew(()=> RemoveSectors(gss.AllRemoveSectors,(s) => discoveryform.Invoke(new Action(()=> { info.AddText(s); }))));
+
+                    removetimer = new Timer() { Interval = 200 };
+                    removetimer.Tick += Removetimer_Tick;
+                    removetimer.Start();
+                }
+            }
+        }
+
+        public static void RemoveSectors(List<int> sectors, Action<string> inform)
+        {
+            inform("Removing Names" + Environment.NewLine);
+            SystemClassDB.RemoveGridNames(sectors, inform);     // MUST do first as relies on system grid for info
+            inform("Removing System Information" + Environment.NewLine);
+            SystemClassDB.RemoveGridSystems(sectors, inform);
+            inform("Vacuum Database for size" + Environment.NewLine);
+            SystemClassDB.Vacuum();
+        }
+
+        private Task taskremovesectors= null;
+
+        private void Removetimer_Tick(object sender, EventArgs e)
+        {
+            if (taskremovesectors.Status == TaskStatus.RanToCompletion)
+            {
+                removetimer.Stop();
+                taskremovesectors.Dispose();
+                info.EnableClose = true;
+                info.AddText("Finished, Please close the window." + Environment.NewLine + 
+                    "If you already have the 3dmap open, changes will not be reflected in that map until the next start of EDD" + Environment.NewLine);
+            }
+        }
+
+        #endregion
     }
 }
 

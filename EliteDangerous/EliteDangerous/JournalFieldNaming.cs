@@ -109,10 +109,12 @@ namespace EliteDangerousCore
                 { "type6",                      "Type 6 Transporter" },
                 { "type7",                      "Type 7 Transporter" },
                 { "type9",                      "Type 9 Heavy" },
+                { "type9_military",             "Type 10 Defender" },
                 { "viper",                      "Viper Mk. III" },
                 { "viper_mkiv",                 "Viper Mk. IV" },
                 { "vulture",                    "Vulture" },
                 { "testbuggy",                  "SRV" },
+                { "typex",                      "Alliance Chieftain"},
         };
 
         static public string GetBetterShipName(string inname)

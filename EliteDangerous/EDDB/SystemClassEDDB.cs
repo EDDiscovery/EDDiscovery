@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace EliteDangerousCore.EDDB
 {
-    class SystemClassEDDB
+    public class SystemClassEDDB
     {
         static public long ParseEDDBUpdateSystems(string filename, Action<string> logline)
         {
@@ -92,7 +92,7 @@ namespace EliteDangerousCore.EDDB
                                     {
                                         JObject jo = JObject.Parse(line);
 
-                                        ISystem system = SystemClassDB.FromJson(jo, SystemInfoSource.EDDB);
+                                        ISystem system = SystemClassDB.FromEDDB(jo);
 
                                         if (system.HasEDDBInformation)                                  // screen out for speed any EDDB data with empty interesting fields
                                         {
@@ -193,9 +193,22 @@ namespace EliteDangerousCore.EDDB
             return updated + inserted;
         }
 
-        public static void PerformEDDBFullSync(Func<bool> cancelRequested, Action<int, string> reportProgress, Action<string> logLine, Action<string> logError)
+
+        // Called from EDDiscoveryController, in back thread, to determine what sync to do..
+
+        public static void DetermineIfEDDBSyncRequired(EliteDangerousCore.EDSM.SystemClassEDSM.SystemsSyncState state)
         {
-            logLine("Get systems from EDDB.");
+            DateTime time = EliteDangerousCore.EDDB.SystemClassEDDB.GetLastEDDBDownloadTime();
+
+            if (DateTime.UtcNow.Subtract(time).TotalDays > 6.5)     // Get EDDB data once every week.
+                state.perform_eddb_sync = true;
+        }
+
+        // Called from DoPerformSync, in back thread
+
+        public static long PerformEDDBFullSync(Func<bool> PendingClose, Action<int, string> ReportProgress, Action<string> LogLine, Action<string> LogLineHighlight)
+        {
+            LogLine("Get systems from EDDB.");
 
             string eddbdir = Path.Combine(EliteConfigInstance.InstanceOptions.AppDataDirectory, "eddb");
             if (!Directory.Exists(eddbdir))
@@ -207,22 +220,34 @@ namespace EliteDangerousCore.EDDB
 
             if (success)
             {
-                if (cancelRequested())
-                    return;
+                if (PendingClose())
+                    return 0;
 
-                logLine("Resyncing all downloaded EDDB data with local database." + Environment.NewLine + "This will take a while.");
+                LogLine("Resyncing all downloaded EDDB data with local database." + Environment.NewLine + "This will take a while.");
 
-                long number = ParseEDDBUpdateSystems(systemFileName, logError);
+                long updates = ParseEDDBUpdateSystems(systemFileName, LogLineHighlight);
 
-                logLine("Local database updated with EDDB data, " + number + " systems updated");
+                LogLine("Local database updated with EDDB data, " + updates + " systems updated");
                 SQLiteConnectionSystem.PutSettingString("EDDBSystemsTime", DateTime.UtcNow.Ticks.ToString());
+
+                GC.Collect();
+                return updates;
             }
             else
-                logError("Failed to download EDDB Systems. Will try again next run.");
+                LogLineHighlight("Failed to download EDDB Systems. Will try again next run.");
 
-            GC.Collect();
+            return 0;
         }
 
+        static public DateTime GetLastEDDBDownloadTime()
+        {
+            string timestr = SQLiteConnectionSystem.GetSettingString("EDDBSystemsTime", "0");
+            return new DateTime(Convert.ToInt64(timestr), DateTimeKind.Utc);
+        }
 
+        static public void ForceEDDBFullUpdate()
+        {
+            SQLiteConnectionSystem.PutSettingString("EDDBSystemsTime", "0");
+        }
     }
 }

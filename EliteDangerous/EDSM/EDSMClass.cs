@@ -191,101 +191,6 @@ namespace EliteDangerousCore.EDSM
             return response.Body;
         }
 
-        
-        internal long GetNewSystems(Func<bool> cancelRequested, Action<int, string> reportProgress, Action<string> logLine)
-        {
-            string lstsyst;
-
-            DateTime lstsystdate;
-            // First system in EDSM is from 2015-05-01 00:39:40
-            DateTime gammadate = new DateTime(2015, 5, 1, 0, 0, 0, DateTimeKind.Utc);
-            bool outoforder = SQLiteConnectionSystem.GetSettingBool("EDSMSystemsOutOfOrder", true);
-
-            if (SystemClassDB.IsSystemsTableEmpty())
-            {
-                lstsystdate = gammadate;
-            }
-            else
-            {
-                // Get the most recent modify time returned from EDSM
-                DateTime lastmod = outoforder ? SystemClassDB.GetLastSystemModifiedTime() : SystemClassDB.GetLastSystemModifiedTimeFast();
-                lstsystdate = lastmod - TimeSpan.FromSeconds(1);
-
-                if (lstsystdate < gammadate)
-                {
-                    lstsystdate = gammadate;
-                }
-            }
-
-            lstsyst = lstsystdate.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
-
-            Console.WriteLine("EDSM Check date: " + lstsyst);
-
-            long updates = 0;
-
-            while (lstsystdate < DateTime.UtcNow)
-            {
-                if (cancelRequested())
-                    return updates;
-
-                DateTime enddate = lstsystdate + TimeSpan.FromHours(12);
-                if (enddate > DateTime.UtcNow)
-                {
-                    enddate = DateTime.UtcNow;
-                }
-
-                logLine($"Downloading systems from {lstsystdate.ToLocalTime().ToString()} to {enddate.ToLocalTime().ToString()}");
-                reportProgress(-1, "Requesting systems from EDSM");
-                string json = null;
-
-                try
-                {
-                    json = RequestSystems(lstsystdate, enddate);
-                }
-                catch (WebException ex)
-                {
-                    reportProgress(-1, $"EDSM request failed");
-                    if (ex.Status == WebExceptionStatus.ProtocolError && ex.Response != null && ex.Response is HttpWebResponse)
-                    {
-                        string status = ((HttpWebResponse)ex.Response).StatusDescription;
-                        logLine($"Download of EDSM systems from the server failed ({status}), will try next time program is run");
-                    }
-                    else
-                    {
-                        logLine($"Download of EDSM systems from the server failed ({ex.Status.ToString()}), will try next time program is run");
-                    }
-                    break;
-                }
-                catch (Exception ex)
-                {
-                    reportProgress(-1, $"EDSM request failed");
-                    logLine($"Download of EDSM systems from the server failed ({ex.Message}), will try next time program is run");
-                    break;
-                }
-
-                if (json == null)
-                {
-                    reportProgress(-1, "EDSM request failed");
-                    logLine("Download of EDSM systems from the server failed (no data returned), will try next time program is run");
-                    break;
-                }
-
-                long cnt = SystemClassEDSM.ParseEDSMUpdateSystemsString(json, ref lstsyst, ref outoforder, false, cancelRequested, reportProgress, false);
-                updates += cnt;
-                if (cnt < 100)
-                {
-                    lstsystdate += TimeSpan.FromHours(12);
-                }
-                else
-                {
-                    lstsystdate = DateTime.Parse(lstsyst, CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal | DateTimeStyles.AdjustToUniversal);
-                }
-            }
-            logLine($"System download complete");
-
-            return updates;
-        }
-
 
         public string GetHiddenSystems()
         {
@@ -512,7 +417,7 @@ namespace EliteDangerousCore.EDSM
                         bool firstdiscover = jo["firstDiscover"].Value<bool>();
                         DateTime etutc = DateTime.ParseExact(ts, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.AdjustToUniversal|DateTimeStyles.AssumeUniversal); // UTC time
 
-                        ISystem sc = SystemClassDB.GetSystem(id, cn, SystemClassDB.SystemIDType.EdsmId);
+                        ISystem sc = SystemClassDB.GetSystem(id, cn, SystemClassDB.SystemIDType.EdsmId, name: name);
                         if (sc == null)
                         {
                             if (DateTime.UtcNow.Subtract(etutc).TotalHours < 6) // Avoid running into the rate limit
@@ -549,6 +454,39 @@ namespace EliteDangerousCore.EDSM
                 return false;
 
             return (json.ToString() != "[]");
+        }
+
+        public List<string> CheckForNewCoordinates(List<string> sysNames)
+        {
+            List<string> nowKnown = new List<string>();
+            string query = "api-v1/systems?onlyKnownCoordinates=1&";
+            bool first = true;
+            foreach (string s in sysNames)
+            {
+                if (first) first = false;
+                else query = query + "&";
+                query = query + $"systemName[]={HttpUtility.UrlEncode(s)}";
+            }
+
+            var response = RequestGet(query, handleException: true);
+            if (response.Error)
+                return nowKnown;
+
+            var json = response.Body;
+            if (json == null)
+                return nowKnown;
+
+            JArray msg = JArray.Parse(json);
+
+            if (msg != null)
+            {
+                foreach (JObject sysname in msg)
+                {
+                    nowKnown.Add(sysname["name"].ToString());
+                }
+            }
+
+            return nowKnown;
         }
 
         public List<String> GetPushedSystems()

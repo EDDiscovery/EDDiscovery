@@ -27,11 +27,11 @@ namespace EliteDangerousCore.JournalEvents
         public JournalSupercruiseEntry(JObject evt ) : base(evt, JournalTypeEnum.SupercruiseEntry)
         {
             StarSystem = evt["StarSystem"].Str();
+            SystemAddress = evt["SystemAddress"].LongNull();
 
         }
         public string StarSystem { get; set; }
-
-        public override System.Drawing.Bitmap Icon { get { return EliteDangerous.Properties.Resources.supercruiseenter; } }
+        public long? SystemAddress { get; set; }
 
         public override void FillInformation(out string summary, out string info, out string detailed)//V
         {

@@ -229,12 +229,14 @@ namespace EDDiscovery.UserControls
         string Infoline(List<HistoryEntry> syslist)
         {
             string infostr = "";
+            string jumponium = "";
+            int hasmaterials = 0;
 
             if (syslist.Count > 1)
                 infostr = "First visit " + syslist.Last().EventTimeLocal.ToShortDateString();
 
             HistoryEntry he = syslist[0];
-            StarScan.SystemNode node = discoveryform.history.starscan?.FindSystem(he.System);
+            StarScan.SystemNode node = discoveryform.history.starscan?.FindSystem(he.System,false);
 
             if (node != null)
             {
@@ -250,7 +252,7 @@ namespace EDDiscovery.UserControls
                         if (sn.ScanData!=null)
                         {
                             JournalScan sc = sn.ScanData;
-                                                                                    
+
                             if (sc.IsStar) // brief notification for special or uncommon celestial bodies, useful to traverse the history and search for that special body you discovered.
                             {
                                 // Sagittarius A* is a special body: is the centre of the Milky Way, and the only one which is classified as a Super Massive Black Hole. As far as we know...                                
@@ -274,7 +276,7 @@ namespace EDDiscovery.UserControls
                                 string WolfRayet = "Wolf-Rayet";
                                 if (sc.StarTypeText.Contains(WolfRayet))
                                     extrainfo = extrainfo.AppendPrePad(sc.BodyName + " is a " + sc.StarTypeID + " wolf-rayet star", prefix);
-                                
+
                                 // giants. It should recognize all classes of giants.
                                 string Giant = "Giant";
                                 if (sc.StarTypeText.Contains(Giant))
@@ -290,9 +292,9 @@ namespace EDDiscovery.UserControls
                             {
                                 // Check if a non-star body is a moon or not. We want it to further refine our brief summary in the visited star list.
                                 // To avoid duplicates, we need to apply our filters before on the bodies recognized as a moon, than do the same for the other bodies that do not fulfill that criteria.
-                                                               
+
                                 if (sn.level >= 2 && sn.type == StarScan.ScanNodeType.body)
-                                
+
                                 // Tell us that that special body is a moon. After all, it can be quite an outstanding discovery...
                                 {
                                     // Earth-like moon
@@ -312,7 +314,7 @@ namespace EDDiscovery.UserControls
 
                                     // Ammonia moon
                                     if (sc.PlanetTypeID == EDPlanet.Ammonia_world)
-                                        extrainfo = extrainfo.AppendPrePad(sc.BodyName + " is an ammonia moon", prefix);                                  
+                                        extrainfo = extrainfo.AppendPrePad(sc.BodyName + " is an ammonia moon", prefix);
                                 }
 
                                 else
@@ -329,7 +331,7 @@ namespace EDDiscovery.UserControls
                                     // Water world
                                     if (sc.PlanetTypeID == EDPlanet.Water_world && sc.Terraformable == false)
                                         extrainfo = extrainfo.AppendPrePad(sc.BodyName + " is a water world", prefix);
-                                    
+
                                     // Terraformable planet
                                     if (sc.Terraformable == true && sc.PlanetTypeID != EDPlanet.Water_world)
                                         extrainfo = extrainfo.AppendPrePad(sc.BodyName + " is a terraformable planet", prefix);
@@ -337,6 +339,95 @@ namespace EDDiscovery.UserControls
                                     // Ammonia world
                                     if (sc.PlanetTypeID == EDPlanet.Ammonia_world)
                                         extrainfo = extrainfo.AppendPrePad(sc.BodyName + " is an ammonia world", prefix);
+                                }
+
+                                // Landable bodies with valuable materials
+                                if (sn.ScanData.IsLandable == true && sn.ScanData.HasMaterials)
+                                {
+                                    hasmaterials = 1;
+
+                                    string MaterialsBrief = sn.ScanData.DisplayMaterials(4).ToString();
+                                    // jumponium materials: Arsenic (As), Cadmium (Cd), Germanium (Ge), Niobium (Nb), Polonium (Po), Vanadium (V), Yttrium (Y)
+                                    
+                                    int jump1 = 0;
+                                    int jump2 = 0;
+                                    int jump3 = 0;
+                                    int njump = 0;
+
+                                    if (MaterialsBrief.Contains("Arsenic"))
+                                    {
+                                        jump3 += 1;
+                                    }
+                                    if (MaterialsBrief.Contains("Cadmium"))
+                                    {
+                                        jump2 += 1;
+                                    }
+                                    if (MaterialsBrief.Contains("Germanium"))
+                                    {
+                                        jump1 += 1;
+                                    }
+                                    if (MaterialsBrief.Contains("Niobium"))
+                                    {
+                                        jump2 += 1;
+                                        jump3 += 1;
+                                    }
+                                    if (MaterialsBrief.Contains("Polonium"))
+                                    {
+                                        jump3 += 1;
+                                    }
+                                    if (MaterialsBrief.Contains("Vanadium"))
+                                    {
+                                        jump1 += 1;
+                                    }
+                                    if (MaterialsBrief.Contains("Yttrium"))
+                                    {
+                                        jump3 += 1;
+                                    }
+
+                                    if (jump1 > 0 || jump2 > 0 || jump3 > 0)
+                                    {
+                                        njump = jump1 + jump2 + jump3;
+
+                                        StringBuilder jumpLevel = new StringBuilder();
+                                            
+                                        // level I
+                                        if (jump1 != 0 && jump2 == 0 && jump3 == 0)
+                                        {
+                                            jumpLevel.Append(jump1 + " level I");
+                                        }
+                                        // level I and II
+                                        if (jump1 != 0 && jump2 != 0 && jump3 == 0)
+                                        {
+                                            jumpLevel.Append(jump1 + " level I and " + jump2 + " level II");
+                                        }
+                                        // level I
+                                        if (jump1 == 0 && jump2 != 0 && jump3 == 0)
+                                        {
+                                            jumpLevel.Append(jump2 + " level II");
+                                        }
+                                        // level II and III
+                                        if (jump1 == 0 && jump2 != 0 && jump3 != 0)
+                                        {
+                                            jumpLevel.Append(jump2 + " level II and " + jump3 + " level III");
+                                        }
+                                        // level III
+                                        if (jump1 == 0 && jump2 == 0 && jump3 != 0)
+                                        {
+                                            jumpLevel.Append(jump3 + " level III");
+                                        }
+                                        // level I and III
+                                        if (jump1 != 0 && jump2 == 0 && jump3 != 0)
+                                        {
+                                            jumpLevel.Append(jump1 + " level I and " + jump3 + " level III");
+                                        }
+                                        // all levels
+                                        if (jump1 != 0 && jump2 != 0 && jump3 != 0)
+                                        {
+                                            jumpLevel.Append(jump1 + " level I, " + jump2 + " level II and " + jump3 + " level III");
+                                        }
+                                                                                
+                                        jumponium = jumponium.AppendPrePad("\n" + sc.BodyName + " has " + jumpLevel );                                        
+                                    }
                                 }
                             }
                         }
@@ -347,6 +438,12 @@ namespace EDDiscovery.UserControls
                     {   // tell us that a system has other bodies, and how much, beside stars
                         infostr = infostr.AppendPrePad(total.ToStringInvariant() + " Other bod" + ((total > 1) ? "ies" : "y"), ", ");
                         infostr = infostr.AppendPrePad(extrainfo, prefix);
+
+                        if ( hasmaterials != 0)
+                        {
+                            infostr = infostr.AppendPrePad("\nThis system has jumponium materials: ");
+                            infostr = infostr.AppendPrePad(jumponium);
+                        }
                     }
                     else
                     {   // we need this to allow the panel to scan also through systems which has only stars
@@ -672,8 +769,8 @@ namespace EDDiscovery.UserControls
             if (current_historylist != null && checkBoxEDSM.Checked)
                 HistoryChanged(current_historylist);        
         }
-    }
 
-    #endregion
+        #endregion
+    }
 }
     
