@@ -25,7 +25,7 @@ namespace EliteDangerousCore.UIEvents
 
     public class UIPosition : UIEvent
     {
-        public UIPosition(Position value, double head, DateTime time) : base(UITypeEnum.Position,time)
+        public UIPosition(Position value, double head, DateTime time, long flags) : base(UITypeEnum.Position,time, flags)
         {
             Location = value;
             Heading = head;

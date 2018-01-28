@@ -32,37 +32,6 @@ namespace EliteDangerousCore
         private Thread ScanThread;
         private ManualResetEvent StopRequested;
 
-        enum StatusFlags
-        { 
-             Docked                             =0, // (on a landing pad)
-             Landed                             =1, // (on planet surface)
-             LandingGear                        =2,
-             ShieldsUp                          =3,
-             Supercruise                        =4,
-             FlightAssist                       =5,
-             HardpointsDeployed                 =6,
-             InWing                             =7,
-             Lights                             =8,
-             CargoScoopDeployed                 =9,
-             SilentRunning                      =10,
-             ScoopingFuel                       =11,
-             SrvHandbrake                       =12,
-             SrvTurret                          =13,
-             SrvUnderShip                       =14,
-             SrvDriveAssist                     =15,
-             FsdMassLocked                      =16,
-             FsdCharging                        =17,
-             FsdCooldown                        =18,
-             LowFuel                            =19,
-             OverHeating                        =20,
-             HasLatLong                         =21,
-             IsInDanger                         =22,
-             BeingInterdicted                   =23,
-             InMainShip                         =24,
-             InFighter                          =25,
-             InSRV                              =26,
-        }
-
         public StatusMonitorWatcher(string datapath)
         {
             watcherfolder = datapath;
@@ -163,7 +132,7 @@ namespace EliteDangerousCore
                                 {
                                     bool flag = ((curflags >> v) & 1) != 0;
                                     //System.Diagnostics.Debug.WriteLine("..Flag " + n + " changed to " + flag);
-                                    events.Add(UIEvent.CreateFlagEvent(n, flag, EventTimeUTC));
+                                    events.Add(UIEvent.CreateFlagEvent(n, flag, EventTimeUTC, curflags));
                                 }
                             }
 
@@ -173,7 +142,7 @@ namespace EliteDangerousCore
                         int curguifocus = (int)jo["GuiFocus"].Int();
                         if (curguifocus != prev_guifocus)
                         {
-                            events.Add(new UIEvents.UIGUIFocus(curguifocus, EventTimeUTC));
+                            events.Add(new UIEvents.UIGUIFocus(curguifocus, EventTimeUTC, curflags));
                             prev_guifocus = curguifocus;
                         }
 
@@ -187,7 +156,7 @@ namespace EliteDangerousCore
                             if (sys != prev_pips.Systems || wep != prev_pips.Weapons || eng != prev_pips.Engines)
                             {
                                 UIEvents.UIPips.Pips newpips = new UIEvents.UIPips.Pips() { Systems = sys, Engines = eng, Weapons = wep };
-                                events.Add(new UIEvents.UIPips(newpips, EventTimeUTC));
+                                events.Add(new UIEvents.UIPips(newpips, EventTimeUTC, curflags));
                                 prev_pips = newpips;
                             }
                         }
@@ -196,7 +165,7 @@ namespace EliteDangerousCore
 
                         if (curfiregroup != null && curfiregroup != prev_firegroup)
                         {
-                            events.Add(new UIEvents.UIFireGroup(curfiregroup.Value + 1, EventTimeUTC));
+                            events.Add(new UIEvents.UIFireGroup(curfiregroup.Value + 1, EventTimeUTC , curflags));
                             prev_firegroup = curfiregroup.Value;
                         }
 
@@ -208,7 +177,7 @@ namespace EliteDangerousCore
                         if (jlat != prev_pos.Latitude || jlon != prev_pos.Longitude || jalt != prev_pos.Altitude || jheading != prev_heading)
                         {
                             UIEvents.UIPosition.Position newpos = new UIEvents.UIPosition.Position() { Latitude = jlat, Longitude = jlon, Altitude = jalt };
-                            events.Add(new UIEvents.UIPosition(newpos, jheading, EventTimeUTC));
+                            events.Add(new UIEvents.UIPosition(newpos, jheading, EventTimeUTC, curflags));
                             prev_pos = newpos;
                             prev_heading = jheading;
                         }

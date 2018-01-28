@@ -23,7 +23,7 @@ namespace EliteDangerousCore.UIEvents
 {
     public class UIPips : UIEvent
     {
-        public UIPips(Pips value, DateTime time) : base(UITypeEnum.Pips,time)
+        public UIPips(Pips value, DateTime time, long flags) : base(UITypeEnum.Pips,time, flags)
         {
             Value = value;
         }
