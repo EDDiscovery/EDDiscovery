@@ -97,11 +97,16 @@ namespace EliteDangerousCore
         private void ScanThreadProc()
         {
             string prev_text = null;
+            int nextpolltime = 250;
 
-            while (!StopRequested.WaitOne(250))
+            while (!StopRequested.WaitOne(nextpolltime))
             {
-                if ( File.Exists(watchfile))
+                //System.Diagnostics.Debug.WriteLine(Environment.TickCount % 100000 + "Check " + watchfile);
+
+                if (File.Exists(watchfile))
                 {
+                    nextpolltime = 250;
+
                     JObject jo = null;
 
                     Stream stream = null;
@@ -182,16 +187,16 @@ namespace EliteDangerousCore
                             if (sys != prev_pips.Systems || wep != prev_pips.Weapons || eng != prev_pips.Engines)
                             {
                                 UIEvents.UIPips.Pips newpips = new UIEvents.UIPips.Pips() { Systems = sys, Engines = eng, Weapons = wep };
-                                events.Add(new UIEvents.UIPips( newpips, EventTimeUTC));
+                                events.Add(new UIEvents.UIPips(newpips, EventTimeUTC));
                                 prev_pips = newpips;
                             }
                         }
 
                         int? curfiregroup = jo["FireGroup"].IntNull();      // may appear/disappear.
 
-                        if ( curfiregroup != null && curfiregroup != prev_firegroup )
+                        if (curfiregroup != null && curfiregroup != prev_firegroup)
                         {
-                            events.Add(new UIEvents.UIFireGroup(curfiregroup.Value+1, EventTimeUTC));       
+                            events.Add(new UIEvents.UIFireGroup(curfiregroup.Value + 1, EventTimeUTC));
                             prev_firegroup = curfiregroup.Value;
                         }
 
@@ -211,6 +216,10 @@ namespace EliteDangerousCore
                         if (events.Count > 0)
                             UIEventCallBack?.Invoke(events, watcherfolder);        // and fire..
                     }
+                }
+                else
+                {
+                    nextpolltime = 10000;           // if its not there, we are probably watching a non journal location.. so just do it occasionally
                 }
             }
         }
