@@ -67,7 +67,7 @@ namespace EDDiscovery.Actions
                 }
                 else if (cmdname.Equals("refresh"))
                 {
-                    (ap.actioncontroller as ActionController).DiscoveryForm.RefreshHistoryAsync(checkedsm: true);
+                    (ap.actioncontroller as ActionController).DiscoveryForm.RefreshHistoryAsync();
                 }
                 else if (cmdname.Equals("url"))
                 {

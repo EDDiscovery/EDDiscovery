@@ -41,6 +41,8 @@ namespace EDDiscovery._3DMap
         Color CentredSystem = System.Drawing.Color.Yellow;
         Color PlannedRouteColor = System.Drawing.Color.Green;
 
+        Bitmap SelectedMarker = (Bitmap)Icons.Controls.Map3D_Markers_Selected;
+
         public Vector2 MinGridPos { get; set; } = new Vector2(-50000.0f, -20000.0f);
         public Vector2 MaxGridPos { get; set; } = new Vector2(50000.0f, 80000.0f);
 
@@ -54,7 +56,7 @@ namespace EDDiscovery._3DMap
 
         #region MAPS
 
-       public List<IData3DSet> AddMapImages(FGEImage [] list)
+       public List<IData3DSet> AddMapImages(BaseUtils.Map2d [] list)
         {
             if (list.Length > 0 )
             {
@@ -62,7 +64,7 @@ namespace EDDiscovery._3DMap
 
                 for( int i = 0; i < list.Length; i++)
                 {
-                    FGEImage img = list[i];
+                    BaseUtils.Map2d img = list[i];
 
                     if (_cachedTextures.ContainsKey(img.FileName))
                     {
@@ -291,7 +293,7 @@ namespace EDDiscovery._3DMap
                 {
                     if (gmo.galMapType.Enabled)
                     {
-                        Bitmap touse = gmo.galMapType.Image;                        // under our control, so must have it
+                        Bitmap touse = gmo.galMapType.Image as Bitmap;                        // under our control, so must have it
 
                         if (touse != null && gmo.points.Count > 0)             // if it has an image its a point object , and has co-ord
                         {
@@ -591,7 +593,7 @@ namespace EDDiscovery._3DMap
             using (Graphics g = Graphics.FromImage(text_bmp))
             {
                 using (Brush br = new SolidBrush(CoarseGridLines))
-                    g.DrawString(x.ToString("0") + "," + z.ToString("0"), fnt, br, new Point(px, py));
+                    g.DrawString(x.ToStringInvariant("0") + "," + z.ToStringInvariant("0"), fnt, br, new Point(px, py));
             }
 
             return text_bmp;
@@ -767,7 +769,7 @@ namespace EDDiscovery._3DMap
 
         public List<IData3DSet> BuildSelected(ISystem centersystem, ISystem selectedsystem, GalacticMapObject selectedgmo, float widthly, float heightly, Vector3 rotation )
         {
-            Bitmap selmark  = (Bitmap)EDDiscovery.Properties.Resources.selectedmarker;
+            Bitmap selmark  = SelectedMarker;
 
             if (centersystem != null)
             {

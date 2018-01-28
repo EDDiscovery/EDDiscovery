@@ -60,7 +60,7 @@ namespace EDDiscovery.Actions
                 IInputDevice idi = GetInputDeviceFromBindingDevice(bd);
 
                 if (idi == null)
-                    ret += "ERROR: Missing physical device for " + bd.Name + Environment.NewLine;
+                    ret += "ERROR: Missing physical device for FD Device " + bd.Name + Environment.NewLine;
                 else
                     ret += "Match of FD Device " + bd.Name + " to " + idi.ID().Name + Environment.NewLine;
             }
@@ -189,7 +189,7 @@ namespace EDDiscovery.Actions
 
         BindingsFile.Device GetBindingDeviceFromInputDeviceIdentifier(InputDeviceIdentity i)
         {
-            BindingsFile.Device dv = bf.FindDevice(i.Name, i.Instanceguid, i.Productguid);
+            BindingsFile.Device dv = bf.FindDevice(i.Name, i.Instanceguid, i.Productguid, i.ProductId, i.VendorId);
             return dv;
         }
 
@@ -197,7 +197,7 @@ namespace EDDiscovery.Actions
         {
             IInputDevice i = devices.Find(x =>
             {
-                BindingsFile.Device b = bf.FindDevice(x.ID().Name, x.ID().Instanceguid, x.ID().Productguid);
+                BindingsFile.Device b = bf.FindDevice(x.ID().Name, x.ID().Instanceguid, x.ID().Productguid,x.ID().ProductId,x.ID().VendorId);
                 return b != null && b.Name.Equals(dv.Name);
             });
 

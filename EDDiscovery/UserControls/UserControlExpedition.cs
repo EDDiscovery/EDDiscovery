@@ -757,7 +757,7 @@ namespace EDDiscovery.UserControls
 
             return (float)locSystems
                 .Except(new[] { locSystems[0] })
-                .Select(s => SystemClassDB.Distance(locSystems[0], s))
+                .Select(s => locSystems[0].Distance(s))
                 .Max();
         }
 
@@ -866,7 +866,7 @@ namespace EDDiscovery.UserControls
 
                     if (sys != null && prevsys != null)
                     {
-                        double dist = SystemClassDB.Distance(sys, prevsys);
+                        double dist = sys.Distance(prevsys);
                         string strdist = dist >= 0 ? ((double)dist).ToString("0.00") : "";
                         dataGridViewRouteSystems[1, rowindex].Value = strdist;
                     }
@@ -943,7 +943,7 @@ namespace EDDiscovery.UserControls
                 distance = 0;
                 if (firstSC != null && lastSC != null)
                 {
-                    distance = SystemClassDB.Distance(firstSC, lastSC);
+                    distance = firstSC.Distance(lastSC);
                     txtP2PDIstance.Text = distance.ToString("0.00") + "LY";
                 }
             }
@@ -1021,9 +1021,5 @@ namespace EDDiscovery.UserControls
         }
 
         #endregion
-
-
-
-
     }
 }

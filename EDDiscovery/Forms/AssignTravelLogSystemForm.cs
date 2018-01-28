@@ -66,7 +66,7 @@ namespace EDDiscovery.Forms
         private List<SystemLink> _systemLinkList;
 
         public AssignTravelLogSystemForm(EliteDangerousCore.JournalEvents.JournalLocOrJump vsc)
-            : this(new SystemClass { name = vsc.StarSystem, x = vsc.HasCoordinate ? vsc.StarPos.X : Double.NaN, y = vsc.HasCoordinate ? vsc.StarPos.Y : Double.NaN, z = vsc.HasCoordinate ? vsc.StarPos.Z : Double.NaN, id_edsm = vsc.EdsmID }, vsc.EventTimeLocal)
+            : this(new SystemClass { name = vsc.StarSystem, x = vsc.HasCoordinate ? vsc.StarPos.X : Double.NaN, y = vsc.HasCoordinate ? vsc.StarPos.Y : Double.NaN, z = vsc.HasCoordinate ? vsc.StarPos.Z : Double.NaN, id_edsm = vsc.EdsmID, SystemAddress = vsc.SystemAddress }, vsc.EventTimeLocal)
         {
         }
 
@@ -206,7 +206,7 @@ namespace EDDiscovery.Forms
 
         private void btnFindSystem_Click(object sender, EventArgs e)
         {
-            string name = tbManualSystemName.Text.ToLower();
+            string name = tbManualSystemName.Text.ToLower(System.Globalization.CultureInfo.InvariantCulture);
             List<ISystem> systems = SystemClassDB.GetSystemsByName(name);
 
             if (systems.Count != 0)

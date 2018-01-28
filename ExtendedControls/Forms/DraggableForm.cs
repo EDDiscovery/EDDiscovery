@@ -36,6 +36,16 @@ namespace ExtendedControls
         }
 
 
+        /// <summary>
+        /// The number of pixels from the top of the <see cref="SmartSysMenuForm"/> that will be interpreted as caption
+        /// area when the <see cref="SmartSysMenuForm"/> is unframed. The default value is <c>28</c>.
+        /// </summary>
+        /// <seealso cref="OnCaptionMouseDown"/>
+        /// <seealso cref="OnCaptionMouseUp"/>
+        [DefaultValue(28), Description("The number of pixels from the top of the Form that will be interpreted as the Form's caption area.")]
+        public uint CaptionHeight { get; set; } = 28;
+
+
         protected override CreateParams CreateParams
         {
             get
@@ -71,14 +81,19 @@ namespace ExtendedControls
             sender.Capture = false;
             if (FormBorderStyle == FormBorderStyle.None)
             {
-                var p = sender.PointToScreen(e.Location);
-                var lParam = (IntPtr)((ushort)p.X | (p.Y << 16));
+                var ptScreen = sender.PointToScreen(e.Location);
+                var ptForm = this.PointToClient(ptScreen);
 
-                switch (e.Button)
+                if (ptForm.Y >= 0 && ptForm.Y < this.CaptionHeight)
                 {
-                    case MouseButtons.Left:     SendMessage(WM.NCLBUTTONDOWN, (IntPtr)HT.CAPTION, lParam); break;
-                    case MouseButtons.Middle:   SendMessage(WM.NCMBUTTONDOWN, (IntPtr)HT.CAPTION, lParam); break;
-                    case MouseButtons.Right:    SendMessage(WM.NCRBUTTONDOWN, (IntPtr)HT.CAPTION, lParam); break;
+                    var lParam = (IntPtr)((ushort)ptScreen.X | (ptScreen.Y << 16));
+
+                    switch (e.Button)
+                    {
+                        case MouseButtons.Left:     SendMessage(WM.NCLBUTTONDOWN, (IntPtr)HT.CAPTION, lParam); break;
+                        case MouseButtons.Middle:   SendMessage(WM.NCMBUTTONDOWN, (IntPtr)HT.CAPTION, lParam); break;
+                        case MouseButtons.Right:    SendMessage(WM.NCRBUTTONDOWN, (IntPtr)HT.CAPTION, lParam); break;
+                    }
                 }
             }
         }
@@ -87,14 +102,19 @@ namespace ExtendedControls
         {
             if (FormBorderStyle == FormBorderStyle.None)
             {
-                var p = sender.PointToScreen(e.Location);
-                var lParam = (IntPtr)((ushort)p.X | (p.Y << 16));
+                var ptScreen = sender.PointToScreen(e.Location);
+                var ptForm = this.PointToClient(ptScreen);
 
-                switch (e.Button)
+                if (ptForm.Y >= 0 && ptForm.Y < this.CaptionHeight)
                 {
-                    case MouseButtons.Left:     SendMessage(WM.NCLBUTTONUP, (IntPtr)HT.CAPTION, lParam); break;
-                    case MouseButtons.Middle:   SendMessage(WM.NCMBUTTONUP, (IntPtr)HT.CAPTION, lParam); break;
-                    case MouseButtons.Right:    SendMessage(WM.NCRBUTTONUP, (IntPtr)HT.CAPTION, lParam); break;
+                    var lParam = (IntPtr)((ushort)ptScreen.X | (ptScreen.Y << 16));
+
+                    switch (e.Button)
+                    {
+                        case MouseButtons.Left:     SendMessage(WM.NCLBUTTONUP, (IntPtr)HT.CAPTION, lParam); break;
+                        case MouseButtons.Middle:   SendMessage(WM.NCMBUTTONUP, (IntPtr)HT.CAPTION, lParam); break;
+                        case MouseButtons.Right:    SendMessage(WM.NCRBUTTONUP, (IntPtr)HT.CAPTION, lParam); break;
+                    }
                 }
             }
         }
@@ -105,9 +125,9 @@ namespace ExtendedControls
 
             switch (m.Msg)
             {
-                case WM.GETMINMAXINFO:  // Don't overlap the taskbar when maximizing without a windows border.
+                case WM.GETMINMAXINFO:  // Set form min/max sizes when not using a windows border.
                     {
-                        if (m.LParam != IntPtr.Zero && !windowsborder && AllowResize)
+                        if (m.LParam != IntPtr.Zero && Environment.OSVersion.Platform == PlatformID.Win32NT && !windowsborder)
                         {
                             var sc = Screen.FromControl(this);
                             var scb = sc.Bounds;
@@ -117,8 +137,35 @@ namespace ExtendedControls
                             mmi.ptMaxPosition.X = wa.Left - scb.Left;
                             mmi.ptMaxPosition.Y = wa.Top - scb.Top;
 
-                            mmi.ptMaxSize.X = wa.Width;
-                            mmi.ptMaxSize.Y = wa.Height;
+                            if (AllowResize)
+                            {
+                                if (!this.MaximumSize.IsEmpty)
+                                {
+                                    mmi.ptMaxSize.X = mmi.ptMaxTrackSize.X = this.MaximumSize.Width;
+                                    mmi.ptMaxSize.Y = mmi.ptMaxTrackSize.Y = this.MaximumSize.Height;
+                                }
+                                else
+                                {
+                                    mmi.ptMaxSize.X = wa.Width;
+                                    mmi.ptMaxSize.Y = wa.Height;
+                                }
+
+                                if (!this.MinimumSize.IsEmpty)
+                                {
+                                    mmi.ptMinTrackSize.X = this.MinimumSize.Width;
+                                    mmi.ptMinTrackSize.Y = this.MinimumSize.Height;
+                                }
+                                else
+                                {
+                                    mmi.ptMinTrackSize.X = UnsafeNativeMethods.GetSystemMetrics(SystemMetrics.CXMINTRACK);
+                                    mmi.ptMinTrackSize.Y = UnsafeNativeMethods.GetSystemMetrics(SystemMetrics.CYMINTRACK);
+                                }
+                            }
+                            else
+                            {
+                                mmi.ptMaxSize.X = mmi.ptMaxTrackSize.X = mmi.ptMinTrackSize.X = ClientSize.Width;
+                                mmi.ptMaxSize.Y = mmi.ptMaxTrackSize.Y = mmi.ptMinTrackSize.Y = ClientSize.Height;
+                            }
 
                             Marshal.StructureToPtr(mmi, m.LParam, false);
                             m.Result = IntPtr.Zero;

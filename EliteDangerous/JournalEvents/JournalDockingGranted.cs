@@ -25,11 +25,14 @@ namespace EliteDangerousCore.JournalEvents
         {
             StationName = evt["StationName"].Str();
             LandingPad = evt["LandingPad"].Int();
+            StationType = evt["StationType"].Str().SplitCapsWord();
+            MarketID = evt["MarketID"].LongNull();
         }
+
         public string StationName { get; set; }
         public int LandingPad { get; set; }
-
-        public override System.Drawing.Bitmap Icon { get { return EliteDangerous.Properties.Resources.dockinggranted; } }
+        public string StationType { get; set; }
+        public long? MarketID { get; set; }
 
         public override void FillInformation(out string summary, out string info, out string detailed) //V
         {

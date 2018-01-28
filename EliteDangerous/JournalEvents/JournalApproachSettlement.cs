@@ -29,12 +29,12 @@ namespace EliteDangerousCore.JournalEvents
         {
             Name = evt["Name"].Str();
             Name_Localised = evt["Name_Localised"].Str();
+            MarketID = evt["MarketID"].LongNull();
         }
 
         public string Name { get; set; }
         public string Name_Localised { get; set; }
-
-        public override System.Drawing.Bitmap Icon { get { return EliteDangerous.Properties.Resources.approachsettlement; } }
+        public long? MarketID { get; set; }
 
         public override void FillInformation(out string summary, out string info, out string detailed) //V
         {

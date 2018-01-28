@@ -41,11 +41,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Conditions", "Conditions\Co
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DirectInput", "DirectInput\DirectInput.csproj", "{390B1547-A455-45E3-974F-E1F9B1613AD5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestExtendedControls", "TestExtendedControls\TestExtendedControls.csproj", "{00AA0CC9-BF55-4051-B6CD-849526AE8FAA}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestForms", "TestExtendedControls\TestForms.csproj", "{00AA0CC9-BF55-4051-B6CD-849526AE8FAA}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EliteDangerous", "EliteDangerous\EliteDangerous.csproj", "{019917A4-7342-4F67-8AAF-9E20C016A935}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestNetLogEntry", "TestNetLogEntry\TestNetLogEntry.csproj", "{913F9FFA-C90A-4DFE-B613-87157CA48FD9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EDDIcons", "EDDIcons\EDDIcons.csproj", "{646F71BE-F102-444E-9254-818E5A320AB8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -187,8 +189,23 @@ Global
 		{913F9FFA-C90A-4DFE-B613-87157CA48FD9}.Release|x64.Build.0 = Release|Any CPU
 		{913F9FFA-C90A-4DFE-B613-87157CA48FD9}.Release|x86.ActiveCfg = Release|Any CPU
 		{913F9FFA-C90A-4DFE-B613-87157CA48FD9}.Release|x86.Build.0 = Release|Any CPU
+		{646F71BE-F102-444E-9254-818E5A320AB8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{646F71BE-F102-444E-9254-818E5A320AB8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{646F71BE-F102-444E-9254-818E5A320AB8}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{646F71BE-F102-444E-9254-818E5A320AB8}.Debug|x64.Build.0 = Debug|Any CPU
+		{646F71BE-F102-444E-9254-818E5A320AB8}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{646F71BE-F102-444E-9254-818E5A320AB8}.Debug|x86.Build.0 = Debug|Any CPU
+		{646F71BE-F102-444E-9254-818E5A320AB8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{646F71BE-F102-444E-9254-818E5A320AB8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{646F71BE-F102-444E-9254-818E5A320AB8}.Release|x64.ActiveCfg = Release|Any CPU
+		{646F71BE-F102-444E-9254-818E5A320AB8}.Release|x64.Build.0 = Release|Any CPU
+		{646F71BE-F102-444E-9254-818E5A320AB8}.Release|x86.ActiveCfg = Release|Any CPU
+		{646F71BE-F102-444E-9254-818E5A320AB8}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {830BBBE9-D379-4BA0-8425-FEB0B85DFA21}
 	EndGlobalSection
 EndGlobal

@@ -13,6 +13,7 @@
  * 
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
+using EDDiscovery.Icons;
 using EliteDangerousCore.DB;
 using EliteDangerousCore.JournalEvents;
 using Newtonsoft.Json.Linq;
@@ -21,6 +22,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
 using System.Diagnostics;
+using System.Drawing;
 using System.Globalization;
 using System.Linq;
 using System.Text;
@@ -32,6 +34,7 @@ namespace EliteDangerousCore
         Unknown = 0,
 
         AfmuRepairs = 3,
+        ApproachBody = 4,
         ApproachSettlement = 5,
         Bounty = 10,
         BuyAmmo = 20,
@@ -44,6 +47,7 @@ namespace EliteDangerousCore
         ClearSavedGame = 70,
         CockpitBreached = 80,
         CollectCargo = 90,
+        Commander = 95,
         CommitCrime = 100,
         CommunityGoal = 109,
         CommunityGoalJoin = 110,
@@ -61,6 +65,7 @@ namespace EliteDangerousCore
         DatalinkScan = 130,
         DatalinkVoucher = 1020,
         Died = 140,
+        DiscoveryScan = 141,
         Docked = 145,
         DockFighter = 150,
         DockingCancelled = 160,
@@ -81,6 +86,8 @@ namespace EliteDangerousCore
         FSDJump = 280,
         FuelScoop = 290,
         Fileheader = 300,
+        FighterDestroyed = 303,
+        FighterRebuilt = 304,
         Friends = 305,
         HeatDamage = 310,
         HeatWarning = 320,
@@ -91,13 +98,16 @@ namespace EliteDangerousCore
         JetConeDamage = 355,
         JoinACrew = 356,
         KickCrewMember = 357,
+        LaunchDrone = 359,
         LaunchFighter = 360,
         LaunchSRV = 370,
+        LeaveBody = 375,
         Liftoff = 380,
         LoadGame = 390,
         Loadout = 395,
         Location = 400,
         MassModuleStore = 1010,
+        Market = 405,
         MarketBuy = 410,
         MarketSell = 420,
         MaterialCollected = 430,
@@ -105,11 +115,13 @@ namespace EliteDangerousCore
         MaterialDiscovered = 450,
         Materials = 455,
         MiningRefined = 460,
+        Missions = 465,
         MissionAbandoned = 470,
         MissionAccepted = 480,
         MissionCompleted = 490,
         MissionFailed = 500,
         MissionRedirected = 505,
+        ModuleInfo = 508,
         ModuleBuy = 510,
         ModuleRetrieve = 515,
         ModuleSell = 520,
@@ -119,6 +131,9 @@ namespace EliteDangerousCore
         Music = 535,
         NavBeaconScan = 538,
         NewCommander = 540,
+        NpcCrewPaidWage = 541,
+        NpcCrewRank = 542,
+        Outfitting = 543,
         Passengers = 545,
         PayFines = 550,
         PayLegacyFines = 560,
@@ -144,6 +159,7 @@ namespace EliteDangerousCore
         Repair = 740,
         RepairAll = 745,
         RepairDrone = 747,
+        Reputation = 748,
         RestockVehicle = 750,
         Resurrect = 760,
         Scan = 770,
@@ -158,17 +174,25 @@ namespace EliteDangerousCore
         SendText = 820,
         SetUserShipName = 825,
         ShieldState = 830,
+        Shipyard = 837,
         ShipyardBuy = 840,
         ShipyardNew = 850,
         ShipyardSell = 860,
         ShipyardSwap = 870,
         ShipyardTransfer = 880,
+        ShipTargeted = 881,
+        Shutdown = 882,
+        SRVDestroyed = 883,
         StartJump = 885,
+        Statistics = 888,
+        StoredModules = 886,
+        StoredShips = 887,
         SupercruiseEntry = 890,
         SupercruiseExit = 900,
         Synthesis = 910,
         SystemsShutdown = 915,
         Touchdown = 920,
+        UnderAttack = 925,
         Undocked = 930,
         USSDrop = 940,
         VehicleSwitch = 950,
@@ -179,6 +203,15 @@ namespace EliteDangerousCore
 
         EDDItemSet = 2000,
         EDDCommodityPrices = 2010,
+
+        RestockVehicle_SRV = 10750,
+        RestockVehicle_Fighter = 10751,
+        ShieldState_ShieldsUp = 10830,
+        ShieldState_ShieldsDown = 10831,
+        VehicleSwitch_Mothership = 10950,
+        VehicleSwitch_Fighter = 10951,
+        EngineerContribution_Unknown = 10235,
+        EngineerContribution_MatCommod = 10236,
     }
 
     public enum CombatRank
@@ -346,11 +379,27 @@ namespace EliteDangerousCore
             return typedict;
         }
 
+        public static IReadOnlyDictionary<JournalTypeEnum, Image> JournalTypeIcons { get; } = new IconGroup<JournalTypeEnum>("Journal");
+
         #endregion
 
         #region Formatting control and Icons
 
-        public abstract System.Drawing.Bitmap Icon { get; }
+        protected virtual JournalTypeEnum IconEventType
+        {
+            get
+            {
+                return EventTypeID;
+            }
+        }
+
+        public virtual System.Drawing.Image Icon
+        {
+            get
+            {
+                return JournalTypeIcons[this.IconEventType];
+            }
+        }
 
         public abstract void FillInformation(out string summary, out string info, out string detailed);
 
@@ -413,12 +462,13 @@ namespace EliteDangerousCore
             return jo;
         }
 
-        public static JournalEntry CreateFSDJournalEntry(long tluid, int cmdrid, int syncflag, JObject jo)
+        public static JournalEntry CreateFSDJournalEntry(long tluid, int cmdrid, int syncflag, JObject jo, long edsmid = 0)
         {
             JournalEntry je = CreateJournalEntry(jo.ToString());
             je.TLUId = tluid;
             je.CommanderId = cmdrid;
             je.Synced = syncflag;
+            je.EdsmID = edsmid;
             return je;
         }
 
@@ -540,9 +590,11 @@ namespace EliteDangerousCore
                     cn = new SQLiteConnectionUser(utc: true);
                 }
 
-                JObject jo = GetJson(journalid, cn, tn);
+                bool updatejson = jsonpos || dist > 0;
 
-                if (jo != null)
+                JObject jo = updatejson ? GetJson(journalid, cn, tn) : null;       // if JSON pos update, get it, else null
+                                                                                    // no need to JSON read if just doing an EDSM update
+                if (jo != null || !updatejson )        // if got it, or no pos
                 {
                     if (jsonpos)
                     {
@@ -553,13 +605,22 @@ namespace EliteDangerousCore
                     if (dist > 0)
                         jo["JumpDist"] = dist;
 
-                    using (DbCommand cmd2 = cn.CreateCommand("Update JournalEntries set EventData = @EventData, EdsmId = @EdsmId where ID = @ID", tn))
+                    using (DbCommand cmd2 = cn.CreateCommand("Update JournalEntries set EdsmId = @EdsmId where ID = @ID", tn))
                     {
+                        if ( updatejson )
+                        {
+                            cmd2.CommandText = "Update JournalEntries set EventData = @EventData, EdsmId = @EdsmId where ID = @ID";
+                            cmd2.AddParameterWithValue("@EventData", jo.ToString());
+                            System.Diagnostics.Trace.WriteLine(string.Format("Update journal ID {0} with pos/edsmid {1} dist {2}", journalid, system.id_edsm, dist));
+                        }
+                        else
+                        {
+                            System.Diagnostics.Trace.WriteLine(string.Format("Update journal ID {0} with edsmid {1}", journalid, system.id_edsm));
+                        }
+
                         cmd2.AddParameterWithValue("@ID", journalid);
-                        cmd2.AddParameterWithValue("@EventData", jo.ToString());
                         cmd2.AddParameterWithValue("@EdsmId", system.id_edsm);
 
-                        //System.Diagnostics.Trace.WriteLine(string.Format("Update journal ID {0} with pos {1}/edsmid {2} dist {3}", journalid, jsonpos, system.id_edsm, dist));
                         cmd2.ExecuteNonQuery();
                     }
                 }

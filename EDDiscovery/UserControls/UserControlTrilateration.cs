@@ -79,7 +79,7 @@ namespace EDDiscovery.UserControls
                 if (wanted)
                     AddWantedSystem(s);
                 else
-                    AddSystemToDataGridViewDistances(s);
+                    AddSystemToDataGridViewDistances(s, false);
             }
         }
 
@@ -226,7 +226,7 @@ namespace EDDiscovery.UserControls
                     return;
                 }
 
-                var system = getSystemForTrilateration(value);
+                var system = getSystemForTrilateration(value, false);
                 if (system == null)
                 {
                     this.BeginInvoke(new MethodInvoker(() =>
@@ -441,11 +441,23 @@ namespace EDDiscovery.UserControls
 
         private void toolStripAddFromHistory_Click(object sender, EventArgs e)
         {
+            AddUnknownFromHistory(false);
+        }
+
+        private void toolStripAddRecentHistory_Click(object sender, EventArgs e)
+        {
+            AddUnknownFromHistory(true);
+        }
+
+        private void AddUnknownFromHistory(bool descending)
+        {
             if (wanted == null) PopulateLocalWantedSystems();
             int i = 0;
             var unknown = discoveryform.history
                             .FilterByFSD.ConvertAll<JournalFSDJump>(he => (he.journalEntry as JournalFSDJump))
-                            .Where(fsd => !fsd.HasCoordinate).OrderBy(fsd => fsd.EventTimeUTC);
+                            .Where(fsd => !fsd.HasCoordinate);
+            if(descending) unknown = unknown.OrderByDescending(fsd => fsd.EventTimeUTC);
+            else unknown = unknown.OrderBy(fsd => fsd.EventTimeUTC);
             foreach (JournalFSDJump jmp in unknown)
             {
                 if (wanted.Where(w => w.system == jmp.StarSystem).Count() == 0)
@@ -540,6 +552,8 @@ namespace EDDiscovery.UserControls
 
         private void deleteAllWithKnownPositionToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            List<string> edsmCheckNames = new List<string>();
+            List<string> removeNames = new List<string>();
             string sysName = "";
             for (int i = dataGridViewClosestSystems.RowCount - 1; i >= 0; i--)
             {
@@ -547,16 +561,33 @@ namespace EDDiscovery.UserControls
                 sysName = r.Cells[1].Value.ToString();
                 if (r.Cells[0].Value.ToString() == "Local")
                 {
-                    ISystem sys = getSystemForTrilateration(sysName);
-                    if (sys.HasCoordinate)
+                    var sys = SystemClassDB.GetSystem(sysName);
+                    if (sys == null)
+                        edsmCheckNames.Add(sysName);
+                    else
+                        if (sys.HasCoordinate) removeNames.Add(sysName);
+                }
+            }
+            if (edsmCheckNames.Count() > 0)
+            {
+                List<string> nowKnown = edsm.CheckForNewCoordinates(edsmCheckNames);
+                foreach (string s in nowKnown)
+                {
+                    removeNames.Add(s);
+                }
+            }
+            for (int i = dataGridViewClosestSystems.RowCount - 1; i >= 0; i--)
+            {
+                DataGridViewRow r = dataGridViewClosestSystems.Rows[i];
+                sysName = r.Cells[1].Value.ToString();
+                if (removeNames.Contains(sysName))
+                {
+                    WantedSystemClass entry = wanted.Where(x => x.system == sysName).FirstOrDefault();
+                    if (entry != null)
                     {
-                        WantedSystemClass entry = wanted.Where(x => x.system == sysName).FirstOrDefault();
-                        if (entry != null)
-                        {
-                            entry.Delete();
-                            dataGridViewClosestSystems.Rows.Remove(r);
-                            wanted.Remove(entry);
-                        }
+                        entry.Delete();
+                        dataGridViewClosestSystems.Rows.Remove(r);
+                        wanted.Remove(entry);
                     }
                 }
             }
@@ -568,7 +599,7 @@ namespace EDDiscovery.UserControls
             {
                 foreach (WantedSystemClass sys in wanted)
                 {
-                    AddSystemToDataGridViewDistances(sys.system);
+                    AddSystemToDataGridViewDistances(sys.system, false);
                 }
             }
         }
@@ -579,7 +610,7 @@ namespace EDDiscovery.UserControls
             {
                 foreach (string sys in pushed)
                 {
-                    AddSystemToDataGridViewDistances(sys);
+                    AddSystemToDataGridViewDistances(sys, true);
                 }
             }
         }
@@ -792,19 +823,19 @@ namespace EDDiscovery.UserControls
 
         /* Tries to load the system data for the given name. If no system data is available, but the system is known,
          * it creates a new System entity, otherwise logs it and returns null. */
-        private ISystem getSystemForTrilateration(string systemName)
+        private ISystem getSystemForTrilateration(string systemName, bool fromEDSM)
         {
             var system = SystemClassDB.GetSystem(systemName);
 
             if (system == null)
             {
-                if (!edsm.IsKnownSystem(systemName))
+                if (fromEDSM || edsm.IsKnownSystem(systemName))
                 {
-                    LogTextHighlight("Only systems with coordinates or already known to EDSM can be added" + Environment.NewLine);
+                    system = new SystemClass(systemName);
                 }
                 else
                 {
-                    system = new SystemClass(systemName);
+                    LogTextHighlight("Only systems with coordinates or already known to EDSM can be added" + Environment.NewLine);
                 }
             }
             return system;
@@ -905,9 +936,9 @@ namespace EDDiscovery.UserControls
             newSystemAdded(dataGridViewDistances[0, index], system);
         }
 
-        public void AddSystemToDataGridViewDistances(string systemName)
+        public void AddSystemToDataGridViewDistances(string systemName, bool fromEDSM)
         {
-            var system = getSystemForTrilateration(systemName);
+            var system = getSystemForTrilateration(systemName, fromEDSM);
             if (system != null)
             {
                 AddSystemToDataGridViewDistances(system);
@@ -985,6 +1016,12 @@ namespace EDDiscovery.UserControls
         {
             if (wanted == null)
                 PopulateLocalWantedSystems();
+            else
+            {
+                // there can be multiple instances tied to the history form so this might already exist...
+                List<WantedSystemClass> dbCheck = WantedSystemClass.GetAllWantedSystems();
+                if (dbCheck.Where(s => s.system == sysName).Any()) return;
+            }
 
             WantedSystemClass entry = wanted.Where(x => x.system == sysName).FirstOrDefault();  //duplicate?
 
@@ -1037,5 +1074,6 @@ namespace EDDiscovery.UserControls
         }
 
         #endregion
+        
     }
 }

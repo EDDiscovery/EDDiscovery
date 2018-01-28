@@ -146,97 +146,47 @@ namespace EliteDangerousCore
             }
         };
 
-        public SystemNode FindSystem(ISystem sys)
+        public SystemNode FindSystem(ISystem sys, bool useedsm)    // optionally, see if EDSM has a valid system, if so, add, return update SN
         {
-            Tuple<string, long> withedsm = new Tuple<string, long>(sys.name, sys.id_edsm);
+            System.Diagnostics.Debug.Assert(System.Windows.Forms.Application.MessageLoop);  // foreground only
 
-            if (scandata.ContainsKey(withedsm))         // if with edsm (if id_edsm=0, then thats okay)
-                return scandata[withedsm];
+            SystemNode sn = FindSystemNode(sys);
 
-            if (scandataByName.ContainsKey(sys.name))
+            if (useedsm)
             {
-                foreach (SystemNode sn in scandataByName[sys.name])
+                if ((sn == null || (sn != null && sn.EDSMAdded == false)) && sys.id_edsm > 0)   // null, or not scanned, and with EDSM ID
                 {
-                    if (sn.system.Equals(sys))
+                    List<JournalScan> jl = EliteDangerousCore.EDSM.EDSMClass.GetBodiesList(sys.id_edsm);
+
+                    if (jl != null)
                     {
-                        return sn;
+                        foreach (JournalScan js in jl)
+                        {
+                            js.BodyDesignation = GetBodyDesignation(js, sys.name);
+                            Process(js, sys, true);
+                        }
                     }
+                   
+                    if (sn == null)
+                        sn = FindSystemNode(sys);
+
+                    if (sn != null)
+                        sn.EDSMAdded = true;
                 }
             }
 
-            return null;
+            return sn;
         }
 
-        private static bool CompareEpsilon(double? a, double? b, bool acceptNull = false, double epsilon = 0.001, Func<double?, double> fb = null)
-        {
-            if (a == null || b == null)
-            {
-                return !acceptNull;
-            }
-
-            double _a = (double)a;
-            double _b = fb == null ? (double)b : fb(b);
-
-            return _a == _b || (_a + _b != 0 && Math.Sign(_a + _b) == Math.Sign(_a) && Math.Abs((_a - _b) / (_a + _b)) < epsilon);
-        }
-
-        public string GetBodyDesignation(JournalScan je, string system)
-        {
-            Dictionary<string, Dictionary<string, string>> desigmap = je.IsStar ? starDesignationMap : planetDesignationMap;
-
-            // Special case for m Centauri
-            if (je.IsStar && system.ToLowerInvariant() == "m centauri")
-            {
-                if (je.BodyName == "m Centauri")
-                {
-                    return "m Centauri A";
-                }
-                else if (je.BodyName == "M Centauri")
-                {
-                    return "m Centauri B";
-                }
-            }
-
-            if (desigmap.ContainsKey(system) && desigmap[system].ContainsKey(je.BodyName))
-            {
-                return desigmap[system][je.BodyName];
-            }
-
-            if (je.IsStar && je.BodyName == system && je.nOrbitalPeriod != null)
-            {
-                return system + " A";
-            }
-
-            if (je.BodyName.Equals(system, StringComparison.InvariantCultureIgnoreCase) || je.BodyName.StartsWith(system + " ", StringComparison.InvariantCultureIgnoreCase))
-            {
-                return je.BodyName;
-            }
-
-            if (je.IsStar && primaryStarScans.ContainsKey(system))
-            {
-                foreach (JournalScan primary in primaryStarScans[system])
-                {
-                    if (CompareEpsilon(je.nOrbitalPeriod, primary.nOrbitalPeriod) && 
-                        CompareEpsilon(je.nPeriapsis, primary.nPeriapsis, acceptNull: true, fb: b => ((double)b + 180) % 360.0) &&
-                        CompareEpsilon(je.nOrbitalInclination, primary.nOrbitalInclination) &&
-                        CompareEpsilon(je.nEccentricity, primary.nEccentricity) &&
-                        !je.BodyName.Equals(primary.BodyName, StringComparison.InvariantCultureIgnoreCase))
-                    {
-                        return system + " B";
-                    }
-                }
-            }
-
-            return je.BodyName;
-        }
-
-        public bool AddScanToBestSystem(JournalScan je, int startindex, List<HistoryEntry> hl)
+        // used by historylist during full history processing in background
+        public bool AddScanToBestSystem(JournalScan je, int startindex, List<HistoryEntry> hl) 
         {
             HistoryEntry he;
             JournalLocOrJump jl;
             return AddScanToBestSystem(je, startindex, hl, out he, out jl);
         }
 
+        // used by historylist directly for a single update during play, in foreground..  Also used by above.. so can be either in fore/back
         public bool AddScanToBestSystem(JournalScan je, int startindex, List<HistoryEntry> hl, out HistoryEntry he, out JournalLocOrJump jl)
         {
             for (int j = startindex; j >= 0; j--)
@@ -268,7 +218,77 @@ namespace EliteDangerousCore
             return Process(je, hl[startindex].System, true);         // no relationship, add..
         }
 
+        private bool Process(JournalScan sc, ISystem sys, bool reprocessPrimary = false)  // background or foreground.. FALSE if you can't process it
+        {
+            SystemNode sn = GetOrCreateSystemNode(sys);
+
+            // handle Earth, starname = Sol
+            // handle Eol Prou LW-L c8-306 A 4 a and Eol Prou LW-L c8-306
+            // handle Colonia 4 , starname = Colonia, planet 4
+            // handle Aurioum B A BELT
+            // Kyloasly OY-Q d5-906 13 1
+
+            ScanNodeType starscannodetype = ScanNodeType.star;          // presuming.. 
+            bool isbeltcluster = false;
+
+            // Extract elements from name
+            List<string> elements = ExtractElements(sc, sys, out isbeltcluster, out starscannodetype);
+
+            // Bail out if no elements extracted
+            if (elements.Count == 0)
+            {
+                System.Diagnostics.Trace.WriteLine($"Failed to add body {sc.BodyName} to system {sys.name} - not enough elements");
+                return false;
+            }
+            // Bail out if more than 5 elements extracted
+            else if (elements.Count > 5)
+            {
+                System.Diagnostics.Trace.WriteLine($"Failed to add body {sc.BodyName} to system {sys.name} - too deep");
+                return false;
+            }
+
+            // Get custom name if different to designation
+            string customname = GetCustomName(sc, sys);
+
+            // Process elements
+            ScanNode node = ProcessElements(sc, sys, sn, customname, elements, starscannodetype, isbeltcluster);
+
+            // Process top-level star
+            if (elements.Count == 1)
+            {
+                // Process any belts if present
+                ProcessBelts(sc, node);
+
+                // Process primary star in multi-star system
+                if (elements[0].Equals("A", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    CachePrimaryStar(sc, sys);
+
+                    // Reprocess if we've encountered the primary (A) star and we already have a "Main Star"
+                    if (reprocessPrimary && sn.starnodes.Any(n => n.Key.Length > 1 && n.Value.type == ScanNodeType.star))
+                    {
+                        ReProcess(sn);
+                    }
+                }
+            }
+
+            return true;
+        }
+
+        private void ReProcess(SystemNode sysnode)
+        {
+            List<JournalScan> bodies = sysnode.Bodies.Where(b => b.ScanData != null).Select(b => b.ScanData).ToList();
+            sysnode.starnodes = new SortedList<string, ScanNode>(new DuplicateKeyComparer<string>());
+
+            foreach (JournalScan sn in bodies)
+            {
+                sn.BodyDesignation = GetBodyDesignation(sn, sysnode.system.name);
+                Process(sn, sysnode.system);
+            }
+        }
+
         #region Scan Processing
+
         private SystemNode GetOrCreateSystemNode(ISystem sys)
         {
             Tuple<string, long> withedsm = new Tuple<string, long>(sys.name, sys.id_edsm);
@@ -507,76 +527,10 @@ namespace EliteDangerousCore
                 primaryStarScans[system].Add(je);
             }
         }
+
         #endregion
 
-        public bool Process(JournalScan sc, ISystem sys, bool reprocessPrimary = false)           // FALSE if you can't process it
-        {
-            SystemNode sn = GetOrCreateSystemNode(sys);
-
-            // handle Earth, starname = Sol
-            // handle Eol Prou LW-L c8-306 A 4 a and Eol Prou LW-L c8-306
-            // handle Colonia 4 , starname = Colonia, planet 4
-            // handle Aurioum B A BELT
-            // Kyloasly OY-Q d5-906 13 1
-
-            ScanNodeType starscannodetype = ScanNodeType.star;          // presuming.. 
-            bool isbeltcluster = false;
-
-            // Extract elements from name
-            List<string> elements = ExtractElements(sc, sys, out isbeltcluster, out starscannodetype);
-
-            // Bail out if no elements extracted
-            if (elements.Count == 0)
-            {
-                System.Diagnostics.Trace.WriteLine($"Failed to add body {sc.BodyName} to system {sys.name} - not enough elements");
-                return false;
-            }
-            // Bail out if more than 5 elements extracted
-            else if (elements.Count > 5)
-            {
-                System.Diagnostics.Trace.WriteLine($"Failed to add body {sc.BodyName} to system {sys.name} - too deep");
-                return false;
-            }
-
-            // Get custom name if different to designation
-            string customname = GetCustomName(sc, sys);
-
-            // Process elements
-            ScanNode node = ProcessElements(sc, sys, sn, customname, elements, starscannodetype, isbeltcluster);
-
-            // Process top-level star
-            if (elements.Count == 1)
-            {
-                // Process any belts if present
-                ProcessBelts(sc, node);
-
-                // Process primary star in multi-star system
-                if (elements[0].Equals("A", StringComparison.InvariantCultureIgnoreCase))
-                {
-                    CachePrimaryStar(sc, sys);
-
-                    // Reprocess if we've encountered the primary (A) star and we already have a "Main Star"
-                    if (reprocessPrimary && sn.starnodes.Any(n => n.Key.Length > 1 && n.Value.type == ScanNodeType.star))
-                    {
-                        ReProcess(sn);
-                    }
-                }
-            }
-
-            return true;
-        }
-
-        private void ReProcess(SystemNode sysnode)
-        {
-            List<JournalScan> bodies = sysnode.Bodies.Where(b => b.ScanData != null).Select(b => b.ScanData).ToList();
-            sysnode.starnodes = new SortedList<string, ScanNode>(new DuplicateKeyComparer<string>());
-
-            foreach (JournalScan sn in bodies)
-            {
-                sn.BodyDesignation = GetBodyDesignation(sn, sysnode.system.name);
-                Process(sn, sysnode.system);
-            }
-        }
+        #region Helpers
 
         private class DuplicateKeyComparer<TKey> : IComparer<string> where TKey : IComparable      // special compare for sortedlist
         {
@@ -595,34 +549,88 @@ namespace EliteDangerousCore
             }
         }
 
-        public SystemNode FindSystem(ISystem sys, bool useedsm)    // see if EDSM has a valid system, if so, add, return update SN
+        private static bool CompareEpsilon(double? a, double? b, bool acceptNull = false, double epsilon = 0.001, Func<double?, double> fb = null)
         {
-            SystemNode sn = FindSystem(sys);
-
-            if (useedsm)
+            if (a == null || b == null)
             {
-                if ((sn == null || (sn != null && sn.EDSMAdded == false)) && sys.id_edsm > 0)   // null, or not scanned, and with EDSM ID
+                return !acceptNull;
+            }
+
+            double _a = (double)a;
+            double _b = fb == null ? (double)b : fb(b);
+
+            return _a == _b || (_a + _b != 0 && Math.Sign(_a + _b) == Math.Sign(_a) && Math.Abs((_a - _b) / (_a + _b)) < epsilon);
+        }
+
+        private string GetBodyDesignation(JournalScan je, string system)
+        {
+            Dictionary<string, Dictionary<string, string>> desigmap = je.IsStar ? starDesignationMap : planetDesignationMap;
+
+            // Special case for m Centauri
+            if (je.IsStar && system.ToLowerInvariant() == "m centauri")
+            {
+                if (je.BodyName == "m Centauri")
                 {
-                    List<JournalScan> jl = EliteDangerousCore.EDSM.EDSMClass.GetBodiesList(sys.id_edsm);
-
-                    if (jl != null)
-                    {
-                        foreach (JournalScan js in jl)
-                        {
-                            js.BodyDesignation = GetBodyDesignation(js, sys.name);
-                            Process(js, sys, true);
-                        }
-                    }
-
-                    if (sn == null)
-                        sn = FindSystem(sys);
-
-                    if (sn != null)
-                        sn.EDSMAdded = true;
+                    return "m Centauri A";
+                }
+                else if (je.BodyName == "M Centauri")
+                {
+                    return "m Centauri B";
                 }
             }
 
-            return sn;
+            if (desigmap.ContainsKey(system) && desigmap[system].ContainsKey(je.BodyName))
+            {
+                return desigmap[system][je.BodyName];
+            }
+
+            if (je.IsStar && je.BodyName == system && je.nOrbitalPeriod != null)
+            {
+                return system + " A";
+            }
+
+            if (je.BodyName.Equals(system, StringComparison.InvariantCultureIgnoreCase) || je.BodyName.StartsWith(system + " ", StringComparison.InvariantCultureIgnoreCase))
+            {
+                return je.BodyName;
+            }
+
+            if (je.IsStar && primaryStarScans.ContainsKey(system))
+            {
+                foreach (JournalScan primary in primaryStarScans[system])
+                {
+                    if (CompareEpsilon(je.nOrbitalPeriod, primary.nOrbitalPeriod) &&
+                        CompareEpsilon(je.nPeriapsis, primary.nPeriapsis, acceptNull: true, fb: b => ((double)b + 180) % 360.0) &&
+                        CompareEpsilon(je.nOrbitalInclination, primary.nOrbitalInclination) &&
+                        CompareEpsilon(je.nEccentricity, primary.nEccentricity) &&
+                        !je.BodyName.Equals(primary.BodyName, StringComparison.InvariantCultureIgnoreCase))
+                    {
+                        return system + " B";
+                    }
+                }
+            }
+
+            return je.BodyName;
+        }
+
+        private SystemNode FindSystemNode(ISystem sys)
+        {
+            Tuple<string, long> withedsm = new Tuple<string, long>(sys.name, sys.id_edsm);
+
+            if (scandata.ContainsKey(withedsm))         // if with edsm (if id_edsm=0, then thats okay)
+                return scandata[withedsm];
+
+            if (scandataByName.ContainsKey(sys.name))
+            {
+                foreach (SystemNode sn in scandataByName[sys.name])
+                {
+                    if (sn.system.Equals(sys))
+                    {
+                        return sn;
+                    }
+                }
+            }
+
+            return null;
         }
 
         public static void LoadBodyDesignationMap()
@@ -689,5 +697,7 @@ namespace EliteDangerousCore
                 }
             }
         }
+
+        #endregion
     }
 }

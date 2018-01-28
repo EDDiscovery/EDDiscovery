@@ -103,7 +103,7 @@ namespace EDDiscovery.Actions
 
             frontierbindings.LoadBindingsFile();
             //System.Diagnostics.Debug.WriteLine("Bindings" + frontierbindings.ListBindings());
-            // System.Diagnostics.Debug.WriteLine("Key Names" + frontierbindings.ListKeyNames("{","}"));
+            //System.Diagnostics.Debug.WriteLine("Key Names" + frontierbindings.ListKeyNames("{","}"));
 
             voicerecon.SpeechRecognised += Voicerecon_SpeechRecognised;
             voicerecon.SpeechNotRecognised += Voicerecon_SpeechNotRecognised;
@@ -163,9 +163,10 @@ namespace EDDiscovery.Actions
                         if (b.Name == "Key")
                         {
                             string err = ActionKeyED.VerifyBinding(b.UserData, frontierbindings);
-                            //System.Diagnostics.Debug.WriteLine("{0} Step {1} UD '{2}' err '{3}'", p.Name, b.Name, b.UserData, err);
                             if (err.Length > 0)
-                                errlist = af.name +":" + p.Name + ":" + b.LineNumber + " " + err + Environment.NewLine;
+                            {   // just a warning.. not a full error, as we don't want to stop someone using the pack due to a missing key mapping
+                                LogLine("Key Mapping error: " + string.Format( "{0}:{1}:{2} {3}", af.name, p.Name, b.LineNumber, err));
+                            }
                         }
                     }
                 }
@@ -666,13 +667,13 @@ namespace EDDiscovery.Actions
 
         #region Misc overrides
 
-        public override bool Pragma(string cmd)     // extra pragmas.
+        public override bool Pragma(string s)     // extra pragmas.
         {
-            if (cmd.Equals("bindings"))
+            if (s.Equals("bindings"))
             {
                 LogLine(frontierbindings.ListBindings());
             }
-            else if (cmd.Equals("bindingvalues"))
+            else if (s.Equals("bindingvalues"))
             {
                 LogLine(frontierbindings.ListValues());
             }

@@ -57,6 +57,8 @@ namespace EliteDangerousCore.JournalEvents
             StationName = evt["StationName"].Str();
             StationType = evt["StationType"].Str().SplitCapsWord();
             StarSystem = evt["StarSystem"].Str();
+            SystemAddress = evt["SystemAddress"].LongNull();
+            MarketID = evt["MarketID"].LongNull();
             CockpitBreach = evt["CockpitBreach"].Bool();
 
             Faction = JSONObjectExtensions.GetMultiStringDef(evt, new string[] { "StationFaction", "Faction" });
@@ -81,6 +83,8 @@ namespace EliteDangerousCore.JournalEvents
         public string StationName { get; set; }
         public string StationType { get; set; }
         public string StarSystem { get; set; }
+        public long? SystemAddress { get; set; }
+        public long? MarketID { get; set; }
         public bool CockpitBreach { get; set; }
         public string Faction { get; set; }
         public string FactionState { get; set; }
@@ -92,9 +96,6 @@ namespace EliteDangerousCore.JournalEvents
         public List<string> StationServices { get; set; }
 
         public bool IsTrainingEvent { get; private set; }
-
-        public override System.Drawing.Bitmap Icon { get { return EliteDangerous.Properties.Resources.Stationenter; } }
-
 
         public override void FillInformation(out string summary, out string info, out string detailed)      //V
         {

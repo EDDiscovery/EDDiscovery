@@ -46,6 +46,7 @@ namespace EliteDangerousCore.JournalEvents
             StationName = evt["StationName"].Str();
             StationType = evt["StationType"].Str().SplitCapsWord();
             Body = evt["Body"].Str();
+            BodyID = evt["BodyID"].IntNull();
             BodyType = evt["BodyType"].Str();
 
             Latitude = evt["Latitude"].DoubleNull();
@@ -56,6 +57,7 @@ namespace EliteDangerousCore.JournalEvents
         public string StationName { get; set; }
         public string StationType { get; set; }
         public string Body { get; set; }
+        public long? BodyID { get; set; }
         public string BodyType { get; set; }
 
         public double? Latitude { get; set; }
@@ -105,10 +107,5 @@ namespace EliteDangerousCore.JournalEvents
                 detailed = "";
             }
         }
-
-
-
-        public override System.Drawing.Bitmap Icon { get { return EliteDangerous.Properties.Resources.location; } }
-
     }
 }

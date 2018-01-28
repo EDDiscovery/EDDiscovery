@@ -54,8 +54,6 @@ namespace EliteDangerousCore.JournalEvents
         public int? SellShipId { get; set; }
         public long? SellPrice { get; set; }
 
-        public override System.Drawing.Bitmap Icon { get { return EliteDangerous.Properties.Resources.shipyardnew; } }
-
         public void Ledger(Ledger mcl, DB.SQLiteConnectionUser conn)
         {
             mcl.AddEvent(Id, EventTimeUTC, EventTypeID, ShipType, -ShipPrice + (SellPrice ?? 0));

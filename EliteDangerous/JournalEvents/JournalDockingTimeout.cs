@@ -27,10 +27,13 @@ namespace EliteDangerousCore.JournalEvents
         public JournalDockingTimeout(JObject evt ) : base(evt, JournalTypeEnum.DockingTimeout)
         {
             StationName = evt["StationName"].Str();
+            StationType = evt["StationType"].Str().SplitCapsWord();
+            MarketID = evt["MarketID"].LongNull();
         }
-        public string StationName { get; set; }
 
-        public override System.Drawing.Bitmap Icon { get { return EliteDangerous.Properties.Resources.dockingtimeout; } }
+        public string StationName { get; set; }
+        public string StationType { get; set; }
+        public long? MarketID { get; set; }
 
         public override void FillInformation(out string summary, out string info, out string detailed) //V
         {

@@ -37,8 +37,6 @@ namespace EliteDangerousCore.JournalEvents
         public string FriendlyType { get; set; }            // translated name
         public bool Stolen { get; set; }
 
-        public override System.Drawing.Bitmap Icon { get { return EliteDangerous.Properties.Resources.collectcargo; } }
-
         public void MaterialList(MaterialCommoditiesList mc, DB.SQLiteConnectionUser conn)
         {
             mc.Change(MaterialCommodities.CommodityCategory, Type, 1, 0, conn);

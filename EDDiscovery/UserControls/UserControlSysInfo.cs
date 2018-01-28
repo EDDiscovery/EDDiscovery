@@ -140,7 +140,7 @@ namespace EDDiscovery.UserControls
             {
                 SetControlText(he.System.name);
                 textBoxSystem.Text = he.System.name;
-                discoveryform.history.FillEDSM(he, reload: true, useedsm: true); // Fill in any EDSM info we have, force it to try again.. in case system db updated
+                discoveryform.history.FillEDSM(he); // Fill in any EDSM info we have
 
                 textBoxBody.Text = he.WhereAmI + ((he.IsInHyperSpace) ? " (HS)": "");
 
@@ -154,8 +154,8 @@ namespace EDDiscovery.UserControls
 
                     ISystem homesys = EDDConfig.Instance.HomeSystem;
 
-                    textBoxHomeDist.Text = SystemClassDB.Distance(he.System, homesys).ToString(SingleCoordinateFormat);
-                    textBoxSolDist.Text = SystemClassDB.Distance(he.System, 0, 0, 0).ToString(SingleCoordinateFormat);
+                    textBoxHomeDist.Text = he.System.Distance(homesys).ToString(SingleCoordinateFormat);
+                    textBoxSolDist.Text = he.System.Distance(0, 0, 0).ToString(SingleCoordinateFormat);
                 }
                 else
                 {
@@ -253,7 +253,7 @@ namespace EDDiscovery.UserControls
         {
             if (last_he != null)
             {
-                discoveryform.history.FillEDSM(last_he, reload: true);
+                discoveryform.history.FillEDSM(last_he);
 
                 if (last_he.System.id_eddb > 0)
                     Process.Start("http://ross.eddb.io/system/update/" + last_he.System.id_eddb.ToString());
@@ -264,7 +264,7 @@ namespace EDDiscovery.UserControls
         {
             if (last_he != null)
             {
-                discoveryform.history.FillEDSM(last_he, reload: true);
+                discoveryform.history.FillEDSM(last_he);
 
                 if (last_he.System != null) // solve a possible exception
                 {
@@ -311,7 +311,7 @@ namespace EDDiscovery.UserControls
 
                 HistoryEntry cs = discoveryform.history.GetLastWithPosition;
                 if (cs != null)
-                    textBoxTargetDist.Text = SystemClassDB.Distance(cs.System, x, y, z).ToString("0.0");
+                    textBoxTargetDist.Text = cs.System.Distance(x, y, z).ToString("0.0");
 
                 textBoxTarget.SetTipDynamically(toolTip1, "Position is " + x.ToString("0.00") + "," + y.ToString("0.00") + "," + z.ToString("0.00"));
             }

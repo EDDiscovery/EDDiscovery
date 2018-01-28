@@ -32,8 +32,6 @@ namespace EliteDangerousCore.JournalEvents
         }
         public string Captain { get; set; }
 
-        public override System.Drawing.Bitmap Icon { get { return EliteDangerous.Properties.Resources.joinacrew; } }
-
         public override void FillInformation(out string summary, out string info, out string detailed) //V
         {
             summary = EventTypeStr.SplitCapsWord();

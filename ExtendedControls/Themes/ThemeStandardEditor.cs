@@ -77,7 +77,6 @@ namespace ExtendedControls
             SetPanel(panel_theme51, "Menu Dropdown Text Colour", ThemeStandard.Settings.CI.menu_dropdownfore);
             SetPanel(panel_theme60, "Tool Strip Back Colour", ThemeStandard.Settings.CI.toolstrip_back);
             SetPanel(panel_theme61, "Tool Strip Border Colour", ThemeStandard.Settings.CI.toolstrip_border);
-            SetPanel(panel_theme62, "Tool Strip Checked Colour", ThemeStandard.Settings.CI.toolstrip_buttonchecked);
             SetPanel(panel_theme70, "Check Box Tick Color", ThemeStandard.Settings.CI.checkbox_tick );
             SetPanel(panel_theme71, "S-Panel Text Colour", ThemeStandard.Settings.CI.s_panel);
 
@@ -124,7 +123,6 @@ namespace ExtendedControls
             UpdatePatch(panel_theme51);
             UpdatePatch(panel_theme60);
             UpdatePatch(panel_theme61);
-            UpdatePatch(panel_theme62);
             UpdatePatch(panel_theme70);
             UpdatePatch(panel_theme71);
             textBox_Font.Text = theme.FontName + " " + theme.FontSize + " points";

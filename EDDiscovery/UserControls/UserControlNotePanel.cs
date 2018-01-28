@@ -130,7 +130,7 @@ namespace EDDiscovery.UserControls
                 Color textcolour = IsTransparent ? discoveryform.theme.SPanelColor : discoveryform.theme.LabelColor;
                 Color backcolour = IsTransparent ? Color.Transparent : this.BackColor;
 
-                discoveryform.history.FillEDSM(he, reload: true); // Fill in any EDSM info we have, force it to try again.. in case system db updated
+                discoveryform.history.FillEDSM(he); // Fill in any EDSM info we have, force it to try again.. in case system db updated
                 string botline = "";
                 if (Config(Configuration.showGMPNotes))
                 {

@@ -35,6 +35,7 @@ namespace EliteDangerousCore.JournalEvents
         {
             public string Name { get; set; }            // FDNAME
             public int Count { get; set; }
+            public int Stolen { get; set; }
         }
 
         public JournalCargo(JObject evt) : base(evt, JournalTypeEnum.Cargo)
@@ -45,8 +46,6 @@ namespace EliteDangerousCore.JournalEvents
         }
 
         public Cargo[] Inventory { get; set; }
-
-        public override System.Drawing.Bitmap Icon { get { return EliteDangerous.Properties.Resources.cargomanifest; } }
 
         public override void FillInformation(out string summary, out string info, out string detailed) //V
         {
@@ -67,7 +66,10 @@ namespace EliteDangerousCore.JournalEvents
                 {
                     if (detailed.Length > 0)
                         detailed += Environment.NewLine;
-                    detailed += BaseUtils.FieldBuilder.Build("", JournalFieldNaming.RMat(c.Name), "; items", c.Count);
+                    int? stolen = null;
+                    if (c.Stolen > 0)
+                        stolen = c.Stolen;
+                    detailed += BaseUtils.FieldBuilder.Build("", JournalFieldNaming.RMat(c.Name), "; items", c.Count , "(;)" , stolen);
                 }
             }
         }

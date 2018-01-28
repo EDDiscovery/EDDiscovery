@@ -63,6 +63,8 @@ namespace EDDiscovery.UserControls
             public const int HistoryTag = 2;
         }
 
+        Timer searchtimer;
+
         public UserControlJournalGrid()
         {
             InitializeComponent();
@@ -87,6 +89,9 @@ namespace EDDiscovery.UserControls
 
             ExtraIcons(false,false);
 
+            searchtimer = new Timer() { Interval = 500 };
+            searchtimer.Tick += Searchtimer_Tick;
+
             discoveryform.OnHistoryChange += Display;
             discoveryform.OnNewEntry += AddNewEntry;
         }
@@ -109,6 +114,7 @@ namespace EDDiscovery.UserControls
             discoveryform.OnHistoryChange -= Display;
             discoveryform.OnNewEntry -= AddNewEntry;
             SQLiteConnectionUser.PutSettingBool(DbAutoTop, checkBoxMoveToTop.Checked);
+            searchtimer.Dispose();
         }
 
         #endregion
@@ -248,6 +254,15 @@ namespace EDDiscovery.UserControls
 
         private void textBoxFilter_TextChanged(object sender, EventArgs e)
         {
+            searchtimer.Stop();
+            searchtimer.Start();
+        }
+
+        private void Searchtimer_Tick(object sender, EventArgs e)
+        {
+            searchtimer.Stop();
+            this.Cursor = Cursors.WaitCursor;
+
             Tuple<long, int> pos = CurrentGridPosByJID();
 
             StaticFilters.FilterGridView(dataGridViewJournal, textBoxFilter.Text);
@@ -255,6 +270,8 @@ namespace EDDiscovery.UserControls
             int rowno = FindGridPosByJID(pos.Item1,true);
             if (rowno >= 0)
                 dataGridViewJournal.CurrentCell = dataGridViewJournal.Rows[rowno].Cells[pos.Item2];       // its the current cell which needs to be set, moves the row marker as well            currentGridRow = (rowno!=-1) ? 
+
+            this.Cursor = Cursors.Default;
         }
 
         private void comboBoxJournalWindow_SelectedIndexChanged(object sender, EventArgs e)
@@ -508,6 +525,5 @@ namespace EDDiscovery.UserControls
                     OnTravelSelectionChanged(dataGridViewJournal.Rows[row].Cells[JournalHistoryColumns.HistoryTag].Tag as HistoryEntry, current_historylist);
             }
         }
-
     }
 }

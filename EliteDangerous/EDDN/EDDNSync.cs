@@ -153,25 +153,49 @@ namespace EliteDangerousCore.EDDN
             }
 
             JObject msg = null;
+            JObject msg2 = null;
 
             if (je.EventTypeID == JournalTypeEnum.FSDJump)
             {
                 msg = eddn.CreateEDDNMessage(je as JournalFSDJump);
-
+            }
+            else if (je.EventTypeID == JournalTypeEnum.Location)
+            {
+                msg = eddn.CreateEDDNMessage(je as JournalLocation);
             }
             else if (je.EventTypeID == JournalTypeEnum.Docked)
             {
-                msg = eddn.CreateEDDNMessage(je as JournalDocked, he.System.x, he.System.y, he.System.z);
+                msg = eddn.CreateEDDNMessage(je as JournalDocked, he.System.x, he.System.y, he.System.z, he.System.SystemAddress);
             }
             else if (je.EventTypeID == JournalTypeEnum.Scan)
             {
-                msg = eddn.CreateEDDNMessage(je as JournalScan, he.System.name, he.System.x, he.System.y, he.System.z);
+                msg = eddn.CreateEDDNMessage(je as JournalScan, he.System.name, he.System.x, he.System.y, he.System.z, he.System.SystemAddress);
+            }
+            else if (je.EventTypeID == JournalTypeEnum.Outfitting)
+            {
+                msg2 = eddn.CreateEDDNJournalMessage(je as JournalOutfitting, he.System.x, he.System.y, he.System.z, he.System.SystemAddress);
+                msg = eddn.CreateEDDNOutfittingMessage(je as JournalOutfitting, he.System.SystemAddress);
+            }
+            else if (je.EventTypeID == JournalTypeEnum.Shipyard)
+            {
+                msg2 = eddn.CreateEDDNJournalMessage(je as JournalShipyard, he.System.x, he.System.y, he.System.z, he.System.SystemAddress);
+                msg = eddn.CreateEDDNShipyardMessage(je as JournalShipyard, he.System.SystemAddress);
+            }
+            else if (je.EventTypeID == JournalTypeEnum.Market)
+            {
+                msg2 = eddn.CreateEDDNJournalMessage(je as JournalMarket, he.System.x, he.System.y, he.System.z, he.System.SystemAddress);
+                msg = eddn.CreateEDDNCommodityMessage(je as JournalMarket, he.System.SystemAddress);
             }
 
             if (msg != null)
             {
                 if (eddn.PostMessage(msg))
                 {
+                    if (msg2 != null)
+                    {
+                        eddn.PostMessage(msg2);
+                    }
+
                     he.SetEddnSync();
                     return true;
                 }

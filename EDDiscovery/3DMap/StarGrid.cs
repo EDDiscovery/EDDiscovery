@@ -107,7 +107,7 @@ namespace EDDiscovery
 
             foreach (HistoryEntry vs in cls)
             {                                                               // all vs stars which are not in edsm and have co-ords.
-                if (vs.IsLocOrJump && vs.System.status != SystemStatusEnum.EDSC && vs.System.HasCoordinate )
+                if (vs.IsLocOrJump && vs.System.status != SystemStatusEnum.EDSM && vs.System.HasCoordinate )
                 {
                     Vector3 ent = new Vector3((float)vs.System.x, (float)vs.System.y, (float)vs.System.z);
                     if (!ents.Contains(ent))
@@ -390,9 +390,9 @@ namespace EDDiscovery
 
         public void Initialise()
         {
-            for (int z = 0; z < GridId.gridzrange; z++)
+            for (int z = 0; z < GridId.GridZRange; z++)
             {
-                for (int x = 0; x < GridId.gridxrange; x++)
+                for (int x = 0; x < GridId.GridXRange; x++)
                 {
                     int id = GridId.IdFromComponents(x, z);
                     float xp = 0, zp = 0;

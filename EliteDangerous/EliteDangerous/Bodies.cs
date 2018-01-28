@@ -13,9 +13,11 @@
  * 
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
+using EDDiscovery.Icons;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -118,6 +120,11 @@ namespace EliteDangerousCore
         Sudarsky_class_V_gas_giant,
         Helium_rich_gas_giant,
         Helium_gas_giant,
+
+        // Custom types
+        High_metal_content_body_700 = 2000,
+        High_metal_content_body_250,
+        High_metal_content_body_hot_thick,
     }
 
     [Flags]
@@ -190,8 +197,6 @@ namespace EliteDangerousCore
         Major,
         Pristine,
     }
-
-   
 
     public class Bodies
     {
@@ -352,6 +357,19 @@ namespace EliteDangerousCore
             return EDReserve.None;
         }
 
+        public static IReadOnlyDictionary<EDStar, Image> StarTypeIcons { get; } = new IconGroup<EDStar>("Stars");
+
+        public static System.Drawing.Image GetStarTypeImage(EDStar type)
+        {
+            return StarTypeIcons[type];
+        }
+
+        public static IReadOnlyDictionary<EDPlanet, Image> PlanetTypeIcons { get; } = new IconGroup<EDPlanet>("Planets");
+
+        public static System.Drawing.Image GetPlanetClassImage(EDPlanet type)
+        {
+            return PlanetTypeIcons[type];
+        }
 
         public static string StarName( EDStar id )
         {

@@ -39,8 +39,6 @@ namespace EliteDangerousCore.JournalEvents
         public string ShipFD { get; set; }
         public int ShipId { get; set; }
 
-        public override System.Drawing.Bitmap Icon { get { return EliteDangerous.Properties.Resources.shipyardnew; } }
-
         public void ShipInformation(ShipInformationList shp, DB.SQLiteConnectionUser conn)
         {
             shp.ShipyardNew(this);

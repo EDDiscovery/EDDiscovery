@@ -32,6 +32,7 @@ public static class KeyObjectExtensions
         new Tuple<string,Keys>("Tilde", Keys.Oem3),
         new Tuple<string,Keys>("OpenBrackets", Keys.Oem4),
         new Tuple<string,Keys>("Pipe", Keys.Oem5),
+        new Tuple<string,Keys>("Equals", Keys.Oemplus),     // need to call it equals to avoid confusion with num key plus
         new Tuple<string,Keys>("CloseBrackets", Keys.Oem6),
         new Tuple<string,Keys>("Quotes", Keys.Oem7),
         new Tuple<string,Keys>("Backquote", Keys.Oem8),
@@ -286,6 +287,32 @@ public static class KeyObjectExtensions
 
         return keyseq;
     }
+
+    static public Dictionary<char, uint> CharToScanCode()       // give me a char vs scan code map
+    {
+        Dictionary<char, uint> chartoscancode = new Dictionary<char, uint>();
+        for (short i = 0; i < 0xff; i++)    // for OEMASCII codes on page 437, map to OEMASCII 
+        {
+            Encoding enc = Encoding.GetEncoding(437);
+            byte[] myByte = new byte[] { (byte)(i) };
+            string str = enc.GetString(myByte);     // now in unicode
+
+            int res = (int)BaseUtils.Win32.SafeNativeMethods.OemKeyScan(i);  // in code page 437
+
+            if (res != -1)
+            {
+                //System.Diagnostics.Debug.WriteLine("Char {0:x} {1} = SC {2:x}", i, str, res);
+
+                if (i == '.' && res == 0x53)    // some maps call '.' numpad period.. lets call it dot on sc 34
+                    res = 0x34;
+
+                chartoscancode[str[0]] = (uint)res;
+            }
+        }
+
+        return chartoscancode;
+    }
+
 
 }
 
