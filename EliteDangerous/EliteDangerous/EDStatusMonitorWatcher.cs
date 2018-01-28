@@ -32,7 +32,7 @@ namespace EliteDangerousCore
         private Thread ScanThread;
         private ManualResetEvent StopRequested;
 
-        enum FlagsStates
+        enum StatusFlags
         { 
              Docked                             =0, // (on a landing pad)
              Landed                             =1, // (on planet surface)
@@ -150,9 +150,9 @@ namespace EliteDangerousCore
 
                             //System.Diagnostics.Debug.WriteLine("Flags changed to {0:x} from {1:x} delta {2:x}", curflags, prev_flags , delta);
 
-                            foreach (string n in Enum.GetNames(typeof(FlagsStates)))
+                            foreach (string n in Enum.GetNames(typeof(StatusFlags)))
                             {
-                                int v = (int)Enum.Parse(typeof(FlagsStates), n);
+                                int v = (int)Enum.Parse(typeof(StatusFlags), n);
 
                                 if (((delta >> v) & 1) != 0)
                                 {
@@ -195,7 +195,7 @@ namespace EliteDangerousCore
                             prev_firegroup = curfiregroup.Value;
                         }
 
-                        double jlat = jo["Latitude"].Double(double.MinValue);       // if not there, read as our NaN.
+                        double jlat = jo["Latitude"].Double(double.MinValue);       // if not there, min value
                         double jlon = jo["Longitude"].Double(double.MinValue);
                         double jalt = jo["Altitude"].Double(double.MinValue);
                         double jheading = jo["Heading"].Double(double.MinValue);
