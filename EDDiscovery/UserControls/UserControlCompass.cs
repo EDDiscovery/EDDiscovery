@@ -39,6 +39,7 @@ namespace EDDiscovery.UserControls
         public override void Init()
         {
             discoveryform.OnNewEntry += Display;
+            discoveryform.OnNewUIEvent += OnNewUIEvent;
             textBoxTargetLatitude.Text = GetSettingString(DbLatSave, "");
             textBoxTargetLongitude.Text = GetSettingString(DbLongSave, "");
         }
@@ -48,6 +49,7 @@ namespace EDDiscovery.UserControls
             PutSettingString(DbLatSave, textBoxTargetLatitude.Text);
             PutSettingString(DbLongSave, textBoxTargetLongitude.Text);
             discoveryform.OnNewEntry -= Display;
+            discoveryform.OnNewUIEvent -= OnNewUIEvent;
         }
 
         #endregion
@@ -74,7 +76,16 @@ namespace EDDiscovery.UserControls
             last_he = he;
             Display();
         }
-        
+
+        private void OnNewUIEvent(UIEvent uievent)       // UI event in, see if we want to hide.  UI events come before any onNew
+        {
+            EliteDangerousCore.UIEvents.UIPosition up = uievent as EliteDangerousCore.UIEvents.UIPosition;
+            if(up != null)
+            {
+                Display(up.Location.Latitude, up.Location.Longitude);
+            }
+        }
+
         private void Display()
         {
             if (last_he != null)
@@ -110,7 +121,8 @@ namespace EDDiscovery.UserControls
                         }
                         break;
                     case JournalTypeEnum.FSDJump:
-                        // we want to blank the current location when we're definitely not on a planet - could add other journal types here?
+                    case JournalTypeEnum.LeaveBody:
+                        // we want to blank the current location when we're definitely not on a planet - LeaveBody seems to have this covered for 3.0
                         break;
                     default:
                         // but leave what's there if we might be and what's there is valid
@@ -121,20 +133,25 @@ namespace EDDiscovery.UserControls
                             longitude = j;
                         break;
                 }
-                textBoxCurrentLatitude.Text = latitude.HasValue ? latitude.Value.ToString("N4") : "";
-                textBoxCurrentLongitude.Text = longitude.HasValue ? longitude.Value.ToString("N4") : "";
-
-                double? targetlat = null;
-                double? targetlong = null;
-                double x, y;
-                if (Double.TryParse(textBoxTargetLatitude.Text, out x))
-                    targetlat = x;
-                if (Double.TryParse(textBoxTargetLongitude.Text, out y))
-                    targetlong = y;
-
-                double? bearing = CalculateBearing(latitude, longitude, targetlat, targetlong);
-                labelExtBearing.Text = bearing.HasValue ? $"Bearing: {bearing.Value.ToString("N0")}" : "Bearing -";
+                Display(latitude, longitude);
             }
+        }
+
+        private void Display(double? currentLat, double? currentLong)
+        {
+            textBoxCurrentLatitude.Text = currentLat.HasValue ? currentLat.Value.ToString("N4") : "";
+            textBoxCurrentLongitude.Text = currentLong.HasValue ? currentLong.Value.ToString("N4") : "";
+
+            double? targetlat = null;
+            double? targetlong = null;
+            double x, y;
+            if (Double.TryParse(textBoxTargetLatitude.Text, out x))
+                targetlat = x;
+            if (Double.TryParse(textBoxTargetLongitude.Text, out y))
+                targetlong = y;
+
+            double? bearing = CalculateBearing(currentLat, currentLong, targetlat, targetlong);
+            labelExtBearing.Text = bearing.HasValue ? $"Bearing: {bearing.Value.ToString("N0")}" : "Bearing -";
         }
 
         private double? CalculateBearing(double? currLat, double? currLong, double? targetLat, double? targetLong)

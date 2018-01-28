@@ -327,9 +327,10 @@ namespace EliteDangerousCore
 
 
 
-        public int GetTouchDown(DateTime start, DateTime to)
+        public int GetPlayerControlledTouchDown(DateTime start, DateTime to)
         {
-            return (from s in historylist where s.EntryType == JournalTypeEnum.Touchdown && s.EventTimeLocal >= start && s.EventTimeLocal < to select s).Count();
+            return (from s in historylist where s.EntryType == JournalTypeEnum.Touchdown && s.EventTimeLocal >= start && s.EventTimeLocal < to select s)
+                .ToList().ConvertAll<JournalTouchdown>(e => e.journalEntry as JournalTouchdown).Where(j => j.PlayerControlled.Value).Count();
         }
 
         public int GetHeatWarning(DateTime start, DateTime to)
