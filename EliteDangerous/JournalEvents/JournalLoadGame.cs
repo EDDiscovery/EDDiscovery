@@ -35,7 +35,7 @@ namespace EliteDangerousCore.JournalEvents
             StartDead = evt["StartDead"].Bool();
             GameMode = evt["GameMode"].Str();
             Group = evt["Group"].Str();
-            Credits = evt["Credits"].Long();
+            Credits = evt["cr;N0"].Long();
             Loan = evt["Loan"].Long();
 
             ShipName = evt["ShipName"].Str();

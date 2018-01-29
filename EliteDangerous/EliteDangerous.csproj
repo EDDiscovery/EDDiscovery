@@ -138,6 +138,7 @@
     <Compile Include="EliteDangerous\VisitingStarsCacheFolder.cs" />
     <Compile Include="HistoryList\HistoryEntry.cs" />
     <Compile Include="HistoryList\HistoryList.cs" />
+    <Compile Include="JournalEvents\JournalEngineerLegacyConvert.cs" />
     <Compile Include="JournalEvents\JournalFighterDestroyed.cs" />
     <Compile Include="JournalEvents\JournalFighterRebuilt.cs" />
     <Compile Include="JournalEvents\JournalLaunchDrone.cs" />

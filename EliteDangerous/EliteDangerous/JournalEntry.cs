@@ -79,6 +79,7 @@ namespace EliteDangerousCore
         EngineerApply = 230,
         EngineerContribution = 235,
         EngineerCraft = 240,
+        EngineerLegacyConvert = 241,
         EngineerProgress = 250,
         EscapeInterdiction = 260,
         FactionKillBond = 270,

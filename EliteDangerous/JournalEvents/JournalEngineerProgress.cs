@@ -29,11 +29,13 @@ namespace EliteDangerousCore.JournalEvents
         public JournalEngineerProgress(JObject evt ) : base(evt, JournalTypeEnum.EngineerProgress)
         {
             Engineer = evt["Engineer"].Str();
+            EngineerID = evt["EngineerID"].LongNull();
             Rank = evt["Rank"].IntNull();
             Progress = evt["Progress"].Str();
         }
 
         public string Engineer { get; set; }
+        public long? EngineerID { get; set; }
         public string Progress { get; set; }
         public int? Rank { get; set; }
 

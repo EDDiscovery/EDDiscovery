@@ -81,7 +81,7 @@ namespace EliteDangerousCore.JournalEvents
             summary = EventTypeStr.SplitCapsWord();
             info = BaseUtils.FieldBuilder.Build("", RetrievedItemLocalised.Alt(RetrievedItem), "< into ", Slot);
             if ( Cost>0)
-                info += " " + BaseUtils.FieldBuilder.Build("Cost:; credits", Cost);
+                info += " " + BaseUtils.FieldBuilder.Build("Cost:; cr;N0", Cost);
 
             if (SwapOutItem.Length > 0)
                 info += ", " + BaseUtils.FieldBuilder.Build("Stored:", SwapOutItemLocalised.Alt(SwapOutItem));

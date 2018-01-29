@@ -166,7 +166,7 @@ namespace EDDiscovery.Actions
                     vars[mi + "Enabled"] = m.Enabled.ToStringInvariant();
                     vars[mi + "AmmoClip"] = m.AmmoClip.ToStringInvariant();
                     vars[mi + "AmmoHopper"] = m.AmmoHopper.ToStringInvariant();
-                    vars[mi + "Blueprint"] = m.Blueprint.ToNullSafeString();
+                    vars[mi + "Blueprint"] = (m.Engineering != null) ? m.Engineering.FriendlyBlueprintName : "";
                     vars[mi + "Health"] = m.Health.ToStringInvariant();
                     vars[mi + "Value"] = m.Value.ToStringInvariant();
                     ind++;
