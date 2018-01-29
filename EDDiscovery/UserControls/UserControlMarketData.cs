@@ -128,7 +128,7 @@ namespace EDDiscovery.UserControls
             {
                 System.Diagnostics.Debug.WriteLine(Environment.NewLine + "From " + current_displayed?.WhereAmI + " to " + left.WhereAmI);
 
-                JournalEDDCommodityPrices ecp = left.journalEntry as JournalEDDCommodityPrices;
+                JournalCommodityPricesBase ecp = left.journalEntry as JournalCommodityPricesBase;
                 List<CCommodities> list = ecp.Commodities;
 
                 System.Diagnostics.Debug.WriteLine("Test Right " + eddmd_right?.WhereAmI + " vs " + left.WhereAmI);
@@ -153,7 +153,7 @@ namespace EDDiscovery.UserControls
                     }
 
                     System.Diagnostics.Debug.WriteLine("Right " + eddmd_right.System.name + " " + eddmd_right.WhereAmI);
-                    list = CCommodities.Merge(list, ((JournalEDDCommodityPrices)eddmd_right.journalEntry).Commodities , eddmd_right.WhereAmI);
+                    list = CCommodities.Merge(list, ((JournalCommodityPricesBase)eddmd_right.journalEntry).Commodities , eddmd_right.WhereAmI);
                 }
 
                 List<MaterialCommodities> mclist = cargo.MaterialCommodity.Sort(true);      // stuff we have..  commodities only
@@ -261,7 +261,7 @@ namespace EDDiscovery.UserControls
 
             comboboxentries.Clear();
 
-            List<HistoryEntry> hlcpb = hl.FilterByEDDCommodityPricesBackwards;
+            List<HistoryEntry> hlcpb = hl.FilterByCommodityPricesBackwards;
 
             foreach (HistoryEntry h in hlcpb)
             {
