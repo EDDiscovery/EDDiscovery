@@ -18,26 +18,30 @@ using System.Linq;
 
 namespace EliteDangerousCore.JournalEvents
 {
-    [JournalEntryType(JournalTypeEnum.ScientificResearch)]
-    public class JournalScientificResearch : JournalEntry
+
+    [JournalEntryType(JournalTypeEnum.TechnologyBroker)]
+    public class JournalTechnologyBroker : JournalEntry
     {
-        public JournalScientificResearch(JObject evt) : base(evt, JournalTypeEnum.ScientificResearch)
+        public JournalTechnologyBroker(JObject evt) : base(evt, JournalTypeEnum.TechnologyBroker)
         {
-            Name = evt["Name"].Str();
-            Count = evt["Count"].Int();
-            Category = evt["Category"].Str();
-            MarketID = evt["MarketID"].LongNull();
+            ItemUnlocked = JournalFieldNaming.GetBetterItemNameEvents(evt["ItemUnlocked"].Str());
+            IngredientsList = evt["Ingredients"]?.ToObject<Ingredients[]>();
         }
 
-        public string Name { get; set; }
-        public int Count { get; set; }
-        public string Category { get; set; }
-        public long? MarketID { get; set; }
+        public string ItemUnlocked { get; set; }
+        public Ingredients[] IngredientsList { get; set; }
+
+        public class Ingredients
+        {
+            public string Name;
+            public int Count;
+        }
 
         public override void FillInformation(out string summary, out string info, out string detailed) //V
         {
+// TBD list and feed into material counts
             summary = EventTypeStr.SplitCapsWord();
-            info = BaseUtils.FieldBuilder.Build("",Name, "Count:",  Count , "Category:", Category);
+            info = BaseUtils.FieldBuilder.Build("Unlocked:", ItemUnlocked);
             detailed = "";
         }
     }
