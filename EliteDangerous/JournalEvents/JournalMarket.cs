@@ -14,6 +14,7 @@
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 using Newtonsoft.Json.Linq;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace EliteDangerousCore.JournalEvents
@@ -39,66 +40,25 @@ namespace EliteDangerousCore.JournalEvents
     //o   Rare
 
     [JournalEntryType(JournalTypeEnum.Market)]
-    public class JournalMarket : JournalEntry
+    public class JournalMarket : JournalCommodityPricesBase
     {
         public JournalMarket(JObject evt) : base(evt, JournalTypeEnum.Market)
         {
-            StationName = evt["StationName"].Str();
+            Station = evt["StationName"].Str();
             StarSystem = evt["StarSystem"].Str();
             MarketID = evt["MarketID"].LongNull();
 
-            MarketItems = evt["Items"]?.ToObject<MarketItem[]>();
-
-            if ( MarketItems != null )
+            JArray jcommodities = (JArray)evt["Items"];
+            if (jcommodities != null )
             {
-                foreach (MarketItem i in MarketItems)
+                Commodities = new List<CCommodities>();
+
+                foreach (JObject commodity in jcommodities)
                 {
-                    i.Name = JournalFieldNaming.GetBetterItemNameEvents(i.Name);
+                    CCommodities com = new CCommodities(commodity, true);
+                    Commodities.Add(com);
                 }
             }
         }
-
-        // TBD Hook into CAPI system
-
-        public string StationName { get; set; }
-        public string StarSystem { get; set; }
-        public long? MarketID { get; set; }
-
-        public MarketItem[] MarketItems { get; set; }
-
-        public override void FillInformation(out string summary, out string info, out string detailed) //V
-        {
-            summary = EventTypeStr.SplitCapsWord();
-            info = "";
-
-            if ( MarketItems != null )
-                foreach (MarketItem m in MarketItems)
-                {
-                    if (info.Length>0)
-                        info += ", ";
-                    info += m.Name;
-                }
-                
-            detailed = "";
-        }
     }
-
-
-    public class MarketItem
-    {
-        public long id;
-        public string Name;
-        public string Name_Localised;
-        public int BuyPrice;
-        public int SellPrice;
-        public int MeanPrice;
-        public int StockBracket;
-        public int DemandBracket;
-        public int Stock;
-        public int Demand;
-        public bool Consumer;
-        public bool Producer;
-        public bool Rare;
-    }
-
 }

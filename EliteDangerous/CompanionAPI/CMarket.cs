@@ -1,4 +1,4 @@
-﻿using EliteDangerousCore.JournalEvents;
+﻿using EliteDangerousCore;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -27,7 +27,7 @@ namespace EliteDangerous.CompanionAPI
 
 
         public JArray jcommodities { get; private set; }
-        public List<CCommodities> commodities;
+        public List<EliteDangerousCore.CCommodities> commodities;
 
         public bool FromJson(JObject jo)
         {

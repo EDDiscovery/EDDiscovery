@@ -109,6 +109,7 @@
     <Compile Include="EliteDangerous\BindingsFile.cs" />
     <Compile Include="EliteDangerous\Bodies.cs" />
     <Compile Include="EliteDangerous\BodyDesignations.cs" />
+    <Compile Include="EliteDangerous\CommodityPrices.cs" />
     <Compile Include="EliteDangerous\EDCalculations.cs" />
     <Compile Include="EliteDangerous\EDCommander.cs" />
     <Compile Include="EliteDangerous\EDJournalClass.cs" />

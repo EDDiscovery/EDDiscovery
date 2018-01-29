@@ -183,8 +183,9 @@ namespace EliteDangerousCore.EDDN
             }
             else if (je.EventTypeID == JournalTypeEnum.Market)
             {
-                msg2 = eddn.CreateEDDNJournalMessage(je as JournalMarket, he.System.x, he.System.y, he.System.z, he.System.SystemAddress);
-                msg = eddn.CreateEDDNCommodityMessage(je as JournalMarket, he.System.SystemAddress);
+                JournalMarket jm = je as JournalMarket;
+                msg2 = eddn.CreateEDDNJournalMessage(jm, he.System.x, he.System.y, he.System.z, he.System.SystemAddress);
+                msg = eddn.CreateEDDNCommodityMessage(jm.Commodities, jm.StarSystem, jm.Station, DateTime.UtcNow);      // if its devoid of data, null returned
             }
 
             if (msg != null)
