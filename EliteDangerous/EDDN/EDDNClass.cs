@@ -281,7 +281,7 @@ namespace EliteDangerousCore.EDDN
 
         public JObject CreateEDDNJournalMessage(JournalMarket journal, double x, double y, double z, long? systemAddress)
         {
-            if (journal.MarketItems == null)
+            if (journal.Commodities == null)
                 return null;
 
             JObject msg = new JObject();
@@ -294,32 +294,6 @@ namespace EliteDangerousCore.EDDN
             message = RemoveCommonKeys(message);
 
             message["StarPos"] = new JArray(new float[] { (float)x, (float)y, (float)z });
-
-            if (systemAddress != null)
-                message["SystemAddress"] = systemAddress;
-
-            msg["message"] = message;
-            return msg;
-        }
-
-        public JObject CreateEDDNCommodityMessage(JournalMarket journal, long? systemAddress)
-        {
-            if (journal.MarketItems == null)
-                return null;
-
-            JObject msg = new JObject();
-
-            msg["header"] = Header();
-            msg["$schemaRef"] = GetEDDNJournalSchemaRef();
-
-            JObject message = new JObject
-            {
-                ["timestamp"] = journal.EventTimeUTC.ToString("yyyy-MM-ddTHH:mm:ss'Z'"),
-                ["systemName"] = journal.StarSystem,
-                ["stationName"] = journal.StationName,
-                ["marketID"] = journal.MarketID,
-                ["commodities"] = new JArray(journal.MarketItems.Select(m => m.Name))
-            };
 
             if (systemAddress != null)
                 message["SystemAddress"] = systemAddress;
@@ -359,6 +333,9 @@ namespace EliteDangerousCore.EDDN
 
         public JObject CreateEDDNCommodityMessage(List<CCommodities> commodities, string systemName, string stationName, DateTime time)
         {
+            if (commodities == null || commodities.Count == 0)
+                return null;
+                
             JObject msg = new JObject();
 
             msg["header"] = Header();

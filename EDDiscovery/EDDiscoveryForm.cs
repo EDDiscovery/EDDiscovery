@@ -649,11 +649,11 @@ namespace EDDiscovery
             {
                 if (Capi.IsCommanderLoggedin(EDCommander.Current.Name))
                 {
-                    if (he.ContainsRares())
-                    {
-                        LogLine("Not performing Companion API get due to carrying rares");
-                    }
-                    else
+                    //if (he.ContainsRares())
+                    //{
+                    //    LogLine("Not performing Companion API get due to carrying rares");
+                    //}
+                    //else
                     {
                         System.Diagnostics.Debug.WriteLine("Commander " + EDCommander.Current.Name + " in CAPI");
                         try
