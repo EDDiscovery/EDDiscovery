@@ -49,7 +49,7 @@ namespace EliteDangerousCore.JournalEvents
         public override void FillInformation(out string summary, out string info, out string detailed) //V
         {
             summary = EventTypeStr.SplitCapsWord();
-            info = BaseUtils.FieldBuilder.Build("",Type , "Cost:; credits" , Cost , "Count:" , Count , "Loadout:" , Loadout);
+            info = BaseUtils.FieldBuilder.Build("",Type , "Cost:; cr;N0" , Cost , "Count:" , Count , "Loadout:" , Loadout);
             detailed = "";
         }
     }

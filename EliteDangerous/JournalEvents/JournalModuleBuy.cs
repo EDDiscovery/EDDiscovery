@@ -90,9 +90,9 @@ namespace EliteDangerousCore.JournalEvents
         public override void FillInformation(out string summary, out string info, out string detailed) //V
         {
             summary = EventTypeStr.SplitCapsWord();
-            info = BaseUtils.FieldBuilder.Build("", BuyItemLocalised.Alt(BuyItem), "< into ", Slot, "Cost:; credits", BuyPrice);
+            info = BaseUtils.FieldBuilder.Build("", BuyItemLocalised.Alt(BuyItem), "< into ", Slot, "Cost:; cr;N0", BuyPrice);
             if (SellItem.Length > 0)
-                info += ", " + BaseUtils.FieldBuilder.Build("Sold:", SellItemLocalised.Alt(SellItem), "Price:; credits", SellPrice);
+                info += ", " + BaseUtils.FieldBuilder.Build("Sold:", SellItemLocalised.Alt(SellItem), "Price:; cr;N0", SellPrice);
             if (StoredItem.Length > 0)
                 info += ", " + BaseUtils.FieldBuilder.Build("Stored:", StoredItemLocalised.Alt(StoredItem));
 

@@ -63,7 +63,7 @@ namespace EliteDangerousCore.JournalEvents
         public override void FillInformation(out string summary, out string info, out string detailed) //V
         {
             summary = EventTypeStr.SplitCapsWord();
-            info = BaseUtils.FieldBuilder.Build("Item:", SellItemLocalised.Alt(SellItem), "Price:; credits", SellPrice);
+            info = BaseUtils.FieldBuilder.Build("Item:", SellItemLocalised.Alt(SellItem), "Price:; cr;N0", SellPrice);
             detailed = BaseUtils.FieldBuilder.Build("Ship:", Ship);
         }
     }

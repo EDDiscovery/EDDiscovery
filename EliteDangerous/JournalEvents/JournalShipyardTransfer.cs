@@ -68,7 +68,7 @@ namespace EliteDangerousCore.JournalEvents
         public override void FillInformation(out string summary, out string info, out string detailed) //V
         {
             summary = EventTypeStr.SplitCapsWord();
-            info = BaseUtils.FieldBuilder.Build("Of ", ShipType, "< from " , System , "Distance:; ly;0.0" , Distance , "Price:; credits", TransferPrice, "TransferTime:", JournalFieldNaming.GetBetterTimeinSeconds(nTransferTime));
+            info = BaseUtils.FieldBuilder.Build("Of ", ShipType, "< from " , System , "Distance:; ly;0.0" , Distance , "Price:; cr;N0", TransferPrice, "TransferTime:", JournalFieldNaming.GetBetterTimeinSeconds(nTransferTime));
             detailed = "";
         }
     }

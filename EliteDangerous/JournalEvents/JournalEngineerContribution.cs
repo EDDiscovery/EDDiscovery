@@ -27,6 +27,7 @@ namespace EliteDangerousCore.JournalEvents
         public JournalEngineerContribution(JObject evt ) : base(evt, JournalTypeEnum.EngineerContribution)
         {
             Engineer = evt["Engineer"].Str();
+            EngineerID = evt["EngineerID"].LongNull();
             Type = evt["Type"].Str();
 
             if (Type.Equals("Commodity") || Type.Equals("Materials"))
@@ -48,6 +49,7 @@ namespace EliteDangerousCore.JournalEvents
 
         private bool unknownType;
         public string Engineer { get; set; }
+        public long? EngineerID { get; set; }
         public string Type { get; set; }
         public string FriendlyCommodity { get; set; }
         public string Commodity { get; set; }
