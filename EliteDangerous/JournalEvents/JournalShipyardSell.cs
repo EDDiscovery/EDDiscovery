@@ -33,6 +33,7 @@ namespace EliteDangerousCore.JournalEvents
         //•	System: (if ship is in another system) name of system
         public JournalShipyardSell(JObject evt ) : base(evt, JournalTypeEnum.ShipyardSell)
         {
+            MarketID = evt["MarketID"].LongNull();
             ShipType = JournalFieldNaming.GetBetterShipName(evt["ShipType"].Str());
             SellShipId = evt["SellShipID"].Int();
             ShipPrice = evt["ShipPrice"].Long();
@@ -42,6 +43,7 @@ namespace EliteDangerousCore.JournalEvents
         public int SellShipId { get; set; }
         public long ShipPrice { get; set; }
         public string System { get; set; }
+        public long? MarketID { get; set; }
 
         public void Ledger(Ledger mcl, DB.SQLiteConnectionUser conn)
         {

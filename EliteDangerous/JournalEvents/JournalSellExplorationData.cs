@@ -37,22 +37,25 @@ namespace EliteDangerousCore.JournalEvents
 
             BaseValue = evt["BaseValue"].Long();
             Bonus = evt["Bonus"].Long();
+            TotalEarnings = evt["TotalEarnings"].LongNull();        
         }
+
         public string[] Systems { get; set; }
         public string[] Discovered { get; set; }
         public long BaseValue { get; set; }
         public long Bonus { get; set; }
+        public long? TotalEarnings { get; set; }        // 3.0
 
         public void Ledger(Ledger mcl, DB.SQLiteConnectionUser conn)
         {
             if (Systems!=null)
-                mcl.AddEvent(Id, EventTimeUTC, EventTypeID, Systems.Length + " systems", Bonus + BaseValue);
+                mcl.AddEvent(Id, EventTimeUTC, EventTypeID, Systems.Length + " systems", TotalEarnings != null ? TotalEarnings : (Bonus + BaseValue));
         }
 
         public override void FillInformation(out string summary, out string info, out string detailed) //V
         {
             summary = EventTypeStr.SplitCapsWord();
-            info = BaseUtils.FieldBuilder.Build("Amount:; cr;N0", BaseValue, "Bonus:; cr;N0", Bonus);
+            info = BaseUtils.FieldBuilder.Build("Amount:; cr;N0", BaseValue, "Bonus:; cr;N0", Bonus , "Full Total:; cr;N0", TotalEarnings);
             detailed = "";
             if (Systems != null)
             {

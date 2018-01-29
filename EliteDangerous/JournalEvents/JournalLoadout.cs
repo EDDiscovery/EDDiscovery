@@ -58,19 +58,23 @@ namespace EliteDangerousCore.JournalEvents
             public long? Value { get; private set; }
             public int? AmmoClip { get; private set; }
             public int? AmmoHopper { get; private set; }
+            public double? Power { get; private set; }      // ONLY via Modules Info
 
             public JournalEngineerCraftBase.EngineeringData Engineering { get; private set; }       // may be NULL if module is not engineered or unknown
 
             public ShipModule()
             { }
 
-            public ShipModule(string s, string sfd, string i, string ifd, bool? e, int? p, int? ac, int? ah, double? h, long? v, 
+            public ShipModule(string s, string sfd, string i, string ifd, 
+                            bool? e, int? prior, int? ac, int? ah, double? health, long? value, 
+                            double? power,
                             JournalEngineerCraftBase.EngineeringData engineering )
             {
-                Slot = s; SlotFD = sfd; Item = i; ItemFD = ifd; Enabled = e; Priority = p; AmmoClip = ac; AmmoHopper = ah;
-                if (h.HasValue)
-                    Health = (int)(h * 100.0);
-                Value = v;
+                Slot = s; SlotFD = sfd; Item = i; ItemFD = ifd; Enabled = e; Priority = prior; AmmoClip = ac; AmmoHopper = ah;
+                if (health.HasValue)
+                    Health = (int)(health * 100.0);
+                Value = value;
+                Power = power;
                 Engineering = engineering;
             }
 
@@ -146,7 +150,9 @@ namespace EliteDangerousCore.JournalEvents
                                                         jo["AmmoInClip"].IntNull(),
                                                         jo["AmmoInHopper"].IntNull(),
                                                         jo["Health"].DoubleNull(),
-                                                        jo["Value"].IntNull() , engineering );
+                                                        jo["Value"].IntNull() , 
+                                                        null,  //power not received here
+                                                        engineering );
                     ShipModules.Add(module);
                 }
 

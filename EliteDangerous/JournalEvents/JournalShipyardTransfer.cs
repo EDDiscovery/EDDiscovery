@@ -48,9 +48,9 @@ namespace EliteDangerousCore.JournalEvents
             if (Distance > 100000.0)       // previously, it was in m, now they have changed it to LY per 2.3. So if its large (over 100k ly, impossible) convert
                 Distance = Distance / 299792458.0 / 365 / 24 / 60 / 60;
 
-
             nTransferTime = evt["TransferTime"].IntNull();
-
+            MarketID = evt["MarketID"].LongNull();
+            ShipMarketID = evt["ShipMarketID"].LongNull();
         }
 
         public string ShipType { get; set; }
@@ -59,6 +59,8 @@ namespace EliteDangerousCore.JournalEvents
         public double Distance { get; set; }
         public long TransferPrice { get; set; }
         public int? nTransferTime { get; set; }
+        public long? MarketID { get; set; }
+        public long? ShipMarketID { get; set; }
 
         public void Ledger(Ledger mcl, DB.SQLiteConnectionUser conn)
         {
