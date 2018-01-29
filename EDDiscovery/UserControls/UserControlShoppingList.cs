@@ -46,6 +46,7 @@ namespace EDDiscovery.UserControls
         private string DBUseEDSMForSystemAvailability { get { return "ShoppingListUseEDSM" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
         const int PhysicalInventoryCapacity = 1000;
         const int DataInventoryCapacity = 500;
+        const int PerMaterialCap = 100;
 
         #region Init
 
@@ -163,6 +164,7 @@ namespace EDDiscovery.UserControls
                 {
                     double available;
                     wantedList.Append("Needed Mats:\n");
+                    List<string> capExceededMats = new List<string>();
                     foreach (MaterialCommodities c in shoppinglist.OrderBy(mat => mat.name))      // and add new..
                     {
                         string present = "";
@@ -179,6 +181,10 @@ namespace EDDiscovery.UserControls
                             }
                         }
                         wantedList.Append($"  {c.scratchpad} {c.name}{present}");
+                        if (c.scratchpad + mcl.Where(m => m.shortname == c.shortname).FirstOrDefault()?.count > PerMaterialCap)
+                        {
+                            capExceededMats.Add(c.name);
+                        }
                         if (!last_he.IsLanded && last_sn != null)
                         {
                             var landables = last_sn.Bodies.Where(b => b.ScanData != null && (!b.ScanData.IsEDSMBody || useEDSMForSystemAvailability) && 
@@ -205,26 +211,35 @@ namespace EDDiscovery.UserControls
                         wantedList.Append("\n");
                     }
 
-                    int currentMats = mcl.Where(m => m.category == MaterialCommodityDB.MaterialManufacturedCategory || m.category == MaterialCommodityDB.MaterialRawCategory)
-                                         .Sum(i => i.count);
-                    int currentData = mcl.Where(m => m.category == MaterialCommodityDB.MaterialEncodedCategory).Sum(i => i.count);
-                    int neededMats = shoppinglist.Where(m => m.category == MaterialCommodityDB.MaterialManufacturedCategory || m.category == MaterialCommodityDB.MaterialRawCategory)
-                                                 .Sum(i => i.scratchpad);
-                    int neededData = shoppinglist.Where(m => m.category == MaterialCommodityDB.MaterialEncodedCategory).Sum(i => i.scratchpad);
-
-                    if (currentMats + neededMats > PhysicalInventoryCapacity || currentData + neededData > DataInventoryCapacity)
+                    if(capExceededMats.Any())
                     {
-                        wantedList.Append("\nCapacity Warning:");
-                        if (currentMats + neededMats > PhysicalInventoryCapacity)
+                        wantedList.Append("\nFilling Shopping List would exceed capacity for:");
+                        foreach(string mat in capExceededMats)
                         {
-                            wantedList.Append($"\n  {PhysicalInventoryCapacity - currentMats}/{neededMats} materials space free");
+                            wantedList.Append($"\n  {mat}");
                         }
-                        if (currentData + neededData > DataInventoryCapacity)
-                        {
-                            wantedList.Append($"\n  {DataInventoryCapacity - currentData}/{neededData} data space free");
-                        }
-                        wantedList.Append("\n");
                     }
+
+                    //int currentMats = mcl.Where(m => m.category == MaterialCommodityDB.MaterialManufacturedCategory || m.category == MaterialCommodityDB.MaterialRawCategory)
+                    //                     .Sum(i => i.count);
+                    //int currentData = mcl.Where(m => m.category == MaterialCommodityDB.MaterialEncodedCategory).Sum(i => i.count);
+                    //int neededMats = shoppinglist.Where(m => m.category == MaterialCommodityDB.MaterialManufacturedCategory || m.category == MaterialCommodityDB.MaterialRawCategory)
+                    //                             .Sum(i => i.scratchpad);
+                    //int neededData = shoppinglist.Where(m => m.category == MaterialCommodityDB.MaterialEncodedCategory).Sum(i => i.scratchpad);
+
+                    //if (currentMats + neededMats > PhysicalInventoryCapacity || currentData + neededData > DataInventoryCapacity)
+                    //{
+                    //    wantedList.Append("\nCapacity Warning:");
+                    //    if (currentMats + neededMats > PhysicalInventoryCapacity)
+                    //    {
+                    //        wantedList.Append($"\n  {PhysicalInventoryCapacity - currentMats}/{neededMats} materials space free");
+                    //    }
+                    //    if (currentData + neededData > DataInventoryCapacity)
+                    //    {
+                    //        wantedList.Append($"\n  {DataInventoryCapacity - currentData}/{neededData} data space free");
+                    //    }
+                    //    wantedList.Append("\n");
+                    //}
                 }
                 else
                 {
