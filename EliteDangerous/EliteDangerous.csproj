@@ -330,9 +330,7 @@
     <Compile Include="UIEvents\UIGUIFocus.cs" />
     <Compile Include="UIEvents\UIHardpointsDeployed.cs" />
     <Compile Include="UIEvents\UIHasLatLong.cs" />
-    <Compile Include="UIEvents\UIInFighter.cs" />
-    <Compile Include="UIEvents\UIInMainShip.cs" />
-    <Compile Include="UIEvents\UIInSRV.cs" />
+    <Compile Include="UIEvents\UIShipType.cs" />
     <Compile Include="UIEvents\UIInWing.cs" />
     <Compile Include="UIEvents\UIIsInDanger.cs" />
     <Compile Include="UIEvents\UILanded.cs" />

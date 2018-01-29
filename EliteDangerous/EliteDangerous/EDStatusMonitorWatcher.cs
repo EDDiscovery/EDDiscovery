@@ -63,6 +63,50 @@ namespace EliteDangerousCore
         UIEvents.UIPosition.Position prev_pos = new UIEvents.UIPosition.Position();     // default is MinValue
         double prev_heading = double.MaxValue;    // this forces a pos report
 
+        private enum StatusFlagsShip                        // PURPOSELY PRIVATE - don't want users to get into low level detail of BITS
+        {
+            Docked = 0, // (on a landing pad)
+            Landed = 1, // (on planet surface)
+            LandingGear = 2,
+            Supercruise = 4,
+            FlightAssist = 5,
+            HardpointsDeployed = 6,
+            InWing = 7,
+            CargoScoopDeployed = 9,
+            SilentRunning = 10,
+            ScoopingFuel = 11,
+            FsdMassLocked = 16,
+            FsdCharging = 17,
+            FsdCooldown = 18,
+            OverHeating = 20,
+            BeingInterdicted = 23,
+        }
+
+        private enum StatusFlagsSRV
+        {
+            SrvHandbrake = 12,
+            SrvTurret = 13,
+            SrvUnderShip = 14,
+            SrvDriveAssist = 15,
+        }
+
+        private enum StatusFlagsAll
+        {
+            ShieldsUp = 3,
+            Lights = 8,
+            LowFuel = 19,
+            HasLatLong = 21,
+            IsInDanger = 22,
+        }
+
+        private enum StatusFlagsShipType
+        {
+            InMainShip = 24,        // -> Degenerates to UIShipType
+            InFighter = 25,
+            InSRV = 26,
+            ShipMask = (1<< InMainShip) | (1<< InFighter) | (1<< InSRV),
+        }
+
         private void ScanThreadProc()
         {
             string prev_text = null;
@@ -118,23 +162,29 @@ namespace EliteDangerousCore
                         if (prev_flags == null || curflags != prev_flags.Value)
                         {
                             if (prev_flags == null)
-                                prev_flags = ~curflags;     // invert all to report.
+                                prev_flags = (long)StatusFlagsShipType.ShipMask;      // set an impossible ship type to start the ball rolling
 
-                            long delta = curflags ^ prev_flags.Value;
+                            long shiptype = curflags & (long)StatusFlagsShipType.ShipMask;
+                            long prevshiptype = prev_flags.Value & (long)StatusFlagsShipType.ShipMask;
 
-                            //System.Diagnostics.Debug.WriteLine("Flags changed to {0:x} from {1:x} delta {2:x}", curflags, prev_flags , delta);
-
-                            foreach (string n in Enum.GetNames(typeof(StatusFlags)))
+                            if (shiptype != prevshiptype)
                             {
-                                int v = (int)Enum.Parse(typeof(StatusFlags), n);
+                                UIEvents.UIShipType.Shiptype t = shiptype == 1L<<(int)StatusFlagsShipType.InMainShip ? UIEvents.UIShipType.Shiptype.MainShip :
+                                                                 shiptype == 1L<<(int)StatusFlagsShipType.InSRV ? UIEvents.UIShipType.Shiptype.SRV :
+                                                                 shiptype == 1L<<(int)StatusFlagsShipType.InFighter ? UIEvents.UIShipType.Shiptype.Fighter :
+                                                                 UIEvents.UIShipType.Shiptype.None;
 
-                                if (((delta >> v) & 1) != 0)
-                                {
-                                    bool flag = ((curflags >> v) & 1) != 0;
-                                    //System.Diagnostics.Debug.WriteLine("..Flag " + n + " changed to " + flag);
-                                    events.Add(UIEvent.CreateFlagEvent(n, flag, EventTimeUTC, curflags));
-                                }
+                                events.Add(new UIEvents.UIShipType(t, EventTimeUTC));        // CHANGE of ship
+                                prev_flags = ~curflags;       // force re-reporting
                             }
+
+                            if (shiptype == (long)StatusFlagsShipType.InMainShip)
+                                events.AddRange(ReportFlagState(typeof(StatusFlagsShip), curflags, prev_flags.Value, EventTimeUTC));
+                            else if (shiptype == (long)StatusFlagsShipType.InSRV)
+                                events.AddRange(ReportFlagState(typeof(StatusFlagsSRV), curflags, prev_flags.Value, EventTimeUTC));
+
+                            if ( shiptype != 0 )    // not none
+                                events.AddRange(ReportFlagState(typeof(StatusFlagsAll), curflags, prev_flags.Value, EventTimeUTC));
 
                             prev_flags = curflags;
                         }
@@ -142,7 +192,7 @@ namespace EliteDangerousCore
                         int curguifocus = (int)jo["GuiFocus"].Int();
                         if (curguifocus != prev_guifocus)
                         {
-                            events.Add(new UIEvents.UIGUIFocus(curguifocus, EventTimeUTC, curflags));
+                            events.Add(new UIEvents.UIGUIFocus(curguifocus, EventTimeUTC));
                             prev_guifocus = curguifocus;
                         }
 
@@ -156,7 +206,7 @@ namespace EliteDangerousCore
                             if (sys != prev_pips.Systems || wep != prev_pips.Weapons || eng != prev_pips.Engines)
                             {
                                 UIEvents.UIPips.Pips newpips = new UIEvents.UIPips.Pips() { Systems = sys, Engines = eng, Weapons = wep };
-                                events.Add(new UIEvents.UIPips(newpips, EventTimeUTC, curflags));
+                                events.Add(new UIEvents.UIPips(newpips, EventTimeUTC));
                                 prev_pips = newpips;
                             }
                         }
@@ -165,7 +215,7 @@ namespace EliteDangerousCore
 
                         if (curfiregroup != null && curfiregroup != prev_firegroup)
                         {
-                            events.Add(new UIEvents.UIFireGroup(curfiregroup.Value + 1, EventTimeUTC , curflags));
+                            events.Add(new UIEvents.UIFireGroup(curfiregroup.Value + 1, EventTimeUTC));
                             prev_firegroup = curfiregroup.Value;
                         }
 
@@ -177,7 +227,7 @@ namespace EliteDangerousCore
                         if (jlat != prev_pos.Latitude || jlon != prev_pos.Longitude || jalt != prev_pos.Altitude || jheading != prev_heading)
                         {
                             UIEvents.UIPosition.Position newpos = new UIEvents.UIPosition.Position() { Latitude = jlat, Longitude = jlon, Altitude = jalt };
-                            events.Add(new UIEvents.UIPosition(newpos, jheading, EventTimeUTC, curflags));
+                            events.Add(new UIEvents.UIPosition(newpos, jheading, EventTimeUTC));
                             prev_pos = newpos;
                             prev_heading = jheading;
                         }
@@ -191,6 +241,28 @@ namespace EliteDangerousCore
                     nextpolltime = 10000;           // if its not there, we are probably watching a non journal location.. so just do it occasionally
                 }
             }
+        }
+
+        List<UIEvent> ReportFlagState(Type enumtype, long curflags, long prev_flags, DateTime EventTimeUTC)
+        {
+            List<UIEvent> events = new List<UIEvent>();
+            long delta = curflags ^ prev_flags;
+
+            //System.Diagnostics.Debug.WriteLine("Flags changed to {0:x} from {1:x} delta {2:x}", curflags, prev_flags , delta);
+
+            foreach (string n in Enum.GetNames(enumtype))
+            {
+                int v = (int)Enum.Parse(enumtype, n);
+
+                if (((delta >> v) & 1) != 0)
+                {
+                    bool flag = ((curflags >> v) & 1) != 0;
+                    //System.Diagnostics.Debug.WriteLine("..Flag " + n + " changed to " + flag);
+                    events.Add(UIEvent.CreateFlagEvent(n, flag, EventTimeUTC));
+                }
+            }
+
+            return events;
         }
     }
 }
