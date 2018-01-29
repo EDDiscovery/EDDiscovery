@@ -87,7 +87,7 @@ namespace EDDiscovery.UserControls
             if (!Object.ReferenceEquals(he, last_he) )       // if last was null, or he has changed, we have a possible change..
             {
                 FillComboBoxes(hl);
-                HistoryEntry new_last_eddmd = hl.GetLastHistoryEntry(x => x.EntryType == JournalTypeEnum.EDDCommodityPrices, he);       // find, from he, the last market data commodity price
+                HistoryEntry new_last_eddmd = hl.GetLastHistoryEntry(x => x.EntryType == JournalTypeEnum.EDDCommodityPrices || x.EntryType == JournalTypeEnum.Market, he);       // find, from he, the last market data commodity price
 
                 bool eddmdchanged = !Object.ReferenceEquals(new_last_eddmd, last_eddmd);
                 bool cargochanged = !Object.ReferenceEquals(last_he?.MaterialCommodity, he?.MaterialCommodity); // is cargo different between he and last_he
@@ -175,7 +175,7 @@ namespace EDDiscovery.UserControls
                     if (!buyonly || (c.buyPrice > 0 || c.ComparisionBuy))
                     {
                         object[] rowobj = { c.type ,
-                                            c.name ,
+                                            c.locName.Alt(c.name.SplitCapsWordFull()) ,
                                             c.sellPrice > 0 ? c.sellPrice.ToString() : "" ,
                                             c.buyPrice > 0 ? c.buyPrice.ToString() : "" ,
                                             c.CargoCarried,
@@ -204,7 +204,7 @@ namespace EDDiscovery.UserControls
                     if (m.count > 0)
                     {
                         object[] rowobj = {     m.type,
-                                                m.name ,
+                                                m.name,
                                                 "",
                                                 "",
                                                 m.count,

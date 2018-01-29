@@ -51,6 +51,7 @@ namespace EliteDangerousCore
                 id = jo["id"].Int();
                 name = jo["name"].Str();
                 locName = jo["locName"].Str();
+                locName = locName.Alt(name);
 
                 buyPrice = jo["buyPrice"].Int();
                 sellPrice = jo["sellPrice"].Int();
@@ -83,7 +84,9 @@ namespace EliteDangerousCore
             {
                 id = jo["id"].Int();
                 name = jo["Name"].Str();
-                locName = name;
+                MaterialCommodityDB mc = MaterialCommodityDB.GetCachedMaterial(name);
+                locName = mc != null ? mc.name : name.SplitCapsWordFull();
+                type = mc != null ? mc.type : "Commodity";
 
                 buyPrice = jo["BuyPrice"].Int();
                 sellPrice = jo["SellPrice"].Int();
@@ -92,7 +95,6 @@ namespace EliteDangerousCore
                 stockBracket = jo["StockBracket"].Int();
                 stock = jo["Stock"].Int();
                 demand = jo["Demand"].Int();
-                type = "CAT?";
 
                 List<string> StatusFlags = new List<string>();
 
