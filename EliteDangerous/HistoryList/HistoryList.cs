@@ -162,11 +162,11 @@ namespace EliteDangerousCore
         }
 
 
-        public List<HistoryEntry> FilterByEDDCommodityPricesBackwards
+        public List<HistoryEntry> FilterByCommodityPricesBackwards
         {
             get
             {
-                return (from s in historylist where s.EntryType == JournalTypeEnum.EDDCommodityPrices orderby s.EventTimeUTC descending select s).ToList();
+                return (from s in historylist where (s.EntryType == JournalTypeEnum.EDDCommodityPrices || s.EntryType == JournalTypeEnum.Market) orderby s.EventTimeUTC descending select s).ToList();
             }
         }
 
