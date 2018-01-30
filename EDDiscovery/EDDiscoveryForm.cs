@@ -1568,7 +1568,7 @@ namespace EDDiscovery
             {
                 if (EDDOptions.Instance.SendEDSMJournals)
                 {
-                    EDSMJournalSync.SendEDSMEvents(l => Trace.WriteLine(l), history, verbose: false, manual: true);
+                    EDSMJournalSync.SendEDSMEvents(l => LogLine(l), history, verbose: false, manual: true);
                 }
                 else
                 {
