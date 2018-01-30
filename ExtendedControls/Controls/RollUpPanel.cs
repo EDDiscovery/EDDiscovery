@@ -77,6 +77,7 @@ namespace ExtendedControls
             hiddenmarker.ImageSelected = DrawnPanel.ImageType.Bars;
             hiddenmarker.Size = new Size(100, 3);
             hiddenmarker.Visible = false;
+            hiddenmarker.Padding = new Padding(0);
             hiddenmarker.Click += Hiddenmarker_Click;
 
             Controls.Add(pinbutton);
