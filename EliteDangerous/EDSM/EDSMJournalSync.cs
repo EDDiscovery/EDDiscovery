@@ -342,8 +342,8 @@ namespace EliteDangerousCore.EDSM
                         }
                     }
 
-                    // Wait at least 1 second between messages
-                    //exitevent.WaitOne(1000);
+                    // Wait at least 50ms between messages
+                    exitevent.WaitOne(50);
                     if (Exit)
                     {
                         return;
