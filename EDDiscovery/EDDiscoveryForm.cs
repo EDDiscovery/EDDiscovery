@@ -1566,7 +1566,14 @@ namespace EDDiscovery
 
             try
             {
-                EdsmSync.StartSync(edsm, history, EDCommander.Current.SyncToEdsm, EDCommander.Current.SyncFromEdsm, EDDConfig.Instance.DefaultMapColour);
+                if (EDDOptions.Instance.SendEDSMJournals)
+                {
+                    EDSMJournalSync.SendEDSMEvents(l => Trace.WriteLine(l), history, verbose: false, manual: true);
+                }
+                else
+                {
+                    EdsmSync.StartSync(edsm, history, EDCommander.Current.SyncToEdsm, EDCommander.Current.SyncFromEdsm, EDDConfig.Instance.DefaultMapColour);
+                }
             }
             catch (Exception ex)
             {
