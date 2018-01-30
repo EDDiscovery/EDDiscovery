@@ -21,6 +21,7 @@ using System.Collections.Concurrent;
 using System.Threading;
 using EliteDangerousCore;
 using EliteDangerousCore.JournalEvents;
+using EliteDangerousCore.DB;
 
 namespace EliteDangerousCore.EDSM
 {
@@ -425,34 +426,42 @@ namespace EliteDangerousCore.EDSM
             }
             else
             {
-                for (int i = 0; i < hl.Count && i < results.Count; i++)
+                using (var cn = new SQLiteConnectionUser(utc: true))
                 {
-                    HistoryEntry he = hl[i];
-                    JObject result = results[i];
-                    int msgnr = result["msgnum"].Int();
-                    int systemId = result["systemId"].Int();
-
-                    if ((msgnr >= 100 && msgnr < 200) || msgnr == 500)
+                    using (var txn = cn.BeginTransaction())
                     {
-                        if (he.EntryType == JournalTypeEnum.FSDJump || he.EntryType == JournalTypeEnum.Location)
+                        for (int i = 0; i < hl.Count && i < results.Count; i++)
                         {
-                            if (systemId != 0)
+                            HistoryEntry he = hl[i];
+                            JObject result = results[i];
+                            int msgnr = result["msgnum"].Int();
+                            int systemId = result["systemId"].Int();
+
+                            if ((msgnr >= 100 && msgnr < 200) || msgnr == 500)
                             {
-                                he.System.id_edsm = systemId;
-                                JournalEntry.UpdateEDSMIDPosJump(he.Journalid, he.System, false, 0);
+                                if (he.EntryType == JournalTypeEnum.FSDJump || he.EntryType == JournalTypeEnum.Location)
+                                {
+                                    if (systemId != 0)
+                                    {
+                                        he.System.id_edsm = systemId;
+                                        JournalEntry.UpdateEDSMIDPosJump(he.Journalid, he.System, false, 0, cn, txn);
+                                    }
+                                }
+
+                                he.SetEdsmSync(cn, txn);
+
+                                if (msgnr == 500)
+                                {
+                                    System.Diagnostics.Trace.WriteLine($"Warning submitting event {he.Journalid} \"{he.EventSummary}\": {msgnr} {result["msg"].Str()}");
+                                }
                             }
-                        }
+                            else
+                            {
+                                System.Diagnostics.Trace.WriteLine($"Error submitting event {he.Journalid} \"{he.EventSummary}\": {msgnr} {result["msg"].Str()}");
+                            }
 
-                        he.SetEdsmSync();
-
-                        if (msgnr == 500)
-                        {
-                            System.Diagnostics.Trace.WriteLine($"Warning submitting event {he.Journalid} \"{he.EventSummary}\": {msgnr} {result["msg"].Str()}");
+                            txn.Commit();
                         }
-                    }
-                    else
-                    {
-                        System.Diagnostics.Trace.WriteLine($"Error submitting event {he.Journalid} \"{he.EventSummary}\": {msgnr} {result["msg"].Str()}");
                     }
                 }
 

@@ -20,6 +20,7 @@ using System.Linq;
 using EliteDangerousCore.DB;
 using EliteDangerousCore.JournalEvents;
 using EliteDangerousCore.EDSM;
+using System.Data.Common;
 
 namespace EliteDangerousCore
 {
@@ -500,29 +501,29 @@ namespace EliteDangerousCore
             }
         }
 
-        public void SetEdsmSync()
+        public void SetEdsmSync(SQLiteConnectionUser cn = null, DbTransaction txn = null)
         {
             EdsmSync = true;
             if (Journalid != 0)
             {
-                JournalEntry.UpdateSyncFlagBit(Journalid, SyncFlags.EDSM, true);
+                JournalEntry.UpdateSyncFlagBit(Journalid, SyncFlags.EDSM, true, cn, txn);
             }
         }
-        public void SetEddnSync()
+        public void SetEddnSync(SQLiteConnectionUser cn = null, DbTransaction txn = null)
         {
             EDDNSync = true;
             if (Journalid != 0)
             {
-                JournalEntry.UpdateSyncFlagBit(Journalid, SyncFlags.EDDN, true);
+                JournalEntry.UpdateSyncFlagBit(Journalid, SyncFlags.EDDN, true, cn, txn);
             }
         }
 
-        public void SetEGOSync()
+        public void SetEGOSync(SQLiteConnectionUser cn = null, DbTransaction txn = null)
         {
             EGOSync = true;
             if (Journalid != 0)
             {
-                JournalEntry.UpdateSyncFlagBit(Journalid, SyncFlags.EGO, true);
+                JournalEntry.UpdateSyncFlagBit(Journalid, SyncFlags.EGO, true, cn, txn);
             }
         }
 

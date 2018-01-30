@@ -659,10 +659,18 @@ namespace EliteDangerousCore
             }
         }
 
-        public static void UpdateSyncFlagBit(long journalid, SyncFlags bit, bool value)
+        public static void UpdateSyncFlagBit(long journalid, SyncFlags bit, bool value, SQLiteConnectionUser cn = null, DbTransaction txn = null)
         {
-            using (SQLiteConnectionUser cn = new SQLiteConnectionUser(utc: true))
+            bool closeConn = false;
+
+            try
             {
+                if (cn == null)
+                {
+                    closeConn = true;
+                    cn = new SQLiteConnectionUser(utc: true);
+                }
+
                 JournalEntry je = Get(journalid, cn);
 
                 if (je != null)
@@ -672,13 +680,20 @@ namespace EliteDangerousCore
                     else
                         je.Synced &= ~(int)bit;
 
-                    using (DbCommand cmd = cn.CreateCommand("Update JournalEntries set Synced = @sync where ID=@journalid"))
+                    using (DbCommand cmd = cn.CreateCommand("Update JournalEntries set Synced = @sync where ID=@journalid", txn))
                     {
                         cmd.AddParameterWithValue("@journalid", journalid);
                         cmd.AddParameterWithValue("@sync", je.Synced);
                         System.Diagnostics.Trace.WriteLine(string.Format("Update sync flag ID {0} with {1}", journalid, je.Synced));
                         SQLiteDBClass.SQLNonQueryText(cn, cmd);
                     }
+                }
+            }
+            finally
+            {
+                if (closeConn && cn != null)
+                {
+                    cn.Dispose();
                 }
             }
         }
