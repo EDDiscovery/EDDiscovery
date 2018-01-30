@@ -274,7 +274,10 @@ namespace EliteDangerousCore.EDSM
 
                         if (holdEvents.Contains(first.EntryType) || (first.EntryType == JournalTypeEnum.Location && first.IsDocked))
                         {
-                            historyevent.WaitOne(20000); // Wait up to 20 seconds for another entry to come through
+                            if (historylist.IsEmpty)
+                            {
+                                historyevent.WaitOne(20000); // Wait up to 20 seconds for another entry to come through
+                            }
                         }
 
                         while (hl.Count < maxEventsPerMessage && historylist.TryPeek(out hqe)) // Leave event in queue if commander changes
@@ -298,7 +301,7 @@ namespace EliteDangerousCore.EDSM
                             hqe.Logger?.Invoke(logline);
                             System.Diagnostics.Trace.WriteLine(logline);
 
-                            if (holdEvents.Contains(he.EntryType) || (he.EntryType == JournalTypeEnum.Location && he.IsDocked))
+                            if ((holdEvents.Contains(he.EntryType) || (he.EntryType == JournalTypeEnum.Location && he.IsDocked)) && historylist.IsEmpty)
                             {
                                 historyevent.WaitOne(20000); // Wait up to 20 seconds for another entry to come through
                             }
