@@ -112,6 +112,7 @@ namespace EliteDangerousCore.EDSM
             "SendText",
             "FuelScoop",
             "Friends",
+            "UnderAttack",
         };
         private static HashSet<JournalTypeEnum> holdEvents = new HashSet<JournalTypeEnum>
         {
