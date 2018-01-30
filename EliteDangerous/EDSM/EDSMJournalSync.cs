@@ -406,21 +406,32 @@ namespace EliteDangerousCore.EDSM
                 entries.Add(json);
             }
 
-            List<int> msgnrs = edsm.SendJournalEvents(entries, out errmsg);
+            List<JObject> results = edsm.SendJournalEvents(entries, out errmsg);
 
-            if (msgnrs == null)
+            if (results == null)
             {
                 return false;
             }
             else
             {
-                for (int i = 0; i < hl.Count && i < msgnrs.Count; i++)
+                for (int i = 0; i < hl.Count && i < results.Count; i++)
                 {
                     HistoryEntry he = hl[i];
-                    int msgnr = msgnrs[i];
+                    JObject result = results[i];
+                    int msgnr = result["msgnum"].Int();
+                    int systemId = result["systemId"].Int();
 
                     if (msgnr >= 100 && msgnr < 200)
                     {
+                        if (he.EntryType == JournalTypeEnum.FSDJump || he.EntryType == JournalTypeEnum.Location)
+                        {
+                            if (systemId != 0)
+                            {
+                                he.System.id_edsm = systemId;
+                                JournalEntry.UpdateEDSMIDPosJump(he.Journalid, he.System, false, 0);
+                            }
+                        }
+
                         he.SetEdsmSync();
                     }
                 }
