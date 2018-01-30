@@ -43,8 +43,6 @@ namespace EliteDangerousCore.JournalEvents
         public long BuyPrice { get; set; }
         public long TotalCost { get; set; }
 
-        public override System.Drawing.Bitmap Icon { get { return EliteDangerous.Properties.Resources.marketbuy; } }
-
         public void MaterialList(MaterialCommoditiesList mc, DB.SQLiteConnectionUser conn)
         {
             mc.Change(MaterialCommodities.CommodityCategory, Type, Count, BuyPrice, conn);
@@ -58,7 +56,7 @@ namespace EliteDangerousCore.JournalEvents
         public override void FillInformation(out string summary, out string info, out string detailed) //V
         {
             summary = EventTypeStr.SplitCapsWord();
-            info = BaseUtils.FieldBuilder.Build("", FriendlyType, "", Count, "< at ; credits", BuyPrice, "Total:", TotalCost);
+            info = BaseUtils.FieldBuilder.Build("", FriendlyType, "", Count, "< at ; cr;N0", BuyPrice, "Total:", TotalCost);
             detailed = "";
         }
     }

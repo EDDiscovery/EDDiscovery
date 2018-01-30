@@ -20,20 +20,31 @@ using System.Linq;
 namespace EliteDangerousCore.JournalEvents
 {
     //When Written: when requesting an engineer upgrade
-    //Parameters:
-    //•	Engineer: name of engineer
-    //•	Blueprint: name of blueprint
-    //•	Level: crafting level
-    //•	Ingredients: JSON object with names and quantities of materials required
-    [JournalEntryType(JournalTypeEnum.EngineerCraft)]
-    public class JournalEngineerCraft : JournalEntry, IMaterialCommodityJournalEntry
-    {
-        public JournalEngineerCraft(JObject evt ) : base(evt, JournalTypeEnum.EngineerCraft)
-        {
-            Engineer = evt["Engineer"].Str();
-            Blueprint = evt["Blueprint"].Str().SplitCapsWordFull();
-            Level = evt["Level"].Int();
 
+    [JournalEntryType(JournalTypeEnum.EngineerCraft)]
+    public class JournalEngineerCraft : JournalEngineerCraftBase
+    {
+        public JournalEngineerCraft(JObject evt) : base(evt, JournalTypeEnum.EngineerCraft)
+        {
+
+        }
+    }
+
+    // Base class used for craft and legacy
+
+    public class JournalEngineerCraftBase : JournalEntry, IMaterialCommodityJournalEntry
+    {
+        public JournalEngineerCraftBase(JObject evt, JournalTypeEnum en) : base(evt, en)
+        {
+            Slot = JournalFieldNaming.GetBetterSlotName(evt["Slot"].Str());
+            SlotFD = JournalFieldNaming.NormaliseFDSlotName(evt["Slot"].Str());
+
+            Module = JournalFieldNaming.GetBetterItemNameEvents(evt["Module"].Str());
+            ModuleFD = JournalFieldNaming.NormaliseFDItemName(evt["Module"].Str());
+
+            Engineering = new EngineeringData(evt);
+            
+            IsPreview = evt["IsPreview"].BoolNull();
             JToken mats = (JToken)evt["Ingredients"];
 
             if (mats != null)
@@ -57,17 +68,22 @@ namespace EliteDangerousCore.JournalEvents
                         Ingredients[JournalFieldNaming.FDNameTranslation((string)jo["Name"])] = jo["Count"].Int();
                     }
                 }
-
             }
 
         }
 
-        public string Engineer { get; set; }
-        public string Blueprint { get; set; }
-        public int Level { get; set; }
-        public Dictionary<string, int> Ingredients { get; set; }
+        public string Slot { get; set; }
+        public string SlotFD { get; set; }
+        public string Module { get; set; }
+        public string ModuleFD { get; set; }
 
-        public override System.Drawing.Bitmap Icon { get { return EliteDangerous.Properties.Resources.engineercraft; } }
+        public EngineeringData Engineering { get; set; }
+
+        public bool? IsPreview { get; set; }            // Only for legacy convert
+
+        public Dictionary<string, int> Ingredients { get; set; }        // not for legacy convert
+
+        public EngineeringModifiers[] Modifiers;
 
         public void MaterialList(MaterialCommoditiesList mc, DB.SQLiteConnectionUser conn)
         {
@@ -81,14 +97,49 @@ namespace EliteDangerousCore.JournalEvents
         public override void FillInformation(out string summary, out string info, out string detailed) //V
         {
             summary = EventTypeStr.SplitCapsWord();
-            info = BaseUtils.FieldBuilder.Build("", Engineer, "Blueprint:", Blueprint, "Level:", Level);
+            info = BaseUtils.FieldBuilder.Build("In ", Slot , "" , Module, "by ", Engineering.Engineer, "Blueprint ", Engineering.FriendlyBlueprintName, "Level ", Engineering.Level);
 
             detailed = "";
             if (Ingredients != null)
             {
                 foreach (KeyValuePair<string, int> k in Ingredients)        // may be commodities or materials
-                    detailed += BaseUtils.FieldBuilder.Build("Name:", JournalFieldNaming.RMat(k.Key), "", k.Value) + "; ";
+                    detailed += BaseUtils.FieldBuilder.Build("", JournalFieldNaming.RMat(k.Key), "", k.Value) + "; ";
             }
+        }
+
+        // Engineering data - used here and for Loadout.
+
+        public class EngineeringData
+        {
+            public string Engineer { get; set; }
+            public string BlueprintName { get; set; }
+            public string FriendlyBlueprintName { get; set; }
+            public long EngineerID { get; set; }
+            public long BlueprintID { get; set; }
+            public int Level { get; set; }
+            public double Quality { get; set; }
+            public EngineeringModifiers[] Modifiers { get; set; }       // may be null
+
+            public EngineeringData(JObject evt)
+            {
+                Engineer = evt["Engineer"].Str();
+                EngineerID = evt["EngineerID"].Long();
+                BlueprintName = evt["BlueprintName"].Str();
+                FriendlyBlueprintName = BlueprintName.SplitCapsWordFull();
+                BlueprintID = evt["BlueprintID"].Long();
+                Level = evt["Level"].Int();
+                Quality = evt["Quality"].Double(0);
+
+                Modifiers = evt["Modifiers"]?.ToObject<EngineeringModifiers[]>();
+            }
+        }
+
+        public class EngineeringModifiers
+        {
+            public string Label { get; set; }
+            public double Value { get; set; }
+            public double OriginalValue { get; set; }
+            public bool LessIsGood { get; set; }
         }
     }
 }

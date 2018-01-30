@@ -114,6 +114,7 @@ namespace EliteDangerousCore
                 { "viper_mkiv",                 "Viper Mk. IV" },
                 { "vulture",                    "Vulture" },
                 { "testbuggy",                  "SRV" },
+                { "typex",                      "Alliance Chieftain"},
         };
 
         static public string GetBetterShipName(string inname)

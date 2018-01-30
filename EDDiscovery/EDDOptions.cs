@@ -10,6 +10,8 @@ namespace EDDiscovery
 {
     public class EDDOptions : EliteDangerousCore.IEliteOptions
     {
+        public static bool Instanced { get { return options != null; } }
+
         public static EDDOptions Instance
         {
             get
@@ -26,6 +28,7 @@ namespace EDDiscovery
         public string AppDataDirectory { get; private set; }
         public string UserDatabasePath { get; private set; }
         public string SystemDatabasePath { get; private set; }
+        public string IconsPath { get; private set; }
         public bool NoWindowReposition { get;  set; }
         public bool ActionButton { get; private set; }
         public bool NoLoad { get; private set; }
@@ -195,6 +198,11 @@ namespace EDDiscovery
             else if (optname == "-systemsdbpath")
             {
                 SystemDatabasePath = optval;
+                return true;
+            }
+            else if (optname == "-iconspath")
+            {
+                IconsPath = optval;
                 return true;
             }
             else if (optname.StartsWith("-"))

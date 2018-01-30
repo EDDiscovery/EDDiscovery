@@ -44,8 +44,9 @@ namespace EliteDangerousCore.JournalEvents
             SellOldShip = JournalFieldNaming.GetBetterShipName(evt["SellOldShip"].Str());
             SellShipId = evt["SellShipID"].IntNull();
             SellPrice = evt["SellPrice"].LongNull();
-
+            MarketID = evt["MarketID"].LongNull();
         }
+
         public string ShipType { get; set; }
         public long ShipPrice { get; set; }
         public string StoreOldShip { get; set; }
@@ -53,8 +54,7 @@ namespace EliteDangerousCore.JournalEvents
         public string SellOldShip { get; set; }
         public int? SellShipId { get; set; }
         public long? SellPrice { get; set; }
-
-        public override System.Drawing.Bitmap Icon { get { return EliteDangerous.Properties.Resources.shipyardnew; } }
+        public long? MarketID { get; set; }
 
         public void Ledger(Ledger mcl, DB.SQLiteConnectionUser conn)
         {
@@ -64,11 +64,11 @@ namespace EliteDangerousCore.JournalEvents
         public override void FillInformation(out string summary, out string info, out string detailed) //V
         {
             summary = EventTypeStr.SplitCapsWord();
-            info = BaseUtils.FieldBuilder.Build("", ShipType, "Amount:; credits", ShipPrice);
+            info = BaseUtils.FieldBuilder.Build("", ShipType, "Amount:; cr;N0", ShipPrice);
             if (StoreOldShip.Length > 0)
                 info += ", " + BaseUtils.FieldBuilder.Build("Stored:", StoreOldShip);
             if (SellOldShip.Length > 0)
-                info += ", " + BaseUtils.FieldBuilder.Build("Sold:", StoreOldShip, "Amount:; credits", SellPrice);
+                info += ", " + BaseUtils.FieldBuilder.Build("Sold:", StoreOldShip, "Amount:; cr;N0", SellPrice);
             detailed = "";
         }
 

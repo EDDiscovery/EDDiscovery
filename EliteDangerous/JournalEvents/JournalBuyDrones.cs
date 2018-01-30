@@ -39,8 +39,6 @@ namespace EliteDangerousCore.JournalEvents
         public long BuyPrice { get; set; }
         public long TotalCost { get; set; }
 
-        public override System.Drawing.Bitmap Icon { get { return EliteDangerous.Properties.Resources.buydrones; } }
-
         public void Ledger(Ledger mcl, DB.SQLiteConnectionUser conn)
         {
             mcl.AddEvent(Id, EventTimeUTC, EventTypeID, Type + " " + Count + " drones", -TotalCost);
@@ -49,7 +47,7 @@ namespace EliteDangerousCore.JournalEvents
         public override void FillInformation(out string summary, out string info, out string detailed) //V
         {
             summary = EventTypeStr.SplitCapsWord();
-            info = BaseUtils.FieldBuilder.Build("Type:", Type, "Count:", Count, "Total Cost:; credits", TotalCost, "each:; credits", BuyPrice);
+            info = BaseUtils.FieldBuilder.Build("Type:", Type, "Count:", Count, "Total Cost:; cr;N0", TotalCost, "each:; cr;N0", BuyPrice);
             detailed = "";
         }
     }

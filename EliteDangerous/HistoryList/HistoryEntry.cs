@@ -188,6 +188,7 @@ namespace EliteDangerousCore
                         allegiance = jl.EDAllegiance,
                         UpdateDate = jl.EventTimeUTC,
                         status = SystemStatusEnum.EDDiscovery,
+                        SystemAddress = jl.SystemAddress,
                     };
 
                     // If it was a new system, pass the coords back to the StartJump
@@ -237,7 +238,7 @@ namespace EliteDangerousCore
                 {
                     if (jfsd.JumpDist <= 0 && isys.HasCoordinate && newsys.HasCoordinate) // if no JDist, its a really old entry, and if previous has a co-ord
                     {
-                        jfsd.JumpDist = SystemClassDB.Distance(isys, newsys); // fill it out here
+                        jfsd.JumpDist = isys.Distance(newsys); // fill it out here
 
                         if (jfsd.JumpDist > 0)
                         {
@@ -454,16 +455,16 @@ namespace EliteDangerousCore
 
         #endregion
 
-        public System.Drawing.Bitmap GetIcon
+        public System.Drawing.Image GetIcon
         {
             get
             {
                 if (journalEntry != null)
                     return journalEntry.Icon;
                 else if (EntryType == JournalTypeEnum.FSDJump)
-                    return EliteDangerous.Properties.Resources.hyperspace;
+                    return JournalEntry.JournalTypeIcons[JournalTypeEnum.FSDJump];
                 else
-                    return EliteDangerous.Properties.Resources.genericevent;
+                    return JournalEntry.JournalTypeIcons[JournalTypeEnum.Unknown];
             }
         }
 

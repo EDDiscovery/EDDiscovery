@@ -90,12 +90,10 @@ namespace EDDiscovery.Forms
                 if (this.WindowState == FormWindowState.Maximized && pnlMaxRestore.ImageSelected != DrawnPanel.ImageType.Restore)
                 {
                     pnlMaxRestore.ImageSelected = DrawnPanel.ImageType.Restore;
-                    pnlMaxRestore.Invalidate();     // TODO: the control should really do this automatically
                 }
                 else if (this.WindowState == FormWindowState.Normal && pnlMaxRestore.ImageSelected != DrawnPanel.ImageType.Maximize)
                 {
                     pnlMaxRestore.ImageSelected = DrawnPanel.ImageType.Maximize;
-                    pnlMaxRestore.Invalidate();     // TODO: the control should really do this automatically
                 }   
             }
 

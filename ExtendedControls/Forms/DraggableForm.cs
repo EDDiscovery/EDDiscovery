@@ -38,12 +38,12 @@ namespace ExtendedControls
 
         /// <summary>
         /// The number of pixels from the top of the <see cref="SmartSysMenuForm"/> that will be interpreted as caption
-        /// area when the <see cref="SmartSysMenuForm"/> is unframed.
+        /// area when the <see cref="SmartSysMenuForm"/> is unframed. The default value is <c>28</c>.
         /// </summary>
         /// <seealso cref="OnCaptionMouseDown"/>
         /// <seealso cref="OnCaptionMouseUp"/>
-        [DefaultValue(20), Description("The number of pixels from the top of the Form that will be interpreted as the Form's caption area.")]
-        public uint CaptionHeight { get; set; } = 20;
+        [DefaultValue(28), Description("The number of pixels from the top of the Form that will be interpreted as the Form's caption area.")]
+        public uint CaptionHeight { get; set; } = 28;
 
 
         protected override CreateParams CreateParams

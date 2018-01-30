@@ -43,7 +43,6 @@ namespace EDDiscovery.Forms
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(NewReleaseForm));
             this.textBoxReleaseName = new ExtendedControls.TextBoxBorder();
             this.labelName = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
@@ -275,8 +274,10 @@ namespace EDDiscovery.Forms
             this.pnlMaxRestore.ImageSelected = ExtendedControls.DrawnPanel.ImageType.Maximize;
             this.pnlMaxRestore.Location = new System.Drawing.Point(359, 0);
             this.pnlMaxRestore.Name = "pnlMaxRestore";
+            this.pnlMaxRestore.Selectable = false;
             this.pnlMaxRestore.Size = new System.Drawing.Size(24, 24);
             this.pnlMaxRestore.TabIndex = 2;
+            this.pnlMaxRestore.TabStop = false;
             this.pnlMaxRestore.MouseClick += new System.Windows.Forms.MouseEventHandler(this.pnlMaxRestore_MouseClick);
             // 
             // pnlClose
@@ -284,8 +285,10 @@ namespace EDDiscovery.Forms
             this.pnlClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.pnlClose.Location = new System.Drawing.Point(389, 0);
             this.pnlClose.Name = "pnlClose";
+            this.pnlClose.Selectable = false;
             this.pnlClose.Size = new System.Drawing.Size(24, 24);
             this.pnlClose.TabIndex = 1;
+            this.pnlClose.TabStop = false;
             this.pnlClose.MouseClick += new System.Windows.Forms.MouseEventHandler(this.pnlClose_MouseClick);
             // 
             // lblCaption
@@ -323,7 +326,7 @@ namespace EDDiscovery.Forms
             this.ClientSize = new System.Drawing.Size(419, 246);
             this.Controls.Add(this.pnlBack);
             this.DoubleBuffered = true;
-            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.Icon = global::EDDiscovery.Properties.Resources.edlogo_3mo_icon;
             this.MinimizeBox = false;
             this.MinimumSize = new System.Drawing.Size(435, 285);
             this.Name = "NewReleaseForm";

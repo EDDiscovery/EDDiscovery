@@ -38,8 +38,6 @@ namespace EliteDangerousCore.JournalEvents
         public long Cost { get; set; }
         public bool Bankrupt { get; set; }
 
-        public override System.Drawing.Bitmap Icon { get { return EliteDangerous.Properties.Resources.ressurect; } }
-
         public void Ledger(Ledger mcl, DB.SQLiteConnectionUser conn)
         {
             mcl.AddEvent(Id, EventTimeUTC, EventTypeID, Option, -Cost);
@@ -53,7 +51,7 @@ namespace EliteDangerousCore.JournalEvents
         public override void FillInformation(out string summary, out string info, out string detailed) //V
         {
             summary = EventTypeStr.SplitCapsWord();
-            info = BaseUtils.FieldBuilder.Build("Option:",Option, "Cost:; credits" , Cost, ";Bankrupt" , Bankrupt);
+            info = BaseUtils.FieldBuilder.Build("Option:",Option, "Cost:; credits;N0" , Cost, ";Bankrupt" , Bankrupt);
             detailed = "";
         }
     }

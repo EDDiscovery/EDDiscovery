@@ -245,7 +245,7 @@ namespace EDDiscovery.UserControls
                     wantedList.Append($"\n\nMaterials on {last_he.WhereAmI}\n");
                     foreach (KeyValuePair<string, double> mat in sd.Materials)
                     {
-                        wantedList.AppendFormat("   {0} {1}%\n", System.Threading.Thread.CurrentThread.CurrentCulture.TextInfo.ToTitleCase(mat.Key.ToLower()),
+                        wantedList.AppendFormat("   {0} {1}%\n", System.Threading.Thread.CurrentThread.CurrentCulture.TextInfo.ToTitleCase(mat.Key.ToLower(System.Globalization.CultureInfo.InvariantCulture)),
                                                                         mat.Value.ToString("N1"));
                     }
                 }

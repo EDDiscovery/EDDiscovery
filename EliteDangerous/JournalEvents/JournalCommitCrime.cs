@@ -45,8 +45,6 @@ namespace EliteDangerousCore.JournalEvents
         public long? Fine { get; set; }
         public long? Bounty { get; set; }
 
-        public override System.Drawing.Bitmap Icon { get { return EliteDangerous.Properties.Resources.commitcrime; } }
-
         public void LedgerNC(Ledger mcl, DB.SQLiteConnectionUser conn)
         {
             string v = (VictimLocalised.Length > 0) ? VictimLocalised : Victim;
@@ -66,7 +64,7 @@ namespace EliteDangerousCore.JournalEvents
         public override void FillInformation(out string summary, out string info, out string detailed) //V
         {
             summary = EventTypeStr.SplitCapsWord();
-            info = BaseUtils.FieldBuilder.Build("", CrimeType, "< on faction ", Faction, "Against ", VictimLocalised.Alt(Victim), "Cost ; credits", Fine, "Bounty ; credits", Bounty);
+            info = BaseUtils.FieldBuilder.Build("", CrimeType, "< on faction ", Faction, "Against ", VictimLocalised.Alt(Victim), "Cost ; cr;N0", Fine, "Bounty ; cr;N0", Bounty);
             detailed = "";
         }
     }

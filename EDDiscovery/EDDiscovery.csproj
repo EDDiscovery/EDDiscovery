@@ -162,18 +162,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="2DMap\FGEImage.cs" />
-    <Compile Include="2DMap\Form2DMap.cs">
+    <Compile Include="Forms\DraggableFormPos.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="2DMap\Form2DMap.Designer.cs">
+    <Compile Include="Forms\DraggableFormPos.Designer.cs">
+      <DependentUpon>DraggableFormPos.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Form2DMap.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Form2DMap.Designer.cs">
       <DependentUpon>Form2DMap.cs</DependentUpon>
-    </Compile>
-    <Compile Include="2DMap\ImageViewer.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="2DMap\ImageViewer.Designer.cs">
-      <DependentUpon>ImageViewer.cs</DependentUpon>
     </Compile>
     <Compile Include="3DMap\CameraDirectionMovement.cs" />
     <Compile Include="3DMap\PositionDirection.cs" />
@@ -209,6 +208,12 @@
     </Compile>
     <Compile Include="Forms\ExportForm.Designer.cs">
       <DependentUpon>ExportForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\GalaxySectorSelect.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\GalaxySectorSelect.Designer.cs">
+      <DependentUpon>GalaxySectorSelect.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\SafeModeForm.cs">
       <SubType>Form</SubType>
@@ -567,8 +572,14 @@
     <EmbeddedResource Include="Forms\AddOnManagerForm.resx">
       <DependentUpon>AddOnManagerForm.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\DraggableFormPos.resx">
+      <DependentUpon>DraggableFormPos.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\ExportForm.resx">
       <DependentUpon>ExportForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\GalaxySectorSelect.resx">
+      <DependentUpon>GalaxySectorSelect.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\ImportSphere.resx">
       <DependentUpon>ImportSphere.cs</DependentUpon>
@@ -698,101 +709,11 @@
     <None Include="Resources\ImportHelp.txt" />
     <None Include="Resources\edlogo_3mo_icon.ico" />
     <None Include="Resources\GNE.ico" />
-    <None Include="Resources\Ring Only 512.png" />
-    <None Include="Resources\selectedmarker.png" />
-    <None Include="Resources\SizeSelectorsSmall.png" />
-    <None Include="Resources\SizeSelectorsMedium.png" />
-    <None Include="Resources\SizeSelectorsTiny.png" />
-    <None Include="Resources\stopflag.png" />
-    <None Include="Resources\startflag.png" />
-    <None Include="Resources\floppy.png" />
-    <None Include="Resources\bookmarktarget.png" />
-    <None Include="Resources\bookmarkgreen.png" />
-    <None Include="Resources\bookmarkyellow.png" />
-    <None Include="Resources\bookmarkbrightred.png" />
-    <None Include="Resources\pauseblue.png" />
-    <None Include="Resources\PlayNormal.png" />
-    <None Include="Resources\PauseNormalRed.png" />
-    <None Include="Resources\RecordPressed.png" />
-    <None Include="Resources\VideoRecorder.png" />
-    <None Include="Resources\StopNormalRed.png" />
-    <None Include="Resources\StopNormalBlue.png" />
-    <None Include="Resources\popout1.png" />
-    <None Include="Resources\Log.png" />
-    <None Include="Resources\eddiscovery_logo.png" />
-    <None Include="Resources\toolStripButtonNew.Image.png" />
-    <None Include="Resources\toolStripButtonSubmitDistances.Image.png" />
-    <None Include="Resources\toolStripButtonRemoveAll.Image.png" />
-    <None Include="Resources\YellowDot.png" />
-    <None Include="Resources\SizeSelectorsLarge.png" />
-    <None Include="Resources\OrangeDot.png" />
-    <None Include="Resources\ImageTravel.png" />
-    <None Include="Resources\ImageStarDiscWhite.png" />
-    <None Include="Resources\ImageStarDisc.png" />
-    <None Include="Resources\Travelicon.png" />
-    <None Include="Resources\excel.png" />
-    <None Include="Resources\materiamoreindicator.png" />
-    <None Include="Resources\RingGap512.png" />
-    <None Include="Resources\materialmarkerorangefilled.png" />
-    <None Include="Resources\planet landing.png" />
-    <None Include="Resources\toolStripButtonRemoveUnused.Image.png" />
-    <None Include="Resources\toolStripButtonMap.Image.png" />
-    <None Include="Resources\Homeicon.png" />
-    <None Include="Resources\Barycentre.png" />
-    <None Include="Resources\Belt.png" />
-    <None Include="Resources\coriolis.png" />
-    <None Include="Resources\eye.png" />
-    <None Include="Resources\stats.png" />
-    <None Include="Resources\star.png" />
-    <None Include="Resources\refresh_blue18.png" />
-    <None Include="Resources\galaxy_gray.png" />
-    <None Include="Resources\ledger.png" />
-    <None Include="Resources\journal.png" />
-    <None Include="Resources\travelgrid.png" />
-    <None Include="Resources\edsmown.png" />
-    <None Include="Resources\materialrare.png" />
-    <None Include="Resources\Moon24.png" />
-    <None Include="Resources\save.png" />
-    <None Include="Resources\speaker.png" />
-    <None Include="Resources\manageaddons.png" />
-    <None Include="Resources\starsystem.png" />
-    <None Include="Resources\grid.png" />
-    <None Include="Resources\spanel.png" />
-    <None Include="Resources\routetracker.png" />
-    <None Include="Resources\trippanel.png" />
-    <None Include="Resources\notes.png" />
-    <None Include="Resources\dustbinshorter.png" />
-    <None Include="Resources\tilegrid.png" />
-    <None Include="Resources\starlist.png" />
-    <None Include="Resources\edsm24.png" />
-    <None Include="Resources\shoppinglist.bmp" />
-    <None Include="Resources\panels.png" />
-    <None Include="Resources\shoppinglist.png" />
-    <None Include="Resources\edsm16.png" />
-    <None Include="Resources\Volcano.bmp" />
-    <None Include="Resources\Terraformable.png" />
-    <None Include="Resources\route.png" />
-    <None Include="Resources\expedition.png" />
-    <None Include="Resources\triangulation.png" />
-    <None Include="Resources\settings.png" />
-    <None Include="Resources\warning.png" />
-    <None Include="Resources\ego.png" />
-    <None Include="Resources\EDDB.png" />
-    <None Include="Resources\EDDN.png" />
-    <None Include="Resources\scangrid.png" />
-    <None Include="Resources\compass.png" />
-    <None Include="Resources\volcano.png" />
-    <None Include="Resources\money.png" />
-    <None Include="Resources\terraform.png" />
-    <Content Include="Resources\map.png" />
-    <Content Include="Resources\plot.png" />
+    <None Include="Resources\Logo.png" />
     <Content Include="x86\Microsoft.VC100.CRT\msvcp100.dll" />
     <Content Include="x86\Microsoft.VC100.CRT\msvcr100.dll" />
-    <EmbeddedResource Include="2DMap\Form2DMap.resx">
+    <EmbeddedResource Include="Forms\Form2DMap.resx">
       <DependentUpon>Form2DMap.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="2DMap\ImageViewer.resx">
-      <DependentUpon>ImageViewer.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="EDDiscoveryForm.resx">
       <DependentUpon>EDDiscoveryForm.cs</DependentUpon>
@@ -851,6 +772,20 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\EDDIcons\Controls\Fakes\Controls.resx">
+      <Link>Icons\Controls.resx</Link>
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Controls.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>EDDiscovery.Icons</CustomToolNamespace>
+    </None>
+    <None Include="..\EDDIcons\Controls\Fakes\Controls.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Controls.resx</DependentUpon>
+      <Link>Icons\Controls.Designer.cs</Link>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
     <None Include="App.config">
       <SubType>Designer</SubType>
     </None>
@@ -897,6 +832,10 @@
     <ProjectReference Include="..\DirectInput\DirectInput.csproj">
       <Project>{390b1547-a455-45e3-974f-e1f9b1613ad5}</Project>
       <Name>DirectInput</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\EDDIcons\EDDIcons.csproj">
+      <Project>{646f71be-f102-444e-9254-818e5a320ab8}</Project>
+      <Name>EDDIcons</Name>
     </ProjectReference>
     <ProjectReference Include="..\EliteDangerous\EliteDangerous.csproj">
       <Project>{019917a4-7342-4f67-8aaf-9e20c016a935}</Project>

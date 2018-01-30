@@ -52,8 +52,6 @@ namespace EliteDangerousCore.JournalEvents
         public string ShipFD { get; set; }
         public int ShipId { get; set; }
 
-        public override System.Drawing.Bitmap Icon { get { return EliteDangerous.Properties.Resources.modulesell; } }
-
         public void Ledger(Ledger mcl, DB.SQLiteConnectionUser conn)
         {
             string s = (SellItemLocalised.Length > 0) ? SellItemLocalised : SellItem;
@@ -68,7 +66,7 @@ namespace EliteDangerousCore.JournalEvents
         public override void FillInformation(out string summary, out string info, out string detailed) //V
         {
             summary = EventTypeStr.SplitCapsWord();
-            info = BaseUtils.FieldBuilder.Build("", SellItemLocalised.Alt(SellItem), "< from ", Slot, "Price:; credits", SellPrice);
+            info = BaseUtils.FieldBuilder.Build("", SellItemLocalised.Alt(SellItem), "< from ", Slot, "Price:; cr;N0", SellPrice);
             detailed = "";
         }
 

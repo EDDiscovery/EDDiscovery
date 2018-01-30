@@ -76,6 +76,22 @@ namespace EliteDangerousCore.EDDN
                 //return "https://eddn.edcd.io/schemas/commodity/3/test"; // For testing now.
         }
 
+        private string GetEDDNOutfittingSchemaRef()
+        {
+            if (isBeta || commanderName.StartsWith("[BETA]"))
+                return "https://eddn.edcd.io/schemas/outfitting/2/test";
+            else
+                return "https://eddn.edcd.io/schemas/outfitting/2";
+        }
+
+        private string GetEDDNShipyardSchemaRef()
+        {
+            if (isBeta || commanderName.StartsWith("[BETA]"))
+                return "https://eddn.edcd.io/schemas/shipyard/2/test";
+            else
+                return "https://eddn.edcd.io/schemas/shipyard/2";
+        }
+
 
         private JObject RemoveCommonKeys(JObject obj)
         {
@@ -131,12 +147,20 @@ namespace EliteDangerousCore.EDDN
 
             message = RemoveCommonKeys(message);
             message.Remove("StarPosFromEDSM");
+            message.Remove("Latitude");
+            message.Remove("Longitude");
+            if (!journal.Docked)
+            {
+                message.Remove("Body");
+                message.Remove("BodyType");
+                message.Remove("BodyID");
+            }
 
             msg["message"] = message;
             return msg;
         }
 
-        public JObject CreateEDDNMessage(JournalDocked journal, double x, double y, double z)
+        public JObject CreateEDDNMessage(JournalDocked journal, double x, double y, double z, long? systemAddress)
         {
             JObject msg = new JObject();
 
@@ -150,11 +174,135 @@ namespace EliteDangerousCore.EDDN
 
             message["StarPos"] = new JArray(new float[] { (float)x, (float)y, (float)z });
 
+            if (systemAddress != null)
+                message["SystemAddress"] = systemAddress;
+
             msg["message"] = message;
             return msg;
         }
 
-        public JObject CreateEDDNMessage(JournalScan journal, string starSystem, double x, double y, double z)
+        public JObject CreateEDDNJournalMessage(JournalOutfitting journal, double x, double y, double z, long? systemAddress)
+        {
+            if (journal.ModuleItems == null)
+                return null;
+
+            JObject msg = new JObject();
+
+            msg["header"] = Header();
+            msg["$schemaRef"] = GetEDDNJournalSchemaRef();
+
+            JObject message = journal.GetJson();
+
+            message = RemoveCommonKeys(message);
+
+            message["StarPos"] = new JArray(new float[] { (float)x, (float)y, (float)z });
+
+            if (systemAddress != null)
+                message["SystemAddress"] = systemAddress;
+
+            msg["message"] = message;
+            return msg;
+        }
+
+        public JObject CreateEDDNOutfittingMessage(JournalOutfitting journal, long? systemAddress)
+        {
+            if (journal.ModuleItems == null)
+                return null;
+
+            JObject msg = new JObject();
+
+            msg["header"] = Header();
+            msg["$schemaRef"] = GetEDDNOutfittingSchemaRef();
+
+            JObject message = new JObject
+            {
+                ["timestamp"] = journal.EventTimeUTC.ToString("yyyy-MM-ddTHH:mm:ss'Z'"),
+                ["systemName"] = journal.StarSystem,
+                ["stationName"] = journal.StationName,
+                ["marketID"] = journal.MarketID,
+                ["modules"] = new JArray(journal.ModuleItems.Select(m => m.Name))
+            };
+
+            if (systemAddress != null)
+                message["systemAddress"] = systemAddress;
+
+            msg["message"] = message;
+            return msg;
+        }
+
+        public JObject CreateEDDNJournalMessage(JournalShipyard journal, double x, double y, double z, long? systemAddress)
+        {
+            if (journal.ShipyardItems == null)
+                return null;
+
+            JObject msg = new JObject();
+
+            msg["header"] = Header();
+            msg["$schemaRef"] = GetEDDNJournalSchemaRef();
+
+            JObject message = journal.GetJson();
+
+            message = RemoveCommonKeys(message);
+
+            message["StarPos"] = new JArray(new float[] { (float)x, (float)y, (float)z });
+
+            if (systemAddress != null)
+                message["SystemAddress"] = systemAddress;
+
+            msg["message"] = message;
+            return msg;
+        }
+
+        public JObject CreateEDDNShipyardMessage(JournalShipyard journal, long? systemAddress)
+        {
+            if (journal.ShipyardItems == null)
+                return null;
+
+            JObject msg = new JObject();
+
+            msg["header"] = Header();
+            msg["$schemaRef"] = GetEDDNShipyardSchemaRef();
+
+            JObject message = new JObject
+            {
+                ["timestamp"] = journal.EventTimeUTC.ToString("yyyy-MM-ddTHH:mm:ss'Z'"),
+                ["systemName"] = journal.StarSystem,
+                ["stationName"] = journal.StationName,
+                ["marketID"] = journal.MarketID,
+                ["ships"] = new JArray(journal.ShipyardItems.Select(m => m.ShipType))
+            };
+
+            if (systemAddress != null)
+                message["SystemAddress"] = systemAddress;
+
+            msg["message"] = message;
+            return msg;
+        }
+
+        public JObject CreateEDDNJournalMessage(JournalMarket journal, double x, double y, double z, long? systemAddress)
+        {
+            if (journal.Commodities == null)
+                return null;
+
+            JObject msg = new JObject();
+
+            msg["header"] = Header();
+            msg["$schemaRef"] = GetEDDNJournalSchemaRef();
+
+            JObject message = journal.GetJson();
+
+            message = RemoveCommonKeys(message);
+
+            message["StarPos"] = new JArray(new float[] { (float)x, (float)y, (float)z });
+
+            if (systemAddress != null)
+                message["SystemAddress"] = systemAddress;
+
+            msg["message"] = message;
+            return msg;
+        }
+
+        public JObject CreateEDDNMessage(JournalScan journal, string starSystem, double x, double y, double z, long? systemAddress = null)
         {
             JObject msg = new JObject();
 
@@ -165,6 +313,9 @@ namespace EliteDangerousCore.EDDN
 
             message["StarSystem"] = starSystem;
             message["StarPos"] = new JArray(new float[] { (float)x, (float)y, (float)z });
+
+            if (systemAddress != null)
+                message["SystemAddress"] = systemAddress;
 
             string bodydesig = journal.BodyDesignation ?? journal.BodyName;
 
@@ -182,6 +333,9 @@ namespace EliteDangerousCore.EDDN
 
         public JObject CreateEDDNCommodityMessage(List<CCommodities> commodities, string systemName, string stationName, DateTime time)
         {
+            if (commodities == null || commodities.Count == 0)
+                return null;
+                
             JObject msg = new JObject();
 
             msg["header"] = Header();

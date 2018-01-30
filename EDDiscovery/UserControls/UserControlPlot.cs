@@ -103,7 +103,7 @@ namespace EDDiscovery.UserControls
                     maxitems, MinRadius, MaxRadius, true);
             }
         }
-        private void NewStarListComputed(ISystem sys, SortedList<double, ISystem> list)      // In UI
+        private void NewStarListComputed(ISystem sys, BaseUtils.SortedListDoubleDuplicate<ISystem>  list)      // In UI
         {
             double? max = textMaxRadius.Text.InvariantParseDoubleNull();
             if (max != null)
@@ -118,7 +118,7 @@ namespace EDDiscovery.UserControls
             FillRadar(list, sys);
         }
         
-        private void FillRadar(SortedList<double, ISystem> csl, ISystem centerSystem)
+        private void FillRadar(BaseUtils.SortedListDoubleDuplicate<ISystem> csl, ISystem centerSystem)
         {
             SetControlText("");
 

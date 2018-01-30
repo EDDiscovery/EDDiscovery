@@ -25,6 +25,7 @@ namespace EliteDangerousCore.JournalEvents
     {
         public string StarSystem { get; set; }
         public EMK.LightGeometry.Vector3 StarPos { get; set; }
+        public long? SystemAddress { get; set; }
         public bool StarPosFromEDSM { get; set; }
         public bool EDSMFirstDiscover { get; set; }
 
@@ -86,6 +87,8 @@ namespace EliteDangerousCore.JournalEvents
             }
 
             StarPos = pos;
+
+            SystemAddress = evt["SystemAddress"].LongNull();
 
             Faction = JSONObjectExtensions.GetMultiStringDef(evt, new string[] { "SystemFaction", "Faction" });
             FactionState = evt["FactionState"].Str();           // PRE 2.3 .. not present in newer files, fixed up in next bit of code

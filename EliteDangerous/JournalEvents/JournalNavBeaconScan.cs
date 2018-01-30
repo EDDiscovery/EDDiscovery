@@ -31,12 +31,11 @@ namespace EliteDangerousCore.JournalEvents
         public JournalNavBeaconScan(JObject evt) : base(evt, JournalTypeEnum.NavBeaconScan)
         {
             NumBodies = evt["NumBodies"].Int();
+            SystemAddress = evt["SystemAddress"].LongNull();
         }
 
-        public int NumBodies { get; set; }            // Hyperspace, Supercruise
-
-
-        public override System.Drawing.Bitmap Icon { get { return EliteDangerous.Properties.Resources.navbeacon; } }
+        public int NumBodies { get; set; }           
+        public long? SystemAddress{ get; set; }            
 
         public override void FillInformation(out string summary, out string info, out string detailed) //V
         {

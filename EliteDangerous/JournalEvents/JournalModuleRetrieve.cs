@@ -64,8 +64,6 @@ namespace EliteDangerousCore.JournalEvents
         public string SwapOutItemLocalised { get; set; }
         public long Cost { get; set; }
 
-        public override System.Drawing.Bitmap Icon { get { return EliteDangerous.Properties.Resources.moduleretrieve; } }
-
         public void Ledger(Ledger mcl, DB.SQLiteConnectionUser conn)
         {
             string s = (RetrievedItemLocalised.Length > 0) ? RetrievedItemLocalised : RetrievedItem;
@@ -83,7 +81,7 @@ namespace EliteDangerousCore.JournalEvents
             summary = EventTypeStr.SplitCapsWord();
             info = BaseUtils.FieldBuilder.Build("", RetrievedItemLocalised.Alt(RetrievedItem), "< into ", Slot);
             if ( Cost>0)
-                info += " " + BaseUtils.FieldBuilder.Build("Cost:; credits", Cost);
+                info += " " + BaseUtils.FieldBuilder.Build("Cost:; cr;N0", Cost);
 
             if (SwapOutItem.Length > 0)
                 info += ", " + BaseUtils.FieldBuilder.Build("Stored:", SwapOutItemLocalised.Alt(SwapOutItem));

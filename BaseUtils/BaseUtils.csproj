@@ -46,6 +46,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Collections\SortedListDuplicates.cs" />
     <Compile Include="Dates\DateObjectExtensions.cs" />
     <Compile Include="EMK\Point3D.cs" />
     <Compile Include="EMK\Vector3D.cs" />
@@ -67,6 +68,7 @@
     </Compile>
     <Compile Include="Misc\FileHandles.cs" />
     <Compile Include="Keys\KeyObjectExtensions.cs" />
+    <Compile Include="Misc\Maps2d.cs" />
     <Compile Include="Misc\NativeMethods.cs" />
     <Compile Include="Misc\Processes.cs" />
     <Compile Include="Misc\AppTicks.cs" />

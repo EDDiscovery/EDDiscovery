@@ -44,12 +44,10 @@ namespace EliteDangerousCore.JournalEvents
             mcl.AddEventNoCash(Id, EventTimeUTC, EventTypeID, AwardingFaction +" " + Reward);
         }
 
-        public override System.Drawing.Bitmap Icon { get { return EliteDangerous.Properties.Resources.capshipbond; } }
-
         public override void FillInformation(out string summary, out string info, out string detailed) //V
         {
             summary = EventTypeStr.SplitCapsWord();
-            info = BaseUtils.FieldBuilder.Build("; credits", Reward, "Awarding faction:" , AwardingFaction,  "Victim faction:", VictimFaction);
+            info = BaseUtils.FieldBuilder.Build("; cr;N0", Reward, "Awarding faction:" , AwardingFaction,  "Victim faction:", VictimFaction);
             detailed = "";
         }
     }

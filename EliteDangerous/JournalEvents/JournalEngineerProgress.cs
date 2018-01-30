@@ -29,15 +29,15 @@ namespace EliteDangerousCore.JournalEvents
         public JournalEngineerProgress(JObject evt ) : base(evt, JournalTypeEnum.EngineerProgress)
         {
             Engineer = evt["Engineer"].Str();
+            EngineerID = evt["EngineerID"].LongNull();
             Rank = evt["Rank"].IntNull();
             Progress = evt["Progress"].Str();
         }
 
         public string Engineer { get; set; }
+        public long? EngineerID { get; set; }
         public string Progress { get; set; }
         public int? Rank { get; set; }
-
-        public override System.Drawing.Bitmap Icon { get { return EliteDangerous.Properties.Resources.engineerprogress; } }
 
         public override void FillInformation(out string summary, out string info, out string detailed) //V
         {

@@ -54,22 +54,28 @@ namespace EliteDangerousCore.JournalEvents
 
             public bool? Enabled { get; private set; }      // Loadout events, may be null
             public int? Priority { get; private set; }      // 0..4 not 1..5
-            public int? AmmoClip { get; private set; }
-            public int? AmmoHopper { get; private set; }
-            public string Blueprint { get; private set; }
-            public int? BlueprintLevel { get; private set; }
             public int? Health { get; private set; }        //0-100
             public long? Value { get; private set; }
+            public int? AmmoClip { get; private set; }
+            public int? AmmoHopper { get; private set; }
+            public double? Power { get; private set; }      // ONLY via Modules Info
+
+            public JournalEngineerCraftBase.EngineeringData Engineering { get; private set; }       // may be NULL if module is not engineered or unknown
 
             public ShipModule()
             { }
 
-            public ShipModule(string s, string sfd, string i, string ifd, bool? e, int? p, int? ac, int? ah, string b, int? bl, double? h, long? v)
+            public ShipModule(string s, string sfd, string i, string ifd, 
+                            bool? e, int? prior, int? ac, int? ah, double? health, long? value, 
+                            double? power,
+                            JournalEngineerCraftBase.EngineeringData engineering )
             {
-                Slot = s; SlotFD = sfd; Item = i; ItemFD = ifd; Enabled = e; Priority = p; AmmoClip = ac; AmmoHopper = ah; Blueprint = b; BlueprintLevel = bl;
-                if (h.HasValue)
-                    Health = (int)(h * 100.0);
-                Value = v;
+                Slot = s; SlotFD = sfd; Item = i; ItemFD = ifd; Enabled = e; Priority = prior; AmmoClip = ac; AmmoHopper = ah;
+                if (health.HasValue)
+                    Health = (int)(health * 100.0);
+                Value = value;
+                Power = power;
+                Engineering = engineering;
             }
 
             public ShipModule(string s, string sfd, string i, string ifd, string l )
@@ -79,9 +85,10 @@ namespace EliteDangerousCore.JournalEvents
 
             public bool Same(ShipModule other)      // ignore localisased item, it does not occur everywhere..
             {
-                return (Slot == other.Slot && Item == other.Item && Enabled == other.Enabled &&
+                bool basics = (Slot == other.Slot && Item == other.Item && Enabled == other.Enabled &&
                          Priority == other.Priority && AmmoClip == other.AmmoClip && AmmoHopper == other.AmmoHopper &&
-                         Blueprint == other.Blueprint && BlueprintLevel == other.BlueprintLevel && Health == other.Health && Value == other.Value);
+                         Health == other.Health && Value == other.Value);
+                return basics;  // Engineering is not needed, we have checked slots/items
             }
 
             public bool Same(string item )
@@ -115,6 +122,9 @@ namespace EliteDangerousCore.JournalEvents
             ShipId = evt["ShipID"].Int();
             ShipName = evt["ShipName"].Str();
             ShipIdent = evt["ShipIdent"].Str();
+            HullValue = evt["HullValue"].LongNull();
+            ModulesValue = evt["ModulesValue"].LongNull();
+            Rebuy = evt["Rebuy"].LongNull();
 
             ShipModules = new List<ShipModule>();
 
@@ -123,6 +133,14 @@ namespace EliteDangerousCore.JournalEvents
             {
                 foreach (JObject jo in jmodules)
                 {
+                    JournalEngineerCraftBase.EngineeringData engineering = null;
+
+                    JObject jeng = (JObject)jo["Engineering"];
+                    if (jeng != null)
+                    {
+                        engineering = new JournalEngineerCraftBase.EngineeringData(jeng);
+                    }
+
                     ShipModule module = new ShipModule( JournalFieldNaming.GetBetterSlotName(jo["Slot"].Str()),
                                                         JournalFieldNaming.NormaliseFDSlotName(jo["Slot"].Str()),
                                                         JournalFieldNaming.GetBetterItemNameLoadout(jo["Item"].Str()),
@@ -131,10 +149,10 @@ namespace EliteDangerousCore.JournalEvents
                                                         jo["Priority"].IntNull(),
                                                         jo["AmmoInClip"].IntNull(),
                                                         jo["AmmoInHopper"].IntNull(),
-                                                        jo["EngineerBlueprint"].Str().SplitCapsWordFull(),
-                                                        jo["EngineerLevel"].IntNull(),
                                                         jo["Health"].DoubleNull(),
-                                                        jo["Value"].IntNull() );
+                                                        jo["Value"].IntNull() , 
+                                                        null,  //power not received here
+                                                        engineering );
                     ShipModules.Add(module);
                 }
 
@@ -147,6 +165,9 @@ namespace EliteDangerousCore.JournalEvents
         public int ShipId { get; set; }
         public string ShipName { get; set; } // : user-defined ship name
         public string ShipIdent { get; set; } //   user-defined ship ID string
+        long? HullValue { get; set; }   //3.0
+        long? ModulesValue { get; set; }   //3.0
+        long? Rebuy { get; set; }   //3.0
 
         public List<ShipModule> ShipModules;
 
@@ -155,12 +176,10 @@ namespace EliteDangerousCore.JournalEvents
             shp.Loadout(ShipId, Ship, ShipFD, ShipName, ShipIdent, ShipModules);
         }
 
-        public override System.Drawing.Bitmap Icon { get { return EliteDangerous.Properties.Resources.loadout; } }
-
         public override void FillInformation(out string summary, out string info, out string detailed) //V
         {
             summary = EventTypeStr.SplitCapsWord();
-            info = BaseUtils.FieldBuilder.Build("Ship:", Ship, "Name:", ShipName, "Ident:", ShipIdent, "Modules:", ShipModules.Count);
+            info = BaseUtils.FieldBuilder.Build("Ship:", Ship, "Name:", ShipName, "Ident:", ShipIdent, "Modules:", ShipModules.Count , "Hull:; cr;N0", HullValue , "Modules:; cr;N0" , ModulesValue , "Rebuy:; cr;N0", Rebuy);
             detailed = "";
 
             foreach (ShipModule m in ShipModules)
@@ -171,5 +190,8 @@ namespace EliteDangerousCore.JournalEvents
                 detailed += BaseUtils.FieldBuilder.Build("", m.Slot, "<:", m.Item , "" , m.PE() );
             }
         }
+
+
+
     }
 }

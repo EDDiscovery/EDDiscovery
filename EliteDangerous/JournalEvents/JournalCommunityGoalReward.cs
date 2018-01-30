@@ -28,10 +28,12 @@ namespace EliteDangerousCore.JournalEvents
     {
         public JournalCommunityGoalReward(JObject evt ) : base(evt, JournalTypeEnum.CommunityGoalReward)
         {
+            CGID = evt["CGID"].Int();
             Name = evt["Name"].Str();
             System = evt["System"].Str();
             Reward = evt["Reward"].Long();
         }
+        public int CGID { get; set; }
         public string Name { get; set; }
         public string System { get; set; }
         public long Reward { get; set; }
@@ -41,12 +43,10 @@ namespace EliteDangerousCore.JournalEvents
             mcl.AddEvent(Id, EventTimeUTC, EventTypeID, Name + " " + System, Reward);
         }
 
-        public override System.Drawing.Bitmap Icon { get { return EliteDangerous.Properties.Resources.communitygoalreward; } }
-
         public override void FillInformation(out string summary, out string info, out string detailed) //V
         {
             summary = EventTypeStr.SplitCapsWord();
-            info = BaseUtils.FieldBuilder.Build("", Name, "< at ; Star System", System, "Reward ; credits", Reward);
+            info = BaseUtils.FieldBuilder.Build("", Name, "< at ; Star System", System, "Reward ; cr;N0", Reward);
             detailed = "";
         }
     }
