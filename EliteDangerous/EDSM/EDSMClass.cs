@@ -1122,7 +1122,7 @@ namespace EliteDangerousCore.EDSM
             return JArray.Parse(response.Body).Select(v => v.Str()).ToList();
         }
 
-        public List<int> SendJournalEvents(List<JObject> entries, out string errmsg)
+        public List<JObject> SendJournalEvents(List<JObject> entries, out string errmsg)
         {
             JArray message = new JArray(entries);
 
@@ -1151,7 +1151,7 @@ namespace EliteDangerousCore.EDSM
                 return null;
             }
 
-            return resp["events"].Select(e => e["msgnum"].Int()).ToList();
+            return resp["events"].Select(e => (JObject)e).ToList();
         }
     }
 }
