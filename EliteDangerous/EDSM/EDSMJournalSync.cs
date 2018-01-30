@@ -432,7 +432,7 @@ namespace EliteDangerousCore.EDSM
                     int msgnr = result["msgnum"].Int();
                     int systemId = result["systemId"].Int();
 
-                    if (msgnr >= 100 && msgnr < 200)
+                    if ((msgnr >= 100 && msgnr < 200) || msgnr == 500)
                     {
                         if (he.EntryType == JournalTypeEnum.FSDJump || he.EntryType == JournalTypeEnum.Location)
                         {
@@ -444,6 +444,15 @@ namespace EliteDangerousCore.EDSM
                         }
 
                         he.SetEdsmSync();
+
+                        if (msgnr == 500)
+                        {
+                            System.Diagnostics.Trace.WriteLine($"Warning submitting event {he.Journalid} \"{he.EventSummary}\": {msgnr} {result["msg"].Str()}");
+                        }
+                    }
+                    else
+                    {
+                        System.Diagnostics.Trace.WriteLine($"Error submitting event {he.Journalid} \"{he.EventSummary}\": {msgnr} {result["msg"].Str()}");
                     }
                 }
 
