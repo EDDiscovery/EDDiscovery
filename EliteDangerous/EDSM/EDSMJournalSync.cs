@@ -350,7 +350,11 @@ namespace EliteDangerousCore.EDSM
                     }
 
                     // Wait up to 120 seconds for another EDSM event to come in
-                    historyevent.WaitOne(120000);
+                    if (historylist.IsEmpty)
+                    {
+                        historyevent.WaitOne(120000);
+                    }
+
                     if (Exit)
                     {
                         return;
@@ -402,17 +406,23 @@ namespace EliteDangerousCore.EDSM
                 entries.Add(json);
             }
 
-            int msgnr = edsm.SendJournalEvents(entries, out errmsg);
+            List<int> msgnrs = edsm.SendJournalEvents(entries, out errmsg);
 
-            if (msgnr < 100 || msgnr / 100 == 2)
+            if (msgnrs == null)
             {
                 return false;
             }
             else
             {
-                foreach (HistoryEntry he in hl)
+                for (int i = 0; i < hl.Count && i < msgnrs.Count; i++)
                 {
-                    he.SetEdsmSync();
+                    HistoryEntry he = hl[i];
+                    int msgnr = msgnrs[i];
+
+                    if (msgnr >= 100 && msgnr < 200)
+                    {
+                        he.SetEdsmSync();
+                    }
                 }
 
                 return true;
