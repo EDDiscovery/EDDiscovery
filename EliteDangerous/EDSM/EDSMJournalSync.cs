@@ -39,7 +39,7 @@ namespace EliteDangerousCore.EDSM
         private static ConcurrentQueue<HistoryQueueEntry> historylist = new ConcurrentQueue<HistoryQueueEntry>();
         private static AutoResetEvent historyevent = new AutoResetEvent(false);
         private static ManualResetEvent exitevent = new ManualResetEvent(false);
-        private static int maxEventsPerMessage = 32;
+        private static int maxEventsPerMessage = 200;
         private static HashSet<string> discardEvents = new HashSet<string>
         { // Default events to discard
             "ShutDown",
