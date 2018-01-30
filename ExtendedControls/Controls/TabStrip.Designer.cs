@@ -89,7 +89,7 @@ namespace ExtendedControls
             // 
             // drawnPanelListSelection
             // 
-            this.drawnPanelListSelection.DrawnImage = global::ExtendedControls.Properties.Resources.panels;
+            this.drawnPanelListSelection.Image = global::ExtendedControls.Properties.Resources.panels;
             this.drawnPanelListSelection.ImageSelected = ExtendedControls.DrawnPanel.ImageType.None;
             this.drawnPanelListSelection.Location = new System.Drawing.Point(210, 3);
             this.drawnPanelListSelection.Name = "drawnPanelListSelection";
@@ -101,7 +101,7 @@ namespace ExtendedControls
             // 
             // drawnPanelPopOut
             // 
-            this.drawnPanelPopOut.DrawnImage = global::ExtendedControls.Properties.Resources.popout;
+            this.drawnPanelPopOut.Image = global::ExtendedControls.Properties.Resources.popout;
             this.drawnPanelPopOut.ImageSelected = ExtendedControls.DrawnPanel.ImageType.None;
             this.drawnPanelPopOut.Location = new System.Drawing.Point(161, 3);
             this.drawnPanelPopOut.Name = "drawnPanelPopOut";

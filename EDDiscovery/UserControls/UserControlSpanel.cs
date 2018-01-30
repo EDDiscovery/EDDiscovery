@@ -201,7 +201,7 @@ namespace EDDiscovery.UserControls
 
         private void UserControlSpanel_Resize(object sender, EventArgs e)
         {
-            if ( !inresizeduetoexpand && !IsInTemporaryResize && this.Width>0)
+            if ( !ResizingNow && !IsInTemporaryResize && this.Width>0)
                 Display(current_historylist);
         }
 
@@ -300,7 +300,7 @@ namespace EDDiscovery.UserControls
 
                         if (targetpresent && Config(Configuration.showTargetLine) && currentsystem != null)
                         {
-                            string dist = (currentsystem.HasCoordinate) ? SystemClassDB.Distance(currentsystem, tpos.X, tpos.Y, tpos.Z).ToString("0.00") : "Unknown";
+                            string dist = (currentsystem.HasCoordinate) ? currentsystem.Distance(tpos.X, tpos.Y, tpos.Z).ToString("0.00") : "Unknown";
                             AddColText(0, 0, rowpos, rowheight, "Target: " + name + " @ " + dist +" ly", textcolour, backcolour, null);
                             rowpos += rowheight;
                         }
@@ -391,7 +391,7 @@ namespace EDDiscovery.UserControls
 
                 if ( coldata[i].Equals("`!!ICON!!") )            // marker for ICON..
                 {
-                    Bitmap img = he.GetIcon;
+                    Image img = he.GetIcon;
                     ExtendedControls.PictureBoxHotspot.ImageElement e = pictureBox.AddImage(new Rectangle(scanpostextoffset.X + columnpos[colnum+i], rowpos, img.Width, img.Height), img, null, null, false);
                     e.Translate(0, (rowheight - e.img.Height) / 2);          // align to centre of rowh..
                 }
@@ -473,28 +473,35 @@ namespace EDDiscovery.UserControls
             }
         }
 
-        private void OnNewUIEvent(string obj, bool uieventshown)       // UI event in, see if we want to hide.  UI events come before any onNew
+        private void OnNewUIEvent(UIEvent uievent)       // UI event in, see if we want to hide.  UI events come before any onNew
         {
-            bool refresh = false;
-            if (obj.Contains("GalaxyMap") )
-            {
-                refresh = (uistate != UIState.GalMap);
-                uistate = UIState.GalMap;
-            }
-            else if (obj.Contains("SystemMap") )
-            {
-                refresh = (uistate != UIState.SystemMap);
-                uistate = UIState.SystemMap;
-            }
-            else
-            {
-                refresh = (uistate != UIState.Normal);
-                uistate = UIState.Normal;
-            }
+            EliteDangerousCore.UIEvents.UIJournalMusic jm = uievent as EliteDangerousCore.UIEvents.UIJournalMusic;
 
-            //System.Diagnostics.Debug.WriteLine("UI event " + obj + " " + uistate + " shown " + shown);
-            if (refresh && !uieventshown)      // if we materially changed, and we are not showing ui events, need to update here
-               Display(current_historylist);
+            if (jm != null)
+            {
+                string ev = jm.Track;
+
+                bool refresh = false;
+                if (ev.Contains("GalaxyMap"))
+                {
+                    refresh = (uistate != UIState.GalMap);
+                    uistate = UIState.GalMap;
+                }
+                else if (ev.Contains("SystemMap"))
+                {
+                    refresh = (uistate != UIState.SystemMap);
+                    uistate = UIState.SystemMap;
+                }
+                else
+                {
+                    refresh = (uistate != UIState.Normal);
+                    uistate = UIState.Normal;
+                }
+
+                //System.Diagnostics.Debug.WriteLine("UI event " + obj + " " + uistate + " shown " + shown);
+                if (refresh && !jm.Shown)      // if we materially changed, and we are not showing ui events, need to update here
+                    Display(current_historylist);
+            }
         }
 
         private string DistToStar(HistoryEntry he, Point3D tpos)
@@ -502,7 +509,7 @@ namespace EDDiscovery.UserControls
             string res = "";
             if (!double.IsNaN(tpos.X))
             {
-                double dist = SystemClassDB.Distance(he.System, tpos.X, tpos.Y, tpos.Z);
+                double dist = he.System.Distance(tpos.X, tpos.Y, tpos.Z);
                 if (dist >= 0)
                     res = dist.ToString("0.00");
             }

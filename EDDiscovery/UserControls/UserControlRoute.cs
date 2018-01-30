@@ -107,16 +107,16 @@ namespace EDDiscovery.UserControls
 
         string SystemNameOnly(string s)             // removes @ at end.
         {
-            int atpos = s.IndexOf('@');
+            int atpos = s?.IndexOf('@') ?? -1;
             if (s != null && atpos != -1)
                 s = s.Substring(0, atpos);
-            s.Trim();
+            s = s?.Trim();
             return s;
         }
 
         private void textBox_Clicked(object sender, EventArgs e)
         {
-            ((ExtendedControls.TextBoxBorder)sender).Select(0, 1000); // clicking highlights everything
+            ((ExtendedControls.TextBoxBorder)sender).SelectAll(); // clicking highlights everything
         }
 
         #region router
@@ -345,7 +345,7 @@ namespace EDDiscovery.UserControls
                 Point3D curpos;
                 if (GetCoordsFrom(out curpos))
                 {
-                    ISystem nearest = SystemClassDB.FindNearestSystem(curpos.X, curpos.Y, curpos.Z);
+                    ISystem nearest = SystemClassDB.FindNearestSystemTo(curpos.X, curpos.Y, curpos.Z);
 
                     if (nearest != null)
                     {
@@ -507,7 +507,7 @@ namespace EDDiscovery.UserControls
                 Point3D curpos;
                 if (GetCoordsTo(out curpos))
                 {
-                    ISystem nearest = SystemClassDB.FindNearestSystem(curpos.X, curpos.Y, curpos.Z);
+                    ISystem nearest = SystemClassDB.FindNearestSystemTo(curpos.X, curpos.Y, curpos.Z);
 
                     if (nearest != null)
                     {
@@ -727,8 +727,7 @@ namespace EDDiscovery.UserControls
                 catch { }
             }
         }
+
+        #endregion
     }
-
-    #endregion
-
 }

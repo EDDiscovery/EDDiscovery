@@ -74,6 +74,13 @@ namespace EDDiscovery.UserControls
             this.buttonEditCommander = new ExtendedControls.ButtonExt();
             this.checkBoxShowUIEvents = new ExtendedControls.CheckBoxCustom();
             this.comboBoxClickThruKey = new ExtendedControls.ComboBoxCustom();
+            this.checkBoxCustomCopyToClipboard = new ExtendedControls.CheckBoxCustom();
+            this.checkBoxCustomMarkHiRes = new ExtendedControls.CheckBoxCustom();
+            this.checkBoxCustomRemoveOriginals = new ExtendedControls.CheckBoxCustom();
+            this.buttonExtScreenshot = new ExtendedControls.ButtonExt();
+            this.checkBoxCustomEnableScreenshots = new ExtendedControls.CheckBoxCustom();
+            this.buttonExtEDSMConfigureArea = new ExtendedControls.ButtonExt();
+            this.checkBoxCustomEDSMEDDBDownload = new ExtendedControls.CheckBoxCustom();
             this.groupBoxPopOuts = new ExtendedControls.GroupBoxCustom();
             this.labelTKey = new System.Windows.Forms.Label();
             this.groupBoxTheme = new ExtendedControls.GroupBoxCustom();
@@ -87,11 +94,7 @@ namespace EDDiscovery.UserControls
             this.dataViewScrollerPanel1 = new ExtendedControls.DataViewScrollerPanel();
             this.vScrollBarCustom1 = new ExtendedControls.VScrollBarCustom();
             this.groupBoxCustomScreenShots = new ExtendedControls.GroupBoxCustom();
-            this.checkBoxCustomCopyToClipboard = new ExtendedControls.CheckBoxCustom();
-            this.checkBoxCustomMarkHiRes = new ExtendedControls.CheckBoxCustom();
-            this.checkBoxCustomRemoveOriginals = new ExtendedControls.CheckBoxCustom();
-            this.buttonExtScreenshot = new ExtendedControls.ButtonExt();
-            this.checkBoxCustomEnableScreenshots = new ExtendedControls.CheckBoxCustom();
+            this.groupBoxCustomEDSM = new ExtendedControls.GroupBoxCustom();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewCommanders)).BeginInit();
             this.groupBoxPopOuts.SuspendLayout();
             this.groupBoxTheme.SuspendLayout();
@@ -100,6 +103,7 @@ namespace EDDiscovery.UserControls
             this.groupBoxCommanders.SuspendLayout();
             this.dataViewScrollerPanel1.SuspendLayout();
             this.groupBoxCustomScreenShots.SuspendLayout();
+            this.groupBoxCustomEDSM.SuspendLayout();
             this.SuspendLayout();
             // 
             // toolTip
@@ -154,9 +158,6 @@ namespace EDDiscovery.UserControls
             // 
             // button_edittheme
             // 
-            this.button_edittheme.BorderColorScaling = 1.25F;
-            this.button_edittheme.ButtonColorScaling = 0.5F;
-            this.button_edittheme.ButtonDisabledScaling = 0.5F;
             this.button_edittheme.Location = new System.Drawing.Point(232, 63);
             this.button_edittheme.Name = "button_edittheme";
             this.button_edittheme.Size = new System.Drawing.Size(95, 23);
@@ -168,9 +169,6 @@ namespace EDDiscovery.UserControls
             // 
             // buttonSaveTheme
             // 
-            this.buttonSaveTheme.BorderColorScaling = 1.25F;
-            this.buttonSaveTheme.ButtonColorScaling = 0.5F;
-            this.buttonSaveTheme.ButtonDisabledScaling = 0.5F;
             this.buttonSaveTheme.Location = new System.Drawing.Point(232, 19);
             this.buttonSaveTheme.Name = "buttonSaveTheme";
             this.buttonSaveTheme.Size = new System.Drawing.Size(95, 23);
@@ -351,9 +349,6 @@ namespace EDDiscovery.UserControls
             // 
             // btnDeleteCommander
             // 
-            this.btnDeleteCommander.BorderColorScaling = 1.25F;
-            this.btnDeleteCommander.ButtonColorScaling = 0.5F;
-            this.btnDeleteCommander.ButtonDisabledScaling = 0.5F;
             this.btnDeleteCommander.Location = new System.Drawing.Point(713, 100);
             this.btnDeleteCommander.Name = "btnDeleteCommander";
             this.btnDeleteCommander.Size = new System.Drawing.Size(71, 23);
@@ -365,9 +360,6 @@ namespace EDDiscovery.UserControls
             // 
             // buttonAddCommander
             // 
-            this.buttonAddCommander.BorderColorScaling = 1.25F;
-            this.buttonAddCommander.ButtonColorScaling = 0.5F;
-            this.buttonAddCommander.ButtonDisabledScaling = 0.5F;
             this.buttonAddCommander.Location = new System.Drawing.Point(713, 20);
             this.buttonAddCommander.Name = "buttonAddCommander";
             this.buttonAddCommander.Size = new System.Drawing.Size(71, 23);
@@ -432,9 +424,6 @@ namespace EDDiscovery.UserControls
             // 
             // buttonReloadSaved
             // 
-            this.buttonReloadSaved.BorderColorScaling = 1.25F;
-            this.buttonReloadSaved.ButtonColorScaling = 0.5F;
-            this.buttonReloadSaved.ButtonDisabledScaling = 0.5F;
             this.buttonReloadSaved.Location = new System.Drawing.Point(218, 16);
             this.buttonReloadSaved.Name = "buttonReloadSaved";
             this.buttonReloadSaved.Size = new System.Drawing.Size(126, 23);
@@ -446,9 +435,6 @@ namespace EDDiscovery.UserControls
             // 
             // buttonSaveSetup
             // 
-            this.buttonSaveSetup.BorderColorScaling = 1.25F;
-            this.buttonSaveSetup.ButtonColorScaling = 0.5F;
-            this.buttonSaveSetup.ButtonDisabledScaling = 0.5F;
             this.buttonSaveSetup.Location = new System.Drawing.Point(218, 46);
             this.buttonSaveSetup.Name = "buttonSaveSetup";
             this.buttonSaveSetup.Size = new System.Drawing.Size(126, 23);
@@ -533,9 +519,6 @@ namespace EDDiscovery.UserControls
             // 
             // buttonEditCommander
             // 
-            this.buttonEditCommander.BorderColorScaling = 1.25F;
-            this.buttonEditCommander.ButtonColorScaling = 0.5F;
-            this.buttonEditCommander.ButtonDisabledScaling = 0.5F;
             this.buttonEditCommander.Location = new System.Drawing.Point(713, 60);
             this.buttonEditCommander.Name = "buttonEditCommander";
             this.buttonEditCommander.Size = new System.Drawing.Size(71, 23);
@@ -590,6 +573,119 @@ namespace EDDiscovery.UserControls
             this.comboBoxClickThruKey.TabIndex = 6;
             this.toolTip.SetToolTip(this.comboBoxClickThruKey, resources.GetString("comboBoxClickThruKey.ToolTip"));
             this.comboBoxClickThruKey.ValueMember = "";
+            // 
+            // checkBoxCustomCopyToClipboard
+            // 
+            this.checkBoxCustomCopyToClipboard.AutoSize = true;
+            this.checkBoxCustomCopyToClipboard.CheckBoxColor = System.Drawing.Color.Gray;
+            this.checkBoxCustomCopyToClipboard.CheckBoxInnerColor = System.Drawing.Color.White;
+            this.checkBoxCustomCopyToClipboard.CheckColor = System.Drawing.Color.DarkBlue;
+            this.checkBoxCustomCopyToClipboard.FontNerfReduction = 0.5F;
+            this.checkBoxCustomCopyToClipboard.ImageButtonDisabledScaling = 0.5F;
+            this.checkBoxCustomCopyToClipboard.Location = new System.Drawing.Point(231, 65);
+            this.checkBoxCustomCopyToClipboard.MouseOverColor = System.Drawing.Color.CornflowerBlue;
+            this.checkBoxCustomCopyToClipboard.Name = "checkBoxCustomCopyToClipboard";
+            this.checkBoxCustomCopyToClipboard.Size = new System.Drawing.Size(108, 17);
+            this.checkBoxCustomCopyToClipboard.TabIndex = 5;
+            this.checkBoxCustomCopyToClipboard.Text = "Copy to clipboard";
+            this.checkBoxCustomCopyToClipboard.TickBoxReductionSize = 10;
+            this.toolTip.SetToolTip(this.checkBoxCustomCopyToClipboard, "Auto copy the image to the clipboard");
+            this.checkBoxCustomCopyToClipboard.UseVisualStyleBackColor = true;
+            // 
+            // checkBoxCustomMarkHiRes
+            // 
+            this.checkBoxCustomMarkHiRes.AutoSize = true;
+            this.checkBoxCustomMarkHiRes.CheckBoxColor = System.Drawing.Color.Gray;
+            this.checkBoxCustomMarkHiRes.CheckBoxInnerColor = System.Drawing.Color.White;
+            this.checkBoxCustomMarkHiRes.CheckColor = System.Drawing.Color.DarkBlue;
+            this.checkBoxCustomMarkHiRes.FontNerfReduction = 0.5F;
+            this.checkBoxCustomMarkHiRes.ImageButtonDisabledScaling = 0.5F;
+            this.checkBoxCustomMarkHiRes.Location = new System.Drawing.Point(9, 65);
+            this.checkBoxCustomMarkHiRes.MouseOverColor = System.Drawing.Color.CornflowerBlue;
+            this.checkBoxCustomMarkHiRes.Name = "checkBoxCustomMarkHiRes";
+            this.checkBoxCustomMarkHiRes.Size = new System.Drawing.Size(103, 17);
+            this.checkBoxCustomMarkHiRes.TabIndex = 5;
+            this.checkBoxCustomMarkHiRes.Text = "Mark HiRes files";
+            this.checkBoxCustomMarkHiRes.TickBoxReductionSize = 10;
+            this.toolTip.SetToolTip(this.checkBoxCustomMarkHiRes, "For Hi-Res files, mark them in the file name");
+            this.checkBoxCustomMarkHiRes.UseVisualStyleBackColor = true;
+            // 
+            // checkBoxCustomRemoveOriginals
+            // 
+            this.checkBoxCustomRemoveOriginals.AutoSize = true;
+            this.checkBoxCustomRemoveOriginals.CheckBoxColor = System.Drawing.Color.Gray;
+            this.checkBoxCustomRemoveOriginals.CheckBoxInnerColor = System.Drawing.Color.White;
+            this.checkBoxCustomRemoveOriginals.CheckColor = System.Drawing.Color.DarkBlue;
+            this.checkBoxCustomRemoveOriginals.FontNerfReduction = 0.5F;
+            this.checkBoxCustomRemoveOriginals.ImageButtonDisabledScaling = 0.5F;
+            this.checkBoxCustomRemoveOriginals.Location = new System.Drawing.Point(9, 42);
+            this.checkBoxCustomRemoveOriginals.MouseOverColor = System.Drawing.Color.CornflowerBlue;
+            this.checkBoxCustomRemoveOriginals.Name = "checkBoxCustomRemoveOriginals";
+            this.checkBoxCustomRemoveOriginals.Size = new System.Drawing.Size(109, 17);
+            this.checkBoxCustomRemoveOriginals.TabIndex = 5;
+            this.checkBoxCustomRemoveOriginals.Text = "Remove Originals";
+            this.checkBoxCustomRemoveOriginals.TickBoxReductionSize = 10;
+            this.toolTip.SetToolTip(this.checkBoxCustomRemoveOriginals, "After conversion, remove originals");
+            this.checkBoxCustomRemoveOriginals.UseVisualStyleBackColor = true;
+            // 
+            // buttonExtScreenshot
+            // 
+            this.buttonExtScreenshot.Location = new System.Drawing.Point(231, 19);
+            this.buttonExtScreenshot.Name = "buttonExtScreenshot";
+            this.buttonExtScreenshot.Size = new System.Drawing.Size(95, 23);
+            this.buttonExtScreenshot.TabIndex = 10;
+            this.buttonExtScreenshot.Text = "Configure";
+            this.toolTip.SetToolTip(this.buttonExtScreenshot, "Configure further screenshot options");
+            this.buttonExtScreenshot.UseVisualStyleBackColor = true;
+            this.buttonExtScreenshot.Click += new System.EventHandler(this.buttonExtScreenshot_Click);
+            // 
+            // checkBoxCustomEnableScreenshots
+            // 
+            this.checkBoxCustomEnableScreenshots.AutoSize = true;
+            this.checkBoxCustomEnableScreenshots.CheckBoxColor = System.Drawing.Color.Gray;
+            this.checkBoxCustomEnableScreenshots.CheckBoxInnerColor = System.Drawing.Color.White;
+            this.checkBoxCustomEnableScreenshots.CheckColor = System.Drawing.Color.DarkBlue;
+            this.checkBoxCustomEnableScreenshots.FontNerfReduction = 0.5F;
+            this.checkBoxCustomEnableScreenshots.ImageButtonDisabledScaling = 0.5F;
+            this.checkBoxCustomEnableScreenshots.Location = new System.Drawing.Point(9, 19);
+            this.checkBoxCustomEnableScreenshots.MouseOverColor = System.Drawing.Color.CornflowerBlue;
+            this.checkBoxCustomEnableScreenshots.Name = "checkBoxCustomEnableScreenshots";
+            this.checkBoxCustomEnableScreenshots.Size = new System.Drawing.Size(169, 17);
+            this.checkBoxCustomEnableScreenshots.TabIndex = 5;
+            this.checkBoxCustomEnableScreenshots.Text = "Enable screenshot conversion";
+            this.checkBoxCustomEnableScreenshots.TickBoxReductionSize = 10;
+            this.toolTip.SetToolTip(this.checkBoxCustomEnableScreenshots, "Screen shot conversion on/off");
+            this.checkBoxCustomEnableScreenshots.UseVisualStyleBackColor = true;
+            // 
+            // buttonExtEDSMConfigureArea
+            // 
+            this.buttonExtEDSMConfigureArea.Location = new System.Drawing.Point(218, 19);
+            this.buttonExtEDSMConfigureArea.Name = "buttonExtEDSMConfigureArea";
+            this.buttonExtEDSMConfigureArea.Size = new System.Drawing.Size(95, 23);
+            this.buttonExtEDSMConfigureArea.TabIndex = 10;
+            this.buttonExtEDSMConfigureArea.Text = "Galaxy Select";
+            this.toolTip.SetToolTip(this.buttonExtEDSMConfigureArea, "Configure what parts of the galaxy is stored in the databases");
+            this.buttonExtEDSMConfigureArea.UseVisualStyleBackColor = true;
+            this.buttonExtEDSMConfigureArea.Click += new System.EventHandler(this.buttonExtEDSMConfigureArea_Click);
+            // 
+            // checkBoxCustomEDSMEDDBDownload
+            // 
+            this.checkBoxCustomEDSMEDDBDownload.AutoSize = true;
+            this.checkBoxCustomEDSMEDDBDownload.CheckBoxColor = System.Drawing.Color.Gray;
+            this.checkBoxCustomEDSMEDDBDownload.CheckBoxInnerColor = System.Drawing.Color.White;
+            this.checkBoxCustomEDSMEDDBDownload.CheckColor = System.Drawing.Color.DarkBlue;
+            this.checkBoxCustomEDSMEDDBDownload.FontNerfReduction = 0.5F;
+            this.checkBoxCustomEDSMEDDBDownload.ImageButtonDisabledScaling = 0.5F;
+            this.checkBoxCustomEDSMEDDBDownload.Location = new System.Drawing.Point(9, 19);
+            this.checkBoxCustomEDSMEDDBDownload.MouseOverColor = System.Drawing.Color.CornflowerBlue;
+            this.checkBoxCustomEDSMEDDBDownload.Name = "checkBoxCustomEDSMEDDBDownload";
+            this.checkBoxCustomEDSMEDDBDownload.Size = new System.Drawing.Size(158, 17);
+            this.checkBoxCustomEDSMEDDBDownload.TabIndex = 5;
+            this.checkBoxCustomEDSMEDDBDownload.Text = "Enable Star Data Download";
+            this.checkBoxCustomEDSMEDDBDownload.TickBoxReductionSize = 10;
+            this.toolTip.SetToolTip(this.checkBoxCustomEDSMEDDBDownload, "Click to enable downloading of stars from EDSM and system information from EDDB. " +
+        " Will apply at next start.");
+            this.checkBoxCustomEDSMEDDBDownload.UseVisualStyleBackColor = true;
             // 
             // groupBoxPopOuts
             // 
@@ -807,91 +903,29 @@ namespace EDDiscovery.UserControls
             this.groupBoxCustomScreenShots.TextPadding = 0;
             this.groupBoxCustomScreenShots.TextStartPosition = -1;
             // 
-            // checkBoxCustomCopyToClipboard
+            // groupBoxCustomEDSM
             // 
-            this.checkBoxCustomCopyToClipboard.AutoSize = true;
-            this.checkBoxCustomCopyToClipboard.CheckBoxColor = System.Drawing.Color.Gray;
-            this.checkBoxCustomCopyToClipboard.CheckBoxInnerColor = System.Drawing.Color.White;
-            this.checkBoxCustomCopyToClipboard.CheckColor = System.Drawing.Color.DarkBlue;
-            this.checkBoxCustomCopyToClipboard.FontNerfReduction = 0.5F;
-            this.checkBoxCustomCopyToClipboard.ImageButtonDisabledScaling = 0.5F;
-            this.checkBoxCustomCopyToClipboard.Location = new System.Drawing.Point(231, 65);
-            this.checkBoxCustomCopyToClipboard.MouseOverColor = System.Drawing.Color.CornflowerBlue;
-            this.checkBoxCustomCopyToClipboard.Name = "checkBoxCustomCopyToClipboard";
-            this.checkBoxCustomCopyToClipboard.Size = new System.Drawing.Size(108, 17);
-            this.checkBoxCustomCopyToClipboard.TabIndex = 5;
-            this.checkBoxCustomCopyToClipboard.Text = "Copy to clipboard";
-            this.checkBoxCustomCopyToClipboard.TickBoxReductionSize = 10;
-            this.checkBoxCustomCopyToClipboard.UseVisualStyleBackColor = true;
-            // 
-            // checkBoxCustomMarkHiRes
-            // 
-            this.checkBoxCustomMarkHiRes.AutoSize = true;
-            this.checkBoxCustomMarkHiRes.CheckBoxColor = System.Drawing.Color.Gray;
-            this.checkBoxCustomMarkHiRes.CheckBoxInnerColor = System.Drawing.Color.White;
-            this.checkBoxCustomMarkHiRes.CheckColor = System.Drawing.Color.DarkBlue;
-            this.checkBoxCustomMarkHiRes.FontNerfReduction = 0.5F;
-            this.checkBoxCustomMarkHiRes.ImageButtonDisabledScaling = 0.5F;
-            this.checkBoxCustomMarkHiRes.Location = new System.Drawing.Point(9, 65);
-            this.checkBoxCustomMarkHiRes.MouseOverColor = System.Drawing.Color.CornflowerBlue;
-            this.checkBoxCustomMarkHiRes.Name = "checkBoxCustomMarkHiRes";
-            this.checkBoxCustomMarkHiRes.Size = new System.Drawing.Size(103, 17);
-            this.checkBoxCustomMarkHiRes.TabIndex = 5;
-            this.checkBoxCustomMarkHiRes.Text = "Mark HiRes files";
-            this.checkBoxCustomMarkHiRes.TickBoxReductionSize = 10;
-            this.checkBoxCustomMarkHiRes.UseVisualStyleBackColor = true;
-            // 
-            // checkBoxCustomRemoveOriginals
-            // 
-            this.checkBoxCustomRemoveOriginals.AutoSize = true;
-            this.checkBoxCustomRemoveOriginals.CheckBoxColor = System.Drawing.Color.Gray;
-            this.checkBoxCustomRemoveOriginals.CheckBoxInnerColor = System.Drawing.Color.White;
-            this.checkBoxCustomRemoveOriginals.CheckColor = System.Drawing.Color.DarkBlue;
-            this.checkBoxCustomRemoveOriginals.FontNerfReduction = 0.5F;
-            this.checkBoxCustomRemoveOriginals.ImageButtonDisabledScaling = 0.5F;
-            this.checkBoxCustomRemoveOriginals.Location = new System.Drawing.Point(9, 42);
-            this.checkBoxCustomRemoveOriginals.MouseOverColor = System.Drawing.Color.CornflowerBlue;
-            this.checkBoxCustomRemoveOriginals.Name = "checkBoxCustomRemoveOriginals";
-            this.checkBoxCustomRemoveOriginals.Size = new System.Drawing.Size(109, 17);
-            this.checkBoxCustomRemoveOriginals.TabIndex = 5;
-            this.checkBoxCustomRemoveOriginals.Text = "Remove Originals";
-            this.checkBoxCustomRemoveOriginals.TickBoxReductionSize = 10;
-            this.checkBoxCustomRemoveOriginals.UseVisualStyleBackColor = true;
-            // 
-            // buttonExtScreenshot
-            // 
-            this.buttonExtScreenshot.BorderColorScaling = 1.25F;
-            this.buttonExtScreenshot.ButtonColorScaling = 0.5F;
-            this.buttonExtScreenshot.ButtonDisabledScaling = 0.5F;
-            this.buttonExtScreenshot.Location = new System.Drawing.Point(231, 19);
-            this.buttonExtScreenshot.Name = "buttonExtScreenshot";
-            this.buttonExtScreenshot.Size = new System.Drawing.Size(95, 23);
-            this.buttonExtScreenshot.TabIndex = 10;
-            this.buttonExtScreenshot.Text = "Configure";
-            this.buttonExtScreenshot.UseVisualStyleBackColor = true;
-            this.buttonExtScreenshot.Click += new System.EventHandler(this.buttonExtScreenshot_Click);
-            // 
-            // checkBoxCustomEnableScreenshots
-            // 
-            this.checkBoxCustomEnableScreenshots.AutoSize = true;
-            this.checkBoxCustomEnableScreenshots.CheckBoxColor = System.Drawing.Color.Gray;
-            this.checkBoxCustomEnableScreenshots.CheckBoxInnerColor = System.Drawing.Color.White;
-            this.checkBoxCustomEnableScreenshots.CheckColor = System.Drawing.Color.DarkBlue;
-            this.checkBoxCustomEnableScreenshots.FontNerfReduction = 0.5F;
-            this.checkBoxCustomEnableScreenshots.ImageButtonDisabledScaling = 0.5F;
-            this.checkBoxCustomEnableScreenshots.Location = new System.Drawing.Point(9, 19);
-            this.checkBoxCustomEnableScreenshots.MouseOverColor = System.Drawing.Color.CornflowerBlue;
-            this.checkBoxCustomEnableScreenshots.Name = "checkBoxCustomEnableScreenshots";
-            this.checkBoxCustomEnableScreenshots.Size = new System.Drawing.Size(169, 17);
-            this.checkBoxCustomEnableScreenshots.TabIndex = 5;
-            this.checkBoxCustomEnableScreenshots.Text = "Enable screenshot conversion";
-            this.checkBoxCustomEnableScreenshots.TickBoxReductionSize = 10;
-            this.checkBoxCustomEnableScreenshots.UseVisualStyleBackColor = true;
+            this.groupBoxCustomEDSM.AlternateClientBackColor = System.Drawing.Color.Blue;
+            this.groupBoxCustomEDSM.BackColorScaling = 0.5F;
+            this.groupBoxCustomEDSM.BorderColor = System.Drawing.Color.LightGray;
+            this.groupBoxCustomEDSM.BorderColorScaling = 0.5F;
+            this.groupBoxCustomEDSM.Controls.Add(this.buttonExtEDSMConfigureArea);
+            this.groupBoxCustomEDSM.Controls.Add(this.checkBoxCustomEDSMEDDBDownload);
+            this.groupBoxCustomEDSM.FillClientAreaWithAlternateColor = false;
+            this.groupBoxCustomEDSM.Location = new System.Drawing.Point(440, 404);
+            this.groupBoxCustomEDSM.Name = "groupBoxCustomEDSM";
+            this.groupBoxCustomEDSM.Size = new System.Drawing.Size(379, 100);
+            this.groupBoxCustomEDSM.TabIndex = 21;
+            this.groupBoxCustomEDSM.TabStop = false;
+            this.groupBoxCustomEDSM.Text = "EDSM/EDDB Control";
+            this.groupBoxCustomEDSM.TextPadding = 0;
+            this.groupBoxCustomEDSM.TextStartPosition = -1;
             // 
             // UserControlSettings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.groupBoxCustomEDSM);
             this.Controls.Add(this.groupBoxCustomScreenShots);
             this.Controls.Add(this.groupBoxPopOuts);
             this.Controls.Add(this.groupBoxTheme);
@@ -913,6 +947,8 @@ namespace EDDiscovery.UserControls
             this.dataViewScrollerPanel1.ResumeLayout(false);
             this.groupBoxCustomScreenShots.ResumeLayout(false);
             this.groupBoxCustomScreenShots.PerformLayout();
+            this.groupBoxCustomEDSM.ResumeLayout(false);
+            this.groupBoxCustomEDSM.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -965,5 +1001,8 @@ namespace EDDiscovery.UserControls
         private ExtendedControls.ButtonExt buttonExtScreenshot;
         private ExtendedControls.CheckBoxCustom checkBoxCustomEnableScreenshots;
         private ExtendedControls.CheckBoxCustom checkBoxCustomCopyToClipboard;
+        private ExtendedControls.GroupBoxCustom groupBoxCustomEDSM;
+        private ExtendedControls.ButtonExt buttonExtEDSMConfigureArea;
+        private ExtendedControls.CheckBoxCustom checkBoxCustomEDSMEDDBDownload;
     }
 }

@@ -65,6 +65,7 @@ namespace EliteDangerousCore.JournalEvents
             public long PlayerContribution { get; set; }
             public int NumContributors { get; set; }
             public int PlayerPercentileBand { get; set; }
+            // TBD TopTier in 3.0 journal.. need to see it
             public int TopRankSize { get; set; }
             public bool PlayerInTopRank { get; set; }
             public string TierReached { get; set; }
@@ -128,8 +129,6 @@ namespace EliteDangerousCore.JournalEvents
         
         public List<CommunityGoal> CommunityGoals;
         public string CommunityGoalList;
-
-        public override System.Drawing.Bitmap Icon { get { return EliteDangerous.Properties.Resources.communitygoal; } }
 
         public override void FillInformation(out string summary, out string info, out string detailed) //V
         {

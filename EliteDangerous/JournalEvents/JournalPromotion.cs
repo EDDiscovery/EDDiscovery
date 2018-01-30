@@ -62,8 +62,6 @@ namespace EliteDangerousCore.JournalEvents
         public FederationRank? Federation { get; set; }
         public EmpireRank? Empire { get; set; }
 
-        public override System.Drawing.Bitmap Icon { get { return EliteDangerous.Properties.Resources.promotion; } }
-
         public override void FillInformation(out string summary, out string info, out string detailed)  //V
         {
             summary = EventTypeStr.SplitCapsWord();

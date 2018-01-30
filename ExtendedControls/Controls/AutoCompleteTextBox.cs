@@ -223,7 +223,7 @@ namespace ExtendedControls
         private void _cbdropdown_SelectedIndexChanged(object sender, EventArgs e)
         {
             int selectedindex = _cbdropdown.SelectedIndex;
-            if (selectedindex >= 0)
+            if (selectedindex >= 0 && selectedindex < _cbdropdown.Items.Count)
             {
                 this.Text = _cbdropdown.Items[selectedindex];
                 this.Select(this.Text.Length, this.Text.Length);

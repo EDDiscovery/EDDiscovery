@@ -26,6 +26,8 @@ namespace ExtendedControls
 {
     public partial class InfoForm : DraggableForm
     {
+        public bool EnableClose { get { return buttonOK.Enabled; } set { buttonOK.Enabled = panel_close.Enabled = value; } }
+
         public InfoForm()
         {
             InitializeComponent();
@@ -60,19 +62,26 @@ namespace ExtendedControls
             }
 
             textBoxInfo.Font = fnt;
-         }
+        }
+
+        public void AddText(string text)
+        {
+            textBoxInfo.Text += text;
+            textBoxInfo.Select(textBoxInfo.Text.Length, textBoxInfo.Text.Length);
+            textBoxInfo.ScrollToCaret();
+        }
 
         private void buttonOK_Click(object sender, EventArgs e)
         {
             Close();
         }
 
-        private void panel_close_MouseClick(object sender, MouseEventArgs e)
+        private void panel_close_Click(object sender, EventArgs e)
         {
             Close();
         }
 
-        private void panel_minimize_MouseClick(object sender, MouseEventArgs e)
+        private void panel_minimize_Click(object sender, EventArgs e)
         {
             this.WindowState = FormWindowState.Minimized;
         }
@@ -82,9 +91,14 @@ namespace ExtendedControls
             OnCaptionMouseDown((Control)sender, e);
         }
 
-        private void labelCaption_MouseDown(object sender, MouseEventArgs e)
+        private void panelTop_MouseUp(object sender, MouseEventArgs e)
         {
-            OnCaptionMouseDown((Control)sender, e);
+            OnCaptionMouseUp((Control)sender, e);
+        }
+
+        private void InfoForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            e.Cancel = !buttonOK.Enabled;
         }
     }
 }

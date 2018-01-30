@@ -174,18 +174,13 @@ namespace EDDiscovery.UserControls
                         ammo += "/" + sm.AmmoClip.ToString();
                 }
 
-                string blueprint = "";
-                if (sm.Blueprint!=null)
-                {
-                    blueprint = sm.Blueprint;
-                    if (sm.BlueprintLevel.HasValue)
-                        blueprint += ":" + sm.BlueprintLevel.ToString();
-                }
-
                 string value = (sm.Value.HasValue && sm.Value.Value > 0) ? sm.Value.Value.ToString(System.Globalization.CultureInfo.InvariantCulture) : "";
 
+                string eng = "";
+                if (sm.Engineering != null)
+                    eng = sm.Engineering.FriendlyBlueprintName;
 
-                object[] rowobj = { sm.Slot, sm.Item, sm.LocalisedItem.ToNullSafeString() , ammo, blueprint , value, sm.PE() };
+                object[] rowobj = { sm.Slot, sm.Item, sm.LocalisedItem.ToNullSafeString() , ammo, eng , value, sm.PE() };
                 // debug object[] rowobj = { sm.Slot+":" + sm.SlotFD, sm.Item + ":" + sm.ItemFD, sm.LocalisedItem.ToNullSafeString() , ammo, blueprint , value, sm.PE() };
                 dataGridViewModules.Rows.Add(rowobj);
 

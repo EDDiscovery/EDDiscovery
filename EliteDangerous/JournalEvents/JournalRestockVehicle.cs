@@ -44,18 +44,12 @@ namespace EliteDangerousCore.JournalEvents
             mcl.AddEvent(Id, EventTimeUTC, EventTypeID, Type + " " + Count.ToString(), -Cost);
         }
 
-        public override System.Drawing.Bitmap Icon { get
-            {
-                if (Type.Contains("SRV") )
-                    return EliteDangerous.Properties.Resources.restocksrv;
-                else
-                    return EliteDangerous.Properties.Resources.restockfighter;
-            } }
+        protected override JournalTypeEnum IconEventType { get { return Type.Contains("SRV") ? JournalTypeEnum.RestockVehicle_SRV : JournalTypeEnum.RestockVehicle_Fighter; } }
 
         public override void FillInformation(out string summary, out string info, out string detailed) //V
         {
             summary = EventTypeStr.SplitCapsWord();
-            info = BaseUtils.FieldBuilder.Build("",Type , "Cost:; credits" , Cost , "Count:" , Count , "Loadout:" , Loadout);
+            info = BaseUtils.FieldBuilder.Build("",Type , "Cost:; cr;N0" , Cost , "Count:" , Count , "Loadout:" , Loadout);
             detailed = "";
         }
     }

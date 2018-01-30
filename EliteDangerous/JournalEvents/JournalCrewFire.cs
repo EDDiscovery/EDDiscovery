@@ -34,8 +34,6 @@ namespace EliteDangerousCore.JournalEvents
         }
         public string Name { get; set; }
 
-        public override System.Drawing.Bitmap Icon { get { return EliteDangerous.Properties.Resources.crewfire; } }
-
         public override void FillInformation(out string summary, out string info, out string detailed) //V
         {
             summary = EventTypeStr.SplitCapsWord();

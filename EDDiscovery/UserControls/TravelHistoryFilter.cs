@@ -292,7 +292,7 @@ namespace EDDiscovery.UserControls
         }
     }
 
-    public class StaticFilters
+    static public class StaticFilters
     {
         public static void FilterGridView(DataGridView vw, string searchstr)
         {

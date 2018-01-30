@@ -26,12 +26,13 @@ namespace EliteDangerousCore.JournalEvents
             Name = evt["Name"].Str();
             Count = evt["Count"].Int();
             Category = evt["Category"].Str();
+            MarketID = evt["MarketID"].LongNull();
         }
+
         public string Name { get; set; }
         public int Count { get; set; }
         public string Category { get; set; }
-
-        public override System.Drawing.Bitmap Icon { get { return EliteDangerous.Properties.Resources.scientificresearch; } }
+        public long? MarketID { get; set; }
 
         public override void FillInformation(out string summary, out string info, out string detailed) //V
         {

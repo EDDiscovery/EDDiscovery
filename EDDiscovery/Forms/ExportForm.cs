@@ -25,7 +25,6 @@ namespace EDDiscovery.Forms
         public ExportForm()
         {
             InitializeComponent();
-
         }
 
         public void Init(string[] exportlist, bool disablestartendtime = false)
@@ -106,12 +105,12 @@ namespace EDDiscovery.Forms
             OnCaptionMouseUp((Control)sender, e);
         }
 
-        private void panel_close_MouseClick(object sender, MouseEventArgs e)
+        private void panel_close_Click(object sender, EventArgs e)
         {
             Close();
         }
 
-        private void panel_minimize_MouseClick(object sender, MouseEventArgs e)
+        private void panel_minimize_Click(object sender, EventArgs e)
         {
             this.WindowState = FormWindowState.Minimized;
         }

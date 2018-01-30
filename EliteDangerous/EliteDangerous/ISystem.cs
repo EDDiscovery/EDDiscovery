@@ -129,6 +129,10 @@ namespace EliteDangerousCore
         bool HasCoordinate { get; }
         int gridid { get; set; }
         int randomid { get; set; }
+        long? SystemAddress { get; set; }
+
+        double Distance(ISystemBase other);
+        double Distance(double x,double y,double z);
     }
 
 
@@ -151,7 +155,6 @@ namespace EliteDangerousCore
     // Definition of the core interface so we can swap out an "offline" version during testing
     public interface ISystem : ISystemBase, ISystemEDDB
     {
-        int cr { get; set; }
         string CommanderCreate { get; set; }
         DateTime CreateDate { get; set; }
         string CommanderUpdate { get; set; }

@@ -30,6 +30,7 @@ namespace ExtendedControls
     {
         public enum StripModeType { StripTop, StripBottom, ListSelection };
         public StripModeType StripMode { get; set; } = StripModeType.StripTop;
+        public Image EmptyPanelIcon { get; set; } = Properties.Resources.Stop;
         public Image[] ImageList;     // images
         public string[] TextList;       // text associated - tooltips or text on list selection
         public bool ShowPopOut { get; set; }= true; // Pop out icon show
@@ -71,7 +72,7 @@ namespace ExtendedControls
             autofadeinouttimer.Tick += AutoFadeInOutTick;
             autorepeat.Interval = 200;
             autorepeat.Tick += Autorepeat_Tick;
-            panelSelectedIcon.BackgroundImage = ExtendedControls.Properties.Resources.Stop;
+            panelSelectedIcon.BackgroundImage = EmptyPanelIcon;
             SetIconVisibility();
         }
 
@@ -106,7 +107,7 @@ namespace ExtendedControls
                 si = -1;
                 labelControlText.Text = "";
                 labelTitle.Text = "None";
-                panelSelectedIcon.BackgroundImage = ExtendedControls.Properties.Resources.Stop;
+                panelSelectedIcon.BackgroundImage = EmptyPanelIcon;
             }
 
             if (OnCreateTab != null)
@@ -482,5 +483,17 @@ namespace ExtendedControls
 
         #endregion
 
+
+        // NOT IN USE        
+        #region Icon Replacement
+        public void ReplaceIconsNOTINUSE(Func<string, Image> getIcon)
+        {
+            drawnPanelListSelection.Image = getIcon("PanelList");
+            drawnPanelPopOut.Image = getIcon("Popout");
+            panelArrowLeft.BackgroundImage = getIcon("ArrowLeft");
+            panelArrowRight.BackgroundImage = getIcon("ArrowRight");
+            EmptyPanelIcon = getIcon("NoPanelSelected");
+        }
+        #endregion
     }
 }

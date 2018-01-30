@@ -39,8 +39,6 @@ namespace EliteDangerousCore.JournalEvents
         public string Faction { get; set; }
         public double BrokerPercentage { get; set; }
 
-        public override System.Drawing.Bitmap Icon { get { return EliteDangerous.Properties.Resources.bounty; } }
-
         public void Ledger(Ledger mcl, DB.SQLiteConnectionUser conn)
         {
             mcl.AddEvent(Id, EventTimeUTC, EventTypeID, Type + " Broker " + BrokerPercentage.ToString("0.0") + "%", Amount);
@@ -49,7 +47,7 @@ namespace EliteDangerousCore.JournalEvents
         public override void FillInformation(out string summary, out string info, out string detailed)      //V
         {
             summary = EventTypeStr.SplitCapsWord();
-            info = BaseUtils.FieldBuilder.Build("Type:" , Type , "Amount:; credits", Amount, "Faction:" , Faction);
+            info = BaseUtils.FieldBuilder.Build("Type:" , Type , "Amount:; cr;N0", Amount, "Faction:" , Faction);
             if (BrokerPercentage > 0)
                 info += ", Broker took " + BrokerPercentage.ToString("0") + "%";
             detailed = "";

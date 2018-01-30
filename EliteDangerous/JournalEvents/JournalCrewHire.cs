@@ -39,8 +39,6 @@ namespace EliteDangerousCore.JournalEvents
         public long Cost { get; set; }
         public CombatRank CombatRank { get; set; }
 
-        public override System.Drawing.Bitmap Icon { get { return EliteDangerous.Properties.Resources.crewhire; } }
-
         public void Ledger(Ledger mcl, DB.SQLiteConnectionUser conn)
         {
             mcl.AddEvent(Id, EventTimeUTC, EventTypeID, Name + " " + Faction, -Cost);
@@ -49,7 +47,7 @@ namespace EliteDangerousCore.JournalEvents
         public override void FillInformation(out string summary, out string info, out string detailed) //V
         {
             summary = EventTypeStr.SplitCapsWord();
-            info = BaseUtils.FieldBuilder.Build("Hired ;", Name, "< of faction ", Faction, " Rank ", CombatRank.ToString().SplitCapsWord(), "Cost ; credits", Cost);
+            info = BaseUtils.FieldBuilder.Build("Hired ;", Name, "< of faction ", Faction, " Rank ", CombatRank.ToString().SplitCapsWord(), "Cost ; cr;N0", Cost);
             detailed = "";
         }
     }

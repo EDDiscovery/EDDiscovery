@@ -162,11 +162,11 @@ namespace EliteDangerousCore
         }
 
 
-        public List<HistoryEntry> FilterByEDDCommodityPricesBackwards
+        public List<HistoryEntry> FilterByCommodityPricesBackwards
         {
             get
             {
-                return (from s in historylist where s.EntryType == JournalTypeEnum.EDDCommodityPrices orderby s.EventTimeUTC descending select s).ToList();
+                return (from s in historylist where (s.EntryType == JournalTypeEnum.EDDCommodityPrices || s.EntryType == JournalTypeEnum.Market) orderby s.EventTimeUTC descending select s).ToList();
             }
         }
 
@@ -327,9 +327,10 @@ namespace EliteDangerousCore
 
 
 
-        public int GetTouchDown(DateTime start, DateTime to)
+        public int GetPlayerControlledTouchDown(DateTime start, DateTime to)
         {
-            return (from s in historylist where s.EntryType == JournalTypeEnum.Touchdown && s.EventTimeLocal >= start && s.EventTimeLocal < to select s).Count();
+            return (from s in historylist where s.EntryType == JournalTypeEnum.Touchdown && s.EventTimeLocal >= start && s.EventTimeLocal < to select s)
+                .ToList().ConvertAll<JournalTouchdown>(e => e.journalEntry as JournalTouchdown).Where(j => j.PlayerControlled.Value).Count();
         }
 
         public int GetHeatWarning(DateTime start, DateTime to)
@@ -458,7 +459,7 @@ namespace EliteDangerousCore
         {
             if (syspos.System.status == SystemStatusEnum.EDSM || syspos.System.id_edsm == -1)  // if set already, or we tried and failed..
             {
-                System.Diagnostics.Debug.WriteLine("Checked System {0} already id {1} ", syspos.System.name , syspos.System.id_edsm);
+                //System.Diagnostics.Debug.WriteLine("Checked System {0} already id {1} ", syspos.System.name , syspos.System.id_edsm);
                 return;
             }
 
@@ -513,7 +514,7 @@ namespace EliteDangerousCore
 
         #region General Info
 
-        public void CalculateSqDistances(SortedList<double, ISystem> distlist, double x, double y, double z, 
+        public void CalculateSqDistances(BaseUtils.SortedListDoubleDuplicate<ISystem> distlist, double x, double y, double z, 
                         int maxitems, double mindistance, double maxdistance , bool spherical )
         {
             HashSet<long> listids = new HashSet<long>();

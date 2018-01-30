@@ -82,6 +82,7 @@ namespace NetLogEntry
                                   "     Options: Friends Name\n" +
                                   "     Options: FuelScoop amount total\n" +
                                   "     Options: JetConeBoost\n" +
+                                  "     Options: FighterDestroyed FigherRebuilt NpcCrewRank NpcCrewPaidWage LaunchDrone\n" +
                                   "EDDBSTARS <filename> or EDDBPLANETS or EDDBSTARNAMES for the eddb dump\n" +
                                   "Phoneme <filename> <fileout> for EDDI phoneme tx\n" +
                                   "Voicerecon <filename>\n" +
@@ -247,6 +248,17 @@ namespace NetLogEntry
                 }
                 else if (writetype.Equals("JetConeBoost", StringComparison.InvariantCultureIgnoreCase))
                     lineout = "{ " + TimeStamp() + F("event", "JetConeBoost") + FF("BoostValue", "1.5") + " }";
+                else if (writetype.Equals("FighterDestroyed", StringComparison.InvariantCultureIgnoreCase))
+                    lineout = "{ " + TimeStamp() + FF("event", "FighterDestroyed") + " }";
+                else if (writetype.Equals("FighterRebuilt", StringComparison.InvariantCultureIgnoreCase))
+                    lineout = "{ " + TimeStamp() + F("event", "FighterRebuilt") + FF("Loadout", "Fred") + " }";
+                else if (writetype.Equals("NpcCrewPaidWage", StringComparison.InvariantCultureIgnoreCase))
+                    lineout = "{ " + TimeStamp() + F("event", "NpcCrewPaidWage") + F("NpcCrewId", 1921) + FF("Amount", 10292) + " }";
+                else if (writetype.Equals("NpcCrewRank", StringComparison.InvariantCultureIgnoreCase))
+                    lineout = "{ " + TimeStamp() + F("event", "NpcCrewRank") + F("NpcCrewId", 1921) + FF("RankCombat", 4) + " }";
+                else if (writetype.Equals("LaunchDrone", StringComparison.InvariantCultureIgnoreCase))
+                    lineout = "{ " + TimeStamp() + F("event", "LaunchDrone") + FF("Type", "FuelTransfer") +" }";
+
                 else
                 {
                     Console.WriteLine("Missing or incorrect arguments for journal write");
@@ -364,14 +376,22 @@ namespace NetLogEntry
 
         public static string F(string name, string v)
         {
-            DateTime dt = DateTime.Now.ToUniversalTime();
             return "\"" + name + "\":\"" + v + "\", ";
         }
 
         public static string FF(string name, string v)      // no final comma
         {
-            DateTime dt = DateTime.Now.ToUniversalTime();
             return "\"" + name + "\":\"" + v + "\"";
+        }
+
+        public static string F(string name, long v)
+        {
+            return "\"" + name + "\":" + v + ", ";
+        }
+
+        public static string FF(string name, long v)      // no final comma
+        {
+            return "\"" + name + "\":" + v;
         }
 
 

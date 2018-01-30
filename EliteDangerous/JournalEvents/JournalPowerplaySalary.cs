@@ -33,8 +33,6 @@ namespace EliteDangerousCore.JournalEvents
         public string Power { get; set; }
         public long Amount { get; set; }
 
-        public override System.Drawing.Bitmap Icon { get { return EliteDangerous.Properties.Resources.powerplaysalary; } }
-
         public void Ledger(Ledger mcl, DB.SQLiteConnectionUser conn)
         {
             mcl.AddEvent(Id, EventTimeUTC, EventTypeID, Power, Amount);
@@ -43,7 +41,7 @@ namespace EliteDangerousCore.JournalEvents
         public override void FillInformation(out string summary, out string info, out string detailed) //V
         {
             summary = EventTypeStr.SplitCapsWord();
-            info = BaseUtils.FieldBuilder.Build("", Power, "Amount:; credits", Amount);
+            info = BaseUtils.FieldBuilder.Build("", Power, "Amount:; cr;N0", Amount);
             detailed = "";
         }
     }

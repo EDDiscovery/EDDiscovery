@@ -74,7 +74,7 @@ namespace EDDiscovery.UserControls
         public virtual void ChangeCursorType(IHistoryCursor thc) { }     // optional, cursor has changed
 
         public virtual Color ColorTransparency { get { return Color.Transparent; } }        // override to say support transparency, and what colour you want.
-        public virtual void SetTransparency(bool on, Color curcol) { }                      // set on/off transparency of components.
+        public virtual void SetTransparency(bool ison, Color curcol) { }                      // set on/off transparency of components.
 
         public void SetControlText(string s)            // used to set heading text in either the form of the tabstrip
         {
@@ -99,35 +99,35 @@ namespace EDDiscovery.UserControls
 
         #region Resize
 
-        public bool inresizeduetoexpand = false;                                            // FUNCTIONS to allow a form to grow temporarily.  Does not work when inside the panels
+        public bool ResizingNow = false;                                            // FUNCTIONS to allow a form to grow temporarily.  Does not work when inside the panels
 
-        public void RequestTemporaryMinimumSize(Size w)         // w is client area
-        {
+        public void RequestTemporaryMinimumSize(Size w)         // w is UC area
+        { 
             if (this.Parent is Forms.UserControlForm)
             {
-                inresizeduetoexpand = true;
+                ResizingNow = true;
                 ((Forms.UserControlForm)(this.Parent)).RequestTemporaryMinimiumSize(w);
-                inresizeduetoexpand = false;
+                ResizingNow = false;
             }
         }
 
-        public void RequestTemporaryResizeExpand(Size w)        // by this client size
+        public void RequestTemporaryResizeExpand(Size w)        // by this area expand
         {
             if (this.Parent is Forms.UserControlForm)
             {
-                inresizeduetoexpand = true;
+                ResizingNow = true;
                 ((Forms.UserControlForm)(this.Parent)).RequestTemporaryResizeExpand(w);
-                inresizeduetoexpand = false;
+                ResizingNow = false;
             }
         }
 
-        public void RequestTemporaryResize(Size w)              // w is client area
+        public void RequestTemporaryResize(Size w)              // w is the UC area
         {
             if (this.Parent is Forms.UserControlForm)
             {
-                inresizeduetoexpand = true;
+                ResizingNow = true;
                 ((Forms.UserControlForm)(this.Parent)).RequestTemporaryResize(w);
-                inresizeduetoexpand = false;
+                ResizingNow = false;
             }
         }
 
@@ -135,16 +135,16 @@ namespace EDDiscovery.UserControls
         {
             if (this.Parent is Forms.UserControlForm)
             {
-                inresizeduetoexpand = true;
+                ResizingNow = true;
                 ((Forms.UserControlForm)(this.Parent)).RevertToNormalSize();
-                inresizeduetoexpand = false;
+                ResizingNow = false;
             }
         }
 
         public bool IsInTemporaryResize                         // have we grown?
         { get
             {
-                return (this.Parent is Forms.UserControlForm) ? ((Forms.UserControlForm)(this.Parent)).istemporaryresized : false;
+                return (this.Parent is Forms.UserControlForm) ? ((Forms.UserControlForm)(this.Parent)).IsTemporaryResized : false;
             }
         }
 

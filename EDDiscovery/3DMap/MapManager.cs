@@ -28,14 +28,13 @@ namespace EDDiscovery._3DMap
     {
         private FormMap _formMap;
 
-        public MapManager(bool nowindowreposition,EDDiscoveryForm frm)
+        public MapManager(EDDiscoveryForm frm)
         {
             if (!EDDOptions.Instance.No3DMap)
             {
                 _formMap = new FormMap()
                 {
                     discoveryForm = frm,
-                    noWindowReposition = nowindowreposition,
                     TopMost = frm.TopMost
                 };
                 frm.TopMostChanged += (s, e) => _formMap.TopMost = ((EDDiscoveryForm)s).TopMost;
@@ -74,6 +73,9 @@ namespace EDDiscovery._3DMap
             // TODO: set Opacity to match EDDiscoveryForm
             if (_formMap != null)
             {
+                EDDiscovery.EDDTheme theme = EDDiscovery.EDDTheme.Instance;
+                _formMap.IconSelect(theme.ApplyToForm(_formMap));
+
                 _formMap.Show();
                 _formMap.Focus();
             }

@@ -25,10 +25,18 @@ namespace BaseUtils
     {
         // first object = format string
         // second object = data value
+        //
         //      if data value null or empty, not printed
+        //
+        //      if data value is string, format = prefix;postfix
         //      if data value is bool, format = false text;true text
-        //      else format is prefix;postfix;[floatdoubleformat] value .  floatDoubleformat must be present for floats/doubles
+        //      if data value is double/float, format = prefix;postfix[;floatformat]    format = "0" if not present    
+        //      if data value is int/long, format = prefix;postfix [;int format]        format = "0" if not present
+        //      if data value is date time, format = prefix;postfix [;date format]      format = "g" if not present
+        //      if data value is enum, format = prefix;postfix 
+        //
         //      if prefix starts with a <, no ,<spc> pad
+        //
         // or first object = NewPrefix only, define next pad to use, then go back to standard pad
 
         public class NewPrefix   // indicator class, use this as first item to indicate the next prefix to use.  After one use, its discarded.
@@ -77,6 +85,8 @@ namespace BaseUtils
                         }
                         else
                         {
+                            string format = fieldnames.Length >= 3 ? fieldnames[2] : "0";
+
                             string output;
                             if (value is string)
                             {
@@ -84,37 +94,42 @@ namespace BaseUtils
                             }
                             else if (value is double)
                             {
-                                System.Diagnostics.Debug.Assert(fieldnames.Length >= 3);
-                                output = ((double)value).ToString(fieldnames[2]);
+                                output = ((double)value).ToString(format);
                             }
                             else if (value is float)
                             {
-                                System.Diagnostics.Debug.Assert(fieldnames.Length >= 3);
-                                output = ((float)value).ToString(fieldnames[2]);
+                                output = ((float)value).ToString(format);
                             }
                             else if (value is int)
-                                output = ((int)value).ToString(System.Globalization.CultureInfo.InvariantCulture);
+                            {
+                                output = ((int)value).ToString(format,System.Globalization.CultureInfo.InvariantCulture);
+                            }
                             else if (value is long)
-                                output = ((long)value).ToString(System.Globalization.CultureInfo.InvariantCulture);
+                            {
+                                output = ((long)value).ToString(format,System.Globalization.CultureInfo.InvariantCulture);
+                            }
                             else if (value is double?)
                             {
-                                System.Diagnostics.Debug.Assert(fieldnames.Length >= 3);
-                                output = ((double?)value).Value.ToString(fieldnames[2]);
+                                output = ((double?)value).Value.ToString(format);
                             }
                             else if (value is float?)
                             {
-                                System.Diagnostics.Debug.Assert(fieldnames.Length >= 3);
-                                output = ((float?)value).Value.ToString(fieldnames[2]);
+                                output = ((float?)value).Value.ToString(format);
                             }
                             else if (value is int?)
-                                output = ((int?)value).Value.ToString(System.Globalization.CultureInfo.InvariantCulture);
+                            {
+                                output = ((int?)value).Value.ToString(format,System.Globalization.CultureInfo.InvariantCulture);
+                            }
                             else if (value is long?)
-                                output = ((long?)value).Value.ToString(System.Globalization.CultureInfo.InvariantCulture);
+                            {
+                                output = ((long?)value).Value.ToString(format,System.Globalization.CultureInfo.InvariantCulture);
+                            }
                             else if (value is DateTime)
                             {
-                                output = ((DateTime)value).ToString();
+                                format = fieldnames.Length >= 3 ? fieldnames[2] : "g";
+                                output = ((DateTime)value).ToString(format);
                             }
-                            else 
+                            else
                             {
                                 Type t = value.GetType();
                                 if (t.BaseType.Name.Equals("Enum"))

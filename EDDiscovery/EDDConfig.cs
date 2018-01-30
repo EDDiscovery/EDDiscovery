@@ -68,6 +68,8 @@ namespace EDDiscovery
         private System.Windows.Forms.Keys _clickthrukey = System.Windows.Forms.Keys.ShiftKey;
         private string _defaultwavedevice = "Default";
         private string _defaultvoicedevice = "Default";
+        private bool _EDSMEDDBDownload = true;
+        private string _EDSMGridIDs = "All";
 
         public bool EDSMLog
         {
@@ -261,6 +263,32 @@ namespace EDDiscovery
             }
         }
 
+        public bool EDSMEDDBDownload
+        {
+            get
+            {
+                return _EDSMEDDBDownload;
+            }
+            set
+            {
+                _EDSMEDDBDownload = value;
+                SQLiteConnectionUser.PutSettingBool("EDSMEDDBDownloadData", value);
+            }
+        }
+
+        public string EDSMGridIDs
+        {
+            get
+            {
+                return _EDSMGridIDs;
+            }
+            set
+            {
+                _EDSMGridIDs = value;
+                SQLiteConnectionSystem.PutSettingString("EDSMGridIDs", value);
+            }
+        }
+
         #endregion
 
         #region Update at start
@@ -283,6 +311,8 @@ namespace EDDiscovery
                 _defaultwavedevice = SQLiteConnectionUser.GetSettingString("WaveAudioDevice", "Default", conn);
                 _showuievents = SQLiteConnectionUser.GetSettingBool("ShowUIEvents", false, conn);
                 _clickthrukey = (System.Windows.Forms.Keys)SQLiteConnectionUser.GetSettingInt("ClickThruKey", (int)System.Windows.Forms.Keys.ShiftKey, conn);
+                _EDSMEDDBDownload = SQLiteConnectionUser.GetSettingBool("EDSMEDDBDownloadData", true, conn);    // this goes with the USER on purpose, so its kept over a system db delete
+                _EDSMGridIDs = SQLiteConnectionSystem.GetSettingString("EDSMGridIDs", "All"); // from system database, not user, to keep setting with system data
 
                 EliteDangerousCore.EDCommander.Load(write, conn);
             }

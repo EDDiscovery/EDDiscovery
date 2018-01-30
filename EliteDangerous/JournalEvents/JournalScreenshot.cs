@@ -47,6 +47,8 @@ namespace EliteDangerousCore.JournalEvents
             Body = evt["Body"].Str();
             nLatitude = evt["Latitude"].DoubleNull();
             nLongitude = evt["Longitude"].DoubleNull();
+            nAltitude = evt["Altitude"].DoubleNull();
+            nHeading = evt["Heading"].DoubleNull();
         }
         public string Filename { get; set; }
         public int Width { get; set; }
@@ -55,8 +57,8 @@ namespace EliteDangerousCore.JournalEvents
         public string Body { get; set; }
         public double? nLatitude { get; set; }
         public double? nLongitude { get; set; }
-
-        public override System.Drawing.Bitmap Icon { get { return EliteDangerous.Properties.Resources.screenshot; } }
+        public double? nAltitude { get; set; }
+        public double? nHeading { get; set; }
 
         public override void FillInformation(out string summary, out string info, out string detailed)  //V
         {

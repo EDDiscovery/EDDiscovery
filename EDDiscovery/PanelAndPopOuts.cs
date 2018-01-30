@@ -14,7 +14,8 @@
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 
- using EDDiscovery.UserControls;
+using EDDiscovery.Icons;
+using EDDiscovery.UserControls;
 using EliteDangerousCore.DB;
 using System;
 using System.Collections.Generic;
@@ -25,7 +26,7 @@ using System.Threading.Tasks;
 
 namespace EDDiscovery.Forms
 {
-    public class PanelInformation
+    static public class PanelInformation
     {
         public enum PanelIDs        // id's.. used in tab controls, and in button pop outs button
         {
@@ -71,41 +72,43 @@ namespace EDDiscovery.Forms
 
         static public List<PanelInfo> PanelList = new List<PanelInfo>()
         {
-            { new PanelInfo( PanelIDs.Log , typeof(UserControlLog),"Log", "Log", EDDiscovery.Properties.Resources.Log , "Program log" ) },
-            { new PanelInfo( PanelIDs.StarDistance, typeof(UserControlStarDistance), "Nearest Stars", "StarDistance", EDDiscovery.Properties.Resources.star,"List of nearest stars") },
-            { new PanelInfo( PanelIDs.Materials, typeof(UserControlMaterials) , "Materials", "Materials", EliteDangerous.Properties.Resources.material, "Materials count" ) },
-            { new PanelInfo( PanelIDs.Commodities, typeof(UserControlCommodities), "Commodities", "Commodities", EliteDangerous.Properties.Resources.commodities, "Commodity count") },
-            { new PanelInfo( PanelIDs.Ledger, typeof(UserControlLedger), "Ledger", "Ledger", EDDiscovery.Properties.Resources.ledger, "Ledger of cash related entries") },
-            { new PanelInfo( PanelIDs.Journal, typeof(UserControlJournalGrid), "Journal", "JournalHistory", EDDiscovery.Properties.Resources.journal, "Journal grid view") },
-            { new PanelInfo( PanelIDs.TravelGrid, typeof(UserControlTravelGrid), "Travel History", "TravelHistory", EDDiscovery.Properties.Resources.travelgrid, "History grid view") },
-            { new PanelInfo( PanelIDs.StarList, typeof(UserControlStarList), "Star List", "StarList", EDDiscovery.Properties.Resources.starlist, "Visited star list", transparent: false) },
-            { new PanelInfo( PanelIDs.MarketData, typeof(UserControlMarketData), "Market Data", "MarketData", EliteDangerous.Properties.Resources.marketdata , "Market data (Requires Frontier Commander login)" ) },
-            { new PanelInfo( PanelIDs.Missions, typeof(UserControlMissions), "Missions", "Missions", EliteDangerous.Properties.Resources.missionaccepted , "Mission list") },
-            { new PanelInfo( PanelIDs.Synthesis, typeof(UserControlSynthesis), "Synthesis", "Synthesis", EliteDangerous.Properties.Resources.synthesis, "Synthesis planner") },
-            { new PanelInfo( PanelIDs.Engineering, typeof(UserControlEngineering), "Engineering", "Engineering", EliteDangerous.Properties.Resources.engineercraft , "Engineering planner") },
-            { new PanelInfo( PanelIDs.ShoppingList, typeof(UserControlShoppingList), "Shopping List", "ShoppingList", EDDiscovery.Properties.Resources.shoppinglist, "Shopping list planner combining synthesis and engineering") },
-            { new PanelInfo( PanelIDs.Scan, typeof(UserControlScan), "Scan", "Scan", EliteDangerous.Properties.Resources.scan, "Scan data on system", transparent: false) },
-            { new PanelInfo( PanelIDs.ScanGrid, typeof(UserControlScanGrid), "Scan Grid", "ScanGrid", EDDiscovery.Properties.Resources.scangrid, "Scan data on system in a grid", transparent: false) },
-            { new PanelInfo( PanelIDs.EstimatedValues, typeof(UserControlEstimatedValues),"Estimated Values", "EstimatedValues", EliteDangerous.Properties.Resources.estval, "Estimated scan values of bodies in system", transparent: false) },
-            { new PanelInfo( PanelIDs.Modules, typeof(UserControlModules), "Loadout", "Modules", EliteDangerous.Properties.Resources.module, "Ship loadout for current ships and stored modules") },
-            { new PanelInfo( PanelIDs.Map, typeof(UserControlMap), "Map", "Map", EDDiscovery.Properties.Resources.map, "3D Map of systems in range", transparent: false) },
-            { new PanelInfo( PanelIDs.Plot, typeof(UserControlPlot), "2D Plot", "Plot", EDDiscovery.Properties.Resources.plot, "2D Plot of systems in range", transparent: false) },
-            { new PanelInfo( PanelIDs.Exploration, typeof(UserControlExploration), "Exploration", "Exploration", EliteDangerous.Properties.Resources.sellexplorationdata, "Exploration Information") },
-            { new PanelInfo( PanelIDs.ScreenShot, typeof(UserControlScreenshot), "Screen Shot", "ScreenShot", EliteDangerous.Properties.Resources.screenshot, "Screen shot view") },
-            { new PanelInfo( PanelIDs.Statistics, typeof(UserControlStats), "Statistics", "Stats", EDDiscovery.Properties.Resources.stats, "Statistics Information") },
-            { new PanelInfo( PanelIDs.SystemInformation, typeof(UserControlSysInfo), "System Information", "SystemInfo", EDDiscovery.Properties.Resources.starsystem , "System Information" , transparent:false ) },
-            { new PanelInfo( PanelIDs.EDSM, typeof(UserControlEDSM), "EDSM Star Finder", "EDSMStarFinder", EDDiscovery.Properties.Resources.edsm24, "EDSM Star finder") },
-            { new PanelInfo( PanelIDs.Route, typeof(UserControlRoute), "Route Finder", "RouteFinder", EDDiscovery.Properties.Resources.route, "Route Finder from stored star data") },
-            { new PanelInfo( PanelIDs.Expedition, typeof(UserControlExpedition), "Expedition", "Expedition", EDDiscovery.Properties.Resources.expedition, "Expedition Planner") },
-            { new PanelInfo( PanelIDs.Trilateration, typeof(UserControlTrilateration) ,"Trilateration", "Trilateration", EDDiscovery.Properties.Resources.triangulation, "Trilateration of stars with unknown positions") },
-            { new PanelInfo( PanelIDs.Spanel, typeof(UserControlSpanel), "Summary Panel", "Spanel", EDDiscovery.Properties.Resources.spanel, "Summary panel overlay" , transparent: false ) },
-            { new PanelInfo( PanelIDs.Trippanel, typeof(UserControlTrippanel), "Trip Computer", "Trippanel", EDDiscovery.Properties.Resources.trippanel, "Trip computer overlay" , transparent: false) },
-            { new PanelInfo( PanelIDs.NotePanel, typeof(UserControlNotePanel), "Notes", "NotePanel", EDDiscovery.Properties.Resources.notes, "System notes overlay" , transparent: false) },
-            { new PanelInfo( PanelIDs.RouteTracker, typeof(UserControlRouteTracker),"Route Tracker", "RouteTracker", EDDiscovery.Properties.Resources.routetracker, "Route tracker overlay", transparent: false) },
-            { new PanelInfo( PanelIDs.Settings, typeof(UserControlSettings), "Settings", "SettingsPanel", EDDiscovery.Properties.Resources.settings, "Settings for ED Discovery ") },
-            { new PanelInfo( PanelIDs.Grid, typeof(UserControlContainerGrid), "Grid", "TheGrid", EDDiscovery.Properties.Resources.grid, "Grid (allows other panels to be placed in the it)" , transparent:false) },
-            { new PanelInfo( PanelIDs.Compass, typeof(UserControlCompass), "Compass", "Compass", Properties.Resources.compass, "Ground compass navigation panel to work out the bearing between planetary coordinates", transparent:true) },
+            { new PanelInfo( PanelIDs.Log , typeof(UserControlLog),"Log", "Log", "Program log" ) },
+            { new PanelInfo( PanelIDs.StarDistance, typeof(UserControlStarDistance), "Nearest Stars", "StarDistance","List of nearest stars") },
+            { new PanelInfo( PanelIDs.Materials, typeof(UserControlMaterials) , "Materials", "Materials", "Materials count" ) },
+            { new PanelInfo( PanelIDs.Commodities, typeof(UserControlCommodities), "Commodities", "Commodities", "Commodity count") },
+            { new PanelInfo( PanelIDs.Ledger, typeof(UserControlLedger), "Ledger", "Ledger", "Ledger of cash related entries") },
+            { new PanelInfo( PanelIDs.Journal, typeof(UserControlJournalGrid), "Journal", "JournalHistory", "Journal grid view") },
+            { new PanelInfo( PanelIDs.TravelGrid, typeof(UserControlTravelGrid), "Travel History", "TravelHistory", "History grid view") },
+            { new PanelInfo( PanelIDs.StarList, typeof(UserControlStarList), "Star List", "StarList", "Visited star list", transparent: false) },
+            { new PanelInfo( PanelIDs.MarketData, typeof(UserControlMarketData), "Market Data", "MarketData", "Market data (Requires Frontier Commander login)" ) },
+            { new PanelInfo( PanelIDs.Missions, typeof(UserControlMissions), "Missions", "Missions", "Mission list") },
+            { new PanelInfo( PanelIDs.Synthesis, typeof(UserControlSynthesis), "Synthesis", "Synthesis", "Synthesis planner") },
+            { new PanelInfo( PanelIDs.Engineering, typeof(UserControlEngineering), "Engineering", "Engineering", "Engineering planner") },
+            { new PanelInfo( PanelIDs.ShoppingList, typeof(UserControlShoppingList), "Shopping List", "ShoppingList", "Shopping list planner combining synthesis and engineering") },
+            { new PanelInfo( PanelIDs.Scan, typeof(UserControlScan), "Scan", "Scan", "Scan data on system", transparent: false) },
+            { new PanelInfo( PanelIDs.ScanGrid, typeof(UserControlScanGrid), "Scan Grid", "ScanGrid", "Scan data on system in a grid", transparent: false) },
+            { new PanelInfo( PanelIDs.EstimatedValues, typeof(UserControlEstimatedValues),"Estimated Values", "EstimatedValues", "Estimated scan values of bodies in system", transparent: false) },
+            { new PanelInfo( PanelIDs.Modules, typeof(UserControlModules), "Loadout", "Modules", "Ship loadout for current ships and stored modules") },
+            { new PanelInfo( PanelIDs.Map, typeof(UserControlMap), "Map", "Map", "3D Map of systems in range", transparent: false) },
+            { new PanelInfo( PanelIDs.Plot, typeof(UserControlPlot), "2D Plot", "Plot", "2D Plot of systems in range", transparent: false) },
+            { new PanelInfo( PanelIDs.Exploration, typeof(UserControlExploration), "Exploration", "Exploration", "Exploration Information") },
+            { new PanelInfo( PanelIDs.ScreenShot, typeof(UserControlScreenshot), "Screen Shot", "ScreenShot", "Screen shot view") },
+            { new PanelInfo( PanelIDs.Statistics, typeof(UserControlStats), "Statistics", "Stats", "Statistics Information") },
+            { new PanelInfo( PanelIDs.SystemInformation, typeof(UserControlSysInfo), "System Information", "SystemInfo", "System Information" , transparent:false ) },
+            { new PanelInfo( PanelIDs.EDSM, typeof(UserControlEDSM), "EDSM Star Finder", "EDSMStarFinder", "EDSM Star finder") },
+            { new PanelInfo( PanelIDs.Route, typeof(UserControlRoute), "Route Finder", "RouteFinder", "Route Finder from stored star data") },
+            { new PanelInfo( PanelIDs.Expedition, typeof(UserControlExpedition), "Expedition", "Expedition", "Expedition Planner") },
+            { new PanelInfo( PanelIDs.Trilateration, typeof(UserControlTrilateration) ,"Trilateration", "Trilateration", "Trilateration of stars with unknown positions") },
+            { new PanelInfo( PanelIDs.Spanel, typeof(UserControlSpanel), "Summary Panel", "Spanel", "Summary panel overlay" , transparent: false ) },
+            { new PanelInfo( PanelIDs.Trippanel, typeof(UserControlTrippanel), "Trip Computer", "Trippanel", "Trip computer overlay" , transparent: false) },
+            { new PanelInfo( PanelIDs.NotePanel, typeof(UserControlNotePanel), "Notes", "NotePanel", "System notes overlay" , transparent: false) },
+            { new PanelInfo( PanelIDs.RouteTracker, typeof(UserControlRouteTracker),"Route Tracker", "RouteTracker", "Route tracker overlay", transparent: false) },
+            { new PanelInfo( PanelIDs.Settings, typeof(UserControlSettings), "Settings", "SettingsPanel", "Settings for ED Discovery ") },
+            { new PanelInfo( PanelIDs.Grid, typeof(UserControlContainerGrid), "Grid", "TheGrid", "Grid (allows other panels to be placed in the it)" , transparent:false) },
+            { new PanelInfo( PanelIDs.Compass, typeof(UserControlCompass), "Compass", "Compass", "Ground compass navigation panel to work out the bearing between planetary coordinates", transparent:true) },
         };
+
+        public static IReadOnlyDictionary<PanelIDs, Image> PanelTypeIcons { get; } = new IconGroup<PanelIDs>("Panels");
 
         public class PanelInfo
         {
@@ -113,18 +116,17 @@ namespace EDDiscovery.Forms
             public Type PopoutType;
             public string WindowTitlePrefix;
             public string WindowRefName;
-            public Bitmap TabIcon;
+            public Image TabIcon { get { return PanelTypeIcons[PopoutID]; } }
             public string Tooltip;
             public bool SupportsTransparency;
             public bool DefaultTransparent;
 
-            public PanelInfo(PanelIDs p, Type t, string prefix, string rf, Bitmap icon, string tooltip, bool? transparent = null)
+            public PanelInfo(PanelIDs p, Type t, string prefix, string rf, string tooltip, bool? transparent = null)
             {
                 PopoutID = p;
                 PopoutType = t;
                 WindowTitlePrefix = prefix;
                 WindowRefName = rf;
-                TabIcon = icon;
                 Tooltip = tooltip;
                 SupportsTransparency = transparent != null;
                 DefaultTransparent = transparent ?? false;
@@ -156,10 +158,7 @@ namespace EDDiscovery.Forms
             return PanelList.FindIndex(x => x.PopoutID == p);
         }
 
-        static public int GetNumberPanels()
-        {
-            return PanelList.Count;
-        }
+        static public int GetNumberPanels { get { return PanelList.Count; } }
 
         static public PanelInfo GetPanelInfoByEnum(PanelIDs p)
         {
@@ -261,9 +260,8 @@ namespace EDDiscovery.Forms
 
         public void PopOut(int ix)
         {
-            UserControlForm tcf = usercontrolsforms.NewForm(EDDiscovery.EDDOptions.Instance.NoWindowReposition);
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(EDDiscovery.EDDiscoveryForm));
-            tcf.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            UserControlForm tcf = usercontrolsforms.NewForm();
+            tcf.Icon = Properties.Resources.edlogo_3mo_icon;
 
             UserControlCommonBase ctrl = PanelInformation.Create(ix);
 

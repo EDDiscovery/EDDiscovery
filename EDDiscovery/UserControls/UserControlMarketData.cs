@@ -87,7 +87,7 @@ namespace EDDiscovery.UserControls
             if (!Object.ReferenceEquals(he, last_he) )       // if last was null, or he has changed, we have a possible change..
             {
                 FillComboBoxes(hl);
-                HistoryEntry new_last_eddmd = hl.GetLastHistoryEntry(x => x.EntryType == JournalTypeEnum.EDDCommodityPrices, he);       // find, from he, the last market data commodity price
+                HistoryEntry new_last_eddmd = hl.GetLastHistoryEntry(x => x.EntryType == JournalTypeEnum.EDDCommodityPrices || x.EntryType == JournalTypeEnum.Market, he);       // find, from he, the last market data commodity price
 
                 bool eddmdchanged = !Object.ReferenceEquals(new_last_eddmd, last_eddmd);
                 bool cargochanged = !Object.ReferenceEquals(last_he?.MaterialCommodity, he?.MaterialCommodity); // is cargo different between he and last_he
@@ -128,7 +128,7 @@ namespace EDDiscovery.UserControls
             {
                 System.Diagnostics.Debug.WriteLine(Environment.NewLine + "From " + current_displayed?.WhereAmI + " to " + left.WhereAmI);
 
-                JournalEDDCommodityPrices ecp = left.journalEntry as JournalEDDCommodityPrices;
+                JournalCommodityPricesBase ecp = left.journalEntry as JournalCommodityPricesBase;
                 List<CCommodities> list = ecp.Commodities;
 
                 System.Diagnostics.Debug.WriteLine("Test Right " + eddmd_right?.WhereAmI + " vs " + left.WhereAmI);
@@ -153,7 +153,7 @@ namespace EDDiscovery.UserControls
                     }
 
                     System.Diagnostics.Debug.WriteLine("Right " + eddmd_right.System.name + " " + eddmd_right.WhereAmI);
-                    list = CCommodities.Merge(list, ((JournalEDDCommodityPrices)eddmd_right.journalEntry).Commodities , eddmd_right.WhereAmI);
+                    list = CCommodities.Merge(list, ((JournalCommodityPricesBase)eddmd_right.journalEntry).Commodities , eddmd_right.WhereAmI);
                 }
 
                 List<MaterialCommodities> mclist = cargo.MaterialCommodity.Sort(true);      // stuff we have..  commodities only
@@ -175,7 +175,7 @@ namespace EDDiscovery.UserControls
                     if (!buyonly || (c.buyPrice > 0 || c.ComparisionBuy))
                     {
                         object[] rowobj = { c.type ,
-                                            c.name ,
+                                            c.locName.Alt(c.name.SplitCapsWordFull()) ,
                                             c.sellPrice > 0 ? c.sellPrice.ToString() : "" ,
                                             c.buyPrice > 0 ? c.buyPrice.ToString() : "" ,
                                             c.CargoCarried,
@@ -204,7 +204,7 @@ namespace EDDiscovery.UserControls
                     if (m.count > 0)
                     {
                         object[] rowobj = {     m.type,
-                                                m.name ,
+                                                m.name,
                                                 "",
                                                 "",
                                                 m.count,
@@ -261,7 +261,7 @@ namespace EDDiscovery.UserControls
 
             comboboxentries.Clear();
 
-            List<HistoryEntry> hlcpb = hl.FilterByEDDCommodityPricesBackwards;
+            List<HistoryEntry> hlcpb = hl.FilterByCommodityPricesBackwards;
 
             foreach (HistoryEntry h in hlcpb)
             {

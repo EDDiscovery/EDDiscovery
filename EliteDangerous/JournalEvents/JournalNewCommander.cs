@@ -27,18 +27,17 @@ namespace EliteDangerousCore.JournalEvents
     {
         public JournalNewCommander(JObject evt ) : base(evt, JournalTypeEnum.NewCommander)
         {
+            Name = evt["Name"].Str();
             Package = evt["Package"].Str();
         }
 
         public string Name { get; set; }
         public string Package { get; set; }
 
-        public override System.Drawing.Bitmap Icon { get { return EliteDangerous.Properties.Resources.newcommander; } }
-
         public override void FillInformation(out string summary, out string info, out string detailed) //V
         {
             summary = EventTypeStr.SplitCapsWord();
-            info = Package;
+            info = BaseUtils.FieldBuilder.Build("Cmdr ", Name , "Starting Package:", Package); 
             detailed = "";
         }
     }
