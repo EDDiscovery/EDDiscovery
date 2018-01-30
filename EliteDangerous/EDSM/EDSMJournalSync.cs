@@ -39,6 +39,7 @@ namespace EliteDangerousCore.EDSM
         private static ConcurrentQueue<HistoryQueueEntry> historylist = new ConcurrentQueue<HistoryQueueEntry>();
         private static AutoResetEvent historyevent = new AutoResetEvent(false);
         private static ManualResetEvent exitevent = new ManualResetEvent(false);
+        private static DateTime lastDiscardFetch;
         private static int maxEventsPerMessage = 200;
         private static HashSet<string> discardEvents = new HashSet<string>
         { // Default events to discard
@@ -193,6 +194,13 @@ namespace EliteDangerousCore.EDSM
 
         private static bool ShouldSendEvent(HistoryEntry he)
         {
+            if (lastDiscardFetch < DateTime.UtcNow.AddMinutes(-30))
+            {
+                EDSMClass edsm = new EDSMClass();
+                discardEvents = new HashSet<string>(edsm.GetJournalEventsToDiscard());
+                lastDiscardFetch = DateTime.UtcNow;
+            }
+
             string eventtype = he.EntryType.ToString();
             if (he.EdsmSync || 
                 he.IsStarPosFromEDSM ||
@@ -227,7 +235,6 @@ namespace EliteDangerousCore.EDSM
                 _running = 1;
 
                 EDSMClass edsm = new EDSMClass();
-                discardEvents = new HashSet<string>(edsm.GetJournalEventsToDiscard());
                 bool manual = false;
                 int manualcount = 0;
                 Action<string> logger;

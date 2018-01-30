@@ -1119,7 +1119,7 @@ namespace EliteDangerousCore.EDSM
         {
             string action = "api-journal-v1/discard";
             var response = RequestGet(action);
-            return JArray.Parse(response.Body).Cast<string>().ToList();
+            return JArray.Parse(response.Body).Select(v => v.Str()).ToList();
         }
 
         public int SendJournalEvents(List<JObject> entries, out string errmsg)
