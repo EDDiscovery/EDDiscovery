@@ -403,6 +403,17 @@ namespace EliteDangerousCore.EDSM
                 JObject json = je.GetJson();
                 RemoveCommonKeys(json);
                 json.Remove("StarPosFromEDSM");
+                json["_systemName"] = he.System.name;
+                json["_systemCoordinates"] = new JArray(he.System.x, he.System.y, he.System.z);
+                if (he.System.SystemAddress != null)
+                    json["_systemAddress"] = he.System.SystemAddress;
+                if (he.IsDocked)
+                {
+                    json["_stationName"] = he.StationName;
+                    if (he.MarketID != null)
+                        json["_stationMarketId"] = he.MarketID;
+                }
+                json["_shipId"] = he.ShipId;
                 entries.Add(json);
             }
 
