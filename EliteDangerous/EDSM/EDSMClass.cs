@@ -272,6 +272,21 @@ namespace EliteDangerousCore.EDSM
             return response.Body;
         }
 
+        public static void SendComments(string star, string note, long edsmid = 0) // (verified with EDSM 29/9/2016)
+        {
+            System.Diagnostics.Debug.WriteLine("Send note to EDSM " + star + " " + edsmid + " " + note);
+            EDSMClass edsm = new EDSMClass();
+
+            if (!edsm.IsApiKeySet)
+                return;
+
+            System.Threading.Tasks.Task taskEDSM = System.Threading.Tasks.Task.Factory.StartNew(() =>
+            {
+                edsm.SetComment(star, note, edsmid);
+            });
+        }
+
+
         public string SetLog(string systemName, DateTime dateVisitedutc)
         {
             if (!IsApiKeySet)
