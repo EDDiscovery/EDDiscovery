@@ -26,21 +26,23 @@ namespace EliteDangerousCore
     public class StatusMonitorWatcher
     {
         public Action<List<UIEvent>,string> UIEventCallBack;           // action passing event list.. in thread, not in UI
+        public string WatcherFolder { get; set; }
 
-        public string watcherfolder;
         private string watchfile;
         private Thread ScanThread;
         private ManualResetEvent StopRequested;
+        private int ScanRate;
 
-        public StatusMonitorWatcher(string datapath)
+        public StatusMonitorWatcher(string datapath, int srate)
         {
-            watcherfolder = datapath;
-            watchfile = Path.Combine(watcherfolder, "status.json");
+            WatcherFolder = datapath;
+            ScanRate = srate;
+            watchfile = Path.Combine(WatcherFolder, "status.json");
         }
 
         public void StartMonitor()
         {
-            System.Diagnostics.Debug.WriteLine("Start Status Monitor on " + watcherfolder);
+            System.Diagnostics.Debug.WriteLine("Start Status Monitor on " + WatcherFolder);
 
             StopRequested = new ManualResetEvent(false);
             ScanThread = new Thread(ScanThreadProc) { Name = "Status.json Monitor Thread", IsBackground = true };
@@ -49,7 +51,7 @@ namespace EliteDangerousCore
         }
         public void StopMonitor()
         {
-            System.Diagnostics.Debug.WriteLine("Stop Status Monitor on " + watcherfolder);
+            System.Diagnostics.Debug.WriteLine("Stop Status Monitor on " + WatcherFolder);
             StopRequested.Set();
             ScanThread.Join();
             StopRequested.Dispose();
@@ -110,7 +112,7 @@ namespace EliteDangerousCore
         private void ScanThreadProc()
         {
             string prev_text = null;
-            int nextpolltime = 250;
+            int nextpolltime = ScanRate;
 
             while (!StopRequested.WaitOne(nextpolltime))
             {
@@ -118,7 +120,7 @@ namespace EliteDangerousCore
 
                 if (File.Exists(watchfile))
                 {
-                    nextpolltime = 250;
+                    nextpolltime = ScanRate;
 
                     JObject jo = null;
 
@@ -233,12 +235,12 @@ namespace EliteDangerousCore
                         }
 
                         if (events.Count > 0)
-                            UIEventCallBack?.Invoke(events, watcherfolder);        // and fire..
+                            UIEventCallBack?.Invoke(events, WatcherFolder);        // and fire..
                     }
                 }
                 else
                 {
-                    nextpolltime = 10000;           // if its not there, we are probably watching a non journal location.. so just do it occasionally
+                    nextpolltime = ScanRate*40;           // if its not there, we are probably watching a non journal location.. so just do it occasionally
                 }
             }
         }

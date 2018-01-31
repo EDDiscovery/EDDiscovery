@@ -162,11 +162,12 @@ namespace EliteDangerousCore
         }
 
 
-        public List<HistoryEntry> FilterByCommodityPricesBackwards
+        public List<HistoryEntry> FilterByCommodityPricesBackwards      // full commodity price information only
         {
             get
             {
-                return (from s in historylist where (s.EntryType == JournalTypeEnum.EDDCommodityPrices || s.EntryType == JournalTypeEnum.Market) orderby s.EventTimeUTC descending select s).ToList();
+                return (from s in historylist where (s.journalEntry is JournalCommodityPricesBase && (s.journalEntry as JournalCommodityPricesBase).Commodities.Count > 0 )
+                        orderby s.EventTimeUTC descending select s).ToList();
             }
         }
 
