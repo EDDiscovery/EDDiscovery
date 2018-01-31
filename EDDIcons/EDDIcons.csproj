@@ -609,5 +609,30 @@
   <ItemGroup>
     <EmbeddedResource Include="Journal\ModuleInfo.png" />
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Journal\Outfitting.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Journal\Shipyard.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Journal\ShipTargeted.png" />
+    <EmbeddedResource Include="Journal\SRVDestroyed.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Journal\StoredModules.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Journal\StoredShips.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Journal\Statistics.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Journal\TechnologyBroker.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Journal\Shutdown.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
