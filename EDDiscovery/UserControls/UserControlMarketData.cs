@@ -87,7 +87,8 @@ namespace EDDiscovery.UserControls
             if (!Object.ReferenceEquals(he, last_he) )       // if last was null, or he has changed, we have a possible change..
             {
                 FillComboBoxes(hl);
-                HistoryEntry new_last_eddmd = hl.GetLastHistoryEntry(x => x.EntryType == JournalTypeEnum.EDDCommodityPrices || x.EntryType == JournalTypeEnum.Market, he);       // find, from he, the last market data commodity price
+                // must be a commodity entry, and have items
+                HistoryEntry new_last_eddmd = hl.GetLastHistoryEntry(x => x.journalEntry is JournalCommodityPricesBase && (x.journalEntry as JournalCommodityPricesBase).Commodities.Count > 0, he);
 
                 bool eddmdchanged = !Object.ReferenceEquals(new_last_eddmd, last_eddmd);
                 bool cargochanged = !Object.ReferenceEquals(last_he?.MaterialCommodity, he?.MaterialCommodity); // is cargo different between he and last_he

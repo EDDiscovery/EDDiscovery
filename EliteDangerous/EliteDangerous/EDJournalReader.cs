@@ -22,6 +22,12 @@ using Newtonsoft.Json.Linq;
 
 namespace EliteDangerousCore
 {
+    public class JournalReaderEntry
+    {
+        public JournalEntry JournalEntry;
+        public JObject Json;
+    }
+
     public class EDJournalReader : LogReaderBase
     {
         // Close Quarters Combat

@@ -589,5 +589,25 @@
   <ItemGroup>
     <EmbeddedResource Include="Journal\Missions.png" />
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Journal\Commander.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Journal\EngineerLegacyConvert.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Journal\Reputation.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Journal\FighterDestroyed.png" />
+    <EmbeddedResource Include="Journal\FighterRebuilt.png" />
+    <EmbeddedResource Include="Journal\LaunchDrone.png" />
+    <EmbeddedResource Include="Journal\MaterialTrade.png" />
+    <EmbeddedResource Include="Journal\NpcCrewPaidWage.png" />
+    <EmbeddedResource Include="Journal\NpcCrewRank.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Journal\ModuleInfo.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

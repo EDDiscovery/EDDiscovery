@@ -28,14 +28,16 @@ namespace EliteDangerousCore.JournalEvents
         public JournalKickCrewMember(JObject evt) : base(evt, JournalTypeEnum.KickCrewMember)
         {
             Crew = evt["Crew"].Str();
-
+            OnCrime = evt["OnCrime"].Bool();
         }
+
         public string Crew { get; set; }
+        public bool OnCrime { get; set; }
 
         public override void FillInformation(out string summary, out string info, out string detailed) //V
         {
             summary = EventTypeStr.SplitCapsWord();
-            info = BaseUtils.FieldBuilder.Build("; removed", Crew);
+            info = BaseUtils.FieldBuilder.Build("; removed", Crew , "; Crime", OnCrime);
             detailed = "";
         }
     }
