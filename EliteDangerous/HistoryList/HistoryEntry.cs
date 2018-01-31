@@ -464,7 +464,7 @@ namespace EliteDangerousCore
                                                                                             // remember for EDSM send purposes if its an FSD entry
 
             if (snc != null && commit && sendtoedsm && snc.FSDEntry)                    // if still have a note, and commiting, and send to esdm, and FSD jump
-                EDSMSync.SendComments(snc.SystemName, snc.Note, snc.EdsmId);
+                EDSMClass.SendComments(snc.SystemName, snc.Note, snc.EdsmId);
         }
 
         #endregion

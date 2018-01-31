@@ -262,18 +262,5 @@ namespace EliteDangerousCore.EDSM
             });
         }
 
-        public static void SendComments(string star , string note, long edsmid = 0) // (verified with EDSM 29/9/2016)
-        {
-            System.Diagnostics.Debug.WriteLine("Send note to EDSM " + star + " " + edsmid + " " + note);
-            EDSMClass edsm = new EDSMClass();
-
-            if (!edsm.IsApiKeySet)
-                return;
-
-            Task taskEDSM = Task.Factory.StartNew(() =>
-            {
-                edsm.SetComment(star, note, edsmid);
-            });
-        }
     }
 }
