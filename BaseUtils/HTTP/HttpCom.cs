@@ -30,6 +30,18 @@ namespace BaseUtils
 
         protected string _serverAddress;
 
+        protected static string EscapeLongDataString(string str)
+        {
+            string ret = "";
+
+            for (int p = 0; p < str.Length; p += 16384)
+            {
+                ret += Uri.EscapeDataString(str.Substring(p, Math.Min(str.Length - p, 16384)));
+            }
+
+            return ret;
+        }
+
         protected ResponseData RequestPost(string json, string action, NameValueCollection headers = null, bool handleException = false )
         {
             if (_serverAddress == null || _serverAddress.Length == 0)           // for debugging, set _serveraddress empty

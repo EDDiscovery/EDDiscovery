@@ -218,6 +218,7 @@ namespace EDDiscovery
                 PendingClose = true;
                 EDDNSync.StopSync();
                 EdsmSync.StopSync();
+                EDSMJournalSync.StopSync();
                 EdsmLogFetcher.AsyncStop();
                 journalmonitor.StopMonitor();
                 LogLineHighlight("Closing down, please wait..");

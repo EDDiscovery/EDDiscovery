@@ -20,6 +20,7 @@ using System.Linq;
 using EliteDangerousCore.DB;
 using EliteDangerousCore.JournalEvents;
 using EliteDangerousCore.EDSM;
+using System.Data.Common;
 
 namespace EliteDangerousCore
 {
@@ -92,6 +93,8 @@ namespace EliteDangerousCore
         public string GameMode { get { return gamemode; } }
         public string Group { get { return group; } }
         public string GameModeGroup { get { return gamemode + ((group != null && group.Length > 0) ? (":" + group) : ""); } }
+        public string StationName { get { return stationName; } }
+        public long? MarketID { get { return marketId; } }
 
         public long Credits { get; set; }       // set up by Historylist during ledger accumulation
 
@@ -130,6 +133,8 @@ namespace EliteDangerousCore
         private string onCrewWithCaptain = null;    // if not null, your in another multiplayer ship      
         private string gamemode = "Unknown";        // game mode, from LoadGame event
         private string group = "";                  // group..
+        private string stationName = null;
+        private long? marketId = null;
 
         #endregion
 
@@ -291,7 +296,10 @@ namespace EliteDangerousCore
                     he.landed = prev.landed;
                 if (prev.hyperspace.HasValue)
                     he.hyperspace = prev.hyperspace;
+                if (prev.marketId != null)
+                    he.marketId = prev.marketId;
 
+                he.stationName = prev.stationName;
                 he.shiptype = prev.shiptype;
                 he.shipid = prev.shipid;
                 he.whereami = prev.whereami;
@@ -313,9 +321,15 @@ namespace EliteDangerousCore
                 JournalDocked jl = je as JournalDocked;
                 he.docked = true;
                 he.whereami = jl.StationName;
+                he.stationName = jl.StationName;
+                he.marketId = jl.MarketID;
             }
             else if (je.EventTypeID == JournalTypeEnum.Undocked)
+            {
                 he.docked = false;
+                he.stationName = null;
+                he.marketId = null;
+            }
             else if (je.EventTypeID == JournalTypeEnum.Touchdown)
                 he.landed = true;
             else if (je.EventTypeID == JournalTypeEnum.Liftoff)
@@ -487,29 +501,29 @@ namespace EliteDangerousCore
             }
         }
 
-        public void SetEdsmSync()
+        public void SetEdsmSync(SQLiteConnectionUser cn = null, DbTransaction txn = null)
         {
             EdsmSync = true;
             if (Journalid != 0)
             {
-                JournalEntry.UpdateSyncFlagBit(Journalid, SyncFlags.EDSM, true);
+                JournalEntry.UpdateSyncFlagBit(Journalid, SyncFlags.EDSM, true, cn, txn);
             }
         }
-        public void SetEddnSync()
+        public void SetEddnSync(SQLiteConnectionUser cn = null, DbTransaction txn = null)
         {
             EDDNSync = true;
             if (Journalid != 0)
             {
-                JournalEntry.UpdateSyncFlagBit(Journalid, SyncFlags.EDDN, true);
+                JournalEntry.UpdateSyncFlagBit(Journalid, SyncFlags.EDDN, true, cn, txn);
             }
         }
 
-        public void SetEGOSync()
+        public void SetEGOSync(SQLiteConnectionUser cn = null, DbTransaction txn = null)
         {
             EGOSync = true;
             if (Journalid != 0)
             {
-                JournalEntry.UpdateSyncFlagBit(Journalid, SyncFlags.EGO, true);
+                JournalEntry.UpdateSyncFlagBit(Journalid, SyncFlags.EGO, true, cn, txn);
             }
         }
 
