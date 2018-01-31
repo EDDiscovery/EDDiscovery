@@ -321,17 +321,20 @@ namespace EDDiscovery.UserControls
 
         // pan
         private void PanControl(Control ctrlToPan, MouseEventArgs e)
-        {   
+        {
             // Pan functions
-            Point mousePosNow = e.Location;
+            if (zoomFactor[zoomIndex] != 1)
+            {
+                Point mousePosNow = e.Location;
 
-            int deltaX = mousePosNow.X - mousePos.X;
-            int deltaY = mousePosNow.Y - mousePos.Y;
+                int deltaX = mousePosNow.X - mousePos.X;
+                int deltaY = mousePosNow.Y - mousePos.Y;
 
-            int newX = ctrlToPan.Location.X + deltaX;
-            int newY = ctrlToPan.Location.Y + deltaY;
+                int newX = ctrlToPan.Location.X + deltaX;
+                int newY = ctrlToPan.Location.Y + deltaY;
 
-            ctrlToPan.Location = new Point(newX, newY);
+                ctrlToPan.Location = new Point(newX, newY);
+            }
         }
 
         // zoom with the mouse scroll wheel
@@ -348,8 +351,8 @@ namespace EDDiscovery.UserControls
             {
                 if (zoomIndex < 12)
                     zoomIndex++;
-                
-                ZoomControl(chartMap, zoomIndex, e);
+
+                ZoomControl(chartMap, zoomIndex, e);                
             }
 
             // Zoom Out
@@ -357,7 +360,7 @@ namespace EDDiscovery.UserControls
             {
                 if (zoomIndex > 0)
                     zoomIndex--;
-                
+
                 ZoomControl(chartMap, zoomIndex, e);
             }
         }
@@ -403,26 +406,6 @@ namespace EDDiscovery.UserControls
                 chartMap.Top = chartNoZoom.Y;
             }
         }
-
-        // zoom the chart always centered
-        private void ZoomControlCentered(Control ctrlZoom, int zoomIndex, MouseEventArgs e)
-        {
-            // get the current position of the chart
-            var chartZoomIn = PointToScreen(new Point(chartMap.Left, chartMap.Top));
-                        
-            // multiply the chart's size to the zoom factor 
-            ctrlZoom.Width = Convert.ToInt32(ctrlZoom.Parent.Width * zoomFactor[zoomIndex]);
-            ctrlZoom.Height = Convert.ToInt32(ctrlZoom.Parent.Height * zoomFactor[zoomIndex]);
-
-            // calculate the new center
-            var Center = new Point(Convert.ToInt32(ctrlZoom.Parent.Width / 2), Convert.ToInt32(ctrlZoom.Parent.Height / 2));
-            
-            // calculate the new position of the chart, offsetting it's center to the mouse coordinates
-            var NewPosition = new Point(chartZoomIn.X - Center.X, chartZoomIn.Y - Center.Y);
-
-            ctrlZoom.Left = NewPosition.X;
-            ctrlZoom.Top = NewPosition.Y;
-        }
         
         private void ControlResize(Control ctrlResize)
         {
@@ -449,7 +432,11 @@ namespace EDDiscovery.UserControls
 
             if (e.Button == MouseButtons.Middle)
             {
-                mousePos = e.Location;
+                mousePos = e.Location;                
+            }
+
+            if (e.Button == MouseButtons.Right)
+            {             
             }
         }
               
@@ -494,55 +481,7 @@ namespace EDDiscovery.UserControls
             ControlResize(chartMap);
         }
 
-
-        // Pan control with the keyboard (WASD)
-        private void chartMap_KeyDown(object sender, KeyEventArgs e)
-        {
-            // Pan with the keyboard            
-            int deltaKb = 20;
-
-            // up
-            if (e.KeyCode == Keys.W)
-            {
-                int newX = chartMap.Location.X; int newY = chartMap.Location.Y + deltaKb;
-                chartMap.Location = new Point(newX, newY);
-            }
-            // down
-            if (e.KeyCode == Keys.S)
-            {
-                int newX = chartMap.Location.X; int newY = chartMap.Location.Y - deltaKb;
-                chartMap.Location = new Point(newX, newY);
-            }
-            // left
-            if (e.KeyCode == Keys.W)
-            {
-                int newX = chartMap.Location.X - deltaKb; int newY = chartMap.Location.Y;
-                chartMap.Location = new Point(newX, newY);
-            }
-            // right
-            if (e.KeyCode == Keys.S)
-            {
-                int newX = chartMap.Location.X + deltaKb; int newY = chartMap.Location.Y;
-                chartMap.Location = new Point(newX, newY);
-            }
-
-            #endregion
-        }
-
-        private void centerUnderMouseToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void zoomToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void centerOnMapToolStripMenuItem1_Click(object sender, EventArgs e)
-        {
-
-        }
-    }
+        #endregion
+    }    
 }
 
