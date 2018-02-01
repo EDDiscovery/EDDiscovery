@@ -24,11 +24,11 @@ namespace BaseUtils
 {
     public class HttpCom
     {
+        protected string httpserveraddress { get; set; }
+
         static public string LogPath = null;           // set path to cause logging to occur
 
         public String MimeType { get; set; } = "application/json; charset=utf-8";
-
-        protected string _serverAddress;
 
         protected static string EscapeLongDataString(string str)
         {
@@ -44,7 +44,7 @@ namespace BaseUtils
 
         protected ResponseData RequestPost(string json, string action, NameValueCollection headers = null, bool handleException = false )
         {
-            if (_serverAddress == null || _serverAddress.Length == 0)           // for debugging, set _serveraddress empty
+            if (httpserveraddress == null || httpserveraddress.Length == 0)           // for debugging, set _serveraddress empty
             {
                 System.Diagnostics.Trace.WriteLine("POST:" + action);
                 return new ResponseData(HttpStatusCode.Unauthorized);
@@ -54,7 +54,7 @@ namespace BaseUtils
             {
                 try
                 {
-                    HttpWebRequest request = (HttpWebRequest)WebRequest.Create(_serverAddress + action);
+                    HttpWebRequest request = (HttpWebRequest)WebRequest.Create(httpserveraddress + action);
                     // Set the Method property of the request to POST.
                     request.Method = "POST";
                     if (headers != null)
@@ -138,7 +138,7 @@ namespace BaseUtils
 
         protected ResponseData RequestPatch(string json, string action, NameValueCollection headers = null, bool handleException = false)
         {
-            if (_serverAddress == null || _serverAddress.Length == 0)           // for debugging, set _serveraddress empty
+            if (httpserveraddress == null || httpserveraddress.Length == 0)           // for debugging, set _serveraddress empty
             {
                 System.Diagnostics.Trace.WriteLine("PATCH:" + action);
                 return new ResponseData(HttpStatusCode.Unauthorized);
@@ -148,7 +148,7 @@ namespace BaseUtils
             {
                 try
                 {
-                    HttpWebRequest request = (HttpWebRequest)WebRequest.Create(_serverAddress + action);
+                    HttpWebRequest request = (HttpWebRequest)WebRequest.Create(httpserveraddress + action);
                     request.Method = "PATCH";
                     if (headers != null)
                     {
@@ -230,7 +230,7 @@ namespace BaseUtils
 
         protected ResponseData RequestGet(string action, NameValueCollection headers = null, bool handleException = false)
         {
-            if ( _serverAddress == null || _serverAddress.Length == 0 )           // for debugging, set _serveraddress empty
+            if ( httpserveraddress == null || httpserveraddress.Length == 0 )           // for debugging, set _serveraddress empty
             {
                 System.Diagnostics.Trace.WriteLine("GET:" + action);
                 return new ResponseData(HttpStatusCode.Unauthorized);
@@ -240,7 +240,7 @@ namespace BaseUtils
             {
                 try
                 {
-                    HttpWebRequest request = (HttpWebRequest)WebRequest.Create(_serverAddress + action);
+                    HttpWebRequest request = (HttpWebRequest)WebRequest.Create(httpserveraddress + action);
                     // Set the Method property of the request to POST.
                     request.Method = "GET";
 
@@ -322,7 +322,7 @@ namespace BaseUtils
 
         protected ResponseData RequestDelete(string action, NameValueCollection headers = null, bool handleException = false)
         {
-            if (_serverAddress == null || _serverAddress.Length == 0)           // for debugging, set _serveraddress empty
+            if (httpserveraddress == null || httpserveraddress.Length == 0)           // for debugging, set _serveraddress empty
             {
                 System.Diagnostics.Trace.WriteLine("DELETE:" + action);
                 return new ResponseData(HttpStatusCode.Unauthorized);
@@ -332,7 +332,7 @@ namespace BaseUtils
             {
                 try
                 {
-                    HttpWebRequest request = (HttpWebRequest)WebRequest.Create(_serverAddress + action);
+                    HttpWebRequest request = (HttpWebRequest)WebRequest.Create(httpserveraddress + action);
                     request.Method = "DELETE";
 
                     // Set the ContentType property of the WebRequest.

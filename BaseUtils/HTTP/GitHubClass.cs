@@ -20,9 +20,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
-using System.Reflection;
-using System.Security.Cryptography;
-using System.Text;
+
 
 namespace BaseUtils
 {
@@ -33,7 +31,7 @@ namespace BaseUtils
 
         public GitHubClass(string server, LogLine lg = null )
         {
-            _serverAddress = server;
+            httpserveraddress = server; 
             logger = lg;
         }
 
@@ -42,7 +40,7 @@ namespace BaseUtils
 
             try
             {
-                HttpWebRequest request = WebRequest.Create("https://api.github.com/repos/EDDiscovery/EDDiscovery/releases") as HttpWebRequest;
+                HttpWebRequest request = WebRequest.Create(httpserveraddress + "releases") as HttpWebRequest;
                 request.UserAgent = BrowserInfo.UserAgent;
                 using (HttpWebResponse response = request.GetResponse() as HttpWebResponse)
                 {
@@ -66,7 +64,7 @@ namespace BaseUtils
 
             try
             {
-                HttpWebRequest request = WebRequest.Create("https://api.github.com/repos/EDDiscovery/EDDiscovery/releases/latest") as HttpWebRequest;
+                HttpWebRequest request = WebRequest.Create(httpserveraddress + "releases/latest") as HttpWebRequest;
                 request.UserAgent = BrowserInfo.UserAgent;
                 using (HttpWebResponse response = request.GetResponse() as HttpWebResponse)
                 {
@@ -89,16 +87,14 @@ namespace BaseUtils
                 Trace.WriteLine($"ETrace: {ex.StackTrace}");
                 return null;
             }
-
         }
 
-
-        public List<GitHubFile> GetDataFiles(string gitdir)
+        public List<GitHubFile> ReadDirectory(string gitdir)
         {
             List<GitHubFile> files = new List<GitHubFile>();
             try
             {
-                HttpWebRequest request = WebRequest.Create("https://api.github.com/repos/EDDiscovery/EDDiscoveryData/contents/" + gitdir) as HttpWebRequest;
+                HttpWebRequest request = WebRequest.Create(httpserveraddress + "contents/" + gitdir) as HttpWebRequest;
                 request.UserAgent = BrowserInfo.UserAgent;
                 using (HttpWebResponse response = request.GetResponse() as HttpWebResponse)
                 {
@@ -116,7 +112,7 @@ namespace BaseUtils
                         return files;
                     }
                     else
-                        return null; ;
+                        return null;
                 }
             }
             catch (Exception ex)
@@ -126,6 +122,39 @@ namespace BaseUtils
                 return null;
             }
         }
+
+        // DOWNLOAD to folder from git folder with pattern match
+
+        public bool Download(string downloadfolder, string gitdir, string match, bool cleanfolder = true)
+        {
+            if (cleanfolder)
+            {
+                DirectoryInfo di = new DirectoryInfo(downloadfolder);
+                foreach (FileInfo file in di.GetFiles())
+                {
+                    file.Delete();
+                }
+            }
+
+            List<BaseUtils.GitHubFile> files = ReadDirectory(gitdir);
+
+            files = (from f in files where f.Name.WildCardMatch(match) select f).ToList();
+
+            return DownloadFiles(files, downloadfolder);
+        }
+
+        // DOWNLOAD to folder with list of files
+
+        public bool Download(string downloadfolder, string gitdir, List<string> matches)
+        {
+            List<BaseUtils.GitHubFile> files = ReadDirectory(gitdir);
+
+            files = (from f in files where matches.Contains(f.Name, StringComparer.InvariantCultureIgnoreCase) select f).ToList();
+
+            return DownloadFiles(files, downloadfolder);
+        }
+
+        // download with github list
 
         public bool DownloadFiles(List<GitHubFile> files, string DestinationDir)
         {
@@ -148,7 +177,7 @@ namespace BaseUtils
             else
             {
                 // Calculate sha
-                string sha = CalcSha1(destFile).ToLower();
+                string sha = SHA.CalcSha1(destFile).ToLower();
 
                 if (sha.Equals(file.sha))
                     return false;
@@ -156,73 +185,6 @@ namespace BaseUtils
 
             return true;
         }
-
-        static public string CalcSha1(string[] filenames)
-        {
-            long length = 0;
-
-            foreach (string filename in filenames)
-            {
-                FileInfo fi = new FileInfo(filename);
-                if (fi == null)
-                    return "";
-
-                length += fi.Length;
-            }
-
-            using (MemoryStream ms = new MemoryStream())
-            {
-                byte[] header = Encoding.UTF8.GetBytes("blob " + (int)length + "\0");
-                ms.Write(header, 0, header.Length);
-
-                foreach (string filename in filenames)
-                {
-                    using (FileStream fs = new FileStream(filename, FileMode.Open, FileAccess.Read))
-                    {
-                        using (BinaryReader br = new BinaryReader(fs))
-                            ms.Write(br.ReadBytes((int)fs.Length), 0, (int)fs.Length);
-                    }
-                }
-
-                using (SHA1Managed sha1 = new SHA1Managed())
-                {
-                    byte[] hash = sha1.ComputeHash(ms.ToArray());
-                    StringBuilder formatted = new StringBuilder(2 * hash.Length);
-                    foreach (byte b in hash)
-                    {
-                        formatted.AppendFormat("{0:X2}", b);
-                    }
-
-                    return formatted.ToNullSafeString();
-                }
-            }
-        }
-
-        static public string CalcSha1(string filename)
-        {
-            using (FileStream fs = new FileStream(filename, FileMode.Open))
-            using (BinaryReader br = new BinaryReader(fs))
-            using (MemoryStream ms = new MemoryStream())
-            {
-                byte[] header = Encoding.UTF8.GetBytes("blob " + fs.Length + "\0");
-                ms.Write(header, 0, header.Length);
-
-                ms.Write(br.ReadBytes((int)fs.Length), 0, (int)fs.Length);
-
-                using (SHA1Managed sha1 = new SHA1Managed())
-                {
-                    byte[] hash = sha1.ComputeHash(ms.ToArray());
-                    StringBuilder formatted = new StringBuilder(2 * hash.Length);
-                    foreach (byte b in hash)
-                    {
-                        formatted.AppendFormat("{0:X2}", b);
-                    }
-
-                    return formatted.ToNullSafeString();
-                }
-            }
-        }
-
 
         public bool DownloadFile(GitHubFile file, string DestinationDir)
         {

@@ -28,6 +28,7 @@ using System.Threading.Tasks;
 using BaseUtils;
 using EliteDangerousCore;
 using EliteDangerousCore.DB;
+using System.Linq;
 
 namespace EDDiscovery
 {
@@ -127,7 +128,11 @@ namespace EDDiscovery
                 };
             }
 
-            LoadIconPack();
+            Icons.IconSet.ResetIcons();     // start with a clean slate loaded up from default icons
+
+            string path = EDDOptions.Instance.IconsPath ?? (EDDOptions.Instance.AppDataDirectory+"\\Icons\\*.zip");
+
+            Icons.IconSet.LoadIconPack(path, EDDOptions.Instance.AppDataDirectory , AppDomain.CurrentDomain.BaseDirectory);
 
             backgroundWorker = new Thread(BackgroundWorkerThread);
             backgroundWorker.IsBackground = true;
@@ -144,49 +149,6 @@ namespace EDDiscovery
             journalmonitor = new EDJournalClass(InvokeAsyncOnUiThread);
             journalmonitor.OnNewJournalEntry += NewEntry;
             journalmonitor.OnNewUIEvent += NewUIEvent;
-        }
-
-        private void LoadIconPack()
-        {
-            Icons.IconSet.ResetIcons();
-
-            string path = EDDOptions.Instance.IconsPath;
-
-            if (path != null)
-            {
-                if (!Path.IsPathRooted(path))
-                {
-                    string testpath = Path.Combine(EDDOptions.Instance.AppDataDirectory, path);
-                    if (File.Exists(testpath) || Directory.Exists(testpath))
-                    {
-                        path = testpath;
-                    }
-                    else
-                    {
-                        path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, path);
-                    }
-                }
-
-                if (Directory.Exists(path))
-                {
-                    Icons.IconSet.LoadIconsFromDirectory(path);
-                }
-                else if (File.Exists(path))
-                {
-                    try
-                    {
-                        Icons.IconSet.LoadIconsFromZipFile(path);
-                    }
-                    catch (Exception ex)
-                    {
-                        Trace.WriteLine($"Unable to load icons from {path}: {ex.Message}");
-                    }
-                }
-                else
-                {
-                    Trace.WriteLine($"Unable to load icons from {path}: Path not found");
-                }
-            }
         }
 
         public void Logger(string s)
@@ -913,9 +875,9 @@ namespace EDDiscovery
 
                 logLine("Checking for new EDDiscovery maps");
 
-                BaseUtils.GitHubClass github = new BaseUtils.GitHubClass(EDDiscovery.Properties.Resources.URLGithubDownload, discoveryform.LogLine);
+                BaseUtils.GitHubClass github = new BaseUtils.GitHubClass(EDDiscovery.Properties.Resources.URLGithubDataDownload, discoveryform.LogLine);
 
-                var files = github.GetDataFiles("Maps/V1");
+                var files = github.ReadDirectory("Maps/V1");
                 return Task.Factory.StartNew(() => github.DownloadFiles(files, mapsdir));
             }
             catch (Exception ex)

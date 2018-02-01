@@ -65,13 +65,15 @@ namespace EDDiscovery.Icons
             InitLegacyIcons();
         }
 
-        public static void LoadIconsFromDirectory(string path)
+        public static void LoadIconsFromDirectory(string path)      // tested 1/feb/2018
         {
             if (Directory.Exists(path))
             {
+                System.Diagnostics.Debug.WriteLine("Loading icons from " + path);
+
                 foreach (var file in Directory.EnumerateFiles(path, "*.png", SearchOption.AllDirectories))
                 {
-                    string name = file.Substring(path.Length + 1).Replace('/', '.').Replace('\\', '.');
+                    string name = file.Substring(path.Length + 1).Replace('/', '.').Replace('\\', '.').Replace(".png", "");
                     Image img = null;
 
                     try
@@ -85,17 +87,22 @@ namespace EDDiscovery.Icons
                         continue;
                     }
 
+                    if (!icons.ContainsKey(name))
+                        System.Diagnostics.Debug.WriteLine("Icon Pack new unknown " + name);
+
                     icons[name] = img;
                 }
             }
         }
 
-        public static void LoadIconsFromZipFile(string path)
+        public static void LoadIconsFromZipFile(string path) // may except.  tested 1/feb/2018
         {
             if (File.Exists(path))
             {
                 using (var zipfile = ZipFile.Open(path, ZipArchiveMode.Read))
                 {
+                    System.Diagnostics.Debug.WriteLine("Loading icons from zip " + path);
+
                     foreach (var entry in zipfile.Entries)
                     {
                         if (entry.FullName.EndsWith(".png", StringComparison.InvariantCultureIgnoreCase))
@@ -119,11 +126,67 @@ namespace EDDiscovery.Icons
                                 continue;
                             }
 
+                            if (!icons.ContainsKey(name))
+                                System.Diagnostics.Debug.WriteLine("Icon Pack new unknown " + name);
+
                             icons[name] = img;
                         }
                     }
                 }
             }
+        }
+
+        // path must not be null.  Check for it directly, or in appdir/basedir.  path may be wildcard.
+
+        public static void LoadIconPack(string path, string appdir, string basedir)
+        {
+            if (!Path.IsPathRooted(path))      // if its not an absolute path
+            {
+                string testpath = Path.Combine(appdir, path);
+
+                if (File.Exists(testpath) || Directory.Exists(testpath))
+                {
+                    path = testpath;
+                }
+                else
+                {
+                    path = Path.Combine(basedir, path);
+                }
+            }
+
+            //System.Diagnostics.Debug.WriteLine("ICONS Path" + path);
+
+            try
+            {
+                if (File.Exists(path))      // single file
+                {
+                    LoadIconsFromZipFile(path);
+                }
+                else if (Directory.Exists(path))     // if its a directory..
+                {
+                    LoadIconsFromDirectory(path);
+                }
+                else
+                {
+                    string dirpart = Path.GetDirectoryName(path);
+
+                    if (Directory.Exists(dirpart))
+                    {
+                        // files in date order, last first, so newer ones override 
+                        FileInfo[] allFiles = Directory.EnumerateFiles(dirpart, Path.GetFileName(path), SearchOption.TopDirectoryOnly).Select(f => new System.IO.FileInfo(f)).OrderBy(p => p.LastWriteTime).ToArray();
+
+                        foreach (FileInfo f in allFiles)
+                        {
+                            LoadIconsFromZipFile(f.FullName);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Unable to load icons from {path}: {ex.Message}");
+            }
+
         }
 
         public static Image GetIcon(string name)

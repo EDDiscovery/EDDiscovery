@@ -793,6 +793,12 @@ public static class ObjectExtensionsStrings
             return "^" + value + ".*$";
     }
 
+    public static bool WildCardMatch(this string value, string match)
+    {
+        match = match.RegExWildCardToRegular();
+        return System.Text.RegularExpressions.Regex.IsMatch(value, match);
+    }
+
     // find start, find terminate, if found replace with replace plus any intermidate text if keepafter>0 (keeping after this no of char)
     // replace can have {plural|notplural} inside it, and if plural is defined, replaced with the approriate selection
 

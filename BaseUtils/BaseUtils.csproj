@@ -72,6 +72,7 @@
     <Compile Include="Misc\NativeMethods.cs" />
     <Compile Include="Misc\Processes.cs" />
     <Compile Include="Misc\AppTicks.cs" />
+    <Compile Include="Misc\SHA.cs" />
     <Compile Include="Numbers\ColorObjectExtensions.cs" />
     <Compile Include="Numbers\DistanceParser.cs" />
     <Compile Include="Numbers\LineStore.cs" />
