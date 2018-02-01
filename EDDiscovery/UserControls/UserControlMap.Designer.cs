@@ -157,9 +157,27 @@ namespace EDDiscovery.UserControls
             this.slideMaxItems = new System.Windows.Forms.TrackBar();
             this.chartMap = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
+            this.contextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.toolStripMenuZoom = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuZoom1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuZoom125 = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuZoom15 = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuZoom175 = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuZoom2 = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuZoom25 = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuZoom3 = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuZoom35 = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuZoom4 = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuZoom5 = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuZoom6 = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuZoom8 = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuZoom10 = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuZoomCenterMap = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuReset = new System.Windows.Forms.ToolStripMenuItem();
             this.panelTop.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.slideMaxItems)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.chartMap)).BeginInit();
+            this.contextMenuStrip.SuspendLayout();
             this.SuspendLayout();
             // 
             // labelExt1
@@ -1023,6 +1041,140 @@ namespace EDDiscovery.UserControls
             this.chartMap.MouseMove += new System.Windows.Forms.MouseEventHandler(this.ChartMap_MouseMove);
             this.chartMap.MouseUp += new System.Windows.Forms.MouseEventHandler(this.ChartMap_MouseUp);
             // 
+            // contextMenuStrip
+            // 
+            this.contextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripMenuZoom,
+            this.toolStripMenuZoomCenterMap,
+            this.toolStripMenuReset});
+            this.contextMenuStrip.Name = "contextMenuStrip";
+            this.contextMenuStrip.Size = new System.Drawing.Size(153, 92);
+            // 
+            // toolStripMenuZoom
+            // 
+            this.toolStripMenuZoom.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripMenuZoom1,
+            this.toolStripMenuZoom125,
+            this.toolStripMenuZoom15,
+            this.toolStripMenuZoom175,
+            this.toolStripMenuZoom2,
+            this.toolStripMenuZoom25,
+            this.toolStripMenuZoom3,
+            this.toolStripMenuZoom35,
+            this.toolStripMenuZoom4,
+            this.toolStripMenuZoom5,
+            this.toolStripMenuZoom6,
+            this.toolStripMenuZoom8,
+            this.toolStripMenuZoom10});
+            this.toolStripMenuZoom.Name = "toolStripMenuZoom";
+            this.toolStripMenuZoom.Size = new System.Drawing.Size(152, 22);
+            this.toolStripMenuZoom.Text = "Zoom";
+            // 
+            // toolStripMenuZoom1
+            // 
+            this.toolStripMenuZoom1.Name = "toolStripMenuZoom1";
+            this.toolStripMenuZoom1.Size = new System.Drawing.Size(152, 22);
+            this.toolStripMenuZoom1.Text = "1:1";
+            this.toolStripMenuZoom1.Click += new System.EventHandler(this.toolStripMenuZoom1_Click);
+            // 
+            // toolStripMenuZoom125
+            // 
+            this.toolStripMenuZoom125.Name = "toolStripMenuZoom125";
+            this.toolStripMenuZoom125.Size = new System.Drawing.Size(152, 22);
+            this.toolStripMenuZoom125.Text = "1.25:1";
+            this.toolStripMenuZoom125.Click += new System.EventHandler(this.toolStripMenuZoom125_Click);
+            // 
+            // toolStripMenuZoom15
+            // 
+            this.toolStripMenuZoom15.Name = "toolStripMenuZoom15";
+            this.toolStripMenuZoom15.Size = new System.Drawing.Size(152, 22);
+            this.toolStripMenuZoom15.Text = "1.5:1";
+            this.toolStripMenuZoom15.Click += new System.EventHandler(this.toolStripMenuZoom15_Click);
+            // 
+            // toolStripMenuZoom175
+            // 
+            this.toolStripMenuZoom175.Name = "toolStripMenuZoom175";
+            this.toolStripMenuZoom175.Size = new System.Drawing.Size(152, 22);
+            this.toolStripMenuZoom175.Text = "1.75:1";
+            this.toolStripMenuZoom175.Click += new System.EventHandler(this.toolStripMenuZoom175_Click);
+            // 
+            // toolStripMenuZoom2
+            // 
+            this.toolStripMenuZoom2.Name = "toolStripMenuZoom2";
+            this.toolStripMenuZoom2.Size = new System.Drawing.Size(152, 22);
+            this.toolStripMenuZoom2.Text = "2:1";
+            this.toolStripMenuZoom2.Click += new System.EventHandler(this.toolStripMenuZoom2_Click);
+            // 
+            // toolStripMenuZoom25
+            // 
+            this.toolStripMenuZoom25.Name = "toolStripMenuZoom25";
+            this.toolStripMenuZoom25.Size = new System.Drawing.Size(152, 22);
+            this.toolStripMenuZoom25.Text = "2.5:1";
+            this.toolStripMenuZoom25.Click += new System.EventHandler(this.toolStripMenuZoom25_Click);
+            // 
+            // toolStripMenuZoom3
+            // 
+            this.toolStripMenuZoom3.Name = "toolStripMenuZoom3";
+            this.toolStripMenuZoom3.Size = new System.Drawing.Size(152, 22);
+            this.toolStripMenuZoom3.Text = "3:1";
+            this.toolStripMenuZoom3.Click += new System.EventHandler(this.toolStripMenuZoom3_Click);
+            // 
+            // toolStripMenuZoom35
+            // 
+            this.toolStripMenuZoom35.Name = "toolStripMenuZoom35";
+            this.toolStripMenuZoom35.Size = new System.Drawing.Size(152, 22);
+            this.toolStripMenuZoom35.Text = "3.5:1";
+            this.toolStripMenuZoom35.Click += new System.EventHandler(this.toolStripMenuZoom35_Click);
+            // 
+            // toolStripMenuZoom4
+            // 
+            this.toolStripMenuZoom4.Name = "toolStripMenuZoom4";
+            this.toolStripMenuZoom4.Size = new System.Drawing.Size(152, 22);
+            this.toolStripMenuZoom4.Text = "4:1";
+            this.toolStripMenuZoom4.Click += new System.EventHandler(this.toolStripMenuZoom4_Click);
+            // 
+            // toolStripMenuZoom5
+            // 
+            this.toolStripMenuZoom5.Name = "toolStripMenuZoom5";
+            this.toolStripMenuZoom5.Size = new System.Drawing.Size(152, 22);
+            this.toolStripMenuZoom5.Text = "5:1";
+            this.toolStripMenuZoom5.Click += new System.EventHandler(this.toolStripMenuZoom5_Click);
+            // 
+            // toolStripMenuZoom6
+            // 
+            this.toolStripMenuZoom6.Name = "toolStripMenuZoom6";
+            this.toolStripMenuZoom6.Size = new System.Drawing.Size(152, 22);
+            this.toolStripMenuZoom6.Text = "6:1";
+            this.toolStripMenuZoom6.Click += new System.EventHandler(this.toolStripMenuZoom6_Click);
+            // 
+            // toolStripMenuZoom8
+            // 
+            this.toolStripMenuZoom8.Name = "toolStripMenuZoom8";
+            this.toolStripMenuZoom8.Size = new System.Drawing.Size(152, 22);
+            this.toolStripMenuZoom8.Text = "8:1";
+            this.toolStripMenuZoom8.Click += new System.EventHandler(this.toolStripMenuZoom8_Click);
+            // 
+            // toolStripMenuZoom10
+            // 
+            this.toolStripMenuZoom10.Name = "toolStripMenuZoom10";
+            this.toolStripMenuZoom10.Size = new System.Drawing.Size(152, 22);
+            this.toolStripMenuZoom10.Text = "10:1";
+            this.toolStripMenuZoom10.Click += new System.EventHandler(this.toolStripMenuZoom10_Click);
+            // 
+            // toolStripMenuZoomCenterMap
+            // 
+            this.toolStripMenuZoomCenterMap.Name = "toolStripMenuZoomCenterMap";
+            this.toolStripMenuZoomCenterMap.Size = new System.Drawing.Size(152, 22);
+            this.toolStripMenuZoomCenterMap.Text = "Center Map";
+            this.toolStripMenuZoomCenterMap.Click += new System.EventHandler(this.toolStripMenuZoomCenterMap_Click);
+            // 
+            // toolStripMenuReset
+            // 
+            this.toolStripMenuReset.Name = "toolStripMenuReset";
+            this.toolStripMenuReset.Size = new System.Drawing.Size(152, 22);
+            this.toolStripMenuReset.Text = "Reset";
+            this.toolStripMenuReset.Click += new System.EventHandler(this.toolStripMenuReset_Click);
+            // 
             // UserControlMap
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1033,11 +1185,13 @@ namespace EDDiscovery.UserControls
             this.Name = "UserControlMap";
             this.Size = new System.Drawing.Size(380, 406);
             this.Load += new System.EventHandler(this.UserControlMap_Load);
+            this.MouseClick += new System.Windows.Forms.MouseEventHandler(this.UserControlMap_MouseClick);
             this.Resize += new System.EventHandler(this.UserControlMap_Resize);
             this.panelTop.ResumeLayout(false);
             this.panelTop.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.slideMaxItems)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.chartMap)).EndInit();
+            this.contextMenuStrip.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -1051,5 +1205,22 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.DataVisualization.Charting.Chart chartMap;
         private TrackBar slideMaxItems;
         private ToolTip toolTip;
+        private ContextMenuStrip contextMenuStrip;
+        private ToolStripMenuItem toolStripMenuZoom;
+        private ToolStripMenuItem toolStripMenuZoom1;
+        private ToolStripMenuItem toolStripMenuZoom125;
+        private ToolStripMenuItem toolStripMenuZoom15;
+        private ToolStripMenuItem toolStripMenuZoom175;
+        private ToolStripMenuItem toolStripMenuZoom2;
+        private ToolStripMenuItem toolStripMenuZoom25;
+        private ToolStripMenuItem toolStripMenuZoom3;
+        private ToolStripMenuItem toolStripMenuZoom35;
+        private ToolStripMenuItem toolStripMenuZoom4;
+        private ToolStripMenuItem toolStripMenuZoom5;
+        private ToolStripMenuItem toolStripMenuZoom6;
+        private ToolStripMenuItem toolStripMenuZoom8;
+        private ToolStripMenuItem toolStripMenuZoom10;
+        private ToolStripMenuItem toolStripMenuZoomCenterMap;
+        private ToolStripMenuItem toolStripMenuReset;
     }
 }
