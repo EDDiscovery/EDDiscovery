@@ -174,6 +174,8 @@ namespace EDDiscovery.UserControls
             this.toolStripMenuZoom10 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuZoomCenterMap = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuReset = new System.Windows.Forms.ToolStripMenuItem();
+            this.aboutToolStripAbout = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator = new System.Windows.Forms.ToolStripSeparator();
             this.panelTop.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.slideMaxItems)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.chartMap)).BeginInit();
@@ -1046,9 +1048,11 @@ namespace EDDiscovery.UserControls
             this.contextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripMenuZoom,
             this.toolStripMenuZoomCenterMap,
-            this.toolStripMenuReset});
+            this.toolStripMenuReset,
+            this.toolStripSeparator,
+            this.aboutToolStripAbout});
             this.contextMenuStrip.Name = "contextMenuStrip";
-            this.contextMenuStrip.Size = new System.Drawing.Size(153, 92);
+            this.contextMenuStrip.Size = new System.Drawing.Size(153, 120);
             // 
             // toolStripMenuZoom
             // 
@@ -1175,6 +1179,18 @@ namespace EDDiscovery.UserControls
             this.toolStripMenuReset.Text = "Reset";
             this.toolStripMenuReset.Click += new System.EventHandler(this.toolStripMenuReset_Click);
             // 
+            // aboutToolStripAbout
+            // 
+            this.aboutToolStripAbout.Name = "aboutToolStripAbout";
+            this.aboutToolStripAbout.Size = new System.Drawing.Size(152, 22);
+            this.aboutToolStripAbout.Text = "About";
+            //this.aboutToolStripAbout.Click += new System.EventHandler(this.aboutToolStripAbout_Click);
+            // 
+            // toolStripSeparator
+            // 
+            this.toolStripSeparator.Name = "toolStripSeparator";
+            this.toolStripSeparator.Size = new System.Drawing.Size(149, 6);
+            // 
             // UserControlMap
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1222,5 +1238,7 @@ namespace EDDiscovery.UserControls
         private ToolStripMenuItem toolStripMenuZoom10;
         private ToolStripMenuItem toolStripMenuZoomCenterMap;
         private ToolStripMenuItem toolStripMenuReset;
+        private ToolStripSeparator toolStripSeparator;
+        private ToolStripMenuItem aboutToolStripAbout;
     }
 }

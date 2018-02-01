@@ -23,6 +23,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using EDDiscovery.Forms;
 using System.Collections.Concurrent;
 using System.Threading;
 using EliteDangerousCore;
@@ -712,6 +713,18 @@ namespace EDDiscovery.UserControls
         }
 
         #endregion
+        
+        public void AboutMapPanel(Form parent = null)
+        {
+            AboutMapPanel frm = new AboutMapPanel();
+            frm.Show();
+        }
+                
+
+        private void aboutToolStripAbout_Click(object sender, EventArgs e)
+        {            
+            AboutMapPanel();        
+        }
     }
 }
 
