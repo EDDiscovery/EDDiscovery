@@ -191,6 +191,7 @@ namespace EDDiscovery.UserControls
             this.textMinRadius.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.textMinRadius.WordWrap = true;
             this.textMinRadius.TextChanged += new System.EventHandler(this.TextMinRadius_TextChanged);
+            this.textMinRadius.Leave += new System.EventHandler(this.textMinRadius_Leave);
             // 
             // labelExt3
             // 
@@ -221,6 +222,7 @@ namespace EDDiscovery.UserControls
             this.textMaxRadius.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.textMaxRadius.WordWrap = true;
             this.textMaxRadius.TextChanged += new System.EventHandler(this.TextMaxRadius_TextChanged);
+            this.textMaxRadius.Leave += new System.EventHandler(this.textMaxRadius_Leave);
             // 
             // panelTop
             // 
@@ -235,7 +237,7 @@ namespace EDDiscovery.UserControls
             this.panelTop.Name = "panelTop";
             this.panelTop.Size = new System.Drawing.Size(380, 26);
             this.panelTop.TabIndex = 25;
-            this.toolTip.SetToolTip(this.panelTop, "Rotate with 1st mouse button; Zoom with ScrollWheel; Pan with WASD");
+            this.toolTip.SetToolTip(this.panelTop, "Rotate with 1st mouse button; Zoom with ScrollWheel; Pan with middle button");
             // 
             // slideMaxItems
             // 

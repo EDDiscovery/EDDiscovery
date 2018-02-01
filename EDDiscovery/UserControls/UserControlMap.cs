@@ -27,6 +27,7 @@ using System.Threading;
 using EliteDangerousCore;
 using EliteDangerousCore.EDSM;
 using EliteDangerousCore.DB;
+using System.Diagnostics;
 
 
 namespace EDDiscovery.UserControls
@@ -45,13 +46,68 @@ namespace EDDiscovery.UserControls
             this.chartMap.MouseWheel += Zoom_MouseWheel;            
         }
 
-        const double defaultMaximumMapRadius = 100;
+        //const double defaultMaximumMapRadius = 100;
 
-        int maxitems = 500;
+        //int maxitems = 500;
 
-        double MaxRadius = 100;
-        double MinRadius = 0;
-        
+        [DefaultValue(defaultMapMaxRadius)]
+        private double MaxRadius
+        {
+            get { return _MaxRadius; }
+            set
+            {
+                if (double.IsNaN(value) || double.IsInfinity(value) || value <= 0)
+                    value = defaultMapMaxRadius;
+                if (_MaxRadius != value)
+                {
+                    _MaxRadius = value;
+                    if (last_he != null || uctg != null)
+                        KickComputation(last_he ?? uctg.GetCurrentHistoryEntry);
+                }
+                // Don't adjust text in a focused textbox while a user is typing.
+                if (textMaxRadius.ContainsFocus)
+                    pendingText = $"{value:0.00}";
+                else
+                    textMaxRadius.Text = $"{value:0.00}";
+            }
+        }
+        [DefaultValue(defaultMapMinRadius)]
+        private double MinRadius
+        {
+            get { return _MinRadius; }
+            set
+            {
+                if (double.IsNaN(value) || double.IsInfinity(value) || value < 0)
+                    value = defaultMapMinRadius;
+                if (_MinRadius != value)
+                {
+                    _MinRadius = value;
+                    if (last_he != null || uctg != null)
+                        KickComputation(last_he ?? uctg.GetCurrentHistoryEntry);
+                }
+                // Don't adjust text in a focused textbox while a user is typing.
+                if (textMinRadius.ContainsFocus)
+                    pendingText = $"{value:0.00}";
+                else
+                    textMinRadius.Text = $"{value:0.00}";
+            }
+        }
+
+        private HistoryEntry last_he = null;
+        private string pendingText = null;
+
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        private double _MaxRadius = defaultMapMaxRadius;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        private double _MinRadius = defaultMapMinRadius;
+
+        private const double defaultMapMaxRadius = 1000;
+        private const double defaultMapMinRadius = 0;
+        private int maxitems = 500;
+
+        //double MaxRadius = 100;
+        //double MinRadius = 0;
+
 
         public override void Init()
         {
@@ -60,7 +116,7 @@ namespace EDDiscovery.UserControls
             uctg.OnTravelSelectionChanged += Uctg_OnTravelSelectionChanged;
 
             textMinRadius.Text = SQLiteConnectionUser.GetSettingDouble(DbSave + "MapMin", 0).ToStringInvariant();
-            textMaxRadius.Text = SQLiteConnectionUser.GetSettingDouble(DbSave + "MapMax", defaultMaximumMapRadius).ToStringInvariant();
+            textMaxRadius.Text = SQLiteConnectionUser.GetSettingDouble(DbSave + "MapMax", defaultMapMaxRadius).ToStringInvariant();
             maxitems = SQLiteConnectionUser.GetSettingInt(DbSave + "MapMaxItems", maxitems);
             slideMaxItems.Value = SQLiteConnectionUser.GetSettingInt(DbSave + "MapMaxItems", maxitems);
             MaxRadius = float.Parse(textMaxRadius.Text);
@@ -82,7 +138,7 @@ namespace EDDiscovery.UserControls
             uctg.OnTravelSelectionChanged -= Uctg_OnTravelSelectionChanged;
             computer.ShutDown();
             SQLiteConnectionUser.PutSettingDouble(DbSave + "MapMin", textMinRadius.Text.InvariantParseDouble(0));
-            SQLiteConnectionUser.PutSettingDouble(DbSave + "MapMax", textMaxRadius.Text.InvariantParseDouble(defaultMaximumMapRadius));
+            SQLiteConnectionUser.PutSettingDouble(DbSave + "MapMax", textMaxRadius.Text.InvariantParseDouble(defaultMapMaxRadius));
             SQLiteConnectionUser.PutSettingInt(DbSave + "MapMaxItems", maxitems);
         }
 
@@ -223,24 +279,38 @@ namespace EDDiscovery.UserControls
 
         private void TextMinRadius_TextChanged(object sender, EventArgs e)
         {
-            double? min = textMinRadius.Text.InvariantParseDoubleNull();
-            if (min != null)
-            MinRadius = float.Parse(textMinRadius.Text);
+            // Don't let others directly assigning to textMinRadius.Text result in parsing.
+            if (textMinRadius.ContainsFocus)
+            {
+                double? min = textMinRadius.Text.InvariantParseDoubleNull();
+                MinRadius = min ?? defaultMapMinRadius;
+                RefreshMap();
+            }
+        }
 
-            KickComputation(uctg.GetCurrentHistoryEntry);
-
-            RefreshMap();
+        private void textMinRadius_Leave(object sender, EventArgs e)
+        {
+            if (pendingText != null)
+                textMinRadius.Text = pendingText;
+            pendingText = null;            
         }
 
         private void TextMaxRadius_TextChanged(object sender, EventArgs e)
         {
-            double? max = textMaxRadius.Text.InvariantParseDoubleNull();
-            if (max != null)
-            MaxRadius = float.Parse(textMaxRadius.Text);
+            // Don't let others directly assigning to textMaxRadius.Text result in parsing.
+            if (textMaxRadius.ContainsFocus)
+            {
+                double? max = textMaxRadius.Text.InvariantParseDoubleNull();
+                MaxRadius = max ?? defaultMapMaxRadius;
+                RefreshMap();
+            }
+        }
 
-            KickComputation(uctg.GetCurrentHistoryEntry);
-
-            RefreshMap();            
+        private void textMaxRadius_Leave(object sender, EventArgs e)
+        {
+            if (pendingText != null)
+                textMaxRadius.Text = pendingText;
+            pendingText = null;                        
         }
                 
         private void RefreshMap()
@@ -482,6 +552,7 @@ namespace EDDiscovery.UserControls
         }
 
         #endregion
+                
     }    
 }
 
