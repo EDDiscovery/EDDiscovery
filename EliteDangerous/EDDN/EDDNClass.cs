@@ -44,7 +44,7 @@ namespace EliteDangerousCore.EDDN
             fromSoftwareVersion = assemblyFullName.Split(',')[1].Split('=')[1];
             commanderName = EDCommander.Current.Name;
 
-            _serverAddress = EDDNServer;
+            httpserveraddress = EDDNServer;
         }
 
         private JObject Header()

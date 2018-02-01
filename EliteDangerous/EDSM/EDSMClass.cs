@@ -45,7 +45,7 @@ namespace EliteDangerousCore.EDSM
             var assemblyFullName = Assembly.GetEntryAssembly().FullName;
             fromSoftwareVersion = assemblyFullName.Split(',')[1].Split('=')[1];
 
-            _serverAddress = ServerAddress;
+            base.httpserveraddress = ServerAddress;
 
             apiKey = EDCommander.Current.APIKey;
             commanderName = EDCommander.Current.EdsmName;
@@ -198,7 +198,7 @@ namespace EliteDangerousCore.EDSM
             {
                 string edsmhiddensystems = Path.Combine(EliteConfigInstance.InstanceOptions.AppDataDirectory, "edsmhiddensystems.json");
                 bool newfile = false;
-                BaseUtils.DownloadFileHandler.DownloadFile(_serverAddress + "api-v1/hidden-systems?showId=1", edsmhiddensystems, out newfile);
+                BaseUtils.DownloadFileHandler.DownloadFile(base.httpserveraddress + "api-v1/hidden-systems?showId=1", edsmhiddensystems, out newfile);
 
                 string json = BaseUtils.FileHelpers.TryReadAllTextFromFile(edsmhiddensystems);
 
@@ -667,7 +667,7 @@ namespace EliteDangerousCore.EDSM
                 sysID = msg["id"].Value<string>();
             }
 
-            string url = _serverAddress + "system/id/" + sysID + "/name/" + encodedSys;
+            string url = base.httpserveraddress + "system/id/" + sysID + "/name/" + encodedSys;
             return url;
         }
 

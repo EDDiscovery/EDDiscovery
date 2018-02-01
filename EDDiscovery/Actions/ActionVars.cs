@@ -61,7 +61,7 @@ namespace EDDiscovery.Actions
                 vars[prefix + "EventDescription"] = he.EventDescription;
                 vars[prefix + "EventDetailedInfo"] = he.EventDetailedInfo;
 
-                vars.AddPropertiesFieldsOfClass(he.journalEntry, prefix + "Class_", new Type[] { typeof(System.Drawing.Bitmap), typeof(Newtonsoft.Json.Linq.JObject) } , 5);      //depth seems good enough
+                vars.AddPropertiesFieldsOfClass(he.journalEntry, prefix + "Class_", new Type[] { typeof(System.Drawing.Icon), typeof(System.Drawing.Image), typeof(System.Drawing.Bitmap), typeof(Newtonsoft.Json.Linq.JObject) }, 5);      //depth seems good enough
 
                 // being backwards compatible to actions packs BEFORE the V3 change to remove JS vars
                 // these were the ones used in the pack..

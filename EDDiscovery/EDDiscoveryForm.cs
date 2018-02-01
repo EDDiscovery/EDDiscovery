@@ -768,7 +768,7 @@ namespace EDDiscovery
         private void Controller_NewUIEvent(UIEvent uievent)      
         {
             Conditions.ConditionVariables cv = new Conditions.ConditionVariables();
-            cv.AddPropertiesFieldsOfClass(uievent, "UI", new Type[] { typeof(System.Drawing.Bitmap), typeof(Newtonsoft.Json.Linq.JObject) }, 5);
+            cv.AddPropertiesFieldsOfClass(uievent, "UI", new Type[] { typeof(System.Drawing.Icon), typeof(System.Drawing.Image), typeof(System.Drawing.Bitmap), typeof(Newtonsoft.Json.Linq.JObject) }, 5);
             cv["UIEvent"] = uievent.EventTypeStr;
             cv["UIDisplayed"] = EDDConfig.ShowUIEvents ? "1" : "0";
             actioncontroller.ActionRun(Actions.ActionEventEDList.onUIEvent , cv);

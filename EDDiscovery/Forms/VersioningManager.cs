@@ -41,10 +41,12 @@ namespace EDDiscovery.Versions
             public bool HasDownloadedCopy { get { return downloadedfilename != null;  } }
             public string LongDownloadedDescription { get { return downloadedvars != null && downloadedvars.Exists("LongDescription") ? downloadedvars["LongDescription"] : ""; } }
 
-            public string downloadedpath;
-            public string downloadedfilename;
+            public string downloadedpath;           // where its stored on disk to be installed from
+            public string downloadedfilename;       // filename
             public int[] downloadedversion;
             public ConditionVariables downloadedvars;
+            public string downloadedserver;         // where to get any additional files from
+            public string downloadedserverpath;     // and its path
 
             public bool HasLocalCopy { get { return localfound; } }
             public string LongLocalDescription { get { return localvars != null && localvars.Exists("LongDescription") ? localvars["LongDescription"] : ""; } }
@@ -70,7 +72,7 @@ namespace EDDiscovery.Versions
         {
         }
 
-        public void ReadLocalFiles(string appfolder, string subfolder, string filename , string itemtype)       // DONE FIRST
+        public void ReadLocalFiles(string appfolder, string subfolder, string filename , string defaultitemtype)       // DONE FIRST
         {
             string installfolder = System.IO.Path.Combine(appfolder, subfolder);
             if (!System.IO.Directory.Exists(installfolder))
@@ -87,7 +89,7 @@ namespace EDDiscovery.Versions
                     it.localfound = true;
 
                     it.itemname = Path.GetFileNameWithoutExtension(f.FullName);
-                    it.itemtype = itemtype;
+                    it.itemtype = defaultitemtype;
 
                     it.localfilename = f.FullName;
                     it.localpath = installfolder;
@@ -107,6 +109,9 @@ namespace EDDiscovery.Versions
                             it.localversion = new int[] { 0, 0, 0, 0 };
                             it.localmodified = true;
                         }
+
+                        if (it.localvars.Exists("ItemType"))
+                            it.itemtype = it.localvars["ItemType"];     // allow file to override name
                     }
 
                     downloaditems.Add(it);
@@ -118,7 +123,7 @@ namespace EDDiscovery.Versions
             }
         }
 
-        public void ReadInstallFiles(string folder, string appfolder, string filename, int[] edversion , string itemtype)
+        public void ReadInstallFiles(string serverlocation , string serverpath, string folder, string appfolder, string filename, int[] edversion , string defaultitemtype)
         {
             FileInfo[] allFiles = Directory.EnumerateFiles(folder, filename, SearchOption.TopDirectoryOnly).Select(f => new FileInfo(f)).OrderBy(p => p.Name).ToArray();
 
@@ -150,6 +155,8 @@ namespace EDDiscovery.Versions
                                 it.downloadedfilename = f.FullName;
                                 it.downloadedvars = cv;
                                 it.downloadedversion = version;
+                                it.downloadedserver = serverlocation;
+                                it.downloadedserverpath = serverpath;
 
                                 it.state = (it.downloadedversion.CompareVersion(it.localversion) > 0) ? ItemState.OutOfDate : ItemState.UpToDate;
                             }
@@ -158,12 +165,14 @@ namespace EDDiscovery.Versions
                                 it = new DownloadItem()
                                 {
                                     itemname = Path.GetFileNameWithoutExtension(f.FullName),
-                                    itemtype = itemtype,
+                                    itemtype = cv.Exists("ItemType") ? cv["ItemType"] : defaultitemtype,       // use file description of it, or use default
 
                                     downloadedpath = folder,
                                     downloadedfilename = f.FullName,
                                     downloadedversion = version,
                                     downloadedvars = cv,
+                                    downloadedserver = serverlocation,
+                                    downloadedserverpath = serverpath,
 
                                     localfilename = localfilename,          // set these so it knows where to install..
                                     localpath = installfolder,
@@ -211,24 +220,43 @@ namespace EDDiscovery.Versions
         {
             try
             {
+                List<string[]> downloads = (from k in item.downloadedvars.NameEnumuerable where k.StartsWith("OtherFile") select item.downloadedvars[k].Split(';')).ToList();
+
+                if (downloads.Count > 0)        // we have downloads..
+                {
+                    List<string> files = (from a in downloads where a.Length == 2 select a[0]).ToList();        // split them apart and get file names
+
+                    BaseUtils.GitHubClass ghc = new BaseUtils.GitHubClass(item.downloadedserver);
+
+                    string tempfolder = Path.GetTempPath();
+
+                    if (ghc.Download(tempfolder, item.downloadedserverpath, files))     // download to temp folder..
+                    {
+                        foreach (string[] entry in downloads)                           // copy in
+                        {
+                            if (entry.Length == 2)
+                            {
+                                string folder = Path.Combine(appfolder, entry[1]);
+                                if (!Directory.Exists(folder))      // ensure the folder exists
+                                    Directory.CreateDirectory(folder);
+                                string outfile = Path.Combine(folder, entry[0]);
+                                string source = Path.Combine(tempfolder, entry[0]);
+                                System.Diagnostics.Debug.WriteLine("Downloaded and installed " + outfile);
+                                File.Copy(source, outfile, true);
+                            }
+                        }
+                    }
+                    else
+                        return false;
+                }
+
                 foreach (string key in item.downloadedvars.NameEnumuerable)  // these first, they are not the controller files
                 {
-                    if (key.StartsWith("OtherFile"))
-                    {
-                        string[] parts = item.downloadedvars[key].Split(';');
-                        string folder = Path.Combine(appfolder, parts[1]);
-                        if (!Directory.Exists(folder))      // ensure the folder exists
-                            Directory.CreateDirectory(folder);
-                        string outfile = Path.Combine(folder, parts[0] );
-                        string source = Path.Combine(item.downloadedpath, parts[0]);
-                        File.Copy(source, outfile, true);
-                    }
-
                     if (key.StartsWith("DisableOther"))
                     {
                         DownloadItem other = downloaditems.Find(x => x.itemname.Equals(item.downloadedvars[key]));
 
-                        if (other != null && other.localfilename != null )
+                        if (other != null && other.localfilename != null)
                             SetEnableFlag(other, false, appfolder); // don't worry if it fails..
                     }
                 }
@@ -288,7 +316,7 @@ namespace EDDiscovery.Versions
                     }
                 }
 
-                string shacurrent = GitHubClass.CalcSha1(filelist.ToArray());
+                string shacurrent = BaseUtils.SHA.CalcSha1(filelist.ToArray());
 
                 string shafile = Path.Combine(it.localpath, it.itemname + ".sha");
 

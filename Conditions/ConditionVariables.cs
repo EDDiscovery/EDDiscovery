@@ -404,6 +404,8 @@ namespace Conditions
             if (depth < 0 )      // 0, list, class, object, .. limit depth
                 return;
 
+            //System.Diagnostics.Debug.WriteLine("Object " + name + " " + rettype.Name);
+
             System.Globalization.CultureInfo ct = System.Globalization.CultureInfo.InvariantCulture;
 
             try // just to make sure a strange type does not barfe it
@@ -450,13 +452,17 @@ namespace Conditions
                         values[name + "_Length"] = "0";                         // always get a length
                     else
                     {
-                        Object[] array = (Object[])o;
-
-                        values[name + "_Length"] = array.Length.ToString(ct);
-                        for (int i = 0; i < array.Length; i++)
+                        Array b = o as Array;
+                        if (b != null)  // should not fail but just in case..
                         {
-                            AddDataOfType(array[i], array[i].GetType(), name + "[" + i.ToString(ct) + "]" , depth-1);
-                    }
+                            values[name + "_Length"] = b.Length.ToString(ct);
+
+                            for (int i = 0; i < b.Length; i++)
+                            {
+                                object oa = b.GetValue(i);
+                                AddDataOfType(oa, oa.GetType(), name + "[" + i.ToString(ct) + "]", depth - 1);
+                            }
+                        }
                     }
                 }
                 else if (o == null)

@@ -118,18 +118,18 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="labelDevelopersEnum.Text" xml:space="preserve">
-    <value>Lead developer:
+    <value>Program Concept by:
   Cmdr Finwen  (Robert Wahlström )
 
-Main developers:
-  Robby,  Bravada Cadelanne,
-  Cruento Mucrone,  phroggie
+Developers for this release:
+  Robby, Bravada Cadelanne,
+  Iain Ross, Phroggie, Andrea Spada.
 
-Additional developers:
-  Corbin Moran
-  Myshka, Zed
-  Marlon Blake, Majkl
-  Smacker, Jason Thorpe</value>
+Previous Contributors:
+  Finwen, Cruento Mucrone,  
+  Corbin Moran, Myshka, Zed,  
+  Marlon Blake, Smacker, Jason Thorpe, 
+  Greg Malcolm,  Majkl578, MWerle..</value>
   </data>
   <data name="textBoxLicense.Text" xml:space="preserve">
     <value>Apache License
@@ -186,7 +186,6 @@ You may add Your own copyright statement to Your modifications and may provide a
 
 END OF TERMS AND CONDITIONS</value>
   </data>
-  <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
   <metadata name="toolTip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 17</value>
   </metadata>
