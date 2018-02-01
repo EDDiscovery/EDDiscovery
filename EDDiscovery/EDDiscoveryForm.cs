@@ -85,7 +85,6 @@ namespace EDDiscovery
         #region IDiscoveryController interface
         #region Properties
         public HistoryList history { get { return Controller.history; } }
-        public EDSMSync EdsmSync { get { return Controller.EdsmSync; } }
         public string LogText { get { return Controller.LogText; } }
         public bool PendingClose { get { return Controller.PendingClose; } }
         public GalacticMapping galacticMapping { get { return Controller.galacticMapping; } }
@@ -643,7 +642,7 @@ namespace EDDiscovery
             actioncontroller.ActionRunOnEntry(he, Actions.ActionEventEDList.NewEntry(he));
 
             // all notes committed
-            SystemNoteClass.CommitDirtyNotes((snc) => { if (EDCommander.Current.SyncToEdsm && snc.FSDEntry) EDSMClass.SendComments(snc.SystemName, snc.Note, snc.EdsmId); });
+            SystemNoteClass.CommitDirtyNotes((snc) => { if (EDCommander.Current.SyncToEdsm && snc.FSDEntry) EDSMClass.SendComments(snc.SystemName, snc.Note, snc.EdsmId, he.Commander); });
 
             if ( he.EntryType == JournalTypeEnum.Docked )
             {
@@ -717,20 +716,7 @@ namespace EDDiscovery
                     System.Diagnostics.Trace.WriteLine("Arrived at system: " + he.System.name + " " + count + ":th visit.");
                 }
 
-                if (!EDDOptions.Instance.SendEDSMJournals)
-                {
-                    if (he.IsFSDJump)
-                    {
-                        if (EDCommander.Current.SyncToEdsm == true)
-                        {
-                            EDSMSync.SendTravelLog(he);
-                            ActionRunOnEntry(he, Actions.ActionEventEDList.onEDSMSync);
-                        }
-                    }
-
-                    hl.SendEDSMStatusInfo(he, true);
-                }
-                else if (EDCommander.Current.SyncToEdsm)
+                if (EDCommander.Current.SyncToEdsm)
                 {
                     EDSMJournalSync.SendEDSMEvents(LogLine, he);
 
@@ -1566,14 +1552,7 @@ namespace EDDiscovery
 
             try
             {
-                if (EDDOptions.Instance.SendEDSMJournals)
-                {
-                    EDSMJournalSync.SendEDSMEvents(l => LogLine(l), history, verbose: false, manual: true);
-                }
-                else
-                {
-                    EdsmSync.StartSync(edsm, history, EDCommander.Current.SyncToEdsm, EDCommander.Current.SyncFromEdsm, EDDConfig.Instance.DefaultMapColour);
-                }
+                EDSMJournalSync.SendEDSMEvents(l => LogLine(l), history, verbose: false, manual: true);
             }
             catch (Exception ex)
             {

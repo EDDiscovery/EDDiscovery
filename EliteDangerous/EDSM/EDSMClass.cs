@@ -51,6 +51,15 @@ namespace EliteDangerousCore.EDSM
             commanderName = EDCommander.Current.EdsmName;
         }
 
+        public EDSMClass(EDCommander cmdr) : this()
+        {
+            if (cmdr != null)
+            {
+                apiKey = cmdr.APIKey;
+                commanderName = cmdr.EdsmName ?? cmdr.Name;
+            }
+        }
+
         static string edsm_server_address = "https://www.edsm.net/";
         public static string ServerAddress { get { return edsm_server_address; } set { edsm_server_address = value; } }
         public static bool IsServerAddressValid { get { return edsm_server_address.Length > 0; } }
@@ -272,10 +281,10 @@ namespace EliteDangerousCore.EDSM
             return response.Body;
         }
 
-        public static void SendComments(string star, string note, long edsmid = 0) // (verified with EDSM 29/9/2016)
+        public static void SendComments(string star, string note, long edsmid = 0, EDCommander cmdr = null) // (verified with EDSM 29/9/2016)
         {
             System.Diagnostics.Debug.WriteLine("Send note to EDSM " + star + " " + edsmid + " " + note);
-            EDSMClass edsm = new EDSMClass();
+            EDSMClass edsm = new EDSMClass(cmdr);
 
             if (!edsm.IsApiKeySet)
                 return;
@@ -286,6 +295,54 @@ namespace EliteDangerousCore.EDSM
             });
         }
 
+        public void GetComments(Action<string> logout = null)
+        {
+            var json = GetComments(new DateTime(2011, 1, 1));
+
+            if (json != null)
+            {
+                JObject msg = JObject.Parse(json);
+                int msgnr = msg["msgnum"].Value<int>();
+
+                JArray comments = (JArray)msg["comments"];
+                if (comments != null)
+                {
+                    int commentsadded = 0;
+
+                    foreach (JObject jo in comments)
+                    {
+                        string name = jo["system"].Value<string>();
+                        string note = jo["comment"].Value<string>();
+                        string utctime = jo["lastUpdate"].Value<string>();
+                        int edsmid = 0;
+
+                        if (!Int32.TryParse(jo["systemId"].Str("0"), out edsmid))
+                            edsmid = 0;
+
+                        DateTime localtime = DateTime.ParseExact(utctime, "yyyy-MM-dd HH:mm:ss",
+                                    CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal).ToLocalTime();
+
+                        SystemNoteClass curnote = SystemNoteClass.GetNoteOnSystem(name, edsmid);
+
+                        if (curnote != null)                // curnote uses local time to store
+                        {
+                            if (localtime.Ticks > curnote.Time.Ticks)   // if newer, add on (verified with EDSM 29/9/2016)
+                            {
+                                curnote.UpdateNote(curnote.Note + ". EDSM: " + note, true, localtime, edsmid, true);
+                                commentsadded++;
+                            }
+                        }
+                        else
+                        {
+                            SystemNoteClass.MakeSystemNote(note, localtime, name, 0, edsmid, true);   // new one!  its an FSD one as well
+                            commentsadded++;
+                        }
+                    }
+
+                    logout?.Invoke(string.Format("EDSM Comments downloaded/updated {0}", commentsadded));
+                }
+            }
+        }
 
         public string SetLog(string systemName, DateTime dateVisitedutc)
         {

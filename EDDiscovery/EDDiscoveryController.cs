@@ -36,7 +36,6 @@ namespace EDDiscovery
         #region Public Interface
         #region Variables
         public HistoryList history { get; private set; } = new HistoryList();
-        public EDSMSync EdsmSync { get; private set; }
         public EDSMLogFetcher EdsmLogFetcher { get; private set; }
         public string LogText { get { return logtext; } }
         public bool PendingClose { get; private set; }           // we want to close boys!
@@ -136,8 +135,6 @@ namespace EDDiscovery
 
             galacticMapping = new GalacticMapping();
 
-            EdsmSync = new EDSMSync(Logger);
-
             EdsmLogFetcher = new EDSMLogFetcher(LogLine);
             EdsmLogFetcher.OnDownloadedSystems += () => RefreshHistoryAsync();
 
@@ -217,7 +214,6 @@ namespace EDDiscovery
             {
                 PendingClose = true;
                 EDDNSync.StopSync();
-                EdsmSync.StopSync();
                 EDSMJournalSync.StopSync();
                 EdsmLogFetcher.AsyncStop();
                 journalmonitor.StopMonitor();
