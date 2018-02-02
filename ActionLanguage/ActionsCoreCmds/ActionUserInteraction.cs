@@ -377,17 +377,13 @@ namespace ActionLanguage
                 {
                     ConditionVariables cv = ap.variables.FilterVars(exp[3] + "*");
 
-                    List<ExtendedControls.ConfigurableForm.Entry> entries = new List<ExtendedControls.ConfigurableForm.Entry>();
+                    ExtendedControls.ConfigurableForm cd = new ExtendedControls.ConfigurableForm();
 
-                    System.Drawing.Point lastpos = new System.Drawing.Point(0, 0);
-
-                    foreach( string k in cv.NameList )
+                    foreach ( string k in cv.NameList )
                     {
-                        ExtendedControls.ConfigurableForm.Entry entry;
-                        string errmsg =ExtendedControls.ConfigurableForm.MakeEntry(cv[k], out entry, ref lastpos);
+                        string errmsg = cd.Add(cv[k]);
                         if (errmsg != null)
                             return ap.ReportError(errmsg + " in " + k + " variable for Dialog");
-                        entries.Add(entry);
                     }
 
                     StringParser sp2 = new StringParser(exp[2]);
@@ -398,8 +394,6 @@ namespace ActionLanguage
 
                     if (dw != null && dh != null && ((x==null)==(y==null))) // need w/h, must have either no pos or both pos
                     {
-                        ExtendedControls.ConfigurableForm cd = new ExtendedControls.ConfigurableForm();
-
                         if (IsModalDialog())
                             ap.dialogs[exp[0]] = cd;
                         else
@@ -411,10 +405,10 @@ namespace ActionLanguage
 
                         cd.Trigger += Cd_Trigger;
 
-                        cd.Show(ap.actioncontroller.Form, exp[0], ap.actioncontroller.Icon,
+                        cd.Show(ap.actioncontroller.Form, ap.actioncontroller.Icon,
                                             new System.Drawing.Size(dw.Value, dh.Value), pos , 
-                                            exp[1], entries.ToArray(), 
-                                            new List<Object>() { ap, IsModalDialog() }
+                                            exp[1],
+                                            exp[0], new List<Object>() { ap, IsModalDialog() }  // logical name and tag
                                             );
 
                         return !IsModalDialog();       // modal, return false, STOP.  Non modal, continue

@@ -245,7 +245,9 @@ namespace EDDiscovery.UserControls
                 {
                     //System.Diagnostics.Debug.WriteLine("Auto Sel");
                     dataGridViewTravel.ClearSelection();
-                    dataGridViewTravel.CurrentCell = dataGridViewTravel.Rows[0].Cells[1];       // its the current cell which needs to be set, moves the row marker as well
+                    int rowno = dataGridViewTravel.Rows.GetFirstRow(DataGridViewElementStates.Visible);
+                    if (rowno != -1)
+                        dataGridViewTravel.CurrentCell = dataGridViewTravel.Rows[rowno].Cells[1];       // its the current cell which needs to be set, moves the row marker as well
 
                     FireChangeSelection();
                 }

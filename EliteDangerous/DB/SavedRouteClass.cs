@@ -55,6 +55,8 @@ namespace EliteDangerousCore.DB
         public DateTime? EndDate { get; set; }
         public List<string> Systems { get; private set; }
 
+        public string LastSystem { get { return Systems.Count > 0 ? Systems[Systems.Count - 1] : null; } }
+
         public bool Equals(SavedRouteClass other)
         {
             if (other == null)
@@ -241,6 +243,132 @@ namespace EliteDangerousCore.DB
             get
             {
                 return $"\"{(Name ?? "(null)")}\" [{Id:n0}]: " + ((Systems == null || Systems.Count == 0) ? "no systems" : ((Systems?.Count == 1) ? "1 system" : (Systems.Count.ToString("n0") + " systems")));
+            }
+        }
+
+        public double CumulativeDistance()
+        {
+            ISystem last = null;
+            double distance = 0;
+
+            for (int i = 0; i < Systems.Count; i++)
+            {
+                ISystem s = SystemClassDB.GetSystem(Systems[i]);
+                if (s != null)
+                {
+                    if (last != null)
+                        distance += s.Distance(last);
+
+                    last = s;
+                }
+            }
+
+            return distance;
+        }
+
+        public ISystem PosAlongRoute(double percentage)             // go along route and give me a co-ord along it..
+        {
+            double dist = CumulativeDistance() * percentage / 100.0;
+
+            ISystem last = null;
+
+            for (int i = 0; i < Systems.Count; i++)
+            {
+                ISystem s = SystemClassDB.GetSystem(Systems[i]);
+                if (s != null)
+                {
+                    if (last != null)
+                    {
+                        double d = s.Distance(last);
+
+                        if (dist < d)
+                        {
+                            d = dist / d;
+
+                            return new SystemClass("WP" + (i).ToString() + "-" + "WP" + (i + 1).ToString() + "-" + d.ToString("#.00"), last.x + (s.x - last.x) * d, last.y + (s.y - last.y) * d, last.z + (s.z - last.z) * d);
+                        }
+
+                        dist -= d;
+                    }
+
+                    last = s;
+                }
+            }
+
+            return last;
+        }
+
+        // given the system list, which is the next waypoint to go to.  return the system (or null if not available or past end) and the waypoint.. (0 based)
+
+        public Tuple<ISystem, int> ClosestTo(ISystem sys)
+        {
+            double dist = Double.MaxValue;
+            ISystem found = null;
+            int closest = -1;
+
+            List<ISystem> list = new List<ISystem>();
+
+            for (int i = 0; i < Systems.Count; i++)
+            {
+                ISystem s = SystemClassDB.GetSystem(Systems[i]);
+
+                if (s != null)
+                {
+                    double sd = s.Distance(sys);
+                    if (sd < dist)
+                    {
+                        dist = sd;
+                        closest = i;
+                        found = s;
+                    }
+                }
+                list.Add(s);
+            }
+
+
+            if (found != null)
+            {
+                //System.Diagnostics.Debug.WriteLine("Found at " + closest + " System " + found.name + " " + found.x + " " + found.y + " " + found.z + " dist " + dist);
+
+                if (closest > 0)
+                {
+                    int lastentry = closest - 1;
+                    while (lastentry >= 0 && list[lastentry] == null)       // go and find the last one which had a position..
+                        lastentry--;
+
+                    if (lastentry >= 0 && list[lastentry] != null)      // found it, so work out using distance if we are closest to last or past it
+                    {
+                        double distlasttoclosest = list[closest].Distance(list[lastentry]);     // last->closest vs
+                        double distlasttocur = sys.Distance(list[lastentry]);                   // last->cur position
+
+                        if (distlasttocur > distlasttoclosest - 0.1)   // past current because the distance last->cur > last->closest waypoint
+                        {
+                            return new Tuple<ISystem, int>(closest < Systems.Count - 1 ? list[closest + 1] : null, closest + 1); // en-route to this. may be null
+                        }
+                        else
+                            return new Tuple<ISystem, int>(found, closest); // en-route to this
+                    }
+                }
+
+                return new Tuple<ISystem, int>(found, closest);
+            }
+            else
+                return null;
+        }
+
+        public void TestHarness()       // fly the route and debug the closestto.. keep this for testing
+        {
+            for (double percent = 0; percent < 110; percent += 1)
+            {
+                ISystem cursys = PosAlongRoute(percent);
+                System.Diagnostics.Debug.WriteLine(Environment.NewLine + "Sys {0} {1} {2} {3}", cursys.x, cursys.y, cursys.z, cursys.name);
+
+                Tuple<ISystem, int> closest = ClosestTo(cursys);
+
+                if (closest != null)
+                {
+                    System.Diagnostics.Debug.WriteLine("Next {0} {1} {2} {3}, index {4}", closest.Item1?.x, closest.Item1?.y, closest.Item1?.z, closest.Item1?.name, closest.Item2);
+                }
             }
         }
     }

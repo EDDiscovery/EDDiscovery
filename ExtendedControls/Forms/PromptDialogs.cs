@@ -115,51 +115,144 @@ namespace ExtendedControls
 
     public class ConfigurableForm : DraggableForm
     {
-        private Entry[] entries;
+        public event Action<string, string, Object> Trigger;        // returns dialog logical name, name of control, caller tag object
+
+        private List<Entry> entries;
         private Object callertag;
         private string logicalname;
-        public event Action<string, string, Object> Trigger;        // returns logical name, name of control, caller tag object
         private bool ProgClose = false;
+        private System.Drawing.Point lastpos; // used for dynamically making the list up
 
         public class Entry
         {
-            public string name;
+            public string controlname;
             public Type controltype;
             public string text;
             public System.Drawing.Point pos;
             public System.Drawing.Size size;
             public string tooltip;                      // can be null.
 
-            public Control control;
-
             public Entry(string nam, Type c, string t, System.Drawing.Point p, System.Drawing.Size s, string tt)
             {
-                controltype = c; text = t; pos = p; size = s; tooltip = tt; name = nam;
+                controltype = c; text = t; pos = p; size = s; tooltip = tt; controlname = nam;
             }
 
-            public bool checkboxchecked;
-            public bool textboxmultiline;
-            public string comboboxitems;
+            public Entry(string nam, string t, System.Drawing.Point p, System.Drawing.Size s, string tt, List<string> comboitems, Size? sz = null)
+            {
+                controltype = typeof(ExtendedControls.ComboBoxCustom); text = t; pos = p; size = s; tooltip = tt; controlname = nam;
+                comboboxitems = string.Join(",", comboitems);
+                comboboxdropdownsize = sz;
+            }
+
+            public bool checkboxchecked;        // fill in for checkbox
+            public bool textboxmultiline;       // fill in for textbox
+            public string comboboxitems;        // fill in for combobox
+            public Size? comboboxdropdownsize;  // may be null, fill in for combobox
+
+            public Control control; // used by Show  no need to set.
         }
 
         private System.ComponentModel.IContainer components = null;     // replicate normal component container, so controls which look this
                                                                         // up for finding the tooltip can (TextBoxBorder)
+
+        #region Public interface
+
         public ConfigurableForm()
         {
             this.components = new System.ComponentModel.Container();
+            entries = new List<Entry>();
+            lastpos = new System.Drawing.Point(0, 0);
         }
 
-        protected override void Dispose(bool disposing)
+        public string Add(string instr)       // add a string definition dynamically add to list.  errmsg if something is wrong
         {
-            if (disposing && (components != null))
-            {
-                components.Dispose();
-            }
-            base.Dispose(disposing);
+            Entry e;
+            string errmsg = MakeEntry(instr, out e, ref lastpos);
+            if (errmsg == null)
+                entries.Add(e);
+            return errmsg;
         }
 
+        public void Add(Entry e )               // add an entry..
+        {
+            entries.Add(e);
+        }
 
-        static public string MakeEntry(string instr, out Entry entry, ref System.Drawing.Point lastpos)
+        public DialogResult ShowDialog(Form p, Icon icon, System.Drawing.Size size, System.Drawing.Point pos, string caption, string lname = null, Object callertag = null)
+        {
+            Show(icon, size, pos, caption, lname, callertag);
+            return ShowDialog(p);
+        }
+
+        public void Show(Form p, Icon icon, System.Drawing.Size size, System.Drawing.Point pos, string caption, string lname = null, Object callertag = null)
+        {
+            Show(icon, size, pos, caption, lname, callertag);
+            Show(p);
+        }
+
+        public new void Close()     // program close.. allow it to close properly
+        {
+            ProgClose = true;
+            base.Close();
+        }
+
+        public string Get(string controlname)      // return value of dialog control
+        {
+            Entry t = entries.Find(x => x.controlname.Equals(controlname, StringComparison.InvariantCultureIgnoreCase));
+            if (t != null)
+            {
+                Control c = t.control;
+                if (c is ExtendedControls.TextBoxBorder)
+                    return (c as ExtendedControls.TextBoxBorder).Text;
+                else if (c is ExtendedControls.CheckBoxCustom)
+                    return (c as ExtendedControls.CheckBoxCustom).Checked ? "1" : "0";
+                else if (c is ExtendedControls.ComboBoxCustom)
+                {
+                    ExtendedControls.ComboBoxCustom cb = c as ExtendedControls.ComboBoxCustom;
+                    return (cb.SelectedIndex != -1) ? cb.Text : "";
+                }
+            }
+
+            return null;
+        }
+
+        public bool Set(string controlname, string value)      // set value of dialog control
+        {
+            Entry t = entries.Find(x => x.controlname.Equals(controlname, StringComparison.InvariantCultureIgnoreCase));
+            if (t != null)
+            {
+                Control c = t.control;
+                if (c is ExtendedControls.TextBoxBorder)
+                {
+                    (c as ExtendedControls.TextBoxBorder).Text = value;
+                    return true;
+                }
+                else if (c is ExtendedControls.CheckBoxCustom)
+                {
+                    (c as ExtendedControls.CheckBoxCustom).Checked = !value.Equals("0");
+                    return true;
+                }
+                else if (c is ExtendedControls.ComboBoxCustom)
+                {
+                    ExtendedControls.ComboBoxCustom cb = c as ExtendedControls.ComboBoxCustom;
+                    if (cb.Items.Contains(value))
+                    {
+                        cb.Enabled = false;
+                        cb.SelectedItem = value;
+                        cb.Enabled = true;
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
+
+        #endregion
+
+        #region Implementation
+
+        static private string MakeEntry(string instr, out Entry entry, ref System.Drawing.Point lastpos)
         {
             entry = null;
 
@@ -230,12 +323,10 @@ namespace ExtendedControls
             return null;
         }
 
-        public void Show(Form p, string lname, Icon icon, System.Drawing.Size size, System.Drawing.Point pos, string caption, Entry[] e, Object t )
+        private void Show(Icon icon, System.Drawing.Size size, System.Drawing.Point pos, string caption, string lname, Object callertag)
         {
-    
-            logicalname = lname;    // passed back to caller via trigger
-            entries = e;
-            callertag = t;      // passed back to caller via trigger
+            this.logicalname = lname;    // passed back to caller via trigger
+            this.callertag = callertag;      // passed back to caller via trigger
 
             ITheme theme = ThemeableFormsInstance.Instance;
 
@@ -273,7 +364,7 @@ namespace ExtendedControls
 
             ToolTip tt = new ToolTip(components);
             tt.ShowAlways = true;
-            for (int i = 0; i < entries.Length; i++)
+            for (int i = 0; i < entries.Count; i++)
             {
                 Entry ent = entries[i];
                 Control c = (Control)Activator.CreateInstance(ent.controltype);
@@ -293,7 +384,7 @@ namespace ExtendedControls
                     b.Click += (sender, ev) =>
                     {
                         Entry en = (Entry)(((Control)sender).Tag);
-                        Trigger?.Invoke(logicalname, en.name, callertag);       // pass back the logical name of dialog, the name of the control, the caller tag
+                        Trigger?.Invoke(logicalname, en.controlname, this.callertag);       // pass back the logical name of dialog, the name of the control, the caller tag
                     };
                 }
 
@@ -310,13 +401,19 @@ namespace ExtendedControls
                     cb.Click += (sender, ev) =>
                     {
                         Entry en = (Entry)(((Control)sender).Tag);
-                        Trigger?.Invoke(logicalname, en.name, callertag);       // pass back the logical name of dialog, the name of the control, the caller tag
+                        Trigger?.Invoke(logicalname, en.controlname, this.callertag);       // pass back the logical name of dialog, the name of the control, the caller tag
                     };
                 }
 
                 if (c is ExtendedControls.ComboBoxCustom)
                 {
                     ExtendedControls.ComboBoxCustom cb = c as ExtendedControls.ComboBoxCustom;
+                    if (ent.comboboxdropdownsize != null)
+                    {
+                        cb.DropDownHeight = ent.comboboxdropdownsize.Value.Height;
+                        cb.DropDownWidth = ent.comboboxdropdownsize.Value.Width;
+                    }
+
                     cb.Items.AddRange(ent.comboboxitems.Split(','));
                     if (cb.Items.Contains(ent.text))
                         cb.SelectedItem = ent.text;
@@ -326,7 +423,7 @@ namespace ExtendedControls
                         if (ctr.Enabled)
                         {
                             Entry en = (Entry)(ctr.Tag);
-                            Trigger?.Invoke(logicalname, en.name, callertag);       // pass back the logical name of dialog, the name of the control, the caller tag
+                            Trigger?.Invoke(logicalname, en.controlname, this.callertag);       // pass back the logical name of dialog, the name of the control, the caller tag
                         }
                     };
 
@@ -338,14 +435,15 @@ namespace ExtendedControls
             this.Icon = icon;
 
             theme.ApplyToForm(this, System.Drawing.SystemFonts.DefaultFont);
-
-            Show(p);
         }
 
-        public new void Close()     // program close.. allow it to close properly
+        protected override void Dispose(bool disposing)
         {
-            ProgClose = true;
-            base.Close();
+            if (disposing && (components != null))
+            {
+                components.Dispose();
+            }
+            base.Dispose(disposing);
         }
 
         protected override void OnFormClosing(FormClosingEventArgs e)
@@ -353,7 +451,7 @@ namespace ExtendedControls
             if (ProgClose == false)
             {
                 e.Cancel = true; // stop it working. program does the close
-                Trigger(logicalname, "Cancel", callertag);
+                Trigger?.Invoke(logicalname, "Cancel", callertag);
             }
             else
                 base.OnFormClosing(e);
@@ -363,63 +461,11 @@ namespace ExtendedControls
         {
             if (keyData == Keys.Escape)
             {
-                Trigger(logicalname, "Escape", callertag);
+                Trigger?.Invoke(logicalname, "Escape", callertag);
                 return true;
             }
 
             return base.ProcessCmdKey(ref msg, keyData);
-        }
-
-        public string Get(string name)
-        {
-            Entry t = Array.Find(entries, x => x.name.Equals(name, StringComparison.InvariantCultureIgnoreCase));
-            if (t != null)
-            {
-                Control c = t.control;
-                if (c is ExtendedControls.TextBoxBorder)
-                    return (c as ExtendedControls.TextBoxBorder).Text;
-                else if (c is ExtendedControls.CheckBoxCustom)
-                    return (c as ExtendedControls.CheckBoxCustom).Checked ? "1" : "0";
-                else if (c is ExtendedControls.ComboBoxCustom)
-                {
-                    ExtendedControls.ComboBoxCustom cb = c as ExtendedControls.ComboBoxCustom;
-                    return (cb.SelectedIndex != -1) ? cb.Text : "";
-                }
-            }
-
-            return null;
-        }
-
-        public bool Set(string name, string value)
-        {
-            Entry t = Array.Find(entries, x => x.name.Equals(name, StringComparison.InvariantCultureIgnoreCase));
-            if (t != null)
-            {
-                Control c = t.control;
-                if (c is ExtendedControls.TextBoxBorder)
-                {
-                    (c as ExtendedControls.TextBoxBorder).Text = value;
-                    return true;
-                }
-                else if (c is ExtendedControls.CheckBoxCustom)
-                {
-                    (c as ExtendedControls.CheckBoxCustom).Checked = !value.Equals("0");
-                    return true;
-                }
-                else if (c is ExtendedControls.ComboBoxCustom)
-                {
-                    ExtendedControls.ComboBoxCustom cb = c as ExtendedControls.ComboBoxCustom;
-                    if (cb.Items.Contains(value))
-                    {
-                        cb.Enabled = false;
-                        cb.SelectedItem = value;
-                        cb.Enabled = true;
-                        return true;
-                    }
-                }
-            }
-
-            return false;
         }
 
         private void FormMouseDown(object sender, MouseEventArgs e)
@@ -431,5 +477,8 @@ namespace ExtendedControls
         {
             OnCaptionMouseUp((Control)sender, e);
         }
+
+        #endregion
+
     }
 }
