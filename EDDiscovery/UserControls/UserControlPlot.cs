@@ -114,7 +114,7 @@ namespace EDDiscovery.UserControls
                 MinRadius = float.Parse(textMinRadius.Text);
 
             System.Diagnostics.Debug.Assert(Application.MessageLoop);       // check!
-            discoveryform.history.CalculateSqDistances(list, sys.x, sys.y, sys.z, maxitems, MinRadius, MaxRadius, true);
+            discoveryform.history.CalculateSqDistances(list, sys.X, sys.Y, sys.Z, maxitems, MinRadius, MaxRadius, true);
             FillRadar(list, sys);
         }
         
@@ -124,30 +124,30 @@ namespace EDDiscovery.UserControls
 
             if (csl.Count() > 0)
             {
-                SetControlText("2D Plot of systems in range from " + centerSystem.name);                
+                SetControlText("2D Plot of systems in range from " + centerSystem.Name);                
 
                 chartBubble.Series[0].Points.AddXY(0, 0, 4);
-                chartBubble.Series[0].ToolTip = centerSystem.name;
+                chartBubble.Series[0].ToolTip = centerSystem.Name;
                 chartBubble.Series[3].Points.AddXY(0, 0, 4);
-                chartBubble.Series[3].ToolTip = centerSystem.name;
+                chartBubble.Series[3].ToolTip = centerSystem.Name;
                 chartBubble.Series[6].Points.AddXY(0, 0, 4);
-                chartBubble.Series[6].ToolTip = centerSystem.name;
+                chartBubble.Series[6].ToolTip = centerSystem.Name;
 
 
 
                 foreach (KeyValuePair<double, ISystem> tvp in csl)
                 {
-                    if (tvp.Value.name != centerSystem.name)
+                    if (tvp.Value.Name != centerSystem.Name)
                     { 
 
                     var theISystemInQuestion = tvp.Value;
-                    var sysX = theISystemInQuestion.x;
-                    var sysY = theISystemInQuestion.y;
-                    var sysZ = theISystemInQuestion.z;
+                    var sysX = theISystemInQuestion.X;
+                    var sysY = theISystemInQuestion.Y;
+                    var sysZ = theISystemInQuestion.Z;
                     var distFromCurrentSys = Math.Round(Math.Sqrt(tvp.Key), 2, MidpointRounding.AwayFromZero);
-                    var curX = centerSystem.x;
-                    var curY = centerSystem.y;
-                    var curZ = centerSystem.z;
+                    var curX = centerSystem.X;
+                    var curY = centerSystem.Y;
+                    var curZ = centerSystem.Z;
 
                     // reset charts axis
                         chartBubble.ChartAreas[0].AxisY.IsStartedFromZero = false;
@@ -161,10 +161,10 @@ namespace EDDiscovery.UserControls
 
                         if (distFromCurrentSys > MinRadius)
                         {
-                            int visits = discoveryform.history.GetVisitsCount(tvp.Value.name, tvp.Value.id_edsm);
+                            int visits = discoveryform.history.GetVisitsCount(tvp.Value.Name, tvp.Value.EDSMID);
 
                             StringBuilder label = new StringBuilder();
-                            label.Append(theISystemInQuestion.name + " / " + visits + " visits" + "\n" + distFromCurrentSys);
+                            label.Append(theISystemInQuestion.Name + " / " + visits + " visits" + "\n" + distFromCurrentSys);
 
                             double dx = curX - sysX;
                             double dy = curY - sysY;

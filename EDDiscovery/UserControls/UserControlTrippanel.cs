@@ -161,7 +161,7 @@ namespace EDDiscovery.UserControls
                     topline = String.Format("{0} | {1:N2}ly {2}", name, dist, mesg);
                 }
 
-                topline = String.Format("{0} [{2}] | {1}", he.System.name, topline, discoveryform.history.GetVisitsCount(he.System.name));
+                topline = String.Format("{0} [{2}] | {1}", he.System.Name, topline, discoveryform.history.GetVisitsCount(he.System.Name));
 
                 pictureBox.AddTextAutoSize(new Point(100, 5), new Size(1000, 40), topline, displayfont, textcolour, backcolour, 1.0F);
 
@@ -271,12 +271,12 @@ namespace EDDiscovery.UserControls
                 {
                     EliteDangerousCore.EDSM.EDSMClass edsm = new EliteDangerousCore.EDSM.EDSMClass();
 
-                    string url = edsm.GetUrlToEDSMSystem(he.System.name);
+                    string url = edsm.GetUrlToEDSMSystem(he.System.Name);
 
                     if (url.Length > 0)         // may pass back empty string if not known, this solves another exception
                         System.Diagnostics.Process.Start(url);
                     else
-                        ExtendedControls.MessageBoxTheme.Show(FindForm(), "System " + he.System.name + " unknown to EDSM");
+                        ExtendedControls.MessageBoxTheme.Show(FindForm(), "System " + he.System.Name + " unknown to EDSM");
                 }
                 else
                 {

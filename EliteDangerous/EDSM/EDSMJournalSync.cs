@@ -404,8 +404,8 @@ namespace EliteDangerousCore.EDSM
                 JObject json = je.GetJson();
                 RemoveCommonKeys(json);
                 json.Remove("StarPosFromEDSM");
-                json["_systemName"] = he.System.name;
-                json["_systemCoordinates"] = new JArray(he.System.x, he.System.y, he.System.z);
+                json["_systemName"] = he.System.Name;
+                json["_systemCoordinates"] = new JArray(he.System.X, he.System.Y, he.System.Z);
                 if (he.System.SystemAddress != null)
                     json["_systemAddress"] = he.System.SystemAddress;
                 if (he.IsDocked)
@@ -443,7 +443,7 @@ namespace EliteDangerousCore.EDSM
                                 {
                                     if (systemId != 0)
                                     {
-                                        he.System.id_edsm = systemId;
+                                        he.System.EDSMID = systemId;
                                         JournalEntry.UpdateEDSMIDPosJump(he.Journalid, he.System, false, 0, cn, txn);
                                     }
                                 }

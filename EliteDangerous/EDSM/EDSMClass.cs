@@ -493,13 +493,13 @@ namespace EliteDangerousCore.EDSM
                         if (sc == null)
                         {
                             if (DateTime.UtcNow.Subtract(etutc).TotalHours < 6) // Avoid running into the rate limit
-                                sc = GetSystemsByName(name)?.FirstOrDefault(s => s.id_edsm == id);
+                                sc = GetSystemsByName(name)?.FirstOrDefault(s => s.EDSMID == id);
 
                             if (sc == null)
                             {
                                 sc = new SystemClass(name)
                                 {
-                                    id_edsm = id
+                                    EDSMID = id
                                 };
                             }
                         }
@@ -608,14 +608,14 @@ namespace EliteDangerousCore.EDSM
                 foreach (JObject sysname in msg)
                 {
                     ISystem sys = new SystemClass();
-                    sys.name = sysname["name"].Str("Unknown");
-                    sys.id_edsm = sysname["id"].Long(0);
+                    sys.Name = sysname["name"].Str("Unknown");
+                    sys.EDSMID = sysname["id"].Long(0);
                     JObject co = (JObject)sysname["coords"];
                     if ( co != null )
                     {
-                        sys.x = co["x"].Double();
-                        sys.y = co["y"].Double();
-                        sys.z = co["z"].Double();
+                        sys.X = co["x"].Double();
+                        sys.Y = co["y"].Double();
+                        sys.Z = co["z"].Double();
                     }
                     systems.Add(new Tuple<ISystem, double>(sys, sysname["distance"].Double()));
                 }
@@ -645,38 +645,38 @@ namespace EliteDangerousCore.EDSM
                 foreach (JObject sysname in msg)
                 {
                     ISystem sys = new SystemClass();
-                    sys.name = sysname["name"].Str("Unknown");
-                    sys.id_edsm = sysname["id"].Long(0);
+                    sys.Name = sysname["name"].Str("Unknown");
+                    sys.EDSMID = sysname["id"].Long(0);
                     JObject co = (JObject)sysname["coords"];
 
                     if (co != null)
                     {
-                        sys.x = co["x"].Double();
-                        sys.y = co["y"].Double();
-                        sys.z = co["z"].Double();
+                        sys.X = co["x"].Double();
+                        sys.Y = co["y"].Double();
+                        sys.Z = co["z"].Double();
                     }
 
-                    sys.needs_permit = sysname["requirePermit"].Bool(false) ? 1 : 0;
+                    sys.NeedsPermit = sysname["requirePermit"].Bool(false) ? 1 : 0;
 
                     JObject info = sysname["information"] as JObject;
 
                     if (info != null)
                     {
-                        sys.population = info["population"].Long(0);
-                        sys.faction = info["faction"].StrNull();
+                        sys.Population = info["population"].Long(0);
+                        sys.Faction = info["faction"].StrNull();
                         EDAllegiance allegiance = EDAllegiance.None;
                         EDGovernment government = EDGovernment.None;
                         EDState state = EDState.None;
                         EDEconomy economy = EDEconomy.None;
                         EDSecurity security = EDSecurity.Unknown;
-                        sys.allegiance = Enum.TryParse(info["allegiance"].Str(), out allegiance) ? allegiance : EDAllegiance.None;
-                        sys.government = Enum.TryParse(info["government"].Str(), out government) ? government : EDGovernment.None;
-                        sys.state = Enum.TryParse(info["factionState"].Str(), out state) ? state : EDState.None;
-                        sys.primary_economy = Enum.TryParse(info["economy"].Str(), out economy) ? economy : EDEconomy.None;
-                        sys.security = Enum.TryParse(info["security"].Str(), out security) ? security : EDSecurity.Unknown;
+                        sys.Allegiance = Enum.TryParse(info["allegiance"].Str(), out allegiance) ? allegiance : EDAllegiance.None;
+                        sys.Government = Enum.TryParse(info["government"].Str(), out government) ? government : EDGovernment.None;
+                        sys.State = Enum.TryParse(info["factionState"].Str(), out state) ? state : EDState.None;
+                        sys.PrimaryEconomy = Enum.TryParse(info["economy"].Str(), out economy) ? economy : EDEconomy.None;
+                        sys.Security = Enum.TryParse(info["security"].Str(), out security) ? security : EDSecurity.Unknown;
                     }
 
-                    if (uselike ? sys.name.StartsWith(systemName, StringComparison.InvariantCultureIgnoreCase) : sys.name.Equals(systemName, StringComparison.InvariantCultureIgnoreCase))
+                    if (uselike ? sys.Name.StartsWith(systemName, StringComparison.InvariantCultureIgnoreCase) : sys.Name.Equals(systemName, StringComparison.InvariantCultureIgnoreCase))
                     {
                         systems.Add(sys);
                     }

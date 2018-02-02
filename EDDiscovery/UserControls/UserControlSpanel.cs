@@ -264,7 +264,7 @@ namespace EDDiscovery.UserControls
                             string allegiance, economy, gov, faction, factionstate, security;
                             hl.ReturnSystemInfo(last, out allegiance, out economy, out gov, out faction, out factionstate, out security);
 
-                            string str = last.System.name + " : " + BaseUtils.FieldBuilder.Build(
+                            string str = last.System.Name + " : " + BaseUtils.FieldBuilder.Build(
                                 "", faction,
                                 "", factionstate,
                                 "", security,
@@ -357,9 +357,9 @@ namespace EDDiscovery.UserControls
 
             if (Config(Configuration.showXYZ))
             {
-                coldata.Add((he.System.HasCoordinate && showdistance) ? he.System.x.ToString("0.00") : "");
-                coldata.Add((he.System.HasCoordinate && showdistance) ? he.System.y.ToString("0.00") : "");
-                coldata.Add((he.System.HasCoordinate && showdistance) ? he.System.z.ToString("0.00") : "");
+                coldata.Add((he.System.HasCoordinate && showdistance) ? he.System.X.ToString("0.00") : "");
+                coldata.Add((he.System.HasCoordinate && showdistance) ? he.System.Y.ToString("0.00") : "");
+                coldata.Add((he.System.HasCoordinate && showdistance) ? he.System.Z.ToString("0.00") : "");
             }
 
             if (layoutorder > 0 && Config(Configuration.showNotes))
@@ -560,12 +560,12 @@ namespace EDDiscovery.UserControls
                 {
                     EliteDangerousCore.EDSM.EDSMClass edsm = new EliteDangerousCore.EDSM.EDSMClass();
 
-                    string url = edsm.GetUrlToEDSMSystem(he.System.name);
+                    string url = edsm.GetUrlToEDSMSystem(he.System.Name);
 
                     if (url.Length > 0)         // may pass back empty string if not known, this solves another exception
                         System.Diagnostics.Process.Start(url);
                     else
-                        ExtendedControls.MessageBoxTheme.Show(FindForm(), "System " + he.System.name + " unknown to EDSM");
+                        ExtendedControls.MessageBoxTheme.Show(FindForm(), "System " + he.System.Name + " unknown to EDSM");
                 }
             }
         }

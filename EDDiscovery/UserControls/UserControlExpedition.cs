@@ -430,7 +430,7 @@ namespace EDDiscovery.UserControls
 
             foreach (ISystem s in latestplottedroute)
             {
-                dataGridViewRouteSystems.Rows.Add(s.name, "", "");
+                dataGridViewRouteSystems.Rows.Add(s.Name, "", "");
             }
             UpdateSystemRows();
         }
@@ -878,26 +878,26 @@ namespace EDDiscovery.UserControls
                 if (sys != null)
                 {
                     string note = "";
-                    SystemNoteClass sn = SystemNoteClass.GetNoteOnSystem(sys.name, sys.id_edsm);
+                    SystemNoteClass sn = SystemNoteClass.GetNoteOnSystem(sys.Name, sys.EDSMID);
                     if (sn != null && !string.IsNullOrWhiteSpace(sn.Note))
                     {
                         note = sn.Note;
                     }
                     else
                     {
-                        BookmarkClass bkmark =BookmarkClass.bookmarks.Find(x => x.StarName != null && x.StarName.Equals(sys.name));
+                        BookmarkClass bkmark =BookmarkClass.bookmarks.Find(x => x.StarName != null && x.StarName.Equals(sys.Name));
                         if (bkmark != null && !string.IsNullOrWhiteSpace(bkmark.Note))
                             note = bkmark.Note;
                         else
                         {
-                            var gmo = discoveryform.galacticMapping.Find(sys.name);
+                            var gmo = discoveryform.galacticMapping.Find(sys.Name);
                             if (gmo != null && !string.IsNullOrWhiteSpace(gmo.description))
                                 note = gmo.description;
                         }
                     }
 
                     dataGridViewRouteSystems[2, rowindex].Value = note.WordWrap(60);
-                    dataGridViewRouteSystems.Rows[rowindex].Cells[0].ToolTipText = string.Format("{0:0.#},{1:0.#},{2:0.#}", sys.x, sys.y, sys.z);
+                    dataGridViewRouteSystems.Rows[rowindex].Cells[0].ToolTipText = string.Format("{0:0.#},{1:0.#},{2:0.#}", sys.X, sys.Y, sys.Z);
                 }
 
                 if (sys == null && sysname != "")

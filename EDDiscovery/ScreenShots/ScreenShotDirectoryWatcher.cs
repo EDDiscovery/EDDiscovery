@@ -187,7 +187,7 @@ namespace EDDiscovery.ScreenShots
             if (sysname == null)
             {
                 HistoryEntry he = discoveryform.history.GetLast;
-                sysname = (he != null) ? he.System.name : "Unknown System";
+                sysname = (he != null) ? he.System.Name : "Unknown System";
             }
 
             try

@@ -285,7 +285,7 @@ namespace EliteDangerousCore.DB
                         {
                             d = dist / d;
 
-                            return new SystemClass("WP" + (i).ToString() + "-" + "WP" + (i + 1).ToString() + "-" + d.ToString("#.00"), last.x + (s.x - last.x) * d, last.y + (s.y - last.y) * d, last.z + (s.z - last.z) * d);
+                            return new SystemClass("WP" + (i).ToString() + "-" + "WP" + (i + 1).ToString() + "-" + d.ToString("#.00"), last.X + (s.X - last.X) * d, last.Y + (s.Y - last.Y) * d, last.Z + (s.Z - last.Z) * d);
                         }
 
                         dist -= d;
@@ -361,13 +361,13 @@ namespace EliteDangerousCore.DB
             for (double percent = 0; percent < 110; percent += 1)
             {
                 ISystem cursys = PosAlongRoute(percent);
-                System.Diagnostics.Debug.WriteLine(Environment.NewLine + "Sys {0} {1} {2} {3}", cursys.x, cursys.y, cursys.z, cursys.name);
+                System.Diagnostics.Debug.WriteLine(Environment.NewLine + "Sys {0} {1} {2} {3}", cursys.X, cursys.Y, cursys.Z, cursys.Name);
 
                 Tuple<ISystem, int> closest = ClosestTo(cursys);
 
                 if (closest != null)
                 {
-                    System.Diagnostics.Debug.WriteLine("Next {0} {1} {2} {3}, index {4}", closest.Item1?.x, closest.Item1?.y, closest.Item1?.z, closest.Item1?.name, closest.Item2);
+                    System.Diagnostics.Debug.WriteLine("Next {0} {1} {2} {3}, index {4}", closest.Item1?.X, closest.Item1?.Y, closest.Item1?.Z, closest.Item1?.Name, closest.Item2);
                 }
             }
         }

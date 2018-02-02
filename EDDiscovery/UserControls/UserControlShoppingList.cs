@@ -150,7 +150,7 @@ namespace EDDiscovery.UserControls
 
                 if (last_he.IsLanded && (showListAvailability || showPlanetMats))
                 {
-                    sd = discoveryform.history.GetScans(last_he.System.name).Where(sc => sc.BodyName == last_he.WhereAmI).FirstOrDefault();
+                    sd = discoveryform.history.GetScans(last_he.System.Name).Where(sc => sc.BodyName == last_he.WhereAmI).FirstOrDefault();
                 }
                 if (!last_he.IsLanded && showSystemAvailability)  //replace true with a setting
                 {
@@ -190,7 +190,7 @@ namespace EDDiscovery.UserControls
                                 foreach (StarScan.ScanNode sn in landables)
                                 {
                                     sn.ScanData.Materials.TryGetValue(c.fdname, out available);
-                                    allMats.Add(new Tuple<string, double>(sn.fullname.Replace(last_he.System.name, "", StringComparison.InvariantCultureIgnoreCase).Trim(), available));
+                                    allMats.Add(new Tuple<string, double>(sn.fullname.Replace(last_he.System.Name, "", StringComparison.InvariantCultureIgnoreCase).Trim(), available));
                                 }
                                 allMats = allMats.OrderByDescending(m => m.Item2).ToList();
                                 int n = 1;

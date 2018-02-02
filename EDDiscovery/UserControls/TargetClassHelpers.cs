@@ -57,12 +57,12 @@ namespace EDDiscovery.UserControls
 
             if (sc != null && sc.HasCoordinate)
             {
-                SystemNoteClass nc = SystemNoteClass.GetNoteOnSystem(sc.name, sc.id_edsm);        // has it got a note?
+                SystemNoteClass nc = SystemNoteClass.GetNoteOnSystem(sc.Name, sc.EDSMID);        // has it got a note?
 
                 if (nc != null)
                 {
-                    TargetClass.SetTargetNotedSystem(sc.name, nc.id, sc.x, sc.y, sc.z);
-                    msgboxtext = "Target set on system with note " + sc.name;
+                    TargetClass.SetTargetNotedSystem(sc.Name, nc.id, sc.X, sc.Y, sc.Z);
+                    msgboxtext = "Target set on system with note " + sc.Name;
                 }
                 else
                 {
@@ -70,13 +70,13 @@ namespace EDDiscovery.UserControls
 
                     if (bk != null)
                     {
-                        TargetClass.SetTargetBookmark(sc.name, bk.id, bk.x, bk.y, bk.z);
-                        msgboxtext = "Target set on bookmarked system " + sc.name;
+                        TargetClass.SetTargetBookmark(sc.Name, bk.id, bk.x, bk.y, bk.z);
+                        msgboxtext = "Target set on bookmarked system " + sc.Name;
                     }
                     else
                     {
                         bool createbookmark = false;
-                        if ((prompt && ExtendedControls.MessageBoxTheme.Show(senderForm, "Make a bookmark on " + sc.name + " and set as target?", "Make Bookmark", MessageBoxButtons.OKCancel) == DialogResult.OK) || !prompt)
+                        if ((prompt && ExtendedControls.MessageBoxTheme.Show(senderForm, "Make a bookmark on " + sc.Name + " and set as target?", "Make Bookmark", MessageBoxButtons.OKCancel) == DialogResult.OK) || !prompt)
                         {
                             createbookmark = true;
                         }
@@ -84,13 +84,13 @@ namespace EDDiscovery.UserControls
                         {
                             BookmarkClass newbk = new BookmarkClass();
                             newbk.StarName = sn;
-                            newbk.x = sc.x;
-                            newbk.y = sc.y;
-                            newbk.z = sc.z;
+                            newbk.x = sc.X;
+                            newbk.y = sc.Y;
+                            newbk.z = sc.Z;
                             newbk.Time = DateTime.Now;
                             newbk.Note = "";
                             newbk.Add();
-                            TargetClass.SetTargetBookmark(sc.name, newbk.id, newbk.x, newbk.y, newbk.z);
+                            TargetClass.SetTargetBookmark(sc.Name, newbk.id, newbk.x, newbk.y, newbk.z);
                         }
                     }
                 }
@@ -127,9 +127,9 @@ namespace EDDiscovery.UserControls
             Form senderForm = ((Control)sender)?.FindForm() ?? discoveryForm;
 
             // try and find the associated bookmark..
-            BookmarkClass bkmark = (curbookmark != null) ? curbookmark : BookmarkClass.bookmarks.Find(x => x.StarName != null && x.StarName.Equals(cursystem.name));
+            BookmarkClass bkmark = (curbookmark != null) ? curbookmark : BookmarkClass.bookmarks.Find(x => x.StarName != null && x.StarName.Equals(cursystem.Name));
 
-            SystemNoteClass sn = (cursystem != null) ? SystemNoteClass.GetNoteOnSystem(cursystem.name, cursystem.id_edsm) : null;
+            SystemNoteClass sn = (cursystem != null) ? SystemNoteClass.GetNoteOnSystem(cursystem.Name, cursystem.EDSMID) : null;
             string note = (sn != null) ? sn.Note : "";
 
             BookmarkForm frm = new BookmarkForm();
@@ -139,14 +139,14 @@ namespace EDDiscovery.UserControls
                 long targetid = TargetClass.GetTargetNotedSystem();      // who is the target of a noted system (0=none)
                 long noteid = sn.id;
 
-                frm.InitialisePos(cursystem.x, cursystem.y, cursystem.z);
-                frm.NotedSystem(cursystem.name, note, noteid == targetid);       // note may be passed in null
+                frm.InitialisePos(cursystem.X, cursystem.Y, cursystem.Z);
+                frm.NotedSystem(cursystem.Name, note, noteid == targetid);       // note may be passed in null
                 frm.ShowDialog(senderForm);
 
                 if ((frm.IsTarget && targetid != noteid) || (!frm.IsTarget && targetid == noteid)) // changed..
                 {
                     if (frm.IsTarget)
-                        TargetClass.SetTargetNotedSystem(cursystem.name, noteid, cursystem.x, cursystem.y, cursystem.z);
+                        TargetClass.SetTargetNotedSystem(cursystem.Name, noteid, cursystem.X, cursystem.Y, cursystem.Z);
                     else
                         TargetClass.ClearTarget();
                 }
@@ -160,9 +160,9 @@ namespace EDDiscovery.UserControls
 
                 if (bkmark == null)                         // new bookmark
                 {
-                    frm.InitialisePos(cursystem.x, cursystem.y, cursystem.z);
+                    frm.InitialisePos(cursystem.X, cursystem.Y, cursystem.Z);
                     tme = DateTime.Now;
-                    frm.NewSystemBookmark(cursystem.name, note, tme.ToString());
+                    frm.NewSystemBookmark(cursystem.Name, note, tme.ToString());
                 }
                 else                                        // update bookmark
                 {
