@@ -712,19 +712,22 @@ namespace EDDiscovery.UserControls
             CenterControlToParent(chartMap);
         }
 
-        #endregion
-        
-        public void AboutMapPanel(Form parent = null)
-        {
-            AboutMapPanel frm = new AboutMapPanel();
-            frm.Show();
-        }
-                
+        // About Map
 
         private void aboutToolStripAbout_Click(object sender, EventArgs e)
-        {            
-            AboutMapPanel();        
+        {
+            chartMap.Visible = false;
+            tableLayoutAboutMap.Visible = true;
+
         }
+        private void buttonExt1_Click(object sender, EventArgs e)
+        {
+            chartMap.Visible = true;
+            tableLayoutAboutMap.Visible = false;
+        }
+        
+        #endregion
+
     }
 }
 
