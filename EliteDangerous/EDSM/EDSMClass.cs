@@ -1140,6 +1140,7 @@ namespace EliteDangerousCore.EDSM
         static MaterialCommoditiesList LastMats = null;
         static Object LockShipInfo = new object();
 
+        // No longer needed as journal events are now sent to EDSM
         public void SendShipInfo(ShipInformation si, MaterialCommoditiesList matcommod, int cargo, ShipInformation sicurrent, long cash, long loan, 
                                     JournalProgress progress, JournalRank rank  // both may be null
                                 )
