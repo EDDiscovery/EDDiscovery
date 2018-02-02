@@ -70,7 +70,7 @@ namespace EliteDangerousCore
 
     }
 
-    [DebuggerDisplay("System {name} ({x,nq},{y,nq},{z,nq})")]
+    [DebuggerDisplay("System {Name} ({X,nq},{Y,nq},{Z,nq})")]
     public class SystemClass : SystemClassBase, ISystem
     {
         public SystemClass()

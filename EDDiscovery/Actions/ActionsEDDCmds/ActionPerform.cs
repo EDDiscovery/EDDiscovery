@@ -62,7 +62,13 @@ namespace EDDiscovery.Actions
                 else if (cmdname.Equals("edsm"))
                 {
                     ActionController ac = (ap.actioncontroller as ActionController);
-                    EliteDangerousCore.EDSM.EDSMJournalSync.SendEDSMEvents(null, ac.DiscoveryForm.history);
+
+                    EliteDangerousCore.EDSM.EDSMClass edsm = new EliteDangerousCore.EDSM.EDSMClass();
+
+                    if (edsm.ValidCredentials)
+                        EliteDangerousCore.EDSM.EDSMJournalSync.SendEDSMEvents(ap.actioncontroller.LogLine, ac.DiscoveryForm.history);
+                    else
+                        ap.ReportError("No valid EDSM Credentials");
                 }
                 else if (cmdname.Equals("refresh"))
                 {

@@ -31,9 +31,11 @@ namespace EliteDangerousCore.EDSM
 {
     public partial class EDSMClass : BaseUtils.HttpCom
     {
-        public string commanderName;
-        public string apiKey;
-        public bool IsApiKeySet { get { return !(string.IsNullOrEmpty(commanderName) || string.IsNullOrEmpty(apiKey)); } }
+        // use if you need an API/name pair to get info from EDSM.  Not all queries need it
+        public bool ValidCredentials { get { return !string.IsNullOrEmpty(commanderName) && !string.IsNullOrEmpty(apiKey); } }
+
+        private string commanderName;
+        private string apiKey;
 
         private readonly string fromSoftwareVersion;
         private readonly string fromSoftware;
@@ -48,7 +50,7 @@ namespace EliteDangerousCore.EDSM
             base.httpserveraddress = ServerAddress;
 
             apiKey = EDCommander.Current.APIKey;
-            commanderName = EDCommander.Current.EdsmName;
+            commanderName = string.IsNullOrEmpty(EDCommander.Current.EdsmName) ? EDCommander.Current.Name : EDCommander.Current.EdsmName;
         }
 
         public EDSMClass(EDCommander cmdr) : this()
@@ -56,22 +58,23 @@ namespace EliteDangerousCore.EDSM
             if (cmdr != null)
             {
                 apiKey = cmdr.APIKey;
-                commanderName = cmdr.EdsmName ?? cmdr.Name;
+                commanderName = string.IsNullOrEmpty(cmdr.EdsmName) ? cmdr.Name : cmdr.EdsmName;
             }
         }
+
 
         static string edsm_server_address = "https://www.edsm.net/";
         public static string ServerAddress { get { return edsm_server_address; } set { edsm_server_address = value; } }
         public static bool IsServerAddressValid { get { return edsm_server_address.Length > 0; } }
 
-        public string SubmitDistances(string cmdr, string from, string to, double dist)
+        public string SubmitDistances(string from, string to, double dist)
         {
-            return SubmitDistances(cmdr, from, new Dictionary<string, double> { { to, dist } });
+            return SubmitDistances(from, new Dictionary<string, double> { { to, dist } });
         }
 
-        public string SubmitDistances(string cmdr, string from, Dictionary<string, double> distances)
+        public string SubmitDistances(string from, Dictionary<string, double> distances)
         {
-            string query = "{\"ver\":2," + " \"commander\":\"" + cmdr + "\", \"fromSoftware\":\"" + fromSoftware + "\",  \"fromSoftwareVersion\":\"" + fromSoftwareVersion + "\", \"p0\": { \"name\": \"" + from + "\" },   \"refs\": [";
+            string query = "{\"ver\":2," + " \"commander\":\"" + commanderName + "\", \"fromSoftware\":\"" + fromSoftware + "\",  \"fromSoftwareVersion\":\"" + fromSoftwareVersion + "\", \"p0\": { \"name\": \"" + from + "\" },   \"refs\": [";
 
             var counter = 0;
             foreach (var item in distances)
@@ -226,7 +229,7 @@ namespace EliteDangerousCore.EDSM
 
         public string GetComments(DateTime starttime)
         {
-            if (!IsApiKeySet)
+            if (!ValidCredentials)
                 return null;
 
             string query = "get-comments?startdatetime=" + HttpUtility.UrlEncode(starttime.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture)) + "&apiKey=" + apiKey + "&commanderName=" + HttpUtility.UrlEncode(commanderName) + "&showId=1";
@@ -242,7 +245,7 @@ namespace EliteDangerousCore.EDSM
 
         public string GetComment(string systemName, long edsmid = 0)
         {
-            if (!IsApiKeySet)
+            if (!ValidCredentials)
                 return null;
 
             string query;
@@ -260,7 +263,7 @@ namespace EliteDangerousCore.EDSM
 
         public string SetComment(string systemName, string note, long edsmid = 0)
         {
-            if (!IsApiKeySet)
+            if (!ValidCredentials)
                 return null;
 
             string query;
@@ -286,7 +289,7 @@ namespace EliteDangerousCore.EDSM
             System.Diagnostics.Debug.WriteLine("Send note to EDSM " + star + " " + edsmid + " " + note);
             EDSMClass edsm = new EDSMClass(cmdr);
 
-            if (!edsm.IsApiKeySet)
+            if (!edsm.ValidCredentials)
                 return;
 
             System.Threading.Tasks.Task taskEDSM = System.Threading.Tasks.Task.Factory.StartNew(() =>
@@ -346,7 +349,7 @@ namespace EliteDangerousCore.EDSM
 
         public string SetLog(string systemName, DateTime dateVisitedutc)
         {
-            if (!IsApiKeySet)
+            if (!ValidCredentials)
                 return null;
 
             string query;
@@ -364,7 +367,7 @@ namespace EliteDangerousCore.EDSM
 
         public string SetLogWithPos(string systemName, DateTime dateVisitedutc, double x, double y, double z)
         {
-            if (!IsApiKeySet)
+            if (!ValidCredentials)
                 return null;
 
             string query;
@@ -387,7 +390,7 @@ namespace EliteDangerousCore.EDSM
             firstdiscover = false;
             edsmid = 0;
 
-            if (!IsApiKeySet)
+            if (!ValidCredentials)
             {
                 errno = -1;
                 error = "EDSM API Key not set";
@@ -444,7 +447,7 @@ namespace EliteDangerousCore.EDSM
             logstarttime = DateTime.MaxValue;
             logendtime = DateTime.MinValue;
 
-            if (!IsApiKeySet)
+            if (!ValidCredentials)
                 return 0;
 
             string query = "get-logs?showId=1&apiKey=" + apiKey + "&commanderName=" + HttpUtility.UrlEncode(commanderName);
@@ -960,7 +963,7 @@ namespace EliteDangerousCore.EDSM
             int explore_rank, int explore_progress, int cqc_rank, int cqc_progress,
             int federation_rank, int federation_progress, int empire_rank, int empire_progress)
         {
-            if (!IsApiKeySet)
+            if (!ValidCredentials)
                 return null;
 
             string query;
@@ -984,7 +987,7 @@ namespace EliteDangerousCore.EDSM
 
         public string SetCredits(long credits, long loan)
         {
-            if (!IsApiKeySet)
+            if (!ValidCredentials)
                 return null;
 
             string query;
@@ -1067,7 +1070,7 @@ namespace EliteDangerousCore.EDSM
 
         public string CommanderUpdateShip(int shipId, string type, EliteDangerousCore.ShipInformation shipinfo = null, int cargoqty = -1)
         {
-            if (!IsApiKeySet)
+            if (!ValidCredentials)
                 return null;
 
             string query;
@@ -1113,7 +1116,7 @@ namespace EliteDangerousCore.EDSM
 
         public string CommanderSetCurrentShip(int shipId)
         {
-            if (!IsApiKeySet)
+            if (!ValidCredentials)
                 return null;
 
             string query;
