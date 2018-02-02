@@ -117,4 +117,34 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <metadata name="toolTip.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>17, 17</value>
+  </metadata>
+  <metadata name="contextMenuStrip.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>107, 17</value>
+  </metadata>
+  <data name="richTextBox1.Text" xml:space="preserve">
+    <value>Map Panel represents, in 3d, the neighborhood of the system highlighted in the travel history.
+
+The current system is paint in red, while the others in yellow. Hovering the mouse over a system opens a tooltip, which shows the system name, how many visits were recorded, and the distance to the current system.
+
+The maximum and minimum radius are adjusted by the user: this permit to choose how far to plot and, quite useful, to plot systems in a shell. The slider, on the top right, permit to choose how much systems to pass to the distance computer (the same of the Star Distance panel), 50 to 500, so is it possible to fine tune the performance in heavily dense sectors.
+
+The map can be rotated, moving the mouse while pressing the first button. It can also be zoomed, up to a 10:1 factor, using the scroll wheel, or from a context menu (opened with the third mouse button), which let the use choose directly the preferred ratio. 
+While zoomed, the map can be panned (moving the mouse while pressing the middle button). If needed, the context menu also has two commands which center the map to the panel window, and which reset the map to the default size and position.
+
+---
+
+There are already some known refinements needed. For example:
+- rotation can reset itself when used after zoom or pan
+- the zoom not always is centered perfectly under the mouse
+- zomming out seemd to not always follow the mouse
+
+Beside those issues, it's already usable and quite fast. It provide an alternative to the Galactic 3d Map, which can be quite memory angry. However, it do not intend to replace it's big syster. Consider this panel a companion, especially when exploring uncharted regions.
+
+---
+
+The panel will be updated and refined in the next releases.
+For suggestions and bugs, file an issue in the EDDiscovery github project: https://github.com/EDDiscovery/EDDiscovery/issues</value>
+  </data>
 </root>
