@@ -153,7 +153,7 @@ namespace EliteDangerousCore
                 EntryType = JournalTypeEnum.FSDJump,
                 System = sys,
                 EventTimeUTC = eventt,
-                EventSummary = "Jump to " + sys.name,
+                EventSummary = "Jump to " + sys.Name,
                 EventDescription = dist,
                 EventDetailedInfo = info,
                 MapColour = m,
@@ -183,14 +183,14 @@ namespace EliteDangerousCore
                 {
                     newsys = new SystemClass(jl.StarSystem, jl.StarPos.X, jl.StarPos.Y, jl.StarPos.Z)
                     {
-                        id_edsm = jl.EdsmID < 0 ? 0 : jl.EdsmID,       // pass across the EDSMID for the lazy load process.
-                        faction = jl.Faction,
-                        government = jl.EDGovernment,
-                        primary_economy = jl.EDEconomy,
-                        security = jl.EDSecurity,
-                        population = jl.Population ?? 0,
-                        state = jl.EDState,
-                        allegiance = jl.EDAllegiance,
+                        EDSMID = jl.EdsmID < 0 ? 0 : jl.EdsmID,       // pass across the EDSMID for the lazy load process.
+                        Faction = jl.Faction,
+                        Government = jl.EDGovernment,
+                        PrimaryEconomy = jl.EDEconomy,
+                        Security = jl.EDSecurity,
+                        Population = jl.Population ?? 0,
+                        State = jl.EDState,
+                        Allegiance = jl.EDAllegiance,
                         UpdateDate = jl.EventTimeUTC,
                         status = SystemStatusEnum.EDDiscovery,
                         SystemAddress = jl.SystemAddress,
@@ -211,7 +211,7 @@ namespace EliteDangerousCore
                     
                     // Default one
                     newsys = new SystemClass(jl.StarSystem);
-                    newsys.id_edsm = je.EdsmID;
+                    newsys.EDSMID = je.EdsmID;
 
                     ISystem s = SystemCache.FindSystem(newsys, conn);      // has no co-ord, did we find it?
 
@@ -219,22 +219,22 @@ namespace EliteDangerousCore
                     {
                         if (jl != null && jl.HasCoordinate)         // if journal Loc, and journal has a star position, use that instead of EDSM..
                         {
-                            s.x = Math.Round(jl.StarPos.X * 32.0) / 32.0;
-                            s.y = Math.Round(jl.StarPos.Y * 32.0) / 32.0;
-                            s.z = Math.Round(jl.StarPos.Z * 32.0) / 32.0;
+                            s.X = Math.Round(jl.StarPos.X * 32.0) / 32.0;
+                            s.Y = Math.Round(jl.StarPos.Y * 32.0) / 32.0;
+                            s.Z = Math.Round(jl.StarPos.Z * 32.0) / 32.0;
                         }
 
                         //Debug.WriteLine("HistoryList found system {0} {1}", s.id_edsm, s.name);
                         newsys = s;
 
-                        if (jl != null && je.EdsmID <= 0 && newsys.id_edsm > 0) // only update on a JL..
+                        if (jl != null && je.EdsmID <= 0 && newsys.EDSMID > 0) // only update on a JL..
                         {
                             journalupdate = true;
-                            Debug.WriteLine("HE EDSM ID update requested {0} {1}", newsys.id_edsm, newsys.name);
+                            Debug.WriteLine("HE EDSM ID update requested {0} {1}", newsys.EDSMID, newsys.Name);
                         }
                     }
                     else
-                        newsys.id_edsm = -1;        // mark as checked but not found
+                        newsys.EDSMID = -1;        // mark as checked but not found
                 }
 
                 JournalFSDJump jfsd = je as JournalFSDJump;
@@ -248,7 +248,7 @@ namespace EliteDangerousCore
                         if (jfsd.JumpDist > 0)
                         {
                             journalupdate = true;
-                            Debug.WriteLine("Je Jump distance update(3) requested {0} {1} {2}", newsys.id_edsm, newsys.name, jfsd.JumpDist);
+                            Debug.WriteLine("Je Jump distance update(3) requested {0} {1} {2}", newsys.EDSMID, newsys.Name, jfsd.JumpDist);
                         }
                     }
 
@@ -458,7 +458,7 @@ namespace EliteDangerousCore
         public void SetJournalSystemNoteText(string text, bool commit, bool sendtoedsm)
         {
             if (snc == null || snc.Journalid == 0)           // if no system note, or its one on a system, from now on we assign journal system notes only from this IF
-                snc = SystemNoteClass.MakeSystemNote("", DateTime.Now, System.name, Journalid, System.id_edsm, IsFSDJump);
+                snc = SystemNoteClass.MakeSystemNote("", DateTime.Now, System.Name, Journalid, System.EDSMID, IsFSDJump);
 
             snc = snc.UpdateNote(text, commit, DateTime.Now, snc.EdsmId, IsFSDJump);        // and update info, and update our ref in case it has changed or gone null
                                                                                             // remember for EDSM send purposes if its an FSD entry

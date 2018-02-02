@@ -165,26 +165,26 @@ namespace EliteDangerousCore.EDDN
             }
             else if (je.EventTypeID == JournalTypeEnum.Docked)
             {
-                msg = eddn.CreateEDDNMessage(je as JournalDocked, he.System.x, he.System.y, he.System.z, he.System.SystemAddress);
+                msg = eddn.CreateEDDNMessage(je as JournalDocked, he.System.X, he.System.Y, he.System.Z, he.System.SystemAddress);
             }
             else if (je.EventTypeID == JournalTypeEnum.Scan)
             {
-                msg = eddn.CreateEDDNMessage(je as JournalScan, he.System.name, he.System.x, he.System.y, he.System.z, he.System.SystemAddress);
+                msg = eddn.CreateEDDNMessage(je as JournalScan, he.System.Name, he.System.X, he.System.Y, he.System.Z, he.System.SystemAddress);
             }
             else if (je.EventTypeID == JournalTypeEnum.Outfitting)
             {
-                msg2 = eddn.CreateEDDNJournalMessage(je as JournalOutfitting, he.System.x, he.System.y, he.System.z, he.System.SystemAddress);
+                msg2 = eddn.CreateEDDNJournalMessage(je as JournalOutfitting, he.System.X, he.System.Y, he.System.Z, he.System.SystemAddress);
                 msg = eddn.CreateEDDNOutfittingMessage(je as JournalOutfitting, he.System.SystemAddress);
             }
             else if (je.EventTypeID == JournalTypeEnum.Shipyard)
             {
-                msg2 = eddn.CreateEDDNJournalMessage(je as JournalShipyard, he.System.x, he.System.y, he.System.z, he.System.SystemAddress);
+                msg2 = eddn.CreateEDDNJournalMessage(je as JournalShipyard, he.System.X, he.System.Y, he.System.Z, he.System.SystemAddress);
                 msg = eddn.CreateEDDNShipyardMessage(je as JournalShipyard, he.System.SystemAddress);
             }
             else if (je.EventTypeID == JournalTypeEnum.Market)
             {
                 JournalMarket jm = je as JournalMarket;
-                msg2 = eddn.CreateEDDNJournalMessage(jm, he.System.x, he.System.y, he.System.z, he.System.SystemAddress);
+                msg2 = eddn.CreateEDDNJournalMessage(jm, he.System.X, he.System.Y, he.System.Z, he.System.SystemAddress);
                 msg = eddn.CreateEDDNCommodityMessage(jm.Commodities, jm.StarSystem, jm.Station, DateTime.UtcNow);      // if its devoid of data, null returned
             }
 

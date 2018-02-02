@@ -23,39 +23,39 @@ namespace EliteDangerousCore
     // Useful for creation of test doubles
     public class SystemClassBase : ISystemBase
     {
-        public long id { get; set; }
-        public long id_edsm { get; set; }
-        public string name { get; set; }
-        public double x { get; set; } = double.NaN;
-        public double y { get; set; } = double.NaN;
-        public double z { get; set; } = double.NaN;
+        public long ID { get; set; }
+        public long EDSMID { get; set; }
+        public string Name { get; set; }
+        public double X { get; set; } = double.NaN;
+        public double Y { get; set; } = double.NaN;
+        public double Z { get; set; } = double.NaN;
         public DateTime UpdateDate { get; set; }
-        public int gridid { get; set; }
-        public int randomid { get; set; }
+        public int GridID { get; set; }
+        public int RandomID { get; set; }
         public long? SystemAddress { get; set; }
 
         public bool HasCoordinate
         {
             get
             {
-                return (!double.IsNaN(x));
+                return (!double.IsNaN(X));
             }
         }
 
         public bool Equals(ISystemBase other)
         {
             return other != null &&
-                   other.name.Equals(this.name, StringComparison.InvariantCultureIgnoreCase) &&
+                   other.Name.Equals(this.Name, StringComparison.InvariantCultureIgnoreCase) &&
                    (!this.HasCoordinate || !other.HasCoordinate ||
-                    (Math.Abs(this.x - other.x) < 0.125 &&
-                     Math.Abs(this.y - other.y) < 0.125 &&
-                     Math.Abs(this.z - other.z) < 0.125));
+                    (Math.Abs(this.X - other.X) < 0.125 &&
+                     Math.Abs(this.Y - other.Y) < 0.125 &&
+                     Math.Abs(this.Z - other.Z) < 0.125));
         }
 
         public double Distance(ISystemBase s2)
         {
             if (s2 != null && HasCoordinate && s2.HasCoordinate)
-                return Math.Sqrt((x - s2.x) * (x - s2.x) + (y - s2.y) * (y - s2.y) + (z - s2.z) * (z - s2.z));
+                return Math.Sqrt((X - s2.X) * (X - s2.X) + (Y - s2.Y) * (Y - s2.Y) + (Z - s2.Z) * (Z - s2.Z));
             else
                 return -1;
         }
@@ -63,7 +63,7 @@ namespace EliteDangerousCore
         public double Distance(double ox, double oy, double oz)
         {
             if (HasCoordinate)
-                return Math.Sqrt((x - ox) * (x - ox) + (y - oy) * (y - oy) + (z - oz) * (z - oz));
+                return Math.Sqrt((X - ox) * (X - ox) + (Y - oy) * (Y - oy) + (Z - oz) * (Z - oz));
             else
                 return -1;
         }
@@ -79,21 +79,21 @@ namespace EliteDangerousCore
 
         public SystemClass(string Name)
         {
-            name = Name;
+            base.Name = Name;
             status = SystemStatusEnum.Unknown;
         }
 
         public SystemClass(long id)
         {
-            name = "UnKnown";
-            id_edsm = id;
+            Name = "UnKnown";
+            EDSMID = id;
         }
 
         public SystemClass(string Name, double vx, double vy, double vz)
         {
-            name = Name;
+            base.Name = Name;
             status = SystemStatusEnum.Unknown;
-            x = vx; y = vy; z = vz;
+            X = vx; Y = vy; Z = vz;
         }
 
         public string CommanderCreate { get; set; }
@@ -103,23 +103,23 @@ namespace EliteDangerousCore
         public SystemStatusEnum status { get; set; }
         public string SystemNote { get; set; }
 
-        public long id_eddb { get; set; }
-        public string faction { get; set; }
-        public long population { get; set; }
-        public EDGovernment government { get; set; }
-        public EDAllegiance allegiance { get; set; }
-        public EDState state { get; set; }
-        public EDSecurity security { get; set; }
-        public EDEconomy primary_economy { get; set; }
-        public int needs_permit { get; set; }
-        public int eddb_updated_at { get; set; }
+        public long EDDBID { get; set; }
+        public string Faction { get; set; }
+        public long Population { get; set; }
+        public EDGovernment Government { get; set; }
+        public EDAllegiance Allegiance { get; set; }
+        public EDState State { get; set; }
+        public EDSecurity Security { get; set; }
+        public EDEconomy PrimaryEconomy { get; set; }
+        public int NeedsPermit { get; set; }
+        public int EDDBUpdatedAt { get; set; }
 
         public bool HasEDDBInformation
         {
             get
             {
-                return population != 0 || government != EDGovernment.Unknown || needs_permit != 0 || allegiance != EDAllegiance.Unknown ||
-                       state != EDState.Unknown || security != EDSecurity.Unknown || primary_economy != EDEconomy.Unknown || (faction != null && faction.Length>0); 
+                return Population != 0 || Government != EDGovernment.Unknown || NeedsPermit != 0 || Allegiance != EDAllegiance.Unknown ||
+                       State != EDState.Unknown || Security != EDSecurity.Unknown || PrimaryEconomy != EDEconomy.Unknown || (Faction != null && Faction.Length>0); 
             }
         }
     }

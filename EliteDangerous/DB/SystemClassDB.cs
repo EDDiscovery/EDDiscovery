@@ -36,33 +36,33 @@ namespace EliteDangerousCore.DB
 
             try
             {
-                sys.name = jo["name"].Value<string>();
+                sys.Name = jo["name"].Value<string>();
 
-                sys.x = jo["x"].Value<double>();
-                sys.y = jo["y"].Value<double>();
-                sys.z = jo["z"].Value<double>();
+                sys.X = jo["x"].Value<double>();
+                sys.Y = jo["y"].Value<double>();
+                sys.Z = jo["z"].Value<double>();
 
-                sys.id_eddb = jo["id"].Value<int>();
+                sys.EDDBID = jo["id"].Value<int>();
 
-                sys.faction = jo["controlling_minor_faction"].Value<string>();
+                sys.Faction = jo["controlling_minor_faction"].Value<string>();
 
                 if (jo["population"].Type == JTokenType.Integer)
-                    sys.population = jo["population"].Value<long>();
+                    sys.Population = jo["population"].Value<long>();
 
-                sys.government = EliteDangerousTypesFromJSON.Government2ID(jo["government"]);
-                sys.allegiance = EliteDangerousTypesFromJSON.Allegiance2ID(jo["allegiance"]);
+                sys.Government = EliteDangerousTypesFromJSON.Government2ID(jo["government"]);
+                sys.Allegiance = EliteDangerousTypesFromJSON.Allegiance2ID(jo["allegiance"]);
 
-                sys.state = EliteDangerousTypesFromJSON.EDState2ID(jo["state"]);
-                sys.security = EliteDangerousTypesFromJSON.EDSecurity2ID(jo["security"]);
+                sys.State = EliteDangerousTypesFromJSON.EDState2ID(jo["state"]);
+                sys.Security = EliteDangerousTypesFromJSON.EDSecurity2ID(jo["security"]);
 
-                sys.primary_economy = EliteDangerousTypesFromJSON.EDEconomy2ID(jo["primary_economy"]);
+                sys.PrimaryEconomy = EliteDangerousTypesFromJSON.EDEconomy2ID(jo["primary_economy"]);
 
                 if (jo["needs_permit"].Type == JTokenType.Integer)
-                    sys.needs_permit = jo["needs_permit"].Value<int>();
+                    sys.NeedsPermit = jo["needs_permit"].Value<int>();
 
-                sys.eddb_updated_at = jo["updated_at"].Value<int>();
+                sys.EDDBUpdatedAt = jo["updated_at"].Value<int>();
 
-                sys.id_edsm = jo["edsm_id"].Long();                         // pick up its edsm ID
+                sys.EDSMID = jo["edsm_id"].Long();                         // pick up its edsm ID
 
                 sys.status = SystemStatusEnum.EDDB;
             }
@@ -372,14 +372,14 @@ namespace EliteDangerousCore.DB
                         {
                             sys = new SystemClass
                             {
-                                id = (long)reader["id"],
-                                id_edsm = (long)reader["EdsmId"],
-                                id_eddb = reader["EddbId"] == System.DBNull.Value ? 0 : (long)reader["EddbId"],
+                                ID = (long)reader["id"],
+                                EDSMID = (long)reader["EdsmId"],
+                                EDDBID = reader["EddbId"] == System.DBNull.Value ? 0 : (long)reader["EddbId"],
                                 CreateDate = new DateTime(2015, 1, 1, 0, 0, 0, DateTimeKind.Utc) + TimeSpan.FromSeconds((long)reader["CreateTimestamp"]),
                                 UpdateDate = new DateTime(2015, 1, 1, 0, 0, 0, DateTimeKind.Utc) + TimeSpan.FromSeconds((long)reader["UpdateTimestamp"]),
                                 status = SystemStatusEnum.EDSM,
-                                gridid = (int)(long)reader["GridId"],
-                                randomid = (int)(long)reader["RandomId"]
+                                GridID = (int)(long)reader["GridId"],
+                                RandomID = (int)(long)reader["RandomId"]
                             };
 
                             if (reader["Name"] == System.DBNull.Value) // if no name found, we have a db error, but lets see if we can recover
@@ -387,25 +387,25 @@ namespace EliteDangerousCore.DB
                                 if (name == null)   // no name, fail (Tested 23/1/2018 with a manual delete of an entry)
                                     return null; //Finally of course gets executed
 
-                                sys.name = name;
+                                sys.Name = name;
                             }
                             else
                             {
-                                sys.name = (string)reader["Name"];
+                                sys.Name = (string)reader["Name"];
                             }
 
                             if (System.DBNull.Value != reader["x"])
                             {
-                                sys.x = ((double)(long)reader["x"]) / XYZScalar;
-                                sys.y = ((double)(long)reader["y"]) / XYZScalar;
-                                sys.z = ((double)(long)reader["z"]) / XYZScalar;
+                                sys.X = ((double)(long)reader["x"]) / XYZScalar;
+                                sys.Y = ((double)(long)reader["y"]) / XYZScalar;
+                                sys.Z = ((double)(long)reader["z"]) / XYZScalar;
                             }
 
-                            if (sys.id_eddb != 0)
+                            if (sys.EDDBID != 0)
                             {
                                 using (DbCommand cmd2 = cn.CreateCommand("SELECT * FROM EddbSystems WHERE EddbId = @EddbId LIMIT 1"))
                                 {
-                                    cmd2.AddParameterWithValue("EddbId", sys.id_eddb);
+                                    cmd2.AddParameterWithValue("EddbId", sys.EDDBID);
                                     using (DbDataReader reader2 = cmd2.ExecuteReader())
                                     {
                                         if (reader2.Read())
@@ -413,31 +413,31 @@ namespace EliteDangerousCore.DB
                                             object o;
 
                                             o = reader2["Population"];
-                                            sys.population = o == DBNull.Value ? 0 : (long)o;
+                                            sys.Population = o == DBNull.Value ? 0 : (long)o;
 
                                             o = reader2["Faction"];
-                                            sys.faction = o == DBNull.Value ? null : (string)o;
+                                            sys.Faction = o == DBNull.Value ? null : (string)o;
 
                                             o = reader2["GovernmentId"];
-                                            sys.government = o == DBNull.Value ? EDGovernment.Unknown : (EDGovernment)((long)o);
+                                            sys.Government = o == DBNull.Value ? EDGovernment.Unknown : (EDGovernment)((long)o);
 
                                             o = reader2["AllegianceId"];
-                                            sys.allegiance = o == DBNull.Value ? EDAllegiance.Unknown : (EDAllegiance)((long)o);
+                                            sys.Allegiance = o == DBNull.Value ? EDAllegiance.Unknown : (EDAllegiance)((long)o);
 
                                             o = reader2["PrimaryEconomyId"];
-                                            sys.primary_economy = o == DBNull.Value ? EDEconomy.Unknown : (EDEconomy)((long)o);
+                                            sys.PrimaryEconomy = o == DBNull.Value ? EDEconomy.Unknown : (EDEconomy)((long)o);
 
                                             o = reader2["Security"];
-                                            sys.security = o == DBNull.Value ? EDSecurity.Unknown : (EDSecurity)((long)o);
+                                            sys.Security = o == DBNull.Value ? EDSecurity.Unknown : (EDSecurity)((long)o);
 
                                             o = reader2["EddbUpdatedAt"];
-                                            sys.eddb_updated_at = o == DBNull.Value ? 0 : (int)((long)o);
+                                            sys.EDDBUpdatedAt = o == DBNull.Value ? 0 : (int)((long)o);
 
                                             o = reader2["State"];
-                                            sys.state = o == DBNull.Value ? EDState.Unknown : (EDState)((long)o);
+                                            sys.State = o == DBNull.Value ? EDState.Unknown : (EDState)((long)o);
 
                                             o = reader2["NeedsPermit"];
-                                            sys.needs_permit = o == DBNull.Value ? 0 : (int)((long)o);
+                                            sys.NeedsPermit = o == DBNull.Value ? 0 : (int)((long)o);
                                         }
                                     }
                                 }
@@ -577,7 +577,7 @@ namespace EliteDangerousCore.DB
                             {
                                 ISystem sys = SystemCache.FindSystem(edsmid, cn); // pass it thru the cache..
                                // System.Diagnostics.Debug.WriteLine("Return " + sys.name);
-                                if (sys != null && sys.name != null)
+                                if (sys != null && sys.Name != null)
                                 {
                                     double dx = ((double)(long)reader[1]) / XYZScalar - x;
                                     double dy = ((double)(long)reader[2]) / XYZScalar - y;
@@ -776,11 +776,11 @@ namespace EliteDangerousCore.DB
         {
             system = new EliteDangerousCore.SystemClass
             {
-                name = refsys.name,
-                x = refsys.HasCoordinate ? refsys.x : Double.NaN,
-                y = refsys.HasCoordinate ? refsys.y : Double.NaN,
-                z = refsys.HasCoordinate ? refsys.z : Double.NaN,
-                id_edsm = refsys.id_edsm
+                Name = refsys.Name,
+                X = refsys.HasCoordinate ? refsys.X : Double.NaN,
+                Y = refsys.HasCoordinate ? refsys.Y : Double.NaN,
+                Z = refsys.HasCoordinate ? refsys.Z : Double.NaN,
+                EDSMID = refsys.EDSMID
             };
 
             using (SQLiteConnectionSystem cn = new SQLiteConnectionSystem())
@@ -811,8 +811,8 @@ namespace EliteDangerousCore.DB
                 Dictionary<long, ISystem> altmatches = new Dictionary<long, ISystem>();
                 Dictionary<long, ISystem> matches = new Dictionary<long, ISystem>();
                 ISystem edsmidmatch = null;
-                long sel_edsmid = refsys.id_edsm;
-                bool hastravcoords = refsys.HasCoordinate && (refsys.name.ToLowerInvariant() == "sol" || refsys.x != 0 || refsys.y != 0 || refsys.z != 0);
+                long sel_edsmid = refsys.EDSMID;
+                bool hastravcoords = refsys.HasCoordinate && (refsys.Name.ToLowerInvariant() == "sol" || refsys.X != 0 || refsys.Y != 0 || refsys.Z != 0);
                 bool multimatch = false;
 
                 if (sel_edsmid != 0)
@@ -820,14 +820,14 @@ namespace EliteDangerousCore.DB
                     edsmidmatch = GetSystem(sel_edsmid, cn, SystemIDType.EdsmId);
                     if (edsmidmatch != null)
                     {
-                        matches.Add(edsmidmatch.id, edsmidmatch);
+                        matches.Add(edsmidmatch.ID, edsmidmatch);
 
                         while (aliasesById.ContainsKey(sel_edsmid))
                         {
                             sel_edsmid = aliasesById[sel_edsmid];
                             ISystem sys = GetSystem(sel_edsmid, cn, SystemIDType.EdsmId);
                             if (sys != null)
-                                altmatches.Add(sys.id, sys);
+                                altmatches.Add(sys.ID, sys);
                             edsmidmatch = null;
                         }
                     }
@@ -835,7 +835,7 @@ namespace EliteDangerousCore.DB
 
                 //Stopwatch sw2 = new Stopwatch(); sw2.Start(); //long t2 = sw2.ElapsedMilliseconds; Tools.LogToFile(string.Format("Query names in {0}", t2));
 
-                Dictionary<long, ISystem> namematches = GetSystemsByName(refsys.name).Where(s => s != null).ToDictionary(s => s.id, s => s);
+                Dictionary<long, ISystem> namematches = GetSystemsByName(refsys.Name).Where(s => s != null).ToDictionary(s => s.ID, s => s);
                 Dictionary<long, ISystem> posmatches = new Dictionary<long, ISystem>();
                 Dictionary<long, ISystem> nameposmatches = new Dictionary<long, ISystem>();
 
@@ -850,9 +850,9 @@ namespace EliteDangerousCore.DB
                         "AND s.Z >= @Z - 16 " +
                         "AND s.Z <= @Z + 16"))
                     {
-                        selectByPosCmd.AddParameterWithValue("@X", (long)(refsys.x * XYZScalar));
-                        selectByPosCmd.AddParameterWithValue("@Y", (long)(refsys.y * XYZScalar));
-                        selectByPosCmd.AddParameterWithValue("@Z", (long)(refsys.z * XYZScalar));
+                        selectByPosCmd.AddParameterWithValue("@X", (long)(refsys.X * XYZScalar));
+                        selectByPosCmd.AddParameterWithValue("@Y", (long)(refsys.Y * XYZScalar));
+                        selectByPosCmd.AddParameterWithValue("@Z", (long)(refsys.Z * XYZScalar));
 
                         //Stopwatch sw = new Stopwatch(); sw.Start(); long t1 = sw.ElapsedMilliseconds; Tools.LogToFile(string.Format("Query pos in {0}", t1));
 
@@ -866,12 +866,12 @@ namespace EliteDangerousCore.DB
                                 ISystem sys = GetSystem(pos_edsmid, cn, SystemIDType.EdsmId);
                                 if (sys != null)
                                 {
-                                    matches[sys.id] = sys;
-                                    posmatches[sys.id] = sys;
+                                    matches[sys.ID] = sys;
+                                    posmatches[sys.ID] = sys;
 
-                                    if (sys.name.Equals(refsys.name, StringComparison.InvariantCultureIgnoreCase))
+                                    if (sys.Name.Equals(refsys.Name, StringComparison.InvariantCultureIgnoreCase))
                                     {
-                                        nameposmatches[sys.id] = sys;
+                                        nameposmatches[sys.ID] = sys;
                                     }
                                 }
                             }
@@ -879,28 +879,28 @@ namespace EliteDangerousCore.DB
                     }
                 }
 
-                if (aliasesByName.ContainsKey(refsys.name))
+                if (aliasesByName.ContainsKey(refsys.Name))
                 {
-                    foreach (long alt_edsmid in aliasesByName[refsys.name])
+                    foreach (long alt_edsmid in aliasesByName[refsys.Name])
                     {
                         ISystem sys = GetSystem(alt_edsmid, cn, SystemIDType.EdsmId);
                         if (sys != null)
                         {
-                            altmatches[sys.id] = sys;
+                            altmatches[sys.ID] = sys;
                         }
                     }
                 }
 
                 foreach (var sys in namematches.Values)
                 {
-                    matches[sys.id] = sys;
+                    matches[sys.ID] = sys;
                 }
 
                 if (altmatches.Count != 0)
                 {
                     foreach (var alt in altmatches.Values)
                     {
-                        matches[alt.id] = alt;
+                        matches[alt.ID] = alt;
                     }
                 }
 
@@ -910,19 +910,19 @@ namespace EliteDangerousCore.DB
                 {
                     system = edsmidmatch;
 
-                    if (nameposmatches.ContainsKey(system.id)) // name and position matches
+                    if (nameposmatches.ContainsKey(system.ID)) // name and position matches
                     {
                         namestatus = "Exact match";
                         return true; // Continue to next system
                     }
-                    else if (posmatches.ContainsKey(system.id)) // position matches
+                    else if (posmatches.ContainsKey(system.ID)) // position matches
                     {
                         namestatus = "Name differs";
                         return true; // Continue to next system
                     }
                     else if (!hastravcoords || !system.HasCoordinate) // no coordinates available
                     {
-                        if (namematches.ContainsKey(system.id)) // name matches
+                        if (namematches.ContainsKey(system.ID)) // name matches
                         {
                             if (!system.HasCoordinate)
                             {
@@ -955,7 +955,7 @@ namespace EliteDangerousCore.DB
                     {
                         // Position matches
                         system = posmatches.Values.Single();
-                        namestatus = $"System {system.name} found at location";
+                        namestatus = $"System {system.Name} found at location";
                         return true; // Continue to next system
                     }
                     else
