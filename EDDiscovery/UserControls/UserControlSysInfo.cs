@@ -138,8 +138,8 @@ namespace EDDiscovery.UserControls
 
             if ( last_he != null )
             {
-                SetControlText(he.System.name);
-                textBoxSystem.Text = he.System.name;
+                SetControlText(he.System.Name);
+                textBoxSystem.Text = he.System.Name;
                 discoveryform.history.FillEDSM(he); // Fill in any EDSM info we have
 
                 textBoxBody.Text = he.WhereAmI + ((he.IsInHyperSpace) ? " (HS)": "");
@@ -150,7 +150,7 @@ namespace EDDiscovery.UserControls
 
                     string separ = System.Globalization.CultureInfo.CurrentCulture.NumberFormat.NumberGroupSeparator + " ";
 
-                    textBoxPosition.Text = he.System.x.ToString(SingleCoordinateFormat) + separ + he.System.y.ToString(SingleCoordinateFormat) + separ + he.System.z.ToString(SingleCoordinateFormat);
+                    textBoxPosition.Text = he.System.X.ToString(SingleCoordinateFormat) + separ + he.System.Y.ToString(SingleCoordinateFormat) + separ + he.System.Z.ToString(SingleCoordinateFormat);
 
                     ISystem homesys = EDDConfig.Instance.HomeSystem;
 
@@ -164,10 +164,10 @@ namespace EDDiscovery.UserControls
                     textBoxSolDist.Text = "";
                 }
 
-                int count = discoveryform.history.GetVisitsCount(he.System.name);
+                int count = discoveryform.history.GetVisitsCount(he.System.Name);
                 textBoxVisits.Text = count.ToString();
 
-                bool enableedddross = (he.System.id_eddb > 0);  // Only enable eddb/ross for system that it knows about
+                bool enableedddross = (he.System.EDDBID > 0);  // Only enable eddb/ross for system that it knows about
 
                 buttonRoss.Enabled = buttonEDDB.Enabled = enableedddross;
 
@@ -245,8 +245,8 @@ namespace EDDiscovery.UserControls
 
         private void buttonEDDB_Click(object sender, EventArgs e)
         {
-            if (last_he != null && last_he.System.id_eddb > 0)
-                Process.Start("http://eddb.io/system/" + last_he.System.id_eddb.ToString());
+            if (last_he != null && last_he.System.EDDBID > 0)
+                Process.Start("http://eddb.io/system/" + last_he.System.EDDBID.ToString());
         }
 
         private void buttonRoss_Click(object sender, EventArgs e)
@@ -255,8 +255,8 @@ namespace EDDiscovery.UserControls
             {
                 discoveryform.history.FillEDSM(last_he);
 
-                if (last_he.System.id_eddb > 0)
-                    Process.Start("http://ross.eddb.io/system/update/" + last_he.System.id_eddb.ToString());
+                if (last_he.System.EDDBID > 0)
+                    Process.Start("http://ross.eddb.io/system/update/" + last_he.System.EDDBID.ToString());
             }
         }
 
@@ -268,16 +268,16 @@ namespace EDDiscovery.UserControls
 
                 if (last_he.System != null) // solve a possible exception
                 {
-                    if (!String.IsNullOrEmpty(last_he.System.name))
+                    if (!String.IsNullOrEmpty(last_he.System.Name))
                     {
-                        long? id_edsm = last_he.System.id_edsm;
+                        long? id_edsm = last_he.System.EDSMID;
                         if (id_edsm <= 0)
                         {
                             id_edsm = null;
                         }
 
                         EDSMClass edsm = new EDSMClass();
-                        string url = edsm.GetUrlToEDSMSystem(last_he.System.name, id_edsm);
+                        string url = edsm.GetUrlToEDSMSystem(last_he.System.Name, id_edsm);
 
                         if (url.Length > 0)         // may pass back empty string if not known, this solves another exception
                             Process.Start(url);

@@ -242,13 +242,13 @@ namespace EliteDangerousCore.DB
 
             if (systemnote == null && fsd)      // this is for older system name notes
             {
-                systemnote = SystemNoteClass.GetNoteOnSystem(sys.name, sys.id_edsm);
+                systemnote = SystemNoteClass.GetNoteOnSystem(sys.Name, sys.EDSMID);
 
                 if (systemnote != null)      // if found..
                 {
-                    if (sys.id_edsm > 0 && systemnote.EdsmId <= 0)    // if we have a system id, but snc not set, update it for next time.
+                    if (sys.EDSMID > 0 && systemnote.EdsmId <= 0)    // if we have a system id, but snc not set, update it for next time.
                     {
-                        systemnote.EdsmId = sys.id_edsm;
+                        systemnote.EdsmId = sys.EDSMID;
                         systemnote.Dirty = true;
                     }
                 }

@@ -133,7 +133,7 @@ namespace EDDiscovery.UserControls
                         ISystem sys = rw.Tag as ISystem;
                         return new Object[]
                         {
-                            rw.Cells[0].Value, rw.Cells[1].Value, sys.x.ToString("0.#"), sys.y.ToString("0.#"), sys.z.ToString("0.#"), rw.Cells[3].Value
+                            rw.Cells[0].Value, rw.Cells[1].Value, sys.X.ToString("0.#"), sys.Y.ToString("0.#"), sys.Z.ToString("0.#"), rw.Cells[3].Value
                         };
                     };
 
@@ -182,7 +182,7 @@ namespace EDDiscovery.UserControls
             {
                 ISystem sys = ret.Item1;
                 string sep = System.Globalization.CultureInfo.CurrentCulture.NumberFormat.NumberGroupSeparator + " ";
-                object[] rowobj = { sys.name, ret.Item2.ToStringInvariant("0.#"), sys.x.ToString("0.#") + sep + sys.y.ToString("0.#") + sep + sys.z.ToString("0.#"), sys.id_edsm.ToStringInvariant() };
+                object[] rowobj = { sys.Name, ret.Item2.ToStringInvariant("0.#"), sys.X.ToString("0.#") + sep + sys.Y.ToString("0.#") + sep + sys.Z.ToString("0.#"), sys.EDSMID.ToStringInvariant() };
                 dataGridViewEDSM.Rows.Add(rowobj);
                 dataGridViewEDSM.Rows[dataGridViewEDSM.Rows.Count - 1].Tag = sys;
             }
@@ -222,7 +222,7 @@ namespace EDDiscovery.UserControls
                 if (sys.HasCoordinate)
                     dist = sys.Distance(home).ToString("0.#");
 
-                object[] rowobj = { sys.name, dist, sys.x.ToString("0.#") + sep + sys.y.ToString("0.#") + sep + sys.z.ToString("0.#"), sys.id_edsm.ToStringInvariant() };
+                object[] rowobj = { sys.Name, dist, sys.X.ToString("0.#") + sep + sys.Y.ToString("0.#") + sep + sys.Z.ToString("0.#"), sys.EDSMID.ToStringInvariant() };
                 dataGridViewEDSM.Rows.Add(rowobj);
                 dataGridViewEDSM.Rows[dataGridViewEDSM.Rows.Count - 1].Tag = sys;
             }
@@ -264,14 +264,14 @@ namespace EDDiscovery.UserControls
         {
             this.Cursor = Cursors.WaitCursor;
             EDSMClass edsm = new EDSMClass();
-            long? id_edsm = rightclicksystem.id_edsm;
+            long? id_edsm = rightclicksystem.EDSMID;
 
             if (id_edsm == 0)
             {
                 id_edsm = null;
             }
 
-            if (!edsm.ShowSystemInEDSM(rightclicksystem.name, id_edsm))
+            if (!edsm.ShowSystemInEDSM(rightclicksystem.Name, id_edsm))
                 ExtendedControls.MessageBoxTheme.Show(FindForm(), "System could not be found - has not been synched or EDSM is unavailable");
 
             this.Cursor = Cursors.Default;

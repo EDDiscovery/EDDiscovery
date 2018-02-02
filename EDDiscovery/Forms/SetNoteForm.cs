@@ -27,7 +27,7 @@ namespace EDDiscovery.Forms
             this.NoteText = he.snc?.Note;
             this.textBoxNote.Text = this.NoteText ?? "";
             this.labelTimestamp.Text = he.EventTimeLocal.ToString();
-            this.labelSystem.Text = he.System.name;
+            this.labelSystem.Text = he.System.Name;
             this.labelSummary.Text = he.EventSummary;
             this.labelDetails.Text = he.EventDescription;
 

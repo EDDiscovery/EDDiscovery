@@ -28,15 +28,15 @@ namespace EliteDangerousCore
 
             List<ISystem> foundlist = new List<ISystem>();
 
-            if (find.id_edsm > 0 && systemsByEdsmId.ContainsKey(find.id_edsm))        // add to list
+            if (find.EDSMID > 0 && systemsByEdsmId.ContainsKey(find.EDSMID))        // add to list
             {
-                ISystem s = systemsByEdsmId[find.id_edsm];
+                ISystem s = systemsByEdsmId[find.EDSMID];
                 foundlist.Add(s);
             }
 
-            if (systemsByName.ContainsKey(find.name))            // and all names cached
+            if (systemsByName.ContainsKey(find.Name))            // and all names cached
             {
-                List<ISystem> s = systemsByName[find.name];
+                List<ISystem> s = systemsByName[find.Name];
                 foundlist.AddRange(s);
             }
 
@@ -60,16 +60,16 @@ namespace EliteDangerousCore
                     conn = new DB.SQLiteConnectionSystem();
                 }
 
-                if (find.id_edsm > 0)        // if we have an ID, look it up
+                if (find.EDSMID > 0)        // if we have an ID, look it up
                 {
-                    found = DB.SystemClassDB.GetSystem(find.id_edsm, conn, DB.SystemClassDB.SystemIDType.EdsmId, name: find.name);
+                    found = DB.SystemClassDB.GetSystem(find.EDSMID, conn, DB.SystemClassDB.SystemIDType.EdsmId, name: find.Name);
                 }
                  
                 // if not found, or no co-ord (unlikely), or its old as the hills, AND has a name
 
-                if ((found == null || !found.HasCoordinate || DateTime.UtcNow.Subtract(found.UpdateDate).TotalDays > 7) && find.name.Length >= 2)
+                if ((found == null || !found.HasCoordinate || DateTime.UtcNow.Subtract(found.UpdateDate).TotalDays > 7) && find.Name.Length >= 2)
                 {
-                    List<ISystem> _systems = DB.SystemClassDB.GetSystemsByName(find.name, cn: conn);     // try DB via names..
+                    List<ISystem> _systems = DB.SystemClassDB.GetSystemsByName(find.Name, cn: conn);     // try DB via names..
 
                     if ( found != null )
                         _systems.Add(found);        // add on the EDSM ID candidate.. if present
@@ -83,7 +83,7 @@ namespace EliteDangerousCore
                 }
 
                 if (found == null && find.HasCoordinate)           // finally, not found, but we have a co-ord, find it from the db  by distance
-                    found = DB.SystemClassDB.GetSystemByPosition(find.x, find.y, find.z, conn);
+                    found = DB.SystemClassDB.GetSystemByPosition(find.X, find.Y, find.Z, conn);
 
                 if (closeit && conn != null)                // finished with db, close
                 {
@@ -94,29 +94,29 @@ namespace EliteDangerousCore
                 {
                     if ((find.HasCoordinate && !found.HasCoordinate) || find.UpdateDate > found.UpdateDate) // if found does not have co-ord, or sys is more up to date..
                     {
-                        found.x = find.x; found.y = find.y; found.z = find.z;
+                        found.X = find.X; found.Y = find.Y; found.Z = find.Z;
                     }
 
                     if (find.UpdateDate > found.UpdateDate)      // Bravada, check that we are not overwriting newer info..
                     {                                           // if the journal info is newer than the db system name, lets presume the journal data is better
-                        found.name = find.name;
+                        found.Name = find.Name;
                         found.UpdateDate = find.UpdateDate;
                     }
 
-                    if (found.id_edsm > 0)
+                    if (found.EDSMID > 0)
                     {
-                        systemsByEdsmId[found.id_edsm] = found;         // must be definition the best ID found.. and if the update date of sys is better, its now been updated
+                        systemsByEdsmId[found.EDSMID] = found;         // must be definition the best ID found.. and if the update date of sys is better, its now been updated
                     }
 
-                    if (systemsByName.ContainsKey(orgsys.name))    // use the original name we looked it up in, if we found one.. remove it
+                    if (systemsByName.ContainsKey(orgsys.Name))    // use the original name we looked it up in, if we found one.. remove it
                     {
-                        systemsByName[orgsys.name].Remove(orgsys);  // and remove 
+                        systemsByName[orgsys.Name].Remove(orgsys);  // and remove 
                     }
 
-                    if (systemsByName.ContainsKey(found.name))
-                        systemsByName[found.name].Add(found);   // add to list..
+                    if (systemsByName.ContainsKey(found.Name))
+                        systemsByName[found.Name].Add(found);   // add to list..
                     else
-                        systemsByName[found.name] = new List<ISystem> { found }; // or make list
+                        systemsByName[found.Name] = new List<ISystem> { found }; // or make list
 
                     //System.Diagnostics.Trace.WriteLine($"DB found {found.name} {found.id_edsm} sysid {found.id_edsm}");
 
