@@ -176,14 +176,14 @@ namespace EDDiscovery.Actions
                         HistoryEntry he = hl.EntryOrder[jidindex];
                         (ap.actioncontroller as ActionController).HistoryList.FillEDSM(he);
 
-                        long? id_edsm = he.System.id_edsm;
+                        long? id_edsm = he.System.EDSMID;
                         if (id_edsm <= 0)
                         {
                             id_edsm = null;
                         }
 
                         EliteDangerousCore.EDSM.EDSMClass edsm = new EliteDangerousCore.EDSM.EDSMClass();
-                        string url = edsm.GetUrlToEDSMSystem(he.System.name, id_edsm);
+                        string url = edsm.GetUrlToEDSMSystem(he.System.Name, id_edsm);
 
                         ap[prefix + "URL"] = url;
 
@@ -197,9 +197,9 @@ namespace EDDiscovery.Actions
 
                         string url = "";
 
-                        if (he.System.id_eddb > 0)
+                        if (he.System.EDDBID > 0)
                         {
-                            url = "http://ross.eddb.io/system/update/" + he.System.id_eddb.ToString();
+                            url = "http://ross.eddb.io/system/update/" + he.System.EDDBID.ToString();
                             System.Diagnostics.Process.Start(url);
                         }
 

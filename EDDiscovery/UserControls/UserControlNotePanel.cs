@@ -134,7 +134,7 @@ namespace EDDiscovery.UserControls
                 string botline = "";
                 if (Config(Configuration.showGMPNotes))
                 {
-                    var gmo = discoveryform.galacticMapping.Find(he.System.name);
+                    var gmo = discoveryform.galacticMapping.Find(he.System.Name);
                     if (gmo != null)
                         botline = ("GMP: " + gmo.description).WordWrap(60) + Environment.NewLine;
                 }

@@ -711,10 +711,10 @@ namespace EDDiscovery
             {   // try is a bit old, probably do not need it.
                 if (he.IsFSDJump)
                 {
-                    int count = history.GetVisitsCount(he.System.name);
-                    LogLine(string.Format("Arrived at system {0} Visit No. {1}", he.System.name, count));
+                    int count = history.GetVisitsCount(he.System.Name);
+                    LogLine(string.Format("Arrived at system {0} Visit No. {1}", he.System.Name, count));
 
-                    System.Diagnostics.Trace.WriteLine("Arrived at system: " + he.System.name + " " + count + ":th visit.");
+                    System.Diagnostics.Trace.WriteLine("Arrived at system: " + he.System.Name + " " + count + ":th visit.");
                 }
 
                 if (!EDDOptions.Instance.SendEDSMJournals)

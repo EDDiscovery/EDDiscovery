@@ -78,7 +78,7 @@ namespace EDDiscovery.Actions
                     if (sc == null)
                     {
                         sc = new SystemClass(cmdname);
-                        sc.id_edsm = 0;
+                        sc.EDSMID = 0;
                     }
 
                     StarScan.SystemNode sn = scan.FindSystem(sc, edsm);

@@ -107,7 +107,7 @@ namespace EDDiscovery.UserControls
 
             if (he != null)
             {
-                StatToDGV("Visits", hl.GetVisitsCount(he.System.name) + " to system " + he.System.name);
+                StatToDGV("Visits", hl.GetVisitsCount(he.System.Name) + " to system " + he.System.Name);
                 StatToDGV("Jumps Before System", hl.GetFSDJumpsBeforeUTC(he.EventTimeUTC));
             }
 
@@ -122,34 +122,34 @@ namespace EDDiscovery.UserControls
                                       );
 
                 HistoryEntry north = hl.GetConditionally(Double.MinValue, (HistoryEntry s, ref double l) =>
-                { bool v = s.IsFSDJump && s.System.HasCoordinate && s.System.z > l; if (v) l = s.System.z; return v; });
+                { bool v = s.IsFSDJump && s.System.HasCoordinate && s.System.Z > l; if (v) l = s.System.Z; return v; });
 
                 HistoryEntry south = hl.GetConditionally(Double.MaxValue, (HistoryEntry s, ref double l) =>
-                { bool v = s.IsFSDJump && s.System.HasCoordinate && s.System.z < l; if (v) l = s.System.z; return v; });
+                { bool v = s.IsFSDJump && s.System.HasCoordinate && s.System.Z < l; if (v) l = s.System.Z; return v; });
 
                 HistoryEntry east = hl.GetConditionally(Double.MinValue, (HistoryEntry s, ref double l) =>
-                { bool v = s.IsFSDJump && s.System.HasCoordinate && s.System.x > l; if (v) l = s.System.x; return v; });
+                { bool v = s.IsFSDJump && s.System.HasCoordinate && s.System.X > l; if (v) l = s.System.X; return v; });
 
                 HistoryEntry west = hl.GetConditionally(Double.MaxValue, (HistoryEntry s, ref double l) =>
-                { bool v = s.IsFSDJump && s.System.HasCoordinate && s.System.x < l; if (v) l = s.System.x; return v; });
+                { bool v = s.IsFSDJump && s.System.HasCoordinate && s.System.X < l; if (v) l = s.System.X; return v; });
 
                 HistoryEntry up = hl.GetConditionally(Double.MinValue, (HistoryEntry s, ref double l) =>
-                { bool v = s.IsFSDJump && s.System.HasCoordinate && s.System.y > l; if (v) l = s.System.y; return v; });
+                { bool v = s.IsFSDJump && s.System.HasCoordinate && s.System.Y > l; if (v) l = s.System.Y; return v; });
 
                 HistoryEntry down = hl.GetConditionally(Double.MaxValue, (HistoryEntry s, ref double l) =>
-                { bool v = s.IsFSDJump && s.System.HasCoordinate && s.System.y < l; if (v) l = s.System.y; return v; });
+                { bool v = s.IsFSDJump && s.System.HasCoordinate && s.System.Y < l; if (v) l = s.System.Y; return v; });
 
-                StatToDGV("Most North", north.System.name + " @ " + north.System.x.ToString("0.0") + "; " + north.System.y.ToString("0.0") + "; " + north.System.z.ToString("0.0"));
-                StatToDGV("Most South", south.System.name + " @ " + south.System.x.ToString("0.0") + "; " + south.System.y.ToString("0.0") + "; " + south.System.z.ToString("0.0"));
-                StatToDGV("Most East", east.System.name + " @ " + east.System.x.ToString("0.0") + "; " + east.System.y.ToString("0.0") + "; " + east.System.z.ToString("0.0"));
-                StatToDGV("Most West", west.System.name + " @ " + west.System.x.ToString("0.0") + "; " + west.System.y.ToString("0.0") + "; " + west.System.z.ToString("0.0"));
-                StatToDGV("Most Highest", up.System.name + " @ " + up.System.x.ToString("0.0") + "; " + up.System.y.ToString("0.0") + "; " + up.System.z.ToString("0.0"));
-                StatToDGV("Most Lowest", down.System.name + " @ " + down.System.x.ToString("0.0") + "; " + down.System.y.ToString("0.0") + "; " + down.System.z.ToString("0.0"));
+                StatToDGV("Most North", north.System.Name + " @ " + north.System.X.ToString("0.0") + "; " + north.System.Y.ToString("0.0") + "; " + north.System.Z.ToString("0.0"));
+                StatToDGV("Most South", south.System.Name + " @ " + south.System.X.ToString("0.0") + "; " + south.System.Y.ToString("0.0") + "; " + south.System.Z.ToString("0.0"));
+                StatToDGV("Most East", east.System.Name + " @ " + east.System.X.ToString("0.0") + "; " + east.System.Y.ToString("0.0") + "; " + east.System.Z.ToString("0.0"));
+                StatToDGV("Most West", west.System.Name + " @ " + west.System.X.ToString("0.0") + "; " + west.System.Y.ToString("0.0") + "; " + west.System.Z.ToString("0.0"));
+                StatToDGV("Most Highest", up.System.Name + " @ " + up.System.X.ToString("0.0") + "; " + up.System.Y.ToString("0.0") + "; " + up.System.Z.ToString("0.0"));
+                StatToDGV("Most Lowest", down.System.Name + " @ " + down.System.X.ToString("0.0") + "; " + down.System.Y.ToString("0.0") + "; " + down.System.Z.ToString("0.0"));
 
 
                 var groupeddata = from data in hl.OrderByDate
                                   where data.IsFSDJump
-                                  group data by data.System.name
+                                  group data by data.System.Name
                                       into grouped
                                   select new
                                   {

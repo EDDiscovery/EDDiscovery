@@ -156,11 +156,11 @@ namespace EDDiscovery.UserControls
             System.Diagnostics.Debug.Assert(Application.MessageLoop);       // check!
 
             // Get nearby systems from our travel history. This will filter out duplicates from the systems DB.
-            discoveryform.history.CalculateSqDistances(list, sys.x, sys.y, sys.z,
+            discoveryform.history.CalculateSqDistances(list, sys.X, sys.Y, sys.Z,
                                 maxitems, MinRadius, MaxRadius, !checkBoxCube.Checked
                                 );
 
-            FillGrid(sys.name, list);
+            FillGrid(sys.Name, list);
         }
 
         private void FillGrid(string name, BaseUtils.SortedListDoubleDuplicate<ISystem> csl)
@@ -174,10 +174,10 @@ namespace EDDiscovery.UserControls
                 {
                     double dist = Math.Sqrt(tvp.Key);   // distances are stored squared for speed, back to normal.
 
-                    if (tvp.Value.name != name && (checkBoxCube.Checked || (dist >= MinRadius && dist <= MaxRadius)))
+                    if (tvp.Value.Name != name && (checkBoxCube.Checked || (dist >= MinRadius && dist <= MaxRadius)))
                     {
-                        int visits = discoveryform.history.GetVisitsCount(tvp.Value.name, tvp.Value.id_edsm);
-                        object[] rowobj = { tvp.Value.name, $"{dist:0.00}", $"{visits:n0}" };
+                        int visits = discoveryform.history.GetVisitsCount(tvp.Value.Name, tvp.Value.EDSMID);
+                        object[] rowobj = { tvp.Value.Name, $"{dist:0.00}", $"{visits:n0}" };
 
                         int rowindex = dataGridViewNearest.Rows.Add(rowobj);
                         dataGridViewNearest.Rows[rowindex].Tag = tvp.Value;
@@ -239,14 +239,14 @@ namespace EDDiscovery.UserControls
         {
             this.Cursor = Cursors.WaitCursor;
             EDSMClass edsm = new EDSMClass();
-            long? id_edsm = rightclicksystem.id_edsm;
+            long? id_edsm = rightclicksystem.EDSMID;
 
             if (id_edsm == 0)
             {
                 id_edsm = null;
             }
 
-            if (!edsm.ShowSystemInEDSM(rightclicksystem.name, id_edsm))
+            if (!edsm.ShowSystemInEDSM(rightclicksystem.Name, id_edsm))
             {
                 ExtendedControls.MessageBoxTheme.Show(FindForm(), "System could not be found - has not been synched or EDSM is unavailable");
             }
@@ -393,7 +393,7 @@ namespace EDDiscovery.UserControls
 
                                     //System.Diagnostics.Debug.WriteLine("DB Computer Max distance " + req.MaxDistance);
 
-                                    SystemClassDB.GetSystemListBySqDistancesFrom(closestsystemlist, sys.x, sys.y, sys.z, req.MaxItems , 
+                                    SystemClassDB.GetSystemListBySqDistancesFrom(closestsystemlist, sys.X, sys.Y, sys.Z, req.MaxItems , 
                                                     req.MinDistance, req.MaxDistance , req.Spherical);
 
                                     if (!PendingClose)

@@ -85,7 +85,7 @@ namespace EDDiscovery.UserControls
 
             checkBoxMinimizeToNotifyIcon.Enabled = EDDiscoveryForm.EDDConfig.UseNotifyIcon;
 
-            textBoxHomeSystem.Text = EDDConfig.Instance.HomeSystem.name;
+            textBoxHomeSystem.Text = EDDConfig.Instance.HomeSystem.Name;
 
             textBoxDefaultZoom.Text = EDDConfig.Instance.MapZoom.ToString();
 
@@ -147,11 +147,11 @@ namespace EDDiscovery.UserControls
 
             if (s != null)
             {
-                textBoxHomeSystem.Text = s.name;
+                textBoxHomeSystem.Text = s.Name;
                 EDDConfig.Instance.HomeSystem = s;
             }
             else
-                textBoxHomeSystem.Text = EDDConfig.Instance.HomeSystem.name;
+                textBoxHomeSystem.Text = EDDConfig.Instance.HomeSystem.Name;
         }
 
         private void textBoxDefaultZoom_Validating(object sender, System.ComponentModel.CancelEventArgs e)
