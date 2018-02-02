@@ -162,12 +162,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Forms\AboutMapPanel.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\AboutMapPanel.Designer.cs">
-      <DependentUpon>AboutMapPanel.cs</DependentUpon>
-    </Compile>
     <Compile Include="Forms\DraggableFormPos.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -572,9 +566,6 @@
     <Compile Include="UserControls\UserControlTrippanel.Designer.cs">
       <DependentUpon>UserControlTrippanel.cs</DependentUpon>
     </Compile>
-    <EmbeddedResource Include="Forms\AboutMapPanel.resx">
-      <DependentUpon>AboutMapPanel.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Forms\CommanderForm.resx">
       <DependentUpon>CommanderForm.cs</DependentUpon>
     </EmbeddedResource>

@@ -23,6 +23,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using EDDiscovery.Forms;
 using System.Collections.Concurrent;
 using System.Threading;
 using EliteDangerousCore;
@@ -711,7 +712,22 @@ namespace EDDiscovery.UserControls
             CenterControlToParent(chartMap);
         }
 
+        // About Map
+
+        private void aboutToolStripAbout_Click(object sender, EventArgs e)
+        {
+            chartMap.Visible = false;
+            tableLayoutAboutMap.Visible = true;
+
+        }
+        private void buttonExt1_Click(object sender, EventArgs e)
+        {
+            chartMap.Visible = true;
+            tableLayoutAboutMap.Visible = false;
+        }
+        
         #endregion
+
     }
 }
 
