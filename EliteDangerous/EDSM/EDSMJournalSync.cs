@@ -373,6 +373,10 @@ namespace EliteDangerousCore.EDSM
 
                 JObject json = je.GetJson();
                 RemoveCommonKeys(json);
+                if (je.EventTypeID == JournalTypeEnum.FSDJump && json["FuelUsed"].Empty())
+                    json["_convertedNetlog"] = true;
+                if (json["StarPosFromEDSM"].Bool(false)) // Remove star pos from EDSM
+                    json.Remove("StarPos");
                 json.Remove("StarPosFromEDSM");
                 json["_systemName"] = he.System.Name;
                 json["_systemCoordinates"] = new JArray(he.System.X, he.System.Y, he.System.Z);
@@ -451,17 +455,9 @@ namespace EliteDangerousCore.EDSM
 
             string eventtype = he.EntryType.ToString();
             if (he.EdsmSync ||
-                he.IsStarPosFromEDSM ||
                 he.MultiPlayer ||
                 discardEvents.Contains(eventtype) ||
                 alwaysDiscard.Contains(eventtype))
-            {
-                return false;
-            }
-
-            JournalFSDJump fsd = he.journalEntry as JournalFSDJump;
-
-            if (fsd != null && fsd.FuelLevel <= 0) // Exclude pre-2.2 events
             {
                 return false;
             }
