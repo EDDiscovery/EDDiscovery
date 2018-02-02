@@ -31,9 +31,18 @@ namespace EDDiscovery.UserControls
     {
         private Font displayfont;
         private string DbSave { get { return "RouteTracker" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
-        private SavedRouteClass _currentRoute;
-        private  HistoryEntry currentSystem;
+        private SavedRouteClass currentRoute;
+        private  HistoryEntry currentHE;
         private string lastsystem;
+
+        public override Color ColorTransparency { get { return Color.Green; } }
+        public override void SetTransparency(bool on, Color curcol)
+        {
+            pictureBox.BackColor = this.BackColor = curcol;
+            Display();
+        }
+
+        #region Init
 
         public UserControlRouteTracker()
         {
@@ -46,15 +55,15 @@ namespace EDDiscovery.UserControls
 
             autoCopyWPToolStripMenuItem.Checked = SQLiteDBClass.GetSettingBool(DbSave + "autoCopyWP", false);
             autoSetTargetToolStripMenuItem.Checked = SQLiteDBClass.GetSettingBool(DbSave + "autoSetTarget", false);
+            string ids = SQLiteDBClass.GetSettingString(DbSave + "SelectedRoute", "-1");        // for some reason, it was saved as a string.. so keep for backwards compat
+            int? id = ids.InvariantParseIntNull();
+            if ( id != null )
+                currentRoute = SavedRouteClass.GetAllSavedRoutes().Find(r => r.Id.Equals(id.Value));  // may be null
 
-            String selRoute = SQLiteDBClass.GetSettingString(DbSave + "SelectedRoute", "-1");
-            long id = long.Parse(selRoute);
-            _currentRoute = SavedRouteClass.GetAllSavedRoutes().Find(r => r.Id.Equals(id));
-            updateScreen();
+            Display();
 
             discoveryform.OnHistoryChange += Display;
             discoveryform.OnNewEntry += NewEntry;
-            discoveryform.OnNewTarget += NewTarget;
         }
 
         public override void Closing()
@@ -63,138 +72,63 @@ namespace EDDiscovery.UserControls
             SQLiteDBClass.PutSettingBool(DbSave + "autoSetTarget", autoSetTargetToolStripMenuItem.Checked);
             discoveryform.OnHistoryChange -= Display;
             discoveryform.OnNewEntry -= NewEntry;
-            discoveryform.OnNewTarget -= NewTarget;
         }
 
-        public override Color ColorTransparency { get { return Color.Green; } }
-        public override void SetTransparency(bool on, Color curcol)
-        {
-            pictureBox.BackColor = this.BackColor = curcol;
-            updateScreen();
-        }
+        #endregion
+
+        #region Implementation
 
         public override void InitialDisplay()
         {
             Display(discoveryform.history);
         }
 
-
         private void Display(HistoryList hl)            // when user clicks around..  HE may be null here
         {
-            currentSystem = hl.GetLastFSD;
-            updateScreen();
+            currentHE = hl.GetLastFSD;
+            Display();
         }
 
         private void NewEntry(HistoryEntry l, HistoryList hl)
         {
-            currentSystem = hl.GetLastFSD;
-            updateScreen();
+            currentHE = hl.GetLastFSD;
+            Display();
         }
 
-        private void NewTarget(Object sender)
+        private void Display()
         {
-           //updateScreen();
-        }
-
-
-        static class Prompt
-        {
-            public static Boolean ShowDialog(Form p, 
-                List<SavedRouteClass> savedRoutes, 
-                String defaultValue,
-                string caption,
-                out SavedRouteClass selectedRoute)
-            {
-                Form prompt = new Form()
-                {
-                    Width = 440,
-                    Height = 160,
-                    FormBorderStyle = FormBorderStyle.FixedDialog,
-                    Text = caption,
-                    StartPosition = FormStartPosition.CenterScreen,
-                };
-
-                Label textLabel = new Label() { Left = 10, Top = 20, Width = 400, Text = "Route" };
-                Button confirmation = new Button() { Text = "Ok", Left = 245, Width = 80, Top = 90, DialogResult = DialogResult.OK };
-                Button cancel = new Button() { Text = "Cancel", Left = 330, Width = 80, Top = 90, DialogResult = DialogResult.Cancel };
-                confirmation.Click += (sender, e) => { prompt.Close(); };
-                cancel.Click += (sender, e) => { prompt.Close(); };
-                ComboBox cb = new ComboBox() { Left = 10, Top = 50, Width = 400 };
-
-                foreach (SavedRouteClass src in savedRoutes)
-                {
-                    cb.Items.Add(src.Name);
-                    if (src.Name.Equals(defaultValue))
-                    {
-                        cb.SelectedItem = defaultValue;
-                    }
-                }
-                
-                prompt.Controls.Add(cb);
-                prompt.Controls.Add(confirmation);
-                prompt.Controls.Add(cancel);
-                prompt.Controls.Add(textLabel);
-                prompt.AcceptButton = confirmation;
-
-                var  res = prompt.ShowDialog(p); 
-                selectedRoute = (cb.SelectedIndex != -1) ? savedRoutes[cb.SelectedIndex] : null;
-                return (res  == DialogResult.OK && selectedRoute != null);
-            }
-        }
-
-        private void setRouteToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            SavedRouteClass selectedRoute;
-
-            if (Prompt.ShowDialog(FindForm(), SavedRouteClass.GetAllSavedRoutes().Where(r => !r.Name.StartsWith("\x7F")).OrderBy(r => r.Name).ToList(),
-                _currentRoute?.Name ?? string.Empty, "Select route", out selectedRoute))
-            {
-                if (selectedRoute == null)
-                    return;
-                _currentRoute = selectedRoute;
-                SQLiteDBClass.PutSettingString(DbSave + "SelectedRoute", selectedRoute.Id.ToString());
-                updateScreen();
-            }
-        }
-
-        void DisplayText(String topline, String bottomLine)
-        {
-            pictureBox.ClearImageList();
-            Color textcolour = IsTransparent ? discoveryform.theme.SPanelColor : discoveryform.theme.LabelColor;
-            Color backcolour = IsTransparent ? Color.Transparent : this.BackColor;
-            pictureBox.AddTextAutoSize(new Point(10, 5), new Size(1000, 35), topline==null?"":topline, displayfont, textcolour, backcolour, 1.0F);
-            pictureBox.AddTextAutoSize(new Point(10, 35), new Size(1000, 35), bottomLine==null?"": bottomLine, displayfont, textcolour, backcolour, 1.0F);
-            pictureBox.Render();
-        }
-
-        private void updateScreen()
-        {
-            if (currentSystem == null)
+            if (currentHE == null)
                 return;
 
-            if (_currentRoute == null)
+            Display(currentHE.System);
+
+          //  t.Interval = 200; t.Tick += (s,e)=> { Display(currentRoute.PosAlongRoute(percent)); percent += 0.2; }; t.Start();  // debug to make it play thru.. leave
+        }
+
+        // double percent = 0; Timer t = new Timer();// play thru harness
+
+        private void Display(ISystem cursys)
+        {
+            if (currentRoute == null)
             {
                 DisplayText("Please set a route, by right clicking", "");
                 return;
             }
 
-            if (_currentRoute.Systems.Count == 0)
+            if (currentRoute.Systems.Count == 0)
             {
-                DisplayText(_currentRoute.Name, "Route contains no waypoints");
+                DisplayText(currentRoute.Name, "Route contains no waypoints");
                 return;
             }
 
             string topline = "";
-            string bottomLine="";
-            string firstSystemName = _currentRoute.Systems[0];
 
-            ISystem firstSystem = SystemClassDB.GetSystem(firstSystemName);
-            ISystem finalSystem = SystemClassDB.GetSystem(_currentRoute.Systems[_currentRoute.Systems.Count - 1]);
+            ISystem finalSystem = SystemClassDB.GetSystem(currentRoute.Systems[currentRoute.Systems.Count - 1]);
 
-            if (finalSystem != null)
+            if (finalSystem != null && cursys.HasCoordinate)
             {
                 string mesg = "remain";
-                double distX = currentSystem.System.Distance(finalSystem);
+                double distX = cursys.Distance(finalSystem);
                 //Small hack to pull the jump range from TripPanel1
                 var jumpRange = SQLiteDBClass.GetSettingDouble("TripPanel1" + "JumpRange", -1.0);       //TBD Not a good idea.
                 if (jumpRange > 0)
@@ -203,97 +137,115 @@ namespace EDDiscovery.UserControls
                     if (jumps > 0)
                         mesg = "@ " + jumps.ToString() + ((jumps == 1) ? " jump" : " jumps");
                 }
-                topline = String.Format("{0} {1} WPs {2:N2}ly {3}", _currentRoute.Name, _currentRoute.Systems.Count, distX, mesg);
+                topline = String.Format("{0} {1} WPs, {2:N2}ly {3}", currentRoute.Name, currentRoute.Systems.Count, distX, mesg);
             }
             else
             {
-                topline = String.Format("{0} {1} WPs remain", _currentRoute.Name, _currentRoute.Systems.Count);
+                topline = String.Format("{0} {1} WPs remain", currentRoute.Name, currentRoute.Systems.Count);
             }
 
-            ISystem nearestSystem = null;
-            double minDist = double.MaxValue;
-            int nearestidx = -1;
-            for (int i = 0; i < _currentRoute.Systems.Count; i++)
+            string bottomline = "";
+
+            Tuple<ISystem, int> closest = cursys.HasCoordinate ? currentRoute.ClosestTo(cursys) : null;
+
+            if (closest != null)
             {
-                String sys = _currentRoute.Systems[i];
-                ISystem sc = SystemClassDB.GetSystem(sys);
-                if (sc == null)
-                    continue;
-                double dist = currentSystem.System.Distance(sc);
-                if (dist <= minDist)
+                if (closest.Item2 >= currentRoute.Systems.Count) // if past end..
                 {
-                    if (nearestSystem == null || !nearestSystem.name.Equals(sc.name))
+                    bottomline = String.Format("Past Last WP{0} {1}", closest.Item2, currentRoute.LastSystem);
+                }
+                else
+                {
+                    string name = null;
+
+                    if (closest.Item1 != null )         // if have a closest system
                     {
-                        minDist = dist;
-                        nearestidx = i;
-                        nearestSystem = sc;
+                        double distance = cursys.Distance(closest.Item1);
+
+                        bottomline = String.Format("{0:N2}ly to WP{1} {2} @ {3},{4},{5}", distance, closest.Item2 + 1, closest.Item1.name,
+                            closest.Item1.x.ToString("0.#"), closest.Item1.y.ToString("0.#"), closest.Item1.z.ToString("0.#"));
+
+                        name = closest.Item1.name;
+                    }
+                    else
+                    {           // just know waypoint..
+                        bottomline = String.Format("To WP{0} {1}", closest.Item2 + 1, currentRoute.Systems[closest.Item2]);
+
+                        name = currentRoute.Systems[closest.Item2];
+                    }
+
+                    if (lastsystem == null || name.CompareTo(lastsystem) != 0)
+                    {
+                        if (autoCopyWPToolStripMenuItem.Checked)
+                            Clipboard.SetText(name);
+
+                        if (autoSetTargetToolStripMenuItem.Checked)
+                        {
+                            string targetName;
+                            double x, y, z;
+                            TargetClass.GetTargetPosition(out targetName, out x, out y, out z);
+                            if (name.CompareTo(targetName) != 0)
+                                TargetHelpers.setTargetSystem(this, discoveryform, name, false);
+                        }
+
+                        lastsystem = name;
                     }
                 }
             }
+            else
+                bottomline = "No current position/no systems found in database";
 
-
-            string name = null;
-            if (nearestSystem != null && firstSystem != null)
-            {
-                string nextName = null;
-
-
-                if (nearestidx < _currentRoute.Systems.Count - 1)           // this is the name of the system beyond the nearest one to us.
-                    nextName = _currentRoute.Systems[nearestidx + 1];
-
-                double first2Neasest = firstSystem.Distance(nearestSystem);
-                double first2Me = firstSystem.Distance(currentSystem.System);
-
-                int wp = nearestidx+1;  // we make this 1 + so 1=first entry, 2=second
-
-                // if distance between me and the first system is > than between the nearest and the first, we are past the nearest, thus must move onto the next
-                if (first2Me >= first2Neasest && !String.IsNullOrWhiteSpace(nextName))
-                {
-                    name = nextName;        // we use this system..
-                    wp++;                   // and our waypoint number increases
-                }
-                else
-                    name = nearestSystem.name;      // else we use the nearest system, with the same WP number
-
-                ISystem nextSystem = SystemClassDB.GetSystem(name);
-
-                if (nextSystem == null)     // if we no co-ords
-                {
-                    bottomLine = String.Format("WP{0}: {1} {2}", wp, name, autoCopyWPToolStripMenuItem.Checked ? " (AUTO)" : "");
-                }
-                else
-                {
-                    double distance = currentSystem.System.Distance(nextSystem);
-                    bottomLine = String.Format("{0:N2}ly to WP{1}: {2} {3}", distance, wp, name, autoCopyWPToolStripMenuItem.Checked ? " (AUTO)" : "");
-                }
-
-            }
-            else 
-            {
-                bottomLine = String.Format("WP{0}: {1} {2}", 1, firstSystemName, autoCopyWPToolStripMenuItem.Checked ? " (AUTO)" : "");
-                name = firstSystemName;
-            }
-
-            if (name!=null && name.CompareTo(lastsystem) != 0)
-            {
-                if (autoCopyWPToolStripMenuItem.Checked)
-                    Clipboard.SetText(name);
-                if (autoSetTargetToolStripMenuItem.Checked)
-                {
-                    string targetName;
-                    double x, y, z;
-                    TargetClass.GetTargetPosition(out targetName, out x, out y, out z);
-                    if (name.CompareTo(targetName) != 0)
-                        TargetHelpers.setTargetSystem(this,discoveryform, name, false);
-                }
-            }
-            lastsystem = name;
-            DisplayText(topline, bottomLine);
+            DisplayText(topline, bottomline);
         }
+
+        void DisplayText(String topline, String bottomLine)
+        {
+            pictureBox.ClearImageList();
+            Color textcolour = IsTransparent ? discoveryform.theme.SPanelColor : discoveryform.theme.LabelColor;
+            Color backcolour = IsTransparent ? Color.Transparent : this.BackColor;
+            pictureBox.AddTextAutoSize(new Point(10, 5), new Size(1000, 35), topline == null ? "" : topline, displayfont, textcolour, backcolour, 1.0F);
+            pictureBox.AddTextAutoSize(new Point(10, 35), new Size(1000, 35), bottomLine == null ? "" : bottomLine, displayfont, textcolour, backcolour, 1.0F);
+            pictureBox.Render();
+        }
+
+        #endregion
+
+        #region UI
 
         private void autoCopyWPToolStripMenuItem_CheckedChanged(object sender, EventArgs e)
         {
-            updateScreen();
+            Display();
         }
+
+        private void setRouteToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ExtendedControls.ConfigurableForm f = new ExtendedControls.ConfigurableForm();
+
+            var routes = SavedRouteClass.GetAllSavedRoutes();
+            var routenames = (from x in routes select x.Name).ToList();
+            f.Add(new ExtendedControls.ConfigurableForm.Entry("Route", "", new Point(10, 40), new Size(400, 24), "Select route", routenames, new Size(400, 400)));
+            f.Add(new ExtendedControls.ConfigurableForm.Entry("Cancel", typeof(ExtendedControls.ButtonExt), "Cancel", new Point(410-100, 80), new Size(100, 24), "Press to Cancel"));
+            f.Trigger += (dialogname, controlname, tag) =>
+            {
+                if (controlname != "Route")
+                    f.DialogResult = DialogResult.Cancel;
+                else
+                    f.DialogResult = DialogResult.OK;
+                f.Close();
+            };
+            if ( f.ShowDialog(this.FindForm(), this.FindForm().Icon, new Size(430, 120), new Point(-999, -999), "Enter route") == DialogResult.OK )
+            {
+                string routename = f.Get("Route");
+                currentRoute = routes.Find(x => x.Name.Equals(routename));       // not going to be null, but consider the upset.
+                if (currentRoute != null)
+                    SQLiteDBClass.PutSettingString(DbSave + "SelectedRoute", currentRoute.Id.ToStringInvariant());        // write ID back
+
+                Display();
+            }
+        }
+
+        #endregion
+
+
     }
 }

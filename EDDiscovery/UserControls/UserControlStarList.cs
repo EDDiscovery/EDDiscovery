@@ -183,7 +183,9 @@ namespace EDDiscovery.UserControls
             {
                 //System.Diagnostics.Debug.WriteLine("Auto Sel");
                 dataGridViewStarList.ClearSelection();
-                dataGridViewStarList.CurrentCell = dataGridViewStarList.Rows[0].Cells[1];       // its the current cell which needs to be set, moves the row marker as well
+                int rowno = dataGridViewStarList.Rows.GetFirstRow(DataGridViewElementStates.Visible);
+                if ( rowno != -1 )
+                    dataGridViewStarList.CurrentCell = dataGridViewStarList.Rows[rowno].Cells[1];       // its the current cell which needs to be set, moves the row marker as well
 
                 FireChangeSelection();
             }

@@ -895,7 +895,9 @@ namespace EDDiscovery.UserControls
                                 note = gmo.description;
                         }
                     }
-                   dataGridViewRouteSystems[2, rowindex].Value = note.WordWrap(60);
+
+                    dataGridViewRouteSystems[2, rowindex].Value = note.WordWrap(60);
+                    dataGridViewRouteSystems.Rows[rowindex].Cells[0].ToolTipText = string.Format("{0:0.#},{1:0.#},{2:0.#}", sys.x, sys.y, sys.z);
                 }
 
                 if (sys == null && sysname != "")

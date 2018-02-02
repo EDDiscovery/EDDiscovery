@@ -72,6 +72,7 @@ namespace NetLogEntry
                 Console.WriteLine("[-keyrepeat]|[-repeat ms]\n" +
                                   "JournalPath CMDRname Options..\n" +
                                   "     Options: FSD name x y z (x y z is position as double)\n" +
+                                  "     Options: FSDTravel name x y z destx desty destz percentint \n" +
                                   "     Options: Loc name x y z\n" +
                                   "     Options: Interdiction name success isplayer combatrank faction power\n" +
                                   "     Options: Docked, Undocked, Touchdown, Liftoff, CommitCrime MissionCompleted MissionCompleted2 MiningRefined\n" +
@@ -171,11 +172,13 @@ namespace NetLogEntry
                 string lineout = null;      //quick writer
 
                 if (writetype.Equals("FSD", StringComparison.InvariantCultureIgnoreCase))
-                    FSDJump(args, filename, repeatcount);
+                    lineout = FSDJump(args, filename, repeatcount);
+                else if (writetype.Equals("FSDTravel", StringComparison.InvariantCultureIgnoreCase))
+                    lineout = FSDTravel(args, filename);
                 else if (writetype.Equals("LOC", StringComparison.InvariantCultureIgnoreCase))
-                    Loc(args, filename);
+                    lineout = Loc(args, filename);
                 else if (writetype.Equals("Interdiction", StringComparison.InvariantCultureIgnoreCase))
-                    Interdiction(args, filename);
+                    lineout = Interdiction(args, filename);
                 else if (writetype.Equals("Docked", StringComparison.InvariantCultureIgnoreCase))
                     lineout = "{ " + TimeStamp() + "\"event\":\"Docked\", " +
                         "\"StationName\":\"Jameson Memorial\", " +
@@ -267,6 +270,8 @@ namespace NetLogEntry
 
                 if (lineout != null)
                     Write(filename, lineout);
+                else
+                    break;
 
                 if (repeatdelay == -1)
                 {
@@ -291,12 +296,12 @@ namespace NetLogEntry
             }
         }
 
-        static void Loc(Args args, string filename)
+        static string Loc(Args args, string filename)
         {
             if (args.Left < 4)
             {
                 Console.WriteLine("More parameters");
-                return;
+                return null;
             }
 
             double x = double.NaN, y = 0, z = 0;
@@ -305,43 +310,39 @@ namespace NetLogEntry
             if (!double.TryParse(args.Next, out x) || !double.TryParse(args.Next, out y) || !double.TryParse(args.Next, out z))
             {
                 Console.WriteLine("X,y,Z must be numbers");
-                return;
+                return null;
             }
 
-            string line = "{ " + TimeStamp() + "\"event\":\"Location\", " +
+            return "{ " + TimeStamp() + "\"event\":\"Location\", " +
                 "\"StarSystem\":\"" + starnameroot +
-                "\", \"StarPos\":[" + x.ToString("0.00") + ", " + y.ToString("0.00") + ", " + z.ToString("0.00") +
+                "\", \"StarPos\":[" + x.ToString("0.000000") + ", " + y.ToString("0.000000") + ", " + z.ToString("0.000000") +
                 "], \"Allegiance\":\"\", \"Economy\":\"$economy_None;\", \"Economy_Localised\":\"None\", \"Government\":\"$government_None;\", \"Government_Localised\":\"None\", \"Security\":\"$SYSTEM_SECURITY_low;\", \"Security_Localised\":\"Low Security\" }";
-
-            Write(filename, line);
         }
 
         //                                  "Options: Interdiction Loc name success isplayer combatrank faction power\n" +
-        static void Interdiction(Args args, string filename)
+        static string Interdiction(Args args, string filename)
         {
             if (args.Left < 6)
             {
                 Console.WriteLine("More parameters");
-                return;
+                return null;
             }
 
-            string line = "{ " + TimeStamp() + "\"event\":\"Interdiction\", " +
+            return "{ " + TimeStamp() + "\"event\":\"Interdiction\", " +
                 "\"Success\":\"" + args[1] + "\", " +
                 "\"Interdicted\":\"" + args[0] + "\", " +
                 "\"IsPlayer\":\"" + args[2] + "\", " +
                 "\"CombatRank\":\"" + args[3] + "\", " +
                 "\"Faction\":\"" + args[4] + "\", " +
                 "\"Power\":\"" + args[5] + "\" }";
-
-            Write(filename, line);
         }
 
-        static void FSDJump(Args args, string filename, int repeatcount)
+        static string FSDJump(Args args, string filename, int repeatcount)
         {
             if (args.Left < 4)
             {
                 Console.WriteLine("More parameters");
-                return;
+                return null;
             }
 
             double x = double.NaN, y = 0, z = 0;
@@ -350,7 +351,7 @@ namespace NetLogEntry
             if (!double.TryParse(args.Next, out x) || !double.TryParse(args.Next, out y) || !double.TryParse(args.Next, out z))
             {
                 Console.WriteLine("X,y,Z must be numbers");
-                return;
+                return null;
             }
 
             Console.WriteLine("In file " + filename);
@@ -359,14 +360,48 @@ namespace NetLogEntry
 
             string starname = starnameroot + ((z > 0) ? "_" + z.ToString("0") : "");
 
-            string line = "{ " + TimeStamp() + "\"event\":\"FSDJump\", \"StarSystem\":\"" + starname +
-            "\", \"StarPos\":[" + x.ToString("0.00") + ", " + y.ToString("0.00") + ", " + z.ToString("0.00") +
+            return "{ " + TimeStamp() + "\"event\":\"FSDJump\", \"StarSystem\":\"" + starname +
+            "\", \"StarPos\":[" + x.ToString("0.000000") + ", " + y.ToString("0.000000") + ", " + z.ToString("0.000000") +
             "], \"Allegiance\":\"\", \"Economy\":\"$economy_None;\", \"Economy_Localised\":\"None\", \"Government\":\"$government_None;\"," +
             "\"Government_Localised\":\"None\", \"Security\":\"$SYSTEM_SECURITY_low;\", \"Security_Localised\":\"Low Security\"," +
             "\"JumpDist\":10.791, \"FuelUsed\":0.790330, \"FuelLevel\":6.893371 }";
-
-            Write(filename, line);
         }
+
+        static string FSDTravel(Args args, string filename)
+        {
+            if (args.Left < 8)
+            {
+                Console.WriteLine("More parameters");
+                return null;
+            }
+
+            double x = double.NaN, y = 0, z = 0, dx=0,dy=0,dz=0;
+            double percent = 0;
+            string starnameroot = args.Next;
+
+            if (!double.TryParse(args.Next, out x) || !double.TryParse(args.Next, out y) || !double.TryParse(args.Next, out z) ||
+                !double.TryParse(args.Next, out dx) || !double.TryParse(args.Next, out dy) || !double.TryParse(args.Next, out dz) || 
+                !double.TryParse(args.Next,out percent) )
+            {
+                Console.WriteLine("X,y,Z,dx,dy,dz,percent must be numbers");
+                return null;
+            }
+
+            Console.WriteLine("{0} {1} {2}", dx, dy, dz);
+
+            x = (dx - x) * percent / 100.0 + x;
+            y = (dy - y) * percent / 100.0 + y;
+            z = (dz - z) * percent / 100.0 + z;
+
+            string starname = starnameroot + percent.ToString("0");
+
+            return "{ " + TimeStamp() + "\"event\":\"FSDJump\", \"StarSystem\":\"" + starname +
+            "\", \"StarPos\":[" + x.ToString("0.000000") + ", " + y.ToString("0.000000") + ", " + z.ToString("0.000000") +
+            "], \"Allegiance\":\"\", \"Economy\":\"$economy_None;\", \"Economy_Localised\":\"None\", \"Government\":\"$government_None;\"," +
+            "\"Government_Localised\":\"None\", \"Security\":\"$SYSTEM_SECURITY_low;\", \"Security_Localised\":\"Low Security\"," +
+            "\"JumpDist\":10.791, \"FuelUsed\":0.790330, \"FuelLevel\":6.893371 }";
+        }
+
 
         public static string TimeStamp()
         {
