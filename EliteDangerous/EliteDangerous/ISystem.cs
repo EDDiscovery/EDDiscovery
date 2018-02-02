@@ -118,17 +118,17 @@ namespace EliteDangerousCore
 
     public interface ISystemBase : IEquatable<ISystemBase>
     {
-        long id { get; set; }
-        long id_edsm { get; set; }
+        long ID { get; set; }
+        long EDSMID { get; set; }
 
-        string name { get; set; }
-        double x { get; set; }
-        double y { get; set; }
-        double z { get; set; }
+        string Name { get; set; }
+        double X { get; set; }
+        double Y { get; set; }
+        double Z { get; set; }
         DateTime UpdateDate { get; set; }
         bool HasCoordinate { get; }
-        int gridid { get; set; }
-        int randomid { get; set; }
+        int GridID { get; set; }
+        int RandomID { get; set; }
         long? SystemAddress { get; set; }
 
         double Distance(ISystemBase other);
@@ -139,16 +139,16 @@ namespace EliteDangerousCore
     public interface ISystemEDDB
     {
 
-        long id_eddb { get; set; }
-        string faction { get; set; }
-        long population { get; set; }
-        EDGovernment government { get; set; }
-        EDAllegiance allegiance { get; set; }
-        EDState state { get; set; }
-        EDSecurity security { get; set; }
-        EDEconomy primary_economy { get; set; }
-        int needs_permit { get; set; }
-        int eddb_updated_at { get; set; }
+        long EDDBID { get; set; }
+        string Faction { get; set; }
+        long Population { get; set; }
+        EDGovernment Government { get; set; }
+        EDAllegiance Allegiance { get; set; }
+        EDState State { get; set; }
+        EDSecurity Security { get; set; }
+        EDEconomy PrimaryEconomy { get; set; }
+        int NeedsPermit { get; set; }
+        int EDDBUpdatedAt { get; set; }
         bool HasEDDBInformation { get; }
     }
 

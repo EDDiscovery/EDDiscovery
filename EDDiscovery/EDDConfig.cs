@@ -359,7 +359,7 @@ namespace EDDiscovery
             {
                 if (value != null && value.HasCoordinate)
                 {
-                    SQLiteDBClass.PutSettingString("DefaultMapCenter", value.name);
+                    SQLiteDBClass.PutSettingString("DefaultMapCenter", value.Name);
                     homeSystem = value;
                 }
             }

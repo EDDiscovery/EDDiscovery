@@ -162,10 +162,10 @@ namespace EDDiscovery.UserControls
                     {
                         double distance = cursys.Distance(closest.Item1);
 
-                        bottomline = String.Format("{0:N2}ly to WP{1} {2} @ {3},{4},{5}", distance, closest.Item2 + 1, closest.Item1.name,
-                            closest.Item1.x.ToString("0.#"), closest.Item1.y.ToString("0.#"), closest.Item1.z.ToString("0.#"));
+                        bottomline = String.Format("{0:N2}ly to WP{1} {2} @ {3},{4},{5}", distance, closest.Item2 + 1, closest.Item1.Name,
+                            closest.Item1.X.ToString("0.#"), closest.Item1.Y.ToString("0.#"), closest.Item1.Z.ToString("0.#"));
 
-                        name = closest.Item1.name;
+                        name = closest.Item1.Name;
                     }
                     else
                     {           // just know waypoint..

@@ -154,25 +154,25 @@ namespace EliteDangerousCore.EDSM
                         int previdx = -1;
                         foreach (HistoryEntry he in edsmlogs)      // find out list of ones not present
                         {
-                            int index = hlfsdlist.FindIndex(x => x.System.name.Equals(he.System.name, StringComparison.InvariantCultureIgnoreCase) && x.EventTimeUTC.Ticks == he.EventTimeUTC.Ticks);
+                            int index = hlfsdlist.FindIndex(x => x.System.Name.Equals(he.System.Name, StringComparison.InvariantCultureIgnoreCase) && x.EventTimeUTC.Ticks == he.EventTimeUTC.Ticks);
 
                             if (index < 0)
                             {
                                 // Look for any entries where DST may have thrown off the time
-                                foreach (var vi in hlfsdlist.Select((v, i) => new { v = v, i = i }).Where(vi => vi.v.System.name.Equals(he.System.name, StringComparison.InvariantCultureIgnoreCase)))
+                                foreach (var vi in hlfsdlist.Select((v, i) => new { v = v, i = i }).Where(vi => vi.v.System.Name.Equals(he.System.Name, StringComparison.InvariantCultureIgnoreCase)))
                                 {
                                     if (vi.i > previdx)
                                     {
                                         double hdiff = vi.v.EventTimeUTC.Subtract(he.EventTimeUTC).TotalHours;
                                         if (hdiff >= -2 && hdiff <= 2 && hdiff == Math.Floor(hdiff))
                                         {
-                                            if (vi.v.System.id_edsm <= 0)
+                                            if (vi.v.System.EDSMID <= 0)
                                             {
-                                                vi.v.System.id_edsm = 0;
+                                                vi.v.System.EDSMID = 0;
                                                 hl.FillEDSM(vi.v);
                                             }
 
-                                            if (vi.v.System.id_edsm <= 0 || vi.v.System.id_edsm == he.System.id_edsm)
+                                            if (vi.v.System.EDSMID <= 0 || vi.v.System.EDSMID == he.System.EDSMID)
                                             {
                                                 index = vi.i;
                                                 break;
@@ -216,13 +216,13 @@ namespace EliteDangerousCore.EDSM
                                 foreach (HistoryEntry he in toadd)
                                 {
                                     JObject jo = JournalEntry.CreateFSDJournalEntryJson(he.EventTimeUTC,
-                                                                                                      he.System.name, he.System.x, he.System.y, he.System.z,
+                                                                                                      he.System.Name, he.System.X, he.System.Y, he.System.Z,
                                                                                                       EliteConfigInstance.InstanceConfig.DefaultMapColour);
                                     JournalEntry je =
                                         JournalEntry.CreateFSDJournalEntry(tlu.id, tlu.CommanderId.Value,
-                                                                                                      (int)SyncFlags.EDSM, jo, he.System.id_edsm);
+                                                                                                      (int)SyncFlags.EDSM, jo, he.System.EDSMID);
 
-                                    System.Diagnostics.Trace.WriteLine(string.Format("Add {0} {1}", je.EventTimeUTC, he.System.name));
+                                    System.Diagnostics.Trace.WriteLine(string.Format("Add {0} {1}", je.EventTimeUTC, he.System.Name));
                                     je.Add(jo, cn);
                                 }
                             }

@@ -140,10 +140,10 @@ namespace EDDiscovery.UserControls
 
             foreach (HistoryEntry he in result)        // last first..
             {
-                if (!systemsentered.ContainsKey(he.System.name))
-                    systemsentered[he.System.name] = new List<HistoryEntry>();
+                if (!systemsentered.ContainsKey(he.System.Name))
+                    systemsentered[he.System.Name] = new List<HistoryEntry>();
 
-                systemsentered[he.System.name].Add(he);     // first entry is newest jump to, second is next last, etc
+                systemsentered[he.System.Name].Add(he);     // first entry is newest jump to, second is next last, etc
             }
 
             foreach( List<HistoryEntry> syslist in systemsentered.Values ) // will be in order of entry..
@@ -197,7 +197,7 @@ namespace EDDiscovery.UserControls
 
             HistoryEntry he = syslist[0];
 
-            object[] rowobj = { EDDiscoveryForm.EDDConfig.DisplayUTC ? he.EventTimeUTC : he.EventTimeLocal, he.System.name, syslist.Count.ToStringInvariant(), Infoline(syslist) };
+            object[] rowobj = { EDDiscoveryForm.EDDConfig.DisplayUTC ? he.EventTimeUTC : he.EventTimeLocal, he.System.Name, syslist.Count.ToStringInvariant(), Infoline(syslist) };
 
             int rownr;
             if (insert)
@@ -657,14 +657,14 @@ namespace EDDiscovery.UserControls
         {
             this.Cursor = Cursors.WaitCursor;
             EliteDangerousCore.EDSM.EDSMClass edsm = new EDSMClass();
-            long? id_edsm = rightclicksystem.System?.id_edsm;
+            long? id_edsm = rightclicksystem.System?.EDSMID;
 
             if (id_edsm <= 0)
             {
                 id_edsm = null;
             }
 
-            if (!edsm.ShowSystemInEDSM(rightclicksystem.System.name, id_edsm))
+            if (!edsm.ShowSystemInEDSM(rightclicksystem.System.Name, id_edsm))
                 ExtendedControls.MessageBoxTheme.Show(FindForm(), "System could not be found - has not been synched or EDSM is unavailable");
 
             this.Cursor = Cursors.Default;

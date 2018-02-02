@@ -136,12 +136,12 @@ namespace EDDiscovery.UserControls
                 if (eddmd_right != null && !Object.ReferenceEquals(eddmd_right, left))   // if got a comparision, and not the same data..
                 {
                     if ( checkBoxAutoSwap.Checked &&
-                        left.System.name.Equals(eddmd_right.System.name) &&     // if left system being displayed is same as right system
+                        left.System.Name.Equals(eddmd_right.System.Name) &&     // if left system being displayed is same as right system
                         left.WhereAmI.Equals(eddmd_right.WhereAmI) )            // that means we can autoswap comparisions around
                     {
                         System.Diagnostics.Debug.WriteLine("Arrived at last left station, repick " + current_displayed.WhereAmI + " as comparision");
 
-                        int index = comboboxentries.FindIndex(x => x.System.name.Equals(current_displayed.System.name) && x.WhereAmI.Equals(current_displayed.WhereAmI));
+                        int index = comboboxentries.FindIndex(x => x.System.Name.Equals(current_displayed.System.Name) && x.WhereAmI.Equals(current_displayed.WhereAmI));
                         if ( index >= 0 )       // if found it, swap to last instance of system
                         {
                             comboBoxCustomTo.Enabled = false;
@@ -153,7 +153,7 @@ namespace EDDiscovery.UserControls
 
                     }
 
-                    System.Diagnostics.Debug.WriteLine("Right " + eddmd_right.System.name + " " + eddmd_right.WhereAmI);
+                    System.Diagnostics.Debug.WriteLine("Right " + eddmd_right.System.Name + " " + eddmd_right.WhereAmI);
                     list = CCommodities.Merge(list, ((JournalCommodityPricesBase)eddmd_right.journalEntry).Commodities , eddmd_right.WhereAmI);
                 }
 
@@ -223,7 +223,7 @@ namespace EDDiscovery.UserControls
                 }
 
                 current_displayed = left;
-                labelLocation.Text = left.System.name + ":" + left.WhereAmI;
+                labelLocation.Text = left.System.Name + ":" + left.WhereAmI;
                 string r = "Recorded at " + ((EDDiscoveryForm.EDDConfig.DisplayUTC) ? left.EventTimeUTC.ToString() : left.EventTimeLocal.ToString());
                 toolTip.SetToolTip(labelLocation, r);
             }
@@ -267,7 +267,7 @@ namespace EDDiscovery.UserControls
             foreach (HistoryEntry h in hlcpb)
             {
                 comboboxentries.Add(h);
-                string v = h.System.name + ":" + h.WhereAmI + " on " + ((EDDiscoveryForm.EDDConfig.DisplayUTC) ? h.EventTimeUTC.ToString() : h.EventTimeLocal.ToString());
+                string v = h.System.Name + ":" + h.WhereAmI + " on " + ((EDDiscoveryForm.EDDConfig.DisplayUTC) ? h.EventTimeUTC.ToString() : h.EventTimeLocal.ToString());
                 comboBoxCustomFrom.Items.Add(v);
                 comboBoxCustomTo.Items.Add(v);
             }
