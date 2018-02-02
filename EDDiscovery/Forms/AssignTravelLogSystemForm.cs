@@ -46,17 +46,17 @@ namespace EDDiscovery.Forms
                     }
                     else if (LinkSystem.HasCoordinate)
                     {
-                        return $"{LinkSystem.name} ({LinkSystem.x:0.00},{LinkSystem.y:0.00},{LinkSystem.z:0.00}) #{LinkSystem.id_edsm}";
+                        return $"{LinkSystem.Name} ({LinkSystem.X:0.00},{LinkSystem.Y:0.00},{LinkSystem.Z:0.00}) #{LinkSystem.EDSMID}";
                     }
                     else
                     {
-                        return $"{LinkSystem.name} #{LinkSystem.id_edsm}";
+                        return $"{LinkSystem.Name} #{LinkSystem.EDSMID}";
                     }
                 }
             }
         }
 
-        public long AssignedEdsmId { get { return _linkSystem == null ? 0 : _linkSystem.id_edsm; } }
+        public long AssignedEdsmId { get { return _linkSystem == null ? 0 : _linkSystem.EDSMID; } }
         public ISystem AssignedSystem { get { return _linkSystem; } }
 
         private ISystem _linkSystem;
@@ -66,7 +66,7 @@ namespace EDDiscovery.Forms
         private List<SystemLink> _systemLinkList;
 
         public AssignTravelLogSystemForm(EliteDangerousCore.JournalEvents.JournalLocOrJump vsc)
-            : this(new SystemClass { name = vsc.StarSystem, x = vsc.HasCoordinate ? vsc.StarPos.X : Double.NaN, y = vsc.HasCoordinate ? vsc.StarPos.Y : Double.NaN, z = vsc.HasCoordinate ? vsc.StarPos.Z : Double.NaN, id_edsm = vsc.EdsmID, SystemAddress = vsc.SystemAddress }, vsc.EventTimeLocal)
+            : this(new SystemClass { Name = vsc.StarSystem, X = vsc.HasCoordinate ? vsc.StarPos.X : Double.NaN, Y = vsc.HasCoordinate ? vsc.StarPos.Y : Double.NaN, Z = vsc.HasCoordinate ? vsc.StarPos.Z : Double.NaN, EDSMID = vsc.EdsmID, SystemAddress = vsc.SystemAddress }, vsc.EventTimeLocal)
         {
         }
 
@@ -76,11 +76,11 @@ namespace EDDiscovery.Forms
             EliteDangerousCore.EDSM.SystemClassEDSM.CheckSystemAliases();
             SystemClassDB.GetSystemAndAlternatives(refsys, out _linkSystem, out _alternatives, out _namestatus);
 
-            this.tbLogSystemName.Text = refsys.name;
+            this.tbLogSystemName.Text = refsys.Name;
             this.tbVisitedDate.Text = visited == null ? "-" : visited.ToString();
-            this.tbLogCoordX.Text = refsys.HasCoordinate ? refsys.x.ToString("0.00") : "?";
-            this.tbLogCoordY.Text = refsys.HasCoordinate ? refsys.y.ToString("0.00") : "?";
-            this.tbLogCoordZ.Text = refsys.HasCoordinate ? refsys.z.ToString("0.00") : "?";
+            this.tbLogCoordX.Text = refsys.HasCoordinate ? refsys.X.ToString("0.00") : "?";
+            this.tbLogCoordY.Text = refsys.HasCoordinate ? refsys.Y.ToString("0.00") : "?";
+            this.tbLogCoordZ.Text = refsys.HasCoordinate ? refsys.Z.ToString("0.00") : "?";
             this.tbLogCoordX.TextAlign = refsys.HasCoordinate ? HorizontalAlignment.Right : HorizontalAlignment.Center;
             this.tbLogCoordY.TextAlign = refsys.HasCoordinate ? HorizontalAlignment.Right : HorizontalAlignment.Center;
             this.tbLogCoordZ.TextAlign = refsys.HasCoordinate ? HorizontalAlignment.Right : HorizontalAlignment.Center;
@@ -105,9 +105,9 @@ namespace EDDiscovery.Forms
             {
                 foreach (var sys in _alternatives)
                 {
-                    var syslink = new SystemLink { Name = sys.name, Id = sys.id, EdsmId = sys.id_edsm, LinkSystem = sys };
+                    var syslink = new SystemLink { Name = sys.Name, Id = sys.ID, EdsmId = sys.EDSMID, LinkSystem = sys };
                     _systemLinkList.Add(syslink);
-                    _systemLinks[sys.id] = syslink;
+                    _systemLinks[sys.ID] = syslink;
                 }
             }
 
@@ -115,18 +115,18 @@ namespace EDDiscovery.Forms
             {
                 foreach (var sys in othersystems)
                 {
-                    if (!_systemLinks.ContainsKey(sys.id))
+                    if (!_systemLinks.ContainsKey(sys.ID))
                     {
                         var syslink = new SystemLink
                         {
-                            Name = sys.name,
-                            Id = sys.id,
-                            EdsmId = sys.id_edsm,
+                            Name = sys.Name,
+                            Id = sys.ID,
+                            EdsmId = sys.EDSMID,
                             LinkSystem = sys
                         };
 
                         _systemLinkList.Add(syslink);
-                        _systemLinks[sys.id] = syslink;
+                        _systemLinks[sys.ID] = syslink;
                     }
                 }
             }
@@ -136,9 +136,9 @@ namespace EDDiscovery.Forms
             this.cbSystemLink.DataSource = _systemLinkList;
             this.cbSystemLink.Refresh();
 
-            if (focus != null && _systemLinks.ContainsKey(focus.id))
+            if (focus != null && _systemLinks.ContainsKey(focus.ID))
             {
-                this.cbSystemLink.SelectedItem = _systemLinks[focus.id];
+                this.cbSystemLink.SelectedItem = _systemLinks[focus.ID];
                 UpdateLinkedSystem();
             }
         }
@@ -150,7 +150,7 @@ namespace EDDiscovery.Forms
 
             if (selectedItem.LinkSystem != null)
             {
-                lblEDSMLink.Text = selectedItem.LinkSystem.name;
+                lblEDSMLink.Text = selectedItem.LinkSystem.Name;
             }
             else
             {
@@ -159,9 +159,9 @@ namespace EDDiscovery.Forms
 
             if (selectedItem.LinkSystem != null && selectedItem.LinkSystem.HasCoordinate)
             {
-                tbSysCoordX.Text = selectedItem.LinkSystem.x.ToString("0.000");
-                tbSysCoordY.Text = selectedItem.LinkSystem.y.ToString("0.000");
-                tbSysCoordZ.Text = selectedItem.LinkSystem.z.ToString("0.000");
+                tbSysCoordX.Text = selectedItem.LinkSystem.X.ToString("0.000");
+                tbSysCoordY.Text = selectedItem.LinkSystem.Y.ToString("0.000");
+                tbSysCoordZ.Text = selectedItem.LinkSystem.Z.ToString("0.000");
                 tbSysCoordX.TextAlign = HorizontalAlignment.Right;
                 tbSysCoordY.TextAlign = HorizontalAlignment.Right;
                 tbSysCoordZ.TextAlign = HorizontalAlignment.Right;
@@ -199,7 +199,7 @@ namespace EDDiscovery.Forms
             if (_linkSystem != null)
             {
                 var edsm = new EliteDangerousCore.EDSM.EDSMClass();
-                string url = edsm.GetUrlToEDSMSystem(_linkSystem.name, _linkSystem.id_edsm);
+                string url = edsm.GetUrlToEDSMSystem(_linkSystem.Name, _linkSystem.EDSMID);
                 System.Diagnostics.Process.Start(url);
             }
         }

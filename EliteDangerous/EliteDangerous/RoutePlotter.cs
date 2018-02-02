@@ -80,11 +80,11 @@ namespace EliteDangerousCore
 
                 if (bestsystem != null)
                 {
-                    Point3D bestposition = new Point3D(bestsystem.x, bestsystem.y, bestsystem.z);
+                    Point3D bestposition = new Point3D(bestsystem.X, bestsystem.Y, bestsystem.Z);
                     deltafromwaypoint = Point3D.DistanceBetween(bestposition, nextpos);     // how much in error
                     deviation = Point3D.DistanceBetween(curpos.InterceptPoint(nextpos, bestposition), bestposition);
                     nextpos = bestposition;
-                    sysname = bestsystem.name;
+                    sysname = bestsystem.Name;
                     routeSystems.Add(bestsystem);
                 }
 

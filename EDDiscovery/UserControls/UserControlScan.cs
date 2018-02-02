@@ -155,7 +155,7 @@ namespace EDDiscovery.UserControls
 
             StarScan.SystemNode last_sn = discoveryform.history.starscan.FindSystem(last_he.System, checkBoxEDSM.Checked);
 
-            SetControlText((last_sn == null) ? "No Scan" : last_sn.system.name);
+            SetControlText((last_sn == null) ? "No Scan" : last_sn.system.Name);
 
             if (last_sn != null)     // 
             {

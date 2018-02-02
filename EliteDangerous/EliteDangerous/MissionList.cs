@@ -31,7 +31,7 @@ namespace EliteDangerousCore
         public bool InProgress { get { return (State == StateTypes.InProgress || State == StateTypes.Redirected); } }
         public bool InProgressDateTime(DateTime compare) { return InProgress && DateTime.Compare(compare, Mission.Expiry)<0; }
 
-        public string OriginatingSystem { get { return sys.name; } }
+        public string OriginatingSystem { get { return sys.Name; } }
         public string OriginatingStation { get { return body; } }
 
         public ISystem sys;                                         // where it was found

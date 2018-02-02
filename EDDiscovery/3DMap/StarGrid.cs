@@ -109,7 +109,7 @@ namespace EDDiscovery
             {                                                               // all vs stars which are not in edsm and have co-ords.
                 if (vs.IsLocOrJump && vs.System.status != SystemStatusEnum.EDSM && vs.System.HasCoordinate )
                 {
-                    Vector3 ent = new Vector3((float)vs.System.x, (float)vs.System.y, (float)vs.System.z);
+                    Vector3 ent = new Vector3((float)vs.System.X, (float)vs.System.Y, (float)vs.System.Z);
                     if (!ents.Contains(ent))
                     {
                         carray[total] = cx;

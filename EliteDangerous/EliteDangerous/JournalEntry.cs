@@ -601,7 +601,7 @@ namespace EliteDangerousCore
                 {
                     if (jsonpos)
                     {
-                        jo["StarPos"] = new JArray() { system.x, system.y, system.z };
+                        jo["StarPos"] = new JArray() { system.X, system.Y, system.Z };
                         jo["StarPosFromEDSM"] = true;
                     }
 
@@ -614,15 +614,15 @@ namespace EliteDangerousCore
                         {
                             cmd2.CommandText = "Update JournalEntries set EventData = @EventData, EdsmId = @EdsmId where ID = @ID";
                             cmd2.AddParameterWithValue("@EventData", jo.ToString());
-                            System.Diagnostics.Trace.WriteLine(string.Format("Update journal ID {0} with pos/edsmid {1} dist {2}", journalid, system.id_edsm, dist));
+                            System.Diagnostics.Trace.WriteLine(string.Format("Update journal ID {0} with pos/edsmid {1} dist {2}", journalid, system.EDSMID, dist));
                         }
                         else
                         {
-                            System.Diagnostics.Trace.WriteLine(string.Format("Update journal ID {0} with edsmid {1}", journalid, system.id_edsm));
+                            System.Diagnostics.Trace.WriteLine(string.Format("Update journal ID {0} with edsmid {1}", journalid, system.EDSMID));
                         }
 
                         cmd2.AddParameterWithValue("@ID", journalid);
-                        cmd2.AddParameterWithValue("@EdsmId", system.id_edsm);
+                        cmd2.AddParameterWithValue("@EdsmId", system.EDSMID);
 
                         cmd2.ExecuteNonQuery();
                     }

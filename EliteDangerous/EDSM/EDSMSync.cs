@@ -123,7 +123,7 @@ namespace EliteDangerousCore.EDSM
                             return;
                         }
 
-                        HistoryEntry ps2 = (from c in edsmsystemlog where c.System.name == he.System.name && c.EventTimeUTC.Ticks == he.EventTimeUTC.Ticks select c).FirstOrDefault();
+                        HistoryEntry ps2 = (from c in edsmsystemlog where c.System.Name == he.System.Name && c.EventTimeUTC.Ticks == he.EventTimeUTC.Ticks select c).FirstOrDefault();
 
                         if (ps2 != null)                // it did, just make sure EDSM sync flag is set..
                         {
@@ -136,11 +136,11 @@ namespace EliteDangerousCore.EDSM
                             bool firstdiscover;
                             int edsmid;
 
-                            if (edsm.SendTravelLog(he.System.name, he.EventTimeUTC, he.System.HasCoordinate && !he.IsStarPosFromEDSM, he.System.x, he.System.y, he.System.z, out errmsg, out errno, out firstdiscover, out edsmid))
+                            if (edsm.SendTravelLog(he.System.Name, he.EventTimeUTC, he.System.HasCoordinate && !he.IsStarPosFromEDSM, he.System.X, he.System.Y, he.System.Z, out errmsg, out errno, out firstdiscover, out edsmid))
                             {
-                                if (edsmid != 0 && he.System.id_edsm <= 0)
+                                if (edsmid != 0 && he.System.EDSMID <= 0)
                                 {
-                                    he.System.id_edsm = edsmid;
+                                    he.System.EDSMID = edsmid;
                                     JournalEntry.UpdateEDSMIDPosJump(he.Journalid, he.System, false, -1);
                                 }
 
@@ -244,11 +244,11 @@ namespace EliteDangerousCore.EDSM
             int edsmid;
             Task taskEDSM = Task.Factory.StartNew(() =>
             {                                                   // LOCAL time, there is a UTC converter inside this call
-                if (edsm.SendTravelLog(he.System.name, he.EventTimeUTC, he.System.HasCoordinate, he.System.x, he.System.y, he.System.z, out errmsg, out errno, out firstdiscover, out edsmid))
+                if (edsm.SendTravelLog(he.System.Name, he.EventTimeUTC, he.System.HasCoordinate, he.System.X, he.System.Y, he.System.Z, out errmsg, out errno, out firstdiscover, out edsmid))
                 {
-                    if (edsmid != 0 && he.System.id_edsm <= 0)
+                    if (edsmid != 0 && he.System.EDSMID <= 0)
                     {
-                        he.System.id_edsm = edsmid;
+                        he.System.EDSMID = edsmid;
                         JournalEntry.UpdateEDSMIDPosJump(he.Journalid, he.System, false, -1);
                     }
 

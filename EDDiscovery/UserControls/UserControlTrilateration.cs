@@ -154,7 +154,7 @@ namespace EDDiscovery.UserControls
                     var enteredSystems = GetEnteredSystems();
                     if (cell.Value != null)
                     {
-                        enteredSystems.RemoveAll(s => s.name == cell.Value.ToString());
+                        enteredSystems.RemoveAll(s => s.Name == cell.Value.ToString());
                     }
 
                     if (system == null || (enteredSystems.Contains(system)))
@@ -210,12 +210,12 @@ namespace EDDiscovery.UserControls
 
                 if (enteredSystems.Count > e.RowIndex)  //don't do the below if we're entering something that's not in enteredSystems yet (we need to set cell.tag lower down the first time through here)
                 {
-                    if (value.Equals(enteredSystems[e.RowIndex].name)) // If we change a row to same value as before dont do anything from doubleclick or pastinf same new for example
+                    if (value.Equals(enteredSystems[e.RowIndex].Name)) // If we change a row to same value as before dont do anything from doubleclick or pastinf same new for example
                     {
                         return;
                     }
                 }
-                if (enteredSystems.Where(es => es.name == value).Count() > 0)
+                if (enteredSystems.Where(es => es.Name == value).Count() > 0)
                 {
                     LogTextHighlight("Duplicate system entry is not allowed" + Environment.NewLine);
                     this.BeginInvoke(new MethodInvoker(() =>
@@ -387,12 +387,12 @@ namespace EDDiscovery.UserControls
             {
                 HistoryEntry he = discoveryform.history.GetLastFSD;
 
-                if (he != null && !he.System.name.Equals(targetsystem.name, StringComparison.OrdinalIgnoreCase))
+                if (he != null && !he.System.Name.Equals(targetsystem.Name, StringComparison.OrdinalIgnoreCase))
                 {
-                    string question1 = $"You are about to submit distances from {targetsystem.name}.\nThe most recent known location in your history is {he.System.name}.\nSubmit distances without changing 'From' system?";
+                    string question1 = $"You are about to submit distances from {targetsystem.Name}.\nThe most recent known location in your history is {he.System.Name}.\nSubmit distances without changing 'From' system?";
                     if (!Query(question1))
                     {
-                        string question2 = $"Update 'From' system to current position ({he.System.name}) and submit entered distances?";
+                        string question2 = $"Update 'From' system to current position ({he.System.Name}) and submit entered distances?";
                         if (Query(question2))
                         {
                             targetsystem = he.System;
@@ -697,7 +697,7 @@ namespace EDDiscovery.UserControls
                     for (int j = i; j < i + 20 && j < distances.Count; j++)
                         dists[distlist[j].Key] = distlist[j].Value;
 
-                    var responseM = edsm.SubmitDistances(edsm.commanderName, targetsystem.name, dists);
+                    var responseM = edsm.SubmitDistances(edsm.commanderName, targetsystem.Name, dists);
 
                     Console.WriteLine(responseM);
 
@@ -803,7 +803,7 @@ namespace EDDiscovery.UserControls
             if (targetsystem == null)
                 return;
 
-            toolStripTextBoxSystem.Text = targetsystem.name;
+            toolStripTextBoxSystem.Text = targetsystem.Name;
         }
 
         private List<ISystem> GetEnteredSystems()
@@ -845,9 +845,9 @@ namespace EDDiscovery.UserControls
          * Performs some additional setup such as clearing data and setting the status. */
         private void newSystemAdded(DataGridViewCell cell, ISystem system)
         {
-            if (!cell.Value.Equals(system.name))            // if cell value is not the same as system name
+            if (!cell.Value.Equals(system.Name))            // if cell value is not the same as system name
             {
-                cell.Value = system.name;
+                cell.Value = system.Name;
             }
             cell.Tag = system;
             // reset any calculated distances
@@ -855,7 +855,7 @@ namespace EDDiscovery.UserControls
             // (re)set status
             if (system.HasCoordinate)
             {
-                dataGridViewDistances[3, cell.RowIndex].Value = "Pos: " + system.x.ToString() + ";" + "Pos: " + system.y.ToString() + ";" + "Pos: " + system.z.ToString();
+                dataGridViewDistances[3, cell.RowIndex].Value = "Pos: " + system.X.ToString() + ";" + "Pos: " + system.Y.ToString() + ";" + "Pos: " + system.Z.ToString();
             }
             else
             {
@@ -925,14 +925,14 @@ namespace EDDiscovery.UserControls
             {
                 var cell = dataGridViewDistances[0, i];
                 ISystem s2 = cell.Tag as ISystem;
-                if (s2 != null && s2.name.Equals(system.name, StringComparison.OrdinalIgnoreCase))
+                if (s2 != null && s2.Name.Equals(system.Name, StringComparison.OrdinalIgnoreCase))
                 {
                     return;
                 }
                 /* Should we fall-back on comparing cell.Value if call.Tag is null? */
             }
 
-            var index = dataGridViewDistances.Rows.Add(system.name);
+            var index = dataGridViewDistances.Rows.Add(system.Name);
             newSystemAdded(dataGridViewDistances[0, index], system);
         }
 

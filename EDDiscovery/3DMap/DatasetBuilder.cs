@@ -124,7 +124,7 @@ namespace EDDiscovery._3DMap
             {
                 foreach (HistoryEntry vs in syslists.Where(s => s.IsLocOrJump))
                 {
-                    SystemNoteClass notecs = SystemNoteClass.GetNoteOnSystem(vs.System.name, vs.System.id_edsm);
+                    SystemNoteClass notecs = SystemNoteClass.GetNoteOnSystem(vs.System.Name, vs.System.EDSMID);
 
                     if (notecs != null)         // if we have a note..
                     {
@@ -132,7 +132,7 @@ namespace EDDiscovery._3DMap
 
                         if (note.Length > 0)
                         {
-                            PointData pd = new PointData(vs.System.x, vs.System.y, vs.System.z);
+                            PointData pd = new PointData(vs.System.X, vs.System.Y, vs.System.Z);
 
                             Bitmap touse = (notecs.id == bookmarknoted) ? maptarget : map;
                             TexturedQuadData newtexture = TexturedQuadData.FromBitmap(touse, pd, rotation, widthly, heightly, 0, heightly / 2);
@@ -164,7 +164,7 @@ namespace EDDiscovery._3DMap
                     if ( (int)tqd.Tag2 == 1)
                     {
                         HistoryEntry vs = (HistoryEntry)tqd.Tag;
-                        pd = new PointData(vs.System.x, vs.System.y, vs.System.z);
+                        pd = new PointData(vs.System.X, vs.System.Y, vs.System.Z);
                     }
                     else
                     {
@@ -713,11 +713,11 @@ namespace EDDiscovery._3DMap
                                 if (c.GetBrightness() < 0.05)                                        // and ensure it shows
                                     c = Color.Red;
 
-                                datasetl.Add(new LineData(sp.System.x, sp.System.y, sp.System.z,
+                                datasetl.Add(new LineData(sp.System.X, sp.System.Y, sp.System.Z,
                                                     lastpos.Value.X, lastpos.Value.Y , lastpos.Value.Z, c));
                             }
 
-                            lastpos = new Vector3d(sp.System.x, sp.System.y, sp.System.z);
+                            lastpos = new Vector3d(sp.System.X, sp.System.Y, sp.System.Z);
                         }
                     }
 
@@ -736,7 +736,7 @@ namespace EDDiscovery._3DMap
                             if (c.GetBrightness() < 0.05)                                        // and ensure it shows
                                 c = Color.Red;
 
-                            datasetp.Add(new PointData(vs.System.x, vs.System.y, vs.System.z, c));
+                            datasetp.Add(new PointData(vs.System.X, vs.System.Y, vs.System.Z, c));
                         }
                     }
 
@@ -755,7 +755,7 @@ namespace EDDiscovery._3DMap
                 ISystem prevSystem = PlannedRoute.First();
                 foreach (ISystem point in PlannedRoute.Skip(1))
                 {
-                    routeLines.Add(new LineData(prevSystem.x, prevSystem.y, prevSystem.z, point.x, point.y, point.z));
+                    routeLines.Add(new LineData(prevSystem.X, prevSystem.Y, prevSystem.Z, point.X, point.Y, point.Z));
                     prevSystem = point;
                 }
                 _datasets.Add(routeLines);
@@ -774,7 +774,7 @@ namespace EDDiscovery._3DMap
             if (centersystem != null)
             {
                 var dataset = Data3DSetClass<PointData>.Create("Center", CentredSystem, 5.0f);
-                dataset.Add(new PointData(centersystem.x, centersystem.y, centersystem.z));
+                dataset.Add(new PointData(centersystem.X, centersystem.Y, centersystem.Z));
                 _datasets.Add(dataset);
             }
 
@@ -782,7 +782,7 @@ namespace EDDiscovery._3DMap
             {
                 var datasetbks = Data3DSetClass<TexturedQuadData>.Create("selstar", Color.White, 1f);
 
-                TexturedQuadData newtexture = TexturedQuadData.FromBitmap(selmark, new PointData(selectedsystem.x,selectedsystem.y,selectedsystem.z), rotation, widthly, heightly/2, 0, heightly/4+heightly/16);
+                TexturedQuadData newtexture = TexturedQuadData.FromBitmap(selmark, new PointData(selectedsystem.X,selectedsystem.Y,selectedsystem.Z), rotation, widthly, heightly/2, 0, heightly/4+heightly/16);
                 newtexture.Tag = 0;
                 datasetbks.Add(newtexture);
                 _datasets.Add(datasetbks);
@@ -821,7 +821,7 @@ namespace EDDiscovery._3DMap
                         int id = (int)tqd.Tag;
 
                         if (id == 0)
-                            tqd.UpdateVertices(new PointData(selectedsystem.x, selectedsystem.y, selectedsystem.z), rotation, widthly, heightly / 2, 0, heightly / 4 + heightly / 16);
+                            tqd.UpdateVertices(new PointData(selectedsystem.X, selectedsystem.Y, selectedsystem.Z), rotation, widthly, heightly / 2, 0, heightly / 4 + heightly / 16);
                         else if (selectedgmo.points.Count > 0)
                         {
                             long gmotarget = TargetClass.GetTargetGMO();

@@ -375,14 +375,14 @@ namespace EDDiscovery.UserControls
         {
             this.Cursor = Cursors.WaitCursor;
             EDSMClass edsm = new EDSMClass();
-            long? id_edsm = rightclicksystem.System?.id_edsm;
+            long? id_edsm = rightclicksystem.System?.EDSMID;
 
             if (id_edsm == 0)
             {
                 id_edsm = null;
             }
 
-            if (!edsm.ShowSystemInEDSM(rightclicksystem.System.name, id_edsm))
+            if (!edsm.ShowSystemInEDSM(rightclicksystem.System.Name, id_edsm))
                 ExtendedControls.MessageBoxTheme.Show(this.FindForm(), "System could not be found - has not been synched or EDSM is unavailable");
 
             this.Cursor = Cursors.Default;

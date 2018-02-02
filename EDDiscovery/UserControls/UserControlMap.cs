@@ -110,17 +110,17 @@ namespace EDDiscovery.UserControls
                 MinRadius = float.Parse(textMinRadius.Text);
 
             System.Diagnostics.Debug.Assert(Application.MessageLoop);       // check!
-            discoveryform.history.CalculateSqDistances(list, sys.x, sys.y, sys.z, maxitems, MinRadius, MaxRadius , true);
+            discoveryform.history.CalculateSqDistances(list, sys.X, sys.Y, sys.Z, maxitems, MinRadius, MaxRadius , true);
             FillRadar(list, sys);
         }
         
         private void FillRadar(BaseUtils.SortedListDoubleDuplicate<ISystem> csl, ISystem centerSystem)
         {   
-            SetControlText("3D Map of closest systems from " + centerSystem.name);
+            SetControlText("3D Map of closest systems from " + centerSystem.Name);
 
             // Add the current system
             chart3DPlot.Series[50].Points.AddXY(0, 0); 
-            chart3DPlot.Series[50].ToolTip = centerSystem.name;
+            chart3DPlot.Series[50].ToolTip = centerSystem.Name;
 
             if (csl.Count() > 0)
             {
@@ -129,13 +129,13 @@ namespace EDDiscovery.UserControls
                     if (tvp.Value != centerSystem)
                     { 
                     var theISystemInQuestion = tvp.Value;
-                    var sysX = theISystemInQuestion.x;
-                    var sysY = theISystemInQuestion.y;
-                    var sysZ = theISystemInQuestion.z;
+                    var sysX = theISystemInQuestion.X;
+                    var sysY = theISystemInQuestion.Y;
+                    var sysZ = theISystemInQuestion.Z;
                     var distFromCurrentSys = Math.Round(Math.Sqrt(tvp.Key), 2, MidpointRounding.AwayFromZero);
-                    var curX = centerSystem.x;
-                    var curY = centerSystem.y;
-                    var curZ = centerSystem.z;
+                    var curX = centerSystem.X;
+                    var curY = centerSystem.Y;
+                    var curZ = centerSystem.Z;
 
                         // reset charts axis
                         chart3DPlot.ChartAreas[0].AxisY.IsStartedFromZero = false;
@@ -158,10 +158,10 @@ namespace EDDiscovery.UserControls
                         
                         if (distFromCurrentSys > MinRadius) // we want to be able to define a shell 
                         {
-                            int visits = discoveryform.history.GetVisitsCount(tvp.Value.name, tvp.Value.id_edsm);
+                            int visits = discoveryform.history.GetVisitsCount(tvp.Value.Name, tvp.Value.EDSMID);
 
                             StringBuilder label = new StringBuilder();
-                            label.Append(theISystemInQuestion.name + " / " + visits + " visits" + "\n" + distFromCurrentSys);
+                            label.Append(theISystemInQuestion.Name + " / " + visits + " visits" + "\n" + distFromCurrentSys);
 
                             // calculate distance for each axis; this provide a cubical distribution
                             double dx = curX - sysX;
