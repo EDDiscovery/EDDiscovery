@@ -76,6 +76,7 @@ namespace EliteDangerousCore.EDSM
         {
             Trace.WriteLine($"EDSM Thread logs start");
             bool jupdate = false;
+            DateTime lastCommentFetch = DateTime.MinValue;
 
             int waittime = 2000; // Max 1 request every 2 seconds, with a backoff if the rate limit is hit
             if (EDSMRequestBackoffTime > DateTime.UtcNow)
@@ -90,6 +91,12 @@ namespace EliteDangerousCore.EDSM
                 DateTime logstarttime = DateTime.MinValue;
                 DateTime logendtime = DateTime.MinValue;
                 int res = -1;
+
+                if (edsm.IsApiKeySet && DateTime.UtcNow > lastCommentFetch.AddHours(1))
+                {
+                    edsm.GetComments(l => Trace.WriteLine(l));
+                    lastCommentFetch = DateTime.UtcNow;
+                }
 
                 if (edsm.IsApiKeySet && Commander.SyncFromEdsm && DateTime.UtcNow > EDSMRequestBackoffTime)
                 {
