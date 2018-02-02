@@ -354,8 +354,7 @@ namespace EliteDangerousCore.DB
                     "CREATE TABLE SystemNames_temp (" +
                         "Id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, " +
                         "Name TEXT NOT NULL COLLATE NOCASE, " +
-                        "EdsmId INTEGER NOT NULL," +
-                        "GridId INTEGER NOT NULL DEFAULT -1)");
+                        "EdsmId INTEGER NOT NULL )");
 
                 ExecuteQuery(conn,
                     "CREATE TABLE EdsmSystems_temp (" +
