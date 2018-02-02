@@ -1544,7 +1544,7 @@ namespace EDDiscovery
         {
             EDSMClass edsm = new EDSMClass();
 
-            if (!edsm.IsApiKeySet)
+            if (!edsm.ValidCredentials)
             {
                 ExtendedControls.MessageBoxTheme.Show(this, "Please ensure a commander is selected and it has a EDSM API key set");
                 return;
@@ -1552,7 +1552,7 @@ namespace EDDiscovery
 
             try
             {
-                EDSMJournalSync.SendEDSMEvents(l => LogLine(l), history, verbose: false, manual: true);
+                EDSMJournalSync.SendEDSMEvents(l => LogLine(l), history, manual: true);
             }
             catch (Exception ex)
             {

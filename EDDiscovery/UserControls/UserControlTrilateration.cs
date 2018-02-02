@@ -31,7 +31,6 @@ namespace EDDiscovery.UserControls
     public partial class UserControlTrilateration : UserControlCommonBase
     {
         private ISystem targetsystem;
-        private EDSMClass edsm;
         private List<WantedSystemClass> wanted;
         private List<string> pushed;
 
@@ -51,9 +50,6 @@ namespace EDDiscovery.UserControls
         {
             ColumnSystem.AutoCompleteGenerator = SystemClassDB.ReturnOnlySystemsListForAutoComplete;
             FreezeTrilaterationUI();
-            edsm = new EDSMClass();
-            edsm.apiKey = EDCommander.Current.APIKey;
-            edsm.commanderName = EDCommander.Current.EdsmName;
             toolStripTextBoxSystem.Text = "Press Start New";
 
             discoveryform.OnNewStarsForTrilat += Discoveryform_OnNewStarsForTrilat;
@@ -570,6 +566,7 @@ namespace EDDiscovery.UserControls
             }
             if (edsmCheckNames.Count() > 0)
             {
+                EDSMClass edsm = new EDSMClass();
                 List<string> nowKnown = edsm.CheckForNewCoordinates(edsmCheckNames);
                 foreach (string s in nowKnown)
                 {
@@ -645,24 +642,18 @@ namespace EDDiscovery.UserControls
         {
             try
             {
-                edsm.apiKey = EDCommander.Current.APIKey;
-                edsm.commanderName = EDCommander.Current.EdsmName;
+                EDSMClass edsm = new EDSMClass();       // current commander credentials
 
-                if (string.IsNullOrEmpty(edsm.commanderName))
+                if (!edsm.ValidCredentials)
                 {
-                    string commanderName = EDCommander.Current.EdsmName;
-
-                    if (string.IsNullOrEmpty(commanderName))
+                    this.BeginInvoke(new MethodInvoker(() =>
                     {
-                        this.BeginInvoke(new MethodInvoker(() =>
-                        {
-                            ExtendedControls.MessageBoxTheme.Show(FindForm(), "Please enter commander name before submitting the system!");
-                            UnfreezeTrilaterationUI();
-                        }));
-                        return;
-                    }
-                    edsm.commanderName = commanderName;
+                        ExtendedControls.MessageBoxTheme.Show(FindForm(), "Please enter commander name before submitting the system!");
+                        UnfreezeTrilaterationUI();
+                    }));
+                    return;
                 }
+
                 var distances = new Dictionary<string, double>();
                 for (int i = 0, count = dataGridViewDistances.Rows.Count - 1; i < count; i++)
                 {
@@ -697,7 +688,7 @@ namespace EDDiscovery.UserControls
                     for (int j = i; j < i + 20 && j < distances.Count; j++)
                         dists[distlist[j].Key] = distlist[j].Value;
 
-                    var responseM = edsm.SubmitDistances(edsm.commanderName, targetsystem.Name, dists);
+                    var responseM = edsm.SubmitDistances(targetsystem.Name, dists);
 
                     Console.WriteLine(responseM);
 
@@ -829,6 +820,7 @@ namespace EDDiscovery.UserControls
 
             if (system == null)
             {
+                EDSMClass edsm = new EDSMClass();
                 if (fromEDSM || edsm.IsKnownSystem(systemName))
                 {
                     system = new SystemClass(systemName);
@@ -892,6 +884,7 @@ namespace EDDiscovery.UserControls
         {
             try
             {
+                EDSMClass edsm = new EDSMClass();
                 pushed = edsm.GetPushedSystems();
 
                 foreach (String system in pushed)

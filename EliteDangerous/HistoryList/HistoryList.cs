@@ -959,14 +959,9 @@ namespace EliteDangerousCore
             {
                 var commander = EDCommander.GetCommander(CommanderId);
 
-                string edsmname = commander.Name;
-                if (!string.IsNullOrEmpty(commander.EdsmName))
-                    edsmname = commander.EdsmName;
-
-                if (!commander.SyncToEdsm || string.IsNullOrEmpty(commander.APIKey) || string.IsNullOrEmpty(edsmname))
+                EDSMClass edsm = new EDSMClass(commander);
+                if (!commander.SyncToEdsm || !edsm.ValidCredentials)
                     return;
-
-                EDSMClass edsm = new EDSMClass { apiKey = commander.APIKey, commanderName = edsmname };
 
                 // find last ship info currently
                 HistoryEntry lastshipinfocurrenthe = GetLastHistoryEntry(x => x.ShipInformation != null && x.ShipInformation.SubVehicle == ShipInformation.SubVehicleType.None);

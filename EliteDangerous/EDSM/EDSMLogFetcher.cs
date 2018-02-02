@@ -86,19 +86,19 @@ namespace EliteDangerousCore.EDSM
 
             while (!ExitRequested.WaitOne(waittime))
             {
-                EDSMClass edsm = new EDSMClass { apiKey = Commander.APIKey, commanderName = Commander.EdsmName };
+                EDSMClass edsm = new EDSMClass(Commander); 
                 List<HistoryEntry> edsmlogs = null;
                 DateTime logstarttime = DateTime.MinValue;
                 DateTime logendtime = DateTime.MinValue;
                 int res = -1;
 
-                if (edsm.IsApiKeySet && DateTime.UtcNow > lastCommentFetch.AddHours(1))
+                if (edsm.ValidCredentials && DateTime.UtcNow > lastCommentFetch.AddHours(1))
                 {
                     edsm.GetComments(l => Trace.WriteLine(l));
                     lastCommentFetch = DateTime.UtcNow;
                 }
 
-                if (edsm.IsApiKeySet && Commander.SyncFromEdsm && DateTime.UtcNow > EDSMRequestBackoffTime)
+                if (edsm.ValidCredentials && Commander.SyncFromEdsm && DateTime.UtcNow > EDSMRequestBackoffTime)
                 {
                     if (DateTime.UtcNow.Subtract(LastEventTime).TotalMinutes >= EDSMMaxLogAgeMinutes)
                     {

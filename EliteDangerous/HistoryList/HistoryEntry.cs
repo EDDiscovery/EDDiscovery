@@ -24,7 +24,7 @@ using System.Data.Common;
 
 namespace EliteDangerousCore
 {
-    [DebuggerDisplay("Event {EntryType} {System.name} ({System.x,nq},{System.y,nq},{System.z,nq}) {EventTimeUTC} JID:{Journalid}")]
+    [DebuggerDisplay("Event {EntryType} {System.Name} ({System.X,nq},{System.Y,nq},{System.Z,nq}) {EventTimeUTC} JID:{Journalid}")]
     public class HistoryEntry           // DONT store commander ID.. this history is externally filtered on it.
     {
         #region Variables
