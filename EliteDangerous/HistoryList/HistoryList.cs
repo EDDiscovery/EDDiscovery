@@ -493,15 +493,51 @@ namespace EliteDangerousCore
 
             if (edsmsys != null)
             {
+                ISystem oldsys = syspos.System;
+
+                bool updateedsmid = oldsys.EDSMID <= 0 && edsmsys.EDSMID > 0;
+                bool updatesyspos = !oldsys.HasCoordinate && edsmsys.HasCoordinate;
+                bool updatename = oldsys.HasCoordinate && edsmsys.HasCoordinate &&
+                                  oldsys.Distance(edsmsys) < 0.1 &&
+                                  !String.Equals(edsmsys.Name, oldsys.Name, StringComparison.InvariantCultureIgnoreCase) &&
+                                  edsmsys.UpdateDate > syspos.EventTimeUTC;
+
+                ISystem newsys = new SystemClass
+                {
+                    Name = updatename ? edsmsys.Name : oldsys.Name,
+                    X = updatesyspos ? edsmsys.X : oldsys.X,
+                    Y = updatesyspos ? edsmsys.Y : oldsys.Y,
+                    Z = updatesyspos ? edsmsys.Z : oldsys.Z,
+                    EDSMID = updateedsmid ? edsmsys.EDSMID : oldsys.EDSMID,
+                    SystemAddress = oldsys.SystemAddress ?? edsmsys.SystemAddress,
+                    Allegiance = oldsys.Allegiance == EDAllegiance.Unknown ? edsmsys.Allegiance : oldsys.Allegiance,
+                    Government = oldsys.Government == EDGovernment.Unknown ? edsmsys.Government : oldsys.Government,
+                    Population = oldsys.Government == EDGovernment.Unknown ? edsmsys.Population : oldsys.Population,
+                    PrimaryEconomy = oldsys.PrimaryEconomy == EDEconomy.Unknown ? edsmsys.PrimaryEconomy : oldsys.PrimaryEconomy,
+                    Security = oldsys.Security == EDSecurity.Unknown ? edsmsys.Security : oldsys.Security,
+                    State = oldsys.State == EDState.Unknown ? edsmsys.State : oldsys.State,
+                    Faction = oldsys.Faction ?? edsmsys.Faction,
+                    CommanderCreate = edsmsys.CommanderCreate,
+                    CommanderUpdate = edsmsys.CommanderUpdate,
+                    CreateDate = edsmsys.CreateDate,
+                    EDDBID = edsmsys.EDDBID,
+                    EDDBUpdatedAt = edsmsys.EDDBUpdatedAt,
+                    GridID = edsmsys.GridID,
+                    NeedsPermit = edsmsys.NeedsPermit,
+                    RandomID = edsmsys.RandomID,
+                    UpdateDate = edsmsys.UpdateDate,
+                    SystemNote = edsmsys.SystemNote,
+                    status = SystemStatusEnum.EDSM
+                };
+
                 foreach (HistoryEntry he in alsomatching)       // list of systems in historylist using the same system object
                 {
-                    bool updateedsmid = he.System.EDSMID <= 0 && edsmsys.EDSMID>0;
-                    bool updatepos = (he.EntryType == JournalTypeEnum.FSDJump || he.EntryType == JournalTypeEnum.Location) && !syspos.System.HasCoordinate && edsmsys.HasCoordinate;
+                    bool updatepos = (he.EntryType == JournalTypeEnum.FSDJump || he.EntryType == JournalTypeEnum.Location) && updatesyspos;
 
                     if (updatepos || updateedsmid)
                         JournalEntry.UpdateEDSMIDPosJump(he.Journalid, edsmsys, updatepos, -1, uconn , utn);  // update pos and edsmid, jdist not updated
 
-                    he.System = edsmsys;
+                    he.System = newsys;
                 }
             }
             else
