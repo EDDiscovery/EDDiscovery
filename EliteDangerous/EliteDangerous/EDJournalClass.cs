@@ -117,8 +117,11 @@ namespace EliteDangerousCore
 
             if (StopRequested != null)
             {
-                StopRequested.Set();
-                StopRequested = null;
+                lock (StopRequested) // Wait for ScanTickDone
+                {
+                    StopRequested.Set();
+                    StopRequested = null;
+                }
             }
 
             if (ScanThread != null)
@@ -164,13 +167,22 @@ namespace EliteDangerousCore
 
         private void ScanTickDone(List<JournalEntry> entries)       // in UI thread..
         {
-            if (entries != null)
+            ManualResetEvent stopRequested = StopRequested;
+
+            if (entries != null && stopRequested != null)
             {
                 foreach (var ent in entries)                    // pass them to the handler
                 {
-                    System.Diagnostics.Trace.WriteLine(string.Format("New entry {0} {1}", ent.EventTimeUTC, ent.EventTypeStr));
-                    if (OnNewJournalEntry != null)
-                        OnNewJournalEntry(ent);
+                    lock (stopRequested) // Make sure StopMonitor returns after this method returns
+                    {
+                        if (stopRequested.WaitOne(0))
+                            return;
+
+                        System.Diagnostics.Trace.WriteLine(string.Format("New entry {0} {1}", ent.EventTimeUTC, ent.EventTypeStr));
+
+                        if (OnNewJournalEntry != null)
+                            OnNewJournalEntry(ent);
+                    }
                 }
             }
         }
