@@ -870,8 +870,6 @@ namespace EliteDangerousCore
 
             hist.ProcessUserHistoryListEntries(h => h.ToList());      // here, we update the DBs in HistoryEntry and any global DBs in historylist
 
-            hist.SendEDSMStatusInfo(hist.GetLast, true);
-
             return hist;
         }
 
@@ -949,56 +947,6 @@ namespace EliteDangerousCore
             }
 
             return false;
-        }
-
-
-
-        public void SendEDSMStatusInfo(HistoryEntry he, bool async)     // he points to ship info to send from..  may be null from one feed function
-        {
-            if (CommanderId >= 0 && he != null)
-            {
-                var commander = EDCommander.GetCommander(CommanderId);
-
-                EDSMClass edsm = new EDSMClass(commander);
-                if (!commander.SyncToEdsm || !edsm.ValidCredentials)
-                    return;
-
-                // find last ship info currently
-                HistoryEntry lastshipinfocurrenthe = GetLastHistoryEntry(x => x.ShipInformation != null && x.ShipInformation.SubVehicle == ShipInformation.SubVehicleType.None);
-
-                // based on he position, find one before it with ship info that is a normal si not a srv
-                HistoryEntry lastshipinfohe = GetLastHistoryEntry(x => x.ShipInformation != null && x.ShipInformation.SubVehicle == ShipInformation.SubVehicleType.None, he);
-
-                long loan = 0;
-                long cash = 0;
-
-                if (lastshipinfohe != null)       // we have a ship info
-                {
-                    // and based on that position, find a last load game.  May be null
-                    HistoryEntry lastloadgamehe = GetLastHistoryEntry(x => x.EntryType == JournalTypeEnum.LoadGame, lastshipinfohe);
-                    loan = (lastloadgamehe != null) ? ((JournalLoadGame)lastloadgamehe.journalEntry).Loan : 0;
-                    cash = (lastloadgamehe != null) ? ((JournalLoadGame)lastloadgamehe.journalEntry).Credits : 0;
-                }
-
-                JournalProgress progress = historylist.FindLast(x => x.EntryType == JournalTypeEnum.Progress)?.journalEntry as JournalProgress;
-                JournalRank rank = historylist.FindLast(x => x.EntryType == JournalTypeEnum.Rank)?.journalEntry as JournalRank;
-
-                if (progress != null && rank != null)
-                {
-                    if (async)
-                    {
-                        Task edsmtask = Task.Factory.StartNew(() =>
-                        {
-                            edsm.SendShipInfo(lastshipinfohe?.ShipInformation, lastshipinfohe?.MaterialCommodity, lastshipinfohe?.MaterialCommodity?.CargoCount ?? 0, lastshipinfocurrenthe?.ShipInformation, cashledger?.CashTotal ?? cash, loan, progress, rank);
-                        });
-                    }
-                    else
-                    {
-                        edsm.SendShipInfo(lastshipinfohe?.ShipInformation, lastshipinfohe?.MaterialCommodity, lastshipinfohe?.MaterialCommodity?.CargoCount ?? 0, lastshipinfocurrenthe?.ShipInformation, cashledger?.CashTotal ?? cash, loan, progress, rank);
-                    }
-                }
-            }
-
         }
 
         #endregion
