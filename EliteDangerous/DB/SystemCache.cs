@@ -45,7 +45,7 @@ namespace EliteDangerousCore
             if (find.HasCoordinate && foundlist.Count > 0)           // if sys has a co-ord, find the best match within 0.5 ly
                 found = NearestTo(foundlist, find , 0.5);
 
-            if (found == null && foundlist.Count == 1)              // if we did not find one, but we have only 1 candidate, use it.
+            if (found == null && foundlist.Count == 1 && !find.HasCoordinate) // if we did not find one, but we have only 1 candidate, use it.
                 found = foundlist[0];
 
             if ( found == null )                                    // nope, no cache, so use the db
