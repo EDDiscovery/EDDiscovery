@@ -285,18 +285,38 @@ namespace EliteDangerousCore
 
         #region UI processing
 
-        public void UIEvent(List<UIEvent> events, string folder)     // callback, in Thread.. from monitor
+        public void UIEvent(ConcurrentQueue<UIEvent> events, string folder)     // callback, in Thread.. from monitor
         {
             InvokeAsyncOnUiThread(() => UIEventPost(events));
         }
 
-        public void UIEventPost(List<UIEvent> events)       // UI thread
+        public void UIEventPost(ConcurrentQueue<UIEvent> events)       // UI thread
         {
+            ManualResetEvent stopRequested = StopRequested;
+
             Debug.Assert(System.Windows.Forms.Application.MessageLoop);
 
-            foreach (UIEvent u in events)
+            if (stopRequested != null)
             {
-                OnNewUIEvent?.Invoke(u);
+                while (!events.IsEmpty)
+                {
+                    lock (stopRequested) // Prevent StopMonitor from returning until this method has returned
+                    {
+                        if (stopRequested.WaitOne(0))
+                            return;
+
+                        UIEvent e;
+
+                        if (events.TryDequeue(out e))
+                        {
+                            OnNewUIEvent?.Invoke(e);
+                        }
+                        else
+                        {
+                            break;
+                        }
+                    }
+                }
             }
         }
 
