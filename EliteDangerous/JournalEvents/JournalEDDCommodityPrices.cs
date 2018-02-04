@@ -56,7 +56,7 @@ namespace EliteDangerousCore.JournalEvents
         public string Faction { get; protected set; }
         public string StarSystem { get; set; }
         public long? MarketID { get; set; }
-        public List<CCommodities> Commodities { get; protected set; }
+        public List<CCommodities> Commodities { get; protected set; }   // never null
 
         public override void FillInformation(out string summary, out string info, out string detailed) //V
         {

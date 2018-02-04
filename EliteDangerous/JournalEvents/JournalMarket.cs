@@ -47,12 +47,11 @@ namespace EliteDangerousCore.JournalEvents
             Station = evt["StationName"].Str();
             StarSystem = evt["StarSystem"].Str();
             MarketID = evt["MarketID"].LongNull();
+            Commodities = new List<CCommodities>(); // always made..
 
             JArray jcommodities = (JArray)evt["Items"];
             if (jcommodities != null )
             {
-                Commodities = new List<CCommodities>();
-
                 foreach (JObject commodity in jcommodities)
                 {
                     CCommodities com = new CCommodities(commodity, true);
