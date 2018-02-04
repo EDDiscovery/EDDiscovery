@@ -281,7 +281,7 @@ namespace EliteDangerousCore.EDDN
 
         public JObject CreateEDDNJournalMessage(JournalMarket journal, double x, double y, double z, long? systemAddress)
         {
-            if (journal.Commodities == null)
+            if (journal.Commodities == null || journal.Commodities.Count == 0)
                 return null;
 
             JObject msg = new JObject();
