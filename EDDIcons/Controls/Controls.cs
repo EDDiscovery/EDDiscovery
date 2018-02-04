@@ -213,5 +213,9 @@ namespace EDDiscovery.Icons
         public static Image UCContainer_Remove { get { return IconSet.GetIcon("Controls.UCContainer.Remove"); } }
         public static Image UCContainer_Tile { get { return IconSet.GetIcon("Controls.UCContainer.Tile"); } }
         #endregion
+        #region TabStrip
+        public static Image TabStrip_ArrowLeft { get { return IconSet.GetIcon("Controls.TabStrip.ArrowLeft"); } }
+        public static Image TabStrip_ArrowRight { get { return IconSet.GetIcon("Controls.TabStrip.ArrowRight"); } }
+        #endregion
     }
 }
