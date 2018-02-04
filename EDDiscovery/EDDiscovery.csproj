@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="12.0" DefaultTargets="Version;Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -115,7 +115,7 @@
   <PropertyGroup>
     <ManifestKeyFile>EDDiscovery_TemporaryKey.pfx</ManifestKeyFile>
   </PropertyGroup>
-  <PropertyGroup>
+  <PropertyGroup Condition=" '$(OS)' != 'Unix' ">
     <GenerateManifests>true</GenerateManifests>
   </PropertyGroup>
   <PropertyGroup>
@@ -142,7 +142,7 @@
       <HintPath>..\packages\OpenTK.GLControl.1.1.2349.61993\lib\NET40\OpenTK.GLControl.dll</HintPath>
     </Reference>
     <Reference Include="System" />
-    <Reference Include="System.configuration" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Management" />
     <Reference Include="System.Net.Http" />
@@ -221,6 +221,7 @@
     <Compile Include="Forms\SafeModeForm.Designer.cs">
       <DependentUpon>SafeModeForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Properties\ExtraVersion.cs" />
     <Compile Include="ScreenShots\ScreenShotConfigureForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -916,5 +917,36 @@
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
+  </Target>
+  <Target Name="Version" >
+    <PropertyGroup Condition=" '$(OS)' != 'Unix' ">
+      <GitPath>$(Registry:HKEY_LOCAL_MACHINE\SOFTWARE\GitForWindows@InstallPath)</GitPath>
+      <GitPath Condition=" '$(GitPath)' == '' Or !Exists('$(GitPath)\bin\git.exe') ">$([MSBuild]::GetRegistryValueFromView('HKEY_LOCAL_MACHINE\SOFTWARE\GitForWindows', 'InstallPath', null, RegistryView.Registry64))</GitPath>
+      <GitPath Condition=" '$(GitPath)' != '' ">$(GitPath)\bin\git.exe</GitPath>
+      <GitPath Condition=" !Exists('$(GitPath)') ">git.exe</GitPath>
+    </PropertyGroup>
+    <PropertyGroup Condition=" '$(OS)' == 'Unix' ">
+      <GitPath Condition=" Exists('/usr/bin/git') ">/usr/bin/git</GitPath>
+      <GitPath Condition=" '$(GitPath)' == '' ">git</GitPath>
+    </PropertyGroup>
+    <PropertyGroup>
+      <MSBuildCommunityTasksPath>$(MSBuildProjectDirectory)\..\packages\MSBuildTasks.1.5.0.235\tools</MSBuildCommunityTasksPath>
+    </PropertyGroup>
+    <PropertyGroup>
+      <In>$([System.IO.File]::ReadAllText('$(MSBuildProjectDirectory)/Properties/AssemblyInfo.cs'))</In>
+      <Pattern>^\s*\[assembly: AssemblyVersion\(\D*(\d+)\.(\d+(\.\d+)*)</Pattern>
+      <AssemblyVersionMajor>$([System.Text.RegularExpressions.Regex]::Match($(In), $(Pattern), System.Text.RegularExpressions.RegexOptions.Multiline).Groups[1].Value)</AssemblyVersionMajor>
+      <AssemblyVersionMinor>$([System.Text.RegularExpressions.Regex]::Match($(In), $(Pattern), System.Text.RegularExpressions.RegexOptions.Multiline).Groups[2].Value)</AssemblyVersionMinor>
+    </PropertyGroup>
+    <Exec Command="&quot;$(GitPath)&quot; rev-parse --short HEAD" ConsoleToMsBuild="true" EchoOff="true" StandardOutputImportance="low" IgnoreExitCode="true">
+      <Output TaskParameter="ConsoleOutput" PropertyName="GitCommitHash" />
+    </Exec>
+    <Message Importance="high" Text="Version: $(AssemblyVersionMajor).$(AssemblyVersionMinor), Commit: $(GitCommitHash)" />
+    <ItemGroup>
+      <AssemblyAttribute Include="System.Reflection.AssemblyInformationalVersionAttribute">
+        <_Parameter1>$(AssemblyVersionMajor).$(AssemblyVersionMinor)+$(GitCommitHash)</_Parameter1>
+      </AssemblyAttribute>
+    </ItemGroup>
+    <WriteCodeFragment AssemblyAttributes="@(AssemblyAttribute)" Language="C#" OutputFile="Properties\ExtraVersion.cs" />
   </Target>
 </Project>
