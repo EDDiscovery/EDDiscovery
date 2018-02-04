@@ -117,8 +117,11 @@ namespace EliteDangerousCore
 
             if (StopRequested != null)
             {
-                StopRequested.Set();
-                StopRequested = null;
+                lock (StopRequested) // Wait for ScanTickDone
+                {
+                    StopRequested.Set();
+                    StopRequested = null;
+                }
             }
 
             if (ScanThread != null)
@@ -164,13 +167,22 @@ namespace EliteDangerousCore
 
         private void ScanTickDone(List<JournalEntry> entries)       // in UI thread..
         {
-            if (entries != null)
+            ManualResetEvent stopRequested = StopRequested;
+
+            if (entries != null && stopRequested != null)
             {
                 foreach (var ent in entries)                    // pass them to the handler
                 {
-                    System.Diagnostics.Trace.WriteLine(string.Format("New entry {0} {1}", ent.EventTimeUTC, ent.EventTypeStr));
-                    if (OnNewJournalEntry != null)
-                        OnNewJournalEntry(ent);
+                    lock (stopRequested) // Make sure StopMonitor returns after this method returns
+                    {
+                        if (stopRequested.WaitOne(0))
+                            return;
+
+                        System.Diagnostics.Trace.WriteLine(string.Format("New entry {0} {1}", ent.EventTimeUTC, ent.EventTypeStr));
+
+                        if (OnNewJournalEntry != null)
+                            OnNewJournalEntry(ent);
+                    }
                 }
             }
         }
@@ -273,18 +285,38 @@ namespace EliteDangerousCore
 
         #region UI processing
 
-        public void UIEvent(List<UIEvent> events, string folder)     // callback, in Thread.. from monitor
+        public void UIEvent(ConcurrentQueue<UIEvent> events, string folder)     // callback, in Thread.. from monitor
         {
             InvokeAsyncOnUiThread(() => UIEventPost(events));
         }
 
-        public void UIEventPost(List<UIEvent> events)       // UI thread
+        public void UIEventPost(ConcurrentQueue<UIEvent> events)       // UI thread
         {
+            ManualResetEvent stopRequested = StopRequested;
+
             Debug.Assert(System.Windows.Forms.Application.MessageLoop);
 
-            foreach (UIEvent u in events)
+            if (stopRequested != null)
             {
-                OnNewUIEvent?.Invoke(u);
+                while (!events.IsEmpty)
+                {
+                    lock (stopRequested) // Prevent StopMonitor from returning until this method has returned
+                    {
+                        if (stopRequested.WaitOne(0))
+                            return;
+
+                        UIEvent e;
+
+                        if (events.TryDequeue(out e))
+                        {
+                            OnNewUIEvent?.Invoke(e);
+                        }
+                        else
+                        {
+                            break;
+                        }
+                    }
+                }
             }
         }
 
