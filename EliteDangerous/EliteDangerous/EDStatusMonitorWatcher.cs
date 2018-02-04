@@ -17,6 +17,7 @@
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Collections.Concurrent;
 using System.Globalization;
 using System.IO;
 using System.Threading;
@@ -25,13 +26,14 @@ namespace EliteDangerousCore
 {
     public class StatusMonitorWatcher
     {
-        public Action<List<UIEvent>,string> UIEventCallBack;           // action passing event list.. in thread, not in UI
+        public Action<ConcurrentQueue<UIEvent>,string> UIEventCallBack;           // action passing event list.. in thread, not in UI
         public string WatcherFolder { get; set; }
 
         private string watchfile;
         private Thread ScanThread;
         private ManualResetEvent StopRequested;
         private int ScanRate;
+        private ConcurrentQueue<UIEvent> Events = new ConcurrentQueue<UIEvent>();
 
         public StatusMonitorWatcher(string datapath, int srate)
         {
@@ -235,7 +237,14 @@ namespace EliteDangerousCore
                         }
 
                         if (events.Count > 0)
-                            UIEventCallBack?.Invoke(events, WatcherFolder);        // and fire..
+                        {
+                            foreach (UIEvent e in events)
+                            {
+                                Events.Enqueue(e);
+                            }
+
+                            UIEventCallBack?.Invoke(Events, WatcherFolder);        // and fire..
+                        }
                     }
                 }
                 else
