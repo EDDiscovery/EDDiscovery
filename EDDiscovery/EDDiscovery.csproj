@@ -938,9 +938,18 @@
       <AssemblyVersionMajor>$([System.Text.RegularExpressions.Regex]::Match($(In), $(Pattern), System.Text.RegularExpressions.RegexOptions.Multiline).Groups[1].Value)</AssemblyVersionMajor>
       <AssemblyVersionMinor>$([System.Text.RegularExpressions.Regex]::Match($(In), $(Pattern), System.Text.RegularExpressions.RegexOptions.Multiline).Groups[2].Value)</AssemblyVersionMinor>
     </PropertyGroup>
-    <Exec Command="&quot;$(GitPath)&quot; rev-parse --short HEAD" ConsoleToMsBuild="true" EchoOff="true" StandardOutputImportance="low" IgnoreExitCode="true">
+    <Exec Command="&quot;$(GitPath)&quot; describe --always --dirty" ConsoleToMsBuild="true" EchoOff="true" StandardOutputImportance="low" IgnoreExitCode="true">
       <Output TaskParameter="ConsoleOutput" PropertyName="GitCommitHash" />
+      <Output TaskParameter="ExitCode" PropertyName="GitExitCode" />
     </Exec>
+    <PropertyGroup Condition="$(GitExitCode) != 0">
+      <GitCommitHash>$([System.IO.File]::ReadAllText('$(MSBuildProjectDirectory)/../.git/HEAD'))</GitCommitHash>
+      <Pattern>^ref: (.*)$</Pattern>
+      <GitCommitRef Condition="$([System.Text.RegularExpressions.Regex]::IsMatch($(GitCommitHash), $(Pattern)))">$([System.Text.RegularExpressions.Regex]::Match($(GitCommitHash), $(Pattern)).Groups[1].Value)</GitCommitRef>
+      <GitCommitHash Condition="'$(GitCommitRef)' != '' And Exists('$(MSBuildProjectDirectory)/../.git/$(GitCommitRef)')">$([System.IO.File]::ReadAllText('$(MSBuildProjectDirectory)/../.git/$(GitCommitRef)'))</GitCommitHash>
+      <Pattern>^([0-9a-f]{7})[0-9a-f]*$</Pattern>
+      <GitCommitHash Condition="$([System.Text.RegularExpressions.Regex]::IsMatch($(GitCommitHash), $(Pattern)))">$(GitCommitHash.SubString(0,7))</GitCommitHash>
+    </PropertyGroup>
     <Message Importance="high" Text="Version: $(AssemblyVersionMajor).$(AssemblyVersionMinor), Commit: $(GitCommitHash)" />
     <ItemGroup>
       <AssemblyAttribute Include="System.Reflection.AssemblyInformationalVersionAttribute">
