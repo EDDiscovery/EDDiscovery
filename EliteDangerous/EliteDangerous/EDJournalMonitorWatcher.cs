@@ -196,17 +196,14 @@ namespace EliteDangerousCore
 
                             foreach (JournalReaderEntry jre in ents)
                             {
-                                JournalReaderEntry xjre = null;
-                                if (ReadExtraInfoFromFile(jre.JournalEntry, nfi, out xjre))
+                                JournalReaderEntry outxf = null;
+                                string extrafile = GetExtraInfoFilePath(jre.JournalEntry.EventTypeID, nfi);  // find out if entry is associated with an info file
+
+                                if (extrafile == null || ReadExtraInfoFromFile(jre.JournalEntry, extrafile, out outxf) )
                                 {
-                                    entries.Add(xjre.JournalEntry);
-                                    jre.JournalEntry.Add(xjre.Json, cn, txn);
-                                    ticksNoActivity = 0;
-                                }
-                                else
-                                {
-                                    entries.Add(jre.JournalEntry);
-                                    jre.JournalEntry.Add(jre.Json, cn, txn);
+                                    outxf = outxf ?? jre;               // make sure outxf is set, either to a new record, or to the existing one.
+                                    entries.Add(outxf.JournalEntry);
+                                    jre.JournalEntry.Add(outxf.Json, cn, txn);
                                     ticksNoActivity = 0;
                                 }
                             }
@@ -250,7 +247,7 @@ namespace EliteDangerousCore
             {
                 FileInfo fi = allFiles[i];
 
-                var reader = OpenFileReader(fi, m_travelogUnits);
+                var reader = OpenFileReader(fi, m_travelogUnits);       // open it
 
                 if (!m_travelogUnits.ContainsKey(reader.TravelLogUnit.Name))
                 {
@@ -292,8 +289,16 @@ namespace EliteDangerousCore
                         {
                             if (!existing[jre.JournalEntry.EventTimeUTC].Any(e => JournalEntry.AreSameEntry(jre.JournalEntry, e, ent1jo: jre.Json)))
                             {
-                                System.Diagnostics.Trace.WriteLine(string.Format("Write Journal to db {0} {1}", jre.JournalEntry.EventTimeUTC, jre.JournalEntry.EventTypeStr));
-                                jre.JournalEntry.Add(jre.Json, cn, tn);
+                                JournalReaderEntry outxf = null;
+                                string extrafile = GetExtraInfoFilePath(jre.JournalEntry.EventTypeID, reader);  // find out if entry is associated with an info file
+
+                                // if no extra file, or is an extra file and it read valid data which was up to date..
+                                if (extrafile == null || ReadExtraInfoFromFile(jre.JournalEntry, extrafile, out outxf))        // if not special, just add.
+                                {
+                                    outxf = outxf ?? jre;
+                                    jre.JournalEntry.Add(outxf.Json, cn, tn);
+                                    System.Diagnostics.Trace.WriteLine(string.Format("Write Journal to db {0} {1}", outxf.JournalEntry.EventTimeUTC, outxf.JournalEntry.EventTypeStr));
+                                }
                             }
                         }
 
@@ -367,22 +372,21 @@ namespace EliteDangerousCore
             }
         }
 
-        private bool ReadExtraInfoFromFile(JournalEntry je, EDJournalReader rdr, out JournalReaderEntry jre)
+        private string GetExtraInfoFilePath(JournalTypeEnum jtype , EDJournalReader nfi )       // return the whole path of this extra file..
+        {
+            string extrafile = GetExtraInfoFileName(jtype);
+            if ( extrafile != null )
+                extrafile = Path.Combine(Path.GetDirectoryName(nfi.FileName), extrafile);
+            return extrafile;
+        }
+
+        private bool ReadExtraInfoFromFile(JournalEntry je, string extrafile, out JournalReaderEntry jre)       // return true if read a good extra file
         {
             jre = null;
 
-            string extrafile = GetExtraInfoFileName(je.EventTypeID);
-
-            if (extrafile == null)
-            {
-                return false;
-            }
-
-            extrafile = Path.Combine(Path.GetDirectoryName(rdr.FileName), extrafile);
-
             if (File.Exists(extrafile))
             {
-                JObject jo = null;
+                jre = null;
 
                 for (int retries = 0; retries < 5; retries++)
                 {
@@ -391,9 +395,11 @@ namespace EliteDangerousCore
                         string json = File.ReadAllText(extrafile);
                         if (json != null)
                         {
-                            jo = JObject.Parse(json);       // this has the full version of the event, including data, at the same timestamp
+                            JObject jo = JObject.Parse(json);       // this has the full version of the event, including data, at the same timestamp
 
-                            JournalEntry newje = JournalEntry.CreateJournalEntry(jo);
+                            JournalEntry newje = JournalEntry.CreateJournalEntry(jo);       // would love to just reprocess the JO into the existing object but no interface for that..
+                            newje.CommanderId = je.CommanderId;     // horrible, but need to copy a few fields over...
+                            newje.TLUId = je.TLUId;                 
 
                             // if timestamp matches our timestamp, it means the data is valid, and double check the string..
                             if (newje.EventTimeUTC == je.EventTimeUTC && newje.EventTypeStr == je.EventTypeStr)
@@ -406,6 +412,8 @@ namespace EliteDangerousCore
 
                                 return true;
                             }
+                            else
+                                return false;       // argument to return is Frontier has told us files are written before journal entry is written
                         }
                     }
                     catch (Exception ex)
