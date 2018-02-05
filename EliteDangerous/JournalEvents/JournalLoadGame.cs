@@ -22,7 +22,7 @@ using System.Text;
 namespace EliteDangerousCore.JournalEvents
 {
     [JournalEntryType(JournalTypeEnum.LoadGame)]
-    [System.Diagnostics.DebuggerDisplay("{LoadGameCommander} {ShipId} {Ship} {GameMode}")]
+    [System.Diagnostics.DebuggerDisplay("LoadGame {LoadGameCommander} {ShipId} {Ship} {GameMode}")]
     public class JournalLoadGame : JournalEntry, ILedgerJournalEntry, IShipInformation
     {
         public JournalLoadGame(JObject evt ) : base(evt, JournalTypeEnum.LoadGame)

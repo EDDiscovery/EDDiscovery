@@ -84,6 +84,7 @@ namespace NetLogEntry
                                   "     Options: FuelScoop amount total\n" +
                                   "     Options: JetConeBoost\n" +
                                   "     Options: FighterDestroyed FigherRebuilt NpcCrewRank NpcCrewPaidWage LaunchDrone\n" +
+                                  "     Options: Market\n" +
                                   "EDDBSTARS <filename> or EDDBPLANETS or EDDBSTARNAMES for the eddb dump\n" +
                                   "Phoneme <filename> <fileout> for EDDI phoneme tx\n" +
                                   "Voicerecon <filename>\n" +
@@ -260,7 +261,9 @@ namespace NetLogEntry
                 else if (writetype.Equals("NpcCrewRank", StringComparison.InvariantCultureIgnoreCase))
                     lineout = "{ " + TimeStamp() + F("event", "NpcCrewRank") + F("NpcCrewId", 1921) + FF("RankCombat", 4) + " }";
                 else if (writetype.Equals("LaunchDrone", StringComparison.InvariantCultureIgnoreCase))
-                    lineout = "{ " + TimeStamp() + F("event", "LaunchDrone") + FF("Type", "FuelTransfer") +" }";
+                    lineout = "{ " + TimeStamp() + F("event", "LaunchDrone") + FF("Type", "FuelTransfer") + " }";
+                else if (writetype.Equals("Market", StringComparison.InvariantCultureIgnoreCase))
+                    lineout = Market(Path.GetDirectoryName(filename));
 
                 else
                 {
@@ -400,6 +403,15 @@ namespace NetLogEntry
             "], \"Allegiance\":\"\", \"Economy\":\"$economy_None;\", \"Economy_Localised\":\"None\", \"Government\":\"$government_None;\"," +
             "\"Government_Localised\":\"None\", \"Security\":\"$SYSTEM_SECURITY_low;\", \"Security_Localised\":\"Low Security\"," +
             "\"JumpDist\":10.791, \"FuelUsed\":0.790330, \"FuelLevel\":6.893371 }";
+        }
+
+        static string Market(string mpath)
+        {
+            string mline = "{ " + TimeStamp() + F("event", "Market") + F("MarketID", 12345678) + F("StationName", "Columbus") + FF("StarSystem", "Sol");
+            string market = mline +  ", " + TestNetLogEntry.Properties.Resources.market;
+            File.WriteAllText(Path.Combine(mpath, "market.json"),market);
+
+            return mline + " }";
         }
 
 
