@@ -568,19 +568,17 @@ public static class ObjectExtensionsStrings
 
     public static string SafeFileString(this string normal)
     {
-        normal = normal.Replace("*", "_star");
+        normal = normal.Replace("*", "_star");      // common ones rename
         normal = normal.Replace("/", "_slash");
         normal = normal.Replace("\\", "_slash");
         normal = normal.Replace(":", "_colon");
         normal = normal.Replace("?", "_qmark");
 
-        string ret = "";
-        foreach (char c in normal)
-        {
-            if (char.IsLetterOrDigit(c) || c == ' ' || c == '-' || c == '_')
-                ret += c;
-        }
-        return ret;
+        char[] invalid = System.IO.Path.GetInvalidFileNameChars();
+        foreach( char c in invalid)
+            normal = normal.Replace(c,'_'); // all others _
+
+        return normal;
     }
 
     public static string FDName(this string normal)
