@@ -398,7 +398,14 @@ namespace EDDiscovery.UserControls
 
                                     if (!PendingClose)
                                     {
-                                        req.Callback(sys, closestsystemlist);
+                                        try
+                                        {
+                                            req.Callback(sys, closestsystemlist);
+                                        }
+                                        catch (Exception ex)
+                                        {
+                                            System.Diagnostics.Trace.WriteLine($"StarDistance callback failed: {ex.ToString()}");
+                                        }
                                     }
                                 }
                             }
