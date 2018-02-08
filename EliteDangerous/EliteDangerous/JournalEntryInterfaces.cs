@@ -47,4 +47,13 @@ namespace EliteDangerousCore
     {
         bool IsTrainingEvent { get; }
     }
+
+    public interface IAdditionalFiles
+    {
+        bool ReadAdditionalFiles(string directory, ref Newtonsoft.Json.Linq.JObject jo);     // true if your happy, you can replace jo..
+    }
+
+    public interface IUIEvent
+    {
+    }
 }

@@ -328,9 +328,17 @@ public static class ObjectExtensionsStrings
     {
         return v.ToString(System.Globalization.CultureInfo.InvariantCulture);
     }
+    public static string ToStringInvariant(this int v, string format)
+    {
+        return v.ToString(format,System.Globalization.CultureInfo.InvariantCulture);
+    }
     public static string ToStringInvariant(this long v)
     {
         return v.ToString(System.Globalization.CultureInfo.InvariantCulture);
+    }
+    public static string ToStringInvariant(this long v, string format)
+    {
+        return v.ToString(format, System.Globalization.CultureInfo.InvariantCulture);
     }
     public static string ToStringInvariant(this bool v)
     {
@@ -368,9 +376,17 @@ public static class ObjectExtensionsStrings
     {
         return (v.HasValue) ? v.Value.ToString(System.Globalization.CultureInfo.InvariantCulture) : "";
     }
+    public static string ToStringInvariant(this int? v, string format)
+    {
+        return (v.HasValue) ? v.Value.ToString(format, System.Globalization.CultureInfo.InvariantCulture) : "";
+    }
     public static string ToStringInvariant(this long? v)
     {
         return (v.HasValue) ? v.Value.ToString(System.Globalization.CultureInfo.InvariantCulture) : "";
+    }
+    public static string ToStringInvariant(this long? v, string format)
+    {
+        return (v.HasValue) ? v.Value.ToString(format, System.Globalization.CultureInfo.InvariantCulture) : "";
     }
 
     // fix word_word to Word Word
@@ -383,8 +399,11 @@ public static class ObjectExtensionsStrings
     //  s = Regex.Replace(s, @"( 0)(0+)", " ");     // any space 000 in middle of line, remove
     //  s = Regex.Replace(s, @"(0)([0-9]+)", "$2");   // any 0Ns left, remove 0
 
+    // at each alpha start, we search using a for loop searchlist first, so it can match stuff with _ and digits/spaces in, 
+    // then we do a quick namerep lookup, but this is alpha numeric only
+
     enum State { space, alpha, nonalpha, digits0, digits };
-    static public string SplitCapsWordFull(this string capslower, Dictionary<string, string> namerep = null)     // fixes numbers, does replacement of alpha sequences
+    static public string SplitCapsWordFull(this string capslower, Dictionary<string, string> namerep = null, Dictionary<string,string> searchlist = null)     // fixes numbers, does replacement of alpha sequences
     {
         if (capslower == null || capslower.Length == 0)
             return "";
@@ -438,26 +457,45 @@ public static class ObjectExtensionsStrings
                             sb.Append(' ');
 
                         state = State.alpha;
+                        bool done = false;
 
-                        if (namerep != null)           // at alpha start, see if we have any global subs of alpha numerics
+                        if (searchlist != null)
+                        {
+                            string strleft = s.Substring(i);
+
+                            foreach (string keyname in searchlist.Keys)
+                            {
+                                if (strleft.StartsWith(keyname, StringComparison.InvariantCultureIgnoreCase))
+                                {
+                                    //System.Diagnostics.Debug.WriteLine("Check List " + keyname + " Replace " + searchlist[keyname]);
+                                    sb.Append(searchlist[keyname]);
+                                    i += keyname.Length - 1;                  // skip this, we are in alpha, -1 because of i++ at top
+                                    done = true;
+                                    break;
+                                }
+                            }
+
+                        }
+
+                        if (done == false && namerep != null)           // at alpha start, see if we have any global subs of alpha numerics
                         {
                             int j = i + 1;
-                            for (; j < s.Length && ((s[j] >= 'A' && s[j] <= 'Z') || (s[j] >= 'a' && s[j] <= 'z') || (s[j] >= '0' && s[j] <= '9')); j++)
+                            for (; j < s.Length && ((s[j] >= 'A' && s[j] <= 'Z') || (s[j] >= 'a' && s[j] <= 'z') || (s[j] >= '0' && s[j] <= '9') ); j++)
                                 ;
 
                             string keyname = s.Substring(i, j - i);
-
                             //                        string keyname = namekeys.Find(x => s.Substring(i).StartsWith(x));
 
                             if (namerep.ContainsKey(keyname))
                             {
+                                //System.Diagnostics.Debug.WriteLine("Check " + keyname + " Replace " + namerep[keyname]);
                                 sb.Append(namerep[keyname]);
                                 i += keyname.Length - 1;                  // skip this, we are in alpha, -1 because of i++ at top
+                                done = true;
                             }
-                            else
-                                sb.Append(char.ToUpper(c));
                         }
-                        else
+
+                        if ( !done )
                             sb.Append(char.ToUpper(c));
                     }
                 }

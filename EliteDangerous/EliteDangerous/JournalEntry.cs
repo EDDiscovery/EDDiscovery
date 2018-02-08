@@ -355,7 +355,12 @@ namespace EliteDangerousCore
                 return beta ?? false;
             }
         }
+
+        public bool IsUIEvent { get { return this is IUIEvent; } }
+
         #endregion
+
+
 
         #region Static properties and fields
         private static Dictionary<JournalTypeEnum, Type> JournalEntryTypes = GetJournalEntryTypes();
@@ -1228,12 +1233,41 @@ namespace EliteDangerousCore
             return ret;
         }
 
-        public bool IsUIEvent { get { return IsUIEventType(this); } }
+        protected JObject ReadAdditionalFile( string extrafile, bool checktimestamptype = true )       // read file, return new JSON
+        {
+            for (int retries = 0; retries < 5; retries++)
+            {
+                try
+                {
+                    string json = System.IO.File.ReadAllText(extrafile);
 
-        static public bool IsUIEventType(JournalEntry j) { return j is JournalMusic; } 
+                    if (json != null)
+                    {
+                        JObject joaf = JObject.Parse(json);       // this has the full version of the event, including data, at the same timestamp
+
+                        string newtype = joaf["event"].Str();
+                        DateTime newUTC = DateTime.Parse(joaf.Value<string>("timestamp"), System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.AssumeUniversal | System.Globalization.DateTimeStyles.AdjustToUniversal);
+
+                        if (checktimestamptype == false || (newUTC != null && newUTC == EventTimeUTC && newtype == EventTypeStr))
+                        {
+                            return joaf;
+                        }
+                        else
+                            return null;            // okay, entry is not related to the file written in the folder, throw the entry away
+                    }
+                }
+                catch (Exception ex)
+                {
+                    System.Diagnostics.Trace.WriteLine($"Unable to read extra info from {extrafile}: {ex.Message}");
+                    System.Threading.Thread.Sleep(500);
+                }
+            }
+
+            return null;
+        }
 
         #endregion
 
     }
 }
-     
+
