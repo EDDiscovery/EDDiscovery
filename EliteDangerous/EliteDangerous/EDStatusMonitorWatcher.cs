@@ -53,11 +53,14 @@ namespace EliteDangerousCore
         }
         public void StopMonitor()
         {
-            System.Diagnostics.Debug.WriteLine("Stop Status Monitor on " + WatcherFolder);
-            StopRequested.Set();
-            ScanThread.Join();
-            StopRequested.Dispose();
-            ScanThread = null;
+            if (ScanThread != null)
+            {
+                System.Diagnostics.Debug.WriteLine("Stop Status Monitor on " + WatcherFolder);
+                StopRequested.Set();
+                ScanThread.Join();
+                StopRequested.Dispose();
+                ScanThread = null;
+            }
         }
 
         long? prev_flags = null;        // force at least one out here by invalid values

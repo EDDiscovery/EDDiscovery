@@ -53,7 +53,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <None Include="Resources\m.json" />
+    <Content Include="Resources\ModulesInfo.txt" />
+    <Content Include="Resources\Outfitting.txt" />
+    <Content Include="Resources\Shipyard.txt" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\BaseUtils\BaseUtils.csproj">
@@ -68,7 +70,7 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\m.txt" />
+    <None Include="Resources\Market.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

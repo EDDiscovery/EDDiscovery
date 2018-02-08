@@ -40,9 +40,14 @@ namespace EliteDangerousCore.JournalEvents
     //o   Rare
 
     [JournalEntryType(JournalTypeEnum.Market)]
-    public class JournalMarket : JournalCommodityPricesBase
+    public class JournalMarket : JournalCommodityPricesBase, IAdditionalFiles
     {
         public JournalMarket(JObject evt) : base(evt, JournalTypeEnum.Market)
+        {
+            Rescan(evt);
+        }
+
+        public void Rescan(JObject evt)
         {
             Station = evt["StationName"].Str();
             StarSystem = evt["StarSystem"].Str();
@@ -59,5 +64,17 @@ namespace EliteDangerousCore.JournalEvents
                 }
             }
         }
+
+        public bool ReadAdditionalFiles(string directory, ref JObject jo)
+        {
+            JObject jnew = ReadAdditionalFile(System.IO.Path.Combine(directory, "Market.json"));
+            if (jnew != null)        // new json, rescan
+            {
+                jo = jnew;      // replace current
+                Rescan(jo);
+            }
+            return jnew != null;
+        }
+
     }
 }

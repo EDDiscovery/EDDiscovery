@@ -143,7 +143,7 @@ namespace EliteDangerousCore.JournalEvents
 
                     ShipModule module = new ShipModule( JournalFieldNaming.GetBetterSlotName(jo["Slot"].Str()),
                                                         JournalFieldNaming.NormaliseFDSlotName(jo["Slot"].Str()),
-                                                        JournalFieldNaming.GetBetterItemNameLoadout(jo["Item"].Str()),
+                                                        JournalFieldNaming.GetBetterItemNameEvents(jo["Item"].Str()),
                                                         JournalFieldNaming.NormaliseFDItemName(jo["Item"].Str()),
                                                         jo["On"].BoolNull(),
                                                         jo["Priority"].IntNull(),

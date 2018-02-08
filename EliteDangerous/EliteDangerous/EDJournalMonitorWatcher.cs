@@ -196,16 +196,9 @@ namespace EliteDangerousCore
 
                             foreach (JournalReaderEntry jre in ents)
                             {
-                                JournalReaderEntry outxf = null;
-                                string extrafile = GetExtraInfoFilePath(jre.JournalEntry.EventTypeID, nfi);  // find out if entry is associated with an info file
-
-                                if (extrafile == null || ReadExtraInfoFromFile(jre.JournalEntry, extrafile, out outxf) )
-                                {
-                                    outxf = outxf ?? jre;               // make sure outxf is set, either to a new record, or to the existing one.
-                                    entries.Add(outxf.JournalEntry);
-                                    jre.JournalEntry.Add(outxf.Json, cn, txn);
-                                    ticksNoActivity = 0;
-                                }
+                                entries.Add(jre.JournalEntry);
+                                jre.JournalEntry.Add(jre.Json, cn, txn);
+                                ticksNoActivity = 0;
                             }
 
                             nfi.TravelLogUnit.Update(cn);
@@ -289,16 +282,8 @@ namespace EliteDangerousCore
                         {
                             if (!existing[jre.JournalEntry.EventTimeUTC].Any(e => JournalEntry.AreSameEntry(jre.JournalEntry, e, ent1jo: jre.Json)))
                             {
-                                JournalReaderEntry outxf = null;
-                                string extrafile = GetExtraInfoFilePath(jre.JournalEntry.EventTypeID, reader);  // find out if entry is associated with an info file
-
-                                // if no extra file, or is an extra file and it read valid data which was up to date..
-                                if (extrafile == null || ReadExtraInfoFromFile(jre.JournalEntry, extrafile, out outxf))        // if not special, just add.
-                                {
-                                    outxf = outxf ?? jre;
-                                    jre.JournalEntry.Add(outxf.Json, cn, tn);
-                                    System.Diagnostics.Trace.WriteLine(string.Format("Write Journal to db {0} {1}", outxf.JournalEntry.EventTimeUTC, outxf.JournalEntry.EventTypeStr));
-                                }
+                                jre.JournalEntry.Add(jre.Json, cn, tn);
+                                System.Diagnostics.Trace.WriteLine(string.Format("Write Journal to db {0} {1}", jre.JournalEntry.EventTimeUTC, jre.JournalEntry.EventTypeStr));
                             }
                         }
 
@@ -358,75 +343,5 @@ namespace EliteDangerousCore
 
         #endregion
 
-        #region Process extra files from frontier
-
-        private string GetExtraInfoFileName(JournalTypeEnum jtype)
-        {
-            switch (jtype)
-            {
-                case JournalTypeEnum.Market: return "Market.json";
-                case JournalTypeEnum.Outfitting: return "Outfitting.json";
-                case JournalTypeEnum.Shipyard: return "Shipyard.json";
-                case JournalTypeEnum.ModuleInfo: return "ModulesInfo.json";
-                default: return null;
-            }
-        }
-
-        private string GetExtraInfoFilePath(JournalTypeEnum jtype , EDJournalReader nfi )       // return the whole path of this extra file..
-        {
-            string extrafile = GetExtraInfoFileName(jtype);
-            if ( extrafile != null )
-                extrafile = Path.Combine(Path.GetDirectoryName(nfi.FileName), extrafile);
-            return extrafile;
-        }
-
-        private bool ReadExtraInfoFromFile(JournalEntry je, string extrafile, out JournalReaderEntry jre)       // return true if read a good extra file
-        {
-            jre = null;
-
-            if (File.Exists(extrafile))
-            {
-                jre = null;
-
-                for (int retries = 0; retries < 5; retries++)
-                {
-                    try
-                    {
-                        string json = File.ReadAllText(extrafile);
-                        if (json != null)
-                        {
-                            JObject jo = JObject.Parse(json);       // this has the full version of the event, including data, at the same timestamp
-
-                            JournalEntry newje = JournalEntry.CreateJournalEntry(jo);       // would love to just reprocess the JO into the existing object but no interface for that..
-                            newje.CommanderId = je.CommanderId;     // horrible, but need to copy a few fields over...
-                            newje.TLUId = je.TLUId;                 
-
-                            // if timestamp matches our timestamp, it means the data is valid, and double check the string..
-                            if (newje.EventTimeUTC == je.EventTimeUTC && newje.EventTypeStr == je.EventTypeStr)
-                            {
-                                jre = new JournalReaderEntry
-                                {
-                                    JournalEntry = newje,
-                                    Json = jo
-                                };
-
-                                return true;
-                            }
-                            else
-                                return false;       // argument to return is Frontier has told us files are written before journal entry is written
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        Trace.WriteLine($"Unable to read extra info from {extrafile}: {ex.Message}");
-                        Thread.Sleep(500);
-                    }
-                }
-            }
-
-            return false;
-        }
-
-        #endregion
     }
 }

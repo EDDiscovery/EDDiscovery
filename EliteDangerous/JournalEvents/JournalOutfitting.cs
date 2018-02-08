@@ -30,9 +30,14 @@ namespace EliteDangerousCore.JournalEvents
     //o   BuyPrice
 
     [JournalEntryType(JournalTypeEnum.Outfitting)]
-    public class JournalOutfitting : JournalEntry
+    public class JournalOutfitting : JournalEntry, IAdditionalFiles
     {
         public JournalOutfitting(JObject evt) : base(evt, JournalTypeEnum.Outfitting)
+        {
+            Rescan(evt);
+        }
+
+        public void Rescan(JObject evt)
         {
             StationName = evt["StationName"].Str();
             StarSystem = evt["StarSystem"].Str();
@@ -49,6 +54,17 @@ namespace EliteDangerousCore.JournalEvents
             }
         }
 
+        public bool ReadAdditionalFiles(string directory, ref JObject jo)
+        {
+            JObject jnew = ReadAdditionalFile(System.IO.Path.Combine(directory, "Outfitting.json"));
+            if (jnew != null)        // new json, rescan
+            {
+                jo = jnew;      // replace current
+                Rescan(jo);
+            }
+            return jnew != null;
+        }
+
         public string StationName { get; set; }
         public string StarSystem { get; set; }
         public long? MarketID { get; set; }
@@ -59,16 +75,19 @@ namespace EliteDangerousCore.JournalEvents
         {
             summary = EventTypeStr.SplitCapsWord();
             info = "";
+            detailed = "";
 
-            if ( ModuleItems != null )
+            if (ModuleItems != null)
+            {
+                info = ModuleItems.Length.ToString() + " items available";
+                int itemno = 0;
                 foreach (OutfittingModuleItem m in ModuleItems)
                 {
-                    if (info.Length>0)
-                        info += ", ";
-                    info += m.Name;
+                    detailed = detailed.AppendPrePad(m.Name + ":" + m.BuyPrice.ToString("N0"), (itemno % 3 < 2) ? ", " : System.Environment.NewLine);
+                    itemno++;
                 }
+            }
                 
-            detailed = "";
         }
     }
 

@@ -32,10 +32,15 @@ namespace EliteDangerousCore.JournalEvents
 
     [System.Diagnostics.DebuggerDisplay("{ShipId} {Ship} {ShipModules.Count}")]
     [JournalEntryType(JournalTypeEnum.ModuleInfo)]
-    public class JournalModuleInfo : JournalEntry
+    public class JournalModuleInfo : JournalEntry , IAdditionalFiles
     {
         public JournalModuleInfo(JObject evt) : base(evt, JournalTypeEnum.ModuleInfo)
         {
+            Rescan(evt);
+        }
+
+        public void Rescan(JObject evt)
+        { 
             ShipModules = new List<JournalLoadout.ShipModule>();
 
             JArray jmodules = (JArray)evt["Modules"];
@@ -46,7 +51,7 @@ namespace EliteDangerousCore.JournalEvents
                     JournalLoadout.ShipModule module = new JournalLoadout.ShipModule( 
                                                         JournalFieldNaming.GetBetterSlotName(jo["Slot"].Str()),
                                                         JournalFieldNaming.NormaliseFDSlotName(jo["Slot"].Str()),
-                                                        JournalFieldNaming.GetBetterItemNameLoadout(jo["Item"].Str()),
+                                                        JournalFieldNaming.GetBetterItemNameEvents(jo["Item"].Str()),
                                                         JournalFieldNaming.NormaliseFDItemName(jo["Item"].Str()),
                                                         null, // unknown
                                                         jo["Priority"].IntNull(),
@@ -64,6 +69,17 @@ namespace EliteDangerousCore.JournalEvents
             }
         }
 
+        public bool ReadAdditionalFiles(string directory, ref JObject jo)
+        {
+            JObject jnew = ReadAdditionalFile(System.IO.Path.Combine(directory, "ModulesInfo.json"));
+            if (jnew != null)        // new json, rescan
+            {
+                jo = jnew;      // replace current
+                Rescan(jo);
+            }
+            return jnew != null;
+        }
+
         public List<JournalLoadout.ShipModule> ShipModules;
 
         public override void FillInformation(out string summary, out string info, out string detailed) //V
@@ -74,12 +90,9 @@ namespace EliteDangerousCore.JournalEvents
 
             foreach (JournalLoadout.ShipModule m in ShipModules)
             {
-                if (detailed.Length > 0)
-                    detailed += Environment.NewLine;
-
                 double? power = (m.Power.HasValue && m.Power.Value > 0) ? m.Power : null;
 
-                detailed += BaseUtils.FieldBuilder.Build("", m.Slot, "<:", m.Item, "Power:; MW;0.###", power);
+                detailed = detailed.AppendPrePad(BaseUtils.FieldBuilder.Build("", m.Slot, "<:", m.Item, "; MW;0.###", power) , Environment.NewLine);
             }
         }
     }
