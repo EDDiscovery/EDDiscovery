@@ -96,8 +96,8 @@ namespace EliteDangerousCore
                 { "empire_fighter",             "Imperial Fighter" },
                 { "empire_trader",              "Imperial Clipper" },
                 { "federation_corvette",        "Federal Corvette" },
-                { "federation_dropship",        "Federal Dropship" },
                 { "federation_dropship_mkii",   "Federal Assault Ship" },
+                { "federation_dropship",        "Federal Dropship" },
                 { "federation_gunship",         "Federal Gunship" },
                 { "federation_fighter",         "F63 Condor" },
                 { "ferdelance",                 "Fer-de-Lance" },
@@ -157,7 +157,7 @@ namespace EliteDangerousCore
             return s.SplitCapsWordFull(replaceslots);
         }
 
-        static Dictionary<string, string> replaceevents = new Dictionary<string, string>
+        static Dictionary<string, string> replaceitems = new Dictionary<string, string>
         {
             // see the program folder win64\items\shipmodule
 
@@ -189,6 +189,7 @@ namespace EliteDangerousCore
             {"scanners",     "Scanners"},
             {"shieldbooster",     "Shield Booster"},
             {"slugshot",     "Fragment Cannon"},
+            {"fueltransfer",     "Fuel Transfer"},
 
             // Int_
             {"buggybay",     "Planetary Vehicle Hangar"},                                       // V
@@ -225,6 +226,9 @@ namespace EliteDangerousCore
             {"defencecrimescanner",     "Defence Crime Scanner"},
             {"refinery",     "Refinery"},
             {"stellarbodydiscoveryscanner",     "Stellar Body Discovery Scanner"}, // V
+            {"shipdatalinkscanner", "Data Link Scanner" },
+            {"modularcargobaydoorfdl", "Fer-De-Lance Cargo Bay Door" },
+            {"modularcargobaydoor", "Cargo Bay Door" },
 
             {"class1" , "Rating E" },
             {"class2" , "Rating D" },
@@ -240,37 +244,8 @@ namespace EliteDangerousCore
             {"size6" , "Class 6" },
             {"size7" , "Class 7" },
             {"size8" , "Class 8" },
-        };
 
-        static public string GetBetterItemNameEvents(string s)            // for all except loadout.. has to deal with $int and $hpt
-        {
-            //string x = s;
-            if (s.StartsWith("$int_") || s.StartsWith("$hpt_"))
-                s = s.Substring(5);
-            else if (s.StartsWith("$"))
-                s = s.Substring(1);
-            if (s.EndsWith("_name;"))
-                s = s.Substring(0, s.Length - 6);
-
-            s = s.SplitCapsWordFull(replaceevents);
-
-            if (s.Contains("Planetary Vehicle Hangar"))                 // strange class naming, fix up after above.. don't want two tables
-                s = s.Replace("Rating E", "Rating H").Replace("Rating D", "Rating G");
-
-            //System.Diagnostics.Debug.WriteLine("PP Item " + x + " >> " + s);
-            return s;
-        }
-
-        static Dictionary<string, string> replaceloadouts = new Dictionary<string, string>
-        {
-
-            { "Class1" , "Rating E" },
-            {"Class2" , "Rating D" },
-            {"Class3" , "Rating C" },
-            {"Class4" , "Rating B" },
-            {"Class5" , "Rating A" },
-
-            {"Size1" , "Class 1" },
+            {"Size1" , "Class 1" },     // need these because Key lookup is case sensitive
             {"Size2" , "Class 2" },
             {"Size3" , "Class 3" },
             {"Size4" , "Class 4" },
@@ -278,6 +253,12 @@ namespace EliteDangerousCore
             {"Size6" , "Class 6" },
             {"Size7" , "Class 7" },
             {"Size8" , "Class 8" },
+
+            {"Class1" , "Rating E" },
+            {"Class2" , "Rating D" },
+            {"Class3" , "Rating C" },
+            {"Class4" , "Rating B" },
+            {"Class5" , "Rating A" },
 
             {"Engine",     "Thrusters"},
             {"Basic",     "Seeker"},
@@ -288,19 +269,26 @@ namespace EliteDangerousCore
             {"Resourcesiphon",     "Hatch Breaker"},        //TBD
             {"Repairer",     "Auto Field Maintenance"},     //TBD
             {"Cloudscanner",     "Hyperspace Cloud Scanner"}, //TBD
-
         };
 
-        static public string GetBetterItemNameLoadout(string s)
+        static public string GetBetterItemNameEvents(string s)            // for all except loadout.. has to deal with $int and $hpt
         {
             //string x = s;
-            if (s.StartsWith("Int_") || s.StartsWith("Hpt_"))
+            if (s.StartsWith("$int_", StringComparison.InvariantCultureIgnoreCase) || s.StartsWith("$hpt_", StringComparison.InvariantCultureIgnoreCase))     // events do that
+                s = s.Substring(5);
+            if (s.StartsWith("int_", StringComparison.InvariantCultureIgnoreCase) || s.StartsWith("hpt_", StringComparison.InvariantCultureIgnoreCase))       // outfitting.json
                 s = s.Substring(4);
-            s = s.SplitCapsWordFull(replaceloadouts);
+            else if (s.StartsWith("$"))
+                s = s.Substring(1);
+            if (s.EndsWith("_name;"))
+                s = s.Substring(0, s.Length - 6);
+
+            s = s.SplitCapsWordFull(replaceitems, shipnames);
 
             if (s.Contains("Planetary Vehicle Hangar"))                 // strange class naming, fix up after above.. don't want two tables
                 s = s.Replace("Rating E", "Rating H").Replace("Rating D", "Rating G");
-            //System.Diagnostics.Debug.WriteLine("LO Item " + x + " >> " + s);
+
+            //System.Diagnostics.Debug.WriteLine("PP Item " + x + " >> " + s);
             return s;
         }
 
