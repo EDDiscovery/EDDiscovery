@@ -69,95 +69,51 @@ namespace NetLogEntry
 
             if (args.Left < 2)
             {
-                Console.WriteLine("[-keyrepeat]|[-repeat ms]\n" +
-                                  "JournalPath CMDRname Options..\n" +
-                                  "     Options: FSD name x y z (x y z is position as double)\n" +
-                                  "     Options: FSDTravel name x y z destx desty destz percentint \n" +
-                                  "     Options: Loc name x y z\n" +
-                                  "     Options: Interdiction name success isplayer combatrank faction power\n" +
-                                  "     Options: Docked, Undocked, Touchdown, Liftoff, CommitCrime MissionCompleted MissionCompleted2 MiningRefined\n" +
-                                  "     Options: ScanPlanet name\n" +
-                                  "     Options: ScanStar NavBeaconScan ScanEarth SellShipOnRebuy SearchANdRescue MissionRedirected\n" +
-                                  "     Options: RepairDrone CommunityGoal\n" +
-                                  "     Options: MusicNormal MusicGalMap MusicSysMap\n" +
-                                  "     Options: Friends Name\n" +
-                                  "     Options: FuelScoop amount total\n" +
-                                  "     Options: JetConeBoost\n" +
-                                  "     Options: FighterDestroyed FigherRebuilt NpcCrewRank NpcCrewPaidWage LaunchDrone\n" +
-                                  "     Options: Market\n" +
-                                  "EDDBSTARS <filename> or EDDBPLANETS or EDDBSTARNAMES for the eddb dump\n" +
-                                  "Phoneme <filename> <fileout> for EDDI phoneme tx\n" +
-                                  "Voicerecon <filename>\n" +
-                                  "DeviceMappings <filename>\n"
-                                  );
+                Help();
                 return;
             }
 
-            string filename = args.Next;
-            string cmdrname = args.Next;        // must have 2 at least.
+            string arg1 = args.Next;
+            string arg2 = args.Next;        // must have 2 at least.
 
-            if (filename.Equals("EDDBSTARS", StringComparison.InvariantCultureIgnoreCase))
+            if (arg1.Equals("EDDBSTARS", StringComparison.InvariantCultureIgnoreCase))
             {
-                EDDBLog(cmdrname, "\"Star\"", "\"spectral_class\"", "Star class ");
-                return;
+                EDDBLog(arg2, "\"Star\"", "\"spectral_class\"", "Star class ");
             }
-            if (filename.Equals("EDDBPLANETS", StringComparison.InvariantCultureIgnoreCase))
+            else if (arg1.Equals("EDDBPLANETS", StringComparison.InvariantCultureIgnoreCase))
             {
-                EDDBLog(cmdrname, "\"Planet\"", "\"type_name\"", "Planet class");
-                return;
+                EDDBLog(arg2, "\"Planet\"", "\"type_name\"", "Planet class");
             }
-
-            if (filename.Equals("EDDBSTARNAMES", StringComparison.InvariantCultureIgnoreCase))
+            else if (arg1.Equals("EDDBSTARNAMES", StringComparison.InvariantCultureIgnoreCase))
             {
-                EDDBLog(cmdrname, "\"Star\"", "\"name\"", "Star Name");
-                return;
+                EDDBLog(arg2, "\"Star\"", "\"name\"", "Star Name");
             }
-
-            if (filename.Equals("voicerecon", StringComparison.InvariantCultureIgnoreCase))
+            else if (arg1.Equals("voicerecon", StringComparison.InvariantCultureIgnoreCase))
             {
-                Bindings(cmdrname);
-                return;
+                Bindings(arg2);
             }
-
-            if (filename.Equals("devicemappings", StringComparison.InvariantCultureIgnoreCase))
+            else if (arg1.Equals("devicemappings", StringComparison.InvariantCultureIgnoreCase))
             {
-                DeviceMappings(cmdrname);
-                return;
+                DeviceMappings(arg2);
             }
-
-
-            if (filename.Equals("Phoneme", StringComparison.InvariantCultureIgnoreCase) && args.Left == 1)
+            else if (arg1.Equals("Phoneme", StringComparison.InvariantCultureIgnoreCase) )
             {
-                Phoneme(cmdrname, args.Next);
-                return;
+                if ( args.Left >= 1 )
+                    Phoneme(arg2, args.Next);
             }
-
-            if (args.Left == 0)
+            else
             {
-                Console.WriteLine("Minimum 3 parameters, see help run without options");
-                return;
+                JournalEntry(arg1, arg2, args, repeatdelay);
             }
-
-            JournalEntry(filename, cmdrname, args, repeatdelay);
         }
 
         static void JournalEntry(string filename, string cmdrname, Args argsentry, int repeatdelay)
         {
-            if (!File.Exists(filename))
+            if (argsentry.Left == 0)
             {
-                using (Stream fs = new FileStream(filename, FileMode.Create, FileAccess.Write, FileShare.ReadWrite))
-                {
-                    using (StreamWriter sr = new StreamWriter(fs))
-                    {
-                        string line = "{ " + TimeStamp() + "\"event\":\"Fileheader\", \"part\":1, \"language\":\"English\\\\UK\", \"gameversion\":\"2.2 (Beta 2)\", \"build\":\"r121783/r0 \" }";
-                        sr.WriteLine(line);
-                        Console.WriteLine(line);
-
-                        string line2 = "{ " + TimeStamp() + "\"event\":\"LoadGame\", \"Commander\":\"" + cmdrname + "\", \"Ship\":\"Anaconda\", \"ShipID\":14, \"GameMode\":\"Open\", \"Credits\":18670609, \"Loan\":0 }";
-                        sr.WriteLine(line2);
-                        Console.WriteLine(line2);
-                    }
-                }
+                Help();
+                Console.WriteLine("** Minimum 3 parameters of filename, cmdrname, journalentrytype");
+                return;
             }
 
             int repeatcount = 0;
@@ -173,13 +129,13 @@ namespace NetLogEntry
                 string lineout = null;      //quick writer
 
                 if (writetype.Equals("FSD", StringComparison.InvariantCultureIgnoreCase))
-                    lineout = FSDJump(args, filename, repeatcount);
+                    lineout = FSDJump(args, repeatcount);
                 else if (writetype.Equals("FSDTravel", StringComparison.InvariantCultureIgnoreCase))
-                    lineout = FSDTravel(args, filename);
+                    lineout = FSDTravel(args);
                 else if (writetype.Equals("LOC", StringComparison.InvariantCultureIgnoreCase))
-                    lineout = Loc(args, filename);
+                    lineout = Loc(args);
                 else if (writetype.Equals("Interdiction", StringComparison.InvariantCultureIgnoreCase))
-                    lineout = Interdiction(args, filename);
+                    lineout = Interdiction(args);
                 else if (writetype.Equals("Docked", StringComparison.InvariantCultureIgnoreCase))
                     lineout = "{ " + TimeStamp() + "\"event\":\"Docked\", " +
                         "\"StationName\":\"Jameson Memorial\", " +
@@ -263,16 +219,41 @@ namespace NetLogEntry
                 else if (writetype.Equals("LaunchDrone", StringComparison.InvariantCultureIgnoreCase))
                     lineout = "{ " + TimeStamp() + F("event", "LaunchDrone") + FF("Type", "FuelTransfer") + " }";
                 else if (writetype.Equals("Market", StringComparison.InvariantCultureIgnoreCase))
-                    lineout = Market(Path.GetDirectoryName(filename));
-
+                    lineout = Market(Path.GetDirectoryName(filename) , args.Next);
+                else if (writetype.Equals("ModuleInfo", StringComparison.InvariantCultureIgnoreCase))
+                    lineout = ModuleInfo(Path.GetDirectoryName(filename), args.Next);
+                else if (writetype.Equals("Outfitting", StringComparison.InvariantCultureIgnoreCase))
+                    lineout = Outfitting(Path.GetDirectoryName(filename), args.Next);
+                else if (writetype.Equals("Shipyard", StringComparison.InvariantCultureIgnoreCase))
+                    lineout = Shipyard(Path.GetDirectoryName(filename) , args.Next);
                 else
                 {
-                    Console.WriteLine("Missing or incorrect arguments for journal write");
+                    Help();
+                    Console.WriteLine("** Unrecognised journal type");
                     break;
                 }
 
                 if (lineout != null)
+                {
+                    if (!File.Exists(filename))
+                    {
+                        using (Stream fs = new FileStream(filename, FileMode.Create, FileAccess.Write, FileShare.ReadWrite))
+                        {
+                            using (StreamWriter sr = new StreamWriter(fs))
+                            {
+                                string line = "{ " + TimeStamp() + "\"event\":\"Fileheader\", \"part\":1, \"language\":\"English\\\\UK\", \"gameversion\":\"2.2 (Beta 2)\", \"build\":\"r121783/r0 \" }";
+                                sr.WriteLine(line);
+                                Console.WriteLine(line);
+
+                                string line2 = "{ " + TimeStamp() + "\"event\":\"LoadGame\", \"Commander\":\"" + cmdrname + "\", \"Ship\":\"Anaconda\", \"ShipID\":14, \"GameMode\":\"Open\", \"Credits\":18670609, \"Loan\":0 }";
+                                sr.WriteLine(line2);
+                                Console.WriteLine(line2);
+                            }
+                        }
+                    }
+
                     Write(filename, lineout);
+                }
                 else
                     break;
 
@@ -299,11 +280,37 @@ namespace NetLogEntry
             }
         }
 
-        static string Loc(Args args, string filename)
+        static void Help()
+        {
+            Console.WriteLine("[-keyrepeat]|[-repeat ms]\n" +
+                              "JournalPath CMDRname Options..\n" +
+                              "     Options: FSD name x y z (x y z is position as double)\n" +
+                              "     Options: FSDTravel name x y z destx desty destz percentint \n" +
+                              "     Options: Loc name x y z\n" +
+                              "     Options: Interdiction name success isplayer combatrank faction power\n" +
+                              "     Options: Docked, Undocked, Touchdown, Liftoff, CommitCrime MissionCompleted MissionCompleted2 MiningRefined\n" +
+                              "     Options: ScanPlanet name\n" +
+                              "     Options: ScanStar NavBeaconScan ScanEarth SellShipOnRebuy SearchANdRescue MissionRedirected\n" +
+                              "     Options: RepairDrone CommunityGoal\n" +
+                              "     Options: MusicNormal MusicGalMap MusicSysMap\n" +
+                              "     Options: Friends Name\n" +
+                              "     Options: FuelScoop amount total\n" +
+                              "     Options: JetConeBoost\n" +
+                              "     Options: FighterDestroyed FigherRebuilt NpcCrewRank NpcCrewPaidWage LaunchDrone\n" +
+                              "     Options: Market ModuleInfo Outfitting Shipyard (use NOFILE after to say don't write the file)\n" +
+                              "EDDBSTARS <filename> or EDDBPLANETS or EDDBSTARNAMES for the eddb dump\n" +
+                              "Phoneme <filename> <fileout> for EDDI phoneme tx\n" +
+                              "Voicerecon <filename>\n" +
+                              "DeviceMappings <filename>\n"
+                              );
+
+        }
+
+        static string Loc(Args args)
         {
             if (args.Left < 4)
             {
-                Console.WriteLine("More parameters");
+                Console.WriteLine("** More parameters");
                 return null;
             }
 
@@ -323,11 +330,11 @@ namespace NetLogEntry
         }
 
         //                                  "Options: Interdiction Loc name success isplayer combatrank faction power\n" +
-        static string Interdiction(Args args, string filename)
+        static string Interdiction(Args args)
         {
             if (args.Left < 6)
             {
-                Console.WriteLine("More parameters");
+                Console.WriteLine("** More parameters");
                 return null;
             }
 
@@ -340,11 +347,11 @@ namespace NetLogEntry
                 "\"Power\":\"" + args[5] + "\" }";
         }
 
-        static string FSDJump(Args args, string filename, int repeatcount)
+        static string FSDJump(Args args, int repeatcount)
         {
             if (args.Left < 4)
             {
-                Console.WriteLine("More parameters");
+                Console.WriteLine("** More parameters");
                 return null;
             }
 
@@ -353,11 +360,9 @@ namespace NetLogEntry
 
             if (!double.TryParse(args.Next, out x) || !double.TryParse(args.Next, out y) || !double.TryParse(args.Next, out z))
             {
-                Console.WriteLine("X,y,Z must be numbers");
+                Console.WriteLine("** X,Y,Z must be numbers");
                 return null;
             }
-
-            Console.WriteLine("In file " + filename);
 
             z = z + 100 * repeatcount;
 
@@ -370,11 +375,11 @@ namespace NetLogEntry
             "\"JumpDist\":10.791, \"FuelUsed\":0.790330, \"FuelLevel\":6.893371 }";
         }
 
-        static string FSDTravel(Args args, string filename)
+        static string FSDTravel(Args args)
         {
             if (args.Left < 8)
             {
-                Console.WriteLine("More parameters");
+                Console.WriteLine("** More parameters");
                 return null;
             }
 
@@ -386,7 +391,7 @@ namespace NetLogEntry
                 !double.TryParse(args.Next, out dx) || !double.TryParse(args.Next, out dy) || !double.TryParse(args.Next, out dz) || 
                 !double.TryParse(args.Next,out percent) )
             {
-                Console.WriteLine("X,y,Z,dx,dy,dz,percent must be numbers");
+                Console.WriteLine("** X,Y,Z,dx,dy,dz,percent must be numbers");
                 return null;
             }
 
@@ -405,54 +410,54 @@ namespace NetLogEntry
             "\"JumpDist\":10.791, \"FuelUsed\":0.790330, \"FuelLevel\":6.893371 }";
         }
 
-        static string Market(string mpath)
+        static string Market(string mpath, string opt)
         {
             string mline = "{ " + TimeStamp() + F("event", "Market") + F("MarketID", 12345678) + F("StationName", "Columbus") + FF("StarSystem", "Sol");
-            string market = mline +  ", " + TestNetLogEntry.Properties.Resources.market;
-            File.WriteAllText(Path.Combine(mpath, "market.json"),market);
+            string market = mline + ", " + TestNetLogEntry.Properties.Resources.Market;
+
+            if (opt == null || opt.Equals("NOFILE", StringComparison.InvariantCultureIgnoreCase) == false)
+                File.WriteAllText(Path.Combine(mpath, "Market.json"), market);
 
             return mline + " }";
         }
 
-
-        public static string TimeStamp()
+        static string Outfitting(string mpath, string opt)
         {
-            DateTime dt = DateTime.Now.ToUniversalTime();
-            return "\"timestamp\":\"" + dt.ToString("yyyy'-'MM'-'dd'T'HH':'mm':'ss'Z'") + "\", ";
+            //{ "timestamp":"2018-01-28T23:45:39Z", "event":"Outfitting", "MarketID":3229009408, "StationName":"Mourelle Gateway", "StarSystem":"G 65-9",
+            string jline = "{ " + TimeStamp() + F("event", "Outfitting") + F("MarketID", 12345678) + F("StationName", "Columbus") + FF("StarSystem", "Sol");
+            string fline = jline + ", " + TestNetLogEntry.Properties.Resources.Outfitting;
+
+            if (opt == null || opt.Equals("NOFILE", StringComparison.InvariantCultureIgnoreCase) == false)
+                File.WriteAllText(Path.Combine(mpath, "Outfitting.json"), fline);
+
+            return jline + " }";
         }
 
-        public static string F(string name, string v)
+        static string Shipyard(string mpath, string opt)
         {
-            return "\"" + name + "\":\"" + v + "\", ";
-        }
+            // { "timestamp":"2018-01-26T03:47:33Z", "event":"Shipyard", "MarketID":128004608, "StationName":"Vonarburg Co-operative", "StarSystem":"Wyrd",
 
-        public static string FF(string name, string v)      // no final comma
-        {
-            return "\"" + name + "\":\"" + v + "\"";
-        }
+            string jline = "{ " + TimeStamp() + F("event", "Shipyard") + F("MarketID", 12345678) + F("StationName", "Columbus") + FF("StarSystem", "Sol");
+            string fline = jline + ", " + TestNetLogEntry.Properties.Resources.Shipyard;
 
-        public static string F(string name, long v)
-        {
-            return "\"" + name + "\":" + v + ", ";
-        }
+            if (opt == null || opt.Equals("NOFILE", StringComparison.InvariantCultureIgnoreCase) == false)
+                File.WriteAllText(Path.Combine(mpath, "Shipyard.json"), fline);
 
-        public static string FF(string name, long v)      // no final comma
-        {
-            return "\"" + name + "\":" + v;
+            return jline + " }";
         }
 
 
-        public static void Write(string filename, string line)
+        static string ModuleInfo(string mpath, string opt)
         {
-            using (Stream fs = new FileStream(filename, FileMode.Append, FileAccess.Write, FileShare.ReadWrite))
-            {
-                using (StreamWriter sr = new StreamWriter(fs))
-                {
-                    sr.WriteLine(line);
-                    Console.WriteLine(line);
-                }
-            }
+            string mline = "{ " + TimeStamp() + FF("event", "ModuleInfo");
+            string market = mline + ", " + TestNetLogEntry.Properties.Resources.ModulesInfo;
+
+            if (opt == null || opt.Equals("NOFILE", StringComparison.InvariantCultureIgnoreCase) == false)
+                File.WriteAllText(Path.Combine(mpath, "ModulesInfo.json"), market);     // note the plural
+
+            return mline + " }";
         }
+
 
         public static void EDDBLog(string filename, string groupname, string field, string title)
         {
@@ -696,5 +701,48 @@ namespace NetLogEntry
 
 
         }
+
+        #region Helpers for journal writing
+
+        public static string TimeStamp()
+        {
+            DateTime dt = DateTime.Now.ToUniversalTime();
+            return "\"timestamp\":\"" + dt.ToString("yyyy'-'MM'-'dd'T'HH':'mm':'ss'Z'") + "\", ";
+        }
+
+        public static string F(string name, string v)
+        {
+            return "\"" + name + "\":\"" + v + "\", ";
+        }
+
+        public static string FF(string name, string v)      // no final comma
+        {
+            return "\"" + name + "\":\"" + v + "\"";
+        }
+
+        public static string F(string name, long v)
+        {
+            return "\"" + name + "\":" + v + ", ";
+        }
+
+        public static string FF(string name, long v)      // no final comma
+        {
+            return "\"" + name + "\":" + v;
+        }
+
+
+        public static void Write(string filename, string line)
+        {
+            using (Stream fs = new FileStream(filename, FileMode.Append, FileAccess.Write, FileShare.ReadWrite))
+            {
+                using (StreamWriter sr = new StreamWriter(fs))
+                {
+                    sr.WriteLine(line);
+                    Console.WriteLine(line);
+                }
+            }
+        }
+
+        #endregion
     }
 }
