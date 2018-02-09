@@ -149,11 +149,10 @@ namespace EDDiscovery.UserControls
             System.Windows.Forms.DataVisualization.Charting.Series series99 = new System.Windows.Forms.DataVisualization.Charting.Series();
             System.Windows.Forms.DataVisualization.Charting.Series series100 = new System.Windows.Forms.DataVisualization.Charting.Series();
             System.Windows.Forms.DataVisualization.Charting.Series series101 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(UserControlMap));
             this.labelExt1 = new System.Windows.Forms.Label();
-            this.textMinRadius = new ExtendedControls.TextBoxBorder();
+            this.textMinRadius = new ExtendedControls.NumberBoxDouble();
             this.labelExt3 = new System.Windows.Forms.Label();
-            this.textMaxRadius = new ExtendedControls.TextBoxBorder();
+            this.textMaxRadius = new ExtendedControls.NumberBoxDouble();
             this.panelTop = new System.Windows.Forms.Panel();
             this.slideMaxItems = new System.Windows.Forms.TrackBar();
             this.chartMap = new System.Windows.Forms.DataVisualization.Charting.Chart();
@@ -177,15 +176,12 @@ namespace EDDiscovery.UserControls
             this.toolStripMenuReset = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator = new System.Windows.Forms.ToolStripSeparator();
             this.aboutToolStripAbout = new System.Windows.Forms.ToolStripMenuItem();
-            this.tableLayoutAboutMap = new System.Windows.Forms.TableLayoutPanel();
-            this.richTextBox1 = new System.Windows.Forms.RichTextBox();
-            this.label1 = new System.Windows.Forms.Label();
-            this.buttonExt1 = new ExtendedControls.ButtonExt();
+            this.panelOuter = new System.Windows.Forms.Panel();
             this.panelTop.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.slideMaxItems)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.chartMap)).BeginInit();
             this.contextMenuStrip.SuspendLayout();
-            this.tableLayoutAboutMap.SuspendLayout();
+            this.panelOuter.SuspendLayout();
             this.SuspendLayout();
             // 
             // labelExt1
@@ -205,7 +201,12 @@ namespace EDDiscovery.UserControls
             this.textMinRadius.BorderColorScaling = 0.5F;
             this.textMinRadius.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textMinRadius.ControlBackground = System.Drawing.SystemColors.Control;
+            this.textMinRadius.DelayBeforeNotification = 500;
+            this.textMinRadius.Format = "0.#######";
+            this.textMinRadius.BackErrorColor = System.Drawing.Color.Red;
             this.textMinRadius.Location = new System.Drawing.Point(28, 3);
+            this.textMinRadius.Maximum = 100000D;
+            this.textMinRadius.Minimum = 0D;
             this.textMinRadius.Multiline = false;
             this.textMinRadius.Name = "textMinRadius";
             this.textMinRadius.ReadOnly = false;
@@ -214,10 +215,12 @@ namespace EDDiscovery.UserControls
             this.textMinRadius.SelectionStart = 0;
             this.textMinRadius.Size = new System.Drawing.Size(40, 20);
             this.textMinRadius.TabIndex = 1;
+            this.textMinRadius.Text = "0";
             this.textMinRadius.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.textMinRadius.Value = 0D;
+            this.textMinRadius.ValueNoChange = 0D;
             this.textMinRadius.WordWrap = true;
-            this.textMinRadius.TextChanged += new System.EventHandler(this.TextMinRadius_TextChanged);
-            this.textMinRadius.Leave += new System.EventHandler(this.textMinRadius_Leave);
+            this.textMinRadius.ValueChanged += new System.EventHandler(this.textMinRadius_ValueChanged);
             // 
             // labelExt3
             // 
@@ -236,7 +239,12 @@ namespace EDDiscovery.UserControls
             this.textMaxRadius.BorderColorScaling = 0.5F;
             this.textMaxRadius.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textMaxRadius.ControlBackground = System.Drawing.SystemColors.Control;
+            this.textMaxRadius.DelayBeforeNotification = 500;
+            this.textMaxRadius.Format = "0.#######";
+            this.textMaxRadius.BackErrorColor = System.Drawing.Color.Red;
             this.textMaxRadius.Location = new System.Drawing.Point(106, 3);
+            this.textMaxRadius.Maximum = 100000D;
+            this.textMaxRadius.Minimum = 0D;
             this.textMaxRadius.Multiline = false;
             this.textMaxRadius.Name = "textMaxRadius";
             this.textMaxRadius.ReadOnly = false;
@@ -245,10 +253,12 @@ namespace EDDiscovery.UserControls
             this.textMaxRadius.SelectionStart = 0;
             this.textMaxRadius.Size = new System.Drawing.Size(40, 20);
             this.textMaxRadius.TabIndex = 1;
+            this.textMaxRadius.Text = "0";
             this.textMaxRadius.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.textMaxRadius.Value = 0D;
+            this.textMaxRadius.ValueNoChange = 0D;
             this.textMaxRadius.WordWrap = true;
-            this.textMaxRadius.TextChanged += new System.EventHandler(this.TextMaxRadius_TextChanged);
-            this.textMaxRadius.Leave += new System.EventHandler(this.textMaxRadius_Leave);
+            this.textMaxRadius.ValueChanged += new System.EventHandler(this.textMaxRadius_ValueChanged);
             // 
             // panelTop
             // 
@@ -330,7 +340,7 @@ namespace EDDiscovery.UserControls
             chartArea1.BackSecondaryColor = System.Drawing.Color.Black;
             chartArea1.Name = "ChartArea";
             this.chartMap.ChartAreas.Add(chartArea1);
-            this.chartMap.Location = new System.Drawing.Point(15, 41);
+            this.chartMap.Location = new System.Drawing.Point(0, 0);
             this.chartMap.Margin = new System.Windows.Forms.Padding(0);
             this.chartMap.MinimumSize = new System.Drawing.Size(50, 50);
             this.chartMap.Name = "chartMap";
@@ -1197,66 +1207,23 @@ namespace EDDiscovery.UserControls
             this.aboutToolStripAbout.Text = "About";
             this.aboutToolStripAbout.Click += new System.EventHandler(this.aboutToolStripAbout_Click);
             // 
-            // tableLayoutAboutMap
+            // panelOuter
             // 
-            this.tableLayoutAboutMap.BackColor = System.Drawing.SystemColors.ControlLight;
-            this.tableLayoutAboutMap.ColumnCount = 1;
-            this.tableLayoutAboutMap.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tableLayoutAboutMap.Controls.Add(this.richTextBox1, 0, 1);
-            this.tableLayoutAboutMap.Controls.Add(this.label1, 0, 0);
-            this.tableLayoutAboutMap.Controls.Add(this.buttonExt1, 0, 2);
-            this.tableLayoutAboutMap.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutAboutMap.Location = new System.Drawing.Point(0, 26);
-            this.tableLayoutAboutMap.Margin = new System.Windows.Forms.Padding(30);
-            this.tableLayoutAboutMap.Name = "tableLayoutAboutMap";
-            this.tableLayoutAboutMap.RowCount = 3;
-            this.tableLayoutAboutMap.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutAboutMap.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutAboutMap.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
-            this.tableLayoutAboutMap.Size = new System.Drawing.Size(380, 380);
-            this.tableLayoutAboutMap.TabIndex = 30;
-            this.tableLayoutAboutMap.Visible = false;
-            // 
-            // richTextBox1
-            // 
-            this.richTextBox1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.richTextBox1.Location = new System.Drawing.Point(3, 23);
-            this.richTextBox1.Name = "richTextBox1";
-            this.richTextBox1.Size = new System.Drawing.Size(374, 324);
-            this.richTextBox1.TabIndex = 1;
-            this.richTextBox1.Text = resources.GetString("richTextBox1.Text");
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(3, 0);
-            this.label1.Name = "label1";
-            this.label1.Padding = new System.Windows.Forms.Padding(0, 2, 0, 0);
-            this.label1.Size = new System.Drawing.Size(374, 20);
-            this.label1.TabIndex = 2;
-            this.label1.Text = "Map Panel: how to use and what can be done with.";
-            // 
-            // buttonExt1
-            // 
-            this.buttonExt1.Dock = System.Windows.Forms.DockStyle.Right;
-            this.buttonExt1.Location = new System.Drawing.Point(302, 353);
-            this.buttonExt1.Name = "buttonExt1";
-            this.buttonExt1.Size = new System.Drawing.Size(75, 24);
-            this.buttonExt1.TabIndex = 3;
-            this.buttonExt1.Text = "OK";
-            this.buttonExt1.UseVisualStyleBackColor = true;
-            this.buttonExt1.Click += new System.EventHandler(this.buttonExt1_Click);
+            this.panelOuter.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panelOuter.Controls.Add(this.chartMap);
+            this.panelOuter.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panelOuter.Location = new System.Drawing.Point(0, 26);
+            this.panelOuter.Name = "panelOuter";
+            this.panelOuter.Size = new System.Drawing.Size(380, 380);
+            this.panelOuter.TabIndex = 30;
             // 
             // UserControlMap
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Black;
-            this.Controls.Add(this.tableLayoutAboutMap);
+            this.Controls.Add(this.panelOuter);
             this.Controls.Add(this.panelTop);
-            this.Controls.Add(this.chartMap);
             this.Name = "UserControlMap";
             this.Size = new System.Drawing.Size(380, 406);
             this.Load += new System.EventHandler(this.UserControlMap_Load);
@@ -1267,17 +1234,16 @@ namespace EDDiscovery.UserControls
             ((System.ComponentModel.ISupportInitialize)(this.slideMaxItems)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.chartMap)).EndInit();
             this.contextMenuStrip.ResumeLayout(false);
-            this.tableLayoutAboutMap.ResumeLayout(false);
-            this.tableLayoutAboutMap.PerformLayout();
+            this.panelOuter.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
 
         #endregion
         private System.Windows.Forms.Label labelExt1;
-        private ExtendedControls.TextBoxBorder textMinRadius;
+        private ExtendedControls.NumberBoxDouble textMinRadius;
         private System.Windows.Forms.Label labelExt3;
-        private ExtendedControls.TextBoxBorder textMaxRadius;
+        private ExtendedControls.NumberBoxDouble textMaxRadius;
         private Panel panelTop;
         private System.Windows.Forms.DataVisualization.Charting.Chart chartMap;
         private TrackBar slideMaxItems;
@@ -1301,9 +1267,6 @@ namespace EDDiscovery.UserControls
         private ToolStripMenuItem toolStripMenuReset;
         private ToolStripSeparator toolStripSeparator;
         private ToolStripMenuItem aboutToolStripAbout;
-        private TableLayoutPanel tableLayoutAboutMap;
-        private RichTextBox richTextBox1;
-        private Label label1;
-        private ExtendedControls.ButtonExt buttonExt1;
+        private Panel panelOuter;
     }
 }

@@ -21,117 +21,120 @@ namespace EliteDangerousCore
         {
             return FindSystem(new SystemClass(edsmid),conn);
         }
-        
+
         public static ISystem FindSystem(ISystem find, DB.SQLiteConnectionSystem conn = null)
         {
-            ISystem orgsys = find;
+            lock (systemsByEdsmId)          // Rob seen instances of it being locked together in multiple star distance threads, we need to serialise the whole thing
+            {                               // Concurrent dictionary no good, they could both be about to add the same thing at the same time and pass the contains test.
+                ISystem orgsys = find;
 
-            List<ISystem> foundlist = new List<ISystem>();
+                List<ISystem> foundlist = new List<ISystem>();
 
-            if (find.EDSMID > 0 && systemsByEdsmId.ContainsKey(find.EDSMID))        // add to list
-            {
-                ISystem s = systemsByEdsmId[find.EDSMID];
-                foundlist.Add(s);
-            }
-
-            if (systemsByName.ContainsKey(find.Name))            // and all names cached
-            {
-                List<ISystem> s = systemsByName[find.Name];
-                foundlist.AddRange(s);
-            }
-
-            ISystem found = null;
-
-            if (find.HasCoordinate && foundlist.Count > 0)           // if sys has a co-ord, find the best match within 0.5 ly
-                found = NearestTo(foundlist, find , 0.5);
-
-            if (found == null && foundlist.Count == 1 && !find.HasCoordinate) // if we did not find one, but we have only 1 candidate, use it.
-                found = foundlist[0];
-
-            if ( found == null )                                    // nope, no cache, so use the db
-            {
-                //System.Diagnostics.Debug.WriteLine("Look up from DB " + sys.name + " " + sys.id_edsm);
-
-                bool closeit = false;
-
-                if (conn == null)       // we may touch the db multiple times, so if we don't have it open, do it.
+                if (find.EDSMID > 0 && systemsByEdsmId.ContainsKey(find.EDSMID))        // add to list
                 {
-                    closeit = true;
-                    conn = new DB.SQLiteConnectionSystem();
+                    ISystem s = systemsByEdsmId[find.EDSMID];
+                    foundlist.Add(s);
                 }
 
-                if (find.EDSMID > 0)        // if we have an ID, look it up
+                if (systemsByName.ContainsKey(find.Name))            // and all names cached
                 {
-                    found = DB.SystemClassDB.GetSystem(find.EDSMID, conn, DB.SystemClassDB.SystemIDType.EdsmId, name: find.Name);
-                }
-                 
-                // if not found, or no co-ord (unlikely), or its old as the hills, AND has a name
-
-                if ((found == null || !found.HasCoordinate || DateTime.UtcNow.Subtract(found.UpdateDate).TotalDays > 7) && find.Name.Length >= 2)
-                {
-                    List<ISystem> _systems = DB.SystemClassDB.GetSystemsByName(find.Name, cn: conn);     // try DB via names..
-
-                    if ( found != null )
-                        _systems.Add(found);        // add on the EDSM ID candidate.. if present
-
-                    if (_systems.Count == 1 && !find.HasCoordinate)  // 1 name, no co-ord, go with it as a back stop
-                        found = _systems[0];
-                    else if (_systems.Count > 0 && find.HasCoordinate)  // entries, and we have a co-ord to distinguish
-                    {
-                        found = NearestTo(_systems, find, 0.5);      // find it..
-                    }                                               // else, found will be edsmid lookup if set..
+                    List<ISystem> s = systemsByName[find.Name];
+                    foundlist.AddRange(s);
                 }
 
-                if (found == null && find.HasCoordinate)           // finally, not found, but we have a co-ord, find it from the db  by distance
-                    found = DB.SystemClassDB.GetSystemByPosition(find.X, find.Y, find.Z, conn);
+                ISystem found = null;
 
-                if (closeit && conn != null)                // finished with db, close
+                if (find.HasCoordinate && foundlist.Count > 0)           // if sys has a co-ord, find the best match within 0.5 ly
+                    found = NearestTo(foundlist, find, 0.5);
+
+                if (found == null && foundlist.Count == 1 && !find.HasCoordinate) // if we did not find one, but we have only 1 candidate, use it.
+                    found = foundlist[0];
+
+                if (found == null)                                    // nope, no cache, so use the db
                 {
-                    conn.Dispose();
-                }
+                    //System.Diagnostics.Debug.WriteLine("Look up from DB " + sys.name + " " + sys.id_edsm);
 
-                if (found != null)                              // if we have a good db, go for it
-                {
-                    if ((find.HasCoordinate && !found.HasCoordinate) || find.UpdateDate > found.UpdateDate) // if found does not have co-ord, or sys is more up to date..
+                    bool closeit = false;
+
+                    if (conn == null)       // we may touch the db multiple times, so if we don't have it open, do it.
                     {
-                        found.X = find.X; found.Y = find.Y; found.Z = find.Z;
+                        closeit = true;
+                        conn = new DB.SQLiteConnectionSystem();
                     }
 
-                    if (find.UpdateDate > found.UpdateDate)      // Bravada, check that we are not overwriting newer info..
-                    {                                           // if the journal info is newer than the db system name, lets presume the journal data is better
-                        found.Name = find.Name;
-                        found.UpdateDate = find.UpdateDate;
-                    }
-
-                    if (found.EDSMID > 0)
+                    if (find.EDSMID > 0)        // if we have an ID, look it up
                     {
-                        systemsByEdsmId[found.EDSMID] = found;         // must be definition the best ID found.. and if the update date of sys is better, its now been updated
+                        found = DB.SystemClassDB.GetSystem(find.EDSMID, conn, DB.SystemClassDB.SystemIDType.EdsmId, name: find.Name);
                     }
 
-                    if (systemsByName.ContainsKey(orgsys.Name))    // use the original name we looked it up in, if we found one.. remove it
+                    // if not found, or no co-ord (unlikely), or its old as the hills, AND has a name
+
+                    if ((found == null || !found.HasCoordinate || DateTime.UtcNow.Subtract(found.UpdateDate).TotalDays > 7) && find.Name.Length >= 2)
                     {
-                        systemsByName[orgsys.Name].Remove(orgsys);  // and remove 
+                        List<ISystem> _systems = DB.SystemClassDB.GetSystemsByName(find.Name, cn: conn);     // try DB via names..
+
+                        if (found != null)
+                            _systems.Add(found);        // add on the EDSM ID candidate.. if present
+
+                        if (_systems.Count == 1 && !find.HasCoordinate)  // 1 name, no co-ord, go with it as a back stop
+                            found = _systems[0];
+                        else if (_systems.Count > 0 && find.HasCoordinate)  // entries, and we have a co-ord to distinguish
+                        {
+                            found = NearestTo(_systems, find, 0.5);      // find it..
+                        }                                               // else, found will be edsmid lookup if set..
                     }
 
-                    if (systemsByName.ContainsKey(found.Name))
-                        systemsByName[found.Name].Add(found);   // add to list..
+                    if (found == null && find.HasCoordinate)           // finally, not found, but we have a co-ord, find it from the db  by distance
+                        found = DB.SystemClassDB.GetSystemByPosition(find.X, find.Y, find.Z, conn);
+
+                    if (closeit && conn != null)                // finished with db, close
+                    {
+                        conn.Dispose();
+                    }
+
+                    if (found != null)                              // if we have a good db, go for it
+                    {
+                        if ((find.HasCoordinate && !found.HasCoordinate) || find.UpdateDate > found.UpdateDate) // if found does not have co-ord, or sys is more up to date..
+                        {
+                            found.X = find.X; found.Y = find.Y; found.Z = find.Z;
+                        }
+
+                        if (find.UpdateDate > found.UpdateDate)      // Bravada, check that we are not overwriting newer info..
+                        {                                           // if the journal info is newer than the db system name, lets presume the journal data is better
+                            found.Name = find.Name;
+                            found.UpdateDate = find.UpdateDate;
+                        }
+
+                        if (found.EDSMID > 0)
+                        {
+                            systemsByEdsmId[found.EDSMID] = found;         // must be definition the best ID found.. and if the update date of sys is better, its now been updated
+                        }
+
+                        if (systemsByName.ContainsKey(orgsys.Name))    // use the original name we looked it up in, if we found one.. remove it
+                        {
+                            systemsByName[orgsys.Name].Remove(orgsys);  // and remove 
+                        }
+
+                        if (systemsByName.ContainsKey(found.Name))
+                            systemsByName[found.Name].Add(found);   // add to list..
+                        else
+                            systemsByName[found.Name] = new List<ISystem> { found }; // or make list
+
+                        //System.Diagnostics.Trace.WriteLine($"DB found {found.name} {found.id_edsm} sysid {found.id_edsm}");
+
+                        return found;
+                    }
                     else
-                        systemsByName[found.Name] = new List<ISystem> { found }; // or make list
-
-                    //System.Diagnostics.Trace.WriteLine($"DB found {found.name} {found.id_edsm} sysid {found.id_edsm}");
-
-                    return found;
+                    {
+                        //System.Diagnostics.Trace.WriteLine($"DB NOT found {find.name} {find.id_edsm} ");
+                        return null;
+                    }
                 }
                 else
-                {
-                    //System.Diagnostics.Trace.WriteLine($"DB NOT found {find.name} {find.id_edsm} ");
-                    return null;
+                {                                               // FROM CACHE
+                    //System.Diagnostics.Trace.WriteLine($"Cached reference to {found.name} {found.id_edsm}");
+                    return found;       // no need for extra work.
                 }
-            }
-            else
-            {                                               // FROM CACHE
-                //System.Diagnostics.Trace.WriteLine($"Cached reference to {found.name} {found.id_edsm}");
-                return found;       // no need for extra work.
             }
 
         }

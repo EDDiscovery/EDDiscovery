@@ -36,7 +36,7 @@ namespace EDDiscovery.UserControls
     {
         private string DbSave { get { return "StarDistancePanel" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
 
-        private UserControlStarDistance.StarDistanceComputer computer;
+        private StarDistanceComputer computer;
 
         public UserControlPlot()
         {
@@ -48,20 +48,16 @@ namespace EDDiscovery.UserControls
         const double defaultmaximumradarradius = 50;
         const int maxitems = 500;
 
-        double MaxRadius = 0;
-        double MinRadius = 0;
-        
         public override void Init()
         {
-            computer = new UserControlStarDistance.StarDistanceComputer();
+            computer = new StarDistanceComputer();
+
+            textMinRadius.ValueNoChange = SQLiteConnectionUser.GetSettingDouble(DbSave + "PlotMin", 0);
+            textMaxRadius.ValueNoChange = SQLiteConnectionUser.GetSettingDouble(DbSave + "PlotMax", defaultmaximumradarradius);
+            textMinRadius.SetComparitor(textMaxRadius, -2);     // need to do this after values are set
+            textMaxRadius.SetComparitor(textMinRadius, 2);
 
             uctg.OnTravelSelectionChanged += Uctg_OnTravelSelectionChanged;
-
-            textMinRadius.Text = SQLiteConnectionUser.GetSettingDouble(DbSave + "PlotMin", 0).ToStringInvariant();
-            textMaxRadius.Text = SQLiteConnectionUser.GetSettingDouble(DbSave + "PlotMax", defaultmaximumradarradius).ToStringInvariant();
-            MaxRadius = float.Parse(textMaxRadius.Text);
-            MinRadius = float.Parse(textMinRadius.Text);
-                        
         }
 
         public override void ChangeCursorType(IHistoryCursor thc)
@@ -77,8 +73,8 @@ namespace EDDiscovery.UserControls
         {
             uctg.OnTravelSelectionChanged -= Uctg_OnTravelSelectionChanged;
             computer.ShutDown();
-            SQLiteConnectionUser.PutSettingDouble(DbSave + "PlotMin", textMinRadius.Text.InvariantParseDouble(0));
-            SQLiteConnectionUser.PutSettingDouble(DbSave + "PlotMax", textMaxRadius.Text.InvariantParseDouble(defaultmaximumradarradius));
+            SQLiteConnectionUser.PutSettingDouble(DbSave + "PlotMin", textMinRadius.Value);
+            SQLiteConnectionUser.PutSettingDouble(DbSave + "PlotMax", textMaxRadius.Value);
         }
 
         public override void InitialDisplay()
@@ -103,21 +99,13 @@ namespace EDDiscovery.UserControls
             {
                 computer.CalculateClosestSystems(he.System,
                     (s, d) => BeginInvoke((MethodInvoker)delegate { NewStarListComputed(s, d); }),
-                    maxitems, MinRadius, MaxRadius, true);
+                    maxitems, textMinRadius.Value, textMaxRadius.Value, true);
             }
         }
         private void NewStarListComputed(ISystem sys, BaseUtils.SortedListDoubleDuplicate<ISystem>  list)      // In UI
         {
-            double? max = textMaxRadius.Text.InvariantParseDoubleNull();
-            if (max != null)
-                MaxRadius = float.Parse(textMaxRadius.Text);
-
-            double? min = textMinRadius.Text.InvariantParseDoubleNull();
-            if (min != null)
-                MinRadius = float.Parse(textMinRadius.Text);
-
             System.Diagnostics.Debug.Assert(Application.MessageLoop);       // check!
-            discoveryform.history.CalculateSqDistances(list, sys.X, sys.Y, sys.Z, maxitems, MinRadius, MaxRadius, true);
+            discoveryform.history.CalculateSqDistances(list, sys.X, sys.Y, sys.Z, maxitems, textMinRadius.Value, textMaxRadius.Value, true);
             FillRadar(list, sys);
         }
         
@@ -136,33 +124,30 @@ namespace EDDiscovery.UserControls
                 chartBubble.Series[6].Points.AddXY(0, 0, 4);
                 chartBubble.Series[6].ToolTip = centerSystem.Name;
 
-
-
                 foreach (KeyValuePair<double, ISystem> tvp in csl)
                 {
                     if (tvp.Value.Name != centerSystem.Name)
                     { 
+                        var theISystemInQuestion = tvp.Value;
+                        var sysX = theISystemInQuestion.X;
+                        var sysY = theISystemInQuestion.Y;
+                        var sysZ = theISystemInQuestion.Z;
+                        var distFromCurrentSys = Math.Round(Math.Sqrt(tvp.Key), 2, MidpointRounding.AwayFromZero);
+                        var curX = centerSystem.X;
+                        var curY = centerSystem.Y;
+                        var curZ = centerSystem.Z;
 
-                    var theISystemInQuestion = tvp.Value;
-                    var sysX = theISystemInQuestion.X;
-                    var sysY = theISystemInQuestion.Y;
-                    var sysZ = theISystemInQuestion.Z;
-                    var distFromCurrentSys = Math.Round(Math.Sqrt(tvp.Key), 2, MidpointRounding.AwayFromZero);
-                    var curX = centerSystem.X;
-                    var curY = centerSystem.Y;
-                    var curZ = centerSystem.Z;
+                        // reset charts axis
+                        chartBubble.ChartAreas[0].AxisY.IsStartedFromZero = false;
+                        chartBubble.ChartAreas[1].AxisY.IsStartedFromZero = false;
+                        chartBubble.ChartAreas[2].AxisY.IsStartedFromZero = false;
 
-                    // reset charts axis
-                    chartBubble.ChartAreas[0].AxisY.IsStartedFromZero = false;
-                    chartBubble.ChartAreas[1].AxisY.IsStartedFromZero = false;
-                    chartBubble.ChartAreas[2].AxisY.IsStartedFromZero = false;
-
-                    chartBubble.ChartAreas[0].AxisX.IsStartedFromZero = false;
-                    chartBubble.ChartAreas[1].AxisX.IsStartedFromZero = false;
-                    chartBubble.ChartAreas[2].AxisX.IsStartedFromZero = false;
+                        chartBubble.ChartAreas[0].AxisX.IsStartedFromZero = false;
+                        chartBubble.ChartAreas[1].AxisX.IsStartedFromZero = false;
+                        chartBubble.ChartAreas[2].AxisX.IsStartedFromZero = false;
 
 
-                        if (distFromCurrentSys > MinRadius)
+                        if (distFromCurrentSys > textMinRadius.Value)
                         {
                             int visits = discoveryform.history.GetVisitsCount(tvp.Value.Name, tvp.Value.EDSMID);
 
@@ -322,26 +307,16 @@ namespace EDDiscovery.UserControls
             }
         }
 
-        private void textMinRadius_TextChanged(object sender, EventArgs e)
+        private void textMinRadius_ValueChanged(object sender, EventArgs e)
         {
-            double? min = textMinRadius.Text.InvariantParseDoubleNull();
-            if (min != null)
-            MinRadius = float.Parse(textMinRadius.Text);
-
-            KickComputation(uctg.GetCurrentHistoryEntry);
-
+           KickComputation(uctg.GetCurrentHistoryEntry);
             refreshRadar();
         }
 
-        private void textMaxRadius_TextChanged(object sender, EventArgs e)
+        private void textMaxRadius_ValueChanged(object sender, EventArgs e)
         {
-            double? max = textMaxRadius.Text.InvariantParseDoubleNull();
-            if (max != null)
-            MaxRadius = float.Parse(textMaxRadius.Text);
-
             KickComputation(uctg.GetCurrentHistoryEntry);
-
-            refreshRadar();            
+            refreshRadar();
         }
                 
         private void refreshRadar()
@@ -465,5 +440,6 @@ namespace EDDiscovery.UserControls
             SetChartSize(chartBubble, zoomIndex);
             SetMarkerSize();
         }
+
     }    
 }
