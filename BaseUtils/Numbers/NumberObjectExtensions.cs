@@ -305,5 +305,17 @@ public static class ObjectExtensionsNumbersBool
             return false;
         }
     }
+
+    static public bool CompareTo<T>(this T v, T other, int code) where T : IComparable       // 0 = equal, 1 = v is greater, 2 = v is greater equal, -1, -2
+    {
+        int compare = v.CompareTo(other);
+
+        if (code == -2)
+            return compare <= 0;    //-1 less or 0 equal good
+        else if (code == 2)
+            return compare >= 0;
+        else 
+            return compare == code; // must be the same
+    }
 }
 
