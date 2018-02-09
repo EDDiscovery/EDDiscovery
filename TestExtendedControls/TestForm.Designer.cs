@@ -1134,8 +1134,6 @@
             this.textBoxDouble1.Minimum = -1.7976931348623157E+308D;
             this.textBoxDouble1.Multiline = false;
             this.textBoxDouble1.Name = "textBoxDouble1";
-            this.textBoxDouble1.Other = null;
-            this.textBoxDouble1.OtherComparision = 0;
             this.textBoxDouble1.ReadOnly = false;
             this.textBoxDouble1.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.textBoxDouble1.SelectionLength = 0;
@@ -1164,8 +1162,6 @@
             this.textBoxDouble2.Minimum = -1.7976931348623157E+308D;
             this.textBoxDouble2.Multiline = false;
             this.textBoxDouble2.Name = "textBoxDouble2";
-            this.textBoxDouble2.Other = null;
-            this.textBoxDouble2.OtherComparision = 0;
             this.textBoxDouble2.ReadOnly = false;
             this.textBoxDouble2.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.textBoxDouble2.SelectionLength = 0;
@@ -1194,8 +1190,6 @@
             this.numberBoxLong0.Minimum = ((long)(-9223372036854775808));
             this.numberBoxLong0.Multiline = false;
             this.numberBoxLong0.Name = "numberBoxLong0";
-            this.numberBoxLong0.Other = null;
-            this.numberBoxLong0.OtherComparision = 0;
             this.numberBoxLong0.ReadOnly = false;
             this.numberBoxLong0.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.numberBoxLong0.SelectionLength = 0;
@@ -1225,8 +1219,6 @@
             this.numberBoxLong1.Minimum = ((long)(-9223372036854775808));
             this.numberBoxLong1.Multiline = false;
             this.numberBoxLong1.Name = "numberBoxLong1";
-            this.numberBoxLong1.Other = null;
-            this.numberBoxLong1.OtherComparision = 0;
             this.numberBoxLong1.ReadOnly = false;
             this.numberBoxLong1.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.numberBoxLong1.SelectionLength = 0;
