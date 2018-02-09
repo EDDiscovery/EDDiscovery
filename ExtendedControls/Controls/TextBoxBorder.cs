@@ -35,7 +35,9 @@ namespace ExtendedControls
         public System.Windows.Forms.BorderStyle BorderStyle { get { return textbox.BorderStyle; } set { textbox.BorderStyle = value; Reposition(); Invalidate(true); } }
 
         public override Color ForeColor { get { return textbox.ForeColor; } set { textbox.ForeColor = value; Invalidate(true); } }
-        public override Color BackColor { get { return textbox.BackColor; } set { textbox.BackColor = value; Invalidate(true); } }
+        public override Color BackColor { get { return backnormalcolor; } set { backnormalcolor = value; if (!inerrorcondition) { textbox.BackColor = backnormalcolor; Invalidate(true); } } }
+        public Color BackErrorColor { get { return backerrorcolor; } set { backerrorcolor = value; if (inerrorcondition) { textbox.BackColor = backerrorcolor; Invalidate(true); } } }
+        public bool InErrorCondition { get { return inerrorcondition; } set { if (inerrorcondition != value) { inerrorcondition = value; textbox.BackColor = inerrorcondition ? backerrorcolor : backnormalcolor; Invalidate(true); } } }
         public Color ControlBackground { get { return controlbackcolor; } set { controlbackcolor = value; Invalidate(true); } } // colour of unfilled control area if border is on or button
 
         public bool WordWrap { get { return textbox.WordWrap; } set { textbox.WordWrap = value; } }
@@ -58,16 +60,21 @@ namespace ExtendedControls
 
         public void SetTipDynamically(ToolTip t, string text) { t.SetToolTip(textbox, text); } // only needed for dynamic changes..
 
-        private TextBox textbox;
+        protected TextBox textbox;
         private Color bordercolor = Color.Transparent;
         private Color controlbackcolor = SystemColors.Control;
+        private Color backnormalcolor;        // normal back colour..
+        private Color backerrorcolor;        // error back colour..
+        private bool inerrorcondition;          // if in error condition
 
-        
         public TextBoxBorder() : base()
         {
             this.GotFocus += TextBoxBorder_GotFocus;
             textbox = new TextBox();
             textbox.BorderStyle = BorderStyle.FixedSingle;
+            backerrorcolor = Color.Red;
+            backnormalcolor = textbox.BackColor;
+            inerrorcondition = false;
 
             // Enter and Leave is handled by this wrapper control itself, since when we leave the textbox, we leave this
             textbox.Click += Textbox_Click;
@@ -276,77 +283,77 @@ namespace ExtendedControls
 
         private void Textbox_Validated(object sender, EventArgs e)
         {
-            base.OnValidated(e);
+            OnValidated(e);
         }
 
         private void Textbox_Validating(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            base.OnValidating(e);
+            OnValidating(e);
         }
 
         private void Textbox_DoubleClick(object sender, EventArgs e)
         {
-            base.OnDoubleClick(e);
+            OnDoubleClick(e);
         }
 
         private void Textbox_Click(object sender, EventArgs e)
         {
-            base.OnClick(e);
+            OnClick(e);
         }
 
         private void Textbox_MouseDoubleClick(object sender, MouseEventArgs e)
         {
-            base.OnMouseDoubleClick(e);
+            OnMouseDoubleClick(e);
         }
 
         private void Textbox_MouseClick(object sender, MouseEventArgs e)
         {
-            base.OnMouseClick(e);
+            OnMouseClick(e);
         }
 
         private void Textbox_MouseEnter(object sender, EventArgs e)
         {
-            base.OnMouseEnter(e);
+            OnMouseEnter(e);
         }
 
         private void Textbox_MouseLeave(object sender, EventArgs e)
         {
-            base.OnMouseLeave(e);
+            OnMouseLeave(e);
         }
 
         private void Textbox_MouseMove(object sender, MouseEventArgs e)
         {
-            base.OnMouseMove(e);
+            OnMouseMove(e);
         }
 
         private void Textbox_MouseDown(object sender, MouseEventArgs e)
         {
-            base.OnMouseDown(e);
+            OnMouseDown(e);
         }
 
         private void Textbox_MouseUp(object sender, MouseEventArgs e)
         {
-            base.OnMouseUp(e);
+            OnMouseUp(e);
         }
 
         private void Textbox_KeyPress(object sender, KeyPressEventArgs e)
         {
-            base.OnKeyPress(e);
+            OnKeyPress(e);
         }
 
         private void Textbox_KeyDown(object sender, KeyEventArgs e)
         {
-            base.OnKeyDown(e);
+            OnKeyDown(e);
         }
 
         private void Textbox_KeyUp(object sender, KeyEventArgs e)
         {
-            base.OnKeyUp(e);
+            OnKeyUp(e);
         }
 
-        private void Textbox_TextChanged(object sender, EventArgs e)
+        protected virtual void Textbox_TextChanged(object sender, EventArgs e)
         {
-            base.OnTextChanged(e);
+            OnTextChanged(e);
         }
 
         #endregion
