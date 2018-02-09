@@ -47,6 +47,11 @@ namespace BaseUtils
 
         static public string Build(params System.Object[] values)
         {
+            return Build(System.Globalization.CultureInfo.CurrentCulture, values);
+        }
+
+        static public string Build(System.Globalization.CultureInfo ct, params System.Object[] values)
+        {
             System.Text.StringBuilder sb = new System.Text.StringBuilder(64);
 
             string overrideprefix = string.Empty;
@@ -94,40 +99,40 @@ namespace BaseUtils
                             }
                             else if (value is double)
                             {
-                                output = ((double)value).ToString(format);
+                                output = ((double)value).ToString(format, ct);
                             }
                             else if (value is float)
                             {
-                                output = ((float)value).ToString(format);
+                                output = ((float)value).ToString(format, ct);
                             }
                             else if (value is int)
                             {
-                                output = ((int)value).ToString(format,System.Globalization.CultureInfo.InvariantCulture);
+                                output = ((int)value).ToString(format,ct);
                             }
                             else if (value is long)
                             {
-                                output = ((long)value).ToString(format,System.Globalization.CultureInfo.InvariantCulture);
+                                output = ((long)value).ToString(format,ct);
                             }
                             else if (value is double?)
                             {
-                                output = ((double?)value).Value.ToString(format);
+                                output = ((double?)value).Value.ToString(format,ct);
                             }
                             else if (value is float?)
                             {
-                                output = ((float?)value).Value.ToString(format);
+                                output = ((float?)value).Value.ToString(format,ct);
                             }
                             else if (value is int?)
                             {
-                                output = ((int?)value).Value.ToString(format,System.Globalization.CultureInfo.InvariantCulture);
+                                output = ((int?)value).Value.ToString(format,ct);
                             }
                             else if (value is long?)
                             {
-                                output = ((long?)value).Value.ToString(format,System.Globalization.CultureInfo.InvariantCulture);
+                                output = ((long?)value).Value.ToString(format,ct);
                             }
                             else if (value is DateTime)
                             {
                                 format = fieldnames.Length >= 3 ? fieldnames[2] : "g";
-                                output = ((DateTime)value).ToString(format);
+                                output = ((DateTime)value).ToString(format,ct);
                             }
                             else
                             {

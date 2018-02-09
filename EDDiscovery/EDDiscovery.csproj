@@ -232,6 +232,7 @@
     <Compile Include="ScreenShots\ScreenShotDirectoryWatcher.cs" />
     <Compile Include="ScreenShots\ScreenShotImageConverter.cs" />
     <Compile Include="UserControls\IHistoryCursor.cs" />
+    <Compile Include="UserControls\StarDistanceComputer.cs" />
     <Compile Include="UserControls\UserControlContainerGrid.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -711,6 +712,7 @@
     <None Include="Resources\edlogo_3mo_icon.ico" />
     <None Include="Resources\GNE.ico" />
     <None Include="Resources\Logo.png" />
+    <None Include="Resources\mapuc.txt" />
     <Content Include="x86\Microsoft.VC100.CRT\msvcp100.dll" />
     <Content Include="x86\Microsoft.VC100.CRT\msvcr100.dll" />
     <EmbeddedResource Include="Forms\Form2DMap.resx">
@@ -918,7 +920,7 @@
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
   </Target>
-  <Target Name="Version" >
+  <Target Name="Version">
     <PropertyGroup Condition=" '$(OS)' != 'Unix' ">
       <GitPath>$(Registry:HKEY_LOCAL_MACHINE\SOFTWARE\GitForWindows@InstallPath)</GitPath>
       <GitPath Condition=" '$(GitPath)' == '' Or !Exists('$(GitPath)\bin\git.exe') ">$([MSBuild]::GetRegistryValueFromView('HKEY_LOCAL_MACHINE\SOFTWARE\GitForWindows', 'InstallPath', null, RegistryView.Registry64))</GitPath>

@@ -13,6 +13,7 @@
  * 
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
+
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -40,7 +41,7 @@ namespace EDDiscovery.UserControls
 
         private string DbSave { get { return "StarDistancePanel" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
 
-        private UserControlStarDistance.StarDistanceComputer computer;
+        private StarDistanceComputer computer;
 
         public UserControlMap()
         {
@@ -49,73 +50,26 @@ namespace EDDiscovery.UserControls
         }
 
         private HistoryEntry last_he = null;
-        private string pendingText = null;
-
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        private double _MaxRadius = defaultMapMaxRadius;
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        private double _MinRadius = defaultMapMinRadius;
-
         private const double defaultMapMaxRadius = 1000;
         private const double defaultMapMinRadius = 0;
         private int maxitems = 500;
-
-
-        [DefaultValue(defaultMapMaxRadius)]
-        private double MaxRadius
-        {
-            get { return _MaxRadius; }
-            set
-            {
-                if (double.IsNaN(value) || double.IsInfinity(value) || value <= 0)
-                    value = defaultMapMaxRadius;
-                if (_MaxRadius != value)
-                {
-                    _MaxRadius = value;
-                    if (last_he != null || uctg != null)
-                        KickComputation(last_he ?? uctg.GetCurrentHistoryEntry);
-                }
-                // Don't adjust text in a focused textbox while a user is typing.
-                if (textMaxRadius.ContainsFocus)
-                    pendingText = $"{value:0.00}";
-                else
-                    textMaxRadius.Text = $"{value:0.00}";
-            }
-        }
-        [DefaultValue(defaultMapMinRadius)]
-        private double MinRadius
-        {
-            get { return _MinRadius; }
-            set
-            {
-                if (double.IsNaN(value) || double.IsInfinity(value) || value < 0)
-                    value = defaultMapMinRadius;
-                if (_MinRadius != value)
-                {
-                    _MinRadius = value;
-                    if (last_he != null || uctg != null)
-                        KickComputation(last_he ?? uctg.GetCurrentHistoryEntry);
-                }
-                // Don't adjust text in a focused textbox while a user is typing.
-                if (textMinRadius.ContainsFocus)
-                    pendingText = $"{value:0.00}";
-                else
-                    textMinRadius.Text = $"{value:0.00}";
-            }
-        }
+        private System.Windows.Forms.Timer slidetimer;
         
         public override void Init()
         {
-            computer = new UserControlStarDistance.StarDistanceComputer();
+            computer = new StarDistanceComputer();
+
+            slideMaxItems.Value = maxitems = SQLiteConnectionUser.GetSettingInt(DbSave + "MapMaxItems", maxitems);
+
+            textMaxRadius.ValueNoChange = SQLiteConnectionUser.GetSettingDouble(DbSave + "MapMax", defaultMapMaxRadius);
+            textMinRadius.ValueNoChange = SQLiteConnectionUser.GetSettingDouble(DbSave + "MapMin", defaultMapMinRadius);
+            textMinRadius.SetComparitor(textMaxRadius, -2);     // need to do this after values are set
+            textMaxRadius.SetComparitor(textMinRadius, 2);
 
             uctg.OnTravelSelectionChanged += Uctg_OnTravelSelectionChanged;
-
-            textMinRadius.Text = SQLiteConnectionUser.GetSettingDouble(DbSave + "MapMin", 0).ToStringInvariant();
-            textMaxRadius.Text = SQLiteConnectionUser.GetSettingDouble(DbSave + "MapMax", defaultMapMaxRadius).ToStringInvariant();
-            maxitems = SQLiteConnectionUser.GetSettingInt(DbSave + "MapMaxItems", maxitems);
-            slideMaxItems.Value = SQLiteConnectionUser.GetSettingInt(DbSave + "MapMaxItems", maxitems);
-            MaxRadius = float.Parse(textMaxRadius.Text);
-            MinRadius = float.Parse(textMinRadius.Text);
+            slidetimer = new System.Windows.Forms.Timer();
+            slidetimer.Interval = 500;
+            slidetimer.Tick += Slidetimer_Tick;
         }
 
         public override void ChangeCursorType(IHistoryCursor thc)
@@ -132,8 +86,8 @@ namespace EDDiscovery.UserControls
         {
             uctg.OnTravelSelectionChanged -= Uctg_OnTravelSelectionChanged;
             computer.ShutDown();
-            SQLiteConnectionUser.PutSettingDouble(DbSave + "MapMin", textMinRadius.Text.InvariantParseDouble(0));
-            SQLiteConnectionUser.PutSettingDouble(DbSave + "MapMax", textMaxRadius.Text.InvariantParseDouble(defaultMapMaxRadius));
+            SQLiteConnectionUser.PutSettingDouble(DbSave + "MapMin", textMinRadius.Value);
+            SQLiteConnectionUser.PutSettingDouble(DbSave + "MapMax", textMaxRadius.Value);
             SQLiteConnectionUser.PutSettingInt(DbSave + "MapMaxItems", maxitems);
         }
 
@@ -159,21 +113,14 @@ namespace EDDiscovery.UserControls
             {                
                 computer.CalculateClosestSystems(he.System,
                     (s, d) => BeginInvoke((MethodInvoker)delegate { NewStarListComputed(s, d); }),
-                    maxitems, MinRadius, MaxRadius , true);
+                    maxitems, textMinRadius.Value, textMaxRadius.Value, true);
             }
         }
+
         private void NewStarListComputed(ISystem sys, BaseUtils.SortedListDoubleDuplicate<ISystem> list)      // In UI
         {
-            double? max = textMaxRadius.Text.InvariantParseDoubleNull();
-            if (max != null)
-                MaxRadius = float.Parse(textMaxRadius.Text);
-
-            double? min = textMinRadius.Text.InvariantParseDoubleNull();
-            if (min != null)
-                MinRadius = float.Parse(textMinRadius.Text);
-
             System.Diagnostics.Debug.Assert(Application.MessageLoop);       // check!
-            discoveryform.history.CalculateSqDistances(list, sys.X, sys.Y, sys.Z, maxitems, MinRadius, MaxRadius , true);
+            discoveryform.history.CalculateSqDistances(list, sys.X, sys.Y, sys.Z, maxitems, textMinRadius.Value, textMaxRadius.Value , true);
             FillMap(list, sys);
         }             
 
@@ -185,6 +132,7 @@ namespace EDDiscovery.UserControls
             chartMap.Series[50].Points.AddXY(0, 0); 
             chartMap.Series[50].ToolTip = centerSystem.Name; // tooltip
 
+            System.Diagnostics.Debug.WriteLine("Max " + textMaxRadius.Value + " Min " + textMinRadius.Value + " Count " + csl.Count()); ;
             if (csl.Count() > 0)
             {
                 foreach (KeyValuePair<double, ISystem> tvp in csl)
@@ -203,13 +151,13 @@ namespace EDDiscovery.UserControls
                         // reset charts axis
                         chartMap.ChartAreas[0].AxisY.IsStartedFromZero = false;
                         chartMap.ChartAreas[0].AxisX.IsStartedFromZero = false;                        
-                        chartMap.ChartAreas[0].AxisX.Maximum = MaxRadius;
-                        chartMap.ChartAreas[0].AxisX.Minimum = MaxRadius * -1;
-                        chartMap.ChartAreas[0].AxisY.Maximum = MaxRadius;
-                        chartMap.ChartAreas[0].AxisY.Minimum = MaxRadius * -1;
+                        chartMap.ChartAreas[0].AxisX.Maximum = textMaxRadius.Value;
+                        chartMap.ChartAreas[0].AxisX.Minimum = textMaxRadius.Value * -1;
+                        chartMap.ChartAreas[0].AxisY.Maximum = textMaxRadius.Value;
+                        chartMap.ChartAreas[0].AxisY.Minimum = textMaxRadius.Value * -1;
 
                         // depth of the series layers need to be adjusted, so to follow the X and Y axis
-                        int sdepth = (Convert.ToInt32((MaxRadius) * 2));
+                        int sdepth = (Convert.ToInt32((textMaxRadius.Value) * 2));
 
                         // maximum allowed depth in chart is 1000%
                         if (sdepth > 1000)
@@ -218,8 +166,8 @@ namespace EDDiscovery.UserControls
                         }
 
                         chartMap.ChartAreas[0].Area3DStyle.PointDepth = sdepth;
-                        
-                        if (distFromCurrentSys > MinRadius) // we want to be able to define a shell 
+
+                        if (distFromCurrentSys > textMinRadius.Value) // we want to be able to define a shell 
                         {
                             int visits = discoveryform.history.GetVisitsCount(tvp.Value.Name, tvp.Value.EDSMID);
                                                         
@@ -233,8 +181,8 @@ namespace EDDiscovery.UserControls
                             int pz = Convert.ToInt32(dz);
 
                             int nseries = 101; // # of series in the 3d plot (0 to 49, before the current system; 50, our current system; 51 to 101, after the current system)
-                            double ratio = ((MaxRadius * 2) / nseries);
-                            double spy = ((py + Convert.ToInt32(MaxRadius)) / ratio); // steps (series) to Y coordinate
+                            double ratio = ((textMaxRadius.Value * 2) / nseries);
+                            double spy = ((py + Convert.ToInt32(textMaxRadius.Value)) / ratio); // steps (series) to Y coordinate
 
                             int ispy = Convert.ToInt32(spy);
 
@@ -266,48 +214,28 @@ namespace EDDiscovery.UserControls
                     }
                 }
             }
+            else
+            {
+                for( int i =0; i < chartMap.Series.Count; i++ )
+                    chartMap.Series[i].Points.Clear();
+
+            }
         }
 
         #endregion
 
         #region refresh
 
-        private void TextMinRadius_TextChanged(object sender, EventArgs e)
+        private void textMinRadius_ValueChanged(object sender, EventArgs e)
         {
-            // Don't let others directly assigning to textMinRadius.Text result in parsing.
-            if (textMinRadius.ContainsFocus)
-            {
-                double? min = textMinRadius.Text.InvariantParseDoubleNull();
-                MinRadius = min ?? defaultMapMinRadius;                
-            }
-            RefreshMap();
+            KickComputation(last_he ?? uctg.GetCurrentHistoryEntry);
         }
 
-        private void textMinRadius_Leave(object sender, EventArgs e)
+        private void textMaxRadius_ValueChanged(object sender, EventArgs e)
         {
-            if (pendingText != null)
-                textMinRadius.Text = pendingText;
-            pendingText = null;            
+            KickComputation(last_he ?? uctg.GetCurrentHistoryEntry);
         }
 
-        private void TextMaxRadius_TextChanged(object sender, EventArgs e)
-        {
-            // Don't let others directly assigning to textMaxRadius.Text result in parsing.
-            if (textMaxRadius.ContainsFocus)
-            {
-                double? max = textMaxRadius.Text.InvariantParseDoubleNull();
-                MaxRadius = max ?? defaultMapMaxRadius;                
-            }
-            RefreshMap();
-        }
-
-        private void textMaxRadius_Leave(object sender, EventArgs e)
-        {
-            if (pendingText != null)
-                textMaxRadius.Text = pendingText;
-            pendingText = null;            
-        }
-                
         private void RefreshMap()
         {
             // clean up all the series
@@ -324,23 +252,15 @@ namespace EDDiscovery.UserControls
 
         #region slide
 
-        // slide 
-        //
-        // wait while move the slide, than refresh the chart...
-        private void Wait(int ms)
-        {
-            DateTime start = DateTime.Now;
-            while ((DateTime.Now - start).TotalMilliseconds < ms)
-                Application.DoEvents();
-        }
-
         private void SlideMaxItems_Scroll(object sender, EventArgs e)
         {
+            slidetimer.Start();
+        }
+        private void Slidetimer_Tick(object sender, EventArgs e)            // DONT use a Wait loop - this kills the rest of the system..
+        {
+            slidetimer.Stop();
             toolTip.SetToolTip(slideMaxItems, slideMaxItems.Value.ToString());
-
             maxitems = slideMaxItems.Value;
-
-            Wait(500);
             KickComputation(uctg.GetCurrentHistoryEntry);
             RefreshMap();
         }
@@ -716,16 +636,12 @@ namespace EDDiscovery.UserControls
 
         private void aboutToolStripAbout_Click(object sender, EventArgs e)
         {
-            chartMap.Visible = false;
-            tableLayoutAboutMap.Visible = true;
+            ExtendedControls.InfoForm frm = new ExtendedControls.InfoForm();
+            frm.Info("Map Help", FindForm().Icon, EDDiscovery.Properties.Resources.mapuc, null, new int[1] { 300 }, true);
+            frm.StartPosition = FormStartPosition.CenterParent;
+            frm.Show(FindForm());
+        }
 
-        }
-        private void buttonExt1_Click(object sender, EventArgs e)
-        {
-            chartMap.Visible = true;
-            tableLayoutAboutMap.Visible = false;
-        }
-        
         #endregion
 
     }
