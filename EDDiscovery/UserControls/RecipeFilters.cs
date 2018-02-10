@@ -28,9 +28,9 @@ namespace EDDiscovery.UserControls
     {
         public static List<MaterialCommoditiesList.SynthesisRecipe> SynthesisRecipes = new List<MaterialCommoditiesList.SynthesisRecipe>()
         {
-            new MaterialCommoditiesList.SynthesisRecipe( "FSD", "Premium","3Nb,1As,1Po,1Y" ),
-            new MaterialCommoditiesList.SynthesisRecipe( "FSD", "Standard","1V,1Ge,2Cd,1Nb" ),
-            new MaterialCommoditiesList.SynthesisRecipe( "FSD", "Basic","2V,1Ge" ),
+            new MaterialCommoditiesList.SynthesisRecipe( "FSD", "Premium","1C,1Ge,1Nb,1As,1Po,1Y" ),
+            new MaterialCommoditiesList.SynthesisRecipe( "FSD", "Standard","1C,1V,1Ge,1Cd,1Nb" ),
+            new MaterialCommoditiesList.SynthesisRecipe( "FSD", "Basic","1C,1V,1Ge" ),
 
             new MaterialCommoditiesList.SynthesisRecipe( "AFM Refill", "Premium","6V,4Cr,2Zn,2Zr,1Te,1Ru" ),
             new MaterialCommoditiesList.SynthesisRecipe( "AFM Refill", "Standard","6V,2Mn,1Mo,1Zr,1Sn" ),

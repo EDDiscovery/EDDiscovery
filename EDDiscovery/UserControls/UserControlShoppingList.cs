@@ -44,9 +44,11 @@ namespace EDDiscovery.UserControls
         private string DbHighlightAvailableMats { get { return "ShoppingListHighlightAvailable" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
         private string DBShowSystemAvailability { get { return "ShoppingListSystemAvailability" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
         private string DBUseEDSMForSystemAvailability { get { return "ShoppingListUseEDSM" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
-        const int PhysicalInventoryCapacity = 1000;
-        const int DataInventoryCapacity = 500;
-        const int PerMaterialCap = 100;
+        const int VeryCommonCap = 300;
+        const int CommonCap = 250;
+        const int StandardCap = 200;
+        const int RareCap = 150;
+        const int VeryRareCap = 100;
 
         #region Init
 
@@ -153,7 +155,7 @@ namespace EDDiscovery.UserControls
                 {
                     sd = discoveryform.history.GetScans(last_he.System.Name).Where(sc => sc.BodyName == last_he.WhereAmI).FirstOrDefault();
                 }
-                if (!last_he.IsLanded && showSystemAvailability)  //replace true with a setting
+                if (!last_he.IsLanded && showSystemAvailability)
                 {
                     last_sn = discoveryform.history.starscan.FindSystem(last_he.System, useEDSMForSystemAvailability);
                 }
@@ -181,7 +183,13 @@ namespace EDDiscovery.UserControls
                             }
                         }
                         wantedList.Append($"  {c.scratchpad} {c.name}{present}");
-                        if (c.scratchpad + mcl.Where(m => m.shortname == c.shortname).FirstOrDefault()?.count > PerMaterialCap)
+                        int? onHand = mcl.Where(m => m.shortname == c.shortname).FirstOrDefault()?.count;
+                        int totalReq = c.scratchpad + (onHand.HasValue ? onHand.Value : 0);
+                        if ((c.type == MaterialCommodityDB.MaterialFreqVeryCommon && totalReq > VeryCommonCap) ||
+                            (c.type == MaterialCommodityDB.MaterialFreqCommon && totalReq > CommonCap) ||
+                            (c.type == MaterialCommodityDB.MaterialFreqStandard && totalReq > StandardCap) ||
+                            (c.type == MaterialCommodityDB.MaterialFreqRare && totalReq > RareCap) ||
+                            (c.type == MaterialCommodityDB.MaterialFreqVeryRare && totalReq > VeryRareCap))
                         {
                             capExceededMats.Add(c.name);
                         }
@@ -219,27 +227,6 @@ namespace EDDiscovery.UserControls
                             wantedList.Append($"\n  {mat}");
                         }
                     }
-
-                    //int currentMats = mcl.Where(m => m.category == MaterialCommodityDB.MaterialManufacturedCategory || m.category == MaterialCommodityDB.MaterialRawCategory)
-                    //                     .Sum(i => i.count);
-                    //int currentData = mcl.Where(m => m.category == MaterialCommodityDB.MaterialEncodedCategory).Sum(i => i.count);
-                    //int neededMats = shoppinglist.Where(m => m.category == MaterialCommodityDB.MaterialManufacturedCategory || m.category == MaterialCommodityDB.MaterialRawCategory)
-                    //                             .Sum(i => i.scratchpad);
-                    //int neededData = shoppinglist.Where(m => m.category == MaterialCommodityDB.MaterialEncodedCategory).Sum(i => i.scratchpad);
-
-                    //if (currentMats + neededMats > PhysicalInventoryCapacity || currentData + neededData > DataInventoryCapacity)
-                    //{
-                    //    wantedList.Append("\nCapacity Warning:");
-                    //    if (currentMats + neededMats > PhysicalInventoryCapacity)
-                    //    {
-                    //        wantedList.Append($"\n  {PhysicalInventoryCapacity - currentMats}/{neededMats} materials space free");
-                    //    }
-                    //    if (currentData + neededData > DataInventoryCapacity)
-                    //    {
-                    //        wantedList.Append($"\n  {DataInventoryCapacity - currentData}/{neededData} data space free");
-                    //    }
-                    //    wantedList.Append("\n");
-                    //}
                 }
                 else
                 {
@@ -255,7 +242,7 @@ namespace EDDiscovery.UserControls
                     wantedList.Append($"\nMax FSD Injections\n   {basic.Item1} Basic\n   {standard.Item1} Standard\n   {premium.Item1} Premium");
                 }
 
-                if (showPlanetMats && sd != null)  //for user configurable setting
+                if (showPlanetMats && sd != null)
                 {
                     wantedList.Append($"\n\nMaterials on {last_he.WhereAmI}\n");
                     foreach (KeyValuePair<string, double> mat in sd.Materials)
