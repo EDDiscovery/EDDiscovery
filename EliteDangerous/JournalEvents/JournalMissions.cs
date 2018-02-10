@@ -38,7 +38,6 @@ namespace EliteDangerousCore.JournalEvents
 
         public string StationName { get; set; }
         public string StarSystem { get; set; }
-        public long MarketID { get; set; }
 
         public MissionItem[] ActiveMissions { get; set; }
         public MissionItem[] FailedMissions { get; set; }

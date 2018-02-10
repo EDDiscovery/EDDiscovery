@@ -63,7 +63,7 @@ namespace EDDiscovery.UserControls
             this.NotesCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.btnDeleteCommander = new ExtendedControls.ButtonExt();
             this.buttonAddCommander = new ExtendedControls.ButtonExt();
-            this.textBoxDefaultZoom = new ExtendedControls.TextBoxBorder();
+            this.textBoxDefaultZoom = new ExtendedControls.NumberBoxDouble();
             this.textBoxHomeSystem = new ExtendedControls.AutoCompleteTextBox();
             this.buttonReloadSaved = new ExtendedControls.ButtonExt();
             this.buttonSaveSetup = new ExtendedControls.ButtonExt();
@@ -377,7 +377,12 @@ namespace EDDiscovery.UserControls
             this.textBoxDefaultZoom.BorderColorScaling = 0.5F;
             this.textBoxDefaultZoom.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBoxDefaultZoom.ControlBackground = System.Drawing.SystemColors.Control;
+            this.textBoxDefaultZoom.DelayBeforeNotification = 0;
+            this.textBoxDefaultZoom.Format = "0.#######";
+            this.textBoxDefaultZoom.BackErrorColor = System.Drawing.Color.Red;
             this.textBoxDefaultZoom.Location = new System.Drawing.Point(114, 70);
+            this.textBoxDefaultZoom.Maximum = 300D;
+            this.textBoxDefaultZoom.Minimum = 0.01D;
             this.textBoxDefaultZoom.Multiline = false;
             this.textBoxDefaultZoom.Name = "textBoxDefaultZoom";
             this.textBoxDefaultZoom.ReadOnly = false;
@@ -386,10 +391,13 @@ namespace EDDiscovery.UserControls
             this.textBoxDefaultZoom.SelectionStart = 0;
             this.textBoxDefaultZoom.Size = new System.Drawing.Size(51, 20);
             this.textBoxDefaultZoom.TabIndex = 6;
+            this.textBoxDefaultZoom.Text = "0";
             this.textBoxDefaultZoom.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.toolTip.SetToolTip(this.textBoxDefaultZoom, "Set the zoom level of the map. 1 is normal");
+            this.textBoxDefaultZoom.Value = 0D;
+            this.textBoxDefaultZoom.ValueNoChange = 0D;
             this.textBoxDefaultZoom.WordWrap = true;
-            this.textBoxDefaultZoom.Validating += new System.ComponentModel.CancelEventHandler(this.textBoxDefaultZoom_Validating);
+            this.textBoxDefaultZoom.ValueChanged += new System.EventHandler(this.textBoxDefaultZoom_ValueChanged);
             // 
             // textBoxHomeSystem
             // 
@@ -960,7 +968,7 @@ namespace EDDiscovery.UserControls
         private ExtendedControls.GroupBoxCustom groupBoxOptions;
         private ExtendedControls.CheckBoxCustom checkBoxEDSMLog;
         private ExtendedControls.GroupBoxCustom groupBox3dmap;
-        private ExtendedControls.TextBoxBorder textBoxDefaultZoom;
+        private ExtendedControls.NumberBoxDouble textBoxDefaultZoom;
         private System.Windows.Forms.Label label5;
         private ExtendedControls.RadioButtonCustom radioButtonHistorySelection;
         private ExtendedControls.RadioButtonCustom radioButtonCentreHome;

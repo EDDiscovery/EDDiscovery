@@ -154,15 +154,15 @@ namespace EliteDangerousCore
 
             if (useedsm)
             {
-                if ((sn == null || (sn != null && sn.EDSMAdded == false)) && sys.id_edsm > 0)   // null, or not scanned, and with EDSM ID
+                if ((sn == null || (sn != null && sn.EDSMAdded == false)) && sys.EDSMID > 0)   // null, or not scanned, and with EDSM ID
                 {
-                    List<JournalScan> jl = EliteDangerousCore.EDSM.EDSMClass.GetBodiesList(sys.id_edsm);
+                    List<JournalScan> jl = EliteDangerousCore.EDSM.EDSMClass.GetBodiesList(sys.EDSMID);
 
                     if (jl != null)
                     {
                         foreach (JournalScan js in jl)
                         {
-                            js.BodyDesignation = GetBodyDesignation(js, sys.name);
+                            js.BodyDesignation = GetBodyDesignation(js, sys.Name);
                             Process(js, sys, true);
                         }
                     }
@@ -196,9 +196,9 @@ namespace EliteDangerousCore
                 if (he.IsLocOrJump)
                 {
                     jl = (JournalLocOrJump)he.journalEntry;
-                    string designation = GetBodyDesignation(je, he.System.name);
+                    string designation = GetBodyDesignation(je, he.System.Name);
 
-                    if (je.IsStarNameRelated(he.System.name, designation))       // if its part of the name, use it
+                    if (je.IsStarNameRelated(he.System.Name, designation))       // if its part of the name, use it
                     {
                         je.BodyDesignation = designation;
                         return Process(je, he.System, true);
@@ -214,7 +214,7 @@ namespace EliteDangerousCore
             jl = null;
             he = null;
 
-            je.BodyDesignation = GetBodyDesignation(je, hl[startindex].System.name);
+            je.BodyDesignation = GetBodyDesignation(je, hl[startindex].System.Name);
             return Process(je, hl[startindex].System, true);         // no relationship, add..
         }
 
@@ -237,13 +237,13 @@ namespace EliteDangerousCore
             // Bail out if no elements extracted
             if (elements.Count == 0)
             {
-                System.Diagnostics.Trace.WriteLine($"Failed to add body {sc.BodyName} to system {sys.name} - not enough elements");
+                System.Diagnostics.Trace.WriteLine($"Failed to add body {sc.BodyName} to system {sys.Name} - not enough elements");
                 return false;
             }
             // Bail out if more than 5 elements extracted
             else if (elements.Count > 5)
             {
-                System.Diagnostics.Trace.WriteLine($"Failed to add body {sc.BodyName} to system {sys.name} - too deep");
+                System.Diagnostics.Trace.WriteLine($"Failed to add body {sc.BodyName} to system {sys.Name} - too deep");
                 return false;
             }
 
@@ -282,7 +282,7 @@ namespace EliteDangerousCore
 
             foreach (JournalScan sn in bodies)
             {
-                sn.BodyDesignation = GetBodyDesignation(sn, sysnode.system.name);
+                sn.BodyDesignation = GetBodyDesignation(sn, sysnode.system.Name);
                 Process(sn, sysnode.system);
             }
         }
@@ -291,20 +291,20 @@ namespace EliteDangerousCore
 
         private SystemNode GetOrCreateSystemNode(ISystem sys)
         {
-            Tuple<string, long> withedsm = new Tuple<string, long>(sys.name, sys.id_edsm);
+            Tuple<string, long> withedsm = new Tuple<string, long>(sys.Name, sys.EDSMID);
 
             SystemNode sn = null;
             if (scandata.ContainsKey(withedsm))         // if with edsm (if id_edsm=0, then thats okay)
                 sn = scandata[withedsm];
-            else if (scandataByName.ContainsKey(sys.name))  // if we now have an edsm id, see if we have one without it 
+            else if (scandataByName.ContainsKey(sys.Name))  // if we now have an edsm id, see if we have one without it 
             {
-                foreach (SystemNode _sn in scandataByName[sys.name])
+                foreach (SystemNode _sn in scandataByName[sys.Name])
                 {
                     if (_sn.system.Equals(sys))
                     {
-                        if (sys.id_edsm != 0)             // yep, replace
+                        if (sys.EDSMID != 0)             // yep, replace
                         {
-                            scandata.Add(new Tuple<string, long>(sys.name, sys.id_edsm), _sn);
+                            scandata.Add(new Tuple<string, long>(sys.Name, sys.EDSMID), _sn);
                         }
                         sn = _sn;
                         break;
@@ -316,16 +316,16 @@ namespace EliteDangerousCore
             {
                 sn = new SystemNode() { system = sys, starnodes = new SortedList<string, ScanNode>(new DuplicateKeyComparer<string>()) };
 
-                if (!scandataByName.ContainsKey(sys.name))
+                if (!scandataByName.ContainsKey(sys.Name))
                 {
-                    scandataByName[sys.name] = new List<SystemNode>();
+                    scandataByName[sys.Name] = new List<SystemNode>();
                 }
 
-                scandataByName[sys.name].Add(sn);
+                scandataByName[sys.Name].Add(sn);
 
-                if (sys.id_edsm != 0)
+                if (sys.EDSMID != 0)
                 {
-                    scandata.Add(new Tuple<string, long>(sys.name, sys.id_edsm), sn);
+                    scandata.Add(new Tuple<string, long>(sys.Name, sys.EDSMID), sn);
                 }
             }
 
@@ -337,7 +337,7 @@ namespace EliteDangerousCore
             starscannodetype = ScanNodeType.star;
             isbeltcluster = false;
             List<string> elements;
-            string rest = sc.IsStarNameRelatedReturnRest(sys.name);
+            string rest = sc.IsStarNameRelatedReturnRest(sys.Name);
 
             if (rest != null)                                   // if we have a relationship..
             {
@@ -393,12 +393,12 @@ namespace EliteDangerousCore
 
         private string GetCustomName(JournalScan sc, ISystem sys)
         {
-            string rest = sc.IsStarNameRelatedReturnRest(sys.name);
+            string rest = sc.IsStarNameRelatedReturnRest(sys.Name);
             string customname = null;
 
-            if (sc.BodyName.StartsWith(sys.name, StringComparison.InvariantCultureIgnoreCase))
+            if (sc.BodyName.StartsWith(sys.Name, StringComparison.InvariantCultureIgnoreCase))
             {
-                customname = sc.BodyName.Substring(sys.name.Length).TrimStart(' ', '-');
+                customname = sc.BodyName.Substring(sys.Name.Length).TrimStart(' ', '-');
 
                 if (customname == "" && !sc.IsStar)
                 {
@@ -446,7 +446,7 @@ namespace EliteDangerousCore
                     sublv = new ScanNode
                     {
                         ownname = ownname,
-                        fullname = lvl == 0 ? (sys.name + (ownname.Contains("Main") ? "" : (" " + ownname))) : node.fullname + " " + ownname,
+                        fullname = lvl == 0 ? (sys.Name + (ownname.Contains("Main") ? "" : (" " + ownname))) : node.fullname + " " + ownname,
                         ScanData = null,
                         children = null,
                         type = sublvtype,
@@ -507,7 +507,7 @@ namespace EliteDangerousCore
 
         private void CachePrimaryStar(JournalScan je, ISystem sys)
         {
-            string system = sys.name;
+            string system = sys.Name;
 
             if (!primaryStarScans.ContainsKey(system))
             {
@@ -614,14 +614,14 @@ namespace EliteDangerousCore
 
         private SystemNode FindSystemNode(ISystem sys)
         {
-            Tuple<string, long> withedsm = new Tuple<string, long>(sys.name, sys.id_edsm);
+            Tuple<string, long> withedsm = new Tuple<string, long>(sys.Name, sys.EDSMID);
 
             if (scandata.ContainsKey(withedsm))         // if with edsm (if id_edsm=0, then thats okay)
                 return scandata[withedsm];
 
-            if (scandataByName.ContainsKey(sys.name))
+            if (scandataByName.ContainsKey(sys.Name))
             {
-                foreach (SystemNode sn in scandataByName[sys.name])
+                foreach (SystemNode sn in scandataByName[sys.Name])
                 {
                     if (sn.system.Equals(sys))
                     {

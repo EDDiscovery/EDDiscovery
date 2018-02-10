@@ -46,6 +46,7 @@ namespace EDDiscovery.UserControls
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
             System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea2 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
             System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea3 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
@@ -59,16 +60,29 @@ namespace EDDiscovery.UserControls
             System.Windows.Forms.DataVisualization.Charting.Series series8 = new System.Windows.Forms.DataVisualization.Charting.Series();
             System.Windows.Forms.DataVisualization.Charting.Series series9 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.labelExt1 = new System.Windows.Forms.Label();
-            this.textMinRadius = new ExtendedControls.TextBoxBorder();
+            this.textMinRadius = new ExtendedControls.NumberBoxDouble();
             this.labelExt3 = new System.Windows.Forms.Label();
-            this.textMaxRadius = new ExtendedControls.TextBoxBorder();
+            this.textMaxRadius = new ExtendedControls.NumberBoxDouble();
             this.panelTop = new System.Windows.Forms.Panel();
             this.buttonExt2dtop = new ExtendedControls.ButtonExt();
             this.buttonExt2dfront = new ExtendedControls.ButtonExt();
             this.buttonExt2dside = new ExtendedControls.ButtonExt();
             this.chartBubble = new System.Windows.Forms.DataVisualization.Charting.Chart();
+            this.contextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.zoomToolStripMenuZoom = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem125 = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem15 = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem175 = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem25 = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem3 = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem35 = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem4 = new System.Windows.Forms.ToolStripMenuItem();
+            this.resetToolStripReset = new System.Windows.Forms.ToolStripMenuItem();
             this.panelTop.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.chartBubble)).BeginInit();
+            this.contextMenuStrip.SuspendLayout();
             this.SuspendLayout();
             // 
             // labelExt1
@@ -88,7 +102,12 @@ namespace EDDiscovery.UserControls
             this.textMinRadius.BorderColorScaling = 0.5F;
             this.textMinRadius.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textMinRadius.ControlBackground = System.Drawing.SystemColors.Control;
+            this.textMinRadius.DelayBeforeNotification = 500;
+            this.textMinRadius.Format = "0.#######";
+            this.textMinRadius.BackErrorColor = System.Drawing.Color.Red;
             this.textMinRadius.Location = new System.Drawing.Point(28, 3);
+            this.textMinRadius.Maximum = 100000D;
+            this.textMinRadius.Minimum = 0D;
             this.textMinRadius.Multiline = false;
             this.textMinRadius.Name = "textMinRadius";
             this.textMinRadius.ReadOnly = false;
@@ -97,9 +116,12 @@ namespace EDDiscovery.UserControls
             this.textMinRadius.SelectionStart = 0;
             this.textMinRadius.Size = new System.Drawing.Size(35, 20);
             this.textMinRadius.TabIndex = 1;
+            this.textMinRadius.Text = "0";
             this.textMinRadius.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.textMinRadius.Value = 0D;
+            this.textMinRadius.ValueNoChange = 0D;
             this.textMinRadius.WordWrap = true;
-            this.textMinRadius.TextChanged += new System.EventHandler(this.textMinRadius_TextChanged);
+            this.textMinRadius.ValueChanged += new System.EventHandler(this.textMinRadius_ValueChanged);
             // 
             // labelExt3
             // 
@@ -118,7 +140,12 @@ namespace EDDiscovery.UserControls
             this.textMaxRadius.BorderColorScaling = 0.5F;
             this.textMaxRadius.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textMaxRadius.ControlBackground = System.Drawing.SystemColors.Control;
+            this.textMaxRadius.DelayBeforeNotification = 500;
+            this.textMaxRadius.Format = "0.#######";
+            this.textMaxRadius.BackErrorColor = System.Drawing.Color.Red;
             this.textMaxRadius.Location = new System.Drawing.Point(107, 3);
+            this.textMaxRadius.Maximum = 100000D;
+            this.textMaxRadius.Minimum = 0D;
             this.textMaxRadius.Multiline = false;
             this.textMaxRadius.Name = "textMaxRadius";
             this.textMaxRadius.ReadOnly = false;
@@ -127,9 +154,12 @@ namespace EDDiscovery.UserControls
             this.textMaxRadius.SelectionStart = 0;
             this.textMaxRadius.Size = new System.Drawing.Size(35, 20);
             this.textMaxRadius.TabIndex = 1;
+            this.textMaxRadius.Text = "0";
             this.textMaxRadius.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.textMaxRadius.Value = 0D;
+            this.textMaxRadius.ValueNoChange = 0D;
             this.textMaxRadius.WordWrap = true;
-            this.textMaxRadius.TextChanged += new System.EventHandler(this.textMaxRadius_TextChanged);
+            this.textMaxRadius.ValueChanged += new System.EventHandler(this.textMaxRadius_ValueChanged);
             // 
             // panelTop
             // 
@@ -150,9 +180,9 @@ namespace EDDiscovery.UserControls
             // buttonExt2dtop
             // 
             this.buttonExt2dtop.Dock = System.Windows.Forms.DockStyle.Right;
-            this.buttonExt2dtop.Location = new System.Drawing.Point(215, 0);
+            this.buttonExt2dtop.Location = new System.Drawing.Point(185, 0);
             this.buttonExt2dtop.Name = "buttonExt2dtop";
-            this.buttonExt2dtop.Size = new System.Drawing.Size(40, 26);
+            this.buttonExt2dtop.Size = new System.Drawing.Size(50, 26);
             this.buttonExt2dtop.TabIndex = 6;
             this.buttonExt2dtop.Text = "Top";
             this.buttonExt2dtop.UseVisualStyleBackColor = true;
@@ -161,9 +191,9 @@ namespace EDDiscovery.UserControls
             // buttonExt2dfront
             // 
             this.buttonExt2dfront.Dock = System.Windows.Forms.DockStyle.Right;
-            this.buttonExt2dfront.Location = new System.Drawing.Point(255, 0);
+            this.buttonExt2dfront.Location = new System.Drawing.Point(235, 0);
             this.buttonExt2dfront.Name = "buttonExt2dfront";
-            this.buttonExt2dfront.Size = new System.Drawing.Size(40, 26);
+            this.buttonExt2dfront.Size = new System.Drawing.Size(50, 26);
             this.buttonExt2dfront.TabIndex = 7;
             this.buttonExt2dfront.Text = "Front";
             this.buttonExt2dfront.UseVisualStyleBackColor = true;
@@ -172,9 +202,9 @@ namespace EDDiscovery.UserControls
             // buttonExt2dside
             // 
             this.buttonExt2dside.Dock = System.Windows.Forms.DockStyle.Right;
-            this.buttonExt2dside.Location = new System.Drawing.Point(295, 0);
+            this.buttonExt2dside.Location = new System.Drawing.Point(285, 0);
             this.buttonExt2dside.Name = "buttonExt2dside";
-            this.buttonExt2dside.Size = new System.Drawing.Size(40, 26);
+            this.buttonExt2dside.Size = new System.Drawing.Size(50, 26);
             this.buttonExt2dside.TabIndex = 8;
             this.buttonExt2dside.Text = "Side";
             this.buttonExt2dside.UseVisualStyleBackColor = true;
@@ -254,7 +284,6 @@ namespace EDDiscovery.UserControls
             this.chartBubble.ChartAreas.Add(chartArea1);
             this.chartBubble.ChartAreas.Add(chartArea2);
             this.chartBubble.ChartAreas.Add(chartArea3);
-            this.chartBubble.Dock = System.Windows.Forms.DockStyle.Fill;
             this.chartBubble.Location = new System.Drawing.Point(0, 26);
             this.chartBubble.Margin = new System.Windows.Forms.Padding(0);
             this.chartBubble.Name = "chartBubble";
@@ -349,32 +378,141 @@ namespace EDDiscovery.UserControls
             this.chartBubble.SuppressExceptions = true;
             this.chartBubble.TabIndex = 28;
             this.chartBubble.Text = "Nearest Systems Plot";
+            this.chartBubble.MouseDown += new System.Windows.Forms.MouseEventHandler(this.chartBubble_MouseDown);
+            this.chartBubble.MouseMove += new System.Windows.Forms.MouseEventHandler(this.chartBubble_MouseMove);
+            // 
+            // contextMenuStrip
+            // 
+            this.contextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.zoomToolStripMenuZoom,
+            this.resetToolStripReset});
+            this.contextMenuStrip.Name = "contextMenuStrip";
+            this.contextMenuStrip.Size = new System.Drawing.Size(107, 48);
+            // 
+            // zoomToolStripMenuZoom
+            // 
+            this.zoomToolStripMenuZoom.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripMenuItem1,
+            this.toolStripMenuItem125,
+            this.toolStripMenuItem15,
+            this.toolStripMenuItem175,
+            this.toolStripMenuItem2,
+            this.toolStripMenuItem25,
+            this.toolStripMenuItem3,
+            this.toolStripMenuItem35,
+            this.toolStripMenuItem4});
+            this.zoomToolStripMenuZoom.Name = "zoomToolStripMenuZoom";
+            this.zoomToolStripMenuZoom.Size = new System.Drawing.Size(106, 22);
+            this.zoomToolStripMenuZoom.Text = "Zoom";
+            // 
+            // toolStripMenuItem1
+            // 
+            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(104, 22);
+            this.toolStripMenuItem1.Text = "1:1";
+            this.toolStripMenuItem1.Click += new System.EventHandler(this.toolStripMenuItem1_Click);
+            // 
+            // toolStripMenuItem125
+            // 
+            this.toolStripMenuItem125.Name = "toolStripMenuItem125";
+            this.toolStripMenuItem125.Size = new System.Drawing.Size(104, 22);
+            this.toolStripMenuItem125.Text = "1.25:1";
+            this.toolStripMenuItem125.Click += new System.EventHandler(this.toolStripMenuItem125_Click);
+            // 
+            // toolStripMenuItem15
+            // 
+            this.toolStripMenuItem15.Name = "toolStripMenuItem15";
+            this.toolStripMenuItem15.Size = new System.Drawing.Size(104, 22);
+            this.toolStripMenuItem15.Text = "1.5:1";
+            this.toolStripMenuItem15.Click += new System.EventHandler(this.toolStripMenuItem15_Click);
+            // 
+            // toolStripMenuItem175
+            // 
+            this.toolStripMenuItem175.Name = "toolStripMenuItem175";
+            this.toolStripMenuItem175.Size = new System.Drawing.Size(104, 22);
+            this.toolStripMenuItem175.Text = "1.75:1";
+            this.toolStripMenuItem175.Click += new System.EventHandler(this.toolStripMenuItem175_Click);
+            // 
+            // toolStripMenuItem2
+            // 
+            this.toolStripMenuItem2.Name = "toolStripMenuItem2";
+            this.toolStripMenuItem2.Size = new System.Drawing.Size(104, 22);
+            this.toolStripMenuItem2.Text = "2:1";
+            this.toolStripMenuItem2.Click += new System.EventHandler(this.toolStripMenuItem2_Click);
+            // 
+            // toolStripMenuItem25
+            // 
+            this.toolStripMenuItem25.Name = "toolStripMenuItem25";
+            this.toolStripMenuItem25.Size = new System.Drawing.Size(104, 22);
+            this.toolStripMenuItem25.Text = "2.5:1";
+            this.toolStripMenuItem25.Click += new System.EventHandler(this.toolStripMenuItem25_Click);
+            // 
+            // toolStripMenuItem3
+            // 
+            this.toolStripMenuItem3.Name = "toolStripMenuItem3";
+            this.toolStripMenuItem3.Size = new System.Drawing.Size(104, 22);
+            this.toolStripMenuItem3.Text = "3:1";
+            this.toolStripMenuItem3.Click += new System.EventHandler(this.toolStripMenuItem3_Click);
+            // 
+            // toolStripMenuItem35
+            // 
+            this.toolStripMenuItem35.Name = "toolStripMenuItem35";
+            this.toolStripMenuItem35.Size = new System.Drawing.Size(104, 22);
+            this.toolStripMenuItem35.Text = "3.5:1";
+            this.toolStripMenuItem35.Click += new System.EventHandler(this.toolStripMenuItem35_Click);
+            // 
+            // toolStripMenuItem4
+            // 
+            this.toolStripMenuItem4.Name = "toolStripMenuItem4";
+            this.toolStripMenuItem4.Size = new System.Drawing.Size(104, 22);
+            this.toolStripMenuItem4.Text = "4:1";
+            this.toolStripMenuItem4.Click += new System.EventHandler(this.toolStripMenuItem4_Click);
+            // 
+            // resetToolStripReset
+            // 
+            this.resetToolStripReset.Name = "resetToolStripReset";
+            this.resetToolStripReset.Size = new System.Drawing.Size(106, 22);
+            this.resetToolStripReset.Text = "Reset";
+            this.resetToolStripReset.Click += new System.EventHandler(this.resetToolStripMenuItem_Click);
             // 
             // UserControlPlot
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Black;
-            this.Controls.Add(this.chartBubble);
             this.Controls.Add(this.panelTop);
+            this.Controls.Add(this.chartBubble);
             this.Name = "UserControlPlot";
             this.Size = new System.Drawing.Size(335, 343);
             this.panelTop.ResumeLayout(false);
             this.panelTop.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.chartBubble)).EndInit();
+            this.contextMenuStrip.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
 
         #endregion
         private System.Windows.Forms.Label labelExt1;
-        private ExtendedControls.TextBoxBorder textMinRadius;
+        private ExtendedControls.NumberBoxDouble textMinRadius;
         private System.Windows.Forms.Label labelExt3;
-        private ExtendedControls.TextBoxBorder textMaxRadius;
+        private ExtendedControls.NumberBoxDouble textMaxRadius;
         private Panel panelTop;
         private System.Windows.Forms.DataVisualization.Charting.Chart chartBubble;
         private ExtendedControls.ButtonExt buttonExt2dtop;
         private ExtendedControls.ButtonExt buttonExt2dfront;
         private ExtendedControls.ButtonExt buttonExt2dside;
+        private ContextMenuStrip contextMenuStrip;
+        private ToolStripMenuItem zoomToolStripMenuZoom;
+        private ToolStripMenuItem toolStripMenuItem1;
+        private ToolStripMenuItem toolStripMenuItem125;
+        private ToolStripMenuItem toolStripMenuItem15;
+        private ToolStripMenuItem toolStripMenuItem175;
+        private ToolStripMenuItem toolStripMenuItem2;
+        private ToolStripMenuItem toolStripMenuItem25;
+        private ToolStripMenuItem toolStripMenuItem3;
+        private ToolStripMenuItem toolStripMenuItem35;
+        private ToolStripMenuItem toolStripMenuItem4;
+        private ToolStripMenuItem resetToolStripReset;
     }
 }

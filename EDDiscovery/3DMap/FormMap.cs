@@ -285,7 +285,7 @@ namespace EDDiscovery
                         HistoryEntry vs = _systemlist.FindLast(x => x.System.HasCoordinate);
 
                         if (vs != null)
-                            SetCenterSystemTo(vs.System.name);
+                            SetCenterSystemTo(vs.System.Name);
                     }
                 }
             }
@@ -343,7 +343,7 @@ namespace EDDiscovery
             SetCenterSystemLabel();
             labelClickedSystemCoords.Text = "Click a star to select/copy, double-click to center";
 
-            posdir.SetCameraPos(new Vector3((float)_centerSystem.x, -(float)_centerSystem.y, (float)_centerSystem.z));
+            posdir.SetCameraPos(new Vector3((float)_centerSystem.X, -(float)_centerSystem.Y, (float)_centerSystem.Z));
 
             zoomfov.SetToDefault();
             _lastcameranorm.Update(posdir.CameraDirection, posdir.Position, zoomfov.Zoom,1.0F); // set up here so ready for action.. below uses it.
@@ -1041,7 +1041,7 @@ namespace EDDiscovery
         private void SetCenterSystemLabel()
         {
             if (_centerSystem != null)
-                labelSystemCoords.Text = string.Format("{0} x:{1} y:{2} z:{3}", _centerSystem.name, _centerSystem.x.ToString("0.00"), _centerSystem.y.ToString("0.00"), _centerSystem.z.ToString("0.00"));
+                labelSystemCoords.Text = string.Format("{0} x:{1} y:{2} z:{3}", _centerSystem.Name, _centerSystem.X.ToString("0.00"), _centerSystem.Y.ToString("0.00"), _centerSystem.Z.ToString("0.00"));
             else
                 labelSystemCoords.Text = "No centre system";
         }
@@ -1061,7 +1061,7 @@ namespace EDDiscovery
                 _centerSystem = sys;
                 SetCenterSystemLabel();
                 GenerateDataSetsSelectedSystems();
-                posdir.StartCameraSlew(new Vector3((float)_centerSystem.x, (float)_centerSystem.y, (float)_centerSystem.z), -1F);
+                posdir.StartCameraSlew(new Vector3((float)_centerSystem.X, (float)_centerSystem.Y, (float)_centerSystem.Z), -1F);
                 return true;
             }
             else
@@ -1170,8 +1170,8 @@ namespace EDDiscovery
         {
             if (_systemlist != null)
             {
-                HistoryEntry he = HistoryList.FindNextSystem(_systemlist, _centerSystem.name, -1);
-                SetCenterSystemTo((he == null) ? _centerSystem.name : he.System.name);
+                HistoryEntry he = HistoryList.FindNextSystem(_systemlist, _centerSystem.Name, -1);
+                SetCenterSystemTo((he == null) ? _centerSystem.Name : he.System.Name);
             }
             else
                 ExtendedControls.MessageBoxTheme.Show(this, "No travel history is available");
@@ -1209,8 +1209,8 @@ namespace EDDiscovery
         {
             if (_systemlist != null)
             {
-                HistoryEntry he = HistoryList.FindNextSystem(_systemlist, _centerSystem.name, 1);
-                SetCenterSystemTo((he == null) ? _centerSystem.name : he.System.name);
+                HistoryEntry he = HistoryList.FindNextSystem(_systemlist, _centerSystem.Name, 1);
+                SetCenterSystemTo((he == null) ? _centerSystem.Name : he.System.Name);
             }
             else
                 ExtendedControls.MessageBoxTheme.Show(this, "No travel history is available");
@@ -1227,7 +1227,7 @@ namespace EDDiscovery
                 HistoryEntry he = HistoryList.FindLastFSDKnownPosition(_systemlist);
 
                 if (he != null )
-                    SetCenterSystemTo(FindSystem(he.System.name));
+                    SetCenterSystemTo(FindSystem(he.System.Name));
                 else
                     ExtendedControls.MessageBoxTheme.Show(this, "No stars with defined co-ordinates available in travel history");
             }
@@ -1624,17 +1624,17 @@ namespace EDDiscovery
 
                 if (_clickedSystem != null)         // will be set for systems clicked, bookmarks or noted systems
                 {
-                    _clickedposition = new Vector3((float)_clickedSystem.x, (float)_clickedSystem.y, (float)_clickedSystem.z);
+                    _clickedposition = new Vector3((float)_clickedSystem.X, (float)_clickedSystem.Y, (float)_clickedSystem.Z);
 
-                    name = _clickedSystem.name;
+                    name = _clickedSystem.Name;
 
                     var edsm = new EDSMClass();
-                    _clickedurl = edsm.GetUrlToEDSMSystem(name, _clickedSystem.id_edsm);
+                    _clickedurl = edsm.GetUrlToEDSMSystem(name, _clickedSystem.EDSMID);
                     viewOnEDSMToolStripMenuItem.Enabled = true;
 
                     try
                     {
-                        System.Windows.Forms.Clipboard.SetText(_clickedSystem.name);
+                        System.Windows.Forms.Clipboard.SetText(_clickedSystem.Name);
                     }
                     catch
                     {
@@ -1824,32 +1824,32 @@ namespace EDDiscovery
 
             if (hoversystem != null)
             {
-                sysname = hoversystem.name;
-                info = hoversystem.name + Environment.NewLine + string.Format("x:{0} y:{1} z:{2}", hoversystem.x.ToString("0.00"), hoversystem.y.ToString("0.00"), hoversystem.z.ToString("0.00"));
-                pos = new Vector3d(hoversystem.x, hoversystem.y, hoversystem.z);
+                sysname = hoversystem.Name;
+                info = hoversystem.Name + Environment.NewLine + string.Format("x:{0} y:{1} z:{2}", hoversystem.X.ToString("0.00"), hoversystem.Y.ToString("0.00"), hoversystem.Z.ToString("0.00"));
+                pos = new Vector3d(hoversystem.X, hoversystem.Y, hoversystem.Z);
 
-                ISystem sysclass = (hoversystem.id != 0) ? SystemClassDB.GetSystem(hoversystem.id, name: hoversystem.name) : SystemClassDB.GetSystem(hoversystem.name);
+                ISystem sysclass = (hoversystem.ID != 0) ? SystemClassDB.GetSystem(hoversystem.ID, name: hoversystem.Name) : SystemClassDB.GetSystem(hoversystem.Name);
 
                 if (sysclass != null)
                 {
-                    if (sysclass.allegiance != EDAllegiance.Unknown)
-                        info += Environment.NewLine + "Allegiance: " + sysclass.allegiance;
+                    if (sysclass.Allegiance != EDAllegiance.Unknown)
+                        info += Environment.NewLine + "Allegiance: " + sysclass.Allegiance;
 
-                    if (sysclass.primary_economy != EDEconomy.Unknown)
-                        info += Environment.NewLine + "Economy: " + sysclass.primary_economy;
+                    if (sysclass.PrimaryEconomy != EDEconomy.Unknown)
+                        info += Environment.NewLine + "Economy: " + sysclass.PrimaryEconomy;
 
-                    if (sysclass.government != EDGovernment.Unknown)
-                        info += Environment.NewLine + "Government: " + sysclass.allegiance;
+                    if (sysclass.Government != EDGovernment.Unknown)
+                        info += Environment.NewLine + "Government: " + sysclass.Allegiance;
 
-                    if (sysclass.state != EDState.Unknown)
-                        info += Environment.NewLine + "State: " + sysclass.state;
+                    if (sysclass.State != EDState.Unknown)
+                        info += Environment.NewLine + "State: " + sysclass.State;
 
-                    if (sysclass.allegiance != EDAllegiance.Unknown)
-                        info += Environment.NewLine + "Allegiance: " + sysclass.allegiance;
+                    if (sysclass.Allegiance != EDAllegiance.Unknown)
+                        info += Environment.NewLine + "Allegiance: " + sysclass.Allegiance;
                 }
 
-                if (hoversystem.population != 0)
-                    info += Environment.NewLine + "Population: " + hoversystem.population;
+                if (hoversystem.Population != 0)
+                    info += Environment.NewLine + "Population: " + hoversystem.Population;
             }
             else if (curbookmark != null && curbookmark.Heading != null)     // region bookmark (second check should be redundant but its protection).
             {
@@ -1867,28 +1867,28 @@ namespace EDDiscovery
             
             if ( sysname != null )
             { 
-                if (!sysname.Equals(_centerSystem.name))
+                if (!sysname.Equals(_centerSystem.Name))
                 {
-                    Vector3d cs = new Vector3d(_centerSystem.x, _centerSystem.y, _centerSystem.z);
-                    info += Environment.NewLine + "Distance from " + _centerSystem.name + ": " + (cs-pos).Length.ToString("0.0");
+                    Vector3d cs = new Vector3d(_centerSystem.X, _centerSystem.Y, _centerSystem.Z);
+                    info += Environment.NewLine + "Distance from " + _centerSystem.Name + ": " + (cs-pos).Length.ToString("0.0");
                 }
                 // if exists, history not hover, history not centre
-                if (_historySelection != null && !sysname.Equals(_historySelection.name) && !_historySelection.name.Equals(_centerSystem.name))
+                if (_historySelection != null && !sysname.Equals(_historySelection.Name) && !_historySelection.Name.Equals(_centerSystem.Name))
                 {
-                    Vector3d hs = new Vector3d(_historySelection.x, _historySelection.y, _historySelection.z);
-                    info += Environment.NewLine + "Distance from " + _historySelection.name + ": " + (hs-pos).Length.ToString("0.0");
+                    Vector3d hs = new Vector3d(_historySelection.X, _historySelection.Y, _historySelection.Z);
+                    info += Environment.NewLine + "Distance from " + _historySelection.Name + ": " + (hs-pos).Length.ToString("0.0");
                 }
                 // home not centre, home not history or history null
-                if (!_homeSystem.name.Equals(_centerSystem.name) && (_historySelection == null || !_historySelection.name.Equals(_homeSystem.name)))
+                if (!_homeSystem.Name.Equals(_centerSystem.Name) && (_historySelection == null || !_historySelection.Name.Equals(_homeSystem.Name)))
                 {
-                    double dist = ((new Vector3d(_homeSystem.x, _homeSystem.y, _homeSystem.z)) - pos).Length;
-                    info += Environment.NewLine + "Distance from " + _homeSystem.name + ": " + dist.ToString("0.0");
+                    double dist = ((new Vector3d(_homeSystem.X, _homeSystem.Y, _homeSystem.Z)) - pos).Length;
+                    info += Environment.NewLine + "Distance from " + _homeSystem.Name + ": " + dist.ToString("0.0");
                 }
 
                 if (_clickedSystem != null && _clickedSystem != _centerSystem && _clickedSystem != _historySelection && _clickedSystem != _homeSystem && _clickedSystem!=hoversystem)
                 {
-                    double dist = ((new Vector3d(_clickedSystem.x, _clickedSystem.y, _clickedSystem.z)) - pos).Length;
-                    info += Environment.NewLine + "Distance from " + _clickedSystem.name + ": " + dist.ToString("0.0");
+                    double dist = ((new Vector3d(_clickedSystem.X, _clickedSystem.Y, _clickedSystem.Z)) - pos).Length;
+                    info += Environment.NewLine + "Distance from " + _clickedSystem.Name + ": " + dist.ToString("0.0");
                 }
 
                 if (_clickedGMO != null && _clickedGMO != gmo )
@@ -1897,7 +1897,7 @@ namespace EDDiscovery
                     info += Environment.NewLine + "Distance from " + _clickedGMO.name + ": " + dist.ToString("0.0");
                 }
 
-                SystemNoteClass sn = SystemNoteClass.GetNoteOnSystem(sysname, hoversystem == null ? 0 : hoversystem.id_edsm);   // may be null
+                SystemNoteClass sn = SystemNoteClass.GetNoteOnSystem(sysname, hoversystem == null ? 0 : hoversystem.EDSMID);   // may be null
                 if (sn != null && sn.Note.Trim().Length>0 )
                 {
                     info += Environment.NewLine + "Notes: " + sn.Note.Trim();
@@ -2047,7 +2047,7 @@ namespace EDDiscovery
             {
                 if ( vs.System.HasCoordinate)
                 { 
-                    SystemNoteClass notecs = SystemNoteClass.GetNoteOnSystem(vs.System.name, vs.System.id_edsm);
+                    SystemNoteClass notecs = SystemNoteClass.GetNoteOnSystem(vs.System.Name, vs.System.EDSMID);
 
                     if (notecs!=null )
                     {
@@ -2055,9 +2055,9 @@ namespace EDDiscovery
 
                         if (note.Length > 0)
                         {
-                            float lx = (float)(vs.System.x);
-                            float ly = (float)(vs.System.y);
-                            float lz = (float)(vs.System.z);
+                            float lx = (float)(vs.System.X);
+                            float ly = (float)(vs.System.Y);
+                            float lz = (float)(vs.System.Z);
 
                             Matrix4 area = new Matrix4(
                                 new Vector4(rotvert[0].X + lx, rotvert[0].Y + ly, rotvert[0].Z + lz, 1),    // top left
@@ -2204,7 +2204,7 @@ namespace EDDiscovery
         {
             if (_systemlist != null)
             {
-                HistoryEntry sys = _systemlist.FindLast(x => x.System.name.Equals(name, StringComparison.InvariantCultureIgnoreCase));
+                HistoryEntry sys = _systemlist.FindLast(x => x.System.Name.Equals(name, StringComparison.InvariantCultureIgnoreCase));
 
                 if (sys != null)
                     return sys.System;
@@ -2248,8 +2248,8 @@ namespace EDDiscovery
 
             if (sys != null)
             {
-                loc = new Vector3((float)sys.x, (float)sys.y, (float)sys.z);
-                return sys.name;
+                loc = new Vector3((float)sys.X, (float)sys.Y, (float)sys.Z);
+                return sys.Name;
             }
 
             gmo = discoveryForm.galacticMapping.Find(textboxFrom.Text, true, true);    // ignore if its off, find any part of string, find if disabled

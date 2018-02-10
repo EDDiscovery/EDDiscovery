@@ -70,6 +70,8 @@ namespace EliteDangerousCore.JournalEvents
             Government = JSONObjectExtensions.GetMultiStringDef(evt, new string[] { "StationGovernment", "Government" });
             Government_Localised = JSONObjectExtensions.GetMultiStringDef(evt, new string[] { "StationGovernment_Localised", "Government_Localised" });
 
+            Wanted = evt["Wanted"].BoolNull();
+
             if (!evt["StationServices"].Empty())
                 StationServices = evt.Value<JArray>("StationServices").Values<string>().ToList();
 
@@ -94,13 +96,14 @@ namespace EliteDangerousCore.JournalEvents
         public string Government { get; set; }
         public string Government_Localised { get; set; }
         public List<string> StationServices { get; set; }
+        public bool? Wanted { get; set; }
 
         public bool IsTrainingEvent { get; private set; }
 
         public override void FillInformation(out string summary, out string info, out string detailed)      //V
         {
             summary = $"At {StationName}";
-            info = BaseUtils.FieldBuilder.Build("Type ", StationType, "< in system ", StarSystem, "Faction:", Faction, "< in state ", FactionState);
+            info = BaseUtils.FieldBuilder.Build("Type ", StationType, "< in system ", StarSystem, ";Wanted" , Wanted, "Faction:", Faction, "< in state ", FactionState);
             detailed = BaseUtils.FieldBuilder.Build("Allegiance:", Allegiance, "Economy:", Economy_Localised.Alt(Economy), "Government:", Government_Localised.Alt(Government));
 
             if (StationServices != null)

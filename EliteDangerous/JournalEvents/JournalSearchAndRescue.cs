@@ -34,12 +34,14 @@ namespace EliteDangerousCore.JournalEvents
             FriendlyName = JournalFieldNaming.RMat(Name);
             Count = evt["Count"].Int();
             Reward = evt["Reward"].Long();
+            MarketID = evt["MarketID"].LongNull();
         }
 
         public string Name { get; set; }            // Hyperspace, Supercruise
         public string FriendlyName { get; set; }            // Hyperspace, Supercruise
         public int Count { get; set; }
         public long Reward { get; set; }
+        public long? MarketID { get; set; }
 
         public override void FillInformation(out string summary, out string info, out string detailed) //V
         {

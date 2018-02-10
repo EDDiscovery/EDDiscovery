@@ -40,7 +40,7 @@ Note: Other music track names may be used in future
     }
 
     [JournalEntryType(JournalTypeEnum.Music)]
-    public class JournalMusic : JournalEntry
+    public class JournalMusic : JournalEntry, IUIEvent
     {
         public JournalMusic(JObject evt ) : base(evt, JournalTypeEnum.Music)
         {

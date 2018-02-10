@@ -19,9 +19,16 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Newtonsoft.Json.Linq;
+using System.IO;
 
 namespace EliteDangerousCore
 {
+    public class JournalReaderEntry
+    {
+        public JournalEntry JournalEntry;
+        public JObject Json;
+    }
+
     public class EDJournalReader : LogReaderBase
     {
         // Close Quarters Combat
@@ -47,7 +54,7 @@ namespace EliteDangerousCore
         // Journal ID
         public int JournalId { get { return (int)TravelLogUnit.id; } }
 
-        protected JournalReaderEntry ProcessLine(string line, bool resetOnError)
+        private JournalReaderEntry ProcessLine(string line, bool resetOnError)
         {
             int cmdrid = -2;        //-1 is hidden, -2 is never shown
 
@@ -148,13 +155,19 @@ namespace EliteDangerousCore
                 return null;
             }
 
+            if (je is IAdditionalFiles)
+            {
+                if ((je as IAdditionalFiles).ReadAdditionalFiles(Path.GetDirectoryName(FileName), ref jo) == false)     // if failed
+                    return null;
+            }
+
             je.TLUId = (int)TravelLogUnit.id;
             je.CommanderId = cmdrid;
 
             return new JournalReaderEntry { JournalEntry = je, Json = jo };
         }
 
-        public bool ReadJournalLog(out JournalReaderEntry jent, bool resetOnError = false)
+        private bool ReadJournalLog(out JournalReaderEntry jent, bool resetOnError = false)
         {
             if (StartEntries.Count != 0 && this.TravelLogUnit.CommanderId != null && this.TravelLogUnit.CommanderId >= 0)
             {

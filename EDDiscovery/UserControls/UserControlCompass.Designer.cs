@@ -45,66 +45,18 @@ namespace EDDiscovery.UserControls
         {
             this.components = new System.ComponentModel.Container();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.textBoxCurrentLatitude = new ExtendedControls.TextBoxBorder();
-            this.textBoxCurrentLongitude = new ExtendedControls.TextBoxBorder();
             this.textBoxTargetLatitude = new ExtendedControls.TextBoxBorder();
             this.textBoxTargetLongitude = new ExtendedControls.TextBoxBorder();
-            this.labelExtBearing = new ExtendedControls.LabelExt();
-            this.labelExtCurrLat = new ExtendedControls.LabelExt();
-            this.labelExt1 = new ExtendedControls.LabelExt();
             this.labelTargetLat = new ExtendedControls.LabelExt();
             this.labelExtTargetLong = new ExtendedControls.LabelExt();
+            this.pictureBoxCompass = new ExtendedControls.PictureBoxHotspot();
+            this.checkBoxHideTransparent = new ExtendedControls.CheckBoxCustom();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxCompass)).BeginInit();
             this.SuspendLayout();
             // 
             // toolTip1
             // 
             this.toolTip1.ShowAlways = true;
-            // 
-            // textBoxCurrentLatitude
-            // 
-            this.textBoxCurrentLatitude.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
-            this.textBoxCurrentLatitude.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
-            this.textBoxCurrentLatitude.BorderColor = System.Drawing.Color.Transparent;
-            this.textBoxCurrentLatitude.BorderColorScaling = 0.5F;
-            this.textBoxCurrentLatitude.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.textBoxCurrentLatitude.ControlBackground = System.Drawing.SystemColors.Control;
-            this.textBoxCurrentLatitude.Location = new System.Drawing.Point(91, 42);
-            this.textBoxCurrentLatitude.Multiline = false;
-            this.textBoxCurrentLatitude.Name = "textBoxCurrentLatitude";
-            this.textBoxCurrentLatitude.ReadOnly = false;
-            this.textBoxCurrentLatitude.ScrollBars = System.Windows.Forms.ScrollBars.None;
-            this.textBoxCurrentLatitude.SelectionLength = 0;
-            this.textBoxCurrentLatitude.SelectionStart = 0;
-            this.textBoxCurrentLatitude.Size = new System.Drawing.Size(55, 20);
-            this.textBoxCurrentLatitude.TabIndex = 3;
-            this.textBoxCurrentLatitude.Text = "0";
-            this.textBoxCurrentLatitude.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
-            this.toolTip1.SetToolTip(this.textBoxCurrentLatitude, "Current Latitude - take a screenshot to auto update");
-            this.textBoxCurrentLatitude.WordWrap = true;
-            this.textBoxCurrentLatitude.Validated += new System.EventHandler(this.textBox_Validated);
-            // 
-            // textBoxCurrentLongitude
-            // 
-            this.textBoxCurrentLongitude.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
-            this.textBoxCurrentLongitude.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
-            this.textBoxCurrentLongitude.BorderColor = System.Drawing.Color.Transparent;
-            this.textBoxCurrentLongitude.BorderColorScaling = 0.5F;
-            this.textBoxCurrentLongitude.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.textBoxCurrentLongitude.ControlBackground = System.Drawing.SystemColors.Control;
-            this.textBoxCurrentLongitude.Location = new System.Drawing.Point(249, 42);
-            this.textBoxCurrentLongitude.Multiline = false;
-            this.textBoxCurrentLongitude.Name = "textBoxCurrentLongitude";
-            this.textBoxCurrentLongitude.ReadOnly = false;
-            this.textBoxCurrentLongitude.ScrollBars = System.Windows.Forms.ScrollBars.None;
-            this.textBoxCurrentLongitude.SelectionLength = 0;
-            this.textBoxCurrentLongitude.SelectionStart = 0;
-            this.textBoxCurrentLongitude.Size = new System.Drawing.Size(55, 20);
-            this.textBoxCurrentLongitude.TabIndex = 4;
-            this.textBoxCurrentLongitude.Text = "0";
-            this.textBoxCurrentLongitude.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
-            this.toolTip1.SetToolTip(this.textBoxCurrentLongitude, "Current Longitude - take a screenshot to auto update");
-            this.textBoxCurrentLongitude.WordWrap = true;
-            this.textBoxCurrentLongitude.Validated += new System.EventHandler(this.textBox_Validated);
             // 
             // textBoxTargetLatitude
             // 
@@ -114,7 +66,7 @@ namespace EDDiscovery.UserControls
             this.textBoxTargetLatitude.BorderColorScaling = 0.5F;
             this.textBoxTargetLatitude.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBoxTargetLatitude.ControlBackground = System.Drawing.SystemColors.Control;
-            this.textBoxTargetLatitude.Location = new System.Drawing.Point(91, 16);
+            this.textBoxTargetLatitude.Location = new System.Drawing.Point(52, 0);
             this.textBoxTargetLatitude.Multiline = false;
             this.textBoxTargetLatitude.Name = "textBoxTargetLatitude";
             this.textBoxTargetLatitude.ReadOnly = false;
@@ -137,7 +89,7 @@ namespace EDDiscovery.UserControls
             this.textBoxTargetLongitude.BorderColorScaling = 0.5F;
             this.textBoxTargetLongitude.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBoxTargetLongitude.ControlBackground = System.Drawing.SystemColors.Control;
-            this.textBoxTargetLongitude.Location = new System.Drawing.Point(249, 16);
+            this.textBoxTargetLongitude.Location = new System.Drawing.Point(129, 0);
             this.textBoxTargetLongitude.Multiline = false;
             this.textBoxTargetLongitude.Name = "textBoxTargetLongitude";
             this.textBoxTargetLongitude.ReadOnly = false;
@@ -152,67 +104,62 @@ namespace EDDiscovery.UserControls
             this.textBoxTargetLongitude.WordWrap = true;
             this.textBoxTargetLongitude.Validated += new System.EventHandler(this.textBox_Validated);
             // 
-            // labelExtBearing
-            // 
-            this.labelExtBearing.AutoSize = true;
-            this.labelExtBearing.Location = new System.Drawing.Point(97, 0);
-            this.labelExtBearing.Name = "labelExtBearing";
-            this.labelExtBearing.Size = new System.Drawing.Size(49, 13);
-            this.labelExtBearing.TabIndex = 8;
-            this.labelExtBearing.Text = "Bearing -";
-            this.toolTip1.SetToolTip(this.labelExtBearing, "Bearing from current location to target location");
-            // 
-            // labelExtCurrLat
-            // 
-            this.labelExtCurrLat.AutoSize = true;
-            this.labelExtCurrLat.Location = new System.Drawing.Point(3, 42);
-            this.labelExtCurrLat.Name = "labelExtCurrLat";
-            this.labelExtCurrLat.Size = new System.Drawing.Size(82, 13);
-            this.labelExtCurrLat.TabIndex = 1;
-            this.labelExtCurrLat.Text = "Current Latitude";
-            // 
-            // labelExt1
-            // 
-            this.labelExt1.AutoSize = true;
-            this.labelExt1.Location = new System.Drawing.Point(152, 42);
-            this.labelExt1.Name = "labelExt1";
-            this.labelExt1.Size = new System.Drawing.Size(91, 13);
-            this.labelExt1.TabIndex = 2;
-            this.labelExt1.Text = "Current Longitude";
-            // 
             // labelTargetLat
             // 
             this.labelTargetLat.AutoSize = true;
-            this.labelTargetLat.Location = new System.Drawing.Point(6, 16);
+            this.labelTargetLat.Location = new System.Drawing.Point(8, 7);
             this.labelTargetLat.Name = "labelTargetLat";
-            this.labelTargetLat.Size = new System.Drawing.Size(79, 13);
+            this.labelTargetLat.Size = new System.Drawing.Size(38, 13);
             this.labelTargetLat.TabIndex = 4;
-            this.labelTargetLat.Text = "Target Latitude";
+            this.labelTargetLat.Text = "Target";
             // 
             // labelExtTargetLong
             // 
             this.labelExtTargetLong.AutoSize = true;
-            this.labelExtTargetLong.Location = new System.Drawing.Point(155, 16);
+            this.labelExtTargetLong.Location = new System.Drawing.Point(113, 7);
             this.labelExtTargetLong.Name = "labelExtTargetLong";
-            this.labelExtTargetLong.Size = new System.Drawing.Size(88, 13);
+            this.labelExtTargetLong.Size = new System.Drawing.Size(10, 13);
             this.labelExtTargetLong.TabIndex = 6;
-            this.labelExtTargetLong.Text = "Target Longitude";
+            this.labelExtTargetLong.Text = ",";
+            // 
+            // pictureBoxCompass
+            // 
+            this.pictureBoxCompass.Location = new System.Drawing.Point(11, 26);
+            this.pictureBoxCompass.Name = "pictureBoxCompass";
+            this.pictureBoxCompass.Size = new System.Drawing.Size(295, 50);
+            this.pictureBoxCompass.TabIndex = 7;
+            // 
+            // checkBoxHideTransparent
+            // 
+            this.checkBoxHideTransparent.AutoSize = true;
+            this.checkBoxHideTransparent.CheckBoxColor = System.Drawing.Color.Gray;
+            this.checkBoxHideTransparent.CheckBoxInnerColor = System.Drawing.Color.White;
+            this.checkBoxHideTransparent.CheckColor = System.Drawing.Color.DarkBlue;
+            this.checkBoxHideTransparent.FontNerfReduction = 0.5F;
+            this.checkBoxHideTransparent.ImageButtonDisabledScaling = 0.5F;
+            this.checkBoxHideTransparent.Location = new System.Drawing.Point(191, 4);
+            this.checkBoxHideTransparent.MouseOverColor = System.Drawing.Color.CornflowerBlue;
+            this.checkBoxHideTransparent.Name = "checkBoxHideTransparent";
+            this.checkBoxHideTransparent.Size = new System.Drawing.Size(120, 17);
+            this.checkBoxHideTransparent.TabIndex = 8;
+            this.checkBoxHideTransparent.Text = "Hide In Transparent";
+            this.checkBoxHideTransparent.TickBoxReductionSize = 10;
+            this.checkBoxHideTransparent.UseVisualStyleBackColor = true;
+            this.checkBoxHideTransparent.CheckedChanged += new System.EventHandler(this.checkBoxHideTransparent_CheckedChanged);
             // 
             // UserControlCompass
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.labelExtBearing);
+            this.Controls.Add(this.checkBoxHideTransparent);
+            this.Controls.Add(this.pictureBoxCompass);
             this.Controls.Add(this.textBoxTargetLongitude);
             this.Controls.Add(this.labelExtTargetLong);
             this.Controls.Add(this.textBoxTargetLatitude);
             this.Controls.Add(this.labelTargetLat);
-            this.Controls.Add(this.textBoxCurrentLongitude);
-            this.Controls.Add(this.labelExt1);
-            this.Controls.Add(this.labelExtCurrLat);
-            this.Controls.Add(this.textBoxCurrentLatitude);
             this.Name = "UserControlCompass";
-            this.Size = new System.Drawing.Size(312, 67);
+            this.Size = new System.Drawing.Size(312, 83);
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxCompass)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -220,14 +167,11 @@ namespace EDDiscovery.UserControls
 
         #endregion
         private System.Windows.Forms.ToolTip toolTip1;
-        private ExtendedControls.TextBoxBorder textBoxCurrentLatitude;
-        private ExtendedControls.LabelExt labelExtCurrLat;
-        private ExtendedControls.LabelExt labelExt1;
-        private ExtendedControls.TextBoxBorder textBoxCurrentLongitude;
         private ExtendedControls.LabelExt labelTargetLat;
         private ExtendedControls.TextBoxBorder textBoxTargetLatitude;
         private ExtendedControls.LabelExt labelExtTargetLong;
         private ExtendedControls.TextBoxBorder textBoxTargetLongitude;
-        private ExtendedControls.LabelExt labelExtBearing;
+        private ExtendedControls.PictureBoxHotspot pictureBoxCompass;
+        private ExtendedControls.CheckBoxCustom checkBoxHideTransparent;
     }
 }

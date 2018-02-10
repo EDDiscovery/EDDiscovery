@@ -66,7 +66,7 @@ namespace EDDiscovery.Forms
         {
             HistoryEntry lastSys = discoveryForm.history.GetLastFSD ;
             if(lastSys!=null && lastSys.System!=null)
-                txtExportVisited.Text = lastSys.System.name;
+                txtExportVisited.Text = lastSys.System.Name;
         }
     }
 }

@@ -61,7 +61,7 @@ namespace EDDiscovery.Actions
                 vars[prefix + "EventDescription"] = he.EventDescription;
                 vars[prefix + "EventDetailedInfo"] = he.EventDetailedInfo;
 
-                vars.AddPropertiesFieldsOfClass(he.journalEntry, prefix + "Class_", new Type[] { typeof(System.Drawing.Bitmap), typeof(Newtonsoft.Json.Linq.JObject) } , 5);      //depth seems good enough
+                vars.AddPropertiesFieldsOfClass(he.journalEntry, prefix + "Class_", new Type[] { typeof(System.Drawing.Icon), typeof(System.Drawing.Image), typeof(System.Drawing.Bitmap), typeof(Newtonsoft.Json.Linq.JObject) }, 5);      //depth seems good enough
 
                 // being backwards compatible to actions packs BEFORE the V3 change to remove JS vars
                 // these were the ones used in the pack..
@@ -80,20 +80,20 @@ namespace EDDiscovery.Actions
             {
                 System.Globalization.CultureInfo ct = System.Globalization.CultureInfo.InvariantCulture;
 
-                vars[prefix + "StarSystem"] = s.name;
-                vars[prefix + "StarSystemEDSMID"] = s.id_edsm.ToString(ct);
-                vars[prefix + "xpos"] = s.x.ToNANSafeString("0.###");
-                vars[prefix + "ypos"] = s.y.ToNANSafeString("0.###");
-                vars[prefix + "zpos"] = s.z.ToNANSafeString("0.###");
-                vars[prefix + "EDDBID"] = s.id_eddb.ToString(ct);
-                vars[prefix + "EDDBGovernment"] = s.government.ToNullUnknownString();
-                vars[prefix + "EDDBAllegiance"] = s.allegiance.ToNullUnknownString();
-                vars[prefix + "EDDBState"] = s.state.ToNullUnknownString();
-                vars[prefix + "EDDBSecurity"] = s.security.ToNullUnknownString();
-                vars[prefix + "EDDBPrimaryEconomy"] = s.primary_economy.ToNullUnknownString();
-                vars[prefix + "EDDBFaction"] = s.faction.ToNullUnknownString();
-                vars[prefix + "EDDBPopulation"] = s.population.ToString(ct);
-                vars[prefix + "EDDBNeedsPermit"] = (s.needs_permit != 0) ? "1" : "0";
+                vars[prefix + "StarSystem"] = s.Name;
+                vars[prefix + "StarSystemEDSMID"] = s.EDSMID.ToString(ct);
+                vars[prefix + "xpos"] = s.X.ToNANSafeString("0.###");
+                vars[prefix + "ypos"] = s.Y.ToNANSafeString("0.###");
+                vars[prefix + "zpos"] = s.Z.ToNANSafeString("0.###");
+                vars[prefix + "EDDBID"] = s.EDDBID.ToString(ct);
+                vars[prefix + "EDDBGovernment"] = s.Government.ToNullUnknownString();
+                vars[prefix + "EDDBAllegiance"] = s.Allegiance.ToNullUnknownString();
+                vars[prefix + "EDDBState"] = s.State.ToNullUnknownString();
+                vars[prefix + "EDDBSecurity"] = s.Security.ToNullUnknownString();
+                vars[prefix + "EDDBPrimaryEconomy"] = s.PrimaryEconomy.ToNullUnknownString();
+                vars[prefix + "EDDBFaction"] = s.Faction.ToNullUnknownString();
+                vars[prefix + "EDDBPopulation"] = s.Population.ToString(ct);
+                vars[prefix + "EDDBNeedsPermit"] = (s.NeedsPermit != 0) ? "1" : "0";
             }
         }
 
@@ -132,8 +132,8 @@ namespace EDDiscovery.Actions
         {
             System.Globalization.CultureInfo ct = System.Globalization.CultureInfo.InvariantCulture;
 
-            vars[prefix + "VisitCount"] = hl.GetVisitsCount(s.name).ToString(ct);
-            vars[prefix + "ScanCount"] = hl.GetScans(s.name).Count.ToString(ct);
+            vars[prefix + "VisitCount"] = hl.GetVisitsCount(s.Name).ToString(ct);
+            vars[prefix + "ScanCount"] = hl.GetScans(s.Name).Count.ToString(ct);
             vars[prefix + "FSDJumpsTotal"] = hl.GetFSDJumps(new TimeSpan(100000, 0, 0, 0)).ToString(ct);
         }
 
@@ -166,7 +166,7 @@ namespace EDDiscovery.Actions
                     vars[mi + "Enabled"] = m.Enabled.ToStringInvariant();
                     vars[mi + "AmmoClip"] = m.AmmoClip.ToStringInvariant();
                     vars[mi + "AmmoHopper"] = m.AmmoHopper.ToStringInvariant();
-                    vars[mi + "Blueprint"] = m.Blueprint.ToNullSafeString();
+                    vars[mi + "Blueprint"] = (m.Engineering != null) ? m.Engineering.FriendlyBlueprintName : "";
                     vars[mi + "Health"] = m.Health.ToStringInvariant();
                     vars[mi + "Value"] = m.Value.ToStringInvariant();
                     ind++;

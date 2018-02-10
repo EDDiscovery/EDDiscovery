@@ -35,10 +35,10 @@ namespace EDDiscovery
 
         public StarNames(ISystem other , Vector3 posf)          // we can't use the position in other, as its in doubles. and we must be able to accurately match
         {
-            id = other.id;
-            name = other.name;
+            id = other.ID;
+            name = other.Name;
             pos = posf;
-            population = other.population;
+            population = other.Population;
 
             nametexture = null;
             newnametexture = null;

@@ -176,12 +176,12 @@ namespace EDDiscovery
 
         private void DrawLine(Graphics gfx, Pen pen, ISystem sys1, ISystem sys2)
         {
-            gfx.DrawLine(pen, Transform2Screen(currentFGEImage.TransformCoordinate(new Point((int)sys1.x, (int)sys1.z))), Transform2Screen(currentFGEImage.TransformCoordinate(new Point((int)sys2.x, (int)sys2.z))));
+            gfx.DrawLine(pen, Transform2Screen(currentFGEImage.TransformCoordinate(new Point((int)sys1.X, (int)sys1.Z))), Transform2Screen(currentFGEImage.TransformCoordinate(new Point((int)sys2.X, (int)sys2.Z))));
         }
 
         private void DrawPoint(Graphics gfx, Pen pen, ISystem sys1, ISystem sys2)
         {
-            Point point = Transform2Screen(currentFGEImage.TransformCoordinate(new Point((int)sys1.x, (int)sys1.z)));
+            Point point = Transform2Screen(currentFGEImage.TransformCoordinate(new Point((int)sys1.X, (int)sys1.Z)));
             gfx.FillRectangle(pen.Brush, point.X, point.Y, 1, 1);
         }
 

@@ -278,7 +278,7 @@ namespace EDDiscovery.UserControls
                 }
 
                 // display total scan values
-                SetControlText("Scan Summary for " + last_sn.system.name + ". " + BuildScanValue(last_sn));
+                SetControlText("Scan Summary for " + last_sn.system.Name + ". " + BuildScanValue(last_sn));
             }
         }
 

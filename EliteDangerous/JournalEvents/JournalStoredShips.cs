@@ -44,7 +44,7 @@ namespace EliteDangerousCore.JournalEvents
         {
             StationName = evt["StationName"].Str();
             StarSystem = evt["StarSystem"].Str();
-            MarketID = evt["MarketID"].Long();
+            MarketID = evt["MarketID"].LongNull();
 
             ShipsHere = evt["ShipsHere"]?.ToObject<StoredShipItem[]>();
             ShipsRemote = evt["ShipsRemote"]?.ToObject<StoredShipItem[]>();
@@ -68,7 +68,7 @@ namespace EliteDangerousCore.JournalEvents
 
         public string StationName { get; set; }
         public string StarSystem { get; set; }
-        public long MarketID { get; set; }
+        public long? MarketID { get; set; }
 
         public StoredShipItem[] ShipsHere { get; set; }
         public StoredShipItem[] ShipsRemote { get; set; }

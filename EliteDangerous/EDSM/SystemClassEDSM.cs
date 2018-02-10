@@ -149,29 +149,29 @@ namespace EliteDangerousCore.EDSM
                         {
                             SystemClassBase sys = new SystemClassBase
                             {
-                                id = (long)reader["id"],
-                                name = (string)reader["name"]
+                                ID = (long)reader["id"],
+                                Name = (string)reader["name"]
                             };
 
-                            string searchname = sys.name.ToLower();
+                            string searchname = sys.Name.ToLower();
 
                             if (System.DBNull.Value == reader["x"])
                             {
-                                sys.x = double.NaN;
-                                sys.y = double.NaN;
-                                sys.z = double.NaN;
+                                sys.X = double.NaN;
+                                sys.Y = double.NaN;
+                                sys.Z = double.NaN;
                             }
                             else
                             {
-                                sys.x = ((double)(long)reader["x"]) / SystemClassDB.XYZScalar;
-                                sys.y = ((double)(long)reader["y"]) / SystemClassDB.XYZScalar;
-                                sys.z = ((double)(long)reader["z"]) / SystemClassDB.XYZScalar;
+                                sys.X = ((double)(long)reader["x"]) / SystemClassDB.XYZScalar;
+                                sys.Y = ((double)(long)reader["y"]) / SystemClassDB.XYZScalar;
+                                sys.Z = ((double)(long)reader["z"]) / SystemClassDB.XYZScalar;
                             }
 
-                            sys.id_edsm = (long)reader["EdsmId"];
-                            systemsByEdsmId[sys.id_edsm] = sys;
-                            sys.gridid = reader["gridid"] == DBNull.Value ? 0 : (int)((long)reader["gridid"]);
-                            sys.randomid = reader["randomid"] == DBNull.Value ? 0 : (int)((long)reader["randomid"]);
+                            sys.EDSMID = (long)reader["EdsmId"];
+                            systemsByEdsmId[sys.EDSMID] = sys;
+                            sys.GridID = reader["gridid"] == DBNull.Value ? 0 : (int)((long)reader["gridid"]);
+                            sys.RandomID = reader["randomid"] == DBNull.Value ? 0 : (int)((long)reader["randomid"]);
                         }
                     }
                 }
@@ -440,26 +440,26 @@ namespace EliteDangerousCore.EDSM
                                                             {
                                                                 dbsys = new SystemClassBase
                                                                 {
-                                                                    id = (long)reader["id"],
-                                                                    id_edsm = edsmid
+                                                                    ID = (long)reader["id"],
+                                                                    EDSMID = edsmid
                                                                 };
 
                                                                 if (System.DBNull.Value == reader["x"])
                                                                 {
-                                                                    dbsys.x = double.NaN;
-                                                                    dbsys.y = double.NaN;
-                                                                    dbsys.z = double.NaN;
+                                                                    dbsys.X = double.NaN;
+                                                                    dbsys.Y = double.NaN;
+                                                                    dbsys.Z = double.NaN;
                                                                 }
                                                                 else
                                                                 {
-                                                                    dbsys.x = ((double)(long)reader["X"]) / SystemClassDB.XYZScalar;
-                                                                    dbsys.y = ((double)(long)reader["Y"]) / SystemClassDB.XYZScalar;
-                                                                    dbsys.z = ((double)(long)reader["Z"]) / SystemClassDB.XYZScalar;
+                                                                    dbsys.X = ((double)(long)reader["X"]) / SystemClassDB.XYZScalar;
+                                                                    dbsys.Y = ((double)(long)reader["Y"]) / SystemClassDB.XYZScalar;
+                                                                    dbsys.Z = ((double)(long)reader["Z"]) / SystemClassDB.XYZScalar;
                                                                 }
 
-                                                                dbsys.id_edsm = edsmid;
-                                                                dbsys.gridid = reader["GridId"] == DBNull.Value ? 0 : (int)((long)reader["GridId"]);
-                                                                dbsys.randomid = reader["RandomId"] == DBNull.Value ? 0 : (int)((long)reader["RandomId"]);
+                                                                dbsys.EDSMID = edsmid;
+                                                                dbsys.GridID = reader["GridId"] == DBNull.Value ? 0 : (int)((long)reader["GridId"]);
+                                                                dbsys.RandomID = reader["RandomId"] == DBNull.Value ? 0 : (int)((long)reader["RandomId"]);
                                                             }
                                                         }
 
@@ -470,7 +470,7 @@ namespace EliteDangerousCore.EDSM
                                                             {
                                                                 if (reader.Read())
                                                                 {
-                                                                    dbsys.name = (string)reader["Name"];
+                                                                    dbsys.Name = (string)reader["Name"];
                                                                 }
                                                             }
                                                         }
@@ -480,17 +480,17 @@ namespace EliteDangerousCore.EDSM
                                                 if (dbsys != null)
                                                 {
                                                     // see if EDSM data changed..
-                                                    if (!dbsys.name.Equals(name))
+                                                    if (!dbsys.Name.Equals(name))
                                                     {
                                                         updateNameCmd.Parameters["@Name"].Value = name;
                                                         updateNameCmd.Parameters["@EdsmId"].Value = edsmid;
                                                         updateNameCmd.ExecuteNonQuery();
                                                     }
 
-                                                    if (Math.Abs(dbsys.x - x) > 0.01 ||
-                                                        Math.Abs(dbsys.y - y) > 0.01 ||
-                                                        Math.Abs(dbsys.z - z) > 0.01 ||
-                                                        dbsys.gridid != gridid)  // position changed
+                                                    if (Math.Abs(dbsys.X - x) > 0.01 ||
+                                                        Math.Abs(dbsys.Y - y) > 0.01 ||
+                                                        Math.Abs(dbsys.Z - z) > 0.01 ||
+                                                        dbsys.GridID != gridid)  // position changed
                                                     {
                                                         updateSysCmd.Parameters["@X"].Value = (long)(x * SystemClassDB.XYZScalar);
                                                         updateSysCmd.Parameters["@Y"].Value = (long)(y * SystemClassDB.XYZScalar);

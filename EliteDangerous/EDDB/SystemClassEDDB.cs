@@ -98,7 +98,7 @@ namespace EliteDangerousCore.EDDB
                                         {
                                             hasinfo++;
 
-                                            selectCmd.Parameters["@EdsmId"].Value = system.id_edsm;     // EDDB carries EDSM ID, so find entry in dB
+                                            selectCmd.Parameters["@EdsmId"].Value = system.EDSMID;     // EDDB carries EDSM ID, so find entry in dB
 
                                             //DEBUGif ( c > 30000 )  Console.WriteLine("EDDB ID " + system.id_eddb + " EDSM ID " + system.id_edsm + " " + system.name + " Late info system");
 
@@ -116,44 +116,44 @@ namespace EliteDangerousCore.EDDB
                                                 }
                                             }
 
-                                            updateSysCmd.Parameters["@EdsmId"].Value = system.id_edsm;
-                                            updateSysCmd.Parameters["@EddbId"].Value = system.id_eddb;
+                                            updateSysCmd.Parameters["@EdsmId"].Value = system.EDSMID;
+                                            updateSysCmd.Parameters["@EddbId"].Value = system.EDDBID;
                                             updateSysCmd.ExecuteNonQuery();
 
                                             if (eddbid != 0)
                                             {
-                                                if (updated_at != system.eddb_updated_at || population != system.population)
+                                                if (updated_at != system.EDDBUpdatedAt || population != system.Population)
                                                 {
-                                                    updateCmd.Parameters["@EddbId"].Value = system.id_eddb;
-                                                    updateCmd.Parameters["@Name"].Value = system.name;
-                                                    updateCmd.Parameters["@Faction"].Value = system.faction;
-                                                    updateCmd.Parameters["@Population"].Value = system.population;
-                                                    updateCmd.Parameters["@GovernmentId"].Value = system.government;
-                                                    updateCmd.Parameters["@AllegianceId"].Value = system.allegiance;
-                                                    updateCmd.Parameters["@State"].Value = system.state;
-                                                    updateCmd.Parameters["@Security"].Value = system.security;
-                                                    updateCmd.Parameters["@PrimaryEconomyId"].Value = system.primary_economy;
-                                                    updateCmd.Parameters["@NeedsPermit"].Value = system.needs_permit;
-                                                    updateCmd.Parameters["@EddbUpdatedAt"].Value = system.eddb_updated_at;
-                                                    updateCmd.Parameters["@EdsmId"].Value = system.id_edsm;
+                                                    updateCmd.Parameters["@EddbId"].Value = system.EDDBID;
+                                                    updateCmd.Parameters["@Name"].Value = system.Name;
+                                                    updateCmd.Parameters["@Faction"].Value = system.Faction;
+                                                    updateCmd.Parameters["@Population"].Value = system.Population;
+                                                    updateCmd.Parameters["@GovernmentId"].Value = system.Government;
+                                                    updateCmd.Parameters["@AllegianceId"].Value = system.Allegiance;
+                                                    updateCmd.Parameters["@State"].Value = system.State;
+                                                    updateCmd.Parameters["@Security"].Value = system.Security;
+                                                    updateCmd.Parameters["@PrimaryEconomyId"].Value = system.PrimaryEconomy;
+                                                    updateCmd.Parameters["@NeedsPermit"].Value = system.NeedsPermit;
+                                                    updateCmd.Parameters["@EddbUpdatedAt"].Value = system.EDDBUpdatedAt;
+                                                    updateCmd.Parameters["@EdsmId"].Value = system.EDSMID;
                                                     updateCmd.ExecuteNonQuery();
                                                     updated++;
                                                 }
                                             }
                                             else
                                             {
-                                                insertCmd.Parameters["@EdsmId"].Value = system.id_edsm;
-                                                insertCmd.Parameters["@EddbId"].Value = system.id_eddb;
-                                                insertCmd.Parameters["@Name"].Value = system.name;
-                                                insertCmd.Parameters["@Faction"].Value = system.faction;
-                                                insertCmd.Parameters["@Population"].Value = system.population;
-                                                insertCmd.Parameters["@GovernmentId"].Value = system.government;
-                                                insertCmd.Parameters["@AllegianceId"].Value = system.allegiance;
-                                                insertCmd.Parameters["@State"].Value = system.state;
-                                                insertCmd.Parameters["@Security"].Value = system.security;
-                                                insertCmd.Parameters["@PrimaryEconomyId"].Value = system.primary_economy;
-                                                insertCmd.Parameters["@NeedsPermit"].Value = system.needs_permit;
-                                                insertCmd.Parameters["@EddbUpdatedAt"].Value = system.eddb_updated_at;
+                                                insertCmd.Parameters["@EdsmId"].Value = system.EDSMID;
+                                                insertCmd.Parameters["@EddbId"].Value = system.EDDBID;
+                                                insertCmd.Parameters["@Name"].Value = system.Name;
+                                                insertCmd.Parameters["@Faction"].Value = system.Faction;
+                                                insertCmd.Parameters["@Population"].Value = system.Population;
+                                                insertCmd.Parameters["@GovernmentId"].Value = system.Government;
+                                                insertCmd.Parameters["@AllegianceId"].Value = system.Allegiance;
+                                                insertCmd.Parameters["@State"].Value = system.State;
+                                                insertCmd.Parameters["@Security"].Value = system.Security;
+                                                insertCmd.Parameters["@PrimaryEconomyId"].Value = system.PrimaryEconomy;
+                                                insertCmd.Parameters["@NeedsPermit"].Value = system.NeedsPermit;
+                                                insertCmd.Parameters["@EddbUpdatedAt"].Value = system.EDDBUpdatedAt;
                                                 insertCmd.ExecuteNonQuery();
                                                 inserted++;
                                             }

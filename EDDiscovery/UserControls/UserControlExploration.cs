@@ -182,9 +182,9 @@ namespace EDDiscovery.UserControls
                 {
                     if (sys.HasCoordinate)
                     {
-                        dataGridViewExplore[2, rowindex].Value = sys.x.ToString("0.00");
-                        dataGridViewExplore[3, rowindex].Value = sys.y.ToString("0.00");
-                        dataGridViewExplore[4, rowindex].Value = sys.z.ToString("0.00");
+                        dataGridViewExplore[2, rowindex].Value = sys.X.ToString("0.00");
+                        dataGridViewExplore[3, rowindex].Value = sys.Y.ToString("0.00");
+                        dataGridViewExplore[4, rowindex].Value = sys.Z.ToString("0.00");
                     }
 
 
@@ -232,19 +232,19 @@ namespace EDDiscovery.UserControls
 
 
                     string note = "";
-                    SystemNoteClass sn = SystemNoteClass.GetNoteOnSystem(sys.name, sys.id_edsm);
+                    SystemNoteClass sn = SystemNoteClass.GetNoteOnSystem(sys.Name, sys.EDSMID);
                     if (sn != null && !string.IsNullOrWhiteSpace(sn.Note))
                     {
                         note = sn.Note;
                     }
                     else
                     {
-                        BookmarkClass bkmark =BookmarkClass.bookmarks.Find(x => x.StarName != null && x.StarName.Equals(sys.name));
+                        BookmarkClass bkmark =BookmarkClass.bookmarks.Find(x => x.StarName != null && x.StarName.Equals(sys.Name));
                         if (bkmark != null && !string.IsNullOrWhiteSpace(bkmark.Note))
                             note = bkmark.Note;
                         else
                         {
-                            var gmo = discoveryform.galacticMapping.Find(sys.name);
+                            var gmo = discoveryform.galacticMapping.Find(sys.Name);
                             if (gmo != null && !string.IsNullOrWhiteSpace(gmo.description))
                                 note = gmo.description;
                         }
@@ -669,7 +669,7 @@ namespace EDDiscovery.UserControls
                     sc = new SystemClass(sysname.Trim());
                     countunknown++;
                 }
-                systems.Add(sc.name);
+                systems.Add(sc.Name);
 
             }
             if (systems.Count == 0)
@@ -816,7 +816,7 @@ namespace EDDiscovery.UserControls
             int countunknown = 0;
             foreach (Tuple<ISystem,double> ret in task.Result)
             {
-                string name = ret.Item1.name;
+                string name = ret.Item1.Name;
 
                 ISystem sc = GetSystem(name.Trim());
                 if (sc == null)
@@ -824,7 +824,7 @@ namespace EDDiscovery.UserControls
                     sc = new SystemClass(name.Trim());
                     countunknown++;
                 }
-                systems.Add(sc.name);
+                systems.Add(sc.Name);
             }
             if (systems.Count == 0)
             {

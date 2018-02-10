@@ -60,9 +60,9 @@ namespace EDDiscovery.UserControls
             this.colDistance = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colVisited = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.labelExt1 = new System.Windows.Forms.Label();
-            this.textMinRadius = new ExtendedControls.TextBoxBorder();
+            this.textMinRadius = new ExtendedControls.NumberBoxDouble();
             this.labelExt3 = new System.Windows.Forms.Label();
-            this.textMaxRadius = new ExtendedControls.TextBoxBorder();
+            this.textMaxRadius = new ExtendedControls.NumberBoxDouble();
             this.panelTop = new System.Windows.Forms.Panel();
             this.checkBoxCube = new ExtendedControls.CheckBoxCustom();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
@@ -222,7 +222,12 @@ namespace EDDiscovery.UserControls
             this.textMinRadius.BorderColorScaling = 0.5F;
             this.textMinRadius.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textMinRadius.ControlBackground = System.Drawing.SystemColors.Control;
+            this.textMinRadius.DelayBeforeNotification = 500;
+            this.textMinRadius.Format = "0.#######";
+            this.textMinRadius.BackErrorColor = System.Drawing.Color.Red;
             this.textMinRadius.Location = new System.Drawing.Point(30, 3);
+            this.textMinRadius.Maximum = 100000D;
+            this.textMinRadius.Minimum = 0D;
             this.textMinRadius.Multiline = false;
             this.textMinRadius.Name = "textMinRadius";
             this.textMinRadius.ReadOnly = false;
@@ -231,12 +236,13 @@ namespace EDDiscovery.UserControls
             this.textMinRadius.SelectionStart = 0;
             this.textMinRadius.Size = new System.Drawing.Size(52, 20);
             this.textMinRadius.TabIndex = 1;
-            this.textMinRadius.Text = "0.00";
+            this.textMinRadius.Text = "0";
             this.textMinRadius.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.toolTip1.SetToolTip(this.textMinRadius, "Minimum star distance in ly");
+            this.textMinRadius.Value = 0D;
+            this.textMinRadius.ValueNoChange = 0D;
             this.textMinRadius.WordWrap = true;
-            this.textMinRadius.TextChanged += new System.EventHandler(this.textMinRadius_TextChanged);
-            this.textMinRadius.Leave += new System.EventHandler(this.textMinRadius_Leave);
+            this.textMinRadius.ValueChanged += new System.EventHandler(this.textMinRadius_ValueChanged);
             // 
             // labelExt3
             // 
@@ -255,7 +261,12 @@ namespace EDDiscovery.UserControls
             this.textMaxRadius.BorderColorScaling = 0.5F;
             this.textMaxRadius.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textMaxRadius.ControlBackground = System.Drawing.SystemColors.Control;
+            this.textMaxRadius.DelayBeforeNotification = 500;
+            this.textMaxRadius.Format = "0.#######";
+            this.textMaxRadius.BackErrorColor = System.Drawing.Color.Red;
             this.textMaxRadius.Location = new System.Drawing.Point(121, 3);
+            this.textMaxRadius.Maximum = 100000D;
+            this.textMaxRadius.Minimum = 0D;
             this.textMaxRadius.Multiline = false;
             this.textMaxRadius.Name = "textMaxRadius";
             this.textMaxRadius.ReadOnly = false;
@@ -264,12 +275,13 @@ namespace EDDiscovery.UserControls
             this.textMaxRadius.SelectionStart = 0;
             this.textMaxRadius.Size = new System.Drawing.Size(52, 20);
             this.textMaxRadius.TabIndex = 1;
-            this.textMaxRadius.Text = "1000.00";
+            this.textMaxRadius.Text = "0";
             this.textMaxRadius.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.toolTip1.SetToolTip(this.textMaxRadius, "Maximum star distance in ly");
+            this.textMaxRadius.Value = 0D;
+            this.textMaxRadius.ValueNoChange = 0D;
             this.textMaxRadius.WordWrap = true;
-            this.textMaxRadius.TextChanged += new System.EventHandler(this.textMaxRadius_TextChanged);
-            this.textMaxRadius.Leave += new System.EventHandler(this.textMaxRadius_Leave);
+            this.textMaxRadius.ValueChanged += new System.EventHandler(this.textMaxRadius_ValueChanged);
             // 
             // panelTop
             // 
@@ -331,9 +343,9 @@ namespace EDDiscovery.UserControls
         private DataGridViewTextBoxColumn colDistance;
         private DataGridViewTextBoxColumn colVisited;
         private System.Windows.Forms.Label labelExt1;
-        private ExtendedControls.TextBoxBorder textMinRadius;
+        private ExtendedControls.NumberBoxDouble textMinRadius;
         private System.Windows.Forms.Label labelExt3;
-        private ExtendedControls.TextBoxBorder textMaxRadius;
+        private ExtendedControls.NumberBoxDouble textMaxRadius;
         private Panel panelTop;
         private ToolTip toolTip1;
         private ExtendedControls.CheckBoxCustom checkBoxCube;
