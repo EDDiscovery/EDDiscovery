@@ -323,18 +323,18 @@ namespace EDDiscovery.UserControls
                         {
                             GalacticMapSystem gms = (GalacticMapSystem)ds1;
                             textBox_From.Text = gms.GalMapObject.name;
-                            textBox_FromName.Text = gms.name;
+                            textBox_FromName.Text = gms.Name;
                         }
                         else
                         {
-                            textBox_From.Text = ds1.name;
-                            textBox_FromName.Text = ds1.name;
+                            textBox_From.Text = ds1.Name;
+                            textBox_FromName.Text = ds1.Name;
                         }
                     }
 
-                    textBox_FromX.Text = ds1.x.ToString("0.00");
-                    textBox_FromY.Text = ds1.y.ToString("0.00");
-                    textBox_FromZ.Text = ds1.z.ToString("0.00");
+                    textBox_FromX.Text = ds1.X.ToString("0.00");
+                    textBox_FromY.Text = ds1.Y.ToString("0.00");
+                    textBox_FromZ.Text = ds1.Z.ToString("0.00");
                 }
                 else
                     textBox_FromX.Text = textBox_FromY.Text = textBox_FromZ.Text = "";
@@ -349,11 +349,11 @@ namespace EDDiscovery.UserControls
 
                     if (nearest != null)
                     {
-                        double distance = Point3D.DistanceBetween(curpos, new Point3D(nearest.x, nearest.y, nearest.z));
+                        double distance = Point3D.DistanceBetween(curpos, new Point3D(nearest.X, nearest.Y, nearest.Z));
                         if (distance < 0.1)
-                            res = nearest.name;
+                            res = nearest.Name;
                         else
-                            res = nearest.name + " @ " + distance.ToString("0.00") + "ly";
+                            res = nearest.Name + " @ " + distance.ToString("0.00") + "ly";
                     }
                 }
 
@@ -415,7 +415,7 @@ namespace EDDiscovery.UserControls
             if (uctg.GetCurrentHistoryEntry != null)
             {
                 SelectFromMaster(false);                              // enable system box
-                textBox_From.Text = uctg.GetCurrentHistoryEntry.System.name;
+                textBox_From.Text = uctg.GetCurrentHistoryEntry.System.Name;
                 UpdateFrom(false);
             }
         }
@@ -485,18 +485,18 @@ namespace EDDiscovery.UserControls
                         {
                             GalacticMapSystem gms = (GalacticMapSystem)ds1;
                             textBox_To.Text = gms.GalMapObject.name;
-                            textBox_ToName.Text = gms.name;
+                            textBox_ToName.Text = gms.Name;
                         }
                         else
                         {
-                            textBox_To.Text = ds1.name;
-                            textBox_ToName.Text = ds1.name;
+                            textBox_To.Text = ds1.Name;
+                            textBox_ToName.Text = ds1.Name;
                         }
                     }
 
-                    textBox_ToX.Text = ds1.x.ToString("0.00");
-                    textBox_ToY.Text = ds1.y.ToString("0.00");
-                    textBox_ToZ.Text = ds1.z.ToString("0.00");
+                    textBox_ToX.Text = ds1.X.ToString("0.00");
+                    textBox_ToY.Text = ds1.Y.ToString("0.00");
+                    textBox_ToZ.Text = ds1.Z.ToString("0.00");
                 }
                 else
                     textBox_ToX.Text = textBox_ToY.Text = textBox_ToZ.Text = "";
@@ -511,11 +511,11 @@ namespace EDDiscovery.UserControls
 
                     if (nearest != null)
                     {
-                        double distance = Point3D.DistanceBetween(curpos, new Point3D(nearest.x, nearest.y, nearest.z));
+                        double distance = Point3D.DistanceBetween(curpos, new Point3D(nearest.X, nearest.Y, nearest.Z));
                         if (distance < 0.1)
-                            res = nearest.name;
+                            res = nearest.Name;
                         else
-                            res = nearest.name + " @ " + distance.ToString("0.00") + "ly";
+                            res = nearest.Name + " @ " + distance.ToString("0.00") + "ly";
                     }
                 }
 
@@ -577,7 +577,7 @@ namespace EDDiscovery.UserControls
             if (uctg.GetCurrentHistoryEntry != null)
             {
                 SelectToMaster(false);                              // enable system box
-                textBox_To.Text = uctg.GetCurrentHistoryEntry.System.name;
+                textBox_To.Text = uctg.GetCurrentHistoryEntry.System.Name;
                 UpdateTo(false);
             }
         }
@@ -702,14 +702,14 @@ namespace EDDiscovery.UserControls
                 this.Cursor = Cursors.WaitCursor;
 
                 EliteDangerousCore.EDSM.EDSMClass edsm = new EDSMClass();
-                long? id_edsm = sys.id_edsm;
+                long? id_edsm = sys.EDSMID;
 
                 if (id_edsm <= 0)
                 {
                     id_edsm = null;
                 }
 
-                if (!edsm.ShowSystemInEDSM(sys.name, id_edsm))
+                if (!edsm.ShowSystemInEDSM(sys.Name, id_edsm))
                     ExtendedControls.MessageBoxTheme.Show(FindForm(), "System could not be found - has not been synched or EDSM is unavailable");
 
                 this.Cursor = Cursors.Default;

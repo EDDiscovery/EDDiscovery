@@ -27,10 +27,10 @@ namespace EDDiscoveryTests
     {
         private readonly ISystem sol = new EliteDangerousCore.SystemClass
         {
-            name = "Sol",
-            x = 0,
-            y = 0,
-            z = 0
+            Name = "Sol",
+            X = 0,
+            Y = 0,
+            Z = 0
         };
 
         [Test]

@@ -25,7 +25,7 @@ namespace EliteDangerousCore.DB
     {
         public long id;
         public string Name;
-        public int type;
+        public int type;            // bit 15 = BETA.  Type = 2 EDSM log, 3 = Journal, 1 = Old pre 2.1 logs.
         public int Size;
         public string Path;
         public int? CommanderId;

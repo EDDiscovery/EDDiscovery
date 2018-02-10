@@ -19,7 +19,7 @@ namespace EDDiscovery.Properties {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class Resources {
@@ -134,6 +134,19 @@ namespace EDDiscovery.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Map Panel represents, in 3d, the neighborhood of the system highlighted in the travel history.
+        ///
+        ///The current system is paint in red, while the others in yellow. Hovering the mouse over a system opens a tooltip, which shows the system name, how many visits were recorded, and the distance to the current system.
+        ///
+        ///The maximum and minimum radius are adjusted by the user: this permit to choose how far to plot and, quite useful, to plot systems in a shell. The slider, on the top right, permit to choose how much [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string mapuc {
+            get {
+                return ResourceManager.GetString("mapuc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to https://coriolis.edcd.io/import?.
         /// </summary>
         internal static string URLCoriolis {
@@ -166,6 +179,15 @@ namespace EDDiscovery.Properties {
         internal static string URLedsm {
             get {
                 return ResourceManager.GetString("URLedsm", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to https://api.github.com/repos/EDDiscovery/EDDiscoveryData/.
+        /// </summary>
+        internal static string URLGithubDataDownload {
+            get {
+                return ResourceManager.GetString("URLGithubDataDownload", resourceCulture);
             }
         }
         

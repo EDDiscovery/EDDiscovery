@@ -37,14 +37,8 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
-    <Reference Include="System.IO.Compression, Version=4.1.2.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.IO.Compression.4.3.0\lib\net46\System.IO.Compression.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
+    <Reference Include="System.IO.Compression" />
     <Reference Include="System.IO.Compression.FileSystem" />
-    <Reference Include="System.IO.Compression.ZipFile, Version=4.0.2.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.IO.Compression.ZipFile.4.3.0\lib\net46\System.IO.Compression.ZipFile.dll</HintPath>
-    </Reference>
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -588,6 +582,51 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Journal\Missions.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Journal\Commander.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Journal\EngineerLegacyConvert.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Journal\Reputation.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Journal\FighterDestroyed.png" />
+    <EmbeddedResource Include="Journal\FighterRebuilt.png" />
+    <EmbeddedResource Include="Journal\LaunchDrone.png" />
+    <EmbeddedResource Include="Journal\MaterialTrade.png" />
+    <EmbeddedResource Include="Journal\NpcCrewPaidWage.png" />
+    <EmbeddedResource Include="Journal\NpcCrewRank.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Journal\ModuleInfo.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Journal\Outfitting.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Journal\Shipyard.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Journal\ShipTargeted.png" />
+    <EmbeddedResource Include="Journal\SRVDestroyed.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Journal\StoredModules.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Journal\StoredShips.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Journal\Statistics.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Journal\TechnologyBroker.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Journal\Shutdown.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

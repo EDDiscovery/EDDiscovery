@@ -95,9 +95,9 @@
     <Compile Include="EDDB\SystemClassEDDB.cs" />
     <Compile Include="EDDN\EDDNClass.cs" />
     <Compile Include="EDDN\EDDNSync.cs" />
+    <Compile Include="EDSM\EDSMJournalSync.cs" />
     <Compile Include="EDSM\EDSMClass.cs" />
     <Compile Include="EDSM\EDSMLogFetcher.cs" />
-    <Compile Include="EDSM\EDSMSync.cs" />
     <Compile Include="EDSM\Expeditions.cs" />
     <Compile Include="EDSM\GalMapType.cs" />
     <Compile Include="EDSM\GalacticMapObject.cs" />
@@ -109,6 +109,7 @@
     <Compile Include="EliteDangerous\BindingsFile.cs" />
     <Compile Include="EliteDangerous\Bodies.cs" />
     <Compile Include="EliteDangerous\BodyDesignations.cs" />
+    <Compile Include="EliteDangerous\CommodityPrices.cs" />
     <Compile Include="EliteDangerous\EDCalculations.cs" />
     <Compile Include="EliteDangerous\EDCommander.cs" />
     <Compile Include="EliteDangerous\EDJournalClass.cs" />
@@ -138,6 +139,9 @@
     <Compile Include="EliteDangerous\VisitingStarsCacheFolder.cs" />
     <Compile Include="HistoryList\HistoryEntry.cs" />
     <Compile Include="HistoryList\HistoryList.cs" />
+    <Compile Include="JournalEvents\JournalMaterialTrade.cs" />
+    <Compile Include="JournalEvents\JournalTechnologyBroker.cs" />
+    <Compile Include="JournalEvents\JournalEngineerLegacyConvert.cs" />
     <Compile Include="JournalEvents\JournalFighterDestroyed.cs" />
     <Compile Include="JournalEvents\JournalFighterRebuilt.cs" />
     <Compile Include="JournalEvents\JournalLaunchDrone.cs" />
@@ -330,9 +334,7 @@
     <Compile Include="UIEvents\UIGUIFocus.cs" />
     <Compile Include="UIEvents\UIHardpointsDeployed.cs" />
     <Compile Include="UIEvents\UIHasLatLong.cs" />
-    <Compile Include="UIEvents\UIInFighter.cs" />
-    <Compile Include="UIEvents\UIInMainShip.cs" />
-    <Compile Include="UIEvents\UIInSRV.cs" />
+    <Compile Include="UIEvents\UIShipType.cs" />
     <Compile Include="UIEvents\UIInWing.cs" />
     <Compile Include="UIEvents\UIIsInDanger.cs" />
     <Compile Include="UIEvents\UILanded.cs" />

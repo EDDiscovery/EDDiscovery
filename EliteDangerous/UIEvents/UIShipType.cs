@@ -21,13 +21,15 @@ using System.Threading.Tasks;
 
 namespace EliteDangerousCore.UIEvents
 {
-    public class UIInFighter : UIEvent
+    public class UIShipType : UIEvent
     {
-        public UIInFighter(bool state, DateTime time) : base(UITypeEnum.InFighter, time)
+        public UIShipType(Shiptype type, DateTime time) : base(UITypeEnum.ShipType, time)
         {
-            Fighter = state;
+            ShipType = type;
         }
 
-        public bool Fighter { get; private set; }
+        public enum Shiptype { None, MainShip, Fighter, SRV };
+
+        public Shiptype ShipType { get; private set; }
     }
 }

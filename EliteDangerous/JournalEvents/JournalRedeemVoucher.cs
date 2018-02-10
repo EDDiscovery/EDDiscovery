@@ -47,7 +47,7 @@ namespace EliteDangerousCore.JournalEvents
         public override void FillInformation(out string summary, out string info, out string detailed)      //V
         {
             summary = EventTypeStr.SplitCapsWord();
-            info = BaseUtils.FieldBuilder.Build("Type:" , Type , "Amount:; credits", Amount, "Faction:" , Faction);
+            info = BaseUtils.FieldBuilder.Build("Type:" , Type , "Amount:; cr;N0", Amount, "Faction:" , Faction);
             if (BrokerPercentage > 0)
                 info += ", Broker took " + BrokerPercentage.ToString("0") + "%";
             detailed = "";

@@ -39,6 +39,7 @@ namespace EliteDangerousCore.JournalEvents
             ShipId = evt["ShipID"].Int();
             StoreOldShip = JournalFieldNaming.GetBetterShipName(evt["StoreOldShip"].Str());
             StoreShipId = evt["StoreShipID"].IntNull();
+            MarketID = evt["MarketID"].LongNull();
         }
 
         public string ShipType { get; set; }
@@ -46,6 +47,7 @@ namespace EliteDangerousCore.JournalEvents
         public int ShipId { get; set; }
         public string StoreOldShip { get; set; }
         public int? StoreShipId { get; set; }
+        public long? MarketID { get; set; }
 
         public void ShipInformation(ShipInformationList shp, DB.SQLiteConnectionUser conn)
         {

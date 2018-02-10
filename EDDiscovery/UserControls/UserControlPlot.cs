@@ -17,6 +17,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
+using System.Windows.Forms.DataVisualization.Charting;
 using System.Data;
 using System.Linq;
 using System.Text;
@@ -35,30 +36,28 @@ namespace EDDiscovery.UserControls
     {
         private string DbSave { get { return "StarDistancePanel" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
 
-        private UserControlStarDistance.StarDistanceComputer computer;
+        private StarDistanceComputer computer;
 
         public UserControlPlot()
         {
             InitializeComponent();
+            this.chartBubble.MouseWheel += Zoom_MouseWheel;
+            SetMarkerSize(); // define default bubbles size
         }
 
         const double defaultmaximumradarradius = 50;
         const int maxitems = 500;
 
-        double MaxRadius = 0;
-        double MinRadius = 0;
-        
         public override void Init()
         {
-            computer = new UserControlStarDistance.StarDistanceComputer();
+            computer = new StarDistanceComputer();
+
+            textMinRadius.ValueNoChange = SQLiteConnectionUser.GetSettingDouble(DbSave + "PlotMin", 0);
+            textMaxRadius.ValueNoChange = SQLiteConnectionUser.GetSettingDouble(DbSave + "PlotMax", defaultmaximumradarradius);
+            textMinRadius.SetComparitor(textMaxRadius, -2);     // need to do this after values are set
+            textMaxRadius.SetComparitor(textMinRadius, 2);
 
             uctg.OnTravelSelectionChanged += Uctg_OnTravelSelectionChanged;
-
-            textMinRadius.Text = SQLiteConnectionUser.GetSettingDouble(DbSave + "PlotMin", 0).ToStringInvariant();
-            textMaxRadius.Text = SQLiteConnectionUser.GetSettingDouble(DbSave + "PlotMax", defaultmaximumradarradius).ToStringInvariant();
-            MaxRadius = float.Parse(textMaxRadius.Text);
-            MinRadius = float.Parse(textMinRadius.Text);
-                        
         }
 
         public override void ChangeCursorType(IHistoryCursor thc)
@@ -74,8 +73,8 @@ namespace EDDiscovery.UserControls
         {
             uctg.OnTravelSelectionChanged -= Uctg_OnTravelSelectionChanged;
             computer.ShutDown();
-            SQLiteConnectionUser.PutSettingDouble(DbSave + "PlotMin", textMinRadius.Text.InvariantParseDouble(0));
-            SQLiteConnectionUser.PutSettingDouble(DbSave + "PlotMax", textMaxRadius.Text.InvariantParseDouble(defaultmaximumradarradius));
+            SQLiteConnectionUser.PutSettingDouble(DbSave + "PlotMin", textMinRadius.Value);
+            SQLiteConnectionUser.PutSettingDouble(DbSave + "PlotMax", textMaxRadius.Value);
         }
 
         public override void InitialDisplay()
@@ -100,21 +99,13 @@ namespace EDDiscovery.UserControls
             {
                 computer.CalculateClosestSystems(he.System,
                     (s, d) => BeginInvoke((MethodInvoker)delegate { NewStarListComputed(s, d); }),
-                    maxitems, MinRadius, MaxRadius, true);
+                    maxitems, textMinRadius.Value, textMaxRadius.Value, true);
             }
         }
         private void NewStarListComputed(ISystem sys, BaseUtils.SortedListDoubleDuplicate<ISystem>  list)      // In UI
         {
-            double? max = textMaxRadius.Text.InvariantParseDoubleNull();
-            if (max != null)
-                MaxRadius = float.Parse(textMaxRadius.Text);
-
-            double? min = textMinRadius.Text.InvariantParseDoubleNull();
-            if (min != null)
-                MinRadius = float.Parse(textMinRadius.Text);
-
             System.Diagnostics.Debug.Assert(Application.MessageLoop);       // check!
-            discoveryform.history.CalculateSqDistances(list, sys.x, sys.y, sys.z, maxitems, MinRadius, MaxRadius, true);
+            discoveryform.history.CalculateSqDistances(list, sys.X, sys.Y, sys.Z, maxitems, textMinRadius.Value, textMaxRadius.Value, true);
             FillRadar(list, sys);
         }
         
@@ -124,32 +115,29 @@ namespace EDDiscovery.UserControls
 
             if (csl.Count() > 0)
             {
-                SetControlText("2D Plot of systems in range from " + centerSystem.name);                
+                SetControlText("2D Plot of systems in range from " + centerSystem.Name);                
 
                 chartBubble.Series[0].Points.AddXY(0, 0, 4);
-                chartBubble.Series[0].ToolTip = centerSystem.name;
+                chartBubble.Series[0].ToolTip = centerSystem.Name;
                 chartBubble.Series[3].Points.AddXY(0, 0, 4);
-                chartBubble.Series[3].ToolTip = centerSystem.name;
+                chartBubble.Series[3].ToolTip = centerSystem.Name;
                 chartBubble.Series[6].Points.AddXY(0, 0, 4);
-                chartBubble.Series[6].ToolTip = centerSystem.name;
-
-
+                chartBubble.Series[6].ToolTip = centerSystem.Name;
 
                 foreach (KeyValuePair<double, ISystem> tvp in csl)
                 {
-                    if (tvp.Value.name != centerSystem.name)
+                    if (tvp.Value.Name != centerSystem.Name)
                     { 
+                        var theISystemInQuestion = tvp.Value;
+                        var sysX = theISystemInQuestion.X;
+                        var sysY = theISystemInQuestion.Y;
+                        var sysZ = theISystemInQuestion.Z;
+                        var distFromCurrentSys = Math.Round(Math.Sqrt(tvp.Key), 2, MidpointRounding.AwayFromZero);
+                        var curX = centerSystem.X;
+                        var curY = centerSystem.Y;
+                        var curZ = centerSystem.Z;
 
-                    var theISystemInQuestion = tvp.Value;
-                    var sysX = theISystemInQuestion.x;
-                    var sysY = theISystemInQuestion.y;
-                    var sysZ = theISystemInQuestion.z;
-                    var distFromCurrentSys = Math.Round(Math.Sqrt(tvp.Key), 2, MidpointRounding.AwayFromZero);
-                    var curX = centerSystem.x;
-                    var curY = centerSystem.y;
-                    var curZ = centerSystem.z;
-
-                    // reset charts axis
+                        // reset charts axis
                         chartBubble.ChartAreas[0].AxisY.IsStartedFromZero = false;
                         chartBubble.ChartAreas[1].AxisY.IsStartedFromZero = false;
                         chartBubble.ChartAreas[2].AxisY.IsStartedFromZero = false;
@@ -159,12 +147,12 @@ namespace EDDiscovery.UserControls
                         chartBubble.ChartAreas[2].AxisX.IsStartedFromZero = false;
 
 
-                        if (distFromCurrentSys > MinRadius)
+                        if (distFromCurrentSys > textMinRadius.Value)
                         {
-                            int visits = discoveryform.history.GetVisitsCount(tvp.Value.name, tvp.Value.id_edsm);
+                            int visits = discoveryform.history.GetVisitsCount(tvp.Value.Name, tvp.Value.EDSMID);
 
                             StringBuilder label = new StringBuilder();
-                            label.Append(theISystemInQuestion.name + " / " + visits + " visits" + "\n" + distFromCurrentSys);
+                            label.Append(theISystemInQuestion.Name + " / " + visits + " visits" + "\n" + distFromCurrentSys);
 
                             double dx = curX - sysX;
                             double dy = curY - sysY;
@@ -204,27 +192,131 @@ namespace EDDiscovery.UserControls
                 }
             }
         }
+
+        // Zoom
         
-        private void textMinRadius_TextChanged(object sender, EventArgs e)
+        // zoom with the mouse scroll wheel
+        private double[] zoomFactor = { 1.0, 1.25, 1.5, 1.75, 2.0, 2.5, 3.0, 3.5, 4.0 };
+        private double[] markerReduction = { 1.0, 0.9, 0.8, 0.7, 0.6, 0.5, 0.4, 0.3, 0.2 };
+        private int zoomIndex = 0; // default zoom at 1:1
+
+        private int[] seriesIsCurrent = { 0, 3, 6 };
+        private int[] seriesIsVisited = { 1, 4, 7 };
+        private int[] seriesUnVisited = { 2, 5, 8 };
+
+        private void SetMarkerSize()
         {
-            double? min = textMinRadius.Text.InvariantParseDoubleNull();
-            if (min != null)
-            MinRadius = float.Parse(textMinRadius.Text);
+            int maxMarker = Convert.ToInt32(5 * (markerReduction[zoomIndex]));
+            int defMarker = Convert.ToInt32(3 * (markerReduction[zoomIndex]));
+            int minMarker = Convert.ToInt32(1 * (markerReduction[zoomIndex]));
 
-            KickComputation(uctg.GetCurrentHistoryEntry);
+            // Min and Max size for Current system
+            foreach (int serie in seriesIsCurrent)
+            {
+                chartBubble.Series[serie]["BubbleMaxSize"] = maxMarker.ToString();
+                chartBubble.Series[serie]["MarkerSize"] = defMarker.ToString();
+                chartBubble.Series[serie]["BubbleMinSize"] = minMarker.ToString();
+            }
+            // Min and Max size for Visited systems
+            foreach (int serie in seriesIsVisited)
+            {
+                chartBubble.Series[serie]["BubbleMaxSize"] = maxMarker.ToString();
+                chartBubble.Series[serie]["MarkerSize"] = defMarker.ToString();
+                chartBubble.Series[serie]["BubbleMinSize"] = minMarker.ToString();
+            }
+            // Min and Max size for Unvisited systems
+            foreach (int serie in seriesUnVisited)
+            {
+                chartBubble.Series[serie]["BubbleMaxSize"] = maxMarker.ToString();
+                chartBubble.Series[serie]["MarkerSize"] = defMarker.ToString();
+                chartBubble.Series[serie]["BubbleMinSize"] = minMarker.ToString();
+            }
+        }
 
+        private void SetChartSize(Control ctrlToZoom, double zoomratio)
+        {
+            ctrlToZoom.Height = ctrlToZoom.Parent.Height;
+            ctrlToZoom.Width = ctrlToZoom.Parent.Width;
+
+            // multiply the chart's size to the zoom factor 
+            ctrlToZoom.Width = Convert.ToInt32(ctrlToZoom.Parent.Width * zoomratio);
+            ctrlToZoom.Height = Convert.ToInt32(ctrlToZoom.Parent.Height * zoomratio);
+
+            ctrlToZoom.Left = ctrlToZoom.Parent.Left;
+            ctrlToZoom.Top = ctrlToZoom.Parent.Top;
+
+            double offsetX = (ctrlToZoom.Width - ctrlToZoom.Parent.Width) / 2;
+            double offsetY = (ctrlToZoom.Height - ctrlToZoom.Parent.Height) / 2;
+
+            ctrlToZoom.Left = ctrlToZoom.Left - (int)offsetX;
+            ctrlToZoom.Top = ctrlToZoom.Top - (int)offsetY;
+        }
+
+        private void Zoom_MouseWheel(object sender, MouseEventArgs e)
+        {            
+            // Zoom In
+            if (e.Delta > 0)
+            {
+                if (zoomIndex < 8)
+                    zoomIndex++;
+
+                ZoomChart();                
+            }
+
+            // Zoom Out
+            else if (e.Delta < 0)
+            {
+                if (zoomIndex > 0)
+                    zoomIndex--;
+
+                ZoomChart();
+            }
+        }
+
+        private void ZoomChart()
+        {
+            if (zoomIndex > 0)
+            {
+                SetMarkerSize();
+                SetChartSize(chartBubble, zoomFactor[zoomIndex]);
+            }
+            if (zoomIndex == 0)
+            {
+                SetChartSize(chartBubble, 1);
+                SetMarkerSize();
+            }
+        }
+
+        private Point mousePosPan;
+
+        // pan the map
+        private void PanControl(Control ctrlToPan, MouseEventArgs e)
+        {
+            // Pan functions
+            if (zoomFactor[zoomIndex] != 0)
+            {
+                Point mousePosNow = e.Location;
+
+                int deltaX = mousePosNow.X - mousePosPan.X;
+                int deltaY = mousePosNow.Y - mousePosPan.Y;
+
+                int newX = ctrlToPan.Location.X + deltaX;
+                int newY = ctrlToPan.Location.Y + deltaY;
+
+                ctrlToPan.Location = new Point(newX, newY);
+            }
+        }
+
+        private void textMinRadius_ValueChanged(object sender, EventArgs e)
+        {
+           KickComputation(uctg.GetCurrentHistoryEntry);
             refreshRadar();
         }
 
-        private void textMaxRadius_TextChanged(object sender, EventArgs e)
+        private void textMaxRadius_ValueChanged(object sender, EventArgs e)
         {
-            double? max = textMaxRadius.Text.InvariantParseDoubleNull();
-            if (max != null)
-            MaxRadius = float.Parse(textMaxRadius.Text);
-
             KickComputation(uctg.GetCurrentHistoryEntry);
-
-            refreshRadar();            
+            refreshRadar();
         }
                 
         private void refreshRadar()
@@ -256,5 +348,98 @@ namespace EDDiscovery.UserControls
             chartBubble.ChartAreas[1].Visible = false;
             chartBubble.ChartAreas[2].Visible = true;
         }
+
+        private void chartBubble_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Middle)
+            {                
+                mousePosPan = e.Location;
+            }
+
+            if (e.Button == MouseButtons.Right)
+            {
+                Point cursor = PointToScreen(new Point(e.Location.X, e.Location.Y));
+                contextMenuStrip.Show(cursor.X, cursor.Y);
+            }
+        }
+
+        private void chartBubble_MouseMove(object sender, MouseEventArgs e)
+        {
+            // pan the chart with the middle mouse buttom
+            if (e.Button == MouseButtons.Middle)
+            {
+                PanControl(chartBubble, e);
+            }
+        }
+
+        private void resetToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            SetChartSize(chartBubble, 1);
+            SetMarkerSize();
+        }
+
+        private void toolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            zoomIndex = 0;
+            SetChartSize(chartBubble, zoomIndex);
+            SetMarkerSize();
+        }
+
+        private void toolStripMenuItem125_Click(object sender, EventArgs e)
+        {
+            zoomIndex = 1;
+            SetChartSize(chartBubble, zoomIndex);
+            SetMarkerSize();
+        }                
+
+        private void toolStripMenuItem15_Click(object sender, EventArgs e)
+        {
+            zoomIndex = 2;
+            SetChartSize(chartBubble, zoomIndex);
+            SetMarkerSize();
+        }
+
+        private void toolStripMenuItem175_Click(object sender, EventArgs e)
+        {
+            zoomIndex = 3;
+            SetChartSize(chartBubble, zoomIndex);
+            SetMarkerSize();
+        }
+
+        private void toolStripMenuItem2_Click(object sender, EventArgs e)
+        {
+            zoomIndex = 4;
+            SetChartSize(chartBubble, zoomIndex);
+            SetMarkerSize();
+        }
+
+        private void toolStripMenuItem25_Click(object sender, EventArgs e)
+        {
+            zoomIndex = 5;
+            SetChartSize(chartBubble, zoomIndex);
+            SetMarkerSize();
+        }
+
+        private void toolStripMenuItem3_Click(object sender, EventArgs e)
+        {
+            zoomIndex = 6;
+            SetChartSize(chartBubble, zoomIndex);
+            SetMarkerSize();
+        }
+
+        private void toolStripMenuItem35_Click(object sender, EventArgs e)
+        {
+            zoomIndex = 7;
+            SetChartSize(chartBubble, zoomIndex);
+            SetMarkerSize();
+        }
+
+        private void toolStripMenuItem4_Click(object sender, EventArgs e)
+        {
+            zoomIndex = 8;
+            SetChartSize(chartBubble, zoomIndex);
+            SetMarkerSize();
+        }
+
     }    
 }

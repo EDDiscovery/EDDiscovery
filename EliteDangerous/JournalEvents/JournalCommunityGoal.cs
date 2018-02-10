@@ -65,6 +65,7 @@ namespace EliteDangerousCore.JournalEvents
             public long PlayerContribution { get; set; }
             public int NumContributors { get; set; }
             public int PlayerPercentileBand { get; set; }
+            // TBD TopTier in 3.0 journal.. need to see it
             public int TopRankSize { get; set; }
             public bool PlayerInTopRank { get; set; }
             public string TierReached { get; set; }

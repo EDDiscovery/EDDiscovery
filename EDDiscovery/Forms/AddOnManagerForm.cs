@@ -66,6 +66,7 @@ namespace EDDiscovery.Forms
 
         string downloadactfolder;
         string downloadflightfolder;
+        string downloadaddonfolder;
 #if DEBUG
         string downloadactdebugfolder;
 #endif
@@ -92,22 +93,6 @@ namespace EDDiscovery.Forms
             buttonMore.Visible = !managedownloadmode;
         }
 
-        public bool DownloadFromGitHub(string downloadfolder, string gitdir)
-        {
-            DirectoryInfo di = new DirectoryInfo(downloadfolder);
-
-            foreach (FileInfo file in di.GetFiles())
-            {
-                file.Delete();
-            }
-
-            BaseUtils.GitHubClass ghc = new BaseUtils.GitHubClass(EDDiscovery.Properties.Resources.URLGithubDownload);
-
-            List<BaseUtils.GitHubFile> files = ghc.GetDataFiles(gitdir);
-
-            return ghc.DownloadFiles(files, downloadfolder);
-        }
-
         private System.Threading.Thread CheckThread;
 
         private void DownloadManager_Shown(object sender, EventArgs e)
@@ -126,6 +111,10 @@ namespace EDDiscovery.Forms
             if (!System.IO.Directory.Exists(downloadflightfolder))
                 System.IO.Directory.CreateDirectory(downloadflightfolder);
 
+            downloadaddonfolder = System.IO.Path.Combine(EDDOptions.Instance.AppDataDirectory, "temp\\addonfiles");
+            if (!System.IO.Directory.Exists(downloadaddonfolder))
+                System.IO.Directory.CreateDirectory(downloadaddonfolder);
+
 #if DEBUG
             downloadactdebugfolder = System.IO.Path.Combine(EDDOptions.Instance.AppDataDirectory, "temp\\Debug");
             if (!System.IO.Directory.Exists(downloadactdebugfolder))
@@ -134,11 +123,13 @@ namespace EDDiscovery.Forms
 
             if (managedownloadmode && EDDOptions.Instance.DontAskGithubForPacks == false )
             {
+                BaseUtils.GitHubClass ghc = new BaseUtils.GitHubClass(EDDiscovery.Properties.Resources.URLGithubDataDownload);
                 System.Diagnostics.Debug.WriteLine("Checking github");
-                DownloadFromGitHub(downloadactfolder, "ActionFiles/V1");
-                DownloadFromGitHub(downloadflightfolder, "VideoFiles/V1");
+                 ghc.Download(downloadactfolder, "ActionFiles/V1", "*.act");
+                 ghc.Download(downloadflightfolder, "VideoFiles/V1", "*.vid");
+                 ghc.Download(downloadaddonfolder, "AddonFiles/V1", "*.inf");
 #if DEBUG
-                DownloadFromGitHub(downloadactdebugfolder, "ActionFiles/Debug");
+                 ghc.Download(downloadactdebugfolder, "ActionFiles/Debug", "*.act");
 #endif
             }
 
@@ -167,11 +158,14 @@ namespace EDDiscovery.Forms
             if (managedownloadmode)
             {
                 mgr.ReadLocalFiles(EDDOptions.Instance.AppDataDirectory, "Flights", "*.vid", "Video File");
+                mgr.ReadLocalFiles(EDDOptions.Instance.AppDataDirectory, "AddonFiles", "*.inf", "Other Files");
 
-                mgr.ReadInstallFiles(downloadactfolder, EDDOptions.Instance.AppDataDirectory, "*.act", edversion, "Action File");
-                mgr.ReadInstallFiles(downloadflightfolder, EDDOptions.Instance.AppDataDirectory, "*.vid", edversion, "Video File");
+                mgr.ReadInstallFiles(EDDiscovery.Properties.Resources.URLGithubDataDownload, "ActionFiles/V1", downloadactfolder, EDDOptions.Instance.AppDataDirectory, "*.act", edversion, "Action File");
+                mgr.ReadInstallFiles(EDDiscovery.Properties.Resources.URLGithubDataDownload, "VideoFiles/V1", downloadflightfolder, EDDOptions.Instance.AppDataDirectory, "*.vid", edversion, "Video File");
+                mgr.ReadInstallFiles(EDDiscovery.Properties.Resources.URLGithubDataDownload, "AddonFiles/V1", downloadaddonfolder, EDDOptions.Instance.AppDataDirectory, "*.inf", edversion, "Other File");
+
 #if DEBUG
-                mgr.ReadInstallFiles(downloadactdebugfolder, EDDOptions.Instance.AppDataDirectory, "*.act", edversion, "Action File");
+                mgr.ReadInstallFiles(EDDiscovery.Properties.Resources.URLGithubDataDownload, "ActionFiles/Debug", downloadactdebugfolder, EDDOptions.Instance.AppDataDirectory, "*.act", edversion, "Action File");
 #endif
             }
 

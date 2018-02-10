@@ -28,7 +28,6 @@ namespace EDDiscovery
     {
         #region Properties
         HistoryList history { get; }
-        EDSMSync EdsmSync { get; }
         string LogText { get; }
         bool PendingClose { get; }
         GalacticMapping galacticMapping { get; }

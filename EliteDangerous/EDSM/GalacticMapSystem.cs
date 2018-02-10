@@ -14,37 +14,37 @@ namespace EliteDangerousCore.EDSM
 
         public GalacticMapSystem(ISystem sys, GalacticMapObject gmo)
         {
-            this.allegiance = sys.allegiance;
+            this.Allegiance = sys.Allegiance;
             this.CommanderCreate = sys.CommanderCreate;
             this.CommanderUpdate = sys.CommanderUpdate;
             this.CreateDate = sys.CreateDate;
-            this.eddb_updated_at = sys.eddb_updated_at;
-            this.faction = sys.faction;
-            this.government = sys.government;
-            this.gridid = sys.gridid;
-            this.id_eddb = sys.id_eddb;
-            this.id_edsm = sys.id_edsm;
-            this.name = sys.name;
-            this.needs_permit = sys.needs_permit;
-            this.population = sys.population;
-            this.primary_economy = sys.primary_economy;
-            this.randomid = sys.randomid;
-            this.security = sys.security;
-            this.state = sys.state;
+            this.EDDBUpdatedAt = sys.EDDBUpdatedAt;
+            this.Faction = sys.Faction;
+            this.Government = sys.Government;
+            this.GridID = sys.GridID;
+            this.EDDBID = sys.EDDBID;
+            this.EDSMID = sys.EDSMID;
+            this.Name = sys.Name;
+            this.NeedsPermit = sys.NeedsPermit;
+            this.Population = sys.Population;
+            this.PrimaryEconomy = sys.PrimaryEconomy;
+            this.RandomID = sys.RandomID;
+            this.Security = sys.Security;
+            this.State = sys.State;
             this.status = sys.status;
             this.UpdateDate = sys.UpdateDate;
-            this.x = sys.x;
-            this.y = sys.y;
-            this.z = sys.z;
+            this.X = sys.X;
+            this.Y = sys.Y;
+            this.Z = sys.Z;
             this.GalMapObject = gmo;
         }
 
         public GalacticMapSystem(GalacticMapObject gmo)
         {
-            this.name = gmo.galMapSearch;
-            this.x = gmo.points[0].X;
-            this.y = gmo.points[0].Y;
-            this.z = gmo.points[0].Z;
+            this.Name = gmo.galMapSearch;
+            this.X = gmo.points[0].X;
+            this.Y = gmo.points[0].Y;
+            this.Z = gmo.points[0].Z;
             this.GalMapObject = gmo;
         }
     }

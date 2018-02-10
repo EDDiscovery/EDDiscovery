@@ -31,9 +31,11 @@ namespace EliteDangerousCore.EDSM
 {
     public partial class EDSMClass : BaseUtils.HttpCom
     {
-        public string commanderName;
-        public string apiKey;
-        public bool IsApiKeySet { get { return !(string.IsNullOrEmpty(commanderName) || string.IsNullOrEmpty(apiKey)); } }
+        // use if you need an API/name pair to get info from EDSM.  Not all queries need it
+        public bool ValidCredentials { get { return !string.IsNullOrEmpty(commanderName) && !string.IsNullOrEmpty(apiKey); } }
+
+        private string commanderName;
+        private string apiKey;
 
         private readonly string fromSoftwareVersion;
         private readonly string fromSoftware;
@@ -45,24 +47,34 @@ namespace EliteDangerousCore.EDSM
             var assemblyFullName = Assembly.GetEntryAssembly().FullName;
             fromSoftwareVersion = assemblyFullName.Split(',')[1].Split('=')[1];
 
-            _serverAddress = ServerAddress;
+            base.httpserveraddress = ServerAddress;
 
             apiKey = EDCommander.Current.APIKey;
-            commanderName = EDCommander.Current.EdsmName;
+            commanderName = string.IsNullOrEmpty(EDCommander.Current.EdsmName) ? EDCommander.Current.Name : EDCommander.Current.EdsmName;
         }
+
+        public EDSMClass(EDCommander cmdr) : this()
+        {
+            if (cmdr != null)
+            {
+                apiKey = cmdr.APIKey;
+                commanderName = string.IsNullOrEmpty(cmdr.EdsmName) ? cmdr.Name : cmdr.EdsmName;
+            }
+        }
+
 
         static string edsm_server_address = "https://www.edsm.net/";
         public static string ServerAddress { get { return edsm_server_address; } set { edsm_server_address = value; } }
         public static bool IsServerAddressValid { get { return edsm_server_address.Length > 0; } }
 
-        public string SubmitDistances(string cmdr, string from, string to, double dist)
+        public string SubmitDistances(string from, string to, double dist)
         {
-            return SubmitDistances(cmdr, from, new Dictionary<string, double> { { to, dist } });
+            return SubmitDistances(from, new Dictionary<string, double> { { to, dist } });
         }
 
-        public string SubmitDistances(string cmdr, string from, Dictionary<string, double> distances)
+        public string SubmitDistances(string from, Dictionary<string, double> distances)
         {
-            string query = "{\"ver\":2," + " \"commander\":\"" + cmdr + "\", \"fromSoftware\":\"" + fromSoftware + "\",  \"fromSoftwareVersion\":\"" + fromSoftwareVersion + "\", \"p0\": { \"name\": \"" + from + "\" },   \"refs\": [";
+            string query = "{\"ver\":2," + " \"commander\":\"" + commanderName + "\", \"fromSoftware\":\"" + fromSoftware + "\",  \"fromSoftwareVersion\":\"" + fromSoftwareVersion + "\", \"p0\": { \"name\": \"" + from + "\" },   \"refs\": [";
 
             var counter = 0;
             foreach (var item in distances)
@@ -198,7 +210,7 @@ namespace EliteDangerousCore.EDSM
             {
                 string edsmhiddensystems = Path.Combine(EliteConfigInstance.InstanceOptions.AppDataDirectory, "edsmhiddensystems.json");
                 bool newfile = false;
-                BaseUtils.DownloadFileHandler.DownloadFile(_serverAddress + "api-v1/hidden-systems?showId=1", edsmhiddensystems, out newfile);
+                BaseUtils.DownloadFileHandler.DownloadFile(base.httpserveraddress + "api-v1/hidden-systems?showId=1", edsmhiddensystems, out newfile);
 
                 string json = BaseUtils.FileHelpers.TryReadAllTextFromFile(edsmhiddensystems);
 
@@ -217,7 +229,7 @@ namespace EliteDangerousCore.EDSM
 
         public string GetComments(DateTime starttime)
         {
-            if (!IsApiKeySet)
+            if (!ValidCredentials)
                 return null;
 
             string query = "get-comments?startdatetime=" + HttpUtility.UrlEncode(starttime.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture)) + "&apiKey=" + apiKey + "&commanderName=" + HttpUtility.UrlEncode(commanderName) + "&showId=1";
@@ -233,7 +245,7 @@ namespace EliteDangerousCore.EDSM
 
         public string GetComment(string systemName, long edsmid = 0)
         {
-            if (!IsApiKeySet)
+            if (!ValidCredentials)
                 return null;
 
             string query;
@@ -251,7 +263,7 @@ namespace EliteDangerousCore.EDSM
 
         public string SetComment(string systemName, string note, long edsmid = 0)
         {
-            if (!IsApiKeySet)
+            if (!ValidCredentials)
                 return null;
 
             string query;
@@ -272,9 +284,72 @@ namespace EliteDangerousCore.EDSM
             return response.Body;
         }
 
+        public static void SendComments(string star, string note, long edsmid = 0, EDCommander cmdr = null) // (verified with EDSM 29/9/2016)
+        {
+            System.Diagnostics.Debug.WriteLine("Send note to EDSM " + star + " " + edsmid + " " + note);
+            EDSMClass edsm = new EDSMClass(cmdr);
+
+            if (!edsm.ValidCredentials)
+                return;
+
+            System.Threading.Tasks.Task taskEDSM = System.Threading.Tasks.Task.Factory.StartNew(() =>
+            {
+                edsm.SetComment(star, note, edsmid);
+            });
+        }
+
+        public void GetComments(Action<string> logout = null)
+        {
+            var json = GetComments(new DateTime(2011, 1, 1));
+
+            if (json != null)
+            {
+                JObject msg = JObject.Parse(json);
+                int msgnr = msg["msgnum"].Value<int>();
+
+                JArray comments = (JArray)msg["comments"];
+                if (comments != null)
+                {
+                    int commentsadded = 0;
+
+                    foreach (JObject jo in comments)
+                    {
+                        string name = jo["system"].Value<string>();
+                        string note = jo["comment"].Value<string>();
+                        string utctime = jo["lastUpdate"].Value<string>();
+                        int edsmid = 0;
+
+                        if (!Int32.TryParse(jo["systemId"].Str("0"), out edsmid))
+                            edsmid = 0;
+
+                        DateTime localtime = DateTime.ParseExact(utctime, "yyyy-MM-dd HH:mm:ss",
+                                    CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal).ToLocalTime();
+
+                        SystemNoteClass curnote = SystemNoteClass.GetNoteOnSystem(name, edsmid);
+
+                        if (curnote != null)                // curnote uses local time to store
+                        {
+                            if (localtime.Ticks > curnote.Time.Ticks)   // if newer, add on (verified with EDSM 29/9/2016)
+                            {
+                                curnote.UpdateNote(curnote.Note + ". EDSM: " + note, true, localtime, edsmid, true);
+                                commentsadded++;
+                            }
+                        }
+                        else
+                        {
+                            SystemNoteClass.MakeSystemNote(note, localtime, name, 0, edsmid, true);   // new one!  its an FSD one as well
+                            commentsadded++;
+                        }
+                    }
+
+                    logout?.Invoke(string.Format("EDSM Comments downloaded/updated {0}", commentsadded));
+                }
+            }
+        }
+
         public string SetLog(string systemName, DateTime dateVisitedutc)
         {
-            if (!IsApiKeySet)
+            if (!ValidCredentials)
                 return null;
 
             string query;
@@ -292,7 +367,7 @@ namespace EliteDangerousCore.EDSM
 
         public string SetLogWithPos(string systemName, DateTime dateVisitedutc, double x, double y, double z)
         {
-            if (!IsApiKeySet)
+            if (!ValidCredentials)
                 return null;
 
             string query;
@@ -315,7 +390,7 @@ namespace EliteDangerousCore.EDSM
             firstdiscover = false;
             edsmid = 0;
 
-            if (!IsApiKeySet)
+            if (!ValidCredentials)
             {
                 errno = -1;
                 error = "EDSM API Key not set";
@@ -372,7 +447,7 @@ namespace EliteDangerousCore.EDSM
             logstarttime = DateTime.MaxValue;
             logendtime = DateTime.MinValue;
 
-            if (!IsApiKeySet)
+            if (!ValidCredentials)
                 return 0;
 
             string query = "get-logs?showId=1&apiKey=" + apiKey + "&commanderName=" + HttpUtility.UrlEncode(commanderName);
@@ -421,13 +496,13 @@ namespace EliteDangerousCore.EDSM
                         if (sc == null)
                         {
                             if (DateTime.UtcNow.Subtract(etutc).TotalHours < 6) // Avoid running into the rate limit
-                                sc = GetSystemsByName(name)?.FirstOrDefault(s => s.id_edsm == id);
+                                sc = GetSystemsByName(name)?.FirstOrDefault(s => s.EDSMID == id);
 
                             if (sc == null)
                             {
                                 sc = new SystemClass(name)
                                 {
-                                    id_edsm = id
+                                    EDSMID = id
                                 };
                             }
                         }
@@ -536,14 +611,14 @@ namespace EliteDangerousCore.EDSM
                 foreach (JObject sysname in msg)
                 {
                     ISystem sys = new SystemClass();
-                    sys.name = sysname["name"].Str("Unknown");
-                    sys.id_edsm = sysname["id"].Long(0);
+                    sys.Name = sysname["name"].Str("Unknown");
+                    sys.EDSMID = sysname["id"].Long(0);
                     JObject co = (JObject)sysname["coords"];
                     if ( co != null )
                     {
-                        sys.x = co["x"].Double();
-                        sys.y = co["y"].Double();
-                        sys.z = co["z"].Double();
+                        sys.X = co["x"].Double();
+                        sys.Y = co["y"].Double();
+                        sys.Z = co["z"].Double();
                     }
                     systems.Add(new Tuple<ISystem, double>(sys, sysname["distance"].Double()));
                 }
@@ -573,38 +648,38 @@ namespace EliteDangerousCore.EDSM
                 foreach (JObject sysname in msg)
                 {
                     ISystem sys = new SystemClass();
-                    sys.name = sysname["name"].Str("Unknown");
-                    sys.id_edsm = sysname["id"].Long(0);
+                    sys.Name = sysname["name"].Str("Unknown");
+                    sys.EDSMID = sysname["id"].Long(0);
                     JObject co = (JObject)sysname["coords"];
 
                     if (co != null)
                     {
-                        sys.x = co["x"].Double();
-                        sys.y = co["y"].Double();
-                        sys.z = co["z"].Double();
+                        sys.X = co["x"].Double();
+                        sys.Y = co["y"].Double();
+                        sys.Z = co["z"].Double();
                     }
 
-                    sys.needs_permit = sysname["requirePermit"].Bool(false) ? 1 : 0;
+                    sys.NeedsPermit = sysname["requirePermit"].Bool(false) ? 1 : 0;
 
                     JObject info = sysname["information"] as JObject;
 
                     if (info != null)
                     {
-                        sys.population = info["population"].Long(0);
-                        sys.faction = info["faction"].StrNull();
+                        sys.Population = info["population"].Long(0);
+                        sys.Faction = info["faction"].StrNull();
                         EDAllegiance allegiance = EDAllegiance.None;
                         EDGovernment government = EDGovernment.None;
                         EDState state = EDState.None;
                         EDEconomy economy = EDEconomy.None;
                         EDSecurity security = EDSecurity.Unknown;
-                        sys.allegiance = Enum.TryParse(info["allegiance"].Str(), out allegiance) ? allegiance : EDAllegiance.None;
-                        sys.government = Enum.TryParse(info["government"].Str(), out government) ? government : EDGovernment.None;
-                        sys.state = Enum.TryParse(info["factionState"].Str(), out state) ? state : EDState.None;
-                        sys.primary_economy = Enum.TryParse(info["economy"].Str(), out economy) ? economy : EDEconomy.None;
-                        sys.security = Enum.TryParse(info["security"].Str(), out security) ? security : EDSecurity.Unknown;
+                        sys.Allegiance = Enum.TryParse(info["allegiance"].Str(), out allegiance) ? allegiance : EDAllegiance.None;
+                        sys.Government = Enum.TryParse(info["government"].Str(), out government) ? government : EDGovernment.None;
+                        sys.State = Enum.TryParse(info["factionState"].Str(), out state) ? state : EDState.None;
+                        sys.PrimaryEconomy = Enum.TryParse(info["economy"].Str(), out economy) ? economy : EDEconomy.None;
+                        sys.Security = Enum.TryParse(info["security"].Str(), out security) ? security : EDSecurity.Unknown;
                     }
 
-                    if (uselike ? sys.name.StartsWith(systemName, StringComparison.InvariantCultureIgnoreCase) : sys.name.Equals(systemName, StringComparison.InvariantCultureIgnoreCase))
+                    if (uselike ? sys.Name.StartsWith(systemName, StringComparison.InvariantCultureIgnoreCase) : sys.Name.Equals(systemName, StringComparison.InvariantCultureIgnoreCase))
                     {
                         systems.Add(sys);
                     }
@@ -652,7 +727,7 @@ namespace EliteDangerousCore.EDSM
                 sysID = msg["id"].Value<string>();
             }
 
-            string url = _serverAddress + "system/id/" + sysID + "/name/" + encodedSys;
+            string url = base.httpserveraddress + "system/id/" + sysID + "/name/" + encodedSys;
             return url;
         }
 
@@ -888,7 +963,7 @@ namespace EliteDangerousCore.EDSM
             int explore_rank, int explore_progress, int cqc_rank, int cqc_progress,
             int federation_rank, int federation_progress, int empire_rank, int empire_progress)
         {
-            if (!IsApiKeySet)
+            if (!ValidCredentials)
                 return null;
 
             string query;
@@ -912,7 +987,7 @@ namespace EliteDangerousCore.EDSM
 
         public string SetCredits(long credits, long loan)
         {
-            if (!IsApiKeySet)
+            if (!ValidCredentials)
                 return null;
 
             string query;
@@ -995,7 +1070,7 @@ namespace EliteDangerousCore.EDSM
 
         public string CommanderUpdateShip(int shipId, string type, EliteDangerousCore.ShipInformation shipinfo = null, int cargoqty = -1)
         {
-            if (!IsApiKeySet)
+            if (!ValidCredentials)
                 return null;
 
             string query;
@@ -1041,7 +1116,7 @@ namespace EliteDangerousCore.EDSM
 
         public string CommanderSetCurrentShip(int shipId)
         {
-            if (!IsApiKeySet)
+            if (!ValidCredentials)
                 return null;
 
             string query;
@@ -1065,6 +1140,7 @@ namespace EliteDangerousCore.EDSM
         static MaterialCommoditiesList LastMats = null;
         static Object LockShipInfo = new object();
 
+        // No longer needed as journal events are now sent to EDSM
         public void SendShipInfo(ShipInformation si, MaterialCommoditiesList matcommod, int cargo, ShipInformation sicurrent, long cash, long loan, 
                                     JournalProgress progress, JournalRank rank  // both may be null
                                 )
@@ -1113,6 +1189,45 @@ namespace EliteDangerousCore.EDSM
                     LastMats = matcommod;
                 }
             }
+        }
+
+        public List<string> GetJournalEventsToDiscard()
+        {
+            string action = "api-journal-v1/discard";
+            var response = RequestGet(action);
+            return JArray.Parse(response.Body).Select(v => v.Str()).ToList();
+        }
+
+        public List<JObject> SendJournalEvents(List<JObject> entries, out string errmsg)
+        {
+            JArray message = new JArray(entries);
+
+            string postdata = "commanderName=" + Uri.EscapeDataString(commanderName) +
+                              "&apiKey=" + Uri.EscapeDataString(apiKey) +
+                              "&fromSoftware=" + Uri.EscapeDataString(fromSoftware) +
+                              "&fromSoftwareVersion=" + Uri.EscapeDataString(fromSoftwareVersion) +
+                              "&message=" + EscapeLongDataString(message.ToString(Newtonsoft.Json.Formatting.None));
+
+            MimeType = "application/x-www-form-urlencoded";
+            var response = RequestPost(postdata, "api-journal-v1", handleException: true);
+
+            if (response.Error)
+            {
+                errmsg = response.StatusCode.ToString();
+                return null;
+            }
+
+            JObject resp = JObject.Parse(response.Body);
+            errmsg = resp["msg"]?.ToString();
+
+            int msgnr = resp["msgnum"].Int();
+
+            if (msgnr >= 200 || msgnr < 100)
+            {
+                return null;
+            }
+
+            return resp["events"].Select(e => (JObject)e).ToList();
         }
     }
 }

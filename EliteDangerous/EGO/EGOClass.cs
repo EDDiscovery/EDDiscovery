@@ -42,7 +42,7 @@ namespace EDDiscoveryCore.EGO
 
         public EGOClass()
         {
-            _serverAddress = ego_address;
+            httpserveraddress = ego_address;
             ego_apikey = EDCommander.Current.EGOAPIKey;
             ego_username = EDCommander.Current.EGOName;
         }

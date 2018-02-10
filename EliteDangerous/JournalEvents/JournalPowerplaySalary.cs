@@ -41,7 +41,7 @@ namespace EliteDangerousCore.JournalEvents
         public override void FillInformation(out string summary, out string info, out string detailed) //V
         {
             summary = EventTypeStr.SplitCapsWord();
-            info = BaseUtils.FieldBuilder.Build("", Power, "Amount:; credits", Amount);
+            info = BaseUtils.FieldBuilder.Build("", Power, "Amount:; cr;N0", Amount);
             detailed = "";
         }
     }

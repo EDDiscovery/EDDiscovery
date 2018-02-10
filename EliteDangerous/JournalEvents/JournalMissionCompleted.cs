@@ -141,7 +141,7 @@ namespace EliteDangerousCore.JournalEvents
             summary = EventTypeStr.SplitCapsWord();
             info = BaseUtils.FieldBuilder.Build("", Name,
                                         "< from ", Faction,
-                                        "Reward:", Reward,
+                                        "Reward:; cr;N0", Reward,
                                         "Donation:", Donation,
                                         "System:", DestinationSystem,
                                         "Station:", DestinationStation);
@@ -188,7 +188,7 @@ namespace EliteDangerousCore.JournalEvents
             return detailed;
         }
 
-        public string RewardOrDonation { get { return Reward.HasValue ? Reward.Value.ToStringInvariant() : (Donation.HasValue ? (-Donation.Value).ToStringInvariant() : ""); } }
+        public string RewardOrDonation { get { return Reward.HasValue ? Reward.Value.ToString("N0") : (Donation.HasValue ? (-Donation.Value).ToString("N0") : ""); } }
         public long Value { get { return Reward.HasValue ? Reward.Value : (Donation.HasValue ? (-Donation.Value) : 0); } }
 
         public string MissionInformation()          // other stuff for the mission panel which it does not already cover or accepted has

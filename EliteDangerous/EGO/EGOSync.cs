@@ -168,7 +168,7 @@ namespace EDDiscoveryCore.EGO
 
             if (je.EventTypeID == JournalTypeEnum.Scan)
             {
-                msg = ego.CreateEGOMessage(je as JournalScan, he.System.name, he.System.x, he.System.y, he.System.z);
+                msg = ego.CreateEGOMessage(je as JournalScan, he.System.Name, he.System.X, he.System.Y, he.System.Z);
             }
 
             if (msg != null)

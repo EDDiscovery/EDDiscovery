@@ -157,6 +157,25 @@ namespace DialogTest
             dateTimePicker1.CustomFormat = "yyyy/MM/dd HH:mm:ss";
             dateTimePicker1.BackColor = Color.Blue;
             dateTimePicker1.SelectedColor = Color.DarkBlue;
+
+            textBoxDouble1.FormatCulture = CultureInfo.GetCultureInfo("en-gb");
+            textBoxDouble2.FormatCulture = CultureInfo.GetCultureInfo("fr");
+            numberBoxLong0.FormatCulture = CultureInfo.GetCultureInfo("en-gb");
+
+            numberBoxLong0.Minimum = 1000;
+            numberBoxLong0.Maximum = 2000;
+            numberBoxLong0.ValueNoChange = 1500;
+
+            numberBoxLong1.Minimum = 1000;
+            numberBoxLong1.Maximum = 2000;
+            numberBoxLong1.ValueNoChange = 1400;
+            numberBoxLong1.SetComparitor(numberBoxLong0,2);
+
+            textBoxDouble1.Minimum = -20.0;
+            textBoxDouble1.Maximum = 20.0;
+
+            textBoxDouble2.Minimum = 10.0;
+            textBoxDouble2.Maximum = 20.0;
         }
 
 
@@ -456,6 +475,11 @@ namespace DialogTest
             System.Diagnostics.Debug.WriteLine("P3 changed");
 
 
+        }
+
+        private void textBoxLong1_ValueChanged(object sender, EventArgs e)
+        {
+            System.Diagnostics.Debug.WriteLine("Long is " + numberBoxLong0.Value);
         }
     }
 }

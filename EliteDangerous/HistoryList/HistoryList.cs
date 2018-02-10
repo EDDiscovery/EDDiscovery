@@ -162,11 +162,12 @@ namespace EliteDangerousCore
         }
 
 
-        public List<HistoryEntry> FilterByEDDCommodityPricesBackwards
+        public List<HistoryEntry> FilterByCommodityPricesBackwards      // full commodity price information only
         {
             get
             {
-                return (from s in historylist where s.EntryType == JournalTypeEnum.EDDCommodityPrices orderby s.EventTimeUTC descending select s).ToList();
+                return (from s in historylist where (s.journalEntry is JournalCommodityPricesBase && (s.journalEntry as JournalCommodityPricesBase).Commodities.Count > 0 )
+                        orderby s.EventTimeUTC descending select s).ToList();
             }
         }
 
@@ -275,13 +276,13 @@ namespace EliteDangerousCore
         public int GetVisitsCount(string name, long edsmid = 0)
         {
             return (from he in historylist.AsParallel()
-                    where (he.IsFSDJump && (edsmid <= 0 || he.System.id_edsm == edsmid) && he.System.name.Equals(name, StringComparison.InvariantCultureIgnoreCase))
+                    where (he.IsFSDJump && (edsmid <= 0 || he.System.EDSMID == edsmid) && he.System.Name.Equals(name, StringComparison.InvariantCultureIgnoreCase))
                     select he).Count();
         }
         public List<JournalScan> GetScans(string name, long edsmid = 0)
         {
             return (from s in historylist.AsParallel()
-                    where (s.journalEntry.EventTypeID == JournalTypeEnum.Scan && (edsmid <= 0 || s.System.id_edsm == edsmid) && s.System.name.Equals(name, StringComparison.InvariantCultureIgnoreCase))
+                    where (s.journalEntry.EventTypeID == JournalTypeEnum.Scan && (edsmid <= 0 || s.System.EDSMID == edsmid) && s.System.Name.Equals(name, StringComparison.InvariantCultureIgnoreCase))
                     select s.journalEntry as JournalScan).ToList<JournalScan>();
         }
 
@@ -330,7 +331,7 @@ namespace EliteDangerousCore
         public int GetPlayerControlledTouchDown(DateTime start, DateTime to)
         {
             return (from s in historylist where s.EntryType == JournalTypeEnum.Touchdown && s.EventTimeLocal >= start && s.EventTimeLocal < to select s)
-                .ToList().ConvertAll<JournalTouchdown>(e => e.journalEntry as JournalTouchdown).Where(j => j.PlayerControlled.Value).Count();
+                .ToList().ConvertAll<JournalTouchdown>(e => e.journalEntry as JournalTouchdown).Where(j => j.PlayerControlled.HasValue && j.PlayerControlled.Value).Count();
         }
 
         public int GetHeatWarning(DateTime start, DateTime to)
@@ -395,9 +396,9 @@ namespace EliteDangerousCore
         public static HistoryEntry FindByPos(List<HistoryEntry> syslist, float x, float y, float z, double limit)     // go thru setting the lastknowsystem
         {
             return syslist.FindLast(s => s.System.HasCoordinate &&
-                                            Math.Abs(s.System.x - x) < limit &&
-                                            Math.Abs(s.System.y - y) < limit &&
-                                            Math.Abs(s.System.z - z) < limit);
+                                            Math.Abs(s.System.X - x) < limit &&
+                                            Math.Abs(s.System.Y - y) < limit &&
+                                            Math.Abs(s.System.Z - z) < limit);
         }
 
         public static List<HistoryEntry> FilterByJournalEvent(List<HistoryEntry> he, string eventstring, out int count)
@@ -428,7 +429,7 @@ namespace EliteDangerousCore
                 {
                     if (he.IsFSDJump && !he.System.HasCoordinate)// try and load ones without position.. if its got pos we are happy
                     {           // done in two IFs for debugging, in case your wondering why!
-                        if (he.System.status != SystemStatusEnum.EDSM && he.System.id_edsm == 0)   // and its not from EDSM and we have not already tried
+                        if (he.System.status != SystemStatusEnum.EDSM && he.System.EDSMID == 0)   // and its not from EDSM and we have not already tried
                         {
                             ISystem found = SystemCache.FindSystem(he.System, cn);
                             if (found != null)
@@ -457,7 +458,7 @@ namespace EliteDangerousCore
 
         public void FillEDSM(HistoryEntry syspos)       // call to fill in ESDM data for entry, and also fills in all others pointing to the system object
         {
-            if (syspos.System.status == SystemStatusEnum.EDSM || syspos.System.id_edsm == -1)  // if set already, or we tried and failed..
+            if (syspos.System.status == SystemStatusEnum.EDSM || syspos.System.EDSMID == -1)  // if set already, or we tried and failed..
             {
                 //System.Diagnostics.Debug.WriteLine("Checked System {0} already id {1} ", syspos.System.name , syspos.System.id_edsm);
                 return;
@@ -492,21 +493,57 @@ namespace EliteDangerousCore
 
             if (edsmsys != null)
             {
+                ISystem oldsys = syspos.System;
+
+                bool updateedsmid = oldsys.EDSMID <= 0 && edsmsys.EDSMID > 0;
+                bool updatesyspos = !oldsys.HasCoordinate && edsmsys.HasCoordinate;
+                bool updatename = oldsys.HasCoordinate && edsmsys.HasCoordinate &&
+                                  oldsys.Distance(edsmsys) < 0.1 &&
+                                  !String.Equals(edsmsys.Name, oldsys.Name, StringComparison.InvariantCultureIgnoreCase) &&
+                                  edsmsys.UpdateDate > syspos.EventTimeUTC;
+
+                ISystem newsys = new SystemClass
+                {
+                    Name = updatename ? edsmsys.Name : oldsys.Name,
+                    X = updatesyspos ? edsmsys.X : oldsys.X,
+                    Y = updatesyspos ? edsmsys.Y : oldsys.Y,
+                    Z = updatesyspos ? edsmsys.Z : oldsys.Z,
+                    EDSMID = updateedsmid ? edsmsys.EDSMID : oldsys.EDSMID,
+                    SystemAddress = oldsys.SystemAddress ?? edsmsys.SystemAddress,
+                    Allegiance = oldsys.Allegiance == EDAllegiance.Unknown ? edsmsys.Allegiance : oldsys.Allegiance,
+                    Government = oldsys.Government == EDGovernment.Unknown ? edsmsys.Government : oldsys.Government,
+                    Population = oldsys.Government == EDGovernment.Unknown ? edsmsys.Population : oldsys.Population,
+                    PrimaryEconomy = oldsys.PrimaryEconomy == EDEconomy.Unknown ? edsmsys.PrimaryEconomy : oldsys.PrimaryEconomy,
+                    Security = oldsys.Security == EDSecurity.Unknown ? edsmsys.Security : oldsys.Security,
+                    State = oldsys.State == EDState.Unknown ? edsmsys.State : oldsys.State,
+                    Faction = oldsys.Faction ?? edsmsys.Faction,
+                    CommanderCreate = edsmsys.CommanderCreate,
+                    CommanderUpdate = edsmsys.CommanderUpdate,
+                    CreateDate = edsmsys.CreateDate,
+                    EDDBID = edsmsys.EDDBID,
+                    EDDBUpdatedAt = edsmsys.EDDBUpdatedAt,
+                    GridID = edsmsys.GridID,
+                    NeedsPermit = edsmsys.NeedsPermit,
+                    RandomID = edsmsys.RandomID,
+                    UpdateDate = edsmsys.UpdateDate,
+                    SystemNote = edsmsys.SystemNote,
+                    status = SystemStatusEnum.EDSM
+                };
+
                 foreach (HistoryEntry he in alsomatching)       // list of systems in historylist using the same system object
                 {
-                    bool updateedsmid = he.System.id_edsm <= 0 && edsmsys.id_edsm>0;
-                    bool updatepos = (he.EntryType == JournalTypeEnum.FSDJump || he.EntryType == JournalTypeEnum.Location) && !syspos.System.HasCoordinate && edsmsys.HasCoordinate;
+                    bool updatepos = (he.EntryType == JournalTypeEnum.FSDJump || he.EntryType == JournalTypeEnum.Location) && updatesyspos;
 
                     if (updatepos || updateedsmid)
                         JournalEntry.UpdateEDSMIDPosJump(he.Journalid, edsmsys, updatepos, -1, uconn , utn);  // update pos and edsmid, jdist not updated
 
-                    he.System = edsmsys;
+                    he.System = newsys;
                 }
             }
             else
             {
                 foreach (HistoryEntry he in alsomatching)       // list of systems in historylist using the same system object
-                    he.System.id_edsm = -1;                     // can't do it
+                    he.System.EDSMID = -1;                     // can't do it
             }
         }
 
@@ -522,22 +559,22 @@ namespace EliteDangerousCore
 
             foreach (ISystem sys in distlist.Values.ToList())
             {
-                listids.Add(sys.id);
-                listnames.Add(sys.name);
+                listids.Add(sys.ID);
+                listnames.Add(sys.Name);
             }
 
             mindistance *= mindistance;
 
             foreach (HistoryEntry pos in historylist)
             {
-                if (pos.System.HasCoordinate && !listnames.Contains(pos.System.name) && !listids.Contains(pos.System.id) )
+                if (pos.System.HasCoordinate && !listnames.Contains(pos.System.Name) && !listids.Contains(pos.System.ID) )
                 {
-                    double dx = (pos.System.x - x);
-                    double dy = (pos.System.y - y);
-                    double dz = (pos.System.z - z);
+                    double dx = (pos.System.X - x);
+                    double dy = (pos.System.Y - y);
+                    double dz = (pos.System.Z - z);
                     double distsq = dx * dx + dy * dy + dz * dz;
 
-                    listnames.Add(pos.System.name); //stops repeats..
+                    listnames.Add(pos.System.Name); //stops repeats..
 
                     if ( distsq >= mindistance && 
                             (( spherical && distsq <= maxdistance*maxdistance) || 
@@ -560,9 +597,9 @@ namespace EliteDangerousCore
         public HistoryEntry FindByName(string name, bool fsdjump = false)
         {
             if (fsdjump)
-                return historylist.FindLast(x => x.System.name.Equals(name, StringComparison.InvariantCultureIgnoreCase));
+                return historylist.FindLast(x => x.System.Name.Equals(name, StringComparison.InvariantCultureIgnoreCase));
             else
-                return historylist.FindLast(x => x.IsFSDJump && x.System.name.Equals(name, StringComparison.InvariantCultureIgnoreCase));
+                return historylist.FindLast(x => x.IsFSDJump && x.System.Name.Equals(name, StringComparison.InvariantCultureIgnoreCase));
         }
 
         public ISystem FindSystem(string name, EDSM.GalacticMapping glist = null)        // in system or name
@@ -600,7 +637,7 @@ namespace EliteDangerousCore
 
         public static HistoryEntry FindNextSystem(List<HistoryEntry> syslist, string sysname, int dir)
         {
-            int index = syslist.FindIndex(x => x.System.name.Equals(sysname));
+            int index = syslist.FindIndex(x => x.System.Name.Equals(sysname));
 
             if (index != -1)
             {
@@ -764,10 +801,10 @@ namespace EliteDangerousCore
                 {
                     // Ignore scans where the system name has been changed
                     // Also ignore belt clusters
-                    if (jl == null || (jl.StarSystem.Equals(jlhe.System.name, StringComparison.InvariantCultureIgnoreCase) && !js.BodyDesignation.ToLowerInvariant().Contains(" belt cluster ")))
+                    if (jl == null || (jl.StarSystem.Equals(jlhe.System.Name, StringComparison.InvariantCultureIgnoreCase) && !js.BodyDesignation.ToLowerInvariant().Contains(" belt cluster ")))
                     {
                         logerror("Cannot add scan to system - alert the EDDiscovery developers using either discord or Github (see help)" + Environment.NewLine +
-                                            "Scan object " + js.BodyName + " in " + he.System.name);
+                                            "Scan object " + js.BodyName + " in " + he.System.Name);
                     }
                 }
             }
@@ -833,7 +870,7 @@ namespace EliteDangerousCore
                     if (journalupdate)
                     {
                         jlistUpdated.Add(new Tuple<JournalEntry, HistoryEntry>(je, he));
-                        Debug.WriteLine("Queued update requested {0} {1}", he.System.id_edsm, he.System.name);
+                        Debug.WriteLine("Queued update requested {0} {1}", he.System.EDSMID, he.System.Name);
                     }
                 }
             }
@@ -854,7 +891,7 @@ namespace EliteDangerousCore
                             double dist = (je is JournalFSDJump) ? (je as JournalFSDJump).JumpDist : 0;
                             bool updatecoord = (je is JournalLocOrJump) ? (!(je as JournalLocOrJump).HasCoordinate && he.System.HasCoordinate) : false;
 
-                            Debug.WriteLine("Push update {0} {1} to JE {2} HE {3}", he.System.id_edsm, he.System.name, je.Id, he.Indexno);
+                            Debug.WriteLine("Push update {0} {1} to JE {2} HE {3}", he.System.EDSMID, he.System.Name, je.Id, he.Indexno);
                             JournalEntry.UpdateEDSMIDPosJump(je.Id, he.System, updatecoord, dist, conn, txn);
                         }
 
@@ -868,8 +905,6 @@ namespace EliteDangerousCore
             hist.CommanderId = CurrentCommander;
 
             hist.ProcessUserHistoryListEntries(h => h.ToList());      // here, we update the DBs in HistoryEntry and any global DBs in historylist
-
-            hist.SendEDSMStatusInfo(hist.GetLast, true);
 
             return hist;
         }
@@ -906,7 +941,7 @@ namespace EliteDangerousCore
                     {
                         if (!this.starscan.AddScanToBestSystem(je as JournalScan, i, hl))
                         {
-                            System.Diagnostics.Debug.WriteLine("******** Cannot add scan to system " + (je as JournalScan).BodyName + " in " + he.System.name);
+                            System.Diagnostics.Debug.WriteLine("******** Cannot add scan to system " + (je as JournalScan).BodyName + " in " + he.System.Name);
                         }
                     }
                 }
@@ -950,61 +985,6 @@ namespace EliteDangerousCore
             return false;
         }
 
-
-
-        public void SendEDSMStatusInfo(HistoryEntry he, bool async)     // he points to ship info to send from..  may be null from one feed function
-        {
-            if (CommanderId >= 0 && he != null)
-            {
-                var commander = EDCommander.GetCommander(CommanderId);
-
-                string edsmname = commander.Name;
-                if (!string.IsNullOrEmpty(commander.EdsmName))
-                    edsmname = commander.EdsmName;
-
-                if (!commander.SyncToEdsm || string.IsNullOrEmpty(commander.APIKey) || string.IsNullOrEmpty(edsmname))
-                    return;
-
-                EDSMClass edsm = new EDSMClass { apiKey = commander.APIKey, commanderName = edsmname };
-
-                // find last ship info currently
-                HistoryEntry lastshipinfocurrenthe = GetLastHistoryEntry(x => x.ShipInformation != null && x.ShipInformation.SubVehicle == ShipInformation.SubVehicleType.None);
-
-                // based on he position, find one before it with ship info that is a normal si not a srv
-                HistoryEntry lastshipinfohe = GetLastHistoryEntry(x => x.ShipInformation != null && x.ShipInformation.SubVehicle == ShipInformation.SubVehicleType.None, he);
-
-                long loan = 0;
-                long cash = 0;
-
-                if (lastshipinfohe != null)       // we have a ship info
-                {
-                    // and based on that position, find a last load game.  May be null
-                    HistoryEntry lastloadgamehe = GetLastHistoryEntry(x => x.EntryType == JournalTypeEnum.LoadGame, lastshipinfohe);
-                    loan = (lastloadgamehe != null) ? ((JournalLoadGame)lastloadgamehe.journalEntry).Loan : 0;
-                    cash = (lastloadgamehe != null) ? ((JournalLoadGame)lastloadgamehe.journalEntry).Credits : 0;
-                }
-
-                JournalProgress progress = historylist.FindLast(x => x.EntryType == JournalTypeEnum.Progress)?.journalEntry as JournalProgress;
-                JournalRank rank = historylist.FindLast(x => x.EntryType == JournalTypeEnum.Rank)?.journalEntry as JournalRank;
-
-                if (progress != null && rank != null)
-                {
-                    if (async)
-                    {
-                        Task edsmtask = Task.Factory.StartNew(() =>
-                        {
-                            edsm.SendShipInfo(lastshipinfohe?.ShipInformation, lastshipinfohe?.MaterialCommodity, lastshipinfohe?.MaterialCommodity?.CargoCount ?? 0, lastshipinfocurrenthe?.ShipInformation, cashledger?.CashTotal ?? cash, loan, progress, rank);
-                        });
-                    }
-                    else
-                    {
-                        edsm.SendShipInfo(lastshipinfohe?.ShipInformation, lastshipinfohe?.MaterialCommodity, lastshipinfohe?.MaterialCommodity?.CargoCount ?? 0, lastshipinfocurrenthe?.ShipInformation, cashledger?.CashTotal ?? cash, loan, progress, rank);
-                    }
-                }
-            }
-
-        }
-
         #endregion
 
         #region Common info extractors
@@ -1017,11 +997,11 @@ namespace EliteDangerousCore
             EliteDangerousCore.JournalEvents.JournalFSDJump lastfsd =
                 GetLastHistoryEntry(x => x.journalEntry is EliteDangerousCore.JournalEvents.JournalFSDJump, he)?.journalEntry as EliteDangerousCore.JournalEvents.JournalFSDJump;
             // same code in spanel.. not sure where to put it
-            allegiance = lastfsd != null && lastfsd.Allegiance.Length > 0 ? lastfsd.Allegiance : he.System.allegiance.ToNullUnknownString();
-            economy = lastfsd != null && lastfsd.Economy_Localised.Length > 0 ? lastfsd.Economy_Localised : he.System.primary_economy.ToNullUnknownString();
-            gov = lastfsd != null && lastfsd.Government_Localised.Length > 0 ? lastfsd.Government_Localised : he.System.government.ToNullUnknownString();
+            allegiance = lastfsd != null && lastfsd.Allegiance.Length > 0 ? lastfsd.Allegiance : he.System.Allegiance.ToNullUnknownString();
+            economy = lastfsd != null && lastfsd.Economy_Localised.Length > 0 ? lastfsd.Economy_Localised : he.System.PrimaryEconomy.ToNullUnknownString();
+            gov = lastfsd != null && lastfsd.Government_Localised.Length > 0 ? lastfsd.Government_Localised : he.System.Government.ToNullUnknownString();
             faction = lastfsd != null && lastfsd.FactionState.Length > 0 ? lastfsd.Faction : "Unknown Faction";
-            factionstate = lastfsd != null && lastfsd.FactionState.Length > 0 ? lastfsd.FactionState : he.System.state.ToNullUnknownString();
+            factionstate = lastfsd != null && lastfsd.FactionState.Length > 0 ? lastfsd.FactionState : he.System.State.ToNullUnknownString();
             factionstate = factionstate.SplitCapsWord();
             security = lastfsd != null && lastfsd.Security_Localised.Length > 0 ? lastfsd.Security_Localised : "Unknown Security";
         }

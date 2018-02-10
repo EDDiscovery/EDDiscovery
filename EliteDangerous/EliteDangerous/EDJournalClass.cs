@@ -41,6 +41,8 @@ namespace EliteDangerousCore
         private string frontierfolder;
         private static Guid Win32FolderId_SavedGames = new Guid("4C5C32FF-BB9D-43b0-B5B4-2D72E54EAAA4");
 
+        const int ScanTick = 250;       // tick time to check journals and status
+
         public EDJournalClass(Action<Action> invokeAsyncOnUiThread)
         {
             InvokeAsyncOnUiThread = invokeAsyncOnUiThread;
@@ -82,6 +84,8 @@ namespace EliteDangerousCore
             return (d == null || d.Length == 0) ? frontierfolder : d;
         }
 
+        #region Start stop and scan
+
         public void StartMonitor()
         {
             StopRequested = new ManualResetEvent(false);
@@ -113,8 +117,11 @@ namespace EliteDangerousCore
 
             if (StopRequested != null)
             {
-                StopRequested.Set();
-                StopRequested = null;
+                lock (StopRequested) // Wait for ScanTickDone
+                {
+                    StopRequested.Set();
+                    StopRequested = null;
+                }
             }
 
             if (ScanThread != null)
@@ -130,7 +137,7 @@ namespace EliteDangerousCore
         {
             ManualResetEvent stopRequested = StopRequested;
 
-            while (!stopRequested.WaitOne(250))
+            while (!stopRequested.WaitOne(ScanTick))
             {
                 List<JournalEntry> jl = ScanTickWorker(() => stopRequested.WaitOne(0));
 
@@ -141,7 +148,7 @@ namespace EliteDangerousCore
             }
         }
 
-        private List<JournalEntry> ScanTickWorker(Func<bool> stopRequested)
+        private List<JournalEntry> ScanTickWorker(Func<bool> stopRequested)     // read the entries from all watcher..
         {
             var entries = new List<JournalEntry>();
 
@@ -160,19 +167,29 @@ namespace EliteDangerousCore
 
         private void ScanTickDone(List<JournalEntry> entries)       // in UI thread..
         {
-            if (entries != null)
+            ManualResetEvent stopRequested = StopRequested;
+
+            if (entries != null && stopRequested != null)
             {
                 foreach (var ent in entries)                    // pass them to the handler
                 {
-                    System.Diagnostics.Trace.WriteLine(string.Format("New entry {0} {1}", ent.EventTimeUTC, ent.EventTypeStr));
-                    if (OnNewJournalEntry != null)
-                        OnNewJournalEntry(ent);
+                    lock (stopRequested) // Make sure StopMonitor returns after this method returns
+                    {
+                        if (stopRequested.WaitOne(0))
+                            return;
+
+                        System.Diagnostics.Trace.WriteLine(string.Format("New entry {0} {1}", ent.EventTimeUTC, ent.EventTypeStr));
+
+                        if (OnNewJournalEntry != null)
+                            OnNewJournalEntry(ent);
+                    }
                 }
             }
         }
 
+        #endregion
 
-        // History refresh calls this for a global reparse of all journal event folders during load history
+        #region History refresh calls this for a global reparse of all journal event folders during load history
 
         public void ParseJournalFiles(Func<bool> cancelRequested, Action<int, string> updateProgress, bool forceReload = false)
         {
@@ -182,13 +199,13 @@ namespace EliteDangerousCore
 
             if (!string.IsNullOrEmpty(frontierfolder) && Directory.Exists(frontierfolder))  // if it exists..
             {
-                if (watchers.FindIndex(x => x.m_watcherfolder.Equals(frontierfolder)) < 0)  // and we are not watching it..
+                if (watchers.FindIndex(x => x.WatcherFolder.Equals(frontierfolder)) < 0)  // and we are not watching it..
                 {
                     System.Diagnostics.Trace.WriteLine(string.Format("New watch on {0}", frontierfolder));
                     JournalMonitorWatcher mw = new JournalMonitorWatcher(frontierfolder);
                     watchers.Add(mw);
 
-                    StatusMonitorWatcher sw = new StatusMonitorWatcher(frontierfolder);
+                    StatusMonitorWatcher sw = new StatusMonitorWatcher(frontierfolder, ScanTick);
                     sw.UIEventCallBack += UIEvent;
                     statuswatchers.Add(sw);
                 }
@@ -201,14 +218,14 @@ namespace EliteDangerousCore
                 if (string.IsNullOrEmpty(datapath) || !Directory.Exists(datapath))  // not exist, ignore
                     continue;
 
-                if (watchers.FindIndex(x => x.m_watcherfolder.Equals(datapath)) >= 0)       // if we already have a watch on this folder..
+                if (watchers.FindIndex(x => x.WatcherFolder.Equals(datapath)) >= 0)       // if we already have a watch on this folder..
                     continue;       // already done
 
                 System.Diagnostics.Trace.WriteLine(string.Format("New watch on {0}", datapath));
                 JournalMonitorWatcher mw = new JournalMonitorWatcher(datapath);
                 watchers.Add(mw);
 
-                StatusMonitorWatcher sw = new StatusMonitorWatcher(datapath);
+                StatusMonitorWatcher sw = new StatusMonitorWatcher(datapath, ScanTick);
                 sw.UIEventCallBack += UIEvent;
                 statuswatchers.Add(sw);
 
@@ -221,7 +238,7 @@ namespace EliteDangerousCore
                 {
                     bool found = false;
                     for (int j = 0; j < listCommanders.Count; j++)          // all commanders, see if this watch folder is present
-                        found |= watchers[i].m_watcherfolder.Equals(GetWatchFolder(listCommanders[j].JournalDir));
+                        found |= watchers[i].WatcherFolder.Equals(GetWatchFolder(listCommanders[j].JournalDir));
 
                     if (!found)
                         tobedeleted.Add(i);
@@ -229,7 +246,7 @@ namespace EliteDangerousCore
 
                 foreach (int i in tobedeleted)
                 {
-                    System.Diagnostics.Trace.WriteLine(string.Format("Delete watch on {0}", watchers[i].m_watcherfolder));
+                    System.Diagnostics.Trace.WriteLine(string.Format("Delete watch on {0}", watchers[i].WatcherFolder));
                     JournalMonitorWatcher mw = watchers[i];
                     mw.StopMonitor();          // just in case
                     watchers.Remove(mw);
@@ -243,7 +260,7 @@ namespace EliteDangerousCore
                 {
                     bool found = false;
                     for (int j = 0; j < listCommanders.Count; j++)          // all commanders, see if this watch folder is present
-                        found |= statuswatchers[i].watcherfolder.Equals(GetWatchFolder(listCommanders[j].JournalDir));
+                        found |= statuswatchers[i].WatcherFolder.Equals(GetWatchFolder(listCommanders[j].JournalDir));
 
                     if (!found)
                         statustobedeleted.Add(i);
@@ -251,7 +268,7 @@ namespace EliteDangerousCore
 
                 foreach (int i in statustobedeleted)
                 {
-                    System.Diagnostics.Trace.WriteLine(string.Format("Delete status watch on {0}", watchers[i].m_watcherfolder));
+                    System.Diagnostics.Trace.WriteLine(string.Format("Delete status watch on {0}", statuswatchers[i].WatcherFolder));
                     StatusMonitorWatcher mw = statuswatchers[i];
                     mw.StopMonitor();          // just in case
                     statuswatchers.Remove(mw);
@@ -264,21 +281,45 @@ namespace EliteDangerousCore
             }
         }
 
-        // UI processing
+        #endregion
 
-        public void UIEvent(List<UIEvent> events, string folder)     // in Thread.. from monitor
+        #region UI processing
+
+        public void UIEvent(ConcurrentQueue<UIEvent> events, string folder)     // callback, in Thread.. from monitor
         {
             InvokeAsyncOnUiThread(() => UIEventPost(events));
         }
 
-        public void UIEventPost(List<UIEvent> events)       // UI thread
+        public void UIEventPost(ConcurrentQueue<UIEvent> events)       // UI thread
         {
+            ManualResetEvent stopRequested = StopRequested;
+
             Debug.Assert(System.Windows.Forms.Application.MessageLoop);
 
-            foreach (UIEvent u in events)
+            if (stopRequested != null)
             {
-                OnNewUIEvent?.Invoke(u);
+                while (!events.IsEmpty)
+                {
+                    lock (stopRequested) // Prevent StopMonitor from returning until this method has returned
+                    {
+                        if (stopRequested.WaitOne(0))
+                            return;
+
+                        UIEvent e;
+
+                        if (events.TryDequeue(out e))
+                        {
+                            OnNewUIEvent?.Invoke(e);
+                        }
+                        else
+                        {
+                            break;
+                        }
+                    }
+                }
             }
         }
+
+        #endregion
     }
 }

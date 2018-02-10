@@ -229,7 +229,9 @@ namespace EDDiscovery.UserControls
                 if (checkBoxMoveToTop.Checked && dataGridViewJournal.DisplayedRowCount(false) > 0)   // Move focus to new row
                 {
                     dataGridViewJournal.ClearSelection();
-                    dataGridViewJournal.CurrentCell = dataGridViewJournal.Rows[0].Cells[1];       // its the current cell which needs to be set, moves the row marker as well
+                    int rowno = dataGridViewJournal.Rows.GetFirstRow(DataGridViewElementStates.Visible);
+                    if (rowno != -1)
+                        dataGridViewJournal.CurrentCell = dataGridViewJournal.Rows[rowno].Cells[1];       // its the current cell which needs to be set, moves the row marker as well
 
                     FireChangeSelection();
                 }
@@ -373,14 +375,14 @@ namespace EDDiscovery.UserControls
         {
             this.Cursor = Cursors.WaitCursor;
             EDSMClass edsm = new EDSMClass();
-            long? id_edsm = rightclicksystem.System?.id_edsm;
+            long? id_edsm = rightclicksystem.System?.EDSMID;
 
             if (id_edsm == 0)
             {
                 id_edsm = null;
             }
 
-            if (!edsm.ShowSystemInEDSM(rightclicksystem.System.name, id_edsm))
+            if (!edsm.ShowSystemInEDSM(rightclicksystem.System.Name, id_edsm))
                 ExtendedControls.MessageBoxTheme.Show(this.FindForm(), "System could not be found - has not been synched or EDSM is unavailable");
 
             this.Cursor = Cursors.Default;

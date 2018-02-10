@@ -96,7 +96,7 @@ namespace EDDiscovery.UserControls
 
             StarScan.SystemNode last_sn = discoveryform.history.starscan.FindSystem(last_he.System, true);
 
-            SetControlText((last_sn == null) ? "No Scan" : ("Estimated Scan Values for " + last_sn.system.name));
+            SetControlText((last_sn == null) ? "No Scan" : ("Estimated Scan Values for " + last_sn.system.Name));
 
             if (last_sn != null)
             {

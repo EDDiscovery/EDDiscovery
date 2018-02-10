@@ -85,9 +85,9 @@ namespace EDDiscovery.UserControls
 
             checkBoxMinimizeToNotifyIcon.Enabled = EDDiscoveryForm.EDDConfig.UseNotifyIcon;
 
-            textBoxHomeSystem.Text = EDDConfig.Instance.HomeSystem.name;
+            textBoxHomeSystem.Text = EDDConfig.Instance.HomeSystem.Name;
 
-            textBoxDefaultZoom.Text = EDDConfig.Instance.MapZoom.ToString();
+            textBoxDefaultZoom.ValueNoChange = EDDConfig.Instance.MapZoom;
 
             bool selectionCentre = EDDConfig.Instance.MapCentreOnSelection;
             radioButtonHistorySelection.Checked = selectionCentre;
@@ -147,23 +147,16 @@ namespace EDDiscovery.UserControls
 
             if (s != null)
             {
-                textBoxHomeSystem.Text = s.name;
+                textBoxHomeSystem.Text = s.Name;
                 EDDConfig.Instance.HomeSystem = s;
             }
             else
-                textBoxHomeSystem.Text = EDDConfig.Instance.HomeSystem.name;
+                textBoxHomeSystem.Text = EDDConfig.Instance.HomeSystem.Name;
         }
 
-        private void textBoxDefaultZoom_Validating(object sender, System.ComponentModel.CancelEventArgs e)
+        private void textBoxDefaultZoom_ValueChanged(object sender, EventArgs e)
         {
-            float? v = textBoxDefaultZoom.Text.InvariantParseFloatNull();
-            if (v != null)
-            {
-                textBoxDefaultZoom.Text = v.Value.ToStringInvariant();
-                EDDConfig.Instance.MapZoom = v.Value;
-            }
-            else
-                textBoxDefaultZoom.Text = EDDConfig.Instance.MapZoom.ToStringInvariant();
+            EDDConfig.Instance.MapZoom = (float)textBoxDefaultZoom.Value;
         }
 
         private void radioButtonCentreHome_CheckedChanged(object sender, EventArgs e)
@@ -530,6 +523,7 @@ namespace EDDiscovery.UserControls
         }
 
         #endregion
+
     }
 }
 

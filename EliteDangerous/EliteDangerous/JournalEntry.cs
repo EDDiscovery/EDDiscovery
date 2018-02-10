@@ -79,6 +79,7 @@ namespace EliteDangerousCore
         EngineerApply = 230,
         EngineerContribution = 235,
         EngineerCraft = 240,
+        EngineerLegacyConvert = 241,
         EngineerProgress = 250,
         EscapeInterdiction = 260,
         FactionKillBond = 270,
@@ -113,6 +114,7 @@ namespace EliteDangerousCore
         MaterialCollected = 430,
         MaterialDiscarded = 440,
         MaterialDiscovered = 450,
+        MaterialTrade = 451,
         Materials = 455,
         MiningRefined = 460,
         Missions = 465,
@@ -191,6 +193,7 @@ namespace EliteDangerousCore
         SupercruiseExit = 900,
         Synthesis = 910,
         SystemsShutdown = 915,
+        TechnologyBroker = 918,
         Touchdown = 920,
         UnderAttack = 925,
         Undocked = 930,
@@ -352,7 +355,12 @@ namespace EliteDangerousCore
                 return beta ?? false;
             }
         }
+
+        public bool IsUIEvent { get { return this is IUIEvent; } }
+
         #endregion
+
+
 
         #region Static properties and fields
         private static Dictionary<JournalTypeEnum, Type> JournalEntryTypes = GetJournalEntryTypes();
@@ -598,7 +606,7 @@ namespace EliteDangerousCore
                 {
                     if (jsonpos)
                     {
-                        jo["StarPos"] = new JArray() { system.x, system.y, system.z };
+                        jo["StarPos"] = new JArray() { system.X, system.Y, system.Z };
                         jo["StarPosFromEDSM"] = true;
                     }
 
@@ -611,15 +619,15 @@ namespace EliteDangerousCore
                         {
                             cmd2.CommandText = "Update JournalEntries set EventData = @EventData, EdsmId = @EdsmId where ID = @ID";
                             cmd2.AddParameterWithValue("@EventData", jo.ToString());
-                            System.Diagnostics.Trace.WriteLine(string.Format("Update journal ID {0} with pos/edsmid {1} dist {2}", journalid, system.id_edsm, dist));
+                            System.Diagnostics.Trace.WriteLine(string.Format("Update journal ID {0} with pos/edsmid {1} dist {2}", journalid, system.EDSMID, dist));
                         }
                         else
                         {
-                            System.Diagnostics.Trace.WriteLine(string.Format("Update journal ID {0} with edsmid {1}", journalid, system.id_edsm));
+                            System.Diagnostics.Trace.WriteLine(string.Format("Update journal ID {0} with edsmid {1}", journalid, system.EDSMID));
                         }
 
                         cmd2.AddParameterWithValue("@ID", journalid);
-                        cmd2.AddParameterWithValue("@EdsmId", system.id_edsm);
+                        cmd2.AddParameterWithValue("@EdsmId", system.EDSMID);
 
                         cmd2.ExecuteNonQuery();
                     }
@@ -656,10 +664,18 @@ namespace EliteDangerousCore
             }
         }
 
-        public static void UpdateSyncFlagBit(long journalid, SyncFlags bit, bool value)
+        public static void UpdateSyncFlagBit(long journalid, SyncFlags bit, bool value, SQLiteConnectionUser cn = null, DbTransaction txn = null)
         {
-            using (SQLiteConnectionUser cn = new SQLiteConnectionUser(utc: true))
+            bool closeConn = false;
+
+            try
             {
+                if (cn == null)
+                {
+                    closeConn = true;
+                    cn = new SQLiteConnectionUser(utc: true);
+                }
+
                 JournalEntry je = Get(journalid, cn);
 
                 if (je != null)
@@ -669,13 +685,20 @@ namespace EliteDangerousCore
                     else
                         je.Synced &= ~(int)bit;
 
-                    using (DbCommand cmd = cn.CreateCommand("Update JournalEntries set Synced = @sync where ID=@journalid"))
+                    using (DbCommand cmd = cn.CreateCommand("Update JournalEntries set Synced = @sync where ID=@journalid", txn))
                     {
                         cmd.AddParameterWithValue("@journalid", journalid);
                         cmd.AddParameterWithValue("@sync", je.Synced);
                         System.Diagnostics.Trace.WriteLine(string.Format("Update sync flag ID {0} with {1}", journalid, je.Synced));
                         SQLiteDBClass.SQLNonQueryText(cn, cmd);
                     }
+                }
+            }
+            finally
+            {
+                if (closeConn && cn != null)
+                {
+                    cn.Dispose();
                 }
             }
         }
@@ -1210,12 +1233,41 @@ namespace EliteDangerousCore
             return ret;
         }
 
-        public bool IsUIEvent { get { return IsUIEventType(this); } }
+        protected JObject ReadAdditionalFile( string extrafile, bool checktimestamptype = true )       // read file, return new JSON
+        {
+            for (int retries = 0; retries < 5; retries++)
+            {
+                try
+                {
+                    string json = System.IO.File.ReadAllText(extrafile);
 
-        static public bool IsUIEventType(JournalEntry j) { return j is JournalMusic; } 
+                    if (json != null)
+                    {
+                        JObject joaf = JObject.Parse(json);       // this has the full version of the event, including data, at the same timestamp
+
+                        string newtype = joaf["event"].Str();
+                        DateTime newUTC = DateTime.Parse(joaf.Value<string>("timestamp"), System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.AssumeUniversal | System.Globalization.DateTimeStyles.AdjustToUniversal);
+
+                        if (checktimestamptype == false || (newUTC != null && newUTC == EventTimeUTC && newtype == EventTypeStr))
+                        {
+                            return joaf;
+                        }
+                        else
+                            return null;            // okay, entry is not related to the file written in the folder, throw the entry away
+                    }
+                }
+                catch (Exception ex)
+                {
+                    System.Diagnostics.Trace.WriteLine($"Unable to read extra info from {extrafile}: {ex.Message}");
+                    System.Threading.Thread.Sleep(500);
+                }
+            }
+
+            return null;
+        }
 
         #endregion
 
     }
 }
-     
+

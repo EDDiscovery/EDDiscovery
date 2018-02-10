@@ -85,7 +85,6 @@ namespace EDDiscovery
         #region IDiscoveryController interface
         #region Properties
         public HistoryList history { get { return Controller.history; } }
-        public EDSMSync EdsmSync { get { return Controller.EdsmSync; } }
         public string LogText { get { return Controller.LogText; } }
         public bool PendingClose { get { return Controller.PendingClose; } }
         public GalacticMapping galacticMapping { get { return Controller.galacticMapping; } }
@@ -643,17 +642,17 @@ namespace EDDiscovery
             actioncontroller.ActionRunOnEntry(he, Actions.ActionEventEDList.NewEntry(he));
 
             // all notes committed
-            SystemNoteClass.CommitDirtyNotes((snc) => { if (EDCommander.Current.SyncToEdsm && snc.FSDEntry) EDSMSync.SendComments(snc.SystemName, snc.Note, snc.EdsmId); });
+            SystemNoteClass.CommitDirtyNotes((snc) => { if (EDCommander.Current.SyncToEdsm && snc.FSDEntry) EDSMClass.SendComments(snc.SystemName, snc.Note, snc.EdsmId, he.Commander); });
 
             if ( he.EntryType == JournalTypeEnum.Docked )
             {
                 if (Capi.IsCommanderLoggedin(EDCommander.Current.Name))
                 {
-                    if (he.ContainsRares())
-                    {
-                        LogLine("Not performing Companion API get due to carrying rares");
-                    }
-                    else
+                    //if (he.ContainsRares())
+                    //{
+                    //    LogLine("Not performing Companion API get due to carrying rares");
+                    //}
+                    //else
                     {
                         System.Diagnostics.Debug.WriteLine("Commander " + EDCommander.Current.Name + " in CAPI");
                         try
@@ -711,19 +710,21 @@ namespace EDDiscovery
             {   // try is a bit old, probably do not need it.
                 if (he.IsFSDJump)
                 {
-                    int count = history.GetVisitsCount(he.System.name);
-                    LogLine(string.Format("Arrived at system {0} Visit No. {1}", he.System.name, count));
+                    int count = history.GetVisitsCount(he.System.Name);
+                    LogLine(string.Format("Arrived at system {0} Visit No. {1}", he.System.Name, count));
 
-                    System.Diagnostics.Trace.WriteLine("Arrived at system: " + he.System.name + " " + count + ":th visit.");
+                    System.Diagnostics.Trace.WriteLine("Arrived at system: " + he.System.Name + " " + count + ":th visit.");
+                }
 
-                    if (EDCommander.Current.SyncToEdsm == true)
+                if (EDCommander.Current.SyncToEdsm)
+                {
+                    EDSMJournalSync.SendEDSMEvents(LogLine, he);
+
+                    if (he.EntryType == JournalTypeEnum.FSDJump)
                     {
-                        EDSMSync.SendTravelLog(he);
                         ActionRunOnEntry(he, Actions.ActionEventEDList.onEDSMSync);
                     }
                 }
-
-                hl.SendEDSMStatusInfo(he, true);
 
                 if (he.ISEDDNMessage && he.AgeOfEntry() < TimeSpan.FromDays(1.0))
                 {
@@ -753,7 +754,7 @@ namespace EDDiscovery
         private void Controller_NewUIEvent(UIEvent uievent)      
         {
             Conditions.ConditionVariables cv = new Conditions.ConditionVariables();
-            cv.AddPropertiesFieldsOfClass(uievent, "UI", new Type[] { typeof(System.Drawing.Bitmap), typeof(Newtonsoft.Json.Linq.JObject) }, 5);
+            cv.AddPropertiesFieldsOfClass(uievent, "UI", new Type[] { typeof(System.Drawing.Icon), typeof(System.Drawing.Image), typeof(System.Drawing.Bitmap), typeof(Newtonsoft.Json.Linq.JObject) }, 5);
             cv["UIEvent"] = uievent.EventTypeStr;
             cv["UIDisplayed"] = EDDConfig.ShowUIEvents ? "1" : "0";
             actioncontroller.ActionRun(Actions.ActionEventEDList.onUIEvent , cv);
@@ -831,7 +832,7 @@ namespace EDDiscovery
         private void Controller_FinalClose()        // run in UI, when controller finishes close
         {
             // send any dirty notes.  if they are, the call back gets called. If we have EDSM sync on, and its an FSD entry, send it
-            SystemNoteClass.CommitDirtyNotes((snc) => { if (EDCommander.Current.SyncToEdsm && snc.FSDEntry) EDSMSync.SendComments(snc.SystemName, snc.Note, snc.EdsmId); });
+            SystemNoteClass.CommitDirtyNotes((snc) => { if (EDCommander.Current.SyncToEdsm && snc.FSDEntry) EDSMClass.SendComments(snc.SystemName, snc.Note, snc.EdsmId); });
 
             screenshotconverter.SaveSettings();
             SQLiteDBClass.PutSettingBool("ToolBarPanelPinState", panelToolBar.PinState);
@@ -1543,7 +1544,7 @@ namespace EDDiscovery
         {
             EDSMClass edsm = new EDSMClass();
 
-            if (!edsm.IsApiKeySet)
+            if (!edsm.ValidCredentials)
             {
                 ExtendedControls.MessageBoxTheme.Show(this, "Please ensure a commander is selected and it has a EDSM API key set");
                 return;
@@ -1551,7 +1552,7 @@ namespace EDDiscovery
 
             try
             {
-                EdsmSync.StartSync(edsm, history, EDCommander.Current.SyncToEdsm, EDCommander.Current.SyncFromEdsm, EDDConfig.Instance.DefaultMapColour);
+                EDSMJournalSync.SendEDSMEvents(l => LogLine(l), history, manual: true);
             }
             catch (Exception ex)
             {

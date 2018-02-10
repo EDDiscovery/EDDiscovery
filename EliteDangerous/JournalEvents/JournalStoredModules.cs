@@ -40,7 +40,7 @@ namespace EliteDangerousCore.JournalEvents
         {
             StationName = evt["StationName"].Str();
             StarSystem = evt["StarSystem"].Str();
-            MarketID = evt["MarketID"].Long();
+            MarketID = evt["MarketID"].LongNull();
 
             ModuleItems = evt["Items"]?.ToObject<StoredModuleItem[]>();
 
@@ -55,7 +55,7 @@ namespace EliteDangerousCore.JournalEvents
 
         public string StationName { get; set; }
         public string StarSystem { get; set; }
-        public long MarketID { get; set; }
+        public long? MarketID { get; set; }
 
         public StoredModuleItem[] ModuleItems { get; set; }
 

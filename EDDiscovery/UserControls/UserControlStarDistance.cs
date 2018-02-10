@@ -40,59 +40,11 @@ namespace EDDiscovery.UserControls
         }
 
         private string DbSave { get { return "StarDistancePanel" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
-        [DefaultValue(defaultMaxRadius)]
-        private double MaxRadius
-        {
-            get { return _MaxRadius; }
-            set
-            {
-                if (double.IsNaN(value) || double.IsInfinity(value) || value <= 0)
-                    value = defaultMaxRadius;
-                if (_MaxRadius != value)
-                {
-                    _MaxRadius = value;
-                    if (last_he != null || uctg != null)
-                        KickComputation(last_he ?? uctg.GetCurrentHistoryEntry);
-                }
-                // Don't adjust text in a focused textbox while a user is typing.
-                if (textMaxRadius.ContainsFocus)
-                    pendingText = $"{value:0.00}";
-                else
-                    textMaxRadius.Text = $"{value:0.00}";
-            }
-        }
-        [DefaultValue(defaultMinRadius)]
-        private double MinRadius
-        {
-            get { return _MinRadius; }
-            set
-            {
-                if (double.IsNaN(value) || double.IsInfinity(value) || value < 0)
-                    value = defaultMinRadius;
-                if (_MinRadius != value)
-                {
-                    _MinRadius = value;
-                    if (last_he != null || uctg != null)
-                        KickComputation(last_he ?? uctg.GetCurrentHistoryEntry);
-                }
-                // Don't adjust text in a focused textbox while a user is typing.
-                if (textMinRadius.ContainsFocus)
-                    pendingText = $"{value:0.00}";
-                else
-                    textMinRadius.Text = $"{value:0.00}";
-            }
-        }
 
         private StarDistanceComputer computer = null;
         private HistoryEntry last_he = null;
         private ISystem rightclicksystem = null;
         private int rightclickrow = -1;
-        private string pendingText = null;
-
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        private double _MaxRadius = defaultMaxRadius;
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        private double _MinRadius = defaultMinRadius;
 
         private const double defaultMaxRadius = 1000;
         private const double defaultMinRadius = 0;
@@ -104,9 +56,14 @@ namespace EDDiscovery.UserControls
 
             uctg.OnTravelSelectionChanged += Uctg_OnTravelSelectionChanged;
 
-            MaxRadius = SQLiteConnectionUser.GetSettingDouble(DbSave + "Max", MaxRadius);
-            MinRadius = SQLiteConnectionUser.GetSettingDouble(DbSave + "Min", MinRadius);
+            textMinRadius.ValueNoChange = SQLiteConnectionUser.GetSettingDouble(DbSave + "Min", defaultMinRadius);
+            textMaxRadius.ValueNoChange = SQLiteConnectionUser.GetSettingDouble(DbSave + "Max", defaultMaxRadius);
+            textMinRadius.SetComparitor(textMaxRadius, -2);     // need to do this after values are set
+            textMaxRadius.SetComparitor(textMinRadius, 2);
+
             checkBoxCube.Checked = SQLiteConnectionUser.GetSettingBool(DbSave + "Behaviour", false);
+
+
         }
 
         public override void ChangeCursorType(IHistoryCursor thc)
@@ -120,8 +77,8 @@ namespace EDDiscovery.UserControls
         {
             uctg.OnTravelSelectionChanged -= Uctg_OnTravelSelectionChanged;
             computer.ShutDown();
-            SQLiteConnectionUser.PutSettingDouble(DbSave + "Min", MinRadius);
-            SQLiteConnectionUser.PutSettingDouble(DbSave + "Max", MaxRadius);
+            SQLiteConnectionUser.PutSettingDouble(DbSave + "Min", textMinRadius.Value);
+            SQLiteConnectionUser.PutSettingDouble(DbSave + "Max", textMaxRadius.Value);
             SQLiteConnectionUser.PutSettingBool(DbSave + "Behaviour", checkBoxCube.Checked);
         }
 
@@ -146,7 +103,7 @@ namespace EDDiscovery.UserControls
                 // Get nearby systems from the systems DB.
                 computer.CalculateClosestSystems(he.System, 
                     (s, d) => BeginInvoke((MethodInvoker)delegate { NewStarListComputed(s, d); }) , 
-                    maxitems, MinRadius, MaxRadius, !checkBoxCube.Checked
+                    maxitems, textMinRadius.Value, textMaxRadius.Value, !checkBoxCube.Checked
                     );     // hook here, force closes system update
             }
         }
@@ -156,11 +113,11 @@ namespace EDDiscovery.UserControls
             System.Diagnostics.Debug.Assert(Application.MessageLoop);       // check!
 
             // Get nearby systems from our travel history. This will filter out duplicates from the systems DB.
-            discoveryform.history.CalculateSqDistances(list, sys.x, sys.y, sys.z,
-                                maxitems, MinRadius, MaxRadius, !checkBoxCube.Checked
+            discoveryform.history.CalculateSqDistances(list, sys.X, sys.Y, sys.Z,
+                                maxitems, textMinRadius.Value, textMaxRadius.Value, !checkBoxCube.Checked
                                 );
 
-            FillGrid(sys.name, list);
+            FillGrid(sys.Name, list);
         }
 
         private void FillGrid(string name, BaseUtils.SortedListDoubleDuplicate<ISystem> csl)
@@ -174,10 +131,10 @@ namespace EDDiscovery.UserControls
                 {
                     double dist = Math.Sqrt(tvp.Key);   // distances are stored squared for speed, back to normal.
 
-                    if (tvp.Value.name != name && (checkBoxCube.Checked || (dist >= MinRadius && dist <= MaxRadius)))
+                    if (tvp.Value.Name != name && (checkBoxCube.Checked || (dist >= textMinRadius.Value && dist <= textMaxRadius.Value)))
                     {
-                        int visits = discoveryform.history.GetVisitsCount(tvp.Value.name, tvp.Value.id_edsm);
-                        object[] rowobj = { tvp.Value.name, $"{dist:0.00}", $"{visits:n0}" };
+                        int visits = discoveryform.history.GetVisitsCount(tvp.Value.Name, tvp.Value.EDSMID);
+                        object[] rowobj = { tvp.Value.Name, $"{dist:0.00}", $"{visits:n0}" };
 
                         int rowindex = dataGridViewNearest.Rows.Add(rowobj);
                         dataGridViewNearest.Rows[rowindex].Tag = tvp.Value;
@@ -239,14 +196,14 @@ namespace EDDiscovery.UserControls
         {
             this.Cursor = Cursors.WaitCursor;
             EDSMClass edsm = new EDSMClass();
-            long? id_edsm = rightclicksystem.id_edsm;
+            long? id_edsm = rightclicksystem.EDSMID;
 
             if (id_edsm == 0)
             {
                 id_edsm = null;
             }
 
-            if (!edsm.ShowSystemInEDSM(rightclicksystem.name, id_edsm))
+            if (!edsm.ShowSystemInEDSM(rightclicksystem.Name, id_edsm))
             {
                 ExtendedControls.MessageBoxTheme.Show(FindForm(), "System could not be found - has not been synched or EDSM is unavailable");
             }
@@ -280,133 +237,19 @@ namespace EDDiscovery.UserControls
             }
         }
 
-
-        private void textMinRadius_TextChanged(object sender, EventArgs e)
-        {
-            // Don't let others directly assigning to textMinRadius.Text result in parsing.
-            if (textMinRadius.ContainsFocus)
-            {
-                double? min = textMinRadius.Text.InvariantParseDoubleNull();
-                MinRadius = min ?? defaultMinRadius;
-            }
-        }
-
-        private void textMinRadius_Leave(object sender, EventArgs e)
-        {
-            if (pendingText != null)
-                textMinRadius.Text = pendingText;
-            pendingText = null;
-        }
-
-        private void textMaxRadius_TextChanged(object sender, EventArgs e)
-        {
-            // Don't let others directly assigning to textMaxRadius.Text result in parsing.
-            if (textMaxRadius.ContainsFocus)
-            {
-                double? max = textMaxRadius.Text.InvariantParseDoubleNull();
-                MaxRadius = max ?? defaultMaxRadius;
-            }
-        }
-
-        private void textMaxRadius_Leave(object sender, EventArgs e)
-        {
-            if (pendingText != null)
-                textMaxRadius.Text = pendingText;
-            pendingText = null;
-        }
-
         private void checkBoxCube_CheckedChanged(object sender, EventArgs e)
         {
-            KickComputation(last_he ?? uctg.GetCurrentHistoryEntry);
+            KickComputation(last_he);
         }
 
-
-        /// <summary>
-        /// Computer
-        /// </summary>
-        public class StarDistanceComputer
+        private void textMinRadius_ValueChanged(object sender, EventArgs e)
         {
-            private Thread backgroundStardistWorker;
-            private bool PendingClose { get; set; }           // we want to close boys!
+            KickComputation(last_he);
+        }
 
-            private class StardistRequest
-            {
-                public ISystem System;
-                public bool IgnoreOnDuplicate;      // don't compute until last one is present
-                public double MinDistance;
-                public double MaxDistance;
-                public bool Spherical;
-                public int MaxItems;
-                public Action<ISystem, BaseUtils.SortedListDoubleDuplicate<ISystem>> Callback;
-            }
-
-            private ConcurrentQueue<StardistRequest> closestsystem_queue = new ConcurrentQueue<StardistRequest>();
-
-            private AutoResetEvent stardistRequested = new AutoResetEvent(false);
-            private AutoResetEvent closeRequested = new AutoResetEvent(false);
-
-            public StarDistanceComputer()
-            {
-                PendingClose = false;
-                backgroundStardistWorker = new Thread(BackgroundStardistWorkerThread) { Name = "Star Distance Worker", IsBackground = true };
-                backgroundStardistWorker.Start();
-            }
-
-            public void CalculateClosestSystems(ISystem sys, Action<ISystem, BaseUtils.SortedListDoubleDuplicate<ISystem>> callback, 
-                            int maxitems, double mindistance, double maxdistance, bool spherical, bool ignoreDuplicates = true)
-            {
-                closestsystem_queue.Enqueue(new StardistRequest { System = sys, Callback = callback,
-                                MaxItems = maxitems, MinDistance = mindistance, MaxDistance = maxdistance,  Spherical = spherical , IgnoreOnDuplicate = ignoreDuplicates });
-                stardistRequested.Set();
-            }
-
-            public void ShutDown()
-            {
-                PendingClose = true;
-                closeRequested.Set();
-                backgroundStardistWorker.Join();
-            }
-
-            private void BackgroundStardistWorkerThread()
-            {
-                while (!PendingClose)
-                {
-                    int wh = WaitHandle.WaitAny(new WaitHandle[] { closeRequested, stardistRequested });
-
-                    if (PendingClose)
-                        break;
-
-                    StardistRequest stardistreq = null;
-
-                    switch (wh)
-                    {
-                        case 0:  // Close Requested
-                            break;
-                        case 1:  // Star Distances Requested
-                            while (!PendingClose && closestsystem_queue.TryDequeue(out stardistreq))
-                            {
-                                if (!stardistreq.IgnoreOnDuplicate || closestsystem_queue.Count == 0)
-                                {
-                                    StardistRequest req = stardistreq;
-                                    ISystem sys = req.System;
-                                    BaseUtils.SortedListDoubleDuplicate<ISystem> closestsystemlist = new BaseUtils.SortedListDoubleDuplicate<ISystem>(); //lovely list allowing duplicate keys - can only iterate in it.
-
-                                    //System.Diagnostics.Debug.WriteLine("DB Computer Max distance " + req.MaxDistance);
-
-                                    SystemClassDB.GetSystemListBySqDistancesFrom(closestsystemlist, sys.x, sys.y, sys.z, req.MaxItems , 
-                                                    req.MinDistance, req.MaxDistance , req.Spherical);
-
-                                    if (!PendingClose)
-                                    {
-                                        req.Callback(sys, closestsystemlist);
-                                    }
-                                }
-                            }
-
-                            break;
-                    }
-                }
-            }
+        private void textMaxRadius_ValueChanged(object sender, EventArgs e)
+        {
+            KickComputation(last_he);
         }
     }
 }

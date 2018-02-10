@@ -32,66 +32,36 @@ namespace EliteDangerousCore.JournalEvents
 
     [System.Diagnostics.DebuggerDisplay("{ShipId} {Ship} {ShipModules.Count}")]
     [JournalEntryType(JournalTypeEnum.ModuleInfo)]
-    public class JournalModuleInfo : JournalEntry
+    public class JournalModuleInfo : JournalEntry , IAdditionalFiles
     {
-        [System.Diagnostics.DebuggerDisplay("{Slot} {Item} {LocalisedItem}")]
-        public class ShipModuleInfo
-        {
-            public string Slot { get; private set; }        // never null       - nice name, used to track 
-            public string SlotFD { get; private set; }      // never null       - FD normalised ID name (Int_CargoRack_Size6_Class1)
-            public string Item { get; private set; }        // never null       - nice name, used to track
-            public string ItemFD { get; private set; }        // never null     - FD normalised ID name
-
-            public double? Power { get; private set; }
-            public int? Priority { get; private set; }      // 0..4 not 1..5
-
-            public ShipModuleInfo()
-            { }
-
-            public ShipModuleInfo(string s, string sfd, string i, string ifd, double? w, int? p)
-            {
-                Slot = s; SlotFD = sfd; Item = i; ItemFD = ifd; Power = w; Priority = p;
-            }
-
-            public ShipModuleInfo(string s, string sfd, string i, string ifd)
-            {
-                Slot = s; SlotFD = sfd; Item = i; ItemFD = ifd;
-            }
-
-            public bool Same(ShipModuleInfo other)      // ignore localisased item, it does not occur everywhere..
-            {
-                return (Slot == other.Slot && Item == other.Item && Power == other.Power && Priority == other.Priority);
-            }
-
-            public bool Same(string item )
-            {
-                return Item == item;
-            }
-
-            public override string ToString()
-            {
-                StringBuilder sb = new StringBuilder(64);
-                sb.AppendFormat("{0} = {1}", Slot, Item);
-                return sb.ToString();
-            }
-        }
-
         public JournalModuleInfo(JObject evt) : base(evt, JournalTypeEnum.ModuleInfo)
         {
-            ShipModules = new List<ShipModuleInfo>();
+            Rescan(evt);
+        }
+
+        public void Rescan(JObject evt)
+        { 
+            ShipModules = new List<JournalLoadout.ShipModule>();
 
             JArray jmodules = (JArray)evt["Modules"];
             if (jmodules != null)
             {
                 foreach (JObject jo in jmodules)
                 {
-                    ShipModuleInfo module = new ShipModuleInfo( 
+                    JournalLoadout.ShipModule module = new JournalLoadout.ShipModule( 
                                                         JournalFieldNaming.GetBetterSlotName(jo["Slot"].Str()),
                                                         JournalFieldNaming.NormaliseFDSlotName(jo["Slot"].Str()),
-                                                        JournalFieldNaming.GetBetterItemNameLoadout(jo["Item"].Str()),
+                                                        JournalFieldNaming.GetBetterItemNameEvents(jo["Item"].Str()),
                                                         JournalFieldNaming.NormaliseFDItemName(jo["Item"].Str()),
+                                                        null, // unknown
+                                                        jo["Priority"].IntNull(),
+                                                        null, //aclip
+                                                        null, //ahooper
+                                                        null, //health
+                                                        null, //value
                                                         jo["Power"].DoubleNull(),
-                                                        jo["Priority"].IntNull() );
+                                                        null //engineering
+                                                        );
                     ShipModules.Add(module);
                 }
 
@@ -99,7 +69,18 @@ namespace EliteDangerousCore.JournalEvents
             }
         }
 
-        public List<ShipModuleInfo> ShipModules;
+        public bool ReadAdditionalFiles(string directory, ref JObject jo)
+        {
+            JObject jnew = ReadAdditionalFile(System.IO.Path.Combine(directory, "ModulesInfo.json"));
+            if (jnew != null)        // new json, rescan
+            {
+                jo = jnew;      // replace current
+                Rescan(jo);
+            }
+            return jnew != null;
+        }
+
+        public List<JournalLoadout.ShipModule> ShipModules;
 
         public override void FillInformation(out string summary, out string info, out string detailed) //V
         {
@@ -107,14 +88,11 @@ namespace EliteDangerousCore.JournalEvents
             info = BaseUtils.FieldBuilder.Build("Modules:", ShipModules.Count);
             detailed = "";
 
-            foreach (ShipModuleInfo m in ShipModules)
+            foreach (JournalLoadout.ShipModule m in ShipModules)
             {
-                if (detailed.Length > 0)
-                    detailed += Environment.NewLine;
-
                 double? power = (m.Power.HasValue && m.Power.Value > 0) ? m.Power : null;
 
-                detailed += BaseUtils.FieldBuilder.Build("", m.Slot, "<:", m.Item, "Power:; MW;0.###", power);
+                detailed = detailed.AppendPrePad(BaseUtils.FieldBuilder.Build("", m.Slot, "<:", m.Item, "; MW;0.###", power) , Environment.NewLine);
             }
         }
     }

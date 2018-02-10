@@ -14,6 +14,7 @@
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 using Newtonsoft.Json.Linq;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace EliteDangerousCore.JournalEvents
@@ -39,64 +40,41 @@ namespace EliteDangerousCore.JournalEvents
     //o   Rare
 
     [JournalEntryType(JournalTypeEnum.Market)]
-    public class JournalMarket : JournalEntry
+    public class JournalMarket : JournalCommodityPricesBase, IAdditionalFiles
     {
         public JournalMarket(JObject evt) : base(evt, JournalTypeEnum.Market)
         {
-            StationName = evt["StationName"].Str();
+            Rescan(evt);
+        }
+
+        public void Rescan(JObject evt)
+        {
+            Station = evt["StationName"].Str();
             StarSystem = evt["StarSystem"].Str();
-            MarketID = evt["MarketID"].Long();
+            MarketID = evt["MarketID"].LongNull();
+            Commodities = new List<CCommodities>(); // always made..
 
-            MarketItems = evt["Items"]?.ToObject<MarketItem[]>();
-
-            if ( MarketItems != null )
+            JArray jcommodities = (JArray)evt["Items"];
+            if (jcommodities != null )
             {
-                foreach (MarketItem i in MarketItems)
+                foreach (JObject commodity in jcommodities)
                 {
-                    i.Name = JournalFieldNaming.GetBetterItemNameEvents(i.Name);
+                    CCommodities com = new CCommodities(commodity, true);
+                    Commodities.Add(com);
                 }
             }
         }
 
-        public string StationName { get; set; }
-        public string StarSystem { get; set; }
-        public long MarketID { get; set; }
-
-        public MarketItem[] MarketItems { get; set; }
-
-        public override void FillInformation(out string summary, out string info, out string detailed) //V
+        public bool ReadAdditionalFiles(string directory, ref JObject jo)
         {
-            summary = EventTypeStr.SplitCapsWord();
-            info = "";
-
-            if ( MarketItems != null )
-                foreach (MarketItem m in MarketItems)
-                {
-                    if (info.Length>0)
-                        info += ", ";
-                    info += m.Name;
-                }
-                
-            detailed = "";
+            JObject jnew = ReadAdditionalFile(System.IO.Path.Combine(directory, "Market.json"));
+            if (jnew != null)        // new json, rescan
+            {
+                jo = jnew;      // replace current
+                Rescan(jo);
+            }
+            return jnew != null;
         }
+
     }
-
-
-    public class MarketItem
-    {
-        public long id;
-        public string Name;
-        public string Name_Localised;
-        public int BuyPrice;
-        public int SellPrice;
-        public int MeanPrice;
-        public int StockBracket;
-        public int DemandBracket;
-        public int Stock;
-        public int Demand;
-        public bool Consumer;
-        public bool Producer;
-        public bool Rare;
-    }
-
 }

@@ -48,7 +48,8 @@ public static class JSONObjectExtensions
             return def;
         try
         {
-            return jToken.Value<string>();
+            string s = jToken.Value<string>();      // defend against json having a null
+            return s != null ? s : def;
         }
         catch { return def; }
     }

@@ -245,7 +245,9 @@ namespace EDDiscovery.UserControls
                 {
                     //System.Diagnostics.Debug.WriteLine("Auto Sel");
                     dataGridViewTravel.ClearSelection();
-                    dataGridViewTravel.CurrentCell = dataGridViewTravel.Rows[0].Cells[1];       // its the current cell which needs to be set, moves the row marker as well
+                    int rowno = dataGridViewTravel.Rows.GetFirstRow(DataGridViewElementStates.Visible);
+                    if (rowno != -1)
+                        dataGridViewTravel.CurrentCell = dataGridViewTravel.Rows[rowno].Cells[1];       // its the current cell which needs to be set, moves the row marker as well
 
                     FireChangeSelection();
                 }
@@ -735,9 +737,9 @@ namespace EDDiscovery.UserControls
             {
                 HistoryEntry sp = (HistoryEntry)r.Cells[TravelHistoryColumns.HistoryTag].Tag;
 
-                if (!sp.System.name.Equals(lastname))
+                if (!sp.System.Name.Equals(lastname))
                 {
-                    lastname = sp.System.name;
+                    lastname = sp.System.Name;
                     systemnamelist.Add(lastname);
                 }
             }
@@ -764,14 +766,14 @@ namespace EDDiscovery.UserControls
         {
             this.Cursor = Cursors.WaitCursor;
             EliteDangerousCore.EDSM.EDSMClass edsm = new EDSMClass();
-            long? id_edsm = rightclicksystem.System?.id_edsm;
+            long? id_edsm = rightclicksystem.System?.EDSMID;
 
             if (id_edsm <= 0)
             {
                 id_edsm = null;
             }
 
-            if (!edsm.ShowSystemInEDSM(rightclicksystem.System.name, id_edsm))
+            if (!edsm.ShowSystemInEDSM(rightclicksystem.System.Name, id_edsm))
                 ExtendedControls.MessageBoxTheme.Show(FindForm(), "System could not be found - has not been synched or EDSM is unavailable");
 
             this.Cursor = Cursors.Default;
@@ -797,7 +799,7 @@ namespace EDDiscovery.UserControls
                 for (int i = selindex - 1; i >= 0; i--)
                 {
                     var jent = jents[i];
-                    if (jent.EdsmID != rightclicksystem.System.id_edsm || jent.EventTypeID == JournalTypeEnum.Died)
+                    if (jent.EdsmID != rightclicksystem.System.EDSMID || jent.EventTypeID == JournalTypeEnum.Died)
                         break;
                     firstrow = i;
                     if (jent.EventTypeID == JournalTypeEnum.FSDJump)
@@ -808,7 +810,7 @@ namespace EDDiscovery.UserControls
             for (int i = rightclickrow + 1; i < dataGridViewTravel.RowCount; i++)
             {
                 var jent = jents[i];
-                if (jent.EdsmID != rightclicksystem.System.id_edsm || jent.EventTypeID == JournalTypeEnum.FSDJump)
+                if (jent.EdsmID != rightclicksystem.System.EDSMID || jent.EventTypeID == JournalTypeEnum.FSDJump)
                     break;
                 lastrow = i;
                 if (jent.EventTypeID == JournalTypeEnum.Died)
@@ -898,7 +900,7 @@ namespace EDDiscovery.UserControls
         private void writeEventInfoToLogDebugToolStripMenuItem_Click(object sender, EventArgs e)        //DEBUG ONLY
         {
             Conditions.ConditionVariables cv = new Conditions.ConditionVariables();
-            cv.AddPropertiesFieldsOfClass(rightclicksystem.journalEntry, "", new Type[] { typeof(System.Drawing.Bitmap), typeof(Newtonsoft.Json.Linq.JObject) }, 5);
+            cv.AddPropertiesFieldsOfClass(rightclicksystem.journalEntry, "", new Type[] { typeof(System.Drawing.Image), typeof(System.Drawing.Icon), typeof(System.Drawing.Bitmap), typeof(Newtonsoft.Json.Linq.JObject) }, 5);
             discoveryform.LogLine(cv.ToString(separ: Environment.NewLine));
             if (rightclicksystem.ShipInformation != null)
                 discoveryform.LogLine(rightclicksystem.ShipInformation.ToString());
@@ -1023,7 +1025,7 @@ namespace EDDiscovery.UserControls
                         return new Object[] {
                             dataGridViewTravel.Rows[r].Cells[0].Value,
                             he.journalEntry.EventTypeStr,
-                            (he.System != null) ? he.System.name : "Unknown",    // paranoia
+                            (he.System != null) ? he.System.Name : "Unknown",    // paranoia
                             he.WhereAmI,
                             he.ShipInformation != null ? he.ShipInformation.Name : "Unknown",
                             he.EventSummary,
@@ -1034,12 +1036,12 @@ namespace EDDiscovery.UserControls
                             he.isTravelling ? he.TravelledSeconds.ToString() : "",
                             he.isTravelling ? he.Travelledjumps.ToStringInvariant() : "",
                             he.isTravelling ? he.TravelledMissingjump.ToStringInvariant() : "",
-                            he.System.x,
-                            he.System.y,
-                            he.System.z,
+                            he.System.X,
+                            he.System.Y,
+                            he.System.Z,
                             he.Journalid,
-                            he.System.id_edsm,
-                            he.System.id_eddb,
+                            he.System.EDSMID,
+                            he.System.EDDBID,
                         };
                     };
 
