@@ -27,6 +27,7 @@ using EliteDangerousCore.EDSM;
 using EliteDangerousCore.EDDN;
 using EliteDangerousCore.DB;
 using EliteDangerousCore;
+using System.IO;
 
 namespace EDDiscovery.UserControls
 {
@@ -464,7 +465,7 @@ namespace EDDiscovery.UserControls
         private void buttonExtExcel_Click(object sender, EventArgs e)
         {
             Forms.ExportForm frm = new Forms.ExportForm();
-            frm.Init(new string[] { "Export Current View" });
+            frm.Init(new string[] { "Export Current View" }, allowRawJournalExport: true);
 
             if (frm.ShowDialog(this.FindForm()) == DialogResult.OK)
             {
@@ -489,7 +490,12 @@ namespace EDDiscovery.UserControls
                     {
                         HistoryEntry he = dataGridViewJournal.Rows[r].Cells[JournalHistoryColumns.HistoryTag].Tag as HistoryEntry;
                         DataGridViewRow rw = dataGridViewJournal.Rows[r];
-                        return new Object[] { rw.Cells[0].Value, rw.Cells[2].Value, rw.Cells[3].Value };
+                        if (frm.ExportAsJournals)
+                        {
+                            return new Object[] { he.journalEntry.GetJson()?.ToString() };
+                        }
+                        else
+                            return new Object[] { rw.Cells[0].Value, rw.Cells[2].Value, rw.Cells[3].Value };
                     };
 
                     grd.GetHeader += delegate (int c)
@@ -503,7 +509,7 @@ namespace EDDiscovery.UserControls
                             System.Diagnostics.Process.Start(frm.Path);
                     }
                     else
-                        ExtendedControls.MessageBoxTheme.Show(this.FindForm(), "Failed to write to " + frm.Path, "Export Failed", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                        ExtendedControls.MessageBoxTheme.Show(this.FindForm(), "Failed to write to " + frm.Path, "Export Failed", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);   
                 }
             }
         }
