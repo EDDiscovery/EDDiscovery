@@ -18,6 +18,7 @@ namespace EDDiscovery.Forms
         public bool Comma { get { return radioButtonComma.Checked; } }
         public bool AutoOpen { get { return checkBoxCustomAutoOpen.Checked; } }
         public bool IncludeHeader { get { return checkBoxIncludeHeader.Checked; } }
+        public bool ExportAsJournals {  get { return checkBoxRawJournal.Checked; } }
         public string Path { get; private set; }
 
         private Font font;
@@ -27,7 +28,7 @@ namespace EDDiscovery.Forms
             InitializeComponent();
         }
 
-        public void Init(string[] exportlist, bool disablestartendtime = false)
+        public void Init(string[] exportlist, bool disablestartendtime = false, bool allowRawJournalExport = false)
         {
             comboBoxCustomExportType.Items.AddRange(exportlist);
             customDateTimePickerFrom.Value = new DateTime(2014, 11, 22, 4, 0, 0, DateTimeKind.Utc); //Gamma start
@@ -40,6 +41,7 @@ namespace EDDiscovery.Forms
 
             checkBoxIncludeHeader.Checked = EliteDangerousCore.DB.SQLiteConnectionUser.GetSettingBool("ExportFormIncludeHeader", true);
             checkBoxCustomAutoOpen.Checked = EliteDangerousCore.DB.SQLiteConnectionUser.GetSettingBool("ExportFormOpenExcel", true);
+            checkBoxRawJournal.Checked = EliteDangerousCore.DB.SQLiteConnectionUser.GetSettingBool("ExportAsJournals", true);
 
             comboBoxCustomExportType.SelectedIndex = 0;
 
@@ -56,6 +58,7 @@ namespace EDDiscovery.Forms
                 panelOuter.Height -= d;
                 Height -= d;
             }
+            checkBoxRawJournal.Visible = checkBoxRawJournal.Enabled = allowRawJournalExport;
         }
 
         private void buttonCancel_Click(object sender, EventArgs e)
@@ -74,13 +77,14 @@ namespace EDDiscovery.Forms
         {
             EliteDangerousCore.DB.SQLiteConnectionUser.PutSettingBool("ExportFormIncludeHeader", checkBoxIncludeHeader.Checked);
             EliteDangerousCore.DB.SQLiteConnectionUser.PutSettingBool("ExportFormOpenExcel", checkBoxCustomAutoOpen.Checked);
+            EliteDangerousCore.DB.SQLiteConnectionUser.PutSettingBool("ExportAsJournals", checkBoxRawJournal.Checked);
 
             SelectedIndex = comboBoxCustomExportType.SelectedIndex;
 
             SaveFileDialog dlg = new SaveFileDialog();
 
-            dlg.Filter = "CSV export| *.csv";
-            dlg.Title = "Export current History view to Excel (csv)";
+            dlg.Filter = ExportAsJournals ? "Journal export| *.log" : "CSV export| *.csv";
+            dlg.Title = $"Export current History view to {(ExportAsJournals ? "Journal file" : "Excel(csv)")}";
 
             if (dlg.ShowDialog(this) == DialogResult.OK)
             {
@@ -113,6 +117,17 @@ namespace EDDiscovery.Forms
         private void panel_minimize_Click(object sender, EventArgs e)
         {
             this.WindowState = FormWindowState.Minimized;
+        }
+
+        private void checkBoxRawJournal_CheckedChanged(object sender, EventArgs e)
+        {
+            if (((ExtendedControls.CheckBoxCustom)sender).Checked)
+            {
+                checkBoxIncludeHeader.Checked = false;
+                checkBoxIncludeHeader.Enabled = false;
+            }
+            else
+                checkBoxIncludeHeader.Enabled = true;
         }
     }
 }
