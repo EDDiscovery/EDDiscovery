@@ -265,9 +265,6 @@ namespace EDDiscovery.UserControls
             // 
             // buttonExtExcel
             // 
-            this.buttonExtExcel.BorderColorScaling = 1.25F;
-            this.buttonExtExcel.ButtonColorScaling = 0.5F;
-            this.buttonExtExcel.ButtonDisabledScaling = 0.5F;
             this.buttonExtExcel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonExtExcel.Image = global::EDDiscovery.Icons.Controls.JournalGrid_ExportToExcel;
             this.buttonExtExcel.Location = new System.Drawing.Point(606, 4);
@@ -300,9 +297,6 @@ namespace EDDiscovery.UserControls
             // 
             // buttonField
             // 
-            this.buttonField.BorderColorScaling = 1.25F;
-            this.buttonField.ButtonColorScaling = 0.5F;
-            this.buttonField.ButtonDisabledScaling = 0.5F;
             this.buttonField.Location = new System.Drawing.Point(525, 3);
             this.buttonField.Name = "buttonField";
             this.buttonField.Size = new System.Drawing.Size(75, 23);
@@ -315,10 +309,12 @@ namespace EDDiscovery.UserControls
             // 
             this.textBoxFilter.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
             this.textBoxFilter.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
+            this.textBoxFilter.BackErrorColor = System.Drawing.Color.Red;
             this.textBoxFilter.BorderColor = System.Drawing.Color.Transparent;
             this.textBoxFilter.BorderColorScaling = 0.5F;
             this.textBoxFilter.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBoxFilter.ControlBackground = System.Drawing.SystemColors.Control;
+            this.textBoxFilter.InErrorCondition = false;
             this.textBoxFilter.Location = new System.Drawing.Point(278, 6);
             this.textBoxFilter.Multiline = false;
             this.textBoxFilter.Name = "textBoxFilter";
@@ -344,9 +340,6 @@ namespace EDDiscovery.UserControls
             // 
             // buttonFilter
             // 
-            this.buttonFilter.BorderColorScaling = 1.25F;
-            this.buttonFilter.ButtonColorScaling = 0.5F;
-            this.buttonFilter.ButtonDisabledScaling = 0.5F;
             this.buttonFilter.Location = new System.Drawing.Point(444, 3);
             this.buttonFilter.Name = "buttonFilter";
             this.buttonFilter.Size = new System.Drawing.Size(75, 23);
