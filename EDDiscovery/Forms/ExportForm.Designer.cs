@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.panelBottom = new System.Windows.Forms.Panel();
+            this.checkBoxRawJournal = new ExtendedControls.CheckBoxCustom();
             this.buttonCancel = new ExtendedControls.ButtonExt();
             this.label1 = new System.Windows.Forms.Label();
             this.radioButtonSemiColon = new ExtendedControls.RadioButtonCustom();
@@ -49,6 +50,7 @@
             // 
             // panelBottom
             // 
+            this.panelBottom.Controls.Add(this.checkBoxRawJournal);
             this.panelBottom.Controls.Add(this.buttonCancel);
             this.panelBottom.Controls.Add(this.label1);
             this.panelBottom.Controls.Add(this.radioButtonSemiColon);
@@ -61,11 +63,26 @@
             this.panelBottom.Size = new System.Drawing.Size(257, 133);
             this.panelBottom.TabIndex = 0;
             // 
+            // checkBoxRawJournal
+            // 
+            this.checkBoxRawJournal.AutoSize = true;
+            this.checkBoxRawJournal.CheckBoxColor = System.Drawing.Color.Gray;
+            this.checkBoxRawJournal.CheckBoxInnerColor = System.Drawing.Color.White;
+            this.checkBoxRawJournal.CheckColor = System.Drawing.Color.DarkBlue;
+            this.checkBoxRawJournal.FontNerfReduction = 0.5F;
+            this.checkBoxRawJournal.ImageButtonDisabledScaling = 0.5F;
+            this.checkBoxRawJournal.Location = new System.Drawing.Point(146, 40);
+            this.checkBoxRawJournal.MouseOverColor = System.Drawing.Color.CornflowerBlue;
+            this.checkBoxRawJournal.Name = "checkBoxRawJournal";
+            this.checkBoxRawJournal.Size = new System.Drawing.Size(98, 17);
+            this.checkBoxRawJournal.TabIndex = 6;
+            this.checkBoxRawJournal.Text = "Export Journals";
+            this.checkBoxRawJournal.TickBoxReductionSize = 10;
+            this.checkBoxRawJournal.UseVisualStyleBackColor = true;
+            this.checkBoxRawJournal.CheckedChanged += new System.EventHandler(this.checkBoxRawJournal_CheckedChanged);
+            // 
             // buttonCancel
             // 
-            this.buttonCancel.BorderColorScaling = 1.25F;
-            this.buttonCancel.ButtonColorScaling = 0.5F;
-            this.buttonCancel.ButtonDisabledScaling = 0.5F;
             this.buttonCancel.Location = new System.Drawing.Point(98, 106);
             this.buttonCancel.Name = "buttonCancel";
             this.buttonCancel.Size = new System.Drawing.Size(75, 23);
@@ -81,13 +98,13 @@
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(77, 13);
             this.label1.TabIndex = 2;
-            this.label1.Text = "CVS Seperator";
+            this.label1.Text = "CSV Separator";
             // 
             // radioButtonSemiColon
             // 
             this.radioButtonSemiColon.AutoSize = true;
             this.radioButtonSemiColon.FontNerfReduction = 0.5F;
-            this.radioButtonSemiColon.Location = new System.Drawing.Point(146, 70);
+            this.radioButtonSemiColon.Location = new System.Drawing.Point(12, 84);
             this.radioButtonSemiColon.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.radioButtonSemiColon.Name = "radioButtonSemiColon";
             this.radioButtonSemiColon.RadioButtonColor = System.Drawing.Color.Gray;
@@ -102,9 +119,6 @@
             // 
             // buttonExport
             // 
-            this.buttonExport.BorderColorScaling = 1.25F;
-            this.buttonExport.ButtonColorScaling = 0.5F;
-            this.buttonExport.ButtonDisabledScaling = 0.5F;
             this.buttonExport.Location = new System.Drawing.Point(179, 106);
             this.buttonExport.Name = "buttonExport";
             this.buttonExport.Size = new System.Drawing.Size(75, 23);
@@ -117,7 +131,7 @@
             // 
             this.radioButtonComma.AutoSize = true;
             this.radioButtonComma.FontNerfReduction = 0.5F;
-            this.radioButtonComma.Location = new System.Drawing.Point(146, 45);
+            this.radioButtonComma.Location = new System.Drawing.Point(12, 61);
             this.radioButtonComma.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.radioButtonComma.Name = "radioButtonComma";
             this.radioButtonComma.RadioButtonColor = System.Drawing.Color.Gray;
@@ -310,5 +324,6 @@
         private ExtendedControls.CheckBoxCustom checkBoxCustomAutoOpen;
         private ExtendedControls.ButtonExt buttonExport;
         private System.Windows.Forms.Panel panelOuter;
+        private ExtendedControls.CheckBoxCustom checkBoxRawJournal;
     }
 }
