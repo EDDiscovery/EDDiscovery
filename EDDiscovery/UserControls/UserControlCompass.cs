@@ -51,16 +51,16 @@ namespace EDDiscovery.UserControls
         {
             discoveryform.OnNewEntry += Display;
             discoveryform.OnNewUIEvent += OnNewUIEvent;
-            textBoxTargetLatitude.Text = GetSettingString(DbLatSave, "");
-            textBoxTargetLongitude.Text = GetSettingString(DbLongSave, "");
+            numberBoxTargetLatitude.ValueNoChange = GetSettingDouble(DbLatSave, 0);
+            numberBoxTargetLongitude.ValueNoChange = GetSettingDouble(DbLongSave, 0);
             autoHideTargetCoords = GetSettingBool(DbHideSave, false);
             checkBoxHideTransparent.Checked = autoHideTargetCoords;
         }
 
         public override void Closing()
         {
-            PutSettingString(DbLatSave, textBoxTargetLatitude.Text);
-            PutSettingString(DbLongSave, textBoxTargetLongitude.Text);
+            PutSettingDouble(DbLatSave, numberBoxTargetLatitude.Value);
+            PutSettingDouble(DbLongSave, numberBoxTargetLongitude.Value);
             PutSettingBool(DbHideSave, autoHideTargetCoords);
             discoveryform.OnNewEntry -= Display;
             discoveryform.OnNewUIEvent -= OnNewUIEvent;
@@ -74,19 +74,19 @@ namespace EDDiscovery.UserControls
         public override void SetTransparency(bool on, Color curcol)
         {
             labelExtTargetLong.BackColor = labelTargetLat.BackColor = curcol;
-            textBoxTargetLatitude.BackColor = textBoxTargetLongitude.BackColor = curcol;
+            numberBoxTargetLatitude.BackColor = numberBoxTargetLongitude.BackColor = curcol;
             BackColor = curcol;
-            if (on && autoHideTargetCoords && textBoxTargetLatitude.Visible)
+            if (on && autoHideTargetCoords && numberBoxTargetLatitude.Visible)
             {
                 labelExtTargetLong.Visible = labelTargetLat.Visible = false;
-                textBoxTargetLatitude.Visible = textBoxTargetLongitude.Visible = checkBoxHideTransparent.Visible = false;
-                pictureBoxCompass.Top = textBoxTargetLongitude.Top;
+                numberBoxTargetLatitude.Visible = numberBoxTargetLongitude.Visible = checkBoxHideTransparent.Visible = false;
+                pictureBoxCompass.Top = numberBoxTargetLongitude.Top;
             }
-            if (!on && autoHideTargetCoords && !textBoxTargetLatitude.Visible)
+            if (!on && autoHideTargetCoords && !numberBoxTargetLatitude.Visible)
             {
                 labelExtTargetLong.Visible = labelTargetLat.Visible = true;
-                textBoxTargetLatitude.Visible = textBoxTargetLongitude.Visible = checkBoxHideTransparent.Visible = true;
-                pictureBoxCompass.Top = textBoxTargetLongitude.Top + textBoxTargetLongitude.Height + 3;
+                numberBoxTargetLatitude.Visible = numberBoxTargetLongitude.Visible = checkBoxHideTransparent.Visible = true;
+                pictureBoxCompass.Top = numberBoxTargetLongitude.Top + numberBoxTargetLongitude.Height + 3;
             }
             Display();
         }
@@ -155,14 +155,9 @@ namespace EDDiscovery.UserControls
         
         private void Display()
         {
-            double? targetlat = null;
-            double? targetlong = null;
-            double x, y;
-            if (Double.TryParse(textBoxTargetLatitude.Text, out x))
-                targetlat = x;
-            if (Double.TryParse(textBoxTargetLongitude.Text, out y))
-                targetlong = y;
-
+            double? targetlat = numberBoxTargetLatitude.Value;
+            double? targetlong = numberBoxTargetLongitude.Value;
+            
             targetBearing = CalculateBearing(targetlat, targetlong);
             targetDistance = CalculateDistance(targetlat, targetlong);
             DrawCompassImage();
@@ -184,7 +179,7 @@ namespace EDDiscovery.UserControls
             Font displayFont = discoveryform.theme.GetFont;
             PictureBoxHotspot.ImageElement compass;
             const int margin = 3;
-            
+
             pictureBoxCompass.ClearImageList();
             if (heading.HasValue)
             {
@@ -275,8 +270,8 @@ namespace EDDiscovery.UserControls
                 compass = pictureBoxCompass.AddTextAutoSize(new Point(0, 2), s, "Surface coordinates unavailable", displayFont, textcolour, backcolour, 1.0F);
             }
             RevertToNormalSize();
-            RequestTemporaryResize(new Size(Max(compass.img.Width + pictureBoxCompass.Left, textBoxTargetLatitude.Visible ? checkBoxHideTransparent.Right + 3 : 0), 
-                compass.img.Height + (textBoxTargetLatitude.Visible ? textBoxTargetLatitude.Height + 6 : 0)));
+            RequestTemporaryResize(new Size(Max(compass.img.Width + pictureBoxCompass.Left, numberBoxTargetLatitude.Visible ? checkBoxHideTransparent.Right + 3 : 0), 
+                compass.img.Height + (numberBoxTargetLatitude.Visible ? numberBoxTargetLatitude.Height + 6 : 0)));
         }
 
         private double? CalculateBearing(double? targetLat, double? targetLong)

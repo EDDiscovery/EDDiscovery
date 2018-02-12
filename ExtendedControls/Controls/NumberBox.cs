@@ -197,7 +197,7 @@ namespace ExtendedControls
         {
             return (char.IsDigit(c) || c == 8 ||
                 (c == FormatCulture.NumberFormat.CurrencyDecimalSeparator[0] && Text.IndexOf(FormatCulture.NumberFormat.CurrencyDecimalSeparator) == -1) ||
-                (c == FormatCulture.NumberFormat.NegativeSign[0] && Text.Length == 0 && Minimum < 0));
+                (c == FormatCulture.NumberFormat.NegativeSign[0] && SelectionStart == 0 && Minimum < 0));
         }
     }
 
@@ -227,7 +227,7 @@ namespace ExtendedControls
         protected override bool AllowedChar(char c)
         {
             return (char.IsDigit(c) || c == 8 ||
-                (c == FormatCulture.NumberFormat.NegativeSign[0] && Text.Length == 0 && Minimum < 0));
+                (c == FormatCulture.NumberFormat.NegativeSign[0] && SelectionStart == 0 && Minimum < 0));
         }
     }
 }
