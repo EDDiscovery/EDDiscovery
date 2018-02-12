@@ -410,6 +410,7 @@ namespace EliteDangerousCore.EDSM
                             JObject result = results[i];
                             int msgnr = result["msgnum"].Int();
                             int systemId = result["systemId"].Int();
+                            bool systemCreated = result["systemCreated"].Bool();
 
                             if ((msgnr >= 100 && msgnr < 200) || msgnr == 500)
                             {
@@ -419,6 +420,11 @@ namespace EliteDangerousCore.EDSM
                                     {
                                         he.System.EDSMID = systemId;
                                         JournalEntry.UpdateEDSMIDPosJump(he.Journalid, he.System, false, 0, cn, txn);
+                                    }
+
+                                    if (systemCreated)
+                                    {
+                                        he.SetFirstDiscover(true);
                                     }
                                 }
 
