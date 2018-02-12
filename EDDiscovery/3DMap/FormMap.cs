@@ -1399,7 +1399,7 @@ namespace EDDiscovery
             {
                 helpDialog = new ExtendedControls.InfoForm() { TopMost = this.TopMost };
                 helpDialog.Info("3D Map Help", Icon.ExtractAssociatedIcon(System.Reflection.Assembly.GetExecutingAssembly().Location),
-                            Properties.Resources.maphelp3d, new Font("Microsoft Sans Serif", 10), new int[] { 50, 200, 400 });
+                            Properties.Resources.maphelp3d, new int[] { 50, 200, 400 });
                 helpDialog.Show();
                 helpDialog.Disposed += (s, ea) => helpDialog = null;
             }

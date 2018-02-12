@@ -176,7 +176,7 @@ namespace EDDiscovery.UserControls
             UserControlContainerResizable uccr = new UserControlContainerResizable();
 
             PanelInformation.PanelInfo pi = PanelInformation.GetPanelInfoByType(uccb.GetType());
-            uccr.Init(uccb,pi.WindowTitlePrefix);
+            uccr.Init(uccb,pi.WindowTitle);
             uccr.ResizeStart += ResizeStart;
             uccr.ResizeEnd += ResizeEnd;
             uccr.BorderColor = discoveryform.theme.GridBorderLines;
@@ -205,11 +205,6 @@ namespace EDDiscovery.UserControls
             uccr.Size = size;
 
             uccb.InitialDisplay();
-
-            if (uccb is UserControlTravelGrid)
-                (uccb as UserControlTravelGrid).ExtraIcons(true, false);
-            if (uccb is UserControlJournalGrid)
-                (uccb as UserControlJournalGrid).ExtraIcons(true, false);
 
             return uccr;
         }
@@ -300,7 +295,7 @@ namespace EDDiscovery.UserControls
             popoutdropdown = new ExtendedControls.DropDownCustom("", true);
 
             popoutdropdown.ItemHeight = 26;
-            popoutdropdown.Items = PanelInformation.GetPanelToolTips().ToList();
+            popoutdropdown.Items = PanelInformation.GetPanelDescriptions().ToList();
             popoutdropdown.ImageItems = PanelInformation.GetPanelImages().ToList();
             popoutdropdown.FlatStyle = FlatStyle.Popup;
             popoutdropdown.Activated += (s, ea) =>

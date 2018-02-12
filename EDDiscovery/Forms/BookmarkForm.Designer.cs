@@ -47,29 +47,31 @@ namespace EDDiscovery.Forms
             this.label2 = new System.Windows.Forms.Label();
             this.labelBookmarkNotes = new System.Windows.Forms.Label();
             this.labelTimeMade = new System.Windows.Forms.Label();
-            this.textBoxNotes = new System.Windows.Forms.TextBox();
-            this.textBoxName = new System.Windows.Forms.TextBox();
-            this.textBoxX = new System.Windows.Forms.TextBox();
-            this.textBoxY = new System.Windows.Forms.TextBox();
-            this.textBoxZ = new System.Windows.Forms.TextBox();
+            this.textBoxNotes = new ExtendedControls.RichTextBoxScroll();
+            this.textBoxName = new ExtendedControls.TextBoxBorder();
+            this.textBoxX = new ExtendedControls.TextBoxBorder();
+            this.textBoxY = new ExtendedControls.TextBoxBorder();
+            this.textBoxZ = new ExtendedControls.TextBoxBorder();
             this.label3 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
-            this.textBoxTime = new System.Windows.Forms.TextBox();
-            this.buttonOK = new System.Windows.Forms.Button();
-            this.buttonCancel = new System.Windows.Forms.Button();
-            this.buttonDelete = new System.Windows.Forms.Button();
+            this.textBoxTime = new ExtendedControls.TextBoxBorder();
+            this.buttonOK = new ExtendedControls.ButtonExt();
+            this.buttonCancel = new ExtendedControls.ButtonExt();
+            this.buttonDelete = new ExtendedControls.ButtonExt();
             this.labelTravelNote = new System.Windows.Forms.Label();
             this.labelTravelNoteEdit = new System.Windows.Forms.Label();
-            this.textBoxTravelNote = new System.Windows.Forms.TextBox();
-            this.checkBoxTarget = new System.Windows.Forms.CheckBox();
-            this.buttonEDSM = new System.Windows.Forms.Button();
+            this.textBoxTravelNote = new ExtendedControls.TextBoxBorder();
+            this.checkBoxTarget = new ExtendedControls.CheckBoxCustom();
+            this.buttonEDSM = new ExtendedControls.ButtonExt();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(13, 16);
+            this.label1.Location = new System.Drawing.Point(9, 16);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(35, 13);
             this.label1.TabIndex = 0;
@@ -78,7 +80,7 @@ namespace EDDiscovery.Forms
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(13, 46);
+            this.label2.Location = new System.Drawing.Point(9, 46);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(66, 13);
             this.label2.TabIndex = 0;
@@ -86,17 +88,16 @@ namespace EDDiscovery.Forms
             // 
             // labelBookmarkNotes
             // 
-            this.labelBookmarkNotes.AutoSize = true;
-            this.labelBookmarkNotes.Location = new System.Drawing.Point(13, 147);
+            this.labelBookmarkNotes.Location = new System.Drawing.Point(9, 147);
             this.labelBookmarkNotes.Name = "labelBookmarkNotes";
-            this.labelBookmarkNotes.Size = new System.Drawing.Size(86, 13);
+            this.labelBookmarkNotes.Size = new System.Drawing.Size(121, 69);
             this.labelBookmarkNotes.TabIndex = 0;
             this.labelBookmarkNotes.Text = "Bookmark Notes";
             // 
             // labelTimeMade
             // 
             this.labelTimeMade.AutoSize = true;
-            this.labelTimeMade.Location = new System.Drawing.Point(13, 76);
+            this.labelTimeMade.Location = new System.Drawing.Point(9, 76);
             this.labelTimeMade.Name = "labelTimeMade";
             this.labelTimeMade.Size = new System.Drawing.Size(60, 13);
             this.labelTimeMade.TabIndex = 0;
@@ -104,53 +105,127 @@ namespace EDDiscovery.Forms
             // 
             // textBoxNotes
             // 
-            this.textBoxNotes.Location = new System.Drawing.Point(116, 147);
-            this.textBoxNotes.Multiline = true;
+            this.textBoxNotes.BorderColor = System.Drawing.Color.Transparent;
+            this.textBoxNotes.BorderColorScaling = 0.5F;
+            this.textBoxNotes.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.textBoxNotes.HideScrollBar = true;
+            this.textBoxNotes.Location = new System.Drawing.Point(139, 147);
             this.textBoxNotes.Name = "textBoxNotes";
-            this.textBoxNotes.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.textBoxNotes.Size = new System.Drawing.Size(336, 115);
+            this.textBoxNotes.ReadOnly = false;
+            this.textBoxNotes.ScrollBarArrowBorderColor = System.Drawing.Color.LightBlue;
+            this.textBoxNotes.ScrollBarArrowButtonColor = System.Drawing.Color.LightGray;
+            this.textBoxNotes.ScrollBarBackColor = System.Drawing.SystemColors.Control;
+            this.textBoxNotes.ScrollBarBorderColor = System.Drawing.Color.White;
+            this.textBoxNotes.ScrollBarFlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.textBoxNotes.ScrollBarForeColor = System.Drawing.SystemColors.ControlText;
+            this.textBoxNotes.ScrollBarMouseOverButtonColor = System.Drawing.Color.Green;
+            this.textBoxNotes.ScrollBarMousePressedButtonColor = System.Drawing.Color.Red;
+            this.textBoxNotes.ScrollBarSliderColor = System.Drawing.Color.DarkGray;
+            this.textBoxNotes.ScrollBarThumbBorderColor = System.Drawing.Color.Yellow;
+            this.textBoxNotes.ScrollBarThumbButtonColor = System.Drawing.Color.DarkBlue;
+            this.textBoxNotes.ScrollBarWidth = 20;
+            this.textBoxNotes.ShowLineCount = false;
+            this.textBoxNotes.Size = new System.Drawing.Size(336, 103);
             this.textBoxNotes.TabIndex = 0;
+            this.textBoxNotes.TextBoxBackColor = System.Drawing.SystemColors.Control;
+            this.textBoxNotes.TextBoxForeColor = System.Drawing.SystemColors.ControlText;
             // 
             // textBoxName
             // 
-            this.textBoxName.Location = new System.Drawing.Point(116, 13);
+            this.textBoxName.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
+            this.textBoxName.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
+            this.textBoxName.BackErrorColor = System.Drawing.Color.Red;
+            this.textBoxName.BorderColor = System.Drawing.Color.Transparent;
+            this.textBoxName.BorderColorScaling = 0.5F;
+            this.textBoxName.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.textBoxName.ControlBackground = System.Drawing.SystemColors.Control;
+            this.textBoxName.InErrorCondition = false;
+            this.textBoxName.Location = new System.Drawing.Point(139, 13);
+            this.textBoxName.Multiline = false;
             this.textBoxName.Name = "textBoxName";
             this.textBoxName.ReadOnly = true;
-            this.textBoxName.Size = new System.Drawing.Size(246, 20);
+            this.textBoxName.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.textBoxName.SelectionLength = 0;
+            this.textBoxName.SelectionStart = 0;
+            this.textBoxName.Size = new System.Drawing.Size(336, 20);
             this.textBoxName.TabIndex = 3;
+            this.textBoxName.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.textBoxName.WordWrap = true;
             this.textBoxName.TextChanged += new System.EventHandler(this.textBox_TextChanged);
             // 
             // textBoxX
             // 
-            this.textBoxX.Location = new System.Drawing.Point(116, 43);
+            this.textBoxX.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
+            this.textBoxX.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
+            this.textBoxX.BackErrorColor = System.Drawing.Color.Red;
+            this.textBoxX.BorderColor = System.Drawing.Color.Transparent;
+            this.textBoxX.BorderColorScaling = 0.5F;
+            this.textBoxX.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.textBoxX.ControlBackground = System.Drawing.SystemColors.Control;
+            this.textBoxX.InErrorCondition = false;
+            this.textBoxX.Location = new System.Drawing.Point(139, 43);
+            this.textBoxX.Multiline = false;
             this.textBoxX.Name = "textBoxX";
             this.textBoxX.ReadOnly = true;
-            this.textBoxX.Size = new System.Drawing.Size(54, 20);
+            this.textBoxX.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.textBoxX.SelectionLength = 0;
+            this.textBoxX.SelectionStart = 0;
+            this.textBoxX.Size = new System.Drawing.Size(80, 20);
             this.textBoxX.TabIndex = 4;
+            this.textBoxX.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.textBoxX.WordWrap = true;
             this.textBoxX.TextChanged += new System.EventHandler(this.textBox_TextChanged);
             // 
             // textBoxY
             // 
-            this.textBoxY.Location = new System.Drawing.Point(209, 43);
+            this.textBoxY.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
+            this.textBoxY.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
+            this.textBoxY.BackErrorColor = System.Drawing.Color.Red;
+            this.textBoxY.BorderColor = System.Drawing.Color.Transparent;
+            this.textBoxY.BorderColorScaling = 0.5F;
+            this.textBoxY.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.textBoxY.ControlBackground = System.Drawing.SystemColors.Control;
+            this.textBoxY.InErrorCondition = false;
+            this.textBoxY.Location = new System.Drawing.Point(273, 43);
+            this.textBoxY.Multiline = false;
             this.textBoxY.Name = "textBoxY";
             this.textBoxY.ReadOnly = true;
-            this.textBoxY.Size = new System.Drawing.Size(54, 20);
+            this.textBoxY.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.textBoxY.SelectionLength = 0;
+            this.textBoxY.SelectionStart = 0;
+            this.textBoxY.Size = new System.Drawing.Size(80, 20);
             this.textBoxY.TabIndex = 5;
+            this.textBoxY.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.textBoxY.WordWrap = true;
             this.textBoxY.TextChanged += new System.EventHandler(this.textBox_TextChanged);
             // 
             // textBoxZ
             // 
-            this.textBoxZ.Location = new System.Drawing.Point(308, 43);
+            this.textBoxZ.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
+            this.textBoxZ.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
+            this.textBoxZ.BackErrorColor = System.Drawing.Color.Red;
+            this.textBoxZ.BorderColor = System.Drawing.Color.Transparent;
+            this.textBoxZ.BorderColorScaling = 0.5F;
+            this.textBoxZ.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.textBoxZ.ControlBackground = System.Drawing.SystemColors.Control;
+            this.textBoxZ.InErrorCondition = false;
+            this.textBoxZ.Location = new System.Drawing.Point(395, 43);
+            this.textBoxZ.Multiline = false;
             this.textBoxZ.Name = "textBoxZ";
             this.textBoxZ.ReadOnly = true;
-            this.textBoxZ.Size = new System.Drawing.Size(54, 20);
+            this.textBoxZ.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.textBoxZ.SelectionLength = 0;
+            this.textBoxZ.SelectionStart = 0;
+            this.textBoxZ.Size = new System.Drawing.Size(80, 20);
             this.textBoxZ.TabIndex = 6;
+            this.textBoxZ.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.textBoxZ.WordWrap = true;
             this.textBoxZ.TextChanged += new System.EventHandler(this.textBox_TextChanged);
             // 
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(95, 46);
+            this.label3.Location = new System.Drawing.Point(115, 46);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(15, 13);
             this.label3.TabIndex = 0;
@@ -159,7 +234,7 @@ namespace EDDiscovery.Forms
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(188, 46);
+            this.label6.Location = new System.Drawing.Point(248, 46);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(15, 13);
             this.label6.TabIndex = 0;
@@ -168,7 +243,7 @@ namespace EDDiscovery.Forms
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(287, 46);
+            this.label7.Location = new System.Drawing.Point(370, 46);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(15, 13);
             this.label7.TabIndex = 0;
@@ -176,15 +251,29 @@ namespace EDDiscovery.Forms
             // 
             // textBoxTime
             // 
-            this.textBoxTime.Location = new System.Drawing.Point(116, 73);
+            this.textBoxTime.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
+            this.textBoxTime.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
+            this.textBoxTime.BackErrorColor = System.Drawing.Color.Red;
+            this.textBoxTime.BorderColor = System.Drawing.Color.Transparent;
+            this.textBoxTime.BorderColorScaling = 0.5F;
+            this.textBoxTime.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.textBoxTime.ControlBackground = System.Drawing.SystemColors.Control;
+            this.textBoxTime.InErrorCondition = false;
+            this.textBoxTime.Location = new System.Drawing.Point(139, 73);
+            this.textBoxTime.Multiline = false;
             this.textBoxTime.Name = "textBoxTime";
             this.textBoxTime.ReadOnly = true;
+            this.textBoxTime.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.textBoxTime.SelectionLength = 0;
+            this.textBoxTime.SelectionStart = 0;
             this.textBoxTime.Size = new System.Drawing.Size(246, 20);
             this.textBoxTime.TabIndex = 7;
+            this.textBoxTime.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.textBoxTime.WordWrap = true;
             // 
             // buttonOK
             // 
-            this.buttonOK.Location = new System.Drawing.Point(377, 361);
+            this.buttonOK.Location = new System.Drawing.Point(400, 361);
             this.buttonOK.Name = "buttonOK";
             this.buttonOK.Size = new System.Drawing.Size(75, 23);
             this.buttonOK.TabIndex = 1;
@@ -194,7 +283,7 @@ namespace EDDiscovery.Forms
             // 
             // buttonCancel
             // 
-            this.buttonCancel.Location = new System.Drawing.Point(275, 361);
+            this.buttonCancel.Location = new System.Drawing.Point(298, 361);
             this.buttonCancel.Name = "buttonCancel";
             this.buttonCancel.Size = new System.Drawing.Size(75, 23);
             this.buttonCancel.TabIndex = 2;
@@ -204,7 +293,7 @@ namespace EDDiscovery.Forms
             // 
             // buttonDelete
             // 
-            this.buttonDelete.Location = new System.Drawing.Point(17, 361);
+            this.buttonDelete.Location = new System.Drawing.Point(13, 361);
             this.buttonDelete.Name = "buttonDelete";
             this.buttonDelete.Size = new System.Drawing.Size(75, 23);
             this.buttonDelete.TabIndex = 9;
@@ -214,43 +303,62 @@ namespace EDDiscovery.Forms
             // 
             // labelTravelNote
             // 
-            this.labelTravelNote.AutoSize = true;
-            this.labelTravelNote.Location = new System.Drawing.Point(13, 280);
+            this.labelTravelNote.Location = new System.Drawing.Point(6, 254);
             this.labelTravelNote.Name = "labelTravelNote";
-            this.labelTravelNote.Size = new System.Drawing.Size(98, 13);
+            this.labelTravelNote.Size = new System.Drawing.Size(124, 49);
             this.labelTravelNote.TabIndex = 0;
             this.labelTravelNote.Text = "Travel History Note";
             // 
             // labelTravelNoteEdit
             // 
-            this.labelTravelNoteEdit.Location = new System.Drawing.Point(13, 305);
+            this.labelTravelNoteEdit.Location = new System.Drawing.Point(9, 312);
             this.labelTravelNoteEdit.Name = "labelTravelNoteEdit";
-            this.labelTravelNoteEdit.Size = new System.Drawing.Size(79, 38);
+            this.labelTravelNoteEdit.Size = new System.Drawing.Size(121, 46);
             this.labelTravelNoteEdit.TabIndex = 0;
             this.labelTravelNoteEdit.Text = "(Edit on Travel Screen)";
             // 
             // textBoxTravelNote
             // 
-            this.textBoxTravelNote.Location = new System.Drawing.Point(116, 280);
+            this.textBoxTravelNote.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
+            this.textBoxTravelNote.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
+            this.textBoxTravelNote.BackErrorColor = System.Drawing.Color.Red;
+            this.textBoxTravelNote.BorderColor = System.Drawing.Color.Transparent;
+            this.textBoxTravelNote.BorderColorScaling = 0.5F;
+            this.textBoxTravelNote.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.textBoxTravelNote.ControlBackground = System.Drawing.SystemColors.Control;
+            this.textBoxTravelNote.InErrorCondition = false;
+            this.textBoxTravelNote.Location = new System.Drawing.Point(139, 256);
             this.textBoxTravelNote.Multiline = true;
             this.textBoxTravelNote.Name = "textBoxTravelNote";
             this.textBoxTravelNote.ReadOnly = true;
-            this.textBoxTravelNote.Size = new System.Drawing.Size(336, 63);
+            this.textBoxTravelNote.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.textBoxTravelNote.SelectionLength = 0;
+            this.textBoxTravelNote.SelectionStart = 0;
+            this.textBoxTravelNote.Size = new System.Drawing.Size(336, 87);
             this.textBoxTravelNote.TabIndex = 8;
+            this.textBoxTravelNote.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.textBoxTravelNote.WordWrap = true;
             // 
             // checkBoxTarget
             // 
             this.checkBoxTarget.AutoSize = true;
-            this.checkBoxTarget.Location = new System.Drawing.Point(275, 112);
+            this.checkBoxTarget.CheckBoxColor = System.Drawing.Color.Gray;
+            this.checkBoxTarget.CheckBoxInnerColor = System.Drawing.Color.White;
+            this.checkBoxTarget.CheckColor = System.Drawing.Color.DarkBlue;
+            this.checkBoxTarget.FontNerfReduction = 0.5F;
+            this.checkBoxTarget.ImageButtonDisabledScaling = 0.5F;
+            this.checkBoxTarget.Location = new System.Drawing.Point(298, 112);
+            this.checkBoxTarget.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.checkBoxTarget.Name = "checkBoxTarget";
             this.checkBoxTarget.Size = new System.Drawing.Size(87, 17);
             this.checkBoxTarget.TabIndex = 10;
             this.checkBoxTarget.Text = "Make Target";
+            this.checkBoxTarget.TickBoxReductionSize = 10;
             this.checkBoxTarget.UseVisualStyleBackColor = true;
             // 
             // buttonEDSM
             // 
-            this.buttonEDSM.Location = new System.Drawing.Point(116, 106);
+            this.buttonEDSM.Location = new System.Drawing.Point(139, 106);
             this.buttonEDSM.Name = "buttonEDSM";
             this.buttonEDSM.Size = new System.Drawing.Size(75, 23);
             this.buttonEDSM.TabIndex = 11;
@@ -258,38 +366,50 @@ namespace EDDiscovery.Forms
             this.buttonEDSM.UseVisualStyleBackColor = true;
             this.buttonEDSM.Click += new System.EventHandler(this.buttonEDSM_Click);
             // 
+            // panel1
+            // 
+            this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel1.Controls.Add(this.textBoxName);
+            this.panel1.Controls.Add(this.buttonEDSM);
+            this.panel1.Controls.Add(this.label1);
+            this.panel1.Controls.Add(this.checkBoxTarget);
+            this.panel1.Controls.Add(this.label2);
+            this.panel1.Controls.Add(this.buttonDelete);
+            this.panel1.Controls.Add(this.label3);
+            this.panel1.Controls.Add(this.buttonCancel);
+            this.panel1.Controls.Add(this.label6);
+            this.panel1.Controls.Add(this.buttonOK);
+            this.panel1.Controls.Add(this.label7);
+            this.panel1.Controls.Add(this.textBoxZ);
+            this.panel1.Controls.Add(this.labelBookmarkNotes);
+            this.panel1.Controls.Add(this.textBoxY);
+            this.panel1.Controls.Add(this.labelTravelNote);
+            this.panel1.Controls.Add(this.textBoxX);
+            this.panel1.Controls.Add(this.labelTravelNoteEdit);
+            this.panel1.Controls.Add(this.textBoxTime);
+            this.panel1.Controls.Add(this.labelTimeMade);
+            this.panel1.Controls.Add(this.textBoxNotes);
+            this.panel1.Controls.Add(this.textBoxTravelNote);
+            this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel1.Location = new System.Drawing.Point(0, 0);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(502, 407);
+            this.panel1.TabIndex = 12;
+            this.panel1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.panel1_MouseDown);
+            // 
             // BookmarkForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(476, 400);
-            this.Controls.Add(this.buttonEDSM);
-            this.Controls.Add(this.checkBoxTarget);
-            this.Controls.Add(this.buttonDelete);
-            this.Controls.Add(this.buttonCancel);
-            this.Controls.Add(this.buttonOK);
-            this.Controls.Add(this.textBoxZ);
-            this.Controls.Add(this.textBoxY);
-            this.Controls.Add(this.textBoxX);
-            this.Controls.Add(this.textBoxTime);
-            this.Controls.Add(this.textBoxName);
-            this.Controls.Add(this.textBoxTravelNote);
-            this.Controls.Add(this.textBoxNotes);
-            this.Controls.Add(this.labelTimeMade);
-            this.Controls.Add(this.labelTravelNoteEdit);
-            this.Controls.Add(this.labelTravelNote);
-            this.Controls.Add(this.labelBookmarkNotes);
-            this.Controls.Add(this.label7);
-            this.Controls.Add(this.label6);
-            this.Controls.Add(this.label3);
-            this.Controls.Add(this.label2);
-            this.Controls.Add(this.label1);
+            this.ClientSize = new System.Drawing.Size(502, 407);
+            this.Controls.Add(this.panel1);
             this.Icon = global::EDDiscovery.Properties.Resources.edlogo_3mo_icon;
             this.Name = "BookmarkForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Create New Bookmark";
+            this.panel1.ResumeLayout(false);
+            this.panel1.PerformLayout();
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
@@ -299,22 +419,23 @@ namespace EDDiscovery.Forms
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label labelBookmarkNotes;
         private System.Windows.Forms.Label labelTimeMade;
-        private System.Windows.Forms.TextBox textBoxNotes;
-        private System.Windows.Forms.TextBox textBoxName;
-        private System.Windows.Forms.TextBox textBoxX;
-        private System.Windows.Forms.TextBox textBoxY;
-        private System.Windows.Forms.TextBox textBoxZ;
+        private ExtendedControls.RichTextBoxScroll textBoxNotes;
+        private ExtendedControls.TextBoxBorder textBoxName;
+        private ExtendedControls.TextBoxBorder textBoxX;
+        private ExtendedControls.TextBoxBorder textBoxY;
+        private ExtendedControls.TextBoxBorder textBoxZ;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Label label7;
-        private System.Windows.Forms.TextBox textBoxTime;
-        private System.Windows.Forms.Button buttonOK;
-        private System.Windows.Forms.Button buttonCancel;
-        private System.Windows.Forms.Button buttonDelete;
+        private ExtendedControls.TextBoxBorder textBoxTime;
+        private ExtendedControls.ButtonExt buttonOK;
+        private ExtendedControls.ButtonExt buttonCancel;
+        private ExtendedControls.ButtonExt buttonDelete;
         private System.Windows.Forms.Label labelTravelNote;
         private System.Windows.Forms.Label labelTravelNoteEdit;
-        private System.Windows.Forms.TextBox textBoxTravelNote;
-        private System.Windows.Forms.CheckBox checkBoxTarget;
-        private System.Windows.Forms.Button buttonEDSM;
+        private ExtendedControls.TextBoxBorder textBoxTravelNote;
+        private ExtendedControls.CheckBoxCustom checkBoxTarget;
+        private ExtendedControls.ButtonExt buttonEDSM;
+        private System.Windows.Forms.Panel panel1;
     }
 }

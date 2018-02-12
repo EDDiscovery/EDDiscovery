@@ -22,7 +22,10 @@ namespace ExtendedControls
     public abstract class NumberBox<T> : TextBoxBorder
     {
         public string Format { get { return format; } set { format = value; } }
+
+        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public System.Globalization.CultureInfo FormatCulture { get { return culture; } set { culture = value; } }
+
         public int DelayBeforeNotification { get; set; } = 0;
         public T Minimum { get; set; }
         public T Maximum { get; set; }
@@ -42,14 +45,15 @@ namespace ExtendedControls
             remove { Events.RemoveHandler(EVENT_VALUECHANGED, value); }
         }
 
+        public Action<bool> ValidityChanged;                    // fires if valid
+
         public T Value                                          // will fire a ValueChanged event
         {
             get { return number; }
             set
             {
                 number = value;
-                base.Text = ConvertToString(number);            // triggers change text event
-                InErrorCondition = !IsValid;
+                base.Text = ConvertToString(number);            // triggers change text event, which sets validity
             }
         }
 
@@ -122,10 +126,15 @@ namespace ExtendedControls
                         timer.Start();
                     }
 
+                    if (InErrorCondition)
+                        ValidityChanged?.Invoke(true);
+
                     InErrorCondition = false;
                 }
                 else
                 {                               // Invalid, indicate
+                    if (!InErrorCondition)
+                        ValidityChanged?.Invoke(false);
                     InErrorCondition = true;
                 }
             }

@@ -46,6 +46,12 @@ namespace ExtendedControls
             get { return null; }
             set { throw new InvalidOperationException("The BackgroundImage property is not supported by this control. Use Image instead."); }
         }
+
+        // Only Centre and Stretch is supported
+        [Category("Appearance"), DefaultValue(ImageLayout.Center),
+            Description("Determines Image size in button for Flatstyle!=Standard, Stretch or Center only")]
+        public ImageLayout ImageLayout { get { return imagelayout; } set { imagelayout = value; Invalidate(); } }
+
         /// <summary>
         /// Gets or sets a value that indicates how bright the border color will be when drawn with the
         /// <see cref="FlatStyle.Popup"/> mode, and also either being hovered by the cursor or depressed.
@@ -54,15 +60,15 @@ namespace ExtendedControls
             Description("When using FlatStyle.Popup, the FlatAppearance.BorderColor will be multiplied by this amount during a hover or click.")]
         public float BorderColorScaling
         {
-            get { return _BorderColorScaling; }
+            get { return borderColorScaling; }
             set
             {
                 if (float.IsNaN(value) || float.IsInfinity(value))
                     return;
-                else if (_BorderColorScaling != value)
+                else if (borderColorScaling != value)
                 {
-                    _BorderColorScaling = value;
-                    if (_DrawState > DrawState.Normal && FlatStyle == FlatStyle.Popup)
+                    borderColorScaling = value;
+                    if (drawState > DrawState.Normal && FlatStyle == FlatStyle.Popup)
                         Invalidate();
                 }
             }
@@ -75,14 +81,14 @@ namespace ExtendedControls
             Description("When using FlatStyle.Popup, the BackColor multiplication factor for the bottom of the background gradient.")]
         public float ButtonColorScaling
         {
-            get { return _ButtonColorScaling; }
+            get { return buttonColorScaling; }
             set
             {
                 if (float.IsNaN(value) || float.IsInfinity(value))
                     return;
-                else if (_ButtonColorScaling != value)
+                else if (buttonColorScaling != value)
                 {
-                    _ButtonColorScaling = value;
+                    buttonColorScaling = value;
                     if (FlatStyle == FlatStyle.Popup)
                         Invalidate();
                 }
@@ -96,14 +102,14 @@ namespace ExtendedControls
             Description("When using FlatStyle.Popup and not Enabled, this multiplication factor will be used for the background color.")]
         public float ButtonDisabledScaling
         {
-            get { return _ButtonDisabledScaling; }
+            get { return buttonDisabledScaling; }
             set
             {
                 if (float.IsNaN(value) || float.IsInfinity(value))
                     return;
-                else if (_ButtonDisabledScaling != value)
+                else if (buttonDisabledScaling != value)
                 {
-                    _ButtonDisabledScaling = value;
+                    buttonDisabledScaling = value;
                     if (!Enabled && FlatStyle == FlatStyle.Popup)
                         Invalidate();
                 }
@@ -129,28 +135,29 @@ namespace ExtendedControls
             if (remap == null)
                 throw new ArgumentNullException(nameof(remap));
 
-            DrawnImageAttributesEnabled?.Dispose();
-            DrawnImageAttributesDisabled?.Dispose();
+            drawnImageAttributesEnabled?.Dispose();
+            drawnImageAttributesDisabled?.Dispose();
 
-            ControlHelpersStaticFunc.ComputeDrawnPanel(out DrawnImageAttributesEnabled, out DrawnImageAttributesDisabled, _ButtonDisabledScaling, remap, colormatrix);
+            ControlHelpersStaticFunc.ComputeDrawnPanel(out drawnImageAttributesEnabled, out drawnImageAttributesDisabled, buttonDisabledScaling, remap, colormatrix);
         }
 
 
-        private ImageAttributes DrawnImageAttributesEnabled = null;         // Image override (colour etc) for background when using Image while Enabled.
-        private ImageAttributes DrawnImageAttributesDisabled = null;        // Image override (colour etc) for background when using Image while !Enabled.
+        private ImageAttributes drawnImageAttributesEnabled = null;         // Image override (colour etc) for background when using Image while Enabled.
+        private ImageAttributes drawnImageAttributesDisabled = null;        // Image override (colour etc) for background when using Image while !Enabled.
 
         private enum DrawState { Disabled = -1, Normal = 0, Hover, Click };
-        private DrawState _DrawState = DrawState.Normal;                    // The current state of our control, even if base is currently doing the painting.
+        private DrawState drawState = DrawState.Normal;                    // The current state of our control, even if base is currently doing the painting.
 
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]                   // Visible via BorderColorScaling
-        private float _BorderColorScaling = 1.25F;
+        private float borderColorScaling = 1.25F;
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]                   // Visible via ButtonColorScaling
-        private float _ButtonColorScaling = 0.5F;
+        private float buttonColorScaling = 0.5F;
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]                   // Visible via ButtonDisabledScaling
-        private float _ButtonDisabledScaling = 0.5F;
+        private float buttonDisabledScaling = 0.5F;
 
         private event PaintEventHandler _CustomPaint;                       // base.OnPaint interferes with our custom painting; mimic it to allow others in on the fun.
 
+        private ImageLayout imagelayout = ImageLayout.Center;               // new! image layout
 
         /// <summary>
         /// Releases the unmanaged resources used by the <see cref="ButtonExt"/> and optionally releases the managed
@@ -162,12 +169,12 @@ namespace ExtendedControls
         {
             if (disposing)
             {
-                DrawnImageAttributesDisabled?.Dispose();
-                DrawnImageAttributesEnabled?.Dispose();
+                drawnImageAttributesDisabled?.Dispose();
+                drawnImageAttributesEnabled?.Dispose();
             }
             _CustomPaint = null;
-            DrawnImageAttributesDisabled = null;
-            DrawnImageAttributesEnabled = null;
+            drawnImageAttributesDisabled = null;
+            drawnImageAttributesEnabled = null;
             base.Dispose(disposing);
         }
 
@@ -263,7 +270,7 @@ namespace ExtendedControls
         /// <param name="mevent">A <see cref="MouseEventArgs"/> containing the event data.</param>
         protected override void OnMouseUp(MouseEventArgs mevent)
         {
-            if (_DrawState == DrawState.Click)
+            if (drawState == DrawState.Click)
                 SetDrawState(DrawState.Hover);
 
             base.OnMouseUp(mevent);
@@ -287,15 +294,15 @@ namespace ExtendedControls
                 Rectangle buttonarea = ClientRectangle;
                 buttonarea.Inflate(-1, -1);                     // inside it.
 
-                //System.Diagnostics.Debug.WriteLine("Paint " + this.Name + " " + ClientRectangle.ToString() + " MD " + mousedown + " MO " + mouseover);
+               // System.Diagnostics.Debug.WriteLine("Paint " + this.Name + " " + ClientRectangle +" " + border + " " + buttonarea + " c " + BackColor + " " + FlatAppearance.BorderColor);
 
                 Color colBack = Color.Empty;
                 Color colBorder = Color.Empty;
-                switch (_DrawState)
+                switch (drawState)
                 {
                     case DrawState.Disabled:
-                        colBack = BackColor.Multiply(0.5F);
-                        colBorder = FlatAppearance.BorderColor.Multiply(_ButtonDisabledScaling);
+                        colBack = BackColor.Multiply(buttonDisabledScaling);
+                        colBorder = FlatAppearance.BorderColor.Multiply(buttonDisabledScaling);
                         break;
                     case DrawState.Normal:
                     default:
@@ -304,34 +311,41 @@ namespace ExtendedControls
                         break;
                     case DrawState.Hover:
                         colBack = FlatAppearance.MouseOverBackColor;
-                        colBorder = FlatAppearance.BorderColor.Multiply(_BorderColorScaling);
+                        colBorder = FlatAppearance.BorderColor.Multiply(borderColorScaling);
                         break;
                     case DrawState.Click:
                         colBack = FlatAppearance.MouseDownBackColor;
-                        colBorder = FlatAppearance.BorderColor.Multiply(_BorderColorScaling);
+                        colBorder = FlatAppearance.BorderColor.Multiply(borderColorScaling);
                         break;
 
                 }
 
-                using (var b = new LinearGradientBrush(buttonarea, colBack, colBack.Multiply(_ButtonColorScaling), 90))
-                    pe.Graphics.FillRectangle(b, buttonarea);
+                using (var b = new LinearGradientBrush(buttonarea, colBack, colBack.Multiply(buttonColorScaling), 90))
+                    pe.Graphics.FillRectangle(b, buttonarea);       // linear grad brushes do not respect smoothing mode, btw
+
+                pe.Graphics.SmoothingMode = SmoothingMode.None;
+
                 using (var p = new Pen(colBorder))
-                    pe.Graphics.DrawRectangle(p, border);
+                     pe.Graphics.DrawRectangle(p, border);
 
                 if (Image != null)
                 {
-                    if ((Enabled && DrawnImageAttributesEnabled != null) || (!Enabled && DrawnImageAttributesDisabled != null))
+                    Size isize = (imagelayout == ImageLayout.Stretch) ? buttonarea.Size : Image.Size;
+
+                    if ((Enabled && drawnImageAttributesEnabled != null) || (!Enabled && drawnImageAttributesDisabled != null))
                     {
                         //System.Diagnostics.Debug.WriteLine("ButtonExt " + this.Name + " Draw image with IA");
-                        pe.Graphics.DrawImage(Image, ControlHelpersStaticFunc.ImagePositionFromContentAlignment(ImageAlign, buttonarea, Image.Size),
-                                    0, 0, Image.Width, Image.Height, GraphicsUnit.Pixel, (Enabled) ? DrawnImageAttributesEnabled : DrawnImageAttributesDisabled);
+                        pe.Graphics.DrawImage(Image, ImageAlign.ImagePositionFromContentAlignment(buttonarea, isize),
+                                    0, 0, Image.Width, Image.Height, GraphicsUnit.Pixel, (Enabled) ? drawnImageAttributesEnabled : drawnImageAttributesDisabled);
                     }
                     else
                     {
-                        pe.Graphics.DrawImage(Image, ControlHelpersStaticFunc.ImagePositionFromContentAlignment(ImageAlign, buttonarea, Image.Size),
+                        pe.Graphics.DrawImage(Image, ImageAlign.ImagePositionFromContentAlignment(buttonarea, isize),
                                     0, 0, Image.Width, Image.Height, GraphicsUnit.Pixel);
                     }
                 }
+
+                pe.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
 
                 if (!string.IsNullOrEmpty(Text))
                 {
@@ -345,6 +359,8 @@ namespace ExtendedControls
                         pe.Graphics.DrawString(this.Text, this.Font, textb, buttonarea, fmt);
                     }
                 }
+
+                pe.Graphics.SmoothingMode = SmoothingMode.None;
 
                 if (Focused && ShowFocusCues)
                 {
@@ -364,6 +380,7 @@ namespace ExtendedControls
                     }
                 }
 
+                pe.Graphics.SmoothingMode = SmoothingMode.Default;
 
                 this.OnCustomPaint(pe);
             }
@@ -372,9 +389,9 @@ namespace ExtendedControls
         // Change the current DrawState, and invalidate as needed.
         private void SetDrawState(DrawState state)
         {
-            if (_DrawState != state)
+            if (drawState != state)
             {
-                _DrawState = state;
+                drawState = state;
                 if (FlatStyle == FlatStyle.Popup)
                     Invalidate();
             }

@@ -92,7 +92,7 @@ namespace EDDiscovery.Forms
             tbManualSystemName.SetAutoCompletor(SystemClassDB.ReturnSystemListForAutoComplete);
 
             EDDiscovery.EDDTheme theme = EDDiscovery.EDDTheme.Instance;
-            theme.ApplyToForm(this);
+            theme.ApplyToFormStandardFontSize(this);
         }
 
         protected void UpdateLinkedSystemList(ISystem focus = null, List<ISystem> othersystems = null)

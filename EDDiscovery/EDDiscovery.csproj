@@ -221,6 +221,9 @@
     <Compile Include="Forms\SafeModeForm.Designer.cs">
       <DependentUpon>SafeModeForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="MajorTabControl.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Properties\ExtraVersion.cs" />
     <Compile Include="ScreenShots\ScreenShotConfigureForm.cs">
       <SubType>Form</SubType>
@@ -353,6 +356,12 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UserControls\UserControlPanelSelector.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\UserControlPanelSelector.Designer.cs">
+      <DependentUpon>UserControlPanelSelector.cs</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\UserControlPlot.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -606,6 +615,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\UserControlContainerResizable.resx">
       <DependentUpon>UserControlContainerResizable.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\UserControlPanelSelector.resx">
+      <DependentUpon>UserControlPanelSelector.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\UserControlPlot.resx">
       <DependentUpon>UserControlPlot.cs</DependentUpon>

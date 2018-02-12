@@ -146,9 +146,9 @@ namespace ExtendedControls
             ITheme theme = ThemeableFormsInstance.Instance;
             if (theme != null)  // paranoid
             {
-                this.Font = new Font(theme.FontName, 12.0F);
                 this.ForeColor = theme.TextBlockColor;
-                framed = theme.ApplyToForm(this, this.Font);
+                framed = theme.ApplyToForm(this,12);
+                this.Font = labelCaption.Font;
                 if (theme.MessageBoxWindowIcon != null)
                     this.Icon = theme.MessageBoxWindowIcon;
             }

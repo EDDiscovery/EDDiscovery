@@ -99,8 +99,12 @@ namespace EliteDangerousCore.EDSM
             type.Add(new GalMapType("minorRoute", "Minor Route", GalMapGroup.Routes, null, index++));
             type.Add(new GalMapType("neutronRoute", "Neutron highway", GalMapGroup.Routes, null, index++));
 
-            type.Add(new GalMapType("region", "Region", GalMapGroup.Regions , null, index++));
+            type.Add(new GalMapType("region", "Region", GalMapGroup.Regions, null, index++));
             type.Add(new GalMapType("regionQuadrants", "Galactic Quadrants", GalMapGroup.Quadrants , null, index++));
+
+            type.Add(new GalMapType("regional", "Regional Marker", GalMapGroup.Markers, GalMapTypeIcons[GalMapTypeEnum.minorPOI], index++));
+            type.Add(new GalMapType("geyserPOI", "Geyser", GalMapGroup.Markers, GalMapTypeIcons[GalMapTypeEnum.minorPOI], index++));
+            type.Add(new GalMapType("organicPOI", "Organic Material", GalMapGroup.Markers, GalMapTypeIcons[GalMapTypeEnum.minorPOI], index++));
 
             type.Add(new GalMapType("EDSMUnknown", "EDSM other POI type", GalMapGroup.Markers, GalMapTypeIcons[GalMapTypeEnum.EDSMUnknown], index++));
 

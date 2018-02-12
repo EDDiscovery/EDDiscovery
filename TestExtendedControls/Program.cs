@@ -74,6 +74,10 @@ namespace DialogTest
                 case "testjournalread":
                     sel = new TestJournalRead();
                     break;
+
+                case "testcompositebutton":
+                    sel = new TestCompositeButton();
+                    break;
             }
 
 

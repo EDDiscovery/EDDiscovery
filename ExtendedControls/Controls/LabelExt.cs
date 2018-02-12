@@ -22,11 +22,13 @@ using System.Windows.Forms;
 
 namespace ExtendedControls
 {
-    public class LabelExt : Label               // draws label using a bitmap - solves problems with aliasing over transparent backgrounds
+    // WARNING ONLY USE IN SPECIAL CIRCUMSTANCES.. NORMALLY YOU WILL WANT THE NORMAL LABEL
+    // draws label using a bitmap - solves problems with aliasing over transparent backgrounds
+    // but it does not antialias properly if the background is not drawn..
+
+    public class LabelExt : Label               
     {
-        public bool CentreX = false;
-        public bool CentreY = false;
-        public Color TextBackColor = Color.Transparent;
+        public Color TextBackColor { get; set; } = Color.Transparent;       // area of text box only
 
         public LabelExt()
         {
@@ -39,40 +41,32 @@ namespace ExtendedControls
 
             //Console.WriteLine("Label size {0}", sz);
 
-            if (sz.Width > 0 && sz.Height>0 && this.Text.Length>0)
+            if (sz.Width > 0 && sz.Height > 0 && this.Text.Length > 0)
             {
                 using (Bitmap mp = new Bitmap(sz.Width, sz.Height))   // bitmaps .. drawing directly does not work due to aliasing
-                using (Graphics mpg = Graphics.FromImage(mp))
                 {
-                    if (!this.TextBackColor.IsFullyTransparent())
+                    using (Graphics mpg = Graphics.FromImage(mp))
                     {
-                        using (Brush b = new SolidBrush(this.TextBackColor))
+                        if (!this.TextBackColor.IsFullyTransparent())
                         {
-                            mpg.FillRectangle(b, new Rectangle(0,0,sz.Width,sz.Height) );
+                            using (Brush b = new SolidBrush(this.TextBackColor))
+                            {
+                                mpg.FillRectangle(b, new Rectangle(0, 0, sz.Width, sz.Height));
+                            }
                         }
+
+                        mpg.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+
+                        using (Brush b = new SolidBrush(this.ForeColor))
+                        {
+                            mpg.DrawString(this.Text, this.Font, b, new Point(0, 0));
+                        }
+
+                        mpg.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.Default;
+
+                        Rectangle pos = TextAlign.ImagePositionFromContentAlignment(ClientRectangle, mp.Size, true);
+                        pe.Graphics.DrawImageUnscaled(mp, pos.Left, pos.Top);
                     }
-
-                    mpg.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
-
-                    using (Brush b = new SolidBrush(this.ForeColor))
-                    {
-                        mpg.DrawString(this.Text, this.Font, b, new Point(0,0));
-                    }
-
-                    mpg.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.Default;
-
-                    if (CentreY || CentreX)
-                    {
-                        int x = (CentreX) ? (ClientRectangle.Width / 2 - sz.Width / 2) : 0;
-                        int y = (CentreY) ? (ClientRectangle.Height / 2 - sz.Height / 2) : 0;
-                        if (x < 0)
-                            x = 0;
-                        if (y < 0)
-                            y = 0;
-                        pe.Graphics.DrawImageUnscaled(mp, x, y);
-                    }
-                    else
-                        pe.Graphics.DrawImageUnscaled(mp, 0,0);
                 }
             }
         }

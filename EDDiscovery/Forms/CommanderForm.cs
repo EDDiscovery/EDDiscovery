@@ -15,21 +15,16 @@ namespace EDDiscovery.Forms
 {
     public partial class CommanderForm : ExtendedControls.DraggableForm
     {
-        Font font;
-
         public CommanderForm()
         {
             InitializeComponent();
             EDDiscovery.EDDTheme theme = EDDiscovery.EDDTheme.Instance;
-            font = new Font(theme.FontName, 10);
-            bool winborder = theme.ApplyToForm(this, font);
+            bool winborder = theme.ApplyToFormStandardFontSize(this);
             panelTop.Visible = panelTop.Enabled = !winborder;
         }
 
         private void CommanderForm_FormClosed(object sender, FormClosedEventArgs e)
         {
-            font.Dispose();
-            font = null;
         }
 
         public void Init(bool enablecmdredit)
