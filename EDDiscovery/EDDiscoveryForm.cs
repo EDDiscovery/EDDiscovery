@@ -176,7 +176,8 @@ namespace EDDiscovery
 
             for (int i = 0; i < PanelInformation.GetNumberPanels; i++)      // and fill up menu control
             {
-                ToolStripMenuItem tsmi = PanelInformation.MakeToolStripMenuItem(i, (s, e) => tabControlMain.AddTab((PanelInformation.PanelIDs)((s as ToolStripMenuItem).Tag), tabControlMain.LastTabClicked));
+                ToolStripMenuItem tsmi = PanelInformation.MakeToolStripMenuItem(i, (s, e) => 
+                            tabControlMain.AddTab((PanelInformation.PanelIDs)((s as ToolStripMenuItem).Tag), tabControlMain.LastTabClicked));
                 if (tsmi != null)
                     addTabToolStripMenuItem.DropDownItems.Add(tsmi);
             }
@@ -347,7 +348,16 @@ namespace EDDiscovery
             return tabControlMain.SelectTabPage(name);
         }
 
-        private void tabControlMain_MouseClick(object sender, MouseEventArgs e)
+        private void panelTabControlBack_MouseDown(object sender, MouseEventArgs e)     // click on the empty space of the tabs.. backed up by the panel
+        {
+            if (e.Button == MouseButtons.Right)
+            {
+                tabControlMain.ClearLastTab();      // this sets LastTab to -1, which thankfully means insert at last but one position to the AddTab function
+                contextMenuStripTabs.Show(tabControlMain.PointToScreen(e.Location));
+            }
+        }
+
+        private void tabControlMain_MouseClick(object sender, MouseEventArgs e)     // click on one of the tab buttons
         {
             if (tabControlMain.LastTabClicked >= 0)
             {
@@ -365,11 +375,10 @@ namespace EDDiscovery
         private void ContextMenuStripTabs_Opening(object sender, CancelEventArgs e)
         {
             int n = tabControlMain.LastTabClicked;
-            if (n >= 0 && n < tabControlMain.TabPages.Count)   // sanity check
-            {
-                removeTabToolStripMenuItem.Enabled = !IsNonRemovableTab(n);
-                renameTabToolStripMenuItem.Enabled = !(tabControlMain.TabPages[n].Controls[0] is UserControls.UserControlPanelSelector);
-            }
+            bool validtab = n >= 0 && n < tabControlMain.TabPages.Count;   // sanity check
+
+            removeTabToolStripMenuItem.Enabled = validtab && !IsNonRemovableTab(n);
+            renameTabToolStripMenuItem.Enabled = validtab && !(tabControlMain.TabPages[n].Controls[0] is UserControls.UserControlPanelSelector);
         }
 
         private bool IsNonRemovableTab(int n)
