@@ -91,7 +91,7 @@ namespace EDDiscovery.Forms
                     initiallist = new List<int>(imageViewer.Selection);     // copy of..
 
                     EDDiscovery.EDDTheme theme = EDDiscovery.EDDTheme.Instance;
-                    bool winborder = theme.ApplyToForm(this);
+                    bool winborder = theme.ApplyToFormStandardFontSize(this);
                     statusStripCustom.Visible = panel_close.Visible = panel_minimize.Visible = !winborder;
 
                     SetComboBox();

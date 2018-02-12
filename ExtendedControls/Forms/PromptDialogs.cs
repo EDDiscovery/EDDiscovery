@@ -101,7 +101,7 @@ namespace ExtendedControls
             prompt.CancelButton = cancel;
             prompt.ShowInTaskbar = false;
 
-            theme.ApplyToForm(prompt, System.Drawing.SystemFonts.DefaultFont);
+            theme.ApplyToFormStandardFontSize(prompt);
 
             if (prompt.ShowDialog(p) == DialogResult.OK)
             {
@@ -434,7 +434,7 @@ namespace ExtendedControls
 
             this.Icon = icon;
 
-            theme.ApplyToForm(this, System.Drawing.SystemFonts.DefaultFont);
+            theme.ApplyToFormStandardFontSize(this);
         }
 
         protected override void Dispose(bool disposing)

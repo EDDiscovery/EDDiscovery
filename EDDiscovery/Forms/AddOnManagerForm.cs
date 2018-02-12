@@ -54,7 +54,6 @@ namespace EDDiscovery.Forms
         int panelheightmargin = 1;
         int labelheightmargin = 6;
         int panelleftmargin = 3;
-        Font font;
 
         public Action<string> EditActionFile;
         public Action EditGlobals;
@@ -83,8 +82,7 @@ namespace EDDiscovery.Forms
             managedownloadmode = ad;
             
             EDDiscovery.EDDTheme theme = EDDiscovery.EDDTheme.Instance;
-            font = new Font(theme.FontName, 10);
-            bool winborder = theme.ApplyToForm(this, font);
+            bool winborder = theme.ApplyToFormStandardFontSize(this);
             statusStripCustom.Visible = panelTop.Visible = panelTop.Enabled = !winborder;
             richTextBoxScrollDescription.ReadOnly = true;
             label_index.Text = this.Text = (managedownloadmode) ? "Add-On Manager" : "Edit Add-Ons";
@@ -140,8 +138,6 @@ namespace EDDiscovery.Forms
         {
             if (CheckThread != null && CheckThread.IsAlive)     // can't close if its alive, it will call back nothing
                 CheckThread.Join();
-
-            font?.Dispose();
         }
 
         void ReadyToDisplay()
@@ -318,7 +314,7 @@ namespace EDDiscovery.Forms
 
             EDDiscovery.EDDTheme theme = EDDiscovery.EDDTheme.Instance;
             if ( theme != null )
-                theme.ApplyToControls(panelVScroll, font);
+                theme.ApplyToControls(panelVScroll, label_index.Font);
 
             panelVScroll.ResumeLayout();
         }

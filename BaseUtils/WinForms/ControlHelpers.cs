@@ -56,7 +56,7 @@ public static class ControlHelpersStaticFunc
         return f;
     }
 
-    static public Rectangle ImagePositionFromContentAlignment(ContentAlignment c, Rectangle client, Size image)
+    static public Rectangle ImagePositionFromContentAlignment(this ContentAlignment c, Rectangle client, Size image, bool cliptorectangle = false)
     {
         int left = client.Left;
 
@@ -75,6 +75,12 @@ public static class ControlHelpersStaticFunc
             top += Math.Max((client.Height - image.Height) / 2, 0);
         else
             top += 0;
+
+        if (cliptorectangle)        // ensure we start in rectangle..
+        {
+            left = Math.Max(0, left);
+            top = Math.Max(0, top);
+        }
 
         return new Rectangle(left, top, image.Width, image.Height);
     }

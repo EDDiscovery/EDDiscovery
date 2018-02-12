@@ -21,5 +21,7 @@ namespace EliteDangerousCore
         string AppDataDirectory { get; }
         string SystemDatabasePath { get; }
         string UserDatabasePath { get; }
+        bool ForceBetaOnCommander { get; }
+        bool DisableBetaCommanderCheck { get; }
     }
 }

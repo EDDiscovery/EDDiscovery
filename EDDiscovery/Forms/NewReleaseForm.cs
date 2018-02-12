@@ -49,7 +49,7 @@ namespace EDDiscovery.Forms
 
         protected override void OnLoad(EventArgs e)
         {
-            var framed = EDDTheme.Instance?.ApplyToForm(this) ?? true;
+            var framed = EDDTheme.Instance?.ApplyToFormStandardFontSize(this) ?? true;
             if (framed)
             {
                 // hide the caption panel, and resize the bottom panel to fit.
