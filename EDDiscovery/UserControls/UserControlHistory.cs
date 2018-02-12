@@ -64,7 +64,6 @@ namespace EDDiscovery.UserControls
         {
             userControlTravelGrid.Init(discoveryform, userControlTravelGrid, displaynumber);       // primary first instance - this registers with events in discoveryform to get info
                                                         // then this display, to update its own controls..
-            userControlTravelGrid.ExtraIcons(true, true);
 
             TabConfigure(tabStripBottom,"Bottom", DisplayNumberHistoryBotLeft);          // codes are used to save info, 0 = primary (journal/travelgrid), 1..N are popups, these are embedded UCs
             TabConfigure(tabStripBottomRight,"Bottom-Right", DisplayNumberHistoryBotRight);
@@ -72,7 +71,6 @@ namespace EDDiscovery.UserControls
             TabConfigure(tabStripTopRight, "Top-Right", DisplayNumberHistoryTopRight);
 
             userControlTravelGrid.OnChangedSelection += ChangedSelection;   // and if the user clicks on something
-            userControlTravelGrid.OnPopOut += () => { discoveryform.PopOuts.PopOut(PanelInformation.PanelIDs.TravelGrid); };
             userControlTravelGrid.OnKeyDownInCell += OnKeyDownInCell;
         }
 
@@ -83,7 +81,7 @@ namespace EDDiscovery.UserControls
         void TabConfigure(ExtendedControls.TabStrip t, string name, int displayno)
         {
             t.ImageList = PanelInformation.GetPanelImages();
-            t.TextList = PanelInformation.GetPanelToolTips();
+            t.TextList = PanelInformation.GetPanelDescriptions();
             t.Tag = displayno;             // these are IDs for purposes of identifying different instances of a control.. 0 = main ones (main travel grid, main tab journal). 1..N are popups
             t.OnRemoving += TabRemoved;
             t.OnCreateTab += TabCreate;
@@ -101,10 +99,10 @@ namespace EDDiscovery.UserControls
         Control TabCreate(ExtendedControls.TabStrip t, int si)        // called by tab strip when selected index changes.. create a new one.. only create.
         {
             Control c = PanelInformation.Create(si);
-            c.Name = PanelInformation.PanelList[si].WindowTitlePrefix;        // tabs uses Name field for display, must set it
+            c.Name = PanelInformation.PanelList[si].WindowTitle;        // tabs uses Name field for display, must set it
 
             discoveryform.ActionRun(Actions.ActionEventEDList.onPanelChange, null, 
-                new Conditions.ConditionVariables(new string[] { "PanelTabName", PanelInformation.PanelList[si].WindowRefName, "PanelTabTitle" , PanelInformation.PanelList[si].WindowTitlePrefix , "PanelName" , t.Name }));
+                new Conditions.ConditionVariables(new string[] { "PanelTabName", PanelInformation.PanelList[si].WindowRefName, "PanelTabTitle" , PanelInformation.PanelList[si].WindowTitle , "PanelName" , t.Name }));
 
             return c;
         }

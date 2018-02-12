@@ -216,6 +216,12 @@ namespace EDDiscovery.Icons
         #region TabStrip
         public static Image TabStrip_ArrowLeft { get { return IconSet.GetIcon("Controls.TabStrip.ArrowLeft"); } }
         public static Image TabStrip_ArrowRight { get { return IconSet.GetIcon("Controls.TabStrip.ArrowRight"); } }
+        public static Image TabStrip_Popout { get { return IconSet.GetIcon("Controls.TabStrip.Popout"); } }
+        #endregion
+        #region Selector
+        public static Image Selector_Background { get { return IconSet.GetIcon("Controls.Selector.Selector"); } }
+        public static Image Selector_AddTab { get { return IconSet.GetIcon("Controls.Selector.Addtab"); } }
+
         #endregion
     }
 }

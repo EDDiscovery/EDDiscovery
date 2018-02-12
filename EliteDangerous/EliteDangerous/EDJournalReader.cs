@@ -39,8 +39,6 @@ namespace EliteDangerousCore
         public TimeZoneInfo TimeZone { get; set; }
         public TimeSpan TimeZoneOffset { get; set; }
 
-        public static bool disable_beta_commander_check = false;        // strictly for debugging purposes
-
         private Queue<JournalReaderEntry> StartEntries = new Queue<JournalReaderEntry>();
 
         public EDJournalReader(string filename) : base(filename)
@@ -99,7 +97,7 @@ namespace EliteDangerousCore
             {
                 JournalEvents.JournalFileheader header = (JournalEvents.JournalFileheader)je;
 
-                if (header.Beta && !disable_beta_commander_check)
+                if ((header.Beta && !EliteConfigInstance.InstanceOptions.DisableBetaCommanderCheck) || EliteConfigInstance.InstanceOptions.ForceBetaOnCommander) // if beta, and not disabled, or force beta
                 {
                     TravelLogUnit.type |= 0x8000;
                 }

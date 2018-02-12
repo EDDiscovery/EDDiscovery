@@ -27,29 +27,38 @@ using System.Windows.Forms;
 
 namespace EDDiscovery.Forms
 {
-    public partial class ImportSphere : Form
+    public partial class ImportSphere : ExtendedControls.DraggableForm
     {
         private EDDiscoveryForm discoveryForm;
 
-        public static Boolean showDialog(EDDiscoveryForm discoveryForm, out string systemName, out  double radius, Form owner = null)
+        public static Boolean showDialog(EDDiscoveryForm discoveryForm, out string systemName, out double radius, Form owner)
         {
-            ImportSphere prompt = new ImportSphere(discoveryForm);
-            var res = prompt.ShowDialog(owner ?? discoveryForm);
-            systemName =  prompt.txtExportVisited.Text;
-            bool worked = Double.TryParse(prompt.txtsphereRadius.Text, out radius);
-            if (!worked)
-                ExtendedControls.MessageBoxTheme.Show(owner ?? discoveryForm, "Radius in wrong format", "Sphere error");
+            owner = owner ?? discoveryForm;
 
-            return (res == DialogResult.OK && worked);
+            ImportSphere prompt = new ImportSphere(discoveryForm);
+            prompt.Icon = owner.Icon;
+
+            EDDTheme.Instance.ApplyToFormStandardFontSize(prompt);
+
+            var res = prompt.ShowDialog(owner);
+
+            systemName =  prompt.txtExportVisited.Text;
+            radius = prompt.txtsphereRadius.Value;
+
+            return res == DialogResult.OK;
         }
 
         public ImportSphere(EDDiscoveryForm discoveryForm)
         {
             InitializeComponent();
             this.discoveryForm = discoveryForm;
-            double ly = 10.0;
-            txtsphereRadius.Text = ly.ToString("0.00");
+            txtsphereRadius.ValidityChanged = ValidityChanged;
             txtExportVisited.SetAutoCompletor(SystemClassDB.ReturnSystemListForAutoComplete);
+        }
+
+        private void ValidityChanged(bool v)
+        {
+            buttonOK.Enabled = v;
         }
 
         private void buttonOK_Click(object sender, EventArgs e)
@@ -67,6 +76,11 @@ namespace EDDiscovery.Forms
             HistoryEntry lastSys = discoveryForm.history.GetLastFSD ;
             if(lastSys!=null && lastSys.System!=null)
                 txtExportVisited.Text = lastSys.System.Name;
+        }
+
+        private void panel1_MouseDown(object sender, MouseEventArgs e)
+        {
+            OnCaptionMouseDown((Control)sender, e);
         }
     }
 }

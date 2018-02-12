@@ -26,7 +26,7 @@ using System.Windows.Forms;
 
 namespace EDDiscovery.Forms
 {
-    public partial class BookmarkForm : Form
+    public partial class BookmarkForm : ExtendedControls.DraggableForm
     {
         public string StarHeading { get { return textBoxName.Text; } }
         public string Notes { get { return textBoxNotes.Text; } }
@@ -40,6 +40,7 @@ namespace EDDiscovery.Forms
         public BookmarkForm()
         {
             InitializeComponent();
+            EDDTheme.Instance.ApplyToFormStandardFontSize(this); 
         }
 
         public void InitialisePos(double x, double y, double z)
@@ -106,6 +107,8 @@ namespace EDDiscovery.Forms
             textBoxName.Text = name;
             textBoxName.ReadOnly = !regionmark;
             textBoxNotes.Text = bookmarknote;
+            textBoxNotes.CursorToEnd();
+            textBoxNotes.ScrollToCaret();
             textBoxTravelNote.Text = note;
             textBoxTime.Text = tme;
             checkBoxTarget.Checked = istarget;
@@ -145,8 +148,8 @@ namespace EDDiscovery.Forms
             this.Text = "Galactic Mapping Object";
             textBoxName.Text = name;
             textBoxNotes.Text = descr.WordWrap(40);
-            textBoxNotes.SelectionStart = textBoxNotes.Text.Length;
-            textBoxNotes.SelectionLength = 0;
+            textBoxNotes.CursorToEnd();
+            textBoxNotes.ScrollToCaret();
             textBoxNotes.ReadOnly = true;
             labelBookmarkNotes.Text = "Description";
             buttonDelete.Hide();
@@ -216,5 +219,9 @@ namespace EDDiscovery.Forms
             c.Location = new Point(c.Location.X, c.Location.Y - d);
         }
 
+        private void panel1_MouseDown(object sender, MouseEventArgs e)
+        {
+            OnCaptionMouseDown((Control)sender, e);
+        }
     }
 }

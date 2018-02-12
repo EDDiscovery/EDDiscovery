@@ -628,5 +628,14 @@
   <ItemGroup>
     <EmbeddedResource Include="Journal\Shutdown.png" />
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Controls\Selector\Selector.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Controls\Selector\Addtab.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Panels\PanelSelector.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

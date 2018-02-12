@@ -197,7 +197,8 @@ namespace ExtendedControls
             }
         }
 
-        public Font GetFontMaxSized(float size) { return new Font(currentsettings.fontname, Math.Min(currentsettings.fontsize,size)); }
+        public Font GetFontMaxSized(float size) { return new Font(currentsettings.fontname, Math.Min(currentsettings.fontsize, size)); }
+        public Font GetFontAtSize(float size) { return new Font(currentsettings.fontname, size); }
 
         public Settings currentsettings;           // if name = custom, then its not a standard theme..
         protected List<Settings> themelist;
@@ -367,6 +368,16 @@ namespace ExtendedControls
                                                false, 95, "Microsoft Sans Serif", 8.25F));
         }
 
+        public bool ApplyToFormStandardFontSize(Form form)
+        {
+            return ApplyToForm(form, GetFontAtSize(10));
+        }
+
+        public bool ApplyToForm(Form form, float fontsize)
+        {
+            return ApplyToForm(form, GetFontAtSize(fontsize));
+        }
+
         public bool ApplyToForm(Form form, Font fnt = null)
         {
             if (fnt == null)
@@ -507,18 +518,32 @@ namespace ExtendedControls
                 }
                 else
                 {
-                    if (ctrl.Image != null)
+                    if (ctrl.Image != null)     // any images, White and a gray (for historic reasons) gets replaced.
                     {
-                        //System.Diagnostics.Debug.WriteLine("Theme Image in " + ctrl.Name + " Map white to " + ctrl.ForeColor);
-                        System.Drawing.Imaging.ColorMap colormap = new System.Drawing.Imaging.ColorMap();       // any drawn panel with drawn images    
-                        colormap.OldColor = Color.FromArgb(134, 134, 134);                                        // gray is defined as the forecolour to use in system mode
-                        colormap.NewColor = ctrl.ForeColor;
+                        System.Drawing.Imaging.ColorMap colormap1 = new System.Drawing.Imaging.ColorMap();       // any drawn panel with drawn images    
+                        colormap1.OldColor = Color.FromArgb(134, 134, 134);                                        // gray is defined as the forecolour to use in system mode
+                        colormap1.NewColor = ctrl.ForeColor;
+                        //System.Diagnostics.Debug.WriteLine("Theme Image in " + ctrl.Name + " Map " + colormap1.OldColor + " to " + colormap1.NewColor);
 
-                        ctrl.SetDrawnBitmapRemapTable(new System.Drawing.Imaging.ColorMap[] { colormap });     // used ButtonDisabledScaling note!
-                        //System.Diagnostics.Debug.WriteLine("Image button " + ctrl.Name);
+                        System.Drawing.Imaging.ColorMap colormap2 = new System.Drawing.Imaging.ColorMap();       // any drawn panel with drawn images    
+                        colormap2.OldColor = Color.FromArgb(255, 255, 255);                                        // gray is defined as the forecolour to use in system mode
+                        colormap2.NewColor = ctrl.ForeColor;
+                        //System.Diagnostics.Debug.WriteLine("Theme Image in " + ctrl.Name + " Map " + colormap2.OldColor + " to " + colormap2.NewColor);
+
+                        ctrl.SetDrawnBitmapRemapTable(new System.Drawing.Imaging.ColorMap[] { colormap1, colormap2 });     // used ButtonDisabledScaling note!
                     }
 
-                    ctrl.BackColor = (ctrl.Image != null) ? currentsettings.colors[Settings.CI.form] : currentsettings.colors[Settings.CI.button_back];
+                    if (ctrl.Image != null && ctrl.Text.Length == 0)        // if no text, background is solid form to make the back disappear
+                    {
+                        ctrl.BackColor = currentsettings.colors[Settings.CI.form];
+                        ctrl.ButtonColorScaling = ctrl.ButtonDisabledScaling = 1.0F;
+                    }
+                    else
+                    {
+                        ctrl.BackColor = currentsettings.colors[Settings.CI.button_back];       // else its a graduated back
+                        ctrl.ButtonColorScaling = ctrl.ButtonDisabledScaling = 0.5F;
+                    }
+
                     ctrl.FlatAppearance.BorderColor = (ctrl.Image != null) ? currentsettings.colors[Settings.CI.form] : currentsettings.colors[Settings.CI.button_border];
                     ctrl.FlatAppearance.BorderSize = 1;
                     ctrl.FlatAppearance.MouseOverBackColor = currentsettings.colors[Settings.CI.button_back].Multiply(mouseoverscaling);
@@ -863,6 +888,8 @@ namespace ExtendedControls
                         i.ForeColor = currentsettings.colors[Settings.CI.textbox_fore];
                         i.BackColor = currentsettings.colors[Settings.CI.textbox_back];
                     }
+
+                    i.Font = fnt;
                 }
             }
             else if (myControl is TabStrip)

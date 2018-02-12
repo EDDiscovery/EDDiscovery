@@ -64,11 +64,13 @@ namespace EDDiscovery.Forms
             Compass,                // 31
             Map,                    // 32
             Plot,                   // 33
+            PanelSelector,          // 34
             // ****** ADD More here DO NOT REORDER *****
         };
 
         // This is the order they are presented to the user..   you can shuffle them to your hearts content
         // ****** DO NOT add UserControlHistory - the display numbers used are special and not okay for a generic panel.  Since you can do the same via a grid, its okay
+        // description = empty means not user selectable
 
         static public List<PanelInfo> PanelList = new List<PanelInfo>()
         {
@@ -106,6 +108,7 @@ namespace EDDiscovery.Forms
             { new PanelInfo( PanelIDs.Settings, typeof(UserControlSettings), "Settings", "SettingsPanel", "Settings for ED Discovery ") },
             { new PanelInfo( PanelIDs.Grid, typeof(UserControlContainerGrid), "Grid", "TheGrid", "Grid (allows other panels to be placed in the it)" , transparent:false) },
             { new PanelInfo( PanelIDs.Compass, typeof(UserControlCompass), "Compass", "Compass", "Ground compass navigation panel to work out the bearing between planetary coordinates", transparent:true) },
+            { new PanelInfo( PanelIDs.PanelSelector, typeof(UserControlPanelSelector), "+", "Selector", "") },       // no description, not presented to user
         };
 
         public static IReadOnlyDictionary<PanelIDs, Image> PanelTypeIcons { get; } = new IconGroup<PanelIDs>("Panels");
@@ -114,10 +117,10 @@ namespace EDDiscovery.Forms
         {
             public PanelIDs PopoutID;
             public Type PopoutType;
-            public string WindowTitlePrefix;
+            public string WindowTitle;
             public string WindowRefName;
             public Image TabIcon { get { return PanelTypeIcons[PopoutID]; } }
-            public string Tooltip;
+            public string Description;
             public bool SupportsTransparency;
             public bool DefaultTransparent;
 
@@ -125,22 +128,24 @@ namespace EDDiscovery.Forms
             {
                 PopoutID = p;
                 PopoutType = t;
-                WindowTitlePrefix = prefix;
+                WindowTitle = prefix;
                 WindowRefName = rf;
-                Tooltip = tooltip;
+                Description = tooltip;
                 SupportsTransparency = transparent != null;
                 DefaultTransparent = transparent ?? false;
             }
+
+            public bool IsUserSelectable { get { return Description.Length > 0; } }
         }
 
         static public string[] GetPanelNames()
         {
-            return (from PanelInfo x in PanelList select x.WindowTitlePrefix).ToArray();
+            return (from PanelInfo x in PanelList select x.WindowTitle).ToArray();
         }
 
-        static public string[] GetPanelToolTips()
+        static public string[] GetPanelDescriptions()
         {
-            return (from PanelInfo x in PanelList select x.Tooltip).ToArray();
+            return (from PanelInfo x in PanelList where x.IsUserSelectable select x.Description).ToArray();
         }
 
         static public Image[] GetPanelImages()
@@ -170,17 +175,6 @@ namespace EDDiscovery.Forms
             return PanelList.Find(x => x.PopoutType == t);
         }
 
-        static public System.Windows.Forms.ToolStripMenuItem MakeToolStripMenuItem(int i, System.EventHandler h)
-        {
-            System.Windows.Forms.ToolStripMenuItem mi = new System.Windows.Forms.ToolStripMenuItem();
-            mi.Text = PanelList[i].Tooltip;
-            mi.Size = new System.Drawing.Size(250, 22);
-            mi.Tag = PanelList[i].PopoutID;
-            mi.Image = PanelList[i].TabIcon;
-            mi.Click += h;
-            return mi;
-        }
-
         public static UserControlCommonBase Create(int i)       // index into popoutlist
         {
             return Create(PanelList[i].PopoutID);
@@ -190,6 +184,23 @@ namespace EDDiscovery.Forms
         {
             int index = GetPanelIndexByEnum(p);
             return index>=0 ? (UserControls.UserControlCommonBase)Activator.CreateInstance(PanelList[index].PopoutType, null) : null;
+        }
+
+        public static System.Windows.Forms.ToolStripMenuItem MakeToolStripMenuItem(int i, System.EventHandler h)
+        {
+            PanelInformation.PanelInfo pi = PanelInformation.PanelList[i];
+            if (pi.IsUserSelectable)
+            {
+                System.Windows.Forms.ToolStripMenuItem mi = new System.Windows.Forms.ToolStripMenuItem();
+                mi.Text = pi.Description;
+                mi.Size = new System.Drawing.Size(250, 22);
+                mi.Tag = pi.PopoutID;
+                mi.Image = pi.TabIcon;
+                mi.Click += h;
+                return mi;
+            }
+            else
+                return null;
         }
     }
 
@@ -270,7 +281,7 @@ namespace EDDiscovery.Forms
             if (ctrl != null && poi != null )
             {
                 int numopened = usercontrolsforms.CountOf(ctrl.GetType()) + 1;
-                string windowtitle = poi.WindowTitlePrefix + " " + ((numopened > 1) ? numopened.ToString() : "");
+                string windowtitle = poi.WindowTitle + " " + ((numopened > 1) ? numopened.ToString() : "");
                 string refname = poi.WindowRefName + numopened.ToString();
                 tcf.Init(ctrl, windowtitle, discoveryform.theme.WindowsFrame, refname, discoveryform.TopMost,
                             poi.DefaultTransparent, discoveryform.theme.LabelColor, discoveryform.theme.SPanelColor);

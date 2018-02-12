@@ -98,7 +98,7 @@ namespace EDDiscovery
             imageViewer.BackColor = Color.FromArgb(5, 5, 5);
 
             EDDiscovery.EDDTheme theme = EDDiscovery.EDDTheme.Instance;
-            bool winborder = theme.ApplyToForm(this);
+            bool winborder = theme.ApplyToFormStandardFontSize(this);
             statusStripCustom.Visible = panel_close.Visible = panel_minimize.Visible = !winborder;
             
         }

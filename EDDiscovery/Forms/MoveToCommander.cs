@@ -44,7 +44,7 @@ namespace EDDiscovery.Forms
             comboBoxCommanders.DataSource = commanders;
 
             EDDiscovery.EDDTheme theme = EDDiscovery.EDDTheme.Instance;
-            theme.ApplyToForm(this);
+            theme.ApplyToFormStandardFontSize(this);
 
             return true;
         }

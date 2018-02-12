@@ -483,17 +483,5 @@ namespace ExtendedControls
 
         #endregion
 
-
-        // NOT IN USE        
-        #region Icon Replacement
-        public void ReplaceIconsNOTINUSE(Func<string, Image> getIcon)
-        {
-            drawnPanelListSelection.Image = getIcon("PanelList");
-            drawnPanelPopOut.Image = getIcon("Popout");
-            panelArrowLeft.BackgroundImage = getIcon("ArrowLeft");
-            panelArrowRight.BackgroundImage = getIcon("ArrowRight");
-            EmptyPanelIcon = getIcon("NoPanelSelected");
-        }
-        #endregion
     }
 }

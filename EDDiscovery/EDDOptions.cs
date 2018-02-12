@@ -41,6 +41,8 @@ namespace EDDiscovery
         public bool DisableShowDebugInfoInTitle { get; private set; }
         public string OptionsFile { get; private set; }
         public bool DontAskGithubForPacks { get; private set; }
+        public bool DisableBetaCommanderCheck { get; private set; }
+        public bool ForceBetaOnCommander { get; private set; }
 
         private string AppFolder { get; set; }      // internal to use.. for -appfolder option
         private bool StoreDataInProgramDirectory { get; set; }  // internal to us, to indicate portable
@@ -99,9 +101,13 @@ namespace EDDiscovery
                 else if (EDSMClass.ServerAddress.IndexOf("Beta",StringComparison.InvariantCultureIgnoreCase)!=-1)
                     sb.Append(" (EDSM Beta server)");
 
-                if (EliteDangerousCore.EDJournalReader.disable_beta_commander_check)
+                if (DisableBetaCommanderCheck)
                 {
                     sb.Append(" (no BETA detect)");
+                }
+                if (ForceBetaOnCommander)
+                {
+                    sb.Append(" (Force BETA)");
                 }
             }
 
@@ -226,7 +232,10 @@ namespace EDDiscovery
                         EDSMClass.ServerAddress = "";
                         break;
                     case "disablebetacheck":
-                        EliteDangerousCore.EDJournalReader.disable_beta_commander_check = true;
+                        DisableBetaCommanderCheck = true;
+                        break;
+                    case "forcebeta":       // use to move logs to a beta commander for testing
+                        ForceBetaOnCommander = true;
                         break;
                     case "notheme": NoTheme = true; break;
                     case "nosound": NoSound = true; break;

@@ -31,7 +31,6 @@ namespace EDDiscovery.Forms
             if (disposing)
             {
                 components?.Dispose();
-                font?.Dispose();
             }
             base.Dispose(disposing);
         }
