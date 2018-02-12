@@ -38,6 +38,12 @@ namespace EliteDangerousCore
 
         public static string CommodityTypeRareGoods = "Rare Goods";
 
+        public static string MaterialFreqVeryRare = "Very Rare";
+        public static string MaterialFreqRare = "Rare";
+        public static string MaterialFreqStandard = "Standard";
+        public static string MaterialFreqCommon = "Common";
+        public static string MaterialFreqVeryCommon = "Very Common";
+
         private static Dictionary<string, MaterialCommodityDB> cachelist = new Dictionary<string, MaterialCommodityDB>();
 
         public static MaterialCommodityDB GetCachedMaterial(string fdname)
@@ -89,15 +95,15 @@ namespace EliteDangerousCore
 
         static Color CByType(string s)
         {
-            if (s == "Very Rare")
+            if (s == MaterialFreqVeryRare)
                 return Color.Red;
-            if (s == "Rare")
+            if (s == MaterialFreqRare)
                 return Color.Yellow;
-            if (s == "Very Common")
+            if (s == MaterialFreqVeryCommon)
                 return Color.Cyan;
-            if (s == "Common")
+            if (s == MaterialFreqCommon)
                 return Color.Green;
-            if (s == "Standard")
+            if (s == MaterialFreqStandard)
                 return Color.SandyBrown;
             if (s == "Unknown")
                 return Color.Red;
@@ -163,35 +169,35 @@ namespace EliteDangerousCore
 
         public static void SetUpInitialTable()
         {
-            AddRaw("Antimony", "Very Rare", "Sb");
-            AddRaw("Polonium", "Very Rare", "Po");
-            AddRaw("Ruthenium", "Very Rare", "Ru");
-            AddRaw("Technetium", "Very Rare", "Tc");
-            AddRaw("Tellurium", "Very Rare", "Te");
+            AddRaw("Antimony", MaterialFreqVeryRare, "Sb");
+            AddRaw("Polonium", MaterialFreqVeryRare, "Po");
+            AddRaw("Ruthenium", MaterialFreqVeryRare, "Ru");
+            AddRaw("Technetium", MaterialFreqVeryRare, "Tc");
+            AddRaw("Tellurium", MaterialFreqVeryRare, "Te");
 
-            AddRaw( "Yttrium", "Rare", "Y");
-            AddRaw( "Cadmium", "Rare", "Cd");
-            AddRaw( "Mercury", "Rare", "Hg");
-            AddRaw( "Molybdenum", "Rare", "Mo");
-            AddRaw( "Tin", "Rare", "Sn");
+            AddRaw( "Yttrium", MaterialFreqRare, "Y");
+            AddRaw( "Cadmium", MaterialFreqRare, "Cd");
+            AddRaw( "Mercury", MaterialFreqRare, "Hg");
+            AddRaw( "Molybdenum", MaterialFreqRare, "Mo");
+            AddRaw( "Tin", MaterialFreqRare, "Sn");
 
-            AddRaw("Carbon", "Very Common", "C");
-            AddRaw("Iron", "Very Common", "Fe");
-            AddRaw("Nickel", "Very Common", "Ni");
-            AddRaw("Phosphorus", "Very Common", "P");
-            AddRaw("Sulphur", "Very Common", "S");
+            AddRaw("Carbon", MaterialFreqVeryCommon, "C");
+            AddRaw("Iron", MaterialFreqVeryCommon, "Fe");
+            AddRaw("Nickel", MaterialFreqVeryCommon, "Ni");
+            AddRaw("Phosphorus", MaterialFreqVeryCommon, "P");
+            AddRaw("Sulphur", MaterialFreqVeryCommon, "S");
 
-            AddRaw( "Chromium", "Common", "Cr");
-            AddRaw( "Germanium", "Common", "Ge");
-            AddRaw( "Manganese", "Common", "Mn");
-            AddRaw( "Vanadium", "Common", "V");
-            AddRaw( "Zinc", "Common", "Zn");
+            AddRaw( "Chromium", MaterialFreqCommon, "Cr");
+            AddRaw( "Germanium", MaterialFreqCommon, "Ge");
+            AddRaw( "Manganese", MaterialFreqCommon, "Mn");
+            AddRaw( "Vanadium", MaterialFreqCommon, "V");
+            AddRaw( "Zinc", MaterialFreqCommon, "Zn");
                                
-            AddRaw("Niobium", "Standard", "Nb");        // realign to Anthors standard
-            AddRaw("Tungsten", "Standard", "W");
-            AddRaw("Arsenic", "Standard", "As");
-            AddRaw("Selenium", "Standard", "Se");
-            AddRaw("Zirconium", "Standard", "Zr");
+            AddRaw("Niobium", MaterialFreqStandard, "Nb");        // realign to Anthors standard
+            AddRaw("Tungsten", MaterialFreqStandard, "W");
+            AddRaw("Arsenic", MaterialFreqStandard, "As");
+            AddRaw("Selenium", MaterialFreqStandard, "Se");
+            AddRaw("Zirconium", MaterialFreqStandard, "Zr");
                                      
             AddCommodity("Explosives;Hydrogen Fuel;Hydrogen Peroxide;Liquid Oxygen;Mineral Oil;Nerve Agents;Pesticides;Surface Stabilisers;Synthetic Reagents;Water", "Chemicals");
 
@@ -396,102 +402,102 @@ namespace EliteDangerousCore
             AddRare("trinketsofhiddenfortune", "Trinkets Of Hidden Fortune");
 
             // very common data
-            AddEnc( "Anomalous Bulk Scan Data", "Very Common", "ABSD", "bulkscandata");
-            AddEnc( "Atypical Disrupted Wake Echoes", "Very Common", "ADWE", "disruptedwakeechoes");
-            AddEnc( "Distorted Shield Cycle Recordings", "Very Common", "DSCR", "shieldcyclerecordings");
-            AddEnc( "Exceptional Scrambled Emission Data", "Very Common", "ESED", "scrambledemissiondata");
-            AddEnc( "Specialised Legacy Firmware", "Very Common", "SLF", "legacyfirmware");
-            AddEnc( "Unusual Encrypted Files", "Very Common", "UEF", "encryptedfiles");
+            AddEnc( "Anomalous Bulk Scan Data", MaterialFreqVeryCommon, "ABSD", "bulkscandata");
+            AddEnc( "Atypical Disrupted Wake Echoes", MaterialFreqVeryCommon, "ADWE", "disruptedwakeechoes");
+            AddEnc( "Distorted Shield Cycle Recordings", MaterialFreqVeryCommon, "DSCR", "shieldcyclerecordings");
+            AddEnc( "Exceptional Scrambled Emission Data", MaterialFreqVeryCommon, "ESED", "scrambledemissiondata");
+            AddEnc( "Specialised Legacy Firmware", MaterialFreqVeryCommon, "SLF", "legacyfirmware");
+            AddEnc( "Unusual Encrypted Files", MaterialFreqVeryCommon, "UEF", "encryptedfiles");
             // common data
-            AddEnc( "Anomalous FSD Telemetry", "Common", "AFT", "fsdtelemetry");
-            AddEnc( "Inconsistent Shield Soak Analysis", "Common", "ISSA", "shieldsoakanalysis");
-            AddEnc( "Irregular Emission Data", "Common", "IED", "archivedemissiondata");
-            AddEnc( "Modified Consumer Firmware", "Common", "MCF", "consumerfirmware");
-            AddEnc( "Tagged Encryption Codes", "Common", "TEC", "encryptioncodes");
-            AddEnc( "Unidentified Scan Archives", "Common", "USA", "scanarchives");
-            AddEnc( "Pattern Beta Obelisk Data", "Common", "PBOD", "ancientculturaldata");
-            AddEnc( "Pattern Gamma Obelisk Data", "Common", "PGOD", "ancienthistoricaldata");
+            AddEnc( "Anomalous FSD Telemetry", MaterialFreqCommon, "AFT", "fsdtelemetry");
+            AddEnc( "Inconsistent Shield Soak Analysis", MaterialFreqCommon, "ISSA", "shieldsoakanalysis");
+            AddEnc( "Irregular Emission Data", MaterialFreqCommon, "IED", "archivedemissiondata");
+            AddEnc( "Modified Consumer Firmware", MaterialFreqCommon, "MCF", "consumerfirmware");
+            AddEnc( "Tagged Encryption Codes", MaterialFreqCommon, "TEC", "encryptioncodes");
+            AddEnc( "Unidentified Scan Archives", MaterialFreqCommon, "USA", "scanarchives");
+            AddEnc( "Pattern Beta Obelisk Data", MaterialFreqCommon, "PBOD", "ancientculturaldata");
+            AddEnc( "Pattern Gamma Obelisk Data", MaterialFreqCommon, "PGOD", "ancienthistoricaldata");
             // standard data
-            AddEnc( "Classified Scan Databanks", "Standard", "CSD", "scandatabanks");
-            AddEnc( "Cracked Industrial Firmware", "Standard", "CIF", "industrialfirmware");
-            AddEnc( "Open Symmetric Keys", "Standard", "OSK", "symmetrickeys");
-            AddEnc( "Strange Wake Solutions", "Standard", "SWS", "wakesolutions");
-            AddEnc( "Unexpected Emission Data", "Standard", "UED", "emissiondata");
-            AddEnc( "Untypical Shield Scans", "Standard", "USS", "shielddensityreports");
-            AddEnc( "Peculiar Shield Frequency Data", "Standard", "SFD", "shieldfrequencydata");
-            AddEnc( "Classified Scan Fragment", "Standard", "CFSD", "classifiedscandata");
-            AddEnc( "Abnormal Compact Emissions Data", "Standard", "CED", "compactemissionsdata");
-            AddEnc( "Modified Embedded Firmware", "Standard", "EFW", "embeddedfirmware");
-            AddEnc( "Pattern Alpha Obelisk Data", "Standard", "PAOD", "ancientbiologicaldata");
+            AddEnc( "Classified Scan Databanks", MaterialFreqStandard, "CSD", "scandatabanks");
+            AddEnc( "Cracked Industrial Firmware", MaterialFreqStandard, "CIF", "industrialfirmware");
+            AddEnc( "Open Symmetric Keys", MaterialFreqStandard, "OSK", "symmetrickeys");
+            AddEnc( "Strange Wake Solutions", MaterialFreqStandard, "SWS", "wakesolutions");
+            AddEnc( "Unexpected Emission Data", MaterialFreqStandard, "UED", "emissiondata");
+            AddEnc( "Untypical Shield Scans", MaterialFreqStandard, "USS", "shielddensityreports");
+            AddEnc( "Peculiar Shield Frequency Data", MaterialFreqStandard, "SFD", "shieldfrequencydata");
+            AddEnc( "Classified Scan Fragment", MaterialFreqStandard, "CFSD", "classifiedscandata");
+            AddEnc( "Abnormal Compact Emissions Data", MaterialFreqStandard, "CED", "compactemissionsdata");
+            AddEnc( "Modified Embedded Firmware", MaterialFreqStandard, "EFW", "embeddedfirmware");
+            AddEnc( "Pattern Alpha Obelisk Data", MaterialFreqStandard, "PAOD", "ancientbiologicaldata");
             // rare data
-            AddEnc( "Aberrant Shield Pattern Analysis", "Rare", "ASPA", "shieldpatternanalysis");
-            AddEnc( "Atypical Encryption Archives", "Rare", "AEA", "encryptionarchives");
-            AddEnc( "Decoded Emission Data", "Rare", "DED");
-            AddEnc( "Divergent Scan Data", "Rare", "DSD", "encodedscandata");
-            AddEnc( "Eccentric Hyperspace Trajectories", "Rare", "EHT", "hyperspacetrajectories");
-            AddEnc( "Security Firmware Patch", "Rare", "SFP", "securityfirmware");
-            AddEnc( "Pattern Delta Obelisk Data", "Rare", "PDOD", "ancientlanguagedata");
+            AddEnc( "Aberrant Shield Pattern Analysis", MaterialFreqRare, "ASPA", "shieldpatternanalysis");
+            AddEnc( "Atypical Encryption Archives", MaterialFreqRare, "AEA", "encryptionarchives");
+            AddEnc( "Decoded Emission Data", MaterialFreqRare, "DED");
+            AddEnc( "Divergent Scan Data", MaterialFreqRare, "DSD", "encodedscandata");
+            AddEnc( "Eccentric Hyperspace Trajectories", MaterialFreqRare, "EHT", "hyperspacetrajectories");
+            AddEnc( "Security Firmware Patch", MaterialFreqRare, "SFP", "securityfirmware");
+            AddEnc( "Pattern Delta Obelisk Data", MaterialFreqRare, "PDOD", "ancientlanguagedata");
             // very rare data
-            AddEnc( "Adaptive Encryptors Capture", "Very Rare", "AEC", "adaptiveencryptors");
-            AddEnc( "Datamined Wake Exceptions", "Very Rare", "DWEx", "dataminedwake");
-            AddEnc( "Peculiar Shield Frequency Data", "Very Rare", "PSFD", "shieldfrequencydata");
-            AddEnc( "Pattern Epsilon Obelisk Data", "Very Rare", "PSFD", "ancienttechnologicaldata");
+            AddEnc( "Adaptive Encryptors Capture", MaterialFreqVeryRare, "AEC", "adaptiveencryptors");
+            AddEnc( "Datamined Wake Exceptions", MaterialFreqVeryRare, "DWEx", "dataminedwake");
+            AddEnc( "Peculiar Shield Frequency Data", MaterialFreqVeryRare, "PSFD", "shieldfrequencydata");
+            AddEnc( "Pattern Epsilon Obelisk Data", MaterialFreqVeryRare, "PSFD", "ancienttechnologicaldata");
             //very common manufactured
-            AddManu( "Basic Conductors", "Very Common", "BaC");
-            AddManu( "Chemical Storage Units", "Very Common", "CSU");
-            AddManu( "Compact Composites", "Very Common", "CC");
-            AddManu( "Crystal Shards", "Very Common", "CS");
-            AddManu( "Grid Resistors", "Very Common", "GR");
-            AddManu( "Heat Conduction Wiring", "Very Common", "HCW");
-            AddManu( "Mechanical Scrap", "Very Common", "MS");
-            AddManu( "Salvaged Alloys", "Very Common", "SAll");
-            AddManu( "Worn Shield Emitters", "Very Common", "WSE");
-            AddManu( "Thermic Alloys", "Very Common", "ThA");
+            AddManu( "Basic Conductors", MaterialFreqVeryCommon, "BaC");
+            AddManu( "Chemical Storage Units", MaterialFreqVeryCommon, "CSU");
+            AddManu( "Compact Composites", MaterialFreqVeryCommon, "CC");
+            AddManu( "Crystal Shards", MaterialFreqVeryCommon, "CS");
+            AddManu( "Grid Resistors", MaterialFreqVeryCommon, "GR");
+            AddManu( "Heat Conduction Wiring", MaterialFreqVeryCommon, "HCW");
+            AddManu( "Mechanical Scrap", MaterialFreqVeryCommon, "MS");
+            AddManu( "Salvaged Alloys", MaterialFreqVeryCommon, "SAll");
+            AddManu( "Worn Shield Emitters", MaterialFreqVeryCommon, "WSE");
+            AddManu( "Thermic Alloys", MaterialFreqVeryCommon, "ThA");
             // common manufactured
-            AddManu("Chemical Processors", "Common", "CP");
-            AddManu("Conductive Components", "Common", "CCo");
-            AddManu("Filament Composites", "Common", "FiC");
-            AddManu("Flawed Focus Crystals", "Common", "FFC", "uncutfocuscrystals");
-            AddManu("Galvanising Alloys", "Common", "GA");
-            AddManu("Heat Dispersion Plate", "Common", "HDP");
-            AddManu("Heat Resistant Ceramics", "Common", "HRC");
-            AddManu("Hybrid Capacitors", "Common", "HC");
-            AddManu("Mechanical Equipment", "Common", "ME");
-            AddManu("Shield Emitters", "Common", "SE");
+            AddManu("Chemical Processors", MaterialFreqCommon, "CP");
+            AddManu("Conductive Components", MaterialFreqCommon, "CCo");
+            AddManu("Filament Composites", MaterialFreqCommon, "FiC");
+            AddManu("Flawed Focus Crystals", MaterialFreqCommon, "FFC", "uncutfocuscrystals");
+            AddManu("Galvanising Alloys", MaterialFreqCommon, "GA");
+            AddManu("Heat Dispersion Plate", MaterialFreqCommon, "HDP");
+            AddManu("Heat Resistant Ceramics", MaterialFreqCommon, "HRC");
+            AddManu("Hybrid Capacitors", MaterialFreqCommon, "HC");
+            AddManu("Mechanical Equipment", MaterialFreqCommon, "ME");
+            AddManu("Shield Emitters", MaterialFreqCommon, "SE");
 
             // standard manufactured
-            AddManu( "Chemical Distillery", "Standard", "CD");
-            AddManu( "Conductive Ceramics", "Standard", "CCe");
-            AddManu( "Electrochemical Arrays", "Standard", "EA");
-            AddManu( "Focus Crystals", "Standard", "FoC");
-            AddManu( "Heat Exchangers", "Standard", "HE");
-            AddManu( "High Density Composites", "Standard", "HDC");
-            AddManu( "Mechanical Components", "Standard", "MC");
-            AddManu( "Phase Alloys", "Standard", "PA");
-            AddManu( "Precipitated Alloys", "Standard", "PAll");
-            AddManu( "Shielding Sensors", "Standard", "SS");
+            AddManu( "Chemical Distillery", MaterialFreqStandard, "CD");
+            AddManu( "Conductive Ceramics", MaterialFreqStandard, "CCe");
+            AddManu( "Electrochemical Arrays", MaterialFreqStandard, "EA");
+            AddManu( "Focus Crystals", MaterialFreqStandard, "FoC");
+            AddManu( "Heat Exchangers", MaterialFreqStandard, "HE");
+            AddManu( "High Density Composites", MaterialFreqStandard, "HDC");
+            AddManu( "Mechanical Components", MaterialFreqStandard, "MC");
+            AddManu( "Phase Alloys", MaterialFreqStandard, "PA");
+            AddManu( "Precipitated Alloys", MaterialFreqStandard, "PAll");
+            AddManu( "Shielding Sensors", MaterialFreqStandard, "SS");
             // rare manufactured
-            AddManu( "Chemical Manipulators", "Rare", "CM");
-            AddManu( "Compound Shielding", "Rare", "CoS");
-            AddManu( "Conductive Polymers", "Rare", "CPo");
-            AddManu( "Configurable Components", "Rare", "CCom");
-            AddManu( "Heat Vanes", "Rare", "HV");
-            AddManu( "Polymer Capacitors", "Rare", "PCa");
-            AddManu( "Proto Light Alloys", "Rare", "PLA");
-            AddManu( "Refined Focus Crystals", "Rare", "RFC");
-            AddManu( "Tempered Alloys", "Rare", "TeA");
-            AddManu( "Proprietary Composites", "Rare", "FPC", "fedproprietarycomposites");
+            AddManu( "Chemical Manipulators", MaterialFreqRare, "CM");
+            AddManu( "Compound Shielding", MaterialFreqRare, "CoS");
+            AddManu( "Conductive Polymers", MaterialFreqRare, "CPo");
+            AddManu( "Configurable Components", MaterialFreqRare, "CCom");
+            AddManu( "Heat Vanes", MaterialFreqRare, "HV");
+            AddManu( "Polymer Capacitors", MaterialFreqRare, "PCa");
+            AddManu( "Proto Light Alloys", MaterialFreqRare, "PLA");
+            AddManu( "Refined Focus Crystals", MaterialFreqRare, "RFC");
+            AddManu( "Tempered Alloys", MaterialFreqRare, "TeA");
+            AddManu( "Proprietary Composites", MaterialFreqRare, "FPC", "fedproprietarycomposites");
             // very rare manufactured
-            AddManu( "Core Dynamics Composites", "Very Rare", "FCC", "fedcorecomposites");
-            AddManu( "Biotech Conductors", "Very Rare", "BiC");
-            AddManu( "Exquisite Focus Crystals", "Very Rare", "EFC");
-            AddManu( "Imperial Shielding", "Very Rare", "IS");
-            AddManu( "Improvised Components", "Very Rare", "IC");
-            AddManu( "Military Grade Alloys", "Very Rare", "MGA");
-            AddManu( "Military Supercapacitors", "Very Rare", "MSC");
-            AddManu( "Pharmaceutical Isolators", "Very Rare", "PI");
-            AddManu( "Proto Heat Radiators", "Very Rare", "PHR");
-            AddManu( "Proto Radiolic Alloys", "Very Rare", "PRA");
+            AddManu( "Core Dynamics Composites", MaterialFreqVeryRare, "FCC", "fedcorecomposites");
+            AddManu( "Biotech Conductors", MaterialFreqVeryRare, "BiC");
+            AddManu( "Exquisite Focus Crystals", MaterialFreqVeryRare, "EFC");
+            AddManu( "Imperial Shielding", MaterialFreqVeryRare, "IS");
+            AddManu( "Improvised Components", MaterialFreqVeryRare, "IC");
+            AddManu( "Military Grade Alloys", MaterialFreqVeryRare, "MGA");
+            AddManu( "Military Supercapacitors", MaterialFreqVeryRare, "MSC");
+            AddManu( "Pharmaceutical Isolators", MaterialFreqVeryRare, "PI");
+            AddManu( "Proto Heat Radiators", MaterialFreqVeryRare, "PHR");
+            AddManu( "Proto Radiolic Alloys", MaterialFreqVeryRare, "PRA");
 
             //Unknowns, data from INARA and cometbourne, July 17
             // Renamed in 2.4
@@ -502,17 +508,17 @@ namespace EliteDangerousCore
             AddRare("unknownresin", "Thargoid Resin");
             AddRare("unknowntechnologysamples", "Thargoid Technology Samples");
 
-            AddManu("Thargoid Carapace", "Common", "UKCP", "unknowncarapace");
-            AddManu("Thargoid Energy Cell", "Standard", "UKEC", "unknownenergycell");
-            AddManu("Thargoid Organic Circuitry", "Very Rare", "UKOC", "unknownorganiccircuitry");
-            AddManu("Thargoid Technology Components", "Rare", "UKTC", "unknowntechnologycomponents");
-            AddManu("Sensor Fragment", "Very Rare", "UES", "unknownenergysource");
+            AddManu("Thargoid Carapace", MaterialFreqCommon, "UKCP", "unknowncarapace");
+            AddManu("Thargoid Energy Cell", MaterialFreqStandard, "UKEC", "unknownenergycell");
+            AddManu("Thargoid Organic Circuitry", MaterialFreqVeryRare, "UKOC", "unknownorganiccircuitry");
+            AddManu("Thargoid Technology Components", MaterialFreqRare, "UKTC", "unknowntechnologycomponents");
+            AddManu("Sensor Fragment", MaterialFreqVeryRare, "UES", "unknownenergysource");
 
-            AddEnc("Thargoid Material Composition Data", "Standard", "UMCD", "tg_compositiondata");
-            AddEnc("Thargoid Structural Data", "Common", "UKSD", "tg_structuraldata");
-            AddEnc("Thargoid Residue Data", "Rare", "URDA", "tg_residuedata");
-            AddEnc("Thargoid Ship Signature", "Standard", "USSig", "unknownshipsignature");
-            AddEnc("Thargoid Wake Data", "Rare", "UWD", "unknownwakedata");
+            AddEnc("Thargoid Material Composition Data", MaterialFreqStandard, "UMCD", "tg_compositiondata");
+            AddEnc("Thargoid Structural Data", MaterialFreqCommon, "UKSD", "tg_structuraldata");
+            AddEnc("Thargoid Residue Data", MaterialFreqRare, "URDA", "tg_residuedata");
+            AddEnc("Thargoid Ship Signature", MaterialFreqStandard, "USSig", "unknownshipsignature");
+            AddEnc("Thargoid Wake Data", MaterialFreqRare, "UWD", "unknownwakedata");
 
             // INARA - no idea what the FD IDs are
 
