@@ -45,64 +45,18 @@ namespace EDDiscovery.UserControls
         {
             this.components = new System.ComponentModel.Container();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.textBoxTargetLatitude = new ExtendedControls.TextBoxBorder();
-            this.textBoxTargetLongitude = new ExtendedControls.TextBoxBorder();
             this.labelTargetLat = new ExtendedControls.LabelExt();
             this.labelExtTargetLong = new ExtendedControls.LabelExt();
             this.pictureBoxCompass = new ExtendedControls.PictureBoxHotspot();
             this.checkBoxHideTransparent = new ExtendedControls.CheckBoxCustom();
+            this.numberBoxTargetLatitude = new ExtendedControls.NumberBoxDouble();
+            this.numberBoxTargetLongitude = new ExtendedControls.NumberBoxDouble();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxCompass)).BeginInit();
             this.SuspendLayout();
             // 
             // toolTip1
             // 
             this.toolTip1.ShowAlways = true;
-            // 
-            // textBoxTargetLatitude
-            // 
-            this.textBoxTargetLatitude.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
-            this.textBoxTargetLatitude.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
-            this.textBoxTargetLatitude.BorderColor = System.Drawing.Color.Transparent;
-            this.textBoxTargetLatitude.BorderColorScaling = 0.5F;
-            this.textBoxTargetLatitude.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.textBoxTargetLatitude.ControlBackground = System.Drawing.SystemColors.Control;
-            this.textBoxTargetLatitude.Location = new System.Drawing.Point(52, 0);
-            this.textBoxTargetLatitude.Multiline = false;
-            this.textBoxTargetLatitude.Name = "textBoxTargetLatitude";
-            this.textBoxTargetLatitude.ReadOnly = false;
-            this.textBoxTargetLatitude.ScrollBars = System.Windows.Forms.ScrollBars.None;
-            this.textBoxTargetLatitude.SelectionLength = 0;
-            this.textBoxTargetLatitude.SelectionStart = 0;
-            this.textBoxTargetLatitude.Size = new System.Drawing.Size(55, 20);
-            this.textBoxTargetLatitude.TabIndex = 1;
-            this.textBoxTargetLatitude.Text = "0";
-            this.textBoxTargetLatitude.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
-            this.toolTip1.SetToolTip(this.textBoxTargetLatitude, "Latitude of your destination");
-            this.textBoxTargetLatitude.WordWrap = true;
-            this.textBoxTargetLatitude.Validated += new System.EventHandler(this.textBox_Validated);
-            // 
-            // textBoxTargetLongitude
-            // 
-            this.textBoxTargetLongitude.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
-            this.textBoxTargetLongitude.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
-            this.textBoxTargetLongitude.BorderColor = System.Drawing.Color.Transparent;
-            this.textBoxTargetLongitude.BorderColorScaling = 0.5F;
-            this.textBoxTargetLongitude.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.textBoxTargetLongitude.ControlBackground = System.Drawing.SystemColors.Control;
-            this.textBoxTargetLongitude.Location = new System.Drawing.Point(129, 0);
-            this.textBoxTargetLongitude.Multiline = false;
-            this.textBoxTargetLongitude.Name = "textBoxTargetLongitude";
-            this.textBoxTargetLongitude.ReadOnly = false;
-            this.textBoxTargetLongitude.ScrollBars = System.Windows.Forms.ScrollBars.None;
-            this.textBoxTargetLongitude.SelectionLength = 0;
-            this.textBoxTargetLongitude.SelectionStart = 0;
-            this.textBoxTargetLongitude.Size = new System.Drawing.Size(55, 20);
-            this.textBoxTargetLongitude.TabIndex = 2;
-            this.textBoxTargetLongitude.Text = "0";
-            this.textBoxTargetLongitude.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
-            this.toolTip1.SetToolTip(this.textBoxTargetLongitude, "Longitude of your destination");
-            this.textBoxTargetLongitude.WordWrap = true;
-            this.textBoxTargetLongitude.Validated += new System.EventHandler(this.textBox_Validated);
             // 
             // labelTargetLat
             // 
@@ -147,15 +101,71 @@ namespace EDDiscovery.UserControls
             this.checkBoxHideTransparent.UseVisualStyleBackColor = true;
             this.checkBoxHideTransparent.CheckedChanged += new System.EventHandler(this.checkBoxHideTransparent_CheckedChanged);
             // 
+            // numberBoxTargetLatitude
+            // 
+            this.numberBoxTargetLatitude.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
+            this.numberBoxTargetLatitude.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
+            this.numberBoxTargetLatitude.BackErrorColor = System.Drawing.Color.Red;
+            this.numberBoxTargetLatitude.BorderColor = System.Drawing.Color.Transparent;
+            this.numberBoxTargetLatitude.BorderColorScaling = 0.5F;
+            this.numberBoxTargetLatitude.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.numberBoxTargetLatitude.ControlBackground = System.Drawing.SystemColors.Control;
+            this.numberBoxTargetLatitude.DelayBeforeNotification = 0;
+            this.numberBoxTargetLatitude.Format = "N4";
+            this.numberBoxTargetLatitude.FormatCulture = new System.Globalization.CultureInfo("en-GB");
+            this.numberBoxTargetLatitude.InErrorCondition = false;
+            this.numberBoxTargetLatitude.Location = new System.Drawing.Point(52, 1);
+            this.numberBoxTargetLatitude.Maximum = 180D;
+            this.numberBoxTargetLatitude.Minimum = -180D;
+            this.numberBoxTargetLatitude.Multiline = false;
+            this.numberBoxTargetLatitude.Name = "numberBoxTargetLatitude";
+            this.numberBoxTargetLatitude.ReadOnly = false;
+            this.numberBoxTargetLatitude.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.numberBoxTargetLatitude.SelectionLength = 0;
+            this.numberBoxTargetLatitude.SelectionStart = 0;
+            this.numberBoxTargetLatitude.Size = new System.Drawing.Size(54, 20);
+            this.numberBoxTargetLatitude.TabIndex = 9;
+            this.numberBoxTargetLatitude.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.numberBoxTargetLatitude.Value = 0D;
+            this.numberBoxTargetLatitude.WordWrap = true;
+            // 
+            // numberBoxTargetLongitude
+            // 
+            this.numberBoxTargetLongitude.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
+            this.numberBoxTargetLongitude.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
+            this.numberBoxTargetLongitude.BackErrorColor = System.Drawing.Color.Red;
+            this.numberBoxTargetLongitude.BorderColor = System.Drawing.Color.Transparent;
+            this.numberBoxTargetLongitude.BorderColorScaling = 0.5F;
+            this.numberBoxTargetLongitude.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.numberBoxTargetLongitude.ControlBackground = System.Drawing.SystemColors.Control;
+            this.numberBoxTargetLongitude.DelayBeforeNotification = 0;
+            this.numberBoxTargetLongitude.Format = "N4";
+            this.numberBoxTargetLongitude.FormatCulture = new System.Globalization.CultureInfo("en-GB");
+            this.numberBoxTargetLongitude.InErrorCondition = false;
+            this.numberBoxTargetLongitude.Location = new System.Drawing.Point(129, 1);
+            this.numberBoxTargetLongitude.Maximum = 180D;
+            this.numberBoxTargetLongitude.Minimum = -180D;
+            this.numberBoxTargetLongitude.Multiline = false;
+            this.numberBoxTargetLongitude.Name = "numberBoxTargetLongitude";
+            this.numberBoxTargetLongitude.ReadOnly = false;
+            this.numberBoxTargetLongitude.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.numberBoxTargetLongitude.SelectionLength = 0;
+            this.numberBoxTargetLongitude.SelectionStart = 0;
+            this.numberBoxTargetLongitude.Size = new System.Drawing.Size(54, 20);
+            this.numberBoxTargetLongitude.TabIndex = 10;
+            this.numberBoxTargetLongitude.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.numberBoxTargetLongitude.Value = 0D;
+            this.numberBoxTargetLongitude.WordWrap = true;
+            // 
             // UserControlCompass
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.numberBoxTargetLongitude);
+            this.Controls.Add(this.numberBoxTargetLatitude);
             this.Controls.Add(this.checkBoxHideTransparent);
             this.Controls.Add(this.pictureBoxCompass);
-            this.Controls.Add(this.textBoxTargetLongitude);
             this.Controls.Add(this.labelExtTargetLong);
-            this.Controls.Add(this.textBoxTargetLatitude);
             this.Controls.Add(this.labelTargetLat);
             this.Name = "UserControlCompass";
             this.Size = new System.Drawing.Size(312, 83);
@@ -168,10 +178,10 @@ namespace EDDiscovery.UserControls
         #endregion
         private System.Windows.Forms.ToolTip toolTip1;
         private ExtendedControls.LabelExt labelTargetLat;
-        private ExtendedControls.TextBoxBorder textBoxTargetLatitude;
         private ExtendedControls.LabelExt labelExtTargetLong;
-        private ExtendedControls.TextBoxBorder textBoxTargetLongitude;
         private ExtendedControls.PictureBoxHotspot pictureBoxCompass;
         private ExtendedControls.CheckBoxCustom checkBoxHideTransparent;
+        private ExtendedControls.NumberBoxDouble numberBoxTargetLatitude;
+        private ExtendedControls.NumberBoxDouble numberBoxTargetLongitude;
     }
 }
