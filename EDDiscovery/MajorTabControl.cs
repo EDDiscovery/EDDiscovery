@@ -59,7 +59,7 @@ namespace EDDiscovery
                 int nameindex = (i - 1) / 2;
                 string name = majortabnames != null && nameindex < majortabnames.Length && majortabnames[nameindex].Length>0 ? majortabnames[nameindex] : null;
 
-                if (tabctrl[i] != -1)
+                if (tabctrl[i] != -1)       // this means UserControlHistory, which is a special one
                 {
                     try
                     {
@@ -84,6 +84,8 @@ namespace EDDiscovery
                 TabPages.Add(history); // add back in right place
                 userhistory.Init(eddiscovery, null, UserControls.UserControlCommonBase.DisplayNumberHistoryGrid); // and init at this point with 0 as dn
             }
+
+            EnsureMajorTabIsPresent(PanelInformation.PanelIDs.PanelSelector, true);     // just in case it disappears due to weirdness or debugging
 
             if (tabctrl.Length > 0 && tabctrl[0] >= 0 && tabctrl[0] < TabPages.Count)
                 SelectedIndex = tabctrl[0];  // make sure external data does not crash us
