@@ -56,10 +56,6 @@ namespace EDDiscovery.UserControls
         public delegate void AddedNewEntry(HistoryEntry he, HistoryList hl, bool accepted);
         public AddedNewEntry OnNewEntry;       // FIRED after discoveryform.onNewEntry->this.AddNewEntry completes
 
-        // to allow pop out for primary travel grid
-        public delegate void PopOut();
-        public PopOut OnPopOut;                     // pop out button pressed
-
         #endregion
 
         #region Init
@@ -100,7 +96,7 @@ namespace EDDiscovery.UserControls
         }
 
         public override void Init()
-        {                       
+        {
             cfs.ConfigureThirdOption("Travel", "Docked;FSD Jump;Undocked;");
             cfs.Changed += EventFilterChanged;
             TravelHistoryFilter.InitaliseComboBox(comboBoxHistoryWindow, DbHistorySave);
@@ -118,21 +114,12 @@ namespace EDDiscovery.UserControls
             writeEventInfoToLogDebugToolStripMenuItem.Visible = false;
 #endif
 
-            ExtraIcons(false,false);
-
             searchtimer = new Timer() { Interval = 500 };
             searchtimer.Tick += Searchtimer_Tick;
 
             discoveryform.OnHistoryChange += HistoryChanged;
             discoveryform.OnNewEntry += AddNewEntry;
             discoveryform.OnNoteChanged += OnNoteChanged;
-        }
-
-        public void ExtraIcons(bool icon, bool popout )
-        {
-            panelHistoryIcon.Visible = icon;
-            drawnPanelPopOut.Visible = popout;
-            drawnPanelPopOut.Left = icon ? 32 : 3;
         }
 
         public override void LoadLayout()
@@ -1085,10 +1072,5 @@ namespace EDDiscovery.UserControls
 
 #endregion
 
-        private void drawnPanelPopOut_Click(object sender, EventArgs e)
-        {
-            if (OnPopOut != null)
-                OnPopOut();
-        }
     }
 }

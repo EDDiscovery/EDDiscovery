@@ -88,20 +88,11 @@ namespace EDDiscovery.UserControls
             if (filter.Length > 0)
                 fieldfilter.FromJSON(filter);        // load filter
 
-            ExtraIcons(false,false);
-
             searchtimer = new Timer() { Interval = 500 };
             searchtimer.Tick += Searchtimer_Tick;
 
             discoveryform.OnHistoryChange += Display;
             discoveryform.OnNewEntry += AddNewEntry;
-        }
-
-        public void ExtraIcons(bool icon, bool popout)
-        {
-            panelJournalIcon.Visible = icon;
-            drawnPanelPopOut.Visible = popout;
-            drawnPanelPopOut.Left = icon ? 32 : 3;
         }
 
         public override void LoadLayout()
@@ -452,12 +443,6 @@ namespace EDDiscovery.UserControls
                 dataGridViewJournal.Rows[rowno].Selected = true;
                 FireChangeSelection();
             }
-        }
-
-        private void drawnPanelPopOut_Click(object sender, EventArgs e)
-        {
-            if (OnPopOut != null)
-                OnPopOut();
         }
 
         #region Excel

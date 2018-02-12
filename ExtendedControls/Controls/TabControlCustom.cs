@@ -66,6 +66,7 @@ namespace ExtendedControls
         public bool AllowDragReorder { get; set; } = false;
         // Tab clicked.. reports last tab clicked
         public int LastTabClicked { get; private set; } = -1;
+        public void ClearLastTab() { LastTabClicked = -1; }
 
         #endregion
 
@@ -121,6 +122,20 @@ namespace ExtendedControls
 
         #region Helpers
 
+        public bool SelectTabPage(string name)
+        {
+            foreach (TabPage p in TabPages)
+            {
+                if (p.Text.Equals(name, StringComparison.InvariantCultureIgnoreCase))
+                {
+                    SelectTab(p);
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
         public int CalculateMinimumTabWidth()                                // given fonts and the tab text, whats the minimum width?
         {
             Graphics gr = Parent.CreateGraphics();
@@ -159,8 +174,8 @@ namespace ExtendedControls
 
         protected override void OnMouseDown(MouseEventArgs e)
         {
-            base.OnMouseDown(e);
             LastTabClicked = TabAt(e.Location);
+            base.OnMouseDown(e);
             //System.Diagnostics.Debug.WriteLine("Clicked on "+ mouseclickedtab);
         }
         protected override void OnMouseMove(MouseEventArgs e)
@@ -214,8 +229,10 @@ namespace ExtendedControls
                 return;
             }
 
-            if (backImageControlBitmap == null)    // First time, we have size..
+            if (backImageControlBitmap == null || RowCount != lastrowcount)    // First time, we have size.. or if multiline changes
             {
+                CleanUp();
+
                 backImageControlBitmap = new Bitmap(Width, Height);
                 Graphics backGraphics = Graphics.FromImage(backImageControlBitmap);
                 PaintTransparentBackground(backGraphics, ClientRectangle);    // force the paint of the background into this bitmap.
@@ -244,7 +261,8 @@ namespace ExtendedControls
                         DrawTab(i, tabImageGraphics, false, mouseover == i);
                 }
 
-                DrawTab(SelectedIndex, tabImageGraphics, true, false);     // we paint the selected one last, in case it overwrites the other ones.
+                if ( SelectedIndex>=0)      // and if its selected, we did not draw it
+                    DrawTab(SelectedIndex, tabImageGraphics, true, false);     // we paint the selected one last, in case it overwrites the other ones.
             }
 
             tabImageGraphics.Flush();
@@ -408,6 +426,8 @@ namespace ExtendedControls
         private FlatStyle flatstyle = FlatStyle.System;
         private TabStyleCustom tabstyle = new TabStyleSquare();    // change for the shape of tabs.
         private int mouseover = -1;                                 // where the mouse if hovering
+        private int lastrowcount = -1;                            // tab row count - to see if its gone multiline
+
         #endregion
 
     }

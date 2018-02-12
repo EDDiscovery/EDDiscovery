@@ -20,6 +20,8 @@ namespace ExtendedControls
 {
     public interface ITheme                     // Extended controls use this if they want to be themed
     {
+        bool ApplyToFormStandardFontSize(Form form);  
+        bool ApplyToForm(Form form, float size); 
         bool ApplyToForm(Form form, Font fnt = null);   // null means use standard one
         void ApplyToControls(Control parent, Font fnt = null, bool applytothis = false);
 

@@ -45,7 +45,7 @@ namespace EDDiscovery.Forms
             labelMessage.TextBackColor = msgback;
             labelMessage.ForeColor = msgfore;
             labelMessage.Text = msg;
-            labelMessage.CentreX = labelMessage.CentreY = true;
+            labelMessage.TextAlign = ContentAlignment.MiddleCenter;
 
             ontimer.Interval = timeout;
             ontimer.Tick += new EventHandler(Timedout);

@@ -43,19 +43,21 @@ namespace EDDiscovery.Forms
         /// </summary>
         private void InitializeComponent()
         {
-            this.buttonCancel = new System.Windows.Forms.Button();
-            this.buttonOK = new System.Windows.Forms.Button();
-            this.txtsphereRadius = new ExtendedControls.TextBoxBorder();
-            this.labelExt8 = new ExtendedControls.LabelExt();
+            this.buttonCancel = new ExtendedControls.ButtonExt();
+            this.buttonOK = new ExtendedControls.ButtonExt();
+            this.txtsphereRadius = new ExtendedControls.NumberBoxDouble();
+            this.labelExt8 = new System.Windows.Forms.Label();
             this.txtExportVisited = new ExtendedControls.AutoCompleteTextBox();
             this.btnExportTravel = new ExtendedControls.ButtonExt();
-            this.labelExt9 = new ExtendedControls.LabelExt();
+            this.labelExt9 = new System.Windows.Forms.Label();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // buttonCancel
             // 
             this.buttonCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.buttonCancel.Location = new System.Drawing.Point(218, 61);
+            this.buttonCancel.Location = new System.Drawing.Point(277, 86);
             this.buttonCancel.Name = "buttonCancel";
             this.buttonCancel.Size = new System.Drawing.Size(75, 23);
             this.buttonCancel.TabIndex = 22;
@@ -66,7 +68,7 @@ namespace EDDiscovery.Forms
             // buttonOK
             // 
             this.buttonOK.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.buttonOK.Location = new System.Drawing.Point(299, 61);
+            this.buttonOK.Location = new System.Drawing.Point(358, 86);
             this.buttonOK.Name = "buttonOK";
             this.buttonOK.Size = new System.Drawing.Size(75, 23);
             this.buttonOK.TabIndex = 21;
@@ -76,19 +78,35 @@ namespace EDDiscovery.Forms
             // 
             // txtsphereRadius
             // 
-            this.txtsphereRadius.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtsphereRadius.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
+            this.txtsphereRadius.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
+            this.txtsphereRadius.BackErrorColor = System.Drawing.Color.Red;
             this.txtsphereRadius.BorderColor = System.Drawing.Color.Transparent;
             this.txtsphereRadius.BorderColorScaling = 0.5F;
-            this.txtsphereRadius.Location = new System.Drawing.Point(47, 35);
+            this.txtsphereRadius.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.txtsphereRadius.ControlBackground = System.Drawing.SystemColors.Control;
+            this.txtsphereRadius.DelayBeforeNotification = 0;
+            this.txtsphereRadius.Format = "0.#";
+            this.txtsphereRadius.InErrorCondition = false;
+            this.txtsphereRadius.Location = new System.Drawing.Point(85, 51);
+            this.txtsphereRadius.Maximum = 100000D;
+            this.txtsphereRadius.Minimum = 0D;
+            this.txtsphereRadius.Multiline = false;
             this.txtsphereRadius.Name = "txtsphereRadius";
-            this.txtsphereRadius.Size = new System.Drawing.Size(54, 20);
+            this.txtsphereRadius.ReadOnly = false;
+            this.txtsphereRadius.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.txtsphereRadius.SelectionLength = 0;
+            this.txtsphereRadius.SelectionStart = 0;
+            this.txtsphereRadius.Size = new System.Drawing.Size(83, 20);
             this.txtsphereRadius.TabIndex = 19;
+            this.txtsphereRadius.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.txtsphereRadius.Value = 10D;
+            this.txtsphereRadius.WordWrap = true;
             // 
             // labelExt8
             // 
             this.labelExt8.AutoSize = true;
-            this.labelExt8.Location = new System.Drawing.Point(1, 38);
+            this.labelExt8.Location = new System.Drawing.Point(16, 54);
             this.labelExt8.Name = "labelExt8";
             this.labelExt8.Size = new System.Drawing.Size(40, 13);
             this.labelExt8.TabIndex = 20;
@@ -96,10 +114,13 @@ namespace EDDiscovery.Forms
             // 
             // txtExportVisited
             // 
-            this.txtExportVisited.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtExportVisited.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
+            this.txtExportVisited.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
+            this.txtExportVisited.BackErrorColor = System.Drawing.Color.Red;
             this.txtExportVisited.BorderColor = System.Drawing.Color.Transparent;
             this.txtExportVisited.BorderColorScaling = 0.5F;
+            this.txtExportVisited.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.txtExportVisited.ControlBackground = System.Drawing.SystemColors.Control;
             this.txtExportVisited.DropDownBackgroundColor = System.Drawing.Color.Gray;
             this.txtExportVisited.DropDownBorderColor = System.Drawing.Color.Green;
             this.txtExportVisited.DropDownHeight = 200;
@@ -109,19 +130,24 @@ namespace EDDiscovery.Forms
             this.txtExportVisited.DropDownScrollBarColor = System.Drawing.Color.LightGray;
             this.txtExportVisited.DropDownWidth = 0;
             this.txtExportVisited.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.txtExportVisited.Location = new System.Drawing.Point(47, 9);
+            this.txtExportVisited.InErrorCondition = false;
+            this.txtExportVisited.Location = new System.Drawing.Point(86, 25);
+            this.txtExportVisited.Multiline = false;
             this.txtExportVisited.Name = "txtExportVisited";
-            this.txtExportVisited.Size = new System.Drawing.Size(210, 20);
+            this.txtExportVisited.ReadOnly = false;
+            this.txtExportVisited.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.txtExportVisited.SelectionLength = 0;
+            this.txtExportVisited.SelectionStart = 0;
+            this.txtExportVisited.Size = new System.Drawing.Size(189, 20);
             this.txtExportVisited.TabIndex = 16;
+            this.txtExportVisited.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.txtExportVisited.WordWrap = true;
             // 
             // btnExportTravel
             // 
-            this.btnExportTravel.BorderColorScaling = 1.25F;
-            this.btnExportTravel.ButtonColorScaling = 0.5F;
-            this.btnExportTravel.ButtonDisabledScaling = 0.5F;
-            this.btnExportTravel.Location = new System.Drawing.Point(263, 7);
+            this.btnExportTravel.Location = new System.Drawing.Point(302, 25);
             this.btnExportTravel.Name = "btnExportTravel";
-            this.btnExportTravel.Size = new System.Drawing.Size(111, 23);
+            this.btnExportTravel.Size = new System.Drawing.Size(133, 23);
             this.btnExportTravel.TabIndex = 17;
             this.btnExportTravel.Text = "Current system";
             this.btnExportTravel.UseVisualStyleBackColor = true;
@@ -130,28 +156,41 @@ namespace EDDiscovery.Forms
             // labelExt9
             // 
             this.labelExt9.AutoSize = true;
-            this.labelExt9.Location = new System.Drawing.Point(1, 12);
+            this.labelExt9.Location = new System.Drawing.Point(16, 28);
             this.labelExt9.Name = "labelExt9";
             this.labelExt9.Size = new System.Drawing.Size(41, 13);
             this.labelExt9.TabIndex = 18;
             this.labelExt9.Text = "System";
             // 
+            // panel1
+            // 
+            this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel1.Controls.Add(this.txtExportVisited);
+            this.panel1.Controls.Add(this.buttonCancel);
+            this.panel1.Controls.Add(this.labelExt9);
+            this.panel1.Controls.Add(this.buttonOK);
+            this.panel1.Controls.Add(this.btnExportTravel);
+            this.panel1.Controls.Add(this.txtsphereRadius);
+            this.panel1.Controls.Add(this.labelExt8);
+            this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel1.Location = new System.Drawing.Point(0, 0);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(455, 123);
+            this.panel1.TabIndex = 23;
+            this.panel1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.panel1_MouseDown);
+            // 
             // ImportSphere
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(383, 92);
-            this.Controls.Add(this.buttonCancel);
-            this.Controls.Add(this.buttonOK);
-            this.Controls.Add(this.txtsphereRadius);
-            this.Controls.Add(this.labelExt8);
-            this.Controls.Add(this.txtExportVisited);
-            this.Controls.Add(this.btnExportTravel);
-            this.Controls.Add(this.labelExt9);
+            this.ClientSize = new System.Drawing.Size(455, 123);
+            this.Controls.Add(this.panel1);
             this.Name = "ImportSphere";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Import sphere systems";
+            this.panel1.ResumeLayout(false);
+            this.panel1.PerformLayout();
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
@@ -159,10 +198,11 @@ namespace EDDiscovery.Forms
 
         private ExtendedControls.AutoCompleteTextBox txtExportVisited;
         private ExtendedControls.ButtonExt btnExportTravel;
-        private ExtendedControls.LabelExt labelExt9;
-        private ExtendedControls.TextBoxBorder txtsphereRadius;
-        private ExtendedControls.LabelExt labelExt8;
-        private System.Windows.Forms.Button buttonCancel;
-        private System.Windows.Forms.Button buttonOK;
+        private ExtendedControls.NumberBoxDouble txtsphereRadius;
+        private System.Windows.Forms.Label labelExt9;
+        private System.Windows.Forms.Label labelExt8;
+        private ExtendedControls.ButtonExt buttonCancel;
+        private ExtendedControls.ButtonExt buttonOK;
+        private System.Windows.Forms.Panel panel1;
     }
 }

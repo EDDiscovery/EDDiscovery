@@ -23,15 +23,13 @@ namespace EDDiscovery.ScreenShots
         public Rectangle CropArea { get { return new Rectangle(numericUpDownLeft.Value,numericUpDownTop.Value,numericUpDownWidth.Value,numericUpDownHeight.Value); } }
 
         string initialssfolder;
-        Font font;
         bool hires; // for file name presentation only
 
         public ScreenShotConfigureForm()
         {
             InitializeComponent();
             EDDiscovery.EDDTheme theme = EDDiscovery.EDDTheme.Instance;
-            font = new Font(theme.FontName, 10);
-            bool winborder = theme.ApplyToForm(this, font);
+            bool winborder = theme.ApplyToFormStandardFontSize(this);
             panelTop.Visible = panelTop.Enabled = !winborder;
         }
 
@@ -61,10 +59,7 @@ namespace EDDiscovery.ScreenShots
 
         private void ScreenShotConfigureForm_FormClosed(object sender, FormClosedEventArgs e)
         {
-            font.Dispose();
-            font = null;
         }
-
 
         private void SetNumEnabled()
         {

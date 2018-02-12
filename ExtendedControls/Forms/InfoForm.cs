@@ -33,7 +33,7 @@ namespace ExtendedControls
             InitializeComponent();
         }
 
-        public void Info(string title, Icon ic, string info , Font fnt, int[] array , bool themeit = false)    
+        public void Info(string title, Icon ic, string info , int[] array , bool themeit = false)    
         {
             Icon = ic;
             Text = title;
@@ -46,22 +46,18 @@ namespace ExtendedControls
 
             ITheme theme = ThemeableFormsInstance.Instance;
 
+            textBoxInfo.Font = SystemFonts.DefaultFont;
+
             if (themeit && theme != null)
             {
-                if (fnt == null)
-                    fnt = new Font(theme.FontName, 12.0F);
-                bool winborder = theme.ApplyToForm(this, fnt);
+                bool winborder = theme.ApplyToForm(this);
                 if (winborder)
                     panelTop.Visible = false;
             }
             else
             {
                 panelTop.Visible = false;
-                if (fnt == null)
-                    fnt = new Font(Font.SystemFontName, 12.0F);
             }
-
-            textBoxInfo.Font = fnt;
         }
 
         public void AddText(string text)

@@ -52,6 +52,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="EDCommander.cs" />
+    <Compile Include="TestCompositeButton.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="TestCompositeButton.Designer.cs">
+      <DependentUpon>TestCompositeButton.cs</DependentUpon>
+    </Compile>
     <Compile Include="TestJournalRead.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -114,6 +120,9 @@
     <Compile Include="UserControl2.Designer.cs">
       <DependentUpon>UserControl2.cs</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="TestCompositeButton.resx">
+      <DependentUpon>TestCompositeButton.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="TestDirectInput.resx">
       <DependentUpon>TestDirectInput.cs</DependentUpon>
     </EmbeddedResource>

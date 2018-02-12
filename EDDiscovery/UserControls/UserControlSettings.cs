@@ -485,7 +485,7 @@ namespace EDDiscovery.UserControls
                                 "You may continue to use EDD while this operation takes place" + Environment.NewLine+
                                 "but it may be slow to respond. Do not close down EDD until this window says" + Environment.NewLine+
                                 "the process has finished" + Environment.NewLine + Environment.NewLine
-                                , null, new int[] { 0 }, true);
+                                , new int[] { 0 }, true);
                     info.EnableClose = false;
                     info.Show(discoveryform);
 

@@ -32,7 +32,7 @@ namespace EDDiscovery.Forms
             this.labelDetails.Text = he.EventDescription;
 
             EDDiscovery.EDDTheme theme = EDDiscovery.EDDTheme.Instance;
-            theme.ApplyToForm(this);
+            theme.ApplyToFormStandardFontSize(this);
         }
 
         private void buttonSave_Click(object sender, EventArgs e)
