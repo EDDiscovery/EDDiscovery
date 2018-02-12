@@ -528,7 +528,7 @@ namespace EliteDangerousCore.EDSM
             if (json == null)
                 return false;
 
-            return (json.ToString() != "[]");
+            return json.ToString().Contains("\"name\":");
         }
 
         public List<string> CheckForNewCoordinates(List<string> sysNames)
@@ -720,7 +720,7 @@ namespace EliteDangerousCore.EDSM
                     return "";
 
                 var json = response.Body;
-                if (json == null || json.ToString() == "[]")
+                if (json == null || !json.ToString().Contains("\"name\":"))
                     return "";
 
                 JObject msg = JObject.Parse(json);
