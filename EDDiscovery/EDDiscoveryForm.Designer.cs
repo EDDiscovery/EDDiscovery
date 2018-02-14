@@ -802,7 +802,7 @@ namespace EDDiscovery
             this.removeTabToolStripMenuItem,
             this.renameTabToolStripMenuItem});
             this.contextMenuStripTabs.Name = "contextMenuStripTabs";
-            this.contextMenuStripTabs.Size = new System.Drawing.Size(190, 92);
+            this.contextMenuStripTabs.Size = new System.Drawing.Size(190, 70);
             this.contextMenuStripTabs.Opening += new System.ComponentModel.CancelEventHandler(this.ContextMenuStripTabs_Opening);
             // 
             // addTabToolStripMenuItem
@@ -845,6 +845,7 @@ namespace EDDiscovery
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.EDDiscoveryForm_FormClosing);
             this.Load += new System.EventHandler(this.EDDiscoveryForm_Load);
             this.Shown += new System.EventHandler(this.EDDiscoveryForm_Shown);
+            this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.EDDiscoveryForm_MouseDown);
             this.Resize += new System.EventHandler(this.EDDiscoveryForm_Resize);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();

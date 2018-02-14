@@ -353,7 +353,9 @@ namespace EDDiscovery
             {
                 if (e.Button == MouseButtons.Right)
                 {
-                    contextMenuStripTabs.Show(tabControlMain.PointToScreen(e.Location));
+                    Point p = tabControlMain.PointToScreen(e.Location);
+                    p.Offset(0, -8);
+                    contextMenuStripTabs.Show(p);
                 }
                 else if (e.Button == MouseButtons.Middle && !IsNonRemovableTab(tabControlMain.LastTabClicked))
                 {
@@ -377,6 +379,17 @@ namespace EDDiscovery
             bool uch = tabControlMain.TabPages[n].Controls[0] is UserControls.UserControlHistory;
             bool sel = tabControlMain.TabPages[n].Controls[0] is UserControls.UserControlPanelSelector;
             return uch || sel;
+        }
+
+        private void EDDiscoveryForm_MouseDown(object sender, MouseEventArgs e)     // use the form to detect the click on the empty tab area.. it passes thru
+        {
+            if (e.Button == MouseButtons.Right && e.Y >= tabControlMain.Top)
+            {
+                tabControlMain.ClearLastTab();      // this sets LastTab to -1, which thankfully means insert at last but one position to the AddTab function
+                Point p = this.PointToScreen(e.Location);
+                p.Offset(0, -8);
+                contextMenuStripTabs.Show(p);
+            }
         }
 
         #endregion
