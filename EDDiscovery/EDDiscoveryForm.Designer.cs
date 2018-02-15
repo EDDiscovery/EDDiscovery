@@ -613,9 +613,6 @@ namespace EDDiscovery
             this.panelToolBar.TabIndex = 1;
             this.panelToolBar.UnrolledHeight = 32;
             this.panelToolBar.UnrollHoverDelay = 1000;
-            this.panelToolBar.DeployStarting += new System.EventHandler(this.panelToolBar_DeployStarting);
-            this.panelToolBar.RetractCompleted += new System.EventHandler(this.panelToolBar_RetractCompleted);
-            this.panelToolBar.Resize += new System.EventHandler(this.panelToolBar_Resize);
             // 
             // comboBoxCommander
             // 
@@ -749,16 +746,14 @@ namespace EDDiscovery
             // tabControlMain
             // 
             this.tabControlMain.AllowDragReorder = true;
-            this.tabControlMain.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.tabControlMain.Controls.Add(this.tabPageTravelHistory);
+            this.tabControlMain.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabControlMain.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.tabControlMain.Location = new System.Drawing.Point(0, 56);
             this.tabControlMain.Multiline = true;
             this.tabControlMain.Name = "tabControlMain";
             this.tabControlMain.SelectedIndex = 0;
-            this.tabControlMain.Size = new System.Drawing.Size(981, 480);
+            this.tabControlMain.Size = new System.Drawing.Size(984, 483);
             this.tabControlMain.TabColorScaling = 0.5F;
             this.tabControlMain.TabControlBorderBrightColor = System.Drawing.Color.LightGray;
             this.tabControlMain.TabControlBorderColor = System.Drawing.Color.DarkGray;
@@ -781,7 +776,7 @@ namespace EDDiscovery
             this.tabPageTravelHistory.Location = new System.Drawing.Point(4, 22);
             this.tabPageTravelHistory.Name = "tabPageTravelHistory";
             this.tabPageTravelHistory.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageTravelHistory.Size = new System.Drawing.Size(973, 454);
+            this.tabPageTravelHistory.Size = new System.Drawing.Size(976, 457);
             this.tabPageTravelHistory.TabIndex = 0;
             this.tabPageTravelHistory.Text = "History";
             this.tabPageTravelHistory.UseVisualStyleBackColor = true;
@@ -791,7 +786,7 @@ namespace EDDiscovery
             this.travelHistoryControl.Dock = System.Windows.Forms.DockStyle.Fill;
             this.travelHistoryControl.Location = new System.Drawing.Point(3, 3);
             this.travelHistoryControl.Name = "travelHistoryControl";
-            this.travelHistoryControl.Size = new System.Drawing.Size(967, 448);
+            this.travelHistoryControl.Size = new System.Drawing.Size(970, 451);
             this.travelHistoryControl.TabIndex = 0;
             // 
             // contextMenuStripTabs
@@ -843,10 +838,10 @@ namespace EDDiscovery
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(984, 561);
             this.Controls.Add(this.panel_eddiscovery);
-            this.Controls.Add(this.statusStrip1);
+            this.Controls.Add(this.tabControlMain);
             this.Controls.Add(this.panelToolBar);
             this.Controls.Add(this.panelMenuTop);
-            this.Controls.Add(this.tabControlMain);
+            this.Controls.Add(this.statusStrip1);
             this.Icon = global::EDDiscovery.Properties.Resources.edlogo_3mo_icon;
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "EDDiscoveryForm";

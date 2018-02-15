@@ -25,14 +25,13 @@ namespace EDDiscovery
 {
     public class MajorTabControl : ExtendedControls.TabControlCustom
     {
-        UserControls.UserControlHistory userhistory;
+        UserControls.UserControlTravelGrid travelgrid;
         EDDiscoveryForm eddiscovery;
 
         //EDDiscovery Init calls this
-        public void CreateTabs(EDDiscoveryForm edf, UserControls.UserControlHistory uch)
+        public void CreateTabs(EDDiscoveryForm edf)
         { 
             eddiscovery = edf;
-            userhistory = uch;
 
             string majortabs = SQLiteConnectionUser.GetSettingString("MajorTabControlList", "");
             string[] majortabnames = null;
@@ -53,11 +52,14 @@ namespace EDDiscovery
             TabPage history = TabPages[0];       // remember history page, remove
             TabPages.Clear();
 
+            UserControls.UserControlHistory uch = history.Controls[0] as UserControls.UserControlHistory;
+            travelgrid = uch.GetTravelGrid;     // remember travel grid globally for later
+
             bool donehistory = false;
             for (int i = 1; i < tabctrl.Length; i += 2)
             {
                 int nameindex = (i - 1) / 2;
-                string name = majortabnames != null && nameindex < majortabnames.Length && majortabnames[nameindex].Length>0 ? majortabnames[nameindex] : null;
+                string name = majortabnames != null && nameindex < majortabnames.Length && majortabnames[nameindex].Length > 0 ? majortabnames[nameindex] : null;
 
                 if (tabctrl[i] != -1)       // this means UserControlHistory, which is a special one
                 {
@@ -65,30 +67,30 @@ namespace EDDiscovery
                     {
                         PanelInformation.PanelIDs p = (PanelInformation.PanelIDs)tabctrl[i];
                         CreateTab(p, name, tabctrl[i + 1], TabPages.Count, false);      // no need the theme, will be themed as part of overall load
-                                                                                                 // may fail if p is crap, then just ignore
+                                                                                        // may fail if p is crap, then just ignore
                     }
                     catch { }   // paranoia in case tabctrl number is crappy.
                 }
-                else if (!donehistory)
+                else if (!donehistory)      // just double check for repeats
                 {
-                    if (name != null)
+                    if (name != null)       // set name. if set.
                         history.Text = name;
                     TabPages.Add(history); // add back in right place
-                    userhistory.Init(eddiscovery, null, UserControls.UserControlCommonBase.DisplayNumberHistoryGrid); // and init at this point with 0 as dn
                     donehistory = true;
                 }
             }
 
-            if (!donehistory)      // just in case its missing
-            {
+            if (!donehistory)      // just in case its missing.. be something up if it is.
                 TabPages.Add(history); // add back in right place
-                userhistory.Init(eddiscovery, null, UserControls.UserControlCommonBase.DisplayNumberHistoryGrid); // and init at this point with 0 as dn
-            }
+
+            uch.Dock = System.Windows.Forms.DockStyle.Fill;    // Crucial ! uccb has to be fill, even though the VS designer does not indicate you need to set it.. copied from designer code
+            uch.Location = new System.Drawing.Point(3, 3);
+            uch.Init(eddiscovery, null, UserControls.UserControlCommonBase.DisplayNumberHistoryGrid); // and init at this point with 0 as dn
 
             EnsureMajorTabIsPresent(PanelInformation.PanelIDs.PanelSelector, true);     // just in case it disappears due to weirdness or debugging
 
-            if (tabctrl.Length > 0 && tabctrl[0] >= 0 && tabctrl[0] < TabPages.Count)
-                SelectedIndex = tabctrl[0];  // make sure external data does not crash us
+            if (tabctrl.Length > 0 && tabctrl[0] >= 0 && tabctrl[0] < TabPages.Count)   // make sure external data does not crash us
+                SelectedIndex = tabctrl[0];  
         }
 
         public void LoadTabs()     // called on Loading..
@@ -224,7 +226,7 @@ namespace EDDiscovery
 
             System.Diagnostics.Debug.WriteLine("Create tab {0} dn {1} at {2}", ptype, dn, posindex);
 
-            uccb.Init(eddiscovery, userhistory.GetTravelGrid, dn);    // start the uccb up
+            uccb.Init(eddiscovery, travelgrid, dn);    // start the uccb up
 
             string postfix;
             if (ptype != PanelInformation.PanelIDs.TravelGrid)      // given the dn, work out the name
