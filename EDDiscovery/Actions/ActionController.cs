@@ -341,18 +341,20 @@ namespace EDDiscovery.Actions
 
         #region Manage them
 
-        public void ManageAddOns()
+        public bool ManageAddOns()
         {
-            ManagerAddOns(true);
+            return ManagerAddOns(true);
         }
 
-        public void EditAddOns()
+        public bool EditAddOns()
         {
-            ManagerAddOns(false);
+            return ManagerAddOns(false);
         }
 
-        private void ManagerAddOns(bool manage)
+        private bool ManagerAddOns(bool manage)
         {
+            bool changed = false;
+
             using (AddOnManagerForm dmf = new AddOnManagerForm())
             {
                 dmf.Init(manage, this.Icon);
@@ -378,10 +380,9 @@ namespace EDDiscovery.Actions
                     {
                         if (kv.Value.Equals("+"))
                         {
-
                             changes += kv.Key + ";";
-
                         }
+
                         if (kv.Value.Equals("-"))
                             discoveryform.RemoveMenuItemsFromAddOns(kv.Key);
                     }
@@ -389,8 +390,12 @@ namespace EDDiscovery.Actions
                     ActionRun(ActionEventEDList.onInstall, null, new ConditionVariables("InstallList", changes));
 
                     ActionConfigureKeys();
+
+                    changed = true;
                 }
             }
+
+            return changed;
         }
 
         private bool Dmf_checkActionLoaded(string name)

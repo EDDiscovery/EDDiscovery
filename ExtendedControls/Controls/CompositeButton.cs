@@ -62,19 +62,21 @@ namespace ExtendedControls
             textlab.Dispose();
         }
 
-        public void QuickInit(Image backimage, string text, Font textfont, Color textback, Image decal, Size decalsize, Image[] buttons, Size buttonsize, Action<object, int> ButtonPressed)
+        public void QuickInit(Image backimage, string text, Font textfont, Color textfore, Color backgroundcol, Image decal, Size decalsize, Image[] buttons, Size buttonsize, Action<object, int> ButtonPressed)
         {
             BackgroundImage = backimage;
             BackgroundImageLayout = ImageLayout.Stretch;
             Text = text;
-            TextBackColor = textback;
+            TextBackColor = backgroundcol;
             TextFont = textfont;
+            textlab.ForeColor = textfore;
 
             Decals = new Panel[1];
             Decals[0] = new Panel();
             Decals[0].Size = decalsize;
             Decals[0].BackgroundImageLayout = ImageLayout.Stretch;
             Decals[0].BackgroundImage = decal;
+            Decals[0].BackColor = backgroundcol;
 
             Buttons = new ButtonExt[buttons.Length];
             for (int i = 0; i < buttons.Length; i++)
@@ -84,6 +86,7 @@ namespace ExtendedControls
                 Buttons[i].Image = buttons[i];
                 Buttons[i].ImageLayout = ImageLayout.Stretch;
                 Buttons[i].Tag = i;
+                Buttons[i].BackColor = backgroundcol;
                 Buttons[i].Click += (o, e) => { ButtonExt b = o as ButtonExt; ButtonPressed?.Invoke(this.Tag, (int)b.Tag); };
             }
 

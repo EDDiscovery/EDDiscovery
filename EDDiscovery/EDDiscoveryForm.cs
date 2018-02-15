@@ -78,7 +78,8 @@ namespace EDDiscovery
         public event Action<Object, HistoryEntry, bool> OnNoteChanged;                    // UI.Note has been updated attached to this note
         public event Action<List<ISystem>> OnNewCalculatedRoute;        // route plotter has a new one
         public event Action<List<string>> OnNewStarsForExpedition;      // add stars to expedition 
-        public event Action<List<string>,bool> OnNewStarsForTrilat;      // add stars to trilat (false distance, true wanted)
+        public event Action<List<string>, bool> OnNewStarsForTrilat;      // add stars to trilat (false distance, true wanted)
+        public event Action OnAddOnsChanged;                            // add on changed
 
         #endregion
 
@@ -1213,25 +1214,26 @@ namespace EDDiscovery
 #endregion
 
 #region Add Ons
-
-        private void manageAddOnsToolStripMenuItem_Click(object sender, EventArgs e)
+        public void manageAddOnsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            actioncontroller.ManageAddOns();
+            buttonExtManageAddOns_Click(sender,e);
         }
 
         private void buttonExtManageAddOns_Click(object sender, EventArgs e)
         {
-            actioncontroller.ManageAddOns();
+            if (actioncontroller.ManageAddOns())
+                OnAddOnsChanged?.Invoke();
         }
 
         private void configureAddOnActionsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            actioncontroller.EditAddOns();
+            buttonExtEditAddOns_Click(sender, e);
         }
 
         private void buttonExtEditAddOns_Click(object sender, EventArgs e)
         {
-            actioncontroller.EditAddOns();
+            if ( actioncontroller.EditAddOns() )
+                OnAddOnsChanged?.Invoke();
         }
 
         private void editLastActionPackToolStripMenuItem_Click(object sender, EventArgs e)

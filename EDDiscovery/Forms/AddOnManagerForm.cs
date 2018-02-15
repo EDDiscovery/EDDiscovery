@@ -140,6 +140,18 @@ namespace EDDiscovery.Forms
                 CheckThread.Join();
         }
 
+        static public void ReadLocalFiles(VersioningManager mgr, bool othertypes)
+        {
+            mgr.ReadLocalFiles(EDDOptions.Instance.AppDataDirectory, "Actions", "*.act", "Action File");
+
+            if (othertypes)
+            {
+                mgr.ReadLocalFiles(EDDOptions.Instance.AppDataDirectory, "Flights", "*.vid", "Video File");
+                mgr.ReadLocalFiles(EDDOptions.Instance.AppDataDirectory, "AddonFiles", "*.inf", "Other Files");
+            }
+        }
+
+
         void ReadyToDisplay()
         {
             panelVScroll.RemoveAllControls(new List<Control>() { buttonMore});
@@ -149,17 +161,13 @@ namespace EDDiscovery.Forms
             int[] edversion = System.Reflection.Assembly.GetExecutingAssembly().GetVersion();
             System.Diagnostics.Debug.Assert(edversion != null);
 
-            mgr.ReadLocalFiles(EDDOptions.Instance.AppDataDirectory, "Actions", "*.act", "Action File");
+            ReadLocalFiles(mgr, managedownloadmode);
 
             if (managedownloadmode)
             {
-                mgr.ReadLocalFiles(EDDOptions.Instance.AppDataDirectory, "Flights", "*.vid", "Video File");
-                mgr.ReadLocalFiles(EDDOptions.Instance.AppDataDirectory, "AddonFiles", "*.inf", "Other Files");
-
                 mgr.ReadInstallFiles(EDDiscovery.Properties.Resources.URLGithubDataDownload, "ActionFiles/V1", downloadactfolder, EDDOptions.Instance.AppDataDirectory, "*.act", edversion, "Action File");
                 mgr.ReadInstallFiles(EDDiscovery.Properties.Resources.URLGithubDataDownload, "VideoFiles/V1", downloadflightfolder, EDDOptions.Instance.AppDataDirectory, "*.vid", edversion, "Video File");
                 mgr.ReadInstallFiles(EDDiscovery.Properties.Resources.URLGithubDataDownload, "AddonFiles/V1", downloadaddonfolder, EDDOptions.Instance.AppDataDirectory, "*.inf", edversion, "Other File");
-
 #if DEBUG
                 mgr.ReadInstallFiles(EDDiscovery.Properties.Resources.URLGithubDataDownload, "ActionFiles/Debug", downloadactdebugfolder, EDDOptions.Instance.AppDataDirectory, "*.act", edversion, "Action File");
 #endif
@@ -187,7 +195,7 @@ namespace EDDiscovery.Forms
 
             int vpos = panelheightmargin + 30;
 
-            foreach ( VersioningManager.DownloadItem di in mgr.downloaditems )
+            foreach ( VersioningManager.DownloadItem di in mgr.DownloadItems )
             {
                 Group g = new Group();
                 g.di = di;
