@@ -64,6 +64,10 @@ namespace EDDiscovery.UserControls
 
             panelVScroll.RemoveAllControls();
 
+            Bitmap backimage = new Bitmap(EDDiscovery.Icons.Controls.Selector_Background);
+            Color centre = backimage.GetPixel(48, 48);
+
+
             {
                 Versions.VersioningManager mgr = new Versions.VersioningManager();
                 AddOnManagerForm.ReadLocalFiles(mgr, true);
@@ -78,7 +82,7 @@ namespace EDDiscovery.UserControls
                             (i==0) ? "NO ADD ONS!" : i.ToString() + " Add Ons",
                             EDDTheme.Instance.GetFontAtSize(11),
                             (i==0) ? Color.Red : (EDDTheme.Instance.TextBlockColor.GetBrightness() < 0.1 ? Color.AntiqueWhite : EDDTheme.Instance.TextBlockColor),
-                            Color.FromArgb(67, 67, 67),
+                            centre,
                             EDDiscovery.Icons.Controls.Main_Addons_ManageAddOns,
                             new Size(48, 48),
                             new Image[] { EDDiscovery.Icons.Controls.Main_Addons_ManageAddOns },
@@ -86,9 +90,10 @@ namespace EDDiscovery.UserControls
                             ButtonPress);
 
                 toolTip1.SetToolTip(cb.Buttons[0], "Click to add or remove Add Ons");
-                toolTip1.SetToolTip(cb.Decals[0], "Add ons are essential additions to your EDD experiance");
-
-                panelVScroll.Controls.Add(cb);       // we don't theme it.. its already fully themed to a fixed theme.
+                toolTip1.SetToolTip(cb.Decals[0], "Add ons are essential additions to your EDD experience!");
+                panelVScroll.Controls.Add(cb);    
+                EDDTheme.Instance.ApplyToControls(cb.Buttons[0], null, true);       // need to theme up the button
+                cb.Buttons[0].BackColor = centre;   // but then fix the back colour again
             }
 
             for (int i = 0; i < PanelInformation.GetNumberPanels; i++)
@@ -105,7 +110,7 @@ namespace EDDiscovery.UserControls
                                 pi.WindowTitle,
                                 EDDTheme.Instance.GetFontAtSize(11),
                                 EDDTheme.Instance.TextBlockColor.GetBrightness() < 0.1 ? Color.AntiqueWhite : EDDTheme.Instance.TextBlockColor,
-                                Color.FromArgb(67, 67, 67),
+                                centre,
                                 pi.TabIcon,
                                 new Size(48, 48),
                                 new Image[] { EDDiscovery.Icons.Controls.TabStrip_Popout, EDDiscovery.Icons.Controls.Selector_AddTab },
@@ -114,6 +119,10 @@ namespace EDDiscovery.UserControls
                     toolTip1.SetToolTip(cb.Buttons[0], "Pop out in a new window");
                     toolTip1.SetToolTip(cb.Buttons[1], "Open as a new menu tab");
                     toolTip1.SetToolTip(cb.Decals[0], pi.Description);
+                    EDDTheme.Instance.ApplyToControls(cb.Buttons[0], null, true);
+                    cb.Buttons[0].BackColor = centre; // need to reset the colour back!
+                    EDDTheme.Instance.ApplyToControls(cb.Buttons[1], null, true);
+                    cb.Buttons[1].BackColor = centre;
 
                     panelVScroll.Controls.Add(cb);       // we don't theme it.. its already fully themed to a fixed theme.
                 }
