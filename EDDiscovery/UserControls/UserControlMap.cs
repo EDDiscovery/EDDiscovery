@@ -415,6 +415,8 @@ namespace EDDiscovery.UserControls
             }
         }
 
+        private int panSwitch = 1;
+
         private void ChartMap_MouseMove(object sender, MouseEventArgs e)
         {
             // rotate the map with the firt mouse button
@@ -433,7 +435,7 @@ namespace EDDiscovery.UserControls
             }
 
             // pan the chart with the middle mouse buttom
-            if (e.Button == MouseButtons.Middle)
+            if (e.Button == MouseButtons.Middle & panSwitch == 0)
             {
                 PanControl(chartMap, e);
             }
@@ -644,6 +646,15 @@ namespace EDDiscovery.UserControls
 
         #endregion
 
+        private void chartMap_MouseEnter(object sender, EventArgs e)
+        {
+            panSwitch = 0;
+        }
+
+        private void chartMap_MouseLeave(object sender, EventArgs e)
+        {
+            panSwitch = 1;
+        }
     }
 }
 
