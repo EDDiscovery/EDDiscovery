@@ -66,7 +66,7 @@ namespace EDDiscovery.Versions
             public string itemtype;
         };
 
-        public List<DownloadItem> downloaditems = new List<DownloadItem>();
+        public List<DownloadItem> DownloadItems { private set; get; } = new List<DownloadItem>();
 
         public VersioningManager()
         {
@@ -114,7 +114,7 @@ namespace EDDiscovery.Versions
                             it.itemtype = it.localvars["ItemType"];     // allow file to override name
                     }
 
-                    downloaditems.Add(it);
+                    DownloadItems.Add(it);
                 }
                 catch
                 {
@@ -147,7 +147,7 @@ namespace EDDiscovery.Versions
                             string installfolder = System.IO.Path.Combine(appfolder, cv["Location"]);
                             string localfilename = System.IO.Path.Combine(installfolder, Path.GetFileName(f.FullName));
 
-                            DownloadItem it = downloaditems.Find(x => x.localfilename.Equals(localfilename, StringComparison.InvariantCultureIgnoreCase));
+                            DownloadItem it = DownloadItems.Find(x => x.localfilename.Equals(localfilename, StringComparison.InvariantCultureIgnoreCase));
 
                             if (it != null)
                             {
@@ -180,7 +180,7 @@ namespace EDDiscovery.Versions
                                     state = ItemState.NotPresent,
                                 };
 
-                                downloaditems.Add(it);
+                                DownloadItems.Add(it);
                             }
 
                             int[] minedversion = cv["MinEDVersion"].VersionFromString();
@@ -254,7 +254,7 @@ namespace EDDiscovery.Versions
                 {
                     if (key.StartsWith("DisableOther"))
                     {
-                        DownloadItem other = downloaditems.Find(x => x.itemname.Equals(item.downloadedvars[key]));
+                        DownloadItem other = DownloadItems.Find(x => x.itemname.Equals(item.downloadedvars[key]));
 
                         if (other != null && other.localfilename != null)
                             SetEnableFlag(other, false, appfolder); // don't worry if it fails..
@@ -362,7 +362,7 @@ namespace EDDiscovery.Versions
 
         public void Sort()
         {
-            downloaditems.Sort(new SortIt());
+            DownloadItems.Sort(new SortIt());
         }
 
     }
