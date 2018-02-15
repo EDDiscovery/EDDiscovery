@@ -154,6 +154,7 @@ namespace EDDiscovery
             InitializeComponent();
 
             panelToolBar.HiddenMarkerWidth = 200;
+            panelToolBar.SecondHiddenMarkerWidth = 60;
             panelToolBar.PinState = SQLiteConnectionUser.GetSettingBool("ToolBarPanelPinState", true);
 
             label_version.Text = EDDOptions.Instance.VersionDisplayString;
@@ -172,7 +173,7 @@ namespace EDDiscovery
             MaterialCommodityDB.SetUpInitialTable();
 
             tabControlMain.MinimumTabWidth = 32;
-            tabControlMain.CreateTabs(this, travelHistoryControl);
+            tabControlMain.CreateTabs(this);
 
             for (int i = 0; i < PanelInformation.GetNumberPanels; i++)      // and fill up menu control
             {
@@ -1173,25 +1174,6 @@ namespace EDDiscovery
                 this.WindowState = FormWindowState.Minimized;
             else
                 MouseUpCAPTION(sender, e);
-        }
-
-#endregion
-
-#region panelToolBar animation
-
-        private void panelToolBar_Resize(object sender, EventArgs e)
-        {
-            tabControlMain.Top = panelToolBar.Bottom;
-        }
-
-        private void panelToolBar_RetractCompleted(object sender, EventArgs e)
-        {
-            tabControlMain.Height += panelToolBar.UnrolledHeight - panelToolBar.RolledUpHeight;
-        }
-
-        private void panelToolBar_DeployStarting(object sender, EventArgs e)
-        {
-            tabControlMain.Height -= panelToolBar.UnrolledHeight - panelToolBar.RolledUpHeight;
         }
 
 #endregion
