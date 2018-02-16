@@ -1349,6 +1349,7 @@ namespace EDDiscovery
 
             if (res == DialogResult.OK)
             {
+                BookmarkClass newcls = BookmarkClass.AddOrUpdateBookmark(null,false,frm.StarHeading, double.Parse(frm.x), double.Parse(frm.y), double.Parse(frm.z), tme, frm.Notes);
 
                 if (frm.IsTarget)          // asked for targetchanged..
                 {
