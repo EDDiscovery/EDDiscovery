@@ -480,15 +480,34 @@ namespace EliteDangerousCore.DB
 
         protected override DbDataReader ExecuteDbDataReader(CommandBehavior behavior)
         {
-            _txnlock.OpenReader();
-            try
+            int retries = 3;
+
+            while (true)
             {
-                return new SQLiteDataReaderED<TConn>(this.InnerCommand, behavior, txnlock: _txnlock);
-            }
-            catch
-            {
-                _txnlock.CloseReader();
-                throw;
+                _txnlock.OpenReader();
+                try
+                {
+                    return new SQLiteDataReaderED<TConn>(this.InnerCommand, behavior, txnlock: _txnlock);
+                }
+                catch (Exception ex)
+                {
+                    _txnlock.CloseReader();
+
+                    if (retries > 0)
+                    {
+                        var sqlex = ex as System.Data.SQLite.SQLiteException;
+
+                        if (sqlex != null && sqlex.ErrorCode == 5) // Database is locked
+                        {
+                            Trace.WriteLine($"Database locked - retrying\n{ex.StackTrace}");
+                            Thread.Sleep(100);
+                            retries--;
+                            continue;
+                        }
+                    }
+
+                    throw;
+                }
             }
         }
 
