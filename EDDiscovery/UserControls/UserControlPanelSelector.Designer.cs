@@ -45,16 +45,63 @@ namespace EDDiscovery.UserControls
         {
             this.components = new System.ComponentModel.Container();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.panelVScroll = new ExtendedControls.PanelVScroll();
+            this.vScrollBarCustom = new ExtendedControls.VScrollBarCustom();
+            this.panelVScroll.SuspendLayout();
             this.SuspendLayout();
             // 
             // toolTip1
             // 
             this.toolTip1.ShowAlways = true;
             // 
+            // panelVScroll
+            // 
+            this.panelVScroll.Controls.Add(this.vScrollBarCustom);
+            this.panelVScroll.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panelVScroll.InternalMargin = new System.Windows.Forms.Padding(0);
+            this.panelVScroll.Location = new System.Drawing.Point(0, 0);
+            this.panelVScroll.Name = "panelVScroll";
+            this.panelVScroll.ScrollBarWidth = 20;
+            this.panelVScroll.Size = new System.Drawing.Size(684, 526);
+            this.panelVScroll.TabIndex = 0;
+            this.panelVScroll.VerticalScrollBarDockRight = true;
+            this.panelVScroll.Resize += new System.EventHandler(this.panelVScroll_Resize);
+            // 
+            // vScrollBarCustom
+            // 
+            this.vScrollBarCustom.ArrowBorderColor = System.Drawing.Color.LightBlue;
+            this.vScrollBarCustom.ArrowButtonColor = System.Drawing.Color.LightGray;
+            this.vScrollBarCustom.ArrowColorScaling = 0.5F;
+            this.vScrollBarCustom.ArrowDownDrawAngle = 270F;
+            this.vScrollBarCustom.ArrowUpDrawAngle = 90F;
+            this.vScrollBarCustom.BorderColor = System.Drawing.Color.White;
+            this.vScrollBarCustom.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.vScrollBarCustom.HideScrollBar = false;
+            this.vScrollBarCustom.LargeChange = 10;
+            this.vScrollBarCustom.Location = new System.Drawing.Point(664, 0);
+            this.vScrollBarCustom.Maximum = -516;
+            this.vScrollBarCustom.Minimum = 0;
+            this.vScrollBarCustom.MouseOverButtonColor = System.Drawing.Color.Green;
+            this.vScrollBarCustom.MousePressedButtonColor = System.Drawing.Color.Red;
+            this.vScrollBarCustom.Name = "vScrollBarCustom";
+            this.vScrollBarCustom.Size = new System.Drawing.Size(20, 526);
+            this.vScrollBarCustom.SliderColor = System.Drawing.Color.DarkGray;
+            this.vScrollBarCustom.SmallChange = 1;
+            this.vScrollBarCustom.TabIndex = 0;
+            this.vScrollBarCustom.Text = "vScrollBarCustom1";
+            this.vScrollBarCustom.ThumbBorderColor = System.Drawing.Color.Yellow;
+            this.vScrollBarCustom.ThumbButtonColor = System.Drawing.Color.DarkBlue;
+            this.vScrollBarCustom.ThumbColorScaling = 0.5F;
+            this.vScrollBarCustom.ThumbDrawAngle = 0F;
+            this.vScrollBarCustom.Value = -516;
+            this.vScrollBarCustom.ValueLimited = -516;
+            // 
             // UserControlPanelSelector
             // 
+            this.Controls.Add(this.panelVScroll);
             this.Name = "UserControlPanelSelector";
             this.Size = new System.Drawing.Size(684, 526);
+            this.panelVScroll.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -62,5 +109,7 @@ namespace EDDiscovery.UserControls
         #endregion
 
         private System.Windows.Forms.ToolTip toolTip1;
+        private ExtendedControls.PanelVScroll panelVScroll;
+        private ExtendedControls.VScrollBarCustom vScrollBarCustom;
     }
 }

@@ -239,7 +239,7 @@ namespace EDDiscovery.UserControls
                     }
                     else
                     {
-                        BookmarkClass bkmark =BookmarkClass.bookmarks.Find(x => x.StarName != null && x.StarName.Equals(sys.Name));
+                        BookmarkClass bkmark = BookmarkClass.FindBookmarkOnSystem(sys.Name);
                         if (bkmark != null && !string.IsNullOrWhiteSpace(bkmark.Note))
                             note = bkmark.Note;
                         else

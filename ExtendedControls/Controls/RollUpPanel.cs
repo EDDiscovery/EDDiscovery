@@ -30,9 +30,10 @@ namespace ExtendedControls
         public int UnrolledHeight { get; set; } = 32;
         public int RolledUpHeight { get; set; } = 5;
         public int RollUpAnimationTime { get; set; } = 500;            // animation time
-        public bool ShowHiddenMarker { get { return hiddenmarkershow; } set { hiddenmarkershow = value; SetHMViz();} }
+        public bool ShowHiddenMarker { get { return hiddenmarkershow; } set { hiddenmarkershow = value; SetHMViz(); } }
 
-        public int HiddenMarkerWidth { get; set; } = 0;   //0 = full width
+        public int HiddenMarkerWidth { get; set; } = 0;   // 0 = full width >0 width from left, <0 width in centre
+        public int SecondHiddenMarkerWidth { get; set; } = 0;   // 0 = off, else >0 width on far right.  Only set if HiddenMarkerWidth!=0 (not checked)
 
         public bool PinState { get { return pinbutton.Checked; } set { SetPinState(value); } }
 
@@ -42,14 +43,15 @@ namespace ExtendedControls
         public event EventHandler RetractCompleted;
 
         private CheckBoxCustom pinbutton;        // public so you can theme them with colour/IAs
-        private DrawnPanel hiddenmarker;
+        private DrawnPanel hiddenmarker1;
+        private DrawnPanel hiddenmarker2;
 
         long targetrolltickstart;     // when the roll is supposed to be in time
         const int rolltimerinterval = 25;
 
         Action<RollUpPanel, CheckBoxCustom> PinStateChanged = null;
 
-        enum Mode { None, PauseBeforeRollDown, PauseBeforeRollUp, RollUp, RollDown};
+        enum Mode { None, PauseBeforeRollDown, PauseBeforeRollUp, RollUp, RollDown };
         Mode mode;
         Timer timer;
         bool hiddenmarkershow = true;           // if to show it at all.
@@ -71,21 +73,27 @@ namespace ExtendedControls
             pinbutton.CheckedChanged += Pinbutton_CheckedChanged;
             pinbutton.Name = "RUP Pinbutton";
 
-            hiddenmarker = new DrawnPanelNoTheme();
-            hiddenmarker.Name = "Hidden marker";
-            hiddenmarker.Location = new Point(0, 0);
-            hiddenmarker.ImageSelected = DrawnPanel.ImageType.Bars;
-            hiddenmarker.Size = new Size(100, 3);
-            hiddenmarker.Visible = false;
-            hiddenmarker.Padding = new Padding(0);
-            hiddenmarker.Click += Hiddenmarker_Click;
+            hiddenmarker1 = new DrawnPanelNoTheme();
+            hiddenmarker1.Name = "Hidden marker";
+            hiddenmarker1.ImageSelected = DrawnPanel.ImageType.Bars;
+            hiddenmarker1.Visible = false;
+            hiddenmarker1.Padding = new Padding(0);
+            hiddenmarker1.Click += Hiddenmarker_Click;
+
+            hiddenmarker2 = new DrawnPanelNoTheme();
+            hiddenmarker2.Name = "Hidden marker";
+            hiddenmarker2.ImageSelected = DrawnPanel.ImageType.Bars;
+            hiddenmarker2.Visible = false;
+            hiddenmarker2.Padding = new Padding(0);
+            hiddenmarker2.Click += Hiddenmarker_Click;
 
             Controls.Add(pinbutton);
-            Controls.Add(hiddenmarker);
+            Controls.Add(hiddenmarker1);
+            Controls.Add(hiddenmarker2);
 
             ResumeLayout();
 
-            mode = Mode.None; 
+            mode = Mode.None;
             timer = new Timer();
             timer.Tick += Timer_Tick;
 
@@ -96,12 +104,12 @@ namespace ExtendedControls
         {
             base.OnBackColorChanged(e);
             pinbutton.BackColor = BackColor;
-            hiddenmarker.BackColor = BackColor;
+            hiddenmarker1.BackColor = hiddenmarker2.BackColor = BackColor;
         }
 
         private void Hiddenmarker_Click(object sender, EventArgs e)
         {
-            if ( mode == Mode.PauseBeforeRollDown )
+            if (mode == Mode.PauseBeforeRollDown)
             {
                 //System.Diagnostics.Debug.WriteLine("Cancel roll down pause and expand now");
                 timer.Stop();
@@ -111,17 +119,20 @@ namespace ExtendedControls
 
         private void SetHMViz()
         {
-            hiddenmarker.Visible = hiddenmarkershow && hiddenmarkershouldbeshown;
+            bool hm1vis = hiddenmarkershow && hiddenmarkershouldbeshown;        // done this way, don't trust visible property, sometimes it can be delayed being set so can't reread it
+            hiddenmarker1.Visible = hm1vis;
+            hiddenmarker2.Visible = hm1vis && SecondHiddenMarkerWidth > 0;            // only visible if width >0 (not full or centre) and both sides
         }
 
         public void SetToolTip(ToolTip t, string ttpin = null, string ttmarker = null)
         {
             if (ttpin == null)
                 ttpin = "Pin to stop this menu bar disappearing automatically";
-            if ( ttmarker == null )
+            if (ttmarker == null)
                 ttmarker = "Click or hover over this to unroll the menu bar";
             t.SetToolTip(pinbutton, ttpin);
-            t.SetToolTip(hiddenmarker, ttmarker);
+            t.SetToolTip(hiddenmarker1, ttmarker);
+            t.SetToolTip(hiddenmarker2, ttmarker);
         }
 
         public void SetPinState(bool state)
@@ -139,7 +150,7 @@ namespace ExtendedControls
         }
 
 
-        public void SetPinImages(Image up , Image down)
+        public void SetPinImages(Image up, Image down)
         {
             pinbutton.Image = up;
             pinbutton.ImageUnchecked = down;
@@ -168,7 +179,7 @@ namespace ExtendedControls
 
                 foreach (Control c in Controls)     // everything except hidden marker visible
                 {
-                    if (!Object.ReferenceEquals(c, hiddenmarker))
+                    if (!Object.ReferenceEquals(c, hiddenmarker1) && !Object.ReferenceEquals(c, hiddenmarker2))
                         c.Visible = true;
                 }
             }
@@ -221,7 +232,7 @@ namespace ExtendedControls
                 mode = Mode.PauseBeforeRollDown;
                 //System.Diagnostics.Debug.WriteLine(Environment.TickCount + " begin wait for unroll");
             }
-            else if ( mode == Mode.PauseBeforeRollUp )      // if in a roll up.. we stop it
+            else if (mode == Mode.PauseBeforeRollUp)      // if in a roll up.. we stop it
             {
                 timer.Stop();
                 mode = Mode.None;
@@ -275,8 +286,10 @@ namespace ExtendedControls
                 if (hmwidth == 0)
                     hmwidth = ClientRectangle.Width;
 
-                hiddenmarker.Left = (HiddenMarkerWidth<0) ? ((ClientRectangle.Width - hmwidth)/2) : 0;
-                hiddenmarker.Width = hmwidth;
+                hiddenmarker1.Left = (HiddenMarkerWidth < 0) ? ((ClientRectangle.Width - hmwidth) / 2) : 0;
+                hiddenmarker2.Left = ClientRectangle.Width - SecondHiddenMarkerWidth;       // shown on right, when visible
+                hiddenmarker1.Width = hmwidth;
+                hiddenmarker2.Width = SecondHiddenMarkerWidth;       // shown on right, when visible
             }
         }
 
@@ -296,7 +309,7 @@ namespace ExtendedControls
                     timer.Stop();
                     foreach (Control c in Controls)
                     {
-                        if (!Object.ReferenceEquals(c, hiddenmarker))       // everything hidden but hm
+                        if (!Object.ReferenceEquals(c, hiddenmarker1) && !Object.ReferenceEquals(c, hiddenmarker2))       // everything hidden but hm
                             c.Visible = false;
                     }
 
@@ -352,14 +365,5 @@ namespace ExtendedControls
                 }
             }
         }
-
-        // NOT IN USE
-        #region Icon Replacement
-        public void ReplaceIconsNOTINUSE(Func<string, Image> getIcon)
-        {
-            pinbutton.Image = getIcon("PinDown");
-            pinbutton.ImageUnchecked = getIcon("PinUp");
-        }
-        #endregion
     }
 }
