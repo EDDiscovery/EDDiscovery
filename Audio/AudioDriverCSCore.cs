@@ -125,7 +125,24 @@ namespace AudioExtensions
             if (aout != null)
             {
                 aout.Stop();
-                aout.Dispose();
+
+                try
+                {
+                    aout.Dispose();
+                }
+                catch (DirectSoundException ex)
+                {
+                    if (ex.Result == DSResult.BufferLost)
+                    {
+                        System.Diagnostics.Trace.WriteLine($"Audio object disposal failed with DSERR_BUFFERLOST - continuing\n{ex.ToString()}");
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+
+                aout = null;
             }
         }
 
