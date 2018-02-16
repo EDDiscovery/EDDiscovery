@@ -1349,15 +1349,6 @@ namespace EDDiscovery
 
             if (res == DialogResult.OK)
             {
-                BookmarkClass newcls = new BookmarkClass();
-
-                newcls.Heading = frm.StarHeading;
-                newcls.x = double.Parse(frm.x);
-                newcls.y = double.Parse(frm.y);
-                newcls.z = double.Parse(frm.z);
-                newcls.Time = tme;
-                newcls.Note = frm.Notes;
-                newcls.Add();
 
                 if (frm.IsTarget)          // asked for targetchanged..
                 {
@@ -1999,7 +1990,7 @@ namespace EDDiscovery
             cursysdistz = float.MaxValue;
             Matrix4 resmat = posdir.GetResMat;
 
-            foreach (BookmarkClass bc in BookmarkClass.bookmarks)
+            foreach (BookmarkClass bc in BookmarkClass.Bookmarks)
             {
                 //Console.WriteLine("Checking bookmark " + ((bc.Heading != null) ? bc.Heading : bc.StarName));
 

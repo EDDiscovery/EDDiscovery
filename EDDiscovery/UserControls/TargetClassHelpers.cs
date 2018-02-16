@@ -80,16 +80,10 @@ namespace EDDiscovery.UserControls
                         {
                             createbookmark = true;
                         }
+
                         if (createbookmark)
                         {
-                            BookmarkClass newbk = new BookmarkClass();
-                            newbk.StarName = sn;
-                            newbk.x = sc.X;
-                            newbk.y = sc.Y;
-                            newbk.z = sc.Z;
-                            newbk.Time = DateTime.Now;
-                            newbk.Note = "";
-                            newbk.Add();
+                            BookmarkClass newbk = BookmarkClass.AddOrUpdateBookmark(null, true, sn, sc.X, sc.Y, sc.Z, DateTime.Now, "");
                             TargetClass.SetTargetBookmark(sc.Name, newbk.id, newbk.x, newbk.y, newbk.z);
                         }
                     }
@@ -127,7 +121,7 @@ namespace EDDiscovery.UserControls
             Form senderForm = ((Control)sender)?.FindForm() ?? discoveryForm;
 
             // try and find the associated bookmark..
-            BookmarkClass bkmark = (curbookmark != null) ? curbookmark : BookmarkClass.bookmarks.Find(x => x.StarName != null && x.StarName.Equals(cursystem.Name));
+            BookmarkClass bkmark = (curbookmark != null) ? curbookmark : BookmarkClass.FindBookmarkOnSystem(cursystem.Name);
 
             SystemNoteClass sn = (cursystem != null) ? SystemNoteClass.GetNoteOnSystem(cursystem.Name, cursystem.EDSMID) : null;
             string note = (sn != null) ? sn.Note : "";
@@ -176,26 +170,8 @@ namespace EDDiscovery.UserControls
 
                 if (res == DialogResult.OK)
                 {
-                    BookmarkClass newcls = new BookmarkClass();
-
-                    if (regionmarker)
-                        newcls.Heading = frm.StarHeading;
-                    else
-                        newcls.StarName = frm.StarHeading;
-
-                    newcls.x = double.Parse(frm.x);
-                    newcls.y = double.Parse(frm.y);
-                    newcls.z = double.Parse(frm.z);
-                    newcls.Time = tme;
-                    newcls.Note = frm.Notes;
-
-                    if (bkmark != null)
-                    {
-                        newcls.id = bkmark.id;
-                        newcls.Update();
-                    }
-                    else
-                        newcls.Add();
+                    BookmarkClass newcls = BookmarkClass.AddOrUpdateBookmark(bkmark, !regionmarker, frm.StarHeading, double.Parse(frm.x), double.Parse(frm.y), double.Parse(frm.z),
+                                                                     tme, frm.Notes);
 
                     if ((frm.IsTarget && targetid != newcls.id) || (!frm.IsTarget && targetid == newcls.id)) // changed..
                     {

@@ -128,6 +128,9 @@ namespace EliteDangerousCore.DB
                 if (dbver < 115)
                     UpgradeUserDB115(conn);
 
+                if (dbver < 116)
+                    UpgradeUserDB116(conn);
+
                 CreateUserDBTableIndexes(conn);
 
                 return true;
@@ -378,6 +381,13 @@ namespace EliteDangerousCore.DB
             string query2 = "ALTER TABLE Commanders ADD COLUMN EGOName TEXT";
             string query3 = "ALTER TABLE Commanders ADD COLUMN EGOAPIKey TEXT";
             PerformUpgrade(conn, 115, true, false, new[] { query1, query2, query3 });
+        }
+
+
+        private static void UpgradeUserDB116(SQLiteConnectionUser conn)
+        {
+            string query1 = "ALTER TABLE Bookmarks ADD COLUMN PlanetMarks TEXT DEFAULT NULL";
+            PerformUpgrade(conn, 116, true, false, new[] { query1 });
         }
 
 
