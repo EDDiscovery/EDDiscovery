@@ -78,7 +78,8 @@ namespace EDDiscovery
         public event Action<Object, HistoryEntry, bool> OnNoteChanged;                    // UI.Note has been updated attached to this note
         public event Action<List<ISystem>> OnNewCalculatedRoute;        // route plotter has a new one
         public event Action<List<string>> OnNewStarsForExpedition;      // add stars to expedition 
-        public event Action<List<string>,bool> OnNewStarsForTrilat;      // add stars to trilat (false distance, true wanted)
+        public event Action<List<string>, bool> OnNewStarsForTrilat;      // add stars to trilat (false distance, true wanted)
+        public event Action OnAddOnsChanged;                            // add on changed
 
         #endregion
 
@@ -154,6 +155,7 @@ namespace EDDiscovery
             InitializeComponent();
 
             panelToolBar.HiddenMarkerWidth = 200;
+            panelToolBar.SecondHiddenMarkerWidth = 60;
             panelToolBar.PinState = SQLiteConnectionUser.GetSettingBool("ToolBarPanelPinState", true);
 
             label_version.Text = EDDOptions.Instance.VersionDisplayString;
@@ -172,7 +174,7 @@ namespace EDDiscovery
             MaterialCommodityDB.SetUpInitialTable();
 
             tabControlMain.MinimumTabWidth = 32;
-            tabControlMain.CreateTabs(this, travelHistoryControl);
+            tabControlMain.CreateTabs(this);
 
             for (int i = 0; i < PanelInformation.GetNumberPanels; i++)      // and fill up menu control
             {
@@ -363,7 +365,9 @@ namespace EDDiscovery
             {
                 if (e.Button == MouseButtons.Right)
                 {
-                    contextMenuStripTabs.Show(tabControlMain.PointToScreen(e.Location));
+                    Point p = tabControlMain.PointToScreen(e.Location);
+                    p.Offset(0, -8);
+                    contextMenuStripTabs.Show(p);
                 }
                 else if (e.Button == MouseButtons.Middle && !IsNonRemovableTab(tabControlMain.LastTabClicked))
                 {
@@ -386,6 +390,17 @@ namespace EDDiscovery
             bool uch = tabControlMain.TabPages[n].Controls[0] is UserControls.UserControlHistory;
             bool sel = tabControlMain.TabPages[n].Controls[0] is UserControls.UserControlPanelSelector;
             return uch || sel;
+        }
+
+        private void EDDiscoveryForm_MouseDown(object sender, MouseEventArgs e)     // use the form to detect the click on the empty tab area.. it passes thru
+        {
+            if (e.Button == MouseButtons.Right && e.Y >= tabControlMain.Top)
+            {
+                tabControlMain.ClearLastTab();      // this sets LastTab to -1, which thankfully means insert at last but one position to the AddTab function
+                Point p = this.PointToScreen(e.Location);
+                p.Offset(0, -8);
+                contextMenuStripTabs.Show(p);
+            }
         }
 
         #endregion
@@ -1164,25 +1179,6 @@ namespace EDDiscovery
 
 #endregion
 
-#region panelToolBar animation
-
-        private void panelToolBar_Resize(object sender, EventArgs e)
-        {
-            tabControlMain.Top = panelToolBar.Bottom;
-        }
-
-        private void panelToolBar_RetractCompleted(object sender, EventArgs e)
-        {
-            tabControlMain.Height += panelToolBar.UnrolledHeight - panelToolBar.RolledUpHeight;
-        }
-
-        private void panelToolBar_DeployStarting(object sender, EventArgs e)
-        {
-            tabControlMain.Height -= panelToolBar.UnrolledHeight - panelToolBar.RolledUpHeight;
-        }
-
-#endregion
-
 #region Updators
 
         public void NewTargetSet(Object sender)
@@ -1218,25 +1214,26 @@ namespace EDDiscovery
 #endregion
 
 #region Add Ons
-
-        private void manageAddOnsToolStripMenuItem_Click(object sender, EventArgs e)
+        public void manageAddOnsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            actioncontroller.ManageAddOns();
+            buttonExtManageAddOns_Click(sender,e);
         }
 
         private void buttonExtManageAddOns_Click(object sender, EventArgs e)
         {
-            actioncontroller.ManageAddOns();
+            if (actioncontroller.ManageAddOns())
+                OnAddOnsChanged?.Invoke();
         }
 
         private void configureAddOnActionsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            actioncontroller.EditAddOns();
+            buttonExtEditAddOns_Click(sender, e);
         }
 
         private void buttonExtEditAddOns_Click(object sender, EventArgs e)
         {
-            actioncontroller.EditAddOns();
+            if ( actioncontroller.EditAddOns() )
+                OnAddOnsChanged?.Invoke();
         }
 
         private void editLastActionPackToolStripMenuItem_Click(object sender, EventArgs e)

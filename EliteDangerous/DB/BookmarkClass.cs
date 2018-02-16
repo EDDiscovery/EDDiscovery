@@ -14,6 +14,7 @@
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -21,6 +22,109 @@ using System.Data.Common;
 
 namespace EliteDangerousCore.DB
 {
+    public class PlanetMarks
+    {
+        public class Location
+        {
+            public string Name;
+            public string Comment;
+            public double Latitude;
+            public double Longitude;
+        }
+
+        public class Planet
+        {
+            public string Name;
+            public List<Location> Locations;
+        }
+
+        public List<PlanetMarks.Planet> Planets;
+
+        public PlanetMarks(string json)
+        {
+            try // prevent crashes
+            {   
+                JObject jo = JObject.Parse(json);
+                if (jo["Marks"] != null)
+                {
+                    Planets = jo["Marks"].ToObject<List<PlanetMarks.Planet>>();
+                }
+            }
+            catch
+            { }
+        }
+
+        public PlanetMarks()
+        {
+        }
+
+        public string ToJsonString()
+        {
+            if (Planets != null)
+            {
+                JArray ja = new JArray();
+                foreach (PlanetMarks.Planet p in Planets)
+                    ja.Add(JObject.FromObject(p));
+
+                JObject overall = new JObject();
+                overall["Marks"] = ja;
+                return overall.ToString(Newtonsoft.Json.Formatting.Indented);
+            }
+            else
+                return null;
+        }
+
+        public Planet GetPlanet(string planet)  // null if planet does not exist.. else array
+        {
+            return Planets?.Find(x => x.Name.Equals(planet, StringComparison.InvariantCultureIgnoreCase));
+        }
+
+        public Location GetLocation(Planet p, string placename)  // null if planet or place does not exist..
+        { 
+            return p?.Locations?.Find(x => x.Name.Equals(placename, StringComparison.InvariantCultureIgnoreCase));
+        }
+
+        public void AddOrUpdateLocation(string planet, string placename, string comment, double latp, double longp)
+        {
+            Planet p = GetPlanet(planet);            // p = null if planet does not exist, else list of existing places
+
+            if (p == null)      // no planet, make one up
+            {
+                if (Planets == null)
+                    Planets = new List<Planet>();       // new planet list
+
+                p = new Planet() { Name = planet, Locations = new List<Location>() };
+                Planets.Add(p);
+            }
+
+            Location l = GetLocation(p, placename);     // location on planet by name
+
+            if (l == null)                      // no location.. make one up and add
+            {
+                l = new Location() { Name = placename, Comment = comment, Latitude = latp, Longitude = longp };
+                p.Locations.Add(l);
+            }
+            else
+            {
+                l.Comment = comment;        // update fields which may have changed
+                l.Latitude = latp;
+                l.Longitude = longp;
+            }
+        }
+
+        public void DeleteLocation( string planet, string placename)
+        {
+            Planet p = GetPlanet(planet);            // p = null if planet does not exist, else list of existing places
+            Location l = GetLocation(p, placename); // if p != null, find placenameYour okay, its 
+            if (l != null)
+            {
+                p.Locations.Remove(l);
+                if (p.Locations.Count == 0) // nothing left?
+                    Planets.Remove(p);  // remove planet.
+            }
+        }
+    }
+
     public class BookmarkClass
     {
         public long id;
@@ -31,16 +135,18 @@ namespace EliteDangerousCore.DB
         public DateTime Time;           
         public string Heading;          // set if region bookmark, else null if its a star
         public string Note;
+        public PlanetMarks PlanetaryMarks;   // may be null
+
         public bool isRegion { get { return Heading != null; } }
 
         public BookmarkClass()
         {
         }
-        
+
         public BookmarkClass(DataRow dr)
         {
             id = (long)dr["id"];
-            if (System.DBNull.Value != dr["StarName"] )
+            if (System.DBNull.Value != dr["StarName"])
                 StarName = (string)dr["StarName"];
             x = (double)dr["x"];
             y = (double)dr["y"];
@@ -49,10 +155,13 @@ namespace EliteDangerousCore.DB
             if (System.DBNull.Value != dr["Heading"])
                 Heading = (string)dr["Heading"];
             Note = (string)dr["Note"];
+            if (System.DBNull.Value != dr["PlanetMarks"])
+            {
+                PlanetaryMarks = new PlanetMarks((string)dr["PlanetMarks"]);
+            }
         }
 
-
-        public bool Add()
+        private bool Add()
         {
             using (SQLiteConnectionUser cn = new SQLiteConnectionUser())      // open connection..
             {
@@ -63,7 +172,7 @@ namespace EliteDangerousCore.DB
 
         private bool Add(SQLiteConnectionUser cn)
         {
-            using (DbCommand cmd = cn.CreateCommand("Insert into Bookmarks (StarName, x, y, z, Time, Heading, Note) values (@sname, @xp, @yp, @zp, @time, @head, @note)"))
+            using (DbCommand cmd = cn.CreateCommand("Insert into Bookmarks (StarName, x, y, z, Time, Heading, Note, PlanetMarks) values (@sname, @xp, @yp, @zp, @time, @head, @note, @pmarks)"))
             {
                 cmd.AddParameterWithValue("@sname", StarName);
                 cmd.AddParameterWithValue("@xp", x);
@@ -72,6 +181,7 @@ namespace EliteDangerousCore.DB
                 cmd.AddParameterWithValue("@time", Time);
                 cmd.AddParameterWithValue("@head", Heading);
                 cmd.AddParameterWithValue("@note", Note);
+                cmd.AddParameterWithValue("@pmarks", PlanetaryMarks.ToJsonString());
 
                 SQLiteDBClass.SQLNonQueryText(cn, cmd);
 
@@ -80,12 +190,12 @@ namespace EliteDangerousCore.DB
                     id = (long)SQLiteDBClass.SQLScalar(cn, cmd2);
                 }
 
-                bookmarks.Add(this);
+                globalboookmarks.Add(this);
                 return true;
             }
         }
 
-        public bool Update()
+        private bool Update()
         {
             using (SQLiteConnectionUser cn = new SQLiteConnectionUser())
             {
@@ -95,7 +205,7 @@ namespace EliteDangerousCore.DB
 
         private bool Update(SQLiteConnectionUser cn)
         {
-            using (DbCommand cmd = cn.CreateCommand("Update Bookmarks set StarName=@sname, x = @xp, y = @yp, z = @zp, Time=@time, Heading = @head, Note=@note  where ID=@id"))
+            using (DbCommand cmd = cn.CreateCommand("Update Bookmarks set StarName=@sname, x = @xp, y = @yp, z = @zp, Time=@time, Heading = @head, Note=@note, PlanetMarks=@pmarks  where ID=@id"))
             {
                 cmd.AddParameterWithValue("@ID", id);
                 cmd.AddParameterWithValue("@sname", StarName);
@@ -105,11 +215,12 @@ namespace EliteDangerousCore.DB
                 cmd.AddParameterWithValue("@time", Time);
                 cmd.AddParameterWithValue("@head", Heading);
                 cmd.AddParameterWithValue("@note", Note);
+                cmd.AddParameterWithValue("@pmarks", PlanetaryMarks.ToJsonString());
 
                 SQLiteDBClass.SQLNonQueryText(cn, cmd);
 
-                bookmarks.RemoveAll(x => x.id == id);     // remove from list any containing id.
-                bookmarks.Add(this);
+                globalboookmarks.RemoveAll(x => x.id == id);     // remove from list any containing id.
+                globalboookmarks.Add(this);
 
                 return true;
             }
@@ -130,21 +241,74 @@ namespace EliteDangerousCore.DB
                 cmd.AddParameterWithValue("@id", id);
                 SQLiteDBClass.SQLNonQueryText(cn, cmd);
 
-                bookmarks.RemoveAll(x => x.id == id);     // remove from list any containing id.
+                globalboookmarks.RemoveAll(x => x.id == id);     // remove from list any containing id.
                 return true;
             }
         }
 
-        public static List<BookmarkClass> bookmarks = new List<BookmarkClass>();
+        public static List<BookmarkClass> Bookmarks { get { return globalboookmarks; } }
 
+        // return star mark, not region marks
         public static BookmarkClass FindBookmarkOnSystem(string name)
         {
             // star name may be null if its a region mark
-            BookmarkClass bk = bookmarks.Find(x => x.StarName != null && x.StarName.Equals(name, StringComparison.InvariantCultureIgnoreCase));
+            BookmarkClass bk = globalboookmarks.Find(x => x.StarName != null && x.StarName.Equals(name, StringComparison.InvariantCultureIgnoreCase));
             return bk;
         }
 
-        public static bool GetAllBookmarks()
+        // on a star system, if an existing bookmark, return it, else create a new one with these properties
+        public static BookmarkClass EnsureBookmarkOnSystem(string name, double x, double y, double z, DateTime tme, string notes)
+        {
+            BookmarkClass bk = FindBookmarkOnSystem(name);
+            return bk != null ? bk : AddOrUpdateBookmark(null, true, name, x, y, z, tme, notes);
+        }
+
+        // bk = null, new bookmark, else update.  isstar = true, region = false.
+        public static BookmarkClass AddOrUpdateBookmark(BookmarkClass bk, bool isstar, string name, double x, double y, double z, DateTime tme, string notes)
+        {
+            bool addit = bk == null;
+
+            if ( bk == null )
+                bk = new BookmarkClass();
+
+            if (isstar)
+                bk.StarName = name;
+            else
+                bk.Heading = name;
+
+            bk.x = x;
+            bk.y = y;
+            bk.z = z;
+            bk.Time = tme;
+            bk.Note = notes;
+
+            if (addit)
+                bk.Add();
+            else
+                bk.Update();
+
+            return bk;
+        }
+
+        // with a found bookmark.. add locations in the system
+        public void AddOrUpdateLocation(string planet, string placename, string comment, double latp, double longp)
+        {
+            if (PlanetaryMarks == null)
+                PlanetaryMarks = new PlanetMarks();
+            PlanetaryMarks.AddOrUpdateLocation(planet, placename, comment, latp, longp);
+            Update();
+        }
+
+        public void DeleteLocation(string planet, string placename)
+        {
+            if (PlanetaryMarks != null)
+            {
+                PlanetaryMarks.DeleteLocation(planet, placename);
+                Update();
+            }
+        }
+
+        public static bool LoadBookmarks()
         {
             try
             {
@@ -161,12 +325,12 @@ namespace EliteDangerousCore.DB
                             return false;
                         }
 
-                        bookmarks.Clear();
+                        globalboookmarks.Clear();
 
                         foreach (DataRow dr in ds.Tables[0].Rows)
                         {
                             BookmarkClass bc = new BookmarkClass(dr);
-                            bookmarks.Add(bc);
+                            globalboookmarks.Add(bc);
                         }
 
                         return true;
@@ -179,5 +343,7 @@ namespace EliteDangerousCore.DB
                 return false;
             }
         }
+
+        private static List<BookmarkClass> globalboookmarks = new List<BookmarkClass>();
     }
 }
