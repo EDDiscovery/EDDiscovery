@@ -150,7 +150,7 @@ Examples of trending states:
                 econ = "";
 
             info += " ";
-            info += BaseUtils.FieldBuilder.Build("Faction:", Faction, "State:", FactionState, "Allegiance:", Allegiance, "Economy:", econ, "Population:", Population);
+            info += BaseUtils.FieldBuilder.Build("Faction:", Faction, "<;(Wanted) ", Wanted, "State:", FactionState, "Allegiance:", Allegiance, "Economy:", econ, "Population:", Population);
             detailed = "";
 
             if ( Factions != null )

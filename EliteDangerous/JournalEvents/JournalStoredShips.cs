@@ -46,52 +46,67 @@ namespace EliteDangerousCore.JournalEvents
             StarSystem = evt["StarSystem"].Str();
             MarketID = evt["MarketID"].LongNull();
 
-            ShipsHere = evt["ShipsHere"]?.ToObject<StoredShipItem[]>();
-            ShipsRemote = evt["ShipsRemote"]?.ToObject<StoredShipItem[]>();
+            ShipsHere = evt["ShipsHere"]?.ToObject<StoredShipInformation[]>();
+            Normalise(ShipsHere);
 
-            if (ShipsHere != null)
-            {
-                foreach (StoredShipItem i in ShipsHere)
-                {
-                    i.ShipType = JournalFieldNaming.GetBetterShipName(i.ShipType);
-                }
-            }
-
-            if (ShipsRemote != null)
-            {
-                foreach (StoredShipItem i in ShipsRemote)
-                {
-                    i.ShipType = JournalFieldNaming.GetBetterShipName(i.ShipType);
-                }
-            }
+            ShipsRemote = evt["ShipsRemote"]?.ToObject<StoredShipInformation[]>();
+            Normalise(ShipsRemote);
         }
 
         public string StationName { get; set; }
         public string StarSystem { get; set; }
         public long? MarketID { get; set; }
 
-        public StoredShipItem[] ShipsHere { get; set; }
-        public StoredShipItem[] ShipsRemote { get; set; }
+        public StoredShipInformation[] ShipsHere { get; set; }
+        public StoredShipInformation[] ShipsRemote { get; set; }
 
         public override void FillInformation(out string summary, out string info, out string detailed) //V
         {
             summary = EventTypeStr.SplitCapsWord();
-            info = "";
+            info = BaseUtils.FieldBuilder.Build("At starport:",ShipsHere?.Count(),"Other locations:",ShipsRemote?.Count() );
             detailed = "";
+            if (ShipsHere != null)
+            {
+                foreach (StoredShipInformation m in ShipsHere)
+                    detailed = detailed.AppendPrePad(BaseUtils.FieldBuilder.Build("", m.ShipType, "; cr;N0", m.Value, ";(Hot)", m.Hot), System.Environment.NewLine);
+            }
+            if (ShipsRemote != null)
+            {
+                detailed = detailed.AppendPrePad("Remote:", System.Environment.NewLine + System.Environment.NewLine);
+
+                foreach (StoredShipInformation m in ShipsRemote)
+                    detailed = detailed.AppendPrePad(BaseUtils.FieldBuilder.Build("", m.ShipType, "< at ", m.StarSystem, "Transfer Cost:; cr;N0" , m
+                                .TransferPrice, "Time:", m.TransferTimeString , "Value:; cr;N0", m.Value, ";(Hot)", m.Hot), System.Environment.NewLine);
+            }
+        }
+
+        public void Normalise(StoredShipInformation[] s)
+        {
+            if (s != null)
+            {
+                foreach (StoredShipInformation i in s)
+                {
+                    i.ShipType = JournalFieldNaming.GetBetterShipName(i.ShipType);
+                    i.TransferTimeSpan = new System.TimeSpan((int)(i.TransferTime / 60 / 60), (int)((i.TransferTime / 60) % 60), (int)(i.TransferTime % 60));
+                    i.TransferTimeString = i.TransferTimeSpan.ToString();
+                }
+            }
+        }
+
+        public class StoredShipInformation
+        {
+            public int ShipID;      // both
+            public string ShipType; // both, Normalised
+            public string ShipType_Localised; // both
+            public string StarSystem;
+            public long ShipMarketID;
+            public long TransferPrice;
+            public long TransferTime;
+            public long Value;      // both
+            public bool Hot;        // both
+
+            public System.TimeSpan TransferTimeSpan;        // computed
+            public string TransferTimeString; // computed
         }
     }
-
-
-    public class StoredShipItem
-    {
-        public int ShipID;
-        public string ShipType;
-        public string Name;
-        public string StarSystem;
-        public long ShipMarketID;
-        public long TransferPrice;
-        public int TransferTime;
-        public long Value;
-    }
-
 }

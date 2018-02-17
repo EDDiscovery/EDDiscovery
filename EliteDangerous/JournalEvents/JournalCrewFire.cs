@@ -30,8 +30,10 @@ namespace EliteDangerousCore.JournalEvents
         public JournalCrewFire(JObject evt) : base(evt, JournalTypeEnum.CrewFire)
         {
             Name = evt["Name"].Str();
-
+            NpcCrewID = evt["CrewID"].Long();
         }
+
+        public long NpcCrewID { get; set; }
         public string Name { get; set; }
 
         public override void FillInformation(out string summary, out string info, out string detailed) //V

@@ -311,10 +311,10 @@ namespace EliteDangerousCore
             return this;
         }
 
-        public ShipInformation RemoveModules(ModuleItem[] items)
+        public ShipInformation RemoveModules(JournalMassModuleStore.ModuleItem[] items)
         {
             ShipInformation sm = null;
-            foreach (ModuleItem it in items)
+            foreach (var it in items)
             {
                 if (Modules.ContainsKey(it.Slot))       // if has it..
                 {
@@ -481,10 +481,10 @@ namespace EliteDangerousCore
             return mis;
         }
 
-        public ModulesInStore StoreModule(ModuleItem[] items, Dictionary<string, string> itemlocalisation)
+        public ModulesInStore StoreModule(JournalMassModuleStore.ModuleItem[] items, Dictionary<string, string> itemlocalisation)
         {
             ModulesInStore mis = this.ShallowClone();
-            foreach (ModuleItem it in items)
+            foreach (var it in items)
             {
                 string local = itemlocalisation.ContainsKey(it.Name) ? itemlocalisation[it.Name] : "";
                 mis.StoredModules.Add(new JournalLoadout.ShipModule("", "", it.Name, "", local));

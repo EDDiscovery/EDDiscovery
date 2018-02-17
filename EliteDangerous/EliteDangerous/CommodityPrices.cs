@@ -15,6 +15,7 @@ namespace EliteDangerousCore
         public int stock { get; private set; }
         public int demand { get; private set; }
         public string type { get; private set; }            // in this context, it means, its type (Metals).. as per MaterialCommoditiesDB
+        public string loctype { get; private set; }            // in this context, it means, its type (Metals).. as per MaterialCommoditiesDB
         public List<string> StatusFlags { get; private set; }
 
         public string categoryname { get; private set; }
@@ -60,7 +61,7 @@ namespace EliteDangerousCore
                 stockBracket = jo["stockBracket"].Int();
                 stock = jo["stock"].Int();
                 demand = jo["demand"].Int();
-                type = jo["categoryname"].Str();
+                loctype = type = jo["categoryname"].Str();
 
                 List<string> StatusFlags = new List<string>();
                 foreach (dynamic statusFlag in jo["statusFlags"])
@@ -84,9 +85,9 @@ namespace EliteDangerousCore
             {
                 id = jo["id"].Int();
                 name = jo["Name"].Str();
-                MaterialCommodityDB mc = MaterialCommodityDB.GetCachedMaterial(name);
-                locName = mc != null ? mc.name : name.SplitCapsWordFull();
-                type = mc != null ? mc.type : "Commodity";
+                locName = jo["Name_Localised"].Str().Alt(name);
+                loctype = jo["Category_Localised"].Str();
+                type = jo["Category"].Str();
 
                 buyPrice = jo["BuyPrice"].Int();
                 sellPrice = jo["SellPrice"].Int();
@@ -121,7 +122,7 @@ namespace EliteDangerousCore
         public override string ToString()
         {
             return string.Format("{0} : {1} Buy {2} Sell {3} Mean {4}" + System.Environment.NewLine +
-                                 "Stock {5} Demand {6}", type, name, buyPrice, sellPrice, meanPrice, stock, demand);
+                                 "Stock {5} Demand {6}", loctype, locName, buyPrice, sellPrice, meanPrice, stock, demand);
         }
 
         public static void Sort(List<CCommodities> list)
