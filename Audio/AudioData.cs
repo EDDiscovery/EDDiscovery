@@ -21,16 +21,12 @@ using System.Threading.Tasks;
 
 namespace AudioExtensions
 {
-    public class DummySpeechEngine : ISpeechEngine
+    public class AudioData              // this holds the data object, used to wrap the object to give it a proper named class.
     {
-        public string[] GetVoiceNames()
-        {
-            return new string[] { };
-        }
+        public AudioData() { Data = null; }
 
-        public System.IO.MemoryStream Speak(string phrase, string culture, string voice, int volume, int rate)
-        {
-            return null;
-        }
+        public AudioData(object d) { Data = d; }
+
+        public object Data { get; set; }
     }
 }

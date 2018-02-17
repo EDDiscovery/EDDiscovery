@@ -33,7 +33,7 @@ namespace AudioExtensions
         public string SayText { get { return textBoxBorderText.Text; } }
         public bool Wait { get { return checkBoxCustomComplete.Checked; } }
         public bool Literal { get { return checkBoxCustomLiteral.Checked; } }
-        public AudioQueue.Priority Priority { get { return (AudioQueue.Priority)Enum.Parse(typeof(AudioQueue.Priority), comboBoxCustomPriority.Text); } }
+        public AudioQueuePriority Priority { get { return (AudioQueuePriority)Enum.Parse(typeof(AudioQueuePriority), comboBoxCustomPriority.Text); } }
         public string StartEvent { get { return textBoxBorderStartTrigger.Text; } }
         public string FinishEvent { get { return textBoxBorderEndTrigger.Text; } }
         public string VoiceName { get { return comboBoxCustomVoice.Text; } }
@@ -53,15 +53,15 @@ namespace AudioExtensions
         public void Init(AudioQueue qu, SpeechSynthesizer syn,
                             string title, string caption, Icon ic,
                             String text,          // if null, no text box or wait complete
-                            bool waitcomplete, bool literal, 
-                            AudioQueue.Priority prio,
+                            bool waitcomplete, bool literal,
+                            AudioQueuePriority prio,
                             string startname, string endname,
                             string voicename,
                             string volume,
                             string rate,
                             ConditionVariables ef)     // effects can also contain other vars, it will ignore
         {
-            comboBoxCustomPriority.Items.AddRange(Enum.GetNames(typeof(AudioQueue.Priority)));
+            comboBoxCustomPriority.Items.AddRange(Enum.GetNames(typeof(AudioQueuePriority)));
 
             queue = qu;
             synth = syn;
@@ -133,7 +133,7 @@ namespace AudioExtensions
 
             effects = ef;
 
-            ExtendedControls.ThemeableFormsInstance.Instance.ApplyToForm(this, System.Drawing.SystemFonts.DefaultFont);
+            ExtendedControls.ThemeableFormsInstance.Instance?.ApplyToForm(this, System.Drawing.SystemFonts.DefaultFont);
         }
 
         private void buttonExtOK_Click(object sender, EventArgs e)
@@ -144,13 +144,15 @@ namespace AudioExtensions
 
         private void buttonExtEffects_Click(object sender, EventArgs e)
         {
-            SoundEffectsDialog sfe = new SoundEffectsDialog();
-            sfe.Init(this.Icon, effects, textBoxBorderText.Visible);           // give them the none option ONLY if we are allowing text
-            sfe.TestSettingEvent += Sfe_TestSettingEvent;           // callback to say test
-            sfe.StopTestSettingEvent += Sfe_StopTestSettingEvent;   // callback to say stop
-            if ( sfe.ShowDialog(this) == DialogResult.OK )
+            using (SoundEffectsDialog sfe = new SoundEffectsDialog())
             {
-                effects = sfe.GetEffects();
+                sfe.Init(this.Icon, effects, textBoxBorderText.Visible);           // give them the none option ONLY if we are allowing text
+                sfe.TestSettingEvent += Sfe_TestSettingEvent;           // callback to say test
+                sfe.StopTestSettingEvent += Sfe_StopTestSettingEvent;   // callback to say stop
+                if (sfe.ShowDialog(this) == DialogResult.OK)
+                {
+                    effects = sfe.GetEffects();
+                }
             }
         }
 
@@ -159,10 +161,10 @@ namespace AudioExtensions
             System.IO.MemoryStream ms = synth.Speak(textBoxBorderTest.Text, "Default", comboBoxCustomVoice.Text, trackBarRate.Value);
             if (ms != null)
             {
-                AudioQueue.AudioSample a = queue.Generate(ms, new SoundEffectSettings(effects));
-                a.sampleOverEvent += SampleOver;
-                a.sampleOverTag = sfe;
-                queue.Submit(a, trackBarVolume.Value, AudioQueue.Priority.High);
+                AudioSample a = queue.Generate(ms, new SoundEffectSettings(effects));
+                a.SampleFinished += SfeTest_SampleFinished;
+                a.FinishTag = sfe;
+                queue.Submit(a, trackBarVolume.Value, AudioQueuePriority.High);
             }
         }
 
@@ -171,10 +173,9 @@ namespace AudioExtensions
             queue.StopCurrent();
         }
 
-        private void SampleOver(AudioQueue s, Object tag)
+        private void SfeTest_SampleFinished(object sender, AudioSampleEventArgs e)
         {
-            SoundEffectsDialog sfe = tag as SoundEffectsDialog;
-            sfe.TestOver();
+            (e.Tag as SoundEffectsDialog).TestOver();
         }
 
         private void checkBoxCustomV_CheckedChanged(object sender, EventArgs e)
@@ -189,12 +190,13 @@ namespace AudioExtensions
 
         private void buttonExtDevice_Click(object sender, EventArgs e)
         {
-            AudioDeviceConfigure adc = new AudioDeviceConfigure();
-            adc.Init("Configure voice device", queue.Driver);
-            if ( adc.ShowDialog(this) == DialogResult.OK )
+            using (AudioDeviceConfigure adc = new AudioDeviceConfigure())
             {
-                if (!queue.SetAudioEndpoint(adc.Selected))
+                adc.Init("Configure voice device", queue.Driver);
+                if (adc.ShowDialog(this) == DialogResult.OK && !queue.SetAudioEndpoint(adc.Selected))
+                {
                     ExtendedControls.MessageBoxTheme.Show(this, "Audio Device Selection failed", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                }
             }
         }
 
@@ -211,9 +213,9 @@ namespace AudioExtensions
                     System.IO.MemoryStream ms = synth.Speak(textBoxBorderTest.Text, "Default", comboBoxCustomVoice.Text, trackBarRate.Value);
                     if (ms != null)
                     {
-                        AudioExtensions.AudioQueue.AudioSample audio = queue.Generate(ms, new SoundEffectSettings(effects));
-                        audio.sampleOverEvent += Audio_sampleOverEvent;
-                        queue.Submit(audio, trackBarVolume.Value, AudioQueue.Priority.High);
+                        AudioSample audio = queue.Generate(ms, new SoundEffectSettings(effects));
+                        audio.SampleFinished += TestAudio_SampleFinished;
+                        queue.Submit(audio, trackBarVolume.Value, AudioQueuePriority.High);
                         buttonExtTest.Text = "Stop";
                     }
                 }
@@ -224,7 +226,7 @@ namespace AudioExtensions
             }
         }
 
-        private void Audio_sampleOverEvent(AudioQueue sender, object tag)
+        private void TestAudio_SampleFinished(object sender, AudioSampleEventArgs e)
         {
             buttonExtTest.Text = "Test";
         }

@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2017 EDDiscovery development team
+ * Copyright © 2017 - 2018 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -19,34 +19,243 @@ using CSCore.SoundOut;
 using CSCore.Streams.Effects;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
 
 namespace AudioExtensions
 { 
     public class AudioDriverCSCore : IAudioDriver, IDisposable
     {
-        public event AudioStopped AudioStoppedEvent;
-
         ISoundOut aout;
 
         public AudioDriverCSCore(string dev = null)
         {
-            SetAudioEndpoint(dev,true);
+            SetAudioEndpoint(dev, true);
+        }
+
+        // windows 2000 and greater.
+        internal static bool IsPlatformSupported { get; } = Environment.OSVersion.Platform == PlatformID.Win32NT && Environment.OSVersion.Version.Major >= 5;
+
+        #region IDisposable support
+
+        public void Dispose()
+        {
+            if (aout != null)
+            {
+                aout.Stop();
+
+                try
+                {
+                    aout.Dispose();
+                }
+                catch (DirectSoundException ex)
+                {
+                    if (ex.Result == DSResult.BufferLost)
+                    {
+                        Trace.WriteLine($"{nameof(AudioDriverCSCore)}.{nameof(Dispose)}(): ignoring DSERR_BUFFERLOST{Environment.NewLine}{ex.ToString()}");
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                finally
+                {
+                    aout = null;
+                }
+            }
+
+            AudioStoppedEvent = null;
+        }
+
+        #endregion
+
+        #region IAudioDriver support
+
+        public event AudioStopped AudioStoppedEvent;
+
+
+        public void Start(AudioData o, int vol)
+        {
+            if (aout != null)
+            {
+                int t = Environment.TickCount;
+
+                IWaveSource current = o.Data as IWaveSource;
+                aout.Initialize(current);
+                //System.Diagnostics.Debug.WriteLine((Environment.TickCount-t).ToString("00000") + "Driver Init done");
+                aout.Volume = (float)(vol) / 100;
+                aout.Play();
+                //System.Diagnostics.Debug.WriteLine((Environment.TickCount - t).ToString("00000") + "Driver Play done");
+            }
+        }
+
+        public void Stop() { aout?.Stop(); }
+
+        public void Dispose(AudioData o)
+        {
+            IWaveSource iws = o.Data as IWaveSource;
+            iws?.Dispose();
+            o.Data = null;      // added to help catch any sequencing errors
+            //System.Diagnostics.Debug.WriteLine("Audio disposed");
+        }
+
+
+        // FROM file
+        public AudioData Generate(string file, SoundEffectSettings effects)
+        {
+            IWaveSource s = null;
+            try
+            {
+                s = CSCore.Codecs.CodecFactory.Instance.GetCodec(file);
+                Debug.Assert(s != null);
+                ApplyEffects(ref s, effects);
+                Debug.Assert(s != null);
+                return new AudioData(s);
+            }
+            catch
+            {
+                s?.Dispose();
+                return null;
+            }
+        }
+
+        // FROM audio stream
+        public AudioData Generate(Stream audioms, SoundEffectSettings effects, bool ensureaudio)
+        {
+            IWaveSource s = null;
+            try
+            {
+                audioms.Position = 0;
+
+                if (audioms.Length == 0)
+                {
+                    if (ensureaudio)
+                        s = new NullWaveSource(50);
+                    else
+                        return null;
+                }
+                else
+                {
+                    s = new CSCore.Codecs.WAV.WaveFileReader(audioms);
+
+                    //System.Diagnostics.Debug.WriteLine("oRIGINAL length " + s.Length);
+                    if (ensureaudio)
+                        s = s.AppendSource(x => new ExtendWaveSource(x, 100));          // SEEMS to help the click at end..
+                }
+
+                //System.Diagnostics.Debug.WriteLine("Sample length " + s.Length);
+                Debug.Assert(s != null);
+                ApplyEffects(ref s, effects);
+                //System.Diagnostics.Debug.WriteLine(".. to length " + s.Length);
+                Debug.Assert(s != null);
+                return new AudioData(s);
+            }
+            catch (Exception ex)
+            {
+                Trace.WriteLine($"{nameof(AudioDriverCSCore)}.{nameof(Generate)} (Stream): swallowing exception " + ex.Message);
+                if (s != null)
+                    s?.Dispose();
+                if (ensureaudio)
+                {
+                    s = new NullWaveSource(100);
+                    Debug.Assert(s != null);
+                    return new AudioData(s);
+                }
+                else
+                    return null;
+            }
+        }
+
+
+        // This mixes mix with Front.  Format changed to MIX.
+        public AudioData Mix(AudioData front, AudioData mix)
+        {
+            if (front == null || front.Data == null || mix == null || mix.Data == null)
+                return null;
+
+            IWaveSource frontws = front.Data as IWaveSource;
+            IWaveSource mixws = mix.Data as IWaveSource;
+
+            if (frontws.WaveFormat.Channels < mixws.WaveFormat.Channels)      // need to adapt to previous format
+                frontws = frontws.ToStereo();
+            else if (frontws.WaveFormat.Channels > mixws.WaveFormat.Channels)
+                frontws = frontws.ToMono();
+
+            if (mixws.WaveFormat.SampleRate != frontws.WaveFormat.SampleRate || mixws.WaveFormat.BitsPerSample != frontws.WaveFormat.BitsPerSample)
+                frontws = ChangeSampleDepth(frontws, mixws.WaveFormat.SampleRate, mixws.WaveFormat.BitsPerSample);
+
+            IWaveSource s = new MixWaveSource(frontws, mixws);
+            Debug.Assert(s != null);
+            return new AudioData(s);
+        }
+
+        // this adds END to Front.   Format is changed to END
+        public AudioData Append(AudioData front, AudioData end)
+        {
+            if (front == null || front.Data == null || end == null || end.Data == null)
+                return null;
+
+            IWaveSource frontws = front.Data as IWaveSource;
+            IWaveSource mixws = end.Data as IWaveSource;
+
+            if (frontws.WaveFormat.Channels < mixws.WaveFormat.Channels)      // need to adapt to previous format
+                frontws = frontws.ToStereo();
+            else if (frontws.WaveFormat.Channels > mixws.WaveFormat.Channels)
+                frontws = frontws.ToMono();
+
+            if (mixws.WaveFormat.SampleRate != frontws.WaveFormat.SampleRate || mixws.WaveFormat.BitsPerSample != frontws.WaveFormat.BitsPerSample)
+                frontws = ChangeSampleDepth(frontws, mixws.WaveFormat.SampleRate, mixws.WaveFormat.BitsPerSample);
+
+            IWaveSource s = new AppendWaveSource(frontws, mixws);
+            Debug.Assert(s != null);
+            return new AudioData(s);
+        }
+
+
+        public int Lengthms(AudioData audio)
+        {
+            IWaveSource ws = audio.Data as IWaveSource;
+            Debug.Assert(ws != null);
+            TimeSpan w = ws.GetLength();
+            return (int)w.TotalMilliseconds;
+        }
+
+        public int TimeLeftms(AudioData audio)
+        {
+            IWaveSource ws = audio.Data as IWaveSource;
+            Debug.Assert(ws != null);
+            TimeSpan l = ws.GetLength();
+            TimeSpan p = ws.GetPosition();
+            TimeSpan togo = l - p;
+            return (int)togo.TotalMilliseconds;
+
+        }
+
+
+        public string GetAudioEndpoint()
+        {
+            if (aout != null)
+            {
+                Guid guid = ((DirectSoundOut)aout).Device;
+                ReadOnlyCollection<DirectSoundDevice> list = DirectSoundDeviceEnumerator.EnumerateDevices();
+                DirectSoundDevice dsd = list.First(x => x.Guid == guid);
+                return dsd.Description;
+            }
+            else
+                return "";
         }
 
         public List<string> GetAudioEndpoints()
         {
-            List<string> ep = new List<string>();
-            IReadOnlyCollection<DirectSoundDevice> list = DirectSoundDeviceEnumerator.EnumerateDevices();
-            foreach ( DirectSoundDevice d in list )
-                ep.Add(d.Description);
-
-            return ep;
+            return DirectSoundDeviceEnumerator.EnumerateDevices()?.Select(dsd => dsd.Description).ToList() ?? new List<string>();
         }
 
         public bool SetAudioEndpoint(string dev, bool usedefault = false)
         {
-            System.Collections.ObjectModel.ReadOnlyCollection<DirectSoundDevice> list = DirectSoundDeviceEnumerator.EnumerateDevices();
+            ReadOnlyCollection<DirectSoundDevice> list = DirectSoundDeviceEnumerator.EnumerateDevices();
 
             DirectSoundDevice dsd = null;
 
@@ -71,19 +280,18 @@ namespace AudioExtensions
                 dso.Device = def.Guid;  // use default GUID
             }
 
-            NullWaveSource nullw = new NullWaveSource(10);
-
-            try
+            using (NullWaveSource nullw = new NullWaveSource(10))
             {
-                dso.Initialize(nullw);  // check it takes it.. may not if no sound devices there..
-                dso.Stop();
-                nullw.Dispose();
-            }
-            catch
-            {
-                nullw.Dispose();
-                dso.Dispose();
-                return false;
+                try
+                {
+                    dso.Initialize(nullw);  // check it takes it.. may not if no sound devices there..
+                    dso.Stop();
+                }
+                catch
+                {
+                    dso.Dispose();
+                    return false;
+                }
             }
 
             if (aout != null)                 // clean up last
@@ -99,185 +307,15 @@ namespace AudioExtensions
             return true;
         }
 
-        public string GetAudioEndpoint()
-        {
-            if (aout != null)
-            {
-                Guid guid = ((DirectSoundOut)aout).Device;
-                System.Collections.ObjectModel.ReadOnlyCollection<DirectSoundDevice> list = DirectSoundDeviceEnumerator.EnumerateDevices();
-                DirectSoundDevice dsd = list.First(x => x.Guid == guid);
-                return dsd.Description;
-            }
-            else
-                return "";
-        }
+        #endregion
 
 
         private void Output_Stopped(object sender, PlaybackStoppedEventArgs e)
         {
             //System.Diagnostics.Debug.WriteLine((Environment.TickCount % 10000).ToString("00000") + "Driver stopped");
-            if (AudioStoppedEvent != null)
-                AudioStoppedEvent();
-        }
-
-        public void Dispose()
-        {
-            if (aout != null)
-            {
-                aout.Stop();
-
-                try
-                {
-                    aout.Dispose();
-                }
-                catch (DirectSoundException ex)
-                {
-                    if (ex.Result == DSResult.BufferLost)
-                    {
-                        System.Diagnostics.Trace.WriteLine($"Audio object disposal failed with DSERR_BUFFERLOST - continuing\n{ex.ToString()}");
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-
-                aout = null;
-            }
-        }
-
-        public void Dispose(AudioData o)
-        {
-            IWaveSource iws = o.data as IWaveSource;
-            iws.Dispose();
-            o.data = null;      // added to help catch any sequencing errors
-            //System.Diagnostics.Debug.WriteLine("Audio disposed");
-        }
-
-        public void Start(AudioData o, int vol)
-        {
-            if (aout != null)
-            {
-                int t = Environment.TickCount;
-
-                IWaveSource current = o.data as IWaveSource;
-                aout.Initialize(current);
-                //System.Diagnostics.Debug.WriteLine((Environment.TickCount-t).ToString("00000") + "Driver Init done");
-                aout.Volume = (float)(vol) / 100;
-                aout.Play();
-                //System.Diagnostics.Debug.WriteLine((Environment.TickCount - t).ToString("00000") + "Driver Play done");
-            }
-        }
-
-        public void Stop()
-        {
-            if ( aout != null )
-                aout.Stop();
-        }
-
-        // FROM file
-        public AudioData Generate(string file, SoundEffectSettings effects)
-        {
-            try
-            {
-                IWaveSource s = CSCore.Codecs.CodecFactory.Instance.GetCodec(file);
-                System.Diagnostics.Debug.Assert(s != null);
-                ApplyEffects(ref s, effects);
-                System.Diagnostics.Debug.Assert(s != null);
-                return new AudioData(s);
-            }
-            catch
-            {
-                return null;
-            }
-        }
-
-        // FROM audio stream
-        public AudioData Generate(System.IO.Stream audioms, SoundEffectSettings effects, bool ensureaudio)
-        {
-            try
-            {
-                audioms.Position = 0;
-
-                IWaveSource s;
-
-                if (audioms.Length == 0)
-                {
-                    if (ensureaudio)
-                        s = new NullWaveSource(50);
-                    else
-                        return null;
-                }
-                else
-                {
-                    s = new CSCore.Codecs.WAV.WaveFileReader(audioms);
-
-                    //System.Diagnostics.Debug.WriteLine("oRIGINAL length " + s.Length);
-                    if (ensureaudio)
-                      s = s.AppendSource(x => new ExtendWaveSource(x, 100));          // SEEMS to help the click at end..
-                }
-
-                //System.Diagnostics.Debug.WriteLine("Sample length " + s.Length);
-                System.Diagnostics.Debug.Assert(s != null);
-                ApplyEffects(ref s, effects);
-                //System.Diagnostics.Debug.WriteLine(".. to length " + s.Length);
-                System.Diagnostics.Debug.Assert(s != null);
-                return new AudioData(s);
-            }
-            catch( Exception ex)
-            {
-                System.Diagnostics.Debug.WriteLine("Exception " + ex.Message);
-                if (ensureaudio)
-                {
-                    IWaveSource s = new NullWaveSource(100);
-                    System.Diagnostics.Debug.Assert(s != null);
-                    return new AudioData(s);
-                }
-                else
-                    return null;
-            }
-        }
-
-        public AudioData Append(AudioData front, AudioData end)      // this adds END to Front.   Format is changed to END
-        {
-            if (front == null || end == null)
-                return null;
-
-            IWaveSource frontws = (IWaveSource)front.data;
-            IWaveSource mixws = (IWaveSource)end.data;
-
-            if (frontws.WaveFormat.Channels < mixws.WaveFormat.Channels)      // need to adapt to previous format
-                frontws = frontws.ToStereo();
-            else if (frontws.WaveFormat.Channels > mixws.WaveFormat.Channels)
-                frontws = frontws.ToMono();
-
-            if (mixws.WaveFormat.SampleRate != frontws.WaveFormat.SampleRate || mixws.WaveFormat.BitsPerSample != frontws.WaveFormat.BitsPerSample)
-                frontws = ChangeSampleDepth(frontws, mixws.WaveFormat.SampleRate, mixws.WaveFormat.BitsPerSample);
-
-            IWaveSource s = new AppendWaveSource(frontws, mixws);
-            System.Diagnostics.Debug.Assert(s != null);
-            return new AudioData(s);
-        }
-
-        public AudioData Mix(AudioData front, AudioData mix)     // This mixes mix with Front.  Format changed to MIX.
-        {
-            if (front == null || mix == null)
-                return null;
-
-            IWaveSource frontws = (IWaveSource)front.data;
-            IWaveSource mixws = (IWaveSource)mix.data;
-
-            if (frontws.WaveFormat.Channels < mixws.WaveFormat.Channels)      // need to adapt to previous format
-                frontws = frontws.ToStereo();
-            else if (frontws.WaveFormat.Channels > mixws.WaveFormat.Channels)
-                frontws = frontws.ToMono();
-
-            if (mixws.WaveFormat.SampleRate != frontws.WaveFormat.SampleRate || mixws.WaveFormat.BitsPerSample != frontws.WaveFormat.BitsPerSample)
-                frontws = ChangeSampleDepth(frontws, mixws.WaveFormat.SampleRate, mixws.WaveFormat.BitsPerSample);
-
-            IWaveSource s = new MixWaveSource(frontws, mixws);
-            System.Diagnostics.Debug.Assert(s != null);
-            return new AudioData(s);
+            if (e.Exception != null)
+                Trace.WriteLine($"{nameof(AudioDriverCSCore)}.{nameof(Output_Stopped)} encountered an exception after playback stopped:{Environment.NewLine}{e.Exception}");
+            AudioStoppedEvent?.Invoke();
         }
 
         static private void ApplyEffects(ref IWaveSource src, SoundEffectSettings ap)   // ap may be null
@@ -332,29 +370,9 @@ namespace AudioExtensions
             }
         }
 
-        public int Lengthms(AudioData audio)
-        {
-            IWaveSource ws = audio.data as IWaveSource;
-            System.Diagnostics.Debug.Assert(ws != null);
-            TimeSpan w = ws.GetLength();
-            return (int)w.TotalMilliseconds;
-        }
-
-        public int TimeLeftms(AudioData audio)
-        {
-            IWaveSource ws = audio.data as IWaveSource;
-            System.Diagnostics.Debug.Assert(ws != null);
-            TimeSpan l = ws.GetLength();
-            TimeSpan p = ws.GetPosition();
-            TimeSpan togo = l - p;
-            return (int)togo.TotalMilliseconds;
-
-        }
-
         public static IWaveSource ChangeSampleDepth(IWaveSource input, int destinationSampleRate , int bitdepth)    // replace INPUT with return
         {
-            if (input == null)
-                throw new ArgumentNullException("input");
+            input = input ?? throw new ArgumentNullException(nameof(input));
 
             if (destinationSampleRate <= 0)
                 throw new ArgumentOutOfRangeException("destinationSampleRate");
@@ -406,7 +424,6 @@ namespace AudioExtensions
         }
     }
 
-
     public class AppendWaveSource : WaveAggregatorBase  // based on the TrimmedWaveSource in the CS Example
     {
         IWaveSource append;
@@ -429,6 +446,14 @@ namespace AudioExtensions
             }
             else
                 return read;
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+                append?.Dispose();
+            append = null;
+            base.Dispose(disposing);
         }
     }
 
@@ -505,8 +530,14 @@ namespace AudioExtensions
             return readbase;
         }
 
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+                mix?.Dispose();
+            mix = null;
+            base.Dispose(disposing);
+        }
     }
-
 
     public class NullWaveSource : IWaveSource  // empty audio
     {
@@ -516,14 +547,11 @@ namespace AudioExtensions
 
         public NullWaveSource(int ms) 
         {
-            _waveFormat = new WaveFormat(22050,16, 1, AudioEncoding.Pcm);       // default format
+            _waveFormat = new WaveFormat(22050, 16, 1, AudioEncoding.Pcm);       // default format
             totalbytes = _waveFormat.MillisecondsToBytes(ms);
         }
 
-        public WaveFormat WaveFormat
-        {
-            get { return _waveFormat; }
-        }
+        public WaveFormat WaveFormat { get { return _waveFormat; } }
 
 
         public int Read(byte[] buffer, int offset, int count)
@@ -546,14 +574,9 @@ namespace AudioExtensions
 
         public long Length { get { return totalbytes; } set { } }
         public long Position { get { return pos; } set { } }
-        public bool CanSeek
-        {
-            get { return false; }
-        }
+        public bool CanSeek { get { return false; } }
 
-        public void Dispose()
-        {
-        }
+        public void Dispose() { }
     }
 
 

@@ -16,79 +16,40 @@
 using System;
 using System.Collections.Generic;
 
-#pragma warning disable 0067
-
 namespace AudioExtensions
 {
     public class AudioDriverDummy : IAudioDriver, IDisposable
     {
+        public AudioDriverDummy() { }
+
+        #region IDisposable support
+
+        public void Dispose() { AudioStoppedEvent = null; }
+
+        #endregion
+
+        #region IAudioDriver support
+
+#pragma warning disable 0414    // The field is assigned but its value is never used.
         public event AudioStopped AudioStoppedEvent;
+#pragma warning restore 0414
 
-        public AudioDriverDummy()
-        {
-        }
+        public void Start(AudioData o, int vol) { }
+        public void Stop() { }
+        public void Dispose(AudioData o) { o.Data = null; }
 
-        public List<string> GetAudioEndpoints()
-        {
-            List<string> ep = new List<string>();
-            ep.Add("Default");
-            return ep;
-        }
+        public AudioData Generate(string file, SoundEffectSettings effects) { return null; }
+        public AudioData Generate(System.IO.Stream audioms, SoundEffectSettings effects, bool ensureaudio) { return null; }
+        public AudioData Mix(AudioData last, AudioData mix) { return null; }
+        public AudioData Append(AudioData front, AudioData append) { return null; }
 
-        public bool SetAudioEndpoint(string dev , bool usedefaultifnotfound = false)
-        {
-            return true;
-        }
+        public int Lengthms(AudioData audio) { return 0; }      // whats the length?
+        public int TimeLeftms(AudioData audio) { return 0; }
 
-        public string GetAudioEndpoint()
-        {
-            return "Default";
-        }
+        public string GetAudioEndpoint() { return "Default"; }
+        public List<string> GetAudioEndpoints() { return new List<string>(new[] { "Default" }); }
+        public bool SetAudioEndpoint(string dev , bool usedefaultifnotfound = false) { return true; }
 
-        public void Dispose()
-        {
-        }
-
-        public void Dispose(AudioData o)
-        {
-        }
-
-        public void Start(AudioData o, int vol)
-        {
-        }
-
-        public void Stop()
-        {
-        }
-
-        public AudioData Generate(string file, SoundEffectSettings effects)
-        {
-            return null;
-        }
-
-        public AudioData Generate(System.IO.Stream audioms, SoundEffectSettings effects, bool ensureaudio)
-        {
-            return null;
-        }
-
-        public AudioData Mix(AudioData last, AudioData mix)
-        {
-            return null;
-        }
-        public AudioData Append(AudioData front, AudioData append)
-        {
-            return null;
-        }
-
-        public int Lengthms(AudioData audio)
-        {
-            return 0;                     // whats the length?
-        }
-
-        public int TimeLeftms(AudioData audio)
-        {
-            return 0;
-        }
-
+        #endregion
     }
 }
