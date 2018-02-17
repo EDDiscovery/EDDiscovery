@@ -231,7 +231,7 @@ namespace ActionLanguage
                             {
                                 AudioQueue.AudioSample mix = ap.actioncontroller.AudioQueueSpeech.Generate(mixsoundpath);
 
-                                if (audio == null)
+                                if (mix == null)
                                 {
                                     ap.ReportError("Say could not create mix audio, check audio file format is supported and effects settings");
                                     return true;
