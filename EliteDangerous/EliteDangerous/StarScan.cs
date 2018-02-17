@@ -39,6 +39,9 @@ namespace EliteDangerousCore
             public ISystem system;
             public SortedList<string, ScanNode> starnodes;
             public bool EDSMAdded = false;
+            public SortedList<int, ScanNode> NodesByID;
+            public int MaxTopLevelBodyID = 0;
+            public int MinPlanetBodyID = 512;
 
             public IEnumerable<ScanNode> Bodies
             {
@@ -70,6 +73,9 @@ namespace EliteDangerousCore
             public string customname;               // e.g. Earth
             public SortedList<string, ScanNode> children;         // kids
             public int level;                       // level within SystemNode
+            public int? BodyID;
+
+            public bool IsTopLevelNode;
 
             private JournalScan scandata;            // can be null if no scan, its a place holder.
             private JournalScan.StarPlanetRing beltdata;
@@ -253,6 +259,11 @@ namespace EliteDangerousCore
             // Process elements
             ScanNode node = ProcessElements(sc, sys, sn, customname, elements, starscannodetype, isbeltcluster);
 
+            if (node.BodyID != null)
+            {
+                sn.NodesByID[(int)node.BodyID] = node;
+            }
+
             // Process top-level star
             if (elements.Count == 1)
             {
@@ -279,6 +290,7 @@ namespace EliteDangerousCore
         {
             List<JournalScan> bodies = sysnode.Bodies.Where(b => b.ScanData != null).Select(b => b.ScanData).ToList();
             sysnode.starnodes = new SortedList<string, ScanNode>(new DuplicateKeyComparer<string>());
+            sysnode.NodesByID = new SortedList<int, ScanNode>();
 
             foreach (JournalScan sn in bodies)
             {
@@ -421,12 +433,26 @@ namespace EliteDangerousCore
         {
             SortedList<string, ScanNode> cnodes = sn.starnodes;
             ScanNode node = null;
+            List<JournalScan.BodyParent> ancestors = sc.Parents?.AsEnumerable()?.ToList();
+            List<JournalScan.BodyParent> ancestorbodies = ancestors?.Where(a => a.Type == "Star" || a.Type == "Planet")?.ToList();
+
+            if ((ancestorbodies != null) && (starscannodetype != ScanNodeType.star))
+            {
+                ancestorbodies.Insert(0, null);
+            }
 
             for (int lvl = 0; lvl < elements.Count; lvl++)
             {
                 ScanNode sublv;
                 ScanNodeType sublvtype;
                 string ownname = elements[lvl];
+
+                if (lvl == 0)
+                    sublvtype = starscannodetype;
+                else if (isbeltcluster)
+                    sublvtype = lvl == 1 ? ScanNodeType.belt : ScanNodeType.beltcluster;
+                else
+                    sublvtype = ScanNodeType.body;
 
                 if (cnodes == null || !cnodes.TryGetValue(elements[lvl], out sublv))
                 {
@@ -436,13 +462,6 @@ namespace EliteDangerousCore
                         cnodes = node.children;
                     }
 
-                    if (lvl == 0)
-                        sublvtype = starscannodetype;
-                    else if (isbeltcluster)
-                        sublvtype = lvl == 1 ? ScanNodeType.belt : ScanNodeType.beltcluster;
-                    else
-                        sublvtype = ScanNodeType.body;
-
                     sublv = new ScanNode
                     {
                         ownname = ownname,
@@ -450,10 +469,32 @@ namespace EliteDangerousCore
                         ScanData = null,
                         children = null,
                         type = sublvtype,
-                        level = lvl
+                        level = lvl,
+                        IsTopLevelNode = lvl == 0
                     };
 
                     cnodes.Add(ownname, sublv);
+                }
+
+                if (ancestorbodies != null && lvl < ancestorbodies.Count && ancestorbodies[lvl] != null)
+                {
+                    if (sublv.BodyID == null)
+                    {
+                        sublv.BodyID = ancestorbodies[lvl].BodyID;
+                        sn.NodesByID[(int)sublv.BodyID] = sublv;
+                    }
+
+                    if (sublv.BodyID != null)
+                    {
+                        if (lvl == 0 && sublv.BodyID > sn.MaxTopLevelBodyID)
+                        {
+                            sn.MaxTopLevelBodyID = (int)sublv.BodyID;
+                        }
+                        else if (lvl > 0 && sublv.BodyID < sn.MinPlanetBodyID)
+                        {
+                            sn.MinPlanetBodyID = (int)sublv.BodyID;
+                        }
+                    }
                 }
 
                 node = sublv;
@@ -463,6 +504,11 @@ namespace EliteDangerousCore
                 {
                     node.ScanData = sc;
                     node.customname = customname;
+
+                    if (sc.BodyID != null)
+                    {
+                        node.BodyID = sc.BodyID;
+                    }
                 }
             }
 
