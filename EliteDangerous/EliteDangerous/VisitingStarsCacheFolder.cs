@@ -49,7 +49,7 @@ namespace EliteDangerousCore
                 folder = Path.GetDirectoryName(allFiles[0]);
             }
 
-            if (folder == null || folder.Trim().Length == 0)
+            if (string.IsNullOrWhiteSpace(folder))
                 return null;
 
             return folder;
