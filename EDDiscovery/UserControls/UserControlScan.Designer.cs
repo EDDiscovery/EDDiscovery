@@ -63,12 +63,12 @@ namespace EDDiscovery.UserControls
             this.imagebox = new ExtendedControls.PictureBoxHotspot();
             this.vScrollBarCustom = new ExtendedControls.VScrollBarCustom();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
-            this.flowPanelTop = new System.Windows.Forms.FlowLayoutPanel();
+            this.rollUpPanelTop = new ExtendedControls.RollUpPanel();
             this.panelStars.SuspendLayout();
             this.contextMenuStrip.SuspendLayout();
             this.panelControls.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.imagebox)).BeginInit();
-            this.flowPanelTop.SuspendLayout();
+            this.rollUpPanelTop.SuspendLayout();
             this.SuspendLayout();
             // 
             // panelStars
@@ -459,25 +459,32 @@ namespace EDDiscovery.UserControls
             this.toolTip.InitialDelay = 250;
             this.toolTip.ReshowDelay = 100;
             // 
-            // flowPanelTop
+            // rollUpPanelTop
             // 
-            this.flowPanelTop.ContextMenuStrip = this.contextMenuStrip;
-            this.flowPanelTop.Controls.Add(this.panelControls);
-            this.flowPanelTop.Controls.Add(this.lblSystemInfo);
-            this.flowPanelTop.Dock = System.Windows.Forms.DockStyle.Top;
-            this.flowPanelTop.Location = new System.Drawing.Point(0, 0);
-            this.flowPanelTop.Name = "flowPanelTop";
-            this.flowPanelTop.Size = new System.Drawing.Size(748, 32);
-            this.flowPanelTop.TabIndex = 4;
-            this.toolTip.SetToolTip(this.flowPanelTop, "Right click on panel to show/hide the toolbar");
-            this.flowPanelTop.WrapContents = false;
+            this.rollUpPanelTop.ContextMenuStrip = this.contextMenuStrip;
+            this.rollUpPanelTop.Controls.Add(this.panelControls);
+            this.rollUpPanelTop.Controls.Add(this.lblSystemInfo);
+            this.rollUpPanelTop.Dock = System.Windows.Forms.DockStyle.Top;
+			this.rollUpPanelTop.HiddenMarkerWidth = 0;
+            this.rollUpPanelTop.Location = new System.Drawing.Point(0, 0);
+            this.rollUpPanelTop.Name = "rollUpPanelTop";
+			this.rollUpPanelTop.PinState = true;
+            this.rollUpPanelTop.RolledUpHeight = 5;
+            this.rollUpPanelTop.RollUpAnimationTime = 500;
+            this.rollUpPanelTop.RollUpDelay = 1000;
+            this.rollUpPanelTop.ShowHiddenMarker = true;
+            this.rollUpPanelTop.Size = new System.Drawing.Size(748, 32);
+            this.rollUpPanelTop.TabIndex = 4;
+            this.toolTip.SetToolTip(this.rollUpPanelTop, "Right click on panel to show/hide the toolbar");
+            this.rollUpPanelTop.UnrolledHeight = 32;
+            this.rollUpPanelTop.UnrollHoverDelay = 1000;
             // 
             // UserControlScan
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.panelStars);
-            this.Controls.Add(this.flowPanelTop);
+            this.Controls.Add(this.rollUpPanelTop);
             this.Name = "UserControlScan";
             this.Size = new System.Drawing.Size(748, 682);
             this.Resize += new System.EventHandler(this.UserControlScan_Resize);
@@ -485,10 +492,8 @@ namespace EDDiscovery.UserControls
             this.contextMenuStrip.ResumeLayout(false);
             this.panelControls.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.imagebox)).EndInit();
-            this.flowPanelTop.ResumeLayout(false);
-            this.flowPanelTop.PerformLayout();
+            this.rollUpPanelTop.ResumeLayout(false);
             this.ResumeLayout(false);
-
         }
 
         #endregion
@@ -511,6 +516,6 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.Label lblSystemInfo;
         private ExtendedControls.CheckBoxCustom chkShowOverlays;
         private System.Windows.Forms.Panel panelControls;
-        private System.Windows.Forms.FlowLayoutPanel flowPanelTop;
+        private ExtendedControls.RollUpPanel rollUpPanelTop;
     }
 }
