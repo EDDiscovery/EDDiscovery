@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2017 EDDiscovery development team
+ * Copyright © 2017 - 2018 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -15,6 +15,7 @@
  */
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -22,25 +23,39 @@ using System.Threading.Tasks;
 namespace AudioExtensions
 {
 #if !NO_SYSTEM_SPEECH
-    public class WindowsSpeechEngine : ISpeechEngine
+    public class SpeechSynthesizerWindows : ISpeechEngine, IDisposable
     {
         private System.Speech.Synthesis.SpeechSynthesizer synth;
-        public string systemdefaultvoice;
+        private string systemdefaultvoice;
 
-        public WindowsSpeechEngine()
+        public SpeechSynthesizerWindows()
         {
             synth = new System.Speech.Synthesis.SpeechSynthesizer();
             synth.SetOutputToDefaultAudioDevice();
             systemdefaultvoice = synth.Voice.Name;
         }
 
+        // windows 2000 and greater.
+        internal static bool IsPlatformSupported { get; } = Environment.OSVersion.Platform == PlatformID.Win32NT && Environment.OSVersion.Version.Major >= 5;
+
+        #region IDisposable support
+
+        public void Dispose()
+        {
+            synth?.Dispose();
+            synth = null;
+        }
+
+        #endregion
+
+        #region ISpeechEngine support
+
         public string[] GetVoiceNames()
         {
             return synth.GetInstalledVoices().Select(v => v.VoiceInfo.Name).ToArray();
         }
 
-
-        public System.IO.MemoryStream Speak(string phrase, string culture, string voice, int volume, int rate)
+        public MemoryStream Speak(string phrase, string culture, string voice, int volume, int rate)
         {
             try
             {                                                   // paranoia here..
@@ -81,7 +96,7 @@ namespace AudioExtensions
                 string[] ssmlstart = new string[] { "<say-as ", "<emphasis" , "<phoneme" , "<sub" , "<prosody"};
                 string[] ssmlend = new string[] { "</say-as>", "</emphasis>" , "</phoneme>" , "</sub>" , "</prosody>" };
 
-                phrase.Trim();
+                phrase = phrase.Trim();
 
                 while (phrase.Length > 0)
                 {
@@ -147,6 +162,8 @@ namespace AudioExtensions
                 return null;
             }
         }
+
+        #endregion
     }
 #endif
 }

@@ -1,5 +1,21 @@
-﻿using System;
+﻿/*
+ * Copyright © 2017 - 2018 EDDiscovery development team
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
+ * file except in compliance with the License. You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software distributed under
+ * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
+ * ANY KIND, either express or implied. See the License for the specific language
+ * governing permissions and limitations under the License.
+ * 
+ * EDDiscovery is not affiliated with Frontier Developments plc.
+ */
+using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,9 +25,33 @@ namespace AudioExtensions
 #if !NO_SYSTEM_SPEECH
     using System.Speech.Recognition;
 
-    public class VoiceRecognitionWindows : IVoiceRecognition
+    public class VoiceRecognizerWindows : IVoiceRecognition, IDisposable
     {
+        private SpeechRecognitionEngine engine;
+        private System.Globalization.CultureInfo ct;
+
+        // Windows Vista and greater.
+        internal static bool IsPlatformSupported { get; } = Environment.OSVersion.Platform == PlatformID.Win32NT && Environment.OSVersion.Version.Major >= 6;
+
+        #region IDisposable support
+
+        public void Dispose()
+        {
+            SpeechRecognised = SpeechNotRecognised = null;
+            engine?.Dispose();
+            engine = null;
+        }
+
+        #endregion
+
+        #region IVoiceRecognition support
+
+        public event SpeechRecognised SpeechRecognised;
+        public event SpeechRecognised SpeechNotRecognised;
+
         public float Confidence { get; set; } = 0.96F;
+
+        public bool IsOpen { get { return engine != null; } }
 
         // WARNING Engine must be started, and they may except if out of range.
         public int BabbleTimeout { get { return (int)engine.BabbleTimeout.TotalMilliseconds; } set { engine.BabbleTimeout = new TimeSpan(0, 0, 0, 0, value); } }
@@ -19,13 +59,7 @@ namespace AudioExtensions
         public int EndSilenceTimeoutAmbigious { get { return (int)engine.EndSilenceTimeoutAmbiguous.TotalMilliseconds; } set { engine.EndSilenceTimeoutAmbiguous = new TimeSpan(0, 0, 0, 0, value); } }
         public int InitialSilenceTimeout { get { return (int)engine.InitialSilenceTimeout.TotalMilliseconds; } set { engine.InitialSilenceTimeout = new TimeSpan(0, 0, 0, 0, value); } }
 
-        public event SpeechRecognised SpeechRecognised;
-        public event SpeechRecognised SpeechNotRecognised;
 
-        public bool IsOpen { get { return engine != null; } }
-
-        private SpeechRecognitionEngine engine;
-        private System.Globalization.CultureInfo ct;
 
         public bool Open(System.Globalization.CultureInfo ctp)
         {
@@ -179,6 +213,7 @@ namespace AudioExtensions
                 return false;
         }
 
+        #endregion
 
         private void Engine_SpeechRecognized(object sender, SpeechRecognizedEventArgs e)
         {
@@ -201,7 +236,7 @@ namespace AudioExtensions
             //DumpInfo("Hypothesised", e.Result);
         }
 
-
+        [Conditional("Debug")]
         void DumpInfo(string t, RecognitionResult r)
         {
             System.Diagnostics.Debug.WriteLine((Environment.TickCount%10000) + ":" + t + " " + r.Text + " " + r.Confidence.ToString("#.00"));

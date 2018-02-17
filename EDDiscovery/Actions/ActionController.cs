@@ -51,17 +51,15 @@ namespace EDDiscovery.Actions
         public override AudioExtensions.AudioQueue AudioQueueWave { get { return audioqueuewave; } }
         public override AudioExtensions.AudioQueue AudioQueueSpeech { get { return audioqueuespeech; } }
         public override AudioExtensions.SpeechSynthesizer SpeechSynthesizer { get { return speechsynth; } }
-        public AudioExtensions.IVoiceRecognition VoiceRecognition { get { return voicerecon; } }
+        public AudioExtensions.VoiceRecognizer VoiceRecognition { get { return voicerecon; } }
         public BindingsFile FrontierBindings { get { return frontierbindings; } }
 
         public string ErrorList;        // set on Reload, use to display warnings at right point
 
-        AudioExtensions.IAudioDriver audiodriverwave;
         AudioExtensions.AudioQueue audioqueuewave;
-        AudioExtensions.IAudioDriver audiodriverspeech;
         AudioExtensions.AudioQueue audioqueuespeech;
         AudioExtensions.SpeechSynthesizer speechsynth;
-        AudioExtensions.IVoiceRecognition voicerecon;
+        AudioExtensions.VoiceRecognizer voicerecon;
 
         DirectInputDevices.InputDeviceList inputdevices;
         Actions.ActionsFromInputDevices inputdevicesactions;
@@ -72,30 +70,10 @@ namespace EDDiscovery.Actions
             discoveryform = frm;
             discoverycontroller = ctrl;
 
-            #if !NO_SYSTEM_SPEECH
-            // Windows TTS (2000 and above). Speech *recognition* will be Version.Major >= 6 (Vista and above)
-            if (Environment.OSVersion.Platform == PlatformID.Win32NT && Environment.OSVersion.Version.Major >= 5 && !EDDOptions.Instance.NoSound)
-            {
-                audiodriverwave = new AudioExtensions.AudioDriverCSCore(EDDConfig.Instance.DefaultWaveDevice);
-                audiodriverspeech = new AudioExtensions.AudioDriverCSCore(EDDConfig.Instance.DefaultVoiceDevice);
-                speechsynth = new AudioExtensions.SpeechSynthesizer(new AudioExtensions.WindowsSpeechEngine());
-                voicerecon = new AudioExtensions.VoiceRecognitionWindows();
-            }
-            else
-            {
-                audiodriverwave = new AudioExtensions.AudioDriverDummy();
-                audiodriverspeech = new AudioExtensions.AudioDriverDummy();
-                speechsynth = new AudioExtensions.SpeechSynthesizer(new AudioExtensions.DummySpeechEngine());
-                voicerecon = new AudioExtensions.VoiceRecognitionDummy();
-            }
-#else
-            audiodriverwave = new AudioExtensions.AudioDriverDummy();
-            audiodriverspeech = new AudioExtensions.AudioDriverDummy();
-            speechsynth = new AudioExtensions.SpeechSynthesizer(new AudioExtensions.DummySpeechEngine());
-            voicerecon = new AudioExtensions.VoiceRecognitionDummy();
-#endif
-            audioqueuewave = new AudioExtensions.AudioQueue(audiodriverwave);
-            audioqueuespeech = new AudioExtensions.AudioQueue(audiodriverspeech);
+            audioqueuespeech = new AudioQueue(EDDConfig.Instance.DefaultVoiceDevice, EDDOptions.Instance.NoSound ? AudioEngine.Dummy : AudioEngine.BestAvail);
+            audioqueuewave = new AudioQueue(EDDConfig.Instance.DefaultWaveDevice,  EDDOptions.Instance.NoSound ? AudioEngine.Dummy : AudioEngine.BestAvail);
+            speechsynth = new SpeechSynthesizer(EDDOptions.Instance.NoSound ? SpeechEngine.Dummy : SpeechEngine.BestAvail);
+            voicerecon = new VoiceRecognizer(EDDOptions.Instance.NoSound ? VoiceRecognitionEngine.Dummy : VoiceRecognitionEngine.BestAvail);
 
             frontierbindings = new BindingsFile();
             inputdevices = new DirectInputDevices.InputDeviceList(a => discoveryform.BeginInvoke(a));
@@ -413,23 +391,25 @@ namespace EDDiscovery.Actions
             string rate = Globals.GetString(ActionSay.globalvarspeechrate, "Default");
             ConditionVariables effects = new ConditionVariables(PersistentVariables.GetString(ActionSay.globalvarspeecheffects, ""), ConditionVariables.FromMode.MultiEntryComma);
 
-            SpeechConfigure cfg = new SpeechConfigure();
-            cfg.Init(AudioQueueSpeech, SpeechSynthesizer,
-                        "Select voice synthesizer defaults", title, this.Icon,
-                        null, false, false, AudioExtensions.AudioQueue.Priority.Normal, "", "",
-                        voicename,
-                        volume,
-                        rate,
-                        effects);
-
-            if (cfg.ShowDialog(discoveryform) == DialogResult.OK)
+            using (SpeechConfigure cfg = new SpeechConfigure())
             {
-                SetPeristentGlobal(ActionSay.globalvarspeechvoice, cfg.VoiceName);
-                SetPeristentGlobal(ActionSay.globalvarspeechvolume, cfg.Volume);
-                SetPeristentGlobal(ActionSay.globalvarspeechrate, cfg.Rate);
-                SetPeristentGlobal(ActionSay.globalvarspeecheffects, cfg.Effects.ToString());
+                cfg.Init(AudioQueueSpeech, SpeechSynthesizer,
+                    "Select voice synthesizer defaults", title, this.Icon,
+                    null, false, false, AudioQueuePriority.Normal, "", "",
+                    voicename,
+                    volume,
+                    rate,
+                    effects);
 
-                EDDConfig.Instance.DefaultVoiceDevice = AudioQueueSpeech.Driver.GetAudioEndpoint();
+                if (cfg.ShowDialog(discoveryform) == DialogResult.OK)
+                {
+                    SetPeristentGlobal(ActionSay.globalvarspeechvoice, cfg.VoiceName);
+                    SetPeristentGlobal(ActionSay.globalvarspeechvolume, cfg.Volume);
+                    SetPeristentGlobal(ActionSay.globalvarspeechrate, cfg.Rate);
+                    SetPeristentGlobal(ActionSay.globalvarspeecheffects, cfg.Effects.ToString());
+
+                    EDDConfig.Instance.DefaultVoiceDevice = AudioQueueSpeech.Driver.GetAudioEndpoint();
+                }
             }
         }
 
@@ -438,21 +418,23 @@ namespace EDDiscovery.Actions
             string volume = Globals.GetString(ActionPlay.globalvarplayvolume, "60");
             ConditionVariables effects = new ConditionVariables(PersistentVariables.GetString(ActionPlay.globalvarplayeffects, ""), ConditionVariables.FromMode.MultiEntryComma);
 
-            WaveConfigureDialog dlg = new WaveConfigureDialog();
-            dlg.Init(AudioQueueWave, true,
-                        "Select Default device, volume and effects", title, this.Icon,
-                        "",
-                        false, AudioExtensions.AudioQueue.Priority.Normal, "", "",
-                        volume, effects);
-
-            if (dlg.ShowDialog(discoveryform) == DialogResult.OK)
+            using (WaveConfigureDialog dlg = new WaveConfigureDialog())
             {
-                ConditionVariables cond = new ConditionVariables(dlg.Effects);// add on any effects variables (and may add in some previous variables, since we did not purge)
+                dlg.Init(AudioQueueWave, true,
+                    "Select Default device, volume and effects", title, this.Icon,
+                    "",
+                    false, AudioQueuePriority.Normal, "", "",
+                    volume, effects);
 
-                SetPeristentGlobal(ActionPlay.globalvarplayvolume, dlg.Volume);
-                SetPeristentGlobal(ActionPlay.globalvarplayeffects, dlg.Effects.ToString());
+                if (dlg.ShowDialog(discoveryform) == DialogResult.OK)
+                {
+                    ConditionVariables cond = new ConditionVariables(dlg.Effects);// add on any effects variables (and may add in some previous variables, since we did not purge)
 
-                EDDConfig.Instance.DefaultWaveDevice = AudioQueueWave.Driver.GetAudioEndpoint();
+                    SetPeristentGlobal(ActionPlay.globalvarplayvolume, dlg.Volume);
+                    SetPeristentGlobal(ActionPlay.globalvarplayeffects, dlg.Effects.ToString());
+
+                    EDDConfig.Instance.DefaultWaveDevice = AudioQueueWave.Driver.GetAudioEndpoint();
+                }
             }
         }
 
@@ -571,10 +553,8 @@ namespace EDDiscovery.Actions
 
             audioqueuespeech.StopAll();
             audioqueuewave.StopAll();
-            audioqueuespeech.Dispose();     // in order..
-            audiodriverspeech.Dispose();
+            audioqueuespeech.Dispose();
             audioqueuewave.Dispose();
-            audiodriverwave.Dispose();
 
             inputdevicesactions.Stop();
             inputdevices.Clear();

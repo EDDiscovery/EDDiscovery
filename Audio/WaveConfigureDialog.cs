@@ -31,7 +31,7 @@ namespace AudioExtensions
     {
         public string Path {  get { return textBoxBorderText.Text; } }
         public bool Wait { get { return checkBoxCustomComplete.Checked; } }
-        public AudioQueue.Priority Priority { get { return (AudioQueue.Priority)Enum.Parse(typeof(AudioQueue.Priority), comboBoxCustomPriority.Text); } }
+        public AudioQueuePriority Priority { get { return (AudioQueuePriority)Enum.Parse(typeof(AudioQueuePriority), comboBoxCustomPriority.Text); } }
         public string StartEvent { get { return textBoxBorderStartTrigger.Text; } }
         public string FinishEvent { get { return textBoxBorderEndTrigger.Text; } }
         public string Volume { get { return (checkBoxCustomV.Checked) ? trackBarVolume.Value.ToString() : "Default"; } }
@@ -50,12 +50,12 @@ namespace AudioExtensions
                           string title, string caption, Icon ic,
                           string defpath,
                           bool waitcomplete,
-                          AudioQueue.Priority prio,
+                          AudioQueuePriority prio,
                           string startname, string endname,
                           string volume,
                           ConditionVariables ef)
         {
-            comboBoxCustomPriority.Items.AddRange(Enum.GetNames(typeof(AudioQueue.Priority)));
+            comboBoxCustomPriority.Items.AddRange(Enum.GetNames(typeof(AudioQueuePriority)));
 
             queue = qu;
             this.Text = caption;
@@ -106,9 +106,9 @@ namespace AudioExtensions
             {
                 try
                 {
-                    AudioQueue.AudioSample audio = queue.Generate(textBoxBorderText.Text, new SoundEffectSettings(effects));
-                    audio.sampleOverEvent += Audio_sampleOverEvent;
-                    queue.Submit(audio, trackBarVolume.Value, AudioQueue.Priority.High);
+                    AudioSample audio = queue.Generate(textBoxBorderText.Text, new SoundEffectSettings(effects));
+                    audio.SampleFinished += TestAudio_SampleFinished;
+                    queue.Submit(audio, trackBarVolume.Value, AudioQueuePriority.High);
                     buttonExtTest.Text = "Stop";
                 }
                 catch
@@ -118,7 +118,7 @@ namespace AudioExtensions
             }
         }
 
-        private void Audio_sampleOverEvent(AudioQueue sender, object tag)
+        private void TestAudio_SampleFinished(object sender, AudioSampleEventArgs e)
         {
             buttonExtTest.Text = "Test";
         }
@@ -131,13 +131,15 @@ namespace AudioExtensions
 
         private void buttonExtEffects_Click(object sender, EventArgs e)
         {
-            SoundEffectsDialog sfe = new SoundEffectsDialog();
-            sfe.Init(this.Icon, effects,true);
-            sfe.TestSettingEvent += Sfe_TestSettingEvent;           // callback to say test
-            sfe.StopTestSettingEvent += Sfe_StopTestSettingEvent;   // callback to say stop
-            if (sfe.ShowDialog(this) == DialogResult.OK)
+            using (SoundEffectsDialog sfe = new SoundEffectsDialog())
             {
-                effects = sfe.GetEffects();
+                sfe.Init(this.Icon, effects, true);
+                sfe.TestSettingEvent += Sfe_TestSettingEvent;           // callback to say test
+                sfe.StopTestSettingEvent += Sfe_StopTestSettingEvent;   // callback to say stop
+                if (sfe.ShowDialog(this) == DialogResult.OK)
+                {
+                    effects = sfe.GetEffects();
+                }
             }
         }
 
@@ -145,10 +147,10 @@ namespace AudioExtensions
         {
             try
             {
-                AudioQueue.AudioSample a = queue.Generate(textBoxBorderText.Text, new SoundEffectSettings(effects));
-                a.sampleOverEvent += SampleOver;
-                a.sampleOverTag = sfe;
-                queue.Submit(a, trackBarVolume.Value, AudioQueue.Priority.High);
+                AudioSample a = queue.Generate(textBoxBorderText.Text, new SoundEffectSettings(effects));
+                a.SampleFinished += SfeTest_SampleFinished;
+                a.FinishTag = sfe;
+                queue.Submit(a, trackBarVolume.Value, AudioQueuePriority.High);
             }
             catch
             {
@@ -162,23 +164,23 @@ namespace AudioExtensions
             queue.StopCurrent();
         }
 
-        private void SampleOver(AudioQueue s, Object tag)
+        private void SfeTest_SampleFinished(object sender, AudioSampleEventArgs e)
         {
-            SoundEffectsDialog sfe = tag as SoundEffectsDialog;
-            sfe.TestOver();
+            (e.Tag as SoundEffectsDialog).TestOver();
         }
 
         private void buttonExtBrowse_Click(object sender, EventArgs e)
         {
-            OpenFileDialog dlg = new OpenFileDialog();
-
-            dlg.DefaultExt = "mp3";
-            dlg.AddExtension = true;
-            dlg.Filter = "MP3 Files (*.mp3)|*.mp3|WAV files (*.wav)|*.wav|Audio Files (*.mp3;*.wav)|*.mp3;*.wav|All files (*.*)|*.*";
-
-            if (dlg.ShowDialog(this) == DialogResult.OK)
+            using (OpenFileDialog dlg = new OpenFileDialog())
             {
-                textBoxBorderText.Text = dlg.FileName;
+                dlg.DefaultExt = "mp3";
+                dlg.AddExtension = true;
+                dlg.Filter = "MP3 Files (*.mp3)|*.mp3|WAV files (*.wav)|*.wav|Audio Files (*.mp3;*.wav)|*.mp3;*.wav|All files (*.*)|*.*";
+
+                if (dlg.ShowDialog(this) == DialogResult.OK)
+                {
+                    textBoxBorderText.Text = dlg.FileName;
+                }
             }
         }
 
@@ -189,12 +191,13 @@ namespace AudioExtensions
 
         private void buttonExtDevice_Click(object sender, EventArgs e)
         {
-            AudioDeviceConfigure adc = new AudioDeviceConfigure();
-            adc.Init("Configure wave device", queue.Driver);
-            if (adc.ShowDialog(this) == DialogResult.OK)
+            using (AudioDeviceConfigure adc = new AudioDeviceConfigure())
             {
-                if (!queue.SetAudioEndpoint(adc.Selected))
+                adc.Init("Configure wave device", queue.Driver);
+                if (adc.ShowDialog(this) == DialogResult.OK && !queue.SetAudioEndpoint(adc.Selected))
+                {
                     ExtendedControls.MessageBoxTheme.Show(this, "Audio Device Selection failed", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                }
             }
         }
     }

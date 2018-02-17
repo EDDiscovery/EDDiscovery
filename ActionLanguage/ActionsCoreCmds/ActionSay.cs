@@ -86,36 +86,38 @@ namespace ActionLanguage
             ConditionVariables vars;
             FromString(userdata, out saying, out vars);
 
-            SpeechConfigure cfg = new SpeechConfigure();
-            cfg.Init(cp.AudioQueueSpeech, cp.SpeechSynthesizer,
-                        "Set Text to say (use ; to separate randomly selectable phrases and {} to group)", "Configure Say Command", cp.Icon,
-                        saying,
-                        vars.Exists(waitname), vars.Exists(literalname),
-                        AudioQueue.GetPriority(vars.GetString(priorityname, "Normal")),
-                        vars.GetString(startname, ""),
-                        vars.GetString(finishname, ""),
-                        vars.GetString(voicename, "Default"),
-                        vars.GetString(volumename, "Default"),
-                        vars.GetString(ratename, "Default"),
-                        vars
-                        );
-
-            if (cfg.ShowDialog(parent.FindForm()) == DialogResult.OK)
+            using (SpeechConfigure cfg = new SpeechConfigure())
             {
-                ConditionVariables cond = new ConditionVariables(cfg.Effects);// add on any effects variables (and may add in some previous variables, since we did not purge
-                cond.SetOrRemove(cfg.Wait, waitname, "1");
-                cond.SetOrRemove(cfg.Literal, literalname, "1");
-                cond.SetOrRemove(cfg.Priority != AudioQueue.Priority.Normal, priorityname, cfg.Priority.ToString());
-                cond.SetOrRemove(cfg.StartEvent.Length > 0, startname, cfg.StartEvent);
-                cond.SetOrRemove(cfg.StartEvent.Length > 0, finishname, cfg.FinishEvent);
-                cond.SetOrRemove(!cfg.VoiceName.Equals("Default", StringComparison.InvariantCultureIgnoreCase), voicename, cfg.VoiceName);
-                cond.SetOrRemove(!cfg.Volume.Equals("Default", StringComparison.InvariantCultureIgnoreCase), volumename, cfg.Volume);
-                cond.SetOrRemove(!cfg.Rate.Equals("Default", StringComparison.InvariantCultureIgnoreCase), ratename, cfg.Rate);
+                cfg.Init(cp.AudioQueueSpeech, cp.SpeechSynthesizer,
+                    "Set Text to say (use ; to separate randomly selectable phrases and {} to group)", "Configure Say Command", cp.Icon,
+                    saying,
+                    vars.Exists(waitname), vars.Exists(literalname),
+                    AudioQueue.GetPriority(vars.GetString(priorityname, "Normal")),
+                    vars.GetString(startname, ""),
+                    vars.GetString(finishname, ""),
+                    vars.GetString(voicename, "Default"),
+                    vars.GetString(volumename, "Default"),
+                    vars.GetString(ratename, "Default"),
+                    vars
+                    );
 
-                return ToString(cfg.SayText, cond);
+                if (cfg.ShowDialog(parent.FindForm()) == DialogResult.OK)
+                {
+                    ConditionVariables cond = new ConditionVariables(cfg.Effects);// add on any effects variables (and may add in some previous variables, since we did not purge
+                    cond.SetOrRemove(cfg.Wait, waitname, "1");
+                    cond.SetOrRemove(cfg.Literal, literalname, "1");
+                    cond.SetOrRemove(cfg.Priority != AudioQueuePriority.Normal, priorityname, cfg.Priority.ToString());
+                    cond.SetOrRemove(cfg.StartEvent.Length > 0, startname, cfg.StartEvent);
+                    cond.SetOrRemove(cfg.StartEvent.Length > 0, finishname, cfg.FinishEvent);
+                    cond.SetOrRemove(!cfg.VoiceName.Equals("Default", StringComparison.InvariantCultureIgnoreCase), voicename, cfg.VoiceName);
+                    cond.SetOrRemove(!cfg.Volume.Equals("Default", StringComparison.InvariantCultureIgnoreCase), volumename, cfg.Volume);
+                    cond.SetOrRemove(!cfg.Rate.Equals("Default", StringComparison.InvariantCultureIgnoreCase), ratename, cfg.Rate);
+
+                    return ToString(cfg.SayText, cond);
+                }
+
+                return null;
             }
-
-            return null;
         }
 
 
@@ -157,7 +159,7 @@ namespace ActionLanguage
                     bool wait = vars.GetInt(waitname, 0) != 0;
 
                     string prior = (vars.Exists(priorityname) && vars[priorityname].Length > 0) ? vars[priorityname] : (ap.VarExist(globalvarspeechpriority) ? ap[globalvarspeechpriority] : "Normal");
-                    AudioQueue.Priority priority = AudioQueue.GetPriority(prior);
+                    AudioQueuePriority priority = AudioQueue.GetPriority(prior);
 
                     string start = vars.GetString(startname, checklen: true);
                     string finish = vars.GetString(finishname, checklen: true);
@@ -219,7 +221,7 @@ namespace ActionLanguage
 
                         if (ms != null)
                         {
-                            AudioQueue.AudioSample audio = ap.actioncontroller.AudioQueueSpeech.Generate(ms, ses, true);
+                            AudioSample audio = ap.actioncontroller.AudioQueueSpeech.Generate(ms, ses, true);
 
                             if (audio == null)
                             {
@@ -229,9 +231,9 @@ namespace ActionLanguage
 
                             if (mixsoundpath != null)
                             {
-                                AudioQueue.AudioSample mix = ap.actioncontroller.AudioQueueSpeech.Generate(mixsoundpath);
+                                AudioSample mix = ap.actioncontroller.AudioQueueSpeech.Generate(mixsoundpath);
 
-                                if (audio == null)
+                                if (mix == null)
                                 {
                                     ap.ReportError("Say could not create mix audio, check audio file format is supported and effects settings");
                                     return true;
@@ -242,7 +244,7 @@ namespace ActionLanguage
 
                             if (prefixsoundpath != null)
                             {
-                                AudioQueue.AudioSample p = ap.actioncontroller.AudioQueueSpeech.Generate(prefixsoundpath);
+                                AudioSample p = ap.actioncontroller.AudioQueueSpeech.Generate(prefixsoundpath);
 
                                 if ( p == null)
                                 {
@@ -255,7 +257,7 @@ namespace ActionLanguage
 
                             if (postfixsoundpath != null)
                             {
-                                AudioQueue.AudioSample p = ap.actioncontroller.AudioQueueSpeech.Generate(postfixsoundpath);
+                                AudioSample p = ap.actioncontroller.AudioQueueSpeech.Generate(postfixsoundpath);
 
                                 if (p == null)
                                 {
@@ -268,14 +270,14 @@ namespace ActionLanguage
 
                             if (start != null )
                             {
-                                audio.sampleStartTag = new AudioEvent { apr = ap, eventname = start, ev = ActionEvent.onSayStarted };
-                                audio.sampleStartEvent += Audio_sampleEvent;
+                                audio.StartTag = new AudioEvent { apr = ap, eventname = start, ev = ActionEvent.onSayStarted };
+                                audio.SampleStarted += Audio_sampleEvent;
                             }
 
                             if (wait || finish != null )       // if waiting, or finish call
                             {
-                                audio.sampleOverTag = new AudioEvent() { apr = ap, wait = wait, eventname = finish, ev = ActionEvent.onSayFinished };
-                                audio.sampleOverEvent += Audio_sampleEvent;
+                                audio.FinishTag = new AudioEvent() { apr = ap, wait = wait, eventname = finish, ev = ActionEvent.onSayFinished };
+                                audio.SampleFinished += Audio_sampleEvent;
                             }
 
                             ap.actioncontroller.AudioQueueSpeech.Submit(audio, vol, priority);
@@ -296,9 +298,9 @@ namespace ActionLanguage
             return true;
         }
 
-        private void Audio_sampleEvent(AudioQueue sender, object tag)
+        private void Audio_sampleEvent(object sender, AudioSampleEventArgs e)
         {
-            AudioEvent af = tag as AudioEvent;
+            AudioEvent af = e.Tag as AudioEvent;
 
             if (af.eventname != null && af.eventname.Length>0)
                 af.apr.actioncontroller.ActionRun(af.ev, new ConditionVariables("EventName", af.eventname), now: false);    // queue at end an event

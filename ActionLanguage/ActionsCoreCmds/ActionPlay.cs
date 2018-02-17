@@ -95,7 +95,7 @@ namespace ActionLanguage
             {
                 ConditionVariables cond = new ConditionVariables(cfg.Effects);// add on any effects variables (and may add in some previous variables, since we did not purge)
                 cond.SetOrRemove(cfg.Wait, waitname, "1");
-                cond.SetOrRemove(cfg.Priority != AudioQueue.Priority.Normal, priorityname, cfg.Priority.ToString());
+                cond.SetOrRemove(cfg.Priority != AudioQueuePriority.Normal, priorityname, cfg.Priority.ToString());
                 cond.SetOrRemove(cfg.StartEvent.Length > 0, startname, cfg.StartEvent);
                 cond.SetOrRemove(cfg.StartEvent.Length > 0, finishname, cfg.FinishEvent);
                 cond.SetOrRemove(!cfg.Volume.Equals("Default", StringComparison.InvariantCultureIgnoreCase), volumename, cfg.Volume);
@@ -131,7 +131,7 @@ namespace ActionLanguage
                         if (System.IO.File.Exists(path))
                         {
                             bool wait = vars.GetInt(waitname, 0) != 0;
-                            AudioQueue.Priority priority = AudioQueue.GetPriority(vars.GetString(priorityname, "Normal"));
+                            AudioQueuePriority priority = AudioQueue.GetPriority(vars.GetString(priorityname, "Normal"));
                             string start = vars.GetString(startname);
                             string finish = vars.GetString(finishname);
 
@@ -142,20 +142,20 @@ namespace ActionLanguage
                             ConditionVariables globalsettings = ap.VarExist(globalvarplayeffects) ? new ConditionVariables(ap[globalvarplayeffects], ConditionVariables.FromMode.MultiEntryComma) : null;
                             SoundEffectSettings ses = SoundEffectSettings.Set(globalsettings, vars);        // work out the settings
                             
-                            AudioQueue.AudioSample audio = ap.actioncontroller.AudioQueueWave.Generate(path, ses);
+                            AudioSample audio = ap.actioncontroller.AudioQueueWave.Generate(path, ses);
 
                             if (audio != null)
                             {
                                 if (start != null && start.Length > 0)
                                 {
-                                    audio.sampleStartTag = new AudioEvent { apr = ap, eventname = start, ev = ActionEvent.onPlayStarted };
-                                    audio.sampleStartEvent += Audio_sampleEvent;
+                                    audio.StartTag = new AudioEvent { apr = ap, eventname = start, ev = ActionEvent.onPlayStarted };
+                                    audio.SampleStarted += Audio_SampleEvent;
 
                                 }
                                 if (wait || (finish != null && finish.Length > 0))       // if waiting, or finish call
                                 {
-                                    audio.sampleOverTag = new AudioEvent() { apr = ap, wait = wait, eventname = finish, ev = ActionEvent.onPlayFinished };
-                                    audio.sampleOverEvent += Audio_sampleEvent;
+                                    audio.FinishTag = new AudioEvent() { apr = ap, wait = wait, eventname = finish, ev = ActionEvent.onPlayFinished };
+                                    audio.SampleFinished += Audio_SampleEvent;
                                 }
 
                                 ap.actioncontroller.AudioQueueWave.Submit(audio, vol, priority);
@@ -179,11 +179,11 @@ namespace ActionLanguage
             return true;
         }
 
-        private void Audio_sampleEvent(AudioQueue sender, object tag)
+        private void Audio_SampleEvent(object sender, AudioSampleEventArgs e)
         {
-            AudioEvent af = tag as AudioEvent;
+            AudioEvent af = e.Tag as AudioEvent;
 
-            if (af.eventname != null && af.eventname.Length>0)
+            if (!string.IsNullOrEmpty(af.eventname))
                 af.apr.actioncontroller.ActionRun(af.ev, new ConditionVariables("EventName", af.eventname), now: false);    // queue at end an event
 
             if (af.wait)

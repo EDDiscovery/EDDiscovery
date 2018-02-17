@@ -107,7 +107,7 @@ namespace AudioExtensions
 
             checkBoxCustomNone.Checked = ap.OverrideNone;
 
-            ExtendedControls.ThemeableFormsInstance.Instance.ApplyToForm(this, System.Drawing.SystemFonts.DefaultFont);
+            ExtendedControls.ThemeableFormsInstance.Instance?.ApplyToForm(this, System.Drawing.SystemFonts.DefaultFont);
         }
 
         public ConditionVariables GetEffects()
@@ -249,7 +249,8 @@ namespace AudioExtensions
 
         public void TestOver()
         {
-            buttonExtTest.Text = "Test";
+            if (!IsDisposed)
+                buttonExtTest.Text = "Test";
         }
 
         static string[] defaulteffects = new string[]
