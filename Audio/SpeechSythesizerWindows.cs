@@ -81,7 +81,7 @@ namespace AudioExtensions
                 string[] ssmlstart = new string[] { "<say-as ", "<emphasis" , "<phoneme" , "<sub" , "<prosody"};
                 string[] ssmlend = new string[] { "</say-as>", "</emphasis>" , "</phoneme>" , "</sub>" , "</prosody>" };
 
-                phrase.Trim();
+                phrase = phrase.Trim();
 
                 while (phrase.Length > 0)
                 {

@@ -484,7 +484,7 @@ namespace EliteDangerousCore.CompanionAPI
             {
                 var reader = new StreamReader(stream, encoding);
                 string data = reader.ReadToEnd();
-                if (data == null || data.Trim() == "")
+                if (string.IsNullOrWhiteSpace(data))
                 {
                     BaseUtils.HttpCom.WriteLog("Companion No data returned", "");
                     return null;
