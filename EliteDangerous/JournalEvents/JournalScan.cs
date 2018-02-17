@@ -76,6 +76,7 @@ namespace EliteDangerousCore.JournalEvents
         public bool HasRings { get { return Rings != null && Rings.Length > 0; } }
         public StarPlanetRing[] Rings { get; set; }
         public int EstimatedValue { get; set; }
+        public ParentList[] Parents;                         // new to 3.0! after I prodded Howard.. use this later in scan display for better formatting
 
         // STAR
         public string StarType { get; set; }                        // null if no StarType, direct from journal, K, A, B etc
@@ -143,6 +144,12 @@ namespace EliteDangerousCore.JournalEvents
         public const double oneGee_m_s2 = 9.80665;
 
         // Classes
+        public class ParentList
+        {
+            public string Name;
+            public long ID;
+        }
+
         public class StarPlanetRing
         {
             public string Name;     // may be null
@@ -202,6 +209,9 @@ namespace EliteDangerousCore.JournalEvents
             BodyName = evt["BodyName"].Str();
             BodyID = evt["BodyID"].IntNull();
             StarType = evt["StarType"].StrNull();
+            JArray pa = (JArray)evt["Parents"];
+            if (pa != null)     // this took a while to work out..!
+                Parents = pa.Select(t => new ParentList() {ID= (int)((t.First as JProperty).Value) , Name = (t.First as JProperty).Name} ).ToArray();
 
             DistanceFromArrivalLS = evt["DistanceFromArrivalLS"].Double();
 

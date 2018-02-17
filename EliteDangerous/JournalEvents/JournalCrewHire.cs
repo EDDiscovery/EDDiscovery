@@ -33,7 +33,10 @@ namespace EliteDangerousCore.JournalEvents
             Faction = evt["Faction"].Str();
             Cost = evt["Cost"].Long();
             CombatRank = (CombatRank)evt["CombatRank"].Int();
+            NpcCrewID = evt["CrewID"].Long();
         }
+
+        public long NpcCrewID { get; set; }
         public string Name { get; set; }
         public string Faction { get; set; }
         public long Cost { get; set; }
