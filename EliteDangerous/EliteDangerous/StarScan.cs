@@ -548,7 +548,7 @@ namespace EliteDangerousCore
             starscannodetype = ScanNodeType.star;
             isbeltcluster = false;
             List<string> elements;
-            string rest = IsStarNameRelatedReturnRest(sys.Name, sc.Body, sc.BodyType);
+            string rest = IsStarNameRelatedReturnRest(sys.Name, sc.Body, sc.BodyDesignation);
 
             if (rest != null)                                   // if we have a relationship..
             {
@@ -800,6 +800,11 @@ namespace EliteDangerousCore
                     {
                         node.BodyID = sc.BodyID;
                     }
+
+                    if (sc.BodyType == "" || sc.BodyType == "Null")
+                        node.type = ScanNodeType.barycentre;
+                    else if (sc.BodyType == "Belt")
+                        node.type = ScanNodeType.belt;
                 }
             }
 
