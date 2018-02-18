@@ -49,6 +49,10 @@ namespace EliteDangerousCore.JournalEvents
             ReplacementItemLocalised = evt["ReplacementItem_Localised"].Str();
 
             Cost = evt["Cost"].LongNull();
+
+            Hot = evt["Hot"].BoolNull();
+            Level = evt["Level"].IntNull();
+            Quality = evt["Quality"].DoubleNull();
         }
         public string Slot { get; set; }
         public string SlotFD { get; set; }
@@ -63,6 +67,9 @@ namespace EliteDangerousCore.JournalEvents
         public string ReplacementItemFD { get; set; }
         public string ReplacementItemLocalised { get; set; }
         public long? Cost { get; set; }
+        public double? Quality { get; set; }
+        public int? Level { get; set; }
+        public bool? Hot { get; set; }
 
         public void Ledger(Ledger mcl, DB.SQLiteConnectionUser conn)
         {
@@ -78,7 +85,7 @@ namespace EliteDangerousCore.JournalEvents
         public override void FillInformation(out string summary, out string info, out string detailed)  //V
         {
             summary = EventTypeStr.SplitCapsWord();
-            info = BaseUtils.FieldBuilder.Build("", StoredItemLocalised.Alt(StoredItem), "< from ", Slot , "Cost:" , Cost);
+            info = BaseUtils.FieldBuilder.Build("", StoredItemLocalised.Alt(StoredItem), "< from ", Slot , ";Hot!", Hot, "Cost:" , Cost);
             if (ReplacementItem.Length > 0)
                 info = ", " + BaseUtils.FieldBuilder.Build("Replaced by:", ReplacementItemLocalised.Alt(ReplacementItem));
             detailed = BaseUtils.FieldBuilder.Build("Modifications:", EngineerModifications);

@@ -139,6 +139,7 @@ namespace EliteDangerousCore
         Passengers = 545,
         PayFines = 550,
         PayLegacyFines = 560,
+        Powerplay = 565,
         PowerplayCollect = 570,
         PowerplayDefect = 580,
         PowerplayDeliver = 590,
@@ -216,97 +217,6 @@ namespace EliteDangerousCore
         EngineerContribution_Unknown = 10235,
         EngineerContribution_MatCommod = 10236,
     }
-
-    public enum CombatRank
-    {
-        Harmless = 0,
-        MostlyHarmless,
-        Novice,
-        Competent,
-        Expert,
-        Master,
-        Dangerous,
-        Deadly,
-        Elite
-    }
-
-    public enum TradeRank
-    {
-        Penniless = 0,
-        MostlyPenniless,
-        Peddler,
-        Dealer,
-        Merchant,
-        Broker,
-        Entrepreneur,
-        Tycoon,
-        Elite
-    }
-
-    public enum ExplorationRank
-    {
-        Aimless = 0,
-        MostlyAimless,
-        Scout,
-        Surveyor,
-        Explorer,
-        Pathfinder,
-        Ranger,
-        Pioneer,
-        Elite
-    }
-
-    public enum FederationRank
-    {
-        None = 0,
-        Recruit,
-        Cadet,
-        Midshipman,
-        PettyOfficer,
-        ChiefPettyOfficer,
-        WarrantOfficer,
-        Ensign,
-        Lieutenant,
-        LtCommander,
-        PostCommander,
-        PostCaptain,
-        RearAdmiral,
-        ViceAdmiral,
-        Admiral
-    }
-
-    public enum EmpireRank
-    {
-        None = 0,
-        Outsider,
-        Serf,
-        Master,
-        Squire,
-        Knight,
-        Lord,
-        Baron,
-        Viscount,
-        Count,
-        Earl,
-        Marquis,
-        Duke,
-        Prince,
-        King
-    }
-
-    public enum CQCRank
-    {
-        Helpless = 0,
-        MostlyHelpless,
-        Amateur,
-        SemiProfessional,
-        Professional,
-        Champion,
-        Hero,
-        Legend,
-        Elite
-    }
-
 
     public enum SyncFlags
     {

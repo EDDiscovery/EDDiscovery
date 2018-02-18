@@ -44,11 +44,13 @@ namespace EliteDangerousCore.JournalEvents
 
             ModuleItems = evt["Items"]?.ToObject<StoredModuleItem[]>();
 
-            if ( ModuleItems != null )
+            if (ModuleItems != null)
             {
                 foreach (StoredModuleItem i in ModuleItems)
                 {
                     i.Name = JournalFieldNaming.GetBetterItemNameEvents(i.Name);
+                    i.TransferTimeSpan = new System.TimeSpan((int)(i.TransferTime / 60 / 60), (int)((i.TransferTime / 60) % 60), (int)(i.TransferTime % 60));
+                    i.TransferTimeString = i.TransferTimeSpan.ToString();
                 }
             }
         }
@@ -62,31 +64,36 @@ namespace EliteDangerousCore.JournalEvents
         public override void FillInformation(out string summary, out string info, out string detailed) //V
         {
             summary = EventTypeStr.SplitCapsWord();
-            info = "";
+            info = BaseUtils.FieldBuilder.Build("Total:", ModuleItems?.Count());
+            detailed = "";
 
-            if ( ModuleItems != null )
+            if (ModuleItems != null)
                 foreach (StoredModuleItem m in ModuleItems)
                 {
-                    if (info.Length>0)
-                        info += ", ";
-                    info += m.Name;
+                    detailed = detailed.AppendPrePad(BaseUtils.FieldBuilder.Build("", m.Name, "< at ", m.StarSystem, "Transfer Cost:; cr;N0", m
+                                .TransferCost, "Time:", m.TransferTimeString, "Value:; cr;N0", m.TransferCost, ";(Hot)", m.Hot), System.Environment.NewLine);
                 }
-                
-            detailed = "";
+
+        }
+
+        public class StoredModuleItem
+        {
+            public int StorageSlot;
+            public string Name;
+            public string Name_Localised;
+            public string StarSystem;
+            public long MarketID;
+            public long TransferCost;
+            public int TransferTime;
+            public string EngineerModifications;
+            public double Quality;
+            public int Level;
+            public bool Hot;
+            public bool InTransit;
+            public int BuyPrice;
+
+            public System.TimeSpan TransferTimeSpan;        // computed
+            public string TransferTimeString; // computed
         }
     }
-
-
-    public class StoredModuleItem
-    {
-        public int StorageSlot;
-        public string Name;
-        public string Name_Localised;
-        public string StarSystem;
-        public long MarketID;
-        public long TransferCost;
-        public int TransferTime;
-        public string EngineerModifications;
-    }
-
 }
