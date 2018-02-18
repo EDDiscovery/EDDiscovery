@@ -195,7 +195,7 @@ namespace EDDiscovery.UserControls
 
                         StarScan.ScanNode lastbelt = belts.Count != 0 ? belts.Dequeue() : null;
 
-                        foreach (StarScan.ScanNode planetnode in starnode.children.Values.Where(s => s.type != StarScan.ScanNodeType.belt))
+                        foreach (StarScan.ScanNode planetnode in starnode.children.Values.Where(s => s.type != StarScan.ScanNodeType.belt && s.type != StarScan.ScanNodeType.barycentre))
                         {
                             while (lastbelt != null && planetnode.ScanData != null && (lastbelt.BeltData == null || lastbelt.BeltData.OuterRad < planetnode.ScanData.nSemiMajorAxis))
                             {
@@ -307,7 +307,7 @@ namespace EDDiscovery.UserControls
 
                 Point moonpos = new Point(curpos.X + offset, maxtreepos.Y + itemsepar.Height);    // moon pos
 
-                foreach (StarScan.ScanNode moonnode in planetnode.children.Values)
+                foreach (StarScan.ScanNode moonnode in planetnode.children.Values.Where(n => n.type != StarScan.ScanNodeType.barycentre))
                 {
                     bool nonedsmscans = moonnode.DoesNodeHaveNonEDSMScansBelow();     // is there any scans here, either at this node or below?
 
