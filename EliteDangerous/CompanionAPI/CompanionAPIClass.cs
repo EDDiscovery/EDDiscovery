@@ -481,8 +481,8 @@ namespace EliteDangerousCore.CompanionAPI
 
             Trace.WriteLine("Reading response");
             using (var stream = response.GetResponseStream())
+            using (var reader = new StreamReader(stream, encoding))
             {
-                var reader = new StreamReader(stream, encoding);
                 string data = reader.ReadToEnd();
                 if (string.IsNullOrWhiteSpace(data))
                 {
