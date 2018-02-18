@@ -197,13 +197,14 @@ namespace EDDiscovery.UserControls
             // 
             this.textMinRadius.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
             this.textMinRadius.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
+            this.textMinRadius.BackErrorColor = System.Drawing.Color.Red;
             this.textMinRadius.BorderColor = System.Drawing.Color.Transparent;
             this.textMinRadius.BorderColorScaling = 0.5F;
             this.textMinRadius.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textMinRadius.ControlBackground = System.Drawing.SystemColors.Control;
             this.textMinRadius.DelayBeforeNotification = 500;
             this.textMinRadius.Format = "0.#######";
-            this.textMinRadius.BackErrorColor = System.Drawing.Color.Red;
+            this.textMinRadius.InErrorCondition = false;
             this.textMinRadius.Location = new System.Drawing.Point(28, 3);
             this.textMinRadius.Maximum = 100000D;
             this.textMinRadius.Minimum = 0D;
@@ -215,10 +216,8 @@ namespace EDDiscovery.UserControls
             this.textMinRadius.SelectionStart = 0;
             this.textMinRadius.Size = new System.Drawing.Size(40, 20);
             this.textMinRadius.TabIndex = 1;
-            this.textMinRadius.Text = "0";
             this.textMinRadius.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.textMinRadius.Value = 0D;
-            this.textMinRadius.ValueNoChange = 0D;
             this.textMinRadius.WordWrap = true;
             this.textMinRadius.ValueChanged += new System.EventHandler(this.textMinRadius_ValueChanged);
             // 
@@ -235,13 +234,14 @@ namespace EDDiscovery.UserControls
             // 
             this.textMaxRadius.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
             this.textMaxRadius.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
+            this.textMaxRadius.BackErrorColor = System.Drawing.Color.Red;
             this.textMaxRadius.BorderColor = System.Drawing.Color.Transparent;
             this.textMaxRadius.BorderColorScaling = 0.5F;
             this.textMaxRadius.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textMaxRadius.ControlBackground = System.Drawing.SystemColors.Control;
             this.textMaxRadius.DelayBeforeNotification = 500;
             this.textMaxRadius.Format = "0.#######";
-            this.textMaxRadius.BackErrorColor = System.Drawing.Color.Red;
+            this.textMaxRadius.InErrorCondition = false;
             this.textMaxRadius.Location = new System.Drawing.Point(106, 3);
             this.textMaxRadius.Maximum = 100000D;
             this.textMaxRadius.Minimum = 0D;
@@ -253,10 +253,8 @@ namespace EDDiscovery.UserControls
             this.textMaxRadius.SelectionStart = 0;
             this.textMaxRadius.Size = new System.Drawing.Size(40, 20);
             this.textMaxRadius.TabIndex = 1;
-            this.textMaxRadius.Text = "0";
             this.textMaxRadius.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.textMaxRadius.Value = 0D;
-            this.textMaxRadius.ValueNoChange = 0D;
             this.textMaxRadius.WordWrap = true;
             this.textMaxRadius.ValueChanged += new System.EventHandler(this.textMaxRadius_ValueChanged);
             // 
@@ -340,7 +338,7 @@ namespace EDDiscovery.UserControls
             chartArea1.BackSecondaryColor = System.Drawing.Color.Black;
             chartArea1.Name = "ChartArea";
             this.chartMap.ChartAreas.Add(chartArea1);
-            this.chartMap.Location = new System.Drawing.Point(0, 0);
+            this.chartMap.Location = new System.Drawing.Point(15, 15);
             this.chartMap.Margin = new System.Windows.Forms.Padding(0);
             this.chartMap.MinimumSize = new System.Drawing.Size(50, 50);
             this.chartMap.Name = "chartMap";
@@ -1056,6 +1054,8 @@ namespace EDDiscovery.UserControls
             this.chartMap.TabIndex = 29;
             this.chartMap.Text = "chart2";
             this.chartMap.MouseDown += new System.Windows.Forms.MouseEventHandler(this.ChartMap_MouseDown);
+            this.chartMap.MouseEnter += new System.EventHandler(this.chartMap_MouseEnter);
+            this.chartMap.MouseLeave += new System.EventHandler(this.chartMap_MouseLeave);
             this.chartMap.MouseMove += new System.Windows.Forms.MouseEventHandler(this.ChartMap_MouseMove);
             this.chartMap.MouseUp += new System.Windows.Forms.MouseEventHandler(this.ChartMap_MouseUp);
             // 
