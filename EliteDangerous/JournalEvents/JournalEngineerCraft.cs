@@ -118,6 +118,7 @@ namespace EliteDangerousCore.JournalEvents
             public long BlueprintID { get; set; }
             public int Level { get; set; }
             public double Quality { get; set; }
+            public string ExperimentalEffect { get; set; }
             public EngineeringModifiers[] Modifiers { get; set; }       // may be null
 
             public EngineeringData(JObject evt)
@@ -129,6 +130,8 @@ namespace EliteDangerousCore.JournalEvents
                 BlueprintID = evt["BlueprintID"].Long();
                 Level = evt["Level"].Int();
                 Quality = evt["Quality"].Double(0);
+                // EngineerCraft has it as Apply.. Loadout has just ExperimentalEffect.  Check both
+                ExperimentalEffect = JSONObjectExtensions.GetMultiStringDef(evt,new string[] { "ExperimentalEffect", "ApplyExperimentalEffect" });
 
                 Modifiers = evt["Modifiers"]?.ToObject<EngineeringModifiers[]>();
             }

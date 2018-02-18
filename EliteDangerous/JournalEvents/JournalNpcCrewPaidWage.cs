@@ -25,16 +25,18 @@ namespace EliteDangerousCore.JournalEvents
         public JournalNpcCrewPaidWage(JObject evt ) : base(evt, JournalTypeEnum.NpcCrewPaidWage)
         {
             NpcCrewID = evt["NpcCrewId"].Long();
+            Name = evt["NpcCrewName"].Str();
             Amount = evt["Amount"].Long();
         }
 
         public long NpcCrewID { get; set; }
+        public string Name { get; set; }
         public long Amount { get; set; }
 
         public override void FillInformation(out string summary, out string info, out string detailed) //V
         {
             summary = EventTypeStr.SplitCapsWord();
-            info = BaseUtils.FieldBuilder.Build("ID:", NpcCrewID , "; Cr" , Amount);
+            info = BaseUtils.FieldBuilder.Build("<", Name , "; Cr" , Amount);
             detailed = "";
         }
 

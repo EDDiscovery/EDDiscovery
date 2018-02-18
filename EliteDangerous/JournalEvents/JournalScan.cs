@@ -143,7 +143,6 @@ namespace EliteDangerousCore.JournalEvents
         public const double oneAtmosphere_Pa = 101325;
         public const double oneGee_m_s2 = 9.80665;
 
-        // Classes
         public class StarPlanetRing
         {
             public string Name;     // may be null
@@ -273,7 +272,6 @@ namespace EliteDangerousCore.JournalEvents
             {
                 PlanetTypeID = EDPlanet.Unknown;
             }
-
 
             JToken mats = (JToken)evt["Materials"];
 

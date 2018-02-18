@@ -41,6 +41,8 @@ namespace EliteDangerousCore.JournalEvents
             StationName = evt["StationName"].Str();
             StarSystem = evt["StarSystem"].Str();
             MarketID = evt["MarketID"].LongNull();
+            Horizons = evt["Horizons"].BoolNull();
+            AllowCobraMkIV = evt["AllowCobraMkIV"].BoolNull();
 
             ShipyardItems = evt["PriceList"]?.ToObject<ShipyardItem[]>();
 
@@ -67,6 +69,8 @@ namespace EliteDangerousCore.JournalEvents
         public string StationName { get; set; }
         public string StarSystem { get; set; }
         public long? MarketID { get; set; }
+        public bool? Horizons { get; set; }
+        public bool? AllowCobraMkIV { get; set; }
 
         public ShipyardItem[] ShipyardItems { get; set; }
 
@@ -88,19 +92,18 @@ namespace EliteDangerousCore.JournalEvents
 
                 foreach (ShipyardItem m in ShipyardItems)
                 {
-                    detailed = detailed.AppendPrePad(m.ShipType_Localised.Alt(m.ShipType) + " " + m.ShipPrice.ToString("N0"), System.Environment.NewLine);
+                    detailed = detailed.AppendPrePad(BaseUtils.FieldBuilder.Build("",m.ShipType_Localised.Alt(m.ShipType), "; cr;N0", m.ShipPrice), System.Environment.NewLine);
                 }
             }
         }
-    }
 
-
-    public class ShipyardItem
-    {
-        public long id;
-        public string ShipType;
-        public string ShipType_Localised;
-        public long ShipPrice;
+        public class ShipyardItem
+        {
+            public long id;
+            public string ShipType;
+            public string ShipType_Localised;
+            public long ShipPrice;
+        }
     }
 
 }

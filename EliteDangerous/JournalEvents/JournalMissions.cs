@@ -49,15 +49,13 @@ namespace EliteDangerousCore.JournalEvents
             info = "";
             detailed = "";
         }
+
+        public class MissionItem
+        {
+            public long id;
+            public string Name;
+            public bool PassengerMission;
+            public int Expires;
+        }
     }
-
-
-    public class MissionItem
-    {
-        public long id;
-        public string Name;
-        public bool PassengerMission;
-        public int Expires;
-    }
-
 }
