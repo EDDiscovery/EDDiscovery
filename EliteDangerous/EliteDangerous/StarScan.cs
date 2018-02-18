@@ -649,7 +649,8 @@ namespace EliteDangerousCore
             SortedList<string, ScanNode> cnodes = sn.starnodes;
             ScanNode node = null;
             List<JournalScan.BodyParent> ancestors = sc.Parents?.AsEnumerable()?.ToList();
-            List<JournalScan.BodyParent> ancestorbodies = ancestors?.Where(a => a.Type == "Star" || a.Type == "Planet")?.ToList();
+            List<JournalScan.BodyParent> ancestorbodies = ancestors?.Where(a => a.Type == "Star" || a.Type == "Planet" || a.Type == "Belt")?.Reverse()?.ToList();
+            ScanNode toplevelnode = null;
 
             if ((ancestorbodies != null) && (starscannodetype != ScanNodeType.star))
             {
@@ -698,18 +699,6 @@ namespace EliteDangerousCore
                         sublv.BodyID = ancestorbodies[lvl].BodyID;
                         sn.NodesByID[(int)sublv.BodyID] = sublv;
                     }
-
-                    if (sublv.BodyID != null)
-                    {
-                        if (lvl == 0 && sublv.BodyID > sn.MaxTopLevelBodyID)
-                        {
-                            sn.MaxTopLevelBodyID = (int)sublv.BodyID;
-                        }
-                        else if (lvl > 0 && sublv.BodyID < sn.MinPlanetBodyID)
-                        {
-                            sn.MinPlanetBodyID = (int)sublv.BodyID;
-                        }
-                    }
                 }
 
                 node = sublv;
@@ -723,6 +712,35 @@ namespace EliteDangerousCore
                     if (sc.BodyID != null)
                     {
                         node.BodyID = sc.BodyID;
+                    }
+                }
+
+                if (lvl == 0)
+                {
+                    toplevelnode = node;
+                }
+
+                if (node.BodyID != null)
+                {
+                    if (lvl == 0 && node.BodyID > sn.MaxTopLevelBodyID)
+                    {
+                        sn.MaxTopLevelBodyID = (int)node.BodyID;
+                    }
+                    else if (lvl > 0 && node.BodyID < sn.MinPlanetBodyID)
+                    {
+                        sn.MinPlanetBodyID = (int)node.BodyID;
+                    }
+                }
+            }
+
+            if (ancestors != null && ancestorbodies != null && ancestorbodies[0] == null && toplevelnode.BodyID == null)
+            {
+                for (int lvl = 1; lvl < ancestors.Count; lvl++)
+                {
+                    if (ancestors[lvl - 1].BodyID >= sn.MinPlanetBodyID && ancestors[lvl].BodyID <= sn.MaxTopLevelBodyID)
+                    {
+                        toplevelnode.BodyID = ancestors[lvl].BodyID;
+                        sn.NodesByID[(int)toplevelnode.BodyID] = toplevelnode;
                     }
                 }
             }
