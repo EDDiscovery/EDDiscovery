@@ -14,6 +14,7 @@
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 using EDDiscovery;
+using EliteDangerousCore.DB;
 using EliteDangerousCore.EDSM;
 using System;
 using System.Collections.Generic;
@@ -23,6 +24,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using static EliteDangerousCore.DB.PlanetMarks;
 
 namespace EDDiscovery.Forms
 {
@@ -34,13 +36,14 @@ namespace EDDiscovery.Forms
         public string y { get { return textBoxY.Text; } }
         public string z { get { return textBoxZ.Text; } }
         public bool IsTarget { get { return checkBoxTarget.Checked;  } }
-
+        public PlanetMarks SurfaceLocations { get { return userControlSurfaceBookmarks1.PlanetMarks; } }
+        
         private string edsmurl = null;
 
         public BookmarkForm()
         {
             InitializeComponent();
-            EDDTheme.Instance.ApplyToFormStandardFontSize(this); 
+            EDDTheme.Instance.ApplyToFormStandardFontSize(this);
         }
 
         public void InitialisePos(double x, double y, double z)
@@ -59,6 +62,7 @@ namespace EDDiscovery.Forms
             textBoxTime.Hide();
             labelTimeMade.Hide();
             labelBookmarkNotes.Hide();
+            userControlSurfaceBookmarks1.Hide();
             textBoxName.Text = name;
             textBoxTravelNote.Text = (note != null) ? note : "";
 
@@ -92,6 +96,7 @@ namespace EDDiscovery.Forms
             labelTravelNoteEdit.Hide();
             textBoxTravelNote.Hide();
             buttonEDSM.Hide();
+            userControlSurfaceBookmarks1.Hide();
 
             int delta = buttonOK.Location.Y - labelTravelNote.Location.Y;
             ShiftLocationY(buttonOK, delta);
@@ -100,7 +105,7 @@ namespace EDDiscovery.Forms
             buttonOK.Enabled = ValidateData();
         }
 
-        public void Update(string name, string note, string bookmarknote, string tme, bool regionmark , bool istarget )
+        public void Update(string name, string note, string bookmarknote, string tme, bool regionmark , bool istarget, PlanetMarks locations)
         {
             this.Text = "Update Bookmark";
             buttonOK.Text = "Update";
@@ -119,6 +124,7 @@ namespace EDDiscovery.Forms
                 labelTravelNote.Hide();
                 labelTravelNoteEdit.Hide();
                 textBoxTravelNote.Hide();
+                userControlSurfaceBookmarks1.Hide();
                 int delta = buttonOK.Location.Y - labelTravelNote.Location.Y;
                 ShiftLocationY(buttonOK, delta);
                 ShiftLocationY(buttonCancel, delta);
@@ -129,7 +135,17 @@ namespace EDDiscovery.Forms
             {
                 var edsm = new EDSMClass();
                 edsmurl = edsm.GetUrlToEDSMSystem(name);
+                userControlSurfaceBookmarks1.NewForSystem(name);
             }
+            
+        }
+
+        public void Update(BookmarkClass bk)
+        {
+            SystemNoteClass sn = SystemNoteClass.GetNoteOnSystem(bk.StarName);
+            string note = (sn != null) ? sn.Note : "";
+            Update(bk.StarName, note, bk.Note, bk.Time.ToString(), bk.StarName == null, false, bk.PlanetaryMarks);
+            userControlSurfaceBookmarks1.ApplyBookmark(bk);
         }
 
         public void NewSystemBookmark(string name, string note, string tme)
@@ -141,6 +157,7 @@ namespace EDDiscovery.Forms
             buttonDelete.Hide();
             var edsm = new EDSMClass();
             edsmurl = edsm.GetUrlToEDSMSystem(name);
+            userControlSurfaceBookmarks1.NewForSystem(name);
         }
 
         public void GMO(string name, string descr , bool istarget , string url )
@@ -177,8 +194,7 @@ namespace EDDiscovery.Forms
 
             edsmurl = url;
         }
-
-
+        
         private void buttonOK_Click(object sender, EventArgs e)
         {
             DialogResult = DialogResult.OK;
@@ -223,5 +239,6 @@ namespace EDDiscovery.Forms
         {
             OnCaptionMouseDown((Control)sender, e);
         }
+        
     }
 }

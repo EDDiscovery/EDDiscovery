@@ -94,7 +94,7 @@ namespace EDDiscovery._3DMap
 
         #region Bookmarks
 
-        public List<IData3DSet> AddStarBookmarks(Bitmap mapstar, Bitmap mapregion, Bitmap maptarget, float widthly, float heightly, Vector3 rotation )
+        public List<IData3DSet> AddStarBookmarks(Bitmap mapstar, Bitmap mapregion, Bitmap maptarget, Bitmap mapsurface, float widthly, float heightly, Vector3 rotation )
         {
             var datasetbks = Data3DSetClass<TexturedQuadData>.Create("bkmrs", Color.White, 1f);
 
@@ -102,7 +102,7 @@ namespace EDDiscovery._3DMap
 
             foreach (BookmarkClass bc in BookmarkClass.Bookmarks)
             {
-                Bitmap touse = (bc.id == bookmarktarget) ? maptarget : ((bc.isRegion) ? mapregion : mapstar);
+                Bitmap touse = (bc.id == bookmarktarget) ? maptarget : (bc.isRegion ? mapregion : (bc.hasSurfaceMarks ? mapsurface : mapstar));
                 TexturedQuadData newtexture = TexturedQuadData.FromBitmap(touse, new PointData(bc.x, bc.y, bc.z), rotation, widthly, heightly,  0, heightly / 2);
                 newtexture.Tag = bc;
                 newtexture.Tag2 = 0;        // bookmark

@@ -163,7 +163,7 @@ namespace EDDiscovery.UserControls
                     frm.InitialisePos(bkmark.x, bkmark.y, bkmark.z);
                     regionmarker = bkmark.isRegion;
                     tme = bkmark.Time;
-                    frm.Update(regionmarker ? bkmark.Heading : bkmark.StarName, note, bkmark.Note, tme.ToString(), regionmarker, targetid == bkmark.id);
+                    frm.Update(regionmarker ? bkmark.Heading : bkmark.StarName, note, bkmark.Note, tme.ToString(), regionmarker, targetid == bkmark.id, bkmark.PlanetaryMarks);
                 }
 
                 DialogResult res = frm.ShowDialog(senderForm);
@@ -171,8 +171,8 @@ namespace EDDiscovery.UserControls
                 if (res == DialogResult.OK)
                 {
                     BookmarkClass newcls = BookmarkClass.AddOrUpdateBookmark(bkmark, !regionmarker, frm.StarHeading, double.Parse(frm.x), double.Parse(frm.y), double.Parse(frm.z),
-                                                                     tme, frm.Notes);
-
+                                                                     tme, frm.Notes, frm.SurfaceLocations);
+                    
                     if ((frm.IsTarget && targetid != newcls.id) || (!frm.IsTarget && targetid == newcls.id)) // changed..
                     {
                         if (frm.IsTarget)
