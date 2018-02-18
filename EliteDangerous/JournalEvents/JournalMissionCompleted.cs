@@ -87,27 +87,27 @@ namespace EliteDangerousCore.JournalEvents
 
             // 16/2/2018 NO EVIDENCE in manual of format, turn on when have answer
 
-            //if (!evt["MaterialReward"].Empty())
-            //{
-            //    JArray rewards = (JArray)evt["MaterialReward"];        // does not have the $_name problem, straight FDNAME
+            if (!evt["MaterialsReward"].Empty())
+            {
+                JArray rewards = (JArray)evt["MaterialsReward"];        // does not have the $_name problem, straight FDNAME
 
-            //    if (rewards.Count > 0)
-            //    {
-            //        System.Tuple<string, int>[] cr = new System.Tuple<string, int>[rewards.Count];
-            //        int i = 0;
-            //        foreach (JToken jc in rewards.Children())
-            //        {
-            //            if (!jc["Name"].Empty() && !jc["Count"].Empty())        // evidence of empty values
-            //                cr[i++] = new System.Tuple<string, int>(JournalFieldNaming.FDNameTranslation(jc["Name"].Str()), jc["Count"].Int()());
+                if (rewards.Count > 0)
+                {
+                    System.Tuple<string, int>[] cr = new System.Tuple<string, int>[rewards.Count];
+                    int i = 0;
+                    foreach (JToken jc in rewards.Children())
+                    {
+                        if (!jc["Name"].Empty() && !jc["Count"].Empty())        // evidence of empty values
+                            cr[i++] = new System.Tuple<string, int>(JournalFieldNaming.FDNameTranslation(jc["Name"].Str()), jc["Count"].Int());
 
-            //            //System.Diagnostics.Trace.WriteLine(string.Format(" >> Child {0} {1}", jc.Path, jc.Type.ToString()));
-            //        }
-            //        MaterialReward = new System.Tuple<string, int>[i];
-            //        System.Array.Copy(cr, MaterialReward, i);
-            //    }
-            //}
+                        //System.Diagnostics.Trace.WriteLine(string.Format(" >> Child {0} {1}", jc.Path, jc.Type.ToString()));
+                    }
+                    MaterialsReward = new System.Tuple<string, int>[i];
+                    System.Array.Copy(cr, MaterialsReward, i);
+                }
+            }
 
-            // FactionEffects = evt["FactionEffects"]?.ToObject<FactionEffectsEntry[]>();      // NEEDS TEST
+            FactionEffects = evt["FactionEffects"]?.ToObject<FactionEffectsEntry[]>();      // NEEDS TEST
         }
 
         public string Name { get; set; }
@@ -135,7 +135,7 @@ namespace EliteDangerousCore.JournalEvents
         public int MissionId { get; set; }
 
         public System.Tuple<string, int>[] CommodityReward { get; set; }            // Verified in fdname, not in $_name. Must be in fdname format
-        public System.Tuple<string, int>[] MaterialReward { get; set; }
+        public System.Tuple<string, int>[] MaterialsReward { get; set; }
 
         public FactionEffectsEntry[] FactionEffects;
 
@@ -148,12 +148,11 @@ namespace EliteDangerousCore.JournalEvents
                     mc.Change(MaterialCommodities.CommodityCategory, CommodityReward[i].Item1, CommodityReward[i].Item2, 0, conn);
             }
 
-            //if (MaterialReward != null)
-            //{
-            //    // Forum indicates its commodities, and we get normal materialcollected events if its a material.
-            //    for (int i = 0; i < MaterialReward.Length; i++)
-            //        mc.Change(MaterialCommodities.MaterialRawCategory, MaterialReward[i].Item1, Material[i].Item2, 0, conn);
-            //}
+            if (MaterialsReward != null)
+            {
+                for (int i = 0; i < MaterialsReward.Length; i++)        // NOTE as of 3.0 journal 15, we are not getting a CAT, so set true don't use CAT to match
+                    mc.Change(MaterialCommodities.MaterialRawCategory, MaterialsReward[i].Item1, MaterialsReward[i].Item2, 0, conn, true);
+            }
         }
 
         public void Ledger(Ledger mcl, DB.SQLiteConnectionUser conn)
@@ -225,12 +224,12 @@ namespace EliteDangerousCore.JournalEvents
         public string MaterialList(bool pretty = true)
         {
             string detailed = "";
-            if (MaterialReward != null && MaterialReward.Length > 0)
+            if (MaterialsReward != null && MaterialsReward.Length > 0)
             {
                 if (pretty)
                     detailed += "Rewards:";
-                for (int i = 0; i < MaterialReward.Length; i++)
-                    detailed += ((i > 0) ? "," : "") + JournalFieldNaming.RMat(MaterialReward[i].Item1) + " " + MaterialReward[i].Item2.ToStringInvariant();
+                for (int i = 0; i < MaterialsReward.Length; i++)
+                    detailed += ((i > 0) ? "," : "") + JournalFieldNaming.RMat(MaterialsReward[i].Item1) + " " + MaterialsReward[i].Item2.ToStringInvariant();
 
                 if (pretty)
                     detailed += System.Environment.NewLine;
@@ -249,12 +248,13 @@ namespace EliteDangerousCore.JournalEvents
         public class EffectTrend
         {
             public string Effect;
+            public string Effect_Localised;
             public string Trend;
         }
 
         public class InfuluenceTrend
         {
-            public long SystemID;
+            public long SystemAddress;
             public string Trend;
         }
 

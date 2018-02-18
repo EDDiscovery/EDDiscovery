@@ -227,7 +227,9 @@ namespace NetLogEntry
                 else if (writetype.Equals("Shipyard", StringComparison.InvariantCultureIgnoreCase))
                     lineout = Shipyard(Path.GetDirectoryName(filename), args.Next);
                 else if (writetype.Equals("PowerPlay", StringComparison.InvariantCultureIgnoreCase))
-                    lineout = "{ " + TimeStamp() + F("event", "PowerPlay") + F("Power", "Fred") + F("Rank",10) + F("Merits",10) + F("Votes",2) + FF("TimePledged", 433024) + " }";
+                    lineout = "{ " + TimeStamp() + F("event", "PowerPlay") + F("Power", "Fred") + F("Rank", 10) + F("Merits", 10) + F("Votes", 2) + FF("TimePledged", 433024) + " }";
+                else if (writetype.Equals("UnderAttack", StringComparison.InvariantCultureIgnoreCase))
+                    lineout = "{ " + TimeStamp() + F("event", "UnderAttack") + FF("Target", "Fighter") + " }";
                 else
                 {
                     Help();
@@ -298,7 +300,7 @@ namespace NetLogEntry
                               "     Options: Friends Name\n" +
                               "     Options: FuelScoop amount total\n" +
                               "     Options: JetConeBoost\n" +
-                              "     Options: PowerPlay\n" +
+                              "     Options: PowerPlay UnderAttack\n" +
                               "     Options: FighterDestroyed FigherRebuilt NpcCrewRank NpcCrewPaidWage LaunchDrone\n" +
                               "     Options: Market ModuleInfo Outfitting Shipyard (use NOFILE after to say don't write the file)\n" +
                               "EDDBSTARS <filename> or EDDBPLANETS or EDDBSTARNAMES for the eddb dump\n" +
