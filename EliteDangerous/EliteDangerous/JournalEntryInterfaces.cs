@@ -38,6 +38,16 @@ namespace EliteDangerousCore
         void ShipInformation(ShipInformationList shp, SQLiteConnectionUser conn);
     }
 
+    public interface IBodyNameAndID
+    {
+        string Body { get; }
+        string BodyType { get; }
+        int? BodyID { get; }
+        string BodyDesignation { get; set; }
+        string StarSystem { get; }
+        long? SystemAddress { get; }
+    }
+
     public interface IMissions
     {
         void UpdateMissions(MissionListAccumulator mlist, ISystem sys, string body, SQLiteConnectionUser conn);

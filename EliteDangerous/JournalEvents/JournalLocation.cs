@@ -36,7 +36,7 @@ namespace EliteDangerousCore.JournalEvents
     //•	Government
     //•	Security
     [JournalEntryType(JournalTypeEnum.Location)]
-    public class JournalLocation : JournalLocOrJump, ISystemStationEntry
+    public class JournalLocation : JournalLocOrJump, ISystemStationEntry, IBodyNameAndID
     {
         public JournalLocation(JObject evt) : base(evt, JournalTypeEnum.Location)      // all have evidence 16/3/2017
         {
@@ -57,8 +57,9 @@ namespace EliteDangerousCore.JournalEvents
         public string StationName { get; set; }
         public string StationType { get; set; }
         public string Body { get; set; }
-        public long? BodyID { get; set; }
+        public int? BodyID { get; set; }
         public string BodyType { get; set; }
+        public string BodyDesignation { get; set; }
 
         public double? Latitude { get; set; }
         public double? Longitude { get; set; }

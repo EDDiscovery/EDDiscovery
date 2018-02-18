@@ -236,9 +236,9 @@ namespace EDDiscovery.UserControls
             }
             else if (e.ColumnIndex == 1)
             {
-                if (dataGridViewDistances[1, e.RowIndex].Value != null && !string.IsNullOrEmpty(dataGridViewDistances[1, e.RowIndex].Value.ToString().Trim()))
+                var value = dataGridViewDistances[1, e.RowIndex].Value?.ToString().Trim();
+                if (!string.IsNullOrEmpty(value))
                 {
-                    var value = dataGridViewDistances[1, e.RowIndex].Value.ToString().Trim();
                     var parsedDistance = BaseUtils.DistanceParser.ParseInterstellarDistance(value);
                     if (parsedDistance.HasValue)
                     {
