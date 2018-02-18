@@ -583,7 +583,7 @@ namespace EDDiscovery
 
             galacticMapping.ParseData();                            // at this point, gal map data has been uploaded - get it into memory
             SystemClassDB.AddToAutoComplete(galacticMapping.GetGMONames());
-            SystemNoteClass.GetAllSystemNotes();                             
+            SystemNoteClass.GetAllSystemNotes();
             BookmarkClass.LoadBookmarks();
 
             LogLine("Loaded Notes, Bookmarks and Galactic mapping.");

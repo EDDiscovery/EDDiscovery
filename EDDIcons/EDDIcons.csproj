@@ -637,5 +637,8 @@
   <ItemGroup>
     <EmbeddedResource Include="Panels\PanelSelector.png" />
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Controls\Map3D\Bookmarks\StarWithPlanets.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

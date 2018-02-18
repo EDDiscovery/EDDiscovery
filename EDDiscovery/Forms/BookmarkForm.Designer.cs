@@ -65,6 +65,7 @@ namespace EDDiscovery.Forms
             this.checkBoxTarget = new ExtendedControls.CheckBoxCustom();
             this.buttonEDSM = new ExtendedControls.ButtonExt();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.userControlSurfaceBookmarks1 = new EDDiscovery.UserControls.UserControlSurfaceBookmarks();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -273,7 +274,7 @@ namespace EDDiscovery.Forms
             // 
             // buttonOK
             // 
-            this.buttonOK.Location = new System.Drawing.Point(400, 361);
+            this.buttonOK.Location = new System.Drawing.Point(548, 542);
             this.buttonOK.Name = "buttonOK";
             this.buttonOK.Size = new System.Drawing.Size(75, 23);
             this.buttonOK.TabIndex = 1;
@@ -283,7 +284,7 @@ namespace EDDiscovery.Forms
             // 
             // buttonCancel
             // 
-            this.buttonCancel.Location = new System.Drawing.Point(298, 361);
+            this.buttonCancel.Location = new System.Drawing.Point(467, 542);
             this.buttonCancel.Name = "buttonCancel";
             this.buttonCancel.Size = new System.Drawing.Size(75, 23);
             this.buttonCancel.TabIndex = 2;
@@ -293,7 +294,7 @@ namespace EDDiscovery.Forms
             // 
             // buttonDelete
             // 
-            this.buttonDelete.Location = new System.Drawing.Point(13, 361);
+            this.buttonDelete.Location = new System.Drawing.Point(3, 542);
             this.buttonDelete.Name = "buttonDelete";
             this.buttonDelete.Size = new System.Drawing.Size(75, 23);
             this.buttonDelete.TabIndex = 9;
@@ -369,6 +370,7 @@ namespace EDDiscovery.Forms
             // panel1
             // 
             this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel1.Controls.Add(this.userControlSurfaceBookmarks1);
             this.panel1.Controls.Add(this.textBoxName);
             this.panel1.Controls.Add(this.buttonEDSM);
             this.panel1.Controls.Add(this.label1);
@@ -393,15 +395,22 @@ namespace EDDiscovery.Forms
             this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(502, 407);
+            this.panel1.Size = new System.Drawing.Size(628, 570);
             this.panel1.TabIndex = 12;
             this.panel1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.panel1_MouseDown);
+            // 
+            // userControlSurfaceBookmarks1
+            // 
+            this.userControlSurfaceBookmarks1.Location = new System.Drawing.Point(13, 362);
+            this.userControlSurfaceBookmarks1.Name = "userControlSurfaceBookmarks1";
+            this.userControlSurfaceBookmarks1.Size = new System.Drawing.Size(602, 160);
+            this.userControlSurfaceBookmarks1.TabIndex = 12;
             // 
             // BookmarkForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(502, 407);
+            this.ClientSize = new System.Drawing.Size(628, 570);
             this.Controls.Add(this.panel1);
             this.Icon = global::EDDiscovery.Properties.Resources.edlogo_3mo_icon;
             this.Name = "BookmarkForm";
@@ -437,5 +446,6 @@ namespace EDDiscovery.Forms
         private ExtendedControls.CheckBoxCustom checkBoxTarget;
         private ExtendedControls.ButtonExt buttonEDSM;
         private System.Windows.Forms.Panel panel1;
+        private UserControls.UserControlSurfaceBookmarks userControlSurfaceBookmarks1;
     }
 }

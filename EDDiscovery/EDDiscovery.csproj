@@ -221,6 +221,12 @@
     <Compile Include="Forms\SafeModeForm.Designer.cs">
       <DependentUpon>SafeModeForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\SurfaceBookmarkForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\SurfaceBookmarkForm.Designer.cs">
+      <DependentUpon>SurfaceBookmarkForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="MajorTabControl.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -236,6 +242,12 @@
     <Compile Include="ScreenShots\ScreenShotImageConverter.cs" />
     <Compile Include="UserControls\IHistoryCursor.cs" />
     <Compile Include="UserControls\StarDistanceComputer.cs" />
+    <Compile Include="UserControls\UserControlBookmarks.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\UserControlBookmarks.Designer.cs">
+      <DependentUpon>UserControlBookmarks.cs</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\UserControlContainerGrid.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -442,6 +454,12 @@
     <Compile Include="UserControls\UserControlMap.Designer.cs">
       <DependentUpon>UserControlMap.cs</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\UserControlSurfaceBookmarks.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\UserControlSurfaceBookmarks.Designer.cs">
+      <DependentUpon>UserControlSurfaceBookmarks.cs</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\UserControlSysInfo.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -604,11 +622,17 @@
     <EmbeddedResource Include="Forms\ShipDetails.resx">
       <DependentUpon>ShipDetails.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\SurfaceBookmarkForm.resx">
+      <DependentUpon>SurfaceBookmarkForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\UserControlForm.resx">
       <DependentUpon>UserControlForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ScreenShots\ScreenShotConfigureForm.resx">
       <DependentUpon>ScreenShotConfigureForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\UserControlBookmarks.resx">
+      <DependentUpon>UserControlBookmarks.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\UserControlContainerGrid.resx">
       <DependentUpon>UserControlContainerGrid.cs</DependentUpon>
@@ -651,6 +675,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\UserControlMap.resx">
       <DependentUpon>UserControlMap.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\UserControlSurfaceBookmarks.resx">
+      <DependentUpon>UserControlSurfaceBookmarks.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\UserControlSysInfo.resx">
       <DependentUpon>UserControlSysInfo.cs</DependentUpon>
