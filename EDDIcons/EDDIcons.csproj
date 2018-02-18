@@ -637,5 +637,11 @@
   <ItemGroup>
     <EmbeddedResource Include="Panels\PanelSelector.png" />
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Journal\Powerplay.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Journal\UnderAttack.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
