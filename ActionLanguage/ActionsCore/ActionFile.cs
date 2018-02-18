@@ -185,7 +185,7 @@ namespace ActionLanguage
                         {
                             lineno++;       // on line of read..
 
-                            line.Trim();
+                            line = line.Trim();
                             if (line.StartsWith("ENABLED", StringComparison.InvariantCultureIgnoreCase))
                             {
                                 line = line.Substring(7).Trim().ToLower();

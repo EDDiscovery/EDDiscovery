@@ -23,7 +23,7 @@ namespace EliteDangerousCore.JournalEvents
     //•	Starsystem
     //•	Body
     [JournalEntryType(JournalTypeEnum.SupercruiseExit)]
-    public class JournalSupercruiseExit : JournalEntry
+    public class JournalSupercruiseExit : JournalEntry, IBodyNameAndID
     {
         public JournalSupercruiseExit(JObject evt ) : base(evt, JournalTypeEnum.SupercruiseExit)
         {
@@ -40,6 +40,7 @@ namespace EliteDangerousCore.JournalEvents
         public string Body { get; set; }
         public int? BodyID { get; set; }
         public string BodyType { get; set; }
+        public string BodyDesignation { get; set; }
 
         public override void FillInformation(out string summary, out string info, out string detailed) //V
         {

@@ -26,20 +26,22 @@ namespace EliteDangerousCore.JournalEvents
     // •	BodyID
 
     [JournalEntryType(JournalTypeEnum.ApproachBody)]
-    public class JournalApproachBody : JournalEntry
+    public class JournalApproachBody : JournalEntry, IBodyNameAndID
     {
         public JournalApproachBody(JObject evt) : base(evt, JournalTypeEnum.ApproachBody)
         {
             StarSystem = evt["StarSystem"].Str();
-            SystemAddress = evt["SystemAddress"].Long();
+            SystemAddress = evt["SystemAddress"].LongNull();
             Body = evt["Body"].Str();
-            BodyID = evt["BodyID"].Int();
+            BodyID = evt["BodyID"].IntNull();
         }
 
         public string StarSystem { get; set; }
-        public long SystemAddress { get; set; }
+        public long? SystemAddress { get; set; }
         public string Body { get; set; }
-        public int BodyID { get; set; }
+        public int? BodyID { get; set; }
+        public string BodyType { get { return "Planet"; } }
+        public string BodyDesignation { get; set; }
 
         public override void FillInformation(out string summary, out string info, out string detailed) //V
         {
