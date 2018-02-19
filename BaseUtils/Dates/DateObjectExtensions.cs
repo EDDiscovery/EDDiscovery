@@ -91,6 +91,16 @@ public static class ObjectExtensionsDates
             return res.ToString("yyyy/mm/dd HH:mm:ss");
         }
     }
+
+    public static string ToStringUS(this DateTime dt)     // US fixed format . Use for ACTION programs
+    {
+        return dt.ToString("MM/dd/yyyy HH:mm:ss");
+    }
+
+    public static string ToStringYearFirst(this DateTime dt)     // year first format
+    {
+        return dt.ToString("yyyy-MM-dd HH:mm:ss");
+    }
 }
 
 

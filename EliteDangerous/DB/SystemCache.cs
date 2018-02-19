@@ -19,7 +19,12 @@ namespace EliteDangerousCore
 
         public static ISystem FindSystem(long edsmid, DB.SQLiteConnectionSystem conn = null)
         {
-            return FindSystem(new SystemClass(edsmid),conn);
+            return FindSystem(new SystemClass(edsmid), conn);
+        }
+
+        public static ISystem FindSystem(string name, DB.SQLiteConnectionSystem conn = null)
+        {
+            return FindSystem(new SystemClass(name), conn);
         }
 
         public static ISystem FindSystem(ISystem find, DB.SQLiteConnectionSystem conn = null)
