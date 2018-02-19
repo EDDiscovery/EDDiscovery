@@ -22,6 +22,8 @@ using System.Text.RegularExpressions;
 
 public static class ObjectExtensionsNumbersBool
 {
+    #region Evaluator - cheap and nasty
+
     public static bool Eval(this string ins, out string res)        // true, res = eval.  false, res = error
     {
         System.Data.DataTable dt = new System.Data.DataTable();
@@ -53,6 +55,10 @@ public static class ObjectExtensionsNumbersBool
             return false;
         }
     }
+
+    #endregion
+
+    #region Int
 
     static public bool InvariantParse(this string s, out int i)
     {
@@ -96,6 +102,10 @@ public static class ObjectExtensionsNumbersBool
         return null;
     }
 
+    #endregion
+
+    #region Double
+
     static public bool InvariantParse(this string s, out double i)
     {
         return double.TryParse(s, System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture, out i);
@@ -116,6 +126,10 @@ public static class ObjectExtensionsNumbersBool
             return null;
     }
 
+    #endregion
+
+    #region Float
+
     static public float InvariantParseFloat(this string s, float def)
     {
         float i;
@@ -130,6 +144,10 @@ public static class ObjectExtensionsNumbersBool
         else
             return null;
     }
+
+    #endregion
+
+    #region Long
 
     static public bool InvariantParse(this string s, out long i)
     {
@@ -150,6 +168,10 @@ public static class ObjectExtensionsNumbersBool
         else
             return null;
     }
+
+    #endregion
+
+    #region Version
 
     static public int[] VersionFromString(this string s)
     {
@@ -194,6 +216,10 @@ public static class ObjectExtensionsNumbersBool
         string[] list = v.Split('.');
         return VersionFromStringArray(list);
     }
+
+    #endregion
+
+    #region Arrays and Lists
 
     static public int[] RestoreArrayFromString(this string plist, int def, int length)      // fill array from comma separ string, with defined length and defined default
     {
@@ -246,6 +272,10 @@ public static class ObjectExtensionsNumbersBool
 
         return true;
     }
+
+    #endregion
+
+    #region Outputs
 
     static public bool SafeToString(this double v, string fmt, out string output)     //  safe as fmt can be crap string.. format it.  Additional M type.
     {
@@ -306,6 +336,10 @@ public static class ObjectExtensionsNumbersBool
         }
     }
 
+    #endregion
+
+    #region Enhanced Compare
+
     static public bool CompareTo<T>(this T v, T other, int code) where T : IComparable       // 0 = equal, 1 = v is greater, 2 = v is greater equal, -1, -2
     {
         int compare = v.CompareTo(other);
@@ -317,5 +351,7 @@ public static class ObjectExtensionsNumbersBool
         else 
             return compare == code; // must be the same
     }
+
+    #endregion
 }
 
