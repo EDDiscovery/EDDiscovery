@@ -59,16 +59,20 @@ namespace EDDiscovery.UserControls
         }
 
         private const int DefaultRowHeight = 26;
+        private bool showJumponium = false; // default to not show available jumponium materials in system (when 0, it shows by default).
+        private bool showClasses = true; // default to show body classes. 
 
         private string DbColumnSave { get { return "StarListControl" + ((displaynumber > 0) ? displaynumber.ToString() : "") + "DGVCol"; } }
         private string DbHistorySave { get { return "StarListControlEDUIHistory" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
         private string DbAutoTop { get { return "StarListControlAutoTop" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
         private string DbEDSM { get { return "StarListControlEDSM" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
+        private string DbShowJumponium { get { return "StarListControlEDSM" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
+        private string DbShowClasses { get { return "StarListControlEDSM" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
 
         private Dictionary<string, List<HistoryEntry>> systemsentered = new Dictionary<string, List<HistoryEntry>>();
         private Dictionary<long, DataGridViewRow> rowsbyjournalid = new Dictionary<long, DataGridViewRow>();
         private HistoryList current_historylist;
-
+                
         public UserControlStarList()
         {
             InitializeComponent();
@@ -81,6 +85,9 @@ namespace EDDiscovery.UserControls
 
             checkBoxMoveToTop.Checked = SQLiteConnectionUser.GetSettingBool(DbAutoTop, true);
 
+            showClasses = SQLiteConnectionUser.GetSettingBool(DbShowClasses, true);
+            showJumponium = SQLiteConnectionUser.GetSettingBool(DbShowJumponium, true);
+         
             dataGridViewStarList.MakeDoubleBuffered();
             dataGridViewStarList.RowTemplate.Height = DefaultRowHeight;
             dataGridViewStarList.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
@@ -88,18 +95,11 @@ namespace EDDiscovery.UserControls
             dataGridViewStarList.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.DisplayedCells;     // NEW! appears to work https://msdn.microsoft.com/en-us/library/74b2wakt(v=vs.110).aspx
 
             checkBoxEDSM.Checked = SQLiteDBClass.GetSettingBool(DbEDSM, false);
-
-            ExtraIcons(false);
-
+            
             discoveryform.OnHistoryChange += HistoryChanged;
             discoveryform.OnNewEntry += AddNewEntry;
         }
-
-        public void ExtraIcons(bool icon)
-        {
-            panelHistoryIcon.Visible = icon;
-        }
-
+               
         public override void LoadLayout()
         {
             DGVLoadColumnLayout(dataGridViewStarList, DbColumnSave);
@@ -111,6 +111,8 @@ namespace EDDiscovery.UserControls
             discoveryform.OnHistoryChange -= HistoryChanged;
             discoveryform.OnNewEntry -= AddNewEntry;
             SQLiteConnectionUser.PutSettingBool(DbAutoTop, checkBoxMoveToTop.Checked);
+            SQLiteConnectionUser.PutSettingBool(DbShowClasses, showClasses);
+            SQLiteConnectionUser.PutSettingBool(DbShowJumponium, showJumponium);
         }
 
         #endregion
@@ -248,10 +250,11 @@ namespace EDDiscovery.UserControls
                     string extrainfo = "";
                     string prefix = Environment.NewLine;
                     int total = 0;
+
                     foreach (StarScan.ScanNode sn in node.Bodies)
                     {
                         total++;
-                        if (sn.ScanData!=null)
+                        if (sn.ScanData != null && showClasses == true)
                         {
                             JournalScan sc = sn.ScanData;
 
@@ -342,95 +345,95 @@ namespace EDDiscovery.UserControls
                                     if (sc.PlanetTypeID == EDPlanet.Ammonia_world)
                                         extrainfo = extrainfo.AppendPrePad(sc.BodyName + " is an ammonia world", prefix);
                                 }
+                            }
+                        }
 
-                                // Landable bodies with valuable materials
-                                if (sn.ScanData.IsLandable == true && sn.ScanData.HasMaterials)
+                        // Landable bodies with valuable materials
+                        if (sn.ScanData != null && sn.ScanData.IsLandable == true && sn.ScanData.HasMaterials && showJumponium == true)
+                        {
+                            hasmaterials = 1;
+
+                            string MaterialsBrief = sn.ScanData.DisplayMaterials(4).ToString();
+                            // jumponium materials: Arsenic (As), Cadmium (Cd), Germanium (Ge), Niobium (Nb), Polonium (Po), Vanadium (V), Yttrium (Y)
+
+                            int jump1 = 0;
+                            int jump2 = 0;
+                            int jump3 = 0;
+                            int njump = 0;
+
+                            if (MaterialsBrief.Contains("Arsenic"))
+                            {
+                                jump3 += 1;
+                            }
+                            if (MaterialsBrief.Contains("Cadmium"))
+                            {
+                                jump2 += 1;
+                            }
+                            if (MaterialsBrief.Contains("Germanium"))
+                            {
+                                jump1 += 1;
+                            }
+                            if (MaterialsBrief.Contains("Niobium"))
+                            {
+                                jump2 += 1;
+                                jump3 += 1;
+                            }
+                            if (MaterialsBrief.Contains("Polonium"))
+                            {
+                                jump3 += 1;
+                            }
+                            if (MaterialsBrief.Contains("Vanadium"))
+                            {
+                                jump1 += 1;
+                            }
+                            if (MaterialsBrief.Contains("Yttrium"))
+                            {
+                                jump3 += 1;
+                            }
+
+                            if (jump1 > 0 || jump2 > 0 || jump3 > 0)
+                            {
+                                njump = jump1 + jump2 + jump3;
+
+                                StringBuilder jumpLevel = new StringBuilder();
+
+                                // level I
+                                if (jump1 != 0 && jump2 == 0 && jump3 == 0)
                                 {
-                                    hasmaterials = 1;
-
-                                    string MaterialsBrief = sn.ScanData.DisplayMaterials(4).ToString();
-                                    // jumponium materials: Arsenic (As), Cadmium (Cd), Germanium (Ge), Niobium (Nb), Polonium (Po), Vanadium (V), Yttrium (Y)
-                                    
-                                    int jump1 = 0;
-                                    int jump2 = 0;
-                                    int jump3 = 0;
-                                    int njump = 0;
-
-                                    if (MaterialsBrief.Contains("Arsenic"))
-                                    {
-                                        jump3 += 1;
-                                    }
-                                    if (MaterialsBrief.Contains("Cadmium"))
-                                    {
-                                        jump2 += 1;
-                                    }
-                                    if (MaterialsBrief.Contains("Germanium"))
-                                    {
-                                        jump1 += 1;
-                                    }
-                                    if (MaterialsBrief.Contains("Niobium"))
-                                    {
-                                        jump2 += 1;
-                                        jump3 += 1;
-                                    }
-                                    if (MaterialsBrief.Contains("Polonium"))
-                                    {
-                                        jump3 += 1;
-                                    }
-                                    if (MaterialsBrief.Contains("Vanadium"))
-                                    {
-                                        jump1 += 1;
-                                    }
-                                    if (MaterialsBrief.Contains("Yttrium"))
-                                    {
-                                        jump3 += 1;
-                                    }
-
-                                    if (jump1 > 0 || jump2 > 0 || jump3 > 0)
-                                    {
-                                        njump = jump1 + jump2 + jump3;
-
-                                        StringBuilder jumpLevel = new StringBuilder();
-                                            
-                                        // level I
-                                        if (jump1 != 0 && jump2 == 0 && jump3 == 0)
-                                        {
-                                            jumpLevel.Append(jump1 + " level I");
-                                        }
-                                        // level I and II
-                                        if (jump1 != 0 && jump2 != 0 && jump3 == 0)
-                                        {
-                                            jumpLevel.Append(jump1 + " level I and " + jump2 + " level II");
-                                        }
-                                        // level I
-                                        if (jump1 == 0 && jump2 != 0 && jump3 == 0)
-                                        {
-                                            jumpLevel.Append(jump2 + " level II");
-                                        }
-                                        // level II and III
-                                        if (jump1 == 0 && jump2 != 0 && jump3 != 0)
-                                        {
-                                            jumpLevel.Append(jump2 + " level II and " + jump3 + " level III");
-                                        }
-                                        // level III
-                                        if (jump1 == 0 && jump2 == 0 && jump3 != 0)
-                                        {
-                                            jumpLevel.Append(jump3 + " level III");
-                                        }
-                                        // level I and III
-                                        if (jump1 != 0 && jump2 == 0 && jump3 != 0)
-                                        {
-                                            jumpLevel.Append(jump1 + " level I and " + jump3 + " level III");
-                                        }
-                                        // all levels
-                                        if (jump1 != 0 && jump2 != 0 && jump3 != 0)
-                                        {
-                                            jumpLevel.Append(jump1 + " level I, " + jump2 + " level II and " + jump3 + " level III");
-                                        }
-                                                                                
-                                        jumponium = jumponium.AppendPrePad("\n" + sc.BodyName + " has " + jumpLevel );                                        
-                                    }
+                                    jumpLevel.Append(jump1 + " level I");
                                 }
+                                // level I and II
+                                if (jump1 != 0 && jump2 != 0 && jump3 == 0)
+                                {
+                                    jumpLevel.Append(jump1 + " level I and " + jump2 + " level II");
+                                }
+                                // level I
+                                if (jump1 == 0 && jump2 != 0 && jump3 == 0)
+                                {
+                                    jumpLevel.Append(jump2 + " level II");
+                                }
+                                // level II and III
+                                if (jump1 == 0 && jump2 != 0 && jump3 != 0)
+                                {
+                                    jumpLevel.Append(jump2 + " level II and " + jump3 + " level III");
+                                }
+                                // level III
+                                if (jump1 == 0 && jump2 == 0 && jump3 != 0)
+                                {
+                                    jumpLevel.Append(jump3 + " level III");
+                                }
+                                // level I and III
+                                if (jump1 != 0 && jump2 == 0 && jump3 != 0)
+                                {
+                                    jumpLevel.Append(jump1 + " level I and " + jump3 + " level III");
+                                }
+                                // all levels
+                                if (jump1 != 0 && jump2 != 0 && jump3 != 0)
+                                {
+                                    jumpLevel.Append(jump1 + " level I, " + jump2 + " level II and " + jump3 + " level III");
+                                }
+
+                                jumponium = jumponium.AppendPrePad("\n" + sn.ScanData.BodyName + " has " + jumpLevel);
                             }
                         }
                     }
@@ -439,17 +442,16 @@ namespace EDDiscovery.UserControls
                     if (total > 0)
                     {   // tell us that a system has other bodies, and how much, beside stars
                         infostr = infostr.AppendPrePad(total.ToStringInvariant() + " Other bod" + ((total > 1) ? "ies" : "y"), ", ");
-                        infostr = infostr.AppendPrePad(extrainfo, prefix);
-
-                        if ( hasmaterials != 0)
-                        {
-                            infostr = infostr.AppendPrePad("\nThis system has jumponium materials: ");
-                            infostr = infostr.AppendPrePad(jumponium);
-                        }
+                        infostr = infostr.AppendPrePad(extrainfo, prefix);                                                
                     }
                     else
                     {   // we need this to allow the panel to scan also through systems which has only stars
                         infostr = infostr.AppendPrePad(extrainfo, prefix);
+                    }
+                    if (hasmaterials != 0 && showJumponium == true)
+                    {
+                        infostr = infostr.AppendPrePad("\nThis system has jumponium materials: ");
+                        infostr = infostr.AppendPrePad(jumponium);
                     }
                 }
             }
@@ -773,6 +775,40 @@ namespace EDDiscovery.UserControls
         }
 
         #endregion
+
+        private void buttonExt1_MouseClick(object sender, MouseEventArgs e)
+        {
+            if (showJumponium == false)
+            {
+                showJumponium = true;                
+                buttonJumponium.BackColor = Color.Violet;
+                HistoryChanged(current_historylist);
+            }
+            else if (showJumponium == true)
+            {
+                showJumponium = false;
+                buttonJumponium.BackColor = Color.Transparent;
+                HistoryChanged(current_historylist);
+            }
+        }
+
+        private void buttonBodyClasses_MouseClick(object sender, MouseEventArgs e)
+        {
+            if (showClasses == false)
+            {
+                showClasses = true;
+                buttonBodyClasses.BackColor = Color.SandyBrown;
+                HistoryChanged(current_historylist);
+            }
+            else if (showClasses == true)
+            {
+                showClasses = false;
+                buttonBodyClasses.BackColor = Color.Transparent;
+                HistoryChanged(current_historylist);
+            }
+        }
     }
 }
+
+
     
