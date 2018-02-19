@@ -59,7 +59,7 @@ namespace EDDiscovery.UserControls
         }
 
         private const int DefaultRowHeight = 26;
-
+        
         private string DbColumnSave { get { return "StarListControl" + ((displaynumber > 0) ? displaynumber.ToString() : "") + "DGVCol"; } }
         private string DbHistorySave { get { return "StarListControlEDUIHistory" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
         private string DbAutoTop { get { return "StarListControlAutoTop" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
@@ -68,6 +68,8 @@ namespace EDDiscovery.UserControls
         private Dictionary<string, List<HistoryEntry>> systemsentered = new Dictionary<string, List<HistoryEntry>>();
         private Dictionary<long, DataGridViewRow> rowsbyjournalid = new Dictionary<long, DataGridViewRow>();
         private HistoryList current_historylist;
+
+        private int showJumponium = 1; // default to not show available jumponium materials in system (when 0, it shows by default).
 
         public UserControlStarList()
         {
@@ -88,18 +90,11 @@ namespace EDDiscovery.UserControls
             dataGridViewStarList.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.DisplayedCells;     // NEW! appears to work https://msdn.microsoft.com/en-us/library/74b2wakt(v=vs.110).aspx
 
             checkBoxEDSM.Checked = SQLiteDBClass.GetSettingBool(DbEDSM, false);
-
-            ExtraIcons(false);
-
+            
             discoveryform.OnHistoryChange += HistoryChanged;
             discoveryform.OnNewEntry += AddNewEntry;
         }
-
-        public void ExtraIcons(bool icon)
-        {
-            panelHistoryIcon.Visible = icon;
-        }
-
+               
         public override void LoadLayout()
         {
             DGVLoadColumnLayout(dataGridViewStarList, DbColumnSave);
@@ -344,7 +339,7 @@ namespace EDDiscovery.UserControls
                                 }
 
                                 // Landable bodies with valuable materials
-                                if (sn.ScanData.IsLandable == true && sn.ScanData.HasMaterials)
+                                if (sn.ScanData.IsLandable == true && sn.ScanData.HasMaterials && showJumponium == 0)
                                 {
                                     hasmaterials = 1;
 
@@ -441,8 +436,8 @@ namespace EDDiscovery.UserControls
                         infostr = infostr.AppendPrePad(total.ToStringInvariant() + " Other bod" + ((total > 1) ? "ies" : "y"), ", ");
                         infostr = infostr.AppendPrePad(extrainfo, prefix);
 
-                        if ( hasmaterials != 0)
-                        {
+                        if ( hasmaterials != 0 && showJumponium == 0)
+                        { 
                             infostr = infostr.AppendPrePad("\nThis system has jumponium materials: ");
                             infostr = infostr.AppendPrePad(jumponium);
                         }
@@ -773,6 +768,22 @@ namespace EDDiscovery.UserControls
         }
 
         #endregion
+
+        private void buttonExt1_MouseClick(object sender, MouseEventArgs e)
+        {
+            if (showJumponium == 1)
+            {
+                showJumponium = 0;
+                HistoryChanged(current_historylist);
+            }
+            else if (showJumponium == 0)
+            {
+                showJumponium = 1;
+                HistoryChanged(current_historylist);
+            }
+        }
     }
 }
+
+
     
