@@ -310,8 +310,6 @@ namespace EDDiscovery
         #region Variables
         private string logtext = "";     // to keep in case of no logs..
 
-        private Task<bool> downloadMapsTask = null;
-
         private EDJournalClass journalmonitor;
 
         private RefreshWorkerArgs refreshWorkerArgs = new RefreshWorkerArgs();
@@ -559,7 +557,7 @@ namespace EDDiscovery
             { 
                 // Async load of maps in another thread
 
-                downloadMapsTask = DownloadMaps(this, () => PendingClose, LogLine, LogLineHighlight);
+                DownloadMaps(this, () => PendingClose, LogLine, LogLineHighlight);
 
                 // Former CheckSystems, reworked to accomodate new switches..
                 // Check to see what sync refreshes we need
@@ -861,28 +859,19 @@ namespace EDDiscovery
         #region 2dmaps
 
         // in its own thread..
-        public static Task<bool> DownloadMaps(IDiscoveryController discoveryform, Func<bool> cancelRequested, Action<string> logLine, Action<string> logError)          // ASYNC process
+        public static void DownloadMaps(IDiscoveryController discoveryform, Func<bool> cancelRequested, Action<string> logLine, Action<string> logError)          // ASYNC process
         {
-            try
-            {
-                string mapsdir = Path.Combine(EDDOptions.Instance.AppDataDirectory, "Maps");
-                if (!Directory.Exists(mapsdir))
-                    Directory.CreateDirectory(mapsdir);
+            string mapsdir = Path.Combine(EDDOptions.Instance.AppDataDirectory, "Maps");
+            if (!Directory.Exists(mapsdir))
+                Directory.CreateDirectory(mapsdir);
 
-                logLine("Checking for new EDDiscovery maps");
+            logLine("Checking for new EDDiscovery maps");
 
-                BaseUtils.GitHubClass github = new BaseUtils.GitHubClass(EDDiscovery.Properties.Resources.URLGithubDataDownload, discoveryform.LogLine);
+            BaseUtils.GitHubClass github = new BaseUtils.GitHubClass(EDDiscovery.Properties.Resources.URLGithubDataDownload, discoveryform.LogLine);
 
-                var files = github.ReadDirectory("Maps/V1");
-                return Task.Factory.StartNew(() => github.DownloadFiles(files, mapsdir));
-            }
-            catch (Exception ex)
-            {
-                logError("DownloadImages exception: " + ex.Message);
-                var tcs = new TaskCompletionSource<bool>();
-                tcs.SetException(ex);
-                return tcs.Task;
-            }
+            var files = github.ReadDirectory("Maps/V1");
+            if ( files != null )        // may be empty, unlikely, but
+                Task.Factory.StartNew(() => github.DownloadFiles(files, mapsdir));
         }
 
         #endregion
