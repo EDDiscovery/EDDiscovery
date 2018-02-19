@@ -604,7 +604,7 @@ namespace EliteDangerousCore
 
         public ISystem FindSystem(string name, EDSM.GalacticMapping glist = null)        // in system or name
         {
-            ISystem ds1 = SystemClassDB.GetSystem(name);
+            ISystem ds1 = SystemCache.FindSystem(name);     // now go thru the cache..
 
             if (ds1 == null)
             {
