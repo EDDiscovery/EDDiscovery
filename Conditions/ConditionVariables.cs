@@ -521,5 +521,81 @@ namespace Conditions
         }
 
         #endregion
+
+        #region JSON to variables
+
+        public void AddJSONVariables(JToken t, string name, string dateformat = "MM/dd/yyyy HH:mm:ss")     // give root name to start..
+        {
+            //System.Diagnostics.Debug.WriteLine(t.GetType().Name+ " " + name );
+
+            if (t is JArray)
+            {
+                values[name + "_Count"] = t.Children().Count().ToString();
+                int childindex = 1;
+                foreach (var subitem in t)
+                    AddJSONVariables(subitem, name + "_" + childindex++ );
+            }
+            else if (t is JProperty)
+            {
+                JProperty p = t as JProperty;
+                string subname = name + "_" + p.Name;
+                foreach (var subitem in t)
+                    AddJSONVariables(subitem, subname);
+            }
+            else if (t is JObject)
+            {
+                foreach (var subitem in t)
+                    AddJSONVariables(subitem, name);
+            }
+            else if (t is JValue)
+            {
+                JValue v = t as JValue;
+                if (v.Type == JTokenType.Date)
+                    values[name] = ((DateTime)v.Value).ToString(dateformat);
+                else
+                    values[name] = v.Value.ToString();
+            }
+            else
+            {
+                System.Diagnostics.Debug.Assert(true,"Not handled JSON class!");
+            }
+        }
+
+        #endregion
+
+        public string Qualify(string instr)     // look for [N] and expand..
+        {
+            while(true)
+            {
+                int bracket = instr.IndexOf("[");
+                if (bracket >= 0)
+                {
+                    int endbracket = instr.IndexOf("]", bracket + 1);
+                    if (endbracket >= 0)
+                    {
+                        string innerpart = instr.Substring(bracket + 1, endbracket - bracket - 1);
+                        string endpart = instr.Substring(endbracket + 1);
+
+                        StringBuilder b = new StringBuilder(128);
+                        b.Append(instr.Substring(0, bracket) + "_");
+                        b.Append(values.ContainsKey(innerpart) ? values[innerpart] : innerpart);
+                        if (endpart.Length > 0)
+                        {
+                            b.Append('_');
+                            b.Append(endpart);
+                        }
+
+                        instr = b.ToNullSafeString();
+                    }
+                    else
+                        break;
+                }
+                else
+                    break;
+            }
+
+            //System.Diagnostics.Debug.WriteLine("Qualify " + instr);
+            return instr;
+        }
     }
 }

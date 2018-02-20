@@ -112,7 +112,7 @@ namespace Conditions
                         if (f.matchtype == ConditionEntry.MatchType.IsPresent)         // these use f.itemname without any expansion
                         {
                             if (leftside == null || er == ConditionFunctions.ExpandResult.NoExpansion)     // no expansion, must be a variable name
-                                leftside = f.itemname;
+                                leftside = values.Qualify(f.itemname);                 // its a straight variable name, allow any special formatting
 
                             if (values.Exists(leftside) && values[leftside] != null)
                                 matched = true;
@@ -120,7 +120,7 @@ namespace Conditions
                         else if (f.matchtype == ConditionEntry.MatchType.IsNotPresent)
                         {
                             if (leftside == null || er == ConditionFunctions.ExpandResult.NoExpansion)     // no expansion, must be a variable name
-                                leftside = f.itemname;
+                                leftside = values.Qualify(f.itemname);                 // its a straight variable name, allow any special formatting
 
                             if (!values.Exists(leftside) || values[leftside] == null)
                                 matched = true;
@@ -129,10 +129,12 @@ namespace Conditions
                         {
                             if (er == ConditionFunctions.ExpandResult.NoExpansion)     // no expansion, must be a variable name
                             {
-                                leftside = values.Exists(f.itemname) ? values[f.itemname] : null;
+                                leftside = values.Qualify(f.itemname);
+                                leftside = values.Exists(leftside) ? values[leftside] : null;   // then lookup
+
                                 if (leftside == null)
                                 {
-                                    errlist += "Item " + f.itemname + " is not available" + Environment.NewLine;
+                                    errlist += "Item " + leftside + " is not available" + Environment.NewLine;
                                     innerres = false;
                                     break;                       // stop the loop, its a false
                                 }

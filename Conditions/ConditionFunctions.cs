@@ -170,7 +170,7 @@ namespace Conditions
 
                                 string res = line.Substring(start, apos - start);
 
-                                if (funcname.Length>0 && line.Contains("%"))        // function paramters can be expanded if they have a %
+                                if (funcname.Length > 0 && line.Contains("%"))        // function paramters can be expanded if they have a %
                                 {
                                     string resexp;          // expand out any strings.. recursion
                                     ExpandResult sexpresult = ExpandStringFull(res, out resexp, recdepth + 1);
@@ -182,6 +182,10 @@ namespace Conditions
                                     }
 
                                     res = resexp;
+                                }
+                                else
+                                {                   // not an expansion.. see if it needs mangling
+                                    res = vars.Qualify(res);
                                 }
 
                                 cfh.paras.Add(new ConditionFunctionHandlers.Parameter() { value = res, isstring = false });
@@ -205,7 +209,7 @@ namespace Conditions
 
                         string expand = null;
 
-                        if (funcname.Length > 0)
+                        if (funcname.Length > 0)        // functions!
                         {
                             if (!cfh.RunFunction(funcname, out expand))
                             {
@@ -213,13 +217,13 @@ namespace Conditions
                                 return ExpandResult.Failed;
                             }
                         }
-                        else if (cfh.paras.Count > 1)
+                        else if (cfh.paras.Count != 1)   // only 1
                         {
-                            result = "Only functions can have multiple comma separated items at '" + line.Substring(startexpression, apos - startexpression) + "'";
+                            result = "Variable name missing between () at '" + line.Substring(startexpression, apos - startexpression) + "'";
                             return ExpandResult.Failed;
                         }
                         else
-                        {
+                        {                               // variables
                             if (cfh.paras[0].isstring)
                             {
                                 result = "Must be a variable not a string for non function expansions";
