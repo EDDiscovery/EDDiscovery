@@ -24,11 +24,11 @@ namespace EliteDangerousCore.JournalEvents
     {
         public JournalEDDItemSet(JObject evt) : base(evt, JournalTypeEnum.EDDItemSet)
         {
-            Materials = new MaterialList(evt["Materials"]?.ToObject<MaterialItem[]>().ToList());
+            Materials = new MaterialListClass(evt["Materials"]?.ToObject<MaterialItem[]>().ToList());
             Commodities = new CommodityList(evt["Commodities"]?.ToObject<CommodityItem[]>().ToList());
         }
 
-        public MaterialList Materials { get; set; }             // FDNAMES
+        public MaterialListClass Materials { get; set; }             // FDNAMES
         public CommodityList Commodities { get; set; }
 
         public void MaterialList(MaterialCommoditiesList mc, DB.SQLiteConnectionUser conn)
@@ -75,44 +75,43 @@ namespace EliteDangerousCore.JournalEvents
             detailed = "";
         }
 
-    }
-
-    public class MaterialItem
-    {
-        public string Name;     //FDNAME
-        public string Category;
-        public int Count;
-    }
-
-    public class CommodityItem
-    {
-        public string Name;     //FDNAME
-        public int Count;
-        public double BuyPrice;
-    }
-
-    public class MaterialList
-    {
-        public MaterialList(System.Collections.Generic.List<MaterialItem> ma )
+        public class MaterialItem
         {
-            Materials = ma ?? new System.Collections.Generic.List<MaterialItem>();
-            foreach (MaterialItem i in Materials)
-                i.Name = JournalFieldNaming.FDNameTranslation(i.Name);
+            public string Name;     //FDNAME
+            public string Category;
+            public int Count;
         }
 
-        public System.Collections.Generic.List<MaterialItem> Materials { get; protected set; }
-    }
-
-    public class CommodityList
-    {
-        public CommodityList(System.Collections.Generic.List<CommodityItem> ma)
+        public class CommodityItem
         {
-            Commodities = ma ?? new System.Collections.Generic.List<CommodityItem>();
-            foreach (CommodityItem i in Commodities)
-                i.Name = JournalFieldNaming.FDNameTranslation(i.Name);
+            public string Name;     //FDNAME
+            public int Count;
+            public double BuyPrice;
         }
 
-        public System.Collections.Generic.List<CommodityItem> Commodities { get; protected set; }
+        public class MaterialListClass
+        {
+            public MaterialListClass(System.Collections.Generic.List<MaterialItem> ma)
+            {
+                Materials = ma ?? new System.Collections.Generic.List<MaterialItem>();
+                foreach (MaterialItem i in Materials)
+                    i.Name = JournalFieldNaming.FDNameTranslation(i.Name);
+            }
+
+            public System.Collections.Generic.List<MaterialItem> Materials { get; protected set; }
+        }
+
+        public class CommodityList
+        {
+            public CommodityList(System.Collections.Generic.List<CommodityItem> ma)
+            {
+                Commodities = ma ?? new System.Collections.Generic.List<CommodityItem>();
+                foreach (CommodityItem i in Commodities)
+                    i.Name = JournalFieldNaming.FDNameTranslation(i.Name);
+            }
+
+            public System.Collections.Generic.List<CommodityItem> Commodities { get; protected set; }
+        }
     }
 
 }

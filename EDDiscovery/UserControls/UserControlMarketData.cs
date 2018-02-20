@@ -175,7 +175,7 @@ namespace EDDiscovery.UserControls
                 {
                     if (!buyonly || (c.buyPrice > 0 || c.ComparisionBuy))
                     {
-                        object[] rowobj = { c.type ,
+                        object[] rowobj = { c.loctype.Alt(c.type) ,
                                             c.locName.Alt(c.name.SplitCapsWordFull()) ,
                                             c.sellPrice > 0 ? c.sellPrice.ToString() : "" ,
                                             c.buyPrice > 0 ? c.buyPrice.ToString() : "" ,

@@ -264,7 +264,25 @@ namespace BaseUtils
 
             return sl;
         }
-        
+
+        public double? NextDouble(string terminators = " ")
+        {
+            string s = NextWord(terminators);
+            return s?.InvariantParseDoubleNull();
+        }
+
+        public int? NextInt(string terminators = " ")
+        {
+            string s = NextWord(terminators);
+            return s?.InvariantParseIntNull();
+        }
+
+        public long? NextLong(string terminators = " ")
+        {
+            string s = NextWord(terminators);
+            return s?.InvariantParseLongNull();
+        }
+
         // Move pointer to string if found
 
         public bool Find(string s)      // move position to string, this will be the next read..

@@ -42,6 +42,8 @@ namespace EliteDangerousCore.JournalEvents
             ShipIdent = evt["ShipIdent"].Str();
             FuelLevel = evt["FuelLevel"].Double();
             FuelCapacity = evt["FuelCapacity"].Double();
+
+            Horizons = evt["Horizons"].BoolNull();
         }
 
         public string LoadGameCommander { get; set; }
@@ -59,6 +61,8 @@ namespace EliteDangerousCore.JournalEvents
         public string ShipIdent { get; set; } //   user-defined ship ID string
         public double FuelLevel { get; set; }
         public double FuelCapacity { get; set; }
+
+        public bool? Horizons { get; set; }
 
         public override void FillInformation(out string summary, out string info, out string detailed) //V
         {

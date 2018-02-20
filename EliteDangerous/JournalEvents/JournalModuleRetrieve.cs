@@ -49,7 +49,12 @@ namespace EliteDangerousCore.JournalEvents
             SwapOutItemLocalised = evt["SwapOutItem_Localised"].Str();
 
             Cost = evt["Cost"].Long();
+
+            Hot = evt["Hot"].BoolNull();
+            Level = evt["Level"].IntNull();
+            Quality = evt["Quality"].DoubleNull();
         }
+
         public string Slot { get; set; }
         public string SlotFD { get; set; }
         public string Ship { get; set; }
@@ -63,6 +68,10 @@ namespace EliteDangerousCore.JournalEvents
         public string SwapOutItemFD { get; set; }
         public string SwapOutItemLocalised { get; set; }
         public long Cost { get; set; }
+        public double? Quality { get; set; }
+        public int? Level { get; set; }
+        public bool? Hot { get; set; }
+
 
         public void Ledger(Ledger mcl, DB.SQLiteConnectionUser conn)
         {
@@ -79,7 +88,7 @@ namespace EliteDangerousCore.JournalEvents
         public override void FillInformation(out string summary, out string info, out string detailed) //V
         {
             summary = EventTypeStr.SplitCapsWord();
-            info = BaseUtils.FieldBuilder.Build("", RetrievedItemLocalised.Alt(RetrievedItem), "< into ", Slot);
+            info = BaseUtils.FieldBuilder.Build("", RetrievedItemLocalised.Alt(RetrievedItem), "< into ", Slot ,";Hot!", Hot );
             if ( Cost>0)
                 info += " " + BaseUtils.FieldBuilder.Build("Cost:; cr;N0", Cost);
 

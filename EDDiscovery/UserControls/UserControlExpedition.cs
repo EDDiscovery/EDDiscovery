@@ -32,11 +32,6 @@ namespace EDDiscovery.UserControls
 {
     public partial class UserControlExpedition : UserControlCommonBase
     {
-        public static bool DeleteIsPermanent = true;
-
-        private const string DEL = "\x7F";
-        private static bool LoadedOnce = false;
-
         private List<SavedRouteClass> savedroute;
         private SavedRouteClass currentroute;
         private Rectangle _dragBox;
@@ -71,6 +66,7 @@ namespace EDDiscovery.UserControls
 
             discoveryform.OnNewCalculatedRoute -= _discoveryForm_OnNewCalculatedRoute;
             discoveryform.OnNewStarsForExpedition -= Discoveryform_OnNewStarsForExpedition;
+            discoveryform.OnExpeditionsDownloaded -= Discoveryform_OnExpeditionsDownloaded;
         }
 
         public override void LoadLayout()
@@ -78,38 +74,26 @@ namespace EDDiscovery.UserControls
             if (displaynumber >= 0)
                 DGVLoadColumnLayout(dataGridViewRouteSystems, DbColumnSave);
 
-            savedroute = SavedRouteClass.GetAllSavedRoutes();
+            UpdateRoutes();
+            discoveryform.OnExpeditionsDownloaded += Discoveryform_OnExpeditionsDownloaded; // only from now on are we interested in a change
+        }
 
-            if (!LoadedOnce)
-            {
-                foreach (var initroute in EDSMClass.Expeditions)
-                {
-                    var rt = savedroute.Find(r => initroute.Name.Equals(r.Name.TrimStart(DEL.ToCharArray()), StringComparison.InvariantCultureIgnoreCase));
-                    if (rt == null)
-                    {
-                        initroute.Add();
-                        savedroute.Add(initroute);
-                    }
-                    // Ensure that hard-coded expeditions are kept up-to-date, even if they've been "deleted" (also means that `a.Equals(b)` can't be used here).
-                    else if (initroute.StartDate != rt.StartDate || initroute.EndDate != rt.EndDate || !initroute.Systems.SequenceEqual(rt.Systems))
-                    {
-                        rt.Systems.Clear();
-                        rt.Systems.AddRange(initroute.Systems);
-                        rt.StartDate = initroute.StartDate;
-                        rt.EndDate = initroute.EndDate;
-                        rt.Update();
-                    }
-                }
-                LoadedOnce = true;
-            }
+        private void Discoveryform_OnExpeditionsDownloaded(bool changed)        // because this is done async, pick up so we can refresh
+        {
+            System.Diagnostics.Debug.WriteLine("Expeditions downloaded, changed " + changed);
+            if (changed)
+                UpdateRoutes();
+        }
 
-            UpdateUndeleteMenu(savedroute);
-            savedroute = savedroute.Where(r => !r.Name.StartsWith(DEL)).OrderBy(r => r.Name).ToList();
+        private void UpdateRoutes()
+        {
+            savedroute = SavedRouteClass.GetAllSavedRoutes();   // all including deleted
+            savedroute = savedroute.Where(r => !r.Deleted).OrderBy(r => r.Name).ToList();   // don't list deleted
+            UpdateUndeleteMenu();
             UpdateComboBox();
         }
 
         #endregion
-
 
         #region Interaction with other parts of the system
 
@@ -161,9 +145,9 @@ namespace EDDiscovery.UserControls
             _suppressCombo = false;
         }
 
-        private void UpdateUndeleteMenu(List<SavedRouteClass> routes = null)
+        private void UpdateUndeleteMenu()
         {
-            var delrts = (routes ?? SavedRouteClass.GetAllSavedRoutes()).Where(r => r.Name.StartsWith(DEL)).OrderBy(r => r.Name);
+            var delrts = SavedRouteClass.GetAllSavedRoutes().Where(r => r.Deleted).OrderBy(r => r.Name);
 
             if (ctxMenuItemUndelete.HasDropDownItems)
             {
@@ -174,10 +158,9 @@ namespace EDDiscovery.UserControls
 
             foreach (var drt in delrts)
             {
-                string rtnm = drt.Name.TrimStart(DEL.ToCharArray());
-                var menuitem = new ToolStripMenuItem(rtnm)
+                var menuitem = new ToolStripMenuItem(drt.Name)
                 {
-                    Name = "UndeleteRouteSubMenuItem_" + rtnm.Replace(" ", string.Empty),
+                    Name = "UndeleteRouteSubMenuItem_" + drt.Name.Replace(" ", string.Empty),
                     Tag = drt
                 };
                 menuitem.Click += UndeleteRouteSubMenuItem_Click;
@@ -194,9 +177,8 @@ namespace EDDiscovery.UserControls
             var tmi = sender as ToolStripMenuItem;
             var rte = tmi.Tag as SavedRouteClass;
 
-            rte.Name = tmi.Text;    // .Text already had the DEL prefix removed, so let's use that.
+            rte.Deleted = false;
             rte.Update();
-
             savedroute.Add(rte);
             savedroute = savedroute.OrderBy(r => r.Name).ToList();
             UpdateComboBox();
@@ -343,18 +325,11 @@ namespace EDDiscovery.UserControls
             {
                 if (currentroute.Id >= 0)
                 {
-                    if (DeleteIsPermanent && !EDSMClass.Expeditions.Any(r => r.Name.Equals(currentroute.Name)))
-                    {
-                        currentroute.Delete();
-                    }
-                    else
-                    {   // Expeditions shouldn't use .Delete(), as LoadControl will ignorantly re-create them at next startup.
-                        currentroute.Name = DEL + currentroute.Name;
-                        currentroute.Update();
-                        UpdateUndeleteMenu(savedroute);
-                    }
+                    currentroute.Deleted = true;
+                    currentroute.Update();
 
                     savedroute.Remove(currentroute);
+                    UpdateUndeleteMenu();
                     UpdateComboBox();
                 }
 
@@ -798,20 +773,22 @@ namespace EDDiscovery.UserControls
 
         private bool SaveCurrentRoute()
         {
-            bool ret = false;
             string newrtname = textBoxRouteName.Text?.Trim();
             string oldrtname = currentroute.Name;
             var newrt = new SavedRouteClass();
             var oldrt = currentroute;
+            bool ret = false;
 
             UpdateRouteInfo(newrt);
+
+            SavedRouteClass foundedsm = savedroute.Find(x => x.Name.Equals(newrtname, StringComparison.InvariantCultureIgnoreCase) && x.EDSM);
 
             if (string.IsNullOrEmpty(newrtname))
             {
                 ExtendedControls.MessageBoxTheme.Show(FindForm(), "Please specify a name for the route.", "Unsaved Route", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 textBoxRouteName.Select();
             }
-            else if (EDSMClass.Expeditions.Any(r => r.Name.Equals(newrtname, StringComparison.InvariantCultureIgnoreCase)))
+            else if ( foundedsm != null )
             {
                 ExtendedControls.MessageBoxTheme.Show(FindForm(), "The current route name conflicts with a well-known expedition." + Environment.NewLine
                     + "Please specify a new name to save your changes.", "Unsaved Route", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
@@ -821,6 +798,7 @@ namespace EDDiscovery.UserControls
             else
             {
                 var overwriteroute = savedroute.Where(r => r.Name.Equals(newrtname) && r.Id != currentroute.Id).FirstOrDefault();
+
                 if (overwriteroute != null)
                 {
                     if (MessageBoxTheme.Show(FindForm(), "Warning: route already exists. Would you like to overwrite it?", "Route Exists", MessageBoxButtons.YesNo) != DialogResult.Yes)
@@ -829,6 +807,7 @@ namespace EDDiscovery.UserControls
                     overwriteroute.Delete();
                     savedroute.Remove(overwriteroute);
                 }
+
                 if (currentroute.Id < 0)
                 {
                     ret = newrt.Add();
@@ -841,7 +820,7 @@ namespace EDDiscovery.UserControls
                 }
                 currentroute = newrt;
                 savedroute.Add(newrt);
-                savedroute = savedroute.Where(r => !r.Name.StartsWith(DEL)).OrderBy(r => r.Name).ToList();
+                savedroute = savedroute.Where(r => !r.Deleted).OrderBy(r => r.Name).ToList();
                 UpdateComboBox();
             }
 

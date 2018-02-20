@@ -78,7 +78,6 @@
     <Compile Include="Config\IEliteConfig.cs" />
     <Compile Include="Config\IEliteOptions.cs" />
     <Compile Include="DB\BookmarkClass.cs" />
-    <Compile Include="DB\IVisitedSystems.cs" />
     <Compile Include="DB\RegisterEntry.cs" />
     <Compile Include="DB\SQLiteCommandED.cs" />
     <Compile Include="DB\SQLiteConnectionED.cs" />
@@ -98,7 +97,6 @@
     <Compile Include="EDSM\EDSMJournalSync.cs" />
     <Compile Include="EDSM\EDSMClass.cs" />
     <Compile Include="EDSM\EDSMLogFetcher.cs" />
-    <Compile Include="EDSM\Expeditions.cs" />
     <Compile Include="EDSM\GalMapType.cs" />
     <Compile Include="EDSM\GalacticMapObject.cs" />
     <Compile Include="EDSM\GalacticMapSystem.cs" />
@@ -131,6 +129,7 @@
     <Compile Include="EliteDangerous\ModuleEDID.cs" />
     <Compile Include="EliteDangerous\NetLogClass.cs" />
     <Compile Include="EliteDangerous\NetLogReader.cs" />
+    <Compile Include="EliteDangerous\Ranks.cs" />
     <Compile Include="EliteDangerous\RoutePlotter.cs" />
     <Compile Include="EliteDangerous\ShipInformation.cs" />
     <Compile Include="EliteDangerous\StarScan.cs" />
@@ -140,6 +139,7 @@
     <Compile Include="HistoryList\HistoryEntry.cs" />
     <Compile Include="HistoryList\HistoryList.cs" />
     <Compile Include="JournalEvents\JournalMaterialTrade.cs" />
+    <Compile Include="JournalEvents\JournalPowerplay.cs" />
     <Compile Include="JournalEvents\JournalTechnologyBroker.cs" />
     <Compile Include="JournalEvents\JournalEngineerLegacyConvert.cs" />
     <Compile Include="JournalEvents\JournalFighterDestroyed.cs" />

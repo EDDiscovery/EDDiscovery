@@ -26,15 +26,17 @@ namespace EliteDangerousCore.JournalEvents
         {
             NpcCrewID = evt["NpcCrewId"].Long();
             RankCombat = (CombatRank)evt["RankCombat"].Int();
+            Name = evt["NpcCrewName"].Str();
         }
 
         public long NpcCrewID { get; set; }
+        public string Name { get; set; }
         public CombatRank RankCombat { get; set; }
 
         public override void FillInformation(out string summary, out string info, out string detailed) //V
         {
             summary = EventTypeStr.SplitCapsWord();
-            info = BaseUtils.FieldBuilder.Build("ID:", NpcCrewID, "Rank:", RankCombat.ToString().SplitCapsWord());
+            info = BaseUtils.FieldBuilder.Build("<", Name, "Rank:", RankCombat.ToString().SplitCapsWord());
             detailed = "";
         }
 

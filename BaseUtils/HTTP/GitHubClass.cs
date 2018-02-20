@@ -89,6 +89,7 @@ namespace BaseUtils
             }
         }
 
+        // NULL if directory not found.  Empty list if files not there
         public List<GitHubFile> ReadDirectory(string gitdir)
         {
             List<GitHubFile> files = new List<GitHubFile>();
@@ -125,7 +126,7 @@ namespace BaseUtils
 
         // DOWNLOAD to folder from git folder with pattern match
 
-        public bool Download(string downloadfolder, string gitdir, string match, bool cleanfolder = true)
+        public bool Download(string downloadfolder, string gitdir, string wildcardmatch, bool cleanfolder = true)
         {
             if (cleanfolder)
             {
@@ -136,11 +137,15 @@ namespace BaseUtils
                 }
             }
 
-            List<BaseUtils.GitHubFile> files = ReadDirectory(gitdir);
+            List<BaseUtils.GitHubFile> files = ReadDirectory(gitdir);       // may except if not there..
 
-            files = (from f in files where f.Name.WildCardMatch(match) select f).ToList();
-
-            return DownloadFiles(files, downloadfolder);
+            if (files != null)
+            {
+                files = (from f in files where f.Name.WildCardMatch(wildcardmatch) select f).ToList();
+                return DownloadFiles(files, downloadfolder);
+            }
+            else
+                return false;
         }
 
         // DOWNLOAD to folder with list of files
@@ -149,9 +154,13 @@ namespace BaseUtils
         {
             List<BaseUtils.GitHubFile> files = ReadDirectory(gitdir);
 
-            files = (from f in files where matches.Contains(f.Name, StringComparer.InvariantCultureIgnoreCase) select f).ToList();
-
-            return DownloadFiles(files, downloadfolder);
+            if (files != null)
+            {
+                files = (from f in files where matches.Contains(f.Name, StringComparer.InvariantCultureIgnoreCase) select f).ToList();
+                return DownloadFiles(files, downloadfolder);
+            }
+            else
+                return false;
         }
 
         // download with github list

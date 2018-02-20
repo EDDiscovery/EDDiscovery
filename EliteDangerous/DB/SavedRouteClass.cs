@@ -18,6 +18,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 
 namespace EliteDangerousCore.DB
@@ -43,18 +44,29 @@ namespace EliteDangerousCore.DB
             this.Id = (long)dr["id"];
             this.Name = (string)dr["name"];
             if (dr["start"] != DBNull.Value)
-                this.StartDate = (DateTime?)dr["start"];
+                this.StartDate = ((DateTime)dr["start"]);
             if (dr["end"] != DBNull.Value)
-                this.EndDate = (DateTime?)dr["end"];
+                this.EndDate = ((DateTime)dr["end"]);
+               
             this.Systems = syslist.Select(s => (string)s["systemname"]).ToList();
+            int statusbits = (int)dr["Status"];
+            this.Deleted = (statusbits & 1) != 0;
+            this.EDSM = (statusbits & 2) != 0;
+
+            if ( this.Name.StartsWith("\x7F"))  // marker 7F meant pre 9.1 a EDSM system which was deleted.
+            {
+                this.Name = this.Name.Substring(1);
+                Deleted = true;
+            }
         }
 
         public long Id { get; set; }
         public string Name { get; set; }
-        public DateTime? StartDate { get; set; }
+        public DateTime? StartDate { get; set; }            // these are LOCAL TIMES since the expedition editor is using DateTime.Now
         public DateTime? EndDate { get; set; }
         public List<string> Systems { get; private set; }
-
+        public bool EDSM { get; set; }          // supplied by EDSM
+        public bool Deleted { get; set; }       // Deleted by us
         public string LastSystem { get { return Systems.Count > 0 ? Systems[Systems.Count - 1] : null; } }
 
         public bool Equals(SavedRouteClass other)
@@ -89,7 +101,7 @@ namespace EliteDangerousCore.DB
 
         public bool Add()
         {
-            using (SQLiteConnectionUser cn = new SQLiteConnectionUser())
+            using (SQLiteConnectionUser cn = new SQLiteConnectionUser(utc: true))
             {
                 bool ret = Add(cn);     // pass it an open connection since it does multiple SQLs
                 return ret;
@@ -98,11 +110,12 @@ namespace EliteDangerousCore.DB
 
         private bool Add(SQLiteConnectionUser cn)
         {
-            using (DbCommand cmd = cn.CreateCommand("Insert into routes_expeditions (name, start, end) values (@name, @start, @end)"))
+            using (DbCommand cmd = cn.CreateCommand("Insert into routes_expeditions (name, start, end, Status) values (@name, @start, @end, @stat)"))
             {
                 cmd.AddParameterWithValue("@name", Name);
                 cmd.AddParameterWithValue("@start", StartDate);
                 cmd.AddParameterWithValue("@end", EndDate);
+                cmd.AddParameterWithValue("@stat", (Deleted ? 1 : 0) + (EDSM ? 2 : 0));
 
                 SQLiteDBClass.SQLNonQueryText(cn, cmd);
 
@@ -130,7 +143,7 @@ namespace EliteDangerousCore.DB
 
         public bool Update()
         {
-            using (SQLiteConnectionUser cn = new SQLiteConnectionUser())
+            using (SQLiteConnectionUser cn = new SQLiteConnectionUser(utc: true))
             {
                 bool ret = Update(cn);
                 return ret;
@@ -139,12 +152,13 @@ namespace EliteDangerousCore.DB
 
         private bool Update(SQLiteConnectionUser cn)
         {
-            using (DbCommand cmd = cn.CreateCommand("UPDATE routes_expeditions SET name=@name, start=@start, end=@end WHERE id=@id"))
+            using (DbCommand cmd = cn.CreateCommand("UPDATE routes_expeditions SET name=@name, start=@start, end=@end, Status=@stat WHERE id=@id"))
             {
                 cmd.AddParameterWithValue("@id", Id);
                 cmd.AddParameterWithValue("@name", Name);
                 cmd.AddParameterWithValue("@start", StartDate);
                 cmd.AddParameterWithValue("@end", EndDate);
+                cmd.AddParameterWithValue("@stat", (Deleted ? 1 : 0) + (EDSM ? 2 : 0));
                 SQLiteDBClass.SQLNonQueryText(cn, cmd);
 
                 using (DbCommand cmd2 = cn.CreateCommand("DELETE FROM route_systems WHERE routeid=@routeid"))
@@ -202,7 +216,7 @@ namespace EliteDangerousCore.DB
 
             try
             {
-                using (SQLiteConnectionUser cn = new SQLiteConnectionUser(mode: EDDbAccessMode.Reader))
+                using (SQLiteConnectionUser cn = new SQLiteConnectionUser(utc:true, mode: EDDbAccessMode.Reader))
                 {
                     using (DbCommand cmd1 = cn.CreateCommand("select * from routes_expeditions"))
                     {
@@ -221,6 +235,7 @@ namespace EliteDangerousCore.DB
                                     {
                                         syslist = ds2.Tables[0].Select(String.Format("routeid = {0}", dr["id"]), "id ASC");
                                     }
+
                                     SavedRouteClass sys = new SavedRouteClass(dr, syslist);
                                     retVal.Add(sys);
                                 }
@@ -354,6 +369,72 @@ namespace EliteDangerousCore.DB
             }
             else
                 return null;
+        }
+
+        // Given a set of expedition files, update the DB.  Add any new ones, and make sure the EDSM marker is on.
+
+        public static bool UpdateDBFromExpeditionFiles(string expeditiondir )
+        {
+            bool changed = false;
+
+            try
+            {
+                FileInfo[] allfiles = Directory.EnumerateFiles(expeditiondir, "*.json", SearchOption.TopDirectoryOnly).Select(f => new System.IO.FileInfo(f)).OrderByDescending(p => p.LastWriteTime).ToArray();
+
+                foreach (FileInfo f in allfiles)
+                {
+                    string text = File.ReadAllText(f.FullName);
+                    if (text != null)
+                    {
+                        var array = Newtonsoft.Json.Linq.JArray.Parse(text).ToObject<SavedRouteClass[]>();
+
+                        List<SavedRouteClass> stored = SavedRouteClass.GetAllSavedRoutes(); // incl deleted
+
+                        foreach (SavedRouteClass s in array)
+                        {
+                            s.StartDate = s.StartDate.Value.ToLocalTime();      // supplied, and respected by JSON, as zulu time. the stupid database holds local times. Convert.
+                            s.EndDate = s.EndDate.Value.ToLocalTime();
+
+                            SavedRouteClass storedentry = stored.Find(x => x.Name.Equals(s.Name));
+
+                            if (storedentry != null )  // if stored already..
+                            {
+                                if (!storedentry.Systems.SequenceEqual(s.Systems) ) // systems changed, we need to reset..
+                                {
+                                    storedentry.Delete();   // delete the old one.. systems may be in a different order, and there is no ordering except by ID in the DB
+                                    s.EDSM = true;
+                                    s.Add();        // add to db..
+                                    changed = true;
+                                }
+                                else if ( storedentry.EndDate == null || storedentry.StartDate == null || storedentry.EndDate.Value != s.EndDate.Value || storedentry.StartDate.Value != s.StartDate.Value )    // times change, just update
+                                {
+                                    storedentry.StartDate = s.StartDate.Value;      // update time and date but keep the expedition ID
+                                    storedentry.EndDate = s.EndDate.Value;
+                                    storedentry.EDSM = true;
+                                    storedentry.Update();
+                                    changed = true;
+                                }
+                                else if ( !storedentry.EDSM )    // backwards with previous system, set EDSM flag on these, prevents overwrite
+                                { 
+                                    storedentry.EDSM = true;    // ensure EDSM flag is set..
+                                    storedentry.Update();
+                                    changed = true;
+                                }
+                            }
+                            else
+                            {                   // not there, add it..
+                                s.EDSM = true;
+                                s.Add();        // add to db..
+                                changed = true;
+                            }
+                        }
+
+                    }
+                }
+            }
+            catch { }
+
+            return changed;
         }
 
         public void TestHarness()       // fly the route and debug the closestto.. keep this for testing

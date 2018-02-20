@@ -39,6 +39,9 @@ namespace EliteDangerousCore
             public ISystem system;
             public SortedList<string, ScanNode> starnodes;
             public bool EDSMAdded = false;
+            public SortedList<int, ScanNode> NodesByID;
+            public int MaxTopLevelBodyID = 0;
+            public int MinPlanetBodyID = 512;
 
             public IEnumerable<ScanNode> Bodies
             {
@@ -70,9 +73,13 @@ namespace EliteDangerousCore
             public string customname;               // e.g. Earth
             public SortedList<string, ScanNode> children;         // kids
             public int level;                       // level within SystemNode
+            public int? BodyID;
+
+            public bool IsTopLevelNode;
 
             private JournalScan scandata;            // can be null if no scan, its a place holder.
             private JournalScan.StarPlanetRing beltdata;
+            private IBodyNameAndID bodyloc;
 
             public JournalScan ScanData
             {
@@ -106,6 +113,21 @@ namespace EliteDangerousCore
                         return;
 
                     beltdata = value;
+                }
+            }
+
+            public IBodyNameAndID BodyLoc
+            {
+                get
+                {
+                    return bodyloc;
+                }
+                set
+                {
+                    if (value == null)
+                        return;
+
+                    bodyloc = value;
                 }
             }
 
@@ -218,6 +240,53 @@ namespace EliteDangerousCore
             return Process(je, hl[startindex].System, true);         // no relationship, add..
         }
 
+        // used by historylist during full history processing in background
+        public bool AddBodyToBestSystem(IBodyNameAndID je, int startindex, List<HistoryEntry> hl)
+        {
+            HistoryEntry he;
+            JournalLocOrJump jl;
+            return AddBodyToBestSystem(je, startindex, hl, out he, out jl);
+        }
+
+        // used by historylist directly for a single update during play, in foreground..  Also used by above.. so can be either in fore/back
+        public bool AddBodyToBestSystem(IBodyNameAndID je, int startindex, List<HistoryEntry> hl, out HistoryEntry he, out JournalLocOrJump jl)
+        {
+            if (je.Body == null)
+            {
+                he = null;
+                jl = null;
+                return false;
+            }
+
+            for (int j = startindex; j >= 0; j--)
+            {
+                he = hl[j];
+
+                if (he.IsLocOrJump && he.System.Name == je.StarSystem && (he.System.SystemAddress == null || je.SystemAddress == null || he.System.SystemAddress == je.SystemAddress))
+                {
+                    jl = (JournalLocOrJump)he.journalEntry;
+                    string designation = GetBodyDesignation(je);
+
+                    if (IsStarNameRelated(he.System.Name, je.Body, designation))       // if its part of the name, use it
+                    {
+                        je.BodyDesignation = designation;
+                        return Process(je, he.System, true);
+                    }
+                    else if (jl != null && IsStarNameRelated(jl.StarSystem, je.Body, designation))
+                    {
+                        // Ignore scans where the system name has changed
+                        return false;
+                    }
+                }
+            }
+
+            jl = null;
+            he = null;
+
+            je.BodyDesignation = GetBodyDesignation(je);
+            return Process(je, hl[startindex].System, true);         // no relationship, add..
+        }
+
         private bool Process(JournalScan sc, ISystem sys, bool reprocessPrimary = false)  // background or foreground.. FALSE if you can't process it
         {
             SystemNode sn = GetOrCreateSystemNode(sys);
@@ -253,6 +322,11 @@ namespace EliteDangerousCore
             // Process elements
             ScanNode node = ProcessElements(sc, sys, sn, customname, elements, starscannodetype, isbeltcluster);
 
+            if (node.BodyID != null)
+            {
+                sn.NodesByID[(int)node.BodyID] = node;
+            }
+
             // Process top-level star
             if (elements.Count == 1)
             {
@@ -275,10 +349,88 @@ namespace EliteDangerousCore
             return true;
         }
 
+        private bool Process(IBodyNameAndID sc, ISystem sys, bool reprocessPrimary = false)  // background or foreground.. FALSE if you can't process it
+        {
+            SystemNode sn = GetOrCreateSystemNode(sys);
+            ScanNode relatedScan = null;
+
+            if ((sc.BodyDesignation == null || sc.BodyDesignation == sc.Body) && (sc.Body != sc.StarSystem || sc.BodyType != "Star"))
+            {
+                foreach (var body in sn.Bodies)
+                {
+                    if ((body.fullname == sc.Body || body.customname == sc.Body) && 
+                        (body.fullname != sc.StarSystem || (sc.BodyType == "Star" && body.level == 0) || (sc.BodyType != "Star" && body.level != 0)))
+                    {
+                        relatedScan = body;
+                        sc.BodyDesignation = body.fullname;
+                        break;
+                    }
+                }
+            }
+
+            if (relatedScan == null)
+            {
+                foreach (var body in sn.Bodies)
+                {
+                    if ((body.fullname == sc.Body || body.customname == sc.Body) &&
+                        (body.fullname != sc.StarSystem || (sc.BodyType == "Star" && body.level == 0) || (sc.BodyType != "Star" && body.level != 0)))
+                    {
+                        relatedScan = body;
+                        break;
+                    }
+                }
+            }
+
+            if (relatedScan != null && relatedScan.ScanData == null)
+            {
+                relatedScan.BodyLoc = sc;
+                return true; // We already have the scan
+            }
+
+            // handle Earth, starname = Sol
+            // handle Eol Prou LW-L c8-306 A 4 a and Eol Prou LW-L c8-306
+            // handle Colonia 4 , starname = Colonia, planet 4
+            // handle Aurioum B A BELT
+            // Kyloasly OY-Q d5-906 13 1
+
+            ScanNodeType starscannodetype = ScanNodeType.star;          // presuming.. 
+            bool isbeltcluster = false;
+
+            // Extract elements from name
+            List<string> elements = ExtractElements(sc, sys, out isbeltcluster, out starscannodetype);
+
+            // Bail out if no elements extracted
+            if (elements.Count == 0)
+            {
+                System.Diagnostics.Trace.WriteLine($"Failed to add body {sc.Body} to system {sys.Name} - not enough elements");
+                return false;
+            }
+            // Bail out if more than 5 elements extracted
+            else if (elements.Count > 5)
+            {
+                System.Diagnostics.Trace.WriteLine($"Failed to add body {sc.Body} to system {sys.Name} - too deep");
+                return false;
+            }
+
+            // Get custom name if different to designation
+            string customname = GetCustomName(sc, sys);
+
+            // Process elements
+            ScanNode node = ProcessElements(sc, sys, sn, customname, elements, starscannodetype, isbeltcluster);
+
+            if (node.BodyID != null)
+            {
+                sn.NodesByID[(int)node.BodyID] = node;
+            }
+
+            return true;
+        }
+
         private void ReProcess(SystemNode sysnode)
         {
             List<JournalScan> bodies = sysnode.Bodies.Where(b => b.ScanData != null).Select(b => b.ScanData).ToList();
             sysnode.starnodes = new SortedList<string, ScanNode>(new DuplicateKeyComparer<string>());
+            sysnode.NodesByID = new SortedList<int, ScanNode>();
 
             foreach (JournalScan sn in bodies)
             {
@@ -391,6 +543,55 @@ namespace EliteDangerousCore
             return elements;
         }
 
+        private List<string> ExtractElements(IBodyNameAndID sc, ISystem sys, out bool isbeltcluster, out ScanNodeType starscannodetype)
+        {
+            starscannodetype = ScanNodeType.star;
+            isbeltcluster = false;
+            List<string> elements;
+            string rest = IsStarNameRelatedReturnRest(sys.Name, sc.Body, sc.BodyDesignation);
+
+            if (rest != null)                                   // if we have a relationship..
+            {
+                if (rest.Length > 0)
+                {
+                    elements = rest.Split(' ').ToList();
+
+                    if (elements.Count == 4 && elements[0].Length == 1 && char.IsLetter(elements[0][0]) &&
+                            elements[1].Equals("belt", StringComparison.InvariantCultureIgnoreCase) &&
+                            elements[2].Equals("cluster", StringComparison.InvariantCultureIgnoreCase))
+                    {
+                        elements = new List<string> { "Main Star", elements[0] + " " + elements[1], elements[2] + " " + elements[3] };
+                        isbeltcluster = true;
+                    }
+                    else if (elements.Count == 5 && elements[0].Length == 1 &&
+                            elements[1].Length == 1 && char.IsLetter(elements[1][0]) &&
+                            elements[2].Equals("belt", StringComparison.InvariantCultureIgnoreCase) &&
+                            elements[3].Equals("cluster", StringComparison.InvariantCultureIgnoreCase))
+                    {
+                        elements = new List<string> { elements[0], elements[1] + " " + elements[2], elements[3] + " " + elements[4] };
+                        isbeltcluster = true;
+                    }
+
+                    if (char.IsDigit(elements[0][0]))       // if digits, planet number, no star designator
+                        elements.Insert(0, "Main Star");         // no star designator, main star, add MAIN
+                    else if (elements[0].Length > 1)        // designator, is it multiple chars.. 
+                        starscannodetype = ScanNodeType.barycentre;
+                }
+                else
+                {
+                    elements = new List<string>();          // only 1 item, the star, which is the same as the system name..
+                    elements.Add("Main Star");              // Sol / SN:Sol should come thru here
+                }
+            }
+            else
+            {                                               // so not part of starname        
+                elements = sc.Body.Split(' ').ToList();     // not related in any way (earth) so assume all bodyparts, and 
+                elements.Insert(0, "Main Star");                     // insert the MAIN designator as the star designator
+            }
+
+            return elements;
+        }
+
         private string GetCustomName(JournalScan sc, ISystem sys)
         {
             string rest = sc.IsStarNameRelatedReturnRest(sys.Name);
@@ -417,7 +618,137 @@ namespace EliteDangerousCore
             return customname;
         }
 
+        private string GetCustomName(IBodyNameAndID sc, ISystem sys)
+        {
+            string rest = IsStarNameRelatedReturnRest(sys.Name, sc.Body, sc.BodyDesignation);
+            string customname = null;
+
+            if (sc.Body.StartsWith(sys.Name, StringComparison.InvariantCultureIgnoreCase))
+            {
+                customname = sc.Body.Substring(sys.Name.Length).TrimStart(' ', '-');
+
+                if (customname == "" && sc.BodyType != "Star")
+                {
+                    customname = sc.Body;
+                }
+                else if (customname == "" || customname == rest)
+                {
+                    customname = null;
+                }
+            }
+            else if (rest == null || !sc.Body.EndsWith(rest))
+            {
+                customname = sc.Body;
+            }
+
+            return customname;
+        }
+
         private ScanNode ProcessElements(JournalScan sc, ISystem sys, SystemNode sn, string customname, List<string> elements, ScanNodeType starscannodetype, bool isbeltcluster)
+        {
+            SortedList<string, ScanNode> cnodes = sn.starnodes;
+            ScanNode node = null;
+            List<JournalScan.BodyParent> ancestors = sc.Parents?.AsEnumerable()?.ToList();
+            List<JournalScan.BodyParent> ancestorbodies = ancestors?.Where(a => a.Type == "Star" || a.Type == "Planet" || a.Type == "Belt")?.Reverse()?.ToList();
+            ScanNode toplevelnode = null;
+
+            if ((ancestorbodies != null) && (starscannodetype != ScanNodeType.star))
+            {
+                ancestorbodies.Insert(0, null);
+            }
+
+            for (int lvl = 0; lvl < elements.Count; lvl++)
+            {
+                ScanNode sublv;
+                ScanNodeType sublvtype;
+                string ownname = elements[lvl];
+
+                if (lvl == 0)
+                    sublvtype = starscannodetype;
+                else if (isbeltcluster)
+                    sublvtype = lvl == 1 ? ScanNodeType.belt : ScanNodeType.beltcluster;
+                else
+                    sublvtype = ScanNodeType.body;
+
+                if (cnodes == null || !cnodes.TryGetValue(elements[lvl], out sublv))
+                {
+                    if (node != null && node.children == null)
+                    {
+                        node.children = new SortedList<string, ScanNode>(new DuplicateKeyComparer<string>());
+                        cnodes = node.children;
+                    }
+
+                    sublv = new ScanNode
+                    {
+                        ownname = ownname,
+                        fullname = lvl == 0 ? (sys.Name + (ownname.Contains("Main") ? "" : (" " + ownname))) : node.fullname + " " + ownname,
+                        ScanData = null,
+                        children = null,
+                        type = sublvtype,
+                        level = lvl,
+                        IsTopLevelNode = lvl == 0
+                    };
+
+                    cnodes.Add(ownname, sublv);
+                }
+
+                if (ancestorbodies != null && lvl < ancestorbodies.Count && ancestorbodies[lvl] != null)
+                {
+                    if (sublv.BodyID == null)
+                    {
+                        sublv.BodyID = ancestorbodies[lvl].BodyID;
+                        sn.NodesByID[(int)sublv.BodyID] = sublv;
+                    }
+                }
+
+                node = sublv;
+                cnodes = node.children;
+
+                if (lvl == elements.Count - 1)
+                {
+                    node.ScanData = sc;
+                    node.customname = customname;
+
+                    if (sc.BodyID != null)
+                    {
+                        node.BodyID = sc.BodyID;
+                    }
+                }
+
+                if (lvl == 0)
+                {
+                    toplevelnode = node;
+                }
+
+                if (node.BodyID != null)
+                {
+                    if (lvl == 0 && node.BodyID > sn.MaxTopLevelBodyID)
+                    {
+                        sn.MaxTopLevelBodyID = (int)node.BodyID;
+                    }
+                    else if (lvl > 0 && node.BodyID < sn.MinPlanetBodyID)
+                    {
+                        sn.MinPlanetBodyID = (int)node.BodyID;
+                    }
+                }
+            }
+
+            if (ancestors != null && ancestorbodies != null && ancestorbodies[0] == null && toplevelnode.BodyID == null)
+            {
+                for (int lvl = 1; lvl < ancestors.Count; lvl++)
+                {
+                    if (ancestors[lvl - 1].BodyID >= sn.MinPlanetBodyID && ancestors[lvl].BodyID <= sn.MaxTopLevelBodyID)
+                    {
+                        toplevelnode.BodyID = ancestors[lvl].BodyID;
+                        sn.NodesByID[(int)toplevelnode.BodyID] = toplevelnode;
+                    }
+                }
+            }
+
+            return node;
+        }
+
+        private ScanNode ProcessElements(IBodyNameAndID sc, ISystem sys, SystemNode sn, string customname, List<string> elements, ScanNodeType starscannodetype, bool isbeltcluster)
         {
             SortedList<string, ScanNode> cnodes = sn.starnodes;
             ScanNode node = null;
@@ -428,6 +759,13 @@ namespace EliteDangerousCore
                 ScanNodeType sublvtype;
                 string ownname = elements[lvl];
 
+                if (lvl == 0)
+                    sublvtype = starscannodetype;
+                else if (isbeltcluster)
+                    sublvtype = lvl == 1 ? ScanNodeType.belt : ScanNodeType.beltcluster;
+                else
+                    sublvtype = ScanNodeType.body;
+
                 if (cnodes == null || !cnodes.TryGetValue(elements[lvl], out sublv))
                 {
                     if (node != null && node.children == null)
@@ -436,13 +774,6 @@ namespace EliteDangerousCore
                         cnodes = node.children;
                     }
 
-                    if (lvl == 0)
-                        sublvtype = starscannodetype;
-                    else if (isbeltcluster)
-                        sublvtype = lvl == 1 ? ScanNodeType.belt : ScanNodeType.beltcluster;
-                    else
-                        sublvtype = ScanNodeType.body;
-
                     sublv = new ScanNode
                     {
                         ownname = ownname,
@@ -450,7 +781,8 @@ namespace EliteDangerousCore
                         ScanData = null,
                         children = null,
                         type = sublvtype,
-                        level = lvl
+                        level = lvl,
+                        IsTopLevelNode = lvl == 0
                     };
 
                     cnodes.Add(ownname, sublv);
@@ -461,8 +793,18 @@ namespace EliteDangerousCore
 
                 if (lvl == elements.Count - 1)
                 {
-                    node.ScanData = sc;
+                    node.BodyLoc = sc;
                     node.customname = customname;
+
+                    if (sc.BodyID != null)
+                    {
+                        node.BodyID = sc.BodyID;
+                    }
+
+                    if (sc.BodyType == "" || sc.BodyType == "Null")
+                        node.type = ScanNodeType.barycentre;
+                    else if (sc.BodyType == "Belt")
+                        node.type = ScanNodeType.belt;
                 }
             }
 
@@ -610,6 +952,76 @@ namespace EliteDangerousCore
             }
 
             return je.BodyName;
+        }
+
+        private string GetBodyDesignation(IBodyNameAndID je)
+        {
+            if (je.Body == null || je.BodyType == null || je.StarSystem == null)
+                return null;
+
+            string system = je.StarSystem;
+            string bodyname = je.Body;
+            bool isstar = je.BodyType == "Star";
+
+            Dictionary<string, Dictionary<string, string>> desigmap = isstar ? starDesignationMap : planetDesignationMap;
+
+            // Special case for m Centauri
+            if (isstar && system.ToLowerInvariant() == "m centauri")
+            {
+                if (bodyname == "m Centauri")
+                {
+                    return "m Centauri A";
+                }
+                else if (bodyname == "M Centauri")
+                {
+                    return "m Centauri B";
+                }
+            }
+
+            if (desigmap.ContainsKey(system) && desigmap[system].ContainsKey(bodyname))
+            {
+                return desigmap[system][bodyname];
+            }
+
+            if (bodyname.Equals(system, StringComparison.InvariantCultureIgnoreCase) || bodyname.StartsWith(system + " ", StringComparison.InvariantCultureIgnoreCase))
+            {
+                return bodyname;
+            }
+
+            return bodyname;
+        }
+
+        private static bool IsStarNameRelated(string starname, string bodyname, string designation = null)
+        {
+            if (designation == null)
+            {
+                designation = bodyname;
+            }
+
+            if (designation.Length >= starname.Length)
+            {
+                string s = designation.Substring(0, starname.Length);
+                return starname.Equals(s, StringComparison.InvariantCultureIgnoreCase);
+            }
+            else
+                return false;
+        }
+
+        public static string IsStarNameRelatedReturnRest(string starname, string bodyname, string designation = null)          // null if not related, else rest of string
+        {
+            if (designation == null)
+            {
+                designation = bodyname;
+            }
+
+            if (designation.Length >= starname.Length)
+            {
+                string s = designation.Substring(0, starname.Length);
+                if (starname.Equals(s, StringComparison.InvariantCultureIgnoreCase))
+                    return designation.Substring(starname.Length).Trim();
+            }
+
+            return null;
         }
 
         private SystemNode FindSystemNode(ISystem sys)

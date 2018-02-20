@@ -349,6 +349,8 @@ namespace EDDiscovery.UserControls
             chartBubble.ChartAreas[2].Visible = true;
         }
 
+        private int panSwitch = 1;
+
         private void chartBubble_MouseDown(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Middle)
@@ -356,7 +358,7 @@ namespace EDDiscovery.UserControls
                 mousePosPan = e.Location;
             }
 
-            if (e.Button == MouseButtons.Right)
+            if (e.Button == MouseButtons.Right && panSwitch == 0)
             {
                 Point cursor = PointToScreen(new Point(e.Location.X, e.Location.Y));
                 contextMenuStrip.Show(cursor.X, cursor.Y);
@@ -441,5 +443,14 @@ namespace EDDiscovery.UserControls
             SetMarkerSize();
         }
 
+        private void chartBubble_MouseEnter(object sender, EventArgs e)
+        {
+            panSwitch = 1;
+        }
+
+        private void chartBubble_MouseLeave(object sender, EventArgs e)
+        {
+            panSwitch = 0;
+        }
     }    
 }

@@ -41,6 +41,7 @@ namespace EliteDangerousCore.JournalEvents
         public long? Population { get; set; }
         public string PowerplayState { get; set; }
         public string[] Powers { get; set; }
+        public bool? Wanted { get; set; }
 
         public FactionInformation[] Factions { get; set; }
 
@@ -108,6 +109,8 @@ namespace EliteDangerousCore.JournalEvents
             Government_Localised = JSONObjectExtensions.GetMultiStringDef(evt, new string[] { "SystemGovernment_Localised", "Government_Localised" });
             Security = JSONObjectExtensions.GetMultiStringDef(evt, new string[] { "SystemSecurity", "Security" });
             Security_Localised = JSONObjectExtensions.GetMultiStringDef(evt, new string[] { "SystemSecurity_Localised", "Security_Localised" });
+
+            Wanted = evt["Wanted"].BoolNull();
 
             PowerplayState = evt["PowerplayState"].Str();            // NO evidence
             if (!evt["Powers"].Empty())

@@ -1891,12 +1891,12 @@ namespace EDDiscovery
                 }
 
                 SystemNoteClass sn = SystemNoteClass.GetNoteOnSystem(sysname, hoversystem == null ? 0 : hoversystem.EDSMID);   // may be null
-                if (sn != null && sn.Note.Trim().Length>0 )
+                if (!string.IsNullOrWhiteSpace(sn?.Note))
                 {
                     info += Environment.NewLine + "Notes: " + sn.Note.Trim();
                 }
 
-                if (curbookmark != null && curbookmark.Note != null && curbookmark.Note.Trim().Length>0 )
+                if (!string.IsNullOrWhiteSpace(curbookmark?.Note))
                     info += Environment.NewLine + "Bookmark Notes: " + curbookmark.Note.Trim();
 
                 _mousehovertooltip = new System.Windows.Forms.ToolTip();

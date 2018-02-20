@@ -42,6 +42,8 @@ namespace EliteDangerousCore.JournalEvents
             StationName = evt["StationName"].Str();
             StarSystem = evt["StarSystem"].Str();
             MarketID = evt["MarketID"].LongNull();
+            Horizons = evt["Horizons"].BoolNull();
+            AllowCobraMkIV = evt["AllowCobraMkIV"].BoolNull();
 
             ModuleItems = evt["Items"]?.ToObject<OutfittingModuleItem[]>();
 
@@ -68,6 +70,8 @@ namespace EliteDangerousCore.JournalEvents
         public string StationName { get; set; }
         public string StarSystem { get; set; }
         public long? MarketID { get; set; }
+        public bool? Horizons { get; set; }
+        public bool? AllowCobraMkIV { get; set; }
 
         public OutfittingModuleItem[] ModuleItems { get; set; }
 
@@ -89,14 +93,12 @@ namespace EliteDangerousCore.JournalEvents
             }
                 
         }
+
+        public class OutfittingModuleItem
+        {
+            public long id;
+            public string Name;
+            public long BuyPrice;
+        }
     }
-
-
-    public class OutfittingModuleItem
-    {
-        public long id;
-        public string Name;
-        public long BuyPrice;
-    }
-
 }
