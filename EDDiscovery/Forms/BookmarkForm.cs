@@ -14,6 +14,7 @@
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 using EDDiscovery;
+using EliteDangerousCore;
 using EliteDangerousCore.DB;
 using EliteDangerousCore.EDSM;
 using System;
@@ -39,6 +40,7 @@ namespace EDDiscovery.Forms
         public PlanetMarks SurfaceLocations { get { return userControlSurfaceBookmarks1.PlanetMarks; } }
         
         private string edsmurl = null;
+        bool freeSystemEntry = false;
 
         public BookmarkForm()
         {
@@ -142,10 +144,24 @@ namespace EDDiscovery.Forms
 
         public void Update(BookmarkClass bk)
         {
-            SystemNoteClass sn = SystemNoteClass.GetNoteOnSystem(bk.StarName);
-            string note = (sn != null) ? sn.Note : "";
-            Update(bk.StarName, note, bk.Note, bk.Time.ToString(), bk.StarName == null, false, bk.PlanetaryMarks);
+            string note = "";
+            string name;
+            if (!bk.isRegion)
+            {
+                SystemNoteClass sn = SystemNoteClass.GetNoteOnSystem(bk.StarName);
+                ISystem s = SystemClassDB.GetSystem(bk.StarName);
+                InitialisePos(s.X, s.Y, s.Z);
+                note = (sn != null) ? sn.Note : "";
+                name = bk.StarName;
+            }
+            else
+            {
+                name = bk.Heading;
+            }
+             
+            Update(name, note, bk.Note, bk.Time.ToString(), bk.isRegion, false, bk.PlanetaryMarks);
             userControlSurfaceBookmarks1.ApplyBookmark(bk);
+            buttonOK.Enabled = true;
         }
 
         public void NewSystemBookmark(string name, string note, string tme)
@@ -158,6 +174,19 @@ namespace EDDiscovery.Forms
             var edsm = new EDSMClass();
             edsmurl = edsm.GetUrlToEDSMSystem(name);
             userControlSurfaceBookmarks1.NewForSystem(name);
+        }
+
+        public void NewSystemBookmark(string tme)
+        {
+            this.Text = "New System Bookmark";
+            textBoxName.Text = "Enter a system name...";
+            textBoxName.SelectAll();
+            textBoxName.Focus();
+            textBoxTime.Text = tme;
+            buttonDelete.Hide();
+            freeSystemEntry = true;
+            buttonOK.Enabled = false;
+            userControlSurfaceBookmarks1.NewForSystem("");
         }
 
         public void GMO(string name, string descr , bool istarget , string url )
@@ -215,7 +244,8 @@ namespace EDDiscovery.Forms
 
         private void textBox_TextChanged(object sender, EventArgs e)
         {
-            buttonOK.Enabled = ValidateData();
+            if(!freeSystemEntry)
+                buttonOK.Enabled = ValidateData();
         }
 
         private bool ValidateData()
@@ -239,6 +269,29 @@ namespace EDDiscovery.Forms
         {
             OnCaptionMouseDown((Control)sender, e);
         }
-        
+
+        private void textBoxName_Validated(object sender, EventArgs e)
+        {
+            if (!freeSystemEntry)
+                return;
+            string t = textBoxName.Text.Trim();
+            ISystem s = SystemClassDB.GetSystem(t);
+
+            if (s != null)
+            {
+                var edsm = new EDSMClass();
+                edsmurl = edsm.GetUrlToEDSMSystem(t);
+                userControlSurfaceBookmarks1.NewForSystem(t);
+                SystemNoteClass sn = SystemNoteClass.GetNoteOnSystem(t);
+                textBoxNotes.Text = (sn != null) ? sn.Note : "";
+                InitialisePos(s.X, s.Y, s.Z);
+                buttonOK.Enabled = true;
+            }
+            else
+            {
+                buttonOK.Enabled = false;
+                textBoxName.Text = "";
+            }
+        }
     }
 }

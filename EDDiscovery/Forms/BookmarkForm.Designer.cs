@@ -48,7 +48,6 @@ namespace EDDiscovery.Forms
             this.labelBookmarkNotes = new System.Windows.Forms.Label();
             this.labelTimeMade = new System.Windows.Forms.Label();
             this.textBoxNotes = new ExtendedControls.RichTextBoxScroll();
-            this.textBoxName = new ExtendedControls.TextBoxBorder();
             this.textBoxX = new ExtendedControls.TextBoxBorder();
             this.textBoxY = new ExtendedControls.TextBoxBorder();
             this.textBoxZ = new ExtendedControls.TextBoxBorder();
@@ -65,6 +64,7 @@ namespace EDDiscovery.Forms
             this.checkBoxTarget = new ExtendedControls.CheckBoxCustom();
             this.buttonEDSM = new ExtendedControls.ButtonExt();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.textBoxName = new ExtendedControls.AutoCompleteTextBox();
             this.userControlSurfaceBookmarks1 = new EDDiscovery.UserControls.UserControlSurfaceBookmarks();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
@@ -130,29 +130,6 @@ namespace EDDiscovery.Forms
             this.textBoxNotes.TabIndex = 0;
             this.textBoxNotes.TextBoxBackColor = System.Drawing.SystemColors.Control;
             this.textBoxNotes.TextBoxForeColor = System.Drawing.SystemColors.ControlText;
-            // 
-            // textBoxName
-            // 
-            this.textBoxName.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
-            this.textBoxName.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
-            this.textBoxName.BackErrorColor = System.Drawing.Color.Red;
-            this.textBoxName.BorderColor = System.Drawing.Color.Transparent;
-            this.textBoxName.BorderColorScaling = 0.5F;
-            this.textBoxName.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.textBoxName.ControlBackground = System.Drawing.SystemColors.Control;
-            this.textBoxName.InErrorCondition = false;
-            this.textBoxName.Location = new System.Drawing.Point(139, 13);
-            this.textBoxName.Multiline = false;
-            this.textBoxName.Name = "textBoxName";
-            this.textBoxName.ReadOnly = true;
-            this.textBoxName.ScrollBars = System.Windows.Forms.ScrollBars.None;
-            this.textBoxName.SelectionLength = 0;
-            this.textBoxName.SelectionStart = 0;
-            this.textBoxName.Size = new System.Drawing.Size(336, 20);
-            this.textBoxName.TabIndex = 3;
-            this.textBoxName.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
-            this.textBoxName.WordWrap = true;
-            this.textBoxName.TextChanged += new System.EventHandler(this.textBox_TextChanged);
             // 
             // textBoxX
             // 
@@ -370,8 +347,8 @@ namespace EDDiscovery.Forms
             // panel1
             // 
             this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panel1.Controls.Add(this.userControlSurfaceBookmarks1);
             this.panel1.Controls.Add(this.textBoxName);
+            this.panel1.Controls.Add(this.userControlSurfaceBookmarks1);
             this.panel1.Controls.Add(this.buttonEDSM);
             this.panel1.Controls.Add(this.label1);
             this.panel1.Controls.Add(this.checkBoxTarget);
@@ -398,6 +375,38 @@ namespace EDDiscovery.Forms
             this.panel1.Size = new System.Drawing.Size(628, 570);
             this.panel1.TabIndex = 12;
             this.panel1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.panel1_MouseDown);
+            // 
+            // textBoxName
+            // 
+            this.textBoxName.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
+            this.textBoxName.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
+            this.textBoxName.BackErrorColor = System.Drawing.Color.Red;
+            this.textBoxName.BorderColor = System.Drawing.Color.Transparent;
+            this.textBoxName.BorderColorScaling = 0.5F;
+            this.textBoxName.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.textBoxName.ControlBackground = System.Drawing.SystemColors.Control;
+            this.textBoxName.DropDownBackgroundColor = System.Drawing.Color.Gray;
+            this.textBoxName.DropDownBorderColor = System.Drawing.Color.Green;
+            this.textBoxName.DropDownHeight = 200;
+            this.textBoxName.DropDownItemHeight = 20;
+            this.textBoxName.DropDownMouseOverBackgroundColor = System.Drawing.Color.Red;
+            this.textBoxName.DropDownScrollBarButtonColor = System.Drawing.Color.LightGray;
+            this.textBoxName.DropDownScrollBarColor = System.Drawing.Color.LightGray;
+            this.textBoxName.DropDownWidth = 0;
+            this.textBoxName.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.textBoxName.InErrorCondition = false;
+            this.textBoxName.Location = new System.Drawing.Point(139, 16);
+            this.textBoxName.Multiline = false;
+            this.textBoxName.Name = "textBoxName";
+            this.textBoxName.ReadOnly = false;
+            this.textBoxName.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.textBoxName.SelectionLength = 0;
+            this.textBoxName.SelectionStart = 0;
+            this.textBoxName.Size = new System.Drawing.Size(336, 20);
+            this.textBoxName.TabIndex = 13;
+            this.textBoxName.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.textBoxName.WordWrap = true;
+            this.textBoxName.Validated += new System.EventHandler(this.textBoxName_Validated);
             // 
             // userControlSurfaceBookmarks1
             // 
@@ -429,7 +438,6 @@ namespace EDDiscovery.Forms
         private System.Windows.Forms.Label labelBookmarkNotes;
         private System.Windows.Forms.Label labelTimeMade;
         private ExtendedControls.RichTextBoxScroll textBoxNotes;
-        private ExtendedControls.TextBoxBorder textBoxName;
         private ExtendedControls.TextBoxBorder textBoxX;
         private ExtendedControls.TextBoxBorder textBoxY;
         private ExtendedControls.TextBoxBorder textBoxZ;
@@ -447,5 +455,6 @@ namespace EDDiscovery.Forms
         private ExtendedControls.ButtonExt buttonEDSM;
         private System.Windows.Forms.Panel panel1;
         private UserControls.UserControlSurfaceBookmarks userControlSurfaceBookmarks1;
+        private ExtendedControls.AutoCompleteTextBox textBoxName;
     }
 }
