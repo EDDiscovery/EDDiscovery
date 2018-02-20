@@ -76,6 +76,7 @@ namespace EliteDangerousCore.JournalEvents
         public bool HasRings { get { return Rings != null && Rings.Length > 0; } }
         public StarPlanetRing[] Rings { get; set; }
         public int EstimatedValue { get; set; }
+        public List<BodyParent> Parents { get; set; }
 
         // STAR
         public string StarType { get; set; }                        // null if no StarType, direct from journal, K, A, B etc
@@ -142,7 +143,6 @@ namespace EliteDangerousCore.JournalEvents
         public const double oneAtmosphere_Pa = 101325;
         public const double oneGee_m_s2 = 9.80665;
 
-        // Classes
         public class StarPlanetRing
         {
             public string Name;     // may be null
@@ -194,6 +194,12 @@ namespace EliteDangerousCore.JournalEvents
                         return ringClass.Replace("eRingClass_", "");
                 }
             }
+        }
+
+        public class BodyParent
+        {
+            public string Type;
+            public int BodyID;
         }
 
         public JournalScan(JObject evt) : base(evt, JournalTypeEnum.Scan)
@@ -267,7 +273,6 @@ namespace EliteDangerousCore.JournalEvents
                 PlanetTypeID = EDPlanet.Unknown;
             }
 
-
             JToken mats = (JToken)evt["Materials"];
 
             if (mats != null)
@@ -307,6 +312,16 @@ namespace EliteDangerousCore.JournalEvents
             IsEDSMBody = evt["EDDFromEDSMBodie"].Bool(false);
 
             EstimatedValue = CalculateEstimatedValue();
+
+            if (evt["Parents"] != null)
+            {
+                Parents = new List<BodyParent>();
+                foreach (JObject parent in evt["Parents"])
+                {
+                    JProperty prop = parent.Properties().First();
+                    Parents.Add(new BodyParent { Type = prop.Name, BodyID = prop.Value.Int() });
+                }
+            }
         }
 
         public override void FillInformation(out string summary, out string info, out string detailed)  //V

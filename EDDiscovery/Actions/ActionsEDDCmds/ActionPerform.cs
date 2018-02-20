@@ -119,7 +119,7 @@ namespace EDDiscovery.Actions
                     string culture = sp.NextQuotedWord();
                     if (culture != null)
                     {
-                        ap["VoiceRecognitionEnabled"] = ((ap.actioncontroller as ActionController).VoiceReconOn(culture)).ToStringInvariant();
+                        ap["VoiceRecognitionEnabled"] = ((ap.actioncontroller as ActionController).VoiceReconOn(culture)).ToStringIntValue();
                     }
                     else
                         ap.ReportError("EnableVoiceRecognition requires a culture");
@@ -168,6 +168,28 @@ namespace EDDiscovery.Actions
                 else if (cmdname.Equals("bindingvalues"))
                 {
                     ap["BindingValues"] = (ap.actioncontroller as ActionController).FrontierBindings.ListValues();
+                }
+                else if (cmdname.Equals("datadownload"))
+                {
+                    string gitfolder = sp.NextQuotedWord();
+                    string filewildcard = sp.NextQuotedWord();
+                    string directory = sp.NextQuotedWord();
+                    string optclean = sp.NextWord();
+
+                    if ( gitfolder != null && filewildcard != null && directory != null )
+                    {
+                        if (System.IO.Directory.Exists(directory))
+                        {
+                            BaseUtils.GitHubClass ghc = new BaseUtils.GitHubClass(EDDiscovery.Properties.Resources.URLGithubDataDownload);
+                            bool worked = ghc.Download(directory, gitfolder, filewildcard, optclean != null && optclean == "1");
+                            ap["Downloaded"] = worked.ToStringIntValue();
+                        }
+                        else
+                            ap.ReportError("Download folder " + directory + " does not exist");
+                    }
+                    else
+                        ap.ReportError("Missing parameters in Perform Datadownload");
+
                 }
                 else
                     ap.ReportError("Unknown command " + cmdname + " in Performaction");

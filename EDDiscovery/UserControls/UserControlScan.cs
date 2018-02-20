@@ -87,12 +87,18 @@ namespace EDDiscovery.UserControls
             uctg.OnTravelSelectionChanged -= Display;
             discoveryform.OnNewEntry -= NewEntry;
         }
-
+		
+		#endregion
+		
+		
+		#region Transparency
         Color transparencycolor = Color.Green;
         public override Color ColorTransparency { get { return transparencycolor; } }
         public override void SetTransparency(bool on, Color curcol)
         {
             imagebox.BackColor = this.BackColor = panelStars.BackColor = panelStars.vsc.SliderColor = panelStars.vsc.BackColor = panelControls.BackColor = curcol;
+			rollUpPanelTop.BackColor = curcol;
+			rollUpPanelTop.ShowHiddenMarker = !on;
         }
 
         private void UserControlScan_Resize(object sender, EventArgs e)
@@ -195,7 +201,7 @@ namespace EDDiscovery.UserControls
 
                         StarScan.ScanNode lastbelt = belts.Count != 0 ? belts.Dequeue() : null;
 
-                        foreach (StarScan.ScanNode planetnode in starnode.children.Values.Where(s => s.type != StarScan.ScanNodeType.belt))
+                        foreach (StarScan.ScanNode planetnode in starnode.children.Values.Where(s => s.type != StarScan.ScanNodeType.belt && s.type != StarScan.ScanNodeType.barycentre))
                         {
                             while (lastbelt != null && planetnode.ScanData != null && (lastbelt.BeltData == null || lastbelt.BeltData.OuterRad < planetnode.ScanData.nSemiMajorAxis))
                             {
@@ -307,7 +313,7 @@ namespace EDDiscovery.UserControls
 
                 Point moonpos = new Point(curpos.X + offset, maxtreepos.Y + itemsepar.Height);    // moon pos
 
-                foreach (StarScan.ScanNode moonnode in planetnode.children.Values)
+                foreach (StarScan.ScanNode moonnode in planetnode.children.Values.Where(n => n.type != StarScan.ScanNodeType.barycentre))
                 {
                     bool nonedsmscans = moonnode.DoesNodeHaveNonEDSMScansBelow();     // is there any scans here, either at this node or below?
 
@@ -746,6 +752,7 @@ namespace EDDiscovery.UserControls
         private void toolStripMenuItemToolbar_Click(object sender, EventArgs e)
         {
             panelControls.Visible = !panelControls.Visible;
+            lblSystemInfo.Left = panelControls.Visible ? panelControls.Width : 0; // move approx value to left if controls hidden
         }
 
         void ShowInfo(string text, bool onright)

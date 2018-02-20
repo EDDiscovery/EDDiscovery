@@ -94,6 +94,7 @@ namespace EliteDangerousCore
         public string Group { get { return group; } }
         public string GameModeGroup { get { return gamemode + ((group != null && group.Length > 0) ? (":" + group) : ""); } }
         public string StationName { get { return stationName; } }
+        public bool? Wanted { get { return wanted; } }
         public long? MarketID { get { return marketId; } }
 
         public long Credits { get; set; }       // set up by Historylist during ledger accumulation
@@ -135,6 +136,7 @@ namespace EliteDangerousCore
         private string group = "";                  // group..
         private string stationName = null;
         private long? marketId = null;
+        private bool? wanted = null;
 
         #endregion
 
@@ -298,6 +300,8 @@ namespace EliteDangerousCore
                     he.hyperspace = prev.hyperspace;
                 if (prev.marketId != null)
                     he.marketId = prev.marketId;
+                if (prev.wanted.HasValue)
+                    he.wanted = prev.wanted;
 
                 he.stationName = prev.stationName;
                 he.shiptype = prev.shiptype;
@@ -315,6 +319,7 @@ namespace EliteDangerousCore
                 he.landed = jl.Latitude.HasValue;
                 he.whereami = jl.Docked ? jl.StationName : jl.Body;
                 he.hyperspace = false;
+                he.wanted = jl.Wanted;
             }
             else if (je.EventTypeID == JournalTypeEnum.Docked)
             {
@@ -346,8 +351,10 @@ namespace EliteDangerousCore
             }
             else if (je.EventTypeID == JournalTypeEnum.FSDJump)
             {
-                he.whereami = (je as JournalFSDJump).StarSystem;
+                JournalFSDJump ju = (je as JournalFSDJump);
+                he.whereami = ju.StarSystem;
                 he.hyperspace = true;
+                he.wanted = ju.Wanted;
             }
             else if (je.EventTypeID == JournalTypeEnum.StartJump)
             {

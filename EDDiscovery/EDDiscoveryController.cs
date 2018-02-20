@@ -80,9 +80,14 @@ namespace EDDiscovery
         // During SYNC events and on start up
 
         public event Action OnInitialSyncComplete;                          // UI. Called during startup after CheckSystems done.
-        public event Action OnSyncStarting;                                 // BK. EDSM/EDDB sync starting
-        public event Action OnSyncComplete;                                 // BK. SYNC has completed
+        public event Action OnSyncStarting;                                 // UI. EDSM/EDDB sync starting
+        public event Action OnSyncComplete;                                 // UI. SYNC has completed
         public event Action<int, string> OnReportProgress;                  // UI. SYNC progress reporter
+
+        // Due to background taskc completing async to the rest
+
+        public event Action OnMapsDownloaded;                               // UI
+        public event Action<bool> OnExpeditionsDownloaded;                  // UI, true if changed entries
 
         #endregion
 
@@ -287,8 +292,10 @@ namespace EDDiscovery
         #endregion
 
         #region EDSM / EDDB
-        public bool AsyncPerformSync(bool eddbsync = false, bool edsmfullsync = false)
+        public bool AsyncPerformSync(bool eddbsync = false, bool edsmfullsync = false)      // UI thread.
         {
+            Debug.Assert(System.Windows.Forms.Application.MessageLoop);
+
             if (Interlocked.CompareExchange(ref resyncEDSMEDDBRequestedFlag, 1, 0) == 0)
             {
                 OnSyncStarting?.Invoke();
@@ -309,8 +316,6 @@ namespace EDDiscovery
         #region Implementation
         #region Variables
         private string logtext = "";     // to keep in case of no logs..
-
-        private Task<bool> downloadMapsTask = null;
 
         private EDJournalClass journalmonitor;
 
@@ -556,10 +561,12 @@ namespace EDDiscovery
             ReportProgress(-1, "");
 
             if (!EDDOptions.Instance.NoSystemsLoad)
-            { 
+            {
                 // Async load of maps in another thread
+                DownloadMaps(() => PendingClose);
 
-                downloadMapsTask = DownloadMaps(this, () => PendingClose, LogLine, LogLineHighlight);
+                // and Expedition data
+                DownloadExpeditions(() => PendingClose);
 
                 // Former CheckSystems, reworked to accomodate new switches..
                 // Check to see what sync refreshes we need
@@ -857,38 +864,61 @@ namespace EDDiscovery
 
         #endregion
 
-        #region 2dmaps
+        #region Aux file downloads
 
         // in its own thread..
-        public static Task<bool> DownloadMaps(IDiscoveryController discoveryform, Func<bool> cancelRequested, Action<string> logLine, Action<string> logError)          // ASYNC process
+        public void DownloadMaps(Func<bool> cancelRequested)
         {
-            try
+            LogLine("Checking for new EDDiscovery maps");
+
+            Task.Factory.StartNew(() =>
             {
-                string mapsdir = Path.Combine(EDDOptions.Instance.AppDataDirectory, "Maps");
-                if (!Directory.Exists(mapsdir))
-                    Directory.CreateDirectory(mapsdir);
-
-                logLine("Checking for new EDDiscovery maps");
-
-                BaseUtils.GitHubClass github = new BaseUtils.GitHubClass(EDDiscovery.Properties.Resources.URLGithubDataDownload, discoveryform.LogLine);
-
+                BaseUtils.GitHubClass github = new BaseUtils.GitHubClass(EDDiscovery.Properties.Resources.URLGithubDataDownload, LogLine);
                 var files = github.ReadDirectory("Maps/V1");
-                return Task.Factory.StartNew(() => github.DownloadFiles(files, mapsdir));
-            }
-            catch (Exception ex)
+                if (files != null)
+                {
+                    string mapsdir = Path.Combine(EDDOptions.Instance.AppDataDirectory, "Maps");
+                    if (!Directory.Exists(mapsdir))
+                        Directory.CreateDirectory(mapsdir);
+
+                    if ( github.DownloadFiles(files, mapsdir) )
+                    {
+                        if (!cancelRequested())
+                            InvokeAsyncOnUiThread(() => { OnMapsDownloaded?.Invoke(); });
+                    }
+                }
+            });
+        }
+
+        // in its own thread..
+        public void DownloadExpeditions(Func<bool> cancelRequested)
+        {
+            LogLine("Checking for new Expedition data");
+
+            Task.Factory.StartNew(() =>
             {
-                logError("DownloadImages exception: " + ex.Message);
-                var tcs = new TaskCompletionSource<bool>();
-                tcs.SetException(ex);
-                return tcs.Task;
-            }
+                BaseUtils.GitHubClass github = new BaseUtils.GitHubClass(EDDiscovery.Properties.Resources.URLGithubDataDownload, LogLine);
+                var files = github.ReadDirectory("Expeditions");
+                if (files != null)        // may be empty, unlikely, but
+                {
+                    string expeditiondir = Path.Combine(EDDOptions.Instance.AppDataDirectory, "Expeditions");
+                    if (!Directory.Exists(expeditiondir))
+                        Directory.CreateDirectory(expeditiondir);
+
+                    if (github.DownloadFiles(files, expeditiondir))
+                    {
+                        if (!cancelRequested())
+                        {
+                            bool changed = SavedRouteClass.UpdateDBFromExpeditionFiles(expeditiondir);
+                            InvokeAsyncOnUiThread(() => { OnExpeditionsDownloaded?.Invoke(changed); });
+                        }
+                    }
+                }
+            });
         }
 
         #endregion
 
         #endregion
-
     }
 }
-
-

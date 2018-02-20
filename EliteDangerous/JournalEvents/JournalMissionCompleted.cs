@@ -85,6 +85,29 @@ namespace EliteDangerousCore.JournalEvents
                 }
             }
 
+            // 16/2/2018 NO EVIDENCE in manual of format, turn on when have answer
+
+            if (!evt["MaterialsReward"].Empty())
+            {
+                JArray rewards = (JArray)evt["MaterialsReward"];        // does not have the $_name problem, straight FDNAME
+
+                if (rewards.Count > 0)
+                {
+                    System.Tuple<string, int>[] cr = new System.Tuple<string, int>[rewards.Count];
+                    int i = 0;
+                    foreach (JToken jc in rewards.Children())
+                    {
+                        if (!jc["Name"].Empty() && !jc["Count"].Empty())        // evidence of empty values
+                            cr[i++] = new System.Tuple<string, int>(JournalFieldNaming.FDNameTranslation(jc["Name"].Str()), jc["Count"].Int());
+
+                        //System.Diagnostics.Trace.WriteLine(string.Format(" >> Child {0} {1}", jc.Path, jc.Type.ToString()));
+                    }
+                    MaterialsReward = new System.Tuple<string, int>[i];
+                    System.Array.Copy(cr, MaterialsReward, i);
+                }
+            }
+
+            FactionEffects = evt["FactionEffects"]?.ToObject<FactionEffectsEntry[]>();      // NEEDS TEST
         }
 
         public string Name { get; set; }
@@ -112,6 +135,9 @@ namespace EliteDangerousCore.JournalEvents
         public int MissionId { get; set; }
 
         public System.Tuple<string, int>[] CommodityReward { get; set; }            // Verified in fdname, not in $_name. Must be in fdname format
+        public System.Tuple<string, int>[] MaterialsReward { get; set; }
+
+        public FactionEffectsEntry[] FactionEffects;
 
         public void MaterialList(MaterialCommoditiesList mc, DB.SQLiteConnectionUser conn)
         {
@@ -120,6 +146,12 @@ namespace EliteDangerousCore.JournalEvents
                 // Forum indicates its commodities, and we get normal materialcollected events if its a material.
                 for (int i = 0; i < CommodityReward.Length; i++)
                     mc.Change(MaterialCommodities.CommodityCategory, CommodityReward[i].Item1, CommodityReward[i].Item2, 0, conn);
+            }
+
+            if (MaterialsReward != null)
+            {
+                for (int i = 0; i < MaterialsReward.Length; i++)        // NOTE as of 3.0 journal 15, we are not getting a CAT, so set true don't use CAT to match
+                    mc.Change(MaterialCommodities.MaterialRawCategory, MaterialsReward[i].Item1, MaterialsReward[i].Item2, 0, conn, true);
             }
         }
 
@@ -153,6 +185,7 @@ namespace EliteDangerousCore.JournalEvents
 
             detailed += PermitsList();
             detailed += CommoditiesList();
+            detailed += MaterialList();
         }
 
         public string PermitsList(bool pretty = true)
@@ -188,12 +221,49 @@ namespace EliteDangerousCore.JournalEvents
             return detailed;
         }
 
+        public string MaterialList(bool pretty = true)
+        {
+            string detailed = "";
+            if (MaterialsReward != null && MaterialsReward.Length > 0)
+            {
+                if (pretty)
+                    detailed += "Rewards:";
+                for (int i = 0; i < MaterialsReward.Length; i++)
+                    detailed += ((i > 0) ? "," : "") + JournalFieldNaming.RMat(MaterialsReward[i].Item1) + " " + MaterialsReward[i].Item2.ToStringInvariant();
+
+                if (pretty)
+                    detailed += System.Environment.NewLine;
+            }
+            return detailed;
+        }
+
         public string RewardOrDonation { get { return Reward.HasValue ? Reward.Value.ToString("N0") : (Donation.HasValue ? (-Donation.Value).ToString("N0") : ""); } }
         public long Value { get { return Reward.HasValue ? Reward.Value : (Donation.HasValue ? (-Donation.Value) : 0); } }
 
         public string MissionInformation()          // other stuff for the mission panel which it does not already cover or accepted has
         {
-            return PermitsList() + CommoditiesList();
+            return PermitsList() + CommoditiesList() + MaterialList();
+        }
+
+        public class EffectTrend
+        {
+            public string Effect;
+            public string Effect_Localised;
+            public string Trend;
+        }
+
+        public class InfuluenceTrend
+        {
+            public long SystemAddress;
+            public string Trend;
+        }
+
+        public class FactionEffectsEntry
+        {
+            public string Faction;
+            public EffectTrend[] Effects;
+            public InfuluenceTrend[] Influence;
+            public string Reputation;
         }
     }
 }

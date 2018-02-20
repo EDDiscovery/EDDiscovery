@@ -29,7 +29,10 @@ namespace EliteDangerousCore.JournalEvents
         {
             Name = evt["Name"].Str();
             Role = evt["Role"].Str();
+            NpcCrewID = evt["CrewID"].Long();
         }
+
+        public long NpcCrewID { get; set; }
         public string Name { get; set; }
         public string Role { get; set; }
 

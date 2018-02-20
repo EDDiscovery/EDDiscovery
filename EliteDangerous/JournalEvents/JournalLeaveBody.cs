@@ -26,20 +26,22 @@ namespace EliteDangerousCore.JournalEvents
     // •	BodyID
 
     [JournalEntryType(JournalTypeEnum.LeaveBody)]
-    public class JournalLeaveBody : JournalEntry
+    public class JournalLeaveBody : JournalEntry, IBodyNameAndID
     {
         public JournalLeaveBody(JObject evt) : base(evt, JournalTypeEnum.LeaveBody)
         {
             StarSystem = evt["StarSystem"].Str();
-            SystemAddress = evt["SystemAddress"].Long();
+            SystemAddress = evt["SystemAddress"].LongNull();
             Body = evt["Body"].Str();
-            BodyID = evt["BodyID"].Int();
+            BodyID = evt["BodyID"].IntNull();
         }
 
         public string StarSystem { get; set; }
-        public long SystemAddress { get; set; }
+        public long? SystemAddress { get; set; }
         public string Body { get; set; }
-        public int BodyID { get; set; }
+        public int? BodyID { get; set; }
+        public string BodyDesignation { get; set; }
+        public string BodyType { get { return "Planet"; } }
 
         public override void FillInformation(out string summary, out string info, out string detailed) //V
         {

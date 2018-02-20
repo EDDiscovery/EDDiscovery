@@ -640,5 +640,11 @@
   <ItemGroup>
     <EmbeddedResource Include="Controls\Map3D\Bookmarks\StarWithPlanets.png" />
   </ItemGroup>
+  <ItemGroup>
+	<EmbeddedResource Include="Journal\Powerplay.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Journal\UnderAttack.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

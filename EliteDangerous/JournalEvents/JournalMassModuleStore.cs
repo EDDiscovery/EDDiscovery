@@ -61,26 +61,25 @@ namespace EliteDangerousCore.JournalEvents
         public override void FillInformation(out string summary, out string info, out string detailed) //V
         {
             summary = EventTypeStr.SplitCapsWord();
-            info = "";
+            info = BaseUtils.FieldBuilder.Build("Total modules:", ModuleItems?.Count());
+            detailed = "";
 
             if ( ModuleItems != null )
                 foreach (ModuleItem m in ModuleItems)
                 {
-                    if (info.Length>0)
-                        info += ", ";
-                    info += m.Name;
+                    detailed = detailed.AppendPrePad(BaseUtils.FieldBuilder.Build("", m.Name, ";(Hot)", m.Hot), ", ");
                 }
                 
-            detailed = "";
+        }
+
+        public class ModuleItem
+        {
+            public string Slot;
+            public string Name;
+            public string EngineerModifications;
+            public double? Quality { get; set; }
+            public int? Level { get; set; }
+            public bool? Hot { get; set; }
         }
     }
-
-
-    public class ModuleItem
-    {
-        public string Slot;
-        public string Name;
-        public string EngineerModifications;
-    }
-
 }

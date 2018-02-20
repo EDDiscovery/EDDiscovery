@@ -604,7 +604,7 @@ namespace EliteDangerousCore
 
         public ISystem FindSystem(string name, EDSM.GalacticMapping glist = null)        // in system or name
         {
-            ISystem ds1 = SystemClassDB.GetSystem(name);
+            ISystem ds1 = SystemCache.FindSystem(name);     // now go thru the cache..
 
             if (ds1 == null)
             {
@@ -808,6 +808,12 @@ namespace EliteDangerousCore
                     }
                 }
             }
+            else if (je is IBodyNameAndID)
+            {
+                JournalLocOrJump jl;
+                HistoryEntry jlhe;
+                starscan.AddBodyToBestSystem((IBodyNameAndID)je, Count - 1, EntryOrder, out jlhe, out jl);
+            }
 
             return he;
         }
@@ -943,6 +949,10 @@ namespace EliteDangerousCore
                         {
                             System.Diagnostics.Debug.WriteLine("******** Cannot add scan to system " + (je as JournalScan).BodyName + " in " + he.System.Name);
                         }
+                    }
+                    else if (je is IBodyNameAndID)
+                    {
+                        this.starscan.AddBodyToBestSystem((IBodyNameAndID)je, i, hl);
                     }
                 }
             }
