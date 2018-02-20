@@ -70,28 +70,30 @@ namespace EDDiscovery.UserControls
             dataGridViewMarks.AllowUserToAddRows = true;
             SetSystem(bk.StarName);
             thisBookmark = bk;
-            PlanetMarks = bk.PlanetaryMarks;
+            PlanetMarks = bk.PlanetaryMarks == null ? new PlanetMarks() : bk.PlanetaryMarks;
 
-            foreach(Planet pl in PlanetMarks.Planets)
+            if (PlanetMarks.Planets != null)
             {
-                foreach(Location loc in pl.Locations)
+                foreach (Planet pl in PlanetMarks.Planets)
                 {
-                    using (DataGridViewRow dr = dataGridViewMarks.Rows[dataGridViewMarks.Rows.Add()])
+                    foreach (Location loc in pl.Locations)
                     {
-                        dr.Cells[0].Value = pl.Name;
-                        dr.Cells[0].ReadOnly = true;
-                        dr.Cells[1].Value = loc.Name;
-                        dr.Cells[1].ReadOnly = true;
-                        dr.Cells[2].Value = loc.Comment;
-                        dr.Cells[3].Value = loc.Latitude.ToString("F4");
-                        dr.Cells[4].Value = loc.Longitude.ToString("F4");
-                        ((DataGridViewCheckBoxCell)dr.Cells[5]).Value = true;
-                        dr.Tag = loc;
+                        using (DataGridViewRow dr = dataGridViewMarks.Rows[dataGridViewMarks.Rows.Add()])
+                        {
+                            dr.Cells[0].Value = pl.Name;
+                            dr.Cells[0].ReadOnly = true;
+                            dr.Cells[1].Value = loc.Name;
+                            dr.Cells[1].ReadOnly = true;
+                            dr.Cells[2].Value = loc.Comment;
+                            dr.Cells[3].Value = loc.Latitude.ToString("F4");
+                            dr.Cells[4].Value = loc.Longitude.ToString("F4");
+                            ((DataGridViewCheckBoxCell)dr.Cells[5]).Value = true;
+                            dr.Tag = loc;
+                        }
                     }
                 }
             }
             dataGridViewMarks.ResumeLayout();
-            buttonSave.Show();
         }
 
         private void dataGridViewMarks_CellValidating(object sender, DataGridViewCellValidatingEventArgs e)
@@ -127,7 +129,7 @@ namespace EDDiscovery.UserControls
             {
                 Location newLoc = dr.Tag != null ? (Location)dr.Tag : new Location();
                 newLoc.Name = dr.Cells[1].Value.ToString();
-                newLoc.Comment = dr.Cells[2].Value.ToString();
+                newLoc.Comment = dr.Cells[2].Value?.ToString();
                 newLoc.Latitude = Double.Parse(dr.Cells[3].Value.ToString());
                 newLoc.Longitude = Double.Parse(dr.Cells[4].Value.ToString());
                 internalPlanetMarks.AddOrUpdateLocation(dr.Cells[0].Value.ToString(), newLoc);
@@ -147,7 +149,7 @@ namespace EDDiscovery.UserControls
             if (!Double.TryParse(dr.Cells[3].Value.ToString(), out double lat)) return false;
             if (!Double.TryParse(dr.Cells[4].Value.ToString(), out double lon)) return false;
 
-            return dr.Cells[0].Value.ToString() != "" && dr.Cells[1].Value.ToString() != "" && lat >= -180 && lat <= 180 && lon >= -180 && lon <= 180;
+            return dr.Cells[0].Value.ToString() != "" && dr.Cells[1].Value?.ToString() != "" && lat >= -180 && lat <= 180 && lon >= -180 && lon <= 180;
         }
 
         private void dataGridViewMarks_UserDeletingRow(object sender, DataGridViewRowCancelEventArgs e)
@@ -163,7 +165,7 @@ namespace EDDiscovery.UserControls
         {
             if(Edited)
             {
-                BookmarkClass.AddOrUpdateBookmark(thisBookmark, true, thisBookmark.StarName, thisBookmark.x, thisBookmark.y, thisBookmark.z, thisBookmark.Time, thisBookmark.Note, internalPlanetMarks);
+                GlobalBookMarkList.AddOrUpdateBookmark(thisBookmark, true, thisBookmark.StarName, thisBookmark.x, thisBookmark.y, thisBookmark.z, thisBookmark.Time, thisBookmark.Note, internalPlanetMarks);
                 Edited = false;
             }
         }

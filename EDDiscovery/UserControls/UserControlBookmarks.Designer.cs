@@ -29,6 +29,8 @@
         private void InitializeComponent()
         {
             this.panelButtons = new System.Windows.Forms.Panel();
+            this.buttonNew = new ExtendedControls.ButtonExt();
+            this.buttonEdit = new ExtendedControls.ButtonExt();
             this.textBoxFilter = new ExtendedControls.TextBoxBorder();
             this.label1 = new System.Windows.Forms.Label();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
@@ -50,12 +52,34 @@
             // 
             // panelButtons
             // 
+            this.panelButtons.Controls.Add(this.buttonNew);
+            this.panelButtons.Controls.Add(this.buttonEdit);
             this.panelButtons.Controls.Add(this.textBoxFilter);
             this.panelButtons.Controls.Add(this.label1);
             this.panelButtons.Location = new System.Drawing.Point(0, 0);
             this.panelButtons.Name = "panelButtons";
             this.panelButtons.Size = new System.Drawing.Size(676, 30);
             this.panelButtons.TabIndex = 0;
+            // 
+            // buttonNew
+            // 
+            this.buttonNew.Location = new System.Drawing.Point(285, 4);
+            this.buttonNew.Name = "buttonNew";
+            this.buttonNew.Size = new System.Drawing.Size(75, 23);
+            this.buttonNew.TabIndex = 28;
+            this.buttonNew.Text = "New";
+            this.buttonNew.UseVisualStyleBackColor = true;
+            this.buttonNew.Click += new System.EventHandler(this.buttonNew_Click);
+            // 
+            // buttonEdit
+            // 
+            this.buttonEdit.Location = new System.Drawing.Point(204, 4);
+            this.buttonEdit.Name = "buttonEdit";
+            this.buttonEdit.Size = new System.Drawing.Size(75, 23);
+            this.buttonEdit.TabIndex = 27;
+            this.buttonEdit.Text = "Edit";
+            this.buttonEdit.UseVisualStyleBackColor = true;
+            this.buttonEdit.Click += new System.EventHandler(this.buttonEdit_Click);
             // 
             // textBoxFilter
             // 
@@ -200,5 +224,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn X;
         private System.Windows.Forms.DataGridViewTextBoxColumn Y;
         private System.Windows.Forms.DataGridViewTextBoxColumn Z;
+        private ExtendedControls.ButtonExt buttonNew;
+        private ExtendedControls.ButtonExt buttonEdit;
     }
 }
