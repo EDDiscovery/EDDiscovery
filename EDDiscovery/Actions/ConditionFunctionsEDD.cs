@@ -33,10 +33,10 @@ namespace EDDiscovery.Actions
             if (functions == null)        // one time init, done like this cause can't do it in {}
             {
                 functions = new Dictionary<string, FuncEntry>();
-                functions.Add("systempath", new FuncEntry(SystemPath, 1, 1, NoMacros, NoStrings));   // literal
-                functions.Add("version", new FuncEntry(Version, 1, 1, NoMacros, NoStrings));     // don't check first para
-                functions.Add("star", new FuncEntry(Star, 2, 2, FirstMacro, AllStrings));     // var/string, literal/var/string
-                functions.Add("ship", new FuncEntry(Ship, 1, 1, AllMacros, AllStrings));   //ship translator
+                //functions.Add("systempath", new FuncEntry(SystemPath, 1, 1, NoMacros, NoStrings));   // literal
+                //functions.Add("version", new FuncEntry(Version, 1, 1, NoMacros, NoStrings));     // don't check first para
+                //functions.Add("star", new FuncEntry(Star, 2, 2, FirstMacro, AllStrings));     // var/string, literal/var/string
+                //functions.Add("ship", new FuncEntry(Ship, 1, 1, AllMacros, AllStrings));   //ship translator
             }
         }
 
