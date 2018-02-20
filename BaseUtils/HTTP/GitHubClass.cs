@@ -130,11 +130,13 @@ namespace BaseUtils
         {
             if (cleanfolder)
             {
-                DirectoryInfo di = new DirectoryInfo(downloadfolder);
-                foreach (FileInfo file in di.GetFiles())
+                try
                 {
-                    file.Delete();
+                    DirectoryInfo di = new DirectoryInfo(downloadfolder);
+                    foreach (FileInfo file in di.GetFiles())
+                        file.Delete();
                 }
+                catch { }   // paranoia
             }
 
             List<BaseUtils.GitHubFile> files = ReadDirectory(gitdir);       // may except if not there..

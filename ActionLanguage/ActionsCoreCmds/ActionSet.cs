@@ -84,7 +84,7 @@ namespace ActionLanguage
             {
                 string keyname = key;
 
-                if (keyname.Contains("%"))
+                if (keyname.Contains("%"))      // if its an expansion, got for expansion
                 {
                     if (ap.functions.ExpandString(key, out keyname) == ConditionFunctions.ExpandResult.Failed)
                     {
@@ -92,6 +92,8 @@ namespace ActionLanguage
                         break;
                     }
                 }
+                else
+                    keyname = ap.variables.Qualify(key);    // else allow name to be mangled
 
                 string res;
 
@@ -254,6 +256,7 @@ namespace ActionLanguage
                 string v;
                 while ((v = p.NextWord(", ")) != null)
                 {
+                    v = ap.variables.Qualify(v);
                     ap.actioncontroller.DeleteVariable(v);
                     ap.actionfile.DeleteFileVariable(v);
                     ap.DeleteVar(v);
