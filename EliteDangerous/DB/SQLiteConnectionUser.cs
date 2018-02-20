@@ -131,6 +131,9 @@ namespace EliteDangerousCore.DB
                 if (dbver < 116)
                     UpgradeUserDB116(conn);
 
+                if (dbver < 117)
+                    UpgradeUserDB117(conn);
+
                 CreateUserDBTableIndexes(conn);
 
                 return true;
@@ -388,6 +391,13 @@ namespace EliteDangerousCore.DB
         {
             string query1 = "ALTER TABLE Bookmarks ADD COLUMN PlanetMarks TEXT DEFAULT NULL";
             PerformUpgrade(conn, 116, true, false, new[] { query1 });
+        }
+
+
+        private static void UpgradeUserDB117(SQLiteConnectionUser conn)
+        {
+            string query1 = "ALTER TABLE routes_expeditions ADD COLUMN Status INT DEFAULT 0";
+            PerformUpgrade(conn, 117, true, false, new[] { query1 });
         }
 
 

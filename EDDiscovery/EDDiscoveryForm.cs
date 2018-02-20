@@ -99,6 +99,8 @@ namespace EDDiscovery
         public event Action<string, Color> OnNewLogEntry { add { Controller.OnNewLogEntry += value; } remove { Controller.OnNewLogEntry -= value; } }
         public event Action OnRefreshCommanders { add { Controller.OnRefreshCommanders += value; } remove { Controller.OnRefreshCommanders -= value; } }
         public event Action<EliteDangerousCore.CompanionAPI.CompanionAPIClass,HistoryEntry> OnNewCompanionAPIData;
+        public event Action OnMapsDownloaded { add { Controller.OnMapsDownloaded += value; } remove { Controller.OnMapsDownloaded -= value; } }
+        public event Action<bool> OnExpeditionsDownloaded { add { Controller.OnExpeditionsDownloaded += value; } remove { Controller.OnExpeditionsDownloaded -= value; } }
 
         #endregion
 
@@ -450,7 +452,7 @@ namespace EDDiscovery
             checkInstallerTask = CheckForNewInstallerAsync();
         }
 
-        private void Controller_SyncStarting()
+        private void Controller_SyncStarting()      
         {
             edsmRefreshTimer.Enabled = false;
         }
