@@ -372,67 +372,77 @@ namespace EliteDangerousCore.DB
         }
 
         // Given a set of expedition files, update the DB.  Add any new ones, and make sure the EDSM marker is on.
+        // use a blank file to retire older ones
 
         public static bool UpdateDBFromExpeditionFiles(string expeditiondir )
         {
             bool changed = false;
 
-            try
-            {
-                FileInfo[] allfiles = Directory.EnumerateFiles(expeditiondir, "*.json", SearchOption.TopDirectoryOnly).Select(f => new System.IO.FileInfo(f)).OrderByDescending(p => p.LastWriteTime).ToArray();
+            FileInfo[] allfiles = Directory.EnumerateFiles(expeditiondir, "*.json", SearchOption.TopDirectoryOnly).Select(f => new System.IO.FileInfo(f)).OrderByDescending(p => p.LastWriteTime).ToArray();
 
-                foreach (FileInfo f in allfiles)
+            foreach (FileInfo f in allfiles)        // iterate thru all files found
+            {
+                try
                 {
-                    string text = File.ReadAllText(f.FullName);
-                    if (text != null)
+                    string text = File.ReadAllText(f.FullName); // may except
+
+                    if (text != null && text.Length>0)      // use a blank file to overwrite an old one you want to get rid of
                     {
                         var array = Newtonsoft.Json.Linq.JArray.Parse(text).ToObject<SavedRouteClass[]>();
 
                         List<SavedRouteClass> stored = SavedRouteClass.GetAllSavedRoutes(); // incl deleted
 
-                        foreach (SavedRouteClass s in array)
+                        foreach (SavedRouteClass newentry in array)
                         {
-                            s.StartDate = s.StartDate.Value.ToLocalTime();      // supplied, and respected by JSON, as zulu time. the stupid database holds local times. Convert.
-                            s.EndDate = s.EndDate.Value.ToLocalTime();
+                            newentry.StartDate = newentry.StartDate.Value.ToLocalTime();      // supplied, and respected by JSON, as zulu time. the stupid database holds local times. Convert.
+                            newentry.EndDate = newentry.EndDate.Value.ToLocalTime();
 
-                            SavedRouteClass storedentry = stored.Find(x => x.Name.Equals(s.Name));
+                            SavedRouteClass storedentry = stored.Find(x => x.Name.Equals(newentry.Name));
 
-                            if (storedentry != null )  // if stored already..
+                            if (newentry.Systems.Count == 0)              // no systems, means delete the database entry.. use with caution
                             {
-                                if (!storedentry.Systems.SequenceEqual(s.Systems) ) // systems changed, we need to reset..
-                                {
-                                    storedentry.Delete();   // delete the old one.. systems may be in a different order, and there is no ordering except by ID in the DB
-                                    s.EDSM = true;
-                                    s.Add();        // add to db..
-                                    changed = true;
-                                }
-                                else if ( storedentry.EndDate == null || storedentry.StartDate == null || storedentry.EndDate.Value != s.EndDate.Value || storedentry.StartDate.Value != s.StartDate.Value )    // times change, just update
-                                {
-                                    storedentry.StartDate = s.StartDate.Value;      // update time and date but keep the expedition ID
-                                    storedentry.EndDate = s.EndDate.Value;
-                                    storedentry.EDSM = true;
-                                    storedentry.Update();
-                                    changed = true;
-                                }
-                                else if ( !storedentry.EDSM )    // backwards with previous system, set EDSM flag on these, prevents overwrite
-                                { 
-                                    storedentry.EDSM = true;    // ensure EDSM flag is set..
-                                    storedentry.Update();
-                                    changed = true;
-                                }
+                                if ( storedentry != null )                  // if we have it in the DB, delete it
+                                    storedentry.Delete();
                             }
                             else
-                            {                   // not there, add it..
-                                s.EDSM = true;
-                                s.Add();        // add to db..
-                                changed = true;
+                            {
+                                if (storedentry != null)  // if stored already..
+                                {
+                                    if (!storedentry.Systems.SequenceEqual(newentry.Systems)) // systems changed, we need to reset..
+                                    {
+                                        storedentry.Delete();   // delete the old one.. systems may be in a different order, and there is no ordering except by ID in the DB
+                                        newentry.EDSM = true;
+                                        newentry.Add();        // add to db..
+                                        changed = true;
+                                    }
+                                    else if (storedentry.EndDate == null || storedentry.StartDate == null || storedentry.EndDate.Value != newentry.EndDate.Value || storedentry.StartDate.Value != newentry.StartDate.Value)    // times change, just update
+                                    {
+                                        storedentry.StartDate = newentry.StartDate.Value;      // update time and date but keep the expedition ID
+                                        storedentry.EndDate = newentry.EndDate.Value;
+                                        storedentry.EDSM = true;
+                                        storedentry.Update();
+                                        changed = true;
+                                    }
+                                    else if (!storedentry.EDSM)    // backwards with previous system, set EDSM flag on these, prevents overwrite
+                                    {
+                                        storedentry.EDSM = true;    // ensure EDSM flag is set..
+                                        storedentry.Update();
+                                        changed = true;
+                                    }
+                                }
+                                else
+                                {                   // not there, add it..
+                                    newentry.EDSM = true;
+                                    newentry.Add();        // add to db..
+                                    changed = true;
+                                }
                             }
                         }
 
                     }
                 }
+                catch { }       // bad file, try again
             }
-            catch { }
 
             return changed;
         }
