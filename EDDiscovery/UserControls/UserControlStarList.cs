@@ -67,7 +67,7 @@ namespace EDDiscovery.UserControls
         private string DbAutoTop { get { return "StarListControlAutoTop" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
         private string DbEDSM { get { return "StarListControlEDSM" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
         private string DbShowJumponium { get { return "StarListControlEDSM" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
-        private string DbShowClasses { get { return "StarListControlEDSM" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
+        private string DbShowClasses { get { return "StarListControlEDSM" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }        
 
         private Dictionary<string, List<HistoryEntry>> systemsentered = new Dictionary<string, List<HistoryEntry>>();
         private Dictionary<long, DataGridViewRow> rowsbyjournalid = new Dictionary<long, DataGridViewRow>();
@@ -94,10 +94,12 @@ namespace EDDiscovery.UserControls
             dataGridViewStarList.RowTemplate.Height = 26;
             dataGridViewStarList.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.DisplayedCells;     // NEW! appears to work https://msdn.microsoft.com/en-us/library/74b2wakt(v=vs.110).aspx
 
+            dataGridViewStarList.Columns[2].ValueType = typeof(Int32);            
+
             checkBoxEDSM.Checked = SQLiteDBClass.GetSettingBool(DbEDSM, false);
             
             discoveryform.OnHistoryChange += HistoryChanged;
-            discoveryform.OnNewEntry += AddNewEntry;
+            discoveryform.OnNewEntry += AddNewEntry;            
         }
                
         public override void LoadLayout()
@@ -159,7 +161,7 @@ namespace EDDiscovery.UserControls
 
             if (rowno >= 0)
             {
-                dataGridViewStarList.CurrentCell = dataGridViewStarList.Rows[rowno].Cells[pos.Item2];       // its the current cell which needs to be set, moves the row marker as well            currentGridRow = (rowno!=-1) ? 
+                dataGridViewStarList.CurrentCell = dataGridViewStarList.Rows[rowno].Cells[pos.Item2];       // its the current cell which needs to be set, moves the row marker as well currentGridRow = (rowno!=-1) ? 
             }
             else if (dataGridViewStarList.Rows.GetRowCount(DataGridViewElementStates.Visible) > 0)
             {
@@ -198,8 +200,9 @@ namespace EDDiscovery.UserControls
             //string debugt = item.Journalid + "  " + item.System.id_edsm + " " + item.System.GetHashCode() + " "; // add on for debug purposes to a field below
 
             HistoryEntry he = syslist[0];
-
-            object[] rowobj = { EDDiscoveryForm.EDDConfig.DisplayUTC ? he.EventTimeUTC : he.EventTimeLocal, he.System.Name, syslist.Count.ToStringInvariant(), Infoline(syslist) };
+            
+            int visits = syslist.Count;                        
+            object[] rowobj = { EDDiscoveryForm.EDDConfig.DisplayUTC ? he.EventTimeUTC : he.EventTimeLocal, he.System.Name, $"{visits:N0}", Infoline(syslist) };
 
             int rownr;
             if (insert)
@@ -227,7 +230,7 @@ namespace EDDiscovery.UserControls
             dataGridViewStarList.Rows[rownr].Cells[0].ToolTipText = tip;
             dataGridViewStarList.Rows[rownr].Cells[1].ToolTipText = tip;
             dataGridViewStarList.Rows[rownr].Cells[2].ToolTipText = tip;
-            dataGridViewStarList.Rows[rownr].Cells[3].ToolTipText = tip;
+            dataGridViewStarList.Rows[rownr].Cells[3].ToolTipText = tip;                       
         }
 
         string Infoline(List<HistoryEntry> syslist)
@@ -624,10 +627,6 @@ namespace EDDiscovery.UserControls
             }
         }
 
-        private void dataGridViewTravel_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
-        {
-        }
-
         #endregion
 
         #region TravelHistoryRightClick
@@ -776,39 +775,53 @@ namespace EDDiscovery.UserControls
 
         #endregion
 
-        private void buttonExt1_MouseClick(object sender, MouseEventArgs e)
-        {
-            if (showJumponium == false)
-            {
-                showJumponium = true;                
-                buttonJumponium.BackColor = Color.Violet;
-                HistoryChanged(current_historylist);
-            }
-            else if (showJumponium == true)
-            {
-                showJumponium = false;
-                buttonJumponium.BackColor = Color.Transparent;
-                HistoryChanged(current_historylist);
-            }
-        }
+        #region Events
 
+        // Show/Hide Bodies classes
         private void buttonBodyClasses_MouseClick(object sender, MouseEventArgs e)
         {
             if (showClasses == false)
             {
                 showClasses = true;
-                buttonBodyClasses.BackColor = Color.SandyBrown;
                 HistoryChanged(current_historylist);
             }
             else if (showClasses == true)
             {
                 showClasses = false;
-                buttonBodyClasses.BackColor = Color.Transparent;
                 HistoryChanged(current_historylist);
             }
         }
+
+        // Show/Hide Jumponium notification
+        private void buttonExt1_MouseClick(object sender, MouseEventArgs e)
+        {
+            if (showJumponium == false)
+            {
+                showJumponium = true;                                
+                HistoryChanged(current_historylist);
+            }
+            else if (showJumponium == true)
+            {
+                showJumponium = false;                
+                HistoryChanged(current_historylist);
+            }
+        }
+                
+        // Override of visits column sorting, to properly ordering as integers and not as strings - do not work as expected, yet...
+        private void dataGridViewStarList_SortCompare(object sender, DataGridViewSortCompareEventArgs e)
+        {
+            if (ColumnVisits.Equals(e.Column))
+            {
+                int v1, v2;
+                string s1 = e.CellValue1?.ToString();
+                string s2 = e.CellValue2?.ToString();
+                if (!string.IsNullOrEmpty(s1) && !string.IsNullOrEmpty(s2) && int.TryParse(s1, out v1) && int.TryParse(s2, out v2))
+                {
+                    e.SortResult = v1.CompareTo(v2);
+                    e.Handled = true;
+                }
+            }
+        }
+        #endregion
     }
 }
-
-
-    
