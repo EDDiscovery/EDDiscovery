@@ -47,7 +47,9 @@ namespace EDDiscovery.Actions
             return functions.ContainsKey(name) ? functions[name] : base.FindFunction(name);
         }
 
-        #region Macro Functions
+#if false
+#region Macro Functions
+
 
         protected new bool SystemPath(out string output)
         {
@@ -174,6 +176,7 @@ namespace EDDiscovery.Actions
                 return true;
         }
 
-        #endregion
+#endregion
+#endif
     }
 }

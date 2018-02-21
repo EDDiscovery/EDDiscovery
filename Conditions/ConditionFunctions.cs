@@ -93,8 +93,20 @@ namespace Conditions
 
                         ConditionFunctionHandlers cfh = GetCFH(this, vars, persistentdata, recdepth);
 
+                        if ( funcname.Length>0 && !cfh.SetFunction(funcname))
+                        {
+                            result = "Function '" + funcname + "' does not exist";
+                            return ExpandResult.Failed;
+                        }
+
                         while (true)
                         {
+                            if (!cfh.IsNextParameterAllowed)
+                            {
+                                result = "Too many parameters";
+                                return ExpandResult.Failed;
+                            }
+
                             while (apos < line.Length && char.IsWhiteSpace(line[apos])) // remove white space
                                 apos++;
 
@@ -108,6 +120,12 @@ namespace Conditions
 
                             if (apos < line.Length && (line[apos] == '"' || line[apos] == '\''))
                             {
+                                if (!cfh.IsNextStringAllowed)
+                                {
+                                    result = "String not allowed in parameter " + (cfh.paras.Count + 1);
+                                    return ExpandResult.Failed;
+                                }
+
                                 char quote = line[apos++];
 
                                 string res = "";
@@ -139,11 +157,11 @@ namespace Conditions
                                     return sexpresult;
                                 }
 
-                                cfh.paras.Add(new ConditionFunctionHandlers.Parameter() { value = resexp, isstring = true });
+                                cfh.ProcessParameter(resexp, true);
                             }
                             else
                             {
-                                if (funcname.Length > 0)        // functions can have () embedded .. in literals
+                                if (cfh.IsFunction)        // functions can have () embedded .. in literals
                                 {
                                     int blevel = 0;
                                     while (apos < line.Length && (blevel > 0 || "), ".IndexOf(line[apos]) == -1))
@@ -164,13 +182,13 @@ namespace Conditions
 
                                 if (apos == start)
                                 {
-                                    result = "Missing variable name at '" + line.Substring(startexpression, apos - startexpression) + "'";
+                                    result = "Missing text/varname at '" + line.Substring(startexpression, apos - startexpression) + "'";
                                     return ExpandResult.Failed;
                                 }
 
                                 string res = line.Substring(start, apos - start);
 
-                                if (funcname.Length > 0 && line.Contains("%"))        // function paramters can be expanded if they have a %
+                                if (cfh.IsFunction && line.Contains("%"))        // function paramters can be expanded if they have a %
                                 {
                                     string resexp;          // expand out any strings.. recursion
                                     ExpandResult sexpresult = ExpandStringFull(res, out resexp, recdepth + 1);
@@ -188,8 +206,7 @@ namespace Conditions
                                     res = vars.Qualify(res);
                                 }
 
-                                cfh.paras.Add(new ConditionFunctionHandlers.Parameter() { value = res, isstring = false });
-                               
+                                cfh.ProcessParameter(res, false);
                             }
 
                             while (apos < line.Length && char.IsWhiteSpace(line[apos]))
@@ -209,9 +226,9 @@ namespace Conditions
 
                         string expand = null;
 
-                        if (funcname.Length > 0)        // functions!
+                        if (cfh.IsFunction)        // functions!
                         {
-                            if (!cfh.RunFunction(funcname, out expand))
+                            if (!cfh.RunFunction(out expand))
                             {
                                 result = "Function " + funcname + ": " + expand;
                                 return ExpandResult.Failed;
@@ -224,16 +241,11 @@ namespace Conditions
                         }
                         else
                         {                               // variables
-                            if (cfh.paras[0].isstring)
-                            {
-                                result = "Must be a variable not a string for non function expansions";
-                                return ExpandResult.Failed;
-                            }
-                            else if (vars.Exists(cfh.paras[0].value))
-                                expand = vars[cfh.paras[0].value];
+                            if (vars.Exists(cfh.paras[0].Value))
+                                expand = vars[cfh.paras[0].Value];
                             else
                             {
-                                result = "Variable " + cfh.paras[0].value + " does not exist";
+                                result = "Variable '" + cfh.paras[0].Value + "' does not exist";
                                 return ExpandResult.Failed;
                             }
                         }
@@ -260,8 +272,5 @@ namespace Conditions
 
         #endregion
     }
-
-    // Class holding parameters and can call functions.  inherit from this, and override find function to add on functions
-    // done this way for historical reasons instead of having a set of ptrs to classes handling functions.
 
 }
