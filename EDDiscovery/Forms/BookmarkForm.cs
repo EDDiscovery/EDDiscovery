@@ -174,6 +174,7 @@ namespace EDDiscovery.Forms
             var edsm = new EDSMClass();
             edsmurl = edsm.GetUrlToEDSMSystem(name);
             userControlSurfaceBookmarks1.NewForSystem(name);
+            buttonOK.Enabled = true;
         }
 
         public void NewSystemBookmark(string tme)

@@ -71,7 +71,7 @@ namespace EDDiscovery.Actions
                         string wildcard = sp.NextQuotedWord() ?? "*";
 
                         int bcount = 1;
-                        foreach (BookmarkClass b in BookmarkClass.Bookmarks)
+                        foreach (BookmarkClass b in GlobalBookMarkList.Bookmarks)
                         {
                             if (b.Name.WildCardMatch(wildcard))
                             {
@@ -112,7 +112,7 @@ namespace EDDiscovery.Actions
                         }
 
                         ap[prefix + "MatchCount"] = (bcount-1).ToStringInvariant();
-                        ap[prefix + "TotalCount"] = BookmarkClass.Bookmarks.Count.ToStringInvariant();
+                        ap[prefix + "TotalCount"] = GlobalBookMarkList.Bookmarks.Count.ToStringInvariant();
 
                     }
                     else
@@ -135,15 +135,15 @@ namespace EDDiscovery.Actions
 
                             if (x != null && y != null && z != null)
                             {
-                                BookmarkClass bk = BookmarkClass.FindBookmark(name, region);
-                                BookmarkClass.AddOrUpdateBookmark(bk, !region, name, x.Value, y.Value, z.Value, DateTime.Now, notes);
+                                BookmarkClass bk = GlobalBookMarkList.FindBookmark(name, region);
+                                GlobalBookMarkList.AddOrUpdateBookmark(bk, !region, name, x.Value, y.Value, z.Value, DateTime.Now, notes);
                             }
                             else
                                 ap.ReportError("Missing parameters in Add");
                         }
                         else if (cmdname.Equals("DELETE", StringComparison.InvariantCultureIgnoreCase))
                         {
-                            BookmarkClass bk = BookmarkClass.FindBookmark(name, region);
+                            BookmarkClass bk = GlobalBookMarkList.FindBookmark(name, region);
                             if (bk != null)
                                 bk.Delete();
                             else
@@ -155,9 +155,9 @@ namespace EDDiscovery.Actions
 
                             if (notes != null)
                             {
-                                BookmarkClass bk = BookmarkClass.FindBookmark(name, region);
+                                BookmarkClass bk = GlobalBookMarkList.FindBookmark(name, region);
                                 if (bk != null)
-                                    BookmarkClass.UpdateBookmarkNotes(bk, notes);
+                                    bk.UpdateNotes(notes);
                                 else
                                     ap.ReportError("UpdateNote cannot find star or region " + name);
                             }
@@ -183,15 +183,15 @@ namespace EDDiscovery.Actions
                                 if (sys != null)
                                 {
                                     string notes = sp.NextQuotedWord();     // valid for it to be null, means don't override or set to empty
-                                    BookmarkClass bk = BookmarkClass.FindBookmarkOnSystem(name);
-                                    BookmarkClass.AddOrUpdateBookmark(bk, true, name, sys.X, sys.Y, sys.Z, DateTime.Now, notes);
+                                    BookmarkClass bk = GlobalBookMarkList.FindBookmarkOnSystem(name);
+                                    GlobalBookMarkList.AddOrUpdateBookmark(bk, true, name, sys.X, sys.Y, sys.Z, DateTime.Now, notes);
                                 }
                                 else
                                     ap.ReportError("AddStar cannot find star " + name + " in database");
                             }
                             else
                             {
-                                BookmarkClass bk = BookmarkClass.FindBookmarkOnSystem(name);
+                                BookmarkClass bk = GlobalBookMarkList.FindBookmarkOnSystem(name);
 
                                 if (bk != null)
                                 {
