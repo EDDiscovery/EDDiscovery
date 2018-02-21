@@ -16,6 +16,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 namespace Conditions
 {
@@ -43,7 +44,7 @@ namespace Conditions
 
                 functions.Add("escapechar", new FuncEntry(EscapeChar, 1, 1, AllMacros, AllStrings));   // check var, can be string
                 functions.Add("eval", new FuncEntry(Eval, 1, 2, NoMacros, FirstString));   // can be string, can be variable, p2 is not a variable, and can't be a string
-                functions.Add("exist", new FuncEntry(Exists, 1, 20, NoMacros, AllStrings)); // no macros, all literal, can be strings
+                functions.Add("exist", new FuncEntry(Exist, 1, 20, NoMacros, AllStrings)); // no macros, all literal, can be strings
                 functions.Add("existsdefault", new FuncEntry(ExistsDefault, 2, 2, SecondMacro, AllStrings));   // first is a macro but can not exist, second is a string or macro which must exist
                 functions.Add("expand", new FuncEntry(Expand, 1, 20, AllMacros, AllStrings)); // check var, can be string (if so expanded)
                 functions.Add("expandarray", new FuncEntry(ExpandArray, 4, 5, SecondMacro, 3 + 16));  // var 1 is text root/string, not var, not string, var 2 can be var or string, var 3/4 is integers or variables, checked in function
@@ -51,6 +52,7 @@ namespace Conditions
 
                 functions.Add("filelength", new FuncEntry(FileLength, 1, 1, AllMacros, FirstString));   // check var, can be string
                 functions.Add("fileexists", new FuncEntry(FileExists, 1, 20, AllMacros, AllStrings));   // check var, can be string
+                functions.Add("filelist", new FuncEntry(FileList, 1, 2, AllMacros, AllStrings));   // check var, can be string
                 functions.Add("findarray", new FuncEntry(FindArray, 2, 2, SecondMacro, AllStrings));   //1 = literal or string, 2 = macro or string
                 functions.Add("findprocess", new FuncEntry(FindProcess, 1, 1, AllMacros, AllStrings));   //macro/string
                 functions.Add("findline", new FuncEntry(FindLine, 2, 2, AllMacros, SecondString));   //check var1 and var2, second can be a string
@@ -84,7 +86,10 @@ namespace Conditions
 
                 functions.Add("ispresent", new FuncEntry(Ispresent, 2, 3, SecondMacro, SecondString));   // 1 may not be there, 2 either a macro or can be string. 3 is optional and a var or literal
 
+                functions.Add("i", new FuncEntry(IndirectI, 2, 2, FirstMacro, SecondString));   // first is a macro name, second is literal or string
+
                 functions.Add("join", new FuncEntry(Join, 3, 20, AllMacros, AllStrings));   // all can be string, check var
+                functions.Add("jsonparse", new FuncEntry(Jsonparse, 2, 2, AllMacros, AllStrings));   // all can be string, check var
 
                 functions.Add("killprocess", new FuncEntry(KillProcess, 1, 1, AllMacros, NoStrings));   //first is macro
 
@@ -101,6 +106,7 @@ namespace Conditions
                 functions.Add("phrase", new FuncEntry(Phrase, 1, 1, AllMacros, AllMacros));
 
                 functions.Add("random", new FuncEntry(Random, 1, 1, NoMacros, NoStrings));   // no change var, not string
+                functions.Add("readalltext", new FuncEntry(ReadAllText, 1, 1, AllMacros, AllStrings));
                 functions.Add("readline", new FuncEntry(ReadLineFile, 2, 2, FirstMacro, NoStrings));   // first must be a macro, second is a literal varname only
                 functions.Add("regex", new FuncEntry(Regex, 3, 3, AllMacros, AllStrings)); // var/string for all
                 functions.Add("replace", new FuncEntry(Replace, 3, 3, AllMacros, AllStrings)); // var/string for all
@@ -149,7 +155,7 @@ namespace Conditions
 
         #region Macro Functions
 
-        protected bool Exists(out string output)
+        protected bool Exist(out string output)
         {
             foreach (Parameter s in paras)
             {
@@ -240,6 +246,29 @@ namespace Conditions
             }
 
             return true;
+        }
+
+        protected bool IndirectI(out string output)
+        {
+            if (recdepth > 9)
+            {
+                output = "Recursion detected - aborting expansion";
+                return false;
+            }
+
+            string mname = vars[paras[0].value] + paras[1].value;        // expand first part, already checked.  Plus the second literal part
+
+            if (vars.Exists(mname))
+            {
+                string value = vars[mname];
+                ConditionFunctions.ExpandResult result = caller.ExpandStringFull(value, out output, recdepth + 1);
+
+                return result != ConditionFunctions.ExpandResult.Failed;
+            }
+            else
+                output = "Indirect Variable '" + mname + "' does not exist";
+
+            return false;
         }
 
         #endregion
@@ -1281,6 +1310,26 @@ namespace Conditions
             return true;
         }
 
+        protected bool FileList(out string output)
+        {
+            string path = paras[0].isstring ? paras[0].value : vars[paras[0].value];
+            string filename = paras[1].isstring ? paras[1].value : vars[paras[1].value];
+            try
+            {
+                var filelist = Directory.EnumerateFiles(path,filename, SearchOption.TopDirectoryOnly).ToList();
+                for( int i = 0; i < filelist.Count; i++)
+                    filelist[i] = "\"" + filelist[i] + "\"";
+
+                output = string.Join(",", filelist);
+                return true;
+            }
+            catch
+            {
+                output = "Directory not found";
+                return false;
+            }
+        }
+
         protected bool DirExists(out string output)
         {
             foreach (Parameter p in paras)
@@ -1378,6 +1427,22 @@ namespace Conditions
 
             return false;
         }
+
+        protected bool ReadAllText(out string output)
+        {
+            string file = paras[0].isstring ? paras[0].value : vars[paras[0].value];
+
+            try
+            {
+                output = File.ReadAllText(file);
+                return true;
+            }
+            catch { }
+
+            output = "File not found:" + file;
+            return false;
+        }
+
 
         protected virtual bool VerifyFileAccess(string file, FileMode fm)      // override to provide protection
         {
@@ -1538,6 +1603,27 @@ namespace Conditions
         {
             output = Environment.TickCount.ToStringInvariant();
             return true;
+        }
+
+        protected bool Jsonparse(out string output)
+        {
+            string json = (paras[0].isstring) ? paras[0].value : vars[paras[0].value];
+            string varprefix = (paras[1].isstring) ? paras[1].value : vars[paras[1].value];
+
+            try
+            {
+                Newtonsoft.Json.Linq.JToken tk = Newtonsoft.Json.Linq.JToken.Parse(json);
+                if (tk != null)
+                {
+                    vars.AddJSONVariables(tk, varprefix);
+                    output = "1";
+                    return true;
+                }
+            }
+            catch { }
+
+            output = "0";
+            return false;
         }
 
         #endregion
