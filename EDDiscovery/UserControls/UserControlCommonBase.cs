@@ -34,6 +34,7 @@ namespace EDDiscovery.UserControls
         protected const int DisplayNumberHistoryBotRight = 1001;
         protected const int DisplayNumberHistoryMidRight = 1002;
         protected const int DisplayNumberHistoryTopRight = 1003;
+        protected const int DisplayNumberHistoryBotCenter = 1004;
 
         public const int DisplayNumberPrimaryTab = 0;               // tabs are 0, or 100+.  0 for the first, 100+ for repeats
         public const int DisplayNumberStartExtraTabs = 100;         // Excepting travelgrid which due to history grid using zero always starts at 100.
