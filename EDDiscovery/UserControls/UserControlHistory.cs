@@ -44,6 +44,8 @@ namespace EDDiscovery.UserControls
         {
             if (name.Equals(tabStripBottom.Name, StringComparison.InvariantCultureIgnoreCase))
                 return tabStripBottom;
+            if (name.Equals(tabStripBottomCenter.Name, StringComparison.InvariantCultureIgnoreCase))
+                return tabStripBottomCenter;
             if (name.Equals(tabStripBottomRight.Name, StringComparison.InvariantCultureIgnoreCase))
                 return tabStripBottomRight;
             if (name.Equals(tabStripMiddleRight.Name, StringComparison.InvariantCultureIgnoreCase))
@@ -66,6 +68,7 @@ namespace EDDiscovery.UserControls
                                                         // then this display, to update its own controls..
 
             TabConfigure(tabStripBottom,"Bottom", DisplayNumberHistoryBotLeft);          // codes are used to save info, 0 = primary (journal/travelgrid), 1..N are popups, these are embedded UCs
+            TabConfigure(tabStripBottomCenter, "Bottom-Center", DisplayNumberHistoryBotCenter);
             TabConfigure(tabStripBottomRight,"Bottom-Right", DisplayNumberHistoryBotRight);
             TabConfigure(tabStripMiddleRight, "Middle-Right", DisplayNumberHistoryMidRight);
             TabConfigure(tabStripTopRight, "Top-Right", DisplayNumberHistoryTopRight);
@@ -142,9 +145,9 @@ namespace EDDiscovery.UserControls
             {
                 splitContainerLeftRight.SplitterDistance(SQLiteDBClass.GetSettingDouble("TravelControlSpliterLR", 0.75));
                 splitContainerLeft.SplitterDistance(SQLiteDBClass.GetSettingDouble("TravelControlSpliterL", 0.75));
+                splitContainerLeftBottom.SplitterDistance(SQLiteDBClass.GetSettingDouble("TravelControlSpliterL", 0.62));
                 splitContainerRightOuter.SplitterDistance(SQLiteDBClass.GetSettingDouble("TravelControlSpliterRO", 0.4));
                 splitContainerRightInner.SplitterDistance(SQLiteDBClass.GetSettingDouble("TravelControlSpliterR", 0.5));
-
             }
 
             userControlTravelGrid.LoadLayout();
@@ -155,11 +158,13 @@ namespace EDDiscovery.UserControls
 
             // saved as the pop out enum value, for historical reasons
             int piindex_bottom = Math.Min(SQLiteDBClass.GetSettingInt("TravelControlBottomTab", (int)(PanelInformation.PanelIDs.Scan)), max);
+            int piindex_bottomcenter = Math.Min(SQLiteDBClass.GetSettingInt("TravelControlBottomCenterTab", (int)(PanelInformation.PanelIDs.Scan)), max);
             int piindex_bottomright = Math.Min(SQLiteDBClass.GetSettingInt("TravelControlBottomRightTab", (int)(PanelInformation.PanelIDs.Log)), max);
             int piindex_middleright = Math.Min(SQLiteDBClass.GetSettingInt("TravelControlMiddleRightTab", (int)(PanelInformation.PanelIDs.StarDistance)), max);
             int piindex_topright = Math.Min(SQLiteDBClass.GetSettingInt("TravelControlTopRightTab", (int)(PanelInformation.PanelIDs.SystemInformation)), max);
 
             tabStripBottom.SelectedIndex = PanelInformation.GetPanelIndexByEnum((PanelInformation.PanelIDs)piindex_bottom);       // translate to image index
+            tabStripBottomCenter.SelectedIndex = PanelInformation.GetPanelIndexByEnum((PanelInformation.PanelIDs)piindex_bottomcenter);       // translate to image index
             tabStripBottomRight.SelectedIndex = PanelInformation.GetPanelIndexByEnum((PanelInformation.PanelIDs)piindex_bottomright);
             tabStripMiddleRight.SelectedIndex = PanelInformation.GetPanelIndexByEnum((PanelInformation.PanelIDs)piindex_middleright);
             tabStripTopRight.SelectedIndex = PanelInformation.GetPanelIndexByEnum((PanelInformation.PanelIDs)piindex_topright);
@@ -170,16 +175,19 @@ namespace EDDiscovery.UserControls
         {
             SQLiteDBClass.PutSettingDouble("TravelControlSpliterLR", splitContainerLeftRight.GetSplitterDistance());
             SQLiteDBClass.PutSettingDouble("TravelControlSpliterL", splitContainerLeft.GetSplitterDistance());
+            SQLiteDBClass.PutSettingDouble("TravelControlSpliterLB", splitContainerLeftBottom.GetSplitterDistance());
             SQLiteDBClass.PutSettingDouble("TravelControlSpliterRO", splitContainerRightOuter.GetSplitterDistance());
             SQLiteDBClass.PutSettingDouble("TravelControlSpliterR", splitContainerRightInner.GetSplitterDistance());
 
             SQLiteDBClass.PutSettingInt("TravelControlBottomRightTab", (int)PanelInformation.PanelList[tabStripBottomRight.SelectedIndex].PopoutID);
             SQLiteDBClass.PutSettingInt("TravelControlBottomTab", (int)PanelInformation.PanelList[tabStripBottom.SelectedIndex].PopoutID);
+            SQLiteDBClass.PutSettingInt("TravelControlBottomCenterTab", (int)PanelInformation.PanelList[tabStripBottomCenter.SelectedIndex].PopoutID);
             SQLiteDBClass.PutSettingInt("TravelControlMiddleRightTab", (int)PanelInformation.PanelList[tabStripMiddleRight.SelectedIndex].PopoutID);
             SQLiteDBClass.PutSettingInt("TravelControlTopRightTab", (int)PanelInformation.PanelList[tabStripTopRight.SelectedIndex].PopoutID);
 
             userControlTravelGrid.Closing();
             ((UserControlCommonBase)(tabStripBottom.CurrentControl)).Closing();
+            ((UserControlCommonBase)(tabStripBottomCenter.CurrentControl)).Closing();
             ((UserControlCommonBase)(tabStripBottomRight.CurrentControl)).Closing();
             ((UserControlCommonBase)(tabStripMiddleRight.CurrentControl)).Closing();
             ((UserControlCommonBase)(tabStripTopRight.CurrentControl)).Closing();
@@ -217,6 +225,8 @@ namespace EDDiscovery.UserControls
                     si = tabStripMiddleRight.CurrentControl as UserControlSysInfo;
                 if (si == null || !si.IsNotesShowing)
                     si = tabStripBottomRight.CurrentControl as UserControlSysInfo;
+                if (si == null || !si.IsNotesShowing)
+                    si = tabStripBottomCenter.CurrentControl as UserControlSysInfo;
 
                 if (si != null && si.IsNotesShowing)      // if its note, and we have a system info window
                 {
