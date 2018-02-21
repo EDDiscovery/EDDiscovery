@@ -233,7 +233,7 @@ namespace Conditions
                                 expand = vars[cfh.paras[0].value];
                             else
                             {
-                                result = "Variable " + cfh.paras[0].value + " does not exist";
+                                result = "Variable '" + cfh.paras[0].value + "' does not exist";
                                 return ExpandResult.Failed;
                             }
                         }
@@ -349,7 +349,7 @@ namespace Conditions
                         }
                         else if (((fe.checkvarmap >> i) & 1) == 1 && !vars.Exists(paras[i].value))
                         {
-                            output = "Variable " + paras[i].value + " does not exist in parameter " + (i + 1).ToString(ct);
+                            output = "Variable '" + paras[i].value + "' does not exist in parameter " + (i + 1).ToString(ct);
                             return false;
                         }
                     }
@@ -360,7 +360,7 @@ namespace Conditions
                 }
             }
             else
-                output = "Does not exist";
+                output = "Function '" + fname + "' does not exist";
 
             return false;
         }

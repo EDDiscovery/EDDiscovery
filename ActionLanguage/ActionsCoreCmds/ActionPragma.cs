@@ -103,7 +103,7 @@ namespace ActionLanguage
                     }
                     else if (cmd.Equals("allowerrors"))
                     {
-                        ap.SetContinueOnErrors(true);
+                        ap.SetContinueOnErrors(false);
                     }
                     else if ( !ap.actioncontroller.Pragma(cmd) )
                     {
