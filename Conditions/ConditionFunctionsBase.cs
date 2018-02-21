@@ -44,7 +44,7 @@ namespace Conditions
 
                 functions.Add("escapechar", new FuncEntry(EscapeChar, 1, 1, AllMacros, AllStrings));   // check var, can be string
                 functions.Add("eval", new FuncEntry(Eval, 1, 2, NoMacros, FirstString));   // can be string, can be variable, p2 is not a variable, and can't be a string
-                functions.Add("exist", new FuncEntry(Exists, 1, 20, NoMacros, AllStrings)); // no macros, all literal, can be strings
+                functions.Add("exist", new FuncEntry(Exist, 1, 20, NoMacros, AllStrings)); // no macros, all literal, can be strings
                 functions.Add("existsdefault", new FuncEntry(ExistsDefault, 2, 2, SecondMacro, AllStrings));   // first is a macro but can not exist, second is a string or macro which must exist
                 functions.Add("expand", new FuncEntry(Expand, 1, 20, AllMacros, AllStrings)); // check var, can be string (if so expanded)
                 functions.Add("expandarray", new FuncEntry(ExpandArray, 4, 5, SecondMacro, 3 + 16));  // var 1 is text root/string, not var, not string, var 2 can be var or string, var 3/4 is integers or variables, checked in function
@@ -85,6 +85,8 @@ namespace Conditions
                 functions.Add("int", new FuncEntry(Int, 2, 2, NoMacros, NoStrings));  // first is macro or lit, second is macro or lit
 
                 functions.Add("ispresent", new FuncEntry(Ispresent, 2, 3, SecondMacro, SecondString));   // 1 may not be there, 2 either a macro or can be string. 3 is optional and a var or literal
+
+                functions.Add("i", new FuncEntry(IndirectI, 2, 2, FirstMacro, SecondString));   // first is a macro name, second is literal or string
 
                 functions.Add("join", new FuncEntry(Join, 3, 20, AllMacros, AllStrings));   // all can be string, check var
                 functions.Add("jsonparse", new FuncEntry(Jsonparse, 2, 2, AllMacros, AllStrings));   // all can be string, check var
@@ -153,7 +155,7 @@ namespace Conditions
 
         #region Macro Functions
 
-        protected bool Exists(out string output)
+        protected bool Exist(out string output)
         {
             foreach (Parameter s in paras)
             {
@@ -244,6 +246,29 @@ namespace Conditions
             }
 
             return true;
+        }
+
+        protected bool IndirectI(out string output)
+        {
+            if (recdepth > 9)
+            {
+                output = "Recursion detected - aborting expansion";
+                return false;
+            }
+
+            string mname = vars[paras[0].value] + paras[1].value;        // expand first part, already checked.  Plus the second literal part
+
+            if (vars.Exists(mname))
+            {
+                string value = vars[mname];
+                ConditionFunctions.ExpandResult result = caller.ExpandStringFull(value, out output, recdepth + 1);
+
+                return result != ConditionFunctions.ExpandResult.Failed;
+            }
+            else
+                output = "Indirect Variable '" + mname + "' does not exist";
+
+            return false;
         }
 
         #endregion
@@ -1414,7 +1439,7 @@ namespace Conditions
             }
             catch { }
 
-            output = "File not read";
+            output = "File not found:" + file;
             return false;
         }
 
