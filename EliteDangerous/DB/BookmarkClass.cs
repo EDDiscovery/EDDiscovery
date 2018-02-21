@@ -288,33 +288,14 @@ namespace EliteDangerousCore.DB
             PlanetaryMarks.AddOrUpdateLocation(planet, placename, comment, latp, longp);
             Update();
         }
-
-        public void DeleteLocation(string planet, string placename)
-        {
-            if (PlanetaryMarks != null)
-            {
-                PlanetaryMarks.DeleteLocation(planet, placename);
-                Update();
-            }
-        }
-		
+        
 		// Update notes
-        public static BookmarkClass UpdateBookmarkNotes(BookmarkClass bk, string notes)
+        public void UpdateNotes(string notes)
         {
-            bk.Note = notes;
-            bk.Update();
-            return bk;
-        }
-
-        // with a found bookmark.. add locations in the system
-        public void AddOrUpdateLocation(string planet, string placename, string comment, double latp, double longp)
-        {
-            if (PlanetaryMarks == null)
-                PlanetaryMarks = new PlanetMarks();
-            PlanetaryMarks.AddOrUpdateLocation(planet, placename, comment, latp, longp);
+            Note = notes;
             Update();
         }
-
+        
         public bool HasLocation(string planet, string placename)
         {
             return PlanetaryMarks != null && PlanetaryMarks.HasLocation(planet, placename);
@@ -374,23 +355,16 @@ namespace EliteDangerousCore.DB
             if (!updating)
                 OnBookmarkRemoved?.Invoke(predicate);
         }
-        // return star mark, not region marks
-        public static BookmarkClass FindBookmarkOnSystem(string name)
-        {
-            // star name may be null if its a region mark
-            BookmarkClass bk = globalbookmarks.Find(x => x.StarName != null && x.StarName.Equals(name, StringComparison.InvariantCultureIgnoreCase));
-            return bk;
-		}
         // return any mark
         public static BookmarkClass FindBookmarkOnRegion(string name)   
         {
-            return globalboookmarks.Find(x => x.Heading != null && x.Name.Equals(x.Heading, StringComparison.InvariantCultureIgnoreCase));
+            return globalbookmarks.Find(x => x.Heading != null && x.Name.Equals(x.Heading, StringComparison.InvariantCultureIgnoreCase));
         }
 
         public static BookmarkClass FindBookmarkOnSystem(string name)
         {
             // star name may be null if its a region mark
-            return globalboookmarks.Find(x => x.StarName != null && x.StarName.Equals(name, StringComparison.InvariantCultureIgnoreCase));
+            return globalbookmarks.Find(x => x.StarName != null && x.StarName.Equals(name, StringComparison.InvariantCultureIgnoreCase));
         }
         public static BookmarkClass FindBookmark(string name , bool region)
         {
