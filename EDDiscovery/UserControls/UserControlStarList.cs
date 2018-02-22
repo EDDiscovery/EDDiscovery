@@ -514,8 +514,11 @@ namespace EDDiscovery.UserControls
 
         private void dataGridViewTravel_ColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
         {
-            DataGridViewSorter.DataGridSort(dataGridViewStarList, e.ColumnIndex);
-            FireChangeSelection();
+            if (e.ColumnIndex != 2)
+            {
+                DataGridViewSorter.DataGridSort(dataGridViewStarList, e.ColumnIndex);
+                FireChangeSelection();
+            }
         }
 
         public void FireChangeSelection() // uccursor requirement
