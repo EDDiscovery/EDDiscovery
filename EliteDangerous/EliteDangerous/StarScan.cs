@@ -251,7 +251,7 @@ namespace EliteDangerousCore
         // used by historylist directly for a single update during play, in foreground..  Also used by above.. so can be either in fore/back
         public bool AddBodyToBestSystem(IBodyNameAndID je, int startindex, List<HistoryEntry> hl, out HistoryEntry he, out JournalLocOrJump jl)
         {
-            if (je.Body == null)
+            if (je.Body == null || je.BodyType == "Station")
             {
                 he = null;
                 jl = null;
