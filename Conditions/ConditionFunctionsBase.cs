@@ -29,41 +29,41 @@ namespace Conditions
                 functions = new Dictionary<string, FuncEntry>();
 
                 //#region Variables
-                functions.Add("exist", new FuncEntry(Exist, 1, 20, FuncEntry.PT.mse)); // no macros, all literal, can be strings
-                functions.Add("existsdefault", new FuncEntry(ExistsDefault, FuncEntry.PT.mse, FuncEntry.PT.MESE ));   // first is a macro but can not exist, second is a string or macro which must exist
-                functions.Add("expand", new FuncEntry(Expand, 1, 20, FuncEntry.PT.MSE)); // check var, can be string (if so expanded)
+                functions.Add("exist", new FuncEntry(Exist, 1, 20, FuncEntry.PT.M)); // no macros, all literal, can be strings
+                functions.Add("existsdefault", new FuncEntry(ExistsDefault, FuncEntry.PT.M, FuncEntry.PT.MESE ));   // first is a macro but can not exist, second is a string or macro which must exist
+                functions.Add("expand", new FuncEntry(Expand, 1, 20, FuncEntry.PT.ME)); // check var, can be string (if so expanded)
 
-                functions.Add("expandarray", new FuncEntry(ExpandArray, 4, FuncEntry.PT.mse, FuncEntry.PT.MESE, FuncEntry.PT.IMESE, FuncEntry.PT.IMESE, FuncEntry.PT.LS));
-                functions.Add("expandvars", new FuncEntry(ExpandVars, 4, FuncEntry.PT.mse, FuncEntry.PT.MESE, FuncEntry.PT.IMESE, FuncEntry.PT.IMESE, FuncEntry.PT.LS ));   // var 1 is text root/string, not var, not string, var 2 can be var or string, var 3/4 is integers or variables, checked in function
-                //functions.Add("findarray", new FuncEntry(FindArray, 2, FuncEntry.PT.MS, FuncEntry.PT.MELS, FuncEntry.PT.MELS ));   //1 = literal or string, 2 = macro or string
-                functions.Add("indirect", new FuncEntry(Indirect, 1, 20, FuncEntry.PT.MSE));   // check var
-                functions.Add("i", new FuncEntry(IndirectI, FuncEntry.PT.MSE, FuncEntry.PT.LS));   // first is a macro name, second is literal or string
-                functions.Add("ispresent", new FuncEntry(Ispresent, 2, FuncEntry.PT.mse, FuncEntry.PT.MESE, FuncEntry.PT.LmeSE)); // 1 may not be there, 2 either a macro or can be string. 3 is optional and a var or literal
+                functions.Add("expandarray", new FuncEntry(ExpandArray, 4, FuncEntry.PT.M, FuncEntry.PT.MESE, FuncEntry.PT.ImeSE, FuncEntry.PT.ImeSE, FuncEntry.PT.LS));
+                functions.Add("expandvars", new FuncEntry(ExpandVars, 4, FuncEntry.PT.M, FuncEntry.PT.MESE, FuncEntry.PT.ImeSE, FuncEntry.PT.ImeSE, FuncEntry.PT.LS ));   // var 1 is text root/string, not var, not string, var 2 can be var or string, var 3/4 is integers or variables, checked in function
+                functions.Add("findarray", new FuncEntry(FindArray, 2, FuncEntry.PT.M, FuncEntry.PT.MESE, FuncEntry.PT.MESE ));   
+                functions.Add("indirect", new FuncEntry(Indirect, 1, 20, FuncEntry.PT.ME));   // check var
+                functions.Add("i", new FuncEntry(IndirectI, FuncEntry.PT.ME, FuncEntry.PT.LS));   // first is a macro name, second is literal or string
+                functions.Add("ispresent", new FuncEntry(Ispresent, 2, FuncEntry.PT.M, FuncEntry.PT.MESE, FuncEntry.PT.LmeSE)); // 1 may not be there, 2 either a macro or can be string. 3 is optional and a var or literal
                 //#endregion
 
                 //#region Numbers
-                functions.Add("abs", new FuncEntry(Abs, FuncEntry.PT.FMESE, FuncEntry.PT.LmeSE));  // first is macro or lit. second is macro or literal
-                functions.Add("int", new FuncEntry(Int, FuncEntry.PT.IMESE, FuncEntry.PT.LmeSE));  // first is macro or lit, second is macro or lit
+                functions.Add("abs", new FuncEntry(Abs, FuncEntry.PT.FmeSE, FuncEntry.PT.LmeSE));  // first is macro or lit. second is macro or literal
+                functions.Add("int", new FuncEntry(Int, FuncEntry.PT.ImeSE, FuncEntry.PT.LmeSE));  // first is macro or lit, second is macro or lit
                 functions.Add("eval", new FuncEntry(Eval, 1, FuncEntry.PT.LmeSE, FuncEntry.PT.LS));   // can be string, can be variable, can be literal p2 is not a variable, and can't be a string
-                functions.Add("floor", new FuncEntry(Floor, FuncEntry.PT.FMESE, FuncEntry.PT.LmeSE));     // first is macros or lit, second is macro or literal
-                functions.Add("hnum", new FuncEntry(Hnum, FuncEntry.PT.FMESE, FuncEntry.PT.LmeSE));   // para 1 literal or var, para 2 string, literal or var
+                functions.Add("floor", new FuncEntry(Floor, FuncEntry.PT.FmeSE, FuncEntry.PT.LmeSE));     // first is macros or lit, second is macro or literal
+                functions.Add("hnum", new FuncEntry(Hnum, FuncEntry.PT.FmeSE, FuncEntry.PT.LmeSE));   // para 1 literal or var, para 2 string, literal or var
 
-                functions.Add("iftrue", new FuncEntry(Iftrue, 2, FuncEntry.PT.IMESE, FuncEntry.PT.ms, FuncEntry.PT.ms));   // check var1-3, allow strings var1-3
-                functions.Add("iffalse", new FuncEntry(Iffalse, 2, FuncEntry.PT.IMESE, FuncEntry.PT.ms, FuncEntry.PT.ms));   // check var1-3, allow strings var1-3
-                functions.Add("ifzero", new FuncEntry(Ifzero, 2, FuncEntry.PT.FMESE, FuncEntry.PT.ms, FuncEntry.PT.ms));   // check var1-3, allow strings var1-3
-                functions.Add("ifnonzero", new FuncEntry(Ifnonzero, 2, FuncEntry.PT.FMESE, FuncEntry.PT.ms, FuncEntry.PT.ms));   // check var1-3, allow strings var1-3
+                functions.Add("iftrue", new FuncEntry(Iftrue, 2, FuncEntry.PT.ImeSE, FuncEntry.PT.ms, FuncEntry.PT.ms));   // check var1-3, allow strings var1-3
+                functions.Add("iffalse", new FuncEntry(Iffalse, 2, FuncEntry.PT.ImeSE, FuncEntry.PT.ms, FuncEntry.PT.ms));   // check var1-3, allow strings var1-3
+                functions.Add("ifzero", new FuncEntry(Ifzero, 2, FuncEntry.PT.FmeSE, FuncEntry.PT.ms, FuncEntry.PT.ms));   // check var1-3, allow strings var1-3
+                functions.Add("ifnonzero", new FuncEntry(Ifnonzero, 2, FuncEntry.PT.FmeSE, FuncEntry.PT.ms, FuncEntry.PT.ms));   // check var1-3, allow strings var1-3
 
-                functions.Add("ifeq", new FuncEntry(Ifnumequal, 3, FuncEntry.PT.FMESEblk, FuncEntry.PT.FMESE, FuncEntry.PT.ms, FuncEntry.PT.ms, FuncEntry.PT.ms));
-                functions.Add("ifne", new FuncEntry(Ifnumnotequal, 3, FuncEntry.PT.FMESEblk, FuncEntry.PT.FMESE, FuncEntry.PT.ms, FuncEntry.PT.ms, FuncEntry.PT.ms));
-                functions.Add("ifgt", new FuncEntry(Ifnumgreater, 3, FuncEntry.PT.FMESEblk, FuncEntry.PT.FMESE, FuncEntry.PT.ms, FuncEntry.PT.ms, FuncEntry.PT.ms));
-                functions.Add("iflt", new FuncEntry(Ifnumless, 3, FuncEntry.PT.FMESEblk, FuncEntry.PT.FMESE, FuncEntry.PT.ms, FuncEntry.PT.ms, FuncEntry.PT.ms));
-                functions.Add("ifge", new FuncEntry(Ifnumgreaterequal, 3, FuncEntry.PT.FMESEblk, FuncEntry.PT.FMESE, FuncEntry.PT.ms, FuncEntry.PT.ms, FuncEntry.PT.ms));
-                functions.Add("ifle", new FuncEntry(Ifnumlessequal, 3, FuncEntry.PT.FMESEblk, FuncEntry.PT.FMESE, FuncEntry.PT.ms, FuncEntry.PT.ms, FuncEntry.PT.ms));
+                functions.Add("ifeq", new FuncEntry(Ifnumequal, 3, FuncEntry.PT.FmeSEBlk, FuncEntry.PT.FmeSE, FuncEntry.PT.ms, FuncEntry.PT.ms, FuncEntry.PT.ms));
+                functions.Add("ifne", new FuncEntry(Ifnumnotequal, 3, FuncEntry.PT.FmeSEBlk, FuncEntry.PT.FmeSE, FuncEntry.PT.ms, FuncEntry.PT.ms, FuncEntry.PT.ms));
+                functions.Add("ifgt", new FuncEntry(Ifnumgreater, 3, FuncEntry.PT.FmeSEBlk, FuncEntry.PT.FmeSE, FuncEntry.PT.ms, FuncEntry.PT.ms, FuncEntry.PT.ms));
+                functions.Add("iflt", new FuncEntry(Ifnumless, 3, FuncEntry.PT.FmeSEBlk, FuncEntry.PT.FmeSE, FuncEntry.PT.ms, FuncEntry.PT.ms, FuncEntry.PT.ms));
+                functions.Add("ifge", new FuncEntry(Ifnumgreaterequal, 3, FuncEntry.PT.FmeSEBlk, FuncEntry.PT.FmeSE, FuncEntry.PT.ms, FuncEntry.PT.ms, FuncEntry.PT.ms));
+                functions.Add("ifle", new FuncEntry(Ifnumlessequal, 3, FuncEntry.PT.FmeSEBlk, FuncEntry.PT.FmeSE, FuncEntry.PT.ms, FuncEntry.PT.ms, FuncEntry.PT.ms));
 
-                functions.Add("random", new FuncEntry(Random, FuncEntry.PT.IMESE));
-                functions.Add("round", new FuncEntry(RoundCommon, FuncEntry.PT.FMESE, FuncEntry.PT.IMESE, FuncEntry.PT.LmeSE));
-                functions.Add("roundnz", new FuncEntry(RoundCommon, FuncEntry.PT.FMESE, FuncEntry.PT.IMESE, FuncEntry.PT.LmeSE, FuncEntry.PT.IMESE));
-                functions.Add("roundscale", new FuncEntry(RoundCommon, FuncEntry.PT.FMESE, FuncEntry.PT.IMESE, FuncEntry.PT.LmeSE, FuncEntry.PT.IMESE, FuncEntry.PT.FMESE));
+                functions.Add("random", new FuncEntry(Random, FuncEntry.PT.ImeSE));
+                functions.Add("round", new FuncEntry(RoundCommon, FuncEntry.PT.FmeSE, FuncEntry.PT.ImeSE, FuncEntry.PT.LmeSE));
+                functions.Add("roundnz", new FuncEntry(RoundCommon, FuncEntry.PT.FmeSE, FuncEntry.PT.ImeSE, FuncEntry.PT.LmeSE, FuncEntry.PT.ImeSE));
+                functions.Add("roundscale", new FuncEntry(RoundCommon, FuncEntry.PT.FmeSE, FuncEntry.PT.ImeSE, FuncEntry.PT.LmeSE, FuncEntry.PT.ImeSE, FuncEntry.PT.FmeSE));
 
                 //#endregion
 
@@ -79,7 +79,7 @@ namespace Conditions
 
                 functions.Add("indexof", new FuncEntry(IndexOf, FuncEntry.PT.MESE, FuncEntry.PT.MESE));
                 functions.Add("join", new FuncEntry(Join, 3, 20, FuncEntry.PT.MESE));
-                //functions.Add("jsonparse", new FuncEntry(Jsonparse, FuncEntry.PT.MELS, FuncEntry.PT.MELS));
+                functions.Add("jsonparse", new FuncEntry(Jsonparse, FuncEntry.PT.MESE, FuncEntry.PT.MESE));
                 functions.Add("length", new FuncEntry(Length, FuncEntry.PT.MESE));
                 functions.Add("lower", new FuncEntry(Lower, 1, 20, FuncEntry.PT.MESE));
                 functions.Add("phrase", new FuncEntry(Phrase, FuncEntry.PT.MESE));
@@ -87,61 +87,60 @@ namespace Conditions
                 functions.Add("regex", new FuncEntry(Regex, FuncEntry.PT.MESE, FuncEntry.PT.MESE, FuncEntry.PT.MESE));
                 functions.Add("replace", new FuncEntry(Replace, FuncEntry.PT.MESE, FuncEntry.PT.MESE, FuncEntry.PT.MESE));
                 functions.Add("replacevar", new FuncEntry(ReplaceVar,  FuncEntry.PT.MESE, FuncEntry.PT.LmeSE));
-                //functions.Add("rs", new FuncEntry(ReplaceVarSC, FuncEntry.PT.MELS, FuncEntry.PT.LMeLS)); // var/string, literal/var/string
-                //functions.Add("rv", new FuncEntry(ReplaceVar,  FuncEntry.PT.MELS, FuncEntry.PT.LMeLS)); // var/string, literal/var/string
+                functions.Add("rv", new FuncEntry(ReplaceVar, FuncEntry.PT.MESE, FuncEntry.PT.LmeSE)); // var/string, literal/var/string
+                functions.Add("rs", new FuncEntry(ReplaceVarSC, FuncEntry.PT.MESE, FuncEntry.PT.LmeSE)); // var/string, literal/var/string
                 functions.Add("replaceescapechar", new FuncEntry(ReplaceEscapeChar, FuncEntry.PT.MESE));
 
-                //functions.Add("sc", new FuncEntry(SplitCaps, FuncEntry.PT.MELS));
+                //functions.Add("sc", new FuncEntry(SplitCaps, FuncEntry.PT.MESE));
                 functions.Add("splitcaps", new FuncEntry(SplitCaps, FuncEntry.PT.MESE));
-                functions.Add("substring", new FuncEntry(SubString, FuncEntry.PT.MESE, FuncEntry.PT.IMESE, FuncEntry.PT.IMESE));
+                functions.Add("substring", new FuncEntry(SubString, FuncEntry.PT.MESE, FuncEntry.PT.ImeSE, FuncEntry.PT.ImeSE));
                 functions.Add("trim", new FuncEntry(Trim, FuncEntry.PT.MESE));
                 functions.Add("upper", new FuncEntry(Upper, 1, 20, FuncEntry.PT.MESE));
-                functions.Add("wordof", new FuncEntry(WordOf, 2, FuncEntry.PT.MESE, FuncEntry.PT.IMESE, FuncEntry.PT.MESE));
+                functions.Add("wordof", new FuncEntry(WordOf, 2, FuncEntry.PT.MESE, FuncEntry.PT.ImeSE, FuncEntry.PT.MESE));
                 functions.Add("wordlistcount", new FuncEntry(WordListCount, FuncEntry.PT.MESE));
-                functions.Add("wordlistentry", new FuncEntry(WordListEntry, FuncEntry.PT.MESE, FuncEntry.PT.IMESE));
+                functions.Add("wordlistentry", new FuncEntry(WordListEntry, FuncEntry.PT.MESE, FuncEntry.PT.ImeSE));
                 //#endregion
 
-                //#region Files
-                //functions.Add("closefile", new FuncEntry(CloseFile, FuncEntry.PT.M));
-                //functions.Add("direxists", new FuncEntry(DirExists, 1,20, FuncEntry.PT.MELS));
-                //functions.Add("fileexists", new FuncEntry(FileExists, 1, 20, FuncEntry.PT.MELS));
-                //functions.Add("filelist", new FuncEntry(FileList, FuncEntry.PT.MELS, FuncEntry.PT.MELS));
-                //functions.Add("filelength", new FuncEntry(FileLength, FuncEntry.PT.MELS));
-                //functions.Add("findline", new FuncEntry(FindLine, FuncEntry.PT.MELS, FuncEntry.PT.MELS));
-                //functions.Add("mkdir", new FuncEntry(MkDir, FuncEntry.PT.MELS));
-                //functions.Add("openfile", new FuncEntry(OpenFile, FuncEntry.PT.MNP, FuncEntry.PT.MELS, FuncEntry.PT.LMe));
-                //functions.Add("readline", new FuncEntry(ReadLineFile, FuncEntry.PT.M, FuncEntry.PT.M));
-                //functions.Add("readalltext", new FuncEntry(ReadAllText, FuncEntry.PT.MELS));
+                #region Files
+                functions.Add("closefile", new FuncEntry(CloseFile, FuncEntry.PT.ME));
+                functions.Add("direxists", new FuncEntry(DirExists, 1,20, FuncEntry.PT.MESE));
+                functions.Add("fileexists", new FuncEntry(FileExists, 1, 20, FuncEntry.PT.MESE));
+                functions.Add("deletefile", new FuncEntry(DeleteFile, 1, 20, FuncEntry.PT.MESE));
+                functions.Add("filelist", new FuncEntry(FileList, FuncEntry.PT.MESE, FuncEntry.PT.MESE));
+                functions.Add("filelength", new FuncEntry(FileLength, FuncEntry.PT.MESE));
+                functions.Add("findline", new FuncEntry(FindLine, FuncEntry.PT.MESE, FuncEntry.PT.MESE));
+                functions.Add("mkdir", new FuncEntry(MkDir, FuncEntry.PT.MESE));
+                functions.Add("rmdir", new FuncEntry(RmDir, FuncEntry.PT.MESE));
+                functions.Add("openfile", new FuncEntry(OpenFile, FuncEntry.PT.M, FuncEntry.PT.MESE, FuncEntry.PT.LmeSE));
+                functions.Add("readline", new FuncEntry(ReadLineFile, FuncEntry.PT.ME, FuncEntry.PT.M));
+                functions.Add("readalltext", new FuncEntry(ReadAllText, FuncEntry.PT.MESE));
                 functions.Add("safevarname", new FuncEntry(SafeVarName, FuncEntry.PT.MESE));
-                //functions.Add("seek", new FuncEntry(SeekFile, FuncEntry.PT.M, FuncEntry.PT.IME));
-                //functions.Add("tell", new FuncEntry(TellFile, FuncEntry.PT.M));
-                //functions.Add("write", new FuncEntry(WriteFile, FuncEntry.PT.M, FuncEntry.PT.MELS));
-                //functions.Add("writeline", new FuncEntry(WriteLineFile, FuncEntry.PT.M, FuncEntry.PT.MELS));
-                //#endregion
+                functions.Add("seek", new FuncEntry(SeekFile, FuncEntry.PT.ME, FuncEntry.PT.ImeSE));
+                functions.Add("systempath", new FuncEntry(SystemPath, FuncEntry.PT.MESE));
+                functions.Add("tell", new FuncEntry(TellFile, FuncEntry.PT.ME));
+                functions.Add("write", new FuncEntry(WriteFile, FuncEntry.PT.ME, FuncEntry.PT.MESE));
+                functions.Add("writeline", new FuncEntry(WriteLineFile, FuncEntry.PT.ME, FuncEntry.PT.MESE));
+                #endregion
 
-                //#region Processes
-                //functions.Add("closeprocess", new FuncEntry(CloseProcess, FuncEntry.PT.M));
-                //functions.Add("findprocess", new FuncEntry(FindProcess, FuncEntry.PT.MELS));
-                //functions.Add("hasprocessexited", new FuncEntry(HasProcessExited, FuncEntry.PT.M));
-                //functions.Add("killprocess", new FuncEntry(KillProcess, FuncEntry.PT.M));
-                //functions.Add("listprocesses", new FuncEntry(ListProcesses, FuncEntry.PT.L));
-                //functions.Add("startprocess", new FuncEntry(StartProcess, FuncEntry.PT.MELS, FuncEntry.PT.MELS));
-                //functions.Add("waitforprocess", new FuncEntry(WaitForProcess, FuncEntry.PT.M, FuncEntry.PT.IME));
-                //#endregion
+                #region Processes
+                functions.Add("closeprocess", new FuncEntry(CloseProcess, FuncEntry.PT.ME));
+                functions.Add("findprocess", new FuncEntry(FindProcess, FuncEntry.PT.MESE));
+                functions.Add("hasprocessexited", new FuncEntry(HasProcessExited, FuncEntry.PT.ME));
+                functions.Add("killprocess", new FuncEntry(KillProcess, FuncEntry.PT.ME));
+                functions.Add("listprocesses", new FuncEntry(ListProcesses, FuncEntry.PT.M));
+                functions.Add("startprocess", new FuncEntry(StartProcess, FuncEntry.PT.MESE, FuncEntry.PT.MESE));
+                functions.Add("waitforprocess", new FuncEntry(WaitForProcess, FuncEntry.PT.ME, FuncEntry.PT.ImeSE));
+                #endregion
 
-                //#region Time
-                //functions.Add("date", new FuncEntry(Date, FuncEntry.PT.MELS, FuncEntry.PT.LS));   // first is a var or string, second is literal
-                //functions.Add("datetimenow", new FuncEntry(DateTimeNow, FuncEntry.PT.LS));     // literal type
-                //functions.Add("datedelta", new FuncEntry(DateDelta, 2, FuncEntry.PT.MELS, FuncEntry.PT.MELS, FuncEntry.PT.LS));   // date, date, literal
-                //functions.Add("datedeltaformat", new FuncEntry(DateDeltaFormat, FuncEntry.PT.MELS, FuncEntry.PT.MELS, FuncEntry.PT.MELS));   // delta seconds, string, string
-                //functions.Add("datedeltaformatnow", new FuncEntry(DateDeltaFormatNow, 3, FuncEntry.PT.MELS, FuncEntry.PT.MELS, FuncEntry.PT.MELS, FuncEntry.PT.LS));   // macro,macro,macro,literal
-                //functions.Add("datedeltadiffformat", new FuncEntry(DateDeltaDiffFormat, 4, FuncEntry.PT.MELS, FuncEntry.PT.MELS, FuncEntry.PT.MELS, FuncEntry.PT.MELS, FuncEntry.PT.LS));
-                //functions.Add("tickcount", new FuncEntry(TickCount));
-                //#endregion
-
-                //#region Misc
-                //functions.Add("systempath", new FuncEntry(SystemPath, FuncEntry.PT.MELS));
-                //#endregion
+                #region Time
+                functions.Add("date", new FuncEntry(Date, FuncEntry.PT.MESE, FuncEntry.PT.LmeSE));   // first is a var or string, second is literal
+                functions.Add("datetimenow", new FuncEntry(DateTimeNow, FuncEntry.PT.LmeSE));     // literal type
+                functions.Add("datedelta", new FuncEntry(DateDelta, 2, FuncEntry.PT.MESE, FuncEntry.PT.MESE, FuncEntry.PT.LmeSE));   // date, date, literal
+                functions.Add("datedeltaformat", new FuncEntry(DateDeltaFormat, FuncEntry.PT.FmeSE, FuncEntry.PT.MESE, FuncEntry.PT.MESE));   // delta seconds, string, string
+                functions.Add("datedeltaformatnow", new FuncEntry(DateDeltaFormatNow, 3, FuncEntry.PT.MESE, FuncEntry.PT.MESE, FuncEntry.PT.MESE, FuncEntry.PT.LmeSE));   // macro,macro,macro,literal
+                functions.Add("datedeltadiffformat", new FuncEntry(DateDeltaDiffFormat, 4, FuncEntry.PT.MESE, FuncEntry.PT.MESE, FuncEntry.PT.MESE, FuncEntry.PT.MESE, FuncEntry.PT.LmeSE));
+                functions.Add("tickcount", new FuncEntry(TickCount));
+                #endregion
             }
         }
 
@@ -515,6 +514,27 @@ namespace Conditions
         }
 
 
+        protected bool Jsonparse(out string output)
+        {
+            string json = paras[0].Value;
+            string varprefix = paras[1].Value;
+
+            try
+            {
+                Newtonsoft.Json.Linq.JToken tk = Newtonsoft.Json.Linq.JToken.Parse(json);
+                if (tk != null)
+                {
+                    vars.AddJSONVariables(tk, varprefix);
+                    output = "1";
+                    return true;
+                }
+            }
+            catch { }
+
+            output = "0";
+            return false;
+        }
+
         #endregion
 
         #region Numbers
@@ -675,6 +695,7 @@ namespace Conditions
         #endregion
 
 
+        #region Arrays
 
         protected bool ExpandArray(out string output)
         {
@@ -747,176 +768,11 @@ namespace Conditions
         }
 
 
-
-
-    }
-}
-
-
-#if false
-
-
-
-#region Dates
-        
-        private DateTime? ConvertDate(string value, string formatoptions) // t may be null
-        {
-            DateTime res;
-
-            System.Globalization.DateTimeStyles dts = System.Globalization.DateTimeStyles.AssumeUniversal | System.Globalization.DateTimeStyles.AdjustToUniversal;
-
-            string[] t = formatoptions.ToLower().Split(';');
-            if (t != null && Array.IndexOf(t, "local") != -1)
-            {
-                dts = System.Globalization.DateTimeStyles.AssumeLocal;
-            }
-
-            // presuming its univeral means no translation in the values to local.
-            if (DateTime.TryParse(value, System.Globalization.CultureInfo.CreateSpecificCulture("en-US"), dts, out res))
-                return res;
-            else
-                return null;
-        }
-
-
-        protected bool Date(out string output)
-        {
-            string value = (paras[0].isstring) ? paras[0].value : vars[paras[0].value];
-
-            DateTime? cnv = ConvertDate(value, paras[1].value);
-
-            if ( cnv != null )
-            {
-                output = ObjectExtensionsDates.PrintDate(cnv.Value,paras[1].value);
-                return true;
-            }
-            else
-                output = "Date is not in correct en-US format";
-
-            return false;
-        }
-
-        protected bool DateTimeNow(out string output)
-        {
-            output = ObjectExtensionsDates.PrintDate(DateTime.UtcNow, paras[0].value);
-            return true;
-        }
-
-        protected bool DateDelta(out string output)
-        {
-            string value1 = (paras[0].isstring) ? paras[0].value : vars[paras[0].value];
-            string value2 = (paras[1].isstring) ? paras[1].value : vars[paras[1].value];
-            string formatoptions = (paras.Count >= 3) ? paras[2].value : "";
-
-            DateTime? v1 = ConvertDate(value1, formatoptions);
-            DateTime? v2 = ConvertDate(value2, formatoptions);
-
-            if (v1 != null && v2 != null)
-            {
-                if (v1.Value.Kind == DateTimeKind.Local)       // all must be in UTC for the calc..
-                    v1 = v1.Value.ToUniversalTime();
-                if (v2.Value.Kind == DateTimeKind.Local)       // all must be in UTC for the calc..
-                    v2 = v2.Value.ToUniversalTime();
-
-                TimeSpan ts = v2.Value.Subtract(v1.Value);      // does not respect time zones
-                output = ts.TotalSeconds.ToStringInvariant();
-                return true;
-            }
-            else
-                output = "A Date is not in correct en-US format";
-
-            return false;
-        }
-
-
-        protected bool DateDeltaFormat(out string output)
-        {
-            string datum = vars.Exists(paras[0].value) ? vars[paras[0].value] : paras[0].value;
-            string before = (paras[1].isstring) ? paras[1].value : vars[paras[1].value];
-            string after = (paras[2].isstring) ? paras[2].value : vars[paras[2].value];
-
-            double? diff = datum.InvariantParseDoubleNull();
-            if (diff != null)
-            {
-                output = ObjectExtensionsDates.DateDeltaFormatter(diff.Value, before, after);
-                return true;
-            }
-            else
-                output = "time Difference is not a number";
-
-            return false;
-        }
-
-        protected bool DateDeltaFormatNow(out string output)
-        {
-            string value = (paras[0].isstring) ? paras[0].value : vars[paras[0].value];
-            string before = (paras[1].isstring) ? paras[1].value : vars[paras[1].value];
-            string after = (paras[2].isstring) ? paras[2].value : vars[paras[2].value];
-            string formatoptions = (paras.Count >= 4) ? paras[3].value : "";
-
-            DateTime? cnv = ConvertDate(value, formatoptions);
-            if (cnv != null)
-            {
-                if (cnv.Value.Kind == DateTimeKind.Local)       // all must be in UTC for the calc..
-                    cnv = cnv.Value.ToUniversalTime();
-
-                DateTime cur = DateTime.UtcNow;
-                TimeSpan ts = cnv.Value.Subtract(cur);      // does not respect Kind when doing calc.
-                output = ObjectExtensionsDates.DateDeltaFormatter(ts.TotalSeconds, before, after, cnv.Value, formatoptions);
-                return true;
-            }
-            else
-                output = "Not a valid date";
-
-            return false;
-        }
-
-        protected bool DateDeltaDiffFormat(out string output)
-        {
-            string value1 = (paras[0].isstring) ? paras[0].value : vars[paras[0].value];
-            string value2 = (paras[1].isstring) ? paras[1].value : vars[paras[1].value];
-            string before = (paras[2].isstring) ? paras[2].value : vars[paras[2].value];
-            string after = (paras[3].isstring) ? paras[3].value : vars[paras[3].value];
-            string formatoptions = (paras.Count >= 5) ? paras[4].value : "";
-
-            DateTime? v1 = ConvertDate(value1, formatoptions);
-            DateTime? v2 = ConvertDate(value2, formatoptions);
-
-            if (v1 != null && v2 != null)
-            {
-                if (v1.Value.Kind == DateTimeKind.Local)       // all must be in UTC for the calc..
-                    v1 = v1.Value.ToUniversalTime();
-                if (v2.Value.Kind == DateTimeKind.Local)       // all must be in UTC for the calc..
-                    v2 = v2.Value.ToUniversalTime();
-
-                TimeSpan ts = v2.Value.Subtract(v1.Value);      // does not respect Kind when doing calc.
-                output = ObjectExtensionsDates.DateDeltaFormatter(ts.TotalSeconds, before, after, v2.Value, formatoptions);
-                return true;
-            }
-            else
-                output = "Not a valid date";
-
-            return false;
-        }
-
-
-#endregion
-
-
-
-#region Is functions    
-
-
-#endregion
-
-#region Arrays
-
-
         protected bool FindArray(out string output)
         {
-            string arrayroot = paras[0].value;
-            string search = (paras[1].isstring) ? paras[1].value : vars[paras[1].value];
-            string searchafter = (paras.Count >= 3 ) ? (paras[2].isstring ? paras[2].value : vars[paras[2].value] ) : "";
+            string arrayroot = paras[0].Value;
+            string search = paras[1].Value;
+            string searchafter = (paras.Count >= 3) ? paras[2].Value : "";
             bool searchon = searchafter.Length == 0;    // empty searchafter means go immediately
 
             foreach (string key in vars.NameEnumuerable)
@@ -942,9 +798,10 @@ namespace Conditions
             return true;
         }
 
-#endregion
+        #endregion
 
-#region File Functions
+
+        #region File Functions
 
         protected bool OpenFile(out string output)
         {
@@ -954,9 +811,9 @@ namespace Conditions
                 return false;
             }
 
-            string handle = paras[0].value;
-            string file = paras[1].isstring ? paras[1].value : vars[paras[1].value];
-            string mode = vars.Exists(paras[2].value) ? vars[paras[2].value] : paras[2].value;
+            string handle = paras[0].Value;
+            string file = paras[1].Value;
+            string mode = paras[2].Value;
 
             FileMode fm;
             if (Enum.TryParse<FileMode>(mode, true, out fm))
@@ -984,7 +841,7 @@ namespace Conditions
 
         protected bool CloseFile(out string output)
         {
-            int? hv = vars[paras[0].value].InvariantParseIntNull();
+            int? hv = paras[0].Value.InvariantParseIntNull();
 
             if (hv != null && persistentdata != null)
             {
@@ -1001,7 +858,7 @@ namespace Conditions
 
         protected bool ReadLineFile(out string output)
         {
-            int? hv = vars[paras[0].value].InvariantParseIntNull();
+            int? hv = paras[0].Value.InvariantParseIntNull();
 
             if (hv != null && persistentdata != null)
             {
@@ -1011,7 +868,7 @@ namespace Conditions
                         output = "0";
                     else
                     {
-                        vars[paras[1].value] = output;
+                        vars[paras[1].Value] = output;
                         output = "1";
                     }
                     return true;
@@ -1036,8 +893,8 @@ namespace Conditions
         }
         protected bool WriteToFile(out string output, bool lf)
         {
-            int? hv = vars[paras[0].value].InvariantParseIntNull();
-            string line = paras[1].isstring ? paras[1].value : vars[paras[1].value];
+            int? hv = paras[0].Value.InvariantParseIntNull();
+            string line = paras[1].Value;
 
             if (hv != null && persistentdata != null)
             {
@@ -1058,14 +915,11 @@ namespace Conditions
 
         protected bool SeekFile(out string output)
         {
-            int? hv = vars[paras[0].value].InvariantParseIntNull();
-            long? pos = paras[1].value.InvariantParseLongNull();
-            if (pos == null && vars.Exists(paras[1].value))
-                pos = vars[paras[1].value].InvariantParseLongNull();
-
-            if (hv != null && pos != null && persistentdata != null)
+            int? hv = paras[0].Value.InvariantParseIntNull();
+            long pos = paras[1].Long;
+            if (hv != null && persistentdata != null)
             {
-                if (persistentdata.fh.Seek(hv.Value, pos.Value, out output))
+                if (persistentdata.fh.Seek(hv.Value, pos, out output))
                 {
                     output = "1";
                     return true;
@@ -1081,7 +935,7 @@ namespace Conditions
         }
         protected bool TellFile(out string output)
         {
-            int? hv = vars[paras[0].value].InvariantParseIntNull();
+            int? hv = paras[0].Value.InvariantParseIntNull();
             if (hv != null && persistentdata != null)
             {
                 if (persistentdata.fh.Tell(hv.Value, out output))
@@ -1102,9 +956,7 @@ namespace Conditions
         {
             foreach (Parameter p in paras)
             {
-                string s = p.isstring ? p.value : vars[p.value];
-
-                if (!System.IO.File.Exists(s))
+                if (!System.IO.File.Exists(p.Value))
                 {
                     output = "0";
                     return true;
@@ -1115,14 +967,40 @@ namespace Conditions
             return true;
         }
 
+        protected bool DeleteFile(out string output)
+        {
+            output = "0";
+
+            foreach (Parameter p in paras)
+            {
+                try
+                {
+                    if (VerifyFileAction("Delete", p.Value))
+                    {
+                        System.IO.File.Delete(p.Value);
+                    }
+                    else
+                        return true;
+                }
+                catch
+                {
+                    return true;
+                }
+            }
+        
+
+            output = "1";
+            return true;
+        }
+
         protected bool FileList(out string output)
         {
-            string path = paras[0].isstring ? paras[0].value : vars[paras[0].value];
-            string filename = paras[1].isstring ? paras[1].value : vars[paras[1].value];
+            string path = paras[0].Value;
+            string filename = paras[1].Value;
             try
             {
-                var filelist = Directory.EnumerateFiles(path,filename, SearchOption.TopDirectoryOnly).ToList();
-                for( int i = 0; i < filelist.Count; i++)
+                var filelist = Directory.EnumerateFiles(path, filename, SearchOption.TopDirectoryOnly).ToList();
+                for (int i = 0; i < filelist.Count; i++)
                     filelist[i] = "\"" + filelist[i] + "\"";
 
                 output = string.Join(",", filelist);
@@ -1139,9 +1017,7 @@ namespace Conditions
         {
             foreach (Parameter p in paras)
             {
-                string s = p.isstring ? p.value : vars[p.value];
-
-                if (!System.IO.Directory.Exists(s))
+                if (!System.IO.Directory.Exists(p.Value))
                 {
                     output = "0";
                     return true;
@@ -1155,11 +1031,9 @@ namespace Conditions
 
         protected bool FileLength(out string output)
         {
-            string line = paras[0].isstring ? paras[0].value : vars[paras[0].value];
-
             try
             {
-                FileInfo fi = new FileInfo(line);
+                FileInfo fi = new FileInfo(paras[0].Value);
                 output = fi.Length.ToString(ct);
                 return true;
             }
@@ -1173,11 +1047,9 @@ namespace Conditions
 
         protected bool MkDir(out string output)
         {
-            string line = paras[0].isstring ? paras[0].value : vars[paras[0].value];
-
             try
             {
-                DirectoryInfo di = Directory.CreateDirectory(line);
+                Directory.CreateDirectory(paras[0].Value);
                 output = "1";
                 return true;
             }
@@ -1187,13 +1059,27 @@ namespace Conditions
             return true;
         }
 
+        protected bool RmDir(out string output)
+        {
+            output = "0";
+
+            try
+            {
+                if (VerifyFileAction("remove folder", paras[0].Value))
+                {
+                    Directory.Delete(paras[0].Value);
+                    output = "1";
+                }
+            }
+            catch { }
+
+            return true;
+        }
+
         protected bool SystemPath(out string output)
         {
-            string id = paras[0].value;
-
             Environment.SpecialFolder sf;
-
-            if (Enum.TryParse<Environment.SpecialFolder>(id, true, out sf))
+            if (Enum.TryParse<Environment.SpecialFolder>(paras[0].Value, true, out sf))
             {
                 output = Environment.GetFolderPath(sf);
                 return true;
@@ -1207,44 +1093,33 @@ namespace Conditions
 
         protected bool FindLine(out string output)
         {
-            string value = (paras[1].isstring) ? paras[1].value : (vars.Exists(paras[1].value) ? vars[paras[1].value] : null);
-
-            if (value != null)
+            using (System.IO.TextReader sr = new System.IO.StringReader(paras[0].Value))
             {
-                using (System.IO.TextReader sr = new System.IO.StringReader(vars[paras[0].value]))
+                string line;
+                while ((line = sr.ReadLine()) != null)
                 {
-                    string line;
-                    while ((line = sr.ReadLine()) != null)
+                    if (line.IndexOf(paras[1].Value, StringComparison.InvariantCultureIgnoreCase) != -1)
                     {
-                        if (line.IndexOf(value, StringComparison.InvariantCultureIgnoreCase) != -1)
-                        {
-                            output = line;
-                            return true;
-                        }
+                        output = line;
+                        return true;
                     }
                 }
-
-                output = "";
-                return true;
             }
-            else
-                output = "The variable " + paras[1].value + " does not exist";
 
-            return false;
+            output = "";
+            return true;
         }
 
         protected bool ReadAllText(out string output)
         {
-            string file = paras[0].isstring ? paras[0].value : vars[paras[0].value];
-
             try
             {
-                output = File.ReadAllText(file);
+                output = File.ReadAllText(paras[0].Value);
                 return true;
             }
             catch { }
 
-            output = "File not found:" + file;
+            output = "File not found:" + paras[0].Value;
             return false;
         }
 
@@ -1254,19 +1129,25 @@ namespace Conditions
             return true;
         }
 
+        protected virtual bool VerifyFileAction(string action, string file)      // override to provide protection
+        {
+            return true;
+        }
+
         protected virtual bool VerifyProcessAllowed(string proc, string cmdline)      // override to provide protection
         {
             return true;
         }
 
-#endregion
+        #endregion
 
-#region Processes
+
+        #region Processes
 
         protected bool StartProcess(out string output)
         {
-            string procname = (paras[0].isstring) ? paras[0].value : vars[paras[0].value];
-            string cmdline = (paras[1].isstring) ? paras[1].value : vars[paras[1].value];
+            string procname = paras[0].Value;
+            string cmdline = paras[1].Value;
 
             if (persistentdata != null)
             {
@@ -1296,7 +1177,7 @@ namespace Conditions
 
         protected bool CloseKillProcess(out string output, bool kill)
         {
-            int? hv = vars[paras[0].value].InvariantParseIntNull();
+            int? hv = paras[0].Value.InvariantParseIntNull();
 
             if (hv != null && persistentdata != null)
             {
@@ -1317,18 +1198,18 @@ namespace Conditions
 
         protected bool HasProcessExited(out string output)
         {
-            int? hv = vars[paras[0].value].InvariantParseIntNull();
+            int? hv = paras[0].Value.InvariantParseIntNull();
 
             if (hv != null && persistentdata != null)
             {
                 int exitcode;
-                BaseUtils.Processes.ProcessResult r = persistentdata.procs.HasProcessExited(hv.Value , out exitcode);
+                BaseUtils.Processes.ProcessResult r = persistentdata.procs.HasProcessExited(hv.Value, out exitcode);
                 if (r == BaseUtils.Processes.ProcessResult.OK)
                 {
                     output = exitcode.ToStringInvariant();
                     return true;
                 }
-                else if ( r == BaseUtils.Processes.ProcessResult.NotExited )
+                else if (r == BaseUtils.Processes.ProcessResult.NotExited)
                 {
                     output = "NOTEXITED";
                     return true;
@@ -1345,19 +1226,18 @@ namespace Conditions
 
         protected bool WaitForProcess(out string output)
         {
-            int? hv = vars[paras[0].value].InvariantParseIntNull();
-            string stimeout = (paras[1].isstring) ? paras[1].value : (vars.Exists(paras[1].value) ? vars[paras[1].value] : paras[1].value);
-            int? timeout = stimeout.InvariantParseIntNull();
+            int? hv = paras[0].Value.InvariantParseIntNull();
+            int timeout = paras[1].Int;
 
-            if (hv != null && persistentdata != null && timeout != null)
+            if (hv != null && persistentdata != null )
             {
-                BaseUtils.Processes.ProcessResult r = persistentdata.procs.WaitForProcess(hv.Value, timeout.Value);
+                BaseUtils.Processes.ProcessResult r = persistentdata.procs.WaitForProcess(hv.Value, timeout);
                 if (r == BaseUtils.Processes.ProcessResult.OK)
                 {
                     output = "1";
                     return true;
                 }
-                else if ( r == BaseUtils.Processes.ProcessResult.Timeout )
+                else if (r == BaseUtils.Processes.ProcessResult.Timeout)
                 {
                     output = "0";
                     return true;
@@ -1373,11 +1253,9 @@ namespace Conditions
 
         protected bool FindProcess(out string output)
         {
-            string pname = (paras[0].isstring) ? paras[0].value : vars[paras[0].value];
-
             if (persistentdata != null)
             {
-                output = persistentdata.procs.FindProcess(pname).ToStringInvariant();
+                output = persistentdata.procs.FindProcess(paras[0].Value).ToStringInvariant();
                 return true;
             }
             else
@@ -1388,10 +1266,10 @@ namespace Conditions
 
         protected bool ListProcesses(out string output)
         {
-            string basename = paras[0].value;
+            string basename = paras[0].Value;
 
             string[] proc = BaseUtils.Processes.ListProcesses();
-            for( int i = 0; i < proc.Length; i++ )
+            for (int i = 0; i < proc.Length; i++)
             {
                 vars[basename + "[" + (i + 1) + "]"] = proc[i];
             }
@@ -1400,9 +1278,128 @@ namespace Conditions
             return true;
         }
 
-#endregion
+        #endregion
 
-#region Misc
+        #region Dates
+
+        private DateTime? ConvertDate(string value, string formatoptions) // t may be null
+        {
+            DateTime res;
+
+            System.Globalization.DateTimeStyles dts = System.Globalization.DateTimeStyles.AssumeUniversal | System.Globalization.DateTimeStyles.AdjustToUniversal;
+
+            string[] t = formatoptions.ToLower().Split(';');
+            if (t != null && Array.IndexOf(t, "local") != -1)
+            {
+                dts = System.Globalization.DateTimeStyles.AssumeLocal;
+            }
+
+            // presuming its univeral means no translation in the values to local.
+            if (DateTime.TryParse(value, System.Globalization.CultureInfo.CreateSpecificCulture("en-US"), dts, out res))
+                return res;
+            else
+                return null;
+        }
+
+
+        protected bool Date(out string output)
+        {
+            DateTime? cnv = ConvertDate(paras[0].Value, paras[1].Value);
+
+            if (cnv != null)
+            {
+                output = ObjectExtensionsDates.PrintDate(cnv.Value, paras[1].Value);
+                return true;
+            }
+            else
+                output = "Date is not in correct en-US format";
+
+            return false;
+        }
+
+        protected bool DateTimeNow(out string output)
+        {
+            output = ObjectExtensionsDates.PrintDate(DateTime.UtcNow, paras[0].Value);
+            return true;
+        }
+
+        protected bool DateDelta(out string output)
+        {
+            string formatoptions = (paras.Count >= 3) ? paras[2].Value : "";
+
+            DateTime? v1 = ConvertDate(paras[0].Value, formatoptions);
+            DateTime? v2 = ConvertDate(paras[1].Value, formatoptions);
+
+            if (v1 != null && v2 != null)
+            {
+                if (v1.Value.Kind == DateTimeKind.Local)       // all must be in UTC for the calc..
+                    v1 = v1.Value.ToUniversalTime();
+                if (v2.Value.Kind == DateTimeKind.Local)       // all must be in UTC for the calc..
+                    v2 = v2.Value.ToUniversalTime();
+
+                TimeSpan ts = v2.Value.Subtract(v1.Value);      // does not respect time zones
+                output = ts.TotalSeconds.ToStringInvariant();
+                return true;
+            }
+            else
+                output = "A date is not in correct en-US format";
+
+            return false;
+        }
+
+
+        protected bool DateDeltaFormat(out string output)
+        {
+            output = ObjectExtensionsDates.DateDeltaFormatter(paras[0].Fractional, paras[1].Value, paras[2].Value);
+            return true;
+        }
+
+        protected bool DateDeltaFormatNow(out string output)
+        {
+            string dvalue = paras[0].Value;
+            string formatoptions = (paras.Count >= 4) ? paras[3].Value : "";
+
+            DateTime? cnv = ConvertDate(dvalue, formatoptions);
+
+            if (cnv != null)
+            {
+                if (cnv.Value.Kind == DateTimeKind.Local)       // all must be in UTC for the calc..
+                    cnv = cnv.Value.ToUniversalTime();
+
+                DateTime cur = DateTime.UtcNow;
+                TimeSpan ts = cnv.Value.Subtract(cur);          // does not respect Kind when doing calc.
+                output = ObjectExtensionsDates.DateDeltaFormatter(ts.TotalSeconds, paras[1].Value, paras[2].Value, cnv.Value, formatoptions);
+                return true;
+            }
+            else
+                output = "Not a valid date";
+
+            return false;
+        }
+
+        protected bool DateDeltaDiffFormat(out string output)
+        {
+            string formatoptions = (paras.Count >= 5) ? paras[4].Value : "";
+
+            DateTime? v1 = ConvertDate(paras[0].Value, formatoptions);
+            DateTime? v2 = ConvertDate(paras[1].Value, formatoptions);
+
+            if (v1 != null && v2 != null)
+            {
+                if (v1.Value.Kind == DateTimeKind.Local)       // all must be in UTC for the calc..
+                    v1 = v1.Value.ToUniversalTime();
+                if (v2.Value.Kind == DateTimeKind.Local)       // all must be in UTC for the calc..
+                    v2 = v2.Value.ToUniversalTime();
+
+                TimeSpan ts = v2.Value.Subtract(v1.Value);      // does not respect Kind when doing calc.
+                output = ObjectExtensionsDates.DateDeltaFormatter(ts.TotalSeconds, paras[2].Value, paras[3].Value, v2.Value, formatoptions);
+                return true;
+            }
+            else
+                output = "Not a valid date";
+
+            return false;
+        }
 
         protected bool TickCount(out string output)
         {
@@ -1410,28 +1407,9 @@ namespace Conditions
             return true;
         }
 
-        protected bool Jsonparse(out string output)
-        {
-            string json = (paras[0].isstring) ? paras[0].value : vars[paras[0].value];
-            string varprefix = (paras[1].isstring) ? paras[1].value : vars[paras[1].value];
+        #endregion
 
-            try
-            {
-                Newtonsoft.Json.Linq.JToken tk = Newtonsoft.Json.Linq.JToken.Parse(json);
-                if (tk != null)
-                {
-                    vars.AddJSONVariables(tk, varprefix);
-                    output = "1";
-                    return true;
-                }
-            }
-            catch { }
 
-            output = "0";
-            return false;
-        }
 
-#endregion
     }
 }
-#endif
