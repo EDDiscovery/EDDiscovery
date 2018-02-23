@@ -15,8 +15,10 @@ namespace Conditions
         public class Parameter
         {
             public string Value;
-            public long Integer;
+            public int Int;
+            public long Long;
             public double Fractional;
+            public bool isstring;
         };
 
         public List<Parameter> paras;
@@ -39,15 +41,166 @@ namespace Conditions
                 if (fe == null)
                     return false;
                 else
-                    return fe.IsStringAllowed(paras.Count - 1);
+                    return fe.IsStringAllowed(paras.Count);
             }
         }
 
-        public bool ProcessParameter(string t, bool isstring)
+        public string ProcessParameter(string t, bool isstr , int recdepth )
         {
-            next do this.. look at its type, and process it, expand it, etc.. so its ready for function..
+            if (fe == null)
+                paras.Add(new Parameter() { Value = t });    
+            else
+            {
+                FuncEntry.PT ptype = fe.paratype[paras.Count];
 
-            paras.Add(new Parameter() { Value = t });
+                // if string, and its an expand string type, do it..
+                if (isstr)
+                {
+                    if (fe.IsExpandedString(paras.Count))
+                    {
+                        string resexp;          // expand out any strings.. recursion
+                        ConditionFunctions.ExpandResult sexpresult = caller.ExpandStringFull(t, out resexp, recdepth + 1);
+
+                        if (sexpresult == ConditionFunctions.ExpandResult.Failed)
+                            return resexp;
+
+                        t = resexp;
+                    }
+                }
+                else
+                {
+                    if ( t.Contains("%"))   // expand out any function ones..
+                    {
+                        string resexp;          // expand out any strings.. recursion
+                        ConditionFunctions.ExpandResult sexpresult = caller.ExpandStringFull(t, out resexp, recdepth + 1);
+
+                        if (sexpresult == ConditionFunctions.ExpandResult.Failed)
+                            return resexp;
+
+                        t = resexp;
+                    }
+                }
+
+                if (ptype == FuncEntry.PT.LS)
+                {
+                }
+                else if (ptype == FuncEntry.PT.mse)     // macro, or string with macro name, don't check.
+                {
+                    t = vars.Qualify(t);
+                }
+                else if (ptype == FuncEntry.PT.ms)      // macro name, unexpanded, unchecked, or string, unexpanded
+                {
+                    if ( !isstr )
+                        t = vars.Qualify(t);            // qualify any macro name
+                }
+                else if (ptype == FuncEntry.PT.MSE)     // macro, or string with macro name
+                {
+                    t = vars.Qualify(t);
+
+                    if (vars.Exists(t))
+                        t = vars[t];
+                    else
+                        return t + " does not exist";
+                }
+                else if (ptype == FuncEntry.PT.MESE )   // macro, expand.  or string expand, macro must exist
+                {
+                    if (!isstr)
+                    {
+                        t = vars.Qualify(t);
+                        if (vars.Exists(t))
+                            t = vars[t];
+                        else
+                            return t + " does not exist";
+                    }
+                }
+                else if (ptype == FuncEntry.PT.LmeSE)           // a Literal, or a macro expanded, or a string expanded
+                {
+                    if (!isstr)
+                    {
+                        string mname = vars.Qualify(t);
+                        if (vars.Exists(mname))
+                            t = vars[mname];
+                    }
+                }
+                else if (ptype == FuncEntry.PT.IMESE)        
+                {
+                    if (!isstr)
+                    {
+                        string mname = vars.Qualify(t);
+                        t = vars.Exists(mname) ? vars[mname] : t;        // if it resolved to a macro, get it, else raw text
+                    }
+
+                    long? l = t.InvariantParseLongNull();
+
+                    if (l != null)
+                    {
+                        paras.Add(new Parameter() { Value = t, Int = (int)l.Value, Long = l.Value });
+                        return null;
+                    }
+                    else
+                        return "is not an integer";
+                }
+                else if (ptype == FuncEntry.PT.FMESE || ptype == FuncEntry.PT.FMESEblk )    
+                {
+                    if (!isstr)
+                    {
+                        string mname = vars.Qualify(t);
+                        t = vars.Exists(mname) ? vars[mname] : t;        // if it resolved to a macro, get it, else raw text
+                    }
+
+                    if (t.Length == 0)
+                    {
+                        if (ptype != FuncEntry.PT.FMESEblk) // error if not blank version
+                            return "value is empty";        // else fall thru with t = blank
+                    }
+                    else
+                    {
+                        double? l = t.InvariantParseDoubleNull();
+
+                        if (l != null)
+                        {
+                            paras.Add(new Parameter() { Value = t, Fractional = l.Value });
+                            return null;
+                        }
+                        else
+                            return "macro does not exist or value is not an number";
+                    }
+                }
+                else
+                    System.Diagnostics.Debug.Assert(true);
+
+                paras.Add( new Parameter() { Value = t, isstring = isstr });
+            }
+
+            return null;
+        }
+
+        protected bool ExpandMacroStr(out string output, int parano )   // blank if out of range.  error if macro does not exist
+        {
+            output = "";
+
+            if (parano < paras.Count)
+            {
+                string value = paras[parano].Value;
+
+                if (paras[parano].isstring)
+                {
+                    ConditionFunctions.ExpandResult sexpresult = caller.ExpandStringFull(value, out output, recdepth + 1);
+
+                    if (sexpresult == ConditionFunctions.ExpandResult.Failed)
+                        return false;
+                }
+                else if (vars.Exists(value))
+                {
+                    output = vars[value];
+                }
+                else
+                {
+                    output = "Variable " + value + " does not exist";
+                    return false;
+                }
+            }
+
             return true;
         }
 
@@ -63,24 +216,29 @@ namespace Conditions
         {
             public enum PT
             {
-                L,          // unnquoted: literal, quoted:Not allowed
                 LS,         // unnquoted: literal, quoted:Literal
-                LMe,        // unquoted: macro name (may be present) or literal otherwise, expanded, quoted: Not allowed
-                LMeLS,      // unquoted: macro name (may be present) or literal otherwise, expanded, quoted: Literal string
-                ME,         // unquoted: macro name (must be present), expanded, quoted: Not allowed
-                MESE,       // unquoted: macro name (must be present), expanded, quoted: macro name (must be present), expanded
-                MELS,       // unquoted: macro name (must be present), expanded, quoted: literal string
-                M,          // unquoted: macro name (must be present), unexpanded, quoted: Not allowed
-                MS,         // unquoted: macro name (must be present), unexpanded, quoted: macro name, unexpanded
-                MNP,        // unquoted: macro name (may be present), unexpanded, quoted: Not allowed
-                MNPS,       // unquoted: macro name (may be present), unexpanded, quoted: macro name (may be present), unexpanded
-                FME,        // unquoted: Either a macro name expanded, or a literal float number
-                IME,        // unquoted: Either a macro name expanded, or a literal integer number
+
+                MSE,        // unquoted: macro name (must be present), expanded, quoted: expanded, then macro name (must be present), expanded
+                mse,        // unquoted: macro name (may be present), unexpanded, quoted: expanded, macro name (may be present), unexpanded
+                ms,         // unquoted: macro name (may be present), unexpanded, quoted: string unexpanded
+                MESE,       // unquoted: macro name (must be present), expanded, quoted: string expanded
+                LmeSE,      // unquoted: macro name (may be present) and expanded, or literal, quoted: string expanded
+                FMESE,      // unquoted: MESE, followed by a fractional convert.
+                IMESE,      // unquoted: MESE, followed by a int convert.
+                FMESEblk,     // unquoted: MESE, followed by a fractional convert.  Also allow an empty string
+
+
+                //M,          // unquoted: macro name (must be present), unexpanded, quoted: Not allowed
+                //MS,         // unquoted: macro name (must be present), unexpanded, quoted: macro name, unexpanded
+                //MNP,        // unquoted: macro name (may be present), unexpanded, quoted: Not allowed
+                //LMe,        // unquoted: macro name (may be present) or literal otherwise, expanded, quoted: Not allowed
             };
 
-            public static PT[] allowedstrings = new PT[] { PT.LS, PT.LMeLS, PT.MESE, PT.MELS, PT.MNPS };
+            //  public static PT[] allowedstrings = new PT[] { PT.LS, PT.MSE,  PT.mse , PT.ms, PT.MESE, PT.LmeSE };
+            public bool IsStringAllowed(int pno) { return true; }
 
-            public bool IsStringAllowed(int pno) { return allowedstrings.Contains(paratype[pno]); }
+            public static PT[] expandedstrings = new PT[] { PT.mse, PT.MSE, PT.MESE, PT.LmeSE, PT.IMESE, PT.FMESE, PT.FMESEblk };
+            public bool IsExpandedString(int pno) { return expandedstrings.Contains(paratype[pno]); }
 
             public PT[] paratype;
             public string fname;
@@ -145,27 +303,8 @@ namespace Conditions
         {
             if (paras.Count < fe.numberparasmin)
                 output = "Too few parameters";
-            else if (paras.Count > fe.paratype.Length)
-                output = "Too many parameters";
             else
             {
-                //for (int i = 0; i < paras.Count; i++)
-                //{
-                //    if (paras[i].isstring)
-                //    {
-                //        if ((fe.paratype[i] & FuncEntry.String) == 0)
-                //        {
-                //            output = "Strings are not allowed in parameter " + (i + 1).ToString(ct);
-                //            return false;
-                //        }
-                //    }
-                //    else if ((fe.paratype[i] & FuncEntry.ML) == FuncEntry.Macro && !vars.Exists(paras[i].value))     // if must be macro
-                //    {
-                //        output = "Variable " + paras[i].value + " does not exist in parameter " + (i + 1).ToString(ct);
-                //        return false;
-                //    }
-                //}
-
                 System.Reflection.MethodInfo mi = GetType().GetMethod(fe.fname, System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
                 func fptr = (func)Delegate.CreateDelegate(typeof(func), this, mi);      // need a delegate which is attached to this instance..
                 return fptr(out output);

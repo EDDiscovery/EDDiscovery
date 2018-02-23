@@ -118,6 +118,9 @@ namespace Conditions
 
                             int start = apos;
 
+                            bool isstring = false;       // meaning, we can't consider it for macro names, its now a literal
+                            string res = null;
+
                             if (apos < line.Length && (line[apos] == '"' || line[apos] == '\''))
                             {
                                 if (!cfh.IsNextStringAllowed)
@@ -128,7 +131,7 @@ namespace Conditions
 
                                 char quote = line[apos++];
 
-                                string res = "";
+                                res = string.Empty;
 
                                 while (apos < line.Length && line[apos] != quote)
                                 {
@@ -147,17 +150,7 @@ namespace Conditions
                                 }
 
                                 apos++;     // remove quote
-
-                                string resexp;          // expand out any strings.. recursion
-                                ExpandResult sexpresult = ExpandStringFull(res, out resexp, recdepth + 1);
-
-                                if (sexpresult == ExpandResult.Failed)
-                                {
-                                    result = resexp;
-                                    return sexpresult;
-                                }
-
-                                cfh.ProcessParameter(resexp, true);
+                                isstring = true;     // because strings are not macro names
                             }
                             else
                             {
@@ -186,27 +179,15 @@ namespace Conditions
                                     return ExpandResult.Failed;
                                 }
 
-                                string res = line.Substring(start, apos - start);
+                                res = line.Substring(start, apos - start);
+                            }
 
-                                if (cfh.IsFunction && line.Contains("%"))        // function paramters can be expanded if they have a %
-                                {
-                                    string resexp;          // expand out any strings.. recursion
-                                    ExpandResult sexpresult = ExpandStringFull(res, out resexp, recdepth + 1);
+                            string err = cfh.ProcessParameter(res, isstring , recdepth);
 
-                                    if (sexpresult == ExpandResult.Failed)
-                                    {
-                                        result = resexp;
-                                        return sexpresult;
-                                    }
-
-                                    res = resexp;
-                                }
-                                else
-                                {                   // not an expansion.. see if it needs mangling
-                                    res = vars.Qualify(res);
-                                }
-
-                                cfh.ProcessParameter(res, false);
+                            if (err != null)
+                            {
+                                result = "Parameter " + (cfh.paras.Count + 1) + ":" + err;
+                                return ExpandResult.Failed;
                             }
 
                             while (apos < line.Length && char.IsWhiteSpace(line[apos]))
@@ -233,6 +214,7 @@ namespace Conditions
                                 result = "Function " + funcname + ": " + expand;
                                 return ExpandResult.Failed;
                             }
+
                         }
                         else if (cfh.paras.Count != 1)   // only 1
                         {
@@ -249,6 +231,8 @@ namespace Conditions
                                 return ExpandResult.Failed;
                             }
                         }
+
+                        System.Diagnostics.Debug.WriteLine("Output is '" + expand + "'");
 
                         noexpansion++;
                         line = line.Substring(0, pos - 1) + expand + line.Substring(apos);
