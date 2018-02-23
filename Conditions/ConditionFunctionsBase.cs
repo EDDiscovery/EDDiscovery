@@ -29,74 +29,76 @@ namespace Conditions
                 functions = new Dictionary<string, FuncEntry>();
 
                 //#region Variables
-                //functions.Add("exist", new FuncEntry(Exist, 1, 20, FuncEntry.PT.MNPS)); // no macros, all literal, can be strings
-                //functions.Add("existsdefault", new FuncEntry(ExistsDefault, FuncEntry.PT.MNPS, FuncEntry.PT.MELS ));   // first is a macro but can not exist, second is a string or macro which must exist
-                //functions.Add("expand", new FuncEntry(Expand, 1, 20, FuncEntry.PT.MESE)); // check var, can be string (if so expanded)
-                //functions.Add("expandarray", new FuncEntry(ExpandArray, 4, FuncEntry.PT.MS, FuncEntry.PT.MELS, FuncEntry.PT.IME, FuncEntry.PT.IME, FuncEntry.PT.L));
-                //functions.Add("expandvars", new FuncEntry(ExpandVars, 4, FuncEntry.PT.MS, FuncEntry.PT.MELS, FuncEntry.PT.IME, FuncEntry.PT.IME, FuncEntry.PT.L ));   // var 1 is text root/string, not var, not string, var 2 can be var or string, var 3/4 is integers or variables, checked in function
+                functions.Add("exist", new FuncEntry(Exist, 1, 20, FuncEntry.PT.mse)); // no macros, all literal, can be strings
+                functions.Add("existsdefault", new FuncEntry(ExistsDefault, FuncEntry.PT.mse, FuncEntry.PT.MESE ));   // first is a macro but can not exist, second is a string or macro which must exist
+                functions.Add("expand", new FuncEntry(Expand, 1, 20, FuncEntry.PT.MSE)); // check var, can be string (if so expanded)
+
+                functions.Add("expandarray", new FuncEntry(ExpandArray, 4, FuncEntry.PT.mse, FuncEntry.PT.MESE, FuncEntry.PT.IMESE, FuncEntry.PT.IMESE, FuncEntry.PT.LS));
+                functions.Add("expandvars", new FuncEntry(ExpandVars, 4, FuncEntry.PT.mse, FuncEntry.PT.MESE, FuncEntry.PT.IMESE, FuncEntry.PT.IMESE, FuncEntry.PT.LS ));   // var 1 is text root/string, not var, not string, var 2 can be var or string, var 3/4 is integers or variables, checked in function
                 //functions.Add("findarray", new FuncEntry(FindArray, 2, FuncEntry.PT.MS, FuncEntry.PT.MELS, FuncEntry.PT.MELS ));   //1 = literal or string, 2 = macro or string
-                //functions.Add("indirect", new FuncEntry(Indirect, 1, 20, FuncEntry.PT.MNPS));   // check var
-                //functions.Add("i", new FuncEntry(IndirectI, FuncEntry.PT.ME, FuncEntry.PT.LS));   // first is a macro name, second is literal or string
-                //functions.Add("ispresent", new FuncEntry(Ispresent, 2, FuncEntry.PT.MNP, FuncEntry.PT.MELS, FuncEntry.PT.MELS)); // 1 may not be there, 2 either a macro or can be string. 3 is optional and a var or literal
+                functions.Add("indirect", new FuncEntry(Indirect, 1, 20, FuncEntry.PT.MSE));   // check var
+                functions.Add("i", new FuncEntry(IndirectI, FuncEntry.PT.MSE, FuncEntry.PT.LS));   // first is a macro name, second is literal or string
+                functions.Add("ispresent", new FuncEntry(Ispresent, 2, FuncEntry.PT.mse, FuncEntry.PT.MESE, FuncEntry.PT.LmeSE)); // 1 may not be there, 2 either a macro or can be string. 3 is optional and a var or literal
                 //#endregion
 
                 //#region Numbers
-                //functions.Add("abs", new FuncEntry(Abs, FuncEntry.PT.FME, FuncEntry.PT.LMeLS));  // first is macro or lit. second is macro or literal
-                //functions.Add("int", new FuncEntry(Int, FuncEntry.PT.FME, FuncEntry.PT.LMeLS));  // first is macro or lit, second is macro or lit
-                //functions.Add("eval", new FuncEntry(Eval, 1, FuncEntry.PT.LMeLS, FuncEntry.PT.L));   // can be string, can be variable, can be literal p2 is not a variable, and can't be a string
-                //functions.Add("floor", new FuncEntry(Floor, FuncEntry.PT.FME, FuncEntry.PT.LMeLS));     // first is macros or lit, second is macro or literal
-                //functions.Add("hnum", new FuncEntry(Hnum, FuncEntry.PT.FME, FuncEntry.PT.LMeLS));   // para 1 literal or var, para 2 string, literal or var
+                functions.Add("abs", new FuncEntry(Abs, FuncEntry.PT.FMESE, FuncEntry.PT.LmeSE));  // first is macro or lit. second is macro or literal
+                functions.Add("int", new FuncEntry(Int, FuncEntry.PT.IMESE, FuncEntry.PT.LmeSE));  // first is macro or lit, second is macro or lit
+                functions.Add("eval", new FuncEntry(Eval, 1, FuncEntry.PT.LmeSE, FuncEntry.PT.LS));   // can be string, can be variable, can be literal p2 is not a variable, and can't be a string
+                functions.Add("floor", new FuncEntry(Floor, FuncEntry.PT.FMESE, FuncEntry.PT.LmeSE));     // first is macros or lit, second is macro or literal
+                functions.Add("hnum", new FuncEntry(Hnum, FuncEntry.PT.FMESE, FuncEntry.PT.LmeSE));   // para 1 literal or var, para 2 string, literal or var
 
-                //functions.Add("iftrue", new FuncEntry(Iftrue, 2, FuncEntry.PT.MELS, FuncEntry.PT.MELS, FuncEntry.PT.MELS));   // check var1-3, allow strings var1-3
-                //functions.Add("iffalse", new FuncEntry(Iffalse, 2, FuncEntry.PT.MELS, FuncEntry.PT.MELS, FuncEntry.PT.MELS));   // check var1-3, allow strings var1-3
-                //functions.Add("ifzero", new FuncEntry(Ifzero, 2, FuncEntry.PT.MELS, FuncEntry.PT.MELS, FuncEntry.PT.MELS));   // check var1-3, allow strings var1-3
-                //functions.Add("ifnonzero", new FuncEntry(Ifnonzero, 2, FuncEntry.PT.MELS, FuncEntry.PT.MELS, FuncEntry.PT.MELS));   // check var1-3, allow strings var1-3
-                //functions.Add("ifgt", new FuncEntry(Ifnumgreater, 3, FuncEntry.PT.MELS, FuncEntry.PT.LMeLS, FuncEntry.PT.MELS, FuncEntry.PT.MELS));
-                //functions.Add("iflt", new FuncEntry(Ifnumless, 3, FuncEntry.PT.MELS, FuncEntry.PT.LMeLS, FuncEntry.PT.MELS, FuncEntry.PT.MELS));
-                //functions.Add("ifge", new FuncEntry(Ifnumgreaterequal, 3, FuncEntry.PT.MELS, FuncEntry.PT.LMeLS, FuncEntry.PT.MELS, FuncEntry.PT.MELS));
-                //functions.Add("ifle", new FuncEntry(Ifnumlessequal, 3, FuncEntry.PT.MELS, FuncEntry.PT.LMeLS, FuncEntry.PT.MELS, FuncEntry.PT.MELS));
-                //functions.Add("ifeq", new FuncEntry(Ifnumequal, 3, FuncEntry.PT.MELS, FuncEntry.PT.LMeLS, FuncEntry.PT.MELS, FuncEntry.PT.MELS));
-                //functions.Add("ifne", new FuncEntry(Ifnumnotequal, 3, FuncEntry.PT.MELS, FuncEntry.PT.LMeLS, FuncEntry.PT.MELS, FuncEntry.PT.MELS));
+                functions.Add("iftrue", new FuncEntry(Iftrue, 2, FuncEntry.PT.IMESE, FuncEntry.PT.ms, FuncEntry.PT.ms));   // check var1-3, allow strings var1-3
+                functions.Add("iffalse", new FuncEntry(Iffalse, 2, FuncEntry.PT.IMESE, FuncEntry.PT.ms, FuncEntry.PT.ms));   // check var1-3, allow strings var1-3
+                functions.Add("ifzero", new FuncEntry(Ifzero, 2, FuncEntry.PT.FMESE, FuncEntry.PT.ms, FuncEntry.PT.ms));   // check var1-3, allow strings var1-3
+                functions.Add("ifnonzero", new FuncEntry(Ifnonzero, 2, FuncEntry.PT.FMESE, FuncEntry.PT.ms, FuncEntry.PT.ms));   // check var1-3, allow strings var1-3
 
-                //functions.Add("random", new FuncEntry(Random, FuncEntry.PT.IME));
-                //functions.Add("round", new FuncEntry(RoundCommon, FuncEntry.PT.FME, FuncEntry.PT.IME, FuncEntry.PT.LMeLS));
-                //functions.Add("roundnz", new FuncEntry(RoundCommon, FuncEntry.PT.FME, FuncEntry.PT.IME, FuncEntry.PT.LMeLS, FuncEntry.PT.IME));
-                //functions.Add("roundscale", new FuncEntry(RoundCommon, FuncEntry.PT.FME, FuncEntry.PT.IME, FuncEntry.PT.LMeLS, FuncEntry.PT.IME, FuncEntry.PT.IME));
+                functions.Add("ifeq", new FuncEntry(Ifnumequal, 3, FuncEntry.PT.FMESEblk, FuncEntry.PT.FMESE, FuncEntry.PT.ms, FuncEntry.PT.ms, FuncEntry.PT.ms));
+                functions.Add("ifne", new FuncEntry(Ifnumnotequal, 3, FuncEntry.PT.FMESEblk, FuncEntry.PT.FMESE, FuncEntry.PT.ms, FuncEntry.PT.ms, FuncEntry.PT.ms));
+                functions.Add("ifgt", new FuncEntry(Ifnumgreater, 3, FuncEntry.PT.FMESEblk, FuncEntry.PT.FMESE, FuncEntry.PT.ms, FuncEntry.PT.ms, FuncEntry.PT.ms));
+                functions.Add("iflt", new FuncEntry(Ifnumless, 3, FuncEntry.PT.FMESEblk, FuncEntry.PT.FMESE, FuncEntry.PT.ms, FuncEntry.PT.ms, FuncEntry.PT.ms));
+                functions.Add("ifge", new FuncEntry(Ifnumgreaterequal, 3, FuncEntry.PT.FMESEblk, FuncEntry.PT.FMESE, FuncEntry.PT.ms, FuncEntry.PT.ms, FuncEntry.PT.ms));
+                functions.Add("ifle", new FuncEntry(Ifnumlessequal, 3, FuncEntry.PT.FMESEblk, FuncEntry.PT.FMESE, FuncEntry.PT.ms, FuncEntry.PT.ms, FuncEntry.PT.ms));
+
+                functions.Add("random", new FuncEntry(Random, FuncEntry.PT.IMESE));
+                functions.Add("round", new FuncEntry(RoundCommon, FuncEntry.PT.FMESE, FuncEntry.PT.IMESE, FuncEntry.PT.LmeSE));
+                functions.Add("roundnz", new FuncEntry(RoundCommon, FuncEntry.PT.FMESE, FuncEntry.PT.IMESE, FuncEntry.PT.LmeSE, FuncEntry.PT.IMESE));
+                functions.Add("roundscale", new FuncEntry(RoundCommon, FuncEntry.PT.FMESE, FuncEntry.PT.IMESE, FuncEntry.PT.LmeSE, FuncEntry.PT.IMESE, FuncEntry.PT.FMESE));
 
                 //#endregion
 
                 //#region Strings
-                //functions.Add("alt", new FuncEntry(Alt, 2, 20, FuncEntry.PT.MELS));  // string/var.. repeated
-                //functions.Add("escapechar", new FuncEntry(EscapeChar, FuncEntry.PT.MELS));   // check var, can be string
-                //functions.Add("ifnotempty", new FuncEntry(Ifnotempty, 2, FuncEntry.PT.MELS, FuncEntry.PT.MELS, FuncEntry.PT.MELS));
-                //functions.Add("ifempty", new FuncEntry(Ifempty, 2, FuncEntry.PT.MELS, FuncEntry.PT.MELS, FuncEntry.PT.MELS));
-                //functions.Add("ifcontains", new FuncEntry(Ifcontains, 3, FuncEntry.PT.MELS, FuncEntry.PT.MELS, FuncEntry.PT.LMeLS, FuncEntry.PT.MELS, FuncEntry.PT.MELS));
-                //functions.Add("ifnotcontains", new FuncEntry(Ifnotcontains, 3, FuncEntry.PT.MELS, FuncEntry.PT.MELS, FuncEntry.PT.LMeLS, FuncEntry.PT.MELS, FuncEntry.PT.MELS));
-                //functions.Add("ifequal", new FuncEntry(Ifequal, 3, FuncEntry.PT.MELS, FuncEntry.PT.MELS, FuncEntry.PT.LMeLS, FuncEntry.PT.MELS, FuncEntry.PT.MELS));
-                //functions.Add("ifnotequal", new FuncEntry(Ifnotequal, 3, FuncEntry.PT.MELS, FuncEntry.PT.MELS, FuncEntry.PT.LMeLS, FuncEntry.PT.MELS, FuncEntry.PT.MELS));
+                functions.Add("alt", new FuncEntry(Alt, 2, 20, FuncEntry.PT.MESE));  // string/var.. repeated
+                functions.Add("escapechar", new FuncEntry(EscapeChar, FuncEntry.PT.MESE));   // check var, can be string
+                functions.Add("ifnotempty", new FuncEntry(Ifnotempty, 2, FuncEntry.PT.MESE, FuncEntry.PT.ms, FuncEntry.PT.ms));
+                functions.Add("ifempty", new FuncEntry(Ifempty, 2, FuncEntry.PT.MESE, FuncEntry.PT.ms, FuncEntry.PT.ms));
+                functions.Add("ifcontains", new FuncEntry(Ifcontains, 3, FuncEntry.PT.MESE, FuncEntry.PT.LmeSE, FuncEntry.PT.ms, FuncEntry.PT.ms, FuncEntry.PT.ms));
+                functions.Add("ifnotcontains", new FuncEntry(Ifnotcontains, 3, FuncEntry.PT.MESE, FuncEntry.PT.LmeSE, FuncEntry.PT.ms, FuncEntry.PT.ms, FuncEntry.PT.ms));
+                functions.Add("ifequal", new FuncEntry(Ifequal, 3, FuncEntry.PT.MESE, FuncEntry.PT.LmeSE, FuncEntry.PT.ms, FuncEntry.PT.ms, FuncEntry.PT.ms));
+                functions.Add("ifnotequal", new FuncEntry(Ifnotequal, 3, FuncEntry.PT.MESE, FuncEntry.PT.LmeSE, FuncEntry.PT.ms, FuncEntry.PT.ms, FuncEntry.PT.ms));
 
-                //functions.Add("indexof", new FuncEntry(IndexOf, FuncEntry.PT.MELS, FuncEntry.PT.MELS));
-                //functions.Add("join", new FuncEntry(Join, 3, 20, FuncEntry.PT.MELS));
+                functions.Add("indexof", new FuncEntry(IndexOf, FuncEntry.PT.MESE, FuncEntry.PT.MESE));
+                functions.Add("join", new FuncEntry(Join, 3, 20, FuncEntry.PT.MESE));
                 //functions.Add("jsonparse", new FuncEntry(Jsonparse, FuncEntry.PT.MELS, FuncEntry.PT.MELS));
-                //functions.Add("length", new FuncEntry(Length, FuncEntry.PT.MELS));
-                //functions.Add("lower", new FuncEntry(Lower, 1, 20, FuncEntry.PT.MELS));
-                //functions.Add("phrase", new FuncEntry(Phrase, FuncEntry.PT.MELS));
+                functions.Add("length", new FuncEntry(Length, FuncEntry.PT.MESE));
+                functions.Add("lower", new FuncEntry(Lower, 1, 20, FuncEntry.PT.MESE));
+                functions.Add("phrase", new FuncEntry(Phrase, FuncEntry.PT.MESE));
 
-                //functions.Add("regex", new FuncEntry(Regex, FuncEntry.PT.MELS, FuncEntry.PT.MELS, FuncEntry.PT.MELS));
-                //functions.Add("replace", new FuncEntry(Replace, FuncEntry.PT.MELS, FuncEntry.PT.MELS, FuncEntry.PT.MELS));
-                //functions.Add("replacevar", new FuncEntry(ReplaceVar,  FuncEntry.PT.MELS, FuncEntry.PT.LMeLS));
+                functions.Add("regex", new FuncEntry(Regex, FuncEntry.PT.MESE, FuncEntry.PT.MESE, FuncEntry.PT.MESE));
+                functions.Add("replace", new FuncEntry(Replace, FuncEntry.PT.MESE, FuncEntry.PT.MESE, FuncEntry.PT.MESE));
+                functions.Add("replacevar", new FuncEntry(ReplaceVar,  FuncEntry.PT.MESE, FuncEntry.PT.LmeSE));
                 //functions.Add("rs", new FuncEntry(ReplaceVarSC, FuncEntry.PT.MELS, FuncEntry.PT.LMeLS)); // var/string, literal/var/string
                 //functions.Add("rv", new FuncEntry(ReplaceVar,  FuncEntry.PT.MELS, FuncEntry.PT.LMeLS)); // var/string, literal/var/string
-                //functions.Add("replaceescapechar", new FuncEntry(ReplaceEscapeChar, FuncEntry.PT.MELS));
+                functions.Add("replaceescapechar", new FuncEntry(ReplaceEscapeChar, FuncEntry.PT.MESE));
 
                 //functions.Add("sc", new FuncEntry(SplitCaps, FuncEntry.PT.MELS));
-                //functions.Add("splitcaps", new FuncEntry(SplitCaps, FuncEntry.PT.MELS));
-                //functions.Add("substring", new FuncEntry(SubString, FuncEntry.PT.MELS, FuncEntry.PT.IME, FuncEntry.PT.IME));
-                //functions.Add("trim", new FuncEntry(Trim, FuncEntry.PT.MELS));
-                //functions.Add("upper", new FuncEntry(Upper, 1, 20, FuncEntry.PT.MELS));
-                //functions.Add("wordof", new FuncEntry(WordOf, 2, FuncEntry.PT.MELS, FuncEntry.PT.IME, FuncEntry.PT.MELS));
-                //functions.Add("wordlistcount", new FuncEntry(WordListCount, FuncEntry.PT.MELS));
-                //functions.Add("wordlistentry", new FuncEntry(WordListEntry, FuncEntry.PT.MELS, FuncEntry.PT.IME));
+                functions.Add("splitcaps", new FuncEntry(SplitCaps, FuncEntry.PT.MESE));
+                functions.Add("substring", new FuncEntry(SubString, FuncEntry.PT.MESE, FuncEntry.PT.IMESE, FuncEntry.PT.IMESE));
+                functions.Add("trim", new FuncEntry(Trim, FuncEntry.PT.MESE));
+                functions.Add("upper", new FuncEntry(Upper, 1, 20, FuncEntry.PT.MESE));
+                functions.Add("wordof", new FuncEntry(WordOf, 2, FuncEntry.PT.MESE, FuncEntry.PT.IMESE, FuncEntry.PT.MESE));
+                functions.Add("wordlistcount", new FuncEntry(WordListCount, FuncEntry.PT.MESE));
+                functions.Add("wordlistentry", new FuncEntry(WordListEntry, FuncEntry.PT.MESE, FuncEntry.PT.IMESE));
                 //#endregion
 
                 //#region Files
@@ -110,7 +112,7 @@ namespace Conditions
                 //functions.Add("openfile", new FuncEntry(OpenFile, FuncEntry.PT.MNP, FuncEntry.PT.MELS, FuncEntry.PT.LMe));
                 //functions.Add("readline", new FuncEntry(ReadLineFile, FuncEntry.PT.M, FuncEntry.PT.M));
                 //functions.Add("readalltext", new FuncEntry(ReadAllText, FuncEntry.PT.MELS));
-                //functions.Add("safevarname", new FuncEntry(SafeVarName, FuncEntry.PT.MELS));
+                functions.Add("safevarname", new FuncEntry(SafeVarName, FuncEntry.PT.MESE));
                 //functions.Add("seek", new FuncEntry(SeekFile, FuncEntry.PT.M, FuncEntry.PT.IME));
                 //functions.Add("tell", new FuncEntry(TellFile, FuncEntry.PT.M));
                 //functions.Add("write", new FuncEntry(WriteFile, FuncEntry.PT.M, FuncEntry.PT.MELS));
@@ -150,14 +152,13 @@ namespace Conditions
             return functions.ContainsKey(name) ? functions[name] : null;
         }
 
-#if false
         #region Macro Functions
 
         protected bool Exist(out string output)
         {
             foreach (Parameter s in paras)
             {
-                if (!vars.Exists(s.value))      // either s.value is an expanded string, or a literal.. does not matter.
+                if (!vars.Exists(s.Value))      // either s.value is an expanded string, or a literal.. does not matter.
                 {
                     output = "0";
                     return true;
@@ -174,11 +175,9 @@ namespace Conditions
 
             foreach (Parameter s in paras)
             {
-                string sv = s.isstring ? s.value : vars[s.value];
-
-                if (sv.Length > 0)
+                if (s.Value.Length > 0)
                 {
-                    output = sv;
+                    output = s.Value;
                     break;
                 }
             }
@@ -188,10 +187,10 @@ namespace Conditions
 
         protected bool ExistsDefault(out string output)
         {
-            if (vars.Exists(paras[0].value))        // either s.value is an expanded string, or a literal.. does not matter.
-                output = vars[paras[0].value];
+            if (vars.Exists(paras[0].Value))        // either s.value is an expanded string, or a literal.. does not matter.
+                output = vars[paras[0].Value];
             else
-                output = paras[1].isstring ? paras[1].value : vars[paras[1].value];
+                output = paras[1].Value;
 
             return true;
         }
@@ -200,7 +199,6 @@ namespace Conditions
         {
             return ExpandCore(out output, false);
         }
-
         protected bool Indirect(out string output)
         {
             return ExpandCore(out output, true);
@@ -218,7 +216,7 @@ namespace Conditions
 
             foreach (Parameter p in paras)
             {
-                string value = (p.isstring) ? p.value : vars[p.value];          // if string, its the value, else look up vars (must exist i've checked)
+                string value = p.Value;
 
                 if (indirect)
                 {
@@ -254,7 +252,7 @@ namespace Conditions
                 return false;
             }
 
-            string mname = vars[paras[0].value] + paras[1].value;        // expand first part, already checked.  Plus the second literal part
+            string mname = paras[0].Value + paras[1].Value;        // expand first part, already checked.  Plus the second literal part
 
             if (vars.Exists(mname))
             {
@@ -275,14 +273,491 @@ namespace Conditions
 
         protected bool SplitCaps(out string output)
         {
-            string value = (paras[0].isstring) ? paras[0].value : vars[paras[0].value];
-            output = value.SplitCapsWordFull();
+            output = paras[0].Value.SplitCapsWordFull();
             return true;
         }
 
         #endregion
 
-        #region Dates
+        #region Strings
+
+        protected bool SubString(out string output)
+        {
+            int start = paras[1].Int;
+            int length = paras[2].Int;
+            string v = paras[0].Value;
+
+            if (start >= 0 && start < v.Length)
+            {
+                if (start + length > v.Length)
+                    length = v.Length - start;
+
+                output = v.Substring(start, length);
+            }
+            else
+                output = "";
+
+            return true;
+        }
+
+        protected bool IndexOf(out string output)
+        {
+            output = paras[0].Value.IndexOf(paras[1].Value).ToString(ct);
+            return true;
+        }
+
+        protected bool Lower(out string output)
+        {
+            string value = paras[0].Value;
+            string delim = (paras.Count > 1) ? paras[1].Value : "";
+
+            for (int i = 2; i < paras.Count; i++)
+                value += delim + paras[i].Value;
+
+            output = value.ToLower();
+            return true;
+        }
+
+        protected bool Upper(out string output)
+        {
+            string value = paras[0].Value;
+            string delim = (paras.Count > 1) ? paras[1].Value : "";
+
+            for (int i = 2; i < paras.Count; i++)
+                value += delim + paras[i].Value;
+
+            output = value.ToUpper();
+            return true;
+        }
+
+        protected bool Join(out string output)
+        {
+            string delim = paras[0].Value;
+            string value = paras[1].Value;
+
+            for (int i = 2; i < paras.Count; i++)
+                value += delim + paras[i].Value;
+
+            output = value;
+            return true;
+        }
+
+        protected bool Trim(out string output)
+        {
+            output = paras[0].Value.Trim();
+            return true;
+        }
+
+        protected bool Length(out string output)
+        {
+            output = paras[0].Value.Length.ToString(ct);
+            return true;
+        }
+
+        protected bool EscapeChar(out string output)
+        {
+            output = paras[0].Value.EscapeControlChars();
+            return true;
+        }
+
+        protected bool ReplaceEscapeChar(out string output)
+        {
+            output = paras[0].Value.ReplaceEscapeControlChars();
+            return true;
+        }
+
+        protected bool WordOf(out string output)
+        {
+            string s = paras[0].Value;
+            int count = paras[1].Int;
+            string splitter = (paras.Count >= 3) ? paras[2].Value : ";";
+            char splitchar = (splitter.Length > 0) ? splitter[0] : ';';
+
+            string[] split = s.Split(splitchar);
+            count = Math.Max(1, Math.Min(count, split.Length));  // between 1 and split length
+            output = split[count - 1];
+            return true;
+        }
+
+        protected bool WordListCount(out string output)
+        {
+            BaseUtils.StringParser l = new BaseUtils.StringParser(paras[0].Value);
+            List<string> ll = l.NextQuotedWordList();
+            output = ll.Count.ToStringInvariant();
+            return true;
+        }
+
+
+        protected bool WordListEntry(out string output)
+        {
+            BaseUtils.StringParser l = new BaseUtils.StringParser(paras[0].Value);
+            int count = paras[1].Int;
+            output = "";
+
+            List<string> ll = l.NextQuotedWordList();
+            if (count >= 0 && count < ll.Count)
+            {
+                output = ll[count];
+            }
+            return true;
+        }
+
+        protected bool Regex(out string output)
+        {
+            string s = paras[0].Value;
+            string f1 = paras[1].Value;
+            string f2 = paras[2].Value;
+            try
+            {
+                output = System.Text.RegularExpressions.Regex.Replace(s, f1, f2);
+                return true;
+            }
+            catch
+            {
+                output = "Regular expression failed";
+                return false;
+            }
+        }
+
+        protected bool Replace(out string output)
+        {
+            string s = paras[0].Value;
+            string f1 = paras[1].Value;
+            string f2 = paras[2].Value;
+            output = s.Replace(f1, f2, StringComparison.InvariantCultureIgnoreCase);
+            return true;
+        }
+
+
+        protected bool ReplaceVar(out string output)
+        {
+            return ReplaceVarCommon(out output, false);
+        }
+
+        protected bool ReplaceVarSC(out string output)
+        {
+            return ReplaceVarCommon(out output, true);
+        }
+
+        protected bool ReplaceVarCommon(out string output, bool sc)
+        {
+            string s = paras[0].Value;
+            string varroot = paras[1].Value;
+
+            foreach (string key in vars.NameEnumuerable)          // all vars.. starting with varroot
+            {
+                if (key.StartsWith(varroot))
+                {
+                    string[] subs = vars[key].Split(';');
+                    if (subs.Length == 2 && subs[0].Length > 0) // standard anywhere pattern
+                    {
+                        if (s.IndexOf(subs[0], StringComparison.InvariantCultureIgnoreCase) >= 0)
+                            s = s.Replace(subs[0], subs[1], StringComparison.InvariantCultureIgnoreCase);
+                    }
+                    else if (subs.Length == 3 && subs[1].Length > 0 && subs[0].Equals("R", StringComparison.InvariantCultureIgnoreCase))     // regex pattern
+                    {
+                        System.Text.RegularExpressions.RegexOptions opt = (subs[0] == "r") ? System.Text.RegularExpressions.RegexOptions.IgnoreCase : System.Text.RegularExpressions.RegexOptions.None;
+                        s = System.Text.RegularExpressions.Regex.Replace(s, subs[1], subs[2], opt);
+                    }
+                    else
+                    {
+                        output = "Missformed replacement pattern : " + vars[key];
+                        return false;
+                    }
+                }
+            }
+
+            if (sc)
+                output = s.SplitCapsWordFull();
+            else
+                output = s;
+
+            return true;
+        }
+
+        protected bool Phrase(out string output)
+        {
+            output = paras[0].Value.PickOneOfGroups(rnd);
+            return true;
+        }
+
+        protected bool SafeVarName(out string output)
+        {
+            output = paras[0].Value.SafeVariableString();
+            return true;
+        }
+
+        protected bool Ifnotempty(out string output) { return IfCommon(out output, () => { return paras[0].Value.Length > 0; }, 1, true); }
+        protected bool Ifempty(out string output) { return IfCommon(out output, () => { return paras[0].Value.Length == 0; }, 1, true); }
+        protected bool Ifequal(out string output) { return IfCommon(out output, () => { return paras[0].Value.Equals(paras[1].Value, StringComparison.InvariantCultureIgnoreCase); }, 2); }
+        protected bool Ifnotequal(out string output) { return IfCommon(out output, () => { return paras[0].Value.Equals(paras[1].Value, StringComparison.InvariantCultureIgnoreCase) == false; }, 2); }
+        protected bool Ifcontains(out string output) { return IfCommon(out output, () => { return paras[0].Value.IndexOf(paras[1].Value, StringComparison.InvariantCultureIgnoreCase) >= 0; }, 2); }
+        protected bool Ifnotcontains(out string output) { return IfCommon(out output, () => { return paras[0].Value.IndexOf(paras[1].Value, StringComparison.InvariantCultureIgnoreCase) < 0; }, 2); }
+
+        protected bool Ispresent(out string output)
+        {
+            if (vars.Exists(paras[0].Value))        // if paras[0] is a macro which exists
+            {
+                string mvalue = vars[paras[0].Value];
+                string cvalue = paras[1].Value;
+                output = mvalue.IndexOf(cvalue, StringComparison.InvariantCultureIgnoreCase) >= 0 ? "1" : "0";
+            }
+            else
+            {   // var does not exist..
+
+                if (paras.Count == 3)   // if default is there, return it
+                    output = paras[2].Value;
+                else
+                    output = "0";
+            }
+
+            return true;
+        }
+
+
+        #endregion
+
+        #region Numbers
+
+        protected bool Hnum(out string output)
+        {
+            double value = paras[0].Fractional;
+            string postfix = paras[1].Value;
+            string[] postfixes = postfix.Split(';');
+
+            if (postfixes.Length < 6)
+            {
+                output = "Need prefixes and postfixes";
+            }
+            else 
+            {
+                string prefix = "";
+                if (value < 0)
+                {
+                    prefix = postfixes[0] + " ";
+                    value = -value;
+                }
+
+                int order = (int)Math.Log10((double)value);
+
+                if (order >= 12)        // billions, say X.Y trillion
+                {
+                    value /= 1E12;
+                    output = prefix + value.ToStringInvariant("0.##") + " " + postfixes[1];
+                }
+                else if (order >= 9)        // billions, say X.Y billion
+                {
+                    value /= 1E9;
+                    output = prefix + value.ToStringInvariant("0.##") + " " + postfixes[2];
+                }
+                else if (order >= 6)        // millions, say X.Y millions
+                {
+                    value /= 1E6;
+                    output = prefix + value.ToStringInvariant("0.##") + " " + postfixes[3];
+                }
+                else if (order >= 4)        // 10000+ thousands, say X thousands
+                {
+                    value /= 1E3;
+                    output = prefix + value.ToStringInvariant("0") + " " + postfixes[4];
+                }
+                else if (order == 3)        // 1000-9999, say xx hundred
+                {
+                    value /= 1E2;           // hundreds.
+                    int hundreds = (int)value;  // thousand parts
+                    output = prefix + (hundreds / 10).ToStringInvariant() + " " + postfixes[4];
+                    if (hundreds % 10 != 0) // hundred parts
+                        output += " " + (hundreds % 10).ToStringInvariant() + " " + postfixes[5];
+                }
+                else
+                {
+                    output = prefix + value.ToStringInvariant();
+                }
+
+                return true;
+            }
+
+            return false;
+        }
+
+        protected bool Abs(out string output)
+        {
+            double para = paras[0].Fractional;
+            string fmt = paras[1].Value;
+            para = Math.Abs(para);
+            return para.SafeToString(fmt, out output);
+        }
+
+        protected bool Int(out string output)
+        {
+            long para = paras[0].Long;
+            string fmt = paras[1].Value;
+            return para.SafeToString(fmt, out output);
+        }
+
+        protected bool Floor(out string output)
+        {
+            double para = paras[0].Fractional;
+            string fmt = paras[1].Value;
+            para = Math.Floor(para);
+            return para.SafeToString(fmt, out output);
+        }
+
+        protected bool RoundCommon(out string output)
+        {
+            double value = paras[0].Fractional;
+            int digits = paras[1].Int;
+            string fmt = paras[2].Value;
+            int extradigits = (paras.Count >= 4) ? paras[3].Int : 0;
+            double scale = (paras.Count >= 5) ? paras[4].Fractional : 1.0;
+
+            value *= scale;
+            double res = Math.Round(value, digits);
+
+            if (extradigits > 0 && Math.Abs(res) < 0.0000001)     // if rounded to zero..
+            {
+                digits += extradigits;
+                fmt += new string('#', extradigits);
+                res = Math.Round(value, digits);
+            }
+
+            return res.SafeToString(fmt, out output);
+        }
+
+        protected bool Random(out string output)
+        {
+            output = rnd.Next(paras[0].Int).ToString(ct);
+            return true;
+        }
+
+        protected bool Eval(out string output)
+        {
+            // string, or if macro name use macro value, else literal
+            string s = paras[0].Value;
+            bool tryit = paras.Count > 1 && paras[1].Value.Equals("Try", StringComparison.InvariantCultureIgnoreCase);
+
+            bool evalstate = s.Eval(out output);      // true okay, with output, false bad, with error
+
+            if (tryit && !evalstate)                   // if try and failed.. NAN without error
+            {
+                output = "NAN";
+                return true;
+            }
+
+            return evalstate;                       // else return error and output
+        }
+
+        const double LM = 0.000001;
+
+        protected bool Iftrue(out string output) { return IfCommon(out output, () => { return paras[0].Long != 0; }, 1); }           // V1, VT, [VF]
+        protected bool Iffalse(out string output) { return IfCommon(out output, () => { return paras[0].Long == 0; }, 1); }
+        protected bool Ifzero(out string output) { return IfCommon(out output, () => { return Math.Abs(paras[0].Fractional) < LM; }, 1); }
+        protected bool Ifnonzero(out string output) { return IfCommon(out output, () => { return Math.Abs(paras[0].Fractional) >= LM; }, 1); }
+        protected bool Ifnumequal(out string output) { return IfCommon(out output, () => { return Math.Abs(paras[0].Fractional - paras[1].Fractional) < LM; }, 2); }
+        protected bool Ifnumnotequal(out string output) { return IfCommon(out output, () => { return Math.Abs(paras[0].Fractional - paras[1].Fractional) >= LM; }, 2); }
+        protected bool Ifnumgreater(out string output) { return IfCommon(out output, () => { return paras[0].Fractional > paras[1].Fractional; }, 2); }
+        protected bool Ifnumless(out string output) { return IfCommon(out output, () => { return paras[0].Fractional < paras[1].Fractional; }, 2); }
+        protected bool Ifnumgreaterequal(out string output) { return IfCommon(out output, () => { return paras[0].Fractional >= paras[1].Fractional; }, 2); }
+        protected bool Ifnumlessequal(out string output) { return IfCommon(out output, () => { return paras[0].Fractional <= paras[1].Fractional; }, 2); }
+
+        protected bool IfCommon(out string output, Func<bool> Test, int firstres , bool disablelengthtest = false)
+        {
+            output = "";
+
+            if (!disablelengthtest && paras[0].Value.Length == 0)   // if we can have an empty first.. its the third para.  If its not there, empty string
+                return ExpandMacroStr(out output, firstres + 2);
+
+            int parano = Test() ? firstres : (firstres + 1);
+
+            return ExpandMacroStr(out output, parano);  // pick first or second to expand.  if second does not exist, func returns empty string
+        }
+
+
+        #endregion
+
+
+
+        protected bool ExpandArray(out string output)
+        {
+            return ExpandArrayCommon(out output, false);
+        }
+
+        protected bool ExpandVars(out string output)
+        {
+            return ExpandArrayCommon(out output, true);
+        }
+
+        protected bool ExpandArrayCommon(out string output, bool join)
+        {
+            string arrayroot = paras[0].Value;
+            string separ = paras[1].Value;
+            int start = paras[2].Int;
+            int length = paras[3].Int;
+
+            bool splitcaps = paras.Count == 5 && paras[4].Value.IndexOf("splitcaps", StringComparison.InvariantCultureIgnoreCase) >= 0;
+
+            output = "";
+
+            if (join)
+            {
+                bool nameonly = paras.Count == 5 && paras[4].Value.IndexOf("nameonly", StringComparison.InvariantCultureIgnoreCase) >= 0;
+                bool valueonly = paras.Count == 5 && paras[4].Value.IndexOf("valueonly", StringComparison.InvariantCultureIgnoreCase) >= 0;
+
+                int index = 0;
+                foreach (string key in vars.NameEnumuerable)
+                {
+                    if (key.StartsWith(arrayroot))
+                    {
+                        index++;
+                        if (index >= start && index < start + length)
+                        {
+                            string value = vars[key];
+
+                            string entry = (valueonly) ? vars[key] : (key.Substring(arrayroot.Length) + (nameonly ? "" : (" = " + vars[key])));
+
+                            if (output.Length > 0)
+                                output += separ;
+
+                            output += (splitcaps) ? entry.SplitCapsWordFull() : entry;
+                        }
+                    }
+                }
+            }
+            else
+            {
+                for (int i = start; i < start + length; i++)
+                {
+                    string aname = arrayroot + "[" + i.ToString(ct) + "]";
+
+                    if (vars.Exists(aname))
+                    {
+                        if (i != start)
+                            output += separ;
+
+                        if (splitcaps)
+                            output += vars[aname].SplitCapsWordFull();
+                        else
+                            output += vars[aname];
+                    }
+                    else
+                        break;
+                }
+            }
+
+            return true;
+        }
+
+
+
+
+    }
+}
+
+
+#if false
+
+
+
+#region Dates
         
         private DateTime? ConvertDate(string value, string formatoptions) // t may be null
         {
@@ -425,685 +900,17 @@ namespace Conditions
         }
 
 
-        #endregion
+#endregion
 
-        #region String Manip
 
-        protected bool SubString(out string output)
-        {
-            int start, length;
 
-            bool okstart = paras[1].value.InvariantParse(out start) || (vars.Exists(paras[1].value) && vars[paras[1].value].InvariantParse(out start));
-            bool oklength = paras[2].value.InvariantParse(out length) || (vars.Exists(paras[2].value) && vars[paras[2].value].InvariantParse(out length));
+#region Is functions    
 
-            if (okstart && oklength)
-            {
-                string v = (paras[0].isstring) ? paras[0].value : vars[paras[0].value];
 
-                if (start >= 0 && start < v.Length)
-                {
-                    if (start + length > v.Length)
-                        length = v.Length - start;
+#endregion
 
-                    output = v.Substring(start, length);
-                }
-                else
-                    output = "";
+#region Arrays
 
-                return true;
-            }
-            else
-                output = "Start and/or length are not integers or variables do not exist";
-
-            return false;
-        }
-
-        protected bool IndexOf(out string output)
-        {
-            string test = (paras[0].isstring) ? paras[0].value : vars[paras[0].value];
-            string value = (paras[1].isstring) ? paras[1].value : vars[paras[1].value];
-            output = test.IndexOf(value).ToString(ct);
-            return true;
-        }
-
-        protected bool Lower(out string output)
-        {
-            string value = (paras[0].isstring) ? paras[0].value : vars[paras[0].value];
-            string delim = (paras.Count > 1) ? ((paras[1].isstring) ? paras[1].value : vars[paras[1].value]) : "";
-
-            for (int i = 2; i < paras.Count; i++)
-                value += delim + ((paras[i].isstring) ? paras[i].value : vars[paras[i].value]);
-
-            output = value.ToLower();
-            return true;
-        }
-
-        protected bool Upper(out string output)
-        {
-            string value = (paras[0].isstring) ? paras[0].value : vars[paras[0].value];
-            string delim = (paras.Count > 1) ? ((paras[1].isstring) ? paras[1].value : vars[paras[1].value]) : "";
-
-            for (int i = 2; i < paras.Count; i++)
-                value += delim + ((paras[i].isstring) ? paras[i].value : vars[paras[i].value]);
-
-            output = value.ToUpper();
-            return true;
-        }
-
-        protected bool Join(out string output)
-        {
-            string delim = (paras[0].isstring) ? paras[0].value : vars[paras[0].value];
-            string value = (paras[1].isstring) ? paras[1].value : vars[paras[1].value];
-
-            for (int i = 2; i < paras.Count; i++)
-                value += delim + ((paras[i].isstring) ? paras[i].value : vars[paras[i].value]);
-
-            output = value;
-            return true;
-        }
-
-        protected bool Trim(out string output)
-        {
-            string value = (paras[0].isstring) ? paras[0].value : vars[paras[0].value];
-            output = value.Trim();
-            return true;
-        }
-
-        protected bool Length(out string output)
-        {
-            string value = (paras[0].isstring) ? paras[0].value : vars[paras[0].value];
-            output = value.Length.ToString(ct);
-            return true;
-        }
-
-        protected bool EscapeChar(out string output)
-        {
-            string s = paras[0].isstring ? paras[0].value : vars[paras[0].value];
-            output = s.EscapeControlChars();
-            return true;
-        }
-
-        protected bool ReplaceEscapeChar(out string output)
-        {
-            string s = paras[0].isstring ? paras[0].value : vars[paras[0].value];
-            output = s.ReplaceEscapeControlChars();
-            return true;
-        }
-
-        protected bool WordOf(out string output)
-        {
-            string s = paras[0].isstring ? paras[0].value : vars[paras[0].value];
-            string c = vars.Exists(paras[1].value) ? vars[paras[1].value] : paras[1].value;
-            string splitter = (paras.Count >= 3) ? (paras[2].isstring ? paras[2].value : vars[paras[2].value]) : ";";
-            char splitchar = (splitter.Length > 0) ? splitter[0] : ';';
-
-            int count;
-            if (c.InvariantParse(out count))
-            {
-                string[] split = s.Split(splitchar);
-                count = Math.Max(1, Math.Min(count, split.Length));  // between 1 and split length
-                output = split[count - 1];
-                return true;
-            }
-            else
-            {
-                output = "Parameter should be an integer constant or a variable name with an integer in its value";
-                return false;
-            }
-        }
-
-        protected bool WordListCount(out string output)
-        {
-            BaseUtils.StringParser l = new BaseUtils.StringParser(paras[0].isstring ? paras[0].value : vars[paras[0].value]);
-            List<string> ll = l.NextQuotedWordList();
-            output = ll.Count.ToStringInvariant();
-            return true;
-        }
-
-        protected bool WordListEntry(out string output)
-        {
-            BaseUtils.StringParser l = new BaseUtils.StringParser(paras[0].isstring ? paras[0].value : vars[paras[0].value]);
-            string c = vars.Exists(paras[1].value) ? vars[paras[1].value] : paras[1].value;
-
-            output = "";
-
-            int count;
-            if (c.InvariantParse(out count))
-            {
-                List<string> ll = l.NextQuotedWordList();
-                if (count >= 0 && count < ll.Count)
-                {
-                    output = ll[count];
-                }
-            }
-            else
-            {
-                output = "Parameter should be an integer constant or a variable name with an integer in its value";
-                return false;
-            }
-
-            return true;
-        }
-
-        protected bool Regex(out string output)
-        {
-            string s = paras[0].isstring ? paras[0].value : vars[paras[0].value];
-            string f1 = paras[1].isstring ? paras[1].value : vars[paras[1].value];
-            string f2 = paras[2].isstring ? paras[2].value : vars[paras[2].value];
-            try
-            {
-                output = System.Text.RegularExpressions.Regex.Replace(s, f1, f2);
-                return true;
-            }
-            catch
-            {
-                output = "Regular expression failed";
-                return false;
-            }
-        }
-
-        protected bool Replace(out string output)
-        {
-            string s = paras[0].isstring ? paras[0].value : vars[paras[0].value];
-            string f1 = paras[1].isstring ? paras[1].value : vars[paras[1].value];
-            string f2 = paras[2].isstring ? paras[2].value : vars[paras[2].value];
-            output = s.Replace(f1, f2, StringComparison.InvariantCultureIgnoreCase);
-            return true;
-        }
-
-
-        protected bool ReplaceVar(out string output)
-        {
-            return ReplaceVarCommon(out output, false);
-        }
-
-        protected bool ReplaceVarSC(out string output)
-        {
-            return ReplaceVarCommon(out output, true);
-        }
-
-        protected bool ReplaceVarCommon(out string output, bool sc)
-        {
-            string s = paras[0].isstring ? paras[0].value : vars[paras[0].value];
-            string varroot = paras[1].isstring ? paras[1].value : (vars.Exists(paras[1].value) ? vars[paras[1].value] : paras[1].value);
-
-            foreach (string key in vars.NameEnumuerable)          // all vars.. starting with varroot
-            {
-                if (key.StartsWith(varroot))
-                {
-                    string[] subs = vars[key].Split(';');
-                    if (subs.Length == 2 && subs[0].Length > 0) // standard anywhere pattern
-                    {
-                        if (s.IndexOf(subs[0], StringComparison.InvariantCultureIgnoreCase) >= 0)
-                            s = s.Replace(subs[0], subs[1], StringComparison.InvariantCultureIgnoreCase);
-                    }
-                    else if (subs.Length == 3 && subs[1].Length > 0 && subs[0].Equals("R",StringComparison.InvariantCultureIgnoreCase))     // regex pattern
-                    {
-                        System.Text.RegularExpressions.RegexOptions opt = (subs[0] == "r" ) ? System.Text.RegularExpressions.RegexOptions.IgnoreCase : System.Text.RegularExpressions.RegexOptions.None;
-                        s = System.Text.RegularExpressions.Regex.Replace(s, subs[1], subs[2],opt);
-                    }
-                    else
-                    {
-                        output = "Missformed replacement pattern : " + vars[key];
-                        return false;
-                    }
-                }
-            }
-
-            if (sc)
-                output = s.SplitCapsWordFull();
-            else
-                output = s;
-
-            return true;
-        }
-
-        protected bool Phrase(out string output)
-        {
-            string s = paras[0].isstring ? paras[0].value : vars[paras[0].value];
-            output = s.PickOneOfGroups(rnd);
-            return true;
-        }
-
-        protected bool SafeVarName(out string output)
-        {
-            string s = paras[0].isstring ? paras[0].value : vars[paras[0].value];
-            output = s.SafeVariableString();
-            return true;
-        }
-
-        #endregion
-
-        #region Numbers
-
-        protected bool Hnum(out string output)
-        {
-            string s = vars.Exists(paras[0].value) ? vars[paras[0].value] : paras[0].value;
-            string postfix = paras[1].isstring ? paras[1].value : ( vars.Exists(paras[1].value) ? vars[paras[1].value] : paras[1].value);
-            string[] postfixes = postfix.Split(';');
-
-            double value;
-
-            if ( postfixes.Length < 6 )
-            {
-                output = "Need prefixes and postfixes";
-            }
-            else if (s.InvariantParse(out value))
-            {
-                string prefix = "";
-                if ( value < 0 )
-                {
-                    prefix = postfixes[0] + " ";
-                    value = -value;
-                }
-
-                int order = (int)Math.Log10((double)value);
-
-                if (order >= 12)        // billions, say X.Y trillion
-                {
-                    value /= 1E12;
-                    output = prefix + value.ToStringInvariant("0.##") + " " + postfixes[1];
-                }
-                else if (order >= 9)        // billions, say X.Y billion
-                {
-                    value /= 1E9;
-                    output = prefix + value.ToStringInvariant("0.##") + " " + postfixes[2];
-                }
-                else if (order >= 6)        // millions, say X.Y millions
-                {
-                    value /= 1E6;
-                    output = prefix + value.ToStringInvariant("0.##") + " " + postfixes[3];
-                }
-                else if (order >= 4)        // 10000+ thousands, say X thousands
-                {
-                    value /= 1E3;
-                    output = prefix + value.ToStringInvariant("0") + " " + postfixes[4];
-                }
-                else if (order == 3)        // 1000-9999, say xx hundred
-                {
-                    value /= 1E2;           // hundreds.
-                    int hundreds = (int)value;  // thousand parts
-                    output = prefix + (hundreds / 10).ToStringInvariant() + " " + postfixes[4];
-                    if ( hundreds%10 != 0 ) // hundred parts
-                        output += " " + (hundreds%10).ToStringInvariant() + " "  + postfixes[5];
-                }
-                else
-                {
-                    output = prefix + value.ToStringInvariant();
-                }
-
-                return true;
-            }
-            else
-            {
-                output = "Parameter number be a number";
-            }
-
-            return false;
-        }
-
-        protected bool Abs(out string output)
-        {
-            double para;
-            string s = vars.Exists(paras[0].value) ? vars[paras[0].value] : paras[0].value;
-            if (s.InvariantParse(out para))
-            {
-                string fmt = vars.Exists(paras[1].value) ? vars[paras[1].value] : paras[1].value;
-                para = Math.Abs(para);
-                return para.SafeToString(fmt, out output);
-            }
-            else
-                output = "Parameter number be a number";
-
-            return false;
-        }
-
-        protected bool Int(out string output)
-        {
-            long para;
-            string s = vars.Exists(paras[0].value) ? vars[paras[0].value] : paras[0].value;
-            if (s.InvariantParse(out para)) // 64 bit
-            {
-                string fmt = vars.Exists(paras[1].value) ? vars[paras[1].value] : paras[1].value;
-                return para.SafeToString(fmt, out output);
-            }
-            else
-            {
-                output = "Parameter number be a integer number";
-                return false;
-            }
-        }
-
-        protected bool Floor(out string output)
-        {
-            double para;
-            string s = vars.Exists(paras[0].value) ? vars[paras[0].value] : paras[0].value;
-            if (s.InvariantParse(out para))
-            {
-                string fmt = vars.Exists(paras[1].value) ? vars[paras[1].value] : paras[1].value;
-                para = Math.Floor(para);
-                return para.SafeToString(fmt, out output);
-            }
-            else
-                output = "Parameter number be a number";
-
-            return false;
-        }
-
-        protected bool RoundCommon(out string output)
-        {
-            int extradigits = 0;
-
-            if (paras.Count >= 4)
-            {
-                if (!paras[3].value.InvariantParse(out extradigits) && !(vars.Exists(paras[3].value) && vars[paras[3].value].InvariantParse(out extradigits)))
-                {
-                    output = "The variable " + paras[3] + " does not exist or the value is not an integer";
-                    return false;
-                }
-            }
-
-            double scale = 1.0;
-            if (paras.Count >= 5)       // round scale.
-            {
-                if (!paras[4].value.InvariantParse(out scale) && !(vars.Exists(paras[4].value) && vars[paras[4].value].InvariantParse(out scale)))
-                {
-                    output = "The variable " + paras[4] + " does not exist of the value is not a fractional";
-                    return false;
-                }
-            }
-
-            double value;
-
-            string s = vars.Exists(paras[0].value) ? vars[paras[0].value] : paras[0].value;
-
-            if (s.InvariantParse(out value))
-            {
-                value *= scale;
-
-                int digits = 0;
-                if (paras[1].value.InvariantParse(out digits) || (vars.Exists(paras[1].value) && vars[paras[1].value].InvariantParse(out digits)))
-                {
-                    string fmt = vars.Exists(paras[2].value) ? vars[paras[2].value] : paras[2].value;
-
-                    double res = Math.Round(value, digits);
-
-                    if (extradigits > 0 && Math.Abs(res) < 0.0000001)     // if rounded to zero..
-                    {
-                        digits += extradigits;
-                        fmt += new string('#', extradigits);
-                        res = Math.Round(value, digits);
-                    }
-
-                    return res.SafeToString(fmt, out output);
-                }
-                else
-                    output = "Digits must be a variable or an integer number of digits";
-            }
-            else
-                output = "Variable must be a integer or fractional";
-
-            return false;
-        }
-
-        protected bool Random(out string output)
-        {
-            int v;
-            if (paras[0].value.InvariantParse(out v) || (vars.Exists(paras[0].value) && vars[paras[0].value].InvariantParse(out v)))
-            {
-                output = rnd.Next(v).ToString(ct);
-                return true;
-            }
-            else
-            {
-                output = "Parameter should be an integer constant or a variable name with an integer in its value";
-                return false;
-            }
-        }
-
-        protected bool Eval(out string output)
-        {
-            // string, or if macro name use macro value, else literal
-            string s = paras[0].isstring ? paras[0].value : (vars.Exists(paras[0].value) ? vars[paras[0].value] : paras[0].value);
-
-            bool tryit = paras.Count > 1 && paras[1].value.Equals("Try", StringComparison.InvariantCultureIgnoreCase);
-
-            bool evalstate = s.Eval(out output);      // true okay, with output, false bad, with error
-
-            if (tryit && !evalstate)                   // if try and failed.. NAN without error
-            {
-                output = "NAN";
-                return true;
-            }
-
-            return evalstate;                       // else return error and output
-        }
-
-        #endregion
-
-        #region Conditionals
-
-        protected bool Ifnotempty(out string output) { return IfCommon(out output, IfType.Empty, false); }
-        protected bool Ifempty(out string output) { return IfCommon(out output, IfType.Empty, true); }
-        protected bool Iftrue(out string output) { return IfCommon(out output, IfType.True, true); }
-        protected bool Iffalse(out string output) { return IfCommon(out output, IfType.True, false); }
-        protected bool Ifzero(out string output) { return IfCommon(out output, IfType.Zero, true); }
-        protected bool Ifnonzero(out string output) { return IfCommon(out output, IfType.Zero, false); }
-        protected bool Ifcontains(out string output) { return IfCommon(out output, IfType.Contains, true); }
-        protected bool Ifnotcontains(out string output) { return IfCommon(out output, IfType.Contains, false); }
-        protected bool Ifequal(out string output) { return IfCommon(out output, IfType.StrEquals, true); }
-        protected bool Ifnotequal(out string output) { return IfCommon(out output, IfType.StrEquals, false); }
-        protected bool Ifnumgreater(out string output) { return IfCommon(out output, IfType.Greater, false); }
-        protected bool Ifnumless(out string output) { return IfCommon(out output, IfType.Less, false); }
-        protected bool Ifnumgreaterequal(out string output) { return IfCommon(out output, IfType.GreaterEqual, false); }
-        protected bool Ifnumlessequal(out string output) { return IfCommon(out output, IfType.LessEqual, false); }
-        protected bool Ifnumequal(out string output) { return IfCommon(out output, IfType.NumEqual, true); }
-        protected bool Ifnumnotequal(out string output) { return IfCommon(out output, IfType.NumEqual, false); }
-
-        protected enum IfType { True, Contains, StrEquals, Empty, Zero, Greater, Less, GreaterEqual, LessEqual, NumEqual };
-
-        protected bool IfCommon(out string output,
-                              IfType iftype, bool test)
-        {
-            if (iftype == IfType.Empty || iftype == IfType.True || iftype == IfType.Zero)         // these, insert a dummy entry to normalise - we don't have a comparitor
-                paras.Insert(1, new Parameter() { value = "", isstring = true });
-
-            // p0 = value, p1 = comparitor, p2 = true expansion, p3 = false expansion, p4 = empty expansion
-
-            string value = (paras[0].isstring) ? paras[0].value : vars[paras[0].value];
-            string comparitor = (paras[1].isstring) ? paras[1].value : (vars.Exists(paras[1].value) ? vars[paras[1].value] : paras[1].value);   // may be literal
-
-            int pexp = 0;       // 0 = blank, else parameter to expand
-
-            if (paras.Count >= 5 && value.Length == 0)        // if we have an empty, and string is empty.
-                pexp = 4;
-            else
-            {
-                bool tres;
-
-                if (iftype == IfType.True)
-                {
-                    int nres;
-                    bool ok = value.InvariantParse(out nres);
-
-                    if (!ok)
-                    {
-                        output = "Condition value is not an integer";
-                        return false;
-                    }
-
-                    tres = (nres != 0) == test;
-                }
-                else if (iftype == IfType.Contains)
-                {
-                    tres = (value.IndexOf(comparitor, StringComparison.InvariantCultureIgnoreCase) != -1) == test;
-                }
-                else if (iftype == IfType.StrEquals)
-                {
-                    tres = value.Equals(comparitor, StringComparison.InvariantCultureIgnoreCase) == test;
-                }
-                else if (iftype == IfType.Empty)                 // 2 parameters
-                {
-                    tres = (value.Length == 0) == test;
-                }
-                else if (iftype == IfType.Zero)
-                {
-                    double nres;
-                    bool ok = value.InvariantParse(out nres);
-
-                    if (!ok)
-                    {
-                        output = "Condition value is not an fractional or integer";
-                        return false;
-                    }
-
-                    tres = (Math.Abs(nres) < 0.000001) == test;
-                }
-                else
-                {
-                    double nleft, nright = 0;
-                    bool ok = value.InvariantParse(out nleft) && comparitor.InvariantParse(out nright);
-
-                    if (!ok)
-                    {
-                        output = "Condition value is not an fractional or integer on one or both sides";
-                        return false;
-                    }
-
-                    if (iftype == IfType.Greater)
-                        tres = nleft > nright;
-                    else if (iftype == IfType.GreaterEqual)
-                        tres = nleft >= nright;
-                    else if (iftype == IfType.Less)
-                        tres = nleft < nright;
-                    else if (iftype == IfType.LessEqual)
-                        tres = nleft < nright;
-                    else
-                        tres = (Math.Abs(nleft - nright) < 0.000001) == test;
-                }
-
-                if (tres)
-                    pexp = 2;
-                else if (paras.Count >= 4)          // if we don't have p4, then use 0, which is empty
-                    pexp = 3;
-            }
-
-            if (pexp == 0)
-                output = "";
-            else if (paras[pexp].isstring)      // string.. already been expanded, don't do it again
-                output = paras[pexp].value;
-            else
-                return caller.ExpandStringFull(vars[paras[pexp].value], out output, recdepth + 1) != ConditionFunctions.ExpandResult.Failed;
-
-            return true;
-        }
-
-        #endregion
-
-        #region Is functions    
-
-        protected bool Ispresent(out string output)
-        {
-            if (vars.Exists(paras[0].value))        // if paras[0] is a macro which exists
-            {
-                string mvalue = vars[paras[0].value];
-                string cvalue = (paras[1].isstring) ? paras[1].value : vars[paras[1].value];
-
-                output = mvalue.IndexOf(cvalue, StringComparison.InvariantCultureIgnoreCase) >= 0 ? "1" : "0";
-            }
-            else
-            {   // var does not exist..
-                if (paras.Count == 3)   // if default is there, see if its a macro, if so return value, else just return it
-                    output = vars.Exists(paras[2].value) ? vars[paras[2].value] : paras[2].value;
-                else
-                    output = "0";
-            }
-
-            return true;
-        }
-
-        #endregion
-
-        #region Arrays
-
-        protected bool ExpandArray(out string output)
-        {
-            return ExpandArrayCommon(out output, false);
-        }
-
-        protected bool ExpandVars(out string output)
-        {
-            return ExpandArrayCommon(out output, true);
-        }
-
-        protected bool ExpandArrayCommon(out string output, bool join)
-        {
-            string arrayroot = paras[0].value;
-            string separ = (paras[1].isstring) ? paras[1].value : vars[paras[1].value];
-
-            int start, length;
-            bool okstart = paras[2].value.InvariantParse(out start) || (vars.Exists(paras[2].value) && vars[paras[2].value].InvariantParse(out start));
-            bool oklength = paras[3].value.InvariantParse(out length) || (vars.Exists(paras[3].value) && vars[paras[3].value].InvariantParse(out length));
-
-            if (okstart && oklength)
-            {
-                bool splitcaps = paras.Count == 5 && paras[4].value.IndexOf("splitcaps", StringComparison.InvariantCultureIgnoreCase) >= 0;
-
-                output = "";
-
-                if (join)
-                {
-                    bool nameonly = paras.Count == 5 && paras[4].value.IndexOf("nameonly", StringComparison.InvariantCultureIgnoreCase) >= 0;
-                    bool valueonly = paras.Count == 5 && paras[4].value.IndexOf("valueonly", StringComparison.InvariantCultureIgnoreCase) >= 0;
-
-                    int index = 0;
-                    foreach (string key in vars.NameEnumuerable)
-                    {
-                        if (key.StartsWith(arrayroot))
-                        {
-                            index++;
-                            if (index >= start && index < start + length)
-                            {
-                                string value = vars[key];
-
-                                string entry = (valueonly) ? vars[key] : (key.Substring(arrayroot.Length) + (nameonly ? "" : (" = " + vars[key])));
-
-                                if (output.Length > 0)
-                                    output += separ;
-
-                                output += (splitcaps) ? entry.SplitCapsWordFull() : entry;
-                            }
-                        }
-                    }
-                }
-                else
-                {
-                    for (int i = start; i < start + length; i++)
-                    {
-                        string aname = arrayroot + "[" + i.ToString(ct) + "]";
-
-                        if (vars.Exists(aname))
-                        {
-                            if (i != start)
-                                output += separ;
-
-                            if (splitcaps)
-                                output += vars[aname].SplitCapsWordFull();
-                            else
-                                output += vars[aname];
-                        }
-                        else
-                            break;
-                    }
-                }
-
-                return true;
-            }
-            else
-                output = "Start and/or length are not integers or variables do not exist";
-
-            return false;
-        }
 
         protected bool FindArray(out string output)
         {
@@ -1135,9 +942,9 @@ namespace Conditions
             return true;
         }
 
-        #endregion
+#endregion
 
-        #region File Functions
+#region File Functions
 
         protected bool OpenFile(out string output)
         {
@@ -1452,9 +1259,9 @@ namespace Conditions
             return true;
         }
 
-        #endregion
+#endregion
 
-        #region Processes
+#region Processes
 
         protected bool StartProcess(out string output)
         {
@@ -1593,9 +1400,9 @@ namespace Conditions
             return true;
         }
 
-        #endregion
+#endregion
 
-        #region Misc
+#region Misc
 
         protected bool TickCount(out string output)
         {
@@ -1624,7 +1431,7 @@ namespace Conditions
             return false;
         }
 
-        #endregion
-#endif
+#endregion
     }
 }
+#endif
