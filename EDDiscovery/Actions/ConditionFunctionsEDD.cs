@@ -47,8 +47,9 @@ namespace EDDiscovery.Actions
             return functions.ContainsKey(name) ? functions[name] : base.FindFunction(name);
         }
 
+        #region Macro Functions
+
 #if false
-#region Macro Functions
 
 
         protected new bool SystemPath(out string output)
@@ -117,35 +118,40 @@ namespace EDDiscovery.Actions
 
             return ReplaceVarCommon(out output, true);
         }
-
+#endif
 
         protected override bool VerifyFileAccess(string file, FileMode fm)
         {
             if (fm != FileMode.Open)
             {
-                string folder = Path.GetDirectoryName(file);
-                string actionfolderperms = SQLiteConnectionUser.GetSettingString("ActionFolderPerms", "");
+                return VerifyFileAction("write", file);
+            }
+            else
+                return true;
+        }
 
-                if (!actionfolderperms.Contains(folder + ";"))
+        protected override bool VerifyFileAction(string action, string file)
+        {
+            string folder = Path.GetDirectoryName(file);
+            string actionfolderperms = SQLiteConnectionUser.GetSettingString("ActionFolderPerms", "");
+
+            if (!actionfolderperms.Contains(folder + ";"))
+            {
+                bool ok = ExtendedControls.MessageBoxTheme.Show("Warning - This program is attempting to "+ action + " folder" + Environment.NewLine + Environment.NewLine +
+                                                     folder + Environment.NewLine + Environment.NewLine +
+                                                     "with file " + Path.GetFileName(file) + Environment.NewLine + Environment.NewLine +
+                                                       "!!! Verify you are happy for the program to perform this action and access ANY files in that folder!!!",
+                                                       "WARNING - ACCESS REQUESTED",
+                                                    System.Windows.Forms.MessageBoxButtons.YesNo,
+                                                    System.Windows.Forms.MessageBoxIcon.Warning) == System.Windows.Forms.DialogResult.Yes;
+
+                if (ok)
                 {
-                    bool ok = ExtendedControls.MessageBoxTheme.Show("Warning - This program is attempting to write to folder" + Environment.NewLine + Environment.NewLine +
-                                                         folder + Environment.NewLine + Environment.NewLine +
-                                                         "with file " + Path.GetFileName(file) + Environment.NewLine + Environment.NewLine +
-                                                           "!!! Verify you are happy for the program to write to ANY files in that folder!!!",
-                                                           "WARNING - WRITE FILE ACCESS REQUESTED",
-                                                        System.Windows.Forms.MessageBoxButtons.YesNo,
-                                                        System.Windows.Forms.MessageBoxIcon.Warning) == System.Windows.Forms.DialogResult.Yes;
-
-                    if (ok)
-                    {
-                        SQLiteConnectionUser.PutSettingString("ActionFolderPerms", actionfolderperms + folder + ";");
-                        return true;
-                    }
-                    else
-                        return false;
+                    SQLiteConnectionUser.PutSettingString("ActionFolderPerms", actionfolderperms + folder + ";");
+                    return true;
                 }
                 else
-                    return true;
+                    return false;
             }
             else
                 return true;
@@ -176,7 +182,7 @@ namespace EDDiscovery.Actions
                 return true;
         }
 
-#endregion
-#endif
+        #endregion
+
     }
 }

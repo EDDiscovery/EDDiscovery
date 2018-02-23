@@ -110,7 +110,7 @@ namespace Conditions
                             while (apos < line.Length && char.IsWhiteSpace(line[apos])) // remove white space
                                 apos++;
 
-                            if (apos < line.Length && line[apos] == ')' && cfh.paras.Count == 0)        // ) here must be on first only, and is valid
+                            if (apos < line.Length && line[apos] == ')' && cfh.ParaCount == 0)        // ) here must be on first only, and is valid
                             {
                                 apos++; // skip by
                                 break;
@@ -125,7 +125,7 @@ namespace Conditions
                             {
                                 if (!cfh.IsNextStringAllowed)
                                 {
-                                    result = "String not allowed in parameter " + (cfh.paras.Count + 1);
+                                    result = "String not allowed in parameter " + (cfh.ParaCount + 1);
                                     return ExpandResult.Failed;
                                 }
 
@@ -150,7 +150,7 @@ namespace Conditions
                                 }
 
                                 apos++;     // remove quote
-                                isstring = true;     // because strings are not macro names
+                                isstring = true;     
                             }
                             else
                             {
@@ -186,7 +186,7 @@ namespace Conditions
 
                             if (err != null)
                             {
-                                result = "Parameter " + (cfh.paras.Count + 1) + ":" + err;
+                                result = "Parameter " + (cfh.ParaCount + 1) + ":" + err;
                                 return ExpandResult.Failed;
                             }
 
@@ -207,29 +207,10 @@ namespace Conditions
 
                         string expand = null;
 
-                        if (cfh.IsFunction)        // functions!
+                        if ( !cfh.Run(out expand , funcname ))
                         {
-                            if (!cfh.RunFunction(out expand))
-                            {
-                                result = "Function " + funcname + ": " + expand;
-                                return ExpandResult.Failed;
-                            }
-
-                        }
-                        else if (cfh.paras.Count != 1)   // only 1
-                        {
-                            result = "Variable name missing between () at '" + line.Substring(startexpression, apos - startexpression) + "'";
+                            result = expand;
                             return ExpandResult.Failed;
-                        }
-                        else
-                        {                               // variables
-                            if (vars.Exists(cfh.paras[0].Value))
-                                expand = vars[cfh.paras[0].Value];
-                            else
-                            {
-                                result = "Variable '" + cfh.paras[0].Value + "' does not exist";
-                                return ExpandResult.Failed;
-                            }
                         }
 
                         System.Diagnostics.Debug.WriteLine("Output is '" + expand + "'");
