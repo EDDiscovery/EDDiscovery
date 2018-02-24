@@ -133,7 +133,7 @@ namespace EDDiscovery.UserControls
                 long targetid = TargetClass.GetTargetNotedSystem();      // who is the target of a noted system (0=none)
                 long noteid = sn.id;
 
-                frm.InitialisePos(cursystem.X, cursystem.Y, cursystem.Z);
+                frm.InitialisePos(cursystem);
                 frm.NotedSystem(cursystem.Name, note, noteid == targetid);       // note may be passed in null
                 frm.ShowDialog(senderForm);
 
@@ -154,16 +154,14 @@ namespace EDDiscovery.UserControls
 
                 if (bkmark == null)                         // new bookmark
                 {
-                    frm.InitialisePos(cursystem.X, cursystem.Y, cursystem.Z);
                     tme = DateTime.Now;
-                    frm.NewSystemBookmark(cursystem.Name, note, tme.ToString());
+                    frm.NewSystemBookmark(cursystem, note, tme.ToString());
                 }
                 else                                        // update bookmark
                 {
-                    frm.InitialisePos(bkmark.x, bkmark.y, bkmark.z);
                     regionmarker = bkmark.isRegion;
                     tme = bkmark.Time;
-                    frm.Update(regionmarker ? bkmark.Heading : bkmark.StarName, note, bkmark.Note, tme.ToString(), regionmarker, targetid == bkmark.id, bkmark.PlanetaryMarks);
+                    frm.Update(bkmark);
                 }
 
                 DialogResult res = frm.ShowDialog(senderForm);

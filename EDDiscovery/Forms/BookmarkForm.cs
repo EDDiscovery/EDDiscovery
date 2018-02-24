@@ -48,6 +48,13 @@ namespace EDDiscovery.Forms
             EDDTheme.Instance.ApplyToFormStandardFontSize(this);
         }
 
+        public void InitialisePos(ISystem system)
+        {
+            textBoxX.Text = system.X.ToString("0.00");
+            textBoxY.Text = system.Y.ToString("0.00");
+            textBoxZ.Text = system.Z.ToString("0.00");
+        }
+
         public void InitialisePos(double x, double y, double z)
         {
             textBoxX.Text = x.ToString("0.00");
@@ -150,7 +157,7 @@ namespace EDDiscovery.Forms
             {
                 SystemNoteClass sn = SystemNoteClass.GetNoteOnSystem(bk.StarName);
                 ISystem s = SystemClassDB.GetSystem(bk.StarName);
-                InitialisePos(s.X, s.Y, s.Z);
+                InitialisePos(s);
                 note = (sn != null) ? sn.Note : "";
                 name = bk.StarName;
             }
@@ -164,17 +171,31 @@ namespace EDDiscovery.Forms
             buttonOK.Enabled = true;
         }
 
-        public void NewSystemBookmark(string name, string note, string tme)
+        public void Update(BookmarkClass bk, string planet, double latitude, double longitude)
+        {
+            Update(bk);
+            userControlSurfaceBookmarks1.AddSurfaceLocation(planet, latitude, longitude);
+        }
+
+        public void NewSystemBookmark(ISystem system, string note, string tme)
         {
             this.Text = "New System Bookmark";
-            textBoxName.Text = name;
+            textBoxName.Text = system.Name;
             textBoxTravelNote.Text = note;
             textBoxTime.Text = tme;
+            InitialisePos(system);
             buttonDelete.Hide();
             var edsm = new EDSMClass();
-            edsmurl = edsm.GetUrlToEDSMSystem(name);
-            userControlSurfaceBookmarks1.NewForSystem(name);
+            edsmurl = edsm.GetUrlToEDSMSystem(system.Name);
+            userControlSurfaceBookmarks1.NewForSystem(system.Name);
             buttonOK.Enabled = true;
+        }
+
+
+        public void NewSystemBookmark(ISystem system, string note, string tme, string planet, double latitude, double longitude)
+        {
+            NewSystemBookmark(system, note, tme);
+            userControlSurfaceBookmarks1.AddSurfaceLocation(planet, latitude, longitude);
         }
 
         public void NewSystemBookmark(string tme)
@@ -285,7 +306,7 @@ namespace EDDiscovery.Forms
                 userControlSurfaceBookmarks1.NewForSystem(t);
                 SystemNoteClass sn = SystemNoteClass.GetNoteOnSystem(t);
                 textBoxNotes.Text = (sn != null) ? sn.Note : "";
-                InitialisePos(s.X, s.Y, s.Z);
+                InitialisePos(s);
                 buttonOK.Enabled = true;
             }
             else

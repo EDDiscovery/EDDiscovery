@@ -222,12 +222,6 @@
     <Compile Include="Forms\SafeModeForm.Designer.cs">
       <DependentUpon>SafeModeForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\SurfaceBookmarkForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\SurfaceBookmarkForm.Designer.cs">
-      <DependentUpon>SurfaceBookmarkForm.cs</DependentUpon>
-    </Compile>
     <Compile Include="MajorTabControl.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -622,9 +616,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\ShipDetails.resx">
       <DependentUpon>ShipDetails.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\SurfaceBookmarkForm.resx">
-      <DependentUpon>SurfaceBookmarkForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\UserControlForm.resx">
       <DependentUpon>UserControlForm.cs</DependentUpon>
