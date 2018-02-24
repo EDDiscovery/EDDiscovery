@@ -120,6 +120,13 @@ namespace EDDiscovery
 
             msg.Invoke("Locating Crew Members");
             EDDConfig.Instance.Update(false);
+
+            msg.Invoke("Decoding Symbols");
+            Icons.IconSet.ResetIcons();     // start with a clean slate loaded up from default icons
+
+            string path = EDDOptions.Instance.IconsPath ?? (EDDOptions.Instance.AppDataDirectory + "\\Icons\\*.zip");
+
+            Icons.IconSet.LoadIconPack(path, EDDOptions.Instance.AppDataDirectory, AppDomain.CurrentDomain.BaseDirectory);
         }
 
         public void Init()      // ED Discovery calls this during its init
@@ -131,12 +138,6 @@ namespace EDDiscovery
                     LogLineHighlight($"Log Writer Exception: {ex}");
                 };
             }
-
-            Icons.IconSet.ResetIcons();     // start with a clean slate loaded up from default icons
-
-            string path = EDDOptions.Instance.IconsPath ?? (EDDOptions.Instance.AppDataDirectory+"\\Icons\\*.zip");
-
-            Icons.IconSet.LoadIconPack(path, EDDOptions.Instance.AppDataDirectory , AppDomain.CurrentDomain.BaseDirectory);
 
             backgroundWorker = new Thread(BackgroundWorkerThread);
             backgroundWorker.IsBackground = true;
