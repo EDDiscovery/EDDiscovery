@@ -151,6 +151,7 @@ namespace EDDiscovery
             Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " ED init");
             msg.Invoke("Modulating Shields");
             Controller.Init();
+            PanelInformation.InitIcons();
 
             // Some components require the controller to be initialized
             // obsolete remove IconSet.SetPanelImageListGetter(PanelInformation.GetPanelImages);

@@ -111,7 +111,12 @@ namespace EDDiscovery.Forms
             { new PanelInfo( PanelIDs.PanelSelector, typeof(UserControlPanelSelector), "+", "Selector", "") },       // no description, not presented to user
         };
 
-        public static IReadOnlyDictionary<PanelIDs, Image> PanelTypeIcons { get; } = new IconGroup<PanelIDs>("Panels");
+        public static IReadOnlyDictionary<PanelIDs, Image> PanelTypeIcons { get; private set; } = new IconGroup<PanelIDs>("Panels");
+
+        public static void InitIcons()
+        {
+            PanelTypeIcons = new IconGroup<PanelIDs>("Panels");
+        }
 
         public class PanelInfo
         {
