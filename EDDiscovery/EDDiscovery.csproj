@@ -560,6 +560,12 @@
     <Compile Include="UserControls\UserControlStarList.Designer.cs">
       <DependentUpon>UserControlStarList.cs</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\UserControlContainerSplit.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\UserControlContainerSplit.Designer.cs">
+      <DependentUpon>UserControlContainerSplit.cs</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\UserControlTravelGrid.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -706,6 +712,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\UserControlStarList.resx">
       <DependentUpon>UserControlStarList.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\UserControlContainerSplit.resx">
+      <DependentUpon>UserControlContainerSplit.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\UserControlTravelGrid.resx">
       <DependentUpon>UserControlTravelGrid.cs</DependentUpon>
