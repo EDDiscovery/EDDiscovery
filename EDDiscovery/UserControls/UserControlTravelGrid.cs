@@ -933,9 +933,8 @@ namespace EDDiscovery.UserControls
                 }
                 else
                 {
-                    bookmarkForm.InitialisePos(rightclicksystem.System.X, rightclicksystem.System.Y, rightclicksystem.System.Z);
                     tme = DateTime.Now;
-                    bookmarkForm.NewSystemBookmark(rightclicksystem.System.Name, "", tme.ToString());
+                    bookmarkForm.NewSystemBookmark(rightclicksystem.System, "", tme.ToString());
                 }
                 DialogResult dr = bookmarkForm.ShowDialog();
                 if (dr == DialogResult.OK)

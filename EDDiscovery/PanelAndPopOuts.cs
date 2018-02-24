@@ -265,13 +265,13 @@ namespace EDDiscovery.Forms
             }
         }
 
-        public void PopOut(PanelInformation.PanelIDs selected)
+        public UserControlCommonBase PopOut(PanelInformation.PanelIDs selected)
         {
             int index = PanelInformation.PanelList.FindIndex(x => x.PopoutID == selected);
-            PopOut(index);
+            return PopOut(index);
         }
 
-        public void PopOut(int ix)
+        public UserControlCommonBase PopOut(int ix)
         {
             UserControlForm tcf = usercontrolsforms.NewForm();
             tcf.Icon = Properties.Resources.edlogo_3mo_icon;
@@ -304,6 +304,7 @@ namespace EDDiscovery.Forms
 
                 discoveryform.ActionRun(Actions.ActionEventEDList.onPopUp, null, new Conditions.ConditionVariables(new string[] { "PopOutName", refname , "PopOutTitle", windowtitle, "PopOutIndex", numopened.ToString()} ));
             }
+            return ctrl;
         }
     }
 }

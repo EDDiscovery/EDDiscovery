@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.dataGridViewMarks = new System.Windows.Forms.DataGridView();
             this.BodyName = new System.Windows.Forms.DataGridViewComboBoxColumn();
             this.SurfaceName = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -37,7 +38,10 @@
             this.Valid = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.labelSurface = new ExtendedControls.LabelExt();
             this.buttonSave = new ExtendedControls.ButtonExt();
+            this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.sendToCompassToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewMarks)).BeginInit();
+            this.contextMenuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // dataGridViewMarks
@@ -50,6 +54,7 @@
             this.Latitude,
             this.Longitude,
             this.Valid});
+            this.dataGridViewMarks.ContextMenuStrip = this.contextMenuStrip1;
             this.dataGridViewMarks.Location = new System.Drawing.Point(6, 29);
             this.dataGridViewMarks.Name = "dataGridViewMarks";
             this.dataGridViewMarks.Size = new System.Drawing.Size(646, 165);
@@ -111,6 +116,20 @@
             this.buttonSave.UseVisualStyleBackColor = true;
             this.buttonSave.Click += new System.EventHandler(this.buttonSave_Click);
             // 
+            // contextMenuStrip1
+            // 
+            this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.sendToCompassToolStripMenuItem});
+            this.contextMenuStrip1.Name = "contextMenuStrip1";
+            this.contextMenuStrip1.Size = new System.Drawing.Size(165, 48);
+            // 
+            // sendToCompassToolStripMenuItem
+            // 
+            this.sendToCompassToolStripMenuItem.Name = "sendToCompassToolStripMenuItem";
+            this.sendToCompassToolStripMenuItem.Size = new System.Drawing.Size(164, 22);
+            this.sendToCompassToolStripMenuItem.Text = "Send to compass";
+            this.sendToCompassToolStripMenuItem.Click += new System.EventHandler(this.sendToCompassToolStripMenuItem_Click);
+            // 
             // UserControlSurfaceBookmarks
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -121,6 +140,7 @@
             this.Name = "UserControlSurfaceBookmarks";
             this.Size = new System.Drawing.Size(657, 200);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewMarks)).EndInit();
+            this.contextMenuStrip1.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -137,5 +157,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn Longitude;
         private System.Windows.Forms.DataGridViewCheckBoxColumn Valid;
         private ExtendedControls.ButtonExt buttonSave;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
+        private System.Windows.Forms.ToolStripMenuItem sendToCompassToolStripMenuItem;
     }
 }

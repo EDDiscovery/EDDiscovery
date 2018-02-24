@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using EliteDangerousCore;
 using EliteDangerousCore.DB;
 using static EliteDangerousCore.DB.PlanetMarks;
+using EDDiscovery.Forms;
 
 namespace EDDiscovery.UserControls
 {
@@ -39,9 +40,12 @@ namespace EDDiscovery.UserControls
             if (thisSystem != null)
             {
                 var landables = EDDApplicationContext.EDDMainForm.history.starscan.FindSystem(thisSystem, true)?.Bodies?.Where(b => b.ScanData != null && b.ScanData.IsLandable)?.Select(b => b.fullname);
-                foreach (string s in landables)
+                if (landables != null)
                 {
-                    ((DataGridViewComboBoxColumn)dataGridViewMarks.Columns["BodyName"]).Items.Add(s);
+                    foreach (string s in landables)
+                    {
+                        ((DataGridViewComboBoxColumn)dataGridViewMarks.Columns["BodyName"]).Items.Add(s);
+                    }
                 }
             }
         }
@@ -53,6 +57,22 @@ namespace EDDiscovery.UserControls
             dataGridViewMarks.Rows.Clear();
             SetSystem(systemName);
             buttonSave.Hide();
+            sendToCompassToolStripMenuItem.Enabled = false;
+        }
+        
+        public void AddSurfaceLocation(string planet, double latitude, double longitude)
+        {
+            using (DataGridViewRow dr = dataGridViewMarks.Rows[dataGridViewMarks.Rows.Add()])
+            {
+                dr.Cells[0].Value = planet;
+                dr.Cells[0].ReadOnly = true;
+                dr.Cells[1].Value = "Enter a name";
+                dr.Cells[2].Value = "";
+                dr.Cells[3].Value = latitude.ToString("F4");
+                dr.Cells[4].Value = longitude.ToString("F4");
+                ((DataGridViewCheckBoxCell)dr.Cells[5]).Value = false;
+                dr.Cells[1].Selected = true;
+            }
         }
 
         public void ApplyBookmark(BookmarkClass bk)
@@ -94,6 +114,7 @@ namespace EDDiscovery.UserControls
                 }
             }
             dataGridViewMarks.ResumeLayout();
+            sendToCompassToolStripMenuItem.Enabled = true;
         }
 
         private void dataGridViewMarks_CellValidating(object sender, DataGridViewCellValidatingEventArgs e)
@@ -127,22 +148,27 @@ namespace EDDiscovery.UserControls
             DataGridViewRow dr = dataGridViewMarks.Rows[e.RowIndex];
             if (ValidRow(dr))
             {
-                Location newLoc = dr.Tag != null ? (Location)dr.Tag : new Location();
-                newLoc.Name = dr.Cells[1].Value.ToString();
-                newLoc.Comment = dr.Cells[2].Value?.ToString();
-                newLoc.Latitude = Double.Parse(dr.Cells[3].Value.ToString());
-                newLoc.Longitude = Double.Parse(dr.Cells[4].Value.ToString());
-                internalPlanetMarks.AddOrUpdateLocation(dr.Cells[0].Value.ToString(), newLoc);
-                dr.Tag = newLoc;
-                dr.Cells[0].ReadOnly = true;    // can't change the planet or location name once it's in the collection or we'll not be able to look it up again
-                dr.Cells[1].ReadOnly = true;
-                ((DataGridViewCheckBoxCell)dr.Cells[5]).Value = true;
-                Edited = true;
+                SaveLocation(dr);
             }
             else
                 ((DataGridViewCheckBoxCell)dr.Cells[5]).Value = false;
         }
 
+        private void SaveLocation(DataGridViewRow dr)
+        {
+            Location newLoc = dr.Tag != null ? (Location)dr.Tag : new Location();
+            newLoc.Name = dr.Cells[1].Value.ToString();
+            newLoc.Comment = dr.Cells[2].Value?.ToString();
+            newLoc.Latitude = Double.Parse(dr.Cells[3].Value.ToString());
+            newLoc.Longitude = Double.Parse(dr.Cells[4].Value.ToString());
+            internalPlanetMarks.AddOrUpdateLocation(dr.Cells[0].Value.ToString(), newLoc);
+            dr.Tag = newLoc;
+            dr.Cells[0].ReadOnly = true;    // can't change the planet or location name once it's in the collection or we'll not be able to look it up again
+            dr.Cells[1].ReadOnly = true;
+            ((DataGridViewCheckBoxCell)dr.Cells[5]).Value = true;
+            Edited = true;
+        }
+        
         private bool ValidRow(DataGridViewRow dr)
         {
             if (dr.Cells[3].Value == null || dr.Cells[4].Value == null) return false;
@@ -167,6 +193,27 @@ namespace EDDiscovery.UserControls
             {
                 GlobalBookMarkList.AddOrUpdateBookmark(thisBookmark, true, thisBookmark.StarName, thisBookmark.x, thisBookmark.y, thisBookmark.z, thisBookmark.Time, thisBookmark.Note, internalPlanetMarks);
                 Edited = false;
+            }
+        }
+
+        private void sendToCompassToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            DataGridViewRow dr = dataGridViewMarks.SelectedCells.Cast<DataGridViewCell>()
+                                                                        .Select(cell => cell.OwningRow)
+                                                                        .FirstOrDefault();
+            if (dr != null)
+            {
+                if (dr.Tag == null && ValidRow(dr)) SaveLocation(dr);
+                if (thisBookmark != null && dr.Tag != null)
+                {
+                    if (Edited)
+                    {
+                        GlobalBookMarkList.AddOrUpdateBookmark(thisBookmark, true, thisBookmark.StarName, thisBookmark.x, thisBookmark.y, thisBookmark.z, thisBookmark.Time, thisBookmark.Note, internalPlanetMarks);
+                        Edited = false;
+                    }
+                    UserControlCompass comp = (UserControlCompass)EDDApplicationContext.EDDMainForm.PopOuts.PopOut(PanelInformation.PanelIDs.Compass);
+                    comp.SetSurfaceBookmark(thisBookmark, dr.Cells[0].Value.ToString(), dr.Cells[1].Value.ToString());
+                }
             }
         }
     }
