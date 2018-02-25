@@ -592,8 +592,9 @@ namespace EDDiscovery
             galacticMapping.ParseData();                            // at this point, gal map data has been uploaded - get it into memory
             SystemClassDB.AddToAutoComplete(galacticMapping.GetGMONames());
             SystemNoteClass.GetAllSystemNotes();
+            GlobalBookMarkList.LoadBookmarks();
 
-            LogLine("Loaded Notes and Galactic mapping.");
+            LogLine("Loaded Notes, Bookmarks and Galactic mapping.");
 
             ReportProgress(-1, "");
             InvokeAsyncOnUiThread(() => OnInitialSyncComplete?.Invoke());

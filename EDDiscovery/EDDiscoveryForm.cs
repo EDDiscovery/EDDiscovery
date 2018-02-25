@@ -476,7 +476,7 @@ namespace EDDiscovery
 
         private void Controller_InitialisationComplete()
         {
-            GlobalBookMarkList.LoadBookmarks();  // Need this to happen on UI thread or BookmarkUC won't draw properly - better way probably exists, will do for now
+            GlobalBookMarkList.FireRefresh();   // ensure any UI hanging off the bookmark list knows it's ready
             if (EDDConfig.AutoLoadPopOuts && EDDOptions.Instance.NoWindowReposition == false)
                 PopOuts.LoadSavedPopouts();  //moved from initial load so we don't open these before we can draw them properly
         }
