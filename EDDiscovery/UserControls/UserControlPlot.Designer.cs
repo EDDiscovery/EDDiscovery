@@ -64,9 +64,7 @@ namespace EDDiscovery.UserControls
             this.labelExt3 = new System.Windows.Forms.Label();
             this.textMaxRadius = new ExtendedControls.NumberBoxDouble();
             this.panelTop = new System.Windows.Forms.Panel();
-            this.buttonExt2dtop = new ExtendedControls.ButtonExt();
-            this.buttonExt2dfront = new ExtendedControls.ButtonExt();
-            this.buttonExt2dside = new ExtendedControls.ButtonExt();
+            this.comboBoxView = new ExtendedControls.ComboBoxCustom();
             this.chartBubble = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.contextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.zoomToolStripMenuZoom = new System.Windows.Forms.ToolStripMenuItem();
@@ -125,7 +123,7 @@ namespace EDDiscovery.UserControls
             // labelExt3
             // 
             this.labelExt3.AutoSize = true;
-            this.labelExt3.Location = new System.Drawing.Point(79, 6);
+            this.labelExt3.Location = new System.Drawing.Point(75, 6);
             this.labelExt3.Name = "labelExt3";
             this.labelExt3.Size = new System.Drawing.Size(27, 13);
             this.labelExt3.TabIndex = 3;
@@ -143,7 +141,7 @@ namespace EDDiscovery.UserControls
             this.textMaxRadius.DelayBeforeNotification = 500;
             this.textMaxRadius.Format = "0.#######";
             this.textMaxRadius.InErrorCondition = false;
-            this.textMaxRadius.Location = new System.Drawing.Point(107, 3);
+            this.textMaxRadius.Location = new System.Drawing.Point(103, 3);
             this.textMaxRadius.Maximum = 100000D;
             this.textMaxRadius.Minimum = 0D;
             this.textMaxRadius.Multiline = false;
@@ -162,9 +160,7 @@ namespace EDDiscovery.UserControls
             // panelTop
             // 
             this.panelTop.BackColor = System.Drawing.SystemColors.Control;
-            this.panelTop.Controls.Add(this.buttonExt2dtop);
-            this.panelTop.Controls.Add(this.buttonExt2dfront);
-            this.panelTop.Controls.Add(this.buttonExt2dside);
+            this.panelTop.Controls.Add(this.comboBoxView);
             this.panelTop.Controls.Add(this.labelExt1);
             this.panelTop.Controls.Add(this.textMinRadius);
             this.panelTop.Controls.Add(this.labelExt3);
@@ -175,38 +171,32 @@ namespace EDDiscovery.UserControls
             this.panelTop.Size = new System.Drawing.Size(335, 26);
             this.panelTop.TabIndex = 25;
             // 
-            // buttonExt2dtop
+            // comboBoxView
             // 
-            this.buttonExt2dtop.Dock = System.Windows.Forms.DockStyle.Right;
-            this.buttonExt2dtop.Location = new System.Drawing.Point(185, 0);
-            this.buttonExt2dtop.Name = "buttonExt2dtop";
-            this.buttonExt2dtop.Size = new System.Drawing.Size(50, 26);
-            this.buttonExt2dtop.TabIndex = 6;
-            this.buttonExt2dtop.Text = "Top";
-            this.buttonExt2dtop.UseVisualStyleBackColor = true;
-            this.buttonExt2dtop.MouseDown += new System.Windows.Forms.MouseEventHandler(this.buttonExt2dtop_MouseDown);
-            // 
-            // buttonExt2dfront
-            // 
-            this.buttonExt2dfront.Dock = System.Windows.Forms.DockStyle.Right;
-            this.buttonExt2dfront.Location = new System.Drawing.Point(235, 0);
-            this.buttonExt2dfront.Name = "buttonExt2dfront";
-            this.buttonExt2dfront.Size = new System.Drawing.Size(50, 26);
-            this.buttonExt2dfront.TabIndex = 7;
-            this.buttonExt2dfront.Text = "Front";
-            this.buttonExt2dfront.UseVisualStyleBackColor = true;
-            this.buttonExt2dfront.MouseDown += new System.Windows.Forms.MouseEventHandler(this.buttonExt2dfront_MouseDown);
-            // 
-            // buttonExt2dside
-            // 
-            this.buttonExt2dside.Dock = System.Windows.Forms.DockStyle.Right;
-            this.buttonExt2dside.Location = new System.Drawing.Point(285, 0);
-            this.buttonExt2dside.Name = "buttonExt2dside";
-            this.buttonExt2dside.Size = new System.Drawing.Size(50, 26);
-            this.buttonExt2dside.TabIndex = 8;
-            this.buttonExt2dside.Text = "Side";
-            this.buttonExt2dside.UseVisualStyleBackColor = true;
-            this.buttonExt2dside.MouseDown += new System.Windows.Forms.MouseEventHandler(this.buttonExt2dside_MouseDown);
+            this.comboBoxView.ArrowWidth = 1;
+            this.comboBoxView.BorderColor = System.Drawing.Color.White;
+            this.comboBoxView.ButtonColorScaling = 0.5F;
+            this.comboBoxView.DataSource = null;
+            this.comboBoxView.DisplayMember = "";
+            this.comboBoxView.DropDownBackgroundColor = System.Drawing.Color.Gray;
+            this.comboBoxView.DropDownHeight = 106;
+            this.comboBoxView.DropDownWidth = 75;
+            this.comboBoxView.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.comboBoxView.ItemHeight = 13;
+            this.comboBoxView.Location = new System.Drawing.Point(157, 3);
+            this.comboBoxView.MouseOverBackgroundColor = System.Drawing.Color.Silver;
+            this.comboBoxView.Name = "comboBoxView";
+            this.comboBoxView.ScrollBarButtonColor = System.Drawing.Color.LightGray;
+            this.comboBoxView.ScrollBarColor = System.Drawing.Color.LightGray;
+            this.comboBoxView.ScrollBarWidth = 16;
+            this.comboBoxView.SelectedIndex = -1;
+            this.comboBoxView.SelectedItem = null;
+            this.comboBoxView.SelectedValue = null;
+            this.comboBoxView.Size = new System.Drawing.Size(75, 21);
+            this.comboBoxView.TabIndex = 9;
+            this.comboBoxView.Text = "comboBoxCustom1";
+            this.comboBoxView.ValueMember = "";
+            this.comboBoxView.SelectedIndexChanged += new System.EventHandler(this.comboBoxView_SelectedIndexChanged);
             // 
             // chartBubble
             // 
@@ -230,12 +220,12 @@ namespace EDDiscovery.UserControls
             chartArea1.AxisY.MajorTickMark.LineColor = System.Drawing.Color.White;
             chartArea1.AxisY.MinorGrid.LineColor = System.Drawing.Color.White;
             chartArea1.AxisY.TextOrientation = System.Windows.Forms.DataVisualization.Charting.TextOrientation.Horizontal;
-            chartArea1.AxisY.Title = "Z";
+            chartArea1.AxisY.Title = "Y";
             chartArea1.AxisY.TitleForeColor = System.Drawing.Color.White;
             chartArea1.AxisY2.Title = "Y";
             chartArea1.AxisY2.TitleForeColor = System.Drawing.Color.White;
             chartArea1.BackColor = System.Drawing.Color.Black;
-            chartArea1.Name = "ChartXZY";
+            chartArea1.Name = "ChartXYZ-Top";
             chartArea2.AxisX.LabelStyle.ForeColor = System.Drawing.Color.DarkGray;
             chartArea2.AxisX.LineColor = System.Drawing.Color.White;
             chartArea2.AxisX.MajorGrid.Interval = 0D;
@@ -251,12 +241,12 @@ namespace EDDiscovery.UserControls
             chartArea2.AxisY.MajorGrid.LineDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.Dot;
             chartArea2.AxisY.MajorTickMark.LineColor = System.Drawing.Color.White;
             chartArea2.AxisY.TextOrientation = System.Windows.Forms.DataVisualization.Charting.TextOrientation.Horizontal;
-            chartArea2.AxisY.Title = "Y";
+            chartArea2.AxisY.Title = "Z";
             chartArea2.AxisY.TitleForeColor = System.Drawing.Color.White;
             chartArea2.AxisY2.Title = "Z";
             chartArea2.AxisY2.TitleForeColor = System.Drawing.Color.White;
             chartArea2.BackColor = System.Drawing.Color.Black;
-            chartArea2.Name = "ChartXYZ";
+            chartArea2.Name = "ChartXZY-Front";
             chartArea2.Visible = false;
             chartArea3.AxisX.LabelStyle.ForeColor = System.Drawing.Color.DarkGray;
             chartArea3.AxisX.LineColor = System.Drawing.Color.White;
@@ -277,7 +267,7 @@ namespace EDDiscovery.UserControls
             chartArea3.AxisY2.Title = "X";
             chartArea3.AxisY2.TitleForeColor = System.Drawing.Color.White;
             chartArea3.BackColor = System.Drawing.Color.Black;
-            chartArea3.Name = "ChartYZX";
+            chartArea3.Name = "ChartYZX-Side";
             chartArea3.Visible = false;
             this.chartBubble.ChartAreas.Add(chartArea1);
             this.chartBubble.ChartAreas.Add(chartArea2);
@@ -285,7 +275,7 @@ namespace EDDiscovery.UserControls
             this.chartBubble.Location = new System.Drawing.Point(0, 26);
             this.chartBubble.Margin = new System.Windows.Forms.Padding(0);
             this.chartBubble.Name = "chartBubble";
-            series1.ChartArea = "ChartXZY";
+            series1.ChartArea = "ChartXYZ-Top";
             series1.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Bubble;
             series1.CustomProperties = "BubbleMinSize=4, BubbleMaxSize=4";
             series1.MarkerColor = System.Drawing.Color.Red;
@@ -293,7 +283,7 @@ namespace EDDiscovery.UserControls
             series1.MarkerStyle = System.Windows.Forms.DataVisualization.Charting.MarkerStyle.Circle;
             series1.Name = "CurrentFront";
             series1.YValuesPerPoint = 2;
-            series2.ChartArea = "ChartXZY";
+            series2.ChartArea = "ChartXYZ-Top";
             series2.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Bubble;
             series2.CustomProperties = "BubbleMinSize=2, BubbleMaxSize=8";
             series2.MarkerBorderColor = System.Drawing.Color.Teal;
@@ -302,7 +292,7 @@ namespace EDDiscovery.UserControls
             series2.MarkerStyle = System.Windows.Forms.DataVisualization.Charting.MarkerStyle.Circle;
             series2.Name = "VisitedFront";
             series2.YValuesPerPoint = 2;
-            series3.ChartArea = "ChartXZY";
+            series3.ChartArea = "ChartXYZ-Top";
             series3.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Bubble;
             series3.CustomProperties = "BubbleMinSize=2, BubbleMaxSize=8";
             series3.MarkerBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(192)))), ((int)(((byte)(128)))));
@@ -311,7 +301,7 @@ namespace EDDiscovery.UserControls
             series3.MarkerStyle = System.Windows.Forms.DataVisualization.Charting.MarkerStyle.Circle;
             series3.Name = "UnvisitedFront";
             series3.YValuesPerPoint = 2;
-            series4.ChartArea = "ChartXYZ";
+            series4.ChartArea = "ChartXZY-Front";
             series4.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Bubble;
             series4.CustomProperties = "BubbleMinSize=4, BubbleMaxSize=4";
             series4.MarkerColor = System.Drawing.Color.Red;
@@ -319,7 +309,7 @@ namespace EDDiscovery.UserControls
             series4.MarkerStyle = System.Windows.Forms.DataVisualization.Charting.MarkerStyle.Circle;
             series4.Name = "CurrentTop";
             series4.YValuesPerPoint = 2;
-            series5.ChartArea = "ChartXYZ";
+            series5.ChartArea = "ChartXZY-Front";
             series5.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Bubble;
             series5.CustomProperties = "BubbleMinSize=2, BubbleMaxSize=8";
             series5.MarkerBorderColor = System.Drawing.Color.Teal;
@@ -328,7 +318,7 @@ namespace EDDiscovery.UserControls
             series5.MarkerStyle = System.Windows.Forms.DataVisualization.Charting.MarkerStyle.Circle;
             series5.Name = "VisitedTop";
             series5.YValuesPerPoint = 2;
-            series6.ChartArea = "ChartXYZ";
+            series6.ChartArea = "ChartXZY-Front";
             series6.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Bubble;
             series6.CustomProperties = "BubbleMinSize=2, BubbleMaxSize=8";
             series6.MarkerBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(192)))), ((int)(((byte)(128)))));
@@ -337,7 +327,7 @@ namespace EDDiscovery.UserControls
             series6.MarkerStyle = System.Windows.Forms.DataVisualization.Charting.MarkerStyle.Circle;
             series6.Name = "UnvisitedTop";
             series6.YValuesPerPoint = 2;
-            series7.ChartArea = "ChartYZX";
+            series7.ChartArea = "ChartYZX-Side";
             series7.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Bubble;
             series7.CustomProperties = "BubbleMinSize=4, BubbleMaxSize=4";
             series7.MarkerColor = System.Drawing.Color.Red;
@@ -345,7 +335,7 @@ namespace EDDiscovery.UserControls
             series7.MarkerStyle = System.Windows.Forms.DataVisualization.Charting.MarkerStyle.Circle;
             series7.Name = "CurrentSide";
             series7.YValuesPerPoint = 2;
-            series8.ChartArea = "ChartYZX";
+            series8.ChartArea = "ChartYZX-Side";
             series8.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Bubble;
             series8.CustomProperties = "BubbleMinSize=2, BubbleMaxSize=8";
             series8.MarkerBorderColor = System.Drawing.Color.Teal;
@@ -354,7 +344,7 @@ namespace EDDiscovery.UserControls
             series8.MarkerStyle = System.Windows.Forms.DataVisualization.Charting.MarkerStyle.Circle;
             series8.Name = "VisitedSide";
             series8.YValuesPerPoint = 2;
-            series9.ChartArea = "ChartYZX";
+            series9.ChartArea = "ChartYZX-Side";
             series9.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Bubble;
             series9.CustomProperties = "BubbleMinSize=2, BubbleMaxSize=8";
             series9.MarkerBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(192)))), ((int)(((byte)(128)))));
@@ -499,9 +489,6 @@ namespace EDDiscovery.UserControls
         private ExtendedControls.NumberBoxDouble textMaxRadius;
         private Panel panelTop;
         private System.Windows.Forms.DataVisualization.Charting.Chart chartBubble;
-        private ExtendedControls.ButtonExt buttonExt2dtop;
-        private ExtendedControls.ButtonExt buttonExt2dfront;
-        private ExtendedControls.ButtonExt buttonExt2dside;
         private ContextMenuStrip contextMenuStrip;
         private ToolStripMenuItem zoomToolStripMenuZoom;
         private ToolStripMenuItem toolStripMenuItem1;
@@ -514,5 +501,6 @@ namespace EDDiscovery.UserControls
         private ToolStripMenuItem toolStripMenuItem35;
         private ToolStripMenuItem toolStripMenuItem4;
         private ToolStripMenuItem resetToolStripReset;
+        private ExtendedControls.ComboBoxCustom comboBoxView;
     }
 }

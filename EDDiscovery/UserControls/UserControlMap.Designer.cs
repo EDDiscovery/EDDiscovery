@@ -224,7 +224,7 @@ namespace EDDiscovery.UserControls
             // labelExt3
             // 
             this.labelExt3.AutoSize = true;
-            this.labelExt3.Location = new System.Drawing.Point(78, 6);
+            this.labelExt3.Location = new System.Drawing.Point(75, 6);
             this.labelExt3.Name = "labelExt3";
             this.labelExt3.Size = new System.Drawing.Size(27, 13);
             this.labelExt3.TabIndex = 3;
@@ -242,7 +242,7 @@ namespace EDDiscovery.UserControls
             this.textMaxRadius.DelayBeforeNotification = 500;
             this.textMaxRadius.Format = "0.#######";
             this.textMaxRadius.InErrorCondition = false;
-            this.textMaxRadius.Location = new System.Drawing.Point(106, 3);
+            this.textMaxRadius.Location = new System.Drawing.Point(103, 3);
             this.textMaxRadius.Maximum = 100000D;
             this.textMaxRadius.Minimum = 0D;
             this.textMaxRadius.Multiline = false;
@@ -275,13 +275,12 @@ namespace EDDiscovery.UserControls
             // 
             // slideMaxItems
             // 
-            this.slideMaxItems.Dock = System.Windows.Forms.DockStyle.Right;
             this.slideMaxItems.LargeChange = 50;
-            this.slideMaxItems.Location = new System.Drawing.Point(290, 0);
+            this.slideMaxItems.Location = new System.Drawing.Point(152, 1);
             this.slideMaxItems.Maximum = 500;
             this.slideMaxItems.Minimum = 50;
             this.slideMaxItems.Name = "slideMaxItems";
-            this.slideMaxItems.Size = new System.Drawing.Size(90, 26);
+            this.slideMaxItems.Size = new System.Drawing.Size(90, 45);
             this.slideMaxItems.SmallChange = 10;
             this.slideMaxItems.TabIndex = 4;
             this.slideMaxItems.TickFrequency = 50;
