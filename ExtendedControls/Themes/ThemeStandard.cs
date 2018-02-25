@@ -155,7 +155,7 @@ namespace ExtendedControls
 
         public Color GridCellText { get { return currentsettings.colors[Settings.CI.grid_celltext]; } set { SetCustom(); currentsettings.colors[Settings.CI.grid_celltext] = value; } }
         public Color GridBorderLines { get { return currentsettings.colors[Settings.CI.grid_borderlines]; } set { SetCustom(); currentsettings.colors[Settings.CI.grid_borderlines] = value; } }
-
+        
         public Color TextBlockColor { get { return currentsettings.colors[Settings.CI.textbox_fore]; } set { SetCustom(); currentsettings.colors[Settings.CI.textbox_fore] = value; } }
         public Color TextBlockHighlightColor { get { return currentsettings.colors[Settings.CI.textbox_highlight]; } set { SetCustom(); currentsettings.colors[Settings.CI.textbox_highlight] = value; } }
         public Color TextBlockSuccessColor { get { return currentsettings.colors[Settings.CI.textbox_success]; } set { SetCustom(); currentsettings.colors[Settings.CI.textbox_success] = value; } }
@@ -781,6 +781,20 @@ namespace ExtendedControls
                 ctrl.Font = fnt;
                 Font fnt2;
 
+                foreach(DataGridViewColumn col in ctrl.Columns)
+                {
+                    if (col.CellType == typeof(DataGridViewComboBoxCell))
+                    {   // Need to set flat style for colours to take on combobox cells.
+                        DataGridViewComboBoxColumn cbocol = (DataGridViewComboBoxColumn)col;
+                        if (currentsettings.buttonstyle.Equals(ButtonStyles[0])) // system
+                            cbocol.FlatStyle = FlatStyle.System;
+                        else if (currentsettings.buttonstyle.Equals(ButtonStyles[1])) // flat
+                            cbocol.FlatStyle = FlatStyle.Flat;
+                        else
+                            cbocol.FlatStyle = FlatStyle.Popup;
+                    }
+                }
+                
                 if (myControl.Name.Contains("dataGridViewTravel") && fnt.Size > 10F)
                     fnt2 = new Font(currentsettings.fontname, 10F);
                 else
