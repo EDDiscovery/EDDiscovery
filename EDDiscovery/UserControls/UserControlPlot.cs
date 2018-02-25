@@ -13,11 +13,11 @@
  * 
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
+
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
-using System.Windows.Forms.DataVisualization.Charting;
 using System.Data;
 using System.Linq;
 using System.Text;
@@ -28,13 +28,13 @@ using System.Threading;
 using EliteDangerousCore;
 using EliteDangerousCore.EDSM;
 using EliteDangerousCore.DB;
-
+using ExtendedControls;
 
 namespace EDDiscovery.UserControls
 {
     public partial class UserControlPlot : UserControlCommonBase
     {
-        private string DbSave { get { return "StarDistancePanel" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
+        private string DbSave { get { return "PlotPanel" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
 
         private StarDistanceComputer computer;
 
@@ -56,6 +56,14 @@ namespace EDDiscovery.UserControls
             textMaxRadius.ValueNoChange = SQLiteConnectionUser.GetSettingDouble(DbSave + "PlotMax", defaultmaximumradarradius);
             textMinRadius.SetComparitor(textMaxRadius, -2);     // need to do this after values are set
             textMaxRadius.SetComparitor(textMinRadius, 2);
+
+            comboBoxView.Enabled = false;
+            comboBoxView.Items.Add("Top");
+            comboBoxView.Items.Add("Front");
+            comboBoxView.Items.Add("Side");
+            comboBoxView.Items.DefaultIfEmpty("Top");
+            comboBoxView.SelectedIndex = 0;
+            comboBoxView.Enabled = true;
 
             uctg.OnTravelSelectionChanged += Uctg_OnTravelSelectionChanged;
         }
@@ -80,8 +88,7 @@ namespace EDDiscovery.UserControls
         public override void InitialDisplay()
         {
             KickComputation(uctg.GetCurrentHistoryEntry);            
-
-        }
+        }              
 
         private void Uctg_OnTravelSelectionChanged(HistoryEntry he, HistoryList hl)
         {
@@ -206,9 +213,9 @@ namespace EDDiscovery.UserControls
 
         private void SetMarkerSize()
         {
-            int maxMarker = Convert.ToInt32(5 * (markerReduction[zoomIndex]));
-            int defMarker = Convert.ToInt32(3 * (markerReduction[zoomIndex]));
-            int minMarker = Convert.ToInt32(1 * (markerReduction[zoomIndex]));
+            int maxMarker = Convert.ToInt32(6 * (markerReduction[zoomIndex]));
+            int defMarker = Convert.ToInt32(4 * (markerReduction[zoomIndex]));
+            int minMarker = Convert.ToInt32(2 * (markerReduction[zoomIndex]));
 
             // Min and Max size for Current system
             foreach (int serie in seriesIsCurrent)
@@ -327,41 +334,23 @@ namespace EDDiscovery.UserControls
             }            
             chartBubble.Update();            
         }
-
-        private void buttonExt2dtop_MouseDown(object sender, MouseEventArgs e)
-        {
-            chartBubble.ChartAreas[0].Visible = false;
-            chartBubble.ChartAreas[1].Visible = true;
-            chartBubble.ChartAreas[2].Visible = false;
-        }
-
-        private void buttonExt2dfront_MouseDown(object sender, MouseEventArgs e)
-        {
-            chartBubble.ChartAreas[0].Visible = true;
-            chartBubble.ChartAreas[1].Visible = false;
-            chartBubble.ChartAreas[2].Visible = false;
-        }
-
-        private void buttonExt2dside_MouseDown(object sender, MouseEventArgs e)
-        {
-            chartBubble.ChartAreas[0].Visible = false;
-            chartBubble.ChartAreas[1].Visible = false;
-            chartBubble.ChartAreas[2].Visible = true;
-        }
-
-        private int panSwitch = 1;
+        
+        private int panSwitch = 0;
 
         private void chartBubble_MouseDown(object sender, MouseEventArgs e)
         {
-            if (e.Button == MouseButtons.Middle)
+            if (e.Button == MouseButtons.Middle && panSwitch == 1)
             {                
                 mousePosPan = e.Location;
             }
 
-            if (e.Button == MouseButtons.Right && panSwitch == 0)
+            if (e.Button == MouseButtons.Right)
             {
-                Point cursor = PointToScreen(new Point(e.Location.X, e.Location.Y));
-                contextMenuStrip.Show(cursor.X, cursor.Y);
+
+                //Point cursor = PointToScreen(new Point(e.Location.X, e.Location.Y));
+                int cursorX = Cursor.Position.X;
+                int cursorY = Cursor.Position.Y;
+                contextMenuStrip.Show(cursorX, cursorY);
             }
         }
 
@@ -452,5 +441,27 @@ namespace EDDiscovery.UserControls
         {
             panSwitch = 0;
         }
+
+        private void comboBoxView_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (comboBoxView.SelectedItem == "Top")
+            {
+                chartBubble.ChartAreas[0].Visible = true;
+                chartBubble.ChartAreas[1].Visible = false;
+                chartBubble.ChartAreas[2].Visible = false;
+            }
+            if (comboBoxView.SelectedItem == "Front")
+            {
+                chartBubble.ChartAreas[0].Visible = false;
+                chartBubble.ChartAreas[1].Visible = true;
+                chartBubble.ChartAreas[2].Visible = false;
+            }
+            if (comboBoxView.SelectedItem == "Side")
+            {
+                chartBubble.ChartAreas[0].Visible = false;
+                chartBubble.ChartAreas[1].Visible = false;
+                chartBubble.ChartAreas[2].Visible = true;
+            }
+        }        
     }    
 }
