@@ -1,4 +1,6 @@
-﻿namespace EDDiscovery.UserControls
+﻿using static ExtendedControls.ThemeStandard;
+
+namespace EDDiscovery.UserControls
 {
     partial class UserControlSurfaceBookmarks
     {

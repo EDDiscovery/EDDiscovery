@@ -41,7 +41,8 @@
             this.X = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Y = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Z = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.userControlSurfaceBookmarks1 = new EDDiscovery.UserControls.UserControlSurfaceBookmarks();
+            this.userControlSurfaceBookmarks = new EDDiscovery.UserControls.UserControlSurfaceBookmarks();
+            this.buttonDelete = new ExtendedControls.ButtonExt();
             this.panelButtons.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
@@ -52,6 +53,7 @@
             // 
             // panelButtons
             // 
+            this.panelButtons.Controls.Add(this.buttonDelete);
             this.panelButtons.Controls.Add(this.buttonNew);
             this.panelButtons.Controls.Add(this.buttonEdit);
             this.panelButtons.Controls.Add(this.textBoxFilter);
@@ -63,20 +65,20 @@
             // 
             // buttonNew
             // 
-            this.buttonNew.Location = new System.Drawing.Point(285, 4);
+            this.buttonNew.Location = new System.Drawing.Point(204, 3);
             this.buttonNew.Name = "buttonNew";
             this.buttonNew.Size = new System.Drawing.Size(75, 23);
-            this.buttonNew.TabIndex = 28;
+            this.buttonNew.TabIndex = 2;
             this.buttonNew.Text = "New";
             this.buttonNew.UseVisualStyleBackColor = true;
             this.buttonNew.Click += new System.EventHandler(this.buttonNew_Click);
             // 
             // buttonEdit
             // 
-            this.buttonEdit.Location = new System.Drawing.Point(204, 4);
+            this.buttonEdit.Location = new System.Drawing.Point(285, 3);
             this.buttonEdit.Name = "buttonEdit";
             this.buttonEdit.Size = new System.Drawing.Size(75, 23);
-            this.buttonEdit.TabIndex = 27;
+            this.buttonEdit.TabIndex = 3;
             this.buttonEdit.Text = "Edit";
             this.buttonEdit.UseVisualStyleBackColor = true;
             this.buttonEdit.Click += new System.EventHandler(this.buttonEdit_Click);
@@ -99,7 +101,7 @@
             this.textBoxFilter.SelectionLength = 0;
             this.textBoxFilter.SelectionStart = 0;
             this.textBoxFilter.Size = new System.Drawing.Size(148, 20);
-            this.textBoxFilter.TabIndex = 25;
+            this.textBoxFilter.TabIndex = 1;
             this.textBoxFilter.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.textBoxFilter.WordWrap = true;
             this.textBoxFilter.TextChanged += new System.EventHandler(this.textBoxFilter_TextChanged);
@@ -125,7 +127,7 @@
             // 
             // splitContainer1.Panel2
             // 
-            this.splitContainer1.Panel2.Controls.Add(this.userControlSurfaceBookmarks1);
+            this.splitContainer1.Panel2.Controls.Add(this.userControlSurfaceBookmarks);
             this.splitContainer1.Size = new System.Drawing.Size(676, 411);
             this.splitContainer1.SplitterDistance = 205;
             this.splitContainer1.TabIndex = 1;
@@ -144,7 +146,7 @@
             this.dataGridViewBookMarks.Location = new System.Drawing.Point(6, 5);
             this.dataGridViewBookMarks.Name = "dataGridViewBookMarks";
             this.dataGridViewBookMarks.Size = new System.Drawing.Size(667, 197);
-            this.dataGridViewBookMarks.TabIndex = 0;
+            this.dataGridViewBookMarks.TabIndex = 4;
             this.dataGridViewBookMarks.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewBookMarks_CellClick);
             this.dataGridViewBookMarks.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewBookMarks_CellEndEdit);
             this.dataGridViewBookMarks.SelectionChanged += new System.EventHandler(this.dataGridViewBookMarks_SelectionChanged);
@@ -186,10 +188,20 @@
             // 
             // userControlSurfaceBookmarks1
             // 
-            this.userControlSurfaceBookmarks1.Location = new System.Drawing.Point(6, 4);
-            this.userControlSurfaceBookmarks1.Name = "userControlSurfaceBookmarks1";
-            this.userControlSurfaceBookmarks1.Size = new System.Drawing.Size(675, 200);
-            this.userControlSurfaceBookmarks1.TabIndex = 0;
+            this.userControlSurfaceBookmarks.Location = new System.Drawing.Point(6, 4);
+            this.userControlSurfaceBookmarks.Name = "userControlSurfaceBookmarks1";
+            this.userControlSurfaceBookmarks.Size = new System.Drawing.Size(675, 200);
+            this.userControlSurfaceBookmarks.TabIndex = 5;
+            // 
+            // buttonDelete
+            // 
+            this.buttonDelete.Location = new System.Drawing.Point(366, 3);
+            this.buttonDelete.Name = "buttonDelete";
+            this.buttonDelete.Size = new System.Drawing.Size(75, 23);
+            this.buttonDelete.TabIndex = 27;
+            this.buttonDelete.Text = "Delete";
+            this.buttonDelete.UseVisualStyleBackColor = true;
+            this.buttonDelete.Click += new System.EventHandler(this.buttonDelete_Click);
             // 
             // UserControlBookmarks
             // 
@@ -217,7 +229,7 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.SplitContainer splitContainer1;
         private System.Windows.Forms.DataGridView dataGridViewBookMarks;
-        private UserControlSurfaceBookmarks userControlSurfaceBookmarks1;
+        private UserControlSurfaceBookmarks userControlSurfaceBookmarks;
         private System.Windows.Forms.DataGridViewTextBoxColumn Type;
         private System.Windows.Forms.DataGridViewTextBoxColumn BookmarkName;
         private System.Windows.Forms.DataGridViewTextBoxColumn Description;
@@ -226,5 +238,6 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn Z;
         private ExtendedControls.ButtonExt buttonNew;
         private ExtendedControls.ButtonExt buttonEdit;
+        private ExtendedControls.ButtonExt buttonDelete;
     }
 }

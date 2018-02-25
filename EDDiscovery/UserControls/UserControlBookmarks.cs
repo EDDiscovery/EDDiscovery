@@ -30,7 +30,7 @@ namespace EDDiscovery.UserControls
 
         public override void Closing()
         {
-            if(userControlSurfaceBookmarks1.Edited)
+            if(userControlSurfaceBookmarks.Edited)
             {
                 UpdateBookmark(previousSelectedRow);
             }
@@ -118,7 +118,7 @@ namespace EDDiscovery.UserControls
         {
             BookmarkClass bk = (BookmarkClass)dataGridViewBookMarks.Rows[fromRowID].Tag;
             string newNote = dataGridViewBookMarks.Rows[fromRowID].Cells[2].Value.ToString();
-            PlanetMarks latestMarks = userControlSurfaceBookmarks1.PlanetMarks;
+            PlanetMarks latestMarks = userControlSurfaceBookmarks.PlanetMarks;
             return GlobalBookMarkList.AddOrUpdateBookmark(bk, !bk.isRegion, bk.isRegion ? bk.Heading : bk.StarName, bk.x, bk.y, bk.z, bk.Time, newNote, latestMarks);
         }
 
@@ -135,7 +135,7 @@ namespace EDDiscovery.UserControls
 
         private void RefreshSurfaceMarks(int forNewRow)
         {
-            if (userControlSurfaceBookmarks1.Edited && previousSelectedRow >= 0)
+            if (userControlSurfaceBookmarks.Edited && previousSelectedRow >= 0)
                 UpdateBookmark(previousSelectedRow);
 
             if (forNewRow >= 0)
@@ -144,7 +144,7 @@ namespace EDDiscovery.UserControls
                 previousSelectedRow = newSelection.Index;
                 BookmarkClass bk = (BookmarkClass)newSelection.Tag;
                 if(bk != null)
-                    userControlSurfaceBookmarks1.ApplyBookmark(bk);
+                    userControlSurfaceBookmarks.ApplyBookmark(bk);
             }
         }
 
@@ -194,6 +194,15 @@ namespace EDDiscovery.UserControls
             {
                 GlobalBookMarkList.AddOrUpdateBookmark(null, true, frm.StarHeading, double.Parse(frm.x), double.Parse(frm.y), double.Parse(frm.z),
                                                                      tme, frm.Notes, frm.SurfaceLocations);
+            }
+        }
+
+        private void buttonDelete_Click(object sender, EventArgs e)
+        {
+            if (previousSelectedRow >= 0)
+            {
+                BookmarkClass bk = (BookmarkClass)dataGridViewBookMarks.Rows[previousSelectedRow].Tag;
+                bk.Delete();
             }
         }
     }

@@ -77,7 +77,7 @@ namespace EDDiscovery.UserControls
 
         private void GlobalBookMarkList_OnBookmarkChange(long bookMarkID)
         {
-            if (bookMark.id == bookMarkID) bookMark = null;
+            if (bookMark?.id == bookMarkID) bookMark = null;
             Display();
         }
 
@@ -226,9 +226,13 @@ namespace EDDiscovery.UserControls
                 return;
             }
             buttonNewBookmark.Enabled = true;
+            if (bookMark != null && bookMark.StarName == last_he.System.Name)
+            {
+                return;
+            }
             string selection = externallyForcedBookmark ? externalLocationName : comboBoxBookmarks.Text;
             comboBoxBookmarks.Items.Clear();
-            if (bookMark == null || bookMark.StarName != last_he.System.Name) bookMark = GlobalBookMarkList.FindBookmarkOnSystem(last_he.System.Name);
+            bookMark = GlobalBookMarkList.FindBookmarkOnSystem(last_he.System.Name);
             if (bookMark != null)
             {
                 if (heading.HasValue)
@@ -248,13 +252,16 @@ namespace EDDiscovery.UserControls
                 {
                     // add whole system
                     labelBookmark.Text = "System Bookmarks";
-                    foreach (PlanetMarks.Planet pl in bookMark.PlanetaryMarks.Planets)
+                    if (bookMark.PlanetaryMarks?.Planets != null)
                     {
-                        if (pl.Locations != null && pl.Locations.Any())
+                        foreach (PlanetMarks.Planet pl in bookMark.PlanetaryMarks.Planets)
                         {
-                            foreach (PlanetMarks.Location loc in pl.Locations.OrderBy(l => l.Name))
+                            if (pl.Locations != null && pl.Locations.Any())
                             {
-                                comboBoxBookmarks.Items.Add($"{loc.Name} ({pl.Name})");
+                                foreach (PlanetMarks.Location loc in pl.Locations.OrderBy(l => l.Name))
+                                {
+                                    comboBoxBookmarks.Items.Add($"{loc.Name} ({pl.Name})");
+                                }
                             }
                         }
                     }
@@ -267,6 +274,10 @@ namespace EDDiscovery.UserControls
             if (!String.IsNullOrEmpty(selection) && comboBoxBookmarks.Items.Contains(selection))
             {
                 comboBoxBookmarks.Text = selection;
+            }
+            else
+            {
+                comboBoxBookmarks.Text = "";
             }
         }
 
@@ -423,7 +434,7 @@ namespace EDDiscovery.UserControls
 
         private void comboBoxBookmarks_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (bookMark == null) return;
+            if (bookMark == null || bookMark.PlanetaryMarks == null || bookMark.PlanetaryMarks.Planets == null) return;
             foreach (PlanetMarks.Planet pl in bookMark.PlanetaryMarks.Planets)
             {
                 if (pl.Locations != null && pl.Locations.Any())
@@ -436,6 +447,7 @@ namespace EDDiscovery.UserControls
                             numberBoxTargetLongitude.Value = loc.Longitude;
                             if (externallyForcedBookmark && comboBoxBookmarks.Text != externalLocationName)
                             {
+                                comboBoxBookmarks.Items.Remove(externalLocationName);
                                 externallyForcedBookmark = false;
                                 externalLocationName = "";
                                 externalLocation = null;
