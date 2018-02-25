@@ -23,7 +23,7 @@ namespace EDDiscovery.UserControls
         {
             searchtimer = new Timer() { Interval = 500 };
             searchtimer.Tick += Searchtimer_Tick;
-            GlobalBookMarkList.OnBookmarkRefresh += Display;
+            GlobalBookMarkList.OnBookmarkRefresh += BookmarksRefreshed;
             GlobalBookMarkList.OnBookmarkChange += BookmarksUpdated;
             GlobalBookMarkList.OnBookmarkRemoved += BookmarksDeleted;
         }
@@ -35,7 +35,7 @@ namespace EDDiscovery.UserControls
                 UpdateBookmark(previousSelectedRow);
             }
             searchtimer.Dispose();
-            GlobalBookMarkList.OnBookmarkRefresh -= Display;
+            GlobalBookMarkList.OnBookmarkRefresh -= BookmarksRefreshed;
             GlobalBookMarkList.OnBookmarkChange -= BookmarksUpdated;
             GlobalBookMarkList.OnBookmarkRemoved -= BookmarksDeleted;
         }
@@ -77,6 +77,22 @@ namespace EDDiscovery.UserControls
             }
             Display();
             updating = false;
+        }
+
+        private void BookmarksRefreshed()
+        {
+            if (updating)
+                return;
+            try
+            {
+                updating = true;
+                Display();
+                updating = false;
+            }
+            finally
+            {
+                updating = false;
+            }
         }
 
         private void Display()

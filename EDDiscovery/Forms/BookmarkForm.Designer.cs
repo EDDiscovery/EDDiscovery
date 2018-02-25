@@ -64,6 +64,7 @@ namespace EDDiscovery.Forms
             this.checkBoxTarget = new ExtendedControls.CheckBoxCustom();
             this.buttonEDSM = new ExtendedControls.ButtonExt();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.labelBadSystem = new ExtendedControls.LabelExt();
             this.textBoxName = new ExtendedControls.AutoCompleteTextBox();
             this.userControlSurfaceBookmarks1 = new EDDiscovery.UserControls.UserControlSurfaceBookmarks();
             this.panel1.SuspendLayout();
@@ -126,7 +127,7 @@ namespace EDDiscovery.Forms
             this.textBoxNotes.ScrollBarThumbButtonColor = System.Drawing.Color.DarkBlue;
             this.textBoxNotes.ScrollBarWidth = 20;
             this.textBoxNotes.ShowLineCount = false;
-            this.textBoxNotes.Size = new System.Drawing.Size(336, 103);
+            this.textBoxNotes.Size = new System.Drawing.Size(521, 103);
             this.textBoxNotes.TabIndex = 0;
             this.textBoxNotes.TextBoxBackColor = System.Drawing.SystemColors.Control;
             this.textBoxNotes.TextBoxForeColor = System.Drawing.SystemColors.ControlText;
@@ -251,7 +252,7 @@ namespace EDDiscovery.Forms
             // 
             // buttonOK
             // 
-            this.buttonOK.Location = new System.Drawing.Point(548, 542);
+            this.buttonOK.Location = new System.Drawing.Point(585, 542);
             this.buttonOK.Name = "buttonOK";
             this.buttonOK.Size = new System.Drawing.Size(75, 23);
             this.buttonOK.TabIndex = 1;
@@ -261,7 +262,7 @@ namespace EDDiscovery.Forms
             // 
             // buttonCancel
             // 
-            this.buttonCancel.Location = new System.Drawing.Point(467, 542);
+            this.buttonCancel.Location = new System.Drawing.Point(504, 542);
             this.buttonCancel.Name = "buttonCancel";
             this.buttonCancel.Size = new System.Drawing.Size(75, 23);
             this.buttonCancel.TabIndex = 2;
@@ -312,7 +313,7 @@ namespace EDDiscovery.Forms
             this.textBoxTravelNote.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.textBoxTravelNote.SelectionLength = 0;
             this.textBoxTravelNote.SelectionStart = 0;
-            this.textBoxTravelNote.Size = new System.Drawing.Size(336, 87);
+            this.textBoxTravelNote.Size = new System.Drawing.Size(521, 87);
             this.textBoxTravelNote.TabIndex = 8;
             this.textBoxTravelNote.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.textBoxTravelNote.WordWrap = true;
@@ -347,6 +348,7 @@ namespace EDDiscovery.Forms
             // panel1
             // 
             this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel1.Controls.Add(this.labelBadSystem);
             this.panel1.Controls.Add(this.textBoxName);
             this.panel1.Controls.Add(this.userControlSurfaceBookmarks1);
             this.panel1.Controls.Add(this.buttonEDSM);
@@ -372,9 +374,18 @@ namespace EDDiscovery.Forms
             this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(628, 570);
+            this.panel1.Size = new System.Drawing.Size(673, 570);
             this.panel1.TabIndex = 12;
             this.panel1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.panel1_MouseDown);
+            // 
+            // labelBadSystem
+            // 
+            this.labelBadSystem.AutoSize = true;
+            this.labelBadSystem.Location = new System.Drawing.Point(482, 22);
+            this.labelBadSystem.Name = "labelBadSystem";
+            this.labelBadSystem.Size = new System.Drawing.Size(0, 13);
+            this.labelBadSystem.TabIndex = 14;
+            this.labelBadSystem.TextBackColor = System.Drawing.Color.Transparent;
             // 
             // textBoxName
             // 
@@ -412,14 +423,14 @@ namespace EDDiscovery.Forms
             // 
             this.userControlSurfaceBookmarks1.Location = new System.Drawing.Point(13, 362);
             this.userControlSurfaceBookmarks1.Name = "userControlSurfaceBookmarks1";
-            this.userControlSurfaceBookmarks1.Size = new System.Drawing.Size(602, 160);
+            this.userControlSurfaceBookmarks1.Size = new System.Drawing.Size(656, 174);
             this.userControlSurfaceBookmarks1.TabIndex = 12;
             // 
             // BookmarkForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(628, 570);
+            this.ClientSize = new System.Drawing.Size(673, 570);
             this.Controls.Add(this.panel1);
             this.Icon = global::EDDiscovery.Properties.Resources.edlogo_3mo_icon;
             this.Name = "BookmarkForm";
@@ -456,5 +467,6 @@ namespace EDDiscovery.Forms
         private System.Windows.Forms.Panel panel1;
         private UserControls.UserControlSurfaceBookmarks userControlSurfaceBookmarks1;
         private ExtendedControls.AutoCompleteTextBox textBoxName;
+        private ExtendedControls.LabelExt labelBadSystem;
     }
 }

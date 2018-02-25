@@ -308,11 +308,13 @@ namespace EDDiscovery.Forms
                 textBoxNotes.Text = (sn != null) ? sn.Note : "";
                 InitialisePos(s);
                 buttonOK.Enabled = true;
+                labelBadSystem.Text = "";
             }
             else
             {
                 buttonOK.Enabled = false;
-                textBoxName.Text = "";
+                textBoxName.SelectAll();
+                labelBadSystem.Text = "System name not recognised";
             }
         }
     }

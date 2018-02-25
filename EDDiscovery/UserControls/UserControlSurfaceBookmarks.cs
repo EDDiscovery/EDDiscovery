@@ -91,16 +91,16 @@ namespace EDDiscovery.UserControls
             SetSystem(bk.StarName);
             thisBookmark = bk;
             PlanetMarks = bk.PlanetaryMarks == null ? new PlanetMarks() : bk.PlanetaryMarks;
-
+            
             if (PlanetMarks.Planets != null)
             {
                 foreach (Planet pl in PlanetMarks.Planets)
                 {
                     foreach (Location loc in pl.Locations)
                     {
-                        using (DataGridViewRow dr = dataGridViewMarks.Rows[dataGridViewMarks.Rows.Add()])
-                        {
-                            if (((DataGridViewComboBoxCell)dr.Cells[0]).Items.Contains(pl.Name))
+                        if (((DataGridViewComboBoxCell)dataGridViewMarks.Rows[0].Cells[0]).Items.Contains(pl.Name))
+                        { 
+                            using (DataGridViewRow dr = dataGridViewMarks.Rows[dataGridViewMarks.Rows.Add()])
                             {
                                 dr.Cells[0].Value = pl.Name;
                                 dr.Cells[0].ReadOnly = true;
@@ -112,16 +112,10 @@ namespace EDDiscovery.UserControls
                                 ((DataGridViewCheckBoxCell)dr.Cells[5]).Value = true;
                                 dr.Tag = loc;
                             }
-                            else
-                            {
-                                // Surface bookmarks have gotten saved against the wrong system a couple of times.
-                                // Until I manage to work out why this should stop it causing a run time error
-                                // trying to set a value that isn't allowed in the drop down.
-                                bk.DeleteLocation(pl.Name, loc.Name);
-                            }
                         }
                     }
                 }
+                
             }
             dataGridViewMarks.ResumeLayout();
             sendToCompassToolStripMenuItem.Enabled = true;
@@ -144,8 +138,11 @@ namespace EDDiscovery.UserControls
                 }
                 else
                 {
-                    e.Cancel = true;
-                    dataGridViewMarks.Rows[e.RowIndex].ErrorText = "Invalid number";
+                    if (dataGridViewMarks.Rows[e.RowIndex].Cells[0].Value != null)
+                    {
+                        e.Cancel = true;
+                        dataGridViewMarks.Rows[e.RowIndex].ErrorText = "Invalid number";
+                    }
                 }
             }
         }
@@ -187,7 +184,7 @@ namespace EDDiscovery.UserControls
             if (!Double.TryParse(dr.Cells[3].Value.ToString(), out double lat)) return false;
             if (!Double.TryParse(dr.Cells[4].Value.ToString(), out double lon)) return false;
 
-            return dr.Cells[0].Value.ToString() != "" && dr.Cells[1].Value?.ToString() != "" && lat >= -180 && lat <= 180 && lon >= -180 && lon <= 180;
+            return dr.Cells[0].Value?.ToString() != "" && dr.Cells[1].Value?.ToString() != "" && lat >= -180 && lat <= 180 && lon >= -180 && lon <= 180;
         }
 
         private void dataGridViewMarks_UserDeletingRow(object sender, DataGridViewRowCancelEventArgs e)
