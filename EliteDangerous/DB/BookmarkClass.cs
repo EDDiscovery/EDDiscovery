@@ -349,6 +349,11 @@ namespace EliteDangerousCore.DB
             OnBookmarkChange?.Invoke(newBookmark.id);
         }
 
+        public static void FireRefresh()
+        {
+            OnBookmarkRefresh?.Invoke();
+        }
+
         internal static void RemoveAll(Predicate<BookmarkClass> predicate, bool updating)
         {
             globalbookmarks.RemoveAll(predicate);
