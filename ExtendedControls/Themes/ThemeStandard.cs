@@ -773,7 +773,7 @@ namespace ExtendedControls
                 ctrl.DefaultCellStyle.ForeColor = currentsettings.colors[Settings.CI.grid_celltext];
                 ctrl.DefaultCellStyle.SelectionBackColor = ctrl.DefaultCellStyle.ForeColor;
                 ctrl.DefaultCellStyle.SelectionForeColor = ctrl.DefaultCellStyle.BackColor;
-
+                
                 ctrl.GridColor = currentsettings.colors[Settings.CI.grid_borderlines];
                 ctrl.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
                 ctrl.RowHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
@@ -789,7 +789,7 @@ namespace ExtendedControls
                 ctrl.ColumnHeadersDefaultCellStyle.Font = fnt2;
                 ctrl.RowHeadersDefaultCellStyle.Font = fnt2;
                 ctrl.Columns[0].DefaultCellStyle.Font = fnt2;
-
+                
                 using (Graphics g = ctrl.CreateGraphics())
                 {
                     SizeF sz = g.MeasureString("99999", fnt2);

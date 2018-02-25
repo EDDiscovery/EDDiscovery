@@ -100,15 +100,25 @@ namespace EDDiscovery.UserControls
                     {
                         using (DataGridViewRow dr = dataGridViewMarks.Rows[dataGridViewMarks.Rows.Add()])
                         {
-                            dr.Cells[0].Value = pl.Name;
-                            dr.Cells[0].ReadOnly = true;
-                            dr.Cells[1].Value = loc.Name;
-                            dr.Cells[1].ReadOnly = true;
-                            dr.Cells[2].Value = loc.Comment;
-                            dr.Cells[3].Value = loc.Latitude.ToString("F4");
-                            dr.Cells[4].Value = loc.Longitude.ToString("F4");
-                            ((DataGridViewCheckBoxCell)dr.Cells[5]).Value = true;
-                            dr.Tag = loc;
+                            if (((DataGridViewComboBoxCell)dr.Cells[0]).Items.Contains(pl.Name))
+                            {
+                                dr.Cells[0].Value = pl.Name;
+                                dr.Cells[0].ReadOnly = true;
+                                dr.Cells[1].Value = loc.Name;
+                                dr.Cells[1].ReadOnly = true;
+                                dr.Cells[2].Value = loc.Comment;
+                                dr.Cells[3].Value = loc.Latitude.ToString("F4");
+                                dr.Cells[4].Value = loc.Longitude.ToString("F4");
+                                ((DataGridViewCheckBoxCell)dr.Cells[5]).Value = true;
+                                dr.Tag = loc;
+                            }
+                            else
+                            {
+                                // Surface bookmarks have gotten saved against the wrong system a couple of times.
+                                // Until I manage to work out why this should stop it causing a run time error
+                                // trying to set a value that isn't allowed in the drop down.
+                                bk.DeleteLocation(pl.Name, loc.Name);
+                            }
                         }
                     }
                 }
@@ -124,11 +134,13 @@ namespace EDDiscovery.UserControls
                 //latitude or longitude
                 if (Double.TryParse(e.FormattedValue.ToString(), out double parsed))
                 {
-                    if(parsed < -180 || parsed > 180)
+                    if (parsed < -180 || parsed > 180)
                     {
                         e.Cancel = true;
                         dataGridViewMarks.Rows[e.RowIndex].ErrorText = "Invalid coordinate";
                     }
+                    else
+                        dataGridViewMarks.Rows[e.RowIndex].ErrorText = "";
                 }
                 else
                 {
