@@ -21,8 +21,6 @@ namespace EDDiscovery.Forms
         public bool ExportAsJournals {  get { return checkBoxRawJournal.Checked; } }
         public string Path { get; private set; }
 
-        private Font font;
-
         public ExportForm()
         {
             InitializeComponent();
@@ -68,8 +66,6 @@ namespace EDDiscovery.Forms
 
         private void ExportForm_FormClosed(object sender, FormClosedEventArgs e)
         {
-            font.Dispose();
-            font = null;
         }
 
         private void buttonExport_Click(object sender, EventArgs e)

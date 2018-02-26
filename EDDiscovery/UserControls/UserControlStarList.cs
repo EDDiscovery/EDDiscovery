@@ -59,15 +59,12 @@ namespace EDDiscovery.UserControls
         }
 
         private const int DefaultRowHeight = 26;
-        private bool showJumponium = false; // default to not show available jumponium materials in system (when 0, it shows by default).
-        private bool showClasses = true; // default to show body classes. 
-
         private string DbColumnSave { get { return "StarListControl" + ((displaynumber > 0) ? displaynumber.ToString() : "") + "DGVCol"; } }
         private string DbHistorySave { get { return "StarListControlEDUIHistory" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
         private string DbAutoTop { get { return "StarListControlAutoTop" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
         private string DbEDSM { get { return "StarListControlEDSM" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
-        private string DbShowJumponium { get { return "StarListControlEDSM" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
-        private string DbShowClasses { get { return "StarListControlEDSM" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }        
+        private string DbShowJumponium { get { return "StarListControlJumponium" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
+        private string DbShowClasses { get { return "StarListControlShowClasses" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }        
 
         private Dictionary<string, List<HistoryEntry>> systemsentered = new Dictionary<string, List<HistoryEntry>>();
         private Dictionary<long, DataGridViewRow> rowsbyjournalid = new Dictionary<long, DataGridViewRow>();
@@ -85,8 +82,6 @@ namespace EDDiscovery.UserControls
 
             checkBoxMoveToTop.Checked = SQLiteConnectionUser.GetSettingBool(DbAutoTop, true);
 
-            showClasses = SQLiteConnectionUser.GetSettingBool(DbShowClasses, true);
-            showJumponium = SQLiteConnectionUser.GetSettingBool(DbShowJumponium, true);
          
             dataGridViewStarList.MakeDoubleBuffered();
             dataGridViewStarList.RowTemplate.Height = DefaultRowHeight;
@@ -97,7 +92,14 @@ namespace EDDiscovery.UserControls
             dataGridViewStarList.Columns[2].ValueType = typeof(Int32);            
 
             checkBoxEDSM.Checked = SQLiteDBClass.GetSettingBool(DbEDSM, false);
-            
+            this.checkBoxEDSM.CheckedChanged += new System.EventHandler(this.checkBoxEDSM_CheckedChanged);
+
+            checkBoxBodyClasses.Checked = SQLiteConnectionUser.GetSettingBool(DbShowClasses, true);
+            this.checkBoxBodyClasses.CheckedChanged += new System.EventHandler(this.buttonBodyClasses_CheckedChanged);
+
+            checkBoxJumponium.Checked = SQLiteConnectionUser.GetSettingBool(DbShowJumponium, true);
+            this.checkBoxJumponium.CheckedChanged += new System.EventHandler(this.buttonJumponium_CheckedChanged);
+
             discoveryform.OnHistoryChange += HistoryChanged;
             discoveryform.OnNewEntry += AddNewEntry;            
         }
@@ -113,8 +115,6 @@ namespace EDDiscovery.UserControls
             discoveryform.OnHistoryChange -= HistoryChanged;
             discoveryform.OnNewEntry -= AddNewEntry;
             SQLiteConnectionUser.PutSettingBool(DbAutoTop, checkBoxMoveToTop.Checked);
-            SQLiteConnectionUser.PutSettingBool(DbShowClasses, showClasses);
-            SQLiteConnectionUser.PutSettingBool(DbShowJumponium, showJumponium);
         }
 
         #endregion
@@ -257,7 +257,7 @@ namespace EDDiscovery.UserControls
                     foreach (StarScan.ScanNode sn in node.Bodies)
                     {
                         total++;
-                        if (sn.ScanData != null && showClasses == true)
+                        if (sn.ScanData != null && checkBoxBodyClasses.Checked)
                         {
                             JournalScan sc = sn.ScanData;
 
@@ -352,7 +352,7 @@ namespace EDDiscovery.UserControls
                         }
 
                         // Landable bodies with valuable materials
-                        if (sn.ScanData != null && sn.ScanData.IsLandable == true && sn.ScanData.HasMaterials && showJumponium == true)
+                        if (sn.ScanData != null && sn.ScanData.IsLandable == true && sn.ScanData.HasMaterials && checkBoxJumponium.Checked == true)
                         {
                             hasmaterials = 1;
 
@@ -451,7 +451,7 @@ namespace EDDiscovery.UserControls
                     {   // we need this to allow the panel to scan also through systems which has only stars
                         infostr = infostr.AppendPrePad(extrainfo, prefix);
                     }
-                    if (hasmaterials != 0 && showJumponium == true)
+                    if (hasmaterials != 0 && checkBoxJumponium.Checked == true)
                     {
                         infostr = infostr.AppendPrePad("\nThis system has jumponium materials: ");
                         infostr = infostr.AppendPrePad(jumponium);
@@ -692,6 +692,42 @@ namespace EDDiscovery.UserControls
 
         #endregion
 
+        #region Events
+
+        private void checkBoxEDSM_CheckedChanged(object sender, EventArgs e)
+        {
+            SQLiteDBClass.PutSettingBool(DbEDSM, checkBoxEDSM.Checked);
+        }
+
+        private void buttonBodyClasses_CheckedChanged(object sender, EventArgs e)
+        {
+            SQLiteConnectionUser.PutSettingBool(DbShowClasses, checkBoxBodyClasses.Checked);
+            HistoryChanged(current_historylist);
+        }
+
+        private void buttonJumponium_CheckedChanged(object sender, EventArgs e)
+        {
+            SQLiteConnectionUser.PutSettingBool(DbShowJumponium, checkBoxJumponium.Checked);
+            HistoryChanged(current_historylist);
+        }
+
+        // Override of visits column sorting, to properly ordering as integers and not as strings - do not work as expected, yet...
+        private void dataGridViewStarList_SortCompare(object sender, DataGridViewSortCompareEventArgs e)
+        {
+            if (ColumnVisits.Equals(e.Column))
+            {
+                int v1, v2;
+                string s1 = e.CellValue1?.ToString();
+                string s2 = e.CellValue2?.ToString();
+                if (!string.IsNullOrEmpty(s1) && !string.IsNullOrEmpty(s2) && int.TryParse(s1, out v1) && int.TryParse(s2, out v2))
+                {
+                    e.SortResult = v1.CompareTo(v2);
+                    e.Handled = true;
+                }
+            }
+        }
+        #endregion
+
         #region Excel
 
         private void buttonExtExcel_Click(object sender, EventArgs e)
@@ -769,62 +805,7 @@ namespace EDDiscovery.UserControls
             }
         }
 
-        private void checkBoxEDSM_CheckedChanged(object sender, EventArgs e)
-        {
-            SQLiteDBClass.PutSettingBool(DbEDSM, checkBoxEDSM.Checked);
-            if (current_historylist != null && checkBoxEDSM.Checked)
-                HistoryChanged(current_historylist);        
-        }
-
         #endregion
 
-        #region Events
-
-        // Show/Hide Bodies classes
-        private void buttonBodyClasses_MouseClick(object sender, MouseEventArgs e)
-        {
-            if (showClasses == false)
-            {
-                showClasses = true;
-                HistoryChanged(current_historylist);
-            }
-            else if (showClasses == true)
-            {
-                showClasses = false;
-                HistoryChanged(current_historylist);
-            }
-        }
-
-        // Show/Hide Jumponium notification
-        private void buttonExt1_MouseClick(object sender, MouseEventArgs e)
-        {
-            if (showJumponium == false)
-            {
-                showJumponium = true;                                
-                HistoryChanged(current_historylist);
-            }
-            else if (showJumponium == true)
-            {
-                showJumponium = false;                
-                HistoryChanged(current_historylist);
-            }
-        }
-                
-        // Override of visits column sorting, to properly ordering as integers and not as strings - do not work as expected, yet...
-        private void dataGridViewStarList_SortCompare(object sender, DataGridViewSortCompareEventArgs e)
-        {
-            if (ColumnVisits.Equals(e.Column))
-            {
-                int v1, v2;
-                string s1 = e.CellValue1?.ToString();
-                string s2 = e.CellValue2?.ToString();
-                if (!string.IsNullOrEmpty(s1) && !string.IsNullOrEmpty(s2) && int.TryParse(s1, out v1) && int.TryParse(s2, out v2))
-                {
-                    e.SortResult = v1.CompareTo(v2);
-                    e.Handled = true;
-                }
-            }
-        }
-        #endregion
     }
 }
