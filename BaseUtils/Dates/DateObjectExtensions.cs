@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -18,7 +19,7 @@ public static class ObjectExtensionsDates
     // d = days, printed if d>0
     // D = Date, in formatoptions, if given
 
-    public static string DateDeltaFormatter(double diff, string before, string after, DateTime? date = null, string formatoptions = null)
+    public static string ToStringTimeDeltaFormatted(this double diff, string before, string after, DateTime? date = null, string formatoptions = null)
     {
         string fmt = (diff > 0) ? before : after;
         diff = Math.Abs(diff);
@@ -47,48 +48,91 @@ public static class ObjectExtensionsDates
         fmt = fmt.ReplaceArea("[d", "]", (days > 0) ? days.ToStringInvariant() : "", (days > 0) ? 2 : 0, days > 1);
 
         bool validdte = (date != null && formatoptions != null);
-        fmt = fmt.ReplaceArea("[D", "]", validdte ? PrintDate(date.Value,formatoptions) : "", validdte ? 2 : 0);
+        fmt = fmt.ReplaceArea("[D", "]", validdte ? date.Value.ToStringFormatted(formatoptions) : "", validdte ? 2 : 0);
 
         return fmt;
     }
 
     //format options are semicoloned.
-    public static string PrintDate(DateTime res, string formatoptions)
+    public static DateTime? ParseUSDateTimeNull(this string value, string formatoptions = null)   // formatoptions = Local only.  
+    {
+        DateTime res;
+
+        System.Globalization.DateTimeStyles dts = System.Globalization.DateTimeStyles.AssumeUniversal | System.Globalization.DateTimeStyles.AdjustToUniversal;
+
+        string[] t = formatoptions?.ToLower().Split(';');
+
+        if (t != null && Array.IndexOf(t, "local") != -1)
+        {
+            dts = System.Globalization.DateTimeStyles.AssumeLocal;
+        }
+
+        // presuming its univeral means no translation in the values to local.
+        if (DateTime.TryParse(value, System.Globalization.CultureInfo.CreateSpecificCulture("en-US"), dts, out res))
+            return res;
+        else
+            return null;
+    }
+
+    //format options are semicoloned.
+    public static string ToStringFormatted(this DateTime res, string formatoptions)
     {
         string[] t = formatoptions.ToLower().Split(';');
+
+        string culture = System.Globalization.CultureInfo.CurrentCulture.Name;
 
         if (Array.IndexOf(t, "toutc") != -1)
             res = res.ToUniversalTime();
         else if (Array.IndexOf(t, "tolocal") != -1)
             res = res.ToLocalTime();
 
+        string ci = Array.Find(t, x => x.IndexOf("culture:") != -1);
+        if (ci != null)
+            culture = ci.Substring(8);
+
+        DateTimeFormatInfo dtfi = null;
+        try
+        {
+            dtfi = CultureInfo.GetCultureInfo(culture).DateTimeFormat;
+        }
+        catch
+        {
+            return "Culture not defined " + culture;
+        }
+
+        System.Globalization.CultureInfo ct = System.Globalization.CultureInfo.CurrentCulture;
+
         if (Array.IndexOf(t, "longtime") != -1)
         {
-            return res.ToLongTimeString();
+            return res.ToString(dtfi.LongTimePattern);
         }
         else if (Array.IndexOf(t, "shorttime") != -1)
         {
-            return res.ToShortTimeString();
-        }
-        else if (Array.IndexOf(t, "longdatetime") != -1)
-        {
-            return res.ToLongDateString() + " " + res.ToLongTimeString();
-        }
-        else if (Array.IndexOf(t, "longdate") != -1)
-        {
-            return res.ToLongDateString();
-        }
-        else if (Array.IndexOf(t, "datetime") != -1)
-        {
-            return res.ToShortDateString() + " " + res.ToLongTimeString();
+            return res.ToString(dtfi.ShortTimePattern);
         }
         else if (Array.IndexOf(t, "shortdate") != -1)
         {
-            return res.ToShortDateString();
+            return res.ToString(dtfi.ShortDatePattern);
+        }
+        else if (Array.IndexOf(t, "longdate") != -1)
+        {
+            return res.ToString(dtfi.LongDatePattern);
+        }
+        else if (Array.IndexOf(t, "longdatetime") != -1)
+        {
+            return res.ToString(dtfi.LongDatePattern) + " " + res.ToString(dtfi.LongTimePattern);
+        }
+        else if (Array.IndexOf(t, "datetime") != -1)
+        {
+            return res.ToString(dtfi.ShortDatePattern) + " " + res.ToString(dtfi.ShortTimePattern);
+        }
+        else if (Array.IndexOf(t, "ticks") != -1)
+        {
+            return res.Ticks.ToStringInvariant();
         }
         else
         {
-            return res.ToString("yyyy/mm/dd HH:mm:ss");
+            return res.ToString("yyyy/MM/dd HH:mm:ss");
         }
     }
 

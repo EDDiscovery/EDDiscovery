@@ -33,10 +33,10 @@ namespace EDDiscovery.Actions
             if (functions == null)        // one time init, done like this cause can't do it in {}
             {
                 functions = new Dictionary<string, FuncEntry>();
-                //functions.Add("systempath", new FuncEntry(SystemPath, 1, 1, NoMacros, NoStrings));   // literal
-                //functions.Add("version", new FuncEntry(Version, 1, 1, NoMacros, NoStrings));     // don't check first para
-                //functions.Add("star", new FuncEntry(Star, 2, 2, FirstMacro, AllStrings));     // var/string, literal/var/string
-                //functions.Add("ship", new FuncEntry(Ship, 1, 1, AllMacros, AllStrings));   //ship translator
+                functions.Add("systempath", new FuncEntry(SystemPath, FuncEntry.PT.LmeSE));   // literal
+                functions.Add("version", new FuncEntry(Version, FuncEntry.PT.ImeSE));
+                functions.Add("star", new FuncEntry(Star, FuncEntry.PT.MESE, FuncEntry.PT.LmeSE));
+                functions.Add("ship", new FuncEntry(Ship, FuncEntry.PT.MESE));
             }
         }
 
@@ -49,12 +49,9 @@ namespace EDDiscovery.Actions
 
         #region Macro Functions
 
-#if false
-
-
         protected new bool SystemPath(out string output)
         {
-            string id = paras[0].value;
+            string id = paras[0].Value;
 
             if (id.Equals("EDDAPPFOLDER", StringComparison.InvariantCultureIgnoreCase))
                 output = EDDOptions.Instance.AppDataDirectory;
@@ -74,8 +71,8 @@ namespace EDDiscovery.Actions
         {
             int[] edversion = System.Reflection.Assembly.GetExecutingAssembly().GetVersion();
 
-            int para;
-            if (paras[0].value.InvariantParse(out para) && para >= 0 && para <= edversion.Length)
+            int para = paras[0].Int;
+            if (para >= 0 && para <= edversion.Length)
             {
                 if (para == 0)
                     output = edversion[0] + "." + edversion[1] + "." + edversion[2] + "." + edversion[3];
@@ -85,7 +82,7 @@ namespace EDDiscovery.Actions
             }
             else
             {
-                output = "Parameter number must be between 1 and 4";
+                output = "Parameter number must be 0 (all), 1 to 4";
                 return false;
             }
         }
@@ -97,28 +94,22 @@ namespace EDDiscovery.Actions
 
         protected bool Ship(out string output)
         {
-            string value = (paras[0].isstring) ? paras[0].value : vars[paras[0].value];
-            output = PhoneticShipName(value);
+            output = PhoneticShipName(paras[0].Value);
             output = output.SplitCapsWordFull();
             return true;
         }
 
         protected bool Star(out string output )
         {
-            string s = paras[0].isstring ? paras[0].value : vars[paras[0].value];
-
             // Find IX-T123b and replace with I X - T 123 b
-            paras[0].value = System.Text.RegularExpressions.Regex.Replace(s, @"([A-Za-z0-9]+)\-([A-Za-z0-9]+)", delegate (System.Text.RegularExpressions.Match match)
+            paras[0].Value = System.Text.RegularExpressions.Regex.Replace(paras[0].Value, @"([A-Za-z0-9]+)\-([A-Za-z0-9]+)", delegate (System.Text.RegularExpressions.Match match)
             {
                 string r = System.Text.RegularExpressions.Regex.Replace(match.Value, @"([A-Za-z\-])", " $1 ");  // space out alphas and dash
                 return r.Replace("  ", " ");   // remove double spaces.. quickest way for now
             });
 
-            paras[0].isstring = true;       // now a string, pass to root function to do the say_ss bit
-
             return ReplaceVarCommon(out output, true);
         }
-#endif
 
         protected override bool VerifyFileAccess(string file, FileMode fm)
         {

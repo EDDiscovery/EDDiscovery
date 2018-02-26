@@ -28,7 +28,7 @@ namespace Conditions
             {
                 functions = new Dictionary<string, FuncEntry>();
 
-                //#region Variables
+                #region Variables
                 functions.Add("exist", new FuncEntry(Exist, 1, 20, FuncEntry.PT.M)); // no macros, all literal, can be strings
                 functions.Add("existsdefault", new FuncEntry(ExistsDefault, FuncEntry.PT.M, FuncEntry.PT.MESE ));   // first is a macro but can not exist, second is a string or macro which must exist
                 functions.Add("expand", new FuncEntry(Expand, 1, 20, FuncEntry.PT.ME)); // check var, can be string (if so expanded)
@@ -39,9 +39,9 @@ namespace Conditions
                 functions.Add("indirect", new FuncEntry(Indirect, 1, 20, FuncEntry.PT.ME));   // check var
                 functions.Add("i", new FuncEntry(IndirectI, FuncEntry.PT.ME, FuncEntry.PT.LS));   // first is a macro name, second is literal or string
                 functions.Add("ispresent", new FuncEntry(Ispresent, 2, FuncEntry.PT.M, FuncEntry.PT.MESE, FuncEntry.PT.LmeSE)); // 1 may not be there, 2 either a macro or can be string. 3 is optional and a var or literal
-                //#endregion
+                #endregion
 
-                //#region Numbers
+                #region Numbers
                 functions.Add("abs", new FuncEntry(Abs, FuncEntry.PT.FmeSE, FuncEntry.PT.LmeSE));  // first is macro or lit. second is macro or literal
                 functions.Add("int", new FuncEntry(Int, FuncEntry.PT.ImeSE, FuncEntry.PT.LmeSE));  // first is macro or lit, second is macro or lit
                 functions.Add("eval", new FuncEntry(Eval, 1, FuncEntry.PT.LmeSE, FuncEntry.PT.LS));   // can be string, can be variable, can be literal p2 is not a variable, and can't be a string
@@ -64,10 +64,9 @@ namespace Conditions
                 functions.Add("round", new FuncEntry(RoundCommon, FuncEntry.PT.FmeSE, FuncEntry.PT.ImeSE, FuncEntry.PT.LmeSE));
                 functions.Add("roundnz", new FuncEntry(RoundCommon, FuncEntry.PT.FmeSE, FuncEntry.PT.ImeSE, FuncEntry.PT.LmeSE, FuncEntry.PT.ImeSE));
                 functions.Add("roundscale", new FuncEntry(RoundCommon, FuncEntry.PT.FmeSE, FuncEntry.PT.ImeSE, FuncEntry.PT.LmeSE, FuncEntry.PT.ImeSE, FuncEntry.PT.FmeSE));
+                #endregion
 
-                //#endregion
-
-                //#region Strings
+                #region Strings
                 functions.Add("alt", new FuncEntry(Alt, 2, 20, FuncEntry.PT.MESE));  // string/var.. repeated
                 functions.Add("escapechar", new FuncEntry(EscapeChar, FuncEntry.PT.MESE));   // check var, can be string
                 functions.Add("ifnotempty", new FuncEntry(Ifnotempty, 2, FuncEntry.PT.MESE, FuncEntry.PT.ms, FuncEntry.PT.ms));
@@ -79,7 +78,7 @@ namespace Conditions
 
                 functions.Add("indexof", new FuncEntry(IndexOf, FuncEntry.PT.MESE, FuncEntry.PT.MESE));
                 functions.Add("join", new FuncEntry(Join, 3, 20, FuncEntry.PT.MESE));
-                functions.Add("jsonparse", new FuncEntry(Jsonparse, FuncEntry.PT.MESE, FuncEntry.PT.MESE));
+                functions.Add("jsonparse", new FuncEntry(Jsonparse, FuncEntry.PT.MESE, FuncEntry.PT.M));
                 functions.Add("length", new FuncEntry(Length, FuncEntry.PT.MESE));
                 functions.Add("lower", new FuncEntry(Lower, 1, 20, FuncEntry.PT.MESE));
                 functions.Add("phrase", new FuncEntry(Phrase, FuncEntry.PT.MESE));
@@ -91,7 +90,7 @@ namespace Conditions
                 functions.Add("rs", new FuncEntry(ReplaceVarSC, FuncEntry.PT.MESE, FuncEntry.PT.LmeSE)); // var/string, literal/var/string
                 functions.Add("replaceescapechar", new FuncEntry(ReplaceEscapeChar, FuncEntry.PT.MESE));
 
-                //functions.Add("sc", new FuncEntry(SplitCaps, FuncEntry.PT.MESE));
+                functions.Add("sc", new FuncEntry(SplitCaps, FuncEntry.PT.MESE));
                 functions.Add("splitcaps", new FuncEntry(SplitCaps, FuncEntry.PT.MESE));
                 functions.Add("substring", new FuncEntry(SubString, FuncEntry.PT.MESE, FuncEntry.PT.ImeSE, FuncEntry.PT.ImeSE));
                 functions.Add("trim", new FuncEntry(Trim, FuncEntry.PT.MESE));
@@ -99,7 +98,7 @@ namespace Conditions
                 functions.Add("wordof", new FuncEntry(WordOf, 2, FuncEntry.PT.MESE, FuncEntry.PT.ImeSE, FuncEntry.PT.MESE));
                 functions.Add("wordlistcount", new FuncEntry(WordListCount, FuncEntry.PT.MESE));
                 functions.Add("wordlistentry", new FuncEntry(WordListEntry, FuncEntry.PT.MESE, FuncEntry.PT.ImeSE));
-                //#endregion
+                #endregion
 
                 #region Files
                 functions.Add("closefile", new FuncEntry(CloseFile, FuncEntry.PT.ME));
@@ -116,7 +115,7 @@ namespace Conditions
                 functions.Add("readalltext", new FuncEntry(ReadAllText, FuncEntry.PT.MESE));
                 functions.Add("safevarname", new FuncEntry(SafeVarName, FuncEntry.PT.MESE));
                 functions.Add("seek", new FuncEntry(SeekFile, FuncEntry.PT.ME, FuncEntry.PT.ImeSE));
-                functions.Add("systempath", new FuncEntry(SystemPath, FuncEntry.PT.MESE));
+                functions.Add("systempath", new FuncEntry(SystemPath, FuncEntry.PT.LmeSE));
                 functions.Add("tell", new FuncEntry(TellFile, FuncEntry.PT.ME));
                 functions.Add("write", new FuncEntry(WriteFile, FuncEntry.PT.ME, FuncEntry.PT.MESE));
                 functions.Add("writeline", new FuncEntry(WriteLineFile, FuncEntry.PT.ME, FuncEntry.PT.MESE));
@@ -151,7 +150,7 @@ namespace Conditions
             return functions.ContainsKey(name) ? functions[name] : null;
         }
 
-        #region Macro Functions
+        #region Variable Functions
 
         protected bool Exist(out string output)
         {
@@ -1281,34 +1280,14 @@ namespace Conditions
         #endregion
 
         #region Dates
-
-        private DateTime? ConvertDate(string value, string formatoptions) // t may be null
-        {
-            DateTime res;
-
-            System.Globalization.DateTimeStyles dts = System.Globalization.DateTimeStyles.AssumeUniversal | System.Globalization.DateTimeStyles.AdjustToUniversal;
-
-            string[] t = formatoptions.ToLower().Split(';');
-            if (t != null && Array.IndexOf(t, "local") != -1)
-            {
-                dts = System.Globalization.DateTimeStyles.AssumeLocal;
-            }
-
-            // presuming its univeral means no translation in the values to local.
-            if (DateTime.TryParse(value, System.Globalization.CultureInfo.CreateSpecificCulture("en-US"), dts, out res))
-                return res;
-            else
-                return null;
-        }
-
-
+        
         protected bool Date(out string output)
         {
-            DateTime? cnv = ConvertDate(paras[0].Value, paras[1].Value);
+            DateTime? cnv = paras[0].Value.ParseUSDateTimeNull(paras[1].Value);   
 
             if (cnv != null)
             {
-                output = ObjectExtensionsDates.PrintDate(cnv.Value, paras[1].Value);
+                output = cnv.Value.ToStringFormatted(paras[1].Value);
                 return true;
             }
             else
@@ -1319,7 +1298,7 @@ namespace Conditions
 
         protected bool DateTimeNow(out string output)
         {
-            output = ObjectExtensionsDates.PrintDate(DateTime.UtcNow, paras[0].Value);
+            output = DateTime.UtcNow.ToStringFormatted(paras[0].Value);
             return true;
         }
 
@@ -1327,8 +1306,8 @@ namespace Conditions
         {
             string formatoptions = (paras.Count >= 3) ? paras[2].Value : "";
 
-            DateTime? v1 = ConvertDate(paras[0].Value, formatoptions);
-            DateTime? v2 = ConvertDate(paras[1].Value, formatoptions);
+            DateTime? v1 = paras[0].Value.ParseUSDateTimeNull(formatoptions);
+            DateTime? v2 = paras[1].Value.ParseUSDateTimeNull(formatoptions);
 
             if (v1 != null && v2 != null)
             {
@@ -1342,7 +1321,7 @@ namespace Conditions
                 return true;
             }
             else
-                output = "A date is not in correct en-US format";
+                output = "One of the dates is not in correct en-US format";
 
             return false;
         }
@@ -1350,16 +1329,15 @@ namespace Conditions
 
         protected bool DateDeltaFormat(out string output)
         {
-            output = ObjectExtensionsDates.DateDeltaFormatter(paras[0].Fractional, paras[1].Value, paras[2].Value);
+            output = paras[0].Fractional.ToStringTimeDeltaFormatted(paras[1].Value, paras[2].Value);
             return true;
         }
 
         protected bool DateDeltaFormatNow(out string output)
         {
-            string dvalue = paras[0].Value;
             string formatoptions = (paras.Count >= 4) ? paras[3].Value : "";
 
-            DateTime? cnv = ConvertDate(dvalue, formatoptions);
+            DateTime? cnv = paras[0].Value.ParseUSDateTimeNull(formatoptions);
 
             if (cnv != null)
             {
@@ -1368,11 +1346,12 @@ namespace Conditions
 
                 DateTime cur = DateTime.UtcNow;
                 TimeSpan ts = cnv.Value.Subtract(cur);          // does not respect Kind when doing calc.
-                output = ObjectExtensionsDates.DateDeltaFormatter(ts.TotalSeconds, paras[1].Value, paras[2].Value, cnv.Value, formatoptions);
+
+                output = ts.TotalSeconds.ToStringTimeDeltaFormatted(paras[1].Value, paras[2].Value, cnv.Value, formatoptions);
                 return true;
             }
             else
-                output = "Not a valid date";
+                output = "Date is not in correct en-US format";
 
             return false;
         }
@@ -1381,8 +1360,8 @@ namespace Conditions
         {
             string formatoptions = (paras.Count >= 5) ? paras[4].Value : "";
 
-            DateTime? v1 = ConvertDate(paras[0].Value, formatoptions);
-            DateTime? v2 = ConvertDate(paras[1].Value, formatoptions);
+            DateTime? v1 = paras[0].Value.ParseUSDateTimeNull(formatoptions);
+            DateTime? v2 = paras[1].Value.ParseUSDateTimeNull(formatoptions);
 
             if (v1 != null && v2 != null)
             {
@@ -1392,11 +1371,11 @@ namespace Conditions
                     v2 = v2.Value.ToUniversalTime();
 
                 TimeSpan ts = v2.Value.Subtract(v1.Value);      // does not respect Kind when doing calc.
-                output = ObjectExtensionsDates.DateDeltaFormatter(ts.TotalSeconds, paras[2].Value, paras[3].Value, v2.Value, formatoptions);
+                output = ts.TotalSeconds.ToStringTimeDeltaFormatted(paras[2].Value, paras[3].Value, v2.Value, formatoptions);
                 return true;
             }
             else
-                output = "Not a valid date";
+                output = "One of the dates is not in correct en-US format";
 
             return false;
         }
