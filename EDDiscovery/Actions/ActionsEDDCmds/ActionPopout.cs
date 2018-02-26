@@ -170,16 +170,16 @@ namespace EDDiscovery.Actions
                     }
                     else
                     {       // pop out not found..
-                        int poi = Forms.PanelInformation.GetPanelIndexByWindowsRefName(cmdname);
+                        Forms.PanelInformation.PanelIDs? id = Forms.PanelInformation.GetPanelIDByWindowsRefName(cmdname);
 
-                        if (poi >= 0)
+                        if (id!=null)
                         {
                             if (nextcmd.Equals("off")) // if off, do nothing
                             {
                             }
                             else if (nextcmd.Equals("toggle") || nextcmd.Equals("on"))
                             {
-                                poc.PopOut(poi);
+                                poc.PopOut(id.Value);
                             }
                             else
                                 ap.ReportError("Cannot use command " + nextcmd + " after generic popout name in Popout");

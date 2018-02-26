@@ -145,24 +145,24 @@ namespace EDDiscovery.Forms
             public bool IsUserSelectable { get { return Description.Length > 0; } }
         }
 
-        static public string[] GetPanelNames()
-        {
-            return (from PanelInfo x in PanelList select x.WindowTitle).ToArray();
-        }
-
-        static public string[] GetPanelDescriptions()
+        static public string[] GetPanelDescriptions()       // only user selected
         {
             return (from PanelInfo x in PanelList where x.IsUserSelectable select x.Description).ToArray();
         }
 
-        static public Image[] GetPanelImages()
+        static public Image[] GetPanelImages()                // only user selected
         {
-            return (from PanelInfo x in PanelList select x.TabIcon).ToArray();
+            return (from PanelInfo x in PanelList where x.IsUserSelectable select x.TabIcon).ToArray();
         }
 
-        static public int GetPanelIndexByWindowsRefName(string name)
+        static public PanelIDs[] GetPanelIDs()                // only user selected
         {
-            return PanelList.FindIndex(x => x.WindowRefName.Equals(name, StringComparison.InvariantCultureIgnoreCase));
+            return (from PanelInfo x in PanelList where x.IsUserSelectable select x.PopoutID).ToArray();
+        }
+
+        static public PanelIDs? GetPanelIDByWindowsRefName(string name) // null if not found
+        {
+            return PanelList.Find(x=>x.WindowRefName.Equals(name, StringComparison.InvariantCultureIgnoreCase))?.PopoutID;
         }
 
         static public int GetPanelIndexByEnum(PanelIDs p)
@@ -170,7 +170,7 @@ namespace EDDiscovery.Forms
             return PanelList.FindIndex(x => x.PopoutID == p);
         }
 
-        static public int GetNumberPanels { get { return PanelList.Count; } }
+        static public int GetNumberPanels { get { return PanelList.Count; } }       // includes non user panels
 
         static public PanelInfo GetPanelInfoByEnum(PanelIDs p)
         {
@@ -180,11 +180,6 @@ namespace EDDiscovery.Forms
         static public PanelInfo GetPanelInfoByType(Type t)  // null if not found
         {
             return PanelList.Find(x => x.PopoutType == t);
-        }
-
-        public static UserControlCommonBase Create(int i)       // index into popoutlist
-        {
-            return Create(PanelList[i].PopoutID);
         }
 
         public static UserControlCommonBase Create(PanelIDs p)  // can fail if P is crap
@@ -272,18 +267,12 @@ namespace EDDiscovery.Forms
 
         public UserControlCommonBase PopOut(PanelInformation.PanelIDs selected)
         {
-            int index = PanelInformation.PanelList.FindIndex(x => x.PopoutID == selected);
-            return PopOut(index);
-        }
-
-        public UserControlCommonBase PopOut(int ix)
-        {
             UserControlForm tcf = usercontrolsforms.NewForm();
             tcf.Icon = Properties.Resources.edlogo_3mo_icon;
 
-            UserControlCommonBase ctrl = PanelInformation.Create(ix);
+            UserControlCommonBase ctrl = PanelInformation.Create(selected);
 
-            PanelInformation.PanelInfo poi = PanelInformation.PanelList[ix];
+            PanelInformation.PanelInfo poi = PanelInformation.GetPanelInfoByEnum(selected);
 
             if (ctrl != null && poi != null )
             {

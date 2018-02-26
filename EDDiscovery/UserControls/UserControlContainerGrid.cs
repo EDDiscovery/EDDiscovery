@@ -297,6 +297,7 @@ namespace EDDiscovery.UserControls
             popoutdropdown.ItemHeight = 26;
             popoutdropdown.Items = PanelInformation.GetPanelDescriptions().ToList();
             popoutdropdown.ImageItems = PanelInformation.GetPanelImages().ToList();
+            PanelInformation.PanelIDs[] pids = PanelInformation.GetPanelIDs();
             popoutdropdown.FlatStyle = FlatStyle.Popup;
             popoutdropdown.Activated += (s, ea) =>
             {
@@ -306,7 +307,7 @@ namespace EDDiscovery.UserControls
             };
             popoutdropdown.SelectedIndexChanged += (s, ea) =>
             {
-                UserControlContainerResizable uccr = CreatePanel(PanelInformation.Create(popoutdropdown.SelectedIndex),
+                UserControlContainerResizable uccr = CreatePanel(PanelInformation.Create(pids[popoutdropdown.SelectedIndex]),
                                             new Point((uccrlist.Count % 5) * 50, (uccrlist.Count % 5) * 50),
                                             new Size(Math.Min(300, panelPlayfield.Width - 10), Math.Min(300, panelPlayfield.Height - 10)));
                 Select(null);
