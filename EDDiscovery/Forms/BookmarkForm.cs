@@ -167,7 +167,7 @@ namespace EDDiscovery.Forms
             }
              
             Update(name, note, bk.Note, bk.Time.ToString(), bk.isRegion, false, bk.PlanetaryMarks);
-            userControlSurfaceBookmarks1.ApplyBookmark(bk);
+            userControlSurfaceBookmarks1.DisplayPlanetMarks(bk);
             buttonOK.Enabled = true;
         }
 

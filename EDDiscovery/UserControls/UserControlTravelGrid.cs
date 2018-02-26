@@ -450,7 +450,7 @@ namespace EDDiscovery.UserControls
             int noicons = (he.IsFSDJump && showfsdmapcolour) ? 2 : 1;
             if (he.StartMarker || he.StopMarker)
                 noicons++;
-            BookmarkClass bk = GlobalBookMarkList.FindBookmarkOnSystem(he.System.Name);
+            BookmarkClass bk = GlobalBookMarkList.Instance.FindBookmarkOnSystem(he.System.Name);
             if (bk != null)
                 noicons++;
 
@@ -924,7 +924,7 @@ namespace EDDiscovery.UserControls
             if (rightclicksystem != null)
             {
                 BookmarkForm bookmarkForm = new BookmarkForm();
-                BookmarkClass existing = GlobalBookMarkList.FindBookmarkOnSystem(rightclicksystem.System.Name);
+                BookmarkClass existing = GlobalBookMarkList.Instance.FindBookmarkOnSystem(rightclicksystem.System.Name);
                 DateTime tme;
                 if (existing != null)
                 {
@@ -939,13 +939,14 @@ namespace EDDiscovery.UserControls
                 DialogResult dr = bookmarkForm.ShowDialog();
                 if (dr == DialogResult.OK)
                 {
-                    GlobalBookMarkList.AddOrUpdateBookmark(existing, true, rightclicksystem.System.Name, rightclicksystem.System.X, rightclicksystem.System.Y, rightclicksystem.System.Z,
+                    GlobalBookMarkList.Instance.AddOrUpdateBookmark(existing, true, rightclicksystem.System.Name, rightclicksystem.System.X, rightclicksystem.System.Y, rightclicksystem.System.Z,
                         tme, bookmarkForm.Notes, bookmarkForm.SurfaceLocations);
                 }
                 if (dr == DialogResult.Abort && existing != null)
                 {
-                    existing.Delete();
+                    GlobalBookMarkList.Instance.Delete(existing);
                 }
+
                 dataGridViewTravel.Refresh();
             }
         }

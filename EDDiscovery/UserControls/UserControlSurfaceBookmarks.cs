@@ -32,6 +32,35 @@ namespace EDDiscovery.UserControls
             InitializeComponent();
         }
 
+        #region Bookmark Form
+
+        public void NewForSystem(string systemName)     // from bookmark form
+        {
+            Edited = false;
+            PlanetMarks = new PlanetMarks();
+            dataGridViewMarks.Rows.Clear();
+            SetSystem(systemName);
+            buttonSave.Hide();
+            sendToCompassToolStripMenuItem.Enabled = false;
+        }
+
+        public void AddSurfaceLocation(string planet, double latitude, double longitude)
+        {
+            using (DataGridViewRow dr = dataGridViewMarks.Rows[dataGridViewMarks.Rows.Add()])
+            {
+                dr.Cells[0].Value = planet;
+                dr.Cells[0].ReadOnly = true;
+                dr.Cells[1].Value = "Enter a name";
+                dr.Cells[2].Value = "";
+                dr.Cells[3].Value = latitude.ToString("F4");
+                dr.Cells[4].Value = longitude.ToString("F4");
+                ((DataGridViewCheckBoxCell)dr.Cells[5]).Value = false;
+                dr.Cells[1].Selected = true;
+            }
+        }
+
+        #endregion
+
         void SetSystem(string systemName)
         {
             ISystem thisSystem = EDDApplicationContext.EDDMainForm.history.FindSystem(systemName);
@@ -50,32 +79,9 @@ namespace EDDiscovery.UserControls
             }
         }
 
-        public void NewForSystem(string systemName)
-        {
-            Edited = false;
-            PlanetMarks = new PlanetMarks();
-            dataGridViewMarks.Rows.Clear();
-            SetSystem(systemName);
-            buttonSave.Hide();
-            sendToCompassToolStripMenuItem.Enabled = false;
-        }
-        
-        public void AddSurfaceLocation(string planet, double latitude, double longitude)
-        {
-            using (DataGridViewRow dr = dataGridViewMarks.Rows[dataGridViewMarks.Rows.Add()])
-            {
-                dr.Cells[0].Value = planet;
-                dr.Cells[0].ReadOnly = true;
-                dr.Cells[1].Value = "Enter a name";
-                dr.Cells[2].Value = "";
-                dr.Cells[3].Value = latitude.ToString("F4");
-                dr.Cells[4].Value = longitude.ToString("F4");
-                ((DataGridViewCheckBoxCell)dr.Cells[5]).Value = false;
-                dr.Cells[1].Selected = true;
-            }
-        }
+        #region Display Interface to Form/Bookmarks
 
-        public void ApplyBookmark(BookmarkClass bk)
+        public void DisplayPlanetMarks(BookmarkClass bk)
         {
             dataGridViewMarks.SuspendLayout();
             Edited = false;
@@ -91,7 +97,7 @@ namespace EDDiscovery.UserControls
             SetSystem(bk.StarName);
             thisBookmark = bk;
             PlanetMarks = bk.PlanetaryMarks == null ? new PlanetMarks() : bk.PlanetaryMarks;
-            
+
             if (PlanetMarks.Planets != null)
             {
                 foreach (Planet pl in PlanetMarks.Planets)
@@ -99,7 +105,7 @@ namespace EDDiscovery.UserControls
                     foreach (Location loc in pl.Locations)
                     {
                         if (((DataGridViewComboBoxCell)dataGridViewMarks.Rows[0].Cells[0]).Items.Contains(pl.Name))
-                        { 
+                        {
                             using (DataGridViewRow dr = dataGridViewMarks.Rows[dataGridViewMarks.Rows.Add()])
                             {
                                 dr.Cells[0].Value = pl.Name;
@@ -115,11 +121,16 @@ namespace EDDiscovery.UserControls
                         }
                     }
                 }
-                
             }
-            dataGridViewMarks.ResumeLayout();
+
             sendToCompassToolStripMenuItem.Enabled = true;
+
+            dataGridViewMarks.ResumeLayout();
         }
+
+        #endregion
+
+        #region UI
 
         private void dataGridViewMarks_CellValidating(object sender, DataGridViewCellValidatingEventArgs e)
         {
@@ -200,7 +211,7 @@ namespace EDDiscovery.UserControls
         {
             if(Edited)
             {
-                GlobalBookMarkList.AddOrUpdateBookmark(thisBookmark, true, thisBookmark.StarName, thisBookmark.x, thisBookmark.y, thisBookmark.z, thisBookmark.Time, thisBookmark.Note, internalPlanetMarks);
+                GlobalBookMarkList.Instance.AddOrUpdateBookmark(thisBookmark, true, thisBookmark.StarName, thisBookmark.x, thisBookmark.y, thisBookmark.z, thisBookmark.Time, thisBookmark.Note, internalPlanetMarks);
                 Edited = false;
             }
         }
@@ -217,7 +228,7 @@ namespace EDDiscovery.UserControls
                 {
                     if (Edited)
                     {
-                        GlobalBookMarkList.AddOrUpdateBookmark(thisBookmark, true, thisBookmark.StarName, thisBookmark.x, thisBookmark.y, thisBookmark.z, thisBookmark.Time, thisBookmark.Note, internalPlanetMarks);
+                        GlobalBookMarkList.Instance.AddOrUpdateBookmark(thisBookmark, true, thisBookmark.StarName, thisBookmark.x, thisBookmark.y, thisBookmark.z, thisBookmark.Time, thisBookmark.Note, internalPlanetMarks);
                         Edited = false;
                     }
                     UserControlCompass comp = (UserControlCompass)EDDApplicationContext.EDDMainForm.PopOuts.PopOut(PanelInformation.PanelIDs.Compass);
@@ -225,5 +236,7 @@ namespace EDDiscovery.UserControls
                 }
             }
         }
+
+        #endregion
     }
 }

@@ -100,7 +100,7 @@ namespace EDDiscovery._3DMap
 
             long bookmarktarget = TargetClass.GetTargetBookmark();
 
-            foreach (BookmarkClass bc in GlobalBookMarkList.Bookmarks)
+            foreach (BookmarkClass bc in GlobalBookMarkList.Instance.Bookmarks)
             {
                 Bitmap touse = (bc.id == bookmarktarget) ? maptarget : (bc.isRegion ? mapregion : (bc.hasSurfaceMarks ? mapsurface : mapstar));
                 TexturedQuadData newtexture = TexturedQuadData.FromBitmap(touse, new PointData(bc.x, bc.y, bc.z), rotation, widthly, heightly,  0, heightly / 2);

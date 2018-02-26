@@ -59,9 +59,9 @@ namespace EDDiscovery.UserControls
         {
             discoveryform.OnNewEntry += Display;
             discoveryform.OnNewUIEvent += OnNewUIEvent;
-            GlobalBookMarkList.OnBookmarkChange += GlobalBookMarkList_OnBookmarkChange;
-            GlobalBookMarkList.OnBookmarkRemoved += GlobalBookMarkList_OnBookmarkRemoved;
-            GlobalBookMarkList.OnBookmarkRefresh += Display;
+            GlobalBookMarkList.Instance.OnBookmarkChange += GlobalBookMarkList_OnBookmarkChange;
+            GlobalBookMarkList.Instance.OnBookmarkRemoved += GlobalBookMarkList_OnBookmarkRemoved;
+            GlobalBookMarkList.Instance.OnBookmarkRefresh += Display;
             numberBoxTargetLatitude.ValueNoChange = GetSettingDouble(DbLatSave, 0);
             numberBoxTargetLongitude.ValueNoChange = GetSettingDouble(DbLongSave, 0);
             autoHideTargetCoords = GetSettingBool(DbHideSave, false);
@@ -69,15 +69,17 @@ namespace EDDiscovery.UserControls
             comboBoxBookmarks.Text = "";
         }
         
-        private void GlobalBookMarkList_OnBookmarkRemoved(Predicate<BookmarkClass> predicate)
+        private void GlobalBookMarkList_OnBookmarkRemoved(long bookMarkID)
         {
-            bookMark = null;
+            if (bookMark?.id == bookMarkID)
+                bookMark = null;
             Display();
         }
 
         private void GlobalBookMarkList_OnBookmarkChange(long bookMarkID)
         {
-            if (bookMark?.id == bookMarkID) bookMark = null;
+            if (bookMark?.id == bookMarkID)
+                bookMark = null;
             Display();
         }
 
@@ -88,9 +90,9 @@ namespace EDDiscovery.UserControls
             PutSettingBool(DbHideSave, autoHideTargetCoords);
             discoveryform.OnNewEntry -= Display;
             discoveryform.OnNewUIEvent -= OnNewUIEvent;
-            GlobalBookMarkList.OnBookmarkChange -= GlobalBookMarkList_OnBookmarkChange;
-            GlobalBookMarkList.OnBookmarkRemoved -= GlobalBookMarkList_OnBookmarkRemoved;
-            GlobalBookMarkList.OnBookmarkRefresh -= Display;
+            GlobalBookMarkList.Instance.OnBookmarkChange -= GlobalBookMarkList_OnBookmarkChange;
+            GlobalBookMarkList.Instance.OnBookmarkRemoved -= GlobalBookMarkList_OnBookmarkRemoved;
+            GlobalBookMarkList.Instance.OnBookmarkRefresh -= Display;
         }
 
         #endregion
@@ -232,7 +234,7 @@ namespace EDDiscovery.UserControls
             }
             string selection = externallyForcedBookmark ? externalLocationName : comboBoxBookmarks.Text;
             comboBoxBookmarks.Items.Clear();
-            bookMark = GlobalBookMarkList.FindBookmarkOnSystem(last_he.System.Name);
+            bookMark = GlobalBookMarkList.Instance.FindBookmarkOnSystem(last_he.System.Name);
             if (bookMark != null)
             {
                 if (heading.HasValue)
@@ -489,11 +491,11 @@ namespace EDDiscovery.UserControls
             DialogResult dr = frm.ShowDialog();
             if (dr == DialogResult.OK)
             {
-                bookMark = GlobalBookMarkList.AddOrUpdateBookmark(bookMark, true, frm.StarHeading, double.Parse(frm.x), double.Parse(frm.y), double.Parse(frm.z), tme, frm.Notes, frm.SurfaceLocations);
+                bookMark = GlobalBookMarkList.Instance.AddOrUpdateBookmark(bookMark, true, frm.StarHeading, double.Parse(frm.x), double.Parse(frm.y), double.Parse(frm.z), tme, frm.Notes, frm.SurfaceLocations);
             }
             if (dr == DialogResult.Abort)
             {
-                bookMark.Delete();
+                GlobalBookMarkList.Instance.Delete(bookMark);
                 bookMark = null;
             }
             Display();

@@ -224,7 +224,6 @@ namespace EliteDangerousCore.DB
                     id = (long)SQLiteDBClass.SQLScalar(cn, cmd2);
                 }
 
-                GlobalBookMarkList.Add(this);
                 return true;
             }
         }
@@ -253,14 +252,11 @@ namespace EliteDangerousCore.DB
 
                 SQLiteDBClass.SQLNonQueryText(cn, cmd);
 
-                GlobalBookMarkList.RemoveAll(x => x.id == id, true);     // remove from list any containing id.
-                GlobalBookMarkList.Add(this);
-
                 return true;
             }
         }
 
-        public bool Delete()
+        internal bool Delete()
         {
             using (SQLiteConnectionUser cn = new SQLiteConnectionUser())
             {
@@ -274,8 +270,6 @@ namespace EliteDangerousCore.DB
             {
                 cmd.AddParameterWithValue("@id", id);
                 SQLiteDBClass.SQLNonQueryText(cn, cmd);
-
-                GlobalBookMarkList.RemoveAll(x => x.id == id, false);     // remove from list any containing id.
                 return true;
             }
         }
@@ -324,68 +318,98 @@ namespace EliteDangerousCore.DB
         }
     }
 
-    public delegate void GlobalBookmarkRefresh();
-    public delegate void GlobalBookmarkChange(long bookMarkID);
-    public delegate void GlobalBookmarkRemoved(Predicate<BookmarkClass> predicate);
+    // EVERYTHING goes thru list class for adding/deleting bookmarks
 
-    public static class GlobalBookMarkList
+    public class GlobalBookMarkList
     {
-        private static List<BookmarkClass> globalbookmarks = new List<BookmarkClass>();
+        public static bool Instanced { get { return gbl != null; } }
+        public static GlobalBookMarkList Instance { get { return gbl; } }
 
-        public static List<BookmarkClass> Bookmarks { get { return globalbookmarks; } }
-        public static event GlobalBookmarkRefresh OnBookmarkRefresh;
-        public static event GlobalBookmarkChange OnBookmarkChange;
-        public static event GlobalBookmarkRemoved OnBookmarkRemoved;
+        public List<BookmarkClass> Bookmarks { get { return globalbookmarks; } }
 
-        public static void Clear()
+        public Action OnBookmarkRefresh;        // hook for notifications
+        public Action<long> OnBookmarkChange;
+        public Action<long> OnBookmarkRemoved;
+
+        private static GlobalBookMarkList gbl = null;
+
+        private List<BookmarkClass> globalbookmarks = new List<BookmarkClass>();
+
+        public static bool LoadBookmarks()
         {
+            try
+            {
+                using (SQLiteConnectionUser cn = new SQLiteConnectionUser(mode: EDDbAccessMode.Reader))
+                {
+                    using (DbCommand cmd = cn.CreateCommand("select * from Bookmarks"))
+                    {
+                        DataSet ds = null;
+
+                        ds = SQLiteDBClass.SQLQueryText(cn, cmd);
+
+                        if (ds.Tables.Count == 0 || ds.Tables[0].Rows.Count == 0)
+                        {
+                            return false;
+                        }
+
+                        gbl = new GlobalBookMarkList();
+
+                        foreach (DataRow dr in ds.Tables[0].Rows)
+                        {
+                            BookmarkClass bc = new BookmarkClass(dr);
+                            gbl.globalbookmarks.Add(bc); 
+                        }
+
+                        return true;
+                    }
+                }
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        public void Clear()
+        {
+            System.Diagnostics.Debug.Assert(System.Windows.Forms.Application.MessageLoop);
             globalbookmarks.Clear();
             OnBookmarkRefresh?.Invoke();
         }
 
-        public static void Add(BookmarkClass newBookmark)
+        public void Add(BookmarkClass newBookmark)
         {
+            System.Diagnostics.Debug.Assert(System.Windows.Forms.Application.MessageLoop);
             globalbookmarks.Add(newBookmark);
             OnBookmarkChange?.Invoke(newBookmark.id);
         }
 
-        public static void FireRefresh()
-        {
-            OnBookmarkRefresh?.Invoke();
-        }
-
-        internal static void RemoveAll(Predicate<BookmarkClass> predicate, bool updating)
-        {
-            globalbookmarks.RemoveAll(predicate);
-            if (!updating)
-                OnBookmarkRemoved?.Invoke(predicate);
-        }
         // return any mark
-        public static BookmarkClass FindBookmarkOnRegion(string name)   
+        public BookmarkClass FindBookmarkOnRegion(string name)   
         {
             return globalbookmarks.Find(x => x.Heading != null && x.Name.Equals(x.Heading, StringComparison.InvariantCultureIgnoreCase));
         }
 
-        public static BookmarkClass FindBookmarkOnSystem(string name)
+        public BookmarkClass FindBookmarkOnSystem(string name)
         {
             // star name may be null if its a region mark
             return globalbookmarks.Find(x => x.StarName != null && x.StarName.Equals(name, StringComparison.InvariantCultureIgnoreCase));
         }
-        public static BookmarkClass FindBookmark(string name , bool region)
+        public BookmarkClass FindBookmark(string name , bool region)
         {
             // star name may be null if its a region mark
             return (region) ? FindBookmarkOnRegion(name) : FindBookmarkOnSystem(name);
         }
 
         // on a star system, if an existing bookmark, return it, else create a new one with these properties
-        public static BookmarkClass EnsureBookmarkOnSystem(string name, double x, double y, double z, DateTime tme, string notes = null)
+        public BookmarkClass EnsureBookmarkOnSystem(string name, double x, double y, double z, DateTime tme, string notes = null)
         {
             BookmarkClass bk = FindBookmarkOnSystem(name);
             return bk != null ? bk : AddOrUpdateBookmark(null, true, name, x, y, z, tme, notes);
         }
 
         // bk = null, new bookmark, else update.  isstar = true, region = false.
-        public static BookmarkClass AddOrUpdateBookmark(BookmarkClass bk, bool isstar, string name, double x, double y, double z, DateTime tme, string notes = null, PlanetMarks planetMarks = null)
+        public BookmarkClass AddOrUpdateBookmark(BookmarkClass bk, bool isstar, string name, double x, double y, double z, DateTime tme, string notes = null, PlanetMarks planetMarks = null)
         {
             bool addit = bk == null;
 
@@ -412,46 +436,20 @@ namespace EliteDangerousCore.DB
             else
                 bk.Update();
 
+            System.Diagnostics.Debug.Assert(System.Windows.Forms.Application.MessageLoop);
             OnBookmarkChange?.Invoke(bk.id);
 
             return bk;
 		}	
 
-        public static bool LoadBookmarks()
+        public void Delete(BookmarkClass bk)
         {
-            try
-            {
-                using (SQLiteConnectionUser cn = new SQLiteConnectionUser(mode: EDDbAccessMode.Reader))
-                {
-                    using (DbCommand cmd = cn.CreateCommand("select * from Bookmarks"))
-                    {
-                        DataSet ds = null;
-
-                        ds = SQLiteDBClass.SQLQueryText(cn, cmd);
-
-                        if (ds.Tables.Count == 0 || ds.Tables[0].Rows.Count == 0)
-                        {
-                            return false;
-                        }
-
-                        globalbookmarks.Clear();
-
-                        foreach (DataRow dr in ds.Tables[0].Rows)
-                        {
-                            BookmarkClass bc = new BookmarkClass(dr);
-                            globalbookmarks.Add(bc);
-                        }
-                        OnBookmarkRefresh?.Invoke();
-
-                        return true;
-
-                    }
-                }
-            }
-            catch
-            {
-                return false;
-            }
+            long id = bk.id;
+            bk.Delete();
+            globalbookmarks.RemoveAll(x => x.id == id);
+            System.Diagnostics.Debug.Assert(System.Windows.Forms.Application.MessageLoop);
+            OnBookmarkRemoved?.Invoke(id);
         }
+
     }
 }
