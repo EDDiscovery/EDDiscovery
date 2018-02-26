@@ -186,6 +186,8 @@ namespace EDDiscovery.Icons
         #endregion
         #region EDDiscovery.UserControls.UserControlStarList
         public static Image StarList_EDSM { get { return IconSet.GetIcon("Controls.StarList.EDSM"); } }
+        public static Image StarList_BodyClass { get { return IconSet.GetIcon("Controls.StarList.BodyClasses"); } }
+        public static Image StarList_Jumponium { get { return IconSet.GetIcon("Controls.StarList.Jumponium"); } }
         public static Image StarList_ExportToExcel { get { return IconSet.GetIcon("Controls.StarList.ExportToExcel"); } }
         public static Image StarList_History { get { return IconSet.GetIcon("Controls.StarList.History"); } }
         #endregion
