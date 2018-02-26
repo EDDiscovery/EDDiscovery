@@ -991,6 +991,7 @@ namespace EDDiscovery
         {
             Bitmap maptarget = (Bitmap)Icons.Controls.Map3D_Bookmarks_Target;
             Bitmap mapstar = (Bitmap)Icons.Controls.Map3D_Bookmarks_Star;
+            Bitmap mapsurface = (Bitmap)Icons.Controls.Map3d_Bookmarks_StarWithPlanets;
             Bitmap mapregion = (Bitmap)Icons.Controls.Map3D_Bookmarks_Region;
             Bitmap mapnotedbkmark = (Bitmap)Icons.Controls.Map3D_Bookmarks_Noted;
             Debug.Assert(mapnotedbkmark != null && maptarget != null);
@@ -998,7 +999,7 @@ namespace EDDiscovery
 
             List<IData3DSet> oldbookmarks = _datasets_bookedmarkedsystems;
             DatasetBuilder builder1 = new DatasetBuilder();
-            _datasets_bookedmarkedsystems = builder1.AddStarBookmarks(mapstar, mapregion, maptarget, GetBitmapOnScreenSizeX(), GetBitmapOnScreenSizeY(), _lastcameranorm.Rotation);
+            _datasets_bookedmarkedsystems = builder1.AddStarBookmarks(mapstar, mapregion, maptarget, mapsurface, GetBitmapOnScreenSizeX(), GetBitmapOnScreenSizeY(), _lastcameranorm.Rotation);
             DeleteDataset(ref oldbookmarks);
 
             List<IData3DSet> oldnotedsystems = _datasets_notedsystems;
@@ -1349,7 +1350,7 @@ namespace EDDiscovery
 
             if (res == DialogResult.OK)
             {
-                BookmarkClass newcls = BookmarkClass.AddOrUpdateBookmark(null,false,frm.StarHeading, double.Parse(frm.x), double.Parse(frm.y), double.Parse(frm.z), tme, frm.Notes);
+                BookmarkClass newcls = GlobalBookMarkList.AddOrUpdateBookmark(null,false,frm.StarHeading, double.Parse(frm.x), double.Parse(frm.y), double.Parse(frm.z), tme, frm.Notes);
 
                 if (frm.IsTarget)          // asked for targetchanged..
                 {
@@ -1991,7 +1992,7 @@ namespace EDDiscovery
             cursysdistz = float.MaxValue;
             Matrix4 resmat = posdir.GetResMat;
 
-            foreach (BookmarkClass bc in BookmarkClass.Bookmarks)
+            foreach (BookmarkClass bc in GlobalBookMarkList.Bookmarks)
             {
                 //Console.WriteLine("Checking bookmark " + ((bc.Heading != null) ? bc.Heading : bc.StarName));
 

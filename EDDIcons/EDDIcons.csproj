@@ -644,6 +644,12 @@
     <EmbeddedResource Include="Journal\UnderAttack.png" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Controls\Map3D\Bookmarks\StarWithPlanets.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Panels\BookmarkManager.png" />
+  </ItemGroup>
+  <ItemGroup>
     <EmbeddedResource Include="Controls\StarList\BodyClasses.png" />
     <EmbeddedResource Include="Controls\StarList\Jumponium.png" />
   </ItemGroup>

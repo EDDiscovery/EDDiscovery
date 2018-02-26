@@ -65,6 +65,7 @@ namespace EDDiscovery.Forms
             Map,                    // 32
             Plot,                   // 33
             PanelSelector,          // 34
+            BookmarkManager,
             // ****** ADD More here DO NOT REORDER *****
         };
 
@@ -109,6 +110,7 @@ namespace EDDiscovery.Forms
             { new PanelInfo( PanelIDs.Grid, typeof(UserControlContainerGrid), "Grid", "TheGrid", "Grid (allows other panels to be placed in the it)" , transparent:false) },
             { new PanelInfo( PanelIDs.Compass, typeof(UserControlCompass), "Compass", "Compass", "Ground compass navigation panel to work out the bearing between planetary coordinates", transparent:true) },
             { new PanelInfo( PanelIDs.PanelSelector, typeof(UserControlPanelSelector), "+", "Selector", "") },       // no description, not presented to user
+            { new PanelInfo( PanelIDs.BookmarkManager, typeof(UserControlBookmarks), "Bookmarks", "Bookmarks", "Manage System and planetary bookmarks", transparent:false)},
         };
 
         public static IReadOnlyDictionary<PanelIDs, Image> PanelTypeIcons { get; private set; } = new IconGroup<PanelIDs>("Panels");
@@ -268,13 +270,13 @@ namespace EDDiscovery.Forms
             }
         }
 
-        public void PopOut(PanelInformation.PanelIDs selected)
+        public UserControlCommonBase PopOut(PanelInformation.PanelIDs selected)
         {
             int index = PanelInformation.PanelList.FindIndex(x => x.PopoutID == selected);
-            PopOut(index);
+            return PopOut(index);
         }
 
-        public void PopOut(int ix)
+        public UserControlCommonBase PopOut(int ix)
         {
             UserControlForm tcf = usercontrolsforms.NewForm();
             tcf.Icon = Properties.Resources.edlogo_3mo_icon;
@@ -307,6 +309,7 @@ namespace EDDiscovery.Forms
 
                 discoveryform.ActionRun(Actions.ActionEventEDList.onPopUp, null, new Conditions.ConditionVariables(new string[] { "PopOutName", refname , "PopOutTitle", windowtitle, "PopOutIndex", numopened.ToString()} ));
             }
+            return ctrl;
         }
     }
 }
