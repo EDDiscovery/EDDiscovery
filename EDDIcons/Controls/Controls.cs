@@ -79,6 +79,7 @@ namespace EDDiscovery.Icons
         public static Image Map3D_Bookmarks_Noted { get { return IconSet.GetIcon("Controls.Map3D.Bookmarks.Noted"); } }
         public static Image Map3D_Bookmarks_Region { get { return IconSet.GetIcon("Controls.Map3D.Bookmarks.Region"); } }
         public static Image Map3D_Bookmarks_Star { get { return IconSet.GetIcon("Controls.Map3D.Bookmarks.Star"); } }
+        public static Image Map3d_Bookmarks_StarWithPlanets { get { return IconSet.GetIcon("Controls.Map3D.Bookmarks.StarWithPlanets"); } }
         public static Image Map3D_Bookmarks_Target { get { return IconSet.GetIcon("Controls.Map3D.Bookmarks.Target"); } }
         public static Image Map3D_EliteMovement { get { return IconSet.GetIcon("Controls.Map3D.EliteMovement"); } }
         public static Image Map3D_Filter_Menu { get { return IconSet.GetIcon("Controls.Map3D.Filter.Menu"); } }

@@ -48,7 +48,6 @@ namespace EDDiscovery.Forms
             this.labelBookmarkNotes = new System.Windows.Forms.Label();
             this.labelTimeMade = new System.Windows.Forms.Label();
             this.textBoxNotes = new ExtendedControls.RichTextBoxScroll();
-            this.textBoxName = new ExtendedControls.TextBoxBorder();
             this.textBoxX = new ExtendedControls.TextBoxBorder();
             this.textBoxY = new ExtendedControls.TextBoxBorder();
             this.textBoxZ = new ExtendedControls.TextBoxBorder();
@@ -65,6 +64,9 @@ namespace EDDiscovery.Forms
             this.checkBoxTarget = new ExtendedControls.CheckBoxCustom();
             this.buttonEDSM = new ExtendedControls.ButtonExt();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.labelBadSystem = new ExtendedControls.LabelExt();
+            this.textBoxName = new ExtendedControls.AutoCompleteTextBox();
+            this.userControlSurfaceBookmarks1 = new EDDiscovery.UserControls.UserControlSurfaceBookmarks();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -125,33 +127,10 @@ namespace EDDiscovery.Forms
             this.textBoxNotes.ScrollBarThumbButtonColor = System.Drawing.Color.DarkBlue;
             this.textBoxNotes.ScrollBarWidth = 20;
             this.textBoxNotes.ShowLineCount = false;
-            this.textBoxNotes.Size = new System.Drawing.Size(336, 103);
+            this.textBoxNotes.Size = new System.Drawing.Size(521, 103);
             this.textBoxNotes.TabIndex = 0;
             this.textBoxNotes.TextBoxBackColor = System.Drawing.SystemColors.Control;
             this.textBoxNotes.TextBoxForeColor = System.Drawing.SystemColors.ControlText;
-            // 
-            // textBoxName
-            // 
-            this.textBoxName.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
-            this.textBoxName.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
-            this.textBoxName.BackErrorColor = System.Drawing.Color.Red;
-            this.textBoxName.BorderColor = System.Drawing.Color.Transparent;
-            this.textBoxName.BorderColorScaling = 0.5F;
-            this.textBoxName.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.textBoxName.ControlBackground = System.Drawing.SystemColors.Control;
-            this.textBoxName.InErrorCondition = false;
-            this.textBoxName.Location = new System.Drawing.Point(139, 13);
-            this.textBoxName.Multiline = false;
-            this.textBoxName.Name = "textBoxName";
-            this.textBoxName.ReadOnly = true;
-            this.textBoxName.ScrollBars = System.Windows.Forms.ScrollBars.None;
-            this.textBoxName.SelectionLength = 0;
-            this.textBoxName.SelectionStart = 0;
-            this.textBoxName.Size = new System.Drawing.Size(336, 20);
-            this.textBoxName.TabIndex = 3;
-            this.textBoxName.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
-            this.textBoxName.WordWrap = true;
-            this.textBoxName.TextChanged += new System.EventHandler(this.textBox_TextChanged);
             // 
             // textBoxX
             // 
@@ -273,7 +252,7 @@ namespace EDDiscovery.Forms
             // 
             // buttonOK
             // 
-            this.buttonOK.Location = new System.Drawing.Point(400, 361);
+            this.buttonOK.Location = new System.Drawing.Point(585, 542);
             this.buttonOK.Name = "buttonOK";
             this.buttonOK.Size = new System.Drawing.Size(75, 23);
             this.buttonOK.TabIndex = 1;
@@ -283,7 +262,7 @@ namespace EDDiscovery.Forms
             // 
             // buttonCancel
             // 
-            this.buttonCancel.Location = new System.Drawing.Point(298, 361);
+            this.buttonCancel.Location = new System.Drawing.Point(504, 542);
             this.buttonCancel.Name = "buttonCancel";
             this.buttonCancel.Size = new System.Drawing.Size(75, 23);
             this.buttonCancel.TabIndex = 2;
@@ -293,7 +272,7 @@ namespace EDDiscovery.Forms
             // 
             // buttonDelete
             // 
-            this.buttonDelete.Location = new System.Drawing.Point(13, 361);
+            this.buttonDelete.Location = new System.Drawing.Point(3, 542);
             this.buttonDelete.Name = "buttonDelete";
             this.buttonDelete.Size = new System.Drawing.Size(75, 23);
             this.buttonDelete.TabIndex = 9;
@@ -334,7 +313,7 @@ namespace EDDiscovery.Forms
             this.textBoxTravelNote.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.textBoxTravelNote.SelectionLength = 0;
             this.textBoxTravelNote.SelectionStart = 0;
-            this.textBoxTravelNote.Size = new System.Drawing.Size(336, 87);
+            this.textBoxTravelNote.Size = new System.Drawing.Size(521, 87);
             this.textBoxTravelNote.TabIndex = 8;
             this.textBoxTravelNote.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.textBoxTravelNote.WordWrap = true;
@@ -369,7 +348,9 @@ namespace EDDiscovery.Forms
             // panel1
             // 
             this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel1.Controls.Add(this.labelBadSystem);
             this.panel1.Controls.Add(this.textBoxName);
+            this.panel1.Controls.Add(this.userControlSurfaceBookmarks1);
             this.panel1.Controls.Add(this.buttonEDSM);
             this.panel1.Controls.Add(this.label1);
             this.panel1.Controls.Add(this.checkBoxTarget);
@@ -393,15 +374,63 @@ namespace EDDiscovery.Forms
             this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(502, 407);
+            this.panel1.Size = new System.Drawing.Size(673, 570);
             this.panel1.TabIndex = 12;
             this.panel1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.panel1_MouseDown);
+            // 
+            // labelBadSystem
+            // 
+            this.labelBadSystem.AutoSize = true;
+            this.labelBadSystem.Location = new System.Drawing.Point(482, 22);
+            this.labelBadSystem.Name = "labelBadSystem";
+            this.labelBadSystem.Size = new System.Drawing.Size(0, 13);
+            this.labelBadSystem.TabIndex = 14;
+            this.labelBadSystem.TextBackColor = System.Drawing.Color.Transparent;
+            // 
+            // textBoxName
+            // 
+            this.textBoxName.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
+            this.textBoxName.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
+            this.textBoxName.BackErrorColor = System.Drawing.Color.Red;
+            this.textBoxName.BorderColor = System.Drawing.Color.Transparent;
+            this.textBoxName.BorderColorScaling = 0.5F;
+            this.textBoxName.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.textBoxName.ControlBackground = System.Drawing.SystemColors.Control;
+            this.textBoxName.DropDownBackgroundColor = System.Drawing.Color.Gray;
+            this.textBoxName.DropDownBorderColor = System.Drawing.Color.Green;
+            this.textBoxName.DropDownHeight = 200;
+            this.textBoxName.DropDownItemHeight = 20;
+            this.textBoxName.DropDownMouseOverBackgroundColor = System.Drawing.Color.Red;
+            this.textBoxName.DropDownScrollBarButtonColor = System.Drawing.Color.LightGray;
+            this.textBoxName.DropDownScrollBarColor = System.Drawing.Color.LightGray;
+            this.textBoxName.DropDownWidth = 0;
+            this.textBoxName.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.textBoxName.InErrorCondition = false;
+            this.textBoxName.Location = new System.Drawing.Point(139, 16);
+            this.textBoxName.Multiline = false;
+            this.textBoxName.Name = "textBoxName";
+            this.textBoxName.ReadOnly = false;
+            this.textBoxName.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.textBoxName.SelectionLength = 0;
+            this.textBoxName.SelectionStart = 0;
+            this.textBoxName.Size = new System.Drawing.Size(336, 20);
+            this.textBoxName.TabIndex = 13;
+            this.textBoxName.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.textBoxName.WordWrap = true;
+            this.textBoxName.Validated += new System.EventHandler(this.textBoxName_Validated);
+            // 
+            // userControlSurfaceBookmarks1
+            // 
+            this.userControlSurfaceBookmarks1.Location = new System.Drawing.Point(13, 362);
+            this.userControlSurfaceBookmarks1.Name = "userControlSurfaceBookmarks1";
+            this.userControlSurfaceBookmarks1.Size = new System.Drawing.Size(656, 174);
+            this.userControlSurfaceBookmarks1.TabIndex = 12;
             // 
             // BookmarkForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(502, 407);
+            this.ClientSize = new System.Drawing.Size(673, 570);
             this.Controls.Add(this.panel1);
             this.Icon = global::EDDiscovery.Properties.Resources.edlogo_3mo_icon;
             this.Name = "BookmarkForm";
@@ -420,7 +449,6 @@ namespace EDDiscovery.Forms
         private System.Windows.Forms.Label labelBookmarkNotes;
         private System.Windows.Forms.Label labelTimeMade;
         private ExtendedControls.RichTextBoxScroll textBoxNotes;
-        private ExtendedControls.TextBoxBorder textBoxName;
         private ExtendedControls.TextBoxBorder textBoxX;
         private ExtendedControls.TextBoxBorder textBoxY;
         private ExtendedControls.TextBoxBorder textBoxZ;
@@ -437,5 +465,8 @@ namespace EDDiscovery.Forms
         private ExtendedControls.CheckBoxCustom checkBoxTarget;
         private ExtendedControls.ButtonExt buttonEDSM;
         private System.Windows.Forms.Panel panel1;
+        private UserControls.UserControlSurfaceBookmarks userControlSurfaceBookmarks1;
+        private ExtendedControls.AutoCompleteTextBox textBoxName;
+        private ExtendedControls.LabelExt labelBadSystem;
     }
 }
