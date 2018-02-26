@@ -643,5 +643,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Journal\UnderAttack.png" />
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Controls\StarList\BodyClasses.png" />
+    <EmbeddedResource Include="Controls\StarList\Jumponium.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
