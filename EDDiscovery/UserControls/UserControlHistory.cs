@@ -155,27 +155,21 @@ namespace EDDiscovery.UserControls
 
             PanelInformation.PanelIDs[] pids = PanelInformation.GetPanelIDs();      // valid PIDs
 
-            int max = pids.Length-1; // fix, its up to but not including endlist
+            // saved as the pop out enum value, for historical reasons. Allow for crap values by using int
+            int enum_bottom = SQLiteDBClass.GetSettingInt("TravelControlBottomTab", (int)(PanelInformation.PanelIDs.Scan));
+            int enum_bottomright = SQLiteDBClass.GetSettingInt("TravelControlBottomRightTab", (int)(PanelInformation.PanelIDs.Log));
+            int enum_middleright = SQLiteDBClass.GetSettingInt("TravelControlMiddleRightTab", (int)(PanelInformation.PanelIDs.StarDistance));
+            int enum_topright = SQLiteDBClass.GetSettingInt("TravelControlTopRightTab", (int)(PanelInformation.PanelIDs.SystemInformation));
 
-            // saved as the pop out enum value, for historical reasons
-            int enum_bottom = Math.Min(SQLiteDBClass.GetSettingInt("TravelControlBottomTab", (int)(PanelInformation.PanelIDs.Scan)), max);
-            int enum_bottomright = Math.Min(SQLiteDBClass.GetSettingInt("TravelControlBottomRightTab", (int)(PanelInformation.PanelIDs.Log)), max);
-            int enum_middleright = Math.Min(SQLiteDBClass.GetSettingInt("TravelControlMiddleRightTab", (int)(PanelInformation.PanelIDs.StarDistance)), max);
-            int enum_topright = Math.Min(SQLiteDBClass.GetSettingInt("TravelControlTopRightTab", (int)(PanelInformation.PanelIDs.SystemInformation)), max);
-
-            int ibottom = Array.IndexOf(pids, (PanelInformation.PanelIDs)enum_bottom);
+            int ibottom = Array.IndexOf(pids, (PanelInformation.PanelIDs)enum_bottom);              //given the enum, find it in the list of PIDs
             int ibottomright = Array.IndexOf(pids, (PanelInformation.PanelIDs)enum_bottomright);
             int imiddleright = Array.IndexOf(pids, (PanelInformation.PanelIDs)enum_middleright);
             int itopright = Array.IndexOf(pids, (PanelInformation.PanelIDs)enum_topright);
 
-            if (ibottom >= 0)
-                tabStripBottom.SelectedIndex = ibottom;
-            if (ibottomright >= 0)
-                tabStripBottomRight.SelectedIndex = ibottomright;
-            if (imiddleright >= 0)
-                tabStripMiddleRight.SelectedIndex = imiddleright;
-            if (itopright >= 0)
-                tabStripTopRight.SelectedIndex = itopright;
+            tabStripBottom.SelectedIndex = ibottom >= 0 ? ibottom : 0;
+            tabStripBottomRight.SelectedIndex = ibottomright >= 0 ? ibottomright: 0;
+            tabStripMiddleRight.SelectedIndex = imiddleright >= 0 ? imiddleright : 0;
+            tabStripTopRight.SelectedIndex = itopright >= 0 ? itopright : 0;
         }
 
 
