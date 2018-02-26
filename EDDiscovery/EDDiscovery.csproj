@@ -357,6 +357,18 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UserControls\UserControlContainerSplit.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\UserControlContainerSplit.Designer.cs">
+      <DependentUpon>UserControlContainerSplit.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\UserControlContainerTabs.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\UserControlContainerTabs.Designer.cs">
+      <DependentUpon>UserControlContainerTabs.cs</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\UserControlPanelSelector.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -617,6 +629,12 @@
     <EmbeddedResource Include="UserControls\UserControlContainerResizable.resx">
       <DependentUpon>UserControlContainerResizable.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\UserControlContainerSplit.resx">
+      <DependentUpon>UserControlContainerSplit.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\UserControlContainerTabs.resx">
+      <DependentUpon>UserControlContainerTabs.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="UserControls\UserControlPanelSelector.resx">
       <DependentUpon>UserControlPanelSelector.cs</DependentUpon>
     </EmbeddedResource>
@@ -862,6 +880,7 @@
       <Name>ExtendedControls</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <UsingTask TaskName="Zip" TaskFactory="CodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.v4.0.dll">
     <ParameterGroup>
       <OutputFilename ParameterType="System.String" Required="true" />
