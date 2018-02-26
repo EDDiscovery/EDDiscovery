@@ -73,7 +73,7 @@ namespace EDDiscovery.Forms
         // ****** DO NOT add UserControlHistory - the display numbers used are special and not okay for a generic panel.  Since you can do the same via a grid, its okay
         // description = empty means not user selectable
 
-        static public List<PanelInfo> PanelList = new List<PanelInfo>()
+        static private List<PanelInfo> PanelList = new List<PanelInfo>()
         {
             { new PanelInfo( PanelIDs.Log , typeof(UserControlLog),"Log", "Log", "Program log" ) },
             { new PanelInfo( PanelIDs.StarDistance, typeof(UserControlStarDistance), "Nearest Stars", "StarDistance","List of nearest stars") },
@@ -109,7 +109,7 @@ namespace EDDiscovery.Forms
             { new PanelInfo( PanelIDs.Settings, typeof(UserControlSettings), "Settings", "SettingsPanel", "Settings for ED Discovery ") },
             { new PanelInfo( PanelIDs.Grid, typeof(UserControlContainerGrid), "Grid", "TheGrid", "Grid (allows other panels to be placed in the it)" , transparent:false) },
             { new PanelInfo( PanelIDs.Compass, typeof(UserControlCompass), "Compass", "Compass", "Ground compass navigation panel to work out the bearing between planetary coordinates", transparent:true) },
-            { new PanelInfo( PanelIDs.PanelSelector, typeof(UserControlPanelSelector), "+", "Selector", "") },       // no description, not presented to user
+            { new PanelInfo( PanelIDs.PanelSelector, typeof(UserControlPanelSelector), "!error!", "Selector", "") },       // no description, not presented to user
             { new PanelInfo( PanelIDs.BookmarkManager, typeof(UserControlBookmarks), "Bookmarks", "Bookmarks", "Manage System and planetary bookmarks", transparent:false)},
         };
 
@@ -165,13 +165,6 @@ namespace EDDiscovery.Forms
             return PanelList.Find(x=>x.WindowRefName.Equals(name, StringComparison.InvariantCultureIgnoreCase))?.PopoutID;
         }
 
-        static public int GetPanelIndexByEnum(PanelIDs p)
-        {
-            return PanelList.FindIndex(x => x.PopoutID == p);
-        }
-
-        static public int GetNumberPanels { get { return PanelList.Count; } }       // includes non user panels
-
         static public PanelInfo GetPanelInfoByEnum(PanelIDs p)
         {
             return PanelList[PanelList.FindIndex(x => x.PopoutID == p)];
@@ -186,6 +179,11 @@ namespace EDDiscovery.Forms
         {
             int index = GetPanelIndexByEnum(p);
             return index>=0 ? (UserControls.UserControlCommonBase)Activator.CreateInstance(PanelList[index].PopoutType, null) : null;
+        }
+
+        static private int GetPanelIndexByEnum(PanelIDs p)
+        {
+            return PanelList.FindIndex(x => x.PopoutID == p);
         }
 
         public static System.Windows.Forms.ToolStripMenuItem MakeToolStripMenuItem(int i, System.EventHandler h)

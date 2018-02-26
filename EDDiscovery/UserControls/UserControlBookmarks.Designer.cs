@@ -38,13 +38,13 @@
             this.dataViewScrollerPanel1 = new ExtendedControls.DataViewScrollerPanel();
             this.vScrollBarCustom1 = new ExtendedControls.VScrollBarCustom();
             this.dataGridViewBookMarks = new System.Windows.Forms.DataGridView();
-            this.userControlSurfaceBookmarks = new EDDiscovery.UserControls.UserControlSurfaceBookmarks();
             this.Type = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.BookmarkName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Description = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.X = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Y = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Z = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.userControlSurfaceBookmarks = new EDDiscovery.UserControls.UserControlSurfaceBookmarks();
             this.panelButtons.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
@@ -211,14 +211,6 @@
             this.dataGridViewBookMarks.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewBookMarks_CellEndEdit);
             this.dataGridViewBookMarks.SelectionChanged += new System.EventHandler(this.dataGridViewBookMarks_SelectionChanged);
             // 
-            // userControlSurfaceBookmarks
-            // 
-            this.userControlSurfaceBookmarks.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.userControlSurfaceBookmarks.Location = new System.Drawing.Point(0, 0);
-            this.userControlSurfaceBookmarks.Name = "userControlSurfaceBookmarks";
-            this.userControlSurfaceBookmarks.Size = new System.Drawing.Size(676, 204);
-            this.userControlSurfaceBookmarks.TabIndex = 5;
-            // 
             // Type
             // 
             this.Type.HeaderText = "Bookmark Type";
@@ -255,6 +247,14 @@
             this.Z.HeaderText = "Z";
             this.Z.Name = "Z";
             this.Z.ReadOnly = true;
+            // 
+            // userControlSurfaceBookmarks
+            // 
+            this.userControlSurfaceBookmarks.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.userControlSurfaceBookmarks.Location = new System.Drawing.Point(0, 0);
+            this.userControlSurfaceBookmarks.Name = "userControlSurfaceBookmarks";
+            this.userControlSurfaceBookmarks.Size = new System.Drawing.Size(676, 204);
+            this.userControlSurfaceBookmarks.TabIndex = 5;
             // 
             // UserControlBookmarks
             // 

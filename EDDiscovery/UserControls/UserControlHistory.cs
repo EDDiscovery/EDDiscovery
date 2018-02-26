@@ -99,11 +99,12 @@ namespace EDDiscovery.UserControls
 
         Control TabCreate(ExtendedControls.TabStrip t, int si)        // called by tab strip when selected index changes.. create a new one.. only create.
         {
-            Control c = PanelInformation.Create((PanelInformation.PanelIDs)t.TagList[si]);
-            c.Name = PanelInformation.PanelList[si].WindowTitle;        // tabs uses Name field for display, must set it
+            PanelInformation.PanelInfo pi = PanelInformation.GetPanelInfoByEnum((PanelInformation.PanelIDs)t.TagList[si]);
+            Control c = PanelInformation.Create(pi.PopoutID);
+            c.Name = pi.WindowTitle;        // tabs uses Name field for display, must set it
 
             discoveryform.ActionRun(Actions.ActionEventEDList.onPanelChange, null, 
-                new Conditions.ConditionVariables(new string[] { "PanelTabName", PanelInformation.PanelList[si].WindowRefName, "PanelTabTitle" , PanelInformation.PanelList[si].WindowTitle , "PanelName" , t.Name }));
+                new Conditions.ConditionVariables(new string[] { "PanelTabName", pi.WindowRefName, "PanelTabTitle" , pi.WindowTitle , "PanelName" , t.Name }));
 
             return c;
         }
@@ -152,18 +153,29 @@ namespace EDDiscovery.UserControls
 
             // NO NEED to reload the three tabstrips - code below will cause a LoadLayout on the one selected.
 
-            int max = PanelInformation.GetNumberPanels-1; // fix, its up to but not including endlist
+            PanelInformation.PanelIDs[] pids = PanelInformation.GetPanelIDs();      // valid PIDs
+
+            int max = pids.Length-1; // fix, its up to but not including endlist
 
             // saved as the pop out enum value, for historical reasons
-            int piindex_bottom = Math.Min(SQLiteDBClass.GetSettingInt("TravelControlBottomTab", (int)(PanelInformation.PanelIDs.Scan)), max);
-            int piindex_bottomright = Math.Min(SQLiteDBClass.GetSettingInt("TravelControlBottomRightTab", (int)(PanelInformation.PanelIDs.Log)), max);
-            int piindex_middleright = Math.Min(SQLiteDBClass.GetSettingInt("TravelControlMiddleRightTab", (int)(PanelInformation.PanelIDs.StarDistance)), max);
-            int piindex_topright = Math.Min(SQLiteDBClass.GetSettingInt("TravelControlTopRightTab", (int)(PanelInformation.PanelIDs.SystemInformation)), max);
+            int enum_bottom = Math.Min(SQLiteDBClass.GetSettingInt("TravelControlBottomTab", (int)(PanelInformation.PanelIDs.Scan)), max);
+            int enum_bottomright = Math.Min(SQLiteDBClass.GetSettingInt("TravelControlBottomRightTab", (int)(PanelInformation.PanelIDs.Log)), max);
+            int enum_middleright = Math.Min(SQLiteDBClass.GetSettingInt("TravelControlMiddleRightTab", (int)(PanelInformation.PanelIDs.StarDistance)), max);
+            int enum_topright = Math.Min(SQLiteDBClass.GetSettingInt("TravelControlTopRightTab", (int)(PanelInformation.PanelIDs.SystemInformation)), max);
 
-            tabStripBottom.SelectedIndex = PanelInformation.GetPanelIndexByEnum((PanelInformation.PanelIDs)piindex_bottom);       // translate to image index
-            tabStripBottomRight.SelectedIndex = PanelInformation.GetPanelIndexByEnum((PanelInformation.PanelIDs)piindex_bottomright);
-            tabStripMiddleRight.SelectedIndex = PanelInformation.GetPanelIndexByEnum((PanelInformation.PanelIDs)piindex_middleright);
-            tabStripTopRight.SelectedIndex = PanelInformation.GetPanelIndexByEnum((PanelInformation.PanelIDs)piindex_topright);
+            int ibottom = Array.IndexOf(pids, (PanelInformation.PanelIDs)enum_bottom);
+            int ibottomright = Array.IndexOf(pids, (PanelInformation.PanelIDs)enum_bottomright);
+            int imiddleright = Array.IndexOf(pids, (PanelInformation.PanelIDs)enum_middleright);
+            int itopright = Array.IndexOf(pids, (PanelInformation.PanelIDs)enum_topright);
+
+            if (ibottom >= 0)
+                tabStripBottom.SelectedIndex = ibottom;
+            if (ibottomright >= 0)
+                tabStripBottomRight.SelectedIndex = ibottomright;
+            if (imiddleright >= 0)
+                tabStripMiddleRight.SelectedIndex = imiddleright;
+            if (itopright >= 0)
+                tabStripTopRight.SelectedIndex = itopright;
         }
 
 
@@ -174,10 +186,12 @@ namespace EDDiscovery.UserControls
             SQLiteDBClass.PutSettingDouble("TravelControlSpliterRO", splitContainerRightOuter.GetSplitterDistance());
             SQLiteDBClass.PutSettingDouble("TravelControlSpliterR", splitContainerRightInner.GetSplitterDistance());
 
-            SQLiteDBClass.PutSettingInt("TravelControlBottomRightTab", (int)PanelInformation.PanelList[tabStripBottomRight.SelectedIndex].PopoutID);
-            SQLiteDBClass.PutSettingInt("TravelControlBottomTab", (int)PanelInformation.PanelList[tabStripBottom.SelectedIndex].PopoutID);
-            SQLiteDBClass.PutSettingInt("TravelControlMiddleRightTab", (int)PanelInformation.PanelList[tabStripMiddleRight.SelectedIndex].PopoutID);
-            SQLiteDBClass.PutSettingInt("TravelControlTopRightTab", (int)PanelInformation.PanelList[tabStripTopRight.SelectedIndex].PopoutID);
+            PanelInformation.PanelIDs[] pids = PanelInformation.GetPanelIDs();
+
+            SQLiteDBClass.PutSettingInt("TravelControlBottomTab", (int)pids[tabStripBottom.SelectedIndex]);
+            SQLiteDBClass.PutSettingInt("TravelControlBottomRightTab", (int)pids[tabStripBottomRight.SelectedIndex]);
+            SQLiteDBClass.PutSettingInt("TravelControlMiddleRightTab", (int)pids[tabStripMiddleRight.SelectedIndex]);
+            SQLiteDBClass.PutSettingInt("TravelControlTopRightTab", (int)pids[tabStripTopRight.SelectedIndex]);
 
             userControlTravelGrid.Closing();
             ((UserControlCommonBase)(tabStripBottom.CurrentControl)).Closing();
