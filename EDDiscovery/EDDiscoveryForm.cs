@@ -1432,6 +1432,7 @@ namespace EDDiscovery
             popoutdropdown.ItemHeight = 26;
             popoutdropdown.Items = PanelInformation.GetPanelDescriptions().ToList();
             popoutdropdown.ImageItems = PanelInformation.GetPanelImages().ToList();
+            PanelInformation.PanelIDs[] pids = PanelInformation.GetPanelIDs();
             popoutdropdown.FlatStyle = FlatStyle.Popup;
             popoutdropdown.Activated += (s, ea) =>
             {
@@ -1441,7 +1442,7 @@ namespace EDDiscovery
             };
             popoutdropdown.SelectedIndexChanged += (s, ea) =>
             {
-                PopOuts.PopOut(popoutdropdown.SelectedIndex);
+                PopOuts.PopOut(pids[popoutdropdown.SelectedIndex]);
             };
 
             popoutdropdown.Size = new Size(500,600);

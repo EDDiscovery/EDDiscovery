@@ -82,6 +82,7 @@ namespace EDDiscovery.UserControls
         {
             t.ImageList = PanelInformation.GetPanelImages();
             t.TextList = PanelInformation.GetPanelDescriptions();
+            t.TagList = PanelInformation.GetPanelIDs().Cast<Object>().ToArray();
             t.Tag = displayno;             // these are IDs for purposes of identifying different instances of a control.. 0 = main ones (main travel grid, main tab journal). 1..N are popups
             t.OnRemoving += TabRemoved;
             t.OnCreateTab += TabCreate;
@@ -98,7 +99,7 @@ namespace EDDiscovery.UserControls
 
         Control TabCreate(ExtendedControls.TabStrip t, int si)        // called by tab strip when selected index changes.. create a new one.. only create.
         {
-            Control c = PanelInformation.Create(si);
+            Control c = PanelInformation.Create((PanelInformation.PanelIDs)t.TagList[si]);
             c.Name = PanelInformation.PanelList[si].WindowTitle;        // tabs uses Name field for display, must set it
 
             discoveryform.ActionRun(Actions.ActionEventEDList.onPanelChange, null, 
@@ -126,7 +127,7 @@ namespace EDDiscovery.UserControls
 
         void TabPopOut(ExtendedControls.TabStrip t, int i)        // pop out clicked
         {
-            discoveryform.PopOuts.PopOut(i);
+            discoveryform.PopOuts.PopOut((PanelInformation.PanelIDs)t.TagList[i]);
         }
 
         #endregion
