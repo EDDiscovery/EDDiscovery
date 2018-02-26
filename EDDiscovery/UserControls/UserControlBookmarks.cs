@@ -23,9 +23,9 @@ namespace EDDiscovery.UserControls
         {
             searchtimer = new Timer() { Interval = 500 };
             searchtimer.Tick += Searchtimer_Tick;
-            GlobalBookMarkList.OnBookmarkRefresh += BookmarksRefreshed;
-            GlobalBookMarkList.OnBookmarkChange += BookmarksUpdated;
-            GlobalBookMarkList.OnBookmarkRemoved += BookmarksDeleted;
+            GlobalBookMarkList.Instance.OnBookmarkRefresh += BookmarksRefreshed;
+            GlobalBookMarkList.Instance.OnBookmarkChange += BookmarksUpdated;
+            GlobalBookMarkList.Instance.OnBookmarkRemoved += BookmarksDeleted;
         }
 
         public override void Closing()
@@ -35,9 +35,9 @@ namespace EDDiscovery.UserControls
                 UpdateBookmark(previousSelectedRow);
             }
             searchtimer.Dispose();
-            GlobalBookMarkList.OnBookmarkRefresh -= BookmarksRefreshed;
-            GlobalBookMarkList.OnBookmarkChange -= BookmarksUpdated;
-            GlobalBookMarkList.OnBookmarkRemoved -= BookmarksDeleted;
+            GlobalBookMarkList.Instance.OnBookmarkRefresh -= BookmarksRefreshed;
+            GlobalBookMarkList.Instance.OnBookmarkChange -= BookmarksUpdated;
+            GlobalBookMarkList.Instance.OnBookmarkRemoved -= BookmarksDeleted;
         }
         #endregion
 
@@ -62,7 +62,7 @@ namespace EDDiscovery.UserControls
             updating = false;
         }
 
-        private void BookmarksDeleted(Predicate<BookmarkClass> predicate)
+        private void BookmarksDeleted(long id)
         {
             if (updating)
                 return;
@@ -71,7 +71,7 @@ namespace EDDiscovery.UserControls
             {
                 // make sure we don't re-add something we just removed!
                 List<BookmarkClass> sel = new List<BookmarkClass> { (BookmarkClass)dataGridViewBookMarks.Rows[previousSelectedRow].Tag };
-                sel.RemoveAll(predicate);
+                sel.RemoveAll(x=>x.id == id);
                 if (sel.Any())
                     UpdateBookmark(previousSelectedRow);
             }
@@ -100,7 +100,7 @@ namespace EDDiscovery.UserControls
             dataGridViewBookMarks.SuspendLayout();
 
             dataGridViewBookMarks.Rows.Clear();
-            foreach(BookmarkClass bk in GlobalBookMarkList.Bookmarks)
+            foreach(BookmarkClass bk in GlobalBookMarkList.Instance.Bookmarks)
             {
                 using (DataGridViewRow dr = dataGridViewBookMarks.Rows[dataGridViewBookMarks.Rows.Add()])
                 {
@@ -115,8 +115,8 @@ namespace EDDiscovery.UserControls
             }
 
             dataGridViewBookMarks.ResumeLayout();
-            if (GlobalBookMarkList.Bookmarks.Count > 0)
-                RefreshSurfaceMarks(previousSelectedRow >= 0 && previousSelectedRow < GlobalBookMarkList.Bookmarks.Count ? previousSelectedRow : 0);
+            if (GlobalBookMarkList.Instance.Bookmarks.Count > 0)
+                RefreshSurfaceMarks(previousSelectedRow >= 0 && previousSelectedRow < GlobalBookMarkList.Instance.Bookmarks.Count ? previousSelectedRow : 0);
         }
 
         #endregion
@@ -135,7 +135,7 @@ namespace EDDiscovery.UserControls
             BookmarkClass bk = (BookmarkClass)dataGridViewBookMarks.Rows[fromRowID].Tag;
             string newNote = dataGridViewBookMarks.Rows[fromRowID].Cells[2].Value.ToString();
             PlanetMarks latestMarks = userControlSurfaceBookmarks.PlanetMarks;
-            return GlobalBookMarkList.AddOrUpdateBookmark(bk, !bk.isRegion, bk.isRegion ? bk.Heading : bk.StarName, bk.x, bk.y, bk.z, bk.Time, newNote, latestMarks);
+            return GlobalBookMarkList.Instance.AddOrUpdateBookmark(bk, !bk.isRegion, bk.isRegion ? bk.Heading : bk.StarName, bk.x, bk.y, bk.z, bk.Time, newNote, latestMarks);
         }
 
         private void dataGridViewBookMarks_SelectionChanged(object sender, EventArgs e)
@@ -160,7 +160,7 @@ namespace EDDiscovery.UserControls
                 previousSelectedRow = newSelection.Index;
                 BookmarkClass bk = (BookmarkClass)newSelection.Tag;
                 if(bk != null)
-                    userControlSurfaceBookmarks.ApplyBookmark(bk);
+                    userControlSurfaceBookmarks.DisplayPlanetMarks(bk);
             }
         }
 
@@ -190,12 +190,12 @@ namespace EDDiscovery.UserControls
                 DialogResult dr = frm.ShowDialog(this);
                 if (dr == DialogResult.OK)
                 {
-                    GlobalBookMarkList.AddOrUpdateBookmark(bk, !bk.isRegion, frm.StarHeading, double.Parse(frm.x), double.Parse(frm.y), double.Parse(frm.z),
+                    GlobalBookMarkList.Instance.AddOrUpdateBookmark(bk, !bk.isRegion, frm.StarHeading, double.Parse(frm.x), double.Parse(frm.y), double.Parse(frm.z),
                                                                      bk.Time, frm.Notes, frm.SurfaceLocations);
                 }
                 else if(dr == DialogResult.Abort)
                 {
-                    bk.Delete();
+                    GlobalBookMarkList.Instance.Delete(bk);
                 }
             }
 
@@ -208,7 +208,7 @@ namespace EDDiscovery.UserControls
             frm.NewSystemBookmark(tme.ToString());
             if(frm.ShowDialog(this) == DialogResult.OK)
             {
-                GlobalBookMarkList.AddOrUpdateBookmark(null, true, frm.StarHeading, double.Parse(frm.x), double.Parse(frm.y), double.Parse(frm.z),
+                GlobalBookMarkList.Instance.AddOrUpdateBookmark(null, true, frm.StarHeading, double.Parse(frm.x), double.Parse(frm.y), double.Parse(frm.z),
                                                                      tme, frm.Notes, frm.SurfaceLocations);
             }
         }
@@ -218,7 +218,8 @@ namespace EDDiscovery.UserControls
             if (previousSelectedRow >= 0)
             {
                 BookmarkClass bk = (BookmarkClass)dataGridViewBookMarks.Rows[previousSelectedRow].Tag;
-                bk.Delete();
+                GlobalBookMarkList.Instance.Delete(bk);
+                
             }
         }
     }

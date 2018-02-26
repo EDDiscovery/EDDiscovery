@@ -66,7 +66,7 @@ namespace EDDiscovery.UserControls
                 }
                 else
                 {
-                    BookmarkClass bk = GlobalBookMarkList.FindBookmarkOnSystem(sn);    // has it been bookmarked?
+                    BookmarkClass bk = GlobalBookMarkList.Instance.FindBookmarkOnSystem(sn);    // has it been bookmarked?
 
                     if (bk != null)
                     {
@@ -83,7 +83,7 @@ namespace EDDiscovery.UserControls
 
                         if (createbookmark)
                         {
-                            BookmarkClass newbk = GlobalBookMarkList.AddOrUpdateBookmark(null, true, sn, sc.X, sc.Y, sc.Z, DateTime.Now, "");
+                            BookmarkClass newbk = GlobalBookMarkList.Instance.AddOrUpdateBookmark(null, true, sn, sc.X, sc.Y, sc.Z, DateTime.Now, "");
                             TargetClass.SetTargetBookmark(sc.Name, newbk.id, newbk.x, newbk.y, newbk.z);
                         }
                     }
@@ -121,7 +121,7 @@ namespace EDDiscovery.UserControls
             Form senderForm = ((Control)sender)?.FindForm() ?? discoveryForm;
 
             // try and find the associated bookmark..
-            BookmarkClass bkmark = (curbookmark != null) ? curbookmark : GlobalBookMarkList.FindBookmarkOnSystem(cursystem.Name);
+            BookmarkClass bkmark = (curbookmark != null) ? curbookmark : GlobalBookMarkList.Instance.FindBookmarkOnSystem(cursystem.Name);
 
             SystemNoteClass sn = (cursystem != null) ? SystemNoteClass.GetNoteOnSystem(cursystem.Name, cursystem.EDSMID) : null;
             string note = (sn != null) ? sn.Note : "";
@@ -168,7 +168,7 @@ namespace EDDiscovery.UserControls
 
                 if (res == DialogResult.OK)
                 {
-                    BookmarkClass newcls = GlobalBookMarkList.AddOrUpdateBookmark(bkmark, !regionmarker, frm.StarHeading, double.Parse(frm.x), double.Parse(frm.y), double.Parse(frm.z),
+                    BookmarkClass newcls = GlobalBookMarkList.Instance.AddOrUpdateBookmark(bkmark, !regionmarker, frm.StarHeading, double.Parse(frm.x), double.Parse(frm.y), double.Parse(frm.z),
                                                                      tme, frm.Notes, frm.SurfaceLocations);
                     
                     if ((frm.IsTarget && targetid != newcls.id) || (!frm.IsTarget && targetid == newcls.id)) // changed..
@@ -186,7 +186,7 @@ namespace EDDiscovery.UserControls
                         TargetClass.ClearTarget();
                     }
 
-                    bkmark.Delete();
+                    GlobalBookMarkList.Instance.Delete(bkmark);
                 }
             }
 

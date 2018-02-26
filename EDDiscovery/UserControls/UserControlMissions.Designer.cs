@@ -45,6 +45,7 @@ namespace EDDiscovery.UserControls
         {
             this.components = new System.ComponentModel.Container();
             this.dataViewScrollerPanelCurrent = new ExtendedControls.DataViewScrollerPanel();
+            this.panelVScroll1 = new ExtendedControls.PanelVScroll();
             this.dataGridViewCurrent = new System.Windows.Forms.DataGridView();
             this.cColName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.cColStartDate = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -59,15 +60,6 @@ namespace EDDiscovery.UserControls
             this.panelPrev = new System.Windows.Forms.Panel();
             this.dataViewScrollerPanelPrev = new ExtendedControls.DataViewScrollerPanel();
             this.dataGridViewPrevious = new System.Windows.Forms.DataGridView();
-            this.vScrollBarCustomPrev = new ExtendedControls.VScrollBarCustom();
-            this.panelButtons = new System.Windows.Forms.Panel();
-            this.labelValue = new System.Windows.Forms.Label();
-            this.label1 = new System.Windows.Forms.Label();
-            this.customDateTimePickerEnd = new ExtendedControls.CustomDateTimePicker();
-            this.customDateTimePickerStart = new ExtendedControls.CustomDateTimePicker();
-            this.panelCurrent = new System.Windows.Forms.Panel();
-            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.splitContainerMissions = new System.Windows.Forms.SplitContainer();
             this.PcolName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.pColStart = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.pColEnd = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -77,6 +69,15 @@ namespace EDDiscovery.UserControls
             this.pColTargetFaction = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.pColResult = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.pColInfo = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.vScrollBarCustomPrev = new ExtendedControls.VScrollBarCustom();
+            this.panelButtons = new System.Windows.Forms.Panel();
+            this.labelValue = new System.Windows.Forms.Label();
+            this.label1 = new System.Windows.Forms.Label();
+            this.customDateTimePickerEnd = new ExtendedControls.CustomDateTimePicker();
+            this.customDateTimePickerStart = new ExtendedControls.CustomDateTimePicker();
+            this.panelCurrent = new System.Windows.Forms.Panel();
+            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.splitContainerMissions = new System.Windows.Forms.SplitContainer();
             this.dataViewScrollerPanelCurrent.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewCurrent)).BeginInit();
             this.panelPrev.SuspendLayout();
@@ -92,6 +93,7 @@ namespace EDDiscovery.UserControls
             // 
             // dataViewScrollerPanelCurrent
             // 
+            this.dataViewScrollerPanelCurrent.Controls.Add(this.panelVScroll1);
             this.dataViewScrollerPanelCurrent.Controls.Add(this.dataGridViewCurrent);
             this.dataViewScrollerPanelCurrent.Controls.Add(this.vScrollBarCustomCur);
             this.dataViewScrollerPanelCurrent.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -102,6 +104,16 @@ namespace EDDiscovery.UserControls
             this.dataViewScrollerPanelCurrent.Size = new System.Drawing.Size(800, 266);
             this.dataViewScrollerPanelCurrent.TabIndex = 0;
             this.dataViewScrollerPanelCurrent.VerticalScrollBarDockRight = true;
+            // 
+            // panelVScroll1
+            // 
+            this.panelVScroll1.InternalMargin = new System.Windows.Forms.Padding(0);
+            this.panelVScroll1.Location = new System.Drawing.Point(744, 81);
+            this.panelVScroll1.Name = "panelVScroll1";
+            this.panelVScroll1.ScrollBarWidth = 20;
+            this.panelVScroll1.Size = new System.Drawing.Size(200, 100);
+            this.panelVScroll1.TabIndex = 2;
+            this.panelVScroll1.VerticalScrollBarDockRight = true;
             // 
             // dataGridViewCurrent
             // 
@@ -275,6 +287,77 @@ namespace EDDiscovery.UserControls
             this.dataGridViewPrevious.TabIndex = 2;
             this.dataGridViewPrevious.SortCompare += new System.Windows.Forms.DataGridViewSortCompareEventHandler(this.dataGridViewPrevious_SortCompare);
             // 
+            // PcolName
+            // 
+            this.PcolName.HeaderText = "Name";
+            this.PcolName.MinimumWidth = 50;
+            this.PcolName.Name = "PcolName";
+            this.PcolName.ReadOnly = true;
+            // 
+            // pColStart
+            // 
+            this.pColStart.FillWeight = 75F;
+            this.pColStart.HeaderText = "Start Date";
+            this.pColStart.MinimumWidth = 50;
+            this.pColStart.Name = "pColStart";
+            this.pColStart.ReadOnly = true;
+            // 
+            // pColEnd
+            // 
+            this.pColEnd.FillWeight = 75F;
+            this.pColEnd.HeaderText = "End Date";
+            this.pColEnd.MinimumWidth = 50;
+            this.pColEnd.Name = "pColEnd";
+            this.pColEnd.ReadOnly = true;
+            // 
+            // pColOrigin
+            // 
+            this.pColOrigin.FillWeight = 80F;
+            this.pColOrigin.HeaderText = "Origin";
+            this.pColOrigin.MinimumWidth = 50;
+            this.pColOrigin.Name = "pColOrigin";
+            this.pColOrigin.ReadOnly = true;
+            // 
+            // pColFromFaction
+            // 
+            this.pColFromFaction.FillWeight = 50F;
+            this.pColFromFaction.HeaderText = "Faction";
+            this.pColFromFaction.MinimumWidth = 50;
+            this.pColFromFaction.Name = "pColFromFaction";
+            this.pColFromFaction.ReadOnly = true;
+            // 
+            // pColDestSys
+            // 
+            this.pColDestSys.FillWeight = 80F;
+            this.pColDestSys.HeaderText = "Destination";
+            this.pColDestSys.MinimumWidth = 50;
+            this.pColDestSys.Name = "pColDestSys";
+            this.pColDestSys.ReadOnly = true;
+            // 
+            // pColTargetFaction
+            // 
+            this.pColTargetFaction.FillWeight = 50F;
+            this.pColTargetFaction.HeaderText = "Target Faction";
+            this.pColTargetFaction.MinimumWidth = 50;
+            this.pColTargetFaction.Name = "pColTargetFaction";
+            this.pColTargetFaction.ReadOnly = true;
+            // 
+            // pColResult
+            // 
+            this.pColResult.FillWeight = 50F;
+            this.pColResult.HeaderText = "Result (cr)";
+            this.pColResult.MinimumWidth = 25;
+            this.pColResult.Name = "pColResult";
+            this.pColResult.ReadOnly = true;
+            // 
+            // pColInfo
+            // 
+            this.pColInfo.FillWeight = 150F;
+            this.pColInfo.HeaderText = "Info";
+            this.pColInfo.MinimumWidth = 50;
+            this.pColInfo.Name = "pColInfo";
+            this.pColInfo.ReadOnly = true;
+            // 
             // vScrollBarCustomPrev
             // 
             this.vScrollBarCustomPrev.ArrowBorderColor = System.Drawing.Color.LightBlue;
@@ -403,77 +486,6 @@ namespace EDDiscovery.UserControls
             this.splitContainerMissions.SplitterDistance = 266;
             this.splitContainerMissions.TabIndex = 3;
             // 
-            // PcolName
-            // 
-            this.PcolName.HeaderText = "Name";
-            this.PcolName.MinimumWidth = 50;
-            this.PcolName.Name = "PcolName";
-            this.PcolName.ReadOnly = true;
-            // 
-            // pColStart
-            // 
-            this.pColStart.FillWeight = 75F;
-            this.pColStart.HeaderText = "Start Date";
-            this.pColStart.MinimumWidth = 50;
-            this.pColStart.Name = "pColStart";
-            this.pColStart.ReadOnly = true;
-            // 
-            // pColEnd
-            // 
-            this.pColEnd.FillWeight = 75F;
-            this.pColEnd.HeaderText = "End Date";
-            this.pColEnd.MinimumWidth = 50;
-            this.pColEnd.Name = "pColEnd";
-            this.pColEnd.ReadOnly = true;
-            // 
-            // pColOrigin
-            // 
-            this.pColOrigin.FillWeight = 80F;
-            this.pColOrigin.HeaderText = "Origin";
-            this.pColOrigin.MinimumWidth = 50;
-            this.pColOrigin.Name = "pColOrigin";
-            this.pColOrigin.ReadOnly = true;
-            // 
-            // pColFromFaction
-            // 
-            this.pColFromFaction.FillWeight = 50F;
-            this.pColFromFaction.HeaderText = "Faction";
-            this.pColFromFaction.MinimumWidth = 50;
-            this.pColFromFaction.Name = "pColFromFaction";
-            this.pColFromFaction.ReadOnly = true;
-            // 
-            // pColDestSys
-            // 
-            this.pColDestSys.FillWeight = 80F;
-            this.pColDestSys.HeaderText = "Destination";
-            this.pColDestSys.MinimumWidth = 50;
-            this.pColDestSys.Name = "pColDestSys";
-            this.pColDestSys.ReadOnly = true;
-            // 
-            // pColTargetFaction
-            // 
-            this.pColTargetFaction.FillWeight = 50F;
-            this.pColTargetFaction.HeaderText = "Target Faction";
-            this.pColTargetFaction.MinimumWidth = 50;
-            this.pColTargetFaction.Name = "pColTargetFaction";
-            this.pColTargetFaction.ReadOnly = true;
-            // 
-            // pColResult
-            // 
-            this.pColResult.FillWeight = 50F;
-            this.pColResult.HeaderText = "Result (cr)";
-            this.pColResult.MinimumWidth = 25;
-            this.pColResult.Name = "pColResult";
-            this.pColResult.ReadOnly = true;
-            // 
-            // pColInfo
-            // 
-            this.pColInfo.FillWeight = 150F;
-            this.pColInfo.HeaderText = "Info";
-            this.pColInfo.MinimumWidth = 50;
-            this.pColInfo.Name = "pColInfo";
-            this.pColInfo.ReadOnly = true;
-            // 
             // UserControlMissions
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -532,5 +544,6 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.DataGridViewTextBoxColumn pColTargetFaction;
         private System.Windows.Forms.DataGridViewTextBoxColumn pColResult;
         private System.Windows.Forms.DataGridViewTextBoxColumn pColInfo;
+        private ExtendedControls.PanelVScroll panelVScroll1;
     }
 }

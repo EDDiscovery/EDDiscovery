@@ -118,6 +118,8 @@ namespace EDDiscovery
             msg.Invoke("Scanning Memory Banks");
             InitializeDatabases();
 
+            GlobalBookMarkList.LoadBookmarks();
+
             msg.Invoke("Locating Crew Members");
             EDDConfig.Instance.Update(false);
 
