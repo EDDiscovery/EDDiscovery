@@ -179,7 +179,7 @@ namespace EDDiscovery
             tabControlMain.MinimumTabWidth = 32;
             tabControlMain.CreateTabs(this);
 
-            for (int i = 0; i < PanelInformation.GetNumberPanels; i++)      // and fill up menu control
+            for (int i = 0; i < PanelInformation.GetPanelIDs().Count(); i++)      // and fill up menu control
             {
                 ToolStripMenuItem tsmi = PanelInformation.MakeToolStripMenuItem(i, (s, e) => 
                             tabControlMain.AddTab((PanelInformation.PanelIDs)((s as ToolStripMenuItem).Tag), tabControlMain.LastTabClicked));
