@@ -99,14 +99,14 @@ namespace EDDiscovery.UserControls
             {
                 labelExtTargetLong.Visible = labelTargetLat.Visible = false;
                 numberBoxTargetLatitude.Visible = numberBoxTargetLongitude.Visible = checkBoxHideTransparent.Visible = false;
-                labelBookmark.Visible = comboBoxBookmarks.Visible = false;
+                buttonNewBookmark.Visible = labelBookmark.Visible = comboBoxBookmarks.Visible = false;
                 pictureBoxCompass.Top = numberBoxTargetLongitude.Top;
             }
             if (!on && autoHideTargetCoords && !numberBoxTargetLatitude.Visible)
             {
                 labelExtTargetLong.Visible = labelTargetLat.Visible = true;
                 numberBoxTargetLatitude.Visible = numberBoxTargetLongitude.Visible = checkBoxHideTransparent.Visible = true;
-                labelBookmark.Visible = comboBoxBookmarks.Visible = true;
+                buttonNewBookmark.Visible = labelBookmark.Visible = comboBoxBookmarks.Visible = true;
                 pictureBoxCompass.Top = comboBoxBookmarks.Top + comboBoxBookmarks.Height + 3;
             }
             Display();
