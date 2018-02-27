@@ -224,7 +224,11 @@ namespace EDDiscovery.Icons
         #region Selector
         public static Image Selector_Background { get { return IconSet.GetIcon("Controls.Selector.Selector"); } }
         public static Image Selector_AddTab { get { return IconSet.GetIcon("Controls.Selector.Addtab"); } }
-
+        #endregion
+        #region Bookmarks
+        public static Image Bookmarks_Edit { get { return IconSet.GetIcon("Controls.Bookmarks.Edit"); } }
+        public static Image Bookmarks_New { get { return IconSet.GetIcon("Controls.Bookmarks.New"); } }
+        public static Image Bookmarks_Delete { get { return IconSet.GetIcon("Controls.Bookmarks.Delete"); } }
         #endregion
     }
 }

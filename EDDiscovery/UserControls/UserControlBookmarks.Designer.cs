@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.panelButtons = new System.Windows.Forms.Panel();
             this.buttonDelete = new ExtendedControls.ButtonExt();
             this.buttonNew = new ExtendedControls.ButtonExt();
@@ -44,7 +45,8 @@
             this.X = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Y = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Z = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.userControlSurfaceBookmarks = new EDDiscovery.UserControls.UserControlSurfaceBookmarks();
+            this.userControlSurfaceBookmarks = new EDDiscovery.UserControls.SurfaceBookmarksForm();
+            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.panelButtons.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
@@ -64,36 +66,39 @@
             this.panelButtons.Dock = System.Windows.Forms.DockStyle.Top;
             this.panelButtons.Location = new System.Drawing.Point(0, 0);
             this.panelButtons.Name = "panelButtons";
-            this.panelButtons.Size = new System.Drawing.Size(676, 30);
+            this.panelButtons.Size = new System.Drawing.Size(676, 32);
             this.panelButtons.TabIndex = 0;
             // 
             // buttonDelete
             // 
-            this.buttonDelete.Location = new System.Drawing.Point(366, 3);
+            this.buttonDelete.Image = global::EDDiscovery.Icons.Controls.Bookmarks_Delete;
+            this.buttonDelete.Location = new System.Drawing.Point(270, 0);
             this.buttonDelete.Name = "buttonDelete";
-            this.buttonDelete.Size = new System.Drawing.Size(75, 23);
+            this.buttonDelete.Size = new System.Drawing.Size(32, 32);
             this.buttonDelete.TabIndex = 27;
-            this.buttonDelete.Text = "Delete";
+            this.toolTip1.SetToolTip(this.buttonDelete, "Delete selected bookmark");
             this.buttonDelete.UseVisualStyleBackColor = true;
             this.buttonDelete.Click += new System.EventHandler(this.buttonDelete_Click);
             // 
             // buttonNew
             // 
-            this.buttonNew.Location = new System.Drawing.Point(204, 3);
+            this.buttonNew.Image = global::EDDiscovery.Icons.Controls.Bookmarks_New;
+            this.buttonNew.Location = new System.Drawing.Point(204, 0);
             this.buttonNew.Name = "buttonNew";
-            this.buttonNew.Size = new System.Drawing.Size(75, 23);
+            this.buttonNew.Size = new System.Drawing.Size(32, 32);
             this.buttonNew.TabIndex = 2;
-            this.buttonNew.Text = "New";
+            this.toolTip1.SetToolTip(this.buttonNew, "New Bookmark");
             this.buttonNew.UseVisualStyleBackColor = true;
             this.buttonNew.Click += new System.EventHandler(this.buttonNew_Click);
             // 
             // buttonEdit
             // 
-            this.buttonEdit.Location = new System.Drawing.Point(285, 3);
+            this.buttonEdit.Image = global::EDDiscovery.Icons.Controls.Bookmarks_Edit;
+            this.buttonEdit.Location = new System.Drawing.Point(236, 0);
             this.buttonEdit.Name = "buttonEdit";
-            this.buttonEdit.Size = new System.Drawing.Size(75, 23);
+            this.buttonEdit.Size = new System.Drawing.Size(32, 32);
             this.buttonEdit.TabIndex = 3;
-            this.buttonEdit.Text = "Edit";
+            this.toolTip1.SetToolTip(this.buttonEdit, "Edit Selected Bookmark");
             this.buttonEdit.UseVisualStyleBackColor = true;
             this.buttonEdit.Click += new System.EventHandler(this.buttonEdit_Click);
             // 
@@ -117,6 +122,7 @@
             this.textBoxFilter.Size = new System.Drawing.Size(148, 20);
             this.textBoxFilter.TabIndex = 1;
             this.textBoxFilter.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.toolTip1.SetToolTip(this.textBoxFilter, "Search for Bookmark");
             this.textBoxFilter.WordWrap = true;
             this.textBoxFilter.TextChanged += new System.EventHandler(this.textBoxFilter_TextChanged);
             // 
@@ -132,7 +138,7 @@
             // splitContainer1
             // 
             this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.splitContainer1.Location = new System.Drawing.Point(0, 30);
+            this.splitContainer1.Location = new System.Drawing.Point(0, 32);
             this.splitContainer1.Name = "splitContainer1";
             this.splitContainer1.Orientation = System.Windows.Forms.Orientation.Horizontal;
             // 
@@ -143,8 +149,8 @@
             // splitContainer1.Panel2
             // 
             this.splitContainer1.Panel2.Controls.Add(this.userControlSurfaceBookmarks);
-            this.splitContainer1.Size = new System.Drawing.Size(676, 413);
-            this.splitContainer1.SplitterDistance = 205;
+            this.splitContainer1.Size = new System.Drawing.Size(676, 411);
+            this.splitContainer1.SplitterDistance = 204;
             this.splitContainer1.TabIndex = 1;
             // 
             // dataViewScrollerPanel1
@@ -156,7 +162,7 @@
             this.dataViewScrollerPanel1.Location = new System.Drawing.Point(0, 0);
             this.dataViewScrollerPanel1.Name = "dataViewScrollerPanel1";
             this.dataViewScrollerPanel1.ScrollBarWidth = 20;
-            this.dataViewScrollerPanel1.Size = new System.Drawing.Size(676, 205);
+            this.dataViewScrollerPanel1.Size = new System.Drawing.Size(676, 204);
             this.dataViewScrollerPanel1.TabIndex = 5;
             this.dataViewScrollerPanel1.VerticalScrollBarDockRight = true;
             // 
@@ -177,7 +183,7 @@
             this.vScrollBarCustom1.MouseOverButtonColor = System.Drawing.Color.Green;
             this.vScrollBarCustom1.MousePressedButtonColor = System.Drawing.Color.Red;
             this.vScrollBarCustom1.Name = "vScrollBarCustom1";
-            this.vScrollBarCustom1.Size = new System.Drawing.Size(20, 171);
+            this.vScrollBarCustom1.Size = new System.Drawing.Size(20, 170);
             this.vScrollBarCustom1.SliderColor = System.Drawing.Color.DarkGray;
             this.vScrollBarCustom1.SmallChange = 1;
             this.vScrollBarCustom1.TabIndex = 6;
@@ -205,11 +211,11 @@
             this.dataGridViewBookMarks.Location = new System.Drawing.Point(0, 0);
             this.dataGridViewBookMarks.Name = "dataGridViewBookMarks";
             this.dataGridViewBookMarks.ScrollBars = System.Windows.Forms.ScrollBars.None;
-            this.dataGridViewBookMarks.Size = new System.Drawing.Size(656, 205);
+            this.dataGridViewBookMarks.Size = new System.Drawing.Size(656, 204);
             this.dataGridViewBookMarks.TabIndex = 4;
-            this.dataGridViewBookMarks.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewBookMarks_CellClick);
+            this.dataGridViewBookMarks.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewBookMarks_CellDoubleClick);
             this.dataGridViewBookMarks.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewBookMarks_CellEndEdit);
-            this.dataGridViewBookMarks.SelectionChanged += new System.EventHandler(this.dataGridViewBookMarks_SelectionChanged);
+            this.dataGridViewBookMarks.SortCompare += new System.Windows.Forms.DataGridViewSortCompareEventHandler(this.dataGridViewBookMarks_SortCompare);
             // 
             // Type
             // 
@@ -253,7 +259,7 @@
             this.userControlSurfaceBookmarks.Dock = System.Windows.Forms.DockStyle.Fill;
             this.userControlSurfaceBookmarks.Location = new System.Drawing.Point(0, 0);
             this.userControlSurfaceBookmarks.Name = "userControlSurfaceBookmarks";
-            this.userControlSurfaceBookmarks.Size = new System.Drawing.Size(676, 204);
+            this.userControlSurfaceBookmarks.Size = new System.Drawing.Size(676, 203);
             this.userControlSurfaceBookmarks.TabIndex = 5;
             // 
             // UserControlBookmarks
@@ -283,7 +289,7 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.SplitContainer splitContainer1;
         private System.Windows.Forms.DataGridView dataGridViewBookMarks;
-        private UserControlSurfaceBookmarks userControlSurfaceBookmarks;
+        private SurfaceBookmarksForm userControlSurfaceBookmarks;
         private ExtendedControls.ButtonExt buttonNew;
         private ExtendedControls.ButtonExt buttonEdit;
         private ExtendedControls.ButtonExt buttonDelete;
@@ -295,5 +301,6 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn X;
         private System.Windows.Forms.DataGridViewTextBoxColumn Y;
         private System.Windows.Forms.DataGridViewTextBoxColumn Z;
+        private System.Windows.Forms.ToolTip toolTip1;
     }
 }

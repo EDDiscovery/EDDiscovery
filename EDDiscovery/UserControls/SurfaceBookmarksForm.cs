@@ -14,7 +14,7 @@ using EDDiscovery.Forms;
 
 namespace EDDiscovery.UserControls
 {
-    public partial class UserControlSurfaceBookmarks : UserControl
+    public partial class SurfaceBookmarksForm : UserControl
     {
         public bool Edited = false;
 
@@ -27,7 +27,7 @@ namespace EDDiscovery.UserControls
         PlanetMarks internalPlanetMarks;
         BookmarkClass thisBookmark;
 
-        public UserControlSurfaceBookmarks()
+        public SurfaceBookmarksForm()
         {
             InitializeComponent();
         }
@@ -83,16 +83,25 @@ namespace EDDiscovery.UserControls
 
         public void DisplayPlanetMarks(BookmarkClass bk)
         {
-            dataGridViewMarks.SuspendLayout();
             Edited = false;
             dataGridViewMarks.Rows.Clear();
-            if(bk.isRegion)
+
+            if (bk == null)
             {
                 dataGridViewMarks.AllowUserToAddRows = false;
-                dataGridViewMarks.ResumeLayout();
                 buttonSave.Hide();
                 return;
             }
+
+            if(bk.isRegion)
+            {
+                dataGridViewMarks.AllowUserToAddRows = false;
+                buttonSave.Hide();
+                return;
+            }
+
+            dataGridViewMarks.SuspendLayout();
+
             dataGridViewMarks.AllowUserToAddRows = true;
             SetSystem(bk.StarName);
             thisBookmark = bk;

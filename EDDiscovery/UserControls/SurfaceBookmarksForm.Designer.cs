@@ -2,7 +2,7 @@
 
 namespace EDDiscovery.UserControls
 {
-    partial class UserControlSurfaceBookmarks
+    partial class SurfaceBookmarksForm
     {
         /// <summary> 
         /// Required designer variable.
