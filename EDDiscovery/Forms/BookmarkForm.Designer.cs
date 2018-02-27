@@ -64,7 +64,7 @@ namespace EDDiscovery.Forms
             this.checkBoxTarget = new ExtendedControls.CheckBoxCustom();
             this.buttonEDSM = new ExtendedControls.ButtonExt();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.labelBadSystem = new ExtendedControls.LabelExt();
+            this.labelBadSystem = new System.Windows.Forms.Label();
             this.textBoxName = new ExtendedControls.AutoCompleteTextBox();
             this.userControlSurfaceBookmarks1 = new EDDiscovery.UserControls.SurfaceBookmarksForm();
             this.panel1.SuspendLayout();
@@ -385,7 +385,6 @@ namespace EDDiscovery.Forms
             this.labelBadSystem.Name = "labelBadSystem";
             this.labelBadSystem.Size = new System.Drawing.Size(0, 13);
             this.labelBadSystem.TabIndex = 14;
-            this.labelBadSystem.TextBackColor = System.Drawing.Color.Transparent;
             // 
             // textBoxName
             // 
@@ -467,6 +466,6 @@ namespace EDDiscovery.Forms
         private System.Windows.Forms.Panel panel1;
         private UserControls.SurfaceBookmarksForm userControlSurfaceBookmarks1;
         private ExtendedControls.AutoCompleteTextBox textBoxName;
-        private ExtendedControls.LabelExt labelBadSystem;
+        private System.Windows.Forms.Label labelBadSystem;
     }
 }
