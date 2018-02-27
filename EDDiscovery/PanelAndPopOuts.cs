@@ -186,9 +186,9 @@ namespace EDDiscovery.Forms
             return PanelList.FindIndex(x => x.PopoutID == p);
         }
 
-        public static System.Windows.Forms.ToolStripMenuItem MakeToolStripMenuItem(int i, System.EventHandler h)
+        public static System.Windows.Forms.ToolStripMenuItem MakeToolStripMenuItem(PanelIDs p, System.EventHandler h)
         {
-            PanelInformation.PanelInfo pi = PanelInformation.PanelList[i];
+            PanelInformation.PanelInfo pi = GetPanelInfoByEnum(p);
             if (pi.IsUserSelectable)
             {
                 System.Windows.Forms.ToolStripMenuItem mi = new System.Windows.Forms.ToolStripMenuItem();

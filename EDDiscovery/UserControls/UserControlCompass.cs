@@ -60,27 +60,11 @@ namespace EDDiscovery.UserControls
             discoveryform.OnNewEntry += Display;
             discoveryform.OnNewUIEvent += OnNewUIEvent;
             GlobalBookMarkList.Instance.OnBookmarkChange += GlobalBookMarkList_OnBookmarkChange;
-            GlobalBookMarkList.Instance.OnBookmarkRemoved += GlobalBookMarkList_OnBookmarkRemoved;
-            GlobalBookMarkList.Instance.OnBookmarkRefresh += Display;
             numberBoxTargetLatitude.ValueNoChange = GetSettingDouble(DbLatSave, 0);
             numberBoxTargetLongitude.ValueNoChange = GetSettingDouble(DbLongSave, 0);
             autoHideTargetCoords = GetSettingBool(DbHideSave, false);
             checkBoxHideTransparent.Checked = autoHideTargetCoords;
             comboBoxBookmarks.Text = "";
-        }
-        
-        private void GlobalBookMarkList_OnBookmarkRemoved(long bookMarkID)
-        {
-            if (bookMark?.id == bookMarkID)
-                bookMark = null;
-            Display();
-        }
-
-        private void GlobalBookMarkList_OnBookmarkChange(long bookMarkID)
-        {
-            if (bookMark?.id == bookMarkID)
-                bookMark = null;
-            Display();
         }
 
         public override void Closing()
@@ -91,8 +75,13 @@ namespace EDDiscovery.UserControls
             discoveryform.OnNewEntry -= Display;
             discoveryform.OnNewUIEvent -= OnNewUIEvent;
             GlobalBookMarkList.Instance.OnBookmarkChange -= GlobalBookMarkList_OnBookmarkChange;
-            GlobalBookMarkList.Instance.OnBookmarkRemoved -= GlobalBookMarkList_OnBookmarkRemoved;
-            GlobalBookMarkList.Instance.OnBookmarkRefresh -= Display;
+        }
+
+        private void GlobalBookMarkList_OnBookmarkChange(BookmarkClass bk, bool deleted)
+        {
+            if (bookMark != null && bookMark.id == bk.id)
+                bookMark = null;
+            Display();
         }
 
         #endregion

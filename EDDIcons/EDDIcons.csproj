@@ -63,6 +63,7 @@
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Controls.Designer.cs</LastGenOutput>
       <CustomToolNamespace>EDDiscovery.Icons</CustomToolNamespace>
+      <SubType>Designer</SubType>
     </None>
     <EmbeddedResource Include="Journal\AfmuRepairs.png" />
     <EmbeddedResource Include="Journal\ApproachSettlement.png" />
@@ -652,6 +653,11 @@
   <ItemGroup>
     <EmbeddedResource Include="Controls\StarList\BodyClasses.png" />
     <EmbeddedResource Include="Controls\StarList\Jumponium.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Controls\Bookmarks\Delete.png" />
+    <EmbeddedResource Include="Controls\Bookmarks\New.png" />
+    <EmbeddedResource Include="Controls\Bookmarks\Edit.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

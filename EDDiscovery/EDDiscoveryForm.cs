@@ -179,10 +179,13 @@ namespace EDDiscovery
             tabControlMain.MinimumTabWidth = 32;
             tabControlMain.CreateTabs(this);
 
-            for (int i = 0; i < PanelInformation.GetPanelIDs().Count(); i++)      // and fill up menu control
+            PanelInformation.PanelIDs[] pids = PanelInformation.GetPanelIDs();      // only user panels
+
+            foreach(PanelInformation.PanelIDs pid in pids)
             {
-                ToolStripMenuItem tsmi = PanelInformation.MakeToolStripMenuItem(i, (s, e) => 
-                            tabControlMain.AddTab((PanelInformation.PanelIDs)((s as ToolStripMenuItem).Tag), tabControlMain.LastTabClicked));
+                ToolStripMenuItem tsmi = PanelInformation.MakeToolStripMenuItem(pid, 
+                    (s, e) => tabControlMain.AddTab((PanelInformation.PanelIDs)((s as ToolStripMenuItem).Tag), tabControlMain.LastTabClicked));
+
                 if (tsmi != null)
                     addTabToolStripMenuItem.DropDownItems.Add(tsmi);
             }

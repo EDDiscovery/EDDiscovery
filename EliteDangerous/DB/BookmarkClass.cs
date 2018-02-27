@@ -327,9 +327,7 @@ namespace EliteDangerousCore.DB
 
         public List<BookmarkClass> Bookmarks { get { return globalbookmarks; } }
 
-        public Action OnBookmarkRefresh;        // hook for notifications
-        public Action<long> OnBookmarkChange;
-        public Action<long> OnBookmarkRemoved;
+        public Action<BookmarkClass, bool> OnBookmarkChange;        // bool = true if deleted
 
         private static GlobalBookMarkList gbl = null;
 
@@ -337,6 +335,7 @@ namespace EliteDangerousCore.DB
 
         public static bool LoadBookmarks()
         {
+            System.Diagnostics.Debug.Assert(gbl == null);       // no double instancing!
             try
             {
                 using (SQLiteConnectionUser cn = new SQLiteConnectionUser(mode: EDDbAccessMode.Reader))
@@ -370,20 +369,6 @@ namespace EliteDangerousCore.DB
             }
         }
 
-        public void Clear()
-        {
-            System.Diagnostics.Debug.Assert(System.Windows.Forms.Application.MessageLoop);
-            globalbookmarks.Clear();
-            OnBookmarkRefresh?.Invoke();
-        }
-
-        public void Add(BookmarkClass newBookmark)
-        {
-            System.Diagnostics.Debug.Assert(System.Windows.Forms.Application.MessageLoop);
-            globalbookmarks.Add(newBookmark);
-            OnBookmarkChange?.Invoke(newBookmark.id);
-        }
-
         // return any mark
         public BookmarkClass FindBookmarkOnRegion(string name)   
         {
@@ -411,12 +396,15 @@ namespace EliteDangerousCore.DB
         // bk = null, new bookmark, else update.  isstar = true, region = false.
         public BookmarkClass AddOrUpdateBookmark(BookmarkClass bk, bool isstar, string name, double x, double y, double z, DateTime tme, string notes = null, PlanetMarks planetMarks = null)
         {
+            System.Diagnostics.Debug.Assert(System.Windows.Forms.Application.MessageLoop);
             bool addit = bk == null;
 
             if (bk == null)
             {
                 bk = new BookmarkClass();
                 bk.Note = "";       // set empty, in case notes==null
+                globalbookmarks.Add(bk);
+                System.Diagnostics.Debug.WriteLine("New bookmark created");
             }
 
             if (isstar)
@@ -434,21 +422,25 @@ namespace EliteDangerousCore.DB
             if (addit)
                 bk.Add();
             else
+            {
+                System.Diagnostics.Debug.WriteLine(GlobalBookMarkList.Instance.Bookmarks.Find((xx) => Object.ReferenceEquals(bk, xx)) != null);
                 bk.Update();
+            }
 
-            System.Diagnostics.Debug.Assert(System.Windows.Forms.Application.MessageLoop);
-            OnBookmarkChange?.Invoke(bk.id);
+            System.Diagnostics.Debug.WriteLine("Write bookmark " + bk.Name + " Notes " + notes);
+
+            OnBookmarkChange?.Invoke(bk,false);
 
             return bk;
 		}	
 
         public void Delete(BookmarkClass bk)
         {
+            System.Diagnostics.Debug.Assert(System.Windows.Forms.Application.MessageLoop);
             long id = bk.id;
             bk.Delete();
             globalbookmarks.RemoveAll(x => x.id == id);
-            System.Diagnostics.Debug.Assert(System.Windows.Forms.Application.MessageLoop);
-            OnBookmarkRemoved?.Invoke(id);
+            OnBookmarkChange?.Invoke(bk,true);
         }
 
     }
