@@ -336,6 +336,8 @@ namespace EliteDangerousCore.DB
         public static bool LoadBookmarks()
         {
             System.Diagnostics.Debug.Assert(gbl == null);       // no double instancing!
+            gbl = new GlobalBookMarkList();
+
             try
             {
                 using (SQLiteConnectionUser cn = new SQLiteConnectionUser(mode: EDDbAccessMode.Reader))
@@ -351,12 +353,9 @@ namespace EliteDangerousCore.DB
                             return false;
                         }
 
-                        gbl = new GlobalBookMarkList();
-
                         foreach (DataRow dr in ds.Tables[0].Rows)
                         {
                             BookmarkClass bc = new BookmarkClass(dr);
-                            gbl.globalbookmarks.Add(bc); 
                         }
 
                         return true;
