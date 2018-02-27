@@ -45,7 +45,6 @@ namespace EDDiscovery.UserControls
         {
             this.components = new System.ComponentModel.Container();
             this.dataViewScrollerPanelCurrent = new ExtendedControls.DataViewScrollerPanel();
-            this.panelVScroll1 = new ExtendedControls.PanelVScroll();
             this.dataGridViewCurrent = new System.Windows.Forms.DataGridView();
             this.cColName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.cColStartDate = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -93,7 +92,6 @@ namespace EDDiscovery.UserControls
             // 
             // dataViewScrollerPanelCurrent
             // 
-            this.dataViewScrollerPanelCurrent.Controls.Add(this.panelVScroll1);
             this.dataViewScrollerPanelCurrent.Controls.Add(this.dataGridViewCurrent);
             this.dataViewScrollerPanelCurrent.Controls.Add(this.vScrollBarCustomCur);
             this.dataViewScrollerPanelCurrent.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -104,16 +102,6 @@ namespace EDDiscovery.UserControls
             this.dataViewScrollerPanelCurrent.Size = new System.Drawing.Size(800, 266);
             this.dataViewScrollerPanelCurrent.TabIndex = 0;
             this.dataViewScrollerPanelCurrent.VerticalScrollBarDockRight = true;
-            // 
-            // panelVScroll1
-            // 
-            this.panelVScroll1.InternalMargin = new System.Windows.Forms.Padding(0);
-            this.panelVScroll1.Location = new System.Drawing.Point(744, 81);
-            this.panelVScroll1.Name = "panelVScroll1";
-            this.panelVScroll1.ScrollBarWidth = 20;
-            this.panelVScroll1.Size = new System.Drawing.Size(200, 100);
-            this.panelVScroll1.TabIndex = 2;
-            this.panelVScroll1.VerticalScrollBarDockRight = true;
             // 
             // dataGridViewCurrent
             // 
@@ -544,6 +532,5 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.DataGridViewTextBoxColumn pColTargetFaction;
         private System.Windows.Forms.DataGridViewTextBoxColumn pColResult;
         private System.Windows.Forms.DataGridViewTextBoxColumn pColInfo;
-        private ExtendedControls.PanelVScroll panelVScroll1;
     }
 }

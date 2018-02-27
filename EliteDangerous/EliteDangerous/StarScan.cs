@@ -733,7 +733,7 @@ namespace EliteDangerousCore
                 }
             }
 
-            if (ancestors != null && ancestorbodies != null && ancestorbodies[0] == null && toplevelnode.BodyID == null)
+            if (ancestors != null && ancestorbodies != null && ancestorbodies.Count > 0 && ancestorbodies[0] == null && toplevelnode.BodyID == null)
             {
                 for (int lvl = 1; lvl < ancestors.Count; lvl++)
                 {

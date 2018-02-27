@@ -204,6 +204,7 @@ namespace EDDiscovery.Forms
             textBoxName.Text = "Enter a system name...";
             textBoxName.SelectAll();
             textBoxName.Focus();
+            textBoxName.ClearOnFirstChar = true;
             textBoxTime.Text = tme;
             buttonDelete.Hide();
             freeSystemEntry = true;
