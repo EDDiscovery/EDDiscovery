@@ -39,7 +39,7 @@ namespace EliteDangerousCore
             public ISystem system;
             public SortedList<string, ScanNode> starnodes;
             public bool EDSMAdded = false;
-            public SortedList<int, ScanNode> NodesByID;
+            public SortedList<int, ScanNode> NodesByID = new SortedList<int, ScanNode>();
             public int MaxTopLevelBodyID = 0;
             public int MinPlanetBodyID = 512;
 
