@@ -1027,9 +1027,16 @@ namespace ExtendedControls
 
         public bool IsFontAvailable(string fontwanted)
         {
-            using (Font fntnew = new Font(fontwanted, 12))
+            try
+            {           // user reports instance of it excepting over "Arial Narrow".. Mine does not
+                using (Font fntnew = new Font(fontwanted, 12))
+                {
+                    return string.Compare(fntnew.Name, fontwanted, true) == 0;
+                }
+            }
+            catch
             {
-                return string.Compare(fntnew.Name, fontwanted, true) == 0;
+                return false;
             }
         }
 
