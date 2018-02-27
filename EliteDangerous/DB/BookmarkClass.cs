@@ -356,6 +356,7 @@ namespace EliteDangerousCore.DB
                         foreach (DataRow dr in ds.Tables[0].Rows)
                         {
                             BookmarkClass bc = new BookmarkClass(dr);
+                            gbl.globalbookmarks.Add(bc);
                         }
 
                         return true;
