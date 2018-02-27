@@ -75,7 +75,7 @@ namespace EDDiscovery.UserControls
             dataGridViewBookMarks.Sort(sortcol, (sortorder == SortOrder.Descending) ? System.ComponentModel.ListSortDirection.Descending : System.ComponentModel.ListSortDirection.Ascending);
             dataGridViewBookMarks.Columns[sortcol.Index].HeaderCell.SortGlyphDirection = sortorder;
 
-            if (lastrow != -1)
+            if (lastrow != -1 && dataGridViewBookMarks.Rows.Count >= 1)
                 dataGridViewBookMarks.CurrentCell = dataGridViewBookMarks.Rows[Math.Min(lastrow, dataGridViewBookMarks.Rows.Count - 1)].Cells[2];
 
             RefreshCurrentEdit();
