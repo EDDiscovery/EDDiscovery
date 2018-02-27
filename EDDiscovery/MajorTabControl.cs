@@ -47,7 +47,7 @@ namespace EDDiscovery
                 };
             }
             else
-                majortabnames = SQLiteConnectionUser.GetSettingString("MajorTabControlName", "").Split(';');       // if its okay, load the name list
+                majortabnames = SQLiteConnectionUser.GetSettingString("MajorTabControlName", "").Replace("!error!","+").Split(';');       // if its okay, load the name list
 
             TabPage history = TabPages[0];       // remember history page, remove
             TabPages.Clear();
