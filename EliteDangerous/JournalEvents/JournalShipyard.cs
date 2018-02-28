@@ -44,7 +44,7 @@ namespace EliteDangerousCore.JournalEvents
             Horizons = evt["Horizons"].BoolNull();
             AllowCobraMkIV = evt["AllowCobraMkIV"].BoolNull();
 
-            ShipyardItems = evt["PriceList"]?.ToObject<ShipyardItem[]>();
+            ShipyardItems = evt["PriceList"]?.ToObjectProtected<ShipyardItem[]>();
 
             if (ShipyardItems != null)
             {

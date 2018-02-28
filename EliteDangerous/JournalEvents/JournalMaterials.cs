@@ -41,11 +41,11 @@ namespace EliteDangerousCore.JournalEvents
 
         public JournalMaterials(JObject evt) : base(evt, JournalTypeEnum.Materials)
         {
-            Raw = evt["Raw"]?.ToObject<Material[]>().OrderBy(x => x.Name).ToArray();
+            Raw = evt["Raw"]?.ToObjectProtected<Material[]>().OrderBy(x => x.Name)?.ToArray();
             FixNames(Raw);
-            Manufactured = evt["Manufactured"]?.ToObject<Material[]>().OrderBy(x => x.Name).ToArray();
+            Manufactured = evt["Manufactured"]?.ToObjectProtected<Material[]>().OrderBy(x => x.Name)?.ToArray();
             FixNames(Manufactured);
-            Encoded = evt["Encoded"]?.ToObject<Material[]>().OrderBy(x => x.Name).ToArray();
+            Encoded = evt["Encoded"]?.ToObjectProtected<Material[]>().OrderBy(x => x.Name)?.ToArray();
             FixNames(Encoded);
         }
 
@@ -55,8 +55,11 @@ namespace EliteDangerousCore.JournalEvents
 
         void FixNames(Material[] a)
         {
-            foreach (Material m in a)
-                m.Name = JournalFieldNaming.FDNameTranslation(m.Name);
+            if (a != null)
+            {
+                foreach (Material m in a)
+                    m.Name = JournalFieldNaming.FDNameTranslation(m.Name);
+            }
         }
 
         public override void FillInformation(out string summary, out string info, out string detailed)  //V

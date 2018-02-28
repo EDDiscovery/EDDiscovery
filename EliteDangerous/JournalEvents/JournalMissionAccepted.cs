@@ -74,13 +74,7 @@ namespace EliteDangerousCore.JournalEvents
             FriendlyCommodity = JournalFieldNaming.RMat(Commodity);
 
             Count = evt["Count"].IntNull();
-
-            if (!evt["Expiry"].Empty())
-            {
-                string s = evt.Value<string>("Expiry");
-                //System.Diagnostics.Debug.WriteLine("Time " + s);
-                Expiry = DateTime.Parse(s, CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal | DateTimeStyles.AdjustToUniversal);
-            }
+            Expiry = evt["Expiry"].DateTimeUTC();
 
             PassengerCount = evt["PassengerCount"].IntNull();
             PassengerVIPs = evt["PassengerVIPs"].BoolNull();
