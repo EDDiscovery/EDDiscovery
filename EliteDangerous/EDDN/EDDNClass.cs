@@ -219,12 +219,12 @@ namespace EliteDangerousCore.EDDN
                 ["timestamp"] = journal.EventTimeUTC.ToString("yyyy-MM-ddTHH:mm:ss'Z'"),
                 ["systemName"] = journal.StarSystem,
                 ["stationName"] = journal.StationName,
-                ["marketID"] = journal.MarketID,
-                ["modules"] = new JArray(journal.ModuleItems.Select(m => m.Name))
+                ["marketId"] = journal.MarketID,
+                ["modules"] = new JArray(journal.ModuleItems.Select(m => m.FDName))
             };
 
-            if (systemAddress != null)
-                message["systemAddress"] = systemAddress;
+            //if (systemAddress != null)
+            //    message["systemAddress"] = systemAddress;
 
             msg["message"] = message;
             return msg;
@@ -268,12 +268,12 @@ namespace EliteDangerousCore.EDDN
                 ["timestamp"] = journal.EventTimeUTC.ToString("yyyy-MM-ddTHH:mm:ss'Z'"),
                 ["systemName"] = journal.StarSystem,
                 ["stationName"] = journal.StationName,
-                ["marketID"] = journal.MarketID,
-                ["ships"] = new JArray(journal.ShipyardItems.Select(m => m.ShipType))
+                ["marketId"] = journal.MarketID,
+                ["ships"] = new JArray(journal.ShipyardItems.Select(m => m.FDShipType))
             };
 
-            if (systemAddress != null)
-                message["SystemAddress"] = systemAddress;
+            //if (systemAddress != null)
+            //    message["SystemAddress"] = systemAddress;
 
             msg["message"] = message;
             return msg;
@@ -345,7 +345,7 @@ namespace EliteDangerousCore.EDDN
 
             message["systemName"] = systemName;
             message["stationName"] = stationName;
-            message["marketID"] = marketID;
+            message["marketId"] = marketID;
             message["timestamp"] = time.ToString("yyyy-MM-dd'T'HH:mm:ss'Z'", CultureInfo.InvariantCulture);
 
             JArray JAcommodities = new JArray();
@@ -360,14 +360,14 @@ namespace EliteDangerousCore.EDDN
 
                 JObject jo = new JObject();
 
-                jo["demandBracket"] = commodity.demandBracket;
                 jo["name"] = commodity.name;
-                jo["buyPrice"] = commodity.buyPrice;
                 jo["meanPrice"] = commodity.meanPrice;
-                jo["stockBracket"] = commodity.stockBracket;
-                jo["demand"] = commodity.demand;
-                jo["sellPrice"] = commodity.sellPrice;
+                jo["buyPrice"] = commodity.buyPrice;
                 jo["stock"] = commodity.stock;
+                jo["stockBracket"] = commodity.stockBracket;
+                jo["sellPrice"] = commodity.sellPrice;
+                jo["demand"] = commodity.demand;
+                jo["demandBracket"] = commodity.demandBracket;
 
                 if (commodity.StatusFlags!=null && commodity.StatusFlags.Count > 0)
                 {
@@ -396,7 +396,16 @@ namespace EliteDangerousCore.EDDN
             catch (System.Net.WebException ex)
             {
                 System.Net.HttpWebResponse response = ex.Response as System.Net.HttpWebResponse;
-                System.Diagnostics.Trace.WriteLine($"EDDN message post failed - status: {response?.StatusCode.ToString() ?? ex.Status.ToString()}\nEDDN Message: {msg.ToString()}");
+                string responsetext = null;
+                using (var responsestream = response.GetResponseStream())
+                {
+                    using (var reader = new System.IO.StreamReader(responsestream))
+                    {
+                        responsetext = reader.ReadToEnd();
+                    }
+                }
+
+                System.Diagnostics.Trace.WriteLine($"EDDN message post failed - status: {response?.StatusCode.ToString() ?? ex.Status.ToString()}\nResponse: {responsetext}\nEDDN Message: {msg.ToString()}");
                 return false;
             }
         }
