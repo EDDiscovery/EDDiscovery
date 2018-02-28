@@ -35,7 +35,7 @@ namespace EDDiscovery.UserControls
         const int vspacing = 170;
         Size panelsize = new Size(hspacing - 20, vspacing - 20);
 
-        private int HorzNumber { get { return ClientRectangle.Width / hspacing; } }
+        private int HorzNumber { get { return Math.Max(1,ClientRectangle.Width / hspacing); } }
         private int curhorz = 0;
 
         public UserControlPanelSelector()

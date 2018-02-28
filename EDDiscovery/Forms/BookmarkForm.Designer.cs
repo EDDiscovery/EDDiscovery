@@ -127,7 +127,7 @@ namespace EDDiscovery.Forms
             this.textBoxNotes.ScrollBarThumbButtonColor = System.Drawing.Color.DarkBlue;
             this.textBoxNotes.ScrollBarWidth = 20;
             this.textBoxNotes.ShowLineCount = false;
-            this.textBoxNotes.Size = new System.Drawing.Size(521, 103);
+            this.textBoxNotes.Size = new System.Drawing.Size(726, 103);
             this.textBoxNotes.TabIndex = 0;
             this.textBoxNotes.TextBoxBackColor = System.Drawing.SystemColors.Control;
             this.textBoxNotes.TextBoxForeColor = System.Drawing.SystemColors.ControlText;
@@ -140,6 +140,7 @@ namespace EDDiscovery.Forms
             this.textBoxX.BorderColor = System.Drawing.Color.Transparent;
             this.textBoxX.BorderColorScaling = 0.5F;
             this.textBoxX.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.textBoxX.ClearOnFirstChar = false;
             this.textBoxX.ControlBackground = System.Drawing.SystemColors.Control;
             this.textBoxX.InErrorCondition = false;
             this.textBoxX.Location = new System.Drawing.Point(139, 43);
@@ -163,6 +164,7 @@ namespace EDDiscovery.Forms
             this.textBoxY.BorderColor = System.Drawing.Color.Transparent;
             this.textBoxY.BorderColorScaling = 0.5F;
             this.textBoxY.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.textBoxY.ClearOnFirstChar = false;
             this.textBoxY.ControlBackground = System.Drawing.SystemColors.Control;
             this.textBoxY.InErrorCondition = false;
             this.textBoxY.Location = new System.Drawing.Point(273, 43);
@@ -186,6 +188,7 @@ namespace EDDiscovery.Forms
             this.textBoxZ.BorderColor = System.Drawing.Color.Transparent;
             this.textBoxZ.BorderColorScaling = 0.5F;
             this.textBoxZ.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.textBoxZ.ClearOnFirstChar = false;
             this.textBoxZ.ControlBackground = System.Drawing.SystemColors.Control;
             this.textBoxZ.InErrorCondition = false;
             this.textBoxZ.Location = new System.Drawing.Point(395, 43);
@@ -236,6 +239,7 @@ namespace EDDiscovery.Forms
             this.textBoxTime.BorderColor = System.Drawing.Color.Transparent;
             this.textBoxTime.BorderColorScaling = 0.5F;
             this.textBoxTime.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.textBoxTime.ClearOnFirstChar = false;
             this.textBoxTime.ControlBackground = System.Drawing.SystemColors.Control;
             this.textBoxTime.InErrorCondition = false;
             this.textBoxTime.Location = new System.Drawing.Point(139, 73);
@@ -252,7 +256,7 @@ namespace EDDiscovery.Forms
             // 
             // buttonOK
             // 
-            this.buttonOK.Location = new System.Drawing.Point(585, 542);
+            this.buttonOK.Location = new System.Drawing.Point(790, 564);
             this.buttonOK.Name = "buttonOK";
             this.buttonOK.Size = new System.Drawing.Size(75, 23);
             this.buttonOK.TabIndex = 1;
@@ -262,7 +266,7 @@ namespace EDDiscovery.Forms
             // 
             // buttonCancel
             // 
-            this.buttonCancel.Location = new System.Drawing.Point(504, 542);
+            this.buttonCancel.Location = new System.Drawing.Point(698, 564);
             this.buttonCancel.Name = "buttonCancel";
             this.buttonCancel.Size = new System.Drawing.Size(75, 23);
             this.buttonCancel.TabIndex = 2;
@@ -272,7 +276,7 @@ namespace EDDiscovery.Forms
             // 
             // buttonDelete
             // 
-            this.buttonDelete.Location = new System.Drawing.Point(3, 542);
+            this.buttonDelete.Location = new System.Drawing.Point(13, 564);
             this.buttonDelete.Name = "buttonDelete";
             this.buttonDelete.Size = new System.Drawing.Size(75, 23);
             this.buttonDelete.TabIndex = 9;
@@ -304,6 +308,7 @@ namespace EDDiscovery.Forms
             this.textBoxTravelNote.BorderColor = System.Drawing.Color.Transparent;
             this.textBoxTravelNote.BorderColorScaling = 0.5F;
             this.textBoxTravelNote.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.textBoxTravelNote.ClearOnFirstChar = false;
             this.textBoxTravelNote.ControlBackground = System.Drawing.SystemColors.Control;
             this.textBoxTravelNote.InErrorCondition = false;
             this.textBoxTravelNote.Location = new System.Drawing.Point(139, 256);
@@ -313,7 +318,7 @@ namespace EDDiscovery.Forms
             this.textBoxTravelNote.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.textBoxTravelNote.SelectionLength = 0;
             this.textBoxTravelNote.SelectionStart = 0;
-            this.textBoxTravelNote.Size = new System.Drawing.Size(521, 87);
+            this.textBoxTravelNote.Size = new System.Drawing.Size(726, 87);
             this.textBoxTravelNote.TabIndex = 8;
             this.textBoxTravelNote.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.textBoxTravelNote.WordWrap = true;
@@ -374,7 +379,7 @@ namespace EDDiscovery.Forms
             this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(673, 570);
+            this.panel1.Size = new System.Drawing.Size(881, 615);
             this.panel1.TabIndex = 12;
             this.panel1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.panel1_MouseDown);
             // 
@@ -394,6 +399,7 @@ namespace EDDiscovery.Forms
             this.textBoxName.BorderColor = System.Drawing.Color.Transparent;
             this.textBoxName.BorderColorScaling = 0.5F;
             this.textBoxName.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.textBoxName.ClearOnFirstChar = false;
             this.textBoxName.ControlBackground = System.Drawing.SystemColors.Control;
             this.textBoxName.DropDownBackgroundColor = System.Drawing.Color.Gray;
             this.textBoxName.DropDownBorderColor = System.Drawing.Color.Green;
@@ -422,14 +428,14 @@ namespace EDDiscovery.Forms
             // 
             this.userControlSurfaceBookmarks1.Location = new System.Drawing.Point(13, 362);
             this.userControlSurfaceBookmarks1.Name = "userControlSurfaceBookmarks1";
-            this.userControlSurfaceBookmarks1.Size = new System.Drawing.Size(656, 174);
+            this.userControlSurfaceBookmarks1.Size = new System.Drawing.Size(852, 174);
             this.userControlSurfaceBookmarks1.TabIndex = 12;
             // 
             // BookmarkForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(673, 570);
+            this.ClientSize = new System.Drawing.Size(881, 615);
             this.Controls.Add(this.panel1);
             this.Icon = global::EDDiscovery.Properties.Resources.edlogo_3mo_icon;
             this.Name = "BookmarkForm";
