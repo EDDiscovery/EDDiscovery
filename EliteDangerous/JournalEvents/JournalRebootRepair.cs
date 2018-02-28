@@ -27,15 +27,13 @@ namespace EliteDangerousCore.JournalEvents
     {
         public JournalRebootRepair(JObject evt) : base(evt, JournalTypeEnum.RebootRepair)
         {
-            if (!evt["Modules"].Empty())
+            Modules = evt["Modules"]?.ToObjectProtected<string[]>();
+
+            if (Modules != null )
             {
-                Modules = evt.Value<JArray>("Modules").Values<string>().ToArray();
-                if (Modules != null)
-                {
-                    FriendlyModules = new string[Modules.Length];
-                    for (int i = 0; i < Modules.Length; i++)
-                        FriendlyModules[i] = JournalFieldNaming.GetBetterItemNameEvents(Modules[i]);
-                }
+                FriendlyModules = new string[Modules.Length];
+                for (int i = 0; i < Modules.Length; i++)
+                    FriendlyModules[i] = JournalFieldNaming.GetBetterItemNameEvents(Modules[i]);
             }
         }
 

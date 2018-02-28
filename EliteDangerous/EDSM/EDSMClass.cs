@@ -887,7 +887,7 @@ namespace EliteDangerousCore.EDSM
             {
                 Dictionary<string, double?> mats;
                 Dictionary<string, double> mats2;
-                mats = jo["materials"]?.ToObject<Dictionary<string, double?>>();
+                mats = jo["materials"]?.ToObjectProtected<Dictionary<string, double?>>();
                 mats2 = new Dictionary<string, double>();
 
                 foreach (string key in mats.Keys)
