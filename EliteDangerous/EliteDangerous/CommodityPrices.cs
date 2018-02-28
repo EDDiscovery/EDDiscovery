@@ -84,7 +84,7 @@ namespace EliteDangerousCore
             try
             {
                 id = jo["id"].Int();
-                name = jo["Name"].Str();
+                name = JournalFieldNaming.FixCommodityName(jo["Name"].Str());
                 locName = jo["Name_Localised"].Str().Alt(name);
                 loctype = jo["Category_Localised"].Str();
                 type = jo["Category"].Str();

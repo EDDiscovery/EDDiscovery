@@ -50,6 +50,7 @@ namespace EliteDangerousCore.JournalEvents
             {
                 foreach (ShipyardItem i in ShipyardItems)
                 {
+                    i.FDShipType = i.ShipType;
                     i.ShipType = JournalFieldNaming.GetBetterShipName(i.ShipType);
                 }
             }
@@ -100,6 +101,7 @@ namespace EliteDangerousCore.JournalEvents
         public class ShipyardItem
         {
             public long id;
+            public string FDShipType;
             public string ShipType;
             public string ShipType_Localised;
             public long ShipPrice;
