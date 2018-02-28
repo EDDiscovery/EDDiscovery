@@ -233,6 +233,7 @@ namespace EDDiscovery.UserControls
             if (dr != null)
             {
                 if (dr.Tag == null && ValidRow(dr)) SaveLocation(dr);
+
                 if (thisBookmark != null && dr.Tag != null)
                 {
                     if (Edited)
@@ -240,6 +241,7 @@ namespace EDDiscovery.UserControls
                         GlobalBookMarkList.Instance.AddOrUpdateBookmark(thisBookmark, true, thisBookmark.StarName, thisBookmark.x, thisBookmark.y, thisBookmark.z, thisBookmark.Time, thisBookmark.Note, internalPlanetMarks);
                         Edited = false;
                     }
+
                     UserControlCompass comp = (UserControlCompass)EDDApplicationContext.EDDMainForm.PopOuts.PopOut(PanelInformation.PanelIDs.Compass);
                     comp.SetSurfaceBookmark(thisBookmark, dr.Cells[0].Value.ToString(), dr.Cells[1].Value.ToString());
                 }

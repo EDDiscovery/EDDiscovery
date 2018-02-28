@@ -31,10 +31,10 @@ namespace EDDiscovery.UserControls
 {
     public partial class UserControlCompass : UserControlCommonBase
     {
-
         string DbLatSave { get { return "CompassLatTarget" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
         string DbLongSave { get { return "CompassLongTarget" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
         string DbHideSave { get { return "CompassAutoHide" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
+
         double? latitude = null;
         double? longitude = null;
         double? heading = null;
@@ -59,12 +59,12 @@ namespace EDDiscovery.UserControls
         {
             discoveryform.OnNewEntry += Display;
             discoveryform.OnNewUIEvent += OnNewUIEvent;
-            GlobalBookMarkList.Instance.OnBookmarkChange += GlobalBookMarkList_OnBookmarkChange;
             numberBoxTargetLatitude.ValueNoChange = GetSettingDouble(DbLatSave, 0);
             numberBoxTargetLongitude.ValueNoChange = GetSettingDouble(DbLongSave, 0);
             autoHideTargetCoords = GetSettingBool(DbHideSave, false);
             checkBoxHideTransparent.Checked = autoHideTargetCoords;
             comboBoxBookmarks.Text = "";
+            GlobalBookMarkList.Instance.OnBookmarkChange += GlobalBookMarkList_OnBookmarkChange;
         }
 
         public override void Closing()
@@ -77,23 +77,14 @@ namespace EDDiscovery.UserControls
             GlobalBookMarkList.Instance.OnBookmarkChange -= GlobalBookMarkList_OnBookmarkChange;
         }
 
-        private void GlobalBookMarkList_OnBookmarkChange(BookmarkClass bk, bool deleted)
-        {
-            if (bookMark != null && bookMark.id == bk.id)
-                bookMark = null;
-            Display();
-        }
-
-        #endregion
-
-        #region Display
-
         public override Color ColorTransparency { get { return Color.Green; } }
+
         public override void SetTransparency(bool on, Color curcol)
         {
             labelExtTargetLong.BackColor = labelTargetLat.BackColor = curcol;
             numberBoxTargetLatitude.BackColor = numberBoxTargetLongitude.BackColor = curcol;
             labelBookmark.BackColor = comboBoxBookmarks.BackColor = curcol;
+            buttonNewBookmark.BackColor = curcol;
             BackColor = curcol;
             if (on && autoHideTargetCoords && numberBoxTargetLatitude.Visible)
             {
@@ -112,23 +103,14 @@ namespace EDDiscovery.UserControls
             Display();
         }
 
+        #endregion
+
+        #region Display
+
         public override void InitialDisplay()       // on start up, this will have an empty history
         {
             last_he = discoveryform.history.GetLast;
             Display(last_he, discoveryform.history);
-        }
-
-        public void SetSurfaceBookmark(BookmarkClass bk, string planetName, string locName)
-        {
-            externallyForcedBookmark = true;
-            externalLocation = bk.PlanetaryMarks.Planets.Where(pl => pl.Name == planetName).FirstOrDefault()?.Locations.Where(l => l.Name == locName).FirstOrDefault();
-            if (externalLocation != null)
-            {
-                externalLocationName = $"{locName} ({planetName})";
-                numberBoxTargetLatitude.Value = externalLocation.Latitude;
-                numberBoxTargetLongitude.Value = externalLocation.Longitude;
-            }
-            Display();
         }
 
         private void Display(HistoryEntry he, HistoryList hl)
@@ -178,14 +160,22 @@ namespace EDDiscovery.UserControls
             }
         }
 
-
         private void OnNewUIEvent(UIEvent uievent)       // UI event in, see if we want to hide.  UI events come before any onNew
         {
             EliteDangerousCore.UIEvents.UIPosition up = uievent as EliteDangerousCore.UIEvents.UIPosition;
-            
-            latitude = up?.Location?.Latitude;
-            longitude = up?.Location?.Longitude;
-            heading = up?.Heading;
+
+            if ( up != null )
+            {
+                if (up.Location.ValidPosition)
+                {
+                    latitude = up.Location.Latitude;
+                    longitude = up.Location.Longitude;
+                    heading = up.Heading;
+                }
+                else
+                    latitude = longitude = heading = null;
+            }
+
             Display();
         }
         
@@ -276,7 +266,7 @@ namespace EDDiscovery.UserControls
         {
             Color textcolour = IsTransparent ? discoveryform.theme.SPanelColor : discoveryform.theme.LabelColor;
             Color backcolour = IsTransparent ? Color.Transparent : BackColor;
-            Font displayFont = discoveryform.theme.GetFont;
+            Font displayFont = discoveryform.theme.GetFontAtSize(10);
             PictureBoxHotspot.ImageElement compass;
             const int margin = 3;
 
@@ -291,13 +281,18 @@ namespace EDDiscovery.UserControls
                 int bigTickSize = (int)labelSize.Height;
                 int littleTickSize = (int)(labelSize.Height / 2);
                 int scaleWidth = (int)labelSize.Width * 17;   // 9 labels + 8 gaps
+
                 Size s = new Size(scaleWidth, bigTickSize + (int)labelSize.Width * 3 + margin * 3);
+                Bitmap scale = new Bitmap(s.Width, s.Height);
+
                 int iconTop = bigTickSize + (int)labelSize.Height + margin * 2;
                 int labelTop = bigTickSize + (int)labelSize.Height + margin * 2 + (int)labelSize.Width;
-                Bitmap scale = new Bitmap(s.Width, s.Height);
-                int left = (int)heading.Value - 90;
+
+                int left = (int)heading.Value - 90; // start at -90 to heading
+
                 bool steerLeft = false;
                 bool steerRight = false;
+
                 if (targetBearing.HasValue)
                 {
                     int right = (int)heading.Value + 90;
@@ -315,19 +310,24 @@ namespace EDDiscovery.UserControls
                         steerLeft = target > rightCorrected + 90 && target < leftCorrected;
                     }
                 }
+
                 using (Graphics gr = Graphics.FromImage(scale))
                 {
                     string targetLabel = targetBearing.HasValue ? $"{targetBearing.Value.ToString("N0")}° ({TargetDistanceFormatted()})" : "";
                     SizeF targetLabelSize = gr.MeasureString(targetLabel, displayFont);
-                    int tickGap = scaleWidth / 179;
                     gr.FillRectangle(new SolidBrush(backcolour), new Rectangle(0, 0, scale.Width, scale.Height));
                     Pen bigTick = new Pen(textcolour, 2);
                     Pen littleTick = new Pen(textcolour, 1);
+
+                    double tickGap = (double)scaleWidth / 179.0;
+
                     for (int i = left; i <= (int)heading.Value + 90; i++)
                     {
-                        int x = margin + ((i - left) * tickGap);
+                        int x = margin + (int)((i - left) * tickGap);
+
                         if (i % 5 == 0)
                         {
+                            //System.Diagnostics.Debug.WriteLine("Tick at " + x);
                             if (i % 20 == 0)
                             {
                                 string label = i < 0 ? (i + 360).ToString() : (i % 360).ToString();
@@ -349,11 +349,13 @@ namespace EDDiscovery.UserControls
                             gr.DrawString(targetLabel, displayFont, new SolidBrush(textcolour), Max(x - (int)targetLabelSize.Width / 2, margin), labelTop, StringFormat.GenericDefault);
                         }
                     }
+
                     if (steerLeft)
                     {
                         gr.DrawImage(TabStrip_ArrowLeft, new Rectangle(margin, iconTop, (int)labelSize.Width, (int)labelSize.Width));
                         gr.DrawString(targetLabel, displayFont, new SolidBrush(textcolour), margin, labelTop, StringFormat.GenericDefault);
                     }
+
                     if (steerRight)
                     {
                         gr.DrawImage(TabStrip_ArrowRight, new Rectangle(scaleWidth - margin * 4 - (int)labelSize.Width, iconTop, (int)labelSize.Width, (int)labelSize.Width));
@@ -362,6 +364,7 @@ namespace EDDiscovery.UserControls
                     bigTick.Dispose();
                     littleTick.Dispose();
                 }
+
                 compass = pictureBoxCompass.AddImage(new Rectangle(new Point(margin, margin), s), scale);
             }
             else
@@ -369,9 +372,9 @@ namespace EDDiscovery.UserControls
                 Size s = new Size(1920, 1080);
                 compass = pictureBoxCompass.AddTextAutoSize(new Point(0, 2), s, "Surface coordinates unavailable", displayFont, textcolour, backcolour, 1.0F);
             }
-            RevertToNormalSize();
-            RequestTemporaryResize(new Size(Max(compass.img.Width + pictureBoxCompass.Left, numberBoxTargetLatitude.Visible ? comboBoxBookmarks.Right + 3 : 0), 
-                compass.img.Height + (numberBoxTargetLatitude.Visible ? comboBoxBookmarks.Top + comboBoxBookmarks.Height + 6 : 0)));
+            //RevertToNormalSize();
+            //RequestTemporaryResize(new Size(Max(compass.img.Width + pictureBoxCompass.Left, numberBoxTargetLatitude.Visible ? comboBoxBookmarks.Right + 3 : 0), 
+            //    compass.img.Height + (numberBoxTargetLatitude.Visible ? comboBoxBookmarks.Top + comboBoxBookmarks.Height + 6 : 0)));
         }
 
         private double? CalculateBearing(double? targetLat, double? targetLong)
@@ -477,6 +480,8 @@ namespace EDDiscovery.UserControls
                     frm.Update(bookMark);
                 }
             }
+
+            frm.StartPosition = FormStartPosition.CenterScreen;
             DialogResult dr = frm.ShowDialog();
             if (dr == DialogResult.OK)
             {
@@ -489,5 +494,27 @@ namespace EDDiscovery.UserControls
             }
             Display();
         }
+
+        private void GlobalBookMarkList_OnBookmarkChange(BookmarkClass bk, bool deleted)
+        {
+            if (bookMark != null && bookMark.id == bk.id)
+                bookMark = null;
+            Display();
+        }
+
+
+        public void SetSurfaceBookmark(BookmarkClass bk, string planetName, string locName)
+        {
+            externallyForcedBookmark = true;
+            externalLocation = bk.PlanetaryMarks.Planets.Where(pl => pl.Name == planetName).FirstOrDefault()?.Locations.Where(l => l.Name == locName).FirstOrDefault();
+            if (externalLocation != null)
+            {
+                externalLocationName = $"{locName} ({planetName})";
+                numberBoxTargetLatitude.Value = externalLocation.Latitude;
+                numberBoxTargetLongitude.Value = externalLocation.Longitude;
+            }
+            Display();
+        }
+
     }
 }
