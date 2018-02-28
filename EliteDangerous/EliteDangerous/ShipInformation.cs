@@ -407,13 +407,13 @@ namespace EliteDangerousCore
 
                 int edid = ModuleEDID.Instance.CalcID(sm.ItemFD,ShipFD);
 
-                if (edid == 0)
+                if (edid == 0)      // 0 is error
                 {
                     errstring += sm.Item + ":" + sm.ItemFD + Environment.NewLine;
                 }
                 else
                 {
-                    if (edid > 0)
+                    if (edid > 0)   // -1 is no EDID
                         module["id"] = edid;
 
                     module["name"] = sm.ItemFD;
