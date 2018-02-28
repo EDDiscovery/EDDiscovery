@@ -173,18 +173,18 @@ namespace EliteDangerousCore.EDDN
             }
             else if (je.EventTypeID == JournalTypeEnum.Outfitting)
             {
-                msg2 = eddn.CreateEDDNJournalMessage(je as JournalOutfitting, he.System.X, he.System.Y, he.System.Z, he.System.SystemAddress);
+                //Removed - not in EDDN spec to send this msg2 = eddn.CreateEDDNJournalMessage(je as JournalOutfitting, he.System.X, he.System.Y, he.System.Z, he.System.SystemAddress);
                 msg = eddn.CreateEDDNOutfittingMessage(je as JournalOutfitting, he.System.SystemAddress);
             }
             else if (je.EventTypeID == JournalTypeEnum.Shipyard)
             {
-                msg2 = eddn.CreateEDDNJournalMessage(je as JournalShipyard, he.System.X, he.System.Y, he.System.Z, he.System.SystemAddress);
+                //Removed - not in EDDN spec to send this msg2 = eddn.CreateEDDNJournalMessage(je as JournalShipyard, he.System.X, he.System.Y, he.System.Z, he.System.SystemAddress);
                 msg = eddn.CreateEDDNShipyardMessage(je as JournalShipyard, he.System.SystemAddress);
             }
             else if (je.EventTypeID == JournalTypeEnum.Market)
             {
                 JournalMarket jm = je as JournalMarket;
-                msg2 = eddn.CreateEDDNJournalMessage(jm, he.System.X, he.System.Y, he.System.Z, he.System.SystemAddress);
+                //Removed - not in EDDN spec to send this msg2 = eddn.CreateEDDNJournalMessage(jm, he.System.X, he.System.Y, he.System.Z, he.System.SystemAddress);
                 msg = eddn.CreateEDDNCommodityMessage(jm.Commodities, jm.StarSystem, jm.Station, jm.MarketID, DateTime.UtcNow);      // if its devoid of data, null returned
             }
 
