@@ -158,7 +158,7 @@ namespace EDDiscovery.Forms
 
             mgr = new VersioningManager();
 
-            int[] edversion = System.Reflection.Assembly.GetExecutingAssembly().GetVersion();
+            int[] edversion = System.Reflection.Assembly.GetExecutingAssembly().GetVersionInts();
             System.Diagnostics.Debug.Assert(edversion != null);
 
             ReadLocalFiles(mgr, managedownloadmode);
