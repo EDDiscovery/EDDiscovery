@@ -72,7 +72,12 @@ namespace EliteDangerousCore
             get
             {
                 DateTime ed22 = new DateTime(2016, 10, 25, 12, 0, 0);
-                if ((EntryType == JournalTypeEnum.Scan || EntryType == JournalTypeEnum.Docked || EntryType == JournalTypeEnum.FSDJump) && EventTimeUTC > ed22) return true; else return false;
+                if ((EntryType == JournalTypeEnum.Scan || 
+                     EntryType == JournalTypeEnum.Docked || 
+                     EntryType == JournalTypeEnum.FSDJump ||
+                     EntryType == JournalTypeEnum.Market ||
+                     EntryType == JournalTypeEnum.Shipyard ||
+                     EntryType == JournalTypeEnum.Outfitting) && EventTimeUTC > ed22) return true; else return false;
             }
         }
 

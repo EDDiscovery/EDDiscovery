@@ -185,7 +185,7 @@ namespace EliteDangerousCore.EDDN
             {
                 JournalMarket jm = je as JournalMarket;
                 msg2 = eddn.CreateEDDNJournalMessage(jm, he.System.X, he.System.Y, he.System.Z, he.System.SystemAddress);
-                msg = eddn.CreateEDDNCommodityMessage(jm.Commodities, jm.StarSystem, jm.Station, DateTime.UtcNow);      // if its devoid of data, null returned
+                msg = eddn.CreateEDDNCommodityMessage(jm.Commodities, jm.StarSystem, jm.Station, jm.MarketID, DateTime.UtcNow);      // if its devoid of data, null returned
             }
 
             if (msg != null)
