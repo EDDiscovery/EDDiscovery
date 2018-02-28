@@ -331,7 +331,7 @@ namespace EliteDangerousCore.EDDN
         }
 
 
-        public JObject CreateEDDNCommodityMessage(List<CCommodities> commodities, string systemName, string stationName, DateTime time)
+        public JObject CreateEDDNCommodityMessage(List<CCommodities> commodities, string systemName, string stationName, long? marketID, DateTime time)
         {
             if (commodities == null || commodities.Count == 0)
                 return null;
@@ -345,6 +345,7 @@ namespace EliteDangerousCore.EDDN
 
             message["systemName"] = systemName;
             message["stationName"] = stationName;
+            message["marketID"] = marketID;
             message["timestamp"] = time.ToString("yyyy-MM-dd'T'HH:mm:ss'Z'", CultureInfo.InvariantCulture);
 
             JArray JAcommodities = new JArray();
