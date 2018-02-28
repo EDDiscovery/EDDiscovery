@@ -317,13 +317,11 @@ namespace EDDiscovery
 
                 if (rel != null)
                 {
-                    //string newInstaller = jo["Filename"].Value<string>();
+                    var currentVersion = System.Reflection.Assembly.GetExecutingAssembly().GetVersionString();
+                    var releaseVersion = rel.ReleaseVersion;
 
-                    var currentVersion = Application.ProductVersion;
-
-                    Version v1, v2;
-                    v1 = new Version(rel.ReleaseVersion);
-                    v2 = new Version(currentVersion);
+                    Version v1 = new Version(releaseVersion);
+                    Version v2 = new Version(currentVersion);
 
                     if (v1.CompareTo(v2) > 0) // Test if newer installer exists:
                     {
