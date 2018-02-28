@@ -203,7 +203,7 @@ namespace EliteDangerousCore
                             prev_guifocus = curguifocus;
                         }
 
-                        int[] pips = jo["Pips"]?.ToObject<int[]>();
+                        int[] pips = jo["Pips"]?.ToObjectProtected<int[]>();
 
                         if (pips != null)
                         {

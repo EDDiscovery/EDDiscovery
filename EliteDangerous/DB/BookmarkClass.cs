@@ -48,7 +48,7 @@ namespace EliteDangerousCore.DB
                 JObject jo = JObject.Parse(json);
                 if (jo["Marks"] != null)
                 {
-                    Planets = jo["Marks"].ToObject<List<Planet>>();
+                    Planets = jo["Marks"].ToObjectProtected<List<Planet>>();
                 }
             }
             catch

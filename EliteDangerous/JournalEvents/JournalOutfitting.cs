@@ -45,7 +45,7 @@ namespace EliteDangerousCore.JournalEvents
             Horizons = evt["Horizons"].BoolNull();
             AllowCobraMkIV = evt["AllowCobraMkIV"].BoolNull();
 
-            ModuleItems = evt["Items"]?.ToObject<OutfittingModuleItem[]>();
+            ModuleItems = evt["Items"]?.ToObjectProtected<OutfittingModuleItem[]>();
 
             if ( ModuleItems != null )
             {

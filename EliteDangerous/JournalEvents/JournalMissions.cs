@@ -31,9 +31,9 @@ namespace EliteDangerousCore.JournalEvents
     {
         public JournalMissions(JObject evt) : base(evt, JournalTypeEnum.Missions)
         {
-            ActiveMissions = evt["Active"]?.ToObject<MissionItem[]>();
-            FailedMissions = evt["Failed"]?.ToObject<MissionItem[]>();
-            CompletedMissions = evt["Completed"]?.ToObject<MissionItem[]>();
+            ActiveMissions = evt["Active"]?.ToObjectProtected<MissionItem[]>();
+            FailedMissions = evt["Failed"]?.ToObjectProtected<MissionItem[]>();
+            CompletedMissions = evt["Completed"]?.ToObjectProtected<MissionItem[]>();
         }
 
         public string StationName { get; set; }
