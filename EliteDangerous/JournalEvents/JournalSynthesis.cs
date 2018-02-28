@@ -39,7 +39,7 @@ namespace EliteDangerousCore.JournalEvents
 
                 if (mats.Type == JTokenType.Object)
                 {
-                    Dictionary<string, int> temp = mats?.ToObject<Dictionary<string, int>>();
+                    Dictionary<string, int> temp = mats?.ToObjectProtected<Dictionary<string, int>>();
 
                     if (temp != null)
                     {

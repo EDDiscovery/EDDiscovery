@@ -53,7 +53,7 @@ namespace EliteDangerousCore.JournalEvents
 
                 if (mats.Type == JTokenType.Object)
                 {
-                    Dictionary<string, int> temp = mats?.ToObject<Dictionary<string, int>>();
+                    Dictionary<string, int> temp = mats?.ToObjectProtected<Dictionary<string, int>>();
 
                     if (temp != null)
                     {
@@ -118,7 +118,7 @@ namespace EliteDangerousCore.JournalEvents
             public long BlueprintID { get; set; }
             public int Level { get; set; }
             public double Quality { get; set; }
-           // public string ExperimentalEffect { get; set; }
+            public string ExperimentalEffect { get; set; }
             public EngineeringModifiers[] Modifiers { get; set; }       // may be null
 
             public EngineeringData(JObject evt)
@@ -131,10 +131,11 @@ namespace EliteDangerousCore.JournalEvents
                 Level = evt["Level"].Int();
                 Quality = evt["Quality"].Double(0);
                 // EngineerCraft has it as Apply.. Loadout has just ExperimentalEffect.  Check both
-              //  Disable - crash on 27/2/18 here ExperimentalEffect = JSONObjectExtensions.GetMultiStringDef(evt,new string[] { "ExperimentalEffect", "ApplyExperimentalEffect" });
+                ExperimentalEffect = JSONObjectExtensions.GetMultiStringDef(evt, new string[] { "ExperimentalEffect", "ApplyExperimentalEffect" });
 
-                Modifiers = evt["Modifiers"]?.ToObject<EngineeringModifiers[]>();
+                Modifiers = evt["Modifiers"]?.ToObjectProtected<EngineeringModifiers[]>();
             }
+
         }
 
         public class EngineeringModifiers

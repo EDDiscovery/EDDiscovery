@@ -25,19 +25,19 @@ namespace EliteDangerousCore.JournalEvents
     {
         public JournalStatistics(JObject evt ) : base(evt, JournalTypeEnum.Statistics)
         {
-            BankAccount = evt["Bank_Account"].RemoveKeyUnderscores()?.ToObject<BankAccountClass>() ?? new BankAccountClass();
-            Combat = evt["Combat"].RemoveKeyUnderscores()?.ToObject<CombatClass>() ?? new CombatClass();
-            Crime = evt["Crime"].RemoveKeyUnderscores()?.ToObject<CrimeClass>() ?? new CrimeClass();
-            Smuggling = evt["Smuggling"].RemoveKeyUnderscores()?.ToObject<SmugglingClass>() ?? new SmugglingClass();
-            Trading = evt["Trading"].RemoveKeyUnderscores()?.ToObject<TradingClass>() ?? new TradingClass();
-            Mining = evt["Mining"].RemoveKeyUnderscores()?.ToObject<MiningClass>() ?? new MiningClass();
-            Exploration = evt["Exploration"].RemoveKeyUnderscores()?.ToObject<ExplorationClass>() ?? new ExplorationClass();
-            PassengerMissions = evt["Passengers"].RemoveKeyUnderscores().RemoveKeyPrefix("PassengersMissions")?.ToObject<PassengerMissionsClass>() ?? new PassengerMissionsClass();
-            SearchAndRescue = evt["Search_And_Rescue"].RemoveKeyUnderscores().RemoveKeyPrefix("SearchRescue")?.ToObject<SearchAndRescueClass>() ?? new SearchAndRescueClass();
-            Crafting = evt["Crafting"].RemoveKeyUnderscores()?.ToObject<CraftingClass>() ?? new CraftingClass();
-            Multicrew = evt["Multicrew"].RemoveKeyUnderscores().RemoveKeyPrefix("Multicrew")?.ToObject<MulticrewClass>() ?? new MulticrewClass();
-            MaterialTraderStats = evt["Material_Trader_Stats"].RemoveKeyUnderscores()?.ToObject<MaterialTraderStatsClass>() ?? new MaterialTraderStatsClass();
-            CQC = evt["CQC"].RemoveKeyUnderscores().RemoveKeyPrefix("CQC")?.ToObject<CQCClass>() ?? new CQCClass();
+            BankAccount = evt["Bank_Account"].RemoveKeyUnderscores()?.ToObjectProtected<BankAccountClass>() ?? new BankAccountClass();
+            Combat = evt["Combat"].RemoveKeyUnderscores()?.ToObjectProtected<CombatClass>() ?? new CombatClass();
+            Crime = evt["Crime"].RemoveKeyUnderscores()?.ToObjectProtected<CrimeClass>() ?? new CrimeClass();
+            Smuggling = evt["Smuggling"].RemoveKeyUnderscores()?.ToObjectProtected<SmugglingClass>() ?? new SmugglingClass();
+            Trading = evt["Trading"].RemoveKeyUnderscores()?.ToObjectProtected<TradingClass>() ?? new TradingClass();
+            Mining = evt["Mining"].RemoveKeyUnderscores()?.ToObjectProtected<MiningClass>() ?? new MiningClass();
+            Exploration = evt["Exploration"].RemoveKeyUnderscores()?.ToObjectProtected<ExplorationClass>() ?? new ExplorationClass();
+            PassengerMissions = evt["Passengers"].RemoveKeyUnderscores().RemoveKeyPrefix("PassengersMissions")?.ToObjectProtected<PassengerMissionsClass>() ?? new PassengerMissionsClass();
+            SearchAndRescue = evt["Search_And_Rescue"].RemoveKeyUnderscores().RemoveKeyPrefix("SearchRescue")?.ToObjectProtected<SearchAndRescueClass>() ?? new SearchAndRescueClass();
+            Crafting = evt["Crafting"].RemoveKeyUnderscores()?.ToObjectProtected<CraftingClass>() ?? new CraftingClass();
+            Multicrew = evt["Multicrew"].RemoveKeyUnderscores().RemoveKeyPrefix("Multicrew")?.ToObjectProtected<MulticrewClass>() ?? new MulticrewClass();
+            MaterialTraderStats = evt["Material_Trader_Stats"].RemoveKeyUnderscores()?.ToObjectProtected<MaterialTraderStatsClass>() ?? new MaterialTraderStatsClass();
+            CQC = evt["CQC"].RemoveKeyUnderscores().RemoveKeyPrefix("CQC")?.ToObjectProtected<CQCClass>() ?? new CQCClass();
         }
 
         public BankAccountClass BankAccount { get; set; }

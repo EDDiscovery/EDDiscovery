@@ -17,6 +17,7 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
 
@@ -140,6 +141,21 @@ public static class JSONObjectExtensions
         catch { return null; }
     }
 
+    static public DateTime DateTimeUTC( this JToken jToken )  // 1 Jan 2000 is the default
+    {
+        if (!jToken.Empty())
+        {
+            try
+            {
+                string str = jToken.Value<string>();
+                return DateTime.Parse(str, CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal | DateTimeStyles.AdjustToUniversal);
+            }
+            catch { }
+        }
+
+        return new DateTime(2000, 1, 1);
+    }
+
     static public string GetMultiStringDef(JObject evt, string[] names, string def = "")
     {
         foreach (string s in names)
@@ -215,6 +231,23 @@ public static class JSONObjectExtensions
 
         return ret;
     }
+
+
+    static public T ToObjectProtected<T>(this JToken token)
+    {
+        try
+        {
+            return token.ToObject<T>();
+        }
+        catch
+        {
+            return default(T);
+        }
+    }
+
+
+
 }
+
 
 

@@ -46,10 +46,10 @@ namespace EliteDangerousCore.JournalEvents
             StarSystem = evt["StarSystem"].Str();
             MarketID = evt["MarketID"].LongNull();
 
-            ShipsHere = evt["ShipsHere"]?.ToObject<StoredShipInformation[]>();
+            ShipsHere = evt["ShipsHere"]?.ToObjectProtected<StoredShipInformation[]>();
             Normalise(ShipsHere);
 
-            ShipsRemote = evt["ShipsRemote"]?.ToObject<StoredShipInformation[]>();
+            ShipsRemote = evt["ShipsRemote"]?.ToObjectProtected<StoredShipInformation[]>();
             Normalise(ShipsRemote);
         }
 
