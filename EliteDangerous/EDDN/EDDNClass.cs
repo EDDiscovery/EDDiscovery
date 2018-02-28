@@ -220,7 +220,7 @@ namespace EliteDangerousCore.EDDN
                 ["systemName"] = journal.StarSystem,
                 ["stationName"] = journal.StationName,
                 ["marketId"] = journal.MarketID,
-                ["modules"] = new JArray(journal.ModuleItems.Select(m => m.FDName))
+                ["modules"] = new JArray(journal.ModuleItems.Select(m => JournalFieldNaming.NormaliseFDItemName(m.FDName)))
             };
 
             //if (systemAddress != null)
