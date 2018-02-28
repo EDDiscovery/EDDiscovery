@@ -51,6 +51,7 @@ namespace EliteDangerousCore.JournalEvents
             {
                 foreach (OutfittingModuleItem i in ModuleItems)
                 {
+                    i.FDName = i.Name;
                     i.Name = JournalFieldNaming.GetBetterItemNameEvents(i.Name);
                 }
             }
@@ -98,6 +99,7 @@ namespace EliteDangerousCore.JournalEvents
         {
             public long id;
             public string Name;
+            public string FDName;
             public long BuyPrice;
         }
     }
