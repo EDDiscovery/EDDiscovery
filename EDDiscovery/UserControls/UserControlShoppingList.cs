@@ -242,7 +242,7 @@ namespace EDDiscovery.UserControls
                     wantedList.Append($"\nMax FSD Injections\n   {basic.Item1} Basic\n   {standard.Item1} Standard\n   {premium.Item1} Premium");
                 }
 
-                if (showPlanetMats && sd != null)
+                if (showPlanetMats && sd != null && sd.HasMaterials)
                 {
                     wantedList.Append($"\n\nMaterials on {last_he.WhereAmI}\n");
                     foreach (KeyValuePair<string, double> mat in sd.Materials)
